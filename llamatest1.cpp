@@ -48,7 +48,7 @@ LLAMA_DEFINE_DATEDOMAIN(
 int main(int argc,char** argv)
 {
 	using UD = llama::UserDomain< 2 >;
-	UD udSize{4096,4096};
+	UD udSize{8192,8192};
 	/*
 	 * struct Layout
 	 * {
@@ -115,17 +115,23 @@ int main(int argc,char** argv)
 			//~ view.accessor<1,0>({x,y}) = double(x+y)/double(udSize[0]+udSize[1]);
 		}
 	for (size_t x = 0; x < udSize[0]; ++x)
+	{
+		//~ auto date = view(UD{x,0});
+		//~ auto aPtr = &date.access(Name::Momentum::A());
+		//~ auto bPtr = &date.access(Name::Momentum::B());
 		for (size_t y = 0; y < udSize[1]; ++y)
 		{
-			auto date = view(UD{x,y});
-			date.access(Name::Momentum::A()) += date.access<1,1>();
+			//~ aPtr[y] += bPtr[y];
+			auto date = view(x,y);
+			date(Name::Momentum::A()) += date(llama::DateCoord<1,1>());
 			//~ view.accessor<1,0>({x,y}) += view.accessor<1,1>({x,y});
 		}
+	}
 	double sum = 0.0;
 	for (size_t x = 0; x < udSize[0]; ++x)
 		for (size_t y = 0; y < udSize[1]; ++y)
 		{
-			auto date = view(UD{x,y});
+			auto date = view({x,y});
 			sum += date.access<1,0>();
 			//~ sum += view.accessor<1,0>({x,y});
 		}

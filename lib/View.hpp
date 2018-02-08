@@ -32,18 +32,19 @@ struct View
 	struct VirtualDate
 	{
 		template <size_t... coord>
-		typename GetType<typename Mapping::DateDomain,coord...>::type& access(
-			DateCoord<coord...>&& = DateCoord<coord...>()
-		)
+		typename GetType<typename Mapping::DateDomain,coord...>::type&
+		access( DateCoord<coord...>&& = DateCoord<coord...>() )
 		{
 			return view.accessor<coord...>(userDomainPos);
 		}
-		template<size_t... coord>
-		auto operator()(DateCoord<coord...>&& = DateCoord<coord...>())
-		-> decltype(access<coord...>())&
+
+		template <size_t... coord>
+		typename GetType<typename Mapping::DateDomain,coord...>::type&
+		operator()(DateCoord<coord...>&& dc= DateCoord<coord...>())
 		{
-			return access<coord...>();
+			return access<coord...>(std::forward<DateCoord<coord...>>(dc));
 		}
+
 		typename Mapping::UserDomain const userDomainPos;
 		View<Mapping,BlobType>& view;
 	};
@@ -51,6 +52,12 @@ struct View
 	VirtualDate operator()(typename Mapping::UserDomain const ud)
 	{
 		return VirtualDate{ud,*this};
+	};
+
+	template <typename... TCoord>
+	VirtualDate operator()(TCoord... coord)
+	{
+		return VirtualDate{typename Mapping::UserDomain{coord...},*this};
 	};
 
 	BlobType blob[Mapping::blobCount];
