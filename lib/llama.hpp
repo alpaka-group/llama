@@ -14,3 +14,4 @@
 #include "mappings/MappingSoA.hpp"
 
 #include "preprocessor/DefineDateDomain.hpp"
+#include "preprocessor/macros.hpp"

@@ -6,25 +6,26 @@ namespace llama
 {
 
 template <
-	typename Mapping,
+	typename __Mapping,
 	typename __BlobType
 >
 struct View
 {
 	using BlobType = __BlobType;
+	using Mapping = __Mapping;
 	View(Mapping mapping) :
 		mapping(mapping)
 	{
 	}
 	template <size_t... dd>
-	typename GetType<typename Mapping::DateDomain,dd...>::type& accessor(
-		typename Mapping::UserDomain const ud
-	)
+	typename GetType<typename Mapping::DateDomain,dd...>::type&
+	accessor( typename Mapping::UserDomain const ud )
 	{
-		auto const adress = mapping.template getBlobAdress<dd...>(ud);
+		auto const nr = mapping.template getBlobNr<dd...>(ud);
+		auto const byte = mapping.template getBlobByte<dd...>(ud);
 		return *(
 			reinterpret_cast<typename GetType<typename Mapping::DateDomain,dd...>::type*> (
-				&blob[adress.blobNr][adress.bytePos]
+				&blob[nr][byte]
 			)
 		);
 	}

@@ -87,8 +87,8 @@ int main(int argc,char** argv)
 		//~ Options
 	//~ >;
 	using DD = Name::Type;
-	std::cout << "AoS Adresse: " << llama::MappingAoS<UD,DD>(udSize).getBlobAdress<0,1>(UD{0,100}).bytePos << std::endl;
-	std::cout << "SoA Adresse: " << llama::MappingSoA<UD,DD>(udSize).getBlobAdress<0,1>(UD{0,100}).bytePos << std::endl;
+	std::cout << "AoS Adresse: " << llama::MappingAoS<UD,DD>(udSize).getBlobByte<0,1>(UD{0,100}) << std::endl;
+	std::cout << "SoA Adresse: " << llama::MappingSoA<UD,DD>(udSize).getBlobByte<0,1>(UD{0,100}) << std::endl;
 
 	using Mapping = llama::MappingSoA<UD,DD,llama::LinearizeUserDomainAdress<UD::count>>;
 
@@ -108,33 +108,21 @@ int main(int argc,char** argv)
 	auto virtualDate = view(pos);
 
 	for (size_t x = 0; x < udSize[0]; ++x)
+		LLAMA_INDEPENDENT_DATA
 		for (size_t y = 0; y < udSize[1]; ++y)
-		{
-			auto date = view(UD{x,y});
-			date(Name::Momentum::A()) = double(x+y)/double(udSize[0]+udSize[1]);
-			//~ view.accessor<1,0>({x,y}) = double(x+y)/double(udSize[0]+udSize[1]);
-		}
+			view.accessor<1,0>({x,y}) = double(x+y)/double(udSize[0]+udSize[1]);
 	for (size_t x = 0; x < udSize[0]; ++x)
-	{
-		//~ auto date = view(UD{x,0});
-		//~ auto aPtr = &date.access(Name::Momentum::A());
-		//~ auto bPtr = &date.access(Name::Momentum::B());
+		LLAMA_INDEPENDENT_DATA
 		for (size_t y = 0; y < udSize[1]; ++y)
 		{
-			//~ aPtr[y] += bPtr[y];
 			auto date = view(x,y);
 			date(Name::Momentum::A()) += date(llama::DateCoord<1,1>());
-			//~ view.accessor<1,0>({x,y}) += view.accessor<1,1>({x,y});
 		}
-	}
 	double sum = 0.0;
 	for (size_t x = 0; x < udSize[0]; ++x)
+		LLAMA_INDEPENDENT_DATA
 		for (size_t y = 0; y < udSize[1]; ++y)
-		{
-			auto date = view({x,y});
-			sum += date.access<1,0>();
-			//~ sum += view.accessor<1,0>({x,y});
-		}
+			sum += view.accessor<1,0>({x,y});
 	std::cout << "Sum: " << sum << std::endl;
 	return 0;
 }

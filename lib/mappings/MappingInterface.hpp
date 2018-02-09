@@ -17,7 +17,8 @@ struct MappingInterface
 	static constexpr size_t blobCount = 0;
 	inline size_t getBlobSize(const size_t blobNr) const;
 	template <typename DateDomainCoord>
-	inline BlobAdress getBlobAdress(const UserDomain coord,const UserDomain size) const;
+	inline size_t getBlobByte(const UserDomain coord,const UserDomain size) const;
+	inline size_t getBlobNr(const UserDomain coord,const UserDomain size) const;
 };
 
 } //namespace llama

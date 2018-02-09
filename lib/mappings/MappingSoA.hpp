@@ -17,25 +17,30 @@ struct MappingSoA
 {
 	using UserDomain = __UserDomain;
 	using DateDomain = __DateDomain;
-	MappingSoA(const UserDomain size) : userDomainSize(size) {}
+	MappingSoA(const UserDomain size) :
+		userDomainSize(size),
+		extentUserDomainAdress(ExtentUserDomainAdressFunctor()(userDomainSize))
+	{}
 	static constexpr size_t blobCount = 1;
 	inline size_t getBlobSize(const size_t) const
 	{
-		return ExtentUserDomainAdressFunctor()(userDomainSize) * DateDomain::size;
+		return extentUserDomainAdress * DateDomain::size;
 	}
 	template <size_t... dateDomainCoord>
-	inline BlobAdress getBlobAdress(const UserDomain coord) const
+	inline size_t getBlobByte(const UserDomain coord) const
 	{
-		return BlobAdress
-		{
-			0,
-			LinearizeUserDomainAdressFunctor()(coord,userDomainSize)
-			* sizeof(typename GetType<DateDomain,dateDomainCoord...>::type)
-			+ DateDomain::template LinearBytePos<dateDomainCoord...>::value
-			* ExtentUserDomainAdressFunctor()(userDomainSize)
-		};
+		return LinearizeUserDomainAdressFunctor()(coord,userDomainSize) // variabele runtime
+			* sizeof(typename GetType<DateDomain,dateDomainCoord...>::type) //constexpr
+			+ DateDomain::template LinearBytePos<dateDomainCoord...>::value //constexpr
+			* extentUserDomainAdress; //const (runtime)
+	}
+	template <size_t... dateDomainCoord>
+	constexpr size_t getBlobNr(const UserDomain coord) const
+	{
+		return 0;
 	}
 	const UserDomain userDomainSize;
+	const size_t extentUserDomainAdress;
 };
 
 } //namespace llama

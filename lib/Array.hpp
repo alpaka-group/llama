@@ -22,30 +22,30 @@ struct Array
 	{
 		Array<T,count-1> result;
 		for (size_t i = 0; i < count-1; i++)
-			result[i] = element[i+1];
+			result.element[i] = element[i+1];
 		return result;
 	}
 	Array<T,count-1> pop_back() const
 	{
 		Array<T,count-1> result;
 		for (size_t i = 0; i < count-1; i++)
-			result[i] = element[i];
+			result.element[i] = element[i];
 		return result;
 	}
 	Array<T,count+1> push_front(T const new_element) const
 	{
 		Array<T,count+1> result;
 		for (size_t i = 0; i < count-1; i++)
-			result[i+1] = element[i];
-		result[0] = new_element;
+			result.element[i+1] = element[i];
+		result.element[0] = new_element;
 		return result;
 	}
 	Array<T,count+1> push_back(T const new_element) const
 	{
 		Array<T,count+1> result;
 		for (size_t i = 0; i < count-1; i++)
-			result[i] = element[i];
-		result[count] = new_element;
+			result.element[i] = element[i];
+		result.element[count] = new_element;
 		return result;
 	}
 };

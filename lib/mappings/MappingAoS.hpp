@@ -23,15 +23,16 @@ struct MappingAoS
 		return ExtentUserDomainAdressFunctor()(userDomainSize) * DateDomain::size;
 	}
 	template <size_t... dateDomainCoord>
-	inline BlobAdress getBlobAdress(const UserDomain coord) const
+	inline size_t getBlobByte(const UserDomain coord) const
 	{
-		return BlobAdress
-		{
-			0,
-			LinearizeUserDomainAdressFunctor()(coord,userDomainSize)
+		return LinearizeUserDomainAdressFunctor()(coord,userDomainSize)
 			* DateDomain::size
-			+ DateDomain::template LinearBytePos<dateDomainCoord...>::value
-		};
+			+ DateDomain::template LinearBytePos<dateDomainCoord...>::value;
+	}
+	template <size_t... dateDomainCoord>
+	constexpr size_t getBlobNr(const UserDomain coord) const
+	{
+		return 0;
 	}
 	const UserDomain userDomainSize;
 };
