@@ -1,5 +1,5 @@
 #pragma once
 
-#define LLAMA_MARK_ASSUMED_DEPENDENCIES_AS_INDEPENDENT \
+#define LLAMA_INDEPENDENT_DATA \
     _Pragma ("ivdep") \
     _Pragma ("GCC ivdep")
