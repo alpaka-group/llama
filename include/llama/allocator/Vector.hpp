@@ -40,20 +40,20 @@ namespace internal
             using difference_type = std::ptrdiff_t;
 
             using pointer = T *;
-            using const_pointer = const T *;
+            using const_pointer = T const *;
 
             using reference = T &;
-            using const_reference = const T &;
+            using const_reference = T const &;
 
         public:
             inline AlignmentAllocator() throw () { }
 
             template< typename T2 >
             inline AlignmentAllocator(
-				const AlignmentAllocator<
+				AlignmentAllocator<
 					T2,
 					N
-				> &
+				> const &
 				) throw () { }
 
             inline ~AlignmentAllocator() throw () { }
@@ -117,7 +117,7 @@ namespace internal
 
             inline void construct(
 				pointer p,
-				const value_type &
+				value_type const &
 			)
             {
 				/* commented out for performance reasons
@@ -147,7 +147,7 @@ namespace internal
             bool operator!=( const AlignmentAllocator<
 					T,
 					N
-				>& other
+				> & other
 			) const
             {
                 return !( *this == other );
@@ -159,7 +159,7 @@ namespace internal
             bool operator==(const AlignmentAllocator<
 					T,
 					N
-				>& other
+				> & other
 			) const
             {
                 return true;

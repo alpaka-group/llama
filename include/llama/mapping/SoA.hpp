@@ -40,19 +40,19 @@ struct SoA
 {
     using UserDomain = __UserDomain;
     using DateDomain = __DateDomain;
-    SoA(const UserDomain size) :
+    SoA(UserDomain const size) :
         userDomainSize(size),
         extentUserDomainAdress(
 			ExtentUserDomainAdressFunctor()( userDomainSize )
 		)
     {}
     static constexpr std::size_t blobCount = 1;
-    inline std::size_t getBlobSize( const std::size_t ) const
+    inline std::size_t getBlobSize( std::size_t const ) const
     {
         return extentUserDomainAdress * DateDomain::size;
     }
     template< std::size_t... dateDomainCoord >
-    inline std::size_t getBlobByte( const UserDomain coord ) const
+    inline std::size_t getBlobByte( UserDomain const coord ) const
     {
         return LinearizeUserDomainAdressFunctor()( coord, userDomainSize )
             * sizeof( typename GetType<
@@ -63,12 +63,12 @@ struct SoA
             * extentUserDomainAdress;
     }
     template< std::size_t... dateDomainCoord >
-    constexpr std::size_t getBlobNr( const UserDomain coord ) const
+    constexpr std::size_t getBlobNr( UserDomain const coord ) const
     {
         return 0;
     }
-    const UserDomain userDomainSize;
-    const std::size_t extentUserDomainAdress;
+    UserDomain const userDomainSize;
+    std::size_t const extentUserDomainAdress;
 };
 
 } //namespace mapping

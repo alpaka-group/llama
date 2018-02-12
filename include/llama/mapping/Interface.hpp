@@ -34,17 +34,17 @@ struct Interface
 {
     using UserDomain = __UserDomain;
     using DateDomain = __DateDomain;
-    Interface( const UserDomain );
+    Interface( UserDomain const );
     static constexpr std::size_t blobCount = 0;
-    inline std::size_t getBlobSize( const std::size_t blobNr ) const;
+    inline std::size_t getBlobSize( std::size_t const blobNr ) const;
     template< typename DateDomainCoord >
     inline std::size_t getBlobByte(
-		const UserDomain coord,
-		const UserDomain size
+		UserDomain const coord,
+		UserDomain const size
 	) const;
     inline std::size_t getBlobNr(
-		const UserDomain coord,
-		const UserDomain size
+		UserDomain const coord,
+		UserDomain const size
 	) const;
 };
 

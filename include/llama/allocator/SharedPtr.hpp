@@ -35,12 +35,12 @@ struct SharedPtrAccessor
     using BlobType = std::shared_ptr< PrimType >;
     // SharedPtrAccessor( BlobType blob ) : blob( blob ) {}
     template< typename IndexType >
-    PrimType& operator[] ( IndexType&& idx )
+    PrimType& operator[] ( IndexType && idx )
     {
         return blob.get()[ idx ];
     }
     template<typename IndexType>
-    const PrimType& operator[] ( IndexType&& idx ) const
+    const PrimType& operator[] ( IndexType && idx ) const
     {
         return blob.get()[ idx ];
     }

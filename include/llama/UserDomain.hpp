@@ -26,7 +26,7 @@ namespace llama
 template< std::size_t dim >
 struct ExtentUserDomainAdress
 {
-    inline std::size_t operator()( const UserDomain< dim >& size ) const
+    inline std::size_t operator()( UserDomain< dim > const & size ) const
     {
         return ExtentUserDomainAdress< dim - 1 >()( size.pop_front() )
 			* size[ 0 ];
@@ -36,7 +36,7 @@ struct ExtentUserDomainAdress
 template< >
 struct ExtentUserDomainAdress< 1 >
 {
-    inline std::size_t operator()( const UserDomain< 1 >& size ) const
+    inline std::size_t operator()( UserDomain< 1 > const & size ) const
     {
         return size[ 0 ];
     }
@@ -49,8 +49,8 @@ template<
 struct LinearizeUserDomainAdress
 {
     inline std::size_t operator()(
-		const UserDomain< dim >& coord,
-		const UserDomain< dim >& size
+		UserDomain< dim > const & coord,
+		UserDomain< dim > const & size
 	) const
     {
         return coord[ it - 1 ]
@@ -72,8 +72,8 @@ struct LinearizeUserDomainAdress<
 >
 {
     inline std::size_t operator()(
-		const UserDomain< dim >& coord,
-		const UserDomain< dim >& size
+		UserDomain< dim > const & coord,
+		UserDomain< dim > const & size
 	) const
     {
         return coord[ 0 ];
@@ -84,8 +84,8 @@ template< std::size_t dim >
 struct LinearizeUserDomainAdressLikeFortran
 {
     inline std::size_t operator()(
-		const UserDomain< dim >& coord,
-		const UserDomain< dim >& size
+		UserDomain< dim > const & coord,
+		UserDomain< dim > const & size
 	) const
     {
         return coord[ 0 ]
@@ -101,8 +101,8 @@ template< >
 struct LinearizeUserDomainAdressLikeFortran< 1 >
 {
     inline std::size_t operator()(
-		const UserDomain< 1 >& coord,
-		const UserDomain< 1 >& size
+		UserDomain< 1 > const & coord,
+		UserDomain< 1 > const & size
 	) const
     {
         return coord[ 0 ];

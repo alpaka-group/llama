@@ -30,12 +30,12 @@ struct Array
     static constexpr std::size_t count = dim;
     T element[dim];
     template< typename IndexType >
-    T& operator[] ( IndexType&& idx )
+    T& operator[] ( IndexType && idx )
     {
         return element[ idx ];
     }
     template< typename IndexType >
-    const T& operator[] ( IndexType&& idx ) const
+    const T& operator[] ( IndexType && idx ) const
     {
         return element[ idx ];
     }

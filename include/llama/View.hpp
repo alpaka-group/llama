@@ -39,7 +39,7 @@ struct View
     typename GetType<
 		typename Mapping::DateDomain,
 		dd...
-	>::type&
+	>::type &
     accessor( typename Mapping::UserDomain const ud )
     {
         auto const nr = mapping.template getBlobNr< dd... >( ud );
@@ -59,8 +59,8 @@ struct View
         typename GetType<
 			typename Mapping::DateDomain,
 			coord...
-		>::type&
-        access( DateCoord< coord... >&& = DateCoord< coord... >() )
+		>::type &
+        access( DateCoord< coord... > && = DateCoord< coord... >() )
         {
             return view.accessor< coord... >( userDomainPos );
         }
@@ -69,8 +69,8 @@ struct View
         typename GetType<
 			typename Mapping::DateDomain,
 			coord...
-		>::type&
-        operator()( DateCoord< coord... >&& dc= DateCoord< coord... >() )
+		>::type &
+        operator()( DateCoord< coord... > && dc= DateCoord< coord... >() )
         {
             return access< coord... >(
 				std::forward< DateCoord<coord... > >( dc )
@@ -81,7 +81,7 @@ struct View
         View<
 			Mapping,
 			BlobType
-		>& view;
+		> & view;
     };
 
     VirtualDate operator()( typename Mapping::UserDomain const ud )

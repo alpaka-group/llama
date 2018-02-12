@@ -35,7 +35,7 @@ struct Factory
 		Mapping,
 		typename Allocator::BlobType
 	>
-	allowView ( const Mapping mapping )
+	allowView ( Mapping const mapping )
     {
         View<
 			Mapping,
