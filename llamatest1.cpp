@@ -48,7 +48,7 @@ LLAMA_DEFINE_DATEDOMAIN(
  * };
  */
 
-int main(int argc,char** argv)
+int main(int argc,char * * argv)
 {
     using UD = llama::UserDomain< 2 >;
     UD udSize{ 8192, 8192 };

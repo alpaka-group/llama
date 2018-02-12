@@ -132,7 +132,7 @@ namespace internal
 
             inline size_type max_size() const throw ()
             {
-                return size_type (-1) / sizeof( value_type );
+                return size_type( -1 ) / sizeof( value_type );
             }
 
             template< typename T2 >
@@ -178,7 +178,7 @@ struct Vector
 			64
 		>
 	>;
-    static inline BlobType allocate( size_t count )
+    static inline BlobType allocate( std::size_t count )
     {
         return BlobType( count );
     }

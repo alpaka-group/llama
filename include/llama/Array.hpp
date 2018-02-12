@@ -27,7 +27,7 @@ template<
 >
 struct Array
 {
-    static constexpr size_t count = dim;
+    static constexpr std::size_t count = dim;
     T element[dim];
     template< typename IndexType >
     T& operator[] ( IndexType&& idx )

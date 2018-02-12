@@ -46,13 +46,13 @@ namespace internal
     template< typename Leave >
     struct GetSizeOfDateStructLeave
     {
-        static constexpr size_t value = sizeof( Leave );
+        static constexpr std::size_t value = sizeof( Leave );
     };
 
     template< typename... Leaves >
     struct GetSizeOfDateStructLeave< DateStruct< Leaves... > >
     {
-        static constexpr size_t value =
+        static constexpr std::size_t value =
 			GetSizeOfDateStructLeaves< Leaves... >::value;
     };
 
@@ -62,7 +62,7 @@ namespace internal
 	>
     struct GetSizeOfDateStructLeaves
     {
-        static constexpr size_t value =
+        static constexpr std::size_t value =
             GetSizeOfDateStructLeave< Leave >::value +
             GetSizeOfDateStructLeaves< Leaves... >::value;
     };
@@ -70,7 +70,7 @@ namespace internal
     template< typename Leave >
     struct GetSizeOfDateStructLeaves< Leave >
     {
-        static constexpr size_t value =
+        static constexpr std::size_t value =
 			GetSizeOfDateStructLeave< Leave >::value;
     };
 
@@ -164,8 +164,8 @@ namespace internal
 	>
     struct GetSizeOfDateStructLeaveWithCoord
     {
-        static constexpr size_t value =
-			sizeof( Leave ) * size_t( CompareDateCoord<
+        static constexpr std::size_t value =
+			sizeof( Leave ) * std::size_t( CompareDateCoord<
 				Coord,
 				Pos
 			>::isBigger );
@@ -182,7 +182,7 @@ namespace internal
 		DateStruct< Leaves... >
 	>
     {
-        static constexpr size_t value = GetSizeOfDateStructLeavesWithCoord<
+        static constexpr std::size_t value = GetSizeOfDateStructLeavesWithCoord<
             Coord,
             typename Pos::template PushBack< 0 >,
             Leaves...
@@ -197,7 +197,7 @@ namespace internal
 	>
     struct GetSizeOfDateStructLeavesWithCoord
     {
-        static constexpr size_t value = GetSizeOfDateStructLeaveWithCoord<
+        static constexpr std::size_t value = GetSizeOfDateStructLeaveWithCoord<
 				Coord,
 				Pos,
 				Leave
@@ -220,7 +220,7 @@ namespace internal
 		Leave
 	>
     {
-        static constexpr size_t value = GetSizeOfDateStructLeaveWithCoord<
+        static constexpr std::size_t value = GetSizeOfDateStructLeaveWithCoord<
 			Coord,
 			Pos,
 			Leave

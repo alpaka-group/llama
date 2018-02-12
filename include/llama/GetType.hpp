@@ -23,8 +23,8 @@ namespace llama
 
 template<
     typename Tree,
-    size_t firstDateDomainCoord,
-    size_t... dateDomainCoords
+    std::size_t firstDateDomainCoord,
+    std::size_t... dateDomainCoords
 >
 struct GetType
 {
@@ -36,7 +36,7 @@ struct GetType
 
 template<
     typename Tree,
-    size_t firstDateDomainCoord
+    std::size_t firstDateDomainCoord
 >
 struct GetType<
 	Tree,

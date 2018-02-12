@@ -23,7 +23,7 @@
 namespace llama
 {
 
-template< size_t dim >
+template< std::size_t dim >
 using UserDomain = Array<
 	size_t,
 	dim

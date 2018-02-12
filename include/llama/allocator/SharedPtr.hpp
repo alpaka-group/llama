@@ -54,7 +54,7 @@ struct SharedPtr
 {
     using PrimType = typename internal::SharedPtrAccessor::PrimType;
     using BlobType = internal::SharedPtrAccessor;
-    static inline BlobType allocate( size_t count )
+    static inline BlobType allocate( std::size_t count )
     {
 		#if defined _MSC_VER
 			PrimType* raw_pointer = reinterpret_cast< PrimType* >(

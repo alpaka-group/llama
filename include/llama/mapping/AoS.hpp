@@ -38,14 +38,14 @@ struct AoS
     using UserDomain = __UserDomain;
     using DateDomain = __DateDomain;
     AoS( const UserDomain size ) : userDomainSize( size ) {}
-    static constexpr size_t blobCount = 1;
-    inline size_t getBlobSize( const size_t ) const
+    static constexpr std::size_t blobCount = 1;
+    inline std::size_t getBlobSize( const std::size_t ) const
     {
         return ExtentUserDomainAdressFunctor()(userDomainSize)
 			* DateDomain::size;
     }
-    template< size_t... dateDomainCoord >
-    inline size_t getBlobByte( const UserDomain coord ) const
+    template< std::size_t... dateDomainCoord >
+    inline std::size_t getBlobByte( const UserDomain coord ) const
     {
         return LinearizeUserDomainAdressFunctor()(
 				coord,
@@ -54,8 +54,8 @@ struct AoS
             * DateDomain::size
             + DateDomain::template LinearBytePos< dateDomainCoord... >::value;
     }
-    template< size_t... dateDomainCoord >
-    constexpr size_t getBlobNr( const UserDomain coord ) const
+    template< std::size_t... dateDomainCoord >
+    constexpr std::size_t getBlobNr( const UserDomain coord ) const
     {
         return 0;
     }

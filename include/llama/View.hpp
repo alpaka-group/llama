@@ -35,7 +35,7 @@ struct View
         mapping( mapping )
     {
     }
-    template< size_t... dd >
+    template< std::size_t... dd >
     typename GetType<
 		typename Mapping::DateDomain,
 		dd...
@@ -55,7 +55,7 @@ struct View
 
     struct VirtualDate
     {
-        template< size_t... coord >
+        template< std::size_t... coord >
         typename GetType<
 			typename Mapping::DateDomain,
 			coord...
@@ -65,7 +65,7 @@ struct View
             return view.accessor< coord... >( userDomainPos );
         }
 
-        template< size_t... coord >
+        template< std::size_t... coord >
         typename GetType<
 			typename Mapping::DateDomain,
 			coord...
