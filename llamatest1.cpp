@@ -54,27 +54,27 @@ int main(int argc,char * * argv)
     UD udSize{ 8192, 8192 };
     using DD = Name::Type;
     std::cout
-		<< "AoS Adresse: "
-		<< llama::mapping::AoS< UD, DD >( udSize )
-			.getBlobByte< 0, 1 >( { 0, 100 } )
+        << "AoS Adresse: "
+        << llama::mapping::AoS< UD, DD >( udSize )
+            .getBlobByte< 0, 1 >( { 0, 100 } )
         << std::endl;
     std::cout
-		<< "SoA Adresse: "
-		<< llama::mapping::SoA< UD, DD >( udSize )
-			.getBlobByte< 0, 1 >( { 0, 100 } )
-		<< std::endl;
+        << "SoA Adresse: "
+        << llama::mapping::SoA< UD, DD >( udSize )
+            .getBlobByte< 0, 1 >( { 0, 100 } )
+        << std::endl;
 
     using Mapping = llama::mapping::SoA<
-		UD,
-		DD,
-		llama::LinearizeUserDomainAdress< UD::count >
-	>;
+        UD,
+        DD,
+        llama::LinearizeUserDomainAdress< UD::count >
+    >;
 
     Mapping mapping( udSize );
     using Factory = llama::Factory<
-		Mapping,
-		llama::allocator::SharedPtr< 256 >
-	>;
+        Mapping,
+        llama::allocator::SharedPtr< 256 >
+    >;
     auto view = Factory::allowView( mapping );
     const UD pos{ 0, 0 };
     float& position_x = view.accessor< 0, 0 >( pos );
@@ -82,23 +82,23 @@ int main(int argc,char * * argv)
     int& weight = view.accessor< 2 >( pos );
     bool& options_2 = view.accessor< 3, 2 >( pos );
     std::cout
-		<< &position_x
-		<< std::endl;
+        << &position_x
+        << std::endl;
     std::cout
-		<< &momentum_y
-		<< " "
-		<< (size_t)&momentum_y - (size_t)&position_x
-		<< std::endl;
+        << &momentum_y
+        << " "
+        << (size_t)&momentum_y - (size_t)&position_x
+        << std::endl;
     std::cout
-		<< &weight
-		<< " "
-		<< (size_t)&weight - (size_t)&momentum_y
-		<< std::endl;
+        << &weight
+        << " "
+        << (size_t)&weight - (size_t)&momentum_y
+        << std::endl;
     std::cout
-		<< &options_2
-		<< " "
-		<< (size_t)&options_2 - (size_t)&weight
-		<< std::endl;
+        << &options_2
+        << " "
+        << (size_t)&options_2 - (size_t)&weight
+        << std::endl;
 
     auto virtualDate = view( pos );
 
@@ -106,7 +106,7 @@ int main(int argc,char * * argv)
         LLAMA_INDEPENDENT_DATA
         for (size_t y = 0; y < udSize[1]; ++y)
             view.accessor< 1, 0 >( { x, y } ) =
-				double( x + y ) / double( udSize[0] + udSize[1] );
+                double( x + y ) / double( udSize[0] + udSize[1] );
     for (size_t x = 0; x < udSize[0]; ++x)
         LLAMA_INDEPENDENT_DATA
         for (size_t y = 0; y < udSize[1]; ++y)
@@ -120,8 +120,8 @@ int main(int argc,char * * argv)
         for (size_t y = 0; y < udSize[1]; ++y)
             sum += view.accessor< 1, 0 >( { x, y } );
     std::cout
-		<< "Sum: "
-		<< sum
-		<< std::endl;
+        << "Sum: "
+        << sum
+        << std::endl;
     return 0;
 }

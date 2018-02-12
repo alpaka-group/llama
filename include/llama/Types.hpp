@@ -25,11 +25,11 @@ namespace llama
 
 template< std::size_t dim >
 using UserDomain = Array<
-	size_t,
-	dim
+    size_t,
+    dim
 >;
 
 template< typename... Leaves >
 struct DateStruct;
 
-} //namespace llama
+} // namespace llama

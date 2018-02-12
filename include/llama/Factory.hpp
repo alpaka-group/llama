@@ -31,20 +31,22 @@ template<
 >
 struct Factory
 {
-    static inline View<
-		Mapping,
-		typename Allocator::BlobType
-	>
-	allowView ( Mapping const mapping )
+    static inline
+	auto
+    allowView ( Mapping const mapping )
+    -> View<
+        Mapping,
+        typename Allocator::BlobType
+    >
     {
         View<
-			Mapping,
-			typename Allocator::BlobType
-		> view( mapping );
+            Mapping,
+            typename Allocator::BlobType
+        > view( mapping );
         for (size_t i = 0; i < Mapping::blobCount; ++i)
             view.blob[ i ] = Allocator::allocate( mapping.getBlobSize( i ) );
         return view;
     }
 };
 
-} //namespace llama
+} // namespace llama

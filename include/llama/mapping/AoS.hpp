@@ -31,39 +31,52 @@ template<
     typename __UserDomain,
     typename __DateDomain,
     typename LinearizeUserDomainAdressFunctor =
-		LinearizeUserDomainAdress< __UserDomain::count >,
+        LinearizeUserDomainAdress< __UserDomain::count >,
     typename ExtentUserDomainAdressFunctor =
-		ExtentUserDomainAdress< __UserDomain::count >
+        ExtentUserDomainAdress< __UserDomain::count >
 >
 struct AoS
 {
     using UserDomain = __UserDomain;
     using DateDomain = __DateDomain;
-    AoS( UserDomain const size ) : userDomainSize( size ) {}
     static constexpr std::size_t blobCount = 1;
-    inline std::size_t getBlobSize( std::size_t const ) const
+
+    AoS( UserDomain const size ) : userDomainSize( size ) {}
+
+    inline
+    auto
+    getBlobSize( std::size_t const ) const
+    -> std::size_t
     {
         return ExtentUserDomainAdressFunctor()(userDomainSize)
-			* DateDomain::size;
+            * DateDomain::size;
     }
+
     template< std::size_t... dateDomainCoord >
-    inline std::size_t getBlobByte( UserDomain const coord ) const
+    inline
+    auto
+    getBlobByte( UserDomain const coord ) const
+    -> std::size_t
     {
         return LinearizeUserDomainAdressFunctor()(
-				coord,
-				userDomainSize
-			)
+                coord,
+                userDomainSize
+            )
             * DateDomain::size
             + DateDomain::template LinearBytePos< dateDomainCoord... >::value;
     }
+
     template< std::size_t... dateDomainCoord >
-    constexpr std::size_t getBlobNr( UserDomain const coord ) const
+    constexpr
+    auto
+    getBlobNr( UserDomain const coord ) const
+    -> std::size_t
     {
         return 0;
     }
     UserDomain const userDomainSize;
 };
 
-} //namespace mapping
+} // namespace mapping
 
-} //namespace llama
+} // namespace llama

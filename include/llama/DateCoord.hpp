@@ -25,9 +25,9 @@ namespace llama
 {
 
     template<
-		size_t coord,
-		size_t... coords
-	>
+        size_t coord,
+        size_t... coords
+    >
     struct DateCoord
     {
         static constexpr std::size_t front = coord;
@@ -37,16 +37,16 @@ namespace llama
         using IncBack = typename PopFront::IncBack::template PushFront< front >;
         template< std::size_t new_coord = 0 >
         using PushFront = DateCoord<
-			new_coord,
-			coord,
-			coords...
-		>;
+            new_coord,
+            coord,
+            coords...
+        >;
         template< std::size_t new_coord = 0 >
         using PushBack = DateCoord<
-			coord,
-			coords...,
-			new_coord
-		>;
+            coord,
+            coords...,
+            new_coord
+        >;
     };
 
     template< std::size_t coord >
@@ -58,14 +58,14 @@ namespace llama
         using IncBack = DateCoord< coord + 1 >;
         template< std::size_t new_coord = 0 >
         using PushFront = DateCoord<
-			new_coord,
-			coord
-		>;
+            new_coord,
+            coord
+        >;
         template< std::size_t new_coord = 0 >
         using PushBack = DateCoord<
-			coord,
-			new_coord
-		>;
+            coord,
+            new_coord
+        >;
     };
 
-} //namespace llama
+} // namespace llama

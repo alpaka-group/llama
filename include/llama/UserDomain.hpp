@@ -26,55 +26,67 @@ namespace llama
 template< std::size_t dim >
 struct ExtentUserDomainAdress
 {
-    inline std::size_t operator()( UserDomain< dim > const & size ) const
+    inline
+    auto
+    operator()( UserDomain< dim > const & size ) const
+    -> std::size_t
     {
         return ExtentUserDomainAdress< dim - 1 >()( size.pop_front() )
-			* size[ 0 ];
+            * size[ 0 ];
     }
 };
 
 template< >
 struct ExtentUserDomainAdress< 1 >
 {
-    inline std::size_t operator()( UserDomain< 1 > const & size ) const
+    inline
+    auto
+    operator()( UserDomain< 1 > const & size ) const
+    -> std::size_t
     {
         return size[ 0 ];
     }
 };
 
 template<
-	size_t dim,
-	size_t it = dim
+    size_t dim,
+    size_t it = dim
 >
 struct LinearizeUserDomainAdress
 {
-    inline std::size_t operator()(
-		UserDomain< dim > const & coord,
-		UserDomain< dim > const & size
-	) const
+    inline
+    auto
+    operator()(
+        UserDomain< dim > const & coord,
+        UserDomain< dim > const & size
+    ) const
+    -> std::size_t
     {
         return coord[ it - 1 ]
-			+ LinearizeUserDomainAdress<
-				dim,
-				it-1
-			>()(
-				coord,
-				size
-			)
-			* size[ it - 1 ];
+            + LinearizeUserDomainAdress<
+                dim,
+                it-1
+            >()(
+                coord,
+                size
+            )
+            * size[ it - 1 ];
     }
 };
 
 template< std::size_t dim >
 struct LinearizeUserDomainAdress<
-	dim,
-	1
+    dim,
+    1
 >
 {
-    inline std::size_t operator()(
-		UserDomain< dim > const & coord,
-		UserDomain< dim > const & size
-	) const
+    inline
+    auto
+    operator()(
+        UserDomain< dim > const & coord,
+        UserDomain< dim > const & size
+    ) const
+    -> std::size_t
     {
         return coord[ 0 ];
     }
@@ -83,30 +95,36 @@ struct LinearizeUserDomainAdress<
 template< std::size_t dim >
 struct LinearizeUserDomainAdressLikeFortran
 {
-    inline std::size_t operator()(
-		UserDomain< dim > const & coord,
-		UserDomain< dim > const & size
-	) const
+    inline
+    auto
+    operator()(
+        UserDomain< dim > const & coord,
+        UserDomain< dim > const & size
+    ) const
+    -> std::size_t
     {
         return coord[ 0 ]
-			+ LinearizeUserDomainAdressLikeFortran< dim - 1 >()(
-				coord.pop_front(),
-				size.pop_front()
-			)
-			* size[ 0 ];
+            + LinearizeUserDomainAdressLikeFortran< dim - 1 >()(
+                coord.pop_front(),
+                size.pop_front()
+            )
+            * size[ 0 ];
     }
 };
 
 template< >
 struct LinearizeUserDomainAdressLikeFortran< 1 >
 {
-    inline std::size_t operator()(
-		UserDomain< 1 > const & coord,
-		UserDomain< 1 > const & size
-	) const
+    inline
+    auto
+    operator()(
+        UserDomain< 1 > const & coord,
+        UserDomain< 1 > const & size
+    ) const
+    -> std::size_t
     {
         return coord[ 0 ];
     }
 };
 
-} //namespace llama
+} // namespace llama

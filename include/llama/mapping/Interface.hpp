@@ -34,20 +34,33 @@ struct Interface
 {
     using UserDomain = __UserDomain;
     using DateDomain = __DateDomain;
-    Interface( UserDomain const );
     static constexpr std::size_t blobCount = 0;
-    inline std::size_t getBlobSize( std::size_t const blobNr ) const;
+
+    Interface( UserDomain const );
+
+    inline
+    auto
+    getBlobSize( std::size_t const blobNr ) const
+    -> std::size_t;
+
     template< typename DateDomainCoord >
-    inline std::size_t getBlobByte(
-		UserDomain const coord,
-		UserDomain const size
-	) const;
-    inline std::size_t getBlobNr(
-		UserDomain const coord,
-		UserDomain const size
-	) const;
+    inline
+    auto
+    getBlobByte(
+        UserDomain const coord,
+        UserDomain const size
+    ) const
+    -> std::size_t;
+
+    inline
+    auto
+    getBlobNr(
+        UserDomain const coord,
+        UserDomain const size
+    ) const
+    -> std::size_t;
 };
 
-} //namespace mapping
+} // namespace mapping
 
-} //namespace llama
+} // namespace llama

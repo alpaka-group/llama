@@ -32,38 +32,51 @@ template<
     typename __UserDomain,
     typename __DateDomain,
     typename LinearizeUserDomainAdressFunctor =
-		LinearizeUserDomainAdress< __UserDomain::count >,
+        LinearizeUserDomainAdress< __UserDomain::count >,
     typename ExtentUserDomainAdressFunctor =
-		ExtentUserDomainAdress< __UserDomain::count >
+        ExtentUserDomainAdress< __UserDomain::count >
 >
 struct SoA
 {
     using UserDomain = __UserDomain;
     using DateDomain = __DateDomain;
-    SoA(UserDomain const size) :
-        userDomainSize(size),
-        extentUserDomainAdress(
-			ExtentUserDomainAdressFunctor()( userDomainSize )
-		)
-    {}
     static constexpr std::size_t blobCount = 1;
-    inline std::size_t getBlobSize( std::size_t const ) const
+
+    SoA( UserDomain const size ) :
+        userDomainSize( size ),
+        extentUserDomainAdress(
+            ExtentUserDomainAdressFunctor()( userDomainSize )
+        )
+    {}
+
+    inline
+    auto
+    getBlobSize( std::size_t const ) const
+    -> std::size_t
     {
         return extentUserDomainAdress * DateDomain::size;
     }
+
     template< std::size_t... dateDomainCoord >
-    inline std::size_t getBlobByte( UserDomain const coord ) const
+    inline
+    auto
+    getBlobByte( UserDomain const coord ) const
+    -> std::size_t
     {
         return LinearizeUserDomainAdressFunctor()( coord, userDomainSize )
             * sizeof( typename GetType<
-				DateDomain,
-				dateDomainCoord...
-			>::type )
+                DateDomain,
+                dateDomainCoord...
+            >::type )
             + DateDomain::template LinearBytePos< dateDomainCoord... >::value
             * extentUserDomainAdress;
     }
+
     template< std::size_t... dateDomainCoord >
-    constexpr std::size_t getBlobNr( UserDomain const coord ) const
+    constexpr
+    auto
+    getBlobNr( UserDomain const coord ) const
+    -> std::size_t
     {
         return 0;
     }
@@ -71,7 +84,7 @@ struct SoA
     std::size_t const extentUserDomainAdress;
 };
 
-} //namespace mapping
+} // namespace mapping
 
-} //namespace llama
+} // namespace llama
 

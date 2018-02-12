@@ -27,16 +27,18 @@ namespace llama
 template< typename... Leaves >
 struct DateStruct
 {
+    static constexpr std::size_t size =
+        internal::GetSizeOfDateStructLeaves< Leaves... >::value;
+
     template< std::size_t coord >
     struct GetBranch
     {
         using type = typename internal::GetLeave<
-			coord,
-			Leaves...
-		>::type;
+            coord,
+            Leaves...
+        >::type;
     };
-    static constexpr std::size_t size =
-		internal::GetSizeOfDateStructLeaves< Leaves... >::value;
+
     template< std::size_t... coords >
     struct LinearBytePos
     {
@@ -49,4 +51,4 @@ struct DateStruct
     };
 };
 
-} //namespace llama
+} // namespace llama

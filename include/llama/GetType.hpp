@@ -39,12 +39,12 @@ template<
     std::size_t firstDateDomainCoord
 >
 struct GetType<
-	Tree,
-	firstDateDomainCoord
+    Tree,
+    firstDateDomainCoord
 >
 {
     using type =
-		typename Tree::template GetBranch< firstDateDomainCoord >::type;
+        typename Tree::template GetBranch< firstDateDomainCoord >::type;
 };
 
-} //namespace llama
+} // namespace llama
