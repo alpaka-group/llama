@@ -26,25 +26,25 @@ namespace llama
 
 
 template<
-    typename Mapping,
-    typename Allocator = allocator::Vector
+    typename T_Mapping,
+    typename T_Allocator = allocator::Vector
 >
 struct Factory
 {
     static inline
 	auto
-    allowView ( Mapping const mapping )
+    allowView ( T_Mapping const mapping )
     -> View<
-        Mapping,
-        typename Allocator::BlobType
+        T_Mapping,
+        typename T_Allocator::BlobType
     >
     {
         View<
-            Mapping,
-            typename Allocator::BlobType
+            T_Mapping,
+            typename T_Allocator::BlobType
         > view( mapping );
-        for( std::size_t i = 0; i < Mapping::blobCount; ++i )
-            view.blob[ i ] = Allocator::allocate( mapping.getBlobSize( i ) );
+        for( std::size_t i = 0; i < T_Mapping::blobCount; ++i )
+            view.blob[ i ] = T_Allocator::allocate( mapping.getBlobSize( i ) );
         return view;
     }
 };

@@ -23,25 +23,25 @@ namespace llama
 
 template<
     typename T,
-    std::size_t dim
+    std::size_t T_dim
 >
 struct Array
 {
-    static constexpr std::size_t count = dim;
+    static constexpr std::size_t count = T_dim;
 
-    T element[dim];
+    T element[count];
 
-    template< typename IndexType >
+    template< typename T_IndexType >
     auto
-    operator[] ( IndexType && idx )
+    operator[] ( T_IndexType && idx )
     -> T &
     {
         return element[ idx ];
     }
 
-    template< typename IndexType >
+    template< typename T_IndexType >
     auto
-    operator[] ( IndexType && idx ) const
+    operator[] ( T_IndexType && idx ) const
     -> T const &
     {
         return element[ idx ];

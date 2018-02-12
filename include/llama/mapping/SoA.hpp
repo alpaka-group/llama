@@ -29,23 +29,23 @@ namespace mapping
 {
 
 template<
-    typename __UserDomain,
-    typename __DateDomain,
-    typename LinearizeUserDomainAdressFunctor =
-        LinearizeUserDomainAdress< __UserDomain::count >,
-    typename ExtentUserDomainAdressFunctor =
-        ExtentUserDomainAdress< __UserDomain::count >
+    typename T_UserDomain,
+    typename T_DateDomain,
+    typename T_LinearizeUserDomainAdressFunctor =
+        LinearizeUserDomainAdress< T_UserDomain::count >,
+    typename T_ExtentUserDomainAdressFunctor =
+        ExtentUserDomainAdress< T_UserDomain::count >
 >
 struct SoA
 {
-    using UserDomain = __UserDomain;
-    using DateDomain = __DateDomain;
+    using UserDomain = T_UserDomain;
+    using DateDomain = T_DateDomain;
     static constexpr std::size_t blobCount = 1;
 
     SoA( UserDomain const size ) :
         userDomainSize( size ),
         extentUserDomainAdress(
-            ExtentUserDomainAdressFunctor()( userDomainSize )
+            T_ExtentUserDomainAdressFunctor()( userDomainSize )
         )
     {}
 
@@ -57,22 +57,22 @@ struct SoA
         return extentUserDomainAdress * DateDomain::size;
     }
 
-    template< std::size_t... dateDomainCoord >
+    template< std::size_t... T_dateDomainCoord >
     inline
     auto
     getBlobByte( UserDomain const coord ) const
     -> std::size_t
     {
-        return LinearizeUserDomainAdressFunctor()( coord, userDomainSize )
+        return T_LinearizeUserDomainAdressFunctor()( coord, userDomainSize )
             * sizeof( typename GetType<
                 DateDomain,
-                dateDomainCoord...
+                T_dateDomainCoord...
             >::type )
-            + DateDomain::template LinearBytePos< dateDomainCoord... >::value
+            + DateDomain::template LinearBytePos< T_dateDomainCoord... >::value
             * extentUserDomainAdress;
     }
 
-    template< std::size_t... dateDomainCoord >
+    template< std::size_t... T_dateDomainCoord >
     constexpr
     auto
     getBlobNr( UserDomain const coord ) const

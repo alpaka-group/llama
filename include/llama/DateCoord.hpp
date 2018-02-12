@@ -25,46 +25,46 @@ namespace llama
 {
 
     template<
-        std::size_t coord,
-        std::size_t... coords
+        std::size_t T_coord,
+        std::size_t... T_coords
     >
     struct DateCoord
     {
-        static constexpr std::size_t front = coord;
-        static constexpr std::size_t size = sizeof...( coords ) + 1;
-        static constexpr std::size_t back = DateCoord< coords... >::back;
-        using PopFront = DateCoord< coords... >;
+        static constexpr std::size_t front = T_coord;
+        static constexpr std::size_t size = sizeof...( T_coords ) + 1;
+        static constexpr std::size_t back = DateCoord< T_coords... >::back;
+        using PopFront = DateCoord< T_coords... >;
         using IncBack = typename PopFront::IncBack::template PushFront< front >;
-        template< std::size_t new_coord = 0 >
+        template< std::size_t T_newCoord = 0 >
         using PushFront = DateCoord<
-            new_coord,
-            coord,
-            coords...
+            T_newCoord,
+            T_coord,
+            T_coords...
         >;
-        template< std::size_t new_coord = 0 >
+        template< std::size_t T_newCoord = 0 >
         using PushBack = DateCoord<
-            coord,
-            coords...,
-            new_coord
+            T_coord,
+            T_coords...,
+            T_newCoord
         >;
     };
 
-    template< std::size_t coord >
-    struct DateCoord < coord >
+    template< std::size_t T_coord >
+    struct DateCoord < T_coord >
     {
-        static constexpr std::size_t front = coord;
-        static constexpr std::size_t back = coord;
+        static constexpr std::size_t front = T_coord;
+        static constexpr std::size_t back = T_coord;
         static constexpr std::size_t size = 1;
-        using IncBack = DateCoord< coord + 1 >;
-        template< std::size_t new_coord = 0 >
+        using IncBack = DateCoord< T_coord + 1 >;
+        template< std::size_t T_newCoord = 0 >
         using PushFront = DateCoord<
-            new_coord,
-            coord
+            T_newCoord,
+            T_coord
         >;
-        template< std::size_t new_coord = 0 >
+        template< std::size_t T_newCoord = 0 >
         using PushBack = DateCoord<
-            coord,
-            new_coord
+            T_coord,
+            T_newCoord
         >;
     };
 

@@ -27,40 +27,40 @@ namespace internal
 {
     template<
         typename T,
-        std::size_t count,
-        typename... List
+        std::size_t T_count,
+        typename... T_List
     >
     struct AddChildToStruct
     {
         using type = typename AddChildToStruct<
             T,
-            count - 1,
-            List...,
+            T_count - 1,
+            T_List...,
             T
         >::type;
     };
     template<
         typename T,
-        typename... List
+        typename... T_List
     >
     struct AddChildToStruct<
         T,
         0,
-        List...
+        T_List...
     >
     {
-        using type = DateStruct< List... >;
+        using type = DateStruct< T_List... >;
     };
 
 } // namespace internal
 
 template<
-    typename Child,
-    std::size_t count
+    typename T_Child,
+    std::size_t T_count
 >
 using DateArray = typename internal::AddChildToStruct<
-    Child,
-    count
+    T_Child,
+    T_count
 >::type;
 
 } // namespace llama

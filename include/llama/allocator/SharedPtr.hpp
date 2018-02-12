@@ -34,16 +34,16 @@ struct SharedPtrAccessor
     using PrimType = unsigned char;
     using BlobType = std::shared_ptr< PrimType >;
 
-    template< typename IndexType >
+    template< typename T_IndexType >
     auto
-    operator[] ( IndexType && idx )
+    operator[] ( T_IndexType && idx )
     -> PrimType &
     {
         return blob.get()[ idx ];
     }
 
-    template< typename IndexType >
-    auto operator[] ( IndexType && idx ) const
+    template< typename T_IndexType >
+    auto operator[] ( T_IndexType && idx ) const
     -> const PrimType &
     {
         return blob.get()[ idx ];
@@ -53,7 +53,7 @@ struct SharedPtrAccessor
 
 } // namespace internal
 
-template< std::size_t alignment = 64u>
+template< std::size_t T_alignment = 64u>
 struct SharedPtr
 {
     using PrimType = typename internal::SharedPtrAccessor::PrimType;
@@ -68,13 +68,13 @@ struct SharedPtr
             PrimType* raw_pointer = reinterpret_cast< PrimType* >(
                 _aligned_malloc(
                     count * sizeof( PrimType ),
-                    alignment
+                    T_alignment
                 )
             );
 #        elif defined __linux__
             PrimType* raw_pointer = reinterpret_cast< PrimType* >(
                 memalign(
-                    alignment,
+                    T_alignment,
                     count * sizeof( PrimType )
                 )
             );

@@ -23,15 +23,15 @@
 namespace llama
 {
 
-template< std::size_t dim >
+template< std::size_t T_dim >
 struct ExtentUserDomainAdress
 {
     inline
     auto
-    operator()( UserDomain< dim > const & size ) const
+    operator()( UserDomain< T_dim > const & size ) const
     -> std::size_t
     {
-        return ExtentUserDomainAdress< dim - 1 >()( size.pop_front() )
+        return ExtentUserDomainAdress< T_dim - 1 >()( size.pop_front() )
             * size[ 0 ];
     }
 };
@@ -49,42 +49,42 @@ struct ExtentUserDomainAdress< 1 >
 };
 
 template<
-    std::size_t dim,
-    std::size_t it = dim
+    std::size_t T_dim,
+    std::size_t T_it = T_dim
 >
 struct LinearizeUserDomainAdress
 {
     inline
     auto
     operator()(
-        UserDomain< dim > const & coord,
-        UserDomain< dim > const & size
+        UserDomain< T_dim > const & coord,
+        UserDomain< T_dim > const & size
     ) const
     -> std::size_t
     {
-        return coord[ it - 1 ]
+        return coord[ T_it - 1 ]
             + LinearizeUserDomainAdress<
-                dim,
-                it-1
+                T_dim,
+                T_it - 1
             >()(
                 coord,
                 size
             )
-            * size[ it - 1 ];
+            * size[ T_it - 1 ];
     }
 };
 
-template< std::size_t dim >
+template< std::size_t T_dim >
 struct LinearizeUserDomainAdress<
-    dim,
+    T_dim,
     1
 >
 {
     inline
     auto
     operator()(
-        UserDomain< dim > const & coord,
-        UserDomain< dim > const & size
+        UserDomain< T_dim > const & coord,
+        UserDomain< T_dim > const & size
     ) const
     -> std::size_t
     {
@@ -92,19 +92,19 @@ struct LinearizeUserDomainAdress<
     }
 };
 
-template< std::size_t dim >
+template< std::size_t T_dim >
 struct LinearizeUserDomainAdressLikeFortran
 {
     inline
     auto
     operator()(
-        UserDomain< dim > const & coord,
-        UserDomain< dim > const & size
+        UserDomain< T_dim > const & coord,
+        UserDomain< T_dim > const & size
     ) const
     -> std::size_t
     {
         return coord[ 0 ]
-            + LinearizeUserDomainAdressLikeFortran< dim - 1 >()(
+            + LinearizeUserDomainAdressLikeFortran< T_dim - 1 >()(
                 coord.pop_front(),
                 size.pop_front()
             )

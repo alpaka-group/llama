@@ -27,13 +27,13 @@ namespace mapping
 {
 
 template<
-    typename __UserDomain,
-    typename __DateDomain
+    typename T_UserDomain,
+    typename T_DateDomain
 >
 struct Interface
 {
-    using UserDomain = __UserDomain;
-    using DateDomain = __DateDomain;
+    using UserDomain = T_UserDomain;
+    using DateDomain = T_DateDomain;
     static constexpr std::size_t blobCount = 0;
 
     Interface( UserDomain const );
@@ -43,7 +43,7 @@ struct Interface
     getBlobSize( std::size_t const blobNr ) const
     -> std::size_t;
 
-    template< typename DateDomainCoord >
+    template< typename T_DateDomainCoord >
     inline
     auto
     getBlobByte(

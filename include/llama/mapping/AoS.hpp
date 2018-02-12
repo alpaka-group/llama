@@ -28,45 +28,47 @@ namespace mapping
 {
 
 template<
-    typename __UserDomain,
-    typename __DateDomain,
-    typename LinearizeUserDomainAdressFunctor =
-        LinearizeUserDomainAdress< __UserDomain::count >,
-    typename ExtentUserDomainAdressFunctor =
-        ExtentUserDomainAdress< __UserDomain::count >
+    typename T_UserDomain,
+    typename T_DateDomain,
+    typename T_LinearizeUserDomainAdressFunctor =
+        LinearizeUserDomainAdress< T_UserDomain::count >,
+    typename T_ExtentUserDomainAdressFunctor =
+        ExtentUserDomainAdress< T_UserDomain::count >
 >
 struct AoS
 {
-    using UserDomain = __UserDomain;
-    using DateDomain = __DateDomain;
+    using UserDomain = T_UserDomain;
+    using DateDomain = T_DateDomain;
     static constexpr std::size_t blobCount = 1;
 
-    AoS( UserDomain const size ) : userDomainSize( size ) {}
+    AoS( UserDomain const size ) :
+		userDomainSize( size )
+	{ }
 
     inline
     auto
     getBlobSize( std::size_t const ) const
     -> std::size_t
     {
-        return ExtentUserDomainAdressFunctor()(userDomainSize)
+        return T_ExtentUserDomainAdressFunctor()(userDomainSize)
             * DateDomain::size;
     }
 
-    template< std::size_t... dateDomainCoord >
+    template< std::size_t... T_dateDomainCoord >
     inline
     auto
     getBlobByte( UserDomain const coord ) const
     -> std::size_t
     {
-        return LinearizeUserDomainAdressFunctor()(
+        return T_LinearizeUserDomainAdressFunctor()(
                 coord,
                 userDomainSize
             )
             * DateDomain::size
-            + DateDomain::template LinearBytePos< dateDomainCoord... >::value;
+            + DateDomain::template LinearBytePos< T_dateDomainCoord... >::value;
     }
 
-    template< std::size_t... dateDomainCoord >
+    template< std::size_t... T_dateDomainCoord >
     constexpr
     auto
     getBlobNr( UserDomain const coord ) const

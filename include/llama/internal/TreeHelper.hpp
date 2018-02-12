@@ -29,106 +29,106 @@ namespace internal
 {
 
     template<
-		std::size_t coord,
-		typename... Leaves
+		std::size_t T_coord,
+		typename... T_Leaves
 	>
     struct GetLeave
     {
         using type = typename std::tuple_element<
-            coord,
-            std::tuple< Leaves... >
+            T_coord,
+            std::tuple< T_Leaves... >
         >::type;
     };
 
     template<
-        typename Leave,
-        typename... Leaves
+        typename T_Leave,
+        typename... T_Leaves
     >
     struct GetSizeOfDateStructLeaves;
 
-    template< typename Leave >
+    template< typename T_Leave >
     struct GetSizeOfDateStructLeave
     {
-        static constexpr std::size_t value = sizeof( Leave );
+        static constexpr std::size_t value = sizeof( T_Leave );
     };
 
-    template< typename... Leaves >
-    struct GetSizeOfDateStructLeave< DateStruct< Leaves... > >
+    template< typename... T_Leaves >
+    struct GetSizeOfDateStructLeave< DateStruct< T_Leaves... > >
     {
         static constexpr std::size_t value =
-            GetSizeOfDateStructLeaves< Leaves... >::value;
+            GetSizeOfDateStructLeaves< T_Leaves... >::value;
     };
 
     template<
-        typename Leave,
-        typename... Leaves
+        typename T_Leave,
+        typename... T_Leaves
     >
     struct GetSizeOfDateStructLeaves
     {
         static constexpr std::size_t value =
-            GetSizeOfDateStructLeave< Leave >::value +
-            GetSizeOfDateStructLeaves< Leaves... >::value;
+            GetSizeOfDateStructLeave< T_Leave >::value +
+            GetSizeOfDateStructLeaves< T_Leaves... >::value;
     };
 
-    template< typename Leave >
-    struct GetSizeOfDateStructLeaves< Leave >
+    template< typename T_Leave >
+    struct GetSizeOfDateStructLeaves< T_Leave >
     {
         static constexpr std::size_t value =
-            GetSizeOfDateStructLeave< Leave >::value;
+            GetSizeOfDateStructLeave< T_Leave >::value;
     };
 
     template<
-        typename First,
-        typename Second,
-        typename SFinae = void
+        typename T_First,
+        typename T_Second,
+        typename T_SFinae = void
     >
     struct CompareDateCoord;
 
     template<
-        typename First,
-        typename Second
+        typename T_First,
+        typename T_Second
     >
     struct CompareDateCoord<
-        First,
-        Second,
+        T_First,
+        T_Second,
         typename std::enable_if<
-            ( First::size == 1 || Second::size == 1)
+            ( T_First::size == 1 || T_Second::size == 1)
         >::type
     >
     {
-        static constexpr bool isBigger = ( First::front > Second::front );
+        static constexpr bool isBigger = ( T_First::front > T_Second::front );
     };
 
     template<
-        typename First,
-        typename Second
+        typename T_First,
+        typename T_Second
     >
     struct CompareDateCoord<
-        First,
-        Second,
+        T_First,
+        T_Second,
         typename std::enable_if<
-            ( First::size > 1 && Second::size > 1
-            && First::front == Second::front )
+            ( T_First::size > 1 && T_Second::size > 1
+            && T_First::front == T_Second::front )
         >::type
     >
     {
         static constexpr bool isBigger = CompareDateCoord<
-            typename First::PopFront,
-            typename Second::PopFront
+            typename T_First::PopFront,
+            typename T_Second::PopFront
         >::isBigger;
     };
 
     template<
-        typename First,
-        typename Second
+        typename T_First,
+        typename T_Second
     >
     struct CompareDateCoord<
-        First,
-        Second,
+        T_First,
+        T_Second,
         typename std::enable_if<
-            ( First::size > 1
-            && Second::size > 1
-            && First::front < Second::front )
+            ( T_First::size > 1
+            && T_Second::size > 1
+            && T_First::front < T_Second::front )
         >::type
     >
     {
@@ -136,16 +136,16 @@ namespace internal
     };
 
     template<
-        typename First,
-        typename Second
+        typename T_First,
+        typename T_Second
     >
     struct CompareDateCoord<
-        First,
-        Second,
+        T_First,
+        T_Second,
         typename std::enable_if<
-            ( First::size > 1
-            && Second::size > 1
-            && First::front > Second::front )
+            ( T_First::size > 1
+            && T_Second::size > 1
+            && T_First::front > T_Second::front )
         >::type
     >
     {
@@ -153,80 +153,80 @@ namespace internal
     };
 
     template<
-        typename Coord,
-        typename Pos,
-        typename Leave,
-        typename... Leaves
+        typename T_Coord,
+        typename T_Pos,
+        typename T_Leave,
+        typename... T_Leaves
     >
     struct GetSizeOfDateStructLeavesWithCoord;
 
     template<
-        typename Coord,
-        typename Pos,
-        typename Leave
+        typename T_Coord,
+        typename T_Pos,
+        typename T_Leave
     >
     struct GetSizeOfDateStructLeaveWithCoord
     {
         static constexpr std::size_t value =
-            sizeof( Leave ) * std::size_t( CompareDateCoord<
-                Coord,
-                Pos
+            sizeof( T_Leave ) * std::size_t( CompareDateCoord<
+                T_Coord,
+                T_Pos
             >::isBigger );
     };
 
     template<
-        typename Coord,
-        typename Pos,
-        typename... Leaves
+        typename T_Coord,
+        typename T_Pos,
+        typename... T_Leaves
     >
     struct GetSizeOfDateStructLeaveWithCoord<
-        Coord,
-        Pos,
-        DateStruct< Leaves... >
+        T_Coord,
+        T_Pos,
+        DateStruct< T_Leaves... >
     >
     {
         static constexpr std::size_t value = GetSizeOfDateStructLeavesWithCoord<
-            Coord,
-            typename Pos::template PushBack< 0 >,
-            Leaves...
+            T_Coord,
+            typename T_Pos::template PushBack< 0 >,
+            T_Leaves...
         >::value;
     };
 
     template<
-        typename Coord,
-        typename Pos,
-        typename Leave,
-        typename... Leaves
+        typename T_Coord,
+        typename T_Pos,
+        typename T_Leave,
+        typename... T_Leaves
     >
     struct GetSizeOfDateStructLeavesWithCoord
     {
         static constexpr std::size_t value = GetSizeOfDateStructLeaveWithCoord<
-                Coord,
-                Pos,
-                Leave
+                T_Coord,
+                T_Pos,
+                T_Leave
             >::value +
             GetSizeOfDateStructLeavesWithCoord<
-                Coord,
-                typename Pos::IncBack,
-                Leaves...
+                T_Coord,
+                typename T_Pos::IncBack,
+                T_Leaves...
             >::value;
     };
 
     template<
-        typename Coord,
-        typename Pos,
-        typename Leave
+        typename T_Coord,
+        typename T_Pos,
+        typename T_Leave
     >
     struct GetSizeOfDateStructLeavesWithCoord<
-        Coord,
-        Pos,
-        Leave
+        T_Coord,
+        T_Pos,
+        T_Leave
     >
     {
         static constexpr std::size_t value = GetSizeOfDateStructLeaveWithCoord<
-            Coord,
-            Pos,
-            Leave
+            T_Coord,
+            T_Pos,
+            T_Leave
         >::value;
     };
 

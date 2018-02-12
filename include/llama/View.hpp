@@ -24,30 +24,32 @@ namespace llama
 {
 
 template<
-    typename __Mapping,
-    typename __BlobType
+    typename T_Mapping,
+    typename T_BlobType
 >
 struct View
 {
-    using BlobType = __BlobType;
-    using Mapping = __Mapping;
+    using BlobType = T_BlobType;
+    using Mapping = T_Mapping;
     View( Mapping mapping ) :
         mapping( mapping )
     { }
 
-    template< std::size_t... dd >
+    template< std::size_t... T_dateDomain >
     auto
-    accessor( typename Mapping::UserDomain const ud )
+    accessor( typename Mapping::UserDomain const userDomain )
     -> typename GetType<
         typename Mapping::DateDomain,
-        dd...
+        T_dateDomain...
     >::type &
     {
-        auto const nr = mapping.template getBlobNr< dd... >( ud );
-        auto const byte = mapping.template getBlobByte< dd... >( ud );
+        auto const nr =
+			mapping.template getBlobNr< T_dateDomain... >( userDomain );
+        auto const byte =
+			mapping.template getBlobByte< T_dateDomain... >( userDomain );
         return *( reinterpret_cast< typename GetType<
                 typename Mapping::DateDomain,
-                dd...
+                T_dateDomain...
             >::type* > (
                 &blob[ nr ][ byte ]
             )
@@ -56,27 +58,27 @@ struct View
 
     struct VirtualDate
     {
-        template< std::size_t... coord >
+        template< std::size_t... T_coord >
         auto
-        access( DateCoord< coord... > && = DateCoord< coord... >() )
+        access( DateCoord< T_coord... > && = DateCoord< T_coord... >() )
         -> typename GetType<
             typename Mapping::DateDomain,
-            coord...
+            T_coord...
         >::type &
         {
-            return view.accessor< coord... >( userDomainPos );
+            return view.accessor< T_coord... >( userDomainPos );
         }
 
-        template< std::size_t... coord >
+        template< std::size_t... T_coord >
 		auto
-        operator()( DateCoord< coord... > && dc= DateCoord< coord... >() )
+        operator()( DateCoord< T_coord... > && dc= DateCoord< T_coord... >() )
         -> typename GetType<
             typename Mapping::DateDomain,
-            coord...
+            T_coord...
         >::type &
         {
-            return access< coord... >(
-                std::forward< DateCoord<coord... > >( dc )
+            return access< T_coord... >(
+                std::forward< DateCoord< T_coord... > >( dc )
             );
         }
 
@@ -88,18 +90,18 @@ struct View
     };
 
     auto
-    operator()( typename Mapping::UserDomain const ud )
+    operator()( typename Mapping::UserDomain const userDomain )
     -> VirtualDate
     {
         return VirtualDate{
-                ud,
+                userDomain,
                 *this
             };
     };
 
-    template< typename... TCoord >
+    template< typename... T_Coord >
     auto
-    operator()( TCoord... coord )
+    operator()( T_Coord... coord )
     -> VirtualDate
     {
         return VirtualDate{
