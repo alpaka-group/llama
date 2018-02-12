@@ -49,8 +49,8 @@ struct ExtentUserDomainAdress< 1 >
 };
 
 template<
-    size_t dim,
-    size_t it = dim
+    std::size_t dim,
+    std::size_t it = dim
 >
 struct LinearizeUserDomainAdress
 {

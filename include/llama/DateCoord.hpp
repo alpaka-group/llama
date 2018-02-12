@@ -25,8 +25,8 @@ namespace llama
 {
 
     template<
-        size_t coord,
-        size_t... coords
+        std::size_t coord,
+        std::size_t... coords
     >
     struct DateCoord
     {

@@ -23,7 +23,7 @@ namespace llama
 
 template<
     typename T,
-    size_t dim
+    std::size_t dim
 >
 struct Array
 {
@@ -58,7 +58,7 @@ struct Array
             T,
             count - 1
         > result;
-        for (size_t i = 0; i < count - 1; i++)
+        for( std::size_t i = 0; i < count - 1; i++ )
             result.element[ i ] = element[ i + 1 ];
         return result;
     }
@@ -74,7 +74,7 @@ struct Array
             T,
             count - 1
         > result;
-        for (size_t i = 0; i < count - 1; i++)
+        for( std::size_t i = 0; i < count - 1; i++ )
             result.element[ i ] = element[ i ];
         return result;
     }
@@ -90,7 +90,7 @@ struct Array
             T,
             count+1
         > result;
-        for (size_t i = 0; i < count - 1; i++)
+        for( std::size_t i = 0; i < count - 1; i++ )
             result.element[ i + 1 ] = element[ i ];
         result.element[ 0 ] = new_element;
         return result;
@@ -107,7 +107,7 @@ struct Array
             T,
             count + 1
         > result;
-        for (size_t i = 0; i < count-1; i++)
+        for( std::size_t i = 0; i < count-1; i++ )
             result.element[ i ] = element[ i ];
         result.element[ count ] = new_element;
         return result;

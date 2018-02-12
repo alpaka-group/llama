@@ -27,7 +27,7 @@ namespace internal
 {
     template<
         typename T,
-        size_t count,
+        std::size_t count,
         typename... List
     >
     struct AddChildToStruct
@@ -56,7 +56,7 @@ namespace internal
 
 template<
     typename Child,
-    size_t count
+    std::size_t count
 >
 using DateArray = typename internal::AddChildToStruct<
     Child,

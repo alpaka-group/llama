@@ -29,7 +29,7 @@ namespace internal
 {
 
     template<
-		size_t coord,
+		std::size_t coord,
 		typename... Leaves
 	>
     struct GetLeave

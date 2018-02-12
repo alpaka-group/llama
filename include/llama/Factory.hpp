@@ -43,7 +43,7 @@ struct Factory
             Mapping,
             typename Allocator::BlobType
         > view( mapping );
-        for (size_t i = 0; i < Mapping::blobCount; ++i)
+        for( std::size_t i = 0; i < Mapping::blobCount; ++i )
             view.blob[ i ] = Allocator::allocate( mapping.getBlobSize( i ) );
         return view;
     }

@@ -34,8 +34,6 @@ struct SharedPtrAccessor
     using PrimType = unsigned char;
     using BlobType = std::shared_ptr< PrimType >;
 
-    // SharedPtrAccessor( BlobType blob ) : blob( blob ) {}
-
     template< typename IndexType >
     auto
     operator[] ( IndexType && idx )
@@ -55,7 +53,7 @@ struct SharedPtrAccessor
 
 } // namespace internal
 
-template<size_t alignment = 64u>
+template< std::size_t alignment = 64u>
 struct SharedPtr
 {
     using PrimType = typename internal::SharedPtrAccessor::PrimType;
