@@ -22,25 +22,29 @@ namespace llama
 {
 
 template<
-	typename Tree,
-	size_t firstDateDomainCoord,
-	size_t... dateDomainCoords
+    typename Tree,
+    size_t firstDateDomainCoord,
+    size_t... dateDomainCoords
 >
 struct GetType
 {
-	using type = typename GetType<
-		typename Tree::template GetBranch<firstDateDomainCoord>::type,
-		dateDomainCoords...
-	>::type;
+    using type = typename GetType<
+        typename Tree::template GetBranch< firstDateDomainCoord >::type,
+        dateDomainCoords...
+    >::type;
 };
 
 template<
-	typename Tree,
-	size_t firstDateDomainCoord
+    typename Tree,
+    size_t firstDateDomainCoord
 >
-struct GetType<Tree,firstDateDomainCoord>
+struct GetType<
+	Tree,
+	firstDateDomainCoord
+>
 {
-	using type = typename Tree::template GetBranch<firstDateDomainCoord>::type;
+    using type =
+		typename Tree::template GetBranch< firstDateDomainCoord >::type;
 };
 
 } //namespace llama

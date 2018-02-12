@@ -25,21 +25,26 @@ namespace llama
 {
 
 
-template <
-	typename Mapping,
-	typename Allocator = allocator::Vector
+template<
+    typename Mapping,
+    typename Allocator = allocator::Vector
 >
 struct Factory
 {
-	static inline View<Mapping,typename Allocator::BlobType> allowView (
-		const Mapping mapping
-	)
-	{
-		View<Mapping,typename Allocator::BlobType> view(mapping);
-		for (size_t i = 0; i < Mapping::blobCount; ++i)
-			view.blob[i] = Allocator::allocate(mapping.getBlobSize(i));
-		return view;
-	}
+    static inline View<
+		Mapping,
+		typename Allocator::BlobType
+	>
+	allowView ( const Mapping mapping )
+    {
+        View<
+			Mapping,
+			typename Allocator::BlobType
+		> view( mapping );
+        for (size_t i = 0; i < Mapping::blobCount; ++i)
+            view.blob[ i ] = Allocator::allocate( mapping.getBlobSize( i ) );
+        return view;
+    }
 };
 
 } //namespace llama

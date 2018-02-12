@@ -27,19 +27,25 @@ namespace mapping
 {
 
 template<
-	typename __UserDomain,
-	typename __DateDomain
+    typename __UserDomain,
+    typename __DateDomain
 >
 struct Interface
 {
-	using UserDomain = __UserDomain;
-	using DateDomain = __DateDomain;
-	Interface(const UserDomain);
-	static constexpr size_t blobCount = 0;
-	inline size_t getBlobSize(const size_t blobNr) const;
-	template <typename DateDomainCoord>
-	inline size_t getBlobByte(const UserDomain coord,const UserDomain size) const;
-	inline size_t getBlobNr(const UserDomain coord,const UserDomain size) const;
+    using UserDomain = __UserDomain;
+    using DateDomain = __DateDomain;
+    Interface( const UserDomain );
+    static constexpr size_t blobCount = 0;
+    inline size_t getBlobSize( const size_t blobNr ) const;
+    template< typename DateDomainCoord >
+    inline size_t getBlobByte(
+		const UserDomain coord,
+		const UserDomain size
+	) const;
+    inline size_t getBlobNr(
+		const UserDomain coord,
+		const UserDomain size
+	) const;
 };
 
 } //namespace mapping

@@ -21,79 +21,79 @@
 // LLAMA_INTERNAL_PARSE_DS_CONTENT_3
 
 #define LLAMA_INTERNAL_PARSE_TUPLE_3( Tuple ) \
-	BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM(1, Tuple), LLAMA_DATESTRUCT), /* if (typeID == DateStruct) */\
-		llama::DateStruct< \
-			LLAMA_INTERNAL_DEFER(LLAMA_INTERNAL_PARSE_DS_CONTENT_4)( BOOST_PP_TUPLE_ELEM(2, Tuple) ) /*not implemented*/ \
-		> \
-	, /* else (typeID == DateStruct) */ \
-		BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM(1, Tuple), LLAMA_DATEARRAY), /* if (typeID == DateArray) */ \
-			llama::DateArray< \
-				LLAMA_INTERNAL_DEFER(LLAMA_INTERNAL_PARSE_DA_CONTENT_4)( BOOST_PP_TUPLE_ELEM(2, Tuple) ) /*not implemented*/ \
-			> \
-		, /* else (typeID == DateArray) */ \
-			BOOST_PP_TUPLE_ELEM(2, Tuple) \
-		) /* fi (typeID == DateArray) */ \
-	) /* fi (typeID == DateStruct) */
+    BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM(1, Tuple), LLAMA_DATESTRUCT), /* if (typeID == DateStruct) */\
+        llama::DateStruct< \
+            LLAMA_INTERNAL_DEFER(LLAMA_INTERNAL_PARSE_DS_CONTENT_4)( BOOST_PP_TUPLE_ELEM(2, Tuple) ) /*not implemented*/ \
+        > \
+    , /* else (typeID == DateStruct) */ \
+        BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM(1, Tuple), LLAMA_DATEARRAY), /* if (typeID == DateArray) */ \
+            llama::DateArray< \
+                LLAMA_INTERNAL_DEFER(LLAMA_INTERNAL_PARSE_DA_CONTENT_4)( BOOST_PP_TUPLE_ELEM(2, Tuple) ) /*not implemented*/ \
+            > \
+        , /* else (typeID == DateArray) */ \
+            BOOST_PP_TUPLE_ELEM(2, Tuple) \
+        ) /* fi (typeID == DateArray) */ \
+    ) /* fi (typeID == DateStruct) */
 
 #define LLAMA_INTERNAL_PARSE_DS_CONTENT_LOOP_3( Z, N, Content ) \
-	LLAMA_INTERNAL_DEFER(BOOST_PP_IF(BOOST_PP_EQUAL(N,0),BOOST_PP_EMPTY,BOOST_PP_COMMA))() \
-	LLAMA_INTERNAL_PARSE_TUPLE_3( BOOST_PP_TUPLE_ELEM(N, Content) )
+    LLAMA_INTERNAL_DEFER(BOOST_PP_IF(BOOST_PP_EQUAL(N,0),BOOST_PP_EMPTY,BOOST_PP_COMMA))() \
+    LLAMA_INTERNAL_PARSE_TUPLE_3( BOOST_PP_TUPLE_ELEM(N, Content) )
 
 #define LLAMA_INTERNAL_PARSE_DS_CONTENT_3( Content ) \
-	BOOST_PP_REPEAT( BOOST_PP_TUPLE_SIZE( Content ), LLAMA_INTERNAL_PARSE_DS_CONTENT_LOOP_3, Content )
+    BOOST_PP_REPEAT( BOOST_PP_TUPLE_SIZE( Content ), LLAMA_INTERNAL_PARSE_DS_CONTENT_LOOP_3, Content )
 
 #define LLAMA_INTERNAL_PARSE_DA_CONTENT_3( Content ) \
-	LLAMA_INTERNAL_DEFER(LLAMA_INTERNAL_PARSE_TUPLE_3)( Content ) , \
-	BOOST_PP_TUPLE_ELEM(0, Content)
+    LLAMA_INTERNAL_DEFER(LLAMA_INTERNAL_PARSE_TUPLE_3)( Content ) , \
+    BOOST_PP_TUPLE_ELEM(0, Content)
 
 // LLAMA_INTERNAL_PARSE_DS_CONTENT_2
 
 #define LLAMA_INTERNAL_PARSE_TUPLE_2( Tuple ) \
-	BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM(1, Tuple), LLAMA_DATESTRUCT), /* if (typeID == DateStruct) */\
-		llama::DateStruct< \
-			LLAMA_INTERNAL_DEFER(LLAMA_INTERNAL_PARSE_DS_CONTENT_3)( BOOST_PP_TUPLE_ELEM(2, Tuple) ) \
-		> \
-	, /* else (typeID == DateStruct) */ \
-		BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM(1, Tuple), LLAMA_DATEARRAY), /* if (typeID == DateArray) */ \
-			llama::DateArray< \
-				LLAMA_INTERNAL_DEFER(LLAMA_INTERNAL_PARSE_DA_CONTENT_3)( BOOST_PP_TUPLE_ELEM(2, Tuple) ) \
-			> \
-		, /* else (typeID == DateArray) */ \
-			BOOST_PP_TUPLE_ELEM(2, Tuple) \
-		) /* fi (typeID == DateArray) */ \
-	) /* fi (typeID == DateStruct) */
+    BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM(1, Tuple), LLAMA_DATESTRUCT), /* if (typeID == DateStruct) */\
+        llama::DateStruct< \
+            LLAMA_INTERNAL_DEFER(LLAMA_INTERNAL_PARSE_DS_CONTENT_3)( BOOST_PP_TUPLE_ELEM(2, Tuple) ) \
+        > \
+    , /* else (typeID == DateStruct) */ \
+        BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM(1, Tuple), LLAMA_DATEARRAY), /* if (typeID == DateArray) */ \
+            llama::DateArray< \
+                LLAMA_INTERNAL_DEFER(LLAMA_INTERNAL_PARSE_DA_CONTENT_3)( BOOST_PP_TUPLE_ELEM(2, Tuple) ) \
+            > \
+        , /* else (typeID == DateArray) */ \
+            BOOST_PP_TUPLE_ELEM(2, Tuple) \
+        ) /* fi (typeID == DateArray) */ \
+    ) /* fi (typeID == DateStruct) */
 
 #define LLAMA_INTERNAL_PARSE_DS_CONTENT_LOOP_2( Z, N, Content ) \
-	LLAMA_INTERNAL_DEFER(BOOST_PP_IF(BOOST_PP_EQUAL(N,0),BOOST_PP_EMPTY,BOOST_PP_COMMA))() \
-	LLAMA_INTERNAL_PARSE_TUPLE_2( BOOST_PP_TUPLE_ELEM(N, Content))
+    LLAMA_INTERNAL_DEFER(BOOST_PP_IF(BOOST_PP_EQUAL(N,0),BOOST_PP_EMPTY,BOOST_PP_COMMA))() \
+    LLAMA_INTERNAL_PARSE_TUPLE_2( BOOST_PP_TUPLE_ELEM(N, Content))
 
 #define LLAMA_INTERNAL_PARSE_DS_CONTENT_2( Content ) \
-	BOOST_PP_REPEAT( BOOST_PP_TUPLE_SIZE( Content ), LLAMA_INTERNAL_PARSE_DS_CONTENT_LOOP_2, Content )
+    BOOST_PP_REPEAT( BOOST_PP_TUPLE_SIZE( Content ), LLAMA_INTERNAL_PARSE_DS_CONTENT_LOOP_2, Content )
 
 #define LLAMA_INTERNAL_PARSE_DA_CONTENT_2( Content ) \
-	LLAMA_INTERNAL_DEFER(LLAMA_INTERNAL_PARSE_TUPLE_2)( Content ) , \
-	BOOST_PP_TUPLE_ELEM(0, Content)
+    LLAMA_INTERNAL_DEFER(LLAMA_INTERNAL_PARSE_TUPLE_2)( Content ) , \
+    BOOST_PP_TUPLE_ELEM(0, Content)
 
 // LLAMA_INTERNAL_PARSE_DS_CONTENT_1
 
 #define LLAMA_INTERNAL_PARSE_TUPLE_1( Tuple ) \
-	BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM(1, Tuple), LLAMA_DATESTRUCT), /* if (typeID == DateStruct) */\
-		llama::DateStruct< \
-			LLAMA_INTERNAL_DEFER(LLAMA_INTERNAL_PARSE_DS_CONTENT_2)( BOOST_PP_TUPLE_ELEM(2, Tuple) ) \
-		> \
-	, /* else (typeID == DateStruct) */ \
-		BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM(1, Tuple), LLAMA_DATEARRAY), /* if (typeID == DateArray) */ \
-			llama::DateArray< \
-				LLAMA_INTERNAL_DEFER(LLAMA_INTERNAL_PARSE_DA_CONTENT_2)( BOOST_PP_TUPLE_ELEM(2, Tuple) ) \
-			> \
-		, /* else (typeID == DateArray) */ \
-			BOOST_PP_TUPLE_ELEM(2, Tuple) \
-		) /* fi (typeID == DateArray) */ \
-	) /* fi (typeID == DateStruct) */
+    BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM(1, Tuple), LLAMA_DATESTRUCT), /* if (typeID == DateStruct) */\
+        llama::DateStruct< \
+            LLAMA_INTERNAL_DEFER(LLAMA_INTERNAL_PARSE_DS_CONTENT_2)( BOOST_PP_TUPLE_ELEM(2, Tuple) ) \
+        > \
+    , /* else (typeID == DateStruct) */ \
+        BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM(1, Tuple), LLAMA_DATEARRAY), /* if (typeID == DateArray) */ \
+            llama::DateArray< \
+                LLAMA_INTERNAL_DEFER(LLAMA_INTERNAL_PARSE_DA_CONTENT_2)( BOOST_PP_TUPLE_ELEM(2, Tuple) ) \
+            > \
+        , /* else (typeID == DateArray) */ \
+            BOOST_PP_TUPLE_ELEM(2, Tuple) \
+        ) /* fi (typeID == DateArray) */ \
+    ) /* fi (typeID == DateStruct) */
 
 #define LLAMA_INTERNAL_PARSE_DS_CONTENT_LOOP_1( Z, N, Content ) \
-	LLAMA_INTERNAL_DEFER(BOOST_PP_IF(BOOST_PP_EQUAL(N,0),BOOST_PP_EMPTY,BOOST_PP_COMMA))() \
-	LLAMA_INTERNAL_PARSE_TUPLE_1( BOOST_PP_TUPLE_ELEM(N, Content) )
+    LLAMA_INTERNAL_DEFER(BOOST_PP_IF(BOOST_PP_EQUAL(N,0),BOOST_PP_EMPTY,BOOST_PP_COMMA))() \
+    LLAMA_INTERNAL_PARSE_TUPLE_1( BOOST_PP_TUPLE_ELEM(N, Content) )
 
 #define LLAMA_INTERNAL_PARSE_DS_CONTENT_1( Content ) \
-	BOOST_PP_REPEAT( BOOST_PP_TUPLE_SIZE( Content ), LLAMA_INTERNAL_PARSE_DS_CONTENT_LOOP_1, Content )
+    BOOST_PP_REPEAT( BOOST_PP_TUPLE_SIZE( Content ), LLAMA_INTERNAL_PARSE_DS_CONTENT_LOOP_1, Content )

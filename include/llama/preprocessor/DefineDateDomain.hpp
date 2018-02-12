@@ -53,10 +53,10 @@
 #define LLAMA_DEFINE_DATEDOMAIN( Name, Content ) \
 struct Name \
 { \
-	/* TODO: Name accessor types */ \
-	 \
-		LLAMA_INTERNAL_EVAL(LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_1( Content ))\
-		using Type = llama::DateStruct< \
-			LLAMA_INTERNAL_EVAL(LLAMA_INTERNAL_PARSE_DS_CONTENT_1( Content )) \
-		>; \
+    /* TODO: Name accessor types */ \
+     \
+        LLAMA_INTERNAL_EVAL(LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_1( Content ))\
+        using Type = llama::DateStruct< \
+            LLAMA_INTERNAL_EVAL(LLAMA_INTERNAL_PARSE_DS_CONTENT_1( Content )) \
+        >; \
 };

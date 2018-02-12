@@ -23,10 +23,13 @@
 namespace llama
 {
 
-template <size_t dim>
-using UserDomain = Array<size_t,dim>;
+template< size_t dim >
+using UserDomain = Array<
+	size_t,
+	dim
+>;
 
-template <typename... Leaves>
+template< typename... Leaves >
 struct DateStruct;
 
 } //namespace llama
