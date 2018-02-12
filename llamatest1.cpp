@@ -1,6 +1,6 @@
 #include <iostream>
 #include <utility>
-#include "lib/llama.hpp"
+#include <llama.hpp>
 
 //~ struct Name
 //~ {
@@ -87,13 +87,13 @@ int main(int argc,char** argv)
 		//~ Options
 	//~ >;
 	using DD = Name::Type;
-	std::cout << "AoS Adresse: " << llama::MappingAoS<UD,DD>(udSize).getBlobByte<0,1>(UD{0,100}) << std::endl;
-	std::cout << "SoA Adresse: " << llama::MappingSoA<UD,DD>(udSize).getBlobByte<0,1>(UD{0,100}) << std::endl;
+	std::cout << "AoS Adresse: " << llama::mapping::AoS<UD,DD>(udSize).getBlobByte<0,1>(UD{0,100}) << std::endl;
+	std::cout << "SoA Adresse: " << llama::mapping::SoA<UD,DD>(udSize).getBlobByte<0,1>(UD{0,100}) << std::endl;
 
-	using Mapping = llama::MappingSoA<UD,DD,llama::LinearizeUserDomainAdress<UD::count>>;
+	using Mapping = llama::mapping::SoA<UD,DD,llama::LinearizeUserDomainAdress<UD::count>>;
 
 	Mapping mapping(udSize);
-	using Factory = llama::Factory<Mapping,llama::SharedPtrAllocator<256> >;
+	using Factory = llama::Factory<Mapping,llama::allocator::SharedPtr<256> >;
 	auto view = Factory::allowView( mapping );
 	const UD pos{0,0};
 	float& position_x = view.accessor<0,0>(pos);

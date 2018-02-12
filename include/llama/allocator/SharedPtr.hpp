@@ -1,8 +1,32 @@
+/* Copyright 2018 Alexander Matthes
+ *
+ * This file is part of LLAMA.
+ *
+ * LLAMA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * LLAMA is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with LLAMA.  If not, see <www.gnu.org/licenses/>.
+ */
+
 #pragma once
 
 #include <memory>
 
 namespace llama
+{
+
+namespace allocator
+{
+
+namespace internal
 {
 
 struct SharedPtrAccessor
@@ -23,11 +47,13 @@ struct SharedPtrAccessor
 	BlobType blob;
 };
 
+} //namespace internal
+
 template <size_t alignment = 64u>
-struct SharedPtrAllocator
+struct SharedPtr
 {
-	using PrimType = typename SharedPtrAccessor::PrimType;
-	using BlobType = SharedPtrAccessor;
+	using PrimType = typename internal::SharedPtrAccessor::PrimType;
+	using BlobType = internal::SharedPtrAccessor;
 	static inline BlobType allocate(size_t count)
 	{
 		#if defined _MSC_VER
@@ -40,7 +66,7 @@ struct SharedPtrAllocator
 			PrimType* raw_pointer = (PrimType*)valloc(count*sizeof(PrimType));    // other (use valloc for page-aligned memory)
 		#endif
 		BlobType accessor;
-		accessor.blob = SharedPtrAccessor::BlobType(raw_pointer,[=](PrimType* raw_pointer)
+		accessor.blob = internal::SharedPtrAccessor::BlobType(raw_pointer,[=](PrimType* raw_pointer)
 			{
 				#if defined _MSC_VER
 					_aligned_free(raw_pointer);
@@ -56,5 +82,7 @@ struct SharedPtrAllocator
 		return accessor;
 	}
 };
+
+} //namespace allocator
 
 } //namespace llama
