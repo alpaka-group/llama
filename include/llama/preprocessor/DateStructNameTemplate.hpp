@@ -20,69 +20,130 @@
 
 // LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_3
 
-#define LLAMA_INTERNAL_PARSE_NAME_TUPLE_3( Tuple, Coord ) \
-    BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM(1, Tuple), LLAMA_DATESTRUCT), /* if (typeID == DateStruct) */\
-        struct BOOST_PP_TUPLE_ELEM(0, Tuple) { \
-            LLAMA_INTERNAL_DEFER(LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_4)( BOOST_PP_TUPLE_ELEM(2, Tuple), Coord ) /*not implemented*/ \
-        }; \
-    , /* else (typeID == DateStruct) */ \
-        BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM(1, Tuple), LLAMA_DATEARRAY), /* if (typeID == DateArray) */ \
-            BOOST_PP_EMPTY() /*DateArray cannot be named*/ \
-        , /* else (typeID == DateArray) */ \
-            using BOOST_PP_TUPLE_ELEM(0, Tuple) = llama::DateCoord< LLAMA_INTERNAL_DEFER(BOOST_PP_TUPLE_ENUM)(Coord) >; \
-        ) /* fi (typeID == DateArray) */ \
+/* 3rd layer of internal naming macro for a dateStruct tuple */
+#define LLAMA_INTERNAL_PARSE_NAME_TUPLE_3( Tuple, Coord )                      \
+    /* if (typeID == DateStruct) */                                            \
+    BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM( 1, Tuple ), LLAMA_DS),  \
+        struct BOOST_PP_TUPLE_ELEM( 0, Tuple )                                 \
+        {                                                                      \
+            LLAMA_INTERNAL_DEFER(                                              \
+                LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_4                         \
+            )( BOOST_PP_TUPLE_ELEM( 2, Tuple ), Coord ) /*not implemented*/    \
+        };                                                                     \
+    , /* else (typeID == DateStruct) */                                        \
+        /* if (typeID == DateArray) */                                         \
+        BOOST_PP_IIF( BOOST_PP_EQUAL(                                          \
+            BOOST_PP_TUPLE_ELEM( 1, Tuple ),                                   \
+            LLAMA_DA                                                           \
+        ),                                                                     \
+            /*DateArray cannot be named*/                                      \
+            BOOST_PP_EMPTY()                                                   \
+        , /* else (typeID == DateArray) */                                     \
+            using BOOST_PP_TUPLE_ELEM( 0, Tuple ) =                            \
+                llama::DateCoord< LLAMA_INTERNAL_DEFER(                        \
+                        BOOST_PP_TUPLE_ENUM                                    \
+                    )( Coord ) >;                                              \
+        ) /* fi (typeID == DateArray) */                                       \
     ) /* fi (typeID == DateStruct) */
 
-#define LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_LOOP_3( Z, N, Content ) \
-    LLAMA_INTERNAL_PARSE_NAME_TUPLE_3( \
-        BOOST_PP_TUPLE_ELEM(N, BOOST_PP_TUPLE_ELEM(0, Content) ), \
-        BOOST_PP_TUPLE_PUSH_BACK( BOOST_PP_TUPLE_ELEM(1, Content), N) \
+/* 3rd layer of internal loop function for naming a dateStruct */
+#define LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_LOOP_3( Z, N, Content )           \
+    LLAMA_INTERNAL_PARSE_NAME_TUPLE_3(                                         \
+        BOOST_PP_TUPLE_ELEM( N, BOOST_PP_TUPLE_ELEM( 0, Content ) ),           \
+        BOOST_PP_TUPLE_PUSH_BACK( BOOST_PP_TUPLE_ELEM( 1, Content ), N )       \
     )
 
-#define LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_3( Content, Coord ) \
-    BOOST_PP_REPEAT( BOOST_PP_TUPLE_SIZE( Content ), LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_LOOP_3, (Content, Coord) )
+/* 3rd layer of internal loop caller for naming a dateStruct */
+#define LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_3( Content, Coord )               \
+    BOOST_PP_REPEAT(                                                           \
+        BOOST_PP_TUPLE_SIZE( Content ),                                        \
+        LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_LOOP_3,                           \
+        (Content, Coord)                                                       \
+    )
 
 // LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_2
 
-#define LLAMA_INTERNAL_PARSE_NAME_TUPLE_2( Tuple, Coord ) \
-    BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM(1, Tuple), LLAMA_DATESTRUCT), /* if (typeID == DateStruct) */\
-        struct BOOST_PP_TUPLE_ELEM(0, Tuple) { \
-            LLAMA_INTERNAL_DEFER(LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_3)( BOOST_PP_TUPLE_ELEM(2, Tuple), Coord ) \
-        }; \
-    , /* else (typeID == DateStruct) */ \
-        BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM(1, Tuple), LLAMA_DATEARRAY), /* if (typeID == DateArray) */ \
-            BOOST_PP_EMPTY() /*DateArray cannot be named*/ \
-        , /* else (typeID == DateArray) */ \
-            using BOOST_PP_TUPLE_ELEM(0, Tuple) = llama::DateCoord< LLAMA_INTERNAL_DEFER(BOOST_PP_TUPLE_ENUM)(Coord) >; \
-        ) /* fi (typeID == DateArray) */ \
+/* 2nd layer of internal naming macro for a dateStruct tuple */
+#define LLAMA_INTERNAL_PARSE_NAME_TUPLE_2( Tuple, Coord )                      \
+    /* if (typeID == DateStruct) */                                            \
+    BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM( 1, Tuple ), LLAMA_DS),  \
+        struct BOOST_PP_TUPLE_ELEM( 0, Tuple )                                 \
+        {                                                                      \
+            LLAMA_INTERNAL_DEFER(                                              \
+                LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_3                         \
+            )( BOOST_PP_TUPLE_ELEM( 2, Tuple ), Coord )                        \
+        };                                                                     \
+    , /* else (typeID == DateStruct) */                                        \
+        /* if (typeID == DateArray) */                                         \
+        BOOST_PP_IIF( BOOST_PP_EQUAL(                                          \
+            BOOST_PP_TUPLE_ELEM( 1, Tuple ),                                   \
+            LLAMA_DA                                                           \
+        ),                                                                     \
+            /*DateArray cannot be named*/                                      \
+            BOOST_PP_EMPTY()                                                   \
+        , /* else (typeID == DateArray) */                                     \
+            using BOOST_PP_TUPLE_ELEM( 0, Tuple ) =                            \
+                llama::DateCoord< LLAMA_INTERNAL_DEFER(                        \
+                        BOOST_PP_TUPLE_ENUM                                    \
+                    )( Coord ) >;                                              \
+        ) /* fi (typeID == DateArray) */                                       \
     ) /* fi (typeID == DateStruct) */
 
-#define LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_LOOP_2( Z, N, Content ) \
-    LLAMA_INTERNAL_PARSE_NAME_TUPLE_2( \
-        BOOST_PP_TUPLE_ELEM(N, BOOST_PP_TUPLE_ELEM(0, Content) ), \
-        BOOST_PP_TUPLE_PUSH_BACK( BOOST_PP_TUPLE_ELEM(1, Content), N) \
+/* 2nd layer of internal loop function for naming a dateStruct */
+#define LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_LOOP_2( Z, N, Content )           \
+    LLAMA_INTERNAL_PARSE_NAME_TUPLE_2(                                         \
+        BOOST_PP_TUPLE_ELEM( N, BOOST_PP_TUPLE_ELEM( 0, Content ) ),           \
+        BOOST_PP_TUPLE_PUSH_BACK( BOOST_PP_TUPLE_ELEM( 1, Content ), N )       \
     )
 
-#define LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_2( Content, Coord ) \
-    BOOST_PP_REPEAT( BOOST_PP_TUPLE_SIZE( Content ), LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_LOOP_2, (Content, Coord) )
+/* 2nd layer of internal loop caller for naming a dateStruct */
+#define LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_2( Content, Coord )               \
+    BOOST_PP_REPEAT(                                                           \
+        BOOST_PP_TUPLE_SIZE( Content ),                                        \
+        LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_LOOP_2,                           \
+        (Content, Coord)                                                       \
+    )
+
 
 // LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_1
 
-#define LLAMA_INTERNAL_PARSE_NAME_TUPLE_1( Tuple, Coord ) \
-    BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM(1, Tuple), LLAMA_DATESTRUCT), /* if (typeID == DateStruct) */\
-        struct BOOST_PP_TUPLE_ELEM(0, Tuple) { \
-            LLAMA_INTERNAL_DEFER(LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_2)( BOOST_PP_TUPLE_ELEM(2, Tuple), Coord ) \
-        }; \
-    , /* else (typeID == DateStruct) */ \
-        BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM(1, Tuple), LLAMA_DATEARRAY), /* if (typeID == DateArray) */ \
-            BOOST_PP_EMPTY() /*DateArray cannot be named*/ \
-        , /* else (typeID == DateArray) */ \
-            using BOOST_PP_TUPLE_ELEM(0, Tuple) = llama::DateCoord< LLAMA_INTERNAL_DEFER(BOOST_PP_TUPLE_ENUM)(Coord) >; \
-        ) /* fi (typeID == DateArray) */ \
+/* 1st layer of internal naming macro for a dateStruct tuple */
+#define LLAMA_INTERNAL_PARSE_NAME_TUPLE_1( Tuple, Coord )                      \
+    /* if (typeID == DateStruct) */                                            \
+    BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM( 1, Tuple ), LLAMA_DS ), \
+        struct BOOST_PP_TUPLE_ELEM( 0, Tuple )                                 \
+        {                                                                      \
+            LLAMA_INTERNAL_DEFER(                                              \
+                LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_2                         \
+            )( BOOST_PP_TUPLE_ELEM( 2, Tuple ), Coord )                        \
+        };                                                                     \
+    , /* else (typeID == DateStruct) */                                        \
+        /* if (typeID == DateArray) */                                         \
+        BOOST_PP_IIF( BOOST_PP_EQUAL(                                          \
+            BOOST_PP_TUPLE_ELEM( 1, Tuple ),                                   \
+            LLAMA_DA                                                           \
+        ),                                                                     \
+            /*DateArray cannot be named*/                                      \
+            BOOST_PP_EMPTY()                                                   \
+        , /* else (typeID == DateArray) */                                     \
+            using BOOST_PP_TUPLE_ELEM( 0, Tuple ) =                            \
+                llama::DateCoord< LLAMA_INTERNAL_DEFER(                        \
+                        BOOST_PP_TUPLE_ENUM                                    \
+                    )( Coord ) >;                                              \
+        ) /* fi (typeID == DateArray) */                                       \
     ) /* fi (typeID == DateStruct) */
 
-#define LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_LOOP_1( Z, N, Content ) \
-    LLAMA_INTERNAL_PARSE_NAME_TUPLE_1( BOOST_PP_TUPLE_ELEM(N, Content), (N) )
+/* 1st layer of internal loop function for naming a dateStruct */
+#define LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_LOOP_1( Z, N, Content )           \
+    LLAMA_INTERNAL_PARSE_NAME_TUPLE_1(                                         \
+        BOOST_PP_TUPLE_ELEM( N, Content ),                                     \
+        ( N )                                                                  \
+    )
 
-#define LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_1( Content ) \
-    BOOST_PP_REPEAT( BOOST_PP_TUPLE_SIZE( Content ), LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_LOOP_1, Content )
+/* 1st layer of internal loop caller for naming a dateStruct */
+#define LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_1( Content )                      \
+    BOOST_PP_REPEAT(                                                           \
+        BOOST_PP_TUPLE_SIZE( Content ),                                        \
+        LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_LOOP_1,                           \
+        Content                                                                \
+    )

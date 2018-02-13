@@ -38,25 +38,53 @@
 #define LLAMA_DATESTRUCT 1
 #define LLAMA_DATEARRAY 2
 
+#define LLAMA_AT LLAMA_ATOMTYPE
+#define LLAMA_DS LLAMA_DATESTRUCT
+#define LLAMA_DA LLAMA_DATEARRAY
+
 #define LLAMA_MAX_DATA_DOMAIN_DEPTH 3
 
-#define LLAMA_INTERNAL_DEFER(id) id BOOST_PP_EMPTY BOOST_PP_EMPTY BOOST_PP_EMPTY BOOST_PP_EMPTY BOOST_PP_EMPTY BOOST_PP_EMPTY BOOST_PP_EMPTY BOOST_PP_EMPTY () () () () () () () ()
-#define LLAMA_INTERNAL_EVAL(...)  LLAMA_INTERNAL_EVAL1(LLAMA_INTERNAL_EVAL1(LLAMA_INTERNAL_EVAL1(__VA_ARGS__)))
-#define LLAMA_INTERNAL_EVAL1(...) LLAMA_INTERNAL_EVAL2(LLAMA_INTERNAL_EVAL2(LLAMA_INTERNAL_EVAL2(__VA_ARGS__)))
+/* Defers the solving of a macro, which is especially needed of the macro
+ * creates commas, which may confuse surrounding steering macros like
+ * BOOST_PP_IF or similar.
+ */
+#define LLAMA_INTERNAL_DEFER(id)                                               \
+    id                                                                         \
+    BOOST_PP_EMPTY                                                             \
+    BOOST_PP_EMPTY                                                             \
+    BOOST_PP_EMPTY                                                             \
+    BOOST_PP_EMPTY                                                             \
+    BOOST_PP_EMPTY                                                             \
+    BOOST_PP_EMPTY                                                             \
+    BOOST_PP_EMPTY                                                             \
+    BOOST_PP_EMPTY () () () () () () () ()
+
+/* Evaluates the previously deferred macros */
+#define LLAMA_INTERNAL_EVAL(...)                                               \
+    LLAMA_INTERNAL_EVAL1(                                                      \
+        LLAMA_INTERNAL_EVAL1(                                                  \
+            LLAMA_INTERNAL_EVAL1( __VA_ARGS__ )                                \
+        )                                                                      \
+    )
+#define LLAMA_INTERNAL_EVAL1(...)                                              \
+    LLAMA_INTERNAL_EVAL2(                                                      \
+        LLAMA_INTERNAL_EVAL2(                                                  \
+            LLAMA_INTERNAL_EVAL2( __VA_ARGS__ )                                \
+        )                                                                      \
+    )
 #define LLAMA_INTERNAL_EVAL2(...) __VA_ARGS__
 
 #include "DateStructNameTemplate.hpp"
 #include "DateStructTemplate.hpp"
 
-#define LLAMA_INTERNAL_ITERATE_SEQ(R, DATA, ELEM) ELEM
-
-#define LLAMA_DEFINE_DATEDOMAIN( Name, Content ) \
-struct Name \
-{ \
-    /* TODO: Name accessor types */ \
-     \
-        LLAMA_INTERNAL_EVAL(LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_1( Content ))\
-        using Type = llama::DateStruct< \
-            LLAMA_INTERNAL_EVAL(LLAMA_INTERNAL_PARSE_DS_CONTENT_1( Content )) \
-        >; \
+/* Creates a struct with naming and type tree of a date domain */
+#define LLAMA_DEFINE_DATEDOMAIN( Name, Content )                               \
+struct Name                                                                    \
+{                                                                              \
+    /* Expands to shortcut structs for llama::DateCoord< x, y, z > */          \
+    LLAMA_INTERNAL_EVAL( LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_1( Content ) )   \
+    using Type = llama::DateStruct<                                            \
+        /* Expands DateStruct tree of date domain types */                     \
+        LLAMA_INTERNAL_EVAL( LLAMA_INTERNAL_PARSE_DS_CONTENT_1( Content ) )    \
+    >;                                                                         \
 };
