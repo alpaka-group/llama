@@ -5,7 +5,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 11)
 
 # LLAMA include dir until a CMakeConfig.cmake is created
-set(INCLUDE_DIRS ${INCLUDE_DIRS} "include/llama")
+SET(LLAMA_ROOT "${CMAKE_CURRENT_LIST_DIR}" CACHE STRING "The location of the llama library")
+LIST(APPEND CMAKE_PREFIX_PATH "${LLAMA_ROOT}")
+
+find_package(llama 0.1.0 REQUIRED)
+set(INCLUDE_DIRS ${INCLUDE_DIRS} ${llama_INCLUDE_DIR})
+add_definitions(${llama_DEFINITIONS})
 
 # set(ALPAKA_ROOT "${CMAKE_SOURCE_DIR}/../alpaka/" CACHE STRING  "The location of the alpaka library")
 # set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${ALPAKA_ROOT})
@@ -24,3 +29,13 @@ add_definitions(-DBOOST_ALL_NO_LIB)
 include_directories(llamatest1 ${INCLUDE_DIRS})
 add_executable(llamatest1 ${CMAKE_SOURCE_DIR}/llamatest1.cpp)
 target_link_libraries(llamatest1 ${LIBRARIES})
+
+configure_file (
+	"${PROJECT_SOURCE_DIR}/cmake/llama-config-version.cmake.in"
+	"${PROJECT_BINARY_DIR}/cmake/llama-config-version.cmake"
+	@ONLY
+	)
+
+install( DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/llama" DESTINATION "include" )
+install( FILES "${CMAKE_CURRENT_SOURCE_DIR}/llama-config.cmake" DESTINATION "lib/cmake/llama" )
+install( FILES "${PROJECT_BINARY_DIR}/cmake/llama-config-version.cmake" DESTINATION "lib/cmake/llama" )

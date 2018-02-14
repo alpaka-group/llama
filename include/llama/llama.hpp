@@ -18,6 +18,10 @@
 
 #pragma once
 
+#define LLAMA_VERSION_MAJOR 0
+#define LLAMA_VERSION_MINOR 1
+#define LLAMA_VERSION_PATCH 0
+
 #include "Types.hpp"
 #include "DateStruct.hpp"
 #include "DateArray.hpp"
