@@ -18,18 +18,18 @@
 
 #pragma once
 
+#include <boost/version.hpp>
+
+#if BOOST_VERSION < 106700 && (__CUDACC__ || __IBMCPP__)
+    #define BOOST_PP_VARIADICS 1
+#endif
+
 #include <boost/preprocessor/comparison/equal.hpp>
-#include <boost/preprocessor/control/if.hpp>
 #include <boost/preprocessor/control/iif.hpp>
 #include <boost/preprocessor/tuple/size.hpp>
 #include <boost/preprocessor/repetition/repeat.hpp>
 #include <boost/preprocessor/tuple/elem.hpp>
-#include <boost/preprocessor/seq/elem.hpp>
-#include <boost/preprocessor/iteration/iterate.hpp>
-#include <boost/preprocessor/cat.hpp>
-#include <boost/preprocessor/punctuation/comma_if.hpp>
-#include <boost/preprocessor/facilities/expand.hpp>
-#include <boost/preprocessor/seq/for_each.hpp>
+#include <boost/preprocessor/punctuation/comma.hpp>
 #include <boost/preprocessor/facilities/empty.hpp>
 #include <boost/preprocessor/tuple/enum.hpp>
 #include <boost/preprocessor/tuple/push_back.hpp>
@@ -46,7 +46,7 @@
 
 /* Defers the solving of a macro, which is especially needed of the macro
  * creates commas, which may confuse surrounding steering macros like
- * BOOST_PP_IF or similar.
+ * BOOST_PP_IIF or similar.
  */
 #define LLAMA_INTERNAL_DEFER(id)                                               \
     id                                                                         \

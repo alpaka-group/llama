@@ -48,7 +48,7 @@
 /* 3rd layer of internal loop function for a dateStruct */
 #define LLAMA_INTERNAL_PARSE_DS_CONTENT_LOOP_3( Z, N, Content )                \
     LLAMA_INTERNAL_DEFER(                                                      \
-        BOOST_PP_IF( BOOST_PP_EQUAL( N, 0 ), BOOST_PP_EMPTY, BOOST_PP_COMMA)   \
+        BOOST_PP_IIF( BOOST_PP_EQUAL( N, 0 ), BOOST_PP_EMPTY, BOOST_PP_COMMA)   \
     )()                                                                        \
     LLAMA_INTERNAL_PARSE_TUPLE_3( BOOST_PP_TUPLE_ELEM( N, Content) )
 
@@ -95,7 +95,7 @@
 /* 2nd layer of internal loop function for a dateStruct */
 #define LLAMA_INTERNAL_PARSE_DS_CONTENT_LOOP_2( Z, N, Content )                \
     LLAMA_INTERNAL_DEFER(                                                      \
-        BOOST_PP_IF( BOOST_PP_EQUAL( N, 0 ), BOOST_PP_EMPTY, BOOST_PP_COMMA)   \
+        BOOST_PP_IIF( BOOST_PP_EQUAL( N, 0 ), BOOST_PP_EMPTY, BOOST_PP_COMMA)   \
     )()                                                                        \
     LLAMA_INTERNAL_PARSE_TUPLE_2( BOOST_PP_TUPLE_ELEM( N, Content) )
 
@@ -142,7 +142,7 @@
 /* 1st layer of internal loop function for a dateStruct */
 #define LLAMA_INTERNAL_PARSE_DS_CONTENT_LOOP_1( Z, N, Content )                \
     LLAMA_INTERNAL_DEFER(                                                      \
-        BOOST_PP_IF( BOOST_PP_EQUAL( N, 0 ), BOOST_PP_EMPTY, BOOST_PP_COMMA)   \
+        BOOST_PP_IIF( BOOST_PP_EQUAL( N, 0 ), BOOST_PP_EMPTY, BOOST_PP_COMMA)   \
     )()                                                                        \
     LLAMA_INTERNAL_PARSE_TUPLE_1( BOOST_PP_TUPLE_ELEM( N, Content) )
 
