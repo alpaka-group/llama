@@ -206,9 +206,13 @@ struct Vector
             64
         >
     >;
+    using Parameter = int; //not used
     static inline
     auto
-    allocate( std::size_t count )
+    allocate(
+        std::size_t count,
+        Parameter const
+    )
     -> BlobType
     {
         return BlobType( count );

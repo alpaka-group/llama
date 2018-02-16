@@ -31,6 +31,16 @@ struct Array
 
     T element[count];
 
+    T* begin()
+    {
+        return &(element[0]);
+    };
+
+    T* end()
+    {
+        return &(element[count]);
+    };
+
     template< typename T_IndexType >
     auto
     operator[] ( T_IndexType && idx )

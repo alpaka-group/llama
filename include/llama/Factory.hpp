@@ -20,10 +20,65 @@
 
 #include "View.hpp"
 #include "allocator/Vector.hpp"
+#include "IntegerSequence.hpp"
 
 namespace llama
 {
 
+namespace internal
+{
+
+template <
+    typename T_Allocator,
+    typename T_Mapping,
+    std::size_t... Is
+>
+auto
+makeBlobArrayImpl(
+    T_Mapping const mapping,
+    typename T_Allocator::Parameter allocatorParams,
+    IntegerSequence<Is...>
+)
+-> Array<
+        typename T_Allocator::BlobType,
+        T_Mapping::blobCount
+    >
+{
+    return Array<
+        typename T_Allocator::BlobType,
+        sizeof...( Is )
+    > { T_Allocator::allocate(
+            mapping.getBlobSize( Is ),
+            allocatorParams
+        )...
+    };
+}
+
+template <
+    typename T_Allocator,
+    typename T_Mapping
+>
+auto
+makeBlobArray(
+    T_Mapping const mapping,
+    typename T_Allocator::Parameter allocatorParams
+)
+-> Array<
+        typename T_Allocator::BlobType,
+        T_Mapping::blobCount
+    >
+{
+    return makeBlobArrayImpl<
+        T_Allocator,
+        T_Mapping
+    > (
+        mapping,
+        allocatorParams,
+        MakeIntegerSequence< T_Mapping::blobCount >{ }
+    );
+}
+
+}; // namespace internal
 
 template<
     typename T_Mapping,
@@ -32,8 +87,12 @@ template<
 struct Factory
 {
     static inline
-	auto
-    allowView ( T_Mapping const mapping )
+    auto
+    allowView(
+        T_Mapping const mapping,
+        typename T_Allocator::Parameter allocatorParams =
+            typename T_Allocator::Parameter()
+    )
     -> View<
         T_Mapping,
         typename T_Allocator::BlobType
@@ -42,9 +101,14 @@ struct Factory
         View<
             T_Mapping,
             typename T_Allocator::BlobType
-        > view( mapping );
-        for( std::size_t i = 0; i < T_Mapping::blobCount; ++i )
-            view.blob[ i ] = T_Allocator::allocate( mapping.getBlobSize( i ) );
+        > view(
+            mapping,
+            internal::makeBlobArray< T_Allocator >(
+                mapping,
+                allocatorParams
+            )
+        );
+
         return view;
     }
 };

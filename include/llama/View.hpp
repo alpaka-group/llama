@@ -19,6 +19,7 @@
 #pragma once
 
 #include "GetType.hpp"
+#include "Array.hpp"
 
 namespace llama
 {
@@ -31,8 +32,15 @@ struct View
 {
     using BlobType = T_BlobType;
     using Mapping = T_Mapping;
-    View( Mapping mapping ) :
-        mapping( mapping )
+    View(
+        Mapping mapping,
+        Array<
+            BlobType,
+            Mapping::blobCount
+        > blob
+    ) :
+        mapping( mapping ),
+        blob( blob )
     { }
 
     template< std::size_t... T_dateDomain >
@@ -44,9 +52,9 @@ struct View
     >::type &
     {
         auto const nr =
-			mapping.template getBlobNr< T_dateDomain... >( userDomain );
+            mapping.template getBlobNr< T_dateDomain... >( userDomain );
         auto const byte =
-			mapping.template getBlobByte< T_dateDomain... >( userDomain );
+            mapping.template getBlobByte< T_dateDomain... >( userDomain );
         return *( reinterpret_cast< typename GetType<
                 typename Mapping::DateDomain,
                 T_dateDomain...
@@ -70,7 +78,7 @@ struct View
         }
 
         template< std::size_t... T_coord >
-		auto
+        auto
         operator()( DateCoord< T_coord... > && dc= DateCoord< T_coord... >() )
         -> typename GetType<
             typename Mapping::DateDomain,
@@ -97,7 +105,7 @@ struct View
                 userDomain,
                 *this
             };
-    };
+    }
 
     template< typename... T_Coord >
     auto
@@ -108,9 +116,13 @@ struct View
                 typename Mapping::UserDomain{coord...},
                 *this
             };
-    };
+    }
 
-    BlobType blob[ Mapping::blobCount ];
+
+    Array<
+        BlobType,
+        Mapping::blobCount
+    > blob;
     const Mapping mapping;
 };
 

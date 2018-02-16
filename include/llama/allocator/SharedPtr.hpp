@@ -34,6 +34,10 @@ struct SharedPtrAccessor
     using PrimType = unsigned char;
     using BlobType = std::shared_ptr< PrimType >;
 
+    SharedPtrAccessor( BlobType blob ) :
+        blob( blob )
+    { }
+
     template< typename T_IndexType >
     auto
     operator[] ( T_IndexType && idx )
@@ -58,10 +62,14 @@ struct SharedPtr
 {
     using PrimType = typename internal::SharedPtrAccessor::PrimType;
     using BlobType = internal::SharedPtrAccessor;
+    using Parameter = int; //not used
 
     static inline
     auto
-    allocate( std::size_t count )
+    allocate(
+        std::size_t count,
+        Parameter const
+    )
     -> BlobType
     {
 #        if defined _MSC_VER
@@ -91,21 +99,21 @@ struct SharedPtr
                 )
             ); // other (use valloc for page-aligned memory)
 #        endif
-        BlobType accessor;
-        accessor.blob = internal::SharedPtrAccessor::BlobType(
-            raw_pointer,
-            [=]( PrimType* raw_pointer )
-            {
-#                if defined _MSC_VER
-                    _aligned_free( raw_pointer );
-#                elif defined __linux__
-                    free( raw_pointer );
-#                elif defined __MACH__
-                    free( raw_pointer );
-#                else
-                    free( raw_pointer );
-#                endif
-            }
+            BlobType accessor( internal::SharedPtrAccessor::BlobType(
+                raw_pointer,
+                [=]( PrimType* raw_pointer )
+                {
+#                    if defined _MSC_VER
+                        _aligned_free( raw_pointer );
+#                    elif defined __linux__
+                        free( raw_pointer );
+#                    elif defined __MACH__
+                        free( raw_pointer );
+#                    else
+                        free( raw_pointer );
+#                    endif
+                }
+            )
         );
         return accessor;
     }
