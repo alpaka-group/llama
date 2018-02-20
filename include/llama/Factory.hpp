@@ -20,6 +20,8 @@
 
 #include "View.hpp"
 #include "allocator/Vector.hpp"
+#include "allocator/Stack.hpp"
+#include "mapping/One.hpp"
 #include "IntegerSequence.hpp"
 
 namespace llama
@@ -88,8 +90,8 @@ struct Factory
 {
     static inline
     auto
-    allowView(
-        T_Mapping const mapping,
+    allocView(
+        T_Mapping const mapping = T_Mapping(),
         typename T_Allocator::Parameter allocatorParams =
             typename T_Allocator::Parameter()
     )
@@ -112,5 +114,42 @@ struct Factory
         return view;
     }
 };
+
+template<
+    std::size_t dimension,
+    typename DateDomain
+>
+using OneOnStackFactory =
+    llama::Factory<
+        llama::mapping::One<
+            UserDomain< dimension >,
+            DateDomain
+        >,
+        llama::allocator::Stack<
+            DateDomain::size
+        >
+    >;
+
+template<
+    std::size_t dimension,
+    typename DateDomain
+>
+auto
+tempAlloc()
+-> View<
+    llama::mapping::One<
+        UserDomain< dimension >,
+        DateDomain
+    >,
+    typename llama::allocator::Stack<
+        DateDomain::size
+    >::BlobType
+>
+{
+    return OneOnStackFactory<
+        dimension,
+        DateDomain
+    >::allocView();
+}
 
 } // namespace llama

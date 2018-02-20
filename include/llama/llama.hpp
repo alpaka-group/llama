@@ -29,11 +29,13 @@
 
 #include "allocator/Vector.hpp"
 #include "allocator/SharedPtr.hpp"
+#include "allocator/Stack.hpp"
 
 #include "Factory.hpp"
 
 #include "mapping/AoS.hpp"
 #include "mapping/SoA.hpp"
+#include "mapping/One.hpp"
 
 #include "preprocessor/DefineDateDomain.hpp"
 #include "preprocessor/macros.hpp"

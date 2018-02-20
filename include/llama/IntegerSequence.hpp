@@ -54,10 +54,41 @@ struct IntegerSequenceHelper<
 
 } // namespace internal
 
-
 template< std::size_t T_N >
 using MakeIntegerSequence = typename
 internal::IntegerSequenceHelper< T_N - 1 >::type;
+
+namespace internal
+{
+
+template<
+    std::size_t T_Iter,
+    std::size_t... T_vals
+>
+struct ZeroSequenceHelper
+{
+    using type = typename ZeroSequenceHelper<
+        T_Iter-1,
+        0,
+        T_vals...
+    >::type;
+};
+
+template < std::size_t... T_vals >
+struct ZeroSequenceHelper<
+    0,
+    T_vals...
+>
+{
+    using type = IntegerSequence< T_vals...>;
+};
+
+} // namespace internal
+
+
+template< std::size_t T_N >
+using MakeZeroSequence = typename
+internal::ZeroSequenceHelper< T_N >::type;
 
 
 } // namespace llama
