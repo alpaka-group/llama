@@ -48,6 +48,76 @@ LLAMA_DEFINE_DATEDOMAIN(
  * };
  */
 
+template< std::size_t... T_coords >
+void printCoords( llama::DateCoord< T_coords... > )
+{
+    #if __cplusplus >= 201703L
+        (std::cout << ... << T_coords);
+    #endif
+}
+
+template<
+    typename T_VirtualDate
+>
+struct SetZeroFunctor
+{
+    template<
+        typename T_OuterCoord,
+        typename T_InnerCoord
+    >
+    auto
+    operator()(
+        T_OuterCoord,
+        T_InnerCoord
+    )
+    -> void
+    {
+        vd( typename T_OuterCoord::template Cat< T_InnerCoord >() ) = 0;
+        //~ printCoords( typename T_OuterCoord::template Cat< T_InnerCoord >() );
+        //~ std::cout << " ";
+        //~ printCoords( T_OuterCoord() );
+        //~ std::cout << " ";
+        //~ printCoords( T_InnerCoord() );
+        //~ std::cout << std::endl;
+    }
+    T_VirtualDate vd;
+};
+
+
+template<
+    typename T_VirtualDate,
+    typename T_Source
+>
+struct AdditionFunctor
+{
+    template<
+        typename T_OuterCoord,
+        typename T_InnerCoord
+    >
+    auto
+    operator()(
+        T_OuterCoord,
+        T_InnerCoord
+    )
+    -> void
+    {
+        using Dst = typename T_OuterCoord::template Cat< T_InnerCoord >;
+        using Src = typename T_Source::template Cat< T_InnerCoord >;
+
+        //~ printCoords( Dst() );
+        //~ std::cout << " - ";
+        //~ printCoords( Src() );
+        //~ std::cout << " - ";
+        //~ printCoords( T_InnerCoord() );
+        //~ std::cout << " - ";
+        //~ printCoords( T_OuterCoord() );
+        //~ std::cout << std::endl;
+
+        vd( Dst() ) = vd( Src() );
+    }
+    T_VirtualDate vd;
+};
+
 int main(int argc,char * * argv)
 {
     using UD = llama::UserDomain< 2 >;
@@ -100,20 +170,31 @@ int main(int argc,char * * argv)
         << (size_t)&options_2 - (size_t)&weight
         << std::endl;
 
-    auto virtualDate = view( pos );
-
     for (size_t x = 0; x < udSize[0]; ++x)
         LLAMA_INDEPENDENT_DATA
         for (size_t y = 0; y < udSize[1]; ++y)
+        {
+            SetZeroFunctor< decltype( view( x, y ) ) > szf{ view( x, y ) };
+            llama::forEach< DD, Name::Pos >( szf );
+            llama::forEach< DD, Name::Momentum >( szf );
             view.accessor< 1, 0 >( { x, y } ) =
                 double( x + y ) / double( udSize[0] + udSize[1] );
+        }
     for (size_t x = 0; x < udSize[0]; ++x)
         LLAMA_INDEPENDENT_DATA
         for (size_t y = 0; y < udSize[1]; ++y)
         {
             auto date = view( x, y );
-            date( Name::Momentum() );
-            date( Name::Momentum::A() ) += date( llama::DateCoord< 1, 1 >() );
+            //~ date( Name::Momentum::A() ) += date( llama::DateCoord< 0, 0 >() );
+            //~ date( Name::Momentum::B() ) += date( llama::DateCoord< 0, 1 >() );
+            AdditionFunctor<
+                decltype(date),
+                Name::Pos
+            > as{ date };
+            llama::forEach<
+                DD,
+                Name::Momentum
+            >( as );
         }
     double sum = 0.0;
     for (size_t x = 0; x < udSize[0]; ++x)
