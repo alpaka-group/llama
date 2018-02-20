@@ -136,7 +136,7 @@ namespace internal
         -> void
         {
             /* commented out for performance reasons
-            /* new ( p ) value_type ( value );
+             * new ( p ) value_type ( value );
              */
         }
 
