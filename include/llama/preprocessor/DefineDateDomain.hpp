@@ -79,7 +79,7 @@
 
 /* Creates a struct with naming and type tree of a date domain */
 #define LLAMA_DEFINE_DATEDOMAIN( Name, Content )                               \
-struct Name                                                                    \
+struct Name final : llama::DateCoord<>                                         \
 {                                                                              \
     /* Expands to shortcut structs for llama::DateCoord< x, y, z > */          \
     LLAMA_INTERNAL_EVAL( LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_1( Content ) )   \

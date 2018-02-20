@@ -24,7 +24,10 @@
 #define LLAMA_INTERNAL_PARSE_NAME_TUPLE_3( Tuple, Coord )                      \
     /* if (typeID == DateStruct) */                                            \
     BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM( 1, Tuple ), LLAMA_DS),  \
-        struct BOOST_PP_TUPLE_ELEM( 0, Tuple )                                 \
+        struct BOOST_PP_TUPLE_ELEM( 0, Tuple ) final                           \
+        : llama::DateCoord< LLAMA_INTERNAL_DEFER(                              \
+                BOOST_PP_TUPLE_ENUM                                            \
+            )( Coord ) >                                                       \
         {                                                                      \
             LLAMA_INTERNAL_DEFER(                                              \
                 LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_4                         \
@@ -67,7 +70,10 @@
 #define LLAMA_INTERNAL_PARSE_NAME_TUPLE_2( Tuple, Coord )                      \
     /* if (typeID == DateStruct) */                                            \
     BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM( 1, Tuple ), LLAMA_DS),  \
-        struct BOOST_PP_TUPLE_ELEM( 0, Tuple )                                 \
+        struct BOOST_PP_TUPLE_ELEM( 0, Tuple ) final                           \
+        : llama::DateCoord< LLAMA_INTERNAL_DEFER(                              \
+                BOOST_PP_TUPLE_ENUM                                            \
+            )( Coord ) >                                                       \
         {                                                                      \
             LLAMA_INTERNAL_DEFER(                                              \
                 LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_3                         \
@@ -111,7 +117,10 @@
 #define LLAMA_INTERNAL_PARSE_NAME_TUPLE_1( Tuple, Coord )                      \
     /* if (typeID == DateStruct) */                                            \
     BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM( 1, Tuple ), LLAMA_DS ), \
-        struct BOOST_PP_TUPLE_ELEM( 0, Tuple )                                 \
+        struct BOOST_PP_TUPLE_ELEM( 0, Tuple ) final                           \
+        : llama::DateCoord< LLAMA_INTERNAL_DEFER(                              \
+                BOOST_PP_TUPLE_ENUM                                            \
+            )( Coord ) >                                                       \
         {                                                                      \
             LLAMA_INTERNAL_DEFER(                                              \
                 LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_2                         \
