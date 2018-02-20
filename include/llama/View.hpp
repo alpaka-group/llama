@@ -113,9 +113,32 @@ struct View
     -> VirtualDate
     {
         return VirtualDate{
-                typename Mapping::UserDomain{coord...},
+                typename Mapping::UserDomain{ coord... },
                 *this
             };
+    }
+
+    auto
+    operator()( std::size_t coord )
+    -> VirtualDate
+    {
+        return VirtualDate{
+                typename Mapping::UserDomain{ coord },
+                *this
+            };
+    }
+
+    template< std::size_t... T_coord >
+    auto
+    operator()( DateCoord< T_coord... > && dc= DateCoord< T_coord... >() )
+    -> typename GetType<
+        typename Mapping::DateDomain,
+        T_coord...
+    >::type &
+    {
+        return accessor< T_coord... >(
+            userDomainZero< Mapping::UserDomain::count >()
+        );
     }
 
 
