@@ -23,12 +23,14 @@
 
 namespace llama
 {
+    template < std::size_t... T_coords >
+    struct DateCoord;
 
     template<
         std::size_t T_coord,
         std::size_t... T_coords
     >
-    struct DateCoord
+    struct DateCoord< T_coord, T_coords... >
     {
         static constexpr std::size_t front = T_coord;
         static constexpr std::size_t size = sizeof...( T_coords ) + 1;
@@ -50,7 +52,7 @@ namespace llama
     };
 
     template< std::size_t T_coord >
-    struct DateCoord < T_coord >
+    struct DateCoord< T_coord >
     {
         static constexpr std::size_t front = T_coord;
         static constexpr std::size_t back = T_coord;
@@ -66,6 +68,19 @@ namespace llama
             T_coord,
             T_newCoord
         >;
+    };
+
+    template< >
+    struct DateCoord< >
+    {
+        static constexpr std::size_t size = 0;
+        using IncBack = DateCoord< 1 >;
+        template< std::size_t T_newCoord = 0 >
+        using PushFront = DateCoord<
+            T_newCoord
+        >;
+        template< std::size_t T_newCoord = 0 >
+        using PushBack = PushFront< T_newCoord >;
     };
 
 } // namespace llama
