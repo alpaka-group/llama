@@ -20,21 +20,21 @@ LLAMA_DEFINE_DATEDOMAIN(
 
 /* The macro above defines the struct below
  *
- * struct Name
+ * struct Name : llama::DateCoord< >
  * {
- *     struct Pos
+ *     struct Pos : llama::DateCoord<0>
  *     {
  *         using X = llama::DateCoord<0,0>;
  *         using Y = llama::DateCoord<0,1>;
  *         using Z = llama::DateCoord<0,2>;
  *     };
- *     struct Momentum
+ *     struct Momentum : llama::DateCoord<1>
  *     {
  *         using A = llama::DateCoord<1,0>;
  *         using B = llama::DateCoord<1,1>;
  *     };
  *     using Weight = llama::DateCoord<2>;
- *     struct Options
+ *     struct Options : llama::DateCoord<3>
  *     {
  *     };
  *
@@ -75,7 +75,7 @@ int main(int argc,char * * argv)
         Mapping,
         llama::allocator::SharedPtr< 256 >
     >;
-    auto view = Factory::allowView( mapping );
+    auto view = Factory::allocView( mapping );
     const UD pos{ 0, 0 };
     float& position_x = view.accessor< 0, 0 >( pos );
     double& momentum_y = view.accessor< 1, 1 >( pos );
@@ -112,6 +112,7 @@ int main(int argc,char * * argv)
         for (size_t y = 0; y < udSize[1]; ++y)
         {
             auto date = view( x, y );
+            date( Name::Momentum() );
             date( Name::Momentum::A() ) += date( llama::DateCoord< 1, 1 >() );
         }
     double sum = 0.0;
