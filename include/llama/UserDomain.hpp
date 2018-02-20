@@ -19,6 +19,7 @@
 #pragma once
 
 #include "Types.hpp"
+#include "IntegerSequence.hpp"
 
 namespace llama
 {
@@ -126,5 +127,28 @@ struct LinearizeUserDomainAdressLikeFortran< 1 >
         return coord[ 0 ];
     }
 };
+
+namespace internal
+{
+
+template<
+    std::size_t... T_dims
+>
+auto
+userDomainZeroHelper( IntegerSequence< T_dims... > )
+-> UserDomain< sizeof...( T_dims ) >
+{
+    return UserDomain< sizeof...( T_dims ) >{ T_dims... };
+}
+
+} // namespace internal
+
+template< std::size_t T_dim >
+auto
+userDomainZero()
+-> UserDomain< T_dim >
+{
+    return internal::userDomainZeroHelper( MakeZeroSequence< T_dim >{ } );
+}
 
 } // namespace llama
