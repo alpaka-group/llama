@@ -18,6 +18,9 @@
 
 #pragma once
 
+
 #define LLAMA_INDEPENDENT_DATA \
     _Pragma ("ivdep") \
-    _Pragma ("GCC ivdep")
+    _Pragma ("GCC ivdep") \
+    _Pragma ("clang loop vectorize(enable)") \
+    _Pragma ("clang loop interleave(enable)")

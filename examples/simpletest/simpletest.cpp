@@ -83,41 +83,6 @@ struct SetZeroFunctor
     T_VirtualDate vd;
 };
 
-
-template<
-    typename T_VirtualDate,
-    typename T_Source
->
-struct AdditionFunctor
-{
-    template<
-        typename T_OuterCoord,
-        typename T_InnerCoord
-    >
-    auto
-    operator()(
-        T_OuterCoord,
-        T_InnerCoord
-    )
-    -> void
-    {
-        using Dst = typename T_OuterCoord::template Cat< T_InnerCoord >;
-        using Src = typename T_Source::template Cat< T_InnerCoord >;
-
-        //~ printCoords( Dst() );
-        //~ std::cout << " - ";
-        //~ printCoords( Src() );
-        //~ std::cout << " - ";
-        //~ printCoords( T_InnerCoord() );
-        //~ std::cout << " - ";
-        //~ printCoords( T_OuterCoord() );
-        //~ std::cout << std::endl;
-
-        vd( Dst() ) = vd( Src() );
-    }
-    T_VirtualDate vd;
-};
-
 int main(int argc,char * * argv)
 {
     using UD = llama::UserDomain< 2 >;
@@ -187,10 +152,11 @@ int main(int argc,char * * argv)
             auto date = view( x, y );
             //~ date( Name::Momentum::A() ) += date( llama::DateCoord< 0, 0 >() );
             //~ date( Name::Momentum::B() ) += date( llama::DateCoord< 0, 1 >() );
-            AdditionFunctor<
+            llama::AdditionFunctor<
+                decltype(date),
                 decltype(date),
                 Name::Pos
-            > as{ date };
+            > as{ date, date };
             llama::forEach<
                 DD,
                 Name::Momentum

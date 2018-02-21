@@ -21,6 +21,9 @@
 #include <boost/version.hpp>
 
 #if BOOST_VERSION < 106700 && (__CUDACC__ || __IBMCPP__)
+    #ifdef BOOST_PP_VARIADICS
+        #undef BOOST_PP_VARIADICS
+    #endif
     #define BOOST_PP_VARIADICS 1
 #endif
 
