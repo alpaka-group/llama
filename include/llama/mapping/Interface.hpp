@@ -38,13 +38,13 @@ struct Interface
 
     Interface( UserDomain const );
 
-    inline
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     getBlobSize( std::size_t const blobNr ) const
     -> std::size_t;
 
     template< typename T_DateDomainCoord >
-    inline
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     getBlobByte(
         UserDomain const coord,
@@ -52,7 +52,7 @@ struct Interface
     ) const
     -> std::size_t;
 
-    inline
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     getBlobNr(
         UserDomain const coord,

@@ -37,7 +37,7 @@
 #include "mapping/SoA.hpp"
 #include "mapping/One.hpp"
 
-#include "preprocessor/DefineDateDomain.hpp"
 #include "preprocessor/macros.hpp"
+#include "preprocessor/DefineDateDomain.hpp"
 
 #include "ForEach.hpp"

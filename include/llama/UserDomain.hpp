@@ -27,7 +27,7 @@ namespace llama
 template< std::size_t T_dim >
 struct ExtentUserDomainAdress
 {
-    inline
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()( UserDomain< T_dim > const & size ) const
     -> std::size_t
@@ -40,7 +40,7 @@ struct ExtentUserDomainAdress
 template< >
 struct ExtentUserDomainAdress< 1 >
 {
-    inline
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()( UserDomain< 1 > const & size ) const
     -> std::size_t
@@ -55,7 +55,7 @@ template<
 >
 struct LinearizeUserDomainAdress
 {
-    inline
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()(
         UserDomain< T_dim > const & coord,
@@ -81,7 +81,7 @@ struct LinearizeUserDomainAdress<
     1
 >
 {
-    inline
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()(
         UserDomain< T_dim > const & coord,
@@ -96,7 +96,7 @@ struct LinearizeUserDomainAdress<
 template< std::size_t T_dim >
 struct LinearizeUserDomainAdressLikeFortran
 {
-    inline
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()(
         UserDomain< T_dim > const & coord,
@@ -116,7 +116,7 @@ struct LinearizeUserDomainAdressLikeFortran
 template< >
 struct LinearizeUserDomainAdressLikeFortran< 1 >
 {
-    inline
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()(
         UserDomain< 1 > const & coord,
@@ -134,6 +134,7 @@ namespace internal
 template<
     std::size_t... T_dims
 >
+LLAMA_FN_HOST_ACC_INLINE
 auto
 userDomainZeroHelper( IntegerSequence< T_dims... > )
 -> UserDomain< sizeof...( T_dims ) >
@@ -144,6 +145,7 @@ userDomainZeroHelper( IntegerSequence< T_dims... > )
 } // namespace internal
 
 template< std::size_t T_dim >
+LLAMA_FN_HOST_ACC_INLINE
 auto
 userDomainZero()
 -> UserDomain< T_dim >

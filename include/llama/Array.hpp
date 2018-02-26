@@ -17,6 +17,7 @@
  */
 
 #pragma once
+#include "preprocessor/macros.hpp"
 
 namespace llama
 {
@@ -31,17 +32,20 @@ struct Array
 
     T element[count];
 
+    LLAMA_FN_HOST_ACC_INLINE
     T* begin()
     {
         return &(element[0]);
     };
 
+    LLAMA_FN_HOST_ACC_INLINE
     T* end()
     {
         return &(element[count]);
     };
 
     template< typename T_IndexType >
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator[] ( T_IndexType && idx )
     -> T &
@@ -50,6 +54,7 @@ struct Array
     }
 
     template< typename T_IndexType >
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator[] ( T_IndexType && idx ) const
     -> T const &
@@ -58,6 +63,7 @@ struct Array
     }
 
     auto
+    LLAMA_FN_HOST_ACC_INLINE
     pop_front() const
     -> Array<
         T,
@@ -74,6 +80,7 @@ struct Array
     }
 
     auto
+    LLAMA_FN_HOST_ACC_INLINE
     pop_back() const
     -> Array<
         T,
@@ -90,6 +97,7 @@ struct Array
     }
 
     auto
+    LLAMA_FN_HOST_ACC_INLINE
     push_front( T const new_element ) const
     -> Array<
         T,
@@ -107,6 +115,7 @@ struct Array
     }
 
     auto
+    LLAMA_FN_HOST_ACC_INLINE
     push_back( T const new_element ) const
     -> Array<
         T,

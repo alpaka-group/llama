@@ -84,6 +84,7 @@ template<
 struct ApplyFunctorIfCoordIsIncluded
 {
     auto
+    LLAMA_FN_HOST_ACC_INLINE
     operator()( T_Functor& functor )
     -> void
     { };
@@ -107,6 +108,7 @@ struct ApplyFunctorIfCoordIsIncluded<
 >
 {
     auto
+    LLAMA_FN_HOST_ACC_INLINE
     operator()( T_Functor& functor )
     -> void
     {
@@ -123,6 +125,7 @@ template<
 struct ApplyFunctorInDateStructLeave
 {
     auto
+    LLAMA_FN_HOST_ACC_INLINE
     operator()( T_Functor&& functor )
     -> void
     {
@@ -148,6 +151,7 @@ struct ApplyFunctorInDateStructLeave<
 >
 {
     auto
+    LLAMA_FN_HOST_ACC_INLINE
     operator()( T_Functor&& functor )
     -> void
     {
@@ -170,6 +174,7 @@ template<
 struct ApplyFunctorInDateStructLeaves
 {
     auto
+    LLAMA_FN_HOST_ACC_INLINE
     operator()( T_Functor&& functor )
     -> void
     {
@@ -202,6 +207,7 @@ struct ApplyFunctorInDateStructLeaves<
 >
 {
     auto
+    LLAMA_FN_HOST_ACC_INLINE
     operator()( T_Functor&& functor )
     -> void
     {
@@ -219,6 +225,7 @@ template<
     typename T_Functor,
     typename... T_Leaves
 >
+LLAMA_FN_HOST_ACC_INLINE
 void applyFunctorInDateStruct(
     T_Functor&& functor,
     DateStruct< T_Leaves... >
@@ -239,6 +246,7 @@ template<
     typename T_DateCoord = DateCoord < >,
     typename T_Functor
 >
+LLAMA_FN_HOST_ACC_INLINE
 void forEach( T_Functor&& functor )
 {
     internal::applyFunctorInDateStruct< T_DateCoord >(

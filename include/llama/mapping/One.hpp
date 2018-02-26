@@ -37,7 +37,7 @@ struct One
     using DateDomain = T_DateDomain;
     static constexpr std::size_t blobCount = 1;
 
-    inline
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     getBlobSize( std::size_t const ) const
     -> std::size_t
@@ -46,6 +46,7 @@ struct One
     }
 
     template< std::size_t... T_dateDomainCoord >
+    LLAMA_FN_HOST_ACC_INLINE
     constexpr
     auto
     getBlobByte( UserDomain const coord ) const
@@ -56,6 +57,7 @@ struct One
     }
 
     template< std::size_t... T_dateDomainCoord >
+    LLAMA_FN_HOST_ACC_INLINE
     constexpr
     auto
     getBlobNr( UserDomain const coord ) const

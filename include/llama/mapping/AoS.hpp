@@ -45,7 +45,7 @@ struct AoS
 		userDomainSize( size )
 	{ }
 
-    inline
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     getBlobSize( std::size_t const ) const
     -> std::size_t
@@ -55,7 +55,7 @@ struct AoS
     }
 
     template< std::size_t... T_dateDomainCoord >
-    inline
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     getBlobByte( UserDomain const coord ) const
     -> std::size_t
@@ -69,6 +69,7 @@ struct AoS
     }
 
     template< std::size_t... T_dateDomainCoord >
+    LLAMA_FN_HOST_ACC_INLINE
     constexpr
     auto
     getBlobNr( UserDomain const coord ) const

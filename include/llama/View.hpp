@@ -21,6 +21,7 @@
 #include <boost/preprocessor/cat.hpp>
 #include <type_traits>
 
+#include "preprocessor/macros.hpp"
 #include "GetType.hpp"
 #include "Array.hpp"
 #include "ForEach.hpp"
@@ -46,6 +47,7 @@ struct View;
             typename T_OuterCoord,                                             \
             typename T_InnerCoord                                              \
         >                                                                      \
+        LLAMA_FN_HOST_ACC_INLINE                                               \
         auto                                                                   \
         operator()(                                                            \
             T_OuterCoord,                                                      \
@@ -71,6 +73,7 @@ struct View;
             typename T_OuterCoord,                                             \
             typename T_InnerCoord                                              \
         >                                                                      \
+        LLAMA_FN_HOST_ACC_INLINE                                               \
         auto                                                                   \
         operator()(                                                            \
             T_OuterCoord,                                                      \
@@ -95,6 +98,7 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
 
 #define __LLAMA_VIRTUALDATE_VIRTUALDATE_OPERATOR( OP, FUNCTOR, REF )           \
     template< typename T_OtherView >                                           \
+    LLAMA_FN_HOST_ACC_INLINE                                                   \
     auto                                                                       \
     operator OP( VirtualDate< T_OtherView >REF other )                         \
     -> decltype(*this)&                                                        \
@@ -119,6 +123,7 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
         typename T_OtherMapping,                                               \
         typename T_OtherBlobType                                               \
     >                                                                          \
+    LLAMA_FN_HOST_ACC_INLINE                                                   \
     auto                                                                       \
     operator OP( View<                                                         \
             T_OtherMapping,                                                    \
@@ -146,6 +151,7 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
 
 #define __LLAMA_VIRTUALDATE_TYPE_OPERATOR( OP, FUNCTOR, REF )                  \
     template< typename T_OtherType >                                           \
+    LLAMA_FN_HOST_ACC_INLINE                                                   \
     auto                                                                       \
     operator OP( T_OtherType REF other )                                       \
     -> decltype(*this)&                                                        \
@@ -180,6 +186,7 @@ struct VirtualDate
     using BlobType = typename ViewType::BlobType;
 
     template< std::size_t... T_coord >
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     access( DateCoord< T_coord... > && = DateCoord< T_coord... >() )
     -> typename GetType<
@@ -191,6 +198,7 @@ struct VirtualDate
     }
 
     template< std::size_t... T_coord >
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()( DateCoord< T_coord... > && dc= DateCoord< T_coord... >() )
     -> typename GetType<
@@ -228,6 +236,8 @@ struct View
             BlobType
         >
     >;
+
+    LLAMA_FN_HOST_ACC_INLINE
     View(
         Mapping mapping,
         Array<
@@ -239,7 +249,9 @@ struct View
         blob( blob )
     { }
 
+    LLAMA_NO_HOST_ACC_WARNING
     template< std::size_t... T_dateDomain >
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     accessor( typename Mapping::UserDomain const userDomain )
     -> typename GetType<
@@ -261,6 +273,7 @@ struct View
     }
 
     auto
+    LLAMA_FN_HOST_ACC_INLINE
     operator()( typename Mapping::UserDomain const userDomain )
     -> VirtualDateType
     {
@@ -271,6 +284,7 @@ struct View
     }
 
     template< typename... T_Coord >
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()( T_Coord... coord )
     -> VirtualDateType
@@ -282,6 +296,7 @@ struct View
     }
 
     template< typename... T_Coord >
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()( T_Coord... coord ) const
     -> const VirtualDateType
@@ -292,6 +307,7 @@ struct View
             };
     }
 
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()( std::size_t coord )
     -> VirtualDateType
@@ -303,6 +319,7 @@ struct View
     }
 
     template< std::size_t... T_coord >
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()( DateCoord< T_coord... > && dc= DateCoord< T_coord... >() )
     -> typename GetType<
