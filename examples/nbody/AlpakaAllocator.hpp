@@ -1,0 +1,125 @@
+#pragma once
+
+namespace nbody
+{
+
+namespace allocator
+{
+
+namespace internal
+{
+
+template < typename T_Buffer >
+struct AlpakaAccessor
+{
+    using PrimType = unsigned char;
+    using BlobType = T_Buffer;
+
+    AlpakaAccessor( BlobType buffer ) :
+        buffer ( buffer )
+    { }
+
+    /* Explicit copy and move constructor and destructor definition because of
+     * "calling a __host__ function from a __host__ __device__ function warnings
+     * from nvidia compiler.
+     */
+    AlpakaAccessor( AlpakaAccessor const & ) = default;
+    AlpakaAccessor( AlpakaAccessor && ) = default;
+    ~AlpakaAccessor( ) = default;
+
+    template< typename T_IndexType >
+    auto
+    operator[] ( T_IndexType && idx )
+    -> PrimType &
+    {
+        return alpaka::mem::view::getPtrNative( buffer )[ idx ];
+    }
+
+    template< typename T_IndexType >
+    auto operator[] ( T_IndexType && idx ) const
+    -> const PrimType &
+    {
+        return alpaka::mem::view::getPtrNative( buffer )[ idx ];
+    }
+
+    BlobType buffer;
+};
+
+} // namespace internal
+
+template<
+    typename DevAcc,
+    typename Dim,
+    typename Size
+>
+struct Alpaka
+{
+    using BufferType = alpaka::mem::buf::Buf<
+        DevAcc,
+        unsigned char,
+        Dim,
+        Size
+    >;
+    using BlobType = internal::AlpakaAccessor< BufferType >;
+    using PrimType = typename BlobType::PrimType;
+    using Parameter = DevAcc;
+
+    static inline
+    auto
+    allocate(
+        std::size_t count,
+        Parameter devAcc
+    )
+    -> BlobType
+    {
+        BufferType buffer =
+        alpaka::mem::buf::alloc<
+            PrimType,
+            Size
+        > (
+            devAcc,
+            Size(count)
+        );
+        BlobType accessor( buffer );
+        return accessor;
+    }
+
+};
+
+template<
+    typename T_DevAcc,
+    typename T_Dim,
+    typename T_Size,
+    typename T_Mapping
+>
+struct AlpakaMirror
+{
+    using MirroredAllocator = Alpaka<
+        T_DevAcc,
+        T_Dim,
+        T_Size
+    >;
+    using BlobType = typename MirroredAllocator::PrimType*;
+    using PrimType = typename MirroredAllocator::PrimType;
+    using MirroredView = llama::View<
+        T_Mapping,
+        typename MirroredAllocator::BlobType
+    >;
+    using Parameter = MirroredView;
+
+    static inline
+    auto
+    allocate(
+        std::size_t count,
+        Parameter mirroredView
+    )
+    -> BlobType
+    {
+        return alpaka::mem::view::getPtrNative( mirroredView.blob[0].buffer );
+    }
+};
+
+
+} // namespace allocator
+
+} // namespace nbody

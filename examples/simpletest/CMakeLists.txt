@@ -1,4 +1,7 @@
 cmake_minimum_required (VERSION 3.3)
+
+SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
+
 project (llama-simpletest)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

@@ -171,5 +171,6 @@ int main(int argc,char * * argv)
         << "Sum: "
         << sum
         << std::endl;
+
     return 0;
 }
