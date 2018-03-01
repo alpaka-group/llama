@@ -42,12 +42,18 @@ struct SoA
     using DateDomain = T_DateDomain;
     static constexpr std::size_t blobCount = 1;
 
+    LLAMA_FN_HOST_ACC_INLINE
     SoA( UserDomain const size ) :
         userDomainSize( size ),
         extentUserDomainAdress(
             T_ExtentUserDomainAdressFunctor()( userDomainSize )
         )
     {}
+
+    SoA() = default;
+    SoA( SoA const & ) = default;
+    SoA( SoA && ) = default;
+    ~SoA( ) = default;
 
     LLAMA_FN_HOST_ACC_INLINE
     auto

@@ -36,7 +36,13 @@ struct Interface
     using DateDomain = T_DateDomain;
     static constexpr std::size_t blobCount = 0;
 
+    LLAMA_FN_HOST_ACC_INLINE
     Interface( UserDomain const );
+
+    Interface() = default;
+    Interface( Interface const & ) = default;
+    Interface( Interface && ) = default;
+    ~Interface( ) = default;
 
     LLAMA_FN_HOST_ACC_INLINE
     auto

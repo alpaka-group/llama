@@ -40,13 +40,16 @@ LLAMA_DEFINE_DATEDOMAIN(
     )
 )
 
-template< typename T_VirtualDate >
+template<
+    typename T_VirtualDate1,
+    typename T_VirtualDate2
+>
 LLAMA_FN_HOST_ACC_INLINE
 auto
 pPInteraction(
-    T_VirtualDate&& p1,
-    T_VirtualDate&& p2,
-    Element const ts
+    T_VirtualDate1&& p1,
+    T_VirtualDate2&& p2,
+    Element const & ts
 )
 -> void
 {
@@ -60,7 +63,7 @@ pPInteraction(
     };
     Element distSqr = d[0] * d[0] + d[1] * d[1] + d[2] * d[2] + EPS2;
     Element distSixth = distSqr * distSqr * distSqr;
-    Element invDistCube = 1.0f/sqrtf(distSixth);
+    Element invDistCube = 1.0f / sqrtf(distSixth);
     Element s = p1( Particle::Mass() ) * invDistCube;
     Element const v_d[3] = {
         d[0] * s * ts,
@@ -70,6 +73,12 @@ pPInteraction(
     p1( Particle::Vel::X() ) += v_d[0];
     p1( Particle::Vel::Y() ) += v_d[1];
     p1( Particle::Vel::Z() ) += v_d[2];
+
+    //~ p1 += p2;
+
+    //~ p1( Particle::Pos::X() ) += p2( Particle::Vel::X() );
+    //~ p1( Particle::Pos::Y() ) += p2( Particle::Vel::Y() );
+    //~ p1( Particle::Pos::Z() ) += p2( Particle::Vel::Z() );
 }
 
 template<
@@ -95,28 +104,48 @@ struct UpdateKernel
             alpaka::Threads
         >( acc )[ 0u ];
 
+        auto const start = threadIdx * elems;
+        auto const   end = alpaka::math::min(
+            acc,
+            start + elems,
+            problemSize
+        );
         LLAMA_INDEPENDENT_DATA
         for ( std::size_t b = 0; b < problemSize / blockSize; ++b )
         {
+            auto const start2 = b * blockSize;
+            auto const   end2 = alpaka::math::min(
+                acc,
+                start2 + blockSize,
+                problemSize
+            ) - start2;
+
+            using SharedMapping = llama::mapping::SoA<
+                typename decltype(particles)::Mapping::UserDomain,
+                typename decltype(particles)::Mapping::DateDomain
+            >;
+            using SharedFactory = llama::Factory<
+                SharedMapping,
+                llama::allocator::Stack<
+                    decltype(particles)::Mapping::DateDomain::size
+                    * blockSize
+                >
+            >;
+            SharedMapping sharedMapping( { blockSize } );
+            auto temp = SharedFactory::allocView( sharedMapping );
             LLAMA_INDEPENDENT_DATA
-            for ( std::size_t e = 0; e < elems; ++e)
-            {
-                auto pos = threadIdx * elems + e;
-                if ( pos < problemSize )
-                {
-                    LLAMA_INDEPENDENT_DATA
-                    for ( std::size_t f = 0; f < blockSize; ++f )
-                    {
-                        auto pos2 = b * blockSize + f;
-                        if ( pos2 < problemSize )
-                            pPInteraction(
-                                particles( pos ),
-                                particles( pos2 ),
-                                ts
-                            );
-                    }
-                }
-            }
+            for ( auto pos2 = decltype(end2)(0); pos2 < end2; ++pos2 )
+                temp(pos2) = particles( start2 + pos2 );
+
+            LLAMA_INDEPENDENT_DATA
+            for ( auto pos2 = decltype(end2)(0); pos2 < end2; ++pos2 )
+                LLAMA_INDEPENDENT_DATA
+                for ( auto pos = start; pos < end; ++pos )
+                    pPInteraction(
+                        particles( pos ),
+                        temp( pos2 ),
+                        ts
+                    );
         };
     }
 };
@@ -143,19 +172,23 @@ struct MoveKernel
             alpaka::Grid,
             alpaka::Threads
         >( acc )[ 0u ];
+
+        auto const start = threadIdx * elems;
+        auto const   end = alpaka::math::min(
+            acc,
+            (threadIdx + 1) * elems,
+            problemSize
+        );
+
         LLAMA_INDEPENDENT_DATA
-        for ( std::size_t e = 0; e < elems; ++e)
+        for ( auto pos = start; pos < end; ++pos )
         {
-            auto pos = threadIdx * elems + e;
-            if (pos < problemSize)
-            {
-                particles( pos )( Particle::Pos::X() ) +=
-                    particles( pos )( Particle::Vel::X() ) * ts;
-                particles( pos )( Particle::Pos::Y() ) +=
-                    particles( pos )( Particle::Vel::Y() ) * ts;
-                particles( pos )( Particle::Pos::Z() ) +=
-                    particles( pos )( Particle::Vel::Z() ) * ts;
-            }
+            particles( pos )( Particle::Pos::X() ) +=
+                particles( pos )( Particle::Vel::X() ) * ts;
+            particles( pos )( Particle::Pos::Y() ) +=
+                particles( pos )( Particle::Vel::Y() ) * ts;
+            particles( pos )( Particle::Pos::Z() ) +=
+                particles( pos )( Particle::Vel::Z() ) * ts;
         };
     }
 };
@@ -255,6 +288,12 @@ int main(int argc,char * * argv)
         //~ temp(Particle::Vel::Y()) = distribution(generator)/Element(10);
         //~ temp(Particle::Vel::Z()) = distribution(generator)/Element(10);
         hostView(i) = seed;
+        //~ hostView(Particle::Pos::X()) = seed;
+        //~ hostView(Particle::Pos::Y()) = seed;
+        //~ hostView(Particle::Pos::Z()) = seed;
+        //~ hostView(Particle::Vel::X()) = seed;
+        //~ hostView(Particle::Vel::Y()) = seed;
+        //~ hostView(Particle::Vel::Z()) = seed;
     }
 
     chrono.printAndReset("Init");

@@ -237,6 +237,12 @@ struct View
         >
     >;
 
+    View() = default;
+    View( View const & ) = default;
+    View( View && ) = default;
+    ~View( ) = default;
+
+    LLAMA_NO_HOST_ACC_WARNING
     LLAMA_FN_HOST_ACC_INLINE
     View(
         Mapping mapping,

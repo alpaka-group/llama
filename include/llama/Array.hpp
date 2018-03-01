@@ -30,6 +30,11 @@ struct Array
 {
     static constexpr std::size_t count = T_dim;
 
+    Array() = default;
+    Array( Array const & ) = default;
+    Array( Array && ) = default;
+    ~Array( ) = default;
+
     T element[count];
 
     LLAMA_FN_HOST_ACC_INLINE

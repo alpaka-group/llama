@@ -64,6 +64,7 @@ struct SharedPtr
     using BlobType = internal::SharedPtrAccessor;
     using Parameter = int; //not used
 
+    LLAMA_NO_HOST_ACC_WARNING
     static inline
     auto
     allocate(

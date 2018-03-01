@@ -30,11 +30,13 @@ namespace llama
 namespace internal
 {
 
+LLAMA_NO_HOST_ACC_WARNING
 template <
     typename T_Allocator,
     typename T_Mapping,
     std::size_t... Is
 >
+LLAMA_FN_HOST_ACC_INLINE
 auto
 makeBlobArrayImpl(
     T_Mapping const mapping,
@@ -49,17 +51,20 @@ makeBlobArrayImpl(
     return Array<
         typename T_Allocator::BlobType,
         sizeof...( Is )
-    > { T_Allocator::allocate(
+    > {
+        T_Allocator::allocate(
             mapping.getBlobSize( Is ),
             allocatorParams
         )...
     };
 }
 
+LLAMA_NO_HOST_ACC_WARNING
 template <
     typename T_Allocator,
     typename T_Mapping
 >
+LLAMA_FN_HOST_ACC_INLINE
 auto
 makeBlobArray(
     T_Mapping const mapping,
@@ -88,7 +93,9 @@ template<
 >
 struct Factory
 {
-    static inline
+    LLAMA_NO_HOST_ACC_WARNING
+    static
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     allocView(
         T_Mapping const mapping = T_Mapping(),

@@ -39,7 +39,8 @@ struct Stack
         reserved
     >;
     using Parameter = int; //not used
-    static inline
+    static
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     allocate(
         std::size_t,

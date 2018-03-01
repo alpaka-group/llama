@@ -41,9 +41,15 @@ struct AoS
     using DateDomain = T_DateDomain;
     static constexpr std::size_t blobCount = 1;
 
+    LLAMA_FN_HOST_ACC_INLINE
     AoS( UserDomain const size ) :
 		userDomainSize( size )
 	{ }
+
+    AoS() = default;
+    AoS( AoS const & ) = default;
+    AoS( AoS && ) = default;
+    ~AoS( ) = default;
 
     LLAMA_FN_HOST_ACC_INLINE
     auto
