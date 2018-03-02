@@ -76,6 +76,70 @@ pPInteraction(
 }
 
 template<
+    typename T_Acc,
+    std::size_t T_size,
+    std::size_t T_counter,
+    std::size_t threads
+>
+struct BlockSharedMemoryAllocator
+{
+    using type = nbody::allocator::AlpakaShared<
+        T_Acc,
+        T_size,
+        T_counter
+    >;
+
+    template <
+        typename T_Factory,
+        typename T_Mapping
+    >
+    LLAMA_FN_HOST_ACC_INLINE
+    static
+    auto
+    allocView(
+        T_Mapping const mapping,
+        T_Acc const & acc
+    )
+    -> decltype( T_Factory::allocView( mapping, acc ) )
+    {
+        return T_Factory::allocView( mapping, acc );
+    }
+};
+
+template<
+    typename T_Acc,
+    std::size_t T_size,
+    std::size_t T_counter
+>
+struct BlockSharedMemoryAllocator<
+    T_Acc,
+    T_size,
+    T_counter,
+    1
+>
+{
+    using type = llama::allocator::Stack<
+        T_size
+    >;
+
+    template <
+        typename T_Factory,
+        typename T_Mapping
+    >
+    LLAMA_FN_HOST_ACC_INLINE
+    static
+    auto
+    allocView(
+        T_Mapping const mapping,
+        T_Acc const & acc
+    )
+    -> decltype( T_Factory::allocView( mapping ) )
+    {
+        return T_Factory::allocView( mapping );
+    }
+};
+
+template<
     std::size_t problemSize,
     std::size_t elems,
     std::size_t blockSize
@@ -99,17 +163,22 @@ struct UpdateKernel
             typename decltype(particles)::Mapping::UserDomain,
             typename decltype(particles)::Mapping::DateDomain
         >;
+        using SharedAllocator = BlockSharedMemoryAllocator<
+            T_Acc,
+            decltype(particles)::Mapping::DateDomain::size
+            * blockSize,
+            __COUNTER__,
+            threads
+        >;
         using SharedFactory = llama::Factory<
             SharedMapping,
-            nbody::allocator::AlpakaShared<
-                T_Acc,
-                decltype(particles)::Mapping::DateDomain::size
-                * blockSize,
-                __COUNTER__
-            >
+            typename SharedAllocator::type
         >;
         SharedMapping sharedMapping( { blockSize } );
-        auto temp = SharedFactory::allocView( sharedMapping, acc );
+        auto temp = SharedAllocator::template allocView<
+            SharedFactory,
+            SharedMapping
+        >( sharedMapping, acc );
 
         auto threadIndex  = alpaka::idx::getIdx<
             alpaka::Grid,
