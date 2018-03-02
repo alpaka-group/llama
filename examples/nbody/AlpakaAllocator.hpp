@@ -119,6 +119,34 @@ struct AlpakaMirror
     }
 };
 
+template<
+    typename T_Acc,
+    std::size_t T_count,
+    std::size_t T_uniqueID
+>
+struct AlpakaShared
+{
+    using BlobType = unsigned char*;
+    using PrimType = unsigned char;
+    using Parameter = T_Acc;
+    using AllocType = PrimType[ T_count ];
+
+    static
+    LLAMA_FN_HOST_ACC_INLINE
+    auto
+    allocate(
+        std::size_t count,
+        Parameter const & acc
+    )
+    -> BlobType
+    {
+        return alpaka::block::shared::st::allocVar<
+            AllocType,
+            T_uniqueID
+        >( acc );
+
+    }
+};
 
 } // namespace allocator
 

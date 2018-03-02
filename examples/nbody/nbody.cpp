@@ -73,12 +73,6 @@ pPInteraction(
     p1( Particle::Vel::X() ) += v_d[0];
     p1( Particle::Vel::Y() ) += v_d[1];
     p1( Particle::Vel::Z() ) += v_d[2];
-
-    //~ p1 += p2;
-
-    //~ p1( Particle::Pos::X() ) += p2( Particle::Vel::X() );
-    //~ p1( Particle::Pos::Y() ) += p2( Particle::Vel::Y() );
-    //~ p1( Particle::Pos::Z() ) += p2( Particle::Vel::Z() );
 }
 
 template<
@@ -99,12 +93,30 @@ struct UpdateKernel
         Element ts
     ) const
     {
-        auto threadIdx  = alpaka::idx::getIdx<
+        constexpr std::size_t threads = blockSize / elems;
+
+        using SharedMapping = llama::mapping::SoA<
+            typename decltype(particles)::Mapping::UserDomain,
+            typename decltype(particles)::Mapping::DateDomain
+        >;
+        using SharedFactory = llama::Factory<
+            SharedMapping,
+            nbody::allocator::AlpakaShared<
+                T_Acc,
+                decltype(particles)::Mapping::DateDomain::size
+                * blockSize,
+                __COUNTER__
+            >
+        >;
+        SharedMapping sharedMapping( { blockSize } );
+        auto temp = SharedFactory::allocView( sharedMapping, acc );
+
+        auto threadIndex  = alpaka::idx::getIdx<
             alpaka::Grid,
             alpaka::Threads
         >( acc )[ 0u ];
 
-        auto const start = threadIdx * elems;
+        auto const start = threadIndex * elems;
         auto const   end = alpaka::math::min(
             acc,
             start + elems,
@@ -120,22 +132,13 @@ struct UpdateKernel
                 problemSize
             ) - start2;
 
-            using SharedMapping = llama::mapping::SoA<
-                typename decltype(particles)::Mapping::UserDomain,
-                typename decltype(particles)::Mapping::DateDomain
-            >;
-            using SharedFactory = llama::Factory<
-                SharedMapping,
-                llama::allocator::Stack<
-                    decltype(particles)::Mapping::DateDomain::size
-                    * blockSize
-                >
-            >;
-            SharedMapping sharedMapping( { blockSize } );
-            auto temp = SharedFactory::allocView( sharedMapping );
             LLAMA_INDEPENDENT_DATA
-            for ( auto pos2 = decltype(end2)(0); pos2 < end2; ++pos2 )
-                temp(pos2) = particles( start2 + pos2 );
+            for (
+                auto pos2 = decltype(end2)(0);
+                pos2 + threadIndex < end2;
+                pos2 += threads
+            )
+                temp(pos2 + threadIndex) = particles( start2 + pos2 + threadIndex );
 
             LLAMA_INDEPENDENT_DATA
             for ( auto pos2 = decltype(end2)(0); pos2 < end2; ++pos2 )
@@ -144,6 +147,7 @@ struct UpdateKernel
                     pPInteraction(
                         particles( pos ),
                         temp( pos2 ),
+                        //~ particles( start2 + pos2 ),
                         ts
                     );
         };
@@ -168,15 +172,15 @@ struct MoveKernel
         Element ts
     ) const
     {
-        auto threadIdx  = alpaka::idx::getIdx<
+        auto threadIndex  = alpaka::idx::getIdx<
             alpaka::Grid,
             alpaka::Threads
         >( acc )[ 0u ];
 
-        auto const start = threadIdx * elems;
+        auto const start = threadIndex * elems;
         auto const   end = alpaka::math::min(
             acc,
-            (threadIdx + 1) * elems,
+            (threadIndex + 1) * elems,
             problemSize
         );
 
@@ -193,25 +197,35 @@ struct MoveKernel
     }
 };
 
+template<
+    typename T_Acc,
+    std::size_t blockSize
+>
+struct ThreadsElemsDistribution
+{
+    static constexpr std::size_t elemCount = blockSize;
+    static constexpr std::size_t threadCount = 1;
+};
+
+#ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
+    template<
+        std::size_t blockSize,
+        typename T_Dim,
+        typename T_Size
+    >
+    struct ThreadsElemsDistribution<
+        alpaka::acc::AccGpuCudaRt<T_Dim, T_Size>,
+        blockSize
+    >
+    {
+        static constexpr std::size_t elemCount = 1;
+        static constexpr std::size_t threadCount = blockSize;
+    };
+#endif
 
 
 int main(int argc,char * * argv)
 {
-    constexpr std::size_t problemSize = 16*1024;
-    constexpr std::size_t elemCount = 256;
-    constexpr std::size_t threadCount = 1;
-    constexpr std::size_t blockSize = threadCount * elemCount;
-    constexpr Element ts = 0.0001;
-    constexpr std::size_t steps = 5;
-
-    // LLAMA
-    using UserDomain = llama::UserDomain< 1 >;
-    const UserDomain userDomainSize{ problemSize };
-    using DateDomain = Particle::Type;
-    using Mapping = llama::mapping::SoA<
-        UserDomain,
-        DateDomain
-    >;
 
     // ALPAKA
     using Dim = alpaka::dim::DimInt< 1 >;
@@ -232,6 +246,27 @@ int main(int argc,char * * argv)
     DevHost const devHost( alpaka::pltf::getDevByIdx< PltfHost >( 0u ) );
     Stream stream( devAcc ) ;
 
+    // NBODY
+    constexpr std::size_t problemSize = 64*1024;
+    constexpr std::size_t blockSize = 256;
+    using Distribution = ThreadsElemsDistribution<
+        Acc,
+        blockSize
+    >;
+    constexpr std::size_t elemCount = Distribution::elemCount;
+    constexpr std::size_t threadCount = Distribution::threadCount;
+    constexpr Element ts = 0.0001;
+    constexpr std::size_t steps = 5;
+
+    // LLAMA
+    using UserDomain = llama::UserDomain< 1 >;
+    const UserDomain userDomainSize{ problemSize };
+    using DateDomain = Particle::Type;
+    using Mapping = llama::mapping::SoA<
+        UserDomain,
+        DateDomain
+    >;
+    std::cout << elemCount << '\n';
     Mapping mapping( userDomainSize );
 
     using DevFactory = llama::Factory<

@@ -40,7 +40,7 @@ LLAMA_FN_HOST_ACC_INLINE
 auto
 makeBlobArrayImpl(
     T_Mapping const mapping,
-    typename T_Allocator::Parameter allocatorParams,
+    typename T_Allocator::Parameter const & allocatorParams,
     IntegerSequence<Is...>
 )
 -> Array<
@@ -68,7 +68,7 @@ LLAMA_FN_HOST_ACC_INLINE
 auto
 makeBlobArray(
     T_Mapping const mapping,
-    typename T_Allocator::Parameter allocatorParams
+    typename T_Allocator::Parameter const & allocatorParams
 )
 -> Array<
         typename T_Allocator::BlobType,
@@ -99,7 +99,7 @@ struct Factory
     auto
     allocView(
         T_Mapping const mapping = T_Mapping(),
-        typename T_Allocator::Parameter allocatorParams =
+        typename T_Allocator::Parameter const & allocatorParams =
             typename T_Allocator::Parameter()
     )
     -> View<
