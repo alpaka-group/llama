@@ -30,7 +30,7 @@ namespace mapping
 
 template<
     typename T_UserDomain,
-    typename T_DateDomain,
+    typename T_DatumDomain,
     typename T_LinearizeUserDomainAdressFunctor =
         LinearizeUserDomainAdress< T_UserDomain::count >,
     typename T_ExtentUserDomainAdressFunctor =
@@ -39,7 +39,7 @@ template<
 struct SoA
 {
     using UserDomain = T_UserDomain;
-    using DateDomain = T_DateDomain;
+    using DatumDomain = T_DatumDomain;
     static constexpr std::size_t blobCount = 1;
 
     LLAMA_FN_HOST_ACC_INLINE
@@ -60,10 +60,10 @@ struct SoA
     getBlobSize( std::size_t const ) const
     -> std::size_t
     {
-        return extentUserDomainAdress * DateDomain::size;
+        return extentUserDomainAdress * DatumDomain::size;
     }
 
-    template< std::size_t... T_dateDomainCoord >
+    template< std::size_t... T_datumDomainCoord >
     LLAMA_FN_HOST_ACC_INLINE
     auto
     getBlobByte( UserDomain const coord ) const
@@ -71,14 +71,14 @@ struct SoA
     {
         return T_LinearizeUserDomainAdressFunctor()( coord, userDomainSize )
             * sizeof( typename GetType<
-                DateDomain,
-                T_dateDomainCoord...
+                DatumDomain,
+                T_datumDomainCoord...
             >::type )
-            + DateDomain::template LinearBytePos< T_dateDomainCoord... >::value
+            + DatumDomain::template LinearBytePos< T_datumDomainCoord... >::value
             * extentUserDomainAdress;
     }
 
-    template< std::size_t... T_dateDomainCoord >
+    template< std::size_t... T_datumDomainCoord >
     LLAMA_FN_HOST_ACC_INLINE
     constexpr
     auto

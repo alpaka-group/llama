@@ -20,39 +20,39 @@
 
 // LLAMA_INTERNAL_PARSE_DS_CONTENT_3
 
-/* 3rd layer of internal parse macro for a dateStruct tuple */
+/* 3rd layer of internal parse macro for a DatumStruct tuple */
 #define LLAMA_INTERNAL_PARSE_TUPLE_3( Tuple )                                  \
-    /* if (typeID == DateStruct) */                                            \
+    /* if (typeID == DatumStruct) */                                           \
     BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM( 1, Tuple ), LLAMA_DS),  \
-        llama::DateStruct<                                                     \
+        llama::DatumStruct<                                                    \
             LLAMA_INTERNAL_DEFER(                                              \
                 LLAMA_INTERNAL_PARSE_DS_CONTENT_4 /*not implemented*/          \
             )( BOOST_PP_TUPLE_ELEM( 2, Tuple ) )                               \
         >                                                                      \
-    , /* else (typeID == DateStruct) */                                        \
-        /* if (typeID == DateArray) */                                         \
+    , /* else (typeID == DatumStruct) */                                       \
+        /* if (typeID == DatumArray) */                                        \
         BOOST_PP_IIF( BOOST_PP_EQUAL(                                          \
             BOOST_PP_TUPLE_ELEM( 1, Tuple ),                                   \
             LLAMA_DA                                                           \
         ),                                                                     \
-            llama::DateArray<                                                  \
+            llama::DatumArray<                                                 \
                 LLAMA_INTERNAL_DEFER(                                          \
                     LLAMA_INTERNAL_PARSE_DA_CONTENT_4  /*not implemented*/     \
                 )( BOOST_PP_TUPLE_ELEM( 2, Tuple ) )                           \
             >                                                                  \
-        , /* else (typeID == DateArray) */                                     \
+        , /* else (typeID == DatumArray) */                                    \
             BOOST_PP_TUPLE_ELEM( 2, Tuple )                                    \
-        ) /* fi (typeID == DateArray) */                                       \
-    ) /* fi (typeID == DateStruct) */
+        ) /* fi (typeID == DatumArray) */                                      \
+    ) /* fi (typeID == DatumStruct) */
 
-/* 3rd layer of internal loop function for a dateStruct */
+/* 3rd layer of internal loop function for a DatumStruct */
 #define LLAMA_INTERNAL_PARSE_DS_CONTENT_LOOP_3( Z, N, Content )                \
     LLAMA_INTERNAL_DEFER(                                                      \
-        BOOST_PP_IIF( BOOST_PP_EQUAL( N, 0 ), BOOST_PP_EMPTY, BOOST_PP_COMMA)   \
+        BOOST_PP_IIF( BOOST_PP_EQUAL( N, 0 ), BOOST_PP_EMPTY, BOOST_PP_COMMA)  \
     )()                                                                        \
     LLAMA_INTERNAL_PARSE_TUPLE_3( BOOST_PP_TUPLE_ELEM( N, Content) )
 
-/* 3rd layer of internal loop caller for a dateStruct */
+/* 3rd layer of internal loop caller for a DatumStruct */
 #define LLAMA_INTERNAL_PARSE_DS_CONTENT_3( Content )                           \
     BOOST_PP_REPEAT(                                                           \
         BOOST_PP_TUPLE_SIZE( Content ),                                        \
@@ -60,46 +60,46 @@
         Content                                                                \
     )
 
-/* 3rd layer of internal parse function for a dateArray */
+/* 3rd layer of internal parse function for a DatumArray */
 #define LLAMA_INTERNAL_PARSE_DA_CONTENT_3( Content )                           \
     LLAMA_INTERNAL_DEFER(LLAMA_INTERNAL_PARSE_TUPLE_3)( Content ) ,            \
     BOOST_PP_TUPLE_ELEM(0, Content)
 
 // LLAMA_INTERNAL_PARSE_DS_CONTENT_2
 
-/* 2nd layer of internal parse macro for a dateStruct tuple */
+/* 2nd layer of internal parse macro for a DatumStruct tuple */
 #define LLAMA_INTERNAL_PARSE_TUPLE_2( Tuple )                                  \
-    /* if (typeID == DateStruct) */                                            \
+    /* if (typeID == DatumStruct) */                                           \
     BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM( 1, Tuple ), LLAMA_DS),  \
-        llama::DateStruct<                                                     \
+        llama::DatumStruct<                                                    \
             LLAMA_INTERNAL_DEFER(                                              \
                 LLAMA_INTERNAL_PARSE_DS_CONTENT_3                              \
             )( BOOST_PP_TUPLE_ELEM( 2, Tuple ) )                               \
         >                                                                      \
-    , /* else (typeID == DateStruct) */                                        \
-        /* if (typeID == DateArray) */                                         \
+    , /* else (typeID == DatumStruct) */                                       \
+        /* if (typeID == DatumArray) */                                        \
         BOOST_PP_IIF( BOOST_PP_EQUAL(                                          \
             BOOST_PP_TUPLE_ELEM( 1, Tuple ),                                   \
             LLAMA_DA                                                           \
         ),                                                                     \
-            llama::DateArray<                                                  \
+            llama::DatumArray<                                                 \
                 LLAMA_INTERNAL_DEFER(                                          \
                     LLAMA_INTERNAL_PARSE_DA_CONTENT_3                          \
                 )( BOOST_PP_TUPLE_ELEM( 2, Tuple ) )                           \
             >                                                                  \
-        , /* else (typeID == DateArray) */                                     \
+        , /* else (typeID == DatumArray) */                                    \
             BOOST_PP_TUPLE_ELEM( 2, Tuple )                                    \
-        ) /* fi (typeID == DateArray) */                                       \
-    ) /* fi (typeID == DateStruct) */
+        ) /* fi (typeID == DatumArray) */                                      \
+    ) /* fi (typeID == DatumStruct) */
 
-/* 2nd layer of internal loop function for a dateStruct */
+/* 2nd layer of internal loop function for a DatumStruct */
 #define LLAMA_INTERNAL_PARSE_DS_CONTENT_LOOP_2( Z, N, Content )                \
     LLAMA_INTERNAL_DEFER(                                                      \
-        BOOST_PP_IIF( BOOST_PP_EQUAL( N, 0 ), BOOST_PP_EMPTY, BOOST_PP_COMMA)   \
+        BOOST_PP_IIF( BOOST_PP_EQUAL( N, 0 ), BOOST_PP_EMPTY, BOOST_PP_COMMA)  \
     )()                                                                        \
     LLAMA_INTERNAL_PARSE_TUPLE_2( BOOST_PP_TUPLE_ELEM( N, Content) )
 
-/* 2nd layer of internal loop caller for a dateStruct */
+/* 2nd layer of internal loop caller for a DatumStruct */
 #define LLAMA_INTERNAL_PARSE_DS_CONTENT_2( Content )                           \
     BOOST_PP_REPEAT(                                                           \
         BOOST_PP_TUPLE_SIZE( Content ),                                        \
@@ -107,46 +107,46 @@
         Content                                                                \
     )
 
-/* 2nd layer of internal parse function for a dateArray */
+/* 2nd layer of internal parse function for a DatumArray */
 #define LLAMA_INTERNAL_PARSE_DA_CONTENT_2( Content )                           \
     LLAMA_INTERNAL_DEFER(LLAMA_INTERNAL_PARSE_TUPLE_2)( Content ) ,            \
     BOOST_PP_TUPLE_ELEM(0, Content)
 
 // LLAMA_INTERNAL_PARSE_DS_CONTENT_1
 
-/* 1st layer of internal parse macro for a dateStruct tuple */
+/* 1st layer of internal parse macro for a DatumStruct tuple */
 #define LLAMA_INTERNAL_PARSE_TUPLE_1( Tuple )                                  \
-    /* if (typeID == DateStruct) */                                            \
+    /* if (typeID == DatumStruct) */                                           \
     BOOST_PP_IIF( BOOST_PP_EQUAL( BOOST_PP_TUPLE_ELEM( 1, Tuple ), LLAMA_DS),  \
-        llama::DateStruct<                                                     \
+        llama::DatumStruct<                                                    \
             LLAMA_INTERNAL_DEFER(                                              \
                 LLAMA_INTERNAL_PARSE_DS_CONTENT_2                              \
             )( BOOST_PP_TUPLE_ELEM( 2, Tuple ) )                               \
         >                                                                      \
-    , /* else (typeID == DateStruct) */                                        \
-        /* if (typeID == DateArray) */                                         \
+    , /* else (typeID == DatumStruct) */                                       \
+        /* if (typeID == DatumArray) */                                        \
         BOOST_PP_IIF( BOOST_PP_EQUAL(                                          \
             BOOST_PP_TUPLE_ELEM( 1, Tuple ),                                   \
             LLAMA_DA                                                           \
         ),                                                                     \
-            llama::DateArray<                                                  \
+            llama::DatumArray<                                                 \
                 LLAMA_INTERNAL_DEFER(                                          \
                     LLAMA_INTERNAL_PARSE_DA_CONTENT_2                          \
                 )( BOOST_PP_TUPLE_ELEM( 2, Tuple ) )                           \
             >                                                                  \
-        , /* else (typeID == DateArray) */                                     \
+        , /* else (typeID == DatumArray) */                                    \
             BOOST_PP_TUPLE_ELEM( 2, Tuple )                                    \
-        ) /* fi (typeID == DateArray) */                                       \
-    ) /* fi (typeID == DateStruct) */
+        ) /* fi (typeID == DatumArray) */                                      \
+    ) /* fi (typeID == DatumStruct) */
 
-/* 1st layer of internal loop function for a dateStruct */
+/* 1st layer of internal loop function for a DatumStruct */
 #define LLAMA_INTERNAL_PARSE_DS_CONTENT_LOOP_1( Z, N, Content )                \
     LLAMA_INTERNAL_DEFER(                                                      \
-        BOOST_PP_IIF( BOOST_PP_EQUAL( N, 0 ), BOOST_PP_EMPTY, BOOST_PP_COMMA)   \
+        BOOST_PP_IIF( BOOST_PP_EQUAL( N, 0 ), BOOST_PP_EMPTY, BOOST_PP_COMMA)  \
     )()                                                                        \
     LLAMA_INTERNAL_PARSE_TUPLE_1( BOOST_PP_TUPLE_ELEM( N, Content) )
 
-/* 1st layer of internal loop caller for a dateStruct */
+/* 1st layer of internal loop caller for a DatumStruct */
 #define LLAMA_INTERNAL_PARSE_DS_CONTENT_1( Content )                           \
     BOOST_PP_REPEAT(                                                           \
         BOOST_PP_TUPLE_SIZE( Content ),                                        \

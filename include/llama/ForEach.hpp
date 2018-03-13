@@ -55,7 +55,7 @@ struct CoordIsIncluded<
     T_Coord,
     typename std::enable_if<
         (T_Pos::size >= T_Coord::size) &&
-        DateCoordIsSame<
+        DatumCoordIsSame<
             T_Pos,
             T_Coord
         >::value
@@ -72,7 +72,7 @@ template<
     typename T_Leave,
     typename... T_Leaves
 >
-struct ApplyFunctorInDateStructLeaves;
+struct ApplyFunctorInDatumStructLeaves;
 
 
 template<
@@ -122,7 +122,7 @@ template<
     typename T_Functor,
     typename T_Leave
 >
-struct ApplyFunctorInDateStructLeave
+struct ApplyFunctorInDatumStructLeave
 {
     auto
     LLAMA_FN_HOST_ACC_INLINE
@@ -143,11 +143,11 @@ template<
     typename T_Functor,
     typename... T_Leaves
 >
-struct ApplyFunctorInDateStructLeave<
+struct ApplyFunctorInDatumStructLeave<
     T_Coord,
     T_Pos,
     T_Functor,
-    DateStruct< T_Leaves... >
+    DatumStruct< T_Leaves... >
 >
 {
     auto
@@ -155,7 +155,7 @@ struct ApplyFunctorInDateStructLeave<
     operator()( T_Functor&& functor )
     -> void
     {
-        ApplyFunctorInDateStructLeaves<
+        ApplyFunctorInDatumStructLeaves<
             T_Coord,
             typename T_Pos::template PushBack< 0 >,
             T_Functor,
@@ -171,20 +171,20 @@ template<
     typename T_Leave,
     typename... T_Leaves
 >
-struct ApplyFunctorInDateStructLeaves
+struct ApplyFunctorInDatumStructLeaves
 {
     auto
     LLAMA_FN_HOST_ACC_INLINE
     operator()( T_Functor&& functor )
     -> void
     {
-        ApplyFunctorInDateStructLeave<
+        ApplyFunctorInDatumStructLeave<
             T_Coord,
             T_Pos,
             T_Functor,
             T_Leave
         >{}( std::forward<T_Functor>( functor ) );
-        ApplyFunctorInDateStructLeaves<
+        ApplyFunctorInDatumStructLeaves<
             T_Coord,
             typename T_Pos::IncBack,
             T_Functor,
@@ -199,7 +199,7 @@ template<
     typename T_Functor,
     typename T_Leave
 >
-struct ApplyFunctorInDateStructLeaves<
+struct ApplyFunctorInDatumStructLeaves<
     T_Coord,
     T_Pos,
     T_Functor,
@@ -211,7 +211,7 @@ struct ApplyFunctorInDateStructLeaves<
     operator()( T_Functor&& functor )
     -> void
     {
-        ApplyFunctorInDateStructLeave<
+        ApplyFunctorInDatumStructLeave<
             T_Coord,
             T_Pos,
             T_Functor,
@@ -221,19 +221,19 @@ struct ApplyFunctorInDateStructLeaves<
 };
 
 template<
-    typename T_DateCoord,
+    typename T_DatumCoord,
     typename T_Functor,
     typename... T_Leaves
 >
 LLAMA_FN_HOST_ACC_INLINE
-void applyFunctorInDateStruct(
+void applyFunctorInDatumStruct(
     T_Functor&& functor,
-    DateStruct< T_Leaves... >
+    DatumStruct< T_Leaves... >
 )
 {
-     ApplyFunctorInDateStructLeaves<
-        T_DateCoord,
-        DateCoord< 0 >,
+     ApplyFunctorInDatumStructLeaves<
+        T_DatumCoord,
+        DatumCoord< 0 >,
         T_Functor,
         T_Leaves...
     >{}( std::forward<T_Functor>( functor ) );
@@ -242,16 +242,16 @@ void applyFunctorInDateStruct(
 } // namespace internal
 
 template<
-    typename T_DateDomain,
-    typename T_DateCoord = DateCoord < >,
+    typename T_DatumDomain,
+    typename T_DatumCoord = DatumCoord < >,
     typename T_Functor
 >
 LLAMA_FN_HOST_ACC_INLINE
 void forEach( T_Functor&& functor )
 {
-    internal::applyFunctorInDateStruct< T_DateCoord >(
+    internal::applyFunctorInDatumStruct< T_DatumCoord >(
         std::forward<T_Functor>( functor ),
-        T_DateDomain()
+        T_DatumDomain()
     );
 }
 

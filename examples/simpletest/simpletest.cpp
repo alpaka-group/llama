@@ -2,54 +2,54 @@
 #include <utility>
 #include <llama/llama.hpp>
 
-LLAMA_DEFINE_DATEDOMAIN(
+LLAMA_DEFINE_DATUMDOMAIN(
     Name, (
-        ( Pos, LLAMA_DATESTRUCT, (
+        ( Pos, LLAMA_DATUMSTRUCT, (
             ( X, LLAMA_ATOMTYPE, float ),
             ( Y, LLAMA_ATOMTYPE, float ),
             ( Z, LLAMA_ATOMTYPE, float )
         ) ),
-        ( Momentum, LLAMA_DATESTRUCT, (
+        ( Momentum, LLAMA_DATUMSTRUCT, (
             ( A, LLAMA_ATOMTYPE, double ),
             ( B, LLAMA_ATOMTYPE, double )
         ) ),
         ( Weight, LLAMA_ATOMTYPE, int ),
-        ( Options, LLAMA_DATEARRAY, (4, LLAMA_ATOMTYPE, bool ) )
+        ( Options, LLAMA_DATUMARRAY, (4, LLAMA_ATOMTYPE, bool ) )
     )
 )
 
 /* The macro above defines the struct below
  *
- * struct Name : llama::DateCoord< >
+ * struct Name : llama::DatumCoord< >
  * {
- *     struct Pos : llama::DateCoord<0>
+ *     struct Pos : llama::DatumCoord<0>
  *     {
- *         using X = llama::DateCoord<0,0>;
- *         using Y = llama::DateCoord<0,1>;
- *         using Z = llama::DateCoord<0,2>;
+ *         using X = llama::DatumCoord<0,0>;
+ *         using Y = llama::DatumCoord<0,1>;
+ *         using Z = llama::DatumCoord<0,2>;
  *     };
- *     struct Momentum : llama::DateCoord<1>
+ *     struct Momentum : llama::DatumCoord<1>
  *     {
- *         using A = llama::DateCoord<1,0>;
- *         using B = llama::DateCoord<1,1>;
+ *         using A = llama::DatumCoord<1,0>;
+ *         using B = llama::DatumCoord<1,1>;
  *     };
- *     using Weight = llama::DateCoord<2>;
- *     struct Options : llama::DateCoord<3>
+ *     using Weight = llama::DatumCoord<2>;
+ *     struct Options : llama::DatumCoord<3>
  *     {
  *     };
  *
- *     using Type = llama::DateStruct
+ *     using Type = llama::DatumStruct
  *     <
- *         llama::DateStruct< float, float, float >,
- *         llama::DateStruct< double, double >,
+ *         llama::DatumStruct< float, float, float >,
+ *         llama::DatumStruct< double, double >,
  *         int,
- *         llama::DateArray< bool, 4 >
+ *         llama::DatumArray< bool, 4 >
  *     >;
  * };
  */
 
 template< std::size_t... T_coords >
-void printCoords( llama::DateCoord< T_coords... > )
+void printCoords( llama::DatumCoord< T_coords... > )
 {
     #if __cplusplus >= 201703L
         (std::cout << ... << T_coords);
@@ -57,7 +57,7 @@ void printCoords( llama::DateCoord< T_coords... > )
 }
 
 template<
-    typename T_VirtualDate
+    typename T_VirtualDatum
 >
 struct SetZeroFunctor
 {
@@ -80,7 +80,7 @@ struct SetZeroFunctor
         //~ printCoords( T_InnerCoord() );
         //~ std::cout << std::endl;
     }
-    T_VirtualDate vd;
+    T_VirtualDatum vd;
 };
 
 int main(int argc,char * * argv)
@@ -150,8 +150,8 @@ int main(int argc,char * * argv)
         for (size_t y = 0; y < udSize[1]; ++y)
         {
             auto date = view( x, y );
-            //~ date( Name::Momentum::A() ) += date( llama::DateCoord< 0, 0 >() );
-            //~ date( Name::Momentum::B() ) += date( llama::DateCoord< 0, 1 >() );
+            //~ date( Name::Momentum::A() ) += date( llama::DatumCoord< 0, 0 >() );
+            //~ date( Name::Momentum::B() ) += date( llama::DatumCoord< 0, 1 >() );
             llama::AdditionFunctor<
                 decltype(date),
                 decltype(date),

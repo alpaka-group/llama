@@ -18,37 +18,49 @@
 
 #pragma once
 
-#include "Types.hpp"
-#include "internal/TreeHelper.hpp"
+#include "DatumStruct.hpp"
 
 namespace llama
 {
 
-template< typename... T_Leaves >
-struct DateStruct
+namespace internal
 {
-    static constexpr std::size_t size =
-        internal::GetSizeOfDateStructLeaves< T_Leaves... >::value;
-
-    template< std::size_t T_coord >
-    struct GetBranch
+    template<
+        typename T,
+        std::size_t T_count,
+        typename... T_List
+    >
+    struct AddChildToStruct
     {
-        using type = typename internal::GetLeave<
-            T_coord,
-            T_Leaves...
+        using type = typename AddChildToStruct<
+            T,
+            T_count - 1,
+            T_List...,
+            T
         >::type;
     };
-
-    template< std::size_t... T_coords >
-    struct LinearBytePos
+    template<
+        typename T,
+        typename... T_List
+    >
+    struct AddChildToStruct<
+        T,
+        0,
+        T_List...
+    >
     {
-        static constexpr std::size_t value =
-            internal::GetSizeOfDateStructLeavesWithCoord<
-                DateCoord< T_coords... >,
-                DateCoord< 0 >,
-                T_Leaves...
-            >::value;
+        using type = DatumStruct< T_List... >;
     };
-};
+
+} // namespace internal
+
+template<
+    typename T_Child,
+    std::size_t T_count
+>
+using DatumArray = typename internal::AddChildToStruct<
+    T_Child,
+    T_count
+>::type;
 
 } // namespace llama

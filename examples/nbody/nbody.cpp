@@ -24,14 +24,14 @@
 using Element = float;
 constexpr Element EPS2 = 0.01;
 
-LLAMA_DEFINE_DATEDOMAIN(
+LLAMA_DEFINE_DATUMDOMAIN(
     Particle, (
-        ( Pos, LLAMA_DATESTRUCT, (
+        ( Pos, LLAMA_DATUMSTRUCT, (
             ( X, LLAMA_ATOMTYPE, Element ),
             ( Y, LLAMA_ATOMTYPE, Element ),
             ( Z, LLAMA_ATOMTYPE, Element )
         ) ),
-        ( Vel, LLAMA_DATESTRUCT, (
+        ( Vel, LLAMA_DATUMSTRUCT, (
             ( X, LLAMA_ATOMTYPE, Element ),
             ( Y, LLAMA_ATOMTYPE, Element ),
             ( Z, LLAMA_ATOMTYPE, Element )
@@ -41,14 +41,14 @@ LLAMA_DEFINE_DATEDOMAIN(
 )
 
 template<
-    typename T_VirtualDate1,
-    typename T_VirtualDate2
+    typename T_VirtualDatum1,
+    typename T_VirtualDatum2
 >
 LLAMA_FN_HOST_ACC_INLINE
 auto
 pPInteraction(
-    T_VirtualDate1&& p1,
-    T_VirtualDate2&& p2,
+    T_VirtualDatum1&& p1,
+    T_VirtualDatum2&& p2,
     Element const & ts
 )
 -> void
@@ -161,11 +161,11 @@ struct UpdateKernel
 
         using SharedMapping = llama::mapping::SoA<
             typename decltype(particles)::Mapping::UserDomain,
-            typename decltype(particles)::Mapping::DateDomain
+            typename decltype(particles)::Mapping::DatumDomain
         >;
         using SharedAllocator = BlockSharedMemoryAllocator<
             T_Acc,
-            decltype(particles)::Mapping::DateDomain::size
+            decltype(particles)::Mapping::DatumDomain::size
             * blockSize,
             __COUNTER__,
             threads
@@ -329,10 +329,10 @@ int main(int argc,char * * argv)
     // LLAMA
     using UserDomain = llama::UserDomain< 1 >;
     const UserDomain userDomainSize{ problemSize };
-    using DateDomain = Particle::Type;
+    using DatumDomain = Particle::Type;
     using Mapping = llama::mapping::SoA<
         UserDomain,
-        DateDomain
+        DatumDomain
     >;
 
     Mapping mapping( userDomainSize );
@@ -364,7 +364,7 @@ int main(int argc,char * * argv)
     >;
 
     std::cout << problemSize / 1000 / 1000 << " million particles\n";
-    std::cout << problemSize * DateDomain::size / 1000 / 1000 << "MB \n";
+    std::cout << problemSize * DatumDomain::size / 1000 / 1000 << "MB \n";
 
     Chrono chrono;
 
@@ -383,7 +383,7 @@ int main(int argc,char * * argv)
     LLAMA_INDEPENDENT_DATA
     for (std::size_t i = 0; i < problemSize; ++i)
     {
-        //~ auto temp = llama::tempAlloc< 1, DateDomain >();
+        //~ auto temp = llama::tempAlloc< 1, DatumDomain >();
         //~ temp(Particle::Pos::X()) = distribution(generator);
         //~ temp(Particle::Pos::Y()) = distribution(generator);
         //~ temp(Particle::Pos::Z()) = distribution(generator);

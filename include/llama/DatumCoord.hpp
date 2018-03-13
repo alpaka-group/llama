@@ -25,7 +25,7 @@ namespace llama
 {
 
 template < std::size_t... T_coords >
-struct DateCoord;
+struct DatumCoord;
 
 namespace internal
 {
@@ -34,20 +34,20 @@ template <
     std::size_t T_rest,
     std::size_t... T_coords
 >
-struct DateCoordFront;
+struct DatumCoordFront;
 
 template <
     std::size_t T_rest,
     std::size_t T_coord,
     std::size_t... T_coords
 >
-struct DateCoordFront<
+struct DatumCoordFront<
     T_rest,
     T_coord,
     T_coords...
 >
 {
-    using type = typename DateCoordFront<
+    using type = typename DatumCoordFront<
         T_rest - 1,
         T_coords...
     >::type::template PushFront< T_coord >;
@@ -57,33 +57,33 @@ template <
     std::size_t T_coord,
     std::size_t... T_coords
 >
-struct DateCoordFront<
+struct DatumCoordFront<
     0,
     T_coord,
     T_coords...
 >
 {
-    using type = DateCoord< >;
+    using type = DatumCoord< >;
 };
 
 template <
     std::size_t T_rest,
     std::size_t... T_coords
 >
-struct DateCoordBack;
+struct DatumCoordBack;
 
 template <
     std::size_t T_rest,
     std::size_t T_coord,
     std::size_t... T_coords
 >
-struct DateCoordBack<
+struct DatumCoordBack<
     T_rest,
     T_coord,
     T_coords...
 >
 {
-    using type = typename DateCoordBack<
+    using type = typename DatumCoordBack<
         T_rest - 1,
         T_coords...
     >::type;
@@ -93,19 +93,19 @@ template <
     std::size_t T_coord,
     std::size_t... T_coords
 >
-struct DateCoordBack<
+struct DatumCoordBack<
     0,
     T_coord,
     T_coords...
 >
 {
-    using type = DateCoord< T_coord, T_coords... >;
+    using type = DatumCoord< T_coord, T_coords... >;
 };
 
 template < >
-struct DateCoordBack< 0 >
+struct DatumCoordBack< 0 >
 {
-    using type = DateCoord< >;
+    using type = DatumCoord< >;
 };
 
 } // namespace internal
@@ -114,67 +114,67 @@ template<
     std::size_t T_coord,
     std::size_t... T_coords
 >
-struct DateCoord< T_coord, T_coords... >
+struct DatumCoord< T_coord, T_coords... >
 {
     static constexpr std::size_t front = T_coord;
     static constexpr std::size_t size = sizeof...( T_coords ) + 1;
-    static constexpr std::size_t back = DateCoord< T_coords... >::back;
-    using PopFront = DateCoord< T_coords... >;
+    static constexpr std::size_t back = DatumCoord< T_coords... >::back;
+    using PopFront = DatumCoord< T_coords... >;
     using IncBack = typename PopFront::IncBack::template PushFront< front >;
     template< std::size_t T_newCoord = 0 >
-    using PushFront = DateCoord<
+    using PushFront = DatumCoord<
         T_newCoord,
         T_coord,
         T_coords...
     >;
     template< std::size_t T_newCoord = 0 >
-    using PushBack = DateCoord<
+    using PushBack = DatumCoord<
         T_coord,
         T_coords...,
         T_newCoord
     >;
     template< std::size_t T_size >
-    using Front = typename internal::DateCoordFront<
+    using Front = typename internal::DatumCoordFront<
         T_size,
         T_coord,
         T_coords...
     >::type;
     template< std::size_t T_size >
-    using Back = typename internal::DateCoordBack<
+    using Back = typename internal::DatumCoordBack<
         size - T_size,
         T_coord,
         T_coords...
     >::type;
     template< typename T_Other >
-    using Cat = typename DateCoord< T_coords... >::template
+    using Cat = typename DatumCoord< T_coords... >::template
         Cat< T_Other >::template
             PushFront< T_coord >;
 };
 
 template< std::size_t T_coord >
-struct DateCoord< T_coord >
+struct DatumCoord< T_coord >
 {
     static constexpr std::size_t front = T_coord;
     static constexpr std::size_t back = T_coord;
     static constexpr std::size_t size = 1;
-    using IncBack = DateCoord< T_coord + 1 >;
+    using IncBack = DatumCoord< T_coord + 1 >;
     template< std::size_t T_newCoord = 0 >
-    using PushFront = DateCoord<
+    using PushFront = DatumCoord<
         T_newCoord,
         T_coord
     >;
     template< std::size_t T_newCoord = 0 >
-    using PushBack = DateCoord<
+    using PushBack = DatumCoord<
         T_coord,
         T_newCoord
     >;
     template< std::size_t T_size >
-    using Front = typename internal::DateCoordFront<
+    using Front = typename internal::DatumCoordFront<
         T_size,
         T_coord
     >::type;
     template< std::size_t T_size >
-    using Back = typename internal::DateCoordBack<
+    using Back = typename internal::DatumCoordBack<
         size - T_size,
         T_coord
     >::type;
@@ -183,18 +183,18 @@ struct DateCoord< T_coord >
 };
 
 template< >
-struct DateCoord< >
+struct DatumCoord< >
 {
     static constexpr std::size_t size = 0;
-    using IncBack = DateCoord< 1 >;
+    using IncBack = DatumCoord< 1 >;
     template< std::size_t T_newCoord = 0 >
-    using PushFront = DateCoord< T_newCoord >;
+    using PushFront = DatumCoord< T_newCoord >;
     template< std::size_t T_newCoord = 0 >
-    using PushBack = DateCoord< T_newCoord >;
+    using PushBack = DatumCoord< T_newCoord >;
     template< std::size_t T_size >
-    using Front = DateCoord< >;
+    using Front = DatumCoord< >;
     template< std::size_t T_size >
-    using Back = DateCoord< >;
+    using Back = DatumCoord< >;
     template< typename T_Other >
     using Cat = T_Other;
 };
@@ -204,13 +204,13 @@ template<
     typename T_Second,
     typename T_SFinae = void
 >
-struct DateCoordIsBigger;
+struct DatumCoordIsBigger;
 
 template<
     typename T_First,
     typename T_Second
 >
-struct DateCoordIsBigger<
+struct DatumCoordIsBigger<
     T_First,
     T_Second,
     typename std::enable_if<
@@ -225,7 +225,7 @@ template<
     typename T_First,
     typename T_Second
 >
-struct DateCoordIsBigger<
+struct DatumCoordIsBigger<
     T_First,
     T_Second,
     typename std::enable_if<
@@ -234,7 +234,7 @@ struct DateCoordIsBigger<
     >::type
 >
 {
-    static constexpr bool value = DateCoordIsBigger<
+    static constexpr bool value = DatumCoordIsBigger<
         typename T_First::PopFront,
         typename T_Second::PopFront
     >::value;
@@ -244,7 +244,7 @@ template<
     typename T_First,
     typename T_Second
 >
-struct DateCoordIsBigger<
+struct DatumCoordIsBigger<
     T_First,
     T_Second,
     typename std::enable_if<
@@ -261,7 +261,7 @@ template<
     typename T_First,
     typename T_Second
 >
-struct DateCoordIsBigger<
+struct DatumCoordIsBigger<
     T_First,
     T_Second,
     typename std::enable_if<
@@ -280,13 +280,13 @@ template<
     typename T_Second,
     typename T_SFinae = void
 >
-struct DateCoordIsSame;
+struct DatumCoordIsSame;
 
 template<
     typename T_First,
     typename T_Second
 >
-struct DateCoordIsSame<
+struct DatumCoordIsSame<
     T_First,
     T_Second,
     typename std::enable_if<
@@ -301,7 +301,7 @@ template<
     typename T_First,
     typename T_Second
 >
-struct DateCoordIsSame<
+struct DatumCoordIsSame<
     T_First,
     T_Second,
     typename std::enable_if<
@@ -317,7 +317,7 @@ template<
     typename T_First,
     typename T_Second
 >
-struct DateCoordIsSame<
+struct DatumCoordIsSame<
     T_First,
     T_Second,
     typename std::enable_if<
@@ -326,7 +326,7 @@ struct DateCoordIsSame<
     >::type
 >
 {
-    static constexpr bool value = DateCoordIsSame<
+    static constexpr bool value = DatumCoordIsSame<
         typename T_First::PopFront,
         typename T_Second::PopFront
     >::value;
@@ -336,7 +336,7 @@ template<
     typename T_First,
     typename T_Second
 >
-struct DateCoordIsSame<
+struct DatumCoordIsSame<
     T_First,
     T_Second,
     typename std::enable_if<

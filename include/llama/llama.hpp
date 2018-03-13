@@ -23,8 +23,8 @@
 #define LLAMA_VERSION_PATCH 0
 
 #include "Types.hpp"
-#include "DateStruct.hpp"
-#include "DateArray.hpp"
+#include "DatumStruct.hpp"
+#include "DatumArray.hpp"
 #include "UserDomain.hpp"
 
 #include "allocator/Vector.hpp"
@@ -38,6 +38,6 @@
 #include "mapping/One.hpp"
 
 #include "preprocessor/macros.hpp"
-#include "preprocessor/DefineDateDomain.hpp"
+#include "preprocessor/DefineDatumDomain.hpp"
 
 #include "ForEach.hpp"

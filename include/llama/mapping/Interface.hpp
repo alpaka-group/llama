@@ -28,12 +28,12 @@ namespace mapping
 
 template<
     typename T_UserDomain,
-    typename T_DateDomain
+    typename T_DatumDomain
 >
 struct Interface
 {
     using UserDomain = T_UserDomain;
-    using DateDomain = T_DateDomain;
+    using DatumDomain = T_DatumDomain;
     static constexpr std::size_t blobCount = 0;
 
     LLAMA_FN_HOST_ACC_INLINE
@@ -49,7 +49,7 @@ struct Interface
     getBlobSize( std::size_t const blobNr ) const
     -> std::size_t;
 
-    template< typename T_DateDomainCoord >
+    template< typename T_DatumDomainCoord >
     LLAMA_FN_HOST_ACC_INLINE
     auto
     getBlobByte(

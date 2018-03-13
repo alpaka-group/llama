@@ -124,38 +124,38 @@ struct Factory
 
 template<
     std::size_t dimension,
-    typename DateDomain
+    typename DatumDomain
 >
 using OneOnStackFactory =
     llama::Factory<
         llama::mapping::One<
             UserDomain< dimension >,
-            DateDomain
+            DatumDomain
         >,
         llama::allocator::Stack<
-            DateDomain::size
+            DatumDomain::size
         >
     >;
 
 template<
     std::size_t dimension,
-    typename DateDomain
+    typename DatumDomain
 >
 auto
 tempAlloc()
 -> View<
     llama::mapping::One<
         UserDomain< dimension >,
-        DateDomain
+        DatumDomain
     >,
     typename llama::allocator::Stack<
-        DateDomain::size
+        DatumDomain::size
     >::BlobType
 >
 {
     return OneOnStackFactory<
         dimension,
-        DateDomain
+        DatumDomain
     >::allocView();
 }
 

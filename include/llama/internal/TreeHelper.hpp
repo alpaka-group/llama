@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "../DateCoord.hpp"
+#include "../DatumCoord.hpp"
 #include <tuple>
 #include <type_traits>
 
@@ -44,37 +44,37 @@ template<
     typename T_Leave,
     typename... T_Leaves
 >
-struct GetSizeOfDateStructLeaves;
+struct GetSizeOfDatumStructLeaves;
 
 template< typename T_Leave >
-struct GetSizeOfDateStructLeave
+struct GetSizeOfDatumStructLeave
 {
     static constexpr std::size_t value = sizeof( T_Leave );
 };
 
 template< typename... T_Leaves >
-struct GetSizeOfDateStructLeave< DateStruct< T_Leaves... > >
+struct GetSizeOfDatumStructLeave< DatumStruct< T_Leaves... > >
 {
     static constexpr std::size_t value =
-        GetSizeOfDateStructLeaves< T_Leaves... >::value;
+        GetSizeOfDatumStructLeaves< T_Leaves... >::value;
 };
 
 template<
     typename T_Leave,
     typename... T_Leaves
 >
-struct GetSizeOfDateStructLeaves
+struct GetSizeOfDatumStructLeaves
 {
     static constexpr std::size_t value =
-        GetSizeOfDateStructLeave< T_Leave >::value +
-        GetSizeOfDateStructLeaves< T_Leaves... >::value;
+        GetSizeOfDatumStructLeave< T_Leave >::value +
+        GetSizeOfDatumStructLeaves< T_Leaves... >::value;
 };
 
 template< typename T_Leave >
-struct GetSizeOfDateStructLeaves< T_Leave >
+struct GetSizeOfDatumStructLeaves< T_Leave >
 {
     static constexpr std::size_t value =
-        GetSizeOfDateStructLeave< T_Leave >::value;
+        GetSizeOfDatumStructLeave< T_Leave >::value;
 };
 
 template<
@@ -83,17 +83,17 @@ template<
     typename T_Leave,
     typename... T_Leaves
 >
-struct GetSizeOfDateStructLeavesWithCoord;
+struct GetSizeOfDatumStructLeavesWithCoord;
 
 template<
     typename T_Coord,
     typename T_Pos,
     typename T_Leave
 >
-struct GetSizeOfDateStructLeaveWithCoord
+struct GetSizeOfDatumStructLeaveWithCoord
 {
     static constexpr std::size_t value =
-        sizeof( T_Leave ) * std::size_t( DateCoordIsBigger<
+        sizeof( T_Leave ) * std::size_t( DatumCoordIsBigger<
             T_Coord,
             T_Pos
         >::value );
@@ -104,13 +104,13 @@ template<
     typename T_Pos,
     typename... T_Leaves
 >
-struct GetSizeOfDateStructLeaveWithCoord<
+struct GetSizeOfDatumStructLeaveWithCoord<
     T_Coord,
     T_Pos,
-    DateStruct< T_Leaves... >
+    DatumStruct< T_Leaves... >
 >
 {
-    static constexpr std::size_t value = GetSizeOfDateStructLeavesWithCoord<
+    static constexpr std::size_t value = GetSizeOfDatumStructLeavesWithCoord<
         T_Coord,
         typename T_Pos::template PushBack< 0 >,
         T_Leaves...
@@ -123,14 +123,14 @@ template<
     typename T_Leave,
     typename... T_Leaves
 >
-struct GetSizeOfDateStructLeavesWithCoord
+struct GetSizeOfDatumStructLeavesWithCoord
 {
-    static constexpr std::size_t value = GetSizeOfDateStructLeaveWithCoord<
+    static constexpr std::size_t value = GetSizeOfDatumStructLeaveWithCoord<
             T_Coord,
             T_Pos,
             T_Leave
         >::value +
-        GetSizeOfDateStructLeavesWithCoord<
+        GetSizeOfDatumStructLeavesWithCoord<
             T_Coord,
             typename T_Pos::IncBack,
             T_Leaves...
@@ -142,13 +142,13 @@ template<
     typename T_Pos,
     typename T_Leave
 >
-struct GetSizeOfDateStructLeavesWithCoord<
+struct GetSizeOfDatumStructLeavesWithCoord<
     T_Coord,
     T_Pos,
     T_Leave
 >
 {
-    static constexpr std::size_t value = GetSizeOfDateStructLeaveWithCoord<
+    static constexpr std::size_t value = GetSizeOfDatumStructLeaveWithCoord<
         T_Coord,
         T_Pos,
         T_Leave

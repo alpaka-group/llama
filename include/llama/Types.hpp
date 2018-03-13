@@ -30,6 +30,6 @@ using UserDomain = Array<
 >;
 
 template< typename... T_Leaves >
-struct DateStruct;
+struct DatumStruct;
 
 } // namespace llama

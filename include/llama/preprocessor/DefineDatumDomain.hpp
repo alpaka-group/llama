@@ -38,14 +38,14 @@
 #include <boost/preprocessor/tuple/push_back.hpp>
 
 #define LLAMA_ATOMTYPE 0
-#define LLAMA_DATESTRUCT 1
-#define LLAMA_DATEARRAY 2
+#define LLAMA_DATUMSTRUCT 1
+#define LLAMA_DATUMARRAY 2
 
 #define LLAMA_AT LLAMA_ATOMTYPE
-#define LLAMA_DS LLAMA_DATESTRUCT
-#define LLAMA_DA LLAMA_DATEARRAY
+#define LLAMA_DS LLAMA_DATUMSTRUCT
+#define LLAMA_DA LLAMA_DATUMARRAY
 
-#define LLAMA_MAX_DATA_DOMAIN_DEPTH 3
+#define LLAMA_MAX_DATUM_DOMAIN_DEPTH 3
 
 /* Defers the solving of a macro, which is especially needed of the macro
  * creates commas, which may confuse surrounding steering macros like
@@ -77,17 +77,17 @@
     )
 #define LLAMA_INTERNAL_EVAL2(...) __VA_ARGS__
 
-#include "DateStructNameTemplate.hpp"
-#include "DateStructTemplate.hpp"
+#include "DatumStructNameTemplate.hpp"
+#include "DatumStructTemplate.hpp"
 
-/* Creates a struct with naming and type tree of a date domain */
-#define LLAMA_DEFINE_DATEDOMAIN( Name, Content )                               \
-struct Name final : llama::DateCoord<>                                         \
+/* Creates a struct with naming and type tree of a datum domain */
+#define LLAMA_DEFINE_DATUMDOMAIN( Name, Content )                              \
+struct Name final : llama::DatumCoord<>                                        \
 {                                                                              \
-    /* Expands to shortcut structs for llama::DateCoord< x, y, z > */          \
+    /* Expands to shortcut structs for llama::DatumCoord< x, y, z > */         \
     LLAMA_INTERNAL_EVAL( LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_1( Content ) )   \
-    using Type = llama::DateStruct<                                            \
-        /* Expands DateStruct tree of date domain types */                     \
+    using Type = llama::DatumStruct<                                           \
+        /* Expands DatumStruct tree of datum domain types */                   \
         LLAMA_INTERNAL_EVAL( LLAMA_INTERNAL_PARSE_DS_CONTENT_1( Content ) )    \
     >;                                                                         \
 };
