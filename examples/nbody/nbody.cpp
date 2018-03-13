@@ -226,7 +226,6 @@ struct ThreadsElemsDistribution
 
 int main(int argc,char * * argv)
 {
-
     // ALPAKA
     using Dim = alpaka::dim::DimInt< 1 >;
     using Size = std::size_t;
@@ -266,7 +265,7 @@ int main(int argc,char * * argv)
         UserDomain,
         DateDomain
     >;
-    std::cout << elemCount << '\n';
+
     Mapping mapping( userDomainSize );
 
     using DevFactory = llama::Factory<
