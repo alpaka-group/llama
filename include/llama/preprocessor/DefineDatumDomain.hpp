@@ -100,8 +100,11 @@ struct Name final : llama::DatumCoord<>                                        \
             /* Expands DatumStruct tree of datum domain types */               \
             LLAMA_INTERNAL_EVAL( LLAMA_INTERNAL_PARSE_DS_CONTENT_1( Content ) )\
         >;                                                                     \
-        template< std::size_t... T_coords >                                    \
+        template<                                                              \
+            typename Unused,                                                   \
+            std::size_t... T_coords                                            \
+        >                                                                      \
         struct UID;                                                            \
-        /*LLAMA_INTERNAL_EVAL( LLAMA_INTERNAL_PARSE_UID_DS_CONTENT_1( Content ) )*/\
+        LLAMA_INTERNAL_EVAL( LLAMA_INTERNAL_PARSE_UID_DS_CONTENT_1( Content ) )\
     };                                                                         \
 };

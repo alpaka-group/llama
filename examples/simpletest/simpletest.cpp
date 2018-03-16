@@ -8,10 +8,10 @@ LLAMA_DEFINE_DATUMDOMAIN(
             ( X, LLAMA_ATOMTYPE, float ),
             ( Y, LLAMA_ATOMTYPE, float ),
             ( Z, LLAMA_ATOMTYPE, float )
-            //~ ,( TestSub, LLAMA_DATUMSTRUCT, (
-                //~ ( U, LLAMA_ATOMTYPE, std::size_t ),
-                //~ ( V, LLAMA_ATOMTYPE, unsigned char )
-            //~ ) )
+            ,( TestSub, LLAMA_DATUMSTRUCT, (
+                ( U, LLAMA_ATOMTYPE, std::size_t ),
+                ( V, LLAMA_ATOMTYPE, unsigned char )
+            ) )
         ) ),
         ( Momentum, LLAMA_DATUMSTRUCT, (
             ( A, LLAMA_ATOMTYPE, double ),
