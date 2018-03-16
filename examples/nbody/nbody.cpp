@@ -315,7 +315,7 @@ int main(int argc,char * * argv)
     Stream stream( devAcc ) ;
 
     // NBODY
-    constexpr std::size_t problemSize = 64*1024;
+    constexpr std::size_t problemSize = 16*1024;
     constexpr std::size_t blockSize = 256;
     using Distribution = ThreadsElemsDistribution<
         Acc,

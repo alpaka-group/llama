@@ -37,8 +37,8 @@ struct View;
 
 #define __LLAMA_DEFINE_FOREACH_FUNCTOR( OP, FUNCTOR )                          \
     template<                                                                  \
-        typename T_LeftDatum,                                                   \
-        typename T_RightDatum,                                                  \
+        typename T_LeftDatum,                                                  \
+        typename T_RightDatum,                                                 \
         typename T_Source                                                      \
     >                                                                          \
     struct BOOST_PP_CAT( FUNCTOR, Functor)                                     \
@@ -59,12 +59,12 @@ struct View;
             using Src = typename T_Source::template Cat< T_InnerCoord >;       \
             left( Dst() ) OP right( Src() );                                   \
         }                                                                      \
-        T_LeftDatum left;                                                       \
-        T_RightDatum right;                                                     \
+        T_LeftDatum left;                                                      \
+        T_RightDatum right;                                                    \
     };                                                                         \
                                                                                \
     template<                                                                  \
-        typename T_LeftDatum,                                                   \
+        typename T_LeftDatum,                                                  \
         typename T_RightType                                                   \
     >                                                                          \
     struct BOOST_PP_CAT( FUNCTOR, TypeFunctor)                                 \
@@ -85,7 +85,7 @@ struct View;
             left( Dst() ) OP static_cast< typename std::remove_reference<      \
                 decltype( left( Dst() ) ) >::type >( right );                  \
         }                                                                      \
-        T_LeftDatum left;                                                       \
+        T_LeftDatum left;                                                      \
         T_RightType right;                                                     \
     };
 
@@ -96,29 +96,29 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( *= , Multiplication )
 __LLAMA_DEFINE_FOREACH_FUNCTOR( /= , Division )
 __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
 
-#define __LLAMA_VIRTUALDATUM_VIRTUALDATUM_OPERATOR( OP, FUNCTOR, REF )           \
+#define __LLAMA_VIRTUALDATUM_VIRTUALDATUM_OPERATOR( OP, FUNCTOR, REF )         \
     template< typename T_OtherView >                                           \
     LLAMA_FN_HOST_ACC_INLINE                                                   \
     auto                                                                       \
-    operator OP( VirtualDatum< T_OtherView >REF other )                         \
+    operator OP( VirtualDatum< T_OtherView >REF other )                        \
     -> decltype(*this)&                                                        \
     {                                                                          \
         BOOST_PP_CAT( FUNCTOR, Functor)<                                       \
             decltype(*this),                                                   \
-            VirtualDatum< T_OtherView >,                                        \
-            DatumCoord< >                                                       \
+            VirtualDatum< T_OtherView >,                                       \
+            DatumCoord< >                                                      \
         > functor{                                                             \
             *this,                                                             \
             other                                                              \
         };                                                                     \
         forEach<                                                               \
-            typename Mapping::DatumDomain,                                      \
-            DatumCoord< >                                                       \
+            typename Mapping::DatumDomain,                                     \
+            DatumCoord< >                                                      \
         >( functor );                                                          \
         return *this;                                                          \
     }
 
-#define __LLAMA_VIRTUALDATUM_VIEW_OPERATOR( OP, FUNCTOR, REF )                  \
+#define __LLAMA_VIRTUALDATUM_VIEW_OPERATOR( OP, FUNCTOR, REF )                 \
     template<                                                                  \
         typename T_OtherMapping,                                               \
         typename T_OtherBlobType                                               \
@@ -137,19 +137,19 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
         BOOST_PP_CAT( FUNCTOR, Functor)<                                       \
             decltype(*this),                                                   \
             decltype(otherVd),                                                 \
-            DatumCoord< >                                                       \
+            DatumCoord< >                                                      \
         > functor{                                                             \
             *this,                                                             \
             otherVd                                                            \
         };                                                                     \
         forEach<                                                               \
-            typename Mapping::DatumDomain,                                      \
-            DatumCoord< >                                                       \
+            typename Mapping::DatumDomain,                                     \
+            DatumCoord< >                                                      \
         >( functor );                                                          \
         return *this;                                                          \
     }
 
-#define __LLAMA_VIRTUALDATUM_TYPE_OPERATOR( OP, FUNCTOR, REF )                  \
+#define __LLAMA_VIRTUALDATUM_TYPE_OPERATOR( OP, FUNCTOR, REF )                 \
     template< typename T_OtherType >                                           \
     LLAMA_FN_HOST_ACC_INLINE                                                   \
     auto                                                                       \
@@ -164,18 +164,18 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
             other                                                              \
         };                                                                     \
         forEach<                                                               \
-            typename Mapping::DatumDomain,                                      \
-            DatumCoord< >                                                       \
+            typename Mapping::DatumDomain,                                     \
+            DatumCoord< >                                                      \
         >( functor );                                                          \
         return *this;                                                          \
     }
 
-#define __LLAMA_VIRTUALDATUM_OPERATOR( OP, FUNCTOR )                            \
-    __LLAMA_VIRTUALDATUM_VIRTUALDATUM_OPERATOR( OP, FUNCTOR, & )                 \
-    __LLAMA_VIRTUALDATUM_VIRTUALDATUM_OPERATOR( OP, FUNCTOR, && )                \
-    __LLAMA_VIRTUALDATUM_VIEW_OPERATOR( OP, FUNCTOR, & )                        \
-    __LLAMA_VIRTUALDATUM_VIEW_OPERATOR( OP, FUNCTOR, && )                       \
-    __LLAMA_VIRTUALDATUM_TYPE_OPERATOR( OP, FUNCTOR, & )                        \
+#define __LLAMA_VIRTUALDATUM_OPERATOR( OP, FUNCTOR )                           \
+    __LLAMA_VIRTUALDATUM_VIRTUALDATUM_OPERATOR( OP, FUNCTOR, & )               \
+    __LLAMA_VIRTUALDATUM_VIRTUALDATUM_OPERATOR( OP, FUNCTOR, && )              \
+    __LLAMA_VIRTUALDATUM_VIEW_OPERATOR( OP, FUNCTOR, & )                       \
+    __LLAMA_VIRTUALDATUM_VIEW_OPERATOR( OP, FUNCTOR, && )                      \
+    __LLAMA_VIRTUALDATUM_TYPE_OPERATOR( OP, FUNCTOR, & )                       \
     __LLAMA_VIRTUALDATUM_TYPE_OPERATOR( OP, FUNCTOR, && )
 
 template< typename T_View >

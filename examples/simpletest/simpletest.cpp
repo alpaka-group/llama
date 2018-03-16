@@ -149,14 +149,14 @@ int main(int argc,char * * argv)
         LLAMA_INDEPENDENT_DATA
         for (size_t y = 0; y < udSize[1]; ++y)
         {
-            auto date = view( x, y );
-            //~ date( Name::Momentum::A() ) += date( llama::DatumCoord< 0, 0 >() );
-            //~ date( Name::Momentum::B() ) += date( llama::DatumCoord< 0, 1 >() );
+            auto datum = view( x, y );
+            //~ datum( Name::Momentum::A() ) += datum( llama::DatumCoord< 0, 0 >() );
+            //~ datum( Name::Momentum::B() ) += datum( llama::DatumCoord< 0, 1 >() );
             llama::AdditionFunctor<
-                decltype(date),
-                decltype(date),
+                decltype(datum),
+                decltype(datum),
                 Name::Pos
-            > as{ date, date };
+            > as{ datum, datum };
             llama::forEach<
                 DD,
                 Name::Momentum
