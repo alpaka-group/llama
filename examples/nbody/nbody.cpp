@@ -165,7 +165,7 @@ struct UpdateKernel
         >;
         using SharedAllocator = BlockSharedMemoryAllocator<
             T_Acc,
-            decltype(particles)::Mapping::DatumDomain::size
+            decltype(particles)::Mapping::DatumDomain::TypeTree::sizeOf
             * blockSize,
             __COUNTER__,
             threads
@@ -329,10 +329,9 @@ int main(int argc,char * * argv)
     // LLAMA
     using UserDomain = llama::UserDomain< 1 >;
     const UserDomain userDomainSize{ problemSize };
-    using DatumDomain = Particle::Type;
     using Mapping = llama::mapping::SoA<
         UserDomain,
-        DatumDomain
+        Particle
     >;
 
     Mapping mapping( userDomainSize );
@@ -364,7 +363,8 @@ int main(int argc,char * * argv)
     >;
 
     std::cout << problemSize / 1000 / 1000 << " million particles\n";
-    std::cout << problemSize * DatumDomain::size / 1000 / 1000 << "MB \n";
+    std::cout <<
+        problemSize * Particle::TypeTree::sizeOf / 1000 / 1000 << "MB \n";
 
     Chrono chrono;
 
@@ -383,7 +383,7 @@ int main(int argc,char * * argv)
     LLAMA_INDEPENDENT_DATA
     for (std::size_t i = 0; i < problemSize; ++i)
     {
-        //~ auto temp = llama::tempAlloc< 1, DatumDomain >();
+        //~ auto temp = llama::tempAlloc< 1, Particle >();
         //~ temp(Particle::Pos::X()) = distribution(generator);
         //~ temp(Particle::Pos::Y()) = distribution(generator);
         //~ temp(Particle::Pos::Z()) = distribution(generator);

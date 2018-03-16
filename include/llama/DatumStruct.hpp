@@ -27,7 +27,7 @@ namespace llama
 template< typename... T_Leaves >
 struct DatumStruct
 {
-    static constexpr std::size_t size =
+    static constexpr std::size_t sizeOf =
         internal::GetSizeOfDatumStructLeaves< T_Leaves... >::value;
 
     template< std::size_t T_coord >

@@ -38,7 +38,7 @@ LLAMA_DEFINE_DATUMDOMAIN(
  *     {
  *     };
  *
- *     using Type = llama::DatumStruct
+ *     using TypeTree = llama::DatumStruct
  *     <
  *         llama::DatumStruct< float, float, float >,
  *         llama::DatumStruct< double, double >,
@@ -87,21 +87,20 @@ int main(int argc,char * * argv)
 {
     using UD = llama::UserDomain< 2 >;
     UD udSize{ 8192, 8192 };
-    using DD = Name::Type;
     std::cout
         << "AoS Adresse: "
-        << llama::mapping::AoS< UD, DD >( udSize )
+        << llama::mapping::AoS< UD, Name >( udSize )
             .getBlobByte< 0, 1 >( { 0, 100 } )
         << std::endl;
     std::cout
         << "SoA Adresse: "
-        << llama::mapping::SoA< UD, DD >( udSize )
+        << llama::mapping::SoA< UD, Name >( udSize )
             .getBlobByte< 0, 1 >( { 0, 100 } )
         << std::endl;
 
     using Mapping = llama::mapping::SoA<
         UD,
-        DD,
+        Name,
         llama::LinearizeUserDomainAdress< UD::count >
     >;
 
@@ -140,8 +139,8 @@ int main(int argc,char * * argv)
         for (size_t y = 0; y < udSize[1]; ++y)
         {
             SetZeroFunctor< decltype( view( x, y ) ) > szf{ view( x, y ) };
-            llama::forEach< DD, Name::Pos >( szf );
-            llama::forEach< DD, Name::Momentum >( szf );
+            llama::forEach< Name, Name::Pos >( szf );
+            llama::forEach< Name, Name::Momentum >( szf );
             view.accessor< 1, 0 >( { x, y } ) =
                 double( x + y ) / double( udSize[0] + udSize[1] );
         }
@@ -158,7 +157,7 @@ int main(int argc,char * * argv)
                 Name::Pos
             > as{ datum, datum };
             llama::forEach<
-                DD,
+                Name,
                 Name::Momentum
             >( as );
         }

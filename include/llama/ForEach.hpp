@@ -251,7 +251,7 @@ void forEach( T_Functor&& functor )
 {
     internal::applyFunctorInDatumStruct< T_DatumCoord >(
         std::forward<T_Functor>( functor ),
-        T_DatumDomain()
+        typename T_DatumDomain::TypeTree()
     );
 }
 

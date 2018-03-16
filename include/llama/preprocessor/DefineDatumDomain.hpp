@@ -86,7 +86,7 @@ struct Name final : llama::DatumCoord<>                                        \
 {                                                                              \
     /* Expands to shortcut structs for llama::DatumCoord< x, y, z > */         \
     LLAMA_INTERNAL_EVAL( LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_1( Content ) )   \
-    using Type = llama::DatumStruct<                                           \
+    using TypeTree = llama::DatumStruct<                                       \
         /* Expands DatumStruct tree of datum domain types */                   \
         LLAMA_INTERNAL_EVAL( LLAMA_INTERNAL_PARSE_DS_CONTENT_1( Content ) )    \
     >;                                                                         \

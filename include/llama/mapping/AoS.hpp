@@ -57,7 +57,7 @@ struct AoS
     -> std::size_t
     {
         return T_ExtentUserDomainAdressFunctor()(userDomainSize)
-            * DatumDomain::size;
+            * DatumDomain::TypeTree::sizeOf;
     }
 
     template< std::size_t... T_datumDomainCoord >
@@ -70,8 +70,8 @@ struct AoS
                 coord,
                 userDomainSize
             )
-            * DatumDomain::size
-            + DatumDomain::template LinearBytePos< T_datumDomainCoord... >::value;
+            * DatumDomain::TypeTree::sizeOf
+            + DatumDomain::TypeTree::template LinearBytePos< T_datumDomainCoord... >::value;
     }
 
     template< std::size_t... T_datumDomainCoord >
