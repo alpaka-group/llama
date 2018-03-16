@@ -8,10 +8,10 @@ LLAMA_DEFINE_DATUMDOMAIN(
             ( X, LLAMA_ATOMTYPE, float ),
             ( Y, LLAMA_ATOMTYPE, float ),
             ( Z, LLAMA_ATOMTYPE, float )
-            ,( TestSub, LLAMA_DATUMSTRUCT, (
-                ( U, LLAMA_ATOMTYPE, std::size_t ),
-                ( V, LLAMA_ATOMTYPE, unsigned char )
-            ) )
+            //~ ,( TestSub, LLAMA_DATUMSTRUCT, (
+                //~ ( U, LLAMA_ATOMTYPE, std::size_t ),
+                //~ ( V, LLAMA_ATOMTYPE, unsigned char )
+            //~ ) )
         ) ),
         ( Momentum, LLAMA_DATUMSTRUCT, (
             ( A, LLAMA_ATOMTYPE, double ),
@@ -52,40 +52,40 @@ LLAMA_DEFINE_DATUMDOMAIN(
  *             llama::DatumArray< bool, 4 >
  *         >;
  *
- *         template< std::size_t... T_coords >
+ *         template< typename Unused, std::size_t... T_coords >
  *         struct UID;
- *         template< >
- *         struct UID< >
+ *         template< typename Unused >
+ *         struct UID< Unused >
  *         {
- *             template< std::size_t i >
+ *             template< std::size_t T_i >
  *             struct Name
  *             {
- *                 static constexpr unsigned char value = "Name" [ i ];
+ *                 static constexpr unsigned char value = "Name" [ T_i ];
  *             };
  *             static constexpr std::size_t length = sizeof( "Name" ) - 1;
- *             using type = typename MakeIdentifier< Name, 0, NameLength >::type;
+ *             using type = typename llama::MakeUniqueIdentifier< Name, 0, length >::type;
  *         };
- *         template< >
- *         struct UID< 0 >
+ *         template< typename Unused >
+ *         struct UID< Unused, 0 >
  *         {
- *             template< std::size_t i >
+ *             template< std::size_t T_i >
  *             struct Name
  *             {
- *                 static constexpr unsigned char value = "Pos" [ i ];
+ *                 static constexpr unsigned char value = "Pos" [ T_i ];
  *             };
  *             static constexpr std::size_t length = sizeof( "Pos" ) - 1;
- *             using type = typename llama::MakeIdentifier< Name, 0, length >::type;
+ *             using type = typename llama::MakeUniqueIdentifier< Name, 0, length >::type;
  *         };
- *         template< >
- *         struct UID< 0, 0 >
+ *         template< typename Unused >
+ *         struct UID< Unused, 0, 0 >
  *         {
- *             template< std::size_t i >
+ *             template< std::size_t T_i >
  *             struct Name
  *             {
- *                 static constexpr unsigned char value = "X" [ i ];
+ *                 static constexpr unsigned char value = "X" [ T_i ];
  *             };
  *             static constexpr std::size_t length = sizeof( "X" ) - 1;
- *             using type = typename llama::MakeIdentifier< Name, 0, length >::type;
+ *             using type = typename llama::MakeUniqueIdentifier< Name, 0, length >::type;
  *         };
  *         ...
  *

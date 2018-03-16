@@ -105,6 +105,21 @@ struct Name final : llama::DatumCoord<>                                        \
             std::size_t... T_coords                                            \
         >                                                                      \
         struct UID;                                                            \
+        template< typename Unused >                                            \
+        struct UID< Unused >                                                   \
+        {                                                                      \
+            template< std::size_t T_i >                                        \
+            struct Name                                                        \
+            {                                                                  \
+                static constexpr unsigned char value = #Name [ T_i ];          \
+            };                                                                 \
+            static constexpr std::size_t length = sizeof( #Name ) - 1;         \
+            using type = typename llama::MakeUniqueIdentifier<                 \
+                    Name,                                                      \
+                    0,                                                         \
+                    length                                                     \
+                >::type;                                                       \
+        };                                                                     \
         LLAMA_INTERNAL_EVAL( LLAMA_INTERNAL_PARSE_UID_DS_CONTENT_1( Content ) )\
     };                                                                         \
 };
