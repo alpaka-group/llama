@@ -36,6 +36,7 @@
 #include <boost/preprocessor/facilities/empty.hpp>
 #include <boost/preprocessor/tuple/enum.hpp>
 #include <boost/preprocessor/tuple/push_back.hpp>
+#include <boost/preprocessor/stringize.hpp>
 
 #define LLAMA_ATOMTYPE 0
 #define LLAMA_DATUMSTRUCT 1
@@ -75,10 +76,17 @@
             LLAMA_INTERNAL_EVAL2( __VA_ARGS__ )                                \
         )                                                                      \
     )
-#define LLAMA_INTERNAL_EVAL2(...) __VA_ARGS__
+#define LLAMA_INTERNAL_EVAL2(...)                                              \
+    LLAMA_INTERNAL_EVAL3(                                                      \
+        LLAMA_INTERNAL_EVAL3(                                                  \
+            LLAMA_INTERNAL_EVAL3( __VA_ARGS__ )                                \
+        )                                                                      \
+    )
+#define LLAMA_INTERNAL_EVAL3(...) __VA_ARGS__
 
 #include "DatumStructNameTemplate.hpp"
 #include "DatumStructTemplate.hpp"
+#include "DatumStructUIDTemplate.hpp"
 
 /* Creates a struct with naming and type tree of a datum domain */
 #define LLAMA_DEFINE_DATUMDOMAIN( Name, Content )                              \
@@ -86,8 +94,14 @@ struct Name final : llama::DatumCoord<>                                        \
 {                                                                              \
     /* Expands to shortcut structs for llama::DatumCoord< x, y, z > */         \
     LLAMA_INTERNAL_EVAL( LLAMA_INTERNAL_PARSE_NAME_DS_CONTENT_1( Content ) )   \
-    using TypeTree = llama::DatumStruct<                                       \
-        /* Expands DatumStruct tree of datum domain types */                   \
-        LLAMA_INTERNAL_EVAL( LLAMA_INTERNAL_PARSE_DS_CONTENT_1( Content ) )    \
-    >;                                                                         \
+    struct Llama                                                               \
+    {                                                                          \
+        using TypeTree = llama::DatumStruct<                                   \
+            /* Expands DatumStruct tree of datum domain types */               \
+            LLAMA_INTERNAL_EVAL( LLAMA_INTERNAL_PARSE_DS_CONTENT_1( Content ) )\
+        >;                                                                     \
+        template< std::size_t... T_coords >                                    \
+        struct UID;                                                            \
+        /*LLAMA_INTERNAL_EVAL( LLAMA_INTERNAL_PARSE_UID_DS_CONTENT_1( Content ) )*/\
+    };                                                                         \
 };

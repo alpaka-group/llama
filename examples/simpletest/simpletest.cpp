@@ -8,6 +8,10 @@ LLAMA_DEFINE_DATUMDOMAIN(
             ( X, LLAMA_ATOMTYPE, float ),
             ( Y, LLAMA_ATOMTYPE, float ),
             ( Z, LLAMA_ATOMTYPE, float )
+            //~ ,( TestSub, LLAMA_DATUMSTRUCT, (
+                //~ ( U, LLAMA_ATOMTYPE, std::size_t ),
+                //~ ( V, LLAMA_ATOMTYPE, unsigned char )
+            //~ ) )
         ) ),
         ( Momentum, LLAMA_DATUMSTRUCT, (
             ( A, LLAMA_ATOMTYPE, double ),
@@ -38,13 +42,54 @@ LLAMA_DEFINE_DATUMDOMAIN(
  *     {
  *     };
  *
- *     using TypeTree = llama::DatumStruct
- *     <
- *         llama::DatumStruct< float, float, float >,
- *         llama::DatumStruct< double, double >,
- *         int,
- *         llama::DatumArray< bool, 4 >
- *     >;
+ *     struct llama
+ *     {
+ *         using TypeTree = llama::DatumStruct
+ *         <
+ *             llama::DatumStruct< float, float, float >,
+ *             llama::DatumStruct< double, double >,
+ *             int,
+ *             llama::DatumArray< bool, 4 >
+ *         >;
+ *
+ *         template< std::size_t... T_coords >
+ *         struct UID;
+ *         template< >
+ *         struct UID< >
+ *         {
+ *             template< std::size_t i >
+ *             struct Name
+ *             {
+ *                 static constexpr unsigned char value = "Name" [ i ];
+ *             };
+ *             static constexpr std::size_t length = sizeof( "Name" ) - 1;
+ *             using type = typename MakeIdentifier< Name, 0, NameLength >::type;
+ *         };
+ *         template< >
+ *         struct UID< 0 >
+ *         {
+ *             template< std::size_t i >
+ *             struct Name
+ *             {
+ *                 static constexpr unsigned char value = "Pos" [ i ];
+ *             };
+ *             static constexpr std::size_t length = sizeof( "Pos" ) - 1;
+ *             using type = typename llama::MakeIdentifier< Name, 0, length >::type;
+ *         };
+ *         template< >
+ *         struct UID< 0, 0 >
+ *         {
+ *             template< std::size_t i >
+ *             struct Name
+ *             {
+ *                 static constexpr unsigned char value = "X" [ i ];
+ *             };
+ *             static constexpr std::size_t length = sizeof( "X" ) - 1;
+ *             using type = typename llama::MakeIdentifier< Name, 0, length >::type;
+ *         };
+ *         ...
+ *
+ *     };
  * };
  */
 

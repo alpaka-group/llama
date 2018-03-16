@@ -165,7 +165,7 @@ struct UpdateKernel
         >;
         using SharedAllocator = BlockSharedMemoryAllocator<
             T_Acc,
-            decltype(particles)::Mapping::DatumDomain::TypeTree::sizeOf
+            decltype(particles)::Mapping::DatumDomain::Llama::TypeTree::sizeOf
             * blockSize,
             __COUNTER__,
             threads
@@ -363,8 +363,9 @@ int main(int argc,char * * argv)
     >;
 
     std::cout << problemSize / 1000 / 1000 << " million particles\n";
-    std::cout <<
-        problemSize * Particle::TypeTree::sizeOf / 1000 / 1000 << "MB \n";
+    std::cout
+        << problemSize * Particle::Llama::TypeTree::sizeOf / 1000 / 1000
+        << "MB \n";
 
     Chrono chrono;
 

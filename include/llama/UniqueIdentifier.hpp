@@ -18,28 +18,45 @@
 
 #pragma once
 
-#define LLAMA_VERSION_MAJOR 0
-#define LLAMA_VERSION_MINOR 1
-#define LLAMA_VERSION_PATCH 0
+namespace llama
+{
 
-#include "Types.hpp"
-#include "DatumStruct.hpp"
-#include "DatumArray.hpp"
-#include "UserDomain.hpp"
+template< unsigned char... T_cs >
+struct UniqueIdentifier
+{
+};
 
-#include "allocator/Vector.hpp"
-#include "allocator/SharedPtr.hpp"
-#include "allocator/Stack.hpp"
+template<
+	template< std::size_t > class T_Name,
+	std::size_t T_i,
+	std::size_t T_length,
+	unsigned char... T_cs
+>
+struct MakeUniqueIdentifier
+{
+	using type = typename MakeUniqueIdentifier<
+		T_Name,
+		T_i + 1,
+		T_length,
+		T_Name< T_i >::value,
+		T_cs...
+	>::type;
+};
 
-#include "Factory.hpp"
+template<
+	template< std::size_t > class T_Name,
+	std::size_t T_length,
+	unsigned char... T_cs
+>
+struct MakeUniqueIdentifier
+<
+	T_Name,
+	T_length,
+	T_length,
+	T_cs...
+>
+{
+	using type = UniqueIdentifier< T_cs... >;
+};
 
-#include "mapping/AoS.hpp"
-#include "mapping/SoA.hpp"
-#include "mapping/One.hpp"
-
-#include "UniqueIdentifier.hpp"
-
-#include "preprocessor/macros.hpp"
-#include "preprocessor/DefineDatumDomain.hpp"
-
-#include "ForEach.hpp"
+}; // namespace llama

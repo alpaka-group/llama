@@ -190,7 +190,7 @@ struct VirtualDatum
     auto
     access( DatumCoord< T_coord... > && = DatumCoord< T_coord... >() )
     -> typename GetType<
-        typename Mapping::DatumDomain::TypeTree,
+        typename Mapping::DatumDomain::Llama::TypeTree,
         T_coord...
     >::type &
     {
@@ -202,7 +202,7 @@ struct VirtualDatum
     auto
     operator()( DatumCoord< T_coord... > && dc= DatumCoord< T_coord... >() )
     -> typename GetType<
-        typename Mapping::DatumDomain::TypeTree,
+        typename Mapping::DatumDomain::Llama::TypeTree,
         T_coord...
     >::type &
     {
@@ -261,7 +261,7 @@ struct View
     auto
     accessor( typename Mapping::UserDomain const userDomain )
     -> typename GetType<
-        typename Mapping::DatumDomain::TypeTree,
+        typename Mapping::DatumDomain::Llama::TypeTree,
         T_datumDomain...
     >::type &
     {
@@ -270,7 +270,7 @@ struct View
         auto const byte =
             mapping.template getBlobByte< T_datumDomain... >( userDomain );
         return *( reinterpret_cast< typename GetType<
-                typename Mapping::DatumDomain::TypeTree,
+                typename Mapping::DatumDomain::Llama::TypeTree,
                 T_datumDomain...
             >::type* > (
                 &blob[ nr ][ byte ]
@@ -329,7 +329,7 @@ struct View
     auto
     operator()( DatumCoord< T_coord... > && dc= DatumCoord< T_coord... >() )
     -> typename GetType<
-        typename Mapping::DatumDomain::TypeTree,
+        typename Mapping::DatumDomain::Llama::TypeTree,
         T_coord...
     >::type &
     {
