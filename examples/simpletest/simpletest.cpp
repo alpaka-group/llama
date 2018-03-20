@@ -14,8 +14,8 @@ LLAMA_DEFINE_DATUMDOMAIN(
             //~ ) )
         ) ),
         ( Momentum, LLAMA_DATUMSTRUCT, (
-            ( A, LLAMA_ATOMTYPE, double ),
-            ( B, LLAMA_ATOMTYPE, double )
+            ( Z, LLAMA_ATOMTYPE, double ),
+            ( X, LLAMA_ATOMTYPE, double )
         ) ),
         ( Weight, LLAMA_ATOMTYPE, int ),
         ( Options, LLAMA_DATUMARRAY, (4, LLAMA_ATOMTYPE, bool ) )
@@ -42,7 +42,7 @@ LLAMA_DEFINE_DATUMDOMAIN(
  *     {
  *     };
  *
- *     struct llama
+ *     struct Llama
  *     {
  *         using TypeTree = llama::DatumStruct
  *         <

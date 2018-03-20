@@ -25,6 +25,7 @@
 #include "GetType.hpp"
 #include "Array.hpp"
 #include "ForEach.hpp"
+#include "CompareUID.hpp"
 
 namespace llama
 {
@@ -36,6 +37,104 @@ template<
 struct View;
 
 #define __LLAMA_DEFINE_FOREACH_FUNCTOR( OP, FUNCTOR )                          \
+    template<                                                                  \
+        typename T_LeftDatum,                                                  \
+        typename T_LeftBase,                                                   \
+        typename T_LeftLocal,                                                  \
+        typename T_RightDatum,                                                 \
+        typename T_RightBase,                                                  \
+        typename T_RightLocal,                                                 \
+        typename SFINAE = void                                                 \
+    >                                                                          \
+    struct BOOST_PP_CAT( FUNCTOR, IfSameUIDFunctor)                            \
+    {                                                                          \
+        LLAMA_FN_HOST_ACC_INLINE                                               \
+        auto                                                                   \
+        operator()()                                                           \
+        -> void                                                                \
+        {}                                                                     \
+        T_LeftDatum left;                                                      \
+        T_RightDatum right;                                                    \
+    };                                                                         \
+                                                                               \
+    template<                                                                  \
+        typename T_LeftDatum,                                                  \
+        typename T_LeftBase,                                                   \
+        typename T_LeftLocal,                                                  \
+        typename T_RightDatum,                                                 \
+        typename T_RightBase,                                                  \
+        typename T_RightLocal                                                  \
+    >                                                                          \
+    struct BOOST_PP_CAT( FUNCTOR, IfSameUIDFunctor)                            \
+    <                                                                          \
+        T_LeftDatum,                                                           \
+        T_LeftBase,                                                            \
+        T_LeftLocal,                                                           \
+        T_RightDatum,                                                          \
+        T_RightBase,                                                           \
+        T_RightLocal,                                                          \
+        typename std::enable_if<                                               \
+            CompareUID<                                                        \
+                typename T_LeftDatum::Mapping::DatumDomain,                    \
+                T_LeftBase,                                                    \
+                T_LeftLocal,                                                   \
+                typename T_RightDatum::Mapping::DatumDomain,                   \
+                T_RightBase,                                                   \
+                T_RightLocal                                                   \
+            >::value                                                           \
+        >::type                                                                \
+    >                                                                          \
+    {                                                                          \
+        LLAMA_FN_HOST_ACC_INLINE                                               \
+        auto                                                                   \
+        operator()()                                                           \
+        -> void                                                                \
+        {                                                                      \
+            using Dst = typename T_LeftBase::template Cat< T_LeftLocal >;      \
+            using Src = typename T_RightBase::template Cat< T_RightLocal >;    \
+            left( Dst() ) OP right( Src() );                                   \
+        }                                                                      \
+        T_LeftDatum left;                                                      \
+        T_RightDatum right;                                                    \
+    };                                                                         \
+                                                                               \
+    template<                                                                  \
+        typename T_LeftDatum,                                                  \
+        typename T_LeftBase,                                                   \
+        typename T_LeftLocal,                                                  \
+        typename T_RightDatum                                                  \
+    >                                                                          \
+    struct BOOST_PP_CAT( FUNCTOR, InnerFunctor)                                \
+    {                                                                          \
+        template<                                                              \
+            typename T_OuterCoord,                                             \
+            typename T_InnerCoord                                              \
+        >                                                                      \
+        LLAMA_FN_HOST_ACC_INLINE                                               \
+        auto                                                                   \
+        operator()(                                                            \
+            T_OuterCoord,                                                      \
+            T_InnerCoord                                                       \
+        )                                                                      \
+        -> void                                                                \
+        {                                                                      \
+            BOOST_PP_CAT( FUNCTOR, IfSameUIDFunctor) <                         \
+                typename std::remove_reference<T_LeftDatum>::type,             \
+                T_LeftBase,                                                    \
+                T_LeftLocal,                                                   \
+                typename std::remove_reference<T_RightDatum>::type,            \
+                T_OuterCoord,                                                  \
+                T_InnerCoord                                                   \
+            > functor {                                                        \
+                left,                                                          \
+                right                                                          \
+            };                                                                 \
+            functor();                                                         \
+        }                                                                      \
+        T_LeftDatum left;                                                      \
+        T_RightDatum right;                                                    \
+    };                                                                         \
+                                                                               \
     template<                                                                  \
         typename T_LeftDatum,                                                  \
         typename T_RightDatum,                                                 \
@@ -55,9 +154,19 @@ struct View;
         )                                                                      \
         -> void                                                                \
         {                                                                      \
-            using Dst = typename T_OuterCoord::template Cat< T_InnerCoord >;   \
-            using Src = typename T_Source::template Cat< T_InnerCoord >;       \
-            left( Dst() ) OP right( Src() );                                   \
+            BOOST_PP_CAT( FUNCTOR, InnerFunctor)<                              \
+                T_LeftDatum,                                                   \
+                T_OuterCoord,                                                  \
+                T_InnerCoord,                                                  \
+                T_RightDatum                                                   \
+            > functor{                                                         \
+                left,                                                          \
+                right                                                          \
+            };                                                                 \
+            forEach<                                                           \
+                typename T_RightDatum::Mapping::DatumDomain,                   \
+                T_Source                                                       \
+            >( functor );                                                      \
         }                                                                      \
         T_LeftDatum left;                                                      \
         T_RightDatum right;                                                    \

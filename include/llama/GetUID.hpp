@@ -18,30 +18,49 @@
 
 #pragma once
 
-#define LLAMA_VERSION_MAJOR 0
-#define LLAMA_VERSION_MINOR 1
-#define LLAMA_VERSION_PATCH 0
+#include "DatumCoord.hpp"
 
-#include "Types.hpp"
-#include "DatumStruct.hpp"
-#include "DatumArray.hpp"
-#include "UserDomain.hpp"
+namespace llama
+{
 
-#include "allocator/Vector.hpp"
-#include "allocator/SharedPtr.hpp"
-#include "allocator/Stack.hpp"
+template<
+    typename T_DatumDomain,
+    typename T_DatumCoord
+>
+struct GetUIDType;
 
-#include "Factory.hpp"
+template<
+    typename T_DatumDomain,
+    std::size_t... T_coords
+>
+struct GetUIDType
+<
+    T_DatumDomain,
+    DatumCoord< T_coords... >
+>
+{
+	using type = typename T_DatumDomain::Llama::template UID<
+        void,
+        T_coords...
+    >::type;
+};
 
-#include "mapping/AoS.hpp"
-#include "mapping/SoA.hpp"
-#include "mapping/One.hpp"
+template<
+    typename T_DatumDomain,
+    typename T_DatumCoordName
+>
+using GetUID = typename GetUIDType<
+    T_DatumDomain,
+    T_DatumCoordName
+>::type;
 
-#include "UniqueIdentifier.hpp"
-#include "GetUID.hpp"
-#include "CompareUID.hpp"
+template<
+    typename T_DatumDomain,
+    typename T_DatumCoordName
+>
+using GetUIDFromName = GetUID<
+    T_DatumDomain,
+    typename T_DatumCoordName::type
+>;
 
-#include "preprocessor/macros.hpp"
-#include "preprocessor/DefineDatumDomain.hpp"
-
-#include "ForEach.hpp"
+} // namespace llama

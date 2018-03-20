@@ -116,6 +116,7 @@ template<
 >
 struct DatumCoord< T_coord, T_coords... >
 {
+    using type = DatumCoord< T_coord, T_coords... >;
     static constexpr std::size_t front = T_coord;
     static constexpr std::size_t size = sizeof...( T_coords ) + 1;
     static constexpr std::size_t back = DatumCoord< T_coords... >::back;
@@ -154,9 +155,11 @@ struct DatumCoord< T_coord, T_coords... >
 template< std::size_t T_coord >
 struct DatumCoord< T_coord >
 {
+    using type = DatumCoord< T_coord >;
     static constexpr std::size_t front = T_coord;
-    static constexpr std::size_t back = T_coord;
     static constexpr std::size_t size = 1;
+    static constexpr std::size_t back = T_coord;
+    using PopFront = DatumCoord< >;
     using IncBack = DatumCoord< T_coord + 1 >;
     template< std::size_t T_newCoord = 0 >
     using PushFront = DatumCoord<
@@ -185,6 +188,7 @@ struct DatumCoord< T_coord >
 template< >
 struct DatumCoord< >
 {
+    using type = DatumCoord< >;
     static constexpr std::size_t size = 0;
     using IncBack = DatumCoord< 1 >;
     template< std::size_t T_newCoord = 0 >
