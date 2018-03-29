@@ -14,7 +14,7 @@ set(llama_INCLUDE_DIR ${llama_INCLUDE_DIR} "${llama_DIR}/include")
 ################################################################################
 # BOOST LIB
 ################################################################################
-find_package(Boost 1.56.0 REQUIRED)
+find_package(Boost 1.66.0 REQUIRED)
 set(llama_INCLUDE_DIR ${llama_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
 set(llama_DEFINITIONS ${llama_DEFINITIONS} -DBOOST_ALL_NO_LIB)
 

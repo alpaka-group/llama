@@ -2,96 +2,36 @@
 #include <utility>
 #include <llama/llama.hpp>
 
-LLAMA_DEFINE_DATUMDOMAIN(
-    Name, (
-        ( Pos, LLAMA_DATUMSTRUCT, (
-            ( X, LLAMA_ATOMTYPE, float ),
-            ( Y, LLAMA_ATOMTYPE, float ),
-            ( Z, LLAMA_ATOMTYPE, float )
-            //~ ,( TestSub, LLAMA_DATUMSTRUCT, (
-                //~ ( U, LLAMA_ATOMTYPE, std::size_t ),
-                //~ ( V, LLAMA_ATOMTYPE, unsigned char )
-            //~ ) )
-        ) ),
-        ( Momentum, LLAMA_DATUMSTRUCT, (
-            ( Z, LLAMA_ATOMTYPE, double ),
-            ( X, LLAMA_ATOMTYPE, double )
-        ) ),
-        ( Weight, LLAMA_ATOMTYPE, int ),
-        ( Options, LLAMA_DATUMARRAY, (4, LLAMA_ATOMTYPE, bool ) )
-    )
-)
+namespace st
+{
+    struct Pos;
+    struct X;
+    struct Y;
+    struct Z;
+    struct Momentum;
+    struct Weight;
+    struct Options;
+}
 
-/* The macro above defines the struct below
- *
- * struct Name : llama::DatumCoord< >
- * {
- *     struct Pos : llama::DatumCoord<0>
- *     {
- *         using X = llama::DatumCoord<0,0>;
- *         using Y = llama::DatumCoord<0,1>;
- *         using Z = llama::DatumCoord<0,2>;
- *     };
- *     struct Momentum : llama::DatumCoord<1>
- *     {
- *         using A = llama::DatumCoord<1,0>;
- *         using B = llama::DatumCoord<1,1>;
- *     };
- *     using Weight = llama::DatumCoord<2>;
- *     struct Options : llama::DatumCoord<3>
- *     {
- *     };
- *
- *     struct Llama
- *     {
- *         using TypeTree = llama::DatumStruct
- *         <
- *             llama::DatumStruct< float, float, float >,
- *             llama::DatumStruct< double, double >,
- *             int,
- *             llama::DatumArray< bool, 4 >
- *         >;
- *
- *         template< typename Unused, std::size_t... T_coords >
- *         struct UID;
- *         template< typename Unused >
- *         struct UID< Unused >
- *         {
- *             template< std::size_t T_i >
- *             struct Name
- *             {
- *                 static constexpr unsigned char value = "Name" [ T_i ];
- *             };
- *             static constexpr std::size_t length = sizeof( "Name" ) - 1;
- *             using type = typename llama::MakeUniqueIdentifier< Name, 0, length >::type;
- *         };
- *         template< typename Unused >
- *         struct UID< Unused, 0 >
- *         {
- *             template< std::size_t T_i >
- *             struct Name
- *             {
- *                 static constexpr unsigned char value = "Pos" [ T_i ];
- *             };
- *             static constexpr std::size_t length = sizeof( "Pos" ) - 1;
- *             using type = typename llama::MakeUniqueIdentifier< Name, 0, length >::type;
- *         };
- *         template< typename Unused >
- *         struct UID< Unused, 0, 0 >
- *         {
- *             template< std::size_t T_i >
- *             struct Name
- *             {
- *                 static constexpr unsigned char value = "X" [ T_i ];
- *             };
- *             static constexpr std::size_t length = sizeof( "X" ) - 1;
- *             using type = typename llama::MakeUniqueIdentifier< Name, 0, length >::type;
- *         };
- *         ...
- *
- *     };
- * };
- */
+using Name = llama::DatumStruct<
+    llama::DatumElement< Pos,
+        llama::DatumStruct<
+            llama::DatumElement< X, float >,
+            llama::DatumElement< Y, float >,
+            llama::DatumElement< Z, float >
+        >
+    >,
+    llama::DatumElement< Momentum,
+        llama::DatumStruct<
+            llama::DatumElement< Z, float >,
+            llama::DatumElement< X, float >
+        >
+    >,
+    llama::DatumElement< Weight, int >,
+    llama::DatumElement< Options,
+        llama::DatumArray< 4, bool >
+    >
+>;
 
 template< std::size_t... T_coords >
 void printCoords( llama::DatumCoord< T_coords... > )

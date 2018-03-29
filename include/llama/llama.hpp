@@ -22,6 +22,8 @@
 #define LLAMA_VERSION_MINOR 1
 #define LLAMA_VERSION_PATCH 0
 
+#include <boost/mp11.hpp>
+
 #include "Types.hpp"
 #include "DatumStruct.hpp"
 #include "DatumArray.hpp"
@@ -42,6 +44,5 @@
 #include "CompareUID.hpp"
 
 #include "preprocessor/macros.hpp"
-#include "preprocessor/DefineDatumDomain.hpp"
 
 #include "ForEach.hpp"
