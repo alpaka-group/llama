@@ -268,27 +268,49 @@ struct MoveKernel
 
 template<
     typename T_Acc,
-    std::size_t blockSize
+    std::size_t blockSize,
+    std::size_t hardwareThreads
 >
 struct ThreadsElemsDistribution
 {
     static constexpr std::size_t elemCount = blockSize;
-    static constexpr std::size_t threadCount = 1;
+    static constexpr std::size_t threadCount = 1u;
 };
 
 #ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
     template<
         std::size_t blockSize,
+        std::size_t hardwareThreads,
         typename T_Dim,
         typename T_Size
     >
     struct ThreadsElemsDistribution<
         alpaka::acc::AccGpuCudaRt<T_Dim, T_Size>,
-        blockSize
+        blockSize,
+        hardwareThreads
     >
     {
-        static constexpr std::size_t elemCount = 1;
+        static constexpr std::size_t elemCount = 1u;
         static constexpr std::size_t threadCount = blockSize;
+    };
+#endif
+
+#ifdef ALPAKA_ACC_CPU_B_SEQ_T_OMP2_ENABLED
+    template<
+        std::size_t blockSize,
+        std::size_t hardwareThreads,
+        typename T_Dim,
+        typename T_Size
+    >
+    struct ThreadsElemsDistribution<
+        alpaka::acc::AccCpuOmp2Threads<T_Dim, T_Size>,
+        blockSize,
+        hardwareThreads
+    >
+    {
+        static constexpr std::size_t elemCount =
+            ( blockSize + hardwareThreads - 1u ) / hardwareThreads;
+        static constexpr std::size_t threadCount = hardwareThreads;
     };
 #endif
 
@@ -302,6 +324,8 @@ int main(int argc,char * * argv)
     using Host = alpaka::acc::AccCpuSerial<Dim, Size>;
     //~ using Acc = alpaka::acc::AccCpuSerial<Dim, Size>;
     using Acc = alpaka::acc::AccCpuOmp2Blocks<Dim, Size>;
+    //~ using Acc = alpaka::acc::AccCpuOmp2Threads<Dim, Size>;
+    //~ using Acc = alpaka::acc::AccCpuOmp4<Dim, Size>;
     //~ using Acc = alpaka::acc::AccGpuCudaRt<Dim, Size>;
     using DevHost = alpaka::dev::Dev<Host>;
     using DevAcc = alpaka::dev::Dev<Acc>;
@@ -317,9 +341,11 @@ int main(int argc,char * * argv)
     // NBODY
     constexpr std::size_t problemSize = 16*1024;
     constexpr std::size_t blockSize = 256;
+    constexpr std::size_t hardwareThreads = 2; //relevant for OpenMP2Threads
     using Distribution = ThreadsElemsDistribution<
         Acc,
-        blockSize
+        blockSize,
+        hardwareThreads
     >;
     constexpr std::size_t elemCount = Distribution::elemCount;
     constexpr std::size_t threadCount = Distribution::threadCount;
