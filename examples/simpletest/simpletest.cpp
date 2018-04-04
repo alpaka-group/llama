@@ -2,42 +2,40 @@
 #include <utility>
 #include <llama/llama.hpp>
 
+#include "../common/demangle.hpp"
+
 namespace st
 {
-    struct Pos;
-    struct X;
-    struct Y;
-    struct Z;
-    struct Momentum;
-    struct Weight;
-    struct Options;
+    struct Pos {};
+    struct X {};
+    struct Y {};
+    struct Z {};
+    struct Momentum {};
+    struct Weight {};
+    struct Options {};
 }
 
-using Name = llama::DatumStruct<
-    llama::DatumElement< Pos,
-        llama::DatumStruct<
-            llama::DatumElement< X, float >,
-            llama::DatumElement< Y, float >,
-            llama::DatumElement< Z, float >
-        >
-    >,
-    llama::DatumElement< Momentum,
-        llama::DatumStruct<
-            llama::DatumElement< Z, float >,
-            llama::DatumElement< X, float >
-        >
-    >,
-    llama::DatumElement< Weight, int >,
-    llama::DatumElement< Options,
-        llama::DatumArray< 4, bool >
-    >
+using Name = llama::DS<
+    llama::DE< st::Pos, llama::DS<
+        llama::DE< st::X, float >,
+        llama::DE< st::Y, float >,
+        llama::DE< st::Z, float >
+    > >,
+    llama::DE< st::Momentum,llama::DS<
+        llama::DE< st::Z, double >,
+        llama::DE< st::X, double >
+    > >,
+    llama::DE< st::Weight, int >,
+    llama::DE< st::Options, llama::DA< bool, 4 > >
 >;
 
 template< std::size_t... T_coords >
-void printCoords( llama::DatumCoord< T_coords... > )
+void printCoords( llama::DatumCoord< T_coords... > dc )
 {
     #if __cplusplus >= 201703L
         (std::cout << ... << T_coords);
+    #else
+        std::cout << type( dc );
     #endif
 }
 
@@ -73,15 +71,25 @@ int main(int argc,char * * argv)
     using UD = llama::UserDomain< 2 >;
     UD udSize{ 8192, 8192 };
     std::cout
-        << "AoS Adresse: "
+        << "Datum Domain is "
+        << addLineBreaks( type( Name() ) )
+        << std::endl;
+    std::cout
+        << "AoS address of (0,100) <0,1>: "
         << llama::mapping::AoS< UD, Name >( udSize )
             .getBlobByte< 0, 1 >( { 0, 100 } )
         << std::endl;
     std::cout
-        << "SoA Adresse: "
+        << "SoA address of (0,100) <0,1>: "
         << llama::mapping::SoA< UD, Name >( udSize )
             .getBlobByte< 0, 1 >( { 0, 100 } )
         << std::endl;
+    std::cout
+        << "SizeOf DatumDomain: "
+        << llama::SizeOf< Name >::value
+        << std::endl;
+
+    std::cout << type( llama::GetCoordFromUID< Name, st::Pos, st::X >() ) << '\n';
 
     using Mapping = llama::mapping::SoA<
         UD,
@@ -97,21 +105,21 @@ int main(int argc,char * * argv)
     auto view = Factory::allocView( mapping );
     const UD pos{ 0, 0 };
     float& position_x = view.accessor< 0, 0 >( pos );
-    double& momentum_y = view.accessor< 1, 1 >( pos );
+    double& momentum_z = view.accessor< st::Momentum, st::Z >( pos );
     int& weight = view.accessor< 2 >( pos );
     bool& options_2 = view.accessor< 3, 2 >( pos );
     std::cout
         << &position_x
         << std::endl;
     std::cout
-        << &momentum_y
+        << &momentum_z
         << " "
-        << (size_t)&momentum_y - (size_t)&position_x
+        << (size_t)&momentum_z - (size_t)&position_x
         << std::endl;
     std::cout
         << &weight
         << " "
-        << (size_t)&weight - (size_t)&momentum_y
+        << (size_t)&weight - (size_t)&momentum_z
         << std::endl;
     std::cout
         << &options_2
@@ -124,8 +132,8 @@ int main(int argc,char * * argv)
         for (size_t y = 0; y < udSize[1]; ++y)
         {
             SetZeroFunctor< decltype( view( x, y ) ) > szf{ view( x, y ) };
-            llama::forEach< Name, Name::Pos >( szf );
-            llama::forEach< Name, Name::Momentum >( szf );
+            llama::ForEach< Name, st::Pos >::apply( szf );
+            llama::ForEach< Name, st::Momentum >::apply( szf );
             view.accessor< 1, 0 >( { x, y } ) =
                 double( x + y ) / double( udSize[0] + udSize[1] );
         }
@@ -134,17 +142,18 @@ int main(int argc,char * * argv)
         for (size_t y = 0; y < udSize[1]; ++y)
         {
             auto datum = view( x, y );
-            //~ datum( Name::Momentum::A() ) += datum( llama::DatumCoord< 0, 0 >() );
-            //~ datum( Name::Momentum::B() ) += datum( llama::DatumCoord< 0, 1 >() );
+            datum.access< st::Pos, st::X >() += datum.access< llama::DatumCoord< 1, 0 > >();
+            datum.access( st::Pos(), st::Y() ) += datum.access( llama::DatumCoord< 1, 1 >() );
+            datum( st::Pos(), st::Z() ) += datum( llama::DatumCoord< 2 >() );
             llama::AdditionFunctor<
                 decltype(datum),
                 decltype(datum),
-                Name::Pos
+                st::Pos
             > as{ datum, datum };
-            llama::forEach<
+            llama::ForEach<
                 Name,
-                Name::Momentum
-            >( as );
+                st::Momentum
+            >::apply( as );
         }
     double sum = 0.0;
     for (size_t x = 0; x < udSize[0]; ++x)

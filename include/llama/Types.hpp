@@ -19,6 +19,7 @@
 #pragma once
 
 #include "Array.hpp"
+#include <boost/mp11.hpp>
 
 namespace llama
 {
@@ -29,7 +30,36 @@ using UserDomain = Array<
     T_dim
 >;
 
-template< typename... T_Leaves >
-struct DatumStruct;
+template<
+    typename... T_Leaves
+>
+using DatumStruct = boost::mp11::mp_list<
+    T_Leaves...
+>;
+
+template<
+    typename... T_Leaves
+>
+using DS = DatumStruct<
+    T_Leaves...
+>;
+
+template<
+    typename T_Identifier,
+    typename T_Type
+>
+using DatumElement = boost::mp11::mp_list<
+    T_Identifier,
+    T_Type
+>;
+
+template<
+    typename T_Identifier,
+    typename T_Type
+>
+using DE = DatumElement<
+    T_Identifier,
+    T_Type
+>;
 
 } // namespace llama

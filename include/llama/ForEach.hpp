@@ -20,6 +20,9 @@
 
 #include <type_traits>
 
+#include "DatumCoord.hpp"
+#include "GetCoordFromUID.hpp"
+
 namespace llama
 {
 
@@ -69,16 +72,6 @@ template<
     typename T_Coord,
     typename T_Pos,
     typename T_Functor,
-    typename T_Leave,
-    typename... T_Leaves
->
-struct ApplyFunctorInDatumStructLeaves;
-
-
-template<
-    typename T_Coord,
-    typename T_Pos,
-    typename T_Functor,
     typename SFINAE = void
 >
 struct ApplyFunctorIfCoordIsIncluded
@@ -120,9 +113,17 @@ template<
     typename T_Coord,
     typename T_Pos,
     typename T_Functor,
+    typename... T_Leaves
+>
+struct ApplyFunctorForEachLeaveImpl;
+
+template<
+    typename T_Coord,
+    typename T_Pos,
+    typename T_Functor,
     typename T_Leave
 >
-struct ApplyFunctorInDatumStructLeave
+struct ApplyFunctorForDatumDomainImpl
 {
     auto
     LLAMA_FN_HOST_ACC_INLINE
@@ -143,7 +144,7 @@ template<
     typename T_Functor,
     typename... T_Leaves
 >
-struct ApplyFunctorInDatumStructLeave<
+struct ApplyFunctorForDatumDomainImpl<
     T_Coord,
     T_Pos,
     T_Functor,
@@ -155,7 +156,7 @@ struct ApplyFunctorInDatumStructLeave<
     operator()( T_Functor&& functor )
     -> void
     {
-        ApplyFunctorInDatumStructLeaves<
+        ApplyFunctorForEachLeaveImpl<
             T_Coord,
             typename T_Pos::template PushBack< 0 >,
             T_Functor,
@@ -171,20 +172,26 @@ template<
     typename T_Leave,
     typename... T_Leaves
 >
-struct ApplyFunctorInDatumStructLeaves
+struct ApplyFunctorForEachLeaveImpl<
+    T_Coord,
+    T_Pos,
+    T_Functor,
+    T_Leave,
+    T_Leaves...
+>
 {
     auto
     LLAMA_FN_HOST_ACC_INLINE
     operator()( T_Functor&& functor )
     -> void
     {
-        ApplyFunctorInDatumStructLeave<
+        ApplyFunctorForDatumDomainImpl<
             T_Coord,
             T_Pos,
             T_Functor,
-            T_Leave
+            GetDatumElementType< T_Leave >
         >{}( std::forward<T_Functor>( functor ) );
-        ApplyFunctorInDatumStructLeaves<
+        ApplyFunctorForEachLeaveImpl<
             T_Coord,
             typename T_Pos::IncBack,
             T_Functor,
@@ -196,64 +203,98 @@ struct ApplyFunctorInDatumStructLeaves
 template<
     typename T_Coord,
     typename T_Pos,
-    typename T_Functor,
-    typename T_Leave
+    typename T_Functor
 >
-struct ApplyFunctorInDatumStructLeaves<
+struct ApplyFunctorForEachLeaveImpl<
     T_Coord,
     T_Pos,
-    T_Functor,
-    T_Leave
+    T_Functor
 >
 {
     auto
     LLAMA_FN_HOST_ACC_INLINE
     operator()( T_Functor&& functor )
     -> void
-    {
-        ApplyFunctorInDatumStructLeave<
-            T_Coord,
-            T_Pos,
-            T_Functor,
-            T_Leave
-        >{}( std::forward<T_Functor>( functor ) );
-    }
+    {}
 };
+
+template<
+    typename T_DatumDomain,
+    typename T_DatumCoord,
+    typename T_Functor
+>
+struct ApplyFunctorForEachLeave;
 
 template<
     typename T_DatumCoord,
     typename T_Functor,
     typename... T_Leaves
 >
-LLAMA_FN_HOST_ACC_INLINE
-void applyFunctorInDatumStruct(
-    T_Functor&& functor,
-    DatumStruct< T_Leaves... >
-)
+struct ApplyFunctorForEachLeave<
+    DatumStruct< T_Leaves... >,
+    T_DatumCoord,
+    T_Functor
+>
 {
-     ApplyFunctorInDatumStructLeaves<
-        T_DatumCoord,
-        DatumCoord< 0 >,
-        T_Functor,
-        T_Leaves...
-    >{}( std::forward<T_Functor>( functor ) );
-}
+    LLAMA_FN_HOST_ACC_INLINE
+    static void apply( T_Functor&& functor )
+    {
+         ApplyFunctorForEachLeaveImpl<
+            T_DatumCoord,
+            DatumCoord< 0 >,
+            T_Functor,
+            T_Leaves...
+        >{}( std::forward<T_Functor>( functor ) );
+    }
+};
 
 } // namespace internal
 
 template<
     typename T_DatumDomain,
-    typename T_DatumCoord = DatumCoord < >,
-    typename T_Functor
+    typename T_DatumCoordOrFirstUID = DatumCoord < >,
+    typename... T_RestUID
 >
-LLAMA_FN_HOST_ACC_INLINE
-void forEach( T_Functor&& functor )
+struct ForEach
 {
-    internal::applyFunctorInDatumStruct< T_DatumCoord >(
-        std::forward<T_Functor>( functor ),
-        typename T_DatumDomain::Llama::TypeTree()
-    );
-}
+    using T_DatumCoord = GetCoordFromUID<
+        T_DatumDomain,
+        T_DatumCoordOrFirstUID,
+        T_RestUID...
+    >;
+    template< typename T_Functor >
+    LLAMA_FN_HOST_ACC_INLINE
+    static void apply( T_Functor&& functor )
+    {
+        internal::ApplyFunctorForEachLeave<
+            T_DatumDomain,
+            T_DatumCoord,
+            T_Functor
+        >::apply( std::forward<T_Functor>( functor ) );
+    }
+};
+
+template<
+    typename T_DatumDomain,
+    std::size_t... T_coords
+>
+struct ForEach<
+    T_DatumDomain,
+    DatumCoord< T_coords... >
+>
+{
+    template< typename T_Functor >
+    LLAMA_FN_HOST_ACC_INLINE
+    static void apply( T_Functor&& functor )
+    {
+        internal::ApplyFunctorForEachLeave<
+            T_DatumDomain,
+            DatumCoord< T_coords... >,
+            T_Functor
+        >::apply( std::forward<T_Functor>( functor ) );
+    }
+};
+
 
 } // namespace llama
 

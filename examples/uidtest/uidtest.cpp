@@ -2,31 +2,38 @@
 #include <utility>
 #include <llama/llama.hpp>
 
-LLAMA_DEFINE_DATUMDOMAIN(
-    Particle, (
-        ( Pos, LLAMA_DATUMSTRUCT, (
-            ( X, LLAMA_ATOMTYPE, float ),
-            ( Y, LLAMA_ATOMTYPE, float ),
-            ( Z, LLAMA_ATOMTYPE, float )
-        ) ),
-        ( NotUsed, LLAMA_ATOMTYPE, int ),
-        ( Vel, LLAMA_DATUMSTRUCT, (
-            ( Z, LLAMA_ATOMTYPE, double ),
-            ( X, LLAMA_ATOMTYPE, double )
-        ) )
-    )
-)
+#include "../common/demangle.hpp"
 
-LLAMA_DEFINE_DATUMDOMAIN(
-    Other, (
-        ( Pos, LLAMA_DATUMSTRUCT, (
-            ( Z, LLAMA_ATOMTYPE, float ),
-            ( Y, LLAMA_ATOMTYPE, float )
-        ) )
-    )
-)
 
-#include "demangle.hpp"
+
+namespace st
+{
+    struct Pos {};
+    struct Vel {};
+    struct X {};
+    struct Y {};
+    struct Z {};
+}
+
+using Particle = llama::DS<
+    llama::DE< st::Pos, llama::DS<
+        llama::DE< st::X, float >,
+        llama::DE< st::Y, float >,
+        llama::DE< st::Z, float >
+    > >,
+    llama::DE< llama::NoName, int >,
+    llama::DE< st::Vel,llama::DS<
+        llama::DE< st::Z, double >,
+        llama::DE< st::X, double >
+    > >
+>;
+
+using Other = llama::DS<
+    llama::DE< st::Pos, llama::DS<
+        llama::DE< st::Z, float >,
+        llama::DE< st::Y, float >
+    > >
+>;
 
 int main(int argc,char * * argv)
 {
@@ -54,105 +61,117 @@ int main(int argc,char * * argv)
         llama::allocator::SharedPtr< 256 >
     >::allocView( mappingOther );
 
-    particle( 0u, 0u )( Particle::Pos::X() ) = 0.0f;
-    particle( 0u, 0u )( Particle::Pos::Y() ) = 0.0f;
-    particle( 0u, 0u )( Particle::Pos::Z() ) = 13.37f;
+    particle( 0u, 0u )( st::Pos(), st::X() ) = 0.0f;
+    particle( 0u, 0u )( st::Pos(), st::Y() ) = 0.0f;
+    particle( 0u, 0u )( st::Pos(), st::Z() ) = 13.37f;
 
-    particle( 0u, 0u )( Particle::Vel::X() ) = 4.2f;
-    particle( 0u, 0u )( Particle::Vel::Z() ) = 0.0f;
+    particle( 0u, 0u )( st::Vel(), st::X() ) = 4.2f;
+    particle( 0u, 0u )( st::Vel(), st::Z() ) = 0.0f;
 
-    other( 0u, 0u )( Other::Pos::Y() ) = 5.f;
-    other( 0u, 0u )( Other::Pos::Z() ) = 2.3f;
+    other( 0u, 0u )( st::Pos(), st::Y() ) = 5.f;
+    other( 0u, 0u )( st::Pos(), st::Z() ) = 2.3f;
 
     std::cout
-        << "UID of Particle::Pos::X "
-        << type( typename llama::GetUIDFromName<
+        << "UID of Particle.Pos.X: "
+        << type( typename llama::GetUID<
                 Particle,
-                Particle::Pos::X
+                llama::GetCoordFromUID<
+                    Particle,
+                    st::Pos,
+                    st::X
+                >
             >() )
         << std::endl;
     std::cout
-        << "UID of Particle::Pos "
-        << type( typename llama::GetUIDFromName<
+        << "UID of Particle.Pos: "
+        << type( typename llama::GetUID<
                 Particle,
-                Particle::Pos
+                llama::GetCoordFromUID<
+                    Particle,
+                    st::Pos
+                >
             >() )
         << std::endl;
     std::cout
-        << "UID of Particle "
-        << type( typename llama::GetUIDFromName<
+        << "UID of Particle: "
+        << type( typename llama::GetUID<
                 Particle,
-                Particle
+                llama::GetCoordFromUID<
+                    Particle
+                >
             >() )
         << std::endl;
     std::cout
-        << "UID of Particle::Vel::X "
-        << type( typename llama::GetUIDFromName<
+        << "UID of Particle.Vel.X: "
+        << type( typename llama::GetUID<
                 Particle,
-                Particle::Vel::X
+                llama::GetCoordFromUID<
+                    Particle,
+                    st::Vel,
+                    st::X
+                >
             >() )
         << std::endl;
 
     std::cout
-        << "Particle::Pos::<0> == Particle::Vel::<0> (X == Z) -> "
+        << "Particle.Pos.0 == Particle.Vel.0 (X == Z) -> "
         << llama::CompareUID<
-                Particle,             // DD A
-                Particle::Pos,        // Base A
-                llama::DatumCoord<0>, // Local A
-                Particle,             // DD B
-                Particle::Vel,        // Base B
-                llama::DatumCoord<0>  // Local B
+                Particle,                                    // DD A
+                llama::GetCoordFromUID< Particle, st::Pos >, // Base A
+                llama::DatumCoord<0>,                        // Local A
+                Particle,                                    // DD B
+                llama::GetCoordFromUID< Particle, st::Vel >, // Base B
+                llama::DatumCoord<0>                         // Local B
             >::value
         << std::endl;
     std::cout
-        << "Particle::Pos::<0> == Particle::Vel::<1> (X == X) -> "
+        << "Particle.Pos.0 == Particle.Vel.1 (X == X) -> "
         << llama::CompareUID<
-                Particle,             // DD A
-                Particle::Pos,        // Base A
-                llama::DatumCoord<0>, // Local A
-                Particle,             // DD B
-                Particle::Vel,        // Base B
-                llama::DatumCoord<1>  // Local B
+                Particle,                                    // DD A
+                llama::GetCoordFromUID< Particle, st::Pos >, // Base A
+                llama::DatumCoord<0>,                        // Local A
+                Particle,                                    // DD B
+                llama::GetCoordFromUID< Particle, st::Vel >, // Base B
+                llama::DatumCoord<1>                         // Local B
             >::value
         << std::endl;
-
     std::cout
-        << "Particle::<0,0> == Other::<0,0> (Pos::X == Pos::Z) -> "
+        << "Particle.0.0 == Other.0.0 (Pos.X == Pos.Z) -> "
         << llama::CompareUID<
                 Particle,               // DD A
-                Particle,               // Base A
+                llama::DatumCoord< >,   // Base A
                 llama::DatumCoord<0,0>, // Local A
                 Other,                  // DD B
-                Other,                  // Base B
+                llama::DatumCoord< >,   // Base B
                 llama::DatumCoord<0,0>  // Local B
             >::value
         << std::endl;
     std::cout
-        << "Particle::<0,2> == Other::<0,0> (Pos::Z == Pos::Z) -> "
+        << "Particle.0.2 == Other.0.0 (Pos.Z == Pos.Z) -> "
         << llama::CompareUID<
                 Particle,               // DD A
-                Particle,               // Base A
+                llama::DatumCoord< >,   // Base A
                 llama::DatumCoord<0,2>, // Local A
                 Other,                  // DD B
-                Other,                  // Base B
+                llama::DatumCoord< >,   // Base B
                 llama::DatumCoord<0,0>  // Local B
             >::value
         << std::endl;
     std::cout
-        << "Particle::<2,0> == Other::<0,0> (Vel::Z == Pos::Z) -> "
+        << "Particle.2.0 == Other.0.0 (Vel.Z == Pos.Z) -> "
         << llama::CompareUID<
                 Particle,               // DD A
-                Particle,               // Base A
+                llama::DatumCoord< >,   // Base A
                 llama::DatumCoord<2,0>, // Local A
                 Other,                  // DD B
-                Other,                  // Base B
+                llama::DatumCoord< >,   // Base B
                 llama::DatumCoord<0,0>  // Local B
             >::value
         << std::endl;
 
     std::cout
-        << "Before: view( 0u, 0u )( Particle::Pos::Z() ) = "
-        << particle( 0u, 0u )( Particle::Pos::Z() )
+        << "Before: view( 0u, 0u )( st::Pos(), st::Z() ) = "
+        << particle( 0u, 0u )( st::Pos(), st::Z() )
         << std::endl;
 
 
@@ -160,10 +179,10 @@ int main(int argc,char * * argv)
     //~ auto o = other( 0u, 0u );
     //~ llama::AdditionIfSameUIDFunctor<
         //~ decltype(p),
-        //~ Particle::Pos,
+        //~ llama::GetCoordFromUID< Particle, st::Pos >,
         //~ llama::DatumCoord<2>,
         //~ decltype(o),
-        //~ Other::Pos,
+        //~ llama::GetCoordFromUID< Other, st::Pos >,
         //~ llama::DatumCoord<0>
     //~ > aisuf{p,o};
     //~ aisuf();
@@ -171,8 +190,8 @@ int main(int argc,char * * argv)
     particle( 0u, 0u ) += other( 0u, 0u );
 
     std::cout
-        << "After:  view( 0u, 0u )( Particle::Pos::Z() ) = "
-        << particle( 0u, 0u )( Particle::Pos::Z() )
+        << "After:  view( 0u, 0u )( st::Pos(), st::Z() ) = "
+        << particle( 0u, 0u )( st::Pos(), st::Z() )
         << std::endl;
 
     return 0;

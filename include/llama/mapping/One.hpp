@@ -42,7 +42,7 @@ struct One
     getBlobSize( std::size_t const ) const
     -> std::size_t
     {
-        return DatumDomain::Llama::TypeTree::sizeOf;
+        return SizeOf<DatumDomain>::value;
     }
 
     template< std::size_t... T_datumDomainCoord >
@@ -53,7 +53,8 @@ struct One
     -> std::size_t
     {
         return
-            DatumDomain::Llama::TypeTree::template LinearBytePos<
+            LinearBytePos<
+                DatumDomain,
                 T_datumDomainCoord...
             >::value;
     }

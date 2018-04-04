@@ -133,7 +133,7 @@ using OneOnStackFactory =
             DatumDomain
         >,
         llama::allocator::Stack<
-            DatumDomain::Llama::TypeTree::sizeOf
+            SizeOf<DatumDomain>::value
         >
     >;
 
@@ -149,7 +149,7 @@ tempAlloc()
         DatumDomain
     >,
     typename llama::allocator::Stack<
-        DatumDomain::Llama::TypeTree::sizeOf
+        SizeOf<DatumDomain>::value
     >::BlobType
 >
 {

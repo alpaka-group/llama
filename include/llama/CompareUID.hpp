@@ -37,11 +37,11 @@ struct CompareUID
 {
     static constexpr bool value =
         std::is_same<
-            GetUIDFromName<
+            GetUID<
                 T_DDA,
                 typename T_BaseA::template PushBack< T_LocalA::front >
             >,
-            GetUIDFromName<
+            GetUID<
                 T_DDB,
                 typename T_BaseB::template PushBack< T_LocalB::front >
             >

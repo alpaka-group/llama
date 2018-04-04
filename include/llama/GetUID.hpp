@@ -18,49 +18,80 @@
 
 #pragma once
 
-#include "DatumCoord.hpp"
+#include <boost/mp11.hpp>
+#include "DatumStruct.hpp"
 
 namespace llama
 {
 
 template<
-    typename T_DatumDomain,
-    typename T_DatumCoord
+    typename T_DatumElement,
+    std::size_t... T_datumDomainCoords
 >
-struct GetUIDType;
+struct GetUIDImpl;
 
 template<
-    typename T_DatumDomain,
-    std::size_t... T_coords
+    typename T_DatumElement,
+    std::size_t T_firstDatumDomainCoord,
+    std::size_t... T_datumDomainCoords
 >
-struct GetUIDType
-<
-    T_DatumDomain,
-    DatumCoord< T_coords... >
+struct GetUIDImpl<
+    T_DatumElement,
+    T_firstDatumDomainCoord,
+    T_datumDomainCoords...
 >
 {
-	using type = typename T_DatumDomain::Llama::template UID<
-        void,
-        T_coords...
+    using _DateElement = boost::mp11::mp_at_c<
+        GetDatumElementType< T_DatumElement >,
+        T_firstDatumDomainCoord
+    >;
+    using type = typename GetUIDImpl<
+        _DateElement,
+        T_datumDomainCoords...
     >::type;
 };
 
 template<
-    typename T_DatumDomain,
-    typename T_DatumCoordName
+    typename T_DatumElement
 >
-using GetUID = typename GetUIDType<
-    T_DatumDomain,
-    T_DatumCoordName
->::type;
+struct GetUIDImpl<
+    T_DatumElement
+>
+{
+    using type = GetDatumElementUID< T_DatumElement >;
+};
+
+template<
+    typename T_DatumElement,
+    typename T_DatumDomainCoord
+>
+struct GetUIDfromDatumCoord;
+
+template<
+    typename T_DatumElement,
+    std::size_t... T_datumDomainCoords
+>
+struct GetUIDfromDatumCoord<
+    T_DatumElement,
+    DatumCoord< T_datumDomainCoords... >
+>
+{
+	using type = typename GetUIDImpl<
+		T_DatumElement,
+		T_datumDomainCoords...
+	>::type;
+};
 
 template<
     typename T_DatumDomain,
-    typename T_DatumCoordName
+    typename T_DatumCoord
 >
-using GetUIDFromName = GetUID<
-    T_DatumDomain,
-    typename T_DatumCoordName::type
->;
+using GetUID = typename GetUIDfromDatumCoord<
+    DatumElement<
+		NoName,
+		T_DatumDomain
+	>,
+    T_DatumCoord
+>::type;
 
 } // namespace llama

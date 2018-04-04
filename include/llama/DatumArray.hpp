@@ -19,48 +19,29 @@
 #pragma once
 
 #include "DatumStruct.hpp"
+#include <boost/mp11.hpp>
 
 namespace llama
 {
 
-namespace internal
-{
-    template<
-        typename T,
-        std::size_t T_count,
-        typename... T_List
-    >
-    struct AddChildToStruct
-    {
-        using type = typename AddChildToStruct<
-            T,
-            T_count - 1,
-            T_List...,
-            T
-        >::type;
-    };
-    template<
-        typename T,
-        typename... T_List
-    >
-    struct AddChildToStruct<
-        T,
-        0,
-        T_List...
-    >
-    {
-        using type = DatumStruct< T_List... >;
-    };
-
-} // namespace internal
+struct NoName {};
 
 template<
     typename T_Child,
     std::size_t T_count
 >
-using DatumArray = typename internal::AddChildToStruct<
+using DatumArray = boost::mp11::mp_repeat_c<
+    DatumStruct< DatumElement< NoName, T_Child > >,
+    T_count
+>;
+
+template<
+    typename T_Child,
+    std::size_t T_count
+>
+using DA = DatumArray<
     T_Child,
     T_count
->::type;
+>;
 
 } // namespace llama
