@@ -365,7 +365,7 @@ struct VirtualDatum
     LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()( T_DatumCoordOrUIDs&&... )
-#if !BOOST_COMP_INTEL
+#if !BOOST_COMP_INTEL && !BOOST_COMP_NVCC
     -> decltype( access< T_DatumCoordOrUIDs... >() ) &
 #else //Intel compiler bug work around
     -> decltype( AccessImpl< T_DatumCoordOrUIDs... >::apply(
