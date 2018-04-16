@@ -60,7 +60,7 @@ struct SoA
     getBlobSize( std::size_t const ) const
     -> std::size_t
     {
-        return extentUserDomainAdress * DatumDomain::Llama::TypeTree::sizeOf;
+        return extentUserDomainAdress * SizeOf<DatumDomain>::value;
     }
 
     template< std::size_t... T_datumDomainCoord >
@@ -70,11 +70,12 @@ struct SoA
     -> std::size_t
     {
         return T_LinearizeUserDomainAdressFunctor()( coord, userDomainSize )
-            * sizeof( typename GetType<
-                typename DatumDomain::Llama::TypeTree,
+            * sizeof( GetType<
+                DatumDomain,
                 T_datumDomainCoord...
-            >::type )
-            + DatumDomain::Llama::TypeTree::template LinearBytePos<
+            > )
+            + LinearBytePos<
+                DatumDomain,
                 T_datumDomainCoord...
             >::value
             * extentUserDomainAdress;

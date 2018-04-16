@@ -163,10 +163,10 @@ struct View;
                 left,                                                          \
                 right                                                          \
             };                                                                 \
-            forEach<                                                           \
+            ForEach<                                                           \
                 typename T_RightDatum::Mapping::DatumDomain,                   \
                 T_Source                                                       \
-            >( functor );                                                      \
+            >::apply( functor );                                                      \
         }                                                                      \
         T_LeftDatum left;                                                      \
         T_RightDatum right;                                                    \
@@ -220,10 +220,10 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
             *this,                                                             \
             other                                                              \
         };                                                                     \
-        forEach<                                                               \
+        ForEach<                                                               \
             typename Mapping::DatumDomain,                                     \
             DatumCoord< >                                                      \
-        >( functor );                                                          \
+        >::apply( functor );                                                          \
         return *this;                                                          \
     }
 
@@ -251,10 +251,10 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
             *this,                                                             \
             otherVd                                                            \
         };                                                                     \
-        forEach<                                                               \
+        ForEach<                                                               \
             typename Mapping::DatumDomain,                                     \
             DatumCoord< >                                                      \
-        >( functor );                                                          \
+        >::apply( functor );                                                          \
         return *this;                                                          \
     }
 
@@ -272,10 +272,10 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
             *this,                                                             \
             other                                                              \
         };                                                                     \
-        forEach<                                                               \
+        ForEach<                                                               \
             typename Mapping::DatumDomain,                                     \
             DatumCoord< >                                                      \
-        >( functor );                                                          \
+        >::apply( functor );                                                          \
         return *this;                                                          \
     }
 
@@ -294,30 +294,87 @@ struct VirtualDatum
     using Mapping = typename ViewType::Mapping;
     using BlobType = typename ViewType::BlobType;
 
-    template< std::size_t... T_coord >
-    LLAMA_FN_HOST_ACC_INLINE
-    auto
-    access( DatumCoord< T_coord... > && = DatumCoord< T_coord... >() )
-    -> typename GetType<
-        typename Mapping::DatumDomain::Llama::TypeTree,
-        T_coord...
-    >::type &
+    typename Mapping::UserDomain const userDomainPos;
+    ViewType& view;
+
+    template< typename... T_UIDs >
+    struct AccessImpl
     {
-        return view.template accessor< T_coord... >( userDomainPos );
-    }
+        template< typename T_UserDomain >
+        static
+        LLAMA_FN_HOST_ACC_INLINE
+        auto
+        apply(
+            T_View&& view,
+            T_UserDomain const & userDomainPos
+        )
+        -> decltype( view.template accessor< T_UIDs... >( userDomainPos ) )&
+        {
+            return view.template accessor< T_UIDs... >( userDomainPos );
+        }
+    };
 
     template< std::size_t... T_coord >
+    struct AccessImpl< DatumCoord< T_coord... > >
+    {
+        template< typename T_UserDomain >
+        static
+        LLAMA_FN_HOST_ACC_INLINE
+        auto
+        apply(
+            T_View&& view,
+            T_UserDomain const & userDomainPos
+        )
+        -> decltype( view.template accessor< T_coord... >( userDomainPos ) )&
+        {
+            return view.template accessor< T_coord... >( userDomainPos );
+        }
+    };
+
+    template< typename... T_DatumCoordOrUIDs  >
     LLAMA_FN_HOST_ACC_INLINE
     auto
-    operator()( DatumCoord< T_coord... > && dc= DatumCoord< T_coord... >() )
-    -> typename GetType<
-        typename Mapping::DatumDomain::Llama::TypeTree,
-        T_coord...
-    >::type &
+    access( T_DatumCoordOrUIDs&&... )
+    -> decltype( AccessImpl< T_DatumCoordOrUIDs... >::apply(
+            std::forward<T_View>(view),
+            userDomainPos
+        ) ) &
     {
-        return access< T_coord... >(
-            std::forward< DatumCoord< T_coord... > >( dc )
+        return AccessImpl< T_DatumCoordOrUIDs... >::apply(
+            std::forward<T_View>(view),
+            userDomainPos
         );
+    }
+
+    template< typename... T_DatumCoordOrUIDs  >
+    LLAMA_FN_HOST_ACC_INLINE
+    auto
+    access( )
+    -> decltype( AccessImpl< T_DatumCoordOrUIDs... >::apply(
+            std::forward<T_View>(view),
+            userDomainPos
+        ) ) &
+    {
+        return AccessImpl< T_DatumCoordOrUIDs... >::apply(
+            std::forward<T_View>(view),
+            userDomainPos
+        );
+    }
+
+    template< typename... T_DatumCoordOrUIDs  >
+    LLAMA_FN_HOST_ACC_INLINE
+    auto
+    operator()( T_DatumCoordOrUIDs&&... )
+#if !BOOST_COMP_INTEL && !BOOST_COMP_NVCC
+    -> decltype( access< T_DatumCoordOrUIDs... >() ) &
+#else //Intel compiler bug work around
+    -> decltype( AccessImpl< T_DatumCoordOrUIDs... >::apply(
+        std::forward<T_View>(view),
+        userDomainPos
+    ) ) &
+#endif
+    {
+        return access< T_DatumCoordOrUIDs... >();
     }
 
     __LLAMA_VIRTUALDATUM_OPERATOR( = , Assigment )
@@ -326,10 +383,49 @@ struct VirtualDatum
     __LLAMA_VIRTUALDATUM_OPERATOR( *= , Multiplication )
     __LLAMA_VIRTUALDATUM_OPERATOR( /= , Division )
     __LLAMA_VIRTUALDATUM_OPERATOR( %= , Modulo )
-
-    typename Mapping::UserDomain const userDomainPos;
-    ViewType& view;
 };
+
+namespace internal
+{
+    template< typename T_DatumCoord >
+    struct MappingDatumCoordCaller;
+
+    template< std::size_t... T_coords >
+    struct MappingDatumCoordCaller< DatumCoord< T_coords... > >
+    {
+        template<
+            typename T_Mapping,
+            typename T_UserDomain
+        >
+        LLAMA_NO_HOST_ACC_WARNING
+        static auto
+        LLAMA_FN_HOST_ACC_INLINE
+        getBlobNr(
+            T_Mapping&& mapping,
+            T_UserDomain&& userDomain
+        )
+        -> decltype( mapping.template getBlobNr< T_coords... >( userDomain ) )
+        {
+            return mapping.template getBlobNr< T_coords... >( userDomain );
+        }
+
+        template<
+            typename T_Mapping,
+            typename T_UserDomain
+        >
+        LLAMA_NO_HOST_ACC_WARNING
+        static auto
+        LLAMA_FN_HOST_ACC_INLINE
+        getBlobByte(
+            T_Mapping&& mapping,
+            T_UserDomain&& userDomain
+        )
+        -> decltype( mapping.template getBlobNr< T_coords... >( userDomain ) )
+        {
+            return mapping.template getBlobByte< T_coords... >( userDomain );
+        }
+    };
+}; //namespace internal
 
 template<
     typename T_Mapping,
@@ -365,23 +461,59 @@ struct View
     { }
 
     LLAMA_NO_HOST_ACC_WARNING
-    template< std::size_t... T_datumDomain >
+    template< std::size_t... T_coords >
     LLAMA_FN_HOST_ACC_INLINE
     auto
     accessor( typename Mapping::UserDomain const userDomain )
-    -> typename GetType<
-        typename Mapping::DatumDomain::Llama::TypeTree,
-        T_datumDomain...
-    >::type &
+    -> GetType<
+        typename Mapping::DatumDomain,
+        T_coords...
+    > &
     {
         auto const nr =
-            mapping.template getBlobNr< T_datumDomain... >( userDomain );
+            mapping.template getBlobNr< T_coords... >( userDomain );
         auto const byte =
-            mapping.template getBlobByte< T_datumDomain... >( userDomain );
-        return *( reinterpret_cast< typename GetType<
-                typename Mapping::DatumDomain::Llama::TypeTree,
-                T_datumDomain...
-            >::type* > (
+            mapping.template getBlobByte< T_coords... >( userDomain );
+        return *( reinterpret_cast< GetType<
+                typename Mapping::DatumDomain,
+                T_coords...
+            >* > (
+                &blob[ nr ][ byte ]
+            )
+        );
+    }
+
+    LLAMA_NO_HOST_ACC_WARNING
+    template< typename... T_UIDs >
+    LLAMA_FN_HOST_ACC_INLINE
+    auto
+    accessor( typename Mapping::UserDomain const userDomain )
+    -> GetTypeFromDatumCoord<
+        typename Mapping::DatumDomain,
+        GetCoordFromUID<
+            typename Mapping::DatumDomain,
+            T_UIDs...
+        >
+    > &
+    {
+        using DatumCoord = GetCoordFromUID<
+            typename Mapping::DatumDomain,
+            T_UIDs...
+        >;
+        auto const nr =
+            internal::MappingDatumCoordCaller< DatumCoord >::getBlobNr(
+                mapping,
+                userDomain
+            );
+        auto const byte =
+            internal::MappingDatumCoordCaller< DatumCoord >::getBlobByte(
+                mapping,
+                userDomain
+            );
+        return *( reinterpret_cast< GetTypeFromDatumCoord<
+                typename Mapping::DatumDomain,
+                DatumCoord
+            >* > (
                 &blob[ nr ][ byte ]
             )
         );
@@ -437,10 +569,10 @@ struct View
     LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()( DatumCoord< T_coord... > && dc= DatumCoord< T_coord... >() )
-    -> typename GetType<
-        typename Mapping::DatumDomain::Llama::TypeTree,
+    -> GetType<
+        typename Mapping::DatumDomain,
         T_coord...
-    >::type &
+    > &
     {
         return accessor< T_coord... >(
             userDomainZero< Mapping::UserDomain::count >()

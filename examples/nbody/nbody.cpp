@@ -24,21 +24,29 @@
 using Element = float;
 constexpr Element EPS2 = 0.01;
 
-LLAMA_DEFINE_DATUMDOMAIN(
-    Particle, (
-        ( Pos, LLAMA_DATUMSTRUCT, (
-            ( X, LLAMA_ATOMTYPE, Element ),
-            ( Y, LLAMA_ATOMTYPE, Element ),
-            ( Z, LLAMA_ATOMTYPE, Element )
-        ) ),
-        ( Vel, LLAMA_DATUMSTRUCT, (
-            ( X, LLAMA_ATOMTYPE, Element ),
-            ( Y, LLAMA_ATOMTYPE, Element ),
-            ( Z, LLAMA_ATOMTYPE, Element )
-        ) ),
-        ( Mass, LLAMA_ATOMTYPE, Element )
-    )
-)
+namespace dd
+{
+    struct Pos {};
+    struct Vel {};
+    struct X {};
+    struct Y {};
+    struct Z {};
+    struct Mass {};
+}
+
+using Particle = llama::DS<
+    llama::DE< dd::Pos, llama::DS<
+        llama::DE< dd::X, Element >,
+        llama::DE< dd::Y, Element >,
+        llama::DE< dd::Z, Element >
+    > >,
+    llama::DE< dd::Vel,llama::DS<
+        llama::DE< dd::X, Element >,
+        llama::DE< dd::Y, Element >,
+        llama::DE< dd::Z, Element >
+    > >,
+    llama::DE< dd::Mass, Element >
+>;
 
 template<
     typename T_VirtualDatum1,
@@ -54,25 +62,25 @@ pPInteraction(
 -> void
 {
     Element const d[3] = {
-        p1( Particle::Pos::X() ) -
-        p2( Particle::Pos::X() ),
-        p1( Particle::Pos::Y() ) -
-        p2( Particle::Pos::Y() ),
-        p1( Particle::Pos::Z() ) -
-        p2( Particle::Pos::Z() )
+        p1( dd::Pos(), dd::X() ) -
+        p2( dd::Pos(), dd::X() ),
+        p1( dd::Pos(), dd::Y() ) -
+        p2( dd::Pos(), dd::Y() ),
+        p1( dd::Pos(), dd::Z() ) -
+        p2( dd::Pos(), dd::Z() )
     };
     Element distSqr = d[0] * d[0] + d[1] * d[1] + d[2] * d[2] + EPS2;
     Element distSixth = distSqr * distSqr * distSqr;
     Element invDistCube = 1.0f / sqrtf(distSixth);
-    Element s = p1( Particle::Mass() ) * invDistCube;
+    Element s = p1( dd::Mass() ) * invDistCube;
     Element const v_d[3] = {
         d[0] * s * ts,
         d[1] * s * ts,
         d[2] * s * ts
     };
-    p1( Particle::Vel::X() ) += v_d[0];
-    p1( Particle::Vel::Y() ) += v_d[1];
-    p1( Particle::Vel::Z() ) += v_d[2];
+    p1( dd::Vel(), dd::X() ) += v_d[0];
+    p1( dd::Vel(), dd::Y() ) += v_d[1];
+    p1( dd::Vel(), dd::Z() ) += v_d[2];
 }
 
 template<
@@ -165,7 +173,7 @@ struct UpdateKernel
         >;
         using SharedAllocator = BlockSharedMemoryAllocator<
             T_Acc,
-            decltype(particles)::Mapping::DatumDomain::Llama::TypeTree::sizeOf
+            llama::SizeOf< typename decltype(particles)::Mapping::DatumDomain >::value
             * blockSize,
             __COUNTER__,
             threads
@@ -256,12 +264,12 @@ struct MoveKernel
         LLAMA_INDEPENDENT_DATA
         for ( auto pos = start; pos < end; ++pos )
         {
-            particles( pos )( Particle::Pos::X() ) +=
-                particles( pos )( Particle::Vel::X() ) * ts;
-            particles( pos )( Particle::Pos::Y() ) +=
-                particles( pos )( Particle::Vel::Y() ) * ts;
-            particles( pos )( Particle::Pos::Z() ) +=
-                particles( pos )( Particle::Vel::Z() ) * ts;
+            particles( pos )( dd::Pos(), dd::X() ) +=
+                particles( pos )( dd::Vel(), dd::X() ) * ts;
+            particles( pos )( dd::Pos(), dd::Y() ) +=
+                particles( pos )( dd::Vel(), dd::Y() ) * ts;
+            particles( pos )( dd::Pos(), dd::Z() ) +=
+                particles( pos )( dd::Vel(), dd::Z() ) * ts;
         };
     }
 };
@@ -390,7 +398,7 @@ int main(int argc,char * * argv)
 
     std::cout << problemSize / 1000 / 1000 << " million particles\n";
     std::cout
-        << problemSize * Particle::Llama::TypeTree::sizeOf / 1000 / 1000
+        << problemSize * llama::SizeOf<Particle>::value / 1000 / 1000
         << "MB \n";
 
     Chrono chrono;
@@ -411,19 +419,19 @@ int main(int argc,char * * argv)
     for (std::size_t i = 0; i < problemSize; ++i)
     {
         //~ auto temp = llama::tempAlloc< 1, Particle >();
-        //~ temp(Particle::Pos::X()) = distribution(generator);
-        //~ temp(Particle::Pos::Y()) = distribution(generator);
-        //~ temp(Particle::Pos::Z()) = distribution(generator);
-        //~ temp(Particle::Vel::X()) = distribution(generator)/Element(10);
-        //~ temp(Particle::Vel::Y()) = distribution(generator)/Element(10);
-        //~ temp(Particle::Vel::Z()) = distribution(generator)/Element(10);
+        //~ temp(dd::Pos(), dd::X()) = distribution(generator);
+        //~ temp(dd::Pos(), dd::Y()) = distribution(generator);
+        //~ temp(dd::Pos(), dd::Z()) = distribution(generator);
+        //~ temp(dd::Vel(), dd::X()) = distribution(generator)/Element(10);
+        //~ temp(dd::Vel(), dd::Y()) = distribution(generator)/Element(10);
+        //~ temp(dd::Vel(), dd::Z()) = distribution(generator)/Element(10);
         hostView(i) = seed;
-        //~ hostView(Particle::Pos::X()) = seed;
-        //~ hostView(Particle::Pos::Y()) = seed;
-        //~ hostView(Particle::Pos::Z()) = seed;
-        //~ hostView(Particle::Vel::X()) = seed;
-        //~ hostView(Particle::Vel::Y()) = seed;
-        //~ hostView(Particle::Vel::Z()) = seed;
+        //~ hostView(dd::Pos(), dd::X()) = seed;
+        //~ hostView(dd::Pos(), dd::Y()) = seed;
+        //~ hostView(dd::Pos(), dd::Z()) = seed;
+        //~ hostView(dd::Vel(), dd::X()) = seed;
+        //~ hostView(dd::Vel(), dd::Y()) = seed;
+        //~ hostView(dd::Vel(), dd::Z()) = seed;
     }
 
     chrono.printAndReset("Init");

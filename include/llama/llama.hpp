@@ -37,11 +37,6 @@
 #include "mapping/SoA.hpp"
 #include "mapping/One.hpp"
 
-#include "UniqueIdentifier.hpp"
-#include "GetUID.hpp"
-#include "CompareUID.hpp"
-
 #include "preprocessor/macros.hpp"
-#include "preprocessor/DefineDatumDomain.hpp"
 
 #include "ForEach.hpp"

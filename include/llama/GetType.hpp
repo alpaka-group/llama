@@ -18,33 +18,86 @@
 
 #pragma once
 
+#include <boost/mp11.hpp>
+#include "DatumStruct.hpp"
+
 namespace llama
 {
 
 template<
-    typename T_Tree,
+    typename T_DatumDomain,
+    std::size_t... T_datumDomainCoords
+>
+struct GetTypeImpl;
+
+template<
+    typename T_DatumDomain,
     std::size_t T_firstDatumDomainCoord,
     std::size_t... T_datumDomainCoords
 >
-struct GetType
+struct GetTypeImpl<
+    T_DatumDomain,
+    T_firstDatumDomainCoord,
+    T_datumDomainCoords...
+>
 {
-    using type = typename GetType<
-        typename T_Tree::template GetBranch< T_firstDatumDomainCoord >::type,
+    using _DateElement = boost::mp11::mp_at_c<
+        T_DatumDomain,
+        T_firstDatumDomainCoord
+    >;
+    using type = typename GetTypeImpl<
+        GetDatumElementType< _DateElement >,
         T_datumDomainCoords...
     >::type;
 };
 
 template<
-    typename T_Tree,
-    std::size_t T_firstDatumDomainCoord
+    typename T_DatumDomain
 >
-struct GetType<
-    T_Tree,
-    T_firstDatumDomainCoord
+struct GetTypeImpl<
+    T_DatumDomain
 >
 {
-    using type =
-        typename T_Tree::template GetBranch< T_firstDatumDomainCoord >::type;
+    using type = T_DatumDomain;
 };
+
+template<
+    typename T_DatumDomain,
+    std::size_t... T_datumDomainCoords
+>
+using GetType = typename GetTypeImpl<
+    T_DatumDomain,
+    T_datumDomainCoords...
+>::type;
+
+template<
+    typename T_DatumDomain,
+    typename T_DatumCoord
+>
+struct GetTypeFromDatumCoordImpl;
+
+template<
+    typename T_DatumDomain,
+    std::size_t... T_coords
+>
+struct GetTypeFromDatumCoordImpl<
+    T_DatumDomain,
+    DatumCoord< T_coords... >
+>
+{
+    using type = GetType<
+        T_DatumDomain,
+        T_coords...
+    >;
+};
+
+template<
+    typename T_DatumDomain,
+    typename T_DatumCoord
+>
+using GetTypeFromDatumCoord = typename GetTypeFromDatumCoordImpl<
+    T_DatumDomain,
+    T_DatumCoord
+>::type;
 
 } // namespace llama
