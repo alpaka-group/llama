@@ -24,8 +24,6 @@
 namespace llama
 {
 
-struct NoName {};
-
 template<
     typename T_Child,
     std::size_t T_count

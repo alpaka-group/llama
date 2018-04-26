@@ -18,50 +18,47 @@
 
 #pragma once
 
-#include "Array.hpp"
-#include <boost/mp11.hpp>
+#include "Reduce.hpp"
+#include "Operations.hpp"
 
 namespace llama
 {
 
-struct NoName {};
+namespace mapping
+{
 
-template< std::size_t T_dim >
-using UserDomain = Array<
-    std::size_t,
-    T_dim
->;
+namespace tree
+{
 
-template<
-    typename... T_Leaves
->
-using DatumStruct = boost::mp11::mp_list<
-    T_Leaves...
->;
+template< typename T_Leave >
+struct SizeOfFunctor
+{
+    LLAMA_FN_HOST_ACC_INLINE
+    auto
+    operator()( T_Leave const leave ) const
+    -> std::size_t
+    {
+        return sizeof( typename T_Leave::Type );
+    }
+};
 
-template<
-    typename... T_Leaves
->
-using DS = DatumStruct<
-    T_Leaves...
->;
+template< typename T_Tree >
+LLAMA_FN_HOST_ACC_INLINE
+auto
+getTreeBlobSize( T_Tree const tree )
+-> std::size_t
+{
+    return Reduce<
+        T_Tree,
+        Addition,
+        Multiplication,
+        SizeOfFunctor
+    >()( tree );
+}
 
-template<
-    typename T_Identifier,
-    typename T_Type
->
-using DatumElement = boost::mp11::mp_list<
-    T_Identifier,
-    T_Type
->;
+} // namespace tree
 
-template<
-    typename T_Identifier,
-    typename T_Type
->
-using DE = DatumElement<
-    T_Identifier,
-    T_Type
->;
+} // namespace mapping
 
 } // namespace llama
+
