@@ -32,9 +32,36 @@ namespace mapping
 namespace tree
 {
 
+namespace internal
+{
+
+template< typename T_CountType >
+struct TreeElementDefaultCount
+{
+    static constexpr T_CountType value = 1;
+};
+
+template< std::size_t T_count >
+struct TreeElementDefaultCount<
+    std::integral_constant<
+        std::size_t,
+        T_count
+    >
+>
+{
+    using CountType = std::integral_constant<
+        std::size_t,
+        T_count
+    >;
+    static constexpr CountType value = CountType();
+};
+
+} // namespace internal
+
 template<
     typename T_Identifier,
-    typename T_Type
+    typename T_Type,
+    typename T_CountType = std::size_t
 >
 struct TreeElement
 {
@@ -42,37 +69,52 @@ struct TreeElement
     using Identifier = T_Identifier;
     using Type = T_Type;
 
-    TreeElement() : count(1) {}
+    TreeElement() :
+        count( internal::TreeElementDefaultCount< T_CountType >::value )
+    {}
 
-    TreeElement( const std::size_t count ) : count(count) {}
+    TreeElement( const T_CountType count ) : count(count) {}
 
-    const std::size_t count;
+    const T_CountType count;
 };
 
 template<
     typename T_Identifier,
+    typename T_CountType,
     typename... T_Childs
 >
 struct TreeElement<
     T_Identifier,
-    Tuple< T_Childs... >
+    Tuple< T_Childs... >,
+    T_CountType
 >
 {
 	using IsTreeElementWithChilds = void;
     using Identifier = T_Identifier;
     using Type = Tuple< T_Childs... >;
 
-    TreeElement() : count(1) {}
+    TreeElement() :
+        count( internal::TreeElementDefaultCount< T_CountType >::value )
+    {}
 
     TreeElement(
-        const std::size_t count,
+        const T_CountType count,
         const Type childs = Type()
     ) :
         count(count),
         childs(childs)
     {}
 
-    const std::size_t count;
+    TreeElement(
+        const Type childs,
+        const T_CountType count =
+            internal::TreeElementDefaultCount< T_CountType >::value
+    ) :
+        count(count),
+        childs(childs)
+    {}
+
+    const T_CountType count;
     const Type childs;
 };
 
@@ -81,38 +123,11 @@ template<
     typename T_Type,
     std::size_t T_count = 1
 >
-struct TreeElementConst
-{
-	using IsTreeElementWithoutChilds = void;
-    using Identifier = T_Identifier;
-    using Type = T_Type;
-    static std::integral_constant< std::size_t, T_count > count;
-};
-
-template<
-    typename T_Identifier,
-    std::size_t T_count,
-    typename... T_Childs
->
-struct TreeElementConst<
+using TreeElementConst = TreeElement<
     T_Identifier,
-    Tuple< T_Childs... >,
-    T_count
->
-{
-	using IsTreeElementWithChilds = void;
-    using Identifier = T_Identifier;
-    using Type = Tuple< T_Childs... >;
-    static std::integral_constant< std::size_t, T_count > count;
-
-    TreeElementConst(
-        const Type childs = Type()
-    ) :
-        childs(childs)
-    {}
-
-    const Type childs;
-};
+    T_Type,
+    std::integral_constant< std::size_t, T_count >
+>;
 
 template< typename T_Tree >
 struct TreePopFrontChild
@@ -153,7 +168,7 @@ struct TreePopFrontChild<
     using ResultType = TreeElementConst<
         typename Tree::Identifier,
         typename Tree::Type::RestTuple,
-        Tree::count
+        T_count
     >;
     auto
     operator()( Tree const & tree )
