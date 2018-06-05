@@ -18,7 +18,6 @@
 
 #pragma once
 
-#include "Reduce.hpp"
 #include "Operations.hpp"
 #include "GetBlobSize.hpp"
 
@@ -38,40 +37,41 @@ template<
     typename T_Tree,
     std::size_t T_Pos
 >
-struct SummizeTreeSmallerPos
+struct SummarizeTreeSmallerPos
 {
-    using RestTree = TreeElement<
-        typename T_Tree::Identifier,
-        typename T_Tree::Type::RestTuple
-    >;
+    using RestTree = typename TreePopFrontChild< T_Tree >::ResultType;
     LLAMA_FN_HOST_ACC_INLINE
     auto
-    operator()( T_Tree const tree ) const
+    operator()(
+        typename T_Tree::Type const & childs,
+        decltype( T_Tree::count ) const & count
+    ) const
     -> std::size_t
     {
         return
-            getTreeBlobSize( tree.childs.first ) +
-            SummizeTreeSmallerPos<
+            getTreeBlobSize( childs.first ) +
+            SummarizeTreeSmallerPos<
                 RestTree,
                 T_Pos - 1
             >()(
-                RestTree(
-                    tree.count,
-                    tree.childs.rest
-                )
+                childs.rest,
+                count
             );
     }
 };
 
 template< typename T_Tree >
-struct SummizeTreeSmallerPos<
+struct SummarizeTreeSmallerPos<
     T_Tree,
     0
 >
 {
     LLAMA_FN_HOST_ACC_INLINE
     auto
-    operator()( const T_Tree tree ) const
+    operator()(
+        typename T_Tree::Type const & childs,
+        decltype( T_Tree::count ) const & count
+    ) const
     -> std::size_t
     {
         return 0;
@@ -92,30 +92,28 @@ struct GetTreeBlobByteImpl
     LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()(
-        T_Tree const tree,
-        T_TreeCoord const treeCoord
+        T_Tree const & tree,
+        T_TreeCoord const & treeCoord
     ) const
     -> std::size_t
     {
         return
             getTreeBlobSize(
-                TreeElement<
-                    typename T_Tree::Identifier,
-                    typename T_Tree::Type
-                >(
-                    treeCoord.first.runtime,
-                    tree.childs
-                )
+                tree.childs,
+                treeCoord.first.runtime
             ) +
-            SummizeTreeSmallerPos<
+            SummarizeTreeSmallerPos<
                 T_Tree,
                 T_TreeCoord::FirstElement::compiletime
-            >()( tree ) +
+            >()(
+                tree.childs,
+                tree.count
+            ) +
             GetTreeBlobByteImpl<
                 SubTree,
                 typename T_TreeCoord::RestTuple
             >()(
-                getTupleElement< T_TreeCoord::FirstElement::compiletime >(
+                getTupleElementRef< T_TreeCoord::FirstElement::compiletime >(
                     tree.childs
                 ),
                 treeCoord.rest
@@ -136,8 +134,8 @@ struct GetTreeBlobByteImpl<
     LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()(
-        T_Tree const tree,
-        TreeCoord const treeCoord
+        T_Tree const & tree,
+        TreeCoord const & treeCoord
     ) const
     -> std::size_t
     {
@@ -154,8 +152,8 @@ template<
 LLAMA_FN_HOST_ACC_INLINE
 auto
 getTreeBlobByte(
-    T_Tree const tree,
-    T_TreeCoord const treeCoord
+    T_Tree const & tree,
+    T_TreeCoord const & treeCoord
 )
 -> std::size_t
 {

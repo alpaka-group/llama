@@ -19,7 +19,6 @@
 #pragma once
 
 #include "../TreeElement.hpp"
-#include "../operations/ChangeNodeRuntime.hpp"
 #include "../operations/GetNode.hpp"
 
 namespace llama
@@ -148,22 +147,44 @@ struct LeaveOnlyRT
     >
     struct BasicCoordToResultCoordImpl
     {
+        using FirstResultCoord = TreeCoordElementConst<
+            T_BasicCoord::FirstElement::compiletime,
+            0
+        >;
+        using ResultCoord = TupleCatType<
+            Tuple< FirstResultCoord >,
+            decltype(
+                BasicCoordToResultCoordImpl<
+                    GetTupleType<
+                        typename T_Tree::Type,
+                        T_BasicCoord::FirstElement::compiletime
+                    >,
+                    typename T_BasicCoord::RestTuple
+                >()(
+                    typename T_BasicCoord::RestTuple(),
+                    getTupleElementRef< T_BasicCoord::FirstElement::compiletime >(
+                        T_Tree().childs
+                    ),
+                    0
+                )
+            )
+        >;
+
         LLAMA_FN_HOST_ACC_INLINE
         auto
         operator()(
-            T_BasicCoord const basicCoord,
-            T_Tree const tree,
+            T_BasicCoord const & basicCoord,
+            T_Tree const & tree,
             std::size_t const runtime = 0
         ) const
-        -> T_BasicCoord
+        -> ResultCoord
         {
-            auto const branch =
-                getTupleElement< T_BasicCoord::FirstElement::compiletime >(
+            auto const & branch =
+                getTupleElementRef< T_BasicCoord::FirstElement::compiletime >(
                     tree.childs
                 );
-
-            return T_BasicCoord(
-                typename T_BasicCoord::FirstElement( 0 ),
+            return ResultCoord(
+                FirstResultCoord(),
                 BasicCoordToResultCoordImpl<
                     GetTupleType<
                         typename T_Tree::Type,
@@ -189,17 +210,19 @@ struct LeaveOnlyRT
     >
     {
         using BasicCoord = Tuple< T_LastCoord >;
+        using ResultCoordElement = TreeCoordElement< T_LastCoord::compiletime >;
+        using ResultCoord = Tuple< ResultCoordElement  >;
         LLAMA_FN_HOST_ACC_INLINE
         auto
         operator()(
-            BasicCoord const basicCoord,
-            T_Tree const tree,
+            BasicCoord const & basicCoord,
+            T_Tree const & tree,
             std::size_t const runtime = 0
         ) const
-        -> BasicCoord
+        -> ResultCoord
         {
-            return BasicCoord(
-                typename BasicCoord::FirstElement(
+            return ResultCoord(
+                ResultCoordElement(
                     runtime + basicCoord.first.runtime
                 )
             );
@@ -213,10 +236,18 @@ struct LeaveOnlyRT
     LLAMA_FN_HOST_ACC_INLINE
     auto
     basicCoordToResultCoord(
-        T_BasicCoord const basicCoord,
-        T_Tree const tree
+        T_BasicCoord const & basicCoord,
+        T_Tree const & tree
     ) const
-    -> T_BasicCoord
+    -> decltype(
+        BasicCoordToResultCoordImpl<
+            T_Tree,
+            T_BasicCoord
+        >()(
+            basicCoord,
+            tree
+        )
+    )
     {
         return BasicCoordToResultCoordImpl<
             T_Tree,
@@ -234,8 +265,8 @@ struct LeaveOnlyRT
     LLAMA_FN_HOST_ACC_INLINE
     auto
     resultCoordToBasicCoord(
-        T_ResultCoord const resultCoord,
-        T_Tree const tree
+        T_ResultCoord const & resultCoord,
+        T_Tree const & tree
     ) const
     -> T_ResultCoord
     {

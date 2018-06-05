@@ -36,7 +36,9 @@
 #if BOOST_COMP_GNUC != 0
 #   define LLAMA_INDEPENDENT_DATA _Pragma ("GCC ivdep")
 #elif BOOST_COMP_INTEL != 0
-#   define LLAMA_INDEPENDENT_DATA _Pragma ("ivdep")
+#   define LLAMA_INDEPENDENT_DATA                                              \
+        _Pragma ("ivdep")                                                      \
+        _Pragma ("forceinline recursive")
 #elif BOOST_COMP_CLANG
 #   define LLAMA_INDEPENDENT_DATA                                              \
         _Pragma ("clang loop vectorize(enable)")                               \
@@ -60,4 +62,10 @@
 #   else
 #       define LLAMA_NO_HOST_ACC_WARNING
 #   endif
+#endif
+
+#if BOOST_COMP_INTEL != 0
+#   define LLAMA_FORCE_INLINE_RECURSIVE _Pragma ("forceinline recursive")
+#else
+#   define LLAMA_FORCE_INLINE_RECURSIVE
 #endif

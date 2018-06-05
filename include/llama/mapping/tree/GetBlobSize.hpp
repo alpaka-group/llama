@@ -30,22 +30,51 @@ namespace mapping
 namespace tree
 {
 
-template< typename T_Leave >
+template<
+    typename T_Type,
+    typename T_CountType
+>
 struct SizeOfFunctor
 {
     LLAMA_FN_HOST_ACC_INLINE
     auto
-    operator()( T_Leave const leave ) const
+    operator()( T_CountType const & ) const
     -> std::size_t
     {
-        return sizeof( typename T_Leave::Type );
+        return sizeof( T_Type );
     }
 };
+
+template<
+    typename T_Childs,
+    typename T_CountType
+>
+LLAMA_FN_HOST_ACC_INLINE
+auto
+getTreeBlobSize(
+    T_Childs const & childs,
+    T_CountType const & count
+)
+-> std::size_t
+{
+    return Reduce<
+        typename TreeOptimalType<
+            T_Childs,
+            T_CountType
+        >::type,
+        Addition,
+        Multiplication,
+        SizeOfFunctor
+    >()(
+        childs,
+        count
+    );
+}
 
 template< typename T_Tree >
 LLAMA_FN_HOST_ACC_INLINE
 auto
-getTreeBlobSize( T_Tree const tree )
+getTreeBlobSize( T_Tree const & tree )
 -> std::size_t
 {
     return Reduce<

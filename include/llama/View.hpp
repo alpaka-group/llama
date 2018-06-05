@@ -50,11 +50,11 @@ struct View;
     {                                                                          \
         LLAMA_FN_HOST_ACC_INLINE                                               \
         auto                                                                   \
-        operator()()                                                           \
+        operator()() const                                                     \
         -> void                                                                \
         {}                                                                     \
-        T_LeftDatum left;                                                      \
-        T_RightDatum right;                                                    \
+        T_LeftDatum & left;                                                    \
+        T_RightDatum & right;                                                  \
     };                                                                         \
                                                                                \
     template<                                                                  \
@@ -94,8 +94,8 @@ struct View;
             using Src = typename T_RightBase::template Cat< T_RightLocal >;    \
             left( Dst() ) OP right( Src() );                                   \
         }                                                                      \
-        T_LeftDatum left;                                                      \
-        T_RightDatum right;                                                    \
+        T_LeftDatum & left;                                                    \
+        T_RightDatum & right;                                                  \
     };                                                                         \
                                                                                \
     template<                                                                  \
@@ -131,8 +131,8 @@ struct View;
             };                                                                 \
             functor();                                                         \
         }                                                                      \
-        T_LeftDatum left;                                                      \
-        T_RightDatum right;                                                    \
+        T_LeftDatum & left;                                                    \
+        T_RightDatum & right;                                                  \
     };                                                                         \
                                                                                \
     template<                                                                  \
@@ -166,10 +166,10 @@ struct View;
             ForEach<                                                           \
                 typename T_RightDatum::Mapping::DatumDomain,                   \
                 T_Source                                                       \
-            >::apply( functor );                                                      \
+            >::apply( functor );                                               \
         }                                                                      \
-        T_LeftDatum left;                                                      \
-        T_RightDatum right;                                                    \
+        T_LeftDatum & left;                                                    \
+        T_RightDatum & right;                                                  \
     };                                                                         \
                                                                                \
     template<                                                                  \
@@ -194,8 +194,8 @@ struct View;
             left( Dst() ) OP static_cast< typename std::remove_reference<      \
                 decltype( left( Dst() ) ) >::type >( right );                  \
         }                                                                      \
-        T_LeftDatum left;                                                      \
-        T_RightType right;                                                     \
+        T_LeftDatum & left;                                                    \
+        T_RightType & right;                                                   \
     };
 
 __LLAMA_DEFINE_FOREACH_FUNCTOR( =  , Assigment )
@@ -223,7 +223,7 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
         ForEach<                                                               \
             typename Mapping::DatumDomain,                                     \
             DatumCoord< >                                                      \
-        >::apply( functor );                                                          \
+        >::apply( functor );                                                   \
         return *this;                                                          \
     }
 
@@ -254,7 +254,7 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
         ForEach<                                                               \
             typename Mapping::DatumDomain,                                     \
             DatumCoord< >                                                      \
-        >::apply( functor );                                                          \
+        >::apply( functor );                                                   \
         return *this;                                                          \
     }
 
@@ -275,7 +275,7 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
         ForEach<                                                               \
             typename Mapping::DatumDomain,                                     \
             DatumCoord< >                                                      \
-        >::apply( functor );                                                          \
+        >::apply( functor );                                                   \
         return *this;                                                          \
     }
 
@@ -310,6 +310,7 @@ struct VirtualDatum
         )
         -> decltype( view.template accessor< T_UIDs... >( userDomainPos ) )&
         {
+            LLAMA_FORCE_INLINE_RECURSIVE
             return view.template accessor< T_UIDs... >( userDomainPos );
         }
     };
@@ -327,6 +328,7 @@ struct VirtualDatum
         )
         -> decltype( view.template accessor< T_coord... >( userDomainPos ) )&
         {
+            LLAMA_FORCE_INLINE_RECURSIVE
             return view.template accessor< T_coord... >( userDomainPos );
         }
     };
@@ -340,6 +342,7 @@ struct VirtualDatum
             userDomainPos
         ) ) &
     {
+        LLAMA_FORCE_INLINE_RECURSIVE
         return AccessImpl< T_DatumCoordOrUIDs... >::apply(
             std::forward<T_View>(view),
             userDomainPos
@@ -355,6 +358,7 @@ struct VirtualDatum
             userDomainPos
         ) ) &
     {
+        LLAMA_FORCE_INLINE_RECURSIVE
         return AccessImpl< T_DatumCoordOrUIDs... >::apply(
             std::forward<T_View>(view),
             userDomainPos
@@ -374,6 +378,7 @@ struct VirtualDatum
     ) ) &
 #endif
     {
+        LLAMA_FORCE_INLINE_RECURSIVE
         return access< T_DatumCoordOrUIDs... >();
     }
 
@@ -406,6 +411,7 @@ namespace internal
         )
         -> decltype( mapping.template getBlobNr< T_coords... >( userDomain ) )
         {
+            LLAMA_FORCE_INLINE_RECURSIVE
             return mapping.template getBlobNr< T_coords... >( userDomain );
         }
 
@@ -422,6 +428,7 @@ namespace internal
         )
         -> decltype( mapping.template getBlobNr< T_coords... >( userDomain ) )
         {
+            LLAMA_FORCE_INLINE_RECURSIVE
             return mapping.template getBlobByte< T_coords... >( userDomain );
         }
     };
@@ -470,6 +477,7 @@ struct View
         T_coords...
     > &
     {
+
         auto const nr =
             mapping.template getBlobNr< T_coords... >( userDomain );
         auto const byte =
@@ -524,6 +532,7 @@ struct View
     operator()( typename Mapping::UserDomain const userDomain )
     -> VirtualDatumType
     {
+        LLAMA_FORCE_INLINE_RECURSIVE
         return VirtualDatumType{
                 userDomain,
                 *this
@@ -536,6 +545,7 @@ struct View
     operator()( T_Coord... coord )
     -> VirtualDatumType
     {
+        LLAMA_FORCE_INLINE_RECURSIVE
         return VirtualDatumType{
                 typename Mapping::UserDomain{ coord... },
                 *this
@@ -548,6 +558,7 @@ struct View
     operator()( T_Coord... coord ) const
     -> const VirtualDatumType
     {
+        LLAMA_FORCE_INLINE_RECURSIVE
         return VirtualDatumType{
                 typename Mapping::UserDomain{ coord... },
                 *this
@@ -559,6 +570,7 @@ struct View
     operator()( std::size_t coord )
     -> VirtualDatumType
     {
+        LLAMA_FORCE_INLINE_RECURSIVE
         return VirtualDatumType{
                 typename Mapping::UserDomain{ coord },
                 *this
@@ -574,6 +586,7 @@ struct View
         T_coord...
     > &
     {
+        LLAMA_FORCE_INLINE_RECURSIVE
         return accessor< T_coord... >(
             userDomainZero< Mapping::UserDomain::count >()
         );

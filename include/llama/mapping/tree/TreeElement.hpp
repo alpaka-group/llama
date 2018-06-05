@@ -86,7 +86,7 @@ struct TreeElementConst
 	using IsTreeElementWithoutChilds = void;
     using Identifier = T_Identifier;
     using Type = T_Type;
-    static constexpr std::size_t count = T_count;
+    static std::integral_constant< std::size_t, T_count > count;
 };
 
 template<
@@ -103,7 +103,7 @@ struct TreeElementConst<
 	using IsTreeElementWithChilds = void;
     using Identifier = T_Identifier;
     using Type = Tuple< T_Childs... >;
-    static constexpr std::size_t count = T_count;
+    static std::integral_constant< std::size_t, T_count > count;
 
     TreeElementConst(
         const Type childs = Type()
@@ -112,6 +112,86 @@ struct TreeElementConst<
     {}
 
     const Type childs;
+};
+
+template< typename T_Tree >
+struct TreePopFrontChild
+{
+    using ResultType = TreeElement<
+        typename T_Tree::Identifier,
+        typename T_Tree::Type::RestTuple
+    >;
+    auto
+    operator()( T_Tree const & tree)
+    -> ResultType
+    {
+        return ResultType(
+            tree.count,
+            tree.childs.rest
+        );
+    }
+};
+
+template<
+    typename T_Identifier,
+    typename T_Type,
+    std::size_t T_count
+>
+struct TreePopFrontChild<
+    TreeElementConst<
+        T_Identifier,
+        T_Type,
+        T_count
+    >
+>
+{
+    using Tree = TreeElementConst<
+        T_Identifier,
+        T_Type,
+        T_count
+    >;
+    using ResultType = TreeElementConst<
+        typename Tree::Identifier,
+        typename Tree::Type::RestTuple,
+        Tree::count
+    >;
+    auto
+    operator()( Tree const & tree )
+    -> ResultType
+    {
+        return ResultType( tree.childs.rest );
+    }
+};
+
+template<
+    typename T_Childs,
+    typename T_CountType
+>
+struct TreeOptimalType
+{
+    using type = TreeElement<
+        NoName,
+        T_Childs
+    >;
+};
+
+template<
+    typename T_Childs,
+    std::size_t T_count
+>
+struct TreeOptimalType<
+    T_Childs,
+    std::integral_constant<
+        std::size_t,
+        T_count
+    >
+>
+{
+    using type = TreeElementConst<
+        NoName,
+        T_Childs,
+        T_count
+    >;
 };
 
 } // namespace tree

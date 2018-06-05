@@ -34,6 +34,8 @@
 
 #include "MergeFunctors.hpp"
 
+#include <type_traits>
+
 namespace llama
 {
 

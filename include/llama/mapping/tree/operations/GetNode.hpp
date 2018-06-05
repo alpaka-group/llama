@@ -42,17 +42,17 @@ template<
 struct GetNode
 {
     auto
-    operator()( T_Tree const tree ) const
+    operator()( T_Tree const & tree ) const
     -> decltype(
         GetNode<
             GetTupleType<
                 typename T_Tree::Type,
-                T_TreeCoord::FirstElement::compiletime
+                decltype( T_TreeCoord::FirstElement::compiletime )::value
             >,
             typename T_TreeCoord::RestTuple
         >()(
             getTupleElement<
-                T_TreeCoord::FirstElement::compiletime
+                decltype( T_TreeCoord::FirstElement::compiletime )::value
             > ( tree.childs )
         )
     )
@@ -60,12 +60,12 @@ struct GetNode
         return GetNode<
             GetTupleType<
                 typename T_Tree::Type,
-                T_TreeCoord::FirstElement::compiletime
+                decltype( T_TreeCoord::FirstElement::compiletime )::value
             >,
             typename T_TreeCoord::RestTuple
         >()(
             getTupleElement<
-                T_TreeCoord::FirstElement::compiletime
+                decltype( T_TreeCoord::FirstElement::compiletime )::value
             > ( tree.childs )
         );
     }
@@ -78,7 +78,7 @@ struct GetNode<
 >
 {
     auto
-    operator()( T_Tree const tree ) const
+    operator()( T_Tree const & tree ) const
     -> T_Tree
     {
         return tree;
@@ -92,7 +92,7 @@ template<
     typename T_Tree
 >
 auto
-getNode( T_Tree const tree )
+getNode( T_Tree const & tree )
 -> decltype(
     internal::GetNode<
         T_Tree,

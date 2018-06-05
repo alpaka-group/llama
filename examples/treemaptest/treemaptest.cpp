@@ -37,45 +37,47 @@ int main(int argc,char * * argv)
         << addLineBreaks( type( Name() ) )
         << std::endl;
 
+    constexpr std::size_t userDomainSize = 1024 * 12;
+
     using UD = llama::UserDomain< 2 >;
-    UD const udSize{ 8192, 8192 };
+    UD const udSize{ userDomainSize, userDomainSize };
 
     auto treeOperationList = llama::makeTuple(
         llama::mapping::tree::functor::Idem(),
 
         //~ llama::mapping::tree::functor::MoveRTDown<
             //~ llama::mapping::tree::TreeCoord< >
-        //~ >( 8192 ),
-        //~ llama::mapping::tree::functor::MoveRTDown<
+        //~ >( userDomainSize )
+        //~ ,llama::mapping::tree::functor::MoveRTDown<
             //~ llama::mapping::tree::TreeCoord< 0 >
-        //~ >( 8192 * 8192 ),
-        //~ llama::mapping::tree::functor::MoveRTDown<
+        //~ >( userDomainSize * userDomainSize )
+        //~ ,llama::mapping::tree::functor::MoveRTDown<
             //~ llama::mapping::tree::TreeCoord< 0, 0 >
-        //~ >( 8192 * 8192 ),
-        //~ llama::mapping::tree::functor::MoveRTDown<
+        //~ >( userDomainSize * userDomainSize )
+        //~ ,llama::mapping::tree::functor::MoveRTDown<
             //~ llama::mapping::tree::TreeCoord< 0, 2 >
-        //~ >( 8192 * 8192 ),
+        //~ >( userDomainSize * userDomainSize )
 
         //~ llama::mapping::tree::functor::MoveRTDownFixed<
             //~ llama::mapping::tree::TreeCoord< >,
-            //~ 8192
+            //~ userDomainSize
         //~ >( ),
         //~ llama::mapping::tree::functor::MoveRTDownFixed<
             //~ llama::mapping::tree::TreeCoord< 0 >,
-            //~ 8192 * 8192
+            //~ userDomainSize * userDomainSize
         //~ >( ),
         //~ llama::mapping::tree::functor::MoveRTDownFixed<
             //~ llama::mapping::tree::TreeCoord< 0, 0 >,
-            //~ 8192 * 8192
+            //~ userDomainSize * userDomainSize
         //~ >( ),
         //~ llama::mapping::tree::functor::MoveRTDownFixed<
             //~ llama::mapping::tree::TreeCoord< 0, 2 >,
-            //~ 8192 * 8192
-        //~ >( ),
+            //~ userDomainSize * userDomainSize
+        //~ >( )
 
-        llama::mapping::tree::functor::LeaveOnlyRT( ),
+        llama::mapping::tree::functor::LeaveOnlyRT( )
 
-        llama::mapping::tree::functor::Idem()
+        ,llama::mapping::tree::functor::Idem()
     );
 
     using Mapping = llama::mapping::tree::Mapping<
@@ -153,6 +155,8 @@ int main(int argc,char * * argv)
                 Name,
                 st::Momentum
             >::apply( as );
+            //~ auto datum2 = view( x+1, y );
+            //~ datum( st::Pos(), st::Y() ) += datum2( st::Pos(), st::Y() );
         }
     double sum = 0.0;
     for (size_t x = 0; x < udSize[0]; ++x)

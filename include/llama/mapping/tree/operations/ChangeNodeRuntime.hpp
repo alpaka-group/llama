@@ -69,7 +69,7 @@ struct ChangeNodeRuntime
     >;
     auto
     operator()(
-        T_Tree const tree,
+        T_Tree const & tree,
         std::size_t const newValue
     ) const
     -> ResultTree
@@ -111,7 +111,7 @@ struct ChangeNodeRuntime<
     >;
     auto
     operator()(
-        ResultTree const tree,
+        ResultTree const & tree,
         std::size_t const newValue
     ) const
     -> T_Tree
@@ -134,7 +134,7 @@ struct ChangeNodeRuntime<
     >;
     auto
     operator()(
-        T_Tree const tree,
+        T_Tree const & tree,
         std::size_t const newValue
     ) const
     -> ResultTree
@@ -154,7 +154,7 @@ template<
 >
 auto
 changeNodeRuntime(
-    T_Tree const tree,
+    T_Tree const & tree,
     std::size_t const newValue
 )
 -> decltype(
@@ -181,7 +181,7 @@ namespace internal
 
 template<
     typename T_Tree,
-    typename T_Operation,
+    template< class, class > class T_Operation,
     typename T_TreeCoord,
     typename T_SFINAE = void
 >
@@ -189,7 +189,7 @@ struct ChangeNodeChildsRuntime;
 
 template<
     typename T_Tree,
-    typename T_Operation,
+    template< class, class > class T_Operation,
     typename T_TreeCoord
 >
 struct ChangeNodeChildsRuntime<
@@ -224,7 +224,7 @@ struct ChangeNodeChildsRuntime<
     >;
     auto
     operator()(
-        T_Tree const tree,
+        T_Tree const & tree,
         std::size_t const newValue
     ) const
     -> ResultType
@@ -256,7 +256,7 @@ struct ChangeNodeChildsRuntime<
 // Leave case
 template<
     typename T_Tree,
-    typename T_Operation
+    template< class, class > class T_Operation
 >
 struct ChangeNodeChildsRuntime<
     T_Tree,
@@ -267,7 +267,7 @@ struct ChangeNodeChildsRuntime<
 {
     auto
     operator()(
-        T_Tree const tree,
+        T_Tree const & tree,
         std::size_t const newValue
     ) const
     -> T_Tree
@@ -276,7 +276,7 @@ struct ChangeNodeChildsRuntime<
     }
 };
 
-template< typename T_Operation >
+template< template< class, class > class T_Operation >
 struct ChangeNodeChildsRuntimeFunctor
 {
     std::size_t const newValue;
@@ -306,7 +306,10 @@ struct ChangeNodeChildsRuntimeFunctor
         -> ResultElement
         {
             return ResultElement{
-                T_Operation::apply(
+                T_Operation<
+                    decltype( element.count ),
+                    std::size_t
+                >::apply(
                     element.count,
                     newValue
                 )
@@ -333,7 +336,10 @@ struct ChangeNodeChildsRuntimeFunctor
         -> ResultElement
         {
             return ResultElement(
-                T_Operation::apply(
+                T_Operation<
+                    decltype( element.count ),
+                    std::size_t
+                >::apply(
                     element.count,
                     newValue
                 ),
@@ -362,7 +368,7 @@ struct ChangeNodeChildsRuntimeFunctor
 // Node case
 template<
     typename T_Tree,
-    typename T_Operation
+    template< class, class > class T_Operation
 >
 struct ChangeNodeChildsRuntime<
     T_Tree,
@@ -382,7 +388,7 @@ struct ChangeNodeChildsRuntime<
     >;
     auto
     operator()(
-        T_Tree const tree,
+        T_Tree const & tree,
         std::size_t const newValue
     ) const
     -> ResultType
@@ -402,12 +408,12 @@ struct ChangeNodeChildsRuntime<
 
 template<
     typename T_TreeCoord,
-    typename T_Operation,
+    template< class, class > class T_Operation,
     typename T_Tree
 >
 auto
 changeNodeChildsRuntime(
-    T_Tree const tree,
+    T_Tree const & tree,
     std::size_t const newValue
 )
 -> decltype(

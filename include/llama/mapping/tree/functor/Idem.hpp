@@ -38,6 +38,7 @@ struct Idem
     using Result = T_Tree;
 
     template< typename T_Tree >
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     basicToResult( const T_Tree & tree ) const
     -> Result< T_Tree >
@@ -49,10 +50,11 @@ struct Idem
         typename T_Tree,
         typename T_TreeCoord
     >
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     basicCoordToResultCoord(
-        T_TreeCoord const basicCoord,
-        T_Tree const
+        T_TreeCoord const & basicCoord,
+        T_Tree const &
     ) const
     -> T_TreeCoord
     {
@@ -63,10 +65,11 @@ struct Idem
         typename T_Tree,
         typename T_TreeCoord
     >
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     resultCoordToBasicCoord(
-        T_TreeCoord const resultCoord,
-        T_Tree const
+        T_TreeCoord const & resultCoord,
+        T_Tree const &
     ) const
     -> T_TreeCoord
     {

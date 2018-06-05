@@ -31,9 +31,10 @@ namespace tree
 
 template<
 	typename T_Tree,
-	typename T_InnerOp,
-	typename T_OuterOp,
-	template< class > class T_LeaveFunctor
+	template< class, class > class T_InnerOp,
+	template< class, class > class T_OuterOp,
+	template< class, class > class T_LeaveFunctor,
+	typename T_SFINAE = void
 >
 struct Reduce;
 
@@ -43,27 +44,31 @@ namespace internal
 // Leave
 template<
 	typename T_Tree,
-	typename T_InnerOp,
-	typename T_OuterOp,
-	template< class > class T_LeaveFunctor,
+	template< class, class > class T_InnerOp,
+	template< class, class > class T_OuterOp,
+	template< class, class > class T_LeaveFunctor,
 	typename T_SFINAE = void
 >
 struct ReduceElementType
 {
+	LLAMA_FN_HOST_ACC_INLINE
 	auto
-	operator()( const T_Tree leave )
+	operator()( decltype( T_Tree::count ) const & count ) const
 	-> std::size_t
 	{
-		return T_LeaveFunctor< T_Tree >()( leave );
+		return T_LeaveFunctor<
+			typename T_Tree::Type,
+			decltype( T_Tree::count )
+		>()( count );
 	}
 };
 
 // Node
 template<
 	typename T_Tree,
-	typename T_InnerOp,
-	typename T_OuterOp,
-	template< class > class T_LeaveFunctor
+	template< class, class > class T_InnerOp,
+	template< class, class > class T_OuterOp,
+	template< class, class > class T_LeaveFunctor
 >
 struct ReduceElementType<
 	T_Tree,
@@ -75,31 +80,51 @@ struct ReduceElementType<
 	>::type
 >
 {
-	using IterTree = TreeElement<
-		typename T_Tree::Identifier,
-		typename T_Tree::Type::RestTuple
-	>;
+	using IterTree = typename TreePopFrontChild< T_Tree >::ResultType;
+
+	LLAMA_FN_HOST_ACC_INLINE
 	auto
-	operator()( const T_Tree tree )
+	operator()(
+        typename T_Tree::Type const & childs,
+        decltype( T_Tree::count ) const & count
+    ) const
 	-> std::size_t
 	{
-		return T_InnerOp::apply(
+		return T_InnerOp<
+			decltype(
+				Reduce<
+					typename T_Tree::Type::FirstElement,
+					T_InnerOp,
+					T_OuterOp,
+					T_LeaveFunctor
+				>()( childs.first )
+			),
+			decltype(
+				internal::ReduceElementType<
+					IterTree,
+					T_InnerOp,
+					T_OuterOp,
+					T_LeaveFunctor
+				>()(
+					childs.rest,
+					count
+				)
+			)
+		>::apply(
 			Reduce<
 				typename T_Tree::Type::FirstElement,
 				T_InnerOp,
 				T_OuterOp,
 				T_LeaveFunctor
-			>()( tree.childs.first ),
+			>()( childs.first ),
 			internal::ReduceElementType<
 				IterTree,
 				T_InnerOp,
 				T_OuterOp,
 				T_LeaveFunctor
 			>()(
-				IterTree(
-					tree.count,
-					tree.childs.rest
-				)
+				childs.rest,
+				count
 			)
 		);
 	}
@@ -108,9 +133,9 @@ struct ReduceElementType<
 // Node with one (last) child
 template<
 	typename T_Tree,
-	typename T_InnerOp,
-	typename T_OuterOp,
-	template< class > class T_LeaveFunctor
+	template< class, class > class T_InnerOp,
+	template< class, class > class T_OuterOp,
+	template< class, class > class T_LeaveFunctor
 >
 struct ReduceElementType<
 	T_Tree,
@@ -122,8 +147,12 @@ struct ReduceElementType<
 	>::type
 >
 {
+	LLAMA_FN_HOST_ACC_INLINE
 	auto
-	operator()( const T_Tree tree )
+	operator()(
+        typename T_Tree::Type const & childs,
+        decltype( T_Tree::count ) const & count
+    ) const
 	-> std::size_t
 	{
 		return Reduce<
@@ -131,7 +160,7 @@ struct ReduceElementType<
 			T_InnerOp,
 			T_OuterOp,
 			T_LeaveFunctor
-		>()( tree.childs.first );
+		>()( childs.first );
 	}
 };
 
@@ -139,25 +168,107 @@ struct ReduceElementType<
 
 template<
 	typename T_Tree,
-	typename T_InnerOp,
-	typename T_OuterOp,
-	template< class > class T_LeaveFunctor
+	template< class, class > class T_InnerOp,
+	template< class, class > class T_OuterOp,
+	template< class, class > class T_LeaveFunctor,
+	typename T_SFINAE
 >
 struct Reduce
 {
+	LLAMA_FN_HOST_ACC_INLINE
 	auto
-	operator()( const T_Tree tree )
+	operator()(
+		typename T_Tree::Type const & childs,
+		decltype( T_Tree::count ) const & count
+	) const
 	-> std::size_t
 	{
-		return T_OuterOp::apply(
-			tree.count,
+		return T_OuterOp<
+			decltype( T_Tree::count ),
+			decltype(
+				internal::ReduceElementType<
+					T_Tree,
+					T_InnerOp,
+					T_OuterOp,
+					T_LeaveFunctor
+				>()(
+					childs,
+					count
+				)
+			)
+		>::apply(
+			count,
 			internal::ReduceElementType<
 				T_Tree,
 				T_InnerOp,
 				T_OuterOp,
 				T_LeaveFunctor
-			>()( tree )
+			>()(
+				childs,
+				count
+			)
 		);
+	}
+
+	LLAMA_FN_HOST_ACC_INLINE
+	auto
+	operator()( T_Tree const & tree ) const
+	-> std::size_t
+	{
+		return operator()(
+			tree.childs,
+			tree.count
+		);
+	}
+};
+
+template<
+	typename T_Tree,
+	template< class, class > class T_InnerOp,
+	template< class, class > class T_OuterOp,
+	template< class, class > class T_LeaveFunctor
+>
+struct Reduce<
+	T_Tree,
+	T_InnerOp,
+	T_OuterOp,
+	T_LeaveFunctor,
+	typename T_Tree::IsTreeElementWithoutChilds
+>
+{
+
+	LLAMA_FN_HOST_ACC_INLINE
+	auto
+	operator()( decltype( T_Tree::count ) const & count ) const
+	-> std::size_t
+	{
+		return T_OuterOp<
+			decltype( T_Tree::count ),
+			decltype(
+				internal::ReduceElementType<
+					T_Tree,
+					T_InnerOp,
+					T_OuterOp,
+					T_LeaveFunctor
+				>()( count )
+			)
+		>::apply(
+			count,
+			internal::ReduceElementType<
+				T_Tree,
+				T_InnerOp,
+				T_OuterOp,
+				T_LeaveFunctor
+			>()( count )
+		);
+	}
+
+	LLAMA_FN_HOST_ACC_INLINE
+	auto
+	operator()( T_Tree const & tree ) const
+	-> std::size_t
+	{
+		return operator()( tree.count );
 	}
 };
 

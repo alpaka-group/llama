@@ -319,7 +319,7 @@ struct UserDomainToTreeCoord<
 template< typename T_DatumCoord >
 struct DatumCoordToTreeCoord
 {
-    using FrontType = Tuple< TreeCoordElement< T_DatumCoord::PopFront::front > >;
+    using FrontType = Tuple< TreeCoordElementConst< T_DatumCoord::PopFront::front > >;
     using type = decltype(
         tupleCat(
             FrontType(),
@@ -333,10 +333,10 @@ struct DatumCoordToTreeCoord
 template< std::size_t T_lastCoord >
 struct DatumCoordToTreeCoord< DatumCoord< T_lastCoord > >
 {
-    using type = Tuple< TreeCoordElement< 0 > >;
+    using type = Tuple< TreeCoordElementConst< > >;
 };
 
-};
+} // namespace internal
 
 template<
     typename T_DatumCoord,

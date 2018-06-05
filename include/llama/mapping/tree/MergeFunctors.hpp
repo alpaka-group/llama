@@ -50,8 +50,8 @@ struct MergeFunctorsImpl
     SubMergeFunctorsImpl const subMergeFunctorsImpl;
 
     MergeFunctorsImpl(
-        T_Tree const tree,
-        T_TreeOperationList const treeOperationList
+        T_Tree const & tree,
+        T_TreeOperationList const & treeOperationList
     ) :
         operation( treeOperationList.first ),
         treeAfterOp( operation.template basicToResult( tree ) ),
@@ -63,7 +63,7 @@ struct MergeFunctorsImpl
 
     LLAMA_FN_HOST_ACC_INLINE
     auto
-    basicToResult( T_Tree const ) const
+    basicToResult( T_Tree const & ) const
     -> Result
     {
         return subMergeFunctorsImpl.basicToResult(
@@ -75,8 +75,8 @@ struct MergeFunctorsImpl
     LLAMA_FN_HOST_ACC_INLINE
     auto
     basicCoordToResultCoord(
-        T_TreeCoord const basicCoord,
-        T_Tree const tree
+        T_TreeCoord const & basicCoord,
+        T_Tree const & tree
     ) const
     -> decltype(
         subMergeFunctorsImpl.basicCoordToResultCoord(
@@ -101,8 +101,8 @@ struct MergeFunctorsImpl
     LLAMA_FN_HOST_ACC_INLINE
     auto
     resultCoordToBasicCoord(
-        T_TreeCoord const resultCoord,
-        T_Tree const tree
+        T_TreeCoord const & resultCoord,
+        T_Tree const & tree
     ) const
     -> decltype(
         subMergeFunctorsImpl.resultCoordToBasicCoord(
@@ -140,8 +140,8 @@ struct MergeFunctorsImpl<
     LastOp const operation;
 
     MergeFunctorsImpl(
-        T_Tree const,
-        TreeOperationList const treeOperationList
+        T_Tree const &,
+        TreeOperationList const & treeOperationList
     ) :
         operation( treeOperationList.first )
     { }
@@ -158,8 +158,8 @@ struct MergeFunctorsImpl<
     LLAMA_FN_HOST_ACC_INLINE
     auto
     basicCoordToResultCoord(
-        T_TreeCoord const basicCoord,
-        T_Tree const tree
+        T_TreeCoord const & basicCoord,
+        T_Tree const & tree
     ) const
     -> decltype(
         operation.template basicCoordToResultCoord(
@@ -178,8 +178,8 @@ struct MergeFunctorsImpl<
     LLAMA_FN_HOST_ACC_INLINE
     auto
     resultCoordToBasicCoord(
-        T_TreeCoord const resultCoord,
-        T_Tree const tree
+        T_TreeCoord const & resultCoord,
+        T_Tree const & tree
     ) const
     -> decltype(
         operation.template resultCoordToBasicCoord(
@@ -205,8 +205,8 @@ struct MergeFunctorsImpl<
     using TreeOperationList = Tuple< >;
 
     MergeFunctorsImpl(
-        T_Tree const,
-        TreeOperationList const treeOperationList
+        T_Tree const &,
+        TreeOperationList const & treeOperationList
     ) { }
 
     LLAMA_FN_HOST_ACC_INLINE
@@ -221,8 +221,8 @@ struct MergeFunctorsImpl<
     LLAMA_FN_HOST_ACC_INLINE
     auto
     basicCoordToResultCoord(
-        T_TreeCoord const basicCoord,
-        T_Tree const tree
+        T_TreeCoord const & basicCoord,
+        T_Tree const & tree
     ) const
     -> T_TreeCoord
     {
@@ -233,8 +233,8 @@ struct MergeFunctorsImpl<
     LLAMA_FN_HOST_ACC_INLINE
     auto
     resultCoordToBasicCoord(
-        T_TreeCoord const resultCoord,
-        T_Tree const tree
+        T_TreeCoord const & resultCoord,
+        T_Tree const & tree
     ) const
     -> T_TreeCoord
     {
@@ -259,8 +259,8 @@ struct MergeFunctors
     MergeFunctorsImpl const mergeFunctorsImpl;
 
     MergeFunctors(
-        T_Tree const tree,
-        T_TreeOperationList const treeOperationList
+        T_Tree const & tree,
+        T_TreeOperationList const & treeOperationList
     ) :
         mergeFunctorsImpl(
             tree,
@@ -280,8 +280,8 @@ struct MergeFunctors
     LLAMA_FN_HOST_ACC_INLINE
     auto
     basicCoordToResultCoord(
-        T_TreeCoord const basicCoord,
-        T_Tree const tree
+        T_TreeCoord const & basicCoord,
+        T_Tree const & tree
     ) const
     -> decltype(
         mergeFunctorsImpl.basicCoordToResultCoord(
@@ -300,8 +300,8 @@ struct MergeFunctors
     LLAMA_FN_HOST_ACC_INLINE
     auto
     resultCoordToBasicCoord(
-        T_TreeCoord const resultCoord,
-        T_Tree const tree
+        T_TreeCoord const & resultCoord,
+        T_Tree const & tree
     ) const
     -> decltype(
         mergeFunctorsImpl.resultCoordToBasicCoord(

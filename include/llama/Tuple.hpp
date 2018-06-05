@@ -43,16 +43,16 @@ struct Tuple<
     Tuple() = default;
 
     Tuple(
-        T_FirstElement first,
-        T_Elements... rest
+        T_FirstElement const first,
+        T_Elements const ... rest
     ) :
         first( first ),
         rest( rest... )
     {}
 
     Tuple(
-        T_FirstElement first,
-        Tuple< T_Elements... > rest
+        T_FirstElement const first,
+        Tuple< T_Elements... > const rest
     ) :
         first( first ),
         rest( rest )
@@ -70,7 +70,7 @@ struct Tuple< T_FirstElement >
     Tuple() = default;
 
     Tuple(
-        T_FirstElement first,
+        T_FirstElement const first,
         Tuple< > const rest = Tuple< >()
     ) : first( first ) {}
 

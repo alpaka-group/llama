@@ -34,13 +34,30 @@ namespace mapping
 namespace tree
 {
 
+template<
+    std::size_t T_compiletime = 0,
+    std::size_t T_runtime = 0
+>
+struct TreeCoordElementConst
+{
+    static std::integral_constant< std::size_t, T_compiletime > compiletime;
+    static std::integral_constant< std::size_t, T_runtime > runtime;
+};
+
 template< std::size_t T_compiletime = 0 >
 struct TreeCoordElement
 {
-    static constexpr std::size_t compiletime = T_compiletime;
+    static std::integral_constant< std::size_t, T_compiletime > compiletime;
     const std::size_t runtime;
     TreeCoordElement() : runtime( 0 ) {}
     TreeCoordElement( std::size_t runtime ) : runtime( runtime ) {}
+    template< std::size_t T_runtime >
+    TreeCoordElement(
+        TreeCoordElementConst<
+            T_compiletime,
+            T_runtime
+        >&
+    ) : runtime( T_runtime ) {}
 };
 
 namespace internal
@@ -59,7 +76,7 @@ struct TreeCoordFromCoords<
 >
 {
     using type = TupleCatType<
-        Tuple< TreeCoordElement< T_firstCoord > >,
+        Tuple< TreeCoordElementConst< T_firstCoord > >,
         typename TreeCoordFromCoords< T_coords...>::type
     >;
 };
@@ -67,7 +84,7 @@ struct TreeCoordFromCoords<
 template< std::size_t T_lastCoord >
 struct TreeCoordFromCoords< T_lastCoord >
 {
-    using type = Tuple< TreeCoordElement< T_lastCoord > >;
+    using type = Tuple< TreeCoordElementConst< T_lastCoord > >;
 };
 
 template< >
@@ -93,9 +110,9 @@ struct TreeCoordToStringImpl
     {
         return
             std::to_string( treeCoord.first.runtime ) +
-            ":" +
+            std::string( ":" ) +
             std::to_string( treeCoord.first.compiletime ) +
-            ", " +
+            std::string( ", " ) +
             TreeCoordToStringImpl< typename T_TreeCoord::RestTuple >()
                 ( treeCoord.rest );
     };
@@ -110,7 +127,7 @@ struct TreeCoordToStringImpl< Tuple< T_LastTreeElement > >
     {
         return
             std::to_string( treeCoord.first.runtime ) +
-            ":" +
+            std::string( ":" ) +
             std::to_string( treeCoord.first.compiletime );
     };
 };
@@ -123,9 +140,9 @@ treeCoordToString( const T_TreeCoord treeCoord )
 -> std::string
 {
     return
-        "[ " +
+        std::string( "[ " ) +
         internal::TreeCoordToStringImpl< T_TreeCoord >()( treeCoord ) +
-        " ]";
+        std::string( " ]" );
 }
 
 
