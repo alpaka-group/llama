@@ -162,8 +162,16 @@ struct LeaveOnlyRT
                     typename T_BasicCoord::RestTuple
                 >()(
                     typename T_BasicCoord::RestTuple(),
-                    getTupleElementRef< T_BasicCoord::FirstElement::compiletime >(
-                        T_Tree().childs
+                    // For some reason I have to call the internal function by
+                    // hand for the cuda nvcc compiler
+                    //~ getTupleElement<
+                        //~ T_BasicCoord::FirstElement::compiletime,
+                        //~ typename T_Tree::Type
+                    llama::internal::GetTupleElementImpl<
+                        typename T_Tree::Type,
+                        T_BasicCoord::FirstElement::compiletime
+                    >()(
+                        typename T_Tree::Type()
                     ),
                     0
                 )
@@ -180,7 +188,13 @@ struct LeaveOnlyRT
         -> ResultCoord
         {
             auto const & branch =
-                getTupleElementRef< T_BasicCoord::FirstElement::compiletime >(
+                // For some reason I have to call the internal function by hand
+                // for the cuda nvcc compiler
+                //~ getTupleElementRef< T_BasicCoord::FirstElement::compiletime >(
+                llama::internal::GetTupleElementImpl<
+                    typename T_Tree::Type,
+                    T_BasicCoord::FirstElement::compiletime
+                >()(
                     tree.childs
                 );
             return ResultCoord(

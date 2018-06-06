@@ -41,10 +41,13 @@ template<
 struct TreeCoordElement
 {
     static std::integral_constant< std::size_t, T_compiletime > const compiletime;
+
     T_RuntimeType const runtime;
 
+    LLAMA_FN_HOST_ACC_INLINE
     TreeCoordElement() : runtime( 0 ) {}
 
+    LLAMA_FN_HOST_ACC_INLINE
     TreeCoordElement( T_RuntimeType const runtime ) : runtime( runtime ) {}
 };
 
@@ -65,6 +68,7 @@ struct TreeCoordElement<
 
     TreeCoordElement() = default;
 
+    LLAMA_FN_HOST_ACC_INLINE
     TreeCoordElement( RuntimeType const ) {}
 };
 

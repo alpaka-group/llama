@@ -67,6 +67,8 @@ struct ChangeNodeRuntime
         typename T_Tree::Identifier,
         ResultChilds
     >;
+
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()(
         T_Tree const & tree,
@@ -109,6 +111,8 @@ struct ChangeNodeRuntime<
         typename T_Tree::Identifier,
         typename T_Tree::Type
     >;
+
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()(
         ResultTree const & tree,
@@ -132,6 +136,8 @@ struct ChangeNodeRuntime<
         typename T_Tree::Identifier,
         typename T_Tree::Type
     >;
+
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()(
         T_Tree const & tree,
@@ -152,6 +158,7 @@ template<
     typename T_TreeCoord,
     typename T_Tree
 >
+LLAMA_FN_HOST_ACC_INLINE
 auto
 changeNodeRuntime(
     T_Tree const & tree,
@@ -222,6 +229,8 @@ struct ChangeNodeChildsRuntime<
             )
         )
     >;
+
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()(
         T_Tree const & tree,
@@ -265,6 +274,7 @@ struct ChangeNodeChildsRuntime<
     typename T_Tree::IsTreeElementWithoutChilds
 >
 {
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()(
         T_Tree const & tree,
@@ -298,6 +308,8 @@ struct ChangeNodeChildsRuntimeFunctor
             typename T_Element::Identifier,
             typename T_Element::Type
         >;
+
+        LLAMA_FN_HOST_ACC_INLINE
         auto
         operator()(
             std::size_t const newValue,
@@ -328,6 +340,8 @@ struct ChangeNodeChildsRuntimeFunctor
             typename T_Element::Identifier,
             typename T_Element::Type
         >;
+
+        LLAMA_FN_HOST_ACC_INLINE
         auto
         operator()(
             std::size_t const newValue,
@@ -349,6 +363,7 @@ struct ChangeNodeChildsRuntimeFunctor
     };
 
     template< typename T_Element >
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()( T_Element const element ) const
     -> decltype(
@@ -386,6 +401,8 @@ struct ChangeNodeChildsRuntime<
             )
         )
     >;
+
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()(
         T_Tree const & tree,
@@ -411,6 +428,7 @@ template<
     template< class, class > class T_Operation,
     typename T_Tree
 >
+LLAMA_FN_HOST_ACC_INLINE
 auto
 changeNodeChildsRuntime(
     T_Tree const & tree,

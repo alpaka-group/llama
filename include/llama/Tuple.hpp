@@ -40,8 +40,10 @@ struct Tuple<
 {
     using FirstElement = T_FirstElement;
     using RestTuple = Tuple< T_Elements... >;
+
     Tuple() = default;
 
+    LLAMA_FN_HOST_ACC_INLINE
     Tuple(
         T_FirstElement const first,
         T_Elements const ... rest
@@ -50,6 +52,7 @@ struct Tuple<
         rest( rest... )
     {}
 
+    LLAMA_FN_HOST_ACC_INLINE
     Tuple(
         T_FirstElement const first,
         Tuple< T_Elements... > const rest
@@ -67,8 +70,10 @@ struct Tuple< T_FirstElement >
 {
     using FirstElement = T_FirstElement;
     using RestTuple = Tuple< >;
+
     Tuple() = default;
 
+    LLAMA_FN_HOST_ACC_INLINE
     Tuple(
         T_FirstElement const first,
         Tuple< > const rest = Tuple< >()
@@ -277,7 +282,7 @@ template<
 >
 LLAMA_FN_HOST_ACC_INLINE
 auto
-getTupleElement( T_Tuple const tuple )
+getTupleElement( T_Tuple const & tuple )
 -> GetTupleType<
     T_Tuple,
     T_pos
@@ -288,7 +293,6 @@ getTupleElement( T_Tuple const tuple )
         T_pos
     >()( tuple );
 }
-
 
 template<
     std::size_t T_pos,

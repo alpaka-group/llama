@@ -41,6 +41,7 @@ template<
 >
 struct GetNode
 {
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()( T_Tree const & tree ) const
     -> decltype(
@@ -77,6 +78,7 @@ struct GetNode<
     Tuple< >
 >
 {
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()( T_Tree const & tree ) const
     -> T_Tree
@@ -91,6 +93,7 @@ template<
     typename T_TreeCoord,
     typename T_Tree
 >
+LLAMA_FN_HOST_ACC_INLINE
 auto
 getNode( T_Tree const & tree )
 -> decltype(

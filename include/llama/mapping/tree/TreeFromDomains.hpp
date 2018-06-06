@@ -215,6 +215,7 @@ struct SetUserDomainInTreeImpl<
     >
 >
 {
+    LLAMA_NO_HOST_ACC_WARNING
     LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()( T_UserDomain const & size ) const
@@ -307,6 +308,7 @@ struct UserDomainToTreeCoord<
 >
 {
     using Result = Tuple< TreeCoordElement< T_firstDatumDomain > >;
+
     LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()( T_UserDomain const & coord ) const

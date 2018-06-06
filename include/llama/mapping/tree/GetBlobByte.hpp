@@ -100,7 +100,10 @@ struct GetTreeBlobByteImpl
         return
             getTreeBlobSize(
                 tree.childs,
-                treeCoord.first.runtime
+                // cuda doesn't like references to static members of they are
+                // not defined somewhere although only type informations
+                // are used which is the case for runtime=std::integral_constant
+                std::size_t(treeCoord.first.runtime)
             ) +
             SummarizeTreeSmallerPos<
                 T_Tree,
@@ -113,7 +116,13 @@ struct GetTreeBlobByteImpl
                 SubTree,
                 typename T_TreeCoord::RestTuple
             >()(
-                getTupleElementRef< T_TreeCoord::FirstElement::compiletime >(
+                // For some reason I have to call the internal function by hand
+                // for the cuda nvcc compiler
+                //~ getTupleElementRef< T_TreeCoord::FirstElement::compiletime >(
+                llama::internal::GetTupleElementImpl<
+                    typename T_Tree::Type,
+                    T_TreeCoord::FirstElement::compiletime
+                >()(
                     tree.childs
                 ),
                 treeCoord.rest

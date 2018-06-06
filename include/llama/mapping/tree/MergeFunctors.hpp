@@ -49,6 +49,7 @@ struct MergeFunctorsImpl
     decltype( operation.template basicToResult( T_Tree() ) ) const treeAfterOp;
     SubMergeFunctorsImpl const subMergeFunctorsImpl;
 
+    LLAMA_FN_HOST_ACC_INLINE
     MergeFunctorsImpl(
         T_Tree const & tree,
         T_TreeOperationList const & treeOperationList
@@ -139,6 +140,7 @@ struct MergeFunctorsImpl<
 
     LastOp const operation;
 
+    LLAMA_FN_HOST_ACC_INLINE
     MergeFunctorsImpl(
         T_Tree const &,
         TreeOperationList const & treeOperationList
@@ -204,6 +206,7 @@ struct MergeFunctorsImpl<
     using Result = T_Tree;
     using TreeOperationList = Tuple< >;
 
+    LLAMA_FN_HOST_ACC_INLINE
     MergeFunctorsImpl(
         T_Tree const &,
         TreeOperationList const & treeOperationList
@@ -258,6 +261,7 @@ struct MergeFunctors
 
     MergeFunctorsImpl const mergeFunctorsImpl;
 
+    LLAMA_FN_HOST_ACC_INLINE
     MergeFunctors(
         T_Tree const & tree,
         T_TreeOperationList const & treeOperationList

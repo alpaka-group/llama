@@ -363,12 +363,25 @@ int main(int argc,char * * argv)
     // LLAMA
     using UserDomain = llama::UserDomain< 1 >;
     const UserDomain userDomainSize{ problemSize };
+
     using Mapping = llama::mapping::SoA<
         UserDomain,
         Particle
     >;
+    Mapping const mapping( userDomainSize );
 
-    Mapping mapping( userDomainSize );
+    //~ auto treeOperationList = llama::makeTuple(
+        //~ llama::mapping::tree::functor::LeaveOnlyRT( )
+    //~ );
+    //~ using Mapping = llama::mapping::tree::Mapping<
+        //~ UserDomain,
+        //~ Particle,
+        //~ decltype( treeOperationList )
+    //~ >;
+    //~ const Mapping mapping(
+        //~ userDomainSize,
+        //~ treeOperationList
+    //~ );
 
     using DevFactory = llama::Factory<
         Mapping,

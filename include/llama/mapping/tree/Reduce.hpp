@@ -236,7 +236,6 @@ struct Reduce<
 	typename T_Tree::IsTreeElementWithoutChilds
 >
 {
-
 	LLAMA_FN_HOST_ACC_INLINE
 	auto
 	operator()( decltype( T_Tree::count ) const & count ) const

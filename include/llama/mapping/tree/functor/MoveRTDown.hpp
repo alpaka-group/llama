@@ -60,6 +60,7 @@ struct MoveRTDown
         >::type
     >
     {
+        LLAMA_FN_HOST_ACC_INLINE
         auto
         operator()(
             T_BasicCoord const & basicCoord,
@@ -87,6 +88,7 @@ struct MoveRTDown
         >::type
     >
     {
+        LLAMA_FN_HOST_ACC_INLINE
         auto
         operator()(
             T_BasicCoord const & basicCoord,
@@ -160,6 +162,7 @@ struct MoveRTDown
             )
         );
 
+        LLAMA_FN_HOST_ACC_INLINE
         auto
         operator()(
             T_BasicCoord const & basicCoord,
@@ -193,6 +196,7 @@ struct MoveRTDown
         void
     >
     {
+        LLAMA_FN_HOST_ACC_INLINE
         auto
         operator()(
             Tuple< > const &,
@@ -226,6 +230,7 @@ struct MoveRTDown
     );
 
     template< typename T_Tree >
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     basicToResult( T_Tree const & tree ) const
     -> Result< T_Tree >
@@ -247,6 +252,7 @@ struct MoveRTDown
         typename T_Tree,
         typename T_BasicCoord
     >
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     basicCoordToResultCoord(
         T_BasicCoord const & basicCoord,
@@ -279,6 +285,7 @@ struct MoveRTDown
         typename T_Tree,
         typename T_ResultCoord
     >
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     resultCoordToBasicCoord(
         T_ResultCoord const & resultCoord,
@@ -321,6 +328,7 @@ struct MoveRTDownFixed
         >::type
     >
     {
+        LLAMA_FN_HOST_ACC_INLINE
         auto
         operator()(
             T_BasicCoord const & basicCoord,
@@ -347,6 +355,7 @@ struct MoveRTDownFixed
         >::type
     >
     {
+        LLAMA_FN_HOST_ACC_INLINE
         auto
         operator()(
             T_BasicCoord const & basicCoord,
@@ -417,6 +426,7 @@ struct MoveRTDownFixed
             )
         );
 
+        LLAMA_FN_HOST_ACC_INLINE
         auto
         operator()(
             T_BasicCoord const & basicCoord,
@@ -449,6 +459,7 @@ struct MoveRTDownFixed
         void
     >
     {
+        LLAMA_FN_HOST_ACC_INLINE
         auto
         operator()(
             Tuple< > const &,
@@ -477,6 +488,7 @@ struct MoveRTDownFixed
     );
 
     template< typename T_Tree >
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     basicToResult( T_Tree const & tree ) const
     -> Result< T_Tree >
@@ -498,6 +510,7 @@ struct MoveRTDownFixed
         typename T_Tree,
         typename T_BasicCoord
     >
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     basicCoordToResultCoord(
         T_BasicCoord const & basicCoord,
@@ -528,6 +541,7 @@ struct MoveRTDownFixed
         typename T_Tree,
         typename T_ResultCoord
     >
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     resultCoordToBasicCoord(
         T_ResultCoord const & resultCoord,

@@ -69,10 +69,13 @@ struct TreeElement
     using Identifier = T_Identifier;
     using Type = T_Type;
 
+    LLAMA_NO_HOST_ACC_WARNING
+    LLAMA_FN_HOST_ACC_INLINE
     TreeElement() :
         count( internal::TreeElementDefaultCount< T_CountType >::value )
     {}
 
+    LLAMA_FN_HOST_ACC_INLINE
     TreeElement( const T_CountType count ) : count(count) {}
 
     const T_CountType count;
@@ -93,10 +96,13 @@ struct TreeElement<
     using Identifier = T_Identifier;
     using Type = Tuple< T_Childs... >;
 
+    LLAMA_NO_HOST_ACC_WARNING
+    LLAMA_FN_HOST_ACC_INLINE
     TreeElement() :
         count( internal::TreeElementDefaultCount< T_CountType >::value )
     {}
 
+    LLAMA_FN_HOST_ACC_INLINE
     TreeElement(
         const T_CountType count,
         const Type childs = Type()
@@ -105,6 +111,7 @@ struct TreeElement<
         childs(childs)
     {}
 
+    LLAMA_FN_HOST_ACC_INLINE
     TreeElement(
         const Type childs,
         const T_CountType count =
@@ -136,6 +143,8 @@ struct TreePopFrontChild
         typename T_Tree::Identifier,
         typename T_Tree::Type::RestTuple
     >;
+
+    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()( T_Tree const & tree)
     -> ResultType
@@ -170,7 +179,9 @@ struct TreePopFrontChild<
         typename Tree::Type::RestTuple,
         T_count
     >;
+
     auto
+    LLAMA_FN_HOST_ACC_INLINE
     operator()( Tree const & tree )
     -> ResultType
     {
