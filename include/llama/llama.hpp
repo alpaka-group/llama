@@ -36,6 +36,7 @@
 #include "mapping/AoS.hpp"
 #include "mapping/SoA.hpp"
 #include "mapping/One.hpp"
+#include "mapping/tree/Mapping.hpp"
 
 #include "preprocessor/macros.hpp"
 

@@ -18,50 +18,23 @@
 
 #pragma once
 
-#include "Array.hpp"
-#include <boost/mp11.hpp>
+#include "TreeElement.hpp"
 
 namespace llama
 {
 
-struct NoName {};
+namespace mapping
+{
 
-template< std::size_t T_dim >
-using UserDomain = Array<
-    std::size_t,
-    T_dim
->;
+namespace tree
+{
 
-template<
-    typename... T_Leaves
->
-using DatumStruct = boost::mp11::mp_list<
-    T_Leaves...
->;
 
-template<
-    typename... T_Leaves
->
-using DS = DatumStruct<
-    T_Leaves...
->;
 
-template<
-    typename T_Identifier,
-    typename T_Type
->
-using DatumElement = boost::mp11::mp_list<
-    T_Identifier,
-    T_Type
->;
 
-template<
-    typename T_Identifier,
-    typename T_Type
->
-using DE = DatumElement<
-    T_Identifier,
-    T_Type
->;
+} // namespace tree
+
+} // namespace mapping
 
 } // namespace llama
+

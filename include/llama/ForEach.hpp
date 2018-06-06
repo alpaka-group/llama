@@ -78,7 +78,7 @@ struct ApplyFunctorIfCoordIsIncluded
 {
     auto
     LLAMA_FN_HOST_ACC_INLINE
-    operator()( T_Functor& functor )
+    operator()( T_Functor const & functor )
     -> void
     { };
 };
@@ -287,6 +287,7 @@ struct ForEach<
     LLAMA_FN_HOST_ACC_INLINE
     static void apply( T_Functor&& functor )
     {
+        LLAMA_FORCE_INLINE_RECURSIVE
         internal::ApplyFunctorForEachLeave<
             T_DatumDomain,
             DatumCoord< T_coords... >,
