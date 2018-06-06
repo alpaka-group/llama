@@ -340,11 +340,11 @@ int main(int argc,char * * argv)
     using PltfHost = alpaka::pltf::Pltf<DevHost>;
     using PltfAcc = alpaka::pltf::Pltf<DevAcc>;
     using WorkDiv = alpaka::workdiv::WorkDivMembers<Dim, Size>;
-    using Stream = alpaka::stream::StreamCpuSync;
-    //~ using Stream = alpaka::stream::StreamCudaRtSync;
+    using Queue = alpaka::queue::QueueCpuSync;
+    //~ using Queue = alpaka::queue::QueueCudaRtSync;
     DevAcc const devAcc( alpaka::pltf::getDevByIdx< PltfAcc >( 0u ) );
     DevHost const devHost( alpaka::pltf::getDevByIdx< PltfHost >( 0u ) );
-    Stream stream( devAcc ) ;
+    Queue queue( devAcc ) ;
 
     // NBODY
     constexpr std::size_t problemSize = 16*1024;
@@ -463,8 +463,8 @@ int main(int argc,char * * argv)
             elemCount,
             blockSize
         > updateKernel;
-        alpaka::stream::enqueue(
-            stream,
+        alpaka::queue::enqueue(
+            queue,
             alpaka::exec::create< Acc > (
                 workdiv,
                 updateKernel,
@@ -479,8 +479,8 @@ int main(int argc,char * * argv)
             problemSize,
             elemCount
         > moveKernel;
-        alpaka::stream::enqueue(
-            stream,
+        alpaka::queue::enqueue(
+            queue,
             alpaka::exec::create< Acc > (
                 workdiv,
                 moveKernel,
