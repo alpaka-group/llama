@@ -36,29 +36,46 @@ namespace tree
 
 template<
     std::size_t T_compiletime = 0,
-    std::size_t T_runtime = 0
+    typename T_RuntimeType = std::size_t
 >
-struct TreeCoordElementConst
-{
-    static std::integral_constant< std::size_t, T_compiletime > compiletime;
-    static std::integral_constant< std::size_t, T_runtime > runtime;
-};
-
-template< std::size_t T_compiletime = 0 >
 struct TreeCoordElement
 {
-    static std::integral_constant< std::size_t, T_compiletime > compiletime;
-    const std::size_t runtime;
+    static std::integral_constant< std::size_t, T_compiletime > const compiletime;
+    T_RuntimeType const runtime;
+
     TreeCoordElement() : runtime( 0 ) {}
-    TreeCoordElement( std::size_t runtime ) : runtime( runtime ) {}
-    template< std::size_t T_runtime >
-    TreeCoordElement(
-        TreeCoordElementConst<
-            T_compiletime,
-            T_runtime
-        >&
-    ) : runtime( T_runtime ) {}
+
+    TreeCoordElement( T_RuntimeType const runtime ) : runtime( runtime ) {}
 };
+
+template<
+    std::size_t T_compiletime,
+    typename T_RuntimeType,
+    T_RuntimeType T_runtime
+>
+struct TreeCoordElement<
+    T_compiletime,
+    std::integral_constant< T_RuntimeType, T_runtime >
+>
+{
+    using RuntimeType = std::integral_constant< T_RuntimeType, T_runtime >;
+
+    static std::integral_constant< std::size_t, T_compiletime > const compiletime;
+    static RuntimeType const runtime;
+
+    TreeCoordElement() = default;
+
+    TreeCoordElement( RuntimeType const ) {}
+};
+
+template<
+    std::size_t T_compiletime = 0,
+    std::size_t T_runtime = 0
+>
+using TreeCoordElementConst = TreeCoordElement<
+    T_compiletime,
+    std::integral_constant< std::size_t, T_runtime >
+>;
 
 namespace internal
 {
