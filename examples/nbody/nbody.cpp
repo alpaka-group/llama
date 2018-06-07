@@ -167,10 +167,6 @@ struct UpdateKernel
     {
         constexpr std::size_t threads = blockSize / elems;
 
-        using SharedMapping = llama::mapping::SoA<
-            typename decltype(particles)::Mapping::UserDomain,
-            typename decltype(particles)::Mapping::DatumDomain
-        >;
         using SharedAllocator = BlockSharedMemoryAllocator<
             T_Acc,
             llama::SizeOf< typename decltype(particles)::Mapping::DatumDomain >::value
@@ -178,11 +174,31 @@ struct UpdateKernel
             __COUNTER__,
             threads
         >;
+
+        using SharedMapping = llama::mapping::SoA<
+            typename decltype(particles)::Mapping::UserDomain,
+            typename decltype(particles)::Mapping::DatumDomain
+        >;
+        SharedMapping const sharedMapping( { blockSize } );
+
+        //~ auto treeOperationList = llama::makeTuple(
+            //~ llama::mapping::tree::functor::LeaveOnlyRT( )
+        //~ );
+        //~ using SharedMapping = llama::mapping::tree::Mapping<
+            //~ typename decltype(particles)::Mapping::UserDomain,
+            //~ typename decltype(particles)::Mapping::DatumDomain,
+            //~ decltype( treeOperationList )
+        //~ >;
+        //~ SharedMapping const sharedMapping(
+            //~ { blockSize },
+            //~ treeOperationList
+        //~ );
+
         using SharedFactory = llama::Factory<
             SharedMapping,
             typename SharedAllocator::type
         >;
-        SharedMapping sharedMapping( { blockSize } );
+
         auto temp = SharedAllocator::template allocView<
             SharedFactory,
             SharedMapping

@@ -41,6 +41,7 @@ struct Tuple<
     using FirstElement = T_FirstElement;
     using RestTuple = Tuple< T_Elements... >;
 
+    LLAMA_FN_HOST_ACC_INLINE
     Tuple() = default;
 
     LLAMA_FN_HOST_ACC_INLINE
@@ -71,6 +72,7 @@ struct Tuple< T_FirstElement >
     using FirstElement = T_FirstElement;
     using RestTuple = Tuple< >;
 
+    LLAMA_FN_HOST_ACC_INLINE
     Tuple() = default;
 
     LLAMA_FN_HOST_ACC_INLINE

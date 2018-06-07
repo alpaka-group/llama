@@ -217,7 +217,10 @@ struct Reduce
 	{
 		return operator()(
 			tree.childs,
-			tree.count
+			// cuda doesn't like references to static members of they are
+			// not defined somewhere although only type informations
+			// are used which is the case for runtime=std::integral_constant
+			decltype(tree.count)( tree.count )
 		);
 	}
 };

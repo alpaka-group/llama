@@ -103,7 +103,7 @@ struct GetTreeBlobByteImpl
                 // cuda doesn't like references to static members of they are
                 // not defined somewhere although only type informations
                 // are used which is the case for runtime=std::integral_constant
-                std::size_t(treeCoord.first.runtime)
+                decltype(treeCoord.first.runtime)(treeCoord.first.runtime)
             ) +
             SummarizeTreeSmallerPos<
                 T_Tree,

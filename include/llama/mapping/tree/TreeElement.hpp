@@ -32,32 +32,6 @@ namespace mapping
 namespace tree
 {
 
-namespace internal
-{
-
-template< typename T_CountType >
-struct TreeElementDefaultCount
-{
-    static constexpr T_CountType value = 1;
-};
-
-template< std::size_t T_count >
-struct TreeElementDefaultCount<
-    std::integral_constant<
-        std::size_t,
-        T_count
-    >
->
-{
-    using CountType = std::integral_constant<
-        std::size_t,
-        T_count
-    >;
-    static constexpr CountType value = CountType();
-};
-
-} // namespace internal
-
 template<
     typename T_Identifier,
     typename T_Type,
@@ -69,11 +43,12 @@ struct TreeElement
     using Identifier = T_Identifier;
     using Type = T_Type;
 
-    LLAMA_NO_HOST_ACC_WARNING
     LLAMA_FN_HOST_ACC_INLINE
     TreeElement() :
-        count( internal::TreeElementDefaultCount< T_CountType >::value )
+        count( 1 )
     {}
+
+    ~TreeElement() = default;
 
     LLAMA_FN_HOST_ACC_INLINE
     TreeElement( const T_CountType count ) : count(count) {}
@@ -96,16 +71,17 @@ struct TreeElement<
     using Identifier = T_Identifier;
     using Type = Tuple< T_Childs... >;
 
-    LLAMA_NO_HOST_ACC_WARNING
     LLAMA_FN_HOST_ACC_INLINE
     TreeElement() :
-        count( internal::TreeElementDefaultCount< T_CountType >::value )
+        count( 1 )
     {}
+
+    ~TreeElement() = default;
 
     LLAMA_FN_HOST_ACC_INLINE
     TreeElement(
         const T_CountType count,
-        const Type childs = Type()
+        const Type childs
     ) :
         count(count),
         childs(childs)
@@ -113,15 +89,83 @@ struct TreeElement<
 
     LLAMA_FN_HOST_ACC_INLINE
     TreeElement(
+        const T_CountType count
+    ) :
+        count(count)
+    {}
+
+    LLAMA_FN_HOST_ACC_INLINE
+    TreeElement(
         const Type childs,
-        const T_CountType count =
-            internal::TreeElementDefaultCount< T_CountType >::value
+        const T_CountType count = 1
     ) :
         count(count),
         childs(childs)
     {}
 
     const T_CountType count;
+    const Type childs;
+};
+
+template<
+    typename T_Identifier,
+    typename T_Type,
+    typename T_CountType,
+    T_CountType T_count
+>
+struct TreeElement<
+    T_Identifier,
+    T_Type,
+    std::integral_constant< T_CountType, T_count >
+>
+{
+	using IsTreeElementWithoutChilds = void;
+    using Identifier = T_Identifier;
+    using Type = T_Type;
+    using CountType = std::integral_constant< T_CountType, T_count>;
+
+    LLAMA_FN_HOST_ACC_INLINE
+    TreeElement() {}
+
+    LLAMA_FN_HOST_ACC_INLINE
+    TreeElement( const T_CountType count ) {}
+
+    static CountType const count;
+};
+
+template<
+    typename T_Identifier,
+    typename T_CountType,
+    T_CountType T_count,
+    typename... T_Childs
+>
+struct TreeElement<
+    T_Identifier,
+    Tuple< T_Childs... >,
+    std::integral_constant< T_CountType, T_count>
+>
+{
+	using IsTreeElementWithChilds = void;
+    using Identifier = T_Identifier;
+    using Type = Tuple< T_Childs... >;
+    using CountType = std::integral_constant< T_CountType, T_count>;
+
+    LLAMA_FN_HOST_ACC_INLINE
+    TreeElement() {}
+
+    LLAMA_FN_HOST_ACC_INLINE
+    TreeElement(
+        const T_CountType count,
+        const Type childs = Type()
+    ) : childs(childs) {}
+
+    LLAMA_FN_HOST_ACC_INLINE
+    TreeElement(
+        const Type childs,
+        const T_CountType count = T_CountType()
+    ) : childs(childs) {}
+
+    static CountType const count;
     const Type childs;
 };
 
