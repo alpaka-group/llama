@@ -1,6 +1,16 @@
 #include <iostream>
 #include <utility>
 
+#define NBODY_CUDA 0
+#define NBODY_USE_TREE 1
+#define NBODY_USE_SHARED 1
+#define NBODY_USE_SHARED_TREE 1
+
+#define NBODY_PROBLEM_SIZE 16*1024
+#define NBODY_BLOCK_SIZE 256
+#define NBODY_STEPS 5
+
+
 #if BOOST_VERSION < 106700 && (__CUDACC__ || __IBMCPP__)
     #ifdef BOOST_PP_VARIADICS
         #undef BOOST_PP_VARIADICS
@@ -165,8 +175,9 @@ struct UpdateKernel
         Element ts
     ) const
     {
-        constexpr std::size_t threads = blockSize / elems;
 
+#if NBODY_USE_SHARED == 1
+        constexpr std::size_t threads = blockSize / elems;
         using SharedAllocator = BlockSharedMemoryAllocator<
             T_Acc,
             llama::SizeOf< typename decltype(particles)::Mapping::DatumDomain >::value
@@ -175,24 +186,27 @@ struct UpdateKernel
             threads
         >;
 
+
+#if NBODY_USE_SHARED_TREE == 1
+        auto treeOperationList = llama::makeTuple(
+            llama::mapping::tree::functor::LeaveOnlyRT( )
+        );
+        using SharedMapping = llama::mapping::tree::Mapping<
+            typename decltype(particles)::Mapping::UserDomain,
+            typename decltype(particles)::Mapping::DatumDomain,
+            decltype( treeOperationList )
+        >;
+        SharedMapping const sharedMapping(
+            { blockSize },
+            treeOperationList
+        );
+#else
         using SharedMapping = llama::mapping::SoA<
             typename decltype(particles)::Mapping::UserDomain,
             typename decltype(particles)::Mapping::DatumDomain
         >;
         SharedMapping const sharedMapping( { blockSize } );
-
-        //~ auto treeOperationList = llama::makeTuple(
-            //~ llama::mapping::tree::functor::LeaveOnlyRT( )
-        //~ );
-        //~ using SharedMapping = llama::mapping::tree::Mapping<
-            //~ typename decltype(particles)::Mapping::UserDomain,
-            //~ typename decltype(particles)::Mapping::DatumDomain,
-            //~ decltype( treeOperationList )
-        //~ >;
-        //~ SharedMapping const sharedMapping(
-            //~ { blockSize },
-            //~ treeOperationList
-        //~ );
+#endif // NBODY_USE_SHARED_TREE
 
         using SharedFactory = llama::Factory<
             SharedMapping,
@@ -203,6 +217,7 @@ struct UpdateKernel
             SharedFactory,
             SharedMapping
         >( sharedMapping, acc );
+#endif // NBODY_USE_SHARED
 
         auto threadIndex  = alpaka::idx::getIdx<
             alpaka::Grid,
@@ -224,7 +239,7 @@ struct UpdateKernel
                 start2 + blockSize,
                 problemSize
             ) - start2;
-
+#if NBODY_USE_SHARED == 1
             LLAMA_INDEPENDENT_DATA
             for (
                 auto pos2 = decltype(end2)(0);
@@ -232,15 +247,18 @@ struct UpdateKernel
                 pos2 += threads
             )
                 temp(pos2 + threadIndex) = particles( start2 + pos2 + threadIndex );
-
+#endif // NBODY_USE_SHARED
             LLAMA_INDEPENDENT_DATA
             for ( auto pos2 = decltype(end2)(0); pos2 < end2; ++pos2 )
                 LLAMA_INDEPENDENT_DATA
                 for ( auto pos = start; pos < end; ++pos )
                     pPInteraction(
                         particles( pos ),
+#if NBODY_USE_SHARED == 1
                         temp( pos2 ),
-                        //~ particles( start2 + pos2 ),
+#else
+                        particles( start2 + pos2 ),
+#endif // NBODY_USE_SHARED
                         ts
                     );
         };
@@ -346,25 +364,32 @@ int main(int argc,char * * argv)
     using Size = std::size_t;
     using Extents = Size;
     using Host = alpaka::acc::AccCpuSerial<Dim, Size>;
+
+#if NBODY_CUDA == 1
+    using Acc = alpaka::acc::AccGpuCudaRt<Dim, Size>;
+#else
     //~ using Acc = alpaka::acc::AccCpuSerial<Dim, Size>;
     using Acc = alpaka::acc::AccCpuOmp2Blocks<Dim, Size>;
     //~ using Acc = alpaka::acc::AccCpuOmp2Threads<Dim, Size>;
     //~ using Acc = alpaka::acc::AccCpuOmp4<Dim, Size>;
-    //~ using Acc = alpaka::acc::AccGpuCudaRt<Dim, Size>;
+#endif // NBODY_CUDA
     using DevHost = alpaka::dev::Dev<Host>;
     using DevAcc = alpaka::dev::Dev<Acc>;
     using PltfHost = alpaka::pltf::Pltf<DevHost>;
     using PltfAcc = alpaka::pltf::Pltf<DevAcc>;
     using WorkDiv = alpaka::workdiv::WorkDivMembers<Dim, Size>;
+#if NBODY_CUDA == 1
+    using Queue = alpaka::queue::QueueCudaRtSync;
+#else
     using Queue = alpaka::queue::QueueCpuSync;
-    //~ using Queue = alpaka::queue::QueueCudaRtSync;
+#endif // NBODY_CUDA
     DevAcc const devAcc( alpaka::pltf::getDevByIdx< PltfAcc >( 0u ) );
     DevHost const devHost( alpaka::pltf::getDevByIdx< PltfHost >( 0u ) );
     Queue queue( devAcc ) ;
 
     // NBODY
-    constexpr std::size_t problemSize = 16*1024;
-    constexpr std::size_t blockSize = 256;
+    constexpr std::size_t problemSize = NBODY_PROBLEM_SIZE;
+    constexpr std::size_t blockSize = NBODY_BLOCK_SIZE;
     constexpr std::size_t hardwareThreads = 2; //relevant for OpenMP2Threads
     using Distribution = ThreadsElemsDistribution<
         Acc,
@@ -374,30 +399,32 @@ int main(int argc,char * * argv)
     constexpr std::size_t elemCount = Distribution::elemCount;
     constexpr std::size_t threadCount = Distribution::threadCount;
     constexpr Element ts = 0.0001;
-    constexpr std::size_t steps = 5;
+    constexpr std::size_t steps = NBODY_STEPS;
 
     // LLAMA
     using UserDomain = llama::UserDomain< 1 >;
     const UserDomain userDomainSize{ problemSize };
 
+#if NBODY_USE_TREE == 1
+    auto treeOperationList = llama::makeTuple(
+        llama::mapping::tree::functor::LeaveOnlyRT( )
+    );
+    using Mapping = llama::mapping::tree::Mapping<
+        UserDomain,
+        Particle,
+        decltype( treeOperationList )
+    >;
+    const Mapping mapping(
+        userDomainSize,
+        treeOperationList
+    );
+#else
     using Mapping = llama::mapping::SoA<
         UserDomain,
         Particle
     >;
     Mapping const mapping( userDomainSize );
-
-    //~ auto treeOperationList = llama::makeTuple(
-        //~ llama::mapping::tree::functor::LeaveOnlyRT( )
-    //~ );
-    //~ using Mapping = llama::mapping::tree::Mapping<
-        //~ UserDomain,
-        //~ Particle,
-        //~ decltype( treeOperationList )
-    //~ >;
-    //~ const Mapping mapping(
-        //~ userDomainSize,
-        //~ treeOperationList
-    //~ );
+#endif // NBODY_USE_TREE
 
     using DevFactory = llama::Factory<
         Mapping,
