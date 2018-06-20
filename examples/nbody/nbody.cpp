@@ -27,9 +27,9 @@
 #include <llama/llama.hpp>
 #include <random>
 
-#include "AlpakaAllocator.hpp"
-#include "Chrono.hpp"
-#include "Dummy.hpp"
+#include "../common/AlpakaAllocator.hpp"
+#include "../common/Chrono.hpp"
+#include "../common/Dummy.hpp"
 
 using Element = float;
 constexpr Element EPS2 = 0.01;
