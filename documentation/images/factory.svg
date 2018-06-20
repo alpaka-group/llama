@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="30cm" height="17cm" viewBox="352 99 600 332" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g id="Hintergrund">
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="359.386" y="101.646" width="118.95" height="38" rx="0" ry="0"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="418.861" y="124.546">
+        <tspan x="418.861" y="124.546">Datum Domain</tspan>
+      </text>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="502.576" y="101" width="104.85" height="38" rx="0" ry="0"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="555.001" y="123.9">
+        <tspan x="555.001" y="123.9">User Domain</tspan>
+      </text>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="628.19" y="100.818" width="77" height="38" rx="0" ry="0"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="666.69" y="123.718">
+        <tspan x="666.69" y="123.718">Mapping</tspan>
+      </text>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 4; stroke: #000000" x="519.6" y="200" width="70.8" height="40" rx="0" ry="0"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="555" y="223.9">
+        <tspan x="555" y="223.9">Factory</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" points="418.861,139.646 418.861,220 508.6,220 "/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="508.6,225 518.6,220 508.6,215 "/>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" points="555.001,139 555.001,169.5 555,169.5 555,189 "/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="550,189 555,199 560,189 "/>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" points="666.69,138.818 666.69,220 601.4,220 "/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="601.4,215 591.4,220 601.4,225 "/>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 4; stroke: #000000" x="511.854" y="295.7" width="86.6" height="40" rx="0" ry="0"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="555.154" y="319.6">
+        <tspan x="555.154" y="319.6">Container</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" points="555,240 555,267.85 555.154,267.85 555.154,284.7 "/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="550.154,284.7 555.154,294.7 560.154,284.7 "/>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #ffffff" x="353.072" y="375.25" width="113.85" height="38" rx="0" ry="0"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="409.997" y="398.15">
+        <tspan x="409.997" y="398.15">holds memory</tspan>
+      </text>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #ffffff" x="487.594" y="376.438" width="134.8" height="54" rx="0" ry="0"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="554.994" y="399.338">
+        <tspan x="554.994" y="399.338">[] overload based</tspan>
+        <tspan x="554.994" y="415.338">on mapping rules</tspan>
+      </text>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #ffffff" x="639.958" y="375.624" width="144.7" height="54" rx="0" ry="0"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="712.308" y="398.524">
+        <tspan x="712.308" y="398.524">access with</tspan>
+        <tspan x="712.308" y="414.524">iterators &amp; handles</tspan>
+      </text>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke-dasharray: 10; stroke: #000000" x="711.7" y="247.336" width="239.05" height="54" rx="0" ry="0"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="831.225" y="270.236">
+        <tspan x="831.225" y="270.236">Allocator / Pointer</tspan>
+        <tspan x="831.225" y="286.236">(Alpaka, third party libraries, etc.)</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke-dasharray: 10; stroke: #000000" points="711.7,274.336 572.7,274.336 572.7,252.236 "/>
+      <polygon style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" points="577.7,252.236 572.7,242.236 567.7,252.236 "/>
+    </g>
+    <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke-dasharray: 2; stroke: #000000" x1="511.854" y1="315.7" x2="409.996" y2="375.25"/>
+    <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke-dasharray: 2; stroke: #000000" x1="555.154" y1="335.7" x2="554.994" y2="376.438"/>
+    <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke-dasharray: 2; stroke: #000000" x1="598.454" y1="315.7" x2="712.308" y2="375.624"/>
+  </g>
+</svg>
