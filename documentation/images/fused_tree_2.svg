@@ -7,9 +7,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="47.925266cm"
+   width="27.925266cm"
    height="6.970798cm"
-   viewBox="42 166 946.52401 123.73166"
+   viewBox="42 166 551.52401 123.73166"
    version="1.1"
    id="svg185"
    sodipodi:docname="fused_tree_2.svg"
@@ -41,25 +41,25 @@
      inkscape:window-height="1028"
      id="namedview187"
      showgrid="false"
-     fit-margin-left="10"
-     fit-margin-right="10"
+     fit-margin-left="0"
+     fit-margin-right="0"
      fit-margin-top="0"
      fit-margin-bottom="0"
      inkscape:zoom="0.44223214"
-     inkscape:cx="904.40746"
-     inkscape:cy="129.05367"
+     inkscape:cx="-80.692477"
+     inkscape:cy="127.0841"
      inkscape:window-x="0"
      inkscape:window-y="28"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg185" />
   <g
      id="Hintergrund"
-     transform="translate(196.1,-8.7640034)">
+     transform="translate(-1.4,-7.7347995)">
     <g
        id="g20">
       <polygon
          style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="99.5314,231.4 44.4,231.4 44.4,191.4 99.5314,191.4 "
+         points="44.4,191.4 99.5314,191.4 99.5314,231.4 44.4,231.4 "
          id="polygon2" />
       <line
          style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
@@ -88,7 +88,7 @@
       </text>
       <polygon
          style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="122.138,185.7 122.138,207.7 81.0382,207.7 81.0382,173.7 110.138,173.7 "
+         points="122.138,207.7 81.0382,207.7 81.0382,173.7 110.138,173.7 122.138,185.7 "
          id="polygon12" />
       <polyline
          style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
@@ -110,7 +110,7 @@
        id="g32">
       <polygon
          style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="363.835,227.892 292.96,227.892 292.96,187.892 363.835,187.892 "
+         points="292.96,187.892 363.835,187.892 363.835,227.892 292.96,227.892 "
          id="polygon22" />
       <line
          style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
@@ -142,7 +142,7 @@
        id="g42">
       <polygon
          style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="377.41,179.764 377.41,201.764 351.71,201.764 351.71,167.764 365.41,167.764 "
+         points="377.41,201.764 351.71,201.764 351.71,167.764 365.41,167.764 377.41,179.764 "
          id="polygon34" />
       <polyline
          style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
@@ -164,7 +164,7 @@
        id="g54">
       <polygon
          style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="234.447,232.702 167.822,232.702 167.822,192.702 234.447,192.702 "
+         points="167.822,192.702 234.447,192.702 234.447,232.702 167.822,232.702 "
          id="polygon44" />
       <line
          style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
@@ -196,7 +196,7 @@
        id="g64">
       <polygon
          style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="256.424,184.174 256.424,206.174 223.024,206.174 223.024,172.174 244.424,172.174 "
+         points="256.424,206.174 223.024,206.174 223.024,172.174 244.424,172.174 256.424,184.174 "
          id="polygon56" />
       <polyline
          style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
@@ -248,7 +248,7 @@
        id="g86">
       <polygon
          style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="371.294,244.148 371.294,266.148 345.594,266.148 345.594,232.148 359.294,232.148 "
+         points="371.294,266.148 345.594,266.148 345.594,232.148 359.294,232.148 371.294,244.148 "
          id="polygon78" />
       <polyline
          style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
@@ -367,7 +367,7 @@
       </text>
       <polygon
          style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="451.004,241.3 451.004,263.3 425.304,263.3 425.304,229.3 439.004,229.3 "
+         points="451.004,263.3 425.304,263.3 425.304,229.3 439.004,229.3 451.004,241.3 "
          id="polygon128" />
       <polyline
          style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
@@ -416,7 +416,7 @@
       </text>
       <polygon
          style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="525.968,225.536 525.968,247.536 500.268,247.536 500.268,213.536 513.968,213.536 "
+         points="525.968,247.536 500.268,247.536 500.268,213.536 513.968,213.536 525.968,225.536 "
          id="polygon148" />
       <polyline
          style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
@@ -465,7 +465,7 @@
            id="tspan164"> float</tspan>      </text>
       <polygon
          style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="593.924,183.162 593.924,205.162 568.224,205.162 568.224,171.162 581.924,171.162 "
+         points="593.924,205.162 568.224,205.162 568.224,171.162 581.924,171.162 593.924,183.162 "
          id="polygon168" />
       <polyline
          style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"

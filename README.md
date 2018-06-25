@@ -6,7 +6,7 @@ Motivation
 
 We face the problem that different architectures these days perform best with
 different memory access patterns, but as projects may last for decades while
-new architectures rises and fall, it is dangerous to settle for one kind of
+new architectures rise and fall, it is dangerous to settle for one kind of
 access. It is well-known that accessing complex data in a struct of array (SoA)
 manner is most of the times faster than as array of structs (AoS):
 ```C++
@@ -20,20 +20,20 @@ struct               |   struct
 
 Even this very easy decision between SoA and AoS has quite different access
 patterns, just compare `image[x][y].r` with `image.r[x][y]`. However for this
-problem research and ready to use libraries already exist like
-[SoAx](https://www.sciencedirect.com/science/article/pii/S0010465517303983)
+problem research and ready to use libraries already exist (e.g.
+[SoAx](https://www.sciencedirect.com/science/article/pii/S0010465517303983) )
 
-However there are more useful mappings than SoA and AoS such as blocking of
+But there are more useful mappings than SoA and AoS such as blocking of
 memory (like partly using SoA inside an AoS approach), strided access of data
 (e.g. odd indexes after each other), padding and more.
 
-Often software is using a random mix of different heterogenous memory regions of
-CPU, GPU, caches or network cards. A data layout optimized for a specific CPU
-may be inefficient on a GPU or only slow to transfer over network. So a mixed
-layout, not optimal for each part but the fastest trade-off, may make sense.
-Again: This layout is highly dependent on the architecture, the scaling of the
-problem and of course the chosen algorithm – and most probably not trivially
-guessable.
+Moreover often software is using a random mix of different heterogenous memory
+regions of CPU, GPU, caches or network cards. A data layout optimized for a
+specific CPU may be inefficient on a GPU or only slowly transferable over
+network. So a mixed layout, not optimal for each part but the fastest trade-off,
+may make sense. Again: This layout is highly dependent on the architecture, the
+scaling of the problem and of course the chosen algorithm – and most probably
+not trivially guessable.
 
 Furthermore other third party libraries may expect specific memory layouts as
 interface, which will most probably differ from library to library.
@@ -43,21 +43,22 @@ Challenges
 
 This results in these challenges LLAMA tries to address:
 
-* splitting of algorithmic view of data and the actual mapping in the background
+* Splitting of algorithmic view of data and the actual mapping in the background
   so that different layouts may be chosen **without touching the algorithm at
   all**.
-* as it is well-known from C and C++ and because of this often the way
+* As it is well-known from C and C++ and because of this often the way
   programmers think of data, LLAMA shall *look* like AoS although the mapping
   will be different quite surely.
-* to be compatible with as most architectures, softwares, compilers and third
+* To be compatible with as most architectures, softwares, compilers and third
   party libraries as possible, LLAMA is only using valid C++11 syntax. The
   whole description of the layout and the mapping is down with C++11 template
   programming (in contrast e.g. to fancy macro magic which is slow and hard to
   maintain).
-* LLAMA shall be extensible in the sense of working togehter with new software
-  but also memory needed for new architectures.
-* as it is the most easy way to write architecture independet but performant
-  code, LLAMA should work well with auto vectorization approaches.
+* LLAMA shall be extensible in the sense of working together with new software
+  but also memory layouts needed for new architectures.
+* As it is the most easy way to write architecture independet but performant
+  code, LLAMA should work well with auto vectorization approaches of modern
+  compilers.
 
 Concept
 -------
@@ -77,11 +78,12 @@ address in DD to byte addresses of potentially different memory regions
 `UD` ⨯ `DD` → `memory region` ⨯ `byte address`. The mapping also defines how
 much memory is needed, which can then be used to allocate it. The **allocator**
 object is an important connection to other libraries such as
-[Alpaka](https://github.com/ComputationalRadiationPhysics/alpaka) as LLAMA
-itself has no knowledge about memory regions.
+[Alpaka](https://github.com/ComputationalRadiationPhysics/alpaka) or
+[DASH](https://github.com/dash-project/dash/) as LLAMA itself has no knowledge
+about memory regions.
 
 The **factory** takes the above-mentioned objects and creates a **view**, which
-is a user accessable container of memory with the given attributes. It can be
+is a user accessable *container* of memory with the given attributes. It can be
 used quite similar to C++ containers or C arrays of structs.
 
 ![The factory creates a view out of the user domain, datum domain, mapping
@@ -119,10 +121,10 @@ struct Pixel {
 
 However it is not possible to iterate over struct members in C++11, so we need
 to define the DD in the above-shown way. The naming of the members needs to be
-predefined to detect the semantically same member in differend DDs. Furthermore
+predefined to detect the semantically same members in differend DDs. Furthermore
 these namings can be encapsulated inside namespaces.
 
-The DD tree would look like this:
+The defined DD tree would look like this:
 
 ![Datum domain as tree](./documentation/images/layout_tree.svg)
 
@@ -133,7 +135,7 @@ const UserDomain userDomain{ 64, 64 };
 ```
 
 For an address in the user domain the view can return a **virtal datum** which
-feels like a element in an n-dimensiona array but may still be distributed in
+*feels* like an element in an n-dimensiona array but may still be distributed in
 memory:
 ```C++
 auto datum = view( { 23, 42 } );
@@ -149,21 +151,123 @@ datum.access< color, g >() = 1.0f; //access with explicit template namings
 datum.access< llama::DatumCoord< 0, 1 > >() = 1.0f; //same with tree coordinate
 ```
 
-Furthermore virtual data can directly be changed without a adress in the DD
-like this
+Furthermore virtual data can directly be changed without an address in the
+datum domain accessing the whole domain like this
 ```C++
 datum *= 5.0f;
 datum1 += datum2;
 ```
 where `datum1` and `datum2` don't need to have the same datum domain at all!
 For every element in `datum1` also found in `datum2` (at compile time) the
-`+=` operation is executed. Of the DD are without overlap, nothing happens at
+`+=` operation is executed. If the DDs are without overlap, nothing happens at
 all.
 
 Mapping description
 -------------------
-TODO
+A mapping is a class providing basically two methods
+
+* getting the total needed amount of memory regions and memory per region (in
+  bytes) for a given DD and UD
+* getting the memory region and byte position in it for a given DD and UD
+
+Easy mappings like SoA or AoS are easily and fast written for this interface.
+However padding, blocking, striding and the arbitrary combination of such
+mappings is not possible. So we defined a special kind of mapping, the **tree
+mapping**.
 
 Tree mappings
 -------------
-TODO
+As tree mapping is described by a **compile time tree** with **run time
+annotations** on which **functors** are operated. These functors transform the
+tree and offer a function for transforming coords from the old tree coord to a
+coord of the new tree.
+
+First the user and datum domain needs to be merged in such a tree. For the DD
+this is straight forward as it is already a compile time tree. Only the run time
+annotations need to be added:
+
+![DD as tree](./documentation/images/layout_tree_2.svg)
+
+The run time part of the tree indicates how often the node needs to be repeated.
+For the DD this is 1. However for the UD the tree has only one child per node
+but the run time a stated like this:
+
+![UD as tree](./documentation/images/ud_tree_2.svg)
+
+The fused tree `UD` ⨯ `DD` looks like this:
+
+![UD as tree](./documentation/images/fused_tree_2.svg)
+
+A tree coordinate now has only two elements per node level (except for the
+last):
+
+* the **run time** part which of the repetitions of the node shall be used
+* the **compile time** part which of the child nodes shall be used
+
+Different trees may now describe different mappings for the same user and datum
+domain:
+
+Array of Struct (no changes) | Padding | Struct of Array
+---------------------------- | ------- | ---------------
+![AoS](./documentation/images/start_tree_2.svg) | ![Padding](./documentation/images/padding_tree_2.svg) | ![SoA](./documentation/images/soa_tree_2.svg)
+
+The last tree is then flattend to the byte domain as seen here
+
+![Last tree](./documentation/images/example_tree.svg)
+<span style="font-size:200px">⟹</span>
+![Mapping tree](./documentation/images/example_mapping.svg)
+
+More than one memory region is not supported by this mapping atm.
+
+Third party compiler and library compatibility
+----------------------------------------------
+
+Although llama tries to abstract different compilers and libraries with C++11
+metaprogramming some languages like CUDA use extensions which cannot directly
+be mapped to C++, so for these macro hooks need to be provided. This is a well
+known approach, e.g. also used by boost. When using CUDA, the include of llama
+may look liks this:
+
+```C++
+#define LLAMA_FN_HOST_ACC_INLINE ALPAKA_FN_ACC \
+	__host__ \
+	__device__ \
+	__forceinline__
+#include <llama/llama.hpp>
+```
+
+The same approach can be used if alpaka is used, which itself abstracts the
+CUDA extensions with macros.
+
+```C++
+#include <alpaka/alpaka.hpp>
+#ifdef __CUDACC__
+	#define LLAMA_FN_HOST_ACC_INLINE ALPAKA_FN_ACC __forceinline__
+#else
+	#define LLAMA_FN_HOST_ACC_INLINE ALPAKA_FN_ACC inline
+#endif
+#include <llama/llama.hpp>
+```
+
+Modern compilers are able to see "through" the layers of llama and figure out
+when consecutive access in loops happens on consecutive data. However for
+auto vectorization the data also needs to be independent which cannot expressed
+directly with C++11. Many languages implement a `restrict` keyword for function
+parameters, but this can also be used for pointers and thus is useless for
+modern C++. Another option is to mark loops with `#pragma`s, like
+`#pragma ivdep` for the intel compiler, that tell the compiler that every data
+access inside the loop is independent. These `#pragma`s are abstracted by llama
+in a macro way so that this code
+```C++
+LLAMA_INDEPENDENT_DATA
+for ( auto pos = start; pos < end; ++pos )
+	a( pos ) += b( pos );
+```
+can be auto vectorized for `gcc`, `clang`, `intel compiler`, `ibm xl` and so on. For not
+yet supported compilers the definition does nothing. `gcc` and `clang` produce
+vectorized code without such help anyway.
+
+The interaction with memory of (other) third party libraries mostly happens with
+allocators. Although the name suggests something else, the allocator can also be
+used to "pass through" already existing memory. Of course the choice of the
+right mapping fitting to the library is task of the user.
