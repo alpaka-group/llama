@@ -519,14 +519,12 @@ int main(int argc,char * * argv)
             elemCount,
             blockSize
         > updateKernel;
-        alpaka::queue::enqueue(
+        alpaka::kernel::exec< Acc > (
             queue,
-            alpaka::exec::create< Acc > (
-                workdiv,
-                updateKernel,
-                mirrowView,
-                ts
-            )
+            workdiv,
+            updateKernel,
+            mirrowView,
+            ts
         );
 
         chrono.printAndReset("Update kernel");
@@ -535,14 +533,12 @@ int main(int argc,char * * argv)
             problemSize,
             elemCount
         > moveKernel;
-        alpaka::queue::enqueue(
+        alpaka::kernel::exec<Acc>(
             queue,
-            alpaka::exec::create< Acc > (
-                workdiv,
-                moveKernel,
-                mirrowView,
-                ts
-            )
+            workdiv,
+            moveKernel,
+            mirrowView,
+            ts
         );
         chrono.printAndReset("Move kernel");
         dummy( static_cast<void*>( mirrowView.blob[0] ) );

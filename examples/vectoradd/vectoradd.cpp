@@ -302,21 +302,19 @@ int main(int argc,char * * argv)
             problemSize,
             elemCount
         > addKernel;
-        alpaka::queue::enqueue(
+        alpaka::kernel::exec<Acc>(
             queue,
-            alpaka::exec::create< Acc > (
-                workdiv,
-                addKernel,
+            workdiv,
+            addKernel,
 #if VECTORADD_BYPASS_LLAMA == 1
-                reinterpret_cast<Element*>(mirrorA.blob[0]),
-                reinterpret_cast<Element*>(mirrorB.blob[0]),
-                problemSize,
-                problemSize
+            reinterpret_cast<Element*>(mirrorA.blob[0]),
+            reinterpret_cast<Element*>(mirrorB.blob[0]),
+            problemSize,
+            problemSize
 #else
-                mirrorA,
-                mirrorB
+            mirrorA,
+            mirrorB
 #endif // VECTORADD_BYPASS_LLAMA
-            )
         );
         chrono.printAndReset("Add kernel");
         dummy( static_cast<void*>( mirrorA.blob[0] ) );
