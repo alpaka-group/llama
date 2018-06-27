@@ -130,7 +130,7 @@ struct TreeElement<
     LLAMA_FN_HOST_ACC_INLINE
     TreeElement( const T_CountType count ) {}
 
-    static CountType const count;
+    LLAMA_IF_RELEASE( static ) CountType const count LLAMA_IF_DEBUG( = CountType() );
 };
 
 template<
@@ -165,7 +165,7 @@ struct TreeElement<
         const T_CountType count = T_CountType()
     ) : childs(childs) {}
 
-    static CountType const count;
+    LLAMA_IF_RELEASE( static ) CountType const count LLAMA_IF_DEBUG( = CountType() );
     const Type childs;
 };
 

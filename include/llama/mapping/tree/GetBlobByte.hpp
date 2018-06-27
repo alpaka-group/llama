@@ -87,7 +87,7 @@ struct GetTreeBlobByteImpl
 {
     using SubTree = GetTupleType<
         typename T_Tree::Type,
-        T_TreeCoord::FirstElement::compiletime
+        decltype(T_TreeCoord::FirstElement::compiletime)::value
     >;
     LLAMA_FN_HOST_ACC_INLINE
     auto
@@ -103,14 +103,17 @@ struct GetTreeBlobByteImpl
                 // cuda doesn't like references to static members of they are
                 // not defined somewhere although only type informations
                 // are used which is the case for runtime=std::integral_constant
-                decltype(treeCoord.first.runtime)(treeCoord.first.runtime)
+                LLAMA_DEREFERENCE( treeCoord.first.runtime )
             ) +
             SummarizeTreeSmallerPos<
                 T_Tree,
-                T_TreeCoord::FirstElement::compiletime
+                decltype(T_TreeCoord::FirstElement::compiletime)::value
             >()(
                 tree.childs,
-                tree.count
+                // cuda doesn't like references to static members of they are
+                // not defined somewhere although only type informations
+                // are used which is the case for runtime=std::integral_constant
+                LLAMA_DEREFERENCE( tree.count )
             ) +
             GetTreeBlobByteImpl<
                 SubTree,
@@ -121,7 +124,7 @@ struct GetTreeBlobByteImpl
                 //~ getTupleElementRef< T_TreeCoord::FirstElement::compiletime >(
                 llama::internal::GetTupleElementImpl<
                     typename T_Tree::Type,
-                    T_TreeCoord::FirstElement::compiletime
+                    decltype(T_TreeCoord::FirstElement::compiletime)::value
                 >()(
                     tree.childs
                 ),

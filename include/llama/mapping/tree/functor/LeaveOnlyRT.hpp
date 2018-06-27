@@ -148,7 +148,7 @@ struct LeaveOnlyRT
     struct BasicCoordToResultCoordImpl
     {
         using FirstResultCoord = TreeCoordElementConst<
-            T_BasicCoord::FirstElement::compiletime,
+            decltype(T_BasicCoord::FirstElement::compiletime)::value,
             0
         >;
         using ResultCoord = TupleCatType<
@@ -157,7 +157,7 @@ struct LeaveOnlyRT
                 BasicCoordToResultCoordImpl<
                     GetTupleType<
                         typename T_Tree::Type,
-                        T_BasicCoord::FirstElement::compiletime
+                        decltype(T_BasicCoord::FirstElement::compiletime)::value
                     >,
                     typename T_BasicCoord::RestTuple
                 >()(
@@ -169,7 +169,7 @@ struct LeaveOnlyRT
                         //~ typename T_Tree::Type
                     llama::internal::GetTupleElementImpl<
                         typename T_Tree::Type,
-                        T_BasicCoord::FirstElement::compiletime
+                        decltype(T_BasicCoord::FirstElement::compiletime)::value
                     >()(
                         typename T_Tree::Type()
                     ),
@@ -193,7 +193,7 @@ struct LeaveOnlyRT
                 //~ getTupleElementRef< T_BasicCoord::FirstElement::compiletime >(
                 llama::internal::GetTupleElementImpl<
                     typename T_Tree::Type,
-                    T_BasicCoord::FirstElement::compiletime
+                    decltype(T_BasicCoord::FirstElement::compiletime)::value
                 >()(
                     tree.childs
                 );
@@ -202,7 +202,7 @@ struct LeaveOnlyRT
                 BasicCoordToResultCoordImpl<
                     GetTupleType<
                         typename T_Tree::Type,
-                        T_BasicCoord::FirstElement::compiletime
+                        decltype(T_BasicCoord::FirstElement::compiletime)::value
                     >,
                     typename T_BasicCoord::RestTuple
                 >()(
@@ -224,7 +224,9 @@ struct LeaveOnlyRT
     >
     {
         using BasicCoord = Tuple< T_LastCoord >;
-        using ResultCoordElement = TreeCoordElement< T_LastCoord::compiletime >;
+        using ResultCoordElement = TreeCoordElement<
+            decltype(T_LastCoord::compiletime)::value
+        >;
         using ResultCoord = Tuple< ResultCoordElement  >;
         LLAMA_FN_HOST_ACC_INLINE
         auto

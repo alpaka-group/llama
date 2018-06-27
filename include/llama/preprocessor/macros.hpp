@@ -69,3 +69,13 @@
 #else
 #   define LLAMA_FORCE_INLINE_RECURSIVE
 #endif
+
+#if defined(DEBUG) || !defined(NDEBUG) || defined(_DEBUG)
+#   define LLAMA_IF_DEBUG( x ) x
+#   define LLAMA_IF_RELEASE( x )
+#else
+#   define LLAMA_IF_DEBUG( x )
+#   define LLAMA_IF_RELEASE( x ) x
+#endif
+
+#define LLAMA_DEREFERENCE( x ) decltype( x )( x )
