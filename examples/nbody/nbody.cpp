@@ -82,7 +82,7 @@ pPInteraction(
     Element distSqr = d[0] * d[0] + d[1] * d[1] + d[2] * d[2] + EPS2;
     Element distSixth = distSqr * distSqr * distSqr;
     Element invDistCube = 1.0f / sqrtf(distSixth);
-    Element s = p1( dd::Mass() ) * invDistCube;
+    Element s = p2( dd::Mass() ) * invDistCube;
     Element const v_d[3] = {
         d[0] * s * ts,
         d[1] * s * ts,
