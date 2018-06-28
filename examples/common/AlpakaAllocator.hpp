@@ -48,12 +48,16 @@ struct AlpakaAccessor
 } // namespace internal
 
 template<
-    typename DevAcc,
-    typename Dim,
-    typename Size
+    typename T_DevAcc,
+    typename T_Dim,
+    typename T_Size
 >
 struct Alpaka
 {
+    using DevAcc = T_DevAcc;
+    using Dim = T_Dim;
+    using Size = T_Size;
+
     using BufferType = alpaka::mem::buf::Buf<
         DevAcc,
         unsigned char,

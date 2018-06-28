@@ -136,6 +136,17 @@ struct Array
         result.element[ count ] = new_element;
         return result;
     }
+
+    template< typename T_Other >
+    bool operator==(const T_Other& other) const
+    {
+        if ( count != other.count )
+            return false;
+        for (std::size_t i = 0; i < count; ++i)
+            if ( element[i] != other.element[i] )
+                return false;
+        return true;
+    }
 };
 
 } // namespace llama

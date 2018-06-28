@@ -23,6 +23,7 @@
 #include <random>
 
 #include "../common/AlpakaAllocator.hpp"
+#include "../common/AlpakaMemCopy.hpp"
 #include "../common/Chrono.hpp"
 #include "../common/Dummy.hpp"
 
@@ -276,6 +277,11 @@ int main(int argc,char * * argv)
     }
     chrono.printAndReset("Init");
 
+    alpakaMemCopy( devA, hostA, userDomainSize, queue );
+    alpakaMemCopy( devB, hostB, userDomainSize, queue );
+
+    chrono.printAndReset("Copy H->D");
+
     const alpaka::vec::Vec< Dim, Size > elems (
         static_cast< Size >( elemCount )
     );
@@ -321,6 +327,10 @@ int main(int argc,char * * argv)
         dummy( static_cast<void*>( mirrorB.blob[0] ) );
     }
 
+    alpakaMemCopy( hostA, devA, userDomainSize, queue );
+    alpakaMemCopy( hostB, devB, userDomainSize, queue );
+
+    chrono.printAndReset("Copy D->H");
 
     return 0;
 }
