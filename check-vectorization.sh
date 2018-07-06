@@ -18,15 +18,29 @@ function check_fma
 	number_sd=$(grep $2 $1 | grep sd | wc -l)
 	number_full=$(grep $2 $1 | grep p | wc -l)
 	set_color $number_full
-	echo -ne "$3 FMA: ps/pd \e[1m$number_full\e[21m (ss $number_ss, sd $number_sd)"
+	echo -ne "$3: ps/pd \e[1m$number_full\e[21m (ss $number_ss, sd $number_sd)"
 	reset_color
 }
 
-tempfile=$(mktemp "${TMPDIR:-/tmp/}$(basename $0).XXXXXXXXXXXX")
-objdump -DSC $1 | grep vfmadd > $tempfile
+grep_output=$(mktemp "${TMPDIR:-/tmp/}$(basename $0).XXXXXXXXXXXX")
+objdump_output=$(mktemp "${TMPDIR:-/tmp/}$(basename $0).XXXXXXXXXXXX")
 
-check_fma $tempfile "xmm" "SSE1…4"
-check_fma $tempfile "ymm" "AVX1/2"
-check_fma $tempfile "zmm" "AVX512"
+objdump -DSC $1 > $objdump_output
 
-rm $tempfile
+cat $objdump_output | grep vfmadd > $grep_output
+check_fma $grep_output "xmm" "SSE1…4 FMA"
+check_fma $grep_output "ymm" "AVX1/2 FMA"
+check_fma $grep_output "zmm" "AVX512 FMA"
+
+cat $objdump_output | grep vadd > $grep_output
+check_fma $grep_output "xmm" "SSE1…4 ADD"
+check_fma $grep_output "ymm" "AVX1/2 ADD"
+check_fma $grep_output "zmm" "AVX512 ADD"
+
+cat $objdump_output | grep vmul > $grep_output
+check_fma $grep_output "xmm" "SSE1…4 MUL"
+check_fma $grep_output "ymm" "AVX1/2 MUL"
+check_fma $grep_output "zmm" "AVX512 MUL"
+
+rm $grep_output
+rm $objdump_output
