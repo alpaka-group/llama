@@ -42,8 +42,8 @@ struct TreeCoordElement
 {
     using CompileType = std::integral_constant< std::size_t, T_compiletime >;
 
-    LLAMA_IF_RELEASE( static ) CompileType const compiletime
-    LLAMA_IF_DEBUG( = CompileType() );
+    LLAMA_IF_RELEASE( static constexpr ) CompileType
+    LLAMA_IF_DEBUG( const ) compiletime = CompileType();
 
     T_RuntimeType const runtime;
 
@@ -67,10 +67,11 @@ struct TreeCoordElement<
     using RuntimeType = std::integral_constant< T_RuntimeType, T_runtime >;
     using CompileType = std::integral_constant< std::size_t, T_compiletime >;
 
-    LLAMA_IF_RELEASE( static ) CompileType const compiletime
-    LLAMA_IF_DEBUG( = CompileType() );
-    LLAMA_IF_RELEASE( static ) RuntimeType const runtime
-    LLAMA_IF_DEBUG( = RuntimeType() );
+    LLAMA_IF_RELEASE( static constexpr ) CompileType
+    LLAMA_IF_DEBUG( const ) compiletime = CompileType();
+
+    LLAMA_IF_RELEASE( static constexpr ) RuntimeType
+    LLAMA_IF_DEBUG( const ) runtime = RuntimeType();
 
     TreeCoordElement() = default;
 
