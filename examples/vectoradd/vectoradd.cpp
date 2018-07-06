@@ -6,7 +6,7 @@
 #define VECTORADD_USE_TREE 2
 #define VECTORADD_BYPASS_LLAMA 0
 // 0 SoA, 1 AoS
-#define VECTORADD_BYPASS_SOA 1
+#define VECTORADD_BYPASS_USE_SOA 1
 
 #define VECTORADD_PROBLEM_SIZE 64*1024*1024
 #define VECTORADD_BLOCK_SIZE 256
@@ -79,12 +79,12 @@ struct AddKernel
         for ( auto pos = start; pos < end; ++pos )
 #if VECTORADD_BYPASS_LLAMA == 1
             for ( auto dd = 0; dd < 3; ++dd )
-#if VECTORADD_BYPASS_SOA == 1
+#if VECTORADD_BYPASS_USE_SOA == 1
                 a[ pos + dd * aSizeAsRuntimeParameter ] +=
                     b[ pos + dd * bSizeAsRuntimeParameter ];
 #else
                 a[ pos * 3 + dd ] += b[ pos * 3 + dd ];
-#endif // VECTORADD_BYPASS_SOA
+#endif // VECTORADD_BYPASS_USE_SOA
 #else
             a( pos ) += b( pos );
 #endif // VECTORADD_BYPASS_LLAMA
