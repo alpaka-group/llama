@@ -162,6 +162,65 @@ For every element in `datum1` also found in `datum2` (at compile time) the
 `+=` operation is executed. If the DDs are without overlap, nothing happens at
 all.
 
+Working on Data
+---------------
+
+Per definition only the _complete_ user and datum domain coordinates are needed
+for accessing the background data somewhere in the memory.
+However as already stated it is possible to get intermediate types as accessors
+for multiple data points in user and datum domain. The most basic type is the
+`View`, followed by the `VirtualDatum` with fixed user domain and the element
+in the very end:
+
+`View ⟹ VirtualDatum ⟹ DataType`
+
+However it also my make sense to work on a sub datum domain, e.g. for directly
+manipulating only the `color` in the example above like this
+`datum( color() ) = 0.0f` which only set the `r`, `g` and `b` but not the
+`alpha` value. The same approach of partly fixed dimensions could be applied to
+the `View` to get a smaller sub view or a slice. So the data access chain may
+look like this in the future:
+
+```
+        ╔══════<═════╗                     ╔══════════<═════════╗
+View ═╦═╩═> SubView ═╩═╦═> VirtualDatum ═╦═╩═> SubVirtualDatum ═╩═╦═> DataType
+      ╚════════>═══════╝                 ╚════════════>═══════════╝
+```
+
+For easying copying between shifted views a new class `VirtualView` will be
+created, which looks like a normal `View`, but has a potentially different size
+or shifted origin. Not valid coords are ignored. It is very similar to the
+`SubView` approach, but the `SubView` as true sub set of the `View` doesn't need
+an extra range check. The data access chain changes like this:
+
+```
+        ╔══════════<═════════╗
+        ║ ╔═> VirtualView ═╗ ║                     ╔══════════<═════════╗
+View ═╦═╩═╩═══> SubView ═══╩═╩═╦═> VirtualDatum ═╦═╩═> SubVirtualDatum ═╩═╦═> DataType
+      ╚════════════>═══════════╝                 ╚════════════>═══════════╝
+```
+
+Possible and planned assigments and assigments operations overloads
+-------------------------------------------------------------------
+
+As no lazy evalation / expression templates are implemented in llama (yet), only
+operations directly changing the goal are possible without the need of a
+temporary object. So `a += b` is possible, `c = a + b` is not as `a + b` would
+be needed to be saved somewhere without changing `a` and `b`.
+
+### Working
+
+| Type | Possible operations |
+| ---- | ------------------- |
+| `VirtualDatum` | <ul><li>`=` and `<op>=`  (e.g. `+=` ) for any type, for which every element in the date domain has the assigment (operation) predefined or overloaded</li><li> `=` and `<op>=` `VirtualDatum` applying the assigment (operation) for every element in the (possibily different) date domains of the view with the same datum domain address.</li><li> `=` and `<op>=` `View`, which internally works like with `VirtualDatum` above for the very first datum in the view. Useful for direct assignment of temporary, one-element virtal data on the stack</li></ul> |
+
+### Not implemented yet
+
+| Type | Possible operations |
+| ---- | ------------------- |
+| `VirtualDatum` | <ul><li> `=` and `<op>=` `SubView` or `VirtualView` as same as with `View` in the table above.</li></ul>
+| `View`, `SubView` or `VirtualView` | <ul><li>`=` and `<op>=`  (e.g. `+=` ) for any type, for which every element in the date domain has the assigment (operation) predefined or overloaded. Applies the operation on every element in the view.</li><li> `=` and `<op>=` `VirtualDatum` applying the assigment (operation) for every element in the (possibily different) date domains of the view with the same datum domain address for every element of the view.</li><li> `=` and `<op>=` `View`, `SubView` or `VirtualView` applies the assigment (operation) for every user datum coord valid in both views.</li></ul> |
+
 Mapping description
 -------------------
 A mapping is a class providing basically two methods
