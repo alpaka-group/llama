@@ -330,3 +330,26 @@ The interaction with memory of (other) third party libraries mostly happens with
 allocators. Although the name suggests something else, the allocator can also be
 used to "pass through" already existing memory. Of course the choice of the
 right mapping fitting to the library is task of the user.
+
+Something about deallocation
+----------------------------
+You may wonder when an how memory is deallocated. You get your view from the
+factory, pass it around, but what happens to the allocated memory when the
+context finishes?
+
+This completely depends in the chosen allocator. The three (at the moment) built
+in allocators are not working with plain pointers, but `std::shared_ptr`,
+`std::vector` and the stack for fast allocation of small, temporary views. All
+these keep track for moving, copying and getting out-of-scope.
+
+However at least in the examples, more precisely the alpaka examples, three
+new allocator types are defined. The `Alpaka` allocator works like the alpaka
+buffer and therefore the same as `std` containers: If they are getting out of
+scope, they are freed. However the `AlpakaMirror` and `AlpakaShared` allocators
+are working on already existing pointers and not freed at any time. The
+`AlpakaMirror` just extracts the native pointer from an alpaka buffer of an
+`Alpaka` view to be able to pass it to a kernel (as alpaka buffers and therefore
+views using the `Alpaka` allocator are host only). `AlpakaShared` manages the
+alpaka given internal shared memory pointer, which is valid for the whole kernel
+scope. You have to keep track on the memory yourself, but should in general try
+to use automatically out-of-scope freeing allocators when possible.
