@@ -60,6 +60,7 @@ struct Array
 
     template< typename T_IndexType >
     LLAMA_FN_HOST_ACC_INLINE
+    constexpr
     auto
     operator[] ( T_IndexType && idx ) const
     -> T const &
@@ -146,6 +147,15 @@ struct Array
             if ( element[i] != other.element[i] )
                 return false;
         return true;
+    }
+
+    template< typename T_Other >
+    Array operator+( const T_Other &second ) const
+    {
+        Array temp;
+        for (std::size_t i = 0; i < count; ++i)
+            temp.element[i] = element[i] + second[i];
+        return temp;
     }
 };
 

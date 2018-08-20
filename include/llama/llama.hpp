@@ -41,3 +41,5 @@
 #include "preprocessor/macros.hpp"
 
 #include "ForEach.hpp"
+
+#include "VirtualView.hpp"

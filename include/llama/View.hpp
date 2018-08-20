@@ -567,7 +567,7 @@ struct View
 
     LLAMA_FN_HOST_ACC_INLINE
     auto
-    operator()( std::size_t coord )
+    operator()( std::size_t coord = 0 )
     -> VirtualDatumType
     {
         LLAMA_FORCE_INLINE_RECURSIVE
