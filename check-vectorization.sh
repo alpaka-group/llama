@@ -12,7 +12,7 @@ function reset_color {
 	echo -e "\e[39m"
 }
 
-function check_fma
+function check_simd
 {
 	number_ss=$(grep $2 $1 | grep ss | wc -l)
 	number_sd=$(grep $2 $1 | grep sd | wc -l)
@@ -28,19 +28,25 @@ objdump_output=$(mktemp "${TMPDIR:-/tmp/}$(basename $0).XXXXXXXXXXXX")
 objdump -DSC $1 > $objdump_output
 
 cat $objdump_output | grep vfmadd > $grep_output
-check_fma $grep_output "xmm" "SSE1…4 FMA"
-check_fma $grep_output "ymm" "AVX1/2 FMA"
-check_fma $grep_output "zmm" "AVX512 FMA"
+check_simd $grep_output "xmm" "SSE1…4 FMA"
+check_simd $grep_output "ymm" "AVX1/2 FMA"
+check_simd $grep_output "zmm" "AVX512 FMA"
 
 cat $objdump_output | grep vadd > $grep_output
-check_fma $grep_output "xmm" "SSE1…4 ADD"
-check_fma $grep_output "ymm" "AVX1/2 ADD"
-check_fma $grep_output "zmm" "AVX512 ADD"
+check_simd $grep_output "xmm" "SSE1…4 ADD"
+check_simd $grep_output "ymm" "AVX1/2 ADD"
+check_simd $grep_output "zmm" "AVX512 ADD"
 
 cat $objdump_output | grep vmul > $grep_output
-check_fma $grep_output "xmm" "SSE1…4 MUL"
-check_fma $grep_output "ymm" "AVX1/2 MUL"
-check_fma $grep_output "zmm" "AVX512 MUL"
+check_simd $grep_output "xmm" "SSE1…4 MUL"
+check_simd $grep_output "ymm" "AVX1/2 MUL"
+check_simd $grep_output "zmm" "AVX512 MUL"
+
+cat $objdump_output | grep vmov > $grep_output
+check_simd $grep_output "xmm" "SSE1…4 MOV"
+check_simd $grep_output "ymm" "AVX1/2 MOV"
+check_simd $grep_output "zmm" "AVX512 MOV"
+
 
 rm $grep_output
 rm $objdump_output
