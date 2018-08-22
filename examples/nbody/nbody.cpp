@@ -431,7 +431,6 @@ int main(int argc,char * * argv)
         Mapping,
         nbody::allocator::Alpaka<
             DevAcc,
-            Dim,
             Size
         >
     >;
@@ -439,7 +438,6 @@ int main(int argc,char * * argv)
         Mapping,
         nbody::allocator::AlpakaMirror<
             DevAcc,
-            Dim,
             Size,
             Mapping
         >
@@ -448,7 +446,6 @@ int main(int argc,char * * argv)
         Mapping,
         nbody::allocator::Alpaka<
             DevHost,
-            Dim,
             Size
         >
     >;

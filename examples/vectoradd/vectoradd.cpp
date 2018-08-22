@@ -10,7 +10,6 @@
 
 #define VECTORADD_PROBLEM_SIZE 64*1024*1024
 #define VECTORADD_BLOCK_SIZE 256
-#define VECTORADD_MIN_ELEM 2
 #define VECTORADD_STEPS 10
 
 #include <alpaka/alpaka.hpp>
@@ -24,6 +23,7 @@
 
 #include "../common/AlpakaAllocator.hpp"
 #include "../common/AlpakaMemCopy.hpp"
+#include "../common/AlpakaThreadElemsDistribution.hpp"
 #include "../common/Chrono.hpp"
 #include "../common/Dummy.hpp"
 
@@ -90,55 +90,6 @@ struct AddKernel
 #endif // VECTORADD_BYPASS_LLAMA
     }
 };
-
-template<
-    typename T_Acc,
-    std::size_t blockSize,
-    std::size_t hardwareThreads
->
-struct ThreadsElemsDistribution
-{
-    static constexpr std::size_t elemCount = blockSize;
-    static constexpr std::size_t threadCount = 1u;
-};
-
-#ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
-    template<
-        std::size_t blockSize,
-        std::size_t hardwareThreads,
-        typename T_Dim,
-        typename T_Size
-    >
-    struct ThreadsElemsDistribution<
-        alpaka::acc::AccGpuCudaRt<T_Dim, T_Size>,
-        blockSize,
-        hardwareThreads
-    >
-    {
-        static constexpr std::size_t elemCount = VECTORADD_MIN_ELEM;
-        static constexpr std::size_t threadCount = blockSize / VECTORADD_MIN_ELEM;
-    };
-#endif
-
-#ifdef ALPAKA_ACC_CPU_B_SEQ_T_OMP2_ENABLED
-    template<
-        std::size_t blockSize,
-        std::size_t hardwareThreads,
-        typename T_Dim,
-        typename T_Size
-    >
-    struct ThreadsElemsDistribution<
-        alpaka::acc::AccCpuOmp2Threads<T_Dim, T_Size>,
-        blockSize,
-        hardwareThreads
-    >
-    {
-        static constexpr std::size_t elemCount =
-            ( blockSize + hardwareThreads - 1u ) / hardwareThreads;
-        static constexpr std::size_t threadCount = hardwareThreads;
-    };
-#endif
-
 
 int main(int argc,char * * argv)
 {
@@ -225,7 +176,6 @@ int main(int argc,char * * argv)
         Mapping,
         nbody::allocator::Alpaka<
             DevAcc,
-            Dim,
             Size
         >
     >;
@@ -233,7 +183,6 @@ int main(int argc,char * * argv)
         Mapping,
         nbody::allocator::AlpakaMirror<
             DevAcc,
-            Dim,
             Size,
             Mapping
         >
@@ -242,7 +191,6 @@ int main(int argc,char * * argv)
         Mapping,
         nbody::allocator::Alpaka<
             DevHost,
-            Dim,
             Size
         >
     >;

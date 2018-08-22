@@ -57,7 +57,7 @@ struct AlpakaMemCopy<
 					alpaka::vec::Vec<
 						alpaka::dim::Dim< decltype( dstView.blob[i].buffer ) >,
 						alpaka::idx::Idx< decltype( dstView.blob[i].buffer ) >
-					>( dstView.mapping.userDomainSize[0] )
+					>( dstView.mapping.getBlobSize( i ) )
 				);
 		}
 		else

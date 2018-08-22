@@ -49,19 +49,17 @@ struct AlpakaAccessor
 
 template<
     typename T_DevAcc,
-    typename T_Dim,
     typename T_Size
 >
 struct Alpaka
 {
     using DevAcc = T_DevAcc;
-    using Dim = T_Dim;
     using Size = T_Size;
 
     using BufferType = alpaka::mem::buf::Buf<
         DevAcc,
         unsigned char,
-        Dim,
+        alpaka::dim::DimInt< 1 >,
         Size
     >;
     using BlobType = internal::AlpakaAccessor< BufferType >;
@@ -92,7 +90,6 @@ struct Alpaka
 
 template<
     typename T_DevAcc,
-    typename T_Dim,
     typename T_Size,
     typename T_Mapping
 >
@@ -100,7 +97,6 @@ struct AlpakaMirror
 {
     using MirroredAllocator = Alpaka<
         T_DevAcc,
-        T_Dim,
         T_Size
     >;
     using BlobType = typename MirroredAllocator::PrimType*;
