@@ -4,15 +4,7 @@ project (llama)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 11)
 
-###############################################################################
-# OPTIONS
-###############################################################################
-option(LLAMA_BUILD_EXAMPLES "Building (and installing) the llama examples" ON)
-if (LLAMA_BUILD_EXAMPLES)
-	ADD_SUBDIRECTORY("examples")
-endif()
-
-
+ADD_SUBDIRECTORY("examples")
 
 configure_file (
 	"${PROJECT_SOURCE_DIR}/cmake/llama-config-version.cmake.in"
