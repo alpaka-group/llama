@@ -18,7 +18,7 @@ function check_fma
 	number_sd=$(grep $2 $1 | grep sd | wc -l)
 	number_full=$(grep $2 $1 | grep p | wc -l)
 	set_color $number_full
-	echo -ne "$3: ps/pd \e[1m$number_full\e[21m (ss $number_ss, sd $number_sd)"
+	echo -ne "$3: ps/pd \e[1m$number_full\e[22m (ss $number_ss, sd $number_sd)"
 	reset_color
 }
 
