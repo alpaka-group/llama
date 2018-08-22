@@ -5,6 +5,9 @@
 
 #include "../common/Dummy.hpp"
 
+#define VIRTUALVIEWTEST_WITH_MINIVIEW 1
+#define VIRTUALVIEWTEST_WITH_MINIVIEW_DUMMY 1
+
 namespace st
 {
     struct X {};
@@ -62,7 +65,7 @@ struct SqrtFunctor
 int main(int argc,char * * argv)
 {
     using UD = llama::UserDomain< 2 >;
-    constexpr UD viewSize{ 1024, 1024 };
+    constexpr UD viewSize{ 4096, 4096 };
     constexpr UD miniSize{ 128, 128 };
     using Mapping = llama::mapping::SoA<
         UD,
@@ -128,7 +131,9 @@ int main(int argc,char * * argv)
         ( viewSize[0] + miniSize[0] - 1 ) / miniSize[0],
         ( viewSize[1] + miniSize[1] - 1 ) / miniSize[1]
     };
+    LLAMA_INDEPENDENT_DATA
     for (std::size_t x = 0; x < iterations[0]; ++x)
+        LLAMA_INDEPENDENT_DATA
         for (std::size_t y = 0; y < iterations[1]; ++y)
         {
             const UD validMiniSize{
@@ -150,6 +155,7 @@ int main(int argc,char * * argv)
                 miniSize
             );
 
+#if VIRTUALVIEWTEST_WITH_MINIVIEW != 0
             // Create mini view on stack
             auto miniView = llama::Factory<
                 MiniMapping,
@@ -161,31 +167,47 @@ int main(int argc,char * * argv)
             // Copy data from virtual view to mini view
             LLAMA_INDEPENDENT_DATA
             for (std::size_t a = 0; a < validMiniSize[0]; ++a)
+                LLAMA_INDEPENDENT_DATA
                 for (std::size_t b = 0; b < validMiniSize[1]; ++b)
                     miniView( a, b ) = virtualView( a, b );
 
             // Do something with mini view
+#if VIRTUALVIEWTEST_WITH_MINIVIEW_DUMMY != 0
             dummy( static_cast<void*>( &(miniView.blob[0][0]) ) );
+#endif // VIRTUALVIEWTEST_WITH_MINIVIEW_DUMMY
+#endif // VIRTUALVIEWTEST_WITH_MINIVIEW
 
+            LLAMA_INDEPENDENT_DATA
             for (std::size_t a = 0; a < validMiniSize[0]; ++a)
                 LLAMA_INDEPENDENT_DATA
                 for (std::size_t b = 0; b < validMiniSize[1]; ++b)
                 {
-                    SqrtFunctor< decltype( miniView( a, b ) ) >
-                        sqrtF{ miniView( a, b ) };
+                    SqrtFunctor<
+#if VIRTUALVIEWTEST_WITH_MINIVIEW != 0
+                        decltype( miniView( a, b ) )
+                    > sqrtF{ miniView( a, b ) };
+#else // VIRTUALVIEWTEST_WITH_MINIVIEW
+                        decltype( virtualView( a, b ) )
+                    > sqrtF{ virtualView( a, b ) };
+#endif // VIRTUALVIEWTEST_WITH_MINIVIEW
                     llama::ForEach< Particle >::apply( sqrtF );
                 }
-            dummy( static_cast<void*>( &(miniView.blob[0][0]) ) );
 
+#if VIRTUALVIEWTEST_WITH_MINIVIEW != 0
+#if VIRTUALVIEWTEST_WITH_MINIVIEW_DUMMY != 0
+            dummy( static_cast<void*>( &(miniView.blob[0][0]) ) );
+#endif // VIRTUALVIEWTEST_WITH_MINIVIEW_DUMMY
             // Copy data back
             LLAMA_INDEPENDENT_DATA
             for (std::size_t a = 0; a < validMiniSize[0]; ++a)
+                LLAMA_INDEPENDENT_DATA
                 for (std::size_t b = 0; b < validMiniSize[1]; ++b)
                     virtualView( a, b ) = miniView( a, b );
+#endif // VIRTUALVIEWTEST_WITH_MINIVIEW
         }
     dummy( static_cast<void*>( &(view.blob[0][0]) ) );
 
-    #ifndef NDEBUG
+#ifndef NDEBUG
     for (std::size_t x = 0; x < viewSize[0]; ++x)
         for (std::size_t y = 0; y < viewSize[1]; ++y)
         {
@@ -207,6 +229,6 @@ int main(int argc,char * * argv)
             }
         }
     end:
-    #endif
+#endif
     return 0;
 }
