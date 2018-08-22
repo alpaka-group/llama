@@ -453,7 +453,7 @@ int main(int argc,char * * argv)
         >
     >;
 
-    std::cout << problemSize / 1000 / 1000 << " million particles\n";
+    std::cout << problemSize / 1000 << " thousand particles\n";
     std::cout
         << problemSize * llama::SizeOf<Particle>::value / 1000 / 1000
         << "MB \n";
