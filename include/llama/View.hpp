@@ -287,6 +287,270 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
     __LLAMA_VIRTUALDATUM_TYPE_OPERATOR( OP, FUNCTOR, & )                       \
     __LLAMA_VIRTUALDATUM_TYPE_OPERATOR( OP, FUNCTOR, && )
 
+#define __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( OP, FUNCTOR )                     \
+    template<                                                                  \
+        typename T_LeftDatum,                                                  \
+        typename T_LeftBase,                                                   \
+        typename T_LeftLocal,                                                  \
+        typename T_RightDatum,                                                 \
+        typename T_RightBase,                                                  \
+        typename T_RightLocal,                                                 \
+        typename SFINAE = void                                                 \
+    >                                                                          \
+    struct BOOST_PP_CAT( FUNCTOR, BoolIfSameUIDFunctor)                        \
+    {                                                                          \
+        LLAMA_FN_HOST_ACC_INLINE                                               \
+        auto                                                                   \
+        operator()()                                                           \
+        -> void                                                                \
+        {}                                                                     \
+        T_LeftDatum & left;                                                    \
+        T_RightDatum & right;                                                  \
+        bool result;                                                           \
+    };                                                                         \
+                                                                               \
+    template<                                                                  \
+        typename T_LeftDatum,                                                  \
+        typename T_LeftBase,                                                   \
+        typename T_LeftLocal,                                                  \
+        typename T_RightDatum,                                                 \
+        typename T_RightBase,                                                  \
+        typename T_RightLocal                                                  \
+    >                                                                          \
+    struct BOOST_PP_CAT( FUNCTOR, BoolIfSameUIDFunctor)                        \
+    <                                                                          \
+        T_LeftDatum,                                                           \
+        T_LeftBase,                                                            \
+        T_LeftLocal,                                                           \
+        T_RightDatum,                                                          \
+        T_RightBase,                                                           \
+        T_RightLocal,                                                          \
+        typename std::enable_if<                                               \
+            CompareUID<                                                        \
+                typename T_LeftDatum::Mapping::DatumDomain,                    \
+                T_LeftBase,                                                    \
+                T_LeftLocal,                                                   \
+                typename T_RightDatum::Mapping::DatumDomain,                   \
+                T_RightBase,                                                   \
+                T_RightLocal                                                   \
+            >::value                                                           \
+        >::type                                                                \
+    >                                                                          \
+    {                                                                          \
+        LLAMA_FN_HOST_ACC_INLINE                                               \
+        auto                                                                   \
+        operator()()                                                           \
+        -> void                                                                \
+        {                                                                      \
+            using Dst = typename T_LeftBase::template Cat< T_LeftLocal >;      \
+            using Src = typename T_RightBase::template Cat< T_RightLocal >;    \
+            result = left( Dst() ) OP right( Src() );                          \
+        }                                                                      \
+        T_LeftDatum & left;                                                    \
+        T_RightDatum & right;                                                  \
+        bool result;                                                           \
+    };                                                                         \
+                                                                               \
+    template<                                                                  \
+        typename T_LeftDatum,                                                  \
+        typename T_LeftBase,                                                   \
+        typename T_LeftLocal,                                                  \
+        typename T_RightDatum                                                  \
+    >                                                                          \
+    struct BOOST_PP_CAT( FUNCTOR, BoolInnerFunctor)                            \
+    {                                                                          \
+        template<                                                              \
+            typename T_OuterCoord,                                             \
+            typename T_InnerCoord                                              \
+        >                                                                      \
+        LLAMA_FN_HOST_ACC_INLINE                                               \
+        auto                                                                   \
+        operator()(                                                            \
+            T_OuterCoord,                                                      \
+            T_InnerCoord                                                       \
+        )                                                                      \
+        -> void                                                                \
+        {                                                                      \
+            BOOST_PP_CAT( FUNCTOR, BoolIfSameUIDFunctor) <                     \
+                typename std::remove_reference<T_LeftDatum>::type,             \
+                T_LeftBase,                                                    \
+                T_LeftLocal,                                                   \
+                typename std::remove_reference<T_RightDatum>::type,            \
+                T_OuterCoord,                                                  \
+                T_InnerCoord                                                   \
+            > functor {                                                        \
+                left,                                                          \
+                right,                                                         \
+                true                                                           \
+            };                                                                 \
+            functor();                                                         \
+            result &= functor.result;                                          \
+        }                                                                      \
+        T_LeftDatum & left;                                                    \
+        T_RightDatum & right;                                                  \
+        bool result;                                                           \
+    };                                                                         \
+                                                                               \
+    template<                                                                  \
+        typename T_LeftDatum,                                                  \
+        typename T_RightDatum,                                                 \
+        typename T_Source                                                      \
+    >                                                                          \
+    struct BOOST_PP_CAT( FUNCTOR, BoolFunctor)                                 \
+    {                                                                          \
+        template<                                                              \
+            typename T_OuterCoord,                                             \
+            typename T_InnerCoord                                              \
+        >                                                                      \
+        LLAMA_FN_HOST_ACC_INLINE                                               \
+        auto                                                                   \
+        operator()(                                                            \
+            T_OuterCoord,                                                      \
+            T_InnerCoord                                                       \
+        )                                                                      \
+        -> void                                                                \
+        {                                                                      \
+            BOOST_PP_CAT( FUNCTOR, BoolInnerFunctor)<                          \
+                T_LeftDatum,                                                   \
+                T_OuterCoord,                                                  \
+                T_InnerCoord,                                                  \
+                T_RightDatum                                                   \
+            > functor{                                                         \
+                left,                                                          \
+                right,                                                         \
+                true                                                           \
+            };                                                                 \
+            ForEach<                                                           \
+                typename T_RightDatum::Mapping::DatumDomain,                   \
+                T_Source                                                       \
+            >::apply( functor );                                               \
+            result &= functor.result;                                          \
+        }                                                                      \
+        T_LeftDatum & left;                                                    \
+        T_RightDatum & right;                                                  \
+        bool result;                                                           \
+    };                                                                         \
+                                                                               \
+    template<                                                                  \
+        typename T_LeftDatum,                                                  \
+        typename T_RightType                                                   \
+    >                                                                          \
+    struct BOOST_PP_CAT( FUNCTOR, BoolTypeFunctor)                             \
+    {                                                                          \
+        template<                                                              \
+            typename T_OuterCoord,                                             \
+            typename T_InnerCoord                                              \
+        >                                                                      \
+        LLAMA_FN_HOST_ACC_INLINE                                               \
+        auto                                                                   \
+        operator()(                                                            \
+            T_OuterCoord,                                                      \
+            T_InnerCoord                                                       \
+        )                                                                      \
+        -> void                                                                \
+        {                                                                      \
+            using Dst = typename T_OuterCoord::template Cat< T_InnerCoord >;   \
+            result &=                                                          \
+                left( Dst() ) OP static_cast< typename std::remove_reference<  \
+                decltype( left( Dst() ) ) >::type >( right );                  \
+        }                                                                      \
+        T_LeftDatum & left;                                                    \
+        T_RightType & right;                                                   \
+        bool result;                                                           \
+    };
+
+__LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( == , SameAs )
+__LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( != , Not )
+__LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( <  , SmallerThan )
+__LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( <= , SmallerSameThan )
+__LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( >  , BiggerThan )
+__LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( >= , BiggerSameThan )
+
+#define __LLAMA_VIRTUALDATUM_VIRTUALDATUM_BOOL_OPERATOR( OP, FUNCTOR, REF )    \
+    template< typename T_OtherView >                                           \
+    LLAMA_FN_HOST_ACC_INLINE                                                   \
+    auto                                                                       \
+    operator OP( VirtualDatum< T_OtherView >REF other )                        \
+    -> bool                                                                    \
+    {                                                                          \
+        BOOST_PP_CAT( FUNCTOR, BoolFunctor)<                                   \
+            decltype(*this),                                                   \
+            VirtualDatum< T_OtherView >,                                       \
+            DatumCoord< >                                                      \
+        > functor{                                                             \
+            *this,                                                             \
+            other,                                                             \
+            true                                                               \
+        };                                                                     \
+        ForEach<                                                               \
+            typename Mapping::DatumDomain,                                     \
+            DatumCoord< >                                                      \
+        >::apply( functor );                                                   \
+        return functor.result;                                                 \
+    }
+
+#define __LLAMA_VIRTUALDATUM_VIEW_BOOL_OPERATOR( OP, FUNCTOR, REF )            \
+    template<                                                                  \
+        typename T_OtherMapping,                                               \
+        typename T_OtherBlobType                                               \
+    >                                                                          \
+    LLAMA_FN_HOST_ACC_INLINE                                                   \
+    auto                                                                       \
+    operator OP( View<                                                         \
+            T_OtherMapping,                                                    \
+            T_OtherBlobType                                                    \
+        > REF other                                                            \
+    )                                                                          \
+    -> bool                                                                    \
+    {                                                                          \
+        auto otherVd =                                                         \
+            other( userDomainZero< T_OtherMapping::UserDomain::count >() );    \
+        BOOST_PP_CAT( FUNCTOR, BoolFunctor)<                                   \
+            decltype(*this),                                                   \
+            decltype(otherVd),                                                 \
+            DatumCoord< >                                                      \
+        > functor{                                                             \
+            *this,                                                             \
+            otherVd,                                                           \
+            true                                                               \
+        };                                                                     \
+        ForEach<                                                               \
+            typename Mapping::DatumDomain,                                     \
+            DatumCoord< >                                                      \
+        >::apply( functor );                                                   \
+        return functor.result;                                                 \
+    }
+
+#define __LLAMA_VIRTUALDATUM_TYPE_BOOL_OPERATOR( OP, FUNCTOR, REF )            \
+    template< typename T_OtherType >                                           \
+    LLAMA_FN_HOST_ACC_INLINE                                                   \
+    auto                                                                       \
+    operator OP( T_OtherType REF other )                                       \
+    -> bool                                                                    \
+    {                                                                          \
+        BOOST_PP_CAT( FUNCTOR, BoolTypeFunctor)<                               \
+            decltype(*this),                                                   \
+            T_OtherType                                                        \
+        > functor{                                                             \
+            *this,                                                             \
+            other,                                                             \
+            true                                                               \
+        };                                                                     \
+        ForEach<                                                               \
+            typename Mapping::DatumDomain,                                     \
+            DatumCoord< >                                                      \
+        >::apply( functor );                                                   \
+        return functor.result;                                                 \
+    }
+
+#define __LLAMA_VIRTUALDATUM_BOOL_OPERATOR( OP, FUNCTOR )                      \
+    __LLAMA_VIRTUALDATUM_VIRTUALDATUM_BOOL_OPERATOR( OP, FUNCTOR, & )          \
+    __LLAMA_VIRTUALDATUM_VIRTUALDATUM_BOOL_OPERATOR( OP, FUNCTOR, && )         \
+    __LLAMA_VIRTUALDATUM_VIEW_BOOL_OPERATOR( OP, FUNCTOR, & )                  \
+    __LLAMA_VIRTUALDATUM_VIEW_BOOL_OPERATOR( OP, FUNCTOR, && )                 \
+    __LLAMA_VIRTUALDATUM_TYPE_BOOL_OPERATOR( OP, FUNCTOR, & )                  \
+    __LLAMA_VIRTUALDATUM_TYPE_BOOL_OPERATOR( OP, FUNCTOR, && )
+
 template< typename T_View >
 struct VirtualDatum
 {
@@ -388,6 +652,13 @@ struct VirtualDatum
     __LLAMA_VIRTUALDATUM_OPERATOR( *= , Multiplication )
     __LLAMA_VIRTUALDATUM_OPERATOR( /= , Division )
     __LLAMA_VIRTUALDATUM_OPERATOR( %= , Modulo )
+
+    __LLAMA_VIRTUALDATUM_BOOL_OPERATOR( == , SameAs )
+    __LLAMA_VIRTUALDATUM_BOOL_OPERATOR( != , Not )
+    __LLAMA_VIRTUALDATUM_BOOL_OPERATOR( <  , SmallerThan )
+    __LLAMA_VIRTUALDATUM_BOOL_OPERATOR( <= , SmallerSameThan )
+    __LLAMA_VIRTUALDATUM_BOOL_OPERATOR( >  , BiggerThan )
+    __LLAMA_VIRTUALDATUM_BOOL_OPERATOR( >= , BiggerSameThan )
 };
 
 namespace internal

@@ -189,17 +189,7 @@ int main(int argc,char * * argv)
     for (std::size_t x = 0; x < viewSize[0]; ++x)
         for (std::size_t y = 0; y < viewSize[1]; ++y)
         {
-            auto checkView = llama::tempAlloc< 1, Particle >();
-            checkView() = x * y * sqrt( x * y );
-            if (
-                view( x, y )( st::Pos(), st::X() ) != checkView()( st::Pos(), st::X() ) ||
-                view( x, y )( st::Pos(), st::Y() ) != checkView()( st::Pos(), st::Y() ) ||
-                view( x, y )( st::Pos(), st::Z() ) != checkView()( st::Pos(), st::Z() ) ||
-                view( x, y )( st::Vel(), st::X() ) != checkView()( st::Vel(), st::X() ) ||
-                view( x, y )( st::Vel(), st::Y() ) != checkView()( st::Vel(), st::Y() ) ||
-                view( x, y )( st::Vel(), st::Z() ) != checkView()( st::Vel(), st::Z() ) ||
-                view( x, y )( st::Mom() ) != checkView()( st::Mom())
-            )
+            if ( view( x, y ) != x * y * sqrt( x * y ) )
             {
                 std::cout
                     << "view( " << x << ", " << y << " ) "
