@@ -183,18 +183,19 @@ struct SetUserDomainInTreeImpl
             InnerTuple
         >
     {
+        constexpr auto pos = T_pos::value;
         return TreeElement<
             NoName,
             InnerTuple
         >(
-            size[ T_pos::value ],
+            size[ pos ],
             InnerTuple(
                 SetUserDomainInTreeImpl<
                     T_DatumDomain,
                     T_UserDomain,
                     std::integral_constant<
                         std::size_t,
-                        T_pos::value + 1
+                        pos + 1
                     >
                 >()( size )
             )
@@ -276,8 +277,9 @@ struct UserDomainToTreeCoord
         )
     )
     {
+        constexpr auto pos = T_pos::value;
         const Tuple< TreeCoordElement< 0 > > mostLeft{
-            TreeCoordElement< 0 >( coord[ T_pos::value ] )
+            TreeCoordElement< 0 >( coord[ pos ] )
         };
         return tupleCat(
             mostLeft,
