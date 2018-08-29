@@ -1,6 +1,6 @@
 #pragma once
 
-namespace nbody
+namespace common
 {
 
 namespace allocator
@@ -82,10 +82,12 @@ struct Alpaka
             devAcc,
             Size(count)
         );
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) && BOOST_LANG_CUDA
+        alpaka::mem::buf::pin( buffer );
+#endif
         BlobType accessor( buffer );
         return accessor;
     }
-
 };
 
 template<

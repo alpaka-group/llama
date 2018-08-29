@@ -183,6 +183,9 @@ struct SetUserDomainInTreeImpl
             InnerTuple
         >
     {
+        // Need to predefine this because of a cuda bug about
+        // identifier "std::integral_constant<unsigned long,
+        // (unsigned long)0ul> ::value" is undefined in device code
         constexpr auto pos = T_pos::value;
         return TreeElement<
             NoName,
@@ -277,6 +280,9 @@ struct UserDomainToTreeCoord
         )
     )
     {
+        // Need to predefine this because of a cuda bug about
+        // identifier "std::integral_constant<unsigned long,
+        // (unsigned long)0ul> ::value" is undefined in device code
         constexpr auto pos = T_pos::value;
         const Tuple< TreeCoordElement< 0 > > mostLeft{
             TreeCoordElement< 0 >( coord[ pos ] )

@@ -141,6 +141,7 @@ template<
     std::size_t dimension,
     typename DatumDomain
 >
+LLAMA_FN_HOST_ACC_INLINE
 auto
 tempAlloc()
 -> View<

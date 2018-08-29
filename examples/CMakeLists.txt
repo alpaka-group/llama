@@ -4,9 +4,11 @@ project (llama)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 11)
 
-set(ALPAKA_ROOT "${CMAKE_CURRENT_LIST_DIR}/../../../alpaka/" CACHE STRING  "The location of the alpaka library")
-LIST(APPEND CMAKE_PREFIX_PATH "${ALPAKA_ROOT}")
-find_package(alpaka QUIET)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/Modules/")
+
+####################
+# General examples #
+####################
 
 option(LLAMA_BUILD_EXAMPLE_SIMPLETEST "Building (and installing) the simpletest example" ON)
 if (LLAMA_BUILD_EXAMPLE_SIMPLETEST)
@@ -28,12 +30,27 @@ if (LLAMA_BUILD_EXAMPLE_VIRTUALVIEWTEST)
 	ADD_SUBDIRECTORY("virtualviewtest")
 endif()
 
+###################
+# Alpaka examples #
+###################
+
+set(ALPAKA_ROOT "${CMAKE_CURRENT_LIST_DIR}/../../../alpaka/" CACHE STRING  "The location of the alpaka library")
+LIST(APPEND CMAKE_PREFIX_PATH "${ALPAKA_ROOT}")
+find_package(alpaka QUIET)
+
 if (ALPAKA_FOUND)
 	option(LLAMA_BUILD_EXAMPLE_NBODY "Building (and installing) the nbody example, needs alpaka" ON)
 	option(LLAMA_BUILD_EXAMPLE_VECTORADD "Building (and installing) the vectoradd example, needs alpaka" ON)
+	find_package(png++ QUIET)
+	if (png++_FOUND)
+		option(LLAMA_BUILD_EXAMPLE_ASYNCCOPY "Building (and installing) the asynccopy example, needs alpaka and png++" ON)
+	else()
+		option(LLAMA_BUILD_EXAMPLE_ASYNCCOPY "Building (and installing) the asynccopy example, needs alpaka and png++" OFF)
+	endif()
 else()
 	option(LLAMA_BUILD_EXAMPLE_NBODY "Building (and installing) the nbody example, needs alpaka" OFF)
 	option(LLAMA_BUILD_EXAMPLE_VECTORADD "Building (and installing) the vectoradd example, needs alpaka" OFF)
+	option(LLAMA_BUILD_EXAMPLE_ASYNCCOPY "Building (and installing) the asynccopy example, needs alpaka and png++" OFF)
 endif()
 
 if (LLAMA_BUILD_EXAMPLE_NBODY)
@@ -42,4 +59,8 @@ endif()
 
 if (LLAMA_BUILD_EXAMPLE_VECTORADD)
 	ADD_SUBDIRECTORY("vectoradd")
+endif()
+
+if (LLAMA_BUILD_EXAMPLE_ASYNCCOPY)
+	ADD_SUBDIRECTORY("asynccopy")
 endif()

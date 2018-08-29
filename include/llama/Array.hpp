@@ -139,7 +139,10 @@ struct Array
     }
 
     template< typename T_Other >
-    bool operator==(const T_Other& other) const
+    auto
+    LLAMA_FN_HOST_ACC_INLINE
+    operator==(const T_Other& other) const
+    -> bool
     {
         if ( count != other.count )
             return false;
@@ -150,7 +153,10 @@ struct Array
     }
 
     template< typename T_Other >
-    Array operator+( const T_Other &second ) const
+    auto
+    LLAMA_FN_HOST_ACC_INLINE
+    operator+( const T_Other &second ) const
+    -> Array
     {
         Array temp;
         for (std::size_t i = 0; i < count; ++i)

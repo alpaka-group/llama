@@ -102,7 +102,7 @@ template<
 >
 struct BlockSharedMemoryAllocator
 {
-    using type = nbody::allocator::AlpakaShared<
+    using type = common::allocator::AlpakaShared<
         T_Acc,
         T_size,
         T_counter
@@ -429,14 +429,14 @@ int main(int argc,char * * argv)
 
     using DevFactory = llama::Factory<
         Mapping,
-        nbody::allocator::Alpaka<
+        common::allocator::Alpaka<
             DevAcc,
             Size
         >
     >;
     using MirrorFactory = llama::Factory<
         Mapping,
-        nbody::allocator::AlpakaMirror<
+        common::allocator::AlpakaMirror<
             DevAcc,
             Size,
             Mapping
@@ -444,7 +444,7 @@ int main(int argc,char * * argv)
     >;
     using HostFactory = llama::Factory<
         Mapping,
-        nbody::allocator::Alpaka<
+        common::allocator::Alpaka<
             DevHost,
             Size
         >
