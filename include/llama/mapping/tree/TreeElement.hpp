@@ -91,7 +91,8 @@ struct TreeElement<
     TreeElement(
         const T_CountType count
     ) :
-        count(count)
+        count(count),
+        childs()
     {}
 
     LLAMA_FN_HOST_ACC_INLINE
@@ -152,7 +153,7 @@ struct TreeElement<
     using CountType = std::integral_constant< T_CountType, T_count>;
 
     LLAMA_FN_HOST_ACC_INLINE
-    TreeElement() {}
+    TreeElement() : childs() {}
 
     LLAMA_FN_HOST_ACC_INLINE
     TreeElement(

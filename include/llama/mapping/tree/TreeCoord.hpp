@@ -73,6 +73,7 @@ struct TreeCoordElement<
     LLAMA_IF_RELEASE( static constexpr ) RuntimeType
     LLAMA_IF_DEBUG( const ) runtime = RuntimeType();
 
+    LLAMA_FN_HOST_ACC_INLINE
     TreeCoordElement() = default;
 
     LLAMA_FN_HOST_ACC_INLINE
