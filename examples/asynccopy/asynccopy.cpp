@@ -3,6 +3,7 @@
 #include <list>
 
 #define ASYNCCOPY_CUDA 0
+#define ASYNCCOPY_ASYNC 1
 #define ASYNCCOPY_SHARED 1
 #define ASYNCCOPY_CHUNK_COUNT 4
 
@@ -209,22 +210,27 @@ int main(int argc,char * * argv)
 
 #if ASYNCCOPY_CUDA == 1
     using Acc = alpaka::acc::AccGpuCudaRt<Dim, Size>;
-#else
+#if ASYNCCOPY_ASYNC == 1
+    using Queue = alpaka::queue::QueueCudaRtAsync;
+#else // ASYNCCOPY_ASYNC == 0
+    using Queue = alpaka::queue::QueueCudaRtSync;
+#endif // ASYNCCOPY_ASYNC
+#else // ASYNCCOPY_CUDA == 0
     //~ using Acc = alpaka::acc::AccCpuSerial<Dim, Size>;
     using Acc = alpaka::acc::AccCpuOmp2Blocks<Dim, Size>;
     //~ using Acc = alpaka::acc::AccCpuOmp2Threads<Dim, Size>;
     //~ using Acc = alpaka::acc::AccCpuOmp4<Dim, Size>;
+#if ASYNCCOPY_ASYNC == 1
+    using Queue = alpaka::queue::QueueCpuAsync;
+#else // ASYNCCOPY_ASYNC == 0
+    using Queue = alpaka::queue::QueueCpuSync;
+#endif // ASYNCCOPY_ASYNC
 #endif // ASYNCCOPY_CUDA
     using DevHost = alpaka::dev::Dev<Host>;
     using DevAcc = alpaka::dev::Dev<Acc>;
     using PltfHost = alpaka::pltf::Pltf<DevHost>;
     using PltfAcc = alpaka::pltf::Pltf<DevAcc>;
     using WorkDiv = alpaka::workdiv::WorkDivMembers<Dim, Size>;
-#if ASYNCCOPY_CUDA == 1
-    using Queue = alpaka::queue::QueueCudaRtAsync;
-#else
-    using Queue = alpaka::queue::QueueCpuAsync;
-#endif // ASYNCCOPY_CUDA
     DevAcc const devAcc( alpaka::pltf::getDevByIdx< PltfAcc >( 0u ) );
     DevHost const devHost( alpaka::pltf::getDevByIdx< PltfHost >( 0u ) );
     std::vector< Queue > queue;
