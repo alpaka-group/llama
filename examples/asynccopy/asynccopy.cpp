@@ -5,6 +5,8 @@
 #define ASYNCCOPY_CUDA 0
 #define ASYNCCOPY_ASYNC 1
 #define ASYNCCOPY_SHARED 1
+#define ASYNCCOPY_LOCAL_SUM 1
+#define ASYNCCOPY_SAVE 1
 #define ASYNCCOPY_CHUNK_COUNT 4
 
 #define ASYNCCOPY_DEFAULT_IMG_X 4096
@@ -74,7 +76,6 @@ struct BlurKernel
     {
         constexpr auto threadsPerBlock = totalElemsPerBlock / elems;
 
-        using UserDomain = typename T_View::Mapping::UserDomain;
         auto const threadIdxInGrid = alpaka::idx::getIdx<
             alpaka::Grid,
             alpaka::Threads
@@ -114,11 +115,11 @@ struct BlurKernel
         >;
         auto shared = SharedFactory::allocView( sharedMapping, acc );
 
-        UserDomain b_start = {
+        std::size_t const b_start[2] = {
             blockIndex[0] * totalElemsPerBlock + threadIdxInBlock[0],
             blockIndex[1] * totalElemsPerBlock + threadIdxInBlock[1]
         };
-        UserDomain b_end = {
+        std::size_t const b_end[2] = {
             alpaka::math::min(
                 acc,
                 (blockIndex[0] + 1) * totalElemsPerBlock + 2 * kernelSize,
@@ -130,7 +131,9 @@ struct BlurKernel
                 oldImage.mapping.userDomainSize[1]
             ),
         };
+        LLAMA_INDEPENDENT_DATA
         for( auto y = b_start[0]; y < b_end[0]; y += threadsPerBlock )
+            LLAMA_INDEPENDENT_DATA
             for( auto x = b_start[1]; x < b_end[1]; x += threadsPerBlock )
                 shared(
                     y - blockIndex[0] * totalElemsPerBlock,
@@ -138,11 +141,11 @@ struct BlurKernel
                 ) = oldImage( y, x );
 #endif // ASYNCCOPY_SHARED
 
-        UserDomain start = {
+        std::size_t const start[2] = {
             threadIdxInGrid[0] * elems,
             threadIdxInGrid[1] * elems
         };
-        UserDomain end = {
+        std::size_t const end[2] = {
             alpaka::math::min(
                 acc,
                 (threadIdxInGrid[0] + 1) * elems,
@@ -155,41 +158,59 @@ struct BlurKernel
             ),
         };
 
+        LLAMA_INDEPENDENT_DATA
         for( auto y = start[0]; y < end[0]; ++y )
+            LLAMA_INDEPENDENT_DATA
             for( auto x = start[1]; x < end[1]; ++x )
             {
+#if ASYNCCOPY_LOCAL_SUM == 1
                 auto sum = llama::tempAlloc< 1, PixelOnAcc >();
                 sum() = 0;
+#else // ASYNCCOPY_LOCAL_SUM == 0
+                newImage( y + kernelSize, x + kernelSize ) = 0;
+#endif // ASYNCCOPY_LOCAL_SUM
 
 #if ASYNCCOPY_SHARED == 0
-                UserDomain i_start = {
+                std::size_t const i_start[2] = {
                     y,
                     x
                 };
-                UserDomain i_end = {
+                std::size_t const i_end[2] = {
                     y + 2 * kernelSize + 1,
                     x + 2 * kernelSize + 1
                 };
 #else // ASYNCCOPY_SHARED == 1
                 using ItType = long int;
-                llama::Array< ItType, 2> i_start = {
+                ItType const i_start[2] = {
                     ItType(y) - ItType(blockIndex[0] * totalElemsPerBlock),
                     ItType(x) - ItType(blockIndex[1] * totalElemsPerBlock)
                 };
-                llama::Array< long int, 2> i_end = {
+                ItType const i_end[2] = {
                     ItType(y + 2 * kernelSize + 1) - ItType(blockIndex[0] * totalElemsPerBlock),
                     ItType(x + 2 * kernelSize + 1) - ItType(blockIndex[1] * totalElemsPerBlock)
                 };
 #endif // ASYNCCOPY_SHARED
+                LLAMA_INDEPENDENT_DATA
                 for ( auto b = i_start[0]; b < i_end[0]; ++b )
+                    LLAMA_INDEPENDENT_DATA
                     for ( auto a = i_start[1]; a < i_end[1]; ++a )
+#if ASYNCCOPY_LOCAL_SUM == 1
+                        sum() +=
+#else // ASYNCCOPY_LOCAL_SUM == 0
+                        newImage( y + kernelSize, x + kernelSize ) +=
+#endif // ASYNCCOPY_LOCAL_SUM
 #if ASYNCCOPY_SHARED == 0
-                        sum() += oldImage( b, a );
+                            oldImage( std::size_t(b), std::size_t(a) );
 #else // ASYNCCOPY_SHARED == 1
-                        sum() += shared( std::size_t(b), std::size_t(a) );
+                            shared( std::size_t(b), std::size_t(a) );
 #endif // ASYNCCOPY_SHARED
+#if ASYNCCOPY_LOCAL_SUM == 1
                 sum() /= Element( (2 * kernelSize + 1) * (2 * kernelSize + 1) );
                 newImage( y + kernelSize, x + kernelSize ) = sum();
+#else // ASYNCCOPY_LOCAL_SUM == 0
+                newImage( y + kernelSize, x + kernelSize ) /=
+                    Element( (2 * kernelSize + 1) * (2 * kernelSize + 1) );
+#endif // ASYNCCOPY_LOCAL_SUM
             }
     }
 };
@@ -205,7 +226,6 @@ int main(int argc,char * * argv)
     // ALPAKA
     using Dim = alpaka::dim::DimInt< 2 >;
     using Size = std::size_t;
-    using Extents = Size;
     using Host = alpaka::acc::AccCpuSerial<Dim, Size>;
 
 #if ASYNCCOPY_CUDA == 1
@@ -230,11 +250,10 @@ int main(int argc,char * * argv)
     using DevAcc = alpaka::dev::Dev<Acc>;
     using PltfHost = alpaka::pltf::Pltf<DevHost>;
     using PltfAcc = alpaka::pltf::Pltf<DevAcc>;
-    using WorkDiv = alpaka::workdiv::WorkDivMembers<Dim, Size>;
     DevAcc const devAcc( alpaka::pltf::getDevByIdx< PltfAcc >( 0u ) );
     DevHost const devHost( alpaka::pltf::getDevByIdx< PltfHost >( 0u ) );
     std::vector< Queue > queue;
-    for (int i = 0; i < chunkCount; ++i)
+    for (std::size_t i = 0; i < chunkCount; ++i)
         queue.push_back( Queue( devAcc ) ) ;
 
     // ASYNCCOPY
@@ -345,7 +364,7 @@ int main(int argc,char * * argv)
         decltype( MirrorFactory::allocView( devMapping,  devOld[0] ) )
     > mirrorOld;
     decltype( mirrorOld ) mirrorNew;
-    for (int i = 0; i < chunkCount; ++i)
+    for (std::size_t i = 0; i < chunkCount; ++i)
     {
         hostChunk.push_back(
             HostChunkFactory::allocView( devMapping, devHost )
@@ -410,7 +429,7 @@ int main(int argc,char * * argv)
                     [ Y - kernelSize ]
                     [ X - kernelSize ].green) / 255.;
             }
-        }
+    }
 
     chrono.printAndReset("Init");
     const alpaka::vec::Vec< Dim, Size > elems (
@@ -465,7 +484,7 @@ int main(int argc,char * * argv)
                 validMiniSize
             );
             // Find free chunk stream
-            int chunkNr = virtualHostList.size();
+            std::size_t chunkNr = virtualHostList.size();
             if (virtualHostList.size() < chunkCount)
                 virtualHostList.push_back( {
                     virtualHost,
@@ -537,7 +556,7 @@ int main(int argc,char * * argv)
         }
     //Wait for not finished tasks on accelerator
     auto chunkIt = virtualHostList.begin();
-    for (int chunkNr = 0; chunkNr < chunkCount; ++chunkNr)
+    for (std::size_t chunkNr = 0; chunkNr < chunkCount; ++chunkNr)
     {
         alpaka::wait::wait( queue[chunkNr] );
         // Copy data back
@@ -558,6 +577,7 @@ int main(int argc,char * * argv)
     }
     chrono.printAndReset("Blur kernel");
 
+#if ASYNCCOPY_SAVE == 1
     LLAMA_INDEPENDENT_DATA
     for (std::size_t y = 0; y < img_y; ++y)
         for (std::size_t x = 0; x < img_x; ++x)
@@ -576,6 +596,7 @@ int main(int argc,char * * argv)
             )( px::B() ) * 255.;
         }
     image->write( out_filename );
+#endif // ASYNCCOPY_SAVE
 
     delete(image);
 
