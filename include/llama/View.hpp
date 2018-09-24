@@ -646,9 +646,9 @@ struct VirtualDatum
         return access< T_DatumCoordOrUIDs... >();
     }
 
-    __LLAMA_VIRTUALDATUM_OPERATOR( = , Assigment )
+    __LLAMA_VIRTUALDATUM_OPERATOR( =  , Assigment )
     __LLAMA_VIRTUALDATUM_OPERATOR( += , Addition )
-    __LLAMA_VIRTUALDATUM_OPERATOR( -= , Addition )
+    __LLAMA_VIRTUALDATUM_OPERATOR( -= , Subtraction )
     __LLAMA_VIRTUALDATUM_OPERATOR( *= , Multiplication )
     __LLAMA_VIRTUALDATUM_OPERATOR( /= , Division )
     __LLAMA_VIRTUALDATUM_OPERATOR( %= , Modulo )
@@ -864,11 +864,11 @@ struct View
     }
 
 
+    const Mapping mapping;
     Array<
         BlobType,
         Mapping::blobCount
     > blob;
-    const Mapping mapping;
 };
 
 } // namespace llama

@@ -68,10 +68,10 @@ struct Mapping
 
     using ResultTree = typename MergedFunctors::Result;
 
+    UserDomain const userDomainSize;
     BasicTree const basicTree;
     MergedFunctors const mergedFunctors;
     ResultTree const resultTree;
-    UserDomain const userDomainSize;
 
     LLAMA_FN_HOST_ACC_INLINE
     Mapping(
