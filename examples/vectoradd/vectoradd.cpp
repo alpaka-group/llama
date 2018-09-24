@@ -96,7 +96,6 @@ int main(int argc,char * * argv)
     // ALPAKA
     using Dim = alpaka::dim::DimInt< 1 >;
     using Size = std::size_t;
-    using Extents = Size;
     using Host = alpaka::acc::AccCpuSerial<Dim, Size>;
 
 #if VECTORADD_CUDA == 1
@@ -111,7 +110,6 @@ int main(int argc,char * * argv)
     using DevAcc = alpaka::dev::Dev<Acc>;
     using PltfHost = alpaka::pltf::Pltf<DevHost>;
     using PltfAcc = alpaka::pltf::Pltf<DevAcc>;
-    using WorkDiv = alpaka::workdiv::WorkDivMembers<Dim, Size>;
 #if VECTORADD_CUDA == 1
     using Queue = alpaka::queue::QueueCudaRtSync;
 #else
