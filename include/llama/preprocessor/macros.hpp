@@ -37,8 +37,7 @@
 #   define LLAMA_INDEPENDENT_DATA _Pragma ("GCC ivdep")
 #elif BOOST_COMP_INTEL != 0
 #   define LLAMA_INDEPENDENT_DATA                                              \
-        _Pragma ("ivdep")                                                      \
-        _Pragma ("forceinline recursive")
+        _Pragma ("ivdep")
 #elif BOOST_COMP_CLANG
 #   define LLAMA_INDEPENDENT_DATA                                              \
         _Pragma ("clang loop vectorize(enable)")                               \
