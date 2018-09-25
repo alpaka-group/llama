@@ -1,5 +1,10 @@
 #!/bin/bash
-echo -ne "                      Build directories: "
+if [ "$#" -eq 0 ]; then
+    echo -e "run-examples.sh runs examples in given build directory and prints the archieved time"
+    echo -e "Usage:\trun-examples.sh build-directory [another] [another] […] "
+    exit 0
+fi
+printf "                      Build directories: "
 for build in "$@"
 do
     printf "%16s " $build
