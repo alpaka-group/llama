@@ -629,6 +629,22 @@ struct VirtualDatum
         );
     }
 
+    template< std::size_t... T_coord  >
+    LLAMA_FN_HOST_ACC_INLINE
+    auto
+    access( )
+    -> decltype( AccessImpl< DatumCoord< T_coord... > >::apply(
+            std::forward<T_View>(view),
+            userDomainPos
+        ) ) &
+    {
+        LLAMA_FORCE_INLINE_RECURSIVE
+        return AccessImpl< DatumCoord< T_coord... > >::apply(
+            std::forward<T_View>(view),
+            userDomainPos
+        );
+    }
+
     template< typename... T_DatumCoordOrUIDs  >
     LLAMA_FN_HOST_ACC_INLINE
     auto
