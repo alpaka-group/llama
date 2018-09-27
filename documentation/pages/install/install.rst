@@ -1,8 +1,10 @@
-.. role:: bash(code)
-   :language: bash
+.. include:: ../common.rst
+
+Installation
+============
 
 Getting LLAMA
-=============
+-------------
 
 The most recent version of LLAMA can be found at
 `GitHub <https://github.com/ComputationalRadiationPhysics/llama>`_.
@@ -13,7 +15,7 @@ installation capabilities for this file, of course the includes, but also for
 built examples.
 
 Requirements
-============
+------------
 
 LLAMA itself only needs boost version 1.66.0 or higher as the quite new
 boost::mp11 template programming library is needed. Furthermore some examples
@@ -23,7 +25,7 @@ demonstrating the inter library collaboration and/or
 `png++ <https://www.nongnu.org/pngpp/>`_ for saving some generated images.
 
 Building the examples
-=====================
+---------------------
 
 As LLAMA is using CMake the examples can be easily build with
 

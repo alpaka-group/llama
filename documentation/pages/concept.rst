@@ -1,5 +1,0 @@
-Interface concept
-=================
-
-Library structure
-=================

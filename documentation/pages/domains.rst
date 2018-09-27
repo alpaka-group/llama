@@ -1,5 +1,0 @@
-User domain
-===========
-
-Datum domain
-============

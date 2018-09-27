@@ -24,16 +24,22 @@ LLAMA is licensed under the LGPL2+.
    :caption: INSTALLATION
    :maxdepth: 2
 
-   pages/install
+   pages/install/install
 
 .. toctree::
    :caption: USER DOCUMENTATION
    :maxdepth: 2
 
-   pages/motivation
-   pages/concept
-   pages/domains
-   pages/views
-   pages/mappings
-   pages/allocators
-   pages/plans
+   pages/user/concept
+   pages/user/domains
+   pages/user/views
+   pages/user/mappings
+   pages/user/allocators
+   pages/user/plans
+   pages/user/api
+
+.. toctree::
+   :caption: DEVELOPER DOCUMENTATION
+   :maxdepth: 2
+
+   pages/dev/concept

@@ -1,5 +1,8 @@
+Concept
+=======
+
 Motivation
-==========
+----------
 
 We face the problem that different architectures these days perform best with
 different memory access patterns, but as projects may last for decades while
@@ -37,23 +40,23 @@ Furthermore other third party libraries may expect specific memory layouts as
 interface, which will most probably differ from library to library.
 
 Example use cases
-=================
+-----------------
 
 The library is designed and written at the
 `Helmholtz-Zentrum Dresden -- Rossendorf (HZDR) <https://www.hzdr.de>`_ inside
-`the group for computational radiation physics (CRP)<https://www.hzdr.de/crp>`_
+`the group for computational radiation physics (CRP) <https://www.hzdr.de/crp>`_
 with some in house and partner applications in mind. These example use cases are
 not the only targets of LLAMA, but drove the development and the feature set.
 
 The CRP group works on a couple of simulation codes, e.g.
 `PIConGPU <https://picongpu.hzdr.de>`_, the fastest particle in cell code
 running on GPUs. Recent development efforts furthermore made the open source
-project ready for other many core and even classic CPU multi core architecture
+project ready for other many core and even classic CPU multi core architectures
 using the library
 `alpaka <https://github.com/ComputationalRadiationPhysics/alpaka>`_. The similar
 namings of alpaka and LLAMA are no coincidence. While alpaka abstracts the
-parallelization of computations, LLAMA shall abstract the memory access.
-To bring the best out of the computational resources accelerating data
+parallelization of computations, LLAMA abstracts the memory access.
+To bring the best out of the computational resources, accelerating data
 structures and a mix out of SoA and AoS known to be performant on GPUs is used.
 The goal is to abstract these data structures with LLAMA to be able to change
 them fast for different architectures.
@@ -61,5 +64,63 @@ them fast for different architectures.
 Image processing is another big, emerging task of the group and partners. Both
 post processing of diffraction images as well as live analysis of high rate
 data sources will be needed in the near future. As with the simulation codes the
-computation devices, the image sensor data format and the probleme size may vary
+computation devices, the image sensor data format and the problem size may vary
 and a fast and easy adaption of the code is needed.
+
+The shipped
+`examples <https://github.com/ComputationalRadiationPhysics/llama/tree/master/examples>`_
+of LLAMA try to show case the implemented feature in the intended usage.
+
+Challenges
+----------
+
+This results in these challenges and goals LLAMA tries to address:
+
+* Splitting of algorithmic view of data and the actual mapping in the background
+  so that different layouts may be chosen **without touching the algorithm at
+  all**.
+* As it is well-known from C and C++ -- and because of this often the way
+  programmers think of data -- LLAMA shall *look* like AoS although the mapping
+  will be different quite surely.
+* To be compatible with as most architectures, softwares, compilers and third
+  party libraries as possible, LLAMA is only using valid C++11 syntax. The
+  whole description of the layout and the mapping is done with C++11 template
+  programming (in contrast e.g. to fancy macro magic which is slow to compile
+  and hard/impossible to maintain).
+* LLAMA shall be extensible in the sense of working together with new software
+  but also new memory layouts needed for emerging architectures.
+* As it is the most easy way to write architecture independet but performant
+  code, LLAMA should work well with auto vectorization approaches of modern
+  compilers.
+
+Library structure
+-----------------
+
+Therefore the library is splitted in as independent parts as possible to ease
+the development and extensibility. Many parts of LLAMA are active research and
+shall not interfere with orthogonal tasks of the library.
+
+The most important data structure for the user is the
+:ref:`view <label-view>` which holds the memory for the data and gives methods
+to address the data.
+
+LLAMA wants to look as much as an array of struct approach as possible. To not
+mix up C/C++ and LLAMA namings, the array-like domain is called
+:ref:`User domain <label-ud>` in LLAMA whereas the struct-like domain is called
+:ref:`Datum domain <label-dd>`. More details about these domains follow in the
+:ref:`next section <label-domains>`.
+
+An address given in these domains is then mapped to memory by the view. The
+mapping is done by a user defined :ref:`mapping <label-mappings>`. The memory
+for the view is also given by user defined :ref:`allocators <label-allocators>`.
+
+A :ref:`factory <label-factory>` takes all those user defined classes and
+creates the view out of their information.
+
+.. only:: html
+
+  .. image:: ../../images/factory.svg
+
+.. only:: latex
+
+  .. image:: ../../images/factory.pdf
