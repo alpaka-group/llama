@@ -159,7 +159,7 @@ int main(int argc,char * * argv)
     for (size_t x = 0; x < udSize[0]; ++x)
         LLAMA_INDEPENDENT_DATA
         for (size_t y = 0; y < udSize[1]; ++y)
-            sum += view.accessor< 1, 0 >( { x, y } );
+            sum += view( x, y ).access< 1, 0 >(  );
     std::cout
         << "Sum: "
         << sum
