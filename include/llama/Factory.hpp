@@ -89,7 +89,7 @@ makeBlobArray(
 
 template<
     typename T_Mapping,
-    typename T_Allocator = allocator::Vector
+    typename T_Allocator = allocator::Vector<>
 >
 struct Factory
 {

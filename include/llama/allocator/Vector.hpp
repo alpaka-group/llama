@@ -196,6 +196,7 @@ namespace internal
 
 } // namespace internal
 
+template< std::size_t T_alignment = 64u>
 struct Vector
 {
     using PrimType = unsigned char;
@@ -203,7 +204,7 @@ struct Vector
         PrimType,
         internal::AlignmentAllocator<
             PrimType,
-            64
+            T_alignment
         >
     >;
     using Parameter = int; //not used
