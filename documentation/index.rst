@@ -43,3 +43,5 @@ LLAMA is licensed under the LGPL2+.
    :maxdepth: 2
 
    pages/dev/concept
+   pages/dev/mapping
+   pages/dev/allocators

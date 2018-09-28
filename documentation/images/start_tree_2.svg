@@ -37,465 +37,466 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="899"
-     inkscape:window-height="480"
+     inkscape:window-width="1920"
+     inkscape:window-height="1028"
      id="namedview605"
      showgrid="false"
      fit-margin-left="1"
      fit-margin-right="1"
      fit-margin-top="0"
      fit-margin-bottom="0"
-     inkscape:zoom="0.34689815"
-     inkscape:cx="218.46454"
-     inkscape:cy="335.32736"
+     inkscape:zoom="0.98117614"
+     inkscape:cx="55.195215"
+     inkscape:cy="341.03458"
      inkscape:window-x="0"
      inkscape:window-y="28"
-     inkscape:window-maximized="0"
+     inkscape:window-maximized="1"
      inkscape:current-layer="svg603" />
+  <path
+     transform="translate(15.084017,-0.7)"
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 44.4,191.4 h 55.1314 v 40 H 44.4 Z"
+     id="polygon420" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 64.997116,190.7 v 40"
+     id="line422" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 109.10232,190.7 v 40"
+     id="line424" />
   <g
-     id="Hintergrund"
-     transform="translate(15.084017,-0.7)">
-    <g
-       id="g438">
-      <polygon
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="44.4,191.4 99.5314,191.4 99.5314,231.4 44.4,231.4 "
-         id="polygon420" />
-      <line
-         style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         x1="49.913101"
-         y1="191.39999"
-         x2="49.913101"
-         y2="231.39999"
-         id="line422" />
-      <line
-         style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         x1="94.018303"
-         y1="191.39999"
-         x2="94.018303"
-         y2="231.39999"
-         id="line424" />
-      <text
-         font-size="12.8"
-         style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:sans-serif;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
-         x="71.965698"
-         y="215.39999"
-         id="text428">
-        <tspan
-           x="71.965698"
-           y="215.39999"
-           id="tspan426" />
-      </text>
-      <polygon
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="81.0382,207.7 81.0382,173.7 110.138,173.7 122.138,185.7 122.138,207.7 "
-         id="polygon430" />
-      <polyline
-         style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
-         points="110.138,173.7 110.138,185.7 122.138,185.7 "
-         id="polyline432" />
-      <text
-         font-size="12.8"
-         style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:monospace;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
-         x="88.0382"
-         y="198.60001"
-         id="text436">
-        <tspan
-           x="88.0382"
-           y="198.60001"
-           id="tspan434">128</tspan>
-      </text>
-    </g>
-    <g
-       id="g450">
-      <polygon
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="-6.04,369.892 64.835,369.892 64.835,409.892 -6.04,409.892 "
-         id="polygon440" />
-      <line
-         style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         x1="1.0475"
-         y1="369.892"
-         x2="1.0475"
-         y2="409.892"
-         id="line442" />
-      <line
-         style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         x1="57.747501"
-         y1="369.892"
-         x2="57.747501"
-         y2="409.892"
-         id="line444" />
-      <text
-         font-size="12.8"
-         style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:sans-serif;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
-         x="29.397499"
-         y="393.892"
-         id="text448">
-        <tspan
-           x="29.397499"
-           y="393.892"
-           id="tspan446">color</tspan>
-      </text>
-    </g>
-    <g
-       id="g460">
-      <polygon
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="52.71,383.764 52.71,349.764 66.41,349.764 78.41,361.764 78.41,383.764 "
-         id="polygon452" />
-      <polyline
-         style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
-         points="66.41,349.764 66.41,361.764 78.41,361.764 "
-         id="polyline454" />
-      <text
-         font-size="12.8"
-         style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:monospace;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
-         x="59.709999"
-         y="374.664"
-         id="text458">
-        <tspan
-           x="59.709999"
-           y="374.664"
-           id="tspan456">1</tspan>
-      </text>
-    </g>
-    <g
-       id="g472">
-      <polygon
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="37.822,286.702 104.447,286.702 104.447,326.702 37.822,326.702 "
-         id="polygon462" />
-      <line
-         style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         x1="44.484501"
-         y1="286.702"
-         x2="44.484501"
-         y2="326.702"
-         id="line464" />
-      <line
-         style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         x1="97.7845"
-         y1="286.702"
-         x2="97.7845"
-         y2="326.702"
-         id="line466" />
-      <text
-         font-size="12.8"
-         style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:sans-serif;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
-         x="71.134499"
-         y="310.702"
-         id="text470">
-        <tspan
-           x="71.134499"
-           y="310.702"
-           id="tspan468">Pixel</tspan>
-      </text>
-    </g>
-    <g
-       id="g482">
-      <polygon
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="93.024,300.174 93.024,266.174 122.124,266.174 134.124,278.174 134.124,300.174 "
-         id="polygon474" />
-      <polyline
-         style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
-         points="122.124,266.174 122.124,278.174 134.124,278.174 "
-         id="polyline476" />
-      <text
-         font-size="12.8"
-         style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:monospace;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
-         x="100.024"
-         y="291.07401"
-         id="text480">
-        <tspan
-           x="100.024"
-           y="291.07401"
-           id="tspan478">256</tspan>
-      </text>
-    </g>
-    <text
-       font-size="12.8"
-       style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:sans-serif;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
-       x="118.698"
-       y="421.25601"
-       id="text486">
-      <tspan
-         xml:space="preserve"
-         x="118.698"
-         y="421.25601"
-         id="tspan484"> char</tspan>    </text>
-    <g
-       id="g494">
-      <path
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         d="m 109.898,368.664 h 49.15 c 6.144,8 8.11,12 8.11,20 0,8 -1.966,12 -8.11,20 h -49.15 c -6.144,-8 -8.11,-12 -8.11,-20 0,-8 1.966,-12 8.11,-20 z"
-         id="path488"
-         inkscape:connector-curvature="0" />
-      <text
-         font-size="12.8"
-         style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:sans-serif;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
-         x="134.47301"
-         y="392.664"
-         id="text492">
-        <tspan
-           x="134.47301"
-           y="392.664"
-           id="tspan490">alpha</tspan>
-      </text>
-    </g>
-    <g
-       id="g504">
-      <polygon
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="153.594,383.148 153.594,349.148 167.294,349.148 179.294,361.148 179.294,383.148 "
-         id="polygon496" />
-      <polyline
-         style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
-         points="167.294,349.148 167.294,361.148 179.294,361.148 "
-         id="polyline498" />
-      <text
-         font-size="12.8"
-         style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:monospace;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
-         x="160.59399"
-         y="374.048"
-         id="text502">
-        <tspan
-           x="160.59399"
-           y="374.048"
-           id="tspan500">1</tspan>
-      </text>
-    </g>
-    <g
-       id="g510">
-      <line
-         style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         x1="71.7826"
-         y1="232.39799"
-         x2="71.413597"
-         y2="274.70401"
-         id="line506" />
-      <polygon
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="71.3264,284.703 76.4134,274.747 66.4138,274.66 "
-         id="polygon508" />
-    </g>
-    <g
-       id="g516">
-      <line
-         style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         x1="57.2663"
-         y1="327.698"
-         x2="35.459999"
-         y2="360.71301"
-         id="line512" />
-      <polygon
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="29.9486,369.058 39.632,363.469 31.2879,357.958 "
-         id="polygon514" />
-    </g>
-    <g
-       id="g522">
-      <line
-         style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         x1="92.605499"
-         y1="327.70599"
-         x2="126.61"
-         y2="360.97198"
-         id="line518" />
-      <polygon
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="133.758,367.965 130.106,357.398 123.113,364.546 "
-         id="polygon520" />
-    </g>
-    <g
-       id="g528">
-      <line
-         style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         x1="44.619202"
-         y1="410.89801"
-         x2="75.3144"
-         y2="453.259"
-         id="line524" />
-      <polygon
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="81.182,461.356 79.3632,450.325 71.2656,456.193 "
-         id="polygon526" />
-    </g>
-    <g
-       id="g534">
-      <line
-         style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         x1="26.3568"
-         y1="410.85101"
-         x2="20.6255"
-         y2="450.35699"
-         id="line530" />
-      <polygon
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="19.1898,460.253 25.5737,451.075 15.6773,449.639 "
-         id="polygon532" />
-    </g>
-    <g
-       id="g554">
-      <text
-         font-size="12.8"
-         style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:sans-serif;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
-         x="126.92"
-         y="517.34802"
-         id="text538">
-        <tspan
-           xml:space="preserve"
-           x="126.92"
-           y="517.34802"
-           id="tspan536"> float</tspan>      </text>
-      <path
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         d="m 130.544,462.652 h 30.075 c 3.76,8 4.963,12 4.963,20 0,8 -1.203,12 -4.963,20 h -30.075 c -3.759,-8 -4.962,-12 -4.962,-20 0,-8 1.203,-12 4.962,-20 z"
-         id="path540"
-         inkscape:connector-curvature="0" />
-      <text
-         font-size="12.8"
-         style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:sans-serif;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
-         x="145.582"
-         y="486.65201"
-         id="text544">
-        <tspan
-           x="145.582"
-           y="486.65201"
-           id="tspan542">b</tspan>
-      </text>
-      <polygon
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="154.486,479.184 154.486,445.184 168.186,445.184 180.186,457.184 180.186,479.184 "
-         id="polygon546" />
-      <polyline
-         style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
-         points="168.186,445.184 168.186,457.184 180.186,457.184 "
-         id="polyline548" />
-      <text
-         font-size="12.8"
-         style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:monospace;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
-         x="161.48599"
-         y="470.08401"
-         id="text552">
-        <tspan
-           x="161.48599"
-           y="470.08401"
-           id="tspan550">1</tspan>
-      </text>
-    </g>
-    <g
-       id="g574">
-      <path
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         d="M 0.967942,462.202 H 31.0431 c 3.7594,8 4.9624,12 4.9624,20 0,8 -1.203,12 -4.9624,20 H 0.967942 c -3.759402,-8 -4.962402,-12 -4.962402,-20 0,-8 1.203,-12 4.962402,-20 z"
-         id="path556"
-         inkscape:connector-curvature="0" />
-      <text
-         font-size="12.8"
-         style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:sans-serif;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
-         x="16.005501"
-         y="486.202"
-         id="text560">
-        <tspan
-           x="16.005501"
-           y="486.202"
-           id="tspan558">r</tspan>
-      </text>
-      <text
-         font-size="12.8"
-         style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:sans-serif;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
-         x="-0.27846399"
-         y="517.284"
-         id="text564">
-        <tspan
-           xml:space="preserve"
-           x="-0.27846399"
-           y="517.284"
-           id="tspan562"> float</tspan>      </text>
-      <polygon
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="27.9535,478.162 27.9535,444.162 41.6535,444.162 53.6535,456.162 53.6535,478.162 "
-         id="polygon566" />
-      <polyline
-         style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
-         points="41.6535,444.162 41.6535,456.162 53.6535,456.162 "
-         id="polyline568" />
-      <text
-         font-size="12.8"
-         style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:monospace;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
-         x="34.953499"
-         y="469.06201"
-         id="text572">
-        <tspan
-           x="34.953499"
-           y="469.06201"
-           id="tspan570">1</tspan>
-      </text>
-    </g>
-    <g
-       id="g594">
-      <text
-         font-size="12.8"
-         style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:sans-serif;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
-         x="63.1068"
-         y="516.862"
-         id="text578">
-        <tspan
-           xml:space="preserve"
-           x="63.1068"
-           y="516.862"
-           id="tspan576"> float</tspan>      </text>
-      <path
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         d="m 66.7312,462.166 h 30.0752 c 3.7596,8 4.9626,12 4.9626,20 0,8 -1.203,12 -4.9626,20 H 66.7312 c -3.7594,-8 -4.9624,-12 -4.9624,-20 0,-8 1.203,-12 4.9624,-20 z"
-         id="path580"
-         inkscape:connector-curvature="0" />
-      <text
-         font-size="12.8"
-         style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:sans-serif;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
-         x="81.768799"
-         y="486.16599"
-         id="text584">
-        <tspan
-           x="81.768799"
-           y="486.16599"
-           id="tspan582">g</tspan>
-      </text>
-      <polygon
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="90.6728,478.698 90.6728,444.698 104.373,444.698 116.373,456.698 116.373,478.698 "
-         id="polygon586" />
-      <polyline
-         style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
-         points="104.373,444.698 104.373,456.698 116.373,456.698 "
-         id="polyline588" />
-      <text
-         font-size="12.8"
-         style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:monospace;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
-         x="97.672798"
-         y="469.59799"
-         id="text592">
-        <tspan
-           x="97.672798"
-           y="469.59799"
-           id="tspan590">1</tspan>
-      </text>
-    </g>
-    <g
-       id="g600">
-      <line
-         style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         x1="62.939499"
-         y1="410.89801"
-         x2="136.259"
-         y2="456.814"
-         id="line596" />
-      <polygon
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
-         points="144.734,462.121 138.913,452.576 133.605,461.051 "
-         id="polygon598" />
-    </g>
+     style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:sans-serif;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
+     id="text428" />
+  <path
+     transform="translate(15.084017,-0.7)"
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="M 122.138,207.7 H 81.0382 v -34 h 29.0998 l 12,12 z"
+     id="polygon430" />
+  <path
+     transform="translate(15.084017,-0.7)"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
+     d="m 110.138,173.7 v 12 h 12"
+     id="polyline432" />
+  <g
+     aria-label="128"
+     style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:monospace;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+     id="text436">
+    <path
+       d="m 104.80972,196.83751 h 1.9625 v -7.13125 l -2.1125,0.475 v -1.15 l 2.1,-0.4625 h 1.2625 v 8.26875 h 1.9375 v 1.0625 h -5.15 z"
+       style=""
+       id="path1130" />
+    <path
+       d="m 113.15347,196.83751 h 4.2875 v 1.0625 h -5.66875 v -1.0625 q 1.16875,-1.23125 2.04375,-2.175 0.875,-0.94375 1.20625,-1.33125 0.625,-0.7625 0.84375,-1.23125 0.21875,-0.475 0.21875,-0.96875 0,-0.78125 -0.4625,-1.225 -0.45625,-0.44375 -1.25625,-0.44375 -0.56875,0 -1.19375,0.20625 -0.625,0.20625 -1.325,0.625 v -1.275 q 0.64375,-0.30625 1.2625,-0.4625 0.625,-0.15625 1.23125,-0.15625 1.36875,0 2.2,0.73125 0.8375,0.725 0.8375,1.90625 0,0.6 -0.28125,1.2 -0.275,0.6 -0.9,1.325 -0.35,0.40625 -1.01875,1.125 -0.6625,0.71875 -2.025,2.15 z"
+       style=""
+       id="path1132" />
+    <path
+       d="m 122.37222,193.46876 q -0.84375,0 -1.30625,0.475 -0.45625,0.46875 -0.45625,1.33125 0,0.8625 0.4625,1.34375 0.46875,0.475 1.3,0.475 0.85,0 1.30625,-0.46875 0.4625,-0.475 0.4625,-1.35 0,-0.85625 -0.46875,-1.33125 -0.4625,-0.475 -1.3,-0.475 z m -1.1,-0.525 q -0.80625,-0.20625 -1.2625,-0.76875 -0.45,-0.5625 -0.45,-1.35625 0,-1.1125 0.75625,-1.7625 0.75625,-0.65625 2.05625,-0.65625 1.30625,0 2.0625,0.65625 0.75625,0.65 0.75625,1.7625 0,0.79375 -0.45625,1.35625 -0.45,0.5625 -1.25625,0.76875 0.9375,0.20625 1.43125,0.83125 0.5,0.625 0.5,1.61875 0,1.2625 -0.80625,1.975 -0.80625,0.7125 -2.23125,0.7125 -1.425,0 -2.23125,-0.70625 -0.8,-0.7125 -0.8,-1.96875 0,-1 0.49375,-1.625 0.5,-0.63125 1.4375,-0.8375 z m -0.45625,-2.00625 q 0,0.75 0.4,1.14375 0.4,0.39375 1.15625,0.39375 0.7625,0 1.1625,-0.39375 0.4,-0.39375 0.4,-1.14375 0,-0.7625 -0.4,-1.1625 -0.39375,-0.4 -1.1625,-0.4 -0.75625,0 -1.15625,0.40625 -0.4,0.4 -0.4,1.15625 z"
+       style=""
+       id="path1134" />
   </g>
+  <path
+     transform="translate(15.084017,-0.7)"
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m -6.04,369.892 h 70.875 v 40 H -6.04 Z"
+     id="polygon440" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 16.131517,369.19199 v 40"
+     id="line442" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 72.83152,369.19199 v 40"
+     id="line444" />
+  <g
+     aria-label="color"
+     style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:sans-serif;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
+     id="text448">
+    <path
+       d="m 34.962768,386.46074 v 1.075 q -0.4875,-0.26875 -0.98125,-0.4 -0.4875,-0.1375 -0.9875,-0.1375 -1.11875,0 -1.7375,0.7125 -0.61875,0.70625 -0.61875,1.9875 0,1.28125 0.61875,1.99375 0.61875,0.70625 1.7375,0.70625 0.5,0 0.9875,-0.13125 0.49375,-0.1375 0.98125,-0.40625 v 1.0625 q -0.48125,0.225 -1,0.3375 -0.5125,0.1125 -1.09375,0.1125 -1.58125,0 -2.5125,-0.99375 -0.93125,-0.99375 -0.93125,-2.68125 0,-1.7125 0.9375,-2.69375 0.94375,-0.98125 2.58125,-0.98125 0.53125,0 1.0375,0.1125 0.50625,0.10625 0.98125,0.325 z"
+       style=""
+       id="path1140" />
+    <path
+       d="m 39.687768,386.99824 q -0.925,0 -1.4625,0.725 -0.5375,0.71875 -0.5375,1.975 0,1.25625 0.53125,1.98125 0.5375,0.71875 1.46875,0.71875 0.91875,0 1.45625,-0.725 0.5375,-0.725 0.5375,-1.975 0,-1.24375 -0.5375,-1.96875 -0.5375,-0.73125 -1.45625,-0.73125 z m 0,-0.975 q 1.5,0 2.35625,0.975 0.85625,0.975 0.85625,2.7 0,1.71875 -0.85625,2.7 -0.85625,0.975 -2.35625,0.975 -1.50625,0 -2.3625,-0.975 -0.85,-0.98125 -0.85,-2.7 0,-1.725 0.85,-2.7 0.85625,-0.975 2.3625,-0.975 z"
+       style=""
+       id="path1142" />
+    <path
+       d="m 44.800268,383.46699 h 1.15 v 9.725 h -1.15 z"
+       style=""
+       id="path1144" />
+    <path
+       d="m 51.062769,386.99824 q -0.925,0 -1.4625,0.725 -0.5375,0.71875 -0.5375,1.975 0,1.25625 0.53125,1.98125 0.5375,0.71875 1.46875,0.71875 0.91875,0 1.45625,-0.725 0.5375,-0.725 0.5375,-1.975 0,-1.24375 -0.5375,-1.96875 -0.5375,-0.73125 -1.45625,-0.73125 z m 0,-0.975 q 1.5,0 2.35625,0.975 0.85625,0.975 0.85625,2.7 0,1.71875 -0.85625,2.7 -0.85625,0.975 -2.35625,0.975 -1.50625,0 -2.3625,-0.975 -0.85,-0.98125 -0.85,-2.7 0,-1.725 0.85,-2.7 0.85625,-0.975 2.3625,-0.975 z"
+       style=""
+       id="path1146" />
+    <path
+       d="m 60.231518,387.26699 q -0.19375,-0.1125 -0.425,-0.1625 -0.225,-0.0562 -0.5,-0.0562 -0.975,0 -1.5,0.6375 -0.51875,0.63125 -0.51875,1.81875 v 3.6875 h -1.15625 v -7 h 1.15625 v 1.0875 q 0.3625,-0.6375 0.94375,-0.94375 0.58125,-0.3125 1.4125,-0.3125 0.11875,0 0.2625,0.0188 0.14375,0.0125 0.31875,0.0437 z"
+       style=""
+       id="path1148" />
+  </g>
+  <path
+     transform="translate(15.084017,-0.7)"
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 78.41,383.764 h -25.7 v -34 h 13.7 l 12,12 z"
+     id="polygon452" />
+  <path
+     transform="translate(15.084017,-0.7)"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
+     d="m 66.41,349.764 v 12 h 12"
+     id="polyline454" />
+  <g
+     aria-label="1"
+     style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:monospace;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+     id="text458">
+    <path
+       d="m 76.481514,372.90149 h 1.9625 v -7.13125 l -2.1125,0.475 v -1.15 l 2.1,-0.4625 h 1.2625 v 8.26875 h 1.9375 v 1.0625 h -5.15 z"
+       style=""
+       id="path1153" />
+  </g>
+  <path
+     transform="translate(15.084017,-0.7)"
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 37.822,286.702 h 66.625 v 40 H 37.822 Z"
+     id="polygon462" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 59.56852,286.00198 v 40"
+     id="line464" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 112.86852,286.00198 v 40"
+     id="line466" />
+  <g
+     aria-label="Pixel"
+     style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:sans-serif;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
+     id="text470">
+    <path
+       d="m 73.937263,301.70823 v 3.50625 h 1.5875 q 0.88125,0 1.3625,-0.45625 0.48125,-0.45625 0.48125,-1.3 0,-0.8375 -0.48125,-1.29375 -0.48125,-0.45625 -1.3625,-0.45625 z m -1.2625,-1.0375 h 2.85 q 1.56875,0 2.36875,0.7125 0.80625,0.70625 0.80625,2.075 0,1.38125 -0.80625,2.0875 -0.8,0.70625 -2.36875,0.70625 h -1.5875 v 3.75 h -1.2625 z"
+       style=""
+       id="path1159" />
+    <path
+       d="m 80.074764,303.00198 h 1.15 v 7 h -1.15 z m 0,-2.725 h 1.15 v 1.45625 h -1.15 z"
+       style=""
+       id="path1161" />
+    <path
+       d="m 89.443513,303.00198 -2.53125,3.40625 2.6625,3.59375 h -1.35625 l -2.0375,-2.75 -2.0375,2.75 h -1.35625 l 2.71875,-3.6625 -2.4875,-3.3375 h 1.35625 l 1.85625,2.49375 1.85625,-2.49375 z"
+       style=""
+       id="path1163" />
+    <path
+       d="m 96.787265,306.21448 v 0.5625 h -5.287501 q 0.075,1.1875 0.7125,1.8125 0.64375,0.61875 1.7875,0.61875 0.6625,0 1.28125,-0.1625 0.625001,-0.1625 1.237501,-0.4875 v 1.0875 q -0.61875,0.2625 -1.268751,0.4 -0.65,0.1375 -1.31875,0.1375 -1.675,0 -2.65625,-0.975 -0.975,-0.975 -0.975,-2.6375 0,-1.71875 0.925,-2.725 0.93125,-1.0125 2.50625,-1.0125 1.4125,0 2.231251,0.9125 0.825,0.90625 0.825,2.46875 z m -1.15,-0.3375 q -0.0125,-0.94375 -0.531251,-1.50625 -0.5125,-0.5625 -1.3625,-0.5625 -0.9625,0 -1.54375,0.54375 -0.575,0.54375 -0.6625,1.53125 z"
+       style=""
+       id="path1165" />
+    <path
+       d="m 98.674764,300.27698 h 1.15 v 9.725 h -1.15 z"
+       style=""
+       id="path1167" />
+  </g>
+  <path
+     transform="translate(15.084017,-0.7)"
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 134.124,300.174 h -41.1 v -34 h 29.1 l 12,12 z"
+     id="polygon474" />
+  <path
+     transform="translate(15.084017,-0.7)"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
+     d="m 122.124,266.174 v 12 h 12"
+     id="polyline476" />
+  <g
+     aria-label="64"
+     style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:monospace;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+     id="text480">
+    <path
+       d="m 126.41705,281.24899 v 1.1625 q -0.39375,-0.23125 -0.8375,-0.35 -0.44375,-0.125 -0.925,-0.125 -1.2,0 -1.81875,0.90625 -0.61875,0.9 -0.61875,2.65625 0.3,-0.625 0.83125,-0.95625 0.53125,-0.3375 1.21875,-0.3375 1.35,0 2.0875,0.83125 0.74375,0.825 0.74375,2.34375 0,1.5125 -0.7625,2.34375 -0.7625,0.83125 -2.14375,0.83125 -1.625,0 -2.38125,-1.1625 -0.75625,-1.16875 -0.75625,-3.675 0,-2.3625 0.90625,-3.6 0.9125,-1.24375 2.6375,-1.24375 0.4625,0 0.925,0.1 0.4625,0.0937 0.89375,0.275 z m -2.25,3.94375 q -0.80625,0 -1.26875,0.58125 -0.4625,0.58125 -0.4625,1.60625 0,1.025 0.4625,1.60625 0.4625,0.58125 1.26875,0.58125 0.8375,0 1.2625,-0.55 0.425,-0.55625 0.425,-1.6375 0,-1.0875 -0.425,-1.6375 -0.425,-0.55 -1.2625,-0.55 z"
+       style=""
+       id="path1172" />
+    <path
+       d="m 132.51705,282.19274 -2.94375,4.93125 h 2.94375 z m -0.20625,-1.15 h 1.4625 v 6.08125 h 1.24375 v 1.025 h -1.24375 v 2.225 h -1.25625 v -2.225 h -3.95625 v -1.19375 z"
+       style=""
+       id="path1174" />
+  </g>
+  <g
+     aria-label=" char"
+     style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:sans-serif;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+     id="text486">
+    <path
+       d="m 144.10076,413.82475 v 1.075 q -0.4875,-0.26875 -0.98125,-0.4 -0.4875,-0.1375 -0.9875,-0.1375 -1.11875,0 -1.7375,0.7125 -0.61875,0.70625 -0.61875,1.9875 0,1.28125 0.61875,1.99375 0.61875,0.70625 1.7375,0.70625 0.5,0 0.9875,-0.13125 0.49375,-0.1375 0.98125,-0.40625 v 1.0625 q -0.48125,0.225 -1,0.3375 -0.5125,0.1125 -1.09375,0.1125 -1.58125,0 -2.5125,-0.99375 -0.93125,-0.99375 -0.93125,-2.68125 0,-1.7125 0.9375,-2.69375 0.94375,-0.98125 2.58125,-0.98125 0.53125,0 1.0375,0.1125 0.50625,0.10625 0.98125,0.325 z"
+       style=""
+       id="path1177" />
+    <path
+       d="m 151.93201,416.331 v 4.225 h -1.15 v -4.1875 q 0,-0.99375 -0.3875,-1.4875 -0.3875,-0.49375 -1.1625,-0.49375 -0.93125,0 -1.46875,0.59375 -0.5375,0.59375 -0.5375,1.61875 v 3.95625 h -1.15625 v -9.725 h 1.15625 v 3.8125 q 0.4125,-0.63125 0.96875,-0.94375 0.5625,-0.3125 1.29375,-0.3125 1.20625,0 1.825,0.75 0.61875,0.74375 0.61875,2.19375 z"
+       style=""
+       id="path1179" />
+    <path
+       d="m 157.41951,417.03725 q -1.39375,0 -1.93125,0.31875 -0.5375,0.31875 -0.5375,1.0875 0,0.6125 0.4,0.975 0.40625,0.35625 1.1,0.35625 0.95625,0 1.53125,-0.675 0.58125,-0.68125 0.58125,-1.80625 v -0.25625 z m 2.29375,-0.475 v 3.99375 h -1.15 v -1.0625 q -0.39375,0.6375 -0.98125,0.94375 -0.5875,0.3 -1.4375,0.3 -1.075,0 -1.7125,-0.6 -0.63125,-0.60625 -0.63125,-1.61875 0,-1.18125 0.7875,-1.78125 0.79375,-0.6 2.3625,-0.6 h 1.6125 v -0.1125 q 0,-0.79375 -0.525,-1.225 -0.51875,-0.4375 -1.4625,-0.4375 -0.6,0 -1.16875,0.14375 -0.56875,0.14375 -1.09375,0.43125 v -1.0625 q 0.63125,-0.24375 1.225,-0.3625 0.59375,-0.125 1.15625,-0.125 1.51875,0 2.26875,0.7875 0.75,0.7875 0.75,2.3875 z"
+       style=""
+       id="path1181" />
+    <path
+       d="m 166.14451,414.631 q -0.19375,-0.1125 -0.425,-0.1625 -0.225,-0.0563 -0.5,-0.0563 -0.975,0 -1.5,0.6375 -0.51875,0.63125 -0.51875,1.81875 v 3.6875 h -1.15625 v -7 h 1.15625 v 1.0875 q 0.3625,-0.6375 0.94375,-0.94375 0.58125,-0.3125 1.4125,-0.3125 0.11875,0 0.2625,0.0188 0.14375,0.0125 0.31875,0.0437 z"
+       style=""
+       id="path1183" />
+  </g>
+  <path
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 124.98202,367.964 h 49.15 c 6.144,8 8.11,12 8.11,20 0,8 -1.966,12 -8.11,20 h -49.15 c -6.144,-8 -8.11,-12 -8.11,-20 0,-8 1.966,-12 8.11,-20 z"
+     id="path488"
+     inkscape:connector-curvature="0" />
+  <g
+     aria-label="alpha"
+     style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:sans-serif;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
+     id="text492">
+    <path
+       d="m 136.19452,388.44524 q -1.39375,0 -1.93125,0.31875 -0.5375,0.31875 -0.5375,1.0875 0,0.6125 0.4,0.975 0.40625,0.35625 1.1,0.35625 0.95625,0 1.53125,-0.675 0.58125,-0.68125 0.58125,-1.80625 v -0.25625 z m 2.29375,-0.475 v 3.99375 h -1.15 v -1.0625 q -0.39375,0.6375 -0.98125,0.94375 -0.5875,0.3 -1.4375,0.3 -1.075,0 -1.7125,-0.6 -0.63125,-0.60625 -0.63125,-1.61875 0,-1.18125 0.7875,-1.78125 0.79375,-0.6 2.3625,-0.6 h 1.6125 v -0.1125 q 0,-0.79375 -0.525,-1.225 -0.51875,-0.4375 -1.4625,-0.4375 -0.6,0 -1.16875,0.14375 -0.56875,0.14375 -1.09375,0.43125 v -1.0625 q 0.63125,-0.24375 1.225,-0.3625 0.59375,-0.125 1.15625,-0.125 1.51875,0 2.26875,0.7875 0.75,0.7875 0.75,2.3875 z"
+       style=""
+       id="path1186" />
+    <path
+       d="m 140.86327,382.23899 h 1.15 v 9.725 h -1.15 z"
+       style=""
+       id="path1188" />
+    <path
+       d="m 145.52577,390.91399 v 3.7125 h -1.15625 v -9.6625 h 1.15625 v 1.0625 q 0.3625,-0.625 0.9125,-0.925 0.55625,-0.30625 1.325,-0.30625 1.275,0 2.06875,1.0125 0.8,1.0125 0.8,2.6625 0,1.65 -0.8,2.6625 -0.79375,1.0125 -2.06875,1.0125 -0.76875,0 -1.325,-0.3 -0.55,-0.30625 -0.9125,-0.93125 z m 3.9125,-2.44375 q 0,-1.26875 -0.525,-1.9875 -0.51875,-0.725 -1.43125,-0.725 -0.9125,0 -1.4375,0.725 -0.51875,0.71875 -0.51875,1.9875 0,1.26875 0.51875,1.99375 0.525,0.71875 1.4375,0.71875 0.9125,0 1.43125,-0.71875 0.525,-0.725 0.525,-1.99375 z"
+       style=""
+       id="path1190" />
+    <path
+       d="m 158.35702,387.73899 v 4.225 h -1.15 v -4.1875 q 0,-0.99375 -0.3875,-1.4875 -0.3875,-0.49375 -1.1625,-0.49375 -0.93125,0 -1.46875,0.59375 -0.5375,0.59375 -0.5375,1.61875 v 3.95625 h -1.15625 v -9.725 h 1.15625 v 3.8125 q 0.4125,-0.63125 0.96875,-0.94375 0.5625,-0.3125 1.29375,-0.3125 1.20625,0 1.825,0.75 0.61875,0.74375 0.61875,2.19375 z"
+       style=""
+       id="path1192" />
+    <path
+       d="m 163.84452,388.44524 q -1.39375,0 -1.93125,0.31875 -0.5375,0.31875 -0.5375,1.0875 0,0.6125 0.4,0.975 0.40625,0.35625 1.1,0.35625 0.95625,0 1.53125,-0.675 0.58125,-0.68125 0.58125,-1.80625 v -0.25625 z m 2.29375,-0.475 v 3.99375 h -1.15 v -1.0625 q -0.39375,0.6375 -0.98125,0.94375 -0.5875,0.3 -1.4375,0.3 -1.075,0 -1.7125,-0.6 -0.63125,-0.60625 -0.63125,-1.61875 0,-1.18125 0.7875,-1.78125 0.79375,-0.6 2.3625,-0.6 h 1.6125 v -0.1125 q 0,-0.79375 -0.525,-1.225 -0.51875,-0.4375 -1.4625,-0.4375 -0.6,0 -1.16875,0.14375 -0.56875,0.14375 -1.09375,0.43125 v -1.0625 q 0.63125,-0.24375 1.225,-0.3625 0.59375,-0.125 1.15625,-0.125 1.51875,0 2.26875,0.7875 0.75,0.7875 0.75,2.3875 z"
+       style=""
+       id="path1194" />
+  </g>
+  <path
+     transform="translate(15.084017,-0.7)"
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 179.294,383.148 h -25.7 v -34 h 13.7 l 12,12 z"
+     id="polygon496" />
+  <path
+     transform="translate(15.084017,-0.7)"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
+     d="m 167.294,349.148 v 12 h 12"
+     id="polyline498" />
+  <g
+     aria-label="1"
+     style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:monospace;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+     id="text502">
+    <path
+       d="m 177.36551,372.28549 h 1.9625 v -7.13125 l -2.1125,0.475 v -1.15 l 2.1,-0.4625 h 1.2625 v 8.26875 h 1.9375 v 1.0625 h -5.15 z"
+       style=""
+       id="path1199" />
+  </g>
+  <path
+     style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 86.866615,231.698 -0.369003,42.306"
+     id="line506" />
+  <path
+     transform="translate(15.084017,-0.7)"
+     style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 76.4134,274.747 -9.9996,-0.087 4.9126,10.043 z"
+     id="polygon508" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="M 72.350319,326.99799 50.544018,360.013"
+     id="line512" />
+  <path
+     transform="translate(15.084017,-0.7)"
+     style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 39.632,363.469 -8.3441,-5.511 -1.3393,11.1 z"
+     id="polygon514" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 107.68951,327.00598 34.00451,33.26599"
+     id="line518" />
+  <path
+     transform="translate(15.084017,-0.7)"
+     style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 130.106,357.398 -6.993,7.148 10.645,3.419 z"
+     id="polygon520" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 59.70322,410.198 30.695195,42.36099"
+     id="line524" />
+  <path
+     transform="translate(15.084017,-0.7)"
+     style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 79.3632,450.325 -8.0976,5.868 9.9164,5.163 z"
+     id="polygon526" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 41.440819,410.151 -5.731301,39.50598"
+     id="line530" />
+  <path
+     transform="translate(15.084017,-0.7)"
+     style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 25.5737,451.075 -9.8964,-1.436 3.5125,10.614 z"
+     id="polygon532" />
+  <g
+     aria-label=" float"
+     style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:sans-serif;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+     id="text538">
+    <path
+       d="m 149.74151,506.92301 h 3.2 v 9.725 h -1.15625 v -8.76875 h -2.05625 q -0.61875,0 -0.8625,0.25 -0.2375,0.25 -0.2375,0.9 v 0.61875 h 1.89375 v 0.89375 h -1.89375 v 6.10625 h -1.15625 v -6.10625 h -1.1 v -0.89375 h 1.1 v -0.4875 q 0,-1.16875 0.54375,-1.7 0.54375,-0.5375 1.725,-0.5375 z"
+       style=""
+       id="path1212" />
+    <path
+       d="m 158.07276,510.45426 q -0.925,0 -1.4625,0.725 -0.5375,0.71875 -0.5375,1.975 0,1.25625 0.53125,1.98125 0.5375,0.71875 1.46875,0.71875 0.91875,0 1.45625,-0.725 0.5375,-0.725 0.5375,-1.975 0,-1.24375 -0.5375,-1.96875 -0.5375,-0.73125 -1.45625,-0.73125 z m 0,-0.975 q 1.5,0 2.35625,0.975 0.85625,0.975 0.85625,2.7 0,1.71875 -0.85625,2.7 -0.85625,0.975 -2.35625,0.975 -1.50625,0 -2.3625,-0.975 -0.85,-0.98125 -0.85,-2.7 0,-1.725 0.85,-2.7 0.85625,-0.975 2.3625,-0.975 z"
+       style=""
+       id="path1214" />
+    <path
+       d="m 166.36651,513.12926 q -1.39375,0 -1.93125,0.31875 -0.5375,0.31875 -0.5375,1.0875 0,0.6125 0.4,0.975 0.40625,0.35625 1.1,0.35625 0.95625,0 1.53125,-0.675 0.58125,-0.68125 0.58125,-1.80625 v -0.25625 z m 2.29375,-0.475 v 3.99375 h -1.15 v -1.0625 q -0.39375,0.6375 -0.98125,0.94375 -0.5875,0.3 -1.4375,0.3 -1.075,0 -1.7125,-0.6 -0.63125,-0.60625 -0.63125,-1.61875 0,-1.18125 0.7875,-1.78125 0.79375,-0.6 2.3625,-0.6 h 1.6125 v -0.1125 q 0,-0.79375 -0.525,-1.225 -0.51875,-0.4375 -1.4625,-0.4375 -0.6,0 -1.16875,0.14375 -0.56875,0.14375 -1.09375,0.43125 v -1.0625 q 0.63125,-0.24375 1.225,-0.3625 0.59375,-0.125 1.15625,-0.125 1.51875,0 2.26875,0.7875 0.75,0.7875 0.75,2.3875 z"
+       style=""
+       id="path1216" />
+    <path
+       d="m 172.17276,507.66051 v 1.9875 h 2.36875 v 0.89375 h -2.36875 v 3.8 q 0,0.85625 0.23125,1.1 0.2375,0.24375 0.95625,0.24375 h 1.18125 v 0.9625 h -1.18125 q -1.33125,0 -1.8375,-0.49375 -0.50625,-0.5 -0.50625,-1.8125 v -3.8 h -0.84375 v -0.89375 h 0.84375 v -1.9875 z"
+       style=""
+       id="path1218" />
+  </g>
+  <path
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 145.62802,461.952 h 30.075 c 3.76,8 4.963,12 4.963,20 0,8 -1.203,12 -4.963,20 h -30.075 c -3.759,-8 -4.962,-12 -4.962,-20 0,-8 1.203,-12 4.962,-20 z"
+     id="path540"
+     inkscape:connector-curvature="0" />
+  <g
+     aria-label="b"
+     style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:sans-serif;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
+     id="text544">
+    <path
+       d="m 162.83477,482.45825 q 0,-1.26875 -0.525,-1.9875 -0.51875,-0.725 -1.43125,-0.725 -0.9125,0 -1.4375,0.725 -0.51875,0.71875 -0.51875,1.9875 0,1.26875 0.51875,1.99375 0.525,0.71875 1.4375,0.71875 0.9125,0 1.43125,-0.71875 0.525,-0.725 0.525,-1.99375 z m -3.9125,-2.44375 q 0.3625,-0.625 0.9125,-0.925 0.55625,-0.30625 1.325,-0.30625 1.275,0 2.06875,1.0125 0.8,1.0125 0.8,2.6625 0,1.65 -0.8,2.6625 -0.79375,1.0125 -2.06875,1.0125 -0.76875,0 -1.325,-0.3 -0.55,-0.30625 -0.9125,-0.93125 v 1.05 h -1.15625 v -9.725 h 1.15625 z"
+       style=""
+       id="path1221" />
+  </g>
+  <path
+     transform="translate(15.084017,-0.7)"
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 180.186,479.184 h -25.7 v -34 h 13.7 l 12,12 z"
+     id="polygon546" />
+  <path
+     transform="translate(15.084017,-0.7)"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
+     d="m 168.186,445.184 v 12 h 12"
+     id="polyline548" />
+  <g
+     aria-label="1"
+     style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:monospace;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+     id="text552">
+    <path
+       d="m 178.25751,468.3215 h 1.9625 v -7.13125 l -2.1125,0.475 v -1.15 l 2.1,-0.4625 h 1.2625 v 8.26875 h 1.9375 v 1.0625 h -5.15 z"
+       style=""
+       id="path1226" />
+  </g>
+  <path
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 16.051959,461.502 h 30.075158 c 3.7594,8 4.9624,12 4.9624,20 0,8 -1.203,12 -4.9624,20 H 16.051959 c -3.759402,-8 -4.962402,-12 -4.962402,-20 0,-8 1.203,-12 4.962402,-20 z"
+     id="path556"
+     inkscape:connector-curvature="0" />
+  <g
+     aria-label="r"
+     style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:sans-serif;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
+     id="text560">
+    <path
+       d="m 33.714518,479.57698 q -0.19375,-0.1125 -0.425,-0.1625 -0.225,-0.0563 -0.5,-0.0563 -0.975,0 -1.5,0.6375 -0.51875,0.63125 -0.51875,1.81875 v 3.6875 h -1.15625 v -7 h 1.15625 v 1.0875 q 0.3625,-0.6375 0.94375,-0.94375 0.58125,-0.3125 1.4125,-0.3125 0.11875,0 0.2625,0.0188 0.14375,0.0125 0.31875,0.0437 z"
+       style=""
+       id="path1229" />
+  </g>
+  <g
+     aria-label=" float"
+     style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:sans-serif;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+     id="text564">
+    <path
+       d="m 22.543054,506.85898 h 3.2 v 9.725 h -1.15625 v -8.76875 h -2.05625 q -0.61875,0 -0.8625,0.25 -0.2375,0.25 -0.2375,0.9 v 0.61875 h 1.89375 v 0.89375 h -1.89375 v 6.10625 h -1.15625 v -6.10625 h -1.1 v -0.89375 h 1.1 v -0.4875 q 0,-1.16875 0.54375,-1.7 0.54375,-0.5375 1.725,-0.5375 z"
+       style=""
+       id="path1232" />
+    <path
+       d="m 30.874303,510.39023 q -0.925,0 -1.4625,0.725 -0.5375,0.71875 -0.5375,1.975 0,1.25625 0.53125,1.98125 0.5375,0.71875 1.46875,0.71875 0.91875,0 1.45625,-0.725 0.5375,-0.725 0.5375,-1.975 0,-1.24375 -0.5375,-1.96875 -0.5375,-0.73125 -1.45625,-0.73125 z m 0,-0.975 q 1.5,0 2.35625,0.975 0.85625,0.975 0.85625,2.7 0,1.71875 -0.85625,2.7 -0.85625,0.975 -2.35625,0.975 -1.50625,0 -2.3625,-0.975 -0.85,-0.98125 -0.85,-2.7 0,-1.725 0.85,-2.7 0.85625,-0.975 2.3625,-0.975 z"
+       style=""
+       id="path1234" />
+    <path
+       d="m 39.168054,513.06523 q -1.39375,0 -1.93125,0.31875 -0.5375,0.31875 -0.5375,1.0875 0,0.6125 0.4,0.975 0.40625,0.35625 1.1,0.35625 0.95625,0 1.53125,-0.675 0.58125,-0.68125 0.58125,-1.80625 v -0.25625 z m 2.29375,-0.475 v 3.99375 h -1.15 v -1.0625 q -0.39375,0.6375 -0.98125,0.94375 -0.5875,0.3 -1.4375,0.3 -1.075,0 -1.7125,-0.6 -0.63125,-0.60625 -0.63125,-1.61875 0,-1.18125 0.7875,-1.78125 0.79375,-0.6 2.3625,-0.6 h 1.6125 v -0.1125 q 0,-0.79375 -0.525,-1.225 -0.51875,-0.4375 -1.4625,-0.4375 -0.6,0 -1.16875,0.14375 -0.56875,0.14375 -1.09375,0.43125 v -1.0625 q 0.63125,-0.24375 1.225,-0.3625 0.59375,-0.125 1.15625,-0.125 1.51875,0 2.26875,0.7875 0.75,0.7875 0.75,2.3875 z"
+       style=""
+       id="path1236" />
+    <path
+       d="m 44.974304,507.59648 v 1.9875 h 2.36875 v 0.89375 h -2.36875 v 3.8 q 0,0.85625 0.23125,1.1 0.2375,0.24375 0.95625,0.24375 h 1.18125 v 0.9625 h -1.18125 q -1.33125,0 -1.8375,-0.49375 -0.50625,-0.5 -0.50625,-1.8125 v -3.8 h -0.84375 v -0.89375 h 0.84375 v -1.9875 z"
+       style=""
+       id="path1238" />
+  </g>
+  <path
+     transform="translate(15.084017,-0.7)"
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 53.6535,478.162 h -25.7 v -34 h 13.7 l 12,12 z"
+     id="polygon566" />
+  <path
+     transform="translate(15.084017,-0.7)"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
+     d="m 41.6535,444.162 v 12 h 12"
+     id="polyline568" />
+  <g
+     aria-label="1"
+     style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:monospace;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+     id="text572">
+    <path
+       d="m 51.725018,467.2995 h 1.9625 v -7.13125 l -2.1125,0.475 v -1.15 l 2.1,-0.4625 h 1.2625 v 8.26875 h 1.9375 v 1.0625 h -5.15 z"
+       style=""
+       id="path1243" />
+  </g>
+  <g
+     aria-label=" float"
+     style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:sans-serif;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+     id="text578">
+    <path
+       d="m 85.928319,506.43699 h 3.2 v 9.725 h -1.15625 v -8.76875 h -2.05625 q -0.61875,0 -0.8625,0.25 -0.2375,0.25 -0.2375,0.9 v 0.61875 h 1.89375 v 0.89375 h -1.89375 v 6.10625 h -1.15625 v -6.10625 h -1.1 v -0.89375 h 1.1 v -0.4875 q 0,-1.16875 0.54375,-1.7 0.54375,-0.5375 1.725,-0.5375 z"
+       style=""
+       id="path1246" />
+    <path
+       d="m 94.259568,509.96824 q -0.925,0 -1.4625,0.725 -0.5375,0.71875 -0.5375,1.975 0,1.25625 0.53125,1.98125 0.5375,0.71875 1.46875,0.71875 0.91875,0 1.45625,-0.725 0.5375,-0.725 0.5375,-1.975 0,-1.24375 -0.5375,-1.96875 -0.5375,-0.73125 -1.45625,-0.73125 z m 0,-0.975 q 1.5,0 2.35625,0.975 0.856251,0.975 0.856251,2.7 0,1.71875 -0.856251,2.7 -0.85625,0.975 -2.35625,0.975 -1.50625,0 -2.3625,-0.975 -0.85,-0.98125 -0.85,-2.7 0,-1.725 0.85,-2.7 0.85625,-0.975 2.3625,-0.975 z"
+       style=""
+       id="path1248" />
+    <path
+       d="m 102.55332,512.64324 q -1.39375,0 -1.93125,0.31875 -0.5375,0.31875 -0.5375,1.0875 0,0.6125 0.4,0.975 0.40625,0.35625 1.1,0.35625 0.95625,0 1.53125,-0.675 0.58125,-0.68125 0.58125,-1.80625 v -0.25625 z m 2.29375,-0.475 v 3.99375 h -1.15 v -1.0625 q -0.39375,0.6375 -0.98125,0.94375 -0.5875,0.3 -1.4375,0.3 -1.075,0 -1.712501,-0.6 -0.63125,-0.60625 -0.63125,-1.61875 0,-1.18125 0.7875,-1.78125 0.793751,-0.6 2.362501,-0.6 h 1.6125 v -0.1125 q 0,-0.79375 -0.525,-1.225 -0.51875,-0.4375 -1.4625,-0.4375 -0.6,0 -1.16875,0.14375 -0.568751,0.14375 -1.093751,0.43125 v -1.0625 q 0.631251,-0.24375 1.225001,-0.3625 0.59375,-0.125 1.15625,-0.125 1.51875,0 2.26875,0.7875 0.75,0.7875 0.75,2.3875 z"
+       style=""
+       id="path1250" />
+    <path
+       d="m 108.35957,507.17449 v 1.9875 h 2.36875 v 0.89375 h -2.36875 v 3.8 q 0,0.85625 0.23125,1.1 0.2375,0.24375 0.95625,0.24375 h 1.18125 v 0.9625 h -1.18125 q -1.33125,0 -1.8375,-0.49375 -0.50625,-0.5 -0.50625,-1.8125 v -3.8 h -0.84375 v -0.89375 h 0.84375 v -1.9875 z"
+       style=""
+       id="path1252" />
+  </g>
+  <path
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 81.815217,461.466 h 30.075203 c 3.7596,8 4.9626,12 4.9626,20 0,8 -1.203,12 -4.9626,20 H 81.815217 c -3.7594,-8 -4.9624,-12 -4.9624,-20 0,-8 1.203,-12 4.9624,-20 z"
+     id="path580"
+     inkscape:connector-curvature="0" />
+  <g
+     aria-label="g"
+     style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:sans-serif;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
+     id="text584">
+    <path
+       d="m 98.602814,481.88472 q 0,-1.25 -0.51875,-1.9375 -0.5125,-0.6875 -1.44375,-0.6875 -0.925,0 -1.44375,0.6875 -0.5125,0.6875 -0.5125,1.9375 0,1.24375 0.5125,1.93125 0.51875,0.6875 1.44375,0.6875 0.93125,0 1.44375,-0.6875 0.51875,-0.6875 0.51875,-1.93125 z m 1.15,2.7125 q 0,1.7875 -0.79375,2.65625 -0.79375,0.875 -2.43125,0.875 -0.60625,0 -1.14375,-0.0937 -0.5375,-0.0875 -1.04375,-0.275 v -1.11875 q 0.50625,0.275 1,0.40625 0.49375,0.13125 1.00625,0.13125 1.13125,0 1.69375,-0.59375 0.5625,-0.5875 0.5625,-1.78125 v -0.56875 q -0.35625,0.61875 -0.9125,0.925 -0.55625,0.30625 -1.33125,0.30625 -1.2875,0 -2.075,-0.98125 -0.7875,-0.98125 -0.7875,-2.6 0,-1.625 0.7875,-2.60625 0.7875,-0.98125 2.075,-0.98125 0.775,0 1.33125,0.30625 0.55625,0.30625 0.9125,0.925 v -1.0625 h 1.15 z"
+       style=""
+       id="path1255" />
+  </g>
+  <path
+     transform="translate(15.084017,-0.7)"
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="M 116.373,478.698 H 90.6728 v -34 h 13.7002 l 12,12 z"
+     id="polygon586" />
+  <path
+     transform="translate(15.084017,-0.7)"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
+     d="m 104.373,444.698 v 12 h 12"
+     id="polyline588" />
+  <g
+     aria-label="1"
+     style="font-style:normal;font-weight:normal;font-size:12.80000019px;font-family:monospace;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+     id="text592">
+    <path
+       d="m 114.44431,467.83548 h 1.9625 v -7.13125 l -2.1125,0.475 v -1.15 l 2.1,-0.4625 h 1.2625 v 8.26875 h 1.9375 v 1.0625 h -5.15 z"
+       style=""
+       id="path1260" />
+  </g>
+  <path
+     style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 78.023514,410.198 73.319506,45.91598"
+     id="line596" />
+  <path
+     transform="translate(15.084017,-0.7)"
+     style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-opacity:1"
+     d="m 138.913,452.576 -5.308,8.475 11.129,1.07 z"
+     id="polygon598" />
 </svg>

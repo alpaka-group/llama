@@ -159,7 +159,7 @@ operated on. Every not matching pair is ignored, e.g.
         > >
     >;
 
-    // Let datum1 be using DD1 and datum2 using DD2.
+    // Let assume datum1 using DD1 and datum2 using DD2.
 
     datum1 += datum2;
     // datum2.pos.x and only datum2.pos.x will be added to datum1.pos.x because
@@ -170,5 +170,137 @@ The same operators are also overloaded for any other type so that
 Of course this may throw warnings about narrowing conversion. It is task of the
 user to only use this if compatible.
 
+The comparative operation :cpp:`==`, :cpp:`!=`, :cpp:`<`, :cpp:`<=`, :cpp:`>`
+and :cpp:`>=` are overloaded, too, and return the boolean value , :cpp:`true` if
+the operation is true for **all** matching elements of the two comparing virtual
+datums respectively other type. Let's examine this deeper in an example:
+
+.. code-block:: C++
+
+    A = llama::DS <
+        llama::DE < x, float >,
+        llama::DE < y, float >
+    >;
+
+    B = llama::DS <
+        llama::DE < z, double >,
+        llama::DE < x, double >
+    >;
+
+    bool result;
+
+    // Let assume a1 and a2 using A and b using B.
+
+    a1( x() ) = 0.0f;
+    a1( y() ) = 2.0f;
+
+    a2( x() ) = 1.0f;
+    a2( y() ) = 1.0f;
+
+    b ( x() ) = 1.0f;
+    b ( z() ) = 2.0f;
+
+    result = a1 < a2;
+    //result is false, because a1.y > a2.y
+
+    result = a1 > a2;
+    //result is false, too, because now a1.x > a2.x
+
+    result = a1 != a2;
+    //result is true
+
+    result = a2 == b;
+    //result is true, because only the matching "x" matters
+
 A partly addressing of a virtual datum like :cpp:`datum1( color() ) *= 7.0`
 would be handy, too, which is planned but not implemented yet.
+
+Compiler steering
+-----------------
+
+Unfortunately C++ lacks some language features to express data and function
+locality as well as dependence of data.
+
+The first shortcoming is what language extension like cuda, OpenMP, OpenACC, you
+name it try to solve. The second is mostly tackles by vendor specific compiler
+extension. Both define new keywords and annotations to fill those gaps.
+As LLAMA tries to stay independent from specific compiler vendors and extension
+C preprocessor macros are used to define some directives only for a sub set of
+compilers but with a unified interface for the user. Some macros can even be
+overwritten from the outside to enable interoperability with libraries such as
+alpaka.
+
+Function locality
+^^^^^^^^^^^^^^^^^
+
+Every method which shall be able to be used on offloading devices (e.g. GPUs)
+uses the :cpp:`LLAMA_FN_HOST_ACC_INLINE` macro in front. At default it is
+defined as
+
+.. code-block:: C++
+
+    #ifndef LLAMA_FN_HOST_ACC_INLINE
+        #define LLAMA_FN_HOST_ACC_INLINE inline
+    #endif
+
+but when working with cuda it may make sense to replace it with
+:cpp:`__host__ __device__` before including or analogous for alpaka
+
+.. code-block:: C++
+
+    #include <alpaka/alpaka.hpp>
+    #ifdef __CUDACC__
+        #define LLAMA_FN_HOST_ACC_INLINE ALPAKA_FN_ACC __forceinline__
+    #else
+        #define LLAMA_FN_HOST_ACC_INLINE ALPAKA_FN_ACC inline
+    #endif
+    #include <llama/llama.hpp>
+
+Data (in)dependence
+^^^^^^^^^^^^^^^^^^^
+
+Another problem is that compilers cannot assume that two data regions are
+independent if the data is not laying on the stack completely. One solution
+of C++ extension was the :cpp:`restrict` keyword which tells that a pointer
+parameter is independent of each other. However this does not work for more
+complex data types hiding pointers -- as it is the idea with modern C++.
+
+Another solution are loop :cpp:`#pragma`\ s which tell the compiler that
+**each** data access inside this loop can be assumed independent of each other
+if not explicitly determined otherwise, e.g.
+
+.. code-block:: C
+
+    int *a = /* ... */;
+    int *b = /* ... */;
+
+    #pragma GCC ivdep
+    for (int i = 0; i < 16; i+=2)
+    {
+        int c[2];
+        int *d = &c[1];
+
+        c[0] = a[i  ];
+        c[1] = a[i+1];
+
+        b[i  ] += c[0];
+        b[i+1] += d[0]; // c[1]
+    }
+
+In this example the compiler assumes now that :cpp:`a` and :cpp:`b` are
+independent, but as :cpp:`c` and :cpp:`d` are defined inside the loop on the
+stack the compilers "sees" that they are not independent although we put
+:cpp:`#pragma GCC ivdep` before.
+
+This is handy and works with more complex data types, too. However nobody wants
+a :cpp:`#pragma` for every C++11 compiler existing in the world in front of
+every loop (which needs to be updated when a new compiler directive is added).
+:cpp:`#pragma omp simd` was promised to solve this issue but
+
+#. It does not work.
+#. It is not even defined for some compilers (OpenMP inside of cuda doesn't even make sense).
+
+So LLAMA provides a macro called :cpp:`LLAMA_INDEPENDENT_DATA` which can be put
+in front of loops to tell the underlying compiler that the loop body is
+independent of each other -- and can savely be vectorized (what is the goal in
+the end).
