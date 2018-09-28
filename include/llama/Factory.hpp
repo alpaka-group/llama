@@ -144,15 +144,12 @@ template<
 LLAMA_FN_HOST_ACC_INLINE
 auto
 tempAlloc()
--> View<
-    llama::mapping::One<
-        UserDomain< dimension >,
+-> decltype(
+    OneOnStackFactory<
+        dimension,
         DatumDomain
-    >,
-    typename llama::allocator::Stack<
-        SizeOf<DatumDomain>::value
-    >::BlobType
->
+    >::allocView()
+)
 {
     return OneOnStackFactory<
         dimension,
