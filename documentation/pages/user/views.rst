@@ -140,7 +140,7 @@ operated on. Every not matching pair is ignored, e.g.
 
 .. code-block:: C++
 
-    DD1 = llama::DS <
+    using DD1 = llama::DS <
         llama::DS < llama::DE < pos
             llama::DE < x, float >
         > >,
@@ -150,14 +150,14 @@ operated on. Every not matching pair is ignored, e.g.
         llama::DE < x, int >
     >;
 
-    DD2 = llama::DS <
+    using DD2 = llama::DS <
         llama::DS < llama::DE < pos
             llama::DE < x, double >
         > >,
         llama::DS < llama::DE < mom
             llama::DE < x, double >
         > >
-    >;
+    >;using
 
     // Let assume datum1 using DD1 and datum2 using DD2.
 
@@ -177,12 +177,12 @@ datums respectively other type. Let's examine this deeper in an example:
 
 .. code-block:: C++
 
-    A = llama::DS <
+    using A = llama::DS <
         llama::DE < x, float >,
         llama::DE < y, float >
     >;
 
-    B = llama::DS <
+    using B = llama::DS <
         llama::DE < z, double >,
         llama::DE < x, double >
     >;
@@ -304,3 +304,159 @@ So LLAMA provides a macro called :cpp:`LLAMA_INDEPENDENT_DATA` which can be put
 in front of loops to tell the underlying compiler that the loop body is
 independent of each other -- and can savely be vectorized (what is the goal in
 the end).
+
+Datum domain iterating
+----------------------
+
+It is trivial to iterate over the user domain and although it is done at run
+time the compiler can optimize a lot e.g. with tree vectorization or loop
+unrolling, especially with the beforementioned macros.
+
+It is also possible to iterate over the datum domain, even without some dirty
+hacks as shown before, totalling staying in our precious C++11 world. But this
+can only be archieved atm with functional meta programming techniques, making
+the code complicated and bloated. Even some simple iterating has to be down
+recursive.
+
+LLAMA provides a class to easy the pain (a bit) called :cpp:`llama::ForEach`.
+It takes a datum domain as compile time parameter and a functor as compile and
+run time parameters and calls this functor for each leave of the datum domain
+tree, e.g.
+
+.. code-block:: C++
+
+    using DatumDomain = llama::DS <
+        llama::DE < x, float >,
+        llama::DE < y, float >,
+        llama::DE < z, llama::DS <
+            llama::DE <  low, short int >,
+            llama::DE < high, short int >
+        > >
+    >;
+
+    MyFunctor functor;
+
+    // "functor" will be called for
+    // * x
+    // * y
+    // * z.low
+    // * z.high
+    llama::ForEach< DatumDomain >::apply( functor );
+
+Optionally a branch of the DatumDomain can be chosen to execute the functor on.
+This is working both for addressing with names and `DatumCoord`.
+
+.. code-block:: C++
+
+    // "functor" will be called for
+    // * z.low
+    // * z.high
+    llama::ForEach< DatumDomain, z >::apply( functor );
+
+    // "functor" will be called for
+    // * z.low
+    llama::ForEach< DatumDomain, z, low >::apply( functor );
+
+    // "functor" will be called for
+    // * z.high
+    llama::ForEach< DatumDomain, llama::DatumCoord< 2, 1 > >::apply( functor );
+
+The functor type itself is a struct which provides the :cpp:`operator()` for
+two different template parameters. The (run time) datum to work on and other
+properties can be given as struct members. The template parameters are outer and
+inner coordinates in the datum domain tree. The outer coordinate is what can be
+given as template parameter(s) after the datum domain itself. However even if
+given as naming, the functor always gets :cpp:`DatumCoord`. The inner coord is
+the leave coordinate based on the outer coord. To get the needed global
+coodinate in the tree :cpp:`llama::DatumCoord` provides a method called
+:cpp:`Cat` as seen in the next example functor.
+
+.. code-block:: C++
+
+    template<
+        typename T_VirtualDatum,
+        typename T_Value
+    >
+    struct SetValueFunctor
+    {
+        template<
+            typename T_OuterCoord,
+            typename T_InnerCoord
+        >
+        auto
+        operator()(
+            T_OuterCoord,
+            T_InnerCoord
+        )
+        -> void
+        {
+            // the global coordinate in the tree is provided with "Cat"
+            vd( typename T_OuterCoord::template Cat< T_InnerCoord >() ) = value;
+        }
+        T_VirtualDatum vd;
+        T_Value const value;
+    };
+
+    // ...
+
+    auto vd = view( 23, 43 );
+
+    SetValueFunctor<
+        decltype( vd ),
+        float
+    > functor( 1337.0f );
+
+    llama::ForEach< DatumDomain >::apply( functor );
+
+A more detailed example can be found in the
+`simpletest example <https://github.com/ComputationalRadiationPhysics/llama/blob/master/examples/simpletest/simpletest.cpp>`_.
+
+Copy
+----
+
+Especially when working with hardware accelerators such as GPUs or offloading
+many core procressors, explicit copy operation calls for as big as possible
+memory chunks are very important to reach best performance.
+
+It is trivial to copy a view from on memory region to another if mapping and
+size are identical. However if the mapping differs, in most of the
+cases only pointwise copy operations will be possible as the memory patterns
+are probably not compatible. There is a small class of remaining use cases where
+the mapping is the same, but the size of the view is different or mappings are
+very related to each other (e.g. both using struct of array, but one time with,
+one time without padding). In that case an optimized copy operation would be
+possible in *theory*. However *practically* it is impossible to figure out the
+biggest possible memory chunks to copy for LLAMA at compile time as the mappings
+can always depend on run time parameters. E.g. a mapping could implement struct
+of array if the view is bigger than :math:`255` elements, but use array of
+struct for a smaller amount.
+
+Three solutions exist for this challenge. One is to implement specializations
+for specific combinations of mappings, which reflect the properties of those
+mappings. This **can** be the way to go if the applications shows significantly
+better run times for different slightly different mappings and the copy
+operation has be shown to be the bottle neck. However this would be the very
+last optimization step as for every new mapping a new specialization would be
+needed.
+
+Another solution would be a run time analysis of the two views to find
+contiguous memory chunks, but the overhead would be probably too big, especially
+if no contiguous memory chunks could be found. At least in that case it may make
+sense to use a (maybe smaller) intermediate view which connects the two worlds.
+
+This last solution means that we have e.g. a view in memory region A with
+mapping A and another view of the same size in memory region B with mapping B.
+A third view in memory region A but with mapping B could be used to reindex in
+region A and then to copy as one big chunk to region B. When using two
+intermediate views in region A and B with the same but possibly different
+mapping than A and B the copy problem can be split to smaller chunks of memory.
+It makes also sense to combine this approach with an asynchronous workflow
+where reindexing, copying and computation and overload as e.g. seen in the
+`async copy example <https://github.com/ComputationalRadiationPhysics/llama/blob/master/examples/asynccopy/asynccopy.cpp>`_.
+
+Another benefit is, that the creating and copying of the intermediate view can
+be analyzed and optimized by the compiler (e.g. with vector operations).
+Furthermore different (sub) datum domains may be used. The above mentioned
+example e.g. applies a bluring kernel to an RGB-image, but may work only on
+two or one channel instead of all three. Not used channels are not allocated and
+especially not copied at all.

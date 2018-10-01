@@ -50,6 +50,9 @@ valid:
     auto subVd1 = vd1( color() );
     subVd1 = 0; //only resetting the color, but not the alpha value
 
+Another thought is to be able to easily define sub datum domains out of existing
+ones, e.g. taking only one branch of the type tree or removing branches.
+
 Mappings
 --------
 
