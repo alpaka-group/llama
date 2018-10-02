@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1mapping_1_1tree_1_1internal_1_1GetTreeBlobByteImpl" kind="struct" language="C++" prot="public">
+    <compoundname>llama::mapping::tree::internal::GetTreeBlobByteImpl</compoundname>
+    <includes refid="GetBlobByte_8hpp" local="no">GetBlobByte.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_Tree</type>
+      </param>
+      <param>
+        <type>typename T_TreeCoord</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structllama_1_1mapping_1_1tree_1_1internal_1_1GetTreeBlobByteImpl_1a320f51dc03f1fd6a134881e49bfe9b1b" prot="public" static="no">
+        <type><ref refid="namespacellama_1aa3255f46d3b3fbcd50ca0d002dfc279c" kindref="member">GetTupleType</ref>&lt; typename T_Tree::Type, decltype(T_TreeCoord::FirstElement::compiletime)::value &gt;</type>
+        <definition>using llama::mapping::tree::internal::GetTreeBlobByteImpl&lt; T_Tree, T_TreeCoord &gt;::SubTree =  GetTupleType&lt; typename T_Tree::Type, decltype(T_TreeCoord::FirstElement::compiletime)::value &gt;</definition>
+        <argsstring></argsstring>
+        <name>SubTree</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobByte.hpp" line="88" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobByte.hpp" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1internal_1_1GetTreeBlobByteImpl_1a6d02fb7b27531c5e69c9e4c538db1090" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto llama::mapping::tree::internal::GetTreeBlobByteImpl&lt; T_Tree, T_TreeCoord &gt;::operator()</definition>
+        <argsstring>(T_Tree const &amp;tree, T_TreeCoord const &amp;treeCoord) const -&gt; std::size_t</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>T_Tree const &amp;</type>
+          <declname>tree</declname>
+        </param>
+        <param>
+          <type>T_TreeCoord const &amp;</type>
+          <declname>treeCoord</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobByte.hpp" line="94" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobByte.hpp" bodystart="94" bodyend="133"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobByte.hpp" line="87" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobByte.hpp" bodystart="86" bodyend="134"/>
+    <listofallmembers>
+      <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1GetTreeBlobByteImpl_1a6d02fb7b27531c5e69c9e4c538db1090" prot="public" virt="non-virtual"><scope>llama::mapping::tree::internal::GetTreeBlobByteImpl</scope><name>operator()</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1GetTreeBlobByteImpl_1a320f51dc03f1fd6a134881e49bfe9b1b" prot="public" virt="non-virtual"><scope>llama::mapping::tree::internal::GetTreeBlobByteImpl</scope><name>SubTree</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

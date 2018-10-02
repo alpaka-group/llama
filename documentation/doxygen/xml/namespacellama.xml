@@ -1,0 +1,2721 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="namespacellama" kind="namespace" language="C++">
+    <compoundname>llama</compoundname>
+    <innerclass refid="structllama_1_1Array" prot="public">llama::Array</innerclass>
+    <innerclass refid="structllama_1_1CompareUID" prot="public">llama::CompareUID</innerclass>
+    <innerclass refid="structllama_1_1CompareUID_3_01T__DDA_00_01T__BaseA_00_01T__LocalA_00_01T__DDB_00_01T__BaseB_00_0c5742394f1083881b470e7c9b93b56f4" prot="public">llama::CompareUID&lt; T_DDA, T_BaseA, T_LocalA, T_DDB, T_BaseB, T_LocalB, typename std::enable_if&lt;(T_LocalA::size !=T_LocalB::size) &gt;::type &gt;</innerclass>
+    <innerclass refid="structllama_1_1CompareUID_3_01T__DDA_00_01T__BaseA_00_01T__LocalA_00_01T__DDB_00_01T__BaseB_00_0ab4d75daf7fe789ae97b47cb4319c9ab" prot="public">llama::CompareUID&lt; T_DDA, T_BaseA, T_LocalA, T_DDB, T_BaseB, T_LocalB, typename std::enable_if&lt;(T_LocalA::size==0) &amp;&amp;(T_LocalB::size==0) &gt;::type &gt;</innerclass>
+    <innerclass refid="structllama_1_1DatumCoord" prot="public">llama::DatumCoord</innerclass>
+    <innerclass refid="structllama_1_1DatumCoord_3_01_4" prot="public">llama::DatumCoord&lt; &gt;</innerclass>
+    <innerclass refid="structllama_1_1DatumCoord_3_01T__coord_01_4" prot="public">llama::DatumCoord&lt; T_coord &gt;</innerclass>
+    <innerclass refid="structllama_1_1DatumCoord_3_01T__coord_00_01T__coords_8_8_8_01_4" prot="public">llama::DatumCoord&lt; T_coord, T_coords... &gt;</innerclass>
+    <innerclass refid="structllama_1_1DatumCoordIsBigger" prot="public">llama::DatumCoordIsBigger</innerclass>
+    <innerclass refid="structllama_1_1DatumCoordIsBigger_3_01T__First_00_01T__Second_00_01typename_01std_1_1enable__if_7a1a7cdba9a89b1c9cec4f60b192bb93" prot="public">llama::DatumCoordIsBigger&lt; T_First, T_Second, typename std::enable_if&lt;(T_First::size==1||T_Second::size==1) &gt;::type &gt;</innerclass>
+    <innerclass refid="structllama_1_1DatumCoordIsSame" prot="public">llama::DatumCoordIsSame</innerclass>
+    <innerclass refid="structllama_1_1ExtentUserDomainAdress" prot="public">llama::ExtentUserDomainAdress</innerclass>
+    <innerclass refid="structllama_1_1ExtentUserDomainAdress_3_011_01_4" prot="public">llama::ExtentUserDomainAdress&lt; 1 &gt;</innerclass>
+    <innerclass refid="structllama_1_1Factory" prot="public">llama::Factory</innerclass>
+    <innerclass refid="structllama_1_1ForEach" prot="public">llama::ForEach</innerclass>
+    <innerclass refid="structllama_1_1ForEach_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4" prot="public">llama::ForEach&lt; T_DatumDomain, DatumCoord&lt; T_coords... &gt;&gt;</innerclass>
+    <innerclass refid="structllama_1_1GetBranch" prot="public">llama::GetBranch</innerclass>
+    <innerclass refid="structllama_1_1GetCoordFromUIDImpl" prot="public">llama::GetCoordFromUIDImpl</innerclass>
+    <innerclass refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01typenaa9912ddeb798da71d2b7162da7df24fe" prot="public">llama::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, typename std::enable_if&lt; !std::is_same&lt; T_FirstUID, GetDatumElementUID&lt; boost::mp11::mp_first&lt; T_DatumDomain &gt; &gt; &gt;::value &gt;::type, T_FirstUID, T_UID... &gt;</innerclass>
+    <innerclass refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01typenad970eea1a4cb24aad0368256d66b0279" prot="public">llama::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, typename std::enable_if&lt; std::is_same&lt; T_FirstUID, GetDatumElementUID&lt; boost::mp11::mp_first&lt; T_DatumDomain &gt; &gt; &gt;::value &gt;::type, T_FirstUID, T_UID... &gt;</innerclass>
+    <innerclass refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01void_01_4" prot="public">llama::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, void &gt;</innerclass>
+    <innerclass refid="structllama_1_1GetTypeFromDatumCoordImpl" prot="public">llama::GetTypeFromDatumCoordImpl</innerclass>
+    <innerclass refid="structllama_1_1GetTypeFromDatumCoordImpl_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4" prot="public">llama::GetTypeFromDatumCoordImpl&lt; T_DatumDomain, DatumCoord&lt; T_coords... &gt;&gt;</innerclass>
+    <innerclass refid="structllama_1_1GetTypeImpl" prot="public">llama::GetTypeImpl</innerclass>
+    <innerclass refid="structllama_1_1GetTypeImpl_3_01T__DatumDomain_01_4" prot="public">llama::GetTypeImpl&lt; T_DatumDomain &gt;</innerclass>
+    <innerclass refid="structllama_1_1GetTypeImpl_3_01T__DatumDomain_00_01T__firstDatumDomainCoord_00_01T__datumDomainCoords_8_8_8_01_4" prot="public">llama::GetTypeImpl&lt; T_DatumDomain, T_firstDatumDomainCoord, T_datumDomainCoords... &gt;</innerclass>
+    <innerclass refid="structllama_1_1IntegerSequence" prot="public">llama::IntegerSequence</innerclass>
+    <innerclass refid="structllama_1_1LinearBytePos" prot="public">llama::LinearBytePos</innerclass>
+    <innerclass refid="structllama_1_1LinearBytePosImpl" prot="public">llama::LinearBytePosImpl</innerclass>
+    <innerclass refid="structllama_1_1LinearBytePosImpl_3_01DatumStruct_3_01_4_00_01T__DatumCoord_00_01T__IterCoord_01_4" prot="public">llama::LinearBytePosImpl&lt; DatumStruct&lt; &gt;, T_DatumCoord, T_IterCoord &gt;</innerclass>
+    <innerclass refid="structllama_1_1LinearBytePosImpl_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__DatumElements_d93a519fea30c3c12f633823a742ed70" prot="public">llama::LinearBytePosImpl&lt; DatumStruct&lt; T_FirstDatumElement, T_DatumElements... &gt;, T_DatumCoord, T_IterCoord &gt;</innerclass>
+    <innerclass refid="structllama_1_1LinearizeUserDomainAdress" prot="public">llama::LinearizeUserDomainAdress</innerclass>
+    <innerclass refid="structllama_1_1LinearizeUserDomainAdress_3_01T__dim_00_011_01_4" prot="public">llama::LinearizeUserDomainAdress&lt; T_dim, 1 &gt;</innerclass>
+    <innerclass refid="structllama_1_1LinearizeUserDomainAdressLikeFortran" prot="public">llama::LinearizeUserDomainAdressLikeFortran</innerclass>
+    <innerclass refid="structllama_1_1LinearizeUserDomainAdressLikeFortran_3_011_01_4" prot="public">llama::LinearizeUserDomainAdressLikeFortran&lt; 1 &gt;</innerclass>
+    <innerclass refid="structllama_1_1NoName" prot="public">llama::NoName</innerclass>
+    <innerclass refid="structllama_1_1DatumCoordIsSame_3_01T__First_00_01T__Second_00_01typename_01std_1_1enable__if_3_452c5e68880e1f6841403842b9e5be07" prot="public">llama::DatumCoordIsSame&lt; T_First, T_Second, typename std::enable_if&lt;(T_First::size&lt; 1||T_Second::size&lt; 1) &gt;::type &gt;</innerclass>
+    <innerclass refid="structllama_1_1SizeOf" prot="public">llama::SizeOf</innerclass>
+    <innerclass refid="structllama_1_1SizeOf_3_01DatumStruct_3_01_4_01_4" prot="public">llama::SizeOf&lt; DatumStruct&lt; &gt; &gt;</innerclass>
+    <innerclass refid="structllama_1_1SizeOf_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__DatumElements_8_8_8_01_4_4" prot="public">llama::SizeOf&lt; DatumStruct&lt; T_FirstDatumElement, T_DatumElements... &gt;&gt;</innerclass>
+    <innerclass refid="structllama_1_1SizeOfTuple" prot="public">llama::SizeOfTuple</innerclass>
+    <innerclass refid="structllama_1_1SizeOfTuple_3_01Tuple_3_01T__Elements_8_8_8_01_4_01_4" prot="public">llama::SizeOfTuple&lt; Tuple&lt; T_Elements... &gt; &gt;</innerclass>
+    <innerclass refid="structllama_1_1Tuple" prot="public">llama::Tuple</innerclass>
+    <innerclass refid="structllama_1_1Tuple_3_01_4" prot="public">llama::Tuple&lt; &gt;</innerclass>
+    <innerclass refid="structllama_1_1Tuple_3_01T__FirstElement_01_4" prot="public">llama::Tuple&lt; T_FirstElement &gt;</innerclass>
+    <innerclass refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4" prot="public">llama::Tuple&lt; T_FirstElement, T_Elements... &gt;</innerclass>
+    <innerclass refid="structllama_1_1TupleLength" prot="public">llama::TupleLength</innerclass>
+    <innerclass refid="structllama_1_1TupleLength_3_01Tuple_3_01T__Childs_8_8_8_01_4_01_4" prot="public">llama::TupleLength&lt; Tuple&lt; T_Childs... &gt; &gt;</innerclass>
+    <innerclass refid="structllama_1_1View" prot="public">llama::View</innerclass>
+    <innerclass refid="structllama_1_1VirtualDatum" prot="public">llama::VirtualDatum</innerclass>
+    <innerclass refid="structllama_1_1VirtualView" prot="public">llama::VirtualView</innerclass>
+    <innernamespace refid="namespacellama_1_1allocator">llama::allocator</innernamespace>
+    <innernamespace refid="namespacellama_1_1DatumCoordIsBigger_011_01_6_6T__First">llama::DatumCoordIsBigger 1 &amp;&amp;T_First</innernamespace>
+    <innernamespace refid="namespacellama_1_1DatumCoordIsSame_011_01_6_6T__First">llama::DatumCoordIsSame 1 &amp;&amp;T_First</innernamespace>
+    <innernamespace refid="namespacellama_1_1DatumCoordIsSame_0A1_01_6_6T__Second">llama::DatumCoordIsSame=1 &amp;&amp;T_Second</innernamespace>
+    <innernamespace refid="namespacellama_1_1internal">llama::internal</innernamespace>
+    <innernamespace refid="namespacellama_1_1mapping">llama::mapping</innernamespace>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="namespacellama_1a970fe0ecd42b66d0c5da72fa94574f70" prot="public" static="no">
+        <type>boost::mp11::mp_repeat_c&lt; <ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>&lt; <ref refid="namespacellama_1a616a6cb9eb30d6b15f4819de1aa7cf68" kindref="member">DatumElement</ref>&lt; <ref refid="structllama_1_1NoName" kindref="compound">NoName</ref>, T_Child &gt; &gt;, T_count &gt;</type>
+        <definition>using llama::DatumArray = boost::mp11::mp_repeat_c&lt; DatumStruct&lt; DatumElement&lt; NoName, T_Child &gt; &gt;, T_count &gt;</definition>
+        <argsstring></argsstring>
+        <name>DatumArray</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>An array of anonymous but identical <ref refid="namespacellama_1a616a6cb9eb30d6b15f4819de1aa7cf68" kindref="member">DatumElements</ref>. Can be used anywhere where <ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref> may used. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_Child</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>type to repeat. May be either another sub tree consisting of a nested <ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref> resp. DatumArray or any other type making it an array of leaves of this type. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>number of repetitions of T_Child </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/DatumArray.hpp" line="38" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumArray.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacellama_1abe9622c2b7b194250a33818e71bb5bed" prot="public" static="no">
+        <type><ref refid="namespacellama_1a970fe0ecd42b66d0c5da72fa94574f70" kindref="member">DatumArray</ref>&lt; T_Child, T_count &gt;</type>
+        <definition>using llama::DA = DatumArray&lt; T_Child, T_count &gt;</definition>
+        <argsstring></argsstring>
+        <name>DA</name>
+        <briefdescription>
+<para>Shortcut for <ref refid="namespacellama_1a970fe0ecd42b66d0c5da72fa94574f70" kindref="member">DatumArray</ref>. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/DatumArray.hpp" line="48" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumArray.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacellama_1a554a797d5fff9070b3c61d7584dc15d5" prot="public" static="no">
+        <type>boost::mp11::mp_second&lt; T_DatumElement &gt;</type>
+        <definition>using llama::GetDatumElementType = boost::mp11::mp_second&lt; T_DatumElement &gt;</definition>
+        <argsstring></argsstring>
+        <name>GetDatumElementType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="30" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacellama_1a29d5fdaf4a5f23aab704f936a53fd68c" prot="public" static="no">
+        <type>boost::mp11::mp_first&lt; T_DatumElement &gt;</type>
+        <definition>using llama::GetDatumElementUID = boost::mp11::mp_first&lt; T_DatumElement &gt;</definition>
+        <argsstring></argsstring>
+        <name>GetDatumElementUID</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="33" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacellama_1a0497c2913f9ebb2cea9c97ddc35be349" prot="public" static="no">
+        <type><ref refid="structllama_1_1Factory" kindref="compound">llama::Factory</ref>&lt; <ref refid="structllama_1_1mapping_1_1One" kindref="compound">llama::mapping::One</ref>&lt; <ref refid="namespacellama_1a03077c6597f96a84efe064fa64d81827" kindref="member">UserDomain</ref>&lt; dimension &gt;, DatumDomain &gt;, <ref refid="structllama_1_1allocator_1_1Stack" kindref="compound">llama::allocator::Stack</ref>&lt; <ref refid="structllama_1_1SizeOf" kindref="compound">SizeOf</ref>&lt; DatumDomain &gt;::value &gt; &gt;</type>
+        <definition>using llama::OneOnStackFactory = llama::Factory&lt; llama::mapping::One&lt; UserDomain&lt; dimension &gt;, DatumDomain &gt;, llama::allocator::Stack&lt; SizeOf&lt;DatumDomain&gt;::value &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>OneOnStackFactory</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Factory.hpp" line="129" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Factory.hpp" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacellama_1a3a9ff09beed7470e5c174d2c34e88aab" prot="public" static="no">
+        <type>typename <ref refid="structllama_1_1GetCoordFromUIDImpl" kindref="compound">GetCoordFromUIDImpl</ref>&lt; T_DatumDomain, <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>&lt; &gt;, 0, void, T_UID... &gt;::type</type>
+        <definition>using llama::GetCoordFromUID = typename GetCoordFromUIDImpl&lt; T_DatumDomain, DatumCoord&lt; &gt;, 0, void, T_UID... &gt;::type</definition>
+        <argsstring></argsstring>
+        <name>GetCoordFromUID</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp" line="123" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacellama_1aeef46491193f44d7be8ba279d053e78f" prot="public" static="no">
+        <type>typename <ref refid="structllama_1_1GetTypeImpl" kindref="compound">GetTypeImpl</ref>&lt; T_DatumDomain, T_datumDomainCoords... &gt;::type</type>
+        <definition>using llama::GetType = typename GetTypeImpl&lt; T_DatumDomain, T_datumDomainCoords... &gt;::type</definition>
+        <argsstring></argsstring>
+        <name>GetType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/GetType.hpp" line="68" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/GetType.hpp" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacellama_1ae6136ff96220af66f833a8de8aa0b6a1" prot="public" static="no">
+        <type>typename <ref refid="structllama_1_1GetTypeFromDatumCoordImpl" kindref="compound">GetTypeFromDatumCoordImpl</ref>&lt; T_DatumDomain, T_DatumCoord &gt;::type</type>
+        <definition>using llama::GetTypeFromDatumCoord = typename GetTypeFromDatumCoordImpl&lt; T_DatumDomain, T_DatumCoord &gt;::type</definition>
+        <argsstring></argsstring>
+        <name>GetTypeFromDatumCoord</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/GetType.hpp" line="98" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/GetType.hpp" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacellama_1afc1dd86868706ba5f5ee39ec0c588534" prot="public" static="no">
+        <type>typename <ref refid="structllama_1_1internal_1_1GetUIDfromDatumCoord" kindref="compound">internal::GetUIDfromDatumCoord</ref>&lt; <ref refid="namespacellama_1a616a6cb9eb30d6b15f4819de1aa7cf68" kindref="member">DatumElement</ref>&lt; <ref refid="structllama_1_1NoName" kindref="compound">NoName</ref>, T_DatumDomain &gt;, T_DatumCoord &gt;::type</type>
+        <definition>using llama::GetUID = typename internal::GetUIDfromDatumCoord&lt; DatumElement&lt; NoName, T_DatumDomain &gt;, T_DatumCoord &gt;::type</definition>
+        <argsstring></argsstring>
+        <name>GetUID</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>return the unique identifier of the <ref refid="namespacellama_1a616a6cb9eb30d6b15f4819de1aa7cf68" kindref="member">DatumElement</ref> at a <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref> inside the datum domain tree. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_DatumDomain</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the datum domain, probably of type <ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref> or <ref refid="namespacellama_1a970fe0ecd42b66d0c5da72fa94574f70" kindref="member">DatumArray</ref> </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_DatumCoord</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the datum coord, probably of type <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref> </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>unique identifer type </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/GetUID.hpp" line="101" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/GetUID.hpp" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacellama_1a8bdcf08fed3eadcfee16599a180465ec" prot="public" static="no">
+        <type>typename <ref refid="structllama_1_1internal_1_1IntegerSequenceHelper" kindref="compound">internal::IntegerSequenceHelper</ref>&lt; T_N - 1 &gt;::type</type>
+        <definition>using llama::MakeIntegerSequence = typename internal::IntegerSequenceHelper&lt; T_N - 1 &gt;::type</definition>
+        <argsstring></argsstring>
+        <name>MakeIntegerSequence</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/IntegerSequence.hpp" line="58" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/IntegerSequence.hpp" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacellama_1a607d767acccd7d568d02f2899fb1aa66" prot="public" static="no">
+        <type>typename <ref refid="structllama_1_1internal_1_1ZeroSequenceHelper" kindref="compound">internal::ZeroSequenceHelper</ref>&lt; T_N &gt;::type</type>
+        <definition>using llama::MakeZeroSequence = typename internal::ZeroSequenceHelper&lt; T_N &gt;::type</definition>
+        <argsstring></argsstring>
+        <name>MakeZeroSequence</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/IntegerSequence.hpp" line="90" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/IntegerSequence.hpp" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacellama_1aa3255f46d3b3fbcd50ca0d002dfc279c" prot="public" static="no">
+        <type>typename <ref refid="structllama_1_1internal_1_1GetTupleTypeImpl" kindref="compound">internal::GetTupleTypeImpl</ref>&lt; T_Tuple, T_pos &gt;::type</type>
+        <definition>using llama::GetTupleType = typename internal::GetTupleTypeImpl&lt; T_Tuple, T_pos &gt;::type</definition>
+        <argsstring></argsstring>
+        <name>GetTupleType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="208" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="211" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacellama_1aaa44c7e572053a067b323bd05d8dc013" prot="public" static="no">
+        <type>typename <ref refid="structllama_1_1internal_1_1TupleCatTypeImpl" kindref="compound">internal::TupleCatTypeImpl</ref>&lt; T_Tuple1, T_Tuple2 &gt;::type</type>
+        <definition>using llama::TupleCatType = typename internal::TupleCatTypeImpl&lt; T_Tuple1, T_Tuple2 &gt;::type</definition>
+        <argsstring></argsstring>
+        <name>TupleCatType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="482" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="485" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacellama_1a03077c6597f96a84efe064fa64d81827" prot="public" static="no">
+        <type><ref refid="structllama_1_1Array" kindref="compound">Array</ref>&lt; std::size_t, T_dim &gt;</type>
+        <definition>using llama::UserDomain = Array&lt; std::size_t, T_dim &gt;</definition>
+        <argsstring></argsstring>
+        <name>UserDomain</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The run-time specified user domain <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_dim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>compile time dimensionality of the user domain </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Types.hpp" line="37" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Types.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" prot="public" static="no">
+        <type>boost::mp11::mp_list&lt; T_Leaves... &gt;</type>
+        <definition>using llama::DatumStruct = boost::mp11::mp_list&lt; T_Leaves... &gt;</definition>
+        <argsstring></argsstring>
+        <name>DatumStruct</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>A list of <ref refid="namespacellama_1a616a6cb9eb30d6b15f4819de1aa7cf68" kindref="member">DatumElement</ref> which may be used to define a datum domain. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_Leaves...</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>List of <ref refid="namespacellama_1a616a6cb9eb30d6b15f4819de1aa7cf68" kindref="member">DatumElement</ref> </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Types.hpp" line="48" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Types.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacellama_1a484672188c5b8e07c1899f890c964f59" prot="public" static="no">
+        <type><ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>&lt; T_Leaves... &gt;</type>
+        <definition>using llama::DS = DatumStruct&lt; T_Leaves... &gt;</definition>
+        <argsstring></argsstring>
+        <name>DS</name>
+        <briefdescription>
+<para>Shortcut for <ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Types.hpp" line="56" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Types.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacellama_1a616a6cb9eb30d6b15f4819de1aa7cf68" prot="public" static="no">
+        <type>boost::mp11::mp_list&lt; T_Identifier, T_Type &gt;</type>
+        <definition>using llama::DatumElement = boost::mp11::mp_list&lt; T_Identifier, T_Type &gt;</definition>
+        <argsstring></argsstring>
+        <name>DatumElement</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Datum domain tree node which may either a leaf or refer to a child tree presented as another <ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_Identifier</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the node. May be any type (struct, class). <ref refid="structllama_1_1NoName" kindref="compound">llama::NoName</ref> is considered a special identifier, which never matches. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_Type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Type of the node. May be either another sub tree consisting of a nested <ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref> or any other type making it a leaf of this type. </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Types.hpp" line="71" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Types.hpp" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacellama_1a01bf2c38141da74bae82c0f07cde1319" prot="public" static="no">
+        <type><ref refid="namespacellama_1a616a6cb9eb30d6b15f4819de1aa7cf68" kindref="member">DatumElement</ref>&lt; T_Identifier, T_Type &gt;</type>
+        <definition>using llama::DE = DatumElement&lt; T_Identifier, T_Type &gt;</definition>
+        <argsstring></argsstring>
+        <name>DE</name>
+        <briefdescription>
+<para>Shortcut for <ref refid="namespacellama_1a616a6cb9eb30d6b15f4819de1aa7cf68" kindref="member">DatumElement</ref>. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Types.hpp" line="81" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Types.hpp" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="var">
+      <memberdef kind="variable" id="namespacellama_1af228a96b05b9e361ebba8f8b7b616389" prot="public" static="no" mutable="no">
+        <type>T_RightDatum &amp;</type>
+        <definition>T_RightDatum &amp; llama::right</definition>
+        <argsstring></argsstring>
+        <name>right</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="201" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="201" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacellama_1af59665345f8ea029fb4b0be33c2c6319" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool llama::result</definition>
+        <argsstring></argsstring>
+        <name>result</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="462" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="462" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="namespacellama_1a7e6d72ed44f9e4c51751940ef5ee8e65" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>dimension</declname>
+            <defname>dimension</defname>
+          </param>
+          <param>
+            <type>typename DatumDomain</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto llama::tempAlloc</definition>
+        <argsstring>() -&gt; decltype(OneOnStackFactory&lt; dimension, DatumDomain &gt;::allocView())</argsstring>
+        <name>tempAlloc</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Factory.hpp" line="146" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Factory.hpp" bodystart="146" bodyend="158"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a3b822ea750d68c8b464a4fc2fb970967" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string llama::demangleType</definition>
+        <argsstring>(const char *name)</argsstring>
+        <name>demangleType</name>
+        <param>
+          <type>const char *</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/toString.hpp" line="52" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/toString.hpp" bodystart="52" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1aab1795adf20dddcc6ee9daefc8e47087" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename...</type>
+            <declname>T_Elements</declname>
+            <defname>T_Elements</defname>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto llama::makeTuple</definition>
+        <argsstring>(T_Elements... elements) -&gt; decltype(internal::MakeTupleImpl&lt; T_Elements... &gt;()(elements...))</argsstring>
+        <name>makeTuple</name>
+        <param>
+          <type>T_Elements...</type>
+          <declname>elements</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="153" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="153" bodyend="157"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a06631de361c03d428287f53c817c880d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>T_pos</declname>
+            <defname>T_pos</defname>
+          </param>
+          <param>
+            <type>typename T_Tuple</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto llama::getTupleElement</definition>
+        <argsstring>(T_Tuple const &amp;tuple) -&gt; GetTupleType&lt; T_Tuple, T_pos &gt;</argsstring>
+        <name>getTupleElement</name>
+        <param>
+          <type>T_Tuple const &amp;</type>
+          <declname>tuple</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="287" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="287" bodyend="297"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a23a39f92cc91dff13e56e2d51a679e64" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>T_pos</declname>
+            <defname>T_pos</defname>
+          </param>
+          <param>
+            <type>typename T_Tuple</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto llama::getTupleElementRef</definition>
+        <argsstring>(T_Tuple const &amp;tuple) -&gt; GetTupleType&lt; T_Tuple, T_pos &gt; const &amp;</argsstring>
+        <name>getTupleElementRef</name>
+        <param>
+          <type>T_Tuple const &amp;</type>
+          <declname>tuple</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="305" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="305" bodyend="315"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1aba28a2d9095426f0fb28d4b5371f34a7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_Tuple1</type>
+          </param>
+          <param>
+            <type>typename T_Tuple2</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto llama::tupleCat</definition>
+        <argsstring>(T_Tuple1 const t1, T_Tuple2 const t2) -&gt; decltype(internal::TupleCatImpl&lt; T_Tuple1, T_Tuple2 &gt;()(t1, t2))</argsstring>
+        <name>tupleCat</name>
+        <param>
+          <type>T_Tuple1 const</type>
+          <declname>t1</declname>
+        </param>
+        <param>
+          <type>T_Tuple2 const</type>
+          <declname>t2</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="493" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="493" bodyend="514"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1af366894d19a93f206cac71e5e6ca7a8d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>T_pos</declname>
+            <defname>T_pos</defname>
+          </param>
+          <param>
+            <type>typename T_Tuple</type>
+          </param>
+          <param>
+            <type>typename T_Replacement</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto llama::tupleReplace</definition>
+        <argsstring>(T_Tuple const tuple, T_Replacement const replacement) -&gt; decltype(internal::TupleReplaceImpl&lt; T_pos, T_Tuple, T_Replacement &gt;()(tuple, replacement))</argsstring>
+        <name>tupleReplace</name>
+        <param>
+          <type>T_Tuple const</type>
+          <declname>tuple</declname>
+        </param>
+        <param>
+          <type>T_Replacement const</type>
+          <declname>replacement</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="622" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="622" bodyend="645"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a87f3fb778741ba559e6b686b86e90686" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_Tuple</type>
+          </param>
+          <param>
+            <type>typename T_Functor</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto llama::tupleForEach</definition>
+        <argsstring>(T_Tuple const tuple, T_Functor const functor) -&gt; decltype(internal::TupleForEach&lt; T_Tuple, T_Functor &gt;()(tuple, functor))</argsstring>
+        <name>tupleForEach</name>
+        <param>
+          <type>T_Tuple const</type>
+          <declname>tuple</declname>
+        </param>
+        <param>
+          <type>T_Functor const</type>
+          <declname>functor</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="739" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="739" bodyend="760"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a4405d1ede3fad1a18b749f84bab1f37e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_Tuple</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto llama::tupleRest</definition>
+        <argsstring>(T_Tuple const tuple) -&gt; decltype(internal::TupleRestImpl&lt; T_Tuple &gt;()(tuple))</argsstring>
+        <name>tupleRest</name>
+        <param>
+          <type>T_Tuple const</type>
+          <declname>tuple</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="795" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="795" bodyend="799"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1aa8b49851209fef972feb72ca58cdffae" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>T_dim</declname>
+            <defname>T_dim</defname>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto llama::userDomainZero</definition>
+        <argsstring>() -&gt; UserDomain&lt; T_dim &gt;</argsstring>
+        <name>userDomainZero</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates a user domain filled with zeros. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_dim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>dimension of the user domain </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><ref refid="namespacellama_1a03077c6597f96a84efe064fa64d81827" kindref="member">UserDomain</ref> filled with zeros </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/UserDomain.hpp" line="182" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/UserDomain.hpp" bodystart="182" bodyend="186"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a02d68d889af6fecb6f30c8b8fa059e56" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+          <param>
+            <type>typename SFINAE</type>
+            <defval>void</defval>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Assigment, IfSameUIDFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Assigment</type>
+        </param>
+        <param>
+          <type>IfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="167" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="201" bodyend="201"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a99f419f4d7c877341a286647b207a399" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Assigment, IfSameUIDFunctor)&lt; T_LeftDatum</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Assigment</type>
+        </param>
+        <param>
+          <type>IfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="167" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1aee74e891ef168983b9ff14201252cc56" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Assigment, InnerFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Assigment</type>
+        </param>
+        <param>
+          <type>InnerFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="201" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="201" bodyend="201"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a04e8e4fb6c7d0d75758babb4d77e8d00" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_Source</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Assigment, Functor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Assigment</type>
+        </param>
+        <param>
+          <type>Functor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="201" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="201" bodyend="201"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1ab24dbb4322db6e7f4d21430ae8a15e0d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightType</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Assigment, TypeFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Assigment</type>
+        </param>
+        <param>
+          <type>TypeFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="201" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="201" bodyend="201"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a3ce31322d95f99ec84bac97968ed0557" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+          <param>
+            <type>typename SFINAE</type>
+            <defval>void</defval>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Addition, IfSameUIDFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Addition</type>
+        </param>
+        <param>
+          <type>IfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="201" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="202" bodyend="202"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a100e5bd0231477cd08345914e184759c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Addition, IfSameUIDFunctor)&lt; T_LeftDatum</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Addition</type>
+        </param>
+        <param>
+          <type>IfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="201" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a3bff158398330a90813e24905a4cb96a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Addition, InnerFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Addition</type>
+        </param>
+        <param>
+          <type>InnerFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="202" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="202" bodyend="202"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a9e0cb2e65f544c63ab65ce5974d81de0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_Source</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Addition, Functor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Addition</type>
+        </param>
+        <param>
+          <type>Functor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="202" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="202" bodyend="202"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a1b2aa089bda5dc09756bcb91e43c5b5b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightType</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Addition, TypeFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Addition</type>
+        </param>
+        <param>
+          <type>TypeFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="202" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="202" bodyend="202"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a61f4934c057f69e6fa4ad9a508b10952" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+          <param>
+            <type>typename SFINAE</type>
+            <defval>void</defval>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Subtraction, IfSameUIDFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Subtraction</type>
+        </param>
+        <param>
+          <type>IfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="202" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="203" bodyend="203"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a4732bd60454f432b70af90ad1e16d36e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Subtraction, IfSameUIDFunctor)&lt; T_LeftDatum</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Subtraction</type>
+        </param>
+        <param>
+          <type>IfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="202" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a040a52f796dd597fab7e484bb90f48cc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Subtraction, InnerFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Subtraction</type>
+        </param>
+        <param>
+          <type>InnerFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="203" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="203" bodyend="203"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1ac380846ca2ea8fb23babdb14611a675d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_Source</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Subtraction, Functor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Subtraction</type>
+        </param>
+        <param>
+          <type>Functor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="203" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="203" bodyend="203"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1ae0340b9360b92b12e07b3a9ba1f0cf89" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightType</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Subtraction, TypeFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Subtraction</type>
+        </param>
+        <param>
+          <type>TypeFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="203" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="203" bodyend="203"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a2facae7fdb5d80eb96fa09ca91800bf0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+          <param>
+            <type>typename SFINAE</type>
+            <defval>void</defval>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Multiplication, IfSameUIDFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Multiplication</type>
+        </param>
+        <param>
+          <type>IfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="203" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="204" bodyend="204"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1aad7a61c2312898daa87c54180a37b205" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Multiplication, IfSameUIDFunctor)&lt; T_LeftDatum</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Multiplication</type>
+        </param>
+        <param>
+          <type>IfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="203" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1acfce4ae2d874bc20cad7c584446f8c54" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Multiplication, InnerFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Multiplication</type>
+        </param>
+        <param>
+          <type>InnerFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="204" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="204" bodyend="204"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1ab1eed6db7423f95495d7eea21548c843" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_Source</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Multiplication, Functor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Multiplication</type>
+        </param>
+        <param>
+          <type>Functor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="204" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="204" bodyend="204"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a0296f5cea0e68a674fc34420fdb9844d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightType</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Multiplication, TypeFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Multiplication</type>
+        </param>
+        <param>
+          <type>TypeFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="204" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="204" bodyend="204"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a6d53b5705de2564cd61a1fc32438486f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+          <param>
+            <type>typename SFINAE</type>
+            <defval>void</defval>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Division, IfSameUIDFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Division</type>
+        </param>
+        <param>
+          <type>IfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="204" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="205" bodyend="205"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1acc7b9ebfb63cbc38596fea1e4e2a47fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Division, IfSameUIDFunctor)&lt; T_LeftDatum</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Division</type>
+        </param>
+        <param>
+          <type>IfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="204" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a76fea27a59da8580f768e36934e2143d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Division, InnerFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Division</type>
+        </param>
+        <param>
+          <type>InnerFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="205" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="205" bodyend="205"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a95cd5e5ed9b18029743b10caea2fc1bd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_Source</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Division, Functor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Division</type>
+        </param>
+        <param>
+          <type>Functor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="205" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="205" bodyend="205"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a1bf2ce7f0d529d9388fac5bc0f8b3e35" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightType</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Division, TypeFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Division</type>
+        </param>
+        <param>
+          <type>TypeFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="205" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="205" bodyend="205"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1aa01b32a271238dfd39608c1a2442196c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+          <param>
+            <type>typename SFINAE</type>
+            <defval>void</defval>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Modulo, IfSameUIDFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Modulo</type>
+        </param>
+        <param>
+          <type>IfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="205" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="206" bodyend="206"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a9567fec4750a59b004a7d8d2602610ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Modulo, IfSameUIDFunctor)&lt; T_LeftDatum</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Modulo</type>
+        </param>
+        <param>
+          <type>IfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="205" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a06cb55db1002c80b75bfbf4e6d135ed4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Modulo, InnerFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Modulo</type>
+        </param>
+        <param>
+          <type>InnerFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="206" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="206" bodyend="206"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1aca476189812fd400e22d5b2aeac77684" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_Source</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Modulo, Functor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Modulo</type>
+        </param>
+        <param>
+          <type>Functor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="206" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="206" bodyend="206"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1aacff91bc6ea76a9cdf2d93d1e611ff54" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightType</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Modulo, TypeFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Modulo</type>
+        </param>
+        <param>
+          <type>TypeFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="206" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="206" bodyend="206"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1aa2af04bb47a32749b1f25782bd47d2ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+          <param>
+            <type>typename SFINAE</type>
+            <defval>void</defval>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(SameAs, BoolIfSameUIDFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>SameAs</type>
+        </param>
+        <param>
+          <type>BoolIfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="206" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="462" bodyend="462"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a73c09558ef55bcf3b01a9dc65222b460" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(SameAs, BoolIfSameUIDFunctor)&lt; T_LeftDatum</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>SameAs</type>
+        </param>
+        <param>
+          <type>BoolIfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="206" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1aaafa196e775b7ce76579423097ff584e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(SameAs, BoolInnerFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>SameAs</type>
+        </param>
+        <param>
+          <type>BoolInnerFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="462" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="462" bodyend="462"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1ac8d7b745cb0fc8e90d7d9c4d2320d6d8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_Source</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(SameAs, BoolFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>SameAs</type>
+        </param>
+        <param>
+          <type>BoolFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="462" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="462" bodyend="462"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1ab1067e7e57199e61a3cf65fc49ddb8a0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightType</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(SameAs, BoolTypeFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>SameAs</type>
+        </param>
+        <param>
+          <type>BoolTypeFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="462" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="462" bodyend="462"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a360be9b41e4aa07d68450c40789583fe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+          <param>
+            <type>typename SFINAE</type>
+            <defval>void</defval>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Not, BoolIfSameUIDFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Not</type>
+        </param>
+        <param>
+          <type>BoolIfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="462" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="463" bodyend="463"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1acfc984a7314ab1e66fdca0f60ad6c1fa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Not, BoolIfSameUIDFunctor)&lt; T_LeftDatum</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Not</type>
+        </param>
+        <param>
+          <type>BoolIfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="462" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a913515ca824790a09ebf6952ba525747" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Not, BoolInnerFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Not</type>
+        </param>
+        <param>
+          <type>BoolInnerFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="463" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="463" bodyend="463"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1acebb1d82eb56f7e1a0a76efba9754e20" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_Source</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Not, BoolFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Not</type>
+        </param>
+        <param>
+          <type>BoolFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="463" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="463" bodyend="463"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a05de049ca5c62ca754d6bb53790f825d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightType</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(Not, BoolTypeFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>Not</type>
+        </param>
+        <param>
+          <type>BoolTypeFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="463" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="463" bodyend="463"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a4bcb8c77b5515521c4863147e501e6b9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+          <param>
+            <type>typename SFINAE</type>
+            <defval>void</defval>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(SmallerThan, BoolIfSameUIDFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>SmallerThan</type>
+        </param>
+        <param>
+          <type>BoolIfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="463" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="464" bodyend="464"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1ade7343453ab3a185e5debd4c9cbb79df" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(SmallerThan, BoolIfSameUIDFunctor)&lt; T_LeftDatum</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>SmallerThan</type>
+        </param>
+        <param>
+          <type>BoolIfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="463" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1aa68360bc532ab4e6b75d387aff041e46" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(SmallerThan, BoolInnerFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>SmallerThan</type>
+        </param>
+        <param>
+          <type>BoolInnerFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="464" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="464" bodyend="464"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1ab5d4ae2e58824cbb31cb3d222901102b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_Source</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(SmallerThan, BoolFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>SmallerThan</type>
+        </param>
+        <param>
+          <type>BoolFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="464" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="464" bodyend="464"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a4a57a4a3db94b1828c03c8d900b05df0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightType</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(SmallerThan, BoolTypeFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>SmallerThan</type>
+        </param>
+        <param>
+          <type>BoolTypeFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="464" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="464" bodyend="464"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1aa455141e0bdaa80ccecb1183fe41cd56" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+          <param>
+            <type>typename SFINAE</type>
+            <defval>void</defval>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(SmallerSameThan, BoolIfSameUIDFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>SmallerSameThan</type>
+        </param>
+        <param>
+          <type>BoolIfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="464" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="465" bodyend="465"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1acdaa5dcacc3e2597a2ee68fe0bce278c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(SmallerSameThan, BoolIfSameUIDFunctor)&lt; T_LeftDatum</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>SmallerSameThan</type>
+        </param>
+        <param>
+          <type>BoolIfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="464" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a228e3b7fc221d892ab134ca1b384cf8f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(SmallerSameThan, BoolInnerFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>SmallerSameThan</type>
+        </param>
+        <param>
+          <type>BoolInnerFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="465" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="465" bodyend="465"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a279c94666edb5d2a65f745d1e139b307" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_Source</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(SmallerSameThan, BoolFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>SmallerSameThan</type>
+        </param>
+        <param>
+          <type>BoolFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="465" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="465" bodyend="465"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a37f26b8a186c273bd332f2cbcc0c9655" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightType</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(SmallerSameThan, BoolTypeFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>SmallerSameThan</type>
+        </param>
+        <param>
+          <type>BoolTypeFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="465" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="465" bodyend="465"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a3521d52208baa4edb7f97d11de195b55" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+          <param>
+            <type>typename SFINAE</type>
+            <defval>void</defval>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(BiggerThan, BoolIfSameUIDFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>BiggerThan</type>
+        </param>
+        <param>
+          <type>BoolIfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="465" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="466" bodyend="466"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a0a4a65d70490b16e52092fee2ae45857" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(BiggerThan, BoolIfSameUIDFunctor)&lt; T_LeftDatum</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>BiggerThan</type>
+        </param>
+        <param>
+          <type>BoolIfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="465" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a53f5dbcf2314cf400474e7be87c05ff1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(BiggerThan, BoolInnerFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>BiggerThan</type>
+        </param>
+        <param>
+          <type>BoolInnerFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="466" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="466" bodyend="466"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a3e152d9faaacc33c9397099f6f63bbaa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_Source</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(BiggerThan, BoolFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>BiggerThan</type>
+        </param>
+        <param>
+          <type>BoolFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="466" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="466" bodyend="466"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a2c436c171ca8481a7a33e3e1e08f3292" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightType</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(BiggerThan, BoolTypeFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>BiggerThan</type>
+        </param>
+        <param>
+          <type>BoolTypeFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="466" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="466" bodyend="466"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1ab0c16a4cceb5141e9adf94f8d93c4c93" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+          <param>
+            <type>typename SFINAE</type>
+            <defval>void</defval>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(BiggerSameThan, BoolIfSameUIDFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>BiggerSameThan</type>
+        </param>
+        <param>
+          <type>BoolIfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="466" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="467" bodyend="467"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a2738646edacb8912bb4d106f54c14db9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightBase</type>
+          </param>
+          <param>
+            <type>typename T_RightLocal</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(BiggerSameThan, BoolIfSameUIDFunctor)&lt; T_LeftDatum</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>BiggerSameThan</type>
+        </param>
+        <param>
+          <type>BoolIfSameUIDFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="466" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a7431d3770ac1c85062a9dfcbb30416e6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_LeftBase</type>
+          </param>
+          <param>
+            <type>typename T_LeftLocal</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(BiggerSameThan, BoolInnerFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>BiggerSameThan</type>
+        </param>
+        <param>
+          <type>BoolInnerFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="467" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="467" bodyend="467"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1ad2039b3b62bcc81c218e4cb874ca66a9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightDatum</type>
+          </param>
+          <param>
+            <type>typename T_Source</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(BiggerSameThan, BoolFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>BiggerSameThan</type>
+        </param>
+        <param>
+          <type>BoolFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="467" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="467" bodyend="467"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacellama_1a36acfdfbc117ce150cd7f55b2479270c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_LeftDatum</type>
+          </param>
+          <param>
+            <type>typename T_RightType</type>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>struct llama::BOOST_PP_CAT</definition>
+        <argsstring>(BiggerSameThan, BoolTypeFunctor)</argsstring>
+        <name>BOOST_PP_CAT</name>
+        <param>
+          <type>BiggerSameThan</type>
+        </param>
+        <param>
+          <type>BoolTypeFunctor</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="467" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="467" bodyend="467"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/allocator/SharedPtr.hpp" line="24" column="1"/>
+  </compounddef>
+</doxygen>

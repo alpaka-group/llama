@@ -1,0 +1,498 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="TreeFromDomains_8hpp" kind="file" language="C++">
+    <compoundname>TreeFromDomains.hpp</compoundname>
+    <includes local="no">cstddef</includes>
+    <includes local="no">type_traits</includes>
+    <includes refid="TreeElement_8hpp" local="yes">TreeElement.hpp</includes>
+    <includes refid="TreeCoord_8hpp" local="yes">TreeCoord.hpp</includes>
+    <includedby refid="Mapping_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/mapping/tree/Mapping.hpp</includedby>
+    <incdepgraph>
+      <node id="507">
+        <label>boost/predef.h</label>
+      </node>
+      <node id="501">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp</label>
+        <link refid="TreeFromDomains_8hpp"/>
+        <childnode refid="502" relation="include">
+        </childnode>
+        <childnode refid="503" relation="include">
+        </childnode>
+        <childnode refid="504" relation="include">
+        </childnode>
+        <childnode refid="508" relation="include">
+        </childnode>
+      </node>
+      <node id="508">
+        <label>TreeCoord.hpp</label>
+        <link refid="TreeCoord_8hpp"/>
+        <childnode refid="502" relation="include">
+        </childnode>
+        <childnode refid="503" relation="include">
+        </childnode>
+        <childnode refid="509" relation="include">
+        </childnode>
+        <childnode refid="504" relation="include">
+        </childnode>
+        <childnode refid="505" relation="include">
+        </childnode>
+      </node>
+      <node id="509">
+        <label>string</label>
+      </node>
+      <node id="504">
+        <label>TreeElement.hpp</label>
+        <link refid="TreeElement_8hpp"/>
+        <childnode refid="502" relation="include">
+        </childnode>
+        <childnode refid="503" relation="include">
+        </childnode>
+        <childnode refid="505" relation="include">
+        </childnode>
+      </node>
+      <node id="505">
+        <label>../../Tuple.hpp</label>
+        <link refid="Tuple_8hpp"/>
+        <childnode refid="506" relation="include">
+        </childnode>
+      </node>
+      <node id="502">
+        <label>cstddef</label>
+      </node>
+      <node id="506">
+        <label>preprocessor/macros.hpp</label>
+        <link refid="macros_8hpp"/>
+        <childnode refid="507" relation="include">
+        </childnode>
+      </node>
+      <node id="503">
+        <label>type_traits</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="512">
+        <label>/home/alexander/develop/work/llama/include/llama/llama.hpp</label>
+        <link refid="llama_8hpp"/>
+      </node>
+      <node id="510">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp</label>
+        <link refid="TreeFromDomains_8hpp"/>
+        <childnode refid="511" relation="include">
+        </childnode>
+      </node>
+      <node id="511">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/Mapping.hpp</label>
+        <link refid="Mapping_8hpp"/>
+        <childnode refid="512" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD" prot="public">llama::mapping::tree::internal::ReplaceDEwithTEinDD</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDE" prot="public">llama::mapping::tree::internal::ReplaceDEwithTEinDE</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDE_3_01DatumElement_3_01T__Identifier_00_01T__Type_01_4_4" prot="public">llama::mapping::tree::internal::ReplaceDEwithTEinDE&lt; DatumElement&lt; T_Identifier, T_Type &gt;&gt;</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_3_01DatumStruct_3_01T__FirstDa1fb10080b24b2b52d2773c9f444c1398" prot="public">llama::mapping::tree::internal::ReplaceDEwithTEinDD&lt; DatumStruct&lt; T_FirstDatumElement, T_DatumElements... &gt;&gt;</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_3_01DatumStruct_3_01_4_01_4" prot="public">llama::mapping::tree::internal::ReplaceDEwithTEinDD&lt; DatumStruct&lt; &gt; &gt;</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeChain" prot="public">llama::mapping::tree::internal::CreateTreeChain</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeChain_3_01T__Leaf_00_010_01_4" prot="public">llama::mapping::tree::internal::CreateTreeChain&lt; T_Leaf, 0 &gt;</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeFromDatumDomainImpl" prot="public">llama::mapping::tree::internal::TreeFromDatumDomainImpl</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeFromDomainsImpl" prot="public">llama::mapping::tree::internal::TreeFromDomainsImpl</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1SetUserDomainInTreeImpl" prot="public">llama::mapping::tree::internal::SetUserDomainInTreeImpl</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1SetUserDomainInTreeImpl_3_01T__DatumDomain_00_01T_01e357a3f57c3ef22fd50f5f9d3cea97" prot="public">llama::mapping::tree::internal::SetUserDomainInTreeImpl&lt; T_DatumDomain, T_UserDomain, std::integral_constant&lt; std::size_t, T_UserDomain::count - 1 &gt;&gt;</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord" prot="public">llama::mapping::tree::internal::UserDomainToTreeCoord</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord_3_01T__UserDomain_00_01T__fic35488dd11491e76cce095c6927fe1f5" prot="public">llama::mapping::tree::internal::UserDomainToTreeCoord&lt; T_UserDomain, T_firstDatumDomain, std::integral_constant&lt; std::size_t, T_UserDomain::count - 1 &gt;&gt;</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1DatumCoordToTreeCoord" prot="public">llama::mapping::tree::internal::DatumCoordToTreeCoord</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1DatumCoordToTreeCoord_3_01DatumCoord_3_01T__lastCoord_01_4_01_4" prot="public">llama::mapping::tree::internal::DatumCoordToTreeCoord&lt; DatumCoord&lt; T_lastCoord &gt; &gt;</innerclass>
+    <innernamespace refid="namespacellama">llama</innernamespace>
+    <innernamespace refid="namespacellama_1_1mapping">llama::mapping</innernamespace>
+    <innernamespace refid="namespacellama_1_1mapping_1_1tree">llama::mapping::tree</innernamespace>
+    <innernamespace refid="namespacellama_1_1mapping_1_1tree_1_1internal">llama::mapping::tree::internal</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*<sp/>Copyright<sp/>2018<sp/>Alexander<sp/>Matthes</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/>*<sp/>This<sp/>file<sp/>is<sp/>part<sp/>of<sp/>LLAMA.</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/>*<sp/>LLAMA<sp/>is<sp/>free<sp/>software:<sp/>you<sp/>can<sp/>redistribute<sp/>it<sp/>and/or<sp/>modify</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/>*<sp/>it<sp/>under<sp/>the<sp/>terms<sp/>of<sp/>the<sp/>GNU<sp/>Lesser<sp/>General<sp/>Public<sp/>License<sp/>as</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/>*<sp/>published<sp/>by<sp/>the<sp/>Free<sp/>Software<sp/>Foundation,<sp/>either<sp/>version<sp/>3<sp/>of<sp/>the</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/>*<sp/>License,<sp/>or<sp/>(at<sp/>your<sp/>option)<sp/>any<sp/>later<sp/>version.</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/>*<sp/>LLAMA<sp/>is<sp/>distributed<sp/>in<sp/>the<sp/>hope<sp/>that<sp/>it<sp/>will<sp/>be<sp/>useful,</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/>*<sp/>but<sp/>WITHOUT<sp/>ANY<sp/>WARRANTY;<sp/>without<sp/>even<sp/>the<sp/>implied<sp/>warranty<sp/>of</highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/>*<sp/>MERCHANTABILITY<sp/>or<sp/>FITNESS<sp/>FOR<sp/>A<sp/>PARTICULAR<sp/>PURPOSE.<sp/><sp/>See<sp/>the</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/>*<sp/>GNU<sp/>Lesser<sp/>General<sp/>Public<sp/>License<sp/>for<sp/>more<sp/>details.</highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="15"><highlight class="comment"><sp/>*<sp/>You<sp/>should<sp/>have<sp/>received<sp/>a<sp/>copy<sp/>of<sp/>the<sp/>GNU<sp/>Lesser<sp/>General<sp/>Public</highlight></codeline>
+<codeline lineno="16"><highlight class="comment"><sp/>*<sp/>License<sp/>along<sp/>with<sp/>LLAMA.<sp/><sp/>If<sp/>not,<sp/>see<sp/>&lt;www.gnu.org/licenses/&gt;.</highlight></codeline>
+<codeline lineno="17"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstddef&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;type_traits&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="TreeElement_8hpp" kindref="compound">TreeElement.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="TreeCoord_8hpp" kindref="compound">TreeCoord.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacellama" kindref="compound">llama</ref></highlight></codeline>
+<codeline lineno="28"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">mapping</highlight></codeline>
+<codeline lineno="31"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">tree</highlight></codeline>
+<codeline lineno="34"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">internal</highlight></codeline>
+<codeline lineno="37"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="comment">//<sp/>General<sp/>case<sp/>(leaf)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain<sp/>&gt;</highlight></codeline>
+<codeline lineno="41" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD" kindref="compound">ReplaceDEwithTEinDD</ref></highlight></codeline>
+<codeline lineno="42"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="43" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_1a2e1406fbf34d90f188f5e15d6deed1e8" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_1a2e1406fbf34d90f188f5e15d6deed1e8" kindref="member">type</ref><sp/>=<sp/>T_DatumDomain;</highlight></codeline>
+<codeline lineno="44"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumElement<sp/>&gt;</highlight></codeline>
+<codeline lineno="47" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDE" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDE" kindref="compound">ReplaceDEwithTEinDE</ref>;</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Identifier,</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Type</highlight></codeline>
+<codeline lineno="52"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="53" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDE_3_01DatumElement_3_01T__Identifier_00_01T__Type_01_4_4" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDE" kindref="compound">ReplaceDEwithTEinDE</ref>&lt;</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacellama_1a616a6cb9eb30d6b15f4819de1aa7cf68" kindref="member">DatumElement</ref>&lt;</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Identifier,</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Type</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;</highlight></codeline>
+<codeline lineno="58"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="59"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeElement" kindref="compound">type</ref><sp/>=<sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeElement" kindref="compound">TreeElementConst</ref>&lt;</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Identifier,</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_1a2e1406fbf34d90f188f5e15d6deed1e8" kindref="member">ReplaceDEwithTEinDD&lt; T_Type &gt;::type</ref></highlight></codeline>
+<codeline lineno="63" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDE_3_01DatumElement_3_01T__Identifier_00_01T__Type_01_4_4_1a990357416dd95ac8a6ae5a145021aadf" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;;</highlight></codeline>
+<codeline lineno="64"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal"></highlight><highlight class="comment">//<sp/>DatumStruct<sp/>case<sp/>(node)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_FirstDatumElement,</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_DatumElements</highlight></codeline>
+<codeline lineno="70"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="71" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_3_01DatumStruct_3_01T__FirstDa1fb10080b24b2b52d2773c9f444c1398" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD" kindref="compound">ReplaceDEwithTEinDD</ref>&lt;</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>&lt;</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_FirstDatumElement,</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumElements...</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;</highlight></codeline>
+<codeline lineno="76"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="77"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_3_01DatumStruct_3_01T__FirstDa1fb10080b24b2b52d2773c9f444c1398_1adfe35384218d8c08a0a0fb640a1fb457" kindref="member">type</ref><sp/>=<sp/>boost::mp11::mp_push_front&lt;</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD" kindref="compound">ReplaceDEwithTEinDD</ref>&lt;<sp/><ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>&lt;<sp/>T_DatumElements...<sp/>&gt;<sp/>&gt;<ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_1a2e1406fbf34d90f188f5e15d6deed1e8" kindref="member">::type</ref>,</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDE" kindref="compound">ReplaceDEwithTEinDE&lt; T_FirstDatumElement &gt;::type</ref></highlight></codeline>
+<codeline lineno="81" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_3_01DatumStruct_3_01T__FirstDa1fb10080b24b2b52d2773c9f444c1398_1adfe35384218d8c08a0a0fb640a1fb457" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;;</highlight></codeline>
+<codeline lineno="82"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"></highlight></codeline>
+<codeline lineno="84"><highlight class="normal"></highlight><highlight class="comment">//<sp/>empty<sp/>DatumStruct<sp/>case<sp/>(<sp/>recursive<sp/>loop<sp/>head<sp/>)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="85"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/>&gt;</highlight></codeline>
+<codeline lineno="86" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_3_01DatumStruct_3_01_4_01_4" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD" kindref="compound">ReplaceDEwithTEinDD</ref>&lt;<sp/><ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>&lt;<sp/>&gt;<sp/>&gt;</highlight></codeline>
+<codeline lineno="87"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="88" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_3_01DatumStruct_3_01_4_01_4_1af2d9166a4c5787af639a4c84a8600208" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1Tuple_3_01_4" kindref="compound">type</ref><sp/>=<sp/><ref refid="structllama_1_1Tuple_3_01_4" kindref="compound">Tuple&lt; &gt;</ref>;</highlight></codeline>
+<codeline lineno="89"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"></highlight></codeline>
+<codeline lineno="91"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Leaf,</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/>std::size_t<sp/>T_count</highlight></codeline>
+<codeline lineno="94"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="95" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeChain" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeChain" kindref="compound">CreateTreeChain</ref></highlight></codeline>
+<codeline lineno="96"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeElement" kindref="compound">type</ref><sp/>=<sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeElement" kindref="compound">TreeElement</ref>&lt;</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1NoName" kindref="compound">NoName</ref>,</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1Tuple" kindref="compound">Tuple</ref>&lt;<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeChain" kindref="compound">CreateTreeChain</ref>&lt;</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Leaf,</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_count<sp/>-<sp/>1</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;<ref refid="structllama_1_1mapping_1_1tree_1_1TreeElement" kindref="compound">::type</ref><sp/>&gt;</highlight></codeline>
+<codeline lineno="103" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeChain_1afd6be8e7944c92627f9147b277cb575f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;;</highlight></codeline>
+<codeline lineno="104"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"></highlight></codeline>
+<codeline lineno="106"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Leaf<sp/>&gt;</highlight></codeline>
+<codeline lineno="107" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeChain_3_01T__Leaf_00_010_01_4" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeChain" kindref="compound">CreateTreeChain</ref>&lt;</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Leaf,</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/>0</highlight></codeline>
+<codeline lineno="110"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="111"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="112" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeChain_3_01T__Leaf_00_010_01_4_1a001f28c313a9fb275ea3fba90fab69f7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeChain_3_01T__Leaf_00_010_01_4_1a001f28c313a9fb275ea3fba90fab69f7" kindref="member">type</ref><sp/>=<sp/>T_Leaf;</highlight></codeline>
+<codeline lineno="113"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"></highlight></codeline>
+<codeline lineno="115"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain<sp/>&gt;</highlight></codeline>
+<codeline lineno="116" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeFromDatumDomainImpl" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeFromDatumDomainImpl" kindref="compound">TreeFromDatumDomainImpl</ref></highlight></codeline>
+<codeline lineno="117"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeElement" kindref="compound">type</ref><sp/>=<sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeElement" kindref="compound">TreeElement</ref>&lt;</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1NoName" kindref="compound">NoName</ref>,</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_1a2e1406fbf34d90f188f5e15d6deed1e8" kindref="member">ReplaceDEwithTEinDD&lt; T_DatumDomain &gt;::type</ref></highlight></codeline>
+<codeline lineno="121" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeFromDatumDomainImpl_1a88fac3728d52312d6f395083f25e2bc7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;;</highlight></codeline>
+<codeline lineno="122"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_UserDomain,</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain</highlight></codeline>
+<codeline lineno="127"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="128" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeFromDomainsImpl" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeFromDomainsImpl" kindref="compound">TreeFromDomainsImpl</ref></highlight></codeline>
+<codeline lineno="129"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeFromDomainsImpl_1a78f991275f4b5f33dca8d184fe8a15de" kindref="member">type</ref><sp/>=<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeChain" kindref="compound">CreateTreeChain</ref>&lt;</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeElement" kindref="compound">TreeFromDatumDomainImpl&lt; T_DatumDomain &gt;::type</ref>,</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_UserDomain::count<sp/>-<sp/>1</highlight></codeline>
+<codeline lineno="133" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeFromDomainsImpl_1a78f991275f4b5f33dca8d184fe8a15de" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;<ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_1a2e1406fbf34d90f188f5e15d6deed1e8" kindref="member">::type</ref>;</highlight></codeline>
+<codeline lineno="134"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"></highlight></codeline>
+<codeline lineno="136"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>internal</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="137"><highlight class="normal"></highlight></codeline>
+<codeline lineno="138"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain<sp/>&gt;</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1_1mapping_1_1tree_1a75ddeae29d60ee0940a2aabf881d64c9" kindref="member">TreeFromDatumDomain</ref><sp/>=<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeFromDatumDomainImpl" kindref="compound">internal::TreeFromDatumDomainImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumDomain</highlight></codeline>
+<codeline lineno="141" refid="namespacellama_1_1mapping_1_1tree_1a75ddeae29d60ee0940a2aabf881d64c9" refkind="member"><highlight class="normal">&gt;<ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_1a2e1406fbf34d90f188f5e15d6deed1e8" kindref="member">::type</ref>;</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"></highlight></codeline>
+<codeline lineno="143"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_UserDomain,</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain</highlight></codeline>
+<codeline lineno="146"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1_1mapping_1_1tree_1a257eba2e41a3508cc0d70fb0f9e30d24" kindref="member">TreeFromDomains</ref><sp/>=<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeFromDomainsImpl" kindref="compound">internal::TreeFromDomainsImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/>T_UserDomain,</highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumDomain</highlight></codeline>
+<codeline lineno="150" refid="namespacellama_1_1mapping_1_1tree_1a257eba2e41a3508cc0d70fb0f9e30d24" refkind="member"><highlight class="normal">&gt;<ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_1a2e1406fbf34d90f188f5e15d6deed1e8" kindref="member">::type</ref>;</highlight></codeline>
+<codeline lineno="151"><highlight class="normal"></highlight></codeline>
+<codeline lineno="152"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">internal</highlight></codeline>
+<codeline lineno="153"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"></highlight></codeline>
+<codeline lineno="155"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_UserDomain,</highlight></codeline>
+<codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_pos<sp/>=<sp/>std::integral_constant&lt;</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::size_t,</highlight></codeline>
+<codeline lineno="160"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0</highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;</highlight></codeline>
+<codeline lineno="162"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="163" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1SetUserDomainInTreeImpl" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1SetUserDomainInTreeImpl" kindref="compound">SetUserDomainInTreeImpl</ref></highlight></codeline>
+<codeline lineno="164"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1Tuple" kindref="compound">InnerTuple</ref><sp/>=<sp/><ref refid="structllama_1_1Tuple" kindref="compound">Tuple</ref>&lt;</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>decltype(</highlight></codeline>
+<codeline lineno="167"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1SetUserDomainInTreeImpl" kindref="compound">SetUserDomainInTreeImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="168"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="169"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_UserDomain,</highlight></codeline>
+<codeline lineno="170"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::integral_constant&lt;</highlight></codeline>
+<codeline lineno="171"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::size_t,</highlight></codeline>
+<codeline lineno="172"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_pos::value<sp/>+<sp/>1</highlight></codeline>
+<codeline lineno="173"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;</highlight></codeline>
+<codeline lineno="174"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;()(<sp/>T_UserDomain()<sp/>)</highlight></codeline>
+<codeline lineno="175"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>)</highlight></codeline>
+<codeline lineno="176" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1SetUserDomainInTreeImpl_1abfec102411450853c591b06de2fdd89a" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;;</highlight></codeline>
+<codeline lineno="177"><highlight class="normal"></highlight></codeline>
+<codeline lineno="178"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="179"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="180" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1SetUserDomainInTreeImpl_1ad2508c5a4da82f5f50076138e97c2bbc" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1SetUserDomainInTreeImpl_1ad2508c5a4da82f5f50076138e97c2bbc" kindref="member">operator()</ref>(<sp/>T_UserDomain<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>&amp;<sp/>size<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="181"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeElement" kindref="compound">TreeElement</ref>&lt;</highlight></codeline>
+<codeline lineno="182"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1NoName" kindref="compound">NoName</ref>,</highlight></codeline>
+<codeline lineno="183"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1Tuple" kindref="compound">InnerTuple</ref></highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;</highlight></codeline>
+<codeline lineno="185"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="186"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Need<sp/>to<sp/>predefine<sp/>this<sp/>because<sp/>of<sp/>a<sp/>cuda<sp/>bug<sp/>about</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="187"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>identifier<sp/>&quot;std::integral_constant&lt;unsigned<sp/>long,</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="188"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>(unsigned<sp/>long)0ul&gt;<sp/>::value&quot;<sp/>is<sp/>undefined<sp/>in<sp/>device<sp/>code</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="189"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>constexpr<sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>pos<sp/>=<sp/>T_pos::value;</highlight></codeline>
+<codeline lineno="190"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeElement" kindref="compound">TreeElement</ref>&lt;</highlight></codeline>
+<codeline lineno="191"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>NoName,</highlight></codeline>
+<codeline lineno="192"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1Tuple" kindref="compound">InnerTuple</ref></highlight></codeline>
+<codeline lineno="193"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;(</highlight></codeline>
+<codeline lineno="194"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>size[<sp/>pos<sp/>],</highlight></codeline>
+<codeline lineno="195"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1Tuple" kindref="compound">InnerTuple</ref>(</highlight></codeline>
+<codeline lineno="196"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1SetUserDomainInTreeImpl" kindref="compound">SetUserDomainInTreeImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="197"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="198"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_UserDomain,</highlight></codeline>
+<codeline lineno="199"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::integral_constant&lt;</highlight></codeline>
+<codeline lineno="200"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::size_t,</highlight></codeline>
+<codeline lineno="201"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pos<sp/>+<sp/>1</highlight></codeline>
+<codeline lineno="202"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;</highlight></codeline>
+<codeline lineno="203"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;()(<sp/>size<sp/>)</highlight></codeline>
+<codeline lineno="204"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>)</highlight></codeline>
+<codeline lineno="205"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>);</highlight></codeline>
+<codeline lineno="206"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="207"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="208"><highlight class="normal"></highlight></codeline>
+<codeline lineno="209"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="210"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="211"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_UserDomain</highlight></codeline>
+<codeline lineno="212"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="213" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1SetUserDomainInTreeImpl_3_01T__DatumDomain_00_01T_01e357a3f57c3ef22fd50f5f9d3cea97" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1SetUserDomainInTreeImpl" kindref="compound">SetUserDomainInTreeImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="214"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="215"><highlight class="normal"><sp/><sp/><sp/><sp/>T_UserDomain,</highlight></codeline>
+<codeline lineno="216"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacestd" kindref="compound">std</ref>::integral_constant&lt;</highlight></codeline>
+<codeline lineno="217"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::size_t,</highlight></codeline>
+<codeline lineno="218"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_UserDomain::count<sp/>-<sp/>1</highlight></codeline>
+<codeline lineno="219"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;</highlight></codeline>
+<codeline lineno="220"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="221"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="222"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="223"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="224" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1SetUserDomainInTreeImpl_3_01T__DatumDomain_00_01T_01e357a3f57c3ef22fd50f5f9d3cea97_1afbffbaff715955a9c143e10a67b73abb" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1SetUserDomainInTreeImpl_3_01T__DatumDomain_00_01T_01e357a3f57c3ef22fd50f5f9d3cea97_1afbffbaff715955a9c143e10a67b73abb" kindref="member">operator()</ref>(<sp/>T_UserDomain<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>&amp;<sp/>size<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="225"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/><ref refid="namespacellama_1_1mapping_1_1tree_1a75ddeae29d60ee0940a2aabf881d64c9" kindref="member">TreeFromDatumDomain&lt; T_DatumDomain &gt;</ref></highlight></codeline>
+<codeline lineno="226"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="227"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1_1mapping_1_1tree_1a75ddeae29d60ee0940a2aabf881d64c9" kindref="member">TreeFromDatumDomain&lt; T_DatumDomain &gt;</ref>(<sp/>size[<sp/>T_UserDomain::count<sp/>-<sp/>1<sp/>]<sp/>);</highlight></codeline>
+<codeline lineno="228"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="229"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="230"><highlight class="normal"></highlight></codeline>
+<codeline lineno="231"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>internal</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="232"><highlight class="normal"></highlight></codeline>
+<codeline lineno="233"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="234"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="235"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_UserDomain</highlight></codeline>
+<codeline lineno="236"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="237"><highlight class="normal"><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="238"><highlight class="normal"></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="239" refid="namespacellama_1_1mapping_1_1tree_1a6c94d5fae399cb0b0d3c7e095862dc04" refkind="member"><highlight class="normal"><ref refid="namespacellama_1_1mapping_1_1tree_1a6c94d5fae399cb0b0d3c7e095862dc04" kindref="member">setUserDomainInTree</ref>(<sp/>T_UserDomain<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>&amp;<sp/>size<sp/>)</highlight></codeline>
+<codeline lineno="240"><highlight class="normal">-&gt;<sp/>decltype(</highlight></codeline>
+<codeline lineno="241"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1SetUserDomainInTreeImpl" kindref="compound">internal::SetUserDomainInTreeImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="242"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="243"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_UserDomain</highlight></codeline>
+<codeline lineno="244"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;()(<sp/>size<sp/>)</highlight></codeline>
+<codeline lineno="245"><highlight class="normal">)</highlight></codeline>
+<codeline lineno="246"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="247"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1SetUserDomainInTreeImpl" kindref="compound">internal::SetUserDomainInTreeImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="248"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="249"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_UserDomain</highlight></codeline>
+<codeline lineno="250"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;()(<sp/>size<sp/>);</highlight></codeline>
+<codeline lineno="251"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="252"><highlight class="normal"></highlight></codeline>
+<codeline lineno="253"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">internal</highlight></codeline>
+<codeline lineno="254"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="255"><highlight class="normal"></highlight></codeline>
+<codeline lineno="256"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="257"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_UserDomain,</highlight></codeline>
+<codeline lineno="258"><highlight class="normal"><sp/><sp/><sp/><sp/>std::size_t<sp/>T_firstDatumDomain,</highlight></codeline>
+<codeline lineno="259"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_pos<sp/>=<sp/>std::integral_constant&lt;</highlight></codeline>
+<codeline lineno="260"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::size_t,</highlight></codeline>
+<codeline lineno="261"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0</highlight></codeline>
+<codeline lineno="262"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;</highlight></codeline>
+<codeline lineno="263"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="264" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord" kindref="compound">UserDomainToTreeCoord</ref></highlight></codeline>
+<codeline lineno="265"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="266"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="267"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="268" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord_1a8b7da0f25cb2c472958671d4f0e2aff4" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord_1a8b7da0f25cb2c472958671d4f0e2aff4" kindref="member">operator()</ref>(<sp/>T_UserDomain<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>&amp;<sp/>coord<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="269"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/>decltype(</highlight></codeline>
+<codeline lineno="270"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacellama_1aba28a2d9095426f0fb28d4b5371f34a7" kindref="member">tupleCat</ref>(</highlight></codeline>
+<codeline lineno="271"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1Tuple" kindref="compound">Tuple</ref>&lt;<sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement" kindref="compound">TreeCoordElement&lt; 0 &gt;</ref><sp/>&gt;(),</highlight></codeline>
+<codeline lineno="272"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord" kindref="compound">UserDomainToTreeCoord</ref>&lt;</highlight></codeline>
+<codeline lineno="273"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_UserDomain,</highlight></codeline>
+<codeline lineno="274"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_firstDatumDomain,</highlight></codeline>
+<codeline lineno="275"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::integral_constant&lt;</highlight></codeline>
+<codeline lineno="276"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::size_t,</highlight></codeline>
+<codeline lineno="277"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_pos::value<sp/>+<sp/>1</highlight></codeline>
+<codeline lineno="278"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;</highlight></codeline>
+<codeline lineno="279"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;()(<sp/>coord<sp/>)</highlight></codeline>
+<codeline lineno="280"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>)</highlight></codeline>
+<codeline lineno="281"><highlight class="normal"><sp/><sp/><sp/><sp/>)</highlight></codeline>
+<codeline lineno="282"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="283"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Need<sp/>to<sp/>predefine<sp/>this<sp/>because<sp/>of<sp/>a<sp/>cuda<sp/>bug<sp/>about</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="284"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>identifier<sp/>&quot;std::integral_constant&lt;unsigned<sp/>long,</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="285"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>(unsigned<sp/>long)0ul&gt;<sp/>::value&quot;<sp/>is<sp/>undefined<sp/>in<sp/>device<sp/>code</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="286"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>constexpr<sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>pos<sp/>=<sp/>T_pos::value;</highlight></codeline>
+<codeline lineno="287"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1Tuple" kindref="compound">Tuple&lt; TreeCoordElement&lt; 0 &gt;</ref><sp/>&gt;<sp/>mostLeft{</highlight></codeline>
+<codeline lineno="288"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement" kindref="compound">TreeCoordElement&lt; 0 &gt;</ref>(<sp/>coord[<sp/>pos<sp/>]<sp/>)</highlight></codeline>
+<codeline lineno="289"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="290"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1aba28a2d9095426f0fb28d4b5371f34a7" kindref="member">tupleCat</ref>(</highlight></codeline>
+<codeline lineno="291"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>mostLeft,</highlight></codeline>
+<codeline lineno="292"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord" kindref="compound">UserDomainToTreeCoord</ref>&lt;</highlight></codeline>
+<codeline lineno="293"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_UserDomain,</highlight></codeline>
+<codeline lineno="294"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_firstDatumDomain,</highlight></codeline>
+<codeline lineno="295"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::integral_constant&lt;</highlight></codeline>
+<codeline lineno="296"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::size_t,</highlight></codeline>
+<codeline lineno="297"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_pos::value<sp/>+<sp/>1</highlight></codeline>
+<codeline lineno="298"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;</highlight></codeline>
+<codeline lineno="299"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;()(<sp/>coord<sp/>)</highlight></codeline>
+<codeline lineno="300"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>);</highlight></codeline>
+<codeline lineno="301"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="302"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="303"><highlight class="normal"></highlight></codeline>
+<codeline lineno="304"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="305"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_UserDomain,</highlight></codeline>
+<codeline lineno="306"><highlight class="normal"><sp/><sp/><sp/><sp/>std::size_t<sp/>T_firstDatumDomain</highlight></codeline>
+<codeline lineno="307"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="308" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord_3_01T__UserDomain_00_01T__fic35488dd11491e76cce095c6927fe1f5" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord" kindref="compound">UserDomainToTreeCoord</ref>&lt;</highlight></codeline>
+<codeline lineno="309"><highlight class="normal"><sp/><sp/><sp/><sp/>T_UserDomain,</highlight></codeline>
+<codeline lineno="310"><highlight class="normal"><sp/><sp/><sp/><sp/>T_firstDatumDomain,</highlight></codeline>
+<codeline lineno="311"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacestd" kindref="compound">std</ref>::integral_constant&lt;</highlight></codeline>
+<codeline lineno="312"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::size_t,</highlight></codeline>
+<codeline lineno="313"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_UserDomain::count<sp/>-<sp/>1</highlight></codeline>
+<codeline lineno="314"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;</highlight></codeline>
+<codeline lineno="315"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="316"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="317" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord_3_01T__UserDomain_00_01T__fic35488dd11491e76cce095c6927fe1f5_1a70622037d237073f383c68d41a9a9f60" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1Tuple" kindref="compound">Result</ref><sp/>=<sp/><ref refid="structllama_1_1Tuple" kindref="compound">Tuple&lt; TreeCoordElement&lt; T_firstDatumDomain &gt;</ref><sp/>&gt;;</highlight></codeline>
+<codeline lineno="318"><highlight class="normal"></highlight></codeline>
+<codeline lineno="319"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="320"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="321" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord_3_01T__UserDomain_00_01T__fic35488dd11491e76cce095c6927fe1f5_1ac00a81753d1a5bb70660756874e42b22" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord_3_01T__UserDomain_00_01T__fic35488dd11491e76cce095c6927fe1f5_1ac00a81753d1a5bb70660756874e42b22" kindref="member">operator()</ref>(<sp/>T_UserDomain<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>&amp;<sp/>coord<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="322"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/><ref refid="structllama_1_1Tuple" kindref="compound">Result</ref></highlight></codeline>
+<codeline lineno="323"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="324"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1Tuple" kindref="compound">Result</ref>(<sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement" kindref="compound">TreeCoordElement&lt; T_firstDatumDomain &gt;</ref>(<sp/>coord[<sp/>T_UserDomain::count<sp/>-<sp/>1<sp/>]<sp/>)<sp/>);</highlight></codeline>
+<codeline lineno="325"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="326"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="327"><highlight class="normal"></highlight></codeline>
+<codeline lineno="328"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoord<sp/>&gt;</highlight></codeline>
+<codeline lineno="329" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1DatumCoordToTreeCoord" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1DatumCoordToTreeCoord" kindref="compound">DatumCoordToTreeCoord</ref></highlight></codeline>
+<codeline lineno="330"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="331" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1DatumCoordToTreeCoord_1aeb352f68de1e963ce1ce3ea17135ce76" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1Tuple" kindref="compound">FrontType</ref><sp/>=<sp/><ref refid="structllama_1_1Tuple" kindref="compound">Tuple&lt; TreeCoordElementConst&lt; T_DatumCoord::PopFront::front &gt;</ref><sp/>&gt;;</highlight></codeline>
+<codeline lineno="332"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1DatumCoordToTreeCoord_1afd04c465b503e0d23dc86005717e1caa" kindref="member">type</ref><sp/>=<sp/>decltype(</highlight></codeline>
+<codeline lineno="333"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacellama_1aba28a2d9095426f0fb28d4b5371f34a7" kindref="member">tupleCat</ref>(</highlight></codeline>
+<codeline lineno="334"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1Tuple" kindref="compound">FrontType</ref>(),</highlight></codeline>
+<codeline lineno="335"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1DatumCoordToTreeCoord" kindref="compound">DatumCoordToTreeCoord</ref>&lt;</highlight></codeline>
+<codeline lineno="336"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoord::PopFront</highlight></codeline>
+<codeline lineno="337"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;::<ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_1a2e1406fbf34d90f188f5e15d6deed1e8" kindref="member">type</ref>()</highlight></codeline>
+<codeline lineno="338"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>)</highlight></codeline>
+<codeline lineno="339" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1DatumCoordToTreeCoord_1afd04c465b503e0d23dc86005717e1caa" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>);</highlight></codeline>
+<codeline lineno="340"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="341"><highlight class="normal"></highlight></codeline>
+<codeline lineno="342"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/>std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>T_lastCoord<sp/>&gt;</highlight></codeline>
+<codeline lineno="343" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1DatumCoordToTreeCoord_3_01DatumCoord_3_01T__lastCoord_01_4_01_4" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1DatumCoordToTreeCoord" kindref="compound">DatumCoordToTreeCoord</ref>&lt;<sp/><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>&lt;<sp/>T_lastCoord<sp/>&gt;<sp/>&gt;</highlight></codeline>
+<codeline lineno="344"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="345" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1DatumCoordToTreeCoord_3_01DatumCoord_3_01T__lastCoord_01_4_01_4_1a34aa94d08403eaea25bde180e17c861e" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1Tuple" kindref="compound">type</ref><sp/>=<sp/><ref refid="structllama_1_1Tuple" kindref="compound">Tuple&lt; TreeCoordElementConst&lt; &gt;</ref><sp/>&gt;;</highlight></codeline>
+<codeline lineno="346"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="347"><highlight class="normal"></highlight></codeline>
+<codeline lineno="348"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>internal</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="349"><highlight class="normal"></highlight></codeline>
+<codeline lineno="350"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="351"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="352"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_UserDomain</highlight></codeline>
+<codeline lineno="353"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="354"><highlight class="normal"><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="355"><highlight class="normal"></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="356" refid="namespacellama_1_1mapping_1_1tree_1aa95d8ba9cd9d81d94605a932011d7a4e" refkind="member"><highlight class="normal"><ref refid="namespacellama_1_1mapping_1_1tree_1aa95d8ba9cd9d81d94605a932011d7a4e" kindref="member">getBasicTreeCoordFromDomains</ref>(<sp/>T_UserDomain<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>&amp;<sp/>coord<sp/>)</highlight></codeline>
+<codeline lineno="357"><highlight class="normal">-&gt;<sp/>decltype(</highlight></codeline>
+<codeline lineno="358"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacellama_1aba28a2d9095426f0fb28d4b5371f34a7" kindref="member">tupleCat</ref>(</highlight></codeline>
+<codeline lineno="359"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord" kindref="compound">internal::UserDomainToTreeCoord</ref>&lt;</highlight></codeline>
+<codeline lineno="360"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_UserDomain,</highlight></codeline>
+<codeline lineno="361"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumCoord::front</highlight></codeline>
+<codeline lineno="362"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;()(<sp/>coord<sp/>),</highlight></codeline>
+<codeline lineno="363"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1DatumCoordToTreeCoord_1afd04c465b503e0d23dc86005717e1caa" kindref="member">internal::DatumCoordToTreeCoord&lt; T_DatumCoord &gt;::type</ref>()</highlight></codeline>
+<codeline lineno="364"><highlight class="normal"><sp/><sp/><sp/><sp/>)</highlight></codeline>
+<codeline lineno="365"><highlight class="normal">)</highlight></codeline>
+<codeline lineno="366"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="367"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1aba28a2d9095426f0fb28d4b5371f34a7" kindref="member">tupleCat</ref>(</highlight></codeline>
+<codeline lineno="368"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord" kindref="compound">internal::UserDomainToTreeCoord</ref>&lt;</highlight></codeline>
+<codeline lineno="369"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_UserDomain,</highlight></codeline>
+<codeline lineno="370"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumCoord::front</highlight></codeline>
+<codeline lineno="371"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;()(<sp/>coord<sp/>),</highlight></codeline>
+<codeline lineno="372"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1DatumCoordToTreeCoord_1afd04c465b503e0d23dc86005717e1caa" kindref="member">internal::DatumCoordToTreeCoord&lt; T_DatumCoord &gt;::type</ref>()</highlight></codeline>
+<codeline lineno="373"><highlight class="normal"><sp/><sp/><sp/><sp/>);</highlight></codeline>
+<codeline lineno="374"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="375"><highlight class="normal"></highlight></codeline>
+<codeline lineno="376"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>tree</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="377"><highlight class="normal"></highlight></codeline>
+<codeline lineno="378"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>mapping</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="379"><highlight class="normal"></highlight></codeline>
+<codeline lineno="380"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>llama</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="381"><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp"/>
+  </compounddef>
+</doxygen>

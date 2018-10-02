@@ -21,6 +21,8 @@
 #include <tuple>
 #include <type_traits>
 
+/// \file Documentation of this file is in DatumCoord.dox!
+
 namespace llama
 {
 

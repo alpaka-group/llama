@@ -115,13 +115,13 @@ template<
     typename T_Functor,
     typename... T_Leaves
 >
-struct ApplyFunctorForEachLeaveImpl;
+struct ApplyFunctorForEachLeafImpl;
 
 template<
     typename T_Coord,
     typename T_Pos,
     typename T_Functor,
-    typename T_Leave
+    typename T_Leaf
 >
 struct ApplyFunctorForDatumDomainImpl
 {
@@ -156,7 +156,7 @@ struct ApplyFunctorForDatumDomainImpl<
     operator()( T_Functor&& functor )
     -> void
     {
-        ApplyFunctorForEachLeaveImpl<
+        ApplyFunctorForEachLeafImpl<
             T_Coord,
             typename T_Pos::template PushBack< 0 >,
             T_Functor,
@@ -169,14 +169,14 @@ template<
     typename T_Coord,
     typename T_Pos,
     typename T_Functor,
-    typename T_Leave,
+    typename T_Leaf,
     typename... T_Leaves
 >
-struct ApplyFunctorForEachLeaveImpl<
+struct ApplyFunctorForEachLeafImpl<
     T_Coord,
     T_Pos,
     T_Functor,
-    T_Leave,
+    T_Leaf,
     T_Leaves...
 >
 {
@@ -189,9 +189,9 @@ struct ApplyFunctorForEachLeaveImpl<
             T_Coord,
             T_Pos,
             T_Functor,
-            GetDatumElementType< T_Leave >
+            GetDatumElementType< T_Leaf >
         >{}( std::forward<T_Functor>( functor ) );
-        ApplyFunctorForEachLeaveImpl<
+        ApplyFunctorForEachLeafImpl<
             T_Coord,
             typename T_Pos::IncBack,
             T_Functor,
@@ -205,7 +205,7 @@ template<
     typename T_Pos,
     typename T_Functor
 >
-struct ApplyFunctorForEachLeaveImpl<
+struct ApplyFunctorForEachLeafImpl<
     T_Coord,
     T_Pos,
     T_Functor
@@ -223,14 +223,14 @@ template<
     typename T_DatumCoord,
     typename T_Functor
 >
-struct ApplyFunctorForEachLeave;
+struct ApplyFunctorForEachLeaf;
 
 template<
     typename T_DatumCoord,
     typename T_Functor,
     typename... T_Leaves
 >
-struct ApplyFunctorForEachLeave<
+struct ApplyFunctorForEachLeaf<
     DatumStruct< T_Leaves... >,
     T_DatumCoord,
     T_Functor
@@ -239,7 +239,7 @@ struct ApplyFunctorForEachLeave<
     LLAMA_FN_HOST_ACC_INLINE
     static void apply( T_Functor&& functor )
     {
-         ApplyFunctorForEachLeaveImpl<
+         ApplyFunctorForEachLeafImpl<
             T_DatumCoord,
             DatumCoord< 0 >,
             T_Functor,
@@ -266,7 +266,7 @@ struct ForEach
     LLAMA_FN_HOST_ACC_INLINE
     static void apply( T_Functor&& functor )
     {
-        internal::ApplyFunctorForEachLeave<
+        internal::ApplyFunctorForEachLeaf<
             T_DatumDomain,
             T_DatumCoord,
             T_Functor
@@ -288,7 +288,7 @@ struct ForEach<
     static void apply( T_Functor&& functor )
     {
         LLAMA_FORCE_INLINE_RECURSIVE
-        internal::ApplyFunctorForEachLeave<
+        internal::ApplyFunctorForEachLeaf<
             T_DatumDomain,
             DatumCoord< T_coords... >,
             T_Functor

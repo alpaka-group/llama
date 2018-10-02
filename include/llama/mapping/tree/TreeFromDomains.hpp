@@ -36,7 +36,7 @@ namespace tree
 namespace internal
 {
 
-// General case (leave)
+// General case (leaf)
 template< typename T_DatumDomain >
 struct ReplaceDEwithTEinDD
 {
@@ -89,7 +89,7 @@ struct ReplaceDEwithTEinDD< DatumStruct< > >
 };
 
 template<
-    typename T_Leave,
+    typename T_Leaf,
     std::size_t T_count
 >
 struct CreateTreeChain
@@ -97,19 +97,19 @@ struct CreateTreeChain
     using type = TreeElement<
         NoName,
         Tuple< typename CreateTreeChain<
-            T_Leave,
+            T_Leaf,
             T_count - 1
         >::type >
     >;
 };
 
-template< typename T_Leave >
+template< typename T_Leaf >
 struct CreateTreeChain<
-    T_Leave,
+    T_Leaf,
     0
 >
 {
-    using type = T_Leave;
+    using type = T_Leaf;
 };
 
 template< typename T_DatumDomain >

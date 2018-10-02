@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1internal_1_1ApplyFunctorForEachLeaveImpl" kind="struct" language="C++" prot="public">
+    <compoundname>llama::internal::ApplyFunctorForEachLeaveImpl</compoundname>
+    <includes refid="ForEach_8hpp" local="no">ForEach.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_Coord</type>
+      </param>
+      <param>
+        <type>typename T_Pos</type>
+      </param>
+      <param>
+        <type>typename T_Functor</type>
+      </param>
+      <param>
+        <type>typename...</type>
+        <declname>T_Leaves</declname>
+        <defname>T_Leaves</defname>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/ForEach.hpp" line="118" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/ForEach.hpp" bodystart="118" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

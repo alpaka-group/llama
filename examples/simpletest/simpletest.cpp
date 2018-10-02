@@ -132,7 +132,7 @@ int main(int argc,char * * argv)
         for (size_t y = 0; y < udSize[1]; ++y)
         {
             SetZeroFunctor< decltype( view( x, y ) ) > szf{ view( x, y ) };
-            llama::ForEach< Name, st::Pos >::apply( szf );
+            llama::ForEach< Name, llama::DatumCoord<0,0> >::apply( szf );
             llama::ForEach< Name, st::Momentum >::apply( szf );
             view.accessor< 1, 0 >( { x, y } ) =
                 double( x + y ) / double( udSize[0] + udSize[1] );

@@ -1,0 +1,435 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="ForEach_8hpp" kind="file" language="C++">
+    <compoundname>ForEach.hpp</compoundname>
+    <includes local="no">type_traits</includes>
+    <includes refid="DatumCoord_8hpp" local="yes">DatumCoord.hpp</includes>
+    <includes refid="GetCoordFromUID_8hpp" local="yes">GetCoordFromUID.hpp</includes>
+    <includedby refid="View_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/View.hpp</includedby>
+    <includedby refid="llama_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/llama.hpp</includedby>
+    <incdepgraph>
+      <node id="143">
+        <label>boost/predef.h</label>
+      </node>
+      <node id="140">
+        <label>Types.hpp</label>
+        <link refid="Types_8hpp"/>
+        <childnode refid="141" relation="include">
+        </childnode>
+        <childnode refid="138" relation="include">
+        </childnode>
+      </node>
+      <node id="141">
+        <label>Array.hpp</label>
+        <link refid="Array_8hpp"/>
+        <childnode refid="142" relation="include">
+        </childnode>
+      </node>
+      <node id="133">
+        <label>/home/alexander/develop/work/llama/include/llama/ForEach.hpp</label>
+        <link refid="ForEach_8hpp"/>
+        <childnode refid="134" relation="include">
+        </childnode>
+        <childnode refid="135" relation="include">
+        </childnode>
+        <childnode refid="137" relation="include">
+        </childnode>
+      </node>
+      <node id="139">
+        <label>DatumStruct.hpp</label>
+        <link refid="DatumStruct_8hpp"/>
+        <childnode refid="140" relation="include">
+        </childnode>
+        <childnode refid="135" relation="include">
+        </childnode>
+        <childnode refid="138" relation="include">
+        </childnode>
+        <childnode refid="134" relation="include">
+        </childnode>
+      </node>
+      <node id="137">
+        <label>GetCoordFromUID.hpp</label>
+        <link refid="GetCoordFromUID_8hpp"/>
+        <childnode refid="134" relation="include">
+        </childnode>
+        <childnode refid="138" relation="include">
+        </childnode>
+        <childnode refid="139" relation="include">
+        </childnode>
+      </node>
+      <node id="136">
+        <label>tuple</label>
+      </node>
+      <node id="142">
+        <label>preprocessor/macros.hpp</label>
+        <link refid="macros_8hpp"/>
+        <childnode refid="143" relation="include">
+        </childnode>
+      </node>
+      <node id="134">
+        <label>type_traits</label>
+      </node>
+      <node id="135">
+        <label>DatumCoord.hpp</label>
+        <link refid="DatumCoord_8hpp"/>
+        <childnode refid="136" relation="include">
+        </childnode>
+        <childnode refid="134" relation="include">
+        </childnode>
+      </node>
+      <node id="138">
+        <label>boost/mp11.hpp</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="147">
+        <label>/home/alexander/develop/work/llama/include/llama/llama.hpp</label>
+        <link refid="llama_8hpp"/>
+      </node>
+      <node id="144">
+        <label>/home/alexander/develop/work/llama/include/llama/ForEach.hpp</label>
+        <link refid="ForEach_8hpp"/>
+        <childnode refid="145" relation="include">
+        </childnode>
+        <childnode refid="147" relation="include">
+        </childnode>
+      </node>
+      <node id="145">
+        <label>/home/alexander/develop/work/llama/include/llama/View.hpp</label>
+        <link refid="View_8hpp"/>
+        <childnode refid="146" relation="include">
+        </childnode>
+      </node>
+      <node id="146">
+        <label>/home/alexander/develop/work/llama/include/llama/Factory.hpp</label>
+        <link refid="Factory_8hpp"/>
+        <childnode refid="147" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structllama_1_1internal_1_1CoordIsIncluded" prot="public">llama::internal::CoordIsIncluded</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1CoordIsIncluded_3_01T__Pos_00_01T__Coord_00_01typename_01std_1_1enable7f0177eec7aaf3f9a26fe9c8ed89548" prot="public">llama::internal::CoordIsIncluded&lt; T_Pos, T_Coord, typename std::enable_if&lt;(T_Pos::size&lt; T_Coord::size) &gt;::type &gt;</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1CoordIsIncluded_1_1type_01_4" prot="public">llama::internal::CoordIsIncluded::type &gt;</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1ApplyFunctorIfCoordIsIncluded" prot="public">llama::internal::ApplyFunctorIfCoordIsIncluded</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1ApplyFunctorIfCoordIsIncluded_3_01T__Coord_00_01T__Pos_00_01T__Functo8178b759a940c008334ad4f19e3e5b46" prot="public">llama::internal::ApplyFunctorIfCoordIsIncluded&lt; T_Coord, T_Pos, T_Functor, typename std::enable_if&lt; CoordIsIncluded&lt; T_Pos, T_Coord &gt;::value &gt;::type &gt;</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1ApplyFunctorForEachLeafImpl" prot="public">llama::internal::ApplyFunctorForEachLeafImpl</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1ApplyFunctorForDatumDomainImpl" prot="public">llama::internal::ApplyFunctorForDatumDomainImpl</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1ApplyFunctorForDatumDomainImpl_3_01T__Coord_00_01T__Pos_00_01T__Funct0dcfe159b3fed89a48111ab8c364fd46" prot="public">llama::internal::ApplyFunctorForDatumDomainImpl&lt; T_Coord, T_Pos, T_Functor, DatumStruct&lt; T_Leaves... &gt;&gt;</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1ApplyFunctorForEachLeafImpl_3_01T__Coord_00_01T__Pos_00_01T__Functor_2bff3420f90301fe4c70a3afab1b82d1" prot="public">llama::internal::ApplyFunctorForEachLeafImpl&lt; T_Coord, T_Pos, T_Functor, T_Leaf, T_Leaves... &gt;</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1ApplyFunctorForEachLeafImpl_3_01T__Coord_00_01T__Pos_00_01T__Functor_01_4" prot="public">llama::internal::ApplyFunctorForEachLeafImpl&lt; T_Coord, T_Pos, T_Functor &gt;</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1ApplyFunctorForEachLeaf" prot="public">llama::internal::ApplyFunctorForEachLeaf</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1ApplyFunctorForEachLeaf_3_01DatumStruct_3_01T__Leaves_8_8_8_01_4_00_0873e5c33522256754320ecd22003f239" prot="public">llama::internal::ApplyFunctorForEachLeaf&lt; DatumStruct&lt; T_Leaves... &gt;, T_DatumCoord, T_Functor &gt;</innerclass>
+    <innerclass refid="structllama_1_1ForEach" prot="public">llama::ForEach</innerclass>
+    <innerclass refid="structllama_1_1ForEach_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4" prot="public">llama::ForEach&lt; T_DatumDomain, DatumCoord&lt; T_coords... &gt;&gt;</innerclass>
+    <innernamespace refid="namespacellama">llama</innernamespace>
+    <innernamespace refid="namespacellama_1_1internal">llama::internal</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*<sp/>Copyright<sp/>2018<sp/>Alexander<sp/>Matthes</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/>*<sp/>This<sp/>file<sp/>is<sp/>part<sp/>of<sp/>LLAMA.</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/>*<sp/>LLAMA<sp/>is<sp/>free<sp/>software:<sp/>you<sp/>can<sp/>redistribute<sp/>it<sp/>and/or<sp/>modify</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/>*<sp/>it<sp/>under<sp/>the<sp/>terms<sp/>of<sp/>the<sp/>GNU<sp/>Lesser<sp/>General<sp/>Public<sp/>License<sp/>as</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/>*<sp/>published<sp/>by<sp/>the<sp/>Free<sp/>Software<sp/>Foundation,<sp/>either<sp/>version<sp/>3<sp/>of<sp/>the</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/>*<sp/>License,<sp/>or<sp/>(at<sp/>your<sp/>option)<sp/>any<sp/>later<sp/>version.</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/>*<sp/>LLAMA<sp/>is<sp/>distributed<sp/>in<sp/>the<sp/>hope<sp/>that<sp/>it<sp/>will<sp/>be<sp/>useful,</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/>*<sp/>but<sp/>WITHOUT<sp/>ANY<sp/>WARRANTY;<sp/>without<sp/>even<sp/>the<sp/>implied<sp/>warranty<sp/>of</highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/>*<sp/>MERCHANTABILITY<sp/>or<sp/>FITNESS<sp/>FOR<sp/>A<sp/>PARTICULAR<sp/>PURPOSE.<sp/><sp/>See<sp/>the</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/>*<sp/>GNU<sp/>Lesser<sp/>General<sp/>Public<sp/>License<sp/>for<sp/>more<sp/>details.</highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="15"><highlight class="comment"><sp/>*<sp/>You<sp/>should<sp/>have<sp/>received<sp/>a<sp/>copy<sp/>of<sp/>the<sp/>GNU<sp/>Lesser<sp/>General<sp/>Public</highlight></codeline>
+<codeline lineno="16"><highlight class="comment"><sp/>*<sp/>License<sp/>along<sp/>with<sp/>LLAMA.<sp/><sp/>If<sp/>not,<sp/>see<sp/>&lt;www.gnu.org/licenses/&gt;.</highlight></codeline>
+<codeline lineno="17"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;type_traits&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="DatumCoord_8hpp" kindref="compound">DatumCoord.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="GetCoordFromUID_8hpp" kindref="compound">GetCoordFromUID.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacellama" kindref="compound">llama</ref></highlight></codeline>
+<codeline lineno="27"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">internal</highlight></codeline>
+<codeline lineno="30"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Pos,</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Coord,</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>SFINAE<sp/>=<sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="37" refid="structllama_1_1internal_1_1CoordIsIncluded" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1internal_1_1CoordIsIncluded" kindref="compound">CoordIsIncluded</ref>;</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Pos,</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Coord</highlight></codeline>
+<codeline lineno="42"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="43" refid="structllama_1_1internal_1_1CoordIsIncluded_3_01T__Pos_00_01T__Coord_00_01typename_01std_1_1enable7f0177eec7aaf3f9a26fe9c8ed89548" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1internal_1_1CoordIsIncluded" kindref="compound">CoordIsIncluded</ref>&lt;</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Pos,</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Coord,</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>typename<sp/><ref refid="namespacestd" kindref="compound">std</ref>::enable_if&lt;<sp/>(T_Pos::size<sp/>&lt;<sp/>T_Coord::size)<sp/>&gt;::type</highlight></codeline>
+<codeline lineno="47"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="48"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="49" refid="structllama_1_1internal_1_1CoordIsIncluded_3_01T__Pos_00_01T__Coord_00_01typename_01std_1_1enable7f0177eec7aaf3f9a26fe9c8ed89548_1a2d5d6a51e0fb844b83a5ce93c0fa9001" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>value<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="50"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Pos,</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Coord</highlight></codeline>
+<codeline lineno="55"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="56" refid="structllama_1_1internal_1_1CoordIsIncluded_1_1type_01_4" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1internal_1_1CoordIsIncluded" kindref="compound">CoordIsIncluded</ref>&lt;</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Pos,</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Coord,</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/>typename<sp/><ref refid="namespacestd" kindref="compound">std</ref>::enable_if&lt;</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(T_Pos::size<sp/>&gt;=<sp/>T_Coord::size)<sp/>&amp;&amp;</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1DatumCoordIsSame" kindref="compound">DatumCoordIsSame</ref>&lt;</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Pos,</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Coord</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;::value</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;::type</highlight></codeline>
+<codeline lineno="66"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="67"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="68" refid="structllama_1_1internal_1_1CoordIsIncluded_1_1type_01_4_1a4c124e04441f388134fef0e470662add" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>value<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="69"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Coord,</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Pos,</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Functor,</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>SFINAE<sp/>=<sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="76"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="77" refid="structllama_1_1internal_1_1ApplyFunctorIfCoordIsIncluded" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1internal_1_1ApplyFunctorIfCoordIsIncluded" kindref="compound">ApplyFunctorIfCoordIsIncluded</ref></highlight></codeline>
+<codeline lineno="78"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="81" refid="structllama_1_1internal_1_1ApplyFunctorIfCoordIsIncluded_1aef642878f11067a6083630c5eed11eda" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1internal_1_1ApplyFunctorIfCoordIsIncluded_1aef642878f11067a6083630c5eed11eda" kindref="member">operator()</ref>(<sp/>T_Functor<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>&amp;<sp/>functor<sp/>)</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/>{<sp/>};</highlight></codeline>
+<codeline lineno="84"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Coord,</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Pos,</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Functor</highlight></codeline>
+<codeline lineno="90"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="91" refid="structllama_1_1internal_1_1ApplyFunctorIfCoordIsIncluded_3_01T__Coord_00_01T__Pos_00_01T__Functo8178b759a940c008334ad4f19e3e5b46" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1internal_1_1ApplyFunctorIfCoordIsIncluded" kindref="compound">ApplyFunctorIfCoordIsIncluded</ref>&lt;</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Coord,</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Pos,</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Functor,</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/>typename<sp/><ref refid="namespacestd" kindref="compound">std</ref>::enable_if&lt;</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>CoordIsIncluded&lt;</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Pos,</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Coord</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;::value</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;::type</highlight></codeline>
+<codeline lineno="101"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="102"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="105" refid="structllama_1_1internal_1_1ApplyFunctorIfCoordIsIncluded_3_01T__Coord_00_01T__Pos_00_01T__Functo8178b759a940c008334ad4f19e3e5b46_1aa9f82e17f37b0f3dbda7313ea85ff839" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1internal_1_1ApplyFunctorIfCoordIsIncluded_3_01T__Coord_00_01T__Pos_00_01T__Functo8178b759a940c008334ad4f19e3e5b46_1aa9f82e17f37b0f3dbda7313ea85ff839" kindref="member">operator()</ref>(<sp/>T_Functor&amp;<sp/>functor<sp/>)</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>functor(<sp/>T_Coord(),<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Pos::template<sp/>Back&lt;<sp/>T_Pos::size<sp/>-<sp/>T_Coord::size<sp/>&gt;()<sp/>);</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="110"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"></highlight></codeline>
+<codeline lineno="112"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Coord,</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Pos,</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Functor,</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_Leaves</highlight></codeline>
+<codeline lineno="117"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="118" refid="structllama_1_1internal_1_1ApplyFunctorForEachLeafImpl" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1internal_1_1ApplyFunctorForEachLeafImpl" kindref="compound">ApplyFunctorForEachLeafImpl</ref>;</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"></highlight></codeline>
+<codeline lineno="120"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Coord,</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Pos,</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Functor,</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Leaf</highlight></codeline>
+<codeline lineno="125"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="126" refid="structllama_1_1internal_1_1ApplyFunctorForDatumDomainImpl" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1internal_1_1ApplyFunctorForDatumDomainImpl" kindref="compound">ApplyFunctorForDatumDomainImpl</ref></highlight></codeline>
+<codeline lineno="127"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="130" refid="structllama_1_1internal_1_1ApplyFunctorForDatumDomainImpl_1adc005faf298677be1fa471ed5f77cefe" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1internal_1_1ApplyFunctorForDatumDomainImpl_1adc005faf298677be1fa471ed5f77cefe" kindref="member">operator()</ref>(<sp/>T_Functor&amp;&amp;<sp/>functor<sp/>)</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1internal_1_1ApplyFunctorIfCoordIsIncluded" kindref="compound">ApplyFunctorIfCoordIsIncluded</ref>&lt;</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Coord,</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Pos,</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Functor</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;{}(<sp/>std::forward&lt;T_Functor&gt;(<sp/>functor<sp/>)<sp/>);</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="139"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"></highlight></codeline>
+<codeline lineno="141"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Coord,</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Pos,</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Functor,</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_Leaves</highlight></codeline>
+<codeline lineno="146"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="147" refid="structllama_1_1internal_1_1ApplyFunctorForDatumDomainImpl_3_01T__Coord_00_01T__Pos_00_01T__Funct0dcfe159b3fed89a48111ab8c364fd46" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1internal_1_1ApplyFunctorForDatumDomainImpl" kindref="compound">ApplyFunctorForDatumDomainImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Coord,</highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Pos,</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Functor,</highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>&lt;<sp/>T_Leaves...<sp/>&gt;</highlight></codeline>
+<codeline lineno="152"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="153"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="156" refid="structllama_1_1internal_1_1ApplyFunctorForDatumDomainImpl_3_01T__Coord_00_01T__Pos_00_01T__Funct0dcfe159b3fed89a48111ab8c364fd46_1a506e9970047557d2edd1084fd189ddf1" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1internal_1_1ApplyFunctorForDatumDomainImpl_3_01T__Coord_00_01T__Pos_00_01T__Funct0dcfe159b3fed89a48111ab8c364fd46_1a506e9970047557d2edd1084fd189ddf1" kindref="member">operator()</ref>(<sp/>T_Functor&amp;&amp;<sp/>functor<sp/>)</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1internal_1_1ApplyFunctorForEachLeafImpl" kindref="compound">ApplyFunctorForEachLeafImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="160"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Coord,</highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Pos::template<sp/>PushBack&lt;<sp/>0<sp/>&gt;,</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Functor,</highlight></codeline>
+<codeline lineno="163"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Leaves...</highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;{}(<sp/>std::forward&lt;T_Functor&gt;(<sp/>functor<sp/>)<sp/>);</highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="166"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="167"><highlight class="normal"></highlight></codeline>
+<codeline lineno="168"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="169"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Coord,</highlight></codeline>
+<codeline lineno="170"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Pos,</highlight></codeline>
+<codeline lineno="171"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Functor,</highlight></codeline>
+<codeline lineno="172"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Leaf,</highlight></codeline>
+<codeline lineno="173"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_Leaves</highlight></codeline>
+<codeline lineno="174"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="175" refid="structllama_1_1internal_1_1ApplyFunctorForEachLeafImpl_3_01T__Coord_00_01T__Pos_00_01T__Functor_2bff3420f90301fe4c70a3afab1b82d1" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1internal_1_1ApplyFunctorForEachLeafImpl" kindref="compound">ApplyFunctorForEachLeafImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="176"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Coord,</highlight></codeline>
+<codeline lineno="177"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Pos,</highlight></codeline>
+<codeline lineno="178"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Functor,</highlight></codeline>
+<codeline lineno="179"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Leaf,</highlight></codeline>
+<codeline lineno="180"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Leaves...</highlight></codeline>
+<codeline lineno="181"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="182"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="183"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="185" refid="structllama_1_1internal_1_1ApplyFunctorForEachLeafImpl_3_01T__Coord_00_01T__Pos_00_01T__Functor_2bff3420f90301fe4c70a3afab1b82d1_1aca98d13f589a6cd6fff041040c6fb758" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1internal_1_1ApplyFunctorForEachLeafImpl_3_01T__Coord_00_01T__Pos_00_01T__Functor_2bff3420f90301fe4c70a3afab1b82d1_1aca98d13f589a6cd6fff041040c6fb758" kindref="member">operator()</ref>(<sp/>T_Functor&amp;&amp;<sp/>functor<sp/>)</highlight></codeline>
+<codeline lineno="186"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="187"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="188"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1internal_1_1ApplyFunctorForDatumDomainImpl" kindref="compound">ApplyFunctorForDatumDomainImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="189"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Coord,</highlight></codeline>
+<codeline lineno="190"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Pos,</highlight></codeline>
+<codeline lineno="191"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Functor,</highlight></codeline>
+<codeline lineno="192"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacellama_1a554a797d5fff9070b3c61d7584dc15d5" kindref="member">GetDatumElementType&lt; T_Leaf &gt;</ref></highlight></codeline>
+<codeline lineno="193"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;{}(<sp/>std::forward&lt;T_Functor&gt;(<sp/>functor<sp/>)<sp/>);</highlight></codeline>
+<codeline lineno="194"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1internal_1_1ApplyFunctorForEachLeafImpl" kindref="compound">ApplyFunctorForEachLeafImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="195"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Coord,</highlight></codeline>
+<codeline lineno="196"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Pos::IncBack,</highlight></codeline>
+<codeline lineno="197"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Functor,</highlight></codeline>
+<codeline lineno="198"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Leaves...</highlight></codeline>
+<codeline lineno="199"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;{}(<sp/>std::forward&lt;T_Functor&gt;(<sp/>functor<sp/>)<sp/>);</highlight></codeline>
+<codeline lineno="200"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="201"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="202"><highlight class="normal"></highlight></codeline>
+<codeline lineno="203"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="204"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Coord,</highlight></codeline>
+<codeline lineno="205"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Pos,</highlight></codeline>
+<codeline lineno="206"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Functor</highlight></codeline>
+<codeline lineno="207"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="208" refid="structllama_1_1internal_1_1ApplyFunctorForEachLeafImpl_3_01T__Coord_00_01T__Pos_00_01T__Functor_01_4" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1internal_1_1ApplyFunctorForEachLeafImpl" kindref="compound">ApplyFunctorForEachLeafImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="209"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Coord,</highlight></codeline>
+<codeline lineno="210"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Pos,</highlight></codeline>
+<codeline lineno="211"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Functor</highlight></codeline>
+<codeline lineno="212"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="213"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="214"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="215"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="216" refid="structllama_1_1internal_1_1ApplyFunctorForEachLeafImpl_3_01T__Coord_00_01T__Pos_00_01T__Functor_01_4_1a1ee552313e0bb5d01c0e6d821e017881" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1internal_1_1ApplyFunctorForEachLeafImpl_3_01T__Coord_00_01T__Pos_00_01T__Functor_01_4_1a1ee552313e0bb5d01c0e6d821e017881" kindref="member">operator()</ref>(<sp/>T_Functor&amp;&amp;<sp/>functor<sp/>)</highlight></codeline>
+<codeline lineno="217"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="218"><highlight class="normal"><sp/><sp/><sp/><sp/>{}</highlight></codeline>
+<codeline lineno="219"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="220"><highlight class="normal"></highlight></codeline>
+<codeline lineno="221"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="222"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="223"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="224"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Functor</highlight></codeline>
+<codeline lineno="225"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="226" refid="structllama_1_1internal_1_1ApplyFunctorForEachLeaf" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1internal_1_1ApplyFunctorForEachLeaf" kindref="compound">ApplyFunctorForEachLeaf</ref>;</highlight></codeline>
+<codeline lineno="227"><highlight class="normal"></highlight></codeline>
+<codeline lineno="228"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="229"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="230"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Functor,</highlight></codeline>
+<codeline lineno="231"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_Leaves</highlight></codeline>
+<codeline lineno="232"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="233" refid="structllama_1_1internal_1_1ApplyFunctorForEachLeaf_3_01DatumStruct_3_01T__Leaves_8_8_8_01_4_00_0873e5c33522256754320ecd22003f239" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1internal_1_1ApplyFunctorForEachLeaf" kindref="compound">ApplyFunctorForEachLeaf</ref>&lt;</highlight></codeline>
+<codeline lineno="234"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>&lt;<sp/>T_Leaves...<sp/>&gt;,</highlight></codeline>
+<codeline lineno="235"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="236"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Functor</highlight></codeline>
+<codeline lineno="237"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="238"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="239"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="240" refid="structllama_1_1internal_1_1ApplyFunctorForEachLeaf_3_01DatumStruct_3_01T__Leaves_8_8_8_01_4_00_0873e5c33522256754320ecd22003f239_1adf595be1564452a4b580d34c3545b26b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1internal_1_1ApplyFunctorForEachLeaf_3_01DatumStruct_3_01T__Leaves_8_8_8_01_4_00_0873e5c33522256754320ecd22003f239_1adf595be1564452a4b580d34c3545b26b" kindref="member">apply</ref>(<sp/>T_Functor&amp;&amp;<sp/>functor<sp/>)</highlight></codeline>
+<codeline lineno="241"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="242"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1internal_1_1ApplyFunctorForEachLeafImpl" kindref="compound">ApplyFunctorForEachLeafImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="243"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="244"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord&lt; 0 &gt;</ref>,</highlight></codeline>
+<codeline lineno="245"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Functor,</highlight></codeline>
+<codeline lineno="246"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Leaves...</highlight></codeline>
+<codeline lineno="247"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;{}(<sp/>std::forward&lt;T_Functor&gt;(<sp/>functor<sp/>)<sp/>);</highlight></codeline>
+<codeline lineno="248"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="249"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="250"><highlight class="normal"></highlight></codeline>
+<codeline lineno="251"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>internal</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="252"><highlight class="normal"></highlight></codeline>
+<codeline lineno="253"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="254"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="255"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoordOrFirstUID<sp/>=<sp/><ref refid="structllama_1_1DatumCoord_3_01_4" kindref="compound">DatumCoord &lt; &gt;</ref>,</highlight></codeline>
+<codeline lineno="256"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_RestUID</highlight></codeline>
+<codeline lineno="257"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="258" refid="structllama_1_1ForEach" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1ForEach" kindref="compound">ForEach</ref></highlight></codeline>
+<codeline lineno="259"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="260"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1ForEach_1a679a6ba62fb600e9b2473c7e07f5b5d2" kindref="member">T_DatumCoord</ref><sp/>=<sp/><ref refid="namespacellama_1a3a9ff09beed7470e5c174d2c34e88aab" kindref="member">GetCoordFromUID</ref>&lt;</highlight></codeline>
+<codeline lineno="261"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="262"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumCoordOrFirstUID,</highlight></codeline>
+<codeline lineno="263"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_RestUID...</highlight></codeline>
+<codeline lineno="264" refid="structllama_1_1ForEach_1a679a6ba62fb600e9b2473c7e07f5b5d2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;;</highlight></codeline>
+<codeline lineno="265"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Functor<sp/>&gt;</highlight></codeline>
+<codeline lineno="266"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="267" refid="structllama_1_1ForEach_1ac384ec94baa84885d622204564831a76" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1ForEach_1ac384ec94baa84885d622204564831a76" kindref="member">apply</ref>(<sp/>T_Functor&amp;&amp;<sp/>functor<sp/>)</highlight></codeline>
+<codeline lineno="268"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="269"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1internal_1_1ApplyFunctorForEachLeaf" kindref="compound">internal::ApplyFunctorForEachLeaf</ref>&lt;</highlight></codeline>
+<codeline lineno="270"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="271"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1ForEach_1a679a6ba62fb600e9b2473c7e07f5b5d2" kindref="member">T_DatumCoord</ref>,</highlight></codeline>
+<codeline lineno="272"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Functor</highlight></codeline>
+<codeline lineno="273"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;::apply(<sp/>std::forward&lt;T_Functor&gt;(<sp/>functor<sp/>)<sp/>);</highlight></codeline>
+<codeline lineno="274"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="275"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="276"><highlight class="normal"></highlight></codeline>
+<codeline lineno="277"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="278"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="279"><highlight class="normal"><sp/><sp/><sp/><sp/>std::size_t...<sp/>T_coords</highlight></codeline>
+<codeline lineno="280"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="281" refid="structllama_1_1ForEach_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1ForEach" kindref="compound">ForEach</ref>&lt;</highlight></codeline>
+<codeline lineno="282"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="283"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>&lt;<sp/>T_coords...<sp/>&gt;</highlight></codeline>
+<codeline lineno="284"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="285"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="286"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Functor<sp/>&gt;</highlight></codeline>
+<codeline lineno="287"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="288" refid="structllama_1_1ForEach_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4_1a8b208e010bdd15c5aa98a27297da29c5" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1ForEach_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4_1a8b208e010bdd15c5aa98a27297da29c5" kindref="member">apply</ref>(<sp/>T_Functor&amp;&amp;<sp/>functor<sp/>)</highlight></codeline>
+<codeline lineno="289"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="290"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1a48abf2d81c1aac87ff87f95bb427049a" kindref="member">LLAMA_FORCE_INLINE_RECURSIVE</ref></highlight></codeline>
+<codeline lineno="291"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1internal_1_1ApplyFunctorForEachLeaf" kindref="compound">internal::ApplyFunctorForEachLeaf</ref>&lt;</highlight></codeline>
+<codeline lineno="292"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="293"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>&lt;<sp/>T_coords...<sp/>&gt;,</highlight></codeline>
+<codeline lineno="294"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Functor</highlight></codeline>
+<codeline lineno="295"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;::apply(<sp/>std::forward&lt;T_Functor&gt;(<sp/>functor<sp/>)<sp/>);</highlight></codeline>
+<codeline lineno="296"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="297"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="298"><highlight class="normal"></highlight></codeline>
+<codeline lineno="299"><highlight class="normal"></highlight></codeline>
+<codeline lineno="300"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>llama</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="301"><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="/home/alexander/develop/work/llama/include/llama/ForEach.hpp"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,256 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="Types_8hpp" kind="file" language="C++">
+    <compoundname>Types.hpp</compoundname>
+    <includes refid="Array_8hpp" local="yes">Array.hpp</includes>
+    <includes local="no">boost/mp11.hpp</includes>
+    <includedby refid="DatumStruct_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp</includedby>
+    <includedby refid="One_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/mapping/One.hpp</includedby>
+    <includedby refid="UserDomain_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/UserDomain.hpp</includedby>
+    <includedby refid="llama_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/llama.hpp</includedby>
+    <includedby refid="AoS_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp</includedby>
+    <includedby refid="SoA_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp</includedby>
+    <includedby refid="Mapping_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/mapping/tree/Mapping.hpp</includedby>
+    <includedby refid="Interface_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/mapping/Interface.hpp</includedby>
+    <incdepgraph>
+      <node id="577">
+        <label>boost/predef.h</label>
+      </node>
+      <node id="574">
+        <label>/home/alexander/develop/work/llama/include/llama/Types.hpp</label>
+        <link refid="Types_8hpp"/>
+        <childnode refid="575" relation="include">
+        </childnode>
+        <childnode refid="578" relation="include">
+        </childnode>
+      </node>
+      <node id="575">
+        <label>Array.hpp</label>
+        <link refid="Array_8hpp"/>
+        <childnode refid="576" relation="include">
+        </childnode>
+      </node>
+      <node id="576">
+        <label>preprocessor/macros.hpp</label>
+        <link refid="macros_8hpp"/>
+        <childnode refid="577" relation="include">
+        </childnode>
+      </node>
+      <node id="578">
+        <label>boost/mp11.hpp</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="579">
+        <label>/home/alexander/develop/work/llama/include/llama/Types.hpp</label>
+        <link refid="Types_8hpp"/>
+        <childnode refid="580" relation="include">
+        </childnode>
+        <childnode refid="591" relation="include">
+        </childnode>
+        <childnode refid="592" relation="include">
+        </childnode>
+        <childnode refid="585" relation="include">
+        </childnode>
+        <childnode refid="593" relation="include">
+        </childnode>
+        <childnode refid="588" relation="include">
+        </childnode>
+        <childnode refid="594" relation="include">
+        </childnode>
+        <childnode refid="595" relation="include">
+        </childnode>
+      </node>
+      <node id="582">
+        <label>/home/alexander/develop/work/llama/include/llama/CompareUID.hpp</label>
+        <link refid="CompareUID_8hpp"/>
+        <childnode refid="583" relation="include">
+        </childnode>
+      </node>
+      <node id="585">
+        <label>/home/alexander/develop/work/llama/include/llama/llama.hpp</label>
+        <link refid="llama_8hpp"/>
+      </node>
+      <node id="595">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/Interface.hpp</label>
+        <link refid="Interface_8hpp"/>
+      </node>
+      <node id="590">
+        <label>/home/alexander/develop/work/llama/include/llama/ForEach.hpp</label>
+        <link refid="ForEach_8hpp"/>
+        <childnode refid="583" relation="include">
+        </childnode>
+        <childnode refid="585" relation="include">
+        </childnode>
+      </node>
+      <node id="593">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp</label>
+        <link refid="AoS_8hpp"/>
+        <childnode refid="585" relation="include">
+        </childnode>
+      </node>
+      <node id="583">
+        <label>/home/alexander/develop/work/llama/include/llama/View.hpp</label>
+        <link refid="View_8hpp"/>
+        <childnode refid="584" relation="include">
+        </childnode>
+      </node>
+      <node id="580">
+        <label>/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp</label>
+        <link refid="DatumStruct_8hpp"/>
+        <childnode refid="581" relation="include">
+        </childnode>
+        <childnode refid="586" relation="include">
+        </childnode>
+        <childnode refid="587" relation="include">
+        </childnode>
+        <childnode refid="589" relation="include">
+        </childnode>
+        <childnode refid="585" relation="include">
+        </childnode>
+      </node>
+      <node id="592">
+        <label>/home/alexander/develop/work/llama/include/llama/UserDomain.hpp</label>
+        <link refid="UserDomain_8hpp"/>
+        <childnode refid="591" relation="include">
+        </childnode>
+        <childnode refid="585" relation="include">
+        </childnode>
+        <childnode refid="593" relation="include">
+        </childnode>
+        <childnode refid="588" relation="include">
+        </childnode>
+        <childnode refid="594" relation="include">
+        </childnode>
+      </node>
+      <node id="588">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp</label>
+        <link refid="SoA_8hpp"/>
+        <childnode refid="585" relation="include">
+        </childnode>
+      </node>
+      <node id="591">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/One.hpp</label>
+        <link refid="One_8hpp"/>
+        <childnode refid="584" relation="include">
+        </childnode>
+        <childnode refid="585" relation="include">
+        </childnode>
+      </node>
+      <node id="589">
+        <label>/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp</label>
+        <link refid="GetCoordFromUID_8hpp"/>
+        <childnode refid="590" relation="include">
+        </childnode>
+      </node>
+      <node id="586">
+        <label>/home/alexander/develop/work/llama/include/llama/DatumArray.hpp</label>
+        <link refid="DatumArray_8hpp"/>
+        <childnode refid="585" relation="include">
+        </childnode>
+      </node>
+      <node id="584">
+        <label>/home/alexander/develop/work/llama/include/llama/Factory.hpp</label>
+        <link refid="Factory_8hpp"/>
+        <childnode refid="585" relation="include">
+        </childnode>
+      </node>
+      <node id="587">
+        <label>/home/alexander/develop/work/llama/include/llama/GetType.hpp</label>
+        <link refid="GetType_8hpp"/>
+        <childnode refid="583" relation="include">
+        </childnode>
+        <childnode refid="588" relation="include">
+        </childnode>
+      </node>
+      <node id="594">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/Mapping.hpp</label>
+        <link refid="Mapping_8hpp"/>
+        <childnode refid="585" relation="include">
+        </childnode>
+      </node>
+      <node id="581">
+        <label>/home/alexander/develop/work/llama/include/llama/GetUID.hpp</label>
+        <link refid="GetUID_8hpp"/>
+        <childnode refid="582" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structllama_1_1NoName" prot="public">llama::NoName</innerclass>
+    <innernamespace refid="namespacellama">llama</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*<sp/>Copyright<sp/>2018<sp/>Alexander<sp/>Matthes</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/>*<sp/>This<sp/>file<sp/>is<sp/>part<sp/>of<sp/>LLAMA.</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/>*<sp/>LLAMA<sp/>is<sp/>free<sp/>software:<sp/>you<sp/>can<sp/>redistribute<sp/>it<sp/>and/or<sp/>modify</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/>*<sp/>it<sp/>under<sp/>the<sp/>terms<sp/>of<sp/>the<sp/>GNU<sp/>Lesser<sp/>General<sp/>Public<sp/>License<sp/>as</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/>*<sp/>published<sp/>by<sp/>the<sp/>Free<sp/>Software<sp/>Foundation,<sp/>either<sp/>version<sp/>3<sp/>of<sp/>the</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/>*<sp/>License,<sp/>or<sp/>(at<sp/>your<sp/>option)<sp/>any<sp/>later<sp/>version.</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/>*<sp/>LLAMA<sp/>is<sp/>distributed<sp/>in<sp/>the<sp/>hope<sp/>that<sp/>it<sp/>will<sp/>be<sp/>useful,</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/>*<sp/>but<sp/>WITHOUT<sp/>ANY<sp/>WARRANTY;<sp/>without<sp/>even<sp/>the<sp/>implied<sp/>warranty<sp/>of</highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/>*<sp/>MERCHANTABILITY<sp/>or<sp/>FITNESS<sp/>FOR<sp/>A<sp/>PARTICULAR<sp/>PURPOSE.<sp/><sp/>See<sp/>the</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/>*<sp/>GNU<sp/>Lesser<sp/>General<sp/>Public<sp/>License<sp/>for<sp/>more<sp/>details.</highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="15"><highlight class="comment"><sp/>*<sp/>You<sp/>should<sp/>have<sp/>received<sp/>a<sp/>copy<sp/>of<sp/>the<sp/>GNU<sp/>Lesser<sp/>General<sp/>Public</highlight></codeline>
+<codeline lineno="16"><highlight class="comment"><sp/>*<sp/>License<sp/>along<sp/>with<sp/>LLAMA.<sp/><sp/>If<sp/>not,<sp/>see<sp/>&lt;www.gnu.org/licenses/&gt;.</highlight></codeline>
+<codeline lineno="17"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="Array_8hpp" kindref="compound">Array.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;boost/mp11.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacellama" kindref="compound">llama</ref></highlight></codeline>
+<codeline lineno="25"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31" refid="structllama_1_1NoName" refkind="compound"><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1NoName" kindref="compound">NoName</ref><sp/>{};</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/>std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>T_dim<sp/>&gt;</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1Array" kindref="compound">UserDomain</ref><sp/>=<sp/><ref refid="structllama_1_1Array" kindref="compound">Array</ref>&lt;</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/>std::size_t,</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/>T_dim</highlight></codeline>
+<codeline lineno="40" refid="namespacellama_1a03077c6597f96a84efe064fa64d81827" refkind="member"><highlight class="normal">&gt;;</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_Leaves</highlight></codeline>
+<codeline lineno="47"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref><sp/>=<sp/>boost::mp11::mp_list&lt;</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Leaves...</highlight></codeline>
+<codeline lineno="50" refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" refkind="member"><highlight class="normal">&gt;;</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_Leaves</highlight></codeline>
+<codeline lineno="55"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1a484672188c5b8e07c1899f890c964f59" kindref="member">DS</ref><sp/>=<sp/>DatumStruct&lt;</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Leaves...</highlight></codeline>
+<codeline lineno="58" refid="namespacellama_1a484672188c5b8e07c1899f890c964f59" refkind="member"><highlight class="normal">&gt;;</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Identifier,</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Type</highlight></codeline>
+<codeline lineno="70"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1a616a6cb9eb30d6b15f4819de1aa7cf68" kindref="member">DatumElement</ref><sp/>=<sp/>boost::mp11::mp_list&lt;</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Identifier,</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Type</highlight></codeline>
+<codeline lineno="74" refid="namespacellama_1a616a6cb9eb30d6b15f4819de1aa7cf68" refkind="member"><highlight class="normal">&gt;;</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Identifier,</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Type</highlight></codeline>
+<codeline lineno="80"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1a01bf2c38141da74bae82c0f07cde1319" kindref="member">DE</ref><sp/>=<sp/>DatumElement&lt;</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Identifier,</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Type</highlight></codeline>
+<codeline lineno="84" refid="namespacellama_1a01bf2c38141da74bae82c0f07cde1319" refkind="member"><highlight class="normal">&gt;;</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>llama</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="/home/alexander/develop/work/llama/include/llama/Types.hpp"/>
+  </compounddef>
+</doxygen>

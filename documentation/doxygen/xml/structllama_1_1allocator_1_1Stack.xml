@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1allocator_1_1Stack" kind="struct" language="C++" prot="public">
+    <compoundname>llama::allocator::Stack</compoundname>
+    <includes refid="Stack_8hpp" local="no">Stack.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>std::size_t</type>
+        <declname>reserved</declname>
+        <defname>reserved</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structllama_1_1allocator_1_1Stack_1aca334348974ae5ee631f48dc11d91ce3" prot="public" static="no">
+        <type>unsigned char</type>
+        <definition>using llama::allocator::Stack&lt; reserved &gt;::PrimType =  unsigned char</definition>
+        <argsstring></argsstring>
+        <name>PrimType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/allocator/Stack.hpp" line="36" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/allocator/Stack.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1allocator_1_1Stack_1af3fc83cbefb3ef69fae3471f46a467ef" prot="public" static="no">
+        <type><ref refid="structllama_1_1Array" kindref="compound">Array</ref>&lt; <ref refid="structllama_1_1allocator_1_1Stack_1aca334348974ae5ee631f48dc11d91ce3" kindref="member">PrimType</ref>, reserved &gt;</type>
+        <definition>using llama::allocator::Stack&lt; reserved &gt;::BlobType =  Array&lt; PrimType, reserved &gt;</definition>
+        <argsstring></argsstring>
+        <name>BlobType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/allocator/Stack.hpp" line="37" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/allocator/Stack.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1allocator_1_1Stack_1a6e72aefa6676721f033d8acc01c72b07" prot="public" static="no">
+        <type>int</type>
+        <definition>using llama::allocator::Stack&lt; reserved &gt;::Parameter =  int</definition>
+        <argsstring></argsstring>
+        <name>Parameter</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/allocator/Stack.hpp" line="41" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/allocator/Stack.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="structllama_1_1allocator_1_1Stack_1a553b068a67b0753dbc0d2507de657b20" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref> auto</type>
+        <definition>static LLAMA_FN_HOST_ACC_INLINE auto llama::allocator::Stack&lt; reserved &gt;::allocate</definition>
+        <argsstring>(std::size_t, Parameter const) -&gt; BlobType</argsstring>
+        <name>allocate</name>
+        <param>
+          <type>std::size_t</type>
+        </param>
+        <param>
+          <type><ref refid="structllama_1_1allocator_1_1Stack_1a6e72aefa6676721f033d8acc01c72b07" kindref="member">Parameter</ref></type>
+          <declname>const</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/allocator/Stack.hpp" line="45" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/allocator/Stack.hpp" bodystart="45" bodyend="52"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/allocator/Stack.hpp" line="35" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/allocator/Stack.hpp" bodystart="34" bodyend="53"/>
+    <listofallmembers>
+      <member refid="structllama_1_1allocator_1_1Stack_1a553b068a67b0753dbc0d2507de657b20" prot="public" virt="non-virtual"><scope>llama::allocator::Stack</scope><name>allocate</name></member>
+      <member refid="structllama_1_1allocator_1_1Stack_1af3fc83cbefb3ef69fae3471f46a467ef" prot="public" virt="non-virtual"><scope>llama::allocator::Stack</scope><name>BlobType</name></member>
+      <member refid="structllama_1_1allocator_1_1Stack_1a6e72aefa6676721f033d8acc01c72b07" prot="public" virt="non-virtual"><scope>llama::allocator::Stack</scope><name>Parameter</name></member>
+      <member refid="structllama_1_1allocator_1_1Stack_1aca334348974ae5ee631f48dc11d91ce3" prot="public" virt="non-virtual"><scope>llama::allocator::Stack</scope><name>PrimType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

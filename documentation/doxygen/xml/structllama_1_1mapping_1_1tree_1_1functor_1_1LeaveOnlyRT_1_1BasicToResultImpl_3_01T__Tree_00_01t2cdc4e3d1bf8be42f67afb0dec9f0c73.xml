@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1mapping_1_1tree_1_1functor_1_1LeaveOnlyRT_1_1BasicToResultImpl_3_01T__Tree_00_01t2cdc4e3d1bf8be42f67afb0dec9f0c73" kind="struct" language="C++" prot="public">
+    <compoundname>llama::mapping::tree::functor::LeaveOnlyRT::BasicToResultImpl&lt; T_Tree, typename T_Tree::IsTreeElementWithChilds &gt;</compoundname>
+    <includes refid="LeaveOnlyRT_8hpp" local="no">LeaveOnlyRT.hpp</includes>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeaveOnlyRT_1_1BasicToResultImpl_3_01T__Tree_00_01t604c4e5557d07b66010f9e4fbe5d6be2" prot="public">llama::mapping::tree::functor::LeaveOnlyRT::BasicToResultImpl&lt; T_Tree, typename T_Tree::IsTreeElementWithChilds &gt;::ChildFunctor</innerclass>
+    <templateparamlist>
+      <param>
+        <type>typename T_Tree</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1functor_1_1LeaveOnlyRT_1_1BasicToResultImpl_3_01T__Tree_00_01t2cdc4e3d1bf8be42f67afb0dec9f0c73_1a4d4a64feaaa0ebf1dcc8f27379452e05" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto llama::mapping::tree::functor::LeaveOnlyRT::BasicToResultImpl&lt; T_Tree, typename T_Tree::IsTreeElementWithChilds &gt;::operator()</definition>
+        <argsstring>(T_Tree const tree, std::size_t const runtime=1) const -&gt; TreeElementConst&lt; typename T_Tree::Identifier, decltype(tupleForEach(tree.childs, ChildFunctor</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>T_Tree const</type>
+          <declname>tree</declname>
+        </param>
+        <param>
+          <type>std::size_t const</type>
+          <declname>runtime</declname>
+          <defval>1</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeaveOnlyRT.hpp" line="93" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeaveOnlyRT.hpp" bodystart="93" bodyend="102"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1functor_1_1LeaveOnlyRT_1_1BasicToResultImpl_3_01T__Tree_00_01t2cdc4e3d1bf8be42f67afb0dec9f0c73_1af9801bd75e4a0f12b229ec43d6197892" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>return</type>
+        <definition>return llama::mapping::tree::functor::LeaveOnlyRT::BasicToResultImpl&lt; T_Tree, typename T_Tree::IsTreeElementWithChilds &gt;::TreeElementConst</definition>
+        <argsstring>(tupleForEach(tree.childs, functor))</argsstring>
+        <name>TreeElementConst</name>
+        <param>
+          <type><ref refid="namespacellama_1a87f3fb778741ba559e6b686b86e90686" kindref="member">tupleForEach</ref>(tree.childs, functor)</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeaveOnlyRT.hpp" line="109" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeaveOnlyRT.hpp" line="67" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeaveOnlyRT.hpp" bodystart="63" bodyend="126"/>
+    <listofallmembers>
+      <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeaveOnlyRT_1_1BasicToResultImpl_3_01T__Tree_00_01t2cdc4e3d1bf8be42f67afb0dec9f0c73_1a4d4a64feaaa0ebf1dcc8f27379452e05" prot="public" virt="non-virtual"><scope>llama::mapping::tree::functor::LeaveOnlyRT::BasicToResultImpl&lt; T_Tree, typename T_Tree::IsTreeElementWithChilds &gt;</scope><name>operator()</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeaveOnlyRT_1_1BasicToResultImpl_3_01T__Tree_00_01t2cdc4e3d1bf8be42f67afb0dec9f0c73_1af9801bd75e4a0f12b229ec43d6197892" prot="public" virt="non-virtual"><scope>llama::mapping::tree::functor::LeaveOnlyRT::BasicToResultImpl&lt; T_Tree, typename T_Tree::IsTreeElementWithChilds &gt;</scope><name>TreeElementConst</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

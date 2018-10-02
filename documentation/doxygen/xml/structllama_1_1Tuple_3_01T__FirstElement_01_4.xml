@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1Tuple_3_01T__FirstElement_01_4" kind="struct" language="C++" prot="public">
+    <compoundname>llama::Tuple&lt; T_FirstElement &gt;</compoundname>
+    <includes refid="Tuple_8hpp" local="no">Tuple.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_FirstElement</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structllama_1_1Tuple_3_01T__FirstElement_01_4_1abcdbc473c15594fa626f36ba32bb328d" prot="public" static="no">
+        <type>T_FirstElement</type>
+        <definition>using llama::Tuple&lt; T_FirstElement &gt;::FirstElement =  T_FirstElement</definition>
+        <argsstring></argsstring>
+        <name>FirstElement</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="72" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1Tuple_3_01T__FirstElement_01_4_1acedc2652dd986a7a523a4eca2e6018d4" prot="public" static="no">
+        <type><ref refid="structllama_1_1Tuple" kindref="compound">Tuple</ref>&lt; &gt;</type>
+        <definition>using llama::Tuple&lt; T_FirstElement &gt;::RestTuple =  Tuple&lt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>RestTuple</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="73" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structllama_1_1Tuple_3_01T__FirstElement_01_4_1a27b4fc45d6c805b02cc4cc3064c34745" prot="public" static="no" mutable="no">
+        <type><ref refid="structllama_1_1Tuple_3_01T__FirstElement_01_4_1abcdbc473c15594fa626f36ba32bb328d" kindref="member">FirstElement</ref></type>
+        <definition>FirstElement llama::Tuple&lt; T_FirstElement &gt;::first</definition>
+        <argsstring></argsstring>
+        <name>first</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="84" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1Tuple_3_01T__FirstElement_01_4_1aac18b6f83a27f3eb84472d3ba8d8c740" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>llama::Tuple&lt; T_FirstElement &gt;::Tuple</definition>
+        <argsstring>()=default</argsstring>
+        <name>Tuple</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="76" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1Tuple_3_01T__FirstElement_01_4_1a93204a1eeb2697c1995e401e3ee46bc7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>llama::Tuple&lt; T_FirstElement &gt;::Tuple</definition>
+        <argsstring>(T_FirstElement const first, Tuple&lt; &gt; const rest=Tuple&lt; &gt;())</argsstring>
+        <name>Tuple</name>
+        <param>
+          <type>T_FirstElement const</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type><ref refid="structllama_1_1Tuple" kindref="compound">Tuple</ref>&lt; &gt; const</type>
+          <declname>rest</declname>
+          <defval><ref refid="structllama_1_1Tuple" kindref="compound">Tuple</ref>&lt; &gt;()</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="79" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="79" bodyend="82"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="71" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="70" bodyend="85"/>
+    <listofallmembers>
+      <member refid="structllama_1_1Tuple_3_01T__FirstElement_01_4_1a27b4fc45d6c805b02cc4cc3064c34745" prot="public" virt="non-virtual"><scope>llama::Tuple&lt; T_FirstElement &gt;</scope><name>first</name></member>
+      <member refid="structllama_1_1Tuple_3_01T__FirstElement_01_4_1abcdbc473c15594fa626f36ba32bb328d" prot="public" virt="non-virtual"><scope>llama::Tuple&lt; T_FirstElement &gt;</scope><name>FirstElement</name></member>
+      <member refid="structllama_1_1Tuple_3_01T__FirstElement_01_4_1acedc2652dd986a7a523a4eca2e6018d4" prot="public" virt="non-virtual"><scope>llama::Tuple&lt; T_FirstElement &gt;</scope><name>RestTuple</name></member>
+      <member refid="structllama_1_1Tuple_3_01T__FirstElement_01_4_1aac18b6f83a27f3eb84472d3ba8d8c740" prot="public" virt="non-virtual"><scope>llama::Tuple&lt; T_FirstElement &gt;</scope><name>Tuple</name></member>
+      <member refid="structllama_1_1Tuple_3_01T__FirstElement_01_4_1a93204a1eeb2697c1995e401e3ee46bc7" prot="public" virt="non-virtual"><scope>llama::Tuple&lt; T_FirstElement &gt;</scope><name>Tuple</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

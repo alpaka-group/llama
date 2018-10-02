@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1Tuple" kind="struct" language="C++" prot="public">
+    <compoundname>llama::Tuple</compoundname>
+    <includes refid="Tuple_8hpp" local="no">Tuple.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename...</type>
+        <declname>T_Elements</declname>
+        <defname>T_Elements</defname>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="26" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="26" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

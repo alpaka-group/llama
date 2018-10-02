@@ -1,0 +1,483 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="macros_8hpp" kind="file" language="C++">
+    <compoundname>macros.hpp</compoundname>
+    <includes local="no">boost/predef.h</includes>
+    <includedby refid="Array_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/Array.hpp</includedby>
+    <includedby refid="View_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/View.hpp</includedby>
+    <includedby refid="Tuple_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/Tuple.hpp</includedby>
+    <includedby refid="llama_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/llama.hpp</includedby>
+    <incdepgraph>
+      <node id="516">
+        <label>boost/predef.h</label>
+      </node>
+      <node id="515">
+        <label>/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp</label>
+        <link refid="macros_8hpp"/>
+        <childnode refid="516" relation="include">
+        </childnode>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="519">
+        <label>/home/alexander/develop/work/llama/include/llama/Types.hpp</label>
+        <link refid="Types_8hpp"/>
+        <childnode refid="520" relation="include">
+        </childnode>
+        <childnode refid="531" relation="include">
+        </childnode>
+        <childnode refid="532" relation="include">
+        </childnode>
+        <childnode refid="525" relation="include">
+        </childnode>
+        <childnode refid="533" relation="include">
+        </childnode>
+        <childnode refid="528" relation="include">
+        </childnode>
+        <childnode refid="534" relation="include">
+        </childnode>
+        <childnode refid="535" relation="include">
+        </childnode>
+      </node>
+      <node id="522">
+        <label>/home/alexander/develop/work/llama/include/llama/CompareUID.hpp</label>
+        <link refid="CompareUID_8hpp"/>
+        <childnode refid="523" relation="include">
+        </childnode>
+      </node>
+      <node id="525">
+        <label>/home/alexander/develop/work/llama/include/llama/llama.hpp</label>
+        <link refid="llama_8hpp"/>
+      </node>
+      <node id="539">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp</label>
+        <link refid="TreeFromDomains_8hpp"/>
+        <childnode refid="534" relation="include">
+        </childnode>
+      </node>
+      <node id="535">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/Interface.hpp</label>
+        <link refid="Interface_8hpp"/>
+      </node>
+      <node id="545">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/Idem.hpp</label>
+        <link refid="Idem_8hpp"/>
+        <childnode refid="534" relation="include">
+        </childnode>
+      </node>
+      <node id="543">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobByte.hpp</label>
+        <link refid="GetBlobByte_8hpp"/>
+        <childnode refid="534" relation="include">
+        </childnode>
+      </node>
+      <node id="518">
+        <label>/home/alexander/develop/work/llama/include/llama/Array.hpp</label>
+        <link refid="Array_8hpp"/>
+        <childnode refid="519" relation="include">
+        </childnode>
+        <childnode refid="523" relation="include">
+        </childnode>
+        <childnode refid="536" relation="include">
+        </childnode>
+      </node>
+      <node id="540">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeCoord.hpp</label>
+        <link refid="TreeCoord_8hpp"/>
+        <childnode refid="539" relation="include">
+        </childnode>
+      </node>
+      <node id="530">
+        <label>/home/alexander/develop/work/llama/include/llama/ForEach.hpp</label>
+        <link refid="ForEach_8hpp"/>
+        <childnode refid="523" relation="include">
+        </childnode>
+        <childnode refid="525" relation="include">
+        </childnode>
+      </node>
+      <node id="533">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp</label>
+        <link refid="AoS_8hpp"/>
+        <childnode refid="525" relation="include">
+        </childnode>
+      </node>
+      <node id="538">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeElement.hpp</label>
+        <link refid="TreeElement_8hpp"/>
+        <childnode refid="534" relation="include">
+        </childnode>
+        <childnode refid="539" relation="include">
+        </childnode>
+        <childnode refid="540" relation="include">
+        </childnode>
+        <childnode refid="541" relation="include">
+        </childnode>
+        <childnode refid="544" relation="include">
+        </childnode>
+        <childnode refid="545" relation="include">
+        </childnode>
+        <childnode refid="546" relation="include">
+        </childnode>
+        <childnode refid="547" relation="include">
+        </childnode>
+        <childnode refid="548" relation="include">
+        </childnode>
+        <childnode refid="549" relation="include">
+        </childnode>
+        <childnode refid="550" relation="include">
+        </childnode>
+        <childnode refid="551" relation="include">
+        </childnode>
+      </node>
+      <node id="523">
+        <label>/home/alexander/develop/work/llama/include/llama/View.hpp</label>
+        <link refid="View_8hpp"/>
+        <childnode refid="524" relation="include">
+        </childnode>
+      </node>
+      <node id="541">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/Reduce.hpp</label>
+        <link refid="Reduce_8hpp"/>
+        <childnode refid="542" relation="include">
+        </childnode>
+      </node>
+      <node id="520">
+        <label>/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp</label>
+        <link refid="DatumStruct_8hpp"/>
+        <childnode refid="521" relation="include">
+        </childnode>
+        <childnode refid="526" relation="include">
+        </childnode>
+        <childnode refid="527" relation="include">
+        </childnode>
+        <childnode refid="529" relation="include">
+        </childnode>
+        <childnode refid="525" relation="include">
+        </childnode>
+      </node>
+      <node id="532">
+        <label>/home/alexander/develop/work/llama/include/llama/UserDomain.hpp</label>
+        <link refid="UserDomain_8hpp"/>
+        <childnode refid="531" relation="include">
+        </childnode>
+        <childnode refid="525" relation="include">
+        </childnode>
+        <childnode refid="533" relation="include">
+        </childnode>
+        <childnode refid="528" relation="include">
+        </childnode>
+        <childnode refid="534" relation="include">
+        </childnode>
+      </node>
+      <node id="528">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp</label>
+        <link refid="SoA_8hpp"/>
+        <childnode refid="525" relation="include">
+        </childnode>
+      </node>
+      <node id="531">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/One.hpp</label>
+        <link refid="One_8hpp"/>
+        <childnode refid="524" relation="include">
+        </childnode>
+        <childnode refid="525" relation="include">
+        </childnode>
+      </node>
+      <node id="544">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/Operations.hpp</label>
+        <link refid="Operations_8hpp"/>
+        <childnode refid="542" relation="include">
+        </childnode>
+        <childnode refid="543" relation="include">
+        </childnode>
+      </node>
+      <node id="529">
+        <label>/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp</label>
+        <link refid="GetCoordFromUID_8hpp"/>
+        <childnode refid="530" relation="include">
+        </childnode>
+      </node>
+      <node id="536">
+        <label>/home/alexander/develop/work/llama/include/llama/IntegerSequence.hpp</label>
+        <link refid="IntegerSequence_8hpp"/>
+        <childnode refid="532" relation="include">
+        </childnode>
+        <childnode refid="524" relation="include">
+        </childnode>
+      </node>
+      <node id="549">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp</label>
+        <link refid="LeafOnlyRT_8hpp"/>
+        <childnode refid="534" relation="include">
+        </childnode>
+      </node>
+      <node id="526">
+        <label>/home/alexander/develop/work/llama/include/llama/DatumArray.hpp</label>
+        <link refid="DatumArray_8hpp"/>
+        <childnode refid="525" relation="include">
+        </childnode>
+      </node>
+      <node id="551">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/ForEach.hpp</label>
+        <link refid="mapping_2tree_2ForEach_8hpp"/>
+      </node>
+      <node id="542">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobSize.hpp</label>
+        <link refid="GetBlobSize_8hpp"/>
+        <childnode refid="534" relation="include">
+        </childnode>
+        <childnode refid="543" relation="include">
+        </childnode>
+      </node>
+      <node id="537">
+        <label>/home/alexander/develop/work/llama/include/llama/Tuple.hpp</label>
+        <link refid="Tuple_8hpp"/>
+        <childnode refid="538" relation="include">
+        </childnode>
+        <childnode refid="540" relation="include">
+        </childnode>
+        <childnode refid="552" relation="include">
+        </childnode>
+        <childnode refid="547" relation="include">
+        </childnode>
+      </node>
+      <node id="524">
+        <label>/home/alexander/develop/work/llama/include/llama/Factory.hpp</label>
+        <link refid="Factory_8hpp"/>
+        <childnode refid="525" relation="include">
+        </childnode>
+      </node>
+      <node id="527">
+        <label>/home/alexander/develop/work/llama/include/llama/GetType.hpp</label>
+        <link refid="GetType_8hpp"/>
+        <childnode refid="523" relation="include">
+        </childnode>
+        <childnode refid="528" relation="include">
+        </childnode>
+      </node>
+      <node id="534">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/Mapping.hpp</label>
+        <link refid="Mapping_8hpp"/>
+        <childnode refid="525" relation="include">
+        </childnode>
+      </node>
+      <node id="548">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/operations/GetNode.hpp</label>
+        <link refid="GetNode_8hpp"/>
+        <childnode refid="547" relation="include">
+        </childnode>
+        <childnode refid="546" relation="include">
+        </childnode>
+        <childnode refid="549" relation="include">
+        </childnode>
+      </node>
+      <node id="547">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/operations/ChangeNodeRuntime.hpp</label>
+        <link refid="ChangeNodeRuntime_8hpp"/>
+        <childnode refid="546" relation="include">
+        </childnode>
+      </node>
+      <node id="517">
+        <label>/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp</label>
+        <link refid="macros_8hpp"/>
+        <childnode refid="518" relation="include">
+        </childnode>
+        <childnode refid="523" relation="include">
+        </childnode>
+        <childnode refid="537" relation="include">
+        </childnode>
+        <childnode refid="525" relation="include">
+        </childnode>
+      </node>
+      <node id="521">
+        <label>/home/alexander/develop/work/llama/include/llama/GetUID.hpp</label>
+        <link refid="GetUID_8hpp"/>
+        <childnode refid="522" relation="include">
+        </childnode>
+      </node>
+      <node id="552">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/toString.hpp</label>
+        <link refid="toString_8hpp"/>
+        <childnode refid="534" relation="include">
+        </childnode>
+      </node>
+      <node id="550">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/MergeFunctors.hpp</label>
+        <link refid="MergeFunctors_8hpp"/>
+        <childnode refid="534" relation="include">
+        </childnode>
+      </node>
+      <node id="546">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp</label>
+        <link refid="MoveRTDown_8hpp"/>
+        <childnode refid="534" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+      <sectiondef kind="define">
+      <memberdef kind="define" id="macros_8hpp_1aa201f5c2567527b34eae5fbdab0e2416" prot="public" static="no">
+        <name>LLAMA_INDEPENDENT_DATA</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" line="47" column="13" bodyfile="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" prot="public" static="no">
+        <name>LLAMA_FN_HOST_ACC_INLINE</name>
+        <initializer>inline</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" line="51" column="12" bodyfile="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="macros_8hpp_1affb1b2bdbbed82d386e8cf712cc7e4b5" prot="public" static="no">
+        <name>LLAMA_NO_HOST_ACC_WARNING</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" line="62" column="20" bodyfile="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="macros_8hpp_1a48abf2d81c1aac87ff87f95bb427049a" prot="public" static="no">
+        <name>LLAMA_FORCE_INLINE_RECURSIVE</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" line="69" column="13" bodyfile="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="macros_8hpp_1ac5ebc32ab3b77b2abc6cc3f8c612b702" prot="public" static="no">
+        <name>LLAMA_IF_DEBUG</name>
+        <param><defname>x</defname></param>
+        <initializer>x</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" line="73" column="12" bodyfile="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="macros_8hpp_1a100b24418a95976a001b8fac8a676b02" prot="public" static="no">
+        <name>LLAMA_IF_RELEASE</name>
+        <param><defname>x</defname></param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" line="74" column="12" bodyfile="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="macros_8hpp_1a84febcf0c516314cf4cc6923dccd5b2a" prot="public" static="no">
+        <name>LLAMA_DEREFERENCE</name>
+        <param><defname>x</defname></param>
+        <initializer>decltype( x )( x )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" line="80" column="9" bodyfile="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*<sp/>Copyright<sp/>2018<sp/>Alexander<sp/>Matthes</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/>*<sp/>This<sp/>file<sp/>is<sp/>part<sp/>of<sp/>LLAMA.</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/>*<sp/>LLAMA<sp/>is<sp/>free<sp/>software:<sp/>you<sp/>can<sp/>redistribute<sp/>it<sp/>and/or<sp/>modify</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/>*<sp/>it<sp/>under<sp/>the<sp/>terms<sp/>of<sp/>the<sp/>GNU<sp/>Lesser<sp/>General<sp/>Public<sp/>License<sp/>as</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/>*<sp/>published<sp/>by<sp/>the<sp/>Free<sp/>Software<sp/>Foundation,<sp/>either<sp/>version<sp/>3<sp/>of<sp/>the</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/>*<sp/>License,<sp/>or<sp/>(at<sp/>your<sp/>option)<sp/>any<sp/>later<sp/>version.</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/>*<sp/>LLAMA<sp/>is<sp/>distributed<sp/>in<sp/>the<sp/>hope<sp/>that<sp/>it<sp/>will<sp/>be<sp/>useful,</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/>*<sp/>but<sp/>WITHOUT<sp/>ANY<sp/>WARRANTY;<sp/>without<sp/>even<sp/>the<sp/>implied<sp/>warranty<sp/>of</highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/>*<sp/>MERCHANTABILITY<sp/>or<sp/>FITNESS<sp/>FOR<sp/>A<sp/>PARTICULAR<sp/>PURPOSE.<sp/><sp/>See<sp/>the</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/>*<sp/>GNU<sp/>Lesser<sp/>General<sp/>Public<sp/>License<sp/>for<sp/>more<sp/>details.</highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="15"><highlight class="comment"><sp/>*<sp/>You<sp/>should<sp/>have<sp/>received<sp/>a<sp/>copy<sp/>of<sp/>the<sp/>GNU<sp/>Lesser<sp/>General<sp/>Public</highlight></codeline>
+<codeline lineno="16"><highlight class="comment"><sp/>*<sp/>License<sp/>along<sp/>with<sp/>LLAMA.<sp/><sp/>If<sp/>not,<sp/>see<sp/>&lt;www.gnu.org/licenses/&gt;.</highlight></codeline>
+<codeline lineno="17"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;boost/predef.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>BOOST_COMP_INTEL<sp/>==<sp/>0<sp/>//<sp/>Work<sp/>around<sp/>for<sp/>broken<sp/>intel<sp/>detection</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>if<sp/>defined(__INTEL_COMPILER)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/>ifdef<sp/>BOOST_COMP_INTEL_DETECTION</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>undef<sp/>BOOST_COMP_INTEL_DETECTION</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/>define<sp/>BOOST_COMP_INTEL_DETECTION<sp/>BOOST_PREDEF_MAKE_10_VVRR(__INTEL_COMPILER)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/>if<sp/>defined(BOOST_COMP_INTEL)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>undef<sp/>BOOST_COMP_INTEL</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/>define<sp/>BOOST_COMP_INTEL<sp/>BOOST_COMP_INTEL_DETECTION</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>BOOST_COMP_GNUC<sp/>!=<sp/>0</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_INDEPENDENT_DATA<sp/>_Pragma<sp/>(&quot;GCC<sp/>ivdep&quot;)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="preprocessor">#elif<sp/>BOOST_COMP_INTEL<sp/>!=<sp/>0</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_INDEPENDENT_DATA<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="40"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>_Pragma<sp/>(&quot;ivdep&quot;)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight><highlight class="preprocessor">#elif<sp/>BOOST_COMP_CLANG</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_INDEPENDENT_DATA<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="43"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>_Pragma<sp/>(&quot;clang<sp/>loop<sp/>vectorize(enable)&quot;)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="44"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>_Pragma<sp/>(&quot;clang<sp/>loop<sp/>interleave(enable)&quot;)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="45"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>_Pragma<sp/>(&quot;clang<sp/>loop<sp/>distribute(enable)&quot;)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="47" refid="macros_8hpp_1aa201f5c2567527b34eae5fbdab0e2416" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_INDEPENDENT_DATA</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>LLAMA_FN_HOST_ACC_INLINE</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="51" refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_FN_HOST_ACC_INLINE<sp/>inline</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>LLAMA_NO_HOST_ACC_WARNING</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>if<sp/>__NVCC__<sp/>!=<sp/>0</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/>if<sp/>BOOST_COMP_MSVC<sp/>!=<sp/>0</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>define<sp/>LLAMA_NO_HOST_ACC_WARNING<sp/>__pragma(hd_warning_disable)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/>else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>define<sp/>LLAMA_NO_HOST_ACC_WARNING<sp/>_Pragma(&quot;hd_warning_disable&quot;)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="62" refid="macros_8hpp_1affb1b2bdbbed82d386e8cf712cc7e4b5" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/>define<sp/>LLAMA_NO_HOST_ACC_WARNING</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="63"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>BOOST_COMP_INTEL<sp/>!=<sp/>0</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_FORCE_INLINE_RECURSIVE<sp/>_Pragma<sp/>(&quot;forceinline<sp/>recursive&quot;)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="69" refid="macros_8hpp_1a48abf2d81c1aac87ff87f95bb427049a" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_FORCE_INLINE_RECURSIVE</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>defined(DEBUG)<sp/>||<sp/>!defined(NDEBUG)<sp/>||<sp/>defined(_DEBUG)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="73" refid="macros_8hpp_1ac5ebc32ab3b77b2abc6cc3f8c612b702" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_IF_DEBUG(<sp/>x<sp/>)<sp/>x</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="74" refid="macros_8hpp_1a100b24418a95976a001b8fac8a676b02" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_IF_RELEASE(<sp/>x<sp/>)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_IF_DEBUG(<sp/>x<sp/>)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_IF_RELEASE(<sp/>x<sp/>)<sp/>x</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="78"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="79"><highlight class="normal"></highlight></codeline>
+<codeline lineno="80" refid="macros_8hpp_1a84febcf0c516314cf4cc6923dccd5b2a" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>LLAMA_DEREFERENCE(<sp/>x<sp/>)<sp/>decltype(<sp/>x<sp/>)(<sp/>x<sp/>)</highlight></codeline>
+    </programlisting>
+    <location file="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp"/>
+  </compounddef>
+</doxygen>

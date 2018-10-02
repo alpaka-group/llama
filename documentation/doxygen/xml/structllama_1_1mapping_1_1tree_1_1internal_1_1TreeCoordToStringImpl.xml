@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordToStringImpl" kind="struct" language="C++" prot="public">
+    <compoundname>llama::mapping::tree::internal::TreeCoordToStringImpl</compoundname>
+    <includes refid="TreeCoord_8hpp" local="no">TreeCoord.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_TreeCoord</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordToStringImpl_1a317739427c0124499181f113fa4fea3a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto llama::mapping::tree::internal::TreeCoordToStringImpl&lt; T_TreeCoord &gt;::operator()</definition>
+        <argsstring>(const T_TreeCoord treeCoord) -&gt; std::string</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>const T_TreeCoord</type>
+          <declname>treeCoord</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeCoord.hpp" line="137" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeCoord.hpp" bodystart="137" bodyend="147"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeCoord.hpp" line="135" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeCoord.hpp" bodystart="134" bodyend="148"/>
+    <listofallmembers>
+      <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordToStringImpl_1a317739427c0124499181f113fa4fea3a" prot="public" virt="non-virtual"><scope>llama::mapping::tree::internal::TreeCoordToStringImpl</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

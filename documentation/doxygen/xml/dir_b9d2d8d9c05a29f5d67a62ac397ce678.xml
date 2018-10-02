@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="dir_b9d2d8d9c05a29f5d67a62ac397ce678" kind="dir">
+    <compoundname>/home/alexander/develop/work/llama/include/llama/mapping/tree/functor</compoundname>
+    <innerfile refid="Idem_8hpp">Idem.hpp</innerfile>
+    <innerfile refid="LeafOnlyRT_8hpp">LeafOnlyRT.hpp</innerfile>
+    <innerfile refid="MoveRTDown_8hpp">MoveRTDown.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/"/>
+  </compounddef>
+</doxygen>

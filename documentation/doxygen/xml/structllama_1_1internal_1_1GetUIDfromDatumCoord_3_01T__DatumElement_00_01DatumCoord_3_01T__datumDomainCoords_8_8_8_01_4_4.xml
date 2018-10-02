@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1internal_1_1GetUIDfromDatumCoord_3_01T__DatumElement_00_01DatumCoord_3_01T__datumDomainCoords_8_8_8_01_4_4" kind="struct" language="C++" prot="public">
+    <compoundname>llama::internal::GetUIDfromDatumCoord&lt; T_DatumElement, DatumCoord&lt; T_datumDomainCoords... &gt;&gt;</compoundname>
+    <includes refid="GetUID_8hpp" local="no">GetUID.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_DatumElement</type>
+      </param>
+      <param>
+        <type>std::size_t...</type>
+        <declname>T_datumDomainCoords</declname>
+        <defname>T_datumDomainCoords</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structllama_1_1internal_1_1GetUIDfromDatumCoord_3_01T__DatumElement_00_01DatumCoord_3_01T__datumDomainCoords_8_8_8_01_4_4_1abe6a727b029546a70ae3b37c4326c388" prot="public" static="no">
+        <type>typename <ref refid="structllama_1_1internal_1_1GetUIDImpl" kindref="compound">GetUIDImpl</ref>&lt; T_DatumElement, T_datumDomainCoords... &gt;::<ref refid="structllama_1_1internal_1_1GetUIDfromDatumCoord_3_01T__DatumElement_00_01DatumCoord_3_01T__datumDomainCoords_8_8_8_01_4_4_1abe6a727b029546a70ae3b37c4326c388" kindref="member">type</ref></type>
+        <definition>using llama::internal::GetUIDfromDatumCoord&lt; T_DatumElement, DatumCoord&lt; T_datumDomainCoords... &gt;&gt;::type =  typename GetUIDImpl&lt; T_DatumElement, T_datumDomainCoords... &gt;::type</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/GetUID.hpp" line="82" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/GetUID.hpp" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/GetUID.hpp" line="81" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/GetUID.hpp" bodystart="77" bodyend="86"/>
+    <listofallmembers>
+      <member refid="structllama_1_1internal_1_1GetUIDfromDatumCoord_3_01T__DatumElement_00_01DatumCoord_3_01T__datumDomainCoords_8_8_8_01_4_4_1abe6a727b029546a70ae3b37c4326c388" prot="public" virt="non-virtual"><scope>llama::internal::GetUIDfromDatumCoord&lt; T_DatumElement, DatumCoord&lt; T_datumDomainCoords... &gt;&gt;</scope><name>type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

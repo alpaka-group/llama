@@ -30,7 +30,7 @@
 
 #include "functor/Idem.hpp"
 #include "functor/MoveRTDown.hpp"
-#include "functor/LeaveOnlyRT.hpp"
+#include "functor/LeafOnlyRT.hpp"
 
 #include "MergeFunctors.hpp"
 

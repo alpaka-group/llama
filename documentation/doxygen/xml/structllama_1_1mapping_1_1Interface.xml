@@ -1,0 +1,218 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1mapping_1_1Interface" kind="struct" language="C++" prot="public">
+    <compoundname>llama::mapping::Interface</compoundname>
+    <includes refid="Interface_8hpp" local="no">Interface.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_UserDomain</type>
+      </param>
+      <param>
+        <type>typename T_DatumDomain</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structllama_1_1mapping_1_1Interface_1ab21e88b7d3fd9318df1a33c3d7f1fe4e" prot="public" static="no">
+        <type>T_UserDomain</type>
+        <definition>using llama::mapping::Interface&lt; T_UserDomain, T_DatumDomain &gt;::UserDomain =  T_UserDomain</definition>
+        <argsstring></argsstring>
+        <name>UserDomain</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/Interface.hpp" line="35" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/Interface.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1mapping_1_1Interface_1a827b458cd12cc01b0bbf6ec8a8ae5a9c" prot="public" static="no">
+        <type>T_DatumDomain</type>
+        <definition>using llama::mapping::Interface&lt; T_UserDomain, T_DatumDomain &gt;::DatumDomain =  T_DatumDomain</definition>
+        <argsstring></argsstring>
+        <name>DatumDomain</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/Interface.hpp" line="36" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/Interface.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="structllama_1_1mapping_1_1Interface_1add1504c8c4e60af6db8be5878b237f2d" prot="public" static="yes" mutable="no">
+        <type>constexpr std::size_t</type>
+        <definition>constexpr std::size_t llama::mapping::Interface&lt; T_UserDomain, T_DatumDomain &gt;::blobCount</definition>
+        <argsstring></argsstring>
+        <name>blobCount</name>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/Interface.hpp" line="37" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/Interface.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1mapping_1_1Interface_1a97da2014e37162ca2f9685c0df6eb5b5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>llama::mapping::Interface&lt; T_UserDomain, T_DatumDomain &gt;::Interface</definition>
+        <argsstring>(UserDomain const)</argsstring>
+        <name>Interface</name>
+        <param>
+          <type><ref refid="structllama_1_1mapping_1_1Interface_1ab21e88b7d3fd9318df1a33c3d7f1fe4e" kindref="member">UserDomain</ref></type>
+          <declname>const</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/Interface.hpp" line="40" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1mapping_1_1Interface_1a132328d7bc67e05506cca330acf07848" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>llama::mapping::Interface&lt; T_UserDomain, T_DatumDomain &gt;::Interface</definition>
+        <argsstring>()=default</argsstring>
+        <name>Interface</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/Interface.hpp" line="42" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1mapping_1_1Interface_1a8c6a4dbf02b212405e841a99cb0c6f81" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>llama::mapping::Interface&lt; T_UserDomain, T_DatumDomain &gt;::Interface</definition>
+        <argsstring>(Interface const &amp;)=default</argsstring>
+        <name>Interface</name>
+        <param>
+          <type><ref refid="structllama_1_1mapping_1_1Interface" kindref="compound">Interface</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/Interface.hpp" line="43" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1mapping_1_1Interface_1a8fcf45571b9b73683a782061e0d4b46d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>llama::mapping::Interface&lt; T_UserDomain, T_DatumDomain &gt;::Interface</definition>
+        <argsstring>(Interface &amp;&amp;)=default</argsstring>
+        <name>Interface</name>
+        <param>
+          <type><ref refid="structllama_1_1mapping_1_1Interface" kindref="compound">Interface</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/Interface.hpp" line="44" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1mapping_1_1Interface_1aabe0bd6bb1b33064270d9918e7428687" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>llama::mapping::Interface&lt; T_UserDomain, T_DatumDomain &gt;::~Interface</definition>
+        <argsstring>()=default</argsstring>
+        <name>~Interface</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/Interface.hpp" line="45" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1mapping_1_1Interface_1a95759ec7b94b3c0e3fbe6b4e7fc21e6e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto llama::mapping::Interface&lt; T_UserDomain, T_DatumDomain &gt;::getBlobSize</definition>
+        <argsstring>(std::size_t const blobNr) const -&gt; std::size_t</argsstring>
+        <name>getBlobSize</name>
+        <param>
+          <type>std::size_t const</type>
+          <declname>blobNr</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/Interface.hpp" line="49" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1mapping_1_1Interface_1a51edf7e5f66b75f787d246e05ace6635" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_DatumDomainCoord</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto llama::mapping::Interface&lt; T_UserDomain, T_DatumDomain &gt;::getBlobByte</definition>
+        <argsstring>(UserDomain const coord, UserDomain const size) const -&gt; std::size_t</argsstring>
+        <name>getBlobByte</name>
+        <param>
+          <type><ref refid="structllama_1_1mapping_1_1Interface_1ab21e88b7d3fd9318df1a33c3d7f1fe4e" kindref="member">UserDomain</ref> const</type>
+          <declname>coord</declname>
+        </param>
+        <param>
+          <type><ref refid="structllama_1_1mapping_1_1Interface_1ab21e88b7d3fd9318df1a33c3d7f1fe4e" kindref="member">UserDomain</ref> const</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/Interface.hpp" line="55" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1mapping_1_1Interface_1a93716eef7211cb91489ff26a3e5fb4a0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto llama::mapping::Interface&lt; T_UserDomain, T_DatumDomain &gt;::getBlobNr</definition>
+        <argsstring>(UserDomain const coord, UserDomain const size) const -&gt; std::size_t</argsstring>
+        <name>getBlobNr</name>
+        <param>
+          <type><ref refid="structllama_1_1mapping_1_1Interface_1ab21e88b7d3fd9318df1a33c3d7f1fe4e" kindref="member">UserDomain</ref> const</type>
+          <declname>coord</declname>
+        </param>
+        <param>
+          <type><ref refid="structllama_1_1mapping_1_1Interface_1ab21e88b7d3fd9318df1a33c3d7f1fe4e" kindref="member">UserDomain</ref> const</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/Interface.hpp" line="63" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/Interface.hpp" line="34" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/Interface.hpp" bodystart="33" bodyend="68"/>
+    <listofallmembers>
+      <member refid="structllama_1_1mapping_1_1Interface_1add1504c8c4e60af6db8be5878b237f2d" prot="public" virt="non-virtual"><scope>llama::mapping::Interface</scope><name>blobCount</name></member>
+      <member refid="structllama_1_1mapping_1_1Interface_1a827b458cd12cc01b0bbf6ec8a8ae5a9c" prot="public" virt="non-virtual"><scope>llama::mapping::Interface</scope><name>DatumDomain</name></member>
+      <member refid="structllama_1_1mapping_1_1Interface_1a51edf7e5f66b75f787d246e05ace6635" prot="public" virt="non-virtual"><scope>llama::mapping::Interface</scope><name>getBlobByte</name></member>
+      <member refid="structllama_1_1mapping_1_1Interface_1a93716eef7211cb91489ff26a3e5fb4a0" prot="public" virt="non-virtual"><scope>llama::mapping::Interface</scope><name>getBlobNr</name></member>
+      <member refid="structllama_1_1mapping_1_1Interface_1a95759ec7b94b3c0e3fbe6b4e7fc21e6e" prot="public" virt="non-virtual"><scope>llama::mapping::Interface</scope><name>getBlobSize</name></member>
+      <member refid="structllama_1_1mapping_1_1Interface_1a97da2014e37162ca2f9685c0df6eb5b5" prot="public" virt="non-virtual"><scope>llama::mapping::Interface</scope><name>Interface</name></member>
+      <member refid="structllama_1_1mapping_1_1Interface_1a132328d7bc67e05506cca330acf07848" prot="public" virt="non-virtual"><scope>llama::mapping::Interface</scope><name>Interface</name></member>
+      <member refid="structllama_1_1mapping_1_1Interface_1a8c6a4dbf02b212405e841a99cb0c6f81" prot="public" virt="non-virtual"><scope>llama::mapping::Interface</scope><name>Interface</name></member>
+      <member refid="structllama_1_1mapping_1_1Interface_1a8fcf45571b9b73683a782061e0d4b46d" prot="public" virt="non-virtual"><scope>llama::mapping::Interface</scope><name>Interface</name></member>
+      <member refid="structllama_1_1mapping_1_1Interface_1ab21e88b7d3fd9318df1a33c3d7f1fe4e" prot="public" virt="non-virtual"><scope>llama::mapping::Interface</scope><name>UserDomain</name></member>
+      <member refid="structllama_1_1mapping_1_1Interface_1aabe0bd6bb1b33064270d9918e7428687" prot="public" virt="non-virtual"><scope>llama::mapping::Interface</scope><name>~Interface</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

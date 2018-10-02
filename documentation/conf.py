@@ -40,7 +40,11 @@ release = u'0.1'
 # ones.
 extensions = [
     'sphinx.ext.imgmath',
+    'breathe'
 ]
+
+breathe_projects = { "LLAMA": "./doxygen/xml" }
+breathe_default_project = "LLAMA"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1mapping_1_1tree_1_1functor_1_1LeaveOnlyRT_1_1BasicToResultImpl_3_01T__Tree_00_01t604c4e5557d07b66010f9e4fbe5d6be2" kind="struct" language="C++" prot="public">
+    <compoundname>llama::mapping::tree::functor::LeaveOnlyRT::BasicToResultImpl&lt; T_Tree, typename T_Tree::IsTreeElementWithChilds &gt;::ChildFunctor</compoundname>
+    <includes refid="LeaveOnlyRT_8hpp" local="no">LeaveOnlyRT.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structllama_1_1mapping_1_1tree_1_1functor_1_1LeaveOnlyRT_1_1BasicToResultImpl_3_01T__Tree_00_01t604c4e5557d07b66010f9e4fbe5d6be2_1a98a12905d761149147e177be4614104a" prot="public" static="no" mutable="no">
+        <type>const std::size_t</type>
+        <definition>const std::size_t llama::mapping::tree::functor::LeaveOnlyRT::BasicToResultImpl&lt; T_Tree, typename T_Tree::IsTreeElementWithChilds &gt;::ChildFunctor::runtime</definition>
+        <argsstring></argsstring>
+        <name>runtime</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeaveOnlyRT.hpp" line="70" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeaveOnlyRT.hpp" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1functor_1_1LeaveOnlyRT_1_1BasicToResultImpl_3_01T__Tree_00_01t604c4e5557d07b66010f9e4fbe5d6be2_1ac7a482f0be7942807713f2d58b4bc9e9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_Element</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto llama::mapping::tree::functor::LeaveOnlyRT::BasicToResultImpl&lt; T_Tree, typename T_Tree::IsTreeElementWithChilds &gt;::ChildFunctor::operator()</definition>
+        <argsstring>(T_Element const element) const -&gt; decltype(BasicToResultImpl&lt; T_Element &gt;()(element, runtime))</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>T_Element const</type>
+          <declname>element</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeaveOnlyRT.hpp" line="75" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeaveOnlyRT.hpp" bodystart="75" bodyend="88"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeaveOnlyRT.hpp" line="69" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeaveOnlyRT.hpp" bodystart="68" bodyend="89"/>
+    <listofallmembers>
+      <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeaveOnlyRT_1_1BasicToResultImpl_3_01T__Tree_00_01t604c4e5557d07b66010f9e4fbe5d6be2_1ac7a482f0be7942807713f2d58b4bc9e9" prot="public" virt="non-virtual"><scope>llama::mapping::tree::functor::LeaveOnlyRT::BasicToResultImpl&lt; T_Tree, typename T_Tree::IsTreeElementWithChilds &gt;::ChildFunctor</scope><name>operator()</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeaveOnlyRT_1_1BasicToResultImpl_3_01T__Tree_00_01t604c4e5557d07b66010f9e4fbe5d6be2_1a98a12905d761149147e177be4614104a" prot="public" virt="non-virtual"><scope>llama::mapping::tree::functor::LeaveOnlyRT::BasicToResultImpl&lt; T_Tree, typename T_Tree::IsTreeElementWithChilds &gt;::ChildFunctor</scope><name>runtime</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

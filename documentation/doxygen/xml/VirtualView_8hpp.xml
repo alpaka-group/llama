@@ -1,0 +1,183 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="VirtualView_8hpp" kind="file" language="C++">
+    <compoundname>VirtualView.hpp</compoundname>
+    <includedby refid="llama_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/llama.hpp</includedby>
+    <invincdepgraph>
+      <node id="631">
+        <label>/home/alexander/develop/work/llama/include/llama/llama.hpp</label>
+        <link refid="llama_8hpp"/>
+      </node>
+      <node id="630">
+        <label>/home/alexander/develop/work/llama/include/llama/VirtualView.hpp</label>
+        <link refid="VirtualView_8hpp"/>
+        <childnode refid="631" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structllama_1_1VirtualView" prot="public">llama::VirtualView</innerclass>
+    <innernamespace refid="namespacellama">llama</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*<sp/>Copyright<sp/>2018<sp/>Alexander<sp/>Matthes</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/>*<sp/>This<sp/>file<sp/>is<sp/>part<sp/>of<sp/>LLAMA.</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/>*<sp/>LLAMA<sp/>is<sp/>free<sp/>software:<sp/>you<sp/>can<sp/>redistribute<sp/>it<sp/>and/or<sp/>modify</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/>*<sp/>it<sp/>under<sp/>the<sp/>terms<sp/>of<sp/>the<sp/>GNU<sp/>Lesser<sp/>General<sp/>Public<sp/>License<sp/>as</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/>*<sp/>published<sp/>by<sp/>the<sp/>Free<sp/>Software<sp/>Foundation,<sp/>either<sp/>version<sp/>3<sp/>of<sp/>the</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/>*<sp/>License,<sp/>or<sp/>(at<sp/>your<sp/>option)<sp/>any<sp/>later<sp/>version.</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/>*<sp/>LLAMA<sp/>is<sp/>distributed<sp/>in<sp/>the<sp/>hope<sp/>that<sp/>it<sp/>will<sp/>be<sp/>useful,</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/>*<sp/>but<sp/>WITHOUT<sp/>ANY<sp/>WARRANTY;<sp/>without<sp/>even<sp/>the<sp/>implied<sp/>warranty<sp/>of</highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/>*<sp/>MERCHANTABILITY<sp/>or<sp/>FITNESS<sp/>FOR<sp/>A<sp/>PARTICULAR<sp/>PURPOSE.<sp/><sp/>See<sp/>the</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/>*<sp/>GNU<sp/>Lesser<sp/>General<sp/>Public<sp/>License<sp/>for<sp/>more<sp/>details.</highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="15"><highlight class="comment"><sp/>*<sp/>You<sp/>should<sp/>have<sp/>received<sp/>a<sp/>copy<sp/>of<sp/>the<sp/>GNU<sp/>Lesser<sp/>General<sp/>Public</highlight></codeline>
+<codeline lineno="16"><highlight class="comment"><sp/>*<sp/>License<sp/>along<sp/>with<sp/>LLAMA.<sp/><sp/>If<sp/>not,<sp/>see<sp/>&lt;www.gnu.org/licenses/&gt;.</highlight></codeline>
+<codeline lineno="17"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacellama" kindref="compound">llama</ref></highlight></codeline>
+<codeline lineno="22"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_ParentViewType</highlight></codeline>
+<codeline lineno="26"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="27" refid="structllama_1_1VirtualView" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1VirtualView" kindref="compound">VirtualView</ref></highlight></codeline>
+<codeline lineno="28"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="29" refid="structllama_1_1VirtualView_1a13b6273ccd2fa7b6c1b7b00950cf307f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1VirtualView_1a13b6273ccd2fa7b6c1b7b00950cf307f" kindref="member">ParentView</ref><sp/>=<sp/>T_ParentViewType;</highlight></codeline>
+<codeline lineno="30" refid="structllama_1_1VirtualView_1af042c300cedcfe447fa84c9c2ce9e152" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1VirtualView_1af042c300cedcfe447fa84c9c2ce9e152" kindref="member">BlobType</ref><sp/>=<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>ParentView::BlobType;</highlight></codeline>
+<codeline lineno="31" refid="structllama_1_1VirtualView_1ab8b386434df0aed417e974b69a7379b3" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1VirtualView_1ab8b386434df0aed417e974b69a7379b3" kindref="member">Mapping</ref><sp/>=<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>ParentView::Mapping;</highlight></codeline>
+<codeline lineno="32" refid="structllama_1_1VirtualView_1a95061d3ecfa6229c2606378cb1f78f33" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1VirtualView_1a95061d3ecfa6229c2606378cb1f78f33" kindref="member">VirtualDatumType</ref><sp/>=<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>ParentView::VirtualDatumType;</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1VirtualView_1a6497f87b0ae075b3336490075305363e" kindref="member">VirtualView</ref>()<sp/>=<sp/></highlight><highlight class="keyword">delete</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1VirtualView_1a6497f87b0ae075b3336490075305363e" kindref="member">VirtualView</ref>(<sp/><ref refid="structllama_1_1VirtualView" kindref="compound">VirtualView</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>&amp;<sp/>)<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1VirtualView_1a6497f87b0ae075b3336490075305363e" kindref="member">VirtualView</ref>(<sp/><ref refid="structllama_1_1VirtualView" kindref="compound">VirtualView</ref><sp/>&amp;&amp;<sp/>)<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1VirtualView_1abe5b8ab3619c15aec658c7eb7d48495e" kindref="member">~VirtualView</ref>(<sp/>)<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1affb1b2bdbbed82d386e8cf712cc7e4b5" kindref="member">LLAMA_NO_HOST_ACC_WARNING</ref></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="41" refid="structllama_1_1VirtualView_1a2be6acaee5e78126a3b83b7c08e1b84e" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1VirtualView_1a2be6acaee5e78126a3b83b7c08e1b84e" kindref="member">VirtualView</ref>(</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1VirtualView_1a13b6273ccd2fa7b6c1b7b00950cf307f" kindref="member">ParentView</ref><sp/>&amp;<sp/><ref refid="structllama_1_1VirtualView_1abca62490ac2e860c543ef5c1d11c878b" kindref="member">parentView</ref>,</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1a03077c6597f96a84efe064fa64d81827" kindref="member">Mapping::UserDomain</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1VirtualView_1ad1ed8471a00d7a016595b52cf0fd541b" kindref="member">position</ref>,</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1a03077c6597f96a84efe064fa64d81827" kindref="member">Mapping::UserDomain</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1VirtualView_1ae4912fed3878afd8cb12b89510c9e5a8" kindref="member">size</ref></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/>)<sp/>:</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>parentView(<sp/>parentView<sp/>),</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>position(<sp/>position<sp/>),</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>size(<sp/>size<sp/>),</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1VirtualView_1aec09601508ebb03072c98dc6beab8b5c" kindref="member">blob</ref>(<sp/>parentView.<ref refid="structllama_1_1VirtualView_1aec09601508ebb03072c98dc6beab8b5c" kindref="member">blob</ref><sp/>),</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1VirtualView_1af96b21c522623cc94c88188960bbfddd" kindref="member">mapping</ref>(<sp/>parentView.<ref refid="structllama_1_1VirtualView_1af96b21c522623cc94c88188960bbfddd" kindref="member">mapping</ref><sp/>)</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/>{<sp/>}</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1affb1b2bdbbed82d386e8cf712cc7e4b5" kindref="member">LLAMA_NO_HOST_ACC_WARNING</ref></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/>std::size_t...<sp/>T_coords<sp/>&gt;</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="57" refid="structllama_1_1VirtualView_1a0489a4234e874a58fa47bc6c7d1d885f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1VirtualView_1a0489a4234e874a58fa47bc6c7d1d885f" kindref="member">accessor</ref>(<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1a03077c6597f96a84efe064fa64d81827" kindref="member">Mapping::UserDomain</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>userDomain<sp/>)</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/><ref refid="namespacellama_1aeef46491193f44d7be8ba279d053e78f" kindref="member">GetType</ref>&lt;</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>Mapping::DatumDomain,</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_coords...</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;<sp/>&amp;</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1VirtualView_1abca62490ac2e860c543ef5c1d11c878b" kindref="member">parentView</ref>.template<sp/><ref refid="structllama_1_1VirtualView_1a0489a4234e874a58fa47bc6c7d1d885f" kindref="member">accessor</ref>&lt;<sp/>T_coords...<sp/>&gt;(</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>userDomain<sp/>+<sp/><ref refid="structllama_1_1VirtualView_1ad1ed8471a00d7a016595b52cf0fd541b" kindref="member">position</ref></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>);</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1affb1b2bdbbed82d386e8cf712cc7e4b5" kindref="member">LLAMA_NO_HOST_ACC_WARNING</ref></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_UIDs<sp/>&gt;</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="72" refid="structllama_1_1VirtualView_1a42db0ff186da22494a44aa842bb61826" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1VirtualView_1a42db0ff186da22494a44aa842bb61826" kindref="member">accessor</ref>(<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1a03077c6597f96a84efe064fa64d81827" kindref="member">Mapping::UserDomain</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>userDomain<sp/>)</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/><ref refid="namespacellama_1ae6136ff96220af66f833a8de8aa0b6a1" kindref="member">GetTypeFromDatumCoord</ref>&lt;</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>Mapping::DatumDomain,</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacellama_1a3a9ff09beed7470e5c174d2c34e88aab" kindref="member">GetCoordFromUID</ref>&lt;</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>Mapping::DatumDomain,</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_UIDs...</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;<sp/>&amp;</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1VirtualView_1abca62490ac2e860c543ef5c1d11c878b" kindref="member">parentView</ref>.template<sp/><ref refid="structllama_1_1VirtualView_1a0489a4234e874a58fa47bc6c7d1d885f" kindref="member">accessor</ref>&lt;<sp/>T_UIDs...<sp/>&gt;(</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>userDomain<sp/>+<sp/><ref refid="structllama_1_1VirtualView_1ad1ed8471a00d7a016595b52cf0fd541b" kindref="member">position</ref></highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>);</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="88" refid="structllama_1_1VirtualView_1a28325234ee1cc92fe890a727564b1c26" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1VirtualView_1a28325234ee1cc92fe890a727564b1c26" kindref="member">operator()</ref>(<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1a03077c6597f96a84efe064fa64d81827" kindref="member">Mapping::UserDomain</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>userDomain<sp/>)</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/><ref refid="structllama_1_1VirtualView_1a95061d3ecfa6229c2606378cb1f78f33" kindref="member">VirtualDatumType</ref></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1a48abf2d81c1aac87ff87f95bb427049a" kindref="member">LLAMA_FORCE_INLINE_RECURSIVE</ref></highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1VirtualView_1abca62490ac2e860c543ef5c1d11c878b" kindref="member">parentView</ref>(<sp/>userDomain<sp/>+<sp/><ref refid="structllama_1_1VirtualView_1ad1ed8471a00d7a016595b52cf0fd541b" kindref="member">position</ref><sp/>);</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"></highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_Coord<sp/>&gt;</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="98" refid="structllama_1_1VirtualView_1ad1c736def64ac78e0001f9941a92b9da" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1VirtualView_1ad1c736def64ac78e0001f9941a92b9da" kindref="member">operator()</ref>(<sp/>T_Coord...<sp/>coord<sp/>)</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/><ref refid="structllama_1_1VirtualView_1a95061d3ecfa6229c2606378cb1f78f33" kindref="member">VirtualDatumType</ref></highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1a48abf2d81c1aac87ff87f95bb427049a" kindref="member">LLAMA_FORCE_INLINE_RECURSIVE</ref></highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1VirtualView_1abca62490ac2e860c543ef5c1d11c878b" kindref="member">parentView</ref>(</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1a03077c6597f96a84efe064fa64d81827" kindref="member">Mapping::UserDomain</ref>{<sp/>coord...<sp/>}<sp/>+<sp/><ref refid="structllama_1_1VirtualView_1ad1ed8471a00d7a016595b52cf0fd541b" kindref="member">position</ref></highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>);</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"></highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_Coord<sp/>&gt;</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="110" refid="structllama_1_1VirtualView_1a993ebaf01d040cd0535e0ce609b51b53" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1VirtualView_1a993ebaf01d040cd0535e0ce609b51b53" kindref="member">operator()</ref>(<sp/>T_Coord...<sp/>coord<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1VirtualView_1a95061d3ecfa6229c2606378cb1f78f33" kindref="member">VirtualDatumType</ref></highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1a48abf2d81c1aac87ff87f95bb427049a" kindref="member">LLAMA_FORCE_INLINE_RECURSIVE</ref></highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1VirtualView_1abca62490ac2e860c543ef5c1d11c878b" kindref="member">parentView</ref>(</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1a03077c6597f96a84efe064fa64d81827" kindref="member">Mapping::UserDomain</ref>{<sp/>coord...<sp/>}<sp/>+<sp/><ref refid="structllama_1_1VirtualView_1ad1ed8471a00d7a016595b52cf0fd541b" kindref="member">position</ref></highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>);</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"></highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="121" refid="structllama_1_1VirtualView_1af8d55c53a0fd092e75834de8b9cb1a41" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1VirtualView_1af8d55c53a0fd092e75834de8b9cb1a41" kindref="member">operator()</ref>(<sp/>std::size_t<sp/>coord<sp/>=<sp/>0<sp/>)</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/><ref refid="structllama_1_1VirtualView_1a95061d3ecfa6229c2606378cb1f78f33" kindref="member">VirtualDatumType</ref></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1a48abf2d81c1aac87ff87f95bb427049a" kindref="member">LLAMA_FORCE_INLINE_RECURSIVE</ref></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1VirtualView_1abca62490ac2e860c543ef5c1d11c878b" kindref="member">parentView</ref>(</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1a03077c6597f96a84efe064fa64d81827" kindref="member">Mapping::UserDomain</ref>{<sp/>coord<sp/>}<sp/>+<sp/><ref refid="structllama_1_1VirtualView_1ad1ed8471a00d7a016595b52cf0fd541b" kindref="member">position</ref></highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>);</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"></highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/>std::size_t...<sp/>T_coord<sp/>&gt;</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="133" refid="structllama_1_1VirtualView_1a88f64410638f235e3588b5b760ac1b05" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1VirtualView_1a88f64410638f235e3588b5b760ac1b05" kindref="member">operator()</ref>(<sp/><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord&lt; T_coord... &gt;</ref><sp/>&amp;&amp;<sp/>dc=<sp/><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord&lt; T_coord... &gt;</ref>()<sp/>)</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/><ref refid="namespacellama_1aeef46491193f44d7be8ba279d053e78f" kindref="member">GetType</ref>&lt;</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>Mapping::DatumDomain,</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_coord...</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;<sp/>&amp;</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1a48abf2d81c1aac87ff87f95bb427049a" kindref="member">LLAMA_FORCE_INLINE_RECURSIVE</ref></highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1VirtualView_1a0489a4234e874a58fa47bc6c7d1d885f" kindref="member">accessor</ref>&lt;<sp/>T_coord...<sp/>&gt;(</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>userDomainZero&lt;<sp/>Mapping::UserDomain::count<sp/>&gt;()</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>);</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"></highlight></codeline>
+<codeline lineno="145" refid="structllama_1_1VirtualView_1abca62490ac2e860c543ef5c1d11c878b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1VirtualView_1a13b6273ccd2fa7b6c1b7b00950cf307f" kindref="member">ParentView</ref><sp/>&amp;<sp/><ref refid="structllama_1_1VirtualView_1abca62490ac2e860c543ef5c1d11c878b" kindref="member">parentView</ref>;</highlight></codeline>
+<codeline lineno="146" refid="structllama_1_1VirtualView_1ad1ed8471a00d7a016595b52cf0fd541b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1a03077c6597f96a84efe064fa64d81827" kindref="member">Mapping::UserDomain</ref><sp/><ref refid="structllama_1_1VirtualView_1ad1ed8471a00d7a016595b52cf0fd541b" kindref="member">position</ref>;</highlight></codeline>
+<codeline lineno="147" refid="structllama_1_1VirtualView_1ae4912fed3878afd8cb12b89510c9e5a8" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1a03077c6597f96a84efe064fa64d81827" kindref="member">Mapping::UserDomain</ref><sp/><ref refid="structllama_1_1VirtualView_1ae4912fed3878afd8cb12b89510c9e5a8" kindref="member">size</ref>;</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1Array" kindref="compound">Array</ref>&lt;</highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1VirtualView_1af042c300cedcfe447fa84c9c2ce9e152" kindref="member">BlobType</ref>,</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Mapping::blobCount</highlight></codeline>
+<codeline lineno="151" refid="structllama_1_1VirtualView_1aec09601508ebb03072c98dc6beab8b5c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;<sp/>&amp;<sp/><ref refid="structllama_1_1VirtualView_1aec09601508ebb03072c98dc6beab8b5c" kindref="member">blob</ref>;</highlight></codeline>
+<codeline lineno="152" refid="structllama_1_1VirtualView_1af96b21c522623cc94c88188960bbfddd" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1VirtualView_1ab8b386434df0aed417e974b69a7379b3" kindref="member">Mapping</ref><sp/>&amp;<sp/><ref refid="structllama_1_1VirtualView_1af96b21c522623cc94c88188960bbfddd" kindref="member">mapping</ref>;</highlight></codeline>
+<codeline lineno="153"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"></highlight></codeline>
+<codeline lineno="155"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>llama</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="/home/alexander/develop/work/llama/include/llama/VirtualView.hpp"/>
+  </compounddef>
+</doxygen>

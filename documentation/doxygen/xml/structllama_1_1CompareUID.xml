@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1CompareUID" kind="struct" language="C++" prot="public">
+    <compoundname>llama::CompareUID</compoundname>
+    <includes refid="CompareUID_8hpp" local="no">CompareUID.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_DDA</type>
+      </param>
+      <param>
+        <type>typename T_BaseA</type>
+      </param>
+      <param>
+        <type>typename T_LocalA</type>
+      </param>
+      <param>
+        <type>typename T_DDB</type>
+      </param>
+      <param>
+        <type>typename T_BaseB</type>
+      </param>
+      <param>
+        <type>typename T_LocalB</type>
+      </param>
+      <param>
+        <type>typename SFINAE</type>
+        <defval>void</defval>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="structllama_1_1CompareUID_1a7cc4d6a29a8d67e0a1be30b274863823" prot="public" static="yes" mutable="no">
+        <type>constexpr bool</type>
+        <definition>constexpr bool llama::CompareUID&lt; T_DDA, T_BaseA, T_LocalA, T_DDB, T_BaseB, T_LocalB, SFINAE &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <initializer>=
+        std::is_same&lt;
+            <ref refid="namespacellama_1afc1dd86868706ba5f5ee39ec0c588534" kindref="member">GetUID</ref>&lt;
+                T_DDA,
+                typename T_BaseA::template PushBack&lt; T_LocalA::front &gt;
+            &gt;,
+            <ref refid="namespacellama_1afc1dd86868706ba5f5ee39ec0c588534" kindref="member">GetUID</ref>&lt;
+                T_DDB,
+                typename T_BaseB::template PushBack&lt; T_LocalB::front &gt;
+            &gt;
+        &gt;::value &amp;&amp;
+        <ref refid="structllama_1_1CompareUID" kindref="compound">CompareUID</ref>&lt;
+            T_DDA,
+            typename T_BaseA::template PushBack&lt; T_LocalA::front &gt;,
+            typename T_LocalA::PopFront,
+            T_DDB,
+            typename T_BaseB::template PushBack&lt; T_LocalB::front &gt;,
+            typename T_LocalB::PopFront
+        &gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/CompareUID.hpp" line="38" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/CompareUID.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/CompareUID.hpp" line="37" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/CompareUID.hpp" bodystart="36" bodyend="57"/>
+    <listofallmembers>
+      <member refid="structllama_1_1CompareUID_1a7cc4d6a29a8d67e0a1be30b274863823" prot="public" virt="non-virtual"><scope>llama::CompareUID</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

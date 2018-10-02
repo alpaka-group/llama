@@ -99,7 +99,7 @@ struct ChangeNodeRuntime
     }
 };
 
-// Leave case
+// Leaf case
 template< typename T_Tree >
 struct ChangeNodeRuntime<
     T_Tree,
@@ -262,7 +262,7 @@ struct ChangeNodeChildsRuntime<
     }
 };
 
-// Leave case
+// Leaf case
 template<
     typename T_Tree,
     template< class, class > class T_Operation
@@ -297,7 +297,7 @@ struct ChangeNodeChildsRuntimeFunctor
     >
     struct OperatorSpecialization;
 
-    // Leave case
+    // Leaf case
     template< typename T_Element >
     struct OperatorSpecialization<
         T_Element,

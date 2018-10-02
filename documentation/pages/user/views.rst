@@ -320,7 +320,7 @@ recursive.
 
 LLAMA provides a class to easy the pain (a bit) called :cpp:`llama::ForEach`.
 It takes a datum domain as compile time parameter and a functor as compile and
-run time parameters and calls this functor for each leave of the datum domain
+run time parameters and calls this functor for each leaf of the datum domain
 tree, e.g.
 
 .. code-block:: C++
@@ -367,7 +367,7 @@ properties can be given as struct members. The template parameters are outer and
 inner coordinates in the datum domain tree. The outer coordinate is what can be
 given as template parameter(s) after the datum domain itself. However even if
 given as naming, the functor always gets :cpp:`DatumCoord`. The inner coord is
-the leave coordinate based on the outer coord. To get the needed global
+the leaf coordinate based on the outer coord. To get the needed global
 coodinate in the tree :cpp:`llama::DatumCoord` provides a method called
 :cpp:`Cat` as seen in the next example functor.
 

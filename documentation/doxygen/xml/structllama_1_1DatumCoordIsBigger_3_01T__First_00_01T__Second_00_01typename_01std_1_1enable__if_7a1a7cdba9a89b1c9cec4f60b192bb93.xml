@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1DatumCoordIsBigger_3_01T__First_00_01T__Second_00_01typename_01std_1_1enable__if_7a1a7cdba9a89b1c9cec4f60b192bb93" kind="struct" language="C++" prot="public">
+    <compoundname>llama::DatumCoordIsBigger&lt; T_First, T_Second, typename std::enable_if&lt;(T_First::size==1||T_Second::size==1) &gt;::type &gt;</compoundname>
+    <includes refid="DatumCoord_8hpp" local="no">DatumCoord.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_First</type>
+      </param>
+      <param>
+        <type>typename T_Second</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="structllama_1_1DatumCoordIsBigger_3_01T__First_00_01T__Second_00_01typename_01std_1_1enable__if_7a1a7cdba9a89b1c9cec4f60b192bb93_1a0fd7d2d23a2c6b41af72afabcafd4a8f" prot="public" static="yes" mutable="no">
+        <type>constexpr bool</type>
+        <definition>constexpr bool llama::DatumCoordIsBigger&lt; T_First, T_Second, typename std::enable_if&lt;(T_First::size==1||T_Second::size==1) &gt;::type &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <initializer>= ( T_First::front &gt; T_Second::front )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" line="227" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" bodystart="227" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" line="226" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" bodystart="219" bodyend="228"/>
+    <listofallmembers>
+      <member refid="structllama_1_1DatumCoordIsBigger_3_01T__First_00_01T__Second_00_01typename_01std_1_1enable__if_7a1a7cdba9a89b1c9cec4f60b192bb93_1a0fd7d2d23a2c6b41af72afabcafd4a8f" prot="public" virt="non-virtual"><scope>llama::DatumCoordIsBigger&lt; T_First, T_Second, typename std::enable_if&lt;(T_First::size==1||T_Second::size==1) &gt;::type &gt;</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

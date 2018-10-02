@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1mapping_1_1tree_1_1SizeOfFunctor" kind="struct" language="C++" prot="public">
+    <compoundname>llama::mapping::tree::SizeOfFunctor</compoundname>
+    <includes refid="GetBlobSize_8hpp" local="no">GetBlobSize.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_Type</type>
+      </param>
+      <param>
+        <type>typename T_CountType</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1SizeOfFunctor_1ac81fb31f72ed822dc4295f934db47ee1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto llama::mapping::tree::SizeOfFunctor&lt; T_Type, T_CountType &gt;::operator()</definition>
+        <argsstring>(T_CountType const &amp;) const -&gt; std::size_t</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>T_CountType const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobSize.hpp" line="41" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobSize.hpp" bodystart="41" bodyend="45"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobSize.hpp" line="38" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobSize.hpp" bodystart="37" bodyend="46"/>
+    <listofallmembers>
+      <member refid="structllama_1_1mapping_1_1tree_1_1SizeOfFunctor_1ac81fb31f72ed822dc4295f934db47ee1" prot="public" virt="non-virtual"><scope>llama::mapping::tree::SizeOfFunctor</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

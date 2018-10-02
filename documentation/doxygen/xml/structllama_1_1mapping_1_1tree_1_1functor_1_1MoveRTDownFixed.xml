@@ -1,0 +1,146 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDownFixed" kind="struct" language="C++" prot="public">
+    <compoundname>llama::mapping::tree::functor::MoveRTDownFixed</compoundname>
+    <includes refid="MoveRTDown_8hpp" local="no">MoveRTDown.hpp</includes>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDownFixed_1_1BasicCoordToResultCoordImpl" prot="public">llama::mapping::tree::functor::MoveRTDownFixed::BasicCoordToResultCoordImpl</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDownFixed_1_1BasicCoordToResultCoordImpl_3_013662b4c9284204fc0ffae9af428aec16" prot="public">llama::mapping::tree::functor::MoveRTDownFixed::BasicCoordToResultCoordImpl&lt; T_Tree, T_InternalTreeCoord, T_BasicCoord, typename std::enable_if&lt; T_InternalTreeCoord::FirstElement::compiletime !=T_BasicCoord::FirstElement::compiletime &gt;::type &gt;</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDownFixed_1_1BasicCoordToResultCoordImpl_3_0102c7ad4e8cdb282f81e72ee2f1e96407" prot="public">llama::mapping::tree::functor::MoveRTDownFixed::BasicCoordToResultCoordImpl&lt; T_Tree, T_InternalTreeCoord, T_BasicCoord, typename std::enable_if&lt; T_InternalTreeCoord::FirstElement::compiletime==T_BasicCoord::FirstElement::compiletime &gt;::type &gt;</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDownFixed_1_1BasicCoordToResultCoordImpl_3_01b7c4181acabd11f2bf6ad750674ff0a3" prot="public">llama::mapping::tree::functor::MoveRTDownFixed::BasicCoordToResultCoordImpl&lt; T_Tree, Tuple&lt; &gt;, T_BasicCoord, void &gt;</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDownFixed_1_1BasicCoordToResultCoordImpl_3_014af9eec41916d5dcea059f1bc07c76c5" prot="public">llama::mapping::tree::functor::MoveRTDownFixed::BasicCoordToResultCoordImpl&lt; T_Tree, Tuple&lt; &gt;, Tuple&lt; &gt;, void &gt;</innerclass>
+    <templateparamlist>
+      <param>
+        <type>typename T_TreeCoord</type>
+      </param>
+      <param>
+        <type>std::size_t</type>
+        <declname>T_amount</declname>
+        <defname>T_amount</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDownFixed_1a500514533b5cb7f902be6268c26a8217" prot="public" static="no">
+        <type>decltype(<ref refid="namespacellama_1_1mapping_1_1tree_1_1operations_1a3f86c4dabf3be3fbb625609b784b60df" kindref="member">operations::changeNodeChildsRuntime</ref>&lt; T_TreeCoord, <ref refid="structllama_1_1mapping_1_1tree_1_1Multiplication" kindref="compound">Multiplication</ref> &gt;(<ref refid="namespacellama_1_1mapping_1_1tree_1_1operations_1aa314792928e37f27d51c2ca7bfb0c22a" kindref="member">operations::changeNodeRuntime</ref>&lt; T_TreeCoord &gt;(T_Tree(),(<ref refid="namespacellama_1_1mapping_1_1tree_1_1operations_1a6ce218a561d1228dac67f9b8197ddfd1" kindref="member">operations::getNode</ref>&lt; T_TreeCoord &gt;(T_Tree()).count+<ref refid="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDownFixed_1ae0830a56e9572b7d4bbfda7fae4ee67c" kindref="member">amount</ref> - 1)/<ref refid="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDownFixed_1ae0830a56e9572b7d4bbfda7fae4ee67c" kindref="member">amount</ref>), <ref refid="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDownFixed_1ae0830a56e9572b7d4bbfda7fae4ee67c" kindref="member">amount</ref>))</type>
+        <definition>using llama::mapping::tree::functor::MoveRTDownFixed&lt; T_TreeCoord, T_amount &gt;::Result =  decltype( operations::changeNodeChildsRuntime&lt; T_TreeCoord, Multiplication &gt;( operations::changeNodeRuntime&lt; T_TreeCoord &gt;( T_Tree(), (operations::getNode&lt; T_TreeCoord &gt;( T_Tree() ).count + amount - 1 ) / amount ), amount ) )</definition>
+        <argsstring></argsstring>
+        <name>Result</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="476" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="488" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDownFixed_1ae0830a56e9572b7d4bbfda7fae4ee67c" prot="public" static="yes" mutable="no">
+        <type>constexpr std::size_t</type>
+        <definition>constexpr std::size_t llama::mapping::tree::functor::MoveRTDownFixed&lt; T_TreeCoord, T_amount &gt;::amount</definition>
+        <argsstring></argsstring>
+        <name>amount</name>
+        <initializer>= T_amount</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="306" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="306" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDownFixed_1aa28792c6708270aa35c3d6862cb45bc4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_Tree</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto llama::mapping::tree::functor::MoveRTDownFixed&lt; T_TreeCoord, T_amount &gt;::basicToResult</definition>
+        <argsstring>(T_Tree const &amp;tree) const -&gt; Result&lt; T_Tree &gt;</argsstring>
+        <name>basicToResult</name>
+        <param>
+          <type>T_Tree const &amp;</type>
+          <declname>tree</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="493" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="493" bodyend="507"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDownFixed_1ad31ff783af5591ef544a22c3498a004a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_Tree</type>
+          </param>
+          <param>
+            <type>typename T_BasicCoord</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto llama::mapping::tree::functor::MoveRTDownFixed&lt; T_TreeCoord, T_amount &gt;::basicCoordToResultCoord</definition>
+        <argsstring>(T_BasicCoord const &amp;basicCoord, T_Tree const &amp;tree) const -&gt; decltype(BasicCoordToResultCoordImpl&lt; T_Tree, T_TreeCoord, T_BasicCoord &gt;()(basicCoord, tree))</argsstring>
+        <name>basicCoordToResultCoord</name>
+        <param>
+          <type>T_BasicCoord const &amp;</type>
+          <declname>basicCoord</declname>
+        </param>
+        <param>
+          <type>T_Tree const &amp;</type>
+          <declname>tree</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="515" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="515" bodyend="538"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDownFixed_1ac6cb248e037dabcc23813fb68a5295bd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_Tree</type>
+          </param>
+          <param>
+            <type>typename T_ResultCoord</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto llama::mapping::tree::functor::MoveRTDownFixed&lt; T_TreeCoord, T_amount &gt;::resultCoordToBasicCoord</definition>
+        <argsstring>(T_ResultCoord const &amp;resultCoord, T_Tree const &amp;) const -&gt; T_ResultCoord</argsstring>
+        <name>resultCoordToBasicCoord</name>
+        <param>
+          <type>T_ResultCoord const &amp;</type>
+          <declname>resultCoord</declname>
+        </param>
+        <param>
+          <type>T_Tree const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="546" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="546" bodyend="553"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="305" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="304" bodyend="554"/>
+    <listofallmembers>
+      <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDownFixed_1ae0830a56e9572b7d4bbfda7fae4ee67c" prot="public" virt="non-virtual"><scope>llama::mapping::tree::functor::MoveRTDownFixed</scope><name>amount</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDownFixed_1ad31ff783af5591ef544a22c3498a004a" prot="public" virt="non-virtual"><scope>llama::mapping::tree::functor::MoveRTDownFixed</scope><name>basicCoordToResultCoord</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDownFixed_1aa28792c6708270aa35c3d6862cb45bc4" prot="public" virt="non-virtual"><scope>llama::mapping::tree::functor::MoveRTDownFixed</scope><name>basicToResult</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDownFixed_1a500514533b5cb7f902be6268c26a8217" prot="public" virt="non-virtual"><scope>llama::mapping::tree::functor::MoveRTDownFixed</scope><name>Result</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDownFixed_1ac6cb248e037dabcc23813fb68a5295bd" prot="public" virt="non-virtual"><scope>llama::mapping::tree::functor::MoveRTDownFixed</scope><name>resultCoordToBasicCoord</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

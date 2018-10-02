@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="dir_1edeeca147c2d4fb57fec1b01c02fb14" kind="dir">
+    <compoundname>/home/alexander/develop/work/llama/include/llama</compoundname>
+    <innerdir refid="dir_69f8c169b83968a39566248a76f40acd">/home/alexander/develop/work/llama/include/llama/allocator</innerdir>
+    <innerdir refid="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc">/home/alexander/develop/work/llama/include/llama/mapping</innerdir>
+    <innerdir refid="dir_d6e31b39b36ebb88750c477949dc9f2e">/home/alexander/develop/work/llama/include/llama/preprocessor</innerdir>
+    <innerfile refid="Array_8hpp">Array.hpp</innerfile>
+    <innerfile refid="CompareUID_8hpp">CompareUID.hpp</innerfile>
+    <innerfile refid="DatumArray_8hpp">DatumArray.hpp</innerfile>
+    <innerfile refid="DatumCoord_8hpp">DatumCoord.hpp</innerfile>
+    <innerfile refid="DatumStruct_8hpp">DatumStruct.hpp</innerfile>
+    <innerfile refid="Factory_8hpp">Factory.hpp</innerfile>
+    <innerfile refid="ForEach_8hpp">ForEach.hpp</innerfile>
+    <innerfile refid="GetCoordFromUID_8hpp">GetCoordFromUID.hpp</innerfile>
+    <innerfile refid="GetType_8hpp">GetType.hpp</innerfile>
+    <innerfile refid="GetUID_8hpp">GetUID.hpp</innerfile>
+    <innerfile refid="IntegerSequence_8hpp">IntegerSequence.hpp</innerfile>
+    <innerfile refid="llama_8hpp">llama.hpp</innerfile>
+    <innerfile refid="Tuple_8hpp">Tuple.hpp</innerfile>
+    <innerfile refid="Types_8hpp">Types.hpp</innerfile>
+    <innerfile refid="UserDomain_8hpp">UserDomain.hpp</innerfile>
+    <innerfile refid="View_8hpp">View.hpp</innerfile>
+    <innerfile refid="VirtualView_8hpp">VirtualView.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/"/>
+  </compounddef>
+</doxygen>

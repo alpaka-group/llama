@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeChain" kind="struct" language="C++" prot="public">
+    <compoundname>llama::mapping::tree::internal::CreateTreeChain</compoundname>
+    <includes refid="TreeFromDomains_8hpp" local="no">TreeFromDomains.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_Leaf</type>
+      </param>
+      <param>
+        <type>std::size_t</type>
+        <declname>T_count</declname>
+        <defname>T_count</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeChain_1afd6be8e7944c92627f9147b277cb575f" prot="public" static="no">
+        <type><ref refid="structllama_1_1mapping_1_1tree_1_1TreeElement" kindref="compound">TreeElement</ref>&lt; <ref refid="structllama_1_1NoName" kindref="compound">NoName</ref>, <ref refid="structllama_1_1Tuple" kindref="compound">Tuple</ref>&lt; typename <ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeChain" kindref="compound">CreateTreeChain</ref>&lt; T_Leaf, T_count - 1 &gt;::<ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeChain_1afd6be8e7944c92627f9147b277cb575f" kindref="member">type</ref> &gt; &gt;</type>
+        <definition>using llama::mapping::tree::internal::CreateTreeChain&lt; T_Leaf, T_count &gt;::type =  TreeElement&lt; NoName, Tuple&lt; typename CreateTreeChain&lt; T_Leaf, T_count - 1 &gt;::type &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp" line="97" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp" line="96" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp" bodystart="95" bodyend="104"/>
+    <listofallmembers>
+      <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeChain_1afd6be8e7944c92627f9147b277cb575f" prot="public" virt="non-virtual"><scope>llama::mapping::tree::internal::CreateTreeChain</scope><name>type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

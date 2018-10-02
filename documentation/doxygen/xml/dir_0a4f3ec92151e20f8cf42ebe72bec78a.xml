@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="dir_0a4f3ec92151e20f8cf42ebe72bec78a" kind="dir">
+    <compoundname>/home/alexander/develop/work/llama/include/llama/mapping/tree/operations</compoundname>
+    <innerfile refid="ChangeNodeRuntime_8hpp">ChangeNodeRuntime.hpp</innerfile>
+    <innerfile refid="GetNode_8hpp">GetNode.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/operations/"/>
+  </compounddef>
+</doxygen>

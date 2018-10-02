@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1allocator_1_1internal_1_1SharedPtrAccessor" kind="struct" language="C++" prot="public">
+    <compoundname>llama::allocator::internal::SharedPtrAccessor</compoundname>
+    <includes refid="SharedPtr_8hpp" local="no">SharedPtr.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structllama_1_1allocator_1_1internal_1_1SharedPtrAccessor_1a2a21e8f1750a7e7d8fccd411bc9107fb" prot="public" static="no">
+        <type>unsigned char</type>
+        <definition>using llama::allocator::internal::SharedPtrAccessor::PrimType =  unsigned char</definition>
+        <argsstring></argsstring>
+        <name>PrimType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/allocator/SharedPtr.hpp" line="34" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/allocator/SharedPtr.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1allocator_1_1internal_1_1SharedPtrAccessor_1ae83433313ee01dbe90d46ddcd1f488ab" prot="public" static="no">
+        <type>std::shared_ptr&lt; <ref refid="structllama_1_1allocator_1_1internal_1_1SharedPtrAccessor_1a2a21e8f1750a7e7d8fccd411bc9107fb" kindref="member">PrimType</ref> &gt;</type>
+        <definition>using llama::allocator::internal::SharedPtrAccessor::BlobType =  std::shared_ptr&lt; PrimType &gt;</definition>
+        <argsstring></argsstring>
+        <name>BlobType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/allocator/SharedPtr.hpp" line="35" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/allocator/SharedPtr.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structllama_1_1allocator_1_1internal_1_1SharedPtrAccessor_1a4f115f296f796181abb3c1bc66412eb5" prot="public" static="no" mutable="no">
+        <type><ref refid="structllama_1_1allocator_1_1internal_1_1SharedPtrAccessor_1ae83433313ee01dbe90d46ddcd1f488ab" kindref="member">BlobType</ref></type>
+        <definition>BlobType llama::allocator::internal::SharedPtrAccessor::blob</definition>
+        <argsstring></argsstring>
+        <name>blob</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/allocator/SharedPtr.hpp" line="55" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/allocator/SharedPtr.hpp" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1allocator_1_1internal_1_1SharedPtrAccessor_1a794c5386ee4abdcb975cf2ffbb4f96bf" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>llama::allocator::internal::SharedPtrAccessor::SharedPtrAccessor</definition>
+        <argsstring>(BlobType blob)</argsstring>
+        <name>SharedPtrAccessor</name>
+        <param>
+          <type><ref refid="structllama_1_1allocator_1_1internal_1_1SharedPtrAccessor_1ae83433313ee01dbe90d46ddcd1f488ab" kindref="member">BlobType</ref></type>
+          <declname>blob</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/allocator/SharedPtr.hpp" line="37" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/allocator/SharedPtr.hpp" bodystart="37" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1allocator_1_1internal_1_1SharedPtrAccessor_1a135d51db8d76c68277519dc7f892fafd" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_IndexType</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto llama::allocator::internal::SharedPtrAccessor::operator[]</definition>
+        <argsstring>(T_IndexType &amp;&amp;idx) -&gt; PrimType &amp;</argsstring>
+        <name>operator[]</name>
+        <param>
+          <type>T_IndexType &amp;&amp;</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/allocator/SharedPtr.hpp" line="43" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/allocator/SharedPtr.hpp" bodystart="43" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1allocator_1_1internal_1_1SharedPtrAccessor_1a746e8af2ba3994e734a71875cb857edf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_IndexType</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto llama::allocator::internal::SharedPtrAccessor::operator[]</definition>
+        <argsstring>(T_IndexType &amp;&amp;idx) const -&gt; const PrimType &amp;</argsstring>
+        <name>operator[]</name>
+        <param>
+          <type>T_IndexType &amp;&amp;</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/allocator/SharedPtr.hpp" line="50" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/allocator/SharedPtr.hpp" bodystart="50" bodyend="54"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/allocator/SharedPtr.hpp" line="33" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/allocator/SharedPtr.hpp" bodystart="32" bodyend="56"/>
+    <listofallmembers>
+      <member refid="structllama_1_1allocator_1_1internal_1_1SharedPtrAccessor_1a4f115f296f796181abb3c1bc66412eb5" prot="public" virt="non-virtual"><scope>llama::allocator::internal::SharedPtrAccessor</scope><name>blob</name></member>
+      <member refid="structllama_1_1allocator_1_1internal_1_1SharedPtrAccessor_1ae83433313ee01dbe90d46ddcd1f488ab" prot="public" virt="non-virtual"><scope>llama::allocator::internal::SharedPtrAccessor</scope><name>BlobType</name></member>
+      <member refid="structllama_1_1allocator_1_1internal_1_1SharedPtrAccessor_1a135d51db8d76c68277519dc7f892fafd" prot="public" virt="non-virtual"><scope>llama::allocator::internal::SharedPtrAccessor</scope><name>operator[]</name></member>
+      <member refid="structllama_1_1allocator_1_1internal_1_1SharedPtrAccessor_1a746e8af2ba3994e734a71875cb857edf" prot="public" virt="non-virtual"><scope>llama::allocator::internal::SharedPtrAccessor</scope><name>operator[]</name></member>
+      <member refid="structllama_1_1allocator_1_1internal_1_1SharedPtrAccessor_1a2a21e8f1750a7e7d8fccd411bc9107fb" prot="public" virt="non-virtual"><scope>llama::allocator::internal::SharedPtrAccessor</scope><name>PrimType</name></member>
+      <member refid="structllama_1_1allocator_1_1internal_1_1SharedPtrAccessor_1a794c5386ee4abdcb975cf2ffbb4f96bf" prot="public" virt="non-virtual"><scope>llama::allocator::internal::SharedPtrAccessor</scope><name>SharedPtrAccessor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

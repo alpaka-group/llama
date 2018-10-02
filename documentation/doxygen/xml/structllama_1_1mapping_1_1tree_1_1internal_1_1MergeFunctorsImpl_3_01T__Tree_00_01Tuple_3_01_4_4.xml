@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl_3_01T__Tree_00_01Tuple_3_01_4_4" kind="struct" language="C++" prot="public">
+    <compoundname>llama::mapping::tree::internal::MergeFunctorsImpl&lt; T_Tree, Tuple&lt; &gt;&gt;</compoundname>
+    <includes refid="MergeFunctors_8hpp" local="no">MergeFunctors.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_Tree</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl_3_01T__Tree_00_01Tuple_3_01_4_4_1a7d1a3d561fc924dcd6a6d271efce33fd" prot="public" static="no">
+        <type>T_Tree</type>
+        <definition>using llama::mapping::tree::internal::MergeFunctorsImpl&lt; T_Tree, Tuple&lt; &gt;&gt;::Result =  T_Tree</definition>
+        <argsstring></argsstring>
+        <name>Result</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/MergeFunctors.hpp" line="206" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/MergeFunctors.hpp" bodystart="206" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl_3_01T__Tree_00_01Tuple_3_01_4_4_1ad33d36d10f97b8807ee1389ff2660c84" prot="public" static="no">
+        <type><ref refid="structllama_1_1Tuple" kindref="compound">Tuple</ref>&lt; &gt;</type>
+        <definition>using llama::mapping::tree::internal::MergeFunctorsImpl&lt; T_Tree, Tuple&lt; &gt;&gt;::TreeOperationList =  Tuple&lt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>TreeOperationList</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/MergeFunctors.hpp" line="207" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/MergeFunctors.hpp" bodystart="207" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl_3_01T__Tree_00_01Tuple_3_01_4_4_1a029edfea392873b675d38f22ec41f79d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>llama::mapping::tree::internal::MergeFunctorsImpl&lt; T_Tree, Tuple&lt; &gt;&gt;::MergeFunctorsImpl</definition>
+        <argsstring>(T_Tree const &amp;, TreeOperationList const &amp;treeOperationList)</argsstring>
+        <name>MergeFunctorsImpl</name>
+        <param>
+          <type>T_Tree const &amp;</type>
+        </param>
+        <param>
+          <type><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl_3_01T__Tree_00_01Tuple_3_01_4_4_1ad33d36d10f97b8807ee1389ff2660c84" kindref="member">TreeOperationList</ref> const &amp;</type>
+          <declname>treeOperationList</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/MergeFunctors.hpp" line="210" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/MergeFunctors.hpp" bodystart="210" bodyend="213"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl_3_01T__Tree_00_01Tuple_3_01_4_4_1ae7326b81f75a3917312fed90708c2998" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto llama::mapping::tree::internal::MergeFunctorsImpl&lt; T_Tree, Tuple&lt; &gt;&gt;::basicToResult</definition>
+        <argsstring>(const T_Tree &amp;tree) const -&gt; Result</argsstring>
+        <name>basicToResult</name>
+        <param>
+          <type>const T_Tree &amp;</type>
+          <declname>tree</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/MergeFunctors.hpp" line="217" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/MergeFunctors.hpp" bodystart="217" bodyend="221"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl_3_01T__Tree_00_01Tuple_3_01_4_4_1afb7dfef27e5f3c6e3326255bf53e82de" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_TreeCoord</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto llama::mapping::tree::internal::MergeFunctorsImpl&lt; T_Tree, Tuple&lt; &gt;&gt;::basicCoordToResultCoord</definition>
+        <argsstring>(T_TreeCoord const &amp;basicCoord, T_Tree const &amp;tree) const -&gt; T_TreeCoord</argsstring>
+        <name>basicCoordToResultCoord</name>
+        <param>
+          <type>T_TreeCoord const &amp;</type>
+          <declname>basicCoord</declname>
+        </param>
+        <param>
+          <type>T_Tree const &amp;</type>
+          <declname>tree</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/MergeFunctors.hpp" line="226" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/MergeFunctors.hpp" bodystart="226" bodyend="233"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl_3_01T__Tree_00_01Tuple_3_01_4_4_1a2f7160fd9e92a059c3b89cce2633899c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_TreeCoord</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto llama::mapping::tree::internal::MergeFunctorsImpl&lt; T_Tree, Tuple&lt; &gt;&gt;::resultCoordToBasicCoord</definition>
+        <argsstring>(T_TreeCoord const &amp;resultCoord, T_Tree const &amp;tree) const -&gt; T_TreeCoord</argsstring>
+        <name>resultCoordToBasicCoord</name>
+        <param>
+          <type>T_TreeCoord const &amp;</type>
+          <declname>resultCoord</declname>
+        </param>
+        <param>
+          <type>T_Tree const &amp;</type>
+          <declname>tree</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/MergeFunctors.hpp" line="238" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/MergeFunctors.hpp" bodystart="238" bodyend="245"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/MergeFunctors.hpp" line="205" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/MergeFunctors.hpp" bodystart="201" bodyend="246"/>
+    <listofallmembers>
+      <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl_3_01T__Tree_00_01Tuple_3_01_4_4_1afb7dfef27e5f3c6e3326255bf53e82de" prot="public" virt="non-virtual"><scope>llama::mapping::tree::internal::MergeFunctorsImpl&lt; T_Tree, Tuple&lt; &gt;&gt;</scope><name>basicCoordToResultCoord</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl_3_01T__Tree_00_01Tuple_3_01_4_4_1ae7326b81f75a3917312fed90708c2998" prot="public" virt="non-virtual"><scope>llama::mapping::tree::internal::MergeFunctorsImpl&lt; T_Tree, Tuple&lt; &gt;&gt;</scope><name>basicToResult</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl_3_01T__Tree_00_01Tuple_3_01_4_4_1a029edfea392873b675d38f22ec41f79d" prot="public" virt="non-virtual"><scope>llama::mapping::tree::internal::MergeFunctorsImpl&lt; T_Tree, Tuple&lt; &gt;&gt;</scope><name>MergeFunctorsImpl</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl_3_01T__Tree_00_01Tuple_3_01_4_4_1a7d1a3d561fc924dcd6a6d271efce33fd" prot="public" virt="non-virtual"><scope>llama::mapping::tree::internal::MergeFunctorsImpl&lt; T_Tree, Tuple&lt; &gt;&gt;</scope><name>Result</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl_3_01T__Tree_00_01Tuple_3_01_4_4_1a2f7160fd9e92a059c3b89cce2633899c" prot="public" virt="non-virtual"><scope>llama::mapping::tree::internal::MergeFunctorsImpl&lt; T_Tree, Tuple&lt; &gt;&gt;</scope><name>resultCoordToBasicCoord</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl_3_01T__Tree_00_01Tuple_3_01_4_4_1ad33d36d10f97b8807ee1389ff2660c84" prot="public" virt="non-virtual"><scope>llama::mapping::tree::internal::MergeFunctorsImpl&lt; T_Tree, Tuple&lt; &gt;&gt;</scope><name>TreeOperationList</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

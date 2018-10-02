@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1mapping_1_1tree_1_1Addition" kind="struct" language="C++" prot="public">
+    <compoundname>llama::mapping::tree::Addition</compoundname>
+    <includes refid="Operations_8hpp" local="no">Operations.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename Parameter1</type>
+      </param>
+      <param>
+        <type>typename Parameter2</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1Addition_1aeddefc668c8cf739135abe32f7690a76" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr auto</type>
+        <definition>static constexpr auto llama::mapping::tree::Addition&lt; Parameter1, Parameter2 &gt;::apply</definition>
+        <argsstring>(Parameter1 const p1, Parameter2 const p2) -&gt; decltype(p1+p2)</argsstring>
+        <name>apply</name>
+        <param>
+          <type>Parameter1 const</type>
+          <declname>p1</declname>
+        </param>
+        <param>
+          <type>Parameter2 const</type>
+          <declname>p2</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/Operations.hpp" line="41" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/Operations.hpp" bodystart="41" bodyend="48"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/Operations.hpp" line="37" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/Operations.hpp" bodystart="36" bodyend="49"/>
+    <listofallmembers>
+      <member refid="structllama_1_1mapping_1_1tree_1_1Addition_1aeddefc668c8cf739135abe32f7690a76" prot="public" virt="non-virtual"><scope>llama::mapping::tree::Addition</scope><name>apply</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

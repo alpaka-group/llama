@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1GetNode" kind="struct" language="C++" prot="public">
+    <compoundname>llama::mapping::tree::operations::internal::GetNode</compoundname>
+    <includes refid="GetNode_8hpp" local="no">GetNode.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_Tree</type>
+      </param>
+      <param>
+        <type>typename T_TreeCoord</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1GetNode_1a65b20cf4471a57acf1d7bb8f6903809e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto llama::mapping::tree::operations::internal::GetNode&lt; T_Tree, T_TreeCoord &gt;::operator()</definition>
+        <argsstring>(T_Tree const &amp;tree) const -&gt; decltype(GetNode&lt; GetTupleType&lt; typename T_Tree::Type, decltype(T_TreeCoord::FirstElement::compiletime)::value &gt;, typename T_TreeCoord::RestTuple &gt;()(getTupleElement&lt; decltype(T_TreeCoord::FirstElement::compiletime)::value &gt;(tree.childs)))</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>T_Tree const &amp;</type>
+          <declname>tree</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/operations/GetNode.hpp" line="46" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/operations/GetNode.hpp" bodystart="46" bodyend="72"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/operations/GetNode.hpp" line="43" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/operations/GetNode.hpp" bodystart="42" bodyend="73"/>
+    <listofallmembers>
+      <member refid="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1GetNode_1a65b20cf4471a57acf1d7bb8f6903809e" prot="public" virt="non-virtual"><scope>llama::mapping::tree::operations::internal::GetNode</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

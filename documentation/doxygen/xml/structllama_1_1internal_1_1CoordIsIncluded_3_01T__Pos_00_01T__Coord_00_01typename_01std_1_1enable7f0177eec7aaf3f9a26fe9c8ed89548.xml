@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1internal_1_1CoordIsIncluded_3_01T__Pos_00_01T__Coord_00_01typename_01std_1_1enable7f0177eec7aaf3f9a26fe9c8ed89548" kind="struct" language="C++" prot="public">
+    <compoundname>llama::internal::CoordIsIncluded&lt; T_Pos, T_Coord, typename std::enable_if&lt;(T_Pos::size&lt; T_Coord::size) &gt;::type &gt;</compoundname>
+    <includes refid="ForEach_8hpp" local="no">ForEach.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_Pos</type>
+      </param>
+      <param>
+        <type>typename T_Coord</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="structllama_1_1internal_1_1CoordIsIncluded_3_01T__Pos_00_01T__Coord_00_01typename_01std_1_1enable7f0177eec7aaf3f9a26fe9c8ed89548_1a2d5d6a51e0fb844b83a5ce93c0fa9001" prot="public" static="yes" mutable="no">
+        <type>constexpr bool</type>
+        <definition>constexpr bool llama::internal::enable_if&lt;(T_Pos::size&lt; T_Coord::size) &gt;::type &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/ForEach.hpp" line="49" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/ForEach.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/ForEach.hpp" line="48" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/ForEach.hpp" bodystart="43" bodyend="50"/>
+    <listofallmembers>
+      <member refid="structllama_1_1internal_1_1CoordIsIncluded_3_01T__Pos_00_01T__Coord_00_01typename_01std_1_1enable7f0177eec7aaf3f9a26fe9c8ed89548_1a2d5d6a51e0fb844b83a5ce93c0fa9001" prot="public" virt="non-virtual"><scope>llama::internal::CoordIsIncluded&lt; T_Pos, T_Coord, typename std::enable_if&lt;(T_Pos::size&lt; T_Coord::size) &gt;::type &gt;</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

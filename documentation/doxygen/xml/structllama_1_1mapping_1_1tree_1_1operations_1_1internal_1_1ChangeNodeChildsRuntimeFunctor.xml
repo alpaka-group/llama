@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntimeFunctor" kind="struct" language="C++" prot="public">
+    <compoundname>llama::mapping::tree::operations::internal::ChangeNodeChildsRuntimeFunctor</compoundname>
+    <includes refid="ChangeNodeRuntime_8hpp" local="no">ChangeNodeRuntime.hpp</includes>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntimeFunctor_1_1OperatorSpecialization" prot="public">llama::mapping::tree::operations::internal::ChangeNodeChildsRuntimeFunctor::OperatorSpecialization</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntimeFunctor_1_1Opb138e16406a10ffab62da47710117dd3" prot="public">llama::mapping::tree::operations::internal::ChangeNodeChildsRuntimeFunctor::OperatorSpecialization&lt; T_Element, typename T_Element::IsTreeElementWithChilds &gt;</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntimeFunctor_1_1Op899d53f87ff9b7118f098c51cf7a1432" prot="public">llama::mapping::tree::operations::internal::ChangeNodeChildsRuntimeFunctor::OperatorSpecialization&lt; T_Element, typename T_Element::IsTreeElementWithoutChilds &gt;</innerclass>
+    <templateparamlist>
+      <param>
+        <type>template&lt; class, class &gt; class</type>
+        <declname>T_Operation</declname>
+        <defname>T_Operation</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntimeFunctor_1ac49a03df0fb7d2920013e63eb9f20c41" prot="public" static="no" mutable="no">
+        <type>std::size_t const</type>
+        <definition>std::size_t const llama::mapping::tree::operations::internal::ChangeNodeChildsRuntimeFunctor&lt; T_Operation &gt;::newValue</definition>
+        <argsstring></argsstring>
+        <name>newValue</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/operations/ChangeNodeRuntime.hpp" line="292" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/operations/ChangeNodeRuntime.hpp" bodystart="292" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntimeFunctor_1a0be6566bfebf300e79842760a2d545eb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_Element</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto llama::mapping::tree::operations::internal::ChangeNodeChildsRuntimeFunctor&lt; T_Operation &gt;::operator()</definition>
+        <argsstring>(T_Element const element) const -&gt; decltype(OperatorSpecialization&lt; T_Element &gt;()(newValue, element))</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>T_Element const</type>
+          <declname>element</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/operations/ChangeNodeRuntime.hpp" line="368" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/operations/ChangeNodeRuntime.hpp" bodystart="368" bodyend="380"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/operations/ChangeNodeRuntime.hpp" line="291" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/operations/ChangeNodeRuntime.hpp" bodystart="290" bodyend="381"/>
+    <listofallmembers>
+      <member refid="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntimeFunctor_1ac49a03df0fb7d2920013e63eb9f20c41" prot="public" virt="non-virtual"><scope>llama::mapping::tree::operations::internal::ChangeNodeChildsRuntimeFunctor</scope><name>newValue</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntimeFunctor_1a0be6566bfebf300e79842760a2d545eb" prot="public" virt="non-virtual"><scope>llama::mapping::tree::operations::internal::ChangeNodeChildsRuntimeFunctor</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

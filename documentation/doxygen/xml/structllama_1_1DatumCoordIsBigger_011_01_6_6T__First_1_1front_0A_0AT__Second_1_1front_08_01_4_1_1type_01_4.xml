@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1DatumCoordIsBigger_011_01_6_6T__First_1_1front_0A_0AT__Second_1_1front_08_01_4_1_1type_01_4" kind="struct" language="C++" prot="public">
+    <compoundname>llama::DatumCoordIsBigger 1 &amp;&amp;T_First::front==T_Second::front) &gt;::type &gt;</compoundname>
+    <includes refid="DatumCoord_8hpp" local="no">DatumCoord.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_First</type>
+      </param>
+      <param>
+        <type>typename T_Second</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="structllama_1_1DatumCoordIsBigger_011_01_6_6T__First_1_1front_0A_0AT__Second_1_1front_08_01_4_1_1type_01_4_1a4a17a2790fb0cdbbde2a62d44d23915a" prot="public" static="yes" mutable="no">
+        <type>constexpr bool</type>
+        <definition>constexpr bool llama::DatumCoordIsBigger 1 &amp;&amp;T_First::front==T_Second::front) &gt;::type &gt;&lt; T_First, T_Second &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <initializer>= <ref refid="structllama_1_1DatumCoordIsBigger" kindref="compound">DatumCoordIsBigger</ref>&lt;
+        typename T_First::PopFront,
+        typename T_Second::PopFront
+    &gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" line="243" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" bodystart="243" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" line="242" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" bodystart="234" bodyend="247"/>
+    <listofallmembers>
+      <member refid="structllama_1_1DatumCoordIsBigger_011_01_6_6T__First_1_1front_0A_0AT__Second_1_1front_08_01_4_1_1type_01_4_1a4a17a2790fb0cdbbde2a62d44d23915a" prot="public" virt="non-virtual"><scope>llama::DatumCoordIsBigger 1 &amp;&amp;T_First::front==T_Second::front) &gt;::type &gt;</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

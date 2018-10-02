@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1ExtentUserDomainAdress" kind="struct" language="C++" prot="public">
+    <compoundname>llama::ExtentUserDomainAdress</compoundname>
+    <includes refid="UserDomain_8hpp" local="no">UserDomain.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>std::size_t</type>
+        <declname>T_dim</declname>
+        <defname>T_dim</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1ExtentUserDomainAdress_1a2b9b9973a86facf275e7782fbb92bb57" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto llama::ExtentUserDomainAdress&lt; T_dim &gt;::operator()</definition>
+        <argsstring>(UserDomain&lt; T_dim &gt; const &amp;size) const -&gt; std::size_t</argsstring>
+        <name>operator()</name>
+        <param>
+          <type><ref refid="namespacellama_1a03077c6597f96a84efe064fa64d81827" kindref="member">UserDomain</ref>&lt; T_dim &gt; const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>user domain </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>the calculated extent </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/UserDomain.hpp" line="37" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/UserDomain.hpp" bodystart="37" bodyend="42"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Functor that calculates the extent of a user domain. </para>    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/UserDomain.hpp" line="30" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/UserDomain.hpp" bodystart="29" bodyend="43"/>
+    <listofallmembers>
+      <member refid="structllama_1_1ExtentUserDomainAdress_1a2b9b9973a86facf275e7782fbb92bb57" prot="public" virt="non-virtual"><scope>llama::ExtentUserDomainAdress</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

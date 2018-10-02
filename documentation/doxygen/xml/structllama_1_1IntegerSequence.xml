@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1IntegerSequence" kind="struct" language="C++" prot="public">
+    <compoundname>llama::IntegerSequence</compoundname>
+    <includes refid="IntegerSequence_8hpp" local="no">IntegerSequence.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>std::size_t...</type>
+        <declname>T_seq</declname>
+        <defname>T_seq</defname>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/IntegerSequence.hpp" line="28" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/IntegerSequence.hpp" bodystart="28" bodyend="28"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

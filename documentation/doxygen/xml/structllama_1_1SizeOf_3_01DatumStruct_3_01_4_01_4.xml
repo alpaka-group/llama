@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1SizeOf_3_01DatumStruct_3_01_4_01_4" kind="struct" language="C++" prot="public">
+    <compoundname>llama::SizeOf&lt; DatumStruct&lt; &gt; &gt;</compoundname>
+    <includes refid="DatumStruct_8hpp" local="no">DatumStruct.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="structllama_1_1SizeOf_3_01DatumStruct_3_01_4_01_4_1af7727c33269d10a7757a8a0ac18cd9a2" prot="public" static="yes" mutable="no">
+        <type>constexpr std::size_t</type>
+        <definition>constexpr std::size_t llama::SizeOf&lt; DatumStruct&lt; &gt; &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="141" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="140" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="139" bodyend="142"/>
+    <listofallmembers>
+      <member refid="structllama_1_1SizeOf_3_01DatumStruct_3_01_4_01_4_1af7727c33269d10a7757a8a0ac18cd9a2" prot="public" virt="non-virtual"><scope>llama::SizeOf&lt; DatumStruct&lt; &gt; &gt;</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

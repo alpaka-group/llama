@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="namespacellama_1_1allocator_1_1internal" kind="namespace" language="C++">
+    <compoundname>llama::allocator::internal</compoundname>
+    <innerclass refid="structllama_1_1allocator_1_1internal_1_1AlignmentAllocator" prot="public">llama::allocator::internal::AlignmentAllocator</innerclass>
+    <innerclass refid="structllama_1_1allocator_1_1internal_1_1SharedPtrAccessor" prot="public">llama::allocator::internal::SharedPtrAccessor</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/allocator/SharedPtr.hpp" line="30" column="1"/>
+  </compounddef>
+</doxygen>

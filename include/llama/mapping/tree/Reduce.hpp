@@ -33,7 +33,7 @@ template<
 	typename T_Tree,
 	template< class, class > class T_InnerOp,
 	template< class, class > class T_OuterOp,
-	template< class, class > class T_LeaveFunctor,
+	template< class, class > class T_LeafFunctor,
 	typename T_SFINAE = void
 >
 struct Reduce;
@@ -41,12 +41,12 @@ struct Reduce;
 namespace internal
 {
 
-// Leave
+// Leaf
 template<
 	typename T_Tree,
 	template< class, class > class T_InnerOp,
 	template< class, class > class T_OuterOp,
-	template< class, class > class T_LeaveFunctor,
+	template< class, class > class T_LeafFunctor,
 	typename T_SFINAE = void
 >
 struct ReduceElementType
@@ -56,7 +56,7 @@ struct ReduceElementType
 	operator()( decltype( T_Tree::count ) const & count ) const
 	-> std::size_t
 	{
-		return T_LeaveFunctor<
+		return T_LeafFunctor<
 			typename T_Tree::Type,
 			decltype( T_Tree::count )
 		>()( count );
@@ -68,13 +68,13 @@ template<
 	typename T_Tree,
 	template< class, class > class T_InnerOp,
 	template< class, class > class T_OuterOp,
-	template< class, class > class T_LeaveFunctor
+	template< class, class > class T_LeafFunctor
 >
 struct ReduceElementType<
 	T_Tree,
 	T_InnerOp,
 	T_OuterOp,
-	T_LeaveFunctor,
+	T_LeafFunctor,
 	typename std::enable_if<
 		( TupleLength< typename T_Tree::Type >::value > 1 )
 	>::type
@@ -96,7 +96,7 @@ struct ReduceElementType<
 					typename T_Tree::Type::FirstElement,
 					T_InnerOp,
 					T_OuterOp,
-					T_LeaveFunctor
+					T_LeafFunctor
 				>()( childs.first )
 			),
 			decltype(
@@ -104,7 +104,7 @@ struct ReduceElementType<
 					IterTree,
 					T_InnerOp,
 					T_OuterOp,
-					T_LeaveFunctor
+					T_LeafFunctor
 				>()(
 					childs.rest,
 					count
@@ -115,13 +115,13 @@ struct ReduceElementType<
 				typename T_Tree::Type::FirstElement,
 				T_InnerOp,
 				T_OuterOp,
-				T_LeaveFunctor
+				T_LeafFunctor
 			>()( childs.first ),
 			internal::ReduceElementType<
 				IterTree,
 				T_InnerOp,
 				T_OuterOp,
-				T_LeaveFunctor
+				T_LeafFunctor
 			>()(
 				childs.rest,
 				count
@@ -135,13 +135,13 @@ template<
 	typename T_Tree,
 	template< class, class > class T_InnerOp,
 	template< class, class > class T_OuterOp,
-	template< class, class > class T_LeaveFunctor
+	template< class, class > class T_LeafFunctor
 >
 struct ReduceElementType<
 	T_Tree,
 	T_InnerOp,
 	T_OuterOp,
-	T_LeaveFunctor,
+	T_LeafFunctor,
 	typename std::enable_if<
 		TupleLength< typename T_Tree::Type >::value == 1
 	>::type
@@ -159,7 +159,7 @@ struct ReduceElementType<
 			typename T_Tree::Type::FirstElement,
 			T_InnerOp,
 			T_OuterOp,
-			T_LeaveFunctor
+			T_LeafFunctor
 		>()( childs.first );
 	}
 };
@@ -170,7 +170,7 @@ template<
 	typename T_Tree,
 	template< class, class > class T_InnerOp,
 	template< class, class > class T_OuterOp,
-	template< class, class > class T_LeaveFunctor,
+	template< class, class > class T_LeafFunctor,
 	typename T_SFINAE
 >
 struct Reduce
@@ -190,7 +190,7 @@ struct Reduce
 					T_Tree,
 					T_InnerOp,
 					T_OuterOp,
-					T_LeaveFunctor
+					T_LeafFunctor
 				>()(
 					childs,
 					count
@@ -202,7 +202,7 @@ struct Reduce
 				T_Tree,
 				T_InnerOp,
 				T_OuterOp,
-				T_LeaveFunctor
+				T_LeafFunctor
 			>()(
 				childs,
 				count
@@ -229,13 +229,13 @@ template<
 	typename T_Tree,
 	template< class, class > class T_InnerOp,
 	template< class, class > class T_OuterOp,
-	template< class, class > class T_LeaveFunctor
+	template< class, class > class T_LeafFunctor
 >
 struct Reduce<
 	T_Tree,
 	T_InnerOp,
 	T_OuterOp,
-	T_LeaveFunctor,
+	T_LeafFunctor,
 	typename T_Tree::IsTreeElementWithoutChilds
 >
 {
@@ -251,7 +251,7 @@ struct Reduce<
 					T_Tree,
 					T_InnerOp,
 					T_OuterOp,
-					T_LeaveFunctor
+					T_LeafFunctor
 				>()( count )
 			)
 		>::apply(
@@ -260,7 +260,7 @@ struct Reduce<
 				T_Tree,
 				T_InnerOp,
 				T_OuterOp,
-				T_LeaveFunctor
+				T_LeafFunctor
 			>()( count )
 		);
 	}

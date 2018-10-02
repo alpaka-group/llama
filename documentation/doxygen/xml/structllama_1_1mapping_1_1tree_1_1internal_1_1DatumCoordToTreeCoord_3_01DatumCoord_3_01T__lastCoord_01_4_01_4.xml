@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1mapping_1_1tree_1_1internal_1_1DatumCoordToTreeCoord_3_01DatumCoord_3_01T__lastCoord_01_4_01_4" kind="struct" language="C++" prot="public">
+    <compoundname>llama::mapping::tree::internal::DatumCoordToTreeCoord&lt; DatumCoord&lt; T_lastCoord &gt; &gt;</compoundname>
+    <includes refid="TreeFromDomains_8hpp" local="no">TreeFromDomains.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>std::size_t</type>
+        <declname>T_lastCoord</declname>
+        <defname>T_lastCoord</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structllama_1_1mapping_1_1tree_1_1internal_1_1DatumCoordToTreeCoord_3_01DatumCoord_3_01T__lastCoord_01_4_01_4_1a34aa94d08403eaea25bde180e17c861e" prot="public" static="no">
+        <type><ref refid="structllama_1_1Tuple" kindref="compound">Tuple</ref>&lt; <ref refid="namespacellama_1_1mapping_1_1tree_1a2004748dcc6a4f19c45572724bf16532" kindref="member">TreeCoordElementConst</ref>&lt; &gt; &gt;</type>
+        <definition>using llama::mapping::tree::internal::DatumCoordToTreeCoord&lt; DatumCoord&lt; T_lastCoord &gt; &gt;::type =  Tuple&lt; TreeCoordElementConst&lt; &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp" line="345" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp" bodystart="345" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp" line="344" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp" bodystart="343" bodyend="346"/>
+    <listofallmembers>
+      <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1DatumCoordToTreeCoord_3_01DatumCoord_3_01T__lastCoord_01_4_01_4_1a34aa94d08403eaea25bde180e17c861e" prot="public" virt="non-virtual"><scope>llama::mapping::tree::internal::DatumCoordToTreeCoord&lt; DatumCoord&lt; T_lastCoord &gt; &gt;</scope><name>type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

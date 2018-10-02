@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1mapping_1_1tree_1_1TreeElement_3_01T__Identifier_00_01T__Type_00_01std_1_1integrad76794eeebc34a3b631ae53ecd97fe27" kind="struct" language="C++" prot="public">
+    <compoundname>llama::mapping::tree::TreeElement&lt; T_Identifier, T_Type, std::integral_constant&lt; T_CountType, T_count &gt;&gt;</compoundname>
+    <includes refid="TreeElement_8hpp" local="no">TreeElement.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_Identifier</type>
+      </param>
+      <param>
+        <type>typename T_Type</type>
+      </param>
+      <param>
+        <type>typename T_CountType</type>
+      </param>
+      <param>
+        <type>T_CountType</type>
+        <declname>T_count</declname>
+        <defname>T_count</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structllama_1_1mapping_1_1tree_1_1TreeElement_3_01T__Identifier_00_01T__Type_00_01std_1_1integrad76794eeebc34a3b631ae53ecd97fe27_1a937e053402df0fb8e08c985826355325" prot="public" static="no">
+        <type>void</type>
+        <definition>using llama::mapping::tree::integral_constant&lt; T_CountType, T_count &gt;&gt;::IsTreeElementWithoutChilds =  void</definition>
+        <argsstring></argsstring>
+        <name>IsTreeElementWithoutChilds</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeElement.hpp" line="123" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeElement.hpp" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1mapping_1_1tree_1_1TreeElement_3_01T__Identifier_00_01T__Type_00_01std_1_1integrad76794eeebc34a3b631ae53ecd97fe27_1a17fec18ca6ec9b8410b79d7233b1ce1b" prot="public" static="no">
+        <type>T_Identifier</type>
+        <definition>using llama::mapping::tree::integral_constant&lt; T_CountType, T_count &gt;&gt;::Identifier =  T_Identifier</definition>
+        <argsstring></argsstring>
+        <name>Identifier</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeElement.hpp" line="124" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeElement.hpp" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1mapping_1_1tree_1_1TreeElement_3_01T__Identifier_00_01T__Type_00_01std_1_1integrad76794eeebc34a3b631ae53ecd97fe27_1a058773bdde93eb7a5264a9112efc0f17" prot="public" static="no">
+        <type>T_Type</type>
+        <definition>using llama::mapping::tree::integral_constant&lt; T_CountType, T_count &gt;&gt;::Type =  T_Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeElement.hpp" line="125" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeElement.hpp" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1mapping_1_1tree_1_1TreeElement_3_01T__Identifier_00_01T__Type_00_01std_1_1integrad76794eeebc34a3b631ae53ecd97fe27_1a2a4d07045c5e7e4d7232faba9a1c9588" prot="public" static="no">
+        <type>std::integral_constant&lt; T_CountType, T_count &gt;</type>
+        <definition>using llama::mapping::tree::integral_constant&lt; T_CountType, T_count &gt;&gt;::CountType =  std::integral_constant&lt; T_CountType, T_count&gt;</definition>
+        <argsstring></argsstring>
+        <name>CountType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeElement.hpp" line="126" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeElement.hpp" bodystart="126" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structllama_1_1mapping_1_1tree_1_1TreeElement_3_01T__Identifier_00_01T__Type_00_01std_1_1integrad76794eeebc34a3b631ae53ecd97fe27_1a7b944ac58ba449e91f91ef781fea6228" prot="public" static="no" mutable="no">
+        <type><ref refid="structllama_1_1mapping_1_1tree_1_1TreeElement_3_01T__Identifier_00_01T__Type_00_01std_1_1integrad76794eeebc34a3b631ae53ecd97fe27_1a2a4d07045c5e7e4d7232faba9a1c9588" kindref="member">CountType</ref> const</type>
+        <definition>CountType const llama::mapping::tree::integral_constant&lt; T_CountType, T_count &gt;&gt;::count</definition>
+        <argsstring></argsstring>
+        <name>count</name>
+        <initializer>= <ref refid="structllama_1_1mapping_1_1tree_1_1TreeElement_3_01T__Identifier_00_01T__Type_00_01std_1_1integrad76794eeebc34a3b631ae53ecd97fe27_1a2a4d07045c5e7e4d7232faba9a1c9588" kindref="member">CountType</ref>()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeElement.hpp" line="135" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeElement.hpp" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1TreeElement_3_01T__Identifier_00_01T__Type_00_01std_1_1integrad76794eeebc34a3b631ae53ecd97fe27_1a5babbcbbdce8a1a4182f8eefc7199e1c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>llama::mapping::tree::integral_constant&lt; T_CountType, T_count &gt;&gt;::TreeElement</definition>
+        <argsstring>()</argsstring>
+        <name>TreeElement</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeElement.hpp" line="129" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeElement.hpp" bodystart="129" bodyend="129"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1TreeElement_3_01T__Identifier_00_01T__Type_00_01std_1_1integrad76794eeebc34a3b631ae53ecd97fe27_1ada4ab9570094b522b4d78b1f50440f2e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>llama::mapping::tree::integral_constant&lt; T_CountType, T_count &gt;&gt;::TreeElement</definition>
+        <argsstring>(const T_CountType count)</argsstring>
+        <name>TreeElement</name>
+        <param>
+          <type>const T_CountType</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeElement.hpp" line="132" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeElement.hpp" bodystart="132" bodyend="132"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeElement.hpp" line="122" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeElement.hpp" bodystart="117" bodyend="136"/>
+    <listofallmembers>
+      <member refid="structllama_1_1mapping_1_1tree_1_1TreeElement_3_01T__Identifier_00_01T__Type_00_01std_1_1integrad76794eeebc34a3b631ae53ecd97fe27_1a7b944ac58ba449e91f91ef781fea6228" prot="public" virt="non-virtual"><scope>llama::mapping::tree::TreeElement&lt; T_Identifier, T_Type, std::integral_constant&lt; T_CountType, T_count &gt;&gt;</scope><name>count</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1TreeElement_3_01T__Identifier_00_01T__Type_00_01std_1_1integrad76794eeebc34a3b631ae53ecd97fe27_1a2a4d07045c5e7e4d7232faba9a1c9588" prot="public" virt="non-virtual"><scope>llama::mapping::tree::TreeElement&lt; T_Identifier, T_Type, std::integral_constant&lt; T_CountType, T_count &gt;&gt;</scope><name>CountType</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1TreeElement_3_01T__Identifier_00_01T__Type_00_01std_1_1integrad76794eeebc34a3b631ae53ecd97fe27_1a17fec18ca6ec9b8410b79d7233b1ce1b" prot="public" virt="non-virtual"><scope>llama::mapping::tree::TreeElement&lt; T_Identifier, T_Type, std::integral_constant&lt; T_CountType, T_count &gt;&gt;</scope><name>Identifier</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1TreeElement_3_01T__Identifier_00_01T__Type_00_01std_1_1integrad76794eeebc34a3b631ae53ecd97fe27_1a937e053402df0fb8e08c985826355325" prot="public" virt="non-virtual"><scope>llama::mapping::tree::TreeElement&lt; T_Identifier, T_Type, std::integral_constant&lt; T_CountType, T_count &gt;&gt;</scope><name>IsTreeElementWithoutChilds</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1TreeElement_3_01T__Identifier_00_01T__Type_00_01std_1_1integrad76794eeebc34a3b631ae53ecd97fe27_1a5babbcbbdce8a1a4182f8eefc7199e1c" prot="public" virt="non-virtual"><scope>llama::mapping::tree::TreeElement&lt; T_Identifier, T_Type, std::integral_constant&lt; T_CountType, T_count &gt;&gt;</scope><name>TreeElement</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1TreeElement_3_01T__Identifier_00_01T__Type_00_01std_1_1integrad76794eeebc34a3b631ae53ecd97fe27_1ada4ab9570094b522b4d78b1f50440f2e" prot="public" virt="non-virtual"><scope>llama::mapping::tree::TreeElement&lt; T_Identifier, T_Type, std::integral_constant&lt; T_CountType, T_count &gt;&gt;</scope><name>TreeElement</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1TreeElement_3_01T__Identifier_00_01T__Type_00_01std_1_1integrad76794eeebc34a3b631ae53ecd97fe27_1a058773bdde93eb7a5264a9112efc0f17" prot="public" virt="non-virtual"><scope>llama::mapping::tree::TreeElement&lt; T_Identifier, T_Type, std::integral_constant&lt; T_CountType, T_count &gt;&gt;</scope><name>Type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="namespacellama_1_1DatumCoordIsSame_011_01_6_6T__First_1_1front_01_9_0AT__Second_1_1front_08_01_4" kind="namespace" language="C++">
+    <compoundname>llama::DatumCoordIsSame 1 &amp;&amp;T_First::front !=T_Second::front) &gt;</compoundname>
+    <innerclass refid="structllama_1_1DatumCoordIsSame_011_01_6_6T__First_1_1front_01_9_0AT__Second_1_1front_08_01_4_1_1type_01_4" prot="public">llama::DatumCoordIsSame 1 &amp;&amp;T_First::front !=T_Second::front) &gt;::type &gt;</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="[generated]" line="1" column="1"/>
+  </compounddef>
+</doxygen>

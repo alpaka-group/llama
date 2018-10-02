@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord" kind="struct" language="C++" prot="public">
+    <compoundname>llama::mapping::tree::internal::UserDomainToTreeCoord</compoundname>
+    <includes refid="TreeFromDomains_8hpp" local="no">TreeFromDomains.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_UserDomain</type>
+      </param>
+      <param>
+        <type>std::size_t</type>
+        <declname>T_firstDatumDomain</declname>
+        <defname>T_firstDatumDomain</defname>
+      </param>
+      <param>
+        <type>typename T_pos</type>
+        <defval>std::integral_constant&lt;        std::size_t,        0    &gt;</defval>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord_1a8b7da0f25cb2c472958671d4f0e2aff4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto llama::mapping::tree::internal::UserDomainToTreeCoord&lt; T_UserDomain, T_firstDatumDomain, T_pos &gt;::operator()</definition>
+        <argsstring>(T_UserDomain const &amp;coord) const -&gt; decltype(tupleCat(Tuple&lt; TreeCoordElement&lt; 0 &gt; &gt;(), UserDomainToTreeCoord&lt; T_UserDomain, T_firstDatumDomain, std::integral_constant&lt; std::size_t, T_pos::value+1 &gt; &gt;()(coord)))</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>T_UserDomain const &amp;</type>
+          <declname>coord</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp" line="268" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp" bodystart="268" bodyend="301"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp" line="265" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp" bodystart="264" bodyend="302"/>
+    <listofallmembers>
+      <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord_1a8b7da0f25cb2c472958671d4f0e2aff4" prot="public" virt="non-virtual"><scope>llama::mapping::tree::internal::UserDomainToTreeCoord</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

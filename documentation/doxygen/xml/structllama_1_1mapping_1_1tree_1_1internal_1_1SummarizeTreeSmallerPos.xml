@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1mapping_1_1tree_1_1internal_1_1SummarizeTreeSmallerPos" kind="struct" language="C++" prot="public">
+    <compoundname>llama::mapping::tree::internal::SummarizeTreeSmallerPos</compoundname>
+    <includes refid="GetBlobByte_8hpp" local="no">GetBlobByte.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_Tree</type>
+      </param>
+      <param>
+        <type>std::size_t</type>
+        <declname>T_Pos</declname>
+        <defname>T_Pos</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structllama_1_1mapping_1_1tree_1_1internal_1_1SummarizeTreeSmallerPos_1af8956486be3d1d8e048fe34097fc2c90" prot="public" static="no">
+        <type>typename <ref refid="structllama_1_1mapping_1_1tree_1_1TreePopFrontChild" kindref="compound">TreePopFrontChild</ref>&lt; T_Tree &gt;::ResultType</type>
+        <definition>using llama::mapping::tree::internal::SummarizeTreeSmallerPos&lt; T_Tree, T_Pos &gt;::RestTree =  typename TreePopFrontChild&lt; T_Tree &gt;::ResultType</definition>
+        <argsstring></argsstring>
+        <name>RestTree</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobByte.hpp" line="42" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobByte.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1internal_1_1SummarizeTreeSmallerPos_1aa704079ea9754036bebac3be98f3bac1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto llama::mapping::tree::internal::SummarizeTreeSmallerPos&lt; T_Tree, T_Pos &gt;::operator()</definition>
+        <argsstring>(typename T_Tree::Type const &amp;childs, decltype(T_Tree::count) const &amp;count) const -&gt; std::size_t</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>typename T_Tree::Type const &amp;</type>
+          <declname>childs</declname>
+        </param>
+        <param>
+          <type>decltype(T_Tree::count) const &amp;</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobByte.hpp" line="45" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobByte.hpp" bodystart="45" bodyend="60"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobByte.hpp" line="41" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobByte.hpp" bodystart="40" bodyend="61"/>
+    <listofallmembers>
+      <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1SummarizeTreeSmallerPos_1aa704079ea9754036bebac3be98f3bac1" prot="public" virt="non-virtual"><scope>llama::mapping::tree::internal::SummarizeTreeSmallerPos</scope><name>operator()</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1SummarizeTreeSmallerPos_1af8956486be3d1d8e048fe34097fc2c90" prot="public" virt="non-virtual"><scope>llama::mapping::tree::internal::SummarizeTreeSmallerPos</scope><name>RestTree</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -75,7 +75,7 @@ int main(int argc,char * * argv)
             //~ userDomainSize * userDomainSize
         //~ >( )
 
-        llama::mapping::tree::functor::LeaveOnlyRT( )
+        llama::mapping::tree::functor::LeafOnlyRT( )
 
         ,llama::mapping::tree::functor::Idem()
     );

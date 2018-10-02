@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc" kind="dir">
+    <compoundname>/home/alexander/develop/work/llama/include/llama/mapping</compoundname>
+    <innerdir refid="dir_167d1c89d05e547509b1688d85c563df">/home/alexander/develop/work/llama/include/llama/mapping/tree</innerdir>
+    <innerfile refid="AoS_8hpp">AoS.hpp</innerfile>
+    <innerfile refid="Interface_8hpp">Interface.hpp</innerfile>
+    <innerfile refid="One_8hpp">One.hpp</innerfile>
+    <innerfile refid="SoA_8hpp">SoA.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/"/>
+  </compounddef>
+</doxygen>

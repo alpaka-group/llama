@@ -1,0 +1,288 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="TreeCoord_8hpp" kind="file" language="C++">
+    <compoundname>TreeCoord.hpp</compoundname>
+    <includes local="no">cstddef</includes>
+    <includes local="no">type_traits</includes>
+    <includes local="no">string</includes>
+    <includes refid="TreeElement_8hpp" local="yes">TreeElement.hpp</includes>
+    <includes refid="Tuple_8hpp" local="yes">../../Tuple.hpp</includes>
+    <includedby refid="TreeFromDomains_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp</includedby>
+    <incdepgraph>
+      <node id="474">
+        <label>boost/predef.h</label>
+      </node>
+      <node id="467">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeCoord.hpp</label>
+        <link refid="TreeCoord_8hpp"/>
+        <childnode refid="468" relation="include">
+        </childnode>
+        <childnode refid="469" relation="include">
+        </childnode>
+        <childnode refid="470" relation="include">
+        </childnode>
+        <childnode refid="471" relation="include">
+        </childnode>
+        <childnode refid="472" relation="include">
+        </childnode>
+      </node>
+      <node id="470">
+        <label>string</label>
+      </node>
+      <node id="471">
+        <label>TreeElement.hpp</label>
+        <link refid="TreeElement_8hpp"/>
+        <childnode refid="468" relation="include">
+        </childnode>
+        <childnode refid="469" relation="include">
+        </childnode>
+        <childnode refid="472" relation="include">
+        </childnode>
+      </node>
+      <node id="472">
+        <label>../../Tuple.hpp</label>
+        <link refid="Tuple_8hpp"/>
+        <childnode refid="473" relation="include">
+        </childnode>
+      </node>
+      <node id="468">
+        <label>cstddef</label>
+      </node>
+      <node id="473">
+        <label>preprocessor/macros.hpp</label>
+        <link refid="macros_8hpp"/>
+        <childnode refid="474" relation="include">
+        </childnode>
+      </node>
+      <node id="469">
+        <label>type_traits</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="478">
+        <label>/home/alexander/develop/work/llama/include/llama/llama.hpp</label>
+        <link refid="llama_8hpp"/>
+      </node>
+      <node id="476">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp</label>
+        <link refid="TreeFromDomains_8hpp"/>
+        <childnode refid="477" relation="include">
+        </childnode>
+      </node>
+      <node id="475">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeCoord.hpp</label>
+        <link refid="TreeCoord_8hpp"/>
+        <childnode refid="476" relation="include">
+        </childnode>
+      </node>
+      <node id="477">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/Mapping.hpp</label>
+        <link refid="Mapping_8hpp"/>
+        <childnode refid="478" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement" prot="public">llama::mapping::tree::TreeCoordElement</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629" prot="public">llama::mapping::tree::TreeCoordElement&lt; T_compiletime, std::integral_constant&lt; T_RuntimeType, T_runtime &gt;&gt;</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordFromCoords" prot="public">llama::mapping::tree::internal::TreeCoordFromCoords</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordFromCoords_3_01T__firstCoord_00_01T__coords_8_8_8_01_4" prot="public">llama::mapping::tree::internal::TreeCoordFromCoords&lt; T_firstCoord, T_coords... &gt;</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordFromCoords_3_01T__lastCoord_01_4" prot="public">llama::mapping::tree::internal::TreeCoordFromCoords&lt; T_lastCoord &gt;</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordFromCoords_3_01_4" prot="public">llama::mapping::tree::internal::TreeCoordFromCoords&lt; &gt;</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordToStringImpl" prot="public">llama::mapping::tree::internal::TreeCoordToStringImpl</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordToStringImpl_3_01Tuple_3_01T__LastTreeElement_01_4_01_4" prot="public">llama::mapping::tree::internal::TreeCoordToStringImpl&lt; Tuple&lt; T_LastTreeElement &gt; &gt;</innerclass>
+    <innernamespace refid="namespacellama">llama</innernamespace>
+    <innernamespace refid="namespacellama_1_1mapping">llama::mapping</innernamespace>
+    <innernamespace refid="namespacellama_1_1mapping_1_1tree">llama::mapping::tree</innernamespace>
+    <innernamespace refid="namespacellama_1_1mapping_1_1tree_1_1internal">llama::mapping::tree::internal</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*<sp/>Copyright<sp/>2018<sp/>Alexander<sp/>Matthes</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/>*<sp/>This<sp/>file<sp/>is<sp/>part<sp/>of<sp/>LLAMA.</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/>*<sp/>LLAMA<sp/>is<sp/>free<sp/>software:<sp/>you<sp/>can<sp/>redistribute<sp/>it<sp/>and/or<sp/>modify</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/>*<sp/>it<sp/>under<sp/>the<sp/>terms<sp/>of<sp/>the<sp/>GNU<sp/>Lesser<sp/>General<sp/>Public<sp/>License<sp/>as</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/>*<sp/>published<sp/>by<sp/>the<sp/>Free<sp/>Software<sp/>Foundation,<sp/>either<sp/>version<sp/>3<sp/>of<sp/>the</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/>*<sp/>License,<sp/>or<sp/>(at<sp/>your<sp/>option)<sp/>any<sp/>later<sp/>version.</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/>*<sp/>LLAMA<sp/>is<sp/>distributed<sp/>in<sp/>the<sp/>hope<sp/>that<sp/>it<sp/>will<sp/>be<sp/>useful,</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/>*<sp/>but<sp/>WITHOUT<sp/>ANY<sp/>WARRANTY;<sp/>without<sp/>even<sp/>the<sp/>implied<sp/>warranty<sp/>of</highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/>*<sp/>MERCHANTABILITY<sp/>or<sp/>FITNESS<sp/>FOR<sp/>A<sp/>PARTICULAR<sp/>PURPOSE.<sp/><sp/>See<sp/>the</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/>*<sp/>GNU<sp/>Lesser<sp/>General<sp/>Public<sp/>License<sp/>for<sp/>more<sp/>details.</highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="15"><highlight class="comment"><sp/>*<sp/>You<sp/>should<sp/>have<sp/>received<sp/>a<sp/>copy<sp/>of<sp/>the<sp/>GNU<sp/>Lesser<sp/>General<sp/>Public</highlight></codeline>
+<codeline lineno="16"><highlight class="comment"><sp/>*<sp/>License<sp/>along<sp/>with<sp/>LLAMA.<sp/><sp/>If<sp/>not,<sp/>see<sp/>&lt;www.gnu.org/licenses/&gt;.</highlight></codeline>
+<codeline lineno="17"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstddef&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;type_traits&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;string&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="TreeElement_8hpp" kindref="compound">TreeElement.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;../../Tuple.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacellama" kindref="compound">llama</ref></highlight></codeline>
+<codeline lineno="29"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">mapping</highlight></codeline>
+<codeline lineno="32"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">tree</highlight></codeline>
+<codeline lineno="35"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/>std::size_t<sp/>T_compiletime<sp/>=<sp/>0,</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_RuntimeType<sp/>=<sp/>std::size_t</highlight></codeline>
+<codeline lineno="40"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="41" refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement" kindref="compound">TreeCoordElement</ref></highlight></codeline>
+<codeline lineno="42"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="43" refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_1a4d8d1fac6727f10554aa671bf5f59ea9" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_1a4d8d1fac6727f10554aa671bf5f59ea9" kindref="member">CompileType</ref><sp/>=<sp/>std::integral_constant&lt;<sp/>std::size_t,<sp/>T_compiletime<sp/>&gt;;</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1a100b24418a95976a001b8fac8a676b02" kindref="member">LLAMA_IF_RELEASE</ref>(<sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/>)<sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_1a4d8d1fac6727f10554aa671bf5f59ea9" kindref="member">CompileType</ref></highlight></codeline>
+<codeline lineno="46" refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_1acd1c6825dcc171a32e77b7dc75ffa9f8" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1ac5ebc32ab3b77b2abc6cc3f8c612b702" kindref="member">LLAMA_IF_DEBUG</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>)<sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_1acd1c6825dcc171a32e77b7dc75ffa9f8" kindref="member">compiletime</ref><sp/>=<sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_1a4d8d1fac6727f10554aa671bf5f59ea9" kindref="member">CompileType</ref>();</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight></codeline>
+<codeline lineno="48" refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_1a4dd4976ef63862f490115c26cf3588d7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>T_RuntimeType<sp/>const<sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_1a4dd4976ef63862f490115c26cf3588d7" kindref="member">runtime</ref>;</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="51" refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_1a12c91b3338fa1ac105fd1aa245f9a092" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement" kindref="compound">TreeCoordElement</ref>()<sp/>:<sp/>runtime(<sp/>0<sp/>)<sp/>{}</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="54" refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_1a8c501abee7fedef1a821b92def4272c9" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_1a8c501abee7fedef1a821b92def4272c9" kindref="member">TreeCoordElement</ref>(<sp/>T_RuntimeType<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_1a4dd4976ef63862f490115c26cf3588d7" kindref="member">runtime</ref><sp/>)<sp/>:<sp/>runtime(<sp/>runtime<sp/>)<sp/>{}</highlight></codeline>
+<codeline lineno="55"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/>std::size_t<sp/>T_compiletime,</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_RuntimeType,</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/>T_RuntimeType<sp/>T_runtime</highlight></codeline>
+<codeline lineno="61"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="62" refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement" kindref="compound">TreeCoordElement</ref>&lt;</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/>T_compiletime,</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacestd" kindref="compound">std</ref>::integral_constant&lt;<sp/>T_RuntimeType,<sp/>T_runtime<sp/>&gt;</highlight></codeline>
+<codeline lineno="65"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="66"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="67" refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1aa6f04ca2d0a785016564462de5d14988" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1aa6f04ca2d0a785016564462de5d14988" kindref="member">RuntimeType</ref><sp/>=<sp/>std::integral_constant&lt;<sp/>T_RuntimeType,<sp/>T_runtime<sp/>&gt;;</highlight></codeline>
+<codeline lineno="68" refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1abeec71430aa53f660565a93fb0670fa6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1abeec71430aa53f660565a93fb0670fa6" kindref="member">CompileType</ref><sp/>=<sp/>std::integral_constant&lt;<sp/>std::size_t,<sp/>T_compiletime<sp/>&gt;;</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1a100b24418a95976a001b8fac8a676b02" kindref="member">LLAMA_IF_RELEASE</ref>(<sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/>)<sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1abeec71430aa53f660565a93fb0670fa6" kindref="member">CompileType</ref></highlight></codeline>
+<codeline lineno="71" refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1ac6c7f358d2bf4d708ebb990e45a81cf5" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1ac5ebc32ab3b77b2abc6cc3f8c612b702" kindref="member">LLAMA_IF_DEBUG</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>)<sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_1acd1c6825dcc171a32e77b7dc75ffa9f8" kindref="member">compiletime</ref><sp/>=<sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1abeec71430aa53f660565a93fb0670fa6" kindref="member">CompileType</ref>();</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1a100b24418a95976a001b8fac8a676b02" kindref="member">LLAMA_IF_RELEASE</ref>(<sp/>static<sp/>constexpr<sp/>)<sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1aa6f04ca2d0a785016564462de5d14988" kindref="member">RuntimeType</ref></highlight></codeline>
+<codeline lineno="74" refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1ae496b81860674eff72e7f9a0f6cc2547" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1ac5ebc32ab3b77b2abc6cc3f8c612b702" kindref="member">LLAMA_IF_DEBUG</ref>(<sp/>const<sp/>)<sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_1a4dd4976ef63862f490115c26cf3588d7" kindref="member">runtime</ref><sp/>=<sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1aa6f04ca2d0a785016564462de5d14988" kindref="member">RuntimeType</ref>();</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement" kindref="compound">TreeCoordElement</ref>()<sp/>=<sp/>default;</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"></highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="80" refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1a151e7f377b4b0c44f93b2dd7477ba8d5" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement" kindref="compound">TreeCoordElement</ref>(<sp/>RuntimeType<sp/>const<sp/>)<sp/>{}</highlight></codeline>
+<codeline lineno="81"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"></highlight></codeline>
+<codeline lineno="83"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/>std::size_t<sp/>T_compiletime<sp/>=<sp/>0,</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/>std::size_t<sp/>T_runtime<sp/>=<sp/>0</highlight></codeline>
+<codeline lineno="86"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement" kindref="compound">TreeCoordElementConst</ref><sp/>=<sp/><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement" kindref="compound">TreeCoordElement</ref>&lt;</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/>T_compiletime,</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/>std::integral_constant&lt;<sp/>std::size_t,<sp/>T_runtime<sp/>&gt;</highlight></codeline>
+<codeline lineno="90" refid="namespacellama_1_1mapping_1_1tree_1a2004748dcc6a4f19c45572724bf16532" refkind="member"><highlight class="normal">&gt;;</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"></highlight></codeline>
+<codeline lineno="92"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">internal</highlight></codeline>
+<codeline lineno="93"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"></highlight></codeline>
+<codeline lineno="95"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/>std::size_t...<sp/>T_coords<sp/>&gt;</highlight></codeline>
+<codeline lineno="96" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordFromCoords" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordFromCoords" kindref="compound">TreeCoordFromCoords</ref>;</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"></highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/>std::size_t<sp/>T_firstCoord,</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/>std::size_t...<sp/>T_coords</highlight></codeline>
+<codeline lineno="101"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="102" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordFromCoords_3_01T__firstCoord_00_01T__coords_8_8_8_01_4" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordFromCoords" kindref="compound">TreeCoordFromCoords</ref>&lt;</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/>T_firstCoord,</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/>T_coords...</highlight></codeline>
+<codeline lineno="105"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="106"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordFromCoords_3_01T__firstCoord_00_01T__coords_8_8_8_01_4_1a847e509ba1157ae892b82f9f5bee89a9" kindref="member">type</ref><sp/>=<sp/><ref refid="namespacellama_1aaa44c7e572053a067b323bd05d8dc013" kindref="member">TupleCatType</ref>&lt;</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1Tuple" kindref="compound">Tuple&lt; TreeCoordElementConst&lt; T_firstCoord &gt;</ref><sp/>&gt;,</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordFromCoords" kindref="compound">TreeCoordFromCoords</ref>&lt;<sp/>T_coords...&gt;<ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordFromCoords_3_01T__firstCoord_00_01T__coords_8_8_8_01_4_1a847e509ba1157ae892b82f9f5bee89a9" kindref="member">::type</ref></highlight></codeline>
+<codeline lineno="110" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordFromCoords_3_01T__firstCoord_00_01T__coords_8_8_8_01_4_1a847e509ba1157ae892b82f9f5bee89a9" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;;</highlight></codeline>
+<codeline lineno="111"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"></highlight></codeline>
+<codeline lineno="113"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/>std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>T_lastCoord<sp/>&gt;</highlight></codeline>
+<codeline lineno="114" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordFromCoords_3_01T__lastCoord_01_4" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordFromCoords" kindref="compound">TreeCoordFromCoords</ref>&lt;<sp/>T_lastCoord<sp/>&gt;</highlight></codeline>
+<codeline lineno="115"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="116" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordFromCoords_3_01T__lastCoord_01_4_1ad524664aa72e9bd21202de53f9176417" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1Tuple" kindref="compound">type</ref><sp/>=<sp/><ref refid="structllama_1_1Tuple" kindref="compound">Tuple&lt; TreeCoordElementConst&lt; T_lastCoord &gt;</ref><sp/>&gt;;</highlight></codeline>
+<codeline lineno="117"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"></highlight></codeline>
+<codeline lineno="119"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/>&gt;</highlight></codeline>
+<codeline lineno="120" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordFromCoords_3_01_4" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordFromCoords" kindref="compound">TreeCoordFromCoords</ref>&lt;<sp/>&gt;</highlight></codeline>
+<codeline lineno="121"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="122" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordFromCoords_3_01_4_1a3250f747f897776ddbdf0566235b9d76" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1Tuple_3_01_4" kindref="compound">type</ref><sp/>=<sp/><ref refid="structllama_1_1Tuple_3_01_4" kindref="compound">Tuple&lt; &gt;</ref>;</highlight></codeline>
+<codeline lineno="123"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>internal</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="126"><highlight class="normal"></highlight></codeline>
+<codeline lineno="127"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/>std::size_t...<sp/>T_coords<sp/>&gt;</highlight></codeline>
+<codeline lineno="128" refid="namespacellama_1_1mapping_1_1tree_1a0669b94ded40c60d0b30a824002fc200" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1_1mapping_1_1tree_1a0669b94ded40c60d0b30a824002fc200" kindref="member">TreeCoord</ref><sp/>=<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordFromCoords" kindref="compound">internal::TreeCoordFromCoords</ref>&lt;<sp/>T_coords...<sp/>&gt;::type;</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"></highlight></codeline>
+<codeline lineno="130"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">internal</highlight></codeline>
+<codeline lineno="131"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"></highlight></codeline>
+<codeline lineno="133"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_TreeCoord<sp/>&gt;</highlight></codeline>
+<codeline lineno="134" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordToStringImpl" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordToStringImpl" kindref="compound">TreeCoordToStringImpl</ref></highlight></codeline>
+<codeline lineno="135"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="137" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordToStringImpl_1a317739427c0124499181f113fa4fea3a" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordToStringImpl_1a317739427c0124499181f113fa4fea3a" kindref="member">operator()</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>T_TreeCoord<sp/>treeCoord<sp/>)</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/>std::string</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::to_string(<sp/>treeCoord.first.runtime<sp/>)<sp/>+</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::string(<sp/></highlight><highlight class="stringliteral">&quot;:&quot;</highlight><highlight class="normal"><sp/>)<sp/>+</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::to_string(<sp/>treeCoord.first.compiletime<sp/>)<sp/>+</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::string(<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal"><sp/>)<sp/>+</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordToStringImpl" kindref="compound">TreeCoordToStringImpl&lt; typename T_TreeCoord::RestTuple &gt;</ref>()</highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(<sp/>treeCoord.rest<sp/>);</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="148"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="149"><highlight class="normal"></highlight></codeline>
+<codeline lineno="150"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_LastTreeElement<sp/>&gt;</highlight></codeline>
+<codeline lineno="151" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordToStringImpl_3_01Tuple_3_01T__LastTreeElement_01_4_01_4" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordToStringImpl" kindref="compound">TreeCoordToStringImpl</ref>&lt;<sp/><ref refid="structllama_1_1Tuple" kindref="compound">Tuple</ref>&lt;<sp/>T_LastTreeElement<sp/>&gt;<sp/>&gt;</highlight></codeline>
+<codeline lineno="152"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="154" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordToStringImpl_3_01Tuple_3_01T__LastTreeElement_01_4_01_4_1a3962ecade3830609bb5b693d9296fb9a" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordToStringImpl_3_01Tuple_3_01T__LastTreeElement_01_4_01_4_1a3962ecade3830609bb5b693d9296fb9a" kindref="member">operator()</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1Tuple" kindref="compound">Tuple&lt; T_LastTreeElement &gt;</ref><sp/>treeCoord<sp/>)</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/>std::string</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::to_string(<sp/>treeCoord.first.runtime<sp/>)<sp/>+</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::string(<sp/></highlight><highlight class="stringliteral">&quot;:&quot;</highlight><highlight class="normal"><sp/>)<sp/>+</highlight></codeline>
+<codeline lineno="160"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::to_string(<sp/>treeCoord.first.compiletime<sp/>);</highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="162"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="163"><highlight class="normal"></highlight></codeline>
+<codeline lineno="164"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>internal;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="165"><highlight class="normal"></highlight></codeline>
+<codeline lineno="166"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_TreeCoord<sp/>&gt;</highlight></codeline>
+<codeline lineno="167"><highlight class="normal"></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="168" refid="namespacellama_1_1mapping_1_1tree_1a45079949cfd7d370acea280b1b04159f" refkind="member"><highlight class="normal"><ref refid="namespacellama_1_1mapping_1_1tree_1a45079949cfd7d370acea280b1b04159f" kindref="member">treeCoordToString</ref>(<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>T_TreeCoord<sp/>treeCoord<sp/>)</highlight></codeline>
+<codeline lineno="169"><highlight class="normal">-&gt;<sp/>std::string</highlight></codeline>
+<codeline lineno="170"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="171"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="172"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::string(<sp/></highlight><highlight class="stringliteral">&quot;[<sp/>&quot;</highlight><highlight class="normal"><sp/>)<sp/>+</highlight></codeline>
+<codeline lineno="173"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordToStringImpl" kindref="compound">internal::TreeCoordToStringImpl&lt; T_TreeCoord &gt;</ref>()(<sp/>treeCoord<sp/>)<sp/>+</highlight></codeline>
+<codeline lineno="174"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::string(<sp/></highlight><highlight class="stringliteral">&quot;<sp/>]&quot;</highlight><highlight class="normal"><sp/>);</highlight></codeline>
+<codeline lineno="175"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="176"><highlight class="normal"></highlight></codeline>
+<codeline lineno="177"><highlight class="normal"></highlight></codeline>
+<codeline lineno="178"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>tree</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="179"><highlight class="normal"></highlight></codeline>
+<codeline lineno="180"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>mapping</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="181"><highlight class="normal"></highlight></codeline>
+<codeline lineno="182"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>llama</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="183"><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeCoord.hpp"/>
+  </compounddef>
+</doxygen>

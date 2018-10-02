@@ -190,7 +190,7 @@ struct UpdateKernel
 
 #if NBODY_USE_SHARED_TREE == 1
         auto treeOperationList = llama::makeTuple(
-            llama::mapping::tree::functor::LeaveOnlyRT( )
+            llama::mapping::tree::functor::LeafOnlyRT( )
         );
         using SharedMapping = llama::mapping::tree::Mapping<
             typename decltype(particles)::Mapping::UserDomain,
@@ -406,7 +406,7 @@ int main(int argc,char * * argv)
 
 #if NBODY_USE_TREE == 1
     auto treeOperationList = llama::makeTuple(
-        llama::mapping::tree::functor::LeaveOnlyRT( )
+        llama::mapping::tree::functor::LeafOnlyRT( )
     );
     using Mapping = llama::mapping::tree::Mapping<
         UserDomain,

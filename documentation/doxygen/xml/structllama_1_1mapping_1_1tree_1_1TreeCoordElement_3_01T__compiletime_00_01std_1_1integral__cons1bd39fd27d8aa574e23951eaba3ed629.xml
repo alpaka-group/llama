@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629" kind="struct" language="C++" prot="public">
+    <compoundname>llama::mapping::tree::TreeCoordElement&lt; T_compiletime, std::integral_constant&lt; T_RuntimeType, T_runtime &gt;&gt;</compoundname>
+    <includes refid="TreeCoord_8hpp" local="no">TreeCoord.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>std::size_t</type>
+        <declname>T_compiletime</declname>
+        <defname>T_compiletime</defname>
+      </param>
+      <param>
+        <type>typename T_RuntimeType</type>
+      </param>
+      <param>
+        <type>T_RuntimeType</type>
+        <declname>T_runtime</declname>
+        <defname>T_runtime</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1aa6f04ca2d0a785016564462de5d14988" prot="public" static="no">
+        <type>std::integral_constant&lt; T_RuntimeType, T_runtime &gt;</type>
+        <definition>using llama::mapping::tree::integral_constant&lt; T_RuntimeType, T_runtime &gt;&gt;::RuntimeType =  std::integral_constant&lt; T_RuntimeType, T_runtime &gt;</definition>
+        <argsstring></argsstring>
+        <name>RuntimeType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeCoord.hpp" line="67" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeCoord.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1abeec71430aa53f660565a93fb0670fa6" prot="public" static="no">
+        <type>std::integral_constant&lt; std::size_t, T_compiletime &gt;</type>
+        <definition>using llama::mapping::tree::integral_constant&lt; T_RuntimeType, T_runtime &gt;&gt;::CompileType =  std::integral_constant&lt; std::size_t, T_compiletime &gt;</definition>
+        <argsstring></argsstring>
+        <name>CompileType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeCoord.hpp" line="68" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeCoord.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1ac6c7f358d2bf4d708ebb990e45a81cf5" prot="public" static="no" mutable="no">
+        <type><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1abeec71430aa53f660565a93fb0670fa6" kindref="member">CompileType</ref> const</type>
+        <definition>CompileType const llama::mapping::tree::integral_constant&lt; T_RuntimeType, T_runtime &gt;&gt;::compiletime</definition>
+        <argsstring></argsstring>
+        <name>compiletime</name>
+        <initializer>= <ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1abeec71430aa53f660565a93fb0670fa6" kindref="member">CompileType</ref>()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeCoord.hpp" line="71" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeCoord.hpp" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1ae496b81860674eff72e7f9a0f6cc2547" prot="public" static="no" mutable="no">
+        <type><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1aa6f04ca2d0a785016564462de5d14988" kindref="member">RuntimeType</ref> const</type>
+        <definition>RuntimeType const llama::mapping::tree::integral_constant&lt; T_RuntimeType, T_runtime &gt;&gt;::runtime</definition>
+        <argsstring></argsstring>
+        <name>runtime</name>
+        <initializer>= <ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1aa6f04ca2d0a785016564462de5d14988" kindref="member">RuntimeType</ref>()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeCoord.hpp" line="74" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeCoord.hpp" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1a6b0453c02a1689298a95456b8cc7eae9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>llama::mapping::tree::integral_constant&lt; T_RuntimeType, T_runtime &gt;&gt;::TreeCoordElement</definition>
+        <argsstring>()=default</argsstring>
+        <name>TreeCoordElement</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeCoord.hpp" line="77" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1a151e7f377b4b0c44f93b2dd7477ba8d5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>llama::mapping::tree::integral_constant&lt; T_RuntimeType, T_runtime &gt;&gt;::TreeCoordElement</definition>
+        <argsstring>(RuntimeType const)</argsstring>
+        <name>TreeCoordElement</name>
+        <param>
+          <type><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1aa6f04ca2d0a785016564462de5d14988" kindref="member">RuntimeType</ref></type>
+          <declname>const</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeCoord.hpp" line="80" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeCoord.hpp" bodystart="80" bodyend="80"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeCoord.hpp" line="66" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeCoord.hpp" bodystart="62" bodyend="81"/>
+    <listofallmembers>
+      <member refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1ac6c7f358d2bf4d708ebb990e45a81cf5" prot="public" virt="non-virtual"><scope>llama::mapping::tree::TreeCoordElement&lt; T_compiletime, std::integral_constant&lt; T_RuntimeType, T_runtime &gt;&gt;</scope><name>compiletime</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1abeec71430aa53f660565a93fb0670fa6" prot="public" virt="non-virtual"><scope>llama::mapping::tree::TreeCoordElement&lt; T_compiletime, std::integral_constant&lt; T_RuntimeType, T_runtime &gt;&gt;</scope><name>CompileType</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1ae496b81860674eff72e7f9a0f6cc2547" prot="public" virt="non-virtual"><scope>llama::mapping::tree::TreeCoordElement&lt; T_compiletime, std::integral_constant&lt; T_RuntimeType, T_runtime &gt;&gt;</scope><name>runtime</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1aa6f04ca2d0a785016564462de5d14988" prot="public" virt="non-virtual"><scope>llama::mapping::tree::TreeCoordElement&lt; T_compiletime, std::integral_constant&lt; T_RuntimeType, T_runtime &gt;&gt;</scope><name>RuntimeType</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1a6b0453c02a1689298a95456b8cc7eae9" prot="public" virt="non-virtual"><scope>llama::mapping::tree::TreeCoordElement&lt; T_compiletime, std::integral_constant&lt; T_RuntimeType, T_runtime &gt;&gt;</scope><name>TreeCoordElement</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement_3_01T__compiletime_00_01std_1_1integral__cons1bd39fd27d8aa574e23951eaba3ed629_1a151e7f377b4b0c44f93b2dd7477ba8d5" prot="public" virt="non-virtual"><scope>llama::mapping::tree::TreeCoordElement&lt; T_compiletime, std::integral_constant&lt; T_RuntimeType, T_runtime &gt;&gt;</scope><name>TreeCoordElement</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

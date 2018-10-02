@@ -33,7 +33,7 @@ namespace tree
 namespace functor
 {
 
-struct LeaveOnlyRT
+struct LeafOnlyRT
 {
     template<
         typename T_Tree,

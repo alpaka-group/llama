@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1DatumCoord_3_01_4" kind="struct" language="C++" prot="public">
+    <compoundname>llama::DatumCoord&lt; &gt;</compoundname>
+    <includes refid="DatumCoord_8hpp" local="no">DatumCoord.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structllama_1_1DatumCoord_3_01_4_1a562d2042a586b7a5708dd9e23ab9a0af" prot="public" static="no">
+        <type><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>&lt; &gt;</type>
+        <definition>using llama::DatumCoord&lt; &gt;::type =  DatumCoord&lt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" line="193" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" bodystart="193" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1DatumCoord_3_01_4_1ae82345e1f93409767fb5990d9a18e4a7" prot="public" static="no">
+        <type><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>&lt; 1 &gt;</type>
+        <definition>using llama::DatumCoord&lt; &gt;::IncBack =  DatumCoord&lt; 1 &gt;</definition>
+        <argsstring></argsstring>
+        <name>IncBack</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" line="195" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" bodystart="195" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1DatumCoord_3_01_4_1a364f558508bf8885473974fa97505e95" prot="public" static="no">
+        <type><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>&lt; T_newCoord &gt;</type>
+        <definition>using llama::DatumCoord&lt; &gt;::PushFront =  DatumCoord&lt; T_newCoord &gt;</definition>
+        <argsstring></argsstring>
+        <name>PushFront</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" line="197" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" bodystart="197" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1DatumCoord_3_01_4_1ac336d5091a9dffa3d679b23864ed970a" prot="public" static="no">
+        <type><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>&lt; T_newCoord &gt;</type>
+        <definition>using llama::DatumCoord&lt; &gt;::PushBack =  DatumCoord&lt; T_newCoord &gt;</definition>
+        <argsstring></argsstring>
+        <name>PushBack</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" line="199" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" bodystart="199" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1DatumCoord_3_01_4_1af83405e1ec7859a824ec4817a8a58c6d" prot="public" static="no">
+        <type><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>&lt; &gt;</type>
+        <definition>using llama::DatumCoord&lt; &gt;::Front =  DatumCoord&lt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>Front</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" line="201" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" bodystart="201" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1DatumCoord_3_01_4_1ae4a039261ecf866e3fcb269c4261d799" prot="public" static="no">
+        <type><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>&lt; &gt;</type>
+        <definition>using llama::DatumCoord&lt; &gt;::Back =  DatumCoord&lt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>Back</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" line="203" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" bodystart="203" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1DatumCoord_3_01_4_1a3543596fa79b857092917bf1a7ba9a5f" prot="public" static="no">
+        <type>T_Other</type>
+        <definition>using llama::DatumCoord&lt; &gt;::Cat =  T_Other</definition>
+        <argsstring></argsstring>
+        <name>Cat</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" line="205" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" bodystart="205" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="structllama_1_1DatumCoord_3_01_4_1a79bf5babc5025634ea5ee8fd772fa5d0" prot="public" static="yes" mutable="no">
+        <type>constexpr std::size_t</type>
+        <definition>constexpr std::size_t llama::DatumCoord&lt; &gt;::size</definition>
+        <argsstring></argsstring>
+        <name>size</name>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" line="194" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" bodystart="194" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" line="192" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" bodystart="191" bodyend="206"/>
+    <listofallmembers>
+      <member refid="structllama_1_1DatumCoord_3_01_4_1ae4a039261ecf866e3fcb269c4261d799" prot="public" virt="non-virtual"><scope>llama::DatumCoord&lt; &gt;</scope><name>Back</name></member>
+      <member refid="structllama_1_1DatumCoord_3_01_4_1a3543596fa79b857092917bf1a7ba9a5f" prot="public" virt="non-virtual"><scope>llama::DatumCoord&lt; &gt;</scope><name>Cat</name></member>
+      <member refid="structllama_1_1DatumCoord_3_01_4_1af83405e1ec7859a824ec4817a8a58c6d" prot="public" virt="non-virtual"><scope>llama::DatumCoord&lt; &gt;</scope><name>Front</name></member>
+      <member refid="structllama_1_1DatumCoord_3_01_4_1ae82345e1f93409767fb5990d9a18e4a7" prot="public" virt="non-virtual"><scope>llama::DatumCoord&lt; &gt;</scope><name>IncBack</name></member>
+      <member refid="structllama_1_1DatumCoord_3_01_4_1ac336d5091a9dffa3d679b23864ed970a" prot="public" virt="non-virtual"><scope>llama::DatumCoord&lt; &gt;</scope><name>PushBack</name></member>
+      <member refid="structllama_1_1DatumCoord_3_01_4_1a364f558508bf8885473974fa97505e95" prot="public" virt="non-virtual"><scope>llama::DatumCoord&lt; &gt;</scope><name>PushFront</name></member>
+      <member refid="structllama_1_1DatumCoord_3_01_4_1a79bf5babc5025634ea5ee8fd772fa5d0" prot="public" virt="non-virtual"><scope>llama::DatumCoord&lt; &gt;</scope><name>size</name></member>
+      <member refid="structllama_1_1DatumCoord_3_01_4_1a562d2042a586b7a5708dd9e23ab9a0af" prot="public" virt="non-virtual"><scope>llama::DatumCoord&lt; &gt;</scope><name>type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

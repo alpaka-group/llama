@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4" kind="struct" language="C++" prot="public">
+    <compoundname>llama::Tuple&lt; T_FirstElement, T_Elements... &gt;</compoundname>
+    <includes refid="Tuple_8hpp" local="no">Tuple.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_FirstElement</type>
+      </param>
+      <param>
+        <type>typename...</type>
+        <declname>T_Elements</declname>
+        <defname>T_Elements</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a4e20dd2456d00722405d95e561a066ca" prot="public" static="no">
+        <type>T_FirstElement</type>
+        <definition>using llama::Tuple&lt; T_FirstElement, T_Elements... &gt;::FirstElement =  T_FirstElement</definition>
+        <argsstring></argsstring>
+        <name>FirstElement</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="41" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a6c635cd5818f0ea11bd58750e6c28208" prot="public" static="no">
+        <type><ref refid="structllama_1_1Tuple" kindref="compound">Tuple</ref>&lt; T_Elements... &gt;</type>
+        <definition>using llama::Tuple&lt; T_FirstElement, T_Elements... &gt;::RestTuple =  Tuple&lt; T_Elements... &gt;</definition>
+        <argsstring></argsstring>
+        <name>RestTuple</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="42" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1afd671958d6081816dc13557b00ea6ca8" prot="public" static="no" mutable="no">
+        <type><ref refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a4e20dd2456d00722405d95e561a066ca" kindref="member">FirstElement</ref></type>
+        <definition>FirstElement llama::Tuple&lt; T_FirstElement, T_Elements... &gt;::first</definition>
+        <argsstring></argsstring>
+        <name>first</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="65" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a18d67b25b1f4dac138717071ed844939" prot="public" static="no" mutable="no">
+        <type><ref refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a6c635cd5818f0ea11bd58750e6c28208" kindref="member">RestTuple</ref></type>
+        <definition>RestTuple llama::Tuple&lt; T_FirstElement, T_Elements... &gt;::rest</definition>
+        <argsstring></argsstring>
+        <name>rest</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="66" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1acf70e7a6b957db629aa9326f7045163a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>llama::Tuple&lt; T_FirstElement, T_Elements... &gt;::Tuple</definition>
+        <argsstring>()=default</argsstring>
+        <name>Tuple</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="45" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a197b53d2b0baebed32df5d9bcdb23c7b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>llama::Tuple&lt; T_FirstElement, T_Elements... &gt;::Tuple</definition>
+        <argsstring>(T_FirstElement const first, T_Elements const ... rest)</argsstring>
+        <name>Tuple</name>
+        <param>
+          <type>T_FirstElement const</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>T_Elements const ...</type>
+          <declname>rest</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="48" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="48" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a26658a47b3c84f7bba37ececcb23670c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>llama::Tuple&lt; T_FirstElement, T_Elements... &gt;::Tuple</definition>
+        <argsstring>(T_FirstElement const first, Tuple&lt; T_Elements... &gt; const rest)</argsstring>
+        <name>Tuple</name>
+        <param>
+          <type>T_FirstElement const</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type><ref refid="structllama_1_1Tuple" kindref="compound">Tuple</ref>&lt; T_Elements... &gt; const</type>
+          <declname>rest</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="57" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="57" bodyend="63"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="364">
+        <label>llama::Tuple&lt; T_Elements... &gt;</label>
+        <link refid="structllama_1_1Tuple"/>
+      </node>
+      <node id="363">
+        <label>llama::Tuple&lt; T_FirstElement, T_Elements... &gt;</label>
+        <link refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4"/>
+        <childnode refid="364" relation="usage">
+          <edgelabel>rest</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="40" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="36" bodyend="67"/>
+    <listofallmembers>
+      <member refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1afd671958d6081816dc13557b00ea6ca8" prot="public" virt="non-virtual"><scope>llama::Tuple&lt; T_FirstElement, T_Elements... &gt;</scope><name>first</name></member>
+      <member refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a4e20dd2456d00722405d95e561a066ca" prot="public" virt="non-virtual"><scope>llama::Tuple&lt; T_FirstElement, T_Elements... &gt;</scope><name>FirstElement</name></member>
+      <member refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a18d67b25b1f4dac138717071ed844939" prot="public" virt="non-virtual"><scope>llama::Tuple&lt; T_FirstElement, T_Elements... &gt;</scope><name>rest</name></member>
+      <member refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a6c635cd5818f0ea11bd58750e6c28208" prot="public" virt="non-virtual"><scope>llama::Tuple&lt; T_FirstElement, T_Elements... &gt;</scope><name>RestTuple</name></member>
+      <member refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1acf70e7a6b957db629aa9326f7045163a" prot="public" virt="non-virtual"><scope>llama::Tuple&lt; T_FirstElement, T_Elements... &gt;</scope><name>Tuple</name></member>
+      <member refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a197b53d2b0baebed32df5d9bcdb23c7b" prot="public" virt="non-virtual"><scope>llama::Tuple&lt; T_FirstElement, T_Elements... &gt;</scope><name>Tuple</name></member>
+      <member refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a26658a47b3c84f7bba37ececcb23670c" prot="public" virt="non-virtual"><scope>llama::Tuple&lt; T_FirstElement, T_Elements... &gt;</scope><name>Tuple</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

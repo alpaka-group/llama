@@ -24,9 +24,14 @@
 namespace llama
 {
 
+/// Functor that calculates the extent of a user domain
 template< std::size_t T_dim >
 struct ExtentUserDomainAdress
 {
+    /**
+     * \param size user domain
+     * \return the calculated extent
+     * */
     LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()( UserDomain< T_dim > const & size ) const
@@ -49,12 +54,24 @@ struct ExtentUserDomainAdress< 1 >
     }
 };
 
+/** Functor to get the linear position of a coordinate in the user domain space
+ *  if the n-dimensional domain is flattened to one dimension with the last user
+ *  domain index being the fastet resp. already linearized index (C like).
+ * \tparam T_dim dimension of the user domain
+ * \tparam T_it internal iteration parameter (should not be changed)
+ * \see LinearizeUserDomainAdressLikeFortran
+ * */
 template<
     std::size_t T_dim,
     std::size_t T_it = T_dim
 >
 struct LinearizeUserDomainAdress
 {
+    /**
+     * \param coord coordinate in the user domain
+     * \param size total size of the user domain
+     * \return linearized index
+     * */
     LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()(
@@ -93,10 +110,21 @@ struct LinearizeUserDomainAdress<
     }
 };
 
+/** Functor to get the linear position of a coordinate in the user domain space
+ *  if the n-dimensional domain is flattened to one dimension with the first
+ *  user domain index being the fastet resp. already linearized index (Fortran
+ *  like).
+ * \tparam T_dim dimension of the user domain
+ * \see LinearizeUserDomainAdress
+ * */
 template< std::size_t T_dim >
 struct LinearizeUserDomainAdressLikeFortran
 {
-    LLAMA_FN_HOST_ACC_INLINE
+    /**
+     * \param coord coordinate in the user domain
+     * \param size total size of the user domain
+     * \return linearized index
+     * */    LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()(
         UserDomain< T_dim > const & coord,
@@ -144,6 +172,10 @@ userDomainZeroHelper( IntegerSequence< T_dims... > )
 
 } // namespace internal
 
+/** Creates a user domain filled with zeros.
+ * \tparam T_dim dimension of the user domain
+ * \return \ref UserDomain filled with zeros
+ * */
 template< std::size_t T_dim >
 LLAMA_FN_HOST_ACC_INLINE
 auto

@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1internal_1_1TupleForEach" kind="struct" language="C++" prot="public">
+    <compoundname>llama::internal::TupleForEach</compoundname>
+    <includes refid="Tuple_8hpp" local="no">Tuple.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_Tuple</type>
+      </param>
+      <param>
+        <type>typename T_Functor</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1internal_1_1TupleForEach_1a1168aacdca4648c72996b157cc3daa75" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto llama::internal::TupleForEach&lt; T_Tuple, T_Functor &gt;::operator()</definition>
+        <argsstring>(T_Tuple const tuple, T_Functor const functor) -&gt; decltype(tupleCat(makeTuple(functor(tuple.first)), TupleForEach&lt; typename T_Tuple::RestTuple, T_Functor &gt;()(tuple.rest, functor)))</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>T_Tuple const</type>
+          <declname>tuple</declname>
+        </param>
+        <param>
+          <type>T_Functor const</type>
+          <declname>functor</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="658" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="658" bodyend="685"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="655" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="654" bodyend="686"/>
+    <listofallmembers>
+      <member refid="structllama_1_1internal_1_1TupleForEach_1a1168aacdca4648c72996b157cc3daa75" prot="public" virt="non-virtual"><scope>llama::internal::TupleForEach</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

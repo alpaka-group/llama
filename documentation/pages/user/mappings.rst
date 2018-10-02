@@ -184,7 +184,7 @@ further constructor parameter for the instantiation of this list.
 .. code-block:: C++
 
         auto treeOperationList = llama::makeTuple(
-            llama::mapping::tree::functor::LeaveOnlyRT( )
+            llama::mapping::tree::functor::LeafOnlyRT( )
         );
 
         using Mapping = llama::mapping::tree::Mapping<
@@ -206,9 +206,9 @@ Idem
 Basically a test functor for testing, how much the number of tree operations
 has an influence on the run time.
 
-LeaveOnlyRT
+LeafOnlyRT
 ^^^^^^^^^^^
-:cpp:`llama::mapping::tree::functor::LeaveOnlyRT` moves all run time parts of
+:cpp:`llama::mapping::tree::functor::LeafOnlyRT` moves all run time parts of
 the tree to the leaves, basically creates a struct of array as seen above.
 However unlike :cpp:`llama::mapping::SoA` a combination with other mapping would
 be possible.

@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1LinearizeUserDomainAdressLikeFortran" kind="struct" language="C++" prot="public">
+    <compoundname>llama::LinearizeUserDomainAdressLikeFortran</compoundname>
+    <includes refid="UserDomain_8hpp" local="no">UserDomain.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>std::size_t</type>
+        <declname>T_dim</declname>
+        <defname>T_dim</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1LinearizeUserDomainAdressLikeFortran_1a09b6d963cd24a85d64c28f209c40323e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto llama::LinearizeUserDomainAdressLikeFortran&lt; T_dim &gt;::operator()</definition>
+        <argsstring>(UserDomain&lt; T_dim &gt; const &amp;coord, UserDomain&lt; T_dim &gt; const &amp;size) const -&gt; std::size_t</argsstring>
+        <name>operator()</name>
+        <param>
+          <type><ref refid="namespacellama_1a03077c6597f96a84efe064fa64d81827" kindref="member">UserDomain</ref>&lt; T_dim &gt; const &amp;</type>
+          <declname>coord</declname>
+        </param>
+        <param>
+          <type><ref refid="namespacellama_1a03077c6597f96a84efe064fa64d81827" kindref="member">UserDomain</ref>&lt; T_dim &gt; const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>coord</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>coordinate in the user domain </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>total size of the user domain </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>linearized index </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/UserDomain.hpp" line="129" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/UserDomain.hpp" bodystart="129" bodyend="141"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Functor to get the linear position of a coordinate in the user domain space if the n-dimensional domain is flattened to one dimension with the first user domain index being the fastet resp. already linearized index (Fortran like). <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_dim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>dimension of the user domain </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="see"><para><ref refid="structllama_1_1LinearizeUserDomainAdress" kindref="compound">LinearizeUserDomainAdress</ref> </para></simplesect>
+</para>    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/UserDomain.hpp" line="122" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/UserDomain.hpp" bodystart="121" bodyend="142"/>
+    <listofallmembers>
+      <member refid="structllama_1_1LinearizeUserDomainAdressLikeFortran_1a09b6d963cd24a85d64c28f209c40323e" prot="public" virt="non-virtual"><scope>llama::LinearizeUserDomainAdressLikeFortran</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType" kind="struct" language="C++" prot="public">
+    <compoundname>llama::mapping::tree::internal::ReduceElementType</compoundname>
+    <includes refid="Reduce_8hpp" local="no">Reduce.hpp</includes>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_1_1type_01_4" prot="public">llama::mapping::tree::internal::ReduceElementType::type &gt;</innerclass>
+    <templateparamlist>
+      <param>
+        <type>typename T_Tree</type>
+      </param>
+      <param>
+        <type>template&lt; class, class &gt; class</type>
+        <declname>T_InnerOp</declname>
+        <defname>T_InnerOp</defname>
+      </param>
+      <param>
+        <type>template&lt; class, class &gt; class</type>
+        <declname>T_OuterOp</declname>
+        <defname>T_OuterOp</defname>
+      </param>
+      <param>
+        <type>template&lt; class, class &gt; class</type>
+        <declname>T_LeafFunctor</declname>
+        <defname>T_LeafFunctor</defname>
+      </param>
+      <param>
+        <type>typename T_SFINAE</type>
+        <defval>void</defval>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_1a32019db38e750a35a662b63cb67106c4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto llama::mapping::tree::internal::ReduceElementType&lt; T_Tree, T_InnerOp, T_OuterOp, T_LeafFunctor, T_SFINAE &gt;::operator()</definition>
+        <argsstring>(decltype(T_Tree::count) const &amp;count) const -&gt; std::size_t</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>decltype(T_Tree::count) const &amp;</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/Reduce.hpp" line="56" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/Reduce.hpp" bodystart="56" bodyend="63"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/Reduce.hpp" line="53" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/Reduce.hpp" bodystart="52" bodyend="64"/>
+    <listofallmembers>
+      <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_1a32019db38e750a35a662b63cb67106c4" prot="public" virt="non-virtual"><scope>llama::mapping::tree::internal::ReduceElementType</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

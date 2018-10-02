@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1GetTypeImpl_3_01T__DatumDomain_00_01T__firstDatumDomainCoord_00_01T__datumDomainCoords_8_8_8_01_4" kind="struct" language="C++" prot="public">
+    <compoundname>llama::GetTypeImpl&lt; T_DatumDomain, T_firstDatumDomainCoord, T_datumDomainCoords... &gt;</compoundname>
+    <includes refid="GetType_8hpp" local="no">GetType.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_DatumDomain</type>
+      </param>
+      <param>
+        <type>std::size_t</type>
+        <declname>T_firstDatumDomainCoord</declname>
+        <defname>T_firstDatumDomainCoord</defname>
+      </param>
+      <param>
+        <type>std::size_t...</type>
+        <declname>T_datumDomainCoords</declname>
+        <defname>T_datumDomainCoords</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structllama_1_1GetTypeImpl_3_01T__DatumDomain_00_01T__firstDatumDomainCoord_00_01T__datumDomainCoords_8_8_8_01_4_1a9203f9136fecb0243a3001f1e11d619e" prot="public" static="no">
+        <type>boost::mp11::mp_at_c&lt; T_DatumDomain, T_firstDatumDomainCoord &gt;</type>
+        <definition>using llama::GetTypeImpl&lt; T_DatumDomain, T_firstDatumDomainCoord, T_datumDomainCoords... &gt;::_DateElement =  boost::mp11::mp_at_c&lt; T_DatumDomain, T_firstDatumDomainCoord &gt;</definition>
+        <argsstring></argsstring>
+        <name>_DateElement</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/GetType.hpp" line="44" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/GetType.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1GetTypeImpl_3_01T__DatumDomain_00_01T__firstDatumDomainCoord_00_01T__datumDomainCoords_8_8_8_01_4_1a3b966e004884a8efe44e9499bcf8f09f" prot="public" static="no">
+        <type>typename <ref refid="structllama_1_1GetTypeImpl" kindref="compound">GetTypeImpl</ref>&lt; <ref refid="namespacellama_1a554a797d5fff9070b3c61d7584dc15d5" kindref="member">GetDatumElementType</ref>&lt; <ref refid="structllama_1_1GetTypeImpl_3_01T__DatumDomain_00_01T__firstDatumDomainCoord_00_01T__datumDomainCoords_8_8_8_01_4_1a9203f9136fecb0243a3001f1e11d619e" kindref="member">_DateElement</ref> &gt;, T_datumDomainCoords... &gt;::<ref refid="structllama_1_1GetTypeImpl_3_01T__DatumDomain_00_01T__firstDatumDomainCoord_00_01T__datumDomainCoords_8_8_8_01_4_1a3b966e004884a8efe44e9499bcf8f09f" kindref="member">type</ref></type>
+        <definition>using llama::GetTypeImpl&lt; T_DatumDomain, T_firstDatumDomainCoord, T_datumDomainCoords... &gt;::type =  typename GetTypeImpl&lt; GetDatumElementType&lt; _DateElement &gt;, T_datumDomainCoords... &gt;::type</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/GetType.hpp" line="48" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/GetType.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/GetType.hpp" line="43" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/GetType.hpp" bodystart="38" bodyend="52"/>
+    <listofallmembers>
+      <member refid="structllama_1_1GetTypeImpl_3_01T__DatumDomain_00_01T__firstDatumDomainCoord_00_01T__datumDomainCoords_8_8_8_01_4_1a9203f9136fecb0243a3001f1e11d619e" prot="public" virt="non-virtual"><scope>llama::GetTypeImpl&lt; T_DatumDomain, T_firstDatumDomainCoord, T_datumDomainCoords... &gt;</scope><name>_DateElement</name></member>
+      <member refid="structllama_1_1GetTypeImpl_3_01T__DatumDomain_00_01T__firstDatumDomainCoord_00_01T__datumDomainCoords_8_8_8_01_4_1a3b966e004884a8efe44e9499bcf8f09f" prot="public" virt="non-virtual"><scope>llama::GetTypeImpl&lt; T_DatumDomain, T_firstDatumDomainCoord, T_datumDomainCoords... &gt;</scope><name>type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

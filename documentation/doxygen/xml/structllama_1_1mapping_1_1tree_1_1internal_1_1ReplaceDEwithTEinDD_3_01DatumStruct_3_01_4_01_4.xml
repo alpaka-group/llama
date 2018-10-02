@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_3_01DatumStruct_3_01_4_01_4" kind="struct" language="C++" prot="public">
+    <compoundname>llama::mapping::tree::internal::ReplaceDEwithTEinDD&lt; DatumStruct&lt; &gt; &gt;</compoundname>
+    <includes refid="TreeFromDomains_8hpp" local="no">TreeFromDomains.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_3_01DatumStruct_3_01_4_01_4_1af2d9166a4c5787af639a4c84a8600208" prot="public" static="no">
+        <type><ref refid="structllama_1_1Tuple" kindref="compound">Tuple</ref>&lt; &gt;</type>
+        <definition>using llama::mapping::tree::internal::ReplaceDEwithTEinDD&lt; DatumStruct&lt; &gt; &gt;::type =  Tuple&lt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp" line="88" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp" line="87" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp" bodystart="86" bodyend="89"/>
+    <listofallmembers>
+      <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_3_01DatumStruct_3_01_4_01_4_1af2d9166a4c5787af639a4c84a8600208" prot="public" virt="non-virtual"><scope>llama::mapping::tree::internal::ReplaceDEwithTEinDD&lt; DatumStruct&lt; &gt; &gt;</scope><name>type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

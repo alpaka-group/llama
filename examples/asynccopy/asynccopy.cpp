@@ -92,7 +92,7 @@ struct BlurKernel
         >( acc );
 
         auto treeOperationList = llama::makeTuple(
-            llama::mapping::tree::functor::LeaveOnlyRT( )
+            llama::mapping::tree::functor::LeafOnlyRT( )
         );
         using SharedMapping = llama::mapping::tree::Mapping<
             typename decltype(oldImage)::Mapping::UserDomain,
@@ -293,7 +293,7 @@ int main(int argc,char * * argv)
     };
 
     auto treeOperationList = llama::makeTuple(
-        llama::mapping::tree::functor::LeaveOnlyRT( )
+        llama::mapping::tree::functor::LeafOnlyRT( )
         //~ llama::mapping::tree::functor::Idem( )
     );
     using HostMapping = llama::mapping::tree::Mapping<

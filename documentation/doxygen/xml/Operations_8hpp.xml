@@ -1,0 +1,224 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="Operations_8hpp" kind="file" language="C++">
+    <compoundname>Operations.hpp</compoundname>
+    <includes refid="TreeElement_8hpp" local="yes">TreeElement.hpp</includes>
+    <includedby refid="GetBlobSize_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobSize.hpp</includedby>
+    <includedby refid="GetBlobByte_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobByte.hpp</includedby>
+    <incdepgraph>
+      <node id="414">
+        <label>boost/predef.h</label>
+      </node>
+      <node id="409">
+        <label>TreeElement.hpp</label>
+        <link refid="TreeElement_8hpp"/>
+        <childnode refid="410" relation="include">
+        </childnode>
+        <childnode refid="411" relation="include">
+        </childnode>
+        <childnode refid="412" relation="include">
+        </childnode>
+      </node>
+      <node id="408">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/Operations.hpp</label>
+        <link refid="Operations_8hpp"/>
+        <childnode refid="409" relation="include">
+        </childnode>
+      </node>
+      <node id="412">
+        <label>../../Tuple.hpp</label>
+        <link refid="Tuple_8hpp"/>
+        <childnode refid="413" relation="include">
+        </childnode>
+      </node>
+      <node id="410">
+        <label>cstddef</label>
+      </node>
+      <node id="413">
+        <label>preprocessor/macros.hpp</label>
+        <link refid="macros_8hpp"/>
+        <childnode refid="414" relation="include">
+        </childnode>
+      </node>
+      <node id="411">
+        <label>type_traits</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="418">
+        <label>/home/alexander/develop/work/llama/include/llama/llama.hpp</label>
+        <link refid="llama_8hpp"/>
+      </node>
+      <node id="419">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobByte.hpp</label>
+        <link refid="GetBlobByte_8hpp"/>
+        <childnode refid="417" relation="include">
+        </childnode>
+      </node>
+      <node id="415">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/Operations.hpp</label>
+        <link refid="Operations_8hpp"/>
+        <childnode refid="416" relation="include">
+        </childnode>
+        <childnode refid="419" relation="include">
+        </childnode>
+      </node>
+      <node id="416">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobSize.hpp</label>
+        <link refid="GetBlobSize_8hpp"/>
+        <childnode refid="417" relation="include">
+        </childnode>
+        <childnode refid="419" relation="include">
+        </childnode>
+      </node>
+      <node id="417">
+        <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/Mapping.hpp</label>
+        <link refid="Mapping_8hpp"/>
+        <childnode refid="418" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1Addition" prot="public">llama::mapping::tree::Addition</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1Addition_3_01std_1_1integral__constant_3_01T_00_01t1_01_4_00_0db9b0881a9379e353ba23b6a33833924" prot="public">llama::mapping::tree::Addition&lt; std::integral_constant&lt; T, t1 &gt;, std::integral_constant&lt; T, t2 &gt;&gt;</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1Multiplication" prot="public">llama::mapping::tree::Multiplication</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1Multiplication_3_01std_1_1integral__constant_3_01T_00_01t1_01_fc4ee335e5630e6d1de1f50c7e3bbdd5" prot="public">llama::mapping::tree::Multiplication&lt; std::integral_constant&lt; T, t1 &gt;, std::integral_constant&lt; T, t2 &gt;&gt;</innerclass>
+    <innernamespace refid="namespacellama">llama</innernamespace>
+    <innernamespace refid="namespacellama_1_1mapping">llama::mapping</innernamespace>
+    <innernamespace refid="namespacellama_1_1mapping_1_1tree">llama::mapping::tree</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*<sp/>Copyright<sp/>2018<sp/>Alexander<sp/>Matthes</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/>*<sp/>This<sp/>file<sp/>is<sp/>part<sp/>of<sp/>LLAMA.</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/>*<sp/>LLAMA<sp/>is<sp/>free<sp/>software:<sp/>you<sp/>can<sp/>redistribute<sp/>it<sp/>and/or<sp/>modify</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/>*<sp/>it<sp/>under<sp/>the<sp/>terms<sp/>of<sp/>the<sp/>GNU<sp/>Lesser<sp/>General<sp/>Public<sp/>License<sp/>as</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/>*<sp/>published<sp/>by<sp/>the<sp/>Free<sp/>Software<sp/>Foundation,<sp/>either<sp/>version<sp/>3<sp/>of<sp/>the</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/>*<sp/>License,<sp/>or<sp/>(at<sp/>your<sp/>option)<sp/>any<sp/>later<sp/>version.</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/>*<sp/>LLAMA<sp/>is<sp/>distributed<sp/>in<sp/>the<sp/>hope<sp/>that<sp/>it<sp/>will<sp/>be<sp/>useful,</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/>*<sp/>but<sp/>WITHOUT<sp/>ANY<sp/>WARRANTY;<sp/>without<sp/>even<sp/>the<sp/>implied<sp/>warranty<sp/>of</highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/>*<sp/>MERCHANTABILITY<sp/>or<sp/>FITNESS<sp/>FOR<sp/>A<sp/>PARTICULAR<sp/>PURPOSE.<sp/><sp/>See<sp/>the</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/>*<sp/>GNU<sp/>Lesser<sp/>General<sp/>Public<sp/>License<sp/>for<sp/>more<sp/>details.</highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="15"><highlight class="comment"><sp/>*<sp/>You<sp/>should<sp/>have<sp/>received<sp/>a<sp/>copy<sp/>of<sp/>the<sp/>GNU<sp/>Lesser<sp/>General<sp/>Public</highlight></codeline>
+<codeline lineno="16"><highlight class="comment"><sp/>*<sp/>License<sp/>along<sp/>with<sp/>LLAMA.<sp/><sp/>If<sp/>not,<sp/>see<sp/>&lt;www.gnu.org/licenses/&gt;.</highlight></codeline>
+<codeline lineno="17"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="TreeElement_8hpp" kindref="compound">TreeElement.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacellama" kindref="compound">llama</ref></highlight></codeline>
+<codeline lineno="24"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">mapping</highlight></codeline>
+<codeline lineno="27"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">tree</highlight></codeline>
+<codeline lineno="30"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>Parameter1,</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>Parameter2</highlight></codeline>
+<codeline lineno="35"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="36" refid="structllama_1_1mapping_1_1tree_1_1Addition" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1Addition" kindref="compound">Addition</ref></highlight></codeline>
+<codeline lineno="37"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="41" refid="structllama_1_1mapping_1_1tree_1_1Addition_1aeddefc668c8cf739135abe32f7690a76" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1Addition_1aeddefc668c8cf739135abe32f7690a76" kindref="member">apply</ref>(</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Parameter1<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>p1,</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Parameter2<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>p2</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/>)</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/>decltype(<sp/>p1<sp/>+<sp/>p2<sp/>)</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>p1<sp/>+<sp/>p2;</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="49"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T,</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>T<sp/>t1,</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/>T<sp/>t2</highlight></codeline>
+<codeline lineno="55"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="56" refid="structllama_1_1mapping_1_1tree_1_1Addition_3_01std_1_1integral__constant_3_01T_00_01t1_01_4_00_0db9b0881a9379e353ba23b6a33833924" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1Addition" kindref="compound">Addition</ref>&lt;</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacestd" kindref="compound">std</ref>::integral_constant&lt;T,t1&gt;,</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/>std::integral_constant&lt;T,t2&gt;</highlight></codeline>
+<codeline lineno="59"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="60"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="61" refid="structllama_1_1mapping_1_1tree_1_1Addition_3_01std_1_1integral__constant_3_01T_00_01t1_01_4_00_0db9b0881a9379e353ba23b6a33833924_1a66813a03de89146410207ab8aa90f46a" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1Addition_3_01std_1_1integral__constant_3_01T_00_01t1_01_4_00_0db9b0881a9379e353ba23b6a33833924_1a66813a03de89146410207ab8aa90f46a" kindref="member">Parameter1</ref><sp/>=<sp/>std::integral_constant&lt;T,t1&gt;;</highlight></codeline>
+<codeline lineno="62" refid="structllama_1_1mapping_1_1tree_1_1Addition_3_01std_1_1integral__constant_3_01T_00_01t1_01_4_00_0db9b0881a9379e353ba23b6a33833924_1af127238101cf49a8b7250b550346bde3" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1Addition_3_01std_1_1integral__constant_3_01T_00_01t1_01_4_00_0db9b0881a9379e353ba23b6a33833924_1af127238101cf49a8b7250b550346bde3" kindref="member">Parameter2</ref><sp/>=<sp/>std::integral_constant&lt;T,t2&gt;;</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"></highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="67" refid="structllama_1_1mapping_1_1tree_1_1Addition_3_01std_1_1integral__constant_3_01T_00_01t1_01_4_00_0db9b0881a9379e353ba23b6a33833924_1ab0d84caa2cb0bf3b45281e0b0b50c399" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1Addition_3_01std_1_1integral__constant_3_01T_00_01t1_01_4_00_0db9b0881a9379e353ba23b6a33833924_1ab0d84caa2cb0bf3b45281e0b0b50c399" kindref="member">apply</ref>(</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1Addition_3_01std_1_1integral__constant_3_01T_00_01t1_01_4_00_0db9b0881a9379e353ba23b6a33833924_1a66813a03de89146410207ab8aa90f46a" kindref="member">Parameter1</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>p1,</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1Addition_3_01std_1_1integral__constant_3_01T_00_01t1_01_4_00_0db9b0881a9379e353ba23b6a33833924_1af127238101cf49a8b7250b550346bde3" kindref="member">Parameter2</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>p2</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/>)</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/>std::integral_constant&lt;T,t1<sp/>+<sp/>t2&gt;</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>std::integral_constant&lt;T,t1<sp/>+<sp/>t2&gt;();</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="75"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1Addition_3_01std_1_1integral__constant_3_01T_00_01t1_01_4_00_0db9b0881a9379e353ba23b6a33833924_1a66813a03de89146410207ab8aa90f46a" kindref="member">Parameter1</ref>,</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1Addition_3_01std_1_1integral__constant_3_01T_00_01t1_01_4_00_0db9b0881a9379e353ba23b6a33833924_1af127238101cf49a8b7250b550346bde3" kindref="member">Parameter2</ref></highlight></codeline>
+<codeline lineno="80"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="81" refid="structllama_1_1mapping_1_1tree_1_1Multiplication" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1Multiplication" kindref="compound">Multiplication</ref></highlight></codeline>
+<codeline lineno="82"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="86" refid="structllama_1_1mapping_1_1tree_1_1Multiplication_1a6a5307d54e43768e98d60ab9a97e5a65" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1Multiplication_1a6a5307d54e43768e98d60ab9a97e5a65" kindref="member">apply</ref>(</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Parameter1<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>p1,</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Parameter2<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>p2</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/>)</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/>decltype(<sp/>p1<sp/>*<sp/>p2<sp/>)</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>p1<sp/>*<sp/>p2;</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="94"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"></highlight></codeline>
+<codeline lineno="96"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T,</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/>T<sp/>t1,</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/>T<sp/>t2</highlight></codeline>
+<codeline lineno="100"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="101" refid="structllama_1_1mapping_1_1tree_1_1Multiplication_3_01std_1_1integral__constant_3_01T_00_01t1_01_fc4ee335e5630e6d1de1f50c7e3bbdd5" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1Multiplication" kindref="compound">Multiplication</ref>&lt;</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacestd" kindref="compound">std</ref>::integral_constant&lt;T,t1&gt;,</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/>std::integral_constant&lt;T,t2&gt;</highlight></codeline>
+<codeline lineno="104"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="105"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="106" refid="structllama_1_1mapping_1_1tree_1_1Multiplication_3_01std_1_1integral__constant_3_01T_00_01t1_01_fc4ee335e5630e6d1de1f50c7e3bbdd5_1a66813a03de89146410207ab8aa90f46a" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1Multiplication_3_01std_1_1integral__constant_3_01T_00_01t1_01_fc4ee335e5630e6d1de1f50c7e3bbdd5_1a66813a03de89146410207ab8aa90f46a" kindref="member">Parameter1</ref><sp/>=<sp/>std::integral_constant&lt;T,t1&gt;;</highlight></codeline>
+<codeline lineno="107" refid="structllama_1_1mapping_1_1tree_1_1Multiplication_3_01std_1_1integral__constant_3_01T_00_01t1_01_fc4ee335e5630e6d1de1f50c7e3bbdd5_1af127238101cf49a8b7250b550346bde3" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1Multiplication_3_01std_1_1integral__constant_3_01T_00_01t1_01_fc4ee335e5630e6d1de1f50c7e3bbdd5_1af127238101cf49a8b7250b550346bde3" kindref="member">Parameter2</ref><sp/>=<sp/>std::integral_constant&lt;T,t2&gt;;</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"></highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="112" refid="structllama_1_1mapping_1_1tree_1_1Multiplication_3_01std_1_1integral__constant_3_01T_00_01t1_01_fc4ee335e5630e6d1de1f50c7e3bbdd5_1aae633e23486fd425f7c77ae234de7ef0" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1Multiplication_3_01std_1_1integral__constant_3_01T_00_01t1_01_fc4ee335e5630e6d1de1f50c7e3bbdd5_1aae633e23486fd425f7c77ae234de7ef0" kindref="member">apply</ref>(</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1Multiplication_3_01std_1_1integral__constant_3_01T_00_01t1_01_fc4ee335e5630e6d1de1f50c7e3bbdd5_1a66813a03de89146410207ab8aa90f46a" kindref="member">Parameter1</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>p1,</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1Multiplication_3_01std_1_1integral__constant_3_01T_00_01t1_01_fc4ee335e5630e6d1de1f50c7e3bbdd5_1af127238101cf49a8b7250b550346bde3" kindref="member">Parameter2</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>p2</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/>)</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/>std::integral_constant&lt;T,t1<sp/>*<sp/>t2&gt;</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>std::integral_constant&lt;T,t1<sp/>*<sp/>t2&gt;();</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="120"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"></highlight></codeline>
+<codeline lineno="122"><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>tree</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>mapping</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="126"><highlight class="normal"></highlight></codeline>
+<codeline lineno="127"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>llama</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="128"><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/Operations.hpp"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1mapping_1_1tree_1_1internal_1_1SummarizeTreeSmallerPos_3_01T__Tree_00_010_01_4" kind="struct" language="C++" prot="public">
+    <compoundname>llama::mapping::tree::internal::SummarizeTreeSmallerPos&lt; T_Tree, 0 &gt;</compoundname>
+    <includes refid="GetBlobByte_8hpp" local="no">GetBlobByte.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_Tree</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1internal_1_1SummarizeTreeSmallerPos_3_01T__Tree_00_010_01_4_1ae32139a8902b7c13675dc87996765f02" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto llama::mapping::tree::internal::SummarizeTreeSmallerPos&lt; T_Tree, 0 &gt;::operator()</definition>
+        <argsstring>(typename T_Tree::Type const &amp;childs, decltype(T_Tree::count) const &amp;count) const -&gt; std::size_t</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>typename T_Tree::Type const &amp;</type>
+          <declname>childs</declname>
+        </param>
+        <param>
+          <type>decltype(T_Tree::count) const &amp;</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobByte.hpp" line="71" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobByte.hpp" bodystart="71" bodyend="78"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobByte.hpp" line="68" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobByte.hpp" bodystart="64" bodyend="79"/>
+    <listofallmembers>
+      <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1SummarizeTreeSmallerPos_3_01T__Tree_00_010_01_4_1ae32139a8902b7c13675dc87996765f02" prot="public" virt="non-virtual"><scope>llama::mapping::tree::internal::SummarizeTreeSmallerPos&lt; T_Tree, 0 &gt;</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

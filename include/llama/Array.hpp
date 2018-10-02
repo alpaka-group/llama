@@ -22,12 +22,18 @@
 namespace llama
 {
 
+/** Array class like std::array but suitable for use with offloading devices
+ *  like GPUs and extended with some (for LLAMA) useful methods.
+ * \tparam T type if array elements
+ * \tparam T_dim number of elements in array
+ * */
 template<
     typename T,
     std::size_t T_dim
 >
 struct Array
 {
+    /// Number of elements in array
     static constexpr std::size_t count = T_dim;
 
     Array() = default;
@@ -35,20 +41,33 @@ struct Array
     Array( Array && ) = default;
     ~Array( ) = default;
 
+    /// Elements in the array, best to access with \ref operator[].
     T element[count];
 
+    /** Returns an iterator to the first element. Basically just a pointer to
+     *  the internal array of elements, which can be incremented.
+     * \return pointer to first element
+     * */
     LLAMA_FN_HOST_ACC_INLINE
     T* begin()
     {
         return &(element[0]);
     };
 
+    /** Returns an iterator to the element after the last element.
+     * \return pointer to element after the last element
+     * */
     LLAMA_FN_HOST_ACC_INLINE
     T* end()
     {
         return &(element[count]);
     };
 
+    /** Gives access to an element of the array *without* range check.
+     * \tparam T_IndexType type of index
+     * \param idx index of element
+     * \return reference to element at index
+     * */
     template< typename T_IndexType >
     LLAMA_FN_HOST_ACC_INLINE
     auto
@@ -58,6 +77,11 @@ struct Array
         return element[ idx ];
     }
 
+    /** Gives const access to an element of the array *without* range check.
+     * \tparam T_IndexType type of index
+     * \param idx index of element
+     * \return const reference to element at index
+     * */
     template< typename T_IndexType >
     LLAMA_FN_HOST_ACC_INLINE
     constexpr
@@ -68,6 +92,9 @@ struct Array
         return element[ idx ];
     }
 
+    /** Returns a copy of the array but with the first element removed.
+     * \return Array with one element less
+     * */
     auto
     LLAMA_FN_HOST_ACC_INLINE
     pop_front() const
@@ -85,6 +112,9 @@ struct Array
         return result;
     }
 
+    /** Returns a copy of the array but with the last element removed.
+     * \return Array with one element less
+     * */
     auto
     LLAMA_FN_HOST_ACC_INLINE
     pop_back() const
@@ -102,6 +132,11 @@ struct Array
         return result;
     }
 
+    /** Returns a copy of the array but with the one element added in front of
+     *  the (former) first element.
+     * \param new_element new element of type T to add at the beginning
+     * \return Array with one element more
+     * */
     auto
     LLAMA_FN_HOST_ACC_INLINE
     push_front( T const new_element ) const
@@ -120,6 +155,11 @@ struct Array
         return result;
     }
 
+    /** Returns a copy of the array but with the one element added after the
+     *  (former) last element.
+     * \param new_element new element of type T to add at the end
+     * \return Array with one element more
+     * */
     auto
     LLAMA_FN_HOST_ACC_INLINE
     push_back( T const new_element ) const
@@ -138,6 +178,15 @@ struct Array
         return result;
     }
 
+    /** Checks whether two arrays are elementwise the same. Returns false if at
+     *  least one pair of elements with the same index in both arrays are not
+     *  the same. Returns always false for arrays of different sizes.
+     * \tparam T_Other type of other arrays. The type of the elements of the
+     *  other array may differ and the operator still return true (e.g. for int
+     *  and char).
+     * \param other other array to compare with
+     * \return true if the arrays are the same, otherwise false
+     * */
     template< typename T_Other >
     auto
     LLAMA_FN_HOST_ACC_INLINE
@@ -152,6 +201,13 @@ struct Array
         return true;
     }
 
+    /** Adds an array to an existing array. May access invalid memory if the
+     *  second array is smaller than the first!
+     * \tparam T_Other type of the other array. The types of the elements of the
+     *  arrays may differ.
+     * \param second other array to add
+     * \return a new array of the same type as the first array
+     * */
     template< typename T_Other >
     auto
     LLAMA_FN_HOST_ACC_INLINE

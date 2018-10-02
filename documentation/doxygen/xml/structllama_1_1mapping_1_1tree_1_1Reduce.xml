@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1mapping_1_1tree_1_1Reduce" kind="struct" language="C++" prot="public">
+    <compoundname>llama::mapping::tree::Reduce</compoundname>
+    <includes refid="Reduce_8hpp" local="no">Reduce.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_Tree</type>
+      </param>
+      <param>
+        <type>template&lt; class, class &gt; class</type>
+        <declname>T_InnerOp</declname>
+        <defname>T_InnerOp</defname>
+      </param>
+      <param>
+        <type>template&lt; class, class &gt; class</type>
+        <declname>T_OuterOp</declname>
+        <defname>T_OuterOp</defname>
+      </param>
+      <param>
+        <type>template&lt; class, class &gt; class</type>
+        <declname>T_LeafFunctor</declname>
+        <defname>T_LeafFunctor</defname>
+      </param>
+      <param>
+        <type>typename T_SFINAE</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1Reduce_1a52a6a5f5eab52793ec68f23e10e9c17d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto llama::mapping::tree::Reduce&lt; T_Tree, T_InnerOp, T_OuterOp, T_LeafFunctor, T_SFINAE &gt;::operator()</definition>
+        <argsstring>(typename T_Tree::Type const &amp;childs, decltype(T_Tree::count) const &amp;count) const -&gt; std::size_t</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>typename T_Tree::Type const &amp;</type>
+          <declname>childs</declname>
+        </param>
+        <param>
+          <type>decltype(T_Tree::count) const &amp;</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/Reduce.hpp" line="180" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/Reduce.hpp" bodystart="180" bodyend="211"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1Reduce_1aa83456985b1e73c2710a0a5f2257747c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto llama::mapping::tree::Reduce&lt; T_Tree, T_InnerOp, T_OuterOp, T_LeafFunctor, T_SFINAE &gt;::operator()</definition>
+        <argsstring>(T_Tree const &amp;tree) const -&gt; std::size_t</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>T_Tree const &amp;</type>
+          <declname>tree</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/Reduce.hpp" line="215" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/Reduce.hpp" bodystart="215" bodyend="225"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/Reduce.hpp" line="39" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/Reduce.hpp" bodystart="39" bodyend="-1"/>
+    <listofallmembers>
+      <member refid="structllama_1_1mapping_1_1tree_1_1Reduce_1a52a6a5f5eab52793ec68f23e10e9c17d" prot="public" virt="non-virtual"><scope>llama::mapping::tree::Reduce</scope><name>operator()</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1Reduce_1aa83456985b1e73c2710a0a5f2257747c" prot="public" virt="non-virtual"><scope>llama::mapping::tree::Reduce</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

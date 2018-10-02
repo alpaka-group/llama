@@ -143,7 +143,7 @@ int main(int argc,char * * argv)
     );
 #elif VECTORADD_USE_TREE == 2
     auto treeOperationList = llama::makeTuple(
-        llama::mapping::tree::functor::LeaveOnlyRT( )
+        llama::mapping::tree::functor::LeafOnlyRT( )
     );
 #endif
     using Mapping = llama::mapping::tree::Mapping<

@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1internal_1_1ApplyFunctorForEachLeave_3_01DatumStruct_3_01T__Leaves_8_8_8_01_4_00_74156ee15ec9f05d1acbbbbd49e098f8" kind="struct" language="C++" prot="public">
+    <compoundname>llama::internal::ApplyFunctorForEachLeave&lt; DatumStruct&lt; T_Leaves... &gt;, T_DatumCoord, T_Functor &gt;</compoundname>
+    <includes refid="ForEach_8hpp" local="no">ForEach.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_DatumCoord</type>
+      </param>
+      <param>
+        <type>typename T_Functor</type>
+      </param>
+      <param>
+        <type>typename...</type>
+        <declname>T_Leaves</declname>
+        <defname>T_Leaves</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="structllama_1_1internal_1_1ApplyFunctorForEachLeave_3_01DatumStruct_3_01T__Leaves_8_8_8_01_4_00_74156ee15ec9f05d1acbbbbd49e098f8_1a5937c0ca5453555ea4b5093085de68d0" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>static void llama::internal::ApplyFunctorForEachLeave&lt; DatumStruct&lt; T_Leaves... &gt;, T_DatumCoord, T_Functor &gt;::apply</definition>
+        <argsstring>(T_Functor &amp;&amp;functor)</argsstring>
+        <name>apply</name>
+        <param>
+          <type>T_Functor &amp;&amp;</type>
+          <declname>functor</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/ForEach.hpp" line="240" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/ForEach.hpp" bodystart="240" bodyend="248"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/ForEach.hpp" line="238" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/ForEach.hpp" bodystart="233" bodyend="249"/>
+    <listofallmembers>
+      <member refid="structllama_1_1internal_1_1ApplyFunctorForEachLeave_3_01DatumStruct_3_01T__Leaves_8_8_8_01_4_00_74156ee15ec9f05d1acbbbbd49e098f8_1a5937c0ca5453555ea4b5093085de68d0" prot="public" virt="non-virtual"><scope>llama::internal::ApplyFunctorForEachLeave&lt; DatumStruct&lt; T_Leaves... &gt;, T_DatumCoord, T_Functor &gt;</scope><name>apply</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

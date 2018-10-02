@@ -24,6 +24,9 @@
 namespace llama
 {
 
+namespace internal
+{
+
 template<
     typename T_DatumElement,
     std::size_t... T_datumDomainCoords
@@ -82,11 +85,20 @@ struct GetUIDfromDatumCoord<
 	>::type;
 };
 
+} // namespace internal
+
+/** return the unique identifier of the \ref DatumElement at a \ref
+ *  DatumCoord inside the datum domain tree.
+ * \tparam T_DatumDomain the datum domain, probably of type \ref DatumStruct or
+ *  \ref DatumArray
+ * \tparam T_DatumCoord the datum coord, probably of type \ref DatumCoord
+ * \return unique identifer type
+ * */
 template<
     typename T_DatumDomain,
     typename T_DatumCoord
 >
-using GetUID = typename GetUIDfromDatumCoord<
+using GetUID = typename internal::GetUIDfromDatumCoord<
     DatumElement<
 		NoName,
 		T_DatumDomain

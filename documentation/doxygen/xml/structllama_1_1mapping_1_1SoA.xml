@@ -1,0 +1,257 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1mapping_1_1SoA" kind="struct" language="C++" prot="public">
+    <compoundname>llama::mapping::SoA</compoundname>
+    <includes refid="SoA_8hpp" local="no">SoA.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_UserDomain</type>
+      </param>
+      <param>
+        <type>typename T_DatumDomain</type>
+      </param>
+      <param>
+        <type>typename T_LinearizeUserDomainAdressFunctor</type>
+        <defval><ref refid="structllama_1_1LinearizeUserDomainAdress" kindref="compound">LinearizeUserDomainAdress</ref>&lt; T_UserDomain::count &gt;</defval>
+      </param>
+      <param>
+        <type>typename T_ExtentUserDomainAdressFunctor</type>
+        <defval><ref refid="structllama_1_1ExtentUserDomainAdress" kindref="compound">ExtentUserDomainAdress</ref>&lt; T_UserDomain::count &gt;</defval>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structllama_1_1mapping_1_1SoA_1ae4685a598f005d1f77c68b9ff8887ad9" prot="public" static="no">
+        <type>T_UserDomain</type>
+        <definition>using llama::mapping::SoA&lt; T_UserDomain, T_DatumDomain, T_LinearizeUserDomainAdressFunctor, T_ExtentUserDomainAdressFunctor &gt;::UserDomain =  T_UserDomain</definition>
+        <argsstring></argsstring>
+        <name>UserDomain</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="41" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1mapping_1_1SoA_1ad1174ec4efb3029b90b349fc195bc2f2" prot="public" static="no">
+        <type>T_DatumDomain</type>
+        <definition>using llama::mapping::SoA&lt; T_UserDomain, T_DatumDomain, T_LinearizeUserDomainAdressFunctor, T_ExtentUserDomainAdressFunctor &gt;::DatumDomain =  T_DatumDomain</definition>
+        <argsstring></argsstring>
+        <name>DatumDomain</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="42" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="structllama_1_1mapping_1_1SoA_1aea27f3b99fd5804e1580035b27eebc95" prot="public" static="yes" mutable="no">
+        <type>constexpr std::size_t</type>
+        <definition>constexpr std::size_t llama::mapping::SoA&lt; T_UserDomain, T_DatumDomain, T_LinearizeUserDomainAdressFunctor, T_ExtentUserDomainAdressFunctor &gt;::blobCount</definition>
+        <argsstring></argsstring>
+        <name>blobCount</name>
+        <initializer>= 1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="43" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structllama_1_1mapping_1_1SoA_1a609d42b5e923a3c7bed127c79b4ed8c5" prot="public" static="no" mutable="no">
+        <type><ref refid="structllama_1_1mapping_1_1SoA_1ae4685a598f005d1f77c68b9ff8887ad9" kindref="member">UserDomain</ref> const</type>
+        <definition>UserDomain const llama::mapping::SoA&lt; T_UserDomain, T_DatumDomain, T_LinearizeUserDomainAdressFunctor, T_ExtentUserDomainAdressFunctor &gt;::userDomainSize</definition>
+        <argsstring></argsstring>
+        <name>userDomainSize</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="93" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structllama_1_1mapping_1_1SoA_1a5001bcbf313ef78602ef03b31faf3211" prot="public" static="no" mutable="no">
+        <type>std::size_t const</type>
+        <definition>std::size_t const llama::mapping::SoA&lt; T_UserDomain, T_DatumDomain, T_LinearizeUserDomainAdressFunctor, T_ExtentUserDomainAdressFunctor &gt;::extentUserDomainAdress</definition>
+        <argsstring></argsstring>
+        <name>extentUserDomainAdress</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="94" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structllama_1_1mapping_1_1SoA_1a1f3217d1052d241bc23bef4bb4918d8b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>llama::mapping::SoA&lt; T_UserDomain, T_DatumDomain, T_LinearizeUserDomainAdressFunctor, T_ExtentUserDomainAdressFunctor &gt;::SoA</definition>
+        <argsstring>(UserDomain const size)</argsstring>
+        <name>SoA</name>
+        <param>
+          <type><ref refid="structllama_1_1mapping_1_1SoA_1ae4685a598f005d1f77c68b9ff8887ad9" kindref="member">UserDomain</ref> const</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="46" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="46" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1mapping_1_1SoA_1aed1d09ddbef76753026406f6ba2bec2a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>llama::mapping::SoA&lt; T_UserDomain, T_DatumDomain, T_LinearizeUserDomainAdressFunctor, T_ExtentUserDomainAdressFunctor &gt;::SoA</definition>
+        <argsstring>()=default</argsstring>
+        <name>SoA</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="53" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1mapping_1_1SoA_1a03e5790007b2dfd1c3fc6fa2094efe0d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>llama::mapping::SoA&lt; T_UserDomain, T_DatumDomain, T_LinearizeUserDomainAdressFunctor, T_ExtentUserDomainAdressFunctor &gt;::SoA</definition>
+        <argsstring>(SoA const &amp;)=default</argsstring>
+        <name>SoA</name>
+        <param>
+          <type><ref refid="structllama_1_1mapping_1_1SoA" kindref="compound">SoA</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="54" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1mapping_1_1SoA_1a692fb7f2e00a5773c02ba2922c882910" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>llama::mapping::SoA&lt; T_UserDomain, T_DatumDomain, T_LinearizeUserDomainAdressFunctor, T_ExtentUserDomainAdressFunctor &gt;::SoA</definition>
+        <argsstring>(SoA &amp;&amp;)=default</argsstring>
+        <name>SoA</name>
+        <param>
+          <type><ref refid="structllama_1_1mapping_1_1SoA" kindref="compound">SoA</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="55" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1mapping_1_1SoA_1a0a4b5cf7167ba021f68339e1faffa934" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>llama::mapping::SoA&lt; T_UserDomain, T_DatumDomain, T_LinearizeUserDomainAdressFunctor, T_ExtentUserDomainAdressFunctor &gt;::~SoA</definition>
+        <argsstring>()=default</argsstring>
+        <name>~SoA</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="56" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1mapping_1_1SoA_1a6ab13b91c2acfbc8cc7eff049b223e2a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto llama::mapping::SoA&lt; T_UserDomain, T_DatumDomain, T_LinearizeUserDomainAdressFunctor, T_ExtentUserDomainAdressFunctor &gt;::getBlobSize</definition>
+        <argsstring>(std::size_t const) const -&gt; std::size_t</argsstring>
+        <name>getBlobSize</name>
+        <param>
+          <type>std::size_t</type>
+          <declname>const</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="60" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="60" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1mapping_1_1SoA_1ab4eec882393d333c4f5c0d539962e2e6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::size_t...</type>
+            <declname>T_datumDomainCoord</declname>
+            <defname>T_datumDomainCoord</defname>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto llama::mapping::SoA&lt; T_UserDomain, T_DatumDomain, T_LinearizeUserDomainAdressFunctor, T_ExtentUserDomainAdressFunctor &gt;::getBlobByte</definition>
+        <argsstring>(UserDomain const coord) const -&gt; std::size_t</argsstring>
+        <name>getBlobByte</name>
+        <param>
+          <type><ref refid="structllama_1_1mapping_1_1SoA_1ae4685a598f005d1f77c68b9ff8887ad9" kindref="member">UserDomain</ref> const</type>
+          <declname>coord</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="69" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="69" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="function" id="structllama_1_1mapping_1_1SoA_1aa99c13fb3948a200dd243d4e89063bd3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::size_t...</type>
+            <declname>T_datumDomainCoord</declname>
+            <defname>T_datumDomainCoord</defname>
+          </param>
+        </templateparamlist>
+        <type>constexpr auto</type>
+        <definition>constexpr auto llama::mapping::SoA&lt; T_UserDomain, T_DatumDomain, T_LinearizeUserDomainAdressFunctor, T_ExtentUserDomainAdressFunctor &gt;::getBlobNr</definition>
+        <argsstring>(UserDomain const coord) const -&gt; std::size_t</argsstring>
+        <name>getBlobNr</name>
+        <param>
+          <type><ref refid="structllama_1_1mapping_1_1SoA_1ae4685a598f005d1f77c68b9ff8887ad9" kindref="member">UserDomain</ref> const</type>
+          <declname>coord</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="88" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="88" bodyend="92"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="40" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="39" bodyend="95"/>
+    <listofallmembers>
+      <member refid="structllama_1_1mapping_1_1SoA_1aea27f3b99fd5804e1580035b27eebc95" prot="public" virt="non-virtual"><scope>llama::mapping::SoA</scope><name>blobCount</name></member>
+      <member refid="structllama_1_1mapping_1_1SoA_1ad1174ec4efb3029b90b349fc195bc2f2" prot="public" virt="non-virtual"><scope>llama::mapping::SoA</scope><name>DatumDomain</name></member>
+      <member refid="structllama_1_1mapping_1_1SoA_1a5001bcbf313ef78602ef03b31faf3211" prot="public" virt="non-virtual"><scope>llama::mapping::SoA</scope><name>extentUserDomainAdress</name></member>
+      <member refid="structllama_1_1mapping_1_1SoA_1ab4eec882393d333c4f5c0d539962e2e6" prot="public" virt="non-virtual"><scope>llama::mapping::SoA</scope><name>getBlobByte</name></member>
+      <member refid="structllama_1_1mapping_1_1SoA_1aa99c13fb3948a200dd243d4e89063bd3" prot="public" virt="non-virtual"><scope>llama::mapping::SoA</scope><name>getBlobNr</name></member>
+      <member refid="structllama_1_1mapping_1_1SoA_1a6ab13b91c2acfbc8cc7eff049b223e2a" prot="public" virt="non-virtual"><scope>llama::mapping::SoA</scope><name>getBlobSize</name></member>
+      <member refid="structllama_1_1mapping_1_1SoA_1a1f3217d1052d241bc23bef4bb4918d8b" prot="public" virt="non-virtual"><scope>llama::mapping::SoA</scope><name>SoA</name></member>
+      <member refid="structllama_1_1mapping_1_1SoA_1aed1d09ddbef76753026406f6ba2bec2a" prot="public" virt="non-virtual"><scope>llama::mapping::SoA</scope><name>SoA</name></member>
+      <member refid="structllama_1_1mapping_1_1SoA_1a03e5790007b2dfd1c3fc6fa2094efe0d" prot="public" virt="non-virtual"><scope>llama::mapping::SoA</scope><name>SoA</name></member>
+      <member refid="structllama_1_1mapping_1_1SoA_1a692fb7f2e00a5773c02ba2922c882910" prot="public" virt="non-virtual"><scope>llama::mapping::SoA</scope><name>SoA</name></member>
+      <member refid="structllama_1_1mapping_1_1SoA_1ae4685a598f005d1f77c68b9ff8887ad9" prot="public" virt="non-virtual"><scope>llama::mapping::SoA</scope><name>UserDomain</name></member>
+      <member refid="structllama_1_1mapping_1_1SoA_1a609d42b5e923a3c7bed127c79b4ed8c5" prot="public" virt="non-virtual"><scope>llama::mapping::SoA</scope><name>userDomainSize</name></member>
+      <member refid="structllama_1_1mapping_1_1SoA_1a0a4b5cf7167ba021f68339e1faffa934" prot="public" virt="non-virtual"><scope>llama::mapping::SoA</scope><name>~SoA</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

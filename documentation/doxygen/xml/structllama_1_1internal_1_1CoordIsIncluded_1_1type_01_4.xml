@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1internal_1_1CoordIsIncluded_1_1type_01_4" kind="struct" language="C++" prot="public">
+    <compoundname>llama::internal::CoordIsIncluded::type &gt;</compoundname>
+    <includes refid="ForEach_8hpp" local="no">ForEach.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="structllama_1_1internal_1_1CoordIsIncluded_1_1type_01_4_1a4c124e04441f388134fef0e470662add" prot="public" static="yes" mutable="no">
+        <type>constexpr bool</type>
+        <definition>constexpr bool llama::internal::CoordIsIncluded&lt; T_Pos, T_Coord, SFINAE &gt;::type &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/ForEach.hpp" line="68" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/ForEach.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/ForEach.hpp" line="67" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/ForEach.hpp" bodystart="56" bodyend="69"/>
+    <listofallmembers>
+      <member refid="structllama_1_1internal_1_1CoordIsIncluded_1_1type_01_4_1a4c124e04441f388134fef0e470662add" prot="public" virt="non-virtual"><scope>llama::internal::CoordIsIncluded::type &gt;</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
