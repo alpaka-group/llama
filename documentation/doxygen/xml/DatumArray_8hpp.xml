@@ -6,76 +6,68 @@
     <includes local="no">boost/mp11.hpp</includes>
     <includedby refid="llama_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/llama.hpp</includedby>
     <incdepgraph>
-      <node id="60">
+      <node id="62">
         <label>boost/predef.h</label>
       </node>
-      <node id="57">
+      <node id="59">
         <label>Types.hpp</label>
         <link refid="Types_8hpp"/>
-        <childnode refid="58" relation="include">
+        <childnode refid="60" relation="include">
         </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+      </node>
+      <node id="60">
+        <label>Array.hpp</label>
+        <link refid="Array_8hpp"/>
         <childnode refid="61" relation="include">
         </childnode>
       </node>
       <node id="58">
-        <label>Array.hpp</label>
-        <link refid="Array_8hpp"/>
-        <childnode refid="59" relation="include">
-        </childnode>
-      </node>
-      <node id="56">
         <label>DatumStruct.hpp</label>
         <link refid="DatumStruct_8hpp"/>
-        <childnode refid="57" relation="include">
-        </childnode>
-        <childnode refid="62" relation="include">
-        </childnode>
-        <childnode refid="61" relation="include">
+        <childnode refid="59" relation="include">
         </childnode>
         <childnode refid="64" relation="include">
         </childnode>
-      </node>
-      <node id="63">
-        <label>tuple</label>
-      </node>
-      <node id="55">
-        <label>/home/alexander/develop/work/llama/include/llama/DatumArray.hpp</label>
-        <link refid="DatumArray_8hpp"/>
-        <childnode refid="56" relation="include">
+        <childnode refid="63" relation="include">
         </childnode>
-        <childnode refid="61" relation="include">
-        </childnode>
-      </node>
-      <node id="59">
-        <label>preprocessor/macros.hpp</label>
-        <link refid="macros_8hpp"/>
-        <childnode refid="60" relation="include">
+        <childnode refid="65" relation="include">
         </childnode>
       </node>
       <node id="64">
-        <label>type_traits</label>
-      </node>
-      <node id="62">
         <label>DatumCoord.hpp</label>
-        <link refid="DatumCoord_8hpp"/>
-        <childnode refid="63" relation="include">
+      </node>
+      <node id="57">
+        <label>/home/alexander/develop/work/llama/include/llama/DatumArray.hpp</label>
+        <link refid="DatumArray_8hpp"/>
+        <childnode refid="58" relation="include">
         </childnode>
-        <childnode refid="64" relation="include">
+        <childnode refid="63" relation="include">
         </childnode>
       </node>
       <node id="61">
+        <label>preprocessor/macros.hpp</label>
+        <link refid="macros_8hpp"/>
+        <childnode refid="62" relation="include">
+        </childnode>
+      </node>
+      <node id="65">
+        <label>type_traits</label>
+      </node>
+      <node id="63">
         <label>boost/mp11.hpp</label>
       </node>
     </incdepgraph>
     <invincdepgraph>
-      <node id="66">
+      <node id="67">
         <label>/home/alexander/develop/work/llama/include/llama/llama.hpp</label>
         <link refid="llama_8hpp"/>
       </node>
-      <node id="65">
+      <node id="66">
         <label>/home/alexander/develop/work/llama/include/llama/DatumArray.hpp</label>
         <link refid="DatumArray_8hpp"/>
-        <childnode refid="66" relation="include">
+        <childnode refid="67" relation="include">
         </childnode>
       </node>
     </invincdepgraph>

@@ -206,66 +206,8 @@
     <member refid="structllama_1_1DatumCoord_1a388bd1bd122aa2d5f15849e7aa3898f6" kind="variable"><name>size</name></member>
     <member refid="structllama_1_1DatumCoord_1a4083f5f2ddc2fe4fb61a4f2497f2597d" kind="variable"><name>back</name></member>
   </compound>
-  <compound refid="structllama_1_1DatumCoord_3_01_4" kind="struct"><name>llama::DatumCoord&lt; &gt;</name>
-    <member refid="structllama_1_1DatumCoord_3_01_4_1a562d2042a586b7a5708dd9e23ab9a0af" kind="typedef"><name>type</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01_4_1ae82345e1f93409767fb5990d9a18e4a7" kind="typedef"><name>IncBack</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01_4_1a364f558508bf8885473974fa97505e95" kind="typedef"><name>PushFront</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01_4_1ac336d5091a9dffa3d679b23864ed970a" kind="typedef"><name>PushBack</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01_4_1af83405e1ec7859a824ec4817a8a58c6d" kind="typedef"><name>Front</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01_4_1ae4a039261ecf866e3fcb269c4261d799" kind="typedef"><name>Back</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01_4_1a3543596fa79b857092917bf1a7ba9a5f" kind="typedef"><name>Cat</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01_4_1a79bf5babc5025634ea5ee8fd772fa5d0" kind="variable"><name>size</name></member>
-  </compound>
-  <compound refid="structllama_1_1DatumCoord_3_01T__coord_01_4" kind="struct"><name>llama::DatumCoord&lt; T_coord &gt;</name>
-    <member refid="structllama_1_1DatumCoord_3_01T__coord_01_4_1ad669811cd00777fe7390e262fb166b65" kind="typedef"><name>type</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01T__coord_01_4_1a8e3ac6db27c62ef8a65ffff8676159b5" kind="typedef"><name>PopFront</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01T__coord_01_4_1a7df13942db547154f73ba0735626b4be" kind="typedef"><name>IncBack</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01T__coord_01_4_1a3312748bb68a39334b729508f503159f" kind="typedef"><name>PushFront</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01T__coord_01_4_1a23fc1c47ce2ee15df107490cdcba33be" kind="typedef"><name>PushBack</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01T__coord_01_4_1ac146f90e6d8e3ef07bfaece936a5a283" kind="typedef"><name>Front</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01T__coord_01_4_1af550b40223a499d678b4203dc4ec1336" kind="typedef"><name>Back</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01T__coord_01_4_1a384f7f7c14227ff898bd1e02a03b4f2a" kind="typedef"><name>Cat</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01T__coord_01_4_1ac29d2d9d9482929e51ad21f88a556535" kind="variable"><name>front</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01T__coord_01_4_1a071d2f8ef1d9227bb40b46339e98bb8f" kind="variable"><name>size</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01T__coord_01_4_1a1f74c726299077ccac49086bd10fecc9" kind="variable"><name>back</name></member>
-  </compound>
-  <compound refid="structllama_1_1DatumCoord_3_01T__coord_00_01T__coords_8_8_8_01_4" kind="struct"><name>llama::DatumCoord&lt; T_coord, T_coords... &gt;</name>
-    <member refid="structllama_1_1DatumCoord_3_01T__coord_00_01T__coords_8_8_8_01_4_1a150ba9694dda768caceae29c526fcaea" kind="typedef"><name>type</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01T__coord_00_01T__coords_8_8_8_01_4_1a428fccd1c2acb00ba8f3a025db699a2e" kind="typedef"><name>PopFront</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01T__coord_00_01T__coords_8_8_8_01_4_1a86831fa60faf2c8f5bbc625c00f81f45" kind="typedef"><name>IncBack</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01T__coord_00_01T__coords_8_8_8_01_4_1a47d0f4244178a6f12acbca560aa79dd8" kind="typedef"><name>PushFront</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01T__coord_00_01T__coords_8_8_8_01_4_1a15aa1cd9faad48b8d83c43fd62b3b598" kind="typedef"><name>PushBack</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01T__coord_00_01T__coords_8_8_8_01_4_1a7089a550e96cbcd08c2a8d54099320a7" kind="typedef"><name>Front</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01T__coord_00_01T__coords_8_8_8_01_4_1adae3d43d4626499c7bfc997969c42419" kind="typedef"><name>Back</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01T__coord_00_01T__coords_8_8_8_01_4_1a2a6592aa5c077263637083386882fe0e" kind="typedef"><name>Cat</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01T__coord_00_01T__coords_8_8_8_01_4_1af3acf04865854f5e05953599b248c4b5" kind="variable"><name>front</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01T__coord_00_01T__coords_8_8_8_01_4_1a272e76b1d51ec2e3b6cc10f1f7c5dd7b" kind="variable"><name>size</name></member>
-    <member refid="structllama_1_1DatumCoord_3_01T__coord_00_01T__coords_8_8_8_01_4_1abecdd166a9c4156a0611e20a5be5f77c" kind="variable"><name>back</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1DatumCoordBack" kind="struct"><name>llama::internal::DatumCoordBack</name>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1DatumCoordBack_3_010_01_4" kind="struct"><name>llama::internal::DatumCoordBack&lt; 0 &gt;</name>
-    <member refid="structllama_1_1internal_1_1DatumCoordBack_3_010_01_4_1a7574dc5230b2247603ca5a42cd8f22d0" kind="typedef"><name>type</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1DatumCoordBack_3_010_00_01T__coord_00_01T__coords_8_8_8_01_4" kind="struct"><name>llama::internal::DatumCoordBack&lt; 0, T_coord, T_coords... &gt;</name>
-    <member refid="structllama_1_1internal_1_1DatumCoordBack_3_010_00_01T__coord_00_01T__coords_8_8_8_01_4_1abf76eefce05674cc1a8b014f2e7be567" kind="typedef"><name>type</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1DatumCoordBack_3_01T__rest_00_01T__coord_00_01T__coords_8_8_8_01_4" kind="struct"><name>llama::internal::DatumCoordBack&lt; T_rest, T_coord, T_coords... &gt;</name>
-    <member refid="structllama_1_1internal_1_1DatumCoordBack_3_01T__rest_00_01T__coord_00_01T__coords_8_8_8_01_4_1ad892e7656711a3f6ea53b023fff1d622" kind="typedef"><name>type</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1DatumCoordFront" kind="struct"><name>llama::internal::DatumCoordFront</name>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1DatumCoordFront_3_010_00_01T__coord_00_01T__coords_8_8_8_01_4" kind="struct"><name>llama::internal::DatumCoordFront&lt; 0, T_coord, T_coords... &gt;</name>
-    <member refid="structllama_1_1internal_1_1DatumCoordFront_3_010_00_01T__coord_00_01T__coords_8_8_8_01_4_1a000ad70e92692ae6d3052e246ccdb5b1" kind="typedef"><name>type</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1DatumCoordFront_3_01T__rest_00_01T__coord_00_01T__coords_8_8_8_01_4" kind="struct"><name>llama::internal::DatumCoordFront&lt; T_rest, T_coord, T_coords... &gt;</name>
-    <member refid="structllama_1_1internal_1_1DatumCoordFront_3_01T__rest_00_01T__coord_00_01T__coords_8_8_8_01_4_1a7f981ff6f18806ff418e8dcde9689fb5" kind="typedef"><name>type</name></member>
-  </compound>
   <compound refid="structllama_1_1DatumCoordIsBigger" kind="struct"><name>llama::DatumCoordIsBigger</name>
     <member refid="structllama_1_1DatumCoordIsBigger_1a61d597228799bd6780e057ea776d174e" kind="variable"><name>value</name></member>
-  </compound>
-  <compound refid="structllama_1_1DatumCoordIsBigger_3_01T__First_00_01T__Second_00_01typename_01std_1_1enable__if_7a1a7cdba9a89b1c9cec4f60b192bb93" kind="struct"><name>llama::DatumCoordIsBigger&lt; T_First, T_Second, typename std::enable_if&lt;(T_First::size==1||T_Second::size==1) &gt;::type &gt;</name>
-    <member refid="structllama_1_1DatumCoordIsBigger_3_01T__First_00_01T__Second_00_01typename_01std_1_1enable__if_7a1a7cdba9a89b1c9cec4f60b192bb93_1a0fd7d2d23a2c6b41af72afabcafd4a8f" kind="variable"><name>value</name></member>
   </compound>
   <compound refid="structllama_1_1DatumCoordIsSame" kind="struct"><name>llama::DatumCoordIsSame</name>
     <member refid="structllama_1_1DatumCoordIsSame_1a1d4f811eada45a78590e65306248fce9" kind="variable"><name>value</name></member>
@@ -295,9 +237,6 @@
   </compound>
   <compound refid="structllama_1_1ForEach_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4" kind="struct"><name>llama::ForEach&lt; T_DatumDomain, DatumCoord&lt; T_coords... &gt;&gt;</name>
     <member refid="structllama_1_1ForEach_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4_1a8b208e010bdd15c5aa98a27297da29c5" kind="function"><name>apply</name></member>
-  </compound>
-  <compound refid="structllama_1_1GetBranch" kind="struct"><name>llama::GetBranch</name>
-    <member refid="structllama_1_1GetBranch_1a857010ee1265d8e8443c60b99ea679ef" kind="typedef"><name>type</name></member>
   </compound>
   <compound refid="structllama_1_1GetCoordFromUIDImpl" kind="struct"><name>llama::GetCoordFromUIDImpl</name>
   </compound>
@@ -444,14 +383,14 @@
   <compound refid="structllama_1_1LinearBytePos" kind="struct"><name>llama::LinearBytePos</name>
     <member refid="structllama_1_1LinearBytePos_1ad94b5c8a780057504a13edb0ccefc0e6" kind="variable"><name>value</name></member>
   </compound>
-  <compound refid="structllama_1_1LinearBytePosImpl" kind="struct"><name>llama::LinearBytePosImpl</name>
-    <member refid="structllama_1_1LinearBytePosImpl_1a71436c65afce5b4d933fb98444c067f0" kind="variable"><name>value</name></member>
+  <compound refid="structllama_1_1internal_1_1LinearBytePosImpl" kind="struct"><name>llama::internal::LinearBytePosImpl</name>
+    <member refid="structllama_1_1internal_1_1LinearBytePosImpl_1a1ea766c50eb94d8ca36bad2c6975089e" kind="variable"><name>value</name></member>
   </compound>
-  <compound refid="structllama_1_1LinearBytePosImpl_3_01DatumStruct_3_01_4_00_01T__DatumCoord_00_01T__IterCoord_01_4" kind="struct"><name>llama::LinearBytePosImpl&lt; DatumStruct&lt; &gt;, T_DatumCoord, T_IterCoord &gt;</name>
-    <member refid="structllama_1_1LinearBytePosImpl_3_01DatumStruct_3_01_4_00_01T__DatumCoord_00_01T__IterCoord_01_4_1a7e100d3e4127b2517b3541b532f7b002" kind="variable"><name>value</name></member>
+  <compound refid="structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01_4_00_01T__DatumCoord_00_01T__IterCoord_01_4" kind="struct"><name>llama::internal::LinearBytePosImpl&lt; DatumStruct&lt; &gt;, T_DatumCoord, T_IterCoord &gt;</name>
+    <member refid="structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01_4_00_01T__DatumCoord_00_01T__IterCoord_01_4_1aa61822d26322ecb480d573513c311d87" kind="variable"><name>value</name></member>
   </compound>
-  <compound refid="structllama_1_1LinearBytePosImpl_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__DatumElements_d93a519fea30c3c12f633823a742ed70" kind="struct"><name>llama::LinearBytePosImpl&lt; DatumStruct&lt; T_FirstDatumElement, T_DatumElements... &gt;, T_DatumCoord, T_IterCoord &gt;</name>
-    <member refid="structllama_1_1LinearBytePosImpl_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__DatumElements_d93a519fea30c3c12f633823a742ed70_1a0e610e7980aaf5899d20140b86e3829c" kind="variable"><name>value</name></member>
+  <compound refid="structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__Daab3e6bc06488e5011eff271a9737aa6b" kind="struct"><name>llama::internal::LinearBytePosImpl&lt; DatumStruct&lt; T_FirstDatumElement, T_DatumElements... &gt;, T_DatumCoord, T_IterCoord &gt;</name>
+    <member refid="structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__Daab3e6bc06488e5011eff271a9737aa6b_1a2d1ea8251ec186fe3e2c5c26b7451536" kind="variable"><name>value</name></member>
   </compound>
   <compound refid="structllama_1_1LinearizeUserDomainAdress" kind="struct"><name>llama::LinearizeUserDomainAdress</name>
     <member refid="structllama_1_1LinearizeUserDomainAdress_1a90d88ec82946a51c2cb7457f6a113733" kind="function"><name>operator()</name></member>
@@ -627,9 +566,6 @@
     <member refid="structllama_1_1allocator_1_1internal_1_1SharedPtrAccessor_1a794c5386ee4abdcb975cf2ffbb4f96bf" kind="function"><name>SharedPtrAccessor</name></member>
     <member refid="structllama_1_1allocator_1_1internal_1_1SharedPtrAccessor_1a135d51db8d76c68277519dc7f892fafd" kind="function"><name>operator[]</name></member>
     <member refid="structllama_1_1allocator_1_1internal_1_1SharedPtrAccessor_1a746e8af2ba3994e734a71875cb857edf" kind="function"><name>operator[]</name></member>
-  </compound>
-  <compound refid="structllama_1_1DatumCoordIsSame_3_01T__First_00_01T__Second_00_01typename_01std_1_1enable__if_3_452c5e68880e1f6841403842b9e5be07" kind="struct"><name>llama::DatumCoordIsSame&lt; T_First, T_Second, typename std::enable_if&lt;(T_First::size&lt; 1||T_Second::size&lt; 1) &gt;::type &gt;</name>
-    <member refid="structllama_1_1DatumCoordIsSame_3_01T__First_00_01T__Second_00_01typename_01std_1_1enable__if_3_452c5e68880e1f6841403842b9e5be07_1ac5165fbc5b8058519c70a4b72661a4cb" kind="variable"><name>value</name></member>
   </compound>
   <compound refid="structllama_1_1mapping_1_1tree_1_1TreeOptimalType_3_01T__Childs_00_01std_1_1integral__constant_314f3f09a057997e2a2641537aa824b9e" kind="struct"><name>llama::mapping::tree::TreeOptimalType&lt; T_Childs, std::integral_constant&lt; std::size_t, T_count &gt;&gt;</name>
     <member refid="structllama_1_1mapping_1_1tree_1_1TreeOptimalType_3_01T__Childs_00_01std_1_1integral__constant_314f3f09a057997e2a2641537aa824b9e_1add0f0c193200156345ac121bff5ed73c" kind="typedef"><name>type</name></member>
@@ -843,30 +779,12 @@
     <member refid="structllama_1_1internal_1_1TupleRestImpl_3_01Tuple_3_01T__OneElement_01_4_01_4_1acbb8d9c2f40a6e9e196482e19ca177d7" kind="typedef"><name>T_Tuple</name></member>
     <member refid="structllama_1_1internal_1_1TupleRestImpl_3_01Tuple_3_01T__OneElement_01_4_01_4_1a3ed8168dde5f3c59d6254567b53b9ea2" kind="function"><name>operator()</name></member>
   </compound>
-  <compound refid="structllama_1_1DatumCoordIsSame_011_01_6_6T__First_1_1front_0A_0AT__Second_1_1front_08_01_4_1_1type_01_4" kind="struct"><name>llama::DatumCoordIsSame 1 &amp;&amp;T_First::front==T_Second::front) &gt;::type &gt;</name>
-    <member refid="structllama_1_1DatumCoordIsSame_011_01_6_6T__First_1_1front_0A_0AT__Second_1_1front_08_01_4_1_1type_01_4_1a4f64bd70401fe6faf1a4a00cc9df6a27" kind="variable"><name>value</name></member>
-  </compound>
   <compound refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_1_1type_01_4" kind="struct"><name>llama::mapping::tree::internal::ReduceElementType::type &gt;</name>
     <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_1_1type_01_4_1a3f0be92e08fbaf63a8f66ac9df56fa5d" kind="typedef"><name>IterTree</name></member>
     <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_1_1type_01_4_1a74e0d38ffc91d367bee104bce7028385" kind="function"><name>operator()</name></member>
   </compound>
-  <compound refid="structllama_1_1DatumCoordIsBigger_011_01_6_6T__First_1_1front_1_1type_01_4" kind="struct"><name>llama::DatumCoordIsBigger 1 &amp;&amp;T_First::front::type &gt;</name>
-    <member refid="structllama_1_1DatumCoordIsBigger_011_01_6_6T__First_1_1front_1_1type_01_4_1a0d6ef15fdde14c6b408a912613add833" kind="variable"><name>value</name></member>
-  </compound>
-  <compound refid="structllama_1_1DatumCoordIsBigger_011_01_6_6T__First_1_1front_01_4_01T__Second_1_1front_08_01_4_1_1type_01_4" kind="struct"><name>llama::DatumCoordIsBigger 1 &amp;&amp;T_First::front &gt; T_Second::front) &gt;::type &gt;</name>
-    <member refid="structllama_1_1DatumCoordIsBigger_011_01_6_6T__First_1_1front_01_4_01T__Second_1_1front_08_01_4_1_1type_01_4_1a69d13b64892d3bd7f880b695a9ada323" kind="variable"><name>value</name></member>
-  </compound>
   <compound refid="structllama_1_1internal_1_1CoordIsIncluded_1_1type_01_4" kind="struct"><name>llama::internal::CoordIsIncluded::type &gt;</name>
     <member refid="structllama_1_1internal_1_1CoordIsIncluded_1_1type_01_4_1a4c124e04441f388134fef0e470662add" kind="variable"><name>value</name></member>
-  </compound>
-  <compound refid="structllama_1_1DatumCoordIsSame_0A1_01_6_6T__Second_1_1size_0A_0A1_08_01_4_1_1type_01_4" kind="struct"><name>llama::DatumCoordIsSame=1 &amp;&amp;T_Second::size==1) &gt;::type &gt;</name>
-    <member refid="structllama_1_1DatumCoordIsSame_0A1_01_6_6T__Second_1_1size_0A_0A1_08_01_4_1_1type_01_4_1a5559820ea8789f087bf2533f1a9411b5" kind="variable"><name>value</name></member>
-  </compound>
-  <compound refid="structllama_1_1DatumCoordIsSame_011_01_6_6T__First_1_1front_01_9_0AT__Second_1_1front_08_01_4_1_1type_01_4" kind="struct"><name>llama::DatumCoordIsSame 1 &amp;&amp;T_First::front !=T_Second::front) &gt;::type &gt;</name>
-    <member refid="structllama_1_1DatumCoordIsSame_011_01_6_6T__First_1_1front_01_9_0AT__Second_1_1front_08_01_4_1_1type_01_4_1a91bb36b601e9a5e0812dc99ac8dbc06e" kind="variable"><name>value</name></member>
-  </compound>
-  <compound refid="structllama_1_1DatumCoordIsBigger_011_01_6_6T__First_1_1front_0A_0AT__Second_1_1front_08_01_4_1_1type_01_4" kind="struct"><name>llama::DatumCoordIsBigger 1 &amp;&amp;T_First::front==T_Second::front) &gt;::type &gt;</name>
-    <member refid="structllama_1_1DatumCoordIsBigger_011_01_6_6T__First_1_1front_0A_0AT__Second_1_1front_08_01_4_1_1type_01_4_1a4a17a2790fb0cdbbde2a62d44d23915a" kind="variable"><name>value</name></member>
   </compound>
   <compound refid="structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord" kind="struct"><name>llama::mapping::tree::internal::UserDomainToTreeCoord</name>
     <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord_1a8b7da0f25cb2c472958671d4f0e2aff4" kind="function"><name>operator()</name></member>
@@ -905,7 +823,7 @@
     <member refid="structllama_1_1VirtualDatum_1a20986df466bd48afeb0f6c39df691f9f" kind="function"><name>access</name></member>
     <member refid="structllama_1_1VirtualDatum_1ad89464c86edc3fbcd7cf43de3e27d20f" kind="function"><name>access</name></member>
     <member refid="structllama_1_1VirtualDatum_1a59c95323ae5ea51f0fb82e9a1a4bdc7f" kind="function"><name>access</name></member>
-    <member refid="structllama_1_1VirtualDatum_1ab9139e421a5828661f10f5f541e52e0a" kind="function"><name>operator()</name></member>
+    <member refid="structllama_1_1VirtualDatum_1a57cb002cb710c69ec3151fcfb8892f97" kind="function"><name>operator()</name></member>
     <member refid="structllama_1_1VirtualDatum_1abdfe236aa0658d57c318e301771d2b24" kind="function"><name>operator=</name></member>
     <member refid="structllama_1_1VirtualDatum_1a55b54752db6a96c5398e0964563e207c" kind="function"><name>operator=</name></member>
     <member refid="structllama_1_1VirtualDatum_1a63072173135bf914b598922337d4020d" kind="function"><name>operator=</name></member>
@@ -993,14 +911,14 @@
     <member refid="structllama_1_1VirtualView_1abc0a9afd6144f2dd210cd54e86b652f6" kind="function"><name>VirtualView</name></member>
     <member refid="structllama_1_1VirtualView_1a6cd714439f67e826fe7d888c5c8dba7b" kind="function"><name>VirtualView</name></member>
     <member refid="structllama_1_1VirtualView_1abe5b8ab3619c15aec658c7eb7d48495e" kind="function"><name>~VirtualView</name></member>
-    <member refid="structllama_1_1VirtualView_1a2be6acaee5e78126a3b83b7c08e1b84e" kind="function"><name>VirtualView</name></member>
-    <member refid="structllama_1_1VirtualView_1a0489a4234e874a58fa47bc6c7d1d885f" kind="function"><name>accessor</name></member>
-    <member refid="structllama_1_1VirtualView_1a42db0ff186da22494a44aa842bb61826" kind="function"><name>accessor</name></member>
-    <member refid="structllama_1_1VirtualView_1a28325234ee1cc92fe890a727564b1c26" kind="function"><name>operator()</name></member>
-    <member refid="structllama_1_1VirtualView_1ad1c736def64ac78e0001f9941a92b9da" kind="function"><name>operator()</name></member>
-    <member refid="structllama_1_1VirtualView_1a993ebaf01d040cd0535e0ce609b51b53" kind="function"><name>operator()</name></member>
-    <member refid="structllama_1_1VirtualView_1af8d55c53a0fd092e75834de8b9cb1a41" kind="function"><name>operator()</name></member>
-    <member refid="structllama_1_1VirtualView_1a88f64410638f235e3588b5b760ac1b05" kind="function"><name>operator()</name></member>
+    <member refid="structllama_1_1VirtualView_1a1ae5e3104bc8fb3507caa4ac7959dddd" kind="function"><name>VirtualView</name></member>
+    <member refid="structllama_1_1VirtualView_1a6e55057662aafced4893806725153ce6" kind="function"><name>accessor</name></member>
+    <member refid="structllama_1_1VirtualView_1ad4d669766c9d48669c1a52df1c21b70f" kind="function"><name>accessor</name></member>
+    <member refid="structllama_1_1VirtualView_1a1e3ffbcde46a60e1b2f1862406e2d79c" kind="function"><name>operator()</name></member>
+    <member refid="structllama_1_1VirtualView_1abffd8f3af035e92fbeffdeef4dc9092c" kind="function"><name>operator()</name></member>
+    <member refid="structllama_1_1VirtualView_1a7142cebedeeeabed15fea51f07a0b5f0" kind="function"><name>operator()</name></member>
+    <member refid="structllama_1_1VirtualView_1ad456a7841ca2a98ac003056d206d98d0" kind="function"><name>operator()</name></member>
+    <member refid="structllama_1_1VirtualView_1a3e89a9eb6efa918be4634a365c917628" kind="function"><name>operator()</name></member>
   </compound>
   <compound refid="structllama_1_1internal_1_1ZeroSequenceHelper" kind="struct"><name>llama::internal::ZeroSequenceHelper</name>
     <member refid="structllama_1_1internal_1_1ZeroSequenceHelper_1accaba4297d72e3ae599b7d78e04696b8" kind="typedef"><name>type</name></member>
@@ -1104,32 +1022,6 @@
   </compound>
   <compound refid="namespacellama_1_1allocator_1_1internal" kind="namespace"><name>llama::allocator::internal</name>
   </compound>
-  <compound refid="namespacellama_1_1DatumCoordIsBigger_011_01_6_6T__First" kind="namespace"><name>llama::DatumCoordIsBigger 1 &amp;&amp;T_First</name>
-  </compound>
-  <compound refid="namespacellama_1_1DatumCoordIsBigger_011_01_6_6T__First_1_1front" kind="namespace"><name>llama::DatumCoordIsBigger 1 &amp;&amp;T_First::front</name>
-  </compound>
-  <compound refid="namespacellama_1_1DatumCoordIsBigger_011_01_6_6T__First_1_1front_01_4_01T__Second" kind="namespace"><name>llama::DatumCoordIsBigger 1 &amp;&amp;T_First::front &gt; T_Second</name>
-  </compound>
-  <compound refid="namespacellama_1_1DatumCoordIsBigger_011_01_6_6T__First_1_1front_01_4_01T__Second_1_1front_08_01_4" kind="namespace"><name>llama::DatumCoordIsBigger 1 &amp;&amp;T_First::front &gt; T_Second::front) &gt;</name>
-  </compound>
-  <compound refid="namespacellama_1_1DatumCoordIsBigger_011_01_6_6T__First_1_1front_0A_0AT__Second" kind="namespace"><name>llama::DatumCoordIsBigger 1 &amp;&amp;T_First::front==T_Second</name>
-  </compound>
-  <compound refid="namespacellama_1_1DatumCoordIsBigger_011_01_6_6T__First_1_1front_0A_0AT__Second_1_1front_08_01_4" kind="namespace"><name>llama::DatumCoordIsBigger 1 &amp;&amp;T_First::front==T_Second::front) &gt;</name>
-  </compound>
-  <compound refid="namespacellama_1_1DatumCoordIsSame_011_01_6_6T__First" kind="namespace"><name>llama::DatumCoordIsSame 1 &amp;&amp;T_First</name>
-  </compound>
-  <compound refid="namespacellama_1_1DatumCoordIsSame_011_01_6_6T__First_1_1front_01_9_0AT__Second" kind="namespace"><name>llama::DatumCoordIsSame 1 &amp;&amp;T_First::front !=T_Second</name>
-  </compound>
-  <compound refid="namespacellama_1_1DatumCoordIsSame_011_01_6_6T__First_1_1front_01_9_0AT__Second_1_1front_08_01_4" kind="namespace"><name>llama::DatumCoordIsSame 1 &amp;&amp;T_First::front !=T_Second::front) &gt;</name>
-  </compound>
-  <compound refid="namespacellama_1_1DatumCoordIsSame_011_01_6_6T__First_1_1front_0A_0AT__Second" kind="namespace"><name>llama::DatumCoordIsSame 1 &amp;&amp;T_First::front==T_Second</name>
-  </compound>
-  <compound refid="namespacellama_1_1DatumCoordIsSame_011_01_6_6T__First_1_1front_0A_0AT__Second_1_1front_08_01_4" kind="namespace"><name>llama::DatumCoordIsSame 1 &amp;&amp;T_First::front==T_Second::front) &gt;</name>
-  </compound>
-  <compound refid="namespacellama_1_1DatumCoordIsSame_0A1_01_6_6T__Second" kind="namespace"><name>llama::DatumCoordIsSame=1 &amp;&amp;T_Second</name>
-  </compound>
-  <compound refid="namespacellama_1_1DatumCoordIsSame_0A1_01_6_6T__Second_1_1size_0A_0A1_08_01_4" kind="namespace"><name>llama::DatumCoordIsSame=1 &amp;&amp;T_Second::size==1) &gt;</name>
-  </compound>
   <compound refid="namespacellama_1_1internal" kind="namespace"><name>llama::internal</name>
     <member refid="namespacellama_1_1internal_1a7c26f441239229fe528731f2c4143b50" kind="function"><name>makeBlobArrayImpl</name></member>
     <member refid="namespacellama_1_1internal_1ad2bf21ee2ef972d55572612e2dfc1ce2" kind="function"><name>makeBlobArray</name></member>
@@ -1177,8 +1069,6 @@
   <compound refid="DatumArray_8hpp" kind="file"><name>DatumArray.hpp</name>
   </compound>
   <compound refid="DatumCoord_8dox" kind="file"><name>DatumCoord.dox</name>
-  </compound>
-  <compound refid="DatumCoord_8hpp" kind="file"><name>DatumCoord.hpp</name>
   </compound>
   <compound refid="DatumStruct_8hpp" kind="file"><name>DatumStruct.hpp</name>
   </compound>
@@ -1238,17 +1128,6 @@
   <compound refid="TreeElement_8hpp" kind="file"><name>TreeElement.hpp</name>
   </compound>
   <compound refid="TreeFromDomains_8hpp" kind="file"><name>TreeFromDomains.hpp</name>
-  </compound>
-  <compound refid="DatumStructUIDTemplate_8hpp" kind="file"><name>DatumStructUIDTemplate.hpp</name>
-    <member refid="DatumStructUIDTemplate_8hpp_1a0d96a1c6f1645458efdec9a8cafbe62d" kind="define"><name>LLAMA_INTERNAL_PARSE_UID_TUPLE_3</name></member>
-    <member refid="DatumStructUIDTemplate_8hpp_1aa3788610e01bfd8f8361ed73d215bc0c" kind="define"><name>LLAMA_INTERNAL_PARSE_UID_DS_CONTENT_LOOP_3</name></member>
-    <member refid="DatumStructUIDTemplate_8hpp_1aa3653b942ee7c89f60127b7050750c13" kind="define"><name>LLAMA_INTERNAL_PARSE_UID_DS_CONTENT_3</name></member>
-    <member refid="DatumStructUIDTemplate_8hpp_1acaf84328173c248361f4474295359443" kind="define"><name>LLAMA_INTERNAL_PARSE_UID_TUPLE_2</name></member>
-    <member refid="DatumStructUIDTemplate_8hpp_1a9dc017c661d64ec3e470fbdd5f2e5c85" kind="define"><name>LLAMA_INTERNAL_PARSE_UID_DS_CONTENT_LOOP_2</name></member>
-    <member refid="DatumStructUIDTemplate_8hpp_1a993e66be6867ab0121d9a511b94ec763" kind="define"><name>LLAMA_INTERNAL_PARSE_UID_DS_CONTENT_2</name></member>
-    <member refid="DatumStructUIDTemplate_8hpp_1ad5e250356682bb63fe309e099254f282" kind="define"><name>LLAMA_INTERNAL_PARSE_UID_TUPLE_1</name></member>
-    <member refid="DatumStructUIDTemplate_8hpp_1abbe939da7b6c63a8205b4b31e175820c" kind="define"><name>LLAMA_INTERNAL_PARSE_UID_DS_CONTENT_LOOP_1</name></member>
-    <member refid="DatumStructUIDTemplate_8hpp_1acbeb0572aec9212cffba8d8f907f189a" kind="define"><name>LLAMA_INTERNAL_PARSE_UID_DS_CONTENT_1</name></member>
   </compound>
   <compound refid="macros_8hpp" kind="file"><name>macros.hpp</name>
     <member refid="macros_8hpp_1aa201f5c2567527b34eae5fbdab0e2416" kind="define"><name>LLAMA_INDEPENDENT_DATA</name></member>

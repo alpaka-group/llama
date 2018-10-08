@@ -18,7 +18,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>static auto llama::VirtualDatum&lt; T_View &gt;::AccessImpl&lt; T_UIDs &gt;::apply</definition>
+        <definition>static auto llama::VirtualDatum::AccessImpl&lt; T_UIDs &gt;::apply</definition>
         <argsstring>(T_View &amp;&amp;view, T_UserDomain const &amp;userDomainPos) -&gt; decltype(view.template accessor&lt; T_UIDs... &gt;(userDomainPos))&amp;</argsstring>
         <name>apply</name>
         <param>
@@ -35,14 +35,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="571" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="571" bodyend="579"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="671" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="671" bodyend="679"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="566" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="565" bodyend="580"/>
+    <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="666" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="665" bodyend="680"/>
     <listofallmembers>
       <member refid="structllama_1_1VirtualDatum_1_1AccessImpl_1ab8f24df21e1c362ddab89e51bd04c0ce" prot="public" virt="non-virtual"><scope>llama::VirtualDatum::AccessImpl</scope><name>apply</name></member>
     </listofallmembers>

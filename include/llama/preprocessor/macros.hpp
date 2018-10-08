@@ -78,3 +78,7 @@
 #endif
 
 #define LLAMA_DEREFERENCE( x ) decltype( x )( x )
+
+#ifndef LLAMA_IGNORE_LITERAL
+#   define LLAMA_IGNORE_LITERAL( x )
+#endif

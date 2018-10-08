@@ -19,7 +19,7 @@
         <definition>constexpr std::size_t llama::LinearBytePos&lt; T_DatumDomain, T_coords &gt;::value</definition>
         <argsstring></argsstring>
         <name>value</name>
-        <initializer>= <ref refid="structllama_1_1LinearBytePosImpl" kindref="compound">LinearBytePosImpl</ref>&lt;
+        <initializer>= <ref refid="structllama_1_1internal_1_1LinearBytePosImpl" kindref="compound">internal::LinearBytePosImpl</ref>&lt;
         T_DatumDomain,
         <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>&lt; T_coords... &gt;,
         <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>&lt; 0 &gt;
@@ -30,14 +30,30 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="97" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="97" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="116" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="116" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
-    </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="96" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="95" bodyend="102"/>
+<para>Gives the byte position of an element in a datum domain if it would be a normal struct <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_DatumDomain</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>datum domain tree </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_coords...</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>coordinate in datum domain tree </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>the byte position as compile time value in &quot;value&quot; </para></simplesect>
+</para>    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="115" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="114" bodyend="121"/>
     <listofallmembers>
       <member refid="structllama_1_1LinearBytePos_1ad94b5c8a780057504a13edb0ccefc0e6" prot="public" virt="non-virtual"><scope>llama::LinearBytePos</scope><name>value</name></member>
     </listofallmembers>

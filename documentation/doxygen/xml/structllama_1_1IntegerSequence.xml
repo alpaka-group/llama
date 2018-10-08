@@ -13,8 +13,16 @@
     <briefdescription>
     </briefdescription>
     <detaileddescription>
-    </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/IntegerSequence.hpp" line="28" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/IntegerSequence.hpp" bodystart="28" bodyend="28"/>
+<para>Helper class just holding some numbers at compile time. A similar sequence is part of the STL starting with C++14, but as LLAMA supports down to C++11 an own implementation is needed <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_seg...</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>variadic sequence of integers. </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/IntegerSequence.hpp" line="33" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/IntegerSequence.hpp" bodystart="33" bodyend="33"/>
     <listofallmembers>
     </listofallmembers>
   </compounddef>

@@ -12,13 +12,6 @@
     <innerclass refid="structllama_1_1internal_1_1ApplyFunctorIfCoordIsIncluded" prot="public">llama::internal::ApplyFunctorIfCoordIsIncluded</innerclass>
     <innerclass refid="structllama_1_1internal_1_1ApplyFunctorIfCoordIsIncluded_3_01T__Coord_00_01T__Pos_00_01T__Functo8178b759a940c008334ad4f19e3e5b46" prot="public">llama::internal::ApplyFunctorIfCoordIsIncluded&lt; T_Coord, T_Pos, T_Functor, typename std::enable_if&lt; CoordIsIncluded&lt; T_Pos, T_Coord &gt;::value &gt;::type &gt;</innerclass>
     <innerclass refid="structllama_1_1internal_1_1CoordIsIncluded" prot="public">llama::internal::CoordIsIncluded</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1DatumCoordBack" prot="public">llama::internal::DatumCoordBack</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1DatumCoordBack_3_010_01_4" prot="public">llama::internal::DatumCoordBack&lt; 0 &gt;</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1DatumCoordBack_3_010_00_01T__coord_00_01T__coords_8_8_8_01_4" prot="public">llama::internal::DatumCoordBack&lt; 0, T_coord, T_coords... &gt;</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1DatumCoordBack_3_01T__rest_00_01T__coord_00_01T__coords_8_8_8_01_4" prot="public">llama::internal::DatumCoordBack&lt; T_rest, T_coord, T_coords... &gt;</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1DatumCoordFront" prot="public">llama::internal::DatumCoordFront</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1DatumCoordFront_3_010_00_01T__coord_00_01T__coords_8_8_8_01_4" prot="public">llama::internal::DatumCoordFront&lt; 0, T_coord, T_coords... &gt;</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1DatumCoordFront_3_01T__rest_00_01T__coord_00_01T__coords_8_8_8_01_4" prot="public">llama::internal::DatumCoordFront&lt; T_rest, T_coord, T_coords... &gt;</innerclass>
     <innerclass refid="structllama_1_1internal_1_1CoordIsIncluded_3_01T__Pos_00_01T__Coord_00_01typename_01std_1_1enable7f0177eec7aaf3f9a26fe9c8ed89548" prot="public">llama::internal::CoordIsIncluded&lt; T_Pos, T_Coord, typename std::enable_if&lt;(T_Pos::size&lt; T_Coord::size) &gt;::type &gt;</innerclass>
     <innerclass refid="structllama_1_1internal_1_1GetTupleElementImpl" prot="public">llama::internal::GetTupleElementImpl</innerclass>
     <innerclass refid="structllama_1_1internal_1_1GetTupleElementImpl_3_01Tuple_3_01T__First_00_01T__Rest_8_8_8_01_4_00_010_01_4" prot="public">llama::internal::GetTupleElementImpl&lt; Tuple&lt; T_First, T_Rest... &gt;, 0 &gt;</innerclass>
@@ -33,6 +26,9 @@
     <innerclass refid="structllama_1_1internal_1_1GetUIDImpl_3_01T__DatumElement_00_01T__firstDatumDomainCoord_00_01T__datumDomainCoords_8_8_8_01_4" prot="public">llama::internal::GetUIDImpl&lt; T_DatumElement, T_firstDatumDomainCoord, T_datumDomainCoords... &gt;</innerclass>
     <innerclass refid="structllama_1_1internal_1_1IntegerSequenceHelper" prot="public">llama::internal::IntegerSequenceHelper</innerclass>
     <innerclass refid="structllama_1_1internal_1_1IntegerSequenceHelper_3_010_00_01T__vals_8_8_8_01_4" prot="public">llama::internal::IntegerSequenceHelper&lt; 0, T_vals... &gt;</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1LinearBytePosImpl" prot="public">llama::internal::LinearBytePosImpl</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01_4_00_01T__DatumCoord_00_01T__IterCoord_01_4" prot="public">llama::internal::LinearBytePosImpl&lt; DatumStruct&lt; &gt;, T_DatumCoord, T_IterCoord &gt;</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__Daab3e6bc06488e5011eff271a9737aa6b" prot="public">llama::internal::LinearBytePosImpl&lt; DatumStruct&lt; T_FirstDatumElement, T_DatumElements... &gt;, T_DatumCoord, T_IterCoord &gt;</innerclass>
     <innerclass refid="structllama_1_1internal_1_1MakeTupleImpl" prot="public">llama::internal::MakeTupleImpl</innerclass>
     <innerclass refid="structllama_1_1internal_1_1MakeTupleImpl_3_01_4" prot="public">llama::internal::MakeTupleImpl&lt; &gt;</innerclass>
     <innerclass refid="structllama_1_1internal_1_1MakeTupleImpl_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4" prot="public">llama::internal::MakeTupleImpl&lt; T_FirstElement, T_Elements... &gt;</innerclass>
@@ -152,6 +148,6 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/DatumCoord.hpp" line="33" column="1"/>
+    <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="44" column="1"/>
   </compounddef>
 </doxygen>

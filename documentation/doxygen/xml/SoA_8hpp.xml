@@ -7,100 +7,92 @@
     <includes refid="UserDomain_8hpp" local="yes">../UserDomain.hpp</includes>
     <includedby refid="llama_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/llama.hpp</includedby>
     <incdepgraph>
-      <node id="298">
+      <node id="284">
         <label>boost/predef.h</label>
       </node>
-      <node id="295">
+      <node id="281">
         <label>../Types.hpp</label>
         <link refid="Types_8hpp"/>
-        <childnode refid="296" relation="include">
+        <childnode refid="282" relation="include">
         </childnode>
-        <childnode refid="299" relation="include">
+        <childnode refid="285" relation="include">
         </childnode>
       </node>
-      <node id="296">
+      <node id="282">
         <label>Array.hpp</label>
         <link refid="Array_8hpp"/>
-        <childnode refid="297" relation="include">
+        <childnode refid="283" relation="include">
         </childnode>
       </node>
-      <node id="301">
+      <node id="287">
         <label>DatumStruct.hpp</label>
         <link refid="DatumStruct_8hpp"/>
-        <childnode refid="295" relation="include">
+        <childnode refid="281" relation="include">
         </childnode>
-        <childnode refid="302" relation="include">
+        <childnode refid="288" relation="include">
         </childnode>
-        <childnode refid="299" relation="include">
+        <childnode refid="285" relation="include">
         </childnode>
-        <childnode refid="304" relation="include">
+        <childnode refid="289" relation="include">
         </childnode>
       </node>
-      <node id="305">
+      <node id="290">
         <label>../UserDomain.hpp</label>
         <link refid="UserDomain_8hpp"/>
-        <childnode refid="295" relation="include">
+        <childnode refid="281" relation="include">
         </childnode>
-        <childnode refid="306" relation="include">
+        <childnode refid="291" relation="include">
         </childnode>
       </node>
-      <node id="294">
+      <node id="280">
         <label>/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp</label>
         <link refid="SoA_8hpp"/>
-        <childnode refid="295" relation="include">
+        <childnode refid="281" relation="include">
         </childnode>
-        <childnode refid="300" relation="include">
+        <childnode refid="286" relation="include">
         </childnode>
-        <childnode refid="305" relation="include">
+        <childnode refid="290" relation="include">
         </childnode>
       </node>
-      <node id="306">
+      <node id="288">
+        <label>DatumCoord.hpp</label>
+      </node>
+      <node id="291">
         <label>IntegerSequence.hpp</label>
         <link refid="IntegerSequence_8hpp"/>
-        <childnode refid="296" relation="include">
+        <childnode refid="282" relation="include">
         </childnode>
       </node>
-      <node id="303">
-        <label>tuple</label>
-      </node>
-      <node id="300">
+      <node id="286">
         <label>../GetType.hpp</label>
         <link refid="GetType_8hpp"/>
-        <childnode refid="299" relation="include">
+        <childnode refid="285" relation="include">
         </childnode>
-        <childnode refid="301" relation="include">
+        <childnode refid="287" relation="include">
         </childnode>
       </node>
-      <node id="297">
+      <node id="283">
         <label>preprocessor/macros.hpp</label>
         <link refid="macros_8hpp"/>
-        <childnode refid="298" relation="include">
+        <childnode refid="284" relation="include">
         </childnode>
       </node>
-      <node id="304">
+      <node id="289">
         <label>type_traits</label>
       </node>
-      <node id="302">
-        <label>DatumCoord.hpp</label>
-        <link refid="DatumCoord_8hpp"/>
-        <childnode refid="303" relation="include">
-        </childnode>
-        <childnode refid="304" relation="include">
-        </childnode>
-      </node>
-      <node id="299">
+      <node id="285">
         <label>boost/mp11.hpp</label>
       </node>
     </incdepgraph>
     <invincdepgraph>
-      <node id="308">
+      <node id="293">
         <label>/home/alexander/develop/work/llama/include/llama/llama.hpp</label>
         <link refid="llama_8hpp"/>
       </node>
-      <node id="307">
+      <node id="292">
         <label>/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp</label>
         <link refid="SoA_8hpp"/>
-        <childnode refid="308" relation="include">
+        <childnode refid="293" relation="include">
         </childnode>
       </node>
     </invincdepgraph>

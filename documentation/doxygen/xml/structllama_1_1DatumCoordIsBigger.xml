@@ -2,7 +2,6 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
   <compounddef id="structllama_1_1DatumCoordIsBigger" kind="struct" language="C++" prot="public">
     <compoundname>llama::DatumCoordIsBigger</compoundname>
-    <includes refid="DatumCoord_8hpp" local="no">DatumCoord.hpp</includes>
     <templateparamlist>
       <param>
         <type>typename T_First</type>

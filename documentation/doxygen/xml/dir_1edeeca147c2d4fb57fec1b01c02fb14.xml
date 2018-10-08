@@ -8,7 +8,6 @@
     <innerfile refid="Array_8hpp">Array.hpp</innerfile>
     <innerfile refid="CompareUID_8hpp">CompareUID.hpp</innerfile>
     <innerfile refid="DatumArray_8hpp">DatumArray.hpp</innerfile>
-    <innerfile refid="DatumCoord_8hpp">DatumCoord.hpp</innerfile>
     <innerfile refid="DatumStruct_8hpp">DatumStruct.hpp</innerfile>
     <innerfile refid="Factory_8hpp">Factory.hpp</innerfile>
     <innerfile refid="ForEach_8hpp">ForEach.hpp</innerfile>

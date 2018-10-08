@@ -18,7 +18,7 @@
       <sectiondef kind="public-static-attrib">
       <memberdef kind="variable" id="structllama_1_1Array_1a77d5b390bfc75eb0674ee5f6ffd9a672" prot="public" static="yes" mutable="no">
         <type>constexpr std::size_t</type>
-        <definition>constexpr std::size_t count</definition>
+        <definition>constexpr std::size_t llama::Array::count</definition>
         <argsstring></argsstring>
         <name>count</name>
         <initializer>= T_dim</initializer>
@@ -34,7 +34,7 @@
       <sectiondef kind="public-attrib">
       <memberdef kind="variable" id="structllama_1_1Array_1a1a94edc9cb79e022057a890ef1438bcd" prot="public" static="no" mutable="no">
         <type>T</type>
-        <definition>T element[count]</definition>
+        <definition>T llama::Array::element[count]</definition>
         <argsstring>[count]</argsstring>
         <name>element</name>
         <briefdescription>
@@ -49,7 +49,7 @@
       <sectiondef kind="public-func">
       <memberdef kind="function" id="structllama_1_1Array_1a77f2703389596822c5904932a3aab372" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
-        <definition>Array</definition>
+        <definition>llama::Array::Array</definition>
         <argsstring>()=default</argsstring>
         <name>Array</name>
         <briefdescription>
@@ -62,7 +62,7 @@
       </memberdef>
       <memberdef kind="function" id="structllama_1_1Array_1a4a99c9accd41220a3d85884542cc618a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
-        <definition>Array</definition>
+        <definition>llama::Array::Array</definition>
         <argsstring>(Array const &amp;)=default</argsstring>
         <name>Array</name>
         <param>
@@ -78,7 +78,7 @@
       </memberdef>
       <memberdef kind="function" id="structllama_1_1Array_1a4c63dd11e2fb6063f5ea7a0aaf34dd87" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
-        <definition>Array</definition>
+        <definition>llama::Array::Array</definition>
         <argsstring>(Array &amp;&amp;)=default</argsstring>
         <name>Array</name>
         <param>
@@ -94,7 +94,7 @@
       </memberdef>
       <memberdef kind="function" id="structllama_1_1Array_1aa1072cddbe999dd93d0f50d933748091" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
-        <definition>~Array</definition>
+        <definition>llama::Array::~Array</definition>
         <argsstring>()=default</argsstring>
         <name>~Array</name>
         <briefdescription>
@@ -107,7 +107,7 @@
       </memberdef>
       <memberdef kind="function" id="structllama_1_1Array_1a62a903722c2fa12eb27535159e6efd5c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>T *</type>
-        <definition>T* begin</definition>
+        <definition>T* llama::Array::begin</definition>
         <argsstring>()</argsstring>
         <name>begin</name>
         <briefdescription>
@@ -121,7 +121,7 @@
       </memberdef>
       <memberdef kind="function" id="structllama_1_1Array_1a421097ae5f2571a31ac9d2ae5cc0364a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>T *</type>
-        <definition>T* end</definition>
+        <definition>T* llama::Array::end</definition>
         <argsstring>()</argsstring>
         <name>end</name>
         <briefdescription>
@@ -140,7 +140,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto operator[]</definition>
+        <definition>auto llama::Array::operator[]</definition>
         <argsstring>(T_IndexType &amp;&amp;idx) -&gt; T &amp;</argsstring>
         <name>operator[]</name>
         <param>
@@ -179,7 +179,7 @@
           </param>
         </templateparamlist>
         <type>constexpr auto</type>
-        <definition>constexpr auto operator[]</definition>
+        <definition>constexpr auto llama::Array::operator[]</definition>
         <argsstring>(T_IndexType &amp;&amp;idx) const -&gt; T const &amp;</argsstring>
         <name>operator[]</name>
         <param>
@@ -213,7 +213,7 @@
       </memberdef>
       <memberdef kind="function" id="structllama_1_1Array_1a486933c16d5b1fe95c7ef2b131a97511" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>auto</type>
-        <definition>auto pop_front</definition>
+        <definition>auto llama::Array::pop_front</definition>
         <argsstring>() const -&gt; Array&lt; T, count-1 &gt;</argsstring>
         <name>pop_front</name>
         <briefdescription>
@@ -227,7 +227,7 @@
       </memberdef>
       <memberdef kind="function" id="structllama_1_1Array_1a8af3020e5e1e24f9c6c91e0909493872" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>auto</type>
-        <definition>auto pop_back</definition>
+        <definition>auto llama::Array::pop_back</definition>
         <argsstring>() const -&gt; Array&lt; T, count-1 &gt;</argsstring>
         <name>pop_back</name>
         <briefdescription>
@@ -241,7 +241,7 @@
       </memberdef>
       <memberdef kind="function" id="structllama_1_1Array_1a07f1108f0c3f94541ff72eaa7dfdb335" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>auto</type>
-        <definition>auto push_front</definition>
+        <definition>auto llama::Array::push_front</definition>
         <argsstring>(T const new_element) const -&gt; Array&lt; T, count+1 &gt;</argsstring>
         <name>push_front</name>
         <param>
@@ -267,7 +267,7 @@
       </memberdef>
       <memberdef kind="function" id="structllama_1_1Array_1ad280fec506e1d72c80b662e9126bf673" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>auto</type>
-        <definition>auto push_back</definition>
+        <definition>auto llama::Array::push_back</definition>
         <argsstring>(T const new_element) const -&gt; Array&lt; T, count+1 &gt;</argsstring>
         <name>push_back</name>
         <param>
@@ -298,7 +298,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto operator==</definition>
+        <definition>auto llama::Array::operator==</definition>
         <argsstring>(const T_Other &amp;other) const -&gt; bool</argsstring>
         <name>operator==</name>
         <param>
@@ -337,7 +337,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto operator+</definition>
+        <definition>auto llama::Array::operator+</definition>
         <argsstring>(const T_Other &amp;second) const -&gt; Array</argsstring>
         <name>operator+</name>
         <param>

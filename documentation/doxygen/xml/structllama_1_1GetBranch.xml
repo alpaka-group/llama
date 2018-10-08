@@ -25,14 +25,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="110" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="113" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="118" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="121" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="109" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="108" bodyend="114"/>
+    <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="117" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="116" bodyend="122"/>
     <listofallmembers>
       <member refid="structllama_1_1GetBranch_1a857010ee1265d8e8443c60b99ea679ef" prot="public" virt="non-virtual"><scope>llama::GetBranch</scope><name>type</name></member>
     </listofallmembers>

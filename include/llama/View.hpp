@@ -36,6 +36,17 @@ template<
 >
 struct View;
 
+/** Macro that defines two functors for \ref llama::ForEach which apply an operation on
+ *  a given virtual datum and either another virtual datum or some other type.
+ *  In the first case the operation is applied if the unique id of the two
+ *  elements in the datum domain is the same, in the second case the operation
+ *  is applied to every combination of elements of the virtual datum and the
+ *  second type.
+ * \param OP operation, e.g. +=
+ * \param FUNCTOR operation naming used for functor name definition, e.g. if
+ *        FUNCTOR is "Addition", the functors will be named AdditionFunctor
+ *        and AdditionTypeFunctor.
+ * */
 #define __LLAMA_DEFINE_FOREACH_FUNCTOR( OP, FUNCTOR )                          \
     template<                                                                  \
         typename T_LeftDatum,                                                  \
@@ -205,6 +216,15 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( *= , Multiplication )
 __LLAMA_DEFINE_FOREACH_FUNCTOR( /= , Division )
 __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
 
+/** Macro that defines an operator overloading inside of \ref llama::VirtualDatum for
+ *  itself and a second virtual datum.
+ * \param OP operator, e.g. operator +=
+ * \param FUNCTOR used for calling the internal needed functor to operate on
+ *        the virtual datums, e.g. if FUNCTOR is "Addition", the AdditionFunctor
+ *        will be used internally.
+ * \param REF may be & or && to determine whether it is an overloading for
+ *        lvalue or rvalue references
+ * */
 #define __LLAMA_VIRTUALDATUM_VIRTUALDATUM_OPERATOR( OP, FUNCTOR, REF )         \
     template< typename T_OtherView >                                           \
     LLAMA_FN_HOST_ACC_INLINE                                                   \
@@ -227,6 +247,17 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
         return *this;                                                          \
     }
 
+/** Macro that defines an operator overloading inside of \ref llama::VirtualDatum for
+ *  itself and a view. Internally the virtual datum at the first postion (all
+ *  zeros) will be taken. This is useful for one-element views (e.g. temporary
+ *  views).
+ * \param OP operator, e.g. operator +=
+ * \param FUNCTOR used for calling the internal needed functor to operate on
+ *        the virtual datums, e.g. if FUNCTOR is "Addition", the AdditionFunctor
+ *        will be used internally.
+ * \param REF may be & or && to determine whether it is an overloading for
+ *        lvalue or rvalue references
+ * */
 #define __LLAMA_VIRTUALDATUM_VIEW_OPERATOR( OP, FUNCTOR, REF )                 \
     template<                                                                  \
         typename T_OtherMapping,                                               \
@@ -258,6 +289,15 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
         return *this;                                                          \
     }
 
+/** Macro that defines an operator overloading inside of \ref llama::VirtualDatum for
+ *  itself and some other type.
+ * \param OP operator, e.g. operator +=
+ * \param FUNCTOR used for calling the internal needed functor to operate on
+ *        the virtual datums, e.g. if FUNCTOR is "Addition", the
+ *        AdditionTypeFunctor will be used internally.
+ * \param REF may be & or && to determine whether it is an overloading for
+ *        lvalue or rvalue references
+ * */
 #define __LLAMA_VIRTUALDATUM_TYPE_OPERATOR( OP, FUNCTOR, REF )                 \
     template< typename T_OtherType >                                           \
     LLAMA_FN_HOST_ACC_INLINE                                                   \
@@ -287,6 +327,21 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
     __LLAMA_VIRTUALDATUM_TYPE_OPERATOR( OP, FUNCTOR, & )                       \
     __LLAMA_VIRTUALDATUM_TYPE_OPERATOR( OP, FUNCTOR, && )
 
+/** Macro that defines two functors for \ref llama::ForEach which apply a boolean
+ *  operation on a given virtual datum and either another virtual datum or some
+ *  other type. In the first case the operation is applied if the unique id of
+ *  the two elements in the datum domain is the same, in the second case the
+ *  operation is applied to every combination of elements of the virtual datum
+ *  and the second type. The result is the logical AND combination of all
+ *  results. So e.g., if some elements are bigger and some are smaller than in
+ *  the other virtual datum or in the type, for both boolean operations ">" and
+ *  "<" the functor will return false. For "!=" the operator would return true.
+ * \param OP operation, e.g. >=
+ * \param FUNCTOR operation naming used for functor name definition, e.g. if
+ *        FUNCTOR is "BiggerSameThan", the functors will be named
+ *        BiggerSameThanBoolFunctor and BiggerSameThanBoolTypeFunctor.
+ * \return a bool inside the member variable "result" of the functor
+ * */
 #define __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( OP, FUNCTOR )                     \
     template<                                                                  \
         typename T_LeftDatum,                                                  \
@@ -466,6 +521,17 @@ __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( <= , SmallerSameThan )
 __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( >  , BiggerThan )
 __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( >= , BiggerSameThan )
 
+/** Macro that defines a boolean operator overloading inside of
+ *  \ref llama::VirtualDatum for itself and a second virtual datum.
+ * \param OP operator, e.g. operator >=
+ * \param FUNCTOR used for calling the internal needed functor to operate on
+ *        the virtual datums, e.g. if FUNCTOR is "BiggerSameThan", the
+ *        BiggerSameThanBoolFunctor will be used internally.
+ * \param REF may be & or && to determine whether it is an overloading for
+ *        lvalue or rvalue references
+ * \return result of the boolean operation for every combination with the same
+ *  UID
+ * */
 #define __LLAMA_VIRTUALDATUM_VIRTUALDATUM_BOOL_OPERATOR( OP, FUNCTOR, REF )    \
     template< typename T_OtherView >                                           \
     LLAMA_FN_HOST_ACC_INLINE                                                   \
@@ -489,6 +555,19 @@ __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( >= , BiggerSameThan )
         return functor.result;                                                 \
     }
 
+/** Macro that defines a boolean operator overloading inside of
+ *  \ref llama::VirtualDatum for itself and a view. Internally the virtual datum at the
+ *  first postion (all zeros) will be taken. This is useful for one-element
+ *  views (e.g. temporary views).
+ * \param OP operator, e.g. operator >=
+ * \param FUNCTOR used for calling the internal needed functor to operate on
+ *        the virtual datums, e.g. if FUNCTOR is "BiggerSameThan", the
+ *        BiggerSameThanBoolFunctor will be used internally.
+ * \param REF may be & or && to determine whether it is an overloading for
+ *        lvalue or rvalue references
+ * \return result of the boolean operation for every combination with the same
+ *  UID
+ * */
 #define __LLAMA_VIRTUALDATUM_VIEW_BOOL_OPERATOR( OP, FUNCTOR, REF )            \
     template<                                                                  \
         typename T_OtherMapping,                                               \
@@ -521,6 +600,16 @@ __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( >= , BiggerSameThan )
         return functor.result;                                                 \
     }
 
+/** Macro that defines a boolean operator overloading inside of
+ *  \ref llama::VirtualDatum for itself and some other type.
+ * \param OP operator, e.g. operator >=
+ * \param FUNCTOR used for calling the internal needed functor to operate on
+ *        the virtual datums, e.g. if FUNCTOR is "BiggerSameThan", the
+ *        BiggerSameThanBoolTypeFunctor will be used internally.
+ * \param REF may be & or && to determine whether it is an overloading for
+ *        lvalue or rvalue references
+ * \return result of the boolean operation for every combination
+ * */
 #define __LLAMA_VIRTUALDATUM_TYPE_BOOL_OPERATOR( OP, FUNCTOR, REF )            \
     template< typename T_OtherType >                                           \
     LLAMA_FN_HOST_ACC_INLINE                                                   \
@@ -551,14 +640,25 @@ __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( >= , BiggerSameThan )
     __LLAMA_VIRTUALDATUM_TYPE_BOOL_OPERATOR( OP, FUNCTOR, & )                  \
     __LLAMA_VIRTUALDATUM_TYPE_BOOL_OPERATOR( OP, FUNCTOR, && )
 
+/** Virtual data type returned by \ref View after resolving user domain address,
+ *  being "virtual" in that sense that the data of the virtual datum are not
+ *  part of the struct itself but a helper object to address them in the compile
+ *  time datum domain
+ * \tparam T_View parent view of the virtual datum
+ */
 template< typename T_View >
 struct VirtualDatum
 {
+    /// parent view of the virtual datum
     using ViewType = T_View;
+    /// mapping of the underlying view
     using Mapping = typename ViewType::Mapping;
+    /// blobtype of the underlying view
     using BlobType = typename ViewType::BlobType;
 
+    /// resolved position in the user domain
     typename Mapping::UserDomain const userDomainPos;
+    /// reference to parent view
     ViewType& view;
 
     template< typename... T_UIDs >
@@ -613,6 +713,14 @@ struct VirtualDatum
         );
     }
 
+    /** Explicit access function for a coordinate in the datum domain given as
+     *  unique identifier or \ref DatumCoord.
+     * \tparam T_DatumCoordOrUIDs... variadic number of types as unique
+     *  identifier **or** \ref DatumCoord with tree coordinates as template
+     *  parameters inside
+     * \return reference to element at resolved user domain and given datum
+     *  domain coordinate
+     */
     template< typename... T_DatumCoordOrUIDs  >
     LLAMA_FN_HOST_ACC_INLINE
     auto
@@ -629,6 +737,13 @@ struct VirtualDatum
         );
     }
 
+    /** Explicit access function for a coordinate in the datum domain given as
+     *  tree position indexes.
+     * \tparam T_coord... variadic number std::size_t numbers as tree
+     *  coordinates
+     * \return reference to element at resolved user domain and given datum
+     *  domain coordinate
+     */
     template< std::size_t... T_coord  >
     LLAMA_FN_HOST_ACC_INLINE
     auto
@@ -645,10 +760,18 @@ struct VirtualDatum
         );
     }
 
+    /** operator overload() for a coordinate in the datum domain given as
+     *  unique identifier or \ref DatumCoord.
+     * \param datumCoordOrUIDs instantiation of variadic number of unique
+     *  identifier types **or** \ref DatumCoord with tree coordinates as
+     *  template parameters inside
+     * \return reference to element at resolved user domain and given datum
+     *  domain coordinate
+     */
     template< typename... T_DatumCoordOrUIDs  >
     LLAMA_FN_HOST_ACC_INLINE
     auto
-    operator()( T_DatumCoordOrUIDs&&... )
+    operator()( T_DatumCoordOrUIDs&&... LLAMA_IGNORE_LITERAL( datumCoordOrUIDs ) )
 #if !BOOST_COMP_INTEL && !BOOST_COMP_NVCC
     -> decltype( access< T_DatumCoordOrUIDs... >() ) &
 #else //Intel compiler bug work around
@@ -721,14 +844,25 @@ namespace internal
     };
 }; //namespace internal
 
+/** Central LLAMA class holding memory and giving access to it defined by a
+ *  mapping. Should not be instantiated "by hand" but with a \ref Factory.
+ * \tparam T_Mapping the mapping of the view
+ * \tparam T_BlobType the background data type of the raw data, at the moment
+ *  always an 8 bit type like "unsigned char"
+ */
 template<
     typename T_Mapping,
     typename T_BlobType
 >
 struct View
 {
+    /// background data type
     using BlobType = T_BlobType;
+    /// used mapping
     using Mapping = T_Mapping;
+    /** corresponding \ref llama::VirtualDatum type returned after resolving user
+     *  domain
+     */
     using VirtualDatumType = VirtualDatum<
         View <
             Mapping,
@@ -754,6 +888,14 @@ struct View
         blob( blob )
     { }
 
+    /** Explicit access function taking the datum domain as tree index
+     *  coordinate template arguments and the user domain as runtime parameter.
+     *  The operator() overloadings should be preferred as they show a more
+     *  array of struct like interface using \ref llama::VirtualDatum.
+     * \tparam T_coords... tree index coordinate
+     * \param userDomain user domain as \ref UserDomain
+     * \return reference to element
+     */
     LLAMA_NO_HOST_ACC_WARNING
     template< std::size_t... T_coords >
     LLAMA_FN_HOST_ACC_INLINE
@@ -778,6 +920,14 @@ struct View
         );
     }
 
+    /** Explicit access function taking the datum domain as UID type list
+     *  template arguments and the user domain as runtime parameter.
+     *  The operator() overloadings should be preferred as they show a more
+     *  array of struct like interface using \ref llama::VirtualDatum.
+     * \tparam T_UIDs... UID type list
+     * \param userDomain user domain as \ref UserDomain
+     * \return reference to element
+     */
     LLAMA_NO_HOST_ACC_WARNING
     template< typename... T_UIDs >
     LLAMA_FN_HOST_ACC_INLINE
@@ -814,6 +964,15 @@ struct View
         );
     }
 
+    /** Operator overloading to reverse the order of compile time (datum domain)
+     *  and run time (user domain) parameter with a helper object
+     *  (\ref llama::VirtualDatum). Should be favoured to access data because of the
+     *  more array of struct like interface and the handy intermediate
+     *  \ref llama::VirtualDatum object.
+     * \param userDomain user domain as \ref UserDomain
+     * \return \ref llama::VirtualDatum with bound user domain, which can be used to
+     *  access the datum domain
+     */
     auto
     LLAMA_FN_HOST_ACC_INLINE
     operator()( typename Mapping::UserDomain const userDomain )
@@ -826,6 +985,16 @@ struct View
             };
     }
 
+    /** Operator overloading to reverse the order of compile time (datum domain)
+     *  and run time (user domain) parameter with a helper object
+     *  (\ref llama::VirtualDatum). Should be favoured to access data because of the
+     *  more array of struct like interface and the handy intermediate
+     *  \ref llama::VirtualDatum object.
+     * \tparam T_Coord... types of user domain coordinates
+     * \param coord user domain as list of numbers
+     * \return \ref llama::VirtualDatum with bound user domain, which can be used to
+     *  access the datum domain
+     */
     template< typename... T_Coord >
     LLAMA_FN_HOST_ACC_INLINE
     auto
@@ -879,8 +1048,9 @@ struct View
         );
     }
 
-
+    /// mapping of the view
     const Mapping mapping;
+    /// memory of the view
     Array<
         BlobType,
         Mapping::blobCount

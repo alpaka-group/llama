@@ -24,6 +24,11 @@
 namespace llama
 {
 
+/** Helper class just holding some numbers at compile time. A similar sequence
+ *  is part of the STL starting with C++14, but as LLAMA supports down to C++11
+ *  an own implementation is needed
+ * \tparam T_seg... variadic sequence of integers.
+ */
 template< std::size_t... T_seq >
 struct IntegerSequence { };
 
@@ -54,6 +59,11 @@ struct IntegerSequenceHelper<
 
 } // namespace internal
 
+/** Gives the type of an \ref IntegerSequence with ascending elements, e.g.
+ *  MakeIntegerSequence< 4 > = IntegerSequence< 0, 1, 2, 3 >.
+ * \tparam T_N number of integers in the sequence
+ * \return an \ref IntegerSequence type
+ */
 template< std::size_t T_N >
 using MakeIntegerSequence = typename
 internal::IntegerSequenceHelper< T_N - 1 >::type;
@@ -86,6 +96,11 @@ struct ZeroSequenceHelper<
 } // namespace internal
 
 
+/** Gives the type of an \ref IntegerSequence of zeros, e.g.
+ *  MakeIntegerSequence< 4 > = IntegerSequence< 0, 0, 0, 0 >.
+ * \tparam T_N number of integers in the sequence
+ * \return an \ref IntegerSequence type
+ */
 template< std::size_t T_N >
 using MakeZeroSequence = typename
 internal::ZeroSequenceHelper< T_N >::type;

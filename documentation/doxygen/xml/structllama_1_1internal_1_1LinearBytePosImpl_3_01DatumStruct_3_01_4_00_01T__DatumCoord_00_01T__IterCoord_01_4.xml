@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01_4_00_01T__DatumCoord_00_01T__IterCoord_01_4" kind="struct" language="C++" prot="public">
+    <compoundname>llama::internal::LinearBytePosImpl&lt; DatumStruct&lt; &gt;, T_DatumCoord, T_IterCoord &gt;</compoundname>
+    <includes refid="DatumStruct_8hpp" local="no">DatumStruct.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_DatumCoord</type>
+      </param>
+      <param>
+        <type>typename T_IterCoord</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01_4_00_01T__DatumCoord_00_01T__IterCoord_01_4_1aa61822d26322ecb480d573513c311d87" prot="public" static="yes" mutable="no">
+        <type>constexpr std::size_t</type>
+        <definition>constexpr std::size_t llama::internal::LinearBytePosImpl&lt; DatumStruct&lt; &gt;, T_DatumCoord, T_IterCoord &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="98" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="97" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="92" bodyend="100"/>
+    <listofallmembers>
+      <member refid="structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01_4_00_01T__DatumCoord_00_01T__IterCoord_01_4_1aa61822d26322ecb480d573513c311d87" prot="public" virt="non-virtual"><scope>llama::internal::LinearBytePosImpl&lt; DatumStruct&lt; &gt;, T_DatumCoord, T_IterCoord &gt;</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

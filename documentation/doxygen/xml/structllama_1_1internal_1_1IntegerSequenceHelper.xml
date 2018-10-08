@@ -27,14 +27,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/IntegerSequence.hpp" line="39" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/IntegerSequence.hpp" bodystart="43" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/IntegerSequence.hpp" line="44" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/IntegerSequence.hpp" bodystart="48" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/IntegerSequence.hpp" line="38" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/IntegerSequence.hpp" bodystart="37" bodyend="44"/>
+    <location file="/home/alexander/develop/work/llama/include/llama/IntegerSequence.hpp" line="43" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/IntegerSequence.hpp" bodystart="42" bodyend="49"/>
     <listofallmembers>
       <member refid="structllama_1_1internal_1_1IntegerSequenceHelper_1af895568eac1fc4a058f3521100a74480" prot="public" virt="non-virtual"><scope>llama::internal::IntegerSequenceHelper</scope><name>type</name></member>
     </listofallmembers>

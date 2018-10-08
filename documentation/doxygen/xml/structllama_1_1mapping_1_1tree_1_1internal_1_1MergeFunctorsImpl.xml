@@ -189,10 +189,10 @@
     <detaileddescription>
     </detaileddescription>
     <collaborationgraph>
-      <node id="244">
+      <node id="220">
         <label>llama::mapping::tree::internal::MergeFunctorsImpl&lt; T_Tree, T_TreeOperationList &gt;</label>
         <link refid="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl"/>
-        <childnode refid="244" relation="usage">
+        <childnode refid="220" relation="usage">
           <edgelabel>subMergeFunctorsImpl</edgelabel>
         </childnode>
       </node>

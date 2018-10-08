@@ -28,14 +28,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="133" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="133" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="144" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="144" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="132" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="126" bodyend="136"/>
+    <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="143" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="137" bodyend="147"/>
     <listofallmembers>
       <member refid="structllama_1_1SizeOf_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__DatumElements_8_8_8_01_4_4_1aaa2f5e0dfef388cd3603739884b5f7e2" prot="public" virt="non-virtual"><scope>llama::SizeOf&lt; DatumStruct&lt; T_FirstDatumElement, T_DatumElements... &gt;&gt;</scope><name>value</name></member>
     </listofallmembers>

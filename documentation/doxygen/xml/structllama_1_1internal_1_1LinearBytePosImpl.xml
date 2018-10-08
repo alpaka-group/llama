@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
-  <compounddef id="structllama_1_1LinearBytePosImpl" kind="struct" language="C++" prot="public">
-    <compoundname>llama::LinearBytePosImpl</compoundname>
+  <compounddef id="structllama_1_1internal_1_1LinearBytePosImpl" kind="struct" language="C++" prot="public">
+    <compoundname>llama::internal::LinearBytePosImpl</compoundname>
     <includes refid="DatumStruct_8hpp" local="no">DatumStruct.hpp</includes>
     <templateparamlist>
       <param>
@@ -15,9 +15,9 @@
       </param>
     </templateparamlist>
       <sectiondef kind="public-static-attrib">
-      <memberdef kind="variable" id="structllama_1_1LinearBytePosImpl_1a71436c65afce5b4d933fb98444c067f0" prot="public" static="yes" mutable="no">
+      <memberdef kind="variable" id="structllama_1_1internal_1_1LinearBytePosImpl_1a1ea766c50eb94d8ca36bad2c6975089e" prot="public" static="yes" mutable="no">
         <type>constexpr std::size_t</type>
-        <definition>constexpr std::size_t llama::LinearBytePosImpl&lt; T_DatumDomain, T_DatumCoord, T_IterCoord &gt;::value</definition>
+        <definition>constexpr std::size_t llama::internal::LinearBytePosImpl&lt; T_DatumDomain, T_DatumCoord, T_IterCoord &gt;::value</definition>
         <argsstring></argsstring>
         <name>value</name>
         <initializer>= sizeof( T_DatumDomain )
@@ -31,16 +31,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="50" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="50" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="53" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="53" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="49" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="48" bodyend="55"/>
+    <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="52" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="51" bodyend="58"/>
     <listofallmembers>
-      <member refid="structllama_1_1LinearBytePosImpl_1a71436c65afce5b4d933fb98444c067f0" prot="public" virt="non-virtual"><scope>llama::LinearBytePosImpl</scope><name>value</name></member>
+      <member refid="structllama_1_1internal_1_1LinearBytePosImpl_1a1ea766c50eb94d8ca36bad2c6975089e" prot="public" virt="non-virtual"><scope>llama::internal::LinearBytePosImpl</scope><name>value</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

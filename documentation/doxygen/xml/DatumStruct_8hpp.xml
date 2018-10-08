@@ -3,7 +3,7 @@
   <compounddef id="DatumStruct_8hpp" kind="file" language="C++">
     <compoundname>DatumStruct.hpp</compoundname>
     <includes refid="Types_8hpp" local="yes">Types.hpp</includes>
-    <includes refid="DatumCoord_8hpp" local="yes">DatumCoord.hpp</includes>
+    <includes local="yes">DatumCoord.hpp</includes>
     <includes local="no">boost/mp11.hpp</includes>
     <includes local="no">type_traits</includes>
     <includedby refid="GetUID_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/GetUID.hpp</includedby>
@@ -12,146 +12,146 @@
     <includedby refid="GetCoordFromUID_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp</includedby>
     <includedby refid="llama_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/llama.hpp</includedby>
     <incdepgraph>
-      <node id="90">
+      <node id="76">
         <label>boost/predef.h</label>
       </node>
-      <node id="87">
+      <node id="73">
         <label>Types.hpp</label>
         <link refid="Types_8hpp"/>
-        <childnode refid="88" relation="include">
+        <childnode refid="74" relation="include">
         </childnode>
-        <childnode refid="91" relation="include">
+        <childnode refid="77" relation="include">
         </childnode>
       </node>
-      <node id="88">
+      <node id="74">
         <label>Array.hpp</label>
         <link refid="Array_8hpp"/>
-        <childnode refid="89" relation="include">
+        <childnode refid="75" relation="include">
         </childnode>
       </node>
-      <node id="86">
+      <node id="72">
         <label>/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp</label>
         <link refid="DatumStruct_8hpp"/>
-        <childnode refid="87" relation="include">
+        <childnode refid="73" relation="include">
         </childnode>
-        <childnode refid="92" relation="include">
+        <childnode refid="78" relation="include">
         </childnode>
-        <childnode refid="91" relation="include">
+        <childnode refid="77" relation="include">
         </childnode>
-        <childnode refid="94" relation="include">
+        <childnode refid="79" relation="include">
         </childnode>
       </node>
-      <node id="93">
-        <label>tuple</label>
+      <node id="78">
+        <label>DatumCoord.hpp</label>
       </node>
-      <node id="89">
+      <node id="75">
         <label>preprocessor/macros.hpp</label>
         <link refid="macros_8hpp"/>
-        <childnode refid="90" relation="include">
+        <childnode refid="76" relation="include">
         </childnode>
       </node>
-      <node id="94">
+      <node id="79">
         <label>type_traits</label>
       </node>
-      <node id="92">
-        <label>DatumCoord.hpp</label>
-        <link refid="DatumCoord_8hpp"/>
-        <childnode refid="93" relation="include">
-        </childnode>
-        <childnode refid="94" relation="include">
-        </childnode>
-      </node>
-      <node id="91">
+      <node id="77">
         <label>boost/mp11.hpp</label>
       </node>
     </incdepgraph>
     <invincdepgraph>
-      <node id="97">
+      <node id="82">
         <label>/home/alexander/develop/work/llama/include/llama/CompareUID.hpp</label>
         <link refid="CompareUID_8hpp"/>
-        <childnode refid="98" relation="include">
+        <childnode refid="83" relation="include">
         </childnode>
       </node>
-      <node id="100">
+      <node id="85">
         <label>/home/alexander/develop/work/llama/include/llama/llama.hpp</label>
         <link refid="llama_8hpp"/>
       </node>
-      <node id="105">
+      <node id="91">
         <label>/home/alexander/develop/work/llama/include/llama/ForEach.hpp</label>
         <link refid="ForEach_8hpp"/>
-        <childnode refid="98" relation="include">
+        <childnode refid="83" relation="include">
         </childnode>
-        <childnode refid="100" relation="include">
+        <childnode refid="85" relation="include">
         </childnode>
       </node>
-      <node id="98">
+      <node id="83">
         <label>/home/alexander/develop/work/llama/include/llama/View.hpp</label>
         <link refid="View_8hpp"/>
-        <childnode refid="99" relation="include">
+        <childnode refid="84" relation="include">
+        </childnode>
+        <childnode refid="86" relation="include">
         </childnode>
       </node>
-      <node id="95">
+      <node id="80">
         <label>/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp</label>
         <link refid="DatumStruct_8hpp"/>
-        <childnode refid="96" relation="include">
+        <childnode refid="81" relation="include">
         </childnode>
-        <childnode refid="101" relation="include">
+        <childnode refid="87" relation="include">
         </childnode>
-        <childnode refid="102" relation="include">
+        <childnode refid="88" relation="include">
         </childnode>
-        <childnode refid="104" relation="include">
+        <childnode refid="90" relation="include">
         </childnode>
-        <childnode refid="100" relation="include">
+        <childnode refid="85" relation="include">
         </childnode>
       </node>
-      <node id="103">
+      <node id="89">
         <label>/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp</label>
         <link refid="SoA_8hpp"/>
-        <childnode refid="100" relation="include">
+        <childnode refid="85" relation="include">
         </childnode>
       </node>
-      <node id="104">
+      <node id="90">
         <label>/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp</label>
         <link refid="GetCoordFromUID_8hpp"/>
-        <childnode refid="105" relation="include">
+        <childnode refid="91" relation="include">
         </childnode>
       </node>
-      <node id="101">
+      <node id="87">
         <label>/home/alexander/develop/work/llama/include/llama/DatumArray.hpp</label>
         <link refid="DatumArray_8hpp"/>
-        <childnode refid="100" relation="include">
+        <childnode refid="85" relation="include">
         </childnode>
       </node>
-      <node id="99">
+      <node id="84">
         <label>/home/alexander/develop/work/llama/include/llama/Factory.hpp</label>
         <link refid="Factory_8hpp"/>
-        <childnode refid="100" relation="include">
+        <childnode refid="85" relation="include">
         </childnode>
       </node>
-      <node id="102">
+      <node id="88">
         <label>/home/alexander/develop/work/llama/include/llama/GetType.hpp</label>
         <link refid="GetType_8hpp"/>
-        <childnode refid="98" relation="include">
+        <childnode refid="83" relation="include">
         </childnode>
-        <childnode refid="103" relation="include">
+        <childnode refid="89" relation="include">
         </childnode>
       </node>
-      <node id="96">
+      <node id="86">
+        <label>/home/alexander/develop/work/llama/include/llama/VirtualView.hpp</label>
+        <link refid="VirtualView_8hpp"/>
+        <childnode refid="85" relation="include">
+        </childnode>
+      </node>
+      <node id="81">
         <label>/home/alexander/develop/work/llama/include/llama/GetUID.hpp</label>
         <link refid="GetUID_8hpp"/>
-        <childnode refid="97" relation="include">
+        <childnode refid="82" relation="include">
         </childnode>
       </node>
     </invincdepgraph>
-    <innerclass refid="structllama_1_1LinearBytePosImpl" prot="public">llama::LinearBytePosImpl</innerclass>
-    <innerclass refid="structllama_1_1LinearBytePosImpl_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__DatumElements_d93a519fea30c3c12f633823a742ed70" prot="public">llama::LinearBytePosImpl&lt; DatumStruct&lt; T_FirstDatumElement, T_DatumElements... &gt;, T_DatumCoord, T_IterCoord &gt;</innerclass>
-    <innerclass refid="structllama_1_1LinearBytePosImpl_3_01DatumStruct_3_01_4_00_01T__DatumCoord_00_01T__IterCoord_01_4" prot="public">llama::LinearBytePosImpl&lt; DatumStruct&lt; &gt;, T_DatumCoord, T_IterCoord &gt;</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1LinearBytePosImpl" prot="public">llama::internal::LinearBytePosImpl</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__Daab3e6bc06488e5011eff271a9737aa6b" prot="public">llama::internal::LinearBytePosImpl&lt; DatumStruct&lt; T_FirstDatumElement, T_DatumElements... &gt;, T_DatumCoord, T_IterCoord &gt;</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01_4_00_01T__DatumCoord_00_01T__IterCoord_01_4" prot="public">llama::internal::LinearBytePosImpl&lt; DatumStruct&lt; &gt;, T_DatumCoord, T_IterCoord &gt;</innerclass>
     <innerclass refid="structllama_1_1LinearBytePos" prot="public">llama::LinearBytePos</innerclass>
-    <innerclass refid="structllama_1_1GetBranch" prot="public">llama::GetBranch</innerclass>
     <innerclass refid="structllama_1_1SizeOf" prot="public">llama::SizeOf</innerclass>
     <innerclass refid="structllama_1_1SizeOf_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__DatumElements_8_8_8_01_4_4" prot="public">llama::SizeOf&lt; DatumStruct&lt; T_FirstDatumElement, T_DatumElements... &gt;&gt;</innerclass>
     <innerclass refid="structllama_1_1SizeOf_3_01DatumStruct_3_01_4_01_4" prot="public">llama::SizeOf&lt; DatumStruct&lt; &gt; &gt;</innerclass>
     <innernamespace refid="namespacellama">llama</innernamespace>
+    <innernamespace refid="namespacellama_1_1internal">llama::internal</innernamespace>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
@@ -178,131 +178,124 @@
 <codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="20"><highlight class="normal"></highlight></codeline>
 <codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="Types_8hpp" kindref="compound">Types.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="DatumCoord_8hpp" kindref="compound">DatumCoord.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;DatumCoord.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;boost/mp11.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;type_traits&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="25"><highlight class="normal"></highlight></codeline>
 <codeline lineno="26"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacellama" kindref="compound">llama</ref></highlight></codeline>
 <codeline lineno="27"><highlight class="normal">{</highlight></codeline>
 <codeline lineno="28"><highlight class="normal"></highlight></codeline>
-<codeline lineno="29"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumElement<sp/>&gt;</highlight></codeline>
-<codeline lineno="30" refid="namespacellama_1a554a797d5fff9070b3c61d7584dc15d5" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1a554a797d5fff9070b3c61d7584dc15d5" kindref="member">GetDatumElementType</ref><sp/>=<sp/>boost::mp11::mp_second&lt;<sp/>T_DatumElement<sp/>&gt;;</highlight></codeline>
-<codeline lineno="31"><highlight class="normal"></highlight></codeline>
-<codeline lineno="32"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumElement<sp/>&gt;</highlight></codeline>
-<codeline lineno="33" refid="namespacellama_1a29d5fdaf4a5f23aab704f936a53fd68c" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1a29d5fdaf4a5f23aab704f936a53fd68c" kindref="member">GetDatumElementUID</ref><sp/>=<sp/>boost::mp11::mp_first&lt;<sp/>T_DatumElement<sp/>&gt;;</highlight></codeline>
-<codeline lineno="34"><highlight class="normal"></highlight></codeline>
-<codeline lineno="35"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
-<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
-<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoord,</highlight></codeline>
-<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_IterCoord</highlight></codeline>
-<codeline lineno="39"><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="40" refid="structllama_1_1LinearBytePosImpl" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1LinearBytePosImpl" kindref="compound">LinearBytePosImpl</ref></highlight></codeline>
-<codeline lineno="41"><highlight class="normal">{</highlight></codeline>
-<codeline lineno="42" refid="structllama_1_1LinearBytePosImpl_1a71436c65afce5b4d933fb98444c067f0" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/>std::size_t<sp/><ref refid="structllama_1_1LinearBytePosImpl_1a71436c65afce5b4d933fb98444c067f0" kindref="member">value</ref><sp/>=<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(<sp/>T_DatumDomain<sp/>)</highlight></codeline>
-<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*<sp/>std::size_t(<sp/><ref refid="structllama_1_1DatumCoordIsBigger" kindref="compound">DatumCoordIsBigger</ref>&lt;</highlight></codeline>
-<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumCoord,</highlight></codeline>
-<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_IterCoord</highlight></codeline>
-<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;::value<sp/>);</highlight></codeline>
-<codeline lineno="47"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="48"><highlight class="normal"></highlight></codeline>
-<codeline lineno="49"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
-<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoord,</highlight></codeline>
-<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_IterCoord,</highlight></codeline>
-<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_FirstDatumElement,</highlight></codeline>
-<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_DatumElements</highlight></codeline>
-<codeline lineno="54"><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="55" refid="structllama_1_1LinearBytePosImpl_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__DatumElements_d93a519fea30c3c12f633823a742ed70" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1LinearBytePosImpl" kindref="compound">LinearBytePosImpl</ref>&lt;</highlight></codeline>
-<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>&lt;</highlight></codeline>
-<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_FirstDatumElement,</highlight></codeline>
-<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumElements...</highlight></codeline>
-<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;,</highlight></codeline>
-<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumCoord,</highlight></codeline>
-<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/>T_IterCoord</highlight></codeline>
-<codeline lineno="62"><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="63"><highlight class="normal">{</highlight></codeline>
-<codeline lineno="64" refid="structllama_1_1LinearBytePosImpl_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__DatumElements_d93a519fea30c3c12f633823a742ed70_1a0e610e7980aaf5899d20140b86e3829c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/>std::size_t<sp/>value<sp/>=</highlight></codeline>
-<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1LinearBytePosImpl" kindref="compound">LinearBytePosImpl</ref>&lt;</highlight></codeline>
-<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacellama_1a554a797d5fff9070b3c61d7584dc15d5" kindref="member">GetDatumElementType&lt; T_FirstDatumElement &gt;</ref>,</highlight></codeline>
-<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumCoord,</highlight></codeline>
-<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_IterCoord::template<sp/>PushBack&lt;<sp/>0<sp/>&gt;</highlight></codeline>
-<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;<ref refid="structllama_1_1LinearBytePosImpl_1a71436c65afce5b4d933fb98444c067f0" kindref="member">::value</ref><sp/>+</highlight></codeline>
-<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1LinearBytePosImpl" kindref="compound">LinearBytePosImpl</ref>&lt;</highlight></codeline>
-<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>&lt;<sp/>T_DatumElements...<sp/>&gt;,</highlight></codeline>
-<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumCoord,</highlight></codeline>
-<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_IterCoord::IncBack</highlight></codeline>
-<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;<ref refid="structllama_1_1LinearBytePosImpl_1a71436c65afce5b4d933fb98444c067f0" kindref="member">::value</ref>;</highlight></codeline>
-<codeline lineno="75"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="76"><highlight class="normal"></highlight></codeline>
-<codeline lineno="77"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
-<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoord,</highlight></codeline>
-<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_IterCoord</highlight></codeline>
-<codeline lineno="80"><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="81" refid="structllama_1_1LinearBytePosImpl_3_01DatumStruct_3_01_4_00_01T__DatumCoord_00_01T__IterCoord_01_4" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1LinearBytePosImpl" kindref="compound">LinearBytePosImpl</ref>&lt;</highlight></codeline>
-<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>&lt;<sp/>&gt;,</highlight></codeline>
-<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumCoord,</highlight></codeline>
-<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/>T_IterCoord</highlight></codeline>
-<codeline lineno="85"><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="86"><highlight class="normal">{</highlight></codeline>
-<codeline lineno="87" refid="structllama_1_1LinearBytePosImpl_3_01DatumStruct_3_01_4_00_01T__DatumCoord_00_01T__IterCoord_01_4_1a7e100d3e4127b2517b3541b532f7b002" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/>std::size_t<sp/>value<sp/>=<sp/>0;</highlight></codeline>
-<codeline lineno="88"><highlight class="normal"></highlight></codeline>
-<codeline lineno="89"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="90"><highlight class="normal"></highlight></codeline>
-<codeline lineno="91"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
-<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
-<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/>std::size_t...<sp/>T_coords</highlight></codeline>
-<codeline lineno="94"><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="95" refid="structllama_1_1LinearBytePos" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1LinearBytePos" kindref="compound">LinearBytePos</ref></highlight></codeline>
-<codeline lineno="96"><highlight class="normal">{</highlight></codeline>
-<codeline lineno="97" refid="structllama_1_1LinearBytePos_1ad94b5c8a780057504a13edb0ccefc0e6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/>std::size_t<sp/>value<sp/>=<sp/><ref refid="structllama_1_1LinearBytePosImpl" kindref="compound">LinearBytePosImpl</ref>&lt;</highlight></codeline>
-<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
-<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>&lt;<sp/>T_coords...<sp/>&gt;,</highlight></codeline>
-<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord&lt; 0 &gt;</ref></highlight></codeline>
-<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;<ref refid="structllama_1_1LinearBytePosImpl_1a71436c65afce5b4d933fb98444c067f0" kindref="member">::value</ref>;</highlight></codeline>
-<codeline lineno="102"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="33"><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumElement<sp/>&gt;</highlight></codeline>
+<codeline lineno="34" refid="namespacellama_1a554a797d5fff9070b3c61d7584dc15d5" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1a554a797d5fff9070b3c61d7584dc15d5" kindref="member">GetDatumElementType</ref><sp/>=<sp/>boost::mp11::mp_second&lt;<sp/>T_DatumElement<sp/>&gt;;</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumElement<sp/>&gt;</highlight></codeline>
+<codeline lineno="41" refid="namespacellama_1a29d5fdaf4a5f23aab704f936a53fd68c" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1a29d5fdaf4a5f23aab704f936a53fd68c" kindref="member">GetDatumElementUID</ref><sp/>=<sp/>boost::mp11::mp_first&lt;<sp/>T_DatumElement<sp/>&gt;;</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight></codeline>
+<codeline lineno="43" refid="namespacellama_1_1internal" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">internal</highlight></codeline>
+<codeline lineno="44"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_IterCoord</highlight></codeline>
+<codeline lineno="50"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="51" refid="structllama_1_1internal_1_1LinearBytePosImpl" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1internal_1_1LinearBytePosImpl" kindref="compound">LinearBytePosImpl</ref></highlight></codeline>
+<codeline lineno="52"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="53" refid="structllama_1_1internal_1_1LinearBytePosImpl_1a1ea766c50eb94d8ca36bad2c6975089e" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/>std::size_t<sp/><ref refid="structllama_1_1internal_1_1LinearBytePosImpl_1a1ea766c50eb94d8ca36bad2c6975089e" kindref="member">value</ref><sp/>=<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(<sp/>T_DatumDomain<sp/>)</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*<sp/>std::size_t(<sp/><ref refid="structllama_1_1DatumCoordIsBigger" kindref="compound">DatumCoordIsBigger</ref>&lt;</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_IterCoord</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;::value<sp/>);</highlight></codeline>
+<codeline lineno="58"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_IterCoord,</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_FirstDatumElement,</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_DatumElements</highlight></codeline>
+<codeline lineno="65"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="66" refid="structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__Daab3e6bc06488e5011eff271a9737aa6b" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1internal_1_1LinearBytePosImpl" kindref="compound">LinearBytePosImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>&lt;</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_FirstDatumElement,</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumElements...</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;,</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/>T_IterCoord</highlight></codeline>
+<codeline lineno="73"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="74"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="75" refid="structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__Daab3e6bc06488e5011eff271a9737aa6b_1a2d1ea8251ec186fe3e2c5c26b7451536" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/>std::size_t<sp/>value<sp/>=</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1internal_1_1LinearBytePosImpl" kindref="compound">LinearBytePosImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacellama_1a554a797d5fff9070b3c61d7584dc15d5" kindref="member">GetDatumElementType&lt; T_FirstDatumElement &gt;</ref>,</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_IterCoord::template<sp/>PushBack&lt;<sp/>0<sp/>&gt;</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;<ref refid="structllama_1_1internal_1_1LinearBytePosImpl_1a1ea766c50eb94d8ca36bad2c6975089e" kindref="member">::value</ref><sp/>+</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1internal_1_1LinearBytePosImpl" kindref="compound">LinearBytePosImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>&lt;<sp/>T_DatumElements...<sp/>&gt;,</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_IterCoord::IncBack</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;<ref refid="structllama_1_1internal_1_1LinearBytePosImpl_1a1ea766c50eb94d8ca36bad2c6975089e" kindref="member">::value</ref>;</highlight></codeline>
+<codeline lineno="86"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"></highlight></codeline>
+<codeline lineno="88"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_IterCoord</highlight></codeline>
+<codeline lineno="91"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="92" refid="structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01_4_00_01T__DatumCoord_00_01T__IterCoord_01_4" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1internal_1_1LinearBytePosImpl" kindref="compound">LinearBytePosImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>&lt;<sp/>&gt;,</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/>T_IterCoord</highlight></codeline>
+<codeline lineno="96"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="97"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="98" refid="structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01_4_00_01T__DatumCoord_00_01T__IterCoord_01_4_1aa61822d26322ecb480d573513c311d87" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/>std::size_t<sp/>value<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"></highlight></codeline>
+<codeline lineno="102"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>internal</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="103"><highlight class="normal"></highlight></codeline>
-<codeline lineno="104"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
-<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
-<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/>std::size_t<sp/>T_coord</highlight></codeline>
-<codeline lineno="107"><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="108" refid="structllama_1_1GetBranch" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1GetBranch" kindref="compound">GetBranch</ref></highlight></codeline>
-<codeline lineno="109"><highlight class="normal">{</highlight></codeline>
-<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1GetBranch_1a857010ee1265d8e8443c60b99ea679ef" kindref="member">type</ref><sp/>=<sp/>boost::mp11::mp_at_c&lt;</highlight></codeline>
-<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
-<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_coord</highlight></codeline>
-<codeline lineno="113" refid="structllama_1_1GetBranch_1a857010ee1265d8e8443c60b99ea679ef" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;;</highlight></codeline>
-<codeline lineno="114"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="115"><highlight class="normal"></highlight></codeline>
-<codeline lineno="116"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain<sp/>&gt;</highlight></codeline>
-<codeline lineno="117" refid="structllama_1_1SizeOf" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1SizeOf" kindref="compound">SizeOf</ref></highlight></codeline>
-<codeline lineno="118"><highlight class="normal">{</highlight></codeline>
-<codeline lineno="119" refid="structllama_1_1SizeOf_1af9ab42e4e43b1533a6041db04be91e02" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/>std::size_t<sp/>value<sp/>=<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(<sp/>T_DatumDomain<sp/>);</highlight></codeline>
-<codeline lineno="120"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="121"><highlight class="normal"></highlight></codeline>
-<codeline lineno="122"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
-<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_FirstDatumElement,</highlight></codeline>
-<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_DatumElements</highlight></codeline>
-<codeline lineno="125"><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="126" refid="structllama_1_1SizeOf_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__DatumElements_8_8_8_01_4_4" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1SizeOf" kindref="compound">SizeOf</ref>&lt;</highlight></codeline>
-<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>&lt;</highlight></codeline>
-<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_FirstDatumElement,</highlight></codeline>
-<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumElements...</highlight></codeline>
-<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;</highlight></codeline>
-<codeline lineno="131"><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="132"><highlight class="normal">{</highlight></codeline>
-<codeline lineno="133" refid="structllama_1_1SizeOf_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__DatumElements_8_8_8_01_4_4_1aaa2f5e0dfef388cd3603739884b5f7e2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/>std::size_t<sp/>value<sp/>=</highlight></codeline>
-<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1SizeOf" kindref="compound">SizeOf&lt; GetDatumElementType&lt; T_FirstDatumElement &gt;</ref><sp/>&gt;<ref refid="structllama_1_1LinearBytePosImpl_1a71436c65afce5b4d933fb98444c067f0" kindref="member">::value</ref><sp/>+</highlight></codeline>
-<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1SizeOf" kindref="compound">SizeOf</ref>&lt;<sp/><ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>&lt;<sp/>T_DatumElements...<sp/>&gt;<sp/>&gt;<ref refid="structllama_1_1LinearBytePosImpl_1a71436c65afce5b4d933fb98444c067f0" kindref="member">::value</ref>;</highlight></codeline>
-<codeline lineno="136"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="137"><highlight class="normal"></highlight></codeline>
-<codeline lineno="138"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/>&gt;</highlight></codeline>
-<codeline lineno="139" refid="structllama_1_1SizeOf_3_01DatumStruct_3_01_4_01_4" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1SizeOf" kindref="compound">SizeOf</ref>&lt;<sp/><ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>&lt;<sp/>&gt;<sp/>&gt;</highlight></codeline>
-<codeline lineno="140"><highlight class="normal">{</highlight></codeline>
-<codeline lineno="141" refid="structllama_1_1SizeOf_3_01DatumStruct_3_01_4_01_4_1af7727c33269d10a7757a8a0ac18cd9a2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/>std::size_t<sp/>value<sp/>=<sp/>0;</highlight></codeline>
-<codeline lineno="142"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="143"><highlight class="normal"></highlight></codeline>
-<codeline lineno="144"><highlight class="normal"></highlight></codeline>
-<codeline lineno="145"><highlight class="normal"></highlight></codeline>
-<codeline lineno="146"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>llama</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/>std::size_t...<sp/>T_coords</highlight></codeline>
+<codeline lineno="113"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="114" refid="structllama_1_1LinearBytePos" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1LinearBytePos" kindref="compound">LinearBytePos</ref></highlight></codeline>
+<codeline lineno="115"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="116" refid="structllama_1_1LinearBytePos_1ad94b5c8a780057504a13edb0ccefc0e6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/>std::size_t<sp/><ref refid="structllama_1_1internal_1_1LinearBytePosImpl_1a1ea766c50eb94d8ca36bad2c6975089e" kindref="member">value</ref><sp/>=<sp/><ref refid="structllama_1_1internal_1_1LinearBytePosImpl" kindref="compound">internal::LinearBytePosImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>&lt;<sp/>T_coords...<sp/>&gt;,</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord&lt; 0 &gt;</ref></highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;<ref refid="structllama_1_1internal_1_1LinearBytePosImpl_1a1ea766c50eb94d8ca36bad2c6975089e" kindref="member">::value</ref>;</highlight></codeline>
+<codeline lineno="121"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"></highlight></codeline>
+<codeline lineno="127"><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain<sp/>&gt;</highlight></codeline>
+<codeline lineno="128" refid="structllama_1_1SizeOf" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1SizeOf" kindref="compound">SizeOf</ref></highlight></codeline>
+<codeline lineno="129"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="130" refid="structllama_1_1SizeOf_1af9ab42e4e43b1533a6041db04be91e02" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/>std::size_t<sp/><ref refid="structllama_1_1internal_1_1LinearBytePosImpl_1a1ea766c50eb94d8ca36bad2c6975089e" kindref="member">value</ref><sp/>=<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(<sp/>T_DatumDomain<sp/>);</highlight></codeline>
+<codeline lineno="131"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"></highlight></codeline>
+<codeline lineno="133"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_FirstDatumElement,</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_DatumElements</highlight></codeline>
+<codeline lineno="136"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="137" refid="structllama_1_1SizeOf_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__DatumElements_8_8_8_01_4_4" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1SizeOf" kindref="compound">SizeOf</ref>&lt;</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>&lt;</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_FirstDatumElement,</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumElements...</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;</highlight></codeline>
+<codeline lineno="142"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="143"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="144" refid="structllama_1_1SizeOf_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__DatumElements_8_8_8_01_4_4_1aaa2f5e0dfef388cd3603739884b5f7e2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/>std::size_t<sp/><ref refid="structllama_1_1internal_1_1LinearBytePosImpl_1a1ea766c50eb94d8ca36bad2c6975089e" kindref="member">value</ref><sp/>=</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1SizeOf" kindref="compound">SizeOf&lt; GetDatumElementType&lt; T_FirstDatumElement &gt;</ref><sp/>&gt;<ref refid="structllama_1_1internal_1_1LinearBytePosImpl_1a1ea766c50eb94d8ca36bad2c6975089e" kindref="member">::value</ref><sp/>+</highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1SizeOf" kindref="compound">SizeOf</ref>&lt;<sp/><ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>&lt;<sp/>T_DatumElements...<sp/>&gt;<sp/>&gt;<ref refid="structllama_1_1internal_1_1LinearBytePosImpl_1a1ea766c50eb94d8ca36bad2c6975089e" kindref="member">::value</ref>;</highlight></codeline>
+<codeline lineno="147"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"></highlight></codeline>
+<codeline lineno="149"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/>&gt;</highlight></codeline>
+<codeline lineno="150" refid="structllama_1_1SizeOf_3_01DatumStruct_3_01_4_01_4" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1SizeOf" kindref="compound">SizeOf</ref>&lt;<sp/><ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>&lt;<sp/>&gt;<sp/>&gt;</highlight></codeline>
+<codeline lineno="151"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="152" refid="structllama_1_1SizeOf_3_01DatumStruct_3_01_4_01_4_1af7727c33269d10a7757a8a0ac18cd9a2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/>std::size_t<sp/><ref refid="structllama_1_1internal_1_1LinearBytePosImpl_1a1ea766c50eb94d8ca36bad2c6975089e" kindref="member">value</ref><sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="153"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"></highlight></codeline>
+<codeline lineno="155"><highlight class="normal"></highlight></codeline>
+<codeline lineno="156"><highlight class="normal"></highlight></codeline>
+<codeline lineno="157"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>llama</highlight><highlight class="normal"></highlight></codeline>
     </programlisting>
     <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp"/>
   </compounddef>

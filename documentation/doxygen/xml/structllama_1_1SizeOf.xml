@@ -21,14 +21,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="119" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="119" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="130" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="130" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
-    </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="118" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="117" bodyend="120"/>
+<para>Gives the size a datum domain if it would be a normal struct <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_DatumDomain</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>datum domain tree </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>the byte position as compile time value in &quot;value&quot; </para></simplesect>
+</para>    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="129" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="128" bodyend="131"/>
     <listofallmembers>
       <member refid="structllama_1_1SizeOf_1af9ab42e4e43b1533a6041db04be91e02" prot="public" virt="non-virtual"><scope>llama::SizeOf</scope><name>value</name></member>
     </listofallmembers>

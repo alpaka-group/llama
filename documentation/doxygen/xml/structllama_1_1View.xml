@@ -14,76 +14,76 @@
       <sectiondef kind="public-type">
       <memberdef kind="typedef" id="structllama_1_1View_1a93aa3bf8757929f678b73e0e01e92ee9" prot="public" static="no">
         <type>T_BlobType</type>
-        <definition>using llama::View&lt; T_Mapping, T_BlobType &gt;::BlobType =  T_BlobType</definition>
+        <definition>using llama::View::BlobType =  T_BlobType</definition>
         <argsstring></argsstring>
         <name>BlobType</name>
         <briefdescription>
-        </briefdescription>
+<para>background data type </para>        </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="730" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="730" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="860" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="860" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="structllama_1_1View_1a674140b83f2489c3695e9fafb0bfc207" prot="public" static="no">
         <type>T_Mapping</type>
-        <definition>using llama::View&lt; T_Mapping, T_BlobType &gt;::Mapping =  T_Mapping</definition>
+        <definition>using llama::View::Mapping =  T_Mapping</definition>
         <argsstring></argsstring>
         <name>Mapping</name>
         <briefdescription>
-        </briefdescription>
+<para>used mapping </para>        </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="731" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="731" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="862" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="862" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="structllama_1_1View_1a0fe0208a4618b9b41881f18e0d1c32f7" prot="public" static="no">
         <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; <ref refid="structllama_1_1View" kindref="compound">View</ref>&lt; <ref refid="structllama_1_1View_1a674140b83f2489c3695e9fafb0bfc207" kindref="member">Mapping</ref>, <ref refid="structllama_1_1View_1a93aa3bf8757929f678b73e0e01e92ee9" kindref="member">BlobType</ref> &gt; &gt;</type>
-        <definition>using llama::View&lt; T_Mapping, T_BlobType &gt;::VirtualDatumType =  VirtualDatum&lt; View &lt; Mapping, BlobType &gt; &gt;</definition>
+        <definition>using llama::View::VirtualDatumType =  VirtualDatum&lt; View &lt; Mapping, BlobType &gt; &gt;</definition>
         <argsstring></argsstring>
         <name>VirtualDatumType</name>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
+<para>corresponding <ref refid="structllama_1_1VirtualDatum" kindref="compound">llama::VirtualDatum</ref> type returned after resolving user domain </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="732" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="737" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="866" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="871" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-attrib">
       <memberdef kind="variable" id="structllama_1_1View_1a7426dad7ef36d24058223d98263f3b9a" prot="public" static="no" mutable="no">
         <type>const <ref refid="structllama_1_1View_1a674140b83f2489c3695e9fafb0bfc207" kindref="member">Mapping</ref></type>
-        <definition>const Mapping llama::View&lt; T_Mapping, T_BlobType &gt;::mapping</definition>
+        <definition>const Mapping llama::View::mapping</definition>
         <argsstring></argsstring>
         <name>mapping</name>
         <briefdescription>
-        </briefdescription>
+<para>mapping of the view </para>        </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="883" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="883" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="1052" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="1052" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structllama_1_1View_1a165e82970b5d8e51aa4814f805ff3c28" prot="public" static="no" mutable="no">
         <type><ref refid="structllama_1_1Array" kindref="compound">Array</ref>&lt; <ref refid="structllama_1_1View_1a93aa3bf8757929f678b73e0e01e92ee9" kindref="member">BlobType</ref>, Mapping::blobCount &gt;</type>
-        <definition>Array&lt; BlobType, Mapping::blobCount &gt; llama::View&lt; T_Mapping, T_BlobType &gt;::blob</definition>
+        <definition>Array&lt; BlobType, Mapping::blobCount &gt; llama::View::blob</definition>
         <argsstring></argsstring>
         <name>blob</name>
         <briefdescription>
-        </briefdescription>
+<para>memory of the view </para>        </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="887" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="887" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="1057" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="1057" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
       <memberdef kind="function" id="structllama_1_1View_1ab230f4f9c30c26a60827b490ebd0479c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
-        <definition>llama::View&lt; T_Mapping, T_BlobType &gt;::View</definition>
+        <definition>llama::View::View</definition>
         <argsstring>()=default</argsstring>
         <name>View</name>
         <briefdescription>
@@ -92,11 +92,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="739" column="1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="873" column="1"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1View_1a8d3fda64c6b75514e8c1ba335869e3ae" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
-        <definition>llama::View&lt; T_Mapping, T_BlobType &gt;::View</definition>
+        <definition>llama::View::View</definition>
         <argsstring>(View const &amp;)=default</argsstring>
         <name>View</name>
         <param>
@@ -108,11 +108,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="740" column="1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="874" column="1"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1View_1afd9c19de4a6d957c1248533cba0bde01" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
-        <definition>llama::View&lt; T_Mapping, T_BlobType &gt;::View</definition>
+        <definition>llama::View::View</definition>
         <argsstring>(View &amp;&amp;)=default</argsstring>
         <name>View</name>
         <param>
@@ -124,11 +124,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="741" column="1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="875" column="1"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1View_1abd530075c6464525fce1d79a7ccd7cfc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
-        <definition>llama::View&lt; T_Mapping, T_BlobType &gt;::~View</definition>
+        <definition>llama::View::~View</definition>
         <argsstring>()=default</argsstring>
         <name>~View</name>
         <briefdescription>
@@ -137,11 +137,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="742" column="1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="876" column="1"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1View_1adc8280be97d67fe2358b78ce0c5a120c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
-        <definition>llama::View&lt; T_Mapping, T_BlobType &gt;::View</definition>
+        <definition>llama::View::View</definition>
         <argsstring>(Mapping mapping, Array&lt; BlobType, Mapping::blobCount &gt; blob)</argsstring>
         <name>View</name>
         <param>
@@ -158,7 +158,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="746" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="746" bodyend="755"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="880" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="880" bodyend="889"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1View_1a583df1438f7e33bd42b9f501f5705383" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -169,7 +169,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::View&lt; T_Mapping, T_BlobType &gt;::accessor</definition>
+        <definition>auto llama::View::accessor</definition>
         <argsstring>(typename Mapping::UserDomain const userDomain) -&gt; GetType&lt; typename Mapping::DatumDomain, T_coords... &gt; &amp;</argsstring>
         <name>accessor</name>
         <param>
@@ -179,10 +179,27 @@
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
+<para>Explicit access function taking the datum domain as tree index coordinate template arguments and the user domain as runtime parameter. The operator() overloadings should be preferred as they show a more array of struct like interface using <ref refid="structllama_1_1VirtualDatum" kindref="compound">llama::VirtualDatum</ref>. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_coords...</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>tree index coordinate </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>userDomain</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>user domain as <ref refid="namespacellama_1a03077c6597f96a84efe064fa64d81827" kindref="member">UserDomain</ref> </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>reference to element </para></simplesect>
+</para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="761" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="761" bodyend="779"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="903" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="903" bodyend="921"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1View_1a0435dd4f93746054745de12c42857790" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -193,7 +210,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::View&lt; T_Mapping, T_BlobType &gt;::accessor</definition>
+        <definition>auto llama::View::accessor</definition>
         <argsstring>(typename Mapping::UserDomain const userDomain) -&gt; GetTypeFromDatumCoord&lt; typename Mapping::DatumDomain, GetCoordFromUID&lt; typename Mapping::DatumDomain, T_UIDs... &gt; &gt; &amp;</argsstring>
         <name>accessor</name>
         <param>
@@ -203,14 +220,31 @@
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
+<para>Explicit access function taking the datum domain as UID type list template arguments and the user domain as runtime parameter. The operator() overloadings should be preferred as they show a more array of struct like interface using <ref refid="structllama_1_1VirtualDatum" kindref="compound">llama::VirtualDatum</ref>. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_UIDs...</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>UID type list </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>userDomain</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>user domain as <ref refid="namespacellama_1a03077c6597f96a84efe064fa64d81827" kindref="member">UserDomain</ref> </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>reference to element </para></simplesect>
+</para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="785" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="785" bodyend="815"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="935" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="935" bodyend="965"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1View_1ac962556be2456999f924b3a7a020be38" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>auto</type>
-        <definition>auto llama::View&lt; T_Mapping, T_BlobType &gt;::operator()</definition>
+        <definition>auto llama::View::operator()</definition>
         <argsstring>(typename Mapping::UserDomain const userDomain) -&gt; VirtualDatumType</argsstring>
         <name>operator()</name>
         <param>
@@ -220,10 +254,19 @@
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
+<para>Operator overloading to reverse the order of compile time (datum domain) and run time (user domain) parameter with a helper object (<ref refid="structllama_1_1VirtualDatum" kindref="compound">llama::VirtualDatum</ref>). Should be favoured to access data because of the more array of struct like interface and the handy intermediate <ref refid="structllama_1_1VirtualDatum" kindref="compound">llama::VirtualDatum</ref> object. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>userDomain</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>user domain as <ref refid="namespacellama_1a03077c6597f96a84efe064fa64d81827" kindref="member">UserDomain</ref> </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><ref refid="structllama_1_1VirtualDatum" kindref="compound">llama::VirtualDatum</ref> with bound user domain, which can be used to access the datum domain </para></simplesect>
+</para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="819" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="819" bodyend="827"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="978" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="978" bodyend="986"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1View_1a71f883c4edd040ed979a0c7d820aeeeb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -234,7 +277,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::View&lt; T_Mapping, T_BlobType &gt;::operator()</definition>
+        <definition>auto llama::View::operator()</definition>
         <argsstring>(T_Coord... coord) -&gt; VirtualDatumType</argsstring>
         <name>operator()</name>
         <param>
@@ -244,10 +287,27 @@
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
+<para>Operator overloading to reverse the order of compile time (datum domain) and run time (user domain) parameter with a helper object (<ref refid="structllama_1_1VirtualDatum" kindref="compound">llama::VirtualDatum</ref>). Should be favoured to access data because of the more array of struct like interface and the handy intermediate <ref refid="structllama_1_1VirtualDatum" kindref="compound">llama::VirtualDatum</ref> object. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_Coord...</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>types of user domain coordinates </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>coord</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>user domain as list of numbers </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><ref refid="structllama_1_1VirtualDatum" kindref="compound">llama::VirtualDatum</ref> with bound user domain, which can be used to access the datum domain </para></simplesect>
+</para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="832" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="832" bodyend="840"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="1001" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="1001" bodyend="1009"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1View_1a496b290b371265664a4af20b55c01320" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -258,7 +318,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::View&lt; T_Mapping, T_BlobType &gt;::operator()</definition>
+        <definition>auto llama::View::operator()</definition>
         <argsstring>(T_Coord... coord) const -&gt; const VirtualDatumType</argsstring>
         <name>operator()</name>
         <param>
@@ -271,11 +331,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="845" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="845" bodyend="853"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="1014" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="1014" bodyend="1022"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1View_1ad0294119f8d577dd2e1eeb7dcd608e6b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>auto</type>
-        <definition>auto llama::View&lt; T_Mapping, T_BlobType &gt;::operator()</definition>
+        <definition>auto llama::View::operator()</definition>
         <argsstring>(std::size_t coord=0) -&gt; VirtualDatumType</argsstring>
         <name>operator()</name>
         <param>
@@ -289,7 +349,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="857" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="857" bodyend="865"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="1026" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="1026" bodyend="1034"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1View_1a60065a34e0031eb9e257b9b53254d764" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -300,7 +360,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::View&lt; T_Mapping, T_BlobType &gt;::operator()</definition>
+        <definition>auto llama::View::operator()</definition>
         <argsstring>(DatumCoord&lt; T_coord... &gt; &amp;&amp;dc=DatumCoord&lt; T_coord... &gt;()) -&gt; GetType&lt; typename Mapping::DatumDomain, T_coord... &gt; &amp;</argsstring>
         <name>operator()</name>
         <param>
@@ -314,22 +374,37 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="870" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="870" bodyend="880"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="1039" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="1039" bodyend="1049"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
-    </detaileddescription>
+<para>Central LLAMA class holding memory and giving access to it defined by a mapping. Should not be instantiated &quot;by hand&quot; but with a <ref refid="structllama_1_1Factory" kindref="compound">Factory</ref>. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_Mapping</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the mapping of the view </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_BlobType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the background data type of the raw data, at the moment always an 8 bit type like &quot;unsigned char&quot; </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>    </detaileddescription>
     <collaborationgraph>
-      <node id="423">
+      <node id="385">
         <label>llama::Array&lt; BlobType, Mapping::blobCount &gt;</label>
         <link refid="structllama_1_1Array"/>
       </node>
-      <node id="422">
+      <node id="384">
         <label>llama::View&lt; T_Mapping, T_BlobType &gt;</label>
         <link refid="structllama_1_1View"/>
-        <childnode refid="423" relation="usage">
+        <childnode refid="385" relation="usage">
           <edgelabel>blob</edgelabel>
         </childnode>
       </node>

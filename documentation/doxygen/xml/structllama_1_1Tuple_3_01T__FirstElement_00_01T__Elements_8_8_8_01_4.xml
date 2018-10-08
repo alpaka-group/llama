@@ -131,14 +131,14 @@
     <detaileddescription>
     </detaileddescription>
     <collaborationgraph>
-      <node id="364">
+      <node id="338">
         <label>llama::Tuple&lt; T_Elements... &gt;</label>
         <link refid="structllama_1_1Tuple"/>
       </node>
-      <node id="363">
+      <node id="337">
         <label>llama::Tuple&lt; T_FirstElement, T_Elements... &gt;</label>
         <link refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4"/>
-        <childnode refid="364" relation="usage">
+        <childnode refid="338" relation="usage">
           <edgelabel>rest</edgelabel>
         </childnode>
       </node>

@@ -26,11 +26,22 @@
 namespace llama
 {
 
+/** helper function to get the type of a \ref DatumElement node
+ * \tparam T_DatumElement \ref DatumElement to get the type of
+ * \return type of the element
+ */
 template< typename T_DatumElement >
 using GetDatumElementType = boost::mp11::mp_second< T_DatumElement >;
 
+/** helper function to get the UID of a \ref DatumElement node
+ * \tparam T_DatumElement \ref DatumElement to get the UID of
+ * \return UID of the element
+ */
 template< typename T_DatumElement >
 using GetDatumElementUID = boost::mp11::mp_first< T_DatumElement >;
+
+namespace internal
+{
 
 template<
     typename T_DatumDomain,
@@ -88,31 +99,31 @@ struct LinearBytePosImpl<
 
 };
 
+} // namespace internal
+
+/** Gives the byte position of an element in a datum domain if it would be a
+ *  normal struct
+ * \tparam T_DatumDomain datum domain tree
+ * \tparam T_coords... coordinate in datum domain tree
+ * \return the byte position as compile time value in "value"
+ */
 template<
     typename T_DatumDomain,
     std::size_t... T_coords
 >
 struct LinearBytePos
 {
-    static constexpr std::size_t value = LinearBytePosImpl<
+    static constexpr std::size_t value = internal::LinearBytePosImpl<
         T_DatumDomain,
         DatumCoord< T_coords... >,
         DatumCoord< 0 >
     >::value;
 };
 
-template<
-    typename T_DatumDomain,
-    std::size_t T_coord
->
-struct GetBranch
-{
-    using type = boost::mp11::mp_at_c<
-        T_DatumDomain,
-        T_coord
-    >;
-};
-
+/** Gives the size a datum domain if it would be a normal struct
+ * \tparam T_DatumDomain datum domain tree
+ * \return the byte position as compile time value in "value"
+ */
 template< typename T_DatumDomain >
 struct SizeOf
 {
