@@ -2,7 +2,6 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
   <compounddef id="structllama_1_1internal_1_1TupleForEach" kind="struct" language="C++" prot="public">
     <compoundname>llama::internal::TupleForEach</compoundname>
-    <includes refid="Tuple_8hpp" local="no">Tuple.hpp</includes>
     <templateparamlist>
       <param>
         <type>typename T_Tuple</type>
@@ -31,14 +30,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="658" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="658" bodyend="685"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.dox" line="350" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.dox" bodystart="350" bodyend="377"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="655" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="654" bodyend="686"/>
+    <location file="/home/alexander/develop/work/llama/include/llama/Tuple.dox" line="347" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.dox" bodystart="346" bodyend="378"/>
     <listofallmembers>
       <member refid="structllama_1_1internal_1_1TupleForEach_1a1168aacdca4648c72996b157cc3daa75" prot="public" virt="non-virtual"><scope>llama::internal::TupleForEach</scope><name>operator()</name></member>
     </listofallmembers>

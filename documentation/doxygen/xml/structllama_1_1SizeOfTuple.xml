@@ -2,18 +2,43 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
   <compounddef id="structllama_1_1SizeOfTuple" kind="struct" language="C++" prot="public">
     <compoundname>llama::SizeOfTuple</compoundname>
-    <includes refid="Tuple_8hpp" local="no">Tuple.hpp</includes>
     <templateparamlist>
       <param>
-        <type>typename T_Tuple</type>
+        <type>ttypename</type>
+        <declname>T_Tuple</declname>
+        <defname>T_Tuple</defname>
       </param>
     </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="structllama_1_1SizeOfTuple_1ad870fc723c135ee6c3c5a65498db7320" prot="public" static="yes" mutable="no">
+        <type>constexpr std::size_t</type>
+        <definition>constexpr std::size_t llama::SizeOfTuple&lt; T_Tuple &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <briefdescription>
+<para>the size of the tuple </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.dox" line="154" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.dox" bodystart="154" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
-    </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="318" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="318" bodyend="-1"/>
+<para>Returns the size of a tuple. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_Tuple</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the tuple type </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/Tuple.dox" line="152" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.dox" bodystart="151" bodyend="155"/>
     <listofallmembers>
+      <member refid="structllama_1_1SizeOfTuple_1ad870fc723c135ee6c3c5a65498db7320" prot="public" virt="non-virtual"><scope>llama::SizeOfTuple</scope><name>value</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

@@ -19,6 +19,8 @@
 #pragma once
 #include "preprocessor/macros.hpp"
 
+/// Documentation of this file is in Tuple.dox!
+
 namespace llama
 {
 
@@ -651,7 +653,7 @@ template<
     typename T_Tuple,
     typename T_Functor
 >
-struct TupleForEach
+struct TupleTransform
 {
     LLAMA_FN_HOST_ACC_INLINE
     auto
@@ -662,7 +664,7 @@ struct TupleForEach
     -> decltype(
         tupleCat(
             makeTuple( functor( tuple.first ) ),
-            TupleForEach<
+            TupleTransform<
                 typename T_Tuple::RestTuple,
                 T_Functor
             >()(
@@ -674,7 +676,7 @@ struct TupleForEach
     {
         return tupleCat(
             makeTuple( functor( tuple.first ) ),
-            TupleForEach<
+            TupleTransform<
                 typename T_Tuple::RestTuple,
                 T_Functor
             >()(
@@ -689,7 +691,7 @@ template<
     typename T_LastElement,
     typename T_Functor
 >
-struct TupleForEach
+struct TupleTransform
 <
     Tuple< T_LastElement >,
     T_Functor
@@ -709,7 +711,7 @@ struct TupleForEach
 };
 
 template< typename T_Functor >
-struct TupleForEach
+struct TupleTransform
 <
     Tuple< >,
     T_Functor
@@ -736,12 +738,12 @@ template<
 >
 LLAMA_FN_HOST_ACC_INLINE
 auto
-tupleForEach(
+tupleTransform(
     T_Tuple const tuple,
     T_Functor const functor
 )
 -> decltype(
-    internal::TupleForEach<
+    internal::TupleTransform<
         T_Tuple,
         T_Functor
     >()(
@@ -750,7 +752,7 @@ tupleForEach(
     )
 )
 {
-    return internal::TupleForEach<
+    return internal::TupleTransform<
         T_Tuple,
         T_Functor
     >()(
@@ -797,17 +799,5 @@ tupleRest( T_Tuple const tuple )
 {
     return internal::TupleRestImpl< T_Tuple >()( tuple );
 }
-
-template< typename T_Tuple >
-struct TupleLength;
-
-template< typename... T_Childs >
-struct TupleLength< Tuple< T_Childs... > >
-{
-    static constexpr std::size_t value = sizeof...( T_Childs );
-};
-
-
-
 
 } // namespace llama

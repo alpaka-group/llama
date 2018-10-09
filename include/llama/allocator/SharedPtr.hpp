@@ -57,11 +57,21 @@ struct SharedPtrAccessor
 
 } // namespace internal
 
+/** Allocator to allocate memory for a \ref View in the \ref Factory using
+ *  `std::shared_ptr` in the background. Meaning every time the view is copied,
+ *  the shared_ptr reference count is increased and both copies share the same
+ *  memory!
+ * \tparam T_alignment aligment of the memory used by `std::shared_ptr`, default
+ *  value is 64
+ */
 template< std::size_t T_alignment = 64u>
 struct SharedPtr
 {
+    /// primary type of this allocator is `unsigned char`
     using PrimType = typename internal::SharedPtrAccessor::PrimType;
+    /// blob type of this allocator is `std::shared_ptr< PrimType >`
     using BlobType = internal::SharedPtrAccessor;
+    /// the optional allocation parameter is ignored
     using Parameter = int; //not used
 
     LLAMA_NO_HOST_ACC_WARNING

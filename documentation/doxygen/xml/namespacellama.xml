@@ -14,15 +14,6 @@
     <innerclass refid="structllama_1_1Factory" prot="public">llama::Factory</innerclass>
     <innerclass refid="structllama_1_1ForEach" prot="public">llama::ForEach</innerclass>
     <innerclass refid="structllama_1_1ForEach_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4" prot="public">llama::ForEach&lt; T_DatumDomain, DatumCoord&lt; T_coords... &gt;&gt;</innerclass>
-    <innerclass refid="structllama_1_1GetCoordFromUIDImpl" prot="public">llama::GetCoordFromUIDImpl</innerclass>
-    <innerclass refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01typenaa9912ddeb798da71d2b7162da7df24fe" prot="public">llama::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, typename std::enable_if&lt; !std::is_same&lt; T_FirstUID, GetDatumElementUID&lt; boost::mp11::mp_first&lt; T_DatumDomain &gt; &gt; &gt;::value &gt;::type, T_FirstUID, T_UID... &gt;</innerclass>
-    <innerclass refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01typenad970eea1a4cb24aad0368256d66b0279" prot="public">llama::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, typename std::enable_if&lt; std::is_same&lt; T_FirstUID, GetDatumElementUID&lt; boost::mp11::mp_first&lt; T_DatumDomain &gt; &gt; &gt;::value &gt;::type, T_FirstUID, T_UID... &gt;</innerclass>
-    <innerclass refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01void_01_4" prot="public">llama::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, void &gt;</innerclass>
-    <innerclass refid="structllama_1_1GetTypeFromDatumCoordImpl" prot="public">llama::GetTypeFromDatumCoordImpl</innerclass>
-    <innerclass refid="structllama_1_1GetTypeFromDatumCoordImpl_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4" prot="public">llama::GetTypeFromDatumCoordImpl&lt; T_DatumDomain, DatumCoord&lt; T_coords... &gt;&gt;</innerclass>
-    <innerclass refid="structllama_1_1GetTypeImpl" prot="public">llama::GetTypeImpl</innerclass>
-    <innerclass refid="structllama_1_1GetTypeImpl_3_01T__DatumDomain_01_4" prot="public">llama::GetTypeImpl&lt; T_DatumDomain &gt;</innerclass>
-    <innerclass refid="structllama_1_1GetTypeImpl_3_01T__DatumDomain_00_01T__firstDatumDomainCoord_00_01T__datumDomainCoords_8_8_8_01_4" prot="public">llama::GetTypeImpl&lt; T_DatumDomain, T_firstDatumDomainCoord, T_datumDomainCoords... &gt;</innerclass>
     <innerclass refid="structllama_1_1IntegerSequence" prot="public">llama::IntegerSequence</innerclass>
     <innerclass refid="structllama_1_1LinearBytePos" prot="public">llama::LinearBytePos</innerclass>
     <innerclass refid="structllama_1_1LinearizeUserDomainAdress" prot="public">llama::LinearizeUserDomainAdress</innerclass>
@@ -34,13 +25,7 @@
     <innerclass refid="structllama_1_1SizeOf_3_01DatumStruct_3_01_4_01_4" prot="public">llama::SizeOf&lt; DatumStruct&lt; &gt; &gt;</innerclass>
     <innerclass refid="structllama_1_1SizeOf_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__DatumElements_8_8_8_01_4_4" prot="public">llama::SizeOf&lt; DatumStruct&lt; T_FirstDatumElement, T_DatumElements... &gt;&gt;</innerclass>
     <innerclass refid="structllama_1_1SizeOfTuple" prot="public">llama::SizeOfTuple</innerclass>
-    <innerclass refid="structllama_1_1SizeOfTuple_3_01Tuple_3_01T__Elements_8_8_8_01_4_01_4" prot="public">llama::SizeOfTuple&lt; Tuple&lt; T_Elements... &gt; &gt;</innerclass>
     <innerclass refid="structllama_1_1Tuple" prot="public">llama::Tuple</innerclass>
-    <innerclass refid="structllama_1_1Tuple_3_01_4" prot="public">llama::Tuple&lt; &gt;</innerclass>
-    <innerclass refid="structllama_1_1Tuple_3_01T__FirstElement_01_4" prot="public">llama::Tuple&lt; T_FirstElement &gt;</innerclass>
-    <innerclass refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4" prot="public">llama::Tuple&lt; T_FirstElement, T_Elements... &gt;</innerclass>
-    <innerclass refid="structllama_1_1TupleLength" prot="public">llama::TupleLength</innerclass>
-    <innerclass refid="structllama_1_1TupleLength_3_01Tuple_3_01T__Childs_8_8_8_01_4_01_4" prot="public">llama::TupleLength&lt; Tuple&lt; T_Childs... &gt; &gt;</innerclass>
     <innerclass refid="structllama_1_1View" prot="public">llama::View</innerclass>
     <innerclass refid="structllama_1_1VirtualDatum" prot="public">llama::VirtualDatum</innerclass>
     <innerclass refid="structllama_1_1VirtualView" prot="public">llama::VirtualView</innerclass>
@@ -141,49 +126,113 @@
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
+<para>Special factory which predefines some options for getting a <ref refid="structllama_1_1View" kindref="compound">View</ref> with only one element laying on the stack avoiding costly allocation operations. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>dimension</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>dimension of the view </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>DatumDomain</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the datum domain for the one element mapping </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="see"><para><ref refid="namespacellama_1a7e6d72ed44f9e4c51751940ef5ee8e65" kindref="member">tempAlloc</ref> </para></simplesect>
+</para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Factory.hpp" line="129" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Factory.hpp" bodystart="138" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Factory.hpp" line="173" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Factory.hpp" bodystart="182" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="typedef" id="namespacellama_1a3a9ff09beed7470e5c174d2c34e88aab" prot="public" static="no">
-        <type>typename <ref refid="structllama_1_1GetCoordFromUIDImpl" kindref="compound">GetCoordFromUIDImpl</ref>&lt; T_DatumDomain, <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>&lt; &gt;, 0, void, T_UID... &gt;::type</type>
-        <definition>using llama::GetCoordFromUID = typename GetCoordFromUIDImpl&lt; T_DatumDomain, DatumCoord&lt; &gt;, 0, void, T_UID... &gt;::type</definition>
+      <memberdef kind="typedef" id="namespacellama_1a3953132518a1c5bd14cbacc8107975db" prot="public" static="no">
+        <type>typename <ref refid="structllama_1_1internal_1_1GetCoordFromUIDImpl" kindref="compound">internal::GetCoordFromUIDImpl</ref>&lt; T_DatumDomain, <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>&lt; &gt;, 0, void, T_UID... &gt;::type</type>
+        <definition>using llama::GetCoordFromUID = typename internal::GetCoordFromUIDImpl&lt; T_DatumDomain, DatumCoord&lt; &gt;, 0, void, T_UID... &gt;::type</definition>
         <argsstring></argsstring>
         <name>GetCoordFromUID</name>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
+<para>Converts a coordinate in a datum domain given as UID to a <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref> . <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_DatumDomain</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the datum domain (<ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>) </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_UID...</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the uid of in the datum domain, may also be empty (for <computeroutput><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>&lt; &gt;</computeroutput>) </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>a <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref> with the datum domain tree coordinates as template parameters </para></simplesect>
+</para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp" line="123" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp" bodystart="129" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp" line="135" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp" bodystart="141" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="typedef" id="namespacellama_1aeef46491193f44d7be8ba279d053e78f" prot="public" static="no">
-        <type>typename <ref refid="structllama_1_1GetTypeImpl" kindref="compound">GetTypeImpl</ref>&lt; T_DatumDomain, T_datumDomainCoords... &gt;::type</type>
-        <definition>using llama::GetType = typename GetTypeImpl&lt; T_DatumDomain, T_datumDomainCoords... &gt;::type</definition>
+      <memberdef kind="typedef" id="namespacellama_1a9b77530642d73f0464c605e6140391cb" prot="public" static="no">
+        <type>typename <ref refid="structllama_1_1internal_1_1GetTypeImpl" kindref="compound">internal::GetTypeImpl</ref>&lt; T_DatumDomain, T_datumDomainCoords... &gt;::type</type>
+        <definition>using llama::GetType = typename internal::GetTypeImpl&lt; T_DatumDomain, T_datumDomainCoords... &gt;::type</definition>
         <argsstring></argsstring>
         <name>GetType</name>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
+<para>Returns the type of a node in a datum domain tree for a coordinate given as tree index (like for <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>) <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_DatumDomain</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the datum domain (probably <ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>) </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_datumDomainCoords...</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the coordinate </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>type at the specified node </para></simplesect>
+</para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/GetType.hpp" line="68" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/GetType.hpp" bodystart="71" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/GetType.hpp" line="79" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/GetType.hpp" bodystart="82" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="typedef" id="namespacellama_1ae6136ff96220af66f833a8de8aa0b6a1" prot="public" static="no">
-        <type>typename <ref refid="structllama_1_1GetTypeFromDatumCoordImpl" kindref="compound">GetTypeFromDatumCoordImpl</ref>&lt; T_DatumDomain, T_DatumCoord &gt;::type</type>
-        <definition>using llama::GetTypeFromDatumCoord = typename GetTypeFromDatumCoordImpl&lt; T_DatumDomain, T_DatumCoord &gt;::type</definition>
+      <memberdef kind="typedef" id="namespacellama_1a22362d58c566945f0f8178e2af1b0013" prot="public" static="no">
+        <type>typename <ref refid="structllama_1_1internal_1_1GetTypeFromDatumCoordImpl" kindref="compound">internal::GetTypeFromDatumCoordImpl</ref>&lt; T_DatumDomain, T_DatumCoord &gt;::type</type>
+        <definition>using llama::GetTypeFromDatumCoord = typename internal::GetTypeFromDatumCoordImpl&lt; T_DatumDomain, T_DatumCoord &gt;::type</definition>
         <argsstring></argsstring>
         <name>GetTypeFromDatumCoord</name>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
+<para>Returns the type of a node in a datum domain tree for a coordinate given as <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref> <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_DatumDomain</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the datum domain (probably <ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>) </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_DatumCoord</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the coordinate </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>type at the specified node </para></simplesect>
+</para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/GetType.hpp" line="98" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/GetType.hpp" bodystart="101" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/GetType.hpp" line="120" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/GetType.hpp" bodystart="123" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="namespacellama_1afc1dd86868706ba5f5ee39ec0c588534" prot="public" static="no">
         <type>typename <ref refid="structllama_1_1internal_1_1GetUIDfromDatumCoord" kindref="compound">internal::GetUIDfromDatumCoord</ref>&lt; <ref refid="namespacellama_1a616a6cb9eb30d6b15f4819de1aa7cf68" kindref="member">DatumElement</ref>&lt; <ref refid="structllama_1_1NoName" kindref="compound">NoName</ref>, T_DatumDomain &gt;, T_DatumCoord &gt;::type</type>
@@ -259,30 +308,61 @@
         <location file="/home/alexander/develop/work/llama/include/llama/IntegerSequence.hpp" line="105" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/IntegerSequence.hpp" bodystart="106" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="namespacellama_1aa3255f46d3b3fbcd50ca0d002dfc279c" prot="public" static="no">
-        <type>typename <ref refid="structllama_1_1internal_1_1GetTupleTypeImpl" kindref="compound">internal::GetTupleTypeImpl</ref>&lt; T_Tuple, T_pos &gt;::type</type>
+        <type>typename internal::GetTupleTypeImpl&lt; T_Tuple, T_pos &gt;::type</type>
         <definition>using llama::GetTupleType = typename internal::GetTupleTypeImpl&lt; T_Tuple, T_pos &gt;::type</definition>
         <argsstring></argsstring>
         <name>GetTupleType</name>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
+<para>Returns the type of an element in a tuple <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_Tuple</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>tuple type </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_pos</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>position of the element </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>the type </para></simplesect>
+</para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="208" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="211" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.dox" line="92" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.dox" bodystart="95" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="namespacellama_1aaa44c7e572053a067b323bd05d8dc013" prot="public" static="no">
-        <type>typename <ref refid="structllama_1_1internal_1_1TupleCatTypeImpl" kindref="compound">internal::TupleCatTypeImpl</ref>&lt; T_Tuple1, T_Tuple2 &gt;::type</type>
+        <type>typename internal::TupleCatTypeImpl&lt; T_Tuple1, T_Tuple2 &gt;::type</type>
         <definition>using llama::TupleCatType = typename internal::TupleCatTypeImpl&lt; T_Tuple1, T_Tuple2 &gt;::type</definition>
         <argsstring></argsstring>
         <name>TupleCatType</name>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
+<para>Returns the tuple type of the concatenation of two tuples <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_Tuple1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>type of the first tuple </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_Tuple2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>type of the second tuple </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="482" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="485" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.dox" line="165" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.dox" bodystart="168" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="namespacellama_1a03077c6597f96a84efe064fa64d81827" prot="public" static="no">
         <type><ref refid="structllama_1_1Array" kindref="compound">Array</ref>&lt; std::size_t, T_dim &gt;</type>
@@ -428,10 +508,27 @@
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
+<para>Uses the <ref refid="namespacellama_1a0497c2913f9ebb2cea9c97ddc35be349" kindref="member">OneOnStackFactory</ref> to allocate one (probably temporary) element for a given dimension and dautm domain on the stack (no costly allocation). <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>dimension</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>dimension of the view </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>DatumDomain</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the datum domain for the one element mapping </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>the allocated view </para></simplesect>
+<simplesect kind="see"><para><ref refid="namespacellama_1a0497c2913f9ebb2cea9c97ddc35be349" kindref="member">OneOnStackFactory</ref> </para></simplesect>
+</para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Factory.hpp" line="146" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Factory.hpp" bodystart="146" bodyend="158"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Factory.hpp" line="197" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Factory.hpp" bodystart="197" bodyend="209"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1a3b822ea750d68c8b464a4fc2fb970967" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::string</type>
@@ -469,10 +566,27 @@
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
+<para>Create a tuple for a given list of elements, which are added. Has the advantage that the tuple type doesn&apos;t need to be written down, but can be concluded from the function parameters, e.g. <computeroutput>auto myTuple = makeTuple( 23, 13.37, std::size_t(42) )</computeroutput> instaed of the error-prone <computeroutput><ref refid="structllama_1_1Tuple" kindref="compound">Tuple</ref>&lt; int, double, std::size_t &gt; myTuple( 23, 13.37, std::size_t(42) )</computeroutput>. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_Elements...</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Types for the tuple. Will probably concluded from the function call parameters (template argument deduction). </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>elements</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>elements to have in the returned tuple </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>the created tuple </para></simplesect>
+</para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="153" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="153" bodyend="157"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.dox" line="77" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.dox" bodystart="77" bodyend="81"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1a06631de361c03d428287f53c817c880d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -496,10 +610,34 @@
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
+<para>Returns an element in a tuple <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_pos</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>position of the element </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_Tuple</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>tuple type, probably indirectly given with template argument deduction </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>tuple</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the tuple to get the element of </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>a copy of the element </para></simplesect>
+</para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="287" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="287" bodyend="297"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.dox" line="110" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.dox" bodystart="110" bodyend="120"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1a23a39f92cc91dff13e56e2d51a679e64" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -523,10 +661,34 @@
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
+<para>Returns a const reference to an element in a tuple <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_pos</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>position of the element </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_Tuple</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>tuple type, probably indirectly given with template argument deduction </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>tuple</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the tuple to get the element of </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>a const reference to the element </para></simplesect>
+</para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="305" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="305" bodyend="315"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.dox" line="135" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.dox" bodystart="135" bodyend="145"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1aba28a2d9095426f0fb28d4b5371f34a7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -552,10 +714,41 @@
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
+<para>Concatenates two tuples to a new tuple containing the elements of both. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_Tuple1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>type of the first tuple, probably indirectly given as template argument deduction </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_Tuple2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>type of the second tuple, probably indirectly given as template argument deduction </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>t1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>first tuple </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>t2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>second tuple </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>new tuple with element of both input tuples </para></simplesect>
+</para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="493" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="493" bodyend="514"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.dox" line="185" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.dox" bodystart="185" bodyend="206"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1af366894d19a93f206cac71e5e6ca7a8d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -586,12 +779,50 @@
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
+<para>Creates a copy of a tuple with one element replaced by another. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_pos</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>position of element to change </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_Tuple</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>type of input tuple </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_Replacement</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>new type of element at replaced position </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>tuple</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>tuple in which an element shall be replaced </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>replacement</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>new element for the returned tuple </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>new tuple with same size but maybe new type and replaced element </para></simplesect>
+</para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="622" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="622" bodyend="645"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.dox" line="223" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.dox" bodystart="223" bodyend="246"/>
       </memberdef>
-      <memberdef kind="function" id="namespacellama_1a87f3fb778741ba559e6b686b86e90686" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="namespacellama_1adbf27665d0e9554d16aa97932d9720c2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_Tuple</type>
@@ -601,9 +832,9 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::tupleForEach</definition>
-        <argsstring>(T_Tuple const tuple, T_Functor const functor) -&gt; decltype(internal::TupleForEach&lt; T_Tuple, T_Functor &gt;()(tuple, functor))</argsstring>
-        <name>tupleForEach</name>
+        <definition>auto llama::tupleTransform</definition>
+        <argsstring>(T_Tuple const tuple, T_Functor const functor) -&gt; decltype(internal::TupleTransform&lt; T_Tuple, T_Functor &gt;()(tuple, functor))</argsstring>
+        <name>tupleTransform</name>
         <param>
           <type>T_Tuple const</type>
           <declname>tuple</declname>
@@ -615,10 +846,41 @@
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
+<para>Applies a functor for every element of a tuple and creating a new tuple with the result of the element transformations. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_Tuple</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>tuple type </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_Functor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Functor type. The functor needs to implement an <computeroutput>operator()</computeroutput> with one template parameter and one parameter of this type being the current element, which returns some new element of any type. </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>tuple</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the tuple </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>functor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the functor </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>a new tuple of the same size but maybe different type </para></simplesect>
+</para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="739" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="739" bodyend="760"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.dox" line="264" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.dox" bodystart="264" bodyend="285"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1a4405d1ede3fad1a18b749f84bab1f37e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -637,10 +899,27 @@
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
+<para>Returns a new tuple without the very first element. Does only work for tuples with at least one element. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_Tuple</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>tuple type </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>tuple</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the tuple </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>new tuple without first element </para></simplesect>
+</para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="795" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="795" bodyend="799"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.dox" line="296" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.dox" bodystart="296" bodyend="300"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1aa8b49851209fef972feb72ca58cdffae" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>

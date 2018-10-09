@@ -34,6 +34,13 @@ namespace tree
 namespace functor
 {
 
+/** Functor for \ref tree::Mapping. Move the run time part of a node one level
+ *  down in direction of the leaves.
+ * \warning Broken at the moment
+ * \tparam T_TreeCoord tree coordinate in the mapping tree which's run time
+ *  part shall be moved down one level
+ * \see tree::Mapping
+ */
 template< typename T_TreeCoord >
 struct MoveRTDown
 {

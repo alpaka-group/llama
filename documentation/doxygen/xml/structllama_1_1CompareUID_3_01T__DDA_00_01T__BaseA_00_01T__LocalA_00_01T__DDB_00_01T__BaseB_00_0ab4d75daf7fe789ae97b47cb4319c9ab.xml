@@ -36,14 +36,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/CompareUID.hpp" line="103" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/CompareUID.hpp" bodystart="103" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/CompareUID.hpp" line="120" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/CompareUID.hpp" bodystart="120" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/CompareUID.hpp" line="102" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/CompareUID.hpp" bodystart="89" bodyend="104"/>
+    <location file="/home/alexander/develop/work/llama/include/llama/CompareUID.hpp" line="119" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/CompareUID.hpp" bodystart="106" bodyend="121"/>
     <listofallmembers>
       <member refid="structllama_1_1CompareUID_3_01T__DDA_00_01T__BaseA_00_01T__LocalA_00_01T__DDB_00_01T__BaseB_00_0ab4d75daf7fe789ae97b47cb4319c9ab_1a3e707d3fefd80fe2169d194ad24463f3" prot="public" virt="non-virtual"><scope>llama::CompareUID&lt; T_DDA, T_BaseA, T_LocalA, T_DDB, T_BaseB, T_LocalB, typename std::enable_if&lt;(T_LocalA::size==0) &amp;&amp;(T_LocalB::size==0) &gt;::type &gt;</scope><name>value</name></member>
     </listofallmembers>

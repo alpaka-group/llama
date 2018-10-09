@@ -2,7 +2,6 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
   <compounddef id="structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01T__Tuple_00_01T__Replacement_01_4" kind="struct" language="C++" prot="public">
     <compoundname>llama::internal::TupleReplaceImpl&lt; 0, T_Tuple, T_Replacement &gt;</compoundname>
-    <includes refid="Tuple_8hpp" local="no">Tuple.hpp</includes>
     <templateparamlist>
       <param>
         <type>typename T_Tuple</type>
@@ -31,14 +30,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="572" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="572" bodyend="587"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.dox" line="264" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.dox" bodystart="264" bodyend="279"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="569" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="564" bodyend="588"/>
+    <location file="/home/alexander/develop/work/llama/include/llama/Tuple.dox" line="261" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.dox" bodystart="256" bodyend="280"/>
     <listofallmembers>
       <member refid="structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01T__Tuple_00_01T__Replacement_01_4_1a97baaef660d16ac98c6a4ea614f90ad5" prot="public" virt="non-virtual"><scope>llama::internal::TupleReplaceImpl&lt; 0, T_Tuple, T_Replacement &gt;</scope><name>operator()</name></member>
     </listofallmembers>

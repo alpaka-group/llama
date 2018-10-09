@@ -23,10 +23,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="150" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="153" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="155" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="158" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1_1BasicCoordToResultCoordImpl_1a194c0cbd31d88ad5fd582e9a9e9768df" prot="public" static="no">
-        <type><ref refid="namespacellama_1aaa44c7e572053a067b323bd05d8dc013" kindref="member">TupleCatType</ref>&lt; <ref refid="structllama_1_1Tuple" kindref="compound">Tuple</ref>&lt; <ref refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1_1BasicCoordToResultCoordImpl_1a087dd7e38330b886eee22c6f149987b2" kindref="member">FirstResultCoord</ref> &gt;, decltype(<ref refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1_1BasicCoordToResultCoordImpl" kindref="compound">BasicCoordToResultCoordImpl</ref>&lt; <ref refid="namespacellama_1aa3255f46d3b3fbcd50ca0d002dfc279c" kindref="member">GetTupleType</ref>&lt; typename T_Tree::Type, decltype(T_BasicCoord::FirstElement::compiletime)::value &gt;, typename T_BasicCoord::RestTuple &gt;()(typename T_BasicCoord::RestTuple(), <ref refid="structllama_1_1internal_1_1GetTupleElementImpl" kindref="compound">llama::internal::GetTupleElementImpl</ref>&lt; typename T_Tree::Type, decltype(T_BasicCoord::FirstElement::compiletime)::value &gt;()(typename T_Tree::Type()), 0)) &gt;</type>
+        <type><ref refid="namespacellama_1aaa44c7e572053a067b323bd05d8dc013" kindref="member">TupleCatType</ref>&lt; <ref refid="structllama_1_1Tuple" kindref="compound">Tuple</ref>&lt; <ref refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1_1BasicCoordToResultCoordImpl_1a087dd7e38330b886eee22c6f149987b2" kindref="member">FirstResultCoord</ref> &gt;, decltype(<ref refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1_1BasicCoordToResultCoordImpl" kindref="compound">BasicCoordToResultCoordImpl</ref>&lt; <ref refid="namespacellama_1aa3255f46d3b3fbcd50ca0d002dfc279c" kindref="member">GetTupleType</ref>&lt; typename T_Tree::Type, decltype(T_BasicCoord::FirstElement::compiletime)::value &gt;, typename T_BasicCoord::RestTuple &gt;()(typename T_BasicCoord::RestTuple(), llama::internal::GetTupleElementImpl&lt; typename T_Tree::Type, decltype(T_BasicCoord::FirstElement::compiletime)::value &gt;()(typename T_Tree::Type()), 0)) &gt;</type>
         <definition>using llama::mapping::tree::functor::LeafOnlyRT::BasicCoordToResultCoordImpl&lt; T_Tree, T_BasicCoord &gt;::ResultCoord =  TupleCatType&lt; Tuple&lt; FirstResultCoord &gt;, decltype( BasicCoordToResultCoordImpl&lt; GetTupleType&lt; typename T_Tree::Type, decltype(T_BasicCoord::FirstElement::compiletime)::value &gt;, typename T_BasicCoord::RestTuple &gt;()( typename T_BasicCoord::RestTuple(), llama::internal::GetTupleElementImpl&lt; typename T_Tree::Type, decltype(T_BasicCoord::FirstElement::compiletime)::value &gt;()( typename T_Tree::Type() ), 0 ) ) &gt;</definition>
         <argsstring></argsstring>
         <name>ResultCoord</name>
@@ -36,7 +36,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="154" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="179" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="159" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="184" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -64,14 +64,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="183" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="183" bodyend="214"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="188" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="188" bodyend="219"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="149" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="148" bodyend="215"/>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="154" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="153" bodyend="220"/>
     <listofallmembers>
       <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1_1BasicCoordToResultCoordImpl_1a087dd7e38330b886eee22c6f149987b2" prot="public" virt="non-virtual"><scope>llama::mapping::tree::functor::LeafOnlyRT::BasicCoordToResultCoordImpl</scope><name>FirstResultCoord</name></member>
       <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1_1BasicCoordToResultCoordImpl_1a75cec6a1562d2607b1250ba5a95b96a7" prot="public" virt="non-virtual"><scope>llama::mapping::tree::functor::LeafOnlyRT::BasicCoordToResultCoordImpl</scope><name>operator()</name></member>

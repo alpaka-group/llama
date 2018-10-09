@@ -2,7 +2,6 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
   <compounddef id="structllama_1_1internal_1_1TupleCatTypeImpl_3_01Tuple_3_01T__Tuple1Elem_01_4_00_01Tuple_3_01T__Tuple2Elems_8_8_8_01_4_4" kind="struct" language="C++" prot="public">
     <compoundname>llama::internal::TupleCatTypeImpl&lt; Tuple&lt; T_Tuple1Elem &gt;, Tuple&lt; T_Tuple2Elems... &gt;&gt;</compoundname>
-    <includes refid="Tuple_8hpp" local="no">Tuple.hpp</includes>
     <templateparamlist>
       <param>
         <type>typename T_Tuple1Elem</type>
@@ -25,14 +24,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="366" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="369" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.dox" line="196" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.dox" bodystart="199" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="365" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="361" bodyend="370"/>
+    <location file="/home/alexander/develop/work/llama/include/llama/Tuple.dox" line="195" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.dox" bodystart="191" bodyend="200"/>
     <listofallmembers>
       <member refid="structllama_1_1internal_1_1TupleCatTypeImpl_3_01Tuple_3_01T__Tuple1Elem_01_4_00_01Tuple_3_01T__Tuple2Elems_8_8_8_01_4_4_1acfbebe707b16e1c34d048f7f8e9f5649" prot="public" virt="non-virtual"><scope>llama::internal::TupleCatTypeImpl&lt; Tuple&lt; T_Tuple1Elem &gt;, Tuple&lt; T_Tuple2Elems... &gt;&gt;</scope><name>type</name></member>
     </listofallmembers>

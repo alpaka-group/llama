@@ -19,7 +19,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="140" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="142" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="145" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="147" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -43,7 +43,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="131" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="131" bodyend="137"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="136" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="136" bodyend="142"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1a94fe30d05dcb0468634a9a56f4ce6728" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -72,7 +72,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="254" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="254" bodyend="275"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="259" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="259" bodyend="280"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1a095a97bbc4a4933e506a778745ced2c4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -101,14 +101,15 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="283" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="283" bodyend="290"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="288" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="288" bodyend="295"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
-    </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="37" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="36" bodyend="291"/>
+<para>Functor for <ref refid="structllama_1_1mapping_1_1tree_1_1Mapping" kindref="compound">tree::Mapping</ref>. Moves all run time parts to the leaves, so in fact another struct of array implementation <ndash/> but with the possibility to add further finetuning of the mapping in the future. <simplesect kind="see"><para><ref refid="structllama_1_1mapping_1_1tree_1_1Mapping" kindref="compound">tree::Mapping</ref> </para></simplesect>
+</para>    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="42" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="41" bodyend="296"/>
     <listofallmembers>
       <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1a94fe30d05dcb0468634a9a56f4ce6728" prot="public" virt="non-virtual"><scope>llama::mapping::tree::functor::LeafOnlyRT</scope><name>basicCoordToResultCoord</name></member>
       <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1a839657c36258390dd8df9c2993b45b79" prot="public" virt="non-virtual"><scope>llama::mapping::tree::functor::LeafOnlyRT</scope><name>basicToResult</name></member>

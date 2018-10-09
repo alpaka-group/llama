@@ -23,7 +23,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" line="36" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" bodystart="36" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" line="46" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" bodystart="46" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="structllama_1_1mapping_1_1One_1a1a71ba62bc01eb9e14d7b348433f4b7a" prot="public" static="no">
         <type>T_DatumDomain</type>
@@ -36,7 +36,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" line="37" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" bodystart="37" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" line="47" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" bodystart="47" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-static-attrib">
@@ -52,7 +52,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" line="38" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" bodystart="38" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" line="48" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" bodystart="48" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -71,7 +71,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" line="42" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" bodystart="42" bodyend="46"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" line="52" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" bodystart="52" bodyend="56"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1mapping_1_1One_1a63a4c055d22f9f5ed0254180d0d5efa2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -95,7 +95,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" line="52" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" bodystart="52" bodyend="60"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" line="62" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" bodystart="62" bodyend="70"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1mapping_1_1One_1a11cd8d43e18e891042ffa4d8db742cf5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -119,14 +119,30 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" line="66" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" bodystart="66" bodyend="70"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" line="76" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" bodystart="76" bodyend="80"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
-    </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" line="35" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" bodystart="34" bodyend="71"/>
+<para>Neither struct of array nor array of struct mapping as only exactly one element (in the user domain) can be mapped. If more than one element is tried to be mapped all virtual datums are mapped to the very same memory. This mapping is especially used for temporary views on the stack allocated with <ref refid="namespacellama_1a7e6d72ed44f9e4c51751940ef5ee8e65" kindref="member">tempAlloc</ref>. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_UserDomain</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>type of the user domain, expected to have only element, although more are working (but doesn&apos;t make sense) </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_DatumDomain</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>type of the datum domain </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="see"><para><ref refid="namespacellama_1a7e6d72ed44f9e4c51751940ef5ee8e65" kindref="member">tempAlloc</ref>, <ref refid="namespacellama_1a0497c2913f9ebb2cea9c97ddc35be349" kindref="member">OneOnStackFactory</ref>, <ref refid="structllama_1_1allocator_1_1Stack" kindref="compound">allocator::Stack</ref> </para></simplesect>
+</para>    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" line="45" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/One.hpp" bodystart="44" bodyend="81"/>
     <listofallmembers>
       <member refid="structllama_1_1mapping_1_1One_1a8f5407ab9384a236a7519e15d2201d39" prot="public" virt="non-virtual"><scope>llama::mapping::One</scope><name>blobCount</name></member>
       <member refid="structllama_1_1mapping_1_1One_1a1a71ba62bc01eb9e14d7b348433f4b7a" prot="public" virt="non-virtual"><scope>llama::mapping::One</scope><name>DatumDomain</name></member>

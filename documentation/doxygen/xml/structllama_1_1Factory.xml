@@ -31,17 +31,52 @@
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
+<para>Allocates the needed memory based in the mapping and returns a view <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>mapping</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the mapping </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>allocatorParams</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>optional allocator parameter, which may be forwarded to the allocator </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>the allocated <ref refid="structllama_1_1View" kindref="compound">View</ref> </para></simplesect>
+</para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Factory.hpp" line="100" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Factory.hpp" bodystart="100" bodyend="122"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Factory.hpp" line="138" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Factory.hpp" bodystart="138" bodyend="160"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
-    </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/Factory.hpp" line="95" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Factory.hpp" bodystart="94" bodyend="123"/>
+<para>Creates views with the help of mapping and allocation functors. Should be the preferred way to create a <ref refid="structllama_1_1View" kindref="compound">View</ref>. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_Mapping</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Mapping type. A mapping binds the user domain and datum domain and needs to expose them as typedefs called <computeroutput>UserDomain</computeroutput> and <computeroutput>DatumDomain</computeroutput>. Furthermore it has to define a <computeroutput>static constexpr</computeroutput> called <computeroutput>blobCount</computeroutput> with the number of needed memory regions to allocate. Furthermore three methods need to be defined (Note: For working with offloading device some further annotations for these methods are needed. Best is to have a look at <ref refid="structllama_1_1mapping_1_1AoS" kindref="compound">mapping::AoS</ref>, <ref refid="structllama_1_1mapping_1_1SoA" kindref="compound">mapping::SoA</ref> or <ref refid="structllama_1_1mapping_1_1One" kindref="compound">mapping::One</ref> for the exactly implemenatation details):<itemizedlist>
+<listitem><para><computeroutput>auto getBlobSize( std::size_t ) -&gt; std::size_t</computeroutput> which returns the needed size in byte per blob</para></listitem><listitem><para><computeroutput>template&lt; std::size_t... &gt; auto getBlobByte( UserDomain ) -&gt; std::size_t</computeroutput> which returns the byte position for a given coordinate in the datum domain (template parameter) and user domain (method parameter).</para></listitem><listitem><para><computeroutput>template&lt; std::size_t... &gt; auto getBlobNr( UserDomain ) -&gt; std::size_t</computeroutput> which returns the blob in which the byte position given by getBlobByte resides. </para></listitem></itemizedlist>
+</para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_Allocator</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Allocator type, at default <ref refid="structllama_1_1allocator_1_1Vector" kindref="compound">allocator::Vector</ref>. An allocator also needs to define some typedefs, namely <computeroutput>PrimType</computeroutput> which is the raw datatype returned from the allocator (e.g. <computeroutput>unsigned char</computeroutput>), <computeroutput>BlobType</computeroutput> which is the type returned from the allocator (can be a pointer, a <computeroutput>std::shared_ptr</computeroutput>, an own class, you name it!) and <computeroutput>Parameter</computeroutput> which is the (optional) allocation parameter type forwarded from the <ref refid="structllama_1_1Factory" kindref="compound">Factory</ref> to the allocator. Be aware that at the moment only an 8 bit <computeroutput>PrimType</computeroutput> is supported. Beside these definitions only the method<itemizedlist>
+<listitem><para><computeroutput>static inline auto allocate( std::size_t, Parameter ) -&gt; BlobType</computeroutput> needs to be implements which allocates memory and returns its self defined blob type. </para></listitem></itemizedlist>
+</para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/Factory.hpp" line="127" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Factory.hpp" bodystart="126" bodyend="161"/>
     <listofallmembers>
       <member refid="structllama_1_1Factory_1a0d8e75c40a060d572a1b8a226b917076" prot="public" virt="non-virtual"><scope>llama::Factory</scope><name>allocView</name></member>
     </listofallmembers>

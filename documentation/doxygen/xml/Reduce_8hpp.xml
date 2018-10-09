@@ -5,80 +5,68 @@
     <includes refid="TreeElement_8hpp" local="yes">TreeElement.hpp</includes>
     <includedby refid="GetBlobSize_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobSize.hpp</includedby>
     <incdepgraph>
-      <node id="436">
-        <label>boost/predef.h</label>
-      </node>
-      <node id="431">
+      <node id="417">
         <label>TreeElement.hpp</label>
         <link refid="TreeElement_8hpp"/>
-        <childnode refid="432" relation="include">
+        <childnode refid="418" relation="include">
         </childnode>
-        <childnode refid="433" relation="include">
+        <childnode refid="419" relation="include">
         </childnode>
-        <childnode refid="434" relation="include">
+        <childnode refid="420" relation="include">
         </childnode>
       </node>
-      <node id="430">
+      <node id="416">
         <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/Reduce.hpp</label>
         <link refid="Reduce_8hpp"/>
-        <childnode refid="431" relation="include">
+        <childnode refid="417" relation="include">
         </childnode>
       </node>
-      <node id="434">
-        <label>../../Tuple.hpp</label>
-        <link refid="Tuple_8hpp"/>
-        <childnode refid="435" relation="include">
-        </childnode>
-      </node>
-      <node id="432">
+      <node id="418">
         <label>cstddef</label>
       </node>
-      <node id="435">
-        <label>preprocessor/macros.hpp</label>
-        <link refid="macros_8hpp"/>
-        <childnode refid="436" relation="include">
-        </childnode>
+      <node id="420">
+        <label>../../Tuple.hpp</label>
       </node>
-      <node id="433">
+      <node id="419">
         <label>type_traits</label>
       </node>
     </incdepgraph>
     <invincdepgraph>
-      <node id="440">
+      <node id="424">
         <label>/home/alexander/develop/work/llama/include/llama/llama.hpp</label>
         <link refid="llama_8hpp"/>
       </node>
-      <node id="441">
+      <node id="425">
         <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobByte.hpp</label>
         <link refid="GetBlobByte_8hpp"/>
-        <childnode refid="439" relation="include">
+        <childnode refid="423" relation="include">
         </childnode>
       </node>
-      <node id="437">
+      <node id="421">
         <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/Reduce.hpp</label>
         <link refid="Reduce_8hpp"/>
-        <childnode refid="438" relation="include">
+        <childnode refid="422" relation="include">
         </childnode>
       </node>
-      <node id="438">
+      <node id="422">
         <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/GetBlobSize.hpp</label>
         <link refid="GetBlobSize_8hpp"/>
-        <childnode refid="439" relation="include">
+        <childnode refid="423" relation="include">
         </childnode>
-        <childnode refid="441" relation="include">
+        <childnode refid="425" relation="include">
         </childnode>
       </node>
-      <node id="439">
+      <node id="423">
         <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/Mapping.hpp</label>
         <link refid="Mapping_8hpp"/>
-        <childnode refid="440" relation="include">
+        <childnode refid="424" relation="include">
         </childnode>
       </node>
     </invincdepgraph>
     <innerclass refid="structllama_1_1mapping_1_1tree_1_1Reduce" prot="public">llama::mapping::tree::Reduce</innerclass>
     <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType" prot="public">llama::mapping::tree::internal::ReduceElementType</innerclass>
     <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_1_1type_01_4" prot="public">llama::mapping::tree::internal::ReduceElementType::type &gt;</innerclass>
-    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_3_01T__Tree_00_01T__InnerOp_00_03287471f85c98255f4533344ab5e51ce" prot="public">llama::mapping::tree::internal::ReduceElementType&lt; T_Tree, T_InnerOp, T_OuterOp, T_LeafFunctor, typename std::enable_if&lt; TupleLength&lt; typename T_Tree::Type &gt;::value==1 &gt;::type &gt;</innerclass>
+    <innerclass refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_3_01T__Tree_00_01T__InnerOp_00_0b1c2b86922fe895368378ced982b946c" prot="public">llama::mapping::tree::internal::ReduceElementType&lt; T_Tree, T_InnerOp, T_OuterOp, T_LeafFunctor, typename std::enable_if&lt; SizeOfTuple&lt; typename T_Tree::Type &gt;::value==1 &gt;::type &gt;</innerclass>
     <innerclass refid="structllama_1_1mapping_1_1tree_1_1Reduce" prot="public">llama::mapping::tree::Reduce</innerclass>
     <innerclass refid="structllama_1_1mapping_1_1tree_1_1Reduce_3_01T__Tree_00_01T__InnerOp_00_01T__OuterOp_00_01T__Lea193ef40a2643f774b28890de69da673e" prot="public">llama::mapping::tree::Reduce&lt; T_Tree, T_InnerOp, T_OuterOp, T_LeafFunctor, typename T_Tree::IsTreeElementWithoutChilds &gt;</innerclass>
     <innernamespace refid="namespacellama">llama</innernamespace>
@@ -168,7 +156,7 @@
 <codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/>T_OuterOp,</highlight></codeline>
 <codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/>T_LeafFunctor,</highlight></codeline>
 <codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/>typename<sp/><ref refid="namespacestd" kindref="compound">std</ref>::enable_if&lt;</highlight></codeline>
-<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(<sp/>TupleLength&lt;<sp/>typename<sp/>T_Tree::Type<sp/>&gt;::value<sp/>&gt;<sp/>1<sp/>)</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(<sp/>SizeOfTuple&lt;<sp/>typename<sp/>T_Tree::Type<sp/>&gt;::value<sp/>&gt;<sp/>1<sp/>)</highlight></codeline>
 <codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;::type</highlight></codeline>
 <codeline lineno="81"><highlight class="normal">&gt;</highlight></codeline>
 <codeline lineno="82"><highlight class="normal">{</highlight></codeline>
@@ -229,19 +217,19 @@
 <codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal">,<sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>&gt;<sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">T_OuterOp,</highlight></codeline>
 <codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal">,<sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>&gt;<sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">T_LeafFunctor</highlight></codeline>
 <codeline lineno="139"><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="140" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_3_01T__Tree_00_01T__InnerOp_00_03287471f85c98255f4533344ab5e51ce" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType" kindref="compound">ReduceElementType</ref>&lt;</highlight></codeline>
+<codeline lineno="140" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_3_01T__Tree_00_01T__InnerOp_00_0b1c2b86922fe895368378ced982b946c" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType" kindref="compound">ReduceElementType</ref>&lt;</highlight></codeline>
 <codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/>T_Tree,</highlight></codeline>
 <codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/>T_InnerOp,</highlight></codeline>
 <codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/>T_OuterOp,</highlight></codeline>
 <codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/>T_LeafFunctor,</highlight></codeline>
 <codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/>typename<sp/><ref refid="namespacestd" kindref="compound">std</ref>::enable_if&lt;</highlight></codeline>
-<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>TupleLength&lt;<sp/>typename<sp/>T_Tree::Type<sp/>&gt;::value<sp/>==<sp/>1</highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SizeOfTuple&lt;<sp/>typename<sp/>T_Tree::Type<sp/>&gt;::value<sp/>==<sp/>1</highlight></codeline>
 <codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;::type</highlight></codeline>
 <codeline lineno="148"><highlight class="normal">&gt;</highlight></codeline>
 <codeline lineno="149"><highlight class="normal">{</highlight></codeline>
 <codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
 <codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="152" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_3_01T__Tree_00_01T__InnerOp_00_03287471f85c98255f4533344ab5e51ce_1a0ed60827acf107480124dedf4bb741fd" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_3_01T__Tree_00_01T__InnerOp_00_03287471f85c98255f4533344ab5e51ce_1a0ed60827acf107480124dedf4bb741fd" kindref="member">operator()</ref>(</highlight></codeline>
+<codeline lineno="152" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_3_01T__Tree_00_01T__InnerOp_00_0b1c2b86922fe895368378ced982b946c_1a9dbb0ba96bf16e4ad38ec38dbfb07314" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_3_01T__Tree_00_01T__InnerOp_00_0b1c2b86922fe895368378ced982b946c_1a9dbb0ba96bf16e4ad38ec38dbfb07314" kindref="member">operator()</ref>(</highlight></codeline>
 <codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_Tree::Type<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>&amp;<sp/>childs,</highlight></codeline>
 <codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>decltype(<sp/>T_Tree::count<sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>&amp;<sp/>count</highlight></codeline>
 <codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"></highlight></codeline>

@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__posdbb55aaccff22d6a4c9d108b6b1d84bf" kind="struct" language="C++" prot="public">
+    <compoundname>llama::internal::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, typename std::enable_if&lt; !std::is_same&lt; T_FirstUID, GetDatumElementUID&lt; boost::mp11::mp_first&lt; T_DatumDomain &gt; &gt; &gt;::value &gt;::type, T_FirstUID, T_UID... &gt;</compoundname>
+    <includes refid="GetCoordFromUID_8hpp" local="no">GetCoordFromUID.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_DatumDomain</type>
+      </param>
+      <param>
+        <type>typename T_DatumCoord</type>
+      </param>
+      <param>
+        <type>std::size_t</type>
+        <declname>T_pos</declname>
+        <defname>T_pos</defname>
+      </param>
+      <param>
+        <type>typename T_FirstUID</type>
+      </param>
+      <param>
+        <type>typename...</type>
+        <declname>T_UID</declname>
+        <defname>T_UID</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__posdbb55aaccff22d6a4c9d108b6b1d84bf_1a17408ae3bcf04affca32bf62bac89792" prot="public" static="no">
+        <type>typename <ref refid="structllama_1_1internal_1_1GetCoordFromUIDImpl" kindref="compound">GetCoordFromUIDImpl</ref>&lt; boost::mp11::mp_pop_front&lt; T_DatumDomain &gt;, T_DatumCoord, T_pos+1, void, T_FirstUID, T_UID... &gt;::<ref refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__posdbb55aaccff22d6a4c9d108b6b1d84bf_1a17408ae3bcf04affca32bf62bac89792" kindref="member">type</ref></type>
+        <definition>using llama::internal::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, typename std::enable_if&lt; !std::is_same&lt; T_FirstUID, GetDatumElementUID&lt; boost::mp11::mp_first&lt; T_DatumDomain &gt; &gt; &gt;::value &gt;::type, T_FirstUID, T_UID... &gt;::type =  typename GetCoordFromUIDImpl&lt; boost::mp11::mp_pop_front&lt; T_DatumDomain &gt;, T_DatumCoord, T_pos + 1, void, T_FirstUID, T_UID... &gt;::type</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp" line="97" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp" line="96" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp" bodystart="83" bodyend="105"/>
+    <listofallmembers>
+      <member refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__posdbb55aaccff22d6a4c9d108b6b1d84bf_1a17408ae3bcf04affca32bf62bac89792" prot="public" virt="non-virtual"><scope>llama::internal::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, typename std::enable_if&lt; !std::is_same&lt; T_FirstUID, GetDatumElementUID&lt; boost::mp11::mp_first&lt; T_DatumDomain &gt; &gt; &gt;::value &gt;::type, T_FirstUID, T_UID... &gt;</scope><name>type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

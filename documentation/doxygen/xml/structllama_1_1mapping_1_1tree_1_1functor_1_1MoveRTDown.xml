@@ -25,7 +25,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="218" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="230" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="225" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="237" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-attrib">
@@ -40,7 +40,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="213" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="213" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="220" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="220" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -60,7 +60,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="215" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="215" bodyend="215"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="222" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="222" bodyend="222"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown_1ae6ff5b19d2d3fe5c3ec69d92264817e0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -82,7 +82,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="235" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="235" bodyend="249"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="242" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="242" bodyend="256"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown_1a3f29e918b92940c4879dcb6af2c18d54" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -111,7 +111,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="257" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="257" bodyend="282"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="264" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="264" bodyend="289"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown_1a8d83d96d58102d4daf1a7a8f805837ba" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -139,14 +139,24 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="290" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="290" bodyend="297"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="297" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="297" bodyend="304"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
-    </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="39" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="38" bodyend="298"/>
+<para>Functor for <ref refid="structllama_1_1mapping_1_1tree_1_1Mapping" kindref="compound">tree::Mapping</ref>. Move the run time part of a node one level down in direction of the leaves. <simplesect kind="warning"><para>Broken at the moment </para></simplesect>
+<parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_TreeCoord</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>tree coordinate in the mapping tree which&apos;s run time part shall be moved down one level </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="see"><para><ref refid="structllama_1_1mapping_1_1tree_1_1Mapping" kindref="compound">tree::Mapping</ref> </para></simplesect>
+</para>    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="46" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="45" bodyend="305"/>
     <listofallmembers>
       <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown_1a40997960dbbb4d8c14081affac038c60" prot="public" virt="non-virtual"><scope>llama::mapping::tree::functor::MoveRTDown</scope><name>amount</name></member>
       <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown_1a3f29e918b92940c4879dcb6af2c18d54" prot="public" virt="non-virtual"><scope>llama::mapping::tree::functor::MoveRTDown</scope><name>basicCoordToResultCoord</name></member>

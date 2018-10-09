@@ -22,7 +22,7 @@
 namespace llama
 {
 
-/** Array class like std::array but suitable for use with offloading devices
+/** Array class like `std::array` but suitable for use with offloading devices
  *  like GPUs and extended with some (for LLAMA) useful methods.
  * \tparam T type if array elements
  * \tparam T_dim number of elements in array

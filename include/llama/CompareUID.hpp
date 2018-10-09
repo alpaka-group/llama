@@ -24,6 +24,22 @@
 namespace llama
 {
 
+/** Tells whether two coordinates in two datum domains have the same UID.
+ * \tparam T_DDA first user domain
+ * \tparam T_BaseA First part of the coordinate in the first user domain as
+ *  \ref DatumCoord. This will be used for getting the UID, but not for the
+ *  comparison.
+ * \tparam T_LocalA Second part of the coordinate in the first user domain as
+ *  \ref DatumCoord. This will be used for the comparison with the second
+ *  datum domain.
+ * \tparam T_DDB second user domain
+ * \tparam T_BaseB First part of the coordinate in the second user domain as
+ *  \ref DatumCoord. This will be used for getting the UID, but not for the
+ *  comparison.
+ * \tparam T_LocalB Second part of the coordinate in the second user domain as
+ *  \ref DatumCoord. This will be used for the comparison with the first
+ *  datum domain.
+ */
 template<
     typename T_DDA,
     typename T_BaseA,
@@ -35,7 +51,8 @@ template<
 >
 struct CompareUID
 {
-    static constexpr bool value =
+    /// true if the two UIDs are exactly the same, otherwise false.
+    static constexpr bool value LLAMA_IGNORE_LITERAL(;) =
         std::is_same<
             GetUID<
                 T_DDA,

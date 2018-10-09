@@ -25,7 +25,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="41" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="41" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="47" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="47" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a6c635cd5818f0ea11bd58750e6c28208" prot="public" static="no">
         <type><ref refid="structllama_1_1Tuple" kindref="compound">Tuple</ref>&lt; T_Elements... &gt;</type>
@@ -38,7 +38,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="42" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="42" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="48" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="48" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-attrib">
@@ -53,7 +53,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="65" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="65" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="71" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="71" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a18d67b25b1f4dac138717071ed844939" prot="public" static="no" mutable="no">
         <type><ref refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a6c635cd5818f0ea11bd58750e6c28208" kindref="member">RestTuple</ref></type>
@@ -66,7 +66,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="66" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="66" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="72" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="72" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -81,7 +81,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="45" column="1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="51" column="1"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a197b53d2b0baebed32df5d9bcdb23c7b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -102,7 +102,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="48" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="48" bodyend="54"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="54" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="54" bodyend="60"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a26658a47b3c84f7bba37ececcb23670c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -123,13 +123,28 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="57" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="57" bodyend="63"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="63" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="63" bodyend="69"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
-    </detaileddescription>
+<para><ref refid="structllama_1_1Tuple" kindref="compound">Tuple</ref> class like <computeroutput>std::tuple</computeroutput> but suitable for use with offloading devices like GPUs and extended with some (for LLAMA) useful methods. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_FirstElement</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>first element in the tuple (specialization with no first element exists) </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_Elements...</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>optional further tuple elements </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>    </detaileddescription>
     <collaborationgraph>
       <node id="338">
         <label>llama::Tuple&lt; T_Elements... &gt;</label>
@@ -143,7 +158,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="40" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="36" bodyend="67"/>
+    <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="46" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="42" bodyend="73"/>
     <listofallmembers>
       <member refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1afd671958d6081816dc13557b00ea6ca8" prot="public" virt="non-virtual"><scope>llama::Tuple&lt; T_FirstElement, T_Elements... &gt;</scope><name>first</name></member>
       <member refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a4e20dd2456d00722405d95e561a066ca" prot="public" virt="non-virtual"><scope>llama::Tuple&lt; T_FirstElement, T_Elements... &gt;</scope><name>FirstElement</name></member>

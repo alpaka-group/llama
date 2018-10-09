@@ -3,12 +3,50 @@
 API
 ===
 
+All functions, classes and structs (except for the macros of course...) are in
+the namespace :cpp:`llama`.
+
 Useful helpers
 --------------
 
 .. doxygenstruct:: llama::Array
    :project: LLAMA
    :members:
+
+.. doxygenstruct:: llama::Tuple
+   :project: LLAMA
+   :members:
+
+.. doxygenfunction:: llama::makeTuple
+   :project: LLAMA
+
+.. doxygenfunction:: llama::getTupleElement
+   :project: LLAMA
+
+.. doxygenfunction:: llama::getTupleElementRef
+   :project: LLAMA
+
+.. doxygentypedef:: llama::GetTupleType
+	:project: LLAMA
+
+.. doxygenstruct:: llama::SizeOfTuple
+   :project: LLAMA
+   :members:
+
+.. doxygentypedef:: TupleCatType
+	:project: LLAMA
+
+.. doxygenfunction:: llama::tupleCat
+   :project: LLAMA
+
+.. doxygenfunction:: llama::tupleReplace
+   :project: LLAMA
+
+.. doxygenfunction:: llama::tupleTransform
+   :project: LLAMA
+
+.. doxygenfunction:: llama::tupleRest
+   :project: LLAMA
 
 .. doxygenstruct:: llama::IntegerSequence
    :project: LLAMA
@@ -67,19 +105,38 @@ Datum domain
 .. doxygenstruct:: llama::NoName
    :project: LLAMA
 
+.. doxygenstruct:: llama::ForEach
+   :project: LLAMA
+   :members:
+
 .. doxygentypedef:: llama::GetUID
+   :project: LLAMA
+
+.. doxygenstruct:: llama::CompareUID
+   :project: LLAMA
+   :members:
+
+.. doxygentypedef:: GetCoordFromUID
    :project: LLAMA
 
 .. doxygenstruct:: llama::LinearBytePos
    :project: LLAMA
+   :members:
 
 .. doxygenstruct:: llama::SizeOf
    :project: LLAMA
+   :members:
 
 .. doxygentypedef:: llama::GetDatumElementType
    :project: LLAMA
 
 .. doxygentypedef:: llama::GetDatumElementUID
+   :project: LLAMA
+
+.. doxygentypedef:: llama::GetType
+   :project: LLAMA
+
+.. doxygentypedef:: llama::GetTypeFromDatumCoord
    :project: LLAMA
 
 .. doxygenstruct:: llama::DatumCoord
@@ -100,11 +157,93 @@ View creation
 Factory
 ^^^^^^^
 
+.. doxygenstruct:: llama::Factory
+   :project: LLAMA
+   :members:
+
+.. doxygentypedef:: llama::OneOnStackFactory
+   :project: LLAMA
+
+.. doxygenfunction:: llama::tempAlloc
+   :project: LLAMA
+
 Allocator
 ^^^^^^^^^
 
+All allocators are in namespace :cpp:`llama::allocator`.
+
+.. doxygenstruct:: llama::allocator::Vector
+   :project: LLAMA
+   :members:
+
+.. doxygenstruct:: llama::allocator::SharedPtr
+   :project: LLAMA
+   :members:
+
+.. doxygenstruct:: llama::allocator::Stack
+   :project: LLAMA
+   :members:
+
+Alpaka allocators
+"""""""""""""""""
+
+As :ref:`already stated <label-allocators-alpaka>`, the alpaka connection is not
+part of LLAMA, but was considered while developing the library. Furthermore some
+examples are using alpaka for parallelization on many-core devices. Therefore
+the alpaka allocators will be described here, too.
+
+.. doxygenstruct:: common::allocator::Alpaka
+   :project: LLAMA
+   :members:
+
+.. doxygenstruct:: common::allocator::AlpakaMirror
+   :project: LLAMA
+   :members:
+
+.. doxygenstruct:: common::allocator::AlpakaShared
+   :project: LLAMA
+   :members:
+
 Mapping
 ^^^^^^^
+
+All mappings are in namespace :cpp:`llama::mapping`.
+
+.. doxygenstruct:: llama::mapping::AoS
+   :project: LLAMA
+   :members:
+
+.. doxygenstruct:: llama::mapping::SoA
+   :project: LLAMA
+   :members:
+
+.. doxygenstruct:: llama::mapping::One
+   :project: LLAMA
+   :members:
+
+Tree mapping
+""""""""""""
+
+The tree mapping is in the namespace :cpp:`llama::mapping::tree` and all tree
+mapping functors in the namespace :cpp:`llama::mapping::tree::functor`.
+
+.. doxygenstruct:: llama::mapping::tree::Mapping
+   :project: LLAMA
+   :members:
+
+For a detailed description of the tree mapping concept have a look at
+:ref:`LLAMA tree mapping <label-tree-mapping>`
+
+**Tree mapping functors**
+
+.. doxygenstruct:: llama::mapping::tree::functor::Idem
+   :project: LLAMA
+
+.. doxygenstruct:: llama::mapping::tree::functor::LeafOnlyRT
+   :project: LLAMA
+
+.. doxygenstruct:: llama::mapping::tree::functor::MoveRTDown
+   :project: LLAMA
 
 Data access
 -----------
@@ -203,5 +342,23 @@ for
 with :cpp:`REF` being :cpp:`&` and :cpp:`&&` for each combination.
 
 
-Parallelization helpers
------------------------
+Parallelization helpers & Macros
+--------------------------------
+
+.. doxygendefine:: LLAMA_INDEPENDENT_DATA
+   :project: LLAMA
+
+.. doxygendefine:: LLAMA_FN_HOST_ACC_INLINE
+   :project: LLAMA
+
+.. doxygendefine:: LLAMA_NO_HOST_ACC_WARNING
+   :project: LLAMA
+
+.. doxygendefine:: LLAMA_FORCE_INLINE_RECURSIVE
+   :project: LLAMA
+
+.. doxygendefine:: LLAMA_IF_DEBUG
+   :project: LLAMA
+
+.. doxygendefine:: LLAMA_IF_RELEASE
+   :project: LLAMA

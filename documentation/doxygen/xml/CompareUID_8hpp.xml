@@ -7,101 +7,101 @@
     <includes local="no">tuple</includes>
     <includedby refid="View_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/View.hpp</includedby>
     <incdepgraph>
-      <node id="49">
+      <node id="51">
         <label>boost/predef.h</label>
       </node>
-      <node id="46">
+      <node id="48">
         <label>Types.hpp</label>
         <link refid="Types_8hpp"/>
-        <childnode refid="47" relation="include">
-        </childnode>
-        <childnode refid="44" relation="include">
-        </childnode>
-      </node>
-      <node id="41">
-        <label>/home/alexander/develop/work/llama/include/llama/CompareUID.hpp</label>
-        <link refid="CompareUID_8hpp"/>
-        <childnode refid="42" relation="include">
-        </childnode>
-        <childnode refid="43" relation="include">
-        </childnode>
-        <childnode refid="51" relation="include">
-        </childnode>
-      </node>
-      <node id="47">
-        <label>Array.hpp</label>
-        <link refid="Array_8hpp"/>
-        <childnode refid="48" relation="include">
-        </childnode>
-      </node>
-      <node id="45">
-        <label>DatumStruct.hpp</label>
-        <link refid="DatumStruct_8hpp"/>
-        <childnode refid="46" relation="include">
-        </childnode>
-        <childnode refid="50" relation="include">
-        </childnode>
-        <childnode refid="44" relation="include">
-        </childnode>
-        <childnode refid="42" relation="include">
-        </childnode>
-      </node>
-      <node id="50">
-        <label>DatumCoord.hpp</label>
-      </node>
-      <node id="51">
-        <label>tuple</label>
-      </node>
-      <node id="48">
-        <label>preprocessor/macros.hpp</label>
-        <link refid="macros_8hpp"/>
         <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
         </childnode>
       </node>
       <node id="43">
-        <label>GetUID.hpp</label>
-        <link refid="GetUID_8hpp"/>
+        <label>/home/alexander/develop/work/llama/include/llama/CompareUID.hpp</label>
+        <link refid="CompareUID_8hpp"/>
         <childnode refid="44" relation="include">
         </childnode>
         <childnode refid="45" relation="include">
         </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
       </node>
-      <node id="42">
-        <label>type_traits</label>
+      <node id="49">
+        <label>Array.hpp</label>
+        <link refid="Array_8hpp"/>
+        <childnode refid="50" relation="include">
+        </childnode>
+      </node>
+      <node id="47">
+        <label>DatumStruct.hpp</label>
+        <link refid="DatumStruct_8hpp"/>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+      </node>
+      <node id="52">
+        <label>DatumCoord.hpp</label>
+      </node>
+      <node id="53">
+        <label>tuple</label>
+      </node>
+      <node id="50">
+        <label>preprocessor/macros.hpp</label>
+        <link refid="macros_8hpp"/>
+        <childnode refid="51" relation="include">
+        </childnode>
+      </node>
+      <node id="45">
+        <label>GetUID.hpp</label>
+        <link refid="GetUID_8hpp"/>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
       </node>
       <node id="44">
+        <label>type_traits</label>
+      </node>
+      <node id="46">
         <label>boost/mp11.hpp</label>
       </node>
     </incdepgraph>
     <invincdepgraph>
-      <node id="52">
+      <node id="54">
         <label>/home/alexander/develop/work/llama/include/llama/CompareUID.hpp</label>
         <link refid="CompareUID_8hpp"/>
-        <childnode refid="53" relation="include">
+        <childnode refid="55" relation="include">
         </childnode>
       </node>
-      <node id="55">
+      <node id="57">
         <label>/home/alexander/develop/work/llama/include/llama/llama.hpp</label>
         <link refid="llama_8hpp"/>
       </node>
-      <node id="53">
+      <node id="55">
         <label>/home/alexander/develop/work/llama/include/llama/View.hpp</label>
         <link refid="View_8hpp"/>
-        <childnode refid="54" relation="include">
-        </childnode>
         <childnode refid="56" relation="include">
         </childnode>
-      </node>
-      <node id="54">
-        <label>/home/alexander/develop/work/llama/include/llama/Factory.hpp</label>
-        <link refid="Factory_8hpp"/>
-        <childnode refid="55" relation="include">
+        <childnode refid="58" relation="include">
         </childnode>
       </node>
       <node id="56">
+        <label>/home/alexander/develop/work/llama/include/llama/Factory.hpp</label>
+        <link refid="Factory_8hpp"/>
+        <childnode refid="57" relation="include">
+        </childnode>
+      </node>
+      <node id="58">
         <label>/home/alexander/develop/work/llama/include/llama/VirtualView.hpp</label>
         <link refid="VirtualView_8hpp"/>
-        <childnode refid="55" relation="include">
+        <childnode refid="57" relation="include">
         </childnode>
       </node>
     </invincdepgraph>
@@ -140,87 +140,87 @@
 <codeline lineno="24"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacellama" kindref="compound">llama</ref></highlight></codeline>
 <codeline lineno="25"><highlight class="normal">{</highlight></codeline>
 <codeline lineno="26"><highlight class="normal"></highlight></codeline>
-<codeline lineno="27"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
-<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DDA,</highlight></codeline>
-<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_BaseA,</highlight></codeline>
-<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_LocalA,</highlight></codeline>
-<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DDB,</highlight></codeline>
-<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_BaseB,</highlight></codeline>
-<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_LocalB,</highlight></codeline>
-<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>SFINAE<sp/>=<sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="35"><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="36" refid="structllama_1_1CompareUID" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1CompareUID" kindref="compound">CompareUID</ref></highlight></codeline>
-<codeline lineno="37"><highlight class="normal">{</highlight></codeline>
-<codeline lineno="38" refid="structllama_1_1CompareUID_1a7cc4d6a29a8d67e0a1be30b274863823" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1CompareUID_1a7cc4d6a29a8d67e0a1be30b274863823" kindref="member">value</ref><sp/>=</highlight></codeline>
-<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::is_same&lt;</highlight></codeline>
-<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacellama_1afc1dd86868706ba5f5ee39ec0c588534" kindref="member">GetUID</ref>&lt;</highlight></codeline>
-<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DDA,</highlight></codeline>
-<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_BaseA::template<sp/>PushBack&lt;<sp/>T_LocalA::front<sp/>&gt;</highlight></codeline>
-<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;,</highlight></codeline>
-<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacellama_1afc1dd86868706ba5f5ee39ec0c588534" kindref="member">GetUID</ref>&lt;</highlight></codeline>
-<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DDB,</highlight></codeline>
-<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_BaseB::template<sp/>PushBack&lt;<sp/>T_LocalB::front<sp/>&gt;</highlight></codeline>
-<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;</highlight></codeline>
-<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;<ref refid="structllama_1_1CompareUID_1a7cc4d6a29a8d67e0a1be30b274863823" kindref="member">::value</ref><sp/>&amp;&amp;</highlight></codeline>
-<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1CompareUID" kindref="compound">CompareUID</ref>&lt;</highlight></codeline>
-<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DDA,</highlight></codeline>
-<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_BaseA::template<sp/>PushBack&lt;<sp/>T_LocalA::front<sp/>&gt;,</highlight></codeline>
-<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_LocalA::PopFront,</highlight></codeline>
-<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DDB,</highlight></codeline>
-<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_BaseB::template<sp/>PushBack&lt;<sp/>T_LocalB::front<sp/>&gt;,</highlight></codeline>
-<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_LocalB::PopFront</highlight></codeline>
-<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;<ref refid="structllama_1_1CompareUID_1a7cc4d6a29a8d67e0a1be30b274863823" kindref="member">::value</ref>;</highlight></codeline>
-<codeline lineno="57"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="58"><highlight class="normal"></highlight></codeline>
-<codeline lineno="59"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
-<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DDA,</highlight></codeline>
-<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_BaseA,</highlight></codeline>
-<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_LocalA,</highlight></codeline>
-<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DDB,</highlight></codeline>
-<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_BaseB,</highlight></codeline>
-<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_LocalB</highlight></codeline>
-<codeline lineno="66"><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="67" refid="structllama_1_1CompareUID_3_01T__DDA_00_01T__BaseA_00_01T__LocalA_00_01T__DDB_00_01T__BaseB_00_0c5742394f1083881b470e7c9b93b56f4" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1CompareUID" kindref="compound">CompareUID</ref></highlight></codeline>
-<codeline lineno="68"><highlight class="normal">&lt;</highlight></codeline>
-<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DDA,</highlight></codeline>
-<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/>T_BaseA,</highlight></codeline>
-<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/>T_LocalA,</highlight></codeline>
-<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DDB,</highlight></codeline>
-<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/>T_BaseB,</highlight></codeline>
-<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/>T_LocalB,</highlight></codeline>
-<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/>typename<sp/><ref refid="namespacestd" kindref="compound">std</ref>::enable_if&lt;<sp/>(T_LocalA::size<sp/>!=<sp/>T_LocalB::size)<sp/>&gt;::type</highlight></codeline>
-<codeline lineno="76"><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="77"><highlight class="normal">{</highlight></codeline>
-<codeline lineno="78" refid="structllama_1_1CompareUID_3_01T__DDA_00_01T__BaseA_00_01T__LocalA_00_01T__DDB_00_01T__BaseB_00_0c5742394f1083881b470e7c9b93b56f4_1ad9a3f9f77680593e2f02810526ce2669" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1CompareUID_1a7cc4d6a29a8d67e0a1be30b274863823" kindref="member">value</ref><sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="79"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="80"><highlight class="normal"></highlight></codeline>
-<codeline lineno="81"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
-<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DDA,</highlight></codeline>
-<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_BaseA,</highlight></codeline>
-<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_LocalA,</highlight></codeline>
-<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DDB,</highlight></codeline>
-<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_BaseB,</highlight></codeline>
-<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_LocalB</highlight></codeline>
-<codeline lineno="88"><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="89" refid="structllama_1_1CompareUID_3_01T__DDA_00_01T__BaseA_00_01T__LocalA_00_01T__DDB_00_01T__BaseB_00_0ab4d75daf7fe789ae97b47cb4319c9ab" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1CompareUID" kindref="compound">CompareUID</ref></highlight></codeline>
-<codeline lineno="90"><highlight class="normal">&lt;</highlight></codeline>
-<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DDA,</highlight></codeline>
-<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/>T_BaseA,</highlight></codeline>
-<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/>T_LocalA,</highlight></codeline>
-<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DDB,</highlight></codeline>
-<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/>T_BaseB,</highlight></codeline>
-<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/>T_LocalB,</highlight></codeline>
-<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/>typename<sp/><ref refid="namespacestd" kindref="compound">std</ref>::enable_if&lt;</highlight></codeline>
-<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(T_LocalA::size<sp/>==<sp/>0)<sp/>&amp;&amp;</highlight></codeline>
-<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(T_LocalB::size<sp/>==<sp/>0)</highlight></codeline>
-<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;::type</highlight></codeline>
-<codeline lineno="101"><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="102"><highlight class="normal">{</highlight></codeline>
-<codeline lineno="103" refid="structllama_1_1CompareUID_3_01T__DDA_00_01T__BaseA_00_01T__LocalA_00_01T__DDB_00_01T__BaseB_00_0ab4d75daf7fe789ae97b47cb4319c9ab_1a3e707d3fefd80fe2169d194ad24463f3" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1CompareUID_1a7cc4d6a29a8d67e0a1be30b274863823" kindref="member">value</ref><sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="104"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="105"><highlight class="normal"></highlight></codeline>
-<codeline lineno="106"><highlight class="normal"></highlight></codeline>
-<codeline lineno="107"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>llama</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DDA,</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_BaseA,</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_LocalA,</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DDB,</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_BaseB,</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_LocalB,</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>SFINAE<sp/>=<sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="52" refid="structllama_1_1CompareUID" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1CompareUID" kindref="compound">CompareUID</ref></highlight></codeline>
+<codeline lineno="53"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="55" refid="structllama_1_1CompareUID_1a7cc4d6a29a8d67e0a1be30b274863823" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1CompareUID_1a7cc4d6a29a8d67e0a1be30b274863823" kindref="member">value</ref><sp/>LLAMA_IGNORE_LITERAL(;)<sp/>=</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::is_same&lt;</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacellama_1afc1dd86868706ba5f5ee39ec0c588534" kindref="member">GetUID</ref>&lt;</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DDA,</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_BaseA::template<sp/>PushBack&lt;<sp/>T_LocalA::front<sp/>&gt;</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;,</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacellama_1afc1dd86868706ba5f5ee39ec0c588534" kindref="member">GetUID</ref>&lt;</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DDB,</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_BaseB::template<sp/>PushBack&lt;<sp/>T_LocalB::front<sp/>&gt;</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;::<ref refid="structllama_1_1CompareUID_1a7cc4d6a29a8d67e0a1be30b274863823" kindref="member">value</ref><sp/>&amp;&amp;</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1CompareUID" kindref="compound">CompareUID</ref>&lt;</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DDA,</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_BaseA::template<sp/>PushBack&lt;<sp/>T_LocalA::front<sp/>&gt;,</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_LocalA::PopFront,</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DDB,</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_BaseB::template<sp/>PushBack&lt;<sp/>T_LocalB::front<sp/>&gt;,</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_LocalB::PopFront</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;::<ref refid="structllama_1_1CompareUID_1a7cc4d6a29a8d67e0a1be30b274863823" kindref="member">value</ref>;</highlight></codeline>
+<codeline lineno="74"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DDA,</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_BaseA,</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_LocalA,</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DDB,</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_BaseB,</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_LocalB</highlight></codeline>
+<codeline lineno="83"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="84" refid="structllama_1_1CompareUID_3_01T__DDA_00_01T__BaseA_00_01T__LocalA_00_01T__DDB_00_01T__BaseB_00_0c5742394f1083881b470e7c9b93b56f4" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1CompareUID" kindref="compound">CompareUID</ref></highlight></codeline>
+<codeline lineno="85"><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DDA,</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/>T_BaseA,</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/>T_LocalA,</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DDB,</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/>T_BaseB,</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/>T_LocalB,</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/>typename<sp/><ref refid="namespacestd" kindref="compound">std</ref>::enable_if&lt;<sp/>(T_LocalA::size<sp/>!=<sp/>T_LocalB::size)<sp/>&gt;::type</highlight></codeline>
+<codeline lineno="93"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="94"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="95" refid="structllama_1_1CompareUID_3_01T__DDA_00_01T__BaseA_00_01T__LocalA_00_01T__DDB_00_01T__BaseB_00_0c5742394f1083881b470e7c9b93b56f4_1ad9a3f9f77680593e2f02810526ce2669" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1CompareUID_1a7cc4d6a29a8d67e0a1be30b274863823" kindref="member">value</ref><sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="96"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"></highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DDA,</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_BaseA,</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_LocalA,</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DDB,</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_BaseB,</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_LocalB</highlight></codeline>
+<codeline lineno="105"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="106" refid="structllama_1_1CompareUID_3_01T__DDA_00_01T__BaseA_00_01T__LocalA_00_01T__DDB_00_01T__BaseB_00_0ab4d75daf7fe789ae97b47cb4319c9ab" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1CompareUID" kindref="compound">CompareUID</ref></highlight></codeline>
+<codeline lineno="107"><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DDA,</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/>T_BaseA,</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/>T_LocalA,</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DDB,</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/>T_BaseB,</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/>T_LocalB,</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/>typename<sp/><ref refid="namespacestd" kindref="compound">std</ref>::enable_if&lt;</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(T_LocalA::size<sp/>==<sp/>0)<sp/>&amp;&amp;</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(T_LocalB::size<sp/>==<sp/>0)</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;::type</highlight></codeline>
+<codeline lineno="118"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="119"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="120" refid="structllama_1_1CompareUID_3_01T__DDA_00_01T__BaseA_00_01T__LocalA_00_01T__DDB_00_01T__BaseB_00_0ab4d75daf7fe789ae97b47cb4319c9ab_1a3e707d3fefd80fe2169d194ad24463f3" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1CompareUID_1a7cc4d6a29a8d67e0a1be30b274863823" kindref="member">value</ref><sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="121"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>llama</highlight><highlight class="normal"></highlight></codeline>
     </programlisting>
     <location file="/home/alexander/develop/work/llama/include/llama/CompareUID.hpp"/>
   </compounddef>

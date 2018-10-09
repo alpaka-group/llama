@@ -24,6 +24,9 @@
 namespace llama
 {
 
+namespace internal
+{
+
 template<
     typename T_DatumDomain,
     std::size_t... T_datumDomainCoords
@@ -61,14 +64,25 @@ struct GetTypeImpl<
     using type = T_DatumDomain;
 };
 
+} // namespace internal
+
+/** Returns the type of a node in a datum domain tree for a coordinate given as
+ *  tree index (like for \ref DatumCoord)
+ * \tparam T_DatumDomain the datum domain (probably \ref DatumStruct)
+ * \tparam T_datumDomainCoords... the coordinate
+ * \return type at the specified node
+ */
 template<
     typename T_DatumDomain,
     std::size_t... T_datumDomainCoords
 >
-using GetType = typename GetTypeImpl<
+using GetType = typename internal::GetTypeImpl<
     T_DatumDomain,
     T_datumDomainCoords...
 >::type;
+
+namespace internal
+{
 
 template<
     typename T_DatumDomain,
@@ -91,11 +105,19 @@ struct GetTypeFromDatumCoordImpl<
     >;
 };
 
+} // namespace internal
+
+/** Returns the type of a node in a datum domain tree for a coordinate given as
+ *  \ref DatumCoord
+ * \tparam T_DatumDomain the datum domain (probably \ref DatumStruct)
+ * \tparam T_DatumCoord the coordinate
+ * \return type at the specified node
+ */
 template<
     typename T_DatumDomain,
     typename T_DatumCoord
 >
-using GetTypeFromDatumCoord = typename GetTypeFromDatumCoordImpl<
+using GetTypeFromDatumCoord = typename internal::GetTypeFromDatumCoordImpl<
     T_DatumDomain,
     T_DatumCoord
 >::type;

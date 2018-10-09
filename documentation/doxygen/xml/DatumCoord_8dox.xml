@@ -5,18 +5,18 @@
     <includes local="no">tuple</includes>
     <includes local="no">type_traits</includes>
     <incdepgraph>
-      <node id="69">
+      <node id="71">
         <label>tuple</label>
       </node>
-      <node id="70">
+      <node id="72">
         <label>type_traits</label>
       </node>
-      <node id="68">
+      <node id="70">
         <label>/home/alexander/develop/work/llama/include/llama/DatumCoord.dox</label>
         <link refid="DatumCoord_8dox"/>
-        <childnode refid="69" relation="include">
+        <childnode refid="71" relation="include">
         </childnode>
-        <childnode refid="70" relation="include">
+        <childnode refid="72" relation="include">
         </childnode>
       </node>
     </incdepgraph>

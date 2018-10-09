@@ -76,7 +76,7 @@ struct ReduceElementType<
 	T_OuterOp,
 	T_LeafFunctor,
 	typename std::enable_if<
-		( TupleLength< typename T_Tree::Type >::value > 1 )
+		( SizeOfTuple< typename T_Tree::Type >::value > 1 )
 	>::type
 >
 {
@@ -143,7 +143,7 @@ struct ReduceElementType<
 	T_OuterOp,
 	T_LeafFunctor,
 	typename std::enable_if<
-		TupleLength< typename T_Tree::Type >::value == 1
+		SizeOfTuple< typename T_Tree::Type >::value == 1
 	>::type
 >
 {

@@ -102,11 +102,12 @@
         </childnode>
       </node>
     </invincdepgraph>
-    <innerclass refid="structllama_1_1GetCoordFromUIDImpl" prot="public">llama::GetCoordFromUIDImpl</innerclass>
-    <innerclass refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01typenad970eea1a4cb24aad0368256d66b0279" prot="public">llama::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, typename std::enable_if&lt; std::is_same&lt; T_FirstUID, GetDatumElementUID&lt; boost::mp11::mp_first&lt; T_DatumDomain &gt; &gt; &gt;::value &gt;::type, T_FirstUID, T_UID... &gt;</innerclass>
-    <innerclass refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01typenaa9912ddeb798da71d2b7162da7df24fe" prot="public">llama::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, typename std::enable_if&lt; !std::is_same&lt; T_FirstUID, GetDatumElementUID&lt; boost::mp11::mp_first&lt; T_DatumDomain &gt; &gt; &gt;::value &gt;::type, T_FirstUID, T_UID... &gt;</innerclass>
-    <innerclass refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01void_01_4" prot="public">llama::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, void &gt;</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1GetCoordFromUIDImpl" prot="public">llama::internal::GetCoordFromUIDImpl</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos42aa3c321c620142ac61091bca4cc194" prot="public">llama::internal::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, typename std::enable_if&lt; std::is_same&lt; T_FirstUID, GetDatumElementUID&lt; boost::mp11::mp_first&lt; T_DatumDomain &gt; &gt; &gt;::value &gt;::type, T_FirstUID, T_UID... &gt;</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__posdbb55aaccff22d6a4c9d108b6b1d84bf" prot="public">llama::internal::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, typename std::enable_if&lt; !std::is_same&lt; T_FirstUID, GetDatumElementUID&lt; boost::mp11::mp_first&lt; T_DatumDomain &gt; &gt; &gt;::value &gt;::type, T_FirstUID, T_UID... &gt;</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01void_01_4" prot="public">llama::internal::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, void &gt;</innerclass>
     <innernamespace refid="namespacellama">llama</innernamespace>
+    <innernamespace refid="namespacellama_1_1internal">llama::internal</innernamespace>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
@@ -139,110 +140,115 @@
 <codeline lineno="25"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacellama" kindref="compound">llama</ref></highlight></codeline>
 <codeline lineno="26"><highlight class="normal">{</highlight></codeline>
 <codeline lineno="27"><highlight class="normal"></highlight></codeline>
-<codeline lineno="28"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
-<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
-<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoord,</highlight></codeline>
-<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/>std::size_t<sp/>T_pos,</highlight></codeline>
-<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_SFinae,</highlight></codeline>
-<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_UID</highlight></codeline>
-<codeline lineno="34"><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="35" refid="structllama_1_1GetCoordFromUIDImpl" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1GetCoordFromUIDImpl" kindref="compound">GetCoordFromUIDImpl</ref></highlight></codeline>
-<codeline lineno="36"><highlight class="normal">{</highlight></codeline>
-<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/>static_assert(</highlight></codeline>
-<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>boost::mp11::mp_size&lt;<sp/>T_DatumDomain<sp/>&gt;::value<sp/>!=<sp/>0,</highlight></codeline>
-<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;UID<sp/>combination<sp/>is<sp/>not<sp/>valid&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/>);</highlight></codeline>
-<codeline lineno="41"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="42"><highlight class="normal"></highlight></codeline>
-<codeline lineno="43"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
-<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
-<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoord,</highlight></codeline>
-<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>std::size_t<sp/>T_pos,</highlight></codeline>
-<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_FirstUID,</highlight></codeline>
-<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_UID</highlight></codeline>
-<codeline lineno="49"><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="50" refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01typenad970eea1a4cb24aad0368256d66b0279" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1GetCoordFromUIDImpl" kindref="compound">GetCoordFromUIDImpl</ref>&lt;</highlight></codeline>
-<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
-<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumCoord,</highlight></codeline>
-<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>T_pos,</highlight></codeline>
-<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/>typename<sp/><ref refid="namespacestd" kindref="compound">std</ref>::enable_if&lt;</highlight></codeline>
-<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::is_same&lt;</highlight></codeline>
-<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_FirstUID,</highlight></codeline>
-<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>GetDatumElementUID&lt;<sp/>boost::mp11::mp_first&lt;<sp/>T_DatumDomain<sp/>&gt;<sp/>&gt;</highlight></codeline>
-<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;::value</highlight></codeline>
-<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;<ref refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01typenad970eea1a4cb24aad0368256d66b0279_1aef920e0714b0914b3adbf9d94c84d780" kindref="member">::type</ref>,</highlight></codeline>
-<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/>T_FirstUID,</highlight></codeline>
-<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/>T_UID...</highlight></codeline>
-<codeline lineno="62"><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="63"><highlight class="normal">{</highlight></codeline>
-<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01typenad970eea1a4cb24aad0368256d66b0279_1aef920e0714b0914b3adbf9d94c84d780" kindref="member">type</ref><sp/>=<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1GetCoordFromUIDImpl" kindref="compound">GetCoordFromUIDImpl</ref>&lt;</highlight></codeline>
-<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacellama_1a554a797d5fff9070b3c61d7584dc15d5" kindref="member">GetDatumElementType&lt; boost::mp11::mp_first&lt; T_DatumDomain &gt;</ref><sp/>&gt;,</highlight></codeline>
-<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoord::template<sp/>PushBack&lt;<sp/>T_pos<sp/>&gt;,</highlight></codeline>
-<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0,</highlight></codeline>
-<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>void,</highlight></codeline>
-<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_UID...</highlight></codeline>
-<codeline lineno="70" refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01typenad970eea1a4cb24aad0368256d66b0279_1aef920e0714b0914b3adbf9d94c84d780" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;<ref refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01typenad970eea1a4cb24aad0368256d66b0279_1aef920e0714b0914b3adbf9d94c84d780" kindref="member">::type</ref>;</highlight></codeline>
-<codeline lineno="71"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="72"><highlight class="normal"></highlight></codeline>
-<codeline lineno="73"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
-<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
-<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoord,</highlight></codeline>
-<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/>std::size_t<sp/>T_pos,</highlight></codeline>
-<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_FirstUID,</highlight></codeline>
-<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_UID</highlight></codeline>
-<codeline lineno="79"><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="80" refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01typenaa9912ddeb798da71d2b7162da7df24fe" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1GetCoordFromUIDImpl" kindref="compound">GetCoordFromUIDImpl</ref>&lt;</highlight></codeline>
-<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
-<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumCoord,</highlight></codeline>
-<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/>T_pos,</highlight></codeline>
-<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/>typename<sp/><ref refid="namespacestd" kindref="compound">std</ref>::enable_if&lt;</highlight></codeline>
-<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!std::is_same&lt;</highlight></codeline>
-<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_FirstUID,</highlight></codeline>
-<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>GetDatumElementUID&lt;<sp/>boost::mp11::mp_first&lt;<sp/>T_DatumDomain<sp/>&gt;<sp/>&gt;</highlight></codeline>
-<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;::value</highlight></codeline>
-<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;<ref refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01typenaa9912ddeb798da71d2b7162da7df24fe_1a31c9d8b2e635a7c4e716ed183c149390" kindref="member">::type</ref>,</highlight></codeline>
-<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/>T_FirstUID,</highlight></codeline>
-<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/>T_UID...</highlight></codeline>
-<codeline lineno="92"><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="93"><highlight class="normal">{</highlight></codeline>
-<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01typenaa9912ddeb798da71d2b7162da7df24fe_1a31c9d8b2e635a7c4e716ed183c149390" kindref="member">type</ref><sp/>=<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1GetCoordFromUIDImpl" kindref="compound">GetCoordFromUIDImpl</ref>&lt;</highlight></codeline>
-<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>boost::mp11::mp_pop_front&lt;<sp/>T_DatumDomain<sp/>&gt;,</highlight></codeline>
-<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumCoord,</highlight></codeline>
-<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_pos<sp/>+<sp/>1,</highlight></codeline>
-<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>void,</highlight></codeline>
-<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_FirstUID,</highlight></codeline>
-<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_UID...</highlight></codeline>
-<codeline lineno="101" refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01typenaa9912ddeb798da71d2b7162da7df24fe_1a31c9d8b2e635a7c4e716ed183c149390" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;<ref refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01typenaa9912ddeb798da71d2b7162da7df24fe_1a31c9d8b2e635a7c4e716ed183c149390" kindref="member">::type</ref>;</highlight></codeline>
-<codeline lineno="102"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="103"><highlight class="normal"></highlight></codeline>
-<codeline lineno="104"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
-<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
-<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoord,</highlight></codeline>
-<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/>std::size_t<sp/>T_pos</highlight></codeline>
-<codeline lineno="108"><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="109" refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01void_01_4" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1GetCoordFromUIDImpl" kindref="compound">GetCoordFromUIDImpl</ref>&lt;</highlight></codeline>
-<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
-<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumCoord,</highlight></codeline>
-<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/>T_pos,</highlight></codeline>
-<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/>void</highlight></codeline>
-<codeline lineno="114"><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="115"><highlight class="normal">{</highlight></codeline>
-<codeline lineno="116" refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01void_01_4_1a339dd458ccebfcd650b40ba83408b67d" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01void_01_4_1a339dd458ccebfcd650b40ba83408b67d" kindref="member">type</ref><sp/>=<sp/>T_DatumCoord;</highlight></codeline>
-<codeline lineno="117"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="118"><highlight class="normal"></highlight></codeline>
-<codeline lineno="119"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
-<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
-<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_UID</highlight></codeline>
-<codeline lineno="122"><highlight class="normal">&gt;</highlight></codeline>
-<codeline lineno="123"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1a3a9ff09beed7470e5c174d2c34e88aab" kindref="member">GetCoordFromUID</ref><sp/>=<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1GetCoordFromUIDImpl" kindref="compound">GetCoordFromUIDImpl</ref>&lt;</highlight></codeline>
-<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
-<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord&lt; &gt;</ref>,</highlight></codeline>
-<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/>0,</highlight></codeline>
-<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/>void,</highlight></codeline>
-<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/>T_UID...</highlight></codeline>
-<codeline lineno="129" refid="namespacellama_1a3a9ff09beed7470e5c174d2c34e88aab" refkind="member"><highlight class="normal">&gt;::type;</highlight></codeline>
-<codeline lineno="130"><highlight class="normal"></highlight></codeline>
-<codeline lineno="131"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>llama</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">internal</highlight></codeline>
+<codeline lineno="29"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/>std::size_t<sp/>T_pos,</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_SFinae,</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_UID</highlight></codeline>
+<codeline lineno="37"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="38" refid="structllama_1_1internal_1_1GetCoordFromUIDImpl" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1internal_1_1GetCoordFromUIDImpl" kindref="compound">GetCoordFromUIDImpl</ref></highlight></codeline>
+<codeline lineno="39"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/>static_assert(</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>boost::mp11::mp_size&lt;<sp/>T_DatumDomain<sp/>&gt;::value<sp/>!=<sp/>0,</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;UID<sp/>combination<sp/>is<sp/>not<sp/>valid&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/>);</highlight></codeline>
+<codeline lineno="44"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/>std::size_t<sp/>T_pos,</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_FirstUID,</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_UID</highlight></codeline>
+<codeline lineno="52"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="53" refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos42aa3c321c620142ac61091bca4cc194" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1internal_1_1GetCoordFromUIDImpl" kindref="compound">GetCoordFromUIDImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/>T_pos,</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/>typename<sp/><ref refid="namespacestd" kindref="compound">std</ref>::enable_if&lt;</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::is_same&lt;</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_FirstUID,</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>GetDatumElementUID&lt;<sp/>boost::mp11::mp_first&lt;<sp/>T_DatumDomain<sp/>&gt;<sp/>&gt;</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;::value</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;<ref refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos42aa3c321c620142ac61091bca4cc194_1a5510931690011081fc140009c7a010f6" kindref="member">::type</ref>,</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/>T_FirstUID,</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/>T_UID...</highlight></codeline>
+<codeline lineno="65"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="66"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos42aa3c321c620142ac61091bca4cc194_1a5510931690011081fc140009c7a010f6" kindref="member">type</ref><sp/>=<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1internal_1_1GetCoordFromUIDImpl" kindref="compound">GetCoordFromUIDImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacellama_1a554a797d5fff9070b3c61d7584dc15d5" kindref="member">GetDatumElementType&lt; boost::mp11::mp_first&lt; T_DatumDomain &gt;</ref><sp/>&gt;,</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoord::template<sp/>PushBack&lt;<sp/>T_pos<sp/>&gt;,</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0,</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>void,</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_UID...</highlight></codeline>
+<codeline lineno="73" refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos42aa3c321c620142ac61091bca4cc194_1a5510931690011081fc140009c7a010f6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;<ref refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos42aa3c321c620142ac61091bca4cc194_1a5510931690011081fc140009c7a010f6" kindref="member">::type</ref>;</highlight></codeline>
+<codeline lineno="74"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/>std::size_t<sp/>T_pos,</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_FirstUID,</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_UID</highlight></codeline>
+<codeline lineno="82"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="83" refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__posdbb55aaccff22d6a4c9d108b6b1d84bf" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1internal_1_1GetCoordFromUIDImpl" kindref="compound">GetCoordFromUIDImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/>T_pos,</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/>typename<sp/><ref refid="namespacestd" kindref="compound">std</ref>::enable_if&lt;</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!std::is_same&lt;</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_FirstUID,</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>GetDatumElementUID&lt;<sp/>boost::mp11::mp_first&lt;<sp/>T_DatumDomain<sp/>&gt;<sp/>&gt;</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;::value</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;<ref refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__posdbb55aaccff22d6a4c9d108b6b1d84bf_1a17408ae3bcf04affca32bf62bac89792" kindref="member">::type</ref>,</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/>T_FirstUID,</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/>T_UID...</highlight></codeline>
+<codeline lineno="95"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="96"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__posdbb55aaccff22d6a4c9d108b6b1d84bf_1a17408ae3bcf04affca32bf62bac89792" kindref="member">type</ref><sp/>=<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1internal_1_1GetCoordFromUIDImpl" kindref="compound">GetCoordFromUIDImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>boost::mp11::mp_pop_front&lt;<sp/>T_DatumDomain<sp/>&gt;,</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_pos<sp/>+<sp/>1,</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>void,</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_FirstUID,</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_UID...</highlight></codeline>
+<codeline lineno="104" refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__posdbb55aaccff22d6a4c9d108b6b1d84bf_1a17408ae3bcf04affca32bf62bac89792" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;<ref refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__posdbb55aaccff22d6a4c9d108b6b1d84bf_1a17408ae3bcf04affca32bf62bac89792" kindref="member">::type</ref>;</highlight></codeline>
+<codeline lineno="105"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"></highlight></codeline>
+<codeline lineno="107"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/>std::size_t<sp/>T_pos</highlight></codeline>
+<codeline lineno="111"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="112" refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01void_01_4" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1internal_1_1GetCoordFromUIDImpl" kindref="compound">GetCoordFromUIDImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/>T_pos,</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/>void</highlight></codeline>
+<codeline lineno="117"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="118"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="119" refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01void_01_4_1ab35d0402118fc43f7c3eb09ceb816a04" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01void_01_4_1ab35d0402118fc43f7c3eb09ceb816a04" kindref="member">type</ref><sp/>=<sp/>T_DatumCoord;</highlight></codeline>
+<codeline lineno="120"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"></highlight></codeline>
+<codeline lineno="122"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>internal</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"></highlight></codeline>
+<codeline lineno="131"><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_UID</highlight></codeline>
+<codeline lineno="134"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1a3953132518a1c5bd14cbacc8107975db" kindref="member">GetCoordFromUID</ref><sp/>=<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1internal_1_1GetCoordFromUIDImpl" kindref="compound">internal::GetCoordFromUIDImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord&lt; &gt;</ref>,</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/>0,</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/>void,</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/>T_UID...</highlight></codeline>
+<codeline lineno="141" refid="namespacellama_1a3953132518a1c5bd14cbacc8107975db" refkind="member"><highlight class="normal">&gt;::type;</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"></highlight></codeline>
+<codeline lineno="143"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>llama</highlight><highlight class="normal"></highlight></codeline>
     </programlisting>
     <location file="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp"/>
   </compounddef>

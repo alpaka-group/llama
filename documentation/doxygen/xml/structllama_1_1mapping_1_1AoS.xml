@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="40" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" bodystart="40" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="53" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" bodystart="53" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="structllama_1_1mapping_1_1AoS_1ae5d0c4673ed69f021273d80707042c54" prot="public" static="no">
         <type>T_DatumDomain</type>
@@ -44,7 +44,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="41" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" bodystart="41" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="54" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" bodystart="54" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-static-attrib">
@@ -60,7 +60,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="42" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" bodystart="42" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="55" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" bodystart="55" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-attrib">
@@ -75,7 +75,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="89" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" bodystart="89" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="103" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" bodystart="103" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -91,10 +91,18 @@
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>size of the user domain </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="45" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" bodystart="45" bodyend="47"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="59" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" bodystart="59" bodyend="61"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1mapping_1_1AoS_1a2c1eeaa107bc149746164db4d900dd80" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -107,7 +115,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="49" column="1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="63" column="1"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1mapping_1_1AoS_1a46a9a1846002f07aafc42175b50c4a79" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -123,7 +131,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="50" column="1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="64" column="1"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1mapping_1_1AoS_1a78c16173d62fb90dea007ee9d6738f6e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -139,7 +147,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="51" column="1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="65" column="1"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1mapping_1_1AoS_1a245f7ecbb94de16cb331677225d822c4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -152,7 +160,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="52" column="1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="66" column="1"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1mapping_1_1AoS_1a9725c67d7f779d29902a90e61d0c588b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>auto</type>
@@ -169,7 +177,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="56" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" bodystart="56" bodyend="61"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="70" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" bodystart="70" bodyend="75"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1mapping_1_1AoS_1a88c6c53d0b528c45c493bc3ea2c5d9fc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -193,7 +201,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="66" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" bodystart="66" bodyend="78"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="80" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" bodystart="80" bodyend="92"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1mapping_1_1AoS_1a26a3f5a39f87826ae6e3451719b6127b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -217,14 +225,44 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="84" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" bodystart="84" bodyend="88"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="98" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" bodystart="98" bodyend="102"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
-    </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="39" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" bodystart="38" bodyend="90"/>
+<para><ref refid="structllama_1_1Array" kindref="compound">Array</ref> of struct mapping which can be used for creating a <ref refid="structllama_1_1View" kindref="compound">View</ref> with a <ref refid="structllama_1_1Factory" kindref="compound">Factory</ref>. For the interface details see <ref refid="structllama_1_1Factory" kindref="compound">Factory</ref>. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_UserDomain</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>type of the user domain </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_DatumDomain</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>type of the datum domain </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_LinearizeUserDomainAdressFunctor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Defines how the user domain should be linearized, e.g. C like with the last dimension being the &quot;fast&quot; one (<ref refid="structllama_1_1LinearizeUserDomainAdress" kindref="compound">LinearizeUserDomainAdress</ref>, default) or Fortran like with the first dimension being the &quot;fast&quot; one (<ref refid="structllama_1_1LinearizeUserDomainAdressLikeFortran" kindref="compound">LinearizeUserDomainAdressLikeFortran</ref>). </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_ExtentUserDomainAdressFunctor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Defines how the size of the view shall be created. Should fit for <computeroutput>T_LinearizeUserDomainAdressFunctor</computeroutput>. Only right now implemented and default value is <ref refid="structllama_1_1ExtentUserDomainAdress" kindref="compound">ExtentUserDomainAdress</ref>. </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="see"><para><ref refid="structllama_1_1mapping_1_1SoA" kindref="compound">SoA</ref> </para></simplesect>
+</para>    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" line="52" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/AoS.hpp" bodystart="51" bodyend="104"/>
     <listofallmembers>
       <member refid="structllama_1_1mapping_1_1AoS_1ab85db3706e63e9bf45849f29234941cb" prot="public" virt="non-virtual"><scope>llama::mapping::AoS</scope><name>AoS</name></member>
       <member refid="structllama_1_1mapping_1_1AoS_1a2c1eeaa107bc149746164db4d900dd80" prot="public" virt="non-virtual"><scope>llama::mapping::AoS</scope><name>AoS</name></member>

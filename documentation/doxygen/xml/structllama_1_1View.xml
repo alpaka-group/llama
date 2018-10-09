@@ -397,14 +397,14 @@
 </parameterlist>
 </para>    </detaileddescription>
     <collaborationgraph>
-      <node id="385">
+      <node id="328">
         <label>llama::Array&lt; BlobType, Mapping::blobCount &gt;</label>
         <link refid="structllama_1_1Array"/>
       </node>
-      <node id="384">
+      <node id="327">
         <label>llama::View&lt; T_Mapping, T_BlobType &gt;</label>
         <link refid="structllama_1_1View"/>
-        <childnode refid="385" relation="usage">
+        <childnode refid="328" relation="usage">
           <edgelabel>blob</edgelabel>
         </childnode>
       </node>

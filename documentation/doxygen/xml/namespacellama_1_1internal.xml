@@ -13,12 +13,15 @@
     <innerclass refid="structllama_1_1internal_1_1ApplyFunctorIfCoordIsIncluded_3_01T__Coord_00_01T__Pos_00_01T__Functo8178b759a940c008334ad4f19e3e5b46" prot="public">llama::internal::ApplyFunctorIfCoordIsIncluded&lt; T_Coord, T_Pos, T_Functor, typename std::enable_if&lt; CoordIsIncluded&lt; T_Pos, T_Coord &gt;::value &gt;::type &gt;</innerclass>
     <innerclass refid="structllama_1_1internal_1_1CoordIsIncluded" prot="public">llama::internal::CoordIsIncluded</innerclass>
     <innerclass refid="structllama_1_1internal_1_1CoordIsIncluded_3_01T__Pos_00_01T__Coord_00_01typename_01std_1_1enable7f0177eec7aaf3f9a26fe9c8ed89548" prot="public">llama::internal::CoordIsIncluded&lt; T_Pos, T_Coord, typename std::enable_if&lt;(T_Pos::size&lt; T_Coord::size) &gt;::type &gt;</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1GetTupleElementImpl" prot="public">llama::internal::GetTupleElementImpl</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1GetTupleElementImpl_3_01Tuple_3_01T__First_00_01T__Rest_8_8_8_01_4_00_010_01_4" prot="public">llama::internal::GetTupleElementImpl&lt; Tuple&lt; T_First, T_Rest... &gt;, 0 &gt;</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1GetTupleElementImpl_3_01Tuple_3_01T__First_00_01T__Rest_8_8_8_01_4_00_01T__pos_01_4" prot="public">llama::internal::GetTupleElementImpl&lt; Tuple&lt; T_First, T_Rest... &gt;, T_pos &gt;</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1GetTupleTypeImpl" prot="public">llama::internal::GetTupleTypeImpl</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1GetTupleTypeImpl_3_01Tuple_3_01T__First_00_01T__Rest_8_8_8_01_4_00_010_01_4" prot="public">llama::internal::GetTupleTypeImpl&lt; Tuple&lt; T_First, T_Rest... &gt;, 0 &gt;</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1GetTupleTypeImpl_3_01Tuple_3_01T__First_00_01T__Rest_8_8_8_01_4_00_01T__pos_01_4" prot="public">llama::internal::GetTupleTypeImpl&lt; Tuple&lt; T_First, T_Rest... &gt;, T_pos &gt;</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1GetCoordFromUIDImpl" prot="public">llama::internal::GetCoordFromUIDImpl</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__posdbb55aaccff22d6a4c9d108b6b1d84bf" prot="public">llama::internal::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, typename std::enable_if&lt; !std::is_same&lt; T_FirstUID, GetDatumElementUID&lt; boost::mp11::mp_first&lt; T_DatumDomain &gt; &gt; &gt;::value &gt;::type, T_FirstUID, T_UID... &gt;</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos42aa3c321c620142ac61091bca4cc194" prot="public">llama::internal::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, typename std::enable_if&lt; std::is_same&lt; T_FirstUID, GetDatumElementUID&lt; boost::mp11::mp_first&lt; T_DatumDomain &gt; &gt; &gt;::value &gt;::type, T_FirstUID, T_UID... &gt;</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01void_01_4" prot="public">llama::internal::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, void &gt;</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1GetTypeFromDatumCoordImpl" prot="public">llama::internal::GetTypeFromDatumCoordImpl</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1GetTypeFromDatumCoordImpl_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4" prot="public">llama::internal::GetTypeFromDatumCoordImpl&lt; T_DatumDomain, DatumCoord&lt; T_coords... &gt;&gt;</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1GetTypeImpl" prot="public">llama::internal::GetTypeImpl</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1GetTypeImpl_3_01T__DatumDomain_01_4" prot="public">llama::internal::GetTypeImpl&lt; T_DatumDomain &gt;</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1GetTypeImpl_3_01T__DatumDomain_00_01T__firstDatumDomainCoord_00_01T__datumDomainCoords_8_8_8_01_4" prot="public">llama::internal::GetTypeImpl&lt; T_DatumDomain, T_firstDatumDomainCoord, T_datumDomainCoords... &gt;</innerclass>
     <innerclass refid="structllama_1_1internal_1_1GetUIDfromDatumCoord" prot="public">llama::internal::GetUIDfromDatumCoord</innerclass>
     <innerclass refid="structllama_1_1internal_1_1GetUIDfromDatumCoord_3_01T__DatumElement_00_01DatumCoord_3_01T__datumDomainCoords_8_8_8_01_4_4" prot="public">llama::internal::GetUIDfromDatumCoord&lt; T_DatumElement, DatumCoord&lt; T_datumDomainCoords... &gt;&gt;</innerclass>
     <innerclass refid="structllama_1_1internal_1_1GetUIDImpl" prot="public">llama::internal::GetUIDImpl</innerclass>
@@ -29,28 +32,8 @@
     <innerclass refid="structllama_1_1internal_1_1LinearBytePosImpl" prot="public">llama::internal::LinearBytePosImpl</innerclass>
     <innerclass refid="structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01_4_00_01T__DatumCoord_00_01T__IterCoord_01_4" prot="public">llama::internal::LinearBytePosImpl&lt; DatumStruct&lt; &gt;, T_DatumCoord, T_IterCoord &gt;</innerclass>
     <innerclass refid="structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__Daab3e6bc06488e5011eff271a9737aa6b" prot="public">llama::internal::LinearBytePosImpl&lt; DatumStruct&lt; T_FirstDatumElement, T_DatumElements... &gt;, T_DatumCoord, T_IterCoord &gt;</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1MakeTupleImpl" prot="public">llama::internal::MakeTupleImpl</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1MakeTupleImpl_3_01_4" prot="public">llama::internal::MakeTupleImpl&lt; &gt;</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1MakeTupleImpl_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4" prot="public">llama::internal::MakeTupleImpl&lt; T_FirstElement, T_Elements... &gt;</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1MakeTupleImpl_3_01T__LastElement_01_4" prot="public">llama::internal::MakeTupleImpl&lt; T_LastElement &gt;</innerclass>
     <innerclass refid="structllama_1_1internal_1_1MappingDatumCoordCaller" prot="public">llama::internal::MappingDatumCoordCaller</innerclass>
     <innerclass refid="structllama_1_1internal_1_1MappingDatumCoordCaller_3_01DatumCoord_3_01T__coords_8_8_8_01_4_01_4" prot="public">llama::internal::MappingDatumCoordCaller&lt; DatumCoord&lt; T_coords... &gt; &gt;</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1TupleCatImpl" prot="public">llama::internal::TupleCatImpl</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1TupleCatImpl_3_01Tuple_3_01_4_00_01T__Tuple2_01_4" prot="public">llama::internal::TupleCatImpl&lt; Tuple&lt; &gt;, T_Tuple2 &gt;</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1TupleCatImpl_3_01Tuple_3_01T__Tuple1Elem_01_4_00_01Tuple_3_01T__Tuple2Elems_8_8_8_01_4_4" prot="public">llama::internal::TupleCatImpl&lt; Tuple&lt; T_Tuple1Elem &gt;, Tuple&lt; T_Tuple2Elems... &gt;&gt;</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1TupleCatImpl_3_01Tuple_3_01T__Tuple1First_00_01T__Tuple1Rest_8_8_8_01_4_00_01T__Tuple2_01_4" prot="public">llama::internal::TupleCatImpl&lt; Tuple&lt; T_Tuple1First, T_Tuple1Rest... &gt;, T_Tuple2 &gt;</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1TupleCatTypeImpl" prot="public">llama::internal::TupleCatTypeImpl</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1TupleCatTypeImpl_3_01Tuple_3_01_4_00_01T__Tuple2_01_4" prot="public">llama::internal::TupleCatTypeImpl&lt; Tuple&lt; &gt;, T_Tuple2 &gt;</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1TupleCatTypeImpl_3_01Tuple_3_01T__Tuple1Elem_01_4_00_01Tuple_3_01T__Tuple2Elems_8_8_8_01_4_4" prot="public">llama::internal::TupleCatTypeImpl&lt; Tuple&lt; T_Tuple1Elem &gt;, Tuple&lt; T_Tuple2Elems... &gt;&gt;</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1TupleCatTypeImpl_3_01Tuple_3_01T__Tuple1First_00_01T__Tuple1Rest_8_8_8_01_4_00_01T__Tuple2_01_4" prot="public">llama::internal::TupleCatTypeImpl&lt; Tuple&lt; T_Tuple1First, T_Tuple1Rest... &gt;, T_Tuple2 &gt;</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1TupleForEach" prot="public">llama::internal::TupleForEach</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1TupleForEach_3_01Tuple_3_01_4_00_01T__Functor_01_4" prot="public">llama::internal::TupleForEach&lt; Tuple&lt; &gt;, T_Functor &gt;</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1TupleForEach_3_01Tuple_3_01T__LastElement_01_4_00_01T__Functor_01_4" prot="public">llama::internal::TupleForEach&lt; Tuple&lt; T_LastElement &gt;, T_Functor &gt;</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1TupleReplaceImpl" prot="public">llama::internal::TupleReplaceImpl</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01T__Tuple_00_01T__Replacement_01_4" prot="public">llama::internal::TupleReplaceImpl&lt; 0, T_Tuple, T_Replacement &gt;</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01T__OneElement_01_4_00_01T__Replacement_01_4" prot="public">llama::internal::TupleReplaceImpl&lt; 0, Tuple&lt; T_OneElement &gt;, T_Replacement &gt;</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1TupleRestImpl" prot="public">llama::internal::TupleRestImpl</innerclass>
-    <innerclass refid="structllama_1_1internal_1_1TupleRestImpl_3_01Tuple_3_01T__OneElement_01_4_01_4" prot="public">llama::internal::TupleRestImpl&lt; Tuple&lt; T_OneElement &gt; &gt;</innerclass>
     <innerclass refid="structllama_1_1internal_1_1ZeroSequenceHelper" prot="public">llama::internal::ZeroSequenceHelper</innerclass>
     <innerclass refid="structllama_1_1internal_1_1ZeroSequenceHelper_3_010_00_01T__vals_8_8_8_01_4" prot="public">llama::internal::ZeroSequenceHelper&lt; 0, T_vals... &gt;</innerclass>
       <sectiondef kind="func">

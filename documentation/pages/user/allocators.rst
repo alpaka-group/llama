@@ -101,6 +101,8 @@ party libraries. For use with these, the
 :ref:`developer section<label-allocators-interface>` documents the interface
 needed to implement.
 
+.. _label-allocators-alpaka:
+
 Alpaka
 ^^^^^^
 

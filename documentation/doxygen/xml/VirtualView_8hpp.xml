@@ -6,138 +6,138 @@
     <includes refid="View_8hpp" local="yes">View.hpp</includes>
     <includedby refid="llama_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/llama.hpp</includedby>
     <incdepgraph>
-      <node id="617">
+      <node id="561">
         <label>boost/predef.h</label>
       </node>
-      <node id="624">
+      <node id="568">
         <label>Types.hpp</label>
         <link refid="Types_8hpp"/>
-        <childnode refid="625" relation="include">
+        <childnode refid="569" relation="include">
         </childnode>
-        <childnode refid="622" relation="include">
+        <childnode refid="566" relation="include">
         </childnode>
       </node>
-      <node id="629">
+      <node id="573">
         <label>CompareUID.hpp</label>
         <link refid="CompareUID_8hpp"/>
-        <childnode refid="620" relation="include">
+        <childnode refid="564" relation="include">
         </childnode>
-        <childnode refid="630" relation="include">
+        <childnode refid="574" relation="include">
         </childnode>
-        <childnode refid="631" relation="include">
+        <childnode refid="575" relation="include">
         </childnode>
       </node>
-      <node id="625">
+      <node id="569">
         <label>Array.hpp</label>
         <link refid="Array_8hpp"/>
-        <childnode refid="616" relation="include">
+        <childnode refid="560" relation="include">
         </childnode>
       </node>
-      <node id="627">
+      <node id="571">
         <label>ForEach.hpp</label>
         <link refid="ForEach_8hpp"/>
-        <childnode refid="620" relation="include">
+        <childnode refid="564" relation="include">
         </childnode>
-        <childnode refid="626" relation="include">
+        <childnode refid="570" relation="include">
         </childnode>
-        <childnode refid="628" relation="include">
+        <childnode refid="572" relation="include">
         </childnode>
       </node>
-      <node id="618">
+      <node id="562">
         <label>View.hpp</label>
         <link refid="View_8hpp"/>
-        <childnode refid="619" relation="include">
+        <childnode refid="563" relation="include">
         </childnode>
-        <childnode refid="620" relation="include">
+        <childnode refid="564" relation="include">
         </childnode>
-        <childnode refid="616" relation="include">
+        <childnode refid="560" relation="include">
         </childnode>
-        <childnode refid="621" relation="include">
+        <childnode refid="565" relation="include">
         </childnode>
-        <childnode refid="625" relation="include">
+        <childnode refid="569" relation="include">
         </childnode>
-        <childnode refid="627" relation="include">
+        <childnode refid="571" relation="include">
         </childnode>
-        <childnode refid="629" relation="include">
+        <childnode refid="573" relation="include">
         </childnode>
       </node>
-      <node id="623">
+      <node id="567">
         <label>DatumStruct.hpp</label>
         <link refid="DatumStruct_8hpp"/>
-        <childnode refid="624" relation="include">
+        <childnode refid="568" relation="include">
         </childnode>
-        <childnode refid="626" relation="include">
+        <childnode refid="570" relation="include">
         </childnode>
-        <childnode refid="622" relation="include">
+        <childnode refid="566" relation="include">
         </childnode>
-        <childnode refid="620" relation="include">
+        <childnode refid="564" relation="include">
         </childnode>
       </node>
-      <node id="626">
+      <node id="570">
         <label>DatumCoord.hpp</label>
       </node>
-      <node id="628">
+      <node id="572">
         <label>GetCoordFromUID.hpp</label>
         <link refid="GetCoordFromUID_8hpp"/>
-        <childnode refid="620" relation="include">
+        <childnode refid="564" relation="include">
         </childnode>
-        <childnode refid="622" relation="include">
+        <childnode refid="566" relation="include">
         </childnode>
-        <childnode refid="623" relation="include">
+        <childnode refid="567" relation="include">
         </childnode>
       </node>
-      <node id="631">
+      <node id="575">
         <label>tuple</label>
       </node>
-      <node id="621">
+      <node id="565">
         <label>GetType.hpp</label>
         <link refid="GetType_8hpp"/>
-        <childnode refid="622" relation="include">
+        <childnode refid="566" relation="include">
         </childnode>
-        <childnode refid="623" relation="include">
+        <childnode refid="567" relation="include">
         </childnode>
       </node>
-      <node id="619">
+      <node id="563">
         <label>boost/preprocessor/cat.hpp</label>
       </node>
-      <node id="615">
+      <node id="559">
         <label>/home/alexander/develop/work/llama/include/llama/VirtualView.hpp</label>
         <link refid="VirtualView_8hpp"/>
-        <childnode refid="616" relation="include">
+        <childnode refid="560" relation="include">
         </childnode>
-        <childnode refid="618" relation="include">
+        <childnode refid="562" relation="include">
         </childnode>
       </node>
-      <node id="616">
+      <node id="560">
         <label>preprocessor/macros.hpp</label>
         <link refid="macros_8hpp"/>
-        <childnode refid="617" relation="include">
+        <childnode refid="561" relation="include">
         </childnode>
       </node>
-      <node id="630">
+      <node id="574">
         <label>GetUID.hpp</label>
         <link refid="GetUID_8hpp"/>
-        <childnode refid="622" relation="include">
+        <childnode refid="566" relation="include">
         </childnode>
-        <childnode refid="623" relation="include">
+        <childnode refid="567" relation="include">
         </childnode>
       </node>
-      <node id="620">
+      <node id="564">
         <label>type_traits</label>
       </node>
-      <node id="622">
+      <node id="566">
         <label>boost/mp11.hpp</label>
       </node>
     </incdepgraph>
     <invincdepgraph>
-      <node id="633">
+      <node id="577">
         <label>/home/alexander/develop/work/llama/include/llama/llama.hpp</label>
         <link refid="llama_8hpp"/>
       </node>
-      <node id="632">
+      <node id="576">
         <label>/home/alexander/develop/work/llama/include/llama/VirtualView.hpp</label>
         <link refid="VirtualView_8hpp"/>
-        <childnode refid="633" relation="include">
+        <childnode refid="577" relation="include">
         </childnode>
       </node>
     </invincdepgraph>
@@ -208,7 +208,7 @@
 <codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
 <codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="84" refid="structllama_1_1VirtualView_1a6e55057662aafced4893806725153ce6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1VirtualView_1a6e55057662aafced4893806725153ce6" kindref="member">accessor</ref>(<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1a03077c6597f96a84efe064fa64d81827" kindref="member">Mapping::UserDomain</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>userDomain<sp/>)</highlight></codeline>
-<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/><ref refid="namespacellama_1aeef46491193f44d7be8ba279d053e78f" kindref="member">GetType</ref>&lt;</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/><ref refid="namespacellama_1a9b77530642d73f0464c605e6140391cb" kindref="member">GetType</ref>&lt;</highlight></codeline>
 <codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>Mapping::DatumDomain,</highlight></codeline>
 <codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_coords...</highlight></codeline>
 <codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;<sp/>&amp;</highlight></codeline>
@@ -223,9 +223,9 @@
 <codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
 <codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="107" refid="structllama_1_1VirtualView_1ad4d669766c9d48669c1a52df1c21b70f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1VirtualView_1ad4d669766c9d48669c1a52df1c21b70f" kindref="member">accessor</ref>(<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1a03077c6597f96a84efe064fa64d81827" kindref="member">Mapping::UserDomain</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>userDomain<sp/>)</highlight></codeline>
-<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/><ref refid="namespacellama_1ae6136ff96220af66f833a8de8aa0b6a1" kindref="member">GetTypeFromDatumCoord</ref>&lt;</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/><ref refid="namespacellama_1a22362d58c566945f0f8178e2af1b0013" kindref="member">GetTypeFromDatumCoord</ref>&lt;</highlight></codeline>
 <codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>Mapping::DatumDomain,</highlight></codeline>
-<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacellama_1a3a9ff09beed7470e5c174d2c34e88aab" kindref="member">GetCoordFromUID</ref>&lt;</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacellama_1a3953132518a1c5bd14cbacc8107975db" kindref="member">GetCoordFromUID</ref>&lt;</highlight></codeline>
 <codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>Mapping::DatumDomain,</highlight></codeline>
 <codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_UIDs...</highlight></codeline>
 <codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;</highlight></codeline>
@@ -284,7 +284,7 @@
 <codeline lineno="185"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
 <codeline lineno="186"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="187" refid="structllama_1_1VirtualView_1a3e89a9eb6efa918be4634a365c917628" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1VirtualView_1a3e89a9eb6efa918be4634a365c917628" kindref="member">operator()</ref>(<sp/><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord&lt; T_coord... &gt;</ref><sp/>&amp;&amp;<sp/>dc=<sp/><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord&lt; T_coord... &gt;</ref>()<sp/>)</highlight></codeline>
-<codeline lineno="188"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/><ref refid="namespacellama_1aeef46491193f44d7be8ba279d053e78f" kindref="member">GetType</ref>&lt;</highlight></codeline>
+<codeline lineno="188"><highlight class="normal"><sp/><sp/><sp/><sp/>-&gt;<sp/><ref refid="namespacellama_1a9b77530642d73f0464c605e6140391cb" kindref="member">GetType</ref>&lt;</highlight></codeline>
 <codeline lineno="189"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>Mapping::DatumDomain,</highlight></codeline>
 <codeline lineno="190"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_coord...</highlight></codeline>
 <codeline lineno="191"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;<sp/>&amp;</highlight></codeline>

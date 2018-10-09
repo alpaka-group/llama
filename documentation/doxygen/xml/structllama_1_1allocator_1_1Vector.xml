@@ -14,42 +14,42 @@
       <sectiondef kind="public-type">
       <memberdef kind="typedef" id="structllama_1_1allocator_1_1Vector_1ae31195ba200ef354f13a06d62d33abb4" prot="public" static="no">
         <type>unsigned char</type>
-        <definition>using llama::allocator::Vector&lt; T_alignment &gt;::PrimType =  unsigned char</definition>
+        <definition>using llama::allocator::Vector::PrimType =  unsigned char</definition>
         <argsstring></argsstring>
         <name>PrimType</name>
         <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/allocator/Vector.hpp" line="202" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/allocator/Vector.hpp" bodystart="202" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="structllama_1_1allocator_1_1Vector_1ac5371899e6d71d54c0df455be9c094a8" prot="public" static="no">
-        <type>std::vector&lt; <ref refid="structllama_1_1allocator_1_1Vector_1ae31195ba200ef354f13a06d62d33abb4" kindref="member">PrimType</ref>, <ref refid="structllama_1_1allocator_1_1internal_1_1AlignmentAllocator" kindref="compound">internal::AlignmentAllocator</ref>&lt; <ref refid="structllama_1_1allocator_1_1Vector_1ae31195ba200ef354f13a06d62d33abb4" kindref="member">PrimType</ref>, T_alignment &gt; &gt;</type>
-        <definition>using llama::allocator::Vector&lt; T_alignment &gt;::BlobType =  std::vector&lt; PrimType, internal::AlignmentAllocator&lt; PrimType, T_alignment &gt; &gt;</definition>
-        <argsstring></argsstring>
-        <name>BlobType</name>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/allocator/Vector.hpp" line="203" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/allocator/Vector.hpp" bodystart="209" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="typedef" id="structllama_1_1allocator_1_1Vector_1a667a6f29c4ff337f1fa125b55631732b" prot="public" static="no">
-        <type>int</type>
-        <definition>using llama::allocator::Vector&lt; T_alignment &gt;::Parameter =  int</definition>
-        <argsstring></argsstring>
-        <name>Parameter</name>
-        <briefdescription>
-        </briefdescription>
+<para>primary type of this allocator is <computeroutput>unsigned char</computeroutput> </para>        </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
         <location file="/home/alexander/develop/work/llama/include/llama/allocator/Vector.hpp" line="210" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/allocator/Vector.hpp" bodystart="210" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1allocator_1_1Vector_1ac5371899e6d71d54c0df455be9c094a8" prot="public" static="no">
+        <type>std::vector&lt; <ref refid="structllama_1_1allocator_1_1Vector_1ae31195ba200ef354f13a06d62d33abb4" kindref="member">PrimType</ref>, <ref refid="structllama_1_1allocator_1_1internal_1_1AlignmentAllocator" kindref="compound">internal::AlignmentAllocator</ref>&lt; <ref refid="structllama_1_1allocator_1_1Vector_1ae31195ba200ef354f13a06d62d33abb4" kindref="member">PrimType</ref>, T_alignment &gt; &gt;</type>
+        <definition>using llama::allocator::Vector::BlobType =  std::vector&lt; PrimType, internal::AlignmentAllocator&lt; PrimType, T_alignment &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>BlobType</name>
+        <briefdescription>
+<para>blob type of this allocator is <computeroutput>std::vector&lt; PrimType &gt;</computeroutput> </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/allocator/Vector.hpp" line="212" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/allocator/Vector.hpp" bodystart="218" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1allocator_1_1Vector_1a667a6f29c4ff337f1fa125b55631732b" prot="public" static="no">
+        <type>int</type>
+        <definition>using llama::allocator::Vector::Parameter =  int</definition>
+        <argsstring></argsstring>
+        <name>Parameter</name>
+        <briefdescription>
+<para>the optional allocation parameter is ignored </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/allocator/Vector.hpp" line="220" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/allocator/Vector.hpp" bodystart="220" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-static-func">
@@ -72,14 +72,22 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/allocator/Vector.hpp" line="215" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/allocator/Vector.hpp" bodystart="215" bodyend="222"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/allocator/Vector.hpp" line="225" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/allocator/Vector.hpp" bodystart="225" bodyend="232"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
-    </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/allocator/Vector.hpp" line="201" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/allocator/Vector.hpp" bodystart="200" bodyend="223"/>
+<para>Allocator to allocate memory for a <ref refid="structllama_1_1View" kindref="compound">View</ref> in the <ref refid="structllama_1_1Factory" kindref="compound">Factory</ref> using <computeroutput>std::vector</computeroutput> in the background. Meaning every time the view is copied, the whole memory is copied. When the view is moved, the move operator of <computeroutput>std::vector</computeroutput> is used. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_alignment</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>aligment of the memory used by <computeroutput>std::vector</computeroutput>, default value is 64 </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/allocator/Vector.hpp" line="208" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/allocator/Vector.hpp" bodystart="207" bodyend="233"/>
     <listofallmembers>
       <member refid="structllama_1_1allocator_1_1Vector_1a0fcd8b8ee583807e25dc3c1369a07461" prot="public" virt="non-virtual"><scope>llama::allocator::Vector</scope><name>allocate</name></member>
       <member refid="structllama_1_1allocator_1_1Vector_1ac5371899e6d71d54c0df455be9c094a8" prot="public" virt="non-virtual"><scope>llama::allocator::Vector</scope><name>BlobType</name></member>

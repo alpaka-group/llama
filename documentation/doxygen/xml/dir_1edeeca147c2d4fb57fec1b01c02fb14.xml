@@ -16,7 +16,6 @@
     <innerfile refid="GetUID_8hpp">GetUID.hpp</innerfile>
     <innerfile refid="IntegerSequence_8hpp">IntegerSequence.hpp</innerfile>
     <innerfile refid="llama_8hpp">llama.hpp</innerfile>
-    <innerfile refid="Tuple_8hpp">Tuple.hpp</innerfile>
     <innerfile refid="Types_8hpp">Types.hpp</innerfile>
     <innerfile refid="UserDomain_8hpp">UserDomain.hpp</innerfile>
     <innerfile refid="View_8hpp">View.hpp</innerfile>

@@ -15,7 +15,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="70" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="70" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="75" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="75" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -39,14 +39,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="75" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="75" bodyend="88"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="80" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="80" bodyend="93"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="69" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="68" bodyend="89"/>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="74" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="73" bodyend="94"/>
     <listofallmembers>
       <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1_1BasicToResultImpl_3_01T__Tree_00_01ty9199430f0c7aca7d6a4550e2c2dec7e0_1a2bda728f5160422e55b4a4fb0e7c7a15" prot="public" virt="non-virtual"><scope>llama::mapping::tree::functor::LeafOnlyRT::BasicToResultImpl&lt; T_Tree, typename T_Tree::IsTreeElementWithChilds &gt;::ChildFunctor</scope><name>operator()</name></member>
       <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1_1BasicToResultImpl_3_01T__Tree_00_01ty9199430f0c7aca7d6a4550e2c2dec7e0_1aaa8c586ecdda7a7291889dbc5d2fa6c2" prot="public" virt="non-virtual"><scope>llama::mapping::tree::functor::LeafOnlyRT::BasicToResultImpl&lt; T_Tree, typename T_Tree::IsTreeElementWithChilds &gt;::ChildFunctor</scope><name>runtime</name></member>

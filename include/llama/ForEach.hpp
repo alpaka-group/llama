@@ -250,6 +250,20 @@ struct ApplyFunctorForEachLeaf<
 
 } // namespace internal
 
+
+/** Can be used to access a given functor for every leaf in a datum domain given
+ *  as \ref DatumStruct. Basically a helper function to iterate over a datum
+ *  domain at compile time without the need to recursively iterate yourself.
+ *  The given functor needs to implement the operator() with two template
+ *  parameters for the outer and the inner coordinate in the datum domain tree.
+ *  These coordinates are both a \ref DatumCoord , which can be concatenated to
+ *  one coordinate with \ref DatumCoord::Cat and used to access the data.
+ * \tparam T_DatumDomain the datum domain (\ref DatumStruct) to iterate over
+ * \tparam T_DatumCoordOrFirstUID DatumCoord or a UID to address the start node
+ *  inside the datum domain tree. Will be given to the functor as
+ *  \ref DatumCoord as first template parameter.
+ * \tparam T_RestUID... optional further UIDs for addressing the start node
+ */
 template<
     typename T_DatumDomain,
     typename T_DatumCoordOrFirstUID = DatumCoord < >,
@@ -262,6 +276,10 @@ struct ForEach
         T_DatumCoordOrFirstUID,
         T_RestUID...
     >;
+    /** Applies the given functor to the given (part of the) datum domain.
+     * \tparam T_Functor type of the functor
+     * \param functor the perfectly forwarded functor
+     */
     template< typename T_Functor >
     LLAMA_FN_HOST_ACC_INLINE
     static void apply( T_Functor&& functor )

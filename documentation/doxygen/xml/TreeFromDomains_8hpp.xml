@@ -8,82 +8,70 @@
     <includes refid="TreeCoord_8hpp" local="yes">TreeCoord.hpp</includes>
     <includedby refid="Mapping_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/mapping/tree/Mapping.hpp</includedby>
     <incdepgraph>
-      <node id="492">
-        <label>boost/predef.h</label>
-      </node>
-      <node id="486">
+      <node id="464">
         <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp</label>
         <link refid="TreeFromDomains_8hpp"/>
-        <childnode refid="487" relation="include">
+        <childnode refid="465" relation="include">
         </childnode>
-        <childnode refid="488" relation="include">
+        <childnode refid="466" relation="include">
         </childnode>
-        <childnode refid="489" relation="include">
+        <childnode refid="467" relation="include">
         </childnode>
-        <childnode refid="493" relation="include">
+        <childnode refid="469" relation="include">
         </childnode>
       </node>
-      <node id="493">
+      <node id="469">
         <label>TreeCoord.hpp</label>
         <link refid="TreeCoord_8hpp"/>
-        <childnode refid="487" relation="include">
+        <childnode refid="465" relation="include">
         </childnode>
-        <childnode refid="488" relation="include">
+        <childnode refid="466" relation="include">
         </childnode>
-        <childnode refid="494" relation="include">
+        <childnode refid="470" relation="include">
         </childnode>
-        <childnode refid="489" relation="include">
+        <childnode refid="467" relation="include">
         </childnode>
-        <childnode refid="490" relation="include">
+        <childnode refid="468" relation="include">
         </childnode>
       </node>
-      <node id="494">
+      <node id="470">
         <label>string</label>
       </node>
-      <node id="489">
+      <node id="467">
         <label>TreeElement.hpp</label>
         <link refid="TreeElement_8hpp"/>
-        <childnode refid="487" relation="include">
+        <childnode refid="465" relation="include">
         </childnode>
-        <childnode refid="488" relation="include">
+        <childnode refid="466" relation="include">
         </childnode>
-        <childnode refid="490" relation="include">
-        </childnode>
-      </node>
-      <node id="490">
-        <label>../../Tuple.hpp</label>
-        <link refid="Tuple_8hpp"/>
-        <childnode refid="491" relation="include">
+        <childnode refid="468" relation="include">
         </childnode>
       </node>
-      <node id="487">
+      <node id="465">
         <label>cstddef</label>
       </node>
-      <node id="491">
-        <label>preprocessor/macros.hpp</label>
-        <link refid="macros_8hpp"/>
-        <childnode refid="492" relation="include">
-        </childnode>
+      <node id="468">
+        <label>../../Tuple.hpp</label>
       </node>
-      <node id="488">
+      <node id="466">
         <label>type_traits</label>
       </node>
     </incdepgraph>
     <invincdepgraph>
-      <node id="497">
+      <node id="473">
         <label>/home/alexander/develop/work/llama/include/llama/llama.hpp</label>
         <link refid="llama_8hpp"/>
       </node>
-      <node id="495">
+      <node id="471">
         <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/TreeFromDomains.hpp</label>
         <link refid="TreeFromDomains_8hpp"/>
-        <childnode refid="496" relation="include">
+        <childnode refid="472" relation="include">
         </childnode>
       </node>
-      <node id="496">
+      <node id="472">
         <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/Mapping.hpp</label>
         <link refid="Mapping_8hpp"/>
-        <childnode refid="497" relation="include">
+        <childnode refid="473" relation="include">
         </childnode>
       </node>
     </invincdepgraph>
@@ -198,7 +186,7 @@
 <codeline lineno="85"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/>&gt;</highlight></codeline>
 <codeline lineno="86" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_3_01DatumStruct_3_01_4_01_4" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD" kindref="compound">ReplaceDEwithTEinDD</ref>&lt;<sp/><ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>&lt;<sp/>&gt;<sp/>&gt;</highlight></codeline>
 <codeline lineno="87"><highlight class="normal">{</highlight></codeline>
-<codeline lineno="88" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_3_01DatumStruct_3_01_4_01_4_1af2d9166a4c5787af639a4c84a8600208" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1Tuple_3_01_4" kindref="compound">type</ref><sp/>=<sp/><ref refid="structllama_1_1Tuple_3_01_4" kindref="compound">Tuple&lt; &gt;</ref>;</highlight></codeline>
+<codeline lineno="88" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_3_01DatumStruct_3_01_4_01_4_1af2d9166a4c5787af639a4c84a8600208" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1Tuple" kindref="compound">type</ref><sp/>=<sp/><ref refid="structllama_1_1Tuple" kindref="compound">Tuple&lt; &gt;</ref>;</highlight></codeline>
 <codeline lineno="89"><highlight class="normal">};</highlight></codeline>
 <codeline lineno="90"><highlight class="normal"></highlight></codeline>
 <codeline lineno="91"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>

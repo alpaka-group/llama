@@ -27,6 +27,19 @@ namespace llama
 namespace mapping
 {
 
+/** Array of struct mapping which can be used for creating a \ref View with a
+ *  \ref Factory. For the interface details see \ref Factory.
+ * \tparam T_UserDomain type of the user domain
+ * \tparam T_DatumDomain type of the datum domain
+ * \tparam T_LinearizeUserDomainAdressFunctor Defines how the user domain should
+ *  be linearized, e.g. C like with the last dimension being the "fast" one
+ *  (\ref LinearizeUserDomainAdress, default) or Fortran like with the first
+ *  dimension being the "fast" one (\ref LinearizeUserDomainAdressLikeFortran).
+ * \tparam T_ExtentUserDomainAdressFunctor Defines how the size of the view
+ *  shall be created. Should fit for `T_LinearizeUserDomainAdressFunctor`. Only
+ *  right now implemented and default value is \ref ExtentUserDomainAdress.
+ * \see SoA
+ */
 template<
     typename T_UserDomain,
     typename T_DatumDomain,
@@ -41,6 +54,7 @@ struct AoS
     using DatumDomain = T_DatumDomain;
     static constexpr std::size_t blobCount = 1;
 
+    /// \param size size of the user domain
     LLAMA_FN_HOST_ACC_INLINE
     AoS( UserDomain const size ) :
 		userDomainSize( size )

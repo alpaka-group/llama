@@ -25,6 +25,9 @@
 namespace llama
 {
 
+namespace internal
+{
+
 template<
     typename T_DatumDomain,
     typename T_DatumCoord,
@@ -116,11 +119,20 @@ struct GetCoordFromUIDImpl<
 	using type = T_DatumCoord;
 };
 
+} // namespace internal
+
+/** Converts a coordinate in a datum domain given as UID to a \ref DatumCoord .
+ * \tparam T_DatumDomain the datum domain (\ref DatumStruct)
+ * \tparam T_UID... the uid of in the datum domain, may also be empty (for
+ *  `DatumCoord< >`)
+ * \returns a \ref DatumCoord with the datum domain tree coordinates as template
+ *  parameters
+ */
 template<
     typename T_DatumDomain,
     typename... T_UID
 >
-using GetCoordFromUID = typename GetCoordFromUIDImpl<
+using GetCoordFromUID = typename internal::GetCoordFromUIDImpl<
 	T_DatumDomain,
     DatumCoord< >,
     0,

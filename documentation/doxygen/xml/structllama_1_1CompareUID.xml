@@ -33,39 +33,63 @@
         <definition>constexpr bool llama::CompareUID&lt; T_DDA, T_BaseA, T_LocalA, T_DDB, T_BaseB, T_LocalB, SFINAE &gt;::value</definition>
         <argsstring></argsstring>
         <name>value</name>
-        <initializer>=
-        std::is_same&lt;
-            <ref refid="namespacellama_1afc1dd86868706ba5f5ee39ec0c588534" kindref="member">GetUID</ref>&lt;
-                T_DDA,
-                typename T_BaseA::template PushBack&lt; T_LocalA::front &gt;
-            &gt;,
-            <ref refid="namespacellama_1afc1dd86868706ba5f5ee39ec0c588534" kindref="member">GetUID</ref>&lt;
-                T_DDB,
-                typename T_BaseB::template PushBack&lt; T_LocalB::front &gt;
-            &gt;
-        &gt;::value &amp;&amp;
-        <ref refid="structllama_1_1CompareUID" kindref="compound">CompareUID</ref>&lt;
-            T_DDA,
-            typename T_BaseA::template PushBack&lt; T_LocalA::front &gt;,
-            typename T_LocalA::PopFront,
-            T_DDB,
-            typename T_BaseB::template PushBack&lt; T_LocalB::front &gt;,
-            typename T_LocalB::PopFront
-        &gt;::value</initializer>
         <briefdescription>
-        </briefdescription>
+<para>true if the two UIDs are exactly the same, otherwise false. </para>        </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/CompareUID.hpp" line="38" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/CompareUID.hpp" bodystart="38" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/CompareUID.hpp" line="55" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/CompareUID.hpp" bodystart="55" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
-    </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/CompareUID.hpp" line="37" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/CompareUID.hpp" bodystart="36" bodyend="57"/>
+<para>Tells whether two coordinates in two datum domains have the same UID. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_DDA</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>first user domain </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_BaseA</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>First part of the coordinate in the first user domain as <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>. This will be used for getting the UID, but not for the comparison. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_LocalA</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Second part of the coordinate in the first user domain as <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>. This will be used for the comparison with the second datum domain. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_DDB</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>second user domain </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_BaseB</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>First part of the coordinate in the second user domain as <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>. This will be used for getting the UID, but not for the comparison. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_LocalB</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Second part of the coordinate in the second user domain as <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>. This will be used for the comparison with the first datum domain. </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/CompareUID.hpp" line="53" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/CompareUID.hpp" bodystart="52" bodyend="74"/>
     <listofallmembers>
       <member refid="structllama_1_1CompareUID_1a7cc4d6a29a8d67e0a1be30b274863823" prot="public" virt="non-virtual"><scope>llama::CompareUID</scope><name>value</name></member>
     </listofallmembers>

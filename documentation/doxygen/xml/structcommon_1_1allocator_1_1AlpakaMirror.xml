@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structcommon_1_1allocator_1_1AlpakaMirror" kind="struct" language="C++" prot="public">
+    <compoundname>common::allocator::AlpakaMirror</compoundname>
+    <includes refid="AlpakaAllocator_8hpp" local="no">AlpakaAllocator.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_DevAcc</type>
+      </param>
+      <param>
+        <type>typename T_Size</type>
+      </param>
+      <param>
+        <type>typename T_Mapping</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structcommon_1_1allocator_1_1AlpakaMirror_1ac8400d127c0f745ae8972168934debb5" prot="public" static="no">
+        <type><ref refid="structcommon_1_1allocator_1_1Alpaka" kindref="compound">Alpaka</ref>&lt; T_DevAcc, T_Size &gt;</type>
+        <definition>using common::allocator::AlpakaMirror::MirroredAllocator =  Alpaka&lt; T_DevAcc, T_Size &gt;</definition>
+        <argsstring></argsstring>
+        <name>MirroredAllocator</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/examples/common/AlpakaAllocator.hpp" line="122" column="1" bodyfile="/home/alexander/develop/work/llama/examples/common/AlpakaAllocator.hpp" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structcommon_1_1allocator_1_1AlpakaMirror_1a265904aa1b4dfd136ebd768a7cff2bac" prot="public" static="no">
+        <type>typename <ref refid="structcommon_1_1allocator_1_1Alpaka_1a31665d764dc604c08676d51b035daffe" kindref="member">MirroredAllocator::PrimType</ref> *</type>
+        <definition>using common::allocator::AlpakaMirror::BlobType =  typename MirroredAllocator::PrimType*</definition>
+        <argsstring></argsstring>
+        <name>BlobType</name>
+        <briefdescription>
+<para>blob type of this allocator is <computeroutput>unsigned char*</computeroutput> </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/examples/common/AlpakaAllocator.hpp" line="127" column="1" bodyfile="/home/alexander/develop/work/llama/examples/common/AlpakaAllocator.hpp" bodystart="127" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structcommon_1_1allocator_1_1AlpakaMirror_1aaa7877b5e488ca36eb16276f3c8b9a06" prot="public" static="no">
+        <type>typename <ref refid="structcommon_1_1allocator_1_1Alpaka_1a31665d764dc604c08676d51b035daffe" kindref="member">MirroredAllocator::PrimType</ref></type>
+        <definition>using common::allocator::AlpakaMirror::PrimType =  typename MirroredAllocator::PrimType</definition>
+        <argsstring></argsstring>
+        <name>PrimType</name>
+        <briefdescription>
+<para>primary type of this allocator is <computeroutput>unsigned char</computeroutput> </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/examples/common/AlpakaAllocator.hpp" line="129" column="1" bodyfile="/home/alexander/develop/work/llama/examples/common/AlpakaAllocator.hpp" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structcommon_1_1allocator_1_1AlpakaMirror_1aee8fd14eb08fb606545b00c4283868a5" prot="public" static="no">
+        <type><ref refid="structllama_1_1View" kindref="compound">llama::View</ref>&lt; T_Mapping, typename <ref refid="structcommon_1_1allocator_1_1Alpaka_1a2c8a31a76ffde16ee246f0e7bcec3be6" kindref="member">MirroredAllocator::BlobType</ref> &gt;</type>
+        <definition>using common::allocator::AlpakaMirror::MirroredView =  llama::View&lt; T_Mapping, typename MirroredAllocator::BlobType &gt;</definition>
+        <argsstring></argsstring>
+        <name>MirroredView</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/examples/common/AlpakaAllocator.hpp" line="130" column="1" bodyfile="/home/alexander/develop/work/llama/examples/common/AlpakaAllocator.hpp" bodystart="133" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structcommon_1_1allocator_1_1AlpakaMirror_1aad4da2b0334fa3556655df0dfeff22a4" prot="public" static="no">
+        <type><ref refid="structcommon_1_1allocator_1_1AlpakaMirror_1aee8fd14eb08fb606545b00c4283868a5" kindref="member">MirroredView</ref></type>
+        <definition>using common::allocator::AlpakaMirror::Parameter =  MirroredView</definition>
+        <argsstring></argsstring>
+        <name>Parameter</name>
+        <briefdescription>
+<para>the parameter is the view which shall be mirrored </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/examples/common/AlpakaAllocator.hpp" line="135" column="1" bodyfile="/home/alexander/develop/work/llama/examples/common/AlpakaAllocator.hpp" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="structcommon_1_1allocator_1_1AlpakaMirror_1a911e503a610662befce85867fca501e4" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>static auto common::allocator::AlpakaMirror&lt; T_DevAcc, T_Size, T_Mapping &gt;::allocate</definition>
+        <argsstring>(std::size_t count, Parameter mirroredView) -&gt; BlobType</argsstring>
+        <name>allocate</name>
+        <param>
+          <type>std::size_t</type>
+          <declname>count</declname>
+        </param>
+        <param>
+          <type><ref refid="structcommon_1_1allocator_1_1AlpakaMirror_1aad4da2b0334fa3556655df0dfeff22a4" kindref="member">Parameter</ref></type>
+          <declname>mirroredView</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/examples/common/AlpakaAllocator.hpp" line="139" column="1" bodyfile="/home/alexander/develop/work/llama/examples/common/AlpakaAllocator.hpp" bodystart="139" bodyend="146"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Allocator to mirror the pointer of an <ref refid="structcommon_1_1allocator_1_1Alpaka" kindref="compound">Alpaka</ref> allocated memory for a <ref refid="structllama_1_1View" kindref="compound">llama::View</ref> in the <ref refid="structllama_1_1Factory" kindref="compound">llama::Factory</ref>. The view created with this allocator can be used on the device side, but the memory is shared with the given view allocated with <ref refid="structcommon_1_1allocator_1_1Alpaka" kindref="compound">Alpaka</ref>. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_DevAcc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>alpaka <computeroutput>DevAcc</computeroutput> </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_Size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>alpaka size type </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_Mapping</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>mapping used for creating the already existing view </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="see"><para><ref refid="structcommon_1_1allocator_1_1Alpaka" kindref="compound">Alpaka</ref> </para></simplesect>
+</para>    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/examples/common/AlpakaAllocator.hpp" line="121" column="1" bodyfile="/home/alexander/develop/work/llama/examples/common/AlpakaAllocator.hpp" bodystart="120" bodyend="147"/>
+    <listofallmembers>
+      <member refid="structcommon_1_1allocator_1_1AlpakaMirror_1a911e503a610662befce85867fca501e4" prot="public" virt="non-virtual"><scope>common::allocator::AlpakaMirror</scope><name>allocate</name></member>
+      <member refid="structcommon_1_1allocator_1_1AlpakaMirror_1a265904aa1b4dfd136ebd768a7cff2bac" prot="public" virt="non-virtual"><scope>common::allocator::AlpakaMirror</scope><name>BlobType</name></member>
+      <member refid="structcommon_1_1allocator_1_1AlpakaMirror_1ac8400d127c0f745ae8972168934debb5" prot="public" virt="non-virtual"><scope>common::allocator::AlpakaMirror</scope><name>MirroredAllocator</name></member>
+      <member refid="structcommon_1_1allocator_1_1AlpakaMirror_1aee8fd14eb08fb606545b00c4283868a5" prot="public" virt="non-virtual"><scope>common::allocator::AlpakaMirror</scope><name>MirroredView</name></member>
+      <member refid="structcommon_1_1allocator_1_1AlpakaMirror_1aad4da2b0334fa3556655df0dfeff22a4" prot="public" virt="non-virtual"><scope>common::allocator::AlpakaMirror</scope><name>Parameter</name></member>
+      <member refid="structcommon_1_1allocator_1_1AlpakaMirror_1aaa7877b5e488ca36eb16276f3c8b9a06" prot="public" virt="non-virtual"><scope>common::allocator::AlpakaMirror</scope><name>PrimType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

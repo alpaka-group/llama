@@ -395,7 +395,7 @@ struct ChangeNodeChildsRuntime<
     using ResultType = TreeElement<
         typename T_Tree::Identifier,
         decltype(
-            tupleForEach(
+            tupleTransform(
                 T_Tree().childs,
                 ChangeNodeChildsRuntimeFunctor< T_Operation >{ 0 }
             )
@@ -413,7 +413,7 @@ struct ChangeNodeChildsRuntime<
         ChangeNodeChildsRuntimeFunctor< T_Operation > const functor{ newValue };
         return ResultType(
             tree.count,
-            tupleForEach(
+            tupleTransform(
                 tree.childs,
                 functor
             )

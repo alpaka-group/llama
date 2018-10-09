@@ -15,7 +15,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/Idem.hpp" line="38" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/Idem.hpp" bodystart="38" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/Idem.hpp" line="42" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/Idem.hpp" bodystart="42" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -39,7 +39,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/Idem.hpp" line="43" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/Idem.hpp" bodystart="43" bodyend="47"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/Idem.hpp" line="47" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/Idem.hpp" bodystart="47" bodyend="51"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1functor_1_1Idem_1a3cf755b97fb8f23ffe994a30d1822cd8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -67,7 +67,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/Idem.hpp" line="55" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/Idem.hpp" bodystart="55" bodyend="62"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/Idem.hpp" line="59" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/Idem.hpp" bodystart="59" bodyend="66"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1mapping_1_1tree_1_1functor_1_1Idem_1a9aaedf31970174977f82508c2f11d711" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -95,14 +95,15 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/Idem.hpp" line="70" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/Idem.hpp" bodystart="70" bodyend="77"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/Idem.hpp" line="74" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/Idem.hpp" bodystart="74" bodyend="81"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
-    </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/Idem.hpp" line="36" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/Idem.hpp" bodystart="35" bodyend="78"/>
+<para>Functor for <ref refid="structllama_1_1mapping_1_1tree_1_1Mapping" kindref="compound">tree::Mapping</ref>. Does nothing with the mapping tree at all (basically implemented for testing purposes). <simplesect kind="see"><para><ref refid="structllama_1_1mapping_1_1tree_1_1Mapping" kindref="compound">tree::Mapping</ref> </para></simplesect>
+</para>    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/Idem.hpp" line="40" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/Idem.hpp" bodystart="39" bodyend="82"/>
     <listofallmembers>
       <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1Idem_1a3cf755b97fb8f23ffe994a30d1822cd8" prot="public" virt="non-virtual"><scope>llama::mapping::tree::functor::Idem</scope><name>basicCoordToResultCoord</name></member>
       <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1Idem_1a4465986ad318005e8f511414a53272b4" prot="public" virt="non-virtual"><scope>llama::mapping::tree::functor::Idem</scope><name>basicToResult</name></member>

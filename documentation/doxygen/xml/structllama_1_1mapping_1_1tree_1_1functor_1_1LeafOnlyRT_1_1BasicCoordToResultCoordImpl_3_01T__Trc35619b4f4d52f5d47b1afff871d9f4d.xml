@@ -23,7 +23,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="226" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="226" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="231" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="231" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1_1BasicCoordToResultCoordImpl_3_01T__Trc35619b4f4d52f5d47b1afff871d9f4d_1ab7934152799c0b2145c80337e888d94f" prot="public" static="no">
         <type><ref refid="structllama_1_1mapping_1_1tree_1_1TreeCoordElement" kindref="compound">TreeCoordElement</ref>&lt; decltype(T_LastCoord::compiletime)::value &gt;</type>
@@ -36,7 +36,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="227" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="229" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="232" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="234" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1_1BasicCoordToResultCoordImpl_3_01T__Trc35619b4f4d52f5d47b1afff871d9f4d_1aeafa5b58fa910dc5b8b9ddf58295f81a" prot="public" static="no">
         <type><ref refid="structllama_1_1Tuple" kindref="compound">Tuple</ref>&lt; <ref refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1_1BasicCoordToResultCoordImpl_3_01T__Trc35619b4f4d52f5d47b1afff871d9f4d_1ab7934152799c0b2145c80337e888d94f" kindref="member">ResultCoordElement</ref> &gt;</type>
@@ -49,7 +49,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="230" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="230" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="235" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="235" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -77,14 +77,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="233" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="233" bodyend="245"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="238" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="238" bodyend="250"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="225" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="221" bodyend="246"/>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" line="230" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/LeafOnlyRT.hpp" bodystart="226" bodyend="251"/>
     <listofallmembers>
       <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1_1BasicCoordToResultCoordImpl_3_01T__Trc35619b4f4d52f5d47b1afff871d9f4d_1a458288114e93643d94ffd08577beb3d9" prot="public" virt="non-virtual"><scope>llama::mapping::tree::functor::LeafOnlyRT::BasicCoordToResultCoordImpl&lt; T_Tree, Tuple&lt; T_LastCoord &gt; &gt;</scope><name>BasicCoord</name></member>
       <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1_1BasicCoordToResultCoordImpl_3_01T__Trc35619b4f4d52f5d47b1afff871d9f4d_1a303c888128c94e15e365c0023f91d90f" prot="public" virt="non-virtual"><scope>llama::mapping::tree::functor::LeafOnlyRT::BasicCoordToResultCoordImpl&lt; T_Tree, Tuple&lt; T_LastCoord &gt; &gt;</scope><name>operator()</name></member>

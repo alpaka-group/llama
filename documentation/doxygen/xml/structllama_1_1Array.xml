@@ -373,7 +373,7 @@
     <briefdescription>
     </briefdescription>
     <detaileddescription>
-<para><ref refid="structllama_1_1Array" kindref="compound">Array</ref> class like std::array but suitable for use with offloading devices like GPUs and extended with some (for LLAMA) useful methods. <parameterlist kind="templateparam"><parameteritem>
+<para><ref refid="structllama_1_1Array" kindref="compound">Array</ref> class like <computeroutput>std::array</computeroutput> but suitable for use with offloading devices like GPUs and extended with some (for LLAMA) useful methods. <parameterlist kind="templateparam"><parameteritem>
 <parameternamelist>
 <parametername>T</parametername>
 </parameternamelist>
@@ -390,13 +390,13 @@
 </parameterlist>
 </para>    </detaileddescription>
     <collaborationgraph>
-      <node id="30">
+      <node id="38">
         <label>T</label>
       </node>
-      <node id="29">
+      <node id="37">
         <label>llama::Array&lt; T, T_dim &gt;</label>
         <link refid="structllama_1_1Array"/>
-        <childnode refid="30" relation="usage">
+        <childnode refid="38" relation="usage">
           <edgelabel>element</edgelabel>
         </childnode>
       </node>

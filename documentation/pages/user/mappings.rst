@@ -71,6 +71,8 @@ clang, cuda, intel):
 However as stated it is not possible to combine these
 mappings with padding, blocking or some other desired more complex mappings.
 
+.. _label-tree-mapping:
+
 LLAMA tree mapping
 ^^^^^^^^^^^^^^^^^^
 

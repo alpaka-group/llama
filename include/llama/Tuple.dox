@@ -1,0 +1,302 @@
+/* Copyright 2018 Alexander Matthes
+ *
+ * This file is part of LLAMA.
+ *
+ * LLAMA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * LLAMA is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with LLAMA.  If not, see <www.gnu.org/licenses/>.
+ */
+
+#pragma once
+#include "preprocessor/macros.hpp"
+
+namespace llama
+{
+
+/** Tuple class like `std::tuple` but suitable for use with offloading devices
+ *  like GPUs and extended with some (for LLAMA) useful methods.
+ * \tparam T_Elements... tuple elements, may be empty
+ */
+template< typename... T_Elements >
+struct Tuple
+{
+    /// first element of the tuple
+    using FirstElement = Tuple < TheFirstElement >;
+    /// tuple with the remaining elements
+    using RestTuple = Tuple< RemainingElements... >;
+
+    LLAMA_FN_HOST_ACC_INLINE
+    Tuple() = default;
+
+    /** Creates the tuple with the given elements.
+     * \param elements elements to initialize the tuple
+     */
+    LLAMA_FN_HOST_ACC_INLINE
+    Tuple( T_Elements const ... elements );
+
+    /** Creates the tuple with the given first element and another already
+     *  existing tuple concatenated at the end.
+     * \param first new first element of the tuple
+     * \param rest tuple to concatenate
+     */
+    LLAMA_FN_HOST_ACC_INLINE
+    Tuple(
+        FirstElement const first,
+        RestTuple const rest
+    );
+
+    /// the first element (if existing)
+    FirstElement first;
+    /// the rest tuple (may be empty or not existing at all for an empty tuple)
+    RestTuple rest;
+};
+
+/** Create a tuple for a given list of elements, which are added. Has the
+ *  advantage that the tuple type doesn't need to be written down, but can be
+ *  concluded from the function parameters, e.g.
+ *  `auto myTuple = makeTuple( 23, 13.37, std::size_t(42) )` instaed of
+ *  the error-prone
+ *  `Tuple< int, double, std::size_t > myTuple( 23, 13.37, std::size_t(42) )`.
+ * \tparam T_Elements... Types for the tuple. Will probably concluded from the
+ *  function call parameters (template argument deduction).
+ * \param elements elements to have in the returned tuple
+ * \return the created tuple
+ */
+template< typename... T_Elements >
+LLAMA_FN_HOST_ACC_INLINE
+auto
+makeTuple( T_Elements... elements )
+-> decltype( internal::MakeTupleImpl< T_Elements...>()( elements... ) )
+{
+    return internal::MakeTupleImpl< T_Elements...>()( elements... );
+}
+
+/** Returns the type of an element in a tuple
+ * \tparam T_Tuple tuple type
+ * \tparam T_pos position of the element
+ * \return the type
+ */
+template<
+    typename T_Tuple,
+    std::size_t T_pos
+>
+using GetTupleType = typename internal::GetTupleTypeImpl<
+    T_Tuple,
+    T_pos
+>::type;
+
+/** Returns an element in a tuple
+ * \tparam T_pos position of the element
+ * \tparam T_Tuple tuple type, probably indirectly given with template argument
+ *  deduction
+ * \param tuple the tuple to get the element of
+ * \return a copy of the element
+ */
+template<
+    std::size_t T_pos,
+    typename T_Tuple
+>
+LLAMA_FN_HOST_ACC_INLINE
+auto
+getTupleElement( T_Tuple const & tuple )
+-> GetTupleType<
+    T_Tuple,
+    T_pos
+>
+{
+    return internal::GetTupleElementImpl<
+        T_Tuple,
+        T_pos
+    >()( tuple );
+}
+
+/** Returns a const reference to an element in a tuple
+ * \tparam T_pos position of the element
+ * \tparam T_Tuple tuple type, probably indirectly given with template argument
+ *  deduction
+ * \param tuple the tuple to get the element of
+ * \return a const reference to the element
+ */
+template<
+    std::size_t T_pos,
+    typename T_Tuple
+>
+LLAMA_FN_HOST_ACC_INLINE
+auto
+getTupleElementRef( T_Tuple const & tuple )
+-> GetTupleType<
+    T_Tuple,
+    T_pos
+> const &
+{
+    return internal::GetTupleElementImpl<
+        T_Tuple,
+        T_pos
+    >()( tuple );
+}
+
+/** Returns the size of a tuple.
+ * \tparam T_Tuple the tuple type
+ */
+template< ttypename T_Tuple >
+struct SizeOfTuple
+{
+    /// the size of the tuple
+    static constexpr std::size_t value;
+};
+
+/** Returns the tuple type of the concatenation of two tuples
+ * \tparam T_Tuple1 type of the first tuple
+ * \tparam T_Tuple2 type of the second tuple
+ */
+template<
+    typename T_Tuple1,
+    typename T_Tuple2
+>
+using TupleCatType = typename internal::TupleCatTypeImpl<
+    T_Tuple1,
+    T_Tuple2
+>::type;
+
+/** Concatenates two tuples to a new tuple containing the elements of both.
+ * \tparam T_Tuple1 type of the first tuple, probably indirectly given as
+ *  template argument deduction
+ * \tparam T_Tuple2 type of the second tuple, probably indirectly given as
+ *  template argument deduction
+ * \param t1 first tuple
+ * \param t2 second tuple
+ * \return new tuple with element of both input tuples
+ */
+template<
+    typename T_Tuple1,
+    typename T_Tuple2
+>
+LLAMA_FN_HOST_ACC_INLINE
+auto
+tupleCat(
+    T_Tuple1 const t1,
+    T_Tuple2 const t2
+)
+-> decltype(
+    internal::TupleCatImpl<
+        T_Tuple1,
+        T_Tuple2
+    >()(
+        t1,
+        t2
+    )
+)
+{
+    return internal::TupleCatImpl<
+        T_Tuple1,
+        T_Tuple2
+    >()(
+        t1,
+        t2
+    );
+}
+
+/** Creates a copy of a tuple with one element replaced by another.
+ * \tparam T_pos position of element to change
+ * \tparam T_Tuple type of input tuple
+ * \tparam T_Replacement new type of element at replaced position
+ * \param tuple tuple in which an element shall be replaced
+ * \param replacement new element for the returned tuple
+ * \return new tuple with same size but maybe new type and replaced element
+ */
+template<
+    std::size_t T_pos,
+    typename T_Tuple,
+    typename T_Replacement
+>
+LLAMA_FN_HOST_ACC_INLINE
+auto
+tupleReplace(
+    T_Tuple const tuple,
+    T_Replacement const replacement
+)
+-> decltype(
+    internal::TupleReplaceImpl<
+        T_pos,
+        T_Tuple,
+        T_Replacement
+    >()(
+        tuple,
+        replacement
+    )
+)
+{
+    return internal::TupleReplaceImpl<
+        T_pos,
+        T_Tuple,
+        T_Replacement
+    >()(
+        tuple,
+        replacement
+    );
+}
+
+/** Applies a functor for every element of a tuple and creating a new tuple with
+ *  the result of the element transformations.
+ * \tparam T_Tuple tuple type
+ * \tparam T_Functor Functor type. The functor needs to implement an
+ *  `operator()` with one template parameter and one parameter of this type
+ *  being the current element, which returns some new element of any type.
+ * \param tuple the tuple
+ * \param functor the functor
+ * \returns a new tuple of the same size but maybe different type
+ */
+template<
+    typename T_Tuple,
+    typename T_Functor
+>
+LLAMA_FN_HOST_ACC_INLINE
+auto
+tupleTransform(
+    T_Tuple const tuple,
+    T_Functor const functor
+)
+-> decltype(
+    internal::TupleTransform<
+        T_Tuple,
+        T_Functor
+    >()(
+        tuple,
+        functor
+    )
+)
+{
+    return internal::TupleTransform<
+        T_Tuple,
+        T_Functor
+    >()(
+        tuple,
+        functor
+    );
+}
+
+/** Returns a new tuple without the very first element. Does only work for
+ *  tuples with at least one element.
+ * \tparam T_Tuple tuple type
+ * \param tuple the tuple
+ * \return new tuple without first element
+ */
+template< typename T_Tuple >
+LLAMA_FN_HOST_ACC_INLINE
+auto
+tupleRest( T_Tuple const tuple )
+-> decltype( internal::TupleRestImpl< T_Tuple >()( tuple ) )
+{
+    return internal::TupleRestImpl< T_Tuple >()( tuple );
+}
+
+} // namespace llama

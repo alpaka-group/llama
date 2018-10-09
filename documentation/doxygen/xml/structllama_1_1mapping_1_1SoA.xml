@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="41" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="41" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="54" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="54" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="structllama_1_1mapping_1_1SoA_1ad1174ec4efb3029b90b349fc195bc2f2" prot="public" static="no">
         <type>T_DatumDomain</type>
@@ -44,7 +44,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="42" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="42" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="55" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="55" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-static-attrib">
@@ -60,7 +60,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="43" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="43" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="56" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="56" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-attrib">
@@ -75,7 +75,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="93" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="93" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="107" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="107" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structllama_1_1mapping_1_1SoA_1a5001bcbf313ef78602ef03b31faf3211" prot="public" static="no" mutable="no">
         <type>std::size_t const</type>
@@ -88,7 +88,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="94" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="94" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="108" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="108" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -104,10 +104,18 @@
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-        </detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>size of the user domain </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="46" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="46" bodyend="51"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="60" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="60" bodyend="65"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1mapping_1_1SoA_1aed1d09ddbef76753026406f6ba2bec2a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -120,7 +128,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="53" column="1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="67" column="1"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1mapping_1_1SoA_1a03e5790007b2dfd1c3fc6fa2094efe0d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -136,7 +144,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="54" column="1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="68" column="1"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1mapping_1_1SoA_1a692fb7f2e00a5773c02ba2922c882910" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -152,7 +160,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="55" column="1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="69" column="1"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1mapping_1_1SoA_1a0a4b5cf7167ba021f68339e1faffa934" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -165,7 +173,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="56" column="1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="70" column="1"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1mapping_1_1SoA_1a6ab13b91c2acfbc8cc7eff049b223e2a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>auto</type>
@@ -182,7 +190,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="60" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="60" bodyend="64"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="74" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="74" bodyend="78"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1mapping_1_1SoA_1ab4eec882393d333c4f5c0d539962e2e6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -206,7 +214,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="69" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="69" bodyend="82"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="83" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="83" bodyend="96"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1mapping_1_1SoA_1aa99c13fb3948a200dd243d4e89063bd3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -230,14 +238,44 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="88" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="88" bodyend="92"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="102" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="102" bodyend="106"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
-    </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="40" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="39" bodyend="95"/>
+<para>Struct of array mapping which can be used for creating a <ref refid="structllama_1_1View" kindref="compound">View</ref> with a <ref refid="structllama_1_1Factory" kindref="compound">Factory</ref>. For the interface details see <ref refid="structllama_1_1Factory" kindref="compound">Factory</ref>. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_UserDomain</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>type of the user domain </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_DatumDomain</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>type of the datum domain </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_LinearizeUserDomainAdressFunctor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Defines how the user domain should be linearized, e.g. C like with the last dimension being the &quot;fast&quot; one (<ref refid="structllama_1_1LinearizeUserDomainAdress" kindref="compound">LinearizeUserDomainAdress</ref>, default) or Fortran like with the first dimension being the &quot;fast&quot; one (<ref refid="structllama_1_1LinearizeUserDomainAdressLikeFortran" kindref="compound">LinearizeUserDomainAdressLikeFortran</ref>). </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_ExtentUserDomainAdressFunctor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Defines how the size of the view shall be created. Should fit for <computeroutput>T_LinearizeUserDomainAdressFunctor</computeroutput>. Only right now implemented and default value is <ref refid="structllama_1_1ExtentUserDomainAdress" kindref="compound">ExtentUserDomainAdress</ref>. </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="see"><para><ref refid="structllama_1_1mapping_1_1AoS" kindref="compound">AoS</ref> </para></simplesect>
+</para>    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" line="53" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/SoA.hpp" bodystart="52" bodyend="109"/>
     <listofallmembers>
       <member refid="structllama_1_1mapping_1_1SoA_1aea27f3b99fd5804e1580035b27eebc95" prot="public" virt="non-virtual"><scope>llama::mapping::SoA</scope><name>blobCount</name></member>
       <member refid="structllama_1_1mapping_1_1SoA_1ad1174ec4efb3029b90b349fc195bc2f2" prot="public" virt="non-virtual"><scope>llama::mapping::SoA</scope><name>DatumDomain</name></member>

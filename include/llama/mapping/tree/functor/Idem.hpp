@@ -32,6 +32,10 @@ namespace tree
 namespace functor
 {
 
+/** Functor for \ref tree::Mapping. Does nothing with the mapping tree at all
+ *  (basically implemented for testing purposes).
+ * \see tree::Mapping
+ */
 struct Idem
 {
     template< typename T_Tree >

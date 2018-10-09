@@ -5,59 +5,47 @@
     <includes refid="TreeElement_8hpp" local="yes">TreeElement.hpp</includes>
     <includedby refid="Mapping_8hpp" local="yes">/home/alexander/develop/work/llama/include/llama/mapping/tree/Mapping.hpp</includedby>
     <incdepgraph>
-      <node id="389">
-        <label>boost/predef.h</label>
-      </node>
-      <node id="384">
+      <node id="377">
         <label>TreeElement.hpp</label>
         <link refid="TreeElement_8hpp"/>
-        <childnode refid="385" relation="include">
+        <childnode refid="378" relation="include">
         </childnode>
-        <childnode refid="386" relation="include">
+        <childnode refid="379" relation="include">
         </childnode>
-        <childnode refid="387" relation="include">
-        </childnode>
-      </node>
-      <node id="387">
-        <label>../../Tuple.hpp</label>
-        <link refid="Tuple_8hpp"/>
-        <childnode refid="388" relation="include">
+        <childnode refid="380" relation="include">
         </childnode>
       </node>
-      <node id="385">
+      <node id="378">
         <label>cstddef</label>
       </node>
-      <node id="388">
-        <label>preprocessor/macros.hpp</label>
-        <link refid="macros_8hpp"/>
-        <childnode refid="389" relation="include">
-        </childnode>
+      <node id="380">
+        <label>../../Tuple.hpp</label>
       </node>
-      <node id="386">
+      <node id="379">
         <label>type_traits</label>
       </node>
-      <node id="383">
+      <node id="376">
         <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/MergeFunctors.hpp</label>
         <link refid="MergeFunctors_8hpp"/>
-        <childnode refid="384" relation="include">
+        <childnode refid="377" relation="include">
         </childnode>
       </node>
     </incdepgraph>
     <invincdepgraph>
-      <node id="392">
+      <node id="383">
         <label>/home/alexander/develop/work/llama/include/llama/llama.hpp</label>
         <link refid="llama_8hpp"/>
       </node>
-      <node id="391">
+      <node id="382">
         <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/Mapping.hpp</label>
         <link refid="Mapping_8hpp"/>
-        <childnode refid="392" relation="include">
+        <childnode refid="383" relation="include">
         </childnode>
       </node>
-      <node id="390">
+      <node id="381">
         <label>/home/alexander/develop/work/llama/include/llama/mapping/tree/MergeFunctors.hpp</label>
         <link refid="MergeFunctors_8hpp"/>
-        <childnode refid="391" relation="include">
+        <childnode refid="382" relation="include">
         </childnode>
       </node>
     </invincdepgraph>
@@ -280,12 +268,12 @@
 <codeline lineno="204"><highlight class="normal">&gt;</highlight></codeline>
 <codeline lineno="205"><highlight class="normal">{</highlight></codeline>
 <codeline lineno="206" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl_3_01T__Tree_00_01Tuple_3_01_4_4_1a7d1a3d561fc924dcd6a6d271efce33fd" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl_3_01T__Tree_00_01Tuple_3_01_4_4_1a7d1a3d561fc924dcd6a6d271efce33fd" kindref="member">Result</ref><sp/>=<sp/>T_Tree;</highlight></codeline>
-<codeline lineno="207" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl_3_01T__Tree_00_01Tuple_3_01_4_4_1ad33d36d10f97b8807ee1389ff2660c84" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1Tuple_3_01_4" kindref="compound">TreeOperationList</ref><sp/>=<sp/><ref refid="structllama_1_1Tuple_3_01_4" kindref="compound">Tuple&lt; &gt;</ref>;</highlight></codeline>
+<codeline lineno="207" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl_3_01T__Tree_00_01Tuple_3_01_4_4_1ad33d36d10f97b8807ee1389ff2660c84" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1Tuple" kindref="compound">TreeOperationList</ref><sp/>=<sp/><ref refid="structllama_1_1Tuple" kindref="compound">Tuple&lt; &gt;</ref>;</highlight></codeline>
 <codeline lineno="208"><highlight class="normal"></highlight></codeline>
 <codeline lineno="209"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
 <codeline lineno="210" refid="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl_3_01T__Tree_00_01Tuple_3_01_4_4_1a029edfea392873b675d38f22ec41f79d" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl_3_01T__Tree_00_01Tuple_3_01_4_4_1a029edfea392873b675d38f22ec41f79d" kindref="member">MergeFunctorsImpl</ref>(</highlight></codeline>
 <codeline lineno="211"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Tree<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>&amp;,</highlight></codeline>
-<codeline lineno="212"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1Tuple_3_01_4" kindref="compound">TreeOperationList</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>&amp;<sp/>treeOperationList</highlight></codeline>
+<codeline lineno="212"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1Tuple" kindref="compound">TreeOperationList</ref><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>&amp;<sp/>treeOperationList</highlight></codeline>
 <codeline lineno="213"><highlight class="normal"><sp/><sp/><sp/><sp/>)<sp/>{<sp/>}</highlight></codeline>
 <codeline lineno="214"><highlight class="normal"></highlight></codeline>
 <codeline lineno="215"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>

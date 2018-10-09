@@ -23,7 +23,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="149" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="163" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="156" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="170" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -50,14 +50,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="167" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="167" bodyend="188"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="174" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="174" bodyend="195"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="148" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="142" bodyend="189"/>
+    <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" line="155" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/functor/MoveRTDown.hpp" bodystart="149" bodyend="196"/>
     <listofallmembers>
       <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown_1_1BasicCoordToResultCoordImpl_3_01T__Tr3e25492a965bc94903b1a9a9f50f487b_1a5d3ad677fdfd607cff2447b67f39e313" prot="public" virt="non-virtual"><scope>llama::mapping::tree::functor::MoveRTDown::BasicCoordToResultCoordImpl&lt; T_Tree, Tuple&lt; &gt;, T_BasicCoord, void &gt;</scope><name>operator()</name></member>
       <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown_1_1BasicCoordToResultCoordImpl_3_01T__Tr3e25492a965bc94903b1a9a9f50f487b_1a3020e93a6a1aa1e65a6f7f474d5c64a4" prot="public" virt="non-virtual"><scope>llama::mapping::tree::functor::MoveRTDown::BasicCoordToResultCoordImpl&lt; T_Tree, Tuple&lt; &gt;, T_BasicCoord, void &gt;</scope><name>ResultCoord</name></member>

@@ -196,10 +196,19 @@ namespace internal
 
 } // namespace internal
 
+/** Allocator to allocate memory for a \ref View in the \ref Factory using
+ *  `std::vector` in the background. Meaning every time the view is copied, the
+ *  whole memory is copied. When the view is moved, the move operator of
+ *  `std::vector` is used.
+ * \tparam T_alignment aligment of the memory used by `std::vector`, default
+ *  value is 64
+ */
 template< std::size_t T_alignment = 64u>
 struct Vector
 {
+    /// primary type of this allocator is `unsigned char`
     using PrimType = unsigned char;
+    /// blob type of this allocator is `std::vector< PrimType >`
     using BlobType = std::vector<
         PrimType,
         internal::AlignmentAllocator<
@@ -207,6 +216,7 @@ struct Vector
             T_alignment
         >
     >;
+    /// the optional allocation parameter is ignored
     using Parameter = int; //not used
 
     LLAMA_NO_HOST_ACC_WARNING

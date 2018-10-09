@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="namespacecommon_1_1allocator" kind="namespace" language="C++">
+    <compoundname>common::allocator</compoundname>
+    <innerclass refid="structcommon_1_1allocator_1_1Alpaka" prot="public">common::allocator::Alpaka</innerclass>
+    <innerclass refid="structcommon_1_1allocator_1_1AlpakaMirror" prot="public">common::allocator::AlpakaMirror</innerclass>
+    <innerclass refid="structcommon_1_1allocator_1_1AlpakaShared" prot="public">common::allocator::AlpakaShared</innerclass>
+    <innernamespace refid="namespacecommon_1_1allocator_1_1internal">common::allocator::internal</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/examples/common/AlpakaAllocator.hpp" line="7" column="1"/>
+  </compounddef>
+</doxygen>

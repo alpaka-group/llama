@@ -33,6 +33,11 @@ namespace tree
 namespace functor
 {
 
+/** Functor for \ref tree::Mapping. Moves all run time parts to the leaves, so
+ *  in fact another struct of array implementation -- but with the possibility
+ *  to add further finetuning of the mapping in the future.
+ * \see tree::Mapping
+ */
 struct LeafOnlyRT
 {
     template<
@@ -97,7 +102,7 @@ struct LeafOnlyRT
         -> TreeElementConst<
                 typename T_Tree::Identifier,
                 decltype(
-                    tupleForEach(
+                    tupleTransform(
                         tree.childs,
                         ChildFunctor{ runtime * tree.count }
                     )
@@ -109,7 +114,7 @@ struct LeafOnlyRT
             return TreeElementConst<
                 typename T_Tree::Identifier,
                 decltype(
-                    tupleForEach(
+                    tupleTransform(
                         tree.childs,
                         functor
                     )
@@ -117,7 +122,7 @@ struct LeafOnlyRT
                 1
             >
             (
-                tupleForEach(
+                tupleTransform(
                     tree.childs,
                     functor
                 )

@@ -2,7 +2,6 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
   <compounddef id="structllama_1_1internal_1_1TupleForEach_3_01Tuple_3_01T__LastElement_01_4_00_01T__Functor_01_4" kind="struct" language="C++" prot="public">
     <compoundname>llama::internal::TupleForEach&lt; Tuple&lt; T_LastElement &gt;, T_Functor &gt;</compoundname>
-    <includes refid="Tuple_8hpp" local="no">Tuple.hpp</includes>
     <templateparamlist>
       <param>
         <type>typename T_LastElement</type>
@@ -23,7 +22,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="698" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="698" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.dox" line="390" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.dox" bodystart="390" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -46,14 +45,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="701" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="701" bodyend="708"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/Tuple.dox" line="393" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.dox" bodystart="393" bodyend="400"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" line="697" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.hpp" bodystart="692" bodyend="709"/>
+    <location file="/home/alexander/develop/work/llama/include/llama/Tuple.dox" line="389" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/Tuple.dox" bodystart="384" bodyend="401"/>
     <listofallmembers>
       <member refid="structllama_1_1internal_1_1TupleForEach_3_01Tuple_3_01T__LastElement_01_4_00_01T__Functor_01_4_1a23ffb57b5b223274ba0db806f840dd76" prot="public" virt="non-virtual"><scope>llama::internal::TupleForEach&lt; Tuple&lt; T_LastElement &gt;, T_Functor &gt;</scope><name>operator()</name></member>
       <member refid="structllama_1_1internal_1_1TupleForEach_3_01Tuple_3_01T__LastElement_01_4_00_01T__Functor_01_4_1a392e60b050bf6db512847e50365caf5f" prot="public" virt="non-virtual"><scope>llama::internal::TupleForEach&lt; Tuple&lt; T_LastElement &gt;, T_Functor &gt;</scope><name>T_Tuple</name></member>

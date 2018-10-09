@@ -45,6 +45,13 @@ namespace mapping
 namespace tree
 {
 
+/** Free describable mapping which can be used for creating a \ref View with a
+ *  \ref Factory. For the interface details see \ref Factory.
+ * \tparam T_UserDomain type of the user domain
+ * \tparam T_DatumDomain type of the datum domain
+ * \tparam T_TreeOperationList the type of a compile time list (\ref Tuple) used
+ *  to define the tree mapping
+ */
 template<
     typename T_UserDomain,
     typename T_DatumDomain,
@@ -73,6 +80,13 @@ struct Mapping
     MergedFunctors const mergedFunctors;
     ResultTree const resultTree;
 
+    /** The initalization of this mapping needs a \ref Tuple of operations
+     *  which describe the mapping in detail. Please have a look at the user
+     *  documenation for more information.
+     * \param size the size of the user domain
+     * \param treeOperationList list of operations to define the mapping, e.g.
+     *  \ref functor::Idem, \ref functor::LeafOnlyRT, \ref functor::MoveRTDown.
+     */
     LLAMA_FN_HOST_ACC_INLINE
     Mapping(
         UserDomain const size,

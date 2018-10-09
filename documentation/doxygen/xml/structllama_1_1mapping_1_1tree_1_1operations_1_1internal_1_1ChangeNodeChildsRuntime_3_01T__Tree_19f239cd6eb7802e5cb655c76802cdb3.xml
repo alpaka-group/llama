@@ -14,9 +14,9 @@
       </param>
     </templateparamlist>
       <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntime_3_01T__Tree_19f239cd6eb7802e5cb655c76802cdb3_1a2e63093e53d8c6b0104f3c0706cb19b2" prot="public" static="no">
-        <type><ref refid="structllama_1_1mapping_1_1tree_1_1TreeElement" kindref="compound">TreeElement</ref>&lt; typename T_Tree::Identifier, decltype(<ref refid="namespacellama_1a87f3fb778741ba559e6b686b86e90686" kindref="member">tupleForEach</ref>(T_Tree().childs, <ref refid="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntimeFunctor" kindref="compound">ChangeNodeChildsRuntimeFunctor</ref>&lt; T_Operation &gt;{ 0 })) &gt;</type>
-        <definition>using llama::mapping::tree::operations::internal::ChangeNodeChildsRuntime&lt; T_Tree, T_Operation, Tuple&lt; &gt;, typename T_Tree::IsTreeElementWithChilds &gt;::ResultType =  TreeElement&lt; typename T_Tree::Identifier, decltype( tupleForEach( T_Tree().childs, ChangeNodeChildsRuntimeFunctor&lt; T_Operation &gt;{ 0 } ) ) &gt;</definition>
+      <memberdef kind="typedef" id="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntime_3_01T__Tree_19f239cd6eb7802e5cb655c76802cdb3_1aa5d73d90d61645dbebd1093941b3d155" prot="public" static="no">
+        <type><ref refid="structllama_1_1mapping_1_1tree_1_1TreeElement" kindref="compound">TreeElement</ref>&lt; typename T_Tree::Identifier, decltype(<ref refid="namespacellama_1adbf27665d0e9554d16aa97932d9720c2" kindref="member">tupleTransform</ref>(T_Tree().childs, <ref refid="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntimeFunctor" kindref="compound">ChangeNodeChildsRuntimeFunctor</ref>&lt; T_Operation &gt;{ 0 })) &gt;</type>
+        <definition>using llama::mapping::tree::operations::internal::ChangeNodeChildsRuntime&lt; T_Tree, T_Operation, Tuple&lt; &gt;, typename T_Tree::IsTreeElementWithChilds &gt;::ResultType =  TreeElement&lt; typename T_Tree::Identifier, decltype( tupleTransform( T_Tree().childs, ChangeNodeChildsRuntimeFunctor&lt; T_Operation &gt;{ 0 } ) ) &gt;</definition>
         <argsstring></argsstring>
         <name>ResultType</name>
         <briefdescription>
@@ -58,7 +58,7 @@
     <location file="/home/alexander/develop/work/llama/include/llama/mapping/tree/operations/ChangeNodeRuntime.hpp" line="394" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/mapping/tree/operations/ChangeNodeRuntime.hpp" bodystart="388" bodyend="422"/>
     <listofallmembers>
       <member refid="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntime_3_01T__Tree_19f239cd6eb7802e5cb655c76802cdb3_1a5276430b8fd3c0dc15285c66f29d8462" prot="public" virt="non-virtual"><scope>llama::mapping::tree::operations::internal::ChangeNodeChildsRuntime&lt; T_Tree, T_Operation, Tuple&lt; &gt;, typename T_Tree::IsTreeElementWithChilds &gt;</scope><name>operator()</name></member>
-      <member refid="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntime_3_01T__Tree_19f239cd6eb7802e5cb655c76802cdb3_1a2e63093e53d8c6b0104f3c0706cb19b2" prot="public" virt="non-virtual"><scope>llama::mapping::tree::operations::internal::ChangeNodeChildsRuntime&lt; T_Tree, T_Operation, Tuple&lt; &gt;, typename T_Tree::IsTreeElementWithChilds &gt;</scope><name>ResultType</name></member>
+      <member refid="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntime_3_01T__Tree_19f239cd6eb7802e5cb655c76802cdb3_1aa5d73d90d61645dbebd1093941b3d155" prot="public" virt="non-virtual"><scope>llama::mapping::tree::operations::internal::ChangeNodeChildsRuntime&lt; T_Tree, T_Operation, Tuple&lt; &gt;, typename T_Tree::IsTreeElementWithChilds &gt;</scope><name>ResultType</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

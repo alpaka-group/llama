@@ -30,6 +30,41 @@
     <member refid="structllama_1_1allocator_1_1internal_1_1AlignmentAllocator_1a2f74bcec8f8dcdfc34008841066192f7" kind="function"><name>operator!=</name></member>
     <member refid="structllama_1_1allocator_1_1internal_1_1AlignmentAllocator_1a30b8c978cbec72619e185c3433d11c84" kind="function"><name>operator==</name></member>
   </compound>
+  <compound refid="structcommon_1_1allocator_1_1Alpaka" kind="struct"><name>common::allocator::Alpaka</name>
+    <member refid="structcommon_1_1allocator_1_1Alpaka_1a69f809e5188d6d2570e88661434421a4" kind="typedef"><name>DevAcc</name></member>
+    <member refid="structcommon_1_1allocator_1_1Alpaka_1a98bb0b62aafe6840a0f7be48d065ba26" kind="typedef"><name>Size</name></member>
+    <member refid="structcommon_1_1allocator_1_1Alpaka_1a35e8c77e7d9559473dfcf65e8bb8cd0f" kind="typedef"><name>BufferType</name></member>
+    <member refid="structcommon_1_1allocator_1_1Alpaka_1a2c8a31a76ffde16ee246f0e7bcec3be6" kind="typedef"><name>BlobType</name></member>
+    <member refid="structcommon_1_1allocator_1_1Alpaka_1a31665d764dc604c08676d51b035daffe" kind="typedef"><name>PrimType</name></member>
+    <member refid="structcommon_1_1allocator_1_1Alpaka_1a58e2a97ee756dcb57cfbefbe1dcb07cc" kind="typedef"><name>Parameter</name></member>
+    <member refid="structcommon_1_1allocator_1_1Alpaka_1ad04d2a1ece71752dddc16de9aaa0f7dd" kind="function"><name>allocate</name></member>
+  </compound>
+  <compound refid="structcommon_1_1allocator_1_1internal_1_1AlpakaAccessor" kind="struct"><name>common::allocator::internal::AlpakaAccessor</name>
+    <member refid="structcommon_1_1allocator_1_1internal_1_1AlpakaAccessor_1aefeec8a406b1163b41c9970943d27101" kind="typedef"><name>PrimType</name></member>
+    <member refid="structcommon_1_1allocator_1_1internal_1_1AlpakaAccessor_1afbb5e7c1abfb994cad6453f89f7686c8" kind="typedef"><name>BlobType</name></member>
+    <member refid="structcommon_1_1allocator_1_1internal_1_1AlpakaAccessor_1a76b396a2c71942ac7f567bbc1c6718d5" kind="variable"><name>buffer</name></member>
+    <member refid="structcommon_1_1allocator_1_1internal_1_1AlpakaAccessor_1a75ffda7f88d2a55a9d681dbbebb4a51c" kind="function"><name>AlpakaAccessor</name></member>
+    <member refid="structcommon_1_1allocator_1_1internal_1_1AlpakaAccessor_1a00f1091eceb99baae3dbcc229f2d9e69" kind="function"><name>AlpakaAccessor</name></member>
+    <member refid="structcommon_1_1allocator_1_1internal_1_1AlpakaAccessor_1af488781899dce62dd4f86b73255d6a9f" kind="function"><name>AlpakaAccessor</name></member>
+    <member refid="structcommon_1_1allocator_1_1internal_1_1AlpakaAccessor_1a781aeeeee49be462cda4edb7f328c876" kind="function"><name>~AlpakaAccessor</name></member>
+    <member refid="structcommon_1_1allocator_1_1internal_1_1AlpakaAccessor_1a4f9ab35276c8450763530e6c6bae06d2" kind="function"><name>operator[]</name></member>
+    <member refid="structcommon_1_1allocator_1_1internal_1_1AlpakaAccessor_1ac60e894d4bbcf58442bcc4aab2d1d4f0" kind="function"><name>operator[]</name></member>
+  </compound>
+  <compound refid="structcommon_1_1allocator_1_1AlpakaMirror" kind="struct"><name>common::allocator::AlpakaMirror</name>
+    <member refid="structcommon_1_1allocator_1_1AlpakaMirror_1ac8400d127c0f745ae8972168934debb5" kind="typedef"><name>MirroredAllocator</name></member>
+    <member refid="structcommon_1_1allocator_1_1AlpakaMirror_1a265904aa1b4dfd136ebd768a7cff2bac" kind="typedef"><name>BlobType</name></member>
+    <member refid="structcommon_1_1allocator_1_1AlpakaMirror_1aaa7877b5e488ca36eb16276f3c8b9a06" kind="typedef"><name>PrimType</name></member>
+    <member refid="structcommon_1_1allocator_1_1AlpakaMirror_1aee8fd14eb08fb606545b00c4283868a5" kind="typedef"><name>MirroredView</name></member>
+    <member refid="structcommon_1_1allocator_1_1AlpakaMirror_1aad4da2b0334fa3556655df0dfeff22a4" kind="typedef"><name>Parameter</name></member>
+    <member refid="structcommon_1_1allocator_1_1AlpakaMirror_1a911e503a610662befce85867fca501e4" kind="function"><name>allocate</name></member>
+  </compound>
+  <compound refid="structcommon_1_1allocator_1_1AlpakaShared" kind="struct"><name>common::allocator::AlpakaShared</name>
+    <member refid="structcommon_1_1allocator_1_1AlpakaShared_1ac3945530f7b8229a1c665c5d3105c079" kind="typedef"><name>BlobType</name></member>
+    <member refid="structcommon_1_1allocator_1_1AlpakaShared_1a2afddc8df57256a6f43e6916ddde0562" kind="typedef"><name>PrimType</name></member>
+    <member refid="structcommon_1_1allocator_1_1AlpakaShared_1aefffd36241f10a57e1a5a821ebc8690c" kind="typedef"><name>Parameter</name></member>
+    <member refid="structcommon_1_1allocator_1_1AlpakaShared_1ab6e16c91640b36c7e7c90f4d5494ba3e" kind="typedef"><name>AllocType</name></member>
+    <member refid="structcommon_1_1allocator_1_1AlpakaShared_1a9849d367f4ce996c06bc6104a79543b5" kind="function"><name>allocate</name></member>
+  </compound>
   <compound refid="structllama_1_1mapping_1_1AoS" kind="struct"><name>llama::mapping::AoS</name>
     <member refid="structllama_1_1mapping_1_1AoS_1aeaa14121b6e26b7be9306eda76ab9fb1" kind="typedef"><name>UserDomain</name></member>
     <member refid="structllama_1_1mapping_1_1AoS_1ae5d0c4673ed69f021273d80707042c54" kind="typedef"><name>DatumDomain</name></member>
@@ -132,8 +167,8 @@
     <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1_1BasicToResultImpl_1aed695bf7482b096ba0fb3491d1688ccd" kind="function"><name>operator()</name></member>
   </compound>
   <compound refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1_1BasicToResultImpl_3_01T__Tree_00_01tycdd910677a5629f3d2911b482860232d" kind="struct"><name>llama::mapping::tree::functor::LeafOnlyRT::BasicToResultImpl&lt; T_Tree, typename T_Tree::IsTreeElementWithChilds &gt;</name>
-    <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1_1BasicToResultImpl_3_01T__Tree_00_01tycdd910677a5629f3d2911b482860232d_1a45325a9e98cc38a64615a285be4bc437" kind="function"><name>operator()</name></member>
-    <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1_1BasicToResultImpl_3_01T__Tree_00_01tycdd910677a5629f3d2911b482860232d_1a6b749abb5773f45d8e3590d9551ae0ff" kind="function"><name>TreeElementConst</name></member>
+    <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1_1BasicToResultImpl_3_01T__Tree_00_01tycdd910677a5629f3d2911b482860232d_1a406367c1499002d0e950bf726badf490" kind="function"><name>operator()</name></member>
+    <member refid="structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT_1_1BasicToResultImpl_3_01T__Tree_00_01tycdd910677a5629f3d2911b482860232d_1a4068ce7c9a261d00b94bac1feb3744bb" kind="function"><name>TreeElementConst</name></member>
   </compound>
   <compound refid="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntime" kind="struct"><name>llama::mapping::tree::operations::internal::ChangeNodeChildsRuntime</name>
   </compound>
@@ -142,7 +177,7 @@
     <member refid="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntime_3_01T__Tree_12068393b0afc588a197e0c682762ac3_1a104d52b220630f00aa1973a758dd4173" kind="function"><name>operator()</name></member>
   </compound>
   <compound refid="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntime_3_01T__Tree_19f239cd6eb7802e5cb655c76802cdb3" kind="struct"><name>llama::mapping::tree::operations::internal::ChangeNodeChildsRuntime&lt; T_Tree, T_Operation, Tuple&lt; &gt;, typename T_Tree::IsTreeElementWithChilds &gt;</name>
-    <member refid="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntime_3_01T__Tree_19f239cd6eb7802e5cb655c76802cdb3_1a2e63093e53d8c6b0104f3c0706cb19b2" kind="typedef"><name>ResultType</name></member>
+    <member refid="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntime_3_01T__Tree_19f239cd6eb7802e5cb655c76802cdb3_1aa5d73d90d61645dbebd1093941b3d155" kind="typedef"><name>ResultType</name></member>
     <member refid="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntime_3_01T__Tree_19f239cd6eb7802e5cb655c76802cdb3_1a5276430b8fd3c0dc15285c66f29d8462" kind="function"><name>operator()</name></member>
   </compound>
   <compound refid="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntime_3_01T__Tree_91500ff63b28d1d5514e1f7dfae0333c" kind="struct"><name>llama::mapping::tree::operations::internal::ChangeNodeChildsRuntime&lt; T_Tree, T_Operation, Tuple&lt; &gt;, typename T_Tree::IsTreeElementWithoutChilds &gt;</name>
@@ -238,16 +273,16 @@
   <compound refid="structllama_1_1ForEach_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4" kind="struct"><name>llama::ForEach&lt; T_DatumDomain, DatumCoord&lt; T_coords... &gt;&gt;</name>
     <member refid="structllama_1_1ForEach_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4_1a8b208e010bdd15c5aa98a27297da29c5" kind="function"><name>apply</name></member>
   </compound>
-  <compound refid="structllama_1_1GetCoordFromUIDImpl" kind="struct"><name>llama::GetCoordFromUIDImpl</name>
+  <compound refid="structllama_1_1internal_1_1GetCoordFromUIDImpl" kind="struct"><name>llama::internal::GetCoordFromUIDImpl</name>
   </compound>
-  <compound refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01typenaa9912ddeb798da71d2b7162da7df24fe" kind="struct"><name>llama::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, typename std::enable_if&lt; !std::is_same&lt; T_FirstUID, GetDatumElementUID&lt; boost::mp11::mp_first&lt; T_DatumDomain &gt; &gt; &gt;::value &gt;::type, T_FirstUID, T_UID... &gt;</name>
-    <member refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01typenaa9912ddeb798da71d2b7162da7df24fe_1a31c9d8b2e635a7c4e716ed183c149390" kind="typedef"><name>type</name></member>
+  <compound refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__posdbb55aaccff22d6a4c9d108b6b1d84bf" kind="struct"><name>llama::internal::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, typename std::enable_if&lt; !std::is_same&lt; T_FirstUID, GetDatumElementUID&lt; boost::mp11::mp_first&lt; T_DatumDomain &gt; &gt; &gt;::value &gt;::type, T_FirstUID, T_UID... &gt;</name>
+    <member refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__posdbb55aaccff22d6a4c9d108b6b1d84bf_1a17408ae3bcf04affca32bf62bac89792" kind="typedef"><name>type</name></member>
   </compound>
-  <compound refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01typenad970eea1a4cb24aad0368256d66b0279" kind="struct"><name>llama::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, typename std::enable_if&lt; std::is_same&lt; T_FirstUID, GetDatumElementUID&lt; boost::mp11::mp_first&lt; T_DatumDomain &gt; &gt; &gt;::value &gt;::type, T_FirstUID, T_UID... &gt;</name>
-    <member refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01typenad970eea1a4cb24aad0368256d66b0279_1aef920e0714b0914b3adbf9d94c84d780" kind="typedef"><name>type</name></member>
+  <compound refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos42aa3c321c620142ac61091bca4cc194" kind="struct"><name>llama::internal::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, typename std::enable_if&lt; std::is_same&lt; T_FirstUID, GetDatumElementUID&lt; boost::mp11::mp_first&lt; T_DatumDomain &gt; &gt; &gt;::value &gt;::type, T_FirstUID, T_UID... &gt;</name>
+    <member refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos42aa3c321c620142ac61091bca4cc194_1a5510931690011081fc140009c7a010f6" kind="typedef"><name>type</name></member>
   </compound>
-  <compound refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01void_01_4" kind="struct"><name>llama::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, void &gt;</name>
-    <member refid="structllama_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01void_01_4_1a339dd458ccebfcd650b40ba83408b67d" kind="typedef"><name>type</name></member>
+  <compound refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01void_01_4" kind="struct"><name>llama::internal::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, void &gt;</name>
+    <member refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01void_01_4_1ab35d0402118fc43f7c3eb09ceb816a04" kind="typedef"><name>type</name></member>
   </compound>
   <compound refid="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1GetNode" kind="struct"><name>llama::mapping::tree::operations::internal::GetNode</name>
     <member refid="structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1GetNode_1a65b20cf4471a57acf1d7bb8f6903809e" kind="function"><name>operator()</name></member>
@@ -263,37 +298,19 @@
     <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1GetTreeBlobByteImpl_3_01T__Tree_00_01Tuple_3_01T__LastCoord_01_4_4_1ab238372e32b797c4ab371ffcf4a43b78" kind="typedef"><name>TreeCoord</name></member>
     <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1GetTreeBlobByteImpl_3_01T__Tree_00_01Tuple_3_01T__LastCoord_01_4_4_1af43241f4a2173e2998d024b404bcb274" kind="function"><name>operator()</name></member>
   </compound>
-  <compound refid="structllama_1_1internal_1_1GetTupleElementImpl" kind="struct"><name>llama::internal::GetTupleElementImpl</name>
+  <compound refid="structllama_1_1internal_1_1GetTypeFromDatumCoordImpl" kind="struct"><name>llama::internal::GetTypeFromDatumCoordImpl</name>
   </compound>
-  <compound refid="structllama_1_1internal_1_1GetTupleElementImpl_3_01Tuple_3_01T__First_00_01T__Rest_8_8_8_01_4_00_010_01_4" kind="struct"><name>llama::internal::GetTupleElementImpl&lt; Tuple&lt; T_First, T_Rest... &gt;, 0 &gt;</name>
-    <member refid="structllama_1_1internal_1_1GetTupleElementImpl_3_01Tuple_3_01T__First_00_01T__Rest_8_8_8_01_4_00_010_01_4_1a98b06e407b7a2427d4508cf0240ec747" kind="typedef"><name>TupleType</name></member>
-    <member refid="structllama_1_1internal_1_1GetTupleElementImpl_3_01Tuple_3_01T__First_00_01T__Rest_8_8_8_01_4_00_010_01_4_1abcf6c3fbaaae5f4a5b62a585806c7db0" kind="function"><name>operator()</name></member>
+  <compound refid="structllama_1_1internal_1_1GetTypeFromDatumCoordImpl_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4" kind="struct"><name>llama::internal::GetTypeFromDatumCoordImpl&lt; T_DatumDomain, DatumCoord&lt; T_coords... &gt;&gt;</name>
+    <member refid="structllama_1_1internal_1_1GetTypeFromDatumCoordImpl_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4_1a759eb7a37e5bccdb237ad2d3c57a0926" kind="typedef"><name>type</name></member>
   </compound>
-  <compound refid="structllama_1_1internal_1_1GetTupleElementImpl_3_01Tuple_3_01T__First_00_01T__Rest_8_8_8_01_4_00_01T__pos_01_4" kind="struct"><name>llama::internal::GetTupleElementImpl&lt; Tuple&lt; T_First, T_Rest... &gt;, T_pos &gt;</name>
-    <member refid="structllama_1_1internal_1_1GetTupleElementImpl_3_01Tuple_3_01T__First_00_01T__Rest_8_8_8_01_4_00_01T__pos_01_4_1a1842ca8a53b054f64546042a43cc93d0" kind="typedef"><name>TupleType</name></member>
-    <member refid="structllama_1_1internal_1_1GetTupleElementImpl_3_01Tuple_3_01T__First_00_01T__Rest_8_8_8_01_4_00_01T__pos_01_4_1a5063623bdc160e0fa237db3a913144da" kind="function"><name>operator()</name></member>
+  <compound refid="structllama_1_1internal_1_1GetTypeImpl" kind="struct"><name>llama::internal::GetTypeImpl</name>
   </compound>
-  <compound refid="structllama_1_1internal_1_1GetTupleTypeImpl" kind="struct"><name>llama::internal::GetTupleTypeImpl</name>
+  <compound refid="structllama_1_1internal_1_1GetTypeImpl_3_01T__DatumDomain_01_4" kind="struct"><name>llama::internal::GetTypeImpl&lt; T_DatumDomain &gt;</name>
+    <member refid="structllama_1_1internal_1_1GetTypeImpl_3_01T__DatumDomain_01_4_1af0f37dea012034c1c961db2e1201b7f2" kind="typedef"><name>type</name></member>
   </compound>
-  <compound refid="structllama_1_1internal_1_1GetTupleTypeImpl_3_01Tuple_3_01T__First_00_01T__Rest_8_8_8_01_4_00_010_01_4" kind="struct"><name>llama::internal::GetTupleTypeImpl&lt; Tuple&lt; T_First, T_Rest... &gt;, 0 &gt;</name>
-    <member refid="structllama_1_1internal_1_1GetTupleTypeImpl_3_01Tuple_3_01T__First_00_01T__Rest_8_8_8_01_4_00_010_01_4_1a48655a8bdd66d0b4cd4d1ad70bc21106" kind="typedef"><name>type</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1GetTupleTypeImpl_3_01Tuple_3_01T__First_00_01T__Rest_8_8_8_01_4_00_01T__pos_01_4" kind="struct"><name>llama::internal::GetTupleTypeImpl&lt; Tuple&lt; T_First, T_Rest... &gt;, T_pos &gt;</name>
-    <member refid="structllama_1_1internal_1_1GetTupleTypeImpl_3_01Tuple_3_01T__First_00_01T__Rest_8_8_8_01_4_00_01T__pos_01_4_1a5aa76292a19dbb1b4c70bdb1ec3ebf06" kind="typedef"><name>type</name></member>
-  </compound>
-  <compound refid="structllama_1_1GetTypeFromDatumCoordImpl" kind="struct"><name>llama::GetTypeFromDatumCoordImpl</name>
-  </compound>
-  <compound refid="structllama_1_1GetTypeFromDatumCoordImpl_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4" kind="struct"><name>llama::GetTypeFromDatumCoordImpl&lt; T_DatumDomain, DatumCoord&lt; T_coords... &gt;&gt;</name>
-    <member refid="structllama_1_1GetTypeFromDatumCoordImpl_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4_1ac1e5cfd0a96c2830829229d36b42e25e" kind="typedef"><name>type</name></member>
-  </compound>
-  <compound refid="structllama_1_1GetTypeImpl" kind="struct"><name>llama::GetTypeImpl</name>
-  </compound>
-  <compound refid="structllama_1_1GetTypeImpl_3_01T__DatumDomain_01_4" kind="struct"><name>llama::GetTypeImpl&lt; T_DatumDomain &gt;</name>
-    <member refid="structllama_1_1GetTypeImpl_3_01T__DatumDomain_01_4_1a14c6d86319235f7848940dcfe5a4d346" kind="typedef"><name>type</name></member>
-  </compound>
-  <compound refid="structllama_1_1GetTypeImpl_3_01T__DatumDomain_00_01T__firstDatumDomainCoord_00_01T__datumDomainCoords_8_8_8_01_4" kind="struct"><name>llama::GetTypeImpl&lt; T_DatumDomain, T_firstDatumDomainCoord, T_datumDomainCoords... &gt;</name>
-    <member refid="structllama_1_1GetTypeImpl_3_01T__DatumDomain_00_01T__firstDatumDomainCoord_00_01T__datumDomainCoords_8_8_8_01_4_1a9203f9136fecb0243a3001f1e11d619e" kind="typedef"><name>_DateElement</name></member>
-    <member refid="structllama_1_1GetTypeImpl_3_01T__DatumDomain_00_01T__firstDatumDomainCoord_00_01T__datumDomainCoords_8_8_8_01_4_1a3b966e004884a8efe44e9499bcf8f09f" kind="typedef"><name>type</name></member>
+  <compound refid="structllama_1_1internal_1_1GetTypeImpl_3_01T__DatumDomain_00_01T__firstDatumDomainCoord_00_01T__datumDomainCoords_8_8_8_01_4" kind="struct"><name>llama::internal::GetTypeImpl&lt; T_DatumDomain, T_firstDatumDomainCoord, T_datumDomainCoords... &gt;</name>
+    <member refid="structllama_1_1internal_1_1GetTypeImpl_3_01T__DatumDomain_00_01T__firstDatumDomainCoord_00_01T__datumDomainCoords_8_8_8_01_4_1ac12fc46dc7c05796f909e4f593456a0e" kind="typedef"><name>_DateElement</name></member>
+    <member refid="structllama_1_1internal_1_1GetTypeImpl_3_01T__DatumDomain_00_01T__firstDatumDomainCoord_00_01T__datumDomainCoords_8_8_8_01_4_1a908250a842f059852f11294096378995" kind="typedef"><name>type</name></member>
   </compound>
   <compound refid="structllama_1_1internal_1_1GetUIDfromDatumCoord" kind="struct"><name>llama::internal::GetUIDfromDatumCoord</name>
   </compound>
@@ -403,17 +420,6 @@
   </compound>
   <compound refid="structllama_1_1LinearizeUserDomainAdressLikeFortran_3_011_01_4" kind="struct"><name>llama::LinearizeUserDomainAdressLikeFortran&lt; 1 &gt;</name>
     <member refid="structllama_1_1LinearizeUserDomainAdressLikeFortran_3_011_01_4_1a0e601b5e7c0faffbc10f00769d78f4d0" kind="function"><name>operator()</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1MakeTupleImpl" kind="struct"><name>llama::internal::MakeTupleImpl</name>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1MakeTupleImpl_3_01_4" kind="struct"><name>llama::internal::MakeTupleImpl&lt; &gt;</name>
-    <member refid="structllama_1_1internal_1_1MakeTupleImpl_3_01_4_1a403c46453d21c0194a413ede2aa81730" kind="function"><name>operator()</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1MakeTupleImpl_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4" kind="struct"><name>llama::internal::MakeTupleImpl&lt; T_FirstElement, T_Elements... &gt;</name>
-    <member refid="structllama_1_1internal_1_1MakeTupleImpl_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a8decd9772fa649edc243d16d39c44990" kind="function"><name>operator()</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1MakeTupleImpl_3_01T__LastElement_01_4" kind="struct"><name>llama::internal::MakeTupleImpl&lt; T_LastElement &gt;</name>
-    <member refid="structllama_1_1internal_1_1MakeTupleImpl_3_01T__LastElement_01_4_1af455f203cd05b87e285ba2690c4b43d8" kind="function"><name>operator()</name></member>
   </compound>
   <compound refid="structllama_1_1mapping_1_1tree_1_1Mapping" kind="struct"><name>llama::mapping::tree::Mapping</name>
     <member refid="structllama_1_1mapping_1_1tree_1_1Mapping_1a954f16c7d5c4f7907248f557eed7df7f" kind="typedef"><name>UserDomain</name></member>
@@ -532,8 +538,8 @@
   <compound refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType" kind="struct"><name>llama::mapping::tree::internal::ReduceElementType</name>
     <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_1a32019db38e750a35a662b63cb67106c4" kind="function"><name>operator()</name></member>
   </compound>
-  <compound refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_3_01T__Tree_00_01T__InnerOp_00_03287471f85c98255f4533344ab5e51ce" kind="struct"><name>llama::mapping::tree::internal::ReduceElementType&lt; T_Tree, T_InnerOp, T_OuterOp, T_LeafFunctor, typename std::enable_if&lt; TupleLength&lt; typename T_Tree::Type &gt;::value==1 &gt;::type &gt;</name>
-    <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_3_01T__Tree_00_01T__InnerOp_00_03287471f85c98255f4533344ab5e51ce_1a0ed60827acf107480124dedf4bb741fd" kind="function"><name>operator()</name></member>
+  <compound refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_3_01T__Tree_00_01T__InnerOp_00_0b1c2b86922fe895368378ced982b946c" kind="struct"><name>llama::mapping::tree::internal::ReduceElementType&lt; T_Tree, T_InnerOp, T_OuterOp, T_LeafFunctor, typename std::enable_if&lt; SizeOfTuple&lt; typename T_Tree::Type &gt;::value==1 &gt;::type &gt;</name>
+    <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_3_01T__Tree_00_01T__InnerOp_00_0b1c2b86922fe895368378ced982b946c_1a9dbb0ba96bf16e4ad38ec38dbfb07314" kind="function"><name>operator()</name></member>
   </compound>
   <compound refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD" kind="struct"><name>llama::mapping::tree::internal::ReplaceDEwithTEinDD</name>
     <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_1a2e1406fbf34d90f188f5e15d6deed1e8" kind="typedef"><name>type</name></member>
@@ -583,9 +589,7 @@
     <member refid="structllama_1_1mapping_1_1tree_1_1SizeOfFunctor_1ac81fb31f72ed822dc4295f934db47ee1" kind="function"><name>operator()</name></member>
   </compound>
   <compound refid="structllama_1_1SizeOfTuple" kind="struct"><name>llama::SizeOfTuple</name>
-  </compound>
-  <compound refid="structllama_1_1SizeOfTuple_3_01Tuple_3_01T__Elements_8_8_8_01_4_01_4" kind="struct"><name>llama::SizeOfTuple&lt; Tuple&lt; T_Elements... &gt; &gt;</name>
-    <member refid="structllama_1_1SizeOfTuple_3_01Tuple_3_01T__Elements_8_8_8_01_4_01_4_1a83c1554e300665cc75b139570b285144" kind="variable"><name>value</name></member>
+    <member refid="structllama_1_1SizeOfTuple_1ad870fc723c135ee6c3c5a65498db7320" kind="variable"><name>value</name></member>
   </compound>
   <compound refid="structllama_1_1mapping_1_1SoA" kind="struct"><name>llama::mapping::SoA</name>
     <member refid="structllama_1_1mapping_1_1SoA_1ae4685a598f005d1f77c68b9ff8887ad9" kind="typedef"><name>UserDomain</name></member>
@@ -701,90 +705,20 @@
     <member refid="structllama_1_1mapping_1_1tree_1_1TreePopFrontChild_3_01TreeElementConst_3_01T__Identifier_00_01T__Type_00_01T__count_01_4_4_1a571fcfc5c8afe0d79234a8898dd2febd" kind="function"><name>operator()</name></member>
   </compound>
   <compound refid="structllama_1_1Tuple" kind="struct"><name>llama::Tuple</name>
+    <member refid="structllama_1_1Tuple_1ab8837ba339f9b728318791dc45497369" kind="typedef"><name>FirstElement</name></member>
+    <member refid="structllama_1_1Tuple_1ada3c49261d16fb88fce9e872a2ba5059" kind="typedef"><name>RestTuple</name></member>
+    <member refid="structllama_1_1Tuple_1a25a3b0efac8043b6e9b03c35762e7768" kind="variable"><name>first</name></member>
+    <member refid="structllama_1_1Tuple_1aa829a9bc2f609cb145c4b7b3eb357e33" kind="variable"><name>rest</name></member>
+    <member refid="structllama_1_1Tuple_1ae0bcaf7c9e80e794a3b89bc6154ea1ff" kind="function"><name>Tuple</name></member>
+    <member refid="structllama_1_1Tuple_1a9f2c7e3039d67ece5c26cc659d55a823" kind="function"><name>Tuple</name></member>
+    <member refid="structllama_1_1Tuple_1a886e6b930f2fb074c34da82ea2703fc7" kind="function"><name>Tuple</name></member>
   </compound>
-  <compound refid="structllama_1_1Tuple_3_01_4" kind="struct"><name>llama::Tuple&lt; &gt;</name>
-  </compound>
-  <compound refid="structllama_1_1Tuple_3_01T__FirstElement_01_4" kind="struct"><name>llama::Tuple&lt; T_FirstElement &gt;</name>
-    <member refid="structllama_1_1Tuple_3_01T__FirstElement_01_4_1abcdbc473c15594fa626f36ba32bb328d" kind="typedef"><name>FirstElement</name></member>
-    <member refid="structllama_1_1Tuple_3_01T__FirstElement_01_4_1acedc2652dd986a7a523a4eca2e6018d4" kind="typedef"><name>RestTuple</name></member>
-    <member refid="structllama_1_1Tuple_3_01T__FirstElement_01_4_1a27b4fc45d6c805b02cc4cc3064c34745" kind="variable"><name>first</name></member>
-    <member refid="structllama_1_1Tuple_3_01T__FirstElement_01_4_1aac18b6f83a27f3eb84472d3ba8d8c740" kind="function"><name>Tuple</name></member>
-    <member refid="structllama_1_1Tuple_3_01T__FirstElement_01_4_1a93204a1eeb2697c1995e401e3ee46bc7" kind="function"><name>Tuple</name></member>
-  </compound>
-  <compound refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4" kind="struct"><name>llama::Tuple&lt; T_FirstElement, T_Elements... &gt;</name>
-    <member refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a4e20dd2456d00722405d95e561a066ca" kind="typedef"><name>FirstElement</name></member>
-    <member refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a6c635cd5818f0ea11bd58750e6c28208" kind="typedef"><name>RestTuple</name></member>
-    <member refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1afd671958d6081816dc13557b00ea6ca8" kind="variable"><name>first</name></member>
-    <member refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a18d67b25b1f4dac138717071ed844939" kind="variable"><name>rest</name></member>
-    <member refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1acf70e7a6b957db629aa9326f7045163a" kind="function"><name>Tuple</name></member>
-    <member refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a197b53d2b0baebed32df5d9bcdb23c7b" kind="function"><name>Tuple</name></member>
-    <member refid="structllama_1_1Tuple_3_01T__FirstElement_00_01T__Elements_8_8_8_01_4_1a26658a47b3c84f7bba37ececcb23670c" kind="function"><name>Tuple</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1TupleCatImpl" kind="struct"><name>llama::internal::TupleCatImpl</name>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1TupleCatImpl_3_01Tuple_3_01_4_00_01T__Tuple2_01_4" kind="struct"><name>llama::internal::TupleCatImpl&lt; Tuple&lt; &gt;, T_Tuple2 &gt;</name>
-    <member refid="structllama_1_1internal_1_1TupleCatImpl_3_01Tuple_3_01_4_00_01T__Tuple2_01_4_1a0c9a076803004975767622306896926f" kind="typedef"><name>Result</name></member>
-    <member refid="structllama_1_1internal_1_1TupleCatImpl_3_01Tuple_3_01_4_00_01T__Tuple2_01_4_1ae189446914bff1e534b8cdef2d2c11a6" kind="function"><name>operator()</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1TupleCatImpl_3_01Tuple_3_01T__Tuple1Elem_01_4_00_01Tuple_3_01T__Tuple2Elems_8_8_8_01_4_4" kind="struct"><name>llama::internal::TupleCatImpl&lt; Tuple&lt; T_Tuple1Elem &gt;, Tuple&lt; T_Tuple2Elems... &gt;&gt;</name>
-    <member refid="structllama_1_1internal_1_1TupleCatImpl_3_01Tuple_3_01T__Tuple1Elem_01_4_00_01Tuple_3_01T__Tuple2Elems_8_8_8_01_4_4_1a51ac234bc8078bd958279488929c1dcc" kind="typedef"><name>Result</name></member>
-    <member refid="structllama_1_1internal_1_1TupleCatImpl_3_01Tuple_3_01T__Tuple1Elem_01_4_00_01Tuple_3_01T__Tuple2Elems_8_8_8_01_4_4_1a5e502c756b0540a692d940af50b06509" kind="function"><name>operator()</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1TupleCatImpl_3_01Tuple_3_01T__Tuple1First_00_01T__Tuple1Rest_8_8_8_01_4_00_01T__Tuple2_01_4" kind="struct"><name>llama::internal::TupleCatImpl&lt; Tuple&lt; T_Tuple1First, T_Tuple1Rest... &gt;, T_Tuple2 &gt;</name>
-    <member refid="structllama_1_1internal_1_1TupleCatImpl_3_01Tuple_3_01T__Tuple1First_00_01T__Tuple1Rest_8_8_8_01_4_00_01T__Tuple2_01_4_1a0c0565f6596b5d08a0df888854747a4b" kind="typedef"><name>Tuple1</name></member>
-    <member refid="structllama_1_1internal_1_1TupleCatImpl_3_01Tuple_3_01T__Tuple1First_00_01T__Tuple1Rest_8_8_8_01_4_00_01T__Tuple2_01_4_1a653164886c3e7c7fdcca7ebbf1bc3f90" kind="typedef"><name>Result</name></member>
-    <member refid="structllama_1_1internal_1_1TupleCatImpl_3_01Tuple_3_01T__Tuple1First_00_01T__Tuple1Rest_8_8_8_01_4_00_01T__Tuple2_01_4_1a37672285a30733ac6b9adc84401874f6" kind="function"><name>operator()</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1TupleCatTypeImpl" kind="struct"><name>llama::internal::TupleCatTypeImpl</name>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1TupleCatTypeImpl_3_01Tuple_3_01_4_00_01T__Tuple2_01_4" kind="struct"><name>llama::internal::TupleCatTypeImpl&lt; Tuple&lt; &gt;, T_Tuple2 &gt;</name>
-    <member refid="structllama_1_1internal_1_1TupleCatTypeImpl_3_01Tuple_3_01_4_00_01T__Tuple2_01_4_1aa935c6b74a1e40b9d7770ecdb7ccd0d8" kind="typedef"><name>type</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1TupleCatTypeImpl_3_01Tuple_3_01T__Tuple1Elem_01_4_00_01Tuple_3_01T__Tuple2Elems_8_8_8_01_4_4" kind="struct"><name>llama::internal::TupleCatTypeImpl&lt; Tuple&lt; T_Tuple1Elem &gt;, Tuple&lt; T_Tuple2Elems... &gt;&gt;</name>
-    <member refid="structllama_1_1internal_1_1TupleCatTypeImpl_3_01Tuple_3_01T__Tuple1Elem_01_4_00_01Tuple_3_01T__Tuple2Elems_8_8_8_01_4_4_1acfbebe707b16e1c34d048f7f8e9f5649" kind="typedef"><name>type</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1TupleCatTypeImpl_3_01Tuple_3_01T__Tuple1First_00_01T__Tuple1Rest_8_8_8_01_4_00_01T__Tuple2_01_4" kind="struct"><name>llama::internal::TupleCatTypeImpl&lt; Tuple&lt; T_Tuple1First, T_Tuple1Rest... &gt;, T_Tuple2 &gt;</name>
-    <member refid="structllama_1_1internal_1_1TupleCatTypeImpl_3_01Tuple_3_01T__Tuple1First_00_01T__Tuple1Rest_8_8_8_01_4_00_01T__Tuple2_01_4_1a0da39d2f24677eb2dcd76bf87a84f728" kind="typedef"><name>type</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1TupleForEach" kind="struct"><name>llama::internal::TupleForEach</name>
-    <member refid="structllama_1_1internal_1_1TupleForEach_1a1168aacdca4648c72996b157cc3daa75" kind="function"><name>operator()</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1TupleForEach_3_01Tuple_3_01_4_00_01T__Functor_01_4" kind="struct"><name>llama::internal::TupleForEach&lt; Tuple&lt; &gt;, T_Functor &gt;</name>
-    <member refid="structllama_1_1internal_1_1TupleForEach_3_01Tuple_3_01_4_00_01T__Functor_01_4_1a8ea1e4b35fa030c5f04d5f6947b7fa65" kind="typedef"><name>T_Tuple</name></member>
-    <member refid="structllama_1_1internal_1_1TupleForEach_3_01Tuple_3_01_4_00_01T__Functor_01_4_1a4175190ee8bc88ff193f4f410d07ce90" kind="function"><name>operator()</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1TupleForEach_3_01Tuple_3_01T__LastElement_01_4_00_01T__Functor_01_4" kind="struct"><name>llama::internal::TupleForEach&lt; Tuple&lt; T_LastElement &gt;, T_Functor &gt;</name>
-    <member refid="structllama_1_1internal_1_1TupleForEach_3_01Tuple_3_01T__LastElement_01_4_00_01T__Functor_01_4_1a392e60b050bf6db512847e50365caf5f" kind="typedef"><name>T_Tuple</name></member>
-    <member refid="structllama_1_1internal_1_1TupleForEach_3_01Tuple_3_01T__LastElement_01_4_00_01T__Functor_01_4_1a23ffb57b5b223274ba0db806f840dd76" kind="function"><name>operator()</name></member>
-  </compound>
-  <compound refid="structllama_1_1TupleLength" kind="struct"><name>llama::TupleLength</name>
-  </compound>
-  <compound refid="structllama_1_1TupleLength_3_01Tuple_3_01T__Childs_8_8_8_01_4_01_4" kind="struct"><name>llama::TupleLength&lt; Tuple&lt; T_Childs... &gt; &gt;</name>
-    <member refid="structllama_1_1TupleLength_3_01Tuple_3_01T__Childs_8_8_8_01_4_01_4_1aab8bc6939af18789077b408a622b37b7" kind="variable"><name>value</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1TupleReplaceImpl" kind="struct"><name>llama::internal::TupleReplaceImpl</name>
-    <member refid="structllama_1_1internal_1_1TupleReplaceImpl_1abfcb5ccb2afc0cc742547c132818d0f8" kind="function"><name>operator()</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01T__Tuple_00_01T__Replacement_01_4" kind="struct"><name>llama::internal::TupleReplaceImpl&lt; 0, T_Tuple, T_Replacement &gt;</name>
-    <member refid="structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01T__Tuple_00_01T__Replacement_01_4_1a97baaef660d16ac98c6a4ea614f90ad5" kind="function"><name>operator()</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01T__OneElement_01_4_00_01T__Replacement_01_4" kind="struct"><name>llama::internal::TupleReplaceImpl&lt; 0, Tuple&lt; T_OneElement &gt;, T_Replacement &gt;</name>
-    <member refid="structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01T__OneElement_01_4_00_01T__Replacement_01_4_1a1470552d2790b81b247f1369703e1053" kind="typedef"><name>T_Tuple</name></member>
-    <member refid="structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01T__OneElement_01_4_00_01T__Replacement_01_4_1ade9da4de89bc2dacf2ab1f12e15d9ddd" kind="function"><name>operator()</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1TupleRestImpl" kind="struct"><name>llama::internal::TupleRestImpl</name>
-    <member refid="structllama_1_1internal_1_1TupleRestImpl_1a58bf9b0de59e9d618e2abb9d2d40f99e" kind="function"><name>operator()</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1TupleRestImpl_3_01Tuple_3_01T__OneElement_01_4_01_4" kind="struct"><name>llama::internal::TupleRestImpl&lt; Tuple&lt; T_OneElement &gt; &gt;</name>
-    <member refid="structllama_1_1internal_1_1TupleRestImpl_3_01Tuple_3_01T__OneElement_01_4_01_4_1acbb8d9c2f40a6e9e196482e19ca177d7" kind="typedef"><name>T_Tuple</name></member>
-    <member refid="structllama_1_1internal_1_1TupleRestImpl_3_01Tuple_3_01T__OneElement_01_4_01_4_1a3ed8168dde5f3c59d6254567b53b9ea2" kind="function"><name>operator()</name></member>
+  <compound refid="structllama_1_1internal_1_1CoordIsIncluded_1_1type_01_4" kind="struct"><name>llama::internal::CoordIsIncluded::type &gt;</name>
+    <member refid="structllama_1_1internal_1_1CoordIsIncluded_1_1type_01_4_1a4c124e04441f388134fef0e470662add" kind="variable"><name>value</name></member>
   </compound>
   <compound refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_1_1type_01_4" kind="struct"><name>llama::mapping::tree::internal::ReduceElementType::type &gt;</name>
     <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_1_1type_01_4_1a3f0be92e08fbaf63a8f66ac9df56fa5d" kind="typedef"><name>IterTree</name></member>
     <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_1_1type_01_4_1a74e0d38ffc91d367bee104bce7028385" kind="function"><name>operator()</name></member>
-  </compound>
-  <compound refid="structllama_1_1internal_1_1CoordIsIncluded_1_1type_01_4" kind="struct"><name>llama::internal::CoordIsIncluded::type &gt;</name>
-    <member refid="structllama_1_1internal_1_1CoordIsIncluded_1_1type_01_4_1a4c124e04441f388134fef0e470662add" kind="variable"><name>value</name></member>
   </compound>
   <compound refid="structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord" kind="struct"><name>llama::mapping::tree::internal::UserDomainToTreeCoord</name>
     <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord_1a8b7da0f25cb2c472958671d4f0e2aff4" kind="function"><name>operator()</name></member>
@@ -926,15 +860,21 @@
   <compound refid="structllama_1_1internal_1_1ZeroSequenceHelper_3_010_00_01T__vals_8_8_8_01_4" kind="struct"><name>llama::internal::ZeroSequenceHelper&lt; 0, T_vals... &gt;</name>
     <member refid="structllama_1_1internal_1_1ZeroSequenceHelper_3_010_00_01T__vals_8_8_8_01_4_1acd2bb813570b04c13d61cc45e80c7af2" kind="typedef"><name>type</name></member>
   </compound>
+  <compound refid="namespacecommon" kind="namespace"><name>common</name>
+  </compound>
+  <compound refid="namespacecommon_1_1allocator" kind="namespace"><name>common::allocator</name>
+  </compound>
+  <compound refid="namespacecommon_1_1allocator_1_1internal" kind="namespace"><name>common::allocator::internal</name>
+  </compound>
   <compound refid="namespacellama" kind="namespace"><name>llama</name>
     <member refid="namespacellama_1a970fe0ecd42b66d0c5da72fa94574f70" kind="typedef"><name>DatumArray</name></member>
     <member refid="namespacellama_1abe9622c2b7b194250a33818e71bb5bed" kind="typedef"><name>DA</name></member>
     <member refid="namespacellama_1a554a797d5fff9070b3c61d7584dc15d5" kind="typedef"><name>GetDatumElementType</name></member>
     <member refid="namespacellama_1a29d5fdaf4a5f23aab704f936a53fd68c" kind="typedef"><name>GetDatumElementUID</name></member>
     <member refid="namespacellama_1a0497c2913f9ebb2cea9c97ddc35be349" kind="typedef"><name>OneOnStackFactory</name></member>
-    <member refid="namespacellama_1a3a9ff09beed7470e5c174d2c34e88aab" kind="typedef"><name>GetCoordFromUID</name></member>
-    <member refid="namespacellama_1aeef46491193f44d7be8ba279d053e78f" kind="typedef"><name>GetType</name></member>
-    <member refid="namespacellama_1ae6136ff96220af66f833a8de8aa0b6a1" kind="typedef"><name>GetTypeFromDatumCoord</name></member>
+    <member refid="namespacellama_1a3953132518a1c5bd14cbacc8107975db" kind="typedef"><name>GetCoordFromUID</name></member>
+    <member refid="namespacellama_1a9b77530642d73f0464c605e6140391cb" kind="typedef"><name>GetType</name></member>
+    <member refid="namespacellama_1a22362d58c566945f0f8178e2af1b0013" kind="typedef"><name>GetTypeFromDatumCoord</name></member>
     <member refid="namespacellama_1afc1dd86868706ba5f5ee39ec0c588534" kind="typedef"><name>GetUID</name></member>
     <member refid="namespacellama_1a8bdcf08fed3eadcfee16599a180465ec" kind="typedef"><name>MakeIntegerSequence</name></member>
     <member refid="namespacellama_1a607d767acccd7d568d02f2899fb1aa66" kind="typedef"><name>MakeZeroSequence</name></member>
@@ -954,7 +894,7 @@
     <member refid="namespacellama_1a23a39f92cc91dff13e56e2d51a679e64" kind="function"><name>getTupleElementRef</name></member>
     <member refid="namespacellama_1aba28a2d9095426f0fb28d4b5371f34a7" kind="function"><name>tupleCat</name></member>
     <member refid="namespacellama_1af366894d19a93f206cac71e5e6ca7a8d" kind="function"><name>tupleReplace</name></member>
-    <member refid="namespacellama_1a87f3fb778741ba559e6b686b86e90686" kind="function"><name>tupleForEach</name></member>
+    <member refid="namespacellama_1adbf27665d0e9554d16aa97932d9720c2" kind="function"><name>tupleTransform</name></member>
     <member refid="namespacellama_1a4405d1ede3fad1a18b749f84bab1f37e" kind="function"><name>tupleRest</name></member>
     <member refid="namespacellama_1aa8b49851209fef972feb72ca58cdffae" kind="function"><name>userDomainZero</name></member>
     <member refid="namespacellama_1a02d68d889af6fecb6f30c8b8fa059e56" kind="function"><name>BOOST_PP_CAT</name></member>
@@ -1056,6 +996,8 @@
   </compound>
   <compound refid="namespacestd" kind="namespace"><name>std</name>
   </compound>
+  <compound refid="AlpakaAllocator_8hpp" kind="file"><name>AlpakaAllocator.hpp</name>
+  </compound>
   <compound refid="SharedPtr_8hpp" kind="file"><name>SharedPtr.hpp</name>
   </compound>
   <compound refid="Stack_8hpp" kind="file"><name>Stack.hpp</name>
@@ -1138,7 +1080,7 @@
     <member refid="macros_8hpp_1a100b24418a95976a001b8fac8a676b02" kind="define"><name>LLAMA_IF_RELEASE</name></member>
     <member refid="macros_8hpp_1a84febcf0c516314cf4cc6923dccd5b2a" kind="define"><name>LLAMA_DEREFERENCE</name></member>
   </compound>
-  <compound refid="Tuple_8hpp" kind="file"><name>Tuple.hpp</name>
+  <compound refid="Tuple_8dox" kind="file"><name>Tuple.dox</name>
   </compound>
   <compound refid="Types_8hpp" kind="file"><name>Types.hpp</name>
   </compound>
@@ -1159,6 +1101,10 @@
   <compound refid="VirtualView_8hpp" kind="file"><name>VirtualView.hpp</name>
   </compound>
   <compound refid="dir_69f8c169b83968a39566248a76f40acd" kind="dir"><name>/home/alexander/develop/work/llama/include/llama/allocator</name>
+  </compound>
+  <compound refid="dir_d697700341b5bc9df88e7bd81cbb1008" kind="dir"><name>/home/alexander/develop/work/llama/examples/common</name>
+  </compound>
+  <compound refid="dir_d28a4824dc47e487b107a5db32ef43c4" kind="dir"><name>/home/alexander/develop/work/llama/examples</name>
   </compound>
   <compound refid="dir_b9d2d8d9c05a29f5d67a62ac397ce678" kind="dir"><name>/home/alexander/develop/work/llama/include/llama/mapping/tree/functor</name>
   </compound>

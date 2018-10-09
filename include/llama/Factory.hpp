@@ -87,12 +87,50 @@ makeBlobArray(
 
 }; // namespace internal
 
+/** Creates views with the help of mapping and allocation functors. Should be
+ *  the preferred way to create a \ref View.
+ * \tparam T_Mapping Mapping type.
+ *  A mapping binds the user domain and datum domain and needs to expose them as
+ *  typedefs called `UserDomain` and `DatumDomain`. Furthermore it has to define
+ *  a `static constexpr` called `blobCount` with the number of needed memory
+ *  regions to allocate.
+ *  Furthermore three methods need to be defined (Note: For
+ *  working with offloading device some further annotations for these methods
+ *  are needed. Best is to have a look at \ref mapping::AoS, \ref mapping::SoA
+ *  or \ref mapping::One for the exactly implemenatation details):
+ *  - `auto getBlobSize( std::size_t ) -> std::size_t` which returns the needed
+ *    size in byte per blob
+ *  - `template< std::size_t... > auto getBlobByte( UserDomain ) -> std::size_t`
+ *    which returns the byte position for a given coordinate in the datum domain
+ *    (template parameter) and user domain (method parameter).
+ *  - `template< std::size_t... > auto getBlobNr( UserDomain ) -> std::size_t`
+ *    which returns the blob in which the byte position given by getBlobByte
+ *    resides.
+ * \tparam T_Allocator Allocator type, at default \ref allocator::Vector.
+ *  An allocator also needs to define some typedefs, namely `PrimType` which
+ *  is the raw datatype returned from the allocator (e.g. `unsigned char`),
+ *  `BlobType` which is the type returned from the allocator (can be a pointer,
+ *  a `std::shared_ptr`, an own class, you name it!) and `Parameter` which is
+ *  the (optional) allocation parameter type forwarded from the \ref Factory to
+ *  the allocator. Be aware that at the moment only an 8 bit `PrimType` is
+ *  supported.
+ *  Beside these definitions only the method
+ *  - `static inline auto allocate( std::size_t, Parameter ) -> BlobType` needs
+ *    to be implements which allocates memory and returns its self defined blob
+ *    type.
+ */
 template<
     typename T_Mapping,
     typename T_Allocator = allocator::Vector<>
 >
 struct Factory
 {
+    /** Allocates the needed memory based in the mapping and returns a view
+     * \param mapping the mapping
+     * \param allocatorParams optional allocator parameter, which may be
+     *  forwarded to the allocator
+     * \return the allocated \ref View
+     */
     LLAMA_NO_HOST_ACC_WARNING
     static
     LLAMA_FN_HOST_ACC_INLINE
@@ -122,6 +160,12 @@ struct Factory
     }
 };
 
+/** Special factory which predefines some options for getting a \ref View with
+ *  only one element laying on the stack avoiding costly allocation operations.
+ * \tparam dimension dimension of the view
+ * \tparam DatumDomain the datum domain for the one element mapping
+ * \see tempAlloc
+ */
 template<
     std::size_t dimension,
     typename DatumDomain
@@ -137,6 +181,13 @@ using OneOnStackFactory =
         >
     >;
 
+/** Uses the \ref OneOnStackFactory to allocate one (probably temporary) element
+ *  for a given dimension and dautm domain on the stack (no costly allocation).
+ * \tparam dimension dimension of the view
+ * \tparam DatumDomain the datum domain for the one element mapping
+ * \return the allocated view
+ * \see OneOnStackFactory
+ */
 template<
     std::size_t dimension,
     typename DatumDomain
