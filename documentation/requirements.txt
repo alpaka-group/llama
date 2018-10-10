@@ -1,0 +1,5 @@
+sphinx-rtd-theme
+recommonmark
+sphinx
+breathe>=4.5
+sphinxcontrib.programoutput
