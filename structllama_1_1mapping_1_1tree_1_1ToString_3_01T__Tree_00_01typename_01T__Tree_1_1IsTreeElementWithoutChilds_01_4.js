@@ -1,0 +1,5 @@
+var structllama_1_1mapping_1_1tree_1_1ToString_3_01T__Tree_00_01typename_01T__Tree_1_1IsTreeElementWithoutChilds_01_4 =
+[
+    [ "Identifier", "structllama_1_1mapping_1_1tree_1_1ToString_3_01T__Tree_00_01typename_01T__Tree_1_1IsTreeElementWithoutChilds_01_4.html#af5694457f191b8f6ef4b3056d8eb178e", null ],
+    [ "operator()", "structllama_1_1mapping_1_1tree_1_1ToString_3_01T__Tree_00_01typename_01T__Tree_1_1IsTreeElementWithoutChilds_01_4.html#aa5686d0dbef1713e1b51c842c9fd1015", null ]
+];

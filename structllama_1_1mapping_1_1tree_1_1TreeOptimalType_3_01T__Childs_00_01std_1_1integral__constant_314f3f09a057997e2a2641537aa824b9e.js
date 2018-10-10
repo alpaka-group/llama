@@ -1,0 +1,4 @@
+var structllama_1_1mapping_1_1tree_1_1TreeOptimalType_3_01T__Childs_00_01std_1_1integral__constant_314f3f09a057997e2a2641537aa824b9e =
+[
+    [ "type", "structllama_1_1mapping_1_1tree_1_1TreeOptimalType_3_01T__Childs_00_01std_1_1integral__constant_314f3f09a057997e2a2641537aa824b9e.html#add0f0c193200156345ac121bff5ed73c", null ]
+];

@@ -1,0 +1,4 @@
+var structllama_1_1DatumCoordIsSame_3_01T__First_00_01T__Second_00_01typename_01std_1_1enable__if_3_452c5e68880e1f6841403842b9e5be07 =
+[
+    [ "value", "structllama_1_1DatumCoordIsSame_3_01T__First_00_01T__Second_00_01typename_01std_1_1enable__if_3_452c5e68880e1f6841403842b9e5be07.html#ac5165fbc5b8058519c70a4b72661a4cb", null ]
+];

@@ -1,0 +1,4 @@
+var structllama_1_1GetTypeFromDatumCoordImpl_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4 =
+[
+    [ "type", "structllama_1_1GetTypeFromDatumCoordImpl_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4.html#ac1e5cfd0a96c2830829229d36b42e25e", null ]
+];

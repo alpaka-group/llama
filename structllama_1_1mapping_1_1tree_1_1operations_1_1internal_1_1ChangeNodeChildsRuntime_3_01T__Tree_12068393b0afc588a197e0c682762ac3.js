@@ -1,0 +1,5 @@
+var structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntime_3_01T__Tree_12068393b0afc588a197e0c682762ac3 =
+[
+    [ "ResultType", "structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntime_3_01T__Tree_12068393b0afc588a197e0c682762ac3.html#a822beeeec49d6dc35614770108172d11", null ],
+    [ "operator()", "structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntime_3_01T__Tree_12068393b0afc588a197e0c682762ac3.html#a104d52b220630f00aa1973a758dd4173", null ]
+];

@@ -1,0 +1,4 @@
+var structllama_1_1DatumCoordIsBigger_3_01T__First_00_01T__Second_00_01typename_01std_1_1enable__if_7a1a7cdba9a89b1c9cec4f60b192bb93 =
+[
+    [ "value", "structllama_1_1DatumCoordIsBigger_3_01T__First_00_01T__Second_00_01typename_01std_1_1enable__if_7a1a7cdba9a89b1c9cec4f60b192bb93.html#a0fd7d2d23a2c6b41af72afabcafd4a8f", null ]
+];

@@ -1,0 +1,4 @@
+var structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01_4_00_01T__DatumCoord_00_01T__IterCoord_01_4 =
+[
+    [ "value", "structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01_4_00_01T__DatumCoord_00_01T__IterCoord_01_4.html#aa61822d26322ecb480d573513c311d87", null ]
+];

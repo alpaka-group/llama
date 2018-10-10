@@ -1,0 +1,4 @@
+var structllama_1_1DatumCoordIsBigger_011_01_6_6T__First_1_1front_0A_0AT__Second_1_1front_08_01_4_1_1type_01_4 =
+[
+    [ "value", "structllama_1_1DatumCoordIsBigger_011_01_6_6T__First_1_1front_0A_0AT__Second_1_1front_08_01_4_1_1type_01_4.html#a4a17a2790fb0cdbbde2a62d44d23915a", null ]
+];

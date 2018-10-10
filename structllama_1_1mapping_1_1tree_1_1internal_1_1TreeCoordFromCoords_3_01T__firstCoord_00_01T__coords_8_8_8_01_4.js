@@ -1,0 +1,4 @@
+var structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordFromCoords_3_01T__firstCoord_00_01T__coords_8_8_8_01_4 =
+[
+    [ "type", "structllama_1_1mapping_1_1tree_1_1internal_1_1TreeCoordFromCoords_3_01T__firstCoord_00_01T__coords_8_8_8_01_4.html#a847e509ba1157ae892b82f9f5bee89a9", null ]
+];

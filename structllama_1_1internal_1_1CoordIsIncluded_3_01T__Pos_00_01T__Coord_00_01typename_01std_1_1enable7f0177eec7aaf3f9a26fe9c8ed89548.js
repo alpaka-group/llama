@@ -1,0 +1,4 @@
+var structllama_1_1internal_1_1CoordIsIncluded_3_01T__Pos_00_01T__Coord_00_01typename_01std_1_1enable7f0177eec7aaf3f9a26fe9c8ed89548 =
+[
+    [ "value", "structllama_1_1internal_1_1CoordIsIncluded_3_01T__Pos_00_01T__Coord_00_01typename_01std_1_1enable7f0177eec7aaf3f9a26fe9c8ed89548.html#a2d5d6a51e0fb844b83a5ce93c0fa9001", null ]
+];
