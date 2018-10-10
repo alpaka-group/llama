@@ -1,6 +1,7 @@
 var NAVTREE =
 [
   [ "LLAMA", "index.html", [
+    [ "LLAMA API documentation", "index.html", null ],
     [ "Namespaces", null, [
       [ "Namespace List", "namespaces.html", "namespaces" ],
       [ "Namespace Members", "namespacemembers.html", [
@@ -33,9 +34,9 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "AlpakaAllocator_8hpp.html",
-"namespacecommon.html",
-"structllama_1_1VirtualView.html#a6497f87b0ae075b3336490075305363e",
-"structllama_1_1mapping_1_1tree_1_1TreeElement.html#a67735261e49c453cfc53c8d27087d365"
+"mapping_2tree_2ForEach_8hpp_source.html",
+"structllama_1_1VirtualView.html#a3e89a9eb6efa918be4634a365c917628",
+"structllama_1_1mapping_1_1tree_1_1TreeElement.html#a4976553bfb3ab1b2bec87ce4356af15f"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

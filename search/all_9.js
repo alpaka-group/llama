@@ -2,6 +2,7 @@ var searchData=
 [
   ['allocator',['allocator',['../namespacellama_1_1allocator.html',1,'llama']]],
   ['functor',['functor',['../namespacellama_1_1mapping_1_1tree_1_1functor.html',1,'llama::mapping::tree']]],
+  ['llama_20api_20documentation',['LLAMA API documentation',['../index.html',1,'']]],
   ['internal',['internal',['../namespacellama_1_1allocator_1_1internal.html',1,'llama::allocator::internal'],['../namespacellama_1_1internal.html',1,'llama::internal'],['../namespacellama_1_1mapping_1_1tree_1_1internal.html',1,'llama::mapping::tree::internal'],['../namespacellama_1_1mapping_1_1tree_1_1operations_1_1internal.html',1,'llama::mapping::tree::operations::internal']]],
   ['lastop',['LastOp',['../structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl_3_01T__Tree_00_01Tuple_3_01T__LastOperation_01_4_4.html#aad750fe9a5bb984b0788fd75b4b54153',1,'llama::mapping::tree::internal::MergeFunctorsImpl&lt; T_Tree, Tuple&lt; T_LastOperation &gt;&gt;']]],
   ['leafonlyrt',['LeafOnlyRT',['../structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT.html',1,'llama::mapping::tree::functor']]],
