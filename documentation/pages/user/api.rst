@@ -157,6 +157,8 @@ View creation
 Factory
 ^^^^^^^
 
+.. _label-api-factory:
+
 .. doxygenstruct:: llama::Factory
    :project: LLAMA
    :members:

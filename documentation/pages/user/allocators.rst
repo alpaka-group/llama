@@ -98,7 +98,7 @@ Third party
 The allocators are not only important for giving the views fine-tuned control
 over allocation and copying overhead, but also an interface for other third
 party libraries. For use with these, the
-:ref:`developer section<label-allocators-interface>` documents the interface
+:ref:`Factory API section <label-api-factory>` documents the interface
 needed to implement.
 
 .. _label-allocators-alpaka:

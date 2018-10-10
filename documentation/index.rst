@@ -15,9 +15,10 @@ Low Level Abstraction of Memory Access
 ======================================
 
 LLAMA is a C++11 template header-only library for the abstraction of memory
-access patterns. It distinguishs between the view of the algorithm on
+access patterns. It distinguishes between the view of the algorithm on
 the memory and the real layout in the background. This enables performance
 portability for multicore, manycore and gpu application with the very same code.
+
 LLAMA is licensed under the LGPL2+.
 
 .. toctree::
@@ -37,11 +38,3 @@ LLAMA is licensed under the LGPL2+.
    pages/user/allocators
    pages/user/plans
    pages/user/api
-
-.. toctree::
-   :caption: DEVELOPER DOCUMENTATION
-   :maxdepth: 2
-
-   pages/dev/concept
-   pages/dev/mapping
-   pages/dev/allocators

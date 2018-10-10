@@ -15,8 +15,8 @@ is impossible to archieve a good performance.
 LLAMA mapping interface
 -----------------------
 
-The LLAMA mapping interface is quite simple and will be explained in detail in
-the :ref:`developer section <label-mapping-interface>`. As user you only have to
+The LLAMA mapping interface is quite simple and is explained in detail in the
+:ref:`Factory API section <label-api-factory>`. As user you only have to
 know that there is a simple interface every mapping has to be implemented
 against.
 
