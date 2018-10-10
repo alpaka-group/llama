@@ -10,7 +10,7 @@ portability for multicore, manycore and gpu application with the very same code.
 
 The user documentation and an overview about the concepts and ideas can be found
 here:
-https://llama-docs.rtfd.io
+https://llama-doc.rtfd.io
 
 Doxygen generated API documentation is located here:
 https://computationalradiationphysics.github.io/llama/

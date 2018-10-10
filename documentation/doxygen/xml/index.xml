@@ -1120,4 +1120,6 @@
   </compound>
   <compound refid="dir_167d1c89d05e547509b1688d85c563df" kind="dir"><name>/home/alexander/develop/work/llama/include/llama/mapping/tree</name>
   </compound>
+  <compound refid="indexpage" kind="page"><name>index</name>
+  </compound>
 </doxygenindex>
