@@ -13,6 +13,6 @@ here:
 https://llama-docs.rtfd.io
 
 Doxygen generated API documentation is located here:
-https://computationalradiationphysics.github.io/llama
+https://computationalradiationphysics.github.io/llama/
 
 LLAMA is licensed under the LGPL2+.
