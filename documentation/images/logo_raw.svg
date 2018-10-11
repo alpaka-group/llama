@@ -9,9 +9,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="44.576092mm"
-   height="14.97583mm"
-   viewBox="0 0 44.576092 14.97583"
+   width="36.472321mm"
+   height="15.404262mm"
+   viewBox="0 0 36.472321 15.404262"
    version="1.1"
    id="svg8"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
-     inkscape:cx="84.768278"
-     inkscape:cy="-50.09593"
+     inkscape:zoom="5.6"
+     inkscape:cx="68.807808"
+     inkscape:cy="43.10221"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -56,21 +56,37 @@
      inkscape:label="Ebene 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-33.447938,-36.962716)">
+     transform="translate(-33.750711,-37.224663)">
+    <rect
+       style="opacity:1;fill:#00599d;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.89636195;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       id="rect845"
+       width="18.653019"
+       height="0.50017041"
+       x="34.254932"
+       y="52.123165" />
+    <path
+       style="fill:#00599d;fill-rule:evenodd;stroke:#f17017;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 44.669296,49.752888 C 47.578722,45.836727 44.28046,37.43591 42.11746,37.73239 c -1.50401,0.164527 1.989213,7.545631 -0.738691,11.684729"
+       id="path820-3"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:5.29166651px;line-height:5.66208363px;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="32.600445"
-       y="51.504463"
-       id="text817"><tspan
+       style="font-style:normal;font-weight:normal;font-size:5.29166651px;line-height:5.66208363px;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#00599d;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="46.954826"
+       y="48.910549"
+       id="text839"><tspan
          sodipodi:role="line"
-         id="tspan815"
-         x="32.600445"
-         y="51.504463"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.16666603px;font-family:ArabBruD;-inkscape-font-specification:ArabBruD;stroke-width:0.26458332px"><tspan
-           style="fill:#f17017"
-           id="tspan819">ll</tspan><tspan
-           style="fill:#00599d"
-           id="tspan821">ama</tspan></tspan></text>
+         id="tspan837"
+         x="46.954826"
+         y="48.910549"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.58333492px;font-family:UnDinaru;-inkscape-font-specification:'UnDinaru Bold';letter-spacing:0.7355417px;fill:#00599d;stroke-width:0.26458332px"
+         dx="0">AMA</tspan></text>
+    <path
+       style="fill:#00599d;fill-rule:evenodd;stroke:#f17017;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 34.254932,52.123165 c 0.375584,-0.514117 0.754283,-0.824636 1.205692,-1.146892 -3.269017,-3.772325 1.020982,-13.27495 3.223371,-12.994226 1.50401,0.164527 -2.324982,7.478477 0.402923,11.617576 7.949669,-0.112104 10.324706,1.230561 13.80433,2.523541"
+       id="path820"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc" />
   </g>
 </svg>
