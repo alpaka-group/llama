@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="indexpage" kind="page">
+    <compoundname>index</compoundname>
+    <title>LLAMA API documentation</title>
+    <detaileddescription>
+<para>LLAMA is a C++11 template header-only library for the abstraction of memory access patterns. It distinguishes between the view of the algorithm on the memory and the real layout in the background. This enables performance portability for multicore, manycore and gpu application with the very same code.</para><para>This page documents the API of LLAMA. The user documentation and an overview about the concepts and ideas can be found here: <ulink url="https://llama-doc.rtfd.io">https://llama-doc.rtfd.io</ulink></para><para>LLAMA is licensed under the LGPL2+. </para>    </detaileddescription>
+  </compounddef>
+</doxygen>
