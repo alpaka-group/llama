@@ -15,7 +15,10 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
-   sodipodi:docname="logo.svg">
+   sodipodi:docname="logo.svg"
+   inkscape:export-filename="/home/alexander/develop/work/llama/documentation/images/logo_doxygen.png"
+   inkscape:export-xdpi="90.534378"
+   inkscape:export-ydpi="90.534378">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -26,8 +29,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="5.6"
-     inkscape:cx="68.807808"
-     inkscape:cy="43.10221"
+     inkscape:cx="56.926391"
+     inkscape:cy="30.31877"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -39,7 +42,8 @@
      inkscape:window-height="1028"
      inkscape:window-x="0"
      inkscape:window-y="28"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="1"
+     inkscape:snap-global="false" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -58,19 +62,26 @@
      id="layer1"
      transform="translate(-33.750711,-37.224663)">
     <path
-       style="opacity:1;fill:#00599d;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.89636195;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
-       d="m 34.254932,52.123165 h 18.653019 v 0.500171 H 34.254932 Z"
-       id="rect845" />
+       style="opacity:1;fill:#00599d;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.03481483;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       d="m 34.254932,51.95612 h 18.636316 v 0.667216 H 34.254932 Z"
+       id="rect845"
+       inkscape:export-xdpi="90.534378"
+       inkscape:export-ydpi="90.534378"
+       inkscape:connector-curvature="0" />
     <path
        style="fill:#00599d;fill-rule:evenodd;stroke:#f17017;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 44.669296,49.752888 C 47.578722,45.836727 44.28046,37.43591 42.11746,37.73239 c -1.50401,0.164527 1.989213,7.545631 -0.738691,11.684729"
        id="path820-3"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccc" />
+       sodipodi:nodetypes="ccc"
+       inkscape:export-xdpi="90.534378"
+       inkscape:export-ydpi="90.534378" />
     <g
        aria-label="AMA"
        style="font-style:normal;font-weight:normal;font-size:5.29166651px;line-height:5.66208363px;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#00599d;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       id="text839">
+       id="text839"
+       inkscape:export-xdpi="90.534378"
+       inkscape:export-ydpi="90.534378">
       <path
          d="m 52.91312,48.993231 q -0.191203,0 -0.37207,-0.113688 -0.191203,-0.139526 -0.232544,-0.310058 l -0.465088,-1.235067 h -3.302125 l -0.465088,1.235067 q -0.160197,0.403076 -0.604614,0.403076 -0.222209,0 -0.387574,-0.134359 -0.160197,-0.139526 -0.170532,-0.361735 l 0.03101,-0.149862 0.03101,-0.113688 2.444296,-6.309693 q 0.129191,-0.325562 0.320393,-0.454753 0.201539,-0.170532 0.444418,-0.170532 0.537435,0 0.769979,0.604614 l 2.475301,6.330364 q 0.04651,0.160197 0.04651,0.294556 0,0.211873 -0.160197,0.361735 -0.160197,0.124023 -0.403076,0.124023 z M 50.205274,42.8334 48.923699,46.306057 h 2.563151 z"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.58333492px;font-family:UnDinaru;-inkscape-font-specification:'UnDinaru Bold';letter-spacing:0.7355417px;fill:#00599d;stroke-width:0.26458332px"
@@ -89,6 +100,8 @@
        d="m 34.254932,52.123165 c 0.375584,-0.514117 0.754283,-0.824636 1.205692,-1.146892 -3.269017,-3.772325 1.020982,-13.27495 3.223371,-12.994226 1.50401,0.164527 -2.324982,7.478477 0.402923,11.617576 7.949669,-0.112104 10.324706,1.230561 13.80433,2.523541"
        id="path820"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccc" />
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-xdpi="90.534378"
+       inkscape:export-ydpi="90.534378" />
   </g>
 </svg>
