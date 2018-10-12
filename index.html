@@ -84,7 +84,9 @@ $(document).ready(function(){initNavTree('index.html','');});
 <div class="title">LLAMA API documentation </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>LLAMA is a C++11 template header-only library for the abstraction of memory access patterns. It distinguishes between the view of the algorithm on the memory and the real layout in the background. This enables performance portability for multicore, manycore and gpu application with the very same code.</p>
+<div class="textblock"><p>LLAMA is a C++11 template header-only library for the abstraction of memory access patterns. It distinguishes between the view of the algorithm on the memory and the real layout in the background. This enables performance portability for multicore, manycore and gpu applications with the very same code.</p>
+<p>In contrast to many other solutions LLAMA can define nested data structures of arbitrary depths and is not limited only to struct of array and array of struct data layouts but is also capable to explicitly define padding, blocking, striding and any other run time or compile time access pattern simultaneously.</p>
+<p>To archieve this goal LLAMA is splitted in mostly independent, orthogonal parts completely written in modern C++11 to run on as many architectures and with as many compilers as possible while still supporting extensions needed e.g. to run on GPU or other many core hardware.</p>
 <p>This page documents the API of LLAMA. The user documentation and an overview about the concepts and ideas can be found here: <a href="https://llama-doc.rtfd.io">https://llama-doc.rtfd.io</a></p>
 <p>LLAMA is licensed under the LGPL2+. </p>
 </div></div><!-- contents -->
@@ -92,7 +94,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Oct 11 2018 14:07:05 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Fri Oct 12 2018 13:50:35 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>
