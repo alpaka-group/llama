@@ -9,6 +9,8 @@ the namespace :cpp:`llama`.
 Useful helpers
 --------------
 
+.. _label-api-array:
+
 .. doxygenstruct:: llama::Array
    :project: LLAMA
    :members:

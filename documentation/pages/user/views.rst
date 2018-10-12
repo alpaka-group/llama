@@ -65,16 +65,16 @@ Of course an explicit template parameter is possible, too, like this:
 
     view( 1, 2, 3 ).access< color, g >() = 1.0;
 
-A direct call of the :cpp:`operator()` like
-:cpp:`view( 1, 2, 3 )< color, g >()` is not possible unfortunately and would
-look like this: :cpp:`view( 1, 2, 3 ).operator()< color, g >()` instead. So as
-an explicit call is needed anyway LLAMA got an own function for this task.
+Unfortunately a direct call of the :cpp:`operator()` like
+:cpp:`view( 1, 2, 3 )< color, g >()` is not possible and would look like this:
+:cpp:`view( 1, 2, 3 ).operator()< color, g >()` instead. So as an explicit call
+of the :cpp:`operator()` is needed anyway LLAMA got an own function for this
+task.
 
 Different algorithms have different requirements for accessing data, e.g. it
 is also possible to access the user domain with one packed parameter like this
 
 .. code-block:: C++
-
 
     view( { 1, 2, 3 } )( color(), g() ) = 1.0;
     // or
@@ -83,7 +83,7 @@ is also possible to access the user domain with one packed parameter like this
 
 If the naming in the datum domain is not important, may change (e.g. with the
 same algorithm working in the RGB or CYK colour space) or is not available at
-all (e.g. for a :cpp:`DatumArray`) or if the algorithm wants to iterate over the
+all (e.g. for :cpp:`DatumArray`) or if the algorithm wants to iterate over the
 datum domain (at compile time of course), also an adressing with the coordinate
 inside the tree is possible like this:
 
@@ -98,7 +98,7 @@ Here the version with the explicit :cpp:`access` function call is even shorter.
 VirtualDatum
 ^^^^^^^^^^^^
 
-It may have attracted attention that the :cpp:`operator()` is overloaded twice
+It may have attracted attention that the :cpp:`operator()` is "overloaded twice"
 for accesses like :cpp:`view( 1, 2, 3 )( color(), g() )` and that an
 intermediate object is needed for this to work. This object exist and is not
 only an internal trick but a central data type of LLAMA called
@@ -112,7 +112,7 @@ most probably not be consecutive in memory, it is called virtual.
 However it can be used like a real local object nevertheless, e.g. been given as
 a parameter to a function (as seen in the
 `nbody example <https://github.com/ComputationalRadiationPhysics/llama/blob/master/examples/nbody/nbody.cpp>`_
-) and to increase this feeling some very useful operators are overloaded, too:
+) and to increase this feeling some often needed operators are overloaded, too:
 
 .. code-block:: C++
 
@@ -131,12 +131,12 @@ a parameter to a function (as seen in the
         vd = 42;
     }
 
-The most needed inplace operators ( :cpp:`+=`, :cpp:`-=`, :cpp:`*=`, :cpp:`/=`,
-:cpp:`%=` ) are overloaded. Only inplace, because it is not trivial to create a
-needed intermediate state out of a virtual datum (without expression templates).
-These operators work between two virtual datums, even if they have different
-datum domains. Every namings existing in both datum domains will be matched and
-operated on. Every not matching pair is ignored, e.g.
+The most needed inplace operators ( :cpp:`=`, :cpp:`+=`, :cpp:`-=`, :cpp:`*=`,
+:cpp:`/=`, :cpp:`%=` ) are overloaded. Only inplace, because it is not trivial
+to create a needed intermediate state out of a virtual datum (without expression
+templates). These operators work between two virtual datums, even if they have
+different datum domains. Every namings existing in both datum domains will be
+matched and operated on. Every not matching pair is ignored, e.g.
 
 .. code-block:: C++
 
@@ -171,7 +171,7 @@ Of course this may throw warnings about narrowing conversion. It is task of the
 user to only use this if compatible.
 
 The comparative operation :cpp:`==`, :cpp:`!=`, :cpp:`<`, :cpp:`<=`, :cpp:`>`
-and :cpp:`>=` are overloaded, too, and return the boolean value , :cpp:`true` if
+and :cpp:`>=` are overloaded too and return the boolean value :cpp:`true` if
 the operation is true for **all** matching elements of the two comparing virtual
 datums respectively other type. Let's examine this deeper in an example:
 
@@ -196,6 +196,7 @@ datums respectively other type. Let's examine this deeper in an example:
 
     a2( x() ) = 1.0f;
     a2( y() ) = 1.0f;
+    //a2() = 1.0f; would do the same
 
     b ( x() ) = 1.0f;
     b ( z() ) = 2.0f;
@@ -212,7 +213,7 @@ datums respectively other type. Let's examine this deeper in an example:
     result = a2 == b;
     //result is true, because only the matching "x" matters
 
-A partly addressing of a virtual datum like :cpp:`datum1( color() ) *= 7.0`
+A partly addressing of a virtual datums like :cpp:`datum1( color() ) *= 7.0`
 would be handy, too, which is planned but not implemented yet.
 
 Compiler steering
@@ -221,14 +222,14 @@ Compiler steering
 Unfortunately C++ lacks some language features to express data and function
 locality as well as dependence of data.
 
-The first shortcoming is what language extension like cuda, OpenMP, OpenACC, you
-name it try to solve. The second is mostly tackles by vendor specific compiler
-extension. Both define new keywords and annotations to fill those gaps.
-As LLAMA tries to stay independent from specific compiler vendors and extension
-C preprocessor macros are used to define some directives only for a sub set of
-compilers but with a unified interface for the user. Some macros can even be
-overwritten from the outside to enable interoperability with libraries such as
-alpaka.
+The first shortcoming is what language extensions like cuda, OpenMP, OpenACC,
+you name it try to solve. The second is mostly tackled by vendor specific
+compiler extension. Both define new keywords and annotations to fill those gaps.
+As LLAMA tries to stay independent from specific compiler vendors and
+extensions, C preprocessor macros are used to define some directives only for a
+sub set of compilers but with a unified interface for the user. Some macros can
+even be overwritten from the outside to enable interoperability with libraries
+such as alpaka.
 
 Function locality
 ^^^^^^^^^^^^^^^^^
@@ -261,13 +262,13 @@ Data (in)dependence
 
 Another problem is that compilers cannot assume that two data regions are
 independent if the data is not laying on the stack completely. One solution
-of C++ extension was the :cpp:`restrict` keyword which tells that a pointer
+of C++ extensions was the :cpp:`restrict` keyword which tells that each pointer
 parameter is independent of each other. However this does not work for more
 complex data types hiding pointers -- as it is the idea with modern C++.
 
 Another solution are loop :cpp:`#pragma`\ s which tell the compiler that
-**each** data access inside this loop can be assumed independent of each other
-if not explicitly determined otherwise, e.g.
+**each** data access inside this loop can be assumed to be independent of each
+other if not explicitly determined otherwise, e.g.
 
 .. code-block:: C
 
@@ -298,12 +299,13 @@ every loop (which needs to be updated when a new compiler directive is added).
 :cpp:`#pragma omp simd` was promised to solve this issue but
 
 #. It does not work.
-#. It is not even defined for some compilers (OpenMP inside of cuda doesn't even make sense).
+#. It is not even defined for some compilers (OpenMP inside of cuda doesn't even
+   make sense).
 
 So LLAMA provides a macro called :cpp:`LLAMA_INDEPENDENT_DATA` which can be put
-in front of loops to tell the underlying compiler that the loop body is
-independent of each other -- and can savely be vectorized (what is the goal in
-the end).
+in front of loops to tell the underlying compiler that the data accesses in the
+loop body are independent of each other -- and can savely be vectorized (what is
+the goal in the end).
 
 Datum domain iterating
 ----------------------
@@ -312,11 +314,11 @@ It is trivial to iterate over the user domain and although it is done at run
 time the compiler can optimize a lot e.g. with tree vectorization or loop
 unrolling, especially with the beforementioned macros.
 
-It is also possible to iterate over the datum domain, even without some dirty
+It is also possible to iterate over the datum domain, even without some macro
 hacks as shown before, totalling staying in our precious C++11 world. But this
-can only be archieved atm with functional meta programming techniques, making
-the code complicated and bloated. Even some simple iterating has to be down
-recursive.
+can at the moment only be archieved with functional meta programming techniques,
+making the code complicated and bloated. Even some simple iterating has to be
+done recursively.
 
 LLAMA provides a class to easy the pain (a bit) called :cpp:`llama::ForEach`.
 It takes a datum domain as compile time parameter and a functor as compile and
@@ -365,11 +367,11 @@ The functor type itself is a struct which provides the :cpp:`operator()` for
 two different template parameters. The (run time) datum to work on and other
 properties can be given as struct members. The template parameters are outer and
 inner coordinates in the datum domain tree. The outer coordinate is what can be
-given as template parameter(s) after the datum domain itself. However even if
-given as naming, the functor always gets :cpp:`DatumCoord`. The inner coord is
-the leaf coordinate based on the outer coord. To get the needed global
-coodinate in the tree :cpp:`llama::DatumCoord` provides a method called
-:cpp:`Cat` as seen in the next example functor.
+given as template parameter(s) to :cpp:`llama::ForEach` after the datum domain
+itself. However even if given as naming, the functor always gets a
+:cpp:`DatumCoord`. The inner coord is the leaf coordinate based on the outer
+coord. To get the needed global coodinate in the tree :cpp:`llama::DatumCoord`
+provides a method called :cpp:`Cat` as seen in the next example functor.
 
 .. code-block:: C++
 
@@ -418,13 +420,13 @@ Especially when working with hardware accelerators such as GPUs or offloading
 many core procressors, explicit copy operation calls for as big as possible
 memory chunks are very important to reach best performance.
 
-It is trivial to copy a view from on memory region to another if mapping and
+It is trivial to copy a view from one memory region to another if mapping and
 size are identical. However if the mapping differs, in most of the
 cases only pointwise copy operations will be possible as the memory patterns
 are probably not compatible. There is a small class of remaining use cases where
 the mapping is the same, but the size of the view is different or mappings are
 very related to each other (e.g. both using struct of array, but one time with,
-one time without padding). In that case an optimized copy operation would be
+one time without padding). In those cases an optimized copy operation would be
 possible in *theory*. However *practically* it is impossible to figure out the
 biggest possible memory chunks to copy for LLAMA at compile time as the mappings
 can always depend on run time parameters. E.g. a mapping could implement struct
@@ -433,25 +435,27 @@ struct for a smaller amount.
 
 Three solutions exist for this challenge. One is to implement specializations
 for specific combinations of mappings, which reflect the properties of those
-mappings. This **can** be the way to go if the applications shows significantly
-better run times for different slightly different mappings and the copy
-operation has be shown to be the bottle neck. However this would be the very
-last optimization step as for every new mapping a new specialization would be
-needed.
+mappings. This **can** be the way to go if the application shows significantly
+better run times for slightly different mappings and the copy operation has be
+shown to be the bottle neck. However this would be the very last optimization
+step as for every new mapping a new specialization would be needed.
 
 Another solution would be a run time analysis of the two views to find
 contiguous memory chunks, but the overhead would be probably too big, especially
 if no contiguous memory chunks could be found. At least in that case it may make
 sense to use a (maybe smaller) intermediate view which connects the two worlds.
 
-This last solution means that we have e.g. a view in memory region A with
-mapping A and another view of the same size in memory region B with mapping B.
-A third view in memory region A but with mapping B could be used to reindex in
-region A and then to copy as one big chunk to region B. When using two
-intermediate views in region A and B with the same but possibly different
-mapping than A and B the copy problem can be split to smaller chunks of memory.
-It makes also sense to combine this approach with an asynchronous workflow
-where reindexing, copying and computation and overload as e.g. seen in the
+This last solution means that we have e.g. a view in memory region :math:`A`
+with mapping :math:`A` and another view of the same size in memory region
+:math:`B` with mapping :math:`B`. A third view in memory region :math:`A` but
+with mapping :math:`B` could be used to reindex in region :math:`A` and then to
+copy it as one big chunk to region :math:`B`.
+
+When using two intermediate views in region :math:`A` and :math:`B` with the
+same mapping but possibly different than in :math:`A` **and** :math:`B` the copy
+problem can be split to smaller chunks of memory. It makes also sense to combine
+this approach with an asynchronous workflow where reindexing, copying and
+computation are overloayed as e.g. seen in the
 `async copy example <https://github.com/ComputationalRadiationPhysics/llama/blob/master/examples/asynccopy/asynccopy.cpp>`_.
 
 Another benefit is, that the creating and copying of the intermediate view can

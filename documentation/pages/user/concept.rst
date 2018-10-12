@@ -19,9 +19,9 @@ manner is most of the times faster than array of structs (AoS):
         char a;          |       char a[64][64];
     } image[64][64];     |   } image;
 
-Even this very easy decision between SoA and AoS has a quite different in code
-access style, just compare `image[x][y].r` with `image.r[x][y]`. However for
-this problem research and ready to use libraries already exist (e.g.
+Even this very easy decision between SoA and AoS has a quite different access
+style in code, just compare :cpp:`image[x][y].r` with :cpp:`image.r[x][y]`.
+However for this problem research and ready to use libraries already exist (e.g.
 `SoAx <https://www.sciencedirect.com/science/article/pii/S0010465517303983>`_).
 
 But there are more useful mappings than SoA and AoS such as blocking of
@@ -31,10 +31,10 @@ memory (like partly using SoA inside an AoS approach), strided access of data
 Moreover often software is using a random mix of different heterogenous memory
 regions of CPU, GPU, caches or network cards. A data layout optimized for a
 specific CPU may be inefficient on a GPU or only slowly transferable over
-network. So a mixed layout not optimal for each part may make sense as trade-off
-between all memory regions. Again: This layout is highly dependent on the
-architecture, the scaling of the problem and of course the chosen algorithm --
-and is most probably not trivially guessable.
+network. So a mixed layout -- not optimal for each part -- may make sense as
+trade-off between all memory regions. Again: This layout is highly dependent on
+the architecture, the scaling of the problem and of course the chosen algorithm
+-- and is most probably not trivially guessable.
 
 Furthermore other third party libraries may expect specific memory layouts as
 interface, which will most probably differ from library to library.
@@ -79,9 +79,9 @@ This results in these challenges and goals LLAMA tries to address:
 * Splitting of algorithmic view of data and the actual mapping in the background
   so that different layouts may be chosen **without touching the algorithm at
   all**.
-* As it is well-known from C and C++ -- and because of this often the way
-  programmers think of data -- LLAMA shall *look* like AoS although the mapping
-  will be different quite surely.
+* As it is well-known from C and C++ -- and often the way programmers think of
+  data because of this -- LLAMA shall *look* like AoS although the mapping will
+  be different quite surely.
 * To be compatible with as most architectures, softwares, compilers and third
   party libraries as possible, LLAMA is only using valid C++11 syntax. The
   whole description of the layout and the mapping is done with C++11 template
