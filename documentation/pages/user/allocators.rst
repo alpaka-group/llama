@@ -5,24 +5,25 @@
 Allocator
 =========
 
-To create a  :ref:`view <label-view>` the :ref:`factory <label-factory>` needs
-to allocate memory. This allocator is explicit given to the factory and has
-the only task to return an object which the view can bytewise address.
+To create a :ref:`view <label-view>` the :ref:`factory <label-factory>` needs to
+allocate memory. This allocator is explicit given to the factory and has the
+only task to return an object which the view can bytewise address.
 
 Concept
 -------
 
 It depends on the chosen allocator whether the created view has its own memory
 which will be copied and freed when needed, whether it is shared or has no
-ownership information at all. The last is important to reuse already existing
-memory of third party libraries as seen in the
+ownership information at all. The last apprach is important for reusing already
+existing memory of third party libraries as seen in the
 :ref:`respective subsection <label-allocators-third-party>`.
 
 Builtin
 -------
 
-The implementation of the shipped allocators is not importent for the end user
-but the behaviour while beeing copied.
+The implementation of the shipped allocators is not important for the end user
+(see :ref:`API <label-api-allocators>` for details) but the behaviour while
+beeing copied.
 
 Shared memory
 ^^^^^^^^^^^^^
@@ -30,7 +31,7 @@ Shared memory
 :cpp:`llama::allocator::SharedPtr` is the most easy and fastest allocator to use
 as the memory of the view is never copied, but a global, shared reference
 counter keeps track how many copies exist using :cpp:`std::shared_ptr` in the
-background. If the last view copy runs out of scope the memory is freed.
+background. If the last copy of a view runs out of scope the memory is freed.
 
 Furthermore a (compile time) alignment option can be given to the allocator to
 improve memory read and write:
@@ -57,13 +58,13 @@ Stack
 
 When creating views for the whole application data, it make sense to allocate
 big chunks of memory. However when working with smaller amounts of memory or
-having some temporary views which need to be reallocated a lot, heap allocations
+having some temporary views which need to be recreated a lot, heap allocations
 are inefficient and it makes more sense to store the data directly on the stack.
 
 :cpp:`llama::allocator::Stack` addresses this challenge. The memory object
-returned from this allocator holds the needed memory as array on the stack in
-itself. However one disadvantage atm is, that the size of the stack memory
-needs to be passed as template parameter. It is possible to determine the
+returned from this allocator holds the needed memory in an array on the stack in
+itself. However at the moment one disadvantage is, that the size of the stack
+memory needs to be passed as template parameter. It is possible to determine the
 needed space at compile time for simple mappings, but e.g. padding needs a
 run time chooseable size. This will be addressed in the future.
 
@@ -99,7 +100,7 @@ The allocators are not only important for giving the views fine-tuned control
 over allocation and copying overhead, but also an interface for other third
 party libraries. For use with these, the
 :ref:`Factory API section <label-api-factory>` documents the interface
-needed to implement.
+needed to implement against.
 
 .. _label-allocators-alpaka:
 
@@ -126,7 +127,7 @@ understanding of alpaka they may hard to understand and can probably be skipped.
 
 Alpaka
 """"""
-:cpp:`common::allocator::Alpaka` creates a buffer for a given device. Internal
+:cpp:`common::allocator::Alpaka` creates a buffer for a given device. Internally
 the well known alpaka buffer object is used.
 
 .. code-block:: C++
@@ -137,7 +138,7 @@ the well known alpaka buffer object is used.
     >
 
 As usual with alpaka the size type is an explicit parameter. If the view is
-copied the internal alpaka buffer is copied, too, which internally uses a
+copied, the internal alpaka buffer is copied, too, which internally uses a
 :cpp:`std::shared_ptr` just as the shared memory allocator above.
 
 AlpakaMirror
@@ -178,8 +179,8 @@ AlpakaShared
 """"""""""""
 Allocation of shared memory is special in cuda and even more special in the
 C++ abstraction of alpaka. So an own allocator for this special memory is
-defined. Two different kind of shared memory exist, dynamically and statically
-allocated. Right now only an allocator static, shared memory exists. Like
+defined. Two different kinds of shared memory exist: dynamically and statically
+allocated. Right now only an allocator for static shared memory exists. Like for
 :cpp:`llama::allocator::Stack` the size of the memory region needs to be known
 at compile time.
 

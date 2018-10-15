@@ -8,9 +8,9 @@ Mappings
 One of the basic tasks of LLAMA is to map an address in the user domain and
 datum domain to some address in allocated memory space. This isn't an easy task,
 especially not if the compiler shall still be able to optimize the resulting
-memory accesses (vectorization, reodering, aligned load, etc.). The compiler
-needs to *understand* the semantic of the mapping at compile time. Otherwise it
-is impossible to archieve a good performance.
+memory accesses (vectorization, reodering, aligned loads, etc.). The compiler
+needs to **understand** the semantic of the mapping at compile time. Otherwise
+it is impossible to archieve a good performance.
 
 LLAMA mapping interface
 -----------------------
@@ -20,7 +20,7 @@ The LLAMA mapping interface is quite simple and is explained in detail in the
 know that there is a simple interface every mapping has to be implemented
 against.
 
-All mapping have an interface which binds the user domain and datum domain type
+All mappings have an interface which binds the user domain and datum domain type
 like this
 
 .. code-block:: C++
@@ -30,8 +30,8 @@ like this
         DatumDomain
     >;
 
-This mapping needs to be ininstantiated with the run time user domain size and
-an optional mapping specific parameter:
+This mapping needs to be instantiated with the run time user domain size and an
+optional, mapping specific parameter:
 
 .. code-block:: C++
 
@@ -45,13 +45,13 @@ Afterwards it can be used for the :ref:`factory <label-factory>`.
 It is possible to directly realize simple mappings such as array of struct,
 struct of array or padding for this interface. However a connecting or mixing
 of these mappings is not possible. To address this, mappings themself can define
-some kind of mapping language which itself can archieve such goals.
+some kind of mapping language themself which itself can archieve such goals.
 
-Which approach of a mapping language is the best, is active research. The tree
-mapping is one attempt of an universal mapping language suitable for many
-architectures. However even if it points out that this approach is not working
-well, it is trivial to switch to a new mapping method without changing the whole
-code as the mapping is totally independent of the other parts of LLAMA.
+Which approach of a mapping language is the best, is active research. The later
+shown tree mapping is one attempt of an universal mapping language suitable for
+many architectures. However even if it points out that this approach is not
+working well, it is trivial to switch to a new mapping method without changing
+the whole code as the mapping is independent of the other parts of LLAMA.
 
 Native mappings
 ^^^^^^^^^^^^^^^
@@ -77,7 +77,7 @@ LLAMA tree mapping
 ^^^^^^^^^^^^^^^^^^
 
 The LLAMA tree mapping is one approach to archieve the goal of mixing differnt
-mappings approaches. Let's e.g. take the example datum domain from the
+mapping approaches. Let's e.g. take the example datum domain from the
 :ref:`domain section<label-domains>`:
 
 .. only:: html
@@ -89,13 +89,13 @@ mappings approaches. Let's e.g. take the example datum domain from the
   .. image:: ../../images/layout_tree.pdf
 
 As already mentioned this is a compile time tree. The idea of the tree mapping
-is now to extend this modell to a compile time tree with run time annotations
+is now to extend this model to a compile time tree with run time annotations
 representing the repetition of branches and to define tree operations which
-create new trees of the old ones while providing methods to translate tree
+create new trees out of the old ones while providing methods to translate tree
 coordinates from one tree to another.
 
 Best is to see this by an example. First of all the user domain needs to be
-represented as such an annotated tree, too. Let's assume an user domain of
+represented as such an annotated tree, too. Let's assume a user domain of
 :math:`128 \times 64`:
 
 .. only:: html
@@ -106,8 +106,8 @@ represented as such an annotated tree, too. Let's assume an user domain of
 
   .. image:: ../../images/ud_tree_2.pdf
 
-As the datum domain has no run time influence, only :math:`1` is annotated for
-these tree nodes:
+The datum domain is already a tree, but as it has no run time influence, only
+:math:`1` is annotated for these tree nodes:
 
 .. only:: html
 
@@ -131,12 +131,11 @@ domain with one tree:
 The mapping works now in this way that the tree is "flattened" from left to
 right. Keep in mind that the annotation represent repetitions of the node
 branches. So for this tree we would copy the datum domain :math:`64` times and
-:math:`128` times again -- basically this is an array of struct approach, which
-is most probably not desired.
+:math:`128` times again -- basically this results in an array of struct
+approach, which is most probably not desired.
 
-So we need to transform the tree before flattening it. The struct of array
+So we want to transform the tree before flattening it. A struct of array
 approach may look like this:
-
 
 .. only:: html
 
@@ -146,7 +145,7 @@ approach may look like this:
 
   .. image:: ../../images/soa_tree_2.pdf
 
-Struct of array, but with a padding after each 1024 elements may look like this:
+Struct of array but with a padding after each 1024 elements may look like this:
 
 .. only:: html
 
@@ -156,8 +155,8 @@ Struct of array, but with a padding after each 1024 elements may look like this:
 
   .. image:: ../../images/padding_tree_2.pdf
 
-The size of the "type" *pad* of course needs to be determined based on the
-desired aligment and sub trees sizes.
+The size of the leaf type in "pad" of course needs to be determined based on the
+desired aligment and sub tree sizes.
 
 Such a tree (with smaller user domain for easier drawing) …
 
@@ -179,9 +178,9 @@ Such a tree (with smaller user domain for easier drawing) …
 
   .. image:: ../../images/example_mapping.pdf
 
-The tree mapping is defined as :cpp:`llama::mapping::tree::Mapping`, but takes
-one more template parameter for the type of a list the tree operations and a
-further constructor parameter for the instantiation of this list.
+In code a tree mapping is defined as :cpp:`llama::mapping::tree::Mapping`, but
+takes one more template parameter for the type of a list of tree operations and
+a further constructor parameter for the instantiation of this list.
 
 .. code-block:: C++
 

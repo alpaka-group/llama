@@ -3,7 +3,7 @@
 API
 ===
 
-All functions, classes and structs (except for the macros of course...) are in
+All functions, classes and structs (except of the macros of course) are in
 the namespace :cpp:`llama`.
 
 Useful helpers
@@ -171,8 +171,10 @@ Factory
 .. doxygenfunction:: llama::tempAlloc
    :project: LLAMA
 
-Allocator
-^^^^^^^^^
+.. _label-api-allocators:
+
+Allocators
+^^^^^^^^^^
 
 All allocators are in namespace :cpp:`llama::allocator`.
 
@@ -208,8 +210,8 @@ the alpaka allocators will be described here, too.
    :project: LLAMA
    :members:
 
-Mapping
-^^^^^^^
+Mappings
+^^^^^^^^
 
 All mappings are in namespace :cpp:`llama::mapping`.
 
