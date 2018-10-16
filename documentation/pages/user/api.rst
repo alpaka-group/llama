@@ -129,6 +129,9 @@ Datum domain
    :project: LLAMA
    :members:
 
+.. doxygentypedef:: llama::StubType
+   :project: LLAMA
+
 .. doxygentypedef:: llama::GetDatumElementType
    :project: LLAMA
 

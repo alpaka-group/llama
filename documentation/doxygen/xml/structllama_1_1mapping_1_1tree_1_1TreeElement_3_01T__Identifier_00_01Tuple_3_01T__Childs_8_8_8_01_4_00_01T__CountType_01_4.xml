@@ -178,14 +178,14 @@
     <detaileddescription>
     </detaileddescription>
     <collaborationgraph>
-      <node id="304">
+      <node id="306">
         <label>llama::mapping::tree::TreeElement&lt; T_Identifier, Tuple&lt; T_Childs... &gt;, T_CountType &gt;</label>
         <link refid="structllama_1_1mapping_1_1tree_1_1TreeElement_3_01T__Identifier_00_01Tuple_3_01T__Childs_8_8_8_01_4_00_01T__CountType_01_4"/>
-        <childnode refid="305" relation="usage">
+        <childnode refid="307" relation="usage">
           <edgelabel>childs</edgelabel>
         </childnode>
       </node>
-      <node id="305">
+      <node id="307">
         <label>llama::Tuple&lt; T_Elements &gt;</label>
         <link refid="structllama_1_1Tuple"/>
       </node>

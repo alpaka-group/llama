@@ -150,6 +150,7 @@
     <innerclass refid="structllama_1_1SizeOf" prot="public">llama::SizeOf</innerclass>
     <innerclass refid="structllama_1_1SizeOf_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__DatumElements_8_8_8_01_4_4" prot="public">llama::SizeOf&lt; DatumStruct&lt; T_FirstDatumElement, T_DatumElements... &gt;&gt;</innerclass>
     <innerclass refid="structllama_1_1SizeOf_3_01DatumStruct_3_01_4_01_4" prot="public">llama::SizeOf&lt; DatumStruct&lt; &gt; &gt;</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1StubTypeImpl" prot="public">llama::internal::StubTypeImpl</innerclass>
     <innernamespace refid="namespacellama">llama</innernamespace>
     <innernamespace refid="namespacellama_1_1internal">llama::internal</innernamespace>
     <briefdescription>
@@ -293,9 +294,24 @@
 <codeline lineno="152" refid="structllama_1_1SizeOf_3_01DatumStruct_3_01_4_01_4_1af7727c33269d10a7757a8a0ac18cd9a2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>constexpr<sp/>std::size_t<sp/><ref refid="structllama_1_1internal_1_1LinearBytePosImpl_1a1ea766c50eb94d8ca36bad2c6975089e" kindref="member">value</ref><sp/>=<sp/>0;</highlight></codeline>
 <codeline lineno="153"><highlight class="normal">};</highlight></codeline>
 <codeline lineno="154"><highlight class="normal"></highlight></codeline>
-<codeline lineno="155"><highlight class="normal"></highlight></codeline>
-<codeline lineno="156"><highlight class="normal"></highlight></codeline>
-<codeline lineno="157"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>llama</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="155"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">internal</highlight></codeline>
+<codeline lineno="156"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"></highlight></codeline>
+<codeline lineno="158"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain<sp/>&gt;</highlight></codeline>
+<codeline lineno="159" refid="structllama_1_1internal_1_1StubTypeImpl" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1internal_1_1StubTypeImpl" kindref="compound">StubTypeImpl</ref></highlight></codeline>
+<codeline lineno="160"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1internal_1_1StubTypeImpl_1af93e4ec691eca2caa37e36bb58217997" kindref="member">type</ref><sp/>=<sp/></highlight><highlight class="keyword">struct</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="162"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="163" refid="structllama_1_1internal_1_1StubTypeImpl_1af93e4ec691eca2caa37e36bb58217997" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>stub[<sp/><ref refid="structllama_1_1SizeOf" kindref="compound">SizeOf&lt; T_DatumDomain &gt;::value</ref><sp/>];</highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="165"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"></highlight></codeline>
+<codeline lineno="167"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>internal</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="168"><highlight class="normal"></highlight></codeline>
+<codeline lineno="174"><highlight class="keyword">template</highlight><highlight class="normal">&lt;<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain<sp/>&gt;</highlight></codeline>
+<codeline lineno="175" refid="namespacellama_1adb589a980e01610411523c3af5e5f4ed" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1adb589a980e01610411523c3af5e5f4ed" kindref="member">StubType</ref><sp/>=<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1internal_1_1StubTypeImpl_1af93e4ec691eca2caa37e36bb58217997" kindref="member">internal::StubTypeImpl&lt; T_DatumDomain &gt;::type</ref>;</highlight></codeline>
+<codeline lineno="176"><highlight class="normal"></highlight></codeline>
+<codeline lineno="177"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>llama</highlight><highlight class="normal"></highlight></codeline>
     </programlisting>
     <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp"/>
   </compounddef>

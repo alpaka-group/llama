@@ -152,6 +152,26 @@ struct SizeOf< DatumStruct< > >
     static constexpr std::size_t value = 0;
 };
 
+namespace internal
+{
 
+template< typename T_DatumDomain >
+struct StubTypeImpl
+{
+    using type = struct
+    {
+        unsigned char stub[ SizeOf< T_DatumDomain >::value ];
+    };
+};
+
+} // namespace internal
+
+/** Returns a type for a datum domain with the same size as \ref SizeOf of this
+ *  datum domain, useful e.g. if an external memory allocation function needs a
+ *  type and a number of elements instead of the total size in bytes.
+ * \tparam T_DatumDomain the datum domain type to create a stub type for
+ */
+template< typename T_DatumDomain >
+using StubType = typename internal::StubTypeImpl< T_DatumDomain >::type;
 
 } // namespace llama

@@ -465,14 +465,14 @@
 </parameterlist>
 </para>    </detaileddescription>
     <collaborationgraph>
-      <node id="333">
+      <node id="335">
         <label>llama::Array&lt; BlobType, Mapping::blobCount &gt;</label>
         <link refid="structllama_1_1Array"/>
       </node>
-      <node id="332">
+      <node id="334">
         <label>llama::VirtualView&lt; T_ParentViewType &gt;</label>
         <link refid="structllama_1_1VirtualView"/>
-        <childnode refid="333" relation="usage">
+        <childnode refid="335" relation="usage">
           <edgelabel>blob</edgelabel>
         </childnode>
       </node>

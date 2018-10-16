@@ -88,6 +88,10 @@ int main(int argc,char * * argv)
         << "SizeOf DatumDomain: "
         << llama::SizeOf< Name >::value
         << std::endl;
+    std::cout
+        << "sizeof( llama::StubType< DatumDomain > ): "
+        << sizeof( llama::StubType< Name > )
+        << std::endl;
 
     std::cout << type( llama::GetCoordFromUID< Name, st::Pos, st::X >() ) << '\n';
 

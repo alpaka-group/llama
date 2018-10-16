@@ -118,6 +118,27 @@
         </inbodydescription>
         <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="41" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="41" bodyend="-1"/>
       </memberdef>
+      <memberdef kind="typedef" id="namespacellama_1adb589a980e01610411523c3af5e5f4ed" prot="public" static="no">
+        <type>typename <ref refid="structllama_1_1internal_1_1StubTypeImpl" kindref="compound">internal::StubTypeImpl</ref>&lt; T_DatumDomain &gt;::type</type>
+        <definition>using llama::StubType = typename internal::StubTypeImpl&lt; T_DatumDomain &gt;::type</definition>
+        <argsstring></argsstring>
+        <name>StubType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns a type for a datum domain with the same size as <ref refid="structllama_1_1SizeOf" kindref="compound">SizeOf</ref> of this datum domain, useful e.g. if an external memory allocation function needs a type and a number of elements instead of the total size in bytes. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_DatumDomain</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the datum domain type to create a stub type for </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" line="175" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/DatumStruct.hpp" bodystart="175" bodyend="-1"/>
+      </memberdef>
       <memberdef kind="typedef" id="namespacellama_1a0497c2913f9ebb2cea9c97ddc35be349" prot="public" static="no">
         <type><ref refid="structllama_1_1Factory" kindref="compound">llama::Factory</ref>&lt; <ref refid="structllama_1_1mapping_1_1One" kindref="compound">llama::mapping::One</ref>&lt; <ref refid="namespacellama_1a03077c6597f96a84efe064fa64d81827" kindref="member">UserDomain</ref>&lt; dimension &gt;, DatumDomain &gt;, <ref refid="structllama_1_1allocator_1_1Stack" kindref="compound">llama::allocator::Stack</ref>&lt; <ref refid="structllama_1_1SizeOf" kindref="compound">SizeOf</ref>&lt; DatumDomain &gt;::value &gt; &gt;</type>
         <definition>using llama::OneOnStackFactory = llama::Factory&lt; llama::mapping::One&lt; UserDomain&lt; dimension &gt;, DatumDomain &gt;, llama::allocator::Stack&lt; SizeOf&lt;DatumDomain&gt;::value &gt; &gt;</definition>

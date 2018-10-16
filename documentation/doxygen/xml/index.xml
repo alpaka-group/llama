@@ -612,6 +612,9 @@
     <member refid="structllama_1_1allocator_1_1Stack_1a6e72aefa6676721f033d8acc01c72b07" kind="typedef"><name>Parameter</name></member>
     <member refid="structllama_1_1allocator_1_1Stack_1a553b068a67b0753dbc0d2507de657b20" kind="function"><name>allocate</name></member>
   </compound>
+  <compound refid="structllama_1_1internal_1_1StubTypeImpl" kind="struct"><name>llama::internal::StubTypeImpl</name>
+    <member refid="structllama_1_1internal_1_1StubTypeImpl_1af93e4ec691eca2caa37e36bb58217997" kind="typedef"><name>type</name></member>
+  </compound>
   <compound refid="structllama_1_1mapping_1_1tree_1_1internal_1_1SummarizeTreeSmallerPos" kind="struct"><name>llama::mapping::tree::internal::SummarizeTreeSmallerPos</name>
     <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1SummarizeTreeSmallerPos_1af8956486be3d1d8e048fe34097fc2c90" kind="typedef"><name>RestTree</name></member>
     <member refid="structllama_1_1mapping_1_1tree_1_1internal_1_1SummarizeTreeSmallerPos_1aa704079ea9754036bebac3be98f3bac1" kind="function"><name>operator()</name></member>
@@ -871,6 +874,7 @@
     <member refid="namespacellama_1abe9622c2b7b194250a33818e71bb5bed" kind="typedef"><name>DA</name></member>
     <member refid="namespacellama_1a554a797d5fff9070b3c61d7584dc15d5" kind="typedef"><name>GetDatumElementType</name></member>
     <member refid="namespacellama_1a29d5fdaf4a5f23aab704f936a53fd68c" kind="typedef"><name>GetDatumElementUID</name></member>
+    <member refid="namespacellama_1adb589a980e01610411523c3af5e5f4ed" kind="typedef"><name>StubType</name></member>
     <member refid="namespacellama_1a0497c2913f9ebb2cea9c97ddc35be349" kind="typedef"><name>OneOnStackFactory</name></member>
     <member refid="namespacellama_1a3953132518a1c5bd14cbacc8107975db" kind="typedef"><name>GetCoordFromUID</name></member>
     <member refid="namespacellama_1a9b77530642d73f0464c605e6140391cb" kind="typedef"><name>GetType</name></member>

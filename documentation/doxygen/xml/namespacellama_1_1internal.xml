@@ -34,6 +34,7 @@
     <innerclass refid="structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__Daab3e6bc06488e5011eff271a9737aa6b" prot="public">llama::internal::LinearBytePosImpl&lt; DatumStruct&lt; T_FirstDatumElement, T_DatumElements... &gt;, T_DatumCoord, T_IterCoord &gt;</innerclass>
     <innerclass refid="structllama_1_1internal_1_1MappingDatumCoordCaller" prot="public">llama::internal::MappingDatumCoordCaller</innerclass>
     <innerclass refid="structllama_1_1internal_1_1MappingDatumCoordCaller_3_01DatumCoord_3_01T__coords_8_8_8_01_4_01_4" prot="public">llama::internal::MappingDatumCoordCaller&lt; DatumCoord&lt; T_coords... &gt; &gt;</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1StubTypeImpl" prot="public">llama::internal::StubTypeImpl</innerclass>
     <innerclass refid="structllama_1_1internal_1_1ZeroSequenceHelper" prot="public">llama::internal::ZeroSequenceHelper</innerclass>
     <innerclass refid="structllama_1_1internal_1_1ZeroSequenceHelper_3_010_00_01T__vals_8_8_8_01_4" prot="public">llama::internal::ZeroSequenceHelper&lt; 0, T_vals... &gt;</innerclass>
       <sectiondef kind="func">
