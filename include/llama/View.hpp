@@ -86,10 +86,10 @@ struct View;
         T_RightLocal,                                                          \
         typename std::enable_if<                                               \
             CompareUID<                                                        \
-                typename T_LeftDatum::Mapping::DatumDomain,                    \
+                typename T_LeftDatum::AccessibleDatumDomain,                   \
                 T_LeftBase,                                                    \
                 T_LeftLocal,                                                   \
-                typename T_RightDatum::Mapping::DatumDomain,                   \
+                typename T_RightDatum::AccessibleDatumDomain,                  \
                 T_RightBase,                                                   \
                 T_RightLocal                                                   \
             >::value                                                           \
@@ -175,7 +175,7 @@ struct View;
                 right                                                          \
             };                                                                 \
             ForEach<                                                           \
-                typename T_RightDatum::Mapping::DatumDomain,                   \
+                typename T_RightDatum::AccessibleDatumDomain,                  \
                 T_Source                                                       \
             >::apply( functor );                                               \
         }                                                                      \
@@ -226,22 +226,30 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
  *        lvalue or rvalue references
  * */
 #define __LLAMA_VIRTUALDATUM_VIRTUALDATUM_OPERATOR( OP, FUNCTOR, REF )         \
-    template< typename T_OtherView >                                           \
+    template<                                                                  \
+        typename T_OtherView,                                                  \
+        typename T_OtherBoundDatumDomain                                       \
+    >                                                                          \
     LLAMA_FN_HOST_ACC_INLINE                                                   \
     auto                                                                       \
-    operator OP( VirtualDatum< T_OtherView >REF other )                        \
-    -> decltype(*this)&                                                        \
+    operator OP( VirtualDatum<                                                 \
+        T_OtherView,                                                           \
+        T_OtherBoundDatumDomain                                                \
+    >REF other ) -> decltype(*this)&                                           \
     {                                                                          \
         BOOST_PP_CAT( FUNCTOR, Functor)<                                       \
             decltype(*this),                                                   \
-            VirtualDatum< T_OtherView >,                                       \
+            VirtualDatum<                                                      \
+                T_OtherView,                                                   \
+                T_OtherBoundDatumDomain                                        \
+            >,                                                                 \
             DatumCoord< >                                                      \
         > functor{                                                             \
             *this,                                                             \
             other                                                              \
         };                                                                     \
         ForEach<                                                               \
-            typename Mapping::DatumDomain,                                     \
+            AccessibleDatumDomain,                                             \
             DatumCoord< >                                                      \
         >::apply( functor );                                                   \
         return *this;                                                          \
@@ -283,7 +291,7 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
             otherVd                                                            \
         };                                                                     \
         ForEach<                                                               \
-            typename Mapping::DatumDomain,                                     \
+            AccessibleDatumDomain,                                             \
             DatumCoord< >                                                      \
         >::apply( functor );                                                   \
         return *this;                                                          \
@@ -313,7 +321,7 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
             other                                                              \
         };                                                                     \
         ForEach<                                                               \
-            typename Mapping::DatumDomain,                                     \
+            AccessibleDatumDomain,                                             \
             DatumCoord< >                                                      \
         >::apply( functor );                                                   \
         return *this;                                                          \
@@ -476,7 +484,7 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
                 true                                                           \
             };                                                                 \
             ForEach<                                                           \
-                typename T_RightDatum::Mapping::DatumDomain,                   \
+                typename T_RightDatum::AccessibleDatumDomain,                  \
                 T_Source                                                       \
             >::apply( functor );                                               \
             result &= functor.result;                                          \
@@ -533,15 +541,23 @@ __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( >= , BiggerSameThan )
  *  UID
  * */
 #define __LLAMA_VIRTUALDATUM_VIRTUALDATUM_BOOL_OPERATOR( OP, FUNCTOR, REF )    \
-    template< typename T_OtherView >                                           \
+    template<                                                                  \
+        typename T_OtherView,                                                  \
+        typename T_OtherBoundDatumDomain                                       \
+    >                                                                          \
     LLAMA_FN_HOST_ACC_INLINE                                                   \
     auto                                                                       \
-    operator OP( VirtualDatum< T_OtherView >REF other )                        \
-    -> bool                                                                    \
+    operator OP( VirtualDatum<                                                 \
+        T_OtherView,                                                           \
+        T_OtherBoundDatumDomain                                                \
+    >REF other ) -> bool                                                       \
     {                                                                          \
         BOOST_PP_CAT( FUNCTOR, BoolFunctor)<                                   \
             decltype(*this),                                                   \
-            VirtualDatum< T_OtherView >,                                       \
+            VirtualDatum<                                                      \
+                T_OtherView,                                                   \
+                T_OtherBoundDatumDomain                                        \
+            >,                                                                 \
             DatumCoord< >                                                      \
         > functor{                                                             \
             *this,                                                             \
@@ -549,7 +565,7 @@ __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( >= , BiggerSameThan )
             true                                                               \
         };                                                                     \
         ForEach<                                                               \
-            typename Mapping::DatumDomain,                                     \
+            AccessibleDatumDomain,                                             \
             DatumCoord< >                                                      \
         >::apply( functor );                                                   \
         return functor.result;                                                 \
@@ -594,7 +610,7 @@ __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( >= , BiggerSameThan )
             true                                                               \
         };                                                                     \
         ForEach<                                                               \
-            typename Mapping::DatumDomain,                                     \
+            AccessibleDatumDomain,                                             \
             DatumCoord< >                                                      \
         >::apply( functor );                                                   \
         return functor.result;                                                 \
@@ -626,7 +642,7 @@ __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( >= , BiggerSameThan )
             true                                                               \
         };                                                                     \
         ForEach<                                                               \
-            typename Mapping::DatumDomain,                                     \
+            AccessibleDatumDomain,                                             \
             DatumCoord< >                                                      \
         >::apply( functor );                                                   \
         return functor.result;                                                 \
@@ -643,10 +659,17 @@ __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( >= , BiggerSameThan )
 /** Virtual data type returned by \ref View after resolving user domain address,
  *  being "virtual" in that sense that the data of the virtual datum are not
  *  part of the struct itself but a helper object to address them in the compile
- *  time datum domain
+ *  time datum domain.
+ *  Beside the user domain, also a part of the compile time domain may be
+ *  resolved for access like `datum( Pos ) += datum( Vel )`.
  * \tparam T_View parent view of the virtual datum
+ * \tparam T_BoundDatumDomain optional \ref DatumCoord which restricts the
+ *  virtual datum to a smaller part of the datum domain
  */
-template< typename T_View >
+template<
+    typename T_View,
+    typename T_BoundDatumDomain = DatumCoord<>
+>
 struct VirtualDatum
 {
     /// parent view of the virtual datum
@@ -655,32 +678,28 @@ struct VirtualDatum
     using Mapping = typename ViewType::Mapping;
     /// blobtype of the underlying view
     using BlobType = typename ViewType::BlobType;
-
+    /** already resolved part of the datum domain, basically the new datum
+     *  domain tree root
+     */
+    using BoundDatumDomain = T_BoundDatumDomain;
     /// resolved position in the user domain
     typename Mapping::UserDomain const userDomainPos;
+    /** Sub part of the datum domain of the view/mapping relative to
+     *  \ref BoundDatumDomain. If BoundDatumDomain is `DatumCoord<>` (default)
+     *  AccessibleDatumDomain is the same as `Mapping::DatumDomain`.
+     */
+    using AccessibleDatumDomain = GetTypeFromDatumCoord<
+        typename Mapping::DatumDomain,
+        BoundDatumDomain
+    >;
     /// reference to parent view
     ViewType& view;
 
-    template< typename... T_UIDs >
-    struct AccessImpl
-    {
-        template< typename T_UserDomain >
-        static
-        LLAMA_FN_HOST_ACC_INLINE
-        auto
-        apply(
-            T_View&& view,
-            T_UserDomain const & userDomainPos
-        )
-        -> decltype( view.template accessor< T_UIDs... >( userDomainPos ) )&
-        {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return view.template accessor< T_UIDs... >( userDomainPos );
-        }
-    };
+    template< typename T_DatumCoordWithBoundDatumDomain >
+    struct AccessWithBoundDatumDomainImpl;
 
     template< std::size_t... T_coord >
-    struct AccessImpl< DatumCoord< T_coord... > >
+    struct AccessWithBoundDatumDomainImpl< DatumCoord< T_coord... > >
     {
         template< typename T_UserDomain >
         static
@@ -697,52 +716,207 @@ struct VirtualDatum
         }
     };
 
+    template<
+        typename T_DatumCoord,
+        typename T_SFINAE = void
+    >
+    struct AccessImpl;
+
+    template< typename T_DatumCoord >
+    struct AccessImpl<
+        T_DatumCoord,
+        typename std::enable_if<
+            !is_DatumStruct<
+                GetTypeFromDatumCoord<
+                    typename Mapping::DatumDomain,
+                    typename BoundDatumDomain::template Cat< T_DatumCoord >
+                >
+            >::value
+        >::type
+    >
+    {
+        template< typename T_UserDomain >
+        static
+        LLAMA_FN_HOST_ACC_INLINE
+        auto
+        apply(
+            T_View&& view,
+            T_UserDomain const & userDomainPos
+        )
+        -> decltype( AccessWithBoundDatumDomainImpl<
+                typename BoundDatumDomain::template Cat< T_DatumCoord >
+            >::apply(
+                std::forward<T_View>(view),
+                userDomainPos
+            ) ) // & should be in decltype if …::apply returns a reference
+        {
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return AccessWithBoundDatumDomainImpl<
+                typename BoundDatumDomain::template Cat< T_DatumCoord >
+            >::apply(
+                std::forward<T_View>(view),
+                userDomainPos
+            );
+        }
+    };
+
+    template< typename T_DatumCoord >
+    struct AccessImpl<
+        T_DatumCoord,
+        typename std::enable_if<
+            is_DatumStruct<
+                GetTypeFromDatumCoord<
+                    typename Mapping::DatumDomain,
+                    typename BoundDatumDomain::template Cat< T_DatumCoord >
+                >
+            >::value
+        >::type
+    >
+    {
+        template< typename T_UserDomain >
+        static
+        LLAMA_FN_HOST_ACC_INLINE
+        auto
+        apply(
+            T_View&& view,
+            T_UserDomain const & userDomainPos
+        )
+        -> decltype( VirtualDatum<
+                View <
+                    Mapping,
+                    BlobType
+                >,
+                typename BoundDatumDomain::template Cat< T_DatumCoord >
+            >{
+                typename Mapping::UserDomain{ userDomainPos },
+                view
+            } ) // & should be in decltype if …::apply returns a reference
+        {
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return VirtualDatum<
+                View <
+                    Mapping,
+                    BlobType
+                >,
+                typename BoundDatumDomain::template Cat< T_DatumCoord >
+            >{
+                typename Mapping::UserDomain{ userDomainPos },
+                view
+            };
+        }
+    };
+
+    template< typename... T_UIDs >
+    struct AccessWithTypeImpl
+    {
+        template< typename T_UserDomain >
+        static
+        LLAMA_FN_HOST_ACC_INLINE
+        auto
+        apply(
+            T_View&& view,
+            T_UserDomain const & userDomainPos
+        )
+        -> decltype( AccessImpl<
+                GetCoordFromUIDRelative<
+                    typename Mapping::DatumDomain,
+                    BoundDatumDomain,
+                    T_UIDs...
+                >
+            >::apply(
+                std::forward<T_View>(view),
+                userDomainPos
+            ) ) // & should be in decltype if …::apply returns a reference
+        {
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return AccessImpl<
+                GetCoordFromUIDRelative<
+                    typename Mapping::DatumDomain,
+                    BoundDatumDomain,
+                    T_UIDs...
+                >
+            >::apply(
+                std::forward<T_View>(view),
+                userDomainPos
+            );
+        }
+    };
+
+
+    template< std::size_t... T_coord >
+    struct AccessWithTypeImpl< DatumCoord< T_coord... > >
+    {
+        template< typename T_UserDomain >
+        static
+        LLAMA_FN_HOST_ACC_INLINE
+        auto
+        apply(
+            T_View&& view,
+            T_UserDomain const & userDomainPos
+        )
+        -> decltype( AccessImpl< DatumCoord< T_coord... > >::apply(
+                std::forward<T_View>(view),
+                userDomainPos
+            ) ) // & should be in decltype if …::apply returns a reference
+        {
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return AccessImpl< DatumCoord< T_coord... > >::apply(
+                std::forward<T_View>(view),
+                userDomainPos
+            );
+        }
+    };
+
     template< typename... T_DatumCoordOrUIDs  >
     LLAMA_FN_HOST_ACC_INLINE
     auto
     access( T_DatumCoordOrUIDs&&... )
-    -> decltype( AccessImpl< T_DatumCoordOrUIDs... >::apply(
+    -> decltype( AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
             std::forward<T_View>(view),
             userDomainPos
-        ) ) &
+        ) ) // & should be in decltype if …::apply returns a reference
     {
         LLAMA_FORCE_INLINE_RECURSIVE
-        return AccessImpl< T_DatumCoordOrUIDs... >::apply(
+        return AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
             std::forward<T_View>(view),
             userDomainPos
         );
     }
 
     /** Explicit access function for a coordinate in the datum domain given as
-     *  unique identifier or \ref DatumCoord.
+     *  unique identifier or \ref DatumCoord. If the address -- independently
+     *  whether given as datum coord or UID -- is not a leaf but, a new virtual
+     *  datum with a bound datum coord is returned.
      * \tparam T_DatumCoordOrUIDs... variadic number of types as unique
      *  identifier **or** \ref DatumCoord with tree coordinates as template
      *  parameters inside
      * \return reference to element at resolved user domain and given datum
-     *  domain coordinate
+     *  domain coordinate or a new virtual datum with a bound datum coord
      */
     template< typename... T_DatumCoordOrUIDs  >
     LLAMA_FN_HOST_ACC_INLINE
     auto
     access( )
-    -> decltype( AccessImpl< T_DatumCoordOrUIDs... >::apply(
+    -> decltype( AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
             std::forward<T_View>(view),
             userDomainPos
-        ) ) &
+        ) ) // & should be in decltype if …::apply returns a reference
     {
         LLAMA_FORCE_INLINE_RECURSIVE
-        return AccessImpl< T_DatumCoordOrUIDs... >::apply(
+        return AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
             std::forward<T_View>(view),
             userDomainPos
         );
     }
 
     /** Explicit access function for a coordinate in the datum domain given as
-     *  tree position indexes.
+     *  tree position indexes. If the address -- independently
+     *  whether given as datum coord or UID -- is not a leaf but, a new virtual
+     *  datum with a bound datum coord is returned.
      * \tparam T_coord... variadic number std::size_t numbers as tree
      *  coordinates
      * \return reference to element at resolved user domain and given datum
-     *  domain coordinate
+     *  domain coordinate or a new virtual datum with a bound datum coord
      */
     template< std::size_t... T_coord  >
     LLAMA_FN_HOST_ACC_INLINE
@@ -751,7 +925,7 @@ struct VirtualDatum
     -> decltype( AccessImpl< DatumCoord< T_coord... > >::apply(
             std::forward<T_View>(view),
             userDomainPos
-        ) ) &
+        ) ) // & should be in decltype if …::apply returns a reference
     {
         LLAMA_FORCE_INLINE_RECURSIVE
         return AccessImpl< DatumCoord< T_coord... > >::apply(
@@ -761,24 +935,27 @@ struct VirtualDatum
     }
 
     /** operator overload() for a coordinate in the datum domain given as
-     *  unique identifier or \ref DatumCoord.
+     *  unique identifier or \ref DatumCoord. If the address -- independently
+     *  whether given as datum coord or UID -- is not a leaf but, a new virtual
+     *  datum with a bound datum coord is returned.
      * \param datumCoordOrUIDs instantiation of variadic number of unique
      *  identifier types **or** \ref DatumCoord with tree coordinates as
      *  template parameters inside
      * \return reference to element at resolved user domain and given datum
-     *  domain coordinate
+     *  domain coordinate or a new virtual datum with a bound datum coord
      */
     template< typename... T_DatumCoordOrUIDs  >
     LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()( T_DatumCoordOrUIDs&&... LLAMA_IGNORE_LITERAL( datumCoordOrUIDs ) )
 #if !BOOST_COMP_INTEL && !BOOST_COMP_NVCC
-    -> decltype( access< T_DatumCoordOrUIDs... >() ) &
+    -> decltype( access< T_DatumCoordOrUIDs... >() )
+    // & should be in decltype if …::apply returns a reference
 #else //Intel compiler bug work around
-    -> decltype( AccessImpl< T_DatumCoordOrUIDs... >::apply(
+    -> decltype( AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
         std::forward<T_View>(view),
         userDomainPos
-    ) ) &
+    ) ) // & should be in decltype if …::apply returns a reference
 #endif
     {
         LLAMA_FORCE_INLINE_RECURSIVE

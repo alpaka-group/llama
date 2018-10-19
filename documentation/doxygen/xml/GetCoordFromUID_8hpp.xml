@@ -106,6 +106,7 @@
     <innerclass refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos42aa3c321c620142ac61091bca4cc194" prot="public">llama::internal::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, typename std::enable_if&lt; std::is_same&lt; T_FirstUID, GetDatumElementUID&lt; boost::mp11::mp_first&lt; T_DatumDomain &gt; &gt; &gt;::value &gt;::type, T_FirstUID, T_UID... &gt;</innerclass>
     <innerclass refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__posdbb55aaccff22d6a4c9d108b6b1d84bf" prot="public">llama::internal::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, typename std::enable_if&lt; !std::is_same&lt; T_FirstUID, GetDatumElementUID&lt; boost::mp11::mp_first&lt; T_DatumDomain &gt; &gt; &gt;::value &gt;::type, T_FirstUID, T_UID... &gt;</innerclass>
     <innerclass refid="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01void_01_4" prot="public">llama::internal::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, void &gt;</innerclass>
+    <innerclass refid="structllama_1_1internal_1_1GetCoordFromUIDRelativeImpl" prot="public">llama::internal::GetCoordFromUIDRelativeImpl</innerclass>
     <innernamespace refid="namespacellama">llama</innernamespace>
     <innernamespace refid="namespacellama_1_1internal">llama::internal</innernamespace>
     <briefdescription>
@@ -248,7 +249,58 @@
 <codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/>T_UID...</highlight></codeline>
 <codeline lineno="141" refid="namespacellama_1a3953132518a1c5bd14cbacc8107975db" refkind="member"><highlight class="normal">&gt;::type;</highlight></codeline>
 <codeline lineno="142"><highlight class="normal"></highlight></codeline>
-<codeline lineno="143"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>llama</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="143"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">internal</highlight></codeline>
+<codeline lineno="144"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"></highlight></codeline>
+<codeline lineno="146"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_UID</highlight></codeline>
+<codeline lineno="150"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="151" refid="structllama_1_1internal_1_1GetCoordFromUIDRelativeImpl" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structllama_1_1internal_1_1GetCoordFromUIDRelativeImpl" kindref="compound">GetCoordFromUIDRelativeImpl</ref></highlight></codeline>
+<codeline lineno="152"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1internal_1_1GetCoordFromUIDRelativeImpl_1a99b9a9520d71d696e4cf1652709a50e3" kindref="member">AbsolutCoord</ref><sp/>=<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1internal_1_1GetCoordFromUIDImpl" kindref="compound">internal::GetCoordFromUIDImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacellama_1a22362d58c566945f0f8178e2af1b0013" kindref="member">GetTypeFromDatumCoord</ref>&lt;</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumCoord</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&gt;,</highlight></codeline>
+<codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0,</highlight></codeline>
+<codeline lineno="160"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>void,</highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_UID...</highlight></codeline>
+<codeline lineno="162" refid="structllama_1_1internal_1_1GetCoordFromUIDRelativeImpl_1a99b9a9520d71d696e4cf1652709a50e3" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;<ref refid="structllama_1_1internal_1_1GetCoordFromUIDRelativeImpl_1a45745f3491000c6962af68167d95d1b2" kindref="member">::type</ref>;</highlight></codeline>
+<codeline lineno="163"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Only<sp/>returning<sp/>the<sp/>datum<sp/>coord<sp/>relative<sp/>to<sp/>T_DatumCoord</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1internal_1_1GetCoordFromUIDRelativeImpl_1a45745f3491000c6962af68167d95d1b2" kindref="member">type</ref><sp/>=<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>AbsolutCoord::template<sp/>Back&lt;</highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>AbsolutCoord::size<sp/>-<sp/>T_DatumCoord::size</highlight></codeline>
+<codeline lineno="166" refid="structllama_1_1internal_1_1GetCoordFromUIDRelativeImpl_1a45745f3491000c6962af68167d95d1b2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;;</highlight></codeline>
+<codeline lineno="167"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="168"><highlight class="normal"></highlight></codeline>
+<codeline lineno="169"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>internal</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="170"><highlight class="normal"></highlight></codeline>
+<codeline lineno="182"><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="183"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="185"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_UID</highlight></codeline>
+<codeline lineno="186"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="187"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1a2a66c0b18aabc9c5ad839c9f79e70023" kindref="member">GetCoordFromUIDRelative</ref><sp/>=<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1internal_1_1GetCoordFromUIDRelativeImpl" kindref="compound">internal::GetCoordFromUIDRelativeImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="188"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="189"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumCoord,</highlight></codeline>
+<codeline lineno="190"><highlight class="normal"><sp/><sp/><sp/><sp/>T_UID...</highlight></codeline>
+<codeline lineno="191" refid="namespacellama_1a2a66c0b18aabc9c5ad839c9f79e70023" refkind="member"><highlight class="normal">&gt;::type;</highlight></codeline>
+<codeline lineno="192"><highlight class="normal"></highlight></codeline>
+<codeline lineno="199"><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight></codeline>
+<codeline lineno="200"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="201"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal">...<sp/>T_UIDs</highlight></codeline>
+<codeline lineno="202"><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="203"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/><ref refid="namespacellama_1a611592a97449d75fa735130181876eda" kindref="member">GetTypeFromUID</ref><sp/>=<sp/><ref refid="namespacellama_1a22362d58c566945f0f8178e2af1b0013" kindref="member">GetTypeFromDatumCoord</ref>&lt;</highlight></codeline>
+<codeline lineno="204"><highlight class="normal"><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="205"><highlight class="normal"><sp/><sp/><sp/><sp/>GetCoordFromUID&lt;</highlight></codeline>
+<codeline lineno="206"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumDomain,</highlight></codeline>
+<codeline lineno="207"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_UIDs...</highlight></codeline>
+<codeline lineno="208"><highlight class="normal"><sp/><sp/><sp/><sp/>&gt;</highlight></codeline>
+<codeline lineno="209" refid="namespacellama_1a611592a97449d75fa735130181876eda" refkind="member"><highlight class="normal">&gt;;</highlight></codeline>
+<codeline lineno="210"><highlight class="normal"></highlight></codeline>
+<codeline lineno="211"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>llama</highlight><highlight class="normal"></highlight></codeline>
     </programlisting>
     <location file="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp"/>
   </compounddef>

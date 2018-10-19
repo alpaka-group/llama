@@ -5,46 +5,19 @@
     <includes refid="View_8hpp" local="no">View.hpp</includes>
     <templateparamlist>
       <param>
-        <type>typename...</type>
-        <declname>T_UIDs</declname>
-        <defname>T_UIDs</defname>
+        <type>typename T_DatumCoord</type>
+      </param>
+      <param>
+        <type>typename T_SFINAE</type>
+        <defval>void</defval>
       </param>
     </templateparamlist>
-      <sectiondef kind="public-static-func">
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1_1AccessImpl_1ab8f24df21e1c362ddab89e51bd04c0ce" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename T_UserDomain</type>
-          </param>
-        </templateparamlist>
-        <type>auto</type>
-        <definition>static auto llama::VirtualDatum::AccessImpl&lt; T_UIDs &gt;::apply</definition>
-        <argsstring>(T_View &amp;&amp;view, T_UserDomain const &amp;userDomainPos) -&gt; decltype(view.template accessor&lt; T_UIDs... &gt;(userDomainPos))&amp;</argsstring>
-        <name>apply</name>
-        <param>
-          <type>T_View &amp;&amp;</type>
-          <declname>view</declname>
-        </param>
-        <param>
-          <type>T_UserDomain const &amp;</type>
-          <declname>userDomainPos</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="671" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="671" bodyend="679"/>
-      </memberdef>
-      </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="666" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="665" bodyend="680"/>
+    <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="723" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="723" bodyend="-1"/>
     <listofallmembers>
-      <member refid="structllama_1_1VirtualDatum_1_1AccessImpl_1ab8f24df21e1c362ddab89e51bd04c0ce" prot="public" virt="non-virtual"><scope>llama::VirtualDatum::AccessImpl</scope><name>apply</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

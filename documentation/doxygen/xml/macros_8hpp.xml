@@ -231,7 +231,7 @@
 </programlisting> </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" line="80" column="12" bodyfile="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" bodystart="80" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" line="83" column="20" bodyfile="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" bodystart="83" bodyend="-1"/>
       </memberdef>
       <memberdef kind="define" id="macros_8hpp_1affb1b2bdbbed82d386e8cf712cc7e4b5" prot="public" static="no">
         <name>LLAMA_NO_HOST_ACC_WARNING</name>
@@ -241,7 +241,7 @@
 <para>Deactivates (wrong negative) warnings about calling host function in an offloading device (e.g. for CUDA). </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" line="94" column="16" bodyfile="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" bodystart="94" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" line="98" column="16" bodyfile="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" bodystart="98" bodyend="-1"/>
       </memberdef>
       <memberdef kind="define" id="macros_8hpp_1a48abf2d81c1aac87ff87f95bb427049a" prot="public" static="no">
         <name>LLAMA_FORCE_INLINE_RECURSIVE</name>
@@ -251,7 +251,7 @@
 <para>If possible forces the compiler to recursively inline the following function and all child function calls. Should be use carefully as at least the Intel compiler implementation seems to be buggy. </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" line="105" column="12" bodyfile="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" bodystart="105" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" line="109" column="12" bodyfile="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" bodystart="109" bodyend="-1"/>
       </memberdef>
       <memberdef kind="define" id="macros_8hpp_1ac5ebc32ab3b77b2abc6cc3f8c612b702" prot="public" static="no">
         <name>LLAMA_IF_DEBUG</name>
@@ -263,7 +263,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" line="110" column="12" bodyfile="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" bodystart="110" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" line="114" column="12" bodyfile="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" bodystart="114" bodyend="-1"/>
       </memberdef>
       <memberdef kind="define" id="macros_8hpp_1a100b24418a95976a001b8fac8a676b02" prot="public" static="no">
         <name>LLAMA_IF_RELEASE</name>
@@ -274,7 +274,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" line="112" column="12" bodyfile="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" bodystart="112" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" line="116" column="12" bodyfile="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" bodystart="116" bodyend="-1"/>
       </memberdef>
       <memberdef kind="define" id="macros_8hpp_1a84febcf0c516314cf4cc6923dccd5b2a" prot="public" static="no">
         <name>LLAMA_DEREFERENCE</name>
@@ -286,7 +286,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" line="118" column="9" bodyfile="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" bodystart="118" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" line="122" column="9" bodyfile="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp" bodystart="122" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -346,42 +346,46 @@
 <codeline lineno="60"><highlight class="normal"></highlight></codeline>
 <codeline lineno="61"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>LLAMA_FN_HOST_ACC_INLINE</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="62"><highlight class="normal"></highlight></codeline>
-<codeline lineno="80" refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" refkind="member"><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_FN_HOST_ACC_INLINE<sp/>inline</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="81"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="82"><highlight class="normal"></highlight></codeline>
-<codeline lineno="83"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>LLAMA_NO_HOST_ACC_WARNING</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="84"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>if<sp/>__NVCC__<sp/>!=<sp/>0</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="85"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/>if<sp/>BOOST_COMP_MSVC<sp/>!=<sp/>0</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="86"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>define<sp/>LLAMA_NO_HOST_ACC_WARNING<sp/>__pragma(hd_warning_disable)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="87"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/>else</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="88"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>define<sp/>LLAMA_NO_HOST_ACC_WARNING<sp/>_Pragma(&quot;hd_warning_disable&quot;)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="89"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="90"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>else</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="91"><highlight class="normal"></highlight></codeline>
-<codeline lineno="94" refid="macros_8hpp_1affb1b2bdbbed82d386e8cf712cc7e4b5" refkind="member"><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/>define<sp/>LLAMA_NO_HOST_ACC_WARNING</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="95"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="96"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="97"><highlight class="normal"></highlight></codeline>
-<codeline lineno="98"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>BOOST_COMP_INTEL<sp/>!=<sp/>0</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="99"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_FORCE_INLINE_RECURSIVE<sp/>_Pragma<sp/>(&quot;forceinline<sp/>recursive&quot;)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="100"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="80"><highlight class="preprocessor">#<sp/><sp/><sp/>if<sp/>BOOST_COMP_GNUC!=0</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="81"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/>define<sp/>LLAMA_FN_HOST_ACC_INLINE<sp/>inline<sp/>__attribute__((always_inline))</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="82"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="83" refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/>define<sp/>LLAMA_FN_HOST_ACC_INLINE<sp/>inline</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="84"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="85"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal"></highlight></codeline>
+<codeline lineno="87"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>LLAMA_NO_HOST_ACC_WARNING</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="88"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>if<sp/>__NVCC__<sp/>!=<sp/>0</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="89"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/>if<sp/>BOOST_COMP_MSVC<sp/>!=<sp/>0</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>define<sp/>LLAMA_NO_HOST_ACC_WARNING<sp/>__pragma(hd_warning_disable)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="91"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/>else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="92"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>define<sp/>LLAMA_NO_HOST_ACC_WARNING<sp/>_Pragma(&quot;hd_warning_disable&quot;)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="93"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="94"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="95"><highlight class="normal"></highlight></codeline>
+<codeline lineno="98" refid="macros_8hpp_1affb1b2bdbbed82d386e8cf712cc7e4b5" refkind="member"><highlight class="preprocessor">#<sp/><sp/><sp/><sp/><sp/><sp/><sp/>define<sp/>LLAMA_NO_HOST_ACC_WARNING</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="99"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="101"><highlight class="normal"></highlight></codeline>
-<codeline lineno="105" refid="macros_8hpp_1a48abf2d81c1aac87ff87f95bb427049a" refkind="member"><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_FORCE_INLINE_RECURSIVE</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="106"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="107"><highlight class="normal"></highlight></codeline>
-<codeline lineno="108"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>defined(DEBUG)<sp/>||<sp/>!defined(NDEBUG)<sp/>||<sp/>defined(_DEBUG)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="109"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_IF_DEBUG(<sp/>x<sp/>)<sp/>x</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="111"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_IF_RELEASE(<sp/>x<sp/>)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="113"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="114"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_IF_DEBUG(<sp/>x<sp/>)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="115"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_IF_RELEASE(<sp/>x<sp/>)<sp/>x</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="116"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="117"><highlight class="normal"></highlight></codeline>
-<codeline lineno="118" refid="macros_8hpp_1a84febcf0c516314cf4cc6923dccd5b2a" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>LLAMA_DEREFERENCE(<sp/>x<sp/>)<sp/>decltype(<sp/>x<sp/>)(<sp/>x<sp/>)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="119"><highlight class="normal"></highlight></codeline>
-<codeline lineno="120"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>LLAMA_IGNORE_LITERAL</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="121"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_IGNORE_LITERAL(<sp/>x<sp/>)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="122"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>BOOST_COMP_INTEL<sp/>!=<sp/>0</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="103"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_FORCE_INLINE_RECURSIVE<sp/>_Pragma<sp/>(&quot;forceinline<sp/>recursive&quot;)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="104"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="105"><highlight class="normal"></highlight></codeline>
+<codeline lineno="109" refid="macros_8hpp_1a48abf2d81c1aac87ff87f95bb427049a" refkind="member"><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_FORCE_INLINE_RECURSIVE</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="111"><highlight class="normal"></highlight></codeline>
+<codeline lineno="112"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>defined(DEBUG)<sp/>||<sp/>!defined(NDEBUG)<sp/>||<sp/>defined(_DEBUG)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="113"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_IF_DEBUG(<sp/>x<sp/>)<sp/>x</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="115"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_IF_RELEASE(<sp/>x<sp/>)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="117"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="118"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_IF_DEBUG(<sp/>x<sp/>)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="119"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_IF_RELEASE(<sp/>x<sp/>)<sp/>x</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="120"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="121"><highlight class="normal"></highlight></codeline>
+<codeline lineno="122" refid="macros_8hpp_1a84febcf0c516314cf4cc6923dccd5b2a" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>LLAMA_DEREFERENCE(<sp/>x<sp/>)<sp/>decltype(<sp/>x<sp/>)(<sp/>x<sp/>)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>LLAMA_IGNORE_LITERAL</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/><sp/>define<sp/>LLAMA_IGNORE_LITERAL(<sp/>x<sp/>)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="126"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
     </programlisting>
     <location file="/home/alexander/develop/work/llama/include/llama/preprocessor/macros.hpp"/>
   </compounddef>

@@ -22,37 +22,6 @@ be implemented -- at least of they are inplace.
 objects (e.g. on the stack) which may be bad or expression templates. Both is
 not **planned** atm but **not completely excluded** as well.
 
-Explictly planned is to be able to work on intermediate objects between a full
-view and a concrete element in the datum domain so that such expression are
-valid:
-
-.. code-block:: C++
-
-    using UserDomain = llama::UserDomain< 2 >;
-    using DatumDomain = llama::DatumStruct <
-        llama::DatumElement < color, llama::DatumStruct <
-            llama::DatumElement < r, float >,
-            llama::DatumElement < g, float >,
-            llama::DatumElement < b, float >
-        > >,
-        llama::DatumElement < alpha, char >
-    >;
-
-    // binding the first user domain dimension
-    auto subview = view( 13 );
-    auto vd1 = subview( 37 ); // same as view( 13, 37 );
-    auto vd2 = view( 23, 42 );
-
-    // working only on the color sub datum domain
-    vd1( color() ) += vd2( color() );
-
-    // binding the first datum domain hierarchie level
-    auto subVd1 = vd1( color() );
-    subVd1 = 0; //only resetting the color, but not the alpha value
-
-Another thought is to be able to easily define sub datum domains out of existing
-ones, e.g. taking only one branch of the type tree or removing branches.
-
 Mappings
 --------
 

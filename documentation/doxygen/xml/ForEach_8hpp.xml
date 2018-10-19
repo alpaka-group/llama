@@ -369,7 +369,7 @@
 <codeline lineno="239"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="macros_8hpp_1adad0b5fb27fb373cb41c47ed7ab419af" kindref="member">LLAMA_FN_HOST_ACC_INLINE</ref></highlight></codeline>
 <codeline lineno="240" refid="structllama_1_1internal_1_1ApplyFunctorForEachLeaf_3_01DatumStruct_3_01T__Leaves_8_8_8_01_4_00_0873e5c33522256754320ecd22003f239_1adf595be1564452a4b580d34c3545b26b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structllama_1_1internal_1_1ApplyFunctorForEachLeaf_3_01DatumStruct_3_01T__Leaves_8_8_8_01_4_00_0873e5c33522256754320ecd22003f239_1adf595be1564452a4b580d34c3545b26b" kindref="member">apply</ref>(<sp/>T_Functor&amp;&amp;<sp/>functor<sp/>)</highlight></codeline>
 <codeline lineno="241"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
-<codeline lineno="242"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1internal_1_1ApplyFunctorForEachLeafImpl" kindref="compound">ApplyFunctorForEachLeafImpl</ref>&lt;</highlight></codeline>
+<codeline lineno="242"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1internal_1_1ApplyFunctorForEachLeafImpl" kindref="compound">ApplyFunctorForEachLeafImpl</ref>&lt;</highlight></codeline>
 <codeline lineno="243"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_DatumCoord,</highlight></codeline>
 <codeline lineno="244"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord&lt; 0 &gt;</ref>,</highlight></codeline>
 <codeline lineno="245"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_Functor,</highlight></codeline>
@@ -429,7 +429,6 @@
 <codeline lineno="316"><highlight class="normal"></highlight></codeline>
 <codeline lineno="317"><highlight class="normal"></highlight></codeline>
 <codeline lineno="318"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>llama</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="319"><highlight class="normal"></highlight></codeline>
     </programlisting>
     <location file="/home/alexander/develop/work/llama/include/llama/ForEach.hpp"/>
   </compounddef>

@@ -339,14 +339,14 @@
 </parameterlist>
 </para>    </detaileddescription>
     <collaborationgraph>
-      <node id="200">
+      <node id="216">
         <label>llama::mapping::tree::MergeFunctors&lt; T_Tree, T_TreeOperationList &gt;</label>
         <link refid="structllama_1_1mapping_1_1tree_1_1MergeFunctors"/>
       </node>
-      <node id="199">
+      <node id="215">
         <label>llama::mapping::tree::Mapping&lt; T_UserDomain, T_DatumDomain, T_TreeOperationList &gt;</label>
         <link refid="structllama_1_1mapping_1_1tree_1_1Mapping"/>
-        <childnode refid="200" relation="usage">
+        <childnode refid="216" relation="usage">
           <edgelabel>mergedFunctors</edgelabel>
         </childnode>
       </node>

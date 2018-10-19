@@ -239,7 +239,7 @@ struct ApplyFunctorForEachLeaf<
     LLAMA_FN_HOST_ACC_INLINE
     static void apply( T_Functor&& functor )
     {
-         ApplyFunctorForEachLeafImpl<
+        ApplyFunctorForEachLeafImpl<
             T_DatumCoord,
             DatumCoord< 0 >,
             T_Functor,
@@ -316,4 +316,3 @@ struct ForEach<
 
 
 } // namespace llama
-

@@ -21,8 +21,6 @@
 #include <alpaka/alpaka.hpp>
 #ifdef __CUDACC__
 	#define LLAMA_FN_HOST_ACC_INLINE ALPAKA_FN_ACC __forceinline__
-#else
-	#define LLAMA_FN_HOST_ACC_INLINE ALPAKA_FN_ACC inline
 #endif
 #include <llama/llama.hpp>
 #include <random>
@@ -72,26 +70,22 @@ pPInteraction(
 )
 -> void
 {
-    Element const d[3] = {
-        p1( dd::Pos(), dd::X() ) -
-        p2( dd::Pos(), dd::X() ),
-        p1( dd::Pos(), dd::Y() ) -
-        p2( dd::Pos(), dd::Y() ),
-        p1( dd::Pos(), dd::Z() ) -
-        p2( dd::Pos(), dd::Z() )
-    };
-    Element distSqr = d[0] * d[0] + d[1] * d[1] + d[2] * d[2] + EPS2;
+    // Creating tempory object for distance on stack:
+    using DistanceDD = llama::GetTypeFromUID< Particle, dd::Pos >;
+    auto distance = llama::tempAlloc< 1, DistanceDD >();
+    distance()  = p1( dd::Pos() );
+    distance() -= p2( dd::Pos() );
+
+    distance() *= distance(); //square for each element
+    Element distSqr = EPS2 +
+        distance()( dd::X() ) +
+        distance()( dd::Y() ) +
+        distance()( dd::Z() );
     Element distSixth = distSqr * distSqr * distSqr;
-    Element invDistCube = 1.0f / sqrtf(distSixth);
+    Element invDistCube = 1.0f / sqrtf( distSixth );
     Element s = p2( dd::Mass() ) * invDistCube;
-    Element const v_d[3] = {
-        d[0] * s * ts,
-        d[1] * s * ts,
-        d[2] * s * ts
-    };
-    p1( dd::Vel(), dd::X() ) += v_d[0];
-    p1( dd::Vel(), dd::Y() ) += v_d[1];
-    p1( dd::Vel(), dd::Z() ) += v_d[2];
+    distance() *= s * ts;
+    p1( dd::Vel() ) += distance();
 }
 
 template<
@@ -299,13 +293,13 @@ struct MoveKernel
         LLAMA_INDEPENDENT_DATA
         for ( auto pos = start; pos < end; ++pos )
         {
-            particles( pos )( dd::Pos(), dd::X() ) +=
-                particles( pos )( dd::Vel(), dd::X() ) * ts;
-            particles( pos )( dd::Pos(), dd::Y() ) +=
-                particles( pos )( dd::Vel(), dd::Y() ) * ts;
-            particles( pos )( dd::Pos(), dd::Z() ) +=
-                particles( pos )( dd::Vel(), dd::Z() ) * ts;
-        };
+            // Creating tempory object for distance on stack:
+            using VelocityDD = llama::GetTypeFromUID< Particle, dd::Vel >;
+            auto velocity = llama::tempAlloc< 1, VelocityDD >();
+            velocity()  = particles( pos )( dd::Vel() );
+            velocity() *= ts;
+            particles( pos )( dd::Pos() ) += velocity();
+        }
     }
 };
 

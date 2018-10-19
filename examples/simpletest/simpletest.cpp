@@ -149,15 +149,19 @@ int main(int argc,char * * argv)
             datum.access< st::Pos, st::X >() += datum.access< llama::DatumCoord< 1, 0 > >();
             datum.access( st::Pos(), st::Y() ) += datum.access( llama::DatumCoord< 1, 1 >() );
             datum( st::Pos(), st::Z() ) += datum( llama::DatumCoord< 2 >() );
-            llama::AdditionFunctor<
-                decltype(datum),
-                decltype(datum),
-                st::Pos
-            > as{ datum, datum };
-            llama::ForEach<
-                Name,
-                st::Momentum
-            >::apply( as );
+
+            datum( st::Pos() ) += datum( st::Momentum() );
+            /* The line above does the same as:
+                llama::AdditionFunctor<
+                    decltype(datum),
+                    decltype(datum),
+                    st::Pos
+                > as{ datum, datum };
+                llama::ForEach<
+                    Name,
+                    st::Momentum
+                >::apply( as );
+            */
         }
     double sum = 0.0;
     for (size_t x = 0; x < udSize[0]; ++x)

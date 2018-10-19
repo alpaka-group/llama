@@ -38,7 +38,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="818" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="818" bodyend="826"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="995" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="995" bodyend="1003"/>
       </memberdef>
       <memberdef kind="function" id="structllama_1_1internal_1_1MappingDatumCoordCaller_3_01DatumCoord_3_01T__coords_8_8_8_01_4_01_4_1ad04de6e73122ebc3939f2165fb393762" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -67,14 +67,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="835" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="835" bodyend="843"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="1012" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="1012" bodyend="1020"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="810" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="809" bodyend="844"/>
+    <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="987" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="986" bodyend="1021"/>
     <listofallmembers>
       <member refid="structllama_1_1internal_1_1MappingDatumCoordCaller_3_01DatumCoord_3_01T__coords_8_8_8_01_4_01_4_1ad04de6e73122ebc3939f2165fb393762" prot="public" virt="non-virtual"><scope>llama::internal::MappingDatumCoordCaller&lt; DatumCoord&lt; T_coords... &gt; &gt;</scope><name>getBlobByte</name></member>
       <member refid="structllama_1_1internal_1_1MappingDatumCoordCaller_3_01DatumCoord_3_01T__coords_8_8_8_01_4_01_4_1a91115c03f141558c6caefe743090b674" prot="public" virt="non-virtual"><scope>llama::internal::MappingDatumCoordCaller&lt; DatumCoord&lt; T_coords... &gt; &gt;</scope><name>getBlobNr</name></member>
