@@ -121,6 +121,9 @@ Datum domain
 .. doxygentypedef:: GetCoordFromUID
    :project: LLAMA
 
+.. doxygentypedef:: GetCoordFromUIDRelative
+   :project: LLAMA
+
 .. doxygenstruct:: llama::LinearBytePos
    :project: LLAMA
    :members:
@@ -142,6 +145,9 @@ Datum domain
    :project: LLAMA
 
 .. doxygentypedef:: llama::GetTypeFromDatumCoord
+   :project: LLAMA
+
+.. doxygentypedef:: llama::GetTypeFromUID
    :project: LLAMA
 
 .. doxygenstruct:: llama::DatumCoord

@@ -390,13 +390,13 @@
 </parameterlist>
 </para>    </detaileddescription>
     <collaborationgraph>
-      <node id="38">
+      <node id="48">
         <label>T</label>
       </node>
-      <node id="37">
+      <node id="47">
         <label>llama::Array&lt; T, T_dim &gt;</label>
         <link refid="structllama_1_1Array"/>
-        <childnode refid="38" relation="usage">
+        <childnode refid="48" relation="usage">
           <edgelabel>element</edgelabel>
         </childnode>
       </node>

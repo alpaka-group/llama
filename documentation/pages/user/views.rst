@@ -214,7 +214,33 @@ datums respectively other type. Let's examine this deeper in an example:
     //result is true, because only the matching "x" matters
 
 A partly addressing of a virtual datums like :cpp:`datum1( color() ) *= 7.0`
-would be handy, too, which is planned but not implemented yet.
+is also possible. :cpp:`datum1( color() )` itself returns a new virtual datum
+with the first tree coordiante (:cpp:`color`) being bound. This enables e.g. to
+easily add a velocity to a position like this:
+
+.. code-block:: C++
+
+    using Particle = llama::DS <
+        llama::DE < pos, llama::DS <
+            llama::DE < x, float >,
+            llama::DE < y, float >,
+            llama::DE < z, float >
+        > >,
+        llama::DE < vel, llama::DS <
+            llama::DE < x, double >,
+            llama::DE < y, double >,
+            llama::DE < z, double >
+        > >,
+    >;
+
+    // Let datum be a virtual datum with the datum domain "Particle".
+
+    datum( pos() ) += datum( vel() );
+
+This is e.g. used in the
+`nbody example <https://github.com/ComputationalRadiationPhysics/llama/blob/master/examples/nbody/nbody.cpp>`_
+to update the particle velocity based on the distances of particles and to
+update the position after one time step movement with the velocity.
 
 Compiler steering
 -----------------

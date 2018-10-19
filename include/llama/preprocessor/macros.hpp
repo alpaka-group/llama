@@ -77,7 +77,11 @@
  *  #include <llama/llama.hpp>
  * \endcode
  */
-#   define LLAMA_FN_HOST_ACC_INLINE inline
+#   if BOOST_COMP_GNUC!=0
+#       define LLAMA_FN_HOST_ACC_INLINE inline __attribute__((always_inline))
+#   else
+#       define LLAMA_FN_HOST_ACC_INLINE inline
+#   endif
 #endif
 
 #ifndef LLAMA_NO_HOST_ACC_WARNING

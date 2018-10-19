@@ -4,14 +4,23 @@
     <compoundname>llama::VirtualDatum</compoundname>
     <includes refid="View_8hpp" local="no">View.hpp</includes>
     <innerclass refid="structllama_1_1VirtualDatum_1_1AccessImpl" prot="public">llama::VirtualDatum::AccessImpl</innerclass>
-    <innerclass refid="structllama_1_1VirtualDatum_1_1AccessImpl_3_01DatumCoord_3_01T__coord_8_8_8_01_4_01_4" prot="public">llama::VirtualDatum::AccessImpl&lt; DatumCoord&lt; T_coord... &gt; &gt;</innerclass>
+    <innerclass refid="structllama_1_1VirtualDatum_1_1AccessImpl_3_01T__DatumCoord_00_01typename_01std_1_1enable__if_3_ef93ef5c5342a6f9a4c91df4fe73e8af" prot="public">llama::VirtualDatum::AccessImpl&lt; T_DatumCoord, typename std::enable_if&lt; !is_DatumStruct&lt; GetTypeFromDatumCoord&lt; typename Mapping::DatumDomain, typename BoundDatumDomain::template Cat&lt; T_DatumCoord &gt; &gt; &gt;::value &gt;::type &gt;</innerclass>
+    <innerclass refid="structllama_1_1VirtualDatum_1_1AccessImpl_3_01T__DatumCoord_00_01typename_01std_1_1enable__if_3_cad2630bd48dbf313b8cd0753edeb19d" prot="public">llama::VirtualDatum::AccessImpl&lt; T_DatumCoord, typename std::enable_if&lt; is_DatumStruct&lt; GetTypeFromDatumCoord&lt; typename Mapping::DatumDomain, typename BoundDatumDomain::template Cat&lt; T_DatumCoord &gt; &gt; &gt;::value &gt;::type &gt;</innerclass>
+    <innerclass refid="structllama_1_1VirtualDatum_1_1AccessWithBoundDatumDomainImpl" prot="public">llama::VirtualDatum::AccessWithBoundDatumDomainImpl</innerclass>
+    <innerclass refid="structllama_1_1VirtualDatum_1_1AccessWithBoundDatumDomainImpl_3_01DatumCoord_3_01T__coord_8_8_8_01_4_01_4" prot="public">llama::VirtualDatum::AccessWithBoundDatumDomainImpl&lt; DatumCoord&lt; T_coord... &gt; &gt;</innerclass>
+    <innerclass refid="structllama_1_1VirtualDatum_1_1AccessWithTypeImpl" prot="public">llama::VirtualDatum::AccessWithTypeImpl</innerclass>
+    <innerclass refid="structllama_1_1VirtualDatum_1_1AccessWithTypeImpl_3_01DatumCoord_3_01T__coord_8_8_8_01_4_01_4" prot="public">llama::VirtualDatum::AccessWithTypeImpl&lt; DatumCoord&lt; T_coord... &gt; &gt;</innerclass>
     <templateparamlist>
       <param>
         <type>typename T_View</type>
       </param>
+      <param>
+        <type>typename T_BoundDatumDomain</type>
+        <defval><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>&lt;&gt;</defval>
+      </param>
     </templateparamlist>
       <sectiondef kind="public-type">
-      <memberdef kind="typedef" id="structllama_1_1VirtualDatum_1ae6b490a7a2ad6e6d29f839ca9ccf5c0c" prot="public" static="no">
+      <memberdef kind="typedef" id="structllama_1_1VirtualDatum_1a4d395cc48cd8bad75611f719ad06b5b1" prot="public" static="no">
         <type>T_View</type>
         <definition>using llama::VirtualDatum::ViewType =  T_View</definition>
         <argsstring></argsstring>
@@ -22,9 +31,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="653" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="653" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="676" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="676" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="typedef" id="structllama_1_1VirtualDatum_1ae2ebf3210301fa34b29534ff187ca34a" prot="public" static="no">
+      <memberdef kind="typedef" id="structllama_1_1VirtualDatum_1ac0f3c397f83d12489fabc8dfccee7d7e" prot="public" static="no">
         <type>typename ViewType::Mapping</type>
         <definition>using llama::VirtualDatum::Mapping =  typename ViewType::Mapping</definition>
         <argsstring></argsstring>
@@ -35,9 +44,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="655" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="655" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="678" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="678" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="typedef" id="structllama_1_1VirtualDatum_1aa691a222152815ae10e7b7715e7757c8" prot="public" static="no">
+      <memberdef kind="typedef" id="structllama_1_1VirtualDatum_1a4f4dec4f12bfa3a9013652b9f0c023d7" prot="public" static="no">
         <type>typename ViewType::BlobType</type>
         <definition>using llama::VirtualDatum::BlobType =  typename ViewType::BlobType</definition>
         <argsstring></argsstring>
@@ -48,13 +57,39 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="657" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="657" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="680" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="680" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1VirtualDatum_1a34a083a142b2916dc7b8753740b03a91" prot="public" static="no">
+        <type>T_BoundDatumDomain</type>
+        <definition>using llama::VirtualDatum::BoundDatumDomain =  T_BoundDatumDomain</definition>
+        <argsstring></argsstring>
+        <name>BoundDatumDomain</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>already resolved part of the datum domain, basically the new datum domain tree root </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="684" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="684" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1VirtualDatum_1a3481a2351965008f4e9ab9d5b8fac198" prot="public" static="no">
+        <type><ref refid="namespacellama_1a22362d58c566945f0f8178e2af1b0013" kindref="member">GetTypeFromDatumCoord</ref>&lt; typename Mapping::DatumDomain, <ref refid="structllama_1_1VirtualDatum_1a34a083a142b2916dc7b8753740b03a91" kindref="member">BoundDatumDomain</ref> &gt;</type>
+        <definition>using llama::VirtualDatum::AccessibleDatumDomain =  GetTypeFromDatumCoord&lt; typename Mapping::DatumDomain, BoundDatumDomain &gt;</definition>
+        <argsstring></argsstring>
+        <name>AccessibleDatumDomain</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sub part of the datum domain of the view/mapping relative to <ref refid="structllama_1_1VirtualDatum_1a34a083a142b2916dc7b8753740b03a91" kindref="member">BoundDatumDomain</ref>. If BoundDatumDomain is <computeroutput><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>&lt;&gt;</computeroutput> (default) AccessibleDatumDomain is the same as <computeroutput>Mapping::DatumDomain</computeroutput>. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="691" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="694" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="structllama_1_1VirtualDatum_1ad10ead874bc7852a4bcc41fec5d790bd" prot="public" static="no" mutable="no">
+      <memberdef kind="variable" id="structllama_1_1VirtualDatum_1ad334d107bd84aed63b3a64d0857013c4" prot="public" static="no" mutable="no">
         <type>Mapping::UserDomain const</type>
-        <definition>Mapping::UserDomain const llama::VirtualDatum::userDomainPos</definition>
+        <definition>Mapping::UserDomain const llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::userDomainPos</definition>
         <argsstring></argsstring>
         <name>userDomainPos</name>
         <briefdescription>
@@ -63,11 +98,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="660" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="660" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="686" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="686" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="structllama_1_1VirtualDatum_1a30842b68acbb1ceb2884a8f4271ec162" prot="public" static="no" mutable="no">
-        <type><ref refid="structllama_1_1VirtualDatum_1ae6b490a7a2ad6e6d29f839ca9ccf5c0c" kindref="member">ViewType</ref> &amp;</type>
-        <definition>ViewType&amp; llama::VirtualDatum::view</definition>
+      <memberdef kind="variable" id="structllama_1_1VirtualDatum_1a349037e81060afc972ca86768ae5567e" prot="public" static="no" mutable="no">
+        <type><ref refid="structllama_1_1VirtualDatum_1a4d395cc48cd8bad75611f719ad06b5b1" kindref="member">ViewType</ref> &amp;</type>
+        <definition>ViewType&amp; llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::view</definition>
         <argsstring></argsstring>
         <name>view</name>
         <briefdescription>
@@ -76,11 +111,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="662" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="662" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="696" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="696" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a20986df466bd48afeb0f6c39df691f9f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a0a513180bf4d05b003101ff8b6991eba" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename...</type>
@@ -89,8 +124,8 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::access</definition>
-        <argsstring>(T_DatumCoordOrUIDs &amp;&amp;...) -&gt; decltype(AccessImpl&lt; T_DatumCoordOrUIDs... &gt;::apply(std::forward&lt; T_View &gt;(view), userDomainPos)) &amp;</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::access</definition>
+        <argsstring>(T_DatumCoordOrUIDs &amp;&amp;...) -&gt; decltype(AccessWithTypeImpl&lt; T_DatumCoordOrUIDs... &gt;::apply(std::forward&lt; T_View &gt;(view), userDomainPos))</argsstring>
         <name>access</name>
         <param>
           <type>T_DatumCoordOrUIDs &amp;&amp;</type>
@@ -102,9 +137,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="703" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="703" bodyend="714"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="873" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="873" bodyend="884"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1ad89464c86edc3fbcd7cf43de3e27d20f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a043286b5750bde50f73efbbb0983cdfb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename...</type>
@@ -113,13 +148,13 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::access</definition>
-        <argsstring>() -&gt; decltype(AccessImpl&lt; T_DatumCoordOrUIDs... &gt;::apply(std::forward&lt; T_View &gt;(view), userDomainPos)) &amp;</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::access</definition>
+        <argsstring>() -&gt; decltype(AccessWithTypeImpl&lt; T_DatumCoordOrUIDs... &gt;::apply(std::forward&lt; T_View &gt;(view), userDomainPos))</argsstring>
         <name>access</name>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>Explicit access function for a coordinate in the datum domain given as unique identifier or <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>. <parameterlist kind="templateparam"><parameteritem>
+<para>Explicit access function for a coordinate in the datum domain given as unique identifier or <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>. If the address <ndash/> independently whether given as datum coord or UID <ndash/> is not a leaf but, a new virtual datum with a bound datum coord is returned. <parameterlist kind="templateparam"><parameteritem>
 <parameternamelist>
 <parametername>T_DatumCoordOrUIDs...</parametername>
 </parameternamelist>
@@ -127,13 +162,13 @@
 <para>variadic number of types as unique identifier <bold>or</bold> <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref> with tree coordinates as template parameters inside </para></parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>reference to element at resolved user domain and given datum domain coordinate </para></simplesect>
+<simplesect kind="return"><para>reference to element at resolved user domain and given datum domain coordinate or a new virtual datum with a bound datum coord </para></simplesect>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="727" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="727" bodyend="738"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="899" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="899" bodyend="910"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a59c95323ae5ea51f0fb82e9a1a4bdc7f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1aed4a4b05ca4f73202aea9570cd9d939a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>std::size_t...</type>
@@ -142,13 +177,13 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::access</definition>
-        <argsstring>() -&gt; decltype(AccessImpl&lt; DatumCoord&lt; T_coord... &gt; &gt;::apply(std::forward&lt; T_View &gt;(view), userDomainPos)) &amp;</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::access</definition>
+        <argsstring>() -&gt; decltype(AccessImpl&lt; DatumCoord&lt; T_coord... &gt; &gt;::apply(std::forward&lt; T_View &gt;(view), userDomainPos))</argsstring>
         <name>access</name>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>Explicit access function for a coordinate in the datum domain given as tree position indexes. <parameterlist kind="templateparam"><parameteritem>
+<para>Explicit access function for a coordinate in the datum domain given as tree position indexes. If the address <ndash/> independently whether given as datum coord or UID <ndash/> is not a leaf but, a new virtual datum with a bound datum coord is returned. <parameterlist kind="templateparam"><parameteritem>
 <parameternamelist>
 <parametername>T_coord...</parametername>
 </parameternamelist>
@@ -156,13 +191,13 @@
 <para>variadic number std::size_t numbers as tree coordinates </para></parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>reference to element at resolved user domain and given datum domain coordinate </para></simplesect>
+<simplesect kind="return"><para>reference to element at resolved user domain and given datum domain coordinate or a new virtual datum with a bound datum coord </para></simplesect>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="750" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="750" bodyend="761"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="924" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="924" bodyend="935"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a57cb002cb710c69ec3151fcfb8892f97" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a3012e4b4b5c73c8e49d2e7d886b082b6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename...</type>
@@ -171,8 +206,8 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator()</definition>
-        <argsstring>(T_DatumCoordOrUIDs &amp;&amp;... datumCoordOrUIDs) -&gt; decltype(access&lt; T_DatumCoordOrUIDs... &gt;()) &amp;</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator()</definition>
+        <argsstring>(T_DatumCoordOrUIDs &amp;&amp;... datumCoordOrUIDs) -&gt; decltype(access&lt; T_DatumCoordOrUIDs... &gt;())</argsstring>
         <name>operator()</name>
         <param>
           <type>T_DatumCoordOrUIDs &amp;&amp;...</type>
@@ -181,7 +216,7 @@
         <briefdescription>
         </briefdescription>
         <detaileddescription>
-<para>operator overload() for a coordinate in the datum domain given as unique identifier or <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>. <parameterlist kind="param"><parameteritem>
+<para>operator overload() for a coordinate in the datum domain given as unique identifier or <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>. If the address <ndash/> independently whether given as datum coord or UID <ndash/> is not a leaf but, a new virtual datum with a bound datum coord is returned. <parameterlist kind="param"><parameteritem>
 <parameternamelist>
 <parametername>datumCoordOrUIDs</parametername>
 </parameternamelist>
@@ -189,24 +224,27 @@
 <para>instantiation of variadic number of unique identifier types <bold>or</bold> <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref> with tree coordinates as template parameters inside </para></parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>reference to element at resolved user domain and given datum domain coordinate </para></simplesect>
+<simplesect kind="return"><para>reference to element at resolved user domain and given datum domain coordinate or a new virtual datum with a bound datum coord </para></simplesect>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="774" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="774" bodyend="786"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="950" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="950" bodyend="963"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1abdfe236aa0658d57c318e301771d2b24" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a180124d0b03f09d4a14fd9385f45ded1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator=</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;other) -&gt; decltype(*this)&amp;</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator=</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator=</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -215,20 +253,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="788" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="788" bodyend="788"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="965" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="965" bodyend="965"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a55b54752db6a96c5398e0964563e207c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a09c69fc62535836c1ff0ebbae2565f32" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator=</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator=</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator=</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;&amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -237,9 +278,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="788" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="788" bodyend="788"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="965" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="965" bodyend="965"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a63072173135bf914b598922337d4020d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1aac2be458e17e34dce5a8c4bd6d7ec7ec" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -249,7 +290,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator=</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator=</name>
         <param>
@@ -262,9 +303,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="788" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="788" bodyend="788"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="965" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="965" bodyend="965"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a16b813d92779c3e8b31d7102ac2f3fcd" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1ad8894e0dff20095dfe722d85d13e0e2f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -274,7 +315,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator=</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator=</name>
         <param>
@@ -287,16 +328,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="788" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="788" bodyend="788"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="965" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="965" bodyend="965"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a81e3654d558ac76057562f624ed8fe9f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a034d86ad3c11b8996221ac4b1358981f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator=</definition>
         <argsstring>(T_OtherType &amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator=</name>
         <param>
@@ -309,16 +350,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="788" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="788" bodyend="788"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="965" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="965" bodyend="965"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1acdff73b1885d85b732726ce20c50c046" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a0c779e530d68a19c3cd5e188cf083762" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator=</definition>
         <argsstring>(T_OtherType &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator=</name>
         <param>
@@ -331,20 +372,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="788" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="788" bodyend="788"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="965" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="965" bodyend="965"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a1310edcd6f9417799bf78a73d2f92c8f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a19f2eeae8443799789e4e8f4b8fbe344" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator+=</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;other) -&gt; decltype(*this)&amp;</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator+=</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator+=</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -353,20 +397,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="789" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="789" bodyend="789"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="966" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="966" bodyend="966"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a825766d7fa14e6e44cb68b5f96b3242d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a1489f93f9d9f1feaef5bd053368a93e3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator+=</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator+=</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator+=</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;&amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -375,9 +422,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="789" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="789" bodyend="789"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="966" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="966" bodyend="966"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1ae6e4e6223905c6f2ab19df715c901a1e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a7d234c31c735460a0deb25132470d5fb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -387,7 +434,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator+=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator+=</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator+=</name>
         <param>
@@ -400,9 +447,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="789" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="789" bodyend="789"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="966" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="966" bodyend="966"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a19302f1de579eb9b45001648750ec968" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a1d52db278f421a70921de86fc1d88b71" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -412,7 +459,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator+=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator+=</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator+=</name>
         <param>
@@ -425,16 +472,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="789" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="789" bodyend="789"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="966" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="966" bodyend="966"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1aa44d72b502e2f2ff67f7a28cc6abc57b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a27a825a2940cc351da12e148e987aec1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator+=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator+=</definition>
         <argsstring>(T_OtherType &amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator+=</name>
         <param>
@@ -447,16 +494,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="789" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="789" bodyend="789"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="966" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="966" bodyend="966"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a540029ab4f0bf748e5c2905698775e8c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a382be7758669b225d3b83dc211f51714" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator+=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator+=</definition>
         <argsstring>(T_OtherType &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator+=</name>
         <param>
@@ -469,20 +516,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="789" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="789" bodyend="789"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="966" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="966" bodyend="966"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a68ec039cae16547882c4d37ba487f515" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a9d401a92c5e90020b48872e51695cb36" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator-=</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;other) -&gt; decltype(*this)&amp;</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator-=</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator-=</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -491,20 +541,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="790" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="790" bodyend="790"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="967" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="967" bodyend="967"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a562c13c259b6551ee2f1f698c4f3718e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1abe60c682cdb4f1b9b0a3e2dcefd74ee3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator-=</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator-=</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator-=</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;&amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -513,9 +566,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="790" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="790" bodyend="790"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="967" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="967" bodyend="967"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1aa5ab078e3fad70a2394fd12e3106b11a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1af8fa6927d9b118dcc24cebc07038a3a8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -525,7 +578,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator-=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator-=</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator-=</name>
         <param>
@@ -538,9 +591,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="790" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="790" bodyend="790"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="967" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="967" bodyend="967"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a43df0462f1b373b2372f274ebe1abd92" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1aa5a781900e27d663d75c8b6c67fa858c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -550,7 +603,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator-=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator-=</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator-=</name>
         <param>
@@ -563,16 +616,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="790" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="790" bodyend="790"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="967" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="967" bodyend="967"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a54b25a367b9ce54c3af8c84b8e2bbe00" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1aaee48de5d0f8549330a4bcdba50da26a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator-=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator-=</definition>
         <argsstring>(T_OtherType &amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator-=</name>
         <param>
@@ -585,16 +638,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="790" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="790" bodyend="790"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="967" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="967" bodyend="967"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1ae50c4513a27bc1746f11ff2542ee6254" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a16b69e430eba587c3b5ad1672fd179c9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator-=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator-=</definition>
         <argsstring>(T_OtherType &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator-=</name>
         <param>
@@ -607,20 +660,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="790" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="790" bodyend="790"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="967" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="967" bodyend="967"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1aeac31333f37d4e4887e76d6f791ee2f7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1adcad7ea91be64b72d826e73fad59f844" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator*=</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;other) -&gt; decltype(*this)&amp;</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator*=</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator*=</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -629,20 +685,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="791" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="791" bodyend="791"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="968" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="968" bodyend="968"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a59dcf161b731d639ba8511bdfc4de2f2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a15614e5903fe20473f4aa49c4af4e100" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator*=</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator*=</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator*=</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;&amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -651,9 +710,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="791" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="791" bodyend="791"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="968" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="968" bodyend="968"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a3b4839b89a8a0ac598ee8af2c185996a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a80bfceb5b7800b3e5e240a105c56b191" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -663,7 +722,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator*=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator*=</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator*=</name>
         <param>
@@ -676,9 +735,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="791" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="791" bodyend="791"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="968" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="968" bodyend="968"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1ad50bec96964d360e7d79b1f842191732" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1aded12152110a3b1389376780f652fab8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -688,7 +747,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator*=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator*=</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator*=</name>
         <param>
@@ -701,16 +760,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="791" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="791" bodyend="791"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="968" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="968" bodyend="968"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a473d02117d183090d253790f05cfb397" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1ac5ae476ae32c16cdfb8ab8ddff1c86fc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator*=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator*=</definition>
         <argsstring>(T_OtherType &amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator*=</name>
         <param>
@@ -723,16 +782,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="791" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="791" bodyend="791"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="968" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="968" bodyend="968"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a2867b23d93aa4f54ad2fa3d5c7186463" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1ac34e4420e539c19ef6bee0f97b68b283" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator*=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator*=</definition>
         <argsstring>(T_OtherType &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator*=</name>
         <param>
@@ -745,20 +804,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="791" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="791" bodyend="791"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="968" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="968" bodyend="968"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a7715f53f569d422a4c3d2d9953756169" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a5bf94b57f277d77ed15075ff35784c3a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator/=</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;other) -&gt; decltype(*this)&amp;</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator/=</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator/=</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -767,20 +829,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="792" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="792" bodyend="792"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="969" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="969" bodyend="969"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1abfcc6abae9eda5116f10af27794d2445" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1aaf927b644dbe58a4313f39c658450ad0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator/=</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator/=</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator/=</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;&amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -789,9 +854,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="792" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="792" bodyend="792"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="969" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="969" bodyend="969"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1abacc744f6bdf197d28370e62800c8f19" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a2e0f7a4021956538b3762e0b9a89d4cb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -801,7 +866,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator/=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator/=</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator/=</name>
         <param>
@@ -814,9 +879,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="792" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="792" bodyend="792"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="969" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="969" bodyend="969"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1aea345def60cc1f2619622f660dc13e12" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a50cd887c54905026d0f6743d767e3cfb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -826,7 +891,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator/=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator/=</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator/=</name>
         <param>
@@ -839,16 +904,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="792" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="792" bodyend="792"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="969" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="969" bodyend="969"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1aa63f7c1a9b3b24c7043f866cbf389c44" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a2932c8d338efc31d7d471d42eaea0ddf" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator/=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator/=</definition>
         <argsstring>(T_OtherType &amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator/=</name>
         <param>
@@ -861,16 +926,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="792" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="792" bodyend="792"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="969" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="969" bodyend="969"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a4c2b89f230f5398b2e47ee2d578aecf6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a296ebd124be87e7c681ba4c9a4c57229" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator/=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator/=</definition>
         <argsstring>(T_OtherType &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator/=</name>
         <param>
@@ -883,20 +948,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="792" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="792" bodyend="792"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="969" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="969" bodyend="969"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1ab9673768f2ed247bdf2fe24854b4bfd6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1aa60d94438f78ea1c6bfd70d1a3fac778" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator%=</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;other) -&gt; decltype(*this)&amp;</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator%=</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator%=</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -905,20 +973,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="793" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="793" bodyend="793"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="970" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="970" bodyend="970"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a0b5221ff7cac591d8aa2fe31d67a584d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1ae9d797b7608d914b50058aa36f7b00de" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator%=</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator%=</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator%=</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;&amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -927,9 +998,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="793" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="793" bodyend="793"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="970" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="970" bodyend="970"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a689a9b120b811213ff9cecb7db290061" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a25e13372ceef482c30d630f947f4ea8f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -939,7 +1010,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator%=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator%=</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator%=</name>
         <param>
@@ -952,9 +1023,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="793" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="793" bodyend="793"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="970" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="970" bodyend="970"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a3b2071645e1ad5801c08191e3eb1a41c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1aeb98a584b83dc5768bf818f6498b3711" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -964,7 +1035,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator%=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator%=</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator%=</name>
         <param>
@@ -977,16 +1048,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="793" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="793" bodyend="793"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="970" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="970" bodyend="970"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1ae2f3dd21a1e413e6c193b5f761a4e35b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a59560ca08f3c93cef5cd1c367981051a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator%=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator%=</definition>
         <argsstring>(T_OtherType &amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator%=</name>
         <param>
@@ -999,16 +1070,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="793" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="793" bodyend="793"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="970" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="970" bodyend="970"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a4ea234be3dd2bf616a4877b420d07866" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1ae12fec4852f0f8a0bb933c631358a502" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator%=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator%=</definition>
         <argsstring>(T_OtherType &amp;&amp;other) -&gt; decltype(*this)&amp;</argsstring>
         <name>operator%=</name>
         <param>
@@ -1021,20 +1092,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="793" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="793" bodyend="793"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="970" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="970" bodyend="970"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a415a873f2654cd17df06a504974287dc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a377da39a374b5a5a6d5ba1135d288141" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator==</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;other) -&gt; bool</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator==</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;other) -&gt; bool</argsstring>
         <name>operator==</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -1043,20 +1117,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="795" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="795" bodyend="795"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="972" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="972" bodyend="972"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a016b747282a6a80d386d81c3b7c9b0c3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1abd0b23c4529625aaa11376bd6be3ace2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator==</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;&amp;other) -&gt; bool</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator==</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;other) -&gt; bool</argsstring>
         <name>operator==</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;&amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -1065,9 +1142,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="795" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="795" bodyend="795"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="972" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="972" bodyend="972"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1aa5472505f0d4a89a1ea0d89ece39c844" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a9065461745697fc43c75eaed8c6fee26" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -1077,7 +1154,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator==</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator==</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;other) -&gt; bool</argsstring>
         <name>operator==</name>
         <param>
@@ -1090,9 +1167,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="795" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="795" bodyend="795"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="972" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="972" bodyend="972"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a96760cec58d0951bca4f07f1420c2402" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a1a6a7a395439c4c36f30bd9d7d501aef" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -1102,7 +1179,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator==</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator==</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;&amp;other) -&gt; bool</argsstring>
         <name>operator==</name>
         <param>
@@ -1115,16 +1192,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="795" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="795" bodyend="795"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="972" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="972" bodyend="972"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a37a81da4589a4cce0ba629e77ac0df44" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a87955b3703420c5b97413a764b833471" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator==</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator==</definition>
         <argsstring>(T_OtherType &amp;other) -&gt; bool</argsstring>
         <name>operator==</name>
         <param>
@@ -1137,16 +1214,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="795" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="795" bodyend="795"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="972" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="972" bodyend="972"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a0464696953844e39599bcfeb066746b9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a15c956aeeafc148a817451bf29d643f2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator==</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator==</definition>
         <argsstring>(T_OtherType &amp;&amp;other) -&gt; bool</argsstring>
         <name>operator==</name>
         <param>
@@ -1159,20 +1236,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="795" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="795" bodyend="795"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="972" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="972" bodyend="972"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a93e04c023db579ece82f6e5100e96f25" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a383a1fb207d04eb3f59c18a67f1e28e6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator!=</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;other) -&gt; bool</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator!=</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;other) -&gt; bool</argsstring>
         <name>operator!=</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -1181,20 +1261,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="796" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="796" bodyend="796"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="973" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="973" bodyend="973"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1ade76dbf969bf72e2402bd01395c5d513" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a847faccf7a64be41b556966bc6bb46a8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator!=</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;&amp;other) -&gt; bool</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator!=</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;other) -&gt; bool</argsstring>
         <name>operator!=</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;&amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -1203,9 +1286,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="796" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="796" bodyend="796"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="973" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="973" bodyend="973"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a41ad5eebb008d9ed5465978fd7d27e12" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a9eb037776b5fd473ddafecacbad4f2ba" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -1215,7 +1298,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator!=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator!=</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;other) -&gt; bool</argsstring>
         <name>operator!=</name>
         <param>
@@ -1228,9 +1311,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="796" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="796" bodyend="796"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="973" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="973" bodyend="973"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a92fddf8855b3c8724e93fdbb48de561d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a838d232b5d540bad33c8966d3d4c95ba" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -1240,7 +1323,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator!=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator!=</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;&amp;other) -&gt; bool</argsstring>
         <name>operator!=</name>
         <param>
@@ -1253,16 +1336,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="796" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="796" bodyend="796"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="973" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="973" bodyend="973"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a84099c7b8ebc20056882ece4153797ff" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a29446d24f4955bcd3b3ef860eaeb02d0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator!=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator!=</definition>
         <argsstring>(T_OtherType &amp;other) -&gt; bool</argsstring>
         <name>operator!=</name>
         <param>
@@ -1275,16 +1358,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="796" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="796" bodyend="796"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="973" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="973" bodyend="973"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a67589a27c6b230bd3d4f3b33a87bde07" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1af9fcc6712293ce008ce2ac89726b3744" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator!=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator!=</definition>
         <argsstring>(T_OtherType &amp;&amp;other) -&gt; bool</argsstring>
         <name>operator!=</name>
         <param>
@@ -1297,20 +1380,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="796" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="796" bodyend="796"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="973" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="973" bodyend="973"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1ad4138ff4720f56350b31c1ef969525c4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1ad94522d2750518abf1bfc0b3f4dcc819" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&lt;</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;other) -&gt; bool</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&lt;</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;other) -&gt; bool</argsstring>
         <name>operator&lt;</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -1319,20 +1405,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="797" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="797" bodyend="797"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="974" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="974" bodyend="974"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a541d786e215eb07a5626102f518cc896" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1af0264a483f3d8560fd56c517baa6e806" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&lt;</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;&amp;other) -&gt; bool</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&lt;</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;other) -&gt; bool</argsstring>
         <name>operator&lt;</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;&amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -1341,9 +1430,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="797" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="797" bodyend="797"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="974" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="974" bodyend="974"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a6bf874381d01d5cabe2cde4d07578163" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a1be4f3888ac8be88e20c01f9e0f57c7a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -1353,7 +1442,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&lt;</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&lt;</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;other) -&gt; bool</argsstring>
         <name>operator&lt;</name>
         <param>
@@ -1366,9 +1455,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="797" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="797" bodyend="797"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="974" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="974" bodyend="974"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a310aa142f68ea69de37469638c8c29bf" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1ac993498a971d99a734757dc60ad2b212" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -1378,7 +1467,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&lt;</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&lt;</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;&amp;other) -&gt; bool</argsstring>
         <name>operator&lt;</name>
         <param>
@@ -1391,16 +1480,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="797" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="797" bodyend="797"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="974" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="974" bodyend="974"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a97801ed3f4e16abad5d4b384561022ff" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a75b883c27689d93fe2d19bf282bbffb9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&lt;</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&lt;</definition>
         <argsstring>(T_OtherType &amp;other) -&gt; bool</argsstring>
         <name>operator&lt;</name>
         <param>
@@ -1413,16 +1502,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="797" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="797" bodyend="797"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="974" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="974" bodyend="974"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a5e044d71d65acd463a9223bbcc45ce82" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1aa903952caf95fbdbe2fda20001cb229a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&lt;</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&lt;</definition>
         <argsstring>(T_OtherType &amp;&amp;other) -&gt; bool</argsstring>
         <name>operator&lt;</name>
         <param>
@@ -1435,20 +1524,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="797" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="797" bodyend="797"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="974" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="974" bodyend="974"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a62cff212160c7b528dc034b8af31a14a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a76fb9a61ed3a28f055d134caa85f4010" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&lt;=</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;other) -&gt; bool</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&lt;=</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;other) -&gt; bool</argsstring>
         <name>operator&lt;=</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -1457,20 +1549,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="798" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="798" bodyend="798"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="975" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="975" bodyend="975"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a845c66bf0b47656fadfd3dea375c12c2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1aea4b341eff066ba87b746c5c4f6f0eaf" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&lt;=</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;&amp;other) -&gt; bool</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&lt;=</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;other) -&gt; bool</argsstring>
         <name>operator&lt;=</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;&amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -1479,9 +1574,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="798" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="798" bodyend="798"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="975" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="975" bodyend="975"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a7f5b791088570b76fbb6cf719375a6dc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a241c14ca0f3d7fdb25de18e4e559cdb7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -1491,7 +1586,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&lt;=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&lt;=</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;other) -&gt; bool</argsstring>
         <name>operator&lt;=</name>
         <param>
@@ -1504,9 +1599,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="798" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="798" bodyend="798"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="975" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="975" bodyend="975"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1ac9d3305d542ecc2f86b89fb4b97e07e3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a309a83554e34bca1aea2b7410f9c6406" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -1516,7 +1611,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&lt;=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&lt;=</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;&amp;other) -&gt; bool</argsstring>
         <name>operator&lt;=</name>
         <param>
@@ -1529,16 +1624,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="798" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="798" bodyend="798"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="975" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="975" bodyend="975"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1ae1970558e4f578d7597aa2dcb2504307" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a4b9061dd4b86591aa219639e9eebaa53" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&lt;=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&lt;=</definition>
         <argsstring>(T_OtherType &amp;other) -&gt; bool</argsstring>
         <name>operator&lt;=</name>
         <param>
@@ -1551,16 +1646,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="798" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="798" bodyend="798"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="975" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="975" bodyend="975"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a1e95229d02ef3317e5d07a36bb14d695" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a83a6e8d9ba0f4fb9b28b285d4b90ebd1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&lt;=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&lt;=</definition>
         <argsstring>(T_OtherType &amp;&amp;other) -&gt; bool</argsstring>
         <name>operator&lt;=</name>
         <param>
@@ -1573,20 +1668,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="798" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="798" bodyend="798"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="975" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="975" bodyend="975"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a34a1f37015e79aafdef5f66f5e4d9f22" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a524164c97e290d1b79b061503716a7d6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&gt;</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;other) -&gt; bool</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&gt;</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;other) -&gt; bool</argsstring>
         <name>operator&gt;</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -1595,20 +1693,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="799" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="799" bodyend="799"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="976" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="976" bodyend="976"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1afec1d0d5b473de50aae3fd20d85b002d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a847ac11503e8d1347021fe0bd2e50fbe" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&gt;</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;&amp;other) -&gt; bool</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&gt;</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;other) -&gt; bool</argsstring>
         <name>operator&gt;</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;&amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -1617,9 +1718,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="799" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="799" bodyend="799"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="976" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="976" bodyend="976"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a1ec13d28304f5dc2b10e9b6c212875c4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1ad83d9c53026304b8c3cfdfa93dac871e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -1629,7 +1730,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&gt;</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&gt;</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;other) -&gt; bool</argsstring>
         <name>operator&gt;</name>
         <param>
@@ -1642,9 +1743,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="799" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="799" bodyend="799"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="976" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="976" bodyend="976"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a4dc53de83b9832a06ef4b1bdb7f92779" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a8f5848b30c54c6564c2ca57b4757064b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -1654,7 +1755,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&gt;</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&gt;</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;&amp;other) -&gt; bool</argsstring>
         <name>operator&gt;</name>
         <param>
@@ -1667,16 +1768,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="799" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="799" bodyend="799"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="976" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="976" bodyend="976"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a137926a6c165f6433d960fc5ed45ec3c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a52acceb3b515562921da452d28db49c9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&gt;</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&gt;</definition>
         <argsstring>(T_OtherType &amp;other) -&gt; bool</argsstring>
         <name>operator&gt;</name>
         <param>
@@ -1689,16 +1790,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="799" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="799" bodyend="799"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="976" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="976" bodyend="976"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1aa69f30209b5869d0b7cd6bd2dd846318" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1af6d7d6d9f829974b3b53db3aeb61694b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&gt;</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&gt;</definition>
         <argsstring>(T_OtherType &amp;&amp;other) -&gt; bool</argsstring>
         <name>operator&gt;</name>
         <param>
@@ -1711,20 +1812,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="799" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="799" bodyend="799"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="976" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="976" bodyend="976"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a94dc38fa634f9df2011937f44669dfa6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a58021062638c6ac6b98617332d53e3e7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&gt;=</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;other) -&gt; bool</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&gt;=</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;other) -&gt; bool</argsstring>
         <name>operator&gt;=</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -1733,20 +1837,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="800" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="800" bodyend="800"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="977" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="977" bodyend="977"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1ad900ae0f361c425a51cb3f8d8b999f82" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1ae03b5137e582c7c1093fc13f3e2e6ac4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherView</type>
           </param>
+          <param>
+            <type>typename T_OtherBoundDatumDomain</type>
+          </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&gt;=</definition>
-        <argsstring>(VirtualDatum&lt; T_OtherView &gt; &amp;&amp;other) -&gt; bool</argsstring>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&gt;=</definition>
+        <argsstring>(VirtualDatum&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;other) -&gt; bool</argsstring>
         <name>operator&gt;=</name>
         <param>
-          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView &gt; &amp;&amp;</type>
+          <type><ref refid="structllama_1_1VirtualDatum" kindref="compound">VirtualDatum</ref>&lt; T_OtherView, T_OtherBoundDatumDomain &gt; &amp;&amp;</type>
           <declname>other</declname>
         </param>
         <briefdescription>
@@ -1755,9 +1862,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="800" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="800" bodyend="800"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="977" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="977" bodyend="977"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1ac7369544be7daf651f01f5eed83c1751" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1ab97de17c4cfb35415b5792c2dcb791db" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -1767,7 +1874,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&gt;=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&gt;=</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;other) -&gt; bool</argsstring>
         <name>operator&gt;=</name>
         <param>
@@ -1780,9 +1887,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="800" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="800" bodyend="800"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="977" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="977" bodyend="977"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1ae17a089cff5ee5777aad18655be088a6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a0cea09f486c9ad05ba060d3f86fd1d68" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherMapping</type>
@@ -1792,7 +1899,7 @@
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&gt;=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&gt;=</definition>
         <argsstring>(View&lt; T_OtherMapping, T_OtherBlobType &gt; &amp;&amp;other) -&gt; bool</argsstring>
         <name>operator&gt;=</name>
         <param>
@@ -1805,16 +1912,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="800" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="800" bodyend="800"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="977" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="977" bodyend="977"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1af791000ae3641fab4b46b3e415724e8d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a40f798b0076e60a67fc82f3fb3616dc3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&gt;=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&gt;=</definition>
         <argsstring>(T_OtherType &amp;other) -&gt; bool</argsstring>
         <name>operator&gt;=</name>
         <param>
@@ -1827,16 +1934,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="800" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="800" bodyend="800"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="977" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="977" bodyend="977"/>
       </memberdef>
-      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a6fa422d87f690d57755a878ff33bfee4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1a55bc50ccdf1250a8deac937751d68dfa" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
             <type>typename T_OtherType</type>
           </param>
         </templateparamlist>
         <type>auto</type>
-        <definition>auto llama::VirtualDatum::operator&gt;=</definition>
+        <definition>auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::operator&gt;=</definition>
         <argsstring>(T_OtherType &amp;&amp;other) -&gt; bool</argsstring>
         <name>operator&gt;=</name>
         <param>
@@ -1849,104 +1956,113 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="800" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="800" bodyend="800"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="977" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="977" bodyend="977"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
-<para>Virtual data type returned by <ref refid="structllama_1_1View" kindref="compound">View</ref> after resolving user domain address, being &quot;virtual&quot; in that sense that the data of the virtual datum are not part of the struct itself but a helper object to address them in the compile time datum domain <parameterlist kind="templateparam"><parameteritem>
+<para>Virtual data type returned by <ref refid="structllama_1_1View" kindref="compound">View</ref> after resolving user domain address, being &quot;virtual&quot; in that sense that the data of the virtual datum are not part of the struct itself but a helper object to address them in the compile time datum domain. Beside the user domain, also a part of the compile time domain may be resolved for access like <computeroutput>datum( Pos ) += datum( Vel )</computeroutput>. <parameterlist kind="templateparam"><parameteritem>
 <parameternamelist>
 <parametername>T_View</parametername>
 </parameternamelist>
 <parameterdescription>
 <para>parent view of the virtual datum </para></parameterdescription>
 </parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_BoundDatumDomain</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>optional <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref> which restricts the virtual datum to a smaller part of the datum domain </para></parameterdescription>
+</parameteritem>
 </parameterlist>
 </para>    </detaileddescription>
-    <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="651" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="650" bodyend="801"/>
+    <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="674" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="673" bodyend="978"/>
     <listofallmembers>
-      <member refid="structllama_1_1VirtualDatum_1a20986df466bd48afeb0f6c39df691f9f" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>access</name></member>
-      <member refid="structllama_1_1VirtualDatum_1ad89464c86edc3fbcd7cf43de3e27d20f" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>access</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a59c95323ae5ea51f0fb82e9a1a4bdc7f" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>access</name></member>
-      <member refid="structllama_1_1VirtualDatum_1aa691a222152815ae10e7b7715e7757c8" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>BlobType</name></member>
-      <member refid="structllama_1_1VirtualDatum_1ae2ebf3210301fa34b29534ff187ca34a" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>Mapping</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a93e04c023db579ece82f6e5100e96f25" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator!=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1ade76dbf969bf72e2402bd01395c5d513" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator!=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a41ad5eebb008d9ed5465978fd7d27e12" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator!=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a92fddf8855b3c8724e93fdbb48de561d" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator!=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a84099c7b8ebc20056882ece4153797ff" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator!=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a67589a27c6b230bd3d4f3b33a87bde07" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator!=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1ab9673768f2ed247bdf2fe24854b4bfd6" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator%=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a0b5221ff7cac591d8aa2fe31d67a584d" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator%=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a689a9b120b811213ff9cecb7db290061" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator%=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a3b2071645e1ad5801c08191e3eb1a41c" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator%=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1ae2f3dd21a1e413e6c193b5f761a4e35b" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator%=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a4ea234be3dd2bf616a4877b420d07866" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator%=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a57cb002cb710c69ec3151fcfb8892f97" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator()</name></member>
-      <member refid="structllama_1_1VirtualDatum_1aeac31333f37d4e4887e76d6f791ee2f7" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator*=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a59dcf161b731d639ba8511bdfc4de2f2" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator*=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a3b4839b89a8a0ac598ee8af2c185996a" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator*=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1ad50bec96964d360e7d79b1f842191732" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator*=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a473d02117d183090d253790f05cfb397" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator*=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a2867b23d93aa4f54ad2fa3d5c7186463" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator*=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a1310edcd6f9417799bf78a73d2f92c8f" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator+=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a825766d7fa14e6e44cb68b5f96b3242d" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator+=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1ae6e4e6223905c6f2ab19df715c901a1e" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator+=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a19302f1de579eb9b45001648750ec968" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator+=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1aa44d72b502e2f2ff67f7a28cc6abc57b" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator+=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a540029ab4f0bf748e5c2905698775e8c" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator+=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a68ec039cae16547882c4d37ba487f515" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator-=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a562c13c259b6551ee2f1f698c4f3718e" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator-=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1aa5ab078e3fad70a2394fd12e3106b11a" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator-=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a43df0462f1b373b2372f274ebe1abd92" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator-=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a54b25a367b9ce54c3af8c84b8e2bbe00" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator-=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1ae50c4513a27bc1746f11ff2542ee6254" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator-=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a7715f53f569d422a4c3d2d9953756169" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator/=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1abfcc6abae9eda5116f10af27794d2445" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator/=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1abacc744f6bdf197d28370e62800c8f19" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator/=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1aea345def60cc1f2619622f660dc13e12" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator/=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1aa63f7c1a9b3b24c7043f866cbf389c44" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator/=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a4c2b89f230f5398b2e47ee2d578aecf6" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator/=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1ad4138ff4720f56350b31c1ef969525c4" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a541d786e215eb07a5626102f518cc896" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a6bf874381d01d5cabe2cde4d07578163" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a310aa142f68ea69de37469638c8c29bf" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a97801ed3f4e16abad5d4b384561022ff" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a5e044d71d65acd463a9223bbcc45ce82" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a62cff212160c7b528dc034b8af31a14a" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a845c66bf0b47656fadfd3dea375c12c2" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a7f5b791088570b76fbb6cf719375a6dc" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1ac9d3305d542ecc2f86b89fb4b97e07e3" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1ae1970558e4f578d7597aa2dcb2504307" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a1e95229d02ef3317e5d07a36bb14d695" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1abdfe236aa0658d57c318e301771d2b24" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a55b54752db6a96c5398e0964563e207c" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a63072173135bf914b598922337d4020d" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a16b813d92779c3e8b31d7102ac2f3fcd" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a81e3654d558ac76057562f624ed8fe9f" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1acdff73b1885d85b732726ce20c50c046" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a415a873f2654cd17df06a504974287dc" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator==</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a016b747282a6a80d386d81c3b7c9b0c3" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator==</name></member>
-      <member refid="structllama_1_1VirtualDatum_1aa5472505f0d4a89a1ea0d89ece39c844" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator==</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a96760cec58d0951bca4f07f1420c2402" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator==</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a37a81da4589a4cce0ba629e77ac0df44" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator==</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a0464696953844e39599bcfeb066746b9" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator==</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a34a1f37015e79aafdef5f66f5e4d9f22" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;</name></member>
-      <member refid="structllama_1_1VirtualDatum_1afec1d0d5b473de50aae3fd20d85b002d" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a1ec13d28304f5dc2b10e9b6c212875c4" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a4dc53de83b9832a06ef4b1bdb7f92779" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a137926a6c165f6433d960fc5ed45ec3c" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;</name></member>
-      <member refid="structllama_1_1VirtualDatum_1aa69f30209b5869d0b7cd6bd2dd846318" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a94dc38fa634f9df2011937f44669dfa6" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1ad900ae0f361c425a51cb3f8d8b999f82" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1ac7369544be7daf651f01f5eed83c1751" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1ae17a089cff5ee5777aad18655be088a6" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1af791000ae3641fab4b46b3e415724e8d" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a6fa422d87f690d57755a878ff33bfee4" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;=</name></member>
-      <member refid="structllama_1_1VirtualDatum_1ad10ead874bc7852a4bcc41fec5d790bd" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>userDomainPos</name></member>
-      <member refid="structllama_1_1VirtualDatum_1a30842b68acbb1ceb2884a8f4271ec162" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>view</name></member>
-      <member refid="structllama_1_1VirtualDatum_1ae6b490a7a2ad6e6d29f839ca9ccf5c0c" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>ViewType</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a0a513180bf4d05b003101ff8b6991eba" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>access</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a043286b5750bde50f73efbbb0983cdfb" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>access</name></member>
+      <member refid="structllama_1_1VirtualDatum_1aed4a4b05ca4f73202aea9570cd9d939a" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>access</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a3481a2351965008f4e9ab9d5b8fac198" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>AccessibleDatumDomain</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a4f4dec4f12bfa3a9013652b9f0c023d7" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>BlobType</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a34a083a142b2916dc7b8753740b03a91" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>BoundDatumDomain</name></member>
+      <member refid="structllama_1_1VirtualDatum_1ac0f3c397f83d12489fabc8dfccee7d7e" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>Mapping</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a383a1fb207d04eb3f59c18a67f1e28e6" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator!=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a847faccf7a64be41b556966bc6bb46a8" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator!=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a9eb037776b5fd473ddafecacbad4f2ba" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator!=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a838d232b5d540bad33c8966d3d4c95ba" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator!=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a29446d24f4955bcd3b3ef860eaeb02d0" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator!=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1af9fcc6712293ce008ce2ac89726b3744" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator!=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1aa60d94438f78ea1c6bfd70d1a3fac778" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator%=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1ae9d797b7608d914b50058aa36f7b00de" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator%=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a25e13372ceef482c30d630f947f4ea8f" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator%=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1aeb98a584b83dc5768bf818f6498b3711" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator%=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a59560ca08f3c93cef5cd1c367981051a" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator%=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1ae12fec4852f0f8a0bb933c631358a502" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator%=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a3012e4b4b5c73c8e49d2e7d886b082b6" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator()</name></member>
+      <member refid="structllama_1_1VirtualDatum_1adcad7ea91be64b72d826e73fad59f844" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator*=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a15614e5903fe20473f4aa49c4af4e100" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator*=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a80bfceb5b7800b3e5e240a105c56b191" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator*=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1aded12152110a3b1389376780f652fab8" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator*=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1ac5ae476ae32c16cdfb8ab8ddff1c86fc" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator*=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1ac34e4420e539c19ef6bee0f97b68b283" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator*=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a19f2eeae8443799789e4e8f4b8fbe344" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator+=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a1489f93f9d9f1feaef5bd053368a93e3" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator+=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a7d234c31c735460a0deb25132470d5fb" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator+=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a1d52db278f421a70921de86fc1d88b71" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator+=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a27a825a2940cc351da12e148e987aec1" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator+=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a382be7758669b225d3b83dc211f51714" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator+=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a9d401a92c5e90020b48872e51695cb36" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator-=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1abe60c682cdb4f1b9b0a3e2dcefd74ee3" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator-=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1af8fa6927d9b118dcc24cebc07038a3a8" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator-=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1aa5a781900e27d663d75c8b6c67fa858c" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator-=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1aaee48de5d0f8549330a4bcdba50da26a" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator-=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a16b69e430eba587c3b5ad1672fd179c9" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator-=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a5bf94b57f277d77ed15075ff35784c3a" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator/=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1aaf927b644dbe58a4313f39c658450ad0" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator/=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a2e0f7a4021956538b3762e0b9a89d4cb" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator/=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a50cd887c54905026d0f6743d767e3cfb" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator/=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a2932c8d338efc31d7d471d42eaea0ddf" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator/=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a296ebd124be87e7c681ba4c9a4c57229" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator/=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1ad94522d2750518abf1bfc0b3f4dcc819" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;</name></member>
+      <member refid="structllama_1_1VirtualDatum_1af0264a483f3d8560fd56c517baa6e806" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a1be4f3888ac8be88e20c01f9e0f57c7a" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;</name></member>
+      <member refid="structllama_1_1VirtualDatum_1ac993498a971d99a734757dc60ad2b212" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a75b883c27689d93fe2d19bf282bbffb9" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;</name></member>
+      <member refid="structllama_1_1VirtualDatum_1aa903952caf95fbdbe2fda20001cb229a" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a76fb9a61ed3a28f055d134caa85f4010" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1aea4b341eff066ba87b746c5c4f6f0eaf" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a241c14ca0f3d7fdb25de18e4e559cdb7" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a309a83554e34bca1aea2b7410f9c6406" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a4b9061dd4b86591aa219639e9eebaa53" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a83a6e8d9ba0f4fb9b28b285d4b90ebd1" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&lt;=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a180124d0b03f09d4a14fd9385f45ded1" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a09c69fc62535836c1ff0ebbae2565f32" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1aac2be458e17e34dce5a8c4bd6d7ec7ec" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1ad8894e0dff20095dfe722d85d13e0e2f" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a034d86ad3c11b8996221ac4b1358981f" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a0c779e530d68a19c3cd5e188cf083762" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a377da39a374b5a5a6d5ba1135d288141" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator==</name></member>
+      <member refid="structllama_1_1VirtualDatum_1abd0b23c4529625aaa11376bd6be3ace2" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator==</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a9065461745697fc43c75eaed8c6fee26" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator==</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a1a6a7a395439c4c36f30bd9d7d501aef" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator==</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a87955b3703420c5b97413a764b833471" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator==</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a15c956aeeafc148a817451bf29d643f2" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator==</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a524164c97e290d1b79b061503716a7d6" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a847ac11503e8d1347021fe0bd2e50fbe" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;</name></member>
+      <member refid="structllama_1_1VirtualDatum_1ad83d9c53026304b8c3cfdfa93dac871e" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a8f5848b30c54c6564c2ca57b4757064b" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a52acceb3b515562921da452d28db49c9" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;</name></member>
+      <member refid="structllama_1_1VirtualDatum_1af6d7d6d9f829974b3b53db3aeb61694b" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a58021062638c6ac6b98617332d53e3e7" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1ae03b5137e582c7c1093fc13f3e2e6ac4" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1ab97de17c4cfb35415b5792c2dcb791db" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a0cea09f486c9ad05ba060d3f86fd1d68" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a40f798b0076e60a67fc82f3fb3616dc3" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a55bc50ccdf1250a8deac937751d68dfa" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>operator&gt;=</name></member>
+      <member refid="structllama_1_1VirtualDatum_1ad334d107bd84aed63b3a64d0857013c4" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>userDomainPos</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a349037e81060afc972ca86768ae5567e" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>view</name></member>
+      <member refid="structllama_1_1VirtualDatum_1a4d395cc48cd8bad75611f719ad06b5b1" prot="public" virt="non-virtual"><scope>llama::VirtualDatum</scope><name>ViewType</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

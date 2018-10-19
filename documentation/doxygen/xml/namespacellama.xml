@@ -15,6 +15,8 @@
     <innerclass refid="structllama_1_1ForEach" prot="public">llama::ForEach</innerclass>
     <innerclass refid="structllama_1_1ForEach_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4" prot="public">llama::ForEach&lt; T_DatumDomain, DatumCoord&lt; T_coords... &gt;&gt;</innerclass>
     <innerclass refid="structllama_1_1IntegerSequence" prot="public">llama::IntegerSequence</innerclass>
+    <innerclass refid="structllama_1_1is__DatumStruct" prot="public">llama::is_DatumStruct</innerclass>
+    <innerclass refid="structllama_1_1is__DatumStruct_3_01DatumStruct_3_01T__DatumStructContent_8_8_8_01_4_01_4" prot="public">llama::is_DatumStruct&lt; DatumStruct&lt; T_DatumStructContent... &gt; &gt;</innerclass>
     <innerclass refid="structllama_1_1LinearBytePos" prot="public">llama::LinearBytePos</innerclass>
     <innerclass refid="structllama_1_1LinearizeUserDomainAdress" prot="public">llama::LinearizeUserDomainAdress</innerclass>
     <innerclass refid="structllama_1_1LinearizeUserDomainAdress_3_01T__dim_00_011_01_4" prot="public">llama::LinearizeUserDomainAdress&lt; T_dim, 1 &gt;</innerclass>
@@ -196,6 +198,71 @@
         <inbodydescription>
         </inbodydescription>
         <location file="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp" line="135" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacellama_1a2a66c0b18aabc9c5ad839c9f79e70023" prot="public" static="no">
+        <type>typename <ref refid="structllama_1_1internal_1_1GetCoordFromUIDRelativeImpl" kindref="compound">internal::GetCoordFromUIDRelativeImpl</ref>&lt; T_DatumDomain, T_DatumCoord, T_UID... &gt;::type</type>
+        <definition>using llama::GetCoordFromUIDRelative = typename internal::GetCoordFromUIDRelativeImpl&lt; T_DatumDomain, T_DatumCoord, T_UID... &gt;::type</definition>
+        <argsstring></argsstring>
+        <name>GetCoordFromUIDRelative</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Converts a coordinate in a datum domain given as UID to a <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref> relative to a given datum coord in the tree. The returned datum coord is also relative to the input datum coord, that is the sub tree. <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_DatumDomain</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the datum domain (<ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>) </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_DatumCoord</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>datum coord to start the translation from UID to datum coord </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_UID...</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the uid of in the datum domain, may also be empty (for <computeroutput><ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref>&lt; &gt;</computeroutput>) </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>a <ref refid="structllama_1_1DatumCoord" kindref="compound">DatumCoord</ref> with the datum domain tree coordinates as template parameters </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp" line="187" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp" bodystart="191" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacellama_1a611592a97449d75fa735130181876eda" prot="public" static="no">
+        <type><ref refid="namespacellama_1a22362d58c566945f0f8178e2af1b0013" kindref="member">GetTypeFromDatumCoord</ref>&lt; T_DatumDomain, <ref refid="namespacellama_1a3953132518a1c5bd14cbacc8107975db" kindref="member">GetCoordFromUID</ref>&lt; T_DatumDomain, T_UIDs... &gt; &gt;</type>
+        <definition>using llama::GetTypeFromUID = GetTypeFromDatumCoord&lt; T_DatumDomain, GetCoordFromUID&lt; T_DatumDomain, T_UIDs... &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>GetTypeFromUID</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the type of a node in a datum domain tree for a coordinate given as UID <parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T_DatumDomain</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the datum domain (probably <ref refid="namespacellama_1ad26ae6be4743f60f2379618d9bfb7cb0" kindref="member">DatumStruct</ref>) </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>T_DatumCoord</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the coordinate </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>type at the specified node </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp" line="203" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp" bodystart="209" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="namespacellama_1a9b77530642d73f0464c605e6140391cb" prot="public" static="no">
         <type>typename <ref refid="structllama_1_1internal_1_1GetTypeImpl" kindref="compound">internal::GetTypeImpl</ref>&lt; T_DatumDomain, T_datumDomainCoords... &gt;::type</type>
@@ -507,7 +574,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="517" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="517" bodyend="-1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="525" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="525" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="func">
@@ -2044,7 +2111,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="217" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="517" bodyend="517"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="217" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="525" bodyend="525"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1a73c09558ef55bcf3b01a9dc65222b460" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2116,7 +2183,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="517" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="517" bodyend="517"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="525" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="525" bodyend="525"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1ac8d7b745cb0fc8e90d7d9c4d2320d6d8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2146,7 +2213,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="517" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="517" bodyend="517"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="525" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="525" bodyend="525"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1ab1067e7e57199e61a3cf65fc49ddb8a0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2173,7 +2240,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="517" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="517" bodyend="517"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="525" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="525" bodyend="525"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1a360be9b41e4aa07d68450c40789583fe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2216,7 +2283,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="517" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="518" bodyend="518"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="525" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="526" bodyend="526"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1acfc984a7314ab1e66fdca0f60ad6c1fa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2255,7 +2322,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="517" column="1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="525" column="1"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1a913515ca824790a09ebf6952ba525747" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2288,7 +2355,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="518" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="518" bodyend="518"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="526" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="526" bodyend="526"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1acebb1d82eb56f7e1a0a76efba9754e20" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2318,7 +2385,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="518" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="518" bodyend="518"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="526" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="526" bodyend="526"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1a05de049ca5c62ca754d6bb53790f825d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2345,7 +2412,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="518" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="518" bodyend="518"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="526" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="526" bodyend="526"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1a4bcb8c77b5515521c4863147e501e6b9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2388,7 +2455,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="518" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="519" bodyend="519"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="526" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="527" bodyend="527"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1ade7343453ab3a185e5debd4c9cbb79df" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2427,7 +2494,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="518" column="1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="526" column="1"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1aa68360bc532ab4e6b75d387aff041e46" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2460,7 +2527,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="519" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="519" bodyend="519"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="527" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="527" bodyend="527"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1ab5d4ae2e58824cbb31cb3d222901102b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2490,7 +2557,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="519" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="519" bodyend="519"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="527" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="527" bodyend="527"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1a4a57a4a3db94b1828c03c8d900b05df0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2517,7 +2584,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="519" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="519" bodyend="519"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="527" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="527" bodyend="527"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1aa455141e0bdaa80ccecb1183fe41cd56" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2560,7 +2627,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="519" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="520" bodyend="520"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="527" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="528" bodyend="528"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1acdaa5dcacc3e2597a2ee68fe0bce278c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2599,7 +2666,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="519" column="1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="527" column="1"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1a228e3b7fc221d892ab134ca1b384cf8f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2632,7 +2699,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="520" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="520" bodyend="520"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="528" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="528" bodyend="528"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1a279c94666edb5d2a65f745d1e139b307" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2662,7 +2729,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="520" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="520" bodyend="520"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="528" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="528" bodyend="528"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1a37f26b8a186c273bd332f2cbcc0c9655" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2689,7 +2756,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="520" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="520" bodyend="520"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="528" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="528" bodyend="528"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1a3521d52208baa4edb7f97d11de195b55" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2732,7 +2799,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="520" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="521" bodyend="521"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="528" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="529" bodyend="529"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1a0a4a65d70490b16e52092fee2ae45857" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2771,7 +2838,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="520" column="1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="528" column="1"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1a53f5dbcf2314cf400474e7be87c05ff1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2804,7 +2871,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="521" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="521" bodyend="521"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="529" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="529" bodyend="529"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1a3e152d9faaacc33c9397099f6f63bbaa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2834,7 +2901,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="521" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="521" bodyend="521"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="529" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="529" bodyend="529"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1a2c436c171ca8481a7a33e3e1e08f3292" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2861,7 +2928,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="521" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="521" bodyend="521"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="529" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="529" bodyend="529"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1ab0c16a4cceb5141e9adf94f8d93c4c93" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2904,7 +2971,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="521" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="522" bodyend="522"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="529" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="530" bodyend="530"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1a2738646edacb8912bb4d106f54c14db9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2943,7 +3010,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="521" column="1"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="529" column="1"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1a7431d3770ac1c85062a9dfcbb30416e6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -2976,7 +3043,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="522" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="522" bodyend="522"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="530" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="530" bodyend="530"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1ad2039b3b62bcc81c218e4cb874ca66a9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -3006,7 +3073,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="522" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="522" bodyend="522"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="530" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="530" bodyend="530"/>
       </memberdef>
       <memberdef kind="function" id="namespacellama_1a36acfdfbc117ce150cd7f55b2479270c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -3033,7 +3100,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="522" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="522" bodyend="522"/>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="530" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="530" bodyend="530"/>
       </memberdef>
       </sectiondef>
     <briefdescription>

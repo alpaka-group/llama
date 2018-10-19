@@ -15,8 +15,6 @@
 #include <alpaka/alpaka.hpp>
 #ifdef __CUDACC__
 	#define LLAMA_FN_HOST_ACC_INLINE ALPAKA_FN_ACC __forceinline__
-#else
-	#define LLAMA_FN_HOST_ACC_INLINE ALPAKA_FN_ACC inline
 #endif
 #include <llama/llama.hpp>
 #include <random>
