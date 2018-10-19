@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1VirtualDatum_1_1AccessImpl_3_01T__DatumCoord_00_01typename_01std_1_1enable__if_3_ef93ef5c5342a6f9a4c91df4fe73e8af" kind="struct" language="C++" prot="public">
+    <compoundname>llama::VirtualDatum::AccessImpl&lt; T_DatumCoord, typename std::enable_if&lt; !is_DatumStruct&lt; GetTypeFromDatumCoord&lt; typename Mapping::DatumDomain, typename BoundDatumDomain::template Cat&lt; T_DatumCoord &gt; &gt; &gt;::value &gt;::type &gt;</compoundname>
+    <includes refid="View_8hpp" local="no">View.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_DatumCoord</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="structllama_1_1VirtualDatum_1_1AccessImpl_3_01T__DatumCoord_00_01typename_01std_1_1enable__if_3_ef93ef5c5342a6f9a4c91df4fe73e8af_1adb4551b673be185d4334439727503cd7" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T_UserDomain</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>static auto llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::AccessImpl&lt; T_DatumCoord, typename std::enable_if&lt; !is_DatumStruct&lt; GetTypeFromDatumCoord&lt; typename Mapping::DatumDomain, typename BoundDatumDomain::template Cat&lt; T_DatumCoord &gt; &gt; &gt;::value &gt;::type &gt;::apply</definition>
+        <argsstring>(T_View &amp;&amp;view, T_UserDomain const &amp;userDomainPos) -&gt; decltype(AccessWithBoundDatumDomainImpl&lt; typename BoundDatumDomain::template Cat&lt; T_DatumCoord &gt; &gt;::apply(std::forward&lt; T_View &gt;(view), userDomainPos))</argsstring>
+        <name>apply</name>
+        <param>
+          <type>T_View &amp;&amp;</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>T_UserDomain const &amp;</type>
+          <declname>userDomainPos</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="742" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="742" bodyend="760"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/View.hpp" line="737" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/View.hpp" bodystart="726" bodyend="761"/>
+    <listofallmembers>
+      <member refid="structllama_1_1VirtualDatum_1_1AccessImpl_3_01T__DatumCoord_00_01typename_01std_1_1enable__if_3_ef93ef5c5342a6f9a4c91df4fe73e8af_1adb4551b673be185d4334439727503cd7" prot="public" virt="non-virtual"><scope>llama::VirtualDatum::AccessImpl&lt; T_DatumCoord, typename std::enable_if&lt; !is_DatumStruct&lt; GetTypeFromDatumCoord&lt; typename Mapping::DatumDomain, typename BoundDatumDomain::template Cat&lt; T_DatumCoord &gt; &gt; &gt;::value &gt;::type &gt;</scope><name>apply</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
