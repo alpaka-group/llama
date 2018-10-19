@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structllama_1_1internal_1_1GetCoordFromUIDRelativeImpl" kind="struct" language="C++" prot="public">
+    <compoundname>llama::internal::GetCoordFromUIDRelativeImpl</compoundname>
+    <includes refid="GetCoordFromUID_8hpp" local="no">GetCoordFromUID.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T_DatumDomain</type>
+      </param>
+      <param>
+        <type>typename T_DatumCoord</type>
+      </param>
+      <param>
+        <type>typename...</type>
+        <declname>T_UID</declname>
+        <defname>T_UID</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structllama_1_1internal_1_1GetCoordFromUIDRelativeImpl_1a99b9a9520d71d696e4cf1652709a50e3" prot="public" static="no">
+        <type>typename <ref refid="structllama_1_1internal_1_1GetCoordFromUIDImpl" kindref="compound">internal::GetCoordFromUIDImpl</ref>&lt; <ref refid="namespacellama_1a22362d58c566945f0f8178e2af1b0013" kindref="member">GetTypeFromDatumCoord</ref>&lt; T_DatumDomain, T_DatumCoord &gt;, T_DatumCoord, 0, void, T_UID... &gt;::<ref refid="structllama_1_1internal_1_1GetCoordFromUIDRelativeImpl_1a45745f3491000c6962af68167d95d1b2" kindref="member">type</ref></type>
+        <definition>using llama::internal::GetCoordFromUIDRelativeImpl&lt; T_DatumDomain, T_DatumCoord, T_UID &gt;::AbsolutCoord =  typename internal::GetCoordFromUIDImpl&lt; GetTypeFromDatumCoord&lt; T_DatumDomain, T_DatumCoord &gt;, T_DatumCoord, 0, void, T_UID... &gt;::type</definition>
+        <argsstring></argsstring>
+        <name>AbsolutCoord</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp" line="153" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp" bodystart="162" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structllama_1_1internal_1_1GetCoordFromUIDRelativeImpl_1a45745f3491000c6962af68167d95d1b2" prot="public" static="no">
+        <type>typename AbsolutCoord::template Back&lt; AbsolutCoord::size - T_DatumCoord::size &gt;</type>
+        <definition>using llama::internal::GetCoordFromUIDRelativeImpl&lt; T_DatumDomain, T_DatumCoord, T_UID &gt;::type =  typename AbsolutCoord::template Back&lt; AbsolutCoord::size - T_DatumCoord::size &gt;</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp" line="164" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp" bodystart="166" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp" line="152" column="1" bodyfile="/home/alexander/develop/work/llama/include/llama/GetCoordFromUID.hpp" bodystart="151" bodyend="167"/>
+    <listofallmembers>
+      <member refid="structllama_1_1internal_1_1GetCoordFromUIDRelativeImpl_1a99b9a9520d71d696e4cf1652709a50e3" prot="public" virt="non-virtual"><scope>llama::internal::GetCoordFromUIDRelativeImpl</scope><name>AbsolutCoord</name></member>
+      <member refid="structllama_1_1internal_1_1GetCoordFromUIDRelativeImpl_1a45745f3491000c6962af68167d95d1b2" prot="public" virt="non-virtual"><scope>llama::internal::GetCoordFromUIDRelativeImpl</scope><name>type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
