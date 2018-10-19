@@ -7,6 +7,8 @@ var DatumStruct_8hpp =
     [ "SizeOf", "structllama_1_1SizeOf.html", "structllama_1_1SizeOf" ],
     [ "SizeOf< DatumStruct< T_FirstDatumElement, T_DatumElements... >>", "structllama_1_1SizeOf_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__DatumElements_8_8_8_01_4_4.html", "structllama_1_1SizeOf_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__DatumElements_8_8_8_01_4_4" ],
     [ "SizeOf< DatumStruct< > >", "structllama_1_1SizeOf_3_01DatumStruct_3_01_4_01_4.html", "structllama_1_1SizeOf_3_01DatumStruct_3_01_4_01_4" ],
+    [ "StubTypeImpl", "structllama_1_1internal_1_1StubTypeImpl.html", "structllama_1_1internal_1_1StubTypeImpl" ],
     [ "GetDatumElementType", "DatumStruct_8hpp.html#a554a797d5fff9070b3c61d7584dc15d5", null ],
-    [ "GetDatumElementUID", "DatumStruct_8hpp.html#a29d5fdaf4a5f23aab704f936a53fd68c", null ]
+    [ "GetDatumElementUID", "DatumStruct_8hpp.html#a29d5fdaf4a5f23aab704f936a53fd68c", null ],
+    [ "StubType", "DatumStruct_8hpp.html#adb589a980e01610411523c3af5e5f4ed", null ]
 ];

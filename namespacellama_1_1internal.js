@@ -34,6 +34,7 @@ var namespacellama_1_1internal =
     [ "LinearBytePosImpl< DatumStruct< T_FirstDatumElement, T_DatumElements... >, T_DatumCoord, T_IterCoord >", "structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__Daab3e6bc06488e5011eff271a9737aa6b.html", "structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__Daab3e6bc06488e5011eff271a9737aa6b" ],
     [ "MappingDatumCoordCaller", "structllama_1_1internal_1_1MappingDatumCoordCaller.html", null ],
     [ "MappingDatumCoordCaller< DatumCoord< T_coords... > >", "structllama_1_1internal_1_1MappingDatumCoordCaller_3_01DatumCoord_3_01T__coords_8_8_8_01_4_01_4.html", "structllama_1_1internal_1_1MappingDatumCoordCaller_3_01DatumCoord_3_01T__coords_8_8_8_01_4_01_4" ],
+    [ "StubTypeImpl", "structllama_1_1internal_1_1StubTypeImpl.html", "structllama_1_1internal_1_1StubTypeImpl" ],
     [ "ZeroSequenceHelper", "structllama_1_1internal_1_1ZeroSequenceHelper.html", "structllama_1_1internal_1_1ZeroSequenceHelper" ],
     [ "ZeroSequenceHelper< 0, T_vals... >", "structllama_1_1internal_1_1ZeroSequenceHelper_3_010_00_01T__vals_8_8_8_01_4.html", "structllama_1_1internal_1_1ZeroSequenceHelper_3_010_00_01T__vals_8_8_8_01_4" ]
 ];

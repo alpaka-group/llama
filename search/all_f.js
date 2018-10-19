@@ -17,6 +17,8 @@ var searchData=
   ['soa_2ehpp',['SoA.hpp',['../SoA_8hpp.html',1,'']]],
   ['stack',['Stack',['../structllama_1_1allocator_1_1Stack.html',1,'llama::allocator']]],
   ['stack_2ehpp',['Stack.hpp',['../Stack_8hpp.html',1,'']]],
+  ['stubtype',['StubType',['../namespacellama.html#adb589a980e01610411523c3af5e5f4ed',1,'llama']]],
+  ['stubtypeimpl',['StubTypeImpl',['../structllama_1_1internal_1_1StubTypeImpl.html',1,'llama::internal']]],
   ['submergefunctorsimpl',['SubMergeFunctorsImpl',['../structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl.html#a172b0bd9666e386b45ec093cbfbe4ca1',1,'llama::mapping::tree::internal::MergeFunctorsImpl::SubMergeFunctorsImpl()'],['../structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl.html#a45aa5417cb477a9a7ac4f35a8fa28ef5',1,'llama::mapping::tree::internal::MergeFunctorsImpl::subMergeFunctorsImpl()']]],
   ['subtree',['SubTree',['../structllama_1_1mapping_1_1tree_1_1internal_1_1GetTreeBlobByteImpl.html#a320f51dc03f1fd6a134881e49bfe9b1b',1,'llama::mapping::tree::internal::GetTreeBlobByteImpl']]],
   ['summarizetreesmallerpos',['SummarizeTreeSmallerPos',['../structllama_1_1mapping_1_1tree_1_1internal_1_1SummarizeTreeSmallerPos.html',1,'llama::mapping::tree::internal']]],

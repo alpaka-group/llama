@@ -173,6 +173,9 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a29d5fdaf4a5f23aab704f936a53fd68c"><td class="memTemplParams" colspan="2">template&lt;typename T_DatumElement &gt; </td></tr>
 <tr class="memitem:a29d5fdaf4a5f23aab704f936a53fd68c"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a29d5fdaf4a5f23aab704f936a53fd68c">GetDatumElementUID</a> = boost::mp11::mp_first&lt; T_DatumElement &gt;</td></tr>
 <tr class="separator:a29d5fdaf4a5f23aab704f936a53fd68c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb589a980e01610411523c3af5e5f4ed"><td class="memTemplParams" colspan="2">template&lt;typename T_DatumDomain &gt; </td></tr>
+<tr class="memitem:adb589a980e01610411523c3af5e5f4ed"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#adb589a980e01610411523c3af5e5f4ed">StubType</a> = typename <a class="el" href="structllama_1_1internal_1_1StubTypeImpl.html">internal::StubTypeImpl</a>&lt; T_DatumDomain &gt;::type</td></tr>
+<tr class="separator:adb589a980e01610411523c3af5e5f4ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0497c2913f9ebb2cea9c97ddc35be349"><td class="memTemplParams" colspan="2">template&lt;std::size_t dimension, typename DatumDomain &gt; </td></tr>
 <tr class="memitem:a0497c2913f9ebb2cea9c97ddc35be349"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a0497c2913f9ebb2cea9c97ddc35be349">OneOnStackFactory</a> = <a class="el" href="structllama_1_1Factory.html">llama::Factory</a>&lt; <a class="el" href="structllama_1_1mapping_1_1One.html">llama::mapping::One</a>&lt; <a class="el" href="namespacellama.html#a03077c6597f96a84efe064fa64d81827">UserDomain</a>&lt; dimension &gt;, DatumDomain &gt;, <a class="el" href="structllama_1_1allocator_1_1Stack.html">llama::allocator::Stack</a>&lt; <a class="el" href="structllama_1_1SizeOf.html">SizeOf</a>&lt; DatumDomain &gt;::value &gt; &gt;</td></tr>
 <tr class="separator:a0497c2913f9ebb2cea9c97ddc35be349"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -825,6 +828,30 @@ template&lt;std::size_t dimension, typename DatumDomain &gt; </div>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacellama.html#a7e6d72ed44f9e4c51751940ef5ee8e65">tempAlloc</a> </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="Factory_8hpp_source.html#l00182">182</a> of file <a class="el" href="Factory_8hpp_source.html">Factory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="adb589a980e01610411523c3af5e5f4ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb589a980e01610411523c3af5e5f4ed">&#9670;&nbsp;</a></span>StubType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_DatumDomain &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama.html#adb589a980e01610411523c3af5e5f4ed">llama::StubType</a> = typedef typename <a class="el" href="structllama_1_1internal_1_1StubTypeImpl.html">internal::StubTypeImpl</a>&lt; T_DatumDomain &gt;::type</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns a type for a datum domain with the same size as <a class="el" href="structllama_1_1SizeOf.html">SizeOf</a> of this datum domain, useful e.g. if an external memory allocation function needs a type and a number of elements instead of the total size in bytes. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T_DatumDomain</td><td>the datum domain type to create a stub type for </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="DatumStruct_8hpp_source.html#l00175">175</a> of file <a class="el" href="DatumStruct_8hpp_source.html">DatumStruct.hpp</a>.</p>
 
 </div>
 </div>
@@ -3292,7 +3319,7 @@ template&lt;std::size_t T_dim&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Fri Oct 12 2018 13:50:35 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Fri Oct 19 2018 16:19:52 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

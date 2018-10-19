@@ -11,6 +11,7 @@ var searchData=
   ['sizeoftuple',['SizeOfTuple',['../structllama_1_1SizeOfTuple.html',1,'llama']]],
   ['soa',['SoA',['../structllama_1_1mapping_1_1SoA.html',1,'llama::mapping']]],
   ['stack',['Stack',['../structllama_1_1allocator_1_1Stack.html',1,'llama::allocator']]],
+  ['stubtypeimpl',['StubTypeImpl',['../structllama_1_1internal_1_1StubTypeImpl.html',1,'llama::internal']]],
   ['summarizetreesmallerpos',['SummarizeTreeSmallerPos',['../structllama_1_1mapping_1_1tree_1_1internal_1_1SummarizeTreeSmallerPos.html',1,'llama::mapping::tree::internal']]],
   ['summarizetreesmallerpos_3c_20t_5ftree_2c_200_20_3e',['SummarizeTreeSmallerPos&lt; T_Tree, 0 &gt;',['../structllama_1_1mapping_1_1tree_1_1internal_1_1SummarizeTreeSmallerPos_3_01T__Tree_00_010_01_4.html',1,'llama::mapping::tree::internal']]]
 ];
