@@ -174,4 +174,17 @@ struct StubTypeImpl
 template< typename T_DatumDomain >
 using StubType = typename internal::StubTypeImpl< T_DatumDomain >::type;
 
+
+template< typename T_Type >
+struct is_DatumStruct
+{
+    static constexpr bool value = false;
+};
+
+template< typename... T_DatumStructContent >
+struct is_DatumStruct< DatumStruct< T_DatumStructContent... > >
+{
+    static constexpr bool value = true;
+};
+
 } // namespace llama

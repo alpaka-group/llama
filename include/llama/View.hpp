@@ -646,7 +646,10 @@ __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( >= , BiggerSameThan )
  *  time datum domain
  * \tparam T_View parent view of the virtual datum
  */
-template< typename T_View >
+template<
+    typename T_View,
+    typename T_BoundDatumDomain = DatumCoord<>
+>
 struct VirtualDatum
 {
     /// parent view of the virtual datum
@@ -661,26 +664,24 @@ struct VirtualDatum
     /// reference to parent view
     ViewType& view;
 
-    template< typename... T_UIDs >
-    struct AccessImpl
-    {
-        template< typename T_UserDomain >
-        static
-        LLAMA_FN_HOST_ACC_INLINE
-        auto
-        apply(
-            T_View&& view,
-            T_UserDomain const & userDomainPos
-        )
-        -> decltype( view.template accessor< T_UIDs... >( userDomainPos ) )&
-        {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return view.template accessor< T_UIDs... >( userDomainPos );
-        }
-    };
+    template<
+        typename T_DatumCoord,
+        typename T_SFINAE = void
+    >
+    struct AccessImpl;
 
     template< std::size_t... T_coord >
-    struct AccessImpl< DatumCoord< T_coord... > >
+    struct AccessImpl<
+        DatumCoord< T_coord... >,
+        typename std::enable_if<
+            !is_DatumStruct<
+                GetType<
+                    typename Mapping::DatumDomain,
+                    T_coord...
+                >
+            >::value
+        >::type
+    >
     {
         template< typename T_UserDomain >
         static
@@ -697,17 +698,124 @@ struct VirtualDatum
         }
     };
 
+    template<
+        typename T_DatumCoord
+    >
+    struct AccessImpl<
+        T_DatumCoord,
+        typename std::enable_if<
+            is_DatumStruct<
+                GetTypeFromDatumCoord<
+                    typename Mapping::DatumDomain,
+                    T_DatumCoord
+                >
+            >::value
+        >::type
+    >
+    {
+        template< typename T_UserDomain >
+        static
+        LLAMA_FN_HOST_ACC_INLINE
+        auto
+        apply(
+            T_View&& view,
+            T_UserDomain const & userDomainPos
+        )
+        -> decltype( VirtualDatum<
+                View <
+                    Mapping,
+                    BlobType
+                >,
+                T_DatumCoord
+            >{
+                typename Mapping::UserDomain{ userDomainPos },
+                view
+            } )
+        {
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return VirtualDatum<
+                View <
+                    Mapping,
+                    BlobType
+                >,
+                T_DatumCoord
+            >{
+                typename Mapping::UserDomain{ userDomainPos },
+                view
+            };
+        }
+    };
+
+    template< typename... T_UIDs >
+    struct AccessWithTypeImpl
+    {
+        template< typename T_UserDomain >
+        static
+        LLAMA_FN_HOST_ACC_INLINE
+        auto
+        apply(
+            T_View&& view,
+            T_UserDomain const & userDomainPos
+        )
+        -> decltype( AccessImpl<
+                GetCoordFromUID<
+                    typename Mapping::DatumDomain,
+                    T_UIDs...
+                >
+            >::apply(
+                std::forward<T_View>(view),
+                userDomainPos
+            ) ) // & should be in decltype if …::apply returns a reference
+        {
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return AccessImpl<
+                GetCoordFromUID<
+                    typename Mapping::DatumDomain,
+                    T_UIDs...
+                >
+            >::apply(
+                std::forward<T_View>(view),
+                userDomainPos
+            );
+        }
+    };
+
+
+    template< std::size_t... T_coord >
+    struct AccessWithTypeImpl< DatumCoord< T_coord... > >
+    {
+        template< typename T_UserDomain >
+        static
+        LLAMA_FN_HOST_ACC_INLINE
+        auto
+        apply(
+            T_View&& view,
+            T_UserDomain const & userDomainPos
+        )
+        -> decltype( AccessImpl< DatumCoord< T_coord... > >::apply(
+                std::forward<T_View>(view),
+                userDomainPos
+            ) )&
+        {
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return AccessImpl< DatumCoord< T_coord... > >::apply(
+                std::forward<T_View>(view),
+                userDomainPos
+            );
+        }
+    };
+
     template< typename... T_DatumCoordOrUIDs  >
     LLAMA_FN_HOST_ACC_INLINE
     auto
     access( T_DatumCoordOrUIDs&&... )
-    -> decltype( AccessImpl< T_DatumCoordOrUIDs... >::apply(
+    -> decltype( AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
             std::forward<T_View>(view),
             userDomainPos
         ) ) &
     {
         LLAMA_FORCE_INLINE_RECURSIVE
-        return AccessImpl< T_DatumCoordOrUIDs... >::apply(
+        return AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
             std::forward<T_View>(view),
             userDomainPos
         );
@@ -725,13 +833,13 @@ struct VirtualDatum
     LLAMA_FN_HOST_ACC_INLINE
     auto
     access( )
-    -> decltype( AccessImpl< T_DatumCoordOrUIDs... >::apply(
+    -> decltype( AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
             std::forward<T_View>(view),
             userDomainPos
-        ) ) &
+        ) ) // & should be in decltype if …::apply returns a reference
     {
         LLAMA_FORCE_INLINE_RECURSIVE
-        return AccessImpl< T_DatumCoordOrUIDs... >::apply(
+        return AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
             std::forward<T_View>(view),
             userDomainPos
         );
@@ -773,12 +881,13 @@ struct VirtualDatum
     auto
     operator()( T_DatumCoordOrUIDs&&... LLAMA_IGNORE_LITERAL( datumCoordOrUIDs ) )
 #if !BOOST_COMP_INTEL && !BOOST_COMP_NVCC
-    -> decltype( access< T_DatumCoordOrUIDs... >() ) &
+    -> decltype( access< T_DatumCoordOrUIDs... >() )
+    // & should be in decltype if …::apply returns a reference
 #else //Intel compiler bug work around
-    -> decltype( AccessImpl< T_DatumCoordOrUIDs... >::apply(
+    -> decltype( AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
         std::forward<T_View>(view),
         userDomainPos
-    ) ) &
+    ) ) // & should be in decltype if …::apply returns a reference
 #endif
     {
         LLAMA_FORCE_INLINE_RECURSIVE
