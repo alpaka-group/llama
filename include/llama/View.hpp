@@ -228,20 +228,23 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
 #define __LLAMA_VIRTUALDATUM_VIRTUALDATUM_OPERATOR( OP, FUNCTOR, REF )         \
     template<                                                                  \
         typename T_OtherView,                                                  \
-        typename T_OtherBoundDatumDomain                                       \
+        typename T_OtherBoundDatumDomain,                                      \
+        template< class > class T_OtherViewType                                \
     >                                                                          \
     LLAMA_FN_HOST_ACC_INLINE                                                   \
     auto                                                                       \
     operator OP( VirtualDatum<                                                 \
         T_OtherView,                                                           \
-        T_OtherBoundDatumDomain                                                \
+        T_OtherBoundDatumDomain,                                               \
+        T_OtherViewType                                                        \
     >REF other ) -> decltype(*this)&                                           \
     {                                                                          \
         BOOST_PP_CAT( FUNCTOR, Functor)<                                       \
             decltype(*this),                                                   \
             VirtualDatum<                                                      \
                 T_OtherView,                                                   \
-                T_OtherBoundDatumDomain                                        \
+                T_OtherBoundDatumDomain,                                       \
+                T_OtherViewType                                                \
             >,                                                                 \
             DatumCoord< >                                                      \
         > functor{                                                             \
@@ -543,20 +546,23 @@ __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( >= , BiggerSameThan )
 #define __LLAMA_VIRTUALDATUM_VIRTUALDATUM_BOOL_OPERATOR( OP, FUNCTOR, REF )    \
     template<                                                                  \
         typename T_OtherView,                                                  \
-        typename T_OtherBoundDatumDomain                                       \
+        typename T_OtherBoundDatumDomain,                                      \
+        template< class > class T_OtherViewType                                \
     >                                                                          \
     LLAMA_FN_HOST_ACC_INLINE                                                   \
     auto                                                                       \
     operator OP( VirtualDatum<                                                 \
         T_OtherView,                                                           \
-        T_OtherBoundDatumDomain                                                \
+        T_OtherBoundDatumDomain,                                               \
+        T_OtherViewType                                                        \
     >REF other ) -> bool                                                       \
     {                                                                          \
         BOOST_PP_CAT( FUNCTOR, BoolFunctor)<                                   \
             decltype(*this),                                                   \
             VirtualDatum<                                                      \
                 T_OtherView,                                                   \
-                T_OtherBoundDatumDomain                                        \
+                T_OtherBoundDatumDomain,                                       \
+                T_OtherViewType                                                \
             >,                                                                 \
             DatumCoord< >                                                      \
         > functor{                                                             \
@@ -656,6 +662,22 @@ __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( >= , BiggerSameThan )
     __LLAMA_VIRTUALDATUM_TYPE_BOOL_OPERATOR( OP, FUNCTOR, & )                  \
     __LLAMA_VIRTUALDATUM_TYPE_BOOL_OPERATOR( OP, FUNCTOR, && )
 
+namespace internal
+{
+
+template< typename T_View >
+struct ViewByRef
+{
+    /// reference to parent view
+    T_View& view;
+
+    LLAMA_FN_HOST_ACC_INLINE
+    ViewByRef( T_View& view ) : view( view ) {}
+
+};
+
+} // namespace internal
+
 /** Virtual data type returned by \ref View after resolving user domain address,
  *  being "virtual" in that sense that the data of the virtual datum are not
  *  part of the struct itself but a helper object to address them in the compile
@@ -668,9 +690,10 @@ __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( >= , BiggerSameThan )
  */
 template<
     typename T_View,
-    typename T_BoundDatumDomain = DatumCoord<>
+    typename T_BoundDatumDomain = DatumCoord<>,
+    template< class > class T_ViewType = internal::ViewByRef
 >
-struct VirtualDatum
+struct VirtualDatum : T_ViewType< T_View >
 {
     /// parent view of the virtual datum
     using ViewType = T_View;
@@ -692,8 +715,15 @@ struct VirtualDatum
         typename Mapping::DatumDomain,
         BoundDatumDomain
     >;
-    /// reference to parent view
-    ViewType& view;
+
+    LLAMA_FN_HOST_ACC_INLINE
+    VirtualDatum(
+        typename Mapping::UserDomain const userDomainPos,
+        ViewType& view
+    ) :
+        T_ViewType< T_View >( view ),
+        userDomainPos( userDomainPos )
+    {}
 
     template< typename T_DatumCoordWithBoundDatumDomain >
     struct AccessWithBoundDatumDomainImpl;
@@ -872,13 +902,13 @@ struct VirtualDatum
     auto
     access( T_DatumCoordOrUIDs&&... )
     -> decltype( AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
-            std::forward<T_View>(view),
+            std::forward<T_View>(this->view),
             userDomainPos
         ) ) // & should be in decltype if …::apply returns a reference
     {
         LLAMA_FORCE_INLINE_RECURSIVE
         return AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
-            std::forward<T_View>(view),
+            std::forward<T_View>(this->view),
             userDomainPos
         );
     }
@@ -898,13 +928,13 @@ struct VirtualDatum
     auto
     access( )
     -> decltype( AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
-            std::forward<T_View>(view),
+            std::forward<T_View>(this->view),
             userDomainPos
         ) ) // & should be in decltype if …::apply returns a reference
     {
         LLAMA_FORCE_INLINE_RECURSIVE
         return AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
-            std::forward<T_View>(view),
+            std::forward<T_View>(this->view),
             userDomainPos
         );
     }
@@ -923,13 +953,13 @@ struct VirtualDatum
     auto
     access( )
     -> decltype( AccessImpl< DatumCoord< T_coord... > >::apply(
-            std::forward<T_View>(view),
+            std::forward<T_View>(this->view),
             userDomainPos
         ) ) // & should be in decltype if …::apply returns a reference
     {
         LLAMA_FORCE_INLINE_RECURSIVE
         return AccessImpl< DatumCoord< T_coord... > >::apply(
-            std::forward<T_View>(view),
+            std::forward<T_View>(this->view),
             userDomainPos
         );
     }
@@ -953,7 +983,7 @@ struct VirtualDatum
     // & should be in decltype if …::apply returns a reference
 #else //Intel compiler bug work around
     -> decltype( AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
-        std::forward<T_View>(view),
+        std::forward<T_View>(this->view),
         userDomainPos
     ) ) // & should be in decltype if …::apply returns a reference
 #endif
