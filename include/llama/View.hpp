@@ -676,6 +676,18 @@ struct ViewByRef
 
 };
 
+template< typename T_View >
+struct ViewByValue
+{
+    /// reference to parent view
+    T_View view;
+
+    LLAMA_NO_HOST_ACC_WARNING
+    LLAMA_FN_HOST_ACC_INLINE
+    ViewByValue( T_View& view ) : view( view ) {}
+
+};
+
 } // namespace internal
 
 /** Virtual data type returned by \ref View after resolving user domain address,
