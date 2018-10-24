@@ -132,10 +132,18 @@ a parameter to a function (as seen in the
     }
 
 The most needed inplace operators ( :cpp:`=`, :cpp:`+=`, :cpp:`-=`, :cpp:`*=`,
-:cpp:`/=`, :cpp:`%=` ) are overloaded. Only inplace, because it is not trivial
-to create a needed intermediate state out of a virtual datum (without expression
-templates). These operators work between two virtual datums, even if they have
-different datum domains. Every namings existing in both datum domains will be
+:cpp:`/=`, :cpp:`%=` ) are overloaded. These operators directly write into the
+corresponding view. Furthermore the not-inplace operators ( :cpp:`+`, :cpp:`-`,
+:cpp:`*`, :cpp:`/`, :cpp:`%` ) are overloaded too but return an temporary object
+on the stack. Althought it has a basic struct-mapping without padding and
+probaly being not compatible to the mapping of the view at all, the compiler
+will most probably be able to optimize the data accesses anyway as it has full
+knowledge about the data in the stack and can cut out all temporary operations.
+
+These operators work between two virtual datums, even if they have
+different datum domains. It is even possible to work on parts of a virtual
+datum. This returns a virtual datum with the first coordinates in the datum
+domain bound. Every namings existing in both datum domains will be
 matched and operated on. Every not matching pair is ignored, e.g.
 
 .. code-block:: C++
@@ -164,6 +172,10 @@ matched and operated on. Every not matching pair is ignored, e.g.
     datum1 += datum2;
     // datum2.pos.x and only datum2.pos.x will be added to datum1.pos.x because
     // of pos.x existing in both datum domains although having different types.
+
+    datum1( vel() ) *= datum2( mom() );
+    // datum2.mom.x will be multiplied to datum2.vel.x as the first part of the
+    // datum domain coord is explicit given and the same afterwards
 
 The same operators are also overloaded for any other type so that
 :cpp:`datum1 *= 7.0` will multiply 7 to every element in the datum domain.

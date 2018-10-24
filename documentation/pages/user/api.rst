@@ -180,6 +180,12 @@ Factory
 .. doxygenfunction:: llama::stackViewAlloc
    :project: LLAMA
 
+.. doxygenfunction:: llama::stackVirtualDatumAlloc
+   :project: LLAMA
+
+.. doxygenfunction:: llama::stackVirtualDatumCopy
+   :project: LLAMA
+
 .. _label-api-allocators:
 
 Allocators
