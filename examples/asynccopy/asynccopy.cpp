@@ -162,8 +162,8 @@ struct BlurKernel
             for( auto x = start[1]; x < end[1]; ++x )
             {
 #if ASYNCCOPY_LOCAL_SUM == 1
-                auto sum = llama::tempAlloc< 1, PixelOnAcc >();
-                sum() = 0;
+                auto sum = llama::stackVirtualDatumAlloc< PixelOnAcc >();
+                sum = 0;
 #else // ASYNCCOPY_LOCAL_SUM == 0
                 newImage( y + kernelSize, x + kernelSize ) = 0;
 #endif // ASYNCCOPY_LOCAL_SUM
@@ -193,7 +193,7 @@ struct BlurKernel
                     LLAMA_INDEPENDENT_DATA
                     for ( auto a = i_start[1]; a < i_end[1]; ++a )
 #if ASYNCCOPY_LOCAL_SUM == 1
-                        sum() +=
+                        sum +=
 #else // ASYNCCOPY_LOCAL_SUM == 0
                         newImage( y + kernelSize, x + kernelSize ) +=
 #endif // ASYNCCOPY_LOCAL_SUM
@@ -203,8 +203,8 @@ struct BlurKernel
                             shared( std::size_t(b), std::size_t(a) );
 #endif // ASYNCCOPY_SHARED
 #if ASYNCCOPY_LOCAL_SUM == 1
-                sum() /= Element( (2 * kernelSize + 1) * (2 * kernelSize + 1) );
-                newImage( y + kernelSize, x + kernelSize ) = sum();
+                sum /= Element( (2 * kernelSize + 1) * (2 * kernelSize + 1) );
+                newImage( y + kernelSize, x + kernelSize ) = sum;
 #else // ASYNCCOPY_LOCAL_SUM == 0
                 newImage( y + kernelSize, x + kernelSize ) /=
                     Element( (2 * kernelSize + 1) * (2 * kernelSize + 1) );

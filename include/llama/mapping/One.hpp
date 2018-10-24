@@ -31,11 +31,11 @@ namespace mapping
  *  element (in the user domain) can be mapped. If more than one element is
  *  tried to be mapped all virtual datums are mapped to the very same memory.
  *  This mapping is especially used for temporary views on the stack allocated
- *  with \ref tempAlloc.
+ *  with \ref stackViewAlloc.
  * \tparam T_UserDomain type of the user domain, expected to have only element,
  *  although more are working (but doesn't make sense)
  * \tparam T_DatumDomain type of the datum domain
- * \see tempAlloc, OneOnStackFactory, allocator::Stack
+ * \see stackViewAlloc, OneOnStackFactory, allocator::Stack
  */
 template<
     typename T_UserDomain,

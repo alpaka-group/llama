@@ -26,6 +26,7 @@
 #include "Array.hpp"
 #include "ForEach.hpp"
 #include "CompareUID.hpp"
+#include "Factory.hpp"
 
 namespace llama
 {
@@ -35,6 +36,89 @@ template<
     typename T_BlobType
 >
 struct View;
+
+namespace internal
+{
+
+template< typename T_View >
+struct ViewByRef
+{
+    /// reference to parent view
+    T_View& view;
+
+    LLAMA_FN_HOST_ACC_INLINE
+    ViewByRef( T_View& view ) : view( view ) {}
+
+};
+
+template< typename T_View >
+struct ViewByValue
+{
+    /// reference to parent view
+    T_View view;
+
+    LLAMA_NO_HOST_ACC_WARNING
+    LLAMA_FN_HOST_ACC_INLINE
+    ViewByValue( T_View& view ) : view( view ) {}
+
+};
+
+} // namespace internal
+
+template<
+    typename T_View,
+    typename T_BoundDatumDomain = DatumCoord<>,
+    template< class > class T_ViewType = internal::ViewByRef
+>
+struct VirtualDatum;
+
+/** Uses the \ref stackViewAlloc to allocate a virtual datum with an own bound
+ *  view "allocated" on the stack.
+ * \tparam T_DatumDomain the datum domain for the virtual datum
+ * \return the allocated virtual datum
+ * \see stackViewAlloc
+ */
+template< typename T_DatumDomain >
+LLAMA_FN_HOST_ACC_INLINE
+auto
+stackVirtualDatumAlloc()
+-> VirtualDatum<
+    decltype( llama::stackViewAlloc< 1, T_DatumDomain >() ),
+    DatumCoord<>,
+    internal::ViewByValue
+>
+{
+    return VirtualDatum<
+        decltype( llama::stackViewAlloc< 1, T_DatumDomain >() ),
+        DatumCoord<>,
+        internal::ViewByValue
+    >{
+        userDomainZero< 1 >(),
+        llama::stackViewAlloc< 1, T_DatumDomain >()
+    };
+}
+
+/** Uses the \ref stackVirtualDatumAlloc to allocate a virtual datum with an own
+ *  bound view "allocated" on the stack bases on an existing virtual datum,
+ *  whose data is copied into the new virtual datum.
+ * \tparam T_VirtualDatum type of the input virtual datum
+ * \return the virtual datum copy on stack
+ * \see stackVirtualDatumAlloc
+ */
+template< typename T_VirtualDatum >
+LLAMA_FN_HOST_ACC_INLINE
+auto
+stackVirtualDatumCopy( T_VirtualDatum & vd )
+-> decltype( stackVirtualDatumAlloc<
+    typename T_VirtualDatum::AccessibleDatumDomain
+>() )
+{
+    auto temp = stackVirtualDatumAlloc<
+        typename T_VirtualDatum::AccessibleDatumDomain
+    >();
+    temp = vd;
+    return temp;
+}
 
 /** Macro that defines two functors for \ref llama::ForEach which apply an operation on
  *  a given virtual datum and either another virtual datum or some other type.
@@ -228,20 +312,23 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
 #define __LLAMA_VIRTUALDATUM_VIRTUALDATUM_OPERATOR( OP, FUNCTOR, REF )         \
     template<                                                                  \
         typename T_OtherView,                                                  \
-        typename T_OtherBoundDatumDomain                                       \
+        typename T_OtherBoundDatumDomain,                                      \
+        template< class > class T_OtherViewType                                \
     >                                                                          \
     LLAMA_FN_HOST_ACC_INLINE                                                   \
     auto                                                                       \
     operator OP( VirtualDatum<                                                 \
         T_OtherView,                                                           \
-        T_OtherBoundDatumDomain                                                \
+        T_OtherBoundDatumDomain,                                               \
+        T_OtherViewType                                                        \
     >REF other ) -> decltype(*this)&                                           \
     {                                                                          \
         BOOST_PP_CAT( FUNCTOR, Functor)<                                       \
             decltype(*this),                                                   \
             VirtualDatum<                                                      \
                 T_OtherView,                                                   \
-                T_OtherBoundDatumDomain                                        \
+                T_OtherBoundDatumDomain,                                       \
+                T_OtherViewType                                                \
             >,                                                                 \
             DatumCoord< >                                                      \
         > functor{                                                             \
@@ -334,6 +421,30 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
     __LLAMA_VIRTUALDATUM_VIEW_OPERATOR( OP, FUNCTOR, && )                      \
     __LLAMA_VIRTUALDATUM_TYPE_OPERATOR( OP, FUNCTOR, & )                       \
     __LLAMA_VIRTUALDATUM_TYPE_OPERATOR( OP, FUNCTOR, && )
+
+//~ /** Macro that defines an operator overloading inside of \ref llama::VirtualDatum for
+ //~ *  itself and some other type.
+ //~ * \param OP operator, e.g. operator +=
+ //~ * \param FUNCTOR used for calling the internal needed functor to operate on
+ //~ *        the virtual datums, e.g. if FUNCTOR is "Addition", the
+ //~ *        AdditionTypeFunctor will be used internally.
+ //~ * \param REF may be & or && to determine whether it is an overloading for
+ //~ *        lvalue or rvalue references
+ //~ * */
+#define __LLAMA_VIRTUALDATUM_NOT_IN_PLACE_OPERATOR_WITH_REF( OP, INP_OP, REF ) \
+    template< typename T_OtherType >                                           \
+    LLAMA_FN_HOST_ACC_INLINE                                                   \
+    auto                                                                       \
+    operator OP( T_OtherType REF other )                                       \
+    -> decltype( stackVirtualDatumCopy( *this ) )                              \
+    {                                                                          \
+        return stackVirtualDatumCopy( *this ) INP_OP other;                    \
+    }
+
+#define __LLAMA_VIRTUALDATUM_NOT_IN_PLACE_OPERATOR( OP, INP_OP )               \
+    __LLAMA_VIRTUALDATUM_NOT_IN_PLACE_OPERATOR_WITH_REF( OP, INP_OP, & )       \
+    __LLAMA_VIRTUALDATUM_NOT_IN_PLACE_OPERATOR_WITH_REF( OP, INP_OP, && )
+
 
 /** Macro that defines two functors for \ref llama::ForEach which apply a boolean
  *  operation on a given virtual datum and either another virtual datum or some
@@ -543,20 +654,23 @@ __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( >= , BiggerSameThan )
 #define __LLAMA_VIRTUALDATUM_VIRTUALDATUM_BOOL_OPERATOR( OP, FUNCTOR, REF )    \
     template<                                                                  \
         typename T_OtherView,                                                  \
-        typename T_OtherBoundDatumDomain                                       \
+        typename T_OtherBoundDatumDomain,                                      \
+        template< class > class T_OtherViewType                                \
     >                                                                          \
     LLAMA_FN_HOST_ACC_INLINE                                                   \
     auto                                                                       \
     operator OP( VirtualDatum<                                                 \
         T_OtherView,                                                           \
-        T_OtherBoundDatumDomain                                                \
+        T_OtherBoundDatumDomain,                                               \
+        T_OtherViewType                                                        \
     >REF other ) -> bool                                                       \
     {                                                                          \
         BOOST_PP_CAT( FUNCTOR, BoolFunctor)<                                   \
             decltype(*this),                                                   \
             VirtualDatum<                                                      \
                 T_OtherView,                                                   \
-                T_OtherBoundDatumDomain                                        \
+                T_OtherBoundDatumDomain,                                       \
+                T_OtherViewType                                                \
             >,                                                                 \
             DatumCoord< >                                                      \
         > functor{                                                             \
@@ -668,9 +782,10 @@ __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR( >= , BiggerSameThan )
  */
 template<
     typename T_View,
-    typename T_BoundDatumDomain = DatumCoord<>
+    typename T_BoundDatumDomain,
+    template< class > class T_ViewType
 >
-struct VirtualDatum
+struct VirtualDatum : T_ViewType< T_View >
 {
     /// parent view of the virtual datum
     using ViewType = T_View;
@@ -692,8 +807,24 @@ struct VirtualDatum
         typename Mapping::DatumDomain,
         BoundDatumDomain
     >;
-    /// reference to parent view
-    ViewType& view;
+
+    LLAMA_FN_HOST_ACC_INLINE
+    VirtualDatum(
+        typename Mapping::UserDomain const userDomainPos,
+        ViewType& view
+    ) :
+        T_ViewType< T_View >( view ),
+        userDomainPos( userDomainPos )
+    {}
+
+    LLAMA_FN_HOST_ACC_INLINE
+    VirtualDatum(
+        typename Mapping::UserDomain const userDomainPos,
+        ViewType&& view
+    ) :
+        T_ViewType< T_View >( view ),
+        userDomainPos( userDomainPos )
+    {}
 
     template< typename T_DatumCoordWithBoundDatumDomain >
     struct AccessWithBoundDatumDomainImpl;
@@ -872,13 +1003,13 @@ struct VirtualDatum
     auto
     access( T_DatumCoordOrUIDs&&... )
     -> decltype( AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
-            std::forward<T_View>(view),
+            std::forward<T_View>(this->view),
             userDomainPos
         ) ) // & should be in decltype if …::apply returns a reference
     {
         LLAMA_FORCE_INLINE_RECURSIVE
         return AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
-            std::forward<T_View>(view),
+            std::forward<T_View>(this->view),
             userDomainPos
         );
     }
@@ -898,13 +1029,13 @@ struct VirtualDatum
     auto
     access( )
     -> decltype( AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
-            std::forward<T_View>(view),
+            std::forward<T_View>(this->view),
             userDomainPos
         ) ) // & should be in decltype if …::apply returns a reference
     {
         LLAMA_FORCE_INLINE_RECURSIVE
         return AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
-            std::forward<T_View>(view),
+            std::forward<T_View>(this->view),
             userDomainPos
         );
     }
@@ -923,13 +1054,13 @@ struct VirtualDatum
     auto
     access( )
     -> decltype( AccessImpl< DatumCoord< T_coord... > >::apply(
-            std::forward<T_View>(view),
+            std::forward<T_View>(this->view),
             userDomainPos
         ) ) // & should be in decltype if …::apply returns a reference
     {
         LLAMA_FORCE_INLINE_RECURSIVE
         return AccessImpl< DatumCoord< T_coord... > >::apply(
-            std::forward<T_View>(view),
+            std::forward<T_View>(this->view),
             userDomainPos
         );
     }
@@ -953,7 +1084,7 @@ struct VirtualDatum
     // & should be in decltype if …::apply returns a reference
 #else //Intel compiler bug work around
     -> decltype( AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
-        std::forward<T_View>(view),
+        std::forward<T_View>(this->view),
         userDomainPos
     ) ) // & should be in decltype if …::apply returns a reference
 #endif
@@ -968,6 +1099,12 @@ struct VirtualDatum
     __LLAMA_VIRTUALDATUM_OPERATOR( *= , Multiplication )
     __LLAMA_VIRTUALDATUM_OPERATOR( /= , Division )
     __LLAMA_VIRTUALDATUM_OPERATOR( %= , Modulo )
+
+    __LLAMA_VIRTUALDATUM_NOT_IN_PLACE_OPERATOR( +, += )
+    __LLAMA_VIRTUALDATUM_NOT_IN_PLACE_OPERATOR( -, -= )
+    __LLAMA_VIRTUALDATUM_NOT_IN_PLACE_OPERATOR( *, *= )
+    __LLAMA_VIRTUALDATUM_NOT_IN_PLACE_OPERATOR( /, /= )
+    __LLAMA_VIRTUALDATUM_NOT_IN_PLACE_OPERATOR( %, %= )
 
     __LLAMA_VIRTUALDATUM_BOOL_OPERATOR( == , SameAs )
     __LLAMA_VIRTUALDATUM_BOOL_OPERATOR( != , Not )

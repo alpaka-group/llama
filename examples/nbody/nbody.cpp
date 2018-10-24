@@ -70,22 +70,18 @@ pPInteraction(
 )
 -> void
 {
-    // Creating tempory object for distance on stack:
-    using DistanceDD = llama::GetTypeFromUID< Particle, dd::Pos >;
-    auto distance = llama::tempAlloc< 1, DistanceDD >();
-    distance()  = p1( dd::Pos() );
-    distance() -= p2( dd::Pos() );
-
-    distance() *= distance(); //square for each element
+    // Creating tempory virtual datum object for distance on stack:
+    auto distance = p1( dd::Pos() ) + p2( dd::Pos() );
+    distance *= distance; //square for each element
     Element distSqr = EPS2 +
-        distance()( dd::X() ) +
-        distance()( dd::Y() ) +
-        distance()( dd::Z() );
+        distance( dd::X() ) +
+        distance( dd::Y() ) +
+        distance( dd::Z() );
     Element distSixth = distSqr * distSqr * distSqr;
     Element invDistCube = 1.0f / sqrtf( distSixth );
     Element s = p2( dd::Mass() ) * invDistCube;
-    distance() *= s * ts;
-    p1( dd::Vel() ) += distance();
+    distance *= s * ts;
+    p1( dd::Vel() ) += distance;
 }
 
 template<
@@ -292,14 +288,7 @@ struct MoveKernel
 
         LLAMA_INDEPENDENT_DATA
         for ( auto pos = start; pos < end; ++pos )
-        {
-            // Creating tempory object for distance on stack:
-            using VelocityDD = llama::GetTypeFromUID< Particle, dd::Vel >;
-            auto velocity = llama::tempAlloc< 1, VelocityDD >();
-            velocity()  = particles( pos )( dd::Vel() );
-            velocity() *= ts;
-            particles( pos )( dd::Pos() ) += velocity();
-        }
+            particles( pos )( dd::Pos() ) += particles( pos )( dd::Vel() ) * ts;
     }
 };
 
@@ -455,29 +444,22 @@ int main(int argc,char * * argv)
 
     chrono.printAndReset("Alloc");
 
-    std::default_random_engine generator;
+    std::mt19937_64 generator;
     std::normal_distribution< Element > distribution(
         Element( 0 ), // mean
         Element( 1 )  // stddev
     );
-    auto seed = distribution(generator);
     LLAMA_INDEPENDENT_DATA
     for (std::size_t i = 0; i < problemSize; ++i)
     {
-        //~ auto temp = llama::tempAlloc< 1, Particle >();
-        //~ temp(dd::Pos(), dd::X()) = distribution(generator);
-        //~ temp(dd::Pos(), dd::Y()) = distribution(generator);
-        //~ temp(dd::Pos(), dd::Z()) = distribution(generator);
-        //~ temp(dd::Vel(), dd::X()) = distribution(generator)/Element(10);
-        //~ temp(dd::Vel(), dd::Y()) = distribution(generator)/Element(10);
-        //~ temp(dd::Vel(), dd::Z()) = distribution(generator)/Element(10);
-        hostView(i) = seed;
-        //~ hostView(dd::Pos(), dd::X()) = seed;
-        //~ hostView(dd::Pos(), dd::Y()) = seed;
-        //~ hostView(dd::Pos(), dd::Z()) = seed;
-        //~ hostView(dd::Vel(), dd::X()) = seed;
-        //~ hostView(dd::Vel(), dd::Y()) = seed;
-        //~ hostView(dd::Vel(), dd::Z()) = seed;
+        auto temp = llama::stackVirtualDatumAlloc< Particle >();
+        temp(dd::Pos(), dd::X()) = distribution(generator);
+        temp(dd::Pos(), dd::Y()) = distribution(generator);
+        temp(dd::Pos(), dd::Z()) = distribution(generator);
+        temp(dd::Vel(), dd::X()) = distribution(generator)/Element(10);
+        temp(dd::Vel(), dd::Y()) = distribution(generator)/Element(10);
+        temp(dd::Vel(), dd::Z()) = distribution(generator)/Element(10);
+        hostView(i) = temp;
     }
 
     chrono.printAndReset("Init");

@@ -18,7 +18,20 @@
 
 #pragma once
 
-#include "View.hpp"
+//#include "View.hpp"
+// Forward declartation instead of include as the View.hpp needs to use
+// factories itself in some VirtualDatum overloads
+namespace llama
+{
+
+template<
+    typename T_Mapping,
+    typename T_BlobType
+>
+struct View;
+
+} // namespace llama
+
 #include "allocator/Vector.hpp"
 #include "allocator/Stack.hpp"
 #include "mapping/One.hpp"
@@ -164,47 +177,47 @@ struct Factory
  *  only one element laying on the stack avoiding costly allocation operations.
  * \tparam dimension dimension of the view
  * \tparam DatumDomain the datum domain for the one element mapping
- * \see tempAlloc
+ * \see stackViewAlloc
  */
 template<
-    std::size_t dimension,
-    typename DatumDomain
+    std::size_t T_dimension,
+    typename T_DatumDomain
 >
 using OneOnStackFactory =
     llama::Factory<
         llama::mapping::One<
-            UserDomain< dimension >,
-            DatumDomain
+            UserDomain< T_dimension >,
+            T_DatumDomain
         >,
         llama::allocator::Stack<
-            SizeOf<DatumDomain>::value
+            SizeOf<T_DatumDomain>::value
         >
     >;
 
 /** Uses the \ref OneOnStackFactory to allocate one (probably temporary) element
- *  for a given dimension and dautm domain on the stack (no costly allocation).
+ *  for a given dimension and datum domain on the stack (no costly allocation).
  * \tparam dimension dimension of the view
  * \tparam DatumDomain the datum domain for the one element mapping
  * \return the allocated view
  * \see OneOnStackFactory
  */
 template<
-    std::size_t dimension,
-    typename DatumDomain
+    std::size_t T_dimension,
+    typename T_DatumDomain
 >
 LLAMA_FN_HOST_ACC_INLINE
 auto
-tempAlloc()
+stackViewAlloc()
 -> decltype(
     OneOnStackFactory<
-        dimension,
-        DatumDomain
+        T_dimension,
+        T_DatumDomain
     >::allocView()
 )
 {
     return OneOnStackFactory<
-        dimension,
-        DatumDomain
+        T_dimension,
+        T_DatumDomain
     >::allocView();
 }
 

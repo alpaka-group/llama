@@ -14,13 +14,9 @@ the near future. However there is still a long way to go.
 View and virtual datum interface
 --------------------------------
 
-One of the most relevent plans for end users is the extension of the view and
-virtual datum functionalities. At the moment only six inplace and six logical
-operators are overload. In the future all arightmetic and logic operators shall
-be implemented -- at least of they are inplace.
-:cpp:`view1( i ) = view2( j ) + view( k )` would need intermediate temporary
-objects (e.g. on the stack) which may be bad or expression templates. Both is
-not **planned** atm but **not completely excluded** as well.
+Right now only the inplace operations like :cpp:`+=`, the logical operations and
+the five most important binary operations are supported. In the future all
+binary (and unary?) operators shall be overloaded.
 
 Mappings
 --------
