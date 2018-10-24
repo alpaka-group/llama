@@ -94,6 +94,8 @@ $(document).ready(function(){initNavTree('functions_v.html','');});
 , <a class="el" href="structllama_1_1internal_1_1LinearBytePosImpl.html#a1ea766c50eb94d8ca36bad2c6975089e">llama::internal::LinearBytePosImpl&lt; T_DatumDomain, T_DatumCoord, T_IterCoord &gt;</a>
 , <a class="el" href="structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01_4_00_01T__DatumCoord_00_01T__IterCoord_01_4.html#aa61822d26322ecb480d573513c311d87">llama::internal::LinearBytePosImpl&lt; DatumStruct&lt; &gt;, T_DatumCoord, T_IterCoord &gt;</a>
 , <a class="el" href="structllama_1_1internal_1_1LinearBytePosImpl_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__Daab3e6bc06488e5011eff271a9737aa6b.html#a2d1ea8251ec186fe3e2c5c26b7451536">llama::internal::LinearBytePosImpl&lt; DatumStruct&lt; T_FirstDatumElement, T_DatumElements... &gt;, T_DatumCoord, T_IterCoord &gt;</a>
+, <a class="el" href="structllama_1_1is__DatumStruct.html#aea74cea00b184b2420a2ac725149cd92">llama::is_DatumStruct&lt; T_Type &gt;</a>
+, <a class="el" href="structllama_1_1is__DatumStruct_3_01DatumStruct_3_01T__DatumStructContent_8_8_8_01_4_01_4.html#a94d23595aece7c884001228cb782931c">llama::is_DatumStruct&lt; DatumStruct&lt; T_DatumStructContent... &gt; &gt;</a>
 , <a class="el" href="structllama_1_1LinearBytePos.html#ad94b5c8a780057504a13edb0ccefc0e6">llama::LinearBytePos&lt; T_DatumDomain, T_coords &gt;</a>
 , <a class="el" href="structllama_1_1SizeOf.html#af9ab42e4e43b1533a6041db04be91e02">llama::SizeOf&lt; T_DatumDomain &gt;</a>
 , <a class="el" href="structllama_1_1SizeOf_3_01DatumStruct_3_01_4_01_4.html#af7727c33269d10a7757a8a0ac18cd9a2">llama::SizeOf&lt; DatumStruct&lt; &gt; &gt;</a>
@@ -103,21 +105,31 @@ $(document).ready(function(){initNavTree('functions_v.html','');});
 <li>value_type
 : <a class="el" href="structllama_1_1allocator_1_1internal_1_1AlignmentAllocator.html#afee883fe02f547a17dbe346c9f371e22">llama::allocator::internal::AlignmentAllocator&lt; T, N &gt;</a>
 </li>
+<li>view
+: <a class="el" href="structllama_1_1internal_1_1ViewByRef.html#a69bd33e65c86d76292ef1bf312801645">llama::internal::ViewByRef&lt; T_View &gt;</a>
+, <a class="el" href="structllama_1_1internal_1_1ViewByValue.html#a133612135474a4b095501eec35cd486f">llama::internal::ViewByValue&lt; T_View &gt;</a>
+</li>
 <li>View()
 : <a class="el" href="structllama_1_1View.html#ab230f4f9c30c26a60827b490ebd0479c">llama::View&lt; T_Mapping, T_BlobType &gt;</a>
 </li>
-<li>view
-: <a class="el" href="structllama_1_1VirtualDatum.html#a30842b68acbb1ceb2884a8f4271ec162">llama::VirtualDatum&lt; T_View &gt;</a>
+<li>ViewByRef()
+: <a class="el" href="structllama_1_1internal_1_1ViewByRef.html#a6a42f77ab31d54054f0920e64898aa75">llama::internal::ViewByRef&lt; T_View &gt;</a>
+</li>
+<li>ViewByValue()
+: <a class="el" href="structllama_1_1internal_1_1ViewByValue.html#ab8be1fc68025d8855b8ea36b0ee6bca2">llama::internal::ViewByValue&lt; T_View &gt;</a>
 </li>
 <li>ViewType
-: <a class="el" href="structllama_1_1VirtualDatum.html#ae6b490a7a2ad6e6d29f839ca9ccf5c0c">llama::VirtualDatum&lt; T_View &gt;</a>
+: <a class="el" href="structllama_1_1VirtualDatum.html#a3e6a1f30c56a6c3b7d53d2c19a274341">llama::VirtualDatum&lt; T_View, T_BoundDatumDomain, T_ViewType &gt;</a>
+</li>
+<li>VirtualDatum()
+: <a class="el" href="structllama_1_1VirtualDatum.html#a58fb36b0bf4639cf28d0a8990f72a438">llama::VirtualDatum&lt; T_View, T_BoundDatumDomain, T_ViewType &gt;</a>
 </li>
 <li>VirtualDatumType
 : <a class="el" href="structllama_1_1View.html#a0fe0208a4618b9b41881f18e0d1c32f7">llama::View&lt; T_Mapping, T_BlobType &gt;</a>
 , <a class="el" href="structllama_1_1VirtualView.html#a95061d3ecfa6229c2606378cb1f78f33">llama::VirtualView&lt; T_ParentViewType &gt;</a>
 </li>
 <li>VirtualView()
-: <a class="el" href="structllama_1_1VirtualView.html#abc0a9afd6144f2dd210cd54e86b652f6">llama::VirtualView&lt; T_ParentViewType &gt;</a>
+: <a class="el" href="structllama_1_1VirtualView.html#a6cd714439f67e826fe7d888c5c8dba7b">llama::VirtualView&lt; T_ParentViewType &gt;</a>
 </li>
 </ul>
 </div><!-- contents -->
@@ -125,7 +137,7 @@ $(document).ready(function(){initNavTree('functions_v.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Oct 19 2018 16:19:52 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Oct 24 2018 15:51:36 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

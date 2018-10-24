@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Low Level Abstraction of Memory Access: llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::AccessImpl&lt; T_DatumCoord, typename std::enable_if&lt; is_DatumStruct&lt; GetTypeFromDatumCoord&lt; typename Mapping::DatumDomain, typename BoundDatumDomain::template Cat&lt; T_DatumCoord &gt; &gt; &gt;::value &gt;::type &gt; Struct Template Reference</title>
+<title>Low Level Abstraction of Memory Access: llama::VirtualDatum&lt; T_View, T_BoundDatumDomain, T_ViewType &gt;::AccessImpl&lt; T_DatumCoord, typename std::enable_if&lt; is_DatumStruct&lt; GetTypeFromDatumCoord&lt; typename Mapping::DatumDomain, typename BoundDatumDomain::template Cat&lt; T_DatumCoord &gt; &gt; &gt;::value &gt;::type &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -84,7 +84,7 @@ $(document).ready(function(){initNavTree('structllama_1_1VirtualDatum_1_1AccessI
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="structllama_1_1VirtualDatum_1_1AccessImpl_3_01T__DatumCoord_00_01typename_01std_1_1enable__if_3_cd670887e7c0cf884843275d0e0ea43b.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::AccessImpl&lt; T_DatumCoord, typename std::enable_if&lt; is_DatumStruct&lt; GetTypeFromDatumCoord&lt; typename Mapping::DatumDomain, typename BoundDatumDomain::template Cat&lt; T_DatumCoord &gt; &gt; &gt;::value &gt;::type &gt; Struct Template Reference</div>  </div>
+<div class="title">llama::VirtualDatum&lt; T_View, T_BoundDatumDomain, T_ViewType &gt;::AccessImpl&lt; T_DatumCoord, typename std::enable_if&lt; is_DatumStruct&lt; GetTypeFromDatumCoord&lt; typename Mapping::DatumDomain, typename BoundDatumDomain::template Cat&lt; T_DatumCoord &gt; &gt; &gt;::value &gt;::type &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -92,25 +92,25 @@ $(document).ready(function(){initNavTree('structllama_1_1VirtualDatum_1_1AccessI
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a17de3a665158ab4331d397963682aa45"><td class="memTemplParams" colspan="2">template&lt;typename T_UserDomain &gt; </td></tr>
-<tr class="memitem:a17de3a665158ab4331d397963682aa45"><td class="memTemplItemLeft" align="right" valign="top">static auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualDatum_1_1AccessImpl_3_01T__DatumCoord_00_01typename_01std_1_1enable__if_3_cad2630bd48dbf313b8cd0753edeb19d.html#a17de3a665158ab4331d397963682aa45">apply</a> (T_View &amp;&amp;<a class="el" href="structllama_1_1VirtualDatum.html#a349037e81060afc972ca86768ae5567e">view</a>, T_UserDomain const &amp;<a class="el" href="structllama_1_1VirtualDatum.html#ad334d107bd84aed63b3a64d0857013c4">userDomainPos</a>) -&gt; decltype(<a class="el" href="structllama_1_1VirtualDatum.html">VirtualDatum</a>&lt; <a class="el" href="structllama_1_1View.html">View</a>&lt; <a class="el" href="structllama_1_1VirtualDatum.html#ac0f3c397f83d12489fabc8dfccee7d7e">Mapping</a>, <a class="el" href="structllama_1_1VirtualDatum.html#a4f4dec4f12bfa3a9013652b9f0c023d7">BlobType</a> &gt;, typename BoundDatumDomain::template Cat&lt; T_DatumCoord &gt; &gt;</td></tr>
-<tr class="separator:a17de3a665158ab4331d397963682aa45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9deffa90f3938b81c0c521cada56c8a"><td class="memTemplParams" colspan="2">template&lt;typename T_UserDomain &gt; </td></tr>
+<tr class="memitem:ab9deffa90f3938b81c0c521cada56c8a"><td class="memTemplItemLeft" align="right" valign="top">static auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualDatum_1_1AccessImpl_3_01T__DatumCoord_00_01typename_01std_1_1enable__if_3_cad2630bd48dbf313b8cd0753edeb19d.html#ab9deffa90f3938b81c0c521cada56c8a">apply</a> (T_View &amp;&amp;view, T_UserDomain const &amp;<a class="el" href="structllama_1_1VirtualDatum.html#aa523169d7291039a0f116f232b1f932b">userDomainPos</a>) -&gt; decltype(<a class="el" href="structllama_1_1VirtualDatum.html">VirtualDatum</a>&lt; <a class="el" href="structllama_1_1View.html">View</a>&lt; <a class="el" href="structllama_1_1VirtualDatum.html#a66dc0844c1b0dc494e398f1f4cafe4df">Mapping</a>, <a class="el" href="structllama_1_1VirtualDatum.html#afdc9470f8672403609936cdd0040c720">BlobType</a> &gt;, typename BoundDatumDomain::template Cat&lt; T_DatumCoord &gt; &gt;</td></tr>
+<tr class="separator:ab9deffa90f3938b81c0c521cada56c8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename T_View, typename T_BoundDatumDomain = DatumCoord&lt;&gt;&gt;<br />
+<div class="textblock"><h3>template&lt;typename T_View, typename T_BoundDatumDomain, template&lt; class &gt; class T_ViewType&gt;<br />
 template&lt;typename T_DatumCoord&gt;<br />
-struct llama::VirtualDatum&lt; T_View, T_BoundDatumDomain &gt;::AccessImpl&lt; T_DatumCoord, typename std::enable_if&lt; is_DatumStruct&lt; GetTypeFromDatumCoord&lt; typename Mapping::DatumDomain, typename BoundDatumDomain::template Cat&lt; T_DatumCoord &gt; &gt; &gt;::value &gt;::type &gt;</h3>
+struct llama::VirtualDatum&lt; T_View, T_BoundDatumDomain, T_ViewType &gt;::AccessImpl&lt; T_DatumCoord, typename std::enable_if&lt; is_DatumStruct&lt; GetTypeFromDatumCoord&lt; typename Mapping::DatumDomain, typename BoundDatumDomain::template Cat&lt; T_DatumCoord &gt; &gt; &gt;::value &gt;::type &gt;</h3>
 
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00764">764</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00895">895</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a17de3a665158ab4331d397963682aa45"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a17de3a665158ab4331d397963682aa45">&#9670;&nbsp;</a></span>apply()</h2>
+<a id="ab9deffa90f3938b81c0c521cada56c8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9deffa90f3938b81c0c521cada56c8a">&#9670;&nbsp;</a></span>apply()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename T_BoundDatumDomain  = DatumCoord&lt;&gt;&gt; </div>
+template&lt;typename T_View , typename T_BoundDatumDomain , template&lt; class &gt; class T_ViewType&gt; </div>
 <div class="memtemplate">
 template&lt;typename T_DatumCoord &gt; </div>
 <div class="memtemplate">
@@ -120,7 +120,7 @@ template&lt;typename T_UserDomain &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static auto <a class="el" href="structllama_1_1VirtualDatum.html">llama::VirtualDatum</a>&lt; T_View, T_BoundDatumDomain &gt;::<a class="el" href="structllama_1_1VirtualDatum_1_1AccessImpl.html">AccessImpl</a>&lt; T_DatumCoord, typename std::enable_if&lt; <a class="el" href="structllama_1_1is__DatumStruct.html">is_DatumStruct</a>&lt; <a class="el" href="namespacellama.html#a22362d58c566945f0f8178e2af1b0013">GetTypeFromDatumCoord</a>&lt; typename Mapping::DatumDomain, typename BoundDatumDomain::template Cat&lt; T_DatumCoord &gt; &gt; &gt;::value &gt;::type &gt;::apply </td>
+          <td class="memname">static auto <a class="el" href="structllama_1_1VirtualDatum.html">llama::VirtualDatum</a>&lt; T_View, T_BoundDatumDomain, T_ViewType &gt;::<a class="el" href="structllama_1_1VirtualDatum_1_1AccessImpl.html">AccessImpl</a>&lt; T_DatumCoord, typename std::enable_if&lt; <a class="el" href="structllama_1_1is__DatumStruct.html">is_DatumStruct</a>&lt; <a class="el" href="namespacellama.html#a22362d58c566945f0f8178e2af1b0013">GetTypeFromDatumCoord</a>&lt; typename Mapping::DatumDomain, typename BoundDatumDomain::template Cat&lt; T_DatumCoord &gt; &gt; &gt;::value &gt;::type &gt;::apply </td>
           <td>(</td>
           <td class="paramtype">T_View &amp;&amp;&#160;</td>
           <td class="paramname"><em>view</em>, </td>
@@ -136,8 +136,8 @@ template&lt;typename T_UserDomain &gt; </div>
           <td>)</td>
           <td></td><td> -&gt; decltype( <a class="el" href="structllama_1_1VirtualDatum.html">VirtualDatum</a>&lt;
                 <a class="el" href="structllama_1_1View.html">View</a> &lt;
-                    <a class="el" href="structllama_1_1VirtualDatum.html#ac0f3c397f83d12489fabc8dfccee7d7e">Mapping</a>,
-                    <a class="el" href="structllama_1_1VirtualDatum.html#a4f4dec4f12bfa3a9013652b9f0c023d7">BlobType</a>
+                    <a class="el" href="structllama_1_1VirtualDatum.html#a66dc0844c1b0dc494e398f1f4cafe4df">Mapping</a>,
+                    <a class="el" href="structllama_1_1VirtualDatum.html#afdc9470f8672403609936cdd0040c720">BlobType</a>
                 &gt;,
                 typename BoundDatumDomain::template Cat&lt; T_DatumCoord &gt;
             &gt;</td>
@@ -150,7 +150,7 @@ template&lt;typename T_UserDomain &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00780">780</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00911">911</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -163,7 +163,7 @@ template&lt;typename T_UserDomain &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="structllama_1_1VirtualDatum.html">VirtualDatum</a></li><li class="navelem"><a class="el" href="structllama_1_1VirtualDatum_1_1AccessImpl_3_01T__DatumCoord_00_01typename_01std_1_1enable__if_3_cad2630bd48dbf313b8cd0753edeb19d.html">AccessImpl&lt; T_DatumCoord, typename std::enable_if&lt; is_DatumStruct&lt; GetTypeFromDatumCoord&lt; typename Mapping::DatumDomain, typename BoundDatumDomain::template Cat&lt; T_DatumCoord &gt; &gt; &gt;::value &gt;::type &gt;</a></li>
-    <li class="footer">Generated on Fri Oct 19 2018 15:57:48 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Oct 24 2018 15:51:36 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

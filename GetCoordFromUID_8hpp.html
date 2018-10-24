@@ -111,11 +111,10 @@ $(document).ready(function(){initNavTree('GetCoordFromUID_8hpp.html','');});
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="GetCoordFromUID_8hpp__dep__incl.png" border="0" usemap="#_2home_2alexander_2develop_2work_2llama_2include_2llama_2GetCoordFromUID_8hppdep" alt=""/></div>
 <map name="_2home_2alexander_2develop_2work_2llama_2include_2llama_2GetCoordFromUID_8hppdep" id="_2home_2alexander_2develop_2work_2llama_2include_2llama_2GetCoordFromUID_8hppdep">
-<area shape="rect" id="node2" href="ForEach_8hpp.html" title="/home/alexander/develop\l/work/llama/include/llama\l/ForEach.hpp" alt="" coords="260,109,429,165"/>
-<area shape="rect" id="node3" href="View_8hpp.html" title="/home/alexander/develop\l/work/llama/include/llama\l/View.hpp" alt="" coords="199,213,368,269"/>
-<area shape="rect" id="node5" href="llama_8hpp.html" title="/home/alexander/develop\l/work/llama/include/llama\l/llama.hpp" alt="" coords="199,421,368,477"/>
-<area shape="rect" id="node4" href="Factory_8hpp.html" title="/home/alexander/develop\l/work/llama/include/llama\l/Factory.hpp" alt="" coords="5,317,175,373"/>
-<area shape="rect" id="node6" href="VirtualView_8hpp.html" title="/home/alexander/develop\l/work/llama/include/llama\l/VirtualView.hpp" alt="" coords="199,317,368,373"/>
+<area shape="rect" id="node2" href="ForEach_8hpp.html" title="/home/alexander/develop\l/work/llama/include/llama\l/ForEach.hpp" alt="" coords="5,109,175,165"/>
+<area shape="rect" id="node3" href="llama_8hpp.html" title="/home/alexander/develop\l/work/llama/include/llama\l/llama.hpp" alt="" coords="5,421,175,477"/>
+<area shape="rect" id="node4" href="View_8hpp.html" title="/home/alexander/develop\l/work/llama/include/llama\l/View.hpp" alt="" coords="67,213,236,269"/>
+<area shape="rect" id="node5" href="VirtualView_8hpp.html" title="/home/alexander/develop\l/work/llama/include/llama\l/VirtualView.hpp" alt="" coords="67,317,236,373"/>
 </map>
 </div>
 </div>
@@ -131,6 +130,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01void_01_4.html">llama::internal::GetCoordFromUIDImpl&lt; T_DatumDomain, T_DatumCoord, T_pos, void &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1GetCoordFromUIDRelativeImpl.html">llama::internal::GetCoordFromUIDRelativeImpl&lt; T_DatumDomain, T_DatumCoord, T_UID &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
@@ -144,6 +145,12 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a3953132518a1c5bd14cbacc8107975db"><td class="memTemplParams" colspan="2">template&lt;typename T_DatumDomain , typename... T_UID&gt; </td></tr>
 <tr class="memitem:a3953132518a1c5bd14cbacc8107975db"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a3953132518a1c5bd14cbacc8107975db">llama::GetCoordFromUID</a> = typename internal::GetCoordFromUIDImpl&lt; T_DatumDomain, DatumCoord&lt; &gt;, 0, void, T_UID... &gt;::type</td></tr>
 <tr class="separator:a3953132518a1c5bd14cbacc8107975db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a66c0b18aabc9c5ad839c9f79e70023"><td class="memTemplParams" colspan="2">template&lt;typename T_DatumDomain , typename T_DatumCoord , typename... T_UID&gt; </td></tr>
+<tr class="memitem:a2a66c0b18aabc9c5ad839c9f79e70023"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a2a66c0b18aabc9c5ad839c9f79e70023">llama::GetCoordFromUIDRelative</a> = typename internal::GetCoordFromUIDRelativeImpl&lt; T_DatumDomain, T_DatumCoord, T_UID... &gt;::type</td></tr>
+<tr class="separator:a2a66c0b18aabc9c5ad839c9f79e70023"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a611592a97449d75fa735130181876eda"><td class="memTemplParams" colspan="2">template&lt;typename T_DatumDomain , typename... T_UIDs&gt; </td></tr>
+<tr class="memitem:a611592a97449d75fa735130181876eda"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a611592a97449d75fa735130181876eda">llama::GetTypeFromUID</a> = GetTypeFromDatumCoord&lt; T_DatumDomain, GetCoordFromUID&lt; T_DatumDomain, T_UIDs... &gt; &gt;</td></tr>
+<tr class="separator:a611592a97449d75fa735130181876eda"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -151,7 +158,7 @@ Typedefs</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="GetCoordFromUID_8hpp.html">GetCoordFromUID.hpp</a></li>
-    <li class="footer">Generated on Fri Oct 19 2018 16:19:52 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Oct 24 2018 15:51:36 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

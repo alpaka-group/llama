@@ -129,6 +129,10 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1IntegerSequence.html">IntegerSequence</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1is__DatumStruct.html">is_DatumStruct</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1is__DatumStruct_3_01DatumStruct_3_01T__DatumStructContent_8_8_8_01_4_01_4.html">is_DatumStruct&lt; DatumStruct&lt; T_DatumStructContent... &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1LinearBytePos.html">LinearBytePos</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1LinearizeUserDomainAdress.html">LinearizeUserDomainAdress</a></td></tr>
@@ -176,12 +180,18 @@ Typedefs</h2></td></tr>
 <tr class="memitem:adb589a980e01610411523c3af5e5f4ed"><td class="memTemplParams" colspan="2">template&lt;typename T_DatumDomain &gt; </td></tr>
 <tr class="memitem:adb589a980e01610411523c3af5e5f4ed"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#adb589a980e01610411523c3af5e5f4ed">StubType</a> = typename <a class="el" href="structllama_1_1internal_1_1StubTypeImpl.html">internal::StubTypeImpl</a>&lt; T_DatumDomain &gt;::type</td></tr>
 <tr class="separator:adb589a980e01610411523c3af5e5f4ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0497c2913f9ebb2cea9c97ddc35be349"><td class="memTemplParams" colspan="2">template&lt;std::size_t dimension, typename DatumDomain &gt; </td></tr>
-<tr class="memitem:a0497c2913f9ebb2cea9c97ddc35be349"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a0497c2913f9ebb2cea9c97ddc35be349">OneOnStackFactory</a> = <a class="el" href="structllama_1_1Factory.html">llama::Factory</a>&lt; <a class="el" href="structllama_1_1mapping_1_1One.html">llama::mapping::One</a>&lt; <a class="el" href="namespacellama.html#a03077c6597f96a84efe064fa64d81827">UserDomain</a>&lt; dimension &gt;, DatumDomain &gt;, <a class="el" href="structllama_1_1allocator_1_1Stack.html">llama::allocator::Stack</a>&lt; <a class="el" href="structllama_1_1SizeOf.html">SizeOf</a>&lt; DatumDomain &gt;::value &gt; &gt;</td></tr>
-<tr class="separator:a0497c2913f9ebb2cea9c97ddc35be349"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28507a7205b7594b7eb1a84510ced671"><td class="memTemplParams" colspan="2">template&lt;std::size_t T_dimension, typename T_DatumDomain &gt; </td></tr>
+<tr class="memitem:a28507a7205b7594b7eb1a84510ced671"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a28507a7205b7594b7eb1a84510ced671">OneOnStackFactory</a> = <a class="el" href="structllama_1_1Factory.html">llama::Factory</a>&lt; <a class="el" href="structllama_1_1mapping_1_1One.html">llama::mapping::One</a>&lt; <a class="el" href="namespacellama.html#a03077c6597f96a84efe064fa64d81827">UserDomain</a>&lt; T_dimension &gt;, T_DatumDomain &gt;, <a class="el" href="structllama_1_1allocator_1_1Stack.html">llama::allocator::Stack</a>&lt; <a class="el" href="structllama_1_1SizeOf.html">SizeOf</a>&lt; T_DatumDomain &gt;::value &gt; &gt;</td></tr>
+<tr class="separator:a28507a7205b7594b7eb1a84510ced671"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3953132518a1c5bd14cbacc8107975db"><td class="memTemplParams" colspan="2">template&lt;typename T_DatumDomain , typename... T_UID&gt; </td></tr>
 <tr class="memitem:a3953132518a1c5bd14cbacc8107975db"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a3953132518a1c5bd14cbacc8107975db">GetCoordFromUID</a> = typename <a class="el" href="structllama_1_1internal_1_1GetCoordFromUIDImpl.html">internal::GetCoordFromUIDImpl</a>&lt; T_DatumDomain, <a class="el" href="structllama_1_1DatumCoord.html">DatumCoord</a>&lt; &gt;, 0, void, T_UID... &gt;::type</td></tr>
 <tr class="separator:a3953132518a1c5bd14cbacc8107975db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a66c0b18aabc9c5ad839c9f79e70023"><td class="memTemplParams" colspan="2">template&lt;typename T_DatumDomain , typename T_DatumCoord , typename... T_UID&gt; </td></tr>
+<tr class="memitem:a2a66c0b18aabc9c5ad839c9f79e70023"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a2a66c0b18aabc9c5ad839c9f79e70023">GetCoordFromUIDRelative</a> = typename <a class="el" href="structllama_1_1internal_1_1GetCoordFromUIDRelativeImpl.html">internal::GetCoordFromUIDRelativeImpl</a>&lt; T_DatumDomain, T_DatumCoord, T_UID... &gt;::type</td></tr>
+<tr class="separator:a2a66c0b18aabc9c5ad839c9f79e70023"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a611592a97449d75fa735130181876eda"><td class="memTemplParams" colspan="2">template&lt;typename T_DatumDomain , typename... T_UIDs&gt; </td></tr>
+<tr class="memitem:a611592a97449d75fa735130181876eda"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a611592a97449d75fa735130181876eda">GetTypeFromUID</a> = <a class="el" href="namespacellama.html#a22362d58c566945f0f8178e2af1b0013">GetTypeFromDatumCoord</a>&lt; T_DatumDomain, <a class="el" href="namespacellama.html#a3953132518a1c5bd14cbacc8107975db">GetCoordFromUID</a>&lt; T_DatumDomain, T_UIDs... &gt; &gt;</td></tr>
+<tr class="separator:a611592a97449d75fa735130181876eda"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b77530642d73f0464c605e6140391cb"><td class="memTemplParams" colspan="2">template&lt;typename T_DatumDomain , std::size_t... T_datumDomainCoords&gt; </td></tr>
 <tr class="memitem:a9b77530642d73f0464c605e6140391cb"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a9b77530642d73f0464c605e6140391cb">GetType</a> = typename <a class="el" href="structllama_1_1internal_1_1GetTypeImpl.html">internal::GetTypeImpl</a>&lt; T_DatumDomain, T_datumDomainCoords... &gt;::type</td></tr>
 <tr class="separator:a9b77530642d73f0464c605e6140391cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -223,9 +233,9 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a7e6d72ed44f9e4c51751940ef5ee8e65"><td class="memTemplParams" colspan="2">template&lt;std::size_t dimension, typename DatumDomain &gt; </td></tr>
-<tr class="memitem:a7e6d72ed44f9e4c51751940ef5ee8e65"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a7e6d72ed44f9e4c51751940ef5ee8e65">tempAlloc</a> () -&gt; decltype(<a class="el" href="namespacellama.html#a0497c2913f9ebb2cea9c97ddc35be349">OneOnStackFactory</a>&lt; dimension, DatumDomain &gt;::allocView())</td></tr>
-<tr class="separator:a7e6d72ed44f9e4c51751940ef5ee8e65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a080e5813dd8c223f7a8640946307c904"><td class="memTemplParams" colspan="2">template&lt;std::size_t T_dimension, typename T_DatumDomain &gt; </td></tr>
+<tr class="memitem:a080e5813dd8c223f7a8640946307c904"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a080e5813dd8c223f7a8640946307c904">stackViewAlloc</a> () -&gt; decltype(<a class="el" href="namespacellama.html#a28507a7205b7594b7eb1a84510ced671">OneOnStackFactory</a>&lt; T_dimension, T_DatumDomain &gt;::allocView())</td></tr>
+<tr class="separator:a080e5813dd8c223f7a8640946307c904"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b822ea750d68c8b464a4fc2fb970967"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama.html#a3b822ea750d68c8b464a4fc2fb970967">demangleType</a> (const char *name)</td></tr>
 <tr class="separator:a3b822ea750d68c8b464a4fc2fb970967"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab1795adf20dddcc6ee9daefc8e47087"><td class="memTemplParams" colspan="2">template&lt;typename... T_Elements&gt; </td></tr>
@@ -252,6 +262,12 @@ Functions</h2></td></tr>
 <tr class="memitem:aa8b49851209fef972feb72ca58cdffae"><td class="memTemplParams" colspan="2">template&lt;std::size_t T_dim&gt; </td></tr>
 <tr class="memitem:aa8b49851209fef972feb72ca58cdffae"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aa8b49851209fef972feb72ca58cdffae">userDomainZero</a> () -&gt; <a class="el" href="namespacellama.html#a03077c6597f96a84efe064fa64d81827">UserDomain</a>&lt; T_dim &gt;</td></tr>
 <tr class="separator:aa8b49851209fef972feb72ca58cdffae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affa16e0e991ca02551c97b56488fea8c"><td class="memTemplParams" colspan="2">template&lt;typename T_DatumDomain &gt; </td></tr>
+<tr class="memitem:affa16e0e991ca02551c97b56488fea8c"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#affa16e0e991ca02551c97b56488fea8c">stackVirtualDatumAlloc</a> () -&gt; <a class="el" href="structllama_1_1VirtualDatum.html">VirtualDatum</a>&lt; decltype(<a class="el" href="namespacellama.html#a080e5813dd8c223f7a8640946307c904">llama::stackViewAlloc</a>&lt; 1, T_DatumDomain &gt;()), <a class="el" href="structllama_1_1DatumCoord.html">DatumCoord</a>&lt;&gt;, <a class="el" href="structllama_1_1internal_1_1ViewByValue.html">internal::ViewByValue</a> &gt;</td></tr>
+<tr class="separator:affa16e0e991ca02551c97b56488fea8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad61ba7f79061d8c304c8aa943e22e9f1"><td class="memTemplParams" colspan="2">template&lt;typename T_VirtualDatum &gt; </td></tr>
+<tr class="memitem:ad61ba7f79061d8c304c8aa943e22e9f1"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ad61ba7f79061d8c304c8aa943e22e9f1">stackVirtualDatumCopy</a> (T_VirtualDatum &amp;vd) -&gt; decltype(<a class="el" href="namespacellama.html#affa16e0e991ca02551c97b56488fea8c">stackVirtualDatumAlloc</a>&lt; typename T_VirtualDatum::AccessibleDatumDomain &gt;())</td></tr>
+<tr class="separator:ad61ba7f79061d8c304c8aa943e22e9f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02d68d889af6fecb6f30c8b8fa059e56"><td class="memTemplParams" colspan="2">template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , typename T_RightDatum , typename T_RightBase , typename T_RightLocal , typename SFINAE  = void&gt; </td></tr>
 <tr class="memitem:a02d68d889af6fecb6f30c8b8fa059e56"><td class="memTemplItemLeft" align="right" valign="top">struct&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a02d68d889af6fecb6f30c8b8fa059e56">BOOST_PP_CAT</a> (Assigment, IfSameUIDFunctor)</td></tr>
 <tr class="separator:a02d68d889af6fecb6f30c8b8fa059e56"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -601,6 +617,33 @@ template&lt;typename T_DatumDomain , typename... T_UID&gt; </div>
 
 </div>
 </div>
+<a id="a2a66c0b18aabc9c5ad839c9f79e70023"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a66c0b18aabc9c5ad839c9f79e70023">&#9670;&nbsp;</a></span>GetCoordFromUIDRelative</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_DatumDomain , typename T_DatumCoord , typename... T_UID&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama.html#a2a66c0b18aabc9c5ad839c9f79e70023">llama::GetCoordFromUIDRelative</a> = typedef typename <a class="el" href="structllama_1_1internal_1_1GetCoordFromUIDRelativeImpl.html">internal::GetCoordFromUIDRelativeImpl</a>&lt; T_DatumDomain, T_DatumCoord, T_UID... &gt;::type</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts a coordinate in a datum domain given as UID to a <a class="el" href="structllama_1_1DatumCoord.html">DatumCoord</a> relative to a given datum coord in the tree. The returned datum coord is also relative to the input datum coord, that is the sub tree. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T_DatumDomain</td><td>the datum domain (<a class="el" href="namespacellama.html#ad26ae6be4743f60f2379618d9bfb7cb0">DatumStruct</a>) </td></tr>
+    <tr><td class="paramname">T_DatumCoord</td><td>datum coord to start the translation from UID to datum coord </td></tr>
+    <tr><td class="paramname">T_UID...</td><td>the uid of in the datum domain, may also be empty (for <code><a class="el" href="structllama_1_1DatumCoord.html">DatumCoord</a>&lt; &gt;</code>) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a <a class="el" href="structllama_1_1DatumCoord.html">DatumCoord</a> with the datum domain tree coordinates as template parameters </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="GetCoordFromUID_8hpp_source.html#l00191">191</a> of file <a class="el" href="GetCoordFromUID_8hpp_source.html">GetCoordFromUID.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a554a797d5fff9070b3c61d7584dc15d5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a554a797d5fff9070b3c61d7584dc15d5">&#9670;&nbsp;</a></span>GetDatumElementType</h2>
 
@@ -729,6 +772,32 @@ template&lt;typename T_DatumDomain , typename T_DatumCoord &gt; </div>
 
 </div>
 </div>
+<a id="a611592a97449d75fa735130181876eda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a611592a97449d75fa735130181876eda">&#9670;&nbsp;</a></span>GetTypeFromUID</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_DatumDomain , typename... T_UIDs&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama.html#a611592a97449d75fa735130181876eda">llama::GetTypeFromUID</a> = typedef <a class="el" href="namespacellama.html#a22362d58c566945f0f8178e2af1b0013">GetTypeFromDatumCoord</a>&lt; T_DatumDomain, <a class="el" href="namespacellama.html#a3953132518a1c5bd14cbacc8107975db">GetCoordFromUID</a>&lt; T_DatumDomain, T_UIDs... &gt; &gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the type of a node in a datum domain tree for a coordinate given as UID </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T_DatumDomain</td><td>the datum domain (probably <a class="el" href="namespacellama.html#ad26ae6be4743f60f2379618d9bfb7cb0">DatumStruct</a>) </td></tr>
+    <tr><td class="paramname">T_DatumCoord</td><td>the coordinate </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>type at the specified node </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="GetCoordFromUID_8hpp_source.html#l00209">209</a> of file <a class="el" href="GetCoordFromUID_8hpp_source.html">GetCoordFromUID.hpp</a>.</p>
+
+</div>
+</div>
 <a id="afc1dd86868706ba5f5ee39ec0c588534"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afc1dd86868706ba5f5ee39ec0c588534">&#9670;&nbsp;</a></span>GetUID</h2>
 
@@ -805,16 +874,16 @@ template&lt;std::size_t T_N&gt; </div>
 
 </div>
 </div>
-<a id="a0497c2913f9ebb2cea9c97ddc35be349"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0497c2913f9ebb2cea9c97ddc35be349">&#9670;&nbsp;</a></span>OneOnStackFactory</h2>
+<a id="a28507a7205b7594b7eb1a84510ced671"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28507a7205b7594b7eb1a84510ced671">&#9670;&nbsp;</a></span>OneOnStackFactory</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;std::size_t dimension, typename DatumDomain &gt; </div>
+template&lt;std::size_t T_dimension, typename T_DatumDomain &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacellama.html#a0497c2913f9ebb2cea9c97ddc35be349">llama::OneOnStackFactory</a> = typedef <a class="el" href="structllama_1_1Factory.html">llama::Factory</a>&lt; <a class="el" href="structllama_1_1mapping_1_1One.html">llama::mapping::One</a>&lt; <a class="el" href="namespacellama.html#a03077c6597f96a84efe064fa64d81827">UserDomain</a>&lt; dimension &gt;, DatumDomain &gt;, <a class="el" href="structllama_1_1allocator_1_1Stack.html">llama::allocator::Stack</a>&lt; <a class="el" href="structllama_1_1SizeOf.html">SizeOf</a>&lt;DatumDomain&gt;::value &gt; &gt;</td>
+          <td class="memname">using <a class="el" href="namespacellama.html#a28507a7205b7594b7eb1a84510ced671">llama::OneOnStackFactory</a> = typedef <a class="el" href="structllama_1_1Factory.html">llama::Factory</a>&lt; <a class="el" href="structllama_1_1mapping_1_1One.html">llama::mapping::One</a>&lt; <a class="el" href="namespacellama.html#a03077c6597f96a84efe064fa64d81827">UserDomain</a>&lt; T_dimension &gt;, T_DatumDomain &gt;, <a class="el" href="structllama_1_1allocator_1_1Stack.html">llama::allocator::Stack</a>&lt; <a class="el" href="structllama_1_1SizeOf.html">SizeOf</a>&lt;T_DatumDomain&gt;::value &gt; &gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -825,9 +894,9 @@ template&lt;std::size_t dimension, typename DatumDomain &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacellama.html#a7e6d72ed44f9e4c51751940ef5ee8e65">tempAlloc</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacellama.html#a080e5813dd8c223f7a8640946307c904">stackViewAlloc</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Factory_8hpp_source.html#l00182">182</a> of file <a class="el" href="Factory_8hpp_source.html">Factory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Factory_8hpp_source.html#l00195">195</a> of file <a class="el" href="Factory_8hpp_source.html">Factory.hpp</a>.</p>
 
 </div>
 </div>
@@ -933,7 +1002,7 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00212">212</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00296">296</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -967,8 +1036,72 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
 
 </div>
 </div>
+<a id="a04e8e4fb6c7d0d75758babb4d77e8d00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04e8e4fb6c7d0d75758babb4d77e8d00">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[3/60]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_LeftDatum , typename T_RightDatum , typename T_Source &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">struct llama::BOOST_PP_CAT </td>
+          <td>(</td>
+          <td class="paramtype">Assigment&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Functor&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00296">296</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ab24dbb4322db6e7f4d21430ae8a15e0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab24dbb4322db6e7f4d21430ae8a15e0d">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[4/60]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_LeftDatum , typename T_RightType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">struct llama::BOOST_PP_CAT </td>
+          <td>(</td>
+          <td class="paramtype">Assigment&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TypeFunctor&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00296">296</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a3ce31322d95f99ec84bac97968ed0557"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3ce31322d95f99ec84bac97968ed0557">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[3/60]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ce31322d95f99ec84bac97968ed0557">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[5/60]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -995,12 +1128,12 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00213">213</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00297">297</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a100e5bd0231477cd08345914e184759c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a100e5bd0231477cd08345914e184759c">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[4/60]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a100e5bd0231477cd08345914e184759c">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[6/60]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1030,7 +1163,7 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
 </div>
 </div>
 <a id="aee74e891ef168983b9ff14201252cc56"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aee74e891ef168983b9ff14201252cc56">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[5/60]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aee74e891ef168983b9ff14201252cc56">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[7/60]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1057,71 +1190,7 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00212">212</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a04e8e4fb6c7d0d75758babb4d77e8d00"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a04e8e4fb6c7d0d75758babb4d77e8d00">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[6/60]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T_LeftDatum , typename T_RightDatum , typename T_Source &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">struct llama::BOOST_PP_CAT </td>
-          <td>(</td>
-          <td class="paramtype">Assigment&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Functor&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00212">212</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
-
-</div>
-</div>
-<a id="ab24dbb4322db6e7f4d21430ae8a15e0d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab24dbb4322db6e7f4d21430ae8a15e0d">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[7/60]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T_LeftDatum , typename T_RightType &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">struct llama::BOOST_PP_CAT </td>
-          <td>(</td>
-          <td class="paramtype">Assigment&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">TypeFunctor&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00212">212</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00296">296</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1153,7 +1222,7 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00213">213</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00297">297</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1185,7 +1254,7 @@ template&lt;typename T_LeftDatum , typename T_RightDatum , typename T_Source &gt
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00213">213</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00297">297</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1217,7 +1286,7 @@ template&lt;typename T_LeftDatum , typename T_RightType &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00213">213</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00297">297</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1249,7 +1318,7 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00214">214</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00298">298</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1311,7 +1380,7 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00214">214</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00298">298</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1343,7 +1412,7 @@ template&lt;typename T_LeftDatum , typename T_RightDatum , typename T_Source &gt
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00214">214</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00298">298</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1375,7 +1444,7 @@ template&lt;typename T_LeftDatum , typename T_RightType &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00214">214</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00298">298</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1407,7 +1476,7 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00215">215</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00299">299</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1441,8 +1510,72 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
 
 </div>
 </div>
+<a id="a0296f5cea0e68a674fc34420fdb9844d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0296f5cea0e68a674fc34420fdb9844d">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[18/60]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_LeftDatum , typename T_RightType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">struct llama::BOOST_PP_CAT </td>
+          <td>(</td>
+          <td class="paramtype">Multiplication&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TypeFunctor&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00299">299</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a6d53b5705de2564cd61a1fc32438486f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d53b5705de2564cd61a1fc32438486f">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[19/60]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , typename T_RightDatum , typename T_RightBase , typename T_RightLocal , typename SFINAE  = void&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">struct llama::BOOST_PP_CAT </td>
+          <td>(</td>
+          <td class="paramtype">Division&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IfSameUIDFunctor&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00300">300</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
 <a id="acc7b9ebfb63cbc38596fea1e4e2a47fd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acc7b9ebfb63cbc38596fea1e4e2a47fd">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[18/60]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#acc7b9ebfb63cbc38596fea1e4e2a47fd">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[20/60]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1472,7 +1605,7 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
 </div>
 </div>
 <a id="acfce4ae2d874bc20cad7c584446f8c54"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acfce4ae2d874bc20cad7c584446f8c54">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[19/60]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#acfce4ae2d874bc20cad7c584446f8c54">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[21/60]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1499,12 +1632,12 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00215">215</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00299">299</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
 <a id="ab1eed6db7423f95495d7eea21548c843"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab1eed6db7423f95495d7eea21548c843">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[20/60]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1eed6db7423f95495d7eea21548c843">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[22/60]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1531,71 +1664,7 @@ template&lt;typename T_LeftDatum , typename T_RightDatum , typename T_Source &gt
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00215">215</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a0296f5cea0e68a674fc34420fdb9844d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0296f5cea0e68a674fc34420fdb9844d">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[21/60]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T_LeftDatum , typename T_RightType &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">struct llama::BOOST_PP_CAT </td>
-          <td>(</td>
-          <td class="paramtype">Multiplication&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">TypeFunctor&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00215">215</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a6d53b5705de2564cd61a1fc32438486f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6d53b5705de2564cd61a1fc32438486f">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[22/60]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , typename T_RightDatum , typename T_RightBase , typename T_RightLocal , typename SFINAE  = void&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">struct llama::BOOST_PP_CAT </td>
-          <td>(</td>
-          <td class="paramtype">Division&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">IfSameUIDFunctor&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00216">216</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00299">299</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1627,7 +1696,7 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00216">216</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00300">300</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1659,7 +1728,7 @@ template&lt;typename T_LeftDatum , typename T_RightDatum , typename T_Source &gt
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00216">216</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00300">300</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1691,7 +1760,7 @@ template&lt;typename T_LeftDatum , typename T_RightType &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00216">216</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00300">300</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1723,7 +1792,7 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00217">217</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00301">301</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1785,7 +1854,7 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00217">217</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00301">301</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1817,7 +1886,7 @@ template&lt;typename T_LeftDatum , typename T_RightDatum , typename T_Source &gt
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00217">217</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00301">301</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1849,7 +1918,7 @@ template&lt;typename T_LeftDatum , typename T_RightType &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00217">217</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00301">301</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1881,7 +1950,7 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00517">517</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00636">636</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1915,24 +1984,24 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
 
 </div>
 </div>
-<a id="acfc984a7314ab1e66fdca0f60ad6c1fa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acfc984a7314ab1e66fdca0f60ad6c1fa">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[33/60]</span></h2>
+<a id="ab1067e7e57199e61a3cf65fc49ddb8a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1067e7e57199e61a3cf65fc49ddb8a0">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[33/60]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , typename T_RightDatum , typename T_RightBase , typename T_RightLocal &gt; </div>
+template&lt;typename T_LeftDatum , typename T_RightType &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">struct llama::BOOST_PP_CAT </td>
           <td>(</td>
-          <td class="paramtype">Not&#160;</td>
+          <td class="paramtype">SameAs&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">BoolIfSameUIDFunctor&#160;</td>
+          <td class="paramtype">BoolTypeFunctor&#160;</td>
           <td class="paramname">&#160;</td>
         </tr>
         <tr>
@@ -1942,6 +2011,8 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00636">636</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1973,7 +2044,7 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00517">517</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00636">636</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -2005,44 +2076,12 @@ template&lt;typename T_LeftDatum , typename T_RightDatum , typename T_Source &gt
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00517">517</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
-
-</div>
-</div>
-<a id="ab1067e7e57199e61a3cf65fc49ddb8a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab1067e7e57199e61a3cf65fc49ddb8a0">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[36/60]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T_LeftDatum , typename T_RightType &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">struct llama::BOOST_PP_CAT </td>
-          <td>(</td>
-          <td class="paramtype">SameAs&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">BoolTypeFunctor&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00517">517</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00636">636</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a360be9b41e4aa07d68450c40789583fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a360be9b41e4aa07d68450c40789583fe">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[37/60]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a360be9b41e4aa07d68450c40789583fe">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[36/60]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2069,7 +2108,37 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00518">518</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00637">637</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
+<a id="acfc984a7314ab1e66fdca0f60ad6c1fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acfc984a7314ab1e66fdca0f60ad6c1fa">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[37/60]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , typename T_RightDatum , typename T_RightBase , typename T_RightLocal &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">struct llama::BOOST_PP_CAT </td>
+          <td>(</td>
+          <td class="paramtype">Not&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">BoolIfSameUIDFunctor&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -2101,7 +2170,7 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00518">518</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00637">637</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -2133,7 +2202,7 @@ template&lt;typename T_LeftDatum , typename T_RightDatum , typename T_Source &gt
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00518">518</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00637">637</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -2165,12 +2234,44 @@ template&lt;typename T_LeftDatum , typename T_RightType &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00518">518</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00637">637</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a4bcb8c77b5515521c4863147e501e6b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bcb8c77b5515521c4863147e501e6b9">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[41/60]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , typename T_RightDatum , typename T_RightBase , typename T_RightLocal , typename SFINAE  = void&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">struct llama::BOOST_PP_CAT </td>
+          <td>(</td>
+          <td class="paramtype">SmallerThan&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">BoolIfSameUIDFunctor&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00638">638</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
 <a id="ade7343453ab3a185e5debd4c9cbb79df"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade7343453ab3a185e5debd4c9cbb79df">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[41/60]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ade7343453ab3a185e5debd4c9cbb79df">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[42/60]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2199,13 +2300,13 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
 
 </div>
 </div>
-<a id="a4bcb8c77b5515521c4863147e501e6b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4bcb8c77b5515521c4863147e501e6b9">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[42/60]</span></h2>
+<a id="aa68360bc532ab4e6b75d387aff041e46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa68360bc532ab4e6b75d387aff041e46">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[43/60]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , typename T_RightDatum , typename T_RightBase , typename T_RightLocal , typename SFINAE  = void&gt; </div>
+template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , typename T_RightDatum &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">struct llama::BOOST_PP_CAT </td>
@@ -2216,7 +2317,7 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">BoolIfSameUIDFunctor&#160;</td>
+          <td class="paramtype">BoolInnerFunctor&#160;</td>
           <td class="paramname">&#160;</td>
         </tr>
         <tr>
@@ -2227,12 +2328,12 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00519">519</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00638">638</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
 <a id="acdaa5dcacc3e2597a2ee68fe0bce278c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acdaa5dcacc3e2597a2ee68fe0bce278c">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[43/60]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#acdaa5dcacc3e2597a2ee68fe0bce278c">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[44/60]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2262,7 +2363,7 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
 </div>
 </div>
 <a id="ab5d4ae2e58824cbb31cb3d222901102b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab5d4ae2e58824cbb31cb3d222901102b">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[44/60]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5d4ae2e58824cbb31cb3d222901102b">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[45/60]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2289,39 +2390,7 @@ template&lt;typename T_LeftDatum , typename T_RightDatum , typename T_Source &gt
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00519">519</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a4a57a4a3db94b1828c03c8d900b05df0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4a57a4a3db94b1828c03c8d900b05df0">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[45/60]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T_LeftDatum , typename T_RightType &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">struct llama::BOOST_PP_CAT </td>
-          <td>(</td>
-          <td class="paramtype">SmallerThan&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">BoolTypeFunctor&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00519">519</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00638">638</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -2353,17 +2422,17 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00520">520</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00639">639</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="aa68360bc532ab4e6b75d387aff041e46"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa68360bc532ab4e6b75d387aff041e46">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[47/60]</span></h2>
+<a id="a4a57a4a3db94b1828c03c8d900b05df0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a57a4a3db94b1828c03c8d900b05df0">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[47/60]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , typename T_RightDatum &gt; </div>
+template&lt;typename T_LeftDatum , typename T_RightType &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">struct llama::BOOST_PP_CAT </td>
@@ -2374,7 +2443,7 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">BoolInnerFunctor&#160;</td>
+          <td class="paramtype">BoolTypeFunctor&#160;</td>
           <td class="paramname">&#160;</td>
         </tr>
         <tr>
@@ -2385,28 +2454,28 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00519">519</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00638">638</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a279c94666edb5d2a65f745d1e139b307"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a279c94666edb5d2a65f745d1e139b307">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[48/60]</span></h2>
+<a id="a0a4a65d70490b16e52092fee2ae45857"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a4a65d70490b16e52092fee2ae45857">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[48/60]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_LeftDatum , typename T_RightDatum , typename T_Source &gt; </div>
+template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , typename T_RightDatum , typename T_RightBase , typename T_RightLocal &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">struct llama::BOOST_PP_CAT </td>
           <td>(</td>
-          <td class="paramtype">SmallerSameThan&#160;</td>
+          <td class="paramtype">BiggerThan&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">BoolFunctor&#160;</td>
+          <td class="paramtype">BoolIfSameUIDFunctor&#160;</td>
           <td class="paramname">&#160;</td>
         </tr>
         <tr>
@@ -2416,8 +2485,6 @@ template&lt;typename T_LeftDatum , typename T_RightDatum , typename T_Source &gt
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00520">520</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -2449,74 +2516,12 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00521">521</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a0a4a65d70490b16e52092fee2ae45857"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0a4a65d70490b16e52092fee2ae45857">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[50/60]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , typename T_RightDatum , typename T_RightBase , typename T_RightLocal &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">struct llama::BOOST_PP_CAT </td>
-          <td>(</td>
-          <td class="paramtype">BiggerThan&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">BoolIfSameUIDFunctor&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a228e3b7fc221d892ab134ca1b384cf8f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a228e3b7fc221d892ab134ca1b384cf8f">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[51/60]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , typename T_RightDatum &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">struct llama::BOOST_PP_CAT </td>
-          <td>(</td>
-          <td class="paramtype">SmallerSameThan&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">BoolInnerFunctor&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00520">520</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00640">640</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a37f26b8a186c273bd332f2cbcc0c9655"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a37f26b8a186c273bd332f2cbcc0c9655">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[52/60]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a37f26b8a186c273bd332f2cbcc0c9655">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[50/60]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2543,12 +2548,12 @@ template&lt;typename T_LeftDatum , typename T_RightType &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00520">520</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00639">639</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a3e152d9faaacc33c9397099f6f63bbaa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3e152d9faaacc33c9397099f6f63bbaa">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[53/60]</span></h2>
+<a id="a279c94666edb5d2a65f745d1e139b307"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a279c94666edb5d2a65f745d1e139b307">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[51/60]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2558,7 +2563,7 @@ template&lt;typename T_LeftDatum , typename T_RightDatum , typename T_Source &gt
         <tr>
           <td class="memname">struct llama::BOOST_PP_CAT </td>
           <td>(</td>
-          <td class="paramtype">BiggerThan&#160;</td>
+          <td class="paramtype">SmallerSameThan&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
@@ -2575,7 +2580,69 @@ template&lt;typename T_LeftDatum , typename T_RightDatum , typename T_Source &gt
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00521">521</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00639">639</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a228e3b7fc221d892ab134ca1b384cf8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a228e3b7fc221d892ab134ca1b384cf8f">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[52/60]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , typename T_RightDatum &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">struct llama::BOOST_PP_CAT </td>
+          <td>(</td>
+          <td class="paramtype">SmallerSameThan&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">BoolInnerFunctor&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00639">639</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a2738646edacb8912bb4d106f54c14db9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2738646edacb8912bb4d106f54c14db9">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[53/60]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , typename T_RightDatum , typename T_RightBase , typename T_RightLocal &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">struct llama::BOOST_PP_CAT </td>
+          <td>(</td>
+          <td class="paramtype">BiggerSameThan&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">BoolIfSameUIDFunctor&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -2607,7 +2674,7 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00522">522</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00641">641</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -2639,28 +2706,28 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00521">521</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00640">640</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a2738646edacb8912bb4d106f54c14db9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2738646edacb8912bb4d106f54c14db9">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[56/60]</span></h2>
+<a id="a3e152d9faaacc33c9397099f6f63bbaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e152d9faaacc33c9397099f6f63bbaa">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[56/60]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , typename T_RightDatum , typename T_RightBase , typename T_RightLocal &gt; </div>
+template&lt;typename T_LeftDatum , typename T_RightDatum , typename T_Source &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">struct llama::BOOST_PP_CAT </td>
           <td>(</td>
-          <td class="paramtype">BiggerSameThan&#160;</td>
+          <td class="paramtype">BiggerThan&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">BoolIfSameUIDFunctor&#160;</td>
+          <td class="paramtype">BoolFunctor&#160;</td>
           <td class="paramname">&#160;</td>
         </tr>
         <tr>
@@ -2670,6 +2737,8 @@ template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , 
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00640">640</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -2701,44 +2770,12 @@ template&lt;typename T_LeftDatum , typename T_RightType &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00521">521</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a7431d3770ac1c85062a9dfcbb30416e6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7431d3770ac1c85062a9dfcbb30416e6">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[58/60]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , typename T_RightDatum &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">struct llama::BOOST_PP_CAT </td>
-          <td>(</td>
-          <td class="paramtype">BiggerSameThan&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">BoolInnerFunctor&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00522">522</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00640">640</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
 <a id="ad2039b3b62bcc81c218e4cb874ca66a9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad2039b3b62bcc81c218e4cb874ca66a9">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[59/60]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2039b3b62bcc81c218e4cb874ca66a9">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[58/60]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2765,7 +2802,39 @@ template&lt;typename T_LeftDatum , typename T_RightDatum , typename T_Source &gt
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00522">522</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00641">641</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a7431d3770ac1c85062a9dfcbb30416e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7431d3770ac1c85062a9dfcbb30416e6">&#9670;&nbsp;</a></span>BOOST_PP_CAT() <span class="overload">[59/60]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_LeftDatum , typename T_LeftBase , typename T_LeftLocal , typename T_RightDatum &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">struct llama::BOOST_PP_CAT </td>
+          <td>(</td>
+          <td class="paramtype">BiggerSameThan&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">BoolInnerFunctor&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00641">641</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -2797,7 +2866,7 @@ template&lt;typename T_LeftDatum , typename T_RightType &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00522">522</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00641">641</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -2961,25 +3030,25 @@ template&lt;typename... T_Elements&gt; </div>
 
 </div>
 </div>
-<a id="a7e6d72ed44f9e4c51751940ef5ee8e65"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7e6d72ed44f9e4c51751940ef5ee8e65">&#9670;&nbsp;</a></span>tempAlloc()</h2>
+<a id="a080e5813dd8c223f7a8640946307c904"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a080e5813dd8c223f7a8640946307c904">&#9670;&nbsp;</a></span>stackViewAlloc()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;std::size_t dimension, typename DatumDomain &gt; </div>
+template&lt;std::size_t T_dimension, typename T_DatumDomain &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto llama::tempAlloc </td>
+          <td class="memname">auto llama::stackViewAlloc </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> -&gt; decltype(
-    <a class="el" href="namespacellama.html#a0497c2913f9ebb2cea9c97ddc35be349">OneOnStackFactory</a>&lt;
-        dimension,
-        DatumDomain
+    <a class="el" href="namespacellama.html#a28507a7205b7594b7eb1a84510ced671">OneOnStackFactory</a>&lt;
+        T_dimension,
+        T_DatumDomain
     &gt;::allocView()
 )
 </td>
@@ -2991,7 +3060,7 @@ template&lt;std::size_t dimension, typename DatumDomain &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Uses the <a class="el" href="namespacellama.html#a0497c2913f9ebb2cea9c97ddc35be349">OneOnStackFactory</a> to allocate one (probably temporary) element for a given dimension and dautm domain on the stack (no costly allocation). </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+<p>Uses the <a class="el" href="namespacellama.html#a28507a7205b7594b7eb1a84510ced671">OneOnStackFactory</a> to allocate one (probably temporary) element for a given dimension and datum domain on the stack (no costly allocation). </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">dimension</td><td>dimension of the view </td></tr>
     <tr><td class="paramname">DatumDomain</td><td>the datum domain for the one element mapping </td></tr>
@@ -2999,9 +3068,92 @@ template&lt;std::size_t dimension, typename DatumDomain &gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the allocated view </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacellama.html#a0497c2913f9ebb2cea9c97ddc35be349">OneOnStackFactory</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacellama.html#a28507a7205b7594b7eb1a84510ced671">OneOnStackFactory</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Factory_8hpp_source.html#l00197">197</a> of file <a class="el" href="Factory_8hpp_source.html">Factory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Factory_8hpp_source.html#l00210">210</a> of file <a class="el" href="Factory_8hpp_source.html">Factory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="affa16e0e991ca02551c97b56488fea8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affa16e0e991ca02551c97b56488fea8c">&#9670;&nbsp;</a></span>stackVirtualDatumAlloc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_DatumDomain &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto llama::stackVirtualDatumAlloc </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> -&gt; <a class="el" href="structllama_1_1VirtualDatum.html">VirtualDatum</a>&lt;
+    decltype( <a class="el" href="namespacellama.html#a080e5813dd8c223f7a8640946307c904">llama::stackViewAlloc</a>&lt; 1, T_DatumDomain &gt;() ),
+    <a class="el" href="structllama_1_1DatumCoord.html">DatumCoord</a>&lt;&gt;,
+    <a class="el" href="structllama_1_1internal_1_1ViewByValue.html">internal::ViewByValue</a>
+&gt;
+</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Uses the <a class="el" href="namespacellama.html#a080e5813dd8c223f7a8640946307c904">stackViewAlloc</a> to allocate a virtual datum with an own bound view "allocated" on the stack. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T_DatumDomain</td><td>the datum domain for the virtual datum </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the allocated virtual datum </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacellama.html#a080e5813dd8c223f7a8640946307c904">stackViewAlloc</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00084">84</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ad61ba7f79061d8c304c8aa943e22e9f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad61ba7f79061d8c304c8aa943e22e9f1">&#9670;&nbsp;</a></span>stackVirtualDatumCopy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_VirtualDatum &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto llama::stackVirtualDatumCopy </td>
+          <td>(</td>
+          <td class="paramtype">T_VirtualDatum &amp;&#160;</td>
+          <td class="paramname"><em>vd</em></td><td>)</td>
+          <td> -&gt; decltype( <a class="el" href="namespacellama.html#affa16e0e991ca02551c97b56488fea8c">stackVirtualDatumAlloc</a>&lt;
+    typename T_VirtualDatum::AccessibleDatumDomain
+&gt;() )
+</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Uses the <a class="el" href="namespacellama.html#affa16e0e991ca02551c97b56488fea8c">stackVirtualDatumAlloc</a> to allocate a virtual datum with an own bound view "allocated" on the stack bases on an existing virtual datum, whose data is copied into the new virtual datum. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T_VirtualDatum</td><td>type of the input virtual datum </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the virtual datum copy on stack </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacellama.html#affa16e0e991ca02551c97b56488fea8c">stackVirtualDatumAlloc</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00111">111</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -3293,7 +3445,7 @@ template&lt;std::size_t T_dim&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00517">517</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00636">636</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -3309,7 +3461,7 @@ template&lt;std::size_t T_dim&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00212">212</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00296">296</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -3319,7 +3471,7 @@ template&lt;std::size_t T_dim&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Fri Oct 19 2018 16:19:52 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Oct 24 2018 15:51:36 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

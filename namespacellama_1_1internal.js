@@ -17,6 +17,7 @@ var namespacellama_1_1internal =
     [ "GetCoordFromUIDImpl< T_DatumDomain, T_DatumCoord, T_pos, typename std::enable_if< !std::is_same< T_FirstUID, GetDatumElementUID< boost::mp11::mp_first< T_DatumDomain > > >::value >::type, T_FirstUID, T_UID... >", "structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__posdbb55aaccff22d6a4c9d108b6b1d84bf.html", "structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__posdbb55aaccff22d6a4c9d108b6b1d84bf" ],
     [ "GetCoordFromUIDImpl< T_DatumDomain, T_DatumCoord, T_pos, typename std::enable_if< std::is_same< T_FirstUID, GetDatumElementUID< boost::mp11::mp_first< T_DatumDomain > > >::value >::type, T_FirstUID, T_UID... >", "structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos42aa3c321c620142ac61091bca4cc194.html", "structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos42aa3c321c620142ac61091bca4cc194" ],
     [ "GetCoordFromUIDImpl< T_DatumDomain, T_DatumCoord, T_pos, void >", "structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01void_01_4.html", "structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos_00_01void_01_4" ],
+    [ "GetCoordFromUIDRelativeImpl", "structllama_1_1internal_1_1GetCoordFromUIDRelativeImpl.html", "structllama_1_1internal_1_1GetCoordFromUIDRelativeImpl" ],
     [ "GetTypeFromDatumCoordImpl", "structllama_1_1internal_1_1GetTypeFromDatumCoordImpl.html", null ],
     [ "GetTypeFromDatumCoordImpl< T_DatumDomain, DatumCoord< T_coords... >>", "structllama_1_1internal_1_1GetTypeFromDatumCoordImpl_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4.html", "structllama_1_1internal_1_1GetTypeFromDatumCoordImpl_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4" ],
     [ "GetTypeImpl", "structllama_1_1internal_1_1GetTypeImpl.html", null ],
@@ -35,6 +36,8 @@ var namespacellama_1_1internal =
     [ "MappingDatumCoordCaller", "structllama_1_1internal_1_1MappingDatumCoordCaller.html", null ],
     [ "MappingDatumCoordCaller< DatumCoord< T_coords... > >", "structllama_1_1internal_1_1MappingDatumCoordCaller_3_01DatumCoord_3_01T__coords_8_8_8_01_4_01_4.html", "structllama_1_1internal_1_1MappingDatumCoordCaller_3_01DatumCoord_3_01T__coords_8_8_8_01_4_01_4" ],
     [ "StubTypeImpl", "structllama_1_1internal_1_1StubTypeImpl.html", "structllama_1_1internal_1_1StubTypeImpl" ],
+    [ "ViewByRef", "structllama_1_1internal_1_1ViewByRef.html", "structllama_1_1internal_1_1ViewByRef" ],
+    [ "ViewByValue", "structllama_1_1internal_1_1ViewByValue.html", "structllama_1_1internal_1_1ViewByValue" ],
     [ "ZeroSequenceHelper", "structllama_1_1internal_1_1ZeroSequenceHelper.html", "structllama_1_1internal_1_1ZeroSequenceHelper" ],
     [ "ZeroSequenceHelper< 0, T_vals... >", "structllama_1_1internal_1_1ZeroSequenceHelper_3_010_00_01T__vals_8_8_8_01_4.html", "structllama_1_1internal_1_1ZeroSequenceHelper_3_010_00_01T__vals_8_8_8_01_4" ]
 ];

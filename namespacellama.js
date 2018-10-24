@@ -16,6 +16,8 @@ var namespacellama =
     [ "ForEach", "structllama_1_1ForEach.html", "structllama_1_1ForEach" ],
     [ "ForEach< T_DatumDomain, DatumCoord< T_coords... >>", "structllama_1_1ForEach_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4.html", "structllama_1_1ForEach_3_01T__DatumDomain_00_01DatumCoord_3_01T__coords_8_8_8_01_4_4" ],
     [ "IntegerSequence", "structllama_1_1IntegerSequence.html", null ],
+    [ "is_DatumStruct", "structllama_1_1is__DatumStruct.html", "structllama_1_1is__DatumStruct" ],
+    [ "is_DatumStruct< DatumStruct< T_DatumStructContent... > >", "structllama_1_1is__DatumStruct_3_01DatumStruct_3_01T__DatumStructContent_8_8_8_01_4_01_4.html", "structllama_1_1is__DatumStruct_3_01DatumStruct_3_01T__DatumStructContent_8_8_8_01_4_01_4" ],
     [ "LinearBytePos", "structllama_1_1LinearBytePos.html", "structllama_1_1LinearBytePos" ],
     [ "LinearizeUserDomainAdress", "structllama_1_1LinearizeUserDomainAdress.html", "structllama_1_1LinearizeUserDomainAdress" ],
     [ "LinearizeUserDomainAdress< T_dim, 1 >", "structllama_1_1LinearizeUserDomainAdress_3_01T__dim_00_011_01_4.html", "structllama_1_1LinearizeUserDomainAdress_3_01T__dim_00_011_01_4" ],

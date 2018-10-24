@@ -83,8 +83,14 @@ $(document).ready(function(){initNavTree('functions_a.html','');});
 <div class="textblock">Here is a list of all class members with links to the classes they belong to:</div>
 
 <h3><a id="index_a"></a>- a -</h3><ul>
+<li>AbsolutCoord
+: <a class="el" href="structllama_1_1internal_1_1GetCoordFromUIDRelativeImpl.html#a99b9a9520d71d696e4cf1652709a50e3">llama::internal::GetCoordFromUIDRelativeImpl&lt; T_DatumDomain, T_DatumCoord, T_UID &gt;</a>
+</li>
 <li>access()
-: <a class="el" href="structllama_1_1VirtualDatum.html#a20986df466bd48afeb0f6c39df691f9f">llama::VirtualDatum&lt; T_View &gt;</a>
+: <a class="el" href="structllama_1_1VirtualDatum.html#a38faeb74722c608496f75751572c8bbd">llama::VirtualDatum&lt; T_View, T_BoundDatumDomain, T_ViewType &gt;</a>
+</li>
+<li>AccessibleDatumDomain
+: <a class="el" href="structllama_1_1VirtualDatum.html#a683a5351e62da3d757ba88b81f5c437b">llama::VirtualDatum&lt; T_View, T_BoundDatumDomain, T_ViewType &gt;</a>
 </li>
 <li>accessor()
 : <a class="el" href="structllama_1_1View.html#a583df1438f7e33bd42b9f501f5705383">llama::View&lt; T_Mapping, T_BlobType &gt;</a>
@@ -112,7 +118,7 @@ $(document).ready(function(){initNavTree('functions_a.html','');});
 : <a class="el" href="structllama_1_1Factory.html#a0d8e75c40a060d572a1b8a226b917076">llama::Factory&lt; T_Mapping, T_Allocator &gt;</a>
 </li>
 <li>AlpakaAccessor()
-: <a class="el" href="structcommon_1_1allocator_1_1internal_1_1AlpakaAccessor.html#af488781899dce62dd4f86b73255d6a9f">common::allocator::internal::AlpakaAccessor&lt; T_Buffer &gt;</a>
+: <a class="el" href="structcommon_1_1allocator_1_1internal_1_1AlpakaAccessor.html#a75ffda7f88d2a55a9d681dbbebb4a51c">common::allocator::internal::AlpakaAccessor&lt; T_Buffer &gt;</a>
 </li>
 <li>amount
 : <a class="el" href="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown.html#a40997960dbbb4d8c14081affac038c60">llama::mapping::tree::functor::MoveRTDown&lt; T_TreeCoord &gt;</a>
@@ -128,8 +134,11 @@ $(document).ready(function(){initNavTree('functions_a.html','');});
 , <a class="el" href="structllama_1_1mapping_1_1tree_1_1Addition.html#aeddefc668c8cf739135abe32f7690a76">llama::mapping::tree::Addition&lt; Parameter1, Parameter2 &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1tree_1_1Addition_3_01std_1_1integral__constant_3_01T_00_01t1_01_4_00_0db9b0881a9379e353ba23b6a33833924.html#ab0d84caa2cb0bf3b45281e0b0b50c399">llama::mapping::tree::integral_constant&lt; T, t2 &gt;&gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1tree_1_1Multiplication.html#a6a5307d54e43768e98d60ab9a97e5a65">llama::mapping::tree::Multiplication&lt; Parameter1, Parameter2 &gt;</a>
-, <a class="el" href="structllama_1_1VirtualDatum_1_1AccessImpl.html#ab8f24df21e1c362ddab89e51bd04c0ce">llama::VirtualDatum&lt; T_View &gt;::AccessImpl&lt; T_UIDs &gt;</a>
-, <a class="el" href="structllama_1_1VirtualDatum_1_1AccessImpl_3_01DatumCoord_3_01T__coord_8_8_8_01_4_01_4.html#a13774c56f5fdbfb5244a2e7f8f011cc3">llama::VirtualDatum&lt; T_View &gt;::AccessImpl&lt; DatumCoord&lt; T_coord... &gt; &gt;</a>
+, <a class="el" href="structllama_1_1VirtualDatum_1_1AccessImpl_3_01T__DatumCoord_00_01typename_01std_1_1enable__if_3_ef93ef5c5342a6f9a4c91df4fe73e8af.html#aa1932c9e9fbfb1da06d12de18f39cfd6">llama::VirtualDatum&lt; T_View, T_BoundDatumDomain, T_ViewType &gt;::AccessImpl&lt; T_DatumCoord, typename std::enable_if&lt; !is_DatumStruct&lt; GetTypeFromDatumCoord&lt; typename Mapping::DatumDomain, typename BoundDatumDomain::template Cat&lt; T_DatumCoord &gt; &gt; &gt;::value &gt;::type &gt;</a>
+, <a class="el" href="structllama_1_1VirtualDatum_1_1AccessImpl_3_01T__DatumCoord_00_01typename_01std_1_1enable__if_3_cad2630bd48dbf313b8cd0753edeb19d.html#ab9deffa90f3938b81c0c521cada56c8a">llama::VirtualDatum&lt; T_View, T_BoundDatumDomain, T_ViewType &gt;::AccessImpl&lt; T_DatumCoord, typename std::enable_if&lt; is_DatumStruct&lt; GetTypeFromDatumCoord&lt; typename Mapping::DatumDomain, typename BoundDatumDomain::template Cat&lt; T_DatumCoord &gt; &gt; &gt;::value &gt;::type &gt;</a>
+, <a class="el" href="structllama_1_1VirtualDatum_1_1AccessWithBoundDatumDomainImpl_3_01DatumCoord_3_01T__coord_8_8_8_01_4_01_4.html#ab842da3495102b938b127565d877a8c3">llama::VirtualDatum&lt; T_View, T_BoundDatumDomain, T_ViewType &gt;::AccessWithBoundDatumDomainImpl&lt; DatumCoord&lt; T_coord... &gt; &gt;</a>
+, <a class="el" href="structllama_1_1VirtualDatum_1_1AccessWithTypeImpl.html#ae3c3715ed6bdd34a6f9979cdb0279b4e">llama::VirtualDatum&lt; T_View, T_BoundDatumDomain, T_ViewType &gt;::AccessWithTypeImpl&lt; T_UIDs &gt;</a>
+, <a class="el" href="structllama_1_1VirtualDatum_1_1AccessWithTypeImpl_3_01DatumCoord_3_01T__coord_8_8_8_01_4_01_4.html#a144d80df2538836424fb9e9f81abd137">llama::VirtualDatum&lt; T_View, T_BoundDatumDomain, T_ViewType &gt;::AccessWithTypeImpl&lt; DatumCoord&lt; T_coord... &gt; &gt;</a>
 </li>
 <li>Array()
 : <a class="el" href="structllama_1_1Array.html#a4a99c9accd41220a3d85884542cc618a">llama::Array&lt; T, T_dim &gt;</a>
@@ -140,7 +149,7 @@ $(document).ready(function(){initNavTree('functions_a.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Oct 19 2018 16:19:52 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Oct 24 2018 15:51:36 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

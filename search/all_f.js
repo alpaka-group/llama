@@ -17,9 +17,12 @@ var searchData=
   ['soa_2ehpp',['SoA.hpp',['../SoA_8hpp.html',1,'']]],
   ['stack',['Stack',['../structllama_1_1allocator_1_1Stack.html',1,'llama::allocator']]],
   ['stack_2ehpp',['Stack.hpp',['../Stack_8hpp.html',1,'']]],
+  ['stackviewalloc',['stackViewAlloc',['../namespacellama.html#a080e5813dd8c223f7a8640946307c904',1,'llama']]],
+  ['stackvirtualdatumalloc',['stackVirtualDatumAlloc',['../namespacellama.html#affa16e0e991ca02551c97b56488fea8c',1,'llama']]],
+  ['stackvirtualdatumcopy',['stackVirtualDatumCopy',['../namespacellama.html#ad61ba7f79061d8c304c8aa943e22e9f1',1,'llama']]],
   ['stubtype',['StubType',['../namespacellama.html#adb589a980e01610411523c3af5e5f4ed',1,'llama']]],
   ['stubtypeimpl',['StubTypeImpl',['../structllama_1_1internal_1_1StubTypeImpl.html',1,'llama::internal']]],
-  ['submergefunctorsimpl',['SubMergeFunctorsImpl',['../structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl.html#a172b0bd9666e386b45ec093cbfbe4ca1',1,'llama::mapping::tree::internal::MergeFunctorsImpl::SubMergeFunctorsImpl()'],['../structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl.html#a45aa5417cb477a9a7ac4f35a8fa28ef5',1,'llama::mapping::tree::internal::MergeFunctorsImpl::subMergeFunctorsImpl()']]],
+  ['submergefunctorsimpl',['subMergeFunctorsImpl',['../structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl.html#a45aa5417cb477a9a7ac4f35a8fa28ef5',1,'llama::mapping::tree::internal::MergeFunctorsImpl::subMergeFunctorsImpl()'],['../structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctorsImpl.html#a172b0bd9666e386b45ec093cbfbe4ca1',1,'llama::mapping::tree::internal::MergeFunctorsImpl::SubMergeFunctorsImpl()']]],
   ['subtree',['SubTree',['../structllama_1_1mapping_1_1tree_1_1internal_1_1GetTreeBlobByteImpl.html#a320f51dc03f1fd6a134881e49bfe9b1b',1,'llama::mapping::tree::internal::GetTreeBlobByteImpl']]],
   ['summarizetreesmallerpos',['SummarizeTreeSmallerPos',['../structllama_1_1mapping_1_1tree_1_1internal_1_1SummarizeTreeSmallerPos.html',1,'llama::mapping::tree::internal']]],
   ['summarizetreesmallerpos_3c_20t_5ftree_2c_200_20_3e',['SummarizeTreeSmallerPos&lt; T_Tree, 0 &gt;',['../structllama_1_1mapping_1_1tree_1_1internal_1_1SummarizeTreeSmallerPos_3_01T__Tree_00_010_01_4.html',1,'llama::mapping::tree::internal']]]

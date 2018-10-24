@@ -1,0 +1,3 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__posdbb55aaccff22d6a4c9d108b6b1d84bf.html" title="llama::internal::GetCoord\lFromUIDImpl\&lt; T_DatumDomain,\l T_DatumCoord, T_pos, typename\l std::enable_if\&lt; !std::is_same\l\&lt; T_FirstUID, GetDatumElementUID\l\&lt; boost::mp11::mp_first\&lt; T_DatumDomain\l \&gt; \&gt; \&gt;::value \&gt;::type, T_FirstUID, T_UID... \&gt;" alt="" coords="5,5,292,120"/>
+</map>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Low Level Abstraction of Memory Access: llama::VirtualDatum&lt; T_View &gt;::AccessImpl&lt; T_UIDs &gt; Struct Template Reference</title>
+<title>Low Level Abstraction of Memory Access: llama::VirtualDatum&lt; T_View, T_BoundDatumDomain, T_ViewType &gt;::AccessImpl&lt; T_DatumCoord, T_SFINAE &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -80,76 +80,20 @@ $(document).ready(function(){initNavTree('structllama_1_1VirtualDatum_1_1AccessI
 </div>
 
 <div class="header">
-  <div class="summary">
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="structllama_1_1VirtualDatum_1_1AccessImpl-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">llama::VirtualDatum&lt; T_View &gt;::AccessImpl&lt; T_UIDs &gt; Struct Template Reference</div>  </div>
+<div class="title">llama::VirtualDatum&lt; T_View, T_BoundDatumDomain, T_ViewType &gt;::AccessImpl&lt; T_DatumCoord, T_SFINAE &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="View_8hpp_source.html">View.hpp</a>&gt;</code></p>
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ab8f24df21e1c362ddab89e51bd04c0ce"><td class="memTemplParams" colspan="2">template&lt;typename T_UserDomain &gt; </td></tr>
-<tr class="memitem:ab8f24df21e1c362ddab89e51bd04c0ce"><td class="memTemplItemLeft" align="right" valign="top">static auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualDatum_1_1AccessImpl.html#ab8f24df21e1c362ddab89e51bd04c0ce">apply</a> (T_View &amp;&amp;<a class="el" href="structllama_1_1VirtualDatum.html#a30842b68acbb1ceb2884a8f4271ec162">view</a>, T_UserDomain const &amp;<a class="el" href="structllama_1_1VirtualDatum.html#ad10ead874bc7852a4bcc41fec5d790bd">userDomainPos</a>) -&gt; decltype(view.template accessor&lt; T_UIDs... &gt;(<a class="el" href="structllama_1_1VirtualDatum.html#ad10ead874bc7852a4bcc41fec5d790bd">userDomainPos</a>))&amp;</td></tr>
-<tr class="separator:ab8f24df21e1c362ddab89e51bd04c0ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename T_View&gt;<br />
-template&lt;typename... T_UIDs&gt;<br />
-struct llama::VirtualDatum&lt; T_View &gt;::AccessImpl&lt; T_UIDs &gt;</h3>
+<div class="textblock"><h3>template&lt;typename T_View, typename T_BoundDatumDomain, template&lt; class &gt; class T_ViewType&gt;<br />
+template&lt;typename T_DatumCoord, typename T_SFINAE = void&gt;<br />
+struct llama::VirtualDatum&lt; T_View, T_BoundDatumDomain, T_ViewType &gt;::AccessImpl&lt; T_DatumCoord, T_SFINAE &gt;</h3>
 
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00665">665</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ab8f24df21e1c362ddab89e51bd04c0ce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab8f24df21e1c362ddab89e51bd04c0ce">&#9670;&nbsp;</a></span>apply()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T_View &gt; </div>
-<div class="memtemplate">
-template&lt;typename... T_UIDs&gt; </div>
-<div class="memtemplate">
-template&lt;typename T_UserDomain &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static auto <a class="el" href="structllama_1_1VirtualDatum.html">llama::VirtualDatum</a>&lt; T_View &gt;::<a class="el" href="structllama_1_1VirtualDatum_1_1AccessImpl.html">AccessImpl</a>&lt; T_UIDs &gt;::apply </td>
-          <td>(</td>
-          <td class="paramtype">T_View &amp;&amp;&#160;</td>
-          <td class="paramname"><em>view</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">T_UserDomain const &amp;&#160;</td>
-          <td class="paramname"><em>userDomainPos</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> -&gt; decltype( view.template accessor&lt; T_UIDs... &gt;( <a class="el" href="structllama_1_1VirtualDatum.html#ad10ead874bc7852a4bcc41fec5d790bd">userDomainPos</a> ) )&amp;
-        </td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00671">671</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
-
-</div>
-</div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00854">854</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+</div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li>/home/alexander/develop/work/llama/include/llama/<a class="el" href="View_8hpp_source.html">View.hpp</a></li>
 </ul>
 </div><!-- contents -->
@@ -158,7 +102,7 @@ template&lt;typename T_UserDomain &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="structllama_1_1VirtualDatum.html">VirtualDatum</a></li><li class="navelem"><a class="el" href="structllama_1_1VirtualDatum_1_1AccessImpl.html">AccessImpl</a></li>
-    <li class="footer">Generated on Fri Oct 19 2018 16:19:52 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Oct 24 2018 15:51:36 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>
