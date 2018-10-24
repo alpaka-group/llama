@@ -177,7 +177,7 @@ Factory
 .. doxygentypedef:: llama::OneOnStackFactory
    :project: LLAMA
 
-.. doxygenfunction:: llama::tempAlloc
+.. doxygenfunction:: llama::stackViewAlloc
    :project: LLAMA
 
 .. _label-api-allocators:
