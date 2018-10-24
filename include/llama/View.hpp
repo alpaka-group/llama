@@ -422,15 +422,14 @@ __LLAMA_DEFINE_FOREACH_FUNCTOR( %= , Modulo )
     __LLAMA_VIRTUALDATUM_TYPE_OPERATOR( OP, FUNCTOR, & )                       \
     __LLAMA_VIRTUALDATUM_TYPE_OPERATOR( OP, FUNCTOR, && )
 
-//~ /** Macro that defines an operator overloading inside of \ref llama::VirtualDatum for
- //~ *  itself and some other type.
- //~ * \param OP operator, e.g. operator +=
- //~ * \param FUNCTOR used for calling the internal needed functor to operate on
- //~ *        the virtual datums, e.g. if FUNCTOR is "Addition", the
- //~ *        AdditionTypeFunctor will be used internally.
- //~ * \param REF may be & or && to determine whether it is an overloading for
- //~ *        lvalue or rvalue references
- //~ * */
+/** Macro that defines a non inplace operator overloading inside of
+ *  \ref llama::VirtualDatum for itself and some other type based on the already
+ *  exising inplace operation overload.
+ * \param OP operator, e.g. operator +
+ * \param INP_OP corresponding inplace operator, e.g. operator +=
+ * \param REF may be & or && to determine whether it is an overloading for
+ *        lvalue or rvalue references
+ * */
 #define __LLAMA_VIRTUALDATUM_NOT_IN_PLACE_OPERATOR_WITH_REF( OP, INP_OP, REF ) \
     template< typename T_OtherType >                                           \
     LLAMA_FN_HOST_ACC_INLINE                                                   \

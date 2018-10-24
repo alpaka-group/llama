@@ -311,7 +311,7 @@ In LLAMA this macro is extended for these combinations of :cpp:`OP` and
   =  Assigment
  +=  Addition
  -=  Subtraction
- \*= Multiplication
+\*=  Multiplication
  /=  Division
  %=  Modulo
 ==== ==============
@@ -328,6 +328,22 @@ In LLAMA this macro is extended for these combinations of :cpp:`OP` and
 These three macros are extended for the same combinations of OP and FUNCTOR as
 for :ref:`__LLAMA_DEFINE_FOREACH_FUNCTOR <label-define-foreach-functor>` with
 :cpp:`REF` being :cpp:`&` and :cpp:`&&` for each combination.
+
+.. doxygendefine:: __LLAMA_VIRTUALDATUM_NOT_IN_PLACE_OPERATOR_WITH_REF
+   :project: LLAMA
+
+In LLAMA this macro is extended for these combinations of :cpp:`OP` and
+:cpp:`INP_OP`:
+
+==== ========
+ OP   INP_OP
+==== ========
+ \+     +=
+ \-     -=
+ \*    \*=
+  /     /=
+  %     %=
+==== ========
 
 .. _label-define-foreach-bool-functor:
 
