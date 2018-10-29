@@ -797,6 +797,8 @@ INPUT                 += ../examples/uidtest/uidtest.cpp
 INPUT                 += ../examples/virtualviewtest/virtualviewtest.cpp
 INPUT                 += ../examples/treemaptest/treemaptest.cpp
 INPUT                 += ../examples/treemaptest/toString.hpp
+INPUT                 += ../examples/vectoradd/vectoradd.cpp
+INPUT                 += ../examples/common/AlpakaThreadElemsDistribution.hpp
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses

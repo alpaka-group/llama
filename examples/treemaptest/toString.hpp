@@ -8,7 +8,7 @@
 
 #pragma once
 
-/** \file toString.hpp
+/** \file treemaptest/toString.hpp
  *  \brief Defining some overloads for the `llama::mapping::tree::ToString`
  *  functor for the treemaptest datum domain uid types.
  */

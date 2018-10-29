@@ -27,6 +27,7 @@
 
 #include "../common/AlpakaAllocator.hpp"
 #include "../common/AlpakaMemCopy.hpp"
+#include "../common/AlpakaThreadElemsDistribution.hpp"
 #include "../common/Chrono.hpp"
 #include "../common/Dummy.hpp"
 
@@ -292,55 +293,6 @@ struct MoveKernel
     }
 };
 
-template<
-    typename T_Acc,
-    std::size_t blockSize,
-    std::size_t hardwareThreads
->
-struct ThreadsElemsDistribution
-{
-    static constexpr std::size_t elemCount = blockSize;
-    static constexpr std::size_t threadCount = 1u;
-};
-
-#ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
-    template<
-        std::size_t blockSize,
-        std::size_t hardwareThreads,
-        typename T_Dim,
-        typename T_Size
-    >
-    struct ThreadsElemsDistribution<
-        alpaka::acc::AccGpuCudaRt<T_Dim, T_Size>,
-        blockSize,
-        hardwareThreads
-    >
-    {
-        static constexpr std::size_t elemCount = 1u;
-        static constexpr std::size_t threadCount = blockSize;
-    };
-#endif
-
-#ifdef ALPAKA_ACC_CPU_B_SEQ_T_OMP2_ENABLED
-    template<
-        std::size_t blockSize,
-        std::size_t hardwareThreads,
-        typename T_Dim,
-        typename T_Size
-    >
-    struct ThreadsElemsDistribution<
-        alpaka::acc::AccCpuOmp2Threads<T_Dim, T_Size>,
-        blockSize,
-        hardwareThreads
-    >
-    {
-        static constexpr std::size_t elemCount =
-            ( blockSize + hardwareThreads - 1u ) / hardwareThreads;
-        static constexpr std::size_t threadCount = hardwareThreads;
-    };
-#endif
-
-
 int main(int argc,char * * argv)
 {
     // ALPAKA
@@ -373,7 +325,7 @@ int main(int argc,char * * argv)
     constexpr std::size_t problemSize = NBODY_PROBLEM_SIZE;
     constexpr std::size_t blockSize = NBODY_BLOCK_SIZE;
     constexpr std::size_t hardwareThreads = 2; //relevant for OpenMP2Threads
-    using Distribution = ThreadsElemsDistribution<
+    using Distribution = common::ThreadsElemsDistribution<
         Acc,
         blockSize,
         hardwareThreads

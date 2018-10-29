@@ -259,7 +259,7 @@ int main(int argc,char * * argv)
     std::size_t img_y = ASYNCCOPY_DEFAULT_IMG_Y;
     std::size_t buffer_x = ASYNCCOPY_DEFAULT_IMG_X + 2 * kernelSize;
     std::size_t buffer_y = ASYNCCOPY_DEFAULT_IMG_Y + 2 * kernelSize;
-    using Distribution = ThreadsElemsDistribution<
+    using Distribution = common::ThreadsElemsDistribution<
         Acc,
         totalElemsPerBlock,
         hardwareThreads
