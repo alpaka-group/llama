@@ -1,3 +1,11 @@
+/* To the extent possible under law, Alexander Matthes has waived all
+ * copyright and related or neighboring rights to this example of LLAMA using
+ * the CC0 license, see https://creativecommons.org/publicdomain/zero/1.0 .
+ *
+ * This example is meant to be "stolen" from to learn how to use LLAMA, which
+ * itself is not under the public domain but LGPL3+.
+ */
+
 #include <iostream>
 #include <utility>
 #include <llama/llama.hpp>
@@ -23,7 +31,7 @@ namespace st
     struct Pos {};
     struct Vel {};
     struct Mom {};
-}
+} // namespace st
 
 #ifdef NDEBUG
 using Element = float;
