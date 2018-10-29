@@ -1,8 +1,23 @@
+/* To the extent possible under law, Alexander Matthes has waived all
+ * copyright and related or neighboring rights to this example of LLAMA using
+ * the CC0 license, see https://creativecommons.org/publicdomain/zero/1.0 .
+ *
+ * This example is meant to be "stolen" from to learn how to use LLAMA, which
+ * itself is not under the public domain but LGPL3+.
+ */
+
 #include <iostream>
 #include <utility>
 #include <llama/llama.hpp>
 
 #include "../common/demangle.hpp"
+
+/** \file treemaptest.cpp
+ *  \brief Example to show how to work with the tree mapping of LLAMA.
+ */
+
+namespace treemaptest
+{
 
 namespace st
 {
@@ -12,9 +27,14 @@ namespace st
     struct Z {};
     struct Momentum {};
     struct Weight {};
-}
+} // namespace st
+
+} // namespace simpletest
 
 #include "toString.hpp"
+
+namespace treemaptest
+{
 
 using Name = llama::DS<
     llama::DE< st::Pos, llama::DS<
@@ -169,4 +189,11 @@ int main(int argc,char * * argv)
         << std::endl;
 
     return 0;
+}
+
+} // namespace treemaptest
+
+int main(int argc,char * * argv)
+{
+    return treemaptest::main( argc, argv );
 }

@@ -1,4 +1,17 @@
+/* To the extent possible under law, Alexander Matthes has waived all
+ * copyright and related or neighboring rights to this example of LLAMA using
+ * the CC0 license, see https://creativecommons.org/publicdomain/zero/1.0 .
+ *
+ * This example is meant to be "stolen" from to learn how to use LLAMA, which
+ * itself is not under the public domain but LGPL3+.
+ */
+
 #pragma once
+
+/** \file toString.hpp
+ *  \brief Defining some overloads for the `llama::mapping::tree::ToString`
+ *  functor for the treemaptest datum domain uid types.
+ */
 
 namespace llama
 {
@@ -10,10 +23,10 @@ namespace tree
 {
 
 template< >
-struct ToString< st::Pos >
+struct ToString< treemaptest::st::Pos >
 {
     auto
-    operator()( const st::Pos )
+    operator()( const treemaptest::st::Pos )
     -> std::string
     {
         return "Pos";
@@ -21,10 +34,10 @@ struct ToString< st::Pos >
 };
 
 template< >
-struct ToString< st::X >
+struct ToString< treemaptest::st::X >
 {
     auto
-    operator()( const st::X )
+    operator()( const treemaptest::st::X )
     -> std::string
     {
         return "X";
@@ -32,10 +45,10 @@ struct ToString< st::X >
 };
 
 template< >
-struct ToString< st::Y >
+struct ToString< treemaptest::st::Y >
 {
     auto
-    operator()( const st::Y )
+    operator()( const treemaptest::st::Y )
     -> std::string
     {
         return "Y";
@@ -43,10 +56,10 @@ struct ToString< st::Y >
 };
 
 template< >
-struct ToString< st::Z >
+struct ToString< treemaptest::st::Z >
 {
     auto
-    operator()( const st::Z )
+    operator()( const treemaptest::st::Z )
     -> std::string
     {
         return "Z";
@@ -54,10 +67,10 @@ struct ToString< st::Z >
 };
 
 template< >
-struct ToString< st::Momentum >
+struct ToString< treemaptest::st::Momentum >
 {
     auto
-    operator()( const st::Momentum )
+    operator()( const treemaptest::st::Momentum )
     -> std::string
     {
         return "Momentum";
@@ -65,10 +78,10 @@ struct ToString< st::Momentum >
 };
 
 template< >
-struct ToString< st::Weight >
+struct ToString< treemaptest::st::Weight >
 {
     auto
-    operator()( const st::Weight )
+    operator()( const treemaptest::st::Weight )
     -> std::string
     {
         return "Weight";
