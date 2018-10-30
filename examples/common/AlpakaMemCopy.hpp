@@ -1,3 +1,15 @@
+/* To the extent possible under law, Alexander Matthes has waived all
+ * copyright and related or neighboring rights to this example of LLAMA using
+ * the CC0 license, see https://creativecommons.org/publicdomain/zero/1.0 .
+ *
+ * This example is meant to be "stolen" from to learn how to use LLAMA, which
+ * itself is not under the public domain but LGPL3+.
+ */
+
+/** \file AlpakaMemCopy.hpp
+ *  \brief memcopy helper function for using ALPAKA and LLAMA together.
+ */
+
 #pragma once
 
 #include <type_traits>
@@ -67,6 +79,9 @@ struct AlpakaMemCopy<
 
 } // namespace internal
 
+/** Copies a view to another if they are both alpaka views and have the same
+ *  mapping and size. Otherwise does nothing
+ */
 template<
 	typename T_DstView,
 	typename T_SrcView,
