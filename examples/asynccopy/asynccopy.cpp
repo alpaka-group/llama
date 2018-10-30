@@ -1,18 +1,42 @@
+/* To the extent possible under law, Alexander Matthes has waived all
+ * copyright and related or neighboring rights to this example of LLAMA using
+ * the CC0 license, see https://creativecommons.org/publicdomain/zero/1.0 .
+ *
+ * This example is meant to be "stolen" from to learn how to use LLAMA, which
+ * itself is not under the public domain but LGPL3+.
+ */
+
+/** \file asynccopy.cpp
+ *  \brief Asynchronous bluring example for LLAMA using ALPAKA.
+ */
+
 #include <iostream>
 #include <utility>
 #include <list>
 
+/// defines whether cuda shall be used or openmp
 #define ASYNCCOPY_CUDA 0
+/// defines whether the data shall be processed asynchronously
 #define ASYNCCOPY_ASYNC 1
+/// defines whether shared memory shall be used
 #define ASYNCCOPY_SHARED 1
+/// defines whether a local variable shall be used or directly written to the
+/// destination memory
 #define ASYNCCOPY_LOCAL_SUM 1
+/// defines whether the resultion image shall be saved
 #define ASYNCCOPY_SAVE 1
+/// defines the number of (in parallel) used chunks to process
 #define ASYNCCOPY_CHUNK_COUNT 4
 
+/// width of the default image if no png is loaded
 #define ASYNCCOPY_DEFAULT_IMG_X 4096
+/// height of the default image if no png is loaded
 #define ASYNCCOPY_DEFAULT_IMG_Y 4096
+/// radius of the blur kernel, the diameter is this times two plus one
 #define ASYNCCOPY_KERNEL_SIZE 8
+/// size of each chunk to be processed per alpaka kernel
 #define ASYNCCOPY_CHUNK_SIZE 512
+/// number of elements per direction(!) every block should process
 #define ASYNCCOPY_TOTAL_ELEMS_PER_BLOCK 16
 
 #include <alpaka/alpaka.hpp>
@@ -20,28 +44,6 @@
 	#define LLAMA_FN_HOST_ACC_INLINE ALPAKA_FN_ACC __forceinline__
 #endif
 #include <llama/llama.hpp>
-
-using Element = float;
-
-namespace px
-{
-    struct R {};
-    struct G {};
-    struct B {};
-}
-
-using Pixel = llama::DS<
-    llama::DE< px::R, Element >,
-    llama::DE< px::G, Element >,
-    llama::DE< px::B, Element >
->;
-
-using PixelOnAcc = llama::DS<
-    //~ llama::DE< px::R, Element >,
-    llama::DE< px::G, Element >,
-    llama::DE< px::B, Element >
->;
-
 
 #include <random>
 
@@ -54,6 +56,35 @@ using PixelOnAcc = llama::DS<
 #include "../common/AlpakaThreadElemsDistribution.hpp"
 #include "../common/Chrono.hpp"
 
+namespace asynccopy
+{
+
+using Element = float;
+
+namespace px
+{
+    struct R {};
+    struct G {};
+    struct B {};
+}
+
+/// real datum domain of the image pixel used on the host for loading and saving
+using Pixel = llama::DS<
+    llama::DE< px::R, Element >,
+    llama::DE< px::G, Element >,
+    llama::DE< px::B, Element >
+>;
+
+/// datum domain used in the kernel to modify the image
+using PixelOnAcc = llama::DS<
+    //~ llama::DE< px::R, Element >,
+    llama::DE< px::G, Element >,
+    llama::DE< px::B, Element >
+>;
+
+/** Alpaka kernel functor used to blur a small image living in the device memory
+ *  using the \ref PixelOnAcc datum domain
+ */
 template<
     std::size_t elems,
     std::size_t kernelSize,
@@ -89,6 +120,7 @@ struct BlurKernel
             alpaka::Blocks
         >( acc );
 
+        // Using SoA for the shared memory
         auto treeOperationList = llama::makeTuple(
             llama::mapping::tree::functor::LeafOnlyRT( )
         );
@@ -259,7 +291,7 @@ int main(int argc,char * * argv)
     std::size_t img_y = ASYNCCOPY_DEFAULT_IMG_Y;
     std::size_t buffer_x = ASYNCCOPY_DEFAULT_IMG_X + 2 * kernelSize;
     std::size_t buffer_y = ASYNCCOPY_DEFAULT_IMG_Y + 2 * kernelSize;
-    using Distribution = ThreadsElemsDistribution<
+    using Distribution = common::ThreadsElemsDistribution<
         Acc,
         totalElemsPerBlock,
         hardwareThreads
@@ -599,4 +631,11 @@ int main(int argc,char * * argv)
     delete(image);
 
     return 0;
+}
+
+} // namespace asynccopy
+
+int main(int argc,char * * argv)
+{
+    return asynccopy::main( argc, argv );
 }

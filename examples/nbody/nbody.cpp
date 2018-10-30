@@ -1,13 +1,32 @@
+/* To the extent possible under law, Alexander Matthes has waived all
+ * copyright and related or neighboring rights to this example of LLAMA using
+ * the CC0 license, see https://creativecommons.org/publicdomain/zero/1.0 .
+ *
+ * This example is meant to be "stolen" from to learn how to use LLAMA, which
+ * itself is not under the public domain but LGPL3+.
+ */
+
+/** \file nbody.cpp
+ *  \brief Realistic nbody example for using LLAMA and ALPAKA together.
+ */
+
 #include <iostream>
 #include <utility>
 
+/// defines whether cuda shall be used
 #define NBODY_CUDA 0
+/// defines whether tree mapping or native mapping shall be used
 #define NBODY_USE_TREE 1
+/// defines whether shared memory shall be used
 #define NBODY_USE_SHARED 1
+/// defines whether the shared memory shall use tree mapping or native mapping
 #define NBODY_USE_SHARED_TREE 1
 
+/// total number of particles
 #define NBODY_PROBLEM_SIZE 16*1024
+/// number of elements per block
 #define NBODY_BLOCK_SIZE 256
+/// number of steps to calculate
 #define NBODY_STEPS 5
 
 
@@ -27,8 +46,12 @@
 
 #include "../common/AlpakaAllocator.hpp"
 #include "../common/AlpakaMemCopy.hpp"
+#include "../common/AlpakaThreadElemsDistribution.hpp"
 #include "../common/Chrono.hpp"
 #include "../common/Dummy.hpp"
+
+namespace nbody
+{
 
 using Element = float;
 constexpr Element EPS2 = 0.01;
@@ -57,6 +80,9 @@ using Particle = llama::DS<
     llama::DE< dd::Mass, Element >
 >;
 
+/** Helper function for particle particle interaction. Gets two virtual datums
+ *  like they are real particle objects
+ */
 template<
     typename T_VirtualDatum1,
     typename T_VirtualDatum2
@@ -84,6 +110,11 @@ pPInteraction(
     p1( dd::Vel() ) += distance;
 }
 
+/** Implements an allocator for LLAMA using the ALPAKA shared memory or just
+ *  local stack memory depending on the number of threads per block. If only one
+ *  thread exists per block, the expensive share memory allocation can be
+ *  avoided
+ */
 template<
     typename T_Acc,
     std::size_t T_size,
@@ -148,6 +179,9 @@ struct BlockSharedMemoryAllocator<
     }
 };
 
+/** Alpaka kernel for updating the speed of every particle based on the distance
+ *  and mass to each other particle. Has complexity O(N²).
+ */
 template<
     std::size_t problemSize,
     std::size_t elems,
@@ -256,7 +290,7 @@ struct UpdateKernel
     }
 };
 
-
+/// Alpaka kernel for moving each particle with its speed. Has complexity O(N).
 template<
     std::size_t problemSize,
     std::size_t elems
@@ -292,55 +326,6 @@ struct MoveKernel
     }
 };
 
-template<
-    typename T_Acc,
-    std::size_t blockSize,
-    std::size_t hardwareThreads
->
-struct ThreadsElemsDistribution
-{
-    static constexpr std::size_t elemCount = blockSize;
-    static constexpr std::size_t threadCount = 1u;
-};
-
-#ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
-    template<
-        std::size_t blockSize,
-        std::size_t hardwareThreads,
-        typename T_Dim,
-        typename T_Size
-    >
-    struct ThreadsElemsDistribution<
-        alpaka::acc::AccGpuCudaRt<T_Dim, T_Size>,
-        blockSize,
-        hardwareThreads
-    >
-    {
-        static constexpr std::size_t elemCount = 1u;
-        static constexpr std::size_t threadCount = blockSize;
-    };
-#endif
-
-#ifdef ALPAKA_ACC_CPU_B_SEQ_T_OMP2_ENABLED
-    template<
-        std::size_t blockSize,
-        std::size_t hardwareThreads,
-        typename T_Dim,
-        typename T_Size
-    >
-    struct ThreadsElemsDistribution<
-        alpaka::acc::AccCpuOmp2Threads<T_Dim, T_Size>,
-        blockSize,
-        hardwareThreads
-    >
-    {
-        static constexpr std::size_t elemCount =
-            ( blockSize + hardwareThreads - 1u ) / hardwareThreads;
-        static constexpr std::size_t threadCount = hardwareThreads;
-    };
-#endif
-
-
 int main(int argc,char * * argv)
 {
     // ALPAKA
@@ -373,7 +358,7 @@ int main(int argc,char * * argv)
     constexpr std::size_t problemSize = NBODY_PROBLEM_SIZE;
     constexpr std::size_t blockSize = NBODY_BLOCK_SIZE;
     constexpr std::size_t hardwareThreads = 2; //relevant for OpenMP2Threads
-    using Distribution = ThreadsElemsDistribution<
+    using Distribution = common::ThreadsElemsDistribution<
         Acc,
         blockSize,
         hardwareThreads
@@ -444,6 +429,7 @@ int main(int argc,char * * argv)
 
     chrono.printAndReset("Alloc");
 
+    /// Random initialization of the particles
     std::mt19937_64 generator;
     std::normal_distribution< Element > distribution(
         Element( 0 ), // mean
@@ -459,6 +445,7 @@ int main(int argc,char * * argv)
         temp(dd::Vel(), dd::X()) = distribution(generator)/Element(10);
         temp(dd::Vel(), dd::Y()) = distribution(generator)/Element(10);
         temp(dd::Vel(), dd::Z()) = distribution(generator)/Element(10);
+        temp(dd::Mass()) = distribution(generator)/Element(100);
         hostView(i) = temp;
     }
 
@@ -525,4 +512,11 @@ int main(int argc,char * * argv)
     chrono.printAndReset("Copy D->H");
 
     return 0;
+}
+
+} // namespace nbody
+
+int main(int argc,char * * argv)
+{
+    return nbody::main( argc, argv );
 }

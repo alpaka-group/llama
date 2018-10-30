@@ -1,3 +1,11 @@
+/* To the extent possible under law, Alexander Matthes has waived all
+ * copyright and related or neighboring rights to this example of LLAMA using
+ * the CC0 license, see https://creativecommons.org/publicdomain/zero/1.0 .
+ *
+ * This example is meant to be "stolen" from to learn how to use LLAMA, which
+ * itself is not under the public domain but LGPL3+.
+ */
+
 #include <iostream>
 #include <utility>
 #include <llama/llama.hpp>
@@ -8,6 +16,13 @@
 #define VIRTUALVIEWTEST_WITH_MINIVIEW 1
 #define VIRTUALVIEWTEST_WITH_MINIVIEW_DUMMY 1
 
+/** \file virtualviewtest.cpp
+ *  \brief Example for LLAMA showing how to define a virtual view.
+ */
+
+namespace virtualviewtest
+{
+
 namespace st
 {
     struct X {};
@@ -16,7 +31,7 @@ namespace st
     struct Pos {};
     struct Vel {};
     struct Mom {};
-}
+} // namespace st
 
 #ifdef NDEBUG
 using Element = float;
@@ -231,4 +246,11 @@ int main(int argc,char * * argv)
     end:
 #endif
     return 0;
+}
+
+} // namespace virtualviewtest
+
+int main(int argc,char * * argv)
+{
+    return virtualviewtest::main( argc, argv );
 }

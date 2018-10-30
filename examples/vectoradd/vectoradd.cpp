@@ -1,19 +1,37 @@
+/* To the extent possible under law, Alexander Matthes has waived all
+ * copyright and related or neighboring rights to this example of LLAMA using
+ * the CC0 license, see https://creativecommons.org/publicdomain/zero/1.0 .
+ *
+ * This example is meant to be "stolen" from to learn how to use LLAMA, which
+ * itself is not under the public domain but LGPL3+.
+ */
+
+/** \file vectoradd.cpp
+ *  \brief Vector add example for LLAMA using the ALPAKA library
+ */
+
 #include <iostream>
 #include <utility>
 
+/// Defines whether CUDA should be used in this example or not
 #define VECTORADD_CUDA 0
-// -1 native AoS, 0 native SoA, 1 tree AoS, 2 tree SoA
+/// -1 native AoS, 0 native SoA, 1 tree AoS, 2 tree SoA
 #define VECTORADD_USE_TREE 2
+/// For testing purposes, llama can be bypassed
 #define VECTORADD_BYPASS_LLAMA 0
-// 0 SoA, 1 AoS
+/// Which data layout for bypassing: 0 SoA, 1 AoS
 #define VECTORADD_BYPASS_USE_SOA 1
 
+/// problem size
 #define VECTORADD_PROBLEM_SIZE 64*1024*1024
+/// total number of elements per block
 #define VECTORADD_BLOCK_SIZE 256
+/// number of vector adds to perform
 #define VECTORADD_STEPS 10
 
 #include <alpaka/alpaka.hpp>
 #ifdef __CUDACC__
+    /// if cuda is used, the function headers need some annotations
 	#define LLAMA_FN_HOST_ACC_INLINE ALPAKA_FN_ACC __forceinline__
 #endif
 #include <llama/llama.hpp>
@@ -24,6 +42,9 @@
 #include "../common/AlpakaThreadElemsDistribution.hpp"
 #include "../common/Chrono.hpp"
 #include "../common/Dummy.hpp"
+
+namespace vectoradd
+{
 
 using Element = float;
 
@@ -121,7 +142,7 @@ int main(int argc,char * * argv)
     constexpr std::size_t problemSize = VECTORADD_PROBLEM_SIZE;
     constexpr std::size_t blockSize = VECTORADD_BLOCK_SIZE;
     constexpr std::size_t hardwareThreads = 2; //relevant for OpenMP2Threads
-    using Distribution = ThreadsElemsDistribution<
+    using Distribution = common::ThreadsElemsDistribution<
         Acc,
         blockSize,
         hardwareThreads
@@ -277,4 +298,11 @@ int main(int argc,char * * argv)
     chrono.printAndReset("Copy D->H");
 
     return 0;
+}
+
+} // namespace vectoradd
+
+int main(int argc,char * * argv)
+{
+    return vectoradd::main( argc, argv );
 }
