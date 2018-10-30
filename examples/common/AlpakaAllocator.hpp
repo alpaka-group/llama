@@ -1,3 +1,15 @@
+/* To the extent possible under law, Alexander Matthes has waived all
+ * copyright and related or neighboring rights to this example of LLAMA using
+ * the CC0 license, see https://creativecommons.org/publicdomain/zero/1.0 .
+ *
+ * This example is meant to be "stolen" from to learn how to use LLAMA, which
+ * itself is not under the public domain but LGPL3+.
+ */
+
+/** \file AlpakaAllocator.hpp
+ *  \brief allocator implementations for LLAMA using ALPAKA memory regions.
+ */
+
 #pragma once
 
 namespace common
@@ -9,6 +21,7 @@ namespace allocator
 namespace internal
 {
 
+/// Accessor for a alpaka buffer using `getNativePtr`
 template < typename T_Buffer >
 struct AlpakaAccessor
 {
