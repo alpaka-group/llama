@@ -1121,11 +1121,11 @@ namespace internal
     template< std::size_t... T_coords >
     struct MappingDatumCoordCaller< DatumCoord< T_coords... > >
     {
+        LLAMA_NO_HOST_ACC_WARNING
         template<
             typename T_Mapping,
             typename T_UserDomain
         >
-        LLAMA_NO_HOST_ACC_WARNING
         static auto
         LLAMA_FN_HOST_ACC_INLINE
         getBlobNr(
@@ -1138,11 +1138,11 @@ namespace internal
             return mapping.template getBlobNr< T_coords... >( userDomain );
         }
 
+        LLAMA_NO_HOST_ACC_WARNING
         template<
             typename T_Mapping,
             typename T_UserDomain
         >
-        LLAMA_NO_HOST_ACC_WARNING
         static auto
         LLAMA_FN_HOST_ACC_INLINE
         getBlobByte(
