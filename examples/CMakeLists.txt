@@ -34,8 +34,6 @@ endif()
 # Alpaka examples #
 ###################
 
-set(ALPAKA_ROOT "${CMAKE_CURRENT_LIST_DIR}/../../../alpaka/" CACHE STRING  "The location of the alpaka library")
-LIST(APPEND CMAKE_PREFIX_PATH "${ALPAKA_ROOT}")
 find_package(alpaka QUIET)
 
 if (ALPAKA_FOUND)
