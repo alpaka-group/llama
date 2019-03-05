@@ -1000,7 +1000,7 @@ struct VirtualDatum : T_ViewType< T_View >
     template< typename... T_DatumCoordOrUIDs  >
     LLAMA_FN_HOST_ACC_INLINE
     auto
-    access( T_DatumCoordOrUIDs&&... )
+    access( T_DatumCoordOrUIDs... )
     -> decltype( AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
             std::forward<T_View>(this->view),
             userDomainPos
@@ -1077,7 +1077,7 @@ struct VirtualDatum : T_ViewType< T_View >
     template< typename... T_DatumCoordOrUIDs  >
     LLAMA_FN_HOST_ACC_INLINE
     auto
-    operator()( T_DatumCoordOrUIDs&&... LLAMA_IGNORE_LITERAL( datumCoordOrUIDs ) )
+    operator()( T_DatumCoordOrUIDs... LLAMA_IGNORE_LITERAL( datumCoordOrUIDs ) )
 #if !BOOST_COMP_INTEL && !BOOST_COMP_NVCC
     -> decltype( access< T_DatumCoordOrUIDs... >() )
     // & should be in decltype if …::apply returns a reference
