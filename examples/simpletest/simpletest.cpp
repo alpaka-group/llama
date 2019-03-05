@@ -160,9 +160,9 @@ int main(int argc,char * * argv)
     // using the position in the user domain and a tree coord or a uid in the
     // datum domain to get the reference to an element in the view
     float& position_x = view( pos ).access< 0, 0 >();
-    double& momentum_z = view( pos ).access< st::Momentum, st::Z >();
-    int& weight = view( pos )( llama::DatumCoord< 2 >() );
-    bool& options_2 = view( pos )( st::Options() )( llama::DatumCoord< 2 >() );
+    double& momentum_z = view[ pos ].access< st::Momentum, st::Z >();
+    int& weight = view[ {0,0} ]( llama::DatumCoord< 2 >() );
+    bool& options_2 = view[ 0 ]( st::Options() )( llama::DatumCoord< 2 >() );
     // printing the address and distances of the element in the memory. This
     // will change based on the chosen mapping. When array of struct is chosen
     // instead the elements will be much closer than with struct of array.
