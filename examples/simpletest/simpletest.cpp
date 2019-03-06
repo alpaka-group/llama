@@ -13,6 +13,7 @@
 
 #include <iostream>
 #include <utility>
+#include <vector>
 #include <llama/llama.hpp>
 
 #include "../common/demangle.hpp"
@@ -129,10 +130,17 @@ int main(int argc,char * * argv)
         << "SizeOf DatumDomain: "
         << llama::SizeOf< Name >::value
         << std::endl;
+    using NameStub = llama::StubType< Name >;
+    static_assert( std::is_same<Name, NameStub::type >::value,
+                   "Type from StubType does not match original type" );
     std::cout
         << "sizeof( llama::StubType< DatumDomain > ): "
-        << sizeof( llama::StubType< Name > )
+        << sizeof( NameStub )
         << std::endl;
+
+    std::vector<NameStub> v;
+    static_assert( std::is_same<Name, decltype(v)::value_type::type >::value,
+                   "Type from StubType does not match original type" );
 
     std::cout << type( llama::GetCoordFromUID< Name, st::Pos, st::X >() ) << '\n';
 

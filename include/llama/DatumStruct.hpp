@@ -160,6 +160,7 @@ struct StubTypeImpl
 {
     using type = struct
     {
+        using type = T_DatumDomain;
         unsigned char stub[ SizeOf< T_DatumDomain >::value ];
     };
 };
@@ -170,6 +171,8 @@ struct StubTypeImpl
  *  datum domain, useful e.g. if an external memory allocation function needs a
  *  type and a number of elements instead of the total size in bytes.
  * \tparam T_DatumDomain the datum domain type to create a stub type for
+ *  Additionally, this type has a type member named \a type which holds the
+ *  original datum domain type.
  */
 template< typename T_DatumDomain >
 using StubType = typename internal::StubTypeImpl< T_DatumDomain >::type;
