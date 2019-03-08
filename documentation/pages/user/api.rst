@@ -134,6 +134,7 @@ Datum domain
 
 .. doxygentypedef:: llama::StubType
    :project: LLAMA
+   :members:
 
 .. doxygentypedef:: llama::GetDatumElementType
    :project: LLAMA
