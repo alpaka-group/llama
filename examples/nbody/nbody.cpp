@@ -467,7 +467,7 @@ int main( int argc, char * * argv )
     );
     constexpr auto innerCount = elemCount * threadCount;
     const alpaka::vec::Vec< Dim, Size > blocks(
-        static_cast< Size >( ( problemSize + innerCount - 1 ) / innerCount )
+        static_cast< Size >( ( problemSize + innerCount - 1u ) / innerCount )
     );
 
     auto const workdiv = alpaka::workdiv::WorkDivMembers<
