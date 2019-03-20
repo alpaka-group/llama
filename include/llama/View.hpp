@@ -1303,6 +1303,27 @@ struct View
      *  (\ref llama::VirtualDatum). Should be favoured to access data because of the
      *  more array of struct like interface and the handy intermediate
      *  \ref llama::VirtualDatum object.
+     * \param userDomain user domain as \ref UserDomain
+     * \return \ref llama::VirtualDatum with bound user domain, which can be used to
+     *  access the datum domain
+     */
+    auto
+    LLAMA_FN_HOST_ACC_INLINE
+    operator[]( typename Mapping::UserDomain const userDomain )
+    -> VirtualDatumType
+    {
+        LLAMA_FORCE_INLINE_RECURSIVE
+        return VirtualDatumType{
+                userDomain,
+                *this
+            };
+    }
+
+    /** Operator overloading to reverse the order of compile time (datum domain)
+     *  and run time (user domain) parameter with a helper object
+     *  (\ref llama::VirtualDatum). Should be favoured to access data because of the
+     *  more array of struct like interface and the handy intermediate
+     *  \ref llama::VirtualDatum object.
      * \tparam T_Coord... types of user domain coordinates
      * \param coord user domain as list of numbers
      * \return \ref llama::VirtualDatum with bound user domain, which can be used to
@@ -1337,6 +1358,18 @@ struct View
     LLAMA_FN_HOST_ACC_INLINE
     auto
     operator()( std::size_t coord = 0 )
+    -> VirtualDatumType
+    {
+        LLAMA_FORCE_INLINE_RECURSIVE
+        return VirtualDatumType{
+                typename Mapping::UserDomain{ coord },
+                *this
+            };
+    }
+
+    LLAMA_FN_HOST_ACC_INLINE
+    auto
+    operator[]( std::size_t coord )
     -> VirtualDatumType
     {
         LLAMA_FORCE_INLINE_RECURSIVE
