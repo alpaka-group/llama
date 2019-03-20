@@ -211,6 +211,10 @@ struct UpdateKernel
             threads
         >;
 
+        auto threadBlockIndex = alpaka::idx::getIdx<
+            alpaka::Block,
+            alpaka::Threads
+        >( acc )[ 0u ];
 
 #if NBODY_USE_SHARED_TREE == 1
         auto treeOperationList = llama::makeTuple(
@@ -271,7 +275,7 @@ struct UpdateKernel
                 pos2 + threadIndex < end2;
                 pos2 += threads
             )
-                temp( pos2 + threadIndex ) = particles( start2 + pos2 + threadIndex );
+                temp( pos2 + threadBlockIndex ) = particles( start2 + pos2 + threadBlockIndex );
 #endif // NBODY_USE_SHARED
             LLAMA_INDEPENDENT_DATA
             for ( auto pos2 = decltype( end2 )( 0 ); pos2 < end2; ++pos2 )
