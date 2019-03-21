@@ -18,8 +18,6 @@ add_definitions(${llama_DEFINITIONS})
 ################################################################################
 # Alpaka LIB
 ################################################################################
-set(ALPAKA_ROOT "${CMAKE_CURRENT_LIST_DIR}/../../../alpaka/" CACHE STRING  "The location of the alpaka library")
-LIST(APPEND CMAKE_PREFIX_PATH "${ALPAKA_ROOT}")
 find_package(alpaka REQUIRED)
 set(LIBRARIES ${LIBRARIES} ${alpaka_LIBRARIES})
 set(INCLUDE_DIRS ${INCLUDE_DIRS} ${alpaka_INCLUDE_DIRS})
