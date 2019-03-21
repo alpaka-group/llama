@@ -90,24 +90,24 @@ template<
 LLAMA_FN_HOST_ACC_INLINE
 auto
 pPInteraction(
-    T_VirtualDatum1&& p1,
-    T_VirtualDatum2&& p2,
+    T_VirtualDatum1 && p1,
+    T_VirtualDatum2 && p2,
     Element const & ts
 )
 -> void
 {
     // Creating tempory virtual datum object for distance on stack:
-    auto distance = p1( dd::Pos() ) + p2( dd::Pos() );
+    auto distance = p1( dd::Pos( ) ) + p2( dd::Pos( ) );
     distance *= distance; //square for each element
     Element distSqr = EPS2 +
-        distance( dd::X() ) +
-        distance( dd::Y() ) +
-        distance( dd::Z() );
+        distance( dd::X( ) ) +
+        distance( dd::Y( ) ) +
+        distance( dd::Z( ) );
     Element distSixth = distSqr * distSqr * distSqr;
     Element invDistCube = 1.0f / sqrtf( distSixth );
-    Element s = p2( dd::Mass() ) * invDistCube;
+    Element s = p2( dd::Mass( ) ) * invDistCube;
     distance *= s * ts;
-    p1( dd::Vel() ) += distance;
+    p1( dd::Vel( ) ) += distance;
 }
 
 /** Implements an allocator for LLAMA using the ALPAKA shared memory or just
@@ -195,7 +195,7 @@ struct UpdateKernel
     >
     LLAMA_FN_HOST_ACC_INLINE
     void operator()(
-        T_Acc const &acc,
+        T_Acc const & acc,
         T_View particles,
         Element ts
     ) const
@@ -205,20 +205,24 @@ struct UpdateKernel
         constexpr std::size_t threads = blockSize / elems;
         using SharedAllocator = BlockSharedMemoryAllocator<
             T_Acc,
-            llama::SizeOf< typename decltype(particles)::Mapping::DatumDomain >::value
+            llama::SizeOf< typename decltype( particles )::Mapping::DatumDomain >::value
             * blockSize,
             __COUNTER__,
             threads
         >;
 
+        auto threadBlockIndex = alpaka::idx::getIdx<
+            alpaka::Block,
+            alpaka::Threads
+        >( acc )[ 0u ];
 
 #if NBODY_USE_SHARED_TREE == 1
         auto treeOperationList = llama::makeTuple(
             llama::mapping::tree::functor::LeafOnlyRT( )
         );
         using SharedMapping = llama::mapping::tree::Mapping<
-            typename decltype(particles)::Mapping::UserDomain,
-            typename decltype(particles)::Mapping::DatumDomain,
+            typename decltype( particles )::Mapping::UserDomain,
+            typename decltype( particles )::Mapping::DatumDomain,
             decltype( treeOperationList )
         >;
         SharedMapping const sharedMapping(
@@ -227,8 +231,8 @@ struct UpdateKernel
         );
 #else
         using SharedMapping = llama::mapping::SoA<
-            typename decltype(particles)::Mapping::UserDomain,
-            typename decltype(particles)::Mapping::DatumDomain
+            typename decltype( particles )::Mapping::UserDomain,
+            typename decltype( particles )::Mapping::DatumDomain
         >;
         SharedMapping const sharedMapping( { blockSize } );
 #endif // NBODY_USE_SHARED_TREE
@@ -244,7 +248,7 @@ struct UpdateKernel
         >( sharedMapping, acc );
 #endif // NBODY_USE_SHARED
 
-        auto threadIndex  = alpaka::idx::getIdx<
+        auto threadIndex = alpaka::idx::getIdx<
             alpaka::Grid,
             alpaka::Threads
         >( acc )[ 0u ];
@@ -267,14 +271,14 @@ struct UpdateKernel
 #if NBODY_USE_SHARED == 1
             LLAMA_INDEPENDENT_DATA
             for (
-                auto pos2 = decltype(end2)(0);
+                auto pos2 = decltype( end2 )( 0 );
                 pos2 + threadIndex < end2;
                 pos2 += threads
             )
-                temp(pos2 + threadIndex) = particles( start2 + pos2 + threadIndex );
+                temp( pos2 + threadBlockIndex ) = particles( start2 + pos2 + threadBlockIndex );
 #endif // NBODY_USE_SHARED
             LLAMA_INDEPENDENT_DATA
-            for ( auto pos2 = decltype(end2)(0); pos2 < end2; ++pos2 )
+            for ( auto pos2 = decltype( end2 )( 0 ); pos2 < end2; ++pos2 )
                 LLAMA_INDEPENDENT_DATA
                 for ( auto pos = start; pos < end; ++pos )
                     pPInteraction(
@@ -303,12 +307,12 @@ struct MoveKernel
     >
     LLAMA_FN_HOST_ACC_INLINE
     void operator()(
-        T_Acc const &acc,
+        T_Acc const & acc,
         T_View particles,
         Element ts
     ) const
     {
-        auto threadIndex  = alpaka::idx::getIdx<
+        auto threadIndex = alpaka::idx::getIdx<
             alpaka::Grid,
             alpaka::Threads
         >( acc )[ 0u ];
@@ -316,35 +320,35 @@ struct MoveKernel
         auto const start = threadIndex * elems;
         auto const   end = alpaka::math::min(
             acc,
-            (threadIndex + 1) * elems,
+            ( threadIndex + 1 ) * elems,
             problemSize
         );
 
         LLAMA_INDEPENDENT_DATA
         for ( auto pos = start; pos < end; ++pos )
-            particles( pos )( dd::Pos() ) += particles( pos )( dd::Vel() ) * ts;
+            particles( pos )( dd::Pos( ) ) += particles( pos )( dd::Vel( ) ) * ts;
     }
 };
 
-int main(int argc,char * * argv)
+int main( int argc, char * * argv )
 {
     // ALPAKA
     using Dim = alpaka::dim::DimInt< 1 >;
     using Size = std::size_t;
-    using Host = alpaka::acc::AccCpuSerial<Dim, Size>;
+    using Host = alpaka::acc::AccCpuSerial< Dim, Size >;
 
 #if NBODY_CUDA == 1
-    using Acc = alpaka::acc::AccGpuCudaRt<Dim, Size>;
+    using Acc = alpaka::acc::AccGpuCudaRt< Dim, Size >;
 #else
-    //~ using Acc = alpaka::acc::AccCpuSerial<Dim, Size>;
-    using Acc = alpaka::acc::AccCpuOmp2Blocks<Dim, Size>;
-    //~ using Acc = alpaka::acc::AccCpuOmp2Threads<Dim, Size>;
-    //~ using Acc = alpaka::acc::AccCpuOmp4<Dim, Size>;
+    //~ using Acc = alpaka::acc::AccCpuSerial< Dim, Size >;
+    using Acc = alpaka::acc::AccCpuOmp2Blocks< Dim, Size >;
+    //~ using Acc = alpaka::acc::AccCpuOmp2Threads< Dim, Size >;
+    //~ using Acc = alpaka::acc::AccCpuOmp4< Dim, Size >;
 #endif // NBODY_CUDA
-    using DevHost = alpaka::dev::Dev<Host>;
-    using DevAcc = alpaka::dev::Dev<Acc>;
-    using PltfHost = alpaka::pltf::Pltf<DevHost>;
-    using PltfAcc = alpaka::pltf::Pltf<DevAcc>;
+    using DevHost = alpaka::dev::Dev< Host >;
+    using DevAcc = alpaka::dev::Dev< Acc >;
+    using PltfHost = alpaka::pltf::Pltf< DevHost >;
+    using PltfAcc = alpaka::pltf::Pltf< DevAcc >;
 #if NBODY_CUDA == 1
     using Queue = alpaka::queue::QueueCudaRtSync;
 #else
@@ -352,7 +356,7 @@ int main(int argc,char * * argv)
 #endif // NBODY_CUDA
     DevAcc const devAcc( alpaka::pltf::getDevByIdx< PltfAcc >( 0u ) );
     DevHost const devHost( alpaka::pltf::getDevByIdx< PltfHost >( 0u ) );
-    Queue queue( devAcc ) ;
+    Queue queue( devAcc );
 
     // NBODY
     constexpr std::size_t problemSize = NBODY_PROBLEM_SIZE;
@@ -427,7 +431,7 @@ int main(int argc,char * * argv)
     auto    devView =    DevFactory::allocView( mapping,  devAcc );
     auto mirrowView = MirrorFactory::allocView( mapping, devView );
 
-    chrono.printAndReset("Alloc");
+    chrono.printAndReset( "Alloc" );
 
     /// Random initialization of the particles
     std::mt19937_64 generator;
@@ -436,53 +440,53 @@ int main(int argc,char * * argv)
         Element( 1 )  // stddev
     );
     LLAMA_INDEPENDENT_DATA
-    for (std::size_t i = 0; i < problemSize; ++i)
+    for ( std::size_t i = 0; i < problemSize; ++i )
     {
-        auto temp = llama::stackVirtualDatumAlloc< Particle >();
-        temp(dd::Pos(), dd::X()) = distribution(generator);
-        temp(dd::Pos(), dd::Y()) = distribution(generator);
-        temp(dd::Pos(), dd::Z()) = distribution(generator);
-        temp(dd::Vel(), dd::X()) = distribution(generator)/Element(10);
-        temp(dd::Vel(), dd::Y()) = distribution(generator)/Element(10);
-        temp(dd::Vel(), dd::Z()) = distribution(generator)/Element(10);
-        temp(dd::Mass()) = distribution(generator)/Element(100);
-        hostView(i) = temp;
+        auto temp = llama::stackVirtualDatumAlloc< Particle >( );
+        temp( dd::Pos( ), dd::X( ) ) = distribution( generator );
+        temp( dd::Pos( ), dd::Y( ) ) = distribution( generator );
+        temp( dd::Pos( ), dd::Z( ) ) = distribution( generator );
+        temp( dd::Vel( ), dd::X( ) ) = distribution( generator ) / Element( 10 );
+        temp( dd::Vel( ), dd::Y( ) ) = distribution( generator ) / Element( 10 );
+        temp( dd::Vel( ), dd::Z( ) ) = distribution( generator ) / Element( 10 );
+        temp( dd::Mass( ) ) = distribution( generator ) / Element( 100 );
+        hostView( i ) = temp;
     }
 
-    chrono.printAndReset("Init");
+    chrono.printAndReset( "Init" );
 
     alpakaMemCopy( devView, hostView, userDomainSize, queue );
 
-    chrono.printAndReset("Copy H->D");
+    chrono.printAndReset( "Copy H->D" );
 
-    const alpaka::vec::Vec< Dim, Size > elems (
+    const alpaka::vec::Vec< Dim, Size > elems(
         static_cast< Size >( elemCount )
     );
-    const alpaka::vec::Vec< Dim, Size > threads (
+    const alpaka::vec::Vec< Dim, Size > threads(
         static_cast< Size >( threadCount )
     );
     constexpr auto innerCount = elemCount * threadCount;
-    const alpaka::vec::Vec< Dim, Size > blocks (
+    const alpaka::vec::Vec< Dim, Size > blocks(
         static_cast< Size >( ( problemSize + innerCount - 1 ) / innerCount )
     );
 
     auto const workdiv = alpaka::workdiv::WorkDivMembers<
         Dim,
         Size
-    > {
+    >{
         blocks,
         threads,
         elems
     };
 
-    for ( std::size_t s = 0; s < steps; ++s)
+    for ( std::size_t s = 0; s < steps; ++s )
     {
         UpdateKernel<
             problemSize,
             elemCount,
             blockSize
         > updateKernel;
-        alpaka::kernel::exec< Acc > (
+        alpaka::kernel::exec< Acc >(
             queue,
             workdiv,
             updateKernel,
@@ -490,33 +494,33 @@ int main(int argc,char * * argv)
             ts
         );
 
-        chrono.printAndReset("Update kernel");
+        chrono.printAndReset( "Update kernel" );
 
         MoveKernel<
             problemSize,
             elemCount
         > moveKernel;
-        alpaka::kernel::exec<Acc>(
+        alpaka::kernel::exec< Acc >(
             queue,
             workdiv,
             moveKernel,
             mirrowView,
             ts
         );
-        chrono.printAndReset("Move kernel");
-        dummy( static_cast<void*>( mirrowView.blob[0] ) );
+        chrono.printAndReset( "Move kernel" );
+        dummy( static_cast< void * >( mirrowView.blob[ 0 ] ) );
     }
 
     alpakaMemCopy( hostView, devView, userDomainSize, queue );
 
-    chrono.printAndReset("Copy D->H");
+    chrono.printAndReset( "Copy D->H" );
 
     return 0;
 }
 
 } // namespace nbody
 
-int main(int argc,char * * argv)
+int main( int argc, char ** argv )
 {
     return nbody::main( argc, argv );
 }
