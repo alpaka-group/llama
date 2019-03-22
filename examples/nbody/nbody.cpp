@@ -260,7 +260,7 @@ struct UpdateKernel
             problemSize
         );
         LLAMA_INDEPENDENT_DATA
-        for ( std::size_t b = 0; b < problemSize / blockSize; ++b )
+        for ( std::size_t b = 0; b < ( problemSize + blockSize - 1u ) / blockSize; ++b )
         {
             auto const start2 = b * blockSize;
             auto const   end2 = alpaka::math::min(
@@ -467,7 +467,7 @@ int main( int argc, char * * argv )
     );
     constexpr auto innerCount = elemCount * threadCount;
     const alpaka::vec::Vec< Dim, Size > blocks(
-        static_cast< Size >( ( problemSize + innerCount - 1 ) / innerCount )
+        static_cast< Size >( ( problemSize + innerCount - 1u ) / innerCount )
     );
 
     auto const workdiv = alpaka::workdiv::WorkDivMembers<
