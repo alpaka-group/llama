@@ -1,4 +1,4 @@
-/* Copyright 2018 Alexander Matthes
+/* Copyright 2018 Alexander Matthes, Rene Widera
  *
  * This file is part of LLAMA.
  *
@@ -18,15 +18,16 @@
 
 #pragma once
 
-#include <boost/preprocessor/cat.hpp>
-#include <type_traits>
-
 #include "preprocessor/macros.hpp"
 #include "GetType.hpp"
 #include "Array.hpp"
 #include "ForEach.hpp"
 #include "CompareUID.hpp"
 #include "Factory.hpp"
+#include "TypeTraits.hpp"
+
+#include <boost/preprocessor/cat.hpp>
+#include <type_traits>
 
 namespace llama
 {
@@ -1000,14 +1001,14 @@ struct VirtualDatum : T_ViewType< T_View >
     template< typename... T_DatumCoordOrUIDs  >
     LLAMA_FN_HOST_ACC_INLINE
     auto
-    access( T_DatumCoordOrUIDs&&... )
-    -> decltype( AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
+    access( T_DatumCoordOrUIDs && ... )
+    -> decltype( AccessWithTypeImpl< remove_cvref_t< T_DatumCoordOrUIDs>... >::apply(
             std::forward<T_View>(this->view),
             userDomainPos
         ) ) // & should be in decltype if …::apply returns a reference
     {
         LLAMA_FORCE_INLINE_RECURSIVE
-        return AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
+        return AccessWithTypeImpl< remove_cvref_t< T_DatumCoordOrUIDs>... >::apply(
             std::forward<T_View>(this->view),
             userDomainPos
         );
@@ -1077,19 +1078,19 @@ struct VirtualDatum : T_ViewType< T_View >
     template< typename... T_DatumCoordOrUIDs  >
     LLAMA_FN_HOST_ACC_INLINE
     auto
-    operator()( T_DatumCoordOrUIDs&&... LLAMA_IGNORE_LITERAL( datumCoordOrUIDs ) )
+    operator()( T_DatumCoordOrUIDs && ... LLAMA_IGNORE_LITERAL( datumCoordOrUIDs ) )
 #if !BOOST_COMP_INTEL && !BOOST_COMP_NVCC
-    -> decltype( access< T_DatumCoordOrUIDs... >() )
+    -> decltype( access< remove_cvref_t< T_DatumCoordOrUIDs >... >() )
     // & should be in decltype if …::apply returns a reference
 #else //Intel compiler bug work around
-    -> decltype( AccessWithTypeImpl< T_DatumCoordOrUIDs... >::apply(
+    -> decltype( AccessWithTypeImpl< remove_cvref_t< T_DatumCoordOrUIDs >... >::apply(
         std::forward<T_View>(this->view),
         userDomainPos
     ) ) // & should be in decltype if …::apply returns a reference
 #endif
     {
         LLAMA_FORCE_INLINE_RECURSIVE
-        return access< T_DatumCoordOrUIDs... >();
+        return access< remove_cvref_t< T_DatumCoordOrUIDs >... >();
     }
 
     __LLAMA_VIRTUALDATUM_OPERATOR( =  , Assigment )
