@@ -100,7 +100,7 @@ struct Array
     pop_front() const
     -> Array<
         T,
-        count-1
+        count - 1
     >
     {
         Array<
@@ -120,7 +120,7 @@ struct Array
     pop_back() const
     -> Array<
         T,
-        count-1
+        count - 1
     >
     {
         Array<
@@ -142,15 +142,15 @@ struct Array
     push_front( T const new_element ) const
     -> Array<
         T,
-        count+1
+        count + 1
     >
     {
         Array<
             T,
-            count+1
+            count + 1
         > result;
         for( std::size_t i = 0; i < count - 1; i++ )
-            result.element[ i + 1 ] = element[ i ];
+            result.element[ count - i ] = element[ count - 1 - i ];
         result.element[ 0 ] = new_element;
         return result;
     }
@@ -172,7 +172,7 @@ struct Array
             T,
             count + 1
         > result;
-        for( std::size_t i = 0; i < count-1; i++ )
+        for( std::size_t i = 0; i < count; i++ )
             result.element[ i ] = element[ i ];
         result.element[ count ] = new_element;
         return result;
