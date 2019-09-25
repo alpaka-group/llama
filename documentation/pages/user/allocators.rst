@@ -7,7 +7,7 @@ Allocator
 
 To create a :ref:`view <label-view>` the :ref:`factory <label-factory>` needs to
 allocate memory. This allocator is explicit given to the factory and has the
-only task to return an object which the view can bytewise address.
+only task to return an object which the view can address bytewise.
 
 Concept
 -------
