@@ -165,7 +165,7 @@ matched and operated on. Every not matching pair is ignored, e.g.
         llama::DS < llama::DE < mom
             llama::DE < x, double >
         > >
-    >;using
+    >;
 
     // Let assume datum1 using DD1 and datum2 using DD2.
 
@@ -460,7 +460,7 @@ memory chunks are very important to reach best performance.
 
 It is trivial to copy a view from one memory region to another if mapping and
 size are identical. However if the mapping differs, in most of the
-cases only pointwise copy operations will be possible as the memory patterns
+cases only elementwise copy operations will be possible as the memory patterns
 are probably not compatible. There is a small class of remaining use cases where
 the mapping is the same, but the size of the view is different or mappings are
 very related to each other (e.g. both using struct of array, but one time with,
