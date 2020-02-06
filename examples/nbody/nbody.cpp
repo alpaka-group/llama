@@ -434,8 +434,8 @@ int main( int argc, char * * argv )
     Chrono chrono;
 
     auto   hostView =   HostFactory::allocView( mapping, devHost );
-    auto    devView =    DevFactory::allocView( mapping,  devAcc );
-    auto mirrowView = MirrorFactory::allocView( mapping, devView );
+    auto    accView =    DevFactory::allocView( mapping,  devAcc );
+    auto mirrorView = MirrorFactory::allocView( mapping, accView );
 
     chrono.printAndReset( "Alloc" );
 
@@ -461,7 +461,7 @@ int main( int argc, char * * argv )
 
     chrono.printAndReset( "Init" );
 
-    alpakaMemCopy( devView, hostView, userDomainSize, queue );
+    alpakaMemCopy( accView, hostView, userDomainSize, queue );
 
     chrono.printAndReset( "Copy H->D" );
 
@@ -496,7 +496,7 @@ int main( int argc, char * * argv )
             queue,
             workdiv,
             updateKernel,
-            mirrowView,
+            mirrorView,
             ts
         );
 
@@ -510,14 +510,14 @@ int main( int argc, char * * argv )
             queue,
             workdiv,
             moveKernel,
-            mirrowView,
+            mirrorView,
             ts
         );
         chrono.printAndReset( "Move kernel" );
-        dummy( static_cast< void * >( mirrowView.blob[ 0 ] ) );
+        dummy( static_cast< void * >( mirrorView.blob[ 0 ] ) );
     }
 
-    alpakaMemCopy( hostView, devView, userDomainSize, queue );
+    alpakaMemCopy( hostView, accView, userDomainSize, queue );
 
     chrono.printAndReset( "Copy D->H" );
 
