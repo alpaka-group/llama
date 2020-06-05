@@ -1,20 +1,57 @@
 cmake_minimum_required (VERSION 3.3)
 project (llama)
 
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_STANDARD 11)
+# llama
+find_package(Boost REQUIRED)
+add_library(${PROJECT_NAME} INTERFACE)
+target_include_directories(${PROJECT_NAME} INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_11)
+target_link_libraries(${PROJECT_NAME} INTERFACE Boost::headers)
 
-ADD_SUBDIRECTORY("examples")
+# llama::llama to make subdirectory projects work
+add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
+# llama IDE
 file(GLOB_RECURSE llamaSources "${CMAKE_CURRENT_SOURCE_DIR}/include/**")
 add_custom_target("llamaIde" SOURCES ${llamaSources})
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/include/llama" FILES ${llamaSources})
 
+# tests
+find_package(Catch2 CONFIG REQUIRED)
+file(GLOB_RECURSE testSources "${CMAKE_CURRENT_SOURCE_DIR}/tests/**")
+add_executable(tests ${testSources})
+source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/tests" FILES ${testSources})
+target_link_libraries(tests Catch2::Catch2)
+
+# examples
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/Modules/")
+option(LLAMA_BUILD_EXAMPLES "Building (and installing) the examples" ON)
+if (LLAMA_BUILD_EXAMPLES)
+	# general examples
+	add_subdirectory("examples/simpletest")
+	add_subdirectory("examples/uidtest")
+	add_subdirectory("examples/treemaptest")
+	add_subdirectory("examples/virtualviewtest")
+
+	# alpaka examples
+	find_package(alpaka QUIET)
+	if (ALPAKA_FOUND)
+		add_subdirectory("examples/nbody")
+		add_subdirectory("examples/vectoradd")
+
+		find_package(png++ QUIET)
+		if (png++_FOUND)
+			add_subdirectory("examples/asynccopy")
+		endif()
+	endif()
+endif()
+
+# install
 configure_file (
 	"${PROJECT_SOURCE_DIR}/cmake/llama-config-version.cmake.in"
 	"${PROJECT_BINARY_DIR}/cmake/llama-config-version.cmake"
 	@ONLY
-	)
+)
 
 install( DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/llama" DESTINATION "include" )
 install( FILES "${CMAKE_CURRENT_SOURCE_DIR}/llama-config.cmake" DESTINATION "lib/cmake/llama" )
