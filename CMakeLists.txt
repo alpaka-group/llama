@@ -21,7 +21,8 @@ find_package(Catch2 CONFIG REQUIRED)
 file(GLOB_RECURSE testSources "${CMAKE_CURRENT_SOURCE_DIR}/tests/**")
 add_executable(tests ${testSources})
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/tests" FILES ${testSources})
-target_link_libraries(tests Catch2::Catch2)
+target_compile_features(tests PRIVATE cxx_std_17)
+target_link_libraries(tests Catch2::Catch2 llama::llama)
 
 # examples
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/Modules/")
