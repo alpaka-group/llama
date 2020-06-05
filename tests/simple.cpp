@@ -184,5 +184,5 @@ TEST_CASE("Datum access") {
         for (size_t y = 0; y < udSize[1]; ++y)
             sum += view(x, y).access< 1, 0 >();
 
-    CHECK(sum == -1607024271924279981565012443692368615049192898273046455444776689860608.0);
+    CHECK(sum == 120.0);
 }
