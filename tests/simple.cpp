@@ -1,5 +1,6 @@
 #include <catch2/catch.hpp>
 #include <llama/llama.hpp>
+#include "common.h"
 
 namespace st {
     struct Pos {};
@@ -24,11 +25,6 @@ using Name = llama::DS<
     llama::DE< st::Weight, int >,
     llama::DE< st::Options, llama::DA< bool, 4 > >
 >;
-
-template <typename T>
-std::string type(const T& t) {
-    return llama::demangleType(typeid(t).name());
-}
 
 TEST_CASE("demangleType") {
     const auto str = type(Name());
