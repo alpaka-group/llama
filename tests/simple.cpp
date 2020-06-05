@@ -27,8 +27,42 @@ using Name = llama::DS<
 >;
 
 TEST_CASE("demangleType") {
-    const auto str = type(Name());
-    CHECK(str == "struct boost::mp11::mp_list<struct boost::mp11::mp_list<struct st::Pos,struct boost::mp11::mp_list<struct boost::mp11::mp_list<struct st::X,float>,struct boost::mp11::mp_list<struct st::Y,float>,struct boost::mp11::mp_list<struct st::Z,float> > >,struct boost::mp11::mp_list<struct st::Momentum,struct boost::mp11::mp_list<struct boost::mp11::mp_list<struct st::Z,double>,struct boost::mp11::mp_list<struct st::X,double> > >,struct boost::mp11::mp_list<struct st::Weight,int>,struct boost::mp11::mp_list<struct st::Options,struct boost::mp11::mp_list<struct boost::mp11::mp_list<struct llama::NoName,bool>,struct boost::mp11::mp_list<struct llama::NoName,bool>,struct boost::mp11::mp_list<struct llama::NoName,bool>,struct boost::mp11::mp_list<struct llama::NoName,bool> > > >");
+    const auto str = prettyPrintType(Name());
+    CHECK(str == R"(struct boost::mp11::mp_list<
+    struct boost::mp11::mp_list<
+        struct st::Pos,struct boost::mp11::mp_list<
+            struct boost::mp11::mp_list<
+                struct st::X,float
+                >,struct boost::mp11::mp_list<
+                    struct st::Y,float
+                    >,struct boost::mp11::mp_list<
+                        struct st::Z,float
+                    >
+                >
+                >,struct boost::mp11::mp_list<
+                    struct st::Momentum,struct boost::mp11::mp_list<
+                        struct boost::mp11::mp_list<
+                            struct st::Z,double
+                            >,struct boost::mp11::mp_list<
+                                struct st::X,double
+                            >
+                        >
+                        >,struct boost::mp11::mp_list<
+                            struct st::Weight,int
+                            >,struct boost::mp11::mp_list<
+                                struct st::Options,struct boost::mp11::mp_list<
+                                    struct boost::mp11::mp_list<
+                                        struct llama::NoName,bool
+                                        >,struct boost::mp11::mp_list<
+                                            struct llama::NoName,bool
+                                            >,struct boost::mp11::mp_list<
+                                                struct llama::NoName,bool
+                                                >,struct boost::mp11::mp_list<
+                                                    struct llama::NoName,bool
+                                                >
+                                            >
+                                        >
+                                    >)");
 }
 
 TEST_CASE("AoS address") {
@@ -59,8 +93,10 @@ TEST_CASE("StubType") {
 }
 
 TEST_CASE("GetCoordFromUID") {
-    const auto str = type(llama::GetCoordFromUID< Name, st::Pos, st::X >());
-    CHECK(str == "struct llama::DatumCoord<0,0>");
+    const auto str = prettyPrintType(llama::GetCoordFromUID< Name, st::Pos, st::X >());
+    CHECK(str == R"(struct llama::DatumCoord<
+    0,0
+>)");
 }
 
 TEST_CASE("access") {

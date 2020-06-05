@@ -53,10 +53,10 @@ TEST_CASE("uid") {
     other(0u, 0u)(st::Pos(), st::Y()) = 5.f;
     other(0u, 0u)(st::Pos(), st::Z()) = 2.3f;
 
-    CHECK(type(llama::GetUID<Particle, llama::GetCoordFromUID<Particle, st::Pos, st::X>>()) == "struct st::X");
-    CHECK(type(llama::GetUID<Particle, llama::GetCoordFromUID<Particle, st::Pos>>()) == "struct st::Pos");
-    CHECK(type(llama::GetUID<Particle, llama::GetCoordFromUID<Particle>>()) == "struct llama::NoName");
-    CHECK(type(llama::GetUID<Particle, llama::GetCoordFromUID<Particle, st::Vel, st::X>>()) == "struct st::X");
+    CHECK(prettyPrintType(llama::GetUID<Particle, llama::GetCoordFromUID<Particle, st::Pos, st::X>>()) == "struct st::X");
+    CHECK(prettyPrintType(llama::GetUID<Particle, llama::GetCoordFromUID<Particle, st::Pos>>()) == "struct st::Pos");
+    CHECK(prettyPrintType(llama::GetUID<Particle, llama::GetCoordFromUID<Particle>>()) == "struct llama::NoName");
+    CHECK(prettyPrintType(llama::GetUID<Particle, llama::GetCoordFromUID<Particle, st::Vel, st::X>>()) == "struct st::X");
 
     CHECK(llama::CompareUID<
         Particle,                                    // DD A
