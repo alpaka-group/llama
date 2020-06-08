@@ -41,9 +41,9 @@ namespace llama
         /// VirtualDatum type, gotten from parent view
         using VirtualDatumType = typename ParentView::VirtualDatumType;
 
-        VirtualView() = delete;
+        // VirtualView() = delete;
         VirtualView(VirtualView const &) = default;
-        VirtualView(VirtualView &&) = default;
+        VirtualView(VirtualView &&) = default; // TODO noexcept
         ~VirtualView() = default;
 
         /** Unlike a \ref View, a VirtualView can be created without a factory
@@ -77,8 +77,7 @@ namespace llama
         LLAMA_NO_HOST_ACC_WARNING
         template<std::size_t... T_coords>
         LLAMA_FN_HOST_ACC_INLINE auto
-        accessor(typename Mapping::UserDomain const userDomain)
-            -> GetType<typename Mapping::DatumDomain, T_coords...> &
+        accessor(typename Mapping::UserDomain const userDomain) -> auto &
         {
             return parentView.template accessor<T_coords...>(
                 userDomain + position);
@@ -95,10 +94,7 @@ namespace llama
         LLAMA_NO_HOST_ACC_WARNING
         template<typename... T_UIDs>
         LLAMA_FN_HOST_ACC_INLINE auto
-        accessor(typename Mapping::UserDomain const userDomain)
-            -> GetTypeFromDatumCoord<
-                typename Mapping::DatumDomain,
-                GetCoordFromUID<typename Mapping::DatumDomain, T_UIDs...>> &
+        accessor(typename Mapping::UserDomain const userDomain) -> auto &
         {
             return parentView.template accessor<T_UIDs...>(
                 userDomain + position);
@@ -141,7 +137,7 @@ namespace llama
 
         template<typename... T_Coord>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(T_Coord... coord) const
-            -> const VirtualDatumType
+            -> const VirtualDatumType // TODO const value
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return parentView(
@@ -158,7 +154,7 @@ namespace llama
         template<std::size_t... T_coord>
         LLAMA_FN_HOST_ACC_INLINE auto
         operator()(DatumCoord<T_coord...> && dc = DatumCoord<T_coord...>())
-            -> GetType<typename Mapping::DatumDomain, T_coord...> &
+            -> auto &
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return accessor<T_coord...>(

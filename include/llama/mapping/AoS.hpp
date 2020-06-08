@@ -57,11 +57,6 @@ namespace llama
             LLAMA_FN_HOST_ACC_INLINE
             AoS(UserDomain const size) : userDomainSize(size) {}
 
-            AoS() = default;
-            AoS(AoS const &) = default;
-            AoS(AoS &&) = default;
-            ~AoS() = default;
-
             LLAMA_FN_HOST_ACC_INLINE
             auto getBlobSize(std::size_t const) const -> std::size_t
             {

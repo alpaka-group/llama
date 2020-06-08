@@ -50,7 +50,7 @@ namespace llama
         {
             static constexpr std::size_t value
                 = sizeof(T_DatumDomain)
-                * std::size_t(
+                * static_cast<std::size_t>(
                       DatumCoordIsBigger<T_DatumCoord, T_IterCoord>::value);
         };
 
@@ -127,11 +127,15 @@ namespace llama
         template<typename T_DatumDomain>
         struct StubTypeImpl
         {
-            using type = struct
+        private:
+            struct impl
             {
                 using type = T_DatumDomain;
                 unsigned char stub[SizeOf<T_DatumDomain>::value];
             };
+
+        public:
+            using type = impl;
         };
 
     } // namespace internal

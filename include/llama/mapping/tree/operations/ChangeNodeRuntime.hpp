@@ -123,11 +123,7 @@ namespace llama
                 template<typename T_TreeCoord, typename T_Tree>
                 LLAMA_FN_HOST_ACC_INLINE auto changeNodeRuntime(
                     T_Tree const & tree,
-                    std::size_t const newValue)
-                    -> decltype(
-                        internal::ChangeNodeRuntime<T_Tree, T_TreeCoord>()(
-                            tree,
-                            newValue))
+                    std::size_t const newValue) -> decltype(auto)
                 {
                     return internal::ChangeNodeRuntime<T_Tree, T_TreeCoord>()(
                         tree, newValue);
@@ -272,9 +268,7 @@ namespace llama
                         template<typename T_Element>
                         LLAMA_FN_HOST_ACC_INLINE auto
                         operator()(T_Element const element) const
-                            -> decltype(OperatorSpecialization<T_Element>()(
-                                newValue,
-                                element))
+                            -> decltype(auto)
                         {
                             return OperatorSpecialization<T_Element>()(
                                 newValue, element);
@@ -321,11 +315,7 @@ namespace llama
                     typename T_Tree>
                 LLAMA_FN_HOST_ACC_INLINE auto changeNodeChildsRuntime(
                     T_Tree const & tree,
-                    std::size_t const newValue)
-                    -> decltype(internal::ChangeNodeChildsRuntime<
-                                T_Tree,
-                                T_Operation,
-                                T_TreeCoord>()(tree, newValue))
+                    std::size_t const newValue) -> decltype(auto)
                 {
                     return internal::ChangeNodeChildsRuntime<
                         T_Tree,

@@ -41,14 +41,14 @@ namespace llama
                 using reference = T &;
                 using const_reference = T const &;
 
-                inline AlignmentAllocator() throw() {}
+                inline AlignmentAllocator() noexcept = default;
 
                 template<typename T2>
                 inline AlignmentAllocator(
-                    AlignmentAllocator<T2, N> const &) throw()
+                    AlignmentAllocator<T2, N> const &) noexcept
                 {}
 
-                inline ~AlignmentAllocator() throw() {}
+                inline ~AlignmentAllocator() noexcept = default;
 
                 inline auto adress(reference r) -> pointer
                 {
@@ -104,7 +104,7 @@ namespace llama
                     p->~value_type();
                 }
 
-                inline auto max_size() const throw() -> size_type
+                inline auto max_size() const noexcept -> size_type
                 {
                     return size_type(-1) / sizeof(value_type);
                 }

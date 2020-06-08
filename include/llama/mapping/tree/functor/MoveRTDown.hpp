@@ -84,21 +84,7 @@ namespace llama
                         auto operator()(
                             T_BasicCoord const & basicCoord,
                             T_Tree const & tree,
-                            std::size_t const amount) const
-                            -> decltype(tupleCat(
-                                makeTuple(basicCoord.first),
-                                BasicCoordToResultCoordImpl<
-                                    GetTupleType<
-                                        typename T_Tree::Type,
-                                        T_BasicCoord::FirstElement::
-                                            compiletime>,
-                                    decltype(tupleRest(T_InternalTreeCoord())),
-                                    decltype(tupleRest(basicCoord))>()(
-                                    tupleRest(basicCoord),
-                                    getTupleElementRef<
-                                        T_BasicCoord::FirstElement::
-                                            compiletime>(tree.childs),
-                                    amount)))
+                            std::size_t const amount) const -> decltype(auto)
                         {
                             return tupleCat(
                                 makeTuple(basicCoord.first),
@@ -173,7 +159,7 @@ namespace llama
                             T_Tree const &,
                             std::size_t const) const -> Tuple<>
                         {
-                            return Tuple<>();
+                            return {};
                         }
                     };
 
@@ -210,11 +196,7 @@ namespace llama
                     template<typename T_Tree, typename T_BasicCoord>
                     LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(
                         T_BasicCoord const & basicCoord,
-                        T_Tree const & tree) const
-                        -> decltype(BasicCoordToResultCoordImpl<
-                                    T_Tree,
-                                    T_TreeCoord,
-                                    T_BasicCoord>()(basicCoord, tree, amount))
+                        T_Tree const & tree) const -> decltype(auto)
                     {
                         return BasicCoordToResultCoordImpl<
                             T_Tree,
@@ -279,20 +261,7 @@ namespace llama
                         LLAMA_FN_HOST_ACC_INLINE
                         auto operator()(
                             T_BasicCoord const & basicCoord,
-                            T_Tree const & tree) const
-                            -> decltype(tupleCat(
-                                makeTuple(basicCoord.first),
-                                BasicCoordToResultCoordImpl<
-                                    GetTupleType<
-                                        typename T_Tree::Type,
-                                        T_BasicCoord::FirstElement::
-                                            compiletime>,
-                                    decltype(tupleRest(T_InternalTreeCoord())),
-                                    decltype(tupleRest(basicCoord))>()(
-                                    tupleRest(basicCoord),
-                                    getTupleElementRef<
-                                        T_BasicCoord::FirstElement::
-                                            compiletime>(tree.childs))))
+                            T_Tree const & tree) const -> decltype(auto)
                         {
                             return tupleCat(
                                 makeTuple(basicCoord.first),
@@ -365,7 +334,7 @@ namespace llama
                             T_Tree const &,
                             std::size_t const) const -> Tuple<>
                         {
-                            return Tuple<>();
+                            return {};
                         }
                     };
 
@@ -398,11 +367,7 @@ namespace llama
                     template<typename T_Tree, typename T_BasicCoord>
                     LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(
                         T_BasicCoord const & basicCoord,
-                        T_Tree const & tree) const
-                        -> decltype(BasicCoordToResultCoordImpl<
-                                    T_Tree,
-                                    T_TreeCoord,
-                                    T_BasicCoord>()(basicCoord, tree))
+                        T_Tree const & tree) const -> decltype(auto)
                     {
                         return BasicCoordToResultCoordImpl<
                             T_Tree,

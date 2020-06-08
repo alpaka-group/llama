@@ -20,6 +20,8 @@
 
 #include "../Types.hpp"
 
+// FIXME: what does this do? There is no implementation
+// If this is a template for mappings, it should be turned into a concept
 namespace llama
 {
     namespace mapping

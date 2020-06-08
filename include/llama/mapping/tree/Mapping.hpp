@@ -85,11 +85,6 @@ namespace llama
                         resultTree(mergedFunctors.basicToResult(basicTree))
                 {}
 
-                Mapping() = default;
-                Mapping(Mapping const &) = default;
-                Mapping(Mapping &&) = default;
-                ~Mapping() = default;
-
                 LLAMA_FN_HOST_ACC_INLINE
                 auto getBlobSize(std::size_t const) const -> std::size_t
                 {

@@ -146,19 +146,18 @@ namespace llama
     struct DatumCoordIsBigger<
         T_First,
         T_Second,
-        typename std::enable_if<(
-            T_First::size == 1 || T_Second::size == 1)>::type>
+        typename std::enable_if_t<T_First::size == 1 || T_Second::size == 1>>
     {
-        static constexpr bool value = (T_First::front > T_Second::front);
+        static constexpr bool value = T_First::front > T_Second::front;
     };
 
     template<typename T_First, typename T_Second>
     struct DatumCoordIsBigger<
         T_First,
         T_Second,
-        typename std::enable_if<(
+        typename std::enable_if_t<(
             T_First::size > 1 && T_Second::size > 1
-            && T_First::front == T_Second::front)>::type>
+            && T_First::front == T_Second::front)>>
     {
         static constexpr bool value = DatumCoordIsBigger<
             typename T_First::PopFront,
@@ -169,9 +168,9 @@ namespace llama
     struct DatumCoordIsBigger<
         T_First,
         T_Second,
-        typename std::enable_if<(
+        typename std::enable_if_t<(
             T_First::size > 1 && T_Second::size > 1
-            && T_First::front < T_Second::front)>::type>
+            && T_First::front < T_Second::front)>>
     {
         static constexpr bool value = false;
     };
@@ -180,9 +179,9 @@ namespace llama
     struct DatumCoordIsBigger<
         T_First,
         T_Second,
-        typename std::enable_if<(
+        typename std::enable_if_t<(
             T_First::size > 1 && T_Second::size > 1
-            && T_First::front > T_Second::front)>::type>
+            && T_First::front > T_Second::front)>>
     {
         static constexpr bool value = true;
     };
@@ -194,8 +193,7 @@ namespace llama
     struct DatumCoordIsSame<
         T_First,
         T_Second,
-        typename std::enable_if<(
-            T_First::size < 1 || T_Second::size < 1)>::type>
+        typename std::enable_if_t<(T_First::size < 1 || T_Second::size < 1)>>
     {
         static constexpr bool value = true;
     };
@@ -204,9 +202,9 @@ namespace llama
     struct DatumCoordIsSame<
         T_First,
         T_Second,
-        typename std::enable_if<
+        typename std::enable_if_t<
             (T_First::size == 1 && T_Second::size >= 1)
-            || (T_First::size >= 1 && T_Second::size == 1)>::type>
+            || (T_First::size >= 1 && T_Second::size == 1)>>
     {
         static constexpr bool value = (T_First::front == T_Second::front);
     };
@@ -215,9 +213,9 @@ namespace llama
     struct DatumCoordIsSame<
         T_First,
         T_Second,
-        typename std::enable_if<(
+        typename std::enable_if_t<(
             T_First::size > 1 && T_Second::size > 1
-            && T_First::front == T_Second::front)>::type>
+            && T_First::front == T_Second::front)>>
     {
         static constexpr bool value = DatumCoordIsSame<
             typename T_First::PopFront,
@@ -228,9 +226,9 @@ namespace llama
     struct DatumCoordIsSame<
         T_First,
         T_Second,
-        typename std::enable_if<(
+        typename std::enable_if_t<(
             T_First::size > 1 && T_Second::size > 1
-            && T_First::front != T_Second::front)>::type>
+            && T_First::front != T_Second::front)>>
     {
         static constexpr bool value = false;
     };

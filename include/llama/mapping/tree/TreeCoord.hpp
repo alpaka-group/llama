@@ -40,7 +40,6 @@ namespace llama
                     = std::integral_constant<std::size_t, T_compiletime>;
 
                 static constexpr CompileType compiletime = {};
-
                 T_RuntimeType const runtime;
 
                 LLAMA_FN_HOST_ACC_INLINE
@@ -66,7 +65,6 @@ namespace llama
 
                 static constexpr CompileType compiletime = {};
                 static constexpr RuntimeType runtime = {};
-
                 LLAMA_FN_HOST_ACC_INLINE
                 TreeCoordElement() = default;
 

@@ -128,7 +128,7 @@ namespace llama
     {
         template<std::size_t... T_dims>
         LLAMA_FN_HOST_ACC_INLINE auto
-            userDomainZeroHelper(IntegerSequence<T_dims...>)
+            userDomainZeroHelper(std::integer_sequence<std::size_t, T_dims...>)
                 -> UserDomain<sizeof...(T_dims)>
         {
             return UserDomain<sizeof...(T_dims)>{T_dims...};

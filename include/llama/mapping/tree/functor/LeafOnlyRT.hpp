@@ -46,9 +46,7 @@ namespace llama
                                 typename T_Tree::Identifier,
                                 typename T_Tree::Type>
                         {
-                            return TreeElement<
-                                typename T_Tree::Identifier,
-                                typename T_Tree::Type>(tree.count * runtime);
+                            return {tree.count * runtime};
                         }
                     };
 
@@ -64,9 +62,7 @@ namespace llama
                             template<typename T_Element>
                             LLAMA_FN_HOST_ACC_INLINE auto
                             operator()(T_Element const element) const
-                                -> decltype(BasicToResultImpl<T_Element>()(
-                                    element,
-                                    runtime))
+                                -> decltype(auto)
                             {
                                 return BasicToResultImpl<T_Element>()(
                                     element, runtime);
@@ -84,18 +80,15 @@ namespace llama
                                     ChildFunctor{runtime * tree.count})),
                                 1>
                         {
-                            ChildFunctor const functor{runtime * tree.count};
-                            return TreeElementConst<
-                                typename T_Tree::Identifier,
-                                decltype(tupleTransform(tree.childs, functor)),
-                                1>(tupleTransform(tree.childs, functor));
+                            return {tupleTransform(
+                                tree.childs,
+                                ChildFunctor{runtime * tree.count})};
                         }
                     };
 
                     template<typename T_Tree>
                     LLAMA_FN_HOST_ACC_INLINE auto
-                    basicToResult(T_Tree const tree) const
-                        -> decltype(BasicToResultImpl<T_Tree>()(tree))
+                    basicToResult(T_Tree const tree) const -> decltype(auto)
                     {
                         return BasicToResultImpl<T_Tree>()(tree);
                     }
@@ -178,19 +171,15 @@ namespace llama
                             T_Tree const & tree,
                             std::size_t const runtime = 0) const -> ResultCoord
                         {
-                            return ResultCoord(ResultCoordElement(
-                                runtime + basicCoord.first.runtime));
+                            return {ResultCoordElement(
+                                runtime + basicCoord.first.runtime)};
                         }
                     };
 
                     template<typename T_Tree, typename T_BasicCoord>
                     LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(
                         T_BasicCoord const & basicCoord,
-                        T_Tree const & tree) const
-                        -> decltype(
-                            BasicCoordToResultCoordImpl<T_Tree, T_BasicCoord>()(
-                                basicCoord,
-                                tree))
+                        T_Tree const & tree) const -> decltype(auto)
                     {
                         return BasicCoordToResultCoordImpl<
                             T_Tree,

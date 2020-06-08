@@ -32,13 +32,8 @@ namespace llama
         /// Number of elements in array
         static constexpr std::size_t count = T_dim;
 
-        Array() = default;
-        Array(Array const &) = default;
-        Array(Array &&) = default;
-        ~Array() = default;
-
         /// Elements in the array, best to access with \ref operator[].
-        T element[count];
+        T element[count]; // TODO why is this public?
 
         /** Returns an iterator to the first element. Basically just a pointer
          * to the internal array of elements, which can be incremented. \return

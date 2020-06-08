@@ -42,7 +42,7 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto makeBlobArrayImpl(
             T_Mapping const mapping,
             typename T_Allocator::Parameter const & allocatorParams,
-            IntegerSequence<Is...>)
+            std::integer_sequence<std::size_t, Is...>)
             -> Array<typename T_Allocator::BlobType, T_Mapping::blobCount>
         {
             return Array<typename T_Allocator::BlobType, sizeof...(Is)>{
@@ -60,7 +60,8 @@ namespace llama
             return makeBlobArrayImpl<T_Allocator, T_Mapping>(
                 mapping,
                 allocatorParams,
-                MakeIntegerSequence<T_Mapping::blobCount>{});
+                std::
+                    make_integer_sequence<std::size_t, T_Mapping::blobCount>{});
         }
 
     }; // namespace internal
@@ -111,11 +112,9 @@ namespace llama
             = typename T_Allocator::Parameter())
             -> View<T_Mapping, typename T_Allocator::BlobType>
         {
-            View<T_Mapping, typename T_Allocator::BlobType> view(
+            return {
                 mapping,
-                internal::makeBlobArray<T_Allocator>(mapping, allocatorParams));
-
-            return view;
+                internal::makeBlobArray<T_Allocator>(mapping, allocatorParams)};
         }
     };
 
@@ -136,8 +135,7 @@ namespace llama
      * \see OneOnStackFactory
      */
     template<std::size_t T_dimension, typename T_DatumDomain>
-    LLAMA_FN_HOST_ACC_INLINE auto stackViewAlloc()
-        -> decltype(OneOnStackFactory<T_dimension, T_DatumDomain>::allocView())
+    LLAMA_FN_HOST_ACC_INLINE auto stackViewAlloc() -> decltype(auto)
     {
         return OneOnStackFactory<T_dimension, T_DatumDomain>::allocView();
     }
