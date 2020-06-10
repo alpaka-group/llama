@@ -36,7 +36,7 @@ if (LLAMA_BUILD_EXAMPLES)
 
 	# alpaka examples
 	find_package(alpaka QUIET)
-	if (ALPAKA_FOUND)
+	if (_ALPAKA_FOUND)
 		add_subdirectory("examples/nbody")
 		add_subdirectory("examples/vectoradd")
 
