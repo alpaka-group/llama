@@ -2,9 +2,6 @@
 #include <llama/llama.hpp>
 #include "common.h"
 
-#define VIRTUALVIEWTEST_WITH_MINIVIEW 1
-#define VIRTUALVIEWTEST_WITH_MINIVIEW_DUMMY 1
-
 namespace st {
     struct X {};
     struct Y {};
