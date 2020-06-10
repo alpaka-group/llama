@@ -46,11 +46,7 @@ if (LLAMA_BUILD_EXAMPLES)
 	if (_ALPAKA_FOUND)
 		add_subdirectory("examples/nbody")
 		add_subdirectory("examples/vectoradd")
-
-		find_package(png++ QUIET)
-		if (png++_FOUND)
-			add_subdirectory("examples/asynccopy")
-		endif()
+		add_subdirectory("examples/asynccopy")
 	endif()
 endif()
 
