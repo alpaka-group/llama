@@ -37,13 +37,13 @@ namespace llama
     namespace internal
     {
         template<typename T_View>
-        struct ViewByRef
+        struct ViewByRefHolder
         {
             T_View & view;
         };
 
         template<typename T_View>
-        struct ViewByValue
+        struct ViewByValueHolder
         {
             T_View view;
         };
@@ -52,7 +52,7 @@ namespace llama
     template<
         typename T_View,
         typename T_BoundDatumDomain = DatumCoord<>,
-        template<class> class T_ViewType = internal::ViewByRef>
+        template<class> class T_ViewHolder = internal::ViewByRefHolder>
     struct VirtualDatum;
 
     /** Uses the \ref stackViewAlloc to allocate a virtual datum with an own
@@ -64,7 +64,7 @@ namespace llama
     LLAMA_FN_HOST_ACC_INLINE auto stackVirtualDatumAlloc() -> VirtualDatum<
         decltype(llama::stackViewAlloc<1, T_DatumDomain>()),
         DatumCoord<>,
-        internal::ViewByValue>
+        internal::ViewByValueHolder>
     {
         return {userDomainZero<1>(), llama::stackViewAlloc<1, T_DatumDomain>()};
     }
@@ -226,9 +226,9 @@ namespace llama
         typename T_OtherView, \
         typename T_OtherBoundDatumDomain, \
         template<class> \
-        class T_OtherViewType> \
+        class T_OtherViewHolder> \
     LLAMA_FN_HOST_ACC_INLINE auto operator OP( \
-        VirtualDatum<T_OtherView, T_OtherBoundDatumDomain, T_OtherViewType> \
+        VirtualDatum<T_OtherView, T_OtherBoundDatumDomain, T_OtherViewHolder> \
             REF other) \
         ->decltype(*this) & \
     { \
@@ -237,7 +237,7 @@ namespace llama
             VirtualDatum< \
                 T_OtherView, \
                 T_OtherBoundDatumDomain, \
-                T_OtherViewType>, \
+                T_OtherViewHolder>, \
             DatumCoord<>> \
             functor{*this, other}; \
         ForEach<AccessibleDatumDomain, DatumCoord<>>::apply(functor); \
@@ -472,9 +472,9 @@ namespace llama
         typename T_OtherView, \
         typename T_OtherBoundDatumDomain, \
         template<class> \
-        class T_OtherViewType> \
+        class T_OtherViewHolder> \
     LLAMA_FN_HOST_ACC_INLINE auto operator OP( \
-        VirtualDatum<T_OtherView, T_OtherBoundDatumDomain, T_OtherViewType> \
+        VirtualDatum<T_OtherView, T_OtherBoundDatumDomain, T_OtherViewHolder> \
             REF other) \
         ->bool \
     { \
@@ -483,7 +483,7 @@ namespace llama
             VirtualDatum< \
                 T_OtherView, \
                 T_OtherBoundDatumDomain, \
-                T_OtherViewType>, \
+                T_OtherViewHolder>, \
             DatumCoord<>> \
             functor{*this, other, true}; \
         ForEach<AccessibleDatumDomain, DatumCoord<>>::apply(functor); \
@@ -559,8 +559,8 @@ namespace llama
         typename T_View,
         typename T_BoundDatumDomain,
         template<typename>
-        class T_ViewType>
-    struct VirtualDatum : T_ViewType<T_View>
+        class T_ViewHolder>
+    struct VirtualDatum : T_ViewHolder<T_View>
     {
         using ViewType = T_View; ///< parent view of the virtual datum
         using Mapping =
@@ -589,7 +589,7 @@ namespace llama
             typename Mapping::UserDomain userDomainPos,
             ViewType & view) // TODO unify ctors
                 :
-                T_ViewType<T_View>{view}, userDomainPos(userDomainPos)
+                T_ViewHolder<T_View>{view}, userDomainPos(userDomainPos)
         {}
 
         LLAMA_FN_HOST_ACC_INLINE
@@ -597,7 +597,7 @@ namespace llama
             typename Mapping::UserDomain userDomainPos,
             ViewType && view) // TODO unify ctors
                 :
-                T_ViewType<T_View>{view}, userDomainPos(userDomainPos)
+                T_ViewHolder<T_View>{view}, userDomainPos(userDomainPos)
         {}
 
         template<typename T_DatumCoordWithBoundDatumDomain>
