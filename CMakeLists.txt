@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.3)
 project (llama)
 
 # llama
-find_package(Boost REQUIRED)
+find_package(Boost 1.66.0 REQUIRED)
 add_library(${PROJECT_NAME} INTERFACE)
 target_include_directories(${PROJECT_NAME} INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_11)
@@ -17,12 +17,12 @@ add_custom_target("llamaIde" SOURCES ${llamaSources})
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/include/llama" FILES ${llamaSources})
 
 # tests
-find_package(Catch2 CONFIG REQUIRED)
+find_package(Catch2 2.6.1 CONFIG REQUIRED)
 file(GLOB_RECURSE testSources "${CMAKE_CURRENT_SOURCE_DIR}/tests/**")
 add_executable(tests ${testSources})
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/tests" FILES ${testSources})
 target_compile_features(tests PRIVATE cxx_std_17)
-target_link_libraries(tests Catch2::Catch2 llama::llama)
+target_link_libraries(tests PRIVATE Catch2::Catch2 llama::llama)
 
 # examples
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/Modules/")
@@ -35,7 +35,7 @@ if (LLAMA_BUILD_EXAMPLES)
 	add_subdirectory("examples/virtualviewtest")
 
 	# alpaka examples
-	find_package(alpaka QUIET)
+	find_package(alpaka 0.4.0 QUIET)
 	if (_ALPAKA_FOUND)
 		add_subdirectory("examples/nbody")
 		add_subdirectory("examples/vectoradd")
