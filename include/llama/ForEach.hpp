@@ -34,7 +34,7 @@ namespace llama
         struct CoordIsIncluded<
             T_Pos,
             T_Coord,
-            typename std::enable_if<(T_Pos::size < T_Coord::size)>::type>
+            std::enable_if_t<(T_Pos::size < T_Coord::size)>>
         {
             static constexpr bool value = false;
         };
@@ -43,9 +43,9 @@ namespace llama
         struct CoordIsIncluded<
             T_Pos,
             T_Coord,
-            typename std::enable_if<
+            std::enable_if_t<
                 (T_Pos::size >= T_Coord::size)
-                && DatumCoordIsSame<T_Pos, T_Coord>::value>::type>
+                && DatumCoordIsSame<T_Pos, T_Coord>::value>>
         {
             static constexpr bool value = true;
         };
@@ -57,8 +57,8 @@ namespace llama
             typename SFINAE = void>
         struct ApplyFunctorIfCoordIsIncluded
         {
-            auto LLAMA_FN_HOST_ACC_INLINE operator()(T_Functor const & functor)
-                -> void{};
+            LLAMA_FN_HOST_ACC_INLINE void
+            operator()(T_Functor const & functor){};
         };
 
         template<typename T_Coord, typename T_Pos, typename T_Functor>
@@ -69,8 +69,7 @@ namespace llama
             typename std::enable_if<
                 CoordIsIncluded<T_Pos, T_Coord>::value>::type>
         {
-            auto LLAMA_FN_HOST_ACC_INLINE operator()(T_Functor & functor)
-                -> void
+            LLAMA_FN_HOST_ACC_INLINE void operator()(T_Functor & functor)
             {
                 functor(
                     T_Coord(),
@@ -93,8 +92,7 @@ namespace llama
             typename T_Leaf>
         struct ApplyFunctorForDatumDomainImpl
         {
-            auto LLAMA_FN_HOST_ACC_INLINE operator()(T_Functor && functor)
-                -> void
+            LLAMA_FN_HOST_ACC_INLINE void operator()(T_Functor && functor)
             {
                 ApplyFunctorIfCoordIsIncluded<T_Coord, T_Pos, T_Functor>{}(
                     std::forward<T_Functor>(functor));
@@ -112,8 +110,7 @@ namespace llama
             T_Functor,
             DatumStruct<T_Leaves...>>
         {
-            auto LLAMA_FN_HOST_ACC_INLINE operator()(T_Functor && functor)
-                -> void
+            LLAMA_FN_HOST_ACC_INLINE void operator()(T_Functor && functor)
             {
                 ApplyFunctorForEachLeafImpl<
                     T_Coord,
@@ -136,7 +133,7 @@ namespace llama
             T_Leaf,
             T_Leaves...>
         {
-            auto LLAMA_FN_HOST_ACC_INLINE operator()(T_Functor && functor)
+            LLAMA_FN_HOST_ACC_INLINE auto operator()(T_Functor && functor)
                 -> void
             {
                 ApplyFunctorForDatumDomainImpl<
@@ -156,9 +153,7 @@ namespace llama
         template<typename T_Coord, typename T_Pos, typename T_Functor>
         struct ApplyFunctorForEachLeafImpl<T_Coord, T_Pos, T_Functor>
         {
-            auto LLAMA_FN_HOST_ACC_INLINE operator()(T_Functor && functor)
-                -> void
-            {}
+            LLAMA_FN_HOST_ACC_INLINE void operator()(T_Functor && functor) {}
         };
 
         template<
@@ -176,8 +171,7 @@ namespace llama
             T_DatumCoord,
             T_Functor>
         {
-            LLAMA_FN_HOST_ACC_INLINE
-            static void apply(T_Functor && functor)
+            LLAMA_FN_HOST_ACC_INLINE static void apply(T_Functor && functor)
             {
                 ApplyFunctorForEachLeafImpl<
                     T_DatumCoord,
@@ -186,8 +180,7 @@ namespace llama
                     T_Leaves...>{}(std::forward<T_Functor>(functor));
             }
         };
-
-    } // namespace internal
+    }
 
     /** Can be used to access a given functor for every leaf in a datum domain
      * given as \ref DatumStruct. Basically a helper function to iterate over a
@@ -239,5 +232,4 @@ namespace llama
                 T_Functor>::apply(std::forward<T_Functor>(functor));
         }
     };
-
-} // namespace llama
+}

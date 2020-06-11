@@ -31,8 +31,8 @@ namespace llama
          * \param size user domain
          * \return the calculated extent
          * */
-        LLAMA_FN_HOST_ACC_INLINE
-        auto operator()(UserDomain<T_dim> const & size) const -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE auto
+        operator()(UserDomain<T_dim> const & size) const -> std::size_t
         {
             return ExtentUserDomainAdress<T_dim - 1>()(size.pop_front())
                 * size[0];
@@ -133,8 +133,7 @@ namespace llama
         {
             return UserDomain<sizeof...(T_dims)>{T_dims...};
         }
-
-    } // namespace internal
+    }
 
     /** Creates a user domain filled with zeros.
      * \tparam T_dim dimension of the user domain

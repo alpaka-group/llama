@@ -36,11 +36,6 @@ namespace llama
             LLAMA_FN_HOST_ACC_INLINE
             Interface(UserDomain const);
 
-            Interface() = default;
-            Interface(Interface const &) = default;
-            Interface(Interface &&) = default;
-            ~Interface() = default;
-
             LLAMA_FN_HOST_ACC_INLINE
             auto getBlobSize(std::size_t const blobNr) const -> std::size_t;
 
@@ -49,11 +44,9 @@ namespace llama
             getBlobByte(UserDomain const coord, UserDomain const size) const
                 -> std::size_t;
 
-            LLAMA_FN_HOST_ACC_INLINE
-            auto getBlobNr(UserDomain const coord, UserDomain const size) const
+            LLAMA_FN_HOST_ACC_INLINE auto
+            getBlobNr(UserDomain const coord, UserDomain const size) const
                 -> std::size_t;
         };
-
-    } // namespace mapping
-
-} // namespace llama
+    }
+}

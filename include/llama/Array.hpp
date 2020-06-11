@@ -29,29 +29,19 @@ namespace llama
     template<typename T, std::size_t T_dim>
     struct Array
     {
-        /// Number of elements in array
-        static constexpr std::size_t count = T_dim;
+        static constexpr std::size_t count
+            = T_dim; ///< Number of elements in array
+        T element[count]; ///< Elements in the array, best to access with \ref
+                          ///< operator[].
 
-        /// Elements in the array, best to access with \ref operator[].
-        T element[count]; // TODO why is this public?
-
-        /** Returns an iterator to the first element. Basically just a pointer
-         * to the internal array of elements, which can be incremented. \return
-         * pointer to first element
-         * */
-        LLAMA_FN_HOST_ACC_INLINE
-        T * begin()
+        LLAMA_FN_HOST_ACC_INLINE T * begin()
         {
-            return &(element[0]);
-        };
+            return &element[0];
+        }
 
-        /** Returns an iterator to the element after the last element.
-         * \return pointer to element after the last element
-         * */
-        LLAMA_FN_HOST_ACC_INLINE
-        T * end()
+        LLAMA_FN_HOST_ACC_INLINE T * end()
         {
-            return &(element[count]);
+            return &element[count];
         };
 
         /** Gives access to an element of the array *without* range check.
@@ -80,7 +70,7 @@ namespace llama
         /** Returns a copy of the array but with the first element removed.
          * \return Array with one element less
          * */
-        auto LLAMA_FN_HOST_ACC_INLINE pop_front() const -> Array<T, count - 1>
+        LLAMA_FN_HOST_ACC_INLINE auto pop_front() const -> Array<T, count - 1>
         {
             Array<T, count - 1> result;
             for(std::size_t i = 0; i < count - 1; i++)
@@ -91,7 +81,7 @@ namespace llama
         /** Returns a copy of the array but with the last element removed.
          * \return Array with one element less
          * */
-        auto LLAMA_FN_HOST_ACC_INLINE pop_back() const -> Array<T, count - 1>
+        LLAMA_FN_HOST_ACC_INLINE auto pop_back() const -> Array<T, count - 1>
         {
             Array<T, count - 1> result;
             for(std::size_t i = 0; i < count - 1; i++)
@@ -103,7 +93,7 @@ namespace llama
          * of the (former) first element. \param new_element new element of type
          * T to add at the beginning \return Array with one element more
          * */
-        auto LLAMA_FN_HOST_ACC_INLINE push_front(T const new_element) const
+        LLAMA_FN_HOST_ACC_INLINE auto push_front(T const new_element) const
             -> Array<T, count + 1>
         {
             Array<T, count + 1> result;
@@ -118,7 +108,7 @@ namespace llama
          * \param new_element new element of type T to add at the end
          * \return Array with one element more
          * */
-        auto LLAMA_FN_HOST_ACC_INLINE push_back(T const new_element) const
+        LLAMA_FN_HOST_ACC_INLINE auto push_back(T const new_element) const
             -> Array<T, count + 1>
         {
             Array<T, count + 1> result;
@@ -137,7 +127,7 @@ namespace llama
          * if the arrays are the same, otherwise false
          * */
         template<typename T_Other>
-        auto LLAMA_FN_HOST_ACC_INLINE operator==(const T_Other & other) const
+        LLAMA_FN_HOST_ACC_INLINE auto operator==(const T_Other & other) const
             -> bool
         {
             if(count != other.count)
@@ -155,7 +145,7 @@ namespace llama
          * array of the same type as the first array
          * */
         template<typename T_Other>
-        auto LLAMA_FN_HOST_ACC_INLINE operator+(const T_Other & second) const
+        LLAMA_FN_HOST_ACC_INLINE auto operator+(const T_Other & second) const
             -> Array
         {
             Array temp;
@@ -164,5 +154,4 @@ namespace llama
             return temp;
         }
     };
-
-} // namespace llama
+}

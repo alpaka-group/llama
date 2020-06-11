@@ -80,8 +80,7 @@ namespace llama
         {
             static constexpr std::size_t value = 0;
         };
-
-    } // namespace internal
+    }
 
     /** Gives the byte position of an element in a datum domain if it would be a
      *  normal struct
@@ -125,9 +124,8 @@ namespace llama
     namespace internal
     {
         template<typename T_DatumDomain>
-        struct StubTypeImpl
+        class StubTypeImpl
         {
-        private:
             struct impl
             {
                 using type = T_DatumDomain;
@@ -137,8 +135,7 @@ namespace llama
         public:
             using type = impl;
         };
-
-    } // namespace internal
+    }
 
     /** Returns a type for a datum domain with the same size as \ref SizeOf of
      * this datum domain, useful e.g. if an external memory allocation function
@@ -161,5 +158,4 @@ namespace llama
     {
         static constexpr bool value = true;
     };
-
-} // namespace llama
+}

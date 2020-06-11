@@ -135,7 +135,7 @@ namespace llama
                                 // For some reason I have to call the internal
                                 // function by hand for the cuda nvcc compiler
                                 //~ getTupleElementRef<
-                                //T_BasicCoord::FirstElement::compiletime >(
+                                // T_BasicCoord::FirstElement::compiletime >(
                                 llama::internal::GetTupleElementImpl<
                                     typename T_Tree::Type,
                                     decltype(T_BasicCoord::FirstElement::

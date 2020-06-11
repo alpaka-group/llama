@@ -55,18 +55,18 @@ namespace llama
 
             /// \param size size of the user domain
             LLAMA_FN_HOST_ACC_INLINE
-            AoS(UserDomain const size) : userDomainSize(size) {}
+            AoS(UserDomain size) : userDomainSize(size) {}
 
-            LLAMA_FN_HOST_ACC_INLINE
-            auto getBlobSize(std::size_t const) const -> std::size_t
+            LLAMA_FN_HOST_ACC_INLINE auto getBlobSize(std::size_t) const
+                -> std::size_t
             {
                 return T_ExtentUserDomainAdressFunctor()(userDomainSize)
                     * SizeOf<DatumDomain>::value;
             }
 
             template<std::size_t... T_datumDomainCoord>
-            LLAMA_FN_HOST_ACC_INLINE auto
-            getBlobByte(UserDomain const coord) const -> std::size_t
+            LLAMA_FN_HOST_ACC_INLINE auto getBlobByte(UserDomain coord) const
+                -> std::size_t
             {
                 return T_LinearizeUserDomainAdressFunctor()(
                            coord, userDomainSize)
@@ -76,13 +76,11 @@ namespace llama
 
             template<std::size_t... T_datumDomainCoord>
             LLAMA_FN_HOST_ACC_INLINE constexpr auto
-            getBlobNr(UserDomain const coord) const -> std::size_t
+            getBlobNr(UserDomain coord) const -> std::size_t
             {
                 return 0;
             }
             UserDomain const userDomainSize;
         };
-
-    } // namespace mapping
-
-} // namespace llama
+    }
+}

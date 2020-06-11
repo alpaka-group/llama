@@ -21,7 +21,7 @@
 /**
  * \mainpage LLAMA API documentation
  *
- * LLAMA is a C++11 template header-only library for the abstraction of memory
+ * LLAMA is a C++17 template header-only library for the abstraction of memory
  * access patterns. It distinguishes between the view of the algorithm on the
  * memory and the real layout in the background. This enables performance
  * portability for multicore, manycore and gpu applications with the very same
@@ -34,7 +34,7 @@
  * simultaneously.
  *
  * To archieve this goal LLAMA is splitted in mostly independent, orthogonal
- * parts completely written in modern C++11 to run on as many architectures and
+ * parts completely written in modern C++17 to run on as many architectures and
  * with as many compilers as possible while still supporting extensions needed
  * e.g. to run on GPU or other many core hardware.
  *

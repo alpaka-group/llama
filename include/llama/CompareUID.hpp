@@ -51,7 +51,7 @@ namespace llama
     struct CompareUID
     {
         /// true if the two UIDs are exactly the same, otherwise false.
-        static constexpr bool value LLAMA_IGNORE_LITERAL(;)
+        static constexpr bool value
             = std::is_same<
                   GetUID<
                       T_DDA,
@@ -106,5 +106,4 @@ namespace llama
     {
         static constexpr bool value = true;
     };
-
-} // namespace llama
+}

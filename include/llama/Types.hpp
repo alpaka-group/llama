@@ -61,5 +61,4 @@ namespace llama
     /// Shortcut for \ref DatumElement
     template<typename T_Identifier, typename T_Type>
     using DE = DatumElement<T_Identifier, T_Type>;
-
-} // namespace llama
+}

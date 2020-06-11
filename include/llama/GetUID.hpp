@@ -63,8 +63,7 @@ namespace llama
                 typename GetUIDImpl<T_DatumElement, T_datumDomainCoords...>::
                     type;
         };
-
-    } // namespace internal
+    }
 
     /** return the unique identifier of the \ref DatumElement at a \ref
      *  DatumCoord inside the datum domain tree.

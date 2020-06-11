@@ -47,8 +47,7 @@ namespace llama
         {
             T_View view;
         };
-
-    } // namespace internal
+    }
 
     template<
         typename T_View,
@@ -563,18 +562,19 @@ namespace llama
         class T_ViewType>
     struct VirtualDatum : T_ViewType<T_View>
     {
-        /// parent view of the virtual datum
-        using ViewType = T_View;
-        /// mapping of the underlying view
-        using Mapping = typename ViewType::Mapping;
-        /// blobtype of the underlying view
-        using BlobType = typename ViewType::BlobType;
-        /** already resolved part of the datum domain, basically the new datum
-         *  domain tree root
-         */
+        using ViewType = T_View; ///< parent view of the virtual datum
+        using Mapping =
+            typename ViewType::Mapping; ///< mapping of the underlying view
+        using BlobType =
+            typename ViewType::BlobType; ///< blobtype of the underlying view
+
+        /// already resolved part of the datum domain, basically the new datum
+        /// domain tree root
         using BoundDatumDomain = T_BoundDatumDomain;
-        /// resolved position in the user domain
-        typename Mapping::UserDomain const userDomainPos;
+
+        typename Mapping::UserDomain const
+            userDomainPos; ///< resolved position in the user domain
+
         /** Sub part of the datum domain of the view/mapping relative to
          *  \ref BoundDatumDomain. If BoundDatumDomain is `DatumCoord<>`
          * (default) AccessibleDatumDomain is the same as
@@ -586,17 +586,17 @@ namespace llama
 
         LLAMA_FN_HOST_ACC_INLINE
         VirtualDatum(
-            typename Mapping::UserDomain const
-                userDomainPos, // TODO const value
-            ViewType & view) :
+            typename Mapping::UserDomain userDomainPos,
+            ViewType & view) // TODO unify ctors
+                :
                 T_ViewType<T_View>{view}, userDomainPos(userDomainPos)
         {}
 
         LLAMA_FN_HOST_ACC_INLINE
         VirtualDatum(
-            typename Mapping::UserDomain const
-                userDomainPos, // TODO const value
-            ViewType && view) :
+            typename Mapping::UserDomain userDomainPos,
+            ViewType && view) // TODO unify ctors
+                :
                 T_ViewType<T_View>{view}, userDomainPos(userDomainPos)
         {}
 
@@ -627,12 +627,10 @@ namespace llama
                 typename BoundDatumDomain::template Cat<T_DatumCoord>>>::value>>
         {
             template<typename T_UserDomain>
-            static LLAMA_FN_HOST_ACC_INLINE auto apply(
-                T_View && view,
-                T_UserDomain const & userDomainPos)
-                -> decltype(auto) // & should be in decltype if …::apply returns
-                                  // a reference
-            {
+            static LLAMA_FN_HOST_ACC_INLINE auto
+            apply(T_View && view, T_UserDomain const & userDomainPos)
+                -> decltype(auto)
+            { // may deduce &
                 LLAMA_FORCE_INLINE_RECURSIVE
                 return AccessWithBoundDatumDomainImpl<
                     typename BoundDatumDomain::template Cat<T_DatumCoord>>::
@@ -648,12 +646,10 @@ namespace llama
                 typename BoundDatumDomain::template Cat<T_DatumCoord>>>::value>>
         {
             template<typename T_UserDomain>
-            static LLAMA_FN_HOST_ACC_INLINE auto apply(
-                T_View && view,
-                T_UserDomain const & userDomainPos)
-                -> decltype(auto) // & should be in decltype if …::apply returns
-                                  // a reference
-            {
+            static LLAMA_FN_HOST_ACC_INLINE auto
+            apply(T_View && view, T_UserDomain const & userDomainPos)
+                -> decltype(auto)
+            { // may deduce &
                 LLAMA_FORCE_INLINE_RECURSIVE
                 return VirtualDatum<
                     View<Mapping, BlobType>,
@@ -666,12 +662,10 @@ namespace llama
         struct AccessWithTypeImpl
         {
             template<typename T_UserDomain>
-            static LLAMA_FN_HOST_ACC_INLINE auto apply(
-                T_View && view,
-                T_UserDomain const & userDomainPos)
-                -> decltype(auto) // & should be in decltype if …::apply returns
-                                  // a reference
-            {
+            static LLAMA_FN_HOST_ACC_INLINE auto
+            apply(T_View && view, T_UserDomain const & userDomainPos)
+                -> decltype(auto)
+            { // may deduce &
                 LLAMA_FORCE_INLINE_RECURSIVE
                 return AccessImpl<GetCoordFromUIDRelative<
                     typename Mapping::DatumDomain,
@@ -685,12 +679,10 @@ namespace llama
         struct AccessWithTypeImpl<DatumCoord<T_coord...>>
         {
             template<typename T_UserDomain>
-            static LLAMA_FN_HOST_ACC_INLINE auto apply(
-                T_View && view,
-                T_UserDomain const & userDomainPos)
-                -> decltype(auto) // & should be in decltype if …::apply returns
-                                  // a reference
-            {
+            static LLAMA_FN_HOST_ACC_INLINE auto
+            apply(T_View && view, T_UserDomain const & userDomainPos)
+                -> decltype(auto)
+            { // may deduce &
                 LLAMA_FORCE_INLINE_RECURSIVE
                 return AccessImpl<DatumCoord<T_coord...>>::apply(
                     std::forward<T_View>(view), userDomainPos);
@@ -699,9 +691,8 @@ namespace llama
 
         template<typename... T_DatumCoordOrUIDs>
         LLAMA_FN_HOST_ACC_INLINE auto access(T_DatumCoordOrUIDs &&...)
-            -> decltype(
-                auto) // & should be in decltype if …::apply returns a reference
-        {
+            -> decltype(auto)
+        { // may deduce &
             LLAMA_FORCE_INLINE_RECURSIVE
             return AccessWithTypeImpl<remove_cvref_t<T_DatumCoordOrUIDs>...>::
                 apply(std::forward<T_View>(this->view), userDomainPos);
@@ -718,9 +709,8 @@ namespace llama
          *  domain coordinate or a new virtual datum with a bound datum coord
          */
         template<typename... T_DatumCoordOrUIDs>
-        LLAMA_FN_HOST_ACC_INLINE auto access() -> decltype(
-            auto) // & should be in decltype if …::apply returns a reference
-        {
+        LLAMA_FN_HOST_ACC_INLINE auto access() -> decltype(auto)
+        { // may deduce &
             LLAMA_FORCE_INLINE_RECURSIVE
             return AccessWithTypeImpl<T_DatumCoordOrUIDs...>::apply(
                 std::forward<T_View>(this->view), userDomainPos);
@@ -735,9 +725,8 @@ namespace llama
          * a new virtual datum with a bound datum coord
          */
         template<std::size_t... T_coord>
-        LLAMA_FN_HOST_ACC_INLINE auto access() -> decltype(
-            auto) // & should be in decltype if …::apply returns a reference
-        {
+        LLAMA_FN_HOST_ACC_INLINE auto access() -> decltype(auto)
+        { // may deduce &
             LLAMA_FORCE_INLINE_RECURSIVE
             return AccessImpl<DatumCoord<T_coord...>>::apply(
                 std::forward<T_View>(this->view), userDomainPos);
@@ -757,8 +746,7 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto operator()(
             T_DatumCoordOrUIDs &&... LLAMA_IGNORE_LITERAL(datumCoordOrUIDs))
             -> decltype(auto)
-        // & should be in decltype if …::apply returns a reference
-        {
+        { // may deduce & {
             LLAMA_FORCE_INLINE_RECURSIVE
             return access<remove_cvref_t<T_DatumCoordOrUIDs>...>();
         }
@@ -794,7 +782,7 @@ namespace llama
         {
             LLAMA_NO_HOST_ACC_WARNING
             template<typename T_Mapping, typename T_UserDomain>
-            static auto LLAMA_FN_HOST_ACC_INLINE
+            static LLAMA_FN_HOST_ACC_INLINE auto
             getBlobNr(T_Mapping && mapping, T_UserDomain && userDomain)
                 -> decltype(auto)
             {
@@ -804,7 +792,7 @@ namespace llama
 
             LLAMA_NO_HOST_ACC_WARNING
             template<typename T_Mapping, typename T_UserDomain>
-            static auto LLAMA_FN_HOST_ACC_INLINE
+            static LLAMA_FN_HOST_ACC_INLINE auto
             getBlobByte(T_Mapping && mapping, T_UserDomain && userDomain)
                 -> decltype(auto)
             {
@@ -812,7 +800,7 @@ namespace llama
                 return mapping.template getBlobByte<T_coords...>(userDomain);
             }
         };
-    }; // namespace internal
+    }
 
     /** Central LLAMA class holding memory and giving access to it defined by a
      *  mapping. Should not be instantiated "by hand" but with a \ref Factory.
@@ -823,20 +811,15 @@ namespace llama
     template<typename T_Mapping, typename T_BlobType>
     struct View
     {
-        /// background data type
-        using BlobType = T_BlobType;
-        /// used mapping
-        using Mapping = T_Mapping;
-        /** corresponding \ref llama::VirtualDatum type returned after resolving
-         * user domain
-         */
-        using VirtualDatumType = VirtualDatum<View<Mapping, BlobType>>;
+        using BlobType = T_BlobType; ///< background data type
+        using Mapping = T_Mapping; ///< used mapping
+        using VirtualDatumType
+            = VirtualDatum<View<Mapping, BlobType>>; ///< corresponding \ref
+                                                     ///< llama::VirtualDatum
+                                                     ///< type returned after
+                                                     ///< resolving user domain
 
         View() = default;
-        View(View const &) = default;
-        View(View &&) = default; // TODO noexcept
-        ~View() = default;
-        // TODO operator= missing?
 
         LLAMA_NO_HOST_ACC_WARNING
         LLAMA_FN_HOST_ACC_INLINE
@@ -855,7 +838,7 @@ namespace llama
         LLAMA_NO_HOST_ACC_WARNING
         template<std::size_t... T_coords>
         LLAMA_FN_HOST_ACC_INLINE auto
-        accessor(typename Mapping::UserDomain const userDomain) -> auto &
+        accessor(typename Mapping::UserDomain userDomain) -> auto &
         {
             auto const nr = mapping.template getBlobNr<T_coords...>(userDomain);
             auto const byte
@@ -876,7 +859,7 @@ namespace llama
         LLAMA_NO_HOST_ACC_WARNING
         template<typename... T_UIDs>
         LLAMA_FN_HOST_ACC_INLINE auto
-        accessor(typename Mapping::UserDomain const userDomain) -> auto &
+        accessor(typename Mapping::UserDomain userDomain) -> auto &
         {
             using DatumCoord
                 = GetCoordFromUID<typename Mapping::DatumDomain, T_UIDs...>;
@@ -899,8 +882,8 @@ namespace llama
          * domain as \ref UserDomain \return \ref llama::VirtualDatum with bound
          * user domain, which can be used to access the datum domain
          */
-        auto LLAMA_FN_HOST_ACC_INLINE operator()(
-            typename Mapping::UserDomain const userDomain) -> VirtualDatumType
+        LLAMA_FN_HOST_ACC_INLINE auto
+        operator()(typename Mapping::UserDomain userDomain) -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return VirtualDatumType{userDomain, *this};
@@ -914,8 +897,8 @@ namespace llama
          * domain as \ref UserDomain \return \ref llama::VirtualDatum with bound
          * user domain, which can be used to access the datum domain
          */
-        auto LLAMA_FN_HOST_ACC_INLINE operator[](
-            typename Mapping::UserDomain const userDomain) -> VirtualDatumType
+        LLAMA_FN_HOST_ACC_INLINE auto
+        operator[](typename Mapping::UserDomain userDomain) -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return VirtualDatumType{userDomain, *this};
@@ -941,22 +924,22 @@ namespace llama
 
         template<typename... T_Coord>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(T_Coord... coord) const
-            -> const VirtualDatumType // TODO const value
+            -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return VirtualDatumType{
                 typename Mapping::UserDomain{coord...}, *this};
         }
 
-        LLAMA_FN_HOST_ACC_INLINE
-        auto operator()(std::size_t coord = 0) -> VirtualDatumType
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(std::size_t coord = 0)
+            -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return VirtualDatumType{typename Mapping::UserDomain{coord}, *this};
         }
 
-        LLAMA_FN_HOST_ACC_INLINE
-        auto operator[](std::size_t coord) -> VirtualDatumType
+        LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t coord)
+            -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return VirtualDatumType{typename Mapping::UserDomain{coord}, *this};
@@ -964,18 +947,15 @@ namespace llama
 
         template<std::size_t... T_coord>
         LLAMA_FN_HOST_ACC_INLINE auto
-        operator()(DatumCoord<T_coord...> && dc = DatumCoord<T_coord...>())
-            -> decltype(auto)
+        operator()(DatumCoord<T_coord...> && dc = {}) -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return accessor<T_coord...>(
                 userDomainZero<Mapping::UserDomain::count>());
         }
 
-        /// mapping of the view
-        const Mapping mapping;
-        /// memory of the view
-        Array<BlobType, Mapping::blobCount> blob;
+        const Mapping mapping; ///< mapping of the view
+        Array<BlobType, Mapping::blobCount> blob; ///< memory of the view
     };
 
 } // namespace llama

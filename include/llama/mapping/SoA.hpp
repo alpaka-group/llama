@@ -85,10 +85,9 @@ namespace llama
             {
                 return 0;
             }
+
             UserDomain const userDomainSize;
             std::size_t const extentUserDomainAdress;
         };
-
-    } // namespace mapping
-
-} // namespace llama
+    }
+}

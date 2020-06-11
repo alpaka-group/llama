@@ -54,7 +54,6 @@ namespace llama
                 {
                     return &r;
                 }
-
                 inline auto adress(const_reference r) const -> const_pointer
                 {
                     return &r;
@@ -79,7 +78,7 @@ namespace llama
 #endif
                 }
 
-                inline auto deallocate(pointer p, size_type) -> void
+                inline void deallocate(pointer p, size_type)
                 {
 #if defined _MSC_VER
                     _aligned_free(p);
@@ -92,11 +91,10 @@ namespace llama
 #endif
                 }
 
-                inline auto construct(pointer p, value_type const &) -> void
+                inline void construct(pointer p, value_type const &)
                 {
-                    /* commented out for performance reasons
-                     * new ( p ) value_type ( value );
-                     */
+                    // commented out for performance reasons
+                    // new ( p ) value_type ( value ); // FIXME this is a bug
                 }
 
                 inline auto destroy(pointer p) -> void
@@ -131,8 +129,7 @@ namespace llama
                     return true;
                 }
             };
-
-        } // namespace internal
+        }
 
         /** Allocator to allocate memory for a \ref View in the \ref Factory
          * using `std::vector` in the background. Meaning every time the view is
@@ -143,23 +140,23 @@ namespace llama
         template<std::size_t T_alignment = 64u>
         struct Vector
         {
-            /// primary type of this allocator is `unsigned char`
-            using PrimType = unsigned char;
-            /// blob type of this allocator is `std::vector< PrimType >`
+            using PrimType = unsigned char; ///< primary type of this allocator
+                                            ///< is `unsigned char`
             using BlobType = std::vector<
                 PrimType,
-                internal::AlignmentAllocator<PrimType, T_alignment>>;
-            /// the optional allocation parameter is ignored
-            using Parameter = int; // not used
+                internal::AlignmentAllocator<
+                    PrimType,
+                    T_alignment>>; ///< blob type of this allocator is
+                                   ///< `std::vector< PrimType >`
+            using Parameter
+                = int; ///< the optional allocation parameter is ignored
 
             LLAMA_NO_HOST_ACC_WARNING
             static inline auto allocate(std::size_t count, Parameter const)
                 -> BlobType
             {
-                return BlobType(count);
+                return {count};
             }
         };
-
-    } // namespace allocator
-
-} // namespace llama
+    }
+}
