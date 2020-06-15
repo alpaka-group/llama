@@ -18,9 +18,6 @@ constexpr auto ASYNCCOPY_ASYNC
     = true; ///< defines whether the data shall be processed asynchronously
 constexpr auto ASYNCCOPY_SHARED
     = true; ///< defines whether shared memory shall be used
-constexpr auto ASYNCCOPY_LOCAL_SUM
-    = true; ///< defines whether a local variable shall be used or directly
-            ///< written to the destination memory
 constexpr auto ASYNCCOPY_SAVE
     = true; ///< defines whether the resultion image shall be saved
 constexpr auto ASYNCCOPY_CHUNK_COUNT = 4;
@@ -97,8 +94,8 @@ namespace asynccopy
             auto treeOperationList
                 = llama::makeTuple(llama::mapping::tree::functor::LeafOnlyRT());
             using SharedMapping = llama::mapping::tree::Mapping<
-                typename decltype(oldImage)::Mapping::UserDomain,
-                typename decltype(oldImage)::Mapping::DatumDomain,
+                typename T_View::Mapping::UserDomain,
+                typename T_View::Mapping::DatumDomain,
                 decltype(treeOperationList)>;
             auto constexpr sharedChunkSize
                 = totalElemsPerBlock + 2 * kernelSize;
@@ -163,12 +160,8 @@ namespace asynccopy
             for(auto y = start[0]; y < end[0]; ++y) LLAMA_INDEPENDENT_DATA
             for(auto x = start[1]; x < end[1]; ++x)
             {
-                [[maybe_unused]] auto sum
-                    = llama::stackVirtualDatumAlloc<PixelOnAcc>();
-                if constexpr(ASYNCCOPY_LOCAL_SUM)
+                auto sum = llama::stackVirtualDatumAlloc<PixelOnAcc>();
                     sum = 0;
-                else
-                    newImage(y + kernelSize, x + kernelSize) = 0;
 
                 using ItType = long int;
                 const ItType i_b_start = ASYNCCOPY_SHARED
@@ -189,33 +182,15 @@ namespace asynccopy
                 for(auto b = i_b_start; b < i_b_end; ++b) LLAMA_INDEPENDENT_DATA
                 for(auto a = i_a_start; a < i_a_end; ++a)
                 {
-                    if constexpr(ASYNCCOPY_LOCAL_SUM)
-                    {
                         if constexpr(ASYNCCOPY_SHARED)
                             sum += shared(std::size_t(b), std::size_t(a));
                         else
                             sum += oldImage(std::size_t(b), std::size_t(a));
                     }
-                    else
-                    {
-                        if constexpr(ASYNCCOPY_SHARED)
-                            newImage(y + kernelSize, x + kernelSize)
-                                += shared(std::size_t(b), std::size_t(a));
-                        else
-                            newImage(y + kernelSize, x + kernelSize)
-                                += oldImage(std::size_t(b), std::size_t(a));
-                    }
-                }
-                if constexpr(ASYNCCOPY_LOCAL_SUM)
-                {
                     sum /= Element((2 * kernelSize + 1) * (2 * kernelSize + 1));
                     newImage(y + kernelSize, x + kernelSize) = sum;
                 }
-                else
-                    newImage(y + kernelSize, x + kernelSize)
-                        /= Element((2 * kernelSize + 1) * (2 * kernelSize + 1));
             }
-        }
     };
 
     int main(int argc, char ** argv)
