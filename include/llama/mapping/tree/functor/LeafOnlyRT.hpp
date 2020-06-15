@@ -151,8 +151,10 @@ namespace llama
                                     typename T_BasicCoord::RestTuple>()(
                                     basicCoord.rest,
                                     branch,
-                                    (runtime + basicCoord.first.runtime)
-                                        * branch.count));
+                                    (runtime
+                                     + LLAMA_DEREFERENCE(
+                                         basicCoord.first.runtime))
+                                        * LLAMA_DEREFERENCE(branch.count)));
                         }
                     };
 
@@ -172,7 +174,8 @@ namespace llama
                             std::size_t const runtime = 0) const -> ResultCoord
                         {
                             return {ResultCoordElement(
-                                runtime + basicCoord.first.runtime)};
+                                runtime
+                                + LLAMA_DEREFERENCE(basicCoord.first.runtime))};
                         }
                     };
 
