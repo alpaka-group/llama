@@ -42,6 +42,8 @@
     _Pragma("clang loop vectorize(enable)") \
         _Pragma("clang loop interleave(enable)") \
             _Pragma("clang loop distribute(enable)")
+#elif defined(_MSC_VER)
+#define LLAMA_INDEPENDENT_DATA __pragma(loop(ivdep))
 #else
 /** Shows that all (!) data access inside inside of a loop is indepent, so the
  *  loop can safely be vectorized although the compiler may not know the data
@@ -78,6 +80,8 @@
  */
 #if BOOST_COMP_GNUC != 0
 #define LLAMA_FN_HOST_ACC_INLINE inline __attribute__((always_inline))
+#elif defined(_MSC_VER)
+#define LLAMA_FN_HOST_ACC_INLINE __forceinline
 #else
 #define LLAMA_FN_HOST_ACC_INLINE inline
 #endif
@@ -100,6 +104,8 @@
 
 #if BOOST_COMP_INTEL != 0
 #define LLAMA_FORCE_INLINE_RECURSIVE _Pragma("forceinline recursive")
+#elif defined(_MSC_VER)
+#define LLAMA_FORCE_INLINE_RECURSIVE __pragma(inline_depth(255))
 #else
 /** If possible forces the compiler to recursively inline the following function
  *  and all child function calls. Should be use carefully as at least the
