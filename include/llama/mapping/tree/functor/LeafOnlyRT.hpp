@@ -46,7 +46,7 @@ namespace llama
                                 typename T_Tree::Identifier,
                                 typename T_Tree::Type>
                         {
-                            return {tree.count * runtime};
+                            return {LLAMA_DEREFERENCE(tree.count) * runtime};
                         }
                     };
 
@@ -73,16 +73,15 @@ namespace llama
                         auto operator()(
                             T_Tree const tree,
                             std::size_t const runtime = 1) const
-                            -> TreeElementConst<
-                                typename T_Tree::Identifier,
-                                decltype(tupleTransform(
-                                    tree.childs,
-                                    ChildFunctor{runtime * tree.count})),
-                                1>
                         {
-                            return {tupleTransform(
+                            auto children = tupleTransform(
                                 tree.childs,
-                                ChildFunctor{runtime * tree.count})};
+                                ChildFunctor{
+                                    runtime * LLAMA_DEREFERENCE(tree.count)});
+                            return TreeElementConst<
+                                typename T_Tree::Identifier,
+                                decltype(children),
+                                1>{children};
                         }
                     };
 
