@@ -12,6 +12,7 @@
 
 #pragma once
 
+#include <alpaka/alpaka.hpp>
 #include <llama/llama.hpp>
 
 namespace common
