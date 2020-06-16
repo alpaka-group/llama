@@ -33,20 +33,22 @@ constexpr auto ASYNCCOPY_CHUNK_SIZE
 constexpr auto ASYNCCOPY_TOTAL_ELEMS_PER_BLOCK
     = 16; /// number of elements per direction(!) every block should process
 
-#include <alpaka/alpaka.hpp>
 #ifdef __CUDACC__
 #define LLAMA_FN_HOST_ACC_INLINE ALPAKA_FN_ACC __forceinline__
 #endif
-#include <llama/llama.hpp>
-#include <random>
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
+
 #include "../../common/AlpakaAllocator.hpp"
 #include "../../common/AlpakaMemCopy.hpp"
 #include "../../common/AlpakaThreadElemsDistribution.hpp"
 #include "../../common/Chrono.hpp"
+#include "stb_image.h"
 #include "stb_image_write.h"
+
+#include <alpaka/alpaka.hpp>
+#include <llama/llama.hpp>
+#include <random>
 
 namespace asynccopy
 {
@@ -60,8 +62,7 @@ namespace asynccopy
         struct B{};
     }
 
-    /// real datum domain of the image pixel used on the host for loading and
-    /// saving
+    /// real datum domain of the image pixel used on the host for loading and saving
     using Pixel = llama::DS<
         llama::DE<px::R, Element>,
         llama::DE<px::G, Element>,
@@ -90,26 +91,33 @@ namespace asynccopy
             auto const threadIdxInGrid
                 = alpaka::idx::getIdx<alpaka::Grid, alpaka::Threads>(acc);
 
-            // Using SoA for the shared memory
-            auto treeOperationList
-                = llama::makeTuple(llama::mapping::tree::functor::LeafOnlyRT());
-            using SharedMapping = llama::mapping::tree::Mapping<
-                typename T_View::Mapping::UserDomain,
-                typename T_View::Mapping::DatumDomain,
-                decltype(treeOperationList)>;
-            auto constexpr sharedChunkSize
-                = totalElemsPerBlock + 2 * kernelSize;
-            SharedMapping const sharedMapping(
-                {sharedChunkSize, sharedChunkSize}, treeOperationList);
-            using SharedFactory = llama::Factory<
-                SharedMapping,
-                common::allocator::AlpakaShared<
-                    T_Acc,
-                    llama::SizeOf<PixelOnAcc>::value * sharedChunkSize
-                        * sharedChunkSize,
-                    __COUNTER__>>;
-            [[maybe_unused]] auto shared
-                = SharedFactory::allocView(sharedMapping, acc);
+            [[maybe_unused]] auto shared = [&] {
+                if constexpr(ASYNCCOPY_SHARED)
+                {
+                    // Using SoA for the shared memory
+                    auto treeOperationList = llama::makeTuple(
+                        llama::mapping::tree::functor::LeafOnlyRT());
+                    using SharedMapping = llama::mapping::tree::Mapping<
+                        typename T_View::Mapping::UserDomain,
+                        typename T_View::Mapping::DatumDomain,
+                        decltype(treeOperationList)>;
+                    auto constexpr sharedChunkSize
+                        = totalElemsPerBlock + 2 * kernelSize;
+                    SharedMapping const sharedMapping(
+                        {sharedChunkSize, sharedChunkSize}, treeOperationList);
+                    using SharedFactory = llama::Factory<
+                        SharedMapping,
+                        common::allocator::AlpakaShared<
+                            T_Acc,
+                            llama::SizeOf<PixelOnAcc>::value * sharedChunkSize
+                                * sharedChunkSize,
+                            __COUNTER__>>;
+                    return SharedFactory::allocView(sharedMapping, acc);
+                }
+                else
+                    return int{}; // dummy
+            }();
+
             [[maybe_unused]] auto const blockIndex
                 = alpaka::idx::getIdx<alpaka::Grid, alpaka::Blocks>(acc);
             if constexpr(ASYNCCOPY_SHARED)
@@ -161,7 +169,7 @@ namespace asynccopy
             for(auto x = start[1]; x < end[1]; ++x)
             {
                 auto sum = llama::stackVirtualDatumAlloc<PixelOnAcc>();
-                    sum = 0;
+                sum = 0;
 
                 using ItType = long int;
                 const ItType i_b_start = ASYNCCOPY_SHARED
@@ -182,15 +190,15 @@ namespace asynccopy
                 for(auto b = i_b_start; b < i_b_end; ++b) LLAMA_INDEPENDENT_DATA
                 for(auto a = i_a_start; a < i_a_end; ++a)
                 {
-                        if constexpr(ASYNCCOPY_SHARED)
-                            sum += shared(std::size_t(b), std::size_t(a));
-                        else
-                            sum += oldImage(std::size_t(b), std::size_t(a));
-                    }
-                    sum /= Element((2 * kernelSize + 1) * (2 * kernelSize + 1));
-                    newImage(y + kernelSize, x + kernelSize) = sum;
+                    if constexpr(ASYNCCOPY_SHARED)
+                        sum += shared(std::size_t(b), std::size_t(a));
+                    else
+                        sum += oldImage(std::size_t(b), std::size_t(a));
                 }
+                sum /= Element((2 * kernelSize + 1) * (2 * kernelSize + 1));
+                newImage(y + kernelSize, x + kernelSize) = sum;
             }
+        }
     };
 
     int main(int argc, char ** argv)
