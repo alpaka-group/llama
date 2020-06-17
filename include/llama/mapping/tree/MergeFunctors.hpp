@@ -36,14 +36,12 @@ namespace llama::mapping::tree
             T_Tree,
             Tuple<FirstOperation, RestOperations...>>
         {
-            using SubMergeFunctorsImpl = MergeFunctorsImpl<
-                typename FirstOperation::template Result<T_Tree>,
-                Tuple<RestOperations...>>;
-            using Result = typename SubMergeFunctorsImpl::Result;
-
             const FirstOperation operation;
             const decltype(operation.basicToResult(T_Tree())) treeAfterOp;
-            const SubMergeFunctorsImpl subMergeFunctorsImpl;
+            const MergeFunctorsImpl<
+                decltype(treeAfterOp),
+                Tuple<RestOperations...>>
+                subMergeFunctorsImpl;
 
             LLAMA_FN_HOST_ACC_INLINE
             MergeFunctorsImpl(
@@ -56,7 +54,7 @@ namespace llama::mapping::tree
             {}
 
             LLAMA_FN_HOST_ACC_INLINE
-            auto basicToResult(T_Tree const &) const -> Result
+            auto basicToResult(T_Tree const &) const
             {
                 return subMergeFunctorsImpl.basicToResult(treeAfterOp);
             }
@@ -86,7 +84,6 @@ namespace llama::mapping::tree
         struct MergeFunctorsImpl<T_Tree, Tuple<T_LastOperation>>
         {
             using LastOp = T_LastOperation;
-            using Result = typename LastOp::template Result<T_Tree>;
             using TreeOperationList = Tuple<T_LastOperation>;
 
             const LastOp operation;
@@ -99,7 +96,7 @@ namespace llama::mapping::tree
             {}
 
             LLAMA_FN_HOST_ACC_INLINE
-            auto basicToResult(const T_Tree & tree) const -> Result
+            auto basicToResult(const T_Tree & tree) const
             {
                 return operation.basicToResult(tree);
             }
@@ -124,7 +121,6 @@ namespace llama::mapping::tree
         template<typename T_Tree>
         struct MergeFunctorsImpl<T_Tree, Tuple<>>
         {
-            using Result = T_Tree;
             using TreeOperationList = Tuple<>;
 
             LLAMA_FN_HOST_ACC_INLINE
@@ -134,7 +130,7 @@ namespace llama::mapping::tree
             {}
 
             LLAMA_FN_HOST_ACC_INLINE
-            auto basicToResult(const T_Tree & tree) const -> Result
+            auto basicToResult(const T_Tree & tree) const
             {
                 return tree;
             }
@@ -162,9 +158,7 @@ namespace llama::mapping::tree
     {
         using MergeFunctorsImpl =
             typename internal::MergeFunctorsImpl<T_Tree, T_TreeOperationList>;
-        using Result = typename MergeFunctorsImpl::Result;
-
-        MergeFunctorsImpl const mergeFunctorsImpl;
+        const MergeFunctorsImpl mergeFunctorsImpl;
 
         LLAMA_FN_HOST_ACC_INLINE
         MergeFunctors(
@@ -174,7 +168,7 @@ namespace llama::mapping::tree
         {}
 
         LLAMA_FN_HOST_ACC_INLINE
-        auto basicToResult(T_Tree const & tree) const -> Result
+        auto basicToResult(T_Tree const & tree) const
         {
             return mergeFunctorsImpl.basicToResult(tree);
         }

@@ -128,6 +128,16 @@ namespace llama::mapping::tree
         const Type childs;
     };
 
+    template<typename TreeElement, typename = void>
+    struct HasChildren : std::false_type
+    {};
+
+    template<typename TreeElement>
+    struct HasChildren<
+        TreeElement,
+        std::void_t<decltype(TreeElement().childs)>> : std::true_type
+    {};
+
     template<typename T_Identifier, typename T_Type, std::size_t T_count = 1>
     using TreeElementConst = TreeElement<
         T_Identifier,

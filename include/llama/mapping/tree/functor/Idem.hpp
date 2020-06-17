@@ -27,11 +27,8 @@ namespace llama::mapping::tree::functor
     struct Idem
     {
         template<typename T_Tree>
-        using Result = T_Tree;
-
-        template<typename T_Tree>
         LLAMA_FN_HOST_ACC_INLINE auto basicToResult(const T_Tree & tree) const
-            -> Result<T_Tree>
+            -> T_Tree
         {
             return tree;
         }

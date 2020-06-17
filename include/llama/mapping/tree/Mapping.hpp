@@ -53,11 +53,12 @@ namespace llama::mapping::tree
         static constexpr std::size_t blobCount = 1;
 
         using MergedFunctors = MergeFunctors<BasicTree, T_TreeOperationList>;
-        using ResultTree = typename MergedFunctors::Result;
 
         UserDomain const userDomainSize;
         BasicTree const basicTree;
         MergedFunctors const mergedFunctors;
+
+        using ResultTree = decltype(mergedFunctors.basicToResult(basicTree));
         ResultTree const resultTree;
 
         /** The initalization of this mapping needs a \ref Tuple of operations

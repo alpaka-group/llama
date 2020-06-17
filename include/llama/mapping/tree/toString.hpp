@@ -51,16 +51,6 @@ namespace llama::mapping::tree
         return toString(tree.first);
     }
 
-    template<typename TreeElement, typename = void>
-    struct HasChildren : std::false_type
-    {};
-
-    template<typename TreeElement>
-    struct HasChildren<
-        TreeElement,
-        std::void_t<decltype(TreeElement().childs)>> : std::true_type
-    {};
-
     template<typename T_Identifier, typename T_Type, typename T_CountType>
     auto toString(TreeElement<T_Identifier, T_Type, T_CountType> tree)
         -> std::string
