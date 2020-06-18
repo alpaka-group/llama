@@ -30,7 +30,7 @@ namespace llama::mapping::tree
         class T_OuterOp,
         template<class, class>
         class T_LeafFunctor,
-        typename T_SFINAE = void>
+        bool HC = HasChildren<T_Tree>::value>
     struct Reduce;
 
     namespace internal
@@ -143,7 +143,7 @@ namespace llama::mapping::tree
         class T_OuterOp,
         template<class, class>
         class T_LeafFunctor,
-        typename T_SFINAE>
+        bool HC>
     struct Reduce
     {
         LLAMA_FN_HOST_ACC_INLINE
@@ -182,12 +182,7 @@ namespace llama::mapping::tree
         class T_OuterOp,
         template<class, class>
         class T_LeafFunctor>
-    struct Reduce<
-        T_Tree,
-        T_InnerOp,
-        T_OuterOp,
-        T_LeafFunctor,
-        typename T_Tree::IsTreeElementWithoutChilds>
+    struct Reduce<T_Tree, T_InnerOp, T_OuterOp, T_LeafFunctor, false>
     {
         LLAMA_FN_HOST_ACC_INLINE
         auto operator()(const decltype(T_Tree::count) & count) const
