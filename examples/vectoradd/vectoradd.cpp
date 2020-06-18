@@ -21,9 +21,9 @@ namespace usellama
     }
 
      using Vector = llama::DS<
-        llama::DE<tag::X, FP>,
-        llama::DE<tag::Y, FP>,
-        llama::DE<tag::Z, FP>
+         llama::DE<tag::X, FP>,
+         llama::DE<tag::Y, FP>,
+         llama::DE<tag::Z, FP>
      >;
     // clang-format on
 
