@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include "../DatumStruct.hpp"
 #include "../Types.hpp"
 #include "../UserDomain.hpp"
 

@@ -18,8 +18,8 @@
 
 #pragma once
 
-#include "../preprocessor/macros.hpp"
 #include "../Array.hpp"
+#include "../preprocessor/macros.hpp"
 
 #include <malloc.h>
 #include <stdlib.h>
