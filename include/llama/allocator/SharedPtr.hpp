@@ -21,6 +21,9 @@
 #include "../preprocessor/macros.hpp"
 
 #include <memory>
+#ifdef __linux__
+#include <malloc.h>
+#endif
 
 namespace llama::allocator
 {
