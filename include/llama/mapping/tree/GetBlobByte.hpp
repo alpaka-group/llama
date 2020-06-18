@@ -26,31 +26,18 @@ namespace llama::mapping::tree
     namespace internal
     {
         template<typename T_Tree, std::size_t T_Pos>
-        struct SummarizeTreeSmallerPos
+        LLAMA_FN_HOST_ACC_INLINE auto summarizeTreeSmallerPos(
+            typename T_Tree::Type const & childs,
+            decltype(T_Tree::count) const & count) -> std::size_t
         {
-            LLAMA_FN_HOST_ACC_INLINE
-            auto operator()(
-                typename T_Tree::Type const & childs,
-                decltype(T_Tree::count) const & count) const -> std::size_t
-            {
-                return getTreeBlobSize(childs.first)
-                    + SummarizeTreeSmallerPos<
-                           typename TreePopFrontChild<T_Tree>::ResultType,
-                           T_Pos - 1>()(childs.rest, count);
-            }
-        };
-
-        template<typename T_Tree>
-        struct SummarizeTreeSmallerPos<T_Tree, 0>
-        {
-            LLAMA_FN_HOST_ACC_INLINE
-            auto operator()(
-                const typename T_Tree::Type & childs,
-                decltype(T_Tree::count) const & count) const -> std::size_t
-            {
+            if constexpr(T_Pos == 0)
                 return 0;
-            }
-        };
+            else
+                return getTreeBlobSize(childs.first)
+                    + summarizeTreeSmallerPos<
+                           typename TreePopFrontChild<T_Tree>::ResultType,
+                           T_Pos - 1>(childs.rest, count);
+        }
 
         template<typename T_Tree, typename T_LastCoord>
         LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobByteImpl(
@@ -67,10 +54,9 @@ namespace llama::mapping::tree
         {
             return getTreeBlobSize(
                        tree.childs, LLAMA_DEREFERENCE(treeCoord.first.runtime))
-                + SummarizeTreeSmallerPos<
+                + summarizeTreeSmallerPos<
                        T_Tree,
-                       decltype(
-                           T_TreeCoord::FirstElement::compiletime)::value>()(
+                       decltype(T_TreeCoord::FirstElement::compiletime)::value>(
                        tree.childs, LLAMA_DEREFERENCE(tree.count))
                 + getTreeBlobByteImpl(
                        getTupleElementRef<
