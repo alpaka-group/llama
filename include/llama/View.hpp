@@ -307,7 +307,6 @@ namespace llama
 #define __LLAMA_VIRTUALDATUM_NOT_IN_PLACE_OPERATOR_WITH_REF(OP, INP_OP, REF) \
     template<typename T_OtherType> \
     LLAMA_FN_HOST_ACC_INLINE auto operator OP(T_OtherType REF other) \
-        ->decltype(stackVirtualDatumCopy(*this)) \
     { \
         return stackVirtualDatumCopy(*this) INP_OP other; \
     }
