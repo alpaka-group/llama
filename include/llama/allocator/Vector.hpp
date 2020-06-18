@@ -154,7 +154,7 @@ namespace llama::allocator
         static inline auto allocate(std::size_t count, Parameter const)
             -> BlobType
         {
-            return {count};
+            return BlobType(count);
         }
     };
 }
