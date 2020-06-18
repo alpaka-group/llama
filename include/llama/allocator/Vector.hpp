@@ -18,10 +18,11 @@
 
 #pragma once
 
+#include "../preprocessor/macros.hpp"
+
 #include <malloc.h>
 #include <stdlib.h>
 #include <vector>
-
 namespace llama::allocator
 {
     namespace internal

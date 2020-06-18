@@ -47,4 +47,3 @@ namespace llama::mapping
             -> std::size_t;
     };
 }
-}

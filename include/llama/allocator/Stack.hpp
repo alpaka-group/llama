@@ -18,6 +18,9 @@
 
 #pragma once
 
+#include "../preprocessor/macros.hpp"
+#include "../Array.hpp"
+
 #include <malloc.h>
 #include <stdlib.h>
 #include <vector>

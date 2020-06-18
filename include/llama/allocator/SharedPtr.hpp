@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "../preprocessor/macros.hpp"
+
 #include <memory>
 
 namespace llama::allocator
