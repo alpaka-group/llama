@@ -41,10 +41,6 @@ namespace llama
             typename ParentView::VirtualDatumType; ///< VirtualDatum type,
                                                    ///< gotten from parent view
 
-        // VirtualView(VirtualView const&) = default;
-        // VirtualView(VirtualView&&) = default; // TODO noexcept
-        //~VirtualView() = default;
-
         /** Unlike a \ref View, a VirtualView can be created without a factory
          *  directly from a parent view.
          * \param parentView a reference to the parental view. Meaning, the
@@ -167,5 +163,4 @@ namespace llama
             blob; ///< reference to blob object of parent
         const Mapping & mapping; ///< reference to mapping of parent
     };
-
-} // namespace llama
+}

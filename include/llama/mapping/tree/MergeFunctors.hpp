@@ -83,15 +83,12 @@ namespace llama::mapping::tree
         template<typename T_Tree, typename T_LastOperation>
         struct MergeFunctorsImpl<T_Tree, Tuple<T_LastOperation>>
         {
-            using LastOp = T_LastOperation;
-            using TreeOperationList = Tuple<T_LastOperation>;
-
-            const LastOp operation;
+            const T_LastOperation operation;
 
             LLAMA_FN_HOST_ACC_INLINE
             MergeFunctorsImpl(
-                T_Tree const &,
-                TreeOperationList const & treeOperationList) :
+                const T_Tree &,
+                const Tuple<T_LastOperation> & treeOperationList) :
                     operation(treeOperationList.first)
             {}
 

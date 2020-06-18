@@ -34,18 +34,11 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto
         operator()(UserDomain<T_dim> const & size) const -> std::size_t
         {
-            return ExtentUserDomainAdress<T_dim - 1>()(size.pop_front())
-                * size[0];
-        }
-    };
-
-    template<>
-    struct ExtentUserDomainAdress<1>
-    {
-        LLAMA_FN_HOST_ACC_INLINE
-        auto operator()(UserDomain<1> const & size) const -> std::size_t
-        {
-            return size[0];
+            if constexpr(T_dim == 1)
+                return size[0];
+            else
+                return ExtentUserDomainAdress<T_dim - 1>()(size.pop_front())
+                    * size[0];
         }
     };
 
@@ -69,21 +62,12 @@ namespace llama
             UserDomain<T_dim> const & coord,
             UserDomain<T_dim> const & size) const -> std::size_t
         {
-            return coord[T_it - 1]
-                + LinearizeUserDomainAdress<T_dim, T_it - 1>()(coord, size)
-                * size[T_it - 1];
-        }
-    };
-
-    template<std::size_t T_dim>
-    struct LinearizeUserDomainAdress<T_dim, 1>
-    {
-        LLAMA_FN_HOST_ACC_INLINE
-        auto operator()(
-            UserDomain<T_dim> const & coord,
-            UserDomain<T_dim> const & size) const -> std::size_t
-        {
-            return coord[0];
+            if constexpr(T_it == 1)
+                return coord[0];
+            else
+                return coord[T_it - 1]
+                    + LinearizeUserDomainAdress<T_dim, T_it - 1>()(coord, size)
+                    * size[T_it - 1];
         }
     };
 
@@ -106,21 +90,13 @@ namespace llama
             UserDomain<T_dim> const & coord,
             UserDomain<T_dim> const & size) const -> std::size_t
         {
-            return coord[0]
-                + LinearizeUserDomainAdressLikeFortran<T_dim - 1>()(
-                      coord.pop_front(), size.pop_front())
-                * size[0];
-        }
-    };
-
-    template<>
-    struct LinearizeUserDomainAdressLikeFortran<1>
-    {
-        LLAMA_FN_HOST_ACC_INLINE
-        auto operator()(UserDomain<1> const & coord, UserDomain<1> const & size)
-            const -> std::size_t
-        {
-            return coord[0];
+            if constexpr(T_dim == 1)
+                return coord[0];
+            else
+                return coord[0]
+                    + LinearizeUserDomainAdressLikeFortran<T_dim - 1>()(
+                          coord.pop_front(), size.pop_front())
+                    * size[0];
         }
     };
 

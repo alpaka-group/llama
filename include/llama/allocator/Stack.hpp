@@ -22,32 +22,28 @@
 #include <stdlib.h>
 #include <vector>
 
-namespace llama
+namespace llama::allocator
 {
-    namespace allocator
+    /** Allocator to allocate memory for a \ref View in the \ref Factory on the
+     *  stack.
+     * \tparam reserved the amount of memory is needed to be known at compile
+     * time for performance reasons, this can be gotten at compile time with
+     * \ref SizeOf \see tempAlloc, OneOnStackFactory
+     */
+    template<std::size_t reserved>
+    struct Stack
     {
-        /** Allocator to allocate memory for a \ref View in the \ref Factory on
-         * the stack. \tparam reserved the amount of memory is needed to be
-         * known at compile time for performance reasons, this can be gotten at
-         * compile time with \ref SizeOf \see tempAlloc, OneOnStackFactory
-         */
-        template<std::size_t reserved>
-        struct Stack
-        {
-            using PrimType = unsigned char; ///< primary type of this allocator
-                                            ///< is `unsigned char`
-            using BlobType
-                = Array<PrimType, reserved>; ///< blob type of this allocator is
-                                             ///< `llama::Array<PrimType,
-                                             ///< reserved>`
-            using Parameter
-                = int; ///< the optional allocation parameter is ignored
+        using PrimType = unsigned char; ///< primary type of this allocator is
+                                        ///< `unsigned char`
+        using BlobType
+            = Array<PrimType, reserved>; ///< blob type of this allocator is
+                                         ///< `llama::Array<PrimType, reserved>`
+        using Parameter = int; ///< the optional allocation parameter is ignored
 
-            static LLAMA_FN_HOST_ACC_INLINE auto
-            allocate(std::size_t, Parameter const) -> BlobType
-            {
-                return {};
-            }
-        };
-    }
+        static LLAMA_FN_HOST_ACC_INLINE auto
+        allocate(std::size_t, Parameter const) -> BlobType
+        {
+            return {};
+        }
+    };
 }
