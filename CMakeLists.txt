@@ -19,7 +19,11 @@ source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/include/llama" FILES ${llamaSources
 # tests
 include(CTest)
 if (BUILD_TESTING)
-	find_package(Catch2 2.6.1 CONFIG REQUIRED)
+	find_package(Catch2 2.6.1 CONFIG QUIET)
+	if (NOT ${Catch2_FOUND})
+		message(FATAL_ERROR "Catch2 is required for building the tests. Either install Catch2 or disable tests by passing -DBUILD_TESTING=OFF to CMake.")
+	endif()
+
 	file(GLOB_RECURSE testSources "${CMAKE_CURRENT_SOURCE_DIR}/tests/**")
 	add_executable(tests ${testSources})
 	source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/tests" FILES ${testSources})
