@@ -17,12 +17,15 @@ add_custom_target("llamaIde" SOURCES ${llamaSources})
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/include/llama" FILES ${llamaSources})
 
 # tests
-find_package(Catch2 2.6.1 CONFIG REQUIRED)
-file(GLOB_RECURSE testSources "${CMAKE_CURRENT_SOURCE_DIR}/tests/**")
-add_executable(tests ${testSources})
-source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/tests" FILES ${testSources})
-target_compile_features(tests PRIVATE cxx_std_17)
-target_link_libraries(tests PRIVATE Catch2::Catch2 llama::llama)
+include(CTest)
+if (BUILD_TESTING)
+	find_package(Catch2 2.6.1 CONFIG REQUIRED)
+	file(GLOB_RECURSE testSources "${CMAKE_CURRENT_SOURCE_DIR}/tests/**")
+	add_executable(tests ${testSources})
+	source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/tests" FILES ${testSources})
+	target_compile_features(tests PRIVATE cxx_std_17)
+	target_link_libraries(tests PRIVATE Catch2::Catch2 llama::llama)
+endif()
 
 # examples
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/Modules/")
