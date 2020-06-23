@@ -11,7 +11,7 @@ target_link_libraries(${PROJECT_NAME} INTERFACE Boost::headers)
 # llama::llama to make subdirectory projects work
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
-# llama IDE
+# llama IDE target to make source browsable/editable in IDEs
 file(GLOB_RECURSE llamaSources "${CMAKE_CURRENT_SOURCE_DIR}/include/**")
 add_custom_target("llamaIde" SOURCES ${llamaSources})
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/include/llama" FILES ${llamaSources})
