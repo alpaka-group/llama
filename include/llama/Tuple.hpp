@@ -86,6 +86,8 @@ struct Tuple< T_FirstElement >
     FirstElement first;
 };
 
+template <typename... Elements>
+Tuple(Elements...) -> Tuple<Elements...>;
 
 namespace internal
 {
