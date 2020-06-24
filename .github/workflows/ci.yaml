@@ -1,0 +1,41 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  build-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: dependencies
+      run: |
+        vcpkg install catch2
+    - name: cmake
+      run: |
+        mkdir build
+        cd build
+        export BOOST_ROOT=$BOOST_ROOT_1_72_0
+        cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+    - name: build
+      run: cmake --build build
+    - name: tests
+      run: build/tests
+
+  build-windows:
+    runs-on: windows-latest
+    env:
+      VCPKG_DEFAULT_TRIPLET: x64-windows
+    steps:
+    - uses: actions/checkout@v2
+    - name: dependencies
+      run: |
+        vcpkg install catch2
+    - name: cmake
+      run: |
+        mkdir build
+        cd build
+        $env:BOOST_ROOT = $env:BOOST_ROOT_1_72_0
+        cmake .. -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
+    - name: build
+      run: cmake --build build
+    - name: tests
+      run: build/tests

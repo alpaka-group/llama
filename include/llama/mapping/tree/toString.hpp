@@ -34,7 +34,7 @@ namespace llama
 {
 
 #ifdef __GNUG__
-std::string demangleType(const char* name) {
+inline std::string demangleType(const char* name) {
 
     int status = -4; // some arbitrary value to eliminate the compiler warning
 
@@ -49,7 +49,7 @@ std::string demangleType(const char* name) {
 #else
 
 // does nothing if not g++
-std::string demangleType(const char* name) {
+inline std::string demangleType(const char* name) {
     return name;
 }
 
