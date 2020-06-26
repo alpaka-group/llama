@@ -44,12 +44,11 @@
 	#define LLAMA_FN_HOST_ACC_INLINE ALPAKA_FN_ACC __forceinline__
 #endif
 #include <llama/llama.hpp>
-
 #include <random>
-
-// png++ has a bug on nvcc, which is fixed in this file
-#include "solid_pixel_buffer_fixed.hpp"
-#include <png++/png.hpp>
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
 
 #include "../common/AlpakaAllocator.hpp"
 #include "../common/AlpakaMemCopy.hpp"
@@ -260,22 +259,19 @@ int main(int argc,char * * argv)
 
 #if ASYNCCOPY_CUDA == 1
     using Acc = alpaka::acc::AccGpuCudaRt<Dim, Size>;
-#if ASYNCCOPY_ASYNC == 1
-    using Queue = alpaka::queue::QueueCudaRtAsync;
-#else // ASYNCCOPY_ASYNC == 0
-    using Queue = alpaka::queue::QueueCudaRtSync;
-#endif // ASYNCCOPY_ASYNC
 #else // ASYNCCOPY_CUDA == 0
     //~ using Acc = alpaka::acc::AccCpuSerial<Dim, Size>;
     using Acc = alpaka::acc::AccCpuOmp2Blocks<Dim, Size>;
     //~ using Acc = alpaka::acc::AccCpuOmp2Threads<Dim, Size>;
     //~ using Acc = alpaka::acc::AccCpuOmp4<Dim, Size>;
-#if ASYNCCOPY_ASYNC == 1
-    using Queue = alpaka::queue::QueueCpuAsync;
-#else // ASYNCCOPY_ASYNC == 0
-    using Queue = alpaka::queue::QueueCpuSync;
-#endif // ASYNCCOPY_ASYNC
 #endif // ASYNCCOPY_CUDA
+    using Queue = alpaka::queue::Queue<Acc,
+#if ASYNCCOPY_ASYNC == 1
+        alpaka::queue::NonBlocking
+#else // ASYNCCOPY_ASYNC == 0
+        alpaka::queue::Blocking
+#endif // ASYNCCOPY_ASYNC
+    >;
     using DevHost = alpaka::dev::Dev<Host>;
     using DevAcc = alpaka::dev::Dev<Acc>;
     using PltfHost = alpaka::pltf::Pltf<DevHost>;
@@ -300,16 +296,23 @@ int main(int argc,char * * argv)
     constexpr std::size_t threadCount = Distribution::threadCount;
 
     //png::image< png::rgb_pixel > image;
-    png::image< png::rgb_pixel >* image = NULL;
+    std::vector<unsigned char> image;
     std::string out_filename = "output.png";
 
     if (argc > 1)
     {
-        image = new png::image< png::rgb_pixel >( argv[1] );
-        img_x = image->get_width();
-        img_y = image->get_height();
-        buffer_x = image->get_width() + 2 * kernelSize;
-        buffer_y = image->get_height() + 2 * kernelSize;
+        int x = 0;
+        int y = 0;
+        int n = 3;
+        unsigned char *data = stbi_load(argv[1], &x, &y, &n, 0);
+        image.resize(x * y * 3);
+        std::copy(data, data + image.size(), begin(image));
+        stbi_image_free(data);
+        img_x = x;
+        img_y = y;
+        buffer_x = x + 2 * kernelSize;
+        buffer_y = y + 2 * kernelSize;
+
         if (argc > 2)
             out_filename = std::string( argv[2] );
     }
@@ -416,9 +419,9 @@ int main(int argc,char * * argv)
 
     chrono.printAndReset("Alloc");
 
-    if ( !image )
+    if (image.empty())
     {
-        image = new png::image< png::rgb_pixel >( img_x, img_y );
+        image.resize(img_x * img_y * 3);
         std::default_random_engine generator;
         std::normal_distribution< Element > distribution(
             Element( 0 ), // mean
@@ -449,15 +452,10 @@ int main(int argc,char * * argv)
                     X = img_x + kernelSize - 1;
                 if ( Y > img_y + kernelSize - 1 )
                     Y = img_y + kernelSize - 1;
-                host( y, x )( px::R() ) = Element((*image)
-                    [ Y - kernelSize ]
-                    [ X - kernelSize ].red) / 255.;
-                host( y, x )( px::G() ) = Element((*image)
-                    [ Y - kernelSize ]
-                    [ X - kernelSize ].blue) / 255.;
-                host( y, x )( px::B() ) = Element((*image)
-                    [ Y - kernelSize ]
-                    [ X - kernelSize ].green) / 255.;
+                const auto* pixel = &image[((Y - kernelSize) * img_x + X - kernelSize) * 3];
+                host( y, x )( px::R() ) = Element(pixel[0]) / 255.;
+                host( y, x )( px::G() ) = Element(pixel[1]) / 255.;
+                host( y, x )( px::B() ) = Element(pixel[2]) / 255.;
             }
     }
 
@@ -558,7 +556,7 @@ int main(int argc,char * * argv)
                         chunkIt++;
                     }
                     if (not_found)
-                        usleep(1);
+                        std::this_thread::sleep_for(std::chrono::microseconds{1});
                 }
             }
             //~ // Copy data from virtual view to mini view
@@ -612,23 +610,22 @@ int main(int argc,char * * argv)
     for (std::size_t y = 0; y < img_y; ++y)
         for (std::size_t x = 0; x < img_x; ++x)
         {
-            (*image)[ y ][ x ].red = host(
+            auto* pixel = &image[(y * img_x + x) * 3];
+            pixel[0] = host(
                 y + kernelSize,
                 x + kernelSize
             )( px::R() ) * 255.;
-            (*image)[ y ][ x ].blue = host(
+            pixel[2] = host(
                 y + kernelSize,
                 x + kernelSize
             )( px::G() ) * 255.;
-            (*image)[ y ][ x ].green = host(
+            pixel[1] = host(
                 y + kernelSize,
                 x + kernelSize
             )( px::B() ) * 255.;
         }
-    image->write( out_filename );
+    stbi_write_png(out_filename.c_str(), img_x, img_y, 3, image.data(), 0);
 #endif // ASYNCCOPY_SAVE
-
-    delete(image);
 
     return 0;
 }

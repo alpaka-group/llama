@@ -46,7 +46,7 @@ struct MergeFunctorsImpl
     using Result = typename SubMergeFunctorsImpl::Result;
 
     FirstOp const operation;
-    decltype( operation.template basicToResult( T_Tree() ) ) const treeAfterOp;
+    decltype( operation.basicToResult( T_Tree() ) ) const treeAfterOp;
     SubMergeFunctorsImpl const subMergeFunctorsImpl;
 
     LLAMA_FN_HOST_ACC_INLINE
@@ -55,7 +55,7 @@ struct MergeFunctorsImpl
         T_TreeOperationList const & treeOperationList
     ) :
         operation( treeOperationList.first ),
-        treeAfterOp( operation.template basicToResult( tree ) ),
+        treeAfterOp( operation.basicToResult( tree ) ),
         subMergeFunctorsImpl(
             treeAfterOp,
             treeOperationList.rest
@@ -81,7 +81,7 @@ struct MergeFunctorsImpl
     ) const
     -> decltype(
         subMergeFunctorsImpl.basicCoordToResultCoord(
-            operation.template basicCoordToResultCoord(
+            operation.basicCoordToResultCoord(
                 basicCoord,
                 tree
             ),
@@ -90,7 +90,7 @@ struct MergeFunctorsImpl
     )
     {
         return subMergeFunctorsImpl.basicCoordToResultCoord(
-            operation.template basicCoordToResultCoord(
+            operation.basicCoordToResultCoord(
             basicCoord,
             tree
             ),
@@ -107,20 +107,20 @@ struct MergeFunctorsImpl
     ) const
     -> decltype(
         subMergeFunctorsImpl.resultCoordToBasicCoord(
-            operation.template resultCoordToBasicCoord(
+            operation.resultCoordToBasicCoord(
                 resultCoord,
                 tree
             ),
-            operation.template basicToResult( tree )
+            operation.basicToResult( tree )
         )
     )
     {
         return subMergeFunctorsImpl.resultCoordToBasicCoord(
-            operation.template resultCoordToBasicCoord(
+            operation.resultCoordToBasicCoord(
                 resultCoord,
                 tree
             ),
-            operation.template basicToResult( tree )
+            operation.basicToResult( tree )
         );
     }
 };
@@ -153,7 +153,7 @@ struct MergeFunctorsImpl<
     basicToResult( const T_Tree & tree ) const
     -> Result
     {
-        return operation.template basicToResult( tree );
+        return operation.basicToResult( tree );
     }
 
     template< typename T_TreeCoord >
@@ -164,13 +164,13 @@ struct MergeFunctorsImpl<
         T_Tree const & tree
     ) const
     -> decltype(
-        operation.template basicCoordToResultCoord(
+        operation.basicCoordToResultCoord(
             basicCoord,
             tree
         )
     )
     {
-        return operation.template basicCoordToResultCoord(
+        return operation.basicCoordToResultCoord(
             basicCoord,
             tree
         );
@@ -184,13 +184,13 @@ struct MergeFunctorsImpl<
         T_Tree const & tree
     ) const
     -> decltype(
-        operation.template resultCoordToBasicCoord(
+        operation.resultCoordToBasicCoord(
             resultCoord,
             tree
         )
     )
     {
-        return operation.template resultCoordToBasicCoord(
+        return operation.resultCoordToBasicCoord(
             resultCoord,
             tree
         );
