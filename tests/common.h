@@ -2,13 +2,30 @@
 
 #include <boost/algorithm/string.hpp>
 #include <boost/core/demangle.hpp>
+#include <numeric>
+#include <regex>
 #include <string>
+#include <typeinfo>
 
 template <typename T>
 std::string prettyPrintType(const T& t) {
     auto raw = boost::core::demangle(typeid(t).name());
+#ifdef _MSC_VER
+    // remove clutter in MSVC
+    boost::replace_all(raw, "struct ", "");
+#endif
+#ifdef __GNUG__
+    // remove clutter in g++
+    static std::regex ulLiteral{"(\\d+)ul"};
+    raw = std::regex_replace(raw, ulLiteral, "$1");
+#endif
+
     boost::replace_all(raw, "<", "<\n");
+#ifdef _MSC_VER
+    boost::replace_all(raw, ",", ",\n");
+#else
     boost::replace_all(raw, ", ", ",\n");
+#endif
     boost::replace_all(raw, " >", ">");
     boost::replace_all(raw, ">", "\n>");
 
@@ -29,4 +46,17 @@ std::string prettyPrintType(const T& t) {
     if (result.back() == '\n')
         result.pop_back();
     return result;
+}
+
+template <typename View>
+void zeroStorage(View& view) {
+    for (auto i = 0; i < View::Mapping::blobCount; i++) std::memset(view.blob[i].blob.get(), 0, view.mapping.getBlobSize(i));
+}
+
+template <typename View>
+void iotaStorage(View& view) {
+    for (auto i = 0; i < View::Mapping::blobCount; i++) {
+        auto fillFunc = [val = 0]() mutable { return static_cast<typename View::BlobType::PrimType>(val++); };
+        std::generate_n(view.blob[i].blob.get(), view.mapping.getBlobSize(i), fillFunc);
+    }
 }
