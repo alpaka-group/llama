@@ -98,100 +98,179 @@ TEST_CASE("treemapping") {
     using Mapping = llama::mapping::tree::Mapping<UD, Name, decltype(treeOperationList)>;
     const Mapping mapping(udSize, treeOperationList);
 
-    CHECK(sizeof(Mapping::BasicTree) == 24);
-    CHECK(prettyPrintType(mapping.basicTree) == R"(struct llama::mapping::tree::TreeElement<
-    struct llama::NoName,struct llama::Tuple<
-        struct llama::mapping::tree::TreeElement<
-            struct llama::NoName,struct llama::Tuple<
-                struct llama::mapping::tree::TreeElement<
-                    struct st::Pos,struct llama::Tuple<
-                        struct llama::mapping::tree::TreeElement<
-                            struct st::X,double,struct std::integral_constant<
-                                unsigned __int64,1
+    auto raw = prettyPrintType(mapping.basicTree);
+#ifdef _WIN32
+    boost::replace_all(raw, "__int64", "long");
+#endif
+    CHECK(raw == R"(llama::mapping::tree::TreeElement<
+    llama::NoName,
+    llama::Tuple<
+        llama::mapping::tree::TreeElement<
+            llama::NoName,
+            llama::Tuple<
+                llama::mapping::tree::TreeElement<
+                    st::Pos,
+                    llama::Tuple<
+                        llama::mapping::tree::TreeElement<
+                            st::X,
+                            double,
+                            std::integral_constant<
+                                unsigned long,
+                                1
                             >
-                            >,struct llama::mapping::tree::TreeElement<
-                                struct st::Y,double,struct std::integral_constant<
-                                    unsigned __int64,1
-                                >
-                                >,struct llama::mapping::tree::TreeElement<
-                                    struct st::Z,double,struct std::integral_constant<
-                                        unsigned __int64,1
-                                    >
-                                >
-                                >,struct std::integral_constant<
-                                    unsigned __int64,1
-                                >
-                                >,struct llama::mapping::tree::TreeElement<
-                                    struct st::Weight,float,struct std::integral_constant<
-                                        unsigned __int64,1
-                                    >
-                                    >,struct llama::mapping::tree::TreeElement<
-                                        struct st::Momentum,struct llama::Tuple<
-                                            struct llama::mapping::tree::TreeElement<
-                                                struct st::Z,double,struct std::integral_constant<
-                                                    unsigned __int64,1
-                                                >
-                                                >,struct llama::mapping::tree::TreeElement<
-                                                    struct st::Y,double,struct std::integral_constant<
-                                                        unsigned __int64,1
-                                                    >
-                                                    >,struct llama::mapping::tree::TreeElement<
-                                                        struct st::X,double,struct std::integral_constant<
-                                                            unsigned __int64,1
-                                                        >
-                                                    >
-                                                    >,struct std::integral_constant<
-                                                        unsigned __int64,1
-                                                    >
-                                                >
-                                                >,unsigned __int64
-                                            >
-                                            >,unsigned __int64
-                                        >)");
+                        >,
+                        llama::mapping::tree::TreeElement<
+                            st::Y,
+                            double,
+                            std::integral_constant<
+                                unsigned long,
+                                1
+                            >
+                        >,
+                        llama::mapping::tree::TreeElement<
+                            st::Z,
+                            double,
+                            std::integral_constant<
+                                unsigned long,
+                                1
+                            >
+                        >
+                    >,
+                    std::integral_constant<
+                        unsigned long,
+                        1
+                    >
+                >,
+                llama::mapping::tree::TreeElement<
+                    st::Weight,
+                    float,
+                    std::integral_constant<
+                        unsigned long,
+                        1
+                    >
+                >,
+                llama::mapping::tree::TreeElement<
+                    st::Momentum,
+                    llama::Tuple<
+                        llama::mapping::tree::TreeElement<
+                            st::Z,
+                            double,
+                            std::integral_constant<
+                                unsigned long,
+                                1
+                            >
+                        >,
+                        llama::mapping::tree::TreeElement<
+                            st::Y,
+                            double,
+                            std::integral_constant<
+                                unsigned long,
+                                1
+                            >
+                        >,
+                        llama::mapping::tree::TreeElement<
+                            st::X,
+                            double,
+                            std::integral_constant<
+                                unsigned long,
+                                1
+                            >
+                        >
+                    >,
+                    std::integral_constant<
+                        unsigned long,
+                        1
+                    >
+                >
+            >,
+            unsigned long
+        >
+    >,
+    unsigned long
+>)");
 
-    CHECK(sizeof(Mapping::ResultTree) == 56);
-    CHECK(prettyPrintType(mapping.resultTree) == R"(struct llama::mapping::tree::TreeElement<
-    struct llama::NoName,struct llama::Tuple<
-        struct llama::mapping::tree::TreeElement<
-            struct llama::NoName,struct llama::Tuple<
-                struct llama::mapping::tree::TreeElement<
-                    struct st::Pos,struct llama::Tuple<
-                        struct llama::mapping::tree::TreeElement<
-                            struct st::X,double,unsigned __int64
-                            >,struct llama::mapping::tree::TreeElement<
-                                struct st::Y,double,unsigned __int64
-                                >,struct llama::mapping::tree::TreeElement<
-                                    struct st::Z,double,unsigned __int64
-                                >
-                                >,struct std::integral_constant<
-                                    unsigned __int64,1
-                                >
-                                >,struct llama::mapping::tree::TreeElement<
-                                    struct st::Weight,float,unsigned __int64
-                                    >,struct llama::mapping::tree::TreeElement<
-                                        struct st::Momentum,struct llama::Tuple<
-                                            struct llama::mapping::tree::TreeElement<
-                                                struct st::Z,double,unsigned __int64
-                                                >,struct llama::mapping::tree::TreeElement<
-                                                    struct st::Y,double,unsigned __int64
-                                                    >,struct llama::mapping::tree::TreeElement<
-                                                        struct st::X,double,unsigned __int64
-                                                    >
-                                                    >,struct std::integral_constant<
-                                                        unsigned __int64,1
-                                                    >
-                                                >
-                                                >,struct std::integral_constant<
-                                                    unsigned __int64,1
-                                                >
-                                            >
-                                            >,struct std::integral_constant<
-                                                unsigned __int64,1
-                                            >
-                                        >)");
+    auto raw2 = prettyPrintType(mapping.resultTree);
+#ifdef _WIN32
+    boost::replace_all(raw2, "__int64", "long");
+#endif
+    CHECK(raw2 == R"(llama::mapping::tree::TreeElement<
+    llama::NoName,
+    llama::Tuple<
+        llama::mapping::tree::TreeElement<
+            llama::NoName,
+            llama::Tuple<
+                llama::mapping::tree::TreeElement<
+                    st::Pos,
+                    llama::Tuple<
+                        llama::mapping::tree::TreeElement<
+                            st::X,
+                            double,
+                            unsigned long
+                        >,
+                        llama::mapping::tree::TreeElement<
+                            st::Y,
+                            double,
+                            unsigned long
+                        >,
+                        llama::mapping::tree::TreeElement<
+                            st::Z,
+                            double,
+                            unsigned long
+                        >
+                    >,
+                    std::integral_constant<
+                        unsigned long,
+                        1
+                    >
+                >,
+                llama::mapping::tree::TreeElement<
+                    st::Weight,
+                    float,
+                    unsigned long
+                >,
+                llama::mapping::tree::TreeElement<
+                    st::Momentum,
+                    llama::Tuple<
+                        llama::mapping::tree::TreeElement<
+                            st::Z,
+                            double,
+                            unsigned long
+                        >,
+                        llama::mapping::tree::TreeElement<
+                            st::Y,
+                            double,
+                            unsigned long
+                        >,
+                        llama::mapping::tree::TreeElement<
+                            st::X,
+                            double,
+                            unsigned long
+                        >
+                    >,
+                    std::integral_constant<
+                        unsigned long,
+                        1
+                    >
+                >
+            >,
+            std::integral_constant<
+                unsigned long,
+                1
+            >
+        >
+    >,
+    std::integral_constant<
+        unsigned long,
+        1
+    >
+>)");
 
-    CHECK(llama::mapping::tree::toString(mapping.basicTree) == "12288 * [ 12288 * [ 1 * Pos[ 1 * X(double __cdecl(void)) , 1 * Y(double __cdecl(void)) , 1 * Z(double __cdecl(void)) ] , 1 * Weight(float __cdecl(void)) , 1 * Momentum[ 1 * Z(double __cdecl(void)) , 1 * Y(double __cdecl(void)) , 1 * X(double __cdecl(void)) ] ] ]");
-    CHECK(llama::mapping::tree::toString(mapping.resultTree) == "1 * [ 1 * [ 1 * Pos[ 150994944 * X(double __cdecl(void)) , 150994944 * Y(double __cdecl(void)) , 150994944 * Z(double __cdecl(void)) ] , 150994944 * Weight(float __cdecl(void)) , 1 * Momentum[ 150994944 * Z(double __cdecl(void)) , 150994944 * Y(double __cdecl(void)) , 150994944 * X(double __cdecl(void)) ] ] ]");
+    CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
+          "12288 * [ 12288 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 "
+          "* X(double) ] ] ]");
+    CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
+          "1 * [ 1 * [ 1 * Pos[ 150994944 * X(double) , 150994944 * Y(double) , 150994944 * Z(double) ] , 150994944 "
+          "* Weight(float) , 1 * Momentum[ 150994944 * Z(double) , 150994944 * Y(double) , 150994944 * X(double) ] ] ]");
 
     CHECK(mapping.getBlobSize(0) == 7851737088);
     CHECK(mapping.getBlobByte<2, 1>({50, 100}) == 5440733984);

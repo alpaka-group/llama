@@ -28,41 +28,63 @@ using Name = llama::DS<
 
 TEST_CASE("demangleType") {
     const auto str = prettyPrintType(Name());
-    CHECK(str == R"(struct boost::mp11::mp_list<
-    struct boost::mp11::mp_list<
-        struct st::Pos,struct boost::mp11::mp_list<
-            struct boost::mp11::mp_list<
-                struct st::X,float
-                >,struct boost::mp11::mp_list<
-                    struct st::Y,float
-                    >,struct boost::mp11::mp_list<
-                        struct st::Z,float
-                    >
-                >
-                >,struct boost::mp11::mp_list<
-                    struct st::Momentum,struct boost::mp11::mp_list<
-                        struct boost::mp11::mp_list<
-                            struct st::Z,double
-                            >,struct boost::mp11::mp_list<
-                                struct st::X,double
-                            >
-                        >
-                        >,struct boost::mp11::mp_list<
-                            struct st::Weight,int
-                            >,struct boost::mp11::mp_list<
-                                struct st::Options,struct boost::mp11::mp_list<
-                                    struct boost::mp11::mp_list<
-                                        struct llama::NoName,bool
-                                        >,struct boost::mp11::mp_list<
-                                            struct llama::NoName,bool
-                                            >,struct boost::mp11::mp_list<
-                                                struct llama::NoName,bool
-                                                >,struct boost::mp11::mp_list<
-                                                    struct llama::NoName,bool
-                                                >
-                                            >
-                                        >
-                                    >)");
+    CHECK(str == R"(boost::mp11::mp_list<
+    boost::mp11::mp_list<
+        st::Pos,
+        boost::mp11::mp_list<
+            boost::mp11::mp_list<
+                st::X,
+                float
+            >,
+            boost::mp11::mp_list<
+                st::Y,
+                float
+            >,
+            boost::mp11::mp_list<
+                st::Z,
+                float
+            >
+        >
+    >,
+    boost::mp11::mp_list<
+        st::Momentum,
+        boost::mp11::mp_list<
+            boost::mp11::mp_list<
+                st::Z,
+                double
+            >,
+            boost::mp11::mp_list<
+                st::X,
+                double
+            >
+        >
+    >,
+    boost::mp11::mp_list<
+        st::Weight,
+        int
+    >,
+    boost::mp11::mp_list<
+        st::Options,
+        boost::mp11::mp_list<
+            boost::mp11::mp_list<
+                llama::NoName,
+                bool
+            >,
+            boost::mp11::mp_list<
+                llama::NoName,
+                bool
+            >,
+            boost::mp11::mp_list<
+                llama::NoName,
+                bool
+            >,
+            boost::mp11::mp_list<
+                llama::NoName,
+                bool
+            >
+        >
+    >
+>)");
 }
 
 TEST_CASE("AoS address") {
@@ -93,9 +115,10 @@ TEST_CASE("StubType") {
 }
 
 TEST_CASE("GetCoordFromUID") {
-    const auto str = prettyPrintType(llama::GetCoordFromUID< Name, st::Pos, st::X >());
-    CHECK(str == R"(struct llama::DatumCoord<
-    0,0
+    const auto str = prettyPrintType(llama::GetCoordFromUID<Name, st::Pos, st::X>());
+    CHECK(str == R"(llama::DatumCoord<
+    0,
+    0
 >)");
 }
 
@@ -108,6 +131,8 @@ TEST_CASE("access") {
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>;
     auto view = Factory::allocView(mapping);
+
+    zeroStorage(view);
 
     const UD pos{0, 0};
     CHECK((view(pos) == view[pos]));
@@ -181,6 +206,8 @@ TEST_CASE("iteration and access") {
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>;
     auto view = Factory::allocView(mapping);
 
+    zeroStorage(view);
+
     for (size_t x = 0; x < udSize[0]; ++x)
         for (size_t y = 0; y < udSize[1]; ++y) {
             SetZeroFunctor<decltype(view(x, y))> szf{view(x, y)};
@@ -206,6 +233,8 @@ TEST_CASE("Datum access") {
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>;
     auto view = Factory::allocView(mapping);
 
+    zeroStorage(view);
+
     for (size_t x = 0; x < udSize[0]; ++x)
         for (size_t y = 0; y < udSize[1]; ++y) {
             auto datum = view(x, y);
@@ -220,5 +249,5 @@ TEST_CASE("Datum access") {
         for (size_t y = 0; y < udSize[1]; ++y)
             sum += view(x, y).access< 1, 0 >();
 
-    CHECK(sum == 120.0);
+    CHECK(sum == 0.0);
 }

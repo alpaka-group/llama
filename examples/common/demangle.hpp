@@ -11,11 +11,12 @@
 #include <vector>
 #include <iterator>
 #include <boost/algorithm/string/replace.hpp>
+#include <boost/core/demangle.hpp>
 
 template <class T>
 std::string type(const T& t) {
 
-    return llama::demangleType(typeid(t).name());
+    return boost::core::demangle(typeid(t).name());
 }
 
 template<typename Out>
