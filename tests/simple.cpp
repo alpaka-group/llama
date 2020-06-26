@@ -14,6 +14,7 @@ namespace st {
     struct Options {};
 }
 
+// clang-format off
 using Name = llama::DS<
     llama::DE<st::Pos, llama::DS<
         llama::DE<st::X, float>,
@@ -27,6 +28,7 @@ using Name = llama::DS<
     llama::DE<st::Weight, int>,
     llama::DE<st::Options, llama::DA<bool, 4>>
 >;
+// clang-format on
 // clang-format on
 
 TEST_CASE("demangleType")
