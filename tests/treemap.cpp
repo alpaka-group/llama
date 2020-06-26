@@ -98,7 +98,6 @@ TEST_CASE("treemapping") {
     using Mapping = llama::mapping::tree::Mapping<UD, Name, decltype(treeOperationList)>;
     const Mapping mapping(udSize, treeOperationList);
 
-    CHECK(sizeof(Mapping::BasicTree) == 24);
     auto raw = prettyPrintType(mapping.basicTree);
 #ifdef _WIN32
     boost::replace_all(raw, "__int64", "long");
@@ -190,7 +189,6 @@ TEST_CASE("treemapping") {
     unsigned long
 >)");
 
-    CHECK(sizeof(Mapping::ResultTree) == 56);
     auto raw2 = prettyPrintType(mapping.resultTree);
 #ifdef _WIN32
     boost::replace_all(raw2, "__int64", "long");
