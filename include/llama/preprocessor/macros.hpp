@@ -109,16 +109,6 @@
 #   define LLAMA_FORCE_INLINE_RECURSIVE
 #endif
 
-#if defined(DEBUG) || !defined(NDEBUG) || defined(_DEBUG)
-/// resolves to `x` if in debug mode otherwise ignores `x`
-#   define LLAMA_IF_DEBUG( x ) x
-/// resolves to `x` if **not** in debug mode otherwise ignores `x`
-#   define LLAMA_IF_RELEASE( x )
-#else
-#   define LLAMA_IF_DEBUG( x )
-#   define LLAMA_IF_RELEASE( x ) x
-#endif
-
 #define LLAMA_DEREFERENCE( x ) decltype( x )( x )
 
 #ifndef LLAMA_IGNORE_LITERAL
