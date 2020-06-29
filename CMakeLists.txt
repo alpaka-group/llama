@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.3)
-project (llama)
+project (llama CXX)
 
 # llama
 find_package(Boost 1.66.0 REQUIRED)
