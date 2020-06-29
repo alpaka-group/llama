@@ -27,57 +27,6 @@ namespace llama
 {
     namespace internal
     {
-        template<typename T_Pos, typename T_Coord, typename SFINAE = void>
-        struct CoordIsIncluded;
-
-        template<typename T_Pos, typename T_Coord>
-        struct CoordIsIncluded<
-            T_Pos,
-            T_Coord,
-            std::enable_if_t<(T_Pos::size < T_Coord::size)>>
-        {
-            static constexpr bool value = false;
-        };
-
-        template<typename T_Pos, typename T_Coord>
-        struct CoordIsIncluded<
-            T_Pos,
-            T_Coord,
-            std::enable_if_t<
-                (T_Pos::size >= T_Coord::size)
-                && DatumCoordIsSame<T_Pos, T_Coord>::value>>
-        {
-            static constexpr bool value = true;
-        };
-
-        template<
-            typename T_Coord,
-            typename T_Pos,
-            typename T_Functor,
-            typename SFINAE = void>
-        struct ApplyFunctorIfCoordIsIncluded
-        {
-            LLAMA_FN_HOST_ACC_INLINE void
-            operator()(T_Functor const & functor){};
-        };
-
-        template<typename T_Coord, typename T_Pos, typename T_Functor>
-        struct ApplyFunctorIfCoordIsIncluded<
-            T_Coord,
-            T_Pos,
-            T_Functor,
-            typename std::enable_if<
-                CoordIsIncluded<T_Pos, T_Coord>::value>::type>
-        {
-            LLAMA_FN_HOST_ACC_INLINE void operator()(T_Functor & functor)
-            {
-                functor(
-                    T_Coord(),
-                    typename T_Pos::template Back<
-                        T_Pos::size - T_Coord::size>());
-            };
-        };
-
         template<
             typename T_Coord,
             typename T_Pos,
@@ -94,8 +43,13 @@ namespace llama
         {
             LLAMA_FN_HOST_ACC_INLINE void operator()(T_Functor && functor)
             {
-                ApplyFunctorIfCoordIsIncluded<T_Coord, T_Pos, T_Functor>{}(
-                    std::forward<T_Functor>(functor));
+                if constexpr(
+                    (T_Pos::size >= T_Coord::size)
+                    && DatumCoordIsSame<T_Pos, T_Coord>::value)
+                    functor(
+                        T_Coord(),
+                        typename T_Pos::template Back<
+                            T_Pos::size - T_Coord::size>());
             };
         };
 
@@ -142,18 +96,13 @@ namespace llama
                     T_Functor,
                     GetDatumElementType<T_Leaf>>{}(
                     std::forward<T_Functor>(functor));
-                ApplyFunctorForEachLeafImpl<
-                    T_Coord,
-                    typename T_Pos::IncBack,
-                    T_Functor,
-                    T_Leaves...>{}(std::forward<T_Functor>(functor));
+                if constexpr(sizeof...(T_Leaves) > 0)
+                    ApplyFunctorForEachLeafImpl<
+                        T_Coord,
+                        typename T_Pos::IncBack,
+                        T_Functor,
+                        T_Leaves...>{}(std::forward<T_Functor>(functor));
             }
-        };
-
-        template<typename T_Coord, typename T_Pos, typename T_Functor>
-        struct ApplyFunctorForEachLeafImpl<T_Coord, T_Pos, T_Functor>
-        {
-            LLAMA_FN_HOST_ACC_INLINE void operator()(T_Functor && functor) {}
         };
 
         template<
@@ -201,10 +150,6 @@ namespace llama
         typename... T_RestUID>
     struct ForEach
     {
-        using T_DatumCoord = GetCoordFromUID<
-            T_DatumDomain,
-            T_DatumCoordOrFirstUID,
-            T_RestUID...>;
         /** Applies the given functor to the given (part of the) datum domain.
          * \tparam T_Functor type of the functor
          * \param functor the perfectly forwarded functor
@@ -212,6 +157,10 @@ namespace llama
         template<typename T_Functor>
         LLAMA_FN_HOST_ACC_INLINE static void apply(T_Functor && functor)
         {
+            using T_DatumCoord = GetCoordFromUID<
+                T_DatumDomain,
+                T_DatumCoordOrFirstUID,
+                T_RestUID...>;
             internal::ApplyFunctorForEachLeaf<
                 T_DatumDomain,
                 T_DatumCoord,
