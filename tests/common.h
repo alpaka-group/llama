@@ -2,6 +2,8 @@
 
 #include <boost/algorithm/string.hpp>
 #include <boost/core/demangle.hpp>
+#include <llama/allocator/SharedPtr.hpp>
+#include <llama/allocator/Vector.hpp>
 #include <numeric>
 #include <regex>
 #include <string>
@@ -48,9 +50,26 @@ std::string prettyPrintType(const T& t) {
     return result;
 }
 
-template <typename View>
-void zeroStorage(View& view) {
-    for (auto i = 0; i < View::Mapping::blobCount; i++) std::memset(view.blob[i].blob.get(), 0, view.mapping.getBlobSize(i));
+namespace internal
+{
+    inline void zeroBlob(
+        llama::allocator::internal::SharedPtrAccessor & spa,
+        size_t blobSize)
+    {
+        std::memset(spa.blob.get(), 0, blobSize);
+    }
+    template<typename T, typename A>
+    void zeroBlob(std::vector<T, A> & v, size_t blobSize)
+    {
+        std::memset(v.data(), 0, blobSize);
+    }
+}
+
+template<typename View>
+void zeroStorage(View & view)
+{
+    for(auto i = 0; i < View::Mapping::blobCount; i++)
+        internal::zeroBlob(view.blob[i], view.mapping.getBlobSize(i));
 }
 
 template <typename View>

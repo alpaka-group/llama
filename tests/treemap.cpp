@@ -952,6 +952,7 @@ TEST_CASE("treemapping")
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>;
     auto view = Factory::allocView(mapping);
+    zeroStorage(view);
 
     for(size_t x = 0; x < udSize[0]; ++x)
         for(size_t y = 0; y < udSize[1]; ++y)
