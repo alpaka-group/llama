@@ -3,7 +3,7 @@
 #include <catch2/catch.hpp>
 #include <llama/llama.hpp>
 
-namespace st
+namespace tag
 {
     // clang-format off
     struct Pos {};
@@ -42,29 +42,29 @@ namespace st
 
 // clang-format off
 using Name = llama::DS<
-    llama::DE<st::Pos, llama::DS<
-        llama::DE<st::X, double>,
-        llama::DE<st::Y, double>,
-        llama::DE<st::Z, double>
+    llama::DE<tag::Pos, llama::DS<
+        llama::DE<tag::X, double>,
+        llama::DE<tag::Y, double>,
+        llama::DE<tag::Z, double>
     >>,
-    llama::DE<st::Weight, float>,
-    llama::DE<st::Momentum, llama::DS<
-        llama::DE<st::Z, double>,
-        llama::DE<st::Y, double>,
-        llama::DE<st::X, double>
+    llama::DE<tag::Weight, float>,
+    llama::DE<tag::Momentum, llama::DS<
+        llama::DE<tag::Z, double>,
+        llama::DE<tag::Y, double>,
+        llama::DE<tag::X, double>
     >>
 >;
 // clang-format on
 
 TEST_CASE("treemapping.empty")
 {
-    using UD = llama::UserDomain<2>;
-    const UD udSize{16, 16};
+    using UserDomain = llama::UserDomain<2>;
+    const UserDomain userDomain{16, 16};
 
     auto treeOperationList = llama::Tuple{};
-    using Mapping
-        = llama::mapping::tree::Mapping<UD, Name, decltype(treeOperationList)>;
-    const Mapping mapping(udSize, treeOperationList);
+    using Mapping = llama::mapping::tree::
+        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+    const Mapping mapping(userDomain, treeOperationList);
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
@@ -76,7 +76,7 @@ TEST_CASE("treemapping.empty")
     CHECK(mapping.getBlobSize(0) == 13312);
 
     {
-        const auto coord = UD{0, 0};
+        const auto coord = UserDomain{0, 0};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 0);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 8);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 16);
@@ -87,7 +87,7 @@ TEST_CASE("treemapping.empty")
     }
 
     {
-        const auto coord = UD{0, 1};
+        const auto coord = UserDomain{0, 1};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 52);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 60);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 68);
@@ -98,7 +98,7 @@ TEST_CASE("treemapping.empty")
     }
 
     {
-        const auto coord = UD{1, 0};
+        const auto coord = UserDomain{1, 0};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 832);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 840);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 848);
@@ -111,14 +111,14 @@ TEST_CASE("treemapping.empty")
 
 TEST_CASE("treemapping.Idem")
 {
-    using UD = llama::UserDomain<2>;
-    const UD udSize{16, 16};
+    using UserDomain = llama::UserDomain<2>;
+    const UserDomain userDomain{16, 16};
 
     auto treeOperationList
         = llama::Tuple{llama::mapping::tree::functor::Idem()};
-    using Mapping
-        = llama::mapping::tree::Mapping<UD, Name, decltype(treeOperationList)>;
-    const Mapping mapping(udSize, treeOperationList);
+    using Mapping = llama::mapping::tree::
+        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+    const Mapping mapping(userDomain, treeOperationList);
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
@@ -130,7 +130,7 @@ TEST_CASE("treemapping.Idem")
     CHECK(mapping.getBlobSize(0) == 13312);
 
     {
-        const auto coord = UD{0, 0};
+        const auto coord = UserDomain{0, 0};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 0);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 8);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 16);
@@ -141,7 +141,7 @@ TEST_CASE("treemapping.Idem")
     }
 
     {
-        const auto coord = UD{0, 1};
+        const auto coord = UserDomain{0, 1};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 52);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 60);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 68);
@@ -152,7 +152,7 @@ TEST_CASE("treemapping.Idem")
     }
 
     {
-        const auto coord = UD{1, 0};
+        const auto coord = UserDomain{1, 0};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 832);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 840);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 848);
@@ -165,14 +165,14 @@ TEST_CASE("treemapping.Idem")
 
 TEST_CASE("treemapping.LeafOnlyRT")
 {
-    using UD = llama::UserDomain<2>;
-    const UD udSize{16, 16};
+    using UserDomain = llama::UserDomain<2>;
+    const UserDomain userDomain{16, 16};
 
     auto treeOperationList
         = llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()};
-    using Mapping
-        = llama::mapping::tree::Mapping<UD, Name, decltype(treeOperationList)>;
-    const Mapping mapping(udSize, treeOperationList);
+    using Mapping = llama::mapping::tree::
+        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+    const Mapping mapping(userDomain, treeOperationList);
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
@@ -184,7 +184,7 @@ TEST_CASE("treemapping.LeafOnlyRT")
     CHECK(mapping.getBlobSize(0) == 13312);
 
     {
-        const auto coord = UD{0, 0};
+        const auto coord = UserDomain{0, 0};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 0);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 2048);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 4096);
@@ -195,7 +195,7 @@ TEST_CASE("treemapping.LeafOnlyRT")
     }
 
     {
-        const auto coord = UD{0, 1};
+        const auto coord = UserDomain{0, 1};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 8);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 2056);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 4104);
@@ -206,7 +206,7 @@ TEST_CASE("treemapping.LeafOnlyRT")
     }
 
     {
-        const auto coord = UD{1, 0};
+        const auto coord = UserDomain{1, 0};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 128);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 2176);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 4224);
@@ -219,15 +219,15 @@ TEST_CASE("treemapping.LeafOnlyRT")
 
 TEST_CASE("treemapping.MoveRTDown<>")
 {
-    using UD = llama::UserDomain<2>;
-    const UD udSize{16, 16};
+    using UserDomain = llama::UserDomain<2>;
+    const UserDomain userDomain{16, 16};
 
     auto treeOperationList
         = llama::Tuple{llama::mapping::tree::functor::MoveRTDown<
             llama::mapping::tree::TreeCoord<>>{4}};
-    using Mapping
-        = llama::mapping::tree::Mapping<UD, Name, decltype(treeOperationList)>;
-    const Mapping mapping(udSize, treeOperationList);
+    using Mapping = llama::mapping::tree::
+        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+    const Mapping mapping(userDomain, treeOperationList);
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
@@ -239,7 +239,7 @@ TEST_CASE("treemapping.MoveRTDown<>")
     CHECK(mapping.getBlobSize(0) == 13312);
 
     {
-        const auto coord = UD{0, 0};
+        const auto coord = UserDomain{0, 0};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 0);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 8);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 16);
@@ -250,7 +250,7 @@ TEST_CASE("treemapping.MoveRTDown<>")
     }
 
     {
-        const auto coord = UD{0, 1};
+        const auto coord = UserDomain{0, 1};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 52);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 60);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 68);
@@ -261,7 +261,7 @@ TEST_CASE("treemapping.MoveRTDown<>")
     }
 
     {
-        const auto coord = UD{1, 0};
+        const auto coord = UserDomain{1, 0};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 832);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 840);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 848);
@@ -274,15 +274,15 @@ TEST_CASE("treemapping.MoveRTDown<>")
 
 TEST_CASE("treemapping.MoveRTDown<0>")
 {
-    using UD = llama::UserDomain<2>;
-    const UD udSize{16, 16};
+    using UserDomain = llama::UserDomain<2>;
+    const UserDomain userDomain{16, 16};
 
     auto treeOperationList
         = llama::Tuple{llama::mapping::tree::functor::MoveRTDown<
             llama::mapping::tree::TreeCoord<0>>{4}};
-    using Mapping
-        = llama::mapping::tree::Mapping<UD, Name, decltype(treeOperationList)>;
-    const Mapping mapping(udSize, treeOperationList);
+    using Mapping = llama::mapping::tree::
+        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+    const Mapping mapping(userDomain, treeOperationList);
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
@@ -294,7 +294,7 @@ TEST_CASE("treemapping.MoveRTDown<0>")
     CHECK(mapping.getBlobSize(0) == 13312);
 
     {
-        const auto coord = UD{0, 0};
+        const auto coord = UserDomain{0, 0};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 0);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 8);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 16);
@@ -305,7 +305,7 @@ TEST_CASE("treemapping.MoveRTDown<0>")
     }
 
     {
-        const auto coord = UD{0, 1};
+        const auto coord = UserDomain{0, 1};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 24);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 32);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 40);
@@ -316,7 +316,7 @@ TEST_CASE("treemapping.MoveRTDown<0>")
     }
 
     {
-        const auto coord = UD{1, 0};
+        const auto coord = UserDomain{1, 0};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 832);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 840);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 848);
@@ -329,15 +329,15 @@ TEST_CASE("treemapping.MoveRTDown<0>")
 
 TEST_CASE("treemapping.MoveRTDown<0,0>")
 {
-    using UD = llama::UserDomain<2>;
-    const UD udSize{16, 16};
+    using UserDomain = llama::UserDomain<2>;
+    const UserDomain userDomain{16, 16};
 
     auto treeOperationList
         = llama::Tuple{llama::mapping::tree::functor::MoveRTDown<
             llama::mapping::tree::TreeCoord<0, 0>>{4}};
-    using Mapping
-        = llama::mapping::tree::Mapping<UD, Name, decltype(treeOperationList)>;
-    const Mapping mapping(udSize, treeOperationList);
+    using Mapping = llama::mapping::tree::
+        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+    const Mapping mapping(userDomain, treeOperationList);
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
@@ -349,7 +349,7 @@ TEST_CASE("treemapping.MoveRTDown<0,0>")
     CHECK(mapping.getBlobSize(0) == 31744);
 
     {
-        const auto coord = UD{0, 0};
+        const auto coord = UserDomain{0, 0};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 0);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 32);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 64);
@@ -360,7 +360,7 @@ TEST_CASE("treemapping.MoveRTDown<0,0>")
     }
 
     {
-        const auto coord = UD{0, 1};
+        const auto coord = UserDomain{0, 1};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 124);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 156);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 188);
@@ -371,7 +371,7 @@ TEST_CASE("treemapping.MoveRTDown<0,0>")
     }
 
     {
-        const auto coord = UD{1, 0};
+        const auto coord = UserDomain{1, 0};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 1984);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 2016);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 2048);
@@ -384,15 +384,15 @@ TEST_CASE("treemapping.MoveRTDown<0,0>")
 
 TEST_CASE("treemapping.MoveRTDownFixed<>")
 {
-    using UD = llama::UserDomain<2>;
-    const UD udSize{16, 16};
+    using UserDomain = llama::UserDomain<2>;
+    const UserDomain userDomain{16, 16};
 
     auto treeOperationList = llama::Tuple{
         llama::mapping::tree::functor::
             MoveRTDownFixed<llama::mapping::tree::TreeCoord<>, 4>{}};
-    using Mapping
-        = llama::mapping::tree::Mapping<UD, Name, decltype(treeOperationList)>;
-    const Mapping mapping(udSize, treeOperationList);
+    using Mapping = llama::mapping::tree::
+        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+    const Mapping mapping(userDomain, treeOperationList);
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
@@ -404,7 +404,7 @@ TEST_CASE("treemapping.MoveRTDownFixed<>")
     CHECK(mapping.getBlobSize(0) == 13312);
 
     {
-        const auto coord = UD{0, 0};
+        const auto coord = UserDomain{0, 0};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 0);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 8);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 16);
@@ -415,7 +415,7 @@ TEST_CASE("treemapping.MoveRTDownFixed<>")
     }
 
     {
-        const auto coord = UD{0, 1};
+        const auto coord = UserDomain{0, 1};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 52);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 60);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 68);
@@ -426,7 +426,7 @@ TEST_CASE("treemapping.MoveRTDownFixed<>")
     }
 
     {
-        const auto coord = UD{1, 0};
+        const auto coord = UserDomain{1, 0};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 832);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 840);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 848);
@@ -439,15 +439,15 @@ TEST_CASE("treemapping.MoveRTDownFixed<>")
 
 TEST_CASE("treemapping.MoveRTDownFixed<0>")
 {
-    using UD = llama::UserDomain<2>;
-    const UD udSize{16, 16};
+    using UserDomain = llama::UserDomain<2>;
+    const UserDomain userDomain{16, 16};
 
     auto treeOperationList = llama::Tuple{
         llama::mapping::tree::functor::
             MoveRTDownFixed<llama::mapping::tree::TreeCoord<0>, 4>{}};
-    using Mapping
-        = llama::mapping::tree::Mapping<UD, Name, decltype(treeOperationList)>;
-    const Mapping mapping(udSize, treeOperationList);
+    using Mapping = llama::mapping::tree::
+        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+    const Mapping mapping(userDomain, treeOperationList);
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
@@ -459,7 +459,7 @@ TEST_CASE("treemapping.MoveRTDownFixed<0>")
     CHECK(mapping.getBlobSize(0) == 13312);
 
     {
-        const auto coord = UD{0, 0};
+        const auto coord = UserDomain{0, 0};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 0);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 8);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 16);
@@ -470,7 +470,7 @@ TEST_CASE("treemapping.MoveRTDownFixed<0>")
     }
 
     {
-        const auto coord = UD{0, 1};
+        const auto coord = UserDomain{0, 1};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 24);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 32);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 40);
@@ -481,7 +481,7 @@ TEST_CASE("treemapping.MoveRTDownFixed<0>")
     }
 
     {
-        const auto coord = UD{1, 0};
+        const auto coord = UserDomain{1, 0};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 832);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 840);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 848);
@@ -494,15 +494,15 @@ TEST_CASE("treemapping.MoveRTDownFixed<0>")
 
 TEST_CASE("treemapping.MoveRTDownFixed<0,0>")
 {
-    using UD = llama::UserDomain<2>;
-    const UD udSize{16, 16};
+    using UserDomain = llama::UserDomain<2>;
+    const UserDomain userDomain{16, 16};
 
     auto treeOperationList = llama::Tuple{
         llama::mapping::tree::functor::
             MoveRTDownFixed<llama::mapping::tree::TreeCoord<0, 0>, 4>{}};
-    using Mapping
-        = llama::mapping::tree::Mapping<UD, Name, decltype(treeOperationList)>;
-    const Mapping mapping(udSize, treeOperationList);
+    using Mapping = llama::mapping::tree::
+        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+    const Mapping mapping(userDomain, treeOperationList);
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
@@ -514,7 +514,7 @@ TEST_CASE("treemapping.MoveRTDownFixed<0,0>")
     CHECK(mapping.getBlobSize(0) == 31744);
 
     {
-        const auto coord = UD{0, 0};
+        const auto coord = UserDomain{0, 0};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 0);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 32);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 64);
@@ -525,7 +525,7 @@ TEST_CASE("treemapping.MoveRTDownFixed<0,0>")
     }
 
     {
-        const auto coord = UD{0, 1};
+        const auto coord = UserDomain{0, 1};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 124);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 156);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 188);
@@ -536,7 +536,7 @@ TEST_CASE("treemapping.MoveRTDownFixed<0,0>")
     }
 
     {
-        const auto coord = UD{1, 0};
+        const auto coord = UserDomain{1, 0};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 1984);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 2016);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 2048);
@@ -549,15 +549,16 @@ TEST_CASE("treemapping.MoveRTDownFixed<0,0>")
 
 TEST_CASE("treemapping.vectorblocks.runtime")
 {
-    using UD = llama::UserDomain<2>;
-    const UD udSize{16, 16};
+    using UserDomain = llama::UserDomain<2>;
+    const UserDomain userDomain{16, 16};
 
     const auto vectorWidth = 8;
 
     auto treeOperationList = llama::Tuple{
         llama::mapping::tree::functor::MoveRTDown<
             llama::mapping::tree::TreeCoord<0>>{
-            vectorWidth}, // move 8 down from UD (to Position/Weight/Momentum)
+            vectorWidth}, // move 8 down from UserDomain (to
+                          // Position/Weight/Momentum)
         llama::mapping::tree::functor::MoveRTDown<
             llama::mapping::tree::TreeCoord<0, 0>>{
             vectorWidth}, // move 8 down from Position (to X/Y/Z)
@@ -565,9 +566,9 @@ TEST_CASE("treemapping.vectorblocks.runtime")
             llama::mapping::tree::TreeCoord<0, 2>>{
             vectorWidth}, // move 8 down from Momentum (to X/Y/Z)
     };
-    using Mapping
-        = llama::mapping::tree::Mapping<UD, Name, decltype(treeOperationList)>;
-    const Mapping mapping(udSize, treeOperationList);
+    using Mapping = llama::mapping::tree::
+        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+    const Mapping mapping(userDomain, treeOperationList);
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
@@ -579,7 +580,7 @@ TEST_CASE("treemapping.vectorblocks.runtime")
     CHECK(mapping.getBlobSize(0) == 13312);
 
     {
-        const auto coord = UD{0, 0};
+        const auto coord = UserDomain{0, 0};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 0);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 64);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 128);
@@ -590,7 +591,7 @@ TEST_CASE("treemapping.vectorblocks.runtime")
     }
 
     {
-        const auto coord = UD{0, 1};
+        const auto coord = UserDomain{0, 1};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 8);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 72);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 136);
@@ -601,7 +602,7 @@ TEST_CASE("treemapping.vectorblocks.runtime")
     }
 
     {
-        const auto coord = UD{1, 0};
+        const auto coord = UserDomain{1, 0};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 832);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 896);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 960);
@@ -614,15 +615,16 @@ TEST_CASE("treemapping.vectorblocks.runtime")
 
 TEST_CASE("treemapping.vectorblocks.compiletime")
 {
-    using UD = llama::UserDomain<2>;
-    const UD udSize{16, 16};
+    using UserDomain = llama::UserDomain<2>;
+    const UserDomain userDomain{16, 16};
 
     constexpr auto vectorWidth = 8;
 
     auto treeOperationList = llama::Tuple{
         llama::mapping::tree::functor::MoveRTDownFixed<
             llama::mapping::tree::TreeCoord<0>,
-            vectorWidth>{}, // move 8 down from UD (to Position/Weight/Momentum)
+            vectorWidth>{}, // move 8 down from UserDomain (to
+                            // Position/Weight/Momentum)
         llama::mapping::tree::functor::MoveRTDownFixed<
             llama::mapping::tree::TreeCoord<0, 0>,
             vectorWidth>{}, // move 8 down from Position (to X/Y/Z)
@@ -630,9 +632,9 @@ TEST_CASE("treemapping.vectorblocks.compiletime")
             llama::mapping::tree::TreeCoord<0, 2>,
             vectorWidth>{}, // move 8 down from Momentum (to X/Y/Z)
     };
-    using Mapping
-        = llama::mapping::tree::Mapping<UD, Name, decltype(treeOperationList)>;
-    const Mapping mapping(udSize, treeOperationList);
+    using Mapping = llama::mapping::tree::
+        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+    const Mapping mapping(userDomain, treeOperationList);
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
@@ -644,7 +646,7 @@ TEST_CASE("treemapping.vectorblocks.compiletime")
     CHECK(mapping.getBlobSize(0) == 13312);
 
     {
-        const auto coord = UD{0, 0};
+        const auto coord = UserDomain{0, 0};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 0);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 64);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 128);
@@ -655,7 +657,7 @@ TEST_CASE("treemapping.vectorblocks.compiletime")
     }
 
     {
-        const auto coord = UD{0, 1};
+        const auto coord = UserDomain{0, 1};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 8);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 72);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 136);
@@ -666,7 +668,7 @@ TEST_CASE("treemapping.vectorblocks.compiletime")
     }
 
     {
-        const auto coord = UD{1, 0};
+        const auto coord = UserDomain{1, 0};
         CHECK(mapping.getBlobByte<0, 0>(coord) == 832);
         CHECK(mapping.getBlobByte<0, 1>(coord) == 896);
         CHECK(mapping.getBlobByte<0, 2>(coord) == 960);
@@ -679,13 +681,13 @@ TEST_CASE("treemapping.vectorblocks.compiletime")
 
 TEST_CASE("treemapping.getNode")
 {
-    using UD = llama::UserDomain<2>;
-    const UD udSize{16, 16};
+    using UserDomain = llama::UserDomain<2>;
+    const UserDomain userDomain{16, 16};
 
     auto treeOperationList = llama::Tuple{};
-    using Mapping
-        = llama::mapping::tree::Mapping<UD, Name, decltype(treeOperationList)>;
-    const Mapping mapping(udSize, treeOperationList);
+    using Mapping = llama::mapping::tree::
+        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+    const Mapping mapping(userDomain, treeOperationList);
 
     using namespace llama::mapping::tree;
     using namespace llama::mapping::tree::operations;
@@ -729,8 +731,8 @@ TEST_CASE("treemapping")
 {
     constexpr std::size_t userDomainSize = 1024 * 12;
 
-    using UD = llama::UserDomain<2>;
-    const UD udSize{userDomainSize, userDomainSize};
+    using UserDomain = llama::UserDomain<2>;
+    const UserDomain userDomain{userDomainSize, userDomainSize};
 
     auto treeOperationList = llama::Tuple{
         llama::mapping::tree::functor::Idem(),
@@ -768,9 +770,9 @@ TEST_CASE("treemapping")
         llama::mapping::tree::functor::LeafOnlyRT{},
         llama::mapping::tree::functor::Idem{}};
 
-    using Mapping
-        = llama::mapping::tree::Mapping<UD, Name, decltype(treeOperationList)>;
-    const Mapping mapping(udSize, treeOperationList);
+    using Mapping = llama::mapping::tree::
+        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+    const Mapping mapping(userDomain, treeOperationList);
 
     auto raw = prettyPrintType(mapping.basicTree);
 #ifdef _WIN32
@@ -783,10 +785,10 @@ TEST_CASE("treemapping")
             llama::NoName,
             llama::Tuple<
                 llama::mapping::tree::TreeElement<
-                    st::Pos,
+                    tag::Pos,
                     llama::Tuple<
                         llama::mapping::tree::TreeElement<
-                            st::X,
+                            tag::X,
                             double,
                             std::integral_constant<
                                 unsigned long,
@@ -794,7 +796,7 @@ TEST_CASE("treemapping")
                             >
                         >,
                         llama::mapping::tree::TreeElement<
-                            st::Y,
+                            tag::Y,
                             double,
                             std::integral_constant<
                                 unsigned long,
@@ -802,7 +804,7 @@ TEST_CASE("treemapping")
                             >
                         >,
                         llama::mapping::tree::TreeElement<
-                            st::Z,
+                            tag::Z,
                             double,
                             std::integral_constant<
                                 unsigned long,
@@ -816,7 +818,7 @@ TEST_CASE("treemapping")
                     >
                 >,
                 llama::mapping::tree::TreeElement<
-                    st::Weight,
+                    tag::Weight,
                     float,
                     std::integral_constant<
                         unsigned long,
@@ -824,10 +826,10 @@ TEST_CASE("treemapping")
                     >
                 >,
                 llama::mapping::tree::TreeElement<
-                    st::Momentum,
+                    tag::Momentum,
                     llama::Tuple<
                         llama::mapping::tree::TreeElement<
-                            st::Z,
+                            tag::Z,
                             double,
                             std::integral_constant<
                                 unsigned long,
@@ -835,7 +837,7 @@ TEST_CASE("treemapping")
                             >
                         >,
                         llama::mapping::tree::TreeElement<
-                            st::Y,
+                            tag::Y,
                             double,
                             std::integral_constant<
                                 unsigned long,
@@ -843,7 +845,7 @@ TEST_CASE("treemapping")
                             >
                         >,
                         llama::mapping::tree::TreeElement<
-                            st::X,
+                            tag::X,
                             double,
                             std::integral_constant<
                                 unsigned long,
@@ -874,20 +876,20 @@ TEST_CASE("treemapping")
             llama::NoName,
             llama::Tuple<
                 llama::mapping::tree::TreeElement<
-                    st::Pos,
+                    tag::Pos,
                     llama::Tuple<
                         llama::mapping::tree::TreeElement<
-                            st::X,
+                            tag::X,
                             double,
                             unsigned long
                         >,
                         llama::mapping::tree::TreeElement<
-                            st::Y,
+                            tag::Y,
                             double,
                             unsigned long
                         >,
                         llama::mapping::tree::TreeElement<
-                            st::Z,
+                            tag::Z,
                             double,
                             unsigned long
                         >
@@ -898,25 +900,25 @@ TEST_CASE("treemapping")
                     >
                 >,
                 llama::mapping::tree::TreeElement<
-                    st::Weight,
+                    tag::Weight,
                     float,
                     unsigned long
                 >,
                 llama::mapping::tree::TreeElement<
-                    st::Momentum,
+                    tag::Momentum,
                     llama::Tuple<
                         llama::mapping::tree::TreeElement<
-                            st::Z,
+                            tag::Z,
                             double,
                             unsigned long
                         >,
                         llama::mapping::tree::TreeElement<
-                            st::Y,
+                            tag::Y,
                             double,
                             unsigned long
                         >,
                         llama::mapping::tree::TreeElement<
-                            st::X,
+                            tag::X,
                             double,
                             unsigned long
                         >
@@ -954,19 +956,19 @@ TEST_CASE("treemapping")
     auto view = Factory::allocView(mapping);
     zeroStorage(view);
 
-    for(size_t x = 0; x < udSize[0]; ++x)
-        for(size_t y = 0; y < udSize[1]; ++y)
+    for(size_t x = 0; x < userDomain[0]; ++x)
+        for(size_t y = 0; y < userDomain[1]; ++y)
         {
             auto datum = view(x, y);
-            llama::AdditionFunctor<decltype(datum), decltype(datum), st::Pos>
+            llama::AdditionFunctor<decltype(datum), decltype(datum), tag::Pos>
                 as{datum, datum};
-            llama::ForEach<Name, st::Momentum>::apply(as);
+            llama::ForEach<Name, tag::Momentum>::apply(as);
             //~ auto datum2 = view( x+1, y );
-            //~ datum( st::Pos(), st::Y() ) += datum2( st::Pos(), st::Y() );
+            //~ datum( tag::Pos(), tag::Y() ) += datum2( tag::Pos(), tag::Y() );
         }
     double sum = 0.0;
-    for(size_t x = 0; x < udSize[0]; ++x)
-        for(size_t y = 0; y < udSize[1]; ++y)
+    for(size_t x = 0; x < userDomain[0]; ++x)
+        for(size_t y = 0; y < userDomain[1]; ++y)
             sum += view.accessor<0, 1>({x, y});
     CHECK(sum == 0);
 }

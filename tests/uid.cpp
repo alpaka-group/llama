@@ -4,7 +4,7 @@
 #include <llama/llama.hpp>
 
 // clang-format off
-namespace st
+namespace tag
 {
     struct Pos {};
     struct Vel {};
@@ -14,38 +14,42 @@ namespace st
 }
 
 using Particle = llama::DS<
-    llama::DE<st::Pos, llama::DS<
-        llama::DE<st::X, float>,
-        llama::DE<st::Y, float>,
-        llama::DE<st::Z, float>
+    llama::DE<tag::Pos, llama::DS<
+        llama::DE<tag::X, float>,
+        llama::DE<tag::Y, float>,
+        llama::DE<tag::Z, float>
     >>,
     llama::DE<llama::NoName, int>,
-    llama::DE<st::Vel,llama::DS<
-        llama::DE<st::Z, double>,
-        llama::DE<st::X, double>
+    llama::DE<tag::Vel,llama::DS<
+        llama::DE<tag::Z, double>,
+        llama::DE<tag::X, double>
     >>
 >;
 
 using Other = llama::DS<
-    llama::DE<st::Pos, llama::DS<
-        llama::DE<st::Z, float>,
-        llama::DE<st::Y, float>
+    llama::DE<tag::Pos, llama::DS<
+        llama::DE<tag::Z, float>,
+        llama::DE<tag::Y, float>
     >>
 >;
 // clang-format on
 
 TEST_CASE("uid")
 {
-    using UD = llama::UserDomain<2>;
-    UD udSize{2, 2};
+    using UserDomain = llama::UserDomain<2>;
+    UserDomain userDomain{2, 2};
 
-    using Mapping = llama::mapping::
-        SoA<UD, Particle, llama::LinearizeUserDomainAdress<UD::count>>;
-    using MappingOther = llama::mapping::
-        SoA<UD, Other, llama::LinearizeUserDomainAdress<UD::count>>;
+    using Mapping = llama::mapping::SoA<
+        UserDomain,
+        Particle,
+        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    using MappingOther = llama::mapping::SoA<
+        UserDomain,
+        Other,
+        llama::LinearizeUserDomainAdress<UserDomain::count>>;
 
-    Mapping mapping{udSize};
-    MappingOther mappingOther{udSize};
+    Mapping mapping{userDomain};
+    MappingOther mappingOther{userDomain};
 
     auto particle
         = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>::allocView(
@@ -55,25 +59,25 @@ TEST_CASE("uid")
             allocView(mappingOther);
 
     // Setting some test values
-    particle(0u, 0u)(st::Pos(), st::X()) = 0.0f;
-    particle(0u, 0u)(st::Pos(), st::Y()) = 0.0f;
-    particle(0u, 0u)(st::Pos(), st::Z()) = 13.37f;
-    particle(0u, 0u)(st::Vel(), st::X()) = 4.2f;
-    particle(0u, 0u)(st::Vel(), st::Z()) = 0.0f;
+    particle(0u, 0u)(tag::Pos(), tag::X()) = 0.0f;
+    particle(0u, 0u)(tag::Pos(), tag::Y()) = 0.0f;
+    particle(0u, 0u)(tag::Pos(), tag::Z()) = 13.37f;
+    particle(0u, 0u)(tag::Vel(), tag::X()) = 4.2f;
+    particle(0u, 0u)(tag::Vel(), tag::Z()) = 0.0f;
 
-    other(0u, 0u)(st::Pos(), st::Y()) = 5.f;
-    other(0u, 0u)(st::Pos(), st::Z()) = 2.3f;
+    other(0u, 0u)(tag::Pos(), tag::Y()) = 5.f;
+    other(0u, 0u)(tag::Pos(), tag::Z()) = 2.3f;
 
     CHECK(
         prettyPrintType(llama::GetUID<
                         Particle,
-                        llama::GetCoordFromUID<Particle, st::Pos, st::X>>())
-        == "st::X");
+                        llama::GetCoordFromUID<Particle, tag::Pos, tag::X>>())
+        == "tag::X");
     CHECK(
         prettyPrintType(
             llama::
-                GetUID<Particle, llama::GetCoordFromUID<Particle, st::Pos>>())
-        == "st::Pos");
+                GetUID<Particle, llama::GetCoordFromUID<Particle, tag::Pos>>())
+        == "tag::Pos");
     CHECK(
         prettyPrintType(
             llama::GetUID<Particle, llama::GetCoordFromUID<Particle>>())
@@ -81,16 +85,16 @@ TEST_CASE("uid")
     CHECK(
         prettyPrintType(llama::GetUID<
                         Particle,
-                        llama::GetCoordFromUID<Particle, st::Vel, st::X>>())
-        == "st::X");
+                        llama::GetCoordFromUID<Particle, tag::Vel, tag::X>>())
+        == "tag::X");
 
     CHECK(
         llama::CompareUID<
             Particle, // DD A
-            llama::GetCoordFromUID<Particle, st::Pos>, // Base A
+            llama::GetCoordFromUID<Particle, tag::Pos>, // Base A
             llama::DatumCoord<0>, // Local A
             Particle, // DD B
-            llama::GetCoordFromUID<Particle, st::Vel>, // Base B
+            llama::GetCoordFromUID<Particle, tag::Vel>, // Base B
             llama::DatumCoord<0> // Local B
             >::value
         == false);
@@ -98,10 +102,10 @@ TEST_CASE("uid")
     CHECK(
         llama::CompareUID<
             Particle, // DD A
-            llama::GetCoordFromUID<Particle, st::Pos>, // Base A
+            llama::GetCoordFromUID<Particle, tag::Pos>, // Base A
             llama::DatumCoord<0>, // Local A
             Particle, // DD B
-            llama::GetCoordFromUID<Particle, st::Vel>, // Base B
+            llama::GetCoordFromUID<Particle, tag::Vel>, // Base B
             llama::DatumCoord<1> // Local B
             >::value
         == true);
@@ -139,7 +143,7 @@ TEST_CASE("uid")
             >::value
         == false);
 
-    CHECK(particle(0u, 0u)(st::Pos(), st::Z()) == 13.37f);
+    CHECK(particle(0u, 0u)(tag::Pos(), tag::Z()) == 13.37f);
     particle(0u, 0u) += other(0u, 0u);
-    CHECK(particle(0u, 0u)(st::Pos(), st::Z()) == 15.67f);
+    CHECK(particle(0u, 0u)(tag::Pos(), tag::Z()) == 15.67f);
 }

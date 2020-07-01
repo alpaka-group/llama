@@ -4,7 +4,7 @@
 #include <llama/llama.hpp>
 
 // clang-format off
-namespace st
+namespace tag
 {
     struct X {};
     struct Y {};
@@ -15,16 +15,16 @@ namespace st
 }
 
 using Particle = llama::DS<
-    llama::DE<st::Pos, llama::DS<
-        llama::DE<st::X, int>,
-        llama::DE<st::Y, int>,
-        llama::DE<st::Z, int>
+    llama::DE<tag::Pos, llama::DS<
+        llama::DE<tag::X, int>,
+        llama::DE<tag::Y, int>,
+        llama::DE<tag::Z, int>
     >>,
-    llama::DE<st::Mom, int>,
-    llama::DE<st::Vel, llama::DS<
-        llama::DE<st::Z, int>,
-        llama::DE<st::Y, int>,
-        llama::DE<st::X, int>
+    llama::DE<tag::Mom, int>,
+    llama::DE<tag::Vel, llama::DS<
+        llama::DE<tag::Z, int>,
+        llama::DE<tag::Y, int>,
+        llama::DE<tag::X, int>
     >>
 >;
 // clang-format on
@@ -43,10 +43,10 @@ struct SqrtFunctor
 
 TEST_CASE("fast virtual view")
 {
-    using UD = llama::UserDomain<2>;
-    constexpr UD viewSize{4096, 4096};
+    using UserDomain = llama::UserDomain<2>;
+    constexpr UserDomain viewSize{4096, 4096};
 
-    using Mapping = llama::mapping::SoA<UD, Particle>;
+    using Mapping = llama::mapping::SoA<UserDomain, Particle>;
     auto view
         = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>::allocView(
             Mapping(viewSize));
@@ -60,25 +60,25 @@ TEST_CASE("fast virtual view")
         {13, 37} // size
     };
 
-    CHECK(virtualView.position == UD{23, 42});
-    CHECK(virtualView.size == UD{13, 37});
+    CHECK(virtualView.position == UserDomain{23, 42});
+    CHECK(virtualView.size == UserDomain{13, 37});
 
-    CHECK(view(virtualView.position)(st::Pos(), st::X()) == 966);
-    CHECK(virtualView({0, 0})(st::Pos(), st::X()) == 966);
+    CHECK(view(virtualView.position)(tag::Pos(), tag::X()) == 966);
+    CHECK(virtualView({0, 0})(tag::Pos(), tag::X()) == 966);
 
     CHECK(
         view({virtualView.position[0] + 2, virtualView.position[1] + 3})(
-            st::Vel(), st::Z())
+            tag::Vel(), tag::Z())
         == 1125);
-    CHECK(virtualView({2, 3})(st::Vel(), st::Z()) == 1125);
+    CHECK(virtualView({2, 3})(tag::Vel(), tag::Z()) == 1125);
 }
 
 TEST_CASE("virtual view")
 {
-    using UD = llama::UserDomain<2>;
-    constexpr UD viewSize{4096, 4096};
-    constexpr UD miniSize{128, 128};
-    using Mapping = llama::mapping::SoA<UD, Particle>;
+    using UserDomain = llama::UserDomain<2>;
+    constexpr UserDomain viewSize{4096, 4096};
+    constexpr UserDomain miniSize{128, 128};
+    using Mapping = llama::mapping::SoA<UserDomain, Particle>;
     auto view
         = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>::allocView(
             Mapping(viewSize));
@@ -86,14 +86,14 @@ TEST_CASE("virtual view")
     for(std::size_t x = 0; x < viewSize[0]; ++x)
         for(std::size_t y = 0; y < viewSize[1]; ++y) view(x, y) = x * y;
 
-    constexpr UD iterations{
+    constexpr UserDomain iterations{
         (viewSize[0] + miniSize[0] - 1) / miniSize[0],
         (viewSize[1] + miniSize[1] - 1) / miniSize[1]};
 
     for(std::size_t x = 0; x < iterations[0]; ++x)
         for(std::size_t y = 0; y < iterations[1]; ++y)
         {
-            const UD validMiniSize{
+            const UserDomain validMiniSize{
                 (x < iterations[0] - 1) ? miniSize[0]
                                         : (viewSize[0] - 1) % miniSize[0] + 1,
                 (y < iterations[1] - 1) ? miniSize[1]
@@ -102,7 +102,7 @@ TEST_CASE("virtual view")
             llama::VirtualView<decltype(view)> virtualView(
                 view, {x * miniSize[0], y * miniSize[1]}, miniSize);
 
-            using MiniMapping = llama::mapping::SoA<UD, Particle>;
+            using MiniMapping = llama::mapping::SoA<UserDomain, Particle>;
             auto miniView = llama::Factory<
                 MiniMapping,
                 llama::allocator::Stack<
