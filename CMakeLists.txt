@@ -42,7 +42,7 @@ if (LLAMA_BUILD_EXAMPLES)
 	add_subdirectory("examples/virtualviewtest")
 
 	# alpaka examples
-	find_package(alpaka 0.4.0 QUIET)
+	find_package(alpaka 0.5.0 QUIET)
 	if (_ALPAKA_FOUND)
 		add_subdirectory("examples/nbody")
 		add_subdirectory("examples/vectoradd")
