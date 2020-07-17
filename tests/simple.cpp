@@ -251,3 +251,39 @@ TEST_CASE("Datum access") {
 
     CHECK(sum == 0.0);
 }
+
+TEST_CASE("AssignOneDatumIntoView") {
+    using UserDomain = llama::UserDomain<2>;
+    UserDomain userDomain{16, 16};
+
+    using Mapping = llama::mapping::SoA<UserDomain, Name>;
+    Mapping mapping{userDomain};
+
+    using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>;
+    auto view = Factory::allocView(mapping);
+
+    auto datum = llama::stackVirtualDatumAlloc<Name>();
+    datum(st::Pos{}, st::X{}) = 14.0f;
+    datum(st::Pos{}, st::Y{}) = 15.0f;
+    datum(st::Pos{}, st::Z{}) = 16.0f;
+    datum(st::Momentum{}) = 0;
+    datum(st::Weight{}) = 500.0f;
+    datum(st::Options{}).access<0>() = true;
+    datum(st::Options{}).access<1>() = false;
+    datum(st::Options{}).access<2>() = true;
+    datum(st::Options{}).access<3>() = false;
+
+    view({3, 4}) = datum;
+
+    CHECK(datum(st::Pos{}, st::X{}) == 14.0f);
+    CHECK(datum(st::Pos{}, st::Y{}) == 15.0f);
+    CHECK(datum(st::Pos{}, st::Z{}) == 16.0f);
+    CHECK(datum(st::Momentum{}, st::Z{}) == 0);
+    CHECK(datum(st::Momentum{}, st::X{}) == 0);
+    CHECK(datum(st::Weight{}) == 500.0f);
+    CHECK(datum(st::Options{}).access<0>() == true);
+    CHECK(datum(st::Options{}).access<1>() == false);
+    CHECK(datum(st::Options{}).access<2>() == true);
+    CHECK(datum(st::Options{}).access<3>() == false);
+}
+
