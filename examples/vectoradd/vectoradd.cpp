@@ -129,11 +129,10 @@ int main(int argc,char * * argv)
     using DevAcc = alpaka::dev::Dev<Acc>;
     using PltfHost = alpaka::pltf::Pltf<DevHost>;
     using PltfAcc = alpaka::pltf::Pltf<DevAcc>;
-#if VECTORADD_CUDA == 1
-    using Queue = alpaka::queue::QueueCudaRtSync;
-#else
-    using Queue = alpaka::queue::QueueCpuSync;
-#endif // VECTORADD_CUDA
+
+    using QueueProperty = alpaka::queue::Blocking;
+    using Queue = alpaka::queue::Queue<Acc, QueueProperty>;
+
     DevAcc const devAcc( alpaka::pltf::getDevByIdx< PltfAcc >( 0u ) );
     DevHost const devHost( alpaka::pltf::getDevByIdx< PltfHost >( 0u ) );
     Queue queue( devAcc ) ;
