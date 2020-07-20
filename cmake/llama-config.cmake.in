@@ -9,21 +9,25 @@
 ###############################################################################
 cmake_minimum_required (VERSION 3.3.0)
 
-set(llama_INCLUDE_DIR ${llama_INCLUDE_DIR} "${llama_DIR}/include")
+@PACKAGE_INIT@
+
+if(NOT TARGET llama)
+    add_library(llama INTERFACE)
+
+    target_compile_features(llama INTERFACE cxx_std_17)
+
+    add_library(llama::llama ALIAS llama)
+endif()
+
+set(llama_INCLUDE_DIR ${llama_INCLUDE_DIR} "${PACKAGE_PREFIX_DIR}/include")
+
+target_include_directories(llama INTERFACE ${llama_INCLUDE_DIR})
 
 ################################################################################
 # BOOST LIB
 ################################################################################
 find_package(Boost 1.66.0 REQUIRED)
-set(llama_INCLUDE_DIR ${llama_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
-set(llama_DEFINITIONS ${llama_DEFINITIONS} -DBOOST_ALL_NO_LIB)
-
-################################################################################
-# Warning if C++11 is not activated
-################################################################################
-if (CMAKE_CXX_STANDARD EQUAL 98)
-    message( FATAL_ERROR "At least C++ standard 11 must be enabled!" )
-endif()
+target_link_libraries(llama INTERFACE Boost::headers)
 
 ################################################################################
 # Returning whether LLAMA could be found

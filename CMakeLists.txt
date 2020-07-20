@@ -51,6 +51,16 @@ if (LLAMA_BUILD_EXAMPLES)
 endif()
 
 # install
+include(CMakePackageConfigHelpers)
+include(GNUInstallDirs)
+
+set(_llama_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/llama")
+
+configure_package_config_file (
+	"${PROJECT_SOURCE_DIR}/cmake/llama-config.cmake.in"
+	"${PROJECT_BINARY_DIR}/cmake/llama-config.cmake"
+	INSTALL_DESTINATION "${_llama_INSTALL_CMAKEDIR}")
+
 configure_file (
 	"${PROJECT_SOURCE_DIR}/cmake/llama-config-version.cmake.in"
 	"${PROJECT_BINARY_DIR}/cmake/llama-config-version.cmake"
@@ -58,5 +68,10 @@ configure_file (
 )
 
 install( DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/llama" DESTINATION "include" )
-install( FILES "${CMAKE_CURRENT_SOURCE_DIR}/llama-config.cmake" DESTINATION "lib/cmake/llama" )
-install( FILES "${PROJECT_BINARY_DIR}/cmake/llama-config-version.cmake" DESTINATION "lib/cmake/llama" )
+install(
+	FILES
+		"${PROJECT_BINARY_DIR}/cmake/llama-config.cmake"
+		"${PROJECT_BINARY_DIR}/cmake/llama-config-version.cmake"
+	DESTINATION
+		"${_llama_INSTALL_CMAKEDIR}"
+)
