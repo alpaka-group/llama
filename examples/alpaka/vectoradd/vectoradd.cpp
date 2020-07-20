@@ -37,11 +37,11 @@
 #include <llama/llama.hpp>
 #include <random>
 
-#include "../common/AlpakaAllocator.hpp"
-#include "../common/AlpakaMemCopy.hpp"
-#include "../common/AlpakaThreadElemsDistribution.hpp"
-#include "../common/Chrono.hpp"
-#include "../common/Dummy.hpp"
+#include "../../common/AlpakaAllocator.hpp"
+#include "../../common/AlpakaMemCopy.hpp"
+#include "../../common/AlpakaThreadElemsDistribution.hpp"
+#include "../../common/Chrono.hpp"
+#include "../../common/Dummy.hpp"
 
 namespace vectoradd
 {
