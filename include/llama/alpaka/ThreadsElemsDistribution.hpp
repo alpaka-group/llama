@@ -6,7 +6,7 @@
  * itself is not under the public domain but LGPL3+.
  */
 
-/** \file AlpakaThreadElemsDistribution.hpp
+/** \file ThreadsElemsDistribution.hpp
  *  \brief common helper class for getting the right amount of elements per
  *  thread and threads per block based on total number of elements in the block
  *  and the accelator type.
@@ -14,9 +14,14 @@
 
 #pragma once
 
-#define THREADELEMDIST_MIN_ELEM 2
+#ifndef LLAMA_ALPAKA_THREADS_ELEMS_DIST_MIN_ELEM
+#define LLAMA_ALPAKA_THREADS_ELEMS_DIST_MIN_ELEM 2
+#endif
 
-namespace common
+namespace llama
+{
+
+namespace alpaka
 {
 
 /** Returns a good guess for an optimal number of threads and elements in a
@@ -43,13 +48,13 @@ struct ThreadsElemsDistribution
         typename T_Size
     >
     struct ThreadsElemsDistribution<
-        alpaka::acc::AccGpuCudaRt<T_Dim, T_Size>,
+        ::alpaka::acc::AccGpuCudaRt<T_Dim, T_Size>,
         blockSize,
         hardwareThreads
     >
     {
-        static constexpr std::size_t elemCount = THREADELEMDIST_MIN_ELEM;
-        static constexpr std::size_t threadCount = blockSize / THREADELEMDIST_MIN_ELEM;
+        static constexpr std::size_t elemCount = LLAMA_ALPAKA_THREADS_ELEMS_DIST_MIN_ELEM;
+        static constexpr std::size_t threadCount = blockSize / LLAMA_ALPAKA_THREADS_ELEMS_DIST_MIN_ELEM;
     };
 #endif
 
@@ -61,7 +66,7 @@ struct ThreadsElemsDistribution
         typename T_Size
     >
     struct ThreadsElemsDistribution<
-        alpaka::acc::AccCpuOmp2Threads<T_Dim, T_Size>,
+        ::alpaka::acc::AccCpuOmp2Threads<T_Dim, T_Size>,
         blockSize,
         hardwareThreads
     >
@@ -72,4 +77,6 @@ struct ThreadsElemsDistribution
     };
 #endif
 
-} // namspace common
+} // namespace alpaka
+
+} // namespace llama

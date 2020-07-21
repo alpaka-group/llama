@@ -43,16 +43,19 @@
 #ifdef __CUDACC__
 	#define LLAMA_FN_HOST_ACC_INLINE ALPAKA_FN_ACC __forceinline__
 #endif
+
 #include <llama/llama.hpp>
+
+#include <llama/allocator/Alpaka.hpp>
+#include <llama/alpaka/MemCopy.hpp>
+#include <llama/alpaka/ThreadsElemsDistribution.hpp>
+
 #include <random>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
-#include "../common/AlpakaAllocator.hpp"
-#include "../common/AlpakaMemCopy.hpp"
-#include "../common/AlpakaThreadElemsDistribution.hpp"
 #include "../common/Chrono.hpp"
 
 namespace asynccopy
@@ -135,7 +138,7 @@ struct BlurKernel
         );
         using SharedFactory = llama::Factory<
             SharedMapping,
-            common::allocator::AlpakaShared<
+            llama::allocator::AlpakaShared<
                 T_Acc,
                 llama::SizeOf< PixelOnAcc >::value
                 * sharedChunkSize * sharedChunkSize,
@@ -287,7 +290,7 @@ int main(int argc,char * * argv)
     std::size_t img_y = ASYNCCOPY_DEFAULT_IMG_Y;
     std::size_t buffer_x = ASYNCCOPY_DEFAULT_IMG_X + 2 * kernelSize;
     std::size_t buffer_y = ASYNCCOPY_DEFAULT_IMG_Y + 2 * kernelSize;
-    using Distribution = common::ThreadsElemsDistribution<
+    using Distribution = llama::alpaka::ThreadsElemsDistribution<
         Acc,
         totalElemsPerBlock,
         hardwareThreads
@@ -350,28 +353,28 @@ int main(int argc,char * * argv)
 
     using HostFactory = llama::Factory<
         HostMapping,
-        common::allocator::Alpaka<
+        llama::allocator::Alpaka<
             DevHost,
             Size
         >
     >;
     using HostChunkFactory = llama::Factory<
         DevMapping,
-        common::allocator::Alpaka<
+        llama::allocator::Alpaka<
             DevHost,
             Size
         >
     >;
     using DevFactory = llama::Factory<
         DevMapping,
-        common::allocator::Alpaka<
+        llama::allocator::Alpaka<
             DevAcc,
             Size
         >
     >;
     using MirrorFactory = llama::Factory<
         DevMapping,
-        common::allocator::AlpakaMirror<
+        llama::allocator::AlpakaMirror<
             DevAcc,
             Size,
             DevMapping
@@ -567,7 +570,7 @@ int main(int argc,char * * argv)
                 for (std::size_t x = 0; x < validMiniSize[1]; ++x)
                     hostChunk[chunkNr]( y, x ) = virtualHost( y, x );
             }
-            alpakaMemCopy( devOld[chunkNr], hostChunk[chunkNr], chunkUserDomain, queue[chunkNr] );
+            llama::alpaka::memCopy( devOld[chunkNr], hostChunk[chunkNr], chunkUserDomain, queue[chunkNr] );
             BlurKernel<
                 elemCount,
                 kernelSize,
@@ -580,7 +583,7 @@ int main(int argc,char * * argv)
                 mirrorOld[chunkNr],
                 mirrorNew[chunkNr]
             );
-            alpakaMemCopy( hostChunk[chunkNr], devNew[chunkNr], userDomainSize, queue[chunkNr] );
+            llama::alpaka::memCopy( hostChunk[chunkNr], devNew[chunkNr], userDomainSize, queue[chunkNr] );
         }
     //Wait for not finished tasks on accelerator
     auto chunkIt = virtualHostList.begin();

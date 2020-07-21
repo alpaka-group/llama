@@ -6,13 +6,19 @@
  * itself is not under the public domain but LGPL3+.
  */
 
-/** \file AlpakaMemCopy.hpp
+/** \file MemCopy.hpp
  *  \brief memcopy helper function for using ALPAKA and LLAMA together.
  */
 
 #pragma once
 
 #include <type_traits>
+
+namespace llama
+{
+
+namespace alpaka
+{
 
 namespace internal
 {
@@ -23,7 +29,7 @@ template<
 	typename T_Queue,
 	typename T_SFINAE = void
 >
-struct AlpakaMemCopy
+struct MemCopy
 {
 	void operator()(
 		T_DstView & dstView,
@@ -39,7 +45,7 @@ template<
 	typename T_SrcView,
 	typename T_Queue
 >
-struct AlpakaMemCopy<
+struct MemCopy<
 	T_DstView,
 	T_SrcView,
 	T_Queue,
@@ -62,13 +68,13 @@ struct AlpakaMemCopy<
 		if (dstView.mapping.userDomainSize == srcView.mapping.userDomainSize)
 		{
 			for (std::size_t i = 0; i < T_DstView::Mapping::blobCount; ++i)
-				alpaka::mem::view::copy(
+				::alpaka::mem::view::copy(
 					queue,
 					dstView.blob[i].buffer,
 					srcView.blob[i].buffer,
-					alpaka::vec::Vec<
-						alpaka::dim::Dim< decltype( dstView.blob[i].buffer ) >,
-						alpaka::idx::Idx< decltype( dstView.blob[i].buffer ) >
+					::alpaka::vec::Vec<
+						::alpaka::dim::Dim< decltype( dstView.blob[i].buffer ) >,
+						::alpaka::idx::Idx< decltype( dstView.blob[i].buffer ) >
 					>( dstView.mapping.getBlobSize( i ) )
 				);
 		}
@@ -87,14 +93,14 @@ template<
 	typename T_SrcView,
 	typename T_Queue
 >
-void alpakaMemCopy(
+void memCopy(
 	T_DstView & dstView,
 	T_SrcView const & srcView,
 	typename T_DstView::Mapping::UserDomain const userDomainSize,
 	T_Queue & queue
 )
 {
-	internal::AlpakaMemCopy<
+	internal::MemCopy<
 		T_DstView,
 		T_SrcView,
 		T_Queue
@@ -105,3 +111,7 @@ void alpakaMemCopy(
 		queue
 	);
 }
+
+} // namespace alpaka
+
+} // namespace llama

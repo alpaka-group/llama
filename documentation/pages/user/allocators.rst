@@ -115,24 +115,17 @@ shared memory) but also some cuda-inherited rules which make e.g. sharing
 memory regions hard (e.g. no possibility to use a :cpp:`std::shared_ptr` on a
 GPU).
 
-Although those allocators are no official part of LLAMA, they will be described
-here nevertheless as they are
-`shipped with the examles <https://github.com/ComputationalRadiationPhysics/llama/blob/master/examples/common/AlpakaAllocator.hpp>`_
-and as alpaka is (not only namewise) one of the most useful third party
-libraries LLAMA works together with. All examples are under a free license
-without copyleft and may be freely copied and altered as needed.
-
 The following descriptions are for alpaka and LLAMA users. Without an
 understanding of alpaka they may hard to understand and can probably be skipped.
 
 Alpaka
 """"""
-:cpp:`common::allocator::Alpaka` creates a buffer for a given device. Internally
+:cpp:`allocator::Alpaka` creates a buffer for a given device. Internally
 the well known alpaka buffer object is used.
 
 .. code-block:: C++
 
-    common::allocator::Alpaka<
+    allocator::Alpaka<
         DevAcc, // some alpaka device type
         Size,   // some size type, e.g. std::size_t
     >
@@ -148,7 +141,7 @@ kernel argument -- at least not for kernels running on Nvidia GPUs. Taking the
 native device pointer is an often seen solution, but this is exactly what LLAMA
 tries to avoid.
 
-So with :cpp:`common::allocator::AlpakaMirror` a view can be created, which
+So with :cpp:`allocator::AlpakaMirror` a view can be created, which
 maps the already allocated memory of another LLAMA mapping.
 
 .. code-block:: C++
@@ -158,7 +151,7 @@ maps the already allocated memory of another LLAMA mapping.
 
     auto view = llama::Factory<
         Mapping,
-        common::allocator::Alpaka<
+        allocator::Alpaka<
             DevAcc,
             Size
         >
@@ -166,7 +159,7 @@ maps the already allocated memory of another LLAMA mapping.
 
     auto mirror = llama::Factory<
         Mapping,
-        common::allocator::AlpakaMirror<
+        allocator::AlpakaMirror<
             DevAcc,
             Size,
             Mapping
@@ -194,7 +187,7 @@ at compile time.
 
     auto view = llama::Factory<
         Mapping,
-        common::allocator::AlpakaShared<
+        allocator::AlpakaShared<
             DevAcc,
             sharedSize[0] * sharedSize[1] * llama::SizeOf< /* some datum domain */ >::value
             __COUNTER__

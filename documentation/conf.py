@@ -55,9 +55,9 @@ fixBug( "<definition>using ", "llama::Tuple", "T_Elements" )
 fixBug( "<definition>using ", "llama::allocator::Vector", "T_alignment" )
 fixBug( "<definition>using ", "llama::allocator::SharedPtr", "T_alignment" )
 fixBug( "<definition>using ", "llama::allocator::Stack", "reserved" )
-fixBug( "<definition>using ", "common::allocator::Alpaka", "T_DevAcc, T_Size" )
-fixBug( "<definition>using ", "common::allocator::AlpakaMirror", "T_DevAcc, T_Size, T_Mapping" )
-fixBug( "<definition>using ", "common::allocator::AlpakaShared", "T_Acc, T_count, T_uniqueID" )
+fixBug( "<definition>using ", "llama::allocator::Alpaka", "T_DevAcc, T_Size" )
+fixBug( "<definition>using ", "llama::allocator::AlpakaMirror", "T_DevAcc, T_Size, T_Mapping" )
+fixBug( "<definition>using ", "llama::allocator::AlpakaShared", "T_Acc, T_count, T_uniqueID" )
 fixBug( "<definition>using ", "llama::VirtualDatum", "T_View, T_BoundDatumDomain, T_ViewType" )
 
 # -- Project information -----------------------------------------------------

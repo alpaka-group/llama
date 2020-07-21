@@ -34,12 +34,15 @@
     /// if cuda is used, the function headers need some annotations
 	#define LLAMA_FN_HOST_ACC_INLINE ALPAKA_FN_ACC __forceinline__
 #endif
+
 #include <llama/llama.hpp>
+
+#include <llama/allocator/Alpaka.hpp>
+#include <llama/alpaka/MemCopy.hpp>
+#include <llama/alpaka/ThreadsElemsDistribution.hpp>
+
 #include <random>
 
-#include "../common/AlpakaAllocator.hpp"
-#include "../common/AlpakaMemCopy.hpp"
-#include "../common/AlpakaThreadElemsDistribution.hpp"
 #include "../common/Chrono.hpp"
 #include "../common/Dummy.hpp"
 
@@ -141,7 +144,7 @@ int main(int argc,char * * argv)
     constexpr std::size_t problemSize = VECTORADD_PROBLEM_SIZE;
     constexpr std::size_t blockSize = VECTORADD_BLOCK_SIZE;
     constexpr std::size_t hardwareThreads = 2; //relevant for OpenMP2Threads
-    using Distribution = common::ThreadsElemsDistribution<
+    using Distribution = llama::alpaka::ThreadsElemsDistribution<
         Acc,
         blockSize,
         hardwareThreads
@@ -190,14 +193,14 @@ int main(int argc,char * * argv)
 
     using DevFactory = llama::Factory<
         Mapping,
-        common::allocator::Alpaka<
+        llama::allocator::Alpaka<
             DevAcc,
             Size
         >
     >;
     using MirrorFactory = llama::Factory<
         Mapping,
-        common::allocator::AlpakaMirror<
+        llama::allocator::AlpakaMirror<
             DevAcc,
             Size,
             Mapping
@@ -205,7 +208,7 @@ int main(int argc,char * * argv)
     >;
     using HostFactory = llama::Factory<
         Mapping,
-        common::allocator::Alpaka<
+        llama::allocator::Alpaka<
             DevHost,
             Size
         >
@@ -241,8 +244,8 @@ int main(int argc,char * * argv)
     }
     chrono.printAndReset("Init");
 
-    alpakaMemCopy( devA, hostA, userDomainSize, queue );
-    alpakaMemCopy( devB, hostB, userDomainSize, queue );
+    llama::alpaka::memCopy( devA, hostA, userDomainSize, queue );
+    llama::alpaka::memCopy( devB, hostB, userDomainSize, queue );
 
     chrono.printAndReset("Copy H->D");
 
@@ -291,8 +294,8 @@ int main(int argc,char * * argv)
         dummy( static_cast<void*>( mirrorB.blob[0] ) );
     }
 
-    alpakaMemCopy( hostA, devA, userDomainSize, queue );
-    alpakaMemCopy( hostB, devB, userDomainSize, queue );
+    llama::alpaka::memCopy( hostA, devA, userDomainSize, queue );
+    llama::alpaka::memCopy( hostB, devB, userDomainSize, queue );
 
     chrono.printAndReset("Copy D->H");
 

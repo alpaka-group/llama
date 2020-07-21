@@ -214,15 +214,15 @@ part of LLAMA, but was considered while developing the library. Furthermore some
 examples are using alpaka for parallelization on many-core devices. Therefore
 the alpaka allocators will be described here, too.
 
-.. doxygenstruct:: common::allocator::Alpaka
+.. doxygenstruct:: llama::allocator::Alpaka
    :project: LLAMA
    :members:
 
-.. doxygenstruct:: common::allocator::AlpakaMirror
+.. doxygenstruct:: llama::allocator::AlpakaMirror
    :project: LLAMA
    :members:
 
-.. doxygenstruct:: common::allocator::AlpakaShared
+.. doxygenstruct:: llama::allocator::AlpakaShared
    :project: LLAMA
    :members:
 

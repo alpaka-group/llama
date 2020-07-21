@@ -6,13 +6,13 @@
  * itself is not under the public domain but LGPL3+.
  */
 
-/** \file AlpakaAllocator.hpp
+/** \file Alpaka.hpp
  *  \brief allocator implementations for LLAMA using ALPAKA memory regions.
  */
 
 #pragma once
 
-namespace common
+namespace llama
 {
 
 namespace allocator
@@ -45,14 +45,14 @@ struct AlpakaAccessor
     operator[] ( T_IndexType && idx )
     -> PrimType &
     {
-        return alpaka::mem::view::getPtrNative( buffer )[ idx ];
+        return ::alpaka::mem::view::getPtrNative( buffer )[ idx ];
     }
 
     template< typename T_IndexType >
     auto operator[] ( T_IndexType && idx ) const
     -> const PrimType &
     {
-        return alpaka::mem::view::getPtrNative( buffer )[ idx ];
+        return ::alpaka::mem::view::getPtrNative( buffer )[ idx ];
     }
 
     BlobType buffer;
@@ -61,7 +61,7 @@ struct AlpakaAccessor
 } // namespace internal
 
 /** Allocator to allocate memory for a \ref llama::View in the
- *  \ref llama::Factory using `alpaka::mem::buf::Buf` in the background. The
+ *  \ref llama::Factory using `::alpaka::mem::buf::Buf` in the background. The
  *  view created with this allocator can only be used on the host side. For the
  *  use of the view on the device see \ref AlpakaMirror.
  * \tparam T_DevAcc alpaka `DevAcc`
@@ -77,10 +77,10 @@ struct Alpaka
     using DevAcc = T_DevAcc;
     using Size = T_Size;
 
-    using BufferType = alpaka::mem::buf::Buf<
+    using BufferType = ::alpaka::mem::buf::Buf<
         DevAcc,
         unsigned char,
-        alpaka::dim::DimInt< 1 >,
+        ::alpaka::dim::DimInt< 1 >,
         Size
     >;
     /** blob type of this allocator is an internal accessor the the alpaka
@@ -101,7 +101,7 @@ struct Alpaka
     -> BlobType
     {
         BufferType buffer =
-        alpaka::mem::buf::alloc<
+        ::alpaka::mem::buf::alloc<
             PrimType,
             Size
         > (
@@ -109,7 +109,7 @@ struct Alpaka
             Size(count)
         );
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) && BOOST_LANG_CUDA
-        alpaka::mem::buf::pin( buffer );
+        ::alpaka::mem::buf::pin( buffer );
 #endif
         BlobType accessor( buffer );
         return accessor;
@@ -155,7 +155,7 @@ struct AlpakaMirror
     )
     -> BlobType
     {
-        return alpaka::mem::view::getPtrNative( mirroredView.blob[0].buffer );
+        return ::alpaka::mem::view::getPtrNative( mirroredView.blob[0].buffer );
     }
 };
 
@@ -196,7 +196,7 @@ struct AlpakaShared
     )
     -> BlobType
     {
-        return alpaka::block::shared::st::allocVar<
+        return ::alpaka::block::shared::st::allocVar<
             AllocType,
             T_uniqueID
         >( acc );
@@ -206,4 +206,4 @@ struct AlpakaShared
 
 } // namespace allocator
 
-} // namespace nbody
+} // namespace llama
