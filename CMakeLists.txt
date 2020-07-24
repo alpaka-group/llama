@@ -44,9 +44,9 @@ if (LLAMA_BUILD_EXAMPLES)
 	# alpaka examples
 	find_package(alpaka 0.5.0 QUIET)
 	if (_ALPAKA_FOUND)
-		add_subdirectory("examples/nbody")
-		add_subdirectory("examples/vectoradd")
-		add_subdirectory("examples/asynccopy")
+		add_subdirectory("examples/alpaka/nbody")
+		add_subdirectory("examples/alpaka/vectoradd")
+		add_subdirectory("examples/alpaka/asynccopy")
 	endif()
 endif()
 

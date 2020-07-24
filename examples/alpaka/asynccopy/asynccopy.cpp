@@ -50,10 +50,10 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
-#include "../common/AlpakaAllocator.hpp"
-#include "../common/AlpakaMemCopy.hpp"
-#include "../common/AlpakaThreadElemsDistribution.hpp"
-#include "../common/Chrono.hpp"
+#include "../../common/AlpakaAllocator.hpp"
+#include "../../common/AlpakaMemCopy.hpp"
+#include "../../common/AlpakaThreadElemsDistribution.hpp"
+#include "../../common/Chrono.hpp"
 
 namespace asynccopy
 {
