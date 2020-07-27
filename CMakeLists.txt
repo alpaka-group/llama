@@ -39,7 +39,9 @@ if (LLAMA_BUILD_EXAMPLES)
 	add_subdirectory("examples/simpletest")
 	add_subdirectory("examples/uidtest")
 	add_subdirectory("examples/treemaptest")
+	add_subdirectory("examples/vectoradd")
 	add_subdirectory("examples/virtualviewtest")
+	add_subdirectory("examples/nbody")
 
 	# alpaka examples
 	find_package(alpaka 0.5.0 QUIET)
