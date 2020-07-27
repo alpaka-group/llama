@@ -19,6 +19,7 @@
 #pragma once
 
 #include "DatumStruct.hpp"
+#include "GetType.hpp"
 
 #include <boost/mp11.hpp>
 #include <type_traits>

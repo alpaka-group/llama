@@ -12,6 +12,8 @@
 
 #pragma once
 
+#include <llama/llama.hpp>
+
 namespace common
 {
     namespace allocator
