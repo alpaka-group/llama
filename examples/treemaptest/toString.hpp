@@ -15,81 +15,66 @@
 
 namespace llama
 {
-
-namespace mapping
-{
-
-namespace tree
-{
-
-template< >
-struct ToString< treemaptest::st::Pos >
-{
-    auto
-    operator()( const treemaptest::st::Pos )
-    -> std::string
+    namespace mapping
     {
-        return "Pos";
-    }
-};
+        namespace tree
+        {
+            template<>
+            struct ToString<treemaptest::st::Pos>
+            {
+                auto operator()(const treemaptest::st::Pos) -> std::string
+                {
+                    return "Pos";
+                }
+            };
 
-template< >
-struct ToString< treemaptest::st::X >
-{
-    auto
-    operator()( const treemaptest::st::X )
-    -> std::string
-    {
-        return "X";
-    }
-};
+            template<>
+            struct ToString<treemaptest::st::X>
+            {
+                auto operator()(const treemaptest::st::X) -> std::string
+                {
+                    return "X";
+                }
+            };
 
-template< >
-struct ToString< treemaptest::st::Y >
-{
-    auto
-    operator()( const treemaptest::st::Y )
-    -> std::string
-    {
-        return "Y";
-    }
-};
+            template<>
+            struct ToString<treemaptest::st::Y>
+            {
+                auto operator()(const treemaptest::st::Y) -> std::string
+                {
+                    return "Y";
+                }
+            };
 
-template< >
-struct ToString< treemaptest::st::Z >
-{
-    auto
-    operator()( const treemaptest::st::Z )
-    -> std::string
-    {
-        return "Z";
-    }
-};
+            template<>
+            struct ToString<treemaptest::st::Z>
+            {
+                auto operator()(const treemaptest::st::Z) -> std::string
+                {
+                    return "Z";
+                }
+            };
 
-template< >
-struct ToString< treemaptest::st::Momentum >
-{
-    auto
-    operator()( const treemaptest::st::Momentum )
-    -> std::string
-    {
-        return "Momentum";
-    }
-};
+            template<>
+            struct ToString<treemaptest::st::Momentum>
+            {
+                auto operator()(const treemaptest::st::Momentum) -> std::string
+                {
+                    return "Momentum";
+                }
+            };
 
-template< >
-struct ToString< treemaptest::st::Weight >
-{
-    auto
-    operator()( const treemaptest::st::Weight )
-    -> std::string
-    {
-        return "Weight";
-    }
-};
+            template<>
+            struct ToString<treemaptest::st::Weight>
+            {
+                auto operator()(const treemaptest::st::Weight) -> std::string
+                {
+                    return "Weight";
+                }
+            };
 
-} // namespace tree
+        } // namespace tree
 
-} // namespace mapping
+    } // namespace mapping
 
 } // namespace llama

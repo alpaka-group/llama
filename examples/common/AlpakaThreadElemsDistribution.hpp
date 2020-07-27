@@ -18,38 +18,32 @@
 
 namespace common
 {
-
-/** Returns a good guess for an optimal number of threads and elements in a
- *  block based on the total number of elements in the block.
- */
-template<
-    typename T_Acc,
-    std::size_t blockSize,
-    std::size_t hardwareThreads
->
-struct ThreadsElemsDistribution
-{
-    /// number of elements per thread
-    static constexpr std::size_t elemCount = blockSize;
-    /// number of threads per block
-    static constexpr std::size_t threadCount = 1u;
-};
+    /** Returns a good guess for an optimal number of threads and elements in a
+     *  block based on the total number of elements in the block.
+     */
+    template<typename T_Acc, std::size_t blockSize, std::size_t hardwareThreads>
+    struct ThreadsElemsDistribution
+    {
+        /// number of elements per thread
+        static constexpr std::size_t elemCount = blockSize;
+        /// number of threads per block
+        static constexpr std::size_t threadCount = 1u;
+    };
 
 #ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
     template<
         std::size_t blockSize,
         std::size_t hardwareThreads,
         typename T_Dim,
-        typename T_Size
-    >
+        typename T_Size>
     struct ThreadsElemsDistribution<
         alpaka::acc::AccGpuCudaRt<T_Dim, T_Size>,
         blockSize,
-        hardwareThreads
-    >
+        hardwareThreads>
     {
         static constexpr std::size_t elemCount = THREADELEMDIST_MIN_ELEM;
-        static constexpr std::size_t threadCount = blockSize / THREADELEMDIST_MIN_ELEM;
+        static constexpr std::size_t threadCount
+            = blockSize / THREADELEMDIST_MIN_ELEM;
     };
 #endif
 
@@ -58,16 +52,14 @@ struct ThreadsElemsDistribution
         std::size_t blockSize,
         std::size_t hardwareThreads,
         typename T_Dim,
-        typename T_Size
-    >
+        typename T_Size>
     struct ThreadsElemsDistribution<
         alpaka::acc::AccCpuOmp2Threads<T_Dim, T_Size>,
         blockSize,
-        hardwareThreads
-    >
+        hardwareThreads>
     {
-        static constexpr std::size_t elemCount =
-            ( blockSize + hardwareThreads - 1u ) / hardwareThreads;
+        static constexpr std::size_t elemCount
+            = (blockSize + hardwareThreads - 1u) / hardwareThreads;
         static constexpr std::size_t threadCount = hardwareThreads;
     };
 #endif

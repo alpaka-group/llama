@@ -18,107 +18,94 @@
 
 #pragma once
 
-#include <type_traits>
 #include "GetUID.hpp"
+
+#include <type_traits>
 
 namespace llama
 {
+    /** Tells whether two coordinates in two datum domains have the same UID.
+     * \tparam T_DDA first user domain
+     * \tparam T_BaseA First part of the coordinate in the first user domain as
+     *  \ref DatumCoord. This will be used for getting the UID, but not for the
+     *  comparison.
+     * \tparam T_LocalA Second part of the coordinate in the first user domain
+     * as \ref DatumCoord. This will be used for the comparison with the second
+     *  datum domain.
+     * \tparam T_DDB second user domain
+     * \tparam T_BaseB First part of the coordinate in the second user domain as
+     *  \ref DatumCoord. This will be used for getting the UID, but not for the
+     *  comparison.
+     * \tparam T_LocalB Second part of the coordinate in the second user domain
+     * as \ref DatumCoord. This will be used for the comparison with the first
+     *  datum domain.
+     */
+    template<
+        typename T_DDA,
+        typename T_BaseA,
+        typename T_LocalA,
+        typename T_DDB,
+        typename T_BaseB,
+        typename T_LocalB,
+        typename SFINAE = void>
+    struct CompareUID
+    {
+        /// true if the two UIDs are exactly the same, otherwise false.
+        static constexpr bool value LLAMA_IGNORE_LITERAL(;)
+            = std::is_same<
+                  GetUID<
+                      T_DDA,
+                      typename T_BaseA::template PushBack<T_LocalA::front>>,
+                  GetUID<
+                      T_DDB,
+                      typename T_BaseB::template PushBack<T_LocalB::front>>>::
+                  value
+            && CompareUID<
+                  T_DDA,
+                  typename T_BaseA::template PushBack<T_LocalA::front>,
+                  typename T_LocalA::PopFront,
+                  T_DDB,
+                  typename T_BaseB::template PushBack<T_LocalB::front>,
+                  typename T_LocalB::PopFront>::value;
+    };
 
-/** Tells whether two coordinates in two datum domains have the same UID.
- * \tparam T_DDA first user domain
- * \tparam T_BaseA First part of the coordinate in the first user domain as
- *  \ref DatumCoord. This will be used for getting the UID, but not for the
- *  comparison.
- * \tparam T_LocalA Second part of the coordinate in the first user domain as
- *  \ref DatumCoord. This will be used for the comparison with the second
- *  datum domain.
- * \tparam T_DDB second user domain
- * \tparam T_BaseB First part of the coordinate in the second user domain as
- *  \ref DatumCoord. This will be used for getting the UID, but not for the
- *  comparison.
- * \tparam T_LocalB Second part of the coordinate in the second user domain as
- *  \ref DatumCoord. This will be used for the comparison with the first
- *  datum domain.
- */
-template<
-    typename T_DDA,
-    typename T_BaseA,
-    typename T_LocalA,
-    typename T_DDB,
-    typename T_BaseB,
-    typename T_LocalB,
-    typename SFINAE = void
->
-struct CompareUID
-{
-    /// true if the two UIDs are exactly the same, otherwise false.
-    static constexpr bool value LLAMA_IGNORE_LITERAL(;) =
-        std::is_same<
-            GetUID<
-                T_DDA,
-                typename T_BaseA::template PushBack< T_LocalA::front >
-            >,
-            GetUID<
-                T_DDB,
-                typename T_BaseB::template PushBack< T_LocalB::front >
-            >
-        >::value &&
-        CompareUID<
-            T_DDA,
-            typename T_BaseA::template PushBack< T_LocalA::front >,
-            typename T_LocalA::PopFront,
-            T_DDB,
-            typename T_BaseB::template PushBack< T_LocalB::front >,
-            typename T_LocalB::PopFront
-        >::value;
-};
+    template<
+        typename T_DDA,
+        typename T_BaseA,
+        typename T_LocalA,
+        typename T_DDB,
+        typename T_BaseB,
+        typename T_LocalB>
+    struct CompareUID<
+        T_DDA,
+        T_BaseA,
+        T_LocalA,
+        T_DDB,
+        T_BaseB,
+        T_LocalB,
+        typename std::enable_if<(T_LocalA::size != T_LocalB::size)>::type>
+    {
+        static constexpr bool value = false;
+    };
 
-template<
-    typename T_DDA,
-    typename T_BaseA,
-    typename T_LocalA,
-    typename T_DDB,
-    typename T_BaseB,
-    typename T_LocalB
->
-struct CompareUID
-<
-    T_DDA,
-    T_BaseA,
-    T_LocalA,
-    T_DDB,
-    T_BaseB,
-    T_LocalB,
-    typename std::enable_if< (T_LocalA::size != T_LocalB::size) >::type
->
-{
-    static constexpr bool value = false;
-};
-
-template<
-    typename T_DDA,
-    typename T_BaseA,
-    typename T_LocalA,
-    typename T_DDB,
-    typename T_BaseB,
-    typename T_LocalB
->
-struct CompareUID
-<
-    T_DDA,
-    T_BaseA,
-    T_LocalA,
-    T_DDB,
-    T_BaseB,
-    T_LocalB,
-    typename std::enable_if<
-        (T_LocalA::size == 0) &&
-        (T_LocalB::size == 0)
-    >::type
->
-{
-    static constexpr bool value = true;
-};
-
+    template<
+        typename T_DDA,
+        typename T_BaseA,
+        typename T_LocalA,
+        typename T_DDB,
+        typename T_BaseB,
+        typename T_LocalB>
+    struct CompareUID<
+        T_DDA,
+        T_BaseA,
+        T_LocalA,
+        T_DDB,
+        T_BaseB,
+        T_LocalB,
+        typename std::enable_if<
+            (T_LocalA::size == 0) && (T_LocalB::size == 0)>::type>
+    {
+        static constexpr bool value = true;
+    };
 
 } // namespace llama

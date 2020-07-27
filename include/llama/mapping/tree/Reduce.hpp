@@ -22,265 +22,223 @@
 
 namespace llama
 {
+    namespace mapping
+    {
+        namespace tree
+        {
+            template<
+                typename T_Tree,
+                template<class, class>
+                class T_InnerOp,
+                template<class, class>
+                class T_OuterOp,
+                template<class, class>
+                class T_LeafFunctor,
+                typename T_SFINAE = void>
+            struct Reduce;
 
-namespace mapping
-{
+            namespace internal
+            {
+                // Leaf
+                template<
+                    typename T_Tree,
+                    template<class, class>
+                    class T_InnerOp,
+                    template<class, class>
+                    class T_OuterOp,
+                    template<class, class>
+                    class T_LeafFunctor,
+                    typename T_SFINAE = void>
+                struct ReduceElementType
+                {
+                    LLAMA_FN_HOST_ACC_INLINE
+                    auto operator()(decltype(T_Tree::count) const & count) const
+                        -> std::size_t
+                    {
+                        return T_LeafFunctor<
+                            typename T_Tree::Type,
+                            decltype(T_Tree::count)>()(count);
+                    }
+                };
 
-namespace tree
-{
+                // Node
+                template<
+                    typename T_Tree,
+                    template<class, class>
+                    class T_InnerOp,
+                    template<class, class>
+                    class T_OuterOp,
+                    template<class, class>
+                    class T_LeafFunctor>
+                struct ReduceElementType<
+                    T_Tree,
+                    T_InnerOp,
+                    T_OuterOp,
+                    T_LeafFunctor,
+                    typename std::enable_if<(
+                        SizeOfTuple<typename T_Tree::Type>::value > 1)>::type>
+                {
+                    using IterTree =
+                        typename TreePopFrontChild<T_Tree>::ResultType;
 
-template<
-	typename T_Tree,
-	template< class, class > class T_InnerOp,
-	template< class, class > class T_OuterOp,
-	template< class, class > class T_LeafFunctor,
-	typename T_SFINAE = void
->
-struct Reduce;
+                    LLAMA_FN_HOST_ACC_INLINE
+                    auto operator()(
+                        typename T_Tree::Type const & childs,
+                        decltype(T_Tree::count) const & count) const
+                        -> std::size_t
+                    {
+                        return T_InnerOp<
+                            decltype(Reduce<
+                                     typename T_Tree::Type::FirstElement,
+                                     T_InnerOp,
+                                     T_OuterOp,
+                                     T_LeafFunctor>()(childs.first)),
+                            decltype(internal::ReduceElementType<
+                                     IterTree,
+                                     T_InnerOp,
+                                     T_OuterOp,
+                                     T_LeafFunctor>()(childs.rest, count))>::
+                            apply(
+                                Reduce<
+                                    typename T_Tree::Type::FirstElement,
+                                    T_InnerOp,
+                                    T_OuterOp,
+                                    T_LeafFunctor>()(childs.first),
+                                internal::ReduceElementType<
+                                    IterTree,
+                                    T_InnerOp,
+                                    T_OuterOp,
+                                    T_LeafFunctor>()(childs.rest, count));
+                    }
+                };
 
-namespace internal
-{
+                // Node with one (last) child
+                template<
+                    typename T_Tree,
+                    template<class, class>
+                    class T_InnerOp,
+                    template<class, class>
+                    class T_OuterOp,
+                    template<class, class>
+                    class T_LeafFunctor>
+                struct ReduceElementType<
+                    T_Tree,
+                    T_InnerOp,
+                    T_OuterOp,
+                    T_LeafFunctor,
+                    typename std::enable_if<
+                        SizeOfTuple<typename T_Tree::Type>::value == 1>::type>
+                {
+                    LLAMA_FN_HOST_ACC_INLINE
+                    auto operator()(
+                        typename T_Tree::Type const & childs,
+                        decltype(T_Tree::count) const & count) const
+                        -> std::size_t
+                    {
+                        return Reduce<
+                            typename T_Tree::Type::FirstElement,
+                            T_InnerOp,
+                            T_OuterOp,
+                            T_LeafFunctor>()(childs.first);
+                    }
+                };
 
-// Leaf
-template<
-	typename T_Tree,
-	template< class, class > class T_InnerOp,
-	template< class, class > class T_OuterOp,
-	template< class, class > class T_LeafFunctor,
-	typename T_SFINAE = void
->
-struct ReduceElementType
-{
-	LLAMA_FN_HOST_ACC_INLINE
-	auto
-	operator()( decltype( T_Tree::count ) const & count ) const
-	-> std::size_t
-	{
-		return T_LeafFunctor<
-			typename T_Tree::Type,
-			decltype( T_Tree::count )
-		>()( count );
-	}
-};
+            } // namespace internal
 
-// Node
-template<
-	typename T_Tree,
-	template< class, class > class T_InnerOp,
-	template< class, class > class T_OuterOp,
-	template< class, class > class T_LeafFunctor
->
-struct ReduceElementType<
-	T_Tree,
-	T_InnerOp,
-	T_OuterOp,
-	T_LeafFunctor,
-	typename std::enable_if<
-		( SizeOfTuple< typename T_Tree::Type >::value > 1 )
-	>::type
->
-{
-	using IterTree = typename TreePopFrontChild< T_Tree >::ResultType;
+            template<
+                typename T_Tree,
+                template<class, class>
+                class T_InnerOp,
+                template<class, class>
+                class T_OuterOp,
+                template<class, class>
+                class T_LeafFunctor,
+                typename T_SFINAE>
+            struct Reduce
+            {
+                LLAMA_FN_HOST_ACC_INLINE
+                auto operator()(
+                    typename T_Tree::Type const & childs,
+                    decltype(T_Tree::count) const & count) const -> std::size_t
+                {
+                    return T_OuterOp<
+                        decltype(T_Tree::count),
+                        decltype(internal::ReduceElementType<
+                                 T_Tree,
+                                 T_InnerOp,
+                                 T_OuterOp,
+                                 T_LeafFunctor>()(childs, count))>::
+                        apply(
+                            count,
+                            internal::ReduceElementType<
+                                T_Tree,
+                                T_InnerOp,
+                                T_OuterOp,
+                                T_LeafFunctor>()(childs, count));
+                }
 
-	LLAMA_FN_HOST_ACC_INLINE
-	auto
-	operator()(
-        typename T_Tree::Type const & childs,
-        decltype( T_Tree::count ) const & count
-    ) const
-	-> std::size_t
-	{
-		return T_InnerOp<
-			decltype(
-				Reduce<
-					typename T_Tree::Type::FirstElement,
-					T_InnerOp,
-					T_OuterOp,
-					T_LeafFunctor
-				>()( childs.first )
-			),
-			decltype(
-				internal::ReduceElementType<
-					IterTree,
-					T_InnerOp,
-					T_OuterOp,
-					T_LeafFunctor
-				>()(
-					childs.rest,
-					count
-				)
-			)
-		>::apply(
-			Reduce<
-				typename T_Tree::Type::FirstElement,
-				T_InnerOp,
-				T_OuterOp,
-				T_LeafFunctor
-			>()( childs.first ),
-			internal::ReduceElementType<
-				IterTree,
-				T_InnerOp,
-				T_OuterOp,
-				T_LeafFunctor
-			>()(
-				childs.rest,
-				count
-			)
-		);
-	}
-};
+                LLAMA_FN_HOST_ACC_INLINE
+                auto operator()(T_Tree const & tree) const -> std::size_t
+                {
+                    return operator()(
+                        tree.childs,
+                        // cuda doesn't like references to static members of
+                        // they are not defined somewhere although only type
+                        // informations are used which is the case for
+                        // runtime=std::integral_constant
+                        LLAMA_DEREFERENCE(tree.count));
+                }
+            };
 
-// Node with one (last) child
-template<
-	typename T_Tree,
-	template< class, class > class T_InnerOp,
-	template< class, class > class T_OuterOp,
-	template< class, class > class T_LeafFunctor
->
-struct ReduceElementType<
-	T_Tree,
-	T_InnerOp,
-	T_OuterOp,
-	T_LeafFunctor,
-	typename std::enable_if<
-		SizeOfTuple< typename T_Tree::Type >::value == 1
-	>::type
->
-{
-	LLAMA_FN_HOST_ACC_INLINE
-	auto
-	operator()(
-        typename T_Tree::Type const & childs,
-        decltype( T_Tree::count ) const & count
-    ) const
-	-> std::size_t
-	{
-		return Reduce<
-			typename T_Tree::Type::FirstElement,
-			T_InnerOp,
-			T_OuterOp,
-			T_LeafFunctor
-		>()( childs.first );
-	}
-};
+            template<
+                typename T_Tree,
+                template<class, class>
+                class T_InnerOp,
+                template<class, class>
+                class T_OuterOp,
+                template<class, class>
+                class T_LeafFunctor>
+            struct Reduce<
+                T_Tree,
+                T_InnerOp,
+                T_OuterOp,
+                T_LeafFunctor,
+                typename T_Tree::IsTreeElementWithoutChilds>
+            {
+                LLAMA_FN_HOST_ACC_INLINE
+                auto operator()(decltype(T_Tree::count) const & count) const
+                    -> std::size_t
+                {
+                    return T_OuterOp<
+                        decltype(T_Tree::count),
+                        decltype(internal::ReduceElementType<
+                                 T_Tree,
+                                 T_InnerOp,
+                                 T_OuterOp,
+                                 T_LeafFunctor>()(count))>::
+                        apply(
+                            count,
+                            internal::ReduceElementType<
+                                T_Tree,
+                                T_InnerOp,
+                                T_OuterOp,
+                                T_LeafFunctor>()(count));
+                }
 
-} //namespace internal
+                LLAMA_FN_HOST_ACC_INLINE
+                auto operator()(T_Tree const & tree) const -> std::size_t
+                {
+                    // cuda doesn't like references to static members of they
+                    // are not defined somewhere although only type informations
+                    // are used which is the case for
+                    // runtime=std::integral_constant
+                    //~ return operator()( (tree.count) );
+                    return operator()(LLAMA_DEREFERENCE(tree.count));
+                }
+            };
 
-template<
-	typename T_Tree,
-	template< class, class > class T_InnerOp,
-	template< class, class > class T_OuterOp,
-	template< class, class > class T_LeafFunctor,
-	typename T_SFINAE
->
-struct Reduce
-{
-	LLAMA_FN_HOST_ACC_INLINE
-	auto
-	operator()(
-		typename T_Tree::Type const & childs,
-		decltype( T_Tree::count ) const & count
-	) const
-	-> std::size_t
-	{
-		return T_OuterOp<
-			decltype( T_Tree::count ),
-			decltype(
-				internal::ReduceElementType<
-					T_Tree,
-					T_InnerOp,
-					T_OuterOp,
-					T_LeafFunctor
-				>()(
-					childs,
-					count
-				)
-			)
-		>::apply(
-			count,
-			internal::ReduceElementType<
-				T_Tree,
-				T_InnerOp,
-				T_OuterOp,
-				T_LeafFunctor
-			>()(
-				childs,
-				count
-			)
-		);
-	}
+        } // namespace tree
 
-	LLAMA_FN_HOST_ACC_INLINE
-	auto
-	operator()( T_Tree const & tree ) const
-	-> std::size_t
-	{
-		return operator()(
-			tree.childs,
-			// cuda doesn't like references to static members of they are
-			// not defined somewhere although only type informations
-			// are used which is the case for runtime=std::integral_constant
-			LLAMA_DEREFERENCE( tree.count )
-		);
-	}
-};
-
-template<
-	typename T_Tree,
-	template< class, class > class T_InnerOp,
-	template< class, class > class T_OuterOp,
-	template< class, class > class T_LeafFunctor
->
-struct Reduce<
-	T_Tree,
-	T_InnerOp,
-	T_OuterOp,
-	T_LeafFunctor,
-	typename T_Tree::IsTreeElementWithoutChilds
->
-{
-	LLAMA_FN_HOST_ACC_INLINE
-	auto
-	operator()( decltype( T_Tree::count ) const & count ) const
-	-> std::size_t
-	{
-		return T_OuterOp<
-			decltype( T_Tree::count ),
-			decltype(
-				internal::ReduceElementType<
-					T_Tree,
-					T_InnerOp,
-					T_OuterOp,
-					T_LeafFunctor
-				>()( count )
-			)
-		>::apply(
-			count,
-			internal::ReduceElementType<
-				T_Tree,
-				T_InnerOp,
-				T_OuterOp,
-				T_LeafFunctor
-			>()( count )
-		);
-	}
-
-	LLAMA_FN_HOST_ACC_INLINE
-	auto
-	operator()( T_Tree const & tree ) const
-	-> std::size_t
-	{
-		// cuda doesn't like references to static members of they are
-		// not defined somewhere although only type informations
-		// are used which is the case for runtime=std::integral_constant
-		//~ return operator()( (tree.count) );
-		return operator()( LLAMA_DEREFERENCE( tree.count ) );
-	}
-};
-
-} // namespace tree
-
-} // namespace mapping
+    } // namespace mapping
 
 } // namespace llama
-

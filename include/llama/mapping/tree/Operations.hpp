@@ -22,107 +22,70 @@
 
 namespace llama
 {
-
-namespace mapping
-{
-
-namespace tree
-{
-
-template<
-    typename Parameter1,
-    typename Parameter2
->
-struct Addition
-{
-    LLAMA_FN_HOST_ACC_INLINE
-    static constexpr
-    auto
-    apply(
-        Parameter1 const p1,
-        Parameter2 const p2
-    )
-    -> decltype( p1 + p2 )
+    namespace mapping
     {
-        return p1 + p2;
-    }
-};
+        namespace tree
+        {
+            template<typename Parameter1, typename Parameter2>
+            struct Addition
+            {
+                LLAMA_FN_HOST_ACC_INLINE
+                static constexpr auto
+                apply(Parameter1 const p1, Parameter2 const p2)
+                    -> decltype(p1 + p2)
+                {
+                    return p1 + p2;
+                }
+            };
 
-template<
-    typename T,
-    T t1,
-    T t2
->
-struct Addition<
-    std::integral_constant<T,t1>,
-    std::integral_constant<T,t2>
->
-{
-    using Parameter1 = std::integral_constant<T,t1>;
-    using Parameter2 = std::integral_constant<T,t2>;
+            template<typename T, T t1, T t2>
+            struct Addition<
+                std::integral_constant<T, t1>,
+                std::integral_constant<T, t2>>
+            {
+                using Parameter1 = std::integral_constant<T, t1>;
+                using Parameter2 = std::integral_constant<T, t2>;
 
-    LLAMA_FN_HOST_ACC_INLINE
-    static constexpr
-    auto
-    apply(
-        Parameter1 const p1,
-        Parameter2 const p2
-    )
-    -> std::integral_constant<T,t1 + t2>
-    {
-        return std::integral_constant<T,t1 + t2>();
-    }
-};
+                LLAMA_FN_HOST_ACC_INLINE
+                static constexpr auto
+                apply(Parameter1 const p1, Parameter2 const p2)
+                    -> std::integral_constant<T, t1 + t2>
+                {
+                    return std::integral_constant<T, t1 + t2>();
+                }
+            };
 
-template<
-    typename Parameter1,
-    typename Parameter2
->
-struct Multiplication
-{
-    LLAMA_FN_HOST_ACC_INLINE
-    static constexpr
-    auto
-    apply(
-        Parameter1 const p1,
-        Parameter2 const p2
-    )
-    -> decltype( p1 * p2 )
-    {
-        return p1 * p2;
-    }
-};
+            template<typename Parameter1, typename Parameter2>
+            struct Multiplication
+            {
+                LLAMA_FN_HOST_ACC_INLINE
+                static constexpr auto
+                apply(Parameter1 const p1, Parameter2 const p2)
+                    -> decltype(p1 * p2)
+                {
+                    return p1 * p2;
+                }
+            };
 
-template<
-    typename T,
-    T t1,
-    T t2
->
-struct Multiplication<
-    std::integral_constant<T,t1>,
-    std::integral_constant<T,t2>
->
-{
-    using Parameter1 = std::integral_constant<T,t1>;
-    using Parameter2 = std::integral_constant<T,t2>;
+            template<typename T, T t1, T t2>
+            struct Multiplication<
+                std::integral_constant<T, t1>,
+                std::integral_constant<T, t2>>
+            {
+                using Parameter1 = std::integral_constant<T, t1>;
+                using Parameter2 = std::integral_constant<T, t2>;
 
-    LLAMA_FN_HOST_ACC_INLINE
-    static constexpr
-    auto
-    apply(
-        Parameter1 const p1,
-        Parameter2 const p2
-    )
-    -> std::integral_constant<T,t1 * t2>
-    {
-        return std::integral_constant<T,t1 * t2>();
-    }
-};
+                LLAMA_FN_HOST_ACC_INLINE
+                static constexpr auto
+                apply(Parameter1 const p1, Parameter2 const p2)
+                    -> std::integral_constant<T, t1 * t2>
+                {
+                    return std::integral_constant<T, t1 * t2>();
+                }
+            };
 
+        } // namespace tree
 
-} // namespace tree
-
-} // namespace mapping
+    } // namespace mapping
 
 } // namespace llama
-

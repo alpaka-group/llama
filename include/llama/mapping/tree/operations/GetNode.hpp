@@ -22,97 +22,64 @@
 
 namespace llama
 {
-
-namespace mapping
-{
-
-namespace tree
-{
-
-namespace operations
-{
-
-namespace internal
-{
-
-template<
-    typename T_Tree,
-    typename T_TreeCoord
->
-struct GetNode
-{
-    LLAMA_FN_HOST_ACC_INLINE
-    auto
-    operator()( T_Tree const & tree ) const
-    -> decltype(
-        GetNode<
-            GetTupleType<
-                typename T_Tree::Type,
-                decltype( T_TreeCoord::FirstElement::compiletime )::value
-            >,
-            typename T_TreeCoord::RestTuple
-        >()(
-            getTupleElement<
-                decltype( T_TreeCoord::FirstElement::compiletime )::value
-            > ( tree.childs )
-        )
-    )
+    namespace mapping
     {
-        return GetNode<
-            GetTupleType<
-                typename T_Tree::Type,
-                decltype( T_TreeCoord::FirstElement::compiletime )::value
-            >,
-            typename T_TreeCoord::RestTuple
-        >()(
-            getTupleElement<
-                decltype( T_TreeCoord::FirstElement::compiletime )::value
-            > ( tree.childs )
-        );
-    }
-};
+        namespace tree
+        {
+            namespace operations
+            {
+                namespace internal
+                {
+                    template<typename T_Tree, typename T_TreeCoord>
+                    struct GetNode
+                    {
+                        LLAMA_FN_HOST_ACC_INLINE
+                        auto operator()(T_Tree const & tree) const
+                            -> decltype(GetNode<
+                                        GetTupleType<
+                                            typename T_Tree::Type,
+                                            decltype(T_TreeCoord::FirstElement::
+                                                         compiletime)::value>,
+                                        typename T_TreeCoord::RestTuple>()(
+                                getTupleElement<decltype(
+                                    T_TreeCoord::FirstElement::compiletime)::
+                                                    value>(tree.childs)))
+                        {
+                            return GetNode<
+                                GetTupleType<
+                                    typename T_Tree::Type,
+                                    decltype(T_TreeCoord::FirstElement::
+                                                 compiletime)::value>,
+                                typename T_TreeCoord::RestTuple>()(
+                                getTupleElement<decltype(
+                                    T_TreeCoord::FirstElement::compiletime)::
+                                                    value>(tree.childs));
+                        }
+                    };
 
-template< typename T_Tree >
-struct GetNode<
-    T_Tree,
-    Tuple< >
->
-{
-    LLAMA_FN_HOST_ACC_INLINE
-    auto
-    operator()( T_Tree const & tree ) const
-    -> T_Tree
-    {
-        return tree;
-    }
-};
+                    template<typename T_Tree>
+                    struct GetNode<T_Tree, Tuple<>>
+                    {
+                        LLAMA_FN_HOST_ACC_INLINE
+                        auto operator()(T_Tree const & tree) const -> T_Tree
+                        {
+                            return tree;
+                        }
+                    };
 
-} // namespace internal
+                } // namespace internal
 
-template<
-    typename T_TreeCoord,
-    typename T_Tree
->
-LLAMA_FN_HOST_ACC_INLINE
-auto
-getNode( T_Tree const & tree )
--> decltype(
-    internal::GetNode<
-        T_Tree,
-        T_TreeCoord
-    >()( tree )
-)
-{
-    return internal::GetNode<
-        T_Tree,
-        T_TreeCoord
-    >()( tree );
-}
+                template<typename T_TreeCoord, typename T_Tree>
+                LLAMA_FN_HOST_ACC_INLINE auto getNode(T_Tree const & tree)
+                    -> decltype(internal::GetNode<T_Tree, T_TreeCoord>()(tree))
+                {
+                    return internal::GetNode<T_Tree, T_TreeCoord>()(tree);
+                }
 
-} // namespace functor
+            } // namespace functor
 
-} // namespace tree
+        } // namespace tree
 
-} // namespace mapping
+    } // namespace mapping
 
 } // namespace llama

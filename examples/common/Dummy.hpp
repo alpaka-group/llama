@@ -1,3 +1,3 @@
 #pragma once
 
-void dummy(void* d);
+void dummy(void * d);

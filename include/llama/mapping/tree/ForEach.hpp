@@ -22,19 +22,11 @@
 
 namespace llama
 {
+    namespace mapping
+    {
+        namespace tree
+        {} // namespace tree
 
-namespace mapping
-{
-
-namespace tree
-{
-
-
-
-
-} // namespace tree
-
-} // namespace mapping
+    } // namespace mapping
 
 } // namespace llama
-
