@@ -3,29 +3,19 @@
 #include <catch2/catch.hpp>
 #include <llama/llama.hpp>
 
-namespace tag
-{
-    struct Pos
-    {};
-    struct Vel
-    {};
-    struct A
-    {};
-    struct X
-    {};
-    struct Y
-    {};
-    struct Z
-    {};
-    struct Weight
-    {};
-    struct Part1
-    {};
-    struct Part2
-    {};
+// clang-format off
+namespace tag {
+    struct Pos {};
+    struct Vel {};
+    struct A {};
+    struct X {};
+    struct Y {};
+    struct Z {};
+    struct Weight {};
+    struct Part1 {};
+    struct Part2 {};
 }
 
-// clang-format off
 using Name = llama::DS<
     llama::DE<tag::Pos, llama::DS<
         llama::DE<tag::A, int>,

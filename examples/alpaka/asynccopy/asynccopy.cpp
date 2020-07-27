@@ -58,14 +58,12 @@ namespace asynccopy
 {
     using Element = float;
 
+    // clang-format off
     namespace px
     {
-        struct R
-        {};
-        struct G
-        {};
-        struct B
-        {};
+        struct R{};
+        struct G{};
+        struct B{};
     }
 
     /// real datum domain of the image pixel used on the host for loading and
@@ -80,6 +78,7 @@ namespace asynccopy
         //~ llama::DE< px::R, Element >,
         llama::DE<px::G, Element>,
         llama::DE<px::B, Element>>;
+    // clang-format on
 
     /** Alpaka kernel functor used to blur a small image living in the device
      * memory using the \ref PixelOnAcc datum domain
@@ -230,7 +229,7 @@ namespace asynccopy
 #if ASYNCCOPY_CUDA == 1
         using Acc = alpaka::acc::AccGpuCudaRt<Dim, Size>;
 #else // ASYNCCOPY_CUDA == 0
-        //~ using Acc = alpaka::acc::AccCpuSerial<Dim, Size>;
+      //~ using Acc = alpaka::acc::AccCpuSerial<Dim, Size>;
         using Acc = alpaka::acc::AccCpuOmp2Blocks<Dim, Size>;
         //~ using Acc = alpaka::acc::AccCpuOmp2Threads<Dim, Size>;
         //~ using Acc = alpaka::acc::AccCpuOmp4<Dim, Size>;

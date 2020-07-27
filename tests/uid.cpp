@@ -3,35 +3,36 @@
 #include <catch2/catch.hpp>
 #include <llama/llama.hpp>
 
+// clang-format off
 namespace st
 {
-    struct Pos
-    {};
-    struct Vel
-    {};
-    struct X
-    {};
-    struct Y
-    {};
-    struct Z
-    {};
+    struct Pos {};
+    struct Vel {};
+    struct X {};
+    struct Y {};
+    struct Z {};
 }
 
 using Particle = llama::DS<
-    llama::DE<
-        st::Pos,
-        llama::DS<
-            llama::DE<st::X, float>,
-            llama::DE<st::Y, float>,
-            llama::DE<st::Z, float>>>,
+    llama::DE<st::Pos, llama::DS<
+        llama::DE<st::X, float>,
+        llama::DE<st::Y, float>,
+        llama::DE<st::Z, float>
+    >>,
     llama::DE<llama::NoName, int>,
-    llama::DE<
-        st::Vel,
-        llama::DS<llama::DE<st::Z, double>, llama::DE<st::X, double>>>>;
+    llama::DE<st::Vel,llama::DS<
+        llama::DE<st::Z, double>,
+        llama::DE<st::X, double>
+    >>
+>;
 
-using Other = llama::DS<llama::DE<
-    st::Pos,
-    llama::DS<llama::DE<st::Z, float>, llama::DE<st::Y, float>>>>;
+using Other = llama::DS<
+    llama::DE<st::Pos, llama::DS<
+        llama::DE<st::Z, float>,
+        llama::DE<st::Y, float>
+    >>
+>;
+// clang-format on
 
 TEST_CASE("uid")
 {

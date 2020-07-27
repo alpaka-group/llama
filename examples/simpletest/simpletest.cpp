@@ -20,6 +20,8 @@
 
 namespace simpletest
 {
+    // clang-format off
+
     /** LLAMA uses class names for accessing data in the datum domain. It makes
      * sense to encapsulate these in own namespaces, especially if you are using
      * similar namings in differnt datum domains, e.g. X, Y and Z in different
@@ -27,20 +29,13 @@ namespace simpletest
      */
     namespace st
     {
-        struct Pos
-        {};
-        struct X
-        {};
-        struct Y
-        {};
-        struct Z
-        {};
-        struct Momentum
-        {};
-        struct Weight
-        {};
-        struct Options
-        {};
+        struct Pos{};
+        struct X{};
+        struct Y{};
+        struct Z{};
+        struct Momentum{};
+        struct Weight{};
+        struct Options{};
     } // namespace st
 
     /** A datum domain in LLAMA is a type, probably always a
@@ -54,17 +49,16 @@ namespace simpletest
      * but of the same type.
      */
     using Name = llama::DS<
-        llama::DE<
-            st::Pos,
-            llama::DS<
-                llama::DE<st::X, float>,
-                llama::DE<st::Y, float>,
-                llama::DE<st::Z, float>>>,
-        llama::DE<
-            st::Momentum,
-            llama::DS<llama::DE<st::Z, double>, llama::DE<st::X, double>>>,
+        llama::DE<st::Pos, llama::DS<
+            llama::DE<st::X, float>,
+            llama::DE<st::Y, float>,
+            llama::DE<st::Z, float>>>,
+        llama::DE<st::Momentum, llama::DS<
+            llama::DE<st::Z, double>,
+            llama::DE<st::X, double>>>,
         llama::DE<st::Weight, int>,
         llama::DE<st::Options, llama::DA<bool, 4>>>;
+    // clang-format on
 
     /** Prints the coordinates of a given \ref llama::DatumCoord for debugging
      * and testing purposes
@@ -91,8 +85,8 @@ namespace simpletest
             vd(typename T_OuterCoord::template Cat<T_InnerCoord>()) = 0;
             //~ printCoords( typename T_OuterCoord::template Cat< T_InnerCoord
             //>() ); ~ std::cout << " "; ~ printCoords( T_OuterCoord() ); ~
-            //std::cout << " "; ~ printCoords( T_InnerCoord() ); ~ std::cout <<
-            //std::endl;
+            // std::cout << " "; ~ printCoords( T_InnerCoord() ); ~ std::cout <<
+            // std::endl;
         }
         T_VirtualDatum vd;
     };

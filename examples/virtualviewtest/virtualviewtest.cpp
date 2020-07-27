@@ -24,18 +24,14 @@ namespace virtualviewtest
 {
     namespace st
     {
-        struct X
-        {};
-        struct Y
-        {};
-        struct Z
-        {};
-        struct Pos
-        {};
-        struct Vel
-        {};
-        struct Mom
-        {};
+        // clang-format off
+        struct X{};
+        struct Y{};
+        struct Z{};
+        struct Pos{};
+        struct Vel{};
+        struct Mom{};
+        // clang-format on
     } // namespace st
 
 #ifdef NDEBUG
@@ -45,20 +41,18 @@ namespace virtualviewtest
     using Element = int;
 #endif
 
+    // clang-format off
     using Particle = llama::DS<
-        llama::DE<
-            st::Pos,
-            llama::DS<
-                llama::DE<st::X, Element>,
-                llama::DE<st::Y, Element>,
-                llama::DE<st::Z, Element>>>,
+        llama::DE<st::Pos, llama::DS<
+            llama::DE<st::X, Element>,
+            llama::DE<st::Y, Element>,
+            llama::DE<st::Z, Element>>>,
         llama::DE<st::Mom, Element>,
-        llama::DE<
-            st::Vel,
-            llama::DS<
-                llama::DE<st::Z, Element>,
-                llama::DE<st::Y, Element>,
-                llama::DE<st::X, Element>>>>;
+        llama::DE<st::Vel, llama::DS<
+            llama::DE<st::Z, Element>,
+            llama::DE<st::Y, Element>,
+            llama::DE<st::X, Element>>>>;
+    // clang-format on
 
     template<typename T_VirtualDatum>
     struct SqrtFunctor

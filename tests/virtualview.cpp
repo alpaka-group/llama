@@ -3,36 +3,31 @@
 #include <catch2/catch.hpp>
 #include <llama/llama.hpp>
 
+// clang-format off
 namespace st
 {
-    struct X
-    {};
-    struct Y
-    {};
-    struct Z
-    {};
-    struct Pos
-    {};
-    struct Vel
-    {};
-    struct Mom
-    {};
+    struct X {};
+    struct Y {};
+    struct Z {};
+    struct Pos {};
+    struct Vel {};
+    struct Mom {};
 }
 
 using Particle = llama::DS<
-    llama::DE<
-        st::Pos,
-        llama::DS<
-            llama::DE<st::X, int>,
-            llama::DE<st::Y, int>,
-            llama::DE<st::Z, int>>>,
+    llama::DE<st::Pos, llama::DS<
+        llama::DE<st::X, int>,
+        llama::DE<st::Y, int>,
+        llama::DE<st::Z, int>
+    >>,
     llama::DE<st::Mom, int>,
-    llama::DE<
-        st::Vel,
-        llama::DS<
-            llama::DE<st::Z, int>,
-            llama::DE<st::Y, int>,
-            llama::DE<st::X, int>>>>;
+    llama::DE<st::Vel, llama::DS<
+        llama::DE<st::Z, int>,
+        llama::DE<st::Y, int>,
+        llama::DE<st::X, int>
+    >>
+>;
+// clang-format on
 
 template<typename T_VirtualDatum>
 struct SqrtFunctor

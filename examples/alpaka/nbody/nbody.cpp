@@ -54,36 +54,28 @@ namespace nbody
     using Element = float;
     constexpr Element EPS2 = 0.01;
 
+    // clang-format off
     namespace dd
     {
-        struct Pos
-        {};
-        struct Vel
-        {};
-        struct X
-        {};
-        struct Y
-        {};
-        struct Z
-        {};
-        struct Mass
-        {};
+        struct Pos{};
+        struct Vel{};
+        struct X{};
+        struct Y{};
+        struct Z{};
+        struct Mass{};
     }
 
     using Particle = llama::DS<
-        llama::DE<
-            dd::Pos,
-            llama::DS<
-                llama::DE<dd::X, Element>,
-                llama::DE<dd::Y, Element>,
-                llama::DE<dd::Z, Element>>>,
-        llama::DE<
-            dd::Vel,
-            llama::DS<
-                llama::DE<dd::X, Element>,
-                llama::DE<dd::Y, Element>,
-                llama::DE<dd::Z, Element>>>,
+        llama::DE<dd::Pos, llama::DS<
+            llama::DE<dd::X, Element>,
+            llama::DE<dd::Y, Element>,
+            llama::DE<dd::Z, Element>>>,
+        llama::DE<dd::Vel, llama::DS<
+            llama::DE<dd::X, Element>,
+            llama::DE<dd::Y, Element>,
+            llama::DE<dd::Z, Element>>>,
         llama::DE<dd::Mass, Element>>;
+    // clang-format on
 
     /** Helper function for particle particle interaction. Gets two virtual
      * datums like they are real particle objects

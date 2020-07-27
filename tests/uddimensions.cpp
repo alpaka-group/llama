@@ -3,24 +3,23 @@
 #include <catch2/catch.hpp>
 #include <llama/llama.hpp>
 
+// clang-format off
 namespace st
 {
-    struct Pos
-    {};
-    struct X
-    {};
-    struct Y
-    {};
-    struct Z
-    {};
+    struct Pos {};
+    struct X {};
+    struct Y {};
+    struct Z {};
 }
 
-using Name = llama::DS<llama::DE<
-    st::Pos,
-    llama::DS<
+using Name = llama::DS<
+    llama::DE<st::Pos, llama::DS<
         llama::DE<st::X, float>,
         llama::DE<st::Y, float>,
-        llama::DE<st::Z, float>>>>;
+        llama::DE<st::Z, float>
+    >>
+>;
+// clang-format on
 
 TEST_CASE("dim1")
 {

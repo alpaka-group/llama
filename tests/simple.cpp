@@ -3,36 +3,31 @@
 #include <catch2/catch.hpp>
 #include <llama/llama.hpp>
 
-namespace st
-{
-    struct Pos
-    {};
-    struct X
-    {};
-    struct Y
-    {};
-    struct Z
-    {};
-    struct Momentum
-    {};
-    struct Weight
-    {};
-    struct Options
-    {};
+// clang-format off
+namespace st {
+    struct Pos {};
+    struct X {};
+    struct Y {};
+    struct Z {};
+    struct Momentum {};
+    struct Weight {};
+    struct Options {};
 }
 
 using Name = llama::DS<
-    llama::DE<
-        st::Pos,
-        llama::DS<
-            llama::DE<st::X, float>,
-            llama::DE<st::Y, float>,
-            llama::DE<st::Z, float>>>,
-    llama::DE<
-        st::Momentum,
-        llama::DS<llama::DE<st::Z, double>, llama::DE<st::X, double>>>,
+    llama::DE<st::Pos, llama::DS<
+        llama::DE<st::X, float>,
+        llama::DE<st::Y, float>,
+        llama::DE<st::Z, float>
+    >>,
+    llama::DE<st::Momentum, llama::DS<
+        llama::DE<st::Z, double>,
+        llama::DE<st::X, double>
+    >>,
     llama::DE<st::Weight, int>,
-    llama::DE<st::Options, llama::DA<bool, 4>>>;
+    llama::DE<st::Options, llama::DA<bool, 4>>
+>;
+// clang-format on
 
 TEST_CASE("demangleType")
 {

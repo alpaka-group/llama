@@ -3,21 +3,17 @@
 #include <catch2/catch.hpp>
 #include <llama/llama.hpp>
 
+// clang-format off
 namespace st
 {
-    struct Pos
-    {};
-    struct X
-    {};
-    struct Y
-    {};
-    struct Z
-    {};
-    struct Momentum
-    {};
-    struct Weight
-    {};
+    struct Pos {};
+    struct X {};
+    struct Y {};
+    struct Z {};
+    struct Momentum {};
+    struct Weight {};
 }
+// clang-format on
 
 namespace llama::mapping::tree
 {
@@ -71,20 +67,21 @@ namespace llama::mapping::tree
     };
 }
 
+// clang-format off
 using Name = llama::DS<
-    llama::DE<
-        st::Pos,
-        llama::DS<
-            llama::DE<st::X, double>,
-            llama::DE<st::Y, double>,
-            llama::DE<st::Z, double>>>,
+    llama::DE<st::Pos, llama::DS<
+        llama::DE<st::X, double>,
+        llama::DE<st::Y, double>,
+        llama::DE<st::Z, double>
+    >>,
     llama::DE<st::Weight, float>,
-    llama::DE<
-        st::Momentum,
-        llama::DS<
-            llama::DE<st::Z, double>,
-            llama::DE<st::Y, double>,
-            llama::DE<st::X, double>>>>;
+    llama::DE<st::Momentum, llama::DS<
+        llama::DE<st::Z, double>,
+        llama::DE<st::Y, double>,
+        llama::DE<st::X, double>
+    >>
+>;
+// clang-format on
 
 TEST_CASE("treemapping.empty")
 {

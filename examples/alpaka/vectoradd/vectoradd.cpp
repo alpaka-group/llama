@@ -47,20 +47,19 @@ namespace vectoradd
 {
     using Element = float;
 
+    // clang-format off
     namespace dd
     {
-        struct X
-        {};
-        struct Y
-        {};
-        struct Z
-        {};
+        struct X{};
+        struct Y{};
+        struct Z{};
     }
 
     using Vector = llama::DS<
         llama::DE<dd::X, Element>,
         llama::DE<dd::Y, Element>,
         llama::DE<dd::Z, Element>>;
+    // clang-format on
 
     template<std::size_t problemSize, std::size_t elems>
     struct AddKernel
