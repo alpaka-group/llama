@@ -76,8 +76,8 @@ TEST_CASE("fast virtual view")
 TEST_CASE("virtual view")
 {
     using UserDomain = llama::UserDomain<2>;
-    constexpr UserDomain viewSize{4096, 4096};
-    constexpr UserDomain miniSize{128, 128};
+    constexpr UserDomain viewSize{256, 256};
+    constexpr UserDomain miniSize{8, 8};
     using Mapping = llama::mapping::SoA<UserDomain, Particle>;
     auto view
         = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>::allocView(
