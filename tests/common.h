@@ -52,14 +52,12 @@ std::string prettyPrintType(const T& t) {
 
 namespace internal
 {
-    inline void zeroBlob(
-        llama::allocator::internal::SharedPtrAccessor & spa,
-        size_t blobSize)
+    inline void zeroBlob(std::shared_ptr<std::byte[]> & sp, size_t blobSize)
     {
-        std::memset(spa.blob.get(), 0, blobSize);
+        std::memset(sp.get(), 0, blobSize);
     }
-    template<typename T, typename A>
-    void zeroBlob(std::vector<T, A> & v, size_t blobSize)
+    template<typename A>
+    void zeroBlob(std::vector<std::byte, A> & v, size_t blobSize)
     {
         std::memset(v.data(), 0, blobSize);
     }

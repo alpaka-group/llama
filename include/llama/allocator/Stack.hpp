@@ -36,11 +36,8 @@ namespace llama::allocator
     template<std::size_t reserved>
     struct Stack
     {
-        using PrimType = unsigned char; ///< primary type of this allocator is
-                                        ///< `unsigned char`
-        using BlobType
-            = Array<PrimType, reserved>; ///< blob type of this allocator is
-                                         ///< `llama::Array<PrimType, reserved>`
+        using PrimType = std::byte;
+        using BlobType = Array<PrimType, reserved>;
         using Parameter = int; ///< the optional allocation parameter is ignored
 
         static LLAMA_FN_HOST_ACC_INLINE auto
