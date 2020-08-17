@@ -256,7 +256,7 @@ namespace llama
 #define __LLAMA_VIRTUALDATUM_VIEW_OPERATOR(OP, FUNCTOR, REF) \
     template<typename T_OtherMapping, typename T_OtherBlobType> \
     LLAMA_FN_HOST_ACC_INLINE auto operator OP( \
-        View<T_OtherMapping, T_OtherBlobType> REF other) \
+        llama::View<T_OtherMapping, T_OtherBlobType> REF other) \
         ->decltype(*this) & \
     { \
         auto otherVd \
@@ -504,7 +504,7 @@ namespace llama
 #define __LLAMA_VIRTUALDATUM_VIEW_BOOL_OPERATOR(OP, FUNCTOR, REF) \
     template<typename T_OtherMapping, typename T_OtherBlobType> \
     LLAMA_FN_HOST_ACC_INLINE auto operator OP( \
-        View<T_OtherMapping, T_OtherBlobType> REF other) \
+        llama::View<T_OtherMapping, T_OtherBlobType> REF other) \
         ->bool \
     { \
         auto otherVd \
@@ -561,13 +561,13 @@ namespace llama
         class T_ViewHolder>
     struct VirtualDatum : T_ViewHolder<T_View>
     {
-        using ViewType = T_View; ///< parent view of the virtual datum
+        using View = T_View; ///< parent view of the virtual datum
         using Mapping =
-            typename ViewType::Mapping; ///< mapping of the underlying view
+            typename View::Mapping; ///< mapping of the underlying view
         using UserDomain = typename Mapping::UserDomain;
         using DatumDomain = typename Mapping::DatumDomain;
         using BlobType =
-            typename ViewType::BlobType; ///< blobtype of the underlying view
+            typename View::BlobType; ///< blobtype of the underlying view
 
         /// already resolved part of the datum domain, basically the new datum
         /// domain tree root
@@ -587,7 +587,7 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE
         VirtualDatum(
             UserDomain userDomainPos,
-            ViewType & view) // TODO unify ctors
+            View & view) // TODO unify ctors
                 :
                 T_ViewHolder<T_View>{view}, userDomainPos(userDomainPos)
         {}
@@ -595,7 +595,7 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE
         VirtualDatum(
             UserDomain userDomainPos,
-            ViewType && view) // TODO unify ctors
+            View && view) // TODO unify ctors
                 :
                 T_ViewHolder<T_View>{view}, userDomainPos(userDomainPos)
         {}
@@ -620,7 +620,7 @@ namespace llama
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
                 return VirtualDatum<
-                    ViewType,
+                    View,
                     typename BoundDatumDomain::template Cat<
                         DatumCoord<T_coord...>>>{
                     UserDomain{userDomainPos}, this->view};
@@ -777,7 +777,7 @@ namespace llama
             -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return VirtualDatumType{userDomain, *this};
+            return {userDomain, *this};
         }
 
         /// Same as operator().
@@ -785,7 +785,7 @@ namespace llama
             -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return VirtualDatumType{userDomain, *this};
+            return {userDomain, *this};
         }
 
         /** Operator overloading to reverse the order of compile time (datum
@@ -802,7 +802,7 @@ namespace llama
             -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return VirtualDatumType{UserDomain{coord...}, *this};
+            return {UserDomain{coord...}, *this};
         }
 
         template<typename... Coord>
@@ -810,21 +810,21 @@ namespace llama
             -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return VirtualDatumType{UserDomain{coord...}, *this};
+            return {UserDomain{coord...}, *this};
         }
 
         LLAMA_FN_HOST_ACC_INLINE auto operator()(std::size_t coord = 0)
             -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return VirtualDatumType{UserDomain{coord}, *this};
+            return {UserDomain{coord}, *this};
         }
 
         LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t coord)
             -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return VirtualDatumType{UserDomain{coord}, *this};
+            return {UserDomain{coord}, *this};
         }
 
         template<std::size_t... Coord>
