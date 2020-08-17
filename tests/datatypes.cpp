@@ -16,10 +16,7 @@ TEST_CASE("type int")
     using UserDomain = llama::UserDomain<1>;
     UserDomain userDomain{16};
 
-    using Mapping = llama::mapping::SoA<
-        UserDomain,
-        Name,
-        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
@@ -38,10 +35,7 @@ TEST_CASE("type std::complex<float>")
     using UserDomain = llama::UserDomain<1>;
     UserDomain userDomain{16};
 
-    using Mapping = llama::mapping::SoA<
-        UserDomain,
-        Name,
-        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
@@ -60,10 +54,7 @@ TEST_CASE("type std::array<float, 4>")
     using UserDomain = llama::UserDomain<1>;
     UserDomain userDomain{16};
 
-    using Mapping = llama::mapping::SoA<
-        UserDomain,
-        Name,
-        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
@@ -82,10 +73,7 @@ TEST_CASE("type std::vector<float>")
     using UserDomain = llama::UserDomain<1>;
     UserDomain userDomain{16};
 
-    using Mapping = llama::mapping::SoA<
-        UserDomain,
-        Name,
-        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
@@ -104,10 +92,7 @@ TEST_CASE("type std::atomic<int>")
     using UserDomain = llama::UserDomain<1>;
     UserDomain userDomain{16};
 
-    using Mapping = llama::mapping::SoA<
-        UserDomain,
-        Name,
-        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
@@ -137,10 +122,7 @@ TEST_CASE("type noncopyable")
     using UserDomain = llama::UserDomain<1>;
     UserDomain userDomain{16};
 
-    using Mapping = llama::mapping::SoA<
-        UserDomain,
-        Name,
-        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
@@ -170,10 +152,7 @@ TEST_CASE("type nonmoveable")
     using UserDomain = llama::UserDomain<1>;
     UserDomain userDomain{16};
 
-    using Mapping = llama::mapping::SoA<
-        UserDomain,
-        Name,
-        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
@@ -198,10 +177,7 @@ TEST_CASE("type not defaultconstructible")
     using UserDomain = llama::UserDomain<1>;
     UserDomain userDomain{16};
 
-    using Mapping = llama::mapping::SoA<
-        UserDomain,
-        Name,
-        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
@@ -225,10 +201,7 @@ TEST_CASE("type nottrivial ctor")
     using UserDomain = llama::UserDomain<1>;
     UserDomain userDomain{16};
 
-    using Mapping = llama::mapping::SoA<
-        UserDomain,
-        Name,
-        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;

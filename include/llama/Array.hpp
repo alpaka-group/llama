@@ -39,7 +39,17 @@ namespace llama
             return &element[0];
         }
 
+        LLAMA_FN_HOST_ACC_INLINE const T * begin() const
+        {
+            return &element[0];
+        }
+
         LLAMA_FN_HOST_ACC_INLINE T * end()
+        {
+            return &element[count];
+        };
+
+        LLAMA_FN_HOST_ACC_INLINE const T * end() const
         {
             return &element[count];
         };
