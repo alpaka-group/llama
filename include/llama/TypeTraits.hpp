@@ -22,7 +22,6 @@
 
 namespace llama
 {
-
     /** remove const end reference
      *
      * This trait is equal to the C++20 remove_cvref.
@@ -30,16 +29,15 @@ namespace llama
      * \attention This trait will not collide with the C++20 trait since it
      *            is defined in the llama namespace.
      */
-    template< typename T >
+    template<typename T>
     struct remove_cvref
     {
         using type = typename std::remove_cv<
-            typename std::remove_reference< T >::type
-        >::type;
+            typename std::remove_reference<T>::type>::type;
     };
 
     //! short hand for remove_cvref
-    template< typename T >
-    using remove_cvref_t = typename remove_cvref< T >::type;
+    template<typename T>
+    using remove_cvref_t = typename remove_cvref<T>::type;
 
 } // namespace llama

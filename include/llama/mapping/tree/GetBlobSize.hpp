@@ -18,76 +18,50 @@
 
 #pragma once
 
-#include "Reduce.hpp"
 #include "Operations.hpp"
+#include "Reduce.hpp"
 
 namespace llama
 {
-
-namespace mapping
-{
-
-namespace tree
-{
-
-template<
-    typename T_Type,
-    typename T_CountType
->
-struct SizeOfFunctor
-{
-    LLAMA_FN_HOST_ACC_INLINE
-    auto
-    operator()( T_CountType const & ) const
-    -> std::size_t
+    namespace mapping
     {
-        return sizeof( T_Type );
-    }
-};
+        namespace tree
+        {
+            template<typename T_Type, typename T_CountType>
+            struct SizeOfFunctor
+            {
+                LLAMA_FN_HOST_ACC_INLINE
+                auto operator()(T_CountType const &) const -> std::size_t
+                {
+                    return sizeof(T_Type);
+                }
+            };
 
-template<
-    typename T_Childs,
-    typename T_CountType
->
-LLAMA_FN_HOST_ACC_INLINE
-auto
-getTreeBlobSize(
-    T_Childs const & childs,
-    T_CountType const & count
-)
--> std::size_t
-{
-    return Reduce<
-        typename TreeOptimalType<
-            T_Childs,
-            T_CountType
-        >::type,
-        Addition,
-        Multiplication,
-        SizeOfFunctor
-    >()(
-        childs,
-        count
-    );
-}
+            template<typename T_Childs, typename T_CountType>
+            LLAMA_FN_HOST_ACC_INLINE auto
+            getTreeBlobSize(T_Childs const & childs, T_CountType const & count)
+                -> std::size_t
+            {
+                return Reduce<
+                    typename TreeOptimalType<T_Childs, T_CountType>::type,
+                    Addition,
+                    Multiplication,
+                    SizeOfFunctor>()(childs, count);
+            }
 
-template< typename T_Tree >
-LLAMA_FN_HOST_ACC_INLINE
-auto
-getTreeBlobSize( T_Tree const & tree )
--> std::size_t
-{
-    return Reduce<
-        T_Tree,
-        Addition,
-        Multiplication,
-        SizeOfFunctor
-    >()( tree );
-}
+            template<typename T_Tree>
+            LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(T_Tree const & tree)
+                -> std::size_t
+            {
+                return Reduce<
+                    T_Tree,
+                    Addition,
+                    Multiplication,
+                    SizeOfFunctor>()(tree);
+            }
 
-} // namespace tree
+        } // namespace tree
 
-} // namespace mapping
+    } // namespace mapping
 
 } // namespace llama
-

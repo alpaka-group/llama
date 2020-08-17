@@ -19,35 +19,23 @@
 #pragma once
 
 #include "DatumStruct.hpp"
+
 #include <boost/mp11.hpp>
 
 namespace llama
 {
+    /** An array of anonymous but identical \ref DatumElement "DatumElements".
+     * Can be used anywhere where \ref DatumStruct may used. \tparam T_Child
+     * type to repeat. May be either another sub tree consisting of a nested
+     * \ref DatumStruct resp. DatumArray or any other type making it an array of
+     * leaves of this type. \tparam T_count number of repetitions of T_Child
+     * */
+    template<typename T_Child, std::size_t T_count>
+    using DatumArray = boost::mp11::
+        mp_repeat_c<DatumStruct<DatumElement<NoName, T_Child>>, T_count>;
 
-/** An array of anonymous but identical \ref DatumElement "DatumElements". Can be used
- *  anywhere where \ref DatumStruct may used.
- * \tparam T_Child type to repeat. May be either another sub tree consisting of
- *  a nested \ref DatumStruct resp. DatumArray or any other type making it an
- *  array of leaves of this type.
- * \tparam T_count number of repetitions of T_Child
- * */
-template<
-    typename T_Child,
-    std::size_t T_count
->
-using DatumArray = boost::mp11::mp_repeat_c<
-    DatumStruct< DatumElement< NoName, T_Child > >,
-    T_count
->;
-
-/// Shortcut for \ref DatumArray
-template<
-    typename T_Child,
-    std::size_t T_count
->
-using DA = DatumArray<
-    T_Child,
-    T_count
->;
+    /// Shortcut for \ref DatumArray
+    template<typename T_Child, std::size_t T_count>
+    using DA = DatumArray<T_Child, T_count>;
 
 } // namespace llama

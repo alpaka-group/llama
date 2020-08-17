@@ -22,51 +22,36 @@
 
 namespace llama
 {
+    namespace mapping
+    {
+        template<typename T_UserDomain, typename T_DatumDomain>
+        struct Interface
+        {
+            using UserDomain = T_UserDomain;
+            using DatumDomain = T_DatumDomain;
+            static constexpr std::size_t blobCount = 0;
 
-namespace mapping
-{
+            LLAMA_FN_HOST_ACC_INLINE
+            Interface(UserDomain const);
 
-template<
-    typename T_UserDomain,
-    typename T_DatumDomain
->
-struct Interface
-{
-    using UserDomain = T_UserDomain;
-    using DatumDomain = T_DatumDomain;
-    static constexpr std::size_t blobCount = 0;
+            Interface() = default;
+            Interface(Interface const &) = default;
+            Interface(Interface &&) = default;
+            ~Interface() = default;
 
-    LLAMA_FN_HOST_ACC_INLINE
-    Interface( UserDomain const );
+            LLAMA_FN_HOST_ACC_INLINE
+            auto getBlobSize(std::size_t const blobNr) const -> std::size_t;
 
-    Interface() = default;
-    Interface( Interface const & ) = default;
-    Interface( Interface && ) = default;
-    ~Interface( ) = default;
+            template<typename T_DatumDomainCoord>
+            LLAMA_FN_HOST_ACC_INLINE auto
+            getBlobByte(UserDomain const coord, UserDomain const size) const
+                -> std::size_t;
 
-    LLAMA_FN_HOST_ACC_INLINE
-    auto
-    getBlobSize( std::size_t const blobNr ) const
-    -> std::size_t;
+            LLAMA_FN_HOST_ACC_INLINE
+            auto getBlobNr(UserDomain const coord, UserDomain const size) const
+                -> std::size_t;
+        };
 
-    template< typename T_DatumDomainCoord >
-    LLAMA_FN_HOST_ACC_INLINE
-    auto
-    getBlobByte(
-        UserDomain const coord,
-        UserDomain const size
-    ) const
-    -> std::size_t;
-
-    LLAMA_FN_HOST_ACC_INLINE
-    auto
-    getBlobNr(
-        UserDomain const coord,
-        UserDomain const size
-    ) const
-    -> std::size_t;
-};
-
-} // namespace mapping
+    } // namespace mapping
 
 } // namespace llama

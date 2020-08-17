@@ -3,6 +3,7 @@
 #include <catch2/catch.hpp>
 #include <llama/llama.hpp>
 
+// clang-format off
 namespace tag {
     struct Pos {};
     struct Vel {};
@@ -15,7 +16,6 @@ namespace tag {
     struct Part2 {};
 }
 
-// clang-format off
 using Name = llama::DS<
     llama::DE<tag::Pos, llama::DS<
         llama::DE<tag::A, int>,
@@ -27,7 +27,8 @@ using Name = llama::DS<
     llama::DE<tag::Weight, int>>;
 // clang-format on
 
-TEST_CASE("operator=") {
+TEST_CASE("operator=")
+{
     auto datum = llama::stackVirtualDatumAlloc<Name>();
 
     // scalar to multiple elements in virtual datum
@@ -79,7 +80,8 @@ TEST_CASE("operator=") {
     CHECK(datum(tag::Weight{}) == 5);
 }
 
-TEST_CASE("operator+=") {
+TEST_CASE("operator+=")
+{
     auto datum = llama::stackVirtualDatumAlloc<Name>();
 
     // scalar to multiple elements in virtual datum
@@ -128,7 +130,8 @@ TEST_CASE("operator+=") {
     CHECK(datum(tag::Weight{}) == 1);
 }
 
-TEST_CASE("operator+") {
+TEST_CASE("operator+")
+{
     auto datum = llama::stackVirtualDatumAlloc<Name>();
 
     // scalar to multiple elements in virtual datum
@@ -199,7 +202,8 @@ using Name2 = llama::DS<
 >;
 // clang-format on
 
-TEST_CASE("operator=propagation") {
+TEST_CASE("operator=propagation")
+{
     auto datum = llama::stackVirtualDatumAlloc<Name2>();
 
     datum(tag::Part1{}) = 1;
@@ -226,7 +230,8 @@ TEST_CASE("operator=propagation") {
     CHECK(datum(tag::Part2{}, tag::Z{}) == 2);
 }
 
-TEST_CASE("operator=multiview") {
+TEST_CASE("operator=multiview")
+{
     auto datum1 = llama::stackVirtualDatumAlloc<Name>();
     auto datum2 = llama::stackVirtualDatumAlloc<Name2>();
 
@@ -248,7 +253,8 @@ TEST_CASE("operator=multiview") {
     CHECK(datum1(tag::Weight{}) == 1);
 }
 
-TEST_CASE("operator==") {
+TEST_CASE("operator==")
+{
     auto datum = llama::stackVirtualDatumAlloc<Name>();
 
     datum = 1;

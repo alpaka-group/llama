@@ -48,24 +48,18 @@
 #define LLAMA_VERSION_MINOR 1
 #define LLAMA_VERSION_PATCH 0
 
-#include "Types.hpp"
-#include "DatumStruct.hpp"
 #include "DatumArray.hpp"
+#include "DatumStruct.hpp"
+#include "Factory.hpp"
+#include "ForEach.hpp"
+#include "Types.hpp"
 #include "UserDomain.hpp"
-
-#include "allocator/Vector.hpp"
+#include "VirtualView.hpp"
 #include "allocator/SharedPtr.hpp"
 #include "allocator/Stack.hpp"
-
-#include "Factory.hpp"
-
+#include "allocator/Vector.hpp"
 #include "mapping/AoS.hpp"
-#include "mapping/SoA.hpp"
 #include "mapping/One.hpp"
+#include "mapping/SoA.hpp"
 #include "mapping/tree/Mapping.hpp"
-
 #include "preprocessor/macros.hpp"
-
-#include "ForEach.hpp"
-
-#include "VirtualView.hpp"

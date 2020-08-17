@@ -18,220 +18,148 @@
 
 #pragma once
 
-#include <vector>
-#include <stdlib.h>
 #include <malloc.h>
+#include <stdlib.h>
+#include <vector>
 
 namespace llama
 {
-
-namespace allocator
-{
-
-namespace internal
-{
-
-    template<typename T, std::size_t N = 16>
-    struct AlignmentAllocator
+    namespace allocator
     {
-        using value_type = T;
-        using size_type = std::size_t;
-        using difference_type = std::ptrdiff_t;
-
-        using pointer = T *;
-        using const_pointer = T const *;
-
-        using reference = T &;
-        using const_reference = T const &;
-
-        inline AlignmentAllocator() throw () { }
-
-        template< typename T2 >
-        inline
-        AlignmentAllocator(
-            AlignmentAllocator<
-                T2,
-                N
-            > const &
-            ) throw () { }
-
-        inline
-        ~AlignmentAllocator() throw () { }
-
-        inline
-        auto
-        adress( reference r )
-        -> pointer
+        namespace internal
         {
-            return &r;
-        }
+            template<typename T, std::size_t N = 16>
+            struct AlignmentAllocator
+            {
+                using value_type = T;
+                using size_type = std::size_t;
+                using difference_type = std::ptrdiff_t;
 
-        inline
-        auto
-        adress( const_reference r ) const
-        -> const_pointer
-        {
-            return &r;
-        }
+                using pointer = T *;
+                using const_pointer = T const *;
 
-        inline
-        auto
-        allocate( size_type n )
-        -> pointer
-        {
-#            if defined _MSC_VER
-                return reinterpret_cast< pointer >(
-                    _aligned_malloc(
-                        n * sizeof( value_type ),
-                        N
-                    )
-                );
-#            elif defined __linux__
-                return reinterpret_cast< pointer >(
-                    memalign(
-                        N,
-                        n * sizeof( value_type )
-                    )
-                );
-#            elif defined __MACH__      // Mac OS X
-                return reinterpret_cast< pointer >(
-                    malloc(
-                        n * sizeof( value_type )
-                    )
-                ); // malloc is always 16 byte aligned on Mac.
-#            else
-                return reinterpret_cast< pointer >(
-                    malloc(
-                        n * sizeof( value_type )
-                    )
-                ); // other (use valloc for page-aligned memory)
-#            endif
-        }
+                using reference = T &;
+                using const_reference = T const &;
 
-        inline
-        auto
-        deallocate(
-            pointer p,
-            size_type
-        )
-        -> void
-        {
-#            if defined _MSC_VER
-                _aligned_free( p );
-#            elif defined __linux__
-                free( p );
-#            elif defined __MACH__
-                free( p );
-#            else
-                free( p );
-#            endif
-        }
+                inline AlignmentAllocator() throw() {}
 
-        inline
-        auto
-        construct(
-            pointer p,
-            value_type const &
-        )
-        -> void
-        {
-            /* commented out for performance reasons
-             * new ( p ) value_type ( value );
-             */
-        }
+                template<typename T2>
+                inline AlignmentAllocator(
+                    AlignmentAllocator<T2, N> const &) throw()
+                {}
 
-        inline
-        auto
-        destroy( pointer p )
-        -> void
-        {
-            p->~value_type();
-        }
+                inline ~AlignmentAllocator() throw() {}
 
-        inline
-        auto
-        max_size() const throw ()
-        -> size_type
-        {
-            return size_type( -1 ) / sizeof( value_type );
-        }
+                inline auto adress(reference r) -> pointer
+                {
+                    return &r;
+                }
 
-        template< typename T2 >
-        struct rebind
+                inline auto adress(const_reference r) const -> const_pointer
+                {
+                    return &r;
+                }
+
+                inline auto allocate(size_type n) -> pointer
+                {
+#if defined _MSC_VER
+                    return reinterpret_cast<pointer>(
+                        _aligned_malloc(n * sizeof(value_type), N));
+#elif defined __linux__
+                    return reinterpret_cast<pointer>(
+                        memalign(N, n * sizeof(value_type)));
+#elif defined __MACH__ // Mac OS X
+                    return reinterpret_cast<pointer>(
+                        malloc(n * sizeof(value_type))); // malloc is always 16
+                                                         // byte aligned on Mac.
+#else
+                    return reinterpret_cast<pointer>(malloc(
+                        n * sizeof(value_type))); // other (use valloc for
+                                                  // page-aligned memory)
+#endif
+                }
+
+                inline auto deallocate(pointer p, size_type) -> void
+                {
+#if defined _MSC_VER
+                    _aligned_free(p);
+#elif defined __linux__
+                    free(p);
+#elif defined __MACH__
+                    free(p);
+#else
+                    free(p);
+#endif
+                }
+
+                inline auto construct(pointer p, value_type const &) -> void
+                {
+                    /* commented out for performance reasons
+                     * new ( p ) value_type ( value );
+                     */
+                }
+
+                inline auto destroy(pointer p) -> void
+                {
+                    p->~value_type();
+                }
+
+                inline auto max_size() const throw() -> size_type
+                {
+                    return size_type(-1) / sizeof(value_type);
+                }
+
+                template<typename T2>
+                struct rebind
+                {
+                    using other = AlignmentAllocator<T2, N>;
+                };
+
+                auto operator!=(const AlignmentAllocator<T, N> & other) const
+                    -> bool
+                {
+                    return !(*this == other);
+                }
+
+                /* Returns true if and only if storage allocated from *this
+                 * can be deallocated from other, and vice versa.
+                 * Always returns true for stateless allocators.
+                 */
+                auto operator==(const AlignmentAllocator<T, N> & other) const
+                    -> bool
+                {
+                    return true;
+                }
+            };
+
+        } // namespace internal
+
+        /** Allocator to allocate memory for a \ref View in the \ref Factory
+         * using `std::vector` in the background. Meaning every time the view is
+         * copied, the whole memory is copied. When the view is moved, the move
+         * operator of `std::vector` is used. \tparam T_alignment aligment of
+         * the memory used by `std::vector`, default value is 64
+         */
+        template<std::size_t T_alignment = 64u>
+        struct Vector
         {
-            using other = AlignmentAllocator<
-                T2,
-                N
-            >;
+            /// primary type of this allocator is `unsigned char`
+            using PrimType = unsigned char;
+            /// blob type of this allocator is `std::vector< PrimType >`
+            using BlobType = std::vector<
+                PrimType,
+                internal::AlignmentAllocator<PrimType, T_alignment>>;
+            /// the optional allocation parameter is ignored
+            using Parameter = int; // not used
+
+            LLAMA_NO_HOST_ACC_WARNING
+            static inline auto allocate(std::size_t count, Parameter const)
+                -> BlobType
+            {
+                return BlobType(count);
+            }
         };
 
-        auto
-        operator!=(
-            const AlignmentAllocator<
-                T,
-                N
-            > & other
-        ) const
-        -> bool
-        {
-            return !( *this == other );
-        }
-
-        /* Returns true if and only if storage allocated from *this
-         * can be deallocated from other, and vice versa.
-         * Always returns true for stateless allocators.
-         */
-        auto
-        operator==(
-            const AlignmentAllocator<
-                T,
-                N
-            > & other
-        ) const
-        -> bool
-        {
-            return true;
-        }
-    };
-
-} // namespace internal
-
-/** Allocator to allocate memory for a \ref View in the \ref Factory using
- *  `std::vector` in the background. Meaning every time the view is copied, the
- *  whole memory is copied. When the view is moved, the move operator of
- *  `std::vector` is used.
- * \tparam T_alignment aligment of the memory used by `std::vector`, default
- *  value is 64
- */
-template< std::size_t T_alignment = 64u>
-struct Vector
-{
-    /// primary type of this allocator is `unsigned char`
-    using PrimType = unsigned char;
-    /// blob type of this allocator is `std::vector< PrimType >`
-    using BlobType = std::vector<
-        PrimType,
-        internal::AlignmentAllocator<
-            PrimType,
-            T_alignment
-        >
-    >;
-    /// the optional allocation parameter is ignored
-    using Parameter = int; //not used
-
-    LLAMA_NO_HOST_ACC_WARNING
-    static inline
-    auto
-    allocate(
-        std::size_t count,
-        Parameter const
-    )
-    -> BlobType
-    {
-        return BlobType( count );
-    }
-};
-
-} // namespace allocator
+    } // namespace allocator
 
 } // namespace llama

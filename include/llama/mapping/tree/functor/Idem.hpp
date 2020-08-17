@@ -22,69 +22,49 @@
 
 namespace llama
 {
-
-namespace mapping
-{
-
-namespace tree
-{
-
-namespace functor
-{
-
-/** Functor for \ref tree::Mapping. Does nothing with the mapping tree at all
- *  (basically implemented for testing purposes).
- * \see tree::Mapping
- */
-struct Idem
-{
-    template< typename T_Tree >
-    using Result = T_Tree;
-
-    template< typename T_Tree >
-    LLAMA_FN_HOST_ACC_INLINE
-    auto
-    basicToResult( const T_Tree & tree ) const
-    -> Result< T_Tree >
+    namespace mapping
     {
-        return tree;
-    }
+        namespace tree
+        {
+            namespace functor
+            {
+                /** Functor for \ref tree::Mapping. Does nothing with the
+                 * mapping tree at all (basically implemented for testing
+                 * purposes). \see tree::Mapping
+                 */
+                struct Idem
+                {
+                    template<typename T_Tree>
+                    using Result = T_Tree;
 
-    template<
-        typename T_Tree,
-        typename T_TreeCoord
-    >
-    LLAMA_FN_HOST_ACC_INLINE
-    auto
-    basicCoordToResultCoord(
-        T_TreeCoord const & basicCoord,
-        T_Tree const &
-    ) const
-    -> T_TreeCoord
-    {
-        return basicCoord;
-    }
+                    template<typename T_Tree>
+                    LLAMA_FN_HOST_ACC_INLINE auto
+                    basicToResult(const T_Tree & tree) const -> Result<T_Tree>
+                    {
+                        return tree;
+                    }
 
-    template<
-        typename T_Tree,
-        typename T_TreeCoord
-    >
-    LLAMA_FN_HOST_ACC_INLINE
-    auto
-    resultCoordToBasicCoord(
-        T_TreeCoord const & resultCoord,
-        T_Tree const &
-    ) const
-    -> T_TreeCoord
-    {
-        return resultCoord;
-    }
-};
+                    template<typename T_Tree, typename T_TreeCoord>
+                    LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(
+                        T_TreeCoord const & basicCoord,
+                        T_Tree const &) const -> T_TreeCoord
+                    {
+                        return basicCoord;
+                    }
 
-} // namespace functor
+                    template<typename T_Tree, typename T_TreeCoord>
+                    LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(
+                        T_TreeCoord const & resultCoord,
+                        T_Tree const &) const -> T_TreeCoord
+                    {
+                        return resultCoord;
+                    }
+                };
 
-} // namespace tree
+            } // namespace functor
 
-} // namespace mapping
+        } // namespace tree
+
+    } // namespace mapping
 
 } // namespace llama
