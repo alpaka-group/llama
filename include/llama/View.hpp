@@ -600,83 +600,6 @@ namespace llama
                 T_ViewHolder<T_View>{view}, userDomainPos(userDomainPos)
         {}
 
-        template<typename T_DatumCoord>
-        struct AccessImpl
-        {
-            template<typename T_UserDomain>
-            static LLAMA_FN_HOST_ACC_INLINE auto
-            apply(T_View && view, T_UserDomain const & userDomainPos)
-                -> decltype(auto)
-            { // may deduce &
-                if constexpr(is_DatumStruct<GetTypeFromDatumCoord<
-                                 DatumDomain,
-                                 typename BoundDatumDomain::template Cat<
-                                     T_DatumCoord>>>::value)
-                {
-                    LLAMA_FORCE_INLINE_RECURSIVE
-                    return VirtualDatum<
-                        ViewType,
-                        typename BoundDatumDomain::template Cat<T_DatumCoord>>{
-                        UserDomain{userDomainPos}, view};
-                }
-                else
-                {
-                    using DatumCoord =
-                        typename BoundDatumDomain::template Cat<T_DatumCoord>;
-                    LLAMA_FORCE_INLINE_RECURSIVE
-                    return view.accessor(userDomainPos, DatumCoord{});
-                }
-            }
-        };
-
-        template<typename... T_UIDs>
-        struct AccessWithTypeImpl :
-                AccessWithTypeImpl<GetCoordFromUIDRelative<
-                    DatumDomain,
-                    BoundDatumDomain,
-                    T_UIDs...>>
-        {};
-
-        template<std::size_t... T_coord>
-        struct AccessWithTypeImpl<DatumCoord<T_coord...>>
-        {
-            template<typename T_UserDomain>
-            static LLAMA_FN_HOST_ACC_INLINE auto
-            apply(T_View && view, T_UserDomain const & userDomainPos)
-                -> decltype(auto)
-            { // may deduce &
-                LLAMA_FORCE_INLINE_RECURSIVE
-                return AccessImpl<DatumCoord<T_coord...>>::apply(
-                    std::forward<T_View>(view), userDomainPos);
-            }
-        };
-
-        /** Explicit access function for a coordinate in the datum domain given
-         * as unique identifier or \ref DatumCoord. If the address --
-         * independently whether given as datum coord or UID -- is not a leaf
-         * but, a new virtual datum with a bound datum coord is returned.
-         * \tparam T_DatumCoordOrUIDs... variadic number of types as unique
-         *  identifier **or** \ref DatumCoord with tree coordinates as template
-         *  parameters inside
-         * \return reference to element at resolved user domain and given datum
-         *  domain coordinate or a new virtual datum with a bound datum coord
-         */
-        template<typename... T_DatumCoordOrUIDs>
-        LLAMA_FN_HOST_ACC_INLINE auto access() -> decltype(auto)
-        { // may deduce &
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return AccessWithTypeImpl<T_DatumCoordOrUIDs...>::apply(
-                std::forward<T_View>(this->view), userDomainPos);
-        }
-
-        template<typename... T_DatumCoordOrUIDs>
-        LLAMA_FN_HOST_ACC_INLINE auto access(T_DatumCoordOrUIDs &&...)
-            -> decltype(auto)
-        { // may deduce &
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return access<remove_cvref_t<T_DatumCoordOrUIDs>...>();
-        }
-
         /** Explicit access function for a coordinate in the datum domain given
          * as tree position indexes. If the address -- independently whether
          * given as datum coord or UID -- is not a leaf but, a new virtual datum
@@ -686,30 +609,75 @@ namespace llama
          * a new virtual datum with a bound datum coord
          */
         template<std::size_t... T_coord>
+        LLAMA_FN_HOST_ACC_INLINE auto access(DatumCoord<T_coord...> = {})
+            -> decltype(auto)
+        { // may deduce &
+
+            if constexpr(is_DatumStruct<GetTypeFromDatumCoord<
+                             DatumDomain,
+                             typename BoundDatumDomain::template Cat<
+                                 DatumCoord<T_coord...>>>>::value)
+            {
+                LLAMA_FORCE_INLINE_RECURSIVE
+                return VirtualDatum<
+                    ViewType,
+                    typename BoundDatumDomain::template Cat<
+                        DatumCoord<T_coord...>>>{
+                    UserDomain{userDomainPos}, this->view};
+            }
+            else
+            {
+                using DatumCoord = typename BoundDatumDomain::template Cat<
+                    DatumCoord<T_coord...>>;
+                LLAMA_FORCE_INLINE_RECURSIVE
+                return this->view.accessor(userDomainPos, DatumCoord{});
+            }
+        }
+
+        /** Explicit access function for a coordinate in the datum domain given
+         * as unique identifier or \ref DatumCoord. If the address --
+         * independently whether given as datum coord or UID -- is not a leaf
+         * but, a new virtual datum with a bound datum coord is returned.
+         * \tparam UIDs... variadic number of types as unique
+         *  identifier
+         * \return reference to element at resolved user domain and given datum
+         *  domain coordinate or a new virtual datum with a bound datum coord
+         */
+        template<typename... UIDs>
+        LLAMA_FN_HOST_ACC_INLINE auto access(UIDs...) -> decltype(auto)
+        { // may deduce &
+            using DatumCoord = GetCoordFromUIDRelative<
+                DatumDomain,
+                BoundDatumDomain,
+                UIDs...>;
+
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return access(DatumCoord{});
+        }
+
+        template<typename... DatumCoordOrUIDs>
         LLAMA_FN_HOST_ACC_INLINE auto access() -> decltype(auto)
         { // may deduce &
             LLAMA_FORCE_INLINE_RECURSIVE
-            return AccessImpl<DatumCoord<T_coord...>>::apply(
-                std::forward<T_View>(this->view), userDomainPos);
+            return access(DatumCoordOrUIDs{}...);
         }
 
         /** operator overload() for a coordinate in the datum domain given as
          *  unique identifier or \ref DatumCoord. If the address --
          * independently whether given as datum coord or UID -- is not a leaf
          * but, a new virtual datum with a bound datum coord is returned. \param
-         * datumCoordOrUIDs instantiation of variadic number of unique
+         * unnamed instantiation of variadic number of unique
          *  identifier types **or** \ref DatumCoord with tree coordinates as
          *  template parameters inside
          * \return reference to element at resolved user domain and given datum
          *  domain coordinate or a new virtual datum with a bound datum coord
          */
-        template<typename... T_DatumCoordOrUIDs>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(
-            T_DatumCoordOrUIDs &&... LLAMA_IGNORE_LITERAL(datumCoordOrUIDs))
+        template<typename... DatumCoordOrUIDs>
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(DatumCoordOrUIDs...)
             -> decltype(auto)
-        { // may deduce & {
+        { // may deduce &
             LLAMA_FORCE_INLINE_RECURSIVE
-            return access<remove_cvref_t<T_DatumCoordOrUIDs>...>();
+            return access(DatumCoordOrUIDs{}...);
         }
 
         __LLAMA_VIRTUALDATUM_OPERATOR(=, Assigment)
@@ -812,14 +780,7 @@ namespace llama
             return VirtualDatumType{userDomain, *this};
         }
 
-        /** Operator overloading to reverse the order of compile time (datum
-         * domain) and run time (user domain) parameter with a helper object
-         *  (\ref llama::VirtualDatum). Should be favoured to access data
-         * because of the more array of struct like interface and the handy
-         * intermediate \ref llama::VirtualDatum object. \param userDomain user
-         * domain as \ref UserDomain \return \ref llama::VirtualDatum with bound
-         * user domain, which can be used to access the datum domain
-         */
+        /// Same as operator().
         LLAMA_FN_HOST_ACC_INLINE auto operator[](UserDomain userDomain)
             -> VirtualDatumType
         {
