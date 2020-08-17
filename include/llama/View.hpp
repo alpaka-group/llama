@@ -66,7 +66,7 @@ namespace llama
         DatumCoord<>,
         internal::ViewByValueHolder>
     {
-        return {userDomainZero<1>(), llama::stackViewAlloc<1, T_DatumDomain>()};
+        return {UserDomain<1>{}, llama::stackViewAlloc<1, T_DatumDomain>()};
     }
 
     /** Uses the \ref stackVirtualDatumAlloc to allocate a virtual datum with an
@@ -260,7 +260,7 @@ namespace llama
         ->decltype(*this) & \
     { \
         auto otherVd \
-            = other(userDomainZero<T_OtherMapping::UserDomain::count>()); \
+            = other(llama::UserDomain<T_OtherMapping::UserDomain::count>{}); \
         BOOST_PP_CAT( \
             FUNCTOR, \
             Functor)<decltype(*this), decltype(otherVd), DatumCoord<>> \
@@ -508,7 +508,7 @@ namespace llama
         ->bool \
     { \
         auto otherVd \
-            = other(userDomainZero<T_OtherMapping::UserDomain::count>()); \
+            = other(llama::UserDomain<T_OtherMapping::UserDomain::count>{}); \
         BOOST_PP_CAT( \
             FUNCTOR, \
             BoolFunctor)<decltype(*this), decltype(otherVd), DatumCoord<>> \
@@ -792,21 +792,21 @@ namespace llama
          * domain) and run time (user domain) parameter with a helper object
          *  (\ref llama::VirtualDatum). Should be favoured to access data
          * because of the more array of struct like interface and the handy
-         * intermediate \ref llama::VirtualDatum object. \tparam T_Coord...
+         * intermediate \ref llama::VirtualDatum object. \tparam Coord...
          * types of user domain coordinates \param coord user domain as list of
          * numbers \return \ref llama::VirtualDatum with bound user domain,
          * which can be used to access the datum domain
          */
-        template<typename... T_Coord>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(T_Coord... coord)
+        template<typename... Coord>
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(Coord... coord)
             -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return VirtualDatumType{UserDomain{coord...}, *this};
         }
 
-        template<typename... T_Coord>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(T_Coord... coord) const
+        template<typename... Coord>
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(Coord... coord) const
             -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
@@ -827,13 +827,12 @@ namespace llama
             return VirtualDatumType{UserDomain{coord}, *this};
         }
 
-        template<std::size_t... T_coord>
-        LLAMA_FN_HOST_ACC_INLINE auto
-        operator()(DatumCoord<T_coord...> && dc = {}) -> decltype(auto)
+        template<std::size_t... Coord>
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(DatumCoord<Coord...> dc = {})
+            -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return accessor<T_coord...>(
-                userDomainZero<Mapping::UserDomain::count>());
+            return accessor<Coord...>(UserDomain{});
         }
 
         const Mapping mapping; ///< mapping of the view
