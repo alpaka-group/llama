@@ -23,7 +23,6 @@
 #include "Factory.hpp"
 #include "ForEach.hpp"
 #include "GetType.hpp"
-#include "TypeTraits.hpp"
 #include "preprocessor/macros.hpp"
 
 #include <boost/preprocessor/cat.hpp>
