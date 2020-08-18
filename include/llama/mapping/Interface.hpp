@@ -20,6 +20,8 @@
 
 #include "../Types.hpp"
 
+// FIXME: what does this do? There is no implementation
+// If this is a template for mappings, it should be turned into a concept
 namespace llama
 {
     namespace mapping
@@ -34,11 +36,6 @@ namespace llama
             LLAMA_FN_HOST_ACC_INLINE
             Interface(UserDomain const);
 
-            Interface() = default;
-            Interface(Interface const &) = default;
-            Interface(Interface &&) = default;
-            ~Interface() = default;
-
             LLAMA_FN_HOST_ACC_INLINE
             auto getBlobSize(std::size_t const blobNr) const -> std::size_t;
 
@@ -47,11 +44,9 @@ namespace llama
             getBlobByte(UserDomain const coord, UserDomain const size) const
                 -> std::size_t;
 
-            LLAMA_FN_HOST_ACC_INLINE
-            auto getBlobNr(UserDomain const coord, UserDomain const size) const
+            LLAMA_FN_HOST_ACC_INLINE auto
+            getBlobNr(UserDomain const coord, UserDomain const size) const
                 -> std::size_t;
         };
-
-    } // namespace mapping
-
-} // namespace llama
+    }
+}

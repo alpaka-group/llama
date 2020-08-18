@@ -35,15 +35,7 @@ namespace llama
                     {
                         LLAMA_FN_HOST_ACC_INLINE
                         auto operator()(T_Tree const & tree) const
-                            -> decltype(GetNode<
-                                        GetTupleType<
-                                            typename T_Tree::Type,
-                                            decltype(T_TreeCoord::FirstElement::
-                                                         compiletime)::value>,
-                                        typename T_TreeCoord::RestTuple>()(
-                                getTupleElement<decltype(
-                                    T_TreeCoord::FirstElement::compiletime)::
-                                                    value>(tree.childs)))
+                            -> decltype(auto)
                         {
                             return GetNode<
                                 GetTupleType<
@@ -71,7 +63,7 @@ namespace llama
 
                 template<typename T_TreeCoord, typename T_Tree>
                 LLAMA_FN_HOST_ACC_INLINE auto getNode(T_Tree const & tree)
-                    -> decltype(internal::GetNode<T_Tree, T_TreeCoord>()(tree))
+                    -> decltype(auto)
                 {
                     return internal::GetNode<T_Tree, T_TreeCoord>()(tree);
                 }

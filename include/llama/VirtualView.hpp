@@ -32,19 +32,18 @@ namespace llama
     template<typename T_ParentViewType>
     struct VirtualView
     {
-        /// type of parent view
-        using ParentView = T_ParentViewType;
-        /// blob type, gotten from parent view
-        using BlobType = typename ParentView::BlobType;
-        /// mapping type, gotten from parent view
-        using Mapping = typename ParentView::Mapping;
-        /// VirtualDatum type, gotten from parent view
-        using VirtualDatumType = typename ParentView::VirtualDatumType;
+        using ParentView = T_ParentViewType; ///< type of parent view
+        using BlobType = typename ParentView::BlobType; ///< blob type, gotten
+                                                        ///< from parent view
+        using Mapping = typename ParentView::Mapping; ///< mapping type, gotten
+                                                      ///< from parent view
+        using VirtualDatumType =
+            typename ParentView::VirtualDatumType; ///< VirtualDatum type,
+                                                   ///< gotten from parent view
 
-        VirtualView() = delete;
-        VirtualView(VirtualView const &) = default;
-        VirtualView(VirtualView &&) = default;
-        ~VirtualView() = default;
+        // VirtualView(VirtualView const&) = default;
+        // VirtualView(VirtualView&&) = default; // TODO noexcept
+        //~VirtualView() = default;
 
         /** Unlike a \ref View, a VirtualView can be created without a factory
          *  directly from a parent view.
@@ -57,8 +56,8 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE
         VirtualView(
             ParentView & parentView,
-            typename Mapping::UserDomain const position,
-            typename Mapping::UserDomain const size) :
+            typename Mapping::UserDomain position,
+            typename Mapping::UserDomain size) :
                 parentView(parentView),
                 position(position),
                 size(size),
@@ -77,8 +76,7 @@ namespace llama
         LLAMA_NO_HOST_ACC_WARNING
         template<std::size_t... T_coords>
         LLAMA_FN_HOST_ACC_INLINE auto
-        accessor(typename Mapping::UserDomain const userDomain)
-            -> GetType<typename Mapping::DatumDomain, T_coords...> &
+        accessor(typename Mapping::UserDomain userDomain) -> auto &
         {
             return parentView.template accessor<T_coords...>(
                 userDomain + position);
@@ -95,10 +93,7 @@ namespace llama
         LLAMA_NO_HOST_ACC_WARNING
         template<typename... T_UIDs>
         LLAMA_FN_HOST_ACC_INLINE auto
-        accessor(typename Mapping::UserDomain const userDomain)
-            -> GetTypeFromDatumCoord<
-                typename Mapping::DatumDomain,
-                GetCoordFromUID<typename Mapping::DatumDomain, T_UIDs...>> &
+        accessor(typename Mapping::UserDomain userDomain) -> auto &
         {
             return parentView.template accessor<T_UIDs...>(
                 userDomain + position);
@@ -113,8 +108,8 @@ namespace llama
          * \return \ref VirtualDatum with bound user domain, which can be used
          * to access the datum domain
          */
-        auto LLAMA_FN_HOST_ACC_INLINE operator()(
-            typename Mapping::UserDomain const userDomain) -> VirtualDatumType
+        LLAMA_FN_HOST_ACC_INLINE auto
+        operator()(typename Mapping::UserDomain userDomain) -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return parentView(userDomain + position);
@@ -141,7 +136,7 @@ namespace llama
 
         template<typename... T_Coord>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(T_Coord... coord) const
-            -> const VirtualDatumType
+            -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return parentView(
@@ -157,24 +152,20 @@ namespace llama
 
         template<std::size_t... T_coord>
         LLAMA_FN_HOST_ACC_INLINE auto
-        operator()(DatumCoord<T_coord...> && dc = DatumCoord<T_coord...>())
-            -> GetType<typename Mapping::DatumDomain, T_coord...> &
+        operator()(DatumCoord<T_coord...> && dc = {}) -> auto &
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return accessor<T_coord...>(
                 userDomainZero<Mapping::UserDomain::count>());
         }
 
-        /// reference to parental view
-        ParentView & parentView;
-        /// shited position in parental view
-        const typename Mapping::UserDomain position;
-        /// shown size
-        const typename Mapping::UserDomain size;
-        /// reference to blob object of parent
-        Array<BlobType, Mapping::blobCount> & blob;
-        /// reference to mapping of parent
-        const Mapping & mapping;
+        ParentView & parentView; ///< reference to parental view
+        const typename Mapping::UserDomain
+            position; ///< shifted position in parental view
+        const typename Mapping::UserDomain size; ///< shown size
+        Array<BlobType, Mapping::blobCount> &
+            blob; ///< reference to blob object of parent
+        const Mapping & mapping; ///< reference to mapping of parent
     };
 
 } // namespace llama

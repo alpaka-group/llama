@@ -50,7 +50,7 @@ namespace llama
         {
             static constexpr std::size_t value
                 = sizeof(T_DatumDomain)
-                * std::size_t(
+                * static_cast<std::size_t>(
                       DatumCoordIsBigger<T_DatumCoord, T_IterCoord>::value);
         };
 
@@ -80,8 +80,7 @@ namespace llama
         {
             static constexpr std::size_t value = 0;
         };
-
-    } // namespace internal
+    }
 
     /** Gives the byte position of an element in a datum domain if it would be a
      *  normal struct
@@ -125,16 +124,18 @@ namespace llama
     namespace internal
     {
         template<typename T_DatumDomain>
-        struct StubTypeImpl
+        class StubTypeImpl
         {
-            using type = struct
+            struct impl
             {
                 using type = T_DatumDomain;
                 unsigned char stub[SizeOf<T_DatumDomain>::value];
             };
-        };
 
-    } // namespace internal
+        public:
+            using type = impl;
+        };
+    }
 
     /** Returns a type for a datum domain with the same size as \ref SizeOf of
      * this datum domain, useful e.g. if an external memory allocation function
@@ -157,5 +158,4 @@ namespace llama
     {
         static constexpr bool value = true;
     };
-
-} // namespace llama
+}

@@ -138,7 +138,7 @@ namespace llama
                         childs(childs)
                 {}
 
-                static constexpr CountType count = CountType();
+                static constexpr CountType count = {};
 
                 const Type childs;
             };

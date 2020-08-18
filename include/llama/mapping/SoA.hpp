@@ -62,11 +62,6 @@ namespace llama
                         T_ExtentUserDomainAdressFunctor()(userDomainSize))
             {}
 
-            SoA() = default;
-            SoA(SoA const &) = default;
-            SoA(SoA &&) = default;
-            ~SoA() = default;
-
             LLAMA_FN_HOST_ACC_INLINE
             auto getBlobSize(std::size_t const) const -> std::size_t
             {
@@ -90,10 +85,9 @@ namespace llama
             {
                 return 0;
             }
+
             UserDomain const userDomainSize;
             std::size_t const extentUserDomainAdress;
         };
-
-    } // namespace mapping
-
-} // namespace llama
+    }
+}

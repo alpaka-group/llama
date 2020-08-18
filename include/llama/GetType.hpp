@@ -50,8 +50,7 @@ namespace llama
         {
             using type = T_DatumDomain;
         };
-
-    } // namespace internal
+    }
 
     /** Returns the type of a node in a datum domain tree for a coordinate given
      * as tree index (like for \ref DatumCoord) \tparam T_DatumDomain the datum
@@ -72,8 +71,7 @@ namespace llama
         {
             using type = GetType<T_DatumDomain, T_coords...>;
         };
-
-    } // namespace internal
+    }
 
     /** Returns the type of a node in a datum domain tree for a coordinate given
      * as \ref DatumCoord \tparam T_DatumDomain the datum domain (probably \ref
@@ -83,5 +81,4 @@ namespace llama
     template<typename T_DatumDomain, typename T_DatumCoord>
     using GetTypeFromDatumCoord = typename internal::
         GetTypeFromDatumCoordImpl<T_DatumDomain, T_DatumCoord>::type;
-
-} // namespace llama
+}

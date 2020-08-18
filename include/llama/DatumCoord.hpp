@@ -72,28 +72,34 @@ namespace llama
         {
             using type = DatumCoord<>;
         };
-
-    } // namespace internal
+    }
 
     template<std::size_t T_coord, std::size_t... T_coords>
     struct DatumCoord<T_coord, T_coords...>
     {
         using type = DatumCoord<T_coord, T_coords...>;
+
         static constexpr std::size_t front = T_coord;
         static constexpr std::size_t size = sizeof...(T_coords) + 1;
         static constexpr std::size_t back = DatumCoord<T_coords...>::back;
+
         using PopFront = DatumCoord<T_coords...>;
         using IncBack = typename PopFront::IncBack::template PushFront<front>;
+
         template<std::size_t T_newCoord = 0>
         using PushFront = DatumCoord<T_newCoord, T_coord, T_coords...>;
+
         template<std::size_t T_newCoord = 0>
         using PushBack = DatumCoord<T_coord, T_coords..., T_newCoord>;
+
         template<std::size_t T_size>
         using Front = typename internal::
             DatumCoordFront<T_size, T_coord, T_coords...>::type;
+
         template<std::size_t T_size>
         using Back = typename internal::
             DatumCoordBack<size - T_size, T_coord, T_coords...>::type;
+
         template<typename T_Other>
         using Cat = typename DatumCoord<T_coords...>::template Cat<
             T_Other>::template PushFront<T_coord>;
@@ -103,20 +109,27 @@ namespace llama
     struct DatumCoord<T_coord>
     {
         using type = DatumCoord<T_coord>;
+
         static constexpr std::size_t front = T_coord;
         static constexpr std::size_t size = 1;
         static constexpr std::size_t back = T_coord;
+
         using PopFront = DatumCoord<>;
         using IncBack = DatumCoord<T_coord + 1>;
+
         template<std::size_t T_newCoord = 0>
         using PushFront = DatumCoord<T_newCoord, T_coord>;
+
         template<std::size_t T_newCoord = 0>
         using PushBack = DatumCoord<T_coord, T_newCoord>;
+
         template<std::size_t T_size>
         using Front = typename internal::DatumCoordFront<T_size, T_coord>::type;
+
         template<std::size_t T_size>
         using Back =
             typename internal::DatumCoordBack<size - T_size, T_coord>::type;
+
         template<typename T_Other>
         using Cat = typename T_Other::template PushFront<T_coord>;
     };
@@ -125,16 +138,23 @@ namespace llama
     struct DatumCoord<>
     {
         using type = DatumCoord<>;
+
         static constexpr std::size_t size = 0;
+
         using IncBack = DatumCoord<1>;
+
         template<std::size_t T_newCoord = 0>
         using PushFront = DatumCoord<T_newCoord>;
+
         template<std::size_t T_newCoord = 0>
         using PushBack = DatumCoord<T_newCoord>;
+
         template<std::size_t T_size>
         using Front = DatumCoord<>;
+
         template<std::size_t T_size>
         using Back = DatumCoord<>;
+
         template<typename T_Other>
         using Cat = T_Other;
     };
@@ -146,19 +166,18 @@ namespace llama
     struct DatumCoordIsBigger<
         T_First,
         T_Second,
-        typename std::enable_if<(
-            T_First::size == 1 || T_Second::size == 1)>::type>
+        typename std::enable_if_t<T_First::size == 1 || T_Second::size == 1>>
     {
-        static constexpr bool value = (T_First::front > T_Second::front);
+        static constexpr bool value = T_First::front > T_Second::front;
     };
 
     template<typename T_First, typename T_Second>
     struct DatumCoordIsBigger<
         T_First,
         T_Second,
-        typename std::enable_if<(
+        typename std::enable_if_t<(
             T_First::size > 1 && T_Second::size > 1
-            && T_First::front == T_Second::front)>::type>
+            && T_First::front == T_Second::front)>>
     {
         static constexpr bool value = DatumCoordIsBigger<
             typename T_First::PopFront,
@@ -169,9 +188,9 @@ namespace llama
     struct DatumCoordIsBigger<
         T_First,
         T_Second,
-        typename std::enable_if<(
+        typename std::enable_if_t<(
             T_First::size > 1 && T_Second::size > 1
-            && T_First::front < T_Second::front)>::type>
+            && T_First::front < T_Second::front)>>
     {
         static constexpr bool value = false;
     };
@@ -180,9 +199,9 @@ namespace llama
     struct DatumCoordIsBigger<
         T_First,
         T_Second,
-        typename std::enable_if<(
+        typename std::enable_if_t<(
             T_First::size > 1 && T_Second::size > 1
-            && T_First::front > T_Second::front)>::type>
+            && T_First::front > T_Second::front)>>
     {
         static constexpr bool value = true;
     };
@@ -194,8 +213,7 @@ namespace llama
     struct DatumCoordIsSame<
         T_First,
         T_Second,
-        typename std::enable_if<(
-            T_First::size < 1 || T_Second::size < 1)>::type>
+        typename std::enable_if_t<(T_First::size < 1 || T_Second::size < 1)>>
     {
         static constexpr bool value = true;
     };
@@ -204,9 +222,9 @@ namespace llama
     struct DatumCoordIsSame<
         T_First,
         T_Second,
-        typename std::enable_if<
+        typename std::enable_if_t<
             (T_First::size == 1 && T_Second::size >= 1)
-            || (T_First::size >= 1 && T_Second::size == 1)>::type>
+            || (T_First::size >= 1 && T_Second::size == 1)>>
     {
         static constexpr bool value = (T_First::front == T_Second::front);
     };
@@ -215,9 +233,9 @@ namespace llama
     struct DatumCoordIsSame<
         T_First,
         T_Second,
-        typename std::enable_if<(
+        typename std::enable_if_t<(
             T_First::size > 1 && T_Second::size > 1
-            && T_First::front == T_Second::front)>::type>
+            && T_First::front == T_Second::front)>>
     {
         static constexpr bool value = DatumCoordIsSame<
             typename T_First::PopFront,
@@ -228,11 +246,10 @@ namespace llama
     struct DatumCoordIsSame<
         T_First,
         T_Second,
-        typename std::enable_if<(
+        typename std::enable_if_t<(
             T_First::size > 1 && T_Second::size > 1
-            && T_First::front != T_Second::front)>::type>
+            && T_First::front != T_Second::front)>>
     {
         static constexpr bool value = false;
     };
-
-} // namespace llama
+}

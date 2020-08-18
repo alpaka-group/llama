@@ -100,8 +100,7 @@ namespace llama
         {
             using type = T_DatumCoord;
         };
-
-    } // namespace internal
+    }
 
     /** Converts a coordinate in a datum domain given as UID to a \ref
      * DatumCoord . \tparam T_DatumDomain the datum domain (\ref DatumStruct)
@@ -133,8 +132,7 @@ namespace llama
             using type = typename AbsolutCoord::template Back<
                 AbsolutCoord::size - T_DatumCoord::size>;
         };
-
-    } // namespace internal
+    }
 
     /** Converts a coordinate in a datum domain given as UID to a \ref
      * DatumCoord relative to a given datum coord in the tree. The returned
@@ -162,5 +160,4 @@ namespace llama
     using GetTypeFromUID = GetTypeFromDatumCoord<
         T_DatumDomain,
         GetCoordFromUID<T_DatumDomain, T_UIDs...>>;
-
-} // namespace llama
+}

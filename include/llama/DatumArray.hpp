@@ -37,5 +37,4 @@ namespace llama
     /// Shortcut for \ref DatumArray
     template<typename T_Child, std::size_t T_count>
     using DA = DatumArray<T_Child, T_count>;
-
-} // namespace llama
+}

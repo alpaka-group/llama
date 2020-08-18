@@ -18,16 +18,6 @@
 
 #pragma once
 
-//#include "View.hpp"
-// Forward declartation instead of include as the View.hpp needs to use
-// factories itself in some VirtualDatum overloads
-namespace llama
-{
-    template<typename T_Mapping, typename T_BlobType>
-    struct View;
-
-} // namespace llama
-
 #include "IntegerSequence.hpp"
 #include "allocator/Stack.hpp"
 #include "allocator/Vector.hpp"
@@ -42,7 +32,7 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto makeBlobArrayImpl(
             T_Mapping const mapping,
             typename T_Allocator::Parameter const & allocatorParams,
-            IntegerSequence<Is...>)
+            std::integer_sequence<std::size_t, Is...>)
             -> Array<typename T_Allocator::BlobType, T_Mapping::blobCount>
         {
             return Array<typename T_Allocator::BlobType, sizeof...(Is)>{
@@ -60,10 +50,13 @@ namespace llama
             return makeBlobArrayImpl<T_Allocator, T_Mapping>(
                 mapping,
                 allocatorParams,
-                MakeIntegerSequence<T_Mapping::blobCount>{});
+                std::
+                    make_integer_sequence<std::size_t, T_Mapping::blobCount>{});
         }
+    }
 
-    }; // namespace internal
+    template<typename T_Mapping, typename T_BlobType>
+    struct View;
 
     /** Creates views with the help of mapping and allocation functors. Should
      * be the preferred way to create a \ref View. \tparam T_Mapping Mapping
@@ -106,16 +99,13 @@ namespace llama
          */
         LLAMA_NO_HOST_ACC_WARNING
         static LLAMA_FN_HOST_ACC_INLINE auto allocView(
-            T_Mapping const mapping = T_Mapping(),
-            typename T_Allocator::Parameter const & allocatorParams
-            = typename T_Allocator::Parameter())
+            T_Mapping const mapping = {},
+            typename T_Allocator::Parameter const & allocatorParams = {})
             -> View<T_Mapping, typename T_Allocator::BlobType>
         {
-            View<T_Mapping, typename T_Allocator::BlobType> view(
+            return {
                 mapping,
-                internal::makeBlobArray<T_Allocator>(mapping, allocatorParams));
-
-            return view;
+                internal::makeBlobArray<T_Allocator>(mapping, allocatorParams)};
         }
     };
 
@@ -136,10 +126,8 @@ namespace llama
      * \see OneOnStackFactory
      */
     template<std::size_t T_dimension, typename T_DatumDomain>
-    LLAMA_FN_HOST_ACC_INLINE auto stackViewAlloc()
-        -> decltype(OneOnStackFactory<T_dimension, T_DatumDomain>::allocView())
+    LLAMA_FN_HOST_ACC_INLINE auto stackViewAlloc() -> decltype(auto)
     {
         return OneOnStackFactory<T_dimension, T_DatumDomain>::allocView();
     }
-
-} // namespace llama
+}

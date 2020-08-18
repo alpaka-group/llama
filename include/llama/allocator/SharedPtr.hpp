@@ -46,8 +46,7 @@ namespace llama
                 }
                 BlobType blob;
             };
-
-        } // namespace internal
+        }
 
         /** Allocator to allocate memory for a \ref View in the \ref Factory
          * using `std::shared_ptr` in the background. Meaning every time the
@@ -58,12 +57,14 @@ namespace llama
         template<std::size_t T_alignment = 64u>
         struct SharedPtr
         {
-            /// primary type of this allocator is `unsigned char`
-            using PrimType = typename internal::SharedPtrAccessor::PrimType;
-            /// blob type of this allocator is `std::shared_ptr< PrimType >`
-            using BlobType = internal::SharedPtrAccessor;
-            /// the optional allocation parameter is ignored
-            using Parameter = int; // not used
+            using PrimType = typename internal::SharedPtrAccessor::
+                PrimType; ///< primary type of this allocator is `unsigned char`
+            using BlobType
+                = internal::SharedPtrAccessor; ///< blob type of this allocator
+                                               ///< is
+                                               ///< `std::shared_ptr<PrimType>`
+            using Parameter
+                = int; ///< the optional allocation parameter is ignored
 
             LLAMA_NO_HOST_ACC_WARNING
             static inline auto allocate(std::size_t count, Parameter const)
@@ -100,7 +101,5 @@ namespace llama
                 return accessor;
             }
         };
-
-    } // namespace allocator
-
-} // namespace llama
+    }
+}
