@@ -37,10 +37,7 @@ option(LLAMA_BUILD_EXAMPLES "Building (and installing) the examples" ON)
 if (LLAMA_BUILD_EXAMPLES)
 	# general examples
 	add_subdirectory("examples/simpletest")
-	add_subdirectory("examples/uidtest")
-	add_subdirectory("examples/treemaptest")
 	add_subdirectory("examples/vectoradd")
-	add_subdirectory("examples/virtualviewtest")
 	add_subdirectory("examples/nbody")
 
 	# alpaka examples
