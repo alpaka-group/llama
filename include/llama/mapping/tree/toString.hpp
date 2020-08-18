@@ -19,97 +19,66 @@
 #pragma once
 
 #include "../../Tuple.hpp"
+#include "TreeElement.hpp"
 
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/core/demangle.hpp>
 #include <string>
 #include <typeinfo>
 
-namespace llama
+namespace llama::mapping::tree
 {
-    namespace mapping
+    template<typename T>
+    auto toString(T) -> std::string
     {
-        namespace tree
+        return "Unknown";
+    }
+
+    inline auto toString(NoName) -> std::string
+    {
+        return "";
+    }
+
+    template<typename T_First, typename T_Second, typename... T_Rest>
+    auto toString(Tuple<T_First, T_Second, T_Rest...> tree) -> std::string
+    {
+        return toString(tree.first) + " , " + toString(tree.rest);
+    }
+
+    template<typename T_First>
+    auto toString(Tuple<T_First> tree) -> std::string
+    {
+        return toString(tree.first);
+    }
+
+    template<typename TreeElement, typename = void>
+    struct HasChildren : std::false_type
+    {};
+
+    template<typename TreeElement>
+    struct HasChildren<
+        TreeElement,
+        std::void_t<decltype(TreeElement().childs)>> : std::true_type
+    {};
+
+    template<typename T_Identifier, typename T_Type, typename T_CountType>
+    auto toString(TreeElement<T_Identifier, T_Type, T_CountType> tree)
+        -> std::string
+    {
+        auto r = std::to_string(tree.count) + " * " + toString(T_Identifier{});
+        if constexpr(HasChildren<decltype(tree)>::value)
+            r += "[ " + toString(tree.childs) + " ]";
+        else
         {
-            template<typename T, typename T_SFINAE = void>
-            struct ToString
-            {
-                auto operator()(const T) -> std::string
-                {
-                    return "Unknown";
-                }
-            };
-
-            template<>
-            struct ToString<NoName>
-            {
-                auto operator()(const NoName) -> std::string
-                {
-                    return "";
-                }
-            };
-
-            template<typename T_First, typename T_Second, typename... T_Rest>
-            struct ToString<Tuple<T_First, T_Second, T_Rest...>>
-            {
-                using Tree = Tuple<T_First, T_Second, T_Rest...>;
-                auto operator()(const Tree tree) -> std::string
-                {
-                    return ToString<T_First>()(tree.first) + " , "
-                        + ToString<Tuple<T_Second, T_Rest...>>()(tree.rest);
-                }
-            };
-
-            template<typename T_First>
-            struct ToString<Tuple<T_First>>
-            {
-                using Tree = Tuple<T_First>;
-                auto operator()(const Tree tree) -> std::string
-                {
-                    return ToString<T_First>()(tree.first);
-                }
-            };
-
-            template<typename T_Tree>
-            struct ToString<T_Tree, typename T_Tree::IsTreeElementWithoutChilds>
-            {
-                using Identifier = typename T_Tree::Identifier;
-                auto operator()(const T_Tree tree) -> std::string
-                {
-                    auto raw = boost::core::demangle(
-                        typeid(typename T_Tree::Type()).name());
+            auto raw = boost::core::demangle(typeid(T_Type()).name());
 #ifdef _MSC_VER
-                    boost::replace_all(raw, " __cdecl(void)", "");
+            boost::replace_all(raw, " __cdecl(void)", "");
 #endif
 #ifdef __GNUG__
-                    boost::replace_all(raw, " ()", "");
+            boost::replace_all(raw, " ()", "");
 #endif
-                    return std::to_string(tree.count) + " * "
-                        + ToString<Identifier>()(Identifier()) + "(" + raw
-                        + ")";
-                }
-            };
-
-            template<typename T_Tree>
-            struct ToString<T_Tree, typename T_Tree::IsTreeElementWithChilds>
-            {
-                using Identifier = typename T_Tree::Identifier;
-                auto operator()(const T_Tree tree) -> std::string
-                {
-                    return std::to_string(tree.count) + " * "
-                        + ToString<Identifier>()(Identifier()) + "[ "
-                        + ToString<typename T_Tree::Type>()(tree.childs) + " ]";
-                }
-            };
-
-            template<typename T_Tree>
-            auto toString(T_Tree tree) -> std::string
-            {
-                return ToString<T_Tree>()(tree);
-            };
-
-        } // namespace tree
-
-    } // namespace mapping
-
-} // namespace llama
+            r += "(" + raw + ")";
+        }
+        return r;
+    }
+}

@@ -95,8 +95,8 @@ namespace asynccopy
                 if constexpr(ASYNCCOPY_SHARED)
                 {
                     // Using SoA for the shared memory
-                    auto treeOperationList = llama::makeTuple(
-                        llama::mapping::tree::functor::LeafOnlyRT());
+                    auto treeOperationList = llama::Tuple{
+                        llama::mapping::tree::functor::LeafOnlyRT()};
                     using SharedMapping = llama::mapping::tree::Mapping<
                         typename T_View::Mapping::UserDomain,
                         typename T_View::Mapping::DatumDomain,
@@ -215,8 +215,8 @@ namespace asynccopy
         using Dim = alpaka::dim::DimInt<2>;
         using Host = alpaka::acc::AccCpuSerial<Dim, size_t>;
 
-        using Acc = alpaka::acc::AccGpuCudaRt<Dim, size_t>;
-        // using Acc = alpaka::acc::AccCpuSerial<Dim, size_t>;
+        // using Acc = alpaka::acc::AccGpuCudaRt<Dim, size_t>;
+        using Acc = alpaka::acc::AccCpuSerial<Dim, size_t>;
         // using Acc = alpaka::acc::AccCpuOmp2Blocks<Dim, size_t>;
         // using Acc = alpaka::acc::AccCpuOmp2Threads<Dim, size_t>;
         // using Acc = alpaka::acc::AccCpuOmp4<Dim, size_t>;
@@ -274,10 +274,10 @@ namespace asynccopy
         const UserDomain chunkUserDomain{
             chunkSize + 2 * kernelSize, chunkSize + 2 * kernelSize};
 
-        auto treeOperationList
-            = llama::makeTuple(llama::mapping::tree::functor::LeafOnlyRT()
-                               //~ llama::mapping::tree::functor::Idem( )
-            );
+        auto treeOperationList = llama::Tuple{
+            llama::mapping::tree::functor::LeafOnlyRT()
+            //~ llama::mapping::tree::functor::Idem( )
+        };
         using HostMapping = llama::mapping::tree::
             Mapping<UserDomain, Pixel, decltype(treeOperationList)>;
         using DevMapping = llama::mapping::tree::

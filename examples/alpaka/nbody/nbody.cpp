@@ -140,8 +140,8 @@ namespace nbody
                     const auto sharedMapping = [&] {
                         if constexpr(NBODY_USE_SHARED_TREE)
                         {
-                            auto treeOperationList = llama::makeTuple(
-                                llama::mapping::tree::functor::LeafOnlyRT());
+                            auto treeOperationList = llama::Tuple{
+                                llama::mapping::tree::functor::LeafOnlyRT()};
                             using SharedMapping = llama::mapping::tree::Mapping<
                                 typename decltype(
                                     particles)::Mapping::UserDomain,
@@ -163,19 +163,19 @@ namespace nbody
                     }();
                     using SharedMapping = decltype(sharedMapping);
 
-            using SharedAllocator = BlockSharedMemoryAllocator<
-                T_Acc,
-                llama::SizeOf<typename decltype(
-                    particles)::Mapping::DatumDomain>::value
-                    * blockSize,
-                __COUNTER__,
-                threads>;
+                    using SharedAllocator = BlockSharedMemoryAllocator<
+                        T_Acc,
+                        llama::SizeOf<typename decltype(
+                            particles)::Mapping::DatumDomain>::value
+                            * blockSize,
+                        __COUNTER__,
+                        threads>;
                     using SharedFactory = llama::
                         Factory<SharedMapping, typename SharedAllocator::type>;
 
                     return SharedAllocator::
-                template allocView<SharedFactory, SharedMapping>(
-                    sharedMapping, acc);
+                        template allocView<SharedFactory, SharedMapping>(
+                            sharedMapping, acc);
                 }
                 else
                     return int{}; // dummy
@@ -197,12 +197,12 @@ namespace nbody
                     - start2;
                 if constexpr(NBODY_USE_SHARED)
                 {
-                LLAMA_INDEPENDENT_DATA
+                    LLAMA_INDEPENDENT_DATA
                     for(auto pos2 = decltype(end2)(0);
                         pos2 + threadIndex < end2;
-                    pos2 += threads)
-                    temp(pos2 + threadBlockIndex)
-                        = particles(start2 + pos2 + threadBlockIndex);
+                        pos2 += threads)
+                        temp(pos2 + threadBlockIndex)
+                            = particles(start2 + pos2 + threadBlockIndex);
                     alpaka::block::sync::syncBlockThreads(acc);
                 }
                 LLAMA_INDEPENDENT_DATA
@@ -212,7 +212,7 @@ namespace nbody
                     if constexpr(NBODY_USE_SHARED)
                         pPInteraction(particles(pos), temp(pos2), ts);
                     else
-                    pPInteraction(
+                        pPInteraction(
                             particles(pos), particles(start2 + pos2), ts);
                 if constexpr(NBODY_USE_SHARED)
                     alpaka::block::sync::syncBlockThreads(acc);
@@ -282,15 +282,15 @@ namespace nbody
         const auto mapping = [&] {
             if constexpr(NBODY_USE_TREE)
             {
-                auto treeOperationList = llama::makeTuple(
-                    llama::mapping::tree::functor::LeafOnlyRT());
-        using Mapping = llama::mapping::tree::
-            Mapping<UserDomain, Particle, decltype(treeOperationList)>;
+                auto treeOperationList
+                    = llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()};
+                using Mapping = llama::mapping::tree::
+                    Mapping<UserDomain, Particle, decltype(treeOperationList)>;
                 return Mapping(userDomainSize, treeOperationList);
             }
             else
             {
-        using Mapping = llama::mapping::SoA<UserDomain, Particle>;
+                using Mapping = llama::mapping::SoA<UserDomain, Particle>;
                 return Mapping(userDomainSize);
             }
         }();

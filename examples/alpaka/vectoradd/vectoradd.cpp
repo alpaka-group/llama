@@ -141,10 +141,10 @@ namespace vectoradd
 #if VECTORADD_USE_TREE >= 1
 #if VECTORADD_USE_TREE == 1
         auto treeOperationList
-            = llama::makeTuple(llama::mapping::tree::functor::Idem());
+            = llama::Tuple{llama::mapping::tree::functor::Idem()};
 #elif VECTORADD_USE_TREE == 2
         auto treeOperationList
-            = llama::makeTuple(llama::mapping::tree::functor::LeafOnlyRT());
+            = llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()};
 #endif
         using Mapping = llama::mapping::tree::
             Mapping<UserDomain, Vector, decltype(treeOperationList)>;

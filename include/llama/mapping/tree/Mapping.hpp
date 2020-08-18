@@ -32,89 +32,74 @@
 
 #include <type_traits>
 
-namespace llama
+namespace llama::mapping::tree
 {
-    namespace mapping
+    /** Free describable mapping which can be used for creating a \ref View with
+     * a \ref Factory. For the interface details see \ref Factory. \tparam
+     * T_UserDomain type of the user domain \tparam T_DatumDomain type of the
+     * datum domain \tparam T_TreeOperationList the type of a compile time list
+     * (\ref Tuple) used to define the tree mapping
+     */
+    template<
+        typename T_UserDomain,
+        typename T_DatumDomain,
+        typename T_TreeOperationList>
+    struct Mapping
     {
-        namespace tree
+        using UserDomain = T_UserDomain;
+        using DatumDomain = T_DatumDomain;
+        using BasicTree = TreeFromDomains<UserDomain, DatumDomain>;
+        // TODO, support more than one blob
+        static constexpr std::size_t blobCount = 1;
+
+        using MergedFunctors = MergeFunctors<BasicTree, T_TreeOperationList>;
+        using ResultTree = typename MergedFunctors::Result;
+
+        UserDomain const userDomainSize;
+        BasicTree const basicTree;
+        MergedFunctors const mergedFunctors;
+        ResultTree const resultTree;
+
+        /** The initalization of this mapping needs a \ref Tuple of operations
+         *  which describe the mapping in detail. Please have a look at the user
+         *  documenation for more information.
+         * \param size the size of the user domain
+         * \param treeOperationList list of operations to define the mapping,
+         * e.g. \ref functor::Idem, \ref functor::LeafOnlyRT, \ref
+         * functor::MoveRTDown.
+         */
+        LLAMA_FN_HOST_ACC_INLINE
+        Mapping(
+            UserDomain const size,
+            T_TreeOperationList const treeOperationList) :
+                userDomainSize(size),
+                basicTree(setUserDomainInTree<DatumDomain>(size)),
+                mergedFunctors(basicTree, treeOperationList),
+                resultTree(mergedFunctors.basicToResult(basicTree))
+        {}
+
+        LLAMA_FN_HOST_ACC_INLINE
+        auto getBlobSize(std::size_t const) const -> std::size_t
         {
-            /** Free describable mapping which can be used for creating a \ref
-             * View with a \ref Factory. For the interface details see \ref
-             * Factory. \tparam T_UserDomain type of the user domain \tparam
-             * T_DatumDomain type of the datum domain \tparam
-             * T_TreeOperationList the type of a compile time list (\ref Tuple)
-             * used to define the tree mapping
-             */
-            template<
-                typename T_UserDomain,
-                typename T_DatumDomain,
-                typename T_TreeOperationList>
-            struct Mapping
-            {
-                using UserDomain = T_UserDomain;
-                using DatumDomain = T_DatumDomain;
-                using BasicTree = TreeFromDomains<UserDomain, DatumDomain>;
-                // TODO, support more than one blob
-                static constexpr std::size_t blobCount = 1;
+            return getTreeBlobSize(resultTree);
+        }
 
-                using MergedFunctors
-                    = MergeFunctors<BasicTree, T_TreeOperationList>;
+        template<std::size_t... T_datumDomainCoord>
+        LLAMA_FN_HOST_ACC_INLINE auto getBlobByte(UserDomain const coord) const
+            -> std::size_t
+        {
+            auto const basicTreeCoord = getBasicTreeCoordFromDomains<
+                DatumCoord<T_datumDomainCoord...>>(coord);
+            auto const resultTreeCoord = mergedFunctors.basicCoordToResultCoord(
+                basicTreeCoord, basicTree);
+            return getTreeBlobByte(resultTree, resultTreeCoord);
+        }
 
-                using ResultTree = typename MergedFunctors::Result;
-
-                UserDomain const userDomainSize;
-                BasicTree const basicTree;
-                MergedFunctors const mergedFunctors;
-                ResultTree const resultTree;
-
-                /** The initalization of this mapping needs a \ref Tuple of
-                 * operations which describe the mapping in detail. Please have
-                 * a look at the user documenation for more information. \param
-                 * size the size of the user domain \param treeOperationList
-                 * list of operations to define the mapping, e.g. \ref
-                 * functor::Idem, \ref functor::LeafOnlyRT, \ref
-                 * functor::MoveRTDown.
-                 */
-                LLAMA_FN_HOST_ACC_INLINE
-                Mapping(
-                    UserDomain const size,
-                    T_TreeOperationList const treeOperationList) :
-                        userDomainSize(size),
-                        basicTree(setUserDomainInTree<DatumDomain>(size)),
-                        mergedFunctors(basicTree, treeOperationList),
-                        resultTree(mergedFunctors.basicToResult(basicTree))
-                {}
-
-                LLAMA_FN_HOST_ACC_INLINE
-                auto getBlobSize(std::size_t const) const -> std::size_t
-                {
-                    return getTreeBlobSize(resultTree);
-                }
-
-                template<std::size_t... T_datumDomainCoord>
-                LLAMA_FN_HOST_ACC_INLINE auto
-                getBlobByte(UserDomain const coord) const -> std::size_t
-                {
-                    auto const basicTreeCoord = getBasicTreeCoordFromDomains<
-                        DatumCoord<T_datumDomainCoord...>>(coord);
-
-                    auto const resultTreeCoord
-                        = mergedFunctors.basicCoordToResultCoord(
-                            basicTreeCoord, basicTree);
-
-                    return getTreeBlobByte(resultTree, resultTreeCoord);
-                }
-
-                template<std::size_t... T_datumDomainCoord>
-                LLAMA_FN_HOST_ACC_INLINE constexpr auto
-                getBlobNr(UserDomain const coord) const -> std::size_t
-                {
-                    return 0;
-                }
-            };
-
-        } // namespace tree
-
-    } // namespace mapping
-
-} // namespace llama
+        template<std::size_t... T_datumDomainCoord>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto
+        getBlobNr(UserDomain const coord) const -> std::size_t
+        {
+            return 0;
+        }
+    };
+}
