@@ -28,14 +28,33 @@ namespace treemaptest
         struct Momentum{};
         struct Weight{};
         // clang-format on
-    } // namespace st
 
-} // namespace simpletest
+        auto toString(Pos)
+        {
+            return "Pos";
+        }
+        auto toString(X)
+        {
+            return "X";
+        }
+        auto toString(Y)
+        {
+            return "Y";
+        }
+        auto toString(Z)
+        {
+            return "Z";
+        }
+        auto toString(Momentum)
+        {
+            return "Momentum";
+        }
+        auto toString(Weight)
+        {
+            return "Weight";
+        }
+    }
 
-#include "toString.hpp"
-
-namespace treemaptest
-{
     // clang-format off
     using Name = llama::DS<
         llama::DE<st::Pos, llama::DS<
@@ -59,9 +78,8 @@ namespace treemaptest
         using UD = llama::UserDomain<2>;
         UD const udSize{userDomainSize, userDomainSize};
 
-        auto treeOperationList = llama::makeTuple(
+        auto treeOperationList = llama::Tuple{
             llama::mapping::tree::functor::Idem(),
-
             //~ llama::mapping::tree::functor::MoveRTDown<
             //~ llama::mapping::tree::TreeCoord< >
             //~ >( userDomainSize )
@@ -92,10 +110,8 @@ namespace treemaptest
             //~ userDomainSize * userDomainSize
             //~ >( )
 
-            llama::mapping::tree::functor::LeafOnlyRT()
-
-                ,
-            llama::mapping::tree::functor::Idem());
+            llama::mapping::tree::functor::LeafOnlyRT(),
+            llama::mapping::tree::functor::Idem()};
 
         using Mapping = llama::mapping::tree::
             Mapping<UD, Name, decltype(treeOperationList)>;

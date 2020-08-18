@@ -3,68 +3,41 @@
 #include <catch2/catch.hpp>
 #include <llama/llama.hpp>
 
-// clang-format off
 namespace st
 {
+    // clang-format off
     struct Pos {};
     struct X {};
     struct Y {};
     struct Z {};
     struct Momentum {};
     struct Weight {};
-}
-// clang-format on
+    // clang-format on
 
-namespace llama::mapping::tree
-{
-    template<>
-    struct ToString<st::Pos>
+    auto toString(Pos)
     {
-        auto operator()(const st::Pos)
-        {
-            return "Pos";
-        }
-    };
-    template<>
-    struct ToString<st::X>
+        return "Pos";
+    }
+    auto toString(X)
     {
-        auto operator()(const st::X)
-        {
-            return "X";
-        }
-    };
-    template<>
-    struct ToString<st::Y>
+        return "X";
+    }
+    auto toString(Y)
     {
-        auto operator()(const st::Y)
-        {
-            return "Y";
-        }
-    };
-    template<>
-    struct ToString<st::Z>
+        return "Y";
+    }
+    auto toString(Z)
     {
-        auto operator()(const st::Z)
-        {
-            return "Z";
-        }
-    };
-    template<>
-    struct ToString<st::Momentum>
+        return "Z";
+    }
+    auto toString(Momentum)
     {
-        auto operator()(const st::Momentum)
-        {
-            return "Momentum";
-        }
-    };
-    template<>
-    struct ToString<st::Weight>
+        return "Momentum";
+    }
+    auto toString(Weight)
     {
-        auto operator()(const st::Weight)
-        {
-            return "Weight";
-        }
-    };
+        return "Weight";
+    }
 }
 
 // clang-format off
@@ -759,7 +732,7 @@ TEST_CASE("treemapping")
     using UD = llama::UserDomain<2>;
     const UD udSize{userDomainSize, userDomainSize};
 
-    auto treeOperationList = llama::makeTuple(
+    auto treeOperationList = llama::Tuple{
         llama::mapping::tree::functor::Idem(),
 
         //~ llama::mapping::tree::functor::MoveRTDown<
@@ -793,7 +766,7 @@ TEST_CASE("treemapping")
         //~ >( )
 
         llama::mapping::tree::functor::LeafOnlyRT{},
-        llama::mapping::tree::functor::Idem{});
+        llama::mapping::tree::functor::Idem{}};
 
     using Mapping
         = llama::mapping::tree::Mapping<UD, Name, decltype(treeOperationList)>;

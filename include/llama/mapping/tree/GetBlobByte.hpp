@@ -21,119 +21,69 @@
 #include "GetBlobSize.hpp"
 #include "Operations.hpp"
 
-namespace llama
+namespace llama::mapping::tree
 {
-    namespace mapping
+    namespace internal
     {
-        namespace tree
+        template<typename T_Tree, std::size_t T_Pos>
+        struct SummarizeTreeSmallerPos
         {
-            namespace internal
+            LLAMA_FN_HOST_ACC_INLINE
+            auto operator()(
+                typename T_Tree::Type const & childs,
+                decltype(T_Tree::count) const & count) const -> std::size_t
             {
-                template<typename T_Tree, std::size_t T_Pos>
-                struct SummarizeTreeSmallerPos
-                {
-                    using RestTree =
-                        typename TreePopFrontChild<T_Tree>::ResultType;
-                    LLAMA_FN_HOST_ACC_INLINE
-                    auto operator()(
-                        typename T_Tree::Type const & childs,
-                        decltype(T_Tree::count) const & count) const
-                        -> std::size_t
-                    {
-                        return getTreeBlobSize(childs.first)
-                            + SummarizeTreeSmallerPos<RestTree, T_Pos - 1>()(
-                                   childs.rest, count);
-                    }
-                };
-
-                template<typename T_Tree>
-                struct SummarizeTreeSmallerPos<T_Tree, 0>
-                {
-                    LLAMA_FN_HOST_ACC_INLINE
-                    auto operator()(
-                        typename T_Tree::Type const & childs,
-                        decltype(T_Tree::count) const & count) const
-                        -> std::size_t
-                    {
-                        return 0;
-                    }
-                };
-
-                template<typename T_Tree, typename T_TreeCoord>
-                struct GetTreeBlobByteImpl
-                {
-                    using SubTree = GetTupleType<
-                        typename T_Tree::Type,
-                        decltype(
-                            T_TreeCoord::FirstElement::compiletime)::value>;
-                    LLAMA_FN_HOST_ACC_INLINE
-                    auto operator()(
-                        T_Tree const & tree,
-                        T_TreeCoord const & treeCoord) const -> std::size_t
-                    {
-                        return getTreeBlobSize(
-                                   tree.childs,
-                                   // cuda doesn't like references to static
-                                   // members of they are not defined somewhere
-                                   // although only type informations are used
-                                   // which is the case for
-                                   // runtime=std::integral_constant
-                                   LLAMA_DEREFERENCE(treeCoord.first.runtime))
-                            + SummarizeTreeSmallerPos<
-                                   T_Tree,
-                                   decltype(T_TreeCoord::FirstElement::
-                                                compiletime)::value>()(
-                                   tree.childs,
-                                   // cuda doesn't like references to static
-                                   // members of they are not defined somewhere
-                                   // although only type informations are used
-                                   // which is the case for
-                                   // runtime=std::integral_constant
-                                   LLAMA_DEREFERENCE(tree.count))
-                            + GetTreeBlobByteImpl<
-                                   SubTree,
-                                   typename T_TreeCoord::RestTuple>()(
-                                   // For some reason I have to call the
-                                   // internal function by hand for the cuda
-                                   // nvcc compiler
-                                   //~ getTupleElementRef<
-                                   // T_TreeCoord::FirstElement::compiletime >(
-                                   llama::internal::GetTupleElementImpl<
-                                       typename T_Tree::Type,
-                                       decltype(T_TreeCoord::FirstElement::
-                                                    compiletime)::value>()(
-                                       tree.childs),
-                                   treeCoord.rest);
-                    }
-                };
-
-                template<typename T_Tree, typename T_LastCoord>
-                struct GetTreeBlobByteImpl<T_Tree, Tuple<T_LastCoord>>
-                {
-                    using TreeCoord = Tuple<T_LastCoord>;
-                    LLAMA_FN_HOST_ACC_INLINE
-                    auto operator()(
-                        T_Tree const & tree,
-                        TreeCoord const & treeCoord) const -> std::size_t
-                    {
-                        return sizeof(typename T_Tree::Type)
-                            * treeCoord.first.runtime;
-                    }
-                };
-
-            } // internal
-
-            template<typename T_Tree, typename T_TreeCoord>
-            LLAMA_FN_HOST_ACC_INLINE auto
-            getTreeBlobByte(T_Tree const & tree, T_TreeCoord const & treeCoord)
-                -> std::size_t
-            {
-                return internal::GetTreeBlobByteImpl<T_Tree, T_TreeCoord>()(
-                    tree, treeCoord);
+                return getTreeBlobSize(childs.first)
+                    + SummarizeTreeSmallerPos<
+                           typename TreePopFrontChild<T_Tree>::ResultType,
+                           T_Pos - 1>()(childs.rest, count);
             }
+        };
 
-        } // namespace tree
+        template<typename T_Tree>
+        struct SummarizeTreeSmallerPos<T_Tree, 0>
+        {
+            LLAMA_FN_HOST_ACC_INLINE
+            auto operator()(
+                const typename T_Tree::Type & childs,
+                decltype(T_Tree::count) const & count) const -> std::size_t
+            {
+                return 0;
+            }
+        };
 
-    } // namespace mapping
+        template<typename T_Tree, typename T_LastCoord>
+        LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobByteImpl(
+            const T_Tree & tree,
+            const Tuple<T_LastCoord> & treeCoord) -> std::size_t
+        {
+            return sizeof(typename T_Tree::Type) * treeCoord.first.runtime;
+        }
 
-} // namespace llama
+        template<typename T_Tree, typename T_TreeCoord>
+        LLAMA_FN_HOST_ACC_INLINE auto
+        getTreeBlobByteImpl(const T_Tree & tree, const T_TreeCoord & treeCoord)
+            -> std::size_t
+        {
+            return getTreeBlobSize(
+                       tree.childs, LLAMA_DEREFERENCE(treeCoord.first.runtime))
+                + SummarizeTreeSmallerPos<
+                       T_Tree,
+                       decltype(
+                           T_TreeCoord::FirstElement::compiletime)::value>()(
+                       tree.childs, LLAMA_DEREFERENCE(tree.count))
+                + getTreeBlobByteImpl(
+                       getTupleElementRef<
+                           T_TreeCoord::FirstElement::compiletime>(tree.childs),
+                       treeCoord.rest);
+        }
+    }
+
+    template<typename T_Tree, typename T_TreeCoord>
+    LLAMA_FN_HOST_ACC_INLINE auto
+    getTreeBlobByte(T_Tree const & tree, T_TreeCoord const & treeCoord)
+        -> std::size_t
+    {
+        return internal::getTreeBlobByteImpl(tree, treeCoord);
+    }
+}

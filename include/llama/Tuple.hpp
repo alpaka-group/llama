@@ -74,53 +74,6 @@ namespace llama
 
     namespace internal
     {
-        template<typename... T_Elements>
-        struct MakeTupleImpl;
-
-        template<typename T_FirstElement, typename... T_Elements>
-        struct MakeTupleImpl<T_FirstElement, T_Elements...>
-        {
-            LLAMA_FN_HOST_ACC_INLINE
-            auto operator()(
-                T_FirstElement const firstElement,
-                T_Elements const... elements)
-                -> Tuple<T_FirstElement, T_Elements...>
-            {
-                return {
-                    firstElement, MakeTupleImpl<T_Elements...>()(elements...)};
-            }
-        };
-
-        template<typename T_LastElement>
-        struct MakeTupleImpl<T_LastElement>
-        {
-            LLAMA_FN_HOST_ACC_INLINE
-            auto operator()(T_LastElement const lastElement)
-                -> Tuple<T_LastElement>
-            {
-                return {lastElement};
-            }
-        };
-
-        template<>
-        struct MakeTupleImpl<>
-        {
-            LLAMA_FN_HOST_ACC_INLINE
-            auto operator()() -> Tuple<>
-            {
-                return {};
-            }
-        };
-    }
-
-    template<typename... T_Elements>
-    LLAMA_FN_HOST_ACC_INLINE auto makeTuple(T_Elements... elements)
-    {
-        return internal::MakeTupleImpl<T_Elements...>()(elements...);
-    }
-
-    namespace internal
-    {
         template<typename T_Tuple, std::size_t T_pos>
         struct GetTupleTypeImpl;
 
@@ -290,7 +243,7 @@ namespace llama
             operator()(T_Tuple const tuple, T_Replacement const replacement)
             {
                 return tupleCat(
-                    makeTuple(tuple.first),
+                    Tuple{tuple.first},
                     TupleReplaceImpl<
                         T_pos - 1,
                         typename T_Tuple::RestTuple,
@@ -305,7 +258,7 @@ namespace llama
             auto
             operator()(T_Tuple const tuple, T_Replacement const replacement)
             {
-                return tupleCat(makeTuple(replacement), tuple.rest);
+                return tupleCat(Tuple{replacement}, tuple.rest);
             };
         };
 
@@ -317,7 +270,7 @@ namespace llama
             auto
             operator()(T_Tuple const tuple, T_Replacement const replacement)
             {
-                return makeTuple(replacement);
+                return Tuple{replacement};
             }
         };
     }
@@ -339,7 +292,7 @@ namespace llama
             operator()(T_Tuple const tuple, T_Functor const functor)
             {
                 return tupleCat(
-                    makeTuple(functor(tuple.first)),
+                    Tuple{functor(tuple.first)},
                     TupleTransform<typename T_Tuple::RestTuple, T_Functor>()(
                         tuple.rest, functor));
             }
@@ -351,9 +304,8 @@ namespace llama
             using T_Tuple = Tuple<T_LastElement>;
             LLAMA_FN_HOST_ACC_INLINE
             auto operator()(T_Tuple const tuple, T_Functor const functor)
-                -> decltype(makeTuple(functor(tuple.first)))
             {
-                return makeTuple(functor(tuple.first));
+                return Tuple{functor(tuple.first)};
             }
         };
 

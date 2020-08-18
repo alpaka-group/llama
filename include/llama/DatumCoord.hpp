@@ -18,7 +18,6 @@
 
 #pragma once
 
-#include <tuple>
 #include <type_traits>
 
 /// Documentation of this file is in DatumCoord.dox!

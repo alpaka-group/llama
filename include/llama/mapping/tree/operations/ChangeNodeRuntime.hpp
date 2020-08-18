@@ -22,311 +22,106 @@
 #include "../TreeElement.hpp"
 #include "GetNode.hpp"
 
-namespace llama
+namespace llama::mapping::tree::operations
 {
-    namespace mapping
+    template<typename T_TreeCoord, typename T_Tree>
+    LLAMA_FN_HOST_ACC_INLINE auto
+    changeNodeRuntime(const T_Tree & tree, std::size_t newValue)
     {
-        namespace tree
+        if constexpr(std::is_same_v<T_TreeCoord, Tuple<>>)
         {
-            namespace operations
+            if constexpr(HasChildren<T_Tree>::value)
+                return TreeElement<
+                    typename T_Tree::Identifier,
+                    typename T_Tree::Type>{newValue, tree.childs};
+            else
+                return T_Tree{newValue};
+        }
+        else
+        {
+            auto current
+                = getTupleElement<T_TreeCoord::FirstElement::compiletime>(
+                    tree.childs);
+            auto replacement
+                = changeNodeRuntime<typename T_TreeCoord::RestTuple>(
+                    current, newValue);
+            auto children
+                = tupleReplace<T_TreeCoord::FirstElement::compiletime>(
+                    tree.childs, replacement);
+            return TreeElement<typename T_Tree::Identifier, decltype(children)>(
+                tree.count, children);
+        }
+    }
+
+    namespace internal
+    {
+        template<template<typename, typename> typename T_Operation>
+        struct ChangeNodeChildsRuntimeFunctor
+        {
+            const std::size_t newValue;
+
+            template<typename T_Element>
+            LLAMA_FN_HOST_ACC_INLINE auto operator()(T_Element element) const
             {
-                namespace internal
+                if constexpr(HasChildren<T_Element>::value)
                 {
-                    template<
-                        typename T_Tree,
-                        typename T_TreeCoord,
-                        typename T_SFINAE = void>
-                    struct ChangeNodeRuntime
-                    {
-                        using ResultChilds
-                            = decltype(tupleReplace<
-                                       T_TreeCoord::FirstElement::compiletime>(
-                                T_Tree().childs,
-                                ChangeNodeRuntime<
-                                    GetTupleType<
-                                        typename T_Tree::Type,
-                                        T_TreeCoord::FirstElement::compiletime>,
-                                    typename T_TreeCoord::RestTuple>()(
-                                    getTupleElement<
-                                        T_TreeCoord::FirstElement::compiletime>(
-                                        T_Tree().childs),
-                                    0)));
-                        using ResultTree = TreeElement<
-                            typename T_Tree::Identifier,
-                            ResultChilds>;
-
-                        LLAMA_FN_HOST_ACC_INLINE
-                        auto operator()(
-                            T_Tree const & tree,
-                            std::size_t const newValue) const -> ResultTree
-                        {
-                            return ResultTree(
-                                tree.count,
-                                tupleReplace<
-                                    T_TreeCoord::FirstElement::compiletime>(
-                                    tree.childs,
-                                    ChangeNodeRuntime<
-                                        GetTupleType<
-                                            typename T_Tree::Type,
-                                            T_TreeCoord::FirstElement::
-                                                compiletime>,
-                                        typename T_TreeCoord::RestTuple>()(
-                                        getTupleElement<
-                                            T_TreeCoord::FirstElement::
-                                                compiletime>(tree.childs),
-                                        newValue)));
-                        }
-                    };
-
-                    // Leaf case
-                    template<typename T_Tree>
-                    struct ChangeNodeRuntime<
-                        T_Tree,
-                        Tuple<>,
-                        typename T_Tree::IsTreeElementWithoutChilds>
-                    {
-                        using ResultTree = TreeElement<
-                            typename T_Tree::Identifier,
-                            typename T_Tree::Type>;
-
-                        LLAMA_FN_HOST_ACC_INLINE
-                        auto operator()(
-                            ResultTree const & tree,
-                            std::size_t const newValue) const -> T_Tree
-                        {
-                            return ResultTree(newValue);
-                        }
-                    };
-
-                    // Node case
-                    template<typename T_Tree>
-                    struct ChangeNodeRuntime<
-                        T_Tree,
-                        Tuple<>,
-                        typename T_Tree::IsTreeElementWithChilds>
-                    {
-                        using ResultTree = TreeElement<
-                            typename T_Tree::Identifier,
-                            typename T_Tree::Type>;
-
-                        LLAMA_FN_HOST_ACC_INLINE
-                        auto operator()(
-                            T_Tree const & tree,
-                            std::size_t const newValue) const -> ResultTree
-                        {
-                            return ResultTree(newValue, tree.childs);
-                        }
-                    };
-
-                } // namespace internal
-
-                template<typename T_TreeCoord, typename T_Tree>
-                LLAMA_FN_HOST_ACC_INLINE auto changeNodeRuntime(
-                    T_Tree const & tree,
-                    std::size_t const newValue) -> decltype(auto)
-                {
-                    return internal::ChangeNodeRuntime<T_Tree, T_TreeCoord>()(
-                        tree, newValue);
+                    return TreeElement<
+                        typename T_Element::Identifier,
+                        typename T_Element::Type>(
+                        T_Operation<decltype(element.count), std::size_t>::
+                            apply(element.count, newValue),
+                        element.childs);
                 }
-
-                namespace internal
+                else
                 {
-                    template<
-                        typename T_Tree,
-                        template<class, class>
-                        class T_Operation,
-                        typename T_TreeCoord,
-                        typename T_SFINAE = void>
-                    struct ChangeNodeChildsRuntime;
-
-                    template<
-                        typename T_Tree,
-                        template<class, class>
-                        class T_Operation,
-                        typename T_TreeCoord>
-                    struct ChangeNodeChildsRuntime<
-                        T_Tree,
-                        T_Operation,
-                        T_TreeCoord,
-                        typename T_Tree::IsTreeElementWithChilds>
-                    {
-                        using ResultType = TreeElement<
-                            typename T_Tree::Identifier,
-                            decltype(tupleReplace<
-                                     T_TreeCoord::FirstElement::compiletime>(
-                                T_Tree().childs,
-                                ChangeNodeChildsRuntime<
-                                    GetTupleType<
-                                        typename T_Tree::Type,
-                                        T_TreeCoord::FirstElement::compiletime>,
-                                    T_Operation,
-                                    typename T_TreeCoord::RestTuple>()(
-                                    getTupleElement<
-                                        T_TreeCoord::FirstElement::compiletime>(
-                                        T_Tree().childs),
-                                    0)))>;
-
-                        LLAMA_FN_HOST_ACC_INLINE
-                        auto operator()(
-                            T_Tree const & tree,
-                            std::size_t const newValue) const -> ResultType
-                        {
-                            return ResultType(
-                                tree.count,
-                                tupleReplace<
-                                    T_TreeCoord::FirstElement::compiletime>(
-                                    tree.childs,
-                                    ChangeNodeChildsRuntime<
-                                        GetTupleType<
-                                            typename T_Tree::Type,
-                                            T_TreeCoord::FirstElement::
-                                                compiletime>,
-                                        T_Operation,
-                                        typename T_TreeCoord::RestTuple>()(
-                                        getTupleElement<
-                                            T_TreeCoord::FirstElement::
-                                                compiletime>(tree.childs),
-                                        newValue)));
-                        }
-                    };
-
-                    // Leaf case
-                    template<
-                        typename T_Tree,
-                        template<class, class>
-                        class T_Operation>
-                    struct ChangeNodeChildsRuntime<
-                        T_Tree,
-                        T_Operation,
-                        Tuple<>,
-                        typename T_Tree::IsTreeElementWithoutChilds>
-                    {
-                        LLAMA_FN_HOST_ACC_INLINE
-                        auto operator()(
-                            T_Tree const & tree,
-                            std::size_t const newValue) const -> T_Tree
-                        {
-                            return tree;
-                        }
-                    };
-
-                    template<template<class, class> class T_Operation>
-                    struct ChangeNodeChildsRuntimeFunctor
-                    {
-                        std::size_t const newValue;
-
-                        template<typename T_Element, typename T_SFINAE = void>
-                        struct OperatorSpecialization;
-
-                        // Leaf case
-                        template<typename T_Element>
-                        struct OperatorSpecialization<
-                            T_Element,
-                            typename T_Element::IsTreeElementWithoutChilds>
-                        {
-                            using ResultElement = TreeElement<
-                                typename T_Element::Identifier,
-                                typename T_Element::Type>;
-
-                            LLAMA_FN_HOST_ACC_INLINE
-                            auto operator()(
-                                std::size_t const newValue,
-                                T_Element const element) const -> ResultElement
-                            {
-                                return ResultElement{
-                                    T_Operation<
-                                        decltype(element.count),
-                                        std::size_t>::
-                                        apply(element.count, newValue)};
-                            }
-                        };
-
-                        // Node case
-                        template<typename T_Element>
-                        struct OperatorSpecialization<
-                            T_Element,
-                            typename T_Element::IsTreeElementWithChilds>
-                        {
-                            using ResultElement = TreeElement<
-                                typename T_Element::Identifier,
-                                typename T_Element::Type>;
-
-                            LLAMA_FN_HOST_ACC_INLINE
-                            auto operator()(
-                                std::size_t const newValue,
-                                T_Element const element) const -> ResultElement
-                            {
-                                return ResultElement(
-                                    T_Operation<
-                                        decltype(element.count),
-                                        std::size_t>::
-                                        apply(element.count, newValue),
-                                    element.childs);
-                            }
-                        };
-
-                        template<typename T_Element>
-                        LLAMA_FN_HOST_ACC_INLINE auto
-                        operator()(T_Element const element) const
-                            -> decltype(auto)
-                        {
-                            return OperatorSpecialization<T_Element>()(
-                                newValue, element);
-                        }
-                    };
-
-                    // Node case
-                    template<
-                        typename T_Tree,
-                        template<class, class>
-                        class T_Operation>
-                    struct ChangeNodeChildsRuntime<
-                        T_Tree,
-                        T_Operation,
-                        Tuple<>,
-                        typename T_Tree::IsTreeElementWithChilds>
-                    {
-                        using ResultType = TreeElement<
-                            typename T_Tree::Identifier,
-                            decltype(tupleTransform(
-                                T_Tree().childs,
-                                ChangeNodeChildsRuntimeFunctor<T_Operation>{
-                                    0}))>;
-
-                        LLAMA_FN_HOST_ACC_INLINE
-                        auto operator()(
-                            T_Tree const & tree,
-                            std::size_t const newValue) const -> ResultType
-                        {
-                            ChangeNodeChildsRuntimeFunctor<T_Operation> const
-                                functor{newValue};
-                            return ResultType(
-                                tree.count,
-                                tupleTransform(tree.childs, functor));
-                        }
-                    };
-
-                } // namespace internal
-
-                template<
-                    typename T_TreeCoord,
-                    template<class, class>
-                    class T_Operation,
-                    typename T_Tree>
-                LLAMA_FN_HOST_ACC_INLINE auto changeNodeChildsRuntime(
-                    T_Tree const & tree,
-                    std::size_t const newValue) -> decltype(auto)
-                {
-                    return internal::ChangeNodeChildsRuntime<
-                        T_Tree,
-                        T_Operation,
-                        T_TreeCoord>()(tree, newValue);
+                    const auto newCount
+                        = T_Operation<decltype(element.count), std::size_t>::
+                            apply(element.count, newValue);
+                    return TreeElement<
+                        typename T_Element::Identifier,
+                        typename T_Element::Type>{newCount};
                 }
+            }
+        };
+    }
 
-            } // namespace functor
-
-        } // namespace tree
-
-    } // namespace mapping
-
-} // namespace llama
+    template<
+        typename T_TreeCoord,
+        template<typename, typename>
+        typename T_Operation,
+        typename T_Tree>
+    LLAMA_FN_HOST_ACC_INLINE auto
+    changeNodeChildsRuntime(T_Tree const & tree, std::size_t const newValue)
+    {
+        if constexpr(HasChildren<T_Tree>::value)
+        {
+            if constexpr(std::is_same_v<T_TreeCoord, Tuple<>>)
+            {
+                auto children = tupleTransform(
+                    tree.childs,
+                    internal::ChangeNodeChildsRuntimeFunctor<T_Operation>{
+                        newValue});
+                return TreeElement<
+                    typename T_Tree::Identifier,
+                    decltype(children)>(tree.count, children);
+            }
+            else
+            {
+                auto current
+                    = getTupleElement<T_TreeCoord::FirstElement::compiletime>(
+                        tree.childs);
+                auto replacement = changeNodeChildsRuntime<
+                    typename T_TreeCoord::RestTuple,
+                    T_Operation>(current, newValue);
+                auto children
+                    = tupleReplace<T_TreeCoord::FirstElement::compiletime>(
+                        tree.childs, replacement);
+                return TreeElement<
+                    typename T_Tree::Identifier,
+                    decltype(children)>(tree.count, children);
+            }
+        }
+        else
+            return tree;
+    }
+}

@@ -20,58 +20,17 @@
 
 #include "../TreeElement.hpp"
 
-namespace llama
+namespace llama::mapping::tree::operations
 {
-    namespace mapping
+    template<typename T_TreeCoord, typename T_Tree>
+    LLAMA_FN_HOST_ACC_INLINE auto getNode(const T_Tree & tree)
     {
-        namespace tree
-        {
-            namespace operations
-            {
-                namespace internal
-                {
-                    template<typename T_Tree, typename T_TreeCoord>
-                    struct GetNode
-                    {
-                        LLAMA_FN_HOST_ACC_INLINE
-                        auto operator()(T_Tree const & tree) const
-                            -> decltype(auto)
-                        {
-                            return GetNode<
-                                GetTupleType<
-                                    typename T_Tree::Type,
-                                    decltype(T_TreeCoord::FirstElement::
-                                                 compiletime)::value>,
-                                typename T_TreeCoord::RestTuple>()(
-                                getTupleElement<decltype(
-                                    T_TreeCoord::FirstElement::compiletime)::
-                                                    value>(tree.childs));
-                        }
-                    };
-
-                    template<typename T_Tree>
-                    struct GetNode<T_Tree, Tuple<>>
-                    {
-                        LLAMA_FN_HOST_ACC_INLINE
-                        auto operator()(T_Tree const & tree) const -> T_Tree
-                        {
-                            return tree;
-                        }
-                    };
-
-                } // namespace internal
-
-                template<typename T_TreeCoord, typename T_Tree>
-                LLAMA_FN_HOST_ACC_INLINE auto getNode(T_Tree const & tree)
-                    -> decltype(auto)
-                {
-                    return internal::GetNode<T_Tree, T_TreeCoord>()(tree);
-                }
-
-            } // namespace functor
-
-        } // namespace tree
-
-    } // namespace mapping
-
-} // namespace llama
+        if constexpr(std::is_same_v<T_TreeCoord, Tuple<>>)
+            return tree;
+        else
+            return getNode<typename T_TreeCoord::RestTuple>(
+                getTupleElement<decltype(
+                    T_TreeCoord::FirstElement::compiletime)::value>(
+                    tree.childs));
+    }
+}
