@@ -13,17 +13,19 @@ TEST_CASE("type int")
     {};
     using Name = llama::DS<llama::DE<Tag, int>>;
 
-    using UD = llama::UserDomain<1>;
-    UD udSize{16};
+    using UserDomain = llama::UserDomain<1>;
+    UserDomain userDomain{16};
 
-    using Mapping = llama::mapping::
-        SoA<UD, Name, llama::LinearizeUserDomainAdress<UD::count>>;
-    Mapping mapping{udSize};
+    using Mapping = llama::mapping::SoA<
+        UserDomain,
+        Name,
+        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
     auto view = Factory::allocView(mapping);
 
-    int & e = view(UD{0}).access<Tag>();
+    int & e = view(UserDomain{0}).access<Tag>();
     e = 0;
 }
 
@@ -33,17 +35,19 @@ TEST_CASE("type std::complex<float>")
     {};
     using Name = llama::DS<llama::DE<Tag, std::complex<float>>>;
 
-    using UD = llama::UserDomain<1>;
-    UD udSize{16};
+    using UserDomain = llama::UserDomain<1>;
+    UserDomain userDomain{16};
 
-    using Mapping = llama::mapping::
-        SoA<UD, Name, llama::LinearizeUserDomainAdress<UD::count>>;
-    Mapping mapping{udSize};
+    using Mapping = llama::mapping::SoA<
+        UserDomain,
+        Name,
+        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
     auto view = Factory::allocView(mapping);
 
-    std::complex<float> & e = view(UD{0}).access<Tag>();
+    std::complex<float> & e = view(UserDomain{0}).access<Tag>();
     e = {2, 3};
 }
 
@@ -53,17 +57,19 @@ TEST_CASE("type std::array<float, 4>")
     {};
     using Name = llama::DS<llama::DE<Tag, std::array<float, 4>>>;
 
-    using UD = llama::UserDomain<1>;
-    UD udSize{16};
+    using UserDomain = llama::UserDomain<1>;
+    UserDomain userDomain{16};
 
-    using Mapping = llama::mapping::
-        SoA<UD, Name, llama::LinearizeUserDomainAdress<UD::count>>;
-    Mapping mapping{udSize};
+    using Mapping = llama::mapping::SoA<
+        UserDomain,
+        Name,
+        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
     auto view = Factory::allocView(mapping);
 
-    std::array<float, 4> & e = view(UD{0}).access<Tag>();
+    std::array<float, 4> & e = view(UserDomain{0}).access<Tag>();
     e = {2, 3, 4, 5};
 }
 
@@ -73,17 +79,19 @@ TEST_CASE("type std::vector<float>")
     {};
     using Name = llama::DS<llama::DE<Tag, std::vector<float>>>;
 
-    using UD = llama::UserDomain<1>;
-    UD udSize{16};
+    using UserDomain = llama::UserDomain<1>;
+    UserDomain userDomain{16};
 
-    using Mapping = llama::mapping::
-        SoA<UD, Name, llama::LinearizeUserDomainAdress<UD::count>>;
-    Mapping mapping{udSize};
+    using Mapping = llama::mapping::SoA<
+        UserDomain,
+        Name,
+        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
     auto view = Factory::allocView(mapping);
 
-    std::vector<float> & e = view(UD{0}).access<Tag>();
+    std::vector<float> & e = view(UserDomain{0}).access<Tag>();
     // e = {2, 3, 4, 5}; // FIXME: LLAMA memory is uninitialized
 }
 
@@ -93,17 +101,19 @@ TEST_CASE("type std::atomic<int>")
     {};
     using Name = llama::DS<llama::DE<Tag, std::atomic<int>>>;
 
-    using UD = llama::UserDomain<1>;
-    UD udSize{16};
+    using UserDomain = llama::UserDomain<1>;
+    UserDomain userDomain{16};
 
-    using Mapping = llama::mapping::
-        SoA<UD, Name, llama::LinearizeUserDomainAdress<UD::count>>;
-    Mapping mapping{udSize};
+    using Mapping = llama::mapping::SoA<
+        UserDomain,
+        Name,
+        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
     auto view = Factory::allocView(mapping);
 
-    std::atomic<int> & e = view(UD{0}).access<Tag>();
+    std::atomic<int> & e = view(UserDomain{0}).access<Tag>();
     // e++; // FIXME: LLAMA memory is uninitialized
 }
 
@@ -124,17 +134,19 @@ TEST_CASE("type noncopyable")
     {};
     using Name = llama::DS<llama::DE<Tag, Element>>;
 
-    using UD = llama::UserDomain<1>;
-    UD udSize{16};
+    using UserDomain = llama::UserDomain<1>;
+    UserDomain userDomain{16};
 
-    using Mapping = llama::mapping::
-        SoA<UD, Name, llama::LinearizeUserDomainAdress<UD::count>>;
-    Mapping mapping{udSize};
+    using Mapping = llama::mapping::SoA<
+        UserDomain,
+        Name,
+        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
     auto view = Factory::allocView(mapping);
 
-    Element & e = view(UD{0}).access<Tag>();
+    Element & e = view(UserDomain{0}).access<Tag>();
     e.value = 0;
 }
 
@@ -155,17 +167,19 @@ TEST_CASE("type nonmoveable")
     {};
     using Name = llama::DS<llama::DE<Tag, Element>>;
 
-    using UD = llama::UserDomain<1>;
-    UD udSize{16};
+    using UserDomain = llama::UserDomain<1>;
+    UserDomain userDomain{16};
 
-    using Mapping = llama::mapping::
-        SoA<UD, Name, llama::LinearizeUserDomainAdress<UD::count>>;
-    Mapping mapping{udSize};
+    using Mapping = llama::mapping::SoA<
+        UserDomain,
+        Name,
+        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
     auto view = Factory::allocView(mapping);
 
-    Element & e = view(UD{0}).access<Tag>();
+    Element & e = view(UserDomain{0}).access<Tag>();
     e.value = 0;
 }
 
@@ -181,17 +195,19 @@ TEST_CASE("type not defaultconstructible")
     {};
     using Name = llama::DS<llama::DE<Tag, Element>>;
 
-    using UD = llama::UserDomain<1>;
-    UD udSize{16};
+    using UserDomain = llama::UserDomain<1>;
+    UserDomain userDomain{16};
 
-    using Mapping = llama::mapping::
-        SoA<UD, Name, llama::LinearizeUserDomainAdress<UD::count>>;
-    Mapping mapping{udSize};
+    using Mapping = llama::mapping::SoA<
+        UserDomain,
+        Name,
+        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
     auto view = Factory::allocView(mapping);
 
-    Element & e = view(UD{0}).access<Tag>();
+    Element & e = view(UserDomain{0}).access<Tag>();
     e.value = 0;
 }
 
@@ -206,16 +222,18 @@ TEST_CASE("type nottrivial ctor")
     {};
     using Name = llama::DS<llama::DE<Tag, Element>>;
 
-    using UD = llama::UserDomain<1>;
-    UD udSize{16};
+    using UserDomain = llama::UserDomain<1>;
+    UserDomain userDomain{16};
 
-    using Mapping = llama::mapping::
-        SoA<UD, Name, llama::LinearizeUserDomainAdress<UD::count>>;
-    Mapping mapping{udSize};
+    using Mapping = llama::mapping::SoA<
+        UserDomain,
+        Name,
+        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
     auto view = Factory::allocView(mapping);
 
-    Element & e = view(UD{0}).access<Tag>();
+    Element & e = view(UserDomain{0}).access<Tag>();
     // CHECK(e.value == 42); // FIXME: LLAMA memory is uninitialized
 }

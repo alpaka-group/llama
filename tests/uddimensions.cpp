@@ -4,7 +4,7 @@
 #include <llama/llama.hpp>
 
 // clang-format off
-namespace st
+namespace tag
 {
     struct Pos {};
     struct X {};
@@ -13,74 +13,83 @@ namespace st
 }
 
 using Name = llama::DS<
-    llama::DE<st::Pos, llama::DS<
-        llama::DE<st::X, float>,
-        llama::DE<st::Y, float>,
-        llama::DE<st::Z, float>
+    llama::DE<tag::Pos, llama::DS<
+        llama::DE<tag::X, float>,
+        llama::DE<tag::Y, float>,
+        llama::DE<tag::Z, float>
     >>
 >;
 // clang-format on
 
 TEST_CASE("dim1")
 {
-    using UD = llama::UserDomain<1>;
-    UD udSize{16};
+    using UserDomain = llama::UserDomain<1>;
+    UserDomain userDomain{16};
 
-    using Mapping = llama::mapping::
-        SoA<UD, Name, llama::LinearizeUserDomainAdress<UD::count>>;
-    Mapping mapping{udSize};
+    using Mapping = llama::mapping::SoA<
+        UserDomain,
+        Name,
+        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
     auto view = Factory::allocView(mapping);
 
-    float & x = view(UD{0}).access<st::Pos, st::X>();
+    float & x = view(UserDomain{0}).access<tag::Pos, tag::X>();
     x = 0;
 }
 
 TEST_CASE("dim2")
 {
-    using UD = llama::UserDomain<2>;
-    UD udSize{16, 16};
+    using UserDomain = llama::UserDomain<2>;
+    UserDomain userDomain{16, 16};
 
-    using Mapping = llama::mapping::
-        SoA<UD, Name, llama::LinearizeUserDomainAdress<UD::count>>;
-    Mapping mapping{udSize};
+    using Mapping = llama::mapping::SoA<
+        UserDomain,
+        Name,
+        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
     auto view = Factory::allocView(mapping);
 
-    float & x = view(UD{0, 0}).access<st::Pos, st::X>();
+    float & x = view(UserDomain{0, 0}).access<tag::Pos, tag::X>();
     x = 0;
 }
 
 TEST_CASE("dim3")
 {
-    using UD = llama::UserDomain<3>;
-    UD udSize{16, 16, 16};
+    using UserDomain = llama::UserDomain<3>;
+    UserDomain userDomain{16, 16, 16};
 
-    using Mapping = llama::mapping::
-        SoA<UD, Name, llama::LinearizeUserDomainAdress<UD::count>>;
-    Mapping mapping{udSize};
+    using Mapping = llama::mapping::SoA<
+        UserDomain,
+        Name,
+        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
     auto view = Factory::allocView(mapping);
 
-    float & x = view(UD{0, 0, 0}).access<st::Pos, st::X>();
+    float & x = view(UserDomain{0, 0, 0}).access<tag::Pos, tag::X>();
     x = 0;
 }
 
 TEST_CASE("dim10")
 {
-    using UD = llama::UserDomain<10>;
-    UD udSize{2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
+    using UserDomain = llama::UserDomain<10>;
+    UserDomain userDomain{2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
 
-    using Mapping = llama::mapping::
-        SoA<UD, Name, llama::LinearizeUserDomainAdress<UD::count>>;
-    Mapping mapping{udSize};
+    using Mapping = llama::mapping::SoA<
+        UserDomain,
+        Name,
+        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
     auto view = Factory::allocView(mapping);
 
-    float & x = view(UD{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}).access<st::Pos, st::X>();
+    float & x = view(UserDomain{0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+                    .access<tag::Pos, tag::X>();
     x = 0;
 }

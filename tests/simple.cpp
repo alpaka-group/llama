@@ -4,7 +4,7 @@
 #include <llama/llama.hpp>
 
 // clang-format off
-namespace st {
+namespace tag {
     struct Pos {};
     struct X {};
     struct Y {};
@@ -14,19 +14,21 @@ namespace st {
     struct Options {};
 }
 
+// clang-format off
 using Name = llama::DS<
-    llama::DE<st::Pos, llama::DS<
-        llama::DE<st::X, float>,
-        llama::DE<st::Y, float>,
-        llama::DE<st::Z, float>
+    llama::DE<tag::Pos, llama::DS<
+        llama::DE<tag::X, float>,
+        llama::DE<tag::Y, float>,
+        llama::DE<tag::Z, float>
     >>,
-    llama::DE<st::Momentum, llama::DS<
-        llama::DE<st::Z, double>,
-        llama::DE<st::X, double>
+    llama::DE<tag::Momentum, llama::DS<
+        llama::DE<tag::Z, double>,
+        llama::DE<tag::X, double>
     >>,
-    llama::DE<st::Weight, int>,
-    llama::DE<st::Options, llama::DA<bool, 4>>
+    llama::DE<tag::Weight, int>,
+    llama::DE<tag::Options, llama::DA<bool, 4>>
 >;
+// clang-format on
 // clang-format on
 
 TEST_CASE("demangleType")
@@ -34,41 +36,41 @@ TEST_CASE("demangleType")
     const auto str = prettyPrintType(Name());
     CHECK(str == R"(boost::mp11::mp_list<
     boost::mp11::mp_list<
-        st::Pos,
+        tag::Pos,
         boost::mp11::mp_list<
             boost::mp11::mp_list<
-                st::X,
+                tag::X,
                 float
             >,
             boost::mp11::mp_list<
-                st::Y,
+                tag::Y,
                 float
             >,
             boost::mp11::mp_list<
-                st::Z,
+                tag::Z,
                 float
             >
         >
     >,
     boost::mp11::mp_list<
-        st::Momentum,
+        tag::Momentum,
         boost::mp11::mp_list<
             boost::mp11::mp_list<
-                st::Z,
+                tag::Z,
                 double
             >,
             boost::mp11::mp_list<
-                st::X,
+                tag::X,
                 double
             >
         >
     >,
     boost::mp11::mp_list<
-        st::Weight,
+        tag::Weight,
         int
     >,
     boost::mp11::mp_list<
-        st::Options,
+        tag::Options,
         boost::mp11::mp_list<
             boost::mp11::mp_list<
                 llama::NoName,
@@ -93,19 +95,19 @@ TEST_CASE("demangleType")
 
 TEST_CASE("AoS address")
 {
-    using UD = llama::UserDomain<2>;
-    UD udSize{16, 16};
-    const auto address
-        = llama::mapping::AoS<UD, Name>(udSize).getBlobByte<0, 1>({0, 100});
+    using UserDomain = llama::UserDomain<2>;
+    UserDomain userDomain{16, 16};
+    const auto address = llama::mapping::AoS<UserDomain, Name>(userDomain)
+                             .getBlobByte<0, 1>({0, 100});
     CHECK(address == 3604);
 }
 
 TEST_CASE("SoA address")
 {
-    using UD = llama::UserDomain<2>;
-    UD udSize{16, 16};
-    const auto address
-        = llama::mapping::SoA<UD, Name>(udSize).getBlobByte<0, 1>({0, 100});
+    using UserDomain = llama::UserDomain<2>;
+    UserDomain userDomain{16, 16};
+    const auto address = llama::mapping::SoA<UserDomain, Name>(userDomain)
+                             .getBlobByte<0, 1>({0, 100});
     CHECK(address == 1424);
 }
 
@@ -127,7 +129,7 @@ TEST_CASE("StubType")
 TEST_CASE("GetCoordFromUID")
 {
     const auto str
-        = prettyPrintType(llama::GetCoordFromUID<Name, st::Pos, st::X>());
+        = prettyPrintType(llama::GetCoordFromUID<Name, tag::Pos, tag::X>());
     CHECK(str == R"(llama::DatumCoord<
     0,
     0
@@ -136,33 +138,35 @@ TEST_CASE("GetCoordFromUID")
 
 TEST_CASE("access")
 {
-    using UD = llama::UserDomain<2>;
-    UD udSize{16, 16};
+    using UserDomain = llama::UserDomain<2>;
+    UserDomain userDomain{16, 16};
 
-    using Mapping = llama::mapping::
-        SoA<UD, Name, llama::LinearizeUserDomainAdress<UD::count>>;
-    Mapping mapping{udSize};
+    using Mapping = llama::mapping::SoA<
+        UserDomain,
+        Name,
+        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>;
     auto view = Factory::allocView(mapping);
 
     zeroStorage(view);
 
-    const UD pos{0, 0};
+    const UserDomain pos{0, 0};
     CHECK((view(pos) == view[pos]));
     CHECK((view(pos) == view[{0, 0}]));
     CHECK((view(pos) == view({0, 0})));
 
     float & x = view(pos).access<0, 0>();
     CHECK(&x == &view(pos).access<0>().access<0>());
-    CHECK(&x == &view(pos).access<0>().access<st::X>());
-    CHECK(&x == &view(pos).access<st::Pos>().access<0>());
-    CHECK(&x == &view(pos).access<st::Pos, st::X>());
-    CHECK(&x == &view(pos).access<st::Pos>().access<st::X>());
-    CHECK(&x == &view(pos)(st::Pos{}, st::X{}));
-    CHECK(&x == &view(pos)(st::Pos{})(st::X{}));
-    CHECK(&x == &view(pos).access<st::Pos>()(st::X{}));
-    CHECK(&x == &view(pos)(st::Pos{}).access<st::X>());
+    CHECK(&x == &view(pos).access<0>().access<tag::X>());
+    CHECK(&x == &view(pos).access<tag::Pos>().access<0>());
+    CHECK(&x == &view(pos).access<tag::Pos, tag::X>());
+    CHECK(&x == &view(pos).access<tag::Pos>().access<tag::X>());
+    CHECK(&x == &view(pos)(tag::Pos{}, tag::X{}));
+    CHECK(&x == &view(pos)(tag::Pos{})(tag::X{}));
+    CHECK(&x == &view(pos).access<tag::Pos>()(tag::X{}));
+    CHECK(&x == &view(pos)(tag::Pos{}).access<tag::X>());
     CHECK(&x == &view(pos)(llama::DatumCoord<0, 0>{}));
     CHECK(&x == &view(pos)(llama::DatumCoord<0>{})(llama::DatumCoord<0>{}));
     // there are even more combinations
@@ -170,27 +174,29 @@ TEST_CASE("access")
 
 TEST_CASE("addresses")
 {
-    using UD = llama::UserDomain<2>;
-    UD udSize{16, 16};
+    using UserDomain = llama::UserDomain<2>;
+    UserDomain userDomain{16, 16};
 
-    using Mapping = llama::mapping::
-        SoA<UD, Name, llama::LinearizeUserDomainAdress<UD::count>>;
-    Mapping mapping{udSize};
+    using Mapping = llama::mapping::SoA<
+        UserDomain,
+        Name,
+        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>;
     auto view = Factory::allocView(mapping);
 
-    const UD pos{0, 0};
-    auto & x = view(pos).access<st::Pos, st::X>();
-    auto & y = view(pos).access<st::Pos, st::Y>();
-    auto & z = view(pos).access<st::Pos, st::Z>();
-    auto & mz = view(pos).access<st::Momentum, st::Z>();
-    auto & mx = view(pos).access<st::Momentum, st::X>();
+    const UserDomain pos{0, 0};
+    auto & x = view(pos).access<tag::Pos, tag::X>();
+    auto & y = view(pos).access<tag::Pos, tag::Y>();
+    auto & z = view(pos).access<tag::Pos, tag::Z>();
+    auto & mz = view(pos).access<tag::Momentum, tag::Z>();
+    auto & mx = view(pos).access<tag::Momentum, tag::X>();
     auto & w = view(pos)(llama::DatumCoord<2>());
-    auto & o0 = view(pos).access<st::Options>().access<0>();
-    auto & o1 = view(pos).access<st::Options>().access<1>();
-    auto & o2 = view(pos).access<st::Options>().access<2>();
-    auto & o3 = view(pos).access<st::Options>().access<3>();
+    auto & o0 = view(pos).access<tag::Options>().access<0>();
+    auto & o1 = view(pos).access<tag::Options>().access<1>();
+    auto & o2 = view(pos).access<tag::Options>().access<2>();
+    auto & o3 = view(pos).access<tag::Options>().access<3>();
 
     CHECK((size_t)&y - (size_t)&x == 1024);
     CHECK((size_t)&z - (size_t)&x == 2048);
@@ -216,62 +222,69 @@ struct SetZeroFunctor
 
 TEST_CASE("iteration and access")
 {
-    using UD = llama::UserDomain<2>;
-    UD udSize{16, 16};
+    using UserDomain = llama::UserDomain<2>;
+    UserDomain userDomain{16, 16};
 
-    using Mapping = llama::mapping::
-        SoA<UD, Name, llama::LinearizeUserDomainAdress<UD::count>>;
-    Mapping mapping{udSize};
+    using Mapping = llama::mapping::SoA<
+        UserDomain,
+        Name,
+        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>;
     auto view = Factory::allocView(mapping);
 
     zeroStorage(view);
 
-    for(size_t x = 0; x < udSize[0]; ++x)
-        for(size_t y = 0; y < udSize[1]; ++y)
+    for(size_t x = 0; x < userDomain[0]; ++x)
+        for(size_t y = 0; y < userDomain[1]; ++y)
         {
             SetZeroFunctor<decltype(view(x, y))> szf{view(x, y)};
             llama::ForEach<Name, llama::DatumCoord<0, 0>>::apply(szf);
-            llama::ForEach<Name, st::Momentum>::apply(szf);
-            view({x, y}) = double(x + y) / double(udSize[0] + udSize[1]);
+            llama::ForEach<Name, tag::Momentum>::apply(szf);
+            view({x, y})
+                = double(x + y) / double(userDomain[0] + userDomain[1]);
         }
 
     double sum = 0.0;
-    for(size_t x = 0; x < udSize[0]; ++x)
-        for(size_t y = 0; y < udSize[1]; ++y) sum += view(x, y).access<1, 0>();
+    for(size_t x = 0; x < userDomain[0]; ++x)
+        for(size_t y = 0; y < userDomain[1]; ++y)
+            sum += view(x, y).access<1, 0>();
     CHECK(sum == 120.0);
 }
 
 TEST_CASE("Datum access")
 {
-    using UD = llama::UserDomain<2>;
-    UD udSize{16, 16};
+    using UserDomain = llama::UserDomain<2>;
+    UserDomain userDomain{16, 16};
 
-    using Mapping = llama::mapping::
-        SoA<UD, Name, llama::LinearizeUserDomainAdress<UD::count>>;
-    Mapping mapping{udSize};
+    using Mapping = llama::mapping::SoA<
+        UserDomain,
+        Name,
+        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>;
     auto view = Factory::allocView(mapping);
 
     zeroStorage(view);
 
-    for(size_t x = 0; x < udSize[0]; ++x)
-        for(size_t y = 0; y < udSize[1]; ++y)
+    for(size_t x = 0; x < userDomain[0]; ++x)
+        for(size_t y = 0; y < userDomain[1]; ++y)
         {
             auto datum = view(x, y);
-            datum.access<st::Pos, st::X>()
+            datum.access<tag::Pos, tag::X>()
                 += datum.access<llama::DatumCoord<1, 0>>();
-            datum.access(st::Pos(), st::Y())
+            datum.access(tag::Pos(), tag::Y())
                 += datum.access(llama::DatumCoord<1, 1>());
-            datum(st::Pos(), st::Z()) += datum(llama::DatumCoord<2>());
-            datum(st::Pos()) += datum(st::Momentum());
+            datum(tag::Pos(), tag::Z()) += datum(llama::DatumCoord<2>());
+            datum(tag::Pos()) += datum(tag::Momentum());
         }
 
     double sum = 0.0;
-    for(size_t x = 0; x < udSize[0]; ++x)
-        for(size_t y = 0; y < udSize[1]; ++y) sum += view(x, y).access<1, 0>();
+    for(size_t x = 0; x < userDomain[0]; ++x)
+        for(size_t y = 0; y < userDomain[1]; ++y)
+            sum += view(x, y).access<1, 0>();
 
     CHECK(sum == 0.0);
 }
@@ -288,26 +301,26 @@ TEST_CASE("AssignOneDatumIntoView")
     auto view = Factory::allocView(mapping);
 
     auto datum = llama::stackVirtualDatumAlloc<Name>();
-    datum(st::Pos{}, st::X{}) = 14.0f;
-    datum(st::Pos{}, st::Y{}) = 15.0f;
-    datum(st::Pos{}, st::Z{}) = 16.0f;
-    datum(st::Momentum{}) = 0;
-    datum(st::Weight{}) = 500.0f;
-    datum(st::Options{}).access<0>() = true;
-    datum(st::Options{}).access<1>() = false;
-    datum(st::Options{}).access<2>() = true;
-    datum(st::Options{}).access<3>() = false;
+    datum(tag::Pos{}, tag::X{}) = 14.0f;
+    datum(tag::Pos{}, tag::Y{}) = 15.0f;
+    datum(tag::Pos{}, tag::Z{}) = 16.0f;
+    datum(tag::Momentum{}) = 0;
+    datum(tag::Weight{}) = 500.0f;
+    datum(tag::Options{}).access<0>() = true;
+    datum(tag::Options{}).access<1>() = false;
+    datum(tag::Options{}).access<2>() = true;
+    datum(tag::Options{}).access<3>() = false;
 
     view({3, 4}) = datum;
 
-    CHECK(datum(st::Pos{}, st::X{}) == 14.0f);
-    CHECK(datum(st::Pos{}, st::Y{}) == 15.0f);
-    CHECK(datum(st::Pos{}, st::Z{}) == 16.0f);
-    CHECK(datum(st::Momentum{}, st::Z{}) == 0);
-    CHECK(datum(st::Momentum{}, st::X{}) == 0);
-    CHECK(datum(st::Weight{}) == 500.0f);
-    CHECK(datum(st::Options{}).access<0>() == true);
-    CHECK(datum(st::Options{}).access<1>() == false);
-    CHECK(datum(st::Options{}).access<2>() == true);
-    CHECK(datum(st::Options{}).access<3>() == false);
+    CHECK(datum(tag::Pos{}, tag::X{}) == 14.0f);
+    CHECK(datum(tag::Pos{}, tag::Y{}) == 15.0f);
+    CHECK(datum(tag::Pos{}, tag::Z{}) == 16.0f);
+    CHECK(datum(tag::Momentum{}, tag::Z{}) == 0);
+    CHECK(datum(tag::Momentum{}, tag::X{}) == 0);
+    CHECK(datum(tag::Weight{}) == 500.0f);
+    CHECK(datum(tag::Options{}).access<0>() == true);
+    CHECK(datum(tag::Options{}).access<1>() == false);
+    CHECK(datum(tag::Options{}).access<2>() == true);
+    CHECK(datum(tag::Options{}).access<3>() == false);
 }
