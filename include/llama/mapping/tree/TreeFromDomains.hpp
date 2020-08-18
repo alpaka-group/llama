@@ -144,34 +144,26 @@ namespace llama::mapping::tree
         template<
             typename T_UserDomain,
             std::size_t T_firstDatumDomain,
-            typename T_pos = std::integral_constant<std::size_t, 0>>
+            std::size_t T_pos = 0>
         struct UserDomainToTreeCoord
         {
             LLAMA_FN_HOST_ACC_INLINE
             auto operator()(T_UserDomain const & coord) const
             {
-                return tupleCat(
-                    Tuple{TreeCoordElement<0>(coord[T_pos::value])},
-                    UserDomainToTreeCoord<
-                        T_UserDomain,
-                        T_firstDatumDomain,
-                        std::
-                            integral_constant<std::size_t, T_pos::value + 1>>()(
-                        coord));
-            }
-        };
-
-        template<typename T_UserDomain, std::size_t T_firstDatumDomain>
-        struct UserDomainToTreeCoord<
-            T_UserDomain,
-            T_firstDatumDomain,
-            std::integral_constant<std::size_t, T_UserDomain::count - 1>>
-        {
-            LLAMA_FN_HOST_ACC_INLINE
-            auto operator()(T_UserDomain const & coord) const
-            {
-                return Tuple{TreeCoordElement<T_firstDatumDomain>(
-                    coord[T_UserDomain::count - 1])};
+                if constexpr(T_pos == T_UserDomain::count - 1)
+                {
+                    return Tuple{TreeCoordElement<T_firstDatumDomain>(
+                        coord[T_UserDomain::count - 1])};
+                }
+                else
+                {
+                    return tupleCat(
+                        Tuple{TreeCoordElement<0>(coord[T_pos])},
+                        UserDomainToTreeCoord<
+                            T_UserDomain,
+                            T_firstDatumDomain,
+                            T_pos + 1>()(coord));
+                }
             }
         };
 
