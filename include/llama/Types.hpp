@@ -21,6 +21,7 @@
 #include "Array.hpp"
 
 #include <boost/mp11.hpp>
+#include <type_traits>
 
 namespace llama
 {
