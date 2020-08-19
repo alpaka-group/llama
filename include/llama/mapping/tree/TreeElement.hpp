@@ -31,7 +31,6 @@ namespace llama::mapping::tree
         typename T_CountType = std::size_t>
     struct TreeElement
     {
-        using IsTreeElementWithoutChilds = void;
         using Identifier = T_Identifier;
         using Type = T_Type;
 
@@ -47,7 +46,6 @@ namespace llama::mapping::tree
     template<typename T_Identifier, typename T_CountType, typename... T_Childs>
     struct TreeElement<T_Identifier, Tuple<T_Childs...>, T_CountType>
     {
-        using IsTreeElementWithChilds = void;
         using Identifier = T_Identifier;
         using Type = Tuple<T_Childs...>;
 
@@ -81,7 +79,6 @@ namespace llama::mapping::tree
         T_Type,
         std::integral_constant<T_CountType, T_count>>
     {
-        using IsTreeElementWithoutChilds = void;
         using Identifier = T_Identifier;
         using Type = T_Type;
         using CountType = std::integral_constant<T_CountType, T_count>;
@@ -105,7 +102,6 @@ namespace llama::mapping::tree
         Tuple<T_Childs...>,
         std::integral_constant<T_CountType, T_count>>
     {
-        using IsTreeElementWithChilds = void;
         using Identifier = T_Identifier;
         using Type = Tuple<T_Childs...>;
         using CountType = std::integral_constant<T_CountType, T_count>;

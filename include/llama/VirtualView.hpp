@@ -54,11 +54,7 @@ namespace llama
             ParentView & parentView,
             typename Mapping::UserDomain position,
             typename Mapping::UserDomain size) :
-                parentView(parentView),
-                position(position),
-                size(size),
-                blob(parentView.blob),
-                mapping(parentView.mapping)
+                parentView(parentView), position(position), size(size)
         {}
 
         /** Explicit access function taking the datum domain as tree index
@@ -159,8 +155,5 @@ namespace llama
         const typename Mapping::UserDomain
             position; ///< shifted position in parental view
         const typename Mapping::UserDomain size; ///< shown size
-        Array<BlobType, Mapping::blobCount> &
-            blob; ///< reference to blob object of parent
-        const Mapping & mapping; ///< reference to mapping of parent
     };
 }

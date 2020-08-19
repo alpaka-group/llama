@@ -51,10 +51,10 @@ namespace llama
             T_DatumDomain,
             T_DatumCoord,
             T_pos,
-            typename std::enable_if<std::is_same<
+            std::enable_if_t<std::is_same<
                 T_FirstUID,
                 GetDatumElementUID<boost::mp11::mp_first<T_DatumDomain>>>::
-                                        value>::type,
+                                 value>,
             T_FirstUID,
             T_UID...>
         {
@@ -76,10 +76,10 @@ namespace llama
             T_DatumDomain,
             T_DatumCoord,
             T_pos,
-            typename std::enable_if<!std::is_same<
+            std::enable_if_t<!std::is_same<
                 T_FirstUID,
                 GetDatumElementUID<boost::mp11::mp_first<T_DatumDomain>>>::
-                                        value>::type,
+                                 value>,
             T_FirstUID,
             T_UID...>
         {

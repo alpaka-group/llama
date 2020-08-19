@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.3)
-project (llama)
+project (llama CXX)
 
 # llama
 find_package(Boost 1.66.0 REQUIRED)
@@ -28,6 +28,9 @@ if (BUILD_TESTING)
 	add_executable(tests ${testSources})
 	source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/tests" FILES ${testSources})
 	target_compile_features(tests PRIVATE cxx_std_17)
+	if (MSVC)
+		target_compile_options(tests PRIVATE /permissive-)
+	endif()
 	target_link_libraries(tests PRIVATE Catch2::Catch2 llama::llama)
 endif()
 

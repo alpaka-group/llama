@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include <utility>
+
 namespace llama
 {
     namespace internal
