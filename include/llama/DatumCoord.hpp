@@ -18,144 +18,93 @@
 
 #pragma once
 
+#include <boost/mp11.hpp>
 #include <type_traits>
 
 /// Documentation of this file is in DatumCoord.dox!
 
 namespace llama
 {
-    template<std::size_t... T_coords>
+    template<std::size_t... Coords>
     struct DatumCoord;
 
     namespace internal
     {
-        template<std::size_t T_rest, std::size_t... T_coords>
-        struct DatumCoordFront;
+        template<class L>
+        struct mp_unwrap_sizes_impl;
 
-        template<
-            std::size_t T_rest,
-            std::size_t T_coord,
-            std::size_t... T_coords>
-        struct DatumCoordFront<T_rest, T_coord, T_coords...>
+        template<template<class...> class L, typename... T>
+        struct mp_unwrap_sizes_impl<L<T...>>
         {
-            using type = typename DatumCoordFront<T_rest - 1, T_coords...>::
-                type::template PushFront<T_coord>;
+            using type = DatumCoord<T::value...>;
         };
 
-        template<std::size_t T_coord, std::size_t... T_coords>
-        struct DatumCoordFront<0, T_coord, T_coords...>
-        {
-            using type = DatumCoord<>;
-        };
-
-        template<std::size_t T_rest, std::size_t... T_coords>
-        struct DatumCoordBack;
-
-        template<
-            std::size_t T_rest,
-            std::size_t T_coord,
-            std::size_t... T_coords>
-        struct DatumCoordBack<T_rest, T_coord, T_coords...>
-        {
-            using type = typename DatumCoordBack<T_rest - 1, T_coords...>::type;
-        };
-
-        template<std::size_t T_coord, std::size_t... T_coords>
-        struct DatumCoordBack<0, T_coord, T_coords...>
-        {
-            using type = DatumCoord<T_coord, T_coords...>;
-        };
-
-        template<>
-        struct DatumCoordBack<0>
-        {
-            using type = DatumCoord<>;
-        };
+        template<typename L>
+        using mp_unwrap_sizes = typename mp_unwrap_sizes_impl<L>::type;
     }
 
-    template<std::size_t T_coord, std::size_t... T_coords>
-    struct DatumCoord<T_coord, T_coords...>
+    template<std::size_t... Coords>
+    struct DatumCoord
     {
-        using type = DatumCoord<T_coord, T_coords...>;
+        using coord_list = boost::mp11::mp_list_c<std::size_t, Coords...>;
 
-        static constexpr std::size_t front = T_coord;
-        static constexpr std::size_t size = sizeof...(T_coords) + 1;
-        static constexpr std::size_t back = DatumCoord<T_coords...>::back;
+        static constexpr std::size_t front
+            = boost::mp11::mp_front<coord_list>::value;
+        static constexpr std::size_t size = sizeof...(Coords);
+        static constexpr std::size_t back
+            = boost::mp11::mp_back<coord_list>::value;
 
-        using PopFront = DatumCoord<T_coords...>;
-        using IncBack = typename PopFront::IncBack::template PushFront<front>;
+        using PopFront
+            = internal::mp_unwrap_sizes<boost::mp11::mp_pop_front<coord_list>>;
 
-        template<std::size_t T_newCoord = 0>
-        using PushFront = DatumCoord<T_newCoord, T_coord, T_coords...>;
+        template<std::size_t NewCoord>
+        using PushFront = DatumCoord<NewCoord, Coords...>;
 
-        template<std::size_t T_newCoord = 0>
-        using PushBack = DatumCoord<T_coord, T_coords..., T_newCoord>;
+        template<std::size_t NewCoord>
+        using PushBack = DatumCoord<Coords..., NewCoord>;
 
-        template<std::size_t T_size>
-        using Front = typename internal::
-            DatumCoordFront<T_size, T_coord, T_coords...>::type;
+        using IncBack = std::conditional_t<
+            (sizeof...(Coords) > 1),
+            typename PopFront::IncBack::template PushFront<front>,
+            DatumCoord<front + 1>>;
 
-        template<std::size_t T_size>
-        using Back = typename internal::
-            DatumCoordBack<size - T_size, T_coord, T_coords...>::type;
+        template<std::size_t N>
+        using Front
+            = internal::mp_unwrap_sizes<boost::mp11::mp_take_c<coord_list, N>>;
 
-        template<typename T_Other>
-        using Cat = typename DatumCoord<T_coords...>::template Cat<
-            T_Other>::template PushFront<T_coord>;
-    };
+        template<std::size_t N>
+        using Back = internal::mp_unwrap_sizes<boost::mp11::mp_reverse<
+            boost::mp11::mp_take_c<boost::mp11::mp_reverse<coord_list>, N>>>;
 
-    template<std::size_t T_coord>
-    struct DatumCoord<T_coord>
-    {
-        using type = DatumCoord<T_coord>;
-
-        static constexpr std::size_t front = T_coord;
-        static constexpr std::size_t size = 1;
-        static constexpr std::size_t back = T_coord;
-
-        using PopFront = DatumCoord<>;
-        using IncBack = DatumCoord<T_coord + 1>;
-
-        template<std::size_t T_newCoord = 0>
-        using PushFront = DatumCoord<T_newCoord, T_coord>;
-
-        template<std::size_t T_newCoord = 0>
-        using PushBack = DatumCoord<T_coord, T_newCoord>;
-
-        template<std::size_t T_size>
-        using Front = typename internal::DatumCoordFront<T_size, T_coord>::type;
-
-        template<std::size_t T_size>
-        using Back =
-            typename internal::DatumCoordBack<size - T_size, T_coord>::type;
-
-        template<typename T_Other>
-        using Cat = typename T_Other::template PushFront<T_coord>;
+        template<typename OtherDatumCoord>
+        using Cat = internal::mp_unwrap_sizes<boost::mp11::mp_append<
+            coord_list,
+            typename OtherDatumCoord::coord_list>>;
     };
 
     template<>
     struct DatumCoord<>
     {
-        using type = DatumCoord<>;
+        using coord_list = boost::mp11::mp_list_c<std::size_t>;
 
         static constexpr std::size_t size = 0;
 
         using IncBack = DatumCoord<1>;
 
-        template<std::size_t T_newCoord = 0>
-        using PushFront = DatumCoord<T_newCoord>;
+        template<std::size_t NewCoord>
+        using PushFront = DatumCoord<NewCoord>;
 
-        template<std::size_t T_newCoord = 0>
-        using PushBack = DatumCoord<T_newCoord>;
+        template<std::size_t NewCoord>
+        using PushBack = DatumCoord<NewCoord>;
 
-        template<std::size_t T_size>
+        template<std::size_t N>
         using Front = DatumCoord<>;
 
-        template<std::size_t T_size>
+        template<std::size_t N>
         using Back = DatumCoord<>;
 
-        template<typename T_Other>
-        using Cat = T_Other;
+        template<typename OtherDatumCoord>
+        using Cat = OtherDatumCoord;
     };
 
     template<typename T_First, typename T_Second, typename T_SFinae = void>
