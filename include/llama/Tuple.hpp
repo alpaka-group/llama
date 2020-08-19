@@ -74,170 +74,63 @@ namespace llama
     template<typename... Elements>
     Tuple(Elements...) -> Tuple<Elements...>;
 
-    namespace internal
+    template<typename Tuple, std::size_t Pos>
+    using GetTupleType = boost::mp11::mp_at_c<Tuple, Pos>;
+
+    template<std::size_t Pos, typename Tuple>
+    LLAMA_FN_HOST_ACC_INLINE auto getTupleElement(const Tuple & tuple)
+        -> GetTupleType<Tuple, Pos>
     {
-        template<typename T_Tuple, std::size_t T_pos>
-        struct GetTupleTypeImpl;
-
-        template<typename T_First, std::size_t T_pos, typename... T_Rest>
-        struct GetTupleTypeImpl<Tuple<T_First, T_Rest...>, T_pos>
-        {
-            using type =
-                typename GetTupleTypeImpl<Tuple<T_Rest...>, T_pos - 1>::type;
-        };
-
-        template<typename T_First, typename... T_Rest>
-        struct GetTupleTypeImpl<Tuple<T_First, T_Rest...>, 0>
-        {
-            using type = T_First;
-        };
+        if constexpr(Pos == 0)
+            return tuple.first;
+        else
+            return getTupleElement<Pos - 1>(tuple.rest);
     }
 
-    template<typename T_Tuple, std::size_t T_pos>
-    using GetTupleType =
-        typename internal::GetTupleTypeImpl<T_Tuple, T_pos>::type;
-
-    namespace internal
-    {
-        template<typename T_Tuple, std::size_t T_pos>
-        struct GetTupleElementImpl;
-
-        template<typename T_First, std::size_t T_pos, typename... T_Rest>
-        struct GetTupleElementImpl<Tuple<T_First, T_Rest...>, T_pos>
-        {
-            using TupleType = Tuple<T_First, T_Rest...>;
-            LLAMA_FN_HOST_ACC_INLINE
-            auto operator()(TupleType const & tuple)
-                -> GetTupleType<TupleType, T_pos> const &
-            {
-                return GetTupleElementImpl<Tuple<T_Rest...>, T_pos - 1>()(
-                    tuple.rest);
-            }
-        };
-
-        template<typename T_First, typename... T_Rest>
-        struct GetTupleElementImpl<Tuple<T_First, T_Rest...>, 0>
-        {
-            using TupleType = Tuple<T_First, T_Rest...>;
-            LLAMA_FN_HOST_ACC_INLINE
-            auto operator()(TupleType const & tuple) -> T_First const &
-            {
-                return tuple.first;
-            }
-        };
-    }
-
-    template<std::size_t T_pos, typename T_Tuple>
-    LLAMA_FN_HOST_ACC_INLINE auto getTupleElement(T_Tuple const & tuple)
-        -> GetTupleType<T_Tuple, T_pos>
-    {
-        return internal::GetTupleElementImpl<T_Tuple, T_pos>()(tuple);
-    }
-
-    template<std::size_t T_pos, typename T_Tuple>
+    template<std::size_t Pos, typename T_Tuple>
     LLAMA_FN_HOST_ACC_INLINE auto getTupleElementRef(T_Tuple const & tuple)
-        -> GetTupleType<T_Tuple, T_pos> const &
+        -> const GetTupleType<T_Tuple, Pos> &
     {
-        return internal::GetTupleElementImpl<T_Tuple, T_pos>()(tuple);
+        if constexpr(Pos == 0)
+            return tuple.first;
+        else
+            return getTupleElementRef<Pos - 1>(tuple.rest);
     }
 
-    template<typename T_Tuple>
-    struct SizeOfTuple;
-
-    template<typename... T_Elements>
-    struct SizeOfTuple<Tuple<T_Elements...>>
-    {
-        static constexpr std::size_t value = sizeof...(T_Elements);
-    };
+    template<typename Tuple>
+    using SizeOfTuple = boost::mp11::mp_size<Tuple>;
 
     namespace internal
     {
-        template<typename T_Tuple1, typename T_Tuple2>
-        struct TupleCatTypeImpl;
+        template<typename Seq1, typename Seq2>
+        struct TupleCatHelper;
 
-        template<
-            typename T_Tuple2,
-            typename T_Tuple1First,
-            typename... T_Tuple1Rest>
-        struct TupleCatTypeImpl<Tuple<T_Tuple1First, T_Tuple1Rest...>, T_Tuple2>
+        template<size_t... Is1, size_t... Is2>
+        struct TupleCatHelper<
+            std::index_sequence<Is1...>,
+            std::index_sequence<Is2...>>
         {
-            using type = typename TupleCatTypeImpl<
-                Tuple<T_Tuple1First>,
-                typename TupleCatTypeImpl<Tuple<T_Tuple1Rest...>, T_Tuple2>::
-                    type>::type;
-        };
-
-        template<typename T_Tuple1Elem, typename... T_Tuple2Elems>
-        struct TupleCatTypeImpl<Tuple<T_Tuple1Elem>, Tuple<T_Tuple2Elems...>>
-        {
-            using type = Tuple<T_Tuple1Elem, T_Tuple2Elems...>;
-        };
-
-        template<typename T_Tuple2>
-        struct TupleCatTypeImpl<Tuple<>, T_Tuple2>
-        {
-            using type = T_Tuple2;
-        };
-
-        template<typename T_Tuple1, typename T_Tuple2>
-        struct TupleCatImpl;
-
-        template<
-            typename T_Tuple2,
-            typename T_Tuple1First,
-            typename... T_Tuple1Rest>
-        struct TupleCatImpl<Tuple<T_Tuple1First, T_Tuple1Rest...>, T_Tuple2>
-        {
-            using Tuple1 = Tuple<T_Tuple1First, T_Tuple1Rest...>;
-            using Result = typename TupleCatTypeImpl<Tuple1, T_Tuple2>::type;
-            LLAMA_FN_HOST_ACC_INLINE
-            auto operator()(const Tuple1 t1, T_Tuple2 const t2) -> Result
+            template<typename Tuple1, typename Tuple2>
+            static LLAMA_FN_HOST_ACC_INLINE auto
+            cat(const Tuple1 & t1, const Tuple2 & t2)
             {
-                return {
-                    t1.first,
-                    TupleCatImpl<Tuple<T_Tuple1Rest...>, T_Tuple2>()(
-                        t1.rest, t2)};
-            }
-        };
-
-        template<typename T_Tuple1Elem, typename... T_Tuple2Elems>
-        struct TupleCatImpl<Tuple<T_Tuple1Elem>, Tuple<T_Tuple2Elems...>>
-        {
-            using Result = Tuple<T_Tuple1Elem, T_Tuple2Elems...>;
-            LLAMA_FN_HOST_ACC_INLINE
-            auto operator()(
-                const Tuple<T_Tuple1Elem> t1,
-                const Tuple<T_Tuple2Elems...> t2) -> Result
-            {
-                return {t1.first, t2};
-            }
-        };
-
-        template<typename T_Tuple2>
-        struct TupleCatImpl<Tuple<>, T_Tuple2>
-        {
-            using Result = T_Tuple2;
-            LLAMA_FN_HOST_ACC_INLINE
-            auto operator()(const Tuple<> t1, T_Tuple2 const t2) -> Result
-            {
-                return t2;
+                return Tuple{
+                    getTupleElement<Is1>(t1)..., getTupleElement<Is2>(t2)...};
             }
         };
     }
 
-    template<typename T_Tuple1, typename T_Tuple2>
-    using TupleCatType =
-        typename internal::TupleCatTypeImpl<T_Tuple1, T_Tuple2>::type;
-
-    template<typename T_Tuple1, typename T_Tuple2>
-    LLAMA_FN_HOST_ACC_INLINE auto tupleCat(T_Tuple1 const t1, T_Tuple2 const t2)
+    template<typename Tuple1, typename Tuple2>
+    LLAMA_FN_HOST_ACC_INLINE auto tupleCat(const Tuple1 & t1, const Tuple2 & t2)
     {
-        return internal::TupleCatImpl<T_Tuple1, T_Tuple2>()(t1, t2);
+        return internal::TupleCatHelper<
+            std::make_index_sequence<SizeOfTuple<Tuple1>::value>,
+            std::make_index_sequence<SizeOfTuple<Tuple2>::value>>::cat(t1, t2);
     }
 
     namespace internal
     {
-        template<std::size_t T_pos, typename T_Tuple, typename T_Replacement>
+        template<std::size_t Pos, typename T_Tuple, typename T_Replacement>
         struct TupleReplaceImpl
         {
             LLAMA_FN_HOST_ACC_INLINE
@@ -247,7 +140,7 @@ namespace llama
                 return tupleCat(
                     Tuple{tuple.first},
                     TupleReplaceImpl<
-                        T_pos - 1,
+                        Pos - 1,
                         typename T_Tuple::RestTuple,
                         T_Replacement>()(tuple.rest, replacement));
             };
@@ -277,87 +170,48 @@ namespace llama
         };
     }
 
-    template<std::size_t T_pos, typename T_Tuple, typename T_Replacement>
+    template<std::size_t Pos, typename T_Tuple, typename T_Replacement>
     LLAMA_FN_HOST_ACC_INLINE auto
     tupleReplace(T_Tuple const tuple, T_Replacement const replacement)
     {
-        return internal::TupleReplaceImpl<T_pos, T_Tuple, T_Replacement>()(
+        return internal::TupleReplaceImpl<Pos, T_Tuple, T_Replacement>()(
             tuple, replacement);
     }
 
     namespace internal
     {
-        template<typename T_Tuple, typename T_Functor>
-        struct TupleTransform
-        {
-            LLAMA_FN_HOST_ACC_INLINE auto
-            operator()(T_Tuple const tuple, T_Functor const functor)
-            {
-                return tupleCat(
-                    Tuple{functor(tuple.first)},
-                    TupleTransform<typename T_Tuple::RestTuple, T_Functor>()(
-                        tuple.rest, functor));
-            }
-        };
+        template<typename Seq>
+        struct TupleTransformHelper;
 
-        template<typename T_LastElement, typename T_Functor>
-        struct TupleTransform<Tuple<T_LastElement>, T_Functor>
+        template<size_t... Is>
+        struct TupleTransformHelper<std::index_sequence<Is...>>
         {
-            using T_Tuple = Tuple<T_LastElement>;
-            LLAMA_FN_HOST_ACC_INLINE
-            auto operator()(T_Tuple const tuple, T_Functor const functor)
+            template<typename Tuple, typename Functor>
+            static LLAMA_FN_HOST_ACC_INLINE auto
+            transform(const Tuple & tuple, const Functor & functor)
             {
-                return Tuple{functor(tuple.first)};
-            }
-        };
-
-        template<typename T_Functor>
-        struct TupleTransform<Tuple<>, T_Functor>
-        {
-            using T_Tuple = Tuple<>;
-            LLAMA_FN_HOST_ACC_INLINE
-            auto operator()(T_Tuple const tuple, T_Functor const functor)
-                -> T_Tuple
-            {
-                return tuple;
+                return llama::Tuple{functor(getTupleElement<Is>(tuple))...};
             }
         };
     }
 
-    template<typename T_Tuple, typename T_Functor>
+    template<typename... Elements, typename Functor>
     LLAMA_FN_HOST_ACC_INLINE auto
-    tupleTransform(T_Tuple const tuple, T_Functor const functor)
+    tupleTransform(const Tuple<Elements...> & tuple, const Functor & functor)
     {
-        return internal::TupleTransform<T_Tuple, T_Functor>()(tuple, functor);
+        return internal::TupleTransformHelper<std::make_index_sequence<
+            sizeof...(Elements)>>::transform(tuple, functor);
     }
 
-    namespace internal
+    template<typename... Elements>
+    LLAMA_FN_HOST_ACC_INLINE auto tupleRest(const Tuple<Elements...> & tuple)
     {
-        template<typename T_Tuple>
-        struct TupleRestImpl
-        {
-            LLAMA_FN_HOST_ACC_INLINE auto operator()(T_Tuple const tuple) const
-                -> typename T_Tuple::RestTuple
-            {
-                return tuple.rest;
-            }
-        };
-
-        template<typename T_OneElement>
-        struct TupleRestImpl<Tuple<T_OneElement>>
-        {
-            using T_Tuple = Tuple<T_OneElement>;
-            LLAMA_FN_HOST_ACC_INLINE auto operator()(T_Tuple const tuple) const
-                -> Tuple<>
-            {
-                return {};
-            }
-        };
+        return tuple.rest;
     }
 
-    template<typename T_Tuple>
-    LLAMA_FN_HOST_ACC_INLINE auto tupleRest(T_Tuple const tuple)
+    template<typename Element>
+    LLAMA_FN_HOST_ACC_INLINE auto tupleRest(const Tuple<Element> & tuple)
     {
-        return internal::TupleRestImpl<T_Tuple>()(tuple);
+        return Tuple<>{};
     }
 }

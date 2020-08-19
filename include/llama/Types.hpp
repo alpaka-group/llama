@@ -67,4 +67,18 @@ namespace llama
     /// Shortcut for \ref DatumElement
     template<typename T_Identifier, typename T_Type>
     using DE = DatumElement<T_Identifier, T_Type>;
+
+    /** An array of anonymous but identical \ref DatumElement "DatumElements".
+     * Can be used anywhere where \ref DatumStruct may used. \tparam T_Child
+     * type to repeat. May be either another sub tree consisting of a nested
+     * \ref DatumStruct resp. DatumArray or any other type making it an array of
+     * leaves of this type. \tparam T_count number of repetitions of T_Child
+     * */
+    template<typename Child, std::size_t Count>
+    using DatumArray = boost::mp11::
+        mp_repeat_c<DatumStruct<DatumElement<NoName, Child>>, Count>;
+
+    /// Shortcut for \ref DatumArray
+    template<typename Child, std::size_t Count>
+    using DA = DatumArray<Child, Count>;
 }

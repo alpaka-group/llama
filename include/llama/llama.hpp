@@ -48,8 +48,7 @@
 #define LLAMA_VERSION_MINOR 1
 #define LLAMA_VERSION_PATCH 0
 
-#include "DatumArray.hpp"
-#include "DatumStruct.hpp"
+#include "Functions.hpp"
 #include "Factory.hpp"
 #include "ForEach.hpp"
 #include "Types.hpp"
