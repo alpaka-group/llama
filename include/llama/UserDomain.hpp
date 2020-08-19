@@ -18,7 +18,6 @@
 
 #pragma once
 
-#include "IntegerSequence.hpp"
 #include "Types.hpp"
 
 namespace llama

@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "DatumStruct.hpp"
+#include "Functions.hpp"
 #include "GetType.hpp"
 
 #include <boost/mp11.hpp>
