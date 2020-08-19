@@ -37,6 +37,11 @@ namespace llama
     template<std::size_t T_dim>
     using UserDomain = Array<std::size_t, T_dim>;
 
+    static_assert(std::is_trivially_default_constructible_v<
+                  UserDomain<1>>); // so UserDomain<1>{} will produce a zeroed
+                                   // coord. Should hold for all dimensions, but
+                                   // just checking for <1> here.
+
     /** A list of \ref DatumElement which may be used to define a datum domain.
      * \tparam T_Leaves... List of \ref DatumElement
      * */

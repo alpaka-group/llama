@@ -99,26 +99,4 @@ namespace llama
                     * size[0];
         }
     };
-
-    namespace internal
-    {
-        template<std::size_t... T_dims>
-        LLAMA_FN_HOST_ACC_INLINE auto
-            userDomainZeroHelper(std::integer_sequence<std::size_t, T_dims...>)
-                -> UserDomain<sizeof...(T_dims)>
-        {
-            return UserDomain<sizeof...(T_dims)>{T_dims...};
-        }
-    }
-
-    /** Creates a user domain filled with zeros.
-     * \tparam T_dim dimension of the user domain
-     * \return \ref UserDomain filled with zeros
-     * */
-    template<std::size_t T_dim>
-    LLAMA_FN_HOST_ACC_INLINE auto userDomainZero() -> UserDomain<T_dim>
-    {
-        return internal::userDomainZeroHelper(MakeZeroSequence<T_dim>{});
-    }
-
 } // namespace llama
