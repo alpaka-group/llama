@@ -104,7 +104,7 @@ namespace llama
     struct BOOST_PP_CAT(FUNCTOR, IfSameUIDFunctor) \
     { \
         LLAMA_FN_HOST_ACC_INLINE \
-        auto operator()() const -> void \
+        void operator()() const \
         { \
             if constexpr(CompareUID< \
                              typename T_LeftDatum::AccessibleDatumDomain, \
@@ -131,8 +131,7 @@ namespace llama
     struct BOOST_PP_CAT(FUNCTOR, InnerFunctor) \
     { \
         template<typename T_OuterCoord, typename T_InnerCoord> \
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(T_OuterCoord, T_InnerCoord) \
-            -> void \
+        LLAMA_FN_HOST_ACC_INLINE void operator()(T_OuterCoord, T_InnerCoord) \
         { \
             BOOST_PP_CAT(FUNCTOR, IfSameUIDFunctor)< \
                 typename std::remove_reference<T_LeftDatum>::type, \
@@ -152,8 +151,7 @@ namespace llama
     struct BOOST_PP_CAT(FUNCTOR, Functor) \
     { \
         template<typename T_OuterCoord, typename T_InnerCoord> \
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(T_OuterCoord, T_InnerCoord) \
-            -> void \
+        LLAMA_FN_HOST_ACC_INLINE void operator()(T_OuterCoord, T_InnerCoord) \
         { \
             BOOST_PP_CAT(FUNCTOR, InnerFunctor)< \
                 T_LeftDatum, \
@@ -172,8 +170,7 @@ namespace llama
     struct BOOST_PP_CAT(FUNCTOR, TypeFunctor) \
     { \
         template<typename T_OuterCoord, typename T_InnerCoord> \
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(T_OuterCoord, T_InnerCoord) \
-            -> void \
+        LLAMA_FN_HOST_ACC_INLINE void operator()(T_OuterCoord, T_InnerCoord) \
         { \
             using Dst = typename T_OuterCoord::template Cat<T_InnerCoord>; \
             left(Dst()) OP static_cast< \
@@ -318,7 +315,7 @@ namespace llama
     struct BOOST_PP_CAT(FUNCTOR, BoolIfSameUIDFunctor) \
     { \
         LLAMA_FN_HOST_ACC_INLINE \
-        auto operator()() -> void \
+        void operator()() \
         { \
             if constexpr(CompareUID< \
                              typename T_LeftDatum::Mapping::DatumDomain, \
@@ -346,8 +343,7 @@ namespace llama
     struct BOOST_PP_CAT(FUNCTOR, BoolInnerFunctor) \
     { \
         template<typename T_OuterCoord, typename T_InnerCoord> \
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(T_OuterCoord, T_InnerCoord) \
-            -> void \
+        LLAMA_FN_HOST_ACC_INLINE void operator()(T_OuterCoord, T_InnerCoord) \
         { \
             BOOST_PP_CAT(FUNCTOR, BoolIfSameUIDFunctor)< \
                 typename std::remove_reference<T_LeftDatum>::type, \
@@ -369,8 +365,7 @@ namespace llama
     struct BOOST_PP_CAT(FUNCTOR, BoolFunctor) \
     { \
         template<typename T_OuterCoord, typename T_InnerCoord> \
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(T_OuterCoord, T_InnerCoord) \
-            -> void \
+        LLAMA_FN_HOST_ACC_INLINE void operator()(T_OuterCoord, T_InnerCoord) \
         { \
             BOOST_PP_CAT(FUNCTOR, BoolInnerFunctor)< \
                 T_LeftDatum, \
@@ -391,8 +386,7 @@ namespace llama
     struct BOOST_PP_CAT(FUNCTOR, BoolTypeFunctor) \
     { \
         template<typename T_OuterCoord, typename T_InnerCoord> \
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(T_OuterCoord, T_InnerCoord) \
-            -> void \
+        LLAMA_FN_HOST_ACC_INLINE void operator()(T_OuterCoord, T_InnerCoord) \
         { \
             using Dst = typename T_OuterCoord::template Cat<T_InnerCoord>; \
             result &= left(Dst()) OP static_cast< \
