@@ -175,24 +175,33 @@ TEST_CASE("access")
 
     zeroStorage(view);
 
-    const UserDomain pos{0, 0};
-    CHECK((view(pos) == view[pos]));
-    CHECK((view(pos) == view[{0, 0}]));
-    CHECK((view(pos) == view({0, 0})));
+    auto l = [](auto & view) {
+        const UserDomain pos{0, 0};
+        CHECK((view(pos) == view[pos]));
+        CHECK((view(pos) == view[{0, 0}]));
+        CHECK((view(pos) == view({0, 0})));
 
-    float & x = view(pos).access<0, 0>();
-    CHECK(&x == &view(pos).access<0>().access<0>());
-    CHECK(&x == &view(pos).access<0>().access<tag::X>());
-    CHECK(&x == &view(pos).access<tag::Pos>().access<0>());
-    CHECK(&x == &view(pos).access<tag::Pos, tag::X>());
-    CHECK(&x == &view(pos).access<tag::Pos>().access<tag::X>());
-    CHECK(&x == &view(pos)(tag::Pos{}, tag::X{}));
-    CHECK(&x == &view(pos)(tag::Pos{})(tag::X{}));
-    CHECK(&x == &view(pos).access<tag::Pos>()(tag::X{}));
-    CHECK(&x == &view(pos)(tag::Pos{}).access<tag::X>());
-    CHECK(&x == &view(pos)(llama::DatumCoord<0, 0>{}));
-    CHECK(&x == &view(pos)(llama::DatumCoord<0>{})(llama::DatumCoord<0>{}));
-    // there are even more combinations
+        const float & x = view(pos).template access<0, 0>();
+        CHECK(&x == &view(pos).template access<0>().template access<0>());
+        CHECK(&x == &view(pos).template access<0>().template access<tag::X>());
+        CHECK(
+            &x == &view(pos).template access<tag::Pos>().template access<0>());
+        CHECK(&x == &view(pos).template access<tag::Pos, tag::X>());
+        CHECK(
+            &x
+            == &view(pos)
+                    .template access<tag::Pos>()
+                    .template access<tag::X>());
+        CHECK(&x == &view(pos)(tag::Pos{}, tag::X{}));
+        CHECK(&x == &view(pos)(tag::Pos{})(tag::X{}));
+        CHECK(&x == &view(pos).template access<tag::Pos>()(tag::X{}));
+        CHECK(&x == &view(pos)(tag::Pos{}).template access<tag::X>());
+        CHECK(&x == &view(pos)(llama::DatumCoord<0, 0>{}));
+        CHECK(&x == &view(pos)(llama::DatumCoord<0>{})(llama::DatumCoord<0>{}));
+        // there are even more combinations
+    };
+    l(view);
+    l(std::as_const(view));
 }
 
 TEST_CASE("addresses")

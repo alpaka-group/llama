@@ -68,6 +68,15 @@ namespace llama
          */
         LLAMA_NO_HOST_ACC_WARNING
         template<std::size_t... T_coords>
+        LLAMA_FN_HOST_ACC_INLINE auto accessor(UserDomain userDomain) const
+            -> const auto &
+        {
+            return parentView.template accessor<T_coords...>(
+                userDomain + position);
+        }
+
+        LLAMA_NO_HOST_ACC_WARNING
+        template<std::size_t... T_coords>
         LLAMA_FN_HOST_ACC_INLINE auto accessor(UserDomain userDomain) -> auto &
         {
             return parentView.template accessor<T_coords...>(
@@ -82,6 +91,15 @@ namespace llama
          * \param userDomain user domain as \ref UserDomain
          * \return reference to element
          */
+        LLAMA_NO_HOST_ACC_WARNING
+        template<typename... T_UIDs>
+        LLAMA_FN_HOST_ACC_INLINE auto accessor(UserDomain userDomain) const
+            -> const auto &
+        {
+            return parentView.template accessor<T_UIDs...>(
+                userDomain + position);
+        }
+
         LLAMA_NO_HOST_ACC_WARNING
         template<typename... T_UIDs>
         LLAMA_FN_HOST_ACC_INLINE auto accessor(UserDomain userDomain) -> auto &
@@ -99,6 +117,13 @@ namespace llama
          * \return \ref VirtualDatum with bound user domain, which can be used
          * to access the datum domain
          */
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(UserDomain userDomain) const
+            -> VirtualDatumType
+        {
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return parentView(userDomain + position);
+        }
+
         LLAMA_FN_HOST_ACC_INLINE auto operator()(UserDomain userDomain)
             -> VirtualDatumType
         {
@@ -117,14 +142,6 @@ namespace llama
          * to access the datum domain
          */
         template<typename... T_Coord>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(T_Coord... coord)
-            -> VirtualDatumType
-        {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return parentView(UserDomain{coord...} + position);
-        }
-
-        template<typename... T_Coord>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(T_Coord... coord) const
             -> VirtualDatumType
         {
@@ -132,11 +149,34 @@ namespace llama
             return parentView(UserDomain{coord...} + position);
         }
 
+        template<typename... T_Coord>
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(T_Coord... coord)
+            -> VirtualDatumType
+        {
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return parentView(UserDomain{coord...} + position);
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE
+        auto operator()(std::size_t coord = 0) const -> VirtualDatumType
+        {
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return parentView(UserDomain{coord} + position);
+        }
+
         LLAMA_FN_HOST_ACC_INLINE
         auto operator()(std::size_t coord = 0) -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return parentView(UserDomain{coord} + position);
+        }
+
+        template<std::size_t... T_coord>
+        LLAMA_FN_HOST_ACC_INLINE auto
+        operator()(DatumCoord<T_coord...> && dc = {}) const -> const auto &
+        {
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return accessor<T_coord...>(UserDomain{});
         }
 
         template<std::size_t... T_coord>
