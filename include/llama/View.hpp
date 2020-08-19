@@ -581,7 +581,7 @@ namespace llama
          * `Mapping::DatumDomain`.
          */
         using AccessibleDatumDomain
-            = GetTypeFromDatumCoord<DatumDomain, BoundDatumDomain>;
+            = GetType<DatumDomain, BoundDatumDomain>;
 
         LLAMA_FN_HOST_ACC_INLINE
         VirtualDatum(
@@ -612,7 +612,7 @@ namespace llama
             -> decltype(auto)
         { // may deduce &
 
-            if constexpr(is_DatumStruct<GetTypeFromDatumCoord<
+            if constexpr(is_DatumStruct<GetType<
                              DatumDomain,
                              typename BoundDatumDomain::template Cat<
                                  DatumCoord<T_coord...>>>>::value)
@@ -744,7 +744,7 @@ namespace llama
                 = mapping.template getBlobNr<T_coords...>(userDomain);
             auto const offset
                 = mapping.template getBlobByte<T_coords...>(userDomain);
-            using Type = GetType<DatumDomain, T_coords...>;
+            using Type = GetType<DatumDomain, DatumCoord<T_coords...>>;
             return reinterpret_cast<Type &>(blob[blobIndex][offset]);
         }
 

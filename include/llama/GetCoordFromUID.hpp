@@ -123,7 +123,7 @@ namespace llama
         struct GetCoordFromUIDRelativeImpl
         {
             using AbsolutCoord = typename internal::GetCoordFromUIDImpl<
-                GetTypeFromDatumCoord<T_DatumDomain, T_DatumCoord>,
+                GetType<T_DatumDomain, T_DatumCoord>,
                 T_DatumCoord,
                 0,
                 void,
@@ -157,7 +157,7 @@ namespace llama
      * \return type at the specified node
      */
     template<typename T_DatumDomain, typename... T_UIDs>
-    using GetTypeFromUID = GetTypeFromDatumCoord<
+    using GetTypeFromUID = GetType<
         T_DatumDomain,
         GetCoordFromUID<T_DatumDomain, T_UIDs...>>;
 }

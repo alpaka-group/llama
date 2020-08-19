@@ -68,7 +68,8 @@ namespace llama::mapping
             -> std::size_t
         {
             return T_LinearizeUserDomainAdressFunctor()(coord, userDomainSize)
-                * sizeof(GetType<DatumDomain, T_datumDomainCoord...>)
+                * sizeof(
+                       GetType<DatumDomain, DatumCoord<T_datumDomainCoord...>>)
                 + LinearBytePos<DatumDomain, T_datumDomainCoord...>::value
                 * extentUserDomainAdress;
         }

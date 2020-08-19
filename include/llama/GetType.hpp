@@ -26,59 +26,34 @@ namespace llama
 {
     namespace internal
     {
-        template<typename T_DatumDomain, std::size_t... T_datumDomainCoords>
+        template<typename DatumDomain, typename T_DatumCoord>
         struct GetTypeImpl;
 
         template<
-            typename T_DatumDomain,
-            std::size_t T_firstDatumDomainCoord,
-            std::size_t... T_datumDomainCoords>
-        struct GetTypeImpl<
-            T_DatumDomain,
-            T_firstDatumDomainCoord,
-            T_datumDomainCoords...>
+            typename DatumDomain,
+            std::size_t HeadCoord,
+            std::size_t... TailCoords>
+        struct GetTypeImpl<DatumDomain, DatumCoord<HeadCoord, TailCoords...>>
         {
-            using _DateElement
-                = boost::mp11::mp_at_c<T_DatumDomain, T_firstDatumDomainCoord>;
+            using _DateElement = boost::mp11::mp_at_c<DatumDomain, HeadCoord>;
             using type = typename GetTypeImpl<
                 GetDatumElementType<_DateElement>,
-                T_datumDomainCoords...>::type;
+                DatumCoord<TailCoords...>>::type;
         };
 
-        template<typename T_DatumDomain>
-        struct GetTypeImpl<T_DatumDomain>
+        template<typename T>
+        struct GetTypeImpl<T, DatumCoord<>>
         {
-            using type = T_DatumDomain;
+            using type = T;
         };
     }
 
     /** Returns the type of a node in a datum domain tree for a coordinate given
-     * as tree index (like for \ref DatumCoord) \tparam T_DatumDomain the datum
-     * domain (probably \ref DatumStruct) \tparam T_datumDomainCoords... the
-     * coordinate \return type at the specified node
-     */
-    template<typename T_DatumDomain, std::size_t... T_datumDomainCoords>
-    using GetType = typename internal::
-        GetTypeImpl<T_DatumDomain, T_datumDomainCoords...>::type;
-
-    namespace internal
-    {
-        template<typename T_DatumDomain, typename T_DatumCoord>
-        struct GetTypeFromDatumCoordImpl;
-
-        template<typename T_DatumDomain, std::size_t... T_coords>
-        struct GetTypeFromDatumCoordImpl<T_DatumDomain, DatumCoord<T_coords...>>
-        {
-            using type = GetType<T_DatumDomain, T_coords...>;
-        };
-    }
-
-    /** Returns the type of a node in a datum domain tree for a coordinate given
-     * as \ref DatumCoord \tparam T_DatumDomain the datum domain (probably \ref
+     * as \ref DatumCoord \tparam DatumDomain the datum domain (probably \ref
      * DatumStruct) \tparam T_DatumCoord the coordinate \return type at the
      * specified node
      */
-    template<typename T_DatumDomain, typename T_DatumCoord>
-    using GetTypeFromDatumCoord = typename internal::
-        GetTypeFromDatumCoordImpl<T_DatumDomain, T_DatumCoord>::type;
+    template<typename DatumDomain, typename T_DatumCoord>
+    using GetType =
+        typename internal::GetTypeImpl<DatumDomain, T_DatumCoord>::type;
 }
