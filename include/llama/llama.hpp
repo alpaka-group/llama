@@ -41,7 +41,7 @@
  * This page documents the API of LLAMA. The user documentation and an overview
  * about the concepts and ideas can be found here: https://llama-doc.rtfd.io
  *
- * LLAMA is licensed under the LGPL2+.
+ * LLAMA is licensed under the LGPL3+.
  */
 
 #define LLAMA_VERSION_MAJOR 0
