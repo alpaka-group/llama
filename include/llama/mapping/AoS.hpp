@@ -40,10 +40,8 @@ namespace llama::mapping
     template<
         typename T_UserDomain,
         typename T_DatumDomain,
-        typename T_LinearizeUserDomainAdressFunctor
-        = LinearizeUserDomainAdress<T_UserDomain::count>,
-        typename T_ExtentUserDomainAdressFunctor
-        = ExtentUserDomainAdress<T_UserDomain::count>>
+        typename T_LinearizeUserDomainAdressFunctor = LinearizeUserDomainAdress,
+        typename T_ExtentUserDomainAdressFunctor = ExtentUserDomainAdress>
     struct AoS
     {
         using UserDomain = T_UserDomain;

@@ -102,6 +102,19 @@ TEST_CASE("AoS address")
     CHECK(address == 3604);
 }
 
+TEST_CASE("AoS address fortran")
+{
+    using UserDomain = llama::UserDomain<2>;
+    UserDomain userDomain{16, 16};
+    const auto address
+        = llama::mapping::AoS<
+              UserDomain,
+              Name,
+              llama::LinearizeUserDomainAdressLikeFortran>(userDomain)
+              .getBlobByte<0, 1>({0, 100});
+    CHECK(address == 57604);
+}
+
 TEST_CASE("SoA address")
 {
     using UserDomain = llama::UserDomain<2>;
@@ -109,6 +122,19 @@ TEST_CASE("SoA address")
     const auto address = llama::mapping::SoA<UserDomain, Name>(userDomain)
                              .getBlobByte<0, 1>({0, 100});
     CHECK(address == 1424);
+}
+
+TEST_CASE("SoA address fortran")
+{
+    using UserDomain = llama::UserDomain<2>;
+    UserDomain userDomain{16, 16};
+    const auto address
+        = llama::mapping::SoA<
+              UserDomain,
+              Name,
+              llama::LinearizeUserDomainAdressLikeFortran>(userDomain)
+              .getBlobByte<0, 1>({0, 100});
+    CHECK(address == 7424);
 }
 
 TEST_CASE("SizeOf DatumDomain")
@@ -141,10 +167,7 @@ TEST_CASE("access")
     using UserDomain = llama::UserDomain<2>;
     UserDomain userDomain{16, 16};
 
-    using Mapping = llama::mapping::SoA<
-        UserDomain,
-        Name,
-        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>;
@@ -177,10 +200,7 @@ TEST_CASE("addresses")
     using UserDomain = llama::UserDomain<2>;
     UserDomain userDomain{16, 16};
 
-    using Mapping = llama::mapping::SoA<
-        UserDomain,
-        Name,
-        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>;
@@ -225,10 +245,7 @@ TEST_CASE("iteration and access")
     using UserDomain = llama::UserDomain<2>;
     UserDomain userDomain{16, 16};
 
-    using Mapping = llama::mapping::SoA<
-        UserDomain,
-        Name,
-        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>;
@@ -258,10 +275,7 @@ TEST_CASE("Datum access")
     using UserDomain = llama::UserDomain<2>;
     UserDomain userDomain{16, 16};
 
-    using Mapping = llama::mapping::SoA<
-        UserDomain,
-        Name,
-        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>;

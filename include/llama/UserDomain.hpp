@@ -24,32 +24,23 @@
 namespace llama
 {
     /// Functor that calculates the extent of a user domain
-    template<std::size_t T_dim>
     struct ExtentUserDomainAdress
     {
-        /**
-         * \param size user domain
-         * \return the calculated extent
-         * */
-        LLAMA_FN_HOST_ACC_INLINE auto
+        template<std::size_t T_dim>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto
         operator()(UserDomain<T_dim> const & size) const -> std::size_t
         {
-            if constexpr(T_dim == 1)
-                return size[0];
-            else
-                return ExtentUserDomainAdress<T_dim - 1>()(size.pop_front())
-                    * size[0];
+            std::size_t prod = 1;
+            for(auto s : size) prod *= s;
+            return prod;
         }
     };
 
     /** Functor to get the linear position of a coordinate in the user domain
      * space if the n-dimensional domain is flattened to one dimension with the
      * last user domain index being the fastet resp. already linearized index (C
-     * like). \tparam T_dim dimension of the user domain \tparam T_it internal
-     * iteration parameter (should not be changed) \see
-     * LinearizeUserDomainAdressLikeFortran
+     * like). \see LinearizeUserDomainAdressLikeFortran
      * */
-    template<std::size_t T_dim, std::size_t T_it = T_dim>
     struct LinearizeUserDomainAdress
     {
         /**
@@ -57,17 +48,18 @@ namespace llama
          * \param size total size of the user domain
          * \return linearized index
          * */
-        LLAMA_FN_HOST_ACC_INLINE
-        auto operator()(
+        template<std::size_t T_dim>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(
             UserDomain<T_dim> const & coord,
             UserDomain<T_dim> const & size) const -> std::size_t
         {
-            if constexpr(T_it == 1)
-                return coord[0];
-            else
-                return coord[T_it - 1]
-                    + LinearizeUserDomainAdress<T_dim, T_it - 1>()(coord, size)
-                    * size[T_it - 1];
+            std::size_t address = coord[0];
+            for(auto i = 1; i < T_dim; i++)
+            {
+                address *= size[i];
+                address += coord[i];
+            }
+            return address;
         }
     };
 
@@ -77,7 +69,6 @@ namespace llama
      * (Fortran like). \tparam T_dim dimension of the user domain \see
      * LinearizeUserDomainAdress
      * */
-    template<std::size_t T_dim>
     struct LinearizeUserDomainAdressLikeFortran
     {
         /**
@@ -85,18 +76,18 @@ namespace llama
          * \param size total size of the user domain
          * \return linearized index
          * */
-        LLAMA_FN_HOST_ACC_INLINE
-        auto operator()(
+        template<std::size_t T_dim>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(
             UserDomain<T_dim> const & coord,
             UserDomain<T_dim> const & size) const -> std::size_t
         {
-            if constexpr(T_dim == 1)
-                return coord[0];
-            else
-                return coord[0]
-                    + LinearizeUserDomainAdressLikeFortran<T_dim - 1>()(
-                          coord.pop_front(), size.pop_front())
-                    * size[0];
+            std::size_t address = coord[T_dim - 1];
+            for(int i = (int)T_dim - 2; i >= 0; i--)
+            {
+                address *= size[i];
+                address += coord[i];
+            }
+            return address;
         }
     };
 } // namespace llama

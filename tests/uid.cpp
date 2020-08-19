@@ -39,14 +39,8 @@ TEST_CASE("uid")
     using UserDomain = llama::UserDomain<2>;
     UserDomain userDomain{2, 2};
 
-    using Mapping = llama::mapping::SoA<
-        UserDomain,
-        Particle,
-        llama::LinearizeUserDomainAdress<UserDomain::count>>;
-    using MappingOther = llama::mapping::SoA<
-        UserDomain,
-        Other,
-        llama::LinearizeUserDomainAdress<UserDomain::count>>;
+    using Mapping = llama::mapping::SoA<UserDomain, Particle>;
+    using MappingOther = llama::mapping::SoA<UserDomain, Other>;
 
     Mapping mapping{userDomain};
     MappingOther mappingOther{userDomain};
