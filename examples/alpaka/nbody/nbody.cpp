@@ -126,7 +126,6 @@ struct UpdateKernel
     LLAMA_FN_HOST_ACC_INLINE void
     operator()(const T_Acc & acc, T_View particles, Element ts) const
     {
-        constexpr std::size_t threads = blockSize / elems;
         const auto threadBlockIndex
             = alpaka::idx::getIdx<alpaka::Block, alpaka::Threads>(acc)[0u];
         [[maybe_unused]] auto temp = [&] {
@@ -159,7 +158,7 @@ struct UpdateKernel
                         particles)::Mapping::DatumDomain>::value
                         * blockSize,
                     __COUNTER__,
-                    threads>;
+                    blockSize / elems>;
                 using SharedFactory = llama::
                     Factory<SharedMapping, typename SharedAllocator::type>;
 
@@ -188,7 +187,7 @@ struct UpdateKernel
             {
                 LLAMA_INDEPENDENT_DATA
                 for(auto pos2 = decltype(end2)(0); pos2 + threadIndex < end2;
-                    pos2 += threads)
+                    pos2 += blockSize / elems)
                     temp(pos2 + threadBlockIndex)
                         = particles(start2 + pos2 + threadBlockIndex);
                 alpaka::block::sync::syncBlockThreads(acc);
