@@ -259,6 +259,11 @@ TEST_CASE("operator==")
 
     datum = 1;
 
+    CHECK((datum(tag::Pos{}, tag::Y{}) == datum(tag::Pos{}, tag::Y{})));
+    CHECK((datum(tag::Pos{}) == datum(tag::Pos{})));
+    CHECK((datum == datum));
+    CHECK((datum(tag::Pos{}) == datum(tag::Vel{})));
+
     // scalar to multiple elements in virtual datum
     CHECK((datum(tag::Pos{}, tag::Y{}) == 1));
     CHECK((datum(tag::Pos{}) == 1));
@@ -269,4 +274,32 @@ TEST_CASE("operator==")
     CHECK((datum(tag::Pos{}, tag::Y{}) == 2));
     CHECK(!(datum(tag::Pos{}) == 1));
     CHECK(!(datum == 1));
+    CHECK(!(datum(tag::Pos{}) == datum(tag::Vel{})));
+}
+
+TEST_CASE("operator<")
+{
+    auto datum = llama::stackVirtualDatumAlloc<Name>();
+
+    datum = 1;
+
+    CHECK(!(datum(tag::Pos{}, tag::Y{}) < datum(tag::Pos{}, tag::Y{})));
+    CHECK(!(datum(tag::Pos{}) < datum(tag::Pos{})));
+    CHECK(!(datum < datum));
+    CHECK(!(datum(tag::Pos{}) < datum(tag::Vel{})));
+
+    // scalar to multiple elements in virtual datum
+    CHECK((datum(tag::Pos{}, tag::Y{}) < 2));
+    CHECK((datum(tag::Pos{}) < 2));
+    CHECK((datum < 2));
+    CHECK(!(datum(tag::Pos{}, tag::Y{}) < 1));
+    CHECK(!(datum(tag::Pos{}) < 1));
+    CHECK(!(datum < 1));
+
+    datum(tag::Pos{}, tag::Y{}) = 2;
+
+    CHECK((datum(tag::Pos{}, tag::Y{}) < 3));
+    CHECK(!(datum(tag::Pos{}) < 2));
+    CHECK(!(datum < 2));
+    CHECK(!(datum(tag::Pos{}) < datum(tag::Vel{})));
 }
