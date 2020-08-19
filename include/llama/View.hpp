@@ -19,10 +19,9 @@
 #pragma once
 
 #include "Array.hpp"
-#include "CompareUID.hpp"
 #include "Factory.hpp"
 #include "ForEach.hpp"
-#include "GetType.hpp"
+#include "Functions.hpp"
 #include "preprocessor/macros.hpp"
 
 #include <boost/preprocessor/cat.hpp>
@@ -580,8 +579,7 @@ namespace llama
          * (default) AccessibleDatumDomain is the same as
          * `Mapping::DatumDomain`.
          */
-        using AccessibleDatumDomain
-            = GetType<DatumDomain, BoundDatumDomain>;
+        using AccessibleDatumDomain = GetType<DatumDomain, BoundDatumDomain>;
 
         LLAMA_FN_HOST_ACC_INLINE
         VirtualDatum(

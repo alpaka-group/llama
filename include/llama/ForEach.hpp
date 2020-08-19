@@ -19,7 +19,7 @@
 #pragma once
 
 #include "DatumCoord.hpp"
-#include "GetCoordFromUID.hpp"
+#include "Functions.hpp"
 
 #include <type_traits>
 
