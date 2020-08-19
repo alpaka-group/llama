@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include <array>
 #include <boost/mp11.hpp>
 #include <type_traits>
 
@@ -107,97 +108,45 @@ namespace llama
         using Cat = OtherDatumCoord;
     };
 
-    template<typename T_First, typename T_Second, typename T_SFinae = void>
+    template<typename T_First, typename T_Second>
     struct DatumCoordIsBigger;
 
-    template<typename T_First, typename T_Second>
-    struct DatumCoordIsBigger<
-        T_First,
-        T_Second,
-        typename std::enable_if_t<T_First::size == 1 || T_Second::size == 1>>
+    template<std::size_t... Coords1, std::size_t... Coords2>
+    struct DatumCoordIsBigger<DatumCoord<Coords1...>, DatumCoord<Coords2...>>
     {
-        static constexpr bool value = T_First::front > T_Second::front;
+        static constexpr bool value = []() constexpr
+        {
+            // CTAD does not work if Coords1/2 is an empty pack
+            std::array<std::size_t, sizeof...(Coords1)> a1{Coords1...};
+            std::array<std::size_t, sizeof...(Coords2)> a2{Coords2...};
+            for(auto i = 0; i < std::min(a1.size(), a2.size()); i++)
+            {
+                if(a1[i] > a2[i])
+                    return true;
+                if(a1[i] < a2[i])
+                    return false;
+            }
+            return false;
+        }
+        ();
     };
 
     template<typename T_First, typename T_Second>
-    struct DatumCoordIsBigger<
-        T_First,
-        T_Second,
-        typename std::enable_if_t<(
-            T_First::size > 1 && T_Second::size > 1
-            && T_First::front == T_Second::front)>>
-    {
-        static constexpr bool value = DatumCoordIsBigger<
-            typename T_First::PopFront,
-            typename T_Second::PopFront>::value;
-    };
-
-    template<typename T_First, typename T_Second>
-    struct DatumCoordIsBigger<
-        T_First,
-        T_Second,
-        typename std::enable_if_t<(
-            T_First::size > 1 && T_Second::size > 1
-            && T_First::front < T_Second::front)>>
-    {
-        static constexpr bool value = false;
-    };
-
-    template<typename T_First, typename T_Second>
-    struct DatumCoordIsBigger<
-        T_First,
-        T_Second,
-        typename std::enable_if_t<(
-            T_First::size > 1 && T_Second::size > 1
-            && T_First::front > T_Second::front)>>
-    {
-        static constexpr bool value = true;
-    };
-
-    template<typename T_First, typename T_Second, typename T_SFinae = void>
     struct DatumCoordIsSame;
 
-    template<typename T_First, typename T_Second>
-    struct DatumCoordIsSame<
-        T_First,
-        T_Second,
-        typename std::enable_if_t<(T_First::size < 1 || T_Second::size < 1)>>
+    template<std::size_t... Coords1, std::size_t... Coords2>
+    struct DatumCoordIsSame<DatumCoord<Coords1...>, DatumCoord<Coords2...>>
     {
-        static constexpr bool value = true;
-    };
-
-    template<typename T_First, typename T_Second>
-    struct DatumCoordIsSame<
-        T_First,
-        T_Second,
-        typename std::enable_if_t<
-            (T_First::size == 1 && T_Second::size >= 1)
-            || (T_First::size >= 1 && T_Second::size == 1)>>
-    {
-        static constexpr bool value = (T_First::front == T_Second::front);
-    };
-
-    template<typename T_First, typename T_Second>
-    struct DatumCoordIsSame<
-        T_First,
-        T_Second,
-        typename std::enable_if_t<(
-            T_First::size > 1 && T_Second::size > 1
-            && T_First::front == T_Second::front)>>
-    {
-        static constexpr bool value = DatumCoordIsSame<
-            typename T_First::PopFront,
-            typename T_Second::PopFront>::value;
-    };
-
-    template<typename T_First, typename T_Second>
-    struct DatumCoordIsSame<
-        T_First,
-        T_Second,
-        typename std::enable_if_t<(
-            T_First::size > 1 && T_Second::size > 1
-            && T_First::front != T_Second::front)>>
-    {
-        static constexpr bool value = false;
+        static constexpr bool value = []() constexpr
+        {
+            // CTAD does not work if Coords1/2 is an empty pack
+            std::array<std::size_t, sizeof...(Coords1)> a1{Coords1...};
+            std::array<std::size_t, sizeof...(Coords2)> a2{Coords2...};
+            for(auto i = 0; i < std::min(a1.size(), a2.size()); i++)
+                if(a1[i] != a2[i])
+                    return false;
+            return true;
+        }
+        ();
     };
 }
