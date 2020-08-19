@@ -20,14 +20,13 @@
 
 #include "../preprocessor/macros.hpp"
 
-#include <malloc.h>
-#include <stdlib.h>
 #include <vector>
+
 namespace llama::allocator
 {
     namespace internal
     {
-        template<typename T, std::size_t N = 16>
+        template<typename T, std::size_t Alignment>
         struct AlignmentAllocator
         {
             using value_type = T;
@@ -44,7 +43,7 @@ namespace llama::allocator
 
             template<typename T2>
             inline AlignmentAllocator(
-                AlignmentAllocator<T2, N> const &) noexcept
+                AlignmentAllocator<T2, Alignment> const &) noexcept
             {}
 
             inline ~AlignmentAllocator() noexcept = default;
@@ -60,34 +59,13 @@ namespace llama::allocator
 
             inline auto allocate(size_type n) -> pointer
             {
-#if defined _MSC_VER
-                return reinterpret_cast<pointer>(
-                    _aligned_malloc(n * sizeof(value_type), N));
-#elif defined __linux__
-                return reinterpret_cast<pointer>(
-                    memalign(N, n * sizeof(value_type)));
-#elif defined __MACH__ // Mac OS X
-                return reinterpret_cast<pointer>(
-                    malloc(n * sizeof(value_type))); // malloc is always 16 byte
-                                                     // aligned on Mac.
-#else
-                return reinterpret_cast<pointer>(
-                    malloc(n * sizeof(value_type))); // other (use valloc for
-                                                     // page-aligned memory)
-#endif
+                return static_cast<pointer>(::operator new[](
+                    n * sizeof(value_type), std::align_val_t{Alignment}));
             }
 
             inline void deallocate(pointer p, size_type)
             {
-#if defined _MSC_VER
-                _aligned_free(p);
-#elif defined __linux__
-                free(p);
-#elif defined __MACH__
-                free(p);
-#else
-                free(p);
-#endif
+                ::operator delete[](p, std::align_val_t{Alignment});
             }
 
             inline void construct(pointer p, value_type const &)
@@ -109,10 +87,11 @@ namespace llama::allocator
             template<typename T2>
             struct rebind
             {
-                using other = AlignmentAllocator<T2, N>;
+                using other = AlignmentAllocator<T2, Alignment>;
             };
 
-            auto operator!=(const AlignmentAllocator<T, N> & other) const
+            auto
+            operator!=(const AlignmentAllocator<T, Alignment> & other) const
                 -> bool
             {
                 return !(*this == other);
@@ -122,7 +101,8 @@ namespace llama::allocator
              * can be deallocated from other, and vice versa.
              * Always returns true for stateless allocators.
              */
-            auto operator==(const AlignmentAllocator<T, N> & other) const
+            auto
+            operator==(const AlignmentAllocator<T, Alignment> & other) const
                 -> bool
             {
                 return true;
@@ -140,14 +120,10 @@ namespace llama::allocator
     template<std::size_t T_alignment = 64u>
     struct Vector
     {
-        using PrimType = unsigned char; ///< primary type of this allocator is
-                                        ///< `unsigned char`
+        using PrimType = std::byte;
         using BlobType = std::vector<
             PrimType,
-            internal::AlignmentAllocator<
-                PrimType,
-                T_alignment>>; ///< blob type of this allocator is `std::vector<
-                               ///< PrimType >`
+            internal::AlignmentAllocator<PrimType, T_alignment>>;
         using Parameter = int; ///< the optional allocation parameter is ignored
 
         LLAMA_NO_HOST_ACC_WARNING

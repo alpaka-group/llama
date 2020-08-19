@@ -104,7 +104,7 @@ namespace usellama
                       << "s\n";
         }
 
-        return c.blob[0][0];
+        return (int)c.blob[0][0];
     }
 }
 
