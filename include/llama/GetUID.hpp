@@ -26,41 +26,41 @@ namespace llama
 {
     namespace internal
     {
-        template<typename T_DatumElement, std::size_t... T_datumDomainCoords>
+        template<typename DatumElement, std::size_t... DatumDomainCoords>
         struct GetUIDImpl;
 
         template<
-            typename T_DatumElement,
-            std::size_t T_firstDatumDomainCoord,
-            std::size_t... T_datumDomainCoords>
+            typename DatumElement,
+            std::size_t FirstDatumDomainCoord,
+            std::size_t... DatumDomainCoords>
         struct GetUIDImpl<
-            T_DatumElement,
-            T_firstDatumDomainCoord,
-            T_datumDomainCoords...>
+            DatumElement,
+            FirstDatumDomainCoord,
+            DatumDomainCoords...>
         {
             using _DateElement = boost::mp11::mp_at_c<
-                GetDatumElementType<T_DatumElement>,
-                T_firstDatumDomainCoord>;
+                GetDatumElementType<DatumElement>,
+                FirstDatumDomainCoord>;
             using type =
-                typename GetUIDImpl<_DateElement, T_datumDomainCoords...>::type;
+                typename GetUIDImpl<_DateElement, DatumDomainCoords...>::type;
         };
 
-        template<typename T_DatumElement>
-        struct GetUIDImpl<T_DatumElement>
+        template<typename DatumElement>
+        struct GetUIDImpl<DatumElement>
         {
-            using type = GetDatumElementUID<T_DatumElement>;
+            using type = GetDatumElementUID<DatumElement>;
         };
 
-        template<typename T_DatumElement, typename T_DatumDomainCoord>
+        template<typename DatumElement, typename T_DatumDomainCoord>
         struct GetUIDfromDatumCoord;
 
-        template<typename T_DatumElement, std::size_t... T_datumDomainCoords>
+        template<typename DatumElement, std::size_t... DatumDomainCoords>
         struct GetUIDfromDatumCoord<
-            T_DatumElement,
-            DatumCoord<T_datumDomainCoords...>>
+            DatumElement,
+            DatumCoord<DatumDomainCoords...>>
         {
             using type =
-                typename GetUIDImpl<T_DatumElement, T_datumDomainCoords...>::
+                typename GetUIDImpl<DatumElement, DatumDomainCoords...>::
                     type;
         };
     }
