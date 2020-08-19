@@ -36,15 +36,15 @@ namespace llama
         using RestTuple = Tuple<T_Elements...>;
 
         LLAMA_FN_HOST_ACC_INLINE
-        Tuple() = default;
+        constexpr Tuple() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        Tuple(T_FirstElement first, T_Elements... rest) :
+        constexpr Tuple(T_FirstElement first, T_Elements... rest) :
                 first(first), rest(rest...)
         {}
 
         LLAMA_FN_HOST_ACC_INLINE
-        Tuple(T_FirstElement first, Tuple<T_Elements...> rest) :
+        constexpr Tuple(T_FirstElement first, Tuple<T_Elements...> rest) :
                 first(first), rest(rest)
         {}
 
@@ -59,10 +59,12 @@ namespace llama
         using RestTuple = Tuple<>;
 
         LLAMA_FN_HOST_ACC_INLINE
-        Tuple() = default;
+        constexpr Tuple() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        Tuple(T_FirstElement const first, Tuple<> const rest = Tuple<>()) :
+        constexpr Tuple(
+            T_FirstElement const first,
+            Tuple<> const rest = Tuple<>()) :
                 first(first)
         {}
 
