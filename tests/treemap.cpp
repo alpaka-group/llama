@@ -729,7 +729,7 @@ TEST_CASE("treemapping.getNode")
 
 TEST_CASE("treemapping")
 {
-    constexpr std::size_t userDomainSize = 1024 * 12;
+    constexpr std::size_t userDomainSize = 12;
 
     using UserDomain = llama::UserDomain<2>;
     const UserDomain userDomain{userDomainSize, userDomainSize};
@@ -942,15 +942,14 @@ TEST_CASE("treemapping")
 >)");
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
-          "12288 * [ 12288 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 "
+          "12 * [ 12 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 "
           "* X(double) ] ] ]");
     CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
-          "1 * [ 1 * [ 1 * Pos[ 150994944 * X(double) , 150994944 * Y(double) , 150994944 * Z(double) ] , 150994944 "
-          "* Weight(float) , 1 * Momentum[ 150994944 * Z(double) , 150994944 * Y(double) , 150994944 * X(double) ] ] ]");
+          "1 * [ 1 * [ 1 * Pos[ 144 * X(double) , 144 * Y(double) , 144 * Z(double) ] , 144 * Weight(float) , 1 * Momentum[ 144 * Z(double) , 144 * Y(double) , 144 * X(double) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 7851737088);
-    CHECK(mapping.getBlobByte<2, 1>({50, 100}) == 5440733984);
-    CHECK(mapping.getBlobByte<2, 1>({50, 101}) == 5440733992);
+    CHECK(mapping.getBlobSize(0) == 7488);
+    CHECK(mapping.getBlobByte<2, 1>({50, 100}) == 10784);
+    CHECK(mapping.getBlobByte<2, 1>({50, 101}) == 10792);
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>;
     auto view = Factory::allocView(mapping);

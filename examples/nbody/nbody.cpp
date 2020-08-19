@@ -277,7 +277,6 @@ namespace manualAoS
 
             std::default_random_engine engine;
             std::normal_distribution<FP> distribution(FP(0), FP(1));
-            LLAMA_INDEPENDENT_DATA
             for(auto & p : particles)
             {
                 p.pos.x = distribution(engine);

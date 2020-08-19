@@ -98,7 +98,11 @@ struct BlurKernel
                 using SharedMapping = llama::mapping::tree::Mapping<
                     typename T_View::Mapping::UserDomain,
                     typename T_View::Mapping::DatumDomain,
-                    decltype(treeOperationList)>;
+                    llama::Tuple<llama::mapping::tree::functor::
+                                     LeafOnlyRT>>; // FIXME(bgruber): replace
+                                                   // last template arg by
+                                                   // decltype(treeOperationList)
+                                                   // when MSVC supports it
                 auto constexpr sharedChunkSize
                     = totalElemsPerBlock + 2 * kernelSize;
                 SharedMapping const sharedMapping(

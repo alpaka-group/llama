@@ -50,6 +50,6 @@ jobs:
         $env:BOOST_ROOT = $env:BOOST_ROOT_1_72_0
         cmake .. -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
     - name: build
-      run: cmake --build build
+      run: cmake --build build --config Release
     - name: tests
-      run: build/tests
+      run: build/Release/tests

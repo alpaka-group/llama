@@ -37,8 +37,8 @@ namespace llama::mapping::tree
     /** Free describable mapping which can be used for creating a \ref View with
      * a \ref Factory. For the interface details see \ref Factory. \tparam
      * T_UserDomain type of the user domain \tparam T_DatumDomain type of the
-     * datum domain \tparam T_TreeOperationList the type of a compile time list
-     * (\ref Tuple) used to define the tree mapping
+     * datum domain \tparam T_TreeOperationList (\ref Tuple) of operations to
+     * define the tree mapping
      */
     template<
         typename T_UserDomain,
