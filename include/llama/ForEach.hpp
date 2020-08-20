@@ -121,11 +121,11 @@ namespace llama
      * template parameters for the outer and the inner coordinate in the datum
      * domain tree. These coordinates are both a \ref DatumCoord , which can be
      * concatenated to one coordinate with \ref DatumCoord::Cat and used to
-     * access the data. \tparamDatumDomain the datum domain (\ref
-     * DatumStruct) to iterate over \tparamDatumCoordOrFirstUID DatumCoord or
+     * access the data. \tparam DatumDomain the datum domain (\ref
+     * DatumStruct) to iterate over \tparam DatumCoordOrFirstUID DatumCoord or
      * a UID to address the start node inside the datum domain tree. Will be
      * given to the functor as \ref DatumCoord as first template parameter.
-     * \tparamRestUID... optional further UIDs for addressing the start node
+     * \tparam RestUID... optional further UIDs for addressing the start node
      */
     template<
         typename DatumDomain,
@@ -134,7 +134,7 @@ namespace llama
     struct ForEach
     {
         /** Applies the given functor to the given (part of the) datum domain.
-         * \tparamFunctor type of the functor
+         * \tparam Functor type of the functor
          * \param functor the perfectly forwarded functor
          */
         template<typename Functor>
