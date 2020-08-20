@@ -77,35 +77,35 @@ TEST_CASE("treemapping.empty")
 
     {
         const auto coord = UserDomain{0, 0};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 0);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 8);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 16);
-        CHECK(mapping.getBlobByte<1>(coord) == 24);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 28);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 36);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 44);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 8);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 16);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 24);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 28);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 36);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 44);
     }
 
     {
         const auto coord = UserDomain{0, 1};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 52);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 60);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 68);
-        CHECK(mapping.getBlobByte<1>(coord) == 76);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 80);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 88);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 96);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 52);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 60);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 68);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 76);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 80);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 88);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 96);
     }
 
     {
         const auto coord = UserDomain{1, 0};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 832);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 840);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 848);
-        CHECK(mapping.getBlobByte<1>(coord) == 856);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 860);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 868);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 876);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 832);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 840);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 848);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 856);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 860);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 868);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 876);
     }
 }
 
@@ -131,35 +131,35 @@ TEST_CASE("treemapping.Idem")
 
     {
         const auto coord = UserDomain{0, 0};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 0);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 8);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 16);
-        CHECK(mapping.getBlobByte<1>(coord) == 24);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 28);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 36);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 44);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 8);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 16);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 24);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 28);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 36);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 44);
     }
 
     {
         const auto coord = UserDomain{0, 1};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 52);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 60);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 68);
-        CHECK(mapping.getBlobByte<1>(coord) == 76);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 80);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 88);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 96);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 52);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 60);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 68);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 76);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 80);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 88);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 96);
     }
 
     {
         const auto coord = UserDomain{1, 0};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 832);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 840);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 848);
-        CHECK(mapping.getBlobByte<1>(coord) == 856);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 860);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 868);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 876);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 832);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 840);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 848);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 856);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 860);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 868);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 876);
     }
 }
 
@@ -185,35 +185,35 @@ TEST_CASE("treemapping.LeafOnlyRT")
 
     {
         const auto coord = UserDomain{0, 0};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 0);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 2048);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 4096);
-        CHECK(mapping.getBlobByte<1>(coord) == 6144);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 7168);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 9216);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 11264);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2048);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 4096);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 6144);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 7168);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 9216);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 11264);
     }
 
     {
         const auto coord = UserDomain{0, 1};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 8);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 2056);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 4104);
-        CHECK(mapping.getBlobByte<1>(coord) == 6148);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 7176);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 9224);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 11272);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 8);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2056);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 4104);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 6148);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 7176);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 9224);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 11272);
     }
 
     {
         const auto coord = UserDomain{1, 0};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 128);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 2176);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 4224);
-        CHECK(mapping.getBlobByte<1>(coord) == 6208);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 7296);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 9344);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 11392);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 128);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2176);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 4224);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 6208);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 7296);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 9344);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 11392);
     }
 }
 
@@ -240,35 +240,35 @@ TEST_CASE("treemapping.MoveRTDown<>")
 
     {
         const auto coord = UserDomain{0, 0};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 0);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 8);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 16);
-        CHECK(mapping.getBlobByte<1>(coord) == 24);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 28);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 36);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 44);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 8);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 16);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 24);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 28);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 36);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 44);
     }
 
     {
         const auto coord = UserDomain{0, 1};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 52);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 60);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 68);
-        CHECK(mapping.getBlobByte<1>(coord) == 76);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 80);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 88);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 96);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 52);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 60);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 68);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 76);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 80);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 88);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 96);
     }
 
     {
         const auto coord = UserDomain{1, 0};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 832);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 840);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 848);
-        CHECK(mapping.getBlobByte<1>(coord) == 856);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 860);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 868);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 876);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 832);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 840);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 848);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 856);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 860);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 868);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 876);
     }
 }
 
@@ -295,35 +295,35 @@ TEST_CASE("treemapping.MoveRTDown<0>")
 
     {
         const auto coord = UserDomain{0, 0};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 0);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 8);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 16);
-        CHECK(mapping.getBlobByte<1>(coord) == 96);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 112);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 120);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 128);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 8);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 16);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 96);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 112);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 120);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 128);
     }
 
     {
         const auto coord = UserDomain{0, 1};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 24);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 32);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 40);
-        CHECK(mapping.getBlobByte<1>(coord) == 100);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 136);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 144);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 152);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 24);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 32);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 40);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 100);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 136);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 144);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 152);
     }
 
     {
         const auto coord = UserDomain{1, 0};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 832);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 840);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 848);
-        CHECK(mapping.getBlobByte<1>(coord) == 928);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 944);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 952);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 960);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 832);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 840);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 848);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 928);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 944);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 952);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 960);
     }
 }
 
@@ -350,35 +350,35 @@ TEST_CASE("treemapping.MoveRTDown<0,0>")
 
     {
         const auto coord = UserDomain{0, 0};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 0);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 32);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 64);
-        CHECK(mapping.getBlobByte<1>(coord) == 96);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 100);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 108);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 116);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 32);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 64);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 96);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 100);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 108);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 116);
     }
 
     {
         const auto coord = UserDomain{0, 1};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 124);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 156);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 188);
-        CHECK(mapping.getBlobByte<1>(coord) == 220);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 224);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 232);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 240);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 124);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 156);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 188);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 220);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 224);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 232);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 240);
     }
 
     {
         const auto coord = UserDomain{1, 0};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 1984);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 2016);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 2048);
-        CHECK(mapping.getBlobByte<1>(coord) == 2080);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 2084);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 2092);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 2100);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 1984);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2016);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 2048);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 2080);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 2084);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 2092);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 2100);
     }
 }
 
@@ -405,35 +405,35 @@ TEST_CASE("treemapping.MoveRTDownFixed<>")
 
     {
         const auto coord = UserDomain{0, 0};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 0);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 8);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 16);
-        CHECK(mapping.getBlobByte<1>(coord) == 24);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 28);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 36);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 44);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 8);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 16);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 24);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 28);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 36);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 44);
     }
 
     {
         const auto coord = UserDomain{0, 1};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 52);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 60);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 68);
-        CHECK(mapping.getBlobByte<1>(coord) == 76);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 80);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 88);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 96);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 52);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 60);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 68);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 76);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 80);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 88);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 96);
     }
 
     {
         const auto coord = UserDomain{1, 0};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 832);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 840);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 848);
-        CHECK(mapping.getBlobByte<1>(coord) == 856);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 860);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 868);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 876);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 832);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 840);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 848);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 856);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 860);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 868);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 876);
     }
 }
 
@@ -460,35 +460,35 @@ TEST_CASE("treemapping.MoveRTDownFixed<0>")
 
     {
         const auto coord = UserDomain{0, 0};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 0);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 8);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 16);
-        CHECK(mapping.getBlobByte<1>(coord) == 96);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 112);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 120);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 128);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 8);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 16);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 96);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 112);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 120);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 128);
     }
 
     {
         const auto coord = UserDomain{0, 1};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 24);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 32);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 40);
-        CHECK(mapping.getBlobByte<1>(coord) == 100);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 136);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 144);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 152);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 24);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 32);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 40);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 100);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 136);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 144);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 152);
     }
 
     {
         const auto coord = UserDomain{1, 0};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 832);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 840);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 848);
-        CHECK(mapping.getBlobByte<1>(coord) == 928);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 944);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 952);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 960);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 832);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 840);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 848);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 928);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 944);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 952);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 960);
     }
 }
 
@@ -515,35 +515,35 @@ TEST_CASE("treemapping.MoveRTDownFixed<0,0>")
 
     {
         const auto coord = UserDomain{0, 0};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 0);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 32);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 64);
-        CHECK(mapping.getBlobByte<1>(coord) == 96);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 100);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 108);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 116);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 32);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 64);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 96);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 100);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 108);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 116);
     }
 
     {
         const auto coord = UserDomain{0, 1};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 124);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 156);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 188);
-        CHECK(mapping.getBlobByte<1>(coord) == 220);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 224);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 232);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 240);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 124);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 156);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 188);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 220);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 224);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 232);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 240);
     }
 
     {
         const auto coord = UserDomain{1, 0};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 1984);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 2016);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 2048);
-        CHECK(mapping.getBlobByte<1>(coord) == 2080);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 2084);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 2092);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 2100);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 1984);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2016);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 2048);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 2080);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 2084);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 2092);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 2100);
     }
 }
 
@@ -581,35 +581,35 @@ TEST_CASE("treemapping.vectorblocks.runtime")
 
     {
         const auto coord = UserDomain{0, 0};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 0);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 64);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 128);
-        CHECK(mapping.getBlobByte<1>(coord) == 192);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 224);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 288);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 352);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 64);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 128);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 192);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 224);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 288);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 352);
     }
 
     {
         const auto coord = UserDomain{0, 1};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 8);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 72);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 136);
-        CHECK(mapping.getBlobByte<1>(coord) == 196);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 232);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 296);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 360);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 8);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 72);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 136);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 196);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 232);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 296);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 360);
     }
 
     {
         const auto coord = UserDomain{1, 0};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 832);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 896);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 960);
-        CHECK(mapping.getBlobByte<1>(coord) == 1024);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 1056);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 1120);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 1184);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 832);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 896);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 960);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 1024);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 1056);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 1120);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 1184);
     }
 }
 
@@ -647,35 +647,35 @@ TEST_CASE("treemapping.vectorblocks.compiletime")
 
     {
         const auto coord = UserDomain{0, 0};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 0);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 64);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 128);
-        CHECK(mapping.getBlobByte<1>(coord) == 192);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 224);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 288);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 352);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 64);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 128);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 192);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 224);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 288);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 352);
     }
 
     {
         const auto coord = UserDomain{0, 1};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 8);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 72);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 136);
-        CHECK(mapping.getBlobByte<1>(coord) == 196);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 232);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 296);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 360);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 8);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 72);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 136);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 196);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 232);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 296);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 360);
     }
 
     {
         const auto coord = UserDomain{1, 0};
-        CHECK(mapping.getBlobByte<0, 0>(coord) == 832);
-        CHECK(mapping.getBlobByte<0, 1>(coord) == 896);
-        CHECK(mapping.getBlobByte<0, 2>(coord) == 960);
-        CHECK(mapping.getBlobByte<1>(coord) == 1024);
-        CHECK(mapping.getBlobByte<2, 0>(coord) == 1056);
-        CHECK(mapping.getBlobByte<2, 1>(coord) == 1120);
-        CHECK(mapping.getBlobByte<2, 2>(coord) == 1184);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 832);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 896);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 960);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 1024);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 1056);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 1120);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 1184);
     }
 }
 
@@ -948,8 +948,8 @@ TEST_CASE("treemapping")
           "1 * [ 1 * [ 1 * Pos[ 144 * X(double) , 144 * Y(double) , 144 * Z(double) ] , 144 * Weight(float) , 1 * Momentum[ 144 * Z(double) , 144 * Y(double) , 144 * X(double) ] ] ]");
 
     CHECK(mapping.getBlobSize(0) == 7488);
-    CHECK(mapping.getBlobByte<2, 1>({50, 100}) == 10784);
-    CHECK(mapping.getBlobByte<2, 1>({50, 101}) == 10792);
+    CHECK(mapping.getBlobNrAndOffset<2, 1>({50, 100}).offset == 10784);
+    CHECK(mapping.getBlobNrAndOffset<2, 1>({50, 101}).offset == 10792);
 
     using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>;
     auto view = Factory::allocView(mapping);

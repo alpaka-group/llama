@@ -98,7 +98,8 @@ TEST_CASE("AoS address")
     using UserDomain = llama::UserDomain<2>;
     UserDomain userDomain{16, 16};
     const auto address = llama::mapping::AoS<UserDomain, Name>(userDomain)
-                             .getBlobByte<0, 1>({0, 100});
+                             .getBlobNrAndOffset<0, 1>({0, 100})
+                             .offset;
     CHECK(address == 3604);
 }
 
@@ -111,7 +112,8 @@ TEST_CASE("AoS address fortran")
               UserDomain,
               Name,
               llama::LinearizeUserDomainAdressLikeFortran>(userDomain)
-              .getBlobByte<0, 1>({0, 100});
+              .getBlobNrAndOffset<0, 1>({0, 100})
+              .offset;
     CHECK(address == 57604);
 }
 
@@ -120,7 +122,8 @@ TEST_CASE("SoA address")
     using UserDomain = llama::UserDomain<2>;
     UserDomain userDomain{16, 16};
     const auto address = llama::mapping::SoA<UserDomain, Name>(userDomain)
-                             .getBlobByte<0, 1>({0, 100});
+                             .getBlobNrAndOffset<0, 1>({0, 100})
+                             .offset;
     CHECK(address == 1424);
 }
 
@@ -133,7 +136,8 @@ TEST_CASE("SoA address fortran")
               UserDomain,
               Name,
               llama::LinearizeUserDomainAdressLikeFortran>(userDomain)
-              .getBlobByte<0, 1>({0, 100});
+              .getBlobNrAndOffset<0, 1>({0, 100})
+              .offset;
     CHECK(address == 7424);
 }
 

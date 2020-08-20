@@ -809,12 +809,10 @@ namespace llama
         accessor(UserDomain userDomain, DatumCoord<T_coords...> = {}) const
             -> const auto &
         {
-            auto const blobIndex
-                = mapping.template getBlobNr<T_coords...>(userDomain);
-            auto const offset
-                = mapping.template getBlobByte<T_coords...>(userDomain);
+            const auto [nr, offset]
+                = mapping.template getBlobNrAndOffset<T_coords...>(userDomain);
             using Type = GetType<DatumDomain, DatumCoord<T_coords...>>;
-            return reinterpret_cast<const Type &>(blob[blobIndex][offset]);
+            return reinterpret_cast<const Type &>(blob[nr][offset]);
         }
 
         LLAMA_NO_HOST_ACC_WARNING
@@ -823,12 +821,10 @@ namespace llama
         accessor(UserDomain userDomain, DatumCoord<T_coords...> coord = {})
             -> auto &
         {
-            auto const blobIndex
-                = mapping.template getBlobNr<T_coords...>(userDomain);
-            auto const offset
-                = mapping.template getBlobByte<T_coords...>(userDomain);
+            const auto [nr, offset]
+                = mapping.template getBlobNrAndOffset<T_coords...>(userDomain);
             using Type = GetType<DatumDomain, DatumCoord<T_coords...>>;
-            return reinterpret_cast<Type &>(blob[blobIndex][offset]);
+            return reinterpret_cast<Type &>(blob[nr][offset]);
         }
     };
 
