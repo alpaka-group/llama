@@ -972,6 +972,6 @@ TEST_CASE("treemapping")
     double sum = 0.0;
     for(size_t x = 0; x < userDomain[0]; ++x)
         for(size_t y = 0; y < userDomain[1]; ++y)
-            sum += view.accessor<0, 1>({x, y});
+            sum += view({x, y}).access<0, 1>();
     CHECK(sum == 0);
 }

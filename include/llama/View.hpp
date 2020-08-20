@@ -691,63 +691,6 @@ namespace llama
                 mapping(mapping), blob(blob)
         {}
 
-        /** Explicit access function taking the datum domain as tree index
-         *  coordinate template arguments and the user domain as runtime
-         * parameter. The operator() overloadings should be preferred as they
-         * show a more array of struct like interface using \ref
-         * llama::VirtualDatum. \tparam T_coords... tree index coordinate \param
-         * userDomain user domain as \ref UserDomain \return reference to
-         * element
-         */
-        LLAMA_NO_HOST_ACC_WARNING
-        template<std::size_t... T_coords>
-        LLAMA_FN_HOST_ACC_INLINE auto
-        accessor(UserDomain userDomain, DatumCoord<T_coords...> = {}) const
-            -> const auto &
-        {
-            auto const blobIndex
-                = mapping.template getBlobNr<T_coords...>(userDomain);
-            auto const offset
-                = mapping.template getBlobByte<T_coords...>(userDomain);
-            using Type = GetType<DatumDomain, DatumCoord<T_coords...>>;
-            return reinterpret_cast<const Type &>(blob[blobIndex][offset]);
-        }
-
-        LLAMA_NO_HOST_ACC_WARNING
-        template<std::size_t... T_coords>
-        LLAMA_FN_HOST_ACC_INLINE auto
-        accessor(UserDomain userDomain, DatumCoord<T_coords...> coord = {})
-            -> auto &
-        {
-            return as_mutable(std::as_const(*this).accessor(userDomain, coord));
-        }
-
-        /** Explicit access function taking the datum domain as UID type list
-         *  template arguments and the user domain as runtime parameter.
-         *  The operator() overloadings should be preferred as they show a more
-         *  array of struct like interface using \ref llama::VirtualDatum.
-         * \tparam T_UIDs... UID type list
-         * \param userDomain user domain as \ref UserDomain
-         * \return reference to element
-         */
-        LLAMA_NO_HOST_ACC_WARNING
-        template<typename... T_UIDs>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(UserDomain userDomain) const
-            -> const auto &
-        {
-            using DatumCoord = GetCoordFromUID<DatumDomain, T_UIDs...>;
-            return accessor(userDomain, DatumCoord{});
-        }
-
-        // FIXME(bgruber): remove redundancy
-        LLAMA_NO_HOST_ACC_WARNING
-        template<typename... T_UIDs>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(UserDomain userDomain) -> auto &
-        {
-            using DatumCoord = GetCoordFromUID<DatumDomain, T_UIDs...>;
-            return accessor(userDomain, DatumCoord{});
-        }
-
         /** Operator overloading to reverse the order of compile time (datum
          * domain) and run time (user domain) parameter with a helper object
          *  (\ref llama::VirtualDatum). Should be favoured to access data
@@ -764,20 +707,6 @@ namespace llama
         }
 
         LLAMA_FN_HOST_ACC_INLINE auto operator()(UserDomain userDomain)
-            -> VirtualDatumType
-        {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return {userDomain, *this};
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE auto operator[](UserDomain userDomain) const
-            -> VirtualDatumTypeConst
-        {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return {userDomain, *this};
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE auto operator[](UserDomain userDomain)
             -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
@@ -823,20 +752,6 @@ namespace llama
             return {UserDomain{coord}, *this};
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t coord) const
-            -> VirtualDatumTypeConst
-        {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return {UserDomain{coord}, *this};
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t coord)
-            -> VirtualDatumType
-        {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return {UserDomain{coord}, *this};
-        }
-
         template<std::size_t... Coord>
         LLAMA_FN_HOST_ACC_INLINE auto
         operator()(DatumCoord<Coord...> dc = {}) const -> decltype(auto)
@@ -853,8 +768,68 @@ namespace llama
             return accessor<Coord...>(UserDomain{});
         }
 
+        LLAMA_FN_HOST_ACC_INLINE auto operator[](UserDomain userDomain) const
+            -> VirtualDatumTypeConst
+        {
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return (*this)(userDomain);
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE auto operator[](UserDomain userDomain)
+            -> VirtualDatumType
+        {
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return (*this)(userDomain);
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t coord) const
+            -> VirtualDatumTypeConst
+        {
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return (*this)(coord);
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t coord)
+            -> VirtualDatumType
+        {
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return (*this)(coord);
+        }
+
         const Mapping mapping; ///< mapping of the view
         Array<BlobType, Mapping::blobCount> blob; ///< memory of the view
+
+    private:
+        template<typename T_View, typename T_BoundDatumDomain, bool OwnView>
+        friend struct VirtualDatum;
+
+        LLAMA_NO_HOST_ACC_WARNING
+        template<std::size_t... T_coords>
+        LLAMA_FN_HOST_ACC_INLINE auto
+        accessor(UserDomain userDomain, DatumCoord<T_coords...> = {}) const
+            -> const auto &
+        {
+            auto const blobIndex
+                = mapping.template getBlobNr<T_coords...>(userDomain);
+            auto const offset
+                = mapping.template getBlobByte<T_coords...>(userDomain);
+            using Type = GetType<DatumDomain, DatumCoord<T_coords...>>;
+            return reinterpret_cast<const Type &>(blob[blobIndex][offset]);
+        }
+
+        LLAMA_NO_HOST_ACC_WARNING
+        template<std::size_t... T_coords>
+        LLAMA_FN_HOST_ACC_INLINE auto
+        accessor(UserDomain userDomain, DatumCoord<T_coords...> coord = {})
+            -> auto &
+        {
+            auto const blobIndex
+                = mapping.template getBlobNr<T_coords...>(userDomain);
+            auto const offset
+                = mapping.template getBlobByte<T_coords...>(userDomain);
+            using Type = GetType<DatumDomain, DatumCoord<T_coords...>>;
+            return reinterpret_cast<Type &>(blob[blobIndex][offset]);
+        }
     };
 
 } // namespace llama
