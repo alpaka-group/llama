@@ -56,19 +56,15 @@ namespace llama
     template<
         typename T_View,
         typename T_BoundDatumDomain = DatumCoord<>,
-        template<class> class T_ViewHolder = internal::ViewByRefHolder>
+        bool OwnView = false>
     struct VirtualDatum;
 
     template<typename View>
     inline constexpr auto is_VirtualDatum = false;
 
-    template<
-        typename T_View,
-        typename T_BoundDatumDomain,
-        template<class>
-        class T_ViewHolder>
+    template<typename T_View, typename T_BoundDatumDomain, bool OwnView>
     inline constexpr auto is_VirtualDatum<
-        VirtualDatum<T_View, T_BoundDatumDomain, T_ViewHolder>> = true;
+        VirtualDatum<T_View, T_BoundDatumDomain, OwnView>> = true;
 
     /** Uses the \ref stackViewAlloc to allocate a virtual datum with an own
      * bound view "allocated" on the stack. \tparam DatumDomain the datum
@@ -79,7 +75,7 @@ namespace llama
     LLAMA_FN_HOST_ACC_INLINE auto stackVirtualDatumAlloc() -> VirtualDatum<
         decltype(llama::stackViewAlloc<1, DatumDomain>()),
         DatumCoord<>,
-        internal::ViewByValueHolder>
+        true>
     {
         return {UserDomain<1>{}, llama::stackViewAlloc<1, DatumDomain>()};
     }
@@ -91,8 +87,8 @@ namespace llama
      * copy on stack \see stackVirtualDatumAlloc
      */
     template<typename VirtualDatum>
-    LLAMA_FN_HOST_ACC_INLINE auto
-    stackVirtualDatumCopy(const VirtualDatum & vd) -> decltype(auto)
+    LLAMA_FN_HOST_ACC_INLINE auto stackVirtualDatumCopy(const VirtualDatum & vd)
+        -> decltype(auto)
     {
         auto temp = stackVirtualDatumAlloc<
             typename VirtualDatum::AccessibleDatumDomain>();
@@ -197,17 +193,15 @@ namespace llama
     template< \
         typename OtherView, \
         typename OtherBoundDatumDomain, \
-        template<class> \
-        class OtherViewHolder> \
-    LLAMA_FN_HOST_ACC_INLINE auto operator OP(const VirtualDatum< \
-                                                  OtherView, \
-                                                  OtherBoundDatumDomain, \
-                                                  OtherViewHolder> & other) \
+        bool OtherOwnView> \
+    LLAMA_FN_HOST_ACC_INLINE auto operator OP( \
+        const VirtualDatum<OtherView, OtherBoundDatumDomain, OtherOwnView> & \
+            other) \
         ->VirtualDatum & \
     { \
         GenericFunctor< \
             std::remove_reference_t<decltype(*this)>, \
-            VirtualDatum<OtherView, OtherBoundDatumDomain, OtherViewHolder>, \
+            VirtualDatum<OtherView, OtherBoundDatumDomain, OtherOwnView>, \
             DatumCoord<>, \
             FUNCTOR> \
             functor{*this, other}; \
@@ -346,17 +340,14 @@ namespace llama
     template< \
         typename OtherView, \
         typename OtherBoundDatumDomain, \
-        template<class> \
-        class OtherViewHolder> \
-    LLAMA_FN_HOST_ACC_INLINE auto operator OP(const VirtualDatum< \
-                                              OtherView, \
-                                              OtherBoundDatumDomain, \
-                                              OtherViewHolder> & other) \
-        const->bool \
+        bool OtherOwnView> \
+    LLAMA_FN_HOST_ACC_INLINE auto operator OP( \
+        const VirtualDatum<OtherView, OtherBoundDatumDomain, OtherOwnView> & \
+            other) const->bool \
     { \
         GenericBoolFunctor< \
             std::remove_reference_t<decltype(*this)>, \
-            VirtualDatum<OtherView, OtherBoundDatumDomain, OtherViewHolder>, \
+            VirtualDatum<OtherView, OtherBoundDatumDomain, OtherOwnView>, \
             DatumCoord<>, \
             FUNCTOR> \
             functor{*this, other, true}; \
@@ -451,12 +442,8 @@ namespace llama
      * T_BoundDatumDomain optional \ref DatumCoord which restricts the virtual
      * datum to a smaller part of the datum domain
      */
-    template<
-        typename T_View,
-        typename T_BoundDatumDomain,
-        template<typename>
-        class T_ViewHolder>
-    struct VirtualDatum : T_ViewHolder<T_View>
+    template<typename T_View, typename T_BoundDatumDomain, bool OwnView>
+    struct VirtualDatum
     {
         using View = T_View; ///< parent view of the virtual datum
         using Mapping =
@@ -470,8 +457,9 @@ namespace llama
         /// domain tree root
         using BoundDatumDomain = T_BoundDatumDomain;
 
-        UserDomain const
+        const UserDomain
             userDomainPos; ///< resolved position in the user domain
+        std::conditional_t<OwnView, View, View &> view;
 
         /** Sub part of the datum domain of the view/mapping relative to
          *  \ref BoundDatumDomain. If BoundDatumDomain is `DatumCoord<>`
@@ -483,17 +471,9 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE
         VirtualDatum(
             UserDomain userDomainPos,
-            View & view) // TODO unify ctors
-                :
-                T_ViewHolder<T_View>{view}, userDomainPos(userDomainPos)
-        {}
-
-        LLAMA_FN_HOST_ACC_INLINE
-        VirtualDatum(
-            UserDomain userDomainPos,
-            View && view) // TODO unify ctors
-                :
-                T_ViewHolder<T_View>{view}, userDomainPos(userDomainPos)
+            std::conditional_t<OwnView, View &&, View &> view) :
+                userDomainPos(userDomainPos),
+                view{static_cast<decltype(view)>(view)}
         {}
 
         VirtualDatum(const VirtualDatum &) = default;
