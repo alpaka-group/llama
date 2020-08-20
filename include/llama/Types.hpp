@@ -33,10 +33,11 @@ namespace llama
     {};
 
     /** The run-time specified user domain
-     * \tparam T_dim compile time dimensionality of the user domain
+     * \tparam Dim compile time dimensionality of the user domain
      * */
-    template<std::size_t T_dim>
-    using UserDomain = Array<std::size_t, T_dim>;
+    template<std::size_t Dim>
+    struct UserDomain : Array<std::size_t, Dim>
+    {};
 
     static_assert(std::is_trivially_default_constructible_v<
                   UserDomain<1>>); // so UserDomain<1>{} will produce a zeroed
