@@ -38,10 +38,8 @@ namespace llama::allocator
     {
         using PrimType = std::byte;
         using BlobType = Array<PrimType, reserved>;
-        using Parameter = int; ///< the optional allocation parameter is ignored
 
-        static LLAMA_FN_HOST_ACC_INLINE auto
-        allocate(std::size_t, Parameter const) -> BlobType
+        static LLAMA_FN_HOST_ACC_INLINE auto allocate(std::size_t) -> BlobType
         {
             return {};
         }

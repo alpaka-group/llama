@@ -35,11 +35,9 @@ namespace llama::allocator
     {
         using PrimType = std::byte;
         using BlobType = std::shared_ptr<PrimType[]>;
-        using Parameter = int; ///< the optional allocation parameter is ignored
 
         LLAMA_NO_HOST_ACC_WARNING
-        static inline auto allocate(std::size_t count, Parameter const)
-            -> BlobType
+        static inline auto allocate(std::size_t count) -> BlobType
         {
             auto * ptr = static_cast<PrimType *>(::operator new[](
                 count * sizeof(PrimType), std::align_val_t{T_alignment}));

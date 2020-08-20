@@ -124,10 +124,9 @@ namespace llama::allocator
         using BlobType = std::vector<
             PrimType,
             internal::AlignmentAllocator<PrimType, T_alignment>>;
-        using Parameter = int; ///< the optional allocation parameter is ignored
 
         LLAMA_NO_HOST_ACC_WARNING
-        static inline auto allocate(std::size_t count, Parameter const)
+        static inline auto allocate(std::size_t count)
             -> BlobType
         {
             return BlobType(count);

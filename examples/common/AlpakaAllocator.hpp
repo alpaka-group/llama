@@ -77,10 +77,8 @@ namespace common
             using BlobType = internal::AlpakaAccessor<BufferType>;
             /// primary type of this allocator is `unsigned char`
             using PrimType = typename BlobType::PrimType;
-            /// the parameter is the alpaka `DevAcc` instance
-            using Parameter = DevAcc;
 
-            static inline auto allocate(std::size_t count, Parameter devAcc)
+            static inline auto allocate(std::size_t count, const DevAcc& devAcc)
                 -> BlobType
             {
                 BufferType buffer = alpaka::mem::buf::alloc<PrimType, Size>(
