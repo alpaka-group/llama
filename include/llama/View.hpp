@@ -502,8 +502,7 @@ namespace llama
                 return VirtualDatum<
                     const View,
                     typename BoundDatumDomain::template Cat<
-                        DatumCoord<T_coord...>>>{
-                    UserDomain{userDomainPos}, this->view};
+                        DatumCoord<T_coord...>>>{userDomainPos, this->view};
             }
             else
             {
@@ -528,8 +527,7 @@ namespace llama
                 return VirtualDatum<
                     View,
                     typename BoundDatumDomain::template Cat<
-                        DatumCoord<T_coord...>>>{
-                    UserDomain{userDomainPos}, this->view};
+                        DatumCoord<T_coord...>>>{userDomainPos, this->view};
             }
             else
             {
