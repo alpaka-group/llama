@@ -6,26 +6,18 @@
  * itself is not under the public domain but LGPL3+.
  */
 
-#include <iostream>
-#include <utility>
-
-#ifdef __CUDACC__
-/// if cuda is used, the function headers need some annotations
-#define LLAMA_FN_HOST_ACC_INLINE ALPAKA_FN_ACC __forceinline__
-#endif
-#include "../../common/AlpakaAllocator.hpp"
-#include "../../common/AlpakaMemCopy.hpp"
 #include "../../common/AlpakaThreadElemsDistribution.hpp"
 #include "../../common/Chrono.hpp"
-#include "../../common/Dummy.hpp"
 
 #include <alpaka/alpaka.hpp>
+#include <iostream>
 #include <llama/llama.hpp>
 #include <random>
+#include <utility>
 
 constexpr auto MAPPING
-    = 3; /// 0 native AoS, 1 native SoA, 2 tree AoS, 3 tree SoA
-constexpr auto PROBLEM_SIZE = 64 * 1024; //* 1024
+    = 0; /// 0 native AoS, 1 native SoA, 2 tree AoS, 3 tree SoA
+constexpr auto PROBLEM_SIZE = 64 * 1024 * 1024;
 constexpr auto BLOCK_SIZE = 256;
 constexpr auto STEPS = 10;
 
@@ -122,28 +114,37 @@ int main(int argc, char ** argv)
     }();
     using Mapping = decltype(mapping);
 
-    using DevFactory
-        = llama::Factory<Mapping, common::allocator::Alpaka<DevAcc, Size>>;
-    using MirrorFactory = llama::Factory<
-        Mapping,
-        common::allocator::AlpakaMirror<DevAcc, Size, Mapping>>;
-    using HostFactory
-        = llama::Factory<Mapping, common::allocator::Alpaka<DevHost, Size>>;
-
     std::cout << PROBLEM_SIZE / 1000 / 1000 << " million vectors\n"
               << PROBLEM_SIZE * llama::SizeOf<Vector>::value * 2 / 1000 / 1000
               << " MB on device\n";
 
     Chrono chrono;
 
-    auto hostA = HostFactory::allocView(mapping, devHost);
-    auto hostB = HostFactory::allocView(mapping, devHost);
-    auto devA = DevFactory::allocView(mapping, devAcc);
-    auto devB = DevFactory::allocView(mapping, devAcc);
-    auto mirrorA = MirrorFactory::allocView(mapping, devA);
-    auto mirrorB = MirrorFactory::allocView(mapping, devB);
+    const auto bufferSize = Size(mapping.getBlobSize(0));
+
+    // allocate buffers
+    auto hostBufferA
+        = alpaka::mem::buf::alloc<std::byte, Size>(devHost, bufferSize);
+    auto hostBufferB
+        = alpaka::mem::buf::alloc<std::byte, Size>(devHost, bufferSize);
+    auto devBufferA
+        = alpaka::mem::buf::alloc<std::byte, Size>(devAcc, bufferSize);
+    auto devBufferB
+        = alpaka::mem::buf::alloc<std::byte, Size>(devAcc, bufferSize);
 
     chrono.printAndReset("Alloc");
+
+    // create LLAMA views
+    auto hostA = llama::View<Mapping, std::byte *>{
+        mapping, {alpaka::mem::view::getPtrNative(hostBufferA)}};
+    auto hostB = llama::View<Mapping, std::byte *>{
+        mapping, {alpaka::mem::view::getPtrNative(hostBufferB)}};
+    auto devA = llama::View<Mapping, std::byte *>{
+        mapping, {alpaka::mem::view::getPtrNative(devBufferA)}};
+    auto devB = llama::View<Mapping, std::byte *>{
+        mapping, {alpaka::mem::view::getPtrNative(devBufferB)}};
+
+    chrono.printAndReset("Views");
 
     std::default_random_engine generator;
     std::normal_distribution<FP> distribution(FP(0), FP(1));
@@ -156,8 +157,8 @@ int main(int argc, char ** argv)
     }
     chrono.printAndReset("Init");
 
-    alpakaMemCopy(devA, hostA, userDomain, queue);
-    alpakaMemCopy(devB, hostB, userDomain, queue);
+    alpaka::mem::view::copy(queue, devBufferA, hostBufferA, bufferSize);
+    alpaka::mem::view::copy(queue, devBufferB, hostBufferB, bufferSize);
 
     chrono.printAndReset("Copy H->D");
 
@@ -178,18 +179,12 @@ int main(int argc, char ** argv)
     for(std::size_t s = 0; s < STEPS; ++s)
     {
         alpaka::kernel::exec<Acc>(
-            queue,
-            workdiv,
-            AddKernel<PROBLEM_SIZE, elemCount>{},
-            mirrorA,
-            mirrorB);
+            queue, workdiv, AddKernel<PROBLEM_SIZE, elemCount>{}, devA, devB);
         chrono.printAndReset("Add kernel");
-        dummy(static_cast<void *>(mirrorA.blob[0]));
-        dummy(static_cast<void *>(mirrorB.blob[0]));
     }
 
-    alpakaMemCopy(hostA, devA, userDomain, queue);
-    alpakaMemCopy(hostB, devB, userDomain, queue);
+    alpaka::mem::view::copy(queue, hostBufferA, devBufferA, bufferSize);
+    alpaka::mem::view::copy(queue, hostBufferB, devBufferB, bufferSize);
 
     chrono.printAndReset("Copy D->H");
 
