@@ -351,3 +351,26 @@ TEST_CASE("AssignOneDatumIntoView")
     CHECK(datum(tag::Options{}).access<2>() == true);
     CHECK(datum(tag::Options{}).access<3>() == false);
 }
+
+TEST_CASE("non-memory-owning view")
+{
+    using UserDomain = llama::UserDomain<1>;
+    UserDomain userDomain{256};
+
+    using Mapping = llama::mapping::SoA<UserDomain, Name>;
+    Mapping mapping{userDomain};
+
+    std::vector<std::byte> storage(mapping.getBlobSize(0));
+    auto view = llama::View<Mapping, std::byte *>{mapping, {storage.data()}};
+
+    for(auto i = 0u; i < 256u; i++)
+    {
+        auto * x = (std::byte *)&view(i)(tag::Pos{}, tag::X{});
+        auto * o3 = (std::byte *)&view(i)(tag::Options{}).access<3>();
+
+        CHECK(&storage.front() <= x);
+        CHECK(x <= &storage.back());
+        CHECK(&storage.front() <= o3);
+        CHECK(o3 <= &storage.back());
+    }
+}
