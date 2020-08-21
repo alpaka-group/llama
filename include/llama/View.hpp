@@ -100,47 +100,27 @@ namespace llama
         typename T_LeftLocal, \
         typename T_RightDatum, \
         typename T_RightBase, \
-        typename T_RightLocal, \
-        typename SFINAE = void> \
+        typename T_RightLocal> \
     struct BOOST_PP_CAT(FUNCTOR, IfSameUIDFunctor) \
     { \
         LLAMA_FN_HOST_ACC_INLINE \
-        auto operator()() const -> void {} \
-        T_LeftDatum & left; \
-        T_RightDatum & right; \
-    }; \
-\
-    template< \
-        typename T_LeftDatum, \
-        typename T_LeftBase, \
-        typename T_LeftLocal, \
-        typename T_RightDatum, \
-        typename T_RightBase, \
-        typename T_RightLocal> \
-    struct BOOST_PP_CAT(FUNCTOR, IfSameUIDFunctor)< \
-        T_LeftDatum, \
-        T_LeftBase, \
-        T_LeftLocal, \
-        T_RightDatum, \
-        T_RightBase, \
-        T_RightLocal, \
-        typename std::enable_if_t<CompareUID< \
-            typename T_LeftDatum::AccessibleDatumDomain, \
-            T_LeftBase, \
-            T_LeftLocal, \
-            typename T_RightDatum::AccessibleDatumDomain, \
-            T_RightBase, \
-            T_RightLocal>::value>> \
-    { \
-        LLAMA_FN_HOST_ACC_INLINE \
-        auto operator()() -> void \
+        void operator()() const \
         { \
-            using Dst = typename T_LeftBase::template Cat<T_LeftLocal>; \
-            using Src = typename T_RightBase::template Cat<T_RightLocal>; \
-            left(Dst()) OP right(Src()); \
+            if constexpr(CompareUID< \
+                             typename T_LeftDatum::AccessibleDatumDomain, \
+                             T_LeftBase, \
+                             T_LeftLocal, \
+                             typename T_RightDatum::AccessibleDatumDomain, \
+                             T_RightBase, \
+                             T_RightLocal>::value) \
+            { \
+                using Dst = typename T_LeftBase::template Cat<T_LeftLocal>; \
+                using Src = typename T_RightBase::template Cat<T_RightLocal>; \
+                left(Dst()) OP right(Src()); \
+            } \
         } \
         T_LeftDatum & left; \
-        T_RightDatum & right; \
+        const T_RightDatum & right; \
     }; \
 \
     template< \
@@ -151,8 +131,7 @@ namespace llama
     struct BOOST_PP_CAT(FUNCTOR, InnerFunctor) \
     { \
         template<typename T_OuterCoord, typename T_InnerCoord> \
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(T_OuterCoord, T_InnerCoord) \
-            -> void \
+        LLAMA_FN_HOST_ACC_INLINE void operator()(T_OuterCoord, T_InnerCoord) \
         { \
             BOOST_PP_CAT(FUNCTOR, IfSameUIDFunctor)< \
                 typename std::remove_reference<T_LeftDatum>::type, \
@@ -165,15 +144,14 @@ namespace llama
             functor(); \
         } \
         T_LeftDatum & left; \
-        T_RightDatum & right; \
+        const T_RightDatum & right; \
     }; \
 \
     template<typename T_LeftDatum, typename T_RightDatum, typename T_Source> \
     struct BOOST_PP_CAT(FUNCTOR, Functor) \
     { \
         template<typename T_OuterCoord, typename T_InnerCoord> \
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(T_OuterCoord, T_InnerCoord) \
-            -> void \
+        LLAMA_FN_HOST_ACC_INLINE void operator()(T_OuterCoord, T_InnerCoord) \
         { \
             BOOST_PP_CAT(FUNCTOR, InnerFunctor)< \
                 T_LeftDatum, \
@@ -185,15 +163,14 @@ namespace llama
                 apply(functor); \
         } \
         T_LeftDatum & left; \
-        T_RightDatum & right; \
+        const T_RightDatum & right; \
     }; \
 \
     template<typename T_LeftDatum, typename T_RightType> \
     struct BOOST_PP_CAT(FUNCTOR, TypeFunctor) \
     { \
         template<typename T_OuterCoord, typename T_InnerCoord> \
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(T_OuterCoord, T_InnerCoord) \
-            -> void \
+        LLAMA_FN_HOST_ACC_INLINE void operator()(T_OuterCoord, T_InnerCoord) \
         { \
             using Dst = typename T_OuterCoord::template Cat<T_InnerCoord>; \
             left(Dst()) OP static_cast< \
@@ -201,7 +178,7 @@ namespace llama
                 right); \
         } \
         T_LeftDatum & left; \
-        T_RightType & right; \
+        const T_RightType & right; \
     };
 
     __LLAMA_DEFINE_FOREACH_FUNCTOR(=, Assigment)
@@ -275,9 +252,9 @@ namespace llama
  * \param REF may be & or && to determine whether it is an overloading for
  *        lvalue or rvalue references
  * */
-#define __LLAMA_VIRTUALDATUM_TYPE_OPERATOR(OP, FUNCTOR, REF) \
+#define __LLAMA_VIRTUALDATUM_TYPE_OPERATOR(OP, FUNCTOR) \
     template<typename T_OtherType> \
-    LLAMA_FN_HOST_ACC_INLINE auto operator OP(T_OtherType REF other) \
+    LLAMA_FN_HOST_ACC_INLINE auto operator OP(const T_OtherType & other) \
         ->decltype(*this) & \
     { \
         BOOST_PP_CAT(FUNCTOR, TypeFunctor)<decltype(*this), T_OtherType> \
@@ -291,8 +268,7 @@ namespace llama
     __LLAMA_VIRTUALDATUM_VIRTUALDATUM_OPERATOR(OP, FUNCTOR, &&) \
     __LLAMA_VIRTUALDATUM_VIEW_OPERATOR(OP, FUNCTOR, &) \
     __LLAMA_VIRTUALDATUM_VIEW_OPERATOR(OP, FUNCTOR, &&) \
-    __LLAMA_VIRTUALDATUM_TYPE_OPERATOR(OP, FUNCTOR, &) \
-    __LLAMA_VIRTUALDATUM_TYPE_OPERATOR(OP, FUNCTOR, &&)
+    __LLAMA_VIRTUALDATUM_TYPE_OPERATOR(OP, FUNCTOR)
 
 /** Macro that defines a non inplace operator overloading inside of
  *  \ref llama::VirtualDatum for itself and some other type based on the already
@@ -335,48 +311,27 @@ namespace llama
         typename T_LeftLocal, \
         typename T_RightDatum, \
         typename T_RightBase, \
-        typename T_RightLocal, \
-        typename SFINAE = void> \
+        typename T_RightLocal> \
     struct BOOST_PP_CAT(FUNCTOR, BoolIfSameUIDFunctor) \
     { \
         LLAMA_FN_HOST_ACC_INLINE \
-        auto operator()() -> void {} \
-        T_LeftDatum & left; \
-        T_RightDatum & right; \
-        bool result; \
-    }; \
-\
-    template< \
-        typename T_LeftDatum, \
-        typename T_LeftBase, \
-        typename T_LeftLocal, \
-        typename T_RightDatum, \
-        typename T_RightBase, \
-        typename T_RightLocal> \
-    struct BOOST_PP_CAT(FUNCTOR, BoolIfSameUIDFunctor)< \
-        T_LeftDatum, \
-        T_LeftBase, \
-        T_LeftLocal, \
-        T_RightDatum, \
-        T_RightBase, \
-        T_RightLocal, \
-        typename std::enable_if_t<CompareUID< \
-            typename T_LeftDatum::Mapping::DatumDomain, \
-            T_LeftBase, \
-            T_LeftLocal, \
-            typename T_RightDatum::Mapping::DatumDomain, \
-            T_RightBase, \
-            T_RightLocal>::value>> \
-    { \
-        LLAMA_FN_HOST_ACC_INLINE \
-        auto operator()() -> void \
+        void operator()() \
         { \
-            using Dst = typename T_LeftBase::template Cat<T_LeftLocal>; \
-            using Src = typename T_RightBase::template Cat<T_RightLocal>; \
-            result = left(Dst()) OP right(Src()); \
+            if constexpr(CompareUID< \
+                             typename T_LeftDatum::Mapping::DatumDomain, \
+                             T_LeftBase, \
+                             T_LeftLocal, \
+                             typename T_RightDatum::Mapping::DatumDomain, \
+                             T_RightBase, \
+                             T_RightLocal>::value) \
+            { \
+                using Dst = typename T_LeftBase::template Cat<T_LeftLocal>; \
+                using Src = typename T_RightBase::template Cat<T_RightLocal>; \
+                result = left(Dst()) OP right(Src()); \
+            } \
         } \
-        T_LeftDatum & left; \
-        T_RightDatum & right; \
+        const T_LeftDatum & left; \
+        const T_RightDatum & right; \
         bool result; \
     }; \
 \
@@ -388,8 +343,7 @@ namespace llama
     struct BOOST_PP_CAT(FUNCTOR, BoolInnerFunctor) \
     { \
         template<typename T_OuterCoord, typename T_InnerCoord> \
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(T_OuterCoord, T_InnerCoord) \
-            -> void \
+        LLAMA_FN_HOST_ACC_INLINE void operator()(T_OuterCoord, T_InnerCoord) \
         { \
             BOOST_PP_CAT(FUNCTOR, BoolIfSameUIDFunctor)< \
                 typename std::remove_reference<T_LeftDatum>::type, \
@@ -402,8 +356,8 @@ namespace llama
             functor(); \
             result &= functor.result; \
         } \
-        T_LeftDatum & left; \
-        T_RightDatum & right; \
+        const T_LeftDatum & left; \
+        const T_RightDatum & right; \
         bool result; \
     }; \
 \
@@ -411,8 +365,7 @@ namespace llama
     struct BOOST_PP_CAT(FUNCTOR, BoolFunctor) \
     { \
         template<typename T_OuterCoord, typename T_InnerCoord> \
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(T_OuterCoord, T_InnerCoord) \
-            -> void \
+        LLAMA_FN_HOST_ACC_INLINE void operator()(T_OuterCoord, T_InnerCoord) \
         { \
             BOOST_PP_CAT(FUNCTOR, BoolInnerFunctor)< \
                 T_LeftDatum, \
@@ -424,8 +377,8 @@ namespace llama
                 apply(functor); \
             result &= functor.result; \
         } \
-        T_LeftDatum & left; \
-        T_RightDatum & right; \
+        const T_LeftDatum & left; \
+        const T_RightDatum & right; \
         bool result; \
     }; \
 \
@@ -433,16 +386,15 @@ namespace llama
     struct BOOST_PP_CAT(FUNCTOR, BoolTypeFunctor) \
     { \
         template<typename T_OuterCoord, typename T_InnerCoord> \
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(T_OuterCoord, T_InnerCoord) \
-            -> void \
+        LLAMA_FN_HOST_ACC_INLINE void operator()(T_OuterCoord, T_InnerCoord) \
         { \
             using Dst = typename T_OuterCoord::template Cat<T_InnerCoord>; \
             result &= left(Dst()) OP static_cast< \
                 typename std::remove_reference<decltype(left(Dst()))>::type>( \
                 right); \
         } \
-        T_LeftDatum & left; \
-        T_RightType & right; \
+        const T_LeftDatum & left; \
+        const T_RightType & right; \
         bool result; \
     };
 
@@ -464,29 +416,6 @@ namespace llama
  * \return result of the boolean operation for every combination with the same
  *  UID
  * */
-#define __LLAMA_VIRTUALDATUM_VIRTUALDATUM_BOOL_OPERATOR(OP, FUNCTOR, REF) \
-    template< \
-        typename T_OtherView, \
-        typename T_OtherBoundDatumDomain, \
-        template<class> \
-        class T_OtherViewHolder> \
-    LLAMA_FN_HOST_ACC_INLINE auto operator OP( \
-        VirtualDatum<T_OtherView, T_OtherBoundDatumDomain, T_OtherViewHolder> \
-            REF other) \
-        ->bool \
-    { \
-        BOOST_PP_CAT(FUNCTOR, BoolFunctor)< \
-            decltype(*this), \
-            VirtualDatum< \
-                T_OtherView, \
-                T_OtherBoundDatumDomain, \
-                T_OtherViewHolder>, \
-            DatumCoord<>> \
-            functor{*this, other, true}; \
-        ForEach<AccessibleDatumDomain, DatumCoord<>>::apply(functor); \
-        return functor.result; \
-    }
-
 /** Macro that defines a boolean operator overloading inside of
  *  \ref llama::VirtualDatum for itself and a view. Internally the virtual datum
  * at the first postion (all zeros) will be taken. This is useful for
@@ -499,22 +428,6 @@ namespace llama
  * \return result of the boolean operation for every combination with the same
  *  UID
  * */
-#define __LLAMA_VIRTUALDATUM_VIEW_BOOL_OPERATOR(OP, FUNCTOR, REF) \
-    template<typename T_OtherMapping, typename T_OtherBlobType> \
-    LLAMA_FN_HOST_ACC_INLINE auto operator OP( \
-        llama::View<T_OtherMapping, T_OtherBlobType> REF other) \
-        ->bool \
-    { \
-        auto otherVd \
-            = other(llama::UserDomain<T_OtherMapping::UserDomain::count>{}); \
-        BOOST_PP_CAT( \
-            FUNCTOR, \
-            BoolFunctor)<decltype(*this), decltype(otherVd), DatumCoord<>> \
-            functor{*this, otherVd, true}; \
-        ForEach<AccessibleDatumDomain, DatumCoord<>>::apply(functor); \
-        return functor.result; \
-    }
-
 /** Macro that defines a boolean operator overloading inside of
  *  \ref llama::VirtualDatum for itself and some other type.
  * \param OP operator, e.g. operator >=
@@ -525,9 +438,46 @@ namespace llama
  *        lvalue or rvalue references
  * \return result of the boolean operation for every combination
  * */
-#define __LLAMA_VIRTUALDATUM_TYPE_BOOL_OPERATOR(OP, FUNCTOR, REF) \
+#define __LLAMA_VIRTUALDATUM_BOOL_OPERATOR(OP, FUNCTOR) \
+    template< \
+        typename T_OtherView, \
+        typename T_OtherBoundDatumDomain, \
+        template<class> \
+        class T_OtherViewHolder> \
+    LLAMA_FN_HOST_ACC_INLINE auto operator OP(const VirtualDatum< \
+                                              T_OtherView, \
+                                              T_OtherBoundDatumDomain, \
+                                              T_OtherViewHolder> & other) \
+        const->bool \
+    { \
+        BOOST_PP_CAT(FUNCTOR, BoolFunctor)< \
+            decltype(*this), \
+            VirtualDatum< \
+                T_OtherView, \
+                T_OtherBoundDatumDomain, \
+                T_OtherViewHolder>, \
+            DatumCoord<>> \
+            functor{*this, other, true}; \
+        ForEach<AccessibleDatumDomain, DatumCoord<>>::apply(functor); \
+        return functor.result; \
+    } \
+    template<typename T_OtherMapping, typename T_OtherBlobType> \
+    LLAMA_FN_HOST_ACC_INLINE auto operator OP( \
+        const llama::View<T_OtherMapping, T_OtherBlobType> & other) \
+        const->bool \
+    { \
+        auto otherVd \
+            = other(llama::UserDomain<T_OtherMapping::UserDomain::count>{}); \
+        BOOST_PP_CAT( \
+            FUNCTOR, \
+            BoolFunctor)<decltype(*this), decltype(otherVd), DatumCoord<>> \
+            functor{*this, otherVd, true}; \
+        ForEach<AccessibleDatumDomain, DatumCoord<>>::apply(functor); \
+        return functor.result; \
+    } \
     template<typename T_OtherType> \
-    LLAMA_FN_HOST_ACC_INLINE auto operator OP(T_OtherType REF other)->bool \
+    LLAMA_FN_HOST_ACC_INLINE auto operator OP(const T_OtherType & other) \
+        const->bool \
     { \
         BOOST_PP_CAT(FUNCTOR, BoolTypeFunctor)<decltype(*this), T_OtherType> \
             functor{*this, other, true}; \
@@ -535,13 +485,11 @@ namespace llama
         return functor.result; \
     }
 
-#define __LLAMA_VIRTUALDATUM_BOOL_OPERATOR(OP, FUNCTOR) \
-    __LLAMA_VIRTUALDATUM_VIRTUALDATUM_BOOL_OPERATOR(OP, FUNCTOR, &) \
-    __LLAMA_VIRTUALDATUM_VIRTUALDATUM_BOOL_OPERATOR(OP, FUNCTOR, &&) \
-    __LLAMA_VIRTUALDATUM_VIEW_BOOL_OPERATOR(OP, FUNCTOR, &) \
-    __LLAMA_VIRTUALDATUM_VIEW_BOOL_OPERATOR(OP, FUNCTOR, &&) \
-    __LLAMA_VIRTUALDATUM_TYPE_BOOL_OPERATOR(OP, FUNCTOR, &) \
-    __LLAMA_VIRTUALDATUM_TYPE_BOOL_OPERATOR(OP, FUNCTOR, &&)
+    template<typename T>
+    auto as_mutable(const T & t) -> T &
+    {
+        return const_cast<T &>(t);
+    }
 
     /** Virtual data type returned by \ref View after resolving user domain
      * address, being "virtual" in that sense that the data of the virtual datum
@@ -606,10 +554,35 @@ namespace llama
          * a new virtual datum with a bound datum coord
          */
         template<std::size_t... T_coord>
-        LLAMA_FN_HOST_ACC_INLINE auto access(DatumCoord<T_coord...> = {})
+        LLAMA_FN_HOST_ACC_INLINE auto access(DatumCoord<T_coord...> = {}) const
             -> decltype(auto)
-        { // may deduce &
+        {
+            if constexpr(is_DatumStruct<GetType<
+                             DatumDomain,
+                             typename BoundDatumDomain::template Cat<
+                                 DatumCoord<T_coord...>>>>::value)
+            {
+                LLAMA_FORCE_INLINE_RECURSIVE
+                return VirtualDatum<
+                    const View,
+                    typename BoundDatumDomain::template Cat<
+                        DatumCoord<T_coord...>>>{
+                    UserDomain{userDomainPos}, this->view};
+            }
+            else
+            {
+                using DatumCoord = typename BoundDatumDomain::template Cat<
+                    DatumCoord<T_coord...>>;
+                LLAMA_FORCE_INLINE_RECURSIVE
+                return this->view.accessor(userDomainPos, DatumCoord{});
+            }
+        }
 
+        // FIXME(bgruber): remove redundancy
+        template<std::size_t... T_coord>
+        LLAMA_FN_HOST_ACC_INLINE auto access(DatumCoord<T_coord...> coord = {})
+            -> decltype(auto)
+        {
             if constexpr(is_DatumStruct<GetType<
                              DatumDomain,
                              typename BoundDatumDomain::template Cat<
@@ -641,8 +614,21 @@ namespace llama
          *  domain coordinate or a new virtual datum with a bound datum coord
          */
         template<typename... UIDs>
-        LLAMA_FN_HOST_ACC_INLINE auto access(UIDs...) -> decltype(auto)
-        { // may deduce &
+        LLAMA_FN_HOST_ACC_INLINE auto access(UIDs...) const -> decltype(auto)
+        {
+            using DatumCoord = GetCoordFromUIDRelative<
+                DatumDomain,
+                BoundDatumDomain,
+                UIDs...>;
+
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return access(DatumCoord{});
+        }
+
+        // FIXME(bgruber): remove redundancy
+        template<typename... UIDs>
+        LLAMA_FN_HOST_ACC_INLINE auto access(UIDs... uids) -> decltype(auto)
+        {
             using DatumCoord = GetCoordFromUIDRelative<
                 DatumDomain,
                 BoundDatumDomain,
@@ -653,8 +639,15 @@ namespace llama
         }
 
         template<typename... DatumCoordOrUIDs>
+        LLAMA_FN_HOST_ACC_INLINE auto access() const -> decltype(auto)
+        {
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return access(DatumCoordOrUIDs{}...);
+        }
+
+        template<typename... DatumCoordOrUIDs>
         LLAMA_FN_HOST_ACC_INLINE auto access() -> decltype(auto)
-        { // may deduce &
+        {
             LLAMA_FORCE_INLINE_RECURSIVE
             return access(DatumCoordOrUIDs{}...);
         }
@@ -670,9 +663,17 @@ namespace llama
          *  domain coordinate or a new virtual datum with a bound datum coord
          */
         template<typename... DatumCoordOrUIDs>
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(DatumCoordOrUIDs...) const
+            -> decltype(auto)
+        {
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return access(DatumCoordOrUIDs{}...);
+        }
+
+        template<typename... DatumCoordOrUIDs>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(DatumCoordOrUIDs...)
             -> decltype(auto)
-        { // may deduce &
+        {
             LLAMA_FORCE_INLINE_RECURSIVE
             return access(DatumCoordOrUIDs{}...);
         }
@@ -711,11 +712,9 @@ namespace llama
         using Mapping = T_Mapping; ///< used mapping
         using UserDomain = typename Mapping::UserDomain;
         using DatumDomain = typename Mapping::DatumDomain;
-        using VirtualDatumType
-            = VirtualDatum<View<Mapping, BlobType>>; ///< corresponding \ref
-                                                     ///< llama::VirtualDatum
-                                                     ///< type returned after
-                                                     ///< resolving user domain
+        using VirtualDatumType = VirtualDatum<View<Mapping, BlobType>>;
+        using VirtualDatumTypeConst
+            = VirtualDatum<const View<Mapping, BlobType>>;
 
         View() = default;
 
@@ -736,14 +735,24 @@ namespace llama
         LLAMA_NO_HOST_ACC_WARNING
         template<std::size_t... T_coords>
         LLAMA_FN_HOST_ACC_INLINE auto
-        accessor(UserDomain userDomain, DatumCoord<T_coords...> = {}) -> auto &
+        accessor(UserDomain userDomain, DatumCoord<T_coords...> = {}) const
+            -> const auto &
         {
             auto const blobIndex
                 = mapping.template getBlobNr<T_coords...>(userDomain);
             auto const offset
                 = mapping.template getBlobByte<T_coords...>(userDomain);
             using Type = GetType<DatumDomain, DatumCoord<T_coords...>>;
-            return reinterpret_cast<Type &>(blob[blobIndex][offset]);
+            return reinterpret_cast<const Type &>(blob[blobIndex][offset]);
+        }
+
+        LLAMA_NO_HOST_ACC_WARNING
+        template<std::size_t... T_coords>
+        LLAMA_FN_HOST_ACC_INLINE auto
+        accessor(UserDomain userDomain, DatumCoord<T_coords...> coord = {})
+            -> auto &
+        {
+            return as_mutable(std::as_const(*this).accessor(userDomain, coord));
         }
 
         /** Explicit access function taking the datum domain as UID type list
@@ -754,6 +763,16 @@ namespace llama
          * \param userDomain user domain as \ref UserDomain
          * \return reference to element
          */
+        LLAMA_NO_HOST_ACC_WARNING
+        template<typename... T_UIDs>
+        LLAMA_FN_HOST_ACC_INLINE auto accessor(UserDomain userDomain) const
+            -> const auto &
+        {
+            using DatumCoord = GetCoordFromUID<DatumDomain, T_UIDs...>;
+            return accessor(userDomain, DatumCoord{});
+        }
+
+        // FIXME(bgruber): remove redundancy
         LLAMA_NO_HOST_ACC_WARNING
         template<typename... T_UIDs>
         LLAMA_FN_HOST_ACC_INLINE auto accessor(UserDomain userDomain) -> auto &
@@ -770,6 +789,13 @@ namespace llama
          * domain as \ref UserDomain \return \ref llama::VirtualDatum with bound
          * user domain, which can be used to access the datum domain
          */
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(UserDomain userDomain) const
+            -> VirtualDatumTypeConst
+        {
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return {userDomain, *this};
+        }
+
         LLAMA_FN_HOST_ACC_INLINE auto operator()(UserDomain userDomain)
             -> VirtualDatumType
         {
@@ -777,7 +803,13 @@ namespace llama
             return {userDomain, *this};
         }
 
-        /// Same as operator().
+        LLAMA_FN_HOST_ACC_INLINE auto operator[](UserDomain userDomain) const
+            -> VirtualDatumTypeConst
+        {
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return {userDomain, *this};
+        }
+
         LLAMA_FN_HOST_ACC_INLINE auto operator[](UserDomain userDomain)
             -> VirtualDatumType
         {
@@ -795,6 +827,14 @@ namespace llama
          * which can be used to access the datum domain
          */
         template<typename... Coord>
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(Coord... coord) const
+            -> VirtualDatumTypeConst
+        {
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return {UserDomain{coord...}, *this};
+        }
+
+        template<typename... Coord>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Coord... coord)
             -> VirtualDatumType
         {
@@ -802,16 +842,22 @@ namespace llama
             return {UserDomain{coord...}, *this};
         }
 
-        template<typename... Coord>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(Coord... coord) const
-            -> VirtualDatumType
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(std::size_t coord = 0) const
+            -> VirtualDatumTypeConst
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return {UserDomain{coord...}, *this};
+            return {UserDomain{coord}, *this};
         }
 
         LLAMA_FN_HOST_ACC_INLINE auto operator()(std::size_t coord = 0)
             -> VirtualDatumType
+        {
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return {UserDomain{coord}, *this};
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t coord) const
+            -> VirtualDatumTypeConst
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return {UserDomain{coord}, *this};
@@ -822,6 +868,14 @@ namespace llama
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return {UserDomain{coord}, *this};
+        }
+
+        template<std::size_t... Coord>
+        LLAMA_FN_HOST_ACC_INLINE auto
+        operator()(DatumCoord<Coord...> dc = {}) const -> decltype(auto)
+        {
+            LLAMA_FORCE_INLINE_RECURSIVE
+            return accessor<Coord...>(UserDomain{});
         }
 
         template<std::size_t... Coord>
