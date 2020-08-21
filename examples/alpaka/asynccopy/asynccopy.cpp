@@ -360,10 +360,9 @@ int main(int argc, char ** argv)
     const auto workdiv
         = alpaka::workdiv::WorkDivMembers<Dim, size_t>{blocks, threads, elems};
 
-    using HostViewType = llama::VirtualView<decltype(hostView)>;
     struct VirtualHostElement
     {
-        HostViewType virtualHost;
+        llama::VirtualView<decltype(hostView)> virtualHost;
         const UserDomain validMiniSize;
     };
     std::list<VirtualHostElement> virtualHostList;
@@ -378,7 +377,7 @@ int main(int argc, char ** argv)
                 ((chunk_x < chunks[1] - 1) ? CHUNK_SIZE
                                            : (img_x - 1) % CHUNK_SIZE + 1)
                     + 2 * KERNEL_SIZE};
-            llama::VirtualView<decltype(hostView)> virtualHost(
+            llama::VirtualView virtualHost(
                 hostView,
                 {chunk_y * CHUNK_SIZE, chunk_x * CHUNK_SIZE},
                 validMiniSize);
@@ -389,8 +388,8 @@ int main(int argc, char ** argv)
                 virtualHostList.push_back({virtualHost, validMiniSize});
             else
             {
-                bool not_found = true;
-                while(not_found)
+                bool notFound = true;
+                while(notFound)
                 {
                     auto chunkIt = virtualHostList.begin();
                     for(chunkNr = 0; chunkNr < CHUNK_COUNT; ++chunkNr)
@@ -399,16 +398,16 @@ int main(int argc, char ** argv)
                         {
                             // Copy data back
                             LLAMA_INDEPENDENT_DATA
-                            for(std::size_t y = 0; y
-                                < (*chunkIt).validMiniSize[0] - 2 * KERNEL_SIZE;
+                            for(std::size_t y = 0;
+                                y < chunkIt->validMiniSize[0] - 2 * KERNEL_SIZE;
                                 ++y)
                             {
                                 LLAMA_INDEPENDENT_DATA
                                 for(std::size_t x = 0;
-                                    x < (*chunkIt).validMiniSize[1]
+                                    x < chunkIt->validMiniSize[1]
                                         - 2 * KERNEL_SIZE;
                                     ++x)
-                                    (*chunkIt).virtualHost(
+                                    chunkIt->virtualHost(
                                         y + KERNEL_SIZE, x + KERNEL_SIZE)
                                         = hostChunkView[chunkNr](
                                             y + KERNEL_SIZE, x + KERNEL_SIZE);
@@ -416,12 +415,12 @@ int main(int argc, char ** argv)
                             chunkIt = virtualHostList.erase(chunkIt);
                             virtualHostList.insert(
                                 chunkIt, {virtualHost, validMiniSize});
-                            not_found = false;
+                            notFound = false;
                             break;
                         }
                         chunkIt++;
                     }
-                    if(not_found)
+                    if(notFound)
                         std::this_thread::sleep_for(
                             std::chrono::microseconds{1});
                 }
@@ -463,15 +462,14 @@ int main(int argc, char ** argv)
         alpaka::wait::wait(queue[chunkNr]);
         // Copy data back
         LLAMA_INDEPENDENT_DATA
-        for(std::size_t y = 0;
-            y < (*chunkIt).validMiniSize[0] - 2 * KERNEL_SIZE;
+        for(std::size_t y = 0; y < chunkIt->validMiniSize[0] - 2 * KERNEL_SIZE;
             ++y)
         {
             LLAMA_INDEPENDENT_DATA
             for(std::size_t x = 0;
-                x < (*chunkIt).validMiniSize[1] - 2 * KERNEL_SIZE;
+                x < chunkIt->validMiniSize[1] - 2 * KERNEL_SIZE;
                 ++x)
-                (*chunkIt).virtualHost(y + KERNEL_SIZE, x + KERNEL_SIZE)
+                chunkIt->virtualHost(y + KERNEL_SIZE, x + KERNEL_SIZE)
                     = hostChunkView[chunkNr](y + KERNEL_SIZE, x + KERNEL_SIZE);
         }
         chunkIt++;
