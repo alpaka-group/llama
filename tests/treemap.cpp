@@ -959,7 +959,11 @@ TEST_CASE("treemapping")
         for(size_t y = 0; y < userDomain[1]; ++y)
         {
             auto datum = view(x, y);
-            llama::AdditionFunctor<decltype(datum), decltype(datum), tag::Pos>
+            llama::GenericFunctor<
+                decltype(datum),
+                decltype(datum),
+                tag::Pos,
+                llama::Addition>
                 as{datum, datum};
             llama::ForEach<Name, tag::Momentum>::apply(as);
             //~ auto datum2 = view( x+1, y );

@@ -32,18 +32,24 @@ namespace llama
     template<typename T_Mapping, typename T_BlobType>
     struct View;
 
+    template<typename View>
+    inline constexpr auto is_View = false;
+
+    template<typename T_Mapping, typename T_BlobType>
+    inline constexpr auto is_View<View<T_Mapping, T_BlobType>> = true;
+
     namespace internal
     {
-        template<typename T_View>
+        template<typename View>
         struct ViewByRefHolder
         {
-            T_View & view;
+            View & view;
         };
 
-        template<typename T_View>
+        template<typename View>
         struct ViewByValueHolder
         {
-            T_View view;
+            View view;
         };
     }
 
@@ -53,357 +59,255 @@ namespace llama
         template<class> class T_ViewHolder = internal::ViewByRefHolder>
     struct VirtualDatum;
 
+    template<typename View>
+    inline constexpr auto is_VirtualDatum = false;
+
+    template<
+        typename T_View,
+        typename T_BoundDatumDomain,
+        template<class>
+        class T_ViewHolder>
+    inline constexpr auto is_VirtualDatum<
+        VirtualDatum<T_View, T_BoundDatumDomain, T_ViewHolder>> = true;
+
     /** Uses the \ref stackViewAlloc to allocate a virtual datum with an own
-     * bound view "allocated" on the stack. \tparam T_DatumDomain the datum
+     * bound view "allocated" on the stack. \tparam DatumDomain the datum
      * domain for the virtual datum \return the allocated virtual datum \see
      * stackViewAlloc
      */
-    template<typename T_DatumDomain>
+    template<typename DatumDomain>
     LLAMA_FN_HOST_ACC_INLINE auto stackVirtualDatumAlloc() -> VirtualDatum<
-        decltype(llama::stackViewAlloc<1, T_DatumDomain>()),
+        decltype(llama::stackViewAlloc<1, DatumDomain>()),
         DatumCoord<>,
         internal::ViewByValueHolder>
     {
-        return {UserDomain<1>{}, llama::stackViewAlloc<1, T_DatumDomain>()};
+        return {UserDomain<1>{}, llama::stackViewAlloc<1, DatumDomain>()};
     }
 
     /** Uses the \ref stackVirtualDatumAlloc to allocate a virtual datum with an
      * own bound view "allocated" on the stack bases on an existing virtual
      * datum, whose data is copied into the new virtual datum. \tparam
-     * T_VirtualDatum type of the input virtual datum \return the virtual datum
+     * VirtualDatum type of the input virtual datum \return the virtual datum
      * copy on stack \see stackVirtualDatumAlloc
      */
-    template<typename T_VirtualDatum>
-    LLAMA_FN_HOST_ACC_INLINE auto stackVirtualDatumCopy(T_VirtualDatum & vd)
-        -> decltype(stackVirtualDatumAlloc<
-                    typename T_VirtualDatum::AccessibleDatumDomain>())
+    template<typename VirtualDatum>
+    LLAMA_FN_HOST_ACC_INLINE auto
+    stackVirtualDatumCopy(const VirtualDatum & vd) -> decltype(auto)
     {
         auto temp = stackVirtualDatumAlloc<
-            typename T_VirtualDatum::AccessibleDatumDomain>();
+            typename VirtualDatum::AccessibleDatumDomain>();
         temp = vd;
         return temp;
     }
 
-/** Macro that defines two functors for \ref llama::ForEach which apply an
- * operation on a given virtual datum and either another virtual datum or some
- * other type. In the first case the operation is applied if the unique id of
- * the two elements in the datum domain is the same, in the second case the
- * operation is applied to every combination of elements of the virtual datum
- * and the second type. \param OP operation, e.g. += \param FUNCTOR operation
- * naming used for functor name definition, e.g. if FUNCTOR is "Addition", the
- * functors will be named AdditionFunctor and AdditionTypeFunctor.
- * */
-#define __LLAMA_DEFINE_FOREACH_FUNCTOR(OP, FUNCTOR) \
-    template< \
-        typename T_LeftDatum, \
-        typename T_LeftBase, \
-        typename T_LeftLocal, \
-        typename T_RightDatum, \
-        typename T_RightBase, \
-        typename T_RightLocal> \
-    struct BOOST_PP_CAT(FUNCTOR, IfSameUIDFunctor) \
-    { \
-        LLAMA_FN_HOST_ACC_INLINE \
-        void operator()() const \
-        { \
-            if constexpr(CompareUID< \
-                             typename T_LeftDatum::AccessibleDatumDomain, \
-                             T_LeftBase, \
-                             T_LeftLocal, \
-                             typename T_RightDatum::AccessibleDatumDomain, \
-                             T_RightBase, \
-                             T_RightLocal>::value) \
-            { \
-                using Dst = typename T_LeftBase::template Cat<T_LeftLocal>; \
-                using Src = typename T_RightBase::template Cat<T_RightLocal>; \
-                left(Dst()) OP right(Src()); \
-            } \
-        } \
-        T_LeftDatum & left; \
-        const T_RightDatum & right; \
-    }; \
-\
-    template< \
-        typename T_LeftDatum, \
-        typename T_LeftBase, \
-        typename T_LeftLocal, \
-        typename T_RightDatum> \
-    struct BOOST_PP_CAT(FUNCTOR, InnerFunctor) \
-    { \
-        template<typename T_OuterCoord, typename T_InnerCoord> \
-        LLAMA_FN_HOST_ACC_INLINE void operator()(T_OuterCoord, T_InnerCoord) \
-        { \
-            BOOST_PP_CAT(FUNCTOR, IfSameUIDFunctor)< \
-                typename std::remove_reference<T_LeftDatum>::type, \
-                T_LeftBase, \
-                T_LeftLocal, \
-                typename std::remove_reference<T_RightDatum>::type, \
-                T_OuterCoord, \
-                T_InnerCoord> \
-                functor{left, right}; \
-            functor(); \
-        } \
-        T_LeftDatum & left; \
-        const T_RightDatum & right; \
-    }; \
-\
-    template<typename T_LeftDatum, typename T_RightDatum, typename T_Source> \
-    struct BOOST_PP_CAT(FUNCTOR, Functor) \
-    { \
-        template<typename T_OuterCoord, typename T_InnerCoord> \
-        LLAMA_FN_HOST_ACC_INLINE void operator()(T_OuterCoord, T_InnerCoord) \
-        { \
-            BOOST_PP_CAT(FUNCTOR, InnerFunctor)< \
-                T_LeftDatum, \
-                T_OuterCoord, \
-                T_InnerCoord, \
-                T_RightDatum> \
-                functor{left, right}; \
-            ForEach<typename T_RightDatum::AccessibleDatumDomain, T_Source>:: \
-                apply(functor); \
-        } \
-        T_LeftDatum & left; \
-        const T_RightDatum & right; \
-    }; \
-\
-    template<typename T_LeftDatum, typename T_RightType> \
-    struct BOOST_PP_CAT(FUNCTOR, TypeFunctor) \
-    { \
-        template<typename T_OuterCoord, typename T_InnerCoord> \
-        LLAMA_FN_HOST_ACC_INLINE void operator()(T_OuterCoord, T_InnerCoord) \
-        { \
-            using Dst = typename T_OuterCoord::template Cat<T_InnerCoord>; \
-            left(Dst()) OP static_cast< \
-                typename std::remove_reference<decltype(left(Dst()))>::type>( \
-                right); \
-        } \
-        T_LeftDatum & left; \
-        const T_RightType & right; \
+    template<
+        typename LeftDatum,
+        typename RightDatum,
+        typename Source,
+        typename LeftOuterCoord,
+        typename LeftInnerCoord,
+        typename OP>
+    struct GenericInnerFunctor
+    {
+        template<typename RightOuterCoord, typename RightInnerCoord>
+        LLAMA_FN_HOST_ACC_INLINE void
+        operator()(RightOuterCoord, RightInnerCoord)
+        {
+            if constexpr(CompareUID<
+                             typename LeftDatum::AccessibleDatumDomain,
+                             LeftOuterCoord,
+                             LeftInnerCoord,
+                             typename RightDatum::AccessibleDatumDomain,
+                             RightOuterCoord,
+                             RightInnerCoord>::value)
+            {
+                using Dst =
+                    typename LeftOuterCoord::template Cat<LeftInnerCoord>;
+                using Src =
+                    typename RightOuterCoord::template Cat<RightInnerCoord>;
+                OP{}(left(Dst()), right(Src()));
+            }
+        }
+        LeftDatum & left;
+        const RightDatum & right;
     };
 
-    __LLAMA_DEFINE_FOREACH_FUNCTOR(=, Assigment)
-    __LLAMA_DEFINE_FOREACH_FUNCTOR(+=, Addition)
-    __LLAMA_DEFINE_FOREACH_FUNCTOR(-=, Subtraction)
-    __LLAMA_DEFINE_FOREACH_FUNCTOR(*=, Multiplication)
-    __LLAMA_DEFINE_FOREACH_FUNCTOR(/=, Division)
-    __LLAMA_DEFINE_FOREACH_FUNCTOR(%=, Modulo)
+    template<
+        typename LeftDatum,
+        typename RightDatum,
+        typename Source,
+        typename OP>
+    struct GenericFunctor
+    {
+        template<typename LeftOuterCoord, typename LeftInnerCoord>
+        LLAMA_FN_HOST_ACC_INLINE void operator()(LeftOuterCoord, LeftInnerCoord)
+        {
+            ForEach<typename RightDatum::AccessibleDatumDomain, Source>::apply(
+                GenericInnerFunctor<
+                    LeftDatum,
+                    RightDatum,
+                    Source,
+                    LeftOuterCoord,
+                    LeftInnerCoord,
+                    OP>{left, right});
+        }
+        LeftDatum & left;
+        const RightDatum & right;
+    };
 
-/** Macro that defines an operator overloading inside of \ref
- * llama::VirtualDatum for itself and a second virtual datum. \param OP
- * operator, e.g. operator += \param FUNCTOR used for calling the internal
- * needed functor to operate on the virtual datums, e.g. if FUNCTOR is
- * "Addition", the AdditionFunctor will be used internally. \param REF may be &
- * or && to determine whether it is an overloading for lvalue or rvalue
- * references
- * */
-#define __LLAMA_VIRTUALDATUM_VIRTUALDATUM_OPERATOR(OP, FUNCTOR, REF) \
-    template< \
-        typename T_OtherView, \
-        typename T_OtherBoundDatumDomain, \
-        template<class> \
-        class T_OtherViewHolder> \
-    LLAMA_FN_HOST_ACC_INLINE auto operator OP( \
-        VirtualDatum<T_OtherView, T_OtherBoundDatumDomain, T_OtherViewHolder> \
-            REF other) \
-        ->decltype(*this) & \
-    { \
-        BOOST_PP_CAT(FUNCTOR, Functor)< \
-            decltype(*this), \
-            VirtualDatum< \
-                T_OtherView, \
-                T_OtherBoundDatumDomain, \
-                T_OtherViewHolder>, \
-            DatumCoord<>> \
-            functor{*this, other}; \
-        ForEach<AccessibleDatumDomain, DatumCoord<>>::apply(functor); \
-        return *this; \
-    }
+    template<typename LeftDatum, typename RightType, typename OP>
+    struct GenericTypeFunctor
+    {
+        template<typename OuterCoord, typename InnerCoord>
+        LLAMA_FN_HOST_ACC_INLINE void operator()(OuterCoord, InnerCoord)
+        {
+            using Dst = typename OuterCoord::template Cat<InnerCoord>;
+            OP{}(left(Dst()), right);
+        }
+        LeftDatum & left;
+        const RightType & right;
+    };
 
-/** Macro that defines an operator overloading inside of \ref
- * llama::VirtualDatum for itself and a view. Internally the virtual datum at
- * the first postion (all zeros) will be taken. This is useful for one-element
- * views (e.g. temporary views). \param OP operator, e.g. operator += \param
- * FUNCTOR used for calling the internal needed functor to operate on the
- * virtual datums, e.g. if FUNCTOR is "Addition", the AdditionFunctor will be
- * used internally. \param REF may be & or && to determine whether it is an
- * overloading for lvalue or rvalue references
- * */
-#define __LLAMA_VIRTUALDATUM_VIEW_OPERATOR(OP, FUNCTOR, REF) \
-    template<typename T_OtherMapping, typename T_OtherBlobType> \
-    LLAMA_FN_HOST_ACC_INLINE auto operator OP( \
-        llama::View<T_OtherMapping, T_OtherBlobType> REF other) \
-        ->decltype(*this) & \
-    { \
-        auto otherVd \
-            = other(llama::UserDomain<T_OtherMapping::UserDomain::count>{}); \
-        BOOST_PP_CAT( \
-            FUNCTOR, \
-            Functor)<decltype(*this), decltype(otherVd), DatumCoord<>> \
-            functor{*this, otherVd}; \
-        ForEach<AccessibleDatumDomain, DatumCoord<>>::apply(functor); \
-        return *this; \
-    }
-
-/** Macro that defines an operator overloading inside of \ref
- * llama::VirtualDatum for itself and some other type. \param OP operator, e.g.
- * operator += \param FUNCTOR used for calling the internal needed functor to
- * operate on the virtual datums, e.g. if FUNCTOR is "Addition", the
- *        AdditionTypeFunctor will be used internally.
- * \param REF may be & or && to determine whether it is an overloading for
- *        lvalue or rvalue references
- * */
-#define __LLAMA_VIRTUALDATUM_TYPE_OPERATOR(OP, FUNCTOR) \
-    template<typename T_OtherType> \
-    LLAMA_FN_HOST_ACC_INLINE auto operator OP(const T_OtherType & other) \
-        ->decltype(*this) & \
-    { \
-        BOOST_PP_CAT(FUNCTOR, TypeFunctor)<decltype(*this), T_OtherType> \
-            functor{*this, other}; \
-        ForEach<AccessibleDatumDomain, DatumCoord<>>::apply(functor); \
-        return *this; \
-    }
-
+    /** Macro that defines an operator overloading inside of \ref
+     * llama::VirtualDatum for itself and a second virtual datum. \param OP
+     * operator, e.g. operator += \param FUNCTOR used for calling the internal
+     * needed functor to operate on the virtual datums, e.g. if FUNCTOR is
+     * "Addition", the AdditionFunctor will be used internally. \param REF may
+     * be & or && to determine whether it is an overloading for lvalue or rvalue
+     * references
+     * */
+    /** Macro that defines an operator overloading inside of \ref
+     * llama::VirtualDatum for itself and a view. Internally the virtual datum
+     * at the first postion (all zeros) will be taken. This is useful for
+     * one-element views (e.g. temporary views). \param OP operator, e.g.
+     * operator += \param FUNCTOR used for calling the internal needed functor
+     * to operate on the virtual datums, e.g. if FUNCTOR is "Addition", the
+     * AdditionFunctor will be used internally. \param REF may be & or && to
+     * determine whether it is an overloading for lvalue or rvalue references
+     * */
+    /** Macro that defines an operator overloading inside of \ref
+     * llama::VirtualDatum for itself and some other type. \param OP operator,
+     * e.g. operator += \param FUNCTOR used for calling the internal needed
+     * functor to operate on the virtual datums, e.g. if FUNCTOR is "Addition",
+     * the AdditionTypeFunctor will be used internally. \param REF may be & or
+     * && to determine whether it is an overloading for lvalue or rvalue
+     * references
+     * */
 #define __LLAMA_VIRTUALDATUM_OPERATOR(OP, FUNCTOR) \
-    __LLAMA_VIRTUALDATUM_VIRTUALDATUM_OPERATOR(OP, FUNCTOR, &) \
-    __LLAMA_VIRTUALDATUM_VIRTUALDATUM_OPERATOR(OP, FUNCTOR, &&) \
-    __LLAMA_VIRTUALDATUM_VIEW_OPERATOR(OP, FUNCTOR, &) \
-    __LLAMA_VIRTUALDATUM_VIEW_OPERATOR(OP, FUNCTOR, &&) \
-    __LLAMA_VIRTUALDATUM_TYPE_OPERATOR(OP, FUNCTOR)
-
-/** Macro that defines a non inplace operator overloading inside of
- *  \ref llama::VirtualDatum for itself and some other type based on the already
- *  exising inplace operation overload.
- * \param OP operator, e.g. operator +
- * \param INP_OP corresponding inplace operator, e.g. operator +=
- * \param REF may be & or && to determine whether it is an overloading for
- *        lvalue or rvalue references
- * */
-#define __LLAMA_VIRTUALDATUM_NOT_IN_PLACE_OPERATOR_WITH_REF(OP, INP_OP, REF) \
-    template<typename T_OtherType> \
-    LLAMA_FN_HOST_ACC_INLINE auto operator OP(T_OtherType REF other) \
+    template< \
+        typename OtherView, \
+        typename OtherBoundDatumDomain, \
+        template<class> \
+        class OtherViewHolder> \
+    LLAMA_FN_HOST_ACC_INLINE auto operator OP(const VirtualDatum< \
+                                                  OtherView, \
+                                                  OtherBoundDatumDomain, \
+                                                  OtherViewHolder> & other) \
+        ->VirtualDatum & \
     { \
-        return stackVirtualDatumCopy(*this) INP_OP other; \
+        GenericFunctor< \
+            std::remove_reference_t<decltype(*this)>, \
+            VirtualDatum<OtherView, OtherBoundDatumDomain, OtherViewHolder>, \
+            DatumCoord<>, \
+            FUNCTOR> \
+            functor{*this, other}; \
+        ForEach<AccessibleDatumDomain, DatumCoord<>>::apply(functor); \
+        return *this; \
+    } \
+\
+    template<typename OtherMapping, typename OtherBlobType> \
+    LLAMA_FN_HOST_ACC_INLINE auto operator OP( \
+        const llama::View<OtherMapping, OtherBlobType> & other) \
+        ->VirtualDatum & \
+    { \
+        return *this OP other( \
+            llama::UserDomain<OtherMapping::UserDomain::count>{}); \
+    } \
+\
+    template< \
+        typename OtherType, \
+        typename = std::enable_if_t< \
+            !is_View<OtherType> && !is_VirtualDatum<OtherType>>> \
+    LLAMA_FN_HOST_ACC_INLINE auto operator OP(const OtherType & other) \
+        ->VirtualDatum & \
+    { \
+        GenericTypeFunctor<decltype(*this), OtherType, FUNCTOR> functor{ \
+            *this, other}; \
+        ForEach<AccessibleDatumDomain, DatumCoord<>>::apply(functor); \
+        return *this; \
     }
 
-#define __LLAMA_VIRTUALDATUM_NOT_IN_PLACE_OPERATOR(OP, INP_OP) \
-    __LLAMA_VIRTUALDATUM_NOT_IN_PLACE_OPERATOR_WITH_REF(OP, INP_OP, &) \
-    __LLAMA_VIRTUALDATUM_NOT_IN_PLACE_OPERATOR_WITH_REF(OP, INP_OP, &&)
-
-/** Macro that defines two functors for \ref llama::ForEach which apply a
- * boolean operation on a given virtual datum and either another virtual datum
- * or some other type. In the first case the operation is applied if the unique
- * id of the two elements in the datum domain is the same, in the second case
- * the operation is applied to every combination of elements of the virtual
- * datum and the second type. The result is the logical AND combination of all
- *  results. So e.g., if some elements are bigger and some are smaller than in
- *  the other virtual datum or in the type, for both boolean operations ">" and
- *  "<" the functor will return false. For "!=" the operator would return true.
- * \param OP operation, e.g. >=
- * \param FUNCTOR operation naming used for functor name definition, e.g. if
- *        FUNCTOR is "BiggerSameThan", the functors will be named
- *        BiggerSameThanBoolFunctor and BiggerSameThanBoolTypeFunctor.
- * \return a bool inside the member variable "result" of the functor
- * */
-#define __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR(OP, FUNCTOR) \
-    template< \
-        typename T_LeftDatum, \
-        typename T_LeftBase, \
-        typename T_LeftLocal, \
-        typename T_RightDatum, \
-        typename T_RightBase, \
-        typename T_RightLocal> \
-    struct BOOST_PP_CAT(FUNCTOR, BoolIfSameUIDFunctor) \
-    { \
-        LLAMA_FN_HOST_ACC_INLINE \
-        void operator()() \
-        { \
-            if constexpr(CompareUID< \
-                             typename T_LeftDatum::Mapping::DatumDomain, \
-                             T_LeftBase, \
-                             T_LeftLocal, \
-                             typename T_RightDatum::Mapping::DatumDomain, \
-                             T_RightBase, \
-                             T_RightLocal>::value) \
-            { \
-                using Dst = typename T_LeftBase::template Cat<T_LeftLocal>; \
-                using Src = typename T_RightBase::template Cat<T_RightLocal>; \
-                result = left(Dst()) OP right(Src()); \
-            } \
-        } \
-        const T_LeftDatum & left; \
-        const T_RightDatum & right; \
-        bool result; \
-    }; \
-\
-    template< \
-        typename T_LeftDatum, \
-        typename T_LeftBase, \
-        typename T_LeftLocal, \
-        typename T_RightDatum> \
-    struct BOOST_PP_CAT(FUNCTOR, BoolInnerFunctor) \
-    { \
-        template<typename T_OuterCoord, typename T_InnerCoord> \
-        LLAMA_FN_HOST_ACC_INLINE void operator()(T_OuterCoord, T_InnerCoord) \
-        { \
-            BOOST_PP_CAT(FUNCTOR, BoolIfSameUIDFunctor)< \
-                typename std::remove_reference<T_LeftDatum>::type, \
-                T_LeftBase, \
-                T_LeftLocal, \
-                typename std::remove_reference<T_RightDatum>::type, \
-                T_OuterCoord, \
-                T_InnerCoord> \
-                functor{left, right, true}; \
-            functor(); \
-            result &= functor.result; \
-        } \
-        const T_LeftDatum & left; \
-        const T_RightDatum & right; \
-        bool result; \
-    }; \
-\
-    template<typename T_LeftDatum, typename T_RightDatum, typename T_Source> \
-    struct BOOST_PP_CAT(FUNCTOR, BoolFunctor) \
-    { \
-        template<typename T_OuterCoord, typename T_InnerCoord> \
-        LLAMA_FN_HOST_ACC_INLINE void operator()(T_OuterCoord, T_InnerCoord) \
-        { \
-            BOOST_PP_CAT(FUNCTOR, BoolInnerFunctor)< \
-                T_LeftDatum, \
-                T_OuterCoord, \
-                T_InnerCoord, \
-                T_RightDatum> \
-                functor{left, right, true}; \
-            ForEach<typename T_RightDatum::AccessibleDatumDomain, T_Source>:: \
-                apply(functor); \
-            result &= functor.result; \
-        } \
-        const T_LeftDatum & left; \
-        const T_RightDatum & right; \
-        bool result; \
-    }; \
-\
-    template<typename T_LeftDatum, typename T_RightType> \
-    struct BOOST_PP_CAT(FUNCTOR, BoolTypeFunctor) \
-    { \
-        template<typename T_OuterCoord, typename T_InnerCoord> \
-        LLAMA_FN_HOST_ACC_INLINE void operator()(T_OuterCoord, T_InnerCoord) \
-        { \
-            using Dst = typename T_OuterCoord::template Cat<T_InnerCoord>; \
-            result &= left(Dst()) OP static_cast< \
-                typename std::remove_reference<decltype(left(Dst()))>::type>( \
-                right); \
-        } \
-        const T_LeftDatum & left; \
-        const T_RightType & right; \
-        bool result; \
+    template<
+        typename LeftDatum,
+        typename LeftBase,
+        typename LeftLocal,
+        typename RightDatum,
+        typename OP>
+    struct GenericBoolInnerFunctor
+    {
+        template<typename OuterCoord, typename InnerCoord>
+        LLAMA_FN_HOST_ACC_INLINE void operator()(OuterCoord, InnerCoord)
+        {
+            if constexpr(CompareUID<
+                             typename LeftDatum::Mapping::DatumDomain,
+                             LeftBase,
+                             LeftLocal,
+                             typename RightDatum::Mapping::DatumDomain,
+                             OuterCoord,
+                             InnerCoord>::value)
+            {
+                using Dst = typename LeftBase::template Cat<LeftLocal>;
+                using Src = typename OuterCoord::template Cat<InnerCoord>;
+                result &= OP{}(left(Dst()), right(Src()));
+            }
+        }
+        const LeftDatum & left;
+        const RightDatum & right;
+        bool result;
     };
 
-    __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR(==, SameAs)
-    __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR(!=, Not)
-    __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR(<, SmallerThan)
-    __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR(<=, SmallerSameThan)
-    __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR(>, BiggerThan)
-    __LLAMA_DEFINE_FOREACH_BOOL_FUNCTOR(>=, BiggerSameThan)
+    template<
+        typename LeftDatum,
+        typename RightDatum,
+        typename Source,
+        typename OP>
+    struct GenericBoolFunctor
+    {
+        template<typename OuterCoord, typename InnerCoord>
+        LLAMA_FN_HOST_ACC_INLINE void operator()(OuterCoord, InnerCoord)
+        {
+            GenericBoolInnerFunctor<
+                LeftDatum,
+                OuterCoord,
+                InnerCoord,
+                RightDatum,
+                OP>
+                functor{left, right, true};
+            ForEach<typename RightDatum::AccessibleDatumDomain, Source>::apply(
+                functor);
+            result &= functor.result;
+        }
+        const LeftDatum & left;
+        const RightDatum & right;
+        bool result;
+    };
+
+    template<typename T_LeftDatum, typename T_RightType, typename OP>
+    struct GenericBoolTypeFunctor
+    {
+        template<typename T_OuterCoord, typename T_InnerCoord>
+        LLAMA_FN_HOST_ACC_INLINE void operator()(T_OuterCoord, T_InnerCoord)
+        {
+            using Dst = typename T_OuterCoord::template Cat<T_InnerCoord>;
+            result &= OP{}(
+                left(Dst()),
+                static_cast<std::remove_reference_t<decltype(left(Dst()))>>(
+                    right));
+        }
+        const T_LeftDatum & left;
+        const T_RightType & right;
+        bool result;
+    };
 
 /** Macro that defines a boolean operator overloading inside of
  *  \ref llama::VirtualDatum for itself and a second virtual datum.
@@ -440,50 +344,97 @@ namespace llama
  * */
 #define __LLAMA_VIRTUALDATUM_BOOL_OPERATOR(OP, FUNCTOR) \
     template< \
-        typename T_OtherView, \
-        typename T_OtherBoundDatumDomain, \
+        typename OtherView, \
+        typename OtherBoundDatumDomain, \
         template<class> \
-        class T_OtherViewHolder> \
+        class OtherViewHolder> \
     LLAMA_FN_HOST_ACC_INLINE auto operator OP(const VirtualDatum< \
-                                              T_OtherView, \
-                                              T_OtherBoundDatumDomain, \
-                                              T_OtherViewHolder> & other) \
+                                              OtherView, \
+                                              OtherBoundDatumDomain, \
+                                              OtherViewHolder> & other) \
         const->bool \
     { \
-        BOOST_PP_CAT(FUNCTOR, BoolFunctor)< \
-            decltype(*this), \
-            VirtualDatum< \
-                T_OtherView, \
-                T_OtherBoundDatumDomain, \
-                T_OtherViewHolder>, \
-            DatumCoord<>> \
+        GenericBoolFunctor< \
+            std::remove_reference_t<decltype(*this)>, \
+            VirtualDatum<OtherView, OtherBoundDatumDomain, OtherViewHolder>, \
+            DatumCoord<>, \
+            FUNCTOR> \
             functor{*this, other, true}; \
         ForEach<AccessibleDatumDomain, DatumCoord<>>::apply(functor); \
         return functor.result; \
     } \
-    template<typename T_OtherMapping, typename T_OtherBlobType> \
+\
+    template<typename OtherMapping, typename OtherBlobType> \
     LLAMA_FN_HOST_ACC_INLINE auto operator OP( \
-        const llama::View<T_OtherMapping, T_OtherBlobType> & other) \
-        const->bool \
+        const llama::View<OtherMapping, OtherBlobType> & other) const->bool \
     { \
-        auto otherVd \
-            = other(llama::UserDomain<T_OtherMapping::UserDomain::count>{}); \
-        BOOST_PP_CAT( \
-            FUNCTOR, \
-            BoolFunctor)<decltype(*this), decltype(otherVd), DatumCoord<>> \
-            functor{*this, otherVd, true}; \
-        ForEach<AccessibleDatumDomain, DatumCoord<>>::apply(functor); \
-        return functor.result; \
+        return *this OP other( \
+            llama::UserDomain<OtherMapping::UserDomain::count>{}); \
     } \
-    template<typename T_OtherType> \
-    LLAMA_FN_HOST_ACC_INLINE auto operator OP(const T_OtherType & other) \
+\
+    template<typename OtherType> \
+    LLAMA_FN_HOST_ACC_INLINE auto operator OP(const OtherType & other) \
         const->bool \
     { \
-        BOOST_PP_CAT(FUNCTOR, BoolTypeFunctor)<decltype(*this), T_OtherType> \
-            functor{*this, other, true}; \
+        GenericBoolTypeFunctor<decltype(*this), OtherType, FUNCTOR> functor{ \
+            *this, other, true}; \
         ForEach<AccessibleDatumDomain, DatumCoord<>>::apply(functor); \
         return functor.result; \
     }
+
+    struct Assignment
+    {
+        template<typename A, typename B>
+        decltype(auto) operator()(A & a, const B & b) const
+        {
+            return a = b;
+        }
+    };
+
+    struct Addition
+    {
+        template<typename A, typename B>
+        decltype(auto) operator()(A & a, const B & b) const
+        {
+            return a += b;
+        }
+    };
+
+    struct Subtraction
+    {
+        template<typename A, typename B>
+        decltype(auto) operator()(A & a, const B & b) const
+        {
+            return a -= b;
+        }
+    };
+
+    struct Multiplication
+    {
+        template<typename A, typename B>
+        decltype(auto) operator()(A & a, const B & b) const
+        {
+            return a *= b;
+        }
+    };
+
+    struct Division
+    {
+        template<typename A, typename B>
+        decltype(auto) operator()(A & a, const B & b) const
+        {
+            return a /= b;
+        }
+    };
+
+    struct Modulo
+    {
+        template<typename A, typename B>
+        decltype(auto) operator()(A & a, const B & b) const
+        {
+            return a %= b;
+        }
+    };
 
     template<typename T>
     auto as_mutable(const T & t) -> T &
@@ -544,6 +495,11 @@ namespace llama
                 :
                 T_ViewHolder<T_View>{view}, userDomainPos(userDomainPos)
         {}
+
+        VirtualDatum(const VirtualDatum &) = default;
+        VirtualDatum(VirtualDatum &&) = default;
+        // VirtualDatum & operator=(const VirtualDatum &) = delete;
+        // VirtualDatum & operator=(VirtualDatum &&) = delete;
 
         /** Explicit access function for a coordinate in the datum domain given
          * as tree position indexes. If the address -- independently whether
@@ -678,25 +634,56 @@ namespace llama
             return access(DatumCoordOrUIDs{}...);
         }
 
-        __LLAMA_VIRTUALDATUM_OPERATOR(=, Assigment)
+        __LLAMA_VIRTUALDATUM_OPERATOR(=, Assignment)
         __LLAMA_VIRTUALDATUM_OPERATOR(+=, Addition)
         __LLAMA_VIRTUALDATUM_OPERATOR(-=, Subtraction)
         __LLAMA_VIRTUALDATUM_OPERATOR(*=, Multiplication)
         __LLAMA_VIRTUALDATUM_OPERATOR(/=, Division)
         __LLAMA_VIRTUALDATUM_OPERATOR(%=, Modulo)
 
-        __LLAMA_VIRTUALDATUM_NOT_IN_PLACE_OPERATOR(+, +=)
-        __LLAMA_VIRTUALDATUM_NOT_IN_PLACE_OPERATOR(-, -=)
-        __LLAMA_VIRTUALDATUM_NOT_IN_PLACE_OPERATOR(*, *=)
-        __LLAMA_VIRTUALDATUM_NOT_IN_PLACE_OPERATOR(/, /=)
-        __LLAMA_VIRTUALDATUM_NOT_IN_PLACE_OPERATOR(%, %=)
+        // we need this one to disable the compiler generated copy assignment
+        LLAMA_FN_HOST_ACC_INLINE auto operator=(const VirtualDatum & other)
+            -> VirtualDatum &
+        {
+            return this->operator=<>(other);
+        }
 
-        __LLAMA_VIRTUALDATUM_BOOL_OPERATOR(==, SameAs)
-        __LLAMA_VIRTUALDATUM_BOOL_OPERATOR(!=, Not)
-        __LLAMA_VIRTUALDATUM_BOOL_OPERATOR(<, SmallerThan)
-        __LLAMA_VIRTUALDATUM_BOOL_OPERATOR(<=, SmallerSameThan)
-        __LLAMA_VIRTUALDATUM_BOOL_OPERATOR(>, BiggerThan)
-        __LLAMA_VIRTUALDATUM_BOOL_OPERATOR(>=, BiggerSameThan)
+        template<typename OtherType>
+        LLAMA_FN_HOST_ACC_INLINE auto operator+(const OtherType & other)
+        {
+            return stackVirtualDatumCopy(*this) += other;
+        }
+
+        template<typename OtherType>
+        LLAMA_FN_HOST_ACC_INLINE auto operator-(const OtherType & other)
+        {
+            return stackVirtualDatumCopy(*this) -= other;
+        }
+
+        template<typename OtherType>
+        LLAMA_FN_HOST_ACC_INLINE auto operator*(const OtherType & other)
+        {
+            return stackVirtualDatumCopy(*this) *= other;
+        }
+
+        template<typename OtherType>
+        LLAMA_FN_HOST_ACC_INLINE auto operator/(const OtherType & other)
+        {
+            return stackVirtualDatumCopy(*this) /= other;
+        }
+
+        template<typename OtherType>
+        LLAMA_FN_HOST_ACC_INLINE auto operator%(const OtherType & other)
+        {
+            return stackVirtualDatumCopy(*this) %= other;
+        }
+
+        __LLAMA_VIRTUALDATUM_BOOL_OPERATOR(==, std::equal_to<>)
+        __LLAMA_VIRTUALDATUM_BOOL_OPERATOR(!=, std::not_equal_to<>)
+        __LLAMA_VIRTUALDATUM_BOOL_OPERATOR(<, std::less<>)
+        __LLAMA_VIRTUALDATUM_BOOL_OPERATOR(<=, std::less_equal<>)
+        __LLAMA_VIRTUALDATUM_BOOL_OPERATOR(>, std::greater<>)
+        __LLAMA_VIRTUALDATUM_BOOL_OPERATOR(>=, std::greater_equal<>)
     };
 
     /** Central LLAMA class holding memory and giving access to it defined by a
