@@ -46,18 +46,12 @@ namespace llama::mapping
             return SizeOf<DatumDomain>::value;
         }
 
-        template<std::size_t... T_datumDomainCoord>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto
-        getBlobByte(UserDomain const coord) const -> std::size_t
+        template<std::size_t... DatumDomainCoord>
+        auto getBlobNrAndOffset(UserDomain coord) const -> NrAndOffset
         {
-            return LinearBytePos<DatumDomain, T_datumDomainCoord...>::value;
-        }
-
-        template<std::size_t... T_datumDomainCoord>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto
-        getBlobNr(UserDomain const coord) const -> std::size_t
-        {
-            return 0;
+            const auto offset
+                = LinearBytePos<DatumDomain, DatumDomainCoord...>::value;
+            return {0, offset};
         }
     };
 }

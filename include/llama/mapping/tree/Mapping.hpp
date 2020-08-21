@@ -85,22 +85,16 @@ namespace llama::mapping::tree
             return getTreeBlobSize(resultTree);
         }
 
-        template<std::size_t... T_datumDomainCoord>
-        LLAMA_FN_HOST_ACC_INLINE auto getBlobByte(UserDomain const coord) const
-            -> std::size_t
+        template<std::size_t... DatumDomainCoord>
+        auto getBlobNrAndOffset(UserDomain coord) const -> NrAndOffset
         {
-            auto const basicTreeCoord = getBasicTreeCoordFromDomains<
-                DatumCoord<T_datumDomainCoord...>>(coord);
+            auto const basicTreeCoord
+                = getBasicTreeCoordFromDomains<DatumCoord<DatumDomainCoord...>>(
+                    coord);
             auto const resultTreeCoord = mergedFunctors.basicCoordToResultCoord(
                 basicTreeCoord, basicTree);
-            return getTreeBlobByte(resultTree, resultTreeCoord);
-        }
-
-        template<std::size_t... T_datumDomainCoord>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto
-        getBlobNr(UserDomain const coord) const -> std::size_t
-        {
-            return 0;
+            const auto offset = getTreeBlobByte(resultTree, resultTreeCoord);
+            return {0, offset};
         }
     };
 }

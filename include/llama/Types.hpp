@@ -81,4 +81,10 @@ namespace llama
     /// Shortcut for \ref DatumArray
     template<typename Child, std::size_t Count>
     using DA = DatumArray<Child, Count>;
+
+    struct NrAndOffset
+    {
+        std::size_t nr;
+        std::size_t offset;
+    };
 }

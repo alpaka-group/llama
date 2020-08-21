@@ -38,12 +38,7 @@ namespace llama::mapping
         auto getBlobSize(std::size_t const blobNr) const -> std::size_t;
 
         template<typename T_DatumDomainCoord>
-        LLAMA_FN_HOST_ACC_INLINE auto
-        getBlobByte(UserDomain const coord, UserDomain const size) const
-            -> std::size_t;
-
-        LLAMA_FN_HOST_ACC_INLINE auto
-        getBlobNr(UserDomain const coord, UserDomain const size) const
-            -> std::size_t;
+        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndByte(UserDomain coord) const
+            -> NrAndOffset;
     };
 }
