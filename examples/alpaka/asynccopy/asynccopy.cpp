@@ -13,8 +13,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 
-#include "../../common/AlpakaAllocator.hpp"
-#include "../../common/AlpakaMemCopy.hpp"
 #include "../../common/AlpakaThreadElemsDistribution.hpp"
 #include "../../common/Chrono.hpp"
 #include "stb_image.h"
@@ -46,6 +44,13 @@ constexpr auto ELEMS_PER_BLOCK
     = 16; /// number of elements per direction(!) every block should process
 
 using FP = float;
+
+template<typename Mapping, typename AlpakaBuffer>
+auto viewAlpakaBuffer(Mapping mapping, AlpakaBuffer & buffer)
+{
+    return llama::View<Mapping, std::byte *>{
+        mapping, {alpaka::mem::view::getPtrNative(buffer)}};
+}
 
 // clang-format off
 namespace tag
@@ -80,7 +85,7 @@ struct BlurKernel
     {
         const auto ti = alpaka::idx::getIdx<alpaka::Grid, alpaka::Threads>(acc);
 
-        [[maybe_unused]] auto shared = [&] {
+        [[maybe_unused]] auto sharedView = [&] {
             if constexpr(SHARED)
             {
                 // Using SoA for the shared memory
@@ -98,14 +103,12 @@ struct BlurKernel
                 constexpr auto sharedChunkSize = ElemsPerBlock + 2 * KernelSize;
                 const SharedMapping sharedMapping(
                     {sharedChunkSize, sharedChunkSize}, treeOperationList);
-                using SharedFactory = llama::Factory<
-                    SharedMapping,
-                    common::allocator::AlpakaShared<
-                        Acc,
-                        llama::SizeOf<PixelOnAcc>::value * sharedChunkSize
-                            * sharedChunkSize,
-                        __COUNTER__>>;
-                return SharedFactory::allocView(sharedMapping, acc);
+                constexpr auto sharedMemSize = llama::SizeOf<PixelOnAcc>::value
+                    * sharedChunkSize * sharedChunkSize;
+                auto & sharedMem = alpaka::block::shared::st::
+                    allocVar<std::byte[sharedMemSize], __COUNTER__>(acc);
+                return llama::View<SharedMapping, std::byte *>{
+                    sharedMapping, {&sharedMem[0]}};
             }
             else
                 return int{}; // dummy
@@ -136,7 +139,7 @@ struct BlurKernel
             for(auto y = bStart[0]; y < bEnd[0]; y += threadsPerBlock)
                 LLAMA_INDEPENDENT_DATA
             for(auto x = bStart[1]; x < bEnd[1]; x += threadsPerBlock)
-                shared(y - bi[0] * ElemsPerBlock, x - bi[1] * ElemsPerBlock)
+                sharedView(y - bi[0] * ElemsPerBlock, x - bi[1] * ElemsPerBlock)
                     = oldImage(y, x);
 
             // FIXME(bgruber): shount't there be a syncThreads?
@@ -177,7 +180,7 @@ struct BlurKernel
             for(auto a = iAStart; a < i_a_end; ++a)
             {
                 if constexpr(SHARED)
-                    sum += shared(std::size_t(b), std::size_t(a));
+                    sum += sharedView(std::size_t(b), std::size_t(a));
                 else
                     sum += oldImage(std::size_t(b), std::size_t(a));
             }
@@ -262,37 +265,44 @@ int main(int argc, char ** argv)
     const HostMapping hostMapping(userDomainSize, treeOperationList);
     const DevMapping devMapping(chunkUserDomain, treeOperationList);
 
-    using HostFactory = llama::
-        Factory<HostMapping, common::allocator::Alpaka<DevHost, size_t>>;
-    using HostChunkFactory = llama::
-        Factory<DevMapping, common::allocator::Alpaka<DevHost, size_t>>;
-    using DevFactory
-        = llama::Factory<DevMapping, common::allocator::Alpaka<DevAcc, size_t>>;
-    using MirrorFactory = llama::Factory<
-        DevMapping,
-        common::allocator::AlpakaMirror<DevAcc, size_t, DevMapping>>;
+    const auto hostBufferSize = hostMapping.getBlobSize(0);
+    const auto devBufferSize = devMapping.getBlobSize(0);
 
     std::cout << "Image size: " << img_x << ":" << img_y << '\n'
-              << hostMapping.getBlobSize(0) * 2 / 1024 / 1024
-              << " MB on device\n";
+              << hostBufferSize * 2 / 1024 / 1024 << " MB on device\n";
 
     Chrono chrono;
 
-    auto host = HostFactory::allocView(hostMapping, devHost);
-    std::vector<decltype(HostChunkFactory::allocView(devMapping, devHost))>
-        hostChunk;
-    std::vector<decltype(DevFactory::allocView(devMapping, devAcc))> devOld;
-    decltype(devOld) devNew;
-    std::vector<decltype(MirrorFactory::allocView(devMapping, devOld[0]))>
-        mirrorOld;
-    decltype(mirrorOld) mirrorNew;
+    auto hostBuffer = alpaka::mem::buf::alloc<std::byte, std::size_t>(
+        devHost, hostBufferSize);
+    auto hostView = viewAlpakaBuffer(hostMapping, hostBuffer);
+
+    std::vector<
+        alpaka::mem::buf::
+            Buf<DevHost, std::byte, alpaka::dim::DimInt<1>, std::size_t>>
+        hostChunkBuffer;
+    std::vector<llama::View<DevMapping, std::byte *>> hostChunkView;
+
+    std::vector<alpaka::mem::buf::
+                    Buf<DevAcc, std::byte, alpaka::dim::DimInt<1>, std::size_t>>
+        devOldBuffer, devNewBuffer;
+    std::vector<llama::View<DevMapping, std::byte *>> devOldView, devNewView;
+
     for(std::size_t i = 0; i < CHUNK_COUNT; ++i)
     {
-        hostChunk.push_back(HostChunkFactory::allocView(devMapping, devHost));
-        devOld.push_back(DevFactory::allocView(devMapping, devAcc));
-        devNew.push_back(DevFactory::allocView(devMapping, devAcc));
-        mirrorOld.push_back(MirrorFactory::allocView(devMapping, devOld[i]));
-        mirrorNew.push_back(MirrorFactory::allocView(devMapping, devNew[i]));
+        hostChunkBuffer.push_back(
+            alpaka::mem::buf::alloc<std::byte, std::size_t>(
+                devHost, devBufferSize));
+        hostChunkView.push_back(
+            viewAlpakaBuffer(hostMapping, hostChunkBuffer.back()));
+
+        devOldBuffer.push_back(alpaka::mem::buf::alloc<std::byte, std::size_t>(
+            devAcc, devBufferSize));
+        devOldView.push_back(viewAlpakaBuffer(devMapping, devOldBuffer.back()));
+
+        devNewBuffer.push_back(alpaka::mem::buf::alloc<std::byte, std::size_t>(
+            devAcc, devBufferSize));
+        devNewView.push_back(viewAlpakaBuffer(devMapping, devNewBuffer.back()));
     }
 
     chrono.printAndReset("Alloc");
@@ -306,9 +316,9 @@ int main(int argc, char ** argv)
         for(std::size_t y = 0; y < buffer_y; ++y)
             for(std::size_t x = 0; x < buffer_x; ++x)
             {
-                host(y, x)(tag::R()) = std::abs(distribution(generator));
-                host(y, x)(tag::G()) = std::abs(distribution(generator));
-                host(y, x)(tag::B()) = std::abs(distribution(generator));
+                hostView(y, x)(tag::R()) = std::abs(distribution(generator));
+                hostView(y, x)(tag::G()) = std::abs(distribution(generator));
+                hostView(y, x)(tag::B()) = std::abs(distribution(generator));
             }
     }
     else
@@ -329,9 +339,9 @@ int main(int argc, char ** argv)
                     Y = img_y + KERNEL_SIZE - 1;
                 const auto * pixel
                     = &image[((Y - KERNEL_SIZE) * img_x + X - KERNEL_SIZE) * 3];
-                host(y, x)(tag::R()) = FP(pixel[0]) / 255.;
-                host(y, x)(tag::G()) = FP(pixel[1]) / 255.;
-                host(y, x)(tag::B()) = FP(pixel[2]) / 255.;
+                hostView(y, x)(tag::R()) = FP(pixel[0]) / 255.;
+                hostView(y, x)(tag::G()) = FP(pixel[1]) / 255.;
+                hostView(y, x)(tag::B()) = FP(pixel[2]) / 255.;
             }
     }
 
@@ -350,7 +360,7 @@ int main(int argc, char ** argv)
     const auto workdiv
         = alpaka::workdiv::WorkDivMembers<Dim, size_t>{blocks, threads, elems};
 
-    using HostViewType = llama::VirtualView<decltype(host)>;
+    using HostViewType = llama::VirtualView<decltype(hostView)>;
     struct VirtualHostElement
     {
         HostViewType virtualHost;
@@ -368,10 +378,11 @@ int main(int argc, char ** argv)
                 ((chunk_x < chunks[1] - 1) ? CHUNK_SIZE
                                            : (img_x - 1) % CHUNK_SIZE + 1)
                     + 2 * KERNEL_SIZE};
-            llama::VirtualView<decltype(host)> virtualHost(
-                host,
+            llama::VirtualView<decltype(hostView)> virtualHost(
+                hostView,
                 {chunk_y * CHUNK_SIZE, chunk_x * CHUNK_SIZE},
                 validMiniSize);
+
             // Find free chunk stream
             std::size_t chunkNr = virtualHostList.size();
             if(virtualHostList.size() < CHUNK_COUNT)
@@ -399,7 +410,7 @@ int main(int argc, char ** argv)
                                     ++x)
                                     (*chunkIt).virtualHost(
                                         y + KERNEL_SIZE, x + KERNEL_SIZE)
-                                        = hostChunk[chunkNr](
+                                        = hostChunkView[chunkNr](
                                             y + KERNEL_SIZE, x + KERNEL_SIZE);
                             }
                             chunkIt = virtualHostList.erase(chunkIt);
@@ -415,31 +426,34 @@ int main(int argc, char ** argv)
                             std::chrono::microseconds{1});
                 }
             }
+
             // Copy data from virtual view to mini view
             LLAMA_INDEPENDENT_DATA
             for(std::size_t y = 0; y < validMiniSize[0]; ++y)
             {
                 LLAMA_INDEPENDENT_DATA
                 for(std::size_t x = 0; x < validMiniSize[1]; ++x)
-                    hostChunk[chunkNr](y, x) = virtualHost(y, x);
+                    hostChunkView[chunkNr](y, x) = virtualHost(y, x);
             }
-            alpakaMemCopy(
-                devOld[chunkNr],
-                hostChunk[chunkNr],
-                chunkUserDomain,
-                queue[chunkNr]);
+            alpaka::mem::view::copy(
+                queue[chunkNr],
+                devOldBuffer[chunkNr],
+                hostChunkBuffer[chunkNr],
+                devBufferSize);
+
             BlurKernel<elemCount, KERNEL_SIZE, ELEMS_PER_BLOCK> blurKernel;
             alpaka::kernel::exec<Acc>(
                 queue[chunkNr],
                 workdiv,
                 blurKernel,
-                mirrorOld[chunkNr],
-                mirrorNew[chunkNr]);
-            alpakaMemCopy(
-                hostChunk[chunkNr],
-                devNew[chunkNr],
-                userDomainSize,
-                queue[chunkNr]);
+                devOldView[chunkNr],
+                devNewView[chunkNr]);
+
+            alpaka::mem::view::copy(
+                queue[chunkNr],
+                hostChunkBuffer[chunkNr],
+                devNewBuffer[chunkNr],
+                devBufferSize);
         }
 
     // Wait for not finished tasks on accelerator
@@ -458,7 +472,7 @@ int main(int argc, char ** argv)
                 x < (*chunkIt).validMiniSize[1] - 2 * KERNEL_SIZE;
                 ++x)
                 (*chunkIt).virtualHost(y + KERNEL_SIZE, x + KERNEL_SIZE)
-                    = hostChunk[chunkNr](y + KERNEL_SIZE, x + KERNEL_SIZE);
+                    = hostChunkView[chunkNr](y + KERNEL_SIZE, x + KERNEL_SIZE);
         }
         chunkIt++;
     }
@@ -471,12 +485,12 @@ int main(int argc, char ** argv)
             for(std::size_t x = 0; x < img_x; ++x)
             {
                 auto * pixel = &image[(y * img_x + x) * 3];
-                pixel[0]
-                    = host(y + KERNEL_SIZE, x + KERNEL_SIZE)(tag::R()) * 255.;
-                pixel[1]
-                    = host(y + KERNEL_SIZE, x + KERNEL_SIZE)(tag::G()) * 255.;
-                pixel[2]
-                    = host(y + KERNEL_SIZE, x + KERNEL_SIZE)(tag::B()) * 255.;
+                pixel[0] = hostView(y + KERNEL_SIZE, x + KERNEL_SIZE)(tag::R())
+                    * 255.;
+                pixel[1] = hostView(y + KERNEL_SIZE, x + KERNEL_SIZE)(tag::G())
+                    * 255.;
+                pixel[2] = hostView(y + KERNEL_SIZE, x + KERNEL_SIZE)(tag::B())
+                    * 255.;
             }
         stbi_write_png(out_filename.c_str(), img_x, img_y, 3, image.data(), 0);
     }
