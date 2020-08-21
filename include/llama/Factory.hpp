@@ -28,30 +28,20 @@ namespace llama
     namespace internal
     {
         LLAMA_NO_HOST_ACC_WARNING
-        template<typename T_Allocator, typename T_Mapping, std::size_t... Is>
-        LLAMA_FN_HOST_ACC_INLINE auto makeBlobArrayImpl(
-            T_Mapping const mapping,
-            typename T_Allocator::Parameter const & allocatorParams,
-            std::integer_sequence<std::size_t, Is...>)
-            -> Array<typename T_Allocator::BlobType, T_Mapping::blobCount>
-        {
-            return Array<typename T_Allocator::BlobType, sizeof...(Is)>{
-                T_Allocator::allocate(
-                    mapping.getBlobSize(Is), allocatorParams)...};
-        }
-
-        LLAMA_NO_HOST_ACC_WARNING
-        template<typename T_Allocator, typename T_Mapping>
+        template<
+            typename T_Allocator,
+            typename T_Mapping,
+            std::size_t... Is,
+            typename... AllocatorArgs>
         LLAMA_FN_HOST_ACC_INLINE auto makeBlobArray(
             T_Mapping const mapping,
-            typename T_Allocator::Parameter const & allocatorParams)
+            std::integer_sequence<std::size_t, Is...>,
+            AllocatorArgs&&... allocatorArgs)
             -> Array<typename T_Allocator::BlobType, T_Mapping::blobCount>
         {
-            return makeBlobArrayImpl<T_Allocator, T_Mapping>(
-                mapping,
-                allocatorParams,
-                std::
-                    make_integer_sequence<std::size_t, T_Mapping::blobCount>{});
+            return {T_Allocator::allocate(
+                mapping.getBlobSize(Is),
+                std::forward<AllocatorArgs>(allocatorArgs)...)...};
         }
     }
 
@@ -91,21 +81,19 @@ namespace llama
     template<typename T_Mapping, typename T_Allocator = allocator::Vector<>>
     struct Factory
     {
-        /** Allocates the needed memory based in the mapping and returns a view
-         * \param mapping the mapping
-         * \param allocatorParams optional allocator parameter, which may be
-         *  forwarded to the allocator
-         * \return the allocated \ref View
-         */
         LLAMA_NO_HOST_ACC_WARNING
+        template<typename... AllocatorArgs>
         static LLAMA_FN_HOST_ACC_INLINE auto allocView(
             T_Mapping const mapping = {},
-            typename T_Allocator::Parameter const & allocatorParams = {})
+            AllocatorArgs &&... allocatorArgs)
             -> View<T_Mapping, typename T_Allocator::BlobType>
         {
             return {
                 mapping,
-                internal::makeBlobArray<T_Allocator>(mapping, allocatorParams)};
+                internal::makeBlobArray<T_Allocator>(
+                    mapping,
+                    std::make_index_sequence<T_Mapping::blobCount>{},
+                    std::forward<AllocatorArgs>(allocatorArgs)...)};
         }
     };
 
