@@ -15,6 +15,7 @@
 #pragma once
 
 #include <cstddef>
+#include <alpaka/alpaka.hpp>
 
 namespace common
 {
