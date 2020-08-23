@@ -51,16 +51,13 @@ namespace llama::mapping
 
         /// \param size size of the user domain
         LLAMA_FN_HOST_ACC_INLINE
-        SoA(UserDomain const size) :
-                userDomainSize(size),
-                extentUserDomainAdress(
-                    ExtentUserDomainAdressFunctor{}(userDomainSize))
-        {}
+        SoA(UserDomain const size) : userDomainSize(size) {}
 
         LLAMA_FN_HOST_ACC_INLINE
         auto getBlobSize(std::size_t const) const -> std::size_t
         {
-            return extentUserDomainAdress * SizeOf<DatumDomain>::value;
+            return ExtentUserDomainAdressFunctor{}(
+                userDomainSize)*SizeOf<DatumDomain>::value;
         }
 
         template<std::size_t... DatumDomainCoord>
@@ -73,11 +70,10 @@ namespace llama::mapping
                     * sizeof(
                         GetType<DatumDomain, DatumCoord<DatumDomainCoord...>>)
                 + LinearBytePos<DatumDomain, DatumDomainCoord...>::value
-                    * extentUserDomainAdress;
+                    * ExtentUserDomainAdressFunctor{}(userDomainSize);
             return {0, offset};
         }
 
         const UserDomain userDomainSize;
-        const std::size_t extentUserDomainAdress;
     };
 }
