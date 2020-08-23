@@ -376,7 +376,8 @@ namespace llama
     struct Assignment
     {
         template<typename A, typename B>
-        decltype(auto) operator()(A & a, const B & b) const
+        LLAMA_FN_HOST_ACC_INLINE decltype(auto)
+        operator()(A & a, const B & b) const
         {
             return a = b;
         }
@@ -385,7 +386,8 @@ namespace llama
     struct Addition
     {
         template<typename A, typename B>
-        decltype(auto) operator()(A & a, const B & b) const
+        LLAMA_FN_HOST_ACC_INLINE decltype(auto)
+        operator()(A & a, const B & b) const
         {
             return a += b;
         }
@@ -394,7 +396,8 @@ namespace llama
     struct Subtraction
     {
         template<typename A, typename B>
-        decltype(auto) operator()(A & a, const B & b) const
+        LLAMA_FN_HOST_ACC_INLINE decltype(auto)
+        operator()(A & a, const B & b) const
         {
             return a -= b;
         }
@@ -403,7 +406,8 @@ namespace llama
     struct Multiplication
     {
         template<typename A, typename B>
-        decltype(auto) operator()(A & a, const B & b) const
+        LLAMA_FN_HOST_ACC_INLINE decltype(auto)
+        operator()(A & a, const B & b) const
         {
             return a *= b;
         }
@@ -412,7 +416,8 @@ namespace llama
     struct Division
     {
         template<typename A, typename B>
-        decltype(auto) operator()(A & a, const B & b) const
+        LLAMA_FN_HOST_ACC_INLINE decltype(auto)
+        operator()(A & a, const B & b) const
         {
             return a /= b;
         }
@@ -421,7 +426,8 @@ namespace llama
     struct Modulo
     {
         template<typename A, typename B>
-        decltype(auto) operator()(A & a, const B & b) const
+        LLAMA_FN_HOST_ACC_INLINE decltype(auto)
+        operator()(A & a, const B & b) const
         {
             return a %= b;
         }

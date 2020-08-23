@@ -186,11 +186,14 @@ namespace llama
         template<size_t... Is>
         struct TupleTransformHelper<std::index_sequence<Is...>>
         {
-            template<typename Tuple, typename Functor>
+            template<typename... Elements, typename Functor>
             static LLAMA_FN_HOST_ACC_INLINE auto
-            transform(const Tuple & tuple, const Functor & functor)
+            transform(const Tuple<Elements...> & tuple, const Functor & functor)
             {
-                return llama::Tuple{functor(getTupleElement<Is>(tuple))...};
+                // FIXME(bgruber): nvcc fails to compile
+                // Tuple{functor(getTupleElement<Is>(tuple))...}
+                return Tuple<decltype(functor(std::declval<Elements>()))...>{
+                    functor(getTupleElement<Is>(tuple))...};
             }
         };
     }

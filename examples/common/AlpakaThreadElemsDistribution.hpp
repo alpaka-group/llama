@@ -14,10 +14,13 @@
 
 #pragma once
 
-#define THREADELEMDIST_MIN_ELEM 2
+#include <cstddef>
+#include <alpaka/alpaka.hpp>
 
 namespace common
 {
+    constexpr auto THREADELEMDIST_MIN_ELEM = 2;
+
     /** Returns a good guess for an optimal number of threads and elements in a
      *  block based on the total number of elements in the block.
      */

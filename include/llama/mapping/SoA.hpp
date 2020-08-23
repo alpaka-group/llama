@@ -27,13 +27,13 @@ namespace llama::mapping
     /** Struct of array mapping which can be used for creating a \ref View with
      * a \ref Factory. For the interface details see \ref Factory. \tparam
      * T_UserDomain type of the user domain \tparam T_DatumDomain type of the
-     * datum domain \tparam T_LinearizeUserDomainAdressFunctor Defines how the
+     * datum domain \tparam LinearizeUserDomainAdressFunctor Defines how the
      * user domain should be linearized, e.g. C like with the last dimension
      * being the "fast" one
      *  (\ref LinearizeUserDomainAdress, default) or Fortran like with the first
      *  dimension being the "fast" one (\ref
      * LinearizeUserDomainAdressLikeFortran). \tparam
-     * T_ExtentUserDomainAdressFunctor Defines how the size of the view shall be
+     * ExtentUserDomainAdressFunctor Defines how the size of the view shall be
      * created. Should fit for `T_LinearizeUserDomainAdressFunctor`. Only right
      * now implemented and default value is \ref ExtentUserDomainAdress. \see
      * AoS
@@ -41,8 +41,8 @@ namespace llama::mapping
     template<
         typename T_UserDomain,
         typename T_DatumDomain,
-        typename T_LinearizeUserDomainAdressFunctor = LinearizeUserDomainAdress,
-        typename T_ExtentUserDomainAdressFunctor = ExtentUserDomainAdress>
+        typename LinearizeUserDomainAdressFunctor = LinearizeUserDomainAdress,
+        typename ExtentUserDomainAdressFunctor = ExtentUserDomainAdress>
     struct SoA
     {
         using UserDomain = T_UserDomain;
@@ -51,31 +51,29 @@ namespace llama::mapping
 
         /// \param size size of the user domain
         LLAMA_FN_HOST_ACC_INLINE
-        SoA(UserDomain const size) :
-                userDomainSize(size),
-                extentUserDomainAdress(
-                    T_ExtentUserDomainAdressFunctor()(userDomainSize))
-        {}
+        SoA(UserDomain const size) : userDomainSize(size) {}
 
         LLAMA_FN_HOST_ACC_INLINE
         auto getBlobSize(std::size_t const) const -> std::size_t
         {
-            return extentUserDomainAdress * SizeOf<DatumDomain>::value;
+            return ExtentUserDomainAdressFunctor{}(
+                userDomainSize)*SizeOf<DatumDomain>::value;
         }
 
         template<std::size_t... DatumDomainCoord>
-        auto getBlobNrAndOffset(UserDomain coord) const -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(UserDomain coord) const
+            -> NrAndOffset
         {
+            LLAMA_FORCE_INLINE_RECURSIVE
             const auto offset
-                = T_LinearizeUserDomainAdressFunctor()(coord, userDomainSize)
+                = LinearizeUserDomainAdressFunctor{}(coord, userDomainSize)
                     * sizeof(
                         GetType<DatumDomain, DatumCoord<DatumDomainCoord...>>)
                 + LinearBytePos<DatumDomain, DatumDomainCoord...>::value
-                    * extentUserDomainAdress;
+                    * ExtentUserDomainAdressFunctor{}(userDomainSize);
             return {0, offset};
         }
 
-        UserDomain const userDomainSize;
-        std::size_t const extentUserDomainAdress;
+        const UserDomain userDomainSize;
     };
 }

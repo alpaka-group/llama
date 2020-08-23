@@ -78,7 +78,9 @@
  *  #include <llama/llama.hpp>
  * \endcode
  */
-#if BOOST_COMP_GNUC != 0
+#if BOOST_COMP_NVCC != 0
+#define LLAMA_FN_HOST_ACC_INLINE __forceinline__
+#elif BOOST_COMP_GNUC != 0
 #define LLAMA_FN_HOST_ACC_INLINE inline __attribute__((always_inline))
 #elif defined(_MSC_VER)
 #define LLAMA_FN_HOST_ACC_INLINE __forceinline
