@@ -86,7 +86,8 @@ namespace llama::mapping::tree
         }
 
         template<std::size_t... DatumDomainCoord>
-        auto getBlobNrAndOffset(UserDomain coord) const -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(UserDomain coord) const
+            -> NrAndOffset
         {
             auto const basicTreeCoord
                 = getBasicTreeCoordFromDomains<DatumCoord<DatumDomainCoord...>>(
