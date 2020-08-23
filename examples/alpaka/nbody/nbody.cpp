@@ -10,6 +10,7 @@
 #include "../../common/Chrono.hpp"
 
 #include <alpaka/alpaka.hpp>
+#include <alpaka/example/ExampleDefaultAcc.hpp>
 #include <iostream>
 #include <llama/llama.hpp>
 #include <random>
@@ -188,15 +189,12 @@ int main(int argc, char ** argv)
 {
     using Dim = alpaka::dim::DimInt<1>;
     using Size = std::size_t;
-    using Host = alpaka::acc::AccCpuSerial<Dim, Size>;
 
+    using Acc = alpaka::example::ExampleDefaultAcc<Dim, Size>;
     // using Acc = alpaka::acc::AccGpuCudaRt<Dim, Size>;
-    using Acc = alpaka::acc::AccCpuSerial<Dim, Size>;
-    // using Acc = alpaka::acc::AccCpuOmp2Blocks<Dim, Size>;
-    // using Acc = alpaka::acc::AccCpuOmp2Threads< Dim, Size >;
-    // using Acc = alpaka::acc::AccCpuOmp4< Dim, Size >;
+    // using Acc = alpaka::acc::AccCpuSerial<Dim, Size>;
 
-    using DevHost = alpaka::dev::Dev<Host>;
+    using DevHost = alpaka::dev::DevCpu;
     using DevAcc = alpaka::dev::Dev<Acc>;
     using PltfHost = alpaka::pltf::Pltf<DevHost>;
     using PltfAcc = alpaka::pltf::Pltf<DevAcc>;
