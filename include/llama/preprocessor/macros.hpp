@@ -80,6 +80,8 @@
  */
 #if BOOST_COMP_GNUC != 0
 #define LLAMA_FN_HOST_ACC_INLINE inline __attribute__((always_inline))
+#elif defined(BOOST_COMP_NVCC)
+#define LLAMA_FN_HOST_ACC_INLINE __forceinline__
 #elif defined(_MSC_VER)
 #define LLAMA_FN_HOST_ACC_INLINE __forceinline
 #else
