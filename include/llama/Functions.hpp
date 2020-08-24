@@ -242,55 +242,62 @@ namespace llama
         T_DatumCoord>::type;
 
     /** Tells whether two coordinates in two datum domains have the same UID.
-     * \tparam T_DDA first user domain
-     * \tparam T_BaseA First part of the coordinate in the first user domain as
+     * \tparam DDA first user domain
+     * \tparam BaseA First part of the coordinate in the first user domain as
      *  \ref DatumCoord. This will be used for getting the UID, but not for the
      *  comparison.
-     * \tparam T_LocalA Second part of the coordinate in the first user domain
+     * \tparam LocalA Second part of the coordinate in the first user domain
      * as \ref DatumCoord. This will be used for the comparison with the second
      *  datum domain.
-     * \tparam T_DDB second user domain
-     * \tparam T_BaseB First part of the coordinate in the second user domain as
+     * \tparam DDB second user domain
+     * \tparam BaseB First part of the coordinate in the second user domain as
      *  \ref DatumCoord. This will be used for getting the UID, but not for the
      *  comparison.
-     * \tparam T_LocalB Second part of the coordinate in the second user domain
+     * \tparam LocalB Second part of the coordinate in the second user domain
      * as \ref DatumCoord. This will be used for the comparison with the first
      *  datum domain.
      */
     template<
-        typename T_DDA,
-        typename T_BaseA,
-        typename T_LocalA,
-        typename T_DDB,
-        typename T_BaseB,
-        typename T_LocalB>
-    struct CompareUID
+        typename DatumDomainA,
+        typename BaseA,
+        typename LocalA,
+        typename DatumDomainB,
+        typename BaseB,
+        typename LocalB>
+    struct CompareUID;
+
+    template<
+        typename DatumDomainA,
+        std::size_t... BaseCoordsA,
+        typename LocalA,
+        typename DatumDomainB,
+        std::size_t... BaseCoordsB,
+        typename LocalB>
+    struct CompareUID<
+        DatumDomainA,
+        DatumCoord<BaseCoordsA...>,
+        LocalA,
+        DatumDomainB,
+        DatumCoord<BaseCoordsB...>,
+        LocalB>
     {
         /// true if the two UIDs are exactly the same, otherwise false.
         static constexpr bool value = []() constexpr
         {
-            if constexpr(T_LocalA::size != T_LocalB::size)
+            if constexpr(LocalA::size != LocalB::size)
                 return false;
-            else if constexpr(T_LocalA::size == 0 && T_LocalB::size == 0)
+            else if constexpr(LocalA::size == 0 && LocalB::size == 0)
                 return true;
             else
             {
-                return std::is_same<
+                using TagCoordA = DatumCoord<BaseCoordsA..., LocalA::front>;
+                using TagCoordB = DatumCoord<BaseCoordsB..., LocalB::front>;
+
+                return std::is_same_v<
+                           GetUID<DatumDomainA, TagCoordA>,
                            GetUID<
-                               T_DDA,
-                               typename T_BaseA::template PushBack<
-                                   T_LocalA::front>>,
-                           GetUID<
-                               T_DDB,
-                               typename T_BaseB::template PushBack<
-                                   T_LocalB::front>>>::value
-                    && CompareUID<
-                           T_DDA,
-                           typename T_BaseA::template PushBack<T_LocalA::front>,
-                           typename T_LocalA::PopFront,
-                           T_DDB,
-                           typename T_BaseB::template PushBack<T_LocalB::front>,
-                           typename T_LocalB::PopFront>::value;
+                               DatumDomainB,
+                               TagCoordB>> && CompareUID<DatumDomainA, TagCoordA, typename LocalA::PopFront, DatumDomainB, TagCoordB, typename LocalB::PopFront>::value;
             }
         }
         ();
@@ -399,8 +406,9 @@ namespace llama
                 void,
                 T_UID...>::type;
             // Only returning the datum coord relative to T_DatumCoord
-            using type = typename AbsolutCoord::template Back<
-                AbsolutCoord::size - T_DatumCoord::size>;
+            using type = mp_unwrap_sizes<boost::mp11::mp_drop_c<
+                typename AbsolutCoord::coord_list,
+                T_DatumCoord::size>>;
         };
     }
 
