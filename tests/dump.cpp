@@ -43,4 +43,14 @@ TEST_CASE("dump")
         f << llama::mapping::toSvg(
             llama::mapping::SoA<UserDomain, Particle>{userDomain});
     }
+    {
+        std::ofstream f{"AoSoAMapping8.svg"};
+        f << llama::mapping::toSvg(
+            llama::mapping::AoSoA<UserDomain, Particle, 8>{userDomain});
+    }
+    {
+        std::ofstream f{"AoSoAMapping32_cuda.svg"};
+        f << llama::mapping::toSvg(
+            llama::mapping::AoSoA<UserDomain, Particle, 32>{userDomain});
+    }
 }
