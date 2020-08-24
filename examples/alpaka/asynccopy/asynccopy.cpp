@@ -19,6 +19,7 @@
 #include "stb_image_write.h"
 
 #include <alpaka/alpaka.hpp>
+#include <alpaka/example/ExampleDefaultAcc.hpp>
 #include <iostream>
 #include <list>
 #include <llama/llama.hpp>
@@ -194,13 +195,10 @@ int main(int argc, char ** argv)
 {
     // ALPAKA
     using Dim = alpaka::dim::DimInt<2>;
-    using Host = alpaka::acc::AccCpuSerial<Dim, size_t>;
 
-    // using Acc = alpaka::acc::AccGpuCudaRt<Dim, size_t>;
-    using Acc = alpaka::acc::AccCpuSerial<Dim, size_t>;
-    // using Acc = alpaka::acc::AccCpuOmp2Blocks<Dim, size_t>;
-    // using Acc = alpaka::acc::AccCpuOmp2Threads<Dim, size_t>;
-    // using Acc = alpaka::acc::AccCpuOmp4<Dim, size_t>;
+    using Acc = alpaka::example::ExampleDefaultAcc<Dim, std::size_t>;
+    // using Acc = alpaka::acc::AccGpuCudaRt<Dim, Size>;
+    // using Acc = alpaka::acc::AccCpuSerial<Dim, Size>;
 
     using Queue = alpaka::queue::Queue<
         Acc,
@@ -208,7 +206,7 @@ int main(int argc, char ** argv)
             ASYNC,
             alpaka::queue::NonBlocking,
             alpaka::queue::Blocking>>;
-    using DevHost = alpaka::dev::Dev<Host>;
+    using DevHost = alpaka::dev::DevCpu;
     using DevAcc = alpaka::dev::Dev<Acc>;
     using PltfHost = alpaka::pltf::Pltf<DevHost>;
     using PltfAcc = alpaka::pltf::Pltf<DevAcc>;
