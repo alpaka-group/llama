@@ -59,23 +59,7 @@ namespace llama
             = internal::mp_unwrap_sizes<boost::mp11::mp_pop_front<coord_list>>;
 
         template<std::size_t NewCoord>
-        using PushFront = DatumCoord<NewCoord, Coords...>;
-
-        template<std::size_t NewCoord>
         using PushBack = DatumCoord<Coords..., NewCoord>;
-
-        using IncBack = std::conditional_t<
-            (sizeof...(Coords) > 1),
-            typename PopFront::IncBack::template PushFront<front>,
-            DatumCoord<front + 1>>;
-
-        template<std::size_t N>
-        using Front
-            = internal::mp_unwrap_sizes<boost::mp11::mp_take_c<coord_list, N>>;
-
-        template<std::size_t N>
-        using Back = internal::mp_unwrap_sizes<boost::mp11::mp_reverse<
-            boost::mp11::mp_take_c<boost::mp11::mp_reverse<coord_list>, N>>>;
 
         template<typename OtherDatumCoord>
         using Cat = internal::mp_unwrap_sizes<boost::mp11::mp_append<
@@ -90,19 +74,8 @@ namespace llama
 
         static constexpr std::size_t size = 0;
 
-        using IncBack = DatumCoord<1>;
-
-        template<std::size_t NewCoord>
-        using PushFront = DatumCoord<NewCoord>;
-
         template<std::size_t NewCoord>
         using PushBack = DatumCoord<NewCoord>;
-
-        template<std::size_t N>
-        using Front = DatumCoord<>;
-
-        template<std::size_t N>
-        using Back = DatumCoord<>;
 
         template<typename OtherDatumCoord>
         using Cat = OtherDatumCoord;
