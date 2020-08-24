@@ -63,9 +63,6 @@ namespace llama
 
         /// last ordinate
         static constexpr std::size_t back = boost::mp11::mp_back<List>::value;
-
-        /// DatumCoord without first coordinate element
-        using PopFront = DatumCoordFromList<boost::mp11::mp_pop_front<List>>;
     };
 
     template<>
@@ -81,6 +78,11 @@ namespace llama
     using Cat = DatumCoordFromList<boost::mp11::mp_append<
         typename DatumCoord1::List,
         typename DatumCoord2::List>>;
+
+    /// DatumCoord without first coordinate element
+    template<typename DatumCoord>
+    using PopFront = DatumCoordFromList<
+        boost::mp11::mp_pop_front<typename DatumCoord::List>>;
 
     /** Checks at compile time whether a first DatumCoord is bigger than a
      * second. If so a static constexpr value will be set to true otherwise to

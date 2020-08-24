@@ -297,7 +297,7 @@ namespace llama
                            GetUID<DatumDomainA, TagCoordA>,
                            GetUID<
                                DatumDomainB,
-                               TagCoordB>> && CompareUID<DatumDomainA, TagCoordA, typename LocalA::PopFront, DatumDomainB, TagCoordB, typename LocalB::PopFront>::value;
+                               TagCoordB>> && CompareUID<DatumDomainA, TagCoordA, PopFront<LocalA>, DatumDomainB, TagCoordB, PopFront<LocalB>>::value;
             }
         }
         ();
