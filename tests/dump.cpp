@@ -1,0 +1,46 @@
+#include "common.h"
+
+#include <catch2/catch.hpp>
+#include <fstream>
+#include <llama/llama.hpp>
+#include <llama/mapping/Dump.hpp>
+
+// clang-format off
+namespace tag
+{
+    struct Pos {};
+    struct Vel {};
+    struct X {};
+    struct Y {};
+    struct Z {};
+    struct Mass {};
+}
+
+using Vec = llama::DS<
+    llama::DE<tag::X, float>,
+    llama::DE<tag::Y, float>,
+    llama::DE<tag::Z, float>
+>;
+using Particle = llama::DS<
+    llama::DE<tag::Pos, Vec>,
+    llama::DE<tag::Vel,Vec>,
+    llama::DE<tag::Mass, float>
+>;
+// clang-format on
+
+TEST_CASE("dump")
+{
+    using UserDomain = llama::UserDomain<2>;
+    UserDomain userDomain{16, 16};
+
+    {
+        std::ofstream f{"AoSMapping.svg"};
+        f << llama::mapping::toSvg(
+            llama::mapping::AoS<UserDomain, Particle>{userDomain});
+    }
+    {
+        std::ofstream f{"SoAMapping.svg"};
+        f << llama::mapping::toSvg(
+            llama::mapping::SoA<UserDomain, Particle>{userDomain});
+    }
+}
