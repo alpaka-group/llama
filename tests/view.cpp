@@ -19,13 +19,16 @@ TEST_CASE("view default ctor")
     using UserDomain = llama::UserDomain<2>;
     constexpr UserDomain viewSize{16, 16};
 
-    llama::View<llama::mapping::SoA<UserDomain, DatumDomain>, std::byte *>
-        view1;
-    llama::View<llama::mapping::AoS<UserDomain, DatumDomain>, std::byte *>
-        view2;
-    llama::View<llama::mapping::One<UserDomain, DatumDomain>, std::byte *>
-        view3;
-    llama::View<
+    [[maybe_unused]] llama::
+        View<llama::mapping::SoA<UserDomain, DatumDomain>, std::byte *>
+            view1;
+    [[maybe_unused]] llama::
+        View<llama::mapping::AoS<UserDomain, DatumDomain>, std::byte *>
+            view2;
+    [[maybe_unused]] llama::
+        View<llama::mapping::One<UserDomain, DatumDomain>, std::byte *>
+            view3;
+    [[maybe_unused]] llama::View<
         llama::mapping::tree::Mapping<UserDomain, DatumDomain, llama::Tuple<>>,
         std::byte *>
         view4;
