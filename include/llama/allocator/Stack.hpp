@@ -21,9 +21,7 @@
 #include "../Array.hpp"
 #include "../preprocessor/macros.hpp"
 
-#include <malloc.h>
-#include <stdlib.h>
-#include <vector>
+#include <cstddef>
 
 namespace llama::allocator
 {

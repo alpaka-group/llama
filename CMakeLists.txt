@@ -3,10 +3,11 @@ project (llama CXX)
 
 # llama
 find_package(Boost 1.66.0 REQUIRED)
+find_package(fmt CONFIG REQUIRED)
 add_library(${PROJECT_NAME} INTERFACE)
 target_include_directories(${PROJECT_NAME} INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_17)
-target_link_libraries(${PROJECT_NAME} INTERFACE Boost::headers)
+target_link_libraries(${PROJECT_NAME} INTERFACE Boost::headers fmt::fmt)
 
 # llama::llama to make subdirectory projects work
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
