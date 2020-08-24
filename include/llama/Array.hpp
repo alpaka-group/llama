@@ -164,4 +164,7 @@ namespace llama
             return temp;
         }
     };
+
+    template<typename First, typename... Args>
+    Array(First, Args... args) -> Array<First, sizeof...(Args) + 1>;
 }

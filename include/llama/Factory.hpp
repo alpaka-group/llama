@@ -27,6 +27,10 @@ namespace llama
 {
     namespace internal
     {
+        template<typename Allocator, typename... AllocatorArgs>
+        using AllocatorBlobType = decltype(
+            Allocator::allocate(0, std::declval<AllocatorArgs>()...));
+
         LLAMA_NO_HOST_ACC_WARNING
         template<
             typename Allocator,
@@ -37,7 +41,9 @@ namespace llama
             Mapping const mapping,
             std::integer_sequence<std::size_t, Is...>,
             AllocatorArgs &&... allocatorArgs)
-            -> Array<typename Allocator::BlobType, Mapping::blobCount>
+            -> Array<
+                AllocatorBlobType<Allocator, AllocatorArgs...>,
+                Mapping::blobCount>
         {
             return {Allocator::allocate(
                 mapping.getBlobSize(Is),
@@ -85,7 +91,9 @@ namespace llama
         template<typename... AllocatorArgs>
         static LLAMA_FN_HOST_ACC_INLINE auto
         allocView(Mapping const mapping = {}, AllocatorArgs &&... allocatorArgs)
-            -> View<Mapping, typename Allocator::BlobType>
+            -> View<
+                Mapping,
+                internal::AllocatorBlobType<Allocator, AllocatorArgs...>>
         {
             return {
                 mapping,
