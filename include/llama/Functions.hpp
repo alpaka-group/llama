@@ -43,58 +43,56 @@ namespace llama
     namespace internal
     {
         template<
-            typename T_DatumDomain,
-            typename T_DatumCoord,
-            typename T_IterCoord>
-        struct LinearBytePosImpl
+            typename DatumDomain,
+            typename TargetDatumCoord,
+            typename IterCoord>
+        constexpr auto
+        linearBytePosImpl(DatumDomain *, TargetDatumCoord, IterCoord)
         {
-            static constexpr std::size_t value
-                = sizeof(T_DatumDomain)
+            return sizeof(DatumDomain)
                 * static_cast<std::size_t>(
-                      DatumCoordIsBigger<T_DatumCoord, T_IterCoord>::value);
-        };
+                       DatumCoordIsBigger<TargetDatumCoord, IterCoord>::value);
+        }
 
         template<
-            typename T_DatumCoord,
-            typename T_IterCoord,
-            typename T_FirstDatumElement,
-            typename... T_DatumElements>
-        struct LinearBytePosImpl<
-            DatumStruct<T_FirstDatumElement, T_DatumElements...>,
-            T_DatumCoord,
-            T_IterCoord>
+            typename... DatumElements,
+            typename TargetDatumCoord,
+            std::size_t... IterCoords>
+        constexpr auto linearBytePosImpl(
+            DatumStruct<DatumElements...> *,
+            TargetDatumCoord,
+            DatumCoord<IterCoords...>)
         {
-            static constexpr std::size_t value
-                = LinearBytePosImpl<
-                      GetDatumElementType<T_FirstDatumElement>,
-                      T_DatumCoord,
-                      typename T_IterCoord::template PushBack<0>>::value
-                + LinearBytePosImpl<
-                      DatumStruct<T_DatumElements...>,
-                      T_DatumCoord,
-                      typename T_IterCoord::IncBack>::value;
-        };
+            std::size_t acc = 0;
+            boost::mp11::mp_for_each<
+                boost::mp11::mp_iota_c<sizeof...(DatumElements)>>([&](
+                auto i) constexpr {
+                constexpr auto index = decltype(i)::value;
+                using Element = boost::mp11::
+                    mp_at_c<DatumStruct<DatumElements...>, index>;
 
-        template<typename T_DatumCoord, typename T_IterCoord>
-        struct LinearBytePosImpl<DatumStruct<>, T_DatumCoord, T_IterCoord>
-        {
-            static constexpr std::size_t value = 0;
-        };
+                acc += linearBytePosImpl(
+                    (GetDatumElementType<Element> *)nullptr,
+                    TargetDatumCoord{},
+                    DatumCoord<IterCoords..., index>{});
+            });
+            return acc;
+        }
     }
 
     /** Gives the byte position of an element in a datum domain if it would be a
      *  normal struct
-     * \tparam T_DatumDomain datum domain tree
-     * \tparam T_coords... coordinate in datum domain tree
+     * \tparam DatumDomain datum domain tree
+     * \tparam Coords... coordinate in datum domain tree
      * \return the byte position as compile time value in "value"
      */
-    template<typename T_DatumDomain, std::size_t... T_coords>
+    template<typename DatumDomain, std::size_t... Coords>
     struct LinearBytePos
     {
-        static constexpr std::size_t value = internal::LinearBytePosImpl<
-            T_DatumDomain,
-            DatumCoord<T_coords...>,
-            DatumCoord<0>>::value;
+        static constexpr std::size_t value = internal::linearBytePosImpl(
+            (DatumDomain *)nullptr,
+            DatumCoord<Coords...>{},
+            DatumCoord<>{});
     };
 
     /** Gives the size a datum domain if it would be a normal struct
