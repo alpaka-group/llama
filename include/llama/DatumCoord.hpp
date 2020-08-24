@@ -47,15 +47,24 @@ namespace llama
     template<typename L>
     using DatumCoordFromList = internal::mp_unwrap_sizes<L>;
 
+    /** Wrapper class for coordinate inside of datum domain tree.
+     * \tparam T_coords... the compile time coordinate
+     * */
     template<std::size_t... Coords>
     struct DatumCoord
     {
         using List = boost::mp11::mp_list_c<std::size_t, Coords...>;
 
+        /// first coordinate element
         static constexpr std::size_t front = boost::mp11::mp_front<List>::value;
+
+        /// number of coordinate elements
         static constexpr std::size_t size = sizeof...(Coords);
+
+        /// last ordinate
         static constexpr std::size_t back = boost::mp11::mp_back<List>::value;
 
+        /// DatumCoord without first coordinate element
         using PopFront = DatumCoordFromList<boost::mp11::mp_pop_front<List>>;
     };
 
@@ -73,6 +82,12 @@ namespace llama
         typename DatumCoord1::List,
         typename DatumCoord2::List>>;
 
+    /** Checks at compile time whether a first DatumCoord is bigger than a
+     * second. If so a static constexpr value will be set to true otherwise to
+     * false. \tparam T_First first \ref DatumCoord in the comparison \tparam
+     * T_Second second \ref DatumCoord in the comparison \tparam T_SFinae
+     * internal helper template parameter for specialization
+     * */
     template<typename T_First, typename T_Second>
     struct DatumCoordIsBigger;
 
@@ -96,6 +111,12 @@ namespace llama
         ();
     };
 
+    /** Checks at compile time whether a first DatumCoord is the same as a
+     * second. If so a static constexpr value will be set to true otherwise to
+     * false. \tparam T_First first \ref DatumCoord in the comparison \tparam
+     * T_Second second \ref DatumCoord in the comparison \tparam T_SFinae
+     * internal helper template parameter for specialization
+     * */
     template<typename T_First, typename T_Second>
     struct DatumCoordIsSame;
 
