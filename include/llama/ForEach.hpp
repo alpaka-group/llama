@@ -28,90 +28,53 @@ namespace llama
     namespace internal
     {
         template<
-            typename Coord,
-            typename Pos,
-            typename Functor,
-            typename... Leaves>
-        struct ApplyFunctorForEachLeafImpl;
-
-        template<typename Coord, typename Pos, typename Functor, typename Leaf>
-        struct ApplyFunctorForDatumDomainImpl
+            typename DatumDomain,
+            typename BaseDatumCoord,
+            std::size_t... InnerCoords,
+            typename Functor>
+        LLAMA_FN_HOST_ACC_INLINE void applyFunctorForEachLeaf(
+            DatumDomain,
+            BaseDatumCoord base,
+            DatumCoord<InnerCoords...> inner,
+            Functor && functor)
         {
-            LLAMA_FN_HOST_ACC_INLINE void operator()(Functor && functor)
-            {
-                if constexpr(
-                    Pos::size >= Coord::size
-                    && DatumCoordIsSame<Pos, Coord>::value)
-                    functor(
-                        Coord{},
-                        typename Pos::template Back<Pos::size - Coord::size>());
-            };
+            using InnerDatumCoord = decltype(inner);
+            if constexpr(
+                InnerDatumCoord::size >= BaseDatumCoord::size
+                && DatumCoordIsSame<InnerDatumCoord, BaseDatumCoord>::value)
+                functor(
+                    BaseDatumCoord{},
+                    mp_unwrap_sizes<boost::mp11::mp_drop_c<
+                        typename InnerDatumCoord::coord_list,
+                        BaseDatumCoord::size>>{});
         };
 
         template<
-            typename Coord,
-            typename Pos,
-            typename Functor,
-            typename... Leaves>
-        struct ApplyFunctorForDatumDomainImpl<
-            Coord,
-            Pos,
-            Functor,
-            DatumStruct<Leaves...>>
-        {
-            LLAMA_FN_HOST_ACC_INLINE void operator()(Functor && functor)
-            {
-                ApplyFunctorForEachLeafImpl<
-                    Coord,
-                    typename Pos::template PushBack<0>,
-                    Functor,
-                    Leaves...>{}(std::forward<Functor>(functor));
-            }
-        };
-
-        template<
-            typename Coord,
-            typename Pos,
-            typename Functor,
-            typename Leaf,
-            typename... Leaves>
-        struct ApplyFunctorForEachLeafImpl<Coord, Pos, Functor, Leaf, Leaves...>
-        {
-            LLAMA_FN_HOST_ACC_INLINE void operator()(Functor && functor)
-            {
-                ApplyFunctorForDatumDomainImpl<
-                    Coord,
-                    Pos,
-                    Functor,
-                    GetDatumElementType<Leaf>>{}(
-                    std::forward<Functor>(functor));
-                if constexpr(sizeof...(Leaves) > 0)
-                    ApplyFunctorForEachLeafImpl<
-                        Coord,
-                        typename Pos::IncBack,
-                        Functor,
-                        Leaves...>{}(std::forward<Functor>(functor));
-            }
-        };
-
-        template<typename DatumDomain, typename DatumCoord, typename Functor>
-        struct ApplyFunctorForEachLeaf;
-
-        template<typename DatumCoord, typename Functor, typename... Leaves>
-        struct ApplyFunctorForEachLeaf<
+            typename... Leaves,
+            typename BaseDatumCoord,
+            std::size_t... InnerCoords,
+            typename Functor>
+        LLAMA_FN_HOST_ACC_INLINE void applyFunctorForEachLeaf(
             DatumStruct<Leaves...>,
-            DatumCoord,
-            Functor>
+            BaseDatumCoord base,
+            DatumCoord<InnerCoords...> inner,
+            Functor && functor)
         {
-            LLAMA_FN_HOST_ACC_INLINE static void apply(Functor && functor)
-            {
-                ApplyFunctorForEachLeafImpl<
-                    DatumCoord,
-                    llama::DatumCoord<0>,
-                    Functor,
-                    Leaves...>{}(std::forward<Functor>(functor));
-            }
-        };
+            LLAMA_FORCE_INLINE_RECURSIVE
+            boost::mp11::mp_for_each<
+                boost::mp11::mp_iota_c<sizeof...(Leaves)>>([&](auto i) {
+                constexpr auto leafIndex = decltype(i)::value;
+                using Leaf
+                    = boost::mp11::mp_at_c<DatumStruct<Leaves...>, leafIndex>;
+
+                LLAMA_FORCE_INLINE_RECURSIVE
+                applyFunctorForEachLeaf(
+                    GetDatumElementType<Leaf>{},
+                    base,
+                    llama::DatumCoord<InnerCoords..., leafIndex>{},
+                    std::forward<Functor>(functor));
+            });
+        }
     }
 
     /** Can be used to access a given functor for every leaf in a datum domain
@@ -131,37 +94,24 @@ namespace llama
         typename DatumDomain,
         typename DatumCoordOrFirstUID = DatumCoord<>,
         typename... RestUID>
-    struct ForEach
-    {
-        /** Applies the given functor to the given (part of the) datum domain.
-         * \tparam Functor type of the functor
-         * \param functor the perfectly forwarded functor
-         */
-        template<typename Functor>
-        LLAMA_FN_HOST_ACC_INLINE static void apply(Functor && functor)
-        {
-            using DatumCoord = GetCoordFromUID<
+    struct ForEach :
+            ForEach<
                 DatumDomain,
-                DatumCoordOrFirstUID,
-                RestUID...>;
-            internal::ApplyFunctorForEachLeaf<
-                DatumDomain,
-                DatumCoord,
-                Functor>::apply(std::forward<Functor>(functor));
-        }
-    };
+                GetCoordFromUID<DatumDomain, DatumCoordOrFirstUID, RestUID...>>
+    {};
 
-    template<typename DatumDomain, std::size_t... coords>
-    struct ForEach<DatumDomain, DatumCoord<coords...>>
+    template<typename DatumDomain, std::size_t... Coords>
+    struct ForEach<DatumDomain, DatumCoord<Coords...>>
     {
         template<typename Functor>
         LLAMA_FN_HOST_ACC_INLINE static void apply(Functor && functor)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            internal::ApplyFunctorForEachLeaf<
-                DatumDomain,
-                llama::DatumCoord<coords...>,
-                Functor>::apply(std::forward<Functor>(functor));
+            internal::applyFunctorForEachLeaf(
+                DatumDomain{},
+                llama::DatumCoord<Coords...>{},
+                DatumCoord<>{},
+                std::forward<Functor>(functor));
         }
     };
 }
