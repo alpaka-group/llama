@@ -688,6 +688,8 @@ namespace llama
             = VirtualDatum<const View<Mapping, BlobType>>;
 
         View() = default;
+        //View(View &&) noexcept = default;
+        //auto operator=(View &&) noexcept -> View & = default;
 
         LLAMA_NO_HOST_ACC_WARNING
         LLAMA_FN_HOST_ACC_INLINE
@@ -800,7 +802,7 @@ namespace llama
             return (*this)(coord);
         }
 
-        const Mapping mapping; ///< mapping of the view
+        Mapping mapping; ///< mapping of the view
         Array<BlobType, Mapping::blobCount> blob; ///< memory of the view
 
     private:
@@ -831,5 +833,4 @@ namespace llama
             return reinterpret_cast<Type &>(blob[nr][offset]);
         }
     };
-
 } // namespace llama

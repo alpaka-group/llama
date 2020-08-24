@@ -38,6 +38,7 @@ namespace llama::mapping
     {
         using UserDomain = T_UserDomain;
         using DatumDomain = T_DatumDomain;
+
         static constexpr std::size_t blobCount = 1;
 
         LLAMA_FN_HOST_ACC_INLINE auto getBlobSize(std::size_t) const

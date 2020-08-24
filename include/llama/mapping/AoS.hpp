@@ -48,7 +48,8 @@ namespace llama::mapping
         using DatumDomain = T_DatumDomain;
         static constexpr std::size_t blobCount = 1;
 
-        /// \param size size of the user domain
+        AoS() = default;
+
         LLAMA_FN_HOST_ACC_INLINE
         AoS(UserDomain size) : userDomainSize(size) {}
 
@@ -71,6 +72,6 @@ namespace llama::mapping
             return {0, offset};
         }
 
-        const UserDomain userDomainSize;
+        UserDomain userDomainSize;
     };
 }

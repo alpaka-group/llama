@@ -54,12 +54,12 @@ namespace llama::mapping::tree
 
         using MergedFunctors = MergeFunctors<BasicTree, T_TreeOperationList>;
 
-        UserDomain const userDomainSize;
-        BasicTree const basicTree;
-        MergedFunctors const mergedFunctors;
+        UserDomain userDomainSize;
+        BasicTree basicTree;
+        MergedFunctors mergedFunctors;
 
         using ResultTree = decltype(mergedFunctors.basicToResult(basicTree));
-        ResultTree const resultTree;
+        ResultTree resultTree;
 
         /** The initalization of this mapping needs a \ref Tuple of operations
          *  which describe the mapping in detail. Please have a look at the user
