@@ -35,7 +35,7 @@ struct SqrtFunctor
     template<typename T_OuterCoord, typename T_InnerCoord>
     auto operator()(T_OuterCoord, T_InnerCoord) -> void
     {
-        using Coord = typename T_OuterCoord::template Cat<T_InnerCoord>;
+        using Coord = llama::Cat<T_OuterCoord, T_InnerCoord>;
         vd(Coord()) *= std::sqrt(vd(Coord()));
     }
     T_VirtualDatum vd;

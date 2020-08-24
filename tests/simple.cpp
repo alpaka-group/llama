@@ -244,7 +244,7 @@ struct SetZeroFunctor
     template<typename T_OuterCoord, typename T_InnerCoord>
     void operator()(T_OuterCoord, T_InnerCoord)
     {
-        vd(typename T_OuterCoord::template Cat<T_InnerCoord>()) = 0;
+        vd(llama::Cat<T_OuterCoord, T_InnerCoord>{}) = 0;
     }
     T_VirtualDatum vd;
 };

@@ -43,58 +43,56 @@ namespace llama
     namespace internal
     {
         template<
-            typename T_DatumDomain,
-            typename T_DatumCoord,
-            typename T_IterCoord>
-        struct LinearBytePosImpl
+            typename DatumDomain,
+            typename TargetDatumCoord,
+            typename IterCoord>
+        constexpr auto
+        linearBytePosImpl(DatumDomain *, TargetDatumCoord, IterCoord)
         {
-            static constexpr std::size_t value
-                = sizeof(T_DatumDomain)
+            return sizeof(DatumDomain)
                 * static_cast<std::size_t>(
-                      DatumCoordIsBigger<T_DatumCoord, T_IterCoord>::value);
-        };
+                       DatumCoordIsBigger<TargetDatumCoord, IterCoord>::value);
+        }
 
         template<
-            typename T_DatumCoord,
-            typename T_IterCoord,
-            typename T_FirstDatumElement,
-            typename... T_DatumElements>
-        struct LinearBytePosImpl<
-            DatumStruct<T_FirstDatumElement, T_DatumElements...>,
-            T_DatumCoord,
-            T_IterCoord>
+            typename... DatumElements,
+            typename TargetDatumCoord,
+            std::size_t... IterCoords>
+        constexpr auto linearBytePosImpl(
+            DatumStruct<DatumElements...> *,
+            TargetDatumCoord,
+            DatumCoord<IterCoords...>)
         {
-            static constexpr std::size_t value
-                = LinearBytePosImpl<
-                      GetDatumElementType<T_FirstDatumElement>,
-                      T_DatumCoord,
-                      typename T_IterCoord::template PushBack<0>>::value
-                + LinearBytePosImpl<
-                      DatumStruct<T_DatumElements...>,
-                      T_DatumCoord,
-                      typename T_IterCoord::IncBack>::value;
-        };
+            std::size_t acc = 0;
+            boost::mp11::mp_for_each<
+                boost::mp11::mp_iota_c<sizeof...(DatumElements)>>([&](
+                auto i) constexpr {
+                constexpr auto index = decltype(i)::value;
+                using Element = boost::mp11::
+                    mp_at_c<DatumStruct<DatumElements...>, index>;
 
-        template<typename T_DatumCoord, typename T_IterCoord>
-        struct LinearBytePosImpl<DatumStruct<>, T_DatumCoord, T_IterCoord>
-        {
-            static constexpr std::size_t value = 0;
-        };
+                acc += linearBytePosImpl(
+                    (GetDatumElementType<Element> *)nullptr,
+                    TargetDatumCoord{},
+                    DatumCoord<IterCoords..., index>{});
+            });
+            return acc;
+        }
     }
 
     /** Gives the byte position of an element in a datum domain if it would be a
      *  normal struct
-     * \tparam T_DatumDomain datum domain tree
-     * \tparam T_coords... coordinate in datum domain tree
+     * \tparam DatumDomain datum domain tree
+     * \tparam Coords... coordinate in datum domain tree
      * \return the byte position as compile time value in "value"
      */
-    template<typename T_DatumDomain, std::size_t... T_coords>
+    template<typename DatumDomain, std::size_t... Coords>
     struct LinearBytePos
     {
-        static constexpr std::size_t value = internal::LinearBytePosImpl<
-            T_DatumDomain,
-            DatumCoord<T_coords...>,
-            DatumCoord<0>>::value;
+        static constexpr std::size_t value = internal::linearBytePosImpl(
+            (DatumDomain *)nullptr,
+            DatumCoord<Coords...>{},
+            DatumCoord<>{});
     };
 
     /** Gives the size a datum domain if it would be a normal struct
@@ -244,86 +242,65 @@ namespace llama
         T_DatumCoord>::type;
 
     /** Tells whether two coordinates in two datum domains have the same UID.
-     * \tparam T_DDA first user domain
-     * \tparam T_BaseA First part of the coordinate in the first user domain as
+     * \tparam DDA first user domain
+     * \tparam BaseA First part of the coordinate in the first user domain as
      *  \ref DatumCoord. This will be used for getting the UID, but not for the
      *  comparison.
-     * \tparam T_LocalA Second part of the coordinate in the first user domain
+     * \tparam LocalA Second part of the coordinate in the first user domain
      * as \ref DatumCoord. This will be used for the comparison with the second
      *  datum domain.
-     * \tparam T_DDB second user domain
-     * \tparam T_BaseB First part of the coordinate in the second user domain as
+     * \tparam DDB second user domain
+     * \tparam BaseB First part of the coordinate in the second user domain as
      *  \ref DatumCoord. This will be used for getting the UID, but not for the
      *  comparison.
-     * \tparam T_LocalB Second part of the coordinate in the second user domain
+     * \tparam LocalB Second part of the coordinate in the second user domain
      * as \ref DatumCoord. This will be used for the comparison with the first
      *  datum domain.
      */
     template<
-        typename T_DDA,
-        typename T_BaseA,
-        typename T_LocalA,
-        typename T_DDB,
-        typename T_BaseB,
-        typename T_LocalB,
-        typename SFINAE = void>
-    struct CompareUID
+        typename DatumDomainA,
+        typename BaseA,
+        typename LocalA,
+        typename DatumDomainB,
+        typename BaseB,
+        typename LocalB>
+    struct CompareUID;
+
+    template<
+        typename DatumDomainA,
+        std::size_t... BaseCoordsA,
+        typename LocalA,
+        typename DatumDomainB,
+        std::size_t... BaseCoordsB,
+        typename LocalB>
+    struct CompareUID<
+        DatumDomainA,
+        DatumCoord<BaseCoordsA...>,
+        LocalA,
+        DatumDomainB,
+        DatumCoord<BaseCoordsB...>,
+        LocalB>
     {
         /// true if the two UIDs are exactly the same, otherwise false.
-        static constexpr bool value
-            = std::is_same<
-                  GetUID<
-                      T_DDA,
-                      typename T_BaseA::template PushBack<T_LocalA::front>>,
-                  GetUID<
-                      T_DDB,
-                      typename T_BaseB::template PushBack<T_LocalB::front>>>::
-                  value
-            && CompareUID<
-                  T_DDA,
-                  typename T_BaseA::template PushBack<T_LocalA::front>,
-                  typename T_LocalA::PopFront,
-                  T_DDB,
-                  typename T_BaseB::template PushBack<T_LocalB::front>,
-                  typename T_LocalB::PopFront>::value;
-    };
+        static constexpr bool value = []() constexpr
+        {
+            if constexpr(LocalA::size != LocalB::size)
+                return false;
+            else if constexpr(LocalA::size == 0 && LocalB::size == 0)
+                return true;
+            else
+            {
+                using TagCoordA = DatumCoord<BaseCoordsA..., LocalA::front>;
+                using TagCoordB = DatumCoord<BaseCoordsB..., LocalB::front>;
 
-    template<
-        typename T_DDA,
-        typename T_BaseA,
-        typename T_LocalA,
-        typename T_DDB,
-        typename T_BaseB,
-        typename T_LocalB>
-    struct CompareUID<
-        T_DDA,
-        T_BaseA,
-        T_LocalA,
-        T_DDB,
-        T_BaseB,
-        T_LocalB,
-        typename std::enable_if_t<T_LocalA::size != T_LocalB::size>>
-    {
-        static constexpr bool value = false;
-    };
-
-    template<
-        typename T_DDA,
-        typename T_BaseA,
-        typename T_LocalA,
-        typename T_DDB,
-        typename T_BaseB,
-        typename T_LocalB>
-    struct CompareUID<
-        T_DDA,
-        T_BaseA,
-        T_LocalA,
-        T_DDB,
-        T_BaseB,
-        T_LocalB,
-        typename std::enable_if_t<T_LocalA::size == 0 && T_LocalB::size == 0>>
-    {
-        static constexpr bool value = true;
+                return std::is_same_v<
+                           GetUID<DatumDomainA, TagCoordA>,
+                           GetUID<
+                               DatumDomainB,
+                               TagCoordB>> && CompareUID<DatumDomainA, TagCoordA, PopFront<LocalA>, DatumDomainB, TagCoordB, PopFront<LocalB>>::value;
+            }
+        }
+        ();
     };
 
     namespace internal
@@ -343,13 +320,13 @@ namespace llama
 
         template<
             typename T_DatumDomain,
-            typename T_DatumCoord,
+            std::size_t... Coords,
             std::size_t T_pos,
             typename T_FirstUID,
             typename... T_UID>
         struct GetCoordFromUIDImpl<
             T_DatumDomain,
-            T_DatumCoord,
+            DatumCoord<Coords...>,
             T_pos,
             std::enable_if_t<std::is_same<
                 T_FirstUID,
@@ -360,7 +337,7 @@ namespace llama
         {
             using type = typename GetCoordFromUIDImpl<
                 GetDatumElementType<boost::mp11::mp_first<T_DatumDomain>>,
-                typename T_DatumCoord::template PushBack<T_pos>,
+                DatumCoord<Coords..., T_pos>,
                 0,
                 void,
                 T_UID...>::type;
@@ -429,8 +406,9 @@ namespace llama
                 void,
                 T_UID...>::type;
             // Only returning the datum coord relative to T_DatumCoord
-            using type = typename AbsolutCoord::template Back<
-                AbsolutCoord::size - T_DatumCoord::size>;
+            using type = DatumCoordFromList<boost::mp11::mp_drop_c<
+                typename AbsolutCoord::List,
+                T_DatumCoord::size>>;
         };
     }
 

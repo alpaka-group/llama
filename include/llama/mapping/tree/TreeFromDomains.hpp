@@ -170,10 +170,10 @@ namespace llama::mapping::tree
         template<typename T_DatumCoord>
         struct DatumCoordToTreeCoord
         {
+            using TailCoord = PopFront<T_DatumCoord>;
             using type = decltype(tupleCat(
-                Tuple{TreeCoordElementConst<T_DatumCoord::PopFront::front>{}},
-                typename DatumCoordToTreeCoord<
-                    typename T_DatumCoord::PopFront>::type()));
+                Tuple{TreeCoordElementConst<TailCoord::front>{}},
+                typename DatumCoordToTreeCoord<TailCoord>::type()));
         };
 
         template<std::size_t T_lastCoord>

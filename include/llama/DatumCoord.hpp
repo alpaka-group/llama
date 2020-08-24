@@ -44,70 +44,52 @@ namespace llama
         using mp_unwrap_sizes = typename mp_unwrap_sizes_impl<L>::type;
     }
 
+    template<typename L>
+    using DatumCoordFromList = internal::mp_unwrap_sizes<L>;
+
+    /** Wrapper class for coordinate inside of datum domain tree.
+     * \tparam T_coords... the compile time coordinate
+     * */
     template<std::size_t... Coords>
     struct DatumCoord
     {
-        using coord_list = boost::mp11::mp_list_c<std::size_t, Coords...>;
+        using List = boost::mp11::mp_list_c<std::size_t, Coords...>;
 
-        static constexpr std::size_t front
-            = boost::mp11::mp_front<coord_list>::value;
+        /// first coordinate element
+        static constexpr std::size_t front = boost::mp11::mp_front<List>::value;
+
+        /// number of coordinate elements
         static constexpr std::size_t size = sizeof...(Coords);
-        static constexpr std::size_t back
-            = boost::mp11::mp_back<coord_list>::value;
 
-        using PopFront
-            = internal::mp_unwrap_sizes<boost::mp11::mp_pop_front<coord_list>>;
-
-        template<std::size_t NewCoord>
-        using PushFront = DatumCoord<NewCoord, Coords...>;
-
-        template<std::size_t NewCoord>
-        using PushBack = DatumCoord<Coords..., NewCoord>;
-
-        using IncBack = std::conditional_t<
-            (sizeof...(Coords) > 1),
-            typename PopFront::IncBack::template PushFront<front>,
-            DatumCoord<front + 1>>;
-
-        template<std::size_t N>
-        using Front
-            = internal::mp_unwrap_sizes<boost::mp11::mp_take_c<coord_list, N>>;
-
-        template<std::size_t N>
-        using Back = internal::mp_unwrap_sizes<boost::mp11::mp_reverse<
-            boost::mp11::mp_take_c<boost::mp11::mp_reverse<coord_list>, N>>>;
-
-        template<typename OtherDatumCoord>
-        using Cat = internal::mp_unwrap_sizes<boost::mp11::mp_append<
-            coord_list,
-            typename OtherDatumCoord::coord_list>>;
+        /// last ordinate
+        static constexpr std::size_t back = boost::mp11::mp_back<List>::value;
     };
 
     template<>
     struct DatumCoord<>
     {
-        using coord_list = boost::mp11::mp_list_c<std::size_t>;
+        using List = boost::mp11::mp_list_c<std::size_t>;
 
         static constexpr std::size_t size = 0;
-
-        using IncBack = DatumCoord<1>;
-
-        template<std::size_t NewCoord>
-        using PushFront = DatumCoord<NewCoord>;
-
-        template<std::size_t NewCoord>
-        using PushBack = DatumCoord<NewCoord>;
-
-        template<std::size_t N>
-        using Front = DatumCoord<>;
-
-        template<std::size_t N>
-        using Back = DatumCoord<>;
-
-        template<typename OtherDatumCoord>
-        using Cat = OtherDatumCoord;
     };
 
+    /// Concatenated two DatumCoords
+    template<typename DatumCoord1, typename DatumCoord2>
+    using Cat = DatumCoordFromList<boost::mp11::mp_append<
+        typename DatumCoord1::List,
+        typename DatumCoord2::List>>;
+
+    /// DatumCoord without first coordinate element
+    template<typename DatumCoord>
+    using PopFront = DatumCoordFromList<
+        boost::mp11::mp_pop_front<typename DatumCoord::List>>;
+
+    /** Checks at compile time whether a first DatumCoord is bigger than a
+     * second. If so a static constexpr value will be set to true otherwise to
+     * false. \tparam T_First first \ref DatumCoord in the comparison \tparam
+     * T_Second second \ref DatumCoord in the comparison \tparam T_SFinae
+     * internal helper template parameter for specialization
+     * */
     template<typename T_First, typename T_Second>
     struct DatumCoordIsBigger;
 
@@ -131,6 +113,12 @@ namespace llama
         ();
     };
 
+    /** Checks at compile time whether a first DatumCoord is the same as a
+     * second. If so a static constexpr value will be set to true otherwise to
+     * false. \tparam T_First first \ref DatumCoord in the comparison \tparam
+     * T_Second second \ref DatumCoord in the comparison \tparam T_SFinae
+     * internal helper template parameter for specialization
+     * */
     template<typename T_First, typename T_Second>
     struct DatumCoordIsSame;
 
