@@ -263,65 +263,37 @@ namespace llama
         typename T_LocalA,
         typename T_DDB,
         typename T_BaseB,
-        typename T_LocalB,
-        typename SFINAE = void>
+        typename T_LocalB>
     struct CompareUID
     {
         /// true if the two UIDs are exactly the same, otherwise false.
-        static constexpr bool value
-            = std::is_same<
-                  GetUID<
-                      T_DDA,
-                      typename T_BaseA::template PushBack<T_LocalA::front>>,
-                  GetUID<
-                      T_DDB,
-                      typename T_BaseB::template PushBack<T_LocalB::front>>>::
-                  value
-            && CompareUID<
-                  T_DDA,
-                  typename T_BaseA::template PushBack<T_LocalA::front>,
-                  typename T_LocalA::PopFront,
-                  T_DDB,
-                  typename T_BaseB::template PushBack<T_LocalB::front>,
-                  typename T_LocalB::PopFront>::value;
-    };
-
-    template<
-        typename T_DDA,
-        typename T_BaseA,
-        typename T_LocalA,
-        typename T_DDB,
-        typename T_BaseB,
-        typename T_LocalB>
-    struct CompareUID<
-        T_DDA,
-        T_BaseA,
-        T_LocalA,
-        T_DDB,
-        T_BaseB,
-        T_LocalB,
-        typename std::enable_if_t<T_LocalA::size != T_LocalB::size>>
-    {
-        static constexpr bool value = false;
-    };
-
-    template<
-        typename T_DDA,
-        typename T_BaseA,
-        typename T_LocalA,
-        typename T_DDB,
-        typename T_BaseB,
-        typename T_LocalB>
-    struct CompareUID<
-        T_DDA,
-        T_BaseA,
-        T_LocalA,
-        T_DDB,
-        T_BaseB,
-        T_LocalB,
-        typename std::enable_if_t<T_LocalA::size == 0 && T_LocalB::size == 0>>
-    {
-        static constexpr bool value = true;
+        static constexpr bool value = []() constexpr
+        {
+            if constexpr(T_LocalA::size != T_LocalB::size)
+                return false;
+            else if constexpr(T_LocalA::size == 0 && T_LocalB::size == 0)
+                return true;
+            else
+            {
+                return std::is_same<
+                           GetUID<
+                               T_DDA,
+                               typename T_BaseA::template PushBack<
+                                   T_LocalA::front>>,
+                           GetUID<
+                               T_DDB,
+                               typename T_BaseB::template PushBack<
+                                   T_LocalB::front>>>::value
+                    && CompareUID<
+                           T_DDA,
+                           typename T_BaseA::template PushBack<T_LocalA::front>,
+                           typename T_LocalA::PopFront,
+                           T_DDB,
+                           typename T_BaseB::template PushBack<T_LocalB::front>,
+                           typename T_LocalB::PopFront>::value;
+            }
+        }
+        ();
     };
 
     namespace internal
