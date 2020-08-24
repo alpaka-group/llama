@@ -44,30 +44,29 @@ namespace llama
         using mp_unwrap_sizes = typename mp_unwrap_sizes_impl<L>::type;
     }
 
+    template<typename L>
+    using DatumCoordFromList = internal::mp_unwrap_sizes<L>;
+
     template<std::size_t... Coords>
     struct DatumCoord
     {
-        using coord_list = boost::mp11::mp_list_c<std::size_t, Coords...>;
+        using List = boost::mp11::mp_list_c<std::size_t, Coords...>;
 
-        static constexpr std::size_t front
-            = boost::mp11::mp_front<coord_list>::value;
+        static constexpr std::size_t front = boost::mp11::mp_front<List>::value;
         static constexpr std::size_t size = sizeof...(Coords);
-        static constexpr std::size_t back
-            = boost::mp11::mp_back<coord_list>::value;
+        static constexpr std::size_t back = boost::mp11::mp_back<List>::value;
 
-        using PopFront
-            = internal::mp_unwrap_sizes<boost::mp11::mp_pop_front<coord_list>>;
+        using PopFront = DatumCoordFromList<boost::mp11::mp_pop_front<List>>;
 
         template<typename OtherDatumCoord>
-        using Cat = internal::mp_unwrap_sizes<boost::mp11::mp_append<
-            coord_list,
-            typename OtherDatumCoord::coord_list>>;
+        using Cat = DatumCoordFromList<
+            boost::mp11::mp_append<List, typename OtherDatumCoord::List>>;
     };
 
     template<>
     struct DatumCoord<>
     {
-        using coord_list = boost::mp11::mp_list_c<std::size_t>;
+        using List = boost::mp11::mp_list_c<std::size_t>;
 
         static constexpr std::size_t size = 0;
 

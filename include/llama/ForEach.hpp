@@ -44,8 +44,8 @@ namespace llama
                 && DatumCoordIsSame<InnerDatumCoord, BaseDatumCoord>::value)
                 functor(
                     BaseDatumCoord{},
-                    mp_unwrap_sizes<boost::mp11::mp_drop_c<
-                        typename InnerDatumCoord::coord_list,
+                    DatumCoordFromList<boost::mp11::mp_drop_c<
+                        typename InnerDatumCoord::List,
                         BaseDatumCoord::size>>{});
         };
 

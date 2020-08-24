@@ -406,8 +406,8 @@ namespace llama
                 void,
                 T_UID...>::type;
             // Only returning the datum coord relative to T_DatumCoord
-            using type = mp_unwrap_sizes<boost::mp11::mp_drop_c<
-                typename AbsolutCoord::coord_list,
+            using type = DatumCoordFromList<boost::mp11::mp_drop_c<
+                typename AbsolutCoord::List,
                 T_DatumCoord::size>>;
         };
     }
