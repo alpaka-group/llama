@@ -320,13 +320,13 @@ namespace llama
 
         template<
             typename T_DatumDomain,
-            typename T_DatumCoord,
+            std::size_t... Coords,
             std::size_t T_pos,
             typename T_FirstUID,
             typename... T_UID>
         struct GetCoordFromUIDImpl<
             T_DatumDomain,
-            T_DatumCoord,
+            DatumCoord<Coords...>,
             T_pos,
             std::enable_if_t<std::is_same<
                 T_FirstUID,
@@ -337,7 +337,7 @@ namespace llama
         {
             using type = typename GetCoordFromUIDImpl<
                 GetDatumElementType<boost::mp11::mp_first<T_DatumDomain>>,
-                typename T_DatumCoord::template PushBack<T_pos>,
+                DatumCoord<Coords..., T_pos>,
                 0,
                 void,
                 T_UID...>::type;

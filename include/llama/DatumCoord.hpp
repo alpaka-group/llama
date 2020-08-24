@@ -58,9 +58,6 @@ namespace llama
         using PopFront
             = internal::mp_unwrap_sizes<boost::mp11::mp_pop_front<coord_list>>;
 
-        template<std::size_t NewCoord>
-        using PushBack = DatumCoord<Coords..., NewCoord>;
-
         template<typename OtherDatumCoord>
         using Cat = internal::mp_unwrap_sizes<boost::mp11::mp_append<
             coord_list,
@@ -73,9 +70,6 @@ namespace llama
         using coord_list = boost::mp11::mp_list_c<std::size_t>;
 
         static constexpr std::size_t size = 0;
-
-        template<std::size_t NewCoord>
-        using PushBack = DatumCoord<NewCoord>;
 
         template<typename OtherDatumCoord>
         using Cat = OtherDatumCoord;
