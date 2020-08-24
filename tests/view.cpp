@@ -31,7 +31,7 @@ TEST_CASE("view move")
     constexpr UserDomain viewSize{16, 16};
 
     using Mapping = llama::mapping::SoA<UserDomain, DatumDomain>;
-    auto view1 = llama::Factory<Mapping>::allocView(Mapping(viewSize));
+    auto view1 = allocView(Mapping(viewSize));
 
     decltype(view1) view2;
     view1({3, 3}) = 1;
@@ -45,8 +45,8 @@ TEST_CASE("view swap")
     constexpr UserDomain viewSize{16, 16};
 
     using Mapping = llama::mapping::SoA<UserDomain, DatumDomain>;
-    auto view1 = llama::Factory<Mapping>::allocView(Mapping(viewSize));
-    auto view2 = llama::Factory<Mapping>::allocView(Mapping(viewSize));
+    auto view1 = allocView(Mapping(viewSize));
+    auto view2 = allocView(Mapping(viewSize));
 
     view1({3, 3}) = 1;
     view2({3, 3}) = 2;

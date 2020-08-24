@@ -28,6 +28,24 @@ namespace llama
     template<typename Mapping, typename BlobType>
     struct View;
 
+    namespace internal
+    {
+        template<typename Allocator>
+        using AllocatorBlobType
+            = decltype(std::declval<Allocator>().allocate(0));
+
+        template<typename Allocator, typename Mapping, std::size_t... Is>
+        LLAMA_FN_HOST_ACC_INLINE static auto makeBlobArray(
+            const Allocator & alloc,
+            Mapping mapping,
+            std::integer_sequence<std::size_t, Is...>)
+            -> Array<AllocatorBlobType<Allocator>, Mapping::blobCount>
+        {
+            return {alloc.allocate(mapping.getBlobSize(Is))...};
+        }
+
+    }
+
     /** Creates views with the help of mapping and allocation functors. Should
      * be the preferred way to create a \ref View. \tparam Mapping Mapping
      * type. A mapping binds the user domain and datum domain and needs to
@@ -47,38 +65,18 @@ namespace llama
      * std::size_t` which returns the blob in which the byte position given by
      * getBlobByte resides.
      */
-    template<typename Mapping>
-    class Factory
+    template<typename Mapping, typename Allocator = allocator::Vector<>>
+    LLAMA_FN_HOST_ACC_INLINE auto
+    allocView(Mapping mapping = {}, const Allocator & alloc = {})
+        -> View<Mapping, internal::AllocatorBlobType<Allocator>>
     {
-        template<typename Allocator>
-        using AllocatorBlobType
-            = decltype(std::declval<Allocator>().allocate(0));
-
-        template<typename Allocator, std::size_t... Is>
-        LLAMA_FN_HOST_ACC_INLINE static auto makeBlobArray(
-            const Allocator & alloc,
-            Mapping mapping,
-            std::integer_sequence<std::size_t, Is...>)
-            -> Array<AllocatorBlobType<Allocator>, Mapping::blobCount>
-        {
-            return {alloc.allocate(mapping.getBlobSize(Is))...};
-        }
-
-    public:
-        template<typename Allocator = allocator::Vector<>>
-        LLAMA_FN_HOST_ACC_INLINE static auto
-        allocView(Mapping mapping = {}, const Allocator & alloc = {})
-            -> View<Mapping, AllocatorBlobType<Allocator>>
-        {
-            return {
+        return {
+            mapping,
+            internal::makeBlobArray<Allocator>(
+                alloc,
                 mapping,
-                makeBlobArray<Allocator>(
-                    alloc,
-                    mapping,
-                    std::make_index_sequence<Mapping::blobCount>{})};
-        }
-    };
-
+                std::make_index_sequence<Mapping::blobCount>{})};
+    }
 
     /** Uses the \ref OneOnStackFactory to allocate one (probably temporary)
      * element for a given dimension and datum domain on the stack (no costly
@@ -87,10 +85,10 @@ namespace llama
      * \see OneOnStackFactory
      */
     template<std::size_t Dim, typename DatumDomain>
-    LLAMA_FN_HOST_ACC_INLINE auto stackViewAlloc() -> decltype(auto)
+    LLAMA_FN_HOST_ACC_INLINE auto allocViewStack() -> decltype(auto)
     {
         using Mapping = llama::mapping::One<UserDomain<Dim>, DatumDomain>;
-        return llama::Factory<Mapping>::allocView(
+        return allocView(
             Mapping{}, llama::allocator::Stack<SizeOf<DatumDomain>::value>{});
     }
 }

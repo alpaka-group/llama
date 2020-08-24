@@ -66,18 +66,18 @@ namespace llama
     inline constexpr auto is_VirtualDatum<
         VirtualDatum<T_View, T_BoundDatumDomain, OwnView>> = true;
 
-    /** Uses the \ref stackViewAlloc to allocate a virtual datum with an own
+    /** Uses the \ref allocViewStack to allocate a virtual datum with an own
      * bound view "allocated" on the stack. \tparam DatumDomain the datum
      * domain for the virtual datum \return the allocated virtual datum \see
-     * stackViewAlloc
+     * allocViewStack
      */
     template<typename DatumDomain>
     LLAMA_FN_HOST_ACC_INLINE auto stackVirtualDatumAlloc() -> VirtualDatum<
-        decltype(llama::stackViewAlloc<1, DatumDomain>()),
+        decltype(llama::allocViewStack<1, DatumDomain>()),
         DatumCoord<>,
         true>
     {
-        return {UserDomain<1>{}, llama::stackViewAlloc<1, DatumDomain>()};
+        return {UserDomain<1>{}, llama::allocViewStack<1, DatumDomain>()};
     }
 
     /** Uses the \ref stackVirtualDatumAlloc to allocate a virtual datum with an

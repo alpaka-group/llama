@@ -45,8 +45,8 @@ TEST_CASE("uid")
     Mapping mapping{userDomain};
     MappingOther mappingOther{userDomain};
 
-    auto particle = llama::Factory<Mapping>::allocView(mapping);
-    auto other = llama::Factory<MappingOther>::allocView(mappingOther);
+    auto particle = allocView(mapping);
+    auto other = allocView(mappingOther);
 
     // Setting some test values
     particle(0u, 0u)(tag::Pos(), tag::X()) = 0.0f;

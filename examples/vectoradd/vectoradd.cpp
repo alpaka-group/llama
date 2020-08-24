@@ -74,9 +74,9 @@ namespace usellama
 
         std::cout << PROBLEM_SIZE / 1000 / 1000 << " million vectors LLAMA\n";
 
-        auto a = llama::Factory<decltype(mapping)>::allocView(mapping);
-        auto b = llama::Factory<decltype(mapping)>::allocView(mapping);
-        auto c = llama::Factory<decltype(mapping)>::allocView(mapping);
+        auto a = allocView(mapping);
+        auto b = allocView(mapping);
+        auto c = allocView(mapping);
 
         const auto start = std::chrono::high_resolution_clock::now();
 
