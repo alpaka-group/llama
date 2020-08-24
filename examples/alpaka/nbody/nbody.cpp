@@ -6,8 +6,8 @@
  * itself is not under the public domain but LGPL3+.
  */
 
-#include "../../common/AlpakaThreadElemsDistribution.hpp"
 #include "../../common/Chrono.hpp"
+#include "../../common/alpakaHelpers.hpp"
 
 #include <alpaka/alpaka.hpp>
 #include <alpaka/example/ExampleDefaultAcc.hpp>
