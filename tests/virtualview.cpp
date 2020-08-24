@@ -47,9 +47,7 @@ TEST_CASE("fast virtual view")
     constexpr UserDomain viewSize{4096, 4096};
 
     using Mapping = llama::mapping::SoA<UserDomain, Particle>;
-    auto view
-        = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>::allocView(
-            Mapping(viewSize));
+    auto view = llama::Factory<Mapping>::allocView(Mapping(viewSize));
 
     for(std::size_t x = 0; x < viewSize[0]; ++x)
         for(std::size_t y = 0; y < viewSize[1]; ++y) view(x, y) = x * y;
@@ -79,9 +77,7 @@ TEST_CASE("virtual view")
     constexpr UserDomain viewSize{256, 256};
     constexpr UserDomain miniSize{8, 8};
     using Mapping = llama::mapping::SoA<UserDomain, Particle>;
-    auto view
-        = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>::allocView(
-            Mapping(viewSize));
+    auto view = llama::Factory<Mapping>::allocView(Mapping(viewSize));
 
     for(std::size_t x = 0; x < viewSize[0]; ++x)
         for(std::size_t y = 0; y < viewSize[1]; ++y) view(x, y) = x * y;
@@ -103,12 +99,11 @@ TEST_CASE("virtual view")
                 view, {x * miniSize[0], y * miniSize[1]}, miniSize);
 
             using MiniMapping = llama::mapping::SoA<UserDomain, Particle>;
-            auto miniView = llama::Factory<
-                MiniMapping,
+            auto miniView = llama::Factory<MiniMapping>::allocView(
+                MiniMapping(miniSize),
                 llama::allocator::Stack<
                     miniSize[0] * miniSize[1]
-                    * llama::SizeOf<Particle>::value>>::
-                allocView(MiniMapping(miniSize));
+                    * llama::SizeOf<Particle>::value>{});
 
             for(std::size_t a = 0; a < validMiniSize[0]; ++a)
                 for(std::size_t b = 0; b < validMiniSize[1]; ++b)

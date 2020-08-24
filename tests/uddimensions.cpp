@@ -29,7 +29,7 @@ TEST_CASE("dim1")
     using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
-    using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
+    using Factory = llama::Factory<Mapping>;
     auto view = Factory::allocView(mapping);
 
     float & x = view(UserDomain{0}).access<tag::Pos, tag::X>();
@@ -44,7 +44,7 @@ TEST_CASE("dim2")
     using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
-    using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
+    using Factory = llama::Factory<Mapping>;
     auto view = Factory::allocView(mapping);
 
     float & x = view(UserDomain{0, 0}).access<tag::Pos, tag::X>();
@@ -59,7 +59,7 @@ TEST_CASE("dim3")
     using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
-    using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
+    using Factory = llama::Factory<Mapping>;
     auto view = Factory::allocView(mapping);
 
     float & x = view(UserDomain{0, 0, 0}).access<tag::Pos, tag::X>();
@@ -74,7 +74,7 @@ TEST_CASE("dim10")
     using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
-    using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
+    using Factory = llama::Factory<Mapping>;
     auto view = Factory::allocView(mapping);
 
     float & x = view(UserDomain{0, 0, 0, 0, 0, 0, 0, 0, 0, 0})

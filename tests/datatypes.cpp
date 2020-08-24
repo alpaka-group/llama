@@ -19,7 +19,7 @@ TEST_CASE("type int")
     using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
-    using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
+    using Factory = llama::Factory<Mapping>;
     auto view = Factory::allocView(mapping);
 
     int & e = view(UserDomain{0}).access<Tag>();
@@ -38,7 +38,7 @@ TEST_CASE("type std::complex<float>")
     using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
-    using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
+    using Factory = llama::Factory<Mapping>;
     auto view = Factory::allocView(mapping);
 
     std::complex<float> & e = view(UserDomain{0}).access<Tag>();
@@ -57,7 +57,7 @@ TEST_CASE("type std::array<float, 4>")
     using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
-    using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
+    using Factory = llama::Factory<Mapping>;
     auto view = Factory::allocView(mapping);
 
     std::array<float, 4> & e = view(UserDomain{0}).access<Tag>();
@@ -76,7 +76,7 @@ TEST_CASE("type std::vector<float>")
     using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
-    using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
+    using Factory = llama::Factory<Mapping>;
     auto view = Factory::allocView(mapping);
 
     std::vector<float> & e = view(UserDomain{0}).access<Tag>();
@@ -95,7 +95,7 @@ TEST_CASE("type std::atomic<int>")
     using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
-    using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
+    using Factory = llama::Factory<Mapping>;
     auto view = Factory::allocView(mapping);
 
     std::atomic<int> & e = view(UserDomain{0}).access<Tag>();
@@ -125,7 +125,7 @@ TEST_CASE("type noncopyable")
     using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
-    using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
+    using Factory = llama::Factory<Mapping>;
     auto view = Factory::allocView(mapping);
 
     Element & e = view(UserDomain{0}).access<Tag>();
@@ -155,7 +155,7 @@ TEST_CASE("type nonmoveable")
     using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
-    using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
+    using Factory = llama::Factory<Mapping>;
     auto view = Factory::allocView(mapping);
 
     Element & e = view(UserDomain{0}).access<Tag>();
@@ -180,7 +180,7 @@ TEST_CASE("type not defaultconstructible")
     using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
-    using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
+    using Factory = llama::Factory<Mapping>;
     auto view = Factory::allocView(mapping);
 
     Element & e = view(UserDomain{0}).access<Tag>();
@@ -204,7 +204,7 @@ TEST_CASE("type nottrivial ctor")
     using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
 
-    using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<>>;
+    using Factory = llama::Factory<Mapping>;
     auto view = Factory::allocView(mapping);
 
     Element & e = view(UserDomain{0}).access<Tag>();

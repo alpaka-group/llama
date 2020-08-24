@@ -34,7 +34,7 @@ namespace llama::allocator
     struct SharedPtr
     {
         LLAMA_NO_HOST_ACC_WARNING
-        static inline auto allocate(std::size_t count)
+        inline auto allocate(std::size_t count) const
             -> std::shared_ptr<std::byte[]>
         {
             auto * ptr = static_cast<std::byte *>(::operator new[](

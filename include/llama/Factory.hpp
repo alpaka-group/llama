@@ -25,32 +25,6 @@
 
 namespace llama
 {
-    namespace internal
-    {
-        template<typename Allocator, typename... AllocatorArgs>
-        using AllocatorBlobType = decltype(
-            Allocator::allocate(0, std::declval<AllocatorArgs>()...));
-
-        LLAMA_NO_HOST_ACC_WARNING
-        template<
-            typename Allocator,
-            typename Mapping,
-            std::size_t... Is,
-            typename... AllocatorArgs>
-        LLAMA_FN_HOST_ACC_INLINE auto makeBlobArray(
-            Mapping const mapping,
-            std::integer_sequence<std::size_t, Is...>,
-            AllocatorArgs &&... allocatorArgs)
-            -> Array<
-                AllocatorBlobType<Allocator, AllocatorArgs...>,
-                Mapping::blobCount>
-        {
-            return {Allocator::allocate(
-                mapping.getBlobSize(Is),
-                std::forward<AllocatorArgs>(allocatorArgs)...)...};
-        }
-    }
-
     template<typename Mapping, typename BlobType>
     struct View;
 
@@ -71,48 +45,40 @@ namespace llama
      * the datum domain (template parameter) and user domain (method parameter).
      *  - `template< std::size_t... > auto getBlobNr( UserDomain ) ->
      * std::size_t` which returns the blob in which the byte position given by
-     * getBlobByte resides. \tparam Allocator Allocator type, at default \ref
-     * allocator::Vector. An allocator also needs to define some typedefs,
-     * namely `PrimType` which is the raw datatype returned from the allocator
-     * (e.g. `unsigned char`), `BlobType` which is the type returned from the
-     * allocator (can be a pointer, a `std::shared_ptr`, an own class, you name
-     * it!) and `Parameter` which is the (optional) allocation parameter type
-     * forwarded from the \ref Factory to the allocator. Be aware that at the
-     * moment only an 8 bit `PrimType` is supported. Beside these definitions
-     * only the method
-     *  - `static inline auto allocate( std::size_t, Parameter ) -> BlobType`
-     * needs to be implements which allocates memory and returns its self
-     * defined blob type.
+     * getBlobByte resides.
      */
-    template<typename Mapping, typename Allocator = allocator::Vector<>>
-    struct Factory
+    template<typename Mapping>
+    class Factory
     {
-        LLAMA_NO_HOST_ACC_WARNING
-        template<typename... AllocatorArgs>
-        static LLAMA_FN_HOST_ACC_INLINE auto
-        allocView(Mapping const mapping = {}, AllocatorArgs &&... allocatorArgs)
-            -> View<
-                Mapping,
-                internal::AllocatorBlobType<Allocator, AllocatorArgs...>>
+        template<typename Allocator>
+        using AllocatorBlobType
+            = decltype(std::declval<Allocator>().allocate(0));
+
+        template<typename Allocator, std::size_t... Is>
+        LLAMA_FN_HOST_ACC_INLINE static auto makeBlobArray(
+            const Allocator & alloc,
+            Mapping mapping,
+            std::integer_sequence<std::size_t, Is...>)
+            -> Array<AllocatorBlobType<Allocator>, Mapping::blobCount>
+        {
+            return {alloc.allocate(mapping.getBlobSize(Is))...};
+        }
+
+    public:
+        template<typename Allocator = allocator::Vector<>>
+        LLAMA_FN_HOST_ACC_INLINE static auto
+        allocView(Mapping mapping = {}, const Allocator & alloc = {})
+            -> View<Mapping, AllocatorBlobType<Allocator>>
         {
             return {
                 mapping,
-                internal::makeBlobArray<Allocator>(
+                makeBlobArray<Allocator>(
+                    alloc,
                     mapping,
-                    std::make_index_sequence<Mapping::blobCount>{},
-                    std::forward<AllocatorArgs>(allocatorArgs)...)};
+                    std::make_index_sequence<Mapping::blobCount>{})};
         }
     };
 
-    /** Special factory which predefines some options for getting a \ref View
-     * with only one element laying on the stack avoiding costly allocation
-     * operations. \tparam dimension dimension of the view \tparam DatumDomain
-     * the datum domain for the one element mapping \see stackViewAlloc
-     */
-    template<std::size_t Dimension, typename DatumDomain>
-    using OneOnStackFactory = llama::Factory<
-        llama::mapping::One<UserDomain<Dimension>, DatumDomain>,
-        llama::allocator::Stack<SizeOf<DatumDomain>::value>>;
 
     /** Uses the \ref OneOnStackFactory to allocate one (probably temporary)
      * element for a given dimension and datum domain on the stack (no costly
@@ -120,9 +86,11 @@ namespace llama
      * the datum domain for the one element mapping \return the allocated view
      * \see OneOnStackFactory
      */
-    template<std::size_t Dimension, typename DatumDomain>
+    template<std::size_t Dim, typename DatumDomain>
     LLAMA_FN_HOST_ACC_INLINE auto stackViewAlloc() -> decltype(auto)
     {
-        return OneOnStackFactory<Dimension, DatumDomain>::allocView();
+        using Mapping = llama::mapping::One<UserDomain<Dim>, DatumDomain>;
+        return llama::Factory<Mapping>::allocView(
+            Mapping{}, llama::allocator::Stack<SizeOf<DatumDomain>::value>{});
     }
 }

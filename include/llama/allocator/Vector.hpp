@@ -121,7 +121,7 @@ namespace llama::allocator
     struct Vector
     {
         LLAMA_NO_HOST_ACC_WARNING
-        static inline auto allocate(std::size_t count)
+        inline auto allocate(std::size_t count) const
         {
             return std::vector<
                 std::byte,

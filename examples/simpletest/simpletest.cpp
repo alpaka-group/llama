@@ -179,7 +179,7 @@ int main(int argc, char ** argv)
     // Instantiating the mapping with the user domain size
     Mapping mapping(udSize);
     // Defining the factory type based on the mapping and the chosen allocator
-    using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>;
+    using Factory = llama::Factory<Mapping>;
     // getting a view wiht allocated memory from the free Factory allocView
     // function
     auto view = Factory::allocView(mapping);
