@@ -27,17 +27,15 @@ namespace llama::allocator
 {
     /** Allocator to allocate memory for a \ref View in the \ref Factory on the
      *  stack.
-     * \tparam reserved the amount of memory is needed to be known at compile
-     * time for performance reasons, this can be gotten at compile time with
-     * \ref SizeOf \see tempAlloc, OneOnStackFactory
+     * \tparam BytesReserved the amount of memory is needed to be known at
+     * compile time for performance reasons, this can be gotten at compile time
+     * with \ref SizeOf \see tempAlloc, OneOnStackFactory
      */
-    template<std::size_t reserved>
+    template<std::size_t BytesReserved>
     struct Stack
     {
-        using PrimType = std::byte;
-        using BlobType = Array<PrimType, reserved>;
-
-        static LLAMA_FN_HOST_ACC_INLINE auto allocate(std::size_t) -> BlobType
+        LLAMA_FN_HOST_ACC_INLINE auto allocate(std::size_t) const
+            -> Array<std::byte, BytesReserved>
         {
             return {};
         }

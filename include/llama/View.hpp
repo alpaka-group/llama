@@ -19,9 +19,12 @@
 #pragma once
 
 #include "Array.hpp"
-#include "Factory.hpp"
 #include "ForEach.hpp"
 #include "Functions.hpp"
+#include "IntegerSequence.hpp"
+#include "allocator/Stack.hpp"
+#include "allocator/Vector.hpp"
+#include "mapping/One.hpp"
 #include "preprocessor/macros.hpp"
 
 #include <boost/preprocessor/cat.hpp>
@@ -29,8 +32,59 @@
 
 namespace llama
 {
-    template<typename T_Mapping, typename T_BlobType>
+    template<typename Mapping, typename BlobType>
     struct View;
+
+    namespace internal
+    {
+        template<typename Allocator>
+        using AllocatorBlobType
+            = decltype(std::declval<Allocator>().allocate(0));
+
+        template<typename Allocator, typename Mapping, std::size_t... Is>
+        LLAMA_FN_HOST_ACC_INLINE static auto makeBlobArray(
+            const Allocator & alloc,
+            Mapping mapping,
+            std::integer_sequence<std::size_t, Is...>)
+            -> Array<AllocatorBlobType<Allocator>, Mapping::blobCount>
+        {
+            return {alloc.allocate(mapping.getBlobSize(Is))...};
+        }
+
+    }
+
+    /** Creates a view based on the given mapping, e.g. \ref mapping::AoS or
+     * \ref mapping::SoA. For allocating the view's underlying memory, the
+     * specified allocator is used (or the default one, which is \ref
+     * allocator::Vector). This function is the preferred way to create a \ref
+     * View.
+     */
+    template<typename Mapping, typename Allocator = allocator::Vector<>>
+    LLAMA_FN_HOST_ACC_INLINE auto
+    allocView(Mapping mapping = {}, const Allocator & alloc = {})
+        -> View<Mapping, internal::AllocatorBlobType<Allocator>>
+    {
+        return {
+            mapping,
+            internal::makeBlobArray<Allocator>(
+                alloc,
+                mapping,
+                std::make_index_sequence<Mapping::blobCount>{})};
+    }
+
+    /** Uses the \ref OneOnStackFactory to allocate one (probably temporary)
+     * element for a given dimension and datum domain on the stack (no costly
+     * allocation). \tparam Dimension dimension of the view \tparam DatumDomain
+     * the datum domain for the one element mapping \return the allocated view
+     * \see OneOnStackFactory
+     */
+    template<std::size_t Dim, typename DatumDomain>
+    LLAMA_FN_HOST_ACC_INLINE auto allocViewStack() -> decltype(auto)
+    {
+        using Mapping = llama::mapping::One<UserDomain<Dim>, DatumDomain>;
+        return allocView(
+            Mapping{}, llama::allocator::Stack<SizeOf<DatumDomain>::value>{});
+    }
 
     template<typename View>
     inline constexpr auto is_View = false;
@@ -66,18 +120,18 @@ namespace llama
     inline constexpr auto is_VirtualDatum<
         VirtualDatum<T_View, T_BoundDatumDomain, OwnView>> = true;
 
-    /** Uses the \ref stackViewAlloc to allocate a virtual datum with an own
+    /** Uses the \ref allocViewStack to allocate a virtual datum with an own
      * bound view "allocated" on the stack. \tparam DatumDomain the datum
      * domain for the virtual datum \return the allocated virtual datum \see
-     * stackViewAlloc
+     * allocViewStack
      */
     template<typename DatumDomain>
     LLAMA_FN_HOST_ACC_INLINE auto stackVirtualDatumAlloc() -> VirtualDatum<
-        decltype(llama::stackViewAlloc<1, DatumDomain>()),
+        decltype(llama::allocViewStack<1, DatumDomain>()),
         DatumCoord<>,
         true>
     {
-        return {UserDomain<1>{}, llama::stackViewAlloc<1, DatumDomain>()};
+        return {UserDomain<1>{}, llama::allocViewStack<1, DatumDomain>()};
     }
 
     /** Uses the \ref stackVirtualDatumAlloc to allocate a virtual datum with an

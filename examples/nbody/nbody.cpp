@@ -112,9 +112,7 @@ namespace usellama
             }
         }();
 
-        using Factory
-            = llama::Factory<decltype(mapping), llama::allocator::Vector<>>;
-        auto particles = Factory::allocView(mapping);
+        auto particles = allocView(mapping);
 
         std::cout << PROBLEM_SIZE / 1000 << " thousand particles LLAMA\n";
 

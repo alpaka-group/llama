@@ -114,22 +114,18 @@ namespace llama::allocator
      *  `std::vector` in the background. Meaning every time the view is copied,
      * the whole memory is copied. When the view is moved, the move operator of
      *  `std::vector` is used.
-     * \tparam T_alignment aligment of the memory used by `std::vector`, default
+     * \tparam Alignment aligment of the memory used by `std::vector`, default
      *  value is 64
      */
-    template<std::size_t T_alignment = 64u>
+    template<std::size_t Alignment = 64u>
     struct Vector
     {
-        using PrimType = std::byte;
-        using BlobType = std::vector<
-            PrimType,
-            internal::AlignmentAllocator<PrimType, T_alignment>>;
-
         LLAMA_NO_HOST_ACC_WARNING
-        static inline auto allocate(std::size_t count)
-            -> BlobType
+        inline auto allocate(std::size_t count) const
         {
-            return BlobType(count);
+            return std::vector<
+                std::byte,
+                internal::AlignmentAllocator<std::byte, Alignment>>(count);
         }
     };
 }

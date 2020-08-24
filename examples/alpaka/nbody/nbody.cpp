@@ -108,7 +108,7 @@ struct UpdateKernel
                 // if there is only 1 thread per block, avoid using shared
                 // memory
                 if constexpr(BlockSize / Elems == 1)
-                    return llama::stackViewAlloc<
+                    return llama::allocViewStack<
                         View::Mapping::UserDomain::count,
                         typename View::Mapping::DatumDomain>();
                 else

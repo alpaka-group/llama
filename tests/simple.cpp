@@ -173,9 +173,7 @@ TEST_CASE("access")
 
     using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
-
-    using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>;
-    auto view = Factory::allocView(mapping);
+    auto view = allocView(mapping);
 
     zeroStorage(view);
 
@@ -215,9 +213,7 @@ TEST_CASE("addresses")
 
     using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
-
-    using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>;
-    auto view = Factory::allocView(mapping);
+    auto view = allocView(mapping);
 
     const UserDomain pos{0, 0};
     auto & x = view(pos).access<tag::Pos, tag::X>();
@@ -260,9 +256,7 @@ TEST_CASE("iteration and access")
 
     using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
-
-    using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>;
-    auto view = Factory::allocView(mapping);
+    auto view = allocView(mapping);
 
     zeroStorage(view);
 
@@ -290,9 +284,7 @@ TEST_CASE("Datum access")
 
     using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
-
-    using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>;
-    auto view = Factory::allocView(mapping);
+    auto view = allocView(mapping);
 
     zeroStorage(view);
 
@@ -323,9 +315,7 @@ TEST_CASE("AssignOneDatumIntoView")
 
     using Mapping = llama::mapping::SoA<UserDomain, Name>;
     Mapping mapping{userDomain};
-
-    using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>;
-    auto view = Factory::allocView(mapping);
+    auto view = allocView(mapping);
 
     auto datum = llama::stackVirtualDatumAlloc<Name>();
     datum(tag::Pos{}, tag::X{}) = 14.0f;

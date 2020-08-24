@@ -951,8 +951,7 @@ TEST_CASE("treemapping")
     CHECK(mapping.getBlobNrAndOffset<2, 1>({50, 100}).offset == 10784);
     CHECK(mapping.getBlobNrAndOffset<2, 1>({50, 101}).offset == 10792);
 
-    using Factory = llama::Factory<Mapping, llama::allocator::SharedPtr<256>>;
-    auto view = Factory::allocView(mapping);
+    auto view = allocView(mapping);
     zeroStorage(view);
 
     for(size_t x = 0; x < userDomain[0]; ++x)
