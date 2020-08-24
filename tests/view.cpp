@@ -22,7 +22,7 @@ TEST_CASE("view default ctor")
     llama::View<llama::mapping::SoA<UserDomain, DatumDomain>, std::byte *> view1;
     llama::View<llama::mapping::AoS<UserDomain, DatumDomain>, std::byte *> view2;
     llama::View<llama::mapping::One<UserDomain, DatumDomain>, std::byte *> view3;
-    //llama::View<llama::mapping::tree::Mapping<UserDomain, DatumDomain, llama::Tuple<>>, std::byte *> view4;
+    llama::View<llama::mapping::tree::Mapping<UserDomain, DatumDomain, llama::Tuple<>>, std::byte *> view4;
 }
 
 TEST_CASE("view move")

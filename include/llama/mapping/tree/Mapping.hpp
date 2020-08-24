@@ -37,13 +37,13 @@ namespace llama::mapping::tree
     /** Free describable mapping which can be used for creating a \ref View with
      * a \ref Factory. For the interface details see \ref Factory. \tparam
      * T_UserDomain type of the user domain \tparam T_DatumDomain type of the
-     * datum domain \tparam T_TreeOperationList (\ref Tuple) of operations to
+     * datum domain \tparam TreeOperationList (\ref Tuple) of operations to
      * define the tree mapping
      */
     template<
         typename T_UserDomain,
         typename T_DatumDomain,
-        typename T_TreeOperationList>
+        typename TreeOperationList>
     struct Mapping
     {
         using UserDomain = T_UserDomain;
@@ -52,14 +52,16 @@ namespace llama::mapping::tree
         // TODO, support more than one blob
         static constexpr std::size_t blobCount = 1;
 
-        using MergedFunctors = MergeFunctors<BasicTree, T_TreeOperationList>;
+        using MergedFunctors = MergeFunctors<BasicTree, TreeOperationList>;
 
-        UserDomain userDomainSize;
+        UserDomain userDomainSize = {};
         BasicTree basicTree;
         MergedFunctors mergedFunctors;
 
         using ResultTree = decltype(mergedFunctors.basicToResult(basicTree));
         ResultTree resultTree;
+
+        Mapping() = default;
 
         /** The initalization of this mapping needs a \ref Tuple of operations
          *  which describe the mapping in detail. Please have a look at the user
@@ -70,9 +72,7 @@ namespace llama::mapping::tree
          * functor::MoveRTDown.
          */
         LLAMA_FN_HOST_ACC_INLINE
-        Mapping(
-            UserDomain const size,
-            T_TreeOperationList const treeOperationList) :
+        Mapping(UserDomain size, TreeOperationList treeOperationList) :
                 userDomainSize(size),
                 basicTree(setUserDomainInTree<DatumDomain>(size)),
                 mergedFunctors(basicTree, treeOperationList),
