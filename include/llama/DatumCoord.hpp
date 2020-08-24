@@ -57,10 +57,6 @@ namespace llama
         static constexpr std::size_t back = boost::mp11::mp_back<List>::value;
 
         using PopFront = DatumCoordFromList<boost::mp11::mp_pop_front<List>>;
-
-        template<typename OtherDatumCoord>
-        using Cat = DatumCoordFromList<
-            boost::mp11::mp_append<List, typename OtherDatumCoord::List>>;
     };
 
     template<>
@@ -69,10 +65,13 @@ namespace llama
         using List = boost::mp11::mp_list_c<std::size_t>;
 
         static constexpr std::size_t size = 0;
-
-        template<typename OtherDatumCoord>
-        using Cat = OtherDatumCoord;
     };
+
+    /// Concatenated two DatumCoords
+    template<typename DatumCoord1, typename DatumCoord2>
+    using Cat = DatumCoordFromList<boost::mp11::mp_append<
+        typename DatumCoord1::List,
+        typename DatumCoord2::List>>;
 
     template<typename T_First, typename T_Second>
     struct DatumCoordIsBigger;

@@ -39,11 +39,6 @@ namespace llama
         static constexpr std::size_t back;
         /// DatumCoord without first coordinate element
         using PopFront = DatumCoord<T_coords...>;
-        /** Concatenated DatumCoord with another DatumCoord
-         * \tparam T_Other other DatumCoord to concatenate
-         * */
-        template<typename T_Other>
-        using Cat = DatumCoord<SomeCoords...>;
     };
 
     /** Checks at compile time whether a first DatumCoord is bigger than a

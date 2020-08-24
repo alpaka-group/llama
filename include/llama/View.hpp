@@ -171,10 +171,8 @@ namespace llama
                              RightOuterCoord,
                              RightInnerCoord>::value)
             {
-                using Dst =
-                    typename LeftOuterCoord::template Cat<LeftInnerCoord>;
-                using Src =
-                    typename RightOuterCoord::template Cat<RightInnerCoord>;
+                using Dst = Cat<LeftOuterCoord, LeftInnerCoord>;
+                using Src = Cat<RightOuterCoord, RightInnerCoord>;
                 OP{}(left(Dst()), right(Src()));
             }
         }
@@ -211,7 +209,7 @@ namespace llama
         template<typename OuterCoord, typename InnerCoord>
         LLAMA_FN_HOST_ACC_INLINE void operator()(OuterCoord, InnerCoord)
         {
-            using Dst = typename OuterCoord::template Cat<InnerCoord>;
+            using Dst = Cat<OuterCoord, InnerCoord>;
             OP{}(left(Dst()), right);
         }
         LeftDatum & left;
@@ -304,8 +302,8 @@ namespace llama
                              OuterCoord,
                              InnerCoord>::value)
             {
-                using Dst = typename LeftBase::template Cat<LeftLocal>;
-                using Src = typename OuterCoord::template Cat<InnerCoord>;
+                using Dst = Cat<LeftBase, LeftLocal>;
+                using Src = Cat<OuterCoord, InnerCoord>;
                 result &= OP{}(left(Dst()), right(Src()));
             }
         }
@@ -346,7 +344,7 @@ namespace llama
         template<typename T_OuterCoord, typename T_InnerCoord>
         LLAMA_FN_HOST_ACC_INLINE void operator()(T_OuterCoord, T_InnerCoord)
         {
-            using Dst = typename T_OuterCoord::template Cat<T_InnerCoord>;
+            using Dst = Cat<T_OuterCoord, T_InnerCoord>;
             result &= OP{}(
                 left(Dst()),
                 static_cast<std::remove_reference_t<decltype(left(Dst()))>>(
@@ -555,19 +553,19 @@ namespace llama
         {
             if constexpr(is_DatumStruct<GetType<
                              DatumDomain,
-                             typename BoundDatumDomain::template Cat<
-                                 DatumCoord<T_coord...>>>>::value)
+                             Cat<BoundDatumDomain, DatumCoord<T_coord...>>>>::
+                             value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
                 return VirtualDatum<
                     const View,
-                    typename BoundDatumDomain::template Cat<
-                        DatumCoord<T_coord...>>>{userDomainPos, this->view};
+                    Cat<BoundDatumDomain, DatumCoord<T_coord...>>>{
+                    userDomainPos, this->view};
             }
             else
             {
-                using DatumCoord = typename BoundDatumDomain::template Cat<
-                    DatumCoord<T_coord...>>;
+                using DatumCoord
+                    = Cat<BoundDatumDomain, DatumCoord<T_coord...>>;
                 LLAMA_FORCE_INLINE_RECURSIVE
                 return this->view.accessor(userDomainPos, DatumCoord{});
             }
@@ -580,19 +578,19 @@ namespace llama
         {
             if constexpr(is_DatumStruct<GetType<
                              DatumDomain,
-                             typename BoundDatumDomain::template Cat<
-                                 DatumCoord<T_coord...>>>>::value)
+                             Cat<BoundDatumDomain, DatumCoord<T_coord...>>>>::
+                             value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
                 return VirtualDatum<
                     View,
-                    typename BoundDatumDomain::template Cat<
-                        DatumCoord<T_coord...>>>{userDomainPos, this->view};
+                    Cat<BoundDatumDomain, DatumCoord<T_coord...>>>{
+                    userDomainPos, this->view};
             }
             else
             {
-                using DatumCoord = typename BoundDatumDomain::template Cat<
-                    DatumCoord<T_coord...>>;
+                using DatumCoord
+                    = Cat<BoundDatumDomain, DatumCoord<T_coord...>>;
                 LLAMA_FORCE_INLINE_RECURSIVE
                 return this->view.accessor(userDomainPos, DatumCoord{});
             }
@@ -742,8 +740,8 @@ namespace llama
             = VirtualDatum<const View<Mapping, BlobType>>;
 
         View() = default;
-        //View(View &&) noexcept = default;
-        //auto operator=(View &&) noexcept -> View & = default;
+        // View(View &&) noexcept = default;
+        // auto operator=(View &&) noexcept -> View & = default;
 
         LLAMA_NO_HOST_ACC_WARNING
         LLAMA_FN_HOST_ACC_INLINE

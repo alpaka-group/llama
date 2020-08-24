@@ -83,7 +83,7 @@ namespace llama
      * yourself. The given functor needs to implement the operator() with two
      * template parameters for the outer and the inner coordinate in the datum
      * domain tree. These coordinates are both a \ref DatumCoord , which can be
-     * concatenated to one coordinate with \ref DatumCoord::Cat and used to
+     * concatenated to one coordinate with \ref Cat and used to
      * access the data. \tparam DatumDomain the datum domain (\ref
      * DatumStruct) to iterate over \tparam DatumCoordOrFirstUID DatumCoord or
      * a UID to address the start node inside the datum domain tree. Will be

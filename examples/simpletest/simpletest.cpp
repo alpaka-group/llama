@@ -130,8 +130,8 @@ struct SetZeroFunctor
     template<typename T_OuterCoord, typename T_InnerCoord>
     auto operator()(T_OuterCoord, T_InnerCoord) -> void
     {
-        vd(typename T_OuterCoord::template Cat<T_InnerCoord>()) = 0;
-        //~ printCoords( typename T_OuterCoord::template Cat< T_InnerCoord >()
+        vd(llama::Cat<T_OuterCoord, T_InnerCoord>{}) = 0;
+        //~ printCoords( llama::Cat<T_OuterCoord, T_InnerCoord>{}
         //); ~ std::cout << " "; ~ printCoords( T_OuterCoord() ); ~ std::cout <<
         //" "; ~ printCoords( T_InnerCoord() ); ~ std::cout << std::endl;
     }
