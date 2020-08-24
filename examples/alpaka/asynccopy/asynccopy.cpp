@@ -13,7 +13,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 
-#include "../../common/AlpakaThreadElemsDistribution.hpp"
+#include "../../common/alpakaHelpers.hpp"
 #include "../../common/Chrono.hpp"
 #include "stb_image.h"
 #include "stb_image_write.h"
