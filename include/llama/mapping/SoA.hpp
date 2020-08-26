@@ -70,7 +70,7 @@ namespace llama::mapping
                 = LinearizeUserDomainAdressFunctor{}(coord, userDomainSize)
                     * sizeof(
                         GetType<DatumDomain, DatumCoord<DatumDomainCoord...>>)
-                + LinearBytePos<DatumDomain, DatumDomainCoord...>::value
+                + linearBytePos<DatumDomain, DatumDomainCoord...>()
                     * ExtentUserDomainAdressFunctor{}(userDomainSize);
             return {0, offset};
         }

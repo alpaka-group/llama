@@ -87,13 +87,11 @@ namespace llama
      * \return the byte position as compile time value in "value"
      */
     template<typename DatumDomain, std::size_t... Coords>
-    struct LinearBytePos
+    constexpr auto linearBytePos() -> std::size_t
     {
-        static constexpr std::size_t value = internal::linearBytePosImpl(
-            (DatumDomain *)nullptr,
-            DatumCoord<Coords...>{},
-            DatumCoord<>{});
-    };
+        return internal::linearBytePosImpl(
+            (DatumDomain *)nullptr, DatumCoord<Coords...>{}, DatumCoord<>{});
+    }
 
     /** Gives the size a datum domain if it would be a normal struct
      * \tparam T_DatumDomain datum domain tree
