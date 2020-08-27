@@ -33,6 +33,18 @@ namespace llama::mapping::tree
         }
     };
 
+    template<typename Childs, typename CountType>
+    struct TreeOptimalType
+    {
+        using type = TreeElement<NoName, Childs>;
+    };
+
+    template<typename Childs, std::size_t Count>
+    struct TreeOptimalType<Childs, std::integral_constant<std::size_t, Count>>
+    {
+        using type = TreeElementConst<NoName, Childs, Count>;
+    };
+
     template<typename T_Childs, typename T_CountType>
     LLAMA_FN_HOST_ACC_INLINE auto
     getTreeBlobSize(T_Childs const & childs, T_CountType const & count)

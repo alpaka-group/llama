@@ -67,7 +67,7 @@ namespace llama::mapping::tree::functor
                 return TreeElementConst<
                     typename T_Tree::Identifier,
                     decltype(children),
-                    1>{children};
+                    1>{{} , children};
             }
             else
                 return TreeElement<
