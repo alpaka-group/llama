@@ -30,8 +30,7 @@ namespace llama::mapping::tree
     template<std::size_t Compiletime = 0, typename RuntimeType = std::size_t>
     struct TreeCoordElement
     {
-        static constexpr std::integral_constant<std::size_t, Compiletime>
-            compiletime = {};
+        static constexpr boost::mp11::mp_size_t<Compiletime> compiletime = {};
         const RuntimeType runtime = {};
 
         LLAMA_FN_HOST_ACC_INLINE
@@ -42,9 +41,8 @@ namespace llama::mapping::tree
     };
 
     template<std::size_t Compiletime = 0, std::size_t Runtime = 0>
-    using TreeCoordElementConst = TreeCoordElement<
-        Compiletime,
-        std::integral_constant<std::size_t, Runtime>>;
+    using TreeCoordElementConst
+        = TreeCoordElement<Compiletime, boost::mp11::mp_size_t<Runtime>>;
 
     template<std::size_t... Coords>
     using TreeCoord = Tuple<TreeCoordElementConst<Coords>...>;

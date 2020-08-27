@@ -29,8 +29,8 @@ namespace llama::mapping::tree
     inline constexpr auto one = 1;
 
     template<>
-    inline constexpr auto one<std::integral_constant<std::size_t, 1>> = std::
-        integral_constant<std::size_t, 1>{};
+    inline constexpr auto
+        one<boost::mp11::mp_size_t<1>> = boost::mp11::mp_size_t<1>{};
 
     template<
         typename T_Identifier,
@@ -77,42 +77,27 @@ namespace llama::mapping::tree
     template<typename TreeElement>
     struct HasChildren<
         TreeElement,
-        std::void_t<decltype(std::declval<TreeElement>().childs)>> : std::true_type
+        std::void_t<decltype(std::declval<TreeElement>().childs)>> :
+            std::true_type
     {};
 
     template<typename Identifier, typename Type, std::size_t Count = 1>
-    using TreeElementConst = TreeElement<
-        Identifier,
-        Type,
-        std::integral_constant<std::size_t, Count>>;
+    using TreeElementConst
+        = TreeElement<Identifier, Type, boost::mp11::mp_size_t<Count>>;
 
     template<typename T_Tree>
     struct TreePopFrontChild
     {
         using ResultType = TreeElement<
             typename T_Tree::Identifier,
-            typename T_Tree::Type::RestTuple>;
+            typename T_Tree::Type::RestTuple,
+            decltype(T_Tree::count)
+        >;
 
         LLAMA_FN_HOST_ACC_INLINE
         auto operator()(const T_Tree & tree) -> ResultType
         {
             return {tree.count, tree.childs.rest};
-        }
-    };
-
-    template<typename Identifier, typename Type, std::size_t Count>
-    struct TreePopFrontChild<TreeElementConst<Identifier, Type, Count>>
-    {
-        using Tree = TreeElementConst<Identifier, Type, Count>;
-        using ResultType = TreeElementConst<
-            typename Tree::Identifier,
-            typename Tree::Type::RestTuple,
-            Count>;
-
-        auto LLAMA_FN_HOST_ACC_INLINE operator()(const Tree & tree)
-            -> ResultType
-        {
-            return {tree.childs.rest};
         }
     };
 }

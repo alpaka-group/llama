@@ -40,7 +40,7 @@ namespace llama::mapping::tree
     };
 
     template<typename Childs, std::size_t Count>
-    struct TreeOptimalType<Childs, std::integral_constant<std::size_t, Count>>
+    struct TreeOptimalType<Childs, boost::mp11::mp_size_t<Count>>
     {
         using type = TreeElementConst<NoName, Childs, Count>;
     };
