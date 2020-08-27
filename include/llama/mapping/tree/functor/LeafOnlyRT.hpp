@@ -19,7 +19,6 @@
 #pragma once
 
 #include "../TreeElement.hpp"
-#include "../operations/GetNode.hpp"
 
 namespace llama::mapping::tree::functor
 {
@@ -43,10 +42,10 @@ namespace llama::mapping::tree::functor
             return basicCoordToResultCoordImpl(basicCoord, tree);
         }
 
-        template<typename Tree, typename T_ResultCoord>
+        template<typename Tree, typename ResultCoord>
         LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(
-            T_ResultCoord const & resultCoord,
-            Tree const & tree) const -> T_ResultCoord
+            ResultCoord const & resultCoord,
+            Tree const & tree) const -> ResultCoord
         {
             return resultCoord;
         }

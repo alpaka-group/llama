@@ -723,7 +723,7 @@ TEST_CASE("treemapping.getNode")
     const Mapping mapping(userDomain, treeOperationList);
 
     using namespace tree;
-    using namespace tree::operations;
+    using namespace tree::functor::internal;
 
     CHECK(toString(getNode<TreeCoord<>>(mapping.resultTree)) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) "
