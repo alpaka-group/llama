@@ -100,53 +100,29 @@ namespace llama::mapping::tree
     {
         template<
             typename UserDomain,
-            std::size_t FirstDatumDomain,
-            std::size_t Pos = 0>
-        struct UserDomainToTreeCoord
+            std::size_t... UDIndices,
+            std::size_t FirstDatumDomainCoord,
+            std::size_t... DatumDomainCoords>
+        LLAMA_FN_HOST_ACC_INLINE auto userDomainToTreeCoord(
+            const UserDomain & coord,
+            std::index_sequence<UDIndices...>,
+            DatumCoord<FirstDatumDomainCoord, DatumDomainCoords...>)
         {
-            LLAMA_FN_HOST_ACC_INLINE
-            auto operator()(const UserDomain & coord) const
-            {
-                if constexpr(Pos == UserDomain::count - 1)
-                {
-                    return Tuple{TreeCoordElement<FirstDatumDomain>(
-                        coord[UserDomain::count - 1])};
-                }
-                else
-                {
-                    return tupleCat(
-                        Tuple{TreeCoordElement<0>(coord[Pos])},
-                        UserDomainToTreeCoord<
-                            UserDomain,
-                            FirstDatumDomain,
-                            Pos + 1>()(coord));
-                }
-            }
-        };
-
-        template<typename DatumCoord>
-        struct DatumCoordToTreeCoord
-        {
-            using TailCoord = PopFront<DatumCoord>;
-            using type = decltype(tupleCat(
-                Tuple{TreeCoordElementConst<TailCoord::front>{}},
-                typename DatumCoordToTreeCoord<TailCoord>::type()));
-        };
-
-        template<std::size_t LastCoord>
-        struct DatumCoordToTreeCoord<DatumCoord<LastCoord>>
-        {
-            using type = Tuple<TreeCoordElementConst<>>;
-        };
+            return Tuple{
+                TreeCoordElement<(
+                    UDIndices == UserDomain::count - 1 ? FirstDatumDomainCoord
+                                                       : 0)>(
+                    coord[UDIndices])...,
+                TreeCoordElementConst<DatumDomainCoords>{}...,
+                TreeCoordElementConst<>{}};
+        }
     }
 
     template<typename DatumCoord, typename UserDomain>
     LLAMA_FN_HOST_ACC_INLINE auto
     getBasicTreeCoordFromDomains(const UserDomain & coord)
     {
-        return tupleCat(
-            internal::UserDomainToTreeCoord<UserDomain, DatumCoord::front>()(
-                coord),
-            typename internal::DatumCoordToTreeCoord<DatumCoord>::type());
+        return internal::userDomainToTreeCoord(
+            coord, std::make_index_sequence<UserDomain::count>{}, DatumCoord{});
     }
 }
