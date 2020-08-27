@@ -66,31 +66,31 @@ namespace llama::mapping::tree::functor
             }
         }
 
-        template<template<typename, typename> typename T_Operation>
+        template<template<typename, typename> typename Operation>
         struct ChangeNodeChildsRuntimeFunctor
         {
             const std::size_t newValue;
 
-            template<typename T_Element>
-            LLAMA_FN_HOST_ACC_INLINE auto operator()(T_Element element) const
+            template<typename Element>
+            LLAMA_FN_HOST_ACC_INLINE auto operator()(Element element) const
             {
-                if constexpr(HasChildren<T_Element>::value)
+                if constexpr(HasChildren<Element>::value)
                 {
                     return TreeElement<
-                        typename T_Element::Identifier,
-                        typename T_Element::Type>(
-                        T_Operation<decltype(element.count), std::size_t>::
-                            apply(element.count, newValue),
+                        typename Element::Identifier,
+                        typename Element::Type>(
+                        Operation<decltype(element.count), std::size_t>::apply(
+                            element.count, newValue),
                         element.childs);
                 }
                 else
                 {
                     const auto newCount
-                        = T_Operation<decltype(element.count), std::size_t>::
+                        = Operation<decltype(element.count), std::size_t>::
                             apply(element.count, newValue);
                     return TreeElement<
-                        typename T_Element::Identifier,
-                        typename T_Element::Type>{newCount};
+                        typename Element::Identifier,
+                        typename Element::Type>{newCount};
                 }
             }
         };
@@ -98,7 +98,7 @@ namespace llama::mapping::tree::functor
         template<
             typename TreeCoord,
             template<typename, typename>
-            typename T_Operation,
+            typename Operation,
             typename Tree>
         LLAMA_FN_HOST_ACC_INLINE auto
         changeNodeChildsRuntime(Tree const & tree, std::size_t const newValue)
@@ -109,7 +109,7 @@ namespace llama::mapping::tree::functor
                 {
                     auto children = tupleTransform(
                         tree.childs,
-                        ChangeNodeChildsRuntimeFunctor<T_Operation>{newValue});
+                        ChangeNodeChildsRuntimeFunctor<Operation>{newValue});
                     return TreeElement<
                         typename Tree::Identifier,
                         decltype(children)>(tree.count, children);
@@ -121,7 +121,7 @@ namespace llama::mapping::tree::functor
                             tree.childs);
                     auto replacement = changeNodeChildsRuntime<
                         typename TreeCoord::RestTuple,
-                        T_Operation>(current, newValue);
+                        Operation>(current, newValue);
                     auto children
                         = tupleReplace<TreeCoord::FirstElement::compiletime>(
                             tree.childs, replacement);

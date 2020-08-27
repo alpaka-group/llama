@@ -36,16 +36,16 @@ namespace llama::mapping::tree::functor
 
         template<typename Tree, typename BasicCoord>
         LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(
-            BasicCoord const & basicCoord,
-            Tree const & tree) const
+            const BasicCoord & basicCoord,
+            const Tree & tree) const
         {
             return basicCoordToResultCoordImpl(basicCoord, tree);
         }
 
         template<typename Tree, typename ResultCoord>
         LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(
-            ResultCoord const & resultCoord,
-            Tree const & tree) const -> ResultCoord
+            const ResultCoord & resultCoord,
+            const Tree & tree) const -> ResultCoord
         {
             return resultCoord;
         }

@@ -85,17 +85,17 @@ namespace llama::mapping::tree
     using TreeElementConst
         = TreeElement<Identifier, Type, boost::mp11::mp_size_t<Count>>;
 
-    template<typename T_Tree>
+    template<typename Tree>
     struct TreePopFrontChild
     {
         using ResultType = TreeElement<
-            typename T_Tree::Identifier,
-            typename T_Tree::Type::RestTuple,
-            decltype(T_Tree::count)
+            typename Tree::Identifier,
+            typename Tree::Type::RestTuple,
+            decltype(Tree::count)
         >;
 
         LLAMA_FN_HOST_ACC_INLINE
-        auto operator()(const T_Tree & tree) -> ResultType
+        auto operator()(const Tree & tree) -> ResultType
         {
             return {tree.count, tree.childs.rest};
         }
