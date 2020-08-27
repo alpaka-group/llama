@@ -40,12 +40,9 @@ namespace llama::mapping::tree
         TreeCoordElement(RuntimeType runtime) : runtime(runtime) {}
     };
 
-    template<std::size_t Compiletime = 0, std::size_t Runtime = 0>
-    using TreeCoordElementConst
-        = TreeCoordElement<Compiletime, boost::mp11::mp_size_t<Runtime>>;
-
     template<std::size_t... Coords>
-    using TreeCoord = Tuple<TreeCoordElementConst<Coords>...>;
+    using TreeCoord
+        = Tuple<TreeCoordElement<Coords, boost::mp11::mp_size_t<0>>...>;
 
     namespace internal
     {
@@ -65,7 +62,7 @@ namespace llama::mapping::tree
     }
 
     template<typename TreeCoord>
-    auto treeCoordToString(const TreeCoord treeCoord) -> std::string
+    auto treeCoordToString(TreeCoord treeCoord) -> std::string
     {
         return std::string("[ ")
             + internal::treeCoordToString(

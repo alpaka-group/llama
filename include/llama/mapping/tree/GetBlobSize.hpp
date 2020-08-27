@@ -23,44 +23,32 @@
 
 namespace llama::mapping::tree
 {
-    template<typename T_Type, typename T_CountType>
+    template<typename Type, typename CountType>
     struct SizeOfFunctor
     {
         LLAMA_FN_HOST_ACC_INLINE
-        auto operator()(T_CountType const &) const -> std::size_t
+        auto operator()(const CountType &) const -> std::size_t
         {
-            return sizeof(T_Type);
+            return sizeof(Type);
         }
     };
 
     template<typename Childs, typename CountType>
-    struct TreeOptimalType
-    {
-        using type = TreeElement<NoName, Childs>;
-    };
-
-    template<typename Childs, std::size_t Count>
-    struct TreeOptimalType<Childs, boost::mp11::mp_size_t<Count>>
-    {
-        using type = TreeElementConst<NoName, Childs, Count>;
-    };
-
-    template<typename T_Childs, typename T_CountType>
     LLAMA_FN_HOST_ACC_INLINE auto
-    getTreeBlobSize(T_Childs const & childs, T_CountType const & count)
+    getTreeBlobSize(const Childs & childs, const CountType & count)
         -> std::size_t
     {
         return Reduce<
-            typename TreeOptimalType<T_Childs, T_CountType>::type,
+            TreeElement<NoName, Childs, CountType>,
             Addition,
             Multiplication,
             SizeOfFunctor>()(childs, count);
     }
 
-    template<typename T_Tree>
-    LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(T_Tree const & tree)
+    template<typename Tree>
+    LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Tree & tree)
         -> std::size_t
     {
-        return Reduce<T_Tree, Addition, Multiplication, SizeOfFunctor>()(tree);
+        return Reduce<Tree, Addition, Multiplication, SizeOfFunctor>()(tree);
     }
 }

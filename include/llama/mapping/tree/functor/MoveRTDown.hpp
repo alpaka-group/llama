@@ -28,7 +28,7 @@ namespace llama::mapping::tree::functor
     /// level down in direction of the leaves. \warning Broken at the moment
     /// \tparam T_TreeCoord tree coordinate in the mapping tree which's run time
     /// part shall be moved down one level \see tree::Mapping
-    template<typename T_TreeCoord>
+    template<typename TreeCoord>
     struct MoveRTDown
     {
         const std::size_t amount = 0;
@@ -37,21 +37,21 @@ namespace llama::mapping::tree::functor
         LLAMA_FN_HOST_ACC_INLINE auto basicToResult(T_Tree const & tree) const
         {
             return operations::
-                changeNodeChildsRuntime<T_TreeCoord, Multiplication>(
-                    operations::changeNodeRuntime<T_TreeCoord>(
+                changeNodeChildsRuntime<TreeCoord, Multiplication>(
+                    operations::changeNodeRuntime<TreeCoord>(
                         tree,
-                        (operations::getNode<T_TreeCoord>(tree).count + amount
+                        (operations::getNode<TreeCoord>(tree).count + amount
                          - 1)
                             / amount),
                     amount);
         }
 
-        template<typename T_Tree, typename T_BasicCoord>
+        template<typename T_Tree, typename BasicCoord>
         LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(
-            T_BasicCoord const & basicCoord,
+            BasicCoord const & basicCoord,
             T_Tree const & tree) const
         {
-            return basicCoordToResultCoordImpl<T_TreeCoord>(
+            return basicCoordToResultCoordImpl<TreeCoord>(
                 basicCoord, tree, amount);
         }
 
@@ -66,30 +66,30 @@ namespace llama::mapping::tree::functor
     private:
         template<
             typename T_InternalTreeCoord,
-            typename T_BasicCoord,
+            typename BasicCoord,
             typename T_Tree>
         LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoordImpl(
-            const T_BasicCoord & basicCoord,
+            const BasicCoord & basicCoord,
             const T_Tree & tree,
             std::size_t amount) const
         {
             if constexpr(std::is_same_v<T_InternalTreeCoord, Tuple<>>)
             {
-                if constexpr(std::is_same_v<T_BasicCoord, Tuple<>>)
+                if constexpr(std::is_same_v<BasicCoord, Tuple<>>)
                     return Tuple<>{};
                 else
                 {
                     const auto & childTree = getTupleElementRef<decltype(
-                        T_BasicCoord::FirstElement::compiletime)::value>(
+                        BasicCoord::FirstElement::compiletime)::value>(
                         tree.childs);
                     const auto rt1 = basicCoord.first.runtime / amount;
                     const auto rt2
                         = basicCoord.first.runtime % amount * childTree.count
                         + basicCoord.rest.first.runtime;
                     auto rt1Child = TreeCoordElement<decltype(
-                        T_BasicCoord::FirstElement::compiletime)::value>(rt1);
+                        BasicCoord::FirstElement::compiletime)::value>(rt1);
                     auto rt2Child = TreeCoordElement<decltype(
-                        T_BasicCoord::RestTuple::FirstElement::compiletime)::
+                        BasicCoord::RestTuple::FirstElement::compiletime)::
                                                          value>(rt2);
                     return tupleCat(
                         Tuple{rt1Child},
@@ -100,7 +100,7 @@ namespace llama::mapping::tree::functor
             {
                 if constexpr(
                     T_InternalTreeCoord::FirstElement::compiletime
-                    != T_BasicCoord::FirstElement::compiletime)
+                    != BasicCoord::FirstElement::compiletime)
                     return basicCoord;
                 else
                 {
@@ -108,7 +108,7 @@ namespace llama::mapping::tree::functor
                         typename T_InternalTreeCoord::RestTuple>(
                         tupleRest(basicCoord),
                         getTupleElementRef<
-                            T_BasicCoord::FirstElement::compiletime>(
+                            BasicCoord::FirstElement::compiletime>(
                             tree.childs),
                         amount);
                     return tupleCat(Tuple{basicCoord.first}, rest);
@@ -117,7 +117,7 @@ namespace llama::mapping::tree::functor
         }
     };
 
-    template<typename T_TreeCoord, std::size_t T_amount>
+    template<typename TreeCoord, std::size_t T_amount>
     struct MoveRTDownFixed
     {
         static constexpr std::size_t amount = T_amount;
@@ -126,21 +126,21 @@ namespace llama::mapping::tree::functor
         LLAMA_FN_HOST_ACC_INLINE auto basicToResult(T_Tree const & tree) const
         {
             return operations::
-                changeNodeChildsRuntime<T_TreeCoord, Multiplication>(
-                    operations::changeNodeRuntime<T_TreeCoord>(
+                changeNodeChildsRuntime<TreeCoord, Multiplication>(
+                    operations::changeNodeRuntime<TreeCoord>(
                         tree,
-                        (operations::getNode<T_TreeCoord>(tree).count + amount
+                        (operations::getNode<TreeCoord>(tree).count + amount
                          - 1)
                             / amount),
                     amount);
         }
 
-        template<typename T_Tree, typename T_BasicCoord>
+        template<typename T_Tree, typename BasicCoord>
         LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(
-            T_BasicCoord const & basicCoord,
+            BasicCoord const & basicCoord,
             T_Tree const & tree) const -> decltype(auto)
         {
-            return basicCoordToResultCoordImpl<T_TreeCoord>(basicCoord, tree);
+            return basicCoordToResultCoordImpl<TreeCoord>(basicCoord, tree);
         }
 
         template<typename T_Tree, typename T_ResultCoord>
@@ -154,29 +154,29 @@ namespace llama::mapping::tree::functor
     private:
         template<
             typename T_InternalTreeCoord,
-            typename T_BasicCoord,
+            typename BasicCoord,
             typename T_Tree>
         LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoordImpl(
-            const T_BasicCoord & basicCoord,
+            const BasicCoord & basicCoord,
             const T_Tree & tree) const
         {
             if constexpr(std::is_same_v<T_InternalTreeCoord, Tuple<>>)
             {
-                if constexpr(std::is_same_v<T_BasicCoord, Tuple<>>)
+                if constexpr(std::is_same_v<BasicCoord, Tuple<>>)
                     return Tuple<>{};
                 else
                 {
                     const auto & childTree = getTupleElementRef<decltype(
-                        T_BasicCoord::FirstElement::compiletime)::value>(
+                        BasicCoord::FirstElement::compiletime)::value>(
                         tree.childs);
                     const auto rt1 = basicCoord.first.runtime / amount;
                     const auto rt2
                         = basicCoord.first.runtime % amount * childTree.count
                         + basicCoord.rest.first.runtime;
                     auto rt1Child = TreeCoordElement<decltype(
-                        T_BasicCoord::FirstElement::compiletime)::value>(rt1);
+                        BasicCoord::FirstElement::compiletime)::value>(rt1);
                     auto rt2Child = TreeCoordElement<decltype(
-                        T_BasicCoord::RestTuple::FirstElement::compiletime)::
+                        BasicCoord::RestTuple::FirstElement::compiletime)::
                                                          value>(rt2);
                     return tupleCat(
                         Tuple{rt1Child},
@@ -187,7 +187,7 @@ namespace llama::mapping::tree::functor
             {
                 if constexpr(
                     T_InternalTreeCoord::FirstElement::compiletime
-                    != T_BasicCoord::FirstElement::compiletime)
+                    != BasicCoord::FirstElement::compiletime)
                     return basicCoord;
                 else
                 {
@@ -195,7 +195,7 @@ namespace llama::mapping::tree::functor
                         typename T_InternalTreeCoord::RestTuple>(
                         tupleRest(basicCoord),
                         getTupleElementRef<
-                            T_BasicCoord::FirstElement::compiletime>(
+                            BasicCoord::FirstElement::compiletime>(
                             tree.childs));
                     return tupleCat(Tuple{basicCoord.first}, rest);
                 }
