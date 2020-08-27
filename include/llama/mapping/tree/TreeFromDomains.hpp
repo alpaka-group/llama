@@ -81,7 +81,7 @@ namespace llama::mapping::tree
         UserDomain::count - 1>::type;
 
     template<typename DatumDomain, typename UserDomain, std::size_t Pos = 0>
-    LLAMA_FN_HOST_ACC_INLINE auto setUserDomainInTree(const UserDomain & size)
+    LLAMA_FN_HOST_ACC_INLINE auto createTree(const UserDomain & size)
     {
         if constexpr(Pos == UserDomain::count - 1)
         {
@@ -90,8 +90,7 @@ namespace llama::mapping::tree
         }
         else
         {
-            Tuple inner{
-                setUserDomainInTree<DatumDomain, UserDomain, Pos + 1>(size)};
+            Tuple inner{createTree<DatumDomain, UserDomain, Pos + 1>(size)};
             return TreeElement<NoName, decltype(inner)>(size[Pos], inner);
         }
     };
@@ -120,7 +119,7 @@ namespace llama::mapping::tree
 
     template<typename DatumCoord, typename UserDomain>
     LLAMA_FN_HOST_ACC_INLINE auto
-    getBasicTreeCoordFromDomains(const UserDomain & coord)
+    createTreeCoord(const UserDomain & coord)
     {
         return internal::userDomainToTreeCoord(
             coord, std::make_index_sequence<UserDomain::count>{}, DatumCoord{});
