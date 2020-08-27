@@ -1070,3 +1070,17 @@ TEST_CASE("treemapping")
             sum += view({x, y}).access<0, 1>();
     CHECK(sum == 0);
 }
+
+TEST_CASE("treeCoordToString")
+{
+    namespace tree = llama::mapping::tree;
+
+    const auto coord = llama::UserDomain<3>{6, 7, 8};
+    CHECK(tree::treeCoordToString(tree::createTreeCoord<llama::DatumCoord<0, 0>>(coord)) == "[ 6:0, 7:0, 8:0, 0:0, 0:0 ]");
+    CHECK(tree::treeCoordToString(tree::createTreeCoord<llama::DatumCoord<0, 1>>(coord)) == "[ 6:0, 7:0, 8:0, 0:1, 0:0 ]");
+    CHECK(tree::treeCoordToString(tree::createTreeCoord<llama::DatumCoord<0, 2>>(coord)) == "[ 6:0, 7:0, 8:0, 0:2, 0:0 ]");
+    CHECK(tree::treeCoordToString(tree::createTreeCoord<llama::DatumCoord<1   >>(coord)) == "[ 6:0, 7:0, 8:1, 0:0 ]");
+    CHECK(tree::treeCoordToString(tree::createTreeCoord<llama::DatumCoord<2, 0>>(coord)) == "[ 6:0, 7:0, 8:2, 0:0, 0:0 ]");
+    CHECK(tree::treeCoordToString(tree::createTreeCoord<llama::DatumCoord<2, 1>>(coord)) == "[ 6:0, 7:0, 8:2, 0:1, 0:0 ]");
+    CHECK(tree::treeCoordToString(tree::createTreeCoord<llama::DatumCoord<2, 2>>(coord)) == "[ 6:0, 7:0, 8:2, 0:2, 0:0 ]");
+}
