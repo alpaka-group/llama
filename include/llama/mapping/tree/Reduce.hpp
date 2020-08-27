@@ -25,11 +25,11 @@ namespace llama::mapping::tree
     template<
         typename Tree,
         template<class, class>
-        class T_InnerOp,
+        class InnerOp,
         template<class, class>
-        class T_OuterOp,
+        class OuterOp,
         template<class, class>
-        class T_LeafFunctor,
+        class LeafFunctor,
         bool HC = HasChildren<Tree>::value>
     struct Reduce;
 
@@ -39,19 +39,19 @@ namespace llama::mapping::tree
         template<
             typename Tree,
             template<class, class>
-            class T_InnerOp,
+            class InnerOp,
             template<class, class>
-            class T_OuterOp,
+            class OuterOp,
             template<class, class>
-            class T_LeafFunctor,
-            typename T_SFINAE = void>
+            class LeafFunctor,
+            typename SFINAE = void>
         struct ReduceElementType
         {
             LLAMA_FN_HOST_ACC_INLINE
             auto operator()(const decltype(Tree::count) & count) const
                 -> std::size_t
             {
-                return T_LeafFunctor<
+                return LeafFunctor<
                     typename Tree::Type,
                     decltype(Tree::count)>()(count);
             }
@@ -61,16 +61,16 @@ namespace llama::mapping::tree
         template<
             typename Tree,
             template<class, class>
-            class T_InnerOp,
+            class InnerOp,
             template<class, class>
-            class T_OuterOp,
+            class OuterOp,
             template<class, class>
-            class T_LeafFunctor>
+            class LeafFunctor>
         struct ReduceElementType<
             Tree,
-            T_InnerOp,
-            T_OuterOp,
-            T_LeafFunctor,
+            InnerOp,
+            OuterOp,
+            LeafFunctor,
             std::enable_if_t<(SizeOfTuple<typename Tree::Type>::value > 1)>>
         {
             using IterTree = typename TreePopFrontChild<Tree>::ResultType;
@@ -80,28 +80,28 @@ namespace llama::mapping::tree
                 typename Tree::Type const & childs,
                 decltype(Tree::count) const & count) const -> std::size_t
             {
-                return T_InnerOp<
+                return InnerOp<
                     decltype(Reduce<
                              typename Tree::Type::FirstElement,
-                             T_InnerOp,
-                             T_OuterOp,
-                             T_LeafFunctor>()(childs.first)),
+                             InnerOp,
+                             OuterOp,
+                             LeafFunctor>()(childs.first)),
                     decltype(internal::ReduceElementType<
                              IterTree,
-                             T_InnerOp,
-                             T_OuterOp,
-                             T_LeafFunctor>()(childs.rest, count))>::
+                             InnerOp,
+                             OuterOp,
+                             LeafFunctor>()(childs.rest, count))>::
                     apply(
                         Reduce<
                             typename Tree::Type::FirstElement,
-                            T_InnerOp,
-                            T_OuterOp,
-                            T_LeafFunctor>()(childs.first),
+                            InnerOp,
+                            OuterOp,
+                            LeafFunctor>()(childs.first),
                         internal::ReduceElementType<
                             IterTree,
-                            T_InnerOp,
-                            T_OuterOp,
-                            T_LeafFunctor>()(childs.rest, count));
+                            InnerOp,
+                            OuterOp,
+                            LeafFunctor>()(childs.rest, count));
             }
         };
 
@@ -109,16 +109,16 @@ namespace llama::mapping::tree
         template<
             typename Tree,
             template<class, class>
-            class T_InnerOp,
+            class InnerOp,
             template<class, class>
-            class T_OuterOp,
+            class OuterOp,
             template<class, class>
-            class T_LeafFunctor>
+            class LeafFunctor>
         struct ReduceElementType<
             Tree,
-            T_InnerOp,
-            T_OuterOp,
-            T_LeafFunctor,
+            InnerOp,
+            OuterOp,
+            LeafFunctor,
             std::enable_if_t<SizeOfTuple<typename Tree::Type>::value == 1>>
         {
             LLAMA_FN_HOST_ACC_INLINE
@@ -128,9 +128,9 @@ namespace llama::mapping::tree
             {
                 return Reduce<
                     typename Tree::Type::FirstElement,
-                    T_InnerOp,
-                    T_OuterOp,
-                    T_LeafFunctor>()(childs.first);
+                    InnerOp,
+                    OuterOp,
+                    LeafFunctor>()(childs.first);
             }
         };
     }
@@ -138,11 +138,11 @@ namespace llama::mapping::tree
     template<
         typename Tree,
         template<class, class>
-        class T_InnerOp,
+        class InnerOp,
         template<class, class>
-        class T_OuterOp,
+        class OuterOp,
         template<class, class>
-        class T_LeafFunctor,
+        class LeafFunctor,
         bool HC>
     struct Reduce
     {
@@ -151,20 +151,20 @@ namespace llama::mapping::tree
             typename Tree::Type const & childs,
             decltype(Tree::count) const & count) const -> std::size_t
         {
-            return T_OuterOp<
+            return OuterOp<
                 decltype(Tree::count),
                 decltype(internal::ReduceElementType<
                          Tree,
-                         T_InnerOp,
-                         T_OuterOp,
-                         T_LeafFunctor>()(childs, count))>::
+                         InnerOp,
+                         OuterOp,
+                         LeafFunctor>()(childs, count))>::
                 apply(
                     count,
                     internal::ReduceElementType<
                         Tree,
-                        T_InnerOp,
-                        T_OuterOp,
-                        T_LeafFunctor>()(childs, count));
+                        InnerOp,
+                        OuterOp,
+                        LeafFunctor>()(childs, count));
         }
 
         LLAMA_FN_HOST_ACC_INLINE
@@ -177,31 +177,31 @@ namespace llama::mapping::tree
     template<
         typename Tree,
         template<class, class>
-        class T_InnerOp,
+        class InnerOp,
         template<class, class>
-        class T_OuterOp,
+        class OuterOp,
         template<class, class>
-        class T_LeafFunctor>
-    struct Reduce<Tree, T_InnerOp, T_OuterOp, T_LeafFunctor, false>
+        class LeafFunctor>
+    struct Reduce<Tree, InnerOp, OuterOp, LeafFunctor, false>
     {
         LLAMA_FN_HOST_ACC_INLINE
         auto operator()(const decltype(Tree::count) & count) const
             -> std::size_t
         {
-            return T_OuterOp<
+            return OuterOp<
                 decltype(Tree::count),
                 decltype(internal::ReduceElementType<
                          Tree,
-                         T_InnerOp,
-                         T_OuterOp,
-                         T_LeafFunctor>()(count))>::
+                         InnerOp,
+                         OuterOp,
+                         LeafFunctor>()(count))>::
                 apply(
                     count,
                     internal::ReduceElementType<
                         Tree,
-                        T_InnerOp,
-                        T_OuterOp,
-                        T_LeafFunctor>()(count));
+                        InnerOp,
+                        OuterOp,
+                        LeafFunctor>()(count));
         }
 
         LLAMA_FN_HOST_ACC_INLINE

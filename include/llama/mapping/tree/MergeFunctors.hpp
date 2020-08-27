@@ -22,7 +22,7 @@
 
 namespace llama::mapping::tree
 {
-    template<typename Tree, typename T_TreeOperationList>
+    template<typename Tree, typename TreeOperationList>
     struct MergeFunctors
     {};
 
@@ -76,17 +76,17 @@ namespace llama::mapping::tree
         }
     };
 
-    template<typename Tree, typename T_LastOperation>
-    struct MergeFunctors<Tree, Tuple<T_LastOperation>>
+    template<typename Tree, typename LastOperation>
+    struct MergeFunctors<Tree, Tuple<LastOperation>>
     {
-        const T_LastOperation operation = {};
+        const LastOperation operation = {};
 
         MergeFunctors() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
         MergeFunctors(
             const Tree &,
-            const Tuple<T_LastOperation> & treeOperationList) :
+            const Tuple<LastOperation> & treeOperationList) :
                 operation(treeOperationList.first)
         {}
 

@@ -102,7 +102,7 @@ namespace llama::mapping::tree
             std::size_t... UDIndices,
             std::size_t FirstDatumDomainCoord,
             std::size_t... DatumDomainCoords>
-        LLAMA_FN_HOST_ACC_INLINE auto userDomainToTreeCoord(
+        LLAMA_FN_HOST_ACC_INLINE auto createTreeCoord(
             const UserDomain & coord,
             std::index_sequence<UDIndices...>,
             DatumCoord<FirstDatumDomainCoord, DatumDomainCoords...>)
@@ -122,7 +122,7 @@ namespace llama::mapping::tree
     template<typename DatumCoord, typename UserDomain>
     LLAMA_FN_HOST_ACC_INLINE auto createTreeCoord(const UserDomain & coord)
     {
-        return internal::userDomainToTreeCoord(
+        return internal::createTreeCoord(
             coord, std::make_index_sequence<UserDomain::count>{}, DatumCoord{});
     }
 }
