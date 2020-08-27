@@ -74,7 +74,7 @@ namespace llama::mapping::tree
                 typename Tree::Type const & childs,
                 decltype(Tree::count) const & count) const -> std::size_t
             {
-                return InnerOp::apply(
+                return InnerOp{}(
                     Reduce<
                         typename Tree::Type::FirstElement,
                         InnerOp,
@@ -130,7 +130,7 @@ namespace llama::mapping::tree
             typename Tree::Type const & childs,
             decltype(Tree::count) const & count) const -> std::size_t
         {
-            return OuterOp::apply(
+            return OuterOp{}(
                 count,
                 internal::
                     ReduceElementType<Tree, InnerOp, OuterOp, LeafFunctor>()(
@@ -156,7 +156,7 @@ namespace llama::mapping::tree
         auto operator()(const decltype(Tree::count) & count) const
             -> std::size_t
         {
-            return OuterOp::apply(
+            return OuterOp{}(
                 count,
                 internal::
                     ReduceElementType<Tree, InnerOp, OuterOp, LeafFunctor>()(

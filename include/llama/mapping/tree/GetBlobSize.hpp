@@ -18,7 +18,6 @@
 
 #pragma once
 
-#include "Operations.hpp"
 #include "Reduce.hpp"
 
 namespace llama::mapping::tree
@@ -40,8 +39,8 @@ namespace llama::mapping::tree
     {
         return Reduce<
             TreeElement<NoName, Childs, CountType>,
-            Addition,
-            Multiplication,
+            std::plus<>,
+            std::multiplies<>,
             SizeOfFunctor>()(childs, count);
     }
 
@@ -49,6 +48,7 @@ namespace llama::mapping::tree
     LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Tree & tree)
         -> std::size_t
     {
-        return Reduce<Tree, Addition, Multiplication, SizeOfFunctor>()(tree);
+        return Reduce<Tree, std::plus<>, std::multiplies<>, SizeOfFunctor>()(
+            tree);
     }
 }

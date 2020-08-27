@@ -79,13 +79,12 @@ namespace llama::mapping::tree::functor
                     return TreeElement<
                         typename Element::Identifier,
                         typename Element::Type>(
-                        Operation::apply(element.count, newValue),
+                        Operation{}(element.count, newValue),
                         element.childs);
                 }
                 else
                 {
-                    const auto newCount
-                        = Operation::apply(element.count, newValue);
+                    const auto newCount = Operation{}(element.count, newValue);
                     return TreeElement<
                         typename Element::Identifier,
                         typename Element::Type>{newCount};
@@ -141,7 +140,7 @@ namespace llama::mapping::tree::functor
         template<typename Tree>
         LLAMA_FN_HOST_ACC_INLINE auto basicToResult(const Tree & tree) const
         {
-            return internal::changeNodeChildsRuntime<TreeCoord, Multiplication>(
+            return internal::changeNodeChildsRuntime<TreeCoord, std::multiplies<>>(
                 internal::changeNodeRuntime<TreeCoord>(
                     tree,
                     (internal::getNode<TreeCoord>(tree).count + amount - 1)
