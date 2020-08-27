@@ -24,9 +24,7 @@ namespace llama::mapping::tree
 {
     template<
         typename Tree,
-        template<class, class>
         class InnerOp,
-        template<class, class>
         class OuterOp,
         template<class, class>
         class LeafFunctor,
@@ -38,9 +36,7 @@ namespace llama::mapping::tree
         // Leaf
         template<
             typename Tree,
-            template<class, class>
             class InnerOp,
-            template<class, class>
             class OuterOp,
             template<class, class>
             class LeafFunctor,
@@ -60,9 +56,7 @@ namespace llama::mapping::tree
         // Node
         template<
             typename Tree,
-            template<class, class>
             class InnerOp,
-            template<class, class>
             class OuterOp,
             template<class, class>
             class LeafFunctor>
@@ -80,37 +74,24 @@ namespace llama::mapping::tree
                 typename Tree::Type const & childs,
                 decltype(Tree::count) const & count) const -> std::size_t
             {
-                return InnerOp<
-                    decltype(Reduce<
-                             typename Tree::Type::FirstElement,
-                             InnerOp,
-                             OuterOp,
-                             LeafFunctor>()(childs.first)),
-                    decltype(internal::ReduceElementType<
-                             IterTree,
-                             InnerOp,
-                             OuterOp,
-                             LeafFunctor>()(childs.rest, count))>::
-                    apply(
-                        Reduce<
-                            typename Tree::Type::FirstElement,
-                            InnerOp,
-                            OuterOp,
-                            LeafFunctor>()(childs.first),
-                        internal::ReduceElementType<
-                            IterTree,
-                            InnerOp,
-                            OuterOp,
-                            LeafFunctor>()(childs.rest, count));
+                return InnerOp::apply(
+                    Reduce<
+                        typename Tree::Type::FirstElement,
+                        InnerOp,
+                        OuterOp,
+                        LeafFunctor>()(childs.first),
+                    internal::ReduceElementType<
+                        IterTree,
+                        InnerOp,
+                        OuterOp,
+                        LeafFunctor>()(childs.rest, count));
             }
         };
 
         // Node with one (last) child
         template<
             typename Tree,
-            template<class, class>
             class InnerOp,
-            template<class, class>
             class OuterOp,
             template<class, class>
             class LeafFunctor>
@@ -137,9 +118,7 @@ namespace llama::mapping::tree
 
     template<
         typename Tree,
-        template<class, class>
         class InnerOp,
-        template<class, class>
         class OuterOp,
         template<class, class>
         class LeafFunctor,
@@ -151,20 +130,11 @@ namespace llama::mapping::tree
             typename Tree::Type const & childs,
             decltype(Tree::count) const & count) const -> std::size_t
         {
-            return OuterOp<
-                decltype(Tree::count),
-                decltype(internal::ReduceElementType<
-                         Tree,
-                         InnerOp,
-                         OuterOp,
-                         LeafFunctor>()(childs, count))>::
-                apply(
-                    count,
-                    internal::ReduceElementType<
-                        Tree,
-                        InnerOp,
-                        OuterOp,
-                        LeafFunctor>()(childs, count));
+            return OuterOp::apply(
+                count,
+                internal::
+                    ReduceElementType<Tree, InnerOp, OuterOp, LeafFunctor>()(
+                        childs, count));
         }
 
         LLAMA_FN_HOST_ACC_INLINE
@@ -176,9 +146,7 @@ namespace llama::mapping::tree
 
     template<
         typename Tree,
-        template<class, class>
         class InnerOp,
-        template<class, class>
         class OuterOp,
         template<class, class>
         class LeafFunctor>
@@ -188,20 +156,11 @@ namespace llama::mapping::tree
         auto operator()(const decltype(Tree::count) & count) const
             -> std::size_t
         {
-            return OuterOp<
-                decltype(Tree::count),
-                decltype(internal::ReduceElementType<
-                         Tree,
-                         InnerOp,
-                         OuterOp,
-                         LeafFunctor>()(count))>::
-                apply(
-                    count,
-                    internal::ReduceElementType<
-                        Tree,
-                        InnerOp,
-                        OuterOp,
-                        LeafFunctor>()(count));
+            return OuterOp::apply(
+                count,
+                internal::
+                    ReduceElementType<Tree, InnerOp, OuterOp, LeafFunctor>()(
+                        count));
         }
 
         LLAMA_FN_HOST_ACC_INLINE

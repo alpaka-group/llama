@@ -22,55 +22,39 @@
 
 namespace llama::mapping::tree
 {
-    template<typename Parameter1, typename Parameter2>
     struct Addition
     {
-        LLAMA_FN_HOST_ACC_INLINE
-        static constexpr auto apply(Parameter1 const p1, Parameter2 const p2)
+        template<typename T, typename U>
+        LLAMA_FN_HOST_ACC_INLINE static constexpr auto apply(T p1, U p2)
         {
             return p1 + p2;
         }
-    };
 
-    template<typename T, T t1, T t2>
-    struct Addition<
-        std::integral_constant<T, t1>,
-        std::integral_constant<T, t2>>
-    {
-        using Parameter1 = std::integral_constant<T, t1>;
-        using Parameter2 = std::integral_constant<T, t2>;
-
-        LLAMA_FN_HOST_ACC_INLINE
-        static constexpr auto apply(Parameter1 const p1, Parameter2 const p2)
-            -> std::integral_constant<T, t1 + t2>
+        template<std::size_t I, std::size_t J>
+        LLAMA_FN_HOST_ACC_INLINE static constexpr auto apply(
+            std::integral_constant<std::size_t, I> p1,
+            std::integral_constant<std::size_t, J> p2)
+            -> std::integral_constant<std::size_t, I + J>
         {
-            return std::integral_constant<T, t1 + t2>();
+            return {};
         }
     };
 
-    template<typename Parameter1, typename Parameter2>
     struct Multiplication
     {
-        LLAMA_FN_HOST_ACC_INLINE
-        static constexpr auto apply(Parameter1 const p1, Parameter2 const p2)
+        template<typename T, typename U>
+        LLAMA_FN_HOST_ACC_INLINE static constexpr auto apply(T p1, U p2)
         {
             return p1 * p2;
         }
-    };
 
-    template<typename T, T t1, T t2>
-    struct Multiplication<
-        std::integral_constant<T, t1>,
-        std::integral_constant<T, t2>>
-    {
-        using Parameter1 = std::integral_constant<T, t1>;
-        using Parameter2 = std::integral_constant<T, t2>;
-
-        LLAMA_FN_HOST_ACC_INLINE
-        static constexpr auto apply(Parameter1 const p1, Parameter2 const p2)
-            -> std::integral_constant<T, t1 * t2>
+        template<std::size_t I, std::size_t J>
+        LLAMA_FN_HOST_ACC_INLINE static constexpr auto apply(
+            std::integral_constant<std::size_t, I> p1,
+            std::integral_constant<std::size_t, J> p2)
+            -> std::integral_constant<std::size_t, I * J>
         {
-            return std::integral_constant<T, t1 * t2>();
+            return {};
         }
     };
 }
