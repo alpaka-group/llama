@@ -21,7 +21,6 @@
 #include "../../Types.hpp"
 #include "../../UserDomain.hpp"
 #include "MergeFunctors.hpp"
-#include "Reduce.hpp"
 #include "TreeElement.hpp"
 #include "TreeFromDomains.hpp"
 #include "functor/Idem.hpp"
@@ -35,22 +34,48 @@ namespace llama::mapping::tree
 {
     namespace internal
     {
-        template<typename Type>
-        struct SizeOfFunctor
-        {
-            template<typename CountType>
-            LLAMA_FN_HOST_ACC_INLINE auto operator()(const CountType &) const
-                -> std::size_t
-            {
-                return sizeof(Type);
-            }
-        };
+        template<
+            typename Tree,
+            std::enable_if_t<HasChildren<Tree>::value, int> = 0>
+        LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Tree & tree)
+            -> std::size_t;
 
-        template<typename Tree>
+        template<
+            typename Tree,
+            std::enable_if_t<!HasChildren<Tree>::value, int> = 0>
+        LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Tree & tree)
+            -> std::size_t;
+
+        template<typename... Children, std::size_t... Is, typename Count>
+        LLAMA_FN_HOST_ACC_INLINE auto getChildrenBlobSize(
+            const Tuple<Children...> & childs,
+            std::index_sequence<Is...> ii,
+            const Count & count) -> std::size_t
+        {
+            return count * (getTreeBlobSize(getTupleElement<Is>(childs)) + ...);
+        }
+
+        template<
+            typename Tree,
+            std::enable_if_t<HasChildren<Tree>::value, int> = 0>
         LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Tree & tree)
             -> std::size_t
         {
-            return Reduce<SizeOfFunctor>()(tree);
+            constexpr std::size_t childCount = boost::mp11::mp_size<
+                std::decay_t<decltype(tree.childs)>>::value;
+            return getChildrenBlobSize(
+                tree.childs,
+                std::make_index_sequence<childCount>{},
+                LLAMA_DEREFERENCE(tree.count));
+        }
+
+        template<
+            typename Tree,
+            std::enable_if_t<!HasChildren<Tree>::value, int> = 0>
+        LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Tree & tree)
+            -> std::size_t
+        {
+            return tree.count * sizeof(typename Tree::Type);
         }
 
         template<typename Childs, typename CountType>
