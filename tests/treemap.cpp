@@ -12,6 +12,7 @@ namespace tag
     struct Z {};
     struct Momentum {};
     struct Weight {};
+    struct Flags {};
     // clang-format on
 
     auto toString(Pos)
@@ -38,6 +39,10 @@ namespace tag
     {
         return "Weight";
     }
+    auto toString(Flags)
+    {
+        return "Flags";
+    }
 }
 
 // clang-format off
@@ -52,7 +57,8 @@ using Name = llama::DS<
         llama::DE<tag::Z, double>,
         llama::DE<tag::Y, double>,
         llama::DE<tag::X, double>
-    >>
+    >>,
+    llama::DE<tag::Flags, llama::DA<bool, 4>>
 >;
 // clang-format on
 
@@ -68,12 +74,12 @@ TEST_CASE("treemapping.empty")
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] ] ]");
+          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
     CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] ] ]");
+          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 13312);
+    CHECK(mapping.getBlobSize(0) == 14336);
 
     {
         const auto coord = UserDomain{0, 0};
@@ -84,28 +90,40 @@ TEST_CASE("treemapping.empty")
         CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 28);
         CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 36);
         CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 44);
+        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 52);
+        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 53);
+        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 54);
+        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 55);
     }
 
     {
         const auto coord = UserDomain{0, 1};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 52);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 60);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 68);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 76);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 80);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 88);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 96);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 56);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 64);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 72);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 80);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 84);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 92);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 100);
+        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 108);
+        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 109);
+        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 110);
+        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 111);
     }
 
     {
         const auto coord = UserDomain{1, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 832);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 840);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 848);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 856);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 860);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 868);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 876);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 904);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 912);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 920);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 924);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 932);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 940);
+        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 948);
+        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 949);
+        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 950);
+        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 951);
     }
 }
 
@@ -122,12 +140,12 @@ TEST_CASE("treemapping.Idem")
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] ] ]");
+          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
     CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] ] ]");
+          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 13312);
+    CHECK(mapping.getBlobSize(0) == 14336);
 
     {
         const auto coord = UserDomain{0, 0};
@@ -138,28 +156,40 @@ TEST_CASE("treemapping.Idem")
         CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 28);
         CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 36);
         CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 44);
+        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 52);
+        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 53);
+        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 54);
+        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 55);
     }
 
     {
         const auto coord = UserDomain{0, 1};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 52);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 60);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 68);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 76);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 80);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 88);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 96);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 56);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 64);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 72);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 80);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 84);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 92);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 100);
+        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 108);
+        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 109);
+        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 110);
+        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 111);
     }
 
     {
         const auto coord = UserDomain{1, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 832);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 840);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 848);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 856);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 860);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 868);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 876);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 904);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 912);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 920);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 924);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 932);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 940);
+        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 948);
+        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 949);
+        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 950);
+        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 951);
     }
 }
 
@@ -176,12 +206,12 @@ TEST_CASE("treemapping.LeafOnlyRT")
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] ] ]");
+          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
     CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
           "1 * [ 1 * [ 1 * Pos[ 256 * X(double) , 256 * Y(double) , 256 * Z(double) ] , 256 * Weight(float) , 1 * Momentum[ 256 * Z(double) , 256 * Y(double) "
-          ", 256 * X(double) ] ] ]");
+          ", 256 * X(double) ] , 1 * Flags[ 256 * (bool) , 256 * (bool) , 256 * (bool) , 256 * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 13312);
+    CHECK(mapping.getBlobSize(0) == 14336);
 
     {
         const auto coord = UserDomain{0, 0};
@@ -192,6 +222,10 @@ TEST_CASE("treemapping.LeafOnlyRT")
         CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 7168);
         CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 9216);
         CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 11264);
+        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 13312);
+        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 13568);
+        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 13824);
+        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 14080);
     }
 
     {
@@ -203,6 +237,10 @@ TEST_CASE("treemapping.LeafOnlyRT")
         CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 7176);
         CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 9224);
         CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 11272);
+        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 13313);
+        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 13569);
+        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 13825);
+        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 14081);
     }
 
     {
@@ -214,6 +252,10 @@ TEST_CASE("treemapping.LeafOnlyRT")
         CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 7296);
         CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 9344);
         CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 11392);
+        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 13328);
+        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 13584);
+        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 13840);
+        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 14096);
     }
 }
 
@@ -231,12 +273,12 @@ TEST_CASE("treemapping.MoveRTDown<>")
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] ] ]");
+          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
     CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
           "4 * [ 64 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] ] ]");
+          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 13312);
+    CHECK(mapping.getBlobSize(0) == 14336);
 
     {
         const auto coord = UserDomain{0, 0};
@@ -251,24 +293,24 @@ TEST_CASE("treemapping.MoveRTDown<>")
 
     {
         const auto coord = UserDomain{0, 1};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 52);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 60);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 68);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 76);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 80);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 88);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 96);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 56);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 64);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 72);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 80);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 84);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 92);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 100);
     }
 
     {
         const auto coord = UserDomain{1, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 832);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 840);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 848);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 856);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 860);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 868);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 876);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 904);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 912);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 920);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 924);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 932);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 940);
     }
 }
 
@@ -286,12 +328,12 @@ TEST_CASE("treemapping.MoveRTDown<0>")
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] ] ]");
+          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
     CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
           "16 * [ 4 * [ 4 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 4 * Weight(float) , 4 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] ] ]");
+          "X(double) ] , 4 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 13312);
+    CHECK(mapping.getBlobSize(0) == 14336);
 
     {
         const auto coord = UserDomain{0, 0};
@@ -317,13 +359,13 @@ TEST_CASE("treemapping.MoveRTDown<0>")
 
     {
         const auto coord = UserDomain{1, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 832);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 840);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 848);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 928);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 944);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 952);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 960);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 904);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 912);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 992);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 1008);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 1016);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 1024);
     }
 }
 
@@ -341,12 +383,12 @@ TEST_CASE("treemapping.MoveRTDown<0,0>")
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] ] ]");
+          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
     CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
           "16 * [ 16 * [ 1 * Pos[ 4 * X(double) , 4 * Y(double) , 4 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] ] ]");
+          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 31744);
+    CHECK(mapping.getBlobSize(0) == 32768);
 
     {
         const auto coord = UserDomain{0, 0};
@@ -361,24 +403,24 @@ TEST_CASE("treemapping.MoveRTDown<0,0>")
 
     {
         const auto coord = UserDomain{0, 1};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 124);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 156);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 188);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 220);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 224);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 232);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 240);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 128);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 160);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 192);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 224);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 228);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 236);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 244);
     }
 
     {
         const auto coord = UserDomain{1, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 1984);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2016);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 2048);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 2080);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 2084);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 2092);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 2100);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 2048);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2080);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 2112);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 2144);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 2148);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 2156);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 2164);
     }
 }
 
@@ -396,12 +438,12 @@ TEST_CASE("treemapping.MoveRTDownFixed<>")
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] ] ]");
+          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
     CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
           "4 * [ 64 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] ] ]");
+          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 13312);
+    CHECK(mapping.getBlobSize(0) == 14336);
 
     {
         const auto coord = UserDomain{0, 0};
@@ -416,24 +458,24 @@ TEST_CASE("treemapping.MoveRTDownFixed<>")
 
     {
         const auto coord = UserDomain{0, 1};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 52);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 60);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 68);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 76);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 80);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 88);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 96);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 56);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 64);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 72);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 80);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 84);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 92);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 100);
     }
 
     {
         const auto coord = UserDomain{1, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 832);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 840);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 848);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 856);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 860);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 868);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 876);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 904);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 912);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 920);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 924);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 932);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 940);
     }
 }
 
@@ -451,12 +493,12 @@ TEST_CASE("treemapping.MoveRTDownFixed<0>")
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] ] ]");
+          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
     CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
           "16 * [ 4 * [ 4 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 4 * Weight(float) , 4 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] ] ]");
+          "X(double) ] , 4 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 13312);
+    CHECK(mapping.getBlobSize(0) == 14336);
 
     {
         const auto coord = UserDomain{0, 0};
@@ -482,13 +524,13 @@ TEST_CASE("treemapping.MoveRTDownFixed<0>")
 
     {
         const auto coord = UserDomain{1, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 832);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 840);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 848);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 928);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 944);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 952);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 960);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 904);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 912);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 992);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 1008);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 1016);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 1024);
     }
 }
 
@@ -506,12 +548,12 @@ TEST_CASE("treemapping.MoveRTDownFixed<0,0>")
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] ] ]");
+          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
     CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
           "16 * [ 16 * [ 1 * Pos[ 4 * X(double) , 4 * Y(double) , 4 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] ] ]");
+          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 31744);
+    CHECK(mapping.getBlobSize(0) == 32768);
 
     {
         const auto coord = UserDomain{0, 0};
@@ -526,24 +568,24 @@ TEST_CASE("treemapping.MoveRTDownFixed<0,0>")
 
     {
         const auto coord = UserDomain{0, 1};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 124);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 156);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 188);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 220);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 224);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 232);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 240);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 128);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 160);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 192);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 224);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 228);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 236);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 244);
     }
 
     {
         const auto coord = UserDomain{1, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 1984);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2016);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 2048);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 2080);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 2084);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 2092);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 2100);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 2048);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2080);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 2112);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 2144);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 2148);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 2156);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 2164);
     }
 }
 
@@ -572,12 +614,12 @@ TEST_CASE("treemapping.vectorblocks.runtime")
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] ] ]");
+          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
     CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
           "16 * [ 2 * [ 1 * Pos[ 8 * X(double) , 8 * Y(double) , 8 * Z(double) ] , 8 * Weight(float) , "
-          "1 * Momentum[ 8 * Z(double) , 8 * Y(double) , 8 * X(double) ] ] ]");
+          "1 * Momentum[ 8 * Z(double) , 8 * Y(double) , 8 * X(double) ] , 8 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 13312);
+    CHECK(mapping.getBlobSize(0) == 14336);
 
     {
         const auto coord = UserDomain{0, 0};
@@ -603,13 +645,13 @@ TEST_CASE("treemapping.vectorblocks.runtime")
 
     {
         const auto coord = UserDomain{1, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 832);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 896);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 960);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 1024);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 1056);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 1120);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 1184);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 960);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 1024);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 1088);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 1120);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 1184);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 1248);
     }
 }
 
@@ -638,12 +680,12 @@ TEST_CASE("treemapping.vectorblocks.compiletime")
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] ] ]");
+          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
     CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
           "16 * [ 2 * [ 1 * Pos[ 8 * X(double) , 8 * Y(double) , 8 * Z(double) ] , 8 * Weight(float) , "
-          "1 * Momentum[ 8 * Z(double) , 8 * Y(double) , 8 * X(double) ] ] ]");
+          "1 * Momentum[ 8 * Z(double) , 8 * Y(double) , 8 * X(double) ] , 8 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 13312);
+    CHECK(mapping.getBlobSize(0) == 14336);
 
     {
         const auto coord = UserDomain{0, 0};
@@ -669,13 +711,13 @@ TEST_CASE("treemapping.vectorblocks.compiletime")
 
     {
         const auto coord = UserDomain{1, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 832);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 896);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 960);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 1024);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 1056);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 1120);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 1184);
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 960);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 1024);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 1088);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 1120);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 1184);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 1248);
     }
 }
 
@@ -694,10 +736,10 @@ TEST_CASE("treemapping.getNode")
 
     CHECK(toString(getNode<TreeCoord<>>(mapping.resultTree)) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) "
-          ", 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * X(double) ] ] ]");
+          ", 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
     CHECK(toString(getNode<TreeCoord<0>>(mapping.resultTree)) ==
           "16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * "
-          "Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * X(double) ] ]");
+          "Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ]");
     CHECK(
         toString(getNode<TreeCoord<0, 0>>(mapping.resultTree))
         == "1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ]");
@@ -725,6 +767,21 @@ TEST_CASE("treemapping.getNode")
     CHECK(
         toString(getNode<TreeCoord<0, 2, 2>>(mapping.resultTree))
         == "1 * X(double)");
+    CHECK(
+        toString(getNode<TreeCoord<0, 3>>(mapping.resultTree))
+        == "1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ]");
+    CHECK(
+        toString(getNode<TreeCoord<0, 3, 0>>(mapping.resultTree))
+        == "1 * (bool)");
+    CHECK(
+        toString(getNode<TreeCoord<0, 3, 1>>(mapping.resultTree))
+        == "1 * (bool)");
+    CHECK(
+        toString(getNode<TreeCoord<0, 3, 2>>(mapping.resultTree))
+        == "1 * (bool)");
+    CHECK(
+        toString(getNode<TreeCoord<0, 3, 3>>(mapping.resultTree))
+        == "1 * (bool)");
 }
 
 TEST_CASE("treemapping")
@@ -736,37 +793,6 @@ TEST_CASE("treemapping")
 
     auto treeOperationList = llama::Tuple{
         llama::mapping::tree::functor::Idem(),
-
-        //~ llama::mapping::tree::functor::MoveRTDown<
-        //~ llama::mapping::tree::TreeCoord< >
-        //~ >( userDomainSize )
-        //~ ,llama::mapping::tree::functor::MoveRTDown<
-        //~ llama::mapping::tree::TreeCoord< 0 >
-        //~ >( userDomainSize * userDomainSize )
-        //~ ,llama::mapping::tree::functor::MoveRTDown<
-        //~ llama::mapping::tree::TreeCoord< 0, 0 >
-        //~ >( userDomainSize * userDomainSize )
-        //~ ,llama::mapping::tree::functor::MoveRTDown<
-        //~ llama::mapping::tree::TreeCoord< 0, 2 >
-        //~ >( userDomainSize * userDomainSize )
-
-        //~ llama::mapping::tree::functor::MoveRTDownFixed<
-        //~ llama::mapping::tree::TreeCoord< >,
-        //~ userDomainSize
-        //~ >( ),
-        //~ llama::mapping::tree::functor::MoveRTDownFixed<
-        //~ llama::mapping::tree::TreeCoord< 0 >,
-        //~ userDomainSize * userDomainSize
-        //~ >( ),
-        //~ llama::mapping::tree::functor::MoveRTDownFixed<
-        //~ llama::mapping::tree::TreeCoord< 0, 0 >,
-        //~ userDomainSize * userDomainSize
-        //~ >( ),
-        //~ llama::mapping::tree::functor::MoveRTDownFixed<
-        //~ llama::mapping::tree::TreeCoord< 0, 2 >,
-        //~ userDomainSize * userDomainSize
-        //~ >( )
-
         llama::mapping::tree::functor::LeafOnlyRT{},
         llama::mapping::tree::functor::Idem{}};
 
@@ -857,6 +883,47 @@ TEST_CASE("treemapping")
                         unsigned long,
                         1
                     >
+                >,
+                llama::mapping::tree::TreeElement<
+                    tag::Flags,
+                    llama::Tuple<
+                        llama::mapping::tree::TreeElement<
+                            llama::NoName,
+                            bool,
+                            std::integral_constant<
+                                unsigned long,
+                                1
+                            >
+                        >,
+                        llama::mapping::tree::TreeElement<
+                            llama::NoName,
+                            bool,
+                            std::integral_constant<
+                                unsigned long,
+                                1
+                            >
+                        >,
+                        llama::mapping::tree::TreeElement<
+                            llama::NoName,
+                            bool,
+                            std::integral_constant<
+                                unsigned long,
+                                1
+                            >
+                        >,
+                        llama::mapping::tree::TreeElement<
+                            llama::NoName,
+                            bool,
+                            std::integral_constant<
+                                unsigned long,
+                                1
+                            >
+                        >
+                    >,
+                    std::integral_constant<
+                        unsigned long,
+                        1
+                    >
                 >
             >,
             unsigned long
@@ -927,6 +994,35 @@ TEST_CASE("treemapping")
                         unsigned long,
                         1
                     >
+                >,
+                llama::mapping::tree::TreeElement<
+                    tag::Flags,
+                    llama::Tuple<
+                        llama::mapping::tree::TreeElement<
+                            llama::NoName,
+                            bool,
+                            unsigned long
+                        >,
+                        llama::mapping::tree::TreeElement<
+                            llama::NoName,
+                            bool,
+                            unsigned long
+                        >,
+                        llama::mapping::tree::TreeElement<
+                            llama::NoName,
+                            bool,
+                            unsigned long
+                        >,
+                        llama::mapping::tree::TreeElement<
+                            llama::NoName,
+                            bool,
+                            unsigned long
+                        >
+                    >,
+                    std::integral_constant<
+                        unsigned long,
+                        1
+                    >
                 >
             >,
             std::integral_constant<
@@ -942,12 +1038,12 @@ TEST_CASE("treemapping")
 >)");
 
     CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
-          "12 * [ 12 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 "
-          "* X(double) ] ] ]");
+          "12 * [ 12 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
+          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
     CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
-          "1 * [ 1 * [ 1 * Pos[ 144 * X(double) , 144 * Y(double) , 144 * Z(double) ] , 144 * Weight(float) , 1 * Momentum[ 144 * Z(double) , 144 * Y(double) , 144 * X(double) ] ] ]");
+          "1 * [ 1 * [ 1 * Pos[ 144 * X(double) , 144 * Y(double) , 144 * Z(double) ] , 144 * Weight(float) , 1 * Momentum[ 144 * Z(double) , 144 * Y(double) , 144 * X(double) ] , 1 * Flags[ 144 * (bool) , 144 * (bool) , 144 * (bool) , 144 * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 7488);
+    CHECK(mapping.getBlobSize(0) == 8064);
     CHECK(mapping.getBlobNrAndOffset<2, 1>({50, 100}).offset == 10784);
     CHECK(mapping.getBlobNrAndOffset<2, 1>({50, 101}).offset == 10792);
 
