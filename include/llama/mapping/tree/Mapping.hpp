@@ -20,9 +20,8 @@
 
 #include "../../Types.hpp"
 #include "../../UserDomain.hpp"
-#include "GetBlobByte.hpp"
-#include "GetBlobSize.hpp"
 #include "MergeFunctors.hpp"
+#include "Reduce.hpp"
 #include "TreeElement.hpp"
 #include "TreeFromDomains.hpp"
 #include "functor/Idem.hpp"
@@ -34,6 +33,89 @@
 
 namespace llama::mapping::tree
 {
+    namespace internal
+    {
+        template<typename Type, typename CountType>
+        struct SizeOfFunctor
+        {
+            LLAMA_FN_HOST_ACC_INLINE
+            auto operator()(const CountType &) const -> std::size_t
+            {
+                return sizeof(Type);
+            }
+        };
+
+        template<typename Childs, typename CountType>
+        LLAMA_FN_HOST_ACC_INLINE auto
+        getTreeBlobSize(const Childs & childs, const CountType & count)
+            -> std::size_t
+        {
+            return Reduce<
+                TreeElement<NoName, Childs, CountType>,
+                std::plus<>,
+                std::multiplies<>,
+                SizeOfFunctor>()(childs, count);
+        }
+
+        template<typename Tree>
+        LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Tree & tree)
+            -> std::size_t
+        {
+            return Reduce<
+                Tree,
+                std::plus<>,
+                std::multiplies<>,
+                SizeOfFunctor>()(tree);
+        }
+
+        template<typename Tree, std::size_t Pos>
+        LLAMA_FN_HOST_ACC_INLINE auto summarizeTreeSmallerPos(
+            typename Tree::Type const & childs,
+            decltype(Tree::count) const & count) -> std::size_t
+        {
+            if constexpr(Pos == 0)
+                return 0;
+            else
+                return getTreeBlobSize(childs.first)
+                    + summarizeTreeSmallerPos<
+                           typename TreePopFrontChild<Tree>::ResultType,
+                           Pos - 1>(childs.rest, count);
+        }
+
+        template<typename Tree, typename LastCoord>
+        LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobByteImpl(
+            const Tree & tree,
+            const Tuple<LastCoord> & treeCoord) -> std::size_t
+        {
+            return sizeof(typename Tree::Type) * treeCoord.first.runtime;
+        }
+
+        template<typename Tree, typename TreeCoord>
+        LLAMA_FN_HOST_ACC_INLINE auto
+        getTreeBlobByteImpl(const Tree & tree, const TreeCoord & treeCoord)
+            -> std::size_t
+        {
+            return getTreeBlobSize(
+                       tree.childs, LLAMA_DEREFERENCE(treeCoord.first.runtime))
+                + summarizeTreeSmallerPos<
+                       Tree,
+                       decltype(TreeCoord::FirstElement::compiletime)::value>(
+                       tree.childs, LLAMA_DEREFERENCE(tree.count))
+                + getTreeBlobByteImpl(
+                       getTupleElementRef<TreeCoord::FirstElement::compiletime>(
+                           tree.childs),
+                       treeCoord.rest);
+        }
+
+        template<typename Tree, typename TreeCoord>
+        LLAMA_FN_HOST_ACC_INLINE auto
+        getTreeBlobByte(const Tree & tree, const TreeCoord & treeCoord)
+            -> std::size_t
+        {
+            return getTreeBlobByteImpl(tree, treeCoord);
+        }
+    }
+
     /** Free describable mapping which can be used for creating a \ref View with
      * a \ref Factory. For the interface details see \ref Factory. \tparam
      * T_UserDomain type of the user domain \tparam T_DatumDomain type of the
@@ -82,7 +164,7 @@ namespace llama::mapping::tree
         LLAMA_FN_HOST_ACC_INLINE
         auto getBlobSize(std::size_t const) const -> std::size_t
         {
-            return getTreeBlobSize(resultTree);
+            return internal::getTreeBlobSize(resultTree);
         }
 
         template<std::size_t... DatumDomainCoord>
@@ -90,11 +172,11 @@ namespace llama::mapping::tree
             -> NrAndOffset
         {
             auto const basicTreeCoord
-                = createTreeCoord<DatumCoord<DatumDomainCoord...>>(
-                    coord);
+                = createTreeCoord<DatumCoord<DatumDomainCoord...>>(coord);
             auto const resultTreeCoord = mergedFunctors.basicCoordToResultCoord(
                 basicTreeCoord, basicTree);
-            const auto offset = getTreeBlobByte(resultTree, resultTreeCoord);
+            const auto offset
+                = internal::getTreeBlobByte(resultTree, resultTreeCoord);
             return {0, offset};
         }
     };
