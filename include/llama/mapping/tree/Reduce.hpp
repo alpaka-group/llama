@@ -22,151 +22,46 @@
 
 namespace llama::mapping::tree
 {
-    template<
-        typename Tree,
-        class InnerOp,
-        class OuterOp,
-        template<class, class>
-        class LeafFunctor,
-        bool HC = HasChildren<Tree>::value>
-    struct Reduce;
-
-    namespace internal
-    {
-        // Leaf
-        template<
-            typename Tree,
-            class InnerOp,
-            class OuterOp,
-            template<class, class>
-            class LeafFunctor,
-            typename SFINAE = void>
-        struct ReduceElementType
-        {
-            LLAMA_FN_HOST_ACC_INLINE
-            auto operator()(const decltype(Tree::count) & count) const
-                -> std::size_t
-            {
-                return LeafFunctor<
-                    typename Tree::Type,
-                    decltype(Tree::count)>()(count);
-            }
-        };
-
-        // Node
-        template<
-            typename Tree,
-            class InnerOp,
-            class OuterOp,
-            template<class, class>
-            class LeafFunctor>
-        struct ReduceElementType<
-            Tree,
-            InnerOp,
-            OuterOp,
-            LeafFunctor,
-            std::enable_if_t<(SizeOfTuple<typename Tree::Type>::value > 1)>>
-        {
-            using IterTree = typename TreePopFrontChild<Tree>::ResultType;
-
-            LLAMA_FN_HOST_ACC_INLINE
-            auto operator()(
-                typename Tree::Type const & childs,
-                decltype(Tree::count) const & count) const -> std::size_t
-            {
-                return InnerOp{}(
-                    Reduce<
-                        typename Tree::Type::FirstElement,
-                        InnerOp,
-                        OuterOp,
-                        LeafFunctor>()(childs.first),
-                    internal::ReduceElementType<
-                        IterTree,
-                        InnerOp,
-                        OuterOp,
-                        LeafFunctor>()(childs.rest, count));
-            }
-        };
-
-        // Node with one (last) child
-        template<
-            typename Tree,
-            class InnerOp,
-            class OuterOp,
-            template<class, class>
-            class LeafFunctor>
-        struct ReduceElementType<
-            Tree,
-            InnerOp,
-            OuterOp,
-            LeafFunctor,
-            std::enable_if_t<SizeOfTuple<typename Tree::Type>::value == 1>>
-        {
-            LLAMA_FN_HOST_ACC_INLINE
-            auto operator()(
-                typename Tree::Type const & childs,
-                decltype(Tree::count) const & count) const -> std::size_t
-            {
-                return Reduce<
-                    typename Tree::Type::FirstElement,
-                    InnerOp,
-                    OuterOp,
-                    LeafFunctor>()(childs.first);
-            }
-        };
-    }
-
-    template<
-        typename Tree,
-        class InnerOp,
-        class OuterOp,
-        template<class, class>
-        class LeafFunctor,
-        bool HC>
+    template<template<class> class LeafFunctor>
     struct Reduce
     {
-        LLAMA_FN_HOST_ACC_INLINE
-        auto operator()(
-            typename Tree::Type const & childs,
-            decltype(Tree::count) const & count) const -> std::size_t
+        template<typename... Children, std::size_t... Is, typename Count>
+        LLAMA_FN_HOST_ACC_INLINE auto reduceChildren(
+            const Tuple<Children...> & childs,
+            std::index_sequence<Is...>,
+            const Count & count) const -> std::size_t
         {
-            return OuterOp{}(
-                count,
-                internal::
-                    ReduceElementType<Tree, InnerOp, OuterOp, LeafFunctor>()(
-                        childs, count));
+            return (operator()(getTupleElement<Is>(childs)) + ...);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE
-        auto operator()(Tree const & tree) const -> std::size_t
+        template<typename... Children, typename Count>
+        LLAMA_FN_HOST_ACC_INLINE auto
+        operator()(const Tuple<Children...> & childs, const Count & count) const
+            -> std::size_t
+        {
+            return count
+                * reduceChildren(
+                       childs,
+                       std::make_index_sequence<sizeof...(Children)>{},
+                       count);
+        }
+
+        template<
+            typename Tree,
+            std::enable_if_t<HasChildren<Tree>::value, int> = 0>
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(const Tree & tree) const
+            -> std::size_t
         {
             return operator()(tree.childs, LLAMA_DEREFERENCE(tree.count));
         }
-    };
 
-    template<
-        typename Tree,
-        class InnerOp,
-        class OuterOp,
-        template<class, class>
-        class LeafFunctor>
-    struct Reduce<Tree, InnerOp, OuterOp, LeafFunctor, false>
-    {
-        LLAMA_FN_HOST_ACC_INLINE
-        auto operator()(const decltype(Tree::count) & count) const
+        template<
+            typename Tree,
+            std::enable_if_t<!HasChildren<Tree>::value, int> = 0>
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(const Tree & tree) const
             -> std::size_t
         {
-            return OuterOp{}(
-                count,
-                internal::
-                    ReduceElementType<Tree, InnerOp, OuterOp, LeafFunctor>()(
-                        count));
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        auto operator()(const Tree & tree) const -> std::size_t
-        {
-            return operator()(LLAMA_DEREFERENCE(tree.count));
+            return tree.count * LeafFunctor<typename Tree::Type>()(tree.count);
         }
     };
 }

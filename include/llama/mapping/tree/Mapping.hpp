@@ -35,11 +35,12 @@ namespace llama::mapping::tree
 {
     namespace internal
     {
-        template<typename Type, typename CountType>
+        template<typename Type>
         struct SizeOfFunctor
         {
-            LLAMA_FN_HOST_ACC_INLINE
-            auto operator()(const CountType &) const -> std::size_t
+            template<typename CountType>
+            LLAMA_FN_HOST_ACC_INLINE auto operator()(const CountType &) const
+                -> std::size_t
             {
                 return sizeof(Type);
             }
@@ -49,11 +50,7 @@ namespace llama::mapping::tree
         LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Tree & tree)
             -> std::size_t
         {
-            return Reduce<
-                Tree,
-                std::plus<>,
-                std::multiplies<>,
-                SizeOfFunctor>()(tree);
+            return Reduce<SizeOfFunctor>()(tree);
         }
 
         template<typename Childs, typename CountType>
