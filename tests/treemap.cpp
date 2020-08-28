@@ -3,6 +3,8 @@
 #include <catch2/catch.hpp>
 #include <llama/llama.hpp>
 
+namespace tree = llama::mapping::tree;
+
 namespace tag
 {
     // clang-format off
@@ -68,14 +70,14 @@ TEST_CASE("treemapping.empty")
     const UserDomain userDomain{16, 16};
 
     auto treeOperationList = llama::Tuple{};
-    using Mapping = llama::mapping::tree::
-        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+    using Mapping
+        = tree::Mapping<UserDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(userDomain, treeOperationList);
 
-    CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
+    CHECK(tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
           "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
-    CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
+    CHECK(tree::toString(mapping.resultTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
           "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
 
@@ -132,16 +134,15 @@ TEST_CASE("treemapping.Idem")
     using UserDomain = llama::UserDomain<2>;
     const UserDomain userDomain{16, 16};
 
-    auto treeOperationList
-        = llama::Tuple{llama::mapping::tree::functor::Idem()};
-    using Mapping = llama::mapping::tree::
-        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+    auto treeOperationList = llama::Tuple{tree::functor::Idem()};
+    using Mapping
+        = tree::Mapping<UserDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(userDomain, treeOperationList);
 
-    CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
+    CHECK(tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
           "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
-    CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
+    CHECK(tree::toString(mapping.resultTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
           "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
 
@@ -198,16 +199,15 @@ TEST_CASE("treemapping.LeafOnlyRT")
     using UserDomain = llama::UserDomain<2>;
     const UserDomain userDomain{16, 16};
 
-    auto treeOperationList
-        = llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()};
-    using Mapping = llama::mapping::tree::
-        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+    auto treeOperationList = llama::Tuple{tree::functor::LeafOnlyRT()};
+    using Mapping
+        = tree::Mapping<UserDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(userDomain, treeOperationList);
 
-    CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
+    CHECK(tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
           "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
-    CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
+    CHECK(tree::toString(mapping.resultTree) ==
           "1 * [ 1 * [ 1 * Pos[ 256 * X(double) , 256 * Y(double) , 256 * Z(double) ] , 256 * Weight(float) , 1 * Momentum[ 256 * Z(double) , 256 * Y(double) "
           ", 256 * X(double) ] , 1 * Flags[ 256 * (bool) , 256 * (bool) , 256 * (bool) , 256 * (bool) ] ] ]");
 
@@ -265,16 +265,15 @@ TEST_CASE("treemapping.MoveRTDown<>")
     const UserDomain userDomain{16, 16};
 
     auto treeOperationList
-        = llama::Tuple{llama::mapping::tree::functor::MoveRTDown<
-            llama::mapping::tree::TreeCoord<>>{4}};
-    using Mapping = llama::mapping::tree::
-        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+        = llama::Tuple{tree::functor::MoveRTDown<tree::TreeCoord<>>{4}};
+    using Mapping
+        = tree::Mapping<UserDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(userDomain, treeOperationList);
 
-    CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
+    CHECK(tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
           "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
-    CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
+    CHECK(tree::toString(mapping.resultTree) ==
           "4 * [ 64 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
           "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
 
@@ -320,16 +319,15 @@ TEST_CASE("treemapping.MoveRTDown<0>")
     const UserDomain userDomain{16, 16};
 
     auto treeOperationList
-        = llama::Tuple{llama::mapping::tree::functor::MoveRTDown<
-            llama::mapping::tree::TreeCoord<0>>{4}};
-    using Mapping = llama::mapping::tree::
-        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+        = llama::Tuple{tree::functor::MoveRTDown<tree::TreeCoord<0>>{4}};
+    using Mapping
+        = tree::Mapping<UserDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(userDomain, treeOperationList);
 
-    CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
+    CHECK(tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
           "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
-    CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
+    CHECK(tree::toString(mapping.resultTree) ==
           "16 * [ 4 * [ 4 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 4 * Weight(float) , 4 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
           "X(double) ] , 4 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
 
@@ -375,16 +373,15 @@ TEST_CASE("treemapping.MoveRTDown<0,0>")
     const UserDomain userDomain{16, 16};
 
     auto treeOperationList
-        = llama::Tuple{llama::mapping::tree::functor::MoveRTDown<
-            llama::mapping::tree::TreeCoord<0, 0>>{4}};
-    using Mapping = llama::mapping::tree::
-        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+        = llama::Tuple{tree::functor::MoveRTDown<tree::TreeCoord<0, 0>>{4}};
+    using Mapping
+        = tree::Mapping<UserDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(userDomain, treeOperationList);
 
-    CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
+    CHECK(tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
           "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
-    CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
+    CHECK(tree::toString(mapping.resultTree) ==
           "16 * [ 16 * [ 1 * Pos[ 4 * X(double) , 4 * Y(double) , 4 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
           "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
 
@@ -429,17 +426,16 @@ TEST_CASE("treemapping.MoveRTDownFixed<>")
     using UserDomain = llama::UserDomain<2>;
     const UserDomain userDomain{16, 16};
 
-    auto treeOperationList = llama::Tuple{
-        llama::mapping::tree::functor::
-            MoveRTDownFixed<llama::mapping::tree::TreeCoord<>, 4>{}};
-    using Mapping = llama::mapping::tree::
-        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+    auto treeOperationList
+        = llama::Tuple{tree::functor::MoveRTDownFixed<tree::TreeCoord<>, 4>{}};
+    using Mapping
+        = tree::Mapping<UserDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(userDomain, treeOperationList);
 
-    CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
+    CHECK(tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
           "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
-    CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
+    CHECK(tree::toString(mapping.resultTree) ==
           "4 * [ 64 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
           "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
 
@@ -484,17 +480,16 @@ TEST_CASE("treemapping.MoveRTDownFixed<0>")
     using UserDomain = llama::UserDomain<2>;
     const UserDomain userDomain{16, 16};
 
-    auto treeOperationList = llama::Tuple{
-        llama::mapping::tree::functor::
-            MoveRTDownFixed<llama::mapping::tree::TreeCoord<0>, 4>{}};
-    using Mapping = llama::mapping::tree::
-        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+    auto treeOperationList
+        = llama::Tuple{tree::functor::MoveRTDownFixed<tree::TreeCoord<0>, 4>{}};
+    using Mapping
+        = tree::Mapping<UserDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(userDomain, treeOperationList);
 
-    CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
+    CHECK(tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
           "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
-    CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
+    CHECK(tree::toString(mapping.resultTree) ==
           "16 * [ 4 * [ 4 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 4 * Weight(float) , 4 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
           "X(double) ] , 4 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
 
@@ -540,16 +535,15 @@ TEST_CASE("treemapping.MoveRTDownFixed<0,0>")
     const UserDomain userDomain{16, 16};
 
     auto treeOperationList = llama::Tuple{
-        llama::mapping::tree::functor::
-            MoveRTDownFixed<llama::mapping::tree::TreeCoord<0, 0>, 4>{}};
-    using Mapping = llama::mapping::tree::
-        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+        tree::functor::MoveRTDownFixed<tree::TreeCoord<0, 0>, 4>{}};
+    using Mapping
+        = tree::Mapping<UserDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(userDomain, treeOperationList);
 
-    CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
+    CHECK(tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
           "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
-    CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
+    CHECK(tree::toString(mapping.resultTree) ==
           "16 * [ 16 * [ 1 * Pos[ 4 * X(double) , 4 * Y(double) , 4 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
           "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
 
@@ -597,25 +591,22 @@ TEST_CASE("treemapping.vectorblocks.runtime")
     const auto vectorWidth = 8;
 
     auto treeOperationList = llama::Tuple{
-        llama::mapping::tree::functor::MoveRTDown<
-            llama::mapping::tree::TreeCoord<0>>{
+        tree::functor::MoveRTDown<tree::TreeCoord<0>>{
             vectorWidth}, // move 8 down from UserDomain (to
                           // Position/Weight/Momentum)
-        llama::mapping::tree::functor::MoveRTDown<
-            llama::mapping::tree::TreeCoord<0, 0>>{
+        tree::functor::MoveRTDown<tree::TreeCoord<0, 0>>{
             vectorWidth}, // move 8 down from Position (to X/Y/Z)
-        llama::mapping::tree::functor::MoveRTDown<
-            llama::mapping::tree::TreeCoord<0, 2>>{
+        tree::functor::MoveRTDown<tree::TreeCoord<0, 2>>{
             vectorWidth}, // move 8 down from Momentum (to X/Y/Z)
     };
-    using Mapping = llama::mapping::tree::
-        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+    using Mapping
+        = tree::Mapping<UserDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(userDomain, treeOperationList);
 
-    CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
+    CHECK(tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
           "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
-    CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
+    CHECK(tree::toString(mapping.resultTree) ==
           "16 * [ 2 * [ 1 * Pos[ 8 * X(double) , 8 * Y(double) , 8 * Z(double) ] , 8 * Weight(float) , "
           "1 * Momentum[ 8 * Z(double) , 8 * Y(double) , 8 * X(double) ] , 8 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
 
@@ -663,25 +654,25 @@ TEST_CASE("treemapping.vectorblocks.compiletime")
     constexpr auto vectorWidth = 8;
 
     auto treeOperationList = llama::Tuple{
-        llama::mapping::tree::functor::MoveRTDownFixed<
-            llama::mapping::tree::TreeCoord<0>,
+        tree::functor::MoveRTDownFixed<
+            tree::TreeCoord<0>,
             vectorWidth>{}, // move 8 down from UserDomain (to
                             // Position/Weight/Momentum)
-        llama::mapping::tree::functor::MoveRTDownFixed<
-            llama::mapping::tree::TreeCoord<0, 0>,
+        tree::functor::MoveRTDownFixed<
+            tree::TreeCoord<0, 0>,
             vectorWidth>{}, // move 8 down from Position (to X/Y/Z)
-        llama::mapping::tree::functor::MoveRTDownFixed<
-            llama::mapping::tree::TreeCoord<0, 2>,
+        tree::functor::MoveRTDownFixed<
+            tree::TreeCoord<0, 2>,
             vectorWidth>{}, // move 8 down from Momentum (to X/Y/Z)
     };
-    using Mapping = llama::mapping::tree::
-        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+    using Mapping
+        = tree::Mapping<UserDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(userDomain, treeOperationList);
 
-    CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
+    CHECK(tree::toString(mapping.basicTree) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
           "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
-    CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
+    CHECK(tree::toString(mapping.resultTree) ==
           "16 * [ 2 * [ 1 * Pos[ 8 * X(double) , 8 * Y(double) , 8 * Z(double) ] , 8 * Weight(float) , "
           "1 * Momentum[ 8 * Z(double) , 8 * Y(double) , 8 * X(double) ] , 8 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
 
@@ -727,12 +718,12 @@ TEST_CASE("treemapping.getNode")
     const UserDomain userDomain{16, 16};
 
     auto treeOperationList = llama::Tuple{};
-    using Mapping = llama::mapping::tree::
-        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+    using Mapping
+        = tree::Mapping<UserDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(userDomain, treeOperationList);
 
-    using namespace llama::mapping::tree;
-    using namespace llama::mapping::tree::operations;
+    using namespace tree;
+    using namespace tree::functor::internal;
 
     CHECK(toString(getNode<TreeCoord<>>(mapping.resultTree)) ==
           "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) "
@@ -792,12 +783,12 @@ TEST_CASE("treemapping")
     const UserDomain userDomain{userDomainSize, userDomainSize};
 
     auto treeOperationList = llama::Tuple{
-        llama::mapping::tree::functor::Idem(),
-        llama::mapping::tree::functor::LeafOnlyRT{},
-        llama::mapping::tree::functor::Idem{}};
+        tree::functor::Idem(),
+        tree::functor::LeafOnlyRT{},
+        tree::functor::Idem{}};
 
-    using Mapping = llama::mapping::tree::
-        Mapping<UserDomain, Name, decltype(treeOperationList)>;
+    using Mapping
+        = tree::Mapping<UserDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(userDomain, treeOperationList);
 
     auto raw = prettyPrintType(mapping.basicTree);
@@ -1037,10 +1028,10 @@ TEST_CASE("treemapping")
     >
 >)");
 
-    CHECK(llama::mapping::tree::toString(mapping.basicTree) ==
+    CHECK(tree::toString(mapping.basicTree) ==
           "12 * [ 12 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
           "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
-    CHECK(llama::mapping::tree::toString(mapping.resultTree) ==
+    CHECK(tree::toString(mapping.resultTree) ==
           "1 * [ 1 * [ 1 * Pos[ 144 * X(double) , 144 * Y(double) , 144 * Z(double) ] , 144 * Weight(float) , 1 * Momentum[ 144 * Z(double) , 144 * Y(double) , 144 * X(double) ] , 1 * Flags[ 144 * (bool) , 144 * (bool) , 144 * (bool) , 144 * (bool) ] ] ]");
 
     CHECK(mapping.getBlobSize(0) == 8064);
@@ -1069,4 +1060,37 @@ TEST_CASE("treemapping")
         for(size_t y = 0; y < userDomain[1]; ++y)
             sum += view({x, y}).access<0, 1>();
     CHECK(sum == 0);
+}
+
+TEST_CASE("treeCoordToString")
+{
+    const auto coord = llama::UserDomain<3>{6, 7, 8};
+    CHECK(
+        tree::treeCoordToString(
+            tree::createTreeCoord<llama::DatumCoord<0, 0>>(coord))
+        == "[ 6:0, 7:0, 8:0, 0:0, 0:0 ]");
+    CHECK(
+        tree::treeCoordToString(
+            tree::createTreeCoord<llama::DatumCoord<0, 1>>(coord))
+        == "[ 6:0, 7:0, 8:0, 0:1, 0:0 ]");
+    CHECK(
+        tree::treeCoordToString(
+            tree::createTreeCoord<llama::DatumCoord<0, 2>>(coord))
+        == "[ 6:0, 7:0, 8:0, 0:2, 0:0 ]");
+    CHECK(
+        tree::treeCoordToString(
+            tree::createTreeCoord<llama::DatumCoord<1>>(coord))
+        == "[ 6:0, 7:0, 8:1, 0:0 ]");
+    CHECK(
+        tree::treeCoordToString(
+            tree::createTreeCoord<llama::DatumCoord<2, 0>>(coord))
+        == "[ 6:0, 7:0, 8:2, 0:0, 0:0 ]");
+    CHECK(
+        tree::treeCoordToString(
+            tree::createTreeCoord<llama::DatumCoord<2, 1>>(coord))
+        == "[ 6:0, 7:0, 8:2, 0:1, 0:0 ]");
+    CHECK(
+        tree::treeCoordToString(
+            tree::createTreeCoord<llama::DatumCoord<2, 2>>(coord))
+        == "[ 6:0, 7:0, 8:2, 0:2, 0:0 ]");
 }

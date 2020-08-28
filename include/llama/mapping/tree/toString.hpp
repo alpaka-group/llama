@@ -39,28 +39,25 @@ namespace llama::mapping::tree
         return "";
     }
 
-    template<typename T_First, typename T_Second, typename... T_Rest>
-    auto toString(Tuple<T_First, T_Second, T_Rest...> tree) -> std::string
+    template<typename... Elements>
+    auto toString(Tuple<Elements...> tree) -> std::string
     {
-        return toString(tree.first) + " , " + toString(tree.rest);
+        if constexpr(sizeof...(Elements) > 1)
+            return toString(tree.first) + " , " + toString(tree.rest);
+        else
+            return toString(tree.first);
     }
 
-    template<typename T_First>
-    auto toString(Tuple<T_First> tree) -> std::string
-    {
-        return toString(tree.first);
-    }
-
-    template<typename T_Identifier, typename T_Type, typename T_CountType>
-    auto toString(TreeElement<T_Identifier, T_Type, T_CountType> tree)
+    template<typename Identifier, typename Type, typename CountType>
+    auto toString(TreeElement<Identifier, Type, CountType> tree)
         -> std::string
     {
-        auto r = std::to_string(tree.count) + " * " + toString(T_Identifier{});
+        auto r = std::to_string(tree.count) + " * " + toString(Identifier{});
         if constexpr(HasChildren<decltype(tree)>::value)
             r += "[ " + toString(tree.childs) + " ]";
         else
         {
-            auto raw = boost::core::demangle(typeid(T_Type()).name());
+            auto raw = boost::core::demangle(typeid(Type()).name());
 #ifdef _MSC_VER
             boost::replace_all(raw, " __cdecl(void)", "");
 #endif

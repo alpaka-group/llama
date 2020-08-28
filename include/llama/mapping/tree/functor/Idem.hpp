@@ -26,25 +26,25 @@ namespace llama::mapping::tree::functor
     /// all (basically implemented for testing purposes). \see tree::Mapping
     struct Idem
     {
-        template<typename T_Tree>
-        LLAMA_FN_HOST_ACC_INLINE auto basicToResult(const T_Tree & tree) const
-            -> T_Tree
+        template<typename Tree>
+        LLAMA_FN_HOST_ACC_INLINE auto basicToResult(const Tree & tree) const
+            -> Tree
         {
             return tree;
         }
 
-        template<typename T_Tree, typename T_TreeCoord>
+        template<typename Tree, typename TreeCoord>
         LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(
-            T_TreeCoord const & basicCoord,
-            T_Tree const &) const -> T_TreeCoord
+            const TreeCoord & basicCoord,
+            const Tree &) const -> TreeCoord
         {
             return basicCoord;
         }
 
-        template<typename T_Tree, typename T_TreeCoord>
+        template<typename Tree, typename TreeCoord>
         LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(
-            T_TreeCoord const & resultCoord,
-            T_Tree const &) const -> T_TreeCoord
+            const TreeCoord & resultCoord,
+            const Tree &) const -> TreeCoord
         {
             return resultCoord;
         }

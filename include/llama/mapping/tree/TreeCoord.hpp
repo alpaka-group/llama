@@ -27,71 +27,47 @@
 
 namespace llama::mapping::tree
 {
-    template<
-        std::size_t T_compiletime = 0,
-        typename T_RuntimeType = std::size_t>
+    template<std::size_t Compiletime = 0, typename RuntimeType = std::size_t>
     struct TreeCoordElement
     {
-        using CompileType = std::integral_constant<std::size_t, T_compiletime>;
-
-        static constexpr CompileType compiletime = {};
-        const T_RuntimeType runtime = 0;
-
-        LLAMA_FN_HOST_ACC_INLINE
-        TreeCoordElement(const T_RuntimeType runtime = 0) : runtime(runtime) {}
-    };
-
-    template<
-        std::size_t T_compiletime,
-        typename T_RuntimeType,
-        T_RuntimeType T_runtime>
-    struct TreeCoordElement<
-        T_compiletime,
-        std::integral_constant<T_RuntimeType, T_runtime>>
-    {
-        using RuntimeType = std::integral_constant<T_RuntimeType, T_runtime>;
-        using CompileType = std::integral_constant<std::size_t, T_compiletime>;
-
-        static constexpr CompileType compiletime = {};
-        static constexpr RuntimeType runtime = {};
+        static constexpr boost::mp11::mp_size_t<Compiletime> compiletime = {};
+        const RuntimeType runtime = {};
 
         LLAMA_FN_HOST_ACC_INLINE
         TreeCoordElement() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        TreeCoordElement(RuntimeType const) {}
+        TreeCoordElement(RuntimeType runtime) : runtime(runtime) {}
     };
 
-    template<std::size_t T_compiletime = 0, std::size_t T_runtime = 0>
-    using TreeCoordElementConst = TreeCoordElement<
-        T_compiletime,
-        std::integral_constant<std::size_t, T_runtime>>;
-
-    template<std::size_t... T_coords>
-    using TreeCoord = Tuple<TreeCoordElementConst<T_coords>...>;
+    template<std::size_t... Coords>
+    using TreeCoord
+        = Tuple<TreeCoordElement<Coords, boost::mp11::mp_size_t<0>>...>;
 
     namespace internal
     {
-        template<typename... Coords>
-        auto treeCoordToString(Tuple<Coords...> treeCoord) -> std::string
+        template<typename... Coords, std::size_t... Is>
+        auto treeCoordToString(
+            Tuple<Coords...> treeCoord,
+            std::index_sequence<Is...>) -> std::string
         {
-            return std::to_string(treeCoord.first.runtime) + ":"
-                + std::to_string(treeCoord.first.compiletime) + ", "
-                + treeCoordToString(treeCoord.rest);
-        }
-
-        template<typename Coord>
-        auto treeCoordToString(Tuple<Coord> treeCoord) -> std::string
-        {
-            return std::to_string(treeCoord.first.runtime) + std::string(":")
-                + std::to_string(treeCoord.first.compiletime);
+            auto s
+                = ((std::to_string(getTupleElement<Is>(treeCoord).runtime) + ":"
+                    + std::to_string(getTupleElement<Is>(treeCoord).compiletime)
+                    + ", ")
+                   + ...);
+            s.resize(s.length() - 2);
+            return s;
         }
     }
 
-    template<typename T_TreeCoord>
-    auto treeCoordToString(const T_TreeCoord treeCoord) -> std::string
+    template<typename TreeCoord>
+    auto treeCoordToString(TreeCoord treeCoord) -> std::string
     {
-        return std::string("[ ") + internal::treeCoordToString(treeCoord)
+        return std::string("[ ")
+            + internal::treeCoordToString(
+                   treeCoord,
+                   std::make_index_sequence<SizeOfTuple<TreeCoord>::value>{})
             + std::string(" ]");
     }
 }

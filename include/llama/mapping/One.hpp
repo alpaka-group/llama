@@ -52,7 +52,7 @@ namespace llama::mapping
             -> NrAndOffset
         {
             const auto offset
-                = LinearBytePos<DatumDomain, DatumDomainCoord...>::value;
+                = linearBytePos<DatumDomain, DatumDomainCoord...>();
             return {0, offset};
         }
     };

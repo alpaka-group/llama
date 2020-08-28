@@ -19,7 +19,6 @@
 #pragma once
 
 #include "../TreeElement.hpp"
-#include "../operations/GetNode.hpp"
 
 namespace llama::mapping::tree::functor
 {
@@ -29,79 +28,77 @@ namespace llama::mapping::tree::functor
     /// tree::Mapping
     struct LeafOnlyRT
     {
-        template<typename T_Tree>
-        LLAMA_FN_HOST_ACC_INLINE auto basicToResult(T_Tree tree) const
+        template<typename Tree>
+        LLAMA_FN_HOST_ACC_INLINE auto basicToResult(Tree tree) const
         {
             return basicToResultImpl(tree);
         }
 
-        template<typename T_Tree, typename T_BasicCoord>
+        template<typename Tree, typename BasicCoord>
         LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(
-            T_BasicCoord const & basicCoord,
-            T_Tree const & tree) const
+            const BasicCoord & basicCoord,
+            const Tree & tree) const
         {
             return basicCoordToResultCoordImpl(basicCoord, tree);
         }
 
-        template<typename T_Tree, typename T_ResultCoord>
+        template<typename Tree, typename ResultCoord>
         LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(
-            T_ResultCoord const & resultCoord,
-            T_Tree const & tree) const -> T_ResultCoord
+            const ResultCoord & resultCoord,
+            const Tree & tree) const -> ResultCoord
         {
             return resultCoord;
         }
 
     private:
-        template<typename T_Tree>
+        template<typename Tree>
         LLAMA_FN_HOST_ACC_INLINE static auto
-        basicToResultImpl(T_Tree tree, std::size_t runtime = 1)
+        basicToResultImpl(Tree tree, std::size_t runtime = 1)
         {
-            if constexpr(HasChildren<T_Tree>::value)
+            if constexpr(HasChildren<Tree>::value)
             {
-                auto children = tupleTransform(
-                    tree.childs,
-                    [runtime
-                     = runtime * LLAMA_DEREFERENCE(tree.count)](auto element) {
-                        return basicToResultImpl(element, runtime);
-                    });
-                return TreeElementConst<
-                    typename T_Tree::Identifier,
+                auto children = tupleTransform(tree.childs, [&](auto element) {
+                    return basicToResultImpl(
+                        element, runtime * LLAMA_DEREFERENCE(tree.count));
+                });
+                return TreeElement<
+                    typename Tree::Identifier,
                     decltype(children),
-                    1>{children};
+                    boost::mp11::mp_size_t<1>>{{}, children};
             }
             else
                 return TreeElement<
-                    typename T_Tree::Identifier,
-                    typename T_Tree::Type>{
+                    typename Tree::Identifier,
+                    typename Tree::Type>{
                     LLAMA_DEREFERENCE(tree.count) * runtime};
         }
 
-        template<typename T_BasicCoord, typename T_Tree>
+        template<typename BasicCoord, typename Tree>
         LLAMA_FN_HOST_ACC_INLINE static auto basicCoordToResultCoordImpl(
-            T_BasicCoord const & basicCoord,
-            T_Tree const & tree,
-            std::size_t const runtime = 0)
+            const BasicCoord & basicCoord,
+            const Tree & tree,
+            std::size_t runtime = 0)
         {
-            if constexpr(SizeOfTuple<T_BasicCoord>::value == 1)
-                return Tuple{TreeCoordElement<decltype(
-                    T_BasicCoord::FirstElement::compiletime)::value>(
-                    runtime + LLAMA_DEREFERENCE(basicCoord.first.runtime))};
+            if constexpr(SizeOfTuple<BasicCoord>::value == 1)
+                return Tuple{
+                    TreeCoordElement<BasicCoord::FirstElement::compiletime>(
+                        runtime + LLAMA_DEREFERENCE(basicCoord.first.runtime))};
             else
             {
-                const auto & branch = getTupleElementRef<
-                    T_BasicCoord::FirstElement::compiletime>(tree.childs);
-                auto first = TreeCoordElementConst<
-                    decltype(T_BasicCoord::FirstElement::compiletime)::value,
-                    0>{};
+                const auto & branch
+                    = getTupleElementRef<BasicCoord::FirstElement::compiletime>(
+                        tree.childs);
+                auto first = TreeCoordElement<
+                    BasicCoord::FirstElement::compiletime,
+                    boost::mp11::mp_size_t<0>>{};
 
                 return tupleCat(
                     Tuple{first},
                     basicCoordToResultCoordImpl<
-                        typename T_BasicCoord::RestTuple,
+                        typename BasicCoord::RestTuple,
                         GetTupleType<
-                            typename T_Tree::Type,
-                            decltype(T_BasicCoord::FirstElement::compiletime)::
-                                value>>(
+                            typename Tree::Type,
+                            BasicCoord::FirstElement::compiletime>>(
                         basicCoord.rest,
                         branch,
                         (runtime + LLAMA_DEREFERENCE(basicCoord.first.runtime))

@@ -74,7 +74,7 @@ namespace llama::mapping::tree
         LLAMA_FN_HOST_ACC_INLINE
         Mapping(UserDomain size, TreeOperationList treeOperationList) :
                 userDomainSize(size),
-                basicTree(setUserDomainInTree<DatumDomain>(size)),
+                basicTree(createTree<DatumDomain>(size)),
                 mergedFunctors(basicTree, treeOperationList),
                 resultTree(mergedFunctors.basicToResult(basicTree))
         {}
@@ -90,7 +90,7 @@ namespace llama::mapping::tree
             -> NrAndOffset
         {
             auto const basicTreeCoord
-                = getBasicTreeCoordFromDomains<DatumCoord<DatumDomainCoord...>>(
+                = createTreeCoord<DatumCoord<DatumDomainCoord...>>(
                     coord);
             auto const resultTreeCoord = mergedFunctors.basicCoordToResultCoord(
                 basicTreeCoord, basicTree);

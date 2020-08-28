@@ -25,103 +25,49 @@
 
 namespace llama::mapping::tree
 {
+    template<typename T>
+    inline constexpr auto one = 1;
+
+    template<>
+    inline constexpr auto
+        one<boost::mp11::mp_size_t<1>> = boost::mp11::mp_size_t<1>{};
+
     template<
         typename T_Identifier,
         typename T_Type,
-        typename T_CountType = std::size_t>
+        typename CountType = std::size_t>
     struct TreeElement
     {
         using Identifier = T_Identifier;
         using Type = T_Type;
 
         LLAMA_FN_HOST_ACC_INLINE
-        TreeElement() : count(1) {}
+        TreeElement() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        TreeElement(const T_CountType count) : count(count) {}
+        TreeElement(CountType count) : count(count) {}
 
-        const T_CountType count;
+        const CountType count = one<CountType>;
     };
 
-    template<typename T_Identifier, typename T_CountType, typename... T_Childs>
-    struct TreeElement<T_Identifier, Tuple<T_Childs...>, T_CountType>
+    template<typename T_Identifier, typename CountType, typename... Children>
+    struct TreeElement<T_Identifier, Tuple<Children...>, CountType>
     {
         using Identifier = T_Identifier;
-        using Type = Tuple<T_Childs...>;
+        using Type = Tuple<Children...>;
 
         LLAMA_FN_HOST_ACC_INLINE
-        TreeElement() : count(1) {}
+        TreeElement() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        TreeElement(const T_CountType count, const Type childs) :
-                count(count), childs(childs)
+        TreeElement(CountType count, Type childs) : count(count), childs(childs)
         {}
 
         LLAMA_FN_HOST_ACC_INLINE
-        TreeElement(const T_CountType count) : count(count), childs() {}
+        TreeElement(CountType count) : count(count), childs() {}
 
-        LLAMA_FN_HOST_ACC_INLINE
-        TreeElement(const Type childs, const T_CountType count = 1) :
-                count(count), childs(childs)
-        {}
-
-        const T_CountType count;
-        const Type childs;
-    };
-
-    template<
-        typename T_Identifier,
-        typename T_Type,
-        typename T_CountType,
-        T_CountType T_count>
-    struct TreeElement<
-        T_Identifier,
-        T_Type,
-        std::integral_constant<T_CountType, T_count>>
-    {
-        using Identifier = T_Identifier;
-        using Type = T_Type;
-        using CountType = std::integral_constant<T_CountType, T_count>;
-
-        LLAMA_FN_HOST_ACC_INLINE
-        TreeElement() {}
-
-        LLAMA_FN_HOST_ACC_INLINE
-        TreeElement(const T_CountType count) {}
-
-        static constexpr CountType count = CountType();
-    };
-
-    template<
-        typename T_Identifier,
-        typename T_CountType,
-        T_CountType T_count,
-        typename... T_Childs>
-    struct TreeElement<
-        T_Identifier,
-        Tuple<T_Childs...>,
-        std::integral_constant<T_CountType, T_count>>
-    {
-        using Identifier = T_Identifier;
-        using Type = Tuple<T_Childs...>;
-        using CountType = std::integral_constant<T_CountType, T_count>;
-
-        LLAMA_FN_HOST_ACC_INLINE
-        TreeElement() : childs() {}
-
-        LLAMA_FN_HOST_ACC_INLINE
-        TreeElement(const T_CountType count, const Type childs = {}) :
-                childs(childs)
-        {}
-
-        LLAMA_FN_HOST_ACC_INLINE
-        TreeElement(const Type childs, const T_CountType count = {}) :
-                childs(childs)
-        {}
-
-        static constexpr CountType count = {};
-
-        const Type childs;
+        const CountType count = one<CountType>;
+        const Type childs = {};
     };
 
     template<typename TreeElement, typename = void>
@@ -131,56 +77,27 @@ namespace llama::mapping::tree
     template<typename TreeElement>
     struct HasChildren<
         TreeElement,
-        std::void_t<decltype(TreeElement().childs)>> : std::true_type
+        std::void_t<decltype(std::declval<TreeElement>().childs)>> :
+            std::true_type
     {};
 
-    template<typename T_Identifier, typename T_Type, std::size_t T_count = 1>
-    using TreeElementConst = TreeElement<
-        T_Identifier,
-        T_Type,
-        std::integral_constant<std::size_t, T_count>>;
+    template<typename Identifier, typename Type, std::size_t Count = 1>
+    using TreeElementConst
+        = TreeElement<Identifier, Type, boost::mp11::mp_size_t<Count>>;
 
-    template<typename T_Tree>
+    template<typename Tree>
     struct TreePopFrontChild
     {
         using ResultType = TreeElement<
-            typename T_Tree::Identifier,
-            typename T_Tree::Type::RestTuple>;
+            typename Tree::Identifier,
+            typename Tree::Type::RestTuple,
+            decltype(Tree::count)
+        >;
 
         LLAMA_FN_HOST_ACC_INLINE
-        auto operator()(T_Tree const & tree) -> ResultType
+        auto operator()(const Tree & tree) -> ResultType
         {
             return {tree.count, tree.childs.rest};
         }
-    };
-
-    template<typename T_Identifier, typename T_Type, std::size_t T_count>
-    struct TreePopFrontChild<TreeElementConst<T_Identifier, T_Type, T_count>>
-    {
-        using Tree = TreeElementConst<T_Identifier, T_Type, T_count>;
-        using ResultType = TreeElementConst<
-            typename Tree::Identifier,
-            typename Tree::Type::RestTuple,
-            T_count>;
-
-        auto LLAMA_FN_HOST_ACC_INLINE operator()(Tree const & tree)
-            -> ResultType
-        {
-            return {tree.childs.rest};
-        }
-    };
-
-    template<typename T_Childs, typename T_CountType>
-    struct TreeOptimalType
-    {
-        using type = TreeElement<NoName, T_Childs>;
-    };
-
-    template<typename T_Childs, std::size_t T_count>
-    struct TreeOptimalType<
-        T_Childs,
-        std::integral_constant<std::size_t, T_count>>
-    {
-        using type = TreeElementConst<NoName, T_Childs, T_count>;
     };
 }

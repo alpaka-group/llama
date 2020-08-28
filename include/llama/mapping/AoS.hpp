@@ -68,7 +68,7 @@ namespace llama::mapping
             const auto offset
                 = LinearizeUserDomainAdressFunctor{}(coord, userDomainSize)
                     * SizeOf<DatumDomain>::value
-                + LinearBytePos<DatumDomain, DatumDomainCoord...>::value;
+                + linearBytePos<DatumDomain, DatumDomainCoord...>();
             return {0, offset};
         }
 

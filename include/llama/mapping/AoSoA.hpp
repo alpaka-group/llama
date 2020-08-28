@@ -36,7 +36,7 @@ namespace llama::mapping
             constexpr auto elementSize
                 = sizeof(GetType<DatumDomain, DatumCoord<DatumDomainCoord...>>);
             constexpr auto elementOff
-                = LinearBytePos<DatumDomain, DatumDomainCoord...>::value;
+                = linearBytePos<DatumDomain, DatumDomainCoord...>();
             constexpr auto datumDomainSize = SizeOf<DatumDomain>::value;
             LLAMA_FORCE_INLINE_RECURSIVE
             const auto userDomainIndex

@@ -22,18 +22,18 @@
 
 namespace llama::mapping::tree
 {
-    template<typename T_Tree, typename T_TreeOperationList>
+    template<typename Tree, typename TreeOperationList>
     struct MergeFunctors
     {};
 
     template<
-        typename T_Tree,
+        typename Tree,
         typename FirstOperation,
         typename... RestOperations>
-    struct MergeFunctors<T_Tree, Tuple<FirstOperation, RestOperations...>>
+    struct MergeFunctors<Tree, Tuple<FirstOperation, RestOperations...>>
     {
         const FirstOperation operation = {};
-        const decltype(operation.basicToResult(T_Tree())) treeAfterOp;
+        const decltype(operation.basicToResult(Tree())) treeAfterOp;
         const MergeFunctors<decltype(treeAfterOp), Tuple<RestOperations...>>
             subMergeFunctorsImpl = {};
 
@@ -41,7 +41,7 @@ namespace llama::mapping::tree
 
         LLAMA_FN_HOST_ACC_INLINE
         MergeFunctors(
-            T_Tree const & tree,
+            Tree const & tree,
             const Tuple<FirstOperation, RestOperations...> &
                 treeOperationList) :
                 operation(treeOperationList.first),
@@ -50,25 +50,25 @@ namespace llama::mapping::tree
         {}
 
         LLAMA_FN_HOST_ACC_INLINE
-        auto basicToResult(T_Tree const &) const
+        auto basicToResult(Tree const &) const
         {
             return subMergeFunctorsImpl.basicToResult(treeAfterOp);
         }
 
-        template<typename T_TreeCoord>
+        template<typename TreeCoord>
         LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(
-            T_TreeCoord const & basicCoord,
-            T_Tree const & tree) const
+            TreeCoord const & basicCoord,
+            Tree const & tree) const
         {
             return subMergeFunctorsImpl.basicCoordToResultCoord(
                 operation.basicCoordToResultCoord(basicCoord, tree),
                 treeAfterOp);
         }
 
-        template<typename T_TreeCoord>
+        template<typename TreeCoord>
         LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(
-            T_TreeCoord const & resultCoord,
-            T_Tree const & tree) const
+            TreeCoord const & resultCoord,
+            Tree const & tree) const
         {
             return subMergeFunctorsImpl.resultCoordToBasicCoord(
                 operation.resultCoordToBasicCoord(resultCoord, tree),
@@ -76,45 +76,45 @@ namespace llama::mapping::tree
         }
     };
 
-    template<typename T_Tree, typename T_LastOperation>
-    struct MergeFunctors<T_Tree, Tuple<T_LastOperation>>
+    template<typename Tree, typename LastOperation>
+    struct MergeFunctors<Tree, Tuple<LastOperation>>
     {
-        const T_LastOperation operation = {};
+        const LastOperation operation = {};
 
         MergeFunctors() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
         MergeFunctors(
-            const T_Tree &,
-            const Tuple<T_LastOperation> & treeOperationList) :
+            const Tree &,
+            const Tuple<LastOperation> & treeOperationList) :
                 operation(treeOperationList.first)
         {}
 
         LLAMA_FN_HOST_ACC_INLINE
-        auto basicToResult(const T_Tree & tree) const
+        auto basicToResult(const Tree & tree) const
         {
             return operation.basicToResult(tree);
         }
 
-        template<typename T_TreeCoord>
+        template<typename TreeCoord>
         LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(
-            T_TreeCoord const & basicCoord,
-            T_Tree const & tree) const
+            TreeCoord const & basicCoord,
+            Tree const & tree) const
         {
             return operation.basicCoordToResultCoord(basicCoord, tree);
         }
 
-        template<typename T_TreeCoord>
+        template<typename TreeCoord>
         LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(
-            T_TreeCoord const & resultCoord,
-            T_Tree const & tree) const
+            TreeCoord const & resultCoord,
+            Tree const & tree) const
         {
             return operation.resultCoordToBasicCoord(resultCoord, tree);
         }
     };
 
-    template<typename T_Tree>
-    struct MergeFunctors<T_Tree, Tuple<>>
+    template<typename Tree>
+    struct MergeFunctors<Tree, Tuple<>>
     {
         using TreeOperationList = Tuple<>;
 
@@ -122,28 +122,28 @@ namespace llama::mapping::tree
 
         LLAMA_FN_HOST_ACC_INLINE
         MergeFunctors(
-            T_Tree const &,
+            Tree const &,
             TreeOperationList const & treeOperationList)
         {}
 
         LLAMA_FN_HOST_ACC_INLINE
-        auto basicToResult(const T_Tree & tree) const
+        auto basicToResult(const Tree & tree) const
         {
             return tree;
         }
 
-        template<typename T_TreeCoord>
+        template<typename TreeCoord>
         LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(
-            T_TreeCoord const & basicCoord,
-            T_Tree const & tree) const -> T_TreeCoord
+            TreeCoord const & basicCoord,
+            Tree const & tree) const -> TreeCoord
         {
             return basicCoord;
         }
 
-        template<typename T_TreeCoord>
+        template<typename TreeCoord>
         LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(
-            T_TreeCoord const & resultCoord,
-            T_Tree const & tree) const -> T_TreeCoord
+            TreeCoord const & resultCoord,
+            Tree const & tree) const -> TreeCoord
         {
             return resultCoord;
         }
