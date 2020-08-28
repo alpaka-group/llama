@@ -45,18 +45,6 @@ namespace llama::mapping::tree
             }
         };
 
-        template<typename Childs, typename CountType>
-        LLAMA_FN_HOST_ACC_INLINE auto
-        getTreeBlobSize(const Childs & childs, const CountType & count)
-            -> std::size_t
-        {
-            return Reduce<
-                TreeElement<NoName, Childs, CountType>,
-                std::plus<>,
-                std::multiplies<>,
-                SizeOfFunctor>()(childs, count);
-        }
-
         template<typename Tree>
         LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Tree & tree)
             -> std::size_t
@@ -66,6 +54,15 @@ namespace llama::mapping::tree
                 std::plus<>,
                 std::multiplies<>,
                 SizeOfFunctor>()(tree);
+        }
+
+        template<typename Childs, typename CountType>
+        LLAMA_FN_HOST_ACC_INLINE auto
+        getTreeBlobSize(const Childs & childs, const CountType & count)
+            -> std::size_t
+        {
+            return getTreeBlobSize(
+                TreeElement<NoName, Childs, CountType>{count, childs});
         }
 
         template<typename Tree, std::size_t Pos>
