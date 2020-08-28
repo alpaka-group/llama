@@ -82,37 +82,25 @@ namespace llama::mapping::tree
                            Pos - 1>(childs.rest, count);
         }
 
-        template<typename Tree, typename LastCoord>
-        LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobByteImpl(
-            const Tree & tree,
-            const Tuple<LastCoord> & treeCoord) -> std::size_t
-        {
-            return sizeof(typename Tree::Type) * treeCoord.first.runtime;
-        }
-
-        template<typename Tree, typename TreeCoord>
+        template<typename Tree, typename... Coords>
         LLAMA_FN_HOST_ACC_INLINE auto
-        getTreeBlobByteImpl(const Tree & tree, const TreeCoord & treeCoord)
+        getTreeBlobByte(const Tree & tree, const Tuple<Coords...> & treeCoord)
             -> std::size_t
         {
-            return getTreeBlobSize(
-                       tree.childs, LLAMA_DEREFERENCE(treeCoord.first.runtime))
-                + summarizeTreeSmallerPos<
-                       Tree,
-                       decltype(TreeCoord::FirstElement::compiletime)::value>(
-                       tree.childs, LLAMA_DEREFERENCE(tree.count))
-                + getTreeBlobByteImpl(
-                       getTupleElementRef<TreeCoord::FirstElement::compiletime>(
-                           tree.childs),
-                       treeCoord.rest);
-        }
-
-        template<typename Tree, typename TreeCoord>
-        LLAMA_FN_HOST_ACC_INLINE auto
-        getTreeBlobByte(const Tree & tree, const TreeCoord & treeCoord)
-            -> std::size_t
-        {
-            return getTreeBlobByteImpl(tree, treeCoord);
+            if constexpr(sizeof...(Coords) > 1)
+                return getTreeBlobSize(
+                           tree.childs,
+                           LLAMA_DEREFERENCE(treeCoord.first.runtime))
+                    + summarizeTreeSmallerPos<
+                           Tree,
+                           treeCoord.first.compiletime>(
+                           tree.childs, LLAMA_DEREFERENCE(tree.count))
+                    + getTreeBlobByte(
+                           getTupleElementRef<treeCoord.first.compiletime>(
+                               tree.childs),
+                           treeCoord.rest);
+            else
+                return sizeof(typename Tree::Type) * treeCoord.first.runtime;
         }
     }
 
