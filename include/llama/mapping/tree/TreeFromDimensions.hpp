@@ -86,6 +86,19 @@ namespace llama::mapping::tree
                 CountType>;
         };
 
+        template <typename Tag, typename ChildType, std::size_t Count, typename CountType>
+        struct CreateTreeElement<Tag, ChildType[Count], CountType>
+        {
+            template <std::size_t... Is>
+            static auto createChildren(std::index_sequence<Is...>)
+            {
+                return Tuple<
+                    typename CreateTreeElement<RecordCoord<Is>, ChildType, boost::mp11::mp_size_t<1>>::type...>{};
+            }
+
+            using type = Node<Tag, decltype(createChildren(std::make_index_sequence<Count>{})), CountType>;
+        };
+
         template <typename Leaf, std::size_t Count>
         struct WrapInNNodes
         {

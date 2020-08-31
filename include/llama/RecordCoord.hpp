@@ -30,6 +30,12 @@ namespace llama
         static constexpr std::size_t size = 0;
     };
 
+    template <typename T>
+    inline constexpr bool isRecordCoord = false;
+
+    template <std::size_t... Coords>
+    inline constexpr bool isRecordCoord<RecordCoord<Coords...>> = true;
+
     inline namespace literals
     {
         /// Literal operator for converting a numeric literal into a \ref RecordCoord.

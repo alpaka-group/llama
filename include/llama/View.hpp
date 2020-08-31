@@ -221,17 +221,6 @@ namespace llama
             : std::bool_constant<Mapping::isComputed(RecordCoord{})>
         {
         };
-
-        // TODO: replace in C++20
-        template <class T>
-        struct is_bounded_array : std::false_type
-        {
-        };
-
-        template <class T, std::size_t N>
-        struct is_bounded_array<T[N]> : std::true_type
-        {
-        };
     } // namespace internal
 
     /// Central LLAMA class holding memory for storage and giving access to
