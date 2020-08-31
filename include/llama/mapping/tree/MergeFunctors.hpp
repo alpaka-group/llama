@@ -26,105 +26,85 @@ namespace llama::mapping::tree
     struct MergeFunctors
     {};
 
-    template<
-        typename Tree,
-        typename FirstOperation,
-        typename... RestOperations>
-    struct MergeFunctors<Tree, Tuple<FirstOperation, RestOperations...>>
+    template<typename... Args>
+    auto rest(Tuple<Args...> t)
     {
-        const FirstOperation operation = {};
-        const decltype(operation.basicToResult(Tree())) treeAfterOp;
-        const MergeFunctors<decltype(treeAfterOp), Tuple<RestOperations...>>
-            subMergeFunctorsImpl = {};
+        return t.rest;
+    }
+
+    template<typename T>
+    auto rest(Tuple<T> t) -> Tuple<>
+    {
+        return {};
+    }
+
+    template<typename Tree, typename... Operations>
+    struct MergeFunctors<Tree, Tuple<Operations...>>
+    {
+        boost::mp11::mp_first<Tuple<Operations...>> operation = {};
+        using ResultTree = decltype(operation.basicToResult(Tree()));
+        ResultTree treeAfterOp;
+        MergeFunctors<
+            ResultTree,
+            boost::mp11::mp_drop_c<Tuple<Operations...>, 1>>
+            next = {};
 
         MergeFunctors() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
         MergeFunctors(
-            Tree const & tree,
-            const Tuple<FirstOperation, RestOperations...> &
-                treeOperationList) :
+            const Tree & tree,
+            const Tuple<Operations...> & treeOperationList) :
                 operation(treeOperationList.first),
                 treeAfterOp(operation.basicToResult(tree)),
-                subMergeFunctorsImpl(treeAfterOp, treeOperationList.rest)
-        {}
-
-        LLAMA_FN_HOST_ACC_INLINE
-        auto basicToResult(Tree const &) const
-        {
-            return subMergeFunctorsImpl.basicToResult(treeAfterOp);
-        }
-
-        template<typename TreeCoord>
-        LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(
-            TreeCoord const & basicCoord,
-            Tree const & tree) const
-        {
-            return subMergeFunctorsImpl.basicCoordToResultCoord(
-                operation.basicCoordToResultCoord(basicCoord, tree),
-                treeAfterOp);
-        }
-
-        template<typename TreeCoord>
-        LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(
-            TreeCoord const & resultCoord,
-            Tree const & tree) const
-        {
-            return subMergeFunctorsImpl.resultCoordToBasicCoord(
-                operation.resultCoordToBasicCoord(resultCoord, tree),
-                operation.basicToResult(tree));
-        }
-    };
-
-    template<typename Tree, typename LastOperation>
-    struct MergeFunctors<Tree, Tuple<LastOperation>>
-    {
-        const LastOperation operation = {};
-
-        MergeFunctors() = default;
-
-        LLAMA_FN_HOST_ACC_INLINE
-        MergeFunctors(
-            const Tree &,
-            const Tuple<LastOperation> & treeOperationList) :
-                operation(treeOperationList.first)
+                next(treeAfterOp, rest(treeOperationList))
         {}
 
         LLAMA_FN_HOST_ACC_INLINE
         auto basicToResult(const Tree & tree) const
         {
-            return operation.basicToResult(tree);
+            if constexpr(sizeof...(Operations) > 1)
+                return next.basicToResult(treeAfterOp);
+            else if constexpr(sizeof...(Operations) == 1)
+                return operation.basicToResult(tree);
+            else
+                return tree;
         }
 
         template<typename TreeCoord>
         LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(
-            TreeCoord const & basicCoord,
-            Tree const & tree) const
+            const TreeCoord & basicCoord,
+            const Tree & tree) const
         {
-            return operation.basicCoordToResultCoord(basicCoord, tree);
+            if constexpr(sizeof...(Operations) >= 1)
+                return next.basicCoordToResultCoord(
+                    operation.basicCoordToResultCoord(basicCoord, tree),
+                    treeAfterOp);
+            else
+                return basicCoord;
         }
 
         template<typename TreeCoord>
         LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(
-            TreeCoord const & resultCoord,
-            Tree const & tree) const
+            const TreeCoord & resultCoord,
+            const Tree & tree) const
         {
-            return operation.resultCoordToBasicCoord(resultCoord, tree);
+            if constexpr(sizeof...(Operations) >= 1)
+                return next.resultCoordToBasicCoord(
+                    operation.resultCoordToBasicCoord(resultCoord, tree),
+                    operation.basicToResult(tree));
+            else
+                return resultCoord;
         }
     };
 
     template<typename Tree>
     struct MergeFunctors<Tree, Tuple<>>
     {
-        using TreeOperationList = Tuple<>;
-
         MergeFunctors() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        MergeFunctors(
-            Tree const &,
-            TreeOperationList const & treeOperationList)
-        {}
+        MergeFunctors(const Tree &, const Tuple<> & treeOperationList) {}
 
         LLAMA_FN_HOST_ACC_INLINE
         auto basicToResult(const Tree & tree) const

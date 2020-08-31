@@ -1093,4 +1093,12 @@ TEST_CASE("treeCoordToString")
         tree::treeCoordToString(
             tree::createTreeCoord<llama::DatumCoord<2, 2>>(coord))
         == "[ 6:0, 7:0, 8:2, 0:2, 0:0 ]");
+    CHECK(
+        tree::treeCoordToString(
+            tree::createTreeCoord<llama::DatumCoord<3, 0>>(coord))
+        == "[ 6:0, 7:0, 8:3, 0:0, 0:0 ]");
+    CHECK(
+        tree::treeCoordToString(
+            tree::createTreeCoord<llama::DatumCoord<3, 1>>(coord))
+        == "[ 6:0, 7:0, 8:3, 0:1, 0:0 ]");
 }
