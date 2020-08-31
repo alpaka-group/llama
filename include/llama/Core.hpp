@@ -96,31 +96,9 @@ namespace llama
     template <typename Field>
     using GetFieldTag = boost::mp11::mp_first<Field>;
 
-    namespace internal
-    {
-        template <typename ChildType, std::size_t... Is>
-        auto makeRecordArray(std::index_sequence<Is...>)
-        {
-            return Record<Field<RecordCoord<Is>, ChildType>...>{};
-        }
-
-        template <typename T>
-        struct ArrayToRecord
-        {
-            using type = T;
-        };
-
-        template <typename ChildType, std::size_t Count>
-        struct ArrayToRecord<ChildType[Count]>
-        {
-            using type = decltype(internal::makeRecordArray<typename ArrayToRecord<ChildType>::type>(
-                std::make_index_sequence<Count>{}));
-        };
-    } // namespace internal
-
     /// Get the type from a \ref Field.
     template <typename Field>
-    using GetFieldType = typename internal::ArrayToRecord<boost::mp11::mp_second<Field>>::type;
+    using GetFieldType = boost::mp11::mp_second<Field>;
 
     template <typename T>
     inline constexpr auto isRecord = false;
@@ -139,6 +117,19 @@ namespace llama
             using Field = boost::mp11::mp_at_c<boost::mp11::mp_list<Fields...>, FirstCoord>;
             using ChildTag = GetFieldTag<Field>;
             using ChildType = GetFieldType<Field>;
+            using type = boost::mp11::
+                mp_push_front<typename GetTagsImpl<ChildTag, ChildType, RecordCoord<Coords...>>::type, CurrTag>;
+        };
+
+        template <
+            typename CurrTag,
+            typename ChildType,
+            std::size_t Count,
+            std::size_t FirstCoord,
+            std::size_t... Coords>
+        struct GetTagsImpl<CurrTag, ChildType[Count], RecordCoord<FirstCoord, Coords...>>
+        {
+            using ChildTag = RecordCoord<FirstCoord>;
             using type = boost::mp11::
                 mp_push_front<typename GetTagsImpl<ChildTag, ChildType, RecordCoord<Coords...>>::type, CurrTag>;
         };
@@ -208,6 +199,22 @@ namespace llama
                 typename GetCoordFromTagsImpl<ChildType, RecordCoord<ResultCoords..., tagIndex>, Tags...>::type;
         };
 
+        template <
+            typename ChildType,
+            std::size_t Count,
+            std::size_t... ResultCoords,
+            typename FirstTag,
+            typename... Tags>
+        struct GetCoordFromTagsImpl<ChildType[Count], RecordCoord<ResultCoords...>, FirstTag, Tags...>
+        {
+            static_assert(isRecordCoord<FirstTag>, "Please use a RecordCoord<I> to index into static arrays");
+            static_assert(FirstTag::size == 1, "Expected RecordCoord with 1 coordinate");
+            static_assert(FirstTag::front < Count, "Index out of bounds");
+
+            using type =
+                typename GetCoordFromTagsImpl<ChildType, RecordCoord<ResultCoords..., FirstTag::front>, Tags...>::type;
+        };
+
         template <typename RecordDim, typename RecordCoord>
         struct GetCoordFromTagsImpl<RecordDim, RecordCoord>
         {
@@ -222,7 +229,10 @@ namespace llama
     namespace internal
     {
         template <typename RecordDim, typename... RecordCoordOrTags>
-        struct GetTypeImpl;
+        struct GetTypeImpl
+        {
+            using type = typename GetTypeImpl<RecordDim, GetCoordFromTags<RecordDim, RecordCoordOrTags...>>::type;
+        };
 
         template <typename... Children, std::size_t HeadCoord, std::size_t... TailCoords>
         struct GetTypeImpl<Record<Children...>, RecordCoord<HeadCoord, TailCoords...>>
@@ -242,12 +252,6 @@ namespace llama
         {
             static_assert(isAllowedFieldType<T>);
             using type = T;
-        };
-
-        template <typename RecordDim, typename... RecordCoordOrTags>
-        struct GetTypeImpl
-        {
-            using type = typename GetTypeImpl<RecordDim, GetCoordFromTags<RecordDim, RecordCoordOrTags...>>::type;
         };
     } // namespace internal
 
@@ -296,6 +300,17 @@ namespace llama
                     typename LeafRecordCoordsImpl<GetFieldType<Fields>, RecordCoord<RCs..., Is>>::type...>{};
             }
             using type = decltype(help(std::make_index_sequence<sizeof...(Fields)>{}));
+        };
+
+        template <typename Child, std::size_t N, std::size_t... RCs>
+        struct LeafRecordCoordsImpl<Child[N], RecordCoord<RCs...>>
+        {
+            template <std::size_t... Is>
+            static auto help(std::index_sequence<Is...>)
+            {
+                return boost::mp11::mp_append<typename LeafRecordCoordsImpl<Child, RecordCoord<RCs..., Is>>::type...>{};
+            }
+            using type = decltype(help(std::make_index_sequence<N>{}));
         };
     } // namespace internal
 
@@ -359,7 +374,7 @@ namespace llama
         template <typename Child, std::size_t N>
         struct FlattenRecordDimImpl<Child[N]>
         {
-            using type = boost::mp11::mp_repeat_c<boost::mp11::mp_list<Child>, N>;
+            using type = boost::mp11::mp_repeat_c<typename FlattenRecordDimImpl<Child>::type, N>;
         };
     } // namespace internal
 
@@ -542,6 +557,17 @@ namespace llama
             {
                 return &value;
             }
+        };
+
+        // TODO: replace in C++20
+        template <class T>
+        struct is_bounded_array : std::false_type
+        {
+        };
+
+        template <class T, std::size_t N>
+        struct is_bounded_array<T[N]> : std::true_type
+        {
         };
     } // namespace internal
 } // namespace llama

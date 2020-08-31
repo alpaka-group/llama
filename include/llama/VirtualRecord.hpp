@@ -351,7 +351,8 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coord...> = {}) const -> decltype(auto)
         {
             using AbsolutCoord = Cat<BoundRecordCoord, RecordCoord<Coord...>>;
-            if constexpr (isRecord<GetType<RecordDim, AbsolutCoord>>)
+            using AccessedType = GetType<RecordDim, AbsolutCoord>;
+            if constexpr (isRecord<AccessedType> || internal::is_bounded_array<AccessedType>::value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
                 return VirtualRecord<const View, AbsolutCoord>{arrayDimsCoord, this->view};
@@ -368,7 +369,8 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coord...> coord = {}) -> decltype(auto)
         {
             using AbsolutCoord = Cat<BoundRecordCoord, RecordCoord<Coord...>>;
-            if constexpr (isRecord<GetType<RecordDim, AbsolutCoord>>)
+            using AccessedType = GetType<RecordDim, AbsolutCoord>;
+            if constexpr (isRecord<AccessedType> || internal::is_bounded_array<AccessedType>::value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
                 return VirtualRecord<View, AbsolutCoord>{arrayDimsCoord, this->view};
