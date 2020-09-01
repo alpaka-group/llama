@@ -18,10 +18,123 @@
 
 #pragma once
 
-#include "../TreeElement.hpp"
+#include "TreeFromDomains.hpp"
 
 namespace llama::mapping::tree::functor
 {
+    /// Functor for \ref tree::Mapping. Does nothing with the mapping tree at
+    /// all (basically implemented for testing purposes). \see tree::Mapping
+    struct Idem
+    {
+        template<typename Tree>
+        LLAMA_FN_HOST_ACC_INLINE auto basicToResult(const Tree & tree) const
+            -> Tree
+        {
+            return tree;
+        }
+
+        template<typename Tree, typename TreeCoord>
+        LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(
+            const TreeCoord & basicCoord,
+            const Tree &) const -> TreeCoord
+        {
+            return basicCoord;
+        }
+
+        template<typename Tree, typename TreeCoord>
+        LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(
+            const TreeCoord & resultCoord,
+            const Tree &) const -> TreeCoord
+        {
+            return resultCoord;
+        }
+    };
+
+    /// Functor for \ref tree::Mapping. Moves all run time parts to the leaves,
+    /// so in fact another struct of array implementation -- but with the
+    /// possibility to add further finetuning of the mapping in the future. \see
+    /// tree::Mapping
+    struct LeafOnlyRT
+    {
+        template<typename Tree>
+        LLAMA_FN_HOST_ACC_INLINE auto basicToResult(Tree tree) const
+        {
+            return basicToResultImpl(tree);
+        }
+
+        template<typename Tree, typename BasicCoord>
+        LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(
+            const BasicCoord & basicCoord,
+            const Tree & tree) const
+        {
+            return basicCoordToResultCoordImpl(basicCoord, tree);
+        }
+
+        template<typename Tree, typename ResultCoord>
+        LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(
+            const ResultCoord & resultCoord,
+            const Tree & tree) const -> ResultCoord
+        {
+            return resultCoord;
+        }
+
+    private:
+        template<typename Tree>
+        LLAMA_FN_HOST_ACC_INLINE static auto
+        basicToResultImpl(Tree tree, std::size_t runtime = 1)
+        {
+            if constexpr(HasChildren<Tree>)
+            {
+                auto children = tupleTransform(tree.childs, [&](auto element) {
+                    return basicToResultImpl(
+                        element, runtime * LLAMA_DEREFERENCE(tree.count));
+                });
+                return TreeElement<
+                    typename Tree::Identifier,
+                    decltype(children),
+                    boost::mp11::mp_size_t<1>>{{}, children};
+            }
+            else
+                return TreeElement<
+                    typename Tree::Identifier,
+                    typename Tree::Type>{
+                    LLAMA_DEREFERENCE(tree.count) * runtime};
+        }
+
+        template<typename BasicCoord, typename Tree>
+        LLAMA_FN_HOST_ACC_INLINE static auto basicCoordToResultCoordImpl(
+            const BasicCoord & basicCoord,
+            const Tree & tree,
+            std::size_t runtime = 0)
+        {
+            if constexpr(SizeOfTuple<BasicCoord> == 1)
+                return Tuple{
+                    TreeCoordElement<BasicCoord::FirstElement::compiletime>(
+                        runtime + LLAMA_DEREFERENCE(basicCoord.first.runtime))};
+            else
+            {
+                const auto & branch
+                    = getTupleElementRef<BasicCoord::FirstElement::compiletime>(
+                        tree.childs);
+                auto first = TreeCoordElement<
+                    BasicCoord::FirstElement::compiletime,
+                    boost::mp11::mp_size_t<0>>{};
+
+                return tupleCat(
+                    Tuple{first},
+                    basicCoordToResultCoordImpl<
+                        typename BasicCoord::RestTuple,
+                        GetTupleType<
+                            typename Tree::Type,
+                            BasicCoord::FirstElement::compiletime>>(
+                        basicCoord.rest,
+                        branch,
+                        (runtime + LLAMA_DEREFERENCE(basicCoord.first.runtime))
+                            * LLAMA_DEREFERENCE(branch.count)));
+            }
+        }
+    };
+
     namespace internal
     {
         template<typename TreeCoord, typename Tree>

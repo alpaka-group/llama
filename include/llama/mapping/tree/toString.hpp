@@ -18,8 +18,7 @@
 
 #pragma once
 
-#include "../../Tuple.hpp"
-#include "TreeElement.hpp"
+#include "TreeFromDomains.hpp"
 
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/core/demangle.hpp>
