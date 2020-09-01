@@ -27,7 +27,7 @@ using Name = llama::DS<
     llama::DE<tag::Weight, int>>;
 // clang-format on
 
-TEST_CASE("operator=")
+TEST_CASE("VirtualDatum.operator=")
 {
     auto datum = llama::stackVirtualDatumAlloc<Name>();
 
@@ -80,7 +80,7 @@ TEST_CASE("operator=")
     CHECK(datum(tag::Weight{}) == 5);
 }
 
-TEST_CASE("operator+=")
+TEST_CASE("VirtualDatum.operator+=")
 {
     auto datum = llama::stackVirtualDatumAlloc<Name>();
 
@@ -130,7 +130,7 @@ TEST_CASE("operator+=")
     CHECK(datum(tag::Weight{}) == 1);
 }
 
-TEST_CASE("operator+")
+TEST_CASE("VirtualDatum.operator+")
 {
     auto datum = llama::stackVirtualDatumAlloc<Name>();
 
@@ -202,7 +202,7 @@ using Name2 = llama::DS<
 >;
 // clang-format on
 
-TEST_CASE("operator=propagation")
+TEST_CASE("VirtualDatum.operator=.propagation")
 {
     auto datum = llama::stackVirtualDatumAlloc<Name2>();
 
@@ -230,7 +230,7 @@ TEST_CASE("operator=propagation")
     CHECK(datum(tag::Part2{}, tag::Z{}) == 2);
 }
 
-TEST_CASE("operator=multiview")
+TEST_CASE("VirtualDatum.operator=.multiview")
 {
     auto datum1 = llama::stackVirtualDatumAlloc<Name>();
     auto datum2 = llama::stackVirtualDatumAlloc<Name2>();
@@ -253,7 +253,7 @@ TEST_CASE("operator=multiview")
     CHECK(datum1(tag::Weight{}) == 1);
 }
 
-TEST_CASE("operator==")
+TEST_CASE("VirtualDatum.operator==")
 {
     auto datum = llama::stackVirtualDatumAlloc<Name>();
 
@@ -277,7 +277,7 @@ TEST_CASE("operator==")
     CHECK(!(datum(tag::Pos{}) == datum(tag::Vel{})));
 }
 
-TEST_CASE("operator<")
+TEST_CASE("VirtualDatum.operator<")
 {
     auto datum = llama::stackVirtualDatumAlloc<Name>();
 
