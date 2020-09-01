@@ -33,7 +33,10 @@ using Name = llama::DS<
 
 TEST_CASE("demangleType")
 {
-    const auto str = prettyPrintType(Name());
+    auto str = prettyPrintType(Name());
+#ifdef _WIN32
+    boost::replace_all(str, "__int64", "long");
+#endif
     CHECK(str == R"(boost::mp11::mp_list<
     boost::mp11::mp_list<
         tag::Pos,
@@ -73,19 +76,31 @@ TEST_CASE("demangleType")
         tag::Options,
         boost::mp11::mp_list<
             boost::mp11::mp_list<
-                llama::NoName,
+                std::integral_constant<
+                    unsigned long,
+                    0
+                >,
                 bool
             >,
             boost::mp11::mp_list<
-                llama::NoName,
+                std::integral_constant<
+                    unsigned long,
+                    1
+                >,
                 bool
             >,
             boost::mp11::mp_list<
-                llama::NoName,
+                std::integral_constant<
+                    unsigned long,
+                    2
+                >,
                 bool
             >,
             boost::mp11::mp_list<
-                llama::NoName,
+                std::integral_constant<
+                    unsigned long,
+                    3
+                >,
                 bool
             >
         >

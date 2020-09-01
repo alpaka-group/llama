@@ -11,6 +11,7 @@ namespace tag
     struct X {};
     struct Y {};
     struct Z {};
+    struct Flags {};
 }
 
 using Particle = llama::DS<
@@ -23,7 +24,8 @@ using Particle = llama::DS<
     llama::DE<tag::Vel,llama::DS<
         llama::DE<tag::Z, double>,
         llama::DE<tag::X, double>
-    >>
+    >>,
+    llama::DE<tag::Flags, llama::DA<bool, 4>>
 >;
 
 using Other = llama::DS<
@@ -34,30 +36,47 @@ using Other = llama::DS<
 >;
 // clang-format on
 
-TEST_CASE("uid")
+static_assert(
+    std::is_same_v<llama::GetCoordFromUID<Particle>, llama::DatumCoord<>>);
+static_assert(std::is_same_v<
+              llama::GetCoordFromUID<Particle, tag::Pos>,
+              llama::DatumCoord<0>>);
+static_assert(std::is_same_v<
+              llama::GetCoordFromUID<Particle, tag::Pos, tag::X>,
+              llama::DatumCoord<0, 0>>);
+static_assert(std::is_same_v<
+              llama::GetCoordFromUID<Particle, tag::Pos, tag::Y>,
+              llama::DatumCoord<0, 1>>);
+static_assert(std::is_same_v<
+              llama::GetCoordFromUID<Particle, tag::Pos, tag::Z>,
+              llama::DatumCoord<0, 2>>);
+static_assert(std::is_same_v<
+              llama::GetCoordFromUID<Particle, llama::NoName>,
+              llama::DatumCoord<1>>);
+static_assert(std::is_same_v<
+              llama::GetCoordFromUID<Particle, tag::Vel, tag::Z>,
+              llama::DatumCoord<2, 0>>);
+static_assert(std::is_same_v<
+              llama::GetCoordFromUID<Particle, tag::Vel, tag::X>,
+              llama::DatumCoord<2, 1>>);
+static_assert(std::is_same_v<
+              llama::GetCoordFromUID<Particle, tag::Flags>,
+              llama::DatumCoord<3>>);
+static_assert(std::is_same_v<
+              llama::GetCoordFromUID<Particle, tag::Flags, llama::Index<0>>,
+              llama::DatumCoord<3, 0>>);
+static_assert(std::is_same_v<
+              llama::GetCoordFromUID<Particle, tag::Flags, llama::Index<1>>,
+              llama::DatumCoord<3, 1>>);
+static_assert(std::is_same_v<
+              llama::GetCoordFromUID<Particle, tag::Flags, llama::Index<2>>,
+              llama::DatumCoord<3, 2>>);
+static_assert(std::is_same_v<
+              llama::GetCoordFromUID<Particle, tag::Flags, llama::Index<3>>,
+              llama::DatumCoord<3, 3>>);
+
+TEST_CASE("prettyPrintType")
 {
-    using UserDomain = llama::UserDomain<2>;
-    UserDomain userDomain{2, 2};
-
-    using Mapping = llama::mapping::SoA<UserDomain, Particle>;
-    using MappingOther = llama::mapping::SoA<UserDomain, Other>;
-
-    Mapping mapping{userDomain};
-    MappingOther mappingOther{userDomain};
-
-    auto particle = allocView(mapping);
-    auto other = allocView(mappingOther);
-
-    // Setting some test values
-    particle(0u, 0u)(tag::Pos(), tag::X()) = 0.0f;
-    particle(0u, 0u)(tag::Pos(), tag::Y()) = 0.0f;
-    particle(0u, 0u)(tag::Pos(), tag::Z()) = 13.37f;
-    particle(0u, 0u)(tag::Vel(), tag::X()) = 4.2f;
-    particle(0u, 0u)(tag::Vel(), tag::Z()) = 0.0f;
-
-    other(0u, 0u)(tag::Pos(), tag::Y()) = 5.f;
-    other(0u, 0u)(tag::Pos(), tag::Z()) = 2.3f;
-
     CHECK(
         prettyPrintType(llama::GetUID<
                         Particle,
@@ -77,7 +96,10 @@ TEST_CASE("uid")
                         Particle,
                         llama::GetCoordFromUID<Particle, tag::Vel, tag::X>>())
         == "tag::X");
+}
 
+TEST_CASE("CompareUID")
+{
     CHECK(
         llama::CompareUID<
             Particle, // DD A
@@ -132,8 +154,4 @@ TEST_CASE("uid")
             llama::DatumCoord<0, 0> // Local B
             >::value
         == false);
-
-    CHECK(particle(0u, 0u)(tag::Pos(), tag::Z()) == 13.37f);
-    particle(0u, 0u) += other(0u, 0u);
-    CHECK(particle(0u, 0u)(tag::Pos(), tag::Z()) == 15.67f);
 }
