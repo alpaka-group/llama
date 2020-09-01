@@ -19,30 +19,118 @@
 #pragma once
 
 #include "../../Types.hpp"
+#include "../../Tuple.hpp"
 #include "../../UserDomain.hpp"
-#include "MergeFunctors.hpp"
-#include "TreeElement.hpp"
+#include "Functors.hpp"
 #include "TreeFromDomains.hpp"
-#include "functor/Idem.hpp"
-#include "functor/LeafOnlyRT.hpp"
-#include "functor/MoveRTDown.hpp"
 #include "toString.hpp"
 
 #include <type_traits>
 
 namespace llama::mapping::tree
 {
+    template<typename Tree, typename TreeOperationList>
+    struct MergeFunctors
+    {};
+
+    template<typename Tree, typename... Operations>
+    struct MergeFunctors<Tree, Tuple<Operations...>>
+    {
+        boost::mp11::mp_first<Tuple<Operations...>> operation = {};
+        using ResultTree = decltype(operation.basicToResult(Tree()));
+        ResultTree treeAfterOp;
+        MergeFunctors<
+            ResultTree,
+            boost::mp11::mp_drop_c<Tuple<Operations...>, 1>>
+            next = {};
+
+        MergeFunctors() = default;
+
+        LLAMA_FN_HOST_ACC_INLINE
+        MergeFunctors(
+            const Tree & tree,
+            const Tuple<Operations...> & treeOperationList) :
+                operation(treeOperationList.first),
+                treeAfterOp(operation.basicToResult(tree)),
+                next(treeAfterOp, tupleRest(treeOperationList))
+        {}
+
+        LLAMA_FN_HOST_ACC_INLINE
+        auto basicToResult(const Tree & tree) const
+        {
+            if constexpr(sizeof...(Operations) > 1)
+                return next.basicToResult(treeAfterOp);
+            else if constexpr(sizeof...(Operations) == 1)
+                return operation.basicToResult(tree);
+            else
+                return tree;
+        }
+
+        template<typename TreeCoord>
+        LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(
+            const TreeCoord & basicCoord,
+            const Tree & tree) const
+        {
+            if constexpr(sizeof...(Operations) >= 1)
+                return next.basicCoordToResultCoord(
+                    operation.basicCoordToResultCoord(basicCoord, tree),
+                    treeAfterOp);
+            else
+                return basicCoord;
+        }
+
+        template<typename TreeCoord>
+        LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(
+            const TreeCoord & resultCoord,
+            const Tree & tree) const
+        {
+            if constexpr(sizeof...(Operations) >= 1)
+                return next.resultCoordToBasicCoord(
+                    operation.resultCoordToBasicCoord(resultCoord, tree),
+                    operation.basicToResult(tree));
+            else
+                return resultCoord;
+        }
+    };
+
+    template<typename Tree>
+    struct MergeFunctors<Tree, Tuple<>>
+    {
+        MergeFunctors() = default;
+
+        LLAMA_FN_HOST_ACC_INLINE
+        MergeFunctors(const Tree &, const Tuple<> & treeOperationList) {}
+
+        LLAMA_FN_HOST_ACC_INLINE
+        auto basicToResult(const Tree & tree) const
+        {
+            return tree;
+        }
+
+        template<typename TreeCoord>
+        LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(
+            TreeCoord const & basicCoord,
+            Tree const & tree) const -> TreeCoord
+        {
+            return basicCoord;
+        }
+
+        template<typename TreeCoord>
+        LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(
+            TreeCoord const & resultCoord,
+            Tree const & tree) const -> TreeCoord
+        {
+            return resultCoord;
+        }
+    };
+
     namespace internal
     {
-        template<
-            typename Tree,
-            std::enable_if_t<HasChildren<Tree>, int> = 0>
+        template<typename Tree, std::enable_if_t<HasChildren<Tree>, int> = 0>
         LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Tree & tree)
             -> std::size_t;
 
-        template<
-            typename Tree,
-            std::enable_if_t<!HasChildren<Tree>, int> = 0>
+        template<typename Tree, std::enable_if_t<!HasChildren<Tree>, int> = 0>
         LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Tree & tree)
             -> std::size_t;
 
@@ -55,9 +143,7 @@ namespace llama::mapping::tree
             return count * (getTreeBlobSize(getTupleElement<Is>(childs)) + ...);
         }
 
-        template<
-            typename Tree,
-            std::enable_if_t<HasChildren<Tree>, int>>
+        template<typename Tree, std::enable_if_t<HasChildren<Tree>, int>>
         LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Tree & tree)
             -> std::size_t
         {
@@ -69,9 +155,7 @@ namespace llama::mapping::tree
                 LLAMA_DEREFERENCE(tree.count));
         }
 
-        template<
-            typename Tree,
-            std::enable_if_t<!HasChildren<Tree>, int>>
+        template<typename Tree, std::enable_if_t<!HasChildren<Tree>, int>>
         LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Tree & tree)
             -> std::size_t
         {
