@@ -364,9 +364,43 @@ TEST_CASE("access")
         CHECK(&x == &view(pos)(llama::DatumCoord<0, 0>{}));
         CHECK(&x == &view(pos)(llama::DatumCoord<0>{})(llama::DatumCoord<0>{}));
         // there are even more combinations
+
+        // also test arrays
+        const bool & o0
+            = view(pos).template access<tag::Flags>().template access<0>();
+        CHECK(
+            &o0
+            == &view(pos)
+                    .template access<tag::Flags>()
+                    .template access<llama::Index<0>>());
+        CHECK(
+            &o0
+            == &view(pos).template access<tag::Flags>().access(
+                llama::Index<0>{}));
+        CHECK(
+            &o0 == &view(pos).template access<tag::Flags>()(llama::Index<0>{}));
     };
     l(view);
     l(std::as_const(view));
+}
+
+TEST_CASE("linearBytePos")
+{
+    CHECK(llama::linearBytePos<Name>() == 0);
+    CHECK(llama::linearBytePos<Name, 0>() == 0);
+    CHECK(llama::linearBytePos<Name, 0, 0>() == 0);
+    CHECK(llama::linearBytePos<Name, 0, 1>() == 8);
+    CHECK(llama::linearBytePos<Name, 0, 2>() == 16);
+    CHECK(llama::linearBytePos<Name, 1>() == 24);
+    CHECK(llama::linearBytePos<Name, 2>() == 28);
+    CHECK(llama::linearBytePos<Name, 2, 0>() == 28);
+    CHECK(llama::linearBytePos<Name, 2, 1>() == 36);
+    CHECK(llama::linearBytePos<Name, 2, 2>() == 44);
+    CHECK(llama::linearBytePos<Name, 3>() == 52);
+    CHECK(llama::linearBytePos<Name, 3, 0>() == 52);
+    CHECK(llama::linearBytePos<Name, 3, 1>() == 53);
+    CHECK(llama::linearBytePos<Name, 3, 2>() == 54);
+    CHECK(llama::linearBytePos<Name, 3, 3>() == 55);
 }
 
 TEST_CASE("addresses")

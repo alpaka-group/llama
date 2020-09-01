@@ -28,12 +28,12 @@ namespace llama
     namespace internal
     {
         template<
-            typename DatumDomain,
+            typename T,
             typename BaseDatumCoord,
             std::size_t... InnerCoords,
             typename Functor>
         LLAMA_FN_HOST_ACC_INLINE void applyFunctorForEachLeaf(
-            DatumDomain,
+            T,
             BaseDatumCoord base,
             DatumCoord<InnerCoords...> inner,
             Functor && functor)
@@ -50,28 +50,28 @@ namespace llama
         };
 
         template<
-            typename... Leaves,
+            typename... Children,
             typename BaseDatumCoord,
             std::size_t... InnerCoords,
             typename Functor>
         LLAMA_FN_HOST_ACC_INLINE void applyFunctorForEachLeaf(
-            DatumStruct<Leaves...>,
+            DatumStruct<Children...>,
             BaseDatumCoord base,
             DatumCoord<InnerCoords...> inner,
             Functor && functor)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             boost::mp11::mp_for_each<
-                boost::mp11::mp_iota_c<sizeof...(Leaves)>>([&](auto i) {
-                constexpr auto leafIndex = decltype(i)::value;
-                using Leaf
-                    = boost::mp11::mp_at_c<DatumStruct<Leaves...>, leafIndex>;
+                boost::mp11::mp_iota_c<sizeof...(Children)>>([&](auto i) {
+                constexpr auto childIndex = decltype(i)::value;
+                using DatumElement = boost::mp11::
+                    mp_at_c<DatumStruct<Children...>, childIndex>;
 
                 LLAMA_FORCE_INLINE_RECURSIVE
                 applyFunctorForEachLeaf(
-                    GetDatumElementType<Leaf>{},
+                    GetDatumElementType<DatumElement>{},
                     base,
-                    llama::DatumCoord<InnerCoords..., leafIndex>{},
+                    llama::DatumCoord<InnerCoords..., childIndex>{},
                     std::forward<Functor>(functor));
             });
         }
