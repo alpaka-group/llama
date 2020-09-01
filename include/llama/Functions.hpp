@@ -89,25 +89,16 @@ namespace llama
             (DatumDomain *)nullptr, DatumCoord<Coords...>{}, DatumCoord<>{});
     }
 
-    namespace internal
-    {
-        template<typename DatumDomain>
-        struct SizeOfImpl
-        {
-            static constexpr std::size_t value = sizeof(DatumDomain);
-        };
-
-        template<typename... DatumElements>
-        struct SizeOfImpl<DatumStruct<DatumElements...>>
-        {
-            static constexpr std::size_t value
-                = (SizeOfImpl<GetDatumElementType<DatumElements>>::value + ...);
-        };
-    }
-
-    /// Gives the size a datum domain if it would be a normal struct
+    /** Gives the size a datum domain if it would be a normal struct
+     * \tparam DatumDomain datum domain tree
+     * \return the byte position as compile time value in "value"
+     */
     template<typename DatumDomain>
-    inline constexpr auto SizeOf = internal::SizeOfImpl<DatumDomain>::value;
+    static constexpr auto SizeOf = sizeof(DatumDomain);
+
+    template<typename... DatumElements>
+    static constexpr auto SizeOf<DatumStruct<
+        DatumElements...>> = (SizeOf<GetDatumElementType<DatumElements>> + ...);
 
     template<typename T>
     inline constexpr auto IsDatumStruct = false;
