@@ -21,10 +21,9 @@
 #include "Array.hpp"
 #include "ForEach.hpp"
 #include "Functions.hpp"
-#include "allocator/Stack.hpp"
-#include "allocator/Vector.hpp"
+#include "Allocators.hpp"
+#include "macros.hpp"
 #include "mapping/One.hpp"
-#include "preprocessor/macros.hpp"
 
 #include <boost/preprocessor/cat.hpp>
 #include <type_traits>

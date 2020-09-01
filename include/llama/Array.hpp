@@ -17,7 +17,8 @@
  */
 
 #pragma once
-#include "preprocessor/macros.hpp"
+
+#include "macros.hpp"
 
 namespace llama
 {
