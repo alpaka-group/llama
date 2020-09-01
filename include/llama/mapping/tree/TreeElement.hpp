@@ -71,15 +71,12 @@ namespace llama::mapping::tree
     };
 
     template<typename TreeElement, typename = void>
-    struct HasChildren : std::false_type
-    {};
+    inline constexpr auto HasChildren = false;
 
     template<typename TreeElement>
-    struct HasChildren<
+    inline constexpr auto HasChildren<
         TreeElement,
-        std::void_t<decltype(std::declval<TreeElement>().childs)>> :
-            std::true_type
-    {};
+        std::void_t<decltype(std::declval<TreeElement>().childs)>> = true;
 
     template<typename Identifier, typename Type, std::size_t Count = 1>
     using TreeElementConst
@@ -91,8 +88,7 @@ namespace llama::mapping::tree
         using ResultType = TreeElement<
             typename Tree::Identifier,
             typename Tree::Type::RestTuple,
-            decltype(Tree::count)
-        >;
+            decltype(Tree::count)>;
 
         LLAMA_FN_HOST_ACC_INLINE
         auto operator()(const Tree & tree) -> ResultType

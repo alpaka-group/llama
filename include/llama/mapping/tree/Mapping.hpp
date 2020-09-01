@@ -36,13 +36,13 @@ namespace llama::mapping::tree
     {
         template<
             typename Tree,
-            std::enable_if_t<HasChildren<Tree>::value, int> = 0>
+            std::enable_if_t<HasChildren<Tree>, int> = 0>
         LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Tree & tree)
             -> std::size_t;
 
         template<
             typename Tree,
-            std::enable_if_t<!HasChildren<Tree>::value, int> = 0>
+            std::enable_if_t<!HasChildren<Tree>, int> = 0>
         LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Tree & tree)
             -> std::size_t;
 
@@ -57,7 +57,7 @@ namespace llama::mapping::tree
 
         template<
             typename Tree,
-            std::enable_if_t<HasChildren<Tree>::value, int> = 0>
+            std::enable_if_t<HasChildren<Tree>, int>>
         LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Tree & tree)
             -> std::size_t
         {
@@ -71,7 +71,7 @@ namespace llama::mapping::tree
 
         template<
             typename Tree,
-            std::enable_if_t<!HasChildren<Tree>::value, int> = 0>
+            std::enable_if_t<!HasChildren<Tree>, int>>
         LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Tree & tree)
             -> std::size_t
         {

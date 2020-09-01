@@ -58,7 +58,7 @@ namespace llama::mapping
         auto getBlobSize(std::size_t const) const -> std::size_t
         {
             return ExtentUserDomainAdressFunctor{}(
-                userDomainSize)*SizeOf<DatumDomain>::value;
+                userDomainSize)*SizeOf<DatumDomain>;
         }
 
         template<std::size_t... DatumDomainCoord>

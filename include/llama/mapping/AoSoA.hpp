@@ -26,7 +26,7 @@ namespace llama::mapping
             -> std::size_t
         {
             return ExtentUserDomainAdressFunctor{}(
-                userDomainSize)*SizeOf<DatumDomain>::value;
+                userDomainSize)*SizeOf<DatumDomain>;
         }
 
         template<std::size_t... DatumDomainCoord>
@@ -37,7 +37,7 @@ namespace llama::mapping
                 = sizeof(GetType<DatumDomain, DatumCoord<DatumDomainCoord...>>);
             constexpr auto elementOff
                 = linearBytePos<DatumDomain, DatumDomainCoord...>();
-            constexpr auto datumDomainSize = SizeOf<DatumDomain>::value;
+            constexpr auto datumDomainSize = SizeOf<DatumDomain>;
             LLAMA_FORCE_INLINE_RECURSIVE
             const auto userDomainIndex
                 = LinearizeUserDomainAdressFunctor{}(coord, userDomainSize);

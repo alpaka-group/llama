@@ -26,32 +26,28 @@
 
 namespace llama
 {
-    /** helper function to get the type of a \ref DatumElement node
-     * \tparam T_DatumElement \ref DatumElement to get the type of
-     * \return type of the element
-     */
-    template<typename T_DatumElement>
-    using GetDatumElementType = boost::mp11::mp_second<T_DatumElement>;
-
     /** helper function to get the UID of a \ref DatumElement node
-     * \tparam T_DatumElement \ref DatumElement to get the UID of
+     * \tparam DatumElement \ref DatumElement to get the UID of
      * \return UID of the element
      */
-    template<typename T_DatumElement>
-    using GetDatumElementUID = boost::mp11::mp_first<T_DatumElement>;
+    template<typename DatumElement>
+    using GetDatumElementUID = boost::mp11::mp_first<DatumElement>;
+
+    /** helper function to get the type of a \ref DatumElement node
+     * \tparam DatumElement \ref DatumElement to get the type of
+     * \return type of the element
+     */
+    template<typename DatumElement>
+    using GetDatumElementType = boost::mp11::mp_second<DatumElement>;
 
     namespace internal
     {
-        template<
-            typename DatumDomain,
-            typename TargetDatumCoord,
-            typename IterCoord>
-        constexpr auto
-        linearBytePosImpl(DatumDomain *, TargetDatumCoord, IterCoord)
+        template<typename T, typename TargetDatumCoord, typename IterCoord>
+        constexpr auto linearBytePosImpl(T *, TargetDatumCoord, IterCoord)
         {
-            return sizeof(DatumDomain)
+            return sizeof(T)
                 * static_cast<std::size_t>(
-                       DatumCoordIsBigger<TargetDatumCoord, IterCoord>::value);
+                       DatumCoordIsBigger<TargetDatumCoord, IterCoord>);
         }
 
         template<
@@ -93,83 +89,50 @@ namespace llama
             (DatumDomain *)nullptr, DatumCoord<Coords...>{}, DatumCoord<>{});
     }
 
-    /** Gives the size a datum domain if it would be a normal struct
-     * \tparam T_DatumDomain datum domain tree
-     * \return the byte position as compile time value in "value"
-     */
-    template<typename T_DatumDomain>
-    struct SizeOf
-    {
-        static constexpr std::size_t value = sizeof(T_DatumDomain);
-    };
-
-    template<typename T_FirstDatumElement, typename... T_DatumElements>
-    struct SizeOf<DatumStruct<T_FirstDatumElement, T_DatumElements...>>
-    {
-        static constexpr std::size_t value
-            = SizeOf<GetDatumElementType<T_FirstDatumElement>>::value
-            + SizeOf<DatumStruct<T_DatumElements...>>::value;
-    };
-
-    template<>
-    struct SizeOf<DatumStruct<>>
-    {
-        static constexpr std::size_t value = 0;
-    };
-
     namespace internal
     {
-        template<typename T_DatumDomain>
-        class StubTypeImpl
+        template<typename DatumDomain>
+        struct SizeOfImpl
         {
-            struct impl
-            {
-                using type = T_DatumDomain;
-                unsigned char stub[SizeOf<T_DatumDomain>::value];
-            };
+            static constexpr std::size_t value = sizeof(DatumDomain);
+        };
 
-        public:
-            using type = impl;
+        template<typename... DatumElements>
+        struct SizeOfImpl<DatumStruct<DatumElements...>>
+        {
+            static constexpr std::size_t value
+                = (SizeOfImpl<GetDatumElementType<DatumElements>>::value + ...);
         };
     }
 
-    /** Returns a type for a datum domain with the same size as \ref SizeOf of
-     * this datum domain, useful e.g. if an external memory allocation function
-     * needs a type and a number of elements instead of the total size in bytes.
-     * \tparam T_DatumDomain the datum domain type to create a stub type for
-     *  Additionally, this type has a type member named \a type which holds the
-     *  original datum domain type.
-     */
-    template<typename T_DatumDomain>
-    using StubType = typename internal::StubTypeImpl<T_DatumDomain>::type;
+    /// Gives the size a datum domain if it would be a normal struct
+    template<typename DatumDomain>
+    inline constexpr auto SizeOf = internal::SizeOfImpl<DatumDomain>::value;
 
-    template<typename T_Type>
-    struct is_DatumStruct
-    {
-        static constexpr bool value = false;
-    };
+    template<typename T>
+    inline constexpr auto IsDatumStruct = false;
 
-    template<typename... T_DatumStructContent>
-    struct is_DatumStruct<DatumStruct<T_DatumStructContent...>>
-    {
-        static constexpr bool value = true;
-    };
+    template<typename... DatumElements>
+    inline constexpr auto IsDatumStruct<DatumStruct<DatumElements...>> = true;
 
     namespace internal
     {
-        template<typename DatumDomain, typename T_DatumCoord>
+        template<typename DatumDomain, typename DatumCoord>
         struct GetTypeImpl;
 
         template<
-            typename DatumDomain,
+            typename... Children,
             std::size_t HeadCoord,
             std::size_t... TailCoords>
-        struct GetTypeImpl<DatumDomain, DatumCoord<HeadCoord, TailCoords...>>
+        struct GetTypeImpl<
+            DatumStruct<Children...>,
+            DatumCoord<HeadCoord, TailCoords...>>
         {
-            using _DateElement = boost::mp11::mp_at_c<DatumDomain, HeadCoord>;
-            using type = typename GetTypeImpl<
-                GetDatumElementType<_DateElement>,
-                DatumCoord<TailCoords...>>::type;
+            using ChildType = GetDatumElementType<
+                boost::mp11::mp_at_c<DatumStruct<Children...>, HeadCoord>>;
+            using type =
+                typename GetTypeImpl<ChildType, DatumCoord<TailCoords...>>::
+                    type;
         };
 
         template<typename T>
@@ -181,63 +144,54 @@ namespace llama
 
     /** Returns the type of a node in a datum domain tree for a coordinate given
      * as \ref DatumCoord \tparam DatumDomain the datum domain (probably \ref
-     * DatumStruct) \tparam T_DatumCoord the coordinate \return type at the
+     * DatumStruct) \tparam DatumCoord the coordinate \return type at the
      * specified node
      */
-    template<typename DatumDomain, typename T_DatumCoord>
+    template<typename DatumDomain, typename DatumCoord>
     using GetType =
-        typename internal::GetTypeImpl<DatumDomain, T_DatumCoord>::type;
+        typename internal::GetTypeImpl<DatumDomain, DatumCoord>::type;
 
     namespace internal
     {
-        template<typename DatumElement, std::size_t... DatumDomainCoords>
+        template<typename CurrTag, typename DatumDomain, typename DatumCoord>
         struct GetUIDImpl;
 
         template<
-            typename DatumElement,
-            std::size_t FirstDatumDomainCoord,
-            std::size_t... DatumDomainCoords>
+            typename CurrTag,
+            typename... DatumElements,
+            std::size_t FirstCoord,
+            std::size_t... Coords>
         struct GetUIDImpl<
-            DatumElement,
-            FirstDatumDomainCoord,
-            DatumDomainCoords...>
+            CurrTag,
+            DatumStruct<DatumElements...>,
+            DatumCoord<FirstCoord, Coords...>>
         {
-            using _DateElement = boost::mp11::mp_at_c<
-                GetDatumElementType<DatumElement>,
-                FirstDatumDomainCoord>;
-            using type =
-                typename GetUIDImpl<_DateElement, DatumDomainCoords...>::type;
+            using DatumElement = boost::mp11::
+                mp_at_c<boost::mp11::mp_list<DatumElements...>, FirstCoord>;
+            using ChildTag = GetDatumElementUID<DatumElement>;
+            using ChildType = GetDatumElementType<DatumElement>;
+            using type = typename GetUIDImpl<
+                ChildTag,
+                ChildType,
+                DatumCoord<Coords...>>::type;
         };
 
-        template<typename DatumElement>
-        struct GetUIDImpl<DatumElement>
+        template<typename CurrTag, typename T>
+        struct GetUIDImpl<CurrTag, T, DatumCoord<>>
         {
-            using type = GetDatumElementUID<DatumElement>;
-        };
-
-        template<typename DatumElement, typename T_DatumDomainCoord>
-        struct GetUIDfromDatumCoord;
-
-        template<typename DatumElement, std::size_t... DatumDomainCoords>
-        struct GetUIDfromDatumCoord<
-            DatumElement,
-            DatumCoord<DatumDomainCoords...>>
-        {
-            using type =
-                typename GetUIDImpl<DatumElement, DatumDomainCoords...>::type;
+            using type = CurrTag;
         };
     }
 
     /** return the unique identifier of the \ref DatumElement at a \ref
      *  DatumCoord inside the datum domain tree.
-     * \tparam T_DatumDomain the datum domain, probably of type \ref DatumStruct
-     * or \ref DatumArray \tparam T_DatumCoord the datum coord, probably of type
+     * \tparam DatumDomain the datum domain, probably of type \ref DatumStruct
+     * or \ref DatumArray \tparam DatumCoord the datum coord, probably of type
      * \ref DatumCoord \return unique identifer type
      * */
-    template<typename T_DatumDomain, typename T_DatumCoord>
-    using GetUID = typename internal::GetUIDfromDatumCoord<
-        DatumElement<NoName, T_DatumDomain>,
-        T_DatumCoord>::type;
+    template<typename DatumDomain, typename DatumCoord>
+    using GetUID =
+        typename internal::GetUIDImpl<NoName, DatumDomain, DatumCoord>::type;
 
     /** Tells whether two coordinates in two datum domains have the same UID.
      * \tparam DDA first user domain
@@ -262,7 +216,7 @@ namespace llama
         typename DatumDomainB,
         typename BaseB,
         typename LocalB>
-    struct CompareUID;
+    inline constexpr auto CompareUID = false;
 
     template<
         typename DatumDomainA,
@@ -271,168 +225,128 @@ namespace llama
         typename DatumDomainB,
         std::size_t... BaseCoordsB,
         typename LocalB>
-    struct CompareUID<
+    inline constexpr auto CompareUID<
         DatumDomainA,
         DatumCoord<BaseCoordsA...>,
         LocalA,
         DatumDomainB,
         DatumCoord<BaseCoordsB...>,
-        LocalB>
+        LocalB> = []() constexpr
     {
-        /// true if the two UIDs are exactly the same, otherwise false.
-        static constexpr bool value = []() constexpr
+        if constexpr(LocalA::size != LocalB::size)
+            return false;
+        else if constexpr(LocalA::size == 0 && LocalB::size == 0)
+            return true;
+        else
         {
-            if constexpr(LocalA::size != LocalB::size)
-                return false;
-            else if constexpr(LocalA::size == 0 && LocalB::size == 0)
-                return true;
-            else
-            {
-                using TagCoordA = DatumCoord<BaseCoordsA..., LocalA::front>;
-                using TagCoordB = DatumCoord<BaseCoordsB..., LocalB::front>;
+            using TagCoordA = DatumCoord<BaseCoordsA..., LocalA::front>;
+            using TagCoordB = DatumCoord<BaseCoordsB..., LocalB::front>;
 
-                return std::is_same_v<
-                           GetUID<DatumDomainA, TagCoordA>,
-                           GetUID<
-                               DatumDomainB,
-                               TagCoordB>> && CompareUID<DatumDomainA, TagCoordA, PopFront<LocalA>, DatumDomainB, TagCoordB, PopFront<LocalB>>::value;
-            }
+            return std::is_same_v<
+                       GetUID<DatumDomainA, TagCoordA>,
+                       GetUID<
+                           DatumDomainB,
+                           TagCoordB>> && CompareUID<DatumDomainA, TagCoordA, PopFront<LocalA>, DatumDomainB, TagCoordB, PopFront<LocalB>>;
         }
-        ();
-    };
+    }
+    ();
 
     namespace internal
     {
-        template<
-            typename T_DatumDomain,
-            typename T_DatumCoord,
-            std::size_t T_pos,
-            typename T_SFinae,
-            typename... T_UID>
+        template<typename DatumDomain, typename DatumCoord, typename... UID>
         struct GetCoordFromUIDImpl
         {
             static_assert(
-                boost::mp11::mp_size<T_DatumDomain>::value != 0,
+                boost::mp11::mp_size<DatumDomain>::value != 0,
                 "UID combination is not valid");
         };
 
         template<
-            typename T_DatumDomain,
-            std::size_t... Coords,
-            std::size_t T_pos,
-            typename T_FirstUID,
-            typename... T_UID>
+            typename... DatumElements,
+            std::size_t... ResultCoords,
+            typename FirstUID,
+            typename... UID>
         struct GetCoordFromUIDImpl<
-            T_DatumDomain,
-            DatumCoord<Coords...>,
-            T_pos,
-            std::enable_if_t<std::is_same<
-                T_FirstUID,
-                GetDatumElementUID<boost::mp11::mp_first<T_DatumDomain>>>::
-                                 value>,
-            T_FirstUID,
-            T_UID...>
+            DatumStruct<DatumElements...>,
+            DatumCoord<ResultCoords...>,
+            FirstUID,
+            UID...>
         {
+            template<typename DatumElement>
+            struct HasTag :
+                    std::is_same<GetDatumElementUID<DatumElement>, FirstUID>
+            {};
+
+            static constexpr auto tagIndex = boost::mp11::mp_find_if<
+                boost::mp11::mp_list<DatumElements...>,
+                HasTag>::value;
+            static_assert(
+                tagIndex < sizeof...(DatumElements),
+                "FirstUID was not found inside this DatumStruct");
+
+            using ChildType = GetDatumElementType<
+                boost::mp11::mp_at_c<DatumStruct<DatumElements...>, tagIndex>>;
+
             using type = typename GetCoordFromUIDImpl<
-                GetDatumElementType<boost::mp11::mp_first<T_DatumDomain>>,
-                DatumCoord<Coords..., T_pos>,
-                0,
-                void,
-                T_UID...>::type;
+                ChildType,
+                DatumCoord<ResultCoords..., tagIndex>,
+                UID...>::type;
         };
 
-        template<
-            typename T_DatumDomain,
-            typename T_DatumCoord,
-            std::size_t T_pos,
-            typename T_FirstUID,
-            typename... T_UID>
-        struct GetCoordFromUIDImpl<
-            T_DatumDomain,
-            T_DatumCoord,
-            T_pos,
-            std::enable_if_t<!std::is_same<
-                T_FirstUID,
-                GetDatumElementUID<boost::mp11::mp_first<T_DatumDomain>>>::
-                                 value>,
-            T_FirstUID,
-            T_UID...>
+        template<typename DatumDomain, typename DatumCoord>
+        struct GetCoordFromUIDImpl<DatumDomain, DatumCoord>
         {
-            using type = typename GetCoordFromUIDImpl<
-                boost::mp11::mp_pop_front<T_DatumDomain>,
-                T_DatumCoord,
-                T_pos + 1,
-                void,
-                T_FirstUID,
-                T_UID...>::type;
-        };
-
-        template<
-            typename T_DatumDomain,
-            typename T_DatumCoord,
-            std::size_t T_pos>
-        struct GetCoordFromUIDImpl<T_DatumDomain, T_DatumCoord, T_pos, void>
-        {
-            using type = T_DatumCoord;
+            using type = DatumCoord;
         };
     }
 
     /** Converts a coordinate in a datum domain given as UID to a \ref
-     * DatumCoord . \tparam T_DatumDomain the datum domain (\ref DatumStruct)
-     * \tparam T_UID... the uid of in the datum domain, may also be empty (for
+     * DatumCoord . \tparam DatumDomain the datum domain (\ref DatumStruct)
+     * \tparam UID... the uid of in the datum domain, may also be empty (for
      *  `DatumCoord< >`)
      * \returns a \ref DatumCoord with the datum domain tree coordinates as
      * template parameters
      */
-    template<typename T_DatumDomain, typename... T_UID>
+    template<typename DatumDomain, typename... UID>
     using GetCoordFromUID = typename internal::
-        GetCoordFromUIDImpl<T_DatumDomain, DatumCoord<>, 0, void, T_UID...>::
-            type;
+        GetCoordFromUIDImpl<DatumDomain, DatumCoord<>, UID...>::type;
 
     namespace internal
     {
-        template<
-            typename T_DatumDomain,
-            typename T_DatumCoord,
-            typename... T_UID>
+        template<typename DatumDomain, typename DatumCoord, typename... UID>
         struct GetCoordFromUIDRelativeImpl
         {
             using AbsolutCoord = typename internal::GetCoordFromUIDImpl<
-                GetType<T_DatumDomain, T_DatumCoord>,
-                T_DatumCoord,
-                0,
-                void,
-                T_UID...>::type;
-            // Only returning the datum coord relative to T_DatumCoord
+                GetType<DatumDomain, DatumCoord>,
+                DatumCoord,
+                UID...>::type;
+            // Only returning the datum coord relative to DatumCoord
             using type = DatumCoordFromList<boost::mp11::mp_drop_c<
                 typename AbsolutCoord::List,
-                T_DatumCoord::size>>;
+                DatumCoord::size>>;
         };
     }
 
     /** Converts a coordinate in a datum domain given as UID to a \ref
      * DatumCoord relative to a given datum coord in the tree. The returned
      * datum coord is also relative to the input datum coord, that is the sub
-     * tree. \tparam T_DatumDomain the datum domain (\ref DatumStruct) \tparam
-     * T_DatumCoord datum coord to start the translation from UID to datum coord
-     * \tparam T_UID... the uid of in the datum domain, may also be empty (for
+     * tree. \tparam DatumDomain the datum domain (\ref DatumStruct) \tparam
+     * DatumCoord datum coord to start the translation from UID to datum coord
+     * \tparam UID... the uid of in the datum domain, may also be empty (for
      *  `DatumCoord< >`)
      * \returns a \ref DatumCoord with the datum domain tree coordinates as
      * template parameters
      */
-    template<typename T_DatumDomain, typename T_DatumCoord, typename... T_UID>
-    using GetCoordFromUIDRelative =
-        typename internal::GetCoordFromUIDRelativeImpl<
-            T_DatumDomain,
-            T_DatumCoord,
-            T_UID...>::type;
+    template<typename DatumDomain, typename DatumCoord, typename... UID>
+    using GetCoordFromUIDRelative = typename internal::
+        GetCoordFromUIDRelativeImpl<DatumDomain, DatumCoord, UID...>::type;
 
     /** Returns the type of a node in a datum domain tree for a coordinate given
-     * as UID \tparam T_DatumDomain the datum domain (probably \ref DatumStruct)
-     * \tparam T_DatumCoord the coordinate
+     * as UID \tparam DatumDomain the datum domain (probably \ref DatumStruct)
+     * \tparam DatumCoord the coordinate
      * \return type at the specified node
      */
-    template<typename T_DatumDomain, typename... T_UIDs>
+    template<typename DatumDomain, typename... UIDs>
     using GetTypeFromUID
-        = GetType<T_DatumDomain, GetCoordFromUID<T_DatumDomain, T_UIDs...>>;
+        = GetType<DatumDomain, GetCoordFromUID<DatumDomain, UIDs...>>;
 }

@@ -31,8 +31,7 @@ namespace llama::mapping::tree::functor
                 return tree;
             else
                 return getNode<typename TreeCoord::RestTuple>(
-                    getTupleElement<decltype(
-                        TreeCoord::FirstElement::compiletime)::value>(
+                    getTupleElement<TreeCoord::FirstElement::compiletime>(
                         tree.childs));
         }
 
@@ -42,7 +41,7 @@ namespace llama::mapping::tree::functor
         {
             if constexpr(std::is_same_v<TreeCoord, Tuple<>>)
             {
-                if constexpr(HasChildren<Tree>::value)
+                if constexpr(HasChildren<Tree>)
                     return TreeElement<
                         typename Tree::Identifier,
                         typename Tree::Type>{newValue, tree.childs};
@@ -74,13 +73,12 @@ namespace llama::mapping::tree::functor
             template<typename Element>
             LLAMA_FN_HOST_ACC_INLINE auto operator()(Element element) const
             {
-                if constexpr(HasChildren<Element>::value)
+                if constexpr(HasChildren<Element>)
                 {
                     return TreeElement<
                         typename Element::Identifier,
                         typename Element::Type>(
-                        Operation{}(element.count, newValue),
-                        element.childs);
+                        Operation{}(element.count, newValue), element.childs);
                 }
                 else
                 {
@@ -96,7 +94,7 @@ namespace llama::mapping::tree::functor
         LLAMA_FN_HOST_ACC_INLINE auto
         changeNodeChildsRuntime(Tree const & tree, std::size_t const newValue)
         {
-            if constexpr(HasChildren<Tree>::value)
+            if constexpr(HasChildren<Tree>)
             {
                 if constexpr(std::is_same_v<TreeCoord, Tuple<>>)
                 {
@@ -140,12 +138,13 @@ namespace llama::mapping::tree::functor
         template<typename Tree>
         LLAMA_FN_HOST_ACC_INLINE auto basicToResult(const Tree & tree) const
         {
-            return internal::changeNodeChildsRuntime<TreeCoord, std::multiplies<>>(
-                internal::changeNodeRuntime<TreeCoord>(
-                    tree,
-                    (internal::getNode<TreeCoord>(tree).count + amount - 1)
-                        / amount),
-                amount);
+            return internal::
+                changeNodeChildsRuntime<TreeCoord, std::multiplies<>>(
+                    internal::changeNodeRuntime<TreeCoord>(
+                        tree,
+                        (internal::getNode<TreeCoord>(tree).count + amount - 1)
+                            / amount),
+                    amount);
         }
 
         template<typename Tree, typename BasicCoord>

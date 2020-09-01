@@ -18,12 +18,47 @@
 
 #pragma once
 
-#include "../preprocessor/macros.hpp"
+#include "Array.hpp"
+#include "macros.hpp"
 
+#include <cstddef>
+#include <memory>
 #include <vector>
 
 namespace llama::allocator
 {
+    template<std::size_t BytesToReserve>
+    struct Stack
+    {
+        LLAMA_FN_HOST_ACC_INLINE auto allocate(std::size_t) const
+            -> Array<std::byte, BytesToReserve>
+        {
+            return {};
+        }
+    };
+
+    /** Allocator to allocate memory for a \ref View in the \ref Factory using
+     *  `std::shared_ptr` in the background. Meaning every time the view is
+     * copied, the shared_ptr reference count is increased and both copies share
+     * the same memory! \tparam Alignment aligment of the memory used by
+     * `std::shared_ptr`, default value is 64
+     */
+    template<std::size_t Alignment = 64u>
+    struct SharedPtr
+    {
+        LLAMA_NO_HOST_ACC_WARNING
+        inline auto allocate(std::size_t count) const
+            -> std::shared_ptr<std::byte[]>
+        {
+            auto * ptr = static_cast<std::byte *>(::operator new[](
+                count * sizeof(std::byte), std::align_val_t{Alignment}));
+            auto deleter = [=](std::byte * ptr) {
+                ::operator delete[](ptr, std::align_val_t{Alignment});
+            };
+            return std::shared_ptr<std::byte[]>{ptr, deleter};
+        }
+    };
+
     namespace internal
     {
         template<typename T, std::size_t Alignment>

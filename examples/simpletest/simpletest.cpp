@@ -157,19 +157,8 @@ int main(int argc, char ** argv)
                      .getBlobNrAndOffset<0, 1>({0, 100})
                      .offset
               << std::endl;
-    std::cout << "SizeOf DatumDomain: " << llama::SizeOf<Name>::value
+    std::cout << "SizeOf DatumDomain: " << llama::SizeOf<Name>
               << std::endl;
-    using NameStub = llama::StubType<Name>;
-    static_assert(
-        std::is_same<Name, NameStub::type>::value,
-        "Type from StubType does not match original type");
-    std::cout << "sizeof( llama::StubType< DatumDomain > ): "
-              << sizeof(NameStub) << std::endl;
-
-    std::vector<NameStub> v;
-    static_assert(
-        std::is_same<Name, decltype(v)::value_type::type>::value,
-        "Type from StubType does not match original type");
 
     std::cout << type(llama::GetCoordFromUID<Name, st::Pos, st::X>()) << '\n';
 

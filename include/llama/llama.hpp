@@ -48,17 +48,15 @@
 #define LLAMA_VERSION_MINOR 1
 #define LLAMA_VERSION_PATCH 0
 
+#include "Allocators.hpp"
 #include "ForEach.hpp"
 #include "Functions.hpp"
 #include "Types.hpp"
 #include "UserDomain.hpp"
-#include "VirtualView.hpp"
-#include "allocator/SharedPtr.hpp"
-#include "allocator/Stack.hpp"
-#include "allocator/Vector.hpp"
+#include "View.hpp"
+#include "macros.hpp"
 #include "mapping/AoS.hpp"
 #include "mapping/AoSoA.hpp"
 #include "mapping/One.hpp"
 #include "mapping/SoA.hpp"
 #include "mapping/tree/Mapping.hpp"
-#include "preprocessor/macros.hpp"

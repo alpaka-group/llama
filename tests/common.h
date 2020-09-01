@@ -2,8 +2,7 @@
 
 #include <boost/algorithm/string.hpp>
 #include <boost/core/demangle.hpp>
-#include <llama/allocator/SharedPtr.hpp>
-#include <llama/allocator/Vector.hpp>
+#include <llama/Allocators.hpp>
 #include <numeric>
 #include <regex>
 #include <string>

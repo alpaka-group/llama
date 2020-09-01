@@ -55,7 +55,7 @@ namespace llama::mapping::tree::functor
         LLAMA_FN_HOST_ACC_INLINE static auto
         basicToResultImpl(Tree tree, std::size_t runtime = 1)
         {
-            if constexpr(HasChildren<Tree>::value)
+            if constexpr(HasChildren<Tree>)
             {
                 auto children = tupleTransform(tree.childs, [&](auto element) {
                     return basicToResultImpl(
@@ -79,7 +79,7 @@ namespace llama::mapping::tree::functor
             const Tree & tree,
             std::size_t runtime = 0)
         {
-            if constexpr(SizeOfTuple<BasicCoord>::value == 1)
+            if constexpr(SizeOfTuple<BasicCoord> == 1)
                 return Tuple{
                     TreeCoordElement<BasicCoord::FirstElement::compiletime>(
                         runtime + LLAMA_DEREFERENCE(basicCoord.first.runtime))};
