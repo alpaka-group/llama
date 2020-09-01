@@ -104,7 +104,7 @@ struct BlurKernel
                 constexpr auto sharedChunkSize = ElemsPerBlock + 2 * KernelSize;
                 const SharedMapping sharedMapping(
                     {sharedChunkSize, sharedChunkSize}, treeOperationList);
-                constexpr auto sharedMemSize = llama::SizeOf<PixelOnAcc>::value
+                constexpr auto sharedMemSize = llama::SizeOf<PixelOnAcc>
                     * sharedChunkSize * sharedChunkSize;
                 auto & sharedMem = alpaka::block::shared::st::
                     allocVar<std::byte[sharedMemSize], __COUNTER__>(acc);

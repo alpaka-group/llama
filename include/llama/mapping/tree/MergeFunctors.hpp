@@ -26,18 +26,6 @@ namespace llama::mapping::tree
     struct MergeFunctors
     {};
 
-    template<typename... Args>
-    auto rest(Tuple<Args...> t)
-    {
-        return t.rest;
-    }
-
-    template<typename T>
-    auto rest(Tuple<T> t) -> Tuple<>
-    {
-        return {};
-    }
-
     template<typename Tree, typename... Operations>
     struct MergeFunctors<Tree, Tuple<Operations...>>
     {
@@ -57,7 +45,7 @@ namespace llama::mapping::tree
             const Tuple<Operations...> & treeOperationList) :
                 operation(treeOperationList.first),
                 treeAfterOp(operation.basicToResult(tree)),
-                next(treeAfterOp, rest(treeOperationList))
+                next(treeAfterOp, tupleRest(treeOperationList))
         {}
 
         LLAMA_FN_HOST_ACC_INLINE

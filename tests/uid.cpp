@@ -108,8 +108,7 @@ TEST_CASE("CompareUID")
             Particle, // DD B
             llama::GetCoordFromUID<Particle, tag::Vel>, // Base B
             llama::DatumCoord<0> // Local B
-            >::value
-        == false);
+            > == false);
 
     CHECK(
         llama::CompareUID<
@@ -119,8 +118,7 @@ TEST_CASE("CompareUID")
             Particle, // DD B
             llama::GetCoordFromUID<Particle, tag::Vel>, // Base B
             llama::DatumCoord<1> // Local B
-            >::value
-        == true);
+            > == true);
 
     CHECK(
         llama::CompareUID<
@@ -130,8 +128,7 @@ TEST_CASE("CompareUID")
             Other, // DD B
             llama::DatumCoord<>, // Base B
             llama::DatumCoord<0, 0> // Local B
-            >::value
-        == false);
+            > == false);
 
     CHECK(
         llama::CompareUID<
@@ -141,8 +138,7 @@ TEST_CASE("CompareUID")
             Other, // DD B
             llama::DatumCoord<>, // Base B
             llama::DatumCoord<0, 0> // Local B
-            >::value
-        == true);
+            > == true);
 
     CHECK(
         llama::CompareUID<
@@ -152,6 +148,5 @@ TEST_CASE("CompareUID")
             Other, // DD B
             llama::DatumCoord<>, // Base B
             llama::DatumCoord<0, 0> // Local B
-            >::value
-        == false);
+            > == false);
 }

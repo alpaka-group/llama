@@ -22,8 +22,6 @@
 #include <boost/mp11.hpp>
 #include <type_traits>
 
-/// Documentation of this file is in DatumCoord.dox!
-
 namespace llama
 {
     template<std::size_t... Coords>
@@ -84,57 +82,74 @@ namespace llama
     using PopFront = DatumCoordFromList<
         boost::mp11::mp_pop_front<typename DatumCoord::List>>;
 
+    namespace internal
+    {
+        template<typename First, typename Second>
+        struct DatumCoordIsBiggerImpl;
+
+        template<std::size_t... Coords1, std::size_t... Coords2>
+        struct DatumCoordIsBiggerImpl<
+            DatumCoord<Coords1...>,
+            DatumCoord<Coords2...>>
+        {
+            static constexpr auto value = []() constexpr
+            {
+                // CTAD does not work if Coords1/2 is an empty pack
+                std::array<std::size_t, sizeof...(Coords1)> a1{Coords1...};
+                std::array<std::size_t, sizeof...(Coords2)> a2{Coords2...};
+                for(auto i = 0; i < std::min(a1.size(), a2.size()); i++)
+                {
+                    if(a1[i] > a2[i])
+                        return true;
+                    if(a1[i] < a2[i])
+                        return false;
+                }
+                return false;
+            }
+            ();
+        };
+    }
+
     /** Checks at compile time whether a first DatumCoord is bigger than a
      * second. If so a static constexpr value will be set to true otherwise to
-     * false. \tparam T_First first \ref DatumCoord in the comparison \tparam
-     * T_Second second \ref DatumCoord in the comparison \tparam T_SFinae
-     * internal helper template parameter for specialization
+     * false. \tparam First first \ref DatumCoord in the comparison \tparam
+     * Second second \ref DatumCoord in the comparison
      * */
-    template<typename T_First, typename T_Second>
-    struct DatumCoordIsBigger;
+    template<typename First, typename Second>
+    inline constexpr auto DatumCoordIsBigger
+        = internal::DatumCoordIsBiggerImpl<First, Second>::value;
 
-    template<std::size_t... Coords1, std::size_t... Coords2>
-    struct DatumCoordIsBigger<DatumCoord<Coords1...>, DatumCoord<Coords2...>>
+    namespace internal
     {
-        static constexpr bool value = []() constexpr
+        template<typename First, typename Second>
+        struct DatumCoordIsSameImpl;
+
+        template<std::size_t... Coords1, std::size_t... Coords2>
+        struct DatumCoordIsSameImpl<
+            DatumCoord<Coords1...>,
+            DatumCoord<Coords2...>>
         {
-            // CTAD does not work if Coords1/2 is an empty pack
-            std::array<std::size_t, sizeof...(Coords1)> a1{Coords1...};
-            std::array<std::size_t, sizeof...(Coords2)> a2{Coords2...};
-            for(auto i = 0; i < std::min(a1.size(), a2.size()); i++)
+            static constexpr auto value = []() constexpr
             {
-                if(a1[i] > a2[i])
-                    return true;
-                if(a1[i] < a2[i])
-                    return false;
+                // CTAD does not work if Coords1/2 is an empty pack
+                std::array<std::size_t, sizeof...(Coords1)> a1{Coords1...};
+                std::array<std::size_t, sizeof...(Coords2)> a2{Coords2...};
+                for(auto i = 0; i < std::min(a1.size(), a2.size()); i++)
+                    if(a1[i] != a2[i])
+                        return false;
+                return true;
             }
-            return false;
-        }
-        ();
-    };
+            ();
+        };
+    }
 
     /** Checks at compile time whether a first DatumCoord is the same as a
      * second. If so a static constexpr value will be set to true otherwise to
-     * false. \tparam T_First first \ref DatumCoord in the comparison \tparam
-     * T_Second second \ref DatumCoord in the comparison \tparam T_SFinae
+     * false. \tparam First first \ref DatumCoord in the comparison \tparam
+     * Second second \ref DatumCoord in the comparison \tparam T_SFinae
      * internal helper template parameter for specialization
      * */
-    template<typename T_First, typename T_Second>
-    struct DatumCoordIsSame;
-
-    template<std::size_t... Coords1, std::size_t... Coords2>
-    struct DatumCoordIsSame<DatumCoord<Coords1...>, DatumCoord<Coords2...>>
-    {
-        static constexpr bool value = []() constexpr
-        {
-            // CTAD does not work if Coords1/2 is an empty pack
-            std::array<std::size_t, sizeof...(Coords1)> a1{Coords1...};
-            std::array<std::size_t, sizeof...(Coords2)> a2{Coords2...};
-            for(auto i = 0; i < std::min(a1.size(), a2.size()); i++)
-                if(a1[i] != a2[i])
-                    return false;
-            return true;
-        }
-        ();
-    };
+    template<typename First, typename Second>
+    inline constexpr auto DatumCoordIsSame
+        = internal::DatumCoordIsSameImpl<First, Second>::value;
 }

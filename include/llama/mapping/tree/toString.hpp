@@ -58,7 +58,7 @@ namespace llama::mapping::tree
     auto toString(TreeElement<Identifier, Type, CountType> tree) -> std::string
     {
         auto r = std::to_string(tree.count) + " * " + toString(Identifier{});
-        if constexpr(HasChildren<decltype(tree)>::value)
+        if constexpr(HasChildren<decltype(tree)>)
             r += "[ " + toString(tree.childs) + " ]";
         else
         {

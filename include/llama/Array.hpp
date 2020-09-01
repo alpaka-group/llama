@@ -22,15 +22,15 @@
 namespace llama
 {
     /** Array class like `std::array` but suitable for use with offloading
-     * devices like GPUs and extended with some (for LLAMA) useful methods.
+     * devices like GPUs.
      * \tparam T type if array elements
-     * \tparam T_dim number of elements in array
+     * \tparam Dim number of elements in array
      * */
-    template<typename T, std::size_t T_dim>
+    template<typename T, std::size_t Dim>
     struct Array
     {
         static constexpr std::size_t count
-            = T_dim; ///< Number of elements in array
+            = Dim; ///< Number of elements in array
         T element[count]; ///< Elements in the array, best to access with \ref
                           ///< operator[].
 
@@ -54,113 +54,33 @@ namespace llama
             return &element[count];
         };
 
-        /** Gives access to an element of the array *without* range check.
-         * \tparam T_IndexType type of index
-         * \param idx index of element
-         * \return reference to element at index
-         * */
-        template<typename T_IndexType>
-        LLAMA_FN_HOST_ACC_INLINE auto operator[](T_IndexType && idx) -> T &
+        template<typename IndexType>
+        LLAMA_FN_HOST_ACC_INLINE auto operator[](IndexType && idx) -> T &
         {
             return element[idx];
         }
 
-        /** Gives const access to an element of the array *without* range check.
-         * \tparam T_IndexType type of index
-         * \param idx index of element
-         * \return const reference to element at index
-         * */
-        template<typename T_IndexType>
+        template<typename IndexType>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto
-        operator[](T_IndexType && idx) const -> T const &
+        operator[](IndexType && idx) const -> T const &
         {
             return element[idx];
         }
 
-        /** Returns a copy of the array but with the first element removed.
-         * \return Array with one element less
-         * */
-        LLAMA_FN_HOST_ACC_INLINE auto pop_front() const -> Array<T, count - 1>
+        LLAMA_FN_HOST_ACC_INLINE friend auto
+        operator==(const Array<T, Dim> & a, const Array<T, Dim> & b) -> bool
         {
-            Array<T, count - 1> result;
-            for(std::size_t i = 0; i < count - 1; i++)
-                result.element[i] = element[i + 1];
-            return result;
-        }
-
-        /** Returns a copy of the array but with the last element removed.
-         * \return Array with one element less
-         * */
-        LLAMA_FN_HOST_ACC_INLINE auto pop_back() const -> Array<T, count - 1>
-        {
-            Array<T, count - 1> result;
-            for(std::size_t i = 0; i < count - 1; i++)
-                result.element[i] = element[i];
-            return result;
-        }
-
-        /** Returns a copy of the array but with the one element added in front
-         * of the (former) first element. \param new_element new element of type
-         * T to add at the beginning \return Array with one element more
-         * */
-        LLAMA_FN_HOST_ACC_INLINE auto push_front(T const new_element) const
-            -> Array<T, count + 1>
-        {
-            Array<T, count + 1> result;
-            for(std::size_t i = 0; i < count; i++)
-                result.element[i + 1] = element[i];
-            result.element[0] = new_element;
-            return result;
-        }
-
-        /** Returns a copy of the array but with the one element added after the
-         *  (former) last element.
-         * \param new_element new element of type T to add at the end
-         * \return Array with one element more
-         * */
-        LLAMA_FN_HOST_ACC_INLINE auto push_back(T const new_element) const
-            -> Array<T, count + 1>
-        {
-            Array<T, count + 1> result;
-            for(std::size_t i = 0; i < count; i++)
-                result.element[i] = element[i];
-            result.element[count] = new_element;
-            return result;
-        }
-
-        /** Checks whether two arrays are elementwise the same. Returns false if
-         * at least one pair of elements with the same index in both arrays are
-         * not the same. Returns always false for arrays of different sizes.
-         * \tparam T_Other type of other arrays. The type of the elements of the
-         *  other array may differ and the operator still return true (e.g. for
-         * int and char). \param other other array to compare with \return true
-         * if the arrays are the same, otherwise false
-         * */
-        template<typename T_Other>
-        LLAMA_FN_HOST_ACC_INLINE auto operator==(const T_Other & other) const
-            -> bool
-        {
-            if(count != other.count)
-                return false;
-            for(std::size_t i = 0; i < count; ++i)
-                if(element[i] != other.element[i])
+            for(std::size_t i = 0; i < Dim; ++i)
+                if(a.element[i] != b.element[i])
                     return false;
             return true;
         }
 
-        /** Adds an array to an existing array. May access invalid memory if the
-         *  second array is smaller than the first!
-         * \tparam T_Other type of the other array. The types of the elements of
-         * the arrays may differ. \param second other array to add \return a new
-         * array of the same type as the first array
-         * */
-        template<typename T_Other>
-        LLAMA_FN_HOST_ACC_INLINE auto operator+(const T_Other & second) const
-            -> Array
+        LLAMA_FN_HOST_ACC_INLINE friend auto
+        operator+(const Array<T, Dim> & a, const Array<T, Dim> & b) -> Array
         {
             Array temp;
-            for(std::size_t i = 0; i < count; ++i)
-                temp.element[i] = element[i] + second[i];
+            for(std::size_t i = 0; i < Dim; ++i) temp[i] = a[i] + b[i];
             return temp;
         }
     };

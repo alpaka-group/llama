@@ -52,7 +52,7 @@
 #include "Functions.hpp"
 #include "Types.hpp"
 #include "UserDomain.hpp"
-#include "VirtualView.hpp"
+#include "View.hpp"
 #include "allocator/SharedPtr.hpp"
 #include "allocator/Stack.hpp"
 #include "allocator/Vector.hpp"

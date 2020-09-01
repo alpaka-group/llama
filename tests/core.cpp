@@ -326,26 +326,7 @@ TEST_CASE("address.SoA.fortran")
 
 TEST_CASE("SizeOf")
 {
-    CHECK(llama::SizeOf<Name>::value == 56);
-}
-
-TEST_CASE("StubType")
-{
-    using NameStub = llama::StubType<Name>;
-    static_assert(std::is_same_v<Name, NameStub::type>);
-    const auto size = llama::SizeOf<Name>::value;
-    const auto stubSize = sizeof(NameStub);
-    CHECK(size == stubSize);
-}
-
-TEST_CASE("GetCoordFromUID")
-{
-    const auto str
-        = prettyPrintType(llama::GetCoordFromUID<Name, tag::Pos, tag::X>());
-    CHECK(str == R"(llama::DatumCoord<
-    0,
-    0
->)");
+    CHECK(llama::SizeOf<Name> == 56);
 }
 
 TEST_CASE("access")
