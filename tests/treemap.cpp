@@ -879,7 +879,10 @@ TEST_CASE("treemapping")
                     tag::Flags,
                     llama::Tuple<
                         llama::mapping::tree::TreeElement<
-                            llama::NoName,
+                            std::integral_constant<
+                                unsigned long,
+                                0
+                            >,
                             bool,
                             std::integral_constant<
                                 unsigned long,
@@ -887,7 +890,10 @@ TEST_CASE("treemapping")
                             >
                         >,
                         llama::mapping::tree::TreeElement<
-                            llama::NoName,
+                            std::integral_constant<
+                                unsigned long,
+                                1
+                            >,
                             bool,
                             std::integral_constant<
                                 unsigned long,
@@ -895,7 +901,10 @@ TEST_CASE("treemapping")
                             >
                         >,
                         llama::mapping::tree::TreeElement<
-                            llama::NoName,
+                            std::integral_constant<
+                                unsigned long,
+                                2
+                            >,
                             bool,
                             std::integral_constant<
                                 unsigned long,
@@ -903,7 +912,10 @@ TEST_CASE("treemapping")
                             >
                         >,
                         llama::mapping::tree::TreeElement<
-                            llama::NoName,
+                            std::integral_constant<
+                                unsigned long,
+                                3
+                            >,
                             bool,
                             std::integral_constant<
                                 unsigned long,
@@ -990,22 +1002,34 @@ TEST_CASE("treemapping")
                     tag::Flags,
                     llama::Tuple<
                         llama::mapping::tree::TreeElement<
-                            llama::NoName,
+                            std::integral_constant<
+                                unsigned long,
+                                0
+                            >,
                             bool,
                             unsigned long
                         >,
                         llama::mapping::tree::TreeElement<
-                            llama::NoName,
+                            std::integral_constant<
+                                unsigned long,
+                                1
+                            >,
                             bool,
                             unsigned long
                         >,
                         llama::mapping::tree::TreeElement<
-                            llama::NoName,
+                            std::integral_constant<
+                                unsigned long,
+                                2
+                            >,
                             bool,
                             unsigned long
                         >,
                         llama::mapping::tree::TreeElement<
-                            llama::NoName,
+                            std::integral_constant<
+                                unsigned long,
+                                3
+                            >,
                             bool,
                             unsigned long
                         >

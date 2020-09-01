@@ -62,19 +62,18 @@ static_assert(std::is_same_v<
 static_assert(std::is_same_v<
               llama::GetCoordFromUID<Particle, tag::Flags>,
               llama::DatumCoord<3>>);
-// FIXME: add native array support
 static_assert(std::is_same_v<
-              llama::GetCoordFromUID<Particle, tag::Flags, llama::NoName>,
+              llama::GetCoordFromUID<Particle, tag::Flags, llama::Index<0>>,
               llama::DatumCoord<3, 0>>);
-//static_assert(std::is_same_v<
-//              llama::GetCoordFromUID<Particle, tag::Flags, llama::NoName>,
-//              llama::DatumCoord<3, 1>>);
-//static_assert(std::is_same_v<
-//              llama::GetCoordFromUID<Particle, tag::Flags, llama::NoName>,
-//              llama::DatumCoord<3, 2>>);
-//static_assert(std::is_same_v<
-//              llama::GetCoordFromUID<Particle, tag::Flags, llama::NoName>,
-//              llama::DatumCoord<3, 3>>);
+static_assert(std::is_same_v<
+              llama::GetCoordFromUID<Particle, tag::Flags, llama::Index<1>>,
+              llama::DatumCoord<3, 1>>);
+static_assert(std::is_same_v<
+              llama::GetCoordFromUID<Particle, tag::Flags, llama::Index<2>>,
+              llama::DatumCoord<3, 2>>);
+static_assert(std::is_same_v<
+              llama::GetCoordFromUID<Particle, tag::Flags, llama::Index<3>>,
+              llama::DatumCoord<3, 3>>);
 
 TEST_CASE("prettyPrintType")
 {

@@ -34,6 +34,12 @@ namespace llama::mapping::tree
         return "Unknown";
     }
 
+    template<std::size_t I>
+    inline auto toString(Index<I>) -> std::string
+    {
+        return "";
+    }
+
     inline auto toString(NoName) -> std::string
     {
         return "";
@@ -49,8 +55,7 @@ namespace llama::mapping::tree
     }
 
     template<typename Identifier, typename Type, typename CountType>
-    auto toString(TreeElement<Identifier, Type, CountType> tree)
-        -> std::string
+    auto toString(TreeElement<Identifier, Type, CountType> tree) -> std::string
     {
         auto r = std::to_string(tree.count) + " * " + toString(Identifier{});
         if constexpr(HasChildren<decltype(tree)>::value)
