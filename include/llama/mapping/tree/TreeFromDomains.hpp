@@ -143,28 +143,27 @@ namespace llama::mapping::tree
 
     namespace internal
     {
-        template<typename DatumDomain>
-        struct ReplaceDEwithTEinDD
+        template<
+            typename Tag,
+            typename DatumDomain,
+            template<typename, typename> typename TE = TreeElementConst>
+        struct CreateTreeElement
         {
-            using type = DatumDomain;
+            using type = TE<Tag, DatumDomain>;
         };
 
-        template<typename DatumElement>
-        struct ReplaceDEwithTEinDE;
-
-        template<typename Tag, typename Type>
-        struct ReplaceDEwithTEinDE<DatumElement<Tag, Type>>
+        template<
+            typename Tag,
+            typename... DatumElements,
+            template<typename, typename>
+            typename TE>
+        struct CreateTreeElement<Tag, DatumStruct<DatumElements...>, TE>
         {
-            using type = TreeElementConst<
+            using type = TE<
                 Tag,
-                typename ReplaceDEwithTEinDD<Type>::type>;
-        };
-
-        template<typename... DatumElements>
-        struct ReplaceDEwithTEinDD<DatumStruct<DatumElements...>>
-        {
-            using type
-                = Tuple<typename ReplaceDEwithTEinDE<DatumElements>::type...>;
+                Tuple<typename CreateTreeElement<
+                    GetDatumElementUID<DatumElements>,
+                    GetDatumElementType<DatumElements>>::type...>>;
         };
 
         template<typename Leaf, std::size_t Count>
@@ -182,9 +181,8 @@ namespace llama::mapping::tree
         };
 
         template<typename DatumDomain>
-        using TreeFromDatumDomainImpl = TreeElement<
-            NoName,
-            typename ReplaceDEwithTEinDD<DatumDomain>::type>;
+        using TreeFromDatumDomainImpl =
+            typename CreateTreeElement<NoName, DatumDomain, TreeElement>::type;
     }
 
     template<typename DatumDomain>
