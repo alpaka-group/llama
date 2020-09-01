@@ -56,7 +56,12 @@ namespace llama::mapping::tree
     template<typename Identifier, typename Type, typename CountType>
     auto toString(TreeElement<Identifier, Type, CountType> tree) -> std::string
     {
-        auto r = std::to_string(tree.count) + " * " + toString(Identifier{});
+        auto r = std::to_string(tree.count);
+        if constexpr(std::is_same_v<CountType, std::size_t>)
+            r += "R"; // runtime
+        else
+            r += "C"; // compile time
+        r += std::string{" * "} + toString(Identifier{});
         if constexpr(HasChildren<decltype(tree)>)
             r += "[ " + toString(tree.childs) + " ]";
         else

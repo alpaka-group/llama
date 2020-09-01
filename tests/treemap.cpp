@@ -75,11 +75,11 @@ TEST_CASE("treemapping.empty")
     const Mapping mapping(userDomain, treeOperationList);
 
     CHECK(tree::toString(mapping.basicTree) ==
-          "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
+          "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
+          "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(tree::toString(mapping.resultTree) ==
-          "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
+          "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
+          "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
     CHECK(mapping.getBlobSize(0) == 14336);
 
@@ -140,11 +140,11 @@ TEST_CASE("treemapping.Idem")
     const Mapping mapping(userDomain, treeOperationList);
 
     CHECK(tree::toString(mapping.basicTree) ==
-          "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
+          "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
+          "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(tree::toString(mapping.resultTree) ==
-          "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
+          "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
+          "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
     CHECK(mapping.getBlobSize(0) == 14336);
 
@@ -205,11 +205,11 @@ TEST_CASE("treemapping.LeafOnlyRT")
     const Mapping mapping(userDomain, treeOperationList);
 
     CHECK(tree::toString(mapping.basicTree) ==
-          "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
+          "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
+          "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(tree::toString(mapping.resultTree) ==
-          "1 * [ 1 * [ 1 * Pos[ 256 * X(double) , 256 * Y(double) , 256 * Z(double) ] , 256 * Weight(float) , 1 * Momentum[ 256 * Z(double) , 256 * Y(double) "
-          ", 256 * X(double) ] , 1 * Flags[ 256 * (bool) , 256 * (bool) , 256 * (bool) , 256 * (bool) ] ] ]");
+          "1C * [ 1C * [ 1C * Pos[ 256R * X(double) , 256R * Y(double) , 256R * Z(double) ] , 256R * Weight(float) , 1C * Momentum[ 256R * Z(double) , 256R * Y(double) "
+          ", 256R * X(double) ] , 1C * Flags[ 256R * (bool) , 256R * (bool) , 256R * (bool) , 256R * (bool) ] ] ]");
 
     CHECK(mapping.getBlobSize(0) == 14336);
 
@@ -271,11 +271,11 @@ TEST_CASE("treemapping.MoveRTDown<>")
     const Mapping mapping(userDomain, treeOperationList);
 
     CHECK(tree::toString(mapping.basicTree) ==
-          "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
+          "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
+          "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(tree::toString(mapping.resultTree) ==
-          "4 * [ 64 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
+          "4R * [ 64R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
+          "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
     CHECK(mapping.getBlobSize(0) == 14336);
 
@@ -325,11 +325,11 @@ TEST_CASE("treemapping.MoveRTDown<0>")
     const Mapping mapping(userDomain, treeOperationList);
 
     CHECK(tree::toString(mapping.basicTree) ==
-          "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
+          "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
+          "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(tree::toString(mapping.resultTree) ==
-          "16 * [ 4 * [ 4 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 4 * Weight(float) , 4 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] , 4 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
+          "16R * [ 4R * [ 4R * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 4R * Weight(float) , 4R * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
+          "X(double) ] , 4R * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
     CHECK(mapping.getBlobSize(0) == 14336);
 
@@ -379,11 +379,11 @@ TEST_CASE("treemapping.MoveRTDown<0,0>")
     const Mapping mapping(userDomain, treeOperationList);
 
     CHECK(tree::toString(mapping.basicTree) ==
-          "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
+          "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
+          "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(tree::toString(mapping.resultTree) ==
-          "16 * [ 16 * [ 1 * Pos[ 4 * X(double) , 4 * Y(double) , 4 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
+          "16R * [ 16R * [ 1R * Pos[ 4R * X(double) , 4R * Y(double) , 4R * Z(double) ] , 1C * Weight(float) , 1C * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
+          "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
     CHECK(mapping.getBlobSize(0) == 32768);
 
@@ -433,11 +433,11 @@ TEST_CASE("treemapping.MoveRTDownFixed<>")
     const Mapping mapping(userDomain, treeOperationList);
 
     CHECK(tree::toString(mapping.basicTree) ==
-          "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
+          "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
+          "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(tree::toString(mapping.resultTree) ==
-          "4 * [ 64 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
+          "4R * [ 64R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
+          "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
     CHECK(mapping.getBlobSize(0) == 14336);
 
@@ -487,11 +487,11 @@ TEST_CASE("treemapping.MoveRTDownFixed<0>")
     const Mapping mapping(userDomain, treeOperationList);
 
     CHECK(tree::toString(mapping.basicTree) ==
-          "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
+          "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
+          "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(tree::toString(mapping.resultTree) ==
-          "16 * [ 4 * [ 4 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 4 * Weight(float) , 4 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] , 4 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
+          "16R * [ 4R * [ 4R * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 4R * Weight(float) , 4R * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
+          "X(double) ] , 4R * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
     CHECK(mapping.getBlobSize(0) == 14336);
 
@@ -541,11 +541,11 @@ TEST_CASE("treemapping.MoveRTDownFixed<0,0>")
     const Mapping mapping(userDomain, treeOperationList);
 
     CHECK(tree::toString(mapping.basicTree) ==
-          "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
+          "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
+          "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(tree::toString(mapping.resultTree) ==
-          "16 * [ 16 * [ 1 * Pos[ 4 * X(double) , 4 * Y(double) , 4 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
+          "16R * [ 16R * [ 1R * Pos[ 4R * X(double) , 4R * Y(double) , 4R * Z(double) ] , 1C * Weight(float) , 1C * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
+          "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
     CHECK(mapping.getBlobSize(0) == 32768);
 
@@ -604,11 +604,11 @@ TEST_CASE("treemapping.vectorblocks.runtime")
     const Mapping mapping(userDomain, treeOperationList);
 
     CHECK(tree::toString(mapping.basicTree) ==
-          "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
+          "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
+          "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(tree::toString(mapping.resultTree) ==
-          "16 * [ 2 * [ 1 * Pos[ 8 * X(double) , 8 * Y(double) , 8 * Z(double) ] , 8 * Weight(float) , "
-          "1 * Momentum[ 8 * Z(double) , 8 * Y(double) , 8 * X(double) ] , 8 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
+          "16R * [ 2R * [ 1R * Pos[ 8R * X(double) , 8R * Y(double) , 8R * Z(double) ] , 8R * Weight(float) , "
+          "1R * Momentum[ 8R * Z(double) , 8R * Y(double) , 8R * X(double) ] , 8R * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
     CHECK(mapping.getBlobSize(0) == 14336);
 
@@ -670,11 +670,11 @@ TEST_CASE("treemapping.vectorblocks.compiletime")
     const Mapping mapping(userDomain, treeOperationList);
 
     CHECK(tree::toString(mapping.basicTree) ==
-          "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
+          "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
+          "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(tree::toString(mapping.resultTree) ==
-          "16 * [ 2 * [ 1 * Pos[ 8 * X(double) , 8 * Y(double) , 8 * Z(double) ] , 8 * Weight(float) , "
-          "1 * Momentum[ 8 * Z(double) , 8 * Y(double) , 8 * X(double) ] , 8 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
+          "16R * [ 2R * [ 1R * Pos[ 8R * X(double) , 8R * Y(double) , 8R * Z(double) ] , 8R * Weight(float) , "
+          "1R * Momentum[ 8R * Z(double) , 8R * Y(double) , 8R * X(double) ] , 8R * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
     CHECK(mapping.getBlobSize(0) == 14336);
 
@@ -726,53 +726,53 @@ TEST_CASE("treemapping.getNode")
     using namespace tree::functor::internal;
 
     CHECK(toString(getNode<TreeCoord<>>(mapping.resultTree)) ==
-          "16 * [ 16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) "
-          ", 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
+          "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) "
+          ", 1C * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(toString(getNode<TreeCoord<0>>(mapping.resultTree)) ==
-          "16 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * "
-          "Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ]");
+          "16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * "
+          "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ]");
     CHECK(
         toString(getNode<TreeCoord<0, 0>>(mapping.resultTree))
-        == "1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ]");
+        == "1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ]");
     CHECK(
         toString(getNode<TreeCoord<0, 0, 0>>(mapping.resultTree))
-        == "1 * X(double)");
+        == "1C * X(double)");
     CHECK(
         toString(getNode<TreeCoord<0, 0, 1>>(mapping.resultTree))
-        == "1 * Y(double)");
+        == "1C * Y(double)");
     CHECK(
         toString(getNode<TreeCoord<0, 0, 2>>(mapping.resultTree))
-        == "1 * Z(double)");
+        == "1C * Z(double)");
     CHECK(
         toString(getNode<TreeCoord<0, 1>>(mapping.resultTree))
-        == "1 * Weight(float)");
+        == "1C * Weight(float)");
     CHECK(
         toString(getNode<TreeCoord<0, 2>>(mapping.resultTree))
-        == "1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * X(double) ]");
+        == "1C * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * X(double) ]");
     CHECK(
         toString(getNode<TreeCoord<0, 2, 0>>(mapping.resultTree))
-        == "1 * Z(double)");
+        == "1C * Z(double)");
     CHECK(
         toString(getNode<TreeCoord<0, 2, 1>>(mapping.resultTree))
-        == "1 * Y(double)");
+        == "1C * Y(double)");
     CHECK(
         toString(getNode<TreeCoord<0, 2, 2>>(mapping.resultTree))
-        == "1 * X(double)");
+        == "1C * X(double)");
     CHECK(
         toString(getNode<TreeCoord<0, 3>>(mapping.resultTree))
-        == "1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ]");
+        == "1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ]");
     CHECK(
         toString(getNode<TreeCoord<0, 3, 0>>(mapping.resultTree))
-        == "1 * (bool)");
+        == "1C * (bool)");
     CHECK(
         toString(getNode<TreeCoord<0, 3, 1>>(mapping.resultTree))
-        == "1 * (bool)");
+        == "1C * (bool)");
     CHECK(
         toString(getNode<TreeCoord<0, 3, 2>>(mapping.resultTree))
-        == "1 * (bool)");
+        == "1C * (bool)");
     CHECK(
         toString(getNode<TreeCoord<0, 3, 3>>(mapping.resultTree))
-        == "1 * (bool)");
+        == "1C * (bool)");
 }
 
 TEST_CASE("treemapping")
@@ -1053,10 +1053,10 @@ TEST_CASE("treemapping")
 >)");
 
     CHECK(tree::toString(mapping.basicTree) ==
-          "12 * [ 12 * [ 1 * Pos[ 1 * X(double) , 1 * Y(double) , 1 * Z(double) ] , 1 * Weight(float) , 1 * Momentum[ 1 * Z(double) , 1 * Y(double) , 1 * "
-          "X(double) ] , 1 * Flags[ 1 * (bool) , 1 * (bool) , 1 * (bool) , 1 * (bool) ] ] ]");
+          "12R * [ 12R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
+          "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(tree::toString(mapping.resultTree) ==
-          "1 * [ 1 * [ 1 * Pos[ 144 * X(double) , 144 * Y(double) , 144 * Z(double) ] , 144 * Weight(float) , 1 * Momentum[ 144 * Z(double) , 144 * Y(double) , 144 * X(double) ] , 1 * Flags[ 144 * (bool) , 144 * (bool) , 144 * (bool) , 144 * (bool) ] ] ]");
+          "1C * [ 1C * [ 1C * Pos[ 144R * X(double) , 144R * Y(double) , 144R * Z(double) ] , 144R * Weight(float) , 1C * Momentum[ 144R * Z(double) , 144R * Y(double) , 144R * X(double) ] , 1C * Flags[ 144R * (bool) , 144R * (bool) , 144R * (bool) , 144R * (bool) ] ] ]");
 
     CHECK(mapping.getBlobSize(0) == 8064);
     CHECK(mapping.getBlobNrAndOffset<2, 1>({50, 100}).offset == 10784);
