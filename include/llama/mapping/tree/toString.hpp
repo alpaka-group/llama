@@ -53,28 +53,40 @@ namespace llama::mapping::tree
             return toString(tree.first);
     }
 
-    template<typename Identifier, typename Type, typename CountType>
-    auto toString(TreeElement<Identifier, Type, CountType> tree) -> std::string
+    namespace internal
     {
-        auto r = std::to_string(tree.count);
-        if constexpr(std::is_same_v<CountType, std::size_t>)
-            r += "R"; // runtime
-        else
-            r += "C"; // compile time
-        r += std::string{" * "} + toString(Identifier{});
-        if constexpr(HasChildren<decltype(tree)>)
-            r += "[ " + toString(tree.childs) + " ]";
-        else
+        template<typename NodeOrLeaf>
+        auto countAndIdentToString(const NodeOrLeaf & nodeOrLeaf) -> std::string
         {
-            auto raw = boost::core::demangle(typeid(Type()).name());
+            auto r = std::to_string(nodeOrLeaf.count);
+            if constexpr(std::is_same_v<
+                             std::decay_t<decltype(nodeOrLeaf.count)>,
+                             std::size_t>)
+                r += "R"; // runtime
+            else
+                r += "C"; // compile time
+            r += std::string{" * "}
+                + toString(typename NodeOrLeaf::Identifier{});
+            return r;
+        }
+    }
+
+    template<typename Identifier, typename Type, typename CountType>
+    auto toString(const Node<Identifier, Type, CountType> & node) -> std::string
+    {
+        return internal::countAndIdentToString(node) + "[ "
+            + toString(node.childs) + " ]";
+    }
+    template<typename Identifier, typename Type, typename CountType>
+    auto toString(const Leaf<Identifier, Type, CountType> & leaf) -> std::string
+    {
+        auto raw = boost::core::demangle(typeid(Type).name());
 #ifdef _MSC_VER
-            boost::replace_all(raw, " __cdecl(void)", "");
+        boost::replace_all(raw, " __cdecl(void)", "");
 #endif
 #ifdef __GNUG__
-            boost::replace_all(raw, " ()", "");
+        boost::replace_all(raw, " ()", "");
 #endif
-            r += "(" + raw + ")";
-        }
-        return r;
+        return internal::countAndIdentToString(leaf) + "(" + raw + ")";
     }
 }

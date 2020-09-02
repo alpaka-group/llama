@@ -795,16 +795,16 @@ TEST_CASE("treemapping")
 #ifdef _WIN32
     boost::replace_all(raw, "__int64", "long");
 #endif
-    CHECK(raw == R"(llama::mapping::tree::TreeElement<
+    CHECK(raw == R"(llama::mapping::tree::Node<
     llama::NoName,
     llama::Tuple<
-        llama::mapping::tree::TreeElement<
+        llama::mapping::tree::Node<
             llama::NoName,
             llama::Tuple<
-                llama::mapping::tree::TreeElement<
+                llama::mapping::tree::Node<
                     tag::Pos,
                     llama::Tuple<
-                        llama::mapping::tree::TreeElement<
+                        llama::mapping::tree::Leaf<
                             tag::X,
                             double,
                             std::integral_constant<
@@ -812,7 +812,7 @@ TEST_CASE("treemapping")
                                 1
                             >
                         >,
-                        llama::mapping::tree::TreeElement<
+                        llama::mapping::tree::Leaf<
                             tag::Y,
                             double,
                             std::integral_constant<
@@ -820,7 +820,7 @@ TEST_CASE("treemapping")
                                 1
                             >
                         >,
-                        llama::mapping::tree::TreeElement<
+                        llama::mapping::tree::Leaf<
                             tag::Z,
                             double,
                             std::integral_constant<
@@ -834,7 +834,7 @@ TEST_CASE("treemapping")
                         1
                     >
                 >,
-                llama::mapping::tree::TreeElement<
+                llama::mapping::tree::Leaf<
                     tag::Weight,
                     float,
                     std::integral_constant<
@@ -842,10 +842,10 @@ TEST_CASE("treemapping")
                         1
                     >
                 >,
-                llama::mapping::tree::TreeElement<
+                llama::mapping::tree::Node<
                     tag::Momentum,
                     llama::Tuple<
-                        llama::mapping::tree::TreeElement<
+                        llama::mapping::tree::Leaf<
                             tag::Z,
                             double,
                             std::integral_constant<
@@ -853,7 +853,7 @@ TEST_CASE("treemapping")
                                 1
                             >
                         >,
-                        llama::mapping::tree::TreeElement<
+                        llama::mapping::tree::Leaf<
                             tag::Y,
                             double,
                             std::integral_constant<
@@ -861,7 +861,7 @@ TEST_CASE("treemapping")
                                 1
                             >
                         >,
-                        llama::mapping::tree::TreeElement<
+                        llama::mapping::tree::Leaf<
                             tag::X,
                             double,
                             std::integral_constant<
@@ -875,10 +875,10 @@ TEST_CASE("treemapping")
                         1
                     >
                 >,
-                llama::mapping::tree::TreeElement<
+                llama::mapping::tree::Node<
                     tag::Flags,
                     llama::Tuple<
-                        llama::mapping::tree::TreeElement<
+                        llama::mapping::tree::Leaf<
                             std::integral_constant<
                                 unsigned long,
                                 0
@@ -889,7 +889,7 @@ TEST_CASE("treemapping")
                                 1
                             >
                         >,
-                        llama::mapping::tree::TreeElement<
+                        llama::mapping::tree::Leaf<
                             std::integral_constant<
                                 unsigned long,
                                 1
@@ -900,7 +900,7 @@ TEST_CASE("treemapping")
                                 1
                             >
                         >,
-                        llama::mapping::tree::TreeElement<
+                        llama::mapping::tree::Leaf<
                             std::integral_constant<
                                 unsigned long,
                                 2
@@ -911,7 +911,7 @@ TEST_CASE("treemapping")
                                 1
                             >
                         >,
-                        llama::mapping::tree::TreeElement<
+                        llama::mapping::tree::Leaf<
                             std::integral_constant<
                                 unsigned long,
                                 3
@@ -939,26 +939,26 @@ TEST_CASE("treemapping")
 #ifdef _WIN32
     boost::replace_all(raw2, "__int64", "long");
 #endif
-    CHECK(raw2 == R"(llama::mapping::tree::TreeElement<
+    CHECK(raw2 == R"(llama::mapping::tree::Node<
     llama::NoName,
     llama::Tuple<
-        llama::mapping::tree::TreeElement<
+        llama::mapping::tree::Node<
             llama::NoName,
             llama::Tuple<
-                llama::mapping::tree::TreeElement<
+                llama::mapping::tree::Node<
                     tag::Pos,
                     llama::Tuple<
-                        llama::mapping::tree::TreeElement<
+                        llama::mapping::tree::Leaf<
                             tag::X,
                             double,
                             unsigned long
                         >,
-                        llama::mapping::tree::TreeElement<
+                        llama::mapping::tree::Leaf<
                             tag::Y,
                             double,
                             unsigned long
                         >,
-                        llama::mapping::tree::TreeElement<
+                        llama::mapping::tree::Leaf<
                             tag::Z,
                             double,
                             unsigned long
@@ -969,25 +969,25 @@ TEST_CASE("treemapping")
                         1
                     >
                 >,
-                llama::mapping::tree::TreeElement<
+                llama::mapping::tree::Leaf<
                     tag::Weight,
                     float,
                     unsigned long
                 >,
-                llama::mapping::tree::TreeElement<
+                llama::mapping::tree::Node<
                     tag::Momentum,
                     llama::Tuple<
-                        llama::mapping::tree::TreeElement<
+                        llama::mapping::tree::Leaf<
                             tag::Z,
                             double,
                             unsigned long
                         >,
-                        llama::mapping::tree::TreeElement<
+                        llama::mapping::tree::Leaf<
                             tag::Y,
                             double,
                             unsigned long
                         >,
-                        llama::mapping::tree::TreeElement<
+                        llama::mapping::tree::Leaf<
                             tag::X,
                             double,
                             unsigned long
@@ -998,10 +998,10 @@ TEST_CASE("treemapping")
                         1
                     >
                 >,
-                llama::mapping::tree::TreeElement<
+                llama::mapping::tree::Node<
                     tag::Flags,
                     llama::Tuple<
-                        llama::mapping::tree::TreeElement<
+                        llama::mapping::tree::Leaf<
                             std::integral_constant<
                                 unsigned long,
                                 0
@@ -1009,7 +1009,7 @@ TEST_CASE("treemapping")
                             bool,
                             unsigned long
                         >,
-                        llama::mapping::tree::TreeElement<
+                        llama::mapping::tree::Leaf<
                             std::integral_constant<
                                 unsigned long,
                                 1
@@ -1017,7 +1017,7 @@ TEST_CASE("treemapping")
                             bool,
                             unsigned long
                         >,
-                        llama::mapping::tree::TreeElement<
+                        llama::mapping::tree::Leaf<
                             std::integral_constant<
                                 unsigned long,
                                 2
@@ -1025,7 +1025,7 @@ TEST_CASE("treemapping")
                             bool,
                             unsigned long
                         >,
-                        llama::mapping::tree::TreeElement<
+                        llama::mapping::tree::Leaf<
                             std::integral_constant<
                                 unsigned long,
                                 3
