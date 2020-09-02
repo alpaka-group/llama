@@ -59,7 +59,7 @@ namespace llama::mapping::tree::functor
         template<typename Tree>
         LLAMA_FN_HOST_ACC_INLINE auto basicToResult(Tree tree) const
         {
-            return basicToResultImpl(tree);
+            return basicToResultImpl(tree, 1);
         }
 
         template<typename Tree, typename BasicCoord>
@@ -79,32 +79,34 @@ namespace llama::mapping::tree::functor
         }
 
     private:
-        template<typename Tree>
-        LLAMA_FN_HOST_ACC_INLINE static auto
-        basicToResultImpl(Tree tree, std::size_t runtime = 1)
+        template<typename Identifier, typename Type, typename CountType>
+        LLAMA_FN_HOST_ACC_INLINE static auto basicToResultImpl(
+            const Node<Identifier, Type, CountType> & node,
+            std::size_t runtime)
         {
-            if constexpr(HasChildren<Tree>)
-            {
-                auto children = tupleTransform(tree.childs, [&](auto element) {
-                    return basicToResultImpl(
-                        element, runtime * LLAMA_DEREFERENCE(tree.count));
-                });
-                return TreeElement<
-                    typename Tree::Identifier,
-                    decltype(children),
-                    boost::mp11::mp_size_t<1>>{{}, children};
-            }
-            else
-                return TreeElement<
-                    typename Tree::Identifier,
-                    typename Tree::Type>{
-                    LLAMA_DEREFERENCE(tree.count) * runtime};
+            auto children = tupleTransform(node.childs, [&](auto element) {
+                return basicToResultImpl(
+                    element, LLAMA_DEREFERENCE(node.count) * runtime);
+            });
+            return Node<
+                Identifier,
+                decltype(children),
+                boost::mp11::mp_size_t<1>>{{}, children};
         }
 
-        template<typename BasicCoord, typename Tree>
+        template<typename Identifier, typename Type, typename CountType>
+        LLAMA_FN_HOST_ACC_INLINE static auto basicToResultImpl(
+            const Leaf<Identifier, Type, CountType> & leaf,
+            std::size_t runtime)
+        {
+            return Leaf<Identifier, Type, std::size_t>{
+                LLAMA_DEREFERENCE(leaf.count) * runtime};
+        }
+
+        template<typename BasicCoord, typename NodeOrLeaf>
         LLAMA_FN_HOST_ACC_INLINE static auto basicCoordToResultCoordImpl(
             const BasicCoord & basicCoord,
-            const Tree & tree,
+            const NodeOrLeaf & nodeOrLeaf,
             std::size_t runtime = 0)
         {
             if constexpr(SizeOfTuple<BasicCoord> == 1)
@@ -115,7 +117,7 @@ namespace llama::mapping::tree::functor
             {
                 const auto & branch
                     = getTupleElementRef<BasicCoord::FirstElement::compiletime>(
-                        tree.childs);
+                        nodeOrLeaf.childs);
                 auto first = TreeCoordElement<
                     BasicCoord::FirstElement::compiletime,
                     boost::mp11::mp_size_t<0>>{};
@@ -125,7 +127,7 @@ namespace llama::mapping::tree::functor
                     basicCoordToResultCoordImpl<
                         typename BasicCoord::RestTuple,
                         GetTupleType<
-                            typename Tree::Type,
+                            typename NodeOrLeaf::ChildrenTuple,
                             BasicCoord::FirstElement::compiletime>>(
                         basicCoord.rest,
                         branch,
@@ -137,30 +139,28 @@ namespace llama::mapping::tree::functor
 
     namespace internal
     {
-        template<typename TreeCoord, typename Tree>
-        LLAMA_FN_HOST_ACC_INLINE auto getNode(const Tree & tree)
+        template<typename TreeCoord, typename Node>
+        LLAMA_FN_HOST_ACC_INLINE auto getNode(const Node & node)
         {
             if constexpr(std::is_same_v<TreeCoord, Tuple<>>)
-                return tree;
+                return node;
             else
                 return getNode<typename TreeCoord::RestTuple>(
                     getTupleElement<TreeCoord::FirstElement::compiletime>(
-                        tree.childs));
+                        node.childs));
         }
 
-        template<typename TreeCoord, typename Tree>
-        LLAMA_FN_HOST_ACC_INLINE auto
-        changeNodeRuntime(const Tree & tree, std::size_t newValue)
+        template<
+            typename TreeCoord,
+            typename Identifier,
+            typename Type,
+            typename CountType>
+        LLAMA_FN_HOST_ACC_INLINE auto changeNodeRuntime(
+            const Node<Identifier, Type, CountType> & tree,
+            std::size_t newValue)
         {
             if constexpr(std::is_same_v<TreeCoord, Tuple<>>)
-            {
-                if constexpr(HasChildren<Tree>)
-                    return TreeElement<
-                        typename Tree::Identifier,
-                        typename Tree::Type>{newValue, tree.childs};
-                else
-                    return Tree{newValue};
-            }
+                return Node<Identifier, Type>{newValue, tree.childs};
             else
             {
                 auto current
@@ -172,10 +172,21 @@ namespace llama::mapping::tree::functor
                 auto children
                     = tupleReplace<TreeCoord::FirstElement::compiletime>(
                         tree.childs, replacement);
-                return TreeElement<
-                    typename Tree::Identifier,
-                    decltype(children)>(tree.count, children);
+                return Node<Identifier, decltype(children)>{
+                    tree.count, children};
             }
+        }
+
+        template<
+            typename TreeCoord,
+            typename Identifier,
+            typename Type,
+            typename CountType>
+        LLAMA_FN_HOST_ACC_INLINE auto changeNodeRuntime(
+            const Leaf<Identifier, Type, CountType> & tree,
+            std::size_t newValue)
+        {
+            return Leaf<Identifier, Type, std::size_t>{newValue};
         }
 
         template<typename Operation>
@@ -183,59 +194,68 @@ namespace llama::mapping::tree::functor
         {
             const std::size_t newValue;
 
-            template<typename Element>
-            LLAMA_FN_HOST_ACC_INLINE auto operator()(Element element) const
+            template<typename Identifier, typename Type, typename CountType>
+            LLAMA_FN_HOST_ACC_INLINE auto
+            operator()(const Node<Identifier, Type, CountType> & element) const
             {
-                if constexpr(HasChildren<Element>)
-                {
-                    return TreeElement<
-                        typename Element::Identifier,
-                        typename Element::Type>(
-                        Operation{}(element.count, newValue), element.childs);
-                }
-                else
-                {
-                    const auto newCount = Operation{}(element.count, newValue);
-                    return TreeElement<
-                        typename Element::Identifier,
-                        typename Element::Type>{newCount};
-                }
+                return Node<Identifier, Type, std::size_t>{
+                    Operation{}(element.count, newValue), element.childs};
+            }
+
+            template<typename Identifier, typename Type, typename CountType>
+            LLAMA_FN_HOST_ACC_INLINE auto
+            operator()(const Leaf<Identifier, Type, CountType> & element) const
+            {
+                return Leaf<Identifier, Type, std::size_t>{
+                    Operation{}(element.count, newValue)};
             }
         };
 
-        template<typename TreeCoord, typename Operation, typename Tree>
-        LLAMA_FN_HOST_ACC_INLINE auto
-        changeNodeChildsRuntime(Tree const & tree, std::size_t const newValue)
+        template<
+            typename TreeCoord,
+            typename Operation,
+            typename Identifier,
+            typename Type,
+            typename CountType>
+        LLAMA_FN_HOST_ACC_INLINE auto changeNodeChildsRuntime(
+            const Node<Identifier, Type, CountType> & tree,
+            std::size_t newValue)
         {
-            if constexpr(HasChildren<Tree>)
+            if constexpr(std::is_same_v<TreeCoord, Tuple<>>)
             {
-                if constexpr(std::is_same_v<TreeCoord, Tuple<>>)
-                {
-                    auto children = tupleTransform(
-                        tree.childs,
-                        ChangeNodeChildsRuntimeFunctor<Operation>{newValue});
-                    return TreeElement<
-                        typename Tree::Identifier,
-                        decltype(children)>(tree.count, children);
-                }
-                else
-                {
-                    auto current
-                        = getTupleElement<TreeCoord::FirstElement::compiletime>(
-                            tree.childs);
-                    auto replacement = changeNodeChildsRuntime<
-                        typename TreeCoord::RestTuple,
-                        Operation>(current, newValue);
-                    auto children
-                        = tupleReplace<TreeCoord::FirstElement::compiletime>(
-                            tree.childs, replacement);
-                    return TreeElement<
-                        typename Tree::Identifier,
-                        decltype(children)>(tree.count, children);
-                }
+                auto children = tupleTransform(
+                    tree.childs,
+                    ChangeNodeChildsRuntimeFunctor<Operation>{newValue});
+                return Node<Identifier, decltype(children)>{
+                    tree.count, children};
             }
             else
-                return tree;
+            {
+                auto current
+                    = getTupleElement<TreeCoord::FirstElement::compiletime>(
+                        tree.childs);
+                auto replacement = changeNodeChildsRuntime<
+                    typename TreeCoord::RestTuple,
+                    Operation>(current, newValue);
+                auto children
+                    = tupleReplace<TreeCoord::FirstElement::compiletime>(
+                        tree.childs, replacement);
+                return Node<Identifier, decltype(children)>{
+                    tree.count, children};
+            }
+        }
+
+        template<
+            typename TreeCoord,
+            typename Operation,
+            typename Identifier,
+            typename Type,
+            typename CountType>
+        LLAMA_FN_HOST_ACC_INLINE auto changeNodeChildsRuntime(
+            const Leaf<Identifier, Type, CountType> & tree,
+            std::size_t newValue)
+        {
+            return tree;
         }
     }
 

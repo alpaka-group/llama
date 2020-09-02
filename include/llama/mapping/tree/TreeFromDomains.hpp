@@ -36,56 +36,31 @@ namespace llama::mapping::tree
         typename T_Identifier,
         typename T_Type,
         typename CountType = std::size_t>
-    struct TreeElement
+    struct Leaf
     {
         using Identifier = T_Identifier;
         using Type = T_Type;
 
-        LLAMA_FN_HOST_ACC_INLINE
-        TreeElement() = default;
-
-        LLAMA_FN_HOST_ACC_INLINE
-        TreeElement(CountType count) : count(count) {}
-
         const CountType count = one<CountType>;
     };
 
-    template<typename T_Identifier, typename CountType, typename... Children>
-    struct TreeElement<T_Identifier, Tuple<Children...>, CountType>
+    template<
+        typename T_Identifier,
+        typename T_ChildrenTuple,
+        typename CountType = std::size_t>
+    struct Node
     {
         using Identifier = T_Identifier;
-        using Type = Tuple<Children...>;
-
-        LLAMA_FN_HOST_ACC_INLINE
-        TreeElement() = default;
-
-        LLAMA_FN_HOST_ACC_INLINE
-        TreeElement(CountType count, Type childs) : count(count), childs(childs)
-        {}
-
-        LLAMA_FN_HOST_ACC_INLINE
-        TreeElement(CountType count) : count(count), childs() {}
+        using ChildrenTuple = T_ChildrenTuple;
 
         const CountType count = one<CountType>;
-        const Type childs = {};
+        const ChildrenTuple childs = {};
     };
-
-    template<typename TreeElement, typename = void>
-    inline constexpr auto HasChildren = false;
-
-    template<typename TreeElement>
-    inline constexpr auto HasChildren<
-        TreeElement,
-        std::void_t<decltype(std::declval<TreeElement>().childs)>> = true;
-
-    template<typename Identifier, typename Type, std::size_t Count = 1>
-    using TreeElementConst
-        = TreeElement<Identifier, Type, boost::mp11::mp_size_t<Count>>;
 
     template<typename Tree>
     struct TreePopFrontChild
     {
-        using ResultType = TreeElement<
+        using ResultType = Node<
             typename Tree::Identifier,
             typename Tree::Type::RestTuple,
             decltype(Tree::count)>;
@@ -143,53 +118,48 @@ namespace llama::mapping::tree
 
     namespace internal
     {
-        template<
-            typename Tag,
-            typename DatumDomain,
-            template<typename, typename> typename TE = TreeElementConst>
+        template<typename Tag, typename DatumDomain, typename CountType>
         struct CreateTreeElement
         {
-            using type = TE<Tag, DatumDomain>;
+            using type = Leaf<Tag, DatumDomain, boost::mp11::mp_size_t<1>>;
         };
 
-        template<
-            typename Tag,
-            typename... DatumElements,
-            template<typename, typename>
-            typename TE>
-        struct CreateTreeElement<Tag, DatumStruct<DatumElements...>, TE>
+        template<typename Tag, typename... DatumElements, typename CountType>
+        struct CreateTreeElement<Tag, DatumStruct<DatumElements...>, CountType>
         {
-            using type = TE<
+            using type = Node<
                 Tag,
                 Tuple<typename CreateTreeElement<
                     GetDatumElementUID<DatumElements>,
-                    GetDatumElementType<DatumElements>>::type...>>;
+                    GetDatumElementType<DatumElements>,
+                    boost::mp11::mp_size_t<1>>::type...>,
+                CountType>;
         };
 
         template<typename Leaf, std::size_t Count>
-        struct WrapInNTreeElements
+        struct WrapInNNodes
         {
-            using type = TreeElement<
+            using type = Node<
                 NoName,
-                Tuple<typename WrapInNTreeElements<Leaf, Count - 1>::type>>;
+                Tuple<typename WrapInNNodes<Leaf, Count - 1>::type>>;
         };
 
         template<typename Leaf>
-        struct WrapInNTreeElements<Leaf, 0>
+        struct WrapInNNodes<Leaf, 0>
         {
             using type = Leaf;
         };
 
         template<typename DatumDomain>
         using TreeFromDatumDomainImpl =
-            typename CreateTreeElement<NoName, DatumDomain, TreeElement>::type;
+            typename CreateTreeElement<NoName, DatumDomain, std::size_t>::type;
     }
 
     template<typename DatumDomain>
     using TreeFromDatumDomain = internal::TreeFromDatumDomainImpl<DatumDomain>;
 
     template<typename UserDomain, typename DatumDomain>
-    using TreeFromDomains = typename internal::WrapInNTreeElements<
+    using TreeFromDomains = typename internal::WrapInNNodes<
         internal::TreeFromDatumDomainImpl<DatumDomain>,
         UserDomain::count - 1>::type;
 
@@ -198,13 +168,13 @@ namespace llama::mapping::tree
     {
         if constexpr(Pos == UserDomain::count - 1)
         {
-            return TreeFromDatumDomain<DatumDomain>(
-                size[UserDomain::count - 1]);
+            return TreeFromDatumDomain<DatumDomain>{
+                size[UserDomain::count - 1]};
         }
         else
         {
             Tuple inner{createTree<DatumDomain, UserDomain, Pos + 1>(size)};
-            return TreeElement<NoName, decltype(inner)>(size[Pos], inner);
+            return Node<NoName, decltype(inner)>{size[Pos], inner};
         }
     };
 

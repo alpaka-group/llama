@@ -126,12 +126,14 @@ namespace llama::mapping::tree
             }
         };
 
-        template<typename Tree, std::enable_if_t<HasChildren<Tree>, int> = 0>
-        LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Tree & tree)
+        template<typename Identifier, typename Type, typename CountType>
+        LLAMA_FN_HOST_ACC_INLINE auto
+        getTreeBlobSize(const Node<Identifier, Type, CountType> & node)
             -> std::size_t;
 
-        template<typename Tree, std::enable_if_t<!HasChildren<Tree>, int> = 0>
-        LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Tree & tree)
+        template<typename Identifier, typename Type, typename CountType>
+        LLAMA_FN_HOST_ACC_INLINE auto
+        getTreeBlobSize(const Leaf<Identifier, Type, CountType> & leaf)
             -> std::size_t;
 
         template<typename... Children, std::size_t... Is, typename Count>
@@ -143,23 +145,25 @@ namespace llama::mapping::tree
             return count * (getTreeBlobSize(getTupleElement<Is>(childs)) + ...);
         }
 
-        template<typename Tree, std::enable_if_t<HasChildren<Tree>, int>>
-        LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Tree & tree)
+        template<typename Identifier, typename Type, typename CountType>
+        LLAMA_FN_HOST_ACC_INLINE auto
+        getTreeBlobSize(const Node<Identifier, Type, CountType> & node)
             -> std::size_t
         {
             constexpr std::size_t childCount = boost::mp11::mp_size<
-                std::decay_t<decltype(tree.childs)>>::value;
+                std::decay_t<decltype(node.childs)>>::value;
             return getChildrenBlobSize(
-                tree.childs,
+                node.childs,
                 std::make_index_sequence<childCount>{},
-                LLAMA_DEREFERENCE(tree.count));
+                LLAMA_DEREFERENCE(node.count));
         }
 
-        template<typename Tree, std::enable_if_t<!HasChildren<Tree>, int>>
-        LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Tree & tree)
+        template<typename Identifier, typename Type, typename CountType>
+        LLAMA_FN_HOST_ACC_INLINE auto
+        getTreeBlobSize(const Leaf<Identifier, Type, CountType> & leaf)
             -> std::size_t
         {
-            return tree.count * sizeof(typename Tree::Type);
+            return leaf.count * sizeof(Type);
         }
 
         template<typename Childs, typename CountType>
@@ -168,21 +172,27 @@ namespace llama::mapping::tree
             -> std::size_t
         {
             return getTreeBlobSize(
-                TreeElement<NoName, Childs, CountType>{count, childs});
+                Node<NoName, Childs, CountType>{count, childs});
         }
 
-        template<typename Tree, std::size_t Pos>
-        LLAMA_FN_HOST_ACC_INLINE auto summarizeTreeSmallerPos(
-            typename Tree::Type const & childs,
-            decltype(Tree::count) const & count) -> std::size_t
+        template<
+            std::size_t Pos,
+            typename Identifier,
+            typename Type,
+            typename CountType>
+        LLAMA_FN_HOST_ACC_INLINE auto
+        summarizeTreeSmallerPos(const Node<Identifier, Type, CountType> & node)
+            -> std::size_t
         {
             if constexpr(Pos == 0)
                 return 0;
             else
-                return getTreeBlobSize(childs.first)
-                    + summarizeTreeSmallerPos<
-                           typename TreePopFrontChild<Tree>::ResultType,
-                           Pos - 1>(childs.rest, count);
+                return getTreeBlobSize(node.childs.first)
+                    + summarizeTreeSmallerPos<Pos - 1>(
+                           Node<
+                               Identifier,
+                               decltype(node.childs.rest),
+                               CountType>{node.count, node.childs.rest});
         }
 
         template<typename Tree, typename... Coords>
@@ -194,10 +204,7 @@ namespace llama::mapping::tree
                 return getTreeBlobSize(
                            tree.childs,
                            LLAMA_DEREFERENCE(treeCoord.first.runtime))
-                    + summarizeTreeSmallerPos<
-                           Tree,
-                           treeCoord.first.compiletime>(
-                           tree.childs, LLAMA_DEREFERENCE(tree.count))
+                    + summarizeTreeSmallerPos<treeCoord.first.compiletime>(tree)
                     + getTreeBlobByte(
                            getTupleElementRef<treeCoord.first.compiletime>(
                                tree.childs),
@@ -225,7 +232,8 @@ namespace llama::mapping::tree
         // TODO, support more than one blob
         static constexpr std::size_t blobCount = 1;
 
-        using MergedFunctors = internal::MergeFunctors<BasicTree, TreeOperationList>;
+        using MergedFunctors
+            = internal::MergeFunctors<BasicTree, TreeOperationList>;
 
         UserDomain userDomainSize = {};
         BasicTree basicTree;
