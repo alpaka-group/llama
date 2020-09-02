@@ -57,21 +57,6 @@ namespace llama::mapping::tree
         const ChildrenTuple childs = {};
     };
 
-    template<typename Tree>
-    struct TreePopFrontChild
-    {
-        using ResultType = Node<
-            typename Tree::Identifier,
-            typename Tree::Type::RestTuple,
-            decltype(Tree::count)>;
-
-        LLAMA_FN_HOST_ACC_INLINE
-        auto operator()(const Tree & tree) -> ResultType
-        {
-            return {tree.count, tree.childs.rest};
-        }
-    };
-
     template<std::size_t Compiletime = 0, typename RuntimeType = std::size_t>
     struct TreeCoordElement
     {
