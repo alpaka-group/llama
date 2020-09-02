@@ -175,24 +175,23 @@ namespace llama::mapping::tree
                 Node<NoName, Childs, CountType>{count, childs});
         }
 
-        template<
-            std::size_t Pos,
-            typename Identifier,
-            typename Type,
-            typename CountType>
-        LLAMA_FN_HOST_ACC_INLINE auto
-        summarizeTreeSmallerPos(const Node<Identifier, Type, CountType> & node)
-            -> std::size_t
+        namespace internal
         {
-            if constexpr(Pos == 0)
-                return 0;
-            else
-                return getTreeBlobSize(node.childs.first)
-                    + summarizeTreeSmallerPos<Pos - 1>(
-                           Node<
-                               Identifier,
-                               decltype(node.childs.rest),
-                               CountType>{node.count, node.childs.rest});
+            template<
+                std::size_t MaxPos,
+                typename Identifier,
+                typename Type,
+                typename CountType,
+                std::size_t... Is>
+            LLAMA_FN_HOST_ACC_INLINE auto sumChildrenSmallerThan(
+                const Node<Identifier, Type, CountType> & node,
+                std::index_sequence<Is...>) -> std::size_t
+            {
+                return (
+                    (getTreeBlobSize(getTupleElementRef<Is>(node.childs))
+                     * (Is < MaxPos))
+                    + ...);
+            }
         }
 
         template<typename Tree, typename... Coords>
@@ -204,7 +203,11 @@ namespace llama::mapping::tree
                 return getTreeBlobSize(
                            tree.childs,
                            LLAMA_DEREFERENCE(treeCoord.first.runtime))
-                    + summarizeTreeSmallerPos<treeCoord.first.compiletime>(tree)
+                    + internal::sumChildrenSmallerThan<
+                           treeCoord.first.compiletime>(
+                           tree,
+                           std::make_index_sequence<
+                               SizeOfTuple<typename Tree::ChildrenTuple>>{})
                     + getTreeBlobByte(
                            getTupleElementRef<treeCoord.first.compiletime>(
                                tree.childs),
