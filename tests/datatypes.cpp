@@ -192,3 +192,39 @@ TEST_CASE("type nottrivial ctor")
     Element & e = view(UserDomain{0}).access<Tag>();
     // CHECK(e.value == 42); // FIXME: LLAMA memory is uninitialized
 }
+
+namespace
+{
+    struct UniqueInt
+    {
+        int value = counter++;
+
+        operator int() const
+        {
+            return value;
+        }
+
+    private:
+        inline static int counter = 0;
+    };
+}
+
+TEST_CASE("type custom initialization")
+{
+    struct Tag
+    {};
+    using Name = llama::DS<llama::DE<Tag, UniqueInt>>;
+
+    using UserDomain = llama::UserDomain<1>;
+    UserDomain userDomain{16};
+
+    using Mapping = llama::mapping::SoA<UserDomain, Name>;
+    Mapping mapping{userDomain};
+    auto view = allocView(mapping);
+
+    // FIXME: LLAMA memory is uninitialized
+    //CHECK(view(UserDomain{0}).access<Tag>() == 0);
+    //CHECK(view(UserDomain{1}).access<Tag>() == 1);
+    //CHECK(view(UserDomain{2}).access<Tag>() == 2);
+    //CHECK(view(UserDomain{15}).access<Tag>() == 15);
+}
