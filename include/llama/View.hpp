@@ -18,10 +18,10 @@
 
 #pragma once
 
+#include "Allocators.hpp"
 #include "Array.hpp"
 #include "ForEach.hpp"
 #include "Functions.hpp"
-#include "Allocators.hpp"
 #include "macros.hpp"
 #include "mapping/One.hpp"
 
@@ -180,21 +180,22 @@ namespace llama
     template<
         typename LeftDatum,
         typename RightDatum,
-        typename Source,
+        typename SourceDatumCoord,
         typename OP>
     struct GenericFunctor
     {
         template<typename LeftOuterCoord, typename LeftInnerCoord>
         LLAMA_FN_HOST_ACC_INLINE void operator()(LeftOuterCoord, LeftInnerCoord)
         {
-            ForEach<typename RightDatum::AccessibleDatumDomain, Source>::apply(
+            forEach<typename RightDatum::AccessibleDatumDomain>(
                 GenericInnerFunctor<
                     LeftDatum,
                     RightDatum,
-                    Source,
+                    SourceDatumCoord,
                     LeftOuterCoord,
                     LeftInnerCoord,
-                    OP>{left, right});
+                    OP>{left, right},
+                SourceDatumCoord{});
         }
         LeftDatum & left;
         const RightDatum & right;
@@ -254,7 +255,7 @@ namespace llama
             DatumCoord<>, \
             FUNCTOR> \
             functor{*this, other}; \
-        ForEach<AccessibleDatumDomain, DatumCoord<>>::apply(functor); \
+        forEach<AccessibleDatumDomain>(functor); \
         return *this; \
     } \
 \
@@ -276,7 +277,7 @@ namespace llama
     { \
         GenericTypeFunctor<decltype(*this), OtherType, FUNCTOR> functor{ \
             *this, other}; \
-        ForEach<AccessibleDatumDomain, DatumCoord<>>::apply(functor); \
+        forEach<AccessibleDatumDomain>(functor); \
         return *this; \
     }
 
@@ -312,7 +313,7 @@ namespace llama
     template<
         typename LeftDatum,
         typename RightDatum,
-        typename Source,
+        typename SourceDatumCoord,
         typename OP>
     struct GenericBoolFunctor
     {
@@ -326,8 +327,8 @@ namespace llama
                 RightDatum,
                 OP>
                 functor{left, right, true};
-            ForEach<typename RightDatum::AccessibleDatumDomain, Source>::apply(
-                functor);
+            forEach<typename RightDatum::AccessibleDatumDomain>(
+                functor, SourceDatumCoord{});
             result &= functor.result;
         }
         const LeftDatum & left;
@@ -400,7 +401,7 @@ namespace llama
             DatumCoord<>, \
             FUNCTOR> \
             functor{*this, other, true}; \
-        ForEach<AccessibleDatumDomain, DatumCoord<>>::apply(functor); \
+        forEach<AccessibleDatumDomain>(functor); \
         return functor.result; \
     } \
 \
@@ -418,7 +419,7 @@ namespace llama
     { \
         GenericBoolTypeFunctor<decltype(*this), OtherType, FUNCTOR> functor{ \
             *this, other, true}; \
-        ForEach<AccessibleDatumDomain, DatumCoord<>>::apply(functor); \
+        forEach<AccessibleDatumDomain>(functor); \
         return functor.result; \
     }
 
@@ -943,16 +944,14 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto accessor(UserDomain userDomain) const
             -> const auto &
         {
-            return parentView.template accessor<UIDs...>(
-                userDomain + position);
+            return parentView.template accessor<UIDs...>(userDomain + position);
         }
 
         LLAMA_NO_HOST_ACC_WARNING
         template<typename... UIDs>
         LLAMA_FN_HOST_ACC_INLINE auto accessor(UserDomain userDomain) -> auto &
         {
-            return parentView.template accessor<UIDs...>(
-                userDomain + position);
+            return parentView.template accessor<UIDs...>(userDomain + position);
         }
 
         /** Operator overloading to reverse the order of compile time (datum

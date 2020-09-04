@@ -90,7 +90,7 @@ namespace llama::mapping
 
         for(auto udCoord : UserDomainCoordRange{mapping.userDomainSize})
         {
-            llama::ForEach<DatumDomain>::apply([&](auto outer, auto inner) {
+            forEach<DatumDomain>([&](auto outer, auto inner) {
                 constexpr int size
                     = sizeof(GetType<DatumDomain, decltype(inner)>);
                 infos.push_back(DatumInfo{

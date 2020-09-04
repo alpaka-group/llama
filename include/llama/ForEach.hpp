@@ -90,28 +90,24 @@ namespace llama
      * given to the functor as \ref DatumCoord as first template parameter.
      * \tparam RestUID... optional further UIDs for addressing the start node
      */
-    template<
-        typename DatumDomain,
-        typename DatumCoordOrFirstUID = DatumCoord<>,
-        typename... RestUID>
-    struct ForEach :
-            ForEach<
-                DatumDomain,
-                GetCoordFromUID<DatumDomain, DatumCoordOrFirstUID, RestUID...>>
-    {};
 
-    template<typename DatumDomain, std::size_t... Coords>
-    struct ForEach<DatumDomain, DatumCoord<Coords...>>
+    template<typename DatumDomain, typename Functor, std::size_t... Coords>
+    LLAMA_FN_HOST_ACC_INLINE void
+    forEach(Functor && functor, DatumCoord<Coords...> coord)
     {
-        template<typename Functor>
-        LLAMA_FN_HOST_ACC_INLINE static void apply(Functor && functor)
-        {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            internal::applyFunctorForEachLeaf(
-                DatumDomain{},
-                llama::DatumCoord<Coords...>{},
-                DatumCoord<>{},
-                std::forward<Functor>(functor));
-        }
-    };
+        LLAMA_FORCE_INLINE_RECURSIVE
+        internal::applyFunctorForEachLeaf(
+            DatumDomain{},
+            coord,
+            DatumCoord<>{},
+            std::forward<Functor>(functor));
+    }
+
+    template<typename DatumDomain, typename Functor, typename... UIDs>
+    LLAMA_FN_HOST_ACC_INLINE void forEach(Functor && functor, UIDs...)
+    {
+        forEach<DatumDomain>(
+            std::forward<Functor>(functor),
+            GetCoordFromUID<DatumDomain, UIDs...>{});
+    }
 }

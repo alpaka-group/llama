@@ -1075,7 +1075,7 @@ TEST_CASE("treemapping")
                 tag::Pos,
                 llama::Addition>
                 as{datum, datum};
-            llama::ForEach<Name, tag::Momentum>::apply(as);
+            llama::forEach<Name>(as, tag::Momentum{});
             //~ auto datum2 = view( x+1, y );
             //~ datum( tag::Pos(), tag::Y() ) += datum2( tag::Pos(), tag::Y() );
         }

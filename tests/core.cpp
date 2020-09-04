@@ -463,8 +463,8 @@ TEST_CASE("iteration and access")
         for(size_t y = 0; y < userDomain[1]; ++y)
         {
             SetZeroFunctor<decltype(view(x, y))> szf{view(x, y)};
-            llama::ForEach<Name, llama::DatumCoord<0, 0>>::apply(szf);
-            llama::ForEach<Name, tag::Momentum>::apply(szf);
+            llama::forEach<Name>(szf, llama::DatumCoord<0, 0>{});
+            llama::forEach<Name>(szf, tag::Momentum{});
             view({x, y})
                 = double(x + y) / double(userDomain[0] + userDomain[1]);
         }

@@ -157,8 +157,7 @@ int main(int argc, char ** argv)
                      .getBlobNrAndOffset<0, 1>({0, 100})
                      .offset
               << std::endl;
-    std::cout << "SizeOf DatumDomain: " << llama::SizeOf<Name>
-              << std::endl;
+    std::cout << "SizeOf DatumDomain: " << llama::SizeOf<Name> << std::endl;
 
     std::cout << type(llama::GetCoordFromUID<Name, st::Pos, st::X>()) << '\n';
 
@@ -207,10 +206,10 @@ int main(int argc, char ** argv)
         SetZeroFunctor<decltype(view(x, y))> szf{view(x, y)};
         // Applying the functor for the sub tree 0,0 (pos.x), so basically
         // only for this element
-        llama::ForEach<Name, llama::DatumCoord<0, 0>>::apply(szf);
+        llama::forEach<Name>(szf, llama::DatumCoord<0, 0>{});
         // Applying the functor for the sub tree momentum (0), so basically
         // for momentum.z, and momentum.x
-        llama::ForEach<Name, st::Momentum>::apply(szf);
+        llama::forEach<Name>(szf, st::Momentum{});
         // the user domain address can be given as multiple comma separated
         // arguments or as one parameter of type user domain
         view({x, y}) = double(x + y) / double(udSize[0] + udSize[1]);
