@@ -183,4 +183,156 @@ namespace llama
         svg += "</svg>";
         return svg;
     }
+
+    template<typename Mapping>
+    auto toHtml(const Mapping & mapping) -> std::string
+    {
+        using UserDomain = typename Mapping::UserDomain;
+        using DatumDomain = typename Mapping::DatumDomain;
+
+        constexpr auto byteSizeInPixel = 30;
+        constexpr auto rulerLengthInBytes = 512;
+        constexpr auto rulerByteInterval = 8;
+
+        struct DatumInfo
+        {
+            UserDomain udCoord;
+            std::vector<std::size_t> ddIndices;
+            std::vector<std::string> ddTags;
+            std::size_t offset;
+            std::size_t size;
+        };
+        std::vector<DatumInfo> infos;
+
+        for(auto udCoord : UserDomainCoordRange{mapping.userDomainSize})
+        {
+            forEach<DatumDomain>([&](auto outer, auto inner) {
+                constexpr int size
+                    = sizeof(GetType<DatumDomain, decltype(inner)>);
+                infos.push_back(DatumInfo{
+                    udCoord,
+                    internal::toVec(inner),
+                    internal::tagsAsStrings<DatumDomain>(inner),
+                    internal::mappingOffset(mapping, udCoord, inner),
+                    size});
+            });
+        }
+        std::sort(
+            begin(infos),
+            end(infos),
+            [](const DatumInfo & a, const DatumInfo & b) {
+                return a.offset < b.offset;
+            });
+
+        auto formatDDTags = [](const std::vector<std::string> & tags) {
+            std::string s;
+            for(const auto & tag : tags)
+            {
+                if(!s.empty())
+                    s += ".";
+                s += tag;
+            }
+            return s;
+        };
+
+        auto cssClass = [](const std::vector<std::string> & tags) {
+            std::string s;
+            for(const auto & tag : tags)
+            {
+                if(!s.empty())
+                    s += "_";
+                s += tag;
+            }
+            return s;
+        };
+
+        auto formatUdCoord = [](const auto & coord) {
+            if constexpr(std::is_same_v<decltype(coord), llama::UserDomain<1>>)
+                return std::to_string(coord[0]);
+            else
+            {
+                std::string s = "{";
+                for(auto v : coord)
+                {
+                    if(s.size() >= 2)
+                        s += ",";
+                    s += std::to_string(v);
+                }
+                s += "}";
+                return s;
+            }
+        };
+
+        std::string svg;
+        svg += fmt::format(
+            R"(<!DOCTYPE html>
+<html>
+<head>
+<style>
+.box {{
+    outline: 1px solid;
+    display: inline-block;
+    white-space: nowrap;
+    height: {}px;
+    background: repeating-linear-gradient(90deg, #0000, #0000 29px, #777 29px, #777 30px);
+    text-align: center;
+    overflow: hidden;
+    vertical-align: middle;
+}}
+#ruler {{
+    background: repeating-linear-gradient(90deg, #0000, #0000 29px, #000 29px, #000 30px);
+    border-bottom: 1px solid;
+    height: 20px;
+    margin-bottom: 20px;
+}}
+#ruler div {{
+    position: absolute;
+    display: inline-block;
+}}
+)",
+            byteSizeInPixel);
+        forEach<DatumDomain>([&](auto outer, auto inner) {
+            constexpr int size = sizeof(GetType<DatumDomain, decltype(inner)>);
+
+            svg += fmt::format(
+                R"(.{} {{
+    width: {}px;
+    background-color: #{:X};
+}}
+)",
+                cssClass(internal::tagsAsStrings<DatumDomain>(inner)),
+                byteSizeInPixel * size,
+                boost::hash_value(internal::toVec(inner)) & 0xFFFFFF);
+        });
+
+        svg += fmt::format(R"(</style>
+</head>
+<body>
+    <header id="ruler">
+)");
+        for(auto i = 0; i < rulerLengthInBytes; i += rulerByteInterval)
+            svg += fmt::format(
+                R"(</style>
+        <div style="margin-left: {}px;">{}</div>)",
+                i * byteSizeInPixel,
+                i);
+        svg += fmt::format(R"(
+    </header>
+)");
+
+        for(const auto & info : infos)
+        {
+            const auto bgColor = boost::hash_value(info.ddIndices) & 0xFFFFFF;
+
+            const auto width = byteSizeInPixel * info.size;
+            svg += fmt::format(
+                R"(<div class="box {0}" title="{1} {2}">{1} {2}</div>)",
+                cssClass(info.ddTags),
+                formatUdCoord(info.udCoord),
+                formatDDTags(info.ddTags));
+        }
+        svg += R"(</body>
+</html>)";
+        return svg;
+    }
 }
