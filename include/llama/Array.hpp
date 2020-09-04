@@ -32,7 +32,7 @@ namespace llama
     {
         static constexpr std::size_t count
             = Dim; ///< Number of elements in array
-        T element[count]; ///< Elements in the array, best to access with \ref
+        T element[count > 0 ? count : 1]; ///< Elements in the array, best to access with \ref
                           ///< operator[].
 
         LLAMA_FN_HOST_ACC_INLINE T * begin()

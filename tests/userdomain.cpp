@@ -21,6 +21,19 @@ using Name = llama::DS<
 >;
 // clang-format on
 
+TEST_CASE("UserDomain.dim0")
+{
+    using UserDomain = llama::UserDomain<0>;
+    UserDomain userDomain{};
+
+    using Mapping = llama::mapping::SoA<UserDomain, Name>;
+    Mapping mapping{userDomain};
+    auto view = allocView(mapping);
+
+    float & x = view(UserDomain{}).access<tag::Pos, tag::X>();
+    x = 0;
+}
+
 TEST_CASE("UserDomain.dim1")
 {
     using UserDomain = llama::UserDomain<1>;
