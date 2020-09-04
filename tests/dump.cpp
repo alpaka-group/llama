@@ -14,6 +14,7 @@ namespace tag
     struct Y {};
     struct Z {};
     struct Mass {};
+    struct Flags {};
 }
 
 using Vec = llama::DS<
@@ -24,14 +25,15 @@ using Vec = llama::DS<
 using Particle = llama::DS<
     llama::DE<tag::Pos, Vec>,
     llama::DE<tag::Vel,Vec>,
-    llama::DE<tag::Mass, float>
+    llama::DE<tag::Mass, float>,
+    llama::DE<tag::Flags, llama::DA<bool, 4>>
 >;
 // clang-format on
 
 TEST_CASE("dump")
 {
     using UserDomain = llama::UserDomain<2>;
-    UserDomain userDomain{16, 16};
+    UserDomain userDomain{8, 8};
 
     {
         std::ofstream f{"AoSMapping.svg"};

@@ -20,13 +20,18 @@ namespace llama::mapping
         }
 
         template<typename Tag>
-        auto tagToString()
+        auto tagToString(Tag)
         {
             auto s = boost::core::demangle(typeid(Tag).name());
-            if(const auto pos = s.rfind(':');
-               pos != std::string::npos) // struo ba
+            if(const auto pos = s.rfind(':'); pos != std::string::npos)
                 s = s.substr(pos + 1);
             return s;
+        }
+
+        template<std::size_t N>
+        auto tagToString(Index<N>)
+        {
+            return std::to_string(N);
         }
 
         template<
@@ -42,7 +47,7 @@ namespace llama::mapping
             using Tag = GetUID<
                 DatumDomain,
                 DatumCoord<CoordsBefore..., CoordCurrent>>;
-            v.push_back(tagToString<Tag>());
+            v.push_back(tagToString(Tag{}));
             if constexpr(sizeof...(CoordsAfter) > 0)
                 collectTagsAsStrings<DatumDomain>(
                     v,
