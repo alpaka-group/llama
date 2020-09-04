@@ -15,7 +15,7 @@ namespace tag {
 }
 
 // clang-format off
-using Name = llama::DS<
+using Particle = llama::DS<
     llama::DE<tag::Pos, llama::DS<
         llama::DE<tag::X, double>,
         llama::DE<tag::Y, double>,
@@ -33,7 +33,7 @@ using Name = llama::DS<
 
 TEST_CASE("demangleType")
 {
-    auto str = prettyPrintType(Name());
+    auto str = prettyPrintType(Particle());
 #ifdef _WIN32
     boost::replace_all(str, "__int64", "long");
 #endif
@@ -116,7 +116,7 @@ TEST_CASE("address.AoS")
 {
     using UserDomain = llama::UserDomain<2>;
     auto userDomain = UserDomain{16, 16};
-    auto mapping = llama::mapping::AoS<UserDomain, Name>{userDomain};
+    auto mapping = llama::mapping::AoS<UserDomain, Particle>{userDomain};
 
     {
         const auto coord = UserDomain{0, 0};
@@ -169,7 +169,7 @@ TEST_CASE("address.AoS.fortran")
     using UserDomain = llama::UserDomain<2>;
     auto userDomain = UserDomain{16, 16};
     auto mapping = llama::mapping::
-        AoS<UserDomain, Name, llama::LinearizeUserDomainAdressLikeFortran>{
+        AoS<UserDomain, Particle, llama::LinearizeUserDomainAdressLikeFortran>{
             userDomain};
 
     {
@@ -222,7 +222,7 @@ TEST_CASE("address.SoA")
 {
     using UserDomain = llama::UserDomain<2>;
     auto userDomain = UserDomain{16, 16};
-    auto mapping = llama::mapping::SoA<UserDomain, Name>{userDomain};
+    auto mapping = llama::mapping::SoA<UserDomain, Particle>{userDomain};
 
     {
         const auto coord = UserDomain{0, 0};
@@ -275,7 +275,7 @@ TEST_CASE("address.SoA.fortran")
     using UserDomain = llama::UserDomain<2>;
     auto userDomain = UserDomain{16, 16};
     auto mapping = llama::mapping::
-        SoA<UserDomain, Name, llama::LinearizeUserDomainAdressLikeFortran>{
+        SoA<UserDomain, Particle, llama::LinearizeUserDomainAdressLikeFortran>{
             userDomain};
 
     {
@@ -324,9 +324,9 @@ TEST_CASE("address.SoA.fortran")
     }
 }
 
-TEST_CASE("SizeOf")
+TEST_CASE("sizeOf")
 {
-    CHECK(llama::SizeOf<Name> == 56);
+    CHECK(llama::sizeOf<Particle> == 56);
 }
 
 TEST_CASE("access")
@@ -334,7 +334,7 @@ TEST_CASE("access")
     using UserDomain = llama::UserDomain<2>;
     UserDomain userDomain{16, 16};
 
-    using Mapping = llama::mapping::SoA<UserDomain, Name>;
+    using Mapping = llama::mapping::SoA<UserDomain, Particle>;
     Mapping mapping{userDomain};
     auto view = allocView(mapping);
 
@@ -384,23 +384,23 @@ TEST_CASE("access")
     l(std::as_const(view));
 }
 
-TEST_CASE("linearBytePos")
+TEST_CASE("offsetOf")
 {
-    CHECK(llama::linearBytePos<Name>() == 0);
-    CHECK(llama::linearBytePos<Name, 0>() == 0);
-    CHECK(llama::linearBytePos<Name, 0, 0>() == 0);
-    CHECK(llama::linearBytePos<Name, 0, 1>() == 8);
-    CHECK(llama::linearBytePos<Name, 0, 2>() == 16);
-    CHECK(llama::linearBytePos<Name, 1>() == 24);
-    CHECK(llama::linearBytePos<Name, 2>() == 28);
-    CHECK(llama::linearBytePos<Name, 2, 0>() == 28);
-    CHECK(llama::linearBytePos<Name, 2, 1>() == 36);
-    CHECK(llama::linearBytePos<Name, 2, 2>() == 44);
-    CHECK(llama::linearBytePos<Name, 3>() == 52);
-    CHECK(llama::linearBytePos<Name, 3, 0>() == 52);
-    CHECK(llama::linearBytePos<Name, 3, 1>() == 53);
-    CHECK(llama::linearBytePos<Name, 3, 2>() == 54);
-    CHECK(llama::linearBytePos<Name, 3, 3>() == 55);
+    static_assert(llama::offsetOf<Particle> == 0);
+    static_assert(llama::offsetOf<Particle, 0> == 0);
+    static_assert(llama::offsetOf<Particle, 0, 0> == 0);
+    static_assert(llama::offsetOf<Particle, 0, 1> == 8);
+    static_assert(llama::offsetOf<Particle, 0, 2> == 16);
+    static_assert(llama::offsetOf<Particle, 1> == 24);
+    static_assert(llama::offsetOf<Particle, 2> == 28);
+    static_assert(llama::offsetOf<Particle, 2, 0> == 28);
+    static_assert(llama::offsetOf<Particle, 2, 1> == 36);
+    static_assert(llama::offsetOf<Particle, 2, 2> == 44);
+    static_assert(llama::offsetOf<Particle, 3> == 52);
+    static_assert(llama::offsetOf<Particle, 3, 0> == 52);
+    static_assert(llama::offsetOf<Particle, 3, 1> == 53);
+    static_assert(llama::offsetOf<Particle, 3, 2> == 54);
+    static_assert(llama::offsetOf<Particle, 3, 3> == 55);
 }
 
 TEST_CASE("addresses")
@@ -408,7 +408,7 @@ TEST_CASE("addresses")
     using UserDomain = llama::UserDomain<2>;
     UserDomain userDomain{16, 16};
 
-    using Mapping = llama::mapping::SoA<UserDomain, Name>;
+    using Mapping = llama::mapping::SoA<UserDomain, Particle>;
     Mapping mapping{userDomain};
     auto view = allocView(mapping);
 
@@ -453,7 +453,7 @@ TEST_CASE("iteration and access")
     using UserDomain = llama::UserDomain<2>;
     UserDomain userDomain{16, 16};
 
-    using Mapping = llama::mapping::SoA<UserDomain, Name>;
+    using Mapping = llama::mapping::SoA<UserDomain, Particle>;
     Mapping mapping{userDomain};
     auto view = allocView(mapping);
 
@@ -463,8 +463,8 @@ TEST_CASE("iteration and access")
         for(size_t y = 0; y < userDomain[1]; ++y)
         {
             SetZeroFunctor<decltype(view(x, y))> szf{view(x, y)};
-            llama::forEach<Name>(szf, llama::DatumCoord<0, 0>{});
-            llama::forEach<Name>(szf, tag::Momentum{});
+            llama::forEach<Particle>(szf, llama::DatumCoord<0, 0>{});
+            llama::forEach<Particle>(szf, tag::Momentum{});
             view({x, y})
                 = double(x + y) / double(userDomain[0] + userDomain[1]);
         }
@@ -481,7 +481,7 @@ TEST_CASE("Datum access")
     using UserDomain = llama::UserDomain<2>;
     UserDomain userDomain{16, 16};
 
-    using Mapping = llama::mapping::SoA<UserDomain, Name>;
+    using Mapping = llama::mapping::SoA<UserDomain, Particle>;
     Mapping mapping{userDomain};
     auto view = allocView(mapping);
 
@@ -512,11 +512,11 @@ TEST_CASE("AssignOneDatumIntoView")
     using UserDomain = llama::UserDomain<2>;
     UserDomain userDomain{16, 16};
 
-    using Mapping = llama::mapping::SoA<UserDomain, Name>;
+    using Mapping = llama::mapping::SoA<UserDomain, Particle>;
     Mapping mapping{userDomain};
     auto view = allocView(mapping);
 
-    auto datum = llama::stackVirtualDatumAlloc<Name>();
+    auto datum = llama::stackVirtualDatumAlloc<Particle>();
     datum(tag::Pos{}, tag::X{}) = 14.0f;
     datum(tag::Pos{}, tag::Y{}) = 15.0f;
     datum(tag::Pos{}, tag::Z{}) = 16.0f;
@@ -547,7 +547,7 @@ TEST_CASE("non-memory-owning view")
     using UserDomain = llama::UserDomain<1>;
     UserDomain userDomain{256};
 
-    using Mapping = llama::mapping::SoA<UserDomain, Name>;
+    using Mapping = llama::mapping::SoA<UserDomain, Particle>;
     Mapping mapping{userDomain};
 
     std::vector<std::byte> storage(mapping.getBlobSize(0));

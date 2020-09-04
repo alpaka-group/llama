@@ -80,25 +80,23 @@ namespace llama
      *  normal struct
      * \tparam DatumDomain datum domain tree
      * \tparam Coords... coordinate in datum domain tree
-     * \return the byte position as compile time value in "value"
      */
     template<typename DatumDomain, std::size_t... Coords>
-    constexpr auto linearBytePos() -> std::size_t
-    {
-        return internal::linearBytePosImpl(
-            (DatumDomain *)nullptr, DatumCoord<Coords...>{}, DatumCoord<>{});
-    }
+    inline constexpr std::size_t offsetOf = internal::linearBytePosImpl(
+        (DatumDomain *)nullptr,
+        DatumCoord<Coords...>{},
+        DatumCoord<>{});
 
     /** Gives the size a datum domain if it would be a normal struct
      * \tparam DatumDomain datum domain tree
      * \return the byte position as compile time value in "value"
      */
     template<typename DatumDomain>
-    static constexpr auto SizeOf = sizeof(DatumDomain);
+    static constexpr auto sizeOf = sizeof(DatumDomain);
 
     template<typename... DatumElements>
-    static constexpr auto SizeOf<DatumStruct<
-        DatumElements...>> = (SizeOf<GetDatumElementType<DatumElements>> + ...);
+    static constexpr auto sizeOf<DatumStruct<
+        DatumElements...>> = (sizeOf<GetDatumElementType<DatumElements>> + ...);
 
     template<typename T>
     inline constexpr auto IsDatumStruct = false;

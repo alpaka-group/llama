@@ -96,7 +96,7 @@ TEST_CASE("view allocator Stack")
     using Mapping = llama::mapping::SoA<UserDomain, DatumDomain>;
     auto view = allocView(
         Mapping(viewSize),
-        llama::allocator::Stack<16 * 16 * llama::SizeOf<DatumDomain>>{});
+        llama::allocator::Stack<16 * 16 * llama::sizeOf<DatumDomain>>{});
 
     for(auto i : llama::UserDomainCoordRange{viewSize}) view(i) = 42;
 }

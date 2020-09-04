@@ -114,7 +114,7 @@ struct UpdateKernel
                 else
                 {
                     constexpr auto sharedMemSize
-                        = llama::SizeOf<
+                        = llama::sizeOf<
                               typename View::Mapping::DatumDomain>
                         * BlockSize;
                     auto & sharedMem = alpaka::block::shared::st::
@@ -245,7 +245,7 @@ int main(int argc, char ** argv)
     using Mapping = decltype(mapping);
 
     std::cout << PROBLEM_SIZE / 1000 << " thousand particles\n"
-              << PROBLEM_SIZE * llama::SizeOf<Particle> / 1000 / 1000
+              << PROBLEM_SIZE * llama::sizeOf<Particle> / 1000 / 1000
               << "MB \n";
 
     Chrono chrono;

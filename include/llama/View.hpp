@@ -80,7 +80,7 @@ namespace llama
     {
         using Mapping = llama::mapping::One<UserDomain<Dim>, DatumDomain>;
         return allocView(
-            Mapping{}, llama::allocator::Stack<SizeOf<DatumDomain>>{});
+            Mapping{}, llama::allocator::Stack<sizeOf<DatumDomain>>{});
     }
 
     template<typename View>

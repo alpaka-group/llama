@@ -157,7 +157,7 @@ int main(int argc, char ** argv)
                      .getBlobNrAndOffset<0, 1>({0, 100})
                      .offset
               << std::endl;
-    std::cout << "SizeOf DatumDomain: " << llama::SizeOf<Name> << std::endl;
+    std::cout << "sizeOf DatumDomain: " << llama::sizeOf<Name> << std::endl;
 
     std::cout << type(llama::GetCoordFromUID<Name, st::Pos, st::X>()) << '\n';
 

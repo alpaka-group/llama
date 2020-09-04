@@ -114,7 +114,7 @@ int main(int argc, char ** argv)
     using Mapping = decltype(mapping);
 
     std::cout << PROBLEM_SIZE / 1000 / 1000 << " million vectors\n"
-              << PROBLEM_SIZE * llama::SizeOf<Vector> * 2 / 1000 / 1000
+              << PROBLEM_SIZE * llama::sizeOf<Vector> * 2 / 1000 / 1000
               << " MB on device\n";
 
     Chrono chrono;

@@ -44,15 +44,15 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE auto getBlobSize(std::size_t) const
             -> std::size_t
         {
-            return SizeOf<DatumDomain>;
+            return sizeOf<DatumDomain>;
         }
 
         template<std::size_t... DatumDomainCoord>
         LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(UserDomain coord) const
             -> NrAndOffset
         {
-            const auto offset
-                = linearBytePos<DatumDomain, DatumDomainCoord...>();
+            constexpr auto offset
+                = offsetOf<DatumDomain, DatumDomainCoord...>;
             return {0, offset};
         }
     };
