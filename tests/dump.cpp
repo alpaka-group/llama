@@ -47,4 +47,9 @@ TEST_CASE("dump")
     dump(llama::mapping::SoA<ArrayDomain, Particle> {arrayDomain}, "SoAMapping");
     dump(llama::mapping::AoSoA<ArrayDomain, Particle, 8> {arrayDomain}, "AoSoAMapping8");
     dump(llama::mapping::AoSoA<ArrayDomain, Particle, 32> {arrayDomain}, "AoSoAMapping32");
+    dump(
+        llama::mapping::
+            SplitMapping<ArrayDomain, Particle, llama::DatumCoord<0>, llama::mapping::SoA, llama::mapping::AoS> {
+                arrayDomain},
+        "SplitMapping");
 }
