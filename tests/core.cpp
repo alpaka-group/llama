@@ -31,7 +31,7 @@ using Particle = llama::DS<
 >;
 // clang-format on
 
-TEST_CASE("demangleType")
+TEST_CASE("prettyPrintType")
 {
     auto str = prettyPrintType(Particle());
 #ifdef _WIN32
@@ -326,7 +326,7 @@ TEST_CASE("address.SoA.fortran")
 
 TEST_CASE("sizeOf")
 {
-    CHECK(llama::sizeOf<Particle> == 56);
+    STATIC_REQUIRE(llama::sizeOf<Particle> == 56);
 }
 
 TEST_CASE("access")
@@ -386,21 +386,21 @@ TEST_CASE("access")
 
 TEST_CASE("offsetOf")
 {
-    static_assert(llama::offsetOf<Particle> == 0);
-    static_assert(llama::offsetOf<Particle, 0> == 0);
-    static_assert(llama::offsetOf<Particle, 0, 0> == 0);
-    static_assert(llama::offsetOf<Particle, 0, 1> == 8);
-    static_assert(llama::offsetOf<Particle, 0, 2> == 16);
-    static_assert(llama::offsetOf<Particle, 1> == 24);
-    static_assert(llama::offsetOf<Particle, 2> == 28);
-    static_assert(llama::offsetOf<Particle, 2, 0> == 28);
-    static_assert(llama::offsetOf<Particle, 2, 1> == 36);
-    static_assert(llama::offsetOf<Particle, 2, 2> == 44);
-    static_assert(llama::offsetOf<Particle, 3> == 52);
-    static_assert(llama::offsetOf<Particle, 3, 0> == 52);
-    static_assert(llama::offsetOf<Particle, 3, 1> == 53);
-    static_assert(llama::offsetOf<Particle, 3, 2> == 54);
-    static_assert(llama::offsetOf<Particle, 3, 3> == 55);
+    STATIC_REQUIRE(llama::offsetOf<Particle> == 0);
+    STATIC_REQUIRE(llama::offsetOf<Particle, 0> == 0);
+    STATIC_REQUIRE(llama::offsetOf<Particle, 0, 0> == 0);
+    STATIC_REQUIRE(llama::offsetOf<Particle, 0, 1> == 8);
+    STATIC_REQUIRE(llama::offsetOf<Particle, 0, 2> == 16);
+    STATIC_REQUIRE(llama::offsetOf<Particle, 1> == 24);
+    STATIC_REQUIRE(llama::offsetOf<Particle, 2> == 28);
+    STATIC_REQUIRE(llama::offsetOf<Particle, 2, 0> == 28);
+    STATIC_REQUIRE(llama::offsetOf<Particle, 2, 1> == 36);
+    STATIC_REQUIRE(llama::offsetOf<Particle, 2, 2> == 44);
+    STATIC_REQUIRE(llama::offsetOf<Particle, 3> == 52);
+    STATIC_REQUIRE(llama::offsetOf<Particle, 3, 0> == 52);
+    STATIC_REQUIRE(llama::offsetOf<Particle, 3, 1> == 53);
+    STATIC_REQUIRE(llama::offsetOf<Particle, 3, 2> == 54);
+    STATIC_REQUIRE(llama::offsetOf<Particle, 3, 3> == 55);
 }
 
 TEST_CASE("addresses")

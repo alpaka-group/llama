@@ -21,7 +21,7 @@ using Name = llama::DS<
 >;
 // clang-format on
 
-TEST_CASE("dim1")
+TEST_CASE("UserDomain.dim1")
 {
     using UserDomain = llama::UserDomain<1>;
     UserDomain userDomain{16};
@@ -34,7 +34,7 @@ TEST_CASE("dim1")
     x = 0;
 }
 
-TEST_CASE("dim2")
+TEST_CASE("UserDomain.dim2")
 {
     using UserDomain = llama::UserDomain<2>;
     UserDomain userDomain{16, 16};
@@ -47,7 +47,7 @@ TEST_CASE("dim2")
     x = 0;
 }
 
-TEST_CASE("dim3")
+TEST_CASE("UserDomain.dim3")
 {
     using UserDomain = llama::UserDomain<3>;
     UserDomain userDomain{16, 16, 16};
@@ -60,7 +60,7 @@ TEST_CASE("dim3")
     x = 0;
 }
 
-TEST_CASE("dim10")
+TEST_CASE("UserDomain.dim10")
 {
     using UserDomain = llama::UserDomain<10>;
     UserDomain userDomain{2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
@@ -74,7 +74,7 @@ TEST_CASE("dim10")
     x = 0;
 }
 
-TEST_CASE("userdomain ctor")
+TEST_CASE("UserDomain.ctor")
 {
     llama::UserDomain<1> ud{};
     CHECK(ud[0] == 0);
