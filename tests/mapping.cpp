@@ -137,6 +137,62 @@ TEST_CASE("address.AoS.fortran")
     }
 }
 
+TEST_CASE("address.AoS.morton")
+{
+    using UserDomain = llama::UserDomain<2>;
+    auto userDomain = UserDomain{16, 16};
+    auto mapping = llama::mapping::AoS<
+        UserDomain,
+        Particle,
+        llama::LinearizeUserDomainMorton,
+        llama::ExtentUserDomainMorton>{userDomain};
+
+    {
+        const auto coord = UserDomain{0, 0};
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 8);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 16);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 24);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 28);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 36);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 44);
+        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 52);
+        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 53);
+        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 54);
+        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 55);
+    }
+
+    {
+        const auto coord = UserDomain{0, 1};
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 56);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 64);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 72);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 80);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 84);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 92);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 100);
+        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 108);
+        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 109);
+        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 110);
+        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 111);
+    }
+
+    {
+        const auto coord = UserDomain{1, 0};
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 112);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 120);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 128);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 136);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 140);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 148);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 156);
+        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 164);
+        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 165);
+        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 166);
+        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 167);
+    }
+}
+
 TEST_CASE("address.SoA")
 {
     using UserDomain = llama::UserDomain<2>;
@@ -240,5 +296,64 @@ TEST_CASE("address.SoA.fortran")
         CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 13569);
         CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 13825);
         CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 14081);
+    }
+}
+
+TEST_CASE("address.SoA.morton")
+{
+    struct Value
+    {};
+
+    using UserDomain = llama::UserDomain<2>;
+    auto userDomain = UserDomain{16, 16};
+    auto mapping = llama::mapping::SoA<
+        UserDomain,
+        Particle,
+        llama::LinearizeUserDomainMorton,
+        llama::ExtentUserDomainMorton>{userDomain};
+
+    {
+        const auto coord = UserDomain{0, 0};
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2048);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 4096);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 6144);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 7168);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 9216);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 11264);
+        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 13312);
+        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 13568);
+        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 13824);
+        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 14080);
+    }
+
+    {
+        const auto coord = UserDomain{0, 1};
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 8);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2056);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 4104);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 6148);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 7176);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 9224);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 11272);
+        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 13313);
+        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 13569);
+        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 13825);
+        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 14081);
+    }
+
+    {
+        const auto coord = UserDomain{1, 0};
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 16);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2064);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 4112);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 6152);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 7184);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 9232);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 11280);
+        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 13314);
+        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 13570);
+        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 13826);
+        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 14082);
     }
 }
