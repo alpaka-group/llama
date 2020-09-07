@@ -141,3 +141,33 @@ TEST_CASE("UserDomainCoordRange3D")
             {2, 2, 0}, {2, 2, 1}, {2, 2, 2},
         });
 }
+
+TEST_CASE("Morton")
+{
+    using UserDomain = llama::UserDomain<2>;
+    UserDomain userDomain{2, 3};
+
+    llama::ExtentUserDomainMorton extent;
+    CHECK(extent(UserDomain{2, 3}) == 4 * 4);
+    CHECK(extent(UserDomain{2, 4}) == 4 * 4);
+    CHECK(extent(UserDomain{2, 5}) == 8 * 8);
+    CHECK(extent(UserDomain{8, 8}) == 8 * 8);
+
+    llama::LinearizeUserDomainMorton lin;
+    CHECK(lin(UserDomain{0, 0}, {}) == 0);
+    CHECK(lin(UserDomain{0, 1}, {}) == 1);
+    CHECK(lin(UserDomain{0, 2}, {}) == 4);
+    CHECK(lin(UserDomain{0, 3}, {}) == 5);
+    CHECK(lin(UserDomain{1, 0}, {}) == 2);
+    CHECK(lin(UserDomain{1, 1}, {}) == 3);
+    CHECK(lin(UserDomain{1, 2}, {}) == 6);
+    CHECK(lin(UserDomain{1, 3}, {}) == 7);
+    CHECK(lin(UserDomain{2, 0}, {}) == 8);
+    CHECK(lin(UserDomain{2, 1}, {}) == 9);
+    CHECK(lin(UserDomain{2, 2}, {}) == 12);
+    CHECK(lin(UserDomain{2, 3}, {}) == 13);
+    CHECK(lin(UserDomain{3, 0}, {}) == 10);
+    CHECK(lin(UserDomain{3, 1}, {}) == 11);
+    CHECK(lin(UserDomain{3, 2}, {}) == 14);
+    CHECK(lin(UserDomain{3, 3}, {}) == 15);
+}

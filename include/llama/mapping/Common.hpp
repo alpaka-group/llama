@@ -20,6 +20,8 @@
 
 #include "../Types.hpp"
 
+#include <climits>
+
 namespace llama
 {
     /// Functor that calculates the extent of a user domain
@@ -87,6 +89,59 @@ namespace llama
                 address += coord[i];
             }
             return address;
+        }
+    };
+
+    struct ExtentUserDomainMorton
+    {
+        template<std::size_t Dim>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto
+        operator()(const UserDomain<Dim> & size) const -> std::size_t
+        {
+            std::size_t longest = size[0];
+            for(auto i = 1; i < Dim; i++) longest = std::max(longest, size[i]);
+            const auto longestPO2 = bit_ceil(longest);
+            return intPow(longestPO2, Dim);
+        }
+
+    private:
+        // TODO: replace by std::bit_ceil in C++20
+        static constexpr auto bit_ceil(std::size_t n) -> std::size_t
+        {
+            std::size_t r = 1;
+            while(r < n) r <<= 1;
+            return r;
+        }
+
+        static constexpr auto intPow(std::size_t b, std::size_t e)
+            -> std::size_t
+        {
+            e--;
+            auto r = b;
+            while(e)
+            {
+                r *= b;
+                e--;
+            }
+            return r;
+        }
+    };
+
+    struct LinearizeUserDomainMorton
+    {
+        template<std::size_t Dim>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto
+        operator()(const UserDomain<Dim> & coord, const UserDomain<Dim> &) const
+            -> std::size_t
+        {
+            std::size_t r = 0;
+            for(std::size_t bit = 0;
+                bit < (sizeof(std::size_t) * CHAR_BIT) / Dim;
+                bit++)
+                for(std::size_t i = 0; i < Dim; i++)
+                    r |= (coord[i] & (std::size_t{1} << bit))
+                        << ((bit + 1) * (Dim - 1) - i);
+            return r;
         }
     };
 }
