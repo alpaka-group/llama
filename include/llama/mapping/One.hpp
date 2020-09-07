@@ -20,7 +20,6 @@
 
 #include "../Functions.hpp"
 #include "../Types.hpp"
-#include "../UserDomain.hpp"
 
 namespace llama::mapping
 {

@@ -19,7 +19,7 @@
 #pragma once
 
 #include "../Types.hpp"
-#include "../UserDomain.hpp"
+#include "Common.hpp"
 
 namespace llama::mapping
 {

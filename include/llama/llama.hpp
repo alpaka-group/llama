@@ -52,7 +52,6 @@
 #include "ForEach.hpp"
 #include "Functions.hpp"
 #include "Types.hpp"
-#include "UserDomain.hpp"
 #include "View.hpp"
 #include "macros.hpp"
 #include "mapping/AoS.hpp"

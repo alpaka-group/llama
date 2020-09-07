@@ -20,7 +20,7 @@
 
 #include "../../Tuple.hpp"
 #include "../../Types.hpp"
-#include "../../UserDomain.hpp"
+#include "../Common.hpp"
 #include "Functors.hpp"
 #include "TreeFromDomains.hpp"
 #include "toString.hpp"
