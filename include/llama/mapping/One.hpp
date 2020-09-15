@@ -23,15 +23,9 @@
 
 namespace llama::mapping
 {
-    /** Neither struct of array nor array of struct mapping as only exactly one
-     *  element (in the user domain) can be mapped. If more than one element is
-     *  tried to be mapped all virtual datums are mapped to the very same
-     * memory. This mapping is especially used for temporary views on the stack
-     * allocated with \ref stackViewAlloc. \tparam T_UserDomain type of the user
-     * domain, expected to have only element, although more are working (but
-     * doesn't make sense) \tparam T_DatumDomain type of the datum domain \see
-     * stackViewAlloc, OneOnStackFactory, allocator::Stack
-     */
+    /// Maps all UserDomain coordinates into the same location and layouts
+    /// struct members consecutively. This mapping is used for temporary, single
+    /// element views.
     template<typename T_UserDomain, typename T_DatumDomain>
     struct One
     {
@@ -47,11 +41,10 @@ namespace llama::mapping
         }
 
         template<std::size_t... DatumDomainCoord>
-        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(UserDomain coord) const
+        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(UserDomain) const
             -> NrAndOffset
         {
-            constexpr auto offset
-                = offsetOf<DatumDomain, DatumDomainCoord...>;
+            constexpr auto offset = offsetOf<DatumDomain, DatumDomainCoord...>;
             return {0, offset};
         }
     };

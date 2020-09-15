@@ -24,7 +24,8 @@
 
 namespace llama
 {
-    /// Functor that calculates the extent of a user domain
+    /// Functor that calculates the extent of a user domain for use with \ref
+    /// LinearizeUserDomainAdress or \ref LinearizeUserDomainAdressLikeFortran.
     struct ExtentUserDomainAdress
     {
         template<std::size_t Dim>
@@ -37,11 +38,8 @@ namespace llama
         }
     };
 
-    /** Functor to get the linear position of a coordinate in the user domain
-     * space if the n-dimensional domain is flattened to one dimension with the
-     * last user domain index being the fastet resp. already linearized index (C
-     * like). \see LinearizeUserDomainAdressLikeFortran
-     * */
+    /// Functor that maps a \ref UserDomain coordinate into linear numbers the
+    /// way C++ arrays work.
     struct LinearizeUserDomainAdress
     {
         /**
@@ -64,12 +62,8 @@ namespace llama
         }
     };
 
-    /** Functor to get the linear position of a coordinate in the user domain
-     * space if the n-dimensional domain is flattened to one dimension with the
-     * first user domain index being the fastet resp. already linearized index
-     * (Fortran like). \tparam Dim dimension of the user domain \see
-     * LinearizeUserDomainAdress
-     * */
+    /// Functor that maps a \ref UserDomain coordinate into linear numbers the
+    /// way Fortran arrays work.
     struct LinearizeUserDomainAdressLikeFortran
     {
         /**
@@ -92,6 +86,8 @@ namespace llama
         }
     };
 
+    /// Functor that calculates the extent of a user domain for use with \ref
+    /// LinearizeUserDomainMorton.
     struct ExtentUserDomainMorton
     {
         template<std::size_t Dim>
@@ -127,6 +123,8 @@ namespace llama
         }
     };
 
+    /// Functor that maps a \ref UserDomain coordinate into linear numbers using
+    /// the Z-order space filling curve (Morton codes).
     struct LinearizeUserDomainMorton
     {
         template<std::size_t Dim>

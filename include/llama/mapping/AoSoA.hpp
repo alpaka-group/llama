@@ -5,6 +5,14 @@
 
 namespace llama::mapping
 {
+    /// Array of struct of arrays mapping. Used to create a \ref View via \ref
+    /// allocView.
+    /// \tparam Lanes The size of the inner arrays of this array of struct of
+    /// arrays.
+    /// \tparam LinearizeUserDomainAdressFunctor Defines how the user
+    /// domain should be mapped into linear numbers.
+    /// \tparam ExtentUserDomainAdressFunctor Defines how the total number of
+    /// \ref UserDomain indices is calculated.
     template<
         typename T_UserDomain,
         typename T_DatumDomain,

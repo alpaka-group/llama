@@ -109,7 +109,7 @@ struct UpdateKernel
                 // memory
                 if constexpr(BlockSize / Elems == 1)
                     return llama::allocViewStack<
-                        View::Mapping::UserDomain::count,
+                        View::Mapping::UserDomain::rank,
                         typename View::Mapping::DatumDomain>();
                 else
                 {
@@ -272,7 +272,7 @@ int main(int argc, char ** argv)
     LLAMA_INDEPENDENT_DATA
     for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
     {
-        auto temp = llama::stackVirtualDatumAlloc<Particle>();
+        auto temp = llama::allocVirtualDatumStack<Particle>();
         temp(tag::Pos(), tag::X()) = distribution(generator);
         temp(tag::Pos(), tag::Y()) = distribution(generator);
         temp(tag::Pos(), tag::Z()) = distribution(generator);

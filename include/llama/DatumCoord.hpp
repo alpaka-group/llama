@@ -42,25 +42,21 @@ namespace llama
         using mp_unwrap_sizes = typename mp_unwrap_sizes_impl<L>::type;
     }
 
+    /// Converts a type list of integral constants into a \ref DatumCoord.
     template<typename L>
     using DatumCoordFromList = internal::mp_unwrap_sizes<L>;
 
-    /** Wrapper class for coordinate inside of datum domain tree.
-     * \tparam T_coords... the compile time coordinate
-     * */
+    /// Represents a coordinate for an element inside of datum domain tree.
+    /// \tparam Coords... the compile time coordinate.
     template<std::size_t... Coords>
     struct DatumCoord
     {
+        /// The list of integral coordinates as `boost::mp11::mp_list`.
         using List = boost::mp11::mp_list_c<std::size_t, Coords...>;
 
-        /// first coordinate element
         static constexpr std::size_t front = boost::mp11::mp_front<List>::value;
-
-        /// number of coordinate elements
-        static constexpr std::size_t size = sizeof...(Coords);
-
-        /// last ordinate
         static constexpr std::size_t back = boost::mp11::mp_back<List>::value;
+        static constexpr std::size_t size = sizeof...(Coords);
     };
 
     template<>
@@ -71,13 +67,13 @@ namespace llama
         static constexpr std::size_t size = 0;
     };
 
-    /// Concatenated two DatumCoords
+    /// Concatenate two \ref DatumCoords.
     template<typename DatumCoord1, typename DatumCoord2>
     using Cat = DatumCoordFromList<boost::mp11::mp_append<
         typename DatumCoord1::List,
         typename DatumCoord2::List>>;
 
-    /// DatumCoord without first coordinate element
+    /// DatumCoord without first coordinate component.
     template<typename DatumCoord>
     using PopFront = DatumCoordFromList<
         boost::mp11::mp_pop_front<typename DatumCoord::List>>;
@@ -110,11 +106,7 @@ namespace llama
         };
     }
 
-    /** Checks at compile time whether a first DatumCoord is bigger than a
-     * second. If so a static constexpr value will be set to true otherwise to
-     * false. \tparam First first \ref DatumCoord in the comparison \tparam
-     * Second second \ref DatumCoord in the comparison
-     * */
+    /// Checks wether the first DatumCoord is bigger than the second.
     template<typename First, typename Second>
     inline constexpr auto DatumCoordIsBigger
         = internal::DatumCoordIsBiggerImpl<First, Second>::value;
@@ -143,12 +135,8 @@ namespace llama
         };
     }
 
-    /** Checks at compile time whether a first DatumCoord is the same as a
-     * second. If so a static constexpr value will be set to true otherwise to
-     * false. \tparam First first \ref DatumCoord in the comparison \tparam
-     * Second second \ref DatumCoord in the comparison \tparam T_SFinae
-     * internal helper template parameter for specialization
-     * */
+    /// Checks wether two \ref DatumCoords are the same or one is the prefix of
+    /// the other.
     template<typename First, typename Second>
     inline constexpr auto DatumCoordIsSame
         = internal::DatumCoordIsSameImpl<First, Second>::value;

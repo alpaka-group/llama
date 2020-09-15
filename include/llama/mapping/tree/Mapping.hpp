@@ -215,12 +215,11 @@ namespace llama::mapping::tree
         }
     }
 
-    /** Free describable mapping which can be used for creating a \ref View with
-     * a \ref Factory. For the interface details see \ref Factory. \tparam
-     * T_UserDomain type of the user domain \tparam T_DatumDomain type of the
-     * datum domain \tparam TreeOperationList (\ref Tuple) of operations to
-     * define the tree mapping
-     */
+    /// An experimental attempt to provide a general purpose description of a
+    /// mapping. \ref UserDomain and datum domain are represented by a compile
+    /// time tree data structure. This tree is mapped into memory by means of a
+    /// breadth-first tree traversal. By specifying additional tree operations,
+    /// the tree can be modified at compile time before being mapped to memory.
     template<
         typename T_UserDomain,
         typename T_DatumDomain,
@@ -245,14 +244,6 @@ namespace llama::mapping::tree
 
         Mapping() = default;
 
-        /** The initalization of this mapping needs a \ref Tuple of operations
-         *  which describe the mapping in detail. Please have a look at the user
-         *  documenation for more information.
-         * \param size the size of the user domain
-         * \param treeOperationList list of operations to define the mapping,
-         * e.g. \ref functor::Idem, \ref functor::LeafOnlyRT, \ref
-         * functor::MoveRTDown.
-         */
         LLAMA_FN_HOST_ACC_INLINE
         Mapping(UserDomain size, TreeOperationList treeOperationList) :
                 userDomainSize(size),

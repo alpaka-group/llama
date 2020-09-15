@@ -24,20 +24,11 @@
 
 namespace llama::mapping
 {
-    /** Struct of array mapping which can be used for creating a \ref View with
-     * a \ref Factory. For the interface details see \ref Factory. \tparam
-     * T_UserDomain type of the user domain \tparam T_DatumDomain type of the
-     * datum domain \tparam LinearizeUserDomainAdressFunctor Defines how the
-     * user domain should be linearized, e.g. C like with the last dimension
-     * being the "fast" one
-     *  (\ref LinearizeUserDomainAdress, default) or Fortran like with the first
-     *  dimension being the "fast" one (\ref
-     * LinearizeUserDomainAdressLikeFortran). \tparam
-     * ExtentUserDomainAdressFunctor Defines how the size of the view shall be
-     * created. Should fit for `T_LinearizeUserDomainAdressFunctor`. Only right
-     * now implemented and default value is \ref ExtentUserDomainAdress. \see
-     * AoS
-     */
+    /// Struct of array mapping. Used to create a \ref View via \ref allocView.
+    /// \tparam LinearizeUserDomainAdressFunctor Defines how the
+    /// user domain should be mapped into linear numbers.
+    /// \tparam ExtentUserDomainAdressFunctor Defines how the total number of
+    /// \ref UserDomain indices is calculated.
     template<
         typename T_UserDomain,
         typename T_DatumDomain,

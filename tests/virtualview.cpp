@@ -54,18 +54,18 @@ TEST_CASE("fast virtual view")
 
     llama::VirtualView<decltype(view)> virtualView{
         view,
-        {23, 42}, // position
+        {23, 42}, // offset
         {13, 37} // size
     };
 
-    CHECK(virtualView.position == UserDomain{23, 42});
+    CHECK(virtualView.offset == UserDomain{23, 42});
     CHECK(virtualView.size == UserDomain{13, 37});
 
-    CHECK(view(virtualView.position)(tag::Pos(), tag::X()) == 966);
+    CHECK(view(virtualView.offset)(tag::Pos(), tag::X()) == 966);
     CHECK(virtualView({0, 0})(tag::Pos(), tag::X()) == 966);
 
     CHECK(
-        view({virtualView.position[0] + 2, virtualView.position[1] + 3})(
+        view({virtualView.offset[0] + 2, virtualView.offset[1] + 3})(
             tag::Vel(), tag::Z())
         == 1125);
     CHECK(virtualView({2, 3})(tag::Vel(), tag::Z()) == 1125);

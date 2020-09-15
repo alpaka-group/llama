@@ -43,7 +43,7 @@ namespace llama
                 InnerDatumCoord::size >= BaseDatumCoord::size
                 && DatumCoordIsSame<InnerDatumCoord, BaseDatumCoord>)
                 functor(
-                    BaseDatumCoord{},
+                    base,
                     DatumCoordFromList<boost::mp11::mp_drop_c<
                         typename InnerDatumCoord::List,
                         BaseDatumCoord::size>>{});
@@ -77,37 +77,37 @@ namespace llama
         }
     }
 
-    /** Can be used to access a given functor for every leaf in a datum domain
-     * given as \ref DatumStruct. Basically a helper function to iterate over a
-     * datum domain at compile time without the need to recursively iterate
-     * yourself. The given functor needs to implement the operator() with two
-     * template parameters for the outer and the inner coordinate in the datum
-     * domain tree. These coordinates are both a \ref DatumCoord , which can be
-     * concatenated to one coordinate with \ref Cat and used to
-     * access the data. \tparam DatumDomain the datum domain (\ref
-     * DatumStruct) to iterate over \tparam DatumCoordOrFirstUID DatumCoord or
-     * a UID to address the start node inside the datum domain tree. Will be
-     * given to the functor as \ref DatumCoord as first template parameter.
-     * \tparam RestUID... optional further UIDs for addressing the start node
-     */
-
+    /// Iterates over the datum domain tree and calls a functor on each element.
+    /// \param functor Functor to execute at each element of. Needs to have
+    /// `operator()` with two template parameters for the base and the inner
+    /// coordinate in the datum domain tree, both will be a spezialization of
+    /// \ref DatumCoord.
+    /// \param base \ref DatumCoord at which the iteration should be started.
+    /// The functor is called on elements beneath this coordinate.
     template<typename DatumDomain, typename Functor, std::size_t... Coords>
     LLAMA_FN_HOST_ACC_INLINE void
-    forEach(Functor && functor, DatumCoord<Coords...> coord)
+    forEach(Functor && functor, DatumCoord<Coords...> base)
     {
         LLAMA_FORCE_INLINE_RECURSIVE
         internal::applyFunctorForEachLeaf(
             DatumDomain{},
-            coord,
+            base,
             DatumCoord<>{},
             std::forward<Functor>(functor));
     }
 
-    template<typename DatumDomain, typename Functor, typename... UIDs>
-    LLAMA_FN_HOST_ACC_INLINE void forEach(Functor && functor, UIDs...)
+    /// Iterates over the datum domain tree and calls a functor on each element.
+    /// \param functor Functor to execute at each element of. Needs to have
+    /// `operator()` with two template parameters for the base and the inner
+    /// coordinate in the datum domain tree, both will be a spezialization of
+    /// \ref DatumCoord.
+    /// \param baseTags Tags used to define where the iteration should be
+    /// started. The functor is called on elements beneath this coordinate.
+    template<typename DatumDomain, typename Functor, typename... Tags>
+    LLAMA_FN_HOST_ACC_INLINE void forEach(Functor && functor, Tags... baseTags)
     {
         forEach<DatumDomain>(
             std::forward<Functor>(functor),
-            GetCoordFromUID<DatumDomain, UIDs...>{});
+            GetCoordFromTags<DatumDomain, Tags...>{});
     }
 }

@@ -43,7 +43,7 @@ namespace llama::mapping
             DatumCoord<CoordsBefore...> before,
             DatumCoord<CoordCurrent, CoordsAfter...> after)
         {
-            using Tag = GetUID<
+            using Tag = GetTag<
                 DatumDomain,
                 DatumCoord<CoordsBefore..., CoordCurrent>>;
             v.push_back(tagToString(Tag{}));
@@ -74,6 +74,9 @@ namespace llama::mapping
         }
     }
 
+    /// Returns an SVG image visualizing the memory layout created by the given
+    /// mapping. The created memory blocks are wrapped after wrapByteCount
+    /// bytes.
     template<typename Mapping>
     auto toSvg(const Mapping & mapping, int wrapByteCount = 64) -> std::string
     {

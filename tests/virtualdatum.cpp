@@ -29,7 +29,7 @@ using Name = llama::DS<
 
 TEST_CASE("VirtualDatum.operator=")
 {
-    auto datum = llama::stackVirtualDatumAlloc<Name>();
+    auto datum = llama::allocVirtualDatumStack<Name>();
 
     // scalar to multiple elements in virtual datum
     datum(tag::Pos{}) = 1;
@@ -82,7 +82,7 @@ TEST_CASE("VirtualDatum.operator=")
 
 TEST_CASE("VirtualDatum.operator+=")
 {
-    auto datum = llama::stackVirtualDatumAlloc<Name>();
+    auto datum = llama::allocVirtualDatumStack<Name>();
 
     // scalar to multiple elements in virtual datum
     datum(tag::Pos{}) += 1;
@@ -132,7 +132,7 @@ TEST_CASE("VirtualDatum.operator+=")
 
 TEST_CASE("VirtualDatum.operator+")
 {
-    auto datum = llama::stackVirtualDatumAlloc<Name>();
+    auto datum = llama::allocVirtualDatumStack<Name>();
 
     // scalar to multiple elements in virtual datum
     datum(tag::Pos{}) = datum(tag::Pos{}) + 1;
@@ -204,7 +204,7 @@ using Name2 = llama::DS<
 
 TEST_CASE("VirtualDatum.operator=.propagation")
 {
-    auto datum = llama::stackVirtualDatumAlloc<Name2>();
+    auto datum = llama::allocVirtualDatumStack<Name2>();
 
     datum(tag::Part1{}) = 1;
     datum(tag::Part2{}) = 2;
@@ -232,8 +232,8 @@ TEST_CASE("VirtualDatum.operator=.propagation")
 
 TEST_CASE("VirtualDatum.operator=.multiview")
 {
-    auto datum1 = llama::stackVirtualDatumAlloc<Name>();
-    auto datum2 = llama::stackVirtualDatumAlloc<Name2>();
+    auto datum1 = llama::allocVirtualDatumStack<Name>();
+    auto datum2 = llama::allocVirtualDatumStack<Name2>();
 
     datum2 = 1;
     datum1 = datum2;
@@ -255,7 +255,7 @@ TEST_CASE("VirtualDatum.operator=.multiview")
 
 TEST_CASE("VirtualDatum.operator==")
 {
-    auto datum = llama::stackVirtualDatumAlloc<Name>();
+    auto datum = llama::allocVirtualDatumStack<Name>();
 
     datum = 1;
 
@@ -279,7 +279,7 @@ TEST_CASE("VirtualDatum.operator==")
 
 TEST_CASE("VirtualDatum.operator<")
 {
-    auto datum = llama::stackVirtualDatumAlloc<Name>();
+    auto datum = llama::allocVirtualDatumStack<Name>();
 
     datum = 1;
 
