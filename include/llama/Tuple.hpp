@@ -22,10 +22,8 @@
 
 namespace llama
 {
-    /** Tuple class like `std::tuple` but suitable for use with offloading
-     * devices like GPUs and extended with some (for LLAMA) useful methods.
-     * \tparam Elements... tuple elements, may be empty
-     */
+    /// Tuple class like `std::tuple` but suitable for use with offloading
+    /// devices like GPUs.
     template<typename... Elements>
     struct Tuple;
 
@@ -53,8 +51,7 @@ namespace llama
         {}
 
         FirstElement first; ///< the first element (if existing)
-        RestTuple rest; ///< the rest tuple (may be empty or not existing at all
-                        ///< for an empty tuple)
+        RestTuple rest; ///< the remaining elements
     };
 
     template<typename T_FirstElement>
@@ -80,30 +77,19 @@ namespace llama
     Tuple(Elements...) -> Tuple<Elements...>;
 
     template<typename Tuple, std::size_t Pos>
-    using GetTupleType = boost::mp11::mp_at_c<Tuple, Pos>;
+    using TupleElement = boost::mp11::mp_at_c<Tuple, Pos>;
 
-    template<std::size_t Pos, typename Tuple>
-    LLAMA_FN_HOST_ACC_INLINE auto getTupleElement(const Tuple & tuple)
-        -> GetTupleType<Tuple, Pos>
+    template<std::size_t Pos, typename... Elements>
+    LLAMA_FN_HOST_ACC_INLINE auto get(const Tuple<Elements...> & tuple)
     {
         if constexpr(Pos == 0)
             return tuple.first;
         else
-            return getTupleElement<Pos - 1>(tuple.rest);
-    }
-
-    template<std::size_t Pos, typename Tuple>
-    LLAMA_FN_HOST_ACC_INLINE auto getTupleElementRef(const Tuple & tuple)
-        -> const GetTupleType<Tuple, Pos> &
-    {
-        if constexpr(Pos == 0)
-            return tuple.first;
-        else
-            return getTupleElementRef<Pos - 1>(tuple.rest);
+            return get<Pos - 1>(tuple.rest);
     }
 
     template<typename Tuple>
-    inline constexpr auto SizeOfTuple = boost::mp11::mp_size<Tuple>::value;
+    inline constexpr auto tupleSize = boost::mp11::mp_size<Tuple>::value;
 
     namespace internal
     {
@@ -114,28 +100,18 @@ namespace llama
             std::index_sequence<Is1...>,
             std::index_sequence<Is2...>)
         {
-            return Tuple{
-                getTupleElement<Is1>(t1)..., getTupleElement<Is2>(t2)...};
+            return Tuple{get<Is1>(t1)..., get<Is2>(t2)...};
         }
     }
 
-    /** Concatenates two tuples to a new tuple containing the elements of both.
-     * \tparam Tuple1 type of the first tuple, probably indirectly given as
-     *  template argument deduction
-     * \tparam Tuple2 type of the second tuple, probably indirectly given as
-     *  template argument deduction
-     * \param t1 first tuple
-     * \param t2 second tuple
-     * \return new tuple with element of both input tuples
-     */
     template<typename Tuple1, typename Tuple2>
     LLAMA_FN_HOST_ACC_INLINE auto tupleCat(const Tuple1 & t1, const Tuple2 & t2)
     {
         return internal::tupleCatImpl(
             t1,
             t2,
-            std::make_index_sequence<SizeOfTuple<Tuple1>>{},
-            std::make_index_sequence<SizeOfTuple<Tuple2>>{});
+            std::make_index_sequence<tupleSize<Tuple1>>{},
+            std::make_index_sequence<tupleSize<Tuple2>>{});
     }
 
     namespace internal
@@ -177,17 +153,11 @@ namespace llama
         };
     }
 
-    /** Creates a copy of a tuple with one element replaced by another.
-     * \tparam Pos position of element to change
-     * \tparam Tuple type of input tuple
-     * \tparam Replacement new type of element at replaced position
-     * \param tuple tuple in which an element shall be replaced
-     * \param replacement new element for the returned tuple
-     * \return new tuple with same size but maybe new type and replaced element
-     */
+    /// Creates a copy of a tuple with the element at position Pos replaced by
+    /// replacement.
     template<std::size_t Pos, typename Tuple, typename Replacement>
     LLAMA_FN_HOST_ACC_INLINE auto
-    tupleReplace(Tuple const tuple, Replacement const replacement)
+    tupleReplace(Tuple tuple, Replacement replacement)
     {
         return internal::TupleReplaceImpl<Pos, Tuple, Replacement>()(
             tuple, replacement);
@@ -206,20 +176,17 @@ namespace llama
             transform(const Tuple<Elements...> & tuple, const Functor & functor)
             {
                 // FIXME(bgruber): nvcc fails to compile
-                // Tuple{functor(getTupleElement<Is>(tuple))...}
+                // Tuple{functor(get<Is>(tuple))...}
                 return Tuple<decltype(functor(std::declval<Elements>()))...>{
-                    functor(getTupleElement<Is>(tuple))...};
+                    functor(get<Is>(tuple))...};
             }
         };
     }
 
-    /** Applies a functor for every element of a tuple and creating a new tuple
-     * with the result of the element transformations. The functor needs to
-     * implement an `operator()` with one template parameter and one parameter
-     * of this type being the current element, which returns some new element of
-     * any type. \param tuple the tuple \param functor the functor \returns a
-     * new tuple of the same size but maybe different type
-     */
+    /// Applies a functor to every element of a tuple, creating a new tuple with
+    /// the result of the element transformations. The functor needs to
+    /// implement a template `operator()` to which all tuple elements are
+    /// passed.
     template<typename... Elements, typename Functor>
     LLAMA_FN_HOST_ACC_INLINE auto
     tupleTransform(const Tuple<Elements...> & tuple, const Functor & functor)
@@ -229,13 +196,15 @@ namespace llama
     }
 
     template<typename... Elements>
-    LLAMA_FN_HOST_ACC_INLINE auto tupleRest(const Tuple<Elements...> & tuple)
+    LLAMA_FN_HOST_ACC_INLINE auto
+    tupleWithoutFirst(const Tuple<Elements...> & tuple)
     {
         return tuple.rest;
     }
 
     template<typename Element>
-    LLAMA_FN_HOST_ACC_INLINE auto tupleRest(const Tuple<Element> & tuple)
+    LLAMA_FN_HOST_ACC_INLINE auto
+    tupleWithoutFirst(const Tuple<Element> & tuple)
     {
         return Tuple<>{};
     }

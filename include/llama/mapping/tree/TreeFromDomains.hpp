@@ -82,9 +82,8 @@ namespace llama::mapping::tree
             std::index_sequence<Is...>) -> std::string
         {
             auto s
-                = ((std::to_string(getTupleElement<Is>(treeCoord).runtime) + ":"
-                    + std::to_string(getTupleElement<Is>(treeCoord).compiletime)
-                    + ", ")
+                = ((std::to_string(get<Is>(treeCoord).runtime) + ":"
+                    + std::to_string(get<Is>(treeCoord).compiletime) + ", ")
                    + ...);
             s.resize(s.length() - 2);
             return s;
@@ -96,8 +95,7 @@ namespace llama::mapping::tree
     {
         return std::string("[ ")
             + internal::treeCoordToString(
-                   treeCoord,
-                   std::make_index_sequence<SizeOfTuple<TreeCoord>>{})
+                   treeCoord, std::make_index_sequence<tupleSize<TreeCoord>>{})
             + std::string(" ]");
     }
 

@@ -54,7 +54,7 @@ namespace llama::mapping::tree
                 const Tuple<Operations...> & treeOperationList) :
                     operation(treeOperationList.first),
                     treeAfterOp(operation.basicToResult(tree)),
-                    next(treeAfterOp, tupleRest(treeOperationList))
+                    next(treeAfterOp, tupleWithoutFirst(treeOperationList))
             {}
 
             LLAMA_FN_HOST_ACC_INLINE
@@ -142,7 +142,7 @@ namespace llama::mapping::tree
             std::index_sequence<Is...> ii,
             const Count & count) -> std::size_t
         {
-            return count * (getTreeBlobSize(getTupleElement<Is>(childs)) + ...);
+            return count * (getTreeBlobSize(get<Is>(childs)) + ...);
         }
 
         template<typename Identifier, typename Type, typename CountType>
@@ -188,8 +188,7 @@ namespace llama::mapping::tree
                 std::index_sequence<Is...>) -> std::size_t
             {
                 return (
-                    (getTreeBlobSize(getTupleElementRef<Is>(node.childs))
-                     * (Is < MaxPos))
+                    (getTreeBlobSize(get<Is>(node.childs)) * (Is < MaxPos))
                     + ...);
             }
         }
@@ -207,10 +206,9 @@ namespace llama::mapping::tree
                            treeCoord.first.compiletime>(
                            tree,
                            std::make_index_sequence<
-                               SizeOfTuple<typename Tree::ChildrenTuple>>{})
+                               tupleSize<typename Tree::ChildrenTuple>>{})
                     + getTreeBlobByte(
-                           getTupleElementRef<treeCoord.first.compiletime>(
-                               tree.childs),
+                           get<treeCoord.first.compiletime>(tree.childs),
                            treeCoord.rest);
             else
                 return sizeof(typename Tree::Type) * treeCoord.first.runtime;
