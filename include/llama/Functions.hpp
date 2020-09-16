@@ -6,6 +6,7 @@
 #include "DatumCoord.hpp"
 #include "Types.hpp"
 
+#include <boost/core/demangle.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/mp11.hpp>
 #include <type_traits>
@@ -84,14 +85,14 @@ namespace llama
     namespace internal
     {
         template<typename CurrTag, typename DatumDomain, typename DatumCoord>
-        struct GetTagImpl;
+        struct GetTagsImpl;
 
         template<
             typename CurrTag,
             typename... DatumElements,
             std::size_t FirstCoord,
             std::size_t... Coords>
-        struct GetTagImpl<
+        struct GetTagsImpl<
             CurrTag,
             DatumStruct<DatumElements...>,
             DatumCoord<FirstCoord, Coords...>>
@@ -100,24 +101,31 @@ namespace llama
                 mp_at_c<boost::mp11::mp_list<DatumElements...>, FirstCoord>;
             using ChildTag = GetDatumElementTag<DatumElement>;
             using ChildType = GetDatumElementType<DatumElement>;
-            using type = typename GetTagImpl<
-                ChildTag,
-                ChildType,
-                DatumCoord<Coords...>>::type;
+            using type = boost::mp11::mp_push_front<
+                typename GetTagsImpl<
+                    ChildTag,
+                    ChildType,
+                    DatumCoord<Coords...>>::type,
+                CurrTag>;
         };
 
         template<typename CurrTag, typename T>
-        struct GetTagImpl<CurrTag, T, DatumCoord<>>
+        struct GetTagsImpl<CurrTag, T, DatumCoord<>>
         {
-            using type = CurrTag;
+            using type = boost::mp11::mp_list<CurrTag>;
         };
     }
+
+    /// Get the tags of all \ref DatumElement from the root of the datum domain
+    /// tree until to the node identified by \ref DatumCoord.
+    template<typename DatumDomain, typename DatumCoord>
+    using GetTags =
+        typename internal::GetTagsImpl<NoName, DatumDomain, DatumCoord>::type;
 
     /// Get the tag of the \ref DatumElement at a \ref DatumCoord inside the
     /// datum domain tree.
     template<typename DatumDomain, typename DatumCoord>
-    using GetTag =
-        typename internal::GetTagImpl<NoName, DatumDomain, DatumCoord>::type;
+    using GetTag = boost::mp11::mp_back<GetTags<DatumDomain, DatumCoord>>;
 
     /// Is true if, starting at two coordinates in two datum domains, all
     /// subsequent nodes in the datum domain tree have the same tag.
