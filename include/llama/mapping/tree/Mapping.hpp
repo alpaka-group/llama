@@ -160,22 +160,18 @@ namespace llama::mapping::tree
                 Node<NoName, Childs, CountType>{count, childs});
         }
 
-        namespace internal
+        template<
+            std::size_t MaxPos,
+            typename Identifier,
+            typename Type,
+            typename CountType,
+            std::size_t... Is>
+        LLAMA_FN_HOST_ACC_INLINE auto sumChildrenSmallerThan(
+            const Node<Identifier, Type, CountType> & node,
+            std::index_sequence<Is...>) -> std::size_t
         {
-            template<
-                std::size_t MaxPos,
-                typename Identifier,
-                typename Type,
-                typename CountType,
-                std::size_t... Is>
-            LLAMA_FN_HOST_ACC_INLINE auto sumChildrenSmallerThan(
-                const Node<Identifier, Type, CountType> & node,
-                std::index_sequence<Is...>) -> std::size_t
-            {
-                return (
-                    (getTreeBlobSize(get<Is>(node.childs)) * (Is < MaxPos))
-                    + ...);
-            }
+            return (
+                (getTreeBlobSize(get<Is>(node.childs)) * (Is < MaxPos)) + ...);
         }
 
         template<typename Tree, typename... Coords>
@@ -184,17 +180,19 @@ namespace llama::mapping::tree
             -> std::size_t
         {
             if constexpr(sizeof...(Coords) > 1)
+            {
+                constexpr auto firstCompileTime
+                    = decltype(treeCoord.first.compiletime)::value;
                 return getTreeBlobSize(
                            tree.childs,
                            LLAMA_DEREFERENCE(treeCoord.first.runtime))
-                    + internal::sumChildrenSmallerThan<
-                           treeCoord.first.compiletime>(
+                    + sumChildrenSmallerThan<firstCompileTime>(
                            tree,
                            std::make_index_sequence<
                                tupleSize<typename Tree::ChildrenTuple>>{})
                     + getTreeBlobByte(
-                           get<treeCoord.first.compiletime>(tree.childs),
-                           treeCoord.rest);
+                           get<firstCompileTime>(tree.childs), treeCoord.rest);
+            }
             else
                 return sizeof(typename Tree::Type) * treeCoord.first.runtime;
         }
