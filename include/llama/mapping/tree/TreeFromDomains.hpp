@@ -41,17 +41,11 @@ namespace llama::mapping::tree
         const ChildrenTuple childs = {};
     };
 
-    template<std::size_t Compiletime = 0, typename RuntimeType = std::size_t>
+    template<std::size_t ChildIndex = 0, typename ArrayIndexType = std::size_t>
     struct TreeCoordElement
     {
-        static constexpr boost::mp11::mp_size_t<Compiletime> compiletime = {};
-        const RuntimeType runtime = {};
-
-        LLAMA_FN_HOST_ACC_INLINE
-        TreeCoordElement() = default;
-
-        LLAMA_FN_HOST_ACC_INLINE
-        TreeCoordElement(RuntimeType runtime) : runtime(runtime) {}
+        static constexpr boost::mp11::mp_size_t<ChildIndex> childIndex = {};
+        const ArrayIndexType arrayIndex = {};
     };
 
     template<std::size_t... Coords>
@@ -66,8 +60,8 @@ namespace llama::mapping::tree
             std::index_sequence<Is...>) -> std::string
         {
             auto s
-                = ((std::to_string(get<Is>(treeCoord).runtime) + ":"
-                    + std::to_string(get<Is>(treeCoord).compiletime) + ", ")
+                = ((std::to_string(get<Is>(treeCoord).arrayIndex) + ":"
+                    + std::to_string(get<Is>(treeCoord).childIndex) + ", ")
                    + ...);
             s.resize(s.length() - 2);
             return s;
@@ -135,8 +129,7 @@ namespace llama::mapping::tree
     {
         if constexpr(Pos == UserDomain::rank - 1)
         {
-            return TreeFromDatumDomain<DatumDomain>{
-                size[UserDomain::rank - 1]};
+            return TreeFromDatumDomain<DatumDomain>{size[UserDomain::rank - 1]};
         }
         else
         {
@@ -160,8 +153,8 @@ namespace llama::mapping::tree
             return Tuple{
                 TreeCoordElement<(
                     UDIndices == UserDomain::rank - 1 ? FirstDatumDomainCoord
-                                                       : 0)>(
-                    coord[UDIndices])...,
+                                                      : 0)>{
+                    coord[UDIndices]}...,
                 TreeCoordElement<
                     DatumDomainCoords,
                     boost::mp11::mp_size_t<0>>{}...,

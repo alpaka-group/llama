@@ -65,11 +65,11 @@ namespace llama::mapping::tree::functor
         template<typename Identifier, typename Type, typename CountType>
         LLAMA_FN_HOST_ACC_INLINE static auto basicToResultImpl(
             const Node<Identifier, Type, CountType> & node,
-            std::size_t runtime)
+            std::size_t arraySize)
         {
             auto children = tupleTransform(node.childs, [&](auto element) {
                 return basicToResultImpl(
-                    element, LLAMA_DEREFERENCE(node.count) * runtime);
+                    element, LLAMA_DEREFERENCE(node.count) * arraySize);
             });
             return Node<
                 Identifier,
@@ -80,29 +80,29 @@ namespace llama::mapping::tree::functor
         template<typename Identifier, typename Type, typename CountType>
         LLAMA_FN_HOST_ACC_INLINE static auto basicToResultImpl(
             const Leaf<Identifier, Type, CountType> & leaf,
-            std::size_t runtime)
+            std::size_t arraySize)
         {
             return Leaf<Identifier, Type, std::size_t>{
-                LLAMA_DEREFERENCE(leaf.count) * runtime};
+                LLAMA_DEREFERENCE(leaf.count) * arraySize};
         }
 
         template<typename BasicCoord, typename NodeOrLeaf>
         LLAMA_FN_HOST_ACC_INLINE static auto basicCoordToResultCoordImpl(
             const BasicCoord & basicCoord,
             const NodeOrLeaf & nodeOrLeaf,
-            std::size_t runtime = 0)
+            std::size_t arraySize = 0)
         {
             if constexpr(tupleSize<BasicCoord> == 1)
                 return Tuple{
-                    TreeCoordElement<BasicCoord::FirstElement::compiletime>(
-                        runtime + LLAMA_DEREFERENCE(basicCoord.first.runtime))};
+                    TreeCoordElement<BasicCoord::FirstElement::childIndex>{
+                        arraySize
+                        + LLAMA_DEREFERENCE(basicCoord.first.arrayIndex)}};
             else
             {
-                const auto & branch
-                    = get<BasicCoord::FirstElement::compiletime>(
-                        nodeOrLeaf.childs);
+                const auto & branch = get<BasicCoord::FirstElement::childIndex>(
+                    nodeOrLeaf.childs);
                 auto first = TreeCoordElement<
-                    BasicCoord::FirstElement::compiletime,
+                    BasicCoord::FirstElement::childIndex,
                     boost::mp11::mp_size_t<0>>{};
 
                 return tupleCat(
@@ -111,10 +111,11 @@ namespace llama::mapping::tree::functor
                         typename BasicCoord::RestTuple,
                         TupleElement<
                             typename NodeOrLeaf::ChildrenTuple,
-                            BasicCoord::FirstElement::compiletime>>(
+                            BasicCoord::FirstElement::childIndex>>(
                         basicCoord.rest,
                         branch,
-                        (runtime + LLAMA_DEREFERENCE(basicCoord.first.runtime))
+                        (arraySize
+                         + LLAMA_DEREFERENCE(basicCoord.first.arrayIndex))
                             * LLAMA_DEREFERENCE(branch.count)));
             }
         }
@@ -129,7 +130,7 @@ namespace llama::mapping::tree::functor
                 return node;
             else
                 return getNode<typename TreeCoord::RestTuple>(
-                    get<TreeCoord::FirstElement::compiletime>(node.childs));
+                    get<TreeCoord::FirstElement::childIndex>(node.childs));
         }
 
         template<
@@ -146,12 +147,12 @@ namespace llama::mapping::tree::functor
             else
             {
                 auto current
-                    = get<TreeCoord::FirstElement::compiletime>(tree.childs);
+                    = get<TreeCoord::FirstElement::childIndex>(tree.childs);
                 auto replacement
                     = changeNodeRuntime<typename TreeCoord::RestTuple>(
                         current, newValue);
                 auto children
-                    = tupleReplace<TreeCoord::FirstElement::compiletime>(
+                    = tupleReplace<TreeCoord::FirstElement::childIndex>(
                         tree.childs, replacement);
                 return Node<Identifier, decltype(children)>{
                     tree.count, children};
@@ -213,12 +214,12 @@ namespace llama::mapping::tree::functor
             else
             {
                 auto current
-                    = get<TreeCoord::FirstElement::compiletime>(tree.childs);
+                    = get<TreeCoord::FirstElement::childIndex>(tree.childs);
                 auto replacement = changeNodeChildsRuntime<
                     typename TreeCoord::RestTuple,
                     Operation>(current, newValue);
                 auto children
-                    = tupleReplace<TreeCoord::FirstElement::compiletime>(
+                    = tupleReplace<TreeCoord::FirstElement::childIndex>(
                         tree.childs, replacement);
                 return Node<Identifier, decltype(children)>{
                     tree.count, children};
@@ -290,16 +291,16 @@ namespace llama::mapping::tree::functor
                 else
                 {
                     const auto & childTree
-                        = get<BasicCoord::FirstElement::compiletime>(
+                        = get<BasicCoord::FirstElement::childIndex>(
                             tree.childs);
-                    const auto rt1 = basicCoord.first.runtime / amount;
+                    const auto rt1 = basicCoord.first.arrayIndex / amount;
                     const auto rt2
-                        = basicCoord.first.runtime % amount * childTree.count
-                        + basicCoord.rest.first.runtime;
+                        = basicCoord.first.arrayIndex % amount * childTree.count
+                        + basicCoord.rest.first.arrayIndex;
                     auto rt1Child = TreeCoordElement<
-                        BasicCoord::FirstElement::compiletime>(rt1);
+                        BasicCoord::FirstElement::childIndex>{rt1};
                     auto rt2Child = TreeCoordElement<
-                        BasicCoord::RestTuple::FirstElement::compiletime>(rt2);
+                        BasicCoord::RestTuple::FirstElement::childIndex>{rt2};
                     return tupleCat(
                         Tuple{rt1Child},
                         tupleCat(
@@ -310,16 +311,15 @@ namespace llama::mapping::tree::functor
             else
             {
                 if constexpr(
-                    InternalTreeCoord::FirstElement::compiletime
-                    != BasicCoord::FirstElement::compiletime)
+                    InternalTreeCoord::FirstElement::childIndex
+                    != BasicCoord::FirstElement::childIndex)
                     return basicCoord;
                 else
                 {
                     auto rest = basicCoordToResultCoordImpl<
                         typename InternalTreeCoord::RestTuple>(
                         tupleWithoutFirst(basicCoord),
-                        get<BasicCoord::FirstElement::compiletime>(
-                            tree.childs));
+                        get<BasicCoord::FirstElement::childIndex>(tree.childs));
                     return tupleCat(Tuple{basicCoord.first}, rest);
                 }
             }

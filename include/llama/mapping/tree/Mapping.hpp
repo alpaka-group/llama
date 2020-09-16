@@ -179,22 +179,21 @@ namespace llama::mapping::tree
         getTreeBlobByte(const Tree & tree, const Tuple<Coords...> & treeCoord)
             -> std::size_t
         {
+            const auto firstArrayIndex = treeCoord.first.arrayIndex;
             if constexpr(sizeof...(Coords) > 1)
             {
-                constexpr auto firstCompileTime
-                    = decltype(treeCoord.first.compiletime)::value;
-                return getTreeBlobSize(
-                           tree.childs,
-                           LLAMA_DEREFERENCE(treeCoord.first.runtime))
-                    + sumChildrenSmallerThan<firstCompileTime>(
+                constexpr auto firstChildIndex
+                    = decltype(treeCoord.first.childIndex)::value;
+                return getTreeBlobSize(tree.childs, firstArrayIndex)
+                    + sumChildrenSmallerThan<firstChildIndex>(
                            tree,
                            std::make_index_sequence<
                                tupleSize<typename Tree::ChildrenTuple>>{})
                     + getTreeBlobByte(
-                           get<firstCompileTime>(tree.childs), treeCoord.rest);
+                           get<firstChildIndex>(tree.childs), treeCoord.rest);
             }
             else
-                return sizeof(typename Tree::Type) * treeCoord.first.runtime;
+                return sizeof(typename Tree::Type) * firstArrayIndex;
         }
     }
 
