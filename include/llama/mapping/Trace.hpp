@@ -3,7 +3,7 @@
 #include "../Types.hpp"
 #include "Common.hpp"
 
-#include <boost/atomic/atomic_ref.hpp>
+#include <atomic>
 #include <boost/core/demangle.hpp>
 #include <iostream>
 #include <string>
@@ -49,6 +49,9 @@ namespace llama::mapping
             });
         }
 
+        Trace(const Trace &) = delete;
+        auto operator=(const Trace &) -> Trace & = delete;
+
         Trace(Trace &&) noexcept = default;
         auto operator=(Trace &&) noexcept -> Trace & = default;
 
@@ -75,17 +78,14 @@ namespace llama::mapping
         {
             const static auto name = internal::coordName<DatumDomain>(
                 DatumCoord<DatumDomainCoord...>{});
-            boost::atomic_ref<std::size_t>
-            {
-                datumHits.at(name)
-            }
-            ++;
+            datumHits.at(name)++;
 
             LLAMA_FORCE_INLINE_RECURSIVE return mapping
                 .template getBlobNrAndOffset<DatumDomainCoord...>(coord);
         }
 
         Mapping mapping;
-        mutable std::unordered_map<std::string, std::size_t> datumHits;
+        mutable std::unordered_map<std::string, std::atomic<std::size_t>>
+            datumHits;
     };
 }
