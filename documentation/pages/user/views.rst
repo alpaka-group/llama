@@ -13,8 +13,8 @@ elements inside the datum domain at once.
 
 .. _label-factory:
 
-Factory
--------
+View allocation
+---------------
 
 The factory creates the view. For this it takes the domains, a
 :ref:`mapping <label-mappings>` and an :ref:`allocator <label-allocators>`.
@@ -22,12 +22,10 @@ The factory creates the view. For this it takes the domains, a
 .. code-block:: C++
 
     using Mapping = ...; // see next section about mappings
-    Mapping mapping( userDomainSize ); // see section about domains
-    using Factory = llama::Factory<
-        Mapping,
-        llama::allocator::SharedPtr // see over next section about allocators
-    >;
-    auto view = Factory::allocView( mapping );
+    Mapping mapping(userDomainSize); // see section about domains
+    auto view = allocView(mapping,
+        llama::allocator::SharedPtr{} // see over next section about allocators
+    );
 
 The :ref:`mapping <label-mappings>` and :ref:`allocator <label-allocators>`
 will be explained later, but are not of relevance at this point. It is just
@@ -358,7 +356,7 @@ can at the moment only be archieved with functional meta programming techniques,
 making the code complicated and bloated. Even some simple iterating has to be
 done recursively.
 
-LLAMA provides a class to easy the pain (a bit) called :cpp:`llama::ForEach`.
+LLAMA provides a function to easy the pain (a bit) called :cpp:`llama::forEach`.
 It takes a datum domain as compile time parameter and a functor as compile and
 run time parameters and calls this functor for each leaf of the datum domain
 tree, e.g.
@@ -381,7 +379,7 @@ tree, e.g.
     // * y
     // * z.low
     // * z.high
-    llama::ForEach< DatumDomain >::apply( functor );
+    llama::forEach<DatumDomain>(functor);
 
 Optionally a branch of the DatumDomain can be chosen to execute the functor on.
 This is working both for addressing with names and `DatumCoord`.
@@ -391,15 +389,15 @@ This is working both for addressing with names and `DatumCoord`.
     // "functor" will be called for
     // * z.low
     // * z.high
-    llama::ForEach< DatumDomain, z >::apply( functor );
+    llama::forEach< DatumDomain, z >(functor);
 
     // "functor" will be called for
     // * z.low
-    llama::ForEach< DatumDomain, z, low >::apply( functor );
+    llama::forEach< DatumDomain, z, low >(functor);
 
     // "functor" will be called for
     // * z.high
-    llama::ForEach< DatumDomain, llama::DatumCoord< 2, 1 > >::apply( functor );
+    llama::forEach< DatumDomain, llama::DatumCoord< 2, 1 > >(functor);
 
 The functor type itself is a struct which provides the :cpp:`operator()` for
 two different template parameters. The (run time) datum to work on and other
@@ -446,7 +444,7 @@ provides a method called :cpp:`Cat` as seen in the next example functor.
         float
     > functor( 1337.0f );
 
-    llama::ForEach< DatumDomain >::apply( functor );
+    llama::forEach<DatumDomain>(functor);
 
 A more detailed example can be found in the
 `simpletest example <https://github.com/ComputationalRadiationPhysics/llama/blob/master/examples/simpletest/simpletest.cpp>`_.

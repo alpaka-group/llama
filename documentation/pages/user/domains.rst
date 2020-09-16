@@ -28,8 +28,8 @@ A definition of a three-dimensional user domain of the size
 
 .. code-block:: C++
 
-    using UserDomain = llama::UserDomain< 3 >;
-    const UserDomain userDomainSize{ 128, 256, 32 };
+    using UserDomain = llama::UserDomain<3>;
+    const UserDomain userDomainSize{128, 256, 32};
 
 .. _label-dd:
 
@@ -85,26 +85,26 @@ given tree:
     struct g {};
     struct b {};
 
-    using Pixel = llama::DatumStruct <
-        llama::DatumElement < color, llama::DatumStruct <
-            llama::DatumElement < r, float >,
-            llama::DatumElement < g, float >,
-            llama::DatumElement < b, float >
-        > >,
-        llama::DatumElement < alpha, char >
+    using Pixel = llama::DatumStruct<
+        llama::DatumElement<color, llama::DatumStruct<
+            llama::DatumElement<r, float>,
+            llama::DatumElement<g, float>,
+            llama::DatumElement<b, float>
+        >>,
+        llama::DatumElement<alpha, char>
     >;
 
 Furthermore a third class :cpp:`DatumArray` is defined, which can be used to
-define a :cpp:`DatumStruct` with multiple, nameless :cpp:`DatumElement`\ s of
-the same type, e.g. :cpp:`llama::DatumArray < float, 4 >` is the same as
+define a :cpp:`DatumStruct` with multiple :cpp:`DatumElement`\ s of
+the same type, e.g. :cpp:`llama::DatumArray<float, 4>` is the same as
 
 .. code-block:: C++
 
-    llama::DatumStruct <
-        llama::DatumElement < llama::NoName, float >,
-        llama::DatumElement < llama::NoName, float >,
-        llama::DatumElement < llama::NoName, float >,
-        llama::DatumElement < llama::NoName, float >
+    llama::DatumStruct<
+        llama::DatumElement<llama::Index<0>, float>,
+        llama::DatumElement<llama::Index<1>, float>,
+        llama::DatumElement<llama::Index<2>, float>,
+        llama::DatumElement<llama::Index<3>, float>
     >
 
 To make the code easier to read, shortcuts are defined for each of these

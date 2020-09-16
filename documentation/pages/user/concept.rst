@@ -96,7 +96,7 @@ This results in these challenges and goals LLAMA tries to address:
 Library structure
 -----------------
 
-Therefore the library is splitted in as independent parts as possible to ease
+Therefore the library is split in as independent parts as possible to ease
 the development and extensibility. Many parts of LLAMA are active research and
 shall not interfere with orthogonal tasks of the library.
 
@@ -114,8 +114,7 @@ An address given in these domains is then mapped to memory by the view. The
 mapping is done by a user defined :ref:`mapping <label-mappings>`. The memory
 for the view is also given by user defined :ref:`allocators <label-allocators>`.
 
-A :ref:`factory <label-factory>` takes all those user defined classes and
-creates the view out of their information.
+The :cpp:`allocView()` takes all those user defined classes and creates the view out of their information.
 
 .. only:: html
 
