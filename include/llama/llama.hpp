@@ -43,4 +43,5 @@
 #include "mapping/AoSoA.hpp"
 #include "mapping/One.hpp"
 #include "mapping/SoA.hpp"
+#include "mapping/Trace.hpp"
 #include "mapping/tree/Mapping.hpp"
