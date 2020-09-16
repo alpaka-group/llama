@@ -366,4 +366,13 @@ namespace llama
     private:
         UserDomain<Dim> size;
     };
+
+    template<typename S>
+    auto structName(S) -> std::string
+    {
+        auto s = boost::core::demangle(typeid(S).name());
+        if(const auto pos = s.rfind(':'); pos != std::string::npos)
+            s = s.substr(pos + 1);
+        return s;
+    }
 }
