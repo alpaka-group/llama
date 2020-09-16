@@ -2,201 +2,121 @@
 
 .. _label-allocators:
 
-Allocator
-=========
+Blobs
+=====
 
-To create a :ref:`view <label-view>` the :ref:`factory <label-factory>` needs to
-allocate memory. This allocator is explicit given to the factory and has the
-only task to return an object which the view can address bytewise.
+When a :ref:`view <label-view>` is created, it needs to be given an array of blobs.
+A blob is an object representing a flat region of memory where each byte is accessed using the subscript operator.
+The number of blobs and the size of each blob is a property determined by the mapping used by the view.
+All this is handled by :cpp:`allocView()`, but I needs to be given an allocator to handle the actual allocation of each blob.
 
-Concept
--------
+Every time a view is copied, it's array of blobs is copied too.
+Depending on the type of blobs used, this can have different effects, especially wrt. the behavior when views are copied.
 
-It depends on the chosen allocator whether the created view has its own memory
-which will be copied and freed when needed, whether it is shared or has no
-ownership information at all. The last apprach is important for reusing already
-existing memory of third party libraries as seen in the
-:ref:`respective subsection <label-allocators-third-party>`.
+If a :cpp:`std::vector<std::byte>` is used, the full storage will be copied.
+If a :cpp:`std::shared_ptr<std::byte[]>` is used, the storage is shared between each copy of the view.
 
-Builtin
--------
+Allocators
+----------
 
-The implementation of the shipped allocators is not important for the end user
-(see :ref:`API <label-api-allocators>` for details) but the behaviour while
-beeing copied.
+An allocator is used for `allocView()` to choose a strategy for creating blobs.
+There is a number of a buildin allocators:
 
 Shared memory
 ^^^^^^^^^^^^^
 
-:cpp:`llama::allocator::SharedPtr` is the most easy and fastest allocator to use
-as the memory of the view is never copied, but a global, shared reference
-counter keeps track how many copies exist using :cpp:`std::shared_ptr` in the
-background. If the last copy of a view runs out of scope the memory is freed.
+:cpp:`llama::allocator::SharedPtr` is an allocator creating blobs of type :cpp:`std::shared_ptr<std::byte[]>`.
+These blobs will be shared between each copy of the view and only destroyed then the last view is destroyed.
 
-Furthermore a (compile time) alignment option can be given to the allocator to
-improve memory read and write:
+Furthermore a compile time alignment value can be given to the allocator to specify the byte alignment of the allocated block of memory.
+This has implications on the read/write speed on some CPU architectures and may even lead to CPU exceptions if data is not properly aligned.
 
 .. code-block:: C++
 
-    llama::allocator::SharedPtr< 256 >
+    llama::allocator::SharedPtr<256>
 
 Vector
 ^^^^^^
 
-:cpp:`llama::allocator::Vector` uses :cpp:`std::vector<unsigned char>` in the
-background. This means every time a view is copied, the whole memory is copied
+
+:cpp:`llama::allocator::Vector` is an allocator creating blobs of type :cpp:`std::vector<std::byte>`.
+This means every time a view is copied, the whole memory is copied
 too. When the view is moved, no extra allocation or copy operation happens.
-Just as the allocator above, it is possible to give the memory alignment as
-template parameter:
+
+Analogous to :cpp:`llama::allocator::SharedPtr` an alignment value may be passed to the allocator.
 
 .. code-block:: C++
 
-    llama::allocator::Vector< 256 >
+    llama::allocator::Vector<256>
 
 Stack
 ^^^^^
 
-When creating views for the whole application data, it make sense to allocate
-big chunks of memory. However when working with smaller amounts of memory or
-having some temporary views which need to be recreated a lot, heap allocations
-are inefficient and it makes more sense to store the data directly on the stack.
+When working with small amounts of memory or temporary views created often, it is usually beneficial to store the data directly on the stack.
 
-:cpp:`llama::allocator::Stack` addresses this challenge. The memory object
-returned from this allocator holds the needed memory in an array on the stack in
-itself. However at the moment one disadvantage is, that the size of the stack
-memory needs to be passed as template parameter. It is possible to determine the
-needed space at compile time for simple mappings, but e.g. padding needs a
-run time chooseable size. This will be addressed in the future.
+:cpp:`llama::allocator::Stack` addresses this issue and creates blobs of type :cpp:`Array<std::byte, N>`, where :cpp:`N` is a compile time value passed to the allocator.
+These blobs are copied every time their view is copied.
 
-Getting a small view of :math:`4 \times 4` may look like this:
+Creating a small view of :math:`4 \times 4` may look like this:
 
 .. code-block:: C++
 
-    using UserDomain = llama::UserDomain< 2 >;
-    constexpr UserDomain miniSize{ 4, 4 };
+    using UserDomain = llama::UserDomain<2>;
+    constexpr UserDomain miniSize{4, 4};
 
-    using MiniMapping = /* some simple mapping */;
+    using Mapping = /* some simple mapping */;
+    using Allocator = llama::allocator::Stack<
+        miniSize[0] * miniSize[1] * llama::sizeOf</* some datum domain */>::value
+    >;
 
-    auto miniView = llama::Factory<
-        MiniMapping,
-        llama::allocator::Stack<
-            miniSize[0] * miniSize[1] * llama::SizeOf< /* some datum domain */ >::value
-        >
-    >::allocView( MiniMapping( miniSize ) );
+    auto miniView = llama::allocView(Mapping{miniSize}, Allocator{});
 
-For :math:`N`-dimensional one-element views a shortcut exists returning a view
+For :math:`N`-dimensional one-element views a shortcut exists, returning a view
 with just one element without any padding, aligment, or whatever on the stack:
 
 .. code-block:: C++
 
-    auto tempView = llama::tempAlloc< N, /* some datum domain */ >();
+    auto tempView = llama::allocViewStack< N, /* some datum domain */ >();
 
-.. _label-allocators-third-party:
 
-Third party
------------
+Non-owning blobs
+----------------
 
-The allocators are not only important for giving the views fine-tuned control
-over allocation and copying overhead, but also an interface for other third
-party libraries. For use with these, the
-:ref:`Factory API section <label-api-factory>` documents the interface
-needed to implement against.
-
-.. _label-allocators-alpaka:
+It is sometimes desirable to create a view based on some already existing memory.
+This is possible by using a non-owning type for the blobs, like a :cpp:`std::span<std::byte>` or just a plain :cpp:`std::byte*`.
+Everything works here as long as it can be subscripted by the view like :cpp:`blob[offset]`.
+One needs to be careful though, since now the ownership of the blob is decoupled from the view.
+It is the responsibility of the user now to ensure that the blob outlives views based on it.
 
 Alpaka
 ^^^^^^
 
-However LLAMA feature some examples using
-`alpaka <https://github.com/ComputationalRadiationPhysics/alpaka>`_
-for the abstraction of computation parallelization. Alpaka has not only its own
-memory allocation functions for different memory regions (e.g. host, device and
-shared memory) but also some cuda-inherited rules which make e.g. sharing
-memory regions hard (e.g. no possibility to use a :cpp:`std::shared_ptr` on a
-GPU).
+LLAMA feature some examples using `alpaka <https://github.com/ComputationalRadiationPhysics/alpaka>`_ for the abstraction of computation parallelization.
+Alpaka has its own memory allocation functions for different memory regions (e.g. host, device and shared memory).
+Additionally there are some cuda-inherited rules which make e.g. sharing memory regions hard (e.g. no possibility to use a :cpp:`std::shared_ptr` on a GPU).
 
-Although those allocators are no official part of LLAMA, they will be described
-here nevertheless as they are
-`shipped with the examles <https://github.com/ComputationalRadiationPhysics/llama/blob/master/examples/common/AlpakaAllocator.hpp>`_
-and as alpaka is (not only namewise) one of the most useful third party
-libraries LLAMA works together with. All examples are under a free license
-without copyleft and may be freely copied and altered as needed.
+The following descriptions are for alpaka users.
+Without an understanding of alpaka they may hard to understand.
 
-The following descriptions are for alpaka and LLAMA users. Without an
-understanding of alpaka they may hard to understand and can probably be skipped.
+Alpaka buffers
+""""""""""""""
 
-Alpaka
-""""""
-:cpp:`common::allocator::Alpaka` creates a buffer for a given device. Internally
-the well known alpaka buffer object is used.
+Alpaka creates and manages memory using buffers.
+However, a pointer to the underlying storage can be obtained, which may be used for a view:
 
 .. code-block:: C++
 
-    common::allocator::Alpaka<
-        DevAcc, // some alpaka device type
-        Size,   // some size type, e.g. std::size_t
-    >
+    auto buffer = alpaka::mem::buf::alloc<std::byte, std::size_t>(dev, size);
+    auto view = llama::View<Mapping, std::byte*>{mapping, {alpaka::mem::view::getPtrNative(buffer)}};
 
-As usual with alpaka the size type is an explicit parameter. If the view is
-copied, the internal alpaka buffer is copied, too, which internally uses a
-:cpp:`std::shared_ptr` just as the shared memory allocator above.
 
-AlpakaMirror
-""""""""""""
-As probably known it is not possible to directly give an alpaka buffer as a
-kernel argument -- at least not for kernels running on Nvidia GPUs. Taking the
-native device pointer is an often seen solution, but this is exactly what LLAMA
-tries to avoid.
+Alpaka shared memory
+""""""""""""""""""""
 
-So with :cpp:`common::allocator::AlpakaMirror` a view can be created, which
-maps the already allocated memory of another LLAMA mapping.
+Shared memory is created by alpaka using a special function returning a reference to a shared variable.
+To allocate storage for LLAMA, we can allocate a shared byte array using alpaka and then pass the address of the first element to a LLAMA view.
 
 .. code-block:: C++
 
-    using Mapping = /* some mapping */;
-    Mapping mapping( /* parameters */ );
-
-    auto view = llama::Factory<
-        Mapping,
-        common::allocator::Alpaka<
-            DevAcc,
-            Size
-        >
-    >::allocView( mapping, devAcc );
-
-    auto mirror = llama::Factory<
-        Mapping,
-        common::allocator::AlpakaMirror<
-            DevAcc,
-            Size,
-            Mapping
-        >
-    >::allocView( mapping, view );
-
-This :cpp:`mirror` view is ready to be copied to any offload device.
-
-AlpakaShared
-""""""""""""
-Allocation of shared memory is special in cuda and even more special in the
-C++ abstraction of alpaka. So an own allocator for this special memory is
-defined. Two different kinds of shared memory exist: dynamically and statically
-allocated. Right now only an allocator for static shared memory exists. Like for
-:cpp:`llama::allocator::Stack` the size of the memory region needs to be known
-at compile time.
-
-.. code-block:: C++
-
-    using UserDomain = llama::UserDomain< 2 >;
-    constexpr UserDomain sharedSize{ 16, 16 };
-
-    using Mapping = /* some mapping */;
-    Mapping mapping( /* parameters */ );
-
-    auto view = llama::Factory<
-        Mapping,
-        common::allocator::AlpakaShared<
-            DevAcc,
-            sharedSize[0] * sharedSize[1] * llama::SizeOf< /* some datum domain */ >::value
-            __COUNTER__
-        >
-    >::allocView( mapping, devAcc );
+    auto& sharedMem = alpaka::block::shared::st::allocVar<std::byte[sharedMemSize], __COUNTER__>(acc);
+    auto view = llama::View<Mapping, std::byte*>{mapping, {&sharedMem[0]}};
