@@ -121,7 +121,7 @@ namespace
 
 }
 
-/** Example functor for \ref llama::ForEach which can also be used to print the
+/** Example functor for \ref llama::forEach which can also be used to print the
  *  coordinates inside of a datum domain when called.
  */
 template<typename T_VirtualDatum>

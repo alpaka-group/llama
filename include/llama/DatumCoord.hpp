@@ -9,29 +9,7 @@
 
 namespace llama
 {
-    template<std::size_t... Coords>
-    struct DatumCoord;
-
-    namespace internal
-    {
-        template<class L>
-        struct mp_unwrap_sizes_impl;
-
-        template<template<class...> class L, typename... T>
-        struct mp_unwrap_sizes_impl<L<T...>>
-        {
-            using type = DatumCoord<T::value...>;
-        };
-
-        template<typename L>
-        using mp_unwrap_sizes = typename mp_unwrap_sizes_impl<L>::type;
-    }
-
-    /// Converts a type list of integral constants into a \ref DatumCoord.
-    template<typename L>
-    using DatumCoordFromList = internal::mp_unwrap_sizes<L>;
-
-    /// Represents a coordinate for an element inside of datum domain tree.
+    /// Represents a coordinate for an element inside the datum domain tree.
     /// \tparam Coords... the compile time coordinate.
     template<std::size_t... Coords>
     struct DatumCoord
@@ -51,6 +29,25 @@ namespace llama
 
         static constexpr std::size_t size = 0;
     };
+
+    namespace internal
+    {
+        template<class L>
+        struct mp_unwrap_sizes_impl;
+
+        template<template<class...> class L, typename... T>
+        struct mp_unwrap_sizes_impl<L<T...>>
+        {
+            using type = DatumCoord<T::value...>;
+        };
+
+        template<typename L>
+        using mp_unwrap_sizes = typename mp_unwrap_sizes_impl<L>::type;
+    }
+
+    /// Converts a type list of integral constants into a \ref DatumCoord.
+    template<typename L>
+    using DatumCoordFromList = internal::mp_unwrap_sizes<L>;
 
     /// Concatenate two \ref DatumCoords.
     template<typename DatumCoord1, typename DatumCoord2>

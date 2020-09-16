@@ -349,7 +349,7 @@ namespace llama
         std::conditional_t<OwnView, View, View &> view;
 
     public:
-        /// Subtree of the datum domain of View starting at \ref
+        /// Subtree of the datum domain of View starting at
         /// BoundDatumDomain. If BoundDatumDomain is `DatumCoord<>` (default)
         /// AccessibleDatumDomain is the same as `Mapping::DatumDomain`.
         using AccessibleDatumDomain = GetType<DatumDomain, BoundDatumDomain>;
@@ -636,7 +636,7 @@ namespace llama
                 mapping(mapping), storageBlobs(storageBlobs)
         {}
 
-        /// Retrieves the \VirtualDatum at the given \ref UserDomain coordinate.
+        /// Retrieves the \ref VirtualDatum at the given \ref UserDomain coordinate.
         LLAMA_FN_HOST_ACC_INLINE auto operator()(UserDomain userDomain) const
             -> VirtualDatumTypeConst
         {
@@ -651,7 +651,7 @@ namespace llama
             return {userDomain, *this};
         }
 
-        /// Retrieves the \VirtualDatum at the \ref UserDomain coordinate
+        /// Retrieves the \ref VirtualDatum at the \ref UserDomain coordinate
         /// constructed from the passed component indices.
         template<typename... Index>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Index... indices) const
@@ -669,7 +669,7 @@ namespace llama
             return {UserDomain{indices...}, *this};
         }
 
-        /// Retrieves the \VirtualDatum at the \ref UserDomain coordinate
+        /// Retrieves the \ref VirtualDatum at the \ref UserDomain coordinate
         /// constructed from the passed component indices.
         LLAMA_FN_HOST_ACC_INLINE auto operator[](UserDomain userDomain) const
             -> VirtualDatumTypeConst
@@ -685,7 +685,7 @@ namespace llama
             return (*this)(userDomain);
         }
 
-        /// Retrieves the \VirtualDatum at the 1D \ref UserDomain coordinate
+        /// Retrieves the \ref VirtualDatum at the 1D \ref UserDomain coordinate
         /// constructed from the passed index.
         LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t index) const
             -> VirtualDatumTypeConst

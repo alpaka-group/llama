@@ -6,12 +6,6 @@
  * itself is not under the public domain but LGPL3+.
  */
 
-/** \file AlpakaThreadElemsDistribution.hpp
- *  \brief common helper class for getting the right amount of elements per
- *  thread and threads per block based on total number of elements in the block
- *  and the accelator type.
- */
-
 #pragma once
 
 #include <cstddef>
