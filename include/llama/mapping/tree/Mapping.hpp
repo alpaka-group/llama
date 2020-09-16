@@ -1,20 +1,5 @@
-/* Copyright 2018 Alexander Matthes
- *
- * This file is part of LLAMA.
- *
- * LLAMA is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * LLAMA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with LLAMA.  If not, see <www.gnu.org/licenses/>.
- */
+// Copyright 2018 Alexander Matthes
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #pragma once
 
@@ -215,12 +200,11 @@ namespace llama::mapping::tree
         }
     }
 
-    /** Free describable mapping which can be used for creating a \ref View with
-     * a \ref Factory. For the interface details see \ref Factory. \tparam
-     * T_UserDomain type of the user domain \tparam T_DatumDomain type of the
-     * datum domain \tparam TreeOperationList (\ref Tuple) of operations to
-     * define the tree mapping
-     */
+    /// An experimental attempt to provide a general purpose description of a
+    /// mapping. \ref UserDomain and datum domain are represented by a compile
+    /// time tree data structure. This tree is mapped into memory by means of a
+    /// breadth-first tree traversal. By specifying additional tree operations,
+    /// the tree can be modified at compile time before being mapped to memory.
     template<
         typename T_UserDomain,
         typename T_DatumDomain,
@@ -245,14 +229,6 @@ namespace llama::mapping::tree
 
         Mapping() = default;
 
-        /** The initalization of this mapping needs a \ref Tuple of operations
-         *  which describe the mapping in detail. Please have a look at the user
-         *  documenation for more information.
-         * \param size the size of the user domain
-         * \param treeOperationList list of operations to define the mapping,
-         * e.g. \ref functor::Idem, \ref functor::LeafOnlyRT, \ref
-         * functor::MoveRTDown.
-         */
         LLAMA_FN_HOST_ACC_INLINE
         Mapping(UserDomain size, TreeOperationList treeOperationList) :
                 userDomainSize(size),

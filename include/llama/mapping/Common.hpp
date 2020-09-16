@@ -1,20 +1,5 @@
-/* Copyright 2018 Alexander Matthes
- *
- * This file is part of LLAMA.
- *
- * LLAMA is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * LLAMA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with LLAMA.  If not, see <www.gnu.org/licenses/>.
- */
+// Copyright 2018 Alexander Matthes
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #pragma once
 
@@ -24,7 +9,8 @@
 
 namespace llama
 {
-    /// Functor that calculates the extent of a user domain
+    /// Functor that calculates the extent of a user domain for use with \ref
+    /// LinearizeUserDomainAdress or \ref LinearizeUserDomainAdressLikeFortran.
     struct ExtentUserDomainAdress
     {
         template<std::size_t Dim>
@@ -37,11 +23,8 @@ namespace llama
         }
     };
 
-    /** Functor to get the linear position of a coordinate in the user domain
-     * space if the n-dimensional domain is flattened to one dimension with the
-     * last user domain index being the fastet resp. already linearized index (C
-     * like). \see LinearizeUserDomainAdressLikeFortran
-     * */
+    /// Functor that maps a \ref UserDomain coordinate into linear numbers the
+    /// way C++ arrays work.
     struct LinearizeUserDomainAdress
     {
         /**
@@ -64,12 +47,8 @@ namespace llama
         }
     };
 
-    /** Functor to get the linear position of a coordinate in the user domain
-     * space if the n-dimensional domain is flattened to one dimension with the
-     * first user domain index being the fastet resp. already linearized index
-     * (Fortran like). \tparam Dim dimension of the user domain \see
-     * LinearizeUserDomainAdress
-     * */
+    /// Functor that maps a \ref UserDomain coordinate into linear numbers the
+    /// way Fortran arrays work.
     struct LinearizeUserDomainAdressLikeFortran
     {
         /**
@@ -92,6 +71,8 @@ namespace llama
         }
     };
 
+    /// Functor that calculates the extent of a user domain for use with \ref
+    /// LinearizeUserDomainMorton.
     struct ExtentUserDomainMorton
     {
         template<std::size_t Dim>
@@ -127,6 +108,8 @@ namespace llama
         }
     };
 
+    /// Functor that maps a \ref UserDomain coordinate into linear numbers using
+    /// the Z-order space filling curve (Morton codes).
     struct LinearizeUserDomainMorton
     {
         template<std::size_t Dim>

@@ -1,20 +1,5 @@
-/* Copyright 2018 Alexander Matthes
- *
- * This file is part of LLAMA.
- *
- * LLAMA is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * LLAMA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with LLAMA.  If not, see <www.gnu.org/licenses/>.
- */
+// Copyright 2018 Alexander Matthes
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #pragma once
 
@@ -23,15 +8,9 @@
 
 namespace llama::mapping
 {
-    /** Neither struct of array nor array of struct mapping as only exactly one
-     *  element (in the user domain) can be mapped. If more than one element is
-     *  tried to be mapped all virtual datums are mapped to the very same
-     * memory. This mapping is especially used for temporary views on the stack
-     * allocated with \ref stackViewAlloc. \tparam T_UserDomain type of the user
-     * domain, expected to have only element, although more are working (but
-     * doesn't make sense) \tparam T_DatumDomain type of the datum domain \see
-     * stackViewAlloc, OneOnStackFactory, allocator::Stack
-     */
+    /// Maps all UserDomain coordinates into the same location and layouts
+    /// struct members consecutively. This mapping is used for temporary, single
+    /// element views.
     template<typename T_UserDomain, typename T_DatumDomain>
     struct One
     {
@@ -47,11 +26,10 @@ namespace llama::mapping
         }
 
         template<std::size_t... DatumDomainCoord>
-        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(UserDomain coord) const
+        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(UserDomain) const
             -> NrAndOffset
         {
-            constexpr auto offset
-                = offsetOf<DatumDomain, DatumDomainCoord...>;
+            constexpr auto offset = offsetOf<DatumDomain, DatumDomainCoord...>;
             return {0, offset};
         }
     };

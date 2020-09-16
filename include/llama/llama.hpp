@@ -1,20 +1,5 @@
-/* Copyright 2018 Alexander Matthes
- *
- * This file is part of LLAMA.
- *
- * LLAMA is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * LLAMA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with LLAMA.  If not, see <www.gnu.org/licenses/>.
- */
+// Copyright 2018 Alexander Matthes
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #pragma once
 
@@ -29,11 +14,11 @@
  *
  * In contrast to many other solutions LLAMA can define nested data structures
  * of arbitrary depths and is not limited only to struct of array and array of
- * struct data layouts but is also capable to explicitly define padding,
+ * struct data layouts. It is also capable to explicitly define padding,
  * blocking, striding and any other run time or compile time access pattern
  * simultaneously.
  *
- * To archieve this goal LLAMA is splitted in mostly independent, orthogonal
+ * To archieve this goal LLAMA is split into mostly independent, orthogonal
  * parts completely written in modern C++17 to run on as many architectures and
  * with as many compilers as possible while still supporting extensions needed
  * e.g. to run on GPU or other many core hardware.

@@ -162,7 +162,7 @@ struct BlurKernel
         for(auto y = start[0]; y < end[0]; ++y) LLAMA_INDEPENDENT_DATA
         for(auto x = start[1]; x < end[1]; ++x)
         {
-            auto sum = llama::stackVirtualDatumAlloc<PixelOnAcc>();
+            auto sum = llama::allocVirtualDatumStack<PixelOnAcc>();
             sum = 0;
 
             using ItType = long int;

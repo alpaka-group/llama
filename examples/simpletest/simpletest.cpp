@@ -159,7 +159,7 @@ int main(int argc, char ** argv)
               << std::endl;
     std::cout << "sizeOf DatumDomain: " << llama::sizeOf<Name> << std::endl;
 
-    std::cout << type(llama::GetCoordFromUID<Name, st::Pos, st::X>()) << '\n';
+    std::cout << type(llama::GetCoordFromTags<Name, st::Pos, st::X>()) << '\n';
 
     // chosing a native struct of array mapping for this simple test example
     using Mapping = llama::mapping::SoA<UD, Name>;

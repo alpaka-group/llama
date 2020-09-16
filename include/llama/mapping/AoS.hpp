@@ -1,20 +1,5 @@
-/* Copyright 2018 Alexander Matthes
- *
- * This file is part of LLAMA.
- *
- * LLAMA is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * LLAMA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with LLAMA.  If not, see <www.gnu.org/licenses/>.
- */
+// Copyright 2018 Alexander Matthes
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #pragma once
 
@@ -23,20 +8,11 @@
 
 namespace llama::mapping
 {
-    /** Array of struct mapping which can be used for creating a \ref View with
-     * a \ref Factory. For the interface details see \ref Factory. \tparam
-     * T_UserDomain type of the user domain \tparam T_DatumDomain type of the
-     * datum domain \tparam LinearizeUserDomainAdressFunctor Defines how the
-     * user domain should be linearized, e.g. C like with the last dimension
-     * being the "fast" one
-     *  (\ref LinearizeUserDomainAdress, default) or Fortran like with the first
-     *  dimension being the "fast" one (\ref
-     * LinearizeUserDomainAdressLikeFortran). \tparam
-     * ExtentUserDomainAdressFunctor Defines how the size of the view shall be
-     * created. Should fit for `T_LinearizeUserDomainAdressFunctor`. Only right
-     * now implemented and default value is \ref ExtentUserDomainAdress. \see
-     * SoA
-     */
+    /// Array of struct mapping. Used to create a \ref View via \ref allocView.
+    /// \tparam LinearizeUserDomainAdressFunctor Defines how the
+    /// user domain should be mapped into linear numbers.
+    /// \tparam ExtentUserDomainAdressFunctor Defines how the total number of
+    /// \ref UserDomain indices is calculated.
     template<
         typename T_UserDomain,
         typename T_DatumDomain,

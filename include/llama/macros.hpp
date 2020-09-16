@@ -1,20 +1,5 @@
-/* Copyright 2018 Alexander Matthes
- *
- * This file is part of LLAMA.
- *
- * LLAMA is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * LLAMA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with LLAMA.  If not, see <www.gnu.org/licenses/>.
- */
+// Copyright 2018 Alexander Matthes
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #pragma once
 
@@ -45,39 +30,19 @@
 #elif defined(_MSC_VER)
 #define LLAMA_INDEPENDENT_DATA __pragma(loop(ivdep))
 #else
-/** Shows that all (!) data access inside inside of a loop is indepent, so the
- *  loop can safely be vectorized although the compiler may not know the data
- *  dependencies completely. Usage looks like this
- * \code{.cpp}
- *  LLAMA_INDEPENDENT_DATA
- *  for (int i = 0; i < N; ++i)
- *      // because of LLAMA_INDEPENDENT_DATA the compiler knows that a and b do
- *      // not overlap and the operation can safely be vectorized
- *      a[i] += b[i];
- * \endcode
- */
+/// May be put in front of a loop statement. Indicates that all (!) data access
+/// inside the loop is indepent, so the loop can be safely vectorized. Example:
+/// \code{.cpp}
+///     LLAMA_INDEPENDENT_DATA
+///     for(int i = 0; i < N; ++i)
+///         // because of LLAMA_INDEPENDENT_DATA the compiler knows that a and b
+///         // do not overlap and the operation can safely be vectorized
+///         a[i] += b[i];
+/// \endcode
 #define LLAMA_INDEPENDENT_DATA
 #endif
 
 #ifndef LLAMA_FN_HOST_ACC_INLINE
-/** Some offloading parallelization language extensions such a CUDA, OpenACC or
- *  OpenMP 4.5 need to specify whether a class, struct, function or method
- *  "resides" on the host, the accelerator (the offloading device) or both.
- *  LLAMA supports this with marking every function wich would be needed on an
- *  accelerator with `LLAMA_FN_HOST_ACC_INLINE`. When using such a language (or
- *  e.g.
- *  <a href="https://github.com/ComputationalRadiationPhysics/alpaka">alpaka</a>
- *  ) the define can be redefined before including LLAMA, e.g. for alpaka:
- * \code{.cpp}
- *  #include <alpaka/alpaka.hpp>
- *  #ifdef __CUDACC__
- *      #define LLAMA_FN_HOST_ACC_INLINE ALPAKA_FN_ACC __forceinline__
- *  #else
- *      #define LLAMA_FN_HOST_ACC_INLINE ALPAKA_FN_ACC inline
- *  #endif
- *  #include <llama/llama.hpp>
- * \endcode
- */
 #if BOOST_COMP_NVCC != 0
 #define LLAMA_FN_HOST_ACC_INLINE __forceinline__
 #elif BOOST_COMP_GNUC != 0
@@ -85,6 +50,14 @@
 #elif defined(_MSC_VER)
 #define LLAMA_FN_HOST_ACC_INLINE __forceinline
 #else
+/// Some offloading parallelization language extensions such a CUDA, OpenACC or
+/// OpenMP 4.5 need to specify whether a class, struct, function or method
+/// "resides" on the host, the accelerator (the offloading device) or both.
+/// LLAMA supports this with marking every function needed on an accelerator
+/// with `LLAMA_FN_HOST_ACC_INLINE`. When using such a language (or e.g. <a
+/// href="https://github.com/ComputationalRadiationPhysics/alpaka">alpaka</a>)
+/// this macro should be defined on the compiler's command line. E.g. for
+/// alpaka: -D'LLAMA_FN_HOST_ACC_INLINE=ALPAKA_FN_HOST_ACC'
 #define LLAMA_FN_HOST_ACC_INLINE inline
 #endif
 #endif
@@ -109,15 +82,9 @@
 #elif defined(_MSC_VER)
 #define LLAMA_FORCE_INLINE_RECURSIVE __pragma(inline_depth(255))
 #else
-/** If possible forces the compiler to recursively inline the following function
- *  and all child function calls. Should be use carefully as at least the
- *  Intel compiler implementation seems to be buggy.
- */
+/// Forces the compiler to recursively inline the call hiearchy started by the
+/// subsequent function call.
 #define LLAMA_FORCE_INLINE_RECURSIVE
 #endif
 
 #define LLAMA_DEREFERENCE(x) decltype(x)(x)
-
-#ifndef LLAMA_IGNORE_LITERAL
-#define LLAMA_IGNORE_LITERAL(x)
-#endif

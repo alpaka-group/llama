@@ -1,21 +1,5 @@
-/* Copyright 2018 Alexander Matthes
- *
- * This file is part of LLAMA.
- *
- * LLAMA is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * LLAMA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with LLAMA.  If not, see <www.gnu.org/licenses/>.
- */
-
+// Copyright 2018 Alexander Matthes
+// SPDX-License-Identifier: GPL-3.0-or-later
 #pragma once
 
 #include "../../Tuple.hpp"
@@ -113,7 +97,7 @@ namespace llama::mapping::tree
             using type = Node<
                 Tag,
                 Tuple<typename CreateTreeElement<
-                    GetDatumElementUID<DatumElements>,
+                    GetDatumElementTag<DatumElements>,
                     GetDatumElementType<DatumElements>,
                     boost::mp11::mp_size_t<1>>::type...>,
                 CountType>;
@@ -144,15 +128,15 @@ namespace llama::mapping::tree
     template<typename UserDomain, typename DatumDomain>
     using TreeFromDomains = typename internal::WrapInNNodes<
         internal::TreeFromDatumDomainImpl<DatumDomain>,
-        UserDomain::count - 1>::type;
+        UserDomain::rank - 1>::type;
 
     template<typename DatumDomain, typename UserDomain, std::size_t Pos = 0>
     LLAMA_FN_HOST_ACC_INLINE auto createTree(const UserDomain & size)
     {
-        if constexpr(Pos == UserDomain::count - 1)
+        if constexpr(Pos == UserDomain::rank - 1)
         {
             return TreeFromDatumDomain<DatumDomain>{
-                size[UserDomain::count - 1]};
+                size[UserDomain::rank - 1]};
         }
         else
         {
@@ -175,7 +159,7 @@ namespace llama::mapping::tree
         {
             return Tuple{
                 TreeCoordElement<(
-                    UDIndices == UserDomain::count - 1 ? FirstDatumDomainCoord
+                    UDIndices == UserDomain::rank - 1 ? FirstDatumDomainCoord
                                                        : 0)>(
                     coord[UDIndices])...,
                 TreeCoordElement<
@@ -189,6 +173,6 @@ namespace llama::mapping::tree
     LLAMA_FN_HOST_ACC_INLINE auto createTreeCoord(const UserDomain & coord)
     {
         return internal::createTreeCoord(
-            coord, std::make_index_sequence<UserDomain::count>{}, DatumCoord{});
+            coord, std::make_index_sequence<UserDomain::rank>{}, DatumCoord{});
     }
 }
