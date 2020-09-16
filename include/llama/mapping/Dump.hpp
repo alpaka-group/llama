@@ -21,12 +21,9 @@ namespace llama::mapping
         }
 
         template<typename Tag>
-        auto tagToString(Tag)
+        auto tagToString(Tag tag)
         {
-            auto s = boost::core::demangle(typeid(Tag).name());
-            if(const auto pos = s.rfind(':'); pos != std::string::npos)
-                s = s.substr(pos + 1);
-            return s;
+            return structName(tag);
         }
 
         template<std::size_t N>

@@ -55,6 +55,16 @@ TEST_CASE("GetCoordFromTags")
     // clang-format on
 }
 
+TEST_CASE("GetTags")
+{
+    // clang-format off
+    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::DatumCoord<0, 0>>, boost::mp11::mp_list<llama::NoName, tag::Pos, tag::X >>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::DatumCoord<0   >>, boost::mp11::mp_list<llama::NoName, tag::Pos         >>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::DatumCoord<    >>, boost::mp11::mp_list<llama::NoName                   >>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::DatumCoord<2, 1>>, boost::mp11::mp_list<llama::NoName, tag::Vel, tag::X >>);
+    // clang-format on
+}
+
 TEST_CASE("GetTag")
 {
     // clang-format off

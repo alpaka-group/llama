@@ -26,7 +26,7 @@ namespace llama
         template<typename Allocator, typename Mapping, std::size_t... Is>
         LLAMA_FN_HOST_ACC_INLINE static auto makeBlobArray(
             const Allocator & alloc,
-            Mapping mapping,
+            const Mapping & mapping,
             std::integer_sequence<std::size_t, Is...>)
             -> Array<AllocatorBlobType<Allocator>, Mapping::blobCount>
         {
@@ -44,12 +44,9 @@ namespace llama
     allocView(Mapping mapping = {}, const Allocator & alloc = {})
         -> View<Mapping, internal::AllocatorBlobType<Allocator>>
     {
-        return {
-            mapping,
-            internal::makeBlobArray<Allocator>(
-                alloc,
-                mapping,
-                std::make_index_sequence<Mapping::blobCount>{})};
+        auto blobs = internal::makeBlobArray<Allocator>(
+            alloc, mapping, std::make_index_sequence<Mapping::blobCount>{});
+        return {std::move(mapping), std::move(blobs)};
     }
 
     /// Allocates a \ref View holding a single datum backed by stack memory
@@ -633,10 +630,11 @@ namespace llama
         View(
             Mapping mapping,
             Array<BlobType, Mapping::blobCount> storageBlobs) :
-                mapping(mapping), storageBlobs(storageBlobs)
+                mapping(std::move(mapping)), storageBlobs(storageBlobs)
         {}
 
-        /// Retrieves the \ref VirtualDatum at the given \ref UserDomain coordinate.
+        /// Retrieves the \ref VirtualDatum at the given \ref UserDomain
+        /// coordinate.
         LLAMA_FN_HOST_ACC_INLINE auto operator()(UserDomain userDomain) const
             -> VirtualDatumTypeConst
         {

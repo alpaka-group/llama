@@ -11,6 +11,7 @@ constexpr auto MAPPING
     = 1; ///< 0 native AoS, 1 native SoA, 2 tree AoS, 3 tree SoA
 constexpr auto PROBLEM_SIZE = 16 * 1024; ///< total number of particles
 constexpr auto STEPS = 5; ///< number of steps to calculate
+constexpr auto TRACE = false;
 
 using FP = float;
 constexpr FP EPS2 = 0.01f;
@@ -84,7 +85,7 @@ namespace usellama
         using UserDomain = llama::UserDomain<1>;
         const UserDomain userDomain{PROBLEM_SIZE};
 
-        const auto mapping = [&] {
+        auto mapping = [&] {
             if constexpr(MAPPING == 0)
             {
                 using Mapping = llama::mapping::AoS<UserDomain, Particle>;
@@ -112,7 +113,14 @@ namespace usellama
             }
         }();
 
-        auto particles = allocView(mapping);
+        auto tmapping = [&] {
+            if constexpr(TRACE)
+                return llama::mapping::Trace{std::move(mapping)};
+            else
+                return std::move(mapping);
+        }();
+
+        auto particles = allocView(std::move(tmapping));
 
         std::cout << PROBLEM_SIZE / 1000 << " thousand particles LLAMA\n";
 
