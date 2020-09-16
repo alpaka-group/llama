@@ -88,7 +88,7 @@ TEST_CASE("address.AoS.fortran")
     using UserDomain = llama::UserDomain<2>;
     auto userDomain = UserDomain{16, 16};
     auto mapping = llama::mapping::
-        AoS<UserDomain, Particle, llama::LinearizeUserDomainAdressLikeFortran>{
+        AoS<UserDomain, Particle, llama::LinearizeUserDomainFortran>{
             userDomain};
 
     {
@@ -141,11 +141,8 @@ TEST_CASE("address.AoS.morton")
 {
     using UserDomain = llama::UserDomain<2>;
     auto userDomain = UserDomain{16, 16};
-    auto mapping = llama::mapping::AoS<
-        UserDomain,
-        Particle,
-        llama::LinearizeUserDomainMorton,
-        llama::ExtentUserDomainMorton>{userDomain};
+    auto mapping = llama::mapping::
+        AoS<UserDomain, Particle, llama::LinearizeUserDomainMorton>{userDomain};
 
     {
         const auto coord = UserDomain{0, 0};
@@ -250,7 +247,7 @@ TEST_CASE("address.SoA.fortran")
     using UserDomain = llama::UserDomain<2>;
     auto userDomain = UserDomain{16, 16};
     auto mapping = llama::mapping::
-        SoA<UserDomain, Particle, llama::LinearizeUserDomainAdressLikeFortran>{
+        SoA<UserDomain, Particle, llama::LinearizeUserDomainFortran>{
             userDomain};
 
     {
@@ -306,11 +303,8 @@ TEST_CASE("address.SoA.morton")
 
     using UserDomain = llama::UserDomain<2>;
     auto userDomain = UserDomain{16, 16};
-    auto mapping = llama::mapping::SoA<
-        UserDomain,
-        Particle,
-        llama::LinearizeUserDomainMorton,
-        llama::ExtentUserDomainMorton>{userDomain};
+    auto mapping = llama::mapping::
+        SoA<UserDomain, Particle, llama::LinearizeUserDomainMorton>{userDomain};
 
     {
         const auto coord = UserDomain{0, 0};

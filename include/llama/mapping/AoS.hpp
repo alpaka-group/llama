@@ -9,15 +9,13 @@
 namespace llama::mapping
 {
     /// Array of struct mapping. Used to create a \ref View via \ref allocView.
-    /// \tparam LinearizeUserDomainAdressFunctor Defines how the
-    /// user domain should be mapped into linear numbers.
-    /// \tparam ExtentUserDomainAdressFunctor Defines how the total number of
-    /// \ref UserDomain indices is calculated.
+    /// \tparam LinearizeUserDomainFunctor Defines how the
+    /// user domain should be mapped into linear numbers and how big the linear
+    /// domain gets.
     template<
         typename T_UserDomain,
         typename T_DatumDomain,
-        typename LinearizeUserDomainAdressFunctor = LinearizeUserDomainAdress,
-        typename ExtentUserDomainAdressFunctor = ExtentUserDomainAdress>
+        typename LinearizeUserDomainFunctor = LinearizeUserDomainCpp>
     struct AoS
     {
         using UserDomain = T_UserDomain;
@@ -32,8 +30,8 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE auto getBlobSize(std::size_t) const
             -> std::size_t
         {
-            return ExtentUserDomainAdressFunctor{}(
-                userDomainSize)*sizeOf<DatumDomain>;
+            return LinearizeUserDomainFunctor{}.size(userDomainSize)
+                * sizeOf<DatumDomain>;
         }
 
         template<std::size_t... DatumDomainCoord>
@@ -42,7 +40,7 @@ namespace llama::mapping
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             const auto offset
-                = LinearizeUserDomainAdressFunctor{}(coord, userDomainSize)
+                = LinearizeUserDomainFunctor{}(coord, userDomainSize)
                     * sizeOf<
                         DatumDomain> + offsetOf<DatumDomain, DatumDomainCoord...>;
             return {0, offset};
