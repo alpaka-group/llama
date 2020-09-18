@@ -44,23 +44,23 @@ namespace usellama
     >;
     // clang-format on
 
-    template<typename VirtualDatum1, typename VirtualDatum2>
+    template<typename VirtualParticle>
     LLAMA_FN_HOST_ACC_INLINE void
-    pPInteraction(VirtualDatum1 && p1, VirtualDatum2 && p2, FP ts)
+    pPInteraction(VirtualParticle p1, VirtualParticle p2, FP ts)
     {
-        auto distance = p1(tag::Pos()) + p2(tag::Pos());
-        distance *= distance;
-        const FP distSqr = EPS2 + distance(tag::X()) + distance(tag::Y())
-            + distance(tag::Z());
+        auto dist = p1(tag::Pos{}) + p2(tag::Pos{});
+        dist *= dist;
+        const FP distSqr
+            = EPS2 + dist(tag::X{}) + dist(tag::Y{}) + dist(tag::Z{});
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
-        const FP s = p2(tag::Mass()) * invDistCube;
-        distance *= s * ts;
-        p1(tag::Vel()) += distance;
+        const FP s = p2(tag::Mass{}) * invDistCube;
+        dist *= s * ts;
+        p1(tag::Vel{}) += dist;
     }
 
-    template<typename T_View>
-    void update(T_View & particles, FP ts)
+    template<typename View>
+    void update(View & particles, FP ts)
     {
         for(std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
@@ -70,12 +70,12 @@ namespace usellama
         }
     }
 
-    template<typename T_View>
-    void move(T_View & particles, FP ts)
+    template<typename View>
+    void move(View & particles, FP ts)
     {
         LLAMA_INDEPENDENT_DATA
         for(std::size_t i = 0; i < PROBLEM_SIZE; i++)
-            particles(i)(tag::Pos()) += particles(i)(tag::Vel()) * ts;
+            particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * ts;
     }
 
     int main(int argc, char ** argv)
@@ -83,33 +83,27 @@ namespace usellama
         constexpr FP ts = 0.0001f;
 
         using UserDomain = llama::UserDomain<1>;
-        const UserDomain userDomain{PROBLEM_SIZE};
+        const auto userDomain = UserDomain{PROBLEM_SIZE};
 
         auto mapping = [&] {
             if constexpr(MAPPING == 0)
-            {
-                using Mapping = llama::mapping::AoS<UserDomain, Particle>;
-                return Mapping(userDomain);
-            }
+                return llama::mapping::AoS<UserDomain, Particle>(userDomain);
             if constexpr(MAPPING == 1)
-            {
-                using Mapping = llama::mapping::SoA<UserDomain, Particle>;
-                return Mapping(userDomain);
-            }
+                return llama::mapping::SoA<UserDomain, Particle>(userDomain);
             if constexpr(MAPPING == 2)
             {
-                auto treeOperationList = llama::Tuple{};
-                using Mapping = llama::mapping::tree::
-                    Mapping<UserDomain, Particle, decltype(treeOperationList)>;
-                return Mapping(userDomain, treeOperationList);
+                auto operations = llama::Tuple{};
+                return llama::mapping::tree::
+                    Mapping<UserDomain, Particle, decltype(operations)>(
+                        userDomain, operations);
             }
             if constexpr(MAPPING == 3)
             {
-                auto treeOperationList
+                auto operations
                     = llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()};
-                using Mapping = llama::mapping::tree::
-                    Mapping<UserDomain, Particle, decltype(treeOperationList)>;
-                return Mapping(userDomain, treeOperationList);
+                return llama::mapping::tree::
+                    Mapping<UserDomain, Particle, decltype(operations)>(
+                        userDomain, operations);
             }
         }();
 
@@ -134,20 +128,17 @@ namespace usellama
             const auto start = std::chrono::high_resolution_clock::now();
 
             std::default_random_engine engine;
-            std::normal_distribution<FP> distribution(FP(0), FP(1));
-            LLAMA_INDEPENDENT_DATA
+            std::normal_distribution<FP> dist(FP(0), FP(1));
             for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
             {
-                particles(i)(tag::Pos(), tag::X()) = distribution(engine);
-                particles(i)(tag::Pos(), tag::Y()) = distribution(engine);
-                particles(i)(tag::Pos(), tag::Z()) = distribution(engine);
-                particles(i)(tag::Vel(), tag::X())
-                    = distribution(engine) / FP(10);
-                particles(i)(tag::Vel(), tag::Y())
-                    = distribution(engine) / FP(10);
-                particles(i)(tag::Vel(), tag::Z())
-                    = distribution(engine) / FP(10);
-                particles(i)(tag::Mass()) = distribution(engine) / FP(100);
+                auto p = particles(i);
+                p(tag::Pos{}, tag::X{}) = dist(engine);
+                p(tag::Pos{}, tag::Y{}) = dist(engine);
+                p(tag::Pos{}, tag::Z{}) = dist(engine);
+                p(tag::Vel{}, tag::X{}) = dist(engine) / FP(10);
+                p(tag::Vel{}, tag::Y{}) = dist(engine) / FP(10);
+                p(tag::Vel{}, tag::Z{}) = dist(engine) / FP(10);
+                p(tag::Mass{}) = dist(engine) / FP(100);
             }
 
             const auto stop = std::chrono::high_resolution_clock::now();
@@ -282,16 +273,16 @@ namespace manualAoS
             const auto start = std::chrono::high_resolution_clock::now();
 
             std::default_random_engine engine;
-            std::normal_distribution<FP> distribution(FP(0), FP(1));
+            std::normal_distribution<FP> dist(FP(0), FP(1));
             for(auto & p : particles)
             {
-                p.pos.x = distribution(engine);
-                p.pos.y = distribution(engine);
-                p.pos.z = distribution(engine);
-                p.vel.x = distribution(engine) / FP(10);
-                p.vel.y = distribution(engine) / FP(10);
-                p.vel.z = distribution(engine) / FP(10);
-                p.mass = distribution(engine) / FP(100);
+                p.pos.x = dist(engine);
+                p.pos.y = dist(engine);
+                p.pos.z = dist(engine);
+                p.vel.x = dist(engine) / FP(10);
+                p.vel.y = dist(engine) / FP(10);
+                p.vel.z = dist(engine) / FP(10);
+                p.mass = dist(engine) / FP(100);
             }
 
             const auto stop = std::chrono::high_resolution_clock::now();
@@ -428,17 +419,16 @@ namespace manualSoA
             const auto start = std::chrono::high_resolution_clock::now();
 
             std::default_random_engine engine;
-            std::normal_distribution<FP> distribution(FP(0), FP(1));
-            LLAMA_INDEPENDENT_DATA
+            std::normal_distribution<FP> dist(FP(0), FP(1));
             for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
             {
-                posx[i] = distribution(engine);
-                posy[i] = distribution(engine);
-                posz[i] = distribution(engine);
-                velx[i] = distribution(engine) / FP(10);
-                vely[i] = distribution(engine) / FP(10);
-                velz[i] = distribution(engine) / FP(10);
-                mass[i] = distribution(engine) / FP(100);
+                posx[i] = dist(engine);
+                posy[i] = dist(engine);
+                posz[i] = dist(engine);
+                velx[i] = dist(engine) / FP(10);
+                vely[i] = dist(engine) / FP(10);
+                velz[i] = dist(engine) / FP(10);
+                mass[i] = dist(engine) / FP(100);
             }
 
             const auto stop = std::chrono::high_resolution_clock::now();
