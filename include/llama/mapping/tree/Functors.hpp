@@ -106,11 +106,7 @@ namespace llama::mapping::tree::functor
 
                 return tupleCat(
                     Tuple{first},
-                    basicCoordToResultCoordImpl<
-                        typename BasicCoord::RestTuple,
-                        TupleElement<
-                            typename NodeOrLeaf::ChildrenTuple,
-                            BasicCoord::FirstElement::childIndex>>(
+                    basicCoordToResultCoordImpl(
                         basicCoord.rest,
                         branch,
                         (arraySize + LLAMA_COPY(basicCoord.first.arrayIndex))
@@ -169,7 +165,6 @@ namespace llama::mapping::tree::functor
             return Leaf<Identifier, Type, std::size_t>{newValue};
         }
 
-        template<typename Operation>
         struct ChangeNodeChildsRuntimeFunctor
         {
             const std::size_t newValue;
@@ -179,7 +174,7 @@ namespace llama::mapping::tree::functor
             operator()(const Node<Identifier, Type, CountType> & element) const
             {
                 return Node<Identifier, Type, std::size_t>{
-                    Operation{}(element.count, newValue), element.childs};
+                    element.count * newValue, element.childs};
             }
 
             template<typename Identifier, typename Type, typename CountType>
@@ -187,13 +182,12 @@ namespace llama::mapping::tree::functor
             operator()(const Leaf<Identifier, Type, CountType> & element) const
             {
                 return Leaf<Identifier, Type, std::size_t>{
-                    Operation{}(element.count, newValue)};
+                    element.count * newValue};
             }
         };
 
         template<
             typename TreeCoord,
-            typename Operation,
             typename Identifier,
             typename Type,
             typename CountType>
@@ -204,8 +198,7 @@ namespace llama::mapping::tree::functor
             if constexpr(std::is_same_v<TreeCoord, Tuple<>>)
             {
                 auto children = tupleTransform(
-                    tree.childs,
-                    ChangeNodeChildsRuntimeFunctor<Operation>{newValue});
+                    tree.childs, ChangeNodeChildsRuntimeFunctor{newValue});
                 return Node<Identifier, decltype(children)>{
                     tree.count, children};
             }
@@ -213,9 +206,9 @@ namespace llama::mapping::tree::functor
             {
                 auto current
                     = get<TreeCoord::FirstElement::childIndex>(tree.childs);
-                auto replacement = changeNodeChildsRuntime<
-                    typename TreeCoord::RestTuple,
-                    Operation>(current, newValue);
+                auto replacement
+                    = changeNodeChildsRuntime<typename TreeCoord::RestTuple>(
+                        current, newValue);
                 auto children
                     = tupleReplace<TreeCoord::FirstElement::childIndex>(
                         tree.childs, replacement);
@@ -226,7 +219,6 @@ namespace llama::mapping::tree::functor
 
         template<
             typename TreeCoord,
-            typename Operation,
             typename Identifier,
             typename Type,
             typename CountType>
@@ -251,13 +243,12 @@ namespace llama::mapping::tree::functor
         template<typename Tree>
         LLAMA_FN_HOST_ACC_INLINE auto basicToResult(const Tree & tree) const
         {
-            return internal::
-                changeNodeChildsRuntime<TreeCoord, std::multiplies<>>(
-                    internal::changeNodeRuntime<TreeCoord>(
-                        tree,
-                        (internal::getNode<TreeCoord>(tree).count + amount - 1)
-                            / amount),
-                    amount);
+            return internal::changeNodeChildsRuntime<TreeCoord>(
+                internal::changeNodeRuntime<TreeCoord>(
+                    tree,
+                    (internal::getNode<TreeCoord>(tree).count + amount - 1)
+                        / amount),
+                amount);
         }
 
         template<typename Tree, typename BasicCoord>

@@ -128,9 +128,7 @@ namespace llama::mapping::tree
     LLAMA_FN_HOST_ACC_INLINE auto createTree(const UserDomain & size)
     {
         if constexpr(Pos == UserDomain::rank - 1)
-        {
             return TreeFromDatumDomain<DatumDomain>{size[UserDomain::rank - 1]};
-        }
         else
         {
             Tuple inner{createTree<DatumDomain, UserDomain, Pos + 1>(size)};
