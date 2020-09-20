@@ -155,6 +155,18 @@ TEST_CASE("UserDomainCoordRange3D")
         });
 }
 
+TEST_CASE("UserDomainCoordRange3D.destructering")
+{
+    llama::UserDomain<3> ud{1, 1, 1};
+
+    for(auto [x, y, z] : llama::UserDomainCoordRange{ud})
+    {
+        CHECK(x == 0);
+        CHECK(y == 0);
+        CHECK(z == 0);
+    }
+}
+
 TEST_CASE("Morton")
 {
     using UserDomain = llama::UserDomain<2>;

@@ -5,6 +5,8 @@
 
 #include "macros.hpp"
 
+#include <tuple>
+
 namespace llama
 {
     /// Array class like `std::array` but suitable for use with offloading
@@ -66,8 +68,33 @@ namespace llama
             for(std::size_t i = 0; i < N; ++i) temp[i] = a[i] + b[i];
             return temp;
         }
+
+        template<std::size_t I>
+        auto get() -> T &
+        {
+            return element[I];
+        }
+
+        template<std::size_t I>
+        auto get() const -> const T &
+        {
+            return element[I];
+        }
     };
 
     template<typename First, typename... Args>
     Array(First, Args... args) -> Array<First, sizeof...(Args) + 1>;
+}
+
+namespace std
+{
+    template<typename T, size_t N>
+    struct tuple_size<llama::Array<T, N>> : integral_constant<size_t, N>
+    {};
+
+    template<size_t I, typename T, size_t N>
+    struct tuple_element<I, llama::Array<T, N>>
+    {
+        using type = T;
+    };
 }

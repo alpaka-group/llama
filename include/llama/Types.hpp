@@ -28,7 +28,23 @@ namespace llama
 
     template<typename... Args>
     UserDomain(Args...) -> UserDomain<sizeof...(Args)>;
+}
 
+namespace std
+{
+    template<size_t N>
+    struct tuple_size<llama::UserDomain<N>> : integral_constant<size_t, N>
+    {};
+
+    template<size_t I, size_t N>
+    struct tuple_element<I, llama::UserDomain<N>>
+    {
+        using type = size_t;
+    };
+}
+
+namespace llama
+{
     /// A list of \ref DatumElement which may be used to define a datum domain.
     template<typename... Leaves>
     using DatumStruct = boost::mp11::mp_list<Leaves...>;
