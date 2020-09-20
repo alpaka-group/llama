@@ -28,7 +28,7 @@
 /// LLAMA is licensed under the LGPL3+.
 
 #define LLAMA_VERSION_MAJOR 0
-#define LLAMA_VERSION_MINOR 1
+#define LLAMA_VERSION_MINOR 2
 #define LLAMA_VERSION_PATCH 0
 
 #include "Allocators.hpp"
