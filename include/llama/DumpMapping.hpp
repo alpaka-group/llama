@@ -184,6 +184,8 @@ namespace llama
         return svg;
     }
 
+    /// Returns an HTML document visualizing the memory layout created by the given
+    /// mapping. The visualization is resizeable.
     template<typename Mapping>
     auto toHtml(const Mapping & mapping) -> std::string
     {
