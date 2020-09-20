@@ -33,33 +33,6 @@ if os.path.isfile( c_cpp_lexer_file ):
 
 os.system( "doxygen Doxyfile > /dev/null" )
 
-# -- Fixing doxygen bug which puts typedef in every "using" statement
-
-os.system( 'find doxygen/xml -type f -exec sed -i "s/typedef //g" {} \;' )
-
-# -- Fixing breathe bug which is confused by members of templated classes
-
-def fixBug( prefix, className, templateList ):
-    os.system(
-        'find doxygen/xml -type f -exec sed -i "s/' +
-        prefix + className + '&lt; ' + templateList + ' &gt;::/' +
-        prefix + className + '::/g" {} \;'
-    );
-
-fixBug( "", "llama::Array", "T, T_dim" )
-fixBug( "", "llama::VirtualDatum", "T_View" )
-fixBug( "", "llama::View", "T_Mapping, T_BlobType" )
-fixBug( "<definition>using ", "llama::DatumCoord", "T_coords" )
-fixBug( "<definition>using ", "llama::VirtualView", "T_ParentViewType" )
-fixBug( "<definition>using ", "llama::Tuple", "T_Elements" )
-fixBug( "<definition>using ", "llama::allocator::Vector", "T_alignment" )
-fixBug( "<definition>using ", "llama::allocator::SharedPtr", "T_alignment" )
-fixBug( "<definition>using ", "llama::allocator::Stack", "reserved" )
-fixBug( "<definition>using ", "common::allocator::Alpaka", "T_DevAcc, T_Size" )
-fixBug( "<definition>using ", "common::allocator::AlpakaMirror", "T_DevAcc, T_Size, T_Mapping" )
-fixBug( "<definition>using ", "common::allocator::AlpakaShared", "T_Acc, T_count, T_uniqueID" )
-fixBug( "<definition>using ", "llama::VirtualDatum", "T_View, T_BoundDatumDomain, T_ViewType" )
-
 # -- Project information -----------------------------------------------------
 
 project = u'LLAMA'
