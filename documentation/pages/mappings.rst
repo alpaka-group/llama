@@ -28,7 +28,6 @@ Every mapping needs to fulfill the following concept:
         { m.getBlobSize(std::size_t{}) } -> std::convertible_to<std::size_t>;
         { m.getBlobNrAndOffset(typename M::UserDomain{}) } -> std::same_as<NrAndOffset>;
     };
-}
 
 That is, each Mapping type needs to expose the types :cpp:`M::UserDomain` and :cpp:`M::DatumDomain`.
 Furthermore, each mapping needs to provide a static constexpr member variable :cpp:`blobCount` and two member functions.
@@ -48,7 +47,7 @@ working well, it is trivial to switch to a new mapping method without changing
 the whole code as the mapping is independent of the other parts of LLAMA.
 
 AoS and SoA mappings
-^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^
 
 If only array of struct or struct of array is needed, LLAMA provides two
 native mappings which show a good performance for all tested compilers (gcc,

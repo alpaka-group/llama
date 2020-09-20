@@ -29,7 +29,7 @@ Useful helpers
 
 .. doxygenfunction:: llama::tupleTransform
 
-.. doxygenfunction:: llama::tupleWithoutFirst
+.. doxygenfunction:: llama::tupleWithoutFirst(const Tuple<Elements...> &tuple)
 
 .. doxygenstruct:: llama::NrAndOffset
    :members:
@@ -92,8 +92,8 @@ Datum domain
 .. doxygentypedef:: llama::GetCoordFromTagsRelative
 
 
-.. doxygenstruct:: llama::forEach
-   :members:
+.. doxygenfunction:: llama::forEach(Functor &&functor, Tags... baseTags)
+.. doxygenfunction:: llama::forEach(Functor &&functor, DatumCoord<Coords...> base)
 
 
 Datum coordinates
@@ -111,7 +111,6 @@ Datum coordinates
 .. doxygenvariable:: llama::DatumCoordCommonPrefixIsBigger
 
 .. doxygenvariable:: llama::DatumCoordCommonPrefixIsSame
-
 
 
 View creation
@@ -141,6 +140,7 @@ Allocators
 
 .. doxygenstruct:: llama::allocator::Stack
    :members:
+
 
 Mappings
 --------
@@ -201,6 +201,7 @@ Data access
 
 .. doxygenstruct:: llama::VirtualDatum
    :members:
+
 
 Macros
 ------
