@@ -2,15 +2,15 @@
 
 #pragma once
 
-#include "../ForEach.hpp"
-#include "../Functions.hpp"
+#include "ForEach.hpp"
+#include "Functions.hpp"
 
 #include <boost/container_hash/hash.hpp>
 #include <fmt/format.h>
 #include <string>
 #include <vector>
 
-namespace llama::mapping
+namespace llama
 {
     namespace internal
     {

@@ -2,8 +2,8 @@
 
 #include <catch2/catch.hpp>
 #include <fstream>
+#include <llama/DumpMapping.hpp>
 #include <llama/llama.hpp>
-#include <llama/mapping/Dump.hpp>
 
 // clang-format off
 namespace tag
@@ -37,22 +37,22 @@ TEST_CASE("dump")
 
     {
         std::ofstream f{"AoSMapping.svg"};
-        f << llama::mapping::toSvg(
+        f << llama::toSvg(
             llama::mapping::AoS<UserDomain, Particle>{userDomain});
     }
     {
         std::ofstream f{"SoAMapping.svg"};
-        f << llama::mapping::toSvg(
+        f << llama::toSvg(
             llama::mapping::SoA<UserDomain, Particle>{userDomain});
     }
     {
         std::ofstream f{"AoSoAMapping8.svg"};
-        f << llama::mapping::toSvg(
+        f << llama::toSvg(
             llama::mapping::AoSoA<UserDomain, Particle, 8>{userDomain});
     }
     {
         std::ofstream f{"AoSoAMapping32_cuda.svg"};
-        f << llama::mapping::toSvg(
+        f << llama::toSvg(
             llama::mapping::AoSoA<UserDomain, Particle, 32>{userDomain});
     }
 }
