@@ -19,7 +19,7 @@ Dependencies
 
  - Boost 1.66.0 or higher
  - libfmt 6.2.1 or higher
- - `Alpaka <https://github.com/ComputationalRadiationPhysics/alpaka>`_ (optional) for building some examples
+ - `Alpaka <https://github.com/alpaka-group/alpaka>`_ (optional) for building some examples
 
 
 Building the examples

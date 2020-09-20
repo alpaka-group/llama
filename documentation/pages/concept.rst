@@ -44,7 +44,7 @@ Example use cases
 
 The library is designed and written at the
 `Helmholtz-Zentrum Dresden -- Rossendorf (HZDR) <https://www.hzdr.de>`_ inside
-`the group for computational radiation physics (CRP) <https://www.hzdr.de/crp>`_
+`the group for computational radiation physics (CRP) <https://www.hzdr.de/crp>`_ and `CASUS <https://www.casus.science>`_
 with some in house and partner applications in mind. These example use cases are
 not the only targets of LLAMA, but drove the development and the feature set.
 
