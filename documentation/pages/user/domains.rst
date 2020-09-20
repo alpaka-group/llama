@@ -5,7 +5,7 @@
 Domains
 =======
 
-As mentioned in the section before, LLAMA differs between the user and the
+As mentioned in the section before, LLAMA distinguishes between the user and the
 datum domain. The most important difference is that the user domain is defined
 at *run time* whereas the datum domain is defined at *compile time*. This allows
 to make the problem size itself a run time value but leaves the compiler room
@@ -17,9 +17,9 @@ User domain
 -----------
 
 The user domain is an :math:`N`-dimensional array with :math:`N` itself being a
-compile time value but with run time values inside. LLAMA brings an own
+compile time value but with run time values inside. LLAMA brings its own
 :ref:`array class <label-api-array>` for such kind of data structs which is
-ready for interoperability with hardware accelerator C++ dialects as CUDA
+ready for interoperability with hardware accelerator C++ dialects such as CUDA
 (Nvidia) or HIP (AMD), or abstraction libraries such as the already mentioned
 alpaka.
 
@@ -28,8 +28,7 @@ A definition of a three-dimensional user domain of the size
 
 .. code-block:: C++
 
-    using UserDomain = llama::UserDomain<3>;
-    const UserDomain userDomainSize{128, 256, 32};
+    const llama::UserDomain<3> userDomainSize{128, 256, 32};
 
 .. _label-dd:
 
@@ -38,7 +37,7 @@ Datum domain
 
 The completely at compile time defined datum domain is basically a tree
 structure. If we have a look at C++ structs (which the datum domain tries to
-abstract) they basically are trees, too. Let's have a look at this simple
+abstract) they are trees too. Let's have a look at this simple
 example struct for storing a pixel value
 
 .. code-block:: C++
@@ -63,19 +62,16 @@ This defines this tree
   .. image:: ../../images/layout_tree.pdf
 
 Unfortunately with C++ it is not possible yet to "iterate" over a struct at
-compile time as it would be needed for LLAMA's mapping. Even if recent versions
-of the language will start to support such a feature, because of the many
-compiler vendors LLAMA tries to support, the library is stuck to the C++11
-feature set (for now). So LLAMA needs to define such a tree itself. For this two
-classes are defined, :cpp:`DatumStruct` and :cpp:`DatumElement`.
-:cpp:`DatumStruct` is a compile time list of :cpp:`DatumElement`, which has a
-name and a type **or** another :cpp:`DatumStruct` list of child
-:cpp:`DatumElement`\ s. The names of the :cpp:`DatumElement`\ s need to be
-predefined as structs. This enables a semantic binding even between two
-different datum domains.
+compile time as it would be needed for LLAMA's mapping (although there are proposals to provide such a facility).
+For now LLAMA needs to define such a tree itself using two classes, :cpp:`DatumStruct` and :cpp:`DatumElement`.
+:cpp:`DatumStruct` is a compile time list of :cpp:`DatumElement`.
+:cpp:`DatumElement` has a name and a fundamental type **or** another :cpp:`DatumStruct` list of child :cpp:`DatumElement`\ s.
+The name of a :cpp:`DatumElement` needs to be C++ type as well.
+We recommend creating empty tag types for this.
+These tags serve as names when describing accesses later.
+Furthermore, these tags also enable a semantic binding even between two different datum domains.
 
-A datum domain itself is just such a :cpp:`DatumStruct` as seen here for the
-given tree:
+A datum domain itself is just a :cpp:`DatumStruct` as seen here for the given tree:
 
 .. code-block:: C++
 
