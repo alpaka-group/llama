@@ -21,6 +21,19 @@ using Name = llama::DS<
 >;
 // clang-format on
 
+TEST_CASE("UserDomain.CTAD")
+{
+    llama::UserDomain ud0{};
+    llama::UserDomain ud1{1};
+    llama::UserDomain ud2{1, 1};
+    llama::UserDomain ud3{1, 1, 1};
+
+    STATIC_REQUIRE(decltype(ud0)::rank == 0);
+    STATIC_REQUIRE(decltype(ud1)::rank == 1);
+    STATIC_REQUIRE(decltype(ud2)::rank == 2);
+    STATIC_REQUIRE(decltype(ud3)::rank == 3);
+}
+
 TEST_CASE("UserDomain.dim0")
 {
     using UserDomain = llama::UserDomain<0>;
