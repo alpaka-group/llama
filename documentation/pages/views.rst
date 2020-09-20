@@ -364,7 +364,7 @@ A more detailed example can be found in the
 `simpletest example <https://github.com/ComputationalRadiationPhysics/llama/blob/master/examples/simpletest/simpletest.cpp>`_.
 
 Thoughts on copies between views
-------------------
+--------------------------------
 
 Especially when working with hardware accelerators such as GPUs or offloading to
 many core procressors, explicit copy operations call for memory chunks as big as possible to reach good throughput performance.
