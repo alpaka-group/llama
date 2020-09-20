@@ -118,4 +118,4 @@ Alternatively, a view can also be created on top of an existing memory block.
 
 The :cpp:`allocView()` takes all those user defined classes and creates the view out of their information.
 
-.. image:: ../../images/allocView.svg
+.. image:: ../images/allocView.svg

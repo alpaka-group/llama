@@ -1,4 +1,4 @@
-.. include:: ../common.rst
+.. include:: common.rst
 
 .. _label-mappings:
 
@@ -75,11 +75,11 @@ Let's take the example datum domain from the :ref:`domain section<label-domains>
 
 .. only:: html
 
-  .. image:: ../../images/layout_tree.svg
+  .. image:: ../images/layout_tree.svg
 
 .. only:: latex
 
-  .. image:: ../../images/layout_tree.pdf
+  .. image:: ../images/layout_tree.pdf
 
 As already mentioned this is a compile time tree. The idea of the tree mapping
 is now to extend this model to a compile time tree with run time annotations
@@ -93,33 +93,33 @@ represented as such an tree too. Let's assume a user domain of
 
 .. only:: html
 
-  .. image:: ../../images/ud_tree_2.svg
+  .. image:: ../images/ud_tree_2.svg
 
 .. only:: latex
 
-  .. image:: ../../images/ud_tree_2.pdf
+  .. image:: ../images/ud_tree_2.pdf
 
 The datum domain is already a tree, but as it has no run time influence, only
 :math:`1` is annotated for these tree nodes:
 
 .. only:: html
 
-  .. image:: ../../images/layout_tree_2.svg
+  .. image:: ../images/layout_tree_2.svg
 
 .. only:: latex
 
-  .. image:: ../../images/layout_tree_2.pdf
+  .. image:: ../images/layout_tree_2.pdf
 
 Now the two trees are connected so that we can represent user domain and datum
 domain with one tree:
 
 .. only:: html
 
-  .. image:: ../../images/start_tree_2.svg
+  .. image:: ../images/start_tree_2.svg
 
 .. only:: latex
 
-  .. image:: ../../images/start_tree_2.pdf
+  .. image:: ../images/start_tree_2.pdf
 
 The mapping works now in this way that the tree is "flattened" from left to
 right using a breadth first traversal. Annotations represent repetitions of the node
@@ -132,21 +132,21 @@ approach may look like this:
 
 .. only:: html
 
-  .. image:: ../../images/soa_tree_2.svg
+  .. image:: ../images/soa_tree_2.svg
 
 .. only:: latex
 
-  .. image:: ../../images/soa_tree_2.pdf
+  .. image:: ../images/soa_tree_2.pdf
 
 Struct of array but with a padding after each 1024 elements may look like this:
 
 .. only:: html
 
-  .. image:: ../../images/padding_tree_2.svg
+  .. image:: ../images/padding_tree_2.svg
 
 .. only:: latex
 
-  .. image:: ../../images/padding_tree_2.pdf
+  .. image:: ../images/padding_tree_2.pdf
 
 The size of the leaf type in "pad" of course needs to be determined based on the
 desired aligment and sub tree sizes.
@@ -155,21 +155,21 @@ Such a tree (with smaller user domain for easier drawing) …
 
 .. only:: html
 
-  .. image:: ../../images/example_tree.svg
+  .. image:: ../images/example_tree.svg
 
 .. only:: latex
 
-  .. image:: ../../images/example_tree.pdf
+  .. image:: ../images/example_tree.pdf
 
 … may look like this mapped to memory:
 
 .. only:: html
 
-  .. image:: ../../images/example_mapping.svg
+  .. image:: ../images/example_mapping.svg
 
 .. only:: latex
 
-  .. image:: ../../images/example_mapping.pdf
+  .. image:: ../images/example_mapping.pdf
 
 In code a tree mapping is defined as :cpp:`llama::mapping::tree::Mapping`, but
 takes one more template parameter for the type of a tuple of tree operations and
