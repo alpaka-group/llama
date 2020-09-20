@@ -19,7 +19,7 @@ If a :cpp:`std::shared_ptr<std::byte[]>` is used, the storage is shared between 
 Allocators
 ----------
 
-An allocator is used for `allocView()` to choose a strategy for creating blobs.
+An allocator is used for :cpp:`allocView()` to choose a strategy for creating blobs.
 There is a number of a buildin allocators:
 
 Shared memory
