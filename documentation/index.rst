@@ -32,19 +32,13 @@ on GPU or other many core hardware.
 LLAMA is licensed under the LGPL3+.
 
 .. toctree::
-   :caption: INSTALLATION
-   :maxdepth: 2
-
-   pages/install/install
-
-.. toctree::
    :caption: USER DOCUMENTATION
    :maxdepth: 2
 
-   pages/user/concept
-   pages/user/domains
-   pages/user/views
-   pages/user/mappings
-   pages/user/allocators
-   pages/user/plans
-   pages/user/api
+   pages/install
+   pages/concept
+   pages/domains
+   pages/views
+   pages/mappings
+   pages/blobs
+   pages/api

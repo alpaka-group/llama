@@ -44,7 +44,7 @@ Example use cases
 
 The library is designed and written at the
 `Helmholtz-Zentrum Dresden -- Rossendorf (HZDR) <https://www.hzdr.de>`_ inside
-`the group for computational radiation physics (CRP) <https://www.hzdr.de/crp>`_
+`the group for computational radiation physics (CRP) <https://www.hzdr.de/crp>`_ and `CASUS <https://www.casus.science>`_
 with some in house and partner applications in mind. These example use cases are
 not the only targets of LLAMA, but drove the development and the feature set.
 
@@ -76,17 +76,16 @@ Challenges
 
 This results in these challenges and goals LLAMA tries to address:
 
-* Splitting of algorithmic view of data and the actual mapping in the background
+* Splitting the algorithmic view of data and the actual mapping in the background
   so that different layouts may be chosen **without touching the algorithm at
   all**.
 * As it is well-known from C and C++ -- and often the way programmers think of
   data because of this -- LLAMA shall *look* like AoS although the mapping will
   be different quite surely.
 * To be compatible with as most architectures, softwares, compilers and third
-  party libraries as possible, LLAMA is only using valid C++11 syntax. The
-  whole description of the layout and the mapping is done with C++11 template
-  programming (in contrast e.g. to fancy macro magic which is slow to compile
-  and hard/impossible to maintain).
+  party libraries as possible, LLAMA is only using valid C++17 syntax. The
+  whole description of the layout and the mapping is done with C++17 template meta
+  programming.
 * LLAMA shall be extensible in the sense of working together with new software
   but also new memory layouts needed for emerging architectures.
 * As it is the most easy way to write architecture independet but performant
@@ -96,31 +95,27 @@ This results in these challenges and goals LLAMA tries to address:
 Library structure
 -----------------
 
-Therefore the library is splitted in as independent parts as possible to ease
+Therefore the library is split in as independent parts as possible to ease
 the development and extensibility. Many parts of LLAMA are active research and
 shall not interfere with orthogonal tasks of the library.
 
 The most important data structure for the user is the
-:ref:`view <label-view>` which holds the memory for the data and gives methods
-to address the data.
+:ref:`view <label-view>` which holds the memory for the data and provides methods
+to access the data.
 
 LLAMA wants to look as much as an array of struct approach as possible. To not
-mix up C/C++ and LLAMA namings, the array-like domain is called
+mix up C++ and LLAMA namings, the array-like domain is called
 :ref:`User domain <label-ud>` in LLAMA whereas the struct-like domain is called
 :ref:`Datum domain <label-dd>`. More details about these domains follow in the
 :ref:`next section <label-domains>`.
 
-An address given in these domains is then mapped to memory by the view. The
-mapping is done by a user defined :ref:`mapping <label-mappings>`. The memory
-for the view is also given by user defined :ref:`allocators <label-allocators>`.
+An access given in these domains is then mapped to a memory address by the view.
+The mapping is done by a pluggable :ref:`mapping <label-mappings>`.
+LLAMA comes with several predefined mappings, but users are free to create their own.
+The memory underneath a view is provided by a customizable :ref:`allocator <label-allocators>`.
+LLAMA again comes with a set of predefined allocators and users can again provider their own.
+Alternatively, a view can also be created on top of an existing memory block.
 
-A :ref:`factory <label-factory>` takes all those user defined classes and
-creates the view out of their information.
+The :cpp:`allocView()` takes all those user defined classes and creates the view out of their information.
 
-.. only:: html
-
-  .. image:: ../../images/factory.svg
-
-.. only:: latex
-
-  .. image:: ../../images/factory.pdf
+.. image:: ../images/allocView.svg

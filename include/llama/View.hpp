@@ -770,8 +770,8 @@ namespace llama
             return parentView.template accessor<Coords...>(userDomain + offset);
         }
 
-        /// Same as \ref View::operator(), but shifted by the offset of this
-        /// \ref VirtualView.
+        /// Same as \ref View::operator()(UserDomain), but shifted by the offset
+        /// of this \ref VirtualView.
         LLAMA_FN_HOST_ACC_INLINE auto operator()(UserDomain userDomain) const
             -> VirtualDatumType
         {
@@ -786,8 +786,8 @@ namespace llama
             return parentView(userDomain + offset);
         }
 
-        /// Same as \ref View::operator(), but shifted by the offset of this
-        /// \ref VirtualView.
+        /// Same as corresponding operator in \ref View, but shifted by the
+        /// offset of this \ref VirtualView.
         template<typename... Indices>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) const
             -> VirtualDatumType

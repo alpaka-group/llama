@@ -10,8 +10,8 @@ namespace llama
     concept Mapping = requires(M m) {
         typename M::UserDomain;
         typename M::DatumDomain;
-        { m.blobCount } -> std::convertible_to<std::size_t>;
-        { m.getBlobSize(std::size_t{}) } -> std::integral;
+        { M::blobCount } -> std::convertible_to<std::size_t>; // TODO: check that blobCount is constexpr
+        { m.getBlobSize(std::size_t{}) } -> std::convertible_to<std::size_t>;
         { m.getBlobNrAndOffset(typename M::UserDomain{}) } -> std::same_as<NrAndOffset>;
     };
 }

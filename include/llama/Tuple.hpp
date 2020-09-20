@@ -172,7 +172,7 @@ namespace llama
     /// the result of the element transformations. The functor needs to
     /// implement a template `operator()` to which all tuple elements are
     /// passed.
-    // TODO: replace my mp11 version in Boost 1.74.
+    // TODO: replace by mp11 version in Boost 1.74.
     template<typename... Elements, typename Functor>
     LLAMA_FN_HOST_ACC_INLINE auto
     tupleTransform(const Tuple<Elements...> & tuple, const Functor & functor)
@@ -181,6 +181,7 @@ namespace llama
             sizeof...(Elements)>>::transform(tuple, functor);
     }
 
+    /// Returns a copy of the tuple without the first element.
     template<typename... Elements>
     LLAMA_FN_HOST_ACC_INLINE auto
     tupleWithoutFirst(const Tuple<Elements...> & tuple)

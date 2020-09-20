@@ -33,38 +33,11 @@ if os.path.isfile( c_cpp_lexer_file ):
 
 os.system( "doxygen Doxyfile > /dev/null" )
 
-# -- Fixing doxygen bug which puts typedef in every "using" statement
-
-os.system( 'find doxygen/xml -type f -exec sed -i "s/typedef //g" {} \;' )
-
-# -- Fixing breathe bug which is confused by members of templated classes
-
-def fixBug( prefix, className, templateList ):
-    os.system(
-        'find doxygen/xml -type f -exec sed -i "s/' +
-        prefix + className + '&lt; ' + templateList + ' &gt;::/' +
-        prefix + className + '::/g" {} \;'
-    );
-
-fixBug( "", "llama::Array", "T, T_dim" )
-fixBug( "", "llama::VirtualDatum", "T_View" )
-fixBug( "", "llama::View", "T_Mapping, T_BlobType" )
-fixBug( "<definition>using ", "llama::DatumCoord", "T_coords" )
-fixBug( "<definition>using ", "llama::VirtualView", "T_ParentViewType" )
-fixBug( "<definition>using ", "llama::Tuple", "T_Elements" )
-fixBug( "<definition>using ", "llama::allocator::Vector", "T_alignment" )
-fixBug( "<definition>using ", "llama::allocator::SharedPtr", "T_alignment" )
-fixBug( "<definition>using ", "llama::allocator::Stack", "reserved" )
-fixBug( "<definition>using ", "common::allocator::Alpaka", "T_DevAcc, T_Size" )
-fixBug( "<definition>using ", "common::allocator::AlpakaMirror", "T_DevAcc, T_Size, T_Mapping" )
-fixBug( "<definition>using ", "common::allocator::AlpakaShared", "T_Acc, T_count, T_uniqueID" )
-fixBug( "<definition>using ", "llama::VirtualDatum", "T_View, T_BoundDatumDomain, T_ViewType" )
-
 # -- Project information -----------------------------------------------------
 
 project = u'LLAMA'
-copyright = u'2018, Alexander Matthes'
-author = u'Alexander Matthes'
+copyright = u'2018, Alexander Matthes, 2020, Bernhard Manfred Gruber'
+author = u'Alexander Matthes, Bernhard Manfred Gruber'
 
 # The short X.Y version
 version = u'0.1'
@@ -82,7 +55,6 @@ release = u'0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.imgmath',
     'breathe'
 ]
 
@@ -135,7 +107,7 @@ html_theme_options = {
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = []
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -180,7 +152,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'LLAMA.tex', u'LLAMA Documentation',
-     u'Alexander Matthes', 'manual'),
+     author, 'manual'),
 ]
 
 

@@ -49,7 +49,7 @@ namespace llama
     template<typename L>
     using DatumCoordFromList = internal::mp_unwrap_sizes<L>;
 
-    /// Concatenate two \ref DatumCoords.
+    /// Concatenate two \ref DatumCoord.
     template<typename DatumCoord1, typename DatumCoord2>
     using Cat = DatumCoordFromList<boost::mp11::mp_append<
         typename DatumCoord1::List,
@@ -117,7 +117,7 @@ namespace llama
         };
     }
 
-    /// Checks wether two \ref DatumCoords are the same or one is the prefix of
+    /// Checks wether two \ref DatumCoord are the same or one is the prefix of
     /// the other.
     template<typename First, typename Second>
     inline constexpr auto DatumCoordCommonPrefixIsSame
