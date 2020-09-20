@@ -13,27 +13,17 @@ Useful helpers
 
 .. doxygenstruct:: llama::Array
    :members:
-
 .. doxygenstruct:: llama::Tuple
    :members:
-
 .. doxygentypedef:: llama::TupleElement
-
 .. doxygenfunction:: llama::get
-
 .. doxygenvariable:: llama::tupleSize
-
 .. doxygenfunction:: llama::tupleCat
-
 .. doxygenfunction:: llama::tupleReplace
-
 .. doxygenfunction:: llama::tupleTransform
-
 .. doxygenfunction:: llama::tupleWithoutFirst(const Tuple<Elements...> &tuple)
-
 .. doxygenstruct:: llama::NrAndOffset
    :members:
-
 .. doxygenfunction:: llama::structName
 
 User domain
@@ -41,91 +31,57 @@ User domain
 
 .. doxygenstruct:: llama::UserDomain
 
-
 .. doxygenstruct:: llama::UserDomainCoordIterator
    :members:
-
 .. doxygenstruct:: llama::UserDomainCoordRange
    :members:
-
 
 Datum domain
 ------------
 
 .. doxygentypedef:: llama::DatumStruct
-
 .. doxygentypedef:: llama::DS
-
 .. doxygentypedef:: llama::DatumElement
-
 .. doxygentypedef:: llama::DE
-
 .. doxygentypedef:: llama::DatumArray
-
 .. doxygentypedef:: llama::DA
-
 .. doxygenstruct:: llama::NoName
-
 .. doxygentypedef:: llama::Index
 
-
 .. doxygentypedef:: llama::GetDatumElementTag
-
 .. doxygentypedef:: llama::GetDatumElementType
-
 .. doxygenvariable:: llama::offsetOf
-
 .. doxygenvariable:: llama::sizeOf
-
 .. doxygenvariable:: llama::isDatumStruct
-
 .. doxygentypedef:: llama::GetTags
-
 .. doxygentypedef:: llama::GetTag
-
 .. doxygenvariable:: llama::hasSameTags
-
 .. doxygentypedef:: llama::GetCoordFromTags
-
 .. doxygentypedef:: llama::GetType
-
 .. doxygentypedef:: llama::GetCoordFromTagsRelative
-
 
 .. doxygenfunction:: llama::forEach(Functor &&functor, Tags... baseTags)
 .. doxygenfunction:: llama::forEach(Functor &&functor, DatumCoord<Coords...> base)
-
 
 Datum coordinates
 -----------------
 
 .. doxygenstruct:: llama::DatumCoord
    :members:
-
 .. doxygentypedef:: llama::DatumCoordFromList
-
 .. doxygentypedef:: llama::Cat
-
 .. doxygentypedef:: llama::PopFront
-
 .. doxygenvariable:: llama::DatumCoordCommonPrefixIsBigger
-
 .. doxygenvariable:: llama::DatumCoordCommonPrefixIsSame
-
 
 View creation
 -------------
 
 .. _label-api-allocView:
-
 .. doxygenfunction:: llama::allocView
-
 .. doxygenfunction:: llama::allocViewStack
-
 .. doxygenfunction:: llama::allocVirtualDatumStack
-
 .. doxygenfunction:: llama::copyVirtualDatumStack
-
 
 .. _label-api-allocators:
 
@@ -134,29 +90,22 @@ Allocators
 
 .. doxygenstruct:: llama::allocator::Vector
    :members:
-
 .. doxygenstruct:: llama::allocator::SharedPtr
    :members:
-
 .. doxygenstruct:: llama::allocator::Stack
    :members:
-
 
 Mappings
 --------
 
 .. doxygenstruct:: llama::mapping::AoS
    :members:
-
 .. doxygenstruct:: llama::mapping::SoA
    :members:
-
 .. doxygenstruct:: llama::mapping::One
    :members:
-
 .. doxygenstruct:: llama::mapping::AoSoA
    :members:
-
 .. doxygenstruct:: llama::mapping::Trace
    :members:
 
@@ -165,10 +114,8 @@ Common utilities
 
 .. doxygenstruct:: llama::mapping::LinearizeUserDomainCpp
    :members:
-
 .. doxygenstruct:: llama::mapping::LinearizeUserDomainFortran
    :members:
-
 .. doxygenstruct:: llama::mapping::LinearizeUserDomainMorton
    :members:
 
@@ -184,34 +131,24 @@ For a detailed description of the tree mapping concept have a look at
 **Tree mapping functors**
 
 .. doxygenstruct:: llama::mapping::tree::functor::Idem
-
 .. doxygenstruct:: llama::mapping::tree::functor::LeafOnlyRT
-
 .. doxygenstruct:: llama::mapping::tree::functor::MoveRTDown
-
 
 Data access
 -----------
 
 .. doxygenstruct:: llama::View
    :members:
-
 .. doxygenstruct:: llama::VirtualView
    :members:
-
 .. doxygenstruct:: llama::VirtualDatum
    :members:
-
 
 Macros
 ------
 
 .. doxygendefine:: LLAMA_INDEPENDENT_DATA
-
 .. doxygendefine:: LLAMA_FN_HOST_ACC_INLINE
-
 .. doxygendefine:: LLAMA_NO_HOST_ACC_WARNING
-
 .. doxygendefine:: LLAMA_FORCE_INLINE_RECURSIVE
-
 .. doxygendefine:: LLAMA_COPY
