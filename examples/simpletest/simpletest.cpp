@@ -17,11 +17,10 @@
 #include <utility>
 #include <vector>
 
-/** LLAMA uses class names for accessing data in the datum domain. It makes
- * sense to encapsulate these in own namespaces, especially if you are using
- * similar namings in differnt datum domains, e.g. X, Y and Z in different kinds
- * of spaces.
- */
+/// LLAMA uses class names for accessing data in the datum domain. It makes
+/// sense to encapsulate these in own namespaces, especially if you are using
+/// similar namings in differnt datum domains, e.g. X, Y and Z in different
+/// kinds of spaces.
 
 // clang-format off
 namespace st
@@ -35,16 +34,15 @@ namespace st
     struct Options{};
 }
 
-/** A datum domain in LLAMA is a type, probably always a
- *  \ref llama::DatumStruct, which can be shortend to llama::DS. This takes a
- *  template list of all members of this struct-like domain. Every member needs
- *  to be a \ref llama::DatumElement, which can itself be shortend to llama::DE.
- *  A DatumElement is a list of two elements itself, first the name of the
- *  element as type and secondly the element type itself, which may be a
- *  nested DatumStruct. A handy shortcut is \ref llama::DatumArray (llama::DA),
- *  which defines multuple datum elements with an anonymous name but of the same
- *  type.
- */
+/// A datum domain in LLAMA is a type, probably always a
+/// \ref llama::DatumStruct, which can be shortend to llama::DS. This takes a
+/// template list of all members of this struct-like domain. Every member needs
+/// to be a \ref llama::DatumElement, which can itself be shortend to llama::DE.
+/// A DatumElement is a list of two elements itself, first the name of the
+/// element as type and secondly the element type itself, which may be a
+/// nested DatumStruct. A handy shortcut is \ref llama::DatumArray (llama::DA),
+/// which defines multuple datum elements with an anonymous name but of the same
+/// type.
 using Name = llama::DS<
     llama::DE<st::Pos, llama::DS<
         llama::DE<st::X, float>,
@@ -65,9 +63,8 @@ namespace
         return boost::core::demangle(typeid(t).name());
     }
 
-    /** Prints the coordinates of a given \ref llama::DatumCoord for debugging
-     * and testing purposes
-     */
+    /// Prints the coordinates of a given \ref llama::DatumCoord for debugging
+    /// and testing purposes
     template<std::size_t... T_coords>
     void printCoords(llama::DatumCoord<T_coords...> dc)
     {
@@ -118,24 +115,19 @@ namespace
         }
         return result;
     }
-
 }
 
-/** Example functor for \ref llama::forEach which can also be used to print the
- *  coordinates inside of a datum domain when called.
- */
-template<typename T_VirtualDatum>
+/// Example functor for \ref llama::forEach which can also be used to print the
+/// coordinates inside of a datum domain when called.
+template<typename VirtualDatum>
 struct SetZeroFunctor
 {
-    template<typename T_OuterCoord, typename T_InnerCoord>
-    auto operator()(T_OuterCoord, T_InnerCoord) -> void
+    template<typename OuterCoord, typename InnerCoord>
+    auto operator()(OuterCoord, InnerCoord) -> void
     {
-        vd(llama::Cat<T_OuterCoord, T_InnerCoord>{}) = 0;
-        //~ printCoords( llama::Cat<T_OuterCoord, T_InnerCoord>{}
-        //); ~ std::cout << " "; ~ printCoords( T_OuterCoord() ); ~ std::cout <<
-        //" "; ~ printCoords( T_InnerCoord() ); ~ std::cout << std::endl;
+        vd(llama::Cat<OuterCoord, InnerCoord>{}) = 0;
     }
-    T_VirtualDatum vd;
+    VirtualDatum vd;
 };
 
 int main(int argc, char ** argv)
@@ -146,18 +138,18 @@ int main(int argc, char ** argv)
     UD udSize{8192, 8192};
 
     // Printing the domain informations at runtime
-    std::cout << "Datum Domain is " << addLineBreaks(type(Name())) << std::endl;
+    std::cout << "Datum Domain is " << addLineBreaks(type(Name())) << '\n';
     std::cout << "AoS address of (0,100) <0,1>: "
               << llama::mapping::AoS<UD, Name>(udSize)
                      .getBlobNrAndOffset<0, 1>({0, 100})
                      .offset
-              << std::endl;
+              << '\n';
     std::cout << "SoA address of (0,100) <0,1>: "
               << llama::mapping::SoA<UD, Name>(udSize)
                      .getBlobNrAndOffset<0, 1>({0, 100})
                      .offset
-              << std::endl;
-    std::cout << "sizeOf DatumDomain: " << llama::sizeOf<Name> << std::endl;
+              << '\n';
+    std::cout << "sizeOf DatumDomain: " << llama::sizeOf<Name> << '\n';
 
     std::cout << type(llama::GetCoordFromTags<Name, st::Pos, st::X>()) << '\n';
 
@@ -186,21 +178,20 @@ int main(int argc, char ** argv)
     // printing the address and distances of the element in the memory. This
     // will change based on the chosen mapping. When array of struct is chosen
     // instead the elements will be much closer than with struct of array.
-    std::cout << &position_x << std::endl;
+    std::cout << &position_x << '\n';
     std::cout << &momentum_z << " " << (size_t)&momentum_z - (size_t)&position_x
-              << std::endl;
+              << '\n';
     std::cout << &weight << " " << (size_t)&weight - (size_t)&momentum_z
-              << std::endl;
+              << '\n';
     std::cout << &options_2 << " " << (size_t)&options_2 - (size_t)&weight
-              << std::endl;
+              << '\n';
 
     // iterating over the user domain at run time to do some stuff with the
     // allocated data
-    for(size_t x = 0; x < udSize[0]; ++x)
-        // telling the compiler that all data in the following loop is
-        // independent to each other and thus can be vectorized
-        LLAMA_INDEPENDENT_DATA
-    for(size_t y = 0; y < udSize[1]; ++y)
+    // telling the compiler that all data in the following loop is
+    // independent to each other and thus can be vectorized
+    LLAMA_INDEPENDENT_DATA
+    for(auto [x, y] : llama::UserDomainCoordRange{udSize})
     {
         // Defining a functor for a given virtual datum
         SetZeroFunctor<decltype(view(x, y))> szf{view(x, y)};
@@ -214,38 +205,27 @@ int main(int argc, char ** argv)
         // arguments or as one parameter of type user domain
         view({x, y}) = double(x + y) / double(udSize[0] + udSize[1]);
     }
-    for(size_t x = 0; x < udSize[0]; ++x) LLAMA_INDEPENDENT_DATA
-    for(size_t y = 0; y < udSize[1]; ++y)
+
+    LLAMA_INDEPENDENT_DATA
+    for(auto udPos : llama::UserDomainCoordRange{udSize})
     {
         // Showing different options of access data with llama. Internally
         // all do the same data- and mappingwise
-        auto datum = view(x, y);
+        auto datum = view(udPos);
         datum.access<st::Pos, st::X>()
             += datum.access<llama::DatumCoord<1, 0>>();
         datum.access(st::Pos(), st::Y())
             += datum.access(llama::DatumCoord<1, 1>());
         datum(st::Pos(), st::Z()) += datum(llama::DatumCoord<2>());
 
-        // It is also possible to work only on a part of data. The statement
-        // below does the same as the commented out forEach call shown
-        // afterwards.
+        // It is also possible to work only on a part of data.
         datum(st::Pos()) += datum(st::Momentum());
-        /* The line above does the same as:
-            llama::AdditionFunctor<
-                decltype(datum),
-                decltype(datum),
-                st::Pos
-            > as{ datum, datum };
-            llama::ForEach<
-                Name,
-                st::Momentum
-            >::apply( as );
-        */
     }
     double sum = 0.0;
-    for(size_t x = 0; x < udSize[0]; ++x) LLAMA_INDEPENDENT_DATA
-    for(size_t y = 0; y < udSize[1]; ++y) sum += view(x, y).access<1, 0>();
-    std::cout << "Sum: " << sum << std::endl;
+    LLAMA_INDEPENDENT_DATA
+    for(auto udPos : llama::UserDomainCoordRange{udSize})
+        sum += view(udPos).access<1, 0>();
+    std::cout << "Sum: " << sum << '\n';
 
     return 0;
 }

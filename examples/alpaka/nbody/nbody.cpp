@@ -56,9 +56,9 @@ using Particle = llama::DS<
 
 /// Helper function for particle particle interaction. Gets two virtual
 /// datums like they are real particle objects
-template<typename T_VirtualDatum1, typename T_VirtualDatum2>
+template<typename VirtualDatum1, typename VirtualDatum2>
 LLAMA_FN_HOST_ACC_INLINE void
-pPInteraction(T_VirtualDatum1 && p1, T_VirtualDatum2 && p2, const FP & ts)
+pPInteraction(VirtualDatum1 p1, VirtualDatum2 p2, FP ts)
 {
     // Creating tempory virtual datum object for distance on stack:
     auto distance = p1(tag::Pos()) + p2(tag::Pos());
@@ -115,8 +115,7 @@ struct UpdateKernel
                 {
                     constexpr auto sharedMemSize
                         = llama::sizeOf<
-                              typename View::Mapping::DatumDomain>
-                        * BlockSize;
+                              typename View::Mapping::DatumDomain> * BlockSize;
                     auto & sharedMem = alpaka::block::shared::st::
                         allocVar<std::byte[sharedMemSize], __COUNTER__>(acc);
                     return llama::View<SharedMapping, std::byte *>{
