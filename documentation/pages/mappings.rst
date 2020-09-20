@@ -47,7 +47,7 @@ working well, it is trivial to switch to a new mapping method without changing
 the whole code as the mapping is independent of the other parts of LLAMA.
 
 AoS and SoA mappings
-^^^^^^^^^^^^^^^^^^^^
+--------------------
 
 If only array of struct or struct of array is needed, LLAMA provides two
 native mappings which show a good performance for all tested compilers (gcc,
@@ -66,7 +66,7 @@ There is also a combined array of struct of arrays mapping, but, since the mappi
 .. _label-tree-mapping:
 
 LLAMA tree mapping
-^^^^^^^^^^^^^^^^^^
+------------------
 
 The LLAMA tree mapping is one approach to archieve the goal of mixing different mapping approaches.
 Furthermore, it tries to establish a general mapping description language and mapping definition framework.
@@ -176,20 +176,20 @@ a further constructor parameter for the instantiation of this tuple.
 
 .. code-block:: C++
 
-        auto treeOperationList = llama::Tuple{
-            llama::mapping::tree::functor::LeafOnlyRT()
-        };
+    auto treeOperationList = llama::Tuple{
+        llama::mapping::tree::functor::LeafOnlyRT()
+    };
 
-        using Mapping = llama::mapping::tree::Mapping<
-            UserDomain,
-            DatumDomain,
-            decltype(treeOperationList)
-        >;
+    using Mapping = llama::mapping::tree::Mapping<
+        UserDomain,
+        DatumDomain,
+        decltype(treeOperationList)
+    >;
 
-        Mapping mapping(
-            userDomainSize,
-            treeOperationList
-        );
+    Mapping mapping(
+        userDomainSize,
+        treeOperationList
+    );
 
 The following tree operations are defined:
 
@@ -214,3 +214,19 @@ This effectively divides the annotation at the node by a given factor and multip
 MoveRTDownFixed
 ^^^^^^^^^^^^^^^
 Same as MoveRTDown but with a compile time factor.
+
+Dump visualizations
+-------------------
+
+Sometimes it is hard to image how data will be laid out in memory by a mapping.
+LLAMA can create a grafical representation of a mapping instance as SVG image or HTML document:
+
+.. code-block:: C++
+
+    #include <llama/DumpMapping.hpp>
+
+    std::ofstream{filename + ".svg" } << llama::toSvg (mapping);
+    std::ofstream{filename + ".html"} << llama::toHtml(mapping);
+
+Since this feature is not often needed, it currently resides in a separate header :cpp:`llama/DumpMapping.hpp`
+and is not included as part of :cpp:`llama.hpp`.

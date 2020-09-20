@@ -4,6 +4,7 @@
 #include <fstream>
 #include <llama/DumpMapping.hpp>
 #include <llama/llama.hpp>
+#include <string>
 
 // clang-format off
 namespace tag
@@ -30,29 +31,24 @@ using Particle = llama::DS<
 >;
 // clang-format on
 
+template<typename Mapping>
+void dump(const Mapping & mapping, std::string filename)
+{
+    std::ofstream{filename + ".svg"} << llama::toSvg(mapping);
+    std::ofstream{filename + ".html"} << llama::toHtml(mapping);
+}
+
 TEST_CASE("dump")
 {
     using UserDomain = llama::UserDomain<2>;
     UserDomain userDomain{8, 8};
 
-    {
-        std::ofstream f{"AoSMapping.svg"};
-        f << llama::toSvg(
-            llama::mapping::AoS<UserDomain, Particle>{userDomain});
-    }
-    {
-        std::ofstream f{"SoAMapping.svg"};
-        f << llama::toSvg(
-            llama::mapping::SoA<UserDomain, Particle>{userDomain});
-    }
-    {
-        std::ofstream f{"AoSoAMapping8.svg"};
-        f << llama::toSvg(
-            llama::mapping::AoSoA<UserDomain, Particle, 8>{userDomain});
-    }
-    {
-        std::ofstream f{"AoSoAMapping32_cuda.svg"};
-        f << llama::toSvg(
-            llama::mapping::AoSoA<UserDomain, Particle, 32>{userDomain});
-    }
+    dump(llama::mapping::AoS<UserDomain, Particle>{userDomain}, "AoSMapping");
+    dump(llama::mapping::SoA<UserDomain, Particle>{userDomain}, "SoAMapping");
+    dump(
+        llama::mapping::AoSoA<UserDomain, Particle, 8>{userDomain},
+        "AoSoAMapping8");
+    dump(
+        llama::mapping::AoSoA<UserDomain, Particle, 32>{userDomain},
+        "AoSoAMapping32");
 }

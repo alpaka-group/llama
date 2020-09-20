@@ -134,6 +134,13 @@ For a detailed description of the tree mapping concept have a look at
 .. doxygenstruct:: llama::mapping::tree::functor::LeafOnlyRT
 .. doxygenstruct:: llama::mapping::tree::functor::MoveRTDown
 
+.. FIXME: doxygen fails to parse the source code ...
+   Dumping
+   ^^^^^^^
+   
+   .. doxygenfunction:: llama::toSvg
+   .. doxygenfunction:: llama::toHtml
+
 Data access
 -----------
 
