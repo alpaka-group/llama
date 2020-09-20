@@ -5,42 +5,36 @@
 Mappings
 ========
 
-One of the basic tasks of LLAMA is to map an address in the user domain and
-datum domain to some address in allocated memory space. This isn't an easy task,
-especially not if the compiler shall still be able to optimize the resulting
-memory accesses (vectorization, reodering, aligned loads, etc.). The compiler
-needs to **understand** the semantic of the mapping at compile time. Otherwise
-it is impossible to archieve a good performance.
+One of the core tasks of LLAMA is to map an address from the user domain and
+datum domain to some address in the allocated memory space.
+This is particularly hard if the compiler shall still be able to optimize the resulting
+memory accesses (vectorization, reodering, aligned loads, etc.).
+The compiler needs to **understand** the semantic of the mapping at compile time.
+Otherwise the abstraction LLAMA provides will perform poorly.
 
 LLAMA mapping interface
 -----------------------
 
-The LLAMA mapping interface is quite simple and is explained in detail in the
-:ref:`Factory API section <label-api-factory>`. As user you only have to
-know that there is a simple interface every mapping has to be implemented
-against.
-
-All mappings have an interface which binds the user domain and datum domain type
-like this
+The LLAMA mapping is used to create views as detailed in the :ref:`allocView API section <label-api-allocView>`.
+Every mapping needs to fulfill the following concept:
 
 .. code-block:: C++
 
-    using Mapping = llama::mapping::SomeMapping<
-        UserDomain,
-        DatumDomain
-    >;
+    template <typename M>
+    concept Mapping = requires(M m) {
+        typename M::UserDomain;
+        typename M::DatumDomain;
+        { M::blobCount } -> std::convertible_to<std::size_t>;
+        { m.getBlobSize(std::size_t{}) } -> std::convertible_to<std::size_t>;
+        { m.getBlobNrAndOffset(typename M::UserDomain{}) } -> std::same_as<NrAndOffset>;
+    };
+}
 
-This mapping needs to be instantiated with the run time user domain size and an
-optional, mapping specific parameter:
-
-.. code-block:: C++
-
-    Mapping mapping(
-      userDomainSize
-      // ,optional parameter
-    );
-
-Afterwards it can be used for the :ref:`factory <label-factory>`.
+That is, each Mapping type needs to expose the types :cpp:`M::UserDomain` and :cpp:`M::DatumDomain`.
+Furthermore, each mapping needs to provide a static constexpr member variable :cpp:`blobCount` and two member functions.
+:cpp:`getBlobSize(i)` gives the size in bytes of the :cpp:`i`th block of memory needed for this mapping.
+:cpp:`i` is in the range of :cpp:`0` to :cpp:`blobCount - 1`.
+:cpp:`getBlobNrAndOffset(ud)` implements the core mapping logic by translating a user domain coordinate :cpp:`ud` into a value of :cpp:`NrAndOffset`, containing the blob number of offset within the blob where the value should be stored.
 
 It is possible to directly realize simple mappings such as array of struct,
 struct of array or padding for this interface. However a connecting or mixing
@@ -53,10 +47,10 @@ many architectures. However even if it points out that this approach is not
 working well, it is trivial to switch to a new mapping method without changing
 the whole code as the mapping is independent of the other parts of LLAMA.
 
-Native mappings
+AoS and SoA mappings
 ^^^^^^^^^^^^^^^
 
-If only array of struct or struct of array is needed, the LLAMA provides two
+If only array of struct or struct of array is needed, LLAMA provides two
 native mappings which show a good performance for all tested compilers (gcc,
 clang, cuda, intel):
 
@@ -68,17 +62,16 @@ clang, cuda, intel):
 
     llama::mapping::AoS
 
-However as stated it is not possible to combine these
-mappings with padding, blocking or some other desired more complex mappings.
+There is also a combined array of struct of arrays mapping, but, since the mapping code is more complicated, compilers currently fail to auto vectorize view access.
 
 .. _label-tree-mapping:
 
 LLAMA tree mapping
 ^^^^^^^^^^^^^^^^^^
 
-The LLAMA tree mapping is one approach to archieve the goal of mixing differnt
-mapping approaches. Let's e.g. take the example datum domain from the
-:ref:`domain section<label-domains>`:
+The LLAMA tree mapping is one approach to archieve the goal of mixing different mapping approaches.
+Furthermore, it tries to establish a general mapping description language and mapping definition framework.
+Let's take the example datum domain from the :ref:`domain section<label-domains>`:
 
 .. only:: html
 
@@ -94,8 +87,8 @@ representing the repetition of branches and to define tree operations which
 create new trees out of the old ones while providing methods to translate tree
 coordinates from one tree to another.
 
-Best is to see this by an example. First of all the user domain needs to be
-represented as such an annotated tree, too. Let's assume a user domain of
+This is best demonstrated by an example. First of all the user domain needs to be
+represented as such an tree too. Let's assume a user domain of
 :math:`128 \times 64`:
 
 .. only:: html
@@ -129,7 +122,7 @@ domain with one tree:
   .. image:: ../../images/start_tree_2.pdf
 
 The mapping works now in this way that the tree is "flattened" from left to
-right. Keep in mind that the annotation represent repetitions of the node
+right using a breadth first traversal. Annotations represent repetitions of the node
 branches. So for this tree we would copy the datum domain :math:`64` times and
 :math:`128` times again -- basically this results in an array of struct
 approach, which is most probably not desired.
@@ -179,27 +172,27 @@ Such a tree (with smaller user domain for easier drawing) …
   .. image:: ../../images/example_mapping.pdf
 
 In code a tree mapping is defined as :cpp:`llama::mapping::tree::Mapping`, but
-takes one more template parameter for the type of a list of tree operations and
-a further constructor parameter for the instantiation of this list.
+takes one more template parameter for the type of a tuple of tree operations and
+a further constructor parameter for the instantiation of this tuple.
 
 .. code-block:: C++
 
-        auto treeOperationList = llama::makeTuple(
-            llama::mapping::tree::functor::LeafOnlyRT( )
-        );
+        auto treeOperationList = llama::Tuple{
+            llama::mapping::tree::functor::LeafOnlyRT()
+        };
 
         using Mapping = llama::mapping::tree::Mapping<
             UserDomain,
             DatumDomain,
-            decltype( treeOperationList )
+            decltype(treeOperationList)
         >;
 
-        Mapping const mapping(
+        Mapping mapping(
             userDomainSize,
             treeOperationList
         );
 
-The following tree operations are defined yet.
+The following tree operations are defined:
 
 Idem
 ^^^^
@@ -214,5 +207,11 @@ the tree to the leaves, basically creates a struct of array as seen above.
 However unlike :cpp:`llama::mapping::SoA` a combination with other mapping would
 be possible.
 
-More operations will follow in the future, as said this approach is active
-reasearch and may even change in the near future.
+MoveRTDown
+^^^^^^^^^^
+:cpp:`llama::mapping::tree::functor::MoveRTDown` moves a runtime multiplier from a node identified by a tree coordinate one level downward.
+This effectively divides the annotation at the node by a given factor and multiplies the direct child nodes by this factor.
+
+MoveRTDownFixed
+^^^^^^^^^^^^^^^
+Same as MoveRTDown but with a compile time factor.

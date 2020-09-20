@@ -117,7 +117,7 @@ Datum coordinates
 View creation
 -------------
 
-.. _label-api-factory:
+.. _label-api-allocView:
 
 .. doxygenfunction:: llama::allocView
 
