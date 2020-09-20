@@ -63,8 +63,8 @@ fixBug( "<definition>using ", "llama::VirtualDatum", "T_View, T_BoundDatumDomain
 # -- Project information -----------------------------------------------------
 
 project = u'LLAMA'
-copyright = u'2018, Alexander Matthes'
-author = u'Alexander Matthes'
+copyright = u'2018, Alexander Matthes, 2020, Bernhard Manfred Gruber'
+author = u'Alexander Matthes, Bernhard Manfred Gruber'
 
 # The short X.Y version
 version = u'0.1'
@@ -180,7 +180,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'LLAMA.tex', u'LLAMA Documentation',
-     u'Alexander Matthes', 'manual'),
+     author, 'manual'),
 ]
 
 
