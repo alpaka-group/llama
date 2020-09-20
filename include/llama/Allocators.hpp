@@ -31,7 +31,6 @@ namespace llama::allocator
     template<std::size_t Alignment = 64>
     struct SharedPtr
     {
-        LLAMA_NO_HOST_ACC_WARNING
         inline auto operator()(std::size_t count) const
             -> std::shared_ptr<std::byte[]>
         {
@@ -99,7 +98,6 @@ namespace llama::allocator
     template<std::size_t Alignment = 64u>
     struct Vector
     {
-        LLAMA_NO_HOST_ACC_WARNING
         inline auto operator()(std::size_t count) const
         {
             return std::vector<

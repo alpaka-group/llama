@@ -62,20 +62,6 @@
 #endif
 #endif
 
-#ifndef LLAMA_NO_HOST_ACC_WARNING
-#if __NVCC__ != 0
-#if BOOST_COMP_MSVC != 0
-#define LLAMA_NO_HOST_ACC_WARNING __pragma(hd_warning_disable)
-#else
-#define LLAMA_NO_HOST_ACC_WARNING _Pragma("hd_warning_disable")
-#endif
-#else
-/// Deactivates (wrong negative) warnings about calling host function in an
-/// offloading device (e.g. for CUDA).
-#define LLAMA_NO_HOST_ACC_WARNING
-#endif
-#endif
-
 #if BOOST_COMP_INTEL != 0
 #define LLAMA_FORCE_INLINE_RECURSIVE _Pragma("forceinline recursive")
 #elif defined(_MSC_VER)

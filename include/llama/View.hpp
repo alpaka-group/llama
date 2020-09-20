@@ -625,7 +625,6 @@ namespace llama
 
         View() = default;
 
-        LLAMA_NO_HOST_ACC_WARNING
         LLAMA_FN_HOST_ACC_INLINE
         View(
             Mapping mapping,
@@ -706,7 +705,6 @@ namespace llama
         template<typename T_View, typename T_BoundDatumDomain, bool OwnView>
         friend struct VirtualDatum;
 
-        LLAMA_NO_HOST_ACC_WARNING
         template<std::size_t... Coords>
         LLAMA_FN_HOST_ACC_INLINE auto
         accessor(UserDomain userDomain, DatumCoord<Coords...> = {}) const
@@ -718,7 +716,6 @@ namespace llama
             return reinterpret_cast<const Type &>(storageBlobs[nr][offset]);
         }
 
-        LLAMA_NO_HOST_ACC_WARNING
         template<std::size_t... Coords>
         LLAMA_FN_HOST_ACC_INLINE auto
         accessor(UserDomain userDomain, DatumCoord<Coords...> coord = {})
@@ -746,7 +743,6 @@ namespace llama
                                                    ///< parent view
 
         /// Creates a VirtualView given a parent \ref View, offset and size.
-        LLAMA_NO_HOST_ACC_WARNING
         LLAMA_FN_HOST_ACC_INLINE
         VirtualView(
             ParentView & parentView,
@@ -755,7 +751,6 @@ namespace llama
                 parentView(parentView), offset(offset), size(size)
         {}
 
-        LLAMA_NO_HOST_ACC_WARNING
         template<std::size_t... Coords>
         LLAMA_FN_HOST_ACC_INLINE auto accessor(UserDomain userDomain) const
             -> const auto &
@@ -763,7 +758,6 @@ namespace llama
             return parentView.template accessor<Coords...>(userDomain + offset);
         }
 
-        LLAMA_NO_HOST_ACC_WARNING
         template<std::size_t... Coords>
         LLAMA_FN_HOST_ACC_INLINE auto accessor(UserDomain userDomain) -> auto &
         {
