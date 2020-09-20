@@ -69,7 +69,7 @@ namespace llama::mapping::tree::functor
         {
             auto children = tupleTransform(node.childs, [&](auto element) {
                 return basicToResultImpl(
-                    element, LLAMA_DEREFERENCE(node.count) * arraySize);
+                    element, LLAMA_COPY(node.count) * arraySize);
             });
             return Node<
                 Identifier,
@@ -83,7 +83,7 @@ namespace llama::mapping::tree::functor
             std::size_t arraySize)
         {
             return Leaf<Identifier, Type, std::size_t>{
-                LLAMA_DEREFERENCE(leaf.count) * arraySize};
+                LLAMA_COPY(leaf.count) * arraySize};
         }
 
         template<typename BasicCoord, typename NodeOrLeaf>
@@ -95,8 +95,7 @@ namespace llama::mapping::tree::functor
             if constexpr(tupleSize<BasicCoord> == 1)
                 return Tuple{
                     TreeCoordElement<BasicCoord::FirstElement::childIndex>{
-                        arraySize
-                        + LLAMA_DEREFERENCE(basicCoord.first.arrayIndex)}};
+                        arraySize + LLAMA_COPY(basicCoord.first.arrayIndex)}};
             else
             {
                 const auto & branch = get<BasicCoord::FirstElement::childIndex>(
@@ -114,9 +113,8 @@ namespace llama::mapping::tree::functor
                             BasicCoord::FirstElement::childIndex>>(
                         basicCoord.rest,
                         branch,
-                        (arraySize
-                         + LLAMA_DEREFERENCE(basicCoord.first.arrayIndex))
-                            * LLAMA_DEREFERENCE(branch.count)));
+                        (arraySize + LLAMA_COPY(basicCoord.first.arrayIndex))
+                            * LLAMA_COPY(branch.count)));
             }
         }
     };

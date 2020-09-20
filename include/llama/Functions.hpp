@@ -27,8 +27,9 @@ namespace llama
         constexpr auto offsetOfImpl(T *, TargetDatumCoord, IterCoord)
         {
             return sizeof(T)
-                * static_cast<std::size_t>(
-                       DatumCoordIsBigger<TargetDatumCoord, IterCoord>);
+                * static_cast<std::size_t>(DatumCoordCommonPrefixIsBigger<
+                                           TargetDatumCoord,
+                                           IterCoord>);
         }
 
         template<

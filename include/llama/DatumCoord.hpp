@@ -63,10 +63,10 @@ namespace llama
     namespace internal
     {
         template<typename First, typename Second>
-        struct DatumCoordIsBiggerImpl;
+        struct DatumCoordCommonPrefixIsBiggerImpl;
 
         template<std::size_t... Coords1, std::size_t... Coords2>
-        struct DatumCoordIsBiggerImpl<
+        struct DatumCoordCommonPrefixIsBiggerImpl<
             DatumCoord<Coords1...>,
             DatumCoord<Coords2...>>
         {
@@ -90,16 +90,16 @@ namespace llama
 
     /// Checks wether the first DatumCoord is bigger than the second.
     template<typename First, typename Second>
-    inline constexpr auto DatumCoordIsBigger
-        = internal::DatumCoordIsBiggerImpl<First, Second>::value;
+    inline constexpr auto DatumCoordCommonPrefixIsBigger
+        = internal::DatumCoordCommonPrefixIsBiggerImpl<First, Second>::value;
 
     namespace internal
     {
         template<typename First, typename Second>
-        struct DatumCoordIsSameImpl;
+        struct DatumCoordCommonPrefixIsSameImpl;
 
         template<std::size_t... Coords1, std::size_t... Coords2>
-        struct DatumCoordIsSameImpl<
+        struct DatumCoordCommonPrefixIsSameImpl<
             DatumCoord<Coords1...>,
             DatumCoord<Coords2...>>
         {
@@ -120,6 +120,6 @@ namespace llama
     /// Checks wether two \ref DatumCoords are the same or one is the prefix of
     /// the other.
     template<typename First, typename Second>
-    inline constexpr auto DatumCoordIsSame
-        = internal::DatumCoordIsSameImpl<First, Second>::value;
+    inline constexpr auto DatumCoordCommonPrefixIsSame
+        = internal::DatumCoordCommonPrefixIsSameImpl<First, Second>::value;
 }

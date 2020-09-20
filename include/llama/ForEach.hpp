@@ -26,7 +26,7 @@ namespace llama
             using InnerDatumCoord = decltype(inner);
             if constexpr(
                 InnerDatumCoord::size >= BaseDatumCoord::size
-                && DatumCoordIsSame<InnerDatumCoord, BaseDatumCoord>)
+                && DatumCoordCommonPrefixIsSame<InnerDatumCoord, BaseDatumCoord>)
                 functor(
                     base,
                     DatumCoordFromList<boost::mp11::mp_drop_c<

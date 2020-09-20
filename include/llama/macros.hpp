@@ -70,9 +70,8 @@
 #define LLAMA_NO_HOST_ACC_WARNING _Pragma("hd_warning_disable")
 #endif
 #else
-/** Deactivates (wrong negative) warnings about calling host function in an
- *  offloading device (e.g. for CUDA).
- */
+/// Deactivates (wrong negative) warnings about calling host function in an
+/// offloading device (e.g. for CUDA).
 #define LLAMA_NO_HOST_ACC_WARNING
 #endif
 #endif
@@ -87,4 +86,6 @@
 #define LLAMA_FORCE_INLINE_RECURSIVE
 #endif
 
-#define LLAMA_DEREFERENCE(x) decltype(x)(x)
+/// Forces a copy of a value. This is useful to prevent ODR usage of constants
+/// when compiling for GPU targets.
+#define LLAMA_COPY(x) decltype(x)(x)

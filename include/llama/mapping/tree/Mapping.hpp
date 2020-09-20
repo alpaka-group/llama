@@ -140,7 +140,7 @@ namespace llama::mapping::tree
             return getChildrenBlobSize(
                 node.childs,
                 std::make_index_sequence<childCount>{},
-                LLAMA_DEREFERENCE(node.count));
+                LLAMA_COPY(node.count));
         }
 
         template<typename Identifier, typename Type, typename CountType>
