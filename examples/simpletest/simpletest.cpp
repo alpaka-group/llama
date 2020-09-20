@@ -188,10 +188,11 @@ int main(int argc, char ** argv)
 
     // iterating over the user domain at run time to do some stuff with the
     // allocated data
-    // telling the compiler that all data in the following loop is
-    // independent to each other and thus can be vectorized
-    LLAMA_INDEPENDENT_DATA
-    for(auto [x, y] : llama::UserDomainCoordRange{udSize})
+    for(size_t x = 0; x < udSize[0]; ++x)
+        // telling the compiler that all data in the following loop is
+        // independent to each other and thus can be vectorized
+        LLAMA_INDEPENDENT_DATA
+    for(size_t y = 0; y < udSize[1]; ++y)
     {
         // Defining a functor for a given virtual datum
         SetZeroFunctor<decltype(view(x, y))> szf{view(x, y)};
@@ -206,12 +207,12 @@ int main(int argc, char ** argv)
         view({x, y}) = double(x + y) / double(udSize[0] + udSize[1]);
     }
 
-    LLAMA_INDEPENDENT_DATA
-    for(auto udPos : llama::UserDomainCoordRange{udSize})
+    for(size_t x = 0; x < udSize[0]; ++x) LLAMA_INDEPENDENT_DATA
+    for(size_t y = 0; y < udSize[1]; ++y)
     {
         // Showing different options of access data with llama. Internally
         // all do the same data- and mappingwise
-        auto datum = view(udPos);
+        auto datum = view(x, y);
         datum.access<st::Pos, st::X>()
             += datum.access<llama::DatumCoord<1, 0>>();
         datum.access(st::Pos(), st::Y())
@@ -223,8 +224,8 @@ int main(int argc, char ** argv)
     }
     double sum = 0.0;
     LLAMA_INDEPENDENT_DATA
-    for(auto udPos : llama::UserDomainCoordRange{udSize})
-        sum += view(udPos).access<1, 0>();
+    for(size_t x = 0; x < udSize[0]; ++x) LLAMA_INDEPENDENT_DATA
+    for(size_t y = 0; y < udSize[1]; ++y) sum += view(x, y).access<1, 0>();
     std::cout << "Sum: " << sum << '\n';
 
     return 0;
