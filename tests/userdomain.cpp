@@ -147,7 +147,7 @@ TEST_CASE("Morton")
     using UserDomain = llama::UserDomain<2>;
     UserDomain userDomain{2, 3};
 
-    llama::LinearizeUserDomainMorton lin;
+    llama::mapping::LinearizeUserDomainMorton lin;
     CHECK(lin.size(UserDomain{2, 3}) == 4 * 4);
     CHECK(lin.size(UserDomain{2, 4}) == 4 * 4);
     CHECK(lin.size(UserDomain{2, 5}) == 8 * 8);

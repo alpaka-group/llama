@@ -7,7 +7,7 @@
 
 #include <climits>
 
-namespace llama
+namespace llama::mapping
 {
     namespace internal
     {
