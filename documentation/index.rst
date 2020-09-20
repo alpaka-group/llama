@@ -40,5 +40,5 @@ LLAMA is licensed under the LGPL3+.
    pages/domains
    pages/views
    pages/mappings
-   pages/allocators
+   pages/blobs
    pages/api
