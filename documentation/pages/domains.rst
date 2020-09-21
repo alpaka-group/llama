@@ -53,13 +53,7 @@ example struct for storing a pixel value
 
 This defines this tree
 
-.. only:: html
-
-  .. image:: ../images/layout_tree.svg
-
-.. only:: latex
-
-  .. image:: ../images/layout_tree.pdf
+.. image:: ../images/layout_tree.svg
 
 Unfortunately with C++ it is not possible yet to "iterate" over a struct at
 compile time as it would be needed for LLAMA's mapping (although there are proposals to provide such a facility).

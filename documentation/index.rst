@@ -3,13 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-.. only:: html
-
-  .. image:: images/logo.svg
-
-.. only:: latex
-
-  .. image:: images/logo.pdf
+.. image:: images/logo.svg
 
 Low Level Abstraction of Memory Access
 ======================================
