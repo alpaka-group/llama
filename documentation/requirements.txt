@@ -4,4 +4,4 @@ sphinx>=3.2.1
 breathe>=4.5
 sphinxcontrib.programoutput
 cairosvg
-sphinxcontrib.cairosvgconverter
+sphinxcontrib-svg2pdfconverter
