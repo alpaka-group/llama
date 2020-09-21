@@ -14,7 +14,7 @@ jobs:
         mkdir build
         cd build
         export BOOST_ROOT=$BOOST_ROOT_1_72_0
-        cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+        cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -DASAN_FOR_TESTS=ON -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
     - name: build
       run: cmake --build build
     - name: tests
@@ -48,8 +48,8 @@ jobs:
         mkdir build
         cd build
         $env:BOOST_ROOT = $env:BOOST_ROOT_1_72_0
-        cmake .. -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
+        cmake .. -DASAN_FOR_TESTS=ON -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
     - name: build
-      run: cmake --build build --config Release
+      run: cmake --build build --config RelWithDebInfo
     - name: tests
-      run: build/Release/tests
+      run: build/RelWithDebInfo/tests

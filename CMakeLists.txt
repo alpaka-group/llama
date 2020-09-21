@@ -33,6 +33,16 @@ if (BUILD_TESTING)
 		target_compile_options(tests PRIVATE /permissive-)
 	endif()
 	target_link_libraries(tests PRIVATE Catch2::Catch2 llama::llama)
+
+	option(ASAN_FOR_TESTS "Enables address sanitizer for tests" OFF)
+	if (ASAN_FOR_TESTS)
+		if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+			target_compile_options(tests PRIVATE -fsanitize=address -fno-omit-frame-pointer)
+			target_link_options   (tests PRIVATE -fsanitize=address -fno-omit-frame-pointer)
+		elseif(MSVC)
+			target_compile_options(tests PRIVATE /fsanitize=address)
+		endif()
+	endif()
 endif()
 
 # examples
