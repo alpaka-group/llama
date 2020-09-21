@@ -36,7 +36,7 @@ LLAMA is licensed under the LGPL3+.
    :maxdepth: 2
 
    pages/install
-   pages/concept
+   pages/introduction
    pages/domains
    pages/views
    pages/mappings
