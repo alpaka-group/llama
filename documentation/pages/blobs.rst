@@ -91,15 +91,12 @@ It is the responsibility of the user now to ensure that the blob outlives views 
 Alpaka
 ^^^^^^
 
-LLAMA feature some examples using `alpaka <https://github.com/ComputationalRadiationPhysics/alpaka>`_ for the abstraction of computation parallelization.
-Alpaka has its own memory allocation functions for different memory regions (e.g. host, device and shared memory).
-Additionally there are some cuda-inherited rules which make e.g. sharing memory regions hard (e.g. no possibility to use a :cpp:`std::shared_ptr` on a GPU).
-
 The following descriptions are for alpaka users.
 Without an understanding of alpaka they may hard to understand.
 
-Alpaka buffers
-""""""""""""""
+LLAMA features some examples using `alpaka <https://github.com/ComputationalRadiationPhysics/alpaka>`_ for the abstraction of computation parallelization.
+Alpaka has its own memory allocation functions for different memory regions (e.g. host, device and shared memory).
+Additionally there are some cuda-inherited rules which make e.g. sharing memory regions hard (e.g. no possibility to use a :cpp:`std::shared_ptr` on a GPU).
 
 Alpaka creates and manages memory using buffers.
 However, a pointer to the underlying storage can be obtained, which may be used for a view:
@@ -108,10 +105,6 @@ However, a pointer to the underlying storage can be obtained, which may be used 
 
     auto buffer = alpaka::mem::buf::alloc<std::byte, std::size_t>(dev, size);
     auto view = llama::View<Mapping, std::byte*>{mapping, {alpaka::mem::view::getPtrNative(buffer)}};
-
-
-Alpaka shared memory
-""""""""""""""""""""
 
 Shared memory is created by alpaka using a special function returning a reference to a shared variable.
 To allocate storage for LLAMA, we can allocate a shared byte array using alpaka and then pass the address of the first element to a LLAMA view.
