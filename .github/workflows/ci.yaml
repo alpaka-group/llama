@@ -48,7 +48,7 @@ jobs:
         mkdir build
         cd build
         $env:BOOST_ROOT = $env:BOOST_ROOT_1_72_0
-        cmake .. -DASAN_FOR_TESTS=ON -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
+        cmake .. -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
     - name: build
       run: cmake --build build --config RelWithDebInfo
     - name: tests
