@@ -526,7 +526,7 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto operator=(const VirtualDatum & other)
             -> VirtualDatum &
         {
-            return this->operator=<>(other);
+            return this->operator=<T_View, BoundDatumDomain, OwnView>(other);
         }
 
         template<typename OtherType>
