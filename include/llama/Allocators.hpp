@@ -9,6 +9,9 @@
 #include <cstddef>
 #include <memory>
 #include <vector>
+#if BOOST_COMP_INTEL != 0
+#include <aligned_new>
+#endif
 
 namespace llama::allocator
 {
