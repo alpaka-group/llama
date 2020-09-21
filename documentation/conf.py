@@ -55,7 +55,8 @@ release = u'0.2'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'breathe'
+    'breathe',
+    'sphinxcontrib.cairosvgconverter'
 ]
 
 breathe_projects = { "LLAMA": "./doxygen/xml" }
