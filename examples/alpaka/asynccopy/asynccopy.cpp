@@ -144,7 +144,7 @@ struct BlurKernel
                 sharedView(y - bi[0] * ElemsPerBlock, x - bi[1] * ElemsPerBlock)
                     = oldImage(y, x);
 
-            // FIXME(bgruber): shount't there be a syncThreads?
+            alpaka::block::sync::syncBlockThreads(acc);
         }
 
         const std::size_t start[2] = {ti[0] * Elems, ti[1] * Elems};
