@@ -290,9 +290,9 @@ int main(int argc, char ** argv)
     {
         hostChunkBuffer.push_back(
             alpaka::mem::buf::alloc<std::byte, std::size_t>(
-                devHost, hostBufferSize));
+                devHost, devBufferSize));
         hostChunkView.push_back(
-            viewAlpakaBuffer(hostMapping, hostChunkBuffer.back()));
+            viewAlpakaBuffer(devMapping, hostChunkBuffer.back()));
 
         devOldBuffer.push_back(alpaka::mem::buf::alloc<std::byte, std::size_t>(
             devAcc, devBufferSize));
