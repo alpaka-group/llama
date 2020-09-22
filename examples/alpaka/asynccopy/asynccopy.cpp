@@ -311,43 +311,42 @@ int main(int argc, char ** argv)
         image.resize(img_x * img_y * 3);
         std::default_random_engine generator;
         std::normal_distribution<FP> distribution{FP(0), FP(0.5)};
-        LLAMA_INDEPENDENT_DATA
         for(std::size_t y = 0; y < buffer_y; ++y)
+        {
+            LLAMA_INDEPENDENT_DATA
             for(std::size_t x = 0; x < buffer_x; ++x)
             {
                 hostView(y, x)(tag::R()) = std::abs(distribution(generator));
                 hostView(y, x)(tag::G()) = std::abs(distribution(generator));
                 hostView(y, x)(tag::B()) = std::abs(distribution(generator));
             }
+        }
     }
     else
     {
-        LLAMA_INDEPENDENT_DATA
         for(std::size_t y = 0; y < buffer_y; ++y)
+        {
+            LLAMA_INDEPENDENT_DATA
             for(std::size_t x = 0; x < buffer_x; ++x)
             {
-                auto X = x;
-                auto Y = y;
-                if(X < KERNEL_SIZE)
-                    X = KERNEL_SIZE;
-                if(Y < KERNEL_SIZE)
-                    Y = KERNEL_SIZE;
-                if(X > img_x + KERNEL_SIZE - 1)
-                    X = img_x + KERNEL_SIZE - 1;
-                if(Y > img_y + KERNEL_SIZE - 1)
-                    Y = img_y + KERNEL_SIZE - 1;
+                const auto X = std::clamp<std::size_t>(
+                    x, KERNEL_SIZE, img_x + KERNEL_SIZE - 1);
+                const auto Y = std::clamp<std::size_t>(
+                    y, KERNEL_SIZE, img_y + KERNEL_SIZE - 1);
                 const auto * pixel
                     = &image[((Y - KERNEL_SIZE) * img_x + X - KERNEL_SIZE) * 3];
                 hostView(y, x)(tag::R()) = FP(pixel[0]) / 255.;
                 hostView(y, x)(tag::G()) = FP(pixel[1]) / 255.;
                 hostView(y, x)(tag::B()) = FP(pixel[2]) / 255.;
             }
+        }
     }
 
     chrono.printAndReset("Init");
-    const alpaka::vec::Vec<Dim, size_t> elems(elemCount, elemCount);
-    const alpaka::vec::Vec<Dim, size_t> threads(threadCount, threadCount);
-    const alpaka::vec::Vec<Dim, size_t> blocks(
+    const auto elems = alpaka::vec::Vec<Dim, size_t>(elemCount, elemCount);
+    const auto threads
+        = alpaka::vec::Vec<Dim, size_t>(threadCount, threadCount);
+    const auto blocks = alpaka::vec::Vec<Dim, size_t>(
         static_cast<size_t>(
             (CHUNK_SIZE + ELEMS_PER_BLOCK - 1) / ELEMS_PER_BLOCK),
         static_cast<size_t>(
@@ -426,7 +425,6 @@ int main(int argc, char ** argv)
             }
 
             // Copy data from virtual view to mini view
-            LLAMA_INDEPENDENT_DATA
             for(std::size_t y = 0; y < validMiniSize[0]; ++y)
             {
                 LLAMA_INDEPENDENT_DATA
@@ -439,11 +437,10 @@ int main(int argc, char ** argv)
                 hostChunkBuffer[chunkNr],
                 devBufferSize);
 
-            BlurKernel<elemCount, KERNEL_SIZE, ELEMS_PER_BLOCK> blurKernel;
             alpaka::kernel::exec<Acc>(
                 queue[chunkNr],
                 workdiv,
-                blurKernel,
+                BlurKernel<elemCount, KERNEL_SIZE, ELEMS_PER_BLOCK>{},
                 devOldView[chunkNr],
                 devNewView[chunkNr]);
 
@@ -460,7 +457,6 @@ int main(int argc, char ** argv)
     {
         alpaka::wait::wait(queue[chunkNr]);
         // Copy data back
-        LLAMA_INDEPENDENT_DATA
         for(std::size_t y = 0; y < chunkIt->validMiniSize[0] - 2 * KERNEL_SIZE;
             ++y)
         {
@@ -477,8 +473,9 @@ int main(int argc, char ** argv)
 
     if(SAVE)
     {
-        LLAMA_INDEPENDENT_DATA
         for(std::size_t y = 0; y < img_y; ++y)
+        {
+            LLAMA_INDEPENDENT_DATA
             for(std::size_t x = 0; x < img_x; ++x)
             {
                 auto * pixel = &image[(y * img_x + x) * 3];
@@ -489,6 +486,7 @@ int main(int argc, char ** argv)
                 pixel[2] = hostView(y + KERNEL_SIZE, x + KERNEL_SIZE)(tag::B())
                     * 255.;
             }
+        }
         stbi_write_png(out_filename.c_str(), img_x, img_y, 3, image.data(), 0);
     }
 
