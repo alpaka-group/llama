@@ -13,8 +13,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 
-#include "../../common/alpakaHelpers.hpp"
 #include "../../common/Chrono.hpp"
+#include "../../common/alpakaHelpers.hpp"
 #include "stb_image.h"
 #include "stb_image_write.h"
 
@@ -104,8 +104,9 @@ struct BlurKernel
                 constexpr auto sharedChunkSize = ElemsPerBlock + 2 * KernelSize;
                 const SharedMapping sharedMapping(
                     {sharedChunkSize, sharedChunkSize}, treeOperationList);
-                constexpr auto sharedMemSize = llama::sizeOf<PixelOnAcc>
-                    * sharedChunkSize * sharedChunkSize;
+                constexpr auto sharedMemSize
+                    = llama::sizeOf<PixelOnAcc> * sharedChunkSize
+                    * sharedChunkSize;
                 auto & sharedMem = alpaka::block::shared::st::
                     allocVar<std::byte[sharedMemSize], __COUNTER__>(acc);
                 return llama::View<SharedMapping, std::byte *>{
@@ -250,9 +251,6 @@ int main(int argc, char ** argv)
 
     // LLAMA
     using UserDomain = llama::UserDomain<2>;
-    const UserDomain userDomainSize{buffer_y, buffer_x};
-    const UserDomain chunkUserDomain{
-        CHUNK_SIZE + 2 * KERNEL_SIZE, CHUNK_SIZE + 2 * KERNEL_SIZE};
 
     auto treeOperationList
         = llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()};
@@ -260,8 +258,11 @@ int main(int argc, char ** argv)
         Mapping<UserDomain, Pixel, decltype(treeOperationList)>;
     using DevMapping = llama::mapping::tree::
         Mapping<UserDomain, PixelOnAcc, decltype(treeOperationList)>;
-    const HostMapping hostMapping(userDomainSize, treeOperationList);
-    const DevMapping devMapping(chunkUserDomain, treeOperationList);
+    const auto hostMapping
+        = HostMapping{{buffer_y, buffer_x}, treeOperationList};
+    const auto devMapping = DevMapping{
+        {CHUNK_SIZE + 2 * KERNEL_SIZE, CHUNK_SIZE + 2 * KERNEL_SIZE},
+        treeOperationList};
 
     const auto hostBufferSize = hostMapping.getBlobSize(0);
     const auto devBufferSize = devMapping.getBlobSize(0);
