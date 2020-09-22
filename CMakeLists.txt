@@ -60,7 +60,7 @@ if (LLAMA_BUILD_EXAMPLES)
 	if (_ALPAKA_FOUND)
 		add_subdirectory("examples/alpaka/nbody")
 		add_subdirectory("examples/alpaka/vectoradd")
-		add_subdirectory("examples/alpaka/asynccopy")
+		add_subdirectory("examples/alpaka/asyncblur")
 	endif()
 endif()
 
