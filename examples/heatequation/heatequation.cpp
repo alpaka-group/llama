@@ -21,10 +21,7 @@
 #include <llama/llama.hpp>
 #include <utility>
 
-struct Current
-{};
-
-using DatumDomain = llama::DS<llama::DE<Current, double>>;
+using DatumDomain = double;
 
 struct HeatEquationKernel
 {
@@ -79,7 +76,7 @@ auto main() -> int
 
     // Apply initial conditions for the test problem
     for(uint32_t i = 0; i < numNodesX; i++)
-        uCurr[i](Current{}) = exactSolution(i * dx, 0.0);
+        uCurr[i] = exactSolution(i * dx, 0.0);
 
     const auto start = std::chrono::high_resolution_clock::now();
     HeatEquationKernel kernel;
@@ -101,7 +98,7 @@ auto main() -> int
     for(uint32_t i = 0; i < numNodesX; i++)
     {
         const auto error
-            = std::abs(uNext[i](Current{}) - exactSolution(i * dx, tMax));
+            = std::abs(uNext[i] - exactSolution(i * dx, tMax));
         maxError = std::max(maxError, error);
     }
 
