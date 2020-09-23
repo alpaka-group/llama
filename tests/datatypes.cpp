@@ -228,3 +228,24 @@ TEST_CASE("type custom initialization")
     //CHECK(view(UserDomain{2}).access<Tag>() == 2);
     //CHECK(view(UserDomain{15}).access<Tag>() == 15);
 }
+
+TEST_CASE("type just double")
+{
+    using DatumDomain = double;
+    llama::UserDomain userDomain{16};
+    llama::mapping::SoA mapping{userDomain, DatumDomain{}};
+    auto view = allocView(mapping);
+
+    STATIC_REQUIRE(std::is_same_v<decltype(view(0u)), double&>);
+    view(0u) = 42.0;
+    CHECK(view(0u) == 42.0);
+
+    STATIC_REQUIRE(std::is_same_v<decltype(view[0u]), double &>);
+    view[0u] = 42.0;
+    CHECK(view[0u] == 42.0);
+
+    STATIC_REQUIRE(
+        std::is_same_v<decltype(view[llama::UserDomain{0}]), double &>);
+    view[llama::UserDomain{0}] = 42.0;
+    CHECK(view[llama::UserDomain{0}] == 42.0);
+}
