@@ -382,9 +382,10 @@ namespace llama
             }
             else
             {
-                using DatumCoord = Cat<BoundDatumDomain, DatumCoord<Coord...>>;
+                using DestDatumCoord
+                    = Cat<BoundDatumDomain, DatumCoord<Coord...>>;
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return this->view.accessor(userDomainPos, DatumCoord{});
+                return this->view.accessor(userDomainPos, DestDatumCoord{});
             }
         }
 
@@ -405,9 +406,10 @@ namespace llama
             }
             else
             {
-                using DatumCoord = Cat<BoundDatumDomain, DatumCoord<Coord...>>;
+                using DestDatumCoord
+                    = Cat<BoundDatumDomain, DatumCoord<Coord...>>;
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return this->view.accessor(userDomainPos, DatumCoord{});
+                return this->view.accessor(userDomainPos, DestDatumCoord{});
             }
         }
 
@@ -635,48 +637,64 @@ namespace llama
         /// Retrieves the \ref VirtualDatum at the given \ref UserDomain
         /// coordinate.
         LLAMA_FN_HOST_ACC_INLINE auto operator()(UserDomain userDomain) const
-            -> VirtualDatumTypeConst
+            -> decltype(auto)
         {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return {userDomain, *this};
+            if constexpr(isDatumStruct<DatumDomain>)
+            {
+                LLAMA_FORCE_INLINE_RECURSIVE
+                return VirtualDatumTypeConst{userDomain, *this};
+            }
+            else
+            {
+                LLAMA_FORCE_INLINE_RECURSIVE
+                return accessor(userDomain, DatumCoord<>{});
+            }
         }
 
         LLAMA_FN_HOST_ACC_INLINE auto operator()(UserDomain userDomain)
-            -> VirtualDatumType
+            -> decltype(auto)
         {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return {userDomain, *this};
+            if constexpr(isDatumStruct<DatumDomain>)
+            {
+                LLAMA_FORCE_INLINE_RECURSIVE
+                return VirtualDatumType{userDomain, *this};
+            }
+            else
+            {
+                LLAMA_FORCE_INLINE_RECURSIVE
+                return accessor(userDomain, DatumCoord<>{});
+            }
         }
 
         /// Retrieves the \ref VirtualDatum at the \ref UserDomain coordinate
         /// constructed from the passed component indices.
         template<typename... Index>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Index... indices) const
-            -> VirtualDatumTypeConst
+            -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return {UserDomain{indices...}, *this};
+            return (*this)(UserDomain{indices...});
         }
 
         template<typename... Index>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Index... indices)
-            -> VirtualDatumType
+            -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return {UserDomain{indices...}, *this};
+            return (*this)(UserDomain{indices...});
         }
 
         /// Retrieves the \ref VirtualDatum at the \ref UserDomain coordinate
         /// constructed from the passed component indices.
         LLAMA_FN_HOST_ACC_INLINE auto operator[](UserDomain userDomain) const
-            -> VirtualDatumTypeConst
+            -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return (*this)(userDomain);
         }
 
         LLAMA_FN_HOST_ACC_INLINE auto operator[](UserDomain userDomain)
-            -> VirtualDatumType
+            -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return (*this)(userDomain);
@@ -685,14 +703,14 @@ namespace llama
         /// Retrieves the \ref VirtualDatum at the 1D \ref UserDomain coordinate
         /// constructed from the passed index.
         LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t index) const
-            -> VirtualDatumTypeConst
+            -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return (*this)(index);
         }
 
         LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t index)
-            -> VirtualDatumType
+            -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return (*this)(index);
