@@ -82,29 +82,20 @@ namespace usellama
     {
         constexpr FP ts = 0.0001f;
 
-        using UserDomain = llama::UserDomain<1>;
-        const auto userDomain = UserDomain{PROBLEM_SIZE};
-
+        const auto userDomain = llama::UserDomain{PROBLEM_SIZE};
         auto mapping = [&] {
             if constexpr(MAPPING == 0)
-                return llama::mapping::AoS<UserDomain, Particle>(userDomain);
+                return llama::mapping::AoS{userDomain, Particle{}};
             if constexpr(MAPPING == 1)
-                return llama::mapping::SoA<UserDomain, Particle>(userDomain);
+                return llama::mapping::SoA{userDomain, Particle{}};
             if constexpr(MAPPING == 2)
-            {
-                auto operations = llama::Tuple{};
-                return llama::mapping::tree::
-                    Mapping<UserDomain, Particle, decltype(operations)>(
-                        userDomain, operations);
-            }
+                return llama::mapping::tree::Mapping{
+                    userDomain, llama::Tuple{}, Particle{}};
             if constexpr(MAPPING == 3)
-            {
-                auto operations
-                    = llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()};
-                return llama::mapping::tree::
-                    Mapping<UserDomain, Particle, decltype(operations)>(
-                        userDomain, operations);
-            }
+                return llama::mapping::tree::Mapping{
+                    userDomain,
+                    llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
+                    Particle{}};
         }();
 
         auto tmapping = [&] {

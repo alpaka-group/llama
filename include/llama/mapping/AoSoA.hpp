@@ -28,7 +28,7 @@ namespace llama::mapping
         AoSoA() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        AoSoA(UserDomain size) : userDomainSize(size) {}
+        AoSoA(UserDomain size, DatumDomain = {}) : userDomainSize(size) {}
 
         LLAMA_FN_HOST_ACC_INLINE auto getBlobSize(std::size_t) const
             -> std::size_t

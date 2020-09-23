@@ -86,40 +86,31 @@ struct UpdateKernel
             {
                 const auto sharedMapping = [&] {
                     if constexpr(USE_SHARED_TREE)
-                    {
-                        auto treeOperationList = llama::Tuple{
-                            llama::mapping::tree::functor::LeafOnlyRT()};
-                        using SharedMapping = llama::mapping::tree::Mapping<
-                            typename View::Mapping::UserDomain,
-                            typename View::Mapping::DatumDomain,
-                            decltype(treeOperationList)>;
-                        return SharedMapping({BlockSize}, treeOperationList);
-                    }
+                        return llama::mapping::tree::Mapping{
+                            typename View::UserDomain{BlockSize},
+                            llama::Tuple{
+                                llama::mapping::tree::functor::LeafOnlyRT()},
+                            typename View::DatumDomain{}};
                     else
-                    {
-                        using SharedMapping = llama::mapping::SoA<
-                            typename View::Mapping::UserDomain,
-                            typename View::Mapping::DatumDomain>;
-                        return SharedMapping({BlockSize});
-                    }
+                        return llama::mapping::SoA{
+                            typename View::UserDomain{BlockSize},
+                            typename View::DatumDomain{}};
                 }();
-                using SharedMapping = decltype(sharedMapping);
 
                 // if there is only 1 thread per block, avoid using shared
                 // memory
                 if constexpr(BlockSize / Elems == 1)
                     return llama::allocViewStack<
-                        View::Mapping::UserDomain::rank,
-                        typename View::Mapping::DatumDomain>();
+                        View::UserDomain::rank,
+                        typename View::DatumDomain>();
                 else
                 {
                     constexpr auto sharedMemSize
-                        = llama::sizeOf<
-                              typename View::Mapping::DatumDomain> * BlockSize;
+                        = llama::sizeOf<typename View::DatumDomain> * BlockSize;
                     auto & sharedMem = alpaka::block::shared::st::
                         allocVar<std::byte[sharedMemSize], __COUNTER__>(acc);
-                    return llama::View<SharedMapping, std::byte *>{
-                        sharedMapping, {&sharedMem[0]}};
+                    return llama::View{
+                        sharedMapping, llama::Array{&sharedMem[0]}};
                 }
             }
             else
@@ -211,37 +202,22 @@ int main(int argc, char ** argv)
     constexpr FP ts = 0.0001;
 
     // LLAMA
-    using UserDomain = llama::UserDomain<1>;
-    const UserDomain userDomain{PROBLEM_SIZE};
+    const auto userDomain = llama::UserDomain{PROBLEM_SIZE};
 
     const auto mapping = [&] {
         if constexpr(MAPPING == 0)
-        {
-            using Mapping = llama::mapping::AoS<UserDomain, Particle>;
-            return Mapping(userDomain);
-        }
+            return llama::mapping::AoS{userDomain, Particle{}};
         if constexpr(MAPPING == 1)
-        {
-            using Mapping = llama::mapping::SoA<UserDomain, Particle>;
-            return Mapping(userDomain);
-        }
+            return llama::mapping::SoA{userDomain, Particle{}};
         if constexpr(MAPPING == 2)
-        {
-            auto treeOperationList = llama::Tuple{};
-            using Mapping = llama::mapping::tree::
-                Mapping<UserDomain, Particle, decltype(treeOperationList)>;
-            return Mapping(userDomain, treeOperationList);
-        }
+            return llama::mapping::tree::Mapping{
+                userDomain, llama::Tuple{}, Particle{}};
         if constexpr(MAPPING == 3)
-        {
-            auto treeOperationList
-                = llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()};
-            using Mapping = llama::mapping::tree::
-                Mapping<UserDomain, Particle, decltype(treeOperationList)>;
-            return Mapping(userDomain, treeOperationList);
-        }
+            return llama::mapping::tree::Mapping{
+                userDomain,
+                llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
+                Particle{}};
     }();
-    using Mapping = decltype(mapping);
 
     std::cout << PROBLEM_SIZE / 1000 << " thousand particles\n"
               << PROBLEM_SIZE * llama::sizeOf<Particle> / 1000 / 1000
@@ -258,10 +234,10 @@ int main(int argc, char ** argv)
 
     chrono.printAndReset("Alloc");
 
-    auto hostView = llama::View<Mapping, std::byte *>{
-        mapping, {alpaka::mem::view::getPtrNative(hostBuffer)}};
-    auto accView = llama::View<Mapping, std::byte *>{
-        mapping, {alpaka::mem::view::getPtrNative(accBuffer)}};
+    auto hostView = llama::View{
+        mapping, llama::Array{alpaka::mem::view::getPtrNative(hostBuffer)}};
+    auto accView = llama::View{
+        mapping, llama::Array{alpaka::mem::view::getPtrNative(accBuffer)}};
 
     chrono.printAndReset("Views");
 

@@ -81,37 +81,22 @@ int main(int argc, char ** argv)
     Queue queue(devAcc);
 
     // LLAMA
-    using UserDomain = llama::UserDomain<1>;
-    const UserDomain userDomain{PROBLEM_SIZE};
+    const auto userDomain = llama::UserDomain{PROBLEM_SIZE};
 
     const auto mapping = [&] {
         if constexpr(MAPPING == 0)
-        {
-            using Mapping = llama::mapping::AoS<UserDomain, Vector>;
-            return Mapping(userDomain);
-        }
+            return llama::mapping::AoS{userDomain, Vector{}};
         if constexpr(MAPPING == 1)
-        {
-            using Mapping = llama::mapping::SoA<UserDomain, Vector>;
-            return Mapping(userDomain);
-        }
+            return llama::mapping::SoA{userDomain, Vector{}};
         if constexpr(MAPPING == 2)
-        {
-            auto treeOperationList = llama::Tuple{};
-            using Mapping = llama::mapping::tree::
-                Mapping<UserDomain, Vector, decltype(treeOperationList)>;
-            return Mapping(userDomain, treeOperationList);
-        }
+            return llama::mapping::tree::Mapping{
+                userDomain, llama::Tuple{}, Vector{}};
         if constexpr(MAPPING == 3)
-        {
-            auto treeOperationList
-                = llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()};
-            using Mapping = llama::mapping::tree::
-                Mapping<UserDomain, Vector, decltype(treeOperationList)>;
-            return Mapping(userDomain, treeOperationList);
-        }
+            return llama::mapping::tree::Mapping{
+                userDomain,
+                llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
+                Vector{}};
     }();
-    using Mapping = decltype(mapping);
 
     std::cout << PROBLEM_SIZE / 1000 / 1000 << " million vectors\n"
               << PROBLEM_SIZE * llama::sizeOf<Vector> * 2 / 1000 / 1000
@@ -134,14 +119,14 @@ int main(int argc, char ** argv)
     chrono.printAndReset("Alloc");
 
     // create LLAMA views
-    auto hostA = llama::View<Mapping, std::byte *>{
-        mapping, {alpaka::mem::view::getPtrNative(hostBufferA)}};
-    auto hostB = llama::View<Mapping, std::byte *>{
-        mapping, {alpaka::mem::view::getPtrNative(hostBufferB)}};
-    auto devA = llama::View<Mapping, std::byte *>{
-        mapping, {alpaka::mem::view::getPtrNative(devBufferA)}};
-    auto devB = llama::View<Mapping, std::byte *>{
-        mapping, {alpaka::mem::view::getPtrNative(devBufferB)}};
+    auto hostA = llama::View{
+        mapping, llama::Array{alpaka::mem::view::getPtrNative(hostBufferA)}};
+    auto hostB = llama::View{
+        mapping, llama::Array{alpaka::mem::view::getPtrNative(hostBufferB)}};
+    auto devA = llama::View{
+        mapping, llama::Array{alpaka::mem::view::getPtrNative(devBufferA)}};
+    auto devB = llama::View{
+        mapping, llama::Array{alpaka::mem::view::getPtrNative(devBufferB)}};
 
     chrono.printAndReset("Views");
 

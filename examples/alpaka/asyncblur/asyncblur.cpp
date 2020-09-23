@@ -47,7 +47,10 @@ constexpr auto ELEMS_PER_BLOCK
 using FP = float;
 
 template<typename Mapping, typename AlpakaBuffer>
-auto viewAlpakaBuffer(Mapping mapping, AlpakaBuffer & buffer)
+auto viewAlpakaBuffer(
+    Mapping & mapping,
+    AlpakaBuffer &
+        buffer) // taking mapping by & on purpose, so Mapping can deduce const
 {
     return llama::View<Mapping, std::byte *>{
         mapping, {alpaka::mem::view::getPtrNative(buffer)}};
@@ -90,27 +93,17 @@ struct BlurKernel
             if constexpr(SHARED)
             {
                 // Using SoA for the shared memory
-                auto treeOperationList
-                    = llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()};
-                using SharedMapping = llama::mapping::tree::Mapping<
-                    typename View::Mapping::UserDomain,
-                    typename View::Mapping::DatumDomain,
-                    llama::Tuple<
-                        llama::mapping::tree::functor::
-                            LeafOnlyRT>>; // FIXME(bgruber): replace
-                                          // last template arg by
-                                          // decltype(treeOperationList)
-                                          // when MSVC supports it
                 constexpr auto sharedChunkSize = ElemsPerBlock + 2 * KernelSize;
-                const SharedMapping sharedMapping(
-                    {sharedChunkSize, sharedChunkSize}, treeOperationList);
+                const auto sharedMapping = llama::mapping::tree::Mapping(
+                    typename View::UserDomain{sharedChunkSize, sharedChunkSize},
+                    llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
+                    typename View::DatumDomain{});
                 constexpr auto sharedMemSize
                     = llama::sizeOf<PixelOnAcc> * sharedChunkSize
                     * sharedChunkSize;
                 auto & sharedMem = alpaka::block::shared::st::
                     allocVar<std::byte[sharedMemSize], __COUNTER__>(acc);
-                return llama::View<SharedMapping, std::byte *>{
-                    sharedMapping, {&sharedMem[0]}};
+                return llama::View{sharedMapping, llama::Array{&sharedMem[0]}};
             }
             else
                 return int{}; // dummy
@@ -254,15 +247,12 @@ int main(int argc, char ** argv)
 
     auto treeOperationList
         = llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()};
-    using HostMapping = llama::mapping::tree::
-        Mapping<UserDomain, Pixel, decltype(treeOperationList)>;
-    using DevMapping = llama::mapping::tree::
-        Mapping<UserDomain, PixelOnAcc, decltype(treeOperationList)>;
-    const auto hostMapping
-        = HostMapping{{buffer_y, buffer_x}, treeOperationList};
-    const auto devMapping = DevMapping{
-        {CHUNK_SIZE + 2 * KERNEL_SIZE, CHUNK_SIZE + 2 * KERNEL_SIZE},
-        treeOperationList};
+    const auto hostMapping = llama::mapping::tree::Mapping{
+        UserDomain{buffer_y, buffer_x}, treeOperationList, Pixel{}};
+    const auto devMapping = llama::mapping::tree::Mapping{
+        UserDomain{CHUNK_SIZE + 2 * KERNEL_SIZE, CHUNK_SIZE + 2 * KERNEL_SIZE},
+        treeOperationList,
+        PixelOnAcc{}};
 
     const auto hostBufferSize = hostMapping.getBlobSize(0);
     const auto devBufferSize = devMapping.getBlobSize(0);
@@ -280,12 +270,13 @@ int main(int argc, char ** argv)
         alpaka::mem::buf::
             Buf<DevHost, std::byte, alpaka::dim::DimInt<1>, std::size_t>>
         hostChunkBuffer;
-    std::vector<llama::View<DevMapping, std::byte *>> hostChunkView;
+    std::vector<llama::View<decltype(devMapping), std::byte *>> hostChunkView;
 
     std::vector<alpaka::mem::buf::
                     Buf<DevAcc, std::byte, alpaka::dim::DimInt<1>, std::size_t>>
         devOldBuffer, devNewBuffer;
-    std::vector<llama::View<DevMapping, std::byte *>> devOldView, devNewView;
+    std::vector<llama::View<decltype(devMapping), std::byte *>> devOldView,
+        devNewView;
 
     for(std::size_t i = 0; i < CHUNK_COUNT; ++i)
     {

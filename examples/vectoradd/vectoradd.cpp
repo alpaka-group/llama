@@ -27,8 +27,8 @@ namespace usellama
      >;
     // clang-format on
 
-    template<typename T_View>
-    void add(T_View & a, T_View & b, T_View & c)
+    template<typename View>
+    void add(const View & a, const View & b, View & c)
     {
         LLAMA_INDEPENDENT_DATA
         for(std::size_t i = 0; i < PROBLEM_SIZE; i++)
@@ -41,35 +41,21 @@ namespace usellama
 
     int main(int argc, char ** argv)
     {
-        using UD = llama::UserDomain<1>;
-        const UD userDomainSize{PROBLEM_SIZE};
+        const auto userDomain = llama::UserDomain{PROBLEM_SIZE};
 
         const auto mapping = [&] {
             if constexpr(MAPPING == 0)
-            {
-                using Mapping = llama::mapping::AoS<UD, Vector>;
-                return Mapping(userDomainSize);
-            }
+                return llama::mapping::AoS{userDomain, Vector{}};
             if constexpr(MAPPING == 1)
-            {
-                using Mapping = llama::mapping::SoA<UD, Vector>;
-                return Mapping(userDomainSize);
-            }
+                return llama::mapping::SoA{userDomain, Vector{}};
             if constexpr(MAPPING == 2)
-            {
-                auto treeOperationList = llama::Tuple{};
-                using Mapping = llama::mapping::tree::
-                    Mapping<UD, Vector, decltype(treeOperationList)>;
-                return Mapping(userDomainSize, treeOperationList);
-            }
+                return llama::mapping::tree::Mapping{
+                    userDomain, llama::Tuple{}, Vector{}};
             if constexpr(MAPPING == 3)
-            {
-                auto treeOperationList
-                    = llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()};
-                using Mapping = llama::mapping::tree::
-                    Mapping<UD, Vector, decltype(treeOperationList)>;
-                return Mapping(userDomainSize, treeOperationList);
-            }
+                return llama::mapping::tree::Mapping{
+                    userDomain,
+                    llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
+                    Vector{}};
         }();
 
         std::cout << PROBLEM_SIZE / 1000 / 1000 << " million vectors LLAMA\n";

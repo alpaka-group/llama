@@ -227,7 +227,10 @@ namespace llama::mapping::tree
         Mapping() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        Mapping(UserDomain size, TreeOperationList treeOperationList) :
+        Mapping(
+            UserDomain size,
+            TreeOperationList treeOperationList,
+            DatumDomain = {}) :
                 userDomainSize(size),
                 basicTree(createTree<DatumDomain>(size)),
                 mergedFunctors(basicTree, treeOperationList),
