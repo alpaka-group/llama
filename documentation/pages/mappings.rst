@@ -55,14 +55,14 @@ clang, cuda, intel, msvc):
 
 .. code-block:: C++
 
-     llama::mapping::SoA<UserDomain, DatumDomain> mapping{userDomainSize};
+    llama::mapping::SoA<UserDomain, DatumDomain> mapping{userDomainSize};
 
     // or using CTAD and an unused argument for the datum domain:
     llama::mapping::SoA mapping{userDomainSize, DatumDomain{});
 
 .. code-block:: C++
 
-     llama::mapping::AoS<UserDomain, DatumDomain> mapping{userDomainSize};
+    llama::mapping::AoS<UserDomain, DatumDomain> mapping{userDomainSize};
 
     // or using CTAD and an unused argument for the datum domain:
     llama::mapping::AoS mapping{userDomainSize, DatumDomain{});
