@@ -124,7 +124,7 @@ namespace llama
             typename RightView,
             typename RightBoundDatumDomain,
             bool RightOwnView>
-        LLAMA_FN_HOST_ACC_INLINE auto virtualDatumOperator(
+        LLAMA_FN_HOST_ACC_INLINE auto virtualDatumArithOperator(
             LeftDatum & left,
             const VirtualDatum<RightView, RightBoundDatumDomain, RightOwnView> &
                 right) -> LeftDatum &
@@ -160,17 +160,18 @@ namespace llama
             typename LeftDatum,
             typename RightMapping,
             typename RightBlobType>
-        LLAMA_FN_HOST_ACC_INLINE auto virtualDatumOperator(
+        LLAMA_FN_HOST_ACC_INLINE auto virtualDatumArithOperator(
             LeftDatum & left,
             const View<RightMapping, RightBlobType> & right) -> LeftDatum &
         {
-            return virtualDatumOperator(
+            return virtualDatumArithOperator(
                 left, right(UserDomain<RightMapping::UserDomain::rank>{}));
         }
 
         template<typename Functor, typename LeftDatum, typename T>
         LLAMA_FN_HOST_ACC_INLINE auto
-        virtualDatumOperator(LeftDatum & left, const T & right) -> LeftDatum &
+        virtualDatumArithOperator(LeftDatum & left, const T & right)
+            -> LeftDatum &
         {
             forEach<typename LeftDatum::AccessibleDatumDomain>(
                 [&](auto inner, auto outer) {
@@ -454,7 +455,7 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto operator=(const T & other)
             -> VirtualDatum &
         {
-            return internal::virtualDatumOperator<internal::Assign>(
+            return internal::virtualDatumArithOperator<internal::Assign>(
                 *this, other);
         }
 
@@ -462,7 +463,7 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto operator+=(const T & other)
             -> VirtualDatum &
         {
-            return internal::virtualDatumOperator<internal::PlusAssign>(
+            return internal::virtualDatumArithOperator<internal::PlusAssign>(
                 *this, other);
         }
 
@@ -470,7 +471,7 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto operator-=(const T & other)
             -> VirtualDatum &
         {
-            return internal::virtualDatumOperator<internal::MinusAssign>(
+            return internal::virtualDatumArithOperator<internal::MinusAssign>(
                 *this, other);
         }
 
@@ -478,15 +479,15 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto operator*=(const T & other)
             -> VirtualDatum &
         {
-            return internal::virtualDatumOperator<internal::MultiplyAssign>(
-                *this, other);
+            return internal::virtualDatumArithOperator<
+                internal::MultiplyAssign>(*this, other);
         }
 
         template<typename T>
         LLAMA_FN_HOST_ACC_INLINE auto operator/=(const T & other)
             -> VirtualDatum &
         {
-            return internal::virtualDatumOperator<internal::DivideAssign>(
+            return internal::virtualDatumArithOperator<internal::DivideAssign>(
                 *this, other);
         }
 
@@ -494,7 +495,7 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto operator%=(const T & other)
             -> VirtualDatum &
         {
-            return internal::virtualDatumOperator<internal::ModuloAssign>(
+            return internal::virtualDatumArithOperator<internal::ModuloAssign>(
                 *this, other);
         }
 
