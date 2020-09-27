@@ -132,29 +132,25 @@ namespace llama
             using RightDatum
                 = VirtualDatum<RightView, RightBoundDatumDomain, RightOwnView>;
             forEach<typename LeftDatum::AccessibleDatumDomain>(
-                [&](auto leftOuterCoord, auto leftInnerCoord) {
+                [&](auto, auto leftInnerCoord) {
                     forEach<typename RightDatum::AccessibleDatumDomain>(
-                        [&](auto rightOuterCoord, auto rightInnerCoord) {
-                            using LeftOuterCoord = decltype(leftOuterCoord);
+                        [&](auto, auto rightInnerCoord) {
                             using LeftInnerCoord = decltype(leftInnerCoord);
-                            using RightOuterCoord = decltype(rightOuterCoord);
                             using RightInnerCoord = decltype(rightInnerCoord);
                             if constexpr(
                                 hasSameTags<
                                     typename LeftDatum::AccessibleDatumDomain,
-                                    LeftOuterCoord,
+                                    DatumCoord<>,
                                     LeftInnerCoord,
                                     typename RightDatum::AccessibleDatumDomain,
-                                    RightOuterCoord,
+                                    DatumCoord<>,
                                     RightInnerCoord>)
                             {
                                 Functor{}(
-                                    left(cat(leftOuterCoord, leftInnerCoord)),
-                                    right(
-                                        cat(rightOuterCoord, rightInnerCoord)));
+                                    left(leftInnerCoord),
+                                    right(rightInnerCoord));
                             }
-                        },
-                        DatumCoord<>{});
+                        });
                 });
             return left;
         }
@@ -369,22 +365,17 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto access(DatumCoord<Coord...> = {}) const
             -> decltype(auto)
         {
-            if constexpr(isDatumStruct<GetType<
-                             DatumDomain,
-                             Cat<BoundDatumDomain, DatumCoord<Coord...>>>>)
+            using AbsolutCoord = Cat<BoundDatumDomain, DatumCoord<Coord...>>;
+            if constexpr(isDatumStruct<GetType<DatumDomain, AbsolutCoord>>)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualDatum<
-                    const View,
-                    Cat<BoundDatumDomain, DatumCoord<Coord...>>>{
+                return VirtualDatum<const View, AbsolutCoord>{
                     userDomainPos, this->view};
             }
             else
             {
-                using DestDatumCoord
-                    = Cat<BoundDatumDomain, DatumCoord<Coord...>>;
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return this->view.accessor(userDomainPos, DestDatumCoord{});
+                return this->view.accessor(userDomainPos, AbsolutCoord{});
             }
         }
 
@@ -393,22 +384,17 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto access(DatumCoord<Coord...> coord = {})
             -> decltype(auto)
         {
-            if constexpr(isDatumStruct<GetType<
-                             DatumDomain,
-                             Cat<BoundDatumDomain, DatumCoord<Coord...>>>>)
+            using AbsolutCoord = Cat<BoundDatumDomain, DatumCoord<Coord...>>;
+            if constexpr(isDatumStruct<GetType<DatumDomain, AbsolutCoord>>)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualDatum<
-                    View,
-                    Cat<BoundDatumDomain, DatumCoord<Coord...>>>{
+                return VirtualDatum<View, AbsolutCoord>{
                     userDomainPos, this->view};
             }
             else
             {
-                using DestDatumCoord
-                    = Cat<BoundDatumDomain, DatumCoord<Coord...>>;
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return this->view.accessor(userDomainPos, DestDatumCoord{});
+                return this->view.accessor(userDomainPos, AbsolutCoord{});
             }
         }
 
