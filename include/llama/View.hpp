@@ -133,9 +133,9 @@ namespace llama
                 = VirtualDatum<RightView, RightBoundDatumDomain, RightOwnView>;
             forEach<typename LeftDatum::AccessibleDatumDomain>(
                 [&](auto, auto leftInnerCoord) {
+                    using LeftInnerCoord = decltype(leftInnerCoord);
                     forEach<typename RightDatum::AccessibleDatumDomain>(
                         [&](auto, auto rightInnerCoord) {
-                            using LeftInnerCoord = decltype(leftInnerCoord);
                             using RightInnerCoord = decltype(rightInnerCoord);
                             if constexpr(
                                 hasSameTags<
