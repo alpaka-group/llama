@@ -244,10 +244,7 @@ namespace llama
                 });
             return result;
         }
-    }
 
-    namespace internal
-    {
         struct Assign
         {
             template<typename A, typename B>
@@ -530,13 +527,6 @@ namespace llama
         {
             return copyVirtualDatumStack(*this) %= other;
         }
-
-#define __LLAMA_VIRTUALDATUM_BOOL_OPERATOR(OP, FUNCTOR) \
-    template<typename T> \
-    LLAMA_FN_HOST_ACC_INLINE auto operator OP(const T & other) const->bool \
-    { \
-        return internal::virtualDatumRelOperator<FUNCTOR>(*this, other); \
-    }
 
         template<typename T>
         LLAMA_FN_HOST_ACC_INLINE auto operator==(const T & other) const -> bool
