@@ -131,54 +131,26 @@ namespace llama
     /// Is true if, starting at two coordinates in two datum domains, all
     /// subsequent nodes in the datum domain tree have the same tag.
     /// \tparam DatumDomainA First user domain.
-    /// \tparam StartA \ref DatumCoord where the comparison is started in the
-    /// first datum domain.
     /// \tparam LocalA \ref DatumCoord based on StartA along which the tags are
     /// compared.
     /// \tparam DatumDomainB second user domain
-    /// \tparam StartB \ref DatumCoord where the comparison is started in the
-    /// second datum domain.
     /// \tparam LocalB \ref DatumCoord based on StartB along which the tags are
     /// compared.
     template<
         typename DatumDomainA,
-        typename StartA,
         typename LocalA,
         typename DatumDomainB,
-        typename StartB,
         typename LocalB>
-    inline constexpr auto hasSameTags = false;
-
-    template<
-        typename DatumDomainA,
-        std::size_t... BaseCoordsA,
-        typename LocalA,
-        typename DatumDomainB,
-        std::size_t... BaseCoordsB,
-        typename LocalB>
-    inline constexpr auto hasSameTags<
-        DatumDomainA,
-        DatumCoord<BaseCoordsA...>,
-        LocalA,
-        DatumDomainB,
-        DatumCoord<BaseCoordsB...>,
-        LocalB> = []() constexpr
+    inline constexpr auto hasSameTags = []() constexpr
     {
         if constexpr(LocalA::size != LocalB::size)
             return false;
         else if constexpr(LocalA::size == 0 && LocalB::size == 0)
             return true;
         else
-        {
-            using TagCoordA = DatumCoord<BaseCoordsA..., LocalA::front>;
-            using TagCoordB = DatumCoord<BaseCoordsB..., LocalB::front>;
-
             return std::is_same_v<
-                       GetTag<DatumDomainA, TagCoordA>,
-                       GetTag<
-                           DatumDomainB,
-                           TagCoordB>> && hasSameTags<DatumDomainA, TagCoordA, PopFront<LocalA>, DatumDomainB, TagCoordB, PopFront<LocalB>>;
-        }
+                GetTags<DatumDomainA, LocalA>,
+                GetTags<DatumDomainB, LocalB>>;
     }
     ();
 

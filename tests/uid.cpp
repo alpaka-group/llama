@@ -77,53 +77,48 @@ TEST_CASE("GetTag")
 
 TEST_CASE("hasSameTags")
 {
+    using PosDomain
+        = llama::GetType<Particle, llama::GetCoordFromTags<Particle, tag::Pos>>;
+    using VelDomain
+        = llama::GetType<Particle, llama::GetCoordFromTags<Particle, tag::Vel>>;
+
     STATIC_REQUIRE(
         llama::hasSameTags<
-            Particle, // DD A
-            llama::GetCoordFromTags<Particle, tag::Pos>, // Base A
+            PosDomain, // DD A
             llama::DatumCoord<0>, // Local A
-            Particle, // DD B
-            llama::GetCoordFromTags<Particle, tag::Vel>, // Base B
+            VelDomain, // DD B
             llama::DatumCoord<0> // Local B
             > == false);
 
     STATIC_REQUIRE(
         llama::hasSameTags<
-            Particle, // DD A
-            llama::GetCoordFromTags<Particle, tag::Pos>, // Base A
+            PosDomain, // DD A
             llama::DatumCoord<0>, // Local A
-            Particle, // DD B
-            llama::GetCoordFromTags<Particle, tag::Vel>, // Base B
+            VelDomain, // DD B
             llama::DatumCoord<1> // Local B
             > == true);
 
     STATIC_REQUIRE(
         llama::hasSameTags<
             Particle, // DD A
-            llama::DatumCoord<>, // Base A
             llama::DatumCoord<0, 0>, // Local A
             Other, // DD B
-            llama::DatumCoord<>, // Base B
             llama::DatumCoord<0, 0> // Local B
             > == false);
 
     STATIC_REQUIRE(
         llama::hasSameTags<
             Particle, // DD A
-            llama::DatumCoord<>, // Base A
             llama::DatumCoord<0, 2>, // Local A
             Other, // DD B
-            llama::DatumCoord<>, // Base B
             llama::DatumCoord<0, 0> // Local B
             > == true);
 
     STATIC_REQUIRE(
         llama::hasSameTags<
             Particle, // DD A
-            llama::DatumCoord<>, // Base A
             llama::DatumCoord<2, 0>, // Local A
             Other, // DD B
-            llama::DatumCoord<>, // Base B
             llama::DatumCoord<0, 0> // Local B
             > == false);
 }

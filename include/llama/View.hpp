@@ -140,10 +140,8 @@ namespace llama
                             if constexpr(
                                 hasSameTags<
                                     typename LeftDatum::AccessibleDatumDomain,
-                                    DatumCoord<>,
                                     LeftInnerCoord,
                                     typename RightDatum::AccessibleDatumDomain,
-                                    DatumCoord<>,
                                     RightInnerCoord>)
                             {
                                 Functor{}(
@@ -174,8 +172,8 @@ namespace llama
             -> LeftDatum &
         {
             forEach<typename LeftDatum::AccessibleDatumDomain>(
-                [&](auto inner, auto outer) {
-                    Functor{}(left(cat(inner, outer)), right);
+                [&](auto, auto leftInnerCoord) {
+                    Functor{}(left(leftInnerCoord), right);
                 });
             return left;
         }
@@ -203,10 +201,8 @@ namespace llama
                             if constexpr(
                                 hasSameTags<
                                     typename LeftDatum::AccessibleDatumDomain,
-                                    DatumCoord<>,
                                     LeftInnerCoord,
                                     typename RightDatum::AccessibleDatumDomain,
-                                    DatumCoord<>,
                                     RightInnerCoord>)
                             {
                                 result &= Functor{}(
