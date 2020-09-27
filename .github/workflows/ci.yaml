@@ -14,7 +14,7 @@ jobs:
         mkdir build
         cd build
         export BOOST_ROOT=$BOOST_ROOT_1_72_0
-        cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -DASAN_FOR_TESTS=ON -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+        CXX=g++-9 cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -DASAN_FOR_TESTS=ON -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
     - name: build
       run: cmake --build build
     - name: tests
