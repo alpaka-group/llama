@@ -28,17 +28,19 @@ A definition of a three-dimensional user domain of the size
 
 .. code-block:: C++
 
-    const llama::UserDomain<3> userDomainSize{128, 256, 32};
+    llama::UserDomain userDomainSize{128, 256, 32};
+
+The template arguments are deduced by the compiler using `CTAD <https://en.cppreference.com/w/cpp/language/class_template_argument_deduction>`_.
+The full type of :cpp:`userDomainSize` is :cpp:`llama::UserDomain<3>`.
 
 .. _label-dd:
 
 Datum domain
 ------------
 
-The completely at compile time defined datum domain is basically a tree
-structure. If we have a look at C++ structs (which the datum domain tries to
-abstract) they are trees too. Let's have a look at this simple
-example struct for storing a pixel value
+The datum domain is a tree structure completely defined at compile time.
+Nested C++ structs, which the datum domain tries to abstract, they are trees too.
+Let's have a look at this simple example struct for storing a pixel value:
 
 .. code-block:: C++
 
@@ -55,8 +57,8 @@ This defines this tree
 
 .. image:: ../images/layout_tree.svg
 
-Unfortunately with C++ it is not possible yet to "iterate" over a struct at
-compile time as it would be needed for LLAMA's mapping (although there are proposals to provide such a facility).
+Unfortunately with C++ it is not possible yet to "iterate" over a struct at compile time and extract member types and names,
+as it would be needed for LLAMA's mapping (although there are proposals to provide such a facility).
 For now LLAMA needs to define such a tree itself using two classes, :cpp:`DatumStruct` and :cpp:`DatumElement`.
 :cpp:`DatumStruct` is a compile time list of :cpp:`DatumElement`.
 :cpp:`DatumElement` has a name and a fundamental type **or** another :cpp:`DatumStruct` list of child :cpp:`DatumElement`\ s.
@@ -65,7 +67,12 @@ We recommend creating empty tag types for this.
 These tags serve as names when describing accesses later.
 Furthermore, these tags also enable a semantic binding even between two different datum domains.
 
-A datum domain itself is just a :cpp:`DatumStruct` as seen here for the given tree:
+To make the code easier to read, the following shortcuts are defined:
+
+* :cpp:`llama::DatumStruct` → :cpp:`llama::DS`
+* :cpp:`llama::DatumElement` → :cpp:`llama::DE`
+
+A datum domain itself is just a :cpp:`DatumStruct` (or a fundamental type), as seen here for the given tree:
 
 .. code-block:: C++
 
@@ -75,31 +82,27 @@ A datum domain itself is just a :cpp:`DatumStruct` as seen here for the given tr
     struct g {};
     struct b {};
 
-    using Pixel = llama::DatumStruct<
-        llama::DatumElement<color, llama::DatumStruct<
-            llama::DatumElement<r, float>,
-            llama::DatumElement<g, float>,
-            llama::DatumElement<b, float>
+    using Pixel = llama::DS<
+        llama::DE<color, llama::DS<
+            llama::DE<r, float>,
+            llama::DE<g, float>,
+            llama::DE<b, float>
         >>,
-        llama::DatumElement<alpha, char>
+        llama::DE<alpha, char>
     >;
 
-Furthermore a third class :cpp:`DatumArray` is defined, which can be used to
-define a :cpp:`DatumStruct` with multiple :cpp:`DatumElement`\ s of
-the same type, e.g. :cpp:`llama::DatumArray<float, 4>` is the same as
+A :cpp:`DatumArray` is essentially a :cpp:`DatumStruct` with multiple :cpp:`DatumElement`\ s of the same type.
+E.g. :cpp:`DatumArray<float, 4>` is the same as
 
 .. code-block:: C++
 
-    llama::DatumStruct<
-        llama::DatumElement<llama::Index<0>, float>,
-        llama::DatumElement<llama::Index<1>, float>,
-        llama::DatumElement<llama::Index<2>, float>,
-        llama::DatumElement<llama::Index<3>, float>
+    llama::DS<
+        llama::DE<llama::Index<0>, float>,
+        llama::DE<llama::Index<1>, float>,
+        llama::DE<llama::Index<2>, float>,
+        llama::DE<llama::Index<3>, float>
     >
 
-To make the code easier to read, shortcuts are defined for each of these
-classes:
+LLAMA also defines a shortcuts for a datum array:
 
-* :cpp:`llama::DatumStruct` → :cpp:`llama::DS`
-* :cpp:`llama::DatumElement` → :cpp:`llama::DE`
 * :cpp:`llama::DatumArray` → :cpp:`llama::DA`
