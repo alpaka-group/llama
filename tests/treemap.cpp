@@ -1069,15 +1069,11 @@ TEST_CASE("treemapping")
         for(size_t y = 0; y < userDomain[1]; ++y)
         {
             auto datum = view(x, y);
-            llama::internal::GenericFunctor<
-                decltype(datum),
-                decltype(datum),
-                tag::Pos,
-                llama::internal::PlusAssign>
-                as{datum, datum};
-            llama::forEach<Name>(as, tag::Momentum{});
-            //~ auto datum2 = view( x+1, y );
-            //~ datum( tag::Pos(), tag::Y() ) += datum2( tag::Pos(), tag::Y() );
+            llama::forEach<Name>(
+                [&](auto outer, auto inner) {
+                    datum(llama::cat(outer, inner)) = 0;
+                },
+                tag::Momentum{});
         }
     double sum = 0.0;
     for(size_t x = 0; x < userDomain[0]; ++x)

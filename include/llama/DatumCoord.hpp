@@ -55,6 +55,13 @@ namespace llama
         typename DatumCoord1::List,
         typename DatumCoord2::List>>;
 
+    /// Concatenate two \ref DatumCoord instances.
+    template<typename DatumCoord1, typename DatumCoord2>
+    auto cat(DatumCoord1, DatumCoord2)
+    {
+        return Cat<DatumCoord1, DatumCoord2>{};
+    }
+
     /// DatumCoord without first coordinate component.
     template<typename DatumCoord>
     using PopFront = DatumCoordFromList<
