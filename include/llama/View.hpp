@@ -119,72 +119,71 @@ namespace llama
     namespace internal
     {
         template<
+            typename Functor,
             typename LeftDatum,
-            typename RightDatum,
-            typename Source,
-            typename LeftOuterCoord,
-            typename LeftInnerCoord,
-            typename OP>
-        struct GenericInnerFunctor
+            typename RightView,
+            typename RightBoundDatumDomain,
+            bool RightOwnView>
+        LLAMA_FN_HOST_ACC_INLINE auto virtualDatumOperator(
+            LeftDatum & left,
+            const VirtualDatum<RightView, RightBoundDatumDomain, RightOwnView> &
+                right) -> LeftDatum &
         {
-            template<typename RightOuterCoord, typename RightInnerCoord>
-            LLAMA_FN_HOST_ACC_INLINE void
-            operator()(RightOuterCoord, RightInnerCoord)
-            {
-                if constexpr(hasSameTags<
-                                 typename LeftDatum::AccessibleDatumDomain,
-                                 LeftOuterCoord,
-                                 LeftInnerCoord,
-                                 typename RightDatum::AccessibleDatumDomain,
-                                 RightOuterCoord,
-                                 RightInnerCoord>)
-                {
-                    using Dst = Cat<LeftOuterCoord, LeftInnerCoord>;
-                    using Src = Cat<RightOuterCoord, RightInnerCoord>;
-                    OP{}(left(Dst()), right(Src()));
-                }
-            }
-            LeftDatum & left;
-            const RightDatum & right;
-        };
+            using RightDatum
+                = VirtualDatum<RightView, RightBoundDatumDomain, RightOwnView>;
+            forEach<typename LeftDatum::AccessibleDatumDomain>(
+                [&](auto leftOuterCoord, auto leftInnerCoord) {
+                    forEach<typename RightDatum::AccessibleDatumDomain>(
+                        [&](auto rightOuterCoord, auto rightInnerCoord) {
+                            using LeftOuterCoord = decltype(leftOuterCoord);
+                            using LeftInnerCoord = decltype(leftInnerCoord);
+                            using RightOuterCoord = decltype(rightOuterCoord);
+                            using RightInnerCoord = decltype(rightInnerCoord);
+                            if constexpr(
+                                hasSameTags<
+                                    typename LeftDatum::AccessibleDatumDomain,
+                                    LeftOuterCoord,
+                                    LeftInnerCoord,
+                                    typename RightDatum::AccessibleDatumDomain,
+                                    RightOuterCoord,
+                                    RightInnerCoord>)
+                            {
+                                Functor{}(
+                                    left(cat(leftOuterCoord, leftInnerCoord)),
+                                    right(
+                                        cat(rightOuterCoord, rightInnerCoord)));
+                            }
+                        },
+                        DatumCoord<>{});
+                });
+            return left;
+        }
 
         template<
+            typename Functor,
             typename LeftDatum,
-            typename RightDatum,
-            typename SourceDatumCoord,
-            typename OP>
-        struct GenericFunctor
+            typename RightMapping,
+            typename RightBlobType>
+        LLAMA_FN_HOST_ACC_INLINE auto virtualDatumOperator(
+            LeftDatum & left,
+            const llama::View<RightMapping, RightBlobType> & right)
+            -> LeftDatum &
         {
-            template<typename LeftOuterCoord, typename LeftInnerCoord>
-            LLAMA_FN_HOST_ACC_INLINE void
-            operator()(LeftOuterCoord, LeftInnerCoord)
-            {
-                forEach<typename RightDatum::AccessibleDatumDomain>(
-                    GenericInnerFunctor<
-                        LeftDatum,
-                        RightDatum,
-                        SourceDatumCoord,
-                        LeftOuterCoord,
-                        LeftInnerCoord,
-                        OP>{left, right},
-                    SourceDatumCoord{});
-            }
-            LeftDatum & left;
-            const RightDatum & right;
-        };
+            return virtualDatumOperator(
+                left,
+                right(llama::UserDomain<RightMapping::UserDomain::rank>{}));
+        }
 
-        template<typename LeftDatum, typename RightType, typename OP>
-        struct GenericTypeFunctor
+        template<typename Functor, typename LeftDatum, typename T>
+        LLAMA_FN_HOST_ACC_INLINE auto
+        virtualDatumOperator(LeftDatum & left, const T & right) -> LeftDatum &
         {
-            template<typename OuterCoord, typename InnerCoord>
-            LLAMA_FN_HOST_ACC_INLINE void operator()(OuterCoord, InnerCoord)
-            {
-                using Dst = Cat<OuterCoord, InnerCoord>;
-                OP{}(left(Dst()), right);
-            }
-            LeftDatum & left;
-            const RightType & right;
-        };
+            forEach<typename LeftDatum::AccessibleDatumDomain>(
+                [&](auto inner, auto outer) {
+                    Functor{}(left(cat(inner, outer)), right);
+                });
+            return left;
+        }
     }
 
     namespace internal
@@ -473,62 +472,59 @@ namespace llama
             return access(DatumCoordOrUIDs{}...);
         }
 
-#define __LLAMA_VIRTUALDATUM_OPERATOR(OP, FUNCTOR) \
-    template< \
-        typename OtherView, \
-        typename OtherBoundDatumDomain, \
-        bool OtherOwnView> \
-    LLAMA_FN_HOST_ACC_INLINE auto operator OP( \
-        const VirtualDatum<OtherView, OtherBoundDatumDomain, OtherOwnView> & \
-            other) \
-        ->VirtualDatum & \
-    { \
-        internal::GenericFunctor< \
-            std::remove_reference_t<decltype(*this)>, \
-            VirtualDatum<OtherView, OtherBoundDatumDomain, OtherOwnView>, \
-            DatumCoord<>, \
-            FUNCTOR> \
-            functor{*this, other}; \
-        forEach<AccessibleDatumDomain>(functor); \
-        return *this; \
-    } \
-\
-    template<typename OtherMapping, typename OtherBlobType> \
-    LLAMA_FN_HOST_ACC_INLINE auto operator OP( \
-        const llama::View<OtherMapping, OtherBlobType> & other) \
-        ->VirtualDatum & \
-    { \
-        return *this OP other( \
-            llama::UserDomain<OtherMapping::UserDomain::rank>{}); \
-    } \
-\
-    template< \
-        typename OtherType, \
-        typename \
-        = std::enable_if_t<!IsView<OtherType> && !is_VirtualDatum<OtherType>>> \
-    LLAMA_FN_HOST_ACC_INLINE auto operator OP(const OtherType & other) \
-        ->VirtualDatum & \
-    { \
-        internal::GenericTypeFunctor<decltype(*this), OtherType, FUNCTOR> \
-            functor{*this, other}; \
-        forEach<AccessibleDatumDomain>(functor); \
-        return *this; \
-    }
-
-        __LLAMA_VIRTUALDATUM_OPERATOR(=, internal::Assign)
-        __LLAMA_VIRTUALDATUM_OPERATOR(+=, internal::PlusAssign)
-        __LLAMA_VIRTUALDATUM_OPERATOR(-=, internal::MinusAssign)
-        __LLAMA_VIRTUALDATUM_OPERATOR(*=, internal::MultiplyAssign)
-        __LLAMA_VIRTUALDATUM_OPERATOR(/=, internal::DivideAssign)
-        __LLAMA_VIRTUALDATUM_OPERATOR(%=, internal::ModuloAssign)
-
-#undef __LLAMA_VIRTUALDATUM_OPERATOR
-
         // we need this one to disable the compiler generated copy assignment
         LLAMA_FN_HOST_ACC_INLINE auto operator=(const VirtualDatum & other)
             -> VirtualDatum &
         {
-            return this->operator=<T_View, BoundDatumDomain, OwnView>(other);
+            return this->operator=<VirtualDatum>(other);
+        }
+
+        template<typename T>
+        LLAMA_FN_HOST_ACC_INLINE auto operator=(const T & other)
+            -> VirtualDatum &
+        {
+            return internal::virtualDatumOperator<internal::Assign>(
+                *this, other);
+        }
+
+        template<typename T>
+        LLAMA_FN_HOST_ACC_INLINE auto operator+=(const T & other)
+            -> VirtualDatum &
+        {
+            return internal::virtualDatumOperator<internal::PlusAssign>(
+                *this, other);
+        }
+
+        template<typename T>
+        LLAMA_FN_HOST_ACC_INLINE auto operator-=(const T & other)
+            -> VirtualDatum &
+        {
+            return internal::virtualDatumOperator<internal::MinusAssign>(
+                *this, other);
+        }
+
+        template<typename T>
+        LLAMA_FN_HOST_ACC_INLINE auto operator*=(const T & other)
+            -> VirtualDatum &
+        {
+            return internal::virtualDatumOperator<internal::MultiplyAssign>(
+                *this, other);
+        }
+
+        template<typename T>
+        LLAMA_FN_HOST_ACC_INLINE auto operator/=(const T & other)
+            -> VirtualDatum &
+        {
+            return internal::virtualDatumOperator<internal::DivideAssign>(
+                *this, other);
+        }
+
+        template<typename T>
+        LLAMA_FN_HOST_ACC_INLINE auto operator%=(const T & other)
+            -> VirtualDatum &
+        {
+            return internal::virtualDatumOperator<internal::ModuloAssign>(
+                *this, other);
         }
 
         template<typename OtherType>
