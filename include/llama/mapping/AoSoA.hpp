@@ -41,19 +41,14 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(UserDomain coord) const
             -> NrAndOffset
         {
-            constexpr auto elementSize
-                = sizeof(GetType<DatumDomain, DatumCoord<DatumDomainCoord...>>);
-            constexpr auto elementOff
-                = offsetOf<DatumDomain, DatumDomainCoord...>;
-            constexpr auto datumDomainSize = sizeOf<DatumDomain>;
-            LLAMA_FORCE_INLINE_RECURSIVE
             const auto userDomainIndex
                 = LinearizeUserDomainFunctor{}(coord, userDomainSize);
-
             const auto blockIndex = userDomainIndex / Lanes;
             const auto laneIndex = userDomainIndex % Lanes;
-            const auto offset = (datumDomainSize * Lanes) * blockIndex
-                + elementOff * Lanes + elementSize * laneIndex;
+            const auto offset = (sizeOf<DatumDomain> * Lanes) * blockIndex
+                + offsetOf<DatumDomain, DatumDomainCoord...> * Lanes
+                + sizeof(GetType<DatumDomain, DatumCoord<DatumDomainCoord...>>)
+                    * laneIndex;
             return {0, offset};
         }
 

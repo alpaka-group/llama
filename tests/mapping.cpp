@@ -353,3 +353,55 @@ TEST_CASE("address.SoA.morton")
         CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 14082);
     }
 }
+
+TEST_CASE("address.AoSoA.4")
+{
+    using UserDomain = llama::UserDomain<2>;
+    auto userDomain = UserDomain{16, 16};
+    auto mapping = llama::mapping::AoSoA<UserDomain, Particle, 4>{userDomain};
+
+    {
+        const auto coord = UserDomain{0, 0};
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 32);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 64);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 96);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 112);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 144);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 176);
+        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 208);
+        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 212);
+        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 216);
+        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 220);
+    }
+
+    {
+        const auto coord = UserDomain{0, 1};
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 8);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 40);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 72);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 100);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 120);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 152);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 184);
+        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 209);
+        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 213);
+        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 217);
+        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 221);
+    }
+
+    {
+        const auto coord = UserDomain{1, 0};
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 928);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 960);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 992);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 1008);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 1040);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 1072);
+        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 1104);
+        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 1108);
+        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 1112);
+        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 1116);
+    }
+}
