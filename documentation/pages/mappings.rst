@@ -51,17 +51,30 @@ AoS and SoA mappings
 
 If only array of struct or struct of array is needed, LLAMA provides two
 native mappings which show a good performance for all tested compilers (gcc,
-clang, cuda, intel):
+clang, cuda, intel, msvc):
 
 .. code-block:: C++
 
-    llama::mapping::SoA
+     llama::mapping::SoA<UserDomain, DatumDomain> mapping{userDomainSize};
+
+    // or using CTAD and an unused argument for the datum domain:
+    llama::mapping::SoA mapping{userDomainSize, DatumDomain{});
 
 .. code-block:: C++
 
-    llama::mapping::AoS
+     llama::mapping::AoS<UserDomain, DatumDomain> mapping{userDomainSize};
 
-There is also a combined array of struct of arrays mapping, but, since the mapping code is more complicated, compilers currently fail to auto vectorize view access.
+    // or using CTAD and an unused argument for the datum domain:
+    llama::mapping::AoS mapping{userDomainSize, DatumDomain{});
+
+The template parameters are deduced using CTAD.
+
+There is also a combined array of struct of arrays mapping,
+but, since the mapping code is more complicated, compilers currently fail to auto vectorize view access:
+
+.. code-block:: C++
+
+    llama::mapping::AoSoA<UserDomain, DatumDomain, Lanes> mapping{userDomainSize};
 
 .. _label-tree-mapping:
 
@@ -141,6 +154,15 @@ a further constructor parameter for the instantiation of this tuple.
     Mapping mapping(
         userDomainSize,
         treeOperationList
+    );
+
+    // or using CTAD and an unused argument for the datum domain:
+    llama::mapping::tree::Mapping mapping(
+        userDomainSize,
+        llama::Tuple{
+            llama::mapping::tree::functor::LeafOnlyRT()
+        },
+        DatumDomain{}
     );
 
 The following tree operations are defined:
