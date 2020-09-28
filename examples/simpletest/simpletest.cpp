@@ -57,32 +57,32 @@ using Name = llama::DS<
 
 namespace
 {
-    template<class T>
-    std::string type(const T & t)
+    template <class T>
+    std::string type(const T& t)
     {
         return boost::core::demangle(typeid(t).name());
     }
 
     /// Prints the coordinates of a given \ref llama::DatumCoord for debugging
     /// and testing purposes
-    template<std::size_t... T_coords>
+    template <std::size_t... T_coords>
     void printCoords(llama::DatumCoord<T_coords...> dc)
     {
         (std::cout << ... << T_coords);
     }
 
-    template<typename Out>
-    void split(const std::string & s, char delim, Out result)
+    template <typename Out>
+    void split(const std::string& s, char delim, Out result)
     {
         std::stringstream ss(s);
         std::string item;
-        while(std::getline(ss, item, delim))
+        while (std::getline(ss, item, delim))
         {
             *(result++) = item;
         }
     }
 
-    std::vector<std::string> split(const std::string & s, char delim)
+    std::vector<std::string> split(const std::string& s, char delim)
     {
         std::vector<std::string> elems;
         split(s, delim, std::back_inserter(elems));
@@ -92,7 +92,8 @@ namespace
     std::string nSpaces(int n)
     {
         std::string result = "";
-        for(int i = 0; i < n; ++i) result += " ";
+        for (int i = 0; i < n; ++i)
+            result += " ";
         return result;
     }
 
@@ -105,24 +106,24 @@ namespace
         auto tokens = split(raw, '\n');
         std::string result = "";
         int indent = 0;
-        for(auto t : tokens)
+        for (auto t : tokens)
         {
-            if(t.back() == '>' || (t.length() > 1 && t[t.length() - 2] == '>'))
+            if (t.back() == '>' || (t.length() > 1 && t[t.length() - 2] == '>'))
                 indent -= 4;
             result += nSpaces(indent) + t + "\n";
-            if(t.back() == '<')
+            if (t.back() == '<')
                 indent += 4;
         }
         return result;
     }
-}
+} // namespace
 
 /// Example functor for \ref llama::forEach which can also be used to print the
 /// coordinates inside of a datum domain when called.
-template<typename VirtualDatum>
+template <typename VirtualDatum>
 struct SetZeroFunctor
 {
-    template<typename Coord>
+    template <typename Coord>
     void operator()(Coord coord)
     {
         vd(coord) = 0;
@@ -130,25 +131,19 @@ struct SetZeroFunctor
     VirtualDatum vd;
 };
 
-int main(int argc, char ** argv)
+int main(int argc, char** argv)
 {
     // Defining a two-dimensional user domain
     using UD = llama::UserDomain<2>;
     // Setting the run time size of the user domain to 8192 * 8192
-    UD udSize{8192, 8192};
+    UD udSize {8192, 8192};
 
     // Printing the domain informations at runtime
     std::cout << "Datum Domain is " << addLineBreaks(type(Name())) << '\n';
     std::cout << "AoS address of (0,100) <0,1>: "
-              << llama::mapping::AoS<UD, Name>(udSize)
-                     .getBlobNrAndOffset<0, 1>({0, 100})
-                     .offset
-              << '\n';
+              << llama::mapping::AoS<UD, Name>(udSize).getBlobNrAndOffset<0, 1>({0, 100}).offset << '\n';
     std::cout << "SoA address of (0,100) <0,1>: "
-              << llama::mapping::SoA<UD, Name>(udSize)
-                     .getBlobNrAndOffset<0, 1>({0, 100})
-                     .offset
-              << '\n';
+              << llama::mapping::SoA<UD, Name>(udSize).getBlobNrAndOffset<0, 1>({0, 100}).offset << '\n';
     std::cout << "sizeOf DatumDomain: " << llama::sizeOf<Name> << '\n';
 
     std::cout << type(llama::GetCoordFromTags<Name, st::Pos, st::X>()) << '\n';
@@ -162,61 +157,57 @@ int main(int argc, char ** argv)
     auto view = allocView(mapping);
 
     // defining a position in the user domain
-    const UD pos{0, 0};
+    const UD pos {0, 0};
 
     st::Options Options_;
-    const auto Weight_ = st::Weight{};
+    const auto Weight_ = st::Weight {};
 
     // using the position in the user domain and a tree coord or a uid in the
     // datum domain to get the reference to an element in the view
-    float & position_x = view(pos).access<0, 0>();
-    double & momentum_z = view[pos].access<st::Momentum, st::Z>();
-    int & weight = view[{0, 0}](llama::DatumCoord<2>());
-    int & weight_2 = view(pos)(Weight_);
-    bool & options_2 = view[0](st::Options())(llama::DatumCoord<2>());
-    bool & options_3 = view(pos)(Options_)(llama::DatumCoord<2>());
+    float& position_x = view(pos).access<0, 0>();
+    double& momentum_z = view[pos].access<st::Momentum, st::Z>();
+    int& weight = view[{0, 0}](llama::DatumCoord<2>());
+    int& weight_2 = view(pos)(Weight_);
+    bool& options_2 = view[0](st::Options())(llama::DatumCoord<2>());
+    bool& options_3 = view(pos)(Options_)(llama::DatumCoord<2>());
     // printing the address and distances of the element in the memory. This
     // will change based on the chosen mapping. When array of struct is chosen
     // instead the elements will be much closer than with struct of array.
     std::cout << &position_x << '\n';
-    std::cout << &momentum_z << " " << (size_t)&momentum_z - (size_t)&position_x
-              << '\n';
-    std::cout << &weight << " " << (size_t)&weight - (size_t)&momentum_z
-              << '\n';
-    std::cout << &options_2 << " " << (size_t)&options_2 - (size_t)&weight
-              << '\n';
+    std::cout << &momentum_z << " " << (size_t) &momentum_z - (size_t) &position_x << '\n';
+    std::cout << &weight << " " << (size_t) &weight - (size_t) &momentum_z << '\n';
+    std::cout << &options_2 << " " << (size_t) &options_2 - (size_t) &weight << '\n';
 
     // iterating over the user domain at run time to do some stuff with the
     // allocated data
-    for(size_t x = 0; x < udSize[0]; ++x)
+    for (size_t x = 0; x < udSize[0]; ++x)
         // telling the compiler that all data in the following loop is
         // independent to each other and thus can be vectorized
         LLAMA_INDEPENDENT_DATA
-    for(size_t y = 0; y < udSize[1]; ++y)
+    for (size_t y = 0; y < udSize[1]; ++y)
     {
         // Defining a functor for a given virtual datum
-        SetZeroFunctor<decltype(view(x, y))> szf{view(x, y)};
+        SetZeroFunctor<decltype(view(x, y))> szf {view(x, y)};
         // Applying the functor for the sub tree 0,0 (pos.x), so basically
         // only for this element
-        llama::forEach<Name>(szf, llama::DatumCoord<0, 0>{});
+        llama::forEach<Name>(szf, llama::DatumCoord<0, 0> {});
         // Applying the functor for the sub tree momentum (0), so basically
         // for momentum.z, and momentum.x
-        llama::forEach<Name>(szf, st::Momentum{});
+        llama::forEach<Name>(szf, st::Momentum {});
         // the user domain address can be given as multiple comma separated
         // arguments or as one parameter of type user domain
         view({x, y}) = double(x + y) / double(udSize[0] + udSize[1]);
     }
 
-    for(size_t x = 0; x < udSize[0]; ++x) LLAMA_INDEPENDENT_DATA
-    for(size_t y = 0; y < udSize[1]; ++y)
+    for (size_t x = 0; x < udSize[0]; ++x)
+        LLAMA_INDEPENDENT_DATA
+    for (size_t y = 0; y < udSize[1]; ++y)
     {
         // Showing different options of access data with llama. Internally
         // all do the same data- and mappingwise
         auto datum = view(x, y);
-        datum.access<st::Pos, st::X>()
-            += datum.access<llama::DatumCoord<1, 0>>();
-        datum.access(st::Pos(), st::Y())
-            += datum.access(llama::DatumCoord<1, 1>());
+        datum.access<st::Pos, st::X>() += datum.access<llama::DatumCoord<1, 0>>();
+        datum.access(st::Pos(), st::Y()) += datum.access(llama::DatumCoord<1, 1>());
         datum(st::Pos(), st::Z()) += datum(llama::DatumCoord<2>());
 
         // It is also possible to work only on a part of data.
@@ -224,8 +215,10 @@ int main(int argc, char ** argv)
     }
     double sum = 0.0;
     LLAMA_INDEPENDENT_DATA
-    for(size_t x = 0; x < udSize[0]; ++x) LLAMA_INDEPENDENT_DATA
-    for(size_t y = 0; y < udSize[1]; ++y) sum += view(x, y).access<1, 0>();
+    for (size_t x = 0; x < udSize[0]; ++x)
+        LLAMA_INDEPENDENT_DATA
+    for (size_t y = 0; y < udSize[1]; ++y)
+        sum += view(x, y).access<1, 0>();
     std::cout << "Sum: " << sum << '\n';
 
     return 0;

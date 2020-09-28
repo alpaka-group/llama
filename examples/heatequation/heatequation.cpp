@@ -25,19 +25,12 @@ using DatumDomain = double;
 
 struct HeatEquationKernel
 {
-    template<typename View>
-    void operator()(
-        uint32_t idx,
-        const View & uCurrBuf,
-        View & uNextBuf,
-        uint32_t extent,
-        double dx,
-        double dt) const
+    template <typename View>
+    void operator()(uint32_t idx, const View& uCurrBuf, View& uNextBuf, uint32_t extent, double dx, double dt) const
     {
         const auto r = dt / (dx * dx);
-        if(idx > 0 && idx < extent - 1u)
-            uNextBuf[idx] = uCurrBuf[idx] * (1.0 - 2.0 * r)
-                + uCurrBuf[idx - 1] * r + uCurrBuf[idx + 1] * r;
+        if (idx > 0 && idx < extent - 1u)
+            uNextBuf[idx] = uCurrBuf[idx] * (1.0 - 2.0 * r) + uCurrBuf[idx - 1] * r + uCurrBuf[idx + 1] * r;
     }
 };
 
@@ -62,27 +55,25 @@ auto main() -> int
     const auto dt = tMax / static_cast<double>(numTimeSteps - 1);
 
     const auto r = dt / (dx * dx);
-    if(r > 0.5)
+    if (r > 0.5)
     {
-        std::cerr << "Stability condition check failed: dt/dx^2 = " << r
-                  << ", it is required to be <= 0.5\n";
+        std::cerr << "Stability condition check failed: dt/dx^2 = " << r << ", it is required to be <= 0.5\n";
         return 1;
     }
 
-    const auto mapping
-        = llama::mapping::AoS{llama::UserDomain{numNodesX}, DatumDomain{}};
+    const auto mapping = llama::mapping::AoS {llama::UserDomain {numNodesX}, DatumDomain {}};
     auto uNext = llama::allocView(mapping);
     auto uCurr = llama::allocView(mapping);
 
     // Apply initial conditions for the test problem
-    for(uint32_t i = 0; i < numNodesX; i++)
+    for (uint32_t i = 0; i < numNodesX; i++)
         uCurr[i] = exactSolution(i * dx, 0.0);
 
     const auto start = std::chrono::high_resolution_clock::now();
     HeatEquationKernel kernel;
-    for(int step = 0; step < numTimeSteps; step++)
+    for (int step = 0; step < numTimeSteps; step++)
     {
-        for(auto i = 0; i < numNodesX; i++)
+        for (auto i = 0; i < numNodesX; i++)
             kernel(i, uCurr, uNext, numNodesX, dx, dt);
 
         // We assume the boundary conditions are constant and so these values
@@ -90,29 +81,26 @@ auto main() -> int
         std::swap(uNext, uCurr);
     }
     const auto end = std::chrono::high_resolution_clock::now();
-    std::cout << "Runtime: "
-              << std::chrono::duration<double>(end - start).count() << "s\n";
+    std::cout << "Runtime: " << std::chrono::duration<double>(end - start).count() << "s\n";
 
     // Calculate error
     double maxError = 0.0;
-    for(uint32_t i = 0; i < numNodesX; i++)
+    for (uint32_t i = 0; i < numNodesX; i++)
     {
-        const auto error
-            = std::abs(uNext[i] - exactSolution(i * dx, tMax));
+        const auto error = std::abs(uNext[i] - exactSolution(i * dx, tMax));
         maxError = std::max(maxError, error);
     }
 
     const auto errorThreshold = 1e-5;
     const auto resultCorrect = (maxError < errorThreshold);
-    if(resultCorrect)
+    if (resultCorrect)
     {
         std::cout << "Execution results correct!\n";
         return 0;
     }
     else
     {
-        std::cout << "Execution results incorrect: error = " << maxError
-                  << " (the grid resolution may be too low)\n";
+        std::cout << "Execution results incorrect: error = " << maxError << " (the grid resolution may be too low)\n";
         return 2;
     }
 }

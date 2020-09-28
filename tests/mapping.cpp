@@ -34,11 +34,11 @@ using Particle = llama::DS<
 TEST_CASE("address.AoS")
 {
     using UserDomain = llama::UserDomain<2>;
-    auto userDomain = UserDomain{16, 16};
-    auto mapping = llama::mapping::AoS<UserDomain, Particle>{userDomain};
+    auto userDomain = UserDomain {16, 16};
+    auto mapping = llama::mapping::AoS<UserDomain, Particle> {userDomain};
 
     {
-        const auto coord = UserDomain{0, 0};
+        const auto coord = UserDomain {0, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 8);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 16);
@@ -53,7 +53,7 @@ TEST_CASE("address.AoS")
     }
 
     {
-        const auto coord = UserDomain{0, 1};
+        const auto coord = UserDomain {0, 1};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 56);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 64);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 72);
@@ -68,7 +68,7 @@ TEST_CASE("address.AoS")
     }
 
     {
-        const auto coord = UserDomain{1, 0};
+        const auto coord = UserDomain {1, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 904);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 912);
@@ -86,13 +86,11 @@ TEST_CASE("address.AoS")
 TEST_CASE("address.AoS.fortran")
 {
     using UserDomain = llama::UserDomain<2>;
-    auto userDomain = UserDomain{16, 16};
-    auto mapping = llama::mapping::
-        AoS<UserDomain, Particle, llama::mapping::LinearizeUserDomainFortran>{
-            userDomain};
+    auto userDomain = UserDomain {16, 16};
+    auto mapping = llama::mapping::AoS<UserDomain, Particle, llama::mapping::LinearizeUserDomainFortran> {userDomain};
 
     {
-        const auto coord = UserDomain{0, 0};
+        const auto coord = UserDomain {0, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 8);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 16);
@@ -107,7 +105,7 @@ TEST_CASE("address.AoS.fortran")
     }
 
     {
-        const auto coord = UserDomain{0, 1};
+        const auto coord = UserDomain {0, 1};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 904);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 912);
@@ -122,7 +120,7 @@ TEST_CASE("address.AoS.fortran")
     }
 
     {
-        const auto coord = UserDomain{1, 0};
+        const auto coord = UserDomain {1, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 56);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 64);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 72);
@@ -140,13 +138,11 @@ TEST_CASE("address.AoS.fortran")
 TEST_CASE("address.AoS.morton")
 {
     using UserDomain = llama::UserDomain<2>;
-    auto userDomain = UserDomain{16, 16};
-    auto mapping = llama::mapping::
-        AoS<UserDomain, Particle, llama::mapping::LinearizeUserDomainMorton>{
-            userDomain};
+    auto userDomain = UserDomain {16, 16};
+    auto mapping = llama::mapping::AoS<UserDomain, Particle, llama::mapping::LinearizeUserDomainMorton> {userDomain};
 
     {
-        const auto coord = UserDomain{0, 0};
+        const auto coord = UserDomain {0, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 8);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 16);
@@ -161,7 +157,7 @@ TEST_CASE("address.AoS.morton")
     }
 
     {
-        const auto coord = UserDomain{0, 1};
+        const auto coord = UserDomain {0, 1};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 56);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 64);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 72);
@@ -176,7 +172,7 @@ TEST_CASE("address.AoS.morton")
     }
 
     {
-        const auto coord = UserDomain{1, 0};
+        const auto coord = UserDomain {1, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 112);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 120);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 128);
@@ -194,11 +190,11 @@ TEST_CASE("address.AoS.morton")
 TEST_CASE("address.SoA")
 {
     using UserDomain = llama::UserDomain<2>;
-    auto userDomain = UserDomain{16, 16};
-    auto mapping = llama::mapping::SoA<UserDomain, Particle>{userDomain};
+    auto userDomain = UserDomain {16, 16};
+    auto mapping = llama::mapping::SoA<UserDomain, Particle> {userDomain};
 
     {
-        const auto coord = UserDomain{0, 0};
+        const auto coord = UserDomain {0, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2048);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 4096);
@@ -213,7 +209,7 @@ TEST_CASE("address.SoA")
     }
 
     {
-        const auto coord = UserDomain{0, 1};
+        const auto coord = UserDomain {0, 1};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 8);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2056);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 4104);
@@ -228,7 +224,7 @@ TEST_CASE("address.SoA")
     }
 
     {
-        const auto coord = UserDomain{1, 0};
+        const auto coord = UserDomain {1, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 128);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2176);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 4224);
@@ -246,13 +242,11 @@ TEST_CASE("address.SoA")
 TEST_CASE("address.SoA.fortran")
 {
     using UserDomain = llama::UserDomain<2>;
-    auto userDomain = UserDomain{16, 16};
-    auto mapping = llama::mapping::
-        SoA<UserDomain, Particle, llama::mapping::LinearizeUserDomainFortran>{
-            userDomain};
+    auto userDomain = UserDomain {16, 16};
+    auto mapping = llama::mapping::SoA<UserDomain, Particle, llama::mapping::LinearizeUserDomainFortran> {userDomain};
 
     {
-        const auto coord = UserDomain{0, 0};
+        const auto coord = UserDomain {0, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2048);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 4096);
@@ -267,7 +261,7 @@ TEST_CASE("address.SoA.fortran")
     }
 
     {
-        const auto coord = UserDomain{0, 1};
+        const auto coord = UserDomain {0, 1};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 128);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2176);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 4224);
@@ -282,7 +276,7 @@ TEST_CASE("address.SoA.fortran")
     }
 
     {
-        const auto coord = UserDomain{1, 0};
+        const auto coord = UserDomain {1, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 8);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2056);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 4104);
@@ -300,16 +294,15 @@ TEST_CASE("address.SoA.fortran")
 TEST_CASE("address.SoA.morton")
 {
     struct Value
-    {};
+    {
+    };
 
     using UserDomain = llama::UserDomain<2>;
-    auto userDomain = UserDomain{16, 16};
-    auto mapping = llama::mapping::
-        SoA<UserDomain, Particle, llama::mapping::LinearizeUserDomainMorton>{
-            userDomain};
+    auto userDomain = UserDomain {16, 16};
+    auto mapping = llama::mapping::SoA<UserDomain, Particle, llama::mapping::LinearizeUserDomainMorton> {userDomain};
 
     {
-        const auto coord = UserDomain{0, 0};
+        const auto coord = UserDomain {0, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2048);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 4096);
@@ -324,7 +317,7 @@ TEST_CASE("address.SoA.morton")
     }
 
     {
-        const auto coord = UserDomain{0, 1};
+        const auto coord = UserDomain {0, 1};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 8);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2056);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 4104);
@@ -339,7 +332,7 @@ TEST_CASE("address.SoA.morton")
     }
 
     {
-        const auto coord = UserDomain{1, 0};
+        const auto coord = UserDomain {1, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 16);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2064);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 4112);
@@ -357,11 +350,11 @@ TEST_CASE("address.SoA.morton")
 TEST_CASE("address.AoSoA.4")
 {
     using UserDomain = llama::UserDomain<2>;
-    auto userDomain = UserDomain{16, 16};
-    auto mapping = llama::mapping::AoSoA<UserDomain, Particle, 4>{userDomain};
+    auto userDomain = UserDomain {16, 16};
+    auto mapping = llama::mapping::AoSoA<UserDomain, Particle, 4> {userDomain};
 
     {
-        const auto coord = UserDomain{0, 0};
+        const auto coord = UserDomain {0, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 32);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 64);
@@ -376,7 +369,7 @@ TEST_CASE("address.AoSoA.4")
     }
 
     {
-        const auto coord = UserDomain{0, 1};
+        const auto coord = UserDomain {0, 1};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 8);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 40);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 72);
@@ -391,7 +384,7 @@ TEST_CASE("address.AoSoA.4")
     }
 
     {
-        const auto coord = UserDomain{1, 0};
+        const auto coord = UserDomain {1, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 928);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 960);

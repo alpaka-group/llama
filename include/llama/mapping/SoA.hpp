@@ -13,7 +13,7 @@ namespace llama::mapping
     /// \tparam LinearizeUserDomainFunctor Defines how the
     /// user domain should be mapped into linear numbers and how big the linear
     /// domain gets.
-    template<
+    template <
         typename T_UserDomain,
         typename T_DatumDomain,
         typename LinearizeUserDomainFunctor = LinearizeUserDomainCpp>
@@ -26,30 +26,26 @@ namespace llama::mapping
         SoA() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        SoA(UserDomain size, DatumDomain = {}) : userDomainSize(size) {}
+        SoA(UserDomain size, DatumDomain = {}) : userDomainSize(size)
+        {
+        }
 
         LLAMA_FN_HOST_ACC_INLINE
         auto getBlobSize(std::size_t const) const -> std::size_t
         {
-            return LinearizeUserDomainFunctor{}.size(userDomainSize)
-                * sizeOf<DatumDomain>;
+            return LinearizeUserDomainFunctor {}.size(userDomainSize) * sizeOf<DatumDomain>;
         }
 
-        template<std::size_t... DatumDomainCoord>
-        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(UserDomain coord) const
-            -> NrAndOffset
+        template <std::size_t... DatumDomainCoord>
+        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(UserDomain coord) const -> NrAndOffset
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            const auto offset
-                = LinearizeUserDomainFunctor{}(coord, userDomainSize)
-                    * sizeof(
-                        GetType<DatumDomain, DatumCoord<DatumDomainCoord...>>)
-                + offsetOf<
-                      DatumDomain,
-                      DatumDomainCoord...> * LinearizeUserDomainFunctor{}.size(userDomainSize);
+            const auto offset = LinearizeUserDomainFunctor {}(coord, userDomainSize)
+                    * sizeof(GetType<DatumDomain, DatumCoord<DatumDomainCoord...>>)
+                + offsetOf<DatumDomain, DatumDomainCoord...> * LinearizeUserDomainFunctor {}.size(userDomainSize);
             return {0, offset};
         }
 
         UserDomain userDomainSize = {};
     };
-}
+} // namespace llama::mapping

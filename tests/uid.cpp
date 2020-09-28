@@ -77,10 +77,8 @@ TEST_CASE("GetTag")
 
 TEST_CASE("hasSameTags")
 {
-    using PosDomain
-        = llama::GetType<Particle, llama::GetCoordFromTags<Particle, tag::Pos>>;
-    using VelDomain
-        = llama::GetType<Particle, llama::GetCoordFromTags<Particle, tag::Vel>>;
+    using PosDomain = llama::GetType<Particle, llama::GetCoordFromTags<Particle, tag::Pos>>;
+    using VelDomain = llama::GetType<Particle, llama::GetCoordFromTags<Particle, tag::Vel>>;
 
     STATIC_REQUIRE(
         llama::hasSameTags<
