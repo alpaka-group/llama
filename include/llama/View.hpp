@@ -66,21 +66,6 @@ namespace llama
     template<typename Mapping, typename BlobType>
     inline constexpr auto IsView<View<Mapping, BlobType>> = true;
 
-    namespace internal
-    {
-        template<typename View>
-        struct ViewByRefHolder
-        {
-            View & view;
-        };
-
-        template<typename View>
-        struct ViewByValueHolder
-        {
-            View view;
-        };
-    }
-
     template<
         typename View,
         typename BoundDatumDomain = DatumCoord<>,
