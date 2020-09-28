@@ -29,16 +29,15 @@ using Particle = llama::DS<
 >;
 // clang-format on
 
-template<typename T_VirtualDatum>
+template<typename VirtualDatum>
 struct SqrtFunctor
 {
-    template<typename T_OuterCoord, typename T_InnerCoord>
-    auto operator()(T_OuterCoord, T_InnerCoord) -> void
+    template<typename Coord>
+    void operator()(Coord coord)
     {
-        using Coord = llama::Cat<T_OuterCoord, T_InnerCoord>;
-        vd(Coord()) *= std::sqrt(vd(Coord()));
+        vd(coord) *= std::sqrt(vd(coord));
     }
-    T_VirtualDatum vd;
+    VirtualDatum vd;
 };
 
 TEST_CASE("fast virtual view")

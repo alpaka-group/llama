@@ -44,8 +44,8 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE
         Trace(Mapping mapping) : mapping(mapping)
         {
-            forEach<DatumDomain>([&](auto, auto inner) {
-                datumHits[internal::coordName<DatumDomain>(inner)] = 0;
+            forEach<DatumDomain>([&](auto coord) {
+                datumHits[internal::coordName<DatumDomain>(coord)] = 0;
             });
         }
 
