@@ -14,70 +14,63 @@ namespace llama
 {
     namespace internal
     {
-        template<std::size_t... Coords>
+        template <std::size_t... Coords>
         auto toVec(DatumCoord<Coords...>) -> std::vector<std::size_t>
         {
             return {Coords...};
         }
 
-        template<typename Tag>
+        template <typename Tag>
         auto tagToString(Tag tag)
         {
             return structName(tag);
         }
 
-        template<std::size_t N>
+        template <std::size_t N>
         auto tagToString(Index<N>)
         {
             return std::to_string(N);
         }
 
-        template<
+        template <
             typename DatumDomain,
             std::size_t... CoordsBefore,
             std::size_t CoordCurrent,
             std::size_t... CoordsAfter>
         void collectTagsAsStrings(
-            std::vector<std::string> & v,
+            std::vector<std::string>& v,
             DatumCoord<CoordsBefore...> before,
             DatumCoord<CoordCurrent, CoordsAfter...> after)
         {
-            using Tag = GetTag<
-                DatumDomain,
-                DatumCoord<CoordsBefore..., CoordCurrent>>;
-            v.push_back(tagToString(Tag{}));
-            if constexpr(sizeof...(CoordsAfter) > 0)
+            using Tag = GetTag<DatumDomain, DatumCoord<CoordsBefore..., CoordCurrent>>;
+            v.push_back(tagToString(Tag {}));
+            if constexpr (sizeof...(CoordsAfter) > 0)
                 collectTagsAsStrings<DatumDomain>(
                     v,
-                    DatumCoord<CoordsBefore..., CoordCurrent>{},
-                    DatumCoord<CoordsAfter...>{});
+                    DatumCoord<CoordsBefore..., CoordCurrent> {},
+                    DatumCoord<CoordsAfter...> {});
         }
 
-        template<typename DatumDomain, std::size_t... Coords>
+        template <typename DatumDomain, std::size_t... Coords>
         auto tagsAsStrings(DatumCoord<Coords...>) -> std::vector<std::string>
         {
             std::vector<std::string> v;
-            collectTagsAsStrings<DatumDomain>(
-                v, DatumCoord<>{}, DatumCoord<Coords...>{});
+            collectTagsAsStrings<DatumDomain>(v, DatumCoord<> {}, DatumCoord<Coords...> {});
             return v;
         }
 
-        template<typename Mapping, typename UserDomain, std::size_t... Coords>
-        auto mappingOffset(
-            const Mapping & mapping,
-            const UserDomain & udCoord,
-            DatumCoord<Coords...>)
+        template <typename Mapping, typename UserDomain, std::size_t... Coords>
+        auto mappingOffset(const Mapping& mapping, const UserDomain& udCoord, DatumCoord<Coords...>)
         {
-            return mapping.template getBlobNrAndOffset<Coords...>(udCoord)
-                .offset;
+            return mapping.template getBlobNrAndOffset<Coords...>(udCoord).offset;
         }
-    }
+    } // namespace internal
 
     /// Returns an SVG image visualizing the memory layout created by the given
     /// mapping. The created memory blocks are wrapped after wrapByteCount
     /// bytes.
-    template<typename Mapping>
-    auto toSvg(const Mapping & mapping, int wrapByteCount = 64) -> std::string
+    template <typename Mapping>
+    auto toSvg(const Mapping& mapping, int wrapByteCount = 64) -> std::string
     {
         using UserDomain = typename Mapping::UserDomain;
         using DatumDomain = typename Mapping::DatumDomain;
@@ -94,12 +87,11 @@ namespace llama
         };
         std::vector<DatumInfo> infos;
 
-        for(auto udCoord : UserDomainCoordRange{mapping.userDomainSize})
+        for (auto udCoord : UserDomainCoordRange {mapping.userDomainSize})
         {
             forEach<DatumDomain>([&](auto coord) {
-                constexpr int size
-                    = sizeof(GetType<DatumDomain, decltype(coord)>);
-                infos.push_back(DatumInfo{
+                constexpr int size = sizeof(GetType<DatumDomain, decltype(coord)>);
+                infos.push_back(DatumInfo {
                     udCoord,
                     internal::toVec(coord),
                     internal::tagsAsStrings<DatumDomain>(coord),
@@ -108,26 +100,26 @@ namespace llama
             });
         }
 
-        auto formatDDTags = [](const std::vector<std::string> & tags) {
+        auto formatDDTags = [](const std::vector<std::string>& tags) {
             std::string s;
-            for(const auto & tag : tags)
+            for (const auto& tag : tags)
             {
-                if(!s.empty())
+                if (!s.empty())
                     s += ".";
                 s += tag;
             }
             return s;
         };
 
-        auto formatUdCoord = [](const auto & coord) {
-            if constexpr(std::is_same_v<decltype(coord), llama::UserDomain<1>>)
+        auto formatUdCoord = [](const auto& coord) {
+            if constexpr (std::is_same_v<decltype(coord), llama::UserDomain<1>>)
                 return std::to_string(coord[0]);
             else
             {
                 std::string s = "{";
-                for(auto v : coord)
+                for (auto v : coord)
                 {
-                    if(s.size() >= 2)
+                    if (s.size() >= 2)
                         s += ",";
                     s += std::to_string(v);
                 }
@@ -146,7 +138,7 @@ namespace llama
 )",
             byteSizeInPixel / 2);
 
-        for(const auto & info : infos)
+        for (const auto& info : infos)
         {
             const auto x = (info.offset % wrapByteCount) * byteSizeInPixel;
             const auto y = (info.offset / wrapByteCount) * byteSizeInPixel;
@@ -162,7 +154,7 @@ namespace llama
                 width,
                 byteSizeInPixel,
                 fill);
-            for(auto i = 1; i < info.size; i++)
+            for (auto i = 1; i < info.size; i++)
             {
                 svg += fmt::format(
                     R"(<line x1="{}" y1="{}" x2="{}" y2="{}" stroke="#777"/>
@@ -186,8 +178,8 @@ namespace llama
 
     /// Returns an HTML document visualizing the memory layout created by the
     /// given mapping. The visualization is resizeable.
-    template<typename Mapping>
-    auto toHtml(const Mapping & mapping) -> std::string
+    template <typename Mapping>
+    auto toHtml(const Mapping& mapping) -> std::string
     {
         using UserDomain = typename Mapping::UserDomain;
         using DatumDomain = typename Mapping::DatumDomain;
@@ -206,12 +198,11 @@ namespace llama
         };
         std::vector<DatumInfo> infos;
 
-        for(auto udCoord : UserDomainCoordRange{mapping.userDomainSize})
+        for (auto udCoord : UserDomainCoordRange {mapping.userDomainSize})
         {
             forEach<DatumDomain>([&](auto coord) {
-                constexpr int size
-                    = sizeof(GetType<DatumDomain, decltype(coord)>);
-                infos.push_back(DatumInfo{
+                constexpr int size = sizeof(GetType<DatumDomain, decltype(coord)>);
+                infos.push_back(DatumInfo {
                     udCoord,
                     internal::toVec(coord),
                     internal::tagsAsStrings<DatumDomain>(coord),
@@ -219,44 +210,39 @@ namespace llama
                     size});
             });
         }
-        std::sort(
-            begin(infos),
-            end(infos),
-            [](const DatumInfo & a, const DatumInfo & b) {
-                return a.offset < b.offset;
-            });
+        std::sort(begin(infos), end(infos), [](const DatumInfo& a, const DatumInfo& b) { return a.offset < b.offset; });
 
-        auto formatDDTags = [](const std::vector<std::string> & tags) {
+        auto formatDDTags = [](const std::vector<std::string>& tags) {
             std::string s;
-            for(const auto & tag : tags)
+            for (const auto& tag : tags)
             {
-                if(!s.empty())
+                if (!s.empty())
                     s += ".";
                 s += tag;
             }
             return s;
         };
 
-        auto cssClass = [](const std::vector<std::string> & tags) {
+        auto cssClass = [](const std::vector<std::string>& tags) {
             std::string s;
-            for(const auto & tag : tags)
+            for (const auto& tag : tags)
             {
-                if(!s.empty())
+                if (!s.empty())
                     s += "_";
                 s += tag;
             }
             return s;
         };
 
-        auto formatUdCoord = [](const auto & coord) {
-            if constexpr(std::is_same_v<decltype(coord), llama::UserDomain<1>>)
+        auto formatUdCoord = [](const auto& coord) {
+            if constexpr (std::is_same_v<decltype(coord), llama::UserDomain<1>>)
                 return std::to_string(coord[0]);
             else
             {
                 std::string s = "{";
-                for(auto v : coord)
+                for (auto v : coord)
                 {
-                    if(s.size() >= 2)
+                    if (s.size() >= 2)
                         s += ",";
                     s += std::to_string(v);
                 }
@@ -312,7 +298,7 @@ namespace llama
 <body>
     <header id="ruler">
 )");
-        for(auto i = 0; i < rulerLengthInBytes; i += rulerByteInterval)
+        for (auto i = 0; i < rulerLengthInBytes; i += rulerByteInterval)
             svg += fmt::format(
                 R"(</style>
         <div style="margin-left: {}px;">{}</div>)",
@@ -322,7 +308,7 @@ namespace llama
     </header>
 )");
 
-        for(const auto & info : infos)
+        for (const auto& info : infos)
         {
             const auto bgColor = boost::hash_value(info.ddIndices) & 0xFFFFFF;
 
@@ -337,4 +323,4 @@ namespace llama
 </html>)";
         return svg;
     }
-}
+} // namespace llama

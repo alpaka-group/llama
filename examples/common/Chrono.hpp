@@ -6,7 +6,9 @@
 
 struct Chrono
 {
-    Chrono() : last(std::chrono::system_clock::now()) {}
+    Chrono() : last(std::chrono::system_clock::now())
+    {
+    }
 
     void printAndReset(std::string eventName)
     {

@@ -12,7 +12,7 @@ namespace llama::mapping
     /// \tparam LinearizeUserDomainFunctor Defines how the
     /// user domain should be mapped into linear numbers and how big the linear
     /// domain gets.
-    template<
+    template <
         typename T_UserDomain,
         typename T_DatumDomain,
         typename LinearizeUserDomainFunctor = LinearizeUserDomainCpp>
@@ -25,27 +25,24 @@ namespace llama::mapping
         AoS() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        AoS(UserDomain size, DatumDomain = {}) : userDomainSize(size) {}
-
-        LLAMA_FN_HOST_ACC_INLINE auto getBlobSize(std::size_t) const
-            -> std::size_t
+        AoS(UserDomain size, DatumDomain = {}) : userDomainSize(size)
         {
-            return LinearizeUserDomainFunctor{}.size(userDomainSize)
-                * sizeOf<DatumDomain>;
         }
 
-        template<std::size_t... DatumDomainCoord>
-        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(UserDomain coord) const
-            -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE auto getBlobSize(std::size_t) const -> std::size_t
+        {
+            return LinearizeUserDomainFunctor {}.size(userDomainSize) * sizeOf<DatumDomain>;
+        }
+
+        template <std::size_t... DatumDomainCoord>
+        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(UserDomain coord) const -> NrAndOffset
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            const auto offset
-                = LinearizeUserDomainFunctor{}(coord, userDomainSize)
-                    * sizeOf<
-                        DatumDomain> + offsetOf<DatumDomain, DatumDomainCoord...>;
+            const auto offset = LinearizeUserDomainFunctor {}(coord, userDomainSize)
+                    * sizeOf<DatumDomain> + offsetOf<DatumDomain, DatumDomainCoord...>;
             return {0, offset};
         }
 
         UserDomain userDomainSize;
     };
-}
+} // namespace llama::mapping

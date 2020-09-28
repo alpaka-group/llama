@@ -2,9 +2,9 @@
 
 #ifdef __cpp_concepts
 
-#include "Types.hpp"
+#    include "Types.hpp"
 
-#include <concepts>
+#    include <concepts>
 
 namespace llama
 {
@@ -18,6 +18,6 @@ namespace llama
         { m.getBlobNrAndOffset(typename M::UserDomain{}) } -> std::same_as<NrAndOffset>;
     };
     // clang-format on
-}
+} // namespace llama
 
 #endif
