@@ -122,10 +122,10 @@ namespace
 template<typename VirtualDatum>
 struct SetZeroFunctor
 {
-    template<typename OuterCoord, typename InnerCoord>
-    auto operator()(OuterCoord, InnerCoord) -> void
+    template<typename Coord>
+    void operator()(Coord coord)
     {
-        vd(llama::Cat<OuterCoord, InnerCoord>{}) = 0;
+        vd(coord) = 0;
     }
     VirtualDatum vd;
 };

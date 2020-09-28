@@ -116,25 +116,22 @@ namespace llama
         {
             using RightDatum
                 = VirtualDatum<RightView, RightBoundDatumDomain, RightOwnView>;
-            forEach<typename LeftDatum::AccessibleDatumDomain>(
-                [&](auto, auto leftInnerCoord) {
-                    using LeftInnerCoord = decltype(leftInnerCoord);
-                    forEach<typename RightDatum::AccessibleDatumDomain>(
-                        [&](auto, auto rightInnerCoord) {
-                            using RightInnerCoord = decltype(rightInnerCoord);
-                            if constexpr(
-                                hasSameTags<
-                                    typename LeftDatum::AccessibleDatumDomain,
-                                    LeftInnerCoord,
-                                    typename RightDatum::AccessibleDatumDomain,
-                                    RightInnerCoord>)
-                            {
-                                Functor{}(
-                                    left(leftInnerCoord),
-                                    right(rightInnerCoord));
-                            }
-                        });
+            forEach<
+                typename LeftDatum::AccessibleDatumDomain>([&](auto leftCoord) {
+                using LeftInnerCoord = decltype(leftCoord);
+                forEach<typename RightDatum::
+                            AccessibleDatumDomain>([&](auto rightCoord) {
+                    using RightInnerCoord = decltype(rightCoord);
+                    if constexpr(hasSameTags<
+                                     typename LeftDatum::AccessibleDatumDomain,
+                                     LeftInnerCoord,
+                                     typename RightDatum::AccessibleDatumDomain,
+                                     RightInnerCoord>)
+                    {
+                        Functor{}(left(leftCoord), right(rightCoord));
+                    }
                 });
+            });
             return left;
         }
 
@@ -157,9 +154,7 @@ namespace llama
             -> LeftDatum &
         {
             forEach<typename LeftDatum::AccessibleDatumDomain>(
-                [&](auto, auto leftInnerCoord) {
-                    Functor{}(left(leftInnerCoord), right);
-                });
+                [&](auto leftCoord) { Functor{}(left(leftCoord), right); });
             return left;
         }
 
@@ -177,25 +172,22 @@ namespace llama
             using RightDatum
                 = VirtualDatum<RightView, RightBoundDatumDomain, RightOwnView>;
             bool result = true;
-            forEach<typename LeftDatum::AccessibleDatumDomain>(
-                [&](auto, auto leftInnerCoord) {
-                    using LeftInnerCoord = decltype(leftInnerCoord);
-                    forEach<typename RightDatum::AccessibleDatumDomain>(
-                        [&](auto, auto rightInnerCoord) {
-                            using RightInnerCoord = decltype(rightInnerCoord);
-                            if constexpr(
-                                hasSameTags<
-                                    typename LeftDatum::AccessibleDatumDomain,
-                                    LeftInnerCoord,
-                                    typename RightDatum::AccessibleDatumDomain,
-                                    RightInnerCoord>)
-                            {
-                                result &= Functor{}(
-                                    left(leftInnerCoord),
-                                    right(rightInnerCoord));
-                            }
-                        });
+            forEach<
+                typename LeftDatum::AccessibleDatumDomain>([&](auto leftCoord) {
+                using LeftInnerCoord = decltype(leftCoord);
+                forEach<typename RightDatum::
+                            AccessibleDatumDomain>([&](auto rightCoord) {
+                    using RightInnerCoord = decltype(rightCoord);
+                    if constexpr(hasSameTags<
+                                     typename LeftDatum::AccessibleDatumDomain,
+                                     LeftInnerCoord,
+                                     typename RightDatum::AccessibleDatumDomain,
+                                     RightInnerCoord>)
+                    {
+                        result &= Functor{}(left(leftCoord), right(rightCoord));
+                    }
                 });
+            });
             return result;
         }
 
@@ -218,11 +210,12 @@ namespace llama
         {
             bool result = true;
             forEach<typename LeftDatum::AccessibleDatumDomain>(
-                [&](auto, auto leftInnerCoord) {
+                [&](auto leftCoord) {
                     result &= Functor{}(
-                        left(leftInnerCoord),
-                        static_cast<std::remove_reference_t<decltype(
-                            left(leftInnerCoord))>>(right));
+                        left(leftCoord),
+                        static_cast<
+                            std::remove_reference_t<decltype(left(leftCoord))>>(
+                            right));
                 });
             return result;
         }

@@ -96,14 +96,14 @@ namespace llama
 
         for(auto udCoord : UserDomainCoordRange{mapping.userDomainSize})
         {
-            forEach<DatumDomain>([&](auto outer, auto inner) {
+            forEach<DatumDomain>([&](auto coord) {
                 constexpr int size
-                    = sizeof(GetType<DatumDomain, decltype(inner)>);
+                    = sizeof(GetType<DatumDomain, decltype(coord)>);
                 infos.push_back(DatumInfo{
                     udCoord,
-                    internal::toVec(inner),
-                    internal::tagsAsStrings<DatumDomain>(inner),
-                    internal::mappingOffset(mapping, udCoord, inner),
+                    internal::toVec(coord),
+                    internal::tagsAsStrings<DatumDomain>(coord),
+                    internal::mappingOffset(mapping, udCoord, coord),
                     size});
             });
         }
@@ -184,8 +184,8 @@ namespace llama
         return svg;
     }
 
-    /// Returns an HTML document visualizing the memory layout created by the given
-    /// mapping. The visualization is resizeable.
+    /// Returns an HTML document visualizing the memory layout created by the
+    /// given mapping. The visualization is resizeable.
     template<typename Mapping>
     auto toHtml(const Mapping & mapping) -> std::string
     {
@@ -208,14 +208,14 @@ namespace llama
 
         for(auto udCoord : UserDomainCoordRange{mapping.userDomainSize})
         {
-            forEach<DatumDomain>([&](auto outer, auto inner) {
+            forEach<DatumDomain>([&](auto coord) {
                 constexpr int size
-                    = sizeof(GetType<DatumDomain, decltype(inner)>);
+                    = sizeof(GetType<DatumDomain, decltype(coord)>);
                 infos.push_back(DatumInfo{
                     udCoord,
-                    internal::toVec(inner),
-                    internal::tagsAsStrings<DatumDomain>(inner),
-                    internal::mappingOffset(mapping, udCoord, inner),
+                    internal::toVec(coord),
+                    internal::tagsAsStrings<DatumDomain>(coord),
+                    internal::mappingOffset(mapping, udCoord, coord),
                     size});
             });
         }
@@ -293,8 +293,8 @@ namespace llama
 }}
 )",
             byteSizeInPixel);
-        forEach<DatumDomain>([&](auto outer, auto inner) {
-            constexpr int size = sizeof(GetType<DatumDomain, decltype(inner)>);
+        forEach<DatumDomain>([&](auto coord) {
+            constexpr int size = sizeof(GetType<DatumDomain, decltype(coord)>);
 
             svg += fmt::format(
                 R"(.{} {{
@@ -302,9 +302,9 @@ namespace llama
     background-color: #{:X};
 }}
 )",
-                cssClass(internal::tagsAsStrings<DatumDomain>(inner)),
+                cssClass(internal::tagsAsStrings<DatumDomain>(coord)),
                 byteSizeInPixel * size,
-                boost::hash_value(internal::toVec(inner)) & 0xFFFFFF);
+                boost::hash_value(internal::toVec(coord)) & 0xFFFFFF);
         });
 
         svg += fmt::format(R"(</style>

@@ -61,7 +61,7 @@ Datum domain
 .. doxygentypedef:: llama::GetCoordFromTagsRelative
 
 .. doxygenfunction:: llama::forEach(Functor &&functor, Tags... baseTags)
-.. doxygenfunction:: llama::forEach(Functor &&functor, DatumCoord<Coords...> base)
+.. doxygenfunction:: llama::forEach(Functor &&functor, DatumCoord<Coords...> baseCoord)
 
 Datum coordinates
 -----------------

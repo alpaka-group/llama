@@ -320,29 +320,26 @@ The subtree is described either via a `DatumCoord` or a series of tags.
     // "functor" will be called for
     // * z.low
     // * z.high
-    llama::forEach<DatumDomain, z>(functor);
+    llama::forEach<DatumDomain>(functor, z{});
 
     // "functor" will be called for
     // * z.low
-    llama::forEach<DatumDomain, z, low>(functor);
+    llama::forEach<DatumDomain>(functor, z{}, low{});
 
     // "functor" will be called for
     // * z.high
-    llama::forEach<DatumDomain, llama::DatumCoord<2, 1>>(functor);
+    llama::forEach<DatumDomain>(functor, llama::DatumCoord<2, 1>{});
 
-The functor type itself is a struct which provides the :cpp:`operator()` for two different template parameters.
-The template parameters are the outer and inner coordinate in the datum domain tree.
-The outer coordinate is the optional subtree specification given to to :cpp:`llama::forEach` as a :cpp:`DatumCoord`.
-The inner coord is the leaf coordinate based on the outer coord.
-To get the full coodinate, outer and inner coordinate can be concatenated using :cpp:`llama::Cat`.
+The functor type itself is a struct which provides the :cpp:`operator()` with one template parameter,
+the coordinate of the leaf in the datum domain tree, the functor is called on.
 
 .. code-block:: C++
 
     template<typename VirtualDatum, typename Value>
     struct SetValueFunctor {
-        template<typename OuterCoord, typename InnerCoord>
-        void operator()(OuterCoord, InnerCoord) {
-            vd(llama::Cat<OuterCoord, InnerCoord>{}) = value;
+        template<typename Coord>
+        void operator()(Coord coord) {
+            vd(coord) = value;
         }
         VirtualDatum vd;
         const Value value;
@@ -356,8 +353,8 @@ To get the full coodinate, outer and inner coordinate can be concatenated using 
     llama::forEach<DatumDomain>(functor);
 
     // or using a lambda function:
-    llama::forEach<DatumDomain>([&](auto outer, auto inner) {
-        vd(llama::Cat<decltype(outer), decltype(inner)>{}) = value;
+    llama::forEach<DatumDomain>([&](auto coord) {
+        vd(coord) = value;
     });
 
 A more detailed example can be found in the

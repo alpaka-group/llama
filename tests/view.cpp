@@ -278,15 +278,15 @@ TEST_CASE("view.addresses")
     CHECK((size_t)&o3 - (size_t)&x == 14080);
 }
 
-template<typename T_VirtualDatum>
+template<typename VirtualDatum>
 struct SetZeroFunctor
 {
-    template<typename T_OuterCoord, typename T_InnerCoord>
-    void operator()(T_OuterCoord, T_InnerCoord)
+    template<typename Coord>
+    void operator()(Coord coord)
     {
-        vd(llama::Cat<T_OuterCoord, T_InnerCoord>{}) = 0;
+        vd(coord) = 0;
     }
-    T_VirtualDatum vd;
+    VirtualDatum vd;
 };
 
 TEST_CASE("view.iteration-and-access")

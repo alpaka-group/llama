@@ -12,37 +12,19 @@ namespace llama
 {
     namespace internal
     {
-        template<
-            typename T,
-            typename BaseDatumCoord,
-            std::size_t... InnerCoords,
-            typename Functor>
+        template<typename T, std::size_t... Coords, typename Functor>
         LLAMA_FN_HOST_ACC_INLINE void applyFunctorForEachLeaf(
             T,
-            BaseDatumCoord base,
-            DatumCoord<InnerCoords...> inner,
+            DatumCoord<Coords...> coord,
             Functor && functor)
         {
-            using InnerDatumCoord = decltype(inner);
-            if constexpr(
-                InnerDatumCoord::size >= BaseDatumCoord::size
-                && DatumCoordCommonPrefixIsSame<InnerDatumCoord, BaseDatumCoord>)
-                functor(
-                    base,
-                    DatumCoordFromList<boost::mp11::mp_drop_c<
-                        typename InnerDatumCoord::List,
-                        BaseDatumCoord::size>>{});
+            functor(coord);
         };
 
-        template<
-            typename... Children,
-            typename BaseDatumCoord,
-            std::size_t... InnerCoords,
-            typename Functor>
+        template<typename... Children, std::size_t... Coords, typename Functor>
         LLAMA_FN_HOST_ACC_INLINE void applyFunctorForEachLeaf(
             DatumStruct<Children...>,
-            BaseDatumCoord base,
-            DatumCoord<InnerCoords...> inner,
+            DatumCoord<Coords...>,
             Functor && functor)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
@@ -55,8 +37,7 @@ namespace llama
                 LLAMA_FORCE_INLINE_RECURSIVE
                 applyFunctorForEachLeaf(
                     GetDatumElementType<DatumElement>{},
-                    base,
-                    llama::DatumCoord<InnerCoords..., childIndex>{},
+                    llama::DatumCoord<Coords..., childIndex>{},
                     std::forward<Functor>(functor));
             });
         }
@@ -64,33 +45,31 @@ namespace llama
 
     /// Iterates over the datum domain tree and calls a functor on each element.
     /// \param functor Functor to execute at each element of. Needs to have
-    /// `operator()` with two template parameters for the base and the inner
-    /// coordinate in the datum domain tree, both will be a spezialization of
-    /// \ref DatumCoord.
-    /// \param base \ref DatumCoord at which the iteration should be started.
-    /// The functor is called on elements beneath this coordinate.
-    template<typename DatumDomain, typename Functor, std::size_t... Coords>
+    /// `operator()` with a template parameter for the \ref DatumCoord in the
+    /// datum domain tree.
+    /// \param baseCoord \ref DatumCoord at which the iteration should be
+    /// started. The functor is called on elements beneath this coordinate.
+    template<typename DatumDomain, typename Functor, std::size_t... Coord>
     LLAMA_FN_HOST_ACC_INLINE void
-    forEach(Functor && functor, DatumCoord<Coords...> base)
+    forEach(Functor && functor, DatumCoord<Coord...> baseCoord)
     {
         LLAMA_FORCE_INLINE_RECURSIVE
         internal::applyFunctorForEachLeaf(
-            DatumDomain{},
-            base,
-            DatumCoord<>{},
+            GetType<DatumDomain, DatumCoord<Coord...>>{},
+            baseCoord,
             std::forward<Functor>(functor));
     }
 
     /// Iterates over the datum domain tree and calls a functor on each element.
     /// \param functor Functor to execute at each element of. Needs to have
-    /// `operator()` with two template parameters for the base and the inner
-    /// coordinate in the datum domain tree, both will be a spezialization of
-    /// \ref DatumCoord.
+    /// `operator()` with a template parameter for the \ref DatumCoord in the
+    /// datum domain tree.
     /// \param baseTags Tags used to define where the iteration should be
     /// started. The functor is called on elements beneath this coordinate.
     template<typename DatumDomain, typename Functor, typename... Tags>
     LLAMA_FN_HOST_ACC_INLINE void forEach(Functor && functor, Tags... baseTags)
     {
+        LLAMA_FORCE_INLINE_RECURSIVE
         forEach<DatumDomain>(
             std::forward<Functor>(functor),
             GetCoordFromTags<DatumDomain, Tags...>{});
