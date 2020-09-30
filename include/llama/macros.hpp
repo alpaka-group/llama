@@ -54,7 +54,7 @@
 /// "resides" on the host, the accelerator (the offloading device) or both.
 /// LLAMA supports this with marking every function needed on an accelerator
 /// with `LLAMA_FN_HOST_ACC_INLINE`. When using such a language (or e.g. <a
-/// href="https://github.com/ComputationalRadiationPhysics/alpaka">alpaka</a>)
+/// href="https://github.com/alpaka-group/alpaka">alpaka</a>)
 /// this macro should be defined on the compiler's command line. E.g. for
 /// alpaka: -D'LLAMA_FN_HOST_ACC_INLINE=ALPAKA_FN_HOST_ACC'
 #        define LLAMA_FN_HOST_ACC_INLINE inline

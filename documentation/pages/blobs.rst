@@ -94,7 +94,7 @@ Alpaka
 The following descriptions are for alpaka users.
 Without an understanding of alpaka they may hard to understand.
 
-LLAMA features some examples using `alpaka <https://github.com/ComputationalRadiationPhysics/alpaka>`_ for the abstraction of computation parallelization.
+LLAMA features some examples using `alpaka <https://github.com/alpaka-group/alpaka>`_ for the abstraction of computation parallelization.
 Alpaka has its own memory allocation functions for different memory regions (e.g. host, device and shared memory).
 Additionally there are some cuda-inherited rules which make e.g. sharing memory regions hard (e.g. no possibility to use a :cpp:`std::shared_ptr` on a GPU).
 

@@ -10,7 +10,7 @@ This often requires separate code paths depending on the target system.
 But even then, sometimes projects last for decades while new architectures rise and fall, making it is dangerous to settle for a specific data structure.
 
 Performance portable parallelism to exhaust multi-, manycore and GPU hardware is addressed in recent developments like
-`alpaka <https://github.com/ComputationalRadiationPhysics/alpaka>`_ or
+`alpaka <https://github.com/alpaka-group/alpaka>`_ or
 `Kokkos <https://github.com/kokkos/kokkos>`_.
 
 However, efficient use of a system's memory and cache hierarchies is crucial as well and equally heterogeneous.
@@ -76,7 +76,7 @@ computation devices, the image sensor data format and the problem size may vary
 and a fast and easy adaption of the code is needed.
 
 The shipped
-`examples <https://github.com/ComputationalRadiationPhysics/llama/tree/master/examples>`_
+`examples <https://github.com/alpaka-group/llama/tree/master/examples>`_
 of LLAMA try to showcase the implemented feature in the intended usage.
 
 Challenges

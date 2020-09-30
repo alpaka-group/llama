@@ -7,7 +7,7 @@ Getting LLAMA
 -------------
 
 The most recent version of LLAMA can be found at
-`GitHub <https://github.com/ComputationalRadiationPhysics/llama>`_.
+`GitHub <https://github.com/alpaka-group/llama>`_.
 
 All examples use CMake and the library itself provides a
 :bash:`llama-config.cmake` to be found by CMake. Although LLAMA is a header-only

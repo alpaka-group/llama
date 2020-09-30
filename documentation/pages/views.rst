@@ -92,7 +92,7 @@ but as the elements of this datum may not be in contiguous in memory, it is call
 
 Nevertheless, it can be used like a real local object.
 A virtual datum can be passed as an argument to a function (as seen in the
-`nbody example <https://github.com/ComputationalRadiationPhysics/llama/blob/master/examples/nbody/nbody.cpp>`_
+`nbody example <https://github.com/alpaka-group/llama/blob/master/examples/nbody/nbody.cpp>`_
 ).
 Furthermore, several arithmetic and logical operatores are overloaded:
 
@@ -230,7 +230,7 @@ This enables e.g. to easily add a velocity to a position like this:
     datum(pos{}) += datum(vel{});
 
 This is e.g. used in the
-`nbody example <https://github.com/ComputationalRadiationPhysics/llama/blob/master/examples/nbody/nbody.cpp>`_
+`nbody example <https://github.com/alpaka-group/llama/blob/master/examples/nbody/nbody.cpp>`_
 to update the particle velocity based on the distances of particles and to
 update the position after one time step movement with the velocity.
 
@@ -358,7 +358,7 @@ the coordinate of the leaf in the datum domain tree, the functor is called on.
     });
 
 A more detailed example can be found in the
-`simpletest example <https://github.com/ComputationalRadiationPhysics/llama/blob/master/examples/simpletest/simpletest.cpp>`_.
+`simpletest example <https://github.com/alpaka-group/llama/blob/master/examples/simpletest/simpletest.cpp>`_.
 
 Thoughts on copies between views
 --------------------------------
@@ -399,7 +399,7 @@ same mapping but possibly different than in :math:`A` **and** :math:`B` the copy
 problem can be split to smaller chunks of memory. It makes also sense to combine
 this approach with an asynchronous workflow where reindexing, copying and
 computation are overloayed as e.g. seen in the
-`async copy example <https://github.com/ComputationalRadiationPhysics/llama/blob/master/examples/asynccopy/asynccopy.cpp>`_.
+`async copy example <https://github.com/alpaka-group/llama/blob/master/examples/asynccopy/asynccopy.cpp>`_.
 
 Another benefit is, that the creating and copying of the intermediate view can
 be analyzed and optimized by the compiler (e.g. with vector operations).
