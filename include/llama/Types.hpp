@@ -16,30 +16,30 @@ namespace llama
     {
     };
 
-    /// The run-time specified user domain.
-    /// \tparam Dim compile time dimensionality of the user domain
+    /// The run-time specified array domain.
+    /// \tparam Dim compile time dimensionality of the array domain
     template <std::size_t Dim>
-    struct UserDomain : Array<std::size_t, Dim>
+    struct ArrayDomain : Array<std::size_t, Dim>
     {
     };
 
-    static_assert(std::is_trivially_default_constructible_v<UserDomain<1>>); // so UserDomain<1>{} will produce a zeroed
+    static_assert(std::is_trivially_default_constructible_v<ArrayDomain<1>>); // so ArrayDomain<1>{} will produce a zeroed
                                                                              // coord. Should hold for all dimensions,
                                                                              // but just checking for <1> here.
 
     template <typename... Args>
-    UserDomain(Args...) -> UserDomain<sizeof...(Args)>;
+    ArrayDomain(Args...) -> ArrayDomain<sizeof...(Args)>;
 } // namespace llama
 
 namespace std
 {
     template <size_t N>
-    struct tuple_size<llama::UserDomain<N>> : integral_constant<size_t, N>
+    struct tuple_size<llama::ArrayDomain<N>> : integral_constant<size_t, N>
     {
     };
 
     template <size_t I, size_t N>
-    struct tuple_element<I, llama::UserDomain<N>>
+    struct tuple_element<I, llama::ArrayDomain<N>>
     {
         using type = size_t;
     };

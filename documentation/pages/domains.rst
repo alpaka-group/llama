@@ -6,7 +6,7 @@ Domains
 =======
 
 As mentioned in the section before, LLAMA distinguishes between the user and the
-datum domain. The most important difference is that the user domain is defined
+datum domain. The most important difference is that the array domain is defined
 at *run time* whereas the datum domain is defined at *compile time*. This allows
 to make the problem size itself a run time value but leaves the compiler room
 to optimize the data access.
@@ -16,22 +16,22 @@ to optimize the data access.
 User domain
 -----------
 
-The user domain is an :math:`N`-dimensional array with :math:`N` itself being a
+The array domain is an :math:`N`-dimensional array with :math:`N` itself being a
 compile time value but with run time values inside. LLAMA brings its own
 :ref:`array class <label-api-array>` for such kind of data structs which is
 ready for interoperability with hardware accelerator C++ dialects such as CUDA
 (Nvidia) or HIP (AMD), or abstraction libraries such as the already mentioned
 alpaka.
 
-A definition of a three-dimensional user domain of the size
+A definition of a three-dimensional array domain of the size
 :math:`128 \times 256 \times 32` looks like this:
 
 .. code-block:: C++
 
-    llama::UserDomain userDomainSize{128, 256, 32};
+    llama::ArrayDomain userDomainSize{128, 256, 32};
 
 The template arguments are deduced by the compiler using `CTAD <https://en.cppreference.com/w/cpp/language/class_template_argument_deduction>`_.
-The full type of :cpp:`userDomainSize` is :cpp:`llama::UserDomain<3>`.
+The full type of :cpp:`userDomainSize` is :cpp:`llama::ArrayDomain<3>`.
 
 .. _label-dd:
 

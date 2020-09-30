@@ -16,22 +16,22 @@ using DatumDomain = llama::DS<
 
 TEST_CASE("view.default-ctor")
 {
-    using UserDomain = llama::UserDomain<2>;
-    constexpr UserDomain viewSize {16, 16};
+    using ArrayDomain = llama::ArrayDomain<2>;
+    constexpr ArrayDomain viewSize {16, 16};
 
-    [[maybe_unused]] llama::View<llama::mapping::SoA<UserDomain, DatumDomain>, std::byte*> view1;
-    [[maybe_unused]] llama::View<llama::mapping::AoS<UserDomain, DatumDomain>, std::byte*> view2;
-    [[maybe_unused]] llama::View<llama::mapping::One<UserDomain, DatumDomain>, std::byte*> view3;
-    [[maybe_unused]] llama::View<llama::mapping::tree::Mapping<UserDomain, DatumDomain, llama::Tuple<>>, std::byte*>
+    [[maybe_unused]] llama::View<llama::mapping::SoA<ArrayDomain, DatumDomain>, std::byte*> view1;
+    [[maybe_unused]] llama::View<llama::mapping::AoS<ArrayDomain, DatumDomain>, std::byte*> view2;
+    [[maybe_unused]] llama::View<llama::mapping::One<ArrayDomain, DatumDomain>, std::byte*> view3;
+    [[maybe_unused]] llama::View<llama::mapping::tree::Mapping<ArrayDomain, DatumDomain, llama::Tuple<>>, std::byte*>
         view4;
 }
 
 TEST_CASE("view.move")
 {
-    using UserDomain = llama::UserDomain<2>;
-    constexpr UserDomain viewSize {16, 16};
+    using ArrayDomain = llama::ArrayDomain<2>;
+    constexpr ArrayDomain viewSize {16, 16};
 
-    using Mapping = llama::mapping::SoA<UserDomain, DatumDomain>;
+    using Mapping = llama::mapping::SoA<ArrayDomain, DatumDomain>;
     auto view1 = allocView(Mapping(viewSize));
 
     decltype(view1) view2;
@@ -42,10 +42,10 @@ TEST_CASE("view.move")
 
 TEST_CASE("view.swap")
 {
-    using UserDomain = llama::UserDomain<2>;
-    constexpr UserDomain viewSize {16, 16};
+    using ArrayDomain = llama::ArrayDomain<2>;
+    constexpr ArrayDomain viewSize {16, 16};
 
-    using Mapping = llama::mapping::SoA<UserDomain, DatumDomain>;
+    using Mapping = llama::mapping::SoA<ArrayDomain, DatumDomain>;
     auto view1 = allocView(Mapping(viewSize));
     auto view2 = allocView(Mapping(viewSize));
 
@@ -60,10 +60,10 @@ TEST_CASE("view.swap")
 
 TEST_CASE("view.allocator.Vector")
 {
-    using UserDomain = llama::UserDomain<2>;
-    constexpr UserDomain viewSize {16, 16};
+    using ArrayDomain = llama::ArrayDomain<2>;
+    constexpr ArrayDomain viewSize {16, 16};
 
-    using Mapping = llama::mapping::SoA<UserDomain, DatumDomain>;
+    using Mapping = llama::mapping::SoA<ArrayDomain, DatumDomain>;
     auto view = allocView(Mapping(viewSize), llama::allocator::Vector {});
 
     for (auto i : llama::UserDomainCoordRange {viewSize})
@@ -72,10 +72,10 @@ TEST_CASE("view.allocator.Vector")
 
 TEST_CASE("view.allocator.SharedPtr")
 {
-    using UserDomain = llama::UserDomain<2>;
-    constexpr UserDomain viewSize {16, 16};
+    using ArrayDomain = llama::ArrayDomain<2>;
+    constexpr ArrayDomain viewSize {16, 16};
 
-    using Mapping = llama::mapping::SoA<UserDomain, DatumDomain>;
+    using Mapping = llama::mapping::SoA<ArrayDomain, DatumDomain>;
     auto view = allocView(Mapping(viewSize), llama::allocator::SharedPtr {});
 
     for (auto i : llama::UserDomainCoordRange {viewSize})
@@ -84,10 +84,10 @@ TEST_CASE("view.allocator.SharedPtr")
 
 TEST_CASE("view.allocator.stack")
 {
-    using UserDomain = llama::UserDomain<2>;
-    constexpr UserDomain viewSize {16, 16};
+    using ArrayDomain = llama::ArrayDomain<2>;
+    constexpr ArrayDomain viewSize {16, 16};
 
-    using Mapping = llama::mapping::SoA<UserDomain, DatumDomain>;
+    using Mapping = llama::mapping::SoA<ArrayDomain, DatumDomain>;
     auto view = allocView(Mapping(viewSize), llama::allocator::Stack<16 * 16 * llama::sizeOf<DatumDomain>> {});
 
     for (auto i : llama::UserDomainCoordRange {viewSize})
@@ -96,11 +96,11 @@ TEST_CASE("view.allocator.stack")
 
 TEST_CASE("view.non-memory-owning")
 {
-    using UserDomain = llama::UserDomain<1>;
-    UserDomain userDomain {256};
+    using ArrayDomain = llama::ArrayDomain<1>;
+    ArrayDomain arrayDomain {256};
 
-    using Mapping = llama::mapping::SoA<UserDomain, DatumDomain>;
-    Mapping mapping {userDomain};
+    using Mapping = llama::mapping::SoA<ArrayDomain, DatumDomain>;
+    Mapping mapping {arrayDomain};
 
     std::vector<std::byte> storage(mapping.getBlobSize(0));
     auto view = llama::View<Mapping, std::byte*> {mapping, {storage.data()}};
@@ -143,17 +143,17 @@ using Particle = llama::DS<
 
 TEST_CASE("view.access")
 {
-    using UserDomain = llama::UserDomain<2>;
-    UserDomain userDomain {16, 16};
+    using ArrayDomain = llama::ArrayDomain<2>;
+    ArrayDomain arrayDomain {16, 16};
 
-    using Mapping = llama::mapping::SoA<UserDomain, Particle>;
-    Mapping mapping {userDomain};
+    using Mapping = llama::mapping::SoA<ArrayDomain, Particle>;
+    Mapping mapping {arrayDomain};
     auto view = allocView(mapping);
 
     zeroStorage(view);
 
     auto l = [](auto& view) {
-        const UserDomain pos {0, 0};
+        const ArrayDomain pos {0, 0};
         CHECK((view(pos) == view[pos]));
         CHECK((view(pos) == view[{0, 0}]));
         CHECK((view(pos) == view({0, 0})));
@@ -186,11 +186,11 @@ TEST_CASE("view.access")
 
 TEST_CASE("view.assign-one-datum")
 {
-    using UserDomain = llama::UserDomain<2>;
-    UserDomain userDomain {16, 16};
+    using ArrayDomain = llama::ArrayDomain<2>;
+    ArrayDomain arrayDomain {16, 16};
 
-    using Mapping = llama::mapping::SoA<UserDomain, Particle>;
-    Mapping mapping {userDomain};
+    using Mapping = llama::mapping::SoA<ArrayDomain, Particle>;
+    Mapping mapping {arrayDomain};
     auto view = allocView(mapping);
 
     auto datum = llama::allocVirtualDatumStack<Particle>();
@@ -221,14 +221,14 @@ TEST_CASE("view.assign-one-datum")
 
 TEST_CASE("view.addresses")
 {
-    using UserDomain = llama::UserDomain<2>;
-    UserDomain userDomain {16, 16};
+    using ArrayDomain = llama::ArrayDomain<2>;
+    ArrayDomain arrayDomain {16, 16};
 
-    using Mapping = llama::mapping::SoA<UserDomain, Particle>;
-    Mapping mapping {userDomain};
+    using Mapping = llama::mapping::SoA<ArrayDomain, Particle>;
+    Mapping mapping {arrayDomain};
     auto view = allocView(mapping);
 
-    const UserDomain pos {0, 0};
+    const ArrayDomain pos {0, 0};
     auto& x = view(pos).access<tag::Pos, tag::X>();
     auto& y = view(pos).access<tag::Pos, tag::Y>();
     auto& z = view(pos).access<tag::Pos, tag::Z>();
@@ -266,44 +266,44 @@ struct SetZeroFunctor
 
 TEST_CASE("view.iteration-and-access")
 {
-    using UserDomain = llama::UserDomain<2>;
-    UserDomain userDomain {16, 16};
+    using ArrayDomain = llama::ArrayDomain<2>;
+    ArrayDomain arrayDomain {16, 16};
 
-    using Mapping = llama::mapping::SoA<UserDomain, Particle>;
-    Mapping mapping {userDomain};
+    using Mapping = llama::mapping::SoA<ArrayDomain, Particle>;
+    Mapping mapping {arrayDomain};
     auto view = allocView(mapping);
 
     zeroStorage(view);
 
-    for (size_t x = 0; x < userDomain[0]; ++x)
-        for (size_t y = 0; y < userDomain[1]; ++y)
+    for (size_t x = 0; x < arrayDomain[0]; ++x)
+        for (size_t y = 0; y < arrayDomain[1]; ++y)
         {
             SetZeroFunctor<decltype(view(x, y))> szf {view(x, y)};
             llama::forEach<Particle>(szf, llama::DatumCoord<0, 0> {});
             llama::forEach<Particle>(szf, tag::Momentum {});
-            view({x, y}) = double(x + y) / double(userDomain[0] + userDomain[1]);
+            view({x, y}) = double(x + y) / double(arrayDomain[0] + arrayDomain[1]);
         }
 
     double sum = 0.0;
-    for (size_t x = 0; x < userDomain[0]; ++x)
-        for (size_t y = 0; y < userDomain[1]; ++y)
+    for (size_t x = 0; x < arrayDomain[0]; ++x)
+        for (size_t y = 0; y < arrayDomain[1]; ++y)
             sum += view(x, y).access<2, 0>();
     CHECK(sum == 120.0);
 }
 
 TEST_CASE("view.datum-access")
 {
-    using UserDomain = llama::UserDomain<2>;
-    UserDomain userDomain {16, 16};
+    using ArrayDomain = llama::ArrayDomain<2>;
+    ArrayDomain arrayDomain {16, 16};
 
-    using Mapping = llama::mapping::SoA<UserDomain, Particle>;
-    Mapping mapping {userDomain};
+    using Mapping = llama::mapping::SoA<ArrayDomain, Particle>;
+    Mapping mapping {arrayDomain};
     auto view = allocView(mapping);
 
     zeroStorage(view);
 
-    for (size_t x = 0; x < userDomain[0]; ++x)
-        for (size_t y = 0; y < userDomain[1]; ++y)
+    for (size_t x = 0; x < arrayDomain[0]; ++x)
+        for (size_t y = 0; y < arrayDomain[1]; ++y)
         {
             auto datum = view(x, y);
             datum.access<tag::Pos, tag::X>() += datum.access<llama::DatumCoord<2, 0>>();
@@ -313,8 +313,8 @@ TEST_CASE("view.datum-access")
         }
 
     double sum = 0.0;
-    for (size_t x = 0; x < userDomain[0]; ++x)
-        for (size_t y = 0; y < userDomain[1]; ++y)
+    for (size_t x = 0; x < arrayDomain[0]; ++x)
+        for (size_t y = 0; y < arrayDomain[1]; ++y)
             sum += view(x, y).access<2, 0>();
 
     CHECK(sum == 0.0);

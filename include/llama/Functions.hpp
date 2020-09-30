@@ -210,15 +210,15 @@ namespace llama
     struct UserDomainCoordIterator
         : boost::iterator_facade<
               UserDomainCoordIterator<Dim>,
-              UserDomain<Dim>,
+              ArrayDomain<Dim>,
               boost::forward_traversal_tag,
-              UserDomain<Dim>>
+              ArrayDomain<Dim>>
     {
-        UserDomainCoordIterator(UserDomain<Dim> size, UserDomain<Dim> current) : size(size), current(current)
+        UserDomainCoordIterator(ArrayDomain<Dim> size, ArrayDomain<Dim> current) : size(size), current(current)
         {
         }
 
-        auto dereference() const -> UserDomain<Dim>
+        auto dereference() const -> ArrayDomain<Dim>
         {
             return current;
         }
@@ -241,32 +241,32 @@ namespace llama
             return size == other.size && current == other.current;
         }
 
-        UserDomain<Dim> size;
-        UserDomain<Dim> current;
+        ArrayDomain<Dim> size;
+        ArrayDomain<Dim> current;
     };
 
-    /// Range allowing to iterate over all indices in a \ref UserDomain.
+    /// Range allowing to iterate over all indices in a \ref ArrayDomain.
     template <std::size_t Dim>
     struct UserDomainCoordRange
     {
-        UserDomainCoordRange(UserDomain<Dim> size) : size(size)
+        UserDomainCoordRange(ArrayDomain<Dim> size) : size(size)
         {
         }
 
         auto begin() const -> UserDomainCoordIterator<Dim>
         {
-            return {size, UserDomain<Dim> {}};
+            return {size, ArrayDomain<Dim> {}};
         }
 
         auto end() const -> UserDomainCoordIterator<Dim>
         {
-            UserDomain<Dim> e {};
+            ArrayDomain<Dim> e {};
             e[0] = size[0];
             return {size, e};
         }
 
     private:
-        UserDomain<Dim> size;
+        ArrayDomain<Dim> size;
     };
 
     template <typename S>

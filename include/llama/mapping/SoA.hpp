@@ -19,14 +19,14 @@ namespace llama::mapping
         typename LinearizeUserDomainFunctor = LinearizeUserDomainCpp>
     struct SoA
     {
-        using UserDomain = T_UserDomain;
+        using ArrayDomain = T_UserDomain;
         using DatumDomain = T_DatumDomain;
         static constexpr std::size_t blobCount = 1;
 
         SoA() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        SoA(UserDomain size, DatumDomain = {}) : userDomainSize(size)
+        SoA(ArrayDomain size, DatumDomain = {}) : userDomainSize(size)
         {
         }
 
@@ -37,7 +37,7 @@ namespace llama::mapping
         }
 
         template <std::size_t... DatumDomainCoord>
-        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(UserDomain coord) const -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             const auto offset = LinearizeUserDomainFunctor {}(coord, userDomainSize)
@@ -46,6 +46,6 @@ namespace llama::mapping
             return {0, offset};
         }
 
-        UserDomain userDomainSize = {};
+        ArrayDomain userDomainSize = {};
     };
 } // namespace llama::mapping

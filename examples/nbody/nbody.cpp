@@ -79,17 +79,17 @@ namespace usellama
     {
         constexpr FP ts = 0.0001f;
 
-        const auto userDomain = llama::UserDomain {PROBLEM_SIZE};
+        const auto arrayDomain = llama::ArrayDomain {PROBLEM_SIZE};
         auto mapping = [&] {
             if constexpr (MAPPING == 0)
-                return llama::mapping::AoS {userDomain, Particle {}};
+                return llama::mapping::AoS {arrayDomain, Particle {}};
             if constexpr (MAPPING == 1)
-                return llama::mapping::SoA {userDomain, Particle {}};
+                return llama::mapping::SoA {arrayDomain, Particle {}};
             if constexpr (MAPPING == 2)
-                return llama::mapping::tree::Mapping {userDomain, llama::Tuple {}, Particle {}};
+                return llama::mapping::tree::Mapping {arrayDomain, llama::Tuple {}, Particle {}};
             if constexpr (MAPPING == 3)
                 return llama::mapping::tree::Mapping {
-                    userDomain,
+                    arrayDomain,
                     llama::Tuple {llama::mapping::tree::functor::LeafOnlyRT()},
                     Particle {}};
         }();

@@ -59,8 +59,8 @@ namespace llama
             return v;
         }
 
-        template <typename Mapping, typename UserDomain, std::size_t... Coords>
-        auto mappingOffset(const Mapping& mapping, const UserDomain& udCoord, DatumCoord<Coords...>)
+        template <typename Mapping, typename ArrayDomain, std::size_t... Coords>
+        auto mappingOffset(const Mapping& mapping, const ArrayDomain& udCoord, DatumCoord<Coords...>)
         {
             return mapping.template getBlobNrAndOffset<Coords...>(udCoord).offset;
         }
@@ -72,14 +72,14 @@ namespace llama
     template <typename Mapping>
     auto toSvg(const Mapping& mapping, int wrapByteCount = 64) -> std::string
     {
-        using UserDomain = typename Mapping::UserDomain;
+        using ArrayDomain = typename Mapping::ArrayDomain;
         using DatumDomain = typename Mapping::DatumDomain;
 
         constexpr auto byteSizeInPixel = 30;
 
         struct DatumInfo
         {
-            UserDomain udCoord;
+            ArrayDomain udCoord;
             std::vector<std::size_t> ddIndices;
             std::vector<std::string> ddTags;
             std::size_t offset;
@@ -112,7 +112,7 @@ namespace llama
         };
 
         auto formatUdCoord = [](const auto& coord) {
-            if constexpr (std::is_same_v<decltype(coord), llama::UserDomain<1>>)
+            if constexpr (std::is_same_v<decltype(coord), llama::ArrayDomain<1>>)
                 return std::to_string(coord[0]);
             else
             {
@@ -181,7 +181,7 @@ namespace llama
     template <typename Mapping>
     auto toHtml(const Mapping& mapping) -> std::string
     {
-        using UserDomain = typename Mapping::UserDomain;
+        using ArrayDomain = typename Mapping::ArrayDomain;
         using DatumDomain = typename Mapping::DatumDomain;
 
         constexpr auto byteSizeInPixel = 30;
@@ -190,7 +190,7 @@ namespace llama
 
         struct DatumInfo
         {
-            UserDomain udCoord;
+            ArrayDomain udCoord;
             std::vector<std::size_t> ddIndices;
             std::vector<std::string> ddTags;
             std::size_t offset;
@@ -235,7 +235,7 @@ namespace llama
         };
 
         auto formatUdCoord = [](const auto& coord) {
-            if constexpr (std::is_same_v<decltype(coord), llama::UserDomain<1>>)
+            if constexpr (std::is_same_v<decltype(coord), llama::ArrayDomain<1>>)
                 return std::to_string(coord[0]);
             else
             {

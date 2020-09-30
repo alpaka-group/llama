@@ -166,22 +166,22 @@ namespace llama::mapping::tree
     } // namespace internal
 
     /// An experimental attempt to provide a general purpose description of a
-    /// mapping. \ref UserDomain and datum domain are represented by a compile
+    /// mapping. \ref ArrayDomain and datum domain are represented by a compile
     /// time tree data structure. This tree is mapped into memory by means of a
     /// breadth-first tree traversal. By specifying additional tree operations,
     /// the tree can be modified at compile time before being mapped to memory.
     template <typename T_UserDomain, typename T_DatumDomain, typename TreeOperationList>
     struct Mapping
     {
-        using UserDomain = T_UserDomain;
+        using ArrayDomain = T_UserDomain;
         using DatumDomain = T_DatumDomain;
-        using BasicTree = TreeFromDomains<UserDomain, DatumDomain>;
+        using BasicTree = TreeFromDomains<ArrayDomain, DatumDomain>;
         // TODO, support more than one blob
         static constexpr std::size_t blobCount = 1;
 
         using MergedFunctors = internal::MergeFunctors<BasicTree, TreeOperationList>;
 
-        UserDomain userDomainSize = {};
+        ArrayDomain userDomainSize = {};
         BasicTree basicTree;
         MergedFunctors mergedFunctors;
 
@@ -191,7 +191,7 @@ namespace llama::mapping::tree
         Mapping() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        Mapping(UserDomain size, TreeOperationList treeOperationList, DatumDomain = {})
+        Mapping(ArrayDomain size, TreeOperationList treeOperationList, DatumDomain = {})
             : userDomainSize(size)
             , basicTree(createTree<DatumDomain>(size))
             , mergedFunctors(basicTree, treeOperationList)
@@ -206,7 +206,7 @@ namespace llama::mapping::tree
         }
 
         template <std::size_t... DatumDomainCoord>
-        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(UserDomain coord) const -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
         {
             auto const basicTreeCoord = createTreeCoord<DatumCoord<DatumDomainCoord...>>(coord);
             auto const resultTreeCoord = mergedFunctors.basicCoordToResultCoord(basicTreeCoord, basicTree);

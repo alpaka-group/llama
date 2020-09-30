@@ -40,11 +40,11 @@ void dump(const Mapping& mapping, std::string filename)
 
 TEST_CASE("dump")
 {
-    using UserDomain = llama::UserDomain<2>;
-    UserDomain userDomain {8, 8};
+    using ArrayDomain = llama::ArrayDomain<2>;
+    ArrayDomain arrayDomain {8, 8};
 
-    dump(llama::mapping::AoS<UserDomain, Particle> {userDomain}, "AoSMapping");
-    dump(llama::mapping::SoA<UserDomain, Particle> {userDomain}, "SoAMapping");
-    dump(llama::mapping::AoSoA<UserDomain, Particle, 8> {userDomain}, "AoSoAMapping8");
-    dump(llama::mapping::AoSoA<UserDomain, Particle, 32> {userDomain}, "AoSoAMapping32");
+    dump(llama::mapping::AoS<ArrayDomain, Particle> {arrayDomain}, "AoSMapping");
+    dump(llama::mapping::SoA<ArrayDomain, Particle> {arrayDomain}, "SoAMapping");
+    dump(llama::mapping::AoSoA<ArrayDomain, Particle, 8> {arrayDomain}, "AoSoAMapping8");
+    dump(llama::mapping::AoSoA<ArrayDomain, Particle, 32> {arrayDomain}, "AoSoAMapping32");
 }
