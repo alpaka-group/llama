@@ -66,7 +66,7 @@ TEST_CASE("view.allocator.Vector")
     using Mapping = llama::mapping::SoA<ArrayDomain, DatumDomain>;
     auto view = allocView(Mapping(viewSize), llama::allocator::Vector {});
 
-    for (auto i : llama::UserDomainCoordRange {viewSize})
+    for (auto i : llama::ArrayDomainIndexRange {viewSize})
         view(i) = 42;
 }
 
@@ -78,7 +78,7 @@ TEST_CASE("view.allocator.SharedPtr")
     using Mapping = llama::mapping::SoA<ArrayDomain, DatumDomain>;
     auto view = allocView(Mapping(viewSize), llama::allocator::SharedPtr {});
 
-    for (auto i : llama::UserDomainCoordRange {viewSize})
+    for (auto i : llama::ArrayDomainIndexRange {viewSize})
         view(i) = 42;
 }
 
@@ -90,7 +90,7 @@ TEST_CASE("view.allocator.stack")
     using Mapping = llama::mapping::SoA<ArrayDomain, DatumDomain>;
     auto view = allocView(Mapping(viewSize), llama::allocator::Stack<16 * 16 * llama::sizeOf<DatumDomain>> {});
 
-    for (auto i : llama::UserDomainCoordRange {viewSize})
+    for (auto i : llama::ArrayDomainIndexRange {viewSize})
         view(i) = 42;
 }
 

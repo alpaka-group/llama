@@ -105,23 +105,23 @@ TEST_CASE("ArrayDomain.ctor")
     CHECK(ud[0] == 0);
 }
 
-TEST_CASE("UserDomainCoordRange1D")
+TEST_CASE("ArrayDomainIndexRange1D")
 {
     llama::ArrayDomain<1> ud {3};
 
     std::vector<llama::ArrayDomain<1>> coords;
-    for (auto coord : llama::UserDomainCoordRange {ud})
+    for (auto coord : llama::ArrayDomainIndexRange {ud})
         coords.push_back(coord);
 
     CHECK(coords == std::vector<llama::ArrayDomain<1>> {{0}, {1}, {2}});
 }
 
-TEST_CASE("UserDomainCoordRange2D")
+TEST_CASE("ArrayDomainIndexRange2D")
 {
     llama::ArrayDomain<2> ud {3, 3};
 
     std::vector<llama::ArrayDomain<2>> coords;
-    for (auto coord : llama::UserDomainCoordRange {ud})
+    for (auto coord : llama::ArrayDomainIndexRange {ud})
         coords.push_back(coord);
 
     CHECK(
@@ -129,12 +129,12 @@ TEST_CASE("UserDomainCoordRange2D")
         == std::vector<llama::ArrayDomain<2>> {{0, 0}, {0, 1}, {0, 2}, {1, 0}, {1, 1}, {1, 2}, {2, 0}, {2, 1}, {2, 2}});
 }
 
-TEST_CASE("UserDomainCoordRange3D")
+TEST_CASE("ArrayDomainIndexRange3D")
 {
     llama::ArrayDomain<3> ud {3, 3, 3};
 
     std::vector<llama::ArrayDomain<3>> coords;
-    for (auto coord : llama::UserDomainCoordRange {ud})
+    for (auto coord : llama::ArrayDomainIndexRange {ud})
         coords.push_back(coord);
 
     CHECK(
@@ -146,11 +146,11 @@ TEST_CASE("UserDomainCoordRange3D")
         });
 }
 
-TEST_CASE("UserDomainCoordRange3D.destructering")
+TEST_CASE("ArrayDomainIndexRange3D.destructering")
 {
     llama::ArrayDomain<3> ud {1, 1, 1};
 
-    for (auto [x, y, z] : llama::UserDomainCoordRange {ud})
+    for (auto [x, y, z] : llama::ArrayDomainIndexRange {ud})
     {
         CHECK(x == 0);
         CHECK(y == 0);

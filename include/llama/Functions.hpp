@@ -205,16 +205,16 @@ namespace llama
     using GetCoordFromTagsRelative =
         typename internal::GetCoordFromTagsRelativeImpl<DatumDomain, BaseDatumCoord, Tags...>::type;
 
-    /// Iterator supporting \ref UserDomainCoordRange.
+    /// Iterator supporting \ref ArrayDomainIndexRange.
     template <std::size_t Dim>
-    struct UserDomainCoordIterator
+    struct ArrayDomainIndexIterator
         : boost::iterator_facade<
-              UserDomainCoordIterator<Dim>,
+              ArrayDomainIndexIterator<Dim>,
               ArrayDomain<Dim>,
               boost::forward_traversal_tag,
               ArrayDomain<Dim>>
     {
-        UserDomainCoordIterator(ArrayDomain<Dim> size, ArrayDomain<Dim> current) : size(size), current(current)
+        ArrayDomainIndexIterator(ArrayDomain<Dim> size, ArrayDomain<Dim> current) : size(size), current(current)
         {
         }
 
@@ -236,7 +236,7 @@ namespace llama
             current[0] = size[0];
         }
 
-        auto equal(const UserDomainCoordIterator& other) const -> bool
+        auto equal(const ArrayDomainIndexIterator& other) const -> bool
         {
             return size == other.size && current == other.current;
         }
@@ -247,18 +247,18 @@ namespace llama
 
     /// Range allowing to iterate over all indices in a \ref ArrayDomain.
     template <std::size_t Dim>
-    struct UserDomainCoordRange
+    struct ArrayDomainIndexRange
     {
-        UserDomainCoordRange(ArrayDomain<Dim> size) : size(size)
+        ArrayDomainIndexRange(ArrayDomain<Dim> size) : size(size)
         {
         }
 
-        auto begin() const -> UserDomainCoordIterator<Dim>
+        auto begin() const -> ArrayDomainIndexIterator<Dim>
         {
             return {size, ArrayDomain<Dim> {}};
         }
 
-        auto end() const -> UserDomainCoordIterator<Dim>
+        auto end() const -> ArrayDomainIndexIterator<Dim>
         {
             ArrayDomain<Dim> e {};
             e[0] = size[0];

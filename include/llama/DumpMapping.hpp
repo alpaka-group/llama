@@ -87,7 +87,7 @@ namespace llama
         };
         std::vector<DatumInfo> infos;
 
-        for (auto udCoord : UserDomainCoordRange {mapping.userDomainSize})
+        for (auto udCoord : ArrayDomainIndexRange {mapping.userDomainSize})
         {
             forEach<DatumDomain>([&](auto coord) {
                 constexpr int size = sizeof(GetType<DatumDomain, decltype(coord)>);
@@ -198,7 +198,7 @@ namespace llama
         };
         std::vector<DatumInfo> infos;
 
-        for (auto udCoord : UserDomainCoordRange {mapping.userDomainSize})
+        for (auto udCoord : ArrayDomainIndexRange {mapping.userDomainSize})
         {
             forEach<DatumDomain>([&](auto coord) {
                 constexpr int size = sizeof(GetType<DatumDomain, decltype(coord)>);
