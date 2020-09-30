@@ -1,5 +1,0 @@
-var structllama_1_1GetTypeImpl_3_01T__DatumDomain_00_01T__firstDatumDomainCoord_00_01T__datumDomainCoords_8_8_8_01_4 =
-[
-    [ "_DateElement", "structllama_1_1GetTypeImpl_3_01T__DatumDomain_00_01T__firstDatumDomainCoord_00_01T__datumDomainCoords_8_8_8_01_4.html#a9203f9136fecb0243a3001f1e11d619e", null ],
-    [ "type", "structllama_1_1GetTypeImpl_3_01T__DatumDomain_00_01T__firstDatumDomainCoord_00_01T__datumDomainCoords_8_8_8_01_4.html#a3b966e004884a8efe44e9499bcf8f09f", null ]
-];

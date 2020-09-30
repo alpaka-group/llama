@@ -1,5 +1,0 @@
-var structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord_3_01T__UserDomain_00_01T__fic35488dd11491e76cce095c6927fe1f5 =
-[
-    [ "Result", "structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord_3_01T__UserDomain_00_01T__fic35488dd11491e76cce095c6927fe1f5.html#a70622037d237073f383c68d41a9a9f60", null ],
-    [ "operator()", "structllama_1_1mapping_1_1tree_1_1internal_1_1UserDomainToTreeCoord_3_01T__UserDomain_00_01T__fic35488dd11491e76cce095c6927fe1f5.html#ac00a81753d1a5bb70660756874e42b22", null ]
-];

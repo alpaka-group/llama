@@ -1,12 +1,5 @@
 var searchData=
 [
-  ['getcoordfromuid',['GetCoordFromUID',['../namespacellama.html#a3953132518a1c5bd14cbacc8107975db',1,'llama']]],
-  ['getcoordfromuidrelative',['GetCoordFromUIDRelative',['../namespacellama.html#a2a66c0b18aabc9c5ad839c9f79e70023',1,'llama']]],
-  ['getdatumelementtype',['GetDatumElementType',['../namespacellama.html#a554a797d5fff9070b3c61d7584dc15d5',1,'llama']]],
-  ['getdatumelementuid',['GetDatumElementUID',['../namespacellama.html#a29d5fdaf4a5f23aab704f936a53fd68c',1,'llama']]],
-  ['gettupletype',['GetTupleType',['../namespacellama.html#aa3255f46d3b3fbcd50ca0d002dfc279c',1,'llama']]],
-  ['gettype',['GetType',['../namespacellama.html#a9b77530642d73f0464c605e6140391cb',1,'llama']]],
-  ['gettypefromdatumcoord',['GetTypeFromDatumCoord',['../namespacellama.html#a22362d58c566945f0f8178e2af1b0013',1,'llama']]],
-  ['gettypefromuid',['GetTypeFromUID',['../namespacellama.html#a611592a97449d75fa735130181876eda',1,'llama']]],
-  ['getuid',['GetUID',['../namespacellama.html#afc1dd86868706ba5f5ee39ec0c588534',1,'llama']]]
+  ['identifier_813',['Identifier',['../structllama_1_1mapping_1_1tree_1_1Leaf.html#ab89192d274c77b6ad40f6ad77969bd83',1,'llama::mapping::tree::Leaf::Identifier()'],['../structllama_1_1mapping_1_1tree_1_1Node.html#a5e6da3990d901660569f2c7bcc6daa5a',1,'llama::mapping::tree::Node::Identifier()']]],
+  ['index_814',['Index',['../namespacellama.html#aca85f43b30448a4661f0c64c8aa44e0e',1,'llama']]]
 ];

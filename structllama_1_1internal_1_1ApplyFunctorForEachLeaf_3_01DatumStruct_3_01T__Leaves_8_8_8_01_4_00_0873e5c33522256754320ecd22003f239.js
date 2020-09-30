@@ -1,4 +1,0 @@
-var structllama_1_1internal_1_1ApplyFunctorForEachLeaf_3_01DatumStruct_3_01T__Leaves_8_8_8_01_4_00_0873e5c33522256754320ecd22003f239 =
-[
-    [ "apply", "structllama_1_1internal_1_1ApplyFunctorForEachLeaf_3_01DatumStruct_3_01T__Leaves_8_8_8_01_4_00_0873e5c33522256754320ecd22003f239.html#adf595be1564452a4b580d34c3545b26b", null ]
-];

@@ -1,4 +1,0 @@
-var structllama_1_1internal_1_1GetUIDfromDatumCoord_3_01T__DatumElement_00_01DatumCoord_3_01T__datumDomainCoords_8_8_8_01_4_4 =
-[
-    [ "type", "structllama_1_1internal_1_1GetUIDfromDatumCoord_3_01T__DatumElement_00_01DatumCoord_3_01T__datumDomainCoords_8_8_8_01_4_4.html#abe6a727b029546a70ae3b37c4326c388", null ]
-];

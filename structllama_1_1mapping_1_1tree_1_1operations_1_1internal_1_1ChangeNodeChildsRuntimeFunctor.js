@@ -1,8 +1,0 @@
-var structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntimeFunctor =
-[
-    [ "OperatorSpecialization", "structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntimeFunctor_1_1OperatorSpecialization.html", null ],
-    [ "OperatorSpecialization< T_Element, typename T_Element::IsTreeElementWithChilds >", "structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntimeFunctor_1_1Opb138e16406a10ffab62da47710117dd3.html", "structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntimeFunctor_1_1Opb138e16406a10ffab62da47710117dd3" ],
-    [ "OperatorSpecialization< T_Element, typename T_Element::IsTreeElementWithoutChilds >", "structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntimeFunctor_1_1Op899d53f87ff9b7118f098c51cf7a1432.html", "structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntimeFunctor_1_1Op899d53f87ff9b7118f098c51cf7a1432" ],
-    [ "operator()", "structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntimeFunctor.html#a0be6566bfebf300e79842760a2d545eb", null ],
-    [ "newValue", "structllama_1_1mapping_1_1tree_1_1operations_1_1internal_1_1ChangeNodeChildsRuntimeFunctor.html#ac49a03df0fb7d2920013e63eb9f20c41", null ]
-];

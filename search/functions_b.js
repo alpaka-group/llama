@@ -1,9 +1,7 @@
 var searchData=
 [
-  ['setuserdomainintree',['setUserDomainInTree',['../namespacellama_1_1mapping_1_1tree.html#a6c94d5fae399cb0b0d3c7e095862dc04',1,'llama::mapping::tree']]],
-  ['sharedptraccessor',['SharedPtrAccessor',['../structllama_1_1allocator_1_1internal_1_1SharedPtrAccessor.html#a794c5386ee4abdcb975cf2ffbb4f96bf',1,'llama::allocator::internal::SharedPtrAccessor']]],
-  ['soa',['SoA',['../structllama_1_1mapping_1_1SoA.html#a1f3217d1052d241bc23bef4bb4918d8b',1,'llama::mapping::SoA::SoA(UserDomain const size)'],['../structllama_1_1mapping_1_1SoA.html#aed1d09ddbef76753026406f6ba2bec2a',1,'llama::mapping::SoA::SoA()=default'],['../structllama_1_1mapping_1_1SoA.html#a03e5790007b2dfd1c3fc6fa2094efe0d',1,'llama::mapping::SoA::SoA(SoA const &amp;)=default'],['../structllama_1_1mapping_1_1SoA.html#a692fb7f2e00a5773c02ba2922c882910',1,'llama::mapping::SoA::SoA(SoA &amp;&amp;)=default']]],
-  ['stackviewalloc',['stackViewAlloc',['../namespacellama.html#a080e5813dd8c223f7a8640946307c904',1,'llama']]],
-  ['stackvirtualdatumalloc',['stackVirtualDatumAlloc',['../namespacellama.html#affa16e0e991ca02551c97b56488fea8c',1,'llama']]],
-  ['stackvirtualdatumcopy',['stackVirtualDatumCopy',['../namespacellama.html#ad61ba7f79061d8c304c8aa943e22e9f1',1,'llama']]]
+  ['ppinteraction_629',['pPInteraction',['../alpaka_2nbody_2nbody_8cpp.html#a8ce3af739c94079fdc010eb0820932e2',1,'pPInteraction():&#160;nbody.cpp'],['../namespaceusellama.html#a831b21537b1b343a07b9e5d5321de63c',1,'usellama::pPInteraction()'],['../namespacemanualAoS.html#aa7496a1c071818b0edc24035111f0cc8',1,'manualAoS::pPInteraction()'],['../namespacemanualSoA.html#ad0a86925dd293f977eef2d084940cfb0',1,'manualSoA::pPInteraction()']]],
+  ['printandreset_630',['printAndReset',['../structChrono.html#a815755185407f32faaf79ef28ee7fc44',1,'Chrono']]],
+  ['printcoords_631',['printCoords',['../namespaceanonymous__namespace_02simpletest_8cpp_03.html#ab9d6df7c4724b0f2db4f77b00df3dad9',1,'anonymous_namespace{simpletest.cpp}']]],
+  ['product_632',['product',['../namespacellama_1_1mapping_1_1internal.html#a8f05f28812d4433a6bbef1858dd4250a',1,'llama::mapping::internal']]]
 ];

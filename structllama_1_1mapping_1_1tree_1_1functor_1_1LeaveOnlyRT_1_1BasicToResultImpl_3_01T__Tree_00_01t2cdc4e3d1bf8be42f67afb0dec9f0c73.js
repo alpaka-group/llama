@@ -1,6 +1,0 @@
-var structllama_1_1mapping_1_1tree_1_1functor_1_1LeaveOnlyRT_1_1BasicToResultImpl_3_01T__Tree_00_01t2cdc4e3d1bf8be42f67afb0dec9f0c73 =
-[
-    [ "ChildFunctor", "structllama_1_1mapping_1_1tree_1_1functor_1_1LeaveOnlyRT_1_1BasicToResultImpl_3_01T__Tree_00_01t604c4e5557d07b66010f9e4fbe5d6be2.html", "structllama_1_1mapping_1_1tree_1_1functor_1_1LeaveOnlyRT_1_1BasicToResultImpl_3_01T__Tree_00_01t604c4e5557d07b66010f9e4fbe5d6be2" ],
-    [ "operator()", "structllama_1_1mapping_1_1tree_1_1functor_1_1LeaveOnlyRT_1_1BasicToResultImpl_3_01T__Tree_00_01t2cdc4e3d1bf8be42f67afb0dec9f0c73.html#a4d4a64feaaa0ebf1dcc8f27379452e05", null ],
-    [ "TreeElementConst", "structllama_1_1mapping_1_1tree_1_1functor_1_1LeaveOnlyRT_1_1BasicToResultImpl_3_01T__Tree_00_01t2cdc4e3d1bf8be42f67afb0dec9f0c73.html#af9801bd75e4a0f12b229ec43d6197892", null ]
-];

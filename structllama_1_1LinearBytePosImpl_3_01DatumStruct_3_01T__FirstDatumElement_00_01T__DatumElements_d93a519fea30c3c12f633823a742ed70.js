@@ -1,4 +1,0 @@
-var structllama_1_1LinearBytePosImpl_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__DatumElements_d93a519fea30c3c12f633823a742ed70 =
-[
-    [ "value", "structllama_1_1LinearBytePosImpl_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__DatumElements_d93a519fea30c3c12f633823a742ed70.html#a0e610e7980aaf5899d20140b86e3829c", null ]
-];

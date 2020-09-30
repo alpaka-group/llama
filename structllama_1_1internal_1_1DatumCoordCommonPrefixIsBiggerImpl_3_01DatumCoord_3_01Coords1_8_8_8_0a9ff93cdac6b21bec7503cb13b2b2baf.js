@@ -1,0 +1,4 @@
+var structllama_1_1internal_1_1DatumCoordCommonPrefixIsBiggerImpl_3_01DatumCoord_3_01Coords1_8_8_8_0a9ff93cdac6b21bec7503cb13b2b2baf =
+[
+    [ "value", "structllama_1_1internal_1_1DatumCoordCommonPrefixIsBiggerImpl_3_01DatumCoord_3_01Coords1_8_8_8_0a9ff93cdac6b21bec7503cb13b2b2baf.html#a311283bad040e5979a176ebe48e6a8ec", null ]
+];

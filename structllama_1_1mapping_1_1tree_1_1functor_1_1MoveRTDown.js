@@ -1,14 +1,7 @@
 var structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown =
 [
-    [ "BasicCoordToResultCoordImpl", "structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown_1_1BasicCoordToResultCoordImpl.html", null ],
-    [ "BasicCoordToResultCoordImpl< T_Tree, T_InternalTreeCoord, T_BasicCoord, typename std::enable_if< T_InternalTreeCoord::FirstElement::compiletime !=T_BasicCoord::FirstElement::compiletime >::type >", "structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown_1_1BasicCoordToResultCoordImpl_3_01T__Tr3f494bbcbe8d3a4e76e2200fc0b20cc9.html", "structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown_1_1BasicCoordToResultCoordImpl_3_01T__Tr3f494bbcbe8d3a4e76e2200fc0b20cc9" ],
-    [ "BasicCoordToResultCoordImpl< T_Tree, T_InternalTreeCoord, T_BasicCoord, typename std::enable_if< T_InternalTreeCoord::FirstElement::compiletime==T_BasicCoord::FirstElement::compiletime >::type >", "structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown_1_1BasicCoordToResultCoordImpl_3_01T__Tr4e4d7c9daab3bb388e4066200c760200.html", "structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown_1_1BasicCoordToResultCoordImpl_3_01T__Tr4e4d7c9daab3bb388e4066200c760200" ],
-    [ "BasicCoordToResultCoordImpl< T_Tree, Tuple< >, T_BasicCoord, void >", "structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown_1_1BasicCoordToResultCoordImpl_3_01T__Tr3e25492a965bc94903b1a9a9f50f487b.html", "structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown_1_1BasicCoordToResultCoordImpl_3_01T__Tr3e25492a965bc94903b1a9a9f50f487b" ],
-    [ "BasicCoordToResultCoordImpl< T_Tree, Tuple< >, Tuple< >, void >", "structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown_1_1BasicCoordToResultCoordImpl_3_01T__Tr078ab1517f1e4c51a592d0fe589c1e9a.html", "structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown_1_1BasicCoordToResultCoordImpl_3_01T__Tr078ab1517f1e4c51a592d0fe589c1e9a" ],
-    [ "Result", "structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown.html#a8e175647d5f312da98f190cf70c58272", null ],
-    [ "MoveRTDown", "structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown.html#a2126c189b5e29c34826d09eccec9788d", null ],
-    [ "basicCoordToResultCoord", "structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown.html#a3f29e918b92940c4879dcb6af2c18d54", null ],
-    [ "basicToResult", "structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown.html#ae6ff5b19d2d3fe5c3ec69d92264817e0", null ],
-    [ "resultCoordToBasicCoord", "structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown.html#a8d83d96d58102d4daf1a7a8f805837ba", null ],
-    [ "amount", "structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown.html#a40997960dbbb4d8c14081affac038c60", null ]
+    [ "basicCoordToResultCoord", "structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown.html#a4ca0a11a5fa6096a1aa425fe8c002d86", null ],
+    [ "basicToResult", "structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown.html#aa7f8d5ecafc2af28f1f0dfb58e4ac75a", null ],
+    [ "resultCoordToBasicCoord", "structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown.html#ac815754a3fd35cf6d40fe2e2f976f094", null ],
+    [ "amount", "structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown.html#ac116255f840f0cee439b5ce01bd90b34", null ]
 ];

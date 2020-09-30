@@ -1,0 +1,4 @@
+var structllama_1_1internal_1_1DatumCoordCommonPrefixIsSameImpl_3_01DatumCoord_3_01Coords1_8_8_8_01_6cecc45c39dad0f9ee30012d1ddccac5 =
+[
+    [ "value", "structllama_1_1internal_1_1DatumCoordCommonPrefixIsSameImpl_3_01DatumCoord_3_01Coords1_8_8_8_01_6cecc45c39dad0f9ee30012d1ddccac5.html#a2d6aa0b106eb9f01795f7485d5f0ab85", null ]
+];

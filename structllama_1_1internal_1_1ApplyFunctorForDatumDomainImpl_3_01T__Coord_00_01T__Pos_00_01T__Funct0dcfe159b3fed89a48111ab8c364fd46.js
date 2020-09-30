@@ -1,4 +1,0 @@
-var structllama_1_1internal_1_1ApplyFunctorForDatumDomainImpl_3_01T__Coord_00_01T__Pos_00_01T__Funct0dcfe159b3fed89a48111ab8c364fd46 =
-[
-    [ "operator()", "structllama_1_1internal_1_1ApplyFunctorForDatumDomainImpl_3_01T__Coord_00_01T__Pos_00_01T__Funct0dcfe159b3fed89a48111ab8c364fd46.html#a506e9970047557d2edd1084fd189ddf1", null ]
-];

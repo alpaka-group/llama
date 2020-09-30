@@ -1,4 +1,0 @@
-var structllama_1_1VirtualDatum_1_1AccessWithBoundDatumDomainImpl_3_01DatumCoord_3_01T__coord_8_8_8_01_4_01_4 =
-[
-    [ "apply", "structllama_1_1VirtualDatum_1_1AccessWithBoundDatumDomainImpl_3_01DatumCoord_3_01T__coord_8_8_8_01_4_01_4.html#ab842da3495102b938b127565d877a8c3", null ]
-];

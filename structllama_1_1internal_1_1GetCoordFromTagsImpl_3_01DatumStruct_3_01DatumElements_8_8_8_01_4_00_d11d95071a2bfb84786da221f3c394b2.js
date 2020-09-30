@@ -1,0 +1,7 @@
+var structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01DatumStruct_3_01DatumElements_8_8_8_01_4_00_d11d95071a2bfb84786da221f3c394b2 =
+[
+    [ "HasTag", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01DatumStruct_3_01DatumElements_8_8_8_01_4_00_00cf5963767cde61bf576c0eaa4b5770.html", null ],
+    [ "ChildType", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01DatumStruct_3_01DatumElements_8_8_8_01_4_00_d11d95071a2bfb84786da221f3c394b2.html#a45b901b95413281cec29c7aa6adf7ce7", null ],
+    [ "type", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01DatumStruct_3_01DatumElements_8_8_8_01_4_00_d11d95071a2bfb84786da221f3c394b2.html#a5dd7fbbacf81bb89159b29125d6736c7", null ],
+    [ "tagIndex", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01DatumStruct_3_01DatumElements_8_8_8_01_4_00_d11d95071a2bfb84786da221f3c394b2.html#a47ac6677d46746aae6ac45f39ce5fc9f", null ]
+];

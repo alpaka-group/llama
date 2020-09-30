@@ -1,4 +1,0 @@
-var structllama_1_1internal_1_1GetTupleTypeImpl_3_01Tuple_3_01T__First_00_01T__Rest_8_8_8_01_4_00_010_01_4 =
-[
-    [ "type", "structllama_1_1internal_1_1GetTupleTypeImpl_3_01Tuple_3_01T__First_00_01T__Rest_8_8_8_01_4_00_010_01_4.html#a48655a8bdd66d0b4cd4d1ad70bc21106", null ]
-];

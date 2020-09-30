@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['userdomainpos',['userDomainPos',['../structllama_1_1VirtualDatum.html#aa523169d7291039a0f116f232b1f932b',1,'llama::VirtualDatum']]],
-  ['userdomainsize',['userDomainSize',['../structllama_1_1mapping_1_1AoS.html#a199b3a9b77dcf9ea7b48a0edc7cdae30',1,'llama::mapping::AoS::userDomainSize()'],['../structllama_1_1mapping_1_1SoA.html#a609d42b5e923a3c7bed127c79b4ed8c5',1,'llama::mapping::SoA::userDomainSize()'],['../structllama_1_1mapping_1_1tree_1_1Mapping.html#a697494268a8b808dcc2bf739b6824026',1,'llama::mapping::tree::Mapping::userDomainSize()']]]
+  ['offset_750',['offset',['../structllama_1_1NrAndOffset.html#ac988896db6d94d5e95b2cdf6ad26c129',1,'llama::NrAndOffset::offset()'],['../structllama_1_1VirtualView.html#ae779d6bb35e025f55c24c386f4e17bff',1,'llama::VirtualView::offset()']]],
+  ['offsetof_751',['offsetOf',['../namespacellama.html#a160903369d7b696ba3c2b50c6be968ee',1,'llama']]],
+  ['one_752',['one',['../namespacellama_1_1mapping_1_1tree.html#afbd4ba87d1acf92e1418324f097a68c8',1,'llama::mapping::tree']]],
+  ['operation_753',['operation',['../structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors_3_01Tree_00_01Tuple_3_01Operations_8_8_8_01_4_01_4.html#a414a8d97cea69b25adb091fd077cd9aa',1,'llama::mapping::tree::internal::MergeFunctors&lt; Tree, Tuple&lt; Operations... &gt; &gt;']]]
 ];

@@ -1,4 +1,0 @@
-var structllama_1_1CompareUID_3_01T__DDA_00_01T__BaseA_00_01T__LocalA_00_01T__DDB_00_01T__BaseB_00_0c5742394f1083881b470e7c9b93b56f4 =
-[
-    [ "value", "structllama_1_1CompareUID_3_01T__DDA_00_01T__BaseA_00_01T__LocalA_00_01T__DDB_00_01T__BaseB_00_0c5742394f1083881b470e7c9b93b56f4.html#ad9a3f9f77680593e2f02810526ce2669", null ]
-];

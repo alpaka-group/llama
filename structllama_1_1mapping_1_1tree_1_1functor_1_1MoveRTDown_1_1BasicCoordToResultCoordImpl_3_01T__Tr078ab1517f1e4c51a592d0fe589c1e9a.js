@@ -1,4 +1,0 @@
-var structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown_1_1BasicCoordToResultCoordImpl_3_01T__Tr078ab1517f1e4c51a592d0fe589c1e9a =
-[
-    [ "operator()", "structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown_1_1BasicCoordToResultCoordImpl_3_01T__Tr078ab1517f1e4c51a592d0fe589c1e9a.html#ad453afd028cbd9df3878ac634a2d7ae4", null ]
-];

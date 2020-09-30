@@ -1,4 +1,0 @@
-var structllama_1_1SizeOf_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__DatumElements_8_8_8_01_4_4 =
-[
-    [ "value", "structllama_1_1SizeOf_3_01DatumStruct_3_01T__FirstDatumElement_00_01T__DatumElements_8_8_8_01_4_4.html#aaa2f5e0dfef388cd3603739884b5f7e2", null ]
-];

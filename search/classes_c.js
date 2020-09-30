@@ -1,13 +1,5 @@
 var searchData=
 [
-  ['rebind',['rebind',['../structllama_1_1allocator_1_1internal_1_1AlignmentAllocator_1_1rebind.html',1,'llama::allocator::internal::AlignmentAllocator']]],
-  ['reduce',['Reduce',['../structllama_1_1mapping_1_1tree_1_1Reduce.html',1,'llama::mapping::tree']]],
-  ['reduce_3c_20t_5ftree_2c_20t_5finnerop_2c_20t_5fouterop_2c_20t_5fleaffunctor_2c_20typename_20t_5ftree_3a_3aistreeelementwithoutchilds_20_3e',['Reduce&lt; T_Tree, T_InnerOp, T_OuterOp, T_LeafFunctor, typename T_Tree::IsTreeElementWithoutChilds &gt;',['../structllama_1_1mapping_1_1tree_1_1Reduce_3_01T__Tree_00_01T__InnerOp_00_01T__OuterOp_00_01T__Lea193ef40a2643f774b28890de69da673e.html',1,'llama::mapping::tree']]],
-  ['reduceelementtype',['ReduceElementType',['../structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType.html',1,'llama::mapping::tree::internal']]],
-  ['reduceelementtype_3c_20t_5ftree_2c_20t_5finnerop_2c_20t_5fouterop_2c_20t_5fleaffunctor_2c_20typename_20std_3a_3aenable_5fif_3c_20sizeoftuple_3c_20typename_20t_5ftree_3a_3atype_20_3e_3a_3avalue_3d_3d1_20_3e_3a_3atype_20_3e',['ReduceElementType&lt; T_Tree, T_InnerOp, T_OuterOp, T_LeafFunctor, typename std::enable_if&lt; SizeOfTuple&lt; typename T_Tree::Type &gt;::value==1 &gt;::type &gt;',['../structllama_1_1mapping_1_1tree_1_1internal_1_1ReduceElementType_3_01T__Tree_00_01T__InnerOp_00_0b1c2b86922fe895368378ced982b946c.html',1,'llama::mapping::tree::internal']]],
-  ['replacedewithteindd',['ReplaceDEwithTEinDD',['../structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD.html',1,'llama::mapping::tree::internal']]],
-  ['replacedewithteindd_3c_20datumstruct_3c_20_3e_20_3e',['ReplaceDEwithTEinDD&lt; DatumStruct&lt; &gt; &gt;',['../structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_3_01DatumStruct_3_01_4_01_4.html',1,'llama::mapping::tree::internal']]],
-  ['replacedewithteindd_3c_20datumstruct_3c_20t_5ffirstdatumelement_2c_20t_5fdatumelements_2e_2e_2e_20_3e_3e',['ReplaceDEwithTEinDD&lt; DatumStruct&lt; T_FirstDatumElement, T_DatumElements... &gt;&gt;',['../structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDD_3_01DatumStruct_3_01T__FirstDa1fb10080b24b2b52d2773c9f444c1398.html',1,'llama::mapping::tree::internal']]],
-  ['replacedewithteinde',['ReplaceDEwithTEinDE',['../structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDE.html',1,'llama::mapping::tree::internal']]],
-  ['replacedewithteinde_3c_20datumelement_3c_20t_5fidentifier_2c_20t_5ftype_20_3e_3e',['ReplaceDEwithTEinDE&lt; DatumElement&lt; T_Identifier, T_Type &gt;&gt;',['../structllama_1_1mapping_1_1tree_1_1internal_1_1ReplaceDEwithTEinDE_3_01DatumElement_3_01T__Identifier_00_01T__Type_01_4_4.html',1,'llama::mapping::tree::internal']]]
+  ['r_478',['R',['../structtag_1_1R.html',1,'tag']]],
+  ['rebind_479',['rebind',['../structllama_1_1allocator_1_1internal_1_1AlignmentAllocator_1_1rebind.html',1,'llama::allocator::internal::AlignmentAllocator']]]
 ];

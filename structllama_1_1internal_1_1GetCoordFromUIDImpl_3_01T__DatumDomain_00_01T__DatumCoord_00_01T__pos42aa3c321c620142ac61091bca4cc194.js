@@ -1,4 +1,0 @@
-var structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos42aa3c321c620142ac61091bca4cc194 =
-[
-    [ "type", "structllama_1_1internal_1_1GetCoordFromUIDImpl_3_01T__DatumDomain_00_01T__DatumCoord_00_01T__pos42aa3c321c620142ac61091bca4cc194.html#a5510931690011081fc140009c7a010f6", null ]
-];

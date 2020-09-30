@@ -1,0 +1,7 @@
+var structllama_1_1internal_1_1GetTagsImpl_3_01CurrTag_00_01DatumStruct_3_01DatumElements_8_8_8_01_4c046d237a9f593ba15b9256149e86d7e =
+[
+    [ "ChildTag", "structllama_1_1internal_1_1GetTagsImpl_3_01CurrTag_00_01DatumStruct_3_01DatumElements_8_8_8_01_4c046d237a9f593ba15b9256149e86d7e.html#a341df49e8d4a4a207b1ad02d14cb279b", null ],
+    [ "ChildType", "structllama_1_1internal_1_1GetTagsImpl_3_01CurrTag_00_01DatumStruct_3_01DatumElements_8_8_8_01_4c046d237a9f593ba15b9256149e86d7e.html#a2a441eabfcd69e587143173313792d7d", null ],
+    [ "DatumElement", "structllama_1_1internal_1_1GetTagsImpl_3_01CurrTag_00_01DatumStruct_3_01DatumElements_8_8_8_01_4c046d237a9f593ba15b9256149e86d7e.html#a9d8267d36995ed521c01d815a93bc7a1", null ],
+    [ "type", "structllama_1_1internal_1_1GetTagsImpl_3_01CurrTag_00_01DatumStruct_3_01DatumElements_8_8_8_01_4c046d237a9f593ba15b9256149e86d7e.html#a3c0bc56ba9daab1ed979ef3237306408", null ]
+];
