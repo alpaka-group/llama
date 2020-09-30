@@ -11,11 +11,11 @@ namespace llama
     // clang-format off
     template <typename M>
     concept Mapping = requires(M m) {
-        typename M::UserDomain;
+        typename M::ArrayDomain;
         typename M::DatumDomain;
         { M::blobCount } -> std::convertible_to<std::size_t>; // TODO: check that blobCount is constexpr
         { m.getBlobSize(std::size_t{}) } -> std::convertible_to<std::size_t>;
-        { m.getBlobNrAndOffset(typename M::UserDomain{}) } -> std::same_as<NrAndOffset>;
+        { m.getBlobNrAndOffset(typename M::ArrayDomain{}) } -> std::same_as<NrAndOffset>;
     };
     // clang-format on
 } // namespace llama

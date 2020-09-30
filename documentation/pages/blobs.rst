@@ -61,8 +61,8 @@ Creating a small view of :math:`4 \times 4` may look like this:
 
 .. code-block:: C++
 
-    using UserDomain = llama::UserDomain<2>;
-    constexpr UserDomain miniSize{4, 4};
+    using ArrayDomain = llama::ArrayDomain<2>;
+    constexpr ArrayDomain miniSize{4, 4};
 
     using Mapping = /* some simple mapping */;
     using Allocator = llama::allocator::Stack<

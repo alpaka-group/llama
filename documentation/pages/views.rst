@@ -34,10 +34,10 @@ Data access
 -----------
 
 As LLAMA tries to have an array of struct like interface.
-When accessing an element of the view, the array part comes first and is called user domain.
+When accessing an element of the view, the array part comes first and is called array domain.
 The struct part comes afterwards and is called the datum domain.
 
-In C++, runtime parameters like the user domain are normal function parameters whereas compile time parameters usually given as template arguments.
+In C++, runtime parameters like the array domain are normal function parameters whereas compile time parameters usually given as template arguments.
 However, compile time information can be stored in a type, instantiated as a value and then passed to a function template deducing the type again.
 This trick allows to pass both, runtime and compile time values as function arguments.
 E.g. instead of calling :cpp:`f<3>()` we can call :cpp:`f(std::integral_constant<std::size_t, 3>{})`.
@@ -60,13 +60,13 @@ Unfortunately a direct call of the :cpp:`operator()` like :cpp:`view(1, 2, 3)<co
 :cpp:`view( 1, 2, 3 ).operator()<color, g>()`.
 Thus, as an explicit call of the :cpp:`operator()` is needed anyway, LLAMA got an own function for this task.
 Different algorithms have different requirements for accessing data.
-E.g. it is also possible to access the user domain with one packed parameter like this:
+E.g. it is also possible to access the array domain with one packed parameter like this:
 
 .. code-block:: C++
 
     view({ 1, 2, 3 })(color{}, g{}) = 1.0;
     // or
-    const UserDomain pos{1, 2, 3};
+    const ArrayDomain pos{1, 2, 3};
     view(pos)(color{}, g{}) = 1.0;
 
 If the use of tag types is not desired (e.g. with the same algorithm working in the RGB or CYK colour space)
@@ -86,8 +86,8 @@ A careful reader might have noticed that the :cpp:`operator()` is "overloaded tw
 for accesses like :cpp:`view(1, 2, 3)( color{}, g{})` and that an intermediate object is needed for this to work.
 This object exists and is not only an internal trick but a central data type of LLAMA called :cpp:`VirtualDatum`.
 
-Resolving the user domain address returns such a :cpp:`VirtualDatum` with a bound user domain address.
-This object can be thought of like a datum in the :math:`N`-dimensional user domain space,
+Resolving the array domain address returns such a :cpp:`VirtualDatum` with a bound array domain address.
+This object can be thought of like a datum in the :math:`N`-dimensional array domain space,
 but as the elements of this datum may not be in contiguous in memory, it is called virtual.
 
 Nevertheless, it can be used like a real local object.
@@ -284,7 +284,7 @@ loop body are independent of each other -- and can savely be vectorized (which i
 Datum domain iterating
 ----------------------
 
-It is trivial to iterate over the user domain, especially using :cpp:`UserDomainRange` and although it is done at run
+It is trivial to iterate over the array domain, especially using :cpp:`UserDomainRange` and although it is done at run
 time the compiler can optimize a lot e.g. with tree vectorization or loop unrolling, especially with the beforementioned macros.
 
 It is also possible to iterate over the datum domain.

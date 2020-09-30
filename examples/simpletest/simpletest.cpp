@@ -134,7 +134,7 @@ struct SetZeroFunctor
 int main(int argc, char** argv)
 {
     // Defining a two-dimensional user domain
-    using UD = llama::UserDomain<2>;
+    using UD = llama::ArrayDomain<2>;
     // Setting the run time size of the user domain to 8192 * 8192
     UD udSize {8192, 8192};
 

@@ -8,13 +8,13 @@
 
 namespace llama::mapping
 {
-    /// Maps all UserDomain coordinates into the same location and layouts
+    /// Maps all ArrayDomain coordinates into the same location and layouts
     /// struct members consecutively. This mapping is used for temporary, single
     /// element views.
     template <typename T_UserDomain, typename T_DatumDomain>
     struct One
     {
-        using UserDomain = T_UserDomain;
+        using ArrayDomain = T_UserDomain;
         using DatumDomain = T_DatumDomain;
 
         static constexpr std::size_t blobCount = 1;
@@ -25,7 +25,7 @@ namespace llama::mapping
         }
 
         template <std::size_t... DatumDomainCoord>
-        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(UserDomain) const -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(ArrayDomain) const -> NrAndOffset
         {
             constexpr auto offset = offsetOf<DatumDomain, DatumDomainCoord...>;
             return {0, offset};

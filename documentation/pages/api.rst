@@ -29,7 +29,7 @@ Useful helpers
 User domain
 -----------
 
-.. doxygenstruct:: llama::UserDomain
+.. doxygenstruct:: llama::ArrayDomain
 
 .. doxygenstruct:: llama::UserDomainCoordIterator
    :members:

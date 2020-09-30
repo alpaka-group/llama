@@ -49,11 +49,11 @@ namespace llama
 
     /// Allocates a \ref View holding a single datum backed by stack memory
     /// (\ref allocator::Stack).
-    /// \tparam Dim Dimension of the \ref UserDomain of the \ref View.
+    /// \tparam Dim Dimension of the \ref ArrayDomain of the \ref View.
     template <std::size_t Dim, typename DatumDomain>
     LLAMA_FN_HOST_ACC_INLINE auto allocViewStack() -> decltype(auto)
     {
-        using Mapping = llama::mapping::One<UserDomain<Dim>, DatumDomain>;
+        using Mapping = llama::mapping::One<ArrayDomain<Dim>, DatumDomain>;
         return allocView(Mapping {}, llama::allocator::Stack<sizeOf<DatumDomain>> {});
     }
 
@@ -77,7 +77,7 @@ namespace llama
     LLAMA_FN_HOST_ACC_INLINE auto allocVirtualDatumStack()
         -> VirtualDatum<decltype(llama::allocViewStack<1, DatumDomain>()), DatumCoord<>, true>
     {
-        return {UserDomain<1> {}, llama::allocViewStack<1, DatumDomain>()};
+        return {ArrayDomain<1> {}, llama::allocViewStack<1, DatumDomain>()};
     }
 
     /// Creates a single \ref VirtualDatum owning a view with stack memory and
@@ -125,7 +125,7 @@ namespace llama
             LeftDatum& left,
             const View<RightMapping, RightBlobType>& right) -> LeftDatum&
         {
-            return virtualDatumArithOperator(left, right(UserDomain<RightMapping::UserDomain::rank> {}));
+            return virtualDatumArithOperator(left, right(ArrayDomain<RightMapping::ArrayDomain::rank> {}));
         }
 
         template <typename Functor, typename LeftDatum, typename T>
@@ -170,7 +170,7 @@ namespace llama
             const LeftDatum& left,
             const View<RightMapping, RightBlobType>& right) -> bool
         {
-            return virtualDatumRelOperator(left, right(UserDomain<RightMapping::UserDomain::rank> {}));
+            return virtualDatumRelOperator(left, right(ArrayDomain<RightMapping::ArrayDomain::rank> {}));
         }
 
         template <typename Functor, typename LeftDatum, typename T>
@@ -253,10 +253,10 @@ namespace llama
         using View = T_View; ///< View this virtual datum points into.
 
     private:
-        using UserDomain = typename View::Mapping::UserDomain;
+        using ArrayDomain = typename View::Mapping::ArrayDomain;
         using DatumDomain = typename View::Mapping::DatumDomain;
 
-        const UserDomain userDomainPos;
+        const ArrayDomain userDomainPos;
         std::conditional_t<OwnView, View, View&> view;
 
     public:
@@ -266,7 +266,7 @@ namespace llama
         using AccessibleDatumDomain = GetType<DatumDomain, BoundDatumDomain>;
 
         LLAMA_FN_HOST_ACC_INLINE
-        VirtualDatum(UserDomain userDomainPos, std::conditional_t<OwnView, View&&, View&> view)
+        VirtualDatum(ArrayDomain userDomainPos, std::conditional_t<OwnView, View&&, View&> view)
             : userDomainPos(userDomainPos)
             , view {static_cast<decltype(view)>(view)}
         {
@@ -484,7 +484,7 @@ namespace llama
     struct View
     {
         using Mapping = T_Mapping;
-        using UserDomain = typename Mapping::UserDomain;
+        using ArrayDomain = typename Mapping::ArrayDomain;
         using DatumDomain = typename Mapping::DatumDomain;
         using VirtualDatumType = VirtualDatum<View<Mapping, BlobType>>;
         using VirtualDatumTypeConst = VirtualDatum<const View<Mapping, BlobType>>;
@@ -498,67 +498,67 @@ namespace llama
         {
         }
 
-        /// Retrieves the \ref VirtualDatum at the given \ref UserDomain
+        /// Retrieves the \ref VirtualDatum at the given \ref ArrayDomain
         /// coordinate.
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(UserDomain userDomain) const -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDomain arrayDomain) const -> decltype(auto)
         {
             if constexpr (isDatumStruct<DatumDomain>)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualDatumTypeConst {userDomain, *this};
+                return VirtualDatumTypeConst {arrayDomain, *this};
             }
             else
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return accessor(userDomain, DatumCoord<> {});
+                return accessor(arrayDomain, DatumCoord<> {});
             }
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(UserDomain userDomain) -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDomain arrayDomain) -> decltype(auto)
         {
             if constexpr (isDatumStruct<DatumDomain>)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualDatumType {userDomain, *this};
+                return VirtualDatumType {arrayDomain, *this};
             }
             else
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return accessor(userDomain, DatumCoord<> {});
+                return accessor(arrayDomain, DatumCoord<> {});
             }
         }
 
-        /// Retrieves the \ref VirtualDatum at the \ref UserDomain coordinate
+        /// Retrieves the \ref VirtualDatum at the \ref ArrayDomain coordinate
         /// constructed from the passed component indices.
         template <typename... Index>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Index... indices) const -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this)(UserDomain {indices...});
+            return (*this)(ArrayDomain {indices...});
         }
 
         template <typename... Index>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Index... indices) -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this)(UserDomain {indices...});
+            return (*this)(ArrayDomain {indices...});
         }
 
-        /// Retrieves the \ref VirtualDatum at the \ref UserDomain coordinate
+        /// Retrieves the \ref VirtualDatum at the \ref ArrayDomain coordinate
         /// constructed from the passed component indices.
-        LLAMA_FN_HOST_ACC_INLINE auto operator[](UserDomain userDomain) const -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayDomain arrayDomain) const -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this)(userDomain);
+            return (*this)(arrayDomain);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto operator[](UserDomain userDomain) -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayDomain arrayDomain) -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this)(userDomain);
+            return (*this)(arrayDomain);
         }
 
-        /// Retrieves the \ref VirtualDatum at the 1D \ref UserDomain coordinate
+        /// Retrieves the \ref VirtualDatum at the 1D \ref ArrayDomain coordinate
         /// constructed from the passed index.
         LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t index) const -> decltype(auto)
         {
@@ -580,17 +580,17 @@ namespace llama
         friend struct VirtualDatum;
 
         template <std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(UserDomain userDomain, DatumCoord<Coords...> = {}) const -> const auto&
+        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDomain arrayDomain, DatumCoord<Coords...> = {}) const -> const auto&
         {
-            const auto [nr, offset] = mapping.template getBlobNrAndOffset<Coords...>(userDomain);
+            const auto [nr, offset] = mapping.template getBlobNrAndOffset<Coords...>(arrayDomain);
             using Type = GetType<DatumDomain, DatumCoord<Coords...>>;
             return reinterpret_cast<const Type&>(storageBlobs[nr][offset]);
         }
 
         template <std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(UserDomain userDomain, DatumCoord<Coords...> coord = {}) -> auto&
+        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDomain arrayDomain, DatumCoord<Coords...> coord = {}) -> auto&
         {
-            const auto [nr, offset] = mapping.template getBlobNrAndOffset<Coords...>(userDomain);
+            const auto [nr, offset] = mapping.template getBlobNrAndOffset<Coords...>(arrayDomain);
             using Type = GetType<DatumDomain, DatumCoord<Coords...>>;
             return reinterpret_cast<Type&>(storageBlobs[nr][offset]);
         }
@@ -603,13 +603,13 @@ namespace llama
     {
         using ParentView = T_ParentViewType; ///< type of the parent view
         using Mapping = typename ParentView::Mapping; ///< mapping of the parent view
-        using UserDomain = typename Mapping::UserDomain; ///< user domain of the parent view
+        using ArrayDomain = typename Mapping::ArrayDomain; ///< user domain of the parent view
         using VirtualDatumType = typename ParentView::VirtualDatumType; ///< VirtualDatum type of the
                                                                         ///< parent view
 
         /// Creates a VirtualView given a parent \ref View, offset and size.
         LLAMA_FN_HOST_ACC_INLINE
-        VirtualView(ParentView& parentView, UserDomain offset, UserDomain size)
+        VirtualView(ParentView& parentView, ArrayDomain offset, ArrayDomain size)
             : parentView(parentView)
             , offset(offset)
             , size(size)
@@ -617,29 +617,29 @@ namespace llama
         }
 
         template <std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(UserDomain userDomain) const -> const auto&
+        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDomain arrayDomain) const -> const auto&
         {
-            return parentView.template accessor<Coords...>(userDomain + offset);
+            return parentView.template accessor<Coords...>(arrayDomain + offset);
         }
 
         template <std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(UserDomain userDomain) -> auto&
+        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDomain arrayDomain) -> auto&
         {
-            return parentView.template accessor<Coords...>(userDomain + offset);
+            return parentView.template accessor<Coords...>(arrayDomain + offset);
         }
 
-        /// Same as \ref View::operator()(UserDomain), but shifted by the offset
+        /// Same as \ref View::operator()(ArrayDomain), but shifted by the offset
         /// of this \ref VirtualView.
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(UserDomain userDomain) const -> VirtualDatumType
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDomain arrayDomain) const -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return parentView(userDomain + offset);
+            return parentView(arrayDomain + offset);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(UserDomain userDomain) -> VirtualDatumType
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDomain arrayDomain) -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return parentView(userDomain + offset);
+            return parentView(arrayDomain + offset);
         }
 
         /// Same as corresponding operator in \ref View, but shifted by the
@@ -648,33 +648,33 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) const -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return parentView(UserDomain {indices...} + offset);
+            return parentView(ArrayDomain {indices...} + offset);
         }
 
         template <typename... Indices>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return parentView(UserDomain {indices...} + offset);
+            return parentView(ArrayDomain {indices...} + offset);
         }
 
         template <std::size_t... Coord>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(DatumCoord<Coord...>&& dc = {}) const -> const auto&
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return accessor<Coord...>(UserDomain {});
+            return accessor<Coord...>(ArrayDomain {});
         }
 
         template <std::size_t... Coord>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(DatumCoord<Coord...>&& dc = {}) -> auto&
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return accessor<Coord...>(UserDomain {});
+            return accessor<Coord...>(ArrayDomain {});
         }
 
         ParentView& parentView; ///< reference to parent view.
-        const UserDomain offset; ///< offset this view's \ref UserDomain coordinates are
+        const ArrayDomain offset; ///< offset this view's \ref ArrayDomain coordinates are
                                  ///< shifted to the parent view.
-        const UserDomain size;
+        const ArrayDomain size;
     };
 } // namespace llama

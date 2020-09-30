@@ -85,7 +85,7 @@ struct BlurKernel
                 // Using SoA for the shared memory
                 constexpr auto sharedChunkSize = ElemsPerBlock + 2 * KernelSize;
                 const auto sharedMapping = llama::mapping::tree::Mapping(
-                    typename View::UserDomain {sharedChunkSize, sharedChunkSize},
+                    typename View::ArrayDomain {sharedChunkSize, sharedChunkSize},
                     llama::Tuple {llama::mapping::tree::functor::LeafOnlyRT()},
                     typename View::DatumDomain {});
                 constexpr auto sharedMemSize = llama::sizeOf<PixelOnAcc> * sharedChunkSize * sharedChunkSize;
@@ -208,13 +208,13 @@ int main(int argc, char** argv)
     }
 
     // LLAMA
-    using UserDomain = llama::UserDomain<2>;
+    using ArrayDomain = llama::ArrayDomain<2>;
 
     auto treeOperationList = llama::Tuple {llama::mapping::tree::functor::LeafOnlyRT()};
     const auto hostMapping
-        = llama::mapping::tree::Mapping {UserDomain {buffer_y, buffer_x}, treeOperationList, Pixel {}};
+        = llama::mapping::tree::Mapping {ArrayDomain {buffer_y, buffer_x}, treeOperationList, Pixel {}};
     const auto devMapping = llama::mapping::tree::Mapping {
-        UserDomain {CHUNK_SIZE + 2 * KERNEL_SIZE, CHUNK_SIZE + 2 * KERNEL_SIZE},
+        ArrayDomain {CHUNK_SIZE + 2 * KERNEL_SIZE, CHUNK_SIZE + 2 * KERNEL_SIZE},
         treeOperationList,
         PixelOnAcc {}};
 
@@ -298,14 +298,14 @@ int main(int argc, char** argv)
     struct VirtualHostElement
     {
         llama::VirtualView<decltype(hostView)> virtualHost;
-        const UserDomain validMiniSize;
+        const ArrayDomain validMiniSize;
     };
     std::list<VirtualHostElement> virtualHostList;
     for (std::size_t chunk_y = 0; chunk_y < chunks[0]; ++chunk_y)
         for (std::size_t chunk_x = 0; chunk_x < chunks[1]; ++chunk_x)
         {
             // Create virtual view with size of mini view
-            const UserDomain validMiniSize {
+            const ArrayDomain validMiniSize {
                 ((chunk_y < chunks[0] - 1) ? CHUNK_SIZE : (img_y - 1) % CHUNK_SIZE + 1) + 2 * KERNEL_SIZE,
                 ((chunk_x < chunks[1] - 1) ? CHUNK_SIZE : (img_x - 1) % CHUNK_SIZE + 1) + 2 * KERNEL_SIZE};
             llama::VirtualView virtualHost(hostView, {chunk_y * CHUNK_SIZE, chunk_x * CHUNK_SIZE}, validMiniSize);

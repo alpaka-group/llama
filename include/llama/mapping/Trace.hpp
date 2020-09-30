@@ -35,7 +35,7 @@ namespace llama::mapping
     template <typename Mapping>
     struct Trace
     {
-        using UserDomain = typename Mapping::UserDomain;
+        using ArrayDomain = typename Mapping::ArrayDomain;
         using DatumDomain = typename Mapping::DatumDomain;
         static constexpr std::size_t blobCount = Mapping::blobCount;
 
@@ -70,7 +70,7 @@ namespace llama::mapping
         }
 
         template <std::size_t... DatumDomainCoord>
-        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(UserDomain coord) const -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
         {
             const static auto name = internal::coordName<DatumDomain>(DatumCoord<DatumDomainCoord...> {});
             datumHits.at(name)++;

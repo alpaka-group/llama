@@ -40,18 +40,18 @@ namespace usellama
 
     int main(int argc, char** argv)
     {
-        const auto userDomain = llama::UserDomain {PROBLEM_SIZE};
+        const auto arrayDomain = llama::ArrayDomain {PROBLEM_SIZE};
 
         const auto mapping = [&] {
             if constexpr (MAPPING == 0)
-                return llama::mapping::AoS {userDomain, Vector {}};
+                return llama::mapping::AoS {arrayDomain, Vector {}};
             if constexpr (MAPPING == 1)
-                return llama::mapping::SoA {userDomain, Vector {}};
+                return llama::mapping::SoA {arrayDomain, Vector {}};
             if constexpr (MAPPING == 2)
-                return llama::mapping::tree::Mapping {userDomain, llama::Tuple {}, Vector {}};
+                return llama::mapping::tree::Mapping {arrayDomain, llama::Tuple {}, Vector {}};
             if constexpr (MAPPING == 3)
                 return llama::mapping::tree::Mapping {
-                    userDomain,
+                    arrayDomain,
                     llama::Tuple {llama::mapping::tree::functor::LeafOnlyRT()},
                     Vector {}};
         }();

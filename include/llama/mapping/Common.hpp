@@ -12,7 +12,7 @@ namespace llama::mapping
     namespace internal
     {
         template <std::size_t Dim>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto product(const UserDomain<Dim>& size) -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto product(const ArrayDomain<Dim>& size) -> std::size_t
         {
             std::size_t prod = 1;
             for (auto s : size)
@@ -21,12 +21,12 @@ namespace llama::mapping
         }
     } // namespace internal
 
-    /// Functor that maps a \ref UserDomain coordinate into linear numbers the
+    /// Functor that maps a \ref ArrayDomain coordinate into linear numbers the
     /// way C++ arrays work.
     struct LinearizeUserDomainCpp
     {
         template <std::size_t Dim>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const UserDomain<Dim>& size) -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayDomain<Dim>& size) -> std::size_t
         {
             return internal::product(size);
         }
@@ -37,7 +37,7 @@ namespace llama::mapping
          * \return linearized index
          * */
         template <std::size_t Dim>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(const UserDomain<Dim>& coord, const UserDomain<Dim>& size)
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(const ArrayDomain<Dim>& coord, const ArrayDomain<Dim>& size)
             const -> std::size_t
         {
             std::size_t address = coord[0];
@@ -50,12 +50,12 @@ namespace llama::mapping
         }
     };
 
-    /// Functor that maps a \ref UserDomain coordinate into linear numbers the
+    /// Functor that maps a \ref ArrayDomain coordinate into linear numbers the
     /// way Fortran arrays work.
     struct LinearizeUserDomainFortran
     {
         template <std::size_t Dim>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const UserDomain<Dim>& size) -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayDomain<Dim>& size) -> std::size_t
         {
             return internal::product(size);
         }
@@ -66,7 +66,7 @@ namespace llama::mapping
          * \return linearized index
          * */
         template <std::size_t Dim>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(const UserDomain<Dim>& coord, const UserDomain<Dim>& size)
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(const ArrayDomain<Dim>& coord, const ArrayDomain<Dim>& size)
             const -> std::size_t
         {
             std::size_t address = coord[Dim - 1];
@@ -79,12 +79,12 @@ namespace llama::mapping
         }
     };
 
-    /// Functor that maps a \ref UserDomain coordinate into linear numbers using
+    /// Functor that maps a \ref ArrayDomain coordinate into linear numbers using
     /// the Z-order space filling curve (Morton codes).
     struct LinearizeUserDomainMorton
     {
         template <std::size_t Dim>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const UserDomain<Dim>& size) const -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayDomain<Dim>& size) const -> std::size_t
         {
             std::size_t longest = size[0];
             for (auto i = 1; i < Dim; i++)
@@ -94,7 +94,7 @@ namespace llama::mapping
         }
 
         template <std::size_t Dim>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(const UserDomain<Dim>& coord, const UserDomain<Dim>&) const
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(const ArrayDomain<Dim>& coord, const ArrayDomain<Dim>&) const
             -> std::size_t
         {
             std::size_t r = 0;
