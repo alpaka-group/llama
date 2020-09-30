@@ -44,12 +44,12 @@ namespace llama
     /// datum domain tree.
     /// \param baseCoord \ref DatumCoord at which the iteration should be
     /// started. The functor is called on elements beneath this coordinate.
-    template <typename DatumDomain, typename Functor, std::size_t... Coord>
-    LLAMA_FN_HOST_ACC_INLINE void forEach(Functor&& functor, DatumCoord<Coord...> baseCoord)
+    template <typename DatumDomain, typename Functor, std::size_t... Coords>
+    LLAMA_FN_HOST_ACC_INLINE void forEach(Functor&& functor, DatumCoord<Coords...> baseCoord)
     {
         LLAMA_FORCE_INLINE_RECURSIVE
         internal::applyFunctorForEachLeaf(
-            GetType<DatumDomain, DatumCoord<Coord...>> {},
+            GetType<DatumDomain, DatumCoord<Coords...>> {},
             baseCoord,
             std::forward<Functor>(functor));
     }

@@ -87,7 +87,7 @@ TEST_CASE("address.AoS.fortran")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
     auto arrayDomain = ArrayDomain {16, 16};
-    auto mapping = llama::mapping::AoS<ArrayDomain, Particle, llama::mapping::LinearizeUserDomainFortran> {arrayDomain};
+    auto mapping = llama::mapping::AoS<ArrayDomain, Particle, llama::mapping::LinearizeArrayDomainFortran> {arrayDomain};
 
     {
         const auto coord = ArrayDomain {0, 0};
@@ -139,7 +139,7 @@ TEST_CASE("address.AoS.morton")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
     auto arrayDomain = ArrayDomain {16, 16};
-    auto mapping = llama::mapping::AoS<ArrayDomain, Particle, llama::mapping::LinearizeUserDomainMorton> {arrayDomain};
+    auto mapping = llama::mapping::AoS<ArrayDomain, Particle, llama::mapping::LinearizeArrayDomainMorton> {arrayDomain};
 
     {
         const auto coord = ArrayDomain {0, 0};
@@ -243,7 +243,7 @@ TEST_CASE("address.SoA.fortran")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
     auto arrayDomain = ArrayDomain {16, 16};
-    auto mapping = llama::mapping::SoA<ArrayDomain, Particle, llama::mapping::LinearizeUserDomainFortran> {arrayDomain};
+    auto mapping = llama::mapping::SoA<ArrayDomain, Particle, llama::mapping::LinearizeArrayDomainFortran> {arrayDomain};
 
     {
         const auto coord = ArrayDomain {0, 0};
@@ -299,7 +299,7 @@ TEST_CASE("address.SoA.morton")
 
     using ArrayDomain = llama::ArrayDomain<2>;
     auto arrayDomain = ArrayDomain {16, 16};
-    auto mapping = llama::mapping::SoA<ArrayDomain, Particle, llama::mapping::LinearizeUserDomainMorton> {arrayDomain};
+    auto mapping = llama::mapping::SoA<ArrayDomain, Particle, llama::mapping::LinearizeArrayDomainMorton> {arrayDomain};
 
     {
         const auto coord = ArrayDomain {0, 0};

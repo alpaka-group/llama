@@ -31,9 +31,9 @@ Array domain
 
 .. doxygenstruct:: llama::ArrayDomain
 
-.. doxygenstruct:: llama::ArrayDomainCoordIterator
+.. doxygenstruct:: llama::ArrayDomainIndexIterator
    :members:
-.. doxygenstruct:: llama::ArrayDomainCoordRange
+.. doxygenstruct:: llama::ArrayDomainIndexRange
    :members:
 
 Datum domain

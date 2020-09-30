@@ -163,7 +163,7 @@ TEST_CASE("Morton")
     using ArrayDomain = llama::ArrayDomain<2>;
     ArrayDomain arrayDomain {2, 3};
 
-    llama::mapping::LinearizeUserDomainMorton lin;
+    llama::mapping::LinearizeArrayDomainMorton lin;
     CHECK(lin.size(ArrayDomain {2, 3}) == 4 * 4);
     CHECK(lin.size(ArrayDomain {2, 4}) == 4 * 4);
     CHECK(lin.size(ArrayDomain {2, 5}) == 8 * 8);

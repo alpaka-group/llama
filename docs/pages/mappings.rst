@@ -31,7 +31,7 @@ Every mapping needs to fulfill the following concept:
 
 That is, each Mapping type needs to expose the types :cpp:`M::ArrayDomain` and :cpp:`M::DatumDomain`.
 Furthermore, each mapping needs to provide a static constexpr member variable :cpp:`blobCount` and two member functions.
-:cpp:`getBlobSize(i)` gives the size in bytes of the :cpp:`i`th block of memory needed for this mapping.
+:cpp:`getBlobSize(i)` gives the size in bytes of the :cpp:`i`\ th block of memory needed for this mapping.
 :cpp:`i` is in the range of :cpp:`0` to :cpp:`blobCount - 1`.
 :cpp:`getBlobNrAndOffset(ud)` implements the core mapping logic by translating a array domain coordinate :cpp:`ud` into a value of :cpp:`NrAndOffset`, containing the blob number of offset within the blob where the value should be stored.
 
@@ -55,17 +55,17 @@ clang, cuda, intel, msvc):
 
 .. code-block:: C++
 
-    llama::mapping::SoA<ArrayDomain, DatumDomain> mapping{userDomainSize};
+    llama::mapping::SoA<ArrayDomain, DatumDomain> mapping{arrayDomainSize};
 
     // or using CTAD and an unused argument for the datum domain:
-    llama::mapping::SoA mapping{userDomainSize, DatumDomain{});
+    llama::mapping::SoA mapping{arrayDomainSize, DatumDomain{});
 
 .. code-block:: C++
 
-    llama::mapping::AoS<ArrayDomain, DatumDomain> mapping{userDomainSize};
+    llama::mapping::AoS<ArrayDomain, DatumDomain> mapping{arrayDomainSize};
 
     // or using CTAD and an unused argument for the datum domain:
-    llama::mapping::AoS mapping{userDomainSize, DatumDomain{});
+    llama::mapping::AoS mapping{arrayDomainSize, DatumDomain{});
 
 The template parameters are deduced using CTAD.
 
@@ -74,7 +74,7 @@ but, since the mapping code is more complicated, compilers currently fail to aut
 
 .. code-block:: C++
 
-    llama::mapping::AoSoA<ArrayDomain, DatumDomain, Lanes> mapping{userDomainSize};
+    llama::mapping::AoSoA<ArrayDomain, DatumDomain, Lanes> mapping{arrayDomainSize};
 
 .. _label-tree-mapping:
 
@@ -152,13 +152,13 @@ a further constructor parameter for the instantiation of this tuple.
     >;
 
     Mapping mapping(
-        userDomainSize,
+        arrayDomainSize,
         treeOperationList
     );
 
     // or using CTAD and an unused argument for the datum domain:
     llama::mapping::tree::Mapping mapping(
-        userDomainSize,
+        arrayDomainSize,
         llama::Tuple{
             llama::mapping::tree::functor::LeafOnlyRT()
         },

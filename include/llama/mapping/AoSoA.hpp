@@ -18,7 +18,7 @@ namespace llama::mapping
         typename T_UserDomain,
         typename T_DatumDomain,
         std::size_t Lanes,
-        typename LinearizeUserDomainFunctor = LinearizeUserDomainCpp>
+        typename LinearizeUserDomainFunctor = LinearizeArrayDomainCpp>
     struct AoSoA
     {
         using ArrayDomain = T_UserDomain;

@@ -15,7 +15,7 @@ namespace llama::mapping
     template <
         typename T_UserDomain,
         typename T_DatumDomain,
-        typename LinearizeUserDomainFunctor = LinearizeUserDomainCpp>
+        typename LinearizeUserDomainFunctor = LinearizeArrayDomainCpp>
     struct AoS
     {
         using ArrayDomain = T_UserDomain;

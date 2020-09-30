@@ -23,7 +23,7 @@ namespace llama::mapping
 
     /// Functor that maps a \ref ArrayDomain coordinate into linear numbers the
     /// way C++ arrays work.
-    struct LinearizeUserDomainCpp
+    struct LinearizeArrayDomainCpp
     {
         template <std::size_t Dim>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayDomain<Dim>& size) -> std::size_t
@@ -52,7 +52,7 @@ namespace llama::mapping
 
     /// Functor that maps a \ref ArrayDomain coordinate into linear numbers the
     /// way Fortran arrays work.
-    struct LinearizeUserDomainFortran
+    struct LinearizeArrayDomainFortran
     {
         template <std::size_t Dim>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayDomain<Dim>& size) -> std::size_t
@@ -81,7 +81,7 @@ namespace llama::mapping
 
     /// Functor that maps a \ref ArrayDomain coordinate into linear numbers using
     /// the Z-order space filling curve (Morton codes).
-    struct LinearizeUserDomainMorton
+    struct LinearizeArrayDomainMorton
     {
         template <std::size_t Dim>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayDomain<Dim>& size) const -> std::size_t
