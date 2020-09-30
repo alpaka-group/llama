@@ -5,15 +5,15 @@
 Domains
 =======
 
-As mentioned in the section before, LLAMA distinguishes between the user and the
+As mentioned in the section before, LLAMA distinguishes between the array and the
 datum domain. The most important difference is that the array domain is defined
 at *run time* whereas the datum domain is defined at *compile time*. This allows
 to make the problem size itself a run time value but leaves the compiler room
 to optimize the data access.
 
-.. _label-ud:
+.. _label-ad:
 
-User domain
+Array domain
 -----------
 
 The array domain is an :math:`N`-dimensional array with :math:`N` itself being a
@@ -28,10 +28,10 @@ A definition of a three-dimensional array domain of the size
 
 .. code-block:: C++
 
-    llama::ArrayDomain userDomainSize{128, 256, 32};
+    llama::ArrayDomain arrayDomainSize{128, 256, 32};
 
 The template arguments are deduced by the compiler using `CTAD <https://en.cppreference.com/w/cpp/language/class_template_argument_deduction>`_.
-The full type of :cpp:`userDomainSize` is :cpp:`llama::ArrayDomain<3>`.
+The full type of :cpp:`arrayDomainSize` is :cpp:`llama::ArrayDomain<3>`.
 
 .. _label-dd:
 

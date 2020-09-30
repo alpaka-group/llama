@@ -6,7 +6,7 @@ View
 ====
 
 The view is the main data structure a LLAMA user will work with. It takes
-coordinates in the user and datum domain and returns a reference to a datum
+coordinates in the array and datum domain and returns a reference to a datum
 in memory which can be read or altered. For more easy use furthermore some
 useful operations such as :cpp:`+=` are overloaded to operate on all datum
 elements inside the datum domain at once.
@@ -22,7 +22,7 @@ The factory creates the view. For this it takes the domains, a
 .. code-block:: C++
 
     using Mapping = ...; // see next section about mappings
-    Mapping mapping(userDomainSize); // see section about domains
+    Mapping mapping(arrayDomainSize); // see section about domains
     auto view = allocView(mapping); // optional allocator as 2nd argument
 
 The :ref:`mapping <label-mappings>` and :ref:`allocator <label-allocators>`
@@ -284,7 +284,7 @@ loop body are independent of each other -- and can savely be vectorized (which i
 Datum domain iterating
 ----------------------
 
-It is trivial to iterate over the array domain, especially using :cpp:`UserDomainRange` and although it is done at run
+It is trivial to iterate over the array domain, especially using :cpp:`ArrayDomainRange` and although it is done at run
 time the compiler can optimize a lot e.g. with tree vectorization or loop unrolling, especially with the beforementioned macros.
 
 It is also possible to iterate over the datum domain.

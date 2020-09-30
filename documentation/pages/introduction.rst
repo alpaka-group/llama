@@ -107,7 +107,7 @@ which holds the memory for the data and provides methods to access the data.
 
 LLAMA wants to look as much as an array of struct approach as possible. To not
 mix up C++ and LLAMA namings, the array-like domain is called
-:ref:`User domain <label-ud>` in LLAMA whereas the struct-like domain is called
+:ref:`Array domain <label-ad>` in LLAMA whereas the struct-like domain is called
 :ref:`Datum domain <label-dd>`. More details about these domains follow in the
 :ref:`next section <label-domains>`.
 

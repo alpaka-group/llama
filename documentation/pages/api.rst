@@ -26,14 +26,14 @@ Useful helpers
    :members:
 .. doxygenfunction:: llama::structName
 
-User domain
+Array domain
 -----------
 
 .. doxygenstruct:: llama::ArrayDomain
 
-.. doxygenstruct:: llama::UserDomainCoordIterator
+.. doxygenstruct:: llama::ArrayDomainCoordIterator
    :members:
-.. doxygenstruct:: llama::UserDomainCoordRange
+.. doxygenstruct:: llama::ArrayDomainCoordRange
    :members:
 
 Datum domain
@@ -112,11 +112,11 @@ Mappings
 Common utilities
 ^^^^^^^^^^^^^^^^
 
-.. doxygenstruct:: llama::mapping::LinearizeUserDomainCpp
+.. doxygenstruct:: llama::mapping::LinearizeArrayDomainCpp
    :members:
-.. doxygenstruct:: llama::mapping::LinearizeUserDomainFortran
+.. doxygenstruct:: llama::mapping::LinearizeArrayDomainFortran
    :members:
-.. doxygenstruct:: llama::mapping::LinearizeUserDomainMorton
+.. doxygenstruct:: llama::mapping::LinearizeArrayDomainMorton
    :members:
 
 Tree mapping
