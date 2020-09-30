@@ -1,0 +1,25 @@
+{
+  "title": "LLAMA: Low Level Abstraction of Memory Access",
+  "description": "LLAMA is a C++17 template header-only library for the abstraction of memory access patterns. It distinguishes between the view of the algorithm on the memory and the real layout in the background. This enables performance portability for multicore, manycore and gpu applications with the very same code.",
+  "creators": [
+    {
+      "affiliation": "Helmholtz-Zentrum Dresden-Rossendorf, TU Dresden",
+      "name": "Matthes, Alexander",
+      "orcid": "0000-0002-6702-2015"
+    },
+    {
+      "affiliation": "Helmholtz-Zentrum Dresden-Rossendorf, CASUS, CERN",
+      "name": "Gruber, Bernhard Manfred"
+    }
+  ],
+  "access_right": "open",
+  "keywords": [
+    "HPC",
+    "C++",
+    "memory layout",
+    "heterogeneous computing",
+    "performance portability"
+  ],
+  "license": "LGPL-3.0",
+  "upload_type": "software"
+}
