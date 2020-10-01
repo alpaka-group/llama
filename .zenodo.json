@@ -21,5 +21,10 @@
     "performance portability"
   ],
   "license": "LGPL-3.0",
-  "upload_type": "software"
+  "upload_type": "software",
+  "grants": [
+    {
+      "id": "654220"
+    }
+  ],
 }
