@@ -99,5 +99,20 @@ namespace llama
     {
         std::size_t nr;
         std::size_t offset;
+
+        friend auto operator==(const NrAndOffset& a, const NrAndOffset& b) -> bool
+        {
+            return a.nr == b.nr && a.offset == b.offset;
+        }
+
+        friend auto operator!=(const NrAndOffset& a, const NrAndOffset& b) -> bool
+        {
+            return !(a == b);
+        }
+
+        friend auto operator<<(std::ostream& os, const NrAndOffset& value) -> std::ostream&
+        {
+            return os << "NrAndOffset{" << value.nr << ", " << value.offset << "}";
+        }
     };
 } // namespace llama
