@@ -23,9 +23,10 @@ namespace llama
     {
     };
 
-    static_assert(std::is_trivially_default_constructible_v<ArrayDomain<1>>); // so ArrayDomain<1>{} will produce a zeroed
-                                                                             // coord. Should hold for all dimensions,
-                                                                             // but just checking for <1> here.
+    static_assert(
+        std::is_trivially_default_constructible_v<ArrayDomain<1>>); // so ArrayDomain<1>{} will produce a zeroed
+                                                                    // coord. Should hold for all dimensions,
+                                                                    // but just checking for <1> here.
 
     template <typename... Args>
     ArrayDomain(Args...) -> ArrayDomain<sizeof...(Args)>;
