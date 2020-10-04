@@ -21,27 +21,34 @@ namespace llama
     template <typename DatumElement>
     using GetDatumElementType = boost::mp11::mp_second<DatumElement>;
 
+    template <typename T>
+    static constexpr auto sizeOf = sizeof(T);
+
+    /// The size a datum domain if it would be a normal struct.
+    template <typename... DatumElements>
+    static constexpr auto sizeOf<DatumStruct<DatumElements...>> = (sizeOf<GetDatumElementType<DatumElements>> + ...);
+
     namespace internal
     {
-        template <typename T, typename TargetDatumCoord, typename IterCoord>
-        constexpr auto offsetOfImpl(T*, TargetDatumCoord, IterCoord)
+        template <typename T>
+        constexpr auto offsetOfImpl(T*, DatumCoord<>)
         {
-            return sizeof(T) * static_cast<std::size_t>(DatumCoordCommonPrefixIsBigger<TargetDatumCoord, IterCoord>);
+            return 0;
         }
 
-        template <typename... DatumElements, typename TargetDatumCoord, std::size_t... IterCoords>
-        constexpr auto offsetOfImpl(DatumStruct<DatumElements...>*, TargetDatumCoord, DatumCoord<IterCoords...>)
+        template <typename... DatumElements, std::size_t FirstCoord, std::size_t... Coords>
+        constexpr auto offsetOfImpl(DatumStruct<DatumElements...>*, DatumCoord<FirstCoord, Coords...>)
         {
             std::size_t acc = 0;
-            boost::mp11::mp_for_each<boost::mp11::mp_iota_c<sizeof...(DatumElements)>>([&](auto i) constexpr {
+            boost::mp11::mp_for_each<boost::mp11::mp_iota_c<FirstCoord>>([&](auto i) constexpr {
                 constexpr auto index = decltype(i)::value;
                 using Element = boost::mp11::mp_at_c<DatumStruct<DatumElements...>, index>;
-
-                acc += offsetOfImpl(
-                    (GetDatumElementType<Element>*) nullptr,
-                    TargetDatumCoord {},
-                    DatumCoord<IterCoords..., index> {});
+                acc += sizeOf<GetDatumElementType<Element>>;
             });
+
+            using Element = boost::mp11::mp_at_c<DatumStruct<DatumElements...>, FirstCoord>;
+            acc += offsetOfImpl((GetDatumElementType<Element>*) nullptr, DatumCoord<Coords...> {});
+
             return acc;
         }
     } // namespace internal
@@ -53,14 +60,7 @@ namespace llama
     /// datum domain tree.
     template <typename DatumDomain, std::size_t... ElementCoords>
     inline constexpr std::size_t offsetOf
-        = internal::offsetOfImpl((DatumDomain*) nullptr, DatumCoord<ElementCoords...> {}, DatumCoord<> {});
-
-    template <typename T>
-    static constexpr auto sizeOf = sizeof(T);
-
-    /// The size a datum domain if it would be a normal struct.
-    template <typename... DatumElements>
-    static constexpr auto sizeOf<DatumStruct<DatumElements...>> = (sizeOf<GetDatumElementType<DatumElements>> + ...);
+        = internal::offsetOfImpl((DatumDomain*) nullptr, DatumCoord<ElementCoords...> {});
 
     template <typename T>
     inline constexpr auto isDatumStruct = false;
