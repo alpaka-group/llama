@@ -1,7 +1,7 @@
 LLAMA – Low Level Abstraction of Memory Access
 ==============================================
 
-![LLAMA](documentation/images/logo_400x169.png)
+![LLAMA](docs/images/logo_400x169.png)
 
 LLAMA is a C++17 template header-only library for the abstraction of memory
 access patterns. It distinguishes between the view of the algorithm on
