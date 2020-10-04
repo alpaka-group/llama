@@ -47,9 +47,11 @@ namespace std
 
 namespace llama
 {
-    /// A list of \ref DatumElement which may be used to define a datum domain.
+    /// A type list of \ref DatumElement which may be used to define a datum domain.
     template <typename... Leaves>
-    using DatumStruct = boost::mp11::mp_list<Leaves...>;
+    struct DatumStruct
+    {
+    };
 
     /// Shortcut alias for \ref DatumStruct.
     template <typename... Leaves>
@@ -62,7 +64,9 @@ namespace llama
     /// of a nested \ref DatumStruct or \ref DatumArray or any other type making
     /// it a leaf of this type.
     template <typename Tag, typename Type>
-    using DatumElement = boost::mp11::mp_list<Tag, Type>;
+    struct DatumElement
+    {
+    };
 
     /// Shortcut alias for \ref DatumElement.
     template <typename Identifier, typename Type>

@@ -37,70 +37,70 @@ TEST_CASE("prettyPrintType")
 #ifdef _WIN32
     boost::replace_all(str, "__int64", "long");
 #endif
-    CHECK(str == R"(boost::mp11::mp_list<
-    boost::mp11::mp_list<
+    CHECK(str == R"(llama::DatumStruct<
+    llama::DatumElement<
         tag::Pos,
-        boost::mp11::mp_list<
-            boost::mp11::mp_list<
+        llama::DatumStruct<
+            llama::DatumElement<
                 tag::X,
                 double
             >,
-            boost::mp11::mp_list<
+            llama::DatumElement<
                 tag::Y,
                 double
             >,
-            boost::mp11::mp_list<
+            llama::DatumElement<
                 tag::Z,
                 double
             >
         >
     >,
-    boost::mp11::mp_list<
+    llama::DatumElement<
         tag::Weight,
         float
     >,
-    boost::mp11::mp_list<
+    llama::DatumElement<
         tag::Momentum,
-        boost::mp11::mp_list<
-            boost::mp11::mp_list<
+        llama::DatumStruct<
+            llama::DatumElement<
                 tag::X,
                 double
             >,
-            boost::mp11::mp_list<
+            llama::DatumElement<
                 tag::Y,
                 double
             >,
-            boost::mp11::mp_list<
+            llama::DatumElement<
                 tag::Z,
                 double
             >
         >
     >,
-    boost::mp11::mp_list<
+    llama::DatumElement<
         tag::Flags,
-        boost::mp11::mp_list<
-            boost::mp11::mp_list<
+        llama::DatumStruct<
+            llama::DatumElement<
                 std::integral_constant<
                     unsigned long,
                     0
                 >,
                 bool
             >,
-            boost::mp11::mp_list<
+            llama::DatumElement<
                 std::integral_constant<
                     unsigned long,
                     1
                 >,
                 bool
             >,
-            boost::mp11::mp_list<
+            llama::DatumElement<
                 std::integral_constant<
                     unsigned long,
                     2
                 >,
                 bool
             >,
-            boost::mp11::mp_list<
+            llama::DatumElement<
                 std::integral_constant<
                     unsigned long,
                     3
