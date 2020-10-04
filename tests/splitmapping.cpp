@@ -41,7 +41,7 @@ TEST_CASE("splitmapping")
         SplitMapping<ArrayDomain, Particle, llama::DatumCoord<0>, llama::mapping::SoA, llama::mapping::AoS> {
             arrayDomain};
 
-    constexpr auto mapping1Size = 14336;
+    constexpr auto mapping1Size = 6120;
     const auto coord = ArrayDomain {0, 0};
     CHECK(mapping.getBlobNrAndOffset<0, 0>(coord) == llama::NrAndOffset {0, 0});
     CHECK(mapping.getBlobNrAndOffset<0, 1>(coord) == llama::NrAndOffset {0, 2048});
