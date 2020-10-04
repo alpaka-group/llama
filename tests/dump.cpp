@@ -31,22 +31,42 @@ using Particle = llama::DS<
 >;
 // clang-format on
 
-template <typename Mapping>
-void dump(const Mapping& mapping, std::string filename)
+namespace
 {
-    std::ofstream {filename + ".svg"} << llama::toSvg(mapping);
-    std::ofstream {filename + ".html"} << llama::toHtml(mapping);
+    llama::ArrayDomain arrayDomain {8, 8};
+    using ArrayDomain = decltype(arrayDomain);
+
+    template <typename Mapping>
+    void dump(const Mapping& mapping, std::string filename)
+    {
+        std::ofstream {filename + ".svg"} << llama::toSvg(mapping);
+        std::ofstream {filename + ".html"} << llama::toHtml(mapping);
+    }
+} // namespace
+
+TEST_CASE("dump.AoS")
+{
+    dump(llama::mapping::AoS {arrayDomain, Particle {}}, "AoSMapping");
 }
 
-TEST_CASE("dump")
+TEST_CASE("dump.SoA")
 {
-    using ArrayDomain = llama::ArrayDomain<2>;
-    ArrayDomain arrayDomain {8, 8};
+    dump(llama::mapping::SoA {arrayDomain, Particle {}}, "SoAMapping");
+}
 
-    dump(llama::mapping::AoS<ArrayDomain, Particle> {arrayDomain}, "AoSMapping");
-    dump(llama::mapping::SoA<ArrayDomain, Particle> {arrayDomain}, "SoAMapping");
+TEST_CASE("dump.AoSoA.8")
+{
     dump(llama::mapping::AoSoA<ArrayDomain, Particle, 8> {arrayDomain}, "AoSoAMapping8");
+}
+
+TEST_CASE("dump.AoSoA.32")
+{
     dump(llama::mapping::AoSoA<ArrayDomain, Particle, 32> {arrayDomain}, "AoSoAMapping32");
+}
+
+
+TEST_CASE("dump.SplitMapping")
+{
     dump(
         llama::mapping::
             SplitMapping<ArrayDomain, Particle, llama::DatumCoord<0>, llama::mapping::SoA, llama::mapping::AoS> {
