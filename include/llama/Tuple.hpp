@@ -84,7 +84,7 @@ namespace llama
             std::index_sequence<Is1...>,
             std::index_sequence<Is2...>)
         {
-            return Tuple {get<Is1>(t1)..., get<Is2>(t2)...};
+            return Tuple{get<Is1>(t1)..., get<Is2>(t2)...};
         }
     } // namespace internal
 
@@ -94,8 +94,8 @@ namespace llama
         return internal::tupleCatImpl(
             t1,
             t2,
-            std::make_index_sequence<tupleSize<Tuple1>> {},
-            std::make_index_sequence<tupleSize<Tuple2>> {});
+            std::make_index_sequence<tupleSize<Tuple1>>{},
+            std::make_index_sequence<tupleSize<Tuple2>>{});
     }
 
     namespace internal
@@ -107,7 +107,7 @@ namespace llama
             auto operator()(Tuple const tuple, Replacement const replacement)
             {
                 return tupleCat(
-                    llama::Tuple {tuple.first},
+                    llama::Tuple{tuple.first},
                     TupleReplaceImpl<Pos - 1, typename Tuple::RestTuple, Replacement>()(tuple.rest, replacement));
             };
         };
@@ -118,7 +118,7 @@ namespace llama
             LLAMA_FN_HOST_ACC_INLINE
             auto operator()(Tuple<Elements...> tuple, Replacement const replacement)
             {
-                return tupleCat(Tuple {replacement}, tuple.rest);
+                return tupleCat(Tuple{replacement}, tuple.rest);
             };
         };
 
@@ -128,7 +128,7 @@ namespace llama
             LLAMA_FN_HOST_ACC_INLINE
             auto operator()(Tuple<OneElement>, Replacement const replacement)
             {
-                return Tuple {replacement};
+                return Tuple{replacement};
             }
         };
     } // namespace internal
@@ -154,7 +154,7 @@ namespace llama
             {
                 // FIXME(bgruber): nvcc fails to compile
                 // Tuple{functor(get<Is>(tuple))...}
-                return Tuple<decltype(functor(std::declval<Elements>()))...> {functor(get<Is>(tuple))...};
+                return Tuple<decltype(functor(std::declval<Elements>()))...>{functor(get<Is>(tuple))...};
             }
         };
     } // namespace internal
@@ -180,6 +180,6 @@ namespace llama
     template <typename Element>
     LLAMA_FN_HOST_ACC_INLINE auto tupleWithoutFirst(const Tuple<Element>& tuple)
     {
-        return Tuple<> {};
+        return Tuple<>{};
     }
 } // namespace llama

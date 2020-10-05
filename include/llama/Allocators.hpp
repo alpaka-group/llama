@@ -36,9 +36,9 @@ namespace llama::allocator
         inline auto operator()(std::size_t count) const -> std::shared_ptr<std::byte[]>
         {
             auto* ptr
-                = static_cast<std::byte*>(::operator new[](count * sizeof(std::byte), std::align_val_t {Alignment}));
-            auto deleter = [=](std::byte* ptr) { ::operator delete[](ptr, std::align_val_t {Alignment}); };
-            return std::shared_ptr<std::byte[]> {ptr, deleter};
+                = static_cast<std::byte*>(::operator new[](count * sizeof(std::byte), std::align_val_t{Alignment}));
+            auto deleter = [=](std::byte* ptr) { ::operator delete[](ptr, std::align_val_t{Alignment}); };
+            return std::shared_ptr<std::byte[]>{ptr, deleter};
         }
     };
 
@@ -60,12 +60,12 @@ namespace llama::allocator
 
             inline auto allocate(std::size_t n) -> T*
             {
-                return static_cast<T*>(::operator new[](n * sizeof(T), std::align_val_t {Alignment}));
+                return static_cast<T*>(::operator new[](n * sizeof(T), std::align_val_t{Alignment}));
             }
 
             inline void deallocate(T* p, std::size_t)
             {
-                ::operator delete[](p, std::align_val_t {Alignment});
+                ::operator delete[](p, std::align_val_t{Alignment});
             }
 
             template <typename T2>

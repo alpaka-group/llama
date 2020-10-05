@@ -57,7 +57,7 @@ namespace llama
     template <typename DatumCoord1, typename DatumCoord2>
     auto cat(DatumCoord1, DatumCoord2)
     {
-        return Cat<DatumCoord1, DatumCoord2> {};
+        return Cat<DatumCoord1, DatumCoord2>{};
     }
 
     /// DatumCoord without first coordinate component.
@@ -75,8 +75,8 @@ namespace llama
             static constexpr auto value = []() constexpr
             {
                 // CTAD does not work if Coords1/2 is an empty pack
-                std::array<std::size_t, sizeof...(Coords1)> a1 {Coords1...};
-                std::array<std::size_t, sizeof...(Coords2)> a2 {Coords2...};
+                std::array<std::size_t, sizeof...(Coords1)> a1{Coords1...};
+                std::array<std::size_t, sizeof...(Coords2)> a2{Coords2...};
                 for (auto i = 0; i < std::min(a1.size(), a2.size()); i++)
                 {
                     if (a1[i] > a2[i])
@@ -106,8 +106,8 @@ namespace llama
             static constexpr auto value = []() constexpr
             {
                 // CTAD does not work if Coords1/2 is an empty pack
-                std::array<std::size_t, sizeof...(Coords1)> a1 {Coords1...};
-                std::array<std::size_t, sizeof...(Coords2)> a2 {Coords2...};
+                std::array<std::size_t, sizeof...(Coords1)> a1{Coords1...};
+                std::array<std::size_t, sizeof...(Coords2)> a2{Coords2...};
                 for (auto i = 0; i < std::min(a1.size(), a2.size()); i++)
                     if (a1[i] != a2[i])
                         return false;

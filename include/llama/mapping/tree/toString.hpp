@@ -48,7 +48,7 @@ namespace llama::mapping::tree
                 r += "R"; // runtime
             else
                 r += "C"; // compile time
-            r += std::string {" * "} + toString(typename NodeOrLeaf::Identifier {});
+            r += std::string{" * "} + toString(typename NodeOrLeaf::Identifier{});
             return r;
         }
     } // namespace internal

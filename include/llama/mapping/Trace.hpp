@@ -72,7 +72,7 @@ namespace llama::mapping
         template <std::size_t... DatumDomainCoord>
         LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
         {
-            const static auto name = internal::coordName<DatumDomain>(DatumCoord<DatumDomainCoord...> {});
+            const static auto name = internal::coordName<DatumDomain>(DatumCoord<DatumDomainCoord...>{});
             datumHits.at(name)++;
 
             LLAMA_FORCE_INLINE_RECURSIVE return mapping.template getBlobNrAndOffset<DatumDomainCoord...>(coord);

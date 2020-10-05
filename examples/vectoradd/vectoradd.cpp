@@ -32,28 +32,28 @@ namespace usellama
         LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
-            c(i)(tag::X {}) = a(i)(tag::X {}) + b(i)(tag::X {});
-            c(i)(tag::Y {}) = a(i)(tag::Y {}) - b(i)(tag::Y {});
-            c(i)(tag::Z {}) = a(i)(tag::Z {}) * b(i)(tag::Z {});
+            c(i)(tag::X{}) = a(i)(tag::X{}) + b(i)(tag::X{});
+            c(i)(tag::Y{}) = a(i)(tag::Y{}) - b(i)(tag::Y{});
+            c(i)(tag::Z{}) = a(i)(tag::Z{}) * b(i)(tag::Z{});
         }
     }
 
     int main(int argc, char** argv)
     {
-        const auto arrayDomain = llama::ArrayDomain {PROBLEM_SIZE};
+        const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
 
         const auto mapping = [&] {
             if constexpr (MAPPING == 0)
-                return llama::mapping::AoS {arrayDomain, Vector {}};
+                return llama::mapping::AoS{arrayDomain, Vector{}};
             if constexpr (MAPPING == 1)
-                return llama::mapping::SoA {arrayDomain, Vector {}};
+                return llama::mapping::SoA{arrayDomain, Vector{}};
             if constexpr (MAPPING == 2)
-                return llama::mapping::tree::Mapping {arrayDomain, llama::Tuple {}, Vector {}};
+                return llama::mapping::tree::Mapping{arrayDomain, llama::Tuple{}, Vector{}};
             if constexpr (MAPPING == 3)
-                return llama::mapping::tree::Mapping {
+                return llama::mapping::tree::Mapping{
                     arrayDomain,
-                    llama::Tuple {llama::mapping::tree::functor::LeafOnlyRT()},
-                    Vector {}};
+                    llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
+                    Vector{}};
         }();
 
         std::cout << PROBLEM_SIZE / 1000 / 1000 << " million vectors LLAMA\n";
@@ -67,7 +67,7 @@ namespace usellama
         LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
         {
-            a[i](tag::X {}) = i; // X
+            a[i](tag::X{}) = i; // X
             a[i].access<tag::Y>() = i; // Y
             a[i].access<2>() = i; // Z
             b(i) = i; // writes to all (X, Y, Z)

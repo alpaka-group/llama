@@ -67,9 +67,9 @@ using Name = llama::DS<
 TEST_CASE("treemapping.empty")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
-    const ArrayDomain arrayDomain {16, 16};
+    const ArrayDomain arrayDomain{16, 16};
 
-    auto treeOperationList = llama::Tuple {};
+    auto treeOperationList = llama::Tuple{};
     using Mapping = tree::Mapping<ArrayDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(arrayDomain, treeOperationList);
 
@@ -87,7 +87,7 @@ TEST_CASE("treemapping.empty")
     CHECK(mapping.getBlobSize(0) == 14336);
 
     {
-        const auto coord = ArrayDomain {0, 0};
+        const auto coord = ArrayDomain{0, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 8);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 16);
@@ -102,7 +102,7 @@ TEST_CASE("treemapping.empty")
     }
 
     {
-        const auto coord = ArrayDomain {0, 1};
+        const auto coord = ArrayDomain{0, 1};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 56);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 64);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 72);
@@ -117,7 +117,7 @@ TEST_CASE("treemapping.empty")
     }
 
     {
-        const auto coord = ArrayDomain {1, 0};
+        const auto coord = ArrayDomain{1, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 904);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 912);
@@ -135,9 +135,9 @@ TEST_CASE("treemapping.empty")
 TEST_CASE("treemapping.Idem")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
-    const ArrayDomain arrayDomain {16, 16};
+    const ArrayDomain arrayDomain{16, 16};
 
-    auto treeOperationList = llama::Tuple {tree::functor::Idem()};
+    auto treeOperationList = llama::Tuple{tree::functor::Idem()};
     using Mapping = tree::Mapping<ArrayDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(arrayDomain, treeOperationList);
 
@@ -155,7 +155,7 @@ TEST_CASE("treemapping.Idem")
     CHECK(mapping.getBlobSize(0) == 14336);
 
     {
-        const auto coord = ArrayDomain {0, 0};
+        const auto coord = ArrayDomain{0, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 8);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 16);
@@ -170,7 +170,7 @@ TEST_CASE("treemapping.Idem")
     }
 
     {
-        const auto coord = ArrayDomain {0, 1};
+        const auto coord = ArrayDomain{0, 1};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 56);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 64);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 72);
@@ -185,7 +185,7 @@ TEST_CASE("treemapping.Idem")
     }
 
     {
-        const auto coord = ArrayDomain {1, 0};
+        const auto coord = ArrayDomain{1, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 904);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 912);
@@ -203,9 +203,9 @@ TEST_CASE("treemapping.Idem")
 TEST_CASE("treemapping.LeafOnlyRT")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
-    const ArrayDomain arrayDomain {16, 16};
+    const ArrayDomain arrayDomain{16, 16};
 
-    auto treeOperationList = llama::Tuple {tree::functor::LeafOnlyRT()};
+    auto treeOperationList = llama::Tuple{tree::functor::LeafOnlyRT()};
     using Mapping = tree::Mapping<ArrayDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(arrayDomain, treeOperationList);
 
@@ -223,7 +223,7 @@ TEST_CASE("treemapping.LeafOnlyRT")
     CHECK(mapping.getBlobSize(0) == 14336);
 
     {
-        const auto coord = ArrayDomain {0, 0};
+        const auto coord = ArrayDomain{0, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2048);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 4096);
@@ -238,7 +238,7 @@ TEST_CASE("treemapping.LeafOnlyRT")
     }
 
     {
-        const auto coord = ArrayDomain {0, 1};
+        const auto coord = ArrayDomain{0, 1};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 8);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2056);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 4104);
@@ -253,7 +253,7 @@ TEST_CASE("treemapping.LeafOnlyRT")
     }
 
     {
-        const auto coord = ArrayDomain {1, 0};
+        const auto coord = ArrayDomain{1, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 128);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2176);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 4224);
@@ -271,9 +271,9 @@ TEST_CASE("treemapping.LeafOnlyRT")
 TEST_CASE("treemapping.MoveRTDown<>")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
-    const ArrayDomain arrayDomain {16, 16};
+    const ArrayDomain arrayDomain{16, 16};
 
-    auto treeOperationList = llama::Tuple {tree::functor::MoveRTDown<tree::TreeCoord<>> {4}};
+    auto treeOperationList = llama::Tuple{tree::functor::MoveRTDown<tree::TreeCoord<>>{4}};
     using Mapping = tree::Mapping<ArrayDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(arrayDomain, treeOperationList);
 
@@ -291,7 +291,7 @@ TEST_CASE("treemapping.MoveRTDown<>")
     CHECK(mapping.getBlobSize(0) == 14336);
 
     {
-        const auto coord = ArrayDomain {0, 0};
+        const auto coord = ArrayDomain{0, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 8);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 16);
@@ -302,7 +302,7 @@ TEST_CASE("treemapping.MoveRTDown<>")
     }
 
     {
-        const auto coord = ArrayDomain {0, 1};
+        const auto coord = ArrayDomain{0, 1};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 56);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 64);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 72);
@@ -313,7 +313,7 @@ TEST_CASE("treemapping.MoveRTDown<>")
     }
 
     {
-        const auto coord = ArrayDomain {1, 0};
+        const auto coord = ArrayDomain{1, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 904);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 912);
@@ -327,9 +327,9 @@ TEST_CASE("treemapping.MoveRTDown<>")
 TEST_CASE("treemapping.MoveRTDown<0>")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
-    const ArrayDomain arrayDomain {16, 16};
+    const ArrayDomain arrayDomain{16, 16};
 
-    auto treeOperationList = llama::Tuple {tree::functor::MoveRTDown<tree::TreeCoord<0>> {4}};
+    auto treeOperationList = llama::Tuple{tree::functor::MoveRTDown<tree::TreeCoord<0>>{4}};
     using Mapping = tree::Mapping<ArrayDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(arrayDomain, treeOperationList);
 
@@ -347,7 +347,7 @@ TEST_CASE("treemapping.MoveRTDown<0>")
     CHECK(mapping.getBlobSize(0) == 14336);
 
     {
-        const auto coord = ArrayDomain {0, 0};
+        const auto coord = ArrayDomain{0, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 8);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 16);
@@ -358,7 +358,7 @@ TEST_CASE("treemapping.MoveRTDown<0>")
     }
 
     {
-        const auto coord = ArrayDomain {0, 1};
+        const auto coord = ArrayDomain{0, 1};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 24);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 32);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 40);
@@ -369,7 +369,7 @@ TEST_CASE("treemapping.MoveRTDown<0>")
     }
 
     {
-        const auto coord = ArrayDomain {1, 0};
+        const auto coord = ArrayDomain{1, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 904);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 912);
@@ -383,9 +383,9 @@ TEST_CASE("treemapping.MoveRTDown<0>")
 TEST_CASE("treemapping.MoveRTDown<0,0>")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
-    const ArrayDomain arrayDomain {16, 16};
+    const ArrayDomain arrayDomain{16, 16};
 
-    auto treeOperationList = llama::Tuple {tree::functor::MoveRTDown<tree::TreeCoord<0, 0>> {4}};
+    auto treeOperationList = llama::Tuple{tree::functor::MoveRTDown<tree::TreeCoord<0, 0>>{4}};
     using Mapping = tree::Mapping<ArrayDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(arrayDomain, treeOperationList);
 
@@ -403,7 +403,7 @@ TEST_CASE("treemapping.MoveRTDown<0,0>")
     CHECK(mapping.getBlobSize(0) == 32768);
 
     {
-        const auto coord = ArrayDomain {0, 0};
+        const auto coord = ArrayDomain{0, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 32);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 64);
@@ -414,7 +414,7 @@ TEST_CASE("treemapping.MoveRTDown<0,0>")
     }
 
     {
-        const auto coord = ArrayDomain {0, 1};
+        const auto coord = ArrayDomain{0, 1};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 128);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 160);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 192);
@@ -425,7 +425,7 @@ TEST_CASE("treemapping.MoveRTDown<0,0>")
     }
 
     {
-        const auto coord = ArrayDomain {1, 0};
+        const auto coord = ArrayDomain{1, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 2048);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2080);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 2112);
@@ -439,9 +439,9 @@ TEST_CASE("treemapping.MoveRTDown<0,0>")
 TEST_CASE("treemapping.MoveRTDownFixed<>")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
-    const ArrayDomain arrayDomain {16, 16};
+    const ArrayDomain arrayDomain{16, 16};
 
-    auto treeOperationList = llama::Tuple {tree::functor::MoveRTDownFixed<tree::TreeCoord<>, 4> {}};
+    auto treeOperationList = llama::Tuple{tree::functor::MoveRTDownFixed<tree::TreeCoord<>, 4>{}};
     using Mapping = tree::Mapping<ArrayDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(arrayDomain, treeOperationList);
 
@@ -459,7 +459,7 @@ TEST_CASE("treemapping.MoveRTDownFixed<>")
     CHECK(mapping.getBlobSize(0) == 14336);
 
     {
-        const auto coord = ArrayDomain {0, 0};
+        const auto coord = ArrayDomain{0, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 8);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 16);
@@ -470,7 +470,7 @@ TEST_CASE("treemapping.MoveRTDownFixed<>")
     }
 
     {
-        const auto coord = ArrayDomain {0, 1};
+        const auto coord = ArrayDomain{0, 1};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 56);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 64);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 72);
@@ -481,7 +481,7 @@ TEST_CASE("treemapping.MoveRTDownFixed<>")
     }
 
     {
-        const auto coord = ArrayDomain {1, 0};
+        const auto coord = ArrayDomain{1, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 904);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 912);
@@ -495,9 +495,9 @@ TEST_CASE("treemapping.MoveRTDownFixed<>")
 TEST_CASE("treemapping.MoveRTDownFixed<0>")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
-    const ArrayDomain arrayDomain {16, 16};
+    const ArrayDomain arrayDomain{16, 16};
 
-    auto treeOperationList = llama::Tuple {tree::functor::MoveRTDownFixed<tree::TreeCoord<0>, 4> {}};
+    auto treeOperationList = llama::Tuple{tree::functor::MoveRTDownFixed<tree::TreeCoord<0>, 4>{}};
     using Mapping = tree::Mapping<ArrayDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(arrayDomain, treeOperationList);
 
@@ -515,7 +515,7 @@ TEST_CASE("treemapping.MoveRTDownFixed<0>")
     CHECK(mapping.getBlobSize(0) == 14336);
 
     {
-        const auto coord = ArrayDomain {0, 0};
+        const auto coord = ArrayDomain{0, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 8);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 16);
@@ -526,7 +526,7 @@ TEST_CASE("treemapping.MoveRTDownFixed<0>")
     }
 
     {
-        const auto coord = ArrayDomain {0, 1};
+        const auto coord = ArrayDomain{0, 1};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 24);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 32);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 40);
@@ -537,7 +537,7 @@ TEST_CASE("treemapping.MoveRTDownFixed<0>")
     }
 
     {
-        const auto coord = ArrayDomain {1, 0};
+        const auto coord = ArrayDomain{1, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 904);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 912);
@@ -551,9 +551,9 @@ TEST_CASE("treemapping.MoveRTDownFixed<0>")
 TEST_CASE("treemapping.MoveRTDownFixed<0,0>")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
-    const ArrayDomain arrayDomain {16, 16};
+    const ArrayDomain arrayDomain{16, 16};
 
-    auto treeOperationList = llama::Tuple {tree::functor::MoveRTDownFixed<tree::TreeCoord<0, 0>, 4> {}};
+    auto treeOperationList = llama::Tuple{tree::functor::MoveRTDownFixed<tree::TreeCoord<0, 0>, 4>{}};
     using Mapping = tree::Mapping<ArrayDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(arrayDomain, treeOperationList);
 
@@ -571,7 +571,7 @@ TEST_CASE("treemapping.MoveRTDownFixed<0,0>")
     CHECK(mapping.getBlobSize(0) == 32768);
 
     {
-        const auto coord = ArrayDomain {0, 0};
+        const auto coord = ArrayDomain{0, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 32);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 64);
@@ -582,7 +582,7 @@ TEST_CASE("treemapping.MoveRTDownFixed<0,0>")
     }
 
     {
-        const auto coord = ArrayDomain {0, 1};
+        const auto coord = ArrayDomain{0, 1};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 128);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 160);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 192);
@@ -593,7 +593,7 @@ TEST_CASE("treemapping.MoveRTDownFixed<0,0>")
     }
 
     {
-        const auto coord = ArrayDomain {1, 0};
+        const auto coord = ArrayDomain{1, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 2048);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2080);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 2112);
@@ -607,15 +607,15 @@ TEST_CASE("treemapping.MoveRTDownFixed<0,0>")
 TEST_CASE("treemapping.vectorblocks.runtime")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
-    const ArrayDomain arrayDomain {16, 16};
+    const ArrayDomain arrayDomain{16, 16};
 
     const auto vectorWidth = 8;
 
-    auto treeOperationList = llama::Tuple {
-        tree::functor::MoveRTDown<tree::TreeCoord<0>> {vectorWidth}, // move 8 down from ArrayDomain (to
-                                                                     // Position/Weight/Momentum)
-        tree::functor::MoveRTDown<tree::TreeCoord<0, 0>> {vectorWidth}, // move 8 down from Position (to X/Y/Z)
-        tree::functor::MoveRTDown<tree::TreeCoord<0, 2>> {vectorWidth}, // move 8 down from Momentum (to X/Y/Z)
+    auto treeOperationList = llama::Tuple{
+        tree::functor::MoveRTDown<tree::TreeCoord<0>>{vectorWidth}, // move 8 down from ArrayDomain (to
+                                                                    // Position/Weight/Momentum)
+        tree::functor::MoveRTDown<tree::TreeCoord<0, 0>>{vectorWidth}, // move 8 down from Position (to X/Y/Z)
+        tree::functor::MoveRTDown<tree::TreeCoord<0, 2>>{vectorWidth}, // move 8 down from Momentum (to X/Y/Z)
     };
     using Mapping = tree::Mapping<ArrayDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(arrayDomain, treeOperationList);
@@ -634,7 +634,7 @@ TEST_CASE("treemapping.vectorblocks.runtime")
     CHECK(mapping.getBlobSize(0) == 14336);
 
     {
-        const auto coord = ArrayDomain {0, 0};
+        const auto coord = ArrayDomain{0, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 64);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 128);
@@ -645,7 +645,7 @@ TEST_CASE("treemapping.vectorblocks.runtime")
     }
 
     {
-        const auto coord = ArrayDomain {0, 1};
+        const auto coord = ArrayDomain{0, 1};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 8);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 72);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 136);
@@ -656,7 +656,7 @@ TEST_CASE("treemapping.vectorblocks.runtime")
     }
 
     {
-        const auto coord = ArrayDomain {1, 0};
+        const auto coord = ArrayDomain{1, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 960);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 1024);
@@ -670,15 +670,15 @@ TEST_CASE("treemapping.vectorblocks.runtime")
 TEST_CASE("treemapping.vectorblocks.compiletime")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
-    const ArrayDomain arrayDomain {16, 16};
+    const ArrayDomain arrayDomain{16, 16};
 
     constexpr auto vectorWidth = 8;
 
-    auto treeOperationList = llama::Tuple {
-        tree::functor::MoveRTDownFixed<tree::TreeCoord<0>, vectorWidth> {}, // move 8 down from ArrayDomain (to
-                                                                            // Position/Weight/Momentum)
-        tree::functor::MoveRTDownFixed<tree::TreeCoord<0, 0>, vectorWidth> {}, // move 8 down from Position (to X/Y/Z)
-        tree::functor::MoveRTDownFixed<tree::TreeCoord<0, 2>, vectorWidth> {}, // move 8 down from Momentum (to X/Y/Z)
+    auto treeOperationList = llama::Tuple{
+        tree::functor::MoveRTDownFixed<tree::TreeCoord<0>, vectorWidth>{}, // move 8 down from ArrayDomain (to
+                                                                           // Position/Weight/Momentum)
+        tree::functor::MoveRTDownFixed<tree::TreeCoord<0, 0>, vectorWidth>{}, // move 8 down from Position (to X/Y/Z)
+        tree::functor::MoveRTDownFixed<tree::TreeCoord<0, 2>, vectorWidth>{}, // move 8 down from Momentum (to X/Y/Z)
     };
     using Mapping = tree::Mapping<ArrayDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(arrayDomain, treeOperationList);
@@ -697,7 +697,7 @@ TEST_CASE("treemapping.vectorblocks.compiletime")
     CHECK(mapping.getBlobSize(0) == 14336);
 
     {
-        const auto coord = ArrayDomain {0, 0};
+        const auto coord = ArrayDomain{0, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 64);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 128);
@@ -708,7 +708,7 @@ TEST_CASE("treemapping.vectorblocks.compiletime")
     }
 
     {
-        const auto coord = ArrayDomain {0, 1};
+        const auto coord = ArrayDomain{0, 1};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 8);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 72);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 136);
@@ -719,7 +719,7 @@ TEST_CASE("treemapping.vectorblocks.compiletime")
     }
 
     {
-        const auto coord = ArrayDomain {1, 0};
+        const auto coord = ArrayDomain{1, 0};
         CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
         CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 960);
         CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 1024);
@@ -733,9 +733,9 @@ TEST_CASE("treemapping.vectorblocks.compiletime")
 TEST_CASE("treemapping.getNode")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
-    const ArrayDomain arrayDomain {16, 16};
+    const ArrayDomain arrayDomain{16, 16};
 
-    auto treeOperationList = llama::Tuple {};
+    auto treeOperationList = llama::Tuple{};
     using Mapping = tree::Mapping<ArrayDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(arrayDomain, treeOperationList);
 
@@ -779,9 +779,9 @@ TEST_CASE("treemapping")
     constexpr std::size_t userDomainSize = 12;
 
     using ArrayDomain = llama::ArrayDomain<2>;
-    const ArrayDomain arrayDomain {userDomainSize, userDomainSize};
+    const ArrayDomain arrayDomain{userDomainSize, userDomainSize};
 
-    auto treeOperationList = llama::Tuple {tree::functor::Idem(), tree::functor::LeafOnlyRT {}, tree::functor::Idem {}};
+    auto treeOperationList = llama::Tuple{tree::functor::Idem(), tree::functor::LeafOnlyRT{}, tree::functor::Idem{}};
 
     using Mapping = tree::Mapping<ArrayDomain, Name, decltype(treeOperationList)>;
     const Mapping mapping(arrayDomain, treeOperationList);
@@ -1069,7 +1069,7 @@ TEST_CASE("treemapping")
         for (size_t y = 0; y < arrayDomain[1]; ++y)
         {
             auto datum = view(x, y);
-            llama::forEach<Name>([&](auto coord) { datum(coord) = 0; }, tag::Momentum {});
+            llama::forEach<Name>([&](auto coord) { datum(coord) = 0; }, tag::Momentum{});
         }
     double sum = 0.0;
     for (size_t x = 0; x < arrayDomain[0]; ++x)
@@ -1080,7 +1080,7 @@ TEST_CASE("treemapping")
 
 TEST_CASE("treeCoordToString")
 {
-    const auto coord = llama::ArrayDomain<3> {6, 7, 8};
+    const auto coord = llama::ArrayDomain<3>{6, 7, 8};
     CHECK(
         tree::treeCoordToString(tree::createTreeCoord<llama::DatumCoord<0, 0>>(coord))
         == "[ 6:0, 7:0, 8:0, 0:0, 0:0 ]");

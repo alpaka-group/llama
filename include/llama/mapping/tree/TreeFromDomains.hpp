@@ -14,7 +14,7 @@ namespace llama::mapping::tree
     inline constexpr auto one = 1;
 
     template <>
-    inline constexpr auto one<boost::mp11::mp_size_t<1>> = boost::mp11::mp_size_t<1> {};
+    inline constexpr auto one<boost::mp11::mp_size_t<1>> = boost::mp11::mp_size_t<1>{};
 
     template <typename T_Identifier, typename T_Type, typename CountType = std::size_t>
     struct Leaf
@@ -63,7 +63,7 @@ namespace llama::mapping::tree
     auto treeCoordToString(TreeCoord treeCoord) -> std::string
     {
         return std::string("[ ")
-            + internal::treeCoordToString(treeCoord, std::make_index_sequence<tupleSize<TreeCoord>> {})
+            + internal::treeCoordToString(treeCoord, std::make_index_sequence<tupleSize<TreeCoord>>{})
             + std::string(" ]");
     }
 
@@ -114,11 +114,11 @@ namespace llama::mapping::tree
     LLAMA_FN_HOST_ACC_INLINE auto createTree(const ArrayDomain& size)
     {
         if constexpr (Pos == ArrayDomain::rank - 1)
-            return TreeFromDatumDomain<DatumDomain> {size[ArrayDomain::rank - 1]};
+            return TreeFromDatumDomain<DatumDomain>{size[ArrayDomain::rank - 1]};
         else
         {
-            Tuple inner {createTree<DatumDomain, ArrayDomain, Pos + 1>(size)};
-            return Node<NoName, decltype(inner)> {size[Pos], inner};
+            Tuple inner{createTree<DatumDomain, ArrayDomain, Pos + 1>(size)};
+            return Node<NoName, decltype(inner)>{size[Pos], inner};
         }
     };
 
@@ -134,16 +134,16 @@ namespace llama::mapping::tree
             std::index_sequence<UDIndices...>,
             DatumCoord<FirstDatumDomainCoord, DatumDomainCoords...>)
         {
-            return Tuple {
-                TreeCoordElement<(UDIndices == ArrayDomain::rank - 1 ? FirstDatumDomainCoord : 0)> {coord[UDIndices]}...,
-                TreeCoordElement<DatumDomainCoords, boost::mp11::mp_size_t<0>> {}...,
-                TreeCoordElement<0, boost::mp11::mp_size_t<0>> {}};
+            return Tuple{
+                TreeCoordElement<(UDIndices == ArrayDomain::rank - 1 ? FirstDatumDomainCoord : 0)>{coord[UDIndices]}...,
+                TreeCoordElement<DatumDomainCoords, boost::mp11::mp_size_t<0>>{}...,
+                TreeCoordElement<0, boost::mp11::mp_size_t<0>>{}};
         }
     } // namespace internal
 
     template <typename DatumCoord, typename ArrayDomain>
     LLAMA_FN_HOST_ACC_INLINE auto createTreeCoord(const ArrayDomain& coord)
     {
-        return internal::createTreeCoord(coord, std::make_index_sequence<ArrayDomain::rank> {}, DatumCoord {});
+        return internal::createTreeCoord(coord, std::make_index_sequence<ArrayDomain::rank>{}, DatumCoord{});
     }
 } // namespace llama::mapping::tree

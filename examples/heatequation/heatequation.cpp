@@ -61,7 +61,7 @@ auto main() -> int
         return 1;
     }
 
-    const auto mapping = llama::mapping::AoS {llama::ArrayDomain {numNodesX}, DatumDomain {}};
+    const auto mapping = llama::mapping::AoS{llama::ArrayDomain{numNodesX}, DatumDomain{}};
     auto uNext = llama::allocView(mapping);
     auto uCurr = llama::allocView(mapping);
 

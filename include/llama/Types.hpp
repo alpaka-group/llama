@@ -82,7 +82,7 @@ namespace llama
         template <typename ChildType, std::size_t... Is>
         auto makeDatumArray(std::index_sequence<Is...>)
         {
-            return DatumStruct<DatumElement<Index<Is>, ChildType>...> {};
+            return DatumStruct<DatumElement<Index<Is>, ChildType>...>{};
         }
     } // namespace internal
 
@@ -94,7 +94,7 @@ namespace llama
     /// of this type.
     /// \tparam Count Number of repetitions of ChildType.
     template <typename ChildType, std::size_t Count>
-    using DatumArray = decltype(internal::makeDatumArray<ChildType>(std::make_index_sequence<Count> {}));
+    using DatumArray = decltype(internal::makeDatumArray<ChildType>(std::make_index_sequence<Count>{}));
 
     /// Shortcut alias for \ref DatumArray
     template <typename ChildType, std::size_t Count>

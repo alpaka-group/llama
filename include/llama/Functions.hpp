@@ -47,7 +47,7 @@ namespace llama
             });
 
             using Element = boost::mp11::mp_at_c<DatumStruct<DatumElements...>, FirstCoord>;
-            acc += offsetOfImpl((GetDatumElementType<Element>*) nullptr, DatumCoord<Coords...> {});
+            acc += offsetOfImpl((GetDatumElementType<Element>*) nullptr, DatumCoord<Coords...>{});
 
             return acc;
         }
@@ -60,7 +60,7 @@ namespace llama
     /// datum domain tree.
     template <typename DatumDomain, std::size_t... ElementCoords>
     inline constexpr std::size_t offsetOf
-        = internal::offsetOfImpl((DatumDomain*) nullptr, DatumCoord<ElementCoords...> {});
+        = internal::offsetOfImpl((DatumDomain*) nullptr, DatumCoord<ElementCoords...>{});
 
     template <typename T>
     inline constexpr auto isDatumStruct = false;
@@ -255,12 +255,12 @@ namespace llama
 
         auto begin() const -> ArrayDomainIndexIterator<Dim>
         {
-            return {size, ArrayDomain<Dim> {}};
+            return {size, ArrayDomain<Dim>{}};
         }
 
         auto end() const -> ArrayDomainIndexIterator<Dim>
         {
-            ArrayDomain<Dim> e {};
+            ArrayDomain<Dim> e{};
             e[0] = size[0];
             return {size, e};
         }

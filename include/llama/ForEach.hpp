@@ -31,8 +31,8 @@ namespace llama
 
                 LLAMA_FORCE_INLINE_RECURSIVE
                 applyFunctorForEachLeaf(
-                    GetDatumElementType<DatumElement> {},
-                    llama::DatumCoord<Coords..., childIndex> {},
+                    GetDatumElementType<DatumElement>{},
+                    llama::DatumCoord<Coords..., childIndex>{},
                     std::forward<Functor>(functor));
             });
         }
@@ -49,7 +49,7 @@ namespace llama
     {
         LLAMA_FORCE_INLINE_RECURSIVE
         internal::applyFunctorForEachLeaf(
-            GetType<DatumDomain, DatumCoord<Coords...>> {},
+            GetType<DatumDomain, DatumCoord<Coords...>>{},
             baseCoord,
             std::forward<Functor>(functor));
     }
@@ -64,6 +64,6 @@ namespace llama
     LLAMA_FN_HOST_ACC_INLINE void forEach(Functor&& functor, Tags... baseTags)
     {
         LLAMA_FORCE_INLINE_RECURSIVE
-        forEach<DatumDomain>(std::forward<Functor>(functor), GetCoordFromTags<DatumDomain, Tags...> {});
+        forEach<DatumDomain>(std::forward<Functor>(functor), GetCoordFromTags<DatumDomain, Tags...>{});
     }
 } // namespace llama

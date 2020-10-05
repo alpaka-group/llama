@@ -43,7 +43,7 @@ struct SqrtFunctor
 TEST_CASE("fast virtual view")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
-    constexpr ArrayDomain viewSize {4096, 4096};
+    constexpr ArrayDomain viewSize{4096, 4096};
 
     using Mapping = llama::mapping::SoA<ArrayDomain, Particle>;
     auto view = allocView(Mapping(viewSize));
@@ -52,14 +52,14 @@ TEST_CASE("fast virtual view")
         for (std::size_t y = 0; y < viewSize[1]; ++y)
             view(x, y) = x * y;
 
-    llama::VirtualView<decltype(view)> virtualView {
+    llama::VirtualView<decltype(view)> virtualView{
         view,
         {23, 42}, // offset
         {13, 37} // size
     };
 
-    CHECK(virtualView.offset == ArrayDomain {23, 42});
-    CHECK(virtualView.size == ArrayDomain {13, 37});
+    CHECK(virtualView.offset == ArrayDomain{23, 42});
+    CHECK(virtualView.size == ArrayDomain{13, 37});
 
     CHECK(view(virtualView.offset)(tag::Pos(), tag::X()) == 966);
     CHECK(virtualView({0, 0})(tag::Pos(), tag::X()) == 966);
@@ -71,8 +71,8 @@ TEST_CASE("fast virtual view")
 TEST_CASE("virtual view")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
-    constexpr ArrayDomain viewSize {256, 256};
-    constexpr ArrayDomain miniSize {8, 8};
+    constexpr ArrayDomain viewSize{256, 256};
+    constexpr ArrayDomain miniSize{8, 8};
     using Mapping = llama::mapping::SoA<ArrayDomain, Particle>;
     auto view = allocView(Mapping(viewSize));
 
@@ -80,14 +80,14 @@ TEST_CASE("virtual view")
         for (std::size_t y = 0; y < viewSize[1]; ++y)
             view(x, y) = x * y;
 
-    constexpr ArrayDomain iterations {
+    constexpr ArrayDomain iterations{
         (viewSize[0] + miniSize[0] - 1) / miniSize[0],
         (viewSize[1] + miniSize[1] - 1) / miniSize[1]};
 
     for (std::size_t x = 0; x < iterations[0]; ++x)
         for (std::size_t y = 0; y < iterations[1]; ++y)
         {
-            const ArrayDomain validMiniSize {
+            const ArrayDomain validMiniSize{
                 (x < iterations[0] - 1) ? miniSize[0] : (viewSize[0] - 1) % miniSize[0] + 1,
                 (y < iterations[1] - 1) ? miniSize[1] : (viewSize[1] - 1) % miniSize[1] + 1};
 
@@ -96,7 +96,7 @@ TEST_CASE("virtual view")
             using MiniMapping = llama::mapping::SoA<ArrayDomain, Particle>;
             auto miniView = allocView(
                 MiniMapping(miniSize),
-                llama::allocator::Stack<miniSize[0] * miniSize[1] * llama::sizeOf<Particle>> {});
+                llama::allocator::Stack<miniSize[0] * miniSize[1] * llama::sizeOf<Particle>>{});
 
             for (std::size_t a = 0; a < validMiniSize[0]; ++a)
                 for (std::size_t b = 0; b < validMiniSize[1]; ++b)
@@ -105,7 +105,7 @@ TEST_CASE("virtual view")
             for (std::size_t a = 0; a < validMiniSize[0]; ++a)
                 for (std::size_t b = 0; b < validMiniSize[1]; ++b)
                 {
-                    SqrtFunctor<decltype(miniView(a, b))> sqrtF {miniView(a, b)};
+                    SqrtFunctor<decltype(miniView(a, b))> sqrtF{miniView(a, b)};
                     llama::forEach<Particle>(sqrtF);
                 }
 

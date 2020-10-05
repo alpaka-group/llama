@@ -34,24 +34,24 @@ using Particle = llama::DS<
 TEST_CASE("splitmapping")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
-    auto arrayDomain = ArrayDomain {16, 16};
+    auto arrayDomain = ArrayDomain{16, 16};
 
     // we layout Pos as SoA, the rest as AoS
     auto mapping = llama::mapping::
-        SplitMapping<ArrayDomain, Particle, llama::DatumCoord<0>, llama::mapping::SoA, llama::mapping::AoS> {
+        SplitMapping<ArrayDomain, Particle, llama::DatumCoord<0>, llama::mapping::SoA, llama::mapping::AoS>{
             arrayDomain};
 
     constexpr auto mapping1Size = 6120;
-    const auto coord = ArrayDomain {0, 0};
-    CHECK(mapping.getBlobNrAndOffset<0, 0>(coord) == llama::NrAndOffset {0, 0});
-    CHECK(mapping.getBlobNrAndOffset<0, 1>(coord) == llama::NrAndOffset {0, 2048});
-    CHECK(mapping.getBlobNrAndOffset<0, 2>(coord) == llama::NrAndOffset {0, 4096});
-    CHECK(mapping.getBlobNrAndOffset<1>(coord) == llama::NrAndOffset {0, mapping1Size + 24});
-    CHECK(mapping.getBlobNrAndOffset<2, 0>(coord) == llama::NrAndOffset {0, mapping1Size + 28});
-    CHECK(mapping.getBlobNrAndOffset<2, 1>(coord) == llama::NrAndOffset {0, mapping1Size + 36});
-    CHECK(mapping.getBlobNrAndOffset<2, 2>(coord) == llama::NrAndOffset {0, mapping1Size + 44});
-    CHECK(mapping.getBlobNrAndOffset<3, 0>(coord) == llama::NrAndOffset {0, mapping1Size + 52});
-    CHECK(mapping.getBlobNrAndOffset<3, 1>(coord) == llama::NrAndOffset {0, mapping1Size + 53});
-    CHECK(mapping.getBlobNrAndOffset<3, 2>(coord) == llama::NrAndOffset {0, mapping1Size + 54});
-    CHECK(mapping.getBlobNrAndOffset<3, 3>(coord) == llama::NrAndOffset {0, mapping1Size + 55});
+    const auto coord = ArrayDomain{0, 0};
+    CHECK(mapping.getBlobNrAndOffset<0, 0>(coord) == llama::NrAndOffset{0, 0});
+    CHECK(mapping.getBlobNrAndOffset<0, 1>(coord) == llama::NrAndOffset{0, 2048});
+    CHECK(mapping.getBlobNrAndOffset<0, 2>(coord) == llama::NrAndOffset{0, 4096});
+    CHECK(mapping.getBlobNrAndOffset<1>(coord) == llama::NrAndOffset{0, mapping1Size + 24});
+    CHECK(mapping.getBlobNrAndOffset<2, 0>(coord) == llama::NrAndOffset{0, mapping1Size + 28});
+    CHECK(mapping.getBlobNrAndOffset<2, 1>(coord) == llama::NrAndOffset{0, mapping1Size + 36});
+    CHECK(mapping.getBlobNrAndOffset<2, 2>(coord) == llama::NrAndOffset{0, mapping1Size + 44});
+    CHECK(mapping.getBlobNrAndOffset<3, 0>(coord) == llama::NrAndOffset{0, mapping1Size + 52});
+    CHECK(mapping.getBlobNrAndOffset<3, 1>(coord) == llama::NrAndOffset{0, mapping1Size + 53});
+    CHECK(mapping.getBlobNrAndOffset<3, 2>(coord) == llama::NrAndOffset{0, mapping1Size + 54});
+    CHECK(mapping.getBlobNrAndOffset<3, 3>(coord) == llama::NrAndOffset{0, mapping1Size + 55});
 }

@@ -46,14 +46,14 @@ namespace usellama
     template <typename VirtualParticle>
     LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticle p1, VirtualParticle p2, FP ts)
     {
-        auto dist = p1(tag::Pos {}) + p2(tag::Pos {});
+        auto dist = p1(tag::Pos{}) + p2(tag::Pos{});
         dist *= dist;
-        const FP distSqr = EPS2 + dist(tag::X {}) + dist(tag::Y {}) + dist(tag::Z {});
+        const FP distSqr = EPS2 + dist(tag::X{}) + dist(tag::Y{}) + dist(tag::Z{});
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
-        const FP s = p2(tag::Mass {}) * invDistCube;
+        const FP s = p2(tag::Mass{}) * invDistCube;
         dist *= s * ts;
-        p1(tag::Vel {}) += dist;
+        p1(tag::Vel{}) += dist;
     }
 
     template <typename View>
@@ -72,31 +72,31 @@ namespace usellama
     {
         LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
-            particles(i)(tag::Pos {}) += particles(i)(tag::Vel {}) * ts;
+            particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * ts;
     }
 
     int main(int argc, char** argv)
     {
         constexpr FP ts = 0.0001f;
 
-        const auto arrayDomain = llama::ArrayDomain {PROBLEM_SIZE};
+        const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
         auto mapping = [&] {
             if constexpr (MAPPING == 0)
-                return llama::mapping::AoS {arrayDomain, Particle {}};
+                return llama::mapping::AoS{arrayDomain, Particle{}};
             if constexpr (MAPPING == 1)
-                return llama::mapping::SoA {arrayDomain, Particle {}};
+                return llama::mapping::SoA{arrayDomain, Particle{}};
             if constexpr (MAPPING == 2)
-                return llama::mapping::tree::Mapping {arrayDomain, llama::Tuple {}, Particle {}};
+                return llama::mapping::tree::Mapping{arrayDomain, llama::Tuple{}, Particle{}};
             if constexpr (MAPPING == 3)
-                return llama::mapping::tree::Mapping {
+                return llama::mapping::tree::Mapping{
                     arrayDomain,
-                    llama::Tuple {llama::mapping::tree::functor::LeafOnlyRT()},
-                    Particle {}};
+                    llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
+                    Particle{}};
         }();
 
         auto tmapping = [&] {
             if constexpr (TRACE)
-                return llama::mapping::Trace {std::move(mapping)};
+                return llama::mapping::Trace{std::move(mapping)};
             else
                 return std::move(mapping);
         }();
@@ -117,13 +117,13 @@ namespace usellama
             for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
             {
                 auto p = particles(i);
-                p(tag::Pos {}, tag::X {}) = dist(engine);
-                p(tag::Pos {}, tag::Y {}) = dist(engine);
-                p(tag::Pos {}, tag::Z {}) = dist(engine);
-                p(tag::Vel {}, tag::X {}) = dist(engine) / FP(10);
-                p(tag::Vel {}, tag::Y {}) = dist(engine) / FP(10);
-                p(tag::Vel {}, tag::Z {}) = dist(engine) / FP(10);
-                p(tag::Mass {}) = dist(engine) / FP(100);
+                p(tag::Pos{}, tag::X{}) = dist(engine);
+                p(tag::Pos{}, tag::Y{}) = dist(engine);
+                p(tag::Pos{}, tag::Z{}) = dist(engine);
+                p(tag::Vel{}, tag::X{}) = dist(engine) / FP(10);
+                p(tag::Vel{}, tag::Y{}) = dist(engine) / FP(10);
+                p(tag::Vel{}, tag::Z{}) = dist(engine) / FP(10);
+                p(tag::Mass{}) = dist(engine) / FP(100);
             }
 
             const auto stop = std::chrono::high_resolution_clock::now();

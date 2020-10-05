@@ -51,9 +51,9 @@ struct AddKernel
         LLAMA_INDEPENDENT_DATA
         for (auto i = start; i < end; ++i)
         {
-            a(i)(tag::X {}) += b(i)(tag::X {});
-            a(i)(tag::Y {}) -= b(i)(tag::Y {});
-            a(i)(tag::Z {}) *= b(i)(tag::Z {});
+            a(i)(tag::X{}) += b(i)(tag::X{});
+            a(i)(tag::Y{}) -= b(i)(tag::Y{});
+            a(i)(tag::Z{}) *= b(i)(tag::Z{});
         }
     }
 };
@@ -78,20 +78,20 @@ int main(int argc, char** argv)
     Queue queue(devAcc);
 
     // LLAMA
-    const auto arrayDomain = llama::ArrayDomain {PROBLEM_SIZE};
+    const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
 
     const auto mapping = [&] {
         if constexpr (MAPPING == 0)
-            return llama::mapping::AoS {arrayDomain, Vector {}};
+            return llama::mapping::AoS{arrayDomain, Vector{}};
         if constexpr (MAPPING == 1)
-            return llama::mapping::SoA {arrayDomain, Vector {}};
+            return llama::mapping::SoA{arrayDomain, Vector{}};
         if constexpr (MAPPING == 2)
-            return llama::mapping::tree::Mapping {arrayDomain, llama::Tuple {}, Vector {}};
+            return llama::mapping::tree::Mapping{arrayDomain, llama::Tuple{}, Vector{}};
         if constexpr (MAPPING == 3)
-            return llama::mapping::tree::Mapping {
+            return llama::mapping::tree::Mapping{
                 arrayDomain,
-                llama::Tuple {llama::mapping::tree::functor::LeafOnlyRT()},
-                Vector {}};
+                llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
+                Vector{}};
     }();
 
     std::cout << PROBLEM_SIZE / 1000 / 1000 << " million vectors\n"
@@ -110,10 +110,10 @@ int main(int argc, char** argv)
     chrono.printAndReset("Alloc");
 
     // create LLAMA views
-    auto hostA = llama::View {mapping, llama::Array {alpaka::mem::view::getPtrNative(hostBufferA)}};
-    auto hostB = llama::View {mapping, llama::Array {alpaka::mem::view::getPtrNative(hostBufferB)}};
-    auto devA = llama::View {mapping, llama::Array {alpaka::mem::view::getPtrNative(devBufferA)}};
-    auto devB = llama::View {mapping, llama::Array {alpaka::mem::view::getPtrNative(devBufferB)}};
+    auto hostA = llama::View{mapping, llama::Array{alpaka::mem::view::getPtrNative(hostBufferA)}};
+    auto hostB = llama::View{mapping, llama::Array{alpaka::mem::view::getPtrNative(hostBufferB)}};
+    auto devA = llama::View{mapping, llama::Array{alpaka::mem::view::getPtrNative(devBufferA)}};
+    auto devB = llama::View{mapping, llama::Array{alpaka::mem::view::getPtrNative(devBufferB)}};
 
     chrono.printAndReset("Views");
 
@@ -142,11 +142,11 @@ int main(int argc, char** argv)
     constexpr auto innerCount = elemCount * threadCount;
     const alpaka::vec::Vec<Dim, Size> blocks(static_cast<Size>((PROBLEM_SIZE + innerCount - 1) / innerCount));
 
-    const auto workdiv = alpaka::workdiv::WorkDivMembers<Dim, Size> {blocks, threads, elems};
+    const auto workdiv = alpaka::workdiv::WorkDivMembers<Dim, Size>{blocks, threads, elems};
 
     for (std::size_t s = 0; s < STEPS; ++s)
     {
-        alpaka::kernel::exec<Acc>(queue, workdiv, AddKernel<PROBLEM_SIZE, elemCount> {}, devA, devB);
+        alpaka::kernel::exec<Acc>(queue, workdiv, AddKernel<PROBLEM_SIZE, elemCount>{}, devA, devB);
         chrono.printAndReset("Add kernel");
     }
 

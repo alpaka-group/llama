@@ -136,7 +136,7 @@ int main(int argc, char** argv)
     // Defining a two-dimensional user domain
     using UD = llama::ArrayDomain<2>;
     // Setting the run time size of the user domain to 8192 * 8192
-    UD udSize {8192, 8192};
+    UD udSize{8192, 8192};
 
     // Printing the domain informations at runtime
     std::cout << "Datum Domain is " << addLineBreaks(type(Name())) << '\n';
@@ -157,10 +157,10 @@ int main(int argc, char** argv)
     auto view = allocView(mapping);
 
     // defining a position in the user domain
-    const UD pos {0, 0};
+    const UD pos{0, 0};
 
     st::Options Options_;
-    const auto Weight_ = st::Weight {};
+    const auto Weight_ = st::Weight{};
 
     // using the position in the user domain and a tree coord or a uid in the
     // datum domain to get the reference to an element in the view
@@ -187,13 +187,13 @@ int main(int argc, char** argv)
     for (size_t y = 0; y < udSize[1]; ++y)
     {
         // Defining a functor for a given virtual datum
-        SetZeroFunctor<decltype(view(x, y))> szf {view(x, y)};
+        SetZeroFunctor<decltype(view(x, y))> szf{view(x, y)};
         // Applying the functor for the sub tree 0,0 (pos.x), so basically
         // only for this element
-        llama::forEach<Name>(szf, llama::DatumCoord<0, 0> {});
+        llama::forEach<Name>(szf, llama::DatumCoord<0, 0>{});
         // Applying the functor for the sub tree momentum (0), so basically
         // for momentum.z, and momentum.x
-        llama::forEach<Name>(szf, st::Momentum {});
+        llama::forEach<Name>(szf, st::Momentum{});
         // the user domain address can be given as multiple comma separated
         // arguments or as one parameter of type user domain
         view({x, y}) = double(x + y) / double(udSize[0] + udSize[1]);

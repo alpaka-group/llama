@@ -123,7 +123,7 @@ namespace llama::mapping::tree
         LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Node<Identifier, Type, CountType>& node) -> std::size_t
         {
             constexpr std::size_t childCount = boost::mp11::mp_size<std::decay_t<decltype(node.childs)>>::value;
-            return getChildrenBlobSize(node.childs, std::make_index_sequence<childCount> {}, LLAMA_COPY(node.count));
+            return getChildrenBlobSize(node.childs, std::make_index_sequence<childCount>{}, LLAMA_COPY(node.count));
         }
 
         template <typename Identifier, typename Type, typename CountType>
@@ -135,7 +135,7 @@ namespace llama::mapping::tree
         template <typename Childs, typename CountType>
         LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Childs& childs, const CountType& count) -> std::size_t
         {
-            return getTreeBlobSize(Node<NoName, Childs, CountType> {count, childs});
+            return getTreeBlobSize(Node<NoName, Childs, CountType>{count, childs});
         }
 
         template <std::size_t MaxPos, typename Identifier, typename Type, typename CountType, std::size_t... Is>
@@ -157,7 +157,7 @@ namespace llama::mapping::tree
                 return getTreeBlobSize(tree.childs, firstArrayIndex)
                     + sumChildrenSmallerThan<firstChildIndex>(
                            tree,
-                           std::make_index_sequence<tupleSize<typename Tree::ChildrenTuple>> {})
+                           std::make_index_sequence<tupleSize<typename Tree::ChildrenTuple>>{})
                     + getTreeBlobByte(get<firstChildIndex>(tree.childs), treeCoord.rest);
             }
             else

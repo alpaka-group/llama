@@ -100,7 +100,7 @@ namespace llama::mapping
             std::size_t r = 0;
             for (std::size_t bit = 0; bit < (sizeof(std::size_t) * CHAR_BIT) / Dim; bit++)
                 for (std::size_t i = 0; i < Dim; i++)
-                    r |= (coord[i] & (std::size_t {1} << bit)) << ((bit + 1) * (Dim - 1) - i);
+                    r |= (coord[i] & (std::size_t{1} << bit)) << ((bit + 1) * (Dim - 1) - i);
             return r;
         }
 

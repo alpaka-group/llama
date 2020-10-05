@@ -43,19 +43,19 @@ namespace llama
             DatumCoord<CoordCurrent, CoordsAfter...> after)
         {
             using Tag = GetTag<DatumDomain, DatumCoord<CoordsBefore..., CoordCurrent>>;
-            v.push_back(tagToString(Tag {}));
+            v.push_back(tagToString(Tag{}));
             if constexpr (sizeof...(CoordsAfter) > 0)
                 collectTagsAsStrings<DatumDomain>(
                     v,
-                    DatumCoord<CoordsBefore..., CoordCurrent> {},
-                    DatumCoord<CoordsAfter...> {});
+                    DatumCoord<CoordsBefore..., CoordCurrent>{},
+                    DatumCoord<CoordsAfter...>{});
         }
 
         template <typename DatumDomain, std::size_t... Coords>
         auto tagsAsStrings(DatumCoord<Coords...>) -> std::vector<std::string>
         {
             std::vector<std::string> v;
-            collectTagsAsStrings<DatumDomain>(v, DatumCoord<> {}, DatumCoord<Coords...> {});
+            collectTagsAsStrings<DatumDomain>(v, DatumCoord<>{}, DatumCoord<Coords...>{});
             return v;
         }
 
@@ -87,11 +87,11 @@ namespace llama
         };
         std::vector<DatumInfo> infos;
 
-        for (auto udCoord : ArrayDomainIndexRange {mapping.userDomainSize})
+        for (auto udCoord : ArrayDomainIndexRange{mapping.userDomainSize})
         {
             forEach<DatumDomain>([&](auto coord) {
                 constexpr int size = sizeof(GetType<DatumDomain, decltype(coord)>);
-                infos.push_back(DatumInfo {
+                infos.push_back(DatumInfo{
                     udCoord,
                     internal::toVec(coord),
                     internal::tagsAsStrings<DatumDomain>(coord),
@@ -198,11 +198,11 @@ namespace llama
         };
         std::vector<DatumInfo> infos;
 
-        for (auto udCoord : ArrayDomainIndexRange {mapping.userDomainSize})
+        for (auto udCoord : ArrayDomainIndexRange{mapping.userDomainSize})
         {
             forEach<DatumDomain>([&](auto coord) {
                 constexpr int size = sizeof(GetType<DatumDomain, decltype(coord)>);
-                infos.push_back(DatumInfo {
+                infos.push_back(DatumInfo{
                     udCoord,
                     internal::toVec(coord),
                     internal::tagsAsStrings<DatumDomain>(coord),

@@ -33,16 +33,16 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE
         auto getBlobSize(std::size_t const) const -> std::size_t
         {
-            return LinearizeUserDomainFunctor {}.size(userDomainSize) * sizeOf<DatumDomain>;
+            return LinearizeUserDomainFunctor{}.size(userDomainSize) * sizeOf<DatumDomain>;
         }
 
         template <std::size_t... DatumDomainCoord>
         LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            const auto offset = LinearizeUserDomainFunctor {}(coord, userDomainSize)
+            const auto offset = LinearizeUserDomainFunctor{}(coord, userDomainSize)
                     * sizeof(GetType<DatumDomain, DatumCoord<DatumDomainCoord...>>)
-                + offsetOf<DatumDomain, DatumDomainCoord...> * LinearizeUserDomainFunctor {}.size(userDomainSize);
+                + offsetOf<DatumDomain, DatumDomainCoord...> * LinearizeUserDomainFunctor{}.size(userDomainSize);
             return {0, offset};
         }
 

@@ -80,14 +80,12 @@ struct UpdateKernel
             {
                 const auto sharedMapping = [&] {
                     if constexpr (USE_SHARED_TREE)
-                        return llama::mapping::tree::Mapping {
-                            typename View::ArrayDomain {BlockSize},
-                            llama::Tuple {llama::mapping::tree::functor::LeafOnlyRT()},
-                            typename View::DatumDomain {}};
+                        return llama::mapping::tree::Mapping{
+                            typename View::ArrayDomain{BlockSize},
+                            llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
+                            typename View::DatumDomain{}};
                     else
-                        return llama::mapping::SoA {
-                            typename View::ArrayDomain {BlockSize},
-                            typename View::DatumDomain {}};
+                        return llama::mapping::SoA{typename View::ArrayDomain{BlockSize}, typename View::DatumDomain{}};
                 }();
 
                 // if there is only 1 thread per block, avoid using shared
@@ -98,11 +96,11 @@ struct UpdateKernel
                 {
                     constexpr auto sharedMemSize = llama::sizeOf<typename View::DatumDomain> * BlockSize;
                     auto& sharedMem = alpaka::block::shared::st::allocVar<std::byte[sharedMemSize], __COUNTER__>(acc);
-                    return llama::View {sharedMapping, llama::Array {&sharedMem[0]}};
+                    return llama::View{sharedMapping, llama::Array{&sharedMem[0]}};
                 }
             }
             else
-                return int {}; // dummy
+                return int{}; // dummy
         }();
 
         const auto ti = alpaka::idx::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0u];
@@ -181,20 +179,20 @@ int main(int argc, char** argv)
     constexpr FP ts = 0.0001;
 
     // LLAMA
-    const auto arrayDomain = llama::ArrayDomain {PROBLEM_SIZE};
+    const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
 
     const auto mapping = [&] {
         if constexpr (MAPPING == 0)
-            return llama::mapping::AoS {arrayDomain, Particle {}};
+            return llama::mapping::AoS{arrayDomain, Particle{}};
         if constexpr (MAPPING == 1)
-            return llama::mapping::SoA {arrayDomain, Particle {}};
+            return llama::mapping::SoA{arrayDomain, Particle{}};
         if constexpr (MAPPING == 2)
-            return llama::mapping::tree::Mapping {arrayDomain, llama::Tuple {}, Particle {}};
+            return llama::mapping::tree::Mapping{arrayDomain, llama::Tuple{}, Particle{}};
         if constexpr (MAPPING == 3)
-            return llama::mapping::tree::Mapping {
+            return llama::mapping::tree::Mapping{
                 arrayDomain,
-                llama::Tuple {llama::mapping::tree::functor::LeafOnlyRT()},
-                Particle {}};
+                llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
+                Particle{}};
     }();
 
     std::cout << PROBLEM_SIZE / 1000 << " thousand particles\n"
@@ -209,8 +207,8 @@ int main(int argc, char** argv)
 
     chrono.printAndReset("Alloc");
 
-    auto hostView = llama::View {mapping, llama::Array {alpaka::mem::view::getPtrNative(hostBuffer)}};
-    auto accView = llama::View {mapping, llama::Array {alpaka::mem::view::getPtrNative(accBuffer)}};
+    auto hostView = llama::View{mapping, llama::Array{alpaka::mem::view::getPtrNative(hostBuffer)}};
+    auto accView = llama::View{mapping, llama::Array{alpaka::mem::view::getPtrNative(accBuffer)}};
 
     chrono.printAndReset("Views");
 
@@ -241,7 +239,7 @@ int main(int argc, char** argv)
     constexpr auto innerCount = elemCount * threadCount;
     const alpaka::vec::Vec<Dim, Size> blocks(static_cast<Size>((PROBLEM_SIZE + innerCount - 1u) / innerCount));
 
-    const auto workdiv = alpaka::workdiv::WorkDivMembers<Dim, Size> {blocks, threads, Elems};
+    const auto workdiv = alpaka::workdiv::WorkDivMembers<Dim, Size>{blocks, threads, Elems};
 
     for (std::size_t s = 0; s < STEPS; ++s)
     {

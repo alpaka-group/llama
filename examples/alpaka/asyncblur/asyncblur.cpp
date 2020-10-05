@@ -44,7 +44,7 @@ auto viewAlpakaBuffer(
     Mapping& mapping,
     AlpakaBuffer& buffer) // taking mapping by & on purpose, so Mapping can deduce const
 {
-    return llama::View<Mapping, std::byte*> {mapping, {alpaka::mem::view::getPtrNative(buffer)}};
+    return llama::View<Mapping, std::byte*>{mapping, {alpaka::mem::view::getPtrNative(buffer)}};
 }
 
 // clang-format off
@@ -85,15 +85,15 @@ struct BlurKernel
                 // Using SoA for the shared memory
                 constexpr auto sharedChunkSize = ElemsPerBlock + 2 * KernelSize;
                 const auto sharedMapping = llama::mapping::tree::Mapping(
-                    typename View::ArrayDomain {sharedChunkSize, sharedChunkSize},
-                    llama::Tuple {llama::mapping::tree::functor::LeafOnlyRT()},
-                    typename View::DatumDomain {});
+                    typename View::ArrayDomain{sharedChunkSize, sharedChunkSize},
+                    llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
+                    typename View::DatumDomain{});
                 constexpr auto sharedMemSize = llama::sizeOf<PixelOnAcc> * sharedChunkSize * sharedChunkSize;
                 auto& sharedMem = alpaka::block::shared::st::allocVar<std::byte[sharedMemSize], __COUNTER__>(acc);
-                return llama::View {sharedMapping, llama::Array {&sharedMem[0]}};
+                return llama::View{sharedMapping, llama::Array{&sharedMem[0]}};
             }
             else
-                return int {}; // dummy
+                return int{}; // dummy
         }();
 
         [[maybe_unused]] const auto bi = alpaka::idx::getIdx<alpaka::Grid, alpaka::Blocks>(acc);
@@ -210,13 +210,12 @@ int main(int argc, char** argv)
     // LLAMA
     using ArrayDomain = llama::ArrayDomain<2>;
 
-    auto treeOperationList = llama::Tuple {llama::mapping::tree::functor::LeafOnlyRT()};
-    const auto hostMapping
-        = llama::mapping::tree::Mapping {ArrayDomain {buffer_y, buffer_x}, treeOperationList, Pixel {}};
-    const auto devMapping = llama::mapping::tree::Mapping {
-        ArrayDomain {CHUNK_SIZE + 2 * KERNEL_SIZE, CHUNK_SIZE + 2 * KERNEL_SIZE},
+    auto treeOperationList = llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()};
+    const auto hostMapping = llama::mapping::tree::Mapping{ArrayDomain{buffer_y, buffer_x}, treeOperationList, Pixel{}};
+    const auto devMapping = llama::mapping::tree::Mapping{
+        ArrayDomain{CHUNK_SIZE + 2 * KERNEL_SIZE, CHUNK_SIZE + 2 * KERNEL_SIZE},
         treeOperationList,
-        PixelOnAcc {}};
+        PixelOnAcc{}};
 
     const auto hostBufferSize = hostMapping.getBlobSize(0);
     const auto devBufferSize = devMapping.getBlobSize(0);
@@ -254,7 +253,7 @@ int main(int argc, char** argv)
     {
         image.resize(img_x * img_y * 3);
         std::default_random_engine generator;
-        std::normal_distribution<FP> distribution {FP(0), FP(0.5)};
+        std::normal_distribution<FP> distribution{FP(0), FP(0.5)};
         for (std::size_t y = 0; y < buffer_y; ++y)
         {
             LLAMA_INDEPENDENT_DATA
@@ -293,7 +292,7 @@ int main(int argc, char** argv)
         static_cast<size_t>((img_y + CHUNK_SIZE - 1) / CHUNK_SIZE),
         static_cast<size_t>((img_x + CHUNK_SIZE - 1) / CHUNK_SIZE));
 
-    const auto workdiv = alpaka::workdiv::WorkDivMembers<Dim, size_t> {blocks, threads, elems};
+    const auto workdiv = alpaka::workdiv::WorkDivMembers<Dim, size_t>{blocks, threads, elems};
 
     struct VirtualHostElement
     {
@@ -305,7 +304,7 @@ int main(int argc, char** argv)
         for (std::size_t chunk_x = 0; chunk_x < chunks[1]; ++chunk_x)
         {
             // Create virtual view with size of mini view
-            const ArrayDomain validMiniSize {
+            const ArrayDomain validMiniSize{
                 ((chunk_y < chunks[0] - 1) ? CHUNK_SIZE : (img_y - 1) % CHUNK_SIZE + 1) + 2 * KERNEL_SIZE,
                 ((chunk_x < chunks[1] - 1) ? CHUNK_SIZE : (img_x - 1) % CHUNK_SIZE + 1) + 2 * KERNEL_SIZE};
             llama::VirtualView virtualHost(hostView, {chunk_y * CHUNK_SIZE, chunk_x * CHUNK_SIZE}, validMiniSize);
@@ -341,7 +340,7 @@ int main(int argc, char** argv)
                         chunkIt++;
                     }
                     if (notFound)
-                        std::this_thread::sleep_for(std::chrono::microseconds {1});
+                        std::this_thread::sleep_for(std::chrono::microseconds{1});
                 }
             }
 
@@ -357,7 +356,7 @@ int main(int argc, char** argv)
             alpaka::kernel::exec<Acc>(
                 queue[chunkNr],
                 workdiv,
-                BlurKernel<elemCount, KERNEL_SIZE, ELEMS_PER_BLOCK> {},
+                BlurKernel<elemCount, KERNEL_SIZE, ELEMS_PER_BLOCK>{},
                 devOldView[chunkNr],
                 devNewView[chunkNr]);
 
