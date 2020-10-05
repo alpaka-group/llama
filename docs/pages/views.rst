@@ -50,21 +50,19 @@ An example access with the domains defined in the :ref:`domain section <label-do
 
     view(1, 2, 3)(color{}, g{}) = 1.0;
 
-LLAMA also provides a function with explicit template parameters:
+The objects :cpp:`color{}` and :cpp:`g{}` are not used.
+The just serve as a way to specify the template arguments.
+A direct call of the :cpp:`operator()` is also possible and looks like this:
 
 .. code-block:: C++
 
-    view(1, 2, 3).access<color, g>() = 1.0;
+    view(1, 2, 3).operator()<color, g>() = 1.0;
 
-Unfortunately a direct call of the :cpp:`operator()` like :cpp:`view(1, 2, 3)<color, g>()` is not possible, it and would look like this:
-:cpp:`view( 1, 2, 3 ).operator()<color, g>()`.
-Thus, as an explicit call of the :cpp:`operator()` is needed anyway, LLAMA got an own function for this task.
-Different algorithms have different requirements for accessing data.
-E.g. it is also possible to access the array domain with one packed parameter like this:
+It is also possible to access the array domain with one packed parameter like this:
 
 .. code-block:: C++
 
-    view({ 1, 2, 3 })(color{}, g{}) = 1.0;
+    view({1, 2, 3})(color{}, g{}) = 1.0;
     // or
     const ArrayDomain pos{1, 2, 3};
     view(pos)(color{}, g{}) = 1.0;
@@ -75,9 +73,7 @@ also an adressing with the coordinate inside the tree is possible like this:
 
 .. code-block:: C++
 
-    view(1, 2, 3)(llama::DatumCoord< 0, 1 >{}) = 1.0; // color.g
-    // or
-    view(1, 2, 3).access<0, 1>() = 1.0; // color.g
+    view(1, 2, 3)(llama::DatumCoord<0, 1>{}) = 1.0; // color.g
 
 VirtualDatum
 ^^^^^^^^^^^^
@@ -155,7 +151,7 @@ matched and operated on. Every non-matching tag is ignored, e.g.
     // datum2.pos.x and only datum2.pos.x will be added to datum1.pos.x because
     // of pos.x existing in both datum domains although having different types.
 
-    datum1(vel{}) *= datum2( mom() );
+    datum1(vel{}) *= datum2(mom{});
     // datum2.mom.x will be multiplied to datum2.vel.x as the first part of the
     // datum domain coord is explicit given and the same afterwards
 
