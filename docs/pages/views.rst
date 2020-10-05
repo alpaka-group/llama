@@ -51,7 +51,7 @@ An example access with the domains defined in the :ref:`domain section <label-do
     view(1, 2, 3)(color{}, g{}) = 1.0;
 
 The objects :cpp:`color{}` and :cpp:`g{}` are not used.
-The just serve as a way to specify the template arguments.
+They just serve as a way to specify the template arguments.
 A direct call of the :cpp:`operator()` is also possible and looks like this:
 
 .. code-block:: C++
