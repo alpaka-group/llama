@@ -16,6 +16,8 @@ namespace tag
     struct Z {};
     struct Mass {};
     struct Flags {};
+    //struct Id {};
+    //struct Pad {};
 }
 
 using Vec = llama::DS<
@@ -29,6 +31,31 @@ using Particle = llama::DS<
     llama::DE<tag::Mass, float>,
     llama::DE<tag::Flags, llama::DA<bool, 4>>
 >;
+
+// example with bad alignment:
+//using Particle = llama::DS<
+//    llama::DE<tag::Id, std::uint16_t>,
+//    llama::DE<tag::Pos, llama::DS<
+//        llama::DE<tag::X, float>,
+//        llama::DE<tag::Y, float>
+//    >>,
+//    llama::DE<tag::Mass, double>,
+//    llama::DE<tag::Flags, llama::DA<bool, 3>>
+//>;
+
+// bad alignment fixed with explicit padding:
+//using Particle = llama::DS<
+//    llama::DE<tag::Id, std::uint16_t>,
+//    llama::DE<tag::Pad, std::uint16_t>,
+//    llama::DE<tag::Pos, llama::DS<
+//        llama::DE<tag::X, float>,
+//        llama::DE<tag::Y, float>
+//    >>,
+//    llama::DE<tag::Pad, float>,
+//    llama::DE<tag::Mass, double>,
+//    llama::DE<tag::Flags, llama::DA<bool, 3>>,
+//    llama::DE<tag::Pad, llama::DA<bool, 5>>
+//>;
 // clang-format on
 
 namespace
