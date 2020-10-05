@@ -310,8 +310,6 @@ namespace llama
 
         for (const auto& info : infos)
         {
-            const auto bgColor = boost::hash_value(info.ddIndices) & 0xFFFFFF;
-
             const auto width = byteSizeInPixel * info.size;
             svg += fmt::format(
                 R"(<div class="box {0}" title="{1} {2}">{1} {2}</div>)",
