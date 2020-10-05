@@ -274,13 +274,12 @@ namespace llama
         VirtualDatum(const VirtualDatum&) = default;
         VirtualDatum(VirtualDatum&&) = default;
 
-    private:
         /// Access a datum in the datum domain underneath the current virtual
         /// datum using a \ref DatumCoord. If the access resolves to a leaf, a
         /// reference to a variable inside the \ref View storage is returned,
         /// otherwise another virtual datum.
         template <std::size_t... Coord>
-        LLAMA_FN_HOST_ACC_INLINE auto access(DatumCoord<Coord...> = {}) const -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(DatumCoord<Coord...> = {}) const -> decltype(auto)
         {
             using AbsolutCoord = Cat<BoundDatumDomain, DatumCoord<Coord...>>;
             if constexpr (isDatumStruct<GetType<DatumDomain, AbsolutCoord>>)
@@ -297,7 +296,7 @@ namespace llama
 
         // FIXME(bgruber): remove redundancy
         template <std::size_t... Coord>
-        LLAMA_FN_HOST_ACC_INLINE auto access(DatumCoord<Coord...> coord = {}) -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(DatumCoord<Coord...> coord = {}) -> decltype(auto)
         {
             using AbsolutCoord = Cat<BoundDatumDomain, DatumCoord<Coord...>>;
             if constexpr (isDatumStruct<GetType<DatumDomain, AbsolutCoord>>)
@@ -317,52 +316,22 @@ namespace llama
         /// reference to a variable inside the \ref View storage is returned,
         /// otherwise another virtual datum.
         template <typename... Tags>
-        LLAMA_FN_HOST_ACC_INLINE auto access(Tags...) const -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(Tags...) const -> decltype(auto)
         {
             using DatumCoord = GetCoordFromTagsRelative<DatumDomain, BoundDatumDomain, Tags...>;
 
             LLAMA_FORCE_INLINE_RECURSIVE
-            return access(DatumCoord{});
+            return operator()(DatumCoord{});
         }
 
         // FIXME(bgruber): remove redundancy
         template <typename... Tags>
-        LLAMA_FN_HOST_ACC_INLINE auto access(Tags... uids) -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(Tags...) -> decltype(auto)
         {
             using DatumCoord = GetCoordFromTagsRelative<DatumDomain, BoundDatumDomain, Tags...>;
 
             LLAMA_FORCE_INLINE_RECURSIVE
-            return access(DatumCoord{});
-        }
-
-        template <typename... DatumCoordOrUIDs>
-        LLAMA_FN_HOST_ACC_INLINE auto access() const -> decltype(auto)
-        {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return access(DatumCoordOrUIDs{}...);
-        }
-
-        template <typename... DatumCoordOrUIDs>
-        LLAMA_FN_HOST_ACC_INLINE auto access() -> decltype(auto)
-        {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return access(DatumCoordOrUIDs{}...);
-        }
-
-    public:
-        /// Calls \ref access with the passed arguments and returns the result.
-        template <typename... DatumCoordOrUIDs>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(DatumCoordOrUIDs...) const -> decltype(auto)
-        {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return access(DatumCoordOrUIDs{}...);
-        }
-
-        template <typename... DatumCoordOrUIDs>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(DatumCoordOrUIDs...) -> decltype(auto)
-        {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return access(DatumCoordOrUIDs{}...);
+            return operator()(DatumCoord{});
         }
 
         // we need this one to disable the compiler generated copy assignment
