@@ -68,8 +68,8 @@ namespace usellama
         for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
         {
             a[i](tag::X{}) = i; // X
-            a[i].access<tag::Y>() = i; // Y
-            a[i].access<2>() = i; // Z
+            a[i](tag::Y{}) = i; // Y
+            a[i](llama::DatumCoord<2>{}) = i; // Z
             b(i) = i; // writes to all (X, Y, Z)
         }
 

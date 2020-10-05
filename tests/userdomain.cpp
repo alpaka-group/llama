@@ -43,7 +43,7 @@ TEST_CASE("ArrayDomain.dim0")
     Mapping mapping{arrayDomain};
     auto view = allocView(mapping);
 
-    float& x = view(ArrayDomain{}).access<tag::Pos, tag::X>();
+    float& x = view(ArrayDomain{})(tag::Pos{}, tag::X{});
     x = 0;
 }
 
@@ -56,7 +56,7 @@ TEST_CASE("ArrayDomain.dim1")
     Mapping mapping{arrayDomain};
     auto view = allocView(mapping);
 
-    float& x = view(ArrayDomain{0}).access<tag::Pos, tag::X>();
+    float& x = view(ArrayDomain{0})(tag::Pos{}, tag::X{});
     x = 0;
 }
 
@@ -69,7 +69,7 @@ TEST_CASE("ArrayDomain.dim2")
     Mapping mapping{arrayDomain};
     auto view = allocView(mapping);
 
-    float& x = view(ArrayDomain{0, 0}).access<tag::Pos, tag::X>();
+    float& x = view(ArrayDomain{0, 0})(tag::Pos{}, tag::X{});
     x = 0;
 }
 
@@ -82,7 +82,7 @@ TEST_CASE("ArrayDomain.dim3")
     Mapping mapping{arrayDomain};
     auto view = allocView(mapping);
 
-    float& x = view(ArrayDomain{0, 0, 0}).access<tag::Pos, tag::X>();
+    float& x = view(ArrayDomain{0, 0, 0})(tag::Pos{}, tag::X{});
     x = 0;
 }
 
@@ -95,7 +95,7 @@ TEST_CASE("ArrayDomain.dim10")
     Mapping mapping{arrayDomain};
     auto view = allocView(mapping);
 
-    float& x = view(ArrayDomain{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}).access<tag::Pos, tag::X>();
+    float& x = view(ArrayDomain{0, 0, 0, 0, 0, 0, 0, 0, 0, 0})(tag::Pos{}, tag::X{});
     x = 0;
 }
 

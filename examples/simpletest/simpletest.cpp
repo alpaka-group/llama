@@ -164,9 +164,9 @@ int main(int argc, char** argv)
 
     // using the position in the user domain and a tree coord or a uid in the
     // datum domain to get the reference to an element in the view
-    float& position_x = view(pos).access<0, 0>();
-    double& momentum_z = view[pos].access<st::Momentum, st::Z>();
-    int& weight = view[{0, 0}](llama::DatumCoord<2>());
+    float& position_x = view(pos)(llama::DatumCoord<0, 0>{});
+    double& momentum_z = view[pos](st::Momentum{}, st::Z{});
+    int& weight = view[{0, 0}](llama::DatumCoord<2>{});
     int& weight_2 = view(pos)(Weight_);
     bool& options_2 = view[0](st::Options())(llama::DatumCoord<2>());
     bool& options_3 = view(pos)(Options_)(llama::DatumCoord<2>());
@@ -206,19 +206,19 @@ int main(int argc, char** argv)
         // Showing different options of access data with llama. Internally
         // all do the same data- and mappingwise
         auto datum = view(x, y);
-        datum.access<st::Pos, st::X>() += datum.access<llama::DatumCoord<1, 0>>();
-        datum.access(st::Pos(), st::Y()) += datum.access(llama::DatumCoord<1, 1>());
-        datum(st::Pos(), st::Z()) += datum(llama::DatumCoord<2>());
+        datum(st::Pos{}, st::X{}) += datum(llama::DatumCoord<1, 0>{});
+        datum(st::Pos{}, st::Y{}) += datum(llama::DatumCoord<1, 1>{});
+        datum(st::Pos{}, st::Z{}) += datum(llama::DatumCoord<2>{});
 
         // It is also possible to work only on a part of data.
-        datum(st::Pos()) += datum(st::Momentum());
+        datum(st::Pos{}) += datum(st::Momentum{});
     }
     double sum = 0.0;
     LLAMA_INDEPENDENT_DATA
     for (size_t x = 0; x < udSize[0]; ++x)
         LLAMA_INDEPENDENT_DATA
     for (size_t y = 0; y < udSize[1]; ++y)
-        sum += view(x, y).access<1, 0>();
+        sum += view(x, y)(llama::DatumCoord<1, 0>{});
     std::cout << "Sum: " << sum << '\n';
 
     return 0;

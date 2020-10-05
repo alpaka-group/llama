@@ -158,27 +158,16 @@ TEST_CASE("view.access")
         CHECK((view(pos) == view[{0, 0}]));
         CHECK((view(pos) == view({0, 0})));
 
-        const auto& x = view(pos).template access<0, 0>();
-        CHECK(&x == &view(pos).template access<0>().template access<0>());
-        CHECK(&x == &view(pos).template access<0>().template access<tag::X>());
-        CHECK(&x == &view(pos).template access<tag::Pos>().template access<0>());
-        CHECK(&x == &view(pos).template access<tag::Pos, tag::X>());
-        CHECK(&x == &view(pos).template access<tag::Pos>().template access<tag::X>());
-        CHECK(&x == &view(pos)(tag::Pos{}, tag::X{}));
-        CHECK(&x == &view(pos)(tag::Pos{})(tag::X{}));
-        CHECK(&x == &view(pos).template access<tag::Pos>()(tag::X{}));
-        CHECK(&x == &view(pos)(tag::Pos{}).template access<tag::X>());
-        CHECK(&x == &view(pos)(llama::DatumCoord<0, 0>{}));
+        const auto& x = view(pos)(llama::DatumCoord<0, 0>{});
         CHECK(&x == &view(pos)(llama::DatumCoord<0>{})(llama::DatumCoord<0>{}));
-        CHECK(&x == &view(pos).template access<llama::DatumCoord<0, 0>>());
-        CHECK(&x == &view(pos).template access<llama::DatumCoord<0>>().template access<llama::DatumCoord<0>>());
-        // there are even more combinations
+        CHECK(&x == &view(pos)(llama::DatumCoord<0>{})(tag::X{}));
+        CHECK(&x == &view(pos)(tag::Pos{})(llama::DatumCoord<0>{}));
+        CHECK(&x == &view(pos)(tag::Pos{})(tag::X{}));
+        CHECK(&x == &view(pos)(tag::Pos{}, tag::X{}));
 
         // also test arrays
-        const bool& o0 = view(pos).template access<tag::Flags>().template access<0>();
-        CHECK(&o0 == &view(pos).template access<tag::Flags>().template access<llama::Index<0>>());
-        CHECK(&o0 == &view(pos).template access<tag::Flags>().access(llama::Index<0>{}));
-        CHECK(&o0 == &view(pos).template access<tag::Flags>()(llama::Index<0>{}));
+        const bool& o0 = view(pos)(tag::Flags{})(llama::DatumCoord<0>{});
+        CHECK(&o0 == &view(pos)(tag::Flags{})(llama::Index<0>{}));
     };
     l(view);
     l(std::as_const(view));
@@ -199,10 +188,10 @@ TEST_CASE("view.assign-one-datum")
     datum(tag::Pos{}, tag::Z{}) = 16.0f;
     datum(tag::Momentum{}) = 0;
     datum(tag::Weight{}) = 500.0f;
-    datum(tag::Flags{}).access<0>() = true;
-    datum(tag::Flags{}).access<1>() = false;
-    datum(tag::Flags{}).access<2>() = true;
-    datum(tag::Flags{}).access<3>() = false;
+    datum(tag::Flags{})(llama::Index<0>{}) = true;
+    datum(tag::Flags{})(llama::Index<1>{}) = false;
+    datum(tag::Flags{})(llama::Index<2>{}) = true;
+    datum(tag::Flags{})(llama::Index<3>{}) = false;
 
     view({3, 4}) = datum;
 
@@ -213,10 +202,10 @@ TEST_CASE("view.assign-one-datum")
     CHECK(datum(tag::Momentum{}, tag::Y{}) == 0);
     CHECK(datum(tag::Momentum{}, tag::Z{}) == 0);
     CHECK(datum(tag::Weight{}) == 500.0f);
-    CHECK(datum(tag::Flags{}).access<0>() == true);
-    CHECK(datum(tag::Flags{}).access<1>() == false);
-    CHECK(datum(tag::Flags{}).access<2>() == true);
-    CHECK(datum(tag::Flags{}).access<3>() == false);
+    CHECK(datum(tag::Flags{})(llama::Index<0>{}) == true);
+    CHECK(datum(tag::Flags{})(llama::Index<1>{}) == false);
+    CHECK(datum(tag::Flags{})(llama::Index<2>{}) == true);
+    CHECK(datum(tag::Flags{})(llama::Index<3>{}) == false);
 }
 
 TEST_CASE("view.addresses")
@@ -229,17 +218,17 @@ TEST_CASE("view.addresses")
     auto view = allocView(mapping);
 
     const ArrayDomain pos{0, 0};
-    auto& x = view(pos).access<tag::Pos, tag::X>();
-    auto& y = view(pos).access<tag::Pos, tag::Y>();
-    auto& z = view(pos).access<tag::Pos, tag::Z>();
-    auto& w = view(pos).access<tag::Weight>();
-    auto& mx = view(pos).access<tag::Momentum, tag::X>();
-    auto& my = view(pos).access<tag::Momentum, tag::Y>();
-    auto& mz = view(pos).access<tag::Momentum, tag::Z>();
-    auto& o0 = view(pos).access<tag::Flags>().access<0>();
-    auto& o1 = view(pos).access<tag::Flags>().access<1>();
-    auto& o2 = view(pos).access<tag::Flags>().access<2>();
-    auto& o3 = view(pos).access<tag::Flags>().access<3>();
+    auto& x = view(pos)(tag::Pos{}, tag::X{});
+    auto& y = view(pos)(tag::Pos{}, tag::Y{});
+    auto& z = view(pos)(tag::Pos{}, tag::Z{});
+    auto& w = view(pos)(tag::Weight{});
+    auto& mx = view(pos)(tag::Momentum{}, tag::X{});
+    auto& my = view(pos)(tag::Momentum{}, tag::Y{});
+    auto& mz = view(pos)(tag::Momentum{}, tag::Z{});
+    auto& o0 = view(pos)(tag::Flags{})(llama::Index<0>{});
+    auto& o1 = view(pos)(tag::Flags{})(llama::Index<1>{});
+    auto& o2 = view(pos)(tag::Flags{})(llama::Index<2>{});
+    auto& o3 = view(pos)(tag::Flags{})(llama::Index<3>{});
 
     CHECK((size_t) &y - (size_t) &x == 2048);
     CHECK((size_t) &z - (size_t) &x == 4096);
@@ -287,7 +276,7 @@ TEST_CASE("view.iteration-and-access")
     double sum = 0.0;
     for (size_t x = 0; x < arrayDomain[0]; ++x)
         for (size_t y = 0; y < arrayDomain[1]; ++y)
-            sum += view(x, y).access<2, 0>();
+            sum += view(x, y)(llama::DatumCoord<2, 0>{});
     CHECK(sum == 120.0);
 }
 
@@ -306,8 +295,8 @@ TEST_CASE("view.datum-access")
         for (size_t y = 0; y < arrayDomain[1]; ++y)
         {
             auto datum = view(x, y);
-            datum.access<tag::Pos, tag::X>() += datum.access<llama::DatumCoord<2, 0>>();
-            datum.access(tag::Pos(), tag::Y()) += datum.access(llama::DatumCoord<2, 1>());
+            datum(tag::Pos(), tag::X()) += datum(llama::DatumCoord<2, 0>{});
+            datum(tag::Pos(), tag::Y()) += datum(llama::DatumCoord<2, 1>{});
             datum(tag::Pos(), tag::Z()) += datum(llama::DatumCoord<1>());
             datum(tag::Pos()) += datum(tag::Momentum());
         }
@@ -315,7 +304,7 @@ TEST_CASE("view.datum-access")
     double sum = 0.0;
     for (size_t x = 0; x < arrayDomain[0]; ++x)
         for (size_t y = 0; y < arrayDomain[1]; ++y)
-            sum += view(x, y).access<2, 0>();
+            sum += view(x, y)(llama::DatumCoord<2, 0>{});
 
     CHECK(sum == 0.0);
 }

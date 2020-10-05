@@ -274,6 +274,7 @@ namespace llama
         VirtualDatum(const VirtualDatum&) = default;
         VirtualDatum(VirtualDatum&&) = default;
 
+    private:
         /// Access a datum in the datum domain underneath the current virtual
         /// datum using a \ref DatumCoord. If the access resolves to a leaf, a
         /// reference to a variable inside the \ref View storage is returned,
@@ -348,6 +349,7 @@ namespace llama
             return access(DatumCoordOrUIDs{}...);
         }
 
+    public:
         /// Calls \ref access with the passed arguments and returns the result.
         template <typename... DatumCoordOrUIDs>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(DatumCoordOrUIDs...) const -> decltype(auto)

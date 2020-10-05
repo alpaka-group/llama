@@ -1074,7 +1074,7 @@ TEST_CASE("treemapping")
     double sum = 0.0;
     for (size_t x = 0; x < arrayDomain[0]; ++x)
         for (size_t y = 0; y < arrayDomain[1]; ++y)
-            sum += view({x, y}).access<0, 1>();
+            sum += view({x, y})(llama::DatumCoord<0, 1>{});
     CHECK(sum == 0);
 }
 

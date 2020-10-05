@@ -21,7 +21,7 @@ TEST_CASE("type int")
     Mapping mapping{arrayDomain};
     auto view = allocView(mapping);
 
-    int& e = view(ArrayDomain{0}).access<Tag>();
+    int& e = view(ArrayDomain{0})(Tag{});
     e = 0;
 }
 
@@ -39,7 +39,7 @@ TEST_CASE("type std::complex<float>")
     Mapping mapping{arrayDomain};
     auto view = allocView(mapping);
 
-    std::complex<float>& e = view(ArrayDomain{0}).access<Tag>();
+    std::complex<float>& e = view(ArrayDomain{0})(Tag{});
     e = {2, 3};
 }
 
@@ -57,7 +57,7 @@ TEST_CASE("type std::array<float, 4>")
     Mapping mapping{arrayDomain};
     auto view = allocView(mapping);
 
-    std::array<float, 4>& e = view(ArrayDomain{0}).access<Tag>();
+    std::array<float, 4>& e = view(ArrayDomain{0})(Tag{});
     e = {2, 3, 4, 5};
 }
 
@@ -75,7 +75,7 @@ TEST_CASE("type std::vector<float>")
     Mapping mapping{arrayDomain};
     auto view = allocView(mapping);
 
-    std::vector<float>& e = view(ArrayDomain{0}).access<Tag>();
+    std::vector<float>& e = view(ArrayDomain{0})(Tag{});
     // e = {2, 3, 4, 5}; // FIXME: LLAMA memory is uninitialized
 }
 
@@ -93,7 +93,7 @@ TEST_CASE("type std::atomic<int>")
     Mapping mapping{arrayDomain};
     auto view = allocView(mapping);
 
-    std::atomic<int>& e = view(ArrayDomain{0}).access<Tag>();
+    std::atomic<int>& e = view(ArrayDomain{0})(Tag{});
     // e++; // FIXME: LLAMA memory is uninitialized
 }
 
@@ -122,7 +122,7 @@ TEST_CASE("type noncopyable")
     Mapping mapping{arrayDomain};
     auto view = allocView(mapping);
 
-    Element& e = view(ArrayDomain{0}).access<Tag>();
+    Element& e = view(ArrayDomain{0})(Tag{});
     e.value = 0;
 }
 
@@ -151,7 +151,7 @@ TEST_CASE("type nonmoveable")
     Mapping mapping{arrayDomain};
     auto view = allocView(mapping);
 
-    Element& e = view(ArrayDomain{0}).access<Tag>();
+    Element& e = view(ArrayDomain{0})(Tag{});
     e.value = 0;
 }
 
@@ -175,7 +175,7 @@ TEST_CASE("type not defaultconstructible")
     Mapping mapping{arrayDomain};
     auto view = allocView(mapping);
 
-    Element& e = view(ArrayDomain{0}).access<Tag>();
+    Element& e = view(ArrayDomain{0})(Tag{});
     e.value = 0;
 }
 
@@ -198,7 +198,7 @@ TEST_CASE("type nottrivial ctor")
     Mapping mapping{arrayDomain};
     auto view = allocView(mapping);
 
-    Element& e = view(ArrayDomain{0}).access<Tag>();
+    Element& e = view(ArrayDomain{0})(Tag{});
     // CHECK(e.value == 42); // FIXME: LLAMA memory is uninitialized
 }
 
@@ -233,10 +233,10 @@ TEST_CASE("type custom initialization")
     auto view = allocView(mapping);
 
     // FIXME: LLAMA memory is uninitialized
-    // CHECK(view(ArrayDomain{0}).access<Tag>() == 0);
-    // CHECK(view(ArrayDomain{1}).access<Tag>() == 1);
-    // CHECK(view(ArrayDomain{2}).access<Tag>() == 2);
-    // CHECK(view(ArrayDomain{15}).access<Tag>() == 15);
+    // CHECK(view(ArrayDomain{0})(Tag{}) == 0);
+    // CHECK(view(ArrayDomain{1})(Tag{}) == 1);
+    // CHECK(view(ArrayDomain{2})(Tag{}) == 2);
+    // CHECK(view(ArrayDomain{15})(Tag{}) == 15);
 }
 
 TEST_CASE("type just double")
