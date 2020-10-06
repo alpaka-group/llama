@@ -47,13 +47,13 @@ jobs:
         vcpkgGitCommitId: 76a7e9248fb3c57350b559966dcaa2d52a5e4458
     - name: vcpkg install dependencies
       run: |
-        $VCPKG_ROOT/vcpkg install catch2 fmt
+        & $env:VCPKG_ROOT/vcpkg install catch2 fmt
     - name: cmake
       run: |
         mkdir build
         cd build
         $env:BOOST_ROOT = $env:BOOST_ROOT_1_72_0
-        cmake .. -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
+        cmake .. -DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake
     - name: build
       run: cmake --build build --config RelWithDebInfo
     - name: tests
