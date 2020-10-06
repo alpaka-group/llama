@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: dependencies
+    - name: vcpkg install dependencies
       run: |
         vcpkg install catch2 fmt
     - name: cmake
@@ -40,9 +40,12 @@ jobs:
       VCPKG_DEFAULT_TRIPLET: x64-windows
     steps:
     - uses: actions/checkout@v2
-    - name: dependencies
+    - name: vcpkg install dependencies
+      uses: lukka/run-vcpkg@v4
+      with:
+        setupOnly: true
       run: |
-        vcpkg install catch2 fmt
+        $VCPKG_ROOT/vcpkg install catch2 fmt
     - name: cmake
       run: |
         mkdir build
