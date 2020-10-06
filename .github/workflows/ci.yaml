@@ -40,10 +40,11 @@ jobs:
       VCPKG_DEFAULT_TRIPLET: x64-windows
     steps:
     - uses: actions/checkout@v2
-    - name: vcpkg install dependencies
+    - name: install vcpkg
       uses: lukka/run-vcpkg@v4
       with:
         setupOnly: true
+    - name: vcpkg install dependencies
       run: |
         $VCPKG_ROOT/vcpkg install catch2 fmt
     - name: cmake
