@@ -53,7 +53,7 @@ jobs:
         mkdir build
         cd build
         $env:BOOST_ROOT = $env:BOOST_ROOT_1_72_0
-        cmake .. -DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake
+        cmake .. "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
     - name: build
       run: cmake --build build --config RelWithDebInfo
     - name: tests
