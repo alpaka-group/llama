@@ -31,7 +31,7 @@ namespace llama::mapping
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        auto getBlobSize(std::size_t const) const -> std::size_t
+        auto getBlobSize(std::size_t) const -> std::size_t
         {
             return LinearizeArrayDomainFunctor{}.size(arrayDomainSize) * sizeOf<DatumDomain>;
         }
@@ -46,6 +46,6 @@ namespace llama::mapping
             return {0, offset};
         }
 
-        ArrayDomain arrayDomainSize = {};
+        ArrayDomain arrayDomainSize;
     };
 } // namespace llama::mapping
