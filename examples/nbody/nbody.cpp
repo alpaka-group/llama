@@ -101,7 +101,7 @@ namespace usellama
                 return std::move(mapping);
         }();
 
-        auto particles = allocView(std::move(tmapping));
+        auto particles = llama::allocView(std::move(tmapping));
 
         std::cout << PROBLEM_SIZE / 1000 << " thousand particles LLAMA\n";
 
