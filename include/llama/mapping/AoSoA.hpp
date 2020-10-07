@@ -40,9 +40,9 @@ namespace llama::mapping
         template <std::size_t... DatumDomainCoord>
         LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
         {
-            const auto userDomainIndex = LinearizeArrayDomainFunctor{}(coord, arrayDomainSize);
-            const auto blockIndex = userDomainIndex / Lanes;
-            const auto laneIndex = userDomainIndex % Lanes;
+            const auto flatArrayIndex = LinearizeArrayDomainFunctor{}(coord, arrayDomainSize);
+            const auto blockIndex = flatArrayIndex / Lanes;
+            const auto laneIndex = flatArrayIndex % Lanes;
             const auto offset = (sizeOf<DatumDomain> * Lanes) * blockIndex
                 + offsetOf<DatumDomain, DatumDomainCoord...> * Lanes
                 + sizeof(GetType<DatumDomain, DatumCoord<DatumDomainCoord...>>) * laneIndex;
