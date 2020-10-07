@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['z_409',['Z',['../structusellama_1_1tag_1_1Z.html',1,'usellama::tag::Z'],['../structst_1_1Z.html',1,'st::Z'],['../structtag_1_1Z.html',1,'tag::Z'],['../structmanualAoS_1_1Vec.html#a7957ef60a6aa7a35292983ef2208d209',1,'manualAoS::Vec::z()'],['../structmanualAoS_1_1Vector.html#abc8050dc265106ad539c727316eb2835',1,'manualAoS::Vector::z()']]]
+  ['y',['Y',['../structst_1_1Y.html',1,'st::Y'],['../structtag_1_1Y.html',1,'tag::Y'],['../structusellama_1_1tag_1_1Y.html',1,'usellama::tag::Y'],['../structmanualAoS_1_1Vec.html#a358b25b238000532cbdb002a1af5abe8',1,'manualAoS::Vec::y()'],['../structmanualAoS_1_1Vector.html#a665d888d6270f9841fc12814fc4f3b1d',1,'manualAoS::Vector::y()']]]
 ];

@@ -1,8 +1,9 @@
 var searchData=
 [
-  ['datumcoordcommonprefixisbigger_723',['DatumCoordCommonPrefixIsBigger',['../namespacellama.html#a509ebe7c2d11a72fc986dd5a69d8d83a',1,'llama']]],
-  ['datumcoordcommonprefixissame_724',['DatumCoordCommonPrefixIsSame',['../namespacellama.html#aede6400125ffd6c6a2c51b86b66fdb10',1,'llama']]],
-  ['datumhits_725',['datumHits',['../structllama_1_1mapping_1_1Trace.html#ab48ce5ba844f9c2462ec43ad8ca8c7d3',1,'llama::mapping::Trace']]],
-  ['default_5fimg_5fx_726',['DEFAULT_IMG_X',['../asyncblur_8cpp.html#a22a969790a7dba0a5c109830a395adb7',1,'asyncblur.cpp']]],
-  ['default_5fimg_5fy_727',['DEFAULT_IMG_Y',['../asyncblur_8cpp.html#ab93517c2ac08dc4f68d0e36cde3e6173',1,'asyncblur.cpp']]]
+  ['childindex',['childIndex',['../structllama_1_1mapping_1_1tree_1_1TreeCoordElement.html#a9c5d79390f82ab6cfcc89c3ddc41da54',1,'llama::mapping::tree::TreeCoordElement']]],
+  ['childs',['childs',['../structllama_1_1mapping_1_1tree_1_1Node.html#aea91d27ab7fe5a3d8c0952996e59e082',1,'llama::mapping::tree::Node']]],
+  ['chunk_5fcount',['CHUNK_COUNT',['../asyncblur_8cpp.html#a5c0181c620dadbb85c1e025bed2b2c5d',1,'asyncblur.cpp']]],
+  ['chunk_5fsize',['CHUNK_SIZE',['../asyncblur_8cpp.html#ac884f9005378d0dcce70475594e32c87',1,'asyncblur.cpp']]],
+  ['count',['count',['../structllama_1_1mapping_1_1tree_1_1Leaf.html#a7b77f1d82f07abc8c4bda286755c806b',1,'llama::mapping::tree::Leaf::count()'],['../structllama_1_1mapping_1_1tree_1_1Node.html#a23d4c1f81e74e0d2912a49fa7fa4fbd0',1,'llama::mapping::tree::Node::count()']]],
+  ['current',['current',['../structllama_1_1ArrayDomainIndexIterator.html#ae9f7a34ddfa8c25824ff1994b58b3b1a',1,'llama::ArrayDomainIndexIterator']]]
 ];

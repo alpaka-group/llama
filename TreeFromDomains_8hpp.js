@@ -12,9 +12,9 @@ var TreeFromDomains_8hpp =
     [ "TreeFromDatumDomainImpl", "TreeFromDomains_8hpp.html#a3584f8107017c7179c38fba44dd6effa", null ],
     [ "TreeFromDomains", "TreeFromDomains_8hpp.html#a40a8c323e7e55bf65a20658f40437de1", null ],
     [ "createTree", "TreeFromDomains_8hpp.html#a402ea48e568a842f07e7618854ec7a63", null ],
-    [ "createTreeCoord", "TreeFromDomains_8hpp.html#a8bd50fb4b5af9af23536ab0cb4e2f391", null ],
     [ "createTreeCoord", "TreeFromDomains_8hpp.html#a3fb9604f4fd0e77ae2ef5a25c3cf1a9a", null ],
-    [ "treeCoordToString", "TreeFromDomains_8hpp.html#a5db1654176ea82f4ed22c4c247133dab", null ],
+    [ "createTreeCoord", "TreeFromDomains_8hpp.html#a8bd50fb4b5af9af23536ab0cb4e2f391", null ],
     [ "treeCoordToString", "TreeFromDomains_8hpp.html#a2c18fb59a758ab64477a2719ad0ce4bc", null ],
+    [ "treeCoordToString", "TreeFromDomains_8hpp.html#a5db1654176ea82f4ed22c4c247133dab", null ],
     [ "one", "TreeFromDomains_8hpp.html#afbd4ba87d1acf92e1418324f097a68c8", null ]
 ];

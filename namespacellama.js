@@ -9,6 +9,8 @@ var namespacellama =
     [ "ArrayDomainIndexRange", "structllama_1_1ArrayDomainIndexRange.html", "structllama_1_1ArrayDomainIndexRange" ],
     [ "DatumCoord", "structllama_1_1DatumCoord.html", "structllama_1_1DatumCoord" ],
     [ "DatumCoord<>", "structllama_1_1DatumCoord_3_4.html", "structllama_1_1DatumCoord_3_4" ],
+    [ "DatumElement", "structllama_1_1DatumElement.html", null ],
+    [ "DatumStruct", "structllama_1_1DatumStruct.html", null ],
     [ "NoName", "structllama_1_1NoName.html", null ],
     [ "NrAndOffset", "structllama_1_1NrAndOffset.html", "structllama_1_1NrAndOffset" ],
     [ "Tuple", "structllama_1_1Tuple.html", null ],

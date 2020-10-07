@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['y_785',['y',['../structmanualAoS_1_1Vec.html#a358b25b238000532cbdb002a1af5abe8',1,'manualAoS::Vec::y()'],['../structmanualAoS_1_1Vector.html#a665d888d6270f9841fc12814fc4f3b1d',1,'manualAoS::Vector::y()']]]
+  ['x',['x',['../structmanualAoS_1_1Vec.html#a28030d3a45307afc445bba41ec1ab51a',1,'manualAoS::Vec::x()'],['../structmanualAoS_1_1Vector.html#ad283fcf2d84eda7a4986e92f103a6f14',1,'manualAoS::Vector::x()']]]
 ];

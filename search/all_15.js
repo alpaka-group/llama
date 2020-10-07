@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['x_407',['X',['../structusellama_1_1tag_1_1X.html',1,'usellama::tag::X'],['../structtag_1_1X.html',1,'tag::X'],['../structst_1_1X.html',1,'st::X'],['../structmanualAoS_1_1Vec.html#a28030d3a45307afc445bba41ec1ab51a',1,'manualAoS::Vec::x()'],['../structmanualAoS_1_1Vector.html#ad283fcf2d84eda7a4986e92f103a6f14',1,'manualAoS::Vector::x()']]]
+  ['weight',['Weight',['../structst_1_1Weight.html',1,'st']]],
+  ['wrapinnnodes',['WrapInNNodes',['../structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes.html',1,'llama::mapping::tree::internal']]],
+  ['wrapinnnodes_3c_20leaf_2c_200_20_3e',['WrapInNNodes&lt; Leaf, 0 &gt;',['../structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes_3_01Leaf_00_010_01_4.html',1,'llama::mapping::tree::internal']]]
 ];

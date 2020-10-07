@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['parentview_754',['parentView',['../structllama_1_1VirtualView.html#abca62490ac2e860c543ef5c1d11c878b',1,'llama::VirtualView']]],
-  ['pos_755',['pos',['../structmanualAoS_1_1Particle.html#a88c9c149719f30350dfbd9e3f1bc4d26',1,'manualAoS::Particle']]],
-  ['problem_5fsize_756',['PROBLEM_SIZE',['../alpaka_2nbody_2nbody_8cpp.html#a90b78adcf906459c1fcd875a872f609b',1,'PROBLEM_SIZE():&#160;nbody.cpp'],['../alpaka_2vectoradd_2vectoradd_8cpp.html#a90b78adcf906459c1fcd875a872f609b',1,'PROBLEM_SIZE():&#160;vectoradd.cpp'],['../nbody_2nbody_8cpp.html#a90b78adcf906459c1fcd875a872f609b',1,'PROBLEM_SIZE():&#160;nbody.cpp'],['../vectoradd_2vectoradd_8cpp.html#a90b78adcf906459c1fcd875a872f609b',1,'PROBLEM_SIZE():&#160;vectoradd.cpp']]]
+  ['offset',['offset',['../structllama_1_1NrAndOffset.html#ac988896db6d94d5e95b2cdf6ad26c129',1,'llama::NrAndOffset::offset()'],['../structllama_1_1VirtualView.html#ae779d6bb35e025f55c24c386f4e17bff',1,'llama::VirtualView::offset()']]],
+  ['offsetof',['offsetOf',['../namespacellama.html#a160903369d7b696ba3c2b50c6be968ee',1,'llama']]],
+  ['one',['one',['../namespacellama_1_1mapping_1_1tree.html#afbd4ba87d1acf92e1418324f097a68c8',1,'llama::mapping::tree']]],
+  ['operation',['operation',['../structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors_3_01Tree_00_01Tuple_3_01Operations_8_8_8_01_4_01_4.html#a414a8d97cea69b25adb091fd077cd9aa',1,'llama::mapping::tree::internal::MergeFunctors&lt; Tree, Tuple&lt; Operations... &gt; &gt;']]]
 ];

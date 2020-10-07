@@ -1,4 +1,3 @@
-<map id="llama::mapping::tree::Mapping&lt; T_UserDomain, T_DatumDomain, TreeOperationList &gt;" name="llama::mapping::tree::Mapping&lt; T_UserDomain, T_DatumDomain, TreeOperationList &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="5,124,253,180"/>
-<area shape="rect" id="node2" href="$structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors.html" title=" " alt="" coords="21,5,237,61"/>
+<map id="llama::mapping::tree::Mapping&lt; T_ArrayDomain, T_DatumDomain, TreeOperationList &gt;" name="llama::mapping::tree::Mapping&lt; T_ArrayDomain, T_DatumDomain, TreeOperationList &gt;">
+<area shape="rect" id="node2" href="$structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors.html" title="llama::mapping::tree\l::internal::MergeFunctors\l\&lt; BasicTree, TreeOperationList \&gt;" alt="" coords="21,5,237,61"/>
 </map>

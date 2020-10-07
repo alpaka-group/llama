@@ -1,11 +1,10 @@
-<map id="/mnt/c/dev/llama/include/llama/mapping/SoA.hpp" name="/mnt/c/dev/llama/include/llama/mapping/SoA.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="696,5,860,47"/>
-<area shape="rect" id="node2" href="$llama_8hpp.html" title=" " alt="" coords="696,95,860,136"/>
-<area shape="rect" id="node3" href="$asyncblur_8cpp.html" title=" " alt="" coords="5,184,215,225"/>
-<area shape="rect" id="node4" href="$alpaka_2nbody_2nbody_8cpp.html" title=" " alt="" coords="239,184,418,225"/>
-<area shape="rect" id="node5" href="$alpaka_2vectoradd_2vectoradd_8cpp.html" title=" " alt="" coords="442,184,653,225"/>
-<area shape="rect" id="node6" href="$heatequation_8cpp.html" title=" " alt="" coords="677,184,879,225"/>
-<area shape="rect" id="node7" href="$nbody_2nbody_8cpp.html" title=" " alt="" coords="903,184,1082,225"/>
-<area shape="rect" id="node8" href="$simpletest_8cpp.html" title="Simple example for LLAMA showing how to define a user and datum domain, to create a view and to acces..." alt="" coords="1106,184,1285,225"/>
-<area shape="rect" id="node9" href="$vectoradd_2vectoradd_8cpp.html" title=" " alt="" coords="1309,184,1487,225"/>
+<map id="/home/runner/work/llama/llama/include/llama/mapping/SoA.hpp" name="/home/runner/work/llama/llama/include/llama/mapping/SoA.hpp">
+<area shape="rect" id="node2" href="$llama_8hpp.html" title="/home/runner/work/llama\l/llama/include/llama/llama.hpp" alt="" coords="579,109,777,151"/>
+<area shape="rect" id="node3" href="$asyncblur_8cpp.html" title="/home/runner/work/llama\l/llama/examples/alpaka\l/asyncblur/asyncblur.cpp" alt="" coords="5,199,172,255"/>
+<area shape="rect" id="node4" href="$alpaka_2nbody_2nbody_8cpp.html" title="/home/runner/work/llama\l/llama/examples/alpaka\l/nbody/nbody.cpp" alt="" coords="197,199,362,255"/>
+<area shape="rect" id="node5" href="$alpaka_2vectoradd_2vectoradd_8cpp.html" title="/home/runner/work/llama\l/llama/examples/alpaka\l/vectoradd/vectoradd.cpp" alt="" coords="387,199,556,255"/>
+<area shape="rect" id="node6" href="$heatequation_8cpp.html" title="/home/runner/work/llama\l/llama/examples/heatequation\l/heatequation.cpp" alt="" coords="581,199,775,255"/>
+<area shape="rect" id="node7" href="$nbody_2nbody_8cpp.html" title="/home/runner/work/llama\l/llama/examples/nbody\l/nbody.cpp" alt="" coords="799,199,965,255"/>
+<area shape="rect" id="node8" href="$simpletest_8cpp.html" title="Simple example for LLAMA showing how to define a user and datum domain, to create a view and to acces..." alt="" coords="989,199,1170,255"/>
+<area shape="rect" id="node9" href="$vectoradd_2vectoradd_8cpp.html" title="/home/runner/work/llama\l/llama/examples/vectoradd\l/vectoradd.cpp" alt="" coords="1194,199,1373,255"/>
 </map>

@@ -1,11 +1,5 @@
-<map id="/mnt/c/dev/llama/include/llama/mapping/Common.hpp" name="/mnt/c/dev/llama/include/llama/mapping/Common.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="181,5,373,47"/>
-<area shape="rect" id="node2" href="$Types_8hpp.html" title=" " alt="" coords="179,95,273,121"/>
-<area shape="rect" id="node9" title=" " alt="" coords="297,95,357,121"/>
-<area shape="rect" id="node3" href="$Array_8hpp.html" title=" " alt="" coords="65,169,144,196"/>
-<area shape="rect" id="node7" title=" " alt="" coords="169,169,283,196"/>
-<area shape="rect" id="node8" title=" " alt="" coords="307,169,390,196"/>
-<area shape="rect" id="node4" href="$macros_8hpp.html" title=" " alt="" coords="13,244,103,271"/>
-<area shape="rect" id="node6" title=" " alt="" coords="127,244,178,271"/>
-<area shape="rect" id="node5" title=" " alt="" coords="5,319,111,345"/>
+<map id="/home/runner/work/llama/llama/include/llama/mapping/Common.hpp" name="/home/runner/work/llama/llama/include/llama/mapping/Common.hpp">
+<area shape="rect" id="node2" href="$Types_8hpp.html" title="../Types.hpp" alt="" coords="240,109,335,136"/>
+<area shape="rect" id="node3" href="$Array_8hpp.html" title="Array.hpp" alt="" coords="65,184,144,211"/>
+<area shape="rect" id="node4" href="$macros_8hpp.html" title="macros.hpp" alt="" coords="13,259,103,285"/>
 </map>

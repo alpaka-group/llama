@@ -1,6 +1,9 @@
 var searchData=
 [
-  ['use_5fshared_778',['USE_SHARED',['../alpaka_2nbody_2nbody_8cpp.html#a5dda953d191e2a3c4b5c75c4bfb1396f',1,'nbody.cpp']]],
-  ['use_5fshared_5ftree_779',['USE_SHARED_TREE',['../alpaka_2nbody_2nbody_8cpp.html#a69efd44e24fa2ca156375db2d26f5d4e',1,'nbody.cpp']]],
-  ['userdomainsize_780',['userDomainSize',['../structllama_1_1mapping_1_1AoS.html#a0f560a09b79adf0a1158ee6ac84813c4',1,'llama::mapping::AoS::userDomainSize()'],['../structllama_1_1mapping_1_1AoSoA.html#aa09c36cda078dd734f69b27005527bac',1,'llama::mapping::AoSoA::userDomainSize()'],['../structllama_1_1mapping_1_1SoA.html#ae29c8fe9e05f04f7f1233653c0bc6e28',1,'llama::mapping::SoA::userDomainSize()'],['../structllama_1_1mapping_1_1tree_1_1Mapping.html#a9fecee91c0ec8c130016098976e2a7b8',1,'llama::mapping::tree::Mapping::userDomainSize()']]]
+  ['tagindex',['tagIndex',['../structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01DatumStruct_3_01DatumElements_8_8_8_01_4_00_d11d95071a2bfb84786da221f3c394b2.html#a47ac6677d46746aae6ac45f39ce5fc9f',1,'llama::internal::GetCoordFromTagsImpl&lt; DatumStruct&lt; DatumElements... &gt;, DatumCoord&lt; ResultCoords... &gt;, FirstTag, Tags... &gt;']]],
+  ['threadcount',['threadCount',['../structcommon_1_1ThreadsElemsDistribution.html#af30d7417b92ebe035ff01d50f21fb3af',1,'common::ThreadsElemsDistribution']]],
+  ['threadelemdist_5fmin_5felem',['THREADELEMDIST_MIN_ELEM',['../namespacecommon.html#a1956e3e019125a9308d4bca0edaf9abb',1,'common']]],
+  ['trace',['TRACE',['../nbody_2nbody_8cpp.html#ad810aaf4b94d7ea8b1436b054c3df4aa',1,'nbody.cpp']]],
+  ['treeafterop',['treeAfterOp',['../structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors_3_01Tree_00_01Tuple_3_01Operations_8_8_8_01_4_01_4.html#a380858e498f09dcf4aa8e04db2fb1b1e',1,'llama::mapping::tree::internal::MergeFunctors&lt; Tree, Tuple&lt; Operations... &gt; &gt;']]],
+  ['tuplesize',['tupleSize',['../namespacellama.html#a4dab552f80b940c9f393f97cb8d4d791',1,'llama']]]
 ];

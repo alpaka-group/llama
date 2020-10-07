@@ -11,7 +11,7 @@ var dir_1edeeca147c2d4fb57fec1b01c02fb14 =
     [ "Array.hpp", "Array_8hpp.html", "Array_8hpp" ],
     [ "Concepts.hpp", "Concepts_8hpp.html", null ],
     [ "DatumCoord.hpp", "DatumCoord_8hpp.html", "DatumCoord_8hpp" ],
-    [ "DumpMapping.hpp", "DumpMapping_8hpp.html", null ],
+    [ "DumpMapping.hpp", "DumpMapping_8hpp.html", "DumpMapping_8hpp" ],
     [ "ForEach.hpp", "ForEach_8hpp.html", "ForEach_8hpp" ],
     [ "Functions.hpp", "Functions_8hpp.html", "Functions_8hpp" ],
     [ "llama.hpp", "llama_8hpp.html", "llama_8hpp" ],

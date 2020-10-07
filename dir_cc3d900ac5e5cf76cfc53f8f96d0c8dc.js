@@ -14,5 +14,6 @@ var dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc =
     [ "SoA.hpp", "SoA_8hpp.html", [
       [ "SoA", "structllama_1_1mapping_1_1SoA.html", "structllama_1_1mapping_1_1SoA" ]
     ] ],
+    [ "SplitMapping.hpp", "SplitMapping_8hpp.html", "SplitMapping_8hpp" ],
     [ "Trace.hpp", "Trace_8hpp.html", "Trace_8hpp" ]
 ];

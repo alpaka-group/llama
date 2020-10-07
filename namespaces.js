@@ -1,4 +1,4 @@
-var namespaces_dup =
+var namespaces =
 [
     [ "anonymous_namespace{simpletest.cpp}", "namespaceanonymous__namespace_02simpletest_8cpp_03.html", null ],
     [ "common", "namespacecommon.html", null ],

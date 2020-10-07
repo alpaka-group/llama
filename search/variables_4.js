@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['elemcount_728',['elemCount',['../structcommon_1_1ThreadsElemsDistribution.html#ad70c780d49780d532a7885dc082f5262',1,'common::ThreadsElemsDistribution']]],
-  ['element_729',['element',['../structllama_1_1Array.html#adcb4206c8a2d2bc2cbe141d354a6185b',1,'llama::Array']]],
-  ['elems_5fper_5fblock_730',['ELEMS_PER_BLOCK',['../asyncblur_8cpp.html#ac138f240a2bc68fa658889b65523a2e3',1,'asyncblur.cpp']]],
-  ['eof_731',['eof',['../structstbi__io__callbacks.html#a319639db2f76e715eed7a7a974136832',1,'stbi_io_callbacks']]],
-  ['eps2_732',['EPS2',['../alpaka_2nbody_2nbody_8cpp.html#a5955893f8d8b02c257ae4c32a32fd53a',1,'EPS2():&#160;nbody.cpp'],['../nbody_2nbody_8cpp.html#a5955893f8d8b02c257ae4c32a32fd53a',1,'EPS2():&#160;nbody.cpp']]]
+  ['datumcoordcommonprefixisbigger',['DatumCoordCommonPrefixIsBigger',['../namespacellama.html#a509ebe7c2d11a72fc986dd5a69d8d83a',1,'llama']]],
+  ['datumcoordcommonprefixissame',['DatumCoordCommonPrefixIsSame',['../namespacellama.html#aede6400125ffd6c6a2c51b86b66fdb10',1,'llama']]],
+  ['datumhits',['datumHits',['../structllama_1_1mapping_1_1Trace.html#ab48ce5ba844f9c2462ec43ad8ca8c7d3',1,'llama::mapping::Trace']]],
+  ['default_5fimg_5fx',['DEFAULT_IMG_X',['../asyncblur_8cpp.html#a22a969790a7dba0a5c109830a395adb7',1,'asyncblur.cpp']]],
+  ['default_5fimg_5fy',['DEFAULT_IMG_Y',['../asyncblur_8cpp.html#ab93517c2ac08dc4f68d0e36cde3e6173',1,'asyncblur.cpp']]]
 ];

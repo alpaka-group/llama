@@ -1,25 +1,4 @@
 var searchData=
 [
-  ['allocator_147',['allocator',['../namespacellama_1_1allocator.html',1,'llama']]],
-  ['functor_148',['functor',['../namespacellama_1_1mapping_1_1tree_1_1functor.html',1,'llama::mapping::tree']]],
-  ['llama_20api_20documentation_149',['LLAMA API documentation',['../index.html',1,'']]],
-  ['internal_150',['internal',['../namespacellama_1_1allocator_1_1internal.html',1,'llama::allocator::internal'],['../namespacellama_1_1internal.html',1,'llama::internal'],['../namespacellama_1_1mapping_1_1internal.html',1,'llama::mapping::internal'],['../namespacellama_1_1mapping_1_1tree_1_1functor_1_1internal.html',1,'llama::mapping::tree::functor::internal'],['../namespacellama_1_1mapping_1_1tree_1_1internal.html',1,'llama::mapping::tree::internal']]],
-  ['last_151',['last',['../structChrono.html#a91a40f9a9e48139c9fb47260bb6601bd',1,'Chrono']]],
-  ['leaf_152',['Leaf',['../structllama_1_1mapping_1_1tree_1_1Leaf.html',1,'llama::mapping::tree']]],
-  ['leafonlyrt_153',['LeafOnlyRT',['../structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT.html',1,'llama::mapping::tree::functor']]],
-  ['linearizeuserdomaincpp_154',['LinearizeUserDomainCpp',['../structllama_1_1mapping_1_1LinearizeUserDomainCpp.html',1,'llama::mapping']]],
-  ['linearizeuserdomainfortran_155',['LinearizeUserDomainFortran',['../structllama_1_1mapping_1_1LinearizeUserDomainFortran.html',1,'llama::mapping']]],
-  ['linearizeuserdomainmorton_156',['LinearizeUserDomainMorton',['../structllama_1_1mapping_1_1LinearizeUserDomainMorton.html',1,'llama::mapping']]],
-  ['list_157',['List',['../structllama_1_1DatumCoord.html#ae0be960abc2e7bc26bc5a2d1140b17e4',1,'llama::DatumCoord::List()'],['../structllama_1_1DatumCoord_3_4.html#a1e8bf56673f38aa8f04a37def7fd573d',1,'llama::DatumCoord&lt;&gt;::List()']]],
-  ['llama_158',['llama',['../namespacellama.html',1,'']]],
-  ['llama_2ehpp_159',['llama.hpp',['../llama_8hpp.html',1,'']]],
-  ['llama_5fcopy_160',['LLAMA_COPY',['../macros_8hpp.html#a2c7addf59d59bed9110075644e115f97',1,'macros.hpp']]],
-  ['llama_5ffn_5fhost_5facc_5finline_161',['LLAMA_FN_HOST_ACC_INLINE',['../macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af',1,'macros.hpp']]],
-  ['llama_5fforce_5finline_5frecursive_162',['LLAMA_FORCE_INLINE_RECURSIVE',['../macros_8hpp.html#a48abf2d81c1aac87ff87f95bb427049a',1,'macros.hpp']]],
-  ['llama_5findependent_5fdata_163',['LLAMA_INDEPENDENT_DATA',['../macros_8hpp.html#aa201f5c2567527b34eae5fbdab0e2416',1,'macros.hpp']]],
-  ['llama_5fversion_5fmajor_164',['LLAMA_VERSION_MAJOR',['../llama_8hpp.html#a8e2c37e852e6877edf8e3e9d9e2de8f3',1,'llama.hpp']]],
-  ['llama_5fversion_5fminor_165',['LLAMA_VERSION_MINOR',['../llama_8hpp.html#ad0bc6386ccc31c0274eb0337c1c8192b',1,'llama.hpp']]],
-  ['llama_5fversion_5fpatch_166',['LLAMA_VERSION_PATCH',['../llama_8hpp.html#a9cc4298783dc19b00d12972c3ef45ba7',1,'llama.hpp']]],
-  ['mapping_167',['mapping',['../namespacellama_1_1mapping.html',1,'llama']]],
-  ['tree_168',['tree',['../namespacellama_1_1mapping_1_1tree.html',1,'llama::mapping']]]
+  ['kernel_5fsize',['KERNEL_SIZE',['../asyncblur_8cpp.html#a44e8eb154643701db85070cc4b0fcf60',1,'asyncblur.cpp']]]
 ];

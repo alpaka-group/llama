@@ -1,11 +1,11 @@
 var searchData=
 [
-  ['first_99',['first',['../structllama_1_1Tuple_3_01T__FirstElement_00_01Elements_8_8_8_01_4.html#ab88f5afaa483c67b8cd30bc3b7343fac',1,'llama::Tuple&lt; T_FirstElement, Elements... &gt;::first()'],['../structllama_1_1Tuple_3_01T__FirstElement_01_4.html#a27b4fc45d6c805b02cc4cc3064c34745',1,'llama::Tuple&lt; T_FirstElement &gt;::first()']]],
-  ['firstelement_100',['FirstElement',['../structllama_1_1Tuple_3_01T__FirstElement_00_01Elements_8_8_8_01_4.html#ab5cbc0cb6579b9d59ccd90f0c7c0830d',1,'llama::Tuple&lt; T_FirstElement, Elements... &gt;::FirstElement()'],['../structllama_1_1Tuple_3_01T__FirstElement_01_4.html#abcdbc473c15594fa626f36ba32bb328d',1,'llama::Tuple&lt; T_FirstElement &gt;::FirstElement()']]],
-  ['foreach_101',['forEach',['../namespacellama.html#a52078b504127db5cda5de18bc313dce5',1,'llama::forEach(Functor &amp;&amp;functor, DatumCoord&lt; Coord... &gt; baseCoord)'],['../namespacellama.html#ae99388558b089a3c892ab07ef27c965d',1,'llama::forEach(Functor &amp;&amp;functor, Tags... baseTags)']]],
-  ['foreach_2ehpp_102',['ForEach.hpp',['../ForEach_8hpp.html',1,'']]],
-  ['fp_103',['FP',['../asyncblur_8cpp.html#a95737b9d95529d75a79f0c30dda56002',1,'FP():&#160;asyncblur.cpp'],['../alpaka_2nbody_2nbody_8cpp.html#a95737b9d95529d75a79f0c30dda56002',1,'FP():&#160;nbody.cpp'],['../alpaka_2vectoradd_2vectoradd_8cpp.html#a95737b9d95529d75a79f0c30dda56002',1,'FP():&#160;vectoradd.cpp'],['../nbody_2nbody_8cpp.html#a95737b9d95529d75a79f0c30dda56002',1,'FP():&#160;nbody.cpp'],['../vectoradd_2vectoradd_8cpp.html#a95737b9d95529d75a79f0c30dda56002',1,'FP():&#160;vectoradd.cpp']]],
-  ['front_104',['front',['../structllama_1_1DatumCoord.html#abe89106949c5b21a05052b3174f3f40c',1,'llama::DatumCoord']]],
-  ['functions_2ehpp_105',['Functions.hpp',['../Functions_8hpp.html',1,'']]],
-  ['functors_2ehpp_106',['Functors.hpp',['../Functors_8hpp.html',1,'']]]
+  ['elemcount',['elemCount',['../structcommon_1_1ThreadsElemsDistribution.html#ad70c780d49780d532a7885dc082f5262',1,'common::ThreadsElemsDistribution']]],
+  ['element',['element',['../structllama_1_1Array.html#adcb4206c8a2d2bc2cbe141d354a6185b',1,'llama::Array']]],
+  ['elems_5fper_5fblock',['ELEMS_PER_BLOCK',['../asyncblur_8cpp.html#ac138f240a2bc68fa658889b65523a2e3',1,'asyncblur.cpp']]],
+  ['end',['end',['../structllama_1_1Array.html#adc6b32b52f8cc78ffd7dff0ff4bca054',1,'llama::Array::end()'],['../structllama_1_1Array.html#a441ed73e4c20e496cf0ade4ffb064ad4',1,'llama::Array::end() const'],['../structllama_1_1ArrayDomainIndexRange.html#a68ace351ca6dbe28e1cd39ad89d0e22c',1,'llama::ArrayDomainIndexRange::end()']]],
+  ['eof',['eof',['../structstbi__io__callbacks.html#a319639db2f76e715eed7a7a974136832',1,'stbi_io_callbacks']]],
+  ['eps2',['EPS2',['../alpaka_2nbody_2nbody_8cpp.html#a5955893f8d8b02c257ae4c32a32fd53a',1,'EPS2():&#160;nbody.cpp'],['../nbody_2nbody_8cpp.html#a5955893f8d8b02c257ae4c32a32fd53a',1,'EPS2():&#160;nbody.cpp']]],
+  ['equal',['equal',['../structllama_1_1ArrayDomainIndexIterator.html#af02fdfd32aa81390c85a66ff2c151465',1,'llama::ArrayDomainIndexIterator']]],
+  ['exactsolution',['exactSolution',['../heatequation_8cpp.html#a27eb8d613db70b6bf0ae2d5a9e9067f4',1,'heatequation.cpp']]]
 ];
