@@ -68,7 +68,7 @@ namespace llama::mapping
 
         LLAMA_FN_HOST_ACC_INLINE
         SplitMapping(ArrayDomain size)
-            : userDomainSize(size)
+            : arrayDomainSize(size)
             , mapping1(size)
             , mapping2(size)
             , mapping1BlobSize(mapping1.getBlobSize(0))
@@ -114,7 +114,7 @@ namespace llama::mapping
         }
 
     public:
-        ArrayDomain userDomainSize = {};
+        ArrayDomain arrayDomainSize = {};
         Mapping1<ArrayDomain, DatumDomain1> mapping1;
         Mapping2<ArrayDomain, DatumDomain2> mapping2;
         std::size_t mapping1BlobSize;

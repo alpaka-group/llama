@@ -776,10 +776,10 @@ TEST_CASE("treemapping.getNode")
 
 TEST_CASE("treemapping")
 {
-    constexpr std::size_t userDomainSize = 12;
+    constexpr std::size_t arrayDomainSize = 12;
 
     using ArrayDomain = llama::ArrayDomain<2>;
-    const ArrayDomain arrayDomain{userDomainSize, userDomainSize};
+    const ArrayDomain arrayDomain{arrayDomainSize, arrayDomainSize};
 
     auto treeOperationList = llama::Tuple{tree::functor::Idem(), tree::functor::LeafOnlyRT{}, tree::functor::Idem{}};
 

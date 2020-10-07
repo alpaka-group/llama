@@ -170,10 +170,10 @@ namespace llama::mapping::tree
     /// time tree data structure. This tree is mapped into memory by means of a
     /// breadth-first tree traversal. By specifying additional tree operations,
     /// the tree can be modified at compile time before being mapped to memory.
-    template <typename T_UserDomain, typename T_DatumDomain, typename TreeOperationList>
+    template <typename T_ArrayDomain, typename T_DatumDomain, typename TreeOperationList>
     struct Mapping
     {
-        using ArrayDomain = T_UserDomain;
+        using ArrayDomain = T_ArrayDomain;
         using DatumDomain = T_DatumDomain;
         using BasicTree = TreeFromDomains<ArrayDomain, DatumDomain>;
         // TODO, support more than one blob
@@ -181,7 +181,7 @@ namespace llama::mapping::tree
 
         using MergedFunctors = internal::MergeFunctors<BasicTree, TreeOperationList>;
 
-        ArrayDomain userDomainSize = {};
+        ArrayDomain arrayDomainSize = {};
         BasicTree basicTree;
         MergedFunctors mergedFunctors;
 
@@ -192,7 +192,7 @@ namespace llama::mapping::tree
 
         LLAMA_FN_HOST_ACC_INLINE
         Mapping(ArrayDomain size, TreeOperationList treeOperationList, DatumDomain = {})
-            : userDomainSize(size)
+            : arrayDomainSize(size)
             , basicTree(createTree<DatumDomain>(size))
             , mergedFunctors(basicTree, treeOperationList)
             , resultTree(mergedFunctors.basicToResult(basicTree))

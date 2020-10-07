@@ -10,42 +10,42 @@
 namespace llama::mapping
 {
     /// Struct of array mapping. Used to create a \ref View via \ref allocView.
-    /// \tparam LinearizeUserDomainFunctor Defines how the
+    /// \tparam LinearizeArrayDomainFunctor Defines how the
     /// user domain should be mapped into linear numbers and how big the linear
     /// domain gets.
     template <
-        typename T_UserDomain,
+        typename T_ArrayDomain,
         typename T_DatumDomain,
-        typename LinearizeUserDomainFunctor = LinearizeArrayDomainCpp>
+        typename LinearizeArrayDomainFunctor = LinearizeArrayDomainCpp>
     struct SoA
     {
-        using ArrayDomain = T_UserDomain;
+        using ArrayDomain = T_ArrayDomain;
         using DatumDomain = T_DatumDomain;
         static constexpr std::size_t blobCount = 1;
 
         SoA() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        SoA(ArrayDomain size, DatumDomain = {}) : userDomainSize(size)
+        SoA(ArrayDomain size, DatumDomain = {}) : arrayDomainSize(size)
         {
         }
 
         LLAMA_FN_HOST_ACC_INLINE
         auto getBlobSize(std::size_t const) const -> std::size_t
         {
-            return LinearizeUserDomainFunctor{}.size(userDomainSize) * sizeOf<DatumDomain>;
+            return LinearizeArrayDomainFunctor{}.size(arrayDomainSize) * sizeOf<DatumDomain>;
         }
 
         template <std::size_t... DatumDomainCoord>
         LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            const auto offset = LinearizeUserDomainFunctor{}(coord, userDomainSize)
+            const auto offset = LinearizeArrayDomainFunctor{}(coord, arrayDomainSize)
                     * sizeof(GetType<DatumDomain, DatumCoord<DatumDomainCoord...>>)
-                + offsetOf<DatumDomain, DatumDomainCoord...> * LinearizeUserDomainFunctor{}.size(userDomainSize);
+                + offsetOf<DatumDomain, DatumDomainCoord...> * LinearizeArrayDomainFunctor{}.size(arrayDomainSize);
             return {0, offset};
         }
 
-        ArrayDomain userDomainSize = {};
+        ArrayDomain arrayDomainSize = {};
     };
 } // namespace llama::mapping

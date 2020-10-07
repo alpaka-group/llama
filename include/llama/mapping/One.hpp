@@ -11,10 +11,10 @@ namespace llama::mapping
     /// Maps all ArrayDomain coordinates into the same location and layouts
     /// struct members consecutively. This mapping is used for temporary, single
     /// element views.
-    template <typename T_UserDomain, typename T_DatumDomain>
+    template <typename T_ArrayDomain, typename T_DatumDomain>
     struct One
     {
-        using ArrayDomain = T_UserDomain;
+        using ArrayDomain = T_ArrayDomain;
         using DatumDomain = T_DatumDomain;
 
         static constexpr std::size_t blobCount = 1;
