@@ -1,381 +1,149 @@
-/* Copyright 2018 Alexander Matthes
- *
- * This file is part of LLAMA.
- *
- * LLAMA is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * LLAMA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with LLAMA.  If not, see <www.gnu.org/licenses/>.
- */
-
+// Copyright 2018 Alexander Matthes
+// SPDX-License-Identifier: GPL-3.0-or-later
 #pragma once
 
+#include "../../Tuple.hpp"
+
 #include <cstddef>
+#include <string>
 #include <type_traits>
 
-#include "TreeElement.hpp"
-#include "TreeCoord.hpp"
-
-namespace llama
+namespace llama::mapping::tree
 {
+    template <typename T>
+    inline constexpr auto one = 1;
 
-namespace mapping
-{
+    template <>
+    inline constexpr auto one<boost::mp11::mp_size_t<1>> = boost::mp11::mp_size_t<1>{};
 
-namespace tree
-{
-
-namespace internal
-{
-
-// General case (leaf)
-template< typename T_DatumDomain >
-struct ReplaceDEwithTEinDD
-{
-    using type = T_DatumDomain;
-};
-
-template< typename T_DatumElement >
-struct ReplaceDEwithTEinDE;
-
-template<
-    typename T_Identifier,
-    typename T_Type
->
-struct ReplaceDEwithTEinDE<
-    DatumElement<
-        T_Identifier,
-        T_Type
-    >
->
-{
-    using type = TreeElementConst<
-        T_Identifier,
-        typename ReplaceDEwithTEinDD< T_Type >::type
-    >;
-};
-
-// DatumStruct case (node)
-template<
-    typename T_FirstDatumElement,
-    typename... T_DatumElements
->
-struct ReplaceDEwithTEinDD<
-    DatumStruct<
-        T_FirstDatumElement,
-        T_DatumElements...
-    >
->
-{
-    using type = boost::mp11::mp_push_front<
-        typename ReplaceDEwithTEinDD< DatumStruct< T_DatumElements... > >::type,
-        typename ReplaceDEwithTEinDE< T_FirstDatumElement >::type
-    >;
-};
-
-// empty DatumStruct case ( recursive loop head )
-template< >
-struct ReplaceDEwithTEinDD< DatumStruct< > >
-{
-    using type = Tuple< >;
-};
-
-template<
-    typename T_Leaf,
-    std::size_t T_count
->
-struct CreateTreeChain
-{
-    using type = TreeElement<
-        NoName,
-        Tuple< typename CreateTreeChain<
-            T_Leaf,
-            T_count - 1
-        >::type >
-    >;
-};
-
-template< typename T_Leaf >
-struct CreateTreeChain<
-    T_Leaf,
-    0
->
-{
-    using type = T_Leaf;
-};
-
-template< typename T_DatumDomain >
-struct TreeFromDatumDomainImpl
-{
-    using type = TreeElement<
-        NoName,
-        typename ReplaceDEwithTEinDD< T_DatumDomain >::type
-    >;
-};
-
-template<
-    typename T_UserDomain,
-    typename T_DatumDomain
->
-struct TreeFromDomainsImpl
-{
-    using type = typename CreateTreeChain<
-        typename TreeFromDatumDomainImpl< T_DatumDomain >::type,
-        T_UserDomain::count - 1
-    >::type;
-};
-
-} // internal
-
-template< typename T_DatumDomain >
-using TreeFromDatumDomain = typename internal::TreeFromDatumDomainImpl<
-    T_DatumDomain
->::type;
-
-template<
-    typename T_UserDomain,
-    typename T_DatumDomain
->
-using TreeFromDomains = typename internal::TreeFromDomainsImpl<
-    T_UserDomain,
-    T_DatumDomain
->::type;
-
-namespace internal
-{
-
-template<
-    typename T_DatumDomain,
-    typename T_UserDomain,
-    typename T_pos = std::integral_constant<
-        std::size_t,
-        0
-    >
->
-struct SetUserDomainInTreeImpl
-{
-    using InnerTuple = Tuple<
-        decltype(
-            SetUserDomainInTreeImpl<
-                T_DatumDomain,
-                T_UserDomain,
-                std::integral_constant<
-                    std::size_t,
-                    T_pos::value + 1
-                >
-            >()( T_UserDomain() )
-        )
-    >;
-
-    LLAMA_FN_HOST_ACC_INLINE
-    auto
-    operator()( T_UserDomain const & size ) const
-    -> TreeElement<
-            NoName,
-            InnerTuple
-        >
+    template <typename T_Identifier, typename T_Type, typename CountType = std::size_t>
+    struct Leaf
     {
-        // Need to predefine this because of a cuda bug about
-        // identifier "std::integral_constant<unsigned long,
-        // (unsigned long)0ul> ::value" is undefined in device code
-        constexpr auto pos = T_pos::value;
-        return TreeElement<
-            NoName,
-            InnerTuple
-        >(
-            size[ pos ],
-            InnerTuple(
-                SetUserDomainInTreeImpl<
-                    T_DatumDomain,
-                    T_UserDomain,
-                    std::integral_constant<
-                        std::size_t,
-                        pos + 1
-                    >
-                >()( size )
-            )
-        );
+        using Identifier = T_Identifier;
+        using Type = T_Type;
+
+        const CountType count = one<CountType>;
+    };
+
+    template <typename T_Identifier, typename T_ChildrenTuple, typename CountType = std::size_t>
+    struct Node
+    {
+        using Identifier = T_Identifier;
+        using ChildrenTuple = T_ChildrenTuple;
+
+        const CountType count = one<CountType>;
+        const ChildrenTuple childs = {};
+    };
+
+    template <std::size_t ChildIndex = 0, typename ArrayIndexType = std::size_t>
+    struct TreeCoordElement
+    {
+        static constexpr boost::mp11::mp_size_t<ChildIndex> childIndex = {};
+        const ArrayIndexType arrayIndex = {};
+    };
+
+    template <std::size_t... Coords>
+    using TreeCoord = Tuple<TreeCoordElement<Coords, boost::mp11::mp_size_t<0>>...>;
+
+    namespace internal
+    {
+        template <typename... Coords, std::size_t... Is>
+        auto treeCoordToString(Tuple<Coords...> treeCoord, std::index_sequence<Is...>) -> std::string
+        {
+            auto s
+                = ((std::to_string(get<Is>(treeCoord).arrayIndex) + ":" + std::to_string(get<Is>(treeCoord).childIndex)
+                    + ", ")
+                   + ...);
+            s.resize(s.length() - 2);
+            return s;
+        }
+    } // namespace internal
+
+    template <typename TreeCoord>
+    auto treeCoordToString(TreeCoord treeCoord) -> std::string
+    {
+        return std::string("[ ")
+            + internal::treeCoordToString(treeCoord, std::make_index_sequence<tupleSize<TreeCoord>>{})
+            + std::string(" ]");
     }
-};
 
-template<
-    typename T_DatumDomain,
-    typename T_UserDomain
->
-struct SetUserDomainInTreeImpl<
-    T_DatumDomain,
-    T_UserDomain,
-    std::integral_constant<
-        std::size_t,
-        T_UserDomain::count - 1
-    >
->
-{
-    LLAMA_FN_HOST_ACC_INLINE
-    auto
-    operator()( T_UserDomain const & size ) const
-    -> TreeFromDatumDomain< T_DatumDomain >
+    namespace internal
     {
-        return TreeFromDatumDomain< T_DatumDomain >( size[ T_UserDomain::count - 1 ] );
-    }
-};
-
-} // internal
-
-template<
-    typename T_DatumDomain,
-    typename T_UserDomain
->
-LLAMA_FN_HOST_ACC_INLINE
-auto
-setUserDomainInTree( T_UserDomain const & size )
--> decltype(
-    internal::SetUserDomainInTreeImpl<
-        T_DatumDomain,
-        T_UserDomain
-    >()( size )
-)
-{
-    return internal::SetUserDomainInTreeImpl<
-        T_DatumDomain,
-        T_UserDomain
-    >()( size );
-};
-
-namespace internal
-{
-
-template<
-    typename T_UserDomain,
-    std::size_t T_firstDatumDomain,
-    typename T_pos = std::integral_constant<
-        std::size_t,
-        0
-    >
->
-struct UserDomainToTreeCoord
-{
-    LLAMA_FN_HOST_ACC_INLINE
-    auto
-    operator()( T_UserDomain const & coord ) const
-    -> decltype(
-        tupleCat(
-            Tuple< TreeCoordElement< 0 > >(),
-            UserDomainToTreeCoord<
-                T_UserDomain,
-                T_firstDatumDomain,
-                std::integral_constant<
-                    std::size_t,
-                    T_pos::value + 1
-                >
-            >()( coord )
-        )
-    )
-    {
-        // Need to predefine this because of a cuda bug about
-        // identifier "std::integral_constant<unsigned long,
-        // (unsigned long)0ul> ::value" is undefined in device code
-        constexpr auto pos = T_pos::value;
-        const Tuple< TreeCoordElement< 0 > > mostLeft{
-            TreeCoordElement< 0 >( coord[ pos ] )
+        template <typename Tag, typename DatumDomain, typename CountType>
+        struct CreateTreeElement
+        {
+            using type = Leaf<Tag, DatumDomain, boost::mp11::mp_size_t<1>>;
         };
-        return tupleCat(
-            mostLeft,
-            UserDomainToTreeCoord<
-                T_UserDomain,
-                T_firstDatumDomain,
-                std::integral_constant<
-                    std::size_t,
-                    T_pos::value + 1
-                >
-            >()( coord )
-        );
-    }
-};
 
-template<
-    typename T_UserDomain,
-    std::size_t T_firstDatumDomain
->
-struct UserDomainToTreeCoord<
-    T_UserDomain,
-    T_firstDatumDomain,
-    std::integral_constant<
-        std::size_t,
-        T_UserDomain::count - 1
-    >
->
-{
-    using Result = Tuple< TreeCoordElement< T_firstDatumDomain > >;
+        template <typename Tag, typename... DatumElements, typename CountType>
+        struct CreateTreeElement<Tag, DatumStruct<DatumElements...>, CountType>
+        {
+            using type = Node<
+                Tag,
+                Tuple<typename CreateTreeElement<
+                    GetDatumElementTag<DatumElements>,
+                    GetDatumElementType<DatumElements>,
+                    boost::mp11::mp_size_t<1>>::type...>,
+                CountType>;
+        };
 
-    LLAMA_FN_HOST_ACC_INLINE
-    auto
-    operator()( T_UserDomain const & coord ) const
-    -> Result
+        template <typename Leaf, std::size_t Count>
+        struct WrapInNNodes
+        {
+            using type = Node<NoName, Tuple<typename WrapInNNodes<Leaf, Count - 1>::type>>;
+        };
+
+        template <typename Leaf>
+        struct WrapInNNodes<Leaf, 0>
+        {
+            using type = Leaf;
+        };
+
+        template <typename DatumDomain>
+        using TreeFromDatumDomainImpl = typename CreateTreeElement<NoName, DatumDomain, std::size_t>::type;
+    } // namespace internal
+
+    template <typename DatumDomain>
+    using TreeFromDatumDomain = internal::TreeFromDatumDomainImpl<DatumDomain>;
+
+    template <typename ArrayDomain, typename DatumDomain>
+    using TreeFromDomains =
+        typename internal::WrapInNNodes<internal::TreeFromDatumDomainImpl<DatumDomain>, ArrayDomain::rank - 1>::type;
+
+    template <typename DatumDomain, typename ArrayDomain, std::size_t Pos = 0>
+    LLAMA_FN_HOST_ACC_INLINE auto createTree(const ArrayDomain& size)
     {
-        return Result( TreeCoordElement< T_firstDatumDomain >( coord[ T_UserDomain::count - 1 ] ) );
+        if constexpr (Pos == ArrayDomain::rank - 1)
+            return TreeFromDatumDomain<DatumDomain>{size[ArrayDomain::rank - 1]};
+        else
+        {
+            Tuple inner{createTree<DatumDomain, ArrayDomain, Pos + 1>(size)};
+            return Node<NoName, decltype(inner)>{size[Pos], inner};
+        }
+    };
+
+    namespace internal
+    {
+        template <
+            typename ArrayDomain,
+            std::size_t... UDIndices,
+            std::size_t FirstDatumDomainCoord,
+            std::size_t... DatumDomainCoords>
+        LLAMA_FN_HOST_ACC_INLINE auto createTreeCoord(
+            const ArrayDomain& coord,
+            std::index_sequence<UDIndices...>,
+            DatumCoord<FirstDatumDomainCoord, DatumDomainCoords...>)
+        {
+            return Tuple{
+                TreeCoordElement<(UDIndices == ArrayDomain::rank - 1 ? FirstDatumDomainCoord : 0)>{coord[UDIndices]}...,
+                TreeCoordElement<DatumDomainCoords, boost::mp11::mp_size_t<0>>{}...,
+                TreeCoordElement<0, boost::mp11::mp_size_t<0>>{}};
+        }
+    } // namespace internal
+
+    template <typename DatumCoord, typename ArrayDomain>
+    LLAMA_FN_HOST_ACC_INLINE auto createTreeCoord(const ArrayDomain& coord)
+    {
+        return internal::createTreeCoord(coord, std::make_index_sequence<ArrayDomain::rank>{}, DatumCoord{});
     }
-};
-
-template< typename T_DatumCoord >
-struct DatumCoordToTreeCoord
-{
-    using FrontType = Tuple< TreeCoordElementConst< T_DatumCoord::PopFront::front > >;
-    using type = decltype(
-        tupleCat(
-            FrontType(),
-            typename DatumCoordToTreeCoord<
-                typename T_DatumCoord::PopFront
-            >::type()
-        )
-    );
-};
-
-template< std::size_t T_lastCoord >
-struct DatumCoordToTreeCoord< DatumCoord< T_lastCoord > >
-{
-    using type = Tuple< TreeCoordElementConst< > >;
-};
-
-} // namespace internal
-
-template<
-    typename T_DatumCoord,
-    typename T_UserDomain
->
-LLAMA_FN_HOST_ACC_INLINE
-auto
-getBasicTreeCoordFromDomains( T_UserDomain const & coord )
--> decltype(
-    tupleCat(
-        internal::UserDomainToTreeCoord<
-            T_UserDomain,
-            T_DatumCoord::front
-        >()( coord ),
-        typename internal::DatumCoordToTreeCoord< T_DatumCoord >::type()
-    )
-)
-{
-    return tupleCat(
-        internal::UserDomainToTreeCoord<
-            T_UserDomain,
-            T_DatumCoord::front
-        >()( coord ),
-        typename internal::DatumCoordToTreeCoord< T_DatumCoord >::type()
-    );
-}
-
-} // namespace tree
-
-} // namespace mapping
-
-} // namespace llama
-
+} // namespace llama::mapping::tree

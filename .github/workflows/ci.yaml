@@ -1,0 +1,60 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  build-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: vcpkg install dependencies
+      run: |
+        vcpkg install catch2 fmt
+    - name: cmake
+      run: |
+        mkdir build
+        cd build
+        export BOOST_ROOT=$BOOST_ROOT_1_72_0
+        CXX=g++-9 cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -DASAN_FOR_TESTS=ON -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+    - name: build
+      run: cmake --build build
+    - name: tests
+      run: build/tests
+    - name: clone amalgamate
+      uses: actions/checkout@v2
+      with:
+        repository: shrpnsld/amalgamate
+        path: build/amalgamate
+    - name: amalgamation
+      run: |
+        cd include/llama
+        ../../build/amalgamate/amalgamate -o ../../build -H
+    - name: upload llama.hpp
+      uses: actions/upload-artifact@v2
+      with:
+        name: llama.hpp
+        path: build/llama-amalgamated/llama.hpp
+
+  build-windows:
+    runs-on: windows-latest
+    env:
+      VCPKG_DEFAULT_TRIPLET: x64-windows
+    steps:
+    - uses: actions/checkout@v2
+    - name: install vcpkg
+      uses: lukka/run-vcpkg@v4
+      with:
+        setupOnly: true
+        vcpkgGitCommitId: 76a7e9248fb3c57350b559966dcaa2d52a5e4458
+    - name: vcpkg install dependencies
+      run: |
+        & $env:VCPKG_ROOT/vcpkg install catch2 fmt
+    - name: cmake
+      run: |
+        mkdir build
+        cd build
+        $env:BOOST_ROOT = $env:BOOST_ROOT_1_72_0
+        cmake .. "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+    - name: build
+      run: cmake --build build --config RelWithDebInfo
+    - name: tests
+      run: build/RelWithDebInfo/tests

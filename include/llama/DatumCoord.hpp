@@ -1,358 +1,125 @@
-/* Copyright 2018 Alexander Matthes
- *
- * This file is part of LLAMA.
- *
- * LLAMA is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * LLAMA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with LLAMA.  If not, see <www.gnu.org/licenses/>.
- */
+// Copyright 2018 Alexander Matthes
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #pragma once
 
-#include <tuple>
+#include <array>
+#include <boost/mp11.hpp>
 #include <type_traits>
-
-/// Documentation of this file is in DatumCoord.dox!
 
 namespace llama
 {
+    /// Represents a coordinate for an element inside the datum domain tree.
+    /// \tparam Coords... the compile time coordinate.
+    template <std::size_t... Coords>
+    struct DatumCoord
+    {
+        /// The list of integral coordinates as `boost::mp11::mp_list`.
+        using List = boost::mp11::mp_list_c<std::size_t, Coords...>;
 
-template < std::size_t... T_coords >
-struct DatumCoord;
+        static constexpr std::size_t front = boost::mp11::mp_front<List>::value;
+        static constexpr std::size_t back = boost::mp11::mp_back<List>::value;
+        static constexpr std::size_t size = sizeof...(Coords);
+    };
 
-namespace internal
-{
+    template <>
+    struct DatumCoord<>
+    {
+        using List = boost::mp11::mp_list_c<std::size_t>;
 
-template <
-    std::size_t T_rest,
-    std::size_t... T_coords
->
-struct DatumCoordFront;
+        static constexpr std::size_t size = 0;
+    };
 
-template <
-    std::size_t T_rest,
-    std::size_t T_coord,
-    std::size_t... T_coords
->
-struct DatumCoordFront<
-    T_rest,
-    T_coord,
-    T_coords...
->
-{
-    using type = typename DatumCoordFront<
-        T_rest - 1,
-        T_coords...
-    >::type::template PushFront< T_coord >;
-};
+    namespace internal
+    {
+        template <class L>
+        struct mp_unwrap_sizes_impl;
 
-template <
-    std::size_t T_coord,
-    std::size_t... T_coords
->
-struct DatumCoordFront<
-    0,
-    T_coord,
-    T_coords...
->
-{
-    using type = DatumCoord< >;
-};
+        template <template <class...> class L, typename... T>
+        struct mp_unwrap_sizes_impl<L<T...>>
+        {
+            using type = DatumCoord<T::value...>;
+        };
 
-template <
-    std::size_t T_rest,
-    std::size_t... T_coords
->
-struct DatumCoordBack;
+        template <typename L>
+        using mp_unwrap_sizes = typename mp_unwrap_sizes_impl<L>::type;
+    } // namespace internal
 
-template <
-    std::size_t T_rest,
-    std::size_t T_coord,
-    std::size_t... T_coords
->
-struct DatumCoordBack<
-    T_rest,
-    T_coord,
-    T_coords...
->
-{
-    using type = typename DatumCoordBack<
-        T_rest - 1,
-        T_coords...
-    >::type;
-};
+    /// Converts a type list of integral constants into a \ref DatumCoord.
+    template <typename L>
+    using DatumCoordFromList = internal::mp_unwrap_sizes<L>;
 
-template <
-    std::size_t T_coord,
-    std::size_t... T_coords
->
-struct DatumCoordBack<
-    0,
-    T_coord,
-    T_coords...
->
-{
-    using type = DatumCoord< T_coord, T_coords... >;
-};
+    /// Concatenate two \ref DatumCoord.
+    template <typename DatumCoord1, typename DatumCoord2>
+    using Cat = DatumCoordFromList<boost::mp11::mp_append<typename DatumCoord1::List, typename DatumCoord2::List>>;
 
-template < >
-struct DatumCoordBack< 0 >
-{
-    using type = DatumCoord< >;
-};
+    /// Concatenate two \ref DatumCoord instances.
+    template <typename DatumCoord1, typename DatumCoord2>
+    auto cat(DatumCoord1, DatumCoord2)
+    {
+        return Cat<DatumCoord1, DatumCoord2>{};
+    }
 
-} // namespace internal
+    /// DatumCoord without first coordinate component.
+    template <typename DatumCoord>
+    using PopFront = DatumCoordFromList<boost::mp11::mp_pop_front<typename DatumCoord::List>>;
 
-template<
-    std::size_t T_coord,
-    std::size_t... T_coords
->
-struct DatumCoord< T_coord, T_coords... >
-{
-    using type = DatumCoord< T_coord, T_coords... >;
-    static constexpr std::size_t front = T_coord;
-    static constexpr std::size_t size = sizeof...( T_coords ) + 1;
-    static constexpr std::size_t back = DatumCoord< T_coords... >::back;
-    using PopFront = DatumCoord< T_coords... >;
-    using IncBack = typename PopFront::IncBack::template PushFront< front >;
-    template< std::size_t T_newCoord = 0 >
-    using PushFront = DatumCoord<
-        T_newCoord,
-        T_coord,
-        T_coords...
-    >;
-    template< std::size_t T_newCoord = 0 >
-    using PushBack = DatumCoord<
-        T_coord,
-        T_coords...,
-        T_newCoord
-    >;
-    template< std::size_t T_size >
-    using Front = typename internal::DatumCoordFront<
-        T_size,
-        T_coord,
-        T_coords...
-    >::type;
-    template< std::size_t T_size >
-    using Back = typename internal::DatumCoordBack<
-        size - T_size,
-        T_coord,
-        T_coords...
-    >::type;
-    template< typename T_Other >
-    using Cat = typename DatumCoord< T_coords... >::template
-        Cat< T_Other >::template
-            PushFront< T_coord >;
-};
+    namespace internal
+    {
+        template <typename First, typename Second>
+        struct DatumCoordCommonPrefixIsBiggerImpl;
 
-template< std::size_t T_coord >
-struct DatumCoord< T_coord >
-{
-    using type = DatumCoord< T_coord >;
-    static constexpr std::size_t front = T_coord;
-    static constexpr std::size_t size = 1;
-    static constexpr std::size_t back = T_coord;
-    using PopFront = DatumCoord< >;
-    using IncBack = DatumCoord< T_coord + 1 >;
-    template< std::size_t T_newCoord = 0 >
-    using PushFront = DatumCoord<
-        T_newCoord,
-        T_coord
-    >;
-    template< std::size_t T_newCoord = 0 >
-    using PushBack = DatumCoord<
-        T_coord,
-        T_newCoord
-    >;
-    template< std::size_t T_size >
-    using Front = typename internal::DatumCoordFront<
-        T_size,
-        T_coord
-    >::type;
-    template< std::size_t T_size >
-    using Back = typename internal::DatumCoordBack<
-        size - T_size,
-        T_coord
-    >::type;
-    template< typename T_Other >
-    using Cat = typename T_Other::template PushFront< T_coord >;
-};
+        template <std::size_t... Coords1, std::size_t... Coords2>
+        struct DatumCoordCommonPrefixIsBiggerImpl<DatumCoord<Coords1...>, DatumCoord<Coords2...>>
+        {
+            static constexpr auto value = []() constexpr
+            {
+                // CTAD does not work if Coords1/2 is an empty pack
+                std::array<std::size_t, sizeof...(Coords1)> a1{Coords1...};
+                std::array<std::size_t, sizeof...(Coords2)> a2{Coords2...};
+                for (auto i = 0; i < std::min(a1.size(), a2.size()); i++)
+                {
+                    if (a1[i] > a2[i])
+                        return true;
+                    if (a1[i] < a2[i])
+                        return false;
+                }
+                return false;
+            }
+            ();
+        };
+    } // namespace internal
 
-template< >
-struct DatumCoord< >
-{
-    using type = DatumCoord< >;
-    static constexpr std::size_t size = 0;
-    using IncBack = DatumCoord< 1 >;
-    template< std::size_t T_newCoord = 0 >
-    using PushFront = DatumCoord< T_newCoord >;
-    template< std::size_t T_newCoord = 0 >
-    using PushBack = DatumCoord< T_newCoord >;
-    template< std::size_t T_size >
-    using Front = DatumCoord< >;
-    template< std::size_t T_size >
-    using Back = DatumCoord< >;
-    template< typename T_Other >
-    using Cat = T_Other;
-};
+    /// Checks wether the first DatumCoord is bigger than the second.
+    template <typename First, typename Second>
+    inline constexpr auto DatumCoordCommonPrefixIsBigger
+        = internal::DatumCoordCommonPrefixIsBiggerImpl<First, Second>::value;
 
-template<
-    typename T_First,
-    typename T_Second,
-    typename T_SFinae = void
->
-struct DatumCoordIsBigger;
+    namespace internal
+    {
+        template <typename First, typename Second>
+        struct DatumCoordCommonPrefixIsSameImpl;
 
-template<
-    typename T_First,
-    typename T_Second
->
-struct DatumCoordIsBigger<
-    T_First,
-    T_Second,
-    typename std::enable_if<
-        ( T_First::size == 1 || T_Second::size == 1)
-    >::type
->
-{
-    static constexpr bool value = ( T_First::front > T_Second::front );
-};
+        template <std::size_t... Coords1, std::size_t... Coords2>
+        struct DatumCoordCommonPrefixIsSameImpl<DatumCoord<Coords1...>, DatumCoord<Coords2...>>
+        {
+            static constexpr auto value = []() constexpr
+            {
+                // CTAD does not work if Coords1/2 is an empty pack
+                std::array<std::size_t, sizeof...(Coords1)> a1{Coords1...};
+                std::array<std::size_t, sizeof...(Coords2)> a2{Coords2...};
+                for (auto i = 0; i < std::min(a1.size(), a2.size()); i++)
+                    if (a1[i] != a2[i])
+                        return false;
+                return true;
+            }
+            ();
+        };
+    } // namespace internal
 
-template<
-    typename T_First,
-    typename T_Second
->
-struct DatumCoordIsBigger<
-    T_First,
-    T_Second,
-    typename std::enable_if<
-        ( T_First::size > 1 && T_Second::size > 1
-        && T_First::front == T_Second::front )
-    >::type
->
-{
-    static constexpr bool value = DatumCoordIsBigger<
-        typename T_First::PopFront,
-        typename T_Second::PopFront
-    >::value;
-};
-
-template<
-    typename T_First,
-    typename T_Second
->
-struct DatumCoordIsBigger<
-    T_First,
-    T_Second,
-    typename std::enable_if<
-        ( T_First::size > 1
-        && T_Second::size > 1
-        && T_First::front < T_Second::front )
-    >::type
->
-{
-    static constexpr bool value = false;
-};
-
-template<
-    typename T_First,
-    typename T_Second
->
-struct DatumCoordIsBigger<
-    T_First,
-    T_Second,
-    typename std::enable_if<
-        ( T_First::size > 1
-        && T_Second::size > 1
-        && T_First::front > T_Second::front )
-    >::type
->
-{
-    static constexpr bool value = true;
-};
-
-
-template<
-    typename T_First,
-    typename T_Second,
-    typename T_SFinae = void
->
-struct DatumCoordIsSame;
-
-template<
-    typename T_First,
-    typename T_Second
->
-struct DatumCoordIsSame<
-    T_First,
-    T_Second,
-    typename std::enable_if<
-        ( T_First::size < 1 || T_Second::size < 1)
-    >::type
->
-{
-    static constexpr bool value = true;
-};
-
-template<
-    typename T_First,
-    typename T_Second
->
-struct DatumCoordIsSame<
-    T_First,
-    T_Second,
-    typename std::enable_if<
-        ( T_First::size == 1 && T_Second::size >= 1) ||
-        ( T_First::size >= 1 && T_Second::size == 1)
-    >::type
->
-{
-    static constexpr bool value = ( T_First::front == T_Second::front );
-};
-
-template<
-    typename T_First,
-    typename T_Second
->
-struct DatumCoordIsSame<
-    T_First,
-    T_Second,
-    typename std::enable_if<
-        ( T_First::size > 1 && T_Second::size > 1
-        && T_First::front == T_Second::front )
-    >::type
->
-{
-    static constexpr bool value = DatumCoordIsSame<
-        typename T_First::PopFront,
-        typename T_Second::PopFront
-    >::value;
-};
-
-template<
-    typename T_First,
-    typename T_Second
->
-struct DatumCoordIsSame<
-    T_First,
-    T_Second,
-    typename std::enable_if<
-        ( T_First::size > 1
-        && T_Second::size > 1
-        && T_First::front != T_Second::front )
-    >::type
->
-{
-    static constexpr bool value = false;
-};
-
+    /// Checks wether two \ref DatumCoord are the same or one is the prefix of
+    /// the other.
+    template <typename First, typename Second>
+    inline constexpr auto DatumCoordCommonPrefixIsSame
+        = internal::DatumCoordCommonPrefixIsSameImpl<First, Second>::value;
 } // namespace llama

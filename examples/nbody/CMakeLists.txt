@@ -1,39 +1,15 @@
 cmake_minimum_required (VERSION 3.3)
+project(llama-nbody)
 
-SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
-SET(_TARGET_NAME "llama-nbody")
+if (NOT TARGET llama::llama)
+	find_package(llama REQUIRED)
+endif()
+add_executable(${PROJECT_NAME} nbody.cpp)
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
+target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama)
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+	target_compile_options(${PROJECT_NAME} PRIVATE -fno-math-errno) # sqrt prevents vectorization otherwise
+endif()
 
-project(${_TARGET_NAME})
-
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_STANDARD 11)
-
-SET(LLAMA_ROOT "${CMAKE_CURRENT_LIST_DIR}/../.." CACHE STRING "The location of the llama library")
-LIST(APPEND CMAKE_PREFIX_PATH "${LLAMA_ROOT}")
-
-find_package(llama 0.1.0 REQUIRED)
-set(INCLUDE_DIRS ${INCLUDE_DIRS} ${llama_INCLUDE_DIR})
-add_definitions(${llama_DEFINITIONS})
-
-################################################################################
-# Alpaka LIB
-################################################################################
-set(ALPAKA_ROOT "${CMAKE_CURRENT_LIST_DIR}/../../../alpaka/" CACHE STRING  "The location of the alpaka library")
-LIST(APPEND CMAKE_PREFIX_PATH "${ALPAKA_ROOT}")
-find_package(alpaka REQUIRED)
-set(LIBRARIES ${LIBRARIES} ${alpaka_LIBRARIES})
-set(INCLUDE_DIRS ${INCLUDE_DIRS} ${alpaka_INCLUDE_DIRS})
-set(DEFINITIONS ${DEFINITIONS} ${alpaka_DEFINITIONS})
-set(DEFINITIONS ${DEFINITIONS} ${ALPAKA_DEV_COMPILE_OPTIONS})
-
-include_directories(${_TARGET_NAME} ${INCLUDE_DIRS})
-ALPAKA_ADD_EXECUTABLE(
-	${_TARGET_NAME}
-	${CMAKE_CURRENT_LIST_DIR}/nbody.cpp
-	${CMAKE_CURRENT_LIST_DIR}/../common/Dummy.cpp
-)
-TARGET_COMPILE_OPTIONS( ${_TARGET_NAME} PRIVATE ${DEFINITIONS})
-TARGET_LINK_LIBRARIES( ${_TARGET_NAME} PUBLIC "alpaka")
-
-install( FILES "${PROJECT_BINARY_DIR}/llama-nbody" DESTINATION "bin" )
+install(FILES "${PROJECT_BINARY_DIR}/llama-nbody" DESTINATION "bin")
 

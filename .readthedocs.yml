@@ -1,4 +1,4 @@
-requirements_file: documentation/requirements.txt
+requirements_file: docs/requirements.txt
 
 formats:
     - htmlzip

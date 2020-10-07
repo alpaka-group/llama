@@ -1,0 +1,31 @@
+name: Publish documentation to gh-pages
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  gh-pages:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install doxygen
+      run: |
+        sudo apt-get -y --quiet install --no-install-recommends doxygen graphviz
+    - name: Regenerate doxygen
+      run: |
+        git clone -b gh-pages https://x-access-token:${{secrets.github_token}}@github.com/${{github.repository}}.git docs/doxygen/html
+        cd docs/
+        rm -rf doxygen/html/*
+        rm -rf doxygen/xml/*
+        doxygen
+        cd ../
+    - name: Publish documentation
+      run: |
+        cd docs/doxygen/html
+        git config --global user.email "action@github.com"
+        git config --global user.name "GitHub Action"
+        git add .
+        git log -n 3
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Update documentation skip-checks: true"; git push origin gh-pages)
+        cd ../../../

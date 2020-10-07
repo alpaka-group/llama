@@ -1,17 +1,92 @@
 cmake_minimum_required (VERSION 3.3)
-project (llama)
+project (llama CXX)
 
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_STANDARD 11)
+# llama
+find_package(Boost 1.66.0 REQUIRED)
+find_package(fmt CONFIG REQUIRED)
+add_library(${PROJECT_NAME} INTERFACE)
+target_include_directories(${PROJECT_NAME} INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_17)
+target_link_libraries(${PROJECT_NAME} INTERFACE Boost::headers fmt::fmt)
 
-ADD_SUBDIRECTORY("examples")
+# llama::llama to make subdirectory projects work
+add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+
+# llama IDE target to make source browsable/editable in IDEs
+file(GLOB_RECURSE llamaSources "${CMAKE_CURRENT_SOURCE_DIR}/include/**")
+add_custom_target("llamaIde" SOURCES ${llamaSources})
+source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/include/llama" FILES ${llamaSources})
+
+# tests
+include(CTest)
+if (BUILD_TESTING)
+	find_package(Catch2 2.6.1 CONFIG QUIET)
+	if (NOT ${Catch2_FOUND})
+		message(FATAL_ERROR "Catch2 is required for building the tests. Either install Catch2 or disable tests by passing -DBUILD_TESTING=OFF to CMake.")
+	endif()
+
+	file(GLOB_RECURSE testSources "${CMAKE_CURRENT_SOURCE_DIR}/tests/**")
+	add_executable(tests ${testSources})
+	source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/tests" FILES ${testSources})
+	target_compile_features(tests PRIVATE cxx_std_20)
+	if (MSVC)
+		target_compile_options(tests PRIVATE /permissive-)
+	endif()
+	target_link_libraries(tests PRIVATE Catch2::Catch2 llama::llama)
+
+	option(ASAN_FOR_TESTS "Enables address sanitizer for tests" OFF)
+	if (ASAN_FOR_TESTS)
+		if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+			target_compile_options(tests PRIVATE -fsanitize=address -fno-omit-frame-pointer)
+			target_link_options   (tests PRIVATE -fsanitize=address -fno-omit-frame-pointer)
+		elseif(MSVC)
+			target_compile_options(tests PRIVATE /fsanitize=address)
+			target_link_options   (tests PRIVATE /wholearchive:clang_rt.asan_dynamic-x86_64.lib /wholearchive:clang_rt.asan_dynamic_runtime_thunk-x86_64.lib)
+		endif()
+	endif()
+endif()
+
+# examples
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/Modules/")
+option(LLAMA_BUILD_EXAMPLES "Building (and installing) the examples" ON)
+if (LLAMA_BUILD_EXAMPLES)
+	# general examples
+	add_subdirectory("examples/simpletest")
+	add_subdirectory("examples/vectoradd")
+	add_subdirectory("examples/nbody")
+	add_subdirectory("examples/heatequation")
+
+	# alpaka examples
+	find_package(alpaka 0.5.0 QUIET)
+	if (_ALPAKA_FOUND)
+		add_subdirectory("examples/alpaka/nbody")
+		add_subdirectory("examples/alpaka/vectoradd")
+		add_subdirectory("examples/alpaka/asyncblur")
+	endif()
+endif()
+
+# install
+include(CMakePackageConfigHelpers)
+include(GNUInstallDirs)
+
+set(_llama_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/llama")
+
+configure_package_config_file (
+	"${PROJECT_SOURCE_DIR}/cmake/llama-config.cmake.in"
+	"${PROJECT_BINARY_DIR}/cmake/llama-config.cmake"
+	INSTALL_DESTINATION "${_llama_INSTALL_CMAKEDIR}")
 
 configure_file (
 	"${PROJECT_SOURCE_DIR}/cmake/llama-config-version.cmake.in"
 	"${PROJECT_BINARY_DIR}/cmake/llama-config-version.cmake"
 	@ONLY
-	)
+)
 
 install( DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/llama" DESTINATION "include" )
-install( FILES "${CMAKE_CURRENT_SOURCE_DIR}/llama-config.cmake" DESTINATION "lib/cmake/llama" )
-install( FILES "${PROJECT_BINARY_DIR}/cmake/llama-config-version.cmake" DESTINATION "lib/cmake/llama" )
+install(
+	FILES
+		"${PROJECT_BINARY_DIR}/cmake/llama-config.cmake"
+		"${PROJECT_BINARY_DIR}/cmake/llama-config-version.cmake"
+	DESTINATION
+		"${_llama_INSTALL_CMAKEDIR}"
+)

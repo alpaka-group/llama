@@ -1,282 +1,218 @@
+#include <chrono>
 #include <iostream>
+#include <llama/llama.hpp>
 #include <utility>
 
-#define VECTORADD_CUDA 0
-// -1 native AoS, 0 native SoA, 1 tree AoS, 2 tree SoA
-#define VECTORADD_USE_TREE 2
-#define VECTORADD_BYPASS_LLAMA 0
-// 0 SoA, 1 AoS
-#define VECTORADD_BYPASS_USE_SOA 1
+constexpr auto MAPPING = 3; /// 0 native AoS, 1 native SoA, 2 tree AoS, 3 tree SoA
+constexpr auto PROBLEM_SIZE = 64 * 1024 * 1024; ///< problem size
+constexpr auto STEPS = 10; ///< number of vector adds to perform
 
-#define VECTORADD_PROBLEM_SIZE 64*1024*1024
-#define VECTORADD_BLOCK_SIZE 256
-#define VECTORADD_STEPS 10
+using FP = float;
 
-#include <alpaka/alpaka.hpp>
-#ifdef __CUDACC__
-	#define LLAMA_FN_HOST_ACC_INLINE ALPAKA_FN_ACC __forceinline__
-#else
-	#define LLAMA_FN_HOST_ACC_INLINE ALPAKA_FN_ACC inline
-#endif
-#include <llama/llama.hpp>
-#include <random>
-
-#include "../common/AlpakaAllocator.hpp"
-#include "../common/AlpakaMemCopy.hpp"
-#include "../common/AlpakaThreadElemsDistribution.hpp"
-#include "../common/Chrono.hpp"
-#include "../common/Dummy.hpp"
-
-using Element = float;
-
-namespace dd
+namespace usellama
 {
-    struct X {};
-    struct Y {};
-    struct Z {};
-}
-
-using Vector = llama::DS<
-    llama::DE< dd::X, Element >,
-    llama::DE< dd::Y, Element >,
-    llama::DE< dd::Z, Element >
->;
-
-template<
-    std::size_t problemSize,
-    std::size_t elems
->
-struct AddKernel
-{
-    template<
-        typename T_Acc,
-        typename T_View
-    >
-    LLAMA_FN_HOST_ACC_INLINE
-    void operator()(
-        T_Acc const &acc,
-        T_View a,
-        T_View b
-#if VECTORADD_BYPASS_LLAMA == 1
-        ,std::size_t const aSizeAsRuntimeParameter
-        ,std::size_t const bSizeAsRuntimeParameter
-#endif
-    ) const
+    // clang-format off
+    namespace tag
     {
-        auto threadIndex  = alpaka::idx::getIdx<
-            alpaka::Grid,
-            alpaka::Threads
-        >( acc )[ 0u ];
+        struct X{};
+        struct Y{};
+        struct Z{};
+    }
 
-        auto const start = threadIndex * elems;
-        auto const   end = alpaka::math::min(
-            acc,
-            (threadIndex + 1) * elems,
-            problemSize
-        );
+     using Vector = llama::DS<
+         llama::DE<tag::X, FP>,
+         llama::DE<tag::Y, FP>,
+         llama::DE<tag::Z, FP>
+     >;
+    // clang-format on
+
+    template <typename View>
+    void add(const View& a, const View& b, View& c)
+    {
+        LLAMA_INDEPENDENT_DATA
+        for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
+        {
+            c(i)(tag::X{}) = a(i)(tag::X{}) + b(i)(tag::X{});
+            c(i)(tag::Y{}) = a(i)(tag::Y{}) - b(i)(tag::Y{});
+            c(i)(tag::Z{}) = a(i)(tag::Z{}) * b(i)(tag::Z{});
+        }
+    }
+
+    int main(int argc, char** argv)
+    {
+        const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
+
+        const auto mapping = [&] {
+            if constexpr (MAPPING == 0)
+                return llama::mapping::AoS{arrayDomain, Vector{}};
+            if constexpr (MAPPING == 1)
+                return llama::mapping::SoA{arrayDomain, Vector{}};
+            if constexpr (MAPPING == 2)
+                return llama::mapping::tree::Mapping{arrayDomain, llama::Tuple{}, Vector{}};
+            if constexpr (MAPPING == 3)
+                return llama::mapping::tree::Mapping{
+                    arrayDomain,
+                    llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
+                    Vector{}};
+        }();
+
+        std::cout << PROBLEM_SIZE / 1000 / 1000 << " million vectors LLAMA\n";
+
+        auto a = allocView(mapping);
+        auto b = allocView(mapping);
+        auto c = allocView(mapping);
+
+        const auto start = std::chrono::high_resolution_clock::now();
 
         LLAMA_INDEPENDENT_DATA
-        for ( auto pos = start; pos < end; ++pos )
-#if VECTORADD_BYPASS_LLAMA == 1
-            for ( auto dd = 0; dd < 3; ++dd )
-#if VECTORADD_BYPASS_USE_SOA == 1
-                a[ pos + dd * aSizeAsRuntimeParameter ] +=
-                    b[ pos + dd * bSizeAsRuntimeParameter ];
-#else
-                a[ pos * 3 + dd ] += b[ pos * 3 + dd ];
-#endif // VECTORADD_BYPASS_USE_SOA
-#else
-            a( pos ) += b( pos );
-#endif // VECTORADD_BYPASS_LLAMA
-    }
-};
+        for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+        {
+            a[i](tag::X{}) = i; // X
+            a[i](tag::Y{}) = i; // Y
+            a[i](llama::DatumCoord<2>{}) = i; // Z
+            b(i) = i; // writes to all (X, Y, Z)
+        }
 
-int main(int argc,char * * argv)
+        const auto stop = std::chrono::high_resolution_clock::now();
+        std::cout << "init took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+
+        for (std::size_t s = 0; s < STEPS; ++s)
+        {
+            const auto start = std::chrono::high_resolution_clock::now();
+            add(a, b, c);
+            const auto stop = std::chrono::high_resolution_clock::now();
+            std::cout << "add took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+        }
+
+        return (int) c.storageBlobs[0][0];
+    }
+} // namespace usellama
+
+namespace manualAoS
 {
-    // ALPAKA
-    using Dim = alpaka::dim::DimInt< 1 >;
-    using Size = std::size_t;
-    using Host = alpaka::acc::AccCpuSerial<Dim, Size>;
-
-#if VECTORADD_CUDA == 1
-    using Acc = alpaka::acc::AccGpuCudaRt<Dim, Size>;
-#else
-    //~ using Acc = alpaka::acc::AccCpuSerial<Dim, Size>;
-    using Acc = alpaka::acc::AccCpuOmp2Blocks<Dim, Size>;
-    //~ using Acc = alpaka::acc::AccCpuOmp2Threads<Dim, Size>;
-    //~ using Acc = alpaka::acc::AccCpuOmp4<Dim, Size>;
-#endif // VECTORADD_CUDA
-    using DevHost = alpaka::dev::Dev<Host>;
-    using DevAcc = alpaka::dev::Dev<Acc>;
-    using PltfHost = alpaka::pltf::Pltf<DevHost>;
-    using PltfAcc = alpaka::pltf::Pltf<DevAcc>;
-#if VECTORADD_CUDA == 1
-    using Queue = alpaka::queue::QueueCudaRtSync;
-#else
-    using Queue = alpaka::queue::QueueCpuSync;
-#endif // VECTORADD_CUDA
-    DevAcc const devAcc( alpaka::pltf::getDevByIdx< PltfAcc >( 0u ) );
-    DevHost const devHost( alpaka::pltf::getDevByIdx< PltfHost >( 0u ) );
-    Queue queue( devAcc ) ;
-
-    // VECTORADD
-    constexpr std::size_t problemSize = VECTORADD_PROBLEM_SIZE;
-    constexpr std::size_t blockSize = VECTORADD_BLOCK_SIZE;
-    constexpr std::size_t hardwareThreads = 2; //relevant for OpenMP2Threads
-    using Distribution = ThreadsElemsDistribution<
-        Acc,
-        blockSize,
-        hardwareThreads
-    >;
-    constexpr std::size_t elemCount = Distribution::elemCount;
-    constexpr std::size_t threadCount = Distribution::threadCount;
-    constexpr std::size_t steps = VECTORADD_STEPS;
-
-    // LLAMA
-    using UserDomain = llama::UserDomain< 1 >;
-    const UserDomain userDomainSize{ problemSize };
-
-#if VECTORADD_USE_TREE >= 1
-#if VECTORADD_USE_TREE == 1
-    auto treeOperationList = llama::makeTuple(
-        llama::mapping::tree::functor::Idem( )
-    );
-#elif VECTORADD_USE_TREE == 2
-    auto treeOperationList = llama::makeTuple(
-        llama::mapping::tree::functor::LeafOnlyRT( )
-    );
-#endif
-    using Mapping = llama::mapping::tree::Mapping<
-        UserDomain,
-        Vector,
-        decltype( treeOperationList )
-    >;
-    const Mapping mapping(
-        userDomainSize,
-        treeOperationList
-    );
-#else // VECTORADD_USE_TREE
-#if VECTORADD_USE_TREE == -1
-    using Mapping = llama::mapping::AoS<
-        UserDomain,
-        Vector
-    >;
-#elif VECTORADD_USE_TREE == 0
-    using Mapping = llama::mapping::SoA<
-        UserDomain,
-        Vector
-    >;
-#endif
-    Mapping const mapping( userDomainSize );
-#endif // VECTORADD_USE_TREE
-
-    using DevFactory = llama::Factory<
-        Mapping,
-        common::allocator::Alpaka<
-            DevAcc,
-            Size
-        >
-    >;
-    using MirrorFactory = llama::Factory<
-        Mapping,
-        common::allocator::AlpakaMirror<
-            DevAcc,
-            Size,
-            Mapping
-        >
-    >;
-    using HostFactory = llama::Factory<
-        Mapping,
-        common::allocator::Alpaka<
-            DevHost,
-            Size
-        >
-    >;
-
-    std::cout << problemSize / 1000 / 1000 << " million vectors\n";
-    std::cout
-        << problemSize * llama::SizeOf<Vector>::value * 2 / 1000 / 1000
-        << " MB on device\n";
-
-    Chrono chrono;
-
-    auto   hostA =   HostFactory::allocView( mapping, devHost );
-    auto   hostB =   HostFactory::allocView( mapping, devHost );
-    auto    devA =    DevFactory::allocView( mapping,  devAcc );
-    auto    devB =    DevFactory::allocView( mapping,  devAcc );
-    auto mirrorA = MirrorFactory::allocView( mapping,    devA );
-    auto mirrorB = MirrorFactory::allocView( mapping,    devB );
-
-    chrono.printAndReset("Alloc");
-
-    std::default_random_engine generator;
-    std::normal_distribution< Element > distribution(
-        Element( 0 ), // mean
-        Element( 1 )  // stddev
-    );
-    auto seed = distribution(generator);
-    LLAMA_INDEPENDENT_DATA
-    for (std::size_t i = 0; i < problemSize; ++i)
+    struct Vector
     {
-        hostA(i) = seed + i;
-        hostB(i) = seed - i;
-    }
-    chrono.printAndReset("Init");
-
-    alpakaMemCopy( devA, hostA, userDomainSize, queue );
-    alpakaMemCopy( devB, hostB, userDomainSize, queue );
-
-    chrono.printAndReset("Copy H->D");
-
-    const alpaka::vec::Vec< Dim, Size > elems (
-        static_cast< Size >( elemCount )
-    );
-    const alpaka::vec::Vec< Dim, Size > threads (
-        static_cast< Size >( threadCount )
-    );
-    constexpr auto innerCount = elemCount * threadCount;
-    const alpaka::vec::Vec< Dim, Size > blocks (
-        static_cast< Size >( ( problemSize + innerCount - 1 ) / innerCount )
-    );
-
-    auto const workdiv = alpaka::workdiv::WorkDivMembers<
-        Dim,
-        Size
-    > {
-        blocks,
-        threads,
-        elems
+        FP x;
+        FP y;
+        FP z;
     };
 
-    for ( std::size_t s = 0; s < steps; ++s)
+    inline void add(const Vector* a, const Vector* b, Vector* c)
     {
-        AddKernel<
-            problemSize,
-            elemCount
-        > addKernel;
-        alpaka::kernel::exec<Acc>(
-            queue,
-            workdiv,
-            addKernel,
-#if VECTORADD_BYPASS_LLAMA == 1
-            reinterpret_cast<Element*>(mirrorA.blob[0]),
-            reinterpret_cast<Element*>(mirrorB.blob[0]),
-            problemSize,
-            problemSize
-#else
-            mirrorA,
-            mirrorB
-#endif // VECTORADD_BYPASS_LLAMA
-        );
-        chrono.printAndReset("Add kernel");
-        dummy( static_cast<void*>( mirrorA.blob[0] ) );
-        dummy( static_cast<void*>( mirrorB.blob[0] ) );
+        LLAMA_INDEPENDENT_DATA
+        for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
+        {
+            c[i].x = a[i].x + b[i].x;
+            c[i].y = a[i].y - b[i].y;
+            c[i].z = a[i].z * b[i].z;
+        }
     }
 
-    alpakaMemCopy( hostA, devA, userDomainSize, queue );
-    alpakaMemCopy( hostB, devB, userDomainSize, queue );
+    int main(int argc, char** argv)
+    {
+        std::cout << PROBLEM_SIZE / 1000 / 1000 << " million vectors AoS\n";
 
-    chrono.printAndReset("Copy D->H");
+        std::vector<Vector> a(PROBLEM_SIZE);
+        std::vector<Vector> b(PROBLEM_SIZE);
+        std::vector<Vector> c(PROBLEM_SIZE);
 
-    return 0;
+        const auto start = std::chrono::high_resolution_clock::now();
+
+        LLAMA_INDEPENDENT_DATA
+        for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+        {
+            a[i].x = i;
+            a[i].y = i;
+            a[i].z = i;
+            b[i].x = i;
+            b[i].y = i;
+            b[i].z = i;
+        }
+
+        const auto stop = std::chrono::high_resolution_clock::now();
+        std::cout << "init took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+
+        for (std::size_t s = 0; s < STEPS; ++s)
+        {
+            const auto start = std::chrono::high_resolution_clock::now();
+            add(a.data(), b.data(), c.data());
+            const auto stop = std::chrono::high_resolution_clock::now();
+            std::cout << "add took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+        }
+
+        return c[0].x;
+    }
+} // namespace manualAoS
+
+namespace manualSoA
+{
+    inline void add(
+        const FP* ax,
+        const FP* ay,
+        const FP* az,
+        const FP* bx,
+        const FP* by,
+        const FP* bz,
+        FP* cx,
+        FP* cy,
+        FP* cz)
+    {
+        LLAMA_INDEPENDENT_DATA
+        for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
+        {
+            cx[i] = ax[i] + bx[i];
+            cy[i] = ay[i] - by[i];
+            cz[i] = az[i] * bz[i];
+        }
+    }
+
+    int main(int argc, char** argv)
+    {
+        std::cout << PROBLEM_SIZE / 1000 / 1000 << " million vectors SoA\n";
+
+        std::vector<FP> ax(PROBLEM_SIZE);
+        std::vector<FP> ay(PROBLEM_SIZE);
+        std::vector<FP> az(PROBLEM_SIZE);
+        std::vector<FP> bx(PROBLEM_SIZE);
+        std::vector<FP> by(PROBLEM_SIZE);
+        std::vector<FP> bz(PROBLEM_SIZE);
+        std::vector<FP> cx(PROBLEM_SIZE);
+        std::vector<FP> cy(PROBLEM_SIZE);
+        std::vector<FP> cz(PROBLEM_SIZE);
+
+        const auto start = std::chrono::high_resolution_clock::now();
+
+        LLAMA_INDEPENDENT_DATA
+        for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+        {
+            ax[i] = i;
+            ay[i] = i;
+            az[i] = i;
+            bx[i] = i;
+            by[i] = i;
+            bz[i] = i;
+        }
+
+        const auto stop = std::chrono::high_resolution_clock::now();
+        std::cout << "init took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+
+        for (std::size_t s = 0; s < STEPS; ++s)
+        {
+            const auto start = std::chrono::high_resolution_clock::now();
+            add(ax.data(), ay.data(), az.data(), bx.data(), by.data(), bz.data(), cx.data(), cy.data(), cz.data());
+            const auto stop = std::chrono::high_resolution_clock::now();
+            std::cout << "add took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+        }
+
+        return cx[0];
+    }
+} // namespace manualSoA
+
+int main(int argc, char** argv)
+{
+    int r = 0;
+    r += usellama::main(argc, argv);
+    r += manualAoS::main(argc, argv);
+    r += manualSoA::main(argc, argv);
+    return r;
 }

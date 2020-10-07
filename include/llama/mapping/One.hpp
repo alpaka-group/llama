@@ -1,85 +1,34 @@
-/* Copyright 2018 Alexander Matthes
- *
- * This file is part of LLAMA.
- *
- * LLAMA is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * LLAMA is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with LLAMA.  If not, see <www.gnu.org/licenses/>.
- */
+// Copyright 2018 Alexander Matthes
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #pragma once
 
+#include "../Functions.hpp"
 #include "../Types.hpp"
-#include "../UserDomain.hpp"
 
-namespace llama
+namespace llama::mapping
 {
-
-namespace mapping
-{
-
-/** Neither struct of array nor array of struct mapping as only exactly one
- *  element (in the user domain) can be mapped. If more than one element is
- *  tried to be mapped all virtual datums are mapped to the very same memory.
- *  This mapping is especially used for temporary views on the stack allocated
- *  with \ref tempAlloc.
- * \tparam T_UserDomain type of the user domain, expected to have only element,
- *  although more are working (but doesn't make sense)
- * \tparam T_DatumDomain type of the datum domain
- * \see tempAlloc, OneOnStackFactory, allocator::Stack
- */
-template<
-    typename T_UserDomain,
-    typename T_DatumDomain
->
-struct One
-{
-    using UserDomain = T_UserDomain;
-    using DatumDomain = T_DatumDomain;
-    static constexpr std::size_t blobCount = 1;
-
-    LLAMA_FN_HOST_ACC_INLINE
-    auto
-    getBlobSize( std::size_t const ) const
-    -> std::size_t
+    /// Maps all ArrayDomain coordinates into the same location and layouts
+    /// struct members consecutively. This mapping is used for temporary, single
+    /// element views.
+    template <typename T_ArrayDomain, typename T_DatumDomain>
+    struct One
     {
-        return SizeOf<DatumDomain>::value;
-    }
+        using ArrayDomain = T_ArrayDomain;
+        using DatumDomain = T_DatumDomain;
 
-    template< std::size_t... T_datumDomainCoord >
-    LLAMA_FN_HOST_ACC_INLINE
-    constexpr
-    auto
-    getBlobByte( UserDomain const coord ) const
-    -> std::size_t
-    {
-        return
-            LinearBytePos<
-                DatumDomain,
-                T_datumDomainCoord...
-            >::value;
-    }
+        static constexpr std::size_t blobCount = 1;
 
-    template< std::size_t... T_datumDomainCoord >
-    LLAMA_FN_HOST_ACC_INLINE
-    constexpr
-    auto
-    getBlobNr( UserDomain const coord ) const
-    -> std::size_t
-    {
-        return 0;
-    }
-};
+        LLAMA_FN_HOST_ACC_INLINE auto getBlobSize(std::size_t) const -> std::size_t
+        {
+            return sizeOf<DatumDomain>;
+        }
 
-} // namespace mapping
-
-} // namespace llama
+        template <std::size_t... DatumDomainCoord>
+        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(ArrayDomain) const -> NrAndOffset
+        {
+            constexpr auto offset = offsetOf<DatumDomain, DatumDomainCoord...>;
+            return {0, offset};
+        }
+    };
+} // namespace llama::mapping

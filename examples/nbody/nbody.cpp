@@ -1,552 +1,418 @@
+#include <chrono>
 #include <iostream>
-#include <utility>
-
-#define NBODY_CUDA 0
-#define NBODY_USE_TREE 1
-#define NBODY_USE_SHARED 1
-#define NBODY_USE_SHARED_TREE 1
-
-#define NBODY_PROBLEM_SIZE 16*1024
-#define NBODY_BLOCK_SIZE 256
-#define NBODY_STEPS 5
-
-
-#if BOOST_VERSION < 106700 && (__CUDACC__ || __IBMCPP__)
-    #ifdef BOOST_PP_VARIADICS
-        #undef BOOST_PP_VARIADICS
-    #endif
-    #define BOOST_PP_VARIADICS 1
-#endif
-
-#include <alpaka/alpaka.hpp>
-#ifdef __CUDACC__
-	#define LLAMA_FN_HOST_ACC_INLINE ALPAKA_FN_ACC __forceinline__
-#else
-	#define LLAMA_FN_HOST_ACC_INLINE ALPAKA_FN_ACC inline
-#endif
 #include <llama/llama.hpp>
 #include <random>
+#include <utility>
+#include <vector>
 
-#include "../common/AlpakaAllocator.hpp"
-#include "../common/AlpakaMemCopy.hpp"
-#include "../common/Chrono.hpp"
-#include "../common/Dummy.hpp"
+// needs -fno-math-errno, so std::sqrt() can be vectorized
 
-using Element = float;
-constexpr Element EPS2 = 0.01;
+constexpr auto MAPPING = 1; ///< 0 native AoS, 1 native SoA, 2 tree AoS, 3 tree SoA
+constexpr auto PROBLEM_SIZE = 16 * 1024; ///< total number of particles
+constexpr auto STEPS = 5; ///< number of steps to calculate
+constexpr auto TRACE = false;
 
-namespace dd
+using FP = float;
+constexpr FP EPS2 = 0.01f;
+
+namespace usellama
 {
-    struct Pos {};
-    struct Vel {};
-    struct X {};
-    struct Y {};
-    struct Z {};
-    struct Mass {};
-}
-
-using Particle = llama::DS<
-    llama::DE< dd::Pos, llama::DS<
-        llama::DE< dd::X, Element >,
-        llama::DE< dd::Y, Element >,
-        llama::DE< dd::Z, Element >
-    > >,
-    llama::DE< dd::Vel,llama::DS<
-        llama::DE< dd::X, Element >,
-        llama::DE< dd::Y, Element >,
-        llama::DE< dd::Z, Element >
-    > >,
-    llama::DE< dd::Mass, Element >
->;
-
-template<
-    typename T_VirtualDatum1,
-    typename T_VirtualDatum2
->
-LLAMA_FN_HOST_ACC_INLINE
-auto
-pPInteraction(
-    T_VirtualDatum1&& p1,
-    T_VirtualDatum2&& p2,
-    Element const & ts
-)
--> void
-{
-    Element const d[3] = {
-        p1( dd::Pos(), dd::X() ) -
-        p2( dd::Pos(), dd::X() ),
-        p1( dd::Pos(), dd::Y() ) -
-        p2( dd::Pos(), dd::Y() ),
-        p1( dd::Pos(), dd::Z() ) -
-        p2( dd::Pos(), dd::Z() )
-    };
-    Element distSqr = d[0] * d[0] + d[1] * d[1] + d[2] * d[2] + EPS2;
-    Element distSixth = distSqr * distSqr * distSqr;
-    Element invDistCube = 1.0f / sqrtf(distSixth);
-    Element s = p2( dd::Mass() ) * invDistCube;
-    Element const v_d[3] = {
-        d[0] * s * ts,
-        d[1] * s * ts,
-        d[2] * s * ts
-    };
-    p1( dd::Vel(), dd::X() ) += v_d[0];
-    p1( dd::Vel(), dd::Y() ) += v_d[1];
-    p1( dd::Vel(), dd::Z() ) += v_d[2];
-}
-
-template<
-    typename T_Acc,
-    std::size_t T_size,
-    std::size_t T_counter,
-    std::size_t threads
->
-struct BlockSharedMemoryAllocator
-{
-    using type = common::allocator::AlpakaShared<
-        T_Acc,
-        T_size,
-        T_counter
-    >;
-
-    template <
-        typename T_Factory,
-        typename T_Mapping
-    >
-    LLAMA_FN_HOST_ACC_INLINE
-    static
-    auto
-    allocView(
-        T_Mapping const mapping,
-        T_Acc const & acc
-    )
-    -> decltype( T_Factory::allocView( mapping, acc ) )
+    // clang-format off
+    namespace tag
     {
-        return T_Factory::allocView( mapping, acc );
+        struct Pos{};
+        struct Vel{};
+        struct X{};
+        struct Y{};
+        struct Z{};
+        struct Mass{};
     }
-};
 
-template<
-    typename T_Acc,
-    std::size_t T_size,
-    std::size_t T_counter
->
-struct BlockSharedMemoryAllocator<
-    T_Acc,
-    T_size,
-    T_counter,
-    1
->
-{
-    using type = llama::allocator::Stack<
-        T_size
+    using Particle = llama::DS<
+        llama::DE<tag::Pos, llama::DS<
+            llama::DE<tag::X, FP>,
+            llama::DE<tag::Y, FP>,
+            llama::DE<tag::Z, FP>
+        >>,
+        llama::DE<tag::Vel, llama::DS<
+            llama::DE<tag::X, FP>,
+            llama::DE<tag::Y, FP>,
+            llama::DE<tag::Z, FP>
+        >>,
+        llama::DE<tag::Mass, FP>
     >;
+    // clang-format on
 
-    template <
-        typename T_Factory,
-        typename T_Mapping
-    >
-    LLAMA_FN_HOST_ACC_INLINE
-    static
-    auto
-    allocView(
-        T_Mapping const mapping,
-        T_Acc const & acc
-    )
-    -> decltype( T_Factory::allocView( mapping ) )
+    template <typename VirtualParticle>
+    LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticle p1, VirtualParticle p2, FP ts)
     {
-        return T_Factory::allocView( mapping );
+        auto dist = p1(tag::Pos{}) + p2(tag::Pos{});
+        dist *= dist;
+        const FP distSqr = EPS2 + dist(tag::X{}) + dist(tag::Y{}) + dist(tag::Z{});
+        const FP distSixth = distSqr * distSqr * distSqr;
+        const FP invDistCube = 1.0f / std::sqrt(distSixth);
+        const FP s = p2(tag::Mass{}) * invDistCube;
+        dist *= s * ts;
+        p1(tag::Vel{}) += dist;
     }
-};
 
-template<
-    std::size_t problemSize,
-    std::size_t elems,
-    std::size_t blockSize
->
-struct UpdateKernel
-{
-    template<
-        typename T_Acc,
-        typename T_View
-    >
-    LLAMA_FN_HOST_ACC_INLINE
-    void operator()(
-        T_Acc const &acc,
-        T_View particles,
-        Element ts
-    ) const
+    template <typename View>
+    void update(View& particles, FP ts)
     {
-
-#if NBODY_USE_SHARED == 1
-        constexpr std::size_t threads = blockSize / elems;
-        using SharedAllocator = BlockSharedMemoryAllocator<
-            T_Acc,
-            llama::SizeOf< typename decltype(particles)::Mapping::DatumDomain >::value
-            * blockSize,
-            __COUNTER__,
-            threads
-        >;
-
-
-#if NBODY_USE_SHARED_TREE == 1
-        auto treeOperationList = llama::makeTuple(
-            llama::mapping::tree::functor::LeafOnlyRT( )
-        );
-        using SharedMapping = llama::mapping::tree::Mapping<
-            typename decltype(particles)::Mapping::UserDomain,
-            typename decltype(particles)::Mapping::DatumDomain,
-            decltype( treeOperationList )
-        >;
-        SharedMapping const sharedMapping(
-            { blockSize },
-            treeOperationList
-        );
-#else
-        using SharedMapping = llama::mapping::SoA<
-            typename decltype(particles)::Mapping::UserDomain,
-            typename decltype(particles)::Mapping::DatumDomain
-        >;
-        SharedMapping const sharedMapping( { blockSize } );
-#endif // NBODY_USE_SHARED_TREE
-
-        using SharedFactory = llama::Factory<
-            SharedMapping,
-            typename SharedAllocator::type
-        >;
-
-        auto temp = SharedAllocator::template allocView<
-            SharedFactory,
-            SharedMapping
-        >( sharedMapping, acc );
-#endif // NBODY_USE_SHARED
-
-        auto threadIndex  = alpaka::idx::getIdx<
-            alpaka::Grid,
-            alpaka::Threads
-        >( acc )[ 0u ];
-
-        auto const start = threadIndex * elems;
-        auto const   end = alpaka::math::min(
-            acc,
-            start + elems,
-            problemSize
-        );
-        LLAMA_INDEPENDENT_DATA
-        for ( std::size_t b = 0; b < problemSize / blockSize; ++b )
+        for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
-            auto const start2 = b * blockSize;
-            auto const   end2 = alpaka::math::min(
-                acc,
-                start2 + blockSize,
-                problemSize
-            ) - start2;
-#if NBODY_USE_SHARED == 1
             LLAMA_INDEPENDENT_DATA
-            for (
-                auto pos2 = decltype(end2)(0);
-                pos2 + threadIndex < end2;
-                pos2 += threads
-            )
-                temp(pos2 + threadIndex) = particles( start2 + pos2 + threadIndex );
-#endif // NBODY_USE_SHARED
-            LLAMA_INDEPENDENT_DATA
-            for ( auto pos2 = decltype(end2)(0); pos2 < end2; ++pos2 )
-                LLAMA_INDEPENDENT_DATA
-                for ( auto pos = start; pos < end; ++pos )
-                    pPInteraction(
-                        particles( pos ),
-#if NBODY_USE_SHARED == 1
-                        temp( pos2 ),
-#else
-                        particles( start2 + pos2 ),
-#endif // NBODY_USE_SHARED
-                        ts
-                    );
-        };
+            for (std::size_t j = 0; j < PROBLEM_SIZE; j++)
+                pPInteraction(particles(j), particles(i), ts);
+        }
     }
-};
 
-
-template<
-    std::size_t problemSize,
-    std::size_t elems
->
-struct MoveKernel
-{
-    template<
-        typename T_Acc,
-        typename T_View
-    >
-    LLAMA_FN_HOST_ACC_INLINE
-    void operator()(
-        T_Acc const &acc,
-        T_View particles,
-        Element ts
-    ) const
+    template <typename View>
+    void move(View& particles, FP ts)
     {
-        auto threadIndex  = alpaka::idx::getIdx<
-            alpaka::Grid,
-            alpaka::Threads
-        >( acc )[ 0u ];
-
-        auto const start = threadIndex * elems;
-        auto const   end = alpaka::math::min(
-            acc,
-            (threadIndex + 1) * elems,
-            problemSize
-        );
-
         LLAMA_INDEPENDENT_DATA
-        for ( auto pos = start; pos < end; ++pos )
+        for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
+            particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * ts;
+    }
+
+    int main(int argc, char** argv)
+    {
+        constexpr FP ts = 0.0001f;
+
+        const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
+        auto mapping = [&] {
+            if constexpr (MAPPING == 0)
+                return llama::mapping::AoS{arrayDomain, Particle{}};
+            if constexpr (MAPPING == 1)
+                return llama::mapping::SoA{arrayDomain, Particle{}};
+            if constexpr (MAPPING == 2)
+                return llama::mapping::tree::Mapping{arrayDomain, llama::Tuple{}, Particle{}};
+            if constexpr (MAPPING == 3)
+                return llama::mapping::tree::Mapping{
+                    arrayDomain,
+                    llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
+                    Particle{}};
+        }();
+
+        auto tmapping = [&] {
+            if constexpr (TRACE)
+                return llama::mapping::Trace{std::move(mapping)};
+            else
+                return std::move(mapping);
+        }();
+
+        auto particles = allocView(std::move(tmapping));
+
+        std::cout << PROBLEM_SIZE / 1000 << " thousand particles LLAMA\n";
+
+        const auto start = std::chrono::high_resolution_clock::now();
+        const auto stop = std::chrono::high_resolution_clock::now();
+        std::cout << "alloc took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+
         {
-            particles( pos )( dd::Pos(), dd::X() ) +=
-                particles( pos )( dd::Vel(), dd::X() ) * ts;
-            particles( pos )( dd::Pos(), dd::Y() ) +=
-                particles( pos )( dd::Vel(), dd::Y() ) * ts;
-            particles( pos )( dd::Pos(), dd::Z() ) +=
-                particles( pos )( dd::Vel(), dd::Z() ) * ts;
-        };
-    }
-};
+            const auto start = std::chrono::high_resolution_clock::now();
 
-template<
-    typename T_Acc,
-    std::size_t blockSize,
-    std::size_t hardwareThreads
->
-struct ThreadsElemsDistribution
+            std::default_random_engine engine;
+            std::normal_distribution<FP> dist(FP(0), FP(1));
+            for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+            {
+                auto p = particles(i);
+                p(tag::Pos{}, tag::X{}) = dist(engine);
+                p(tag::Pos{}, tag::Y{}) = dist(engine);
+                p(tag::Pos{}, tag::Z{}) = dist(engine);
+                p(tag::Vel{}, tag::X{}) = dist(engine) / FP(10);
+                p(tag::Vel{}, tag::Y{}) = dist(engine) / FP(10);
+                p(tag::Vel{}, tag::Z{}) = dist(engine) / FP(10);
+                p(tag::Mass{}) = dist(engine) / FP(100);
+            }
+
+            const auto stop = std::chrono::high_resolution_clock::now();
+            std::cout << "init took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+        }
+
+        for (std::size_t s = 0; s < STEPS; ++s)
+        {
+            {
+                const auto start = std::chrono::high_resolution_clock::now();
+                update(particles, ts);
+                const auto stop = std::chrono::high_resolution_clock::now();
+                std::cout << "update took " << std::chrono::duration<double>(stop - start).count() << "s\t";
+            }
+            {
+                const auto start = std::chrono::high_resolution_clock::now();
+                move(particles, ts);
+                const auto stop = std::chrono::high_resolution_clock::now();
+                std::cout << "move took   " << std::chrono::duration<double>(stop - start).count() << "s\n";
+            }
+        }
+
+        return 0;
+    }
+} // namespace usellama
+
+namespace manualAoS
 {
-    static constexpr std::size_t elemCount = blockSize;
-    static constexpr std::size_t threadCount = 1u;
-};
-
-#ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
-    template<
-        std::size_t blockSize,
-        std::size_t hardwareThreads,
-        typename T_Dim,
-        typename T_Size
-    >
-    struct ThreadsElemsDistribution<
-        alpaka::acc::AccGpuCudaRt<T_Dim, T_Size>,
-        blockSize,
-        hardwareThreads
-    >
+    struct Vec
     {
-        static constexpr std::size_t elemCount = 1u;
-        static constexpr std::size_t threadCount = blockSize;
-    };
-#endif
+        FP x;
+        FP y;
+        FP z;
 
-#ifdef ALPAKA_ACC_CPU_B_SEQ_T_OMP2_ENABLED
-    template<
-        std::size_t blockSize,
-        std::size_t hardwareThreads,
-        typename T_Dim,
-        typename T_Size
-    >
-    struct ThreadsElemsDistribution<
-        alpaka::acc::AccCpuOmp2Threads<T_Dim, T_Size>,
-        blockSize,
-        hardwareThreads
-    >
+        auto operator*=(FP s) -> Vec&
+        {
+            x *= s;
+            y *= s;
+            z *= s;
+            return *this;
+        }
+
+        auto operator*=(Vec v) -> Vec&
+        {
+            x *= v.x;
+            y *= v.y;
+            z *= v.z;
+            return *this;
+        }
+
+        auto operator+=(Vec v) -> Vec&
+        {
+            x += v.x;
+            y += v.y;
+            z += v.z;
+            return *this;
+        }
+
+        friend auto operator+(Vec a, Vec b) -> Vec
+        {
+            return a += b;
+        }
+        friend auto operator*(Vec a, FP s) -> Vec
+        {
+            return a *= s;
+        }
+        friend auto operator*(Vec a, Vec b) -> Vec
+        {
+            return a *= b;
+        }
+    };
+
+    using Pos = Vec;
+    using Vel = Vec;
+
+    struct Particle
     {
-        static constexpr std::size_t elemCount =
-            ( blockSize + hardwareThreads - 1u ) / hardwareThreads;
-        static constexpr std::size_t threadCount = hardwareThreads;
+        Pos pos;
+        Vel vel;
+        FP mass;
     };
-#endif
 
+    inline void pPInteraction(Particle& p1, const Particle& p2, FP ts)
+    {
+        auto distance = p1.pos + p2.pos;
+        distance *= distance;
+        const FP distSqr = EPS2 + distance.x + distance.y + distance.z;
+        const FP distSixth = distSqr * distSqr * distSqr;
+        const FP invDistCube = 1.0f / std::sqrt(distSixth);
+        const FP s = p2.mass * invDistCube;
+        distance *= s * ts;
+        p1.vel += distance;
+    }
 
-int main(int argc,char * * argv)
+    void update(Particle* particles, FP ts)
+    {
+        for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
+        {
+            LLAMA_INDEPENDENT_DATA
+            for (std::size_t j = 0; j < PROBLEM_SIZE; j++)
+                pPInteraction(particles[j], particles[i], ts);
+        }
+    }
+
+    void move(Particle* particles, FP ts)
+    {
+        LLAMA_INDEPENDENT_DATA
+        for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
+            particles[i].pos += particles[i].vel * ts;
+    }
+
+    int main(int argc, char** argv)
+    {
+        constexpr FP ts = 0.0001f;
+
+        std::cout << PROBLEM_SIZE / 1000 << " thousand particles AoS\n";
+
+        const auto start = std::chrono::high_resolution_clock::now();
+        std::vector<Particle> particles(PROBLEM_SIZE);
+        const auto stop = std::chrono::high_resolution_clock::now();
+        std::cout << "alloc took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+
+        {
+            const auto start = std::chrono::high_resolution_clock::now();
+
+            std::default_random_engine engine;
+            std::normal_distribution<FP> dist(FP(0), FP(1));
+            for (auto& p : particles)
+            {
+                p.pos.x = dist(engine);
+                p.pos.y = dist(engine);
+                p.pos.z = dist(engine);
+                p.vel.x = dist(engine) / FP(10);
+                p.vel.y = dist(engine) / FP(10);
+                p.vel.z = dist(engine) / FP(10);
+                p.mass = dist(engine) / FP(100);
+            }
+
+            const auto stop = std::chrono::high_resolution_clock::now();
+            std::cout << "init took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+        }
+
+        for (std::size_t s = 0; s < STEPS; ++s)
+        {
+            {
+                const auto start = std::chrono::high_resolution_clock::now();
+                update(particles.data(), ts);
+                const auto stop = std::chrono::high_resolution_clock::now();
+                std::cout << "update took " << std::chrono::duration<double>(stop - start).count() << "s\t";
+            }
+            {
+                const auto start = std::chrono::high_resolution_clock::now();
+                move(particles.data(), ts);
+                const auto stop = std::chrono::high_resolution_clock::now();
+                std::cout << "move took   " << std::chrono::duration<double>(stop - start).count() << "s\n";
+            }
+        }
+
+        return 0;
+    }
+} // namespace manualAoS
+
+namespace manualSoA
 {
-    // ALPAKA
-    using Dim = alpaka::dim::DimInt< 1 >;
-    using Size = std::size_t;
-    using Host = alpaka::acc::AccCpuSerial<Dim, Size>;
-
-#if NBODY_CUDA == 1
-    using Acc = alpaka::acc::AccGpuCudaRt<Dim, Size>;
-#else
-    //~ using Acc = alpaka::acc::AccCpuSerial<Dim, Size>;
-    using Acc = alpaka::acc::AccCpuOmp2Blocks<Dim, Size>;
-    //~ using Acc = alpaka::acc::AccCpuOmp2Threads<Dim, Size>;
-    //~ using Acc = alpaka::acc::AccCpuOmp4<Dim, Size>;
-#endif // NBODY_CUDA
-    using DevHost = alpaka::dev::Dev<Host>;
-    using DevAcc = alpaka::dev::Dev<Acc>;
-    using PltfHost = alpaka::pltf::Pltf<DevHost>;
-    using PltfAcc = alpaka::pltf::Pltf<DevAcc>;
-#if NBODY_CUDA == 1
-    using Queue = alpaka::queue::QueueCudaRtSync;
-#else
-    using Queue = alpaka::queue::QueueCpuSync;
-#endif // NBODY_CUDA
-    DevAcc const devAcc( alpaka::pltf::getDevByIdx< PltfAcc >( 0u ) );
-    DevHost const devHost( alpaka::pltf::getDevByIdx< PltfHost >( 0u ) );
-    Queue queue( devAcc ) ;
-
-    // NBODY
-    constexpr std::size_t problemSize = NBODY_PROBLEM_SIZE;
-    constexpr std::size_t blockSize = NBODY_BLOCK_SIZE;
-    constexpr std::size_t hardwareThreads = 2; //relevant for OpenMP2Threads
-    using Distribution = ThreadsElemsDistribution<
-        Acc,
-        blockSize,
-        hardwareThreads
-    >;
-    constexpr std::size_t elemCount = Distribution::elemCount;
-    constexpr std::size_t threadCount = Distribution::threadCount;
-    constexpr Element ts = 0.0001;
-    constexpr std::size_t steps = NBODY_STEPS;
-
-    // LLAMA
-    using UserDomain = llama::UserDomain< 1 >;
-    const UserDomain userDomainSize{ problemSize };
-
-#if NBODY_USE_TREE == 1
-    auto treeOperationList = llama::makeTuple(
-        llama::mapping::tree::functor::LeafOnlyRT( )
-    );
-    using Mapping = llama::mapping::tree::Mapping<
-        UserDomain,
-        Particle,
-        decltype( treeOperationList )
-    >;
-    const Mapping mapping(
-        userDomainSize,
-        treeOperationList
-    );
-#else
-    using Mapping = llama::mapping::SoA<
-        UserDomain,
-        Particle
-    >;
-    Mapping const mapping( userDomainSize );
-#endif // NBODY_USE_TREE
-
-    using DevFactory = llama::Factory<
-        Mapping,
-        common::allocator::Alpaka<
-            DevAcc,
-            Size
-        >
-    >;
-    using MirrorFactory = llama::Factory<
-        Mapping,
-        common::allocator::AlpakaMirror<
-            DevAcc,
-            Size,
-            Mapping
-        >
-    >;
-    using HostFactory = llama::Factory<
-        Mapping,
-        common::allocator::Alpaka<
-            DevHost,
-            Size
-        >
-    >;
-
-    std::cout << problemSize / 1000 << " thousand particles\n";
-    std::cout
-        << problemSize * llama::SizeOf<Particle>::value / 1000 / 1000
-        << "MB \n";
-
-    Chrono chrono;
-
-    auto   hostView =   HostFactory::allocView( mapping, devHost );
-    auto    devView =    DevFactory::allocView( mapping,  devAcc );
-    auto mirrowView = MirrorFactory::allocView( mapping, devView );
-
-    chrono.printAndReset("Alloc");
-
-    std::default_random_engine generator;
-    std::normal_distribution< Element > distribution(
-        Element( 0 ), // mean
-        Element( 1 )  // stddev
-    );
-    auto seed = distribution(generator);
-    LLAMA_INDEPENDENT_DATA
-    for (std::size_t i = 0; i < problemSize; ++i)
+    inline void pPInteraction(
+        FP p1posx,
+        FP p1posy,
+        FP p1posz,
+        FP& p1velx,
+        FP& p1vely,
+        FP& p1velz,
+        FP p2posx,
+        FP p2posy,
+        FP p2posz,
+        FP p2mass,
+        FP ts)
     {
-        //~ auto temp = llama::tempAlloc< 1, Particle >();
-        //~ temp(dd::Pos(), dd::X()) = distribution(generator);
-        //~ temp(dd::Pos(), dd::Y()) = distribution(generator);
-        //~ temp(dd::Pos(), dd::Z()) = distribution(generator);
-        //~ temp(dd::Vel(), dd::X()) = distribution(generator)/Element(10);
-        //~ temp(dd::Vel(), dd::Y()) = distribution(generator)/Element(10);
-        //~ temp(dd::Vel(), dd::Z()) = distribution(generator)/Element(10);
-        hostView(i) = seed;
-        //~ hostView(dd::Pos(), dd::X()) = seed;
-        //~ hostView(dd::Pos(), dd::Y()) = seed;
-        //~ hostView(dd::Pos(), dd::Z()) = seed;
-        //~ hostView(dd::Vel(), dd::X()) = seed;
-        //~ hostView(dd::Vel(), dd::Y()) = seed;
-        //~ hostView(dd::Vel(), dd::Z()) = seed;
+        auto xdistance = p1posx + p2posx;
+        auto ydistance = p1posy + p2posy;
+        auto zdistance = p1posz + p2posz;
+        xdistance *= xdistance;
+        ydistance *= ydistance;
+        zdistance *= zdistance;
+        const FP distSqr = EPS2 + xdistance + ydistance + zdistance;
+        const FP distSixth = distSqr * distSqr * distSqr;
+        const FP invDistCube = 1.0f / std::sqrt(distSixth);
+        const FP s = p2mass * invDistCube;
+        xdistance *= s * ts;
+        ydistance *= s * ts;
+        zdistance *= s * ts;
+        p1velx += xdistance;
+        p1vely += ydistance;
+        p1velz += zdistance;
     }
 
-    chrono.printAndReset("Init");
-
-    alpakaMemCopy( devView, hostView, userDomainSize, queue );
-
-    chrono.printAndReset("Copy H->D");
-
-    const alpaka::vec::Vec< Dim, Size > elems (
-        static_cast< Size >( elemCount )
-    );
-    const alpaka::vec::Vec< Dim, Size > threads (
-        static_cast< Size >( threadCount )
-    );
-    constexpr auto innerCount = elemCount * threadCount;
-    const alpaka::vec::Vec< Dim, Size > blocks (
-        static_cast< Size >( ( problemSize + innerCount - 1 ) / innerCount )
-    );
-
-    auto const workdiv = alpaka::workdiv::WorkDivMembers<
-        Dim,
-        Size
-    > {
-        blocks,
-        threads,
-        elems
-    };
-
-    for ( std::size_t s = 0; s < steps; ++s)
+    void update(FP* posx, FP* posy, FP* posz, FP* velx, FP* vely, FP* velz, FP* mass, FP ts)
     {
-        UpdateKernel<
-            problemSize,
-            elemCount,
-            blockSize
-        > updateKernel;
-        alpaka::kernel::exec< Acc > (
-            queue,
-            workdiv,
-            updateKernel,
-            mirrowView,
-            ts
-        );
-
-        chrono.printAndReset("Update kernel");
-
-        MoveKernel<
-            problemSize,
-            elemCount
-        > moveKernel;
-        alpaka::kernel::exec<Acc>(
-            queue,
-            workdiv,
-            moveKernel,
-            mirrowView,
-            ts
-        );
-        chrono.printAndReset("Move kernel");
-        dummy( static_cast<void*>( mirrowView.blob[0] ) );
+        for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
+        {
+            LLAMA_INDEPENDENT_DATA
+            for (std::size_t j = 0; j < PROBLEM_SIZE; j++)
+                pPInteraction(
+                    posx[j],
+                    posy[j],
+                    posz[j],
+                    velx[j],
+                    vely[j],
+                    velz[j],
+                    posx[i],
+                    posy[i],
+                    posz[i],
+                    mass[i],
+                    ts);
+        }
     }
 
-    alpakaMemCopy( hostView, devView, userDomainSize, queue );
+    void move(FP* posx, FP* posy, FP* posz, FP* velx, FP* vely, FP* velz, FP* mass, FP ts)
+    {
+        LLAMA_INDEPENDENT_DATA
+        for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
+        {
+            posx[i] += velx[i] * ts;
+            posy[i] += vely[i] * ts;
+            posz[i] += velz[i] * ts;
+        }
+    }
 
-    chrono.printAndReset("Copy D->H");
+    int main(int argc, char** argv)
+    {
+        constexpr FP ts = 0.0001f;
 
-    return 0;
+        std::cout << PROBLEM_SIZE / 1000 << " thousand particles SoA\n";
+
+        const auto start = std::chrono::high_resolution_clock::now();
+        std::vector<FP> posx(PROBLEM_SIZE);
+        std::vector<FP> posy(PROBLEM_SIZE);
+        std::vector<FP> posz(PROBLEM_SIZE);
+        std::vector<FP> velx(PROBLEM_SIZE);
+        std::vector<FP> vely(PROBLEM_SIZE);
+        std::vector<FP> velz(PROBLEM_SIZE);
+        std::vector<FP> mass(PROBLEM_SIZE);
+        const auto stop = std::chrono::high_resolution_clock::now();
+        std::cout << "alloc took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+
+        {
+            const auto start = std::chrono::high_resolution_clock::now();
+
+            std::default_random_engine engine;
+            std::normal_distribution<FP> dist(FP(0), FP(1));
+            for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+            {
+                posx[i] = dist(engine);
+                posy[i] = dist(engine);
+                posz[i] = dist(engine);
+                velx[i] = dist(engine) / FP(10);
+                vely[i] = dist(engine) / FP(10);
+                velz[i] = dist(engine) / FP(10);
+                mass[i] = dist(engine) / FP(100);
+            }
+
+            const auto stop = std::chrono::high_resolution_clock::now();
+            std::cout << "init took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+        }
+
+        for (std::size_t s = 0; s < STEPS; ++s)
+        {
+            {
+                const auto start = std::chrono::high_resolution_clock::now();
+                update(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), mass.data(), ts);
+                const auto stop = std::chrono::high_resolution_clock::now();
+                std::cout << "update took " << std::chrono::duration<double>(stop - start).count() << "s\t";
+            }
+            {
+                const auto start = std::chrono::high_resolution_clock::now();
+                move(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), mass.data(), ts);
+                const auto stop = std::chrono::high_resolution_clock::now();
+                std::cout << "move took   " << std::chrono::duration<double>(stop - start).count() << "s\n";
+            }
+        }
+
+        return 0;
+    }
+} // namespace manualSoA
+
+int main(int argc, char** argv)
+{
+    int r = 0;
+    r += usellama::main(argc, argv);
+    r += manualAoS::main(argc, argv);
+    r += manualSoA::main(argc, argv);
+    return r;
 }
