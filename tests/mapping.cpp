@@ -2,6 +2,7 @@
 
 #include <catch2/catch.hpp>
 #include <llama/llama.hpp>
+#include <llama/Concepts.hpp>
 
 // clang-format off
 namespace tag {
@@ -30,6 +31,16 @@ using Particle = llama::DS<
     llama::DE<tag::Flags, llama::DA<bool, 4>>
 >;
 // clang-format on
+
+
+#ifdef __cpp_concepts
+TEST_CASE("mapping.concepts")
+{
+    STATIC_REQUIRE(llama::Mapping<llama::mapping::AoS<llama::ArrayDomain<2>, Particle>>);
+    STATIC_REQUIRE(llama::Mapping<llama::mapping::SoA<llama::ArrayDomain<2>, Particle>>);
+    STATIC_REQUIRE(llama::Mapping<llama::mapping::AoSoA<llama::ArrayDomain<2>, Particle, 8>>);
+}
+#endif
 
 TEST_CASE("address.AoS")
 {
