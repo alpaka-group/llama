@@ -39,9 +39,9 @@ Array domain
 Datum domain
 ------------
 
-.. doxygentypedef:: llama::DatumStruct
+.. doxygenstruct:: llama::DatumStruct
 .. doxygentypedef:: llama::DS
-.. doxygentypedef:: llama::DatumElement
+.. doxygenstruct:: llama::DatumElement
 .. doxygentypedef:: llama::DE
 .. doxygentypedef:: llama::DatumArray
 .. doxygentypedef:: llama::DA
