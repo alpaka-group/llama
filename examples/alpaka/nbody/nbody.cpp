@@ -57,7 +57,7 @@ template <typename VirtualDatum1, typename VirtualDatum2>
 LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualDatum1 p1, VirtualDatum2 p2, FP ts)
 {
     // Creating tempory virtual datum object for distance on stack:
-    auto distance = p1(tag::Pos()) + p2(tag::Pos());
+    auto distance = p1(tag::Pos()) - p2(tag::Pos());
     distance *= distance; // square for each element
     const FP distSqr = EPS2 + distance(tag::X()) + distance(tag::Y()) + distance(tag::Z());
     const FP distSixth = distSqr * distSqr * distSqr;

@@ -46,7 +46,7 @@ namespace usellama
     template <typename VirtualParticle>
     LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticle p1, VirtualParticle p2, FP ts)
     {
-        auto dist = p1(tag::Pos{}) + p2(tag::Pos{});
+        auto dist = p1(tag::Pos{}) - p2(tag::Pos{});
         dist *= dist;
         const FP distSqr = EPS2 + dist(tag::X{}) + dist(tag::Y{}) + dist(tag::Z{});
         const FP distSixth = distSqr * distSqr * distSqr;
