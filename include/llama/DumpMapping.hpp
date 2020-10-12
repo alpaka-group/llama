@@ -60,9 +60,9 @@ namespace llama
         }
 
         template <typename Mapping, typename ArrayDomain, std::size_t... Coords>
-        auto mappingOffset(const Mapping& mapping, const ArrayDomain& udCoord, DatumCoord<Coords...>)
+        auto mappingBlobNrAndOffset(const Mapping& mapping, const ArrayDomain& udCoord, DatumCoord<Coords...>)
         {
-            return mapping.template getBlobNrAndOffset<Coords...>(udCoord).offset;
+            return mapping.template getBlobNrAndOffset<Coords...>(udCoord);
         }
     } // namespace internal
 
@@ -82,7 +82,7 @@ namespace llama
             ArrayDomain udCoord;
             std::vector<std::size_t> ddIndices;
             std::vector<std::string> ddTags;
-            std::size_t offset;
+            NrAndOffset nrAndOffset;
             std::size_t size;
         };
         std::vector<DatumInfo> infos;
@@ -95,7 +95,7 @@ namespace llama
                     udCoord,
                     internal::toVec(coord),
                     internal::tagsAsStrings<DatumDomain>(coord),
-                    internal::mappingOffset(mapping, udCoord, coord),
+                    internal::mappingBlobNrAndOffset(mapping, udCoord, coord),
                     size});
             });
         }
@@ -140,8 +140,16 @@ namespace llama
 
         for (const auto& info : infos)
         {
-            const auto x = (info.offset % wrapByteCount) * byteSizeInPixel;
-            const auto y = (info.offset / wrapByteCount) * byteSizeInPixel;
+            std::size_t blobY = 0;
+            for (auto i = 0; i < info.nrAndOffset.nr; i++)
+            {
+                auto blobRows = (mapping.getBlobSize(i) + wrapByteCount - 1) / wrapByteCount;
+                blobRows++; // one row gap between blobs
+                blobY += blobRows * byteSizeInPixel;
+            }
+
+            const auto x = (info.nrAndOffset.offset % wrapByteCount) * byteSizeInPixel;
+            const auto y = (info.nrAndOffset.offset / wrapByteCount) * byteSizeInPixel + blobY;
 
             const auto fill = boost::hash_value(info.ddIndices) & 0xFFFFFF;
 
@@ -193,7 +201,7 @@ namespace llama
             ArrayDomain udCoord;
             std::vector<std::size_t> ddIndices;
             std::vector<std::string> ddTags;
-            std::size_t offset;
+            NrAndOffset nrAndOffset;
             std::size_t size;
         };
         std::vector<DatumInfo> infos;
@@ -206,11 +214,13 @@ namespace llama
                     udCoord,
                     internal::toVec(coord),
                     internal::tagsAsStrings<DatumDomain>(coord),
-                    internal::mappingOffset(mapping, udCoord, coord),
+                    internal::mappingBlobNrAndOffset(mapping, udCoord, coord),
                     size});
             });
         }
-        std::sort(begin(infos), end(infos), [](const DatumInfo& a, const DatumInfo& b) { return a.offset < b.offset; });
+        std::sort(begin(infos), end(infos), [](const DatumInfo& a, const DatumInfo& b) {
+            return std::tie(a.nrAndOffset.nr, a.nrAndOffset.offset) < std::tie(b.nrAndOffset.nr, b.nrAndOffset.offset);
+        });
 
         auto formatDDTags = [](const std::vector<std::string>& tags) {
             std::string s;
@@ -308,8 +318,14 @@ namespace llama
     </header>
 )");
 
+        auto currentBlobNr = std::numeric_limits<std::size_t>::max();
         for (const auto& info : infos)
         {
+            if (currentBlobNr != info.nrAndOffset.nr)
+            {
+                currentBlobNr = info.nrAndOffset.nr;
+                svg += fmt::format("<h1>Blob: {}</h1>", currentBlobNr);
+            }
             const auto width = byteSizeInPixel * info.size;
             svg += fmt::format(
                 R"(<div class="box {0}" title="{1} {2}">{1} {2}</div>)",
