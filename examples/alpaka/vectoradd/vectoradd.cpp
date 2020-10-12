@@ -16,7 +16,8 @@
 #include <random>
 #include <utility>
 
-constexpr auto MAPPING = 0; /// 0 native AoS, 1 native SoA, 2 tree AoS, 3 tree SoA
+constexpr auto MAPPING
+    = 1; ///< 0 native AoS, 1 native SoA, 2 native SoA (separate blobs, does not work yet), 3 tree AoS, 4 tree SoA
 constexpr auto PROBLEM_SIZE = 64 * 1024 * 1024;
 constexpr auto BLOCK_SIZE = 256;
 constexpr auto STEPS = 10;
@@ -86,8 +87,10 @@ int main(int argc, char** argv)
         if constexpr (MAPPING == 1)
             return llama::mapping::SoA{arrayDomain, Vector{}};
         if constexpr (MAPPING == 2)
-            return llama::mapping::tree::Mapping{arrayDomain, llama::Tuple{}, Vector{}};
+            return llama::mapping::SoA{arrayDomain, Vector{}, std::true_type{}};
         if constexpr (MAPPING == 3)
+            return llama::mapping::tree::Mapping{arrayDomain, llama::Tuple{}, Vector{}};
+        if constexpr (MAPPING == 4)
             return llama::mapping::tree::Mapping{
                 arrayDomain,
                 llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},

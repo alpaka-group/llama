@@ -81,6 +81,11 @@ TEST_CASE("dump.SoA")
     dump(llama::mapping::SoA{arrayDomain, Particle{}}, "SoAMapping");
 }
 
+TEST_CASE("dump.SoA.MultiBlob")
+{
+    dump(llama::mapping::SoA{arrayDomain, Particle{}, std::true_type{}}, "SoAMappingMultiBlob");
+}
+
 TEST_CASE("dump.AoSoA.8")
 {
     dump(llama::mapping::AoSoA<ArrayDomain, Particle, 8>{arrayDomain}, "AoSoAMapping8");
@@ -90,7 +95,6 @@ TEST_CASE("dump.AoSoA.32")
 {
     dump(llama::mapping::AoSoA<ArrayDomain, Particle, 32>{arrayDomain}, "AoSoAMapping32");
 }
-
 
 TEST_CASE("dump.SplitMapping")
 {
