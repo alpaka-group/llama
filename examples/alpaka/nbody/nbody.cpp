@@ -16,7 +16,7 @@
 #include <random>
 #include <utility>
 
-constexpr auto MAPPING = 0; /// 0 native AoS, 1 native SoA, 2 tree AoS, 3 tree SoA
+constexpr auto MAPPING = 0; ///< 0 native AoS, 1 native SoA, 2 native SoA (separate blobs), 3 tree AoS, 4 tree SoA
 constexpr auto USE_SHARED = true; ///< defines whether shared memory shall be used
 constexpr auto USE_SHARED_TREE = true; ///< defines whether the shared memory shall use tree mapping or
                                        ///< native mapping
@@ -187,8 +187,10 @@ int main(int argc, char** argv)
         if constexpr (MAPPING == 1)
             return llama::mapping::SoA{arrayDomain, Particle{}};
         if constexpr (MAPPING == 2)
-            return llama::mapping::tree::Mapping{arrayDomain, llama::Tuple{}, Particle{}};
+            return llama::mapping::SoA{arrayDomain, Particle{}, std::true_type{}};
         if constexpr (MAPPING == 3)
+            return llama::mapping::tree::Mapping{arrayDomain, llama::Tuple{}, Particle{}};
+        if constexpr (MAPPING == 4)
             return llama::mapping::tree::Mapping{
                 arrayDomain,
                 llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
