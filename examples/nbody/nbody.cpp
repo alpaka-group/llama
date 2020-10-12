@@ -7,7 +7,7 @@
 
 // needs -fno-math-errno, so std::sqrt() can be vectorized
 
-constexpr auto MAPPING = 1; ///< 0 native AoS, 1 native SoA, 2 tree AoS, 3 tree SoA
+constexpr auto MAPPING = 2; ///< 0 native AoS, 1 native SoA, 2 native SoA (separate blos), 3 tree AoS, 4 tree SoA
 constexpr auto PROBLEM_SIZE = 16 * 1024; ///< total number of particles
 constexpr auto STEPS = 5; ///< number of steps to calculate
 constexpr auto TRACE = false;
@@ -86,8 +86,10 @@ namespace usellama
             if constexpr (MAPPING == 1)
                 return llama::mapping::SoA{arrayDomain, Particle{}};
             if constexpr (MAPPING == 2)
-                return llama::mapping::tree::Mapping{arrayDomain, llama::Tuple{}, Particle{}};
+                return llama::mapping::SoA{arrayDomain, Particle{}, std::true_type{}};
             if constexpr (MAPPING == 3)
+                return llama::mapping::tree::Mapping{arrayDomain, llama::Tuple{}, Particle{}};
+            if constexpr (MAPPING == 4)
                 return llama::mapping::tree::Mapping{
                     arrayDomain,
                     llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},

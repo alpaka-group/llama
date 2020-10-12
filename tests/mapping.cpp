@@ -1,8 +1,8 @@
 #include "common.h"
 
 #include <catch2/catch.hpp>
-#include <llama/llama.hpp>
 #include <llama/Concepts.hpp>
+#include <llama/llama.hpp>
 
 // clang-format off
 namespace tag {
@@ -254,7 +254,9 @@ TEST_CASE("address.SoA.fortran")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
     auto arrayDomain = ArrayDomain{16, 16};
-    auto mapping = llama::mapping::SoA<ArrayDomain, Particle, llama::mapping::LinearizeArrayDomainFortran>{arrayDomain};
+    auto mapping
+        = llama::mapping::SoA<ArrayDomain, Particle, std::false_type, llama::mapping::LinearizeArrayDomainFortran>{
+            arrayDomain};
 
     {
         const auto coord = ArrayDomain{0, 0};
@@ -310,7 +312,9 @@ TEST_CASE("address.SoA.morton")
 
     using ArrayDomain = llama::ArrayDomain<2>;
     auto arrayDomain = ArrayDomain{16, 16};
-    auto mapping = llama::mapping::SoA<ArrayDomain, Particle, llama::mapping::LinearizeArrayDomainMorton>{arrayDomain};
+    auto mapping
+        = llama::mapping::SoA<ArrayDomain, Particle, std::false_type, llama::mapping::LinearizeArrayDomainMorton>{
+            arrayDomain};
 
     {
         const auto coord = ArrayDomain{0, 0};
