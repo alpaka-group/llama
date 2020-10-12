@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.3)
 project (llama CXX)
 
 # llama
-find_package(Boost 1.66.0 REQUIRED)
+find_package(Boost 1.70.0 REQUIRED)
 find_package(fmt CONFIG REQUIRED)
 add_library(${PROJECT_NAME} INTERFACE)
 target_include_directories(${PROJECT_NAME} INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
