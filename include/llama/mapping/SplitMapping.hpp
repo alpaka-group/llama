@@ -77,7 +77,7 @@ namespace llama::mapping
 
         LLAMA_FN_HOST_ACC_INLINE auto getBlobSize(std::size_t) const -> std::size_t
         {
-            return mapping1BlobSize + mapping2.getBlobSize();
+            return mapping1BlobSize + mapping2.getBlobSize(0);
         }
 
         template <std::size_t... DatumDomainCoord>
