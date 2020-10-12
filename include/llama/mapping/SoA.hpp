@@ -68,16 +68,19 @@ namespace llama::mapping
         {
             if constexpr (SeparateBuffers::value)
             {
+                using TargetDatumCoord = DatumCoord<DatumDomainCoord...>;
                 constexpr auto blob = [&]() constexpr
                 {
                     std::size_t index = 0;
                     bool found = false;
-                    forEach<DatumDomain>([&](auto coord) constexpr {
-                        if constexpr (std::is_same_v<decltype(coord), DatumCoord<DatumDomainCoord...>>)
+                    forEach<DatumDomain>([&](auto c) constexpr {
+                        if constexpr (std::is_same_v<decltype(c), TargetDatumCoord>)
                             found = true;
                         else if (!found)
                             index++;
                     });
+                    if (!found)
+                        throw "Passed TargetDatumCoord must be in datum domain";
                     return index;
                 }
                 ();
