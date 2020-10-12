@@ -47,17 +47,17 @@ namespace llama::mapping
         {
             if constexpr (SeparateBuffers::value)
             {
-                auto typeSize = [&]() {
-                    std::size_t index = 0;
-                    std::size_t size = 0;
-                    forEach<DatumDomain>([&](auto coord) {
-                        if (index == blobIndex)
-                            size = sizeof(GetType<DatumDomain, decltype(coord)>);
-                        index++;
+                static constexpr llama::Array<std::size_t, blobCount> typeSizes = []() constexpr
+                {
+                    llama::Array<std::size_t, blobCount> r{};
+                    std::size_t i = 0;
+                    forEach<DatumDomain>([&](auto coord) constexpr {
+                        r[i++] = sizeof(GetType<DatumDomain, decltype(coord)>);
                     });
-                    return size;
-                }();
-                return LinearizeArrayDomainFunctor{}.size(arrayDomainSize) * typeSize;
+                    return r;
+                }
+                ();
+                return LinearizeArrayDomainFunctor{}.size(arrayDomainSize) * typeSizes[blobIndex];
             }
             else
                 return LinearizeArrayDomainFunctor{}.size(arrayDomainSize) * sizeOf<DatumDomain>;

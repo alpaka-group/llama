@@ -19,28 +19,28 @@ namespace llama
         static constexpr std::size_t rank = N;
         T element[N > 0 ? N : 1];
 
-        LLAMA_FN_HOST_ACC_INLINE T* begin()
+        LLAMA_FN_HOST_ACC_INLINE constexpr T* begin()
         {
             return &element[0];
         }
 
-        LLAMA_FN_HOST_ACC_INLINE const T* begin() const
+        LLAMA_FN_HOST_ACC_INLINE constexpr const T* begin() const
         {
             return &element[0];
         }
 
-        LLAMA_FN_HOST_ACC_INLINE T* end()
+        LLAMA_FN_HOST_ACC_INLINE constexpr T* end()
         {
             return &element[N];
         };
 
-        LLAMA_FN_HOST_ACC_INLINE const T* end() const
+        LLAMA_FN_HOST_ACC_INLINE constexpr const T* end() const
         {
             return &element[N];
         };
 
         template <typename IndexType>
-        LLAMA_FN_HOST_ACC_INLINE auto operator[](IndexType&& idx) -> T&
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](IndexType&& idx) -> T&
         {
             return element[idx];
         }
@@ -51,7 +51,7 @@ namespace llama
             return element[idx];
         }
 
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator==(const Array<T, N>& a, const Array<T, N>& b) -> bool
+        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator==(const Array<T, N>& a, const Array<T, N>& b) -> bool
         {
             for (std::size_t i = 0; i < N; ++i)
                 if (a.element[i] != b.element[i])
@@ -59,7 +59,7 @@ namespace llama
             return true;
         }
 
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator+(const Array<T, N>& a, const Array<T, N>& b) -> Array
+        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator+(const Array<T, N>& a, const Array<T, N>& b) -> Array
         {
             Array temp;
             for (std::size_t i = 0; i < N; ++i)
@@ -68,13 +68,13 @@ namespace llama
         }
 
         template <std::size_t I>
-        auto get() -> T&
+        constexpr auto get() -> T&
         {
             return element[I];
         }
 
         template <std::size_t I>
-        auto get() const -> const T&
+        constexpr auto get() const -> const T&
         {
             return element[I];
         }
