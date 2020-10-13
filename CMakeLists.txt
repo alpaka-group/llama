@@ -54,6 +54,7 @@ if (LLAMA_BUILD_EXAMPLES)
 	add_subdirectory("examples/simpletest")
 	add_subdirectory("examples/vectoradd")
 	add_subdirectory("examples/nbody")
+	add_subdirectory("examples/nbody_benchmark")
 	add_subdirectory("examples/heatequation")
 
 	# alpaka examples
