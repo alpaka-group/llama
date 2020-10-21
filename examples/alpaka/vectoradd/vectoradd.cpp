@@ -44,7 +44,7 @@ struct AddKernel
     template <typename Acc, typename View>
     LLAMA_FN_HOST_ACC_INLINE void operator()(const Acc& acc, View a, View b) const
     {
-        const auto ti = alpaka::idx::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0];
+        const auto ti = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0];
 
         const auto start = ti * Elems;
         const auto end = alpaka::math::min(acc, start + Elems, ProblemSize);
@@ -62,20 +62,20 @@ struct AddKernel
 int main(int argc, char** argv)
 {
     // ALPAKA
-    using Dim = alpaka::dim::DimInt<1>;
+    using Dim = alpaka::DimInt<1>;
     using Size = std::size_t;
 
-    using Acc = alpaka::example::ExampleDefaultAcc<Dim, Size>;
-    // using Acc = alpaka::acc::AccGpuCudaRt<Dim, Size>;
-    // using Acc = alpaka::acc::AccCpuSerial<Dim, Size>;
+    using Acc = alpaka::ExampleDefaultAcc<Dim, Size>;
+    // using Acc = alpaka::AccGpuCudaRt<Dim, Size>;
+    // using Acc = alpaka::AccCpuSerial<Dim, Size>;
 
-    using DevHost = alpaka::dev::DevCpu;
-    using DevAcc = alpaka::dev::Dev<Acc>;
-    using PltfHost = alpaka::pltf::Pltf<DevHost>;
-    using PltfAcc = alpaka::pltf::Pltf<DevAcc>;
-    using Queue = alpaka::queue::Queue<DevAcc, alpaka::queue::Blocking>;
-    const DevAcc devAcc(alpaka::pltf::getDevByIdx<PltfAcc>(0u));
-    const DevHost devHost(alpaka::pltf::getDevByIdx<PltfHost>(0u));
+    using DevHost = alpaka::DevCpu;
+    using DevAcc = alpaka::Dev<Acc>;
+    using PltfHost = alpaka::Pltf<DevHost>;
+    using PltfAcc = alpaka::Pltf<DevAcc>;
+    using Queue = alpaka::Queue<DevAcc, alpaka::Blocking>;
+    const DevAcc devAcc(alpaka::getDevByIdx<PltfAcc>(0u));
+    const DevHost devHost(alpaka::getDevByIdx<PltfHost>(0u));
     Queue queue(devAcc);
 
     // LLAMA
@@ -105,18 +105,18 @@ int main(int argc, char** argv)
     const auto bufferSize = Size(mapping.getBlobSize(0));
 
     // allocate buffers
-    auto hostBufferA = alpaka::mem::buf::alloc<std::byte, Size>(devHost, bufferSize);
-    auto hostBufferB = alpaka::mem::buf::alloc<std::byte, Size>(devHost, bufferSize);
-    auto devBufferA = alpaka::mem::buf::alloc<std::byte, Size>(devAcc, bufferSize);
-    auto devBufferB = alpaka::mem::buf::alloc<std::byte, Size>(devAcc, bufferSize);
+    auto hostBufferA = alpaka::allocBuf<std::byte, Size>(devHost, bufferSize);
+    auto hostBufferB = alpaka::allocBuf<std::byte, Size>(devHost, bufferSize);
+    auto devBufferA = alpaka::allocBuf<std::byte, Size>(devAcc, bufferSize);
+    auto devBufferB = alpaka::allocBuf<std::byte, Size>(devAcc, bufferSize);
 
     chrono.printAndReset("Alloc");
 
     // create LLAMA views
-    auto hostA = llama::View{mapping, llama::Array{alpaka::mem::view::getPtrNative(hostBufferA)}};
-    auto hostB = llama::View{mapping, llama::Array{alpaka::mem::view::getPtrNative(hostBufferB)}};
-    auto devA = llama::View{mapping, llama::Array{alpaka::mem::view::getPtrNative(devBufferA)}};
-    auto devB = llama::View{mapping, llama::Array{alpaka::mem::view::getPtrNative(devBufferB)}};
+    auto hostA = llama::View{mapping, llama::Array{alpaka::getPtrNative(hostBufferA)}};
+    auto hostB = llama::View{mapping, llama::Array{alpaka::getPtrNative(hostBufferB)}};
+    auto devA = llama::View{mapping, llama::Array{alpaka::getPtrNative(devBufferA)}};
+    auto devB = llama::View{mapping, llama::Array{alpaka::getPtrNative(devBufferB)}};
 
     chrono.printAndReset("Views");
 
@@ -131,8 +131,8 @@ int main(int argc, char** argv)
     }
     chrono.printAndReset("Init");
 
-    alpaka::mem::view::copy(queue, devBufferA, hostBufferA, bufferSize);
-    alpaka::mem::view::copy(queue, devBufferB, hostBufferB, bufferSize);
+    alpaka::memcpy(queue, devBufferA, hostBufferA, bufferSize);
+    alpaka::memcpy(queue, devBufferB, hostBufferB, bufferSize);
 
     chrono.printAndReset("Copy H->D");
 
@@ -140,21 +140,21 @@ int main(int argc, char** argv)
     using Distribution = common::ThreadsElemsDistribution<Acc, BLOCK_SIZE, hardwareThreads>;
     constexpr std::size_t elemCount = Distribution::elemCount;
     constexpr std::size_t threadCount = Distribution::threadCount;
-    const alpaka::vec::Vec<Dim, Size> elems(static_cast<Size>(elemCount));
-    const alpaka::vec::Vec<Dim, Size> threads(static_cast<Size>(threadCount));
+    const alpaka::Vec<Dim, Size> elems(static_cast<Size>(elemCount));
+    const alpaka::Vec<Dim, Size> threads(static_cast<Size>(threadCount));
     constexpr auto innerCount = elemCount * threadCount;
-    const alpaka::vec::Vec<Dim, Size> blocks(static_cast<Size>((PROBLEM_SIZE + innerCount - 1) / innerCount));
+    const alpaka::Vec<Dim, Size> blocks(static_cast<Size>((PROBLEM_SIZE + innerCount - 1) / innerCount));
 
-    const auto workdiv = alpaka::workdiv::WorkDivMembers<Dim, Size>{blocks, threads, elems};
+    const auto workdiv = alpaka::WorkDivMembers<Dim, Size>{blocks, threads, elems};
 
     for (std::size_t s = 0; s < STEPS; ++s)
     {
-        alpaka::kernel::exec<Acc>(queue, workdiv, AddKernel<PROBLEM_SIZE, elemCount>{}, devA, devB);
+        alpaka::exec<Acc>(queue, workdiv, AddKernel<PROBLEM_SIZE, elemCount>{}, devA, devB);
         chrono.printAndReset("Add kernel");
     }
 
-    alpaka::mem::view::copy(queue, hostBufferA, devBufferA, bufferSize);
-    alpaka::mem::view::copy(queue, hostBufferB, devBufferB, bufferSize);
+    alpaka::memcpy(queue, hostBufferA, devBufferA, bufferSize);
+    alpaka::memcpy(queue, hostBufferB, devBufferB, bufferSize);
 
     chrono.printAndReset("Copy D->H");
 
