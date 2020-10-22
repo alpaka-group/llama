@@ -9,6 +9,3 @@ if (NOT TARGET llama::llama)
 endif()
 add_executable(${PROJECT_NAME} heatequation.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama)
-
-install(FILES "${PROJECT_BINARY_DIR}/llama-heatequation" DESTINATION "bin")
-

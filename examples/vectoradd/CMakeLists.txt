@@ -9,6 +9,3 @@ endif()
 add_executable(${PROJECT_NAME} vectoradd.cpp)
 #target_compile_options(${PROJECT_NAME} PRIVATE /arch:AVX2)
 target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama)
-
-install(FILES "${PROJECT_BINARY_DIR}/llama-vectoradd" DESTINATION "bin")
-

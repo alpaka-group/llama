@@ -7,5 +7,3 @@ endif()
 add_executable(${PROJECT_NAME} simpletest.cpp)
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama)
-
-install(FILES "${PROJECT_BINARY_DIR}/llama-simpletest" DESTINATION "bin")

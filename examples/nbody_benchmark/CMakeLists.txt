@@ -18,6 +18,3 @@ endif()
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
 	target_compile_options(${PROJECT_NAME} PRIVATE /bigobj)
 endif()
-
-install(FILES "${PROJECT_BINARY_DIR}/llama-nbody" DESTINATION "bin")
-
