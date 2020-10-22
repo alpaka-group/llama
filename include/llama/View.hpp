@@ -119,14 +119,6 @@ namespace llama
             return left;
         }
 
-        template <typename Functor, typename LeftDatum, typename RightMapping, typename RightBlobType>
-        LLAMA_FN_HOST_ACC_INLINE auto virtualDatumArithOperator(
-            LeftDatum& left,
-            const View<RightMapping, RightBlobType>& right) -> LeftDatum&
-        {
-            return virtualDatumArithOperator(left, right(ArrayDomain<RightMapping::ArrayDomain::rank>{}));
-        }
-
         template <typename Functor, typename LeftDatum, typename T>
         LLAMA_FN_HOST_ACC_INLINE auto virtualDatumArithOperator(LeftDatum& left, const T& right) -> LeftDatum&
         {
@@ -162,14 +154,6 @@ namespace llama
                 });
             });
             return result;
-        }
-
-        template <typename Functor, typename LeftDatum, typename RightMapping, typename RightBlobType>
-        LLAMA_FN_HOST_ACC_INLINE auto virtualDatumRelOperator(
-            const LeftDatum& left,
-            const View<RightMapping, RightBlobType>& right) -> bool
-        {
-            return virtualDatumRelOperator(left, right(ArrayDomain<RightMapping::ArrayDomain::rank>{}));
         }
 
         template <typename Functor, typename LeftDatum, typename T>
@@ -382,6 +366,12 @@ namespace llama
             return copyVirtualDatumStack(vd) += t;
         }
 
+        template <typename T, typename = std::enable_if_t<!is_VirtualDatum<T>>>
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator+(const T& t, const VirtualDatum& vd)
+        {
+            return vd + t;
+        }
+
         template <typename T>
         LLAMA_FN_HOST_ACC_INLINE friend auto operator-(const VirtualDatum& vd, const T& t)
         {
@@ -392,6 +382,12 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE friend auto operator*(const VirtualDatum& vd, const T& t)
         {
             return copyVirtualDatumStack(vd) *= t;
+        }
+
+        template <typename T, typename = std::enable_if_t<!is_VirtualDatum<T>>>
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator*(const T& t, const VirtualDatum& vd)
+        {
+            return vd * t;
         }
 
         template <typename T>
@@ -412,10 +408,22 @@ namespace llama
             return internal::virtualDatumRelOperator<std::equal_to<>>(vd, t);
         }
 
+        template <typename T, typename = std::enable_if_t<!is_VirtualDatum<T>>>
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator==(const T& t, const VirtualDatum& vd) -> bool
+        {
+            return vd == t;
+        }
+
         template <typename T>
         LLAMA_FN_HOST_ACC_INLINE friend auto operator!=(const VirtualDatum& vd, const T& t) -> bool
         {
             return internal::virtualDatumRelOperator<std::not_equal_to<>>(vd, t);
+        }
+
+        template <typename T, typename = std::enable_if_t<!is_VirtualDatum<T>>>
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator!=(const T& t, const VirtualDatum& vd) -> bool
+        {
+            return vd != t;
         }
 
         template <typename T>
@@ -424,10 +432,22 @@ namespace llama
             return internal::virtualDatumRelOperator<std::less<>>(vd, t);
         }
 
+        template <typename T, typename = std::enable_if_t<!is_VirtualDatum<T>>>
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator<(const T& t, const VirtualDatum& vd) -> bool
+        {
+            return vd > t;
+        }
+
         template <typename T>
         LLAMA_FN_HOST_ACC_INLINE friend auto operator<=(const VirtualDatum& vd, const T& t) -> bool
         {
             return internal::virtualDatumRelOperator<std::less_equal<>>(vd, t);
+        }
+
+        template <typename T, typename = std::enable_if_t<!is_VirtualDatum<T>>>
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator<=(const T& t, const VirtualDatum& vd) -> bool
+        {
+            return vd >= t;
         }
 
         template <typename T>
@@ -436,10 +456,22 @@ namespace llama
             return internal::virtualDatumRelOperator<std::greater<>>(vd, t);
         }
 
+        template <typename T, typename = std::enable_if_t<!is_VirtualDatum<T>>>
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator>(const T& t, const VirtualDatum& vd) -> bool
+        {
+            return vd < t;
+        }
+
         template <typename T>
         LLAMA_FN_HOST_ACC_INLINE friend auto operator>=(const VirtualDatum& vd, const T& t) -> bool
         {
             return internal::virtualDatumRelOperator<std::greater_equal<>>(vd, t);
+        }
+
+        template <typename T, typename = std::enable_if_t<!is_VirtualDatum<T>>>
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator>=(const T& t, const VirtualDatum& vd) -> bool
+        {
+            return vd <= t;
         }
     };
 
