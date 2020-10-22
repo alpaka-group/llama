@@ -377,69 +377,69 @@ namespace llama
         }
 
         template <typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator+(const T& other)
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator+(const VirtualDatum& vd, const T& t)
         {
-            return copyVirtualDatumStack(*this) += other;
+            return copyVirtualDatumStack(vd) += t;
         }
 
         template <typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator-(const T& other)
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator-(const VirtualDatum& vd, const T& t)
         {
-            return copyVirtualDatumStack(*this) -= other;
+            return copyVirtualDatumStack(vd) -= t;
         }
 
         template <typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator*(const T& other)
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator*(const VirtualDatum& vd, const T& t)
         {
-            return copyVirtualDatumStack(*this) *= other;
+            return copyVirtualDatumStack(vd) *= t;
         }
 
         template <typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator/(const T& other)
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator/(const VirtualDatum& vd, const T& t)
         {
-            return copyVirtualDatumStack(*this) /= other;
+            return copyVirtualDatumStack(vd) /= t;
         }
 
         template <typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator%(const T& other)
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator%(const VirtualDatum& vd, const T& t)
         {
-            return copyVirtualDatumStack(*this) %= other;
+            return copyVirtualDatumStack(vd) %= t;
         }
 
         template <typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator==(const T& other) const -> bool
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator==(const VirtualDatum& vd, const T& t) -> bool
         {
-            return internal::virtualDatumRelOperator<std::equal_to<>>(*this, other);
+            return internal::virtualDatumRelOperator<std::equal_to<>>(vd, t);
         }
 
         template <typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator!=(const T& other) const -> bool
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator!=(const VirtualDatum& vd, const T& t) -> bool
         {
-            return internal::virtualDatumRelOperator<std::not_equal_to<>>(*this, other);
+            return internal::virtualDatumRelOperator<std::not_equal_to<>>(vd, t);
         }
 
         template <typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator<(const T& other) const -> bool
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator<(const VirtualDatum& vd, const T& t) -> bool
         {
-            return internal::virtualDatumRelOperator<std::less<>>(*this, other);
+            return internal::virtualDatumRelOperator<std::less<>>(vd, t);
         }
 
         template <typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator<=(const T& other) const -> bool
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator<=(const VirtualDatum& vd, const T& t) -> bool
         {
-            return internal::virtualDatumRelOperator<std::less_equal<>>(*this, other);
+            return internal::virtualDatumRelOperator<std::less_equal<>>(vd, t);
         }
 
         template <typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator>(const T& other) const -> bool
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator>(const VirtualDatum& vd, const T& t) -> bool
         {
-            return internal::virtualDatumRelOperator<std::greater<>>(*this, other);
+            return internal::virtualDatumRelOperator<std::greater<>>(vd, t);
         }
 
         template <typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator>=(const T& other) const -> bool
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator>=(const VirtualDatum& vd, const T& t) -> bool
         {
-            return internal::virtualDatumRelOperator<std::greater_equal<>>(*this, other);
+            return internal::virtualDatumRelOperator<std::greater_equal<>>(vd, t);
         }
     };
 
