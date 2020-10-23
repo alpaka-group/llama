@@ -479,16 +479,14 @@ namespace manualAoSoA
     void update(ParticleBlock* particles, FP ts)
     {
         for (std::size_t bi = 0; bi < BLOCKS; bi++)
-        {
-            auto& blockI = particles[bi];
             for (std::size_t bj = 0; bj < BLOCKS; bj++)
-            {
-                auto& blockJ = particles[bj];
                 for (std::size_t i = 0; i < LANES; i++)
                 {
                     LLAMA_INDEPENDENT_DATA
                     for (std::size_t j = 0; j < LANES; j++)
                     {
+                        auto& blockI = particles[bi];
+                        auto& blockJ = particles[bj];
                         pPInteraction(
                             blockJ.pos.x[j],
                             blockJ.pos.y[j],
@@ -503,45 +501,35 @@ namespace manualAoSoA
                             ts);
                     }
                 }
-            }
-        }
     }
 
     void updateTiled(ParticleBlock* particles, FP ts)
     {
         for (std::size_t ti = 0; ti < BLOCKS / BLOCKS_PER_TILE; ti++)
-        {
             for (std::size_t tj = 0; tj < BLOCKS / BLOCKS_PER_TILE; tj++)
-            {
                 for (std::size_t bi = 0; bi < BLOCKS_PER_TILE; bi++)
-                {
-                    auto& blockI = particles[ti * BLOCKS_PER_TILE + bi];
                     for (std::size_t bj = 0; bj < BLOCKS_PER_TILE; bj++)
-                    {
-                        auto& blockJ = particles[tj * BLOCKS_PER_TILE + bj];
-                        for (std::size_t bi = 0; bi < LANES; bi++)
+                        for (std::size_t i = 0; i < LANES; i++)
                         {
                             LLAMA_INDEPENDENT_DATA
-                            for (std::size_t bj = 0; bj < LANES; bj++)
+                            for (std::size_t j = 0; j < LANES; j++)
                             {
+                                auto& blockI = particles[ti * BLOCKS_PER_TILE + bi];
+                                auto& blockJ = particles[tj * BLOCKS_PER_TILE + bj];
                                 pPInteraction(
-                                    blockJ.pos.x[bj],
-                                    blockJ.pos.y[bj],
-                                    blockJ.pos.z[bj],
-                                    blockJ.vel.x[bj],
-                                    blockJ.vel.y[bj],
-                                    blockJ.vel.z[bj],
-                                    blockI.pos.x[bi],
-                                    blockI.pos.y[bi],
-                                    blockI.pos.z[bi],
-                                    blockI.mass[bi],
+                                    blockJ.pos.x[j],
+                                    blockJ.pos.y[j],
+                                    blockJ.pos.z[j],
+                                    blockJ.vel.x[j],
+                                    blockJ.vel.y[j],
+                                    blockJ.vel.z[j],
+                                    blockI.pos.x[i],
+                                    blockI.pos.y[i],
+                                    blockI.pos.z[i],
+                                    blockI.mass[i],
                                     ts);
                             }
                         }
-                    }
-                }
-            }
-        }
     }
 
     void move(ParticleBlock* particles, FP ts)
