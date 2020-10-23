@@ -184,14 +184,24 @@ namespace manualAoS
             return *this;
         }
 
-        friend auto operator+(Vec a, Vec b) -> Vec
+        auto operator-=(Vec v) -> Vec&
         {
-            return a += b;
+            x -= v.x;
+            y -= v.y;
+            z -= v.z;
+            return *this;
         }
+
+        friend auto operator-(Vec a, Vec b) -> Vec
+        {
+            return a -= b;
+        }
+
         friend auto operator*(Vec a, FP s) -> Vec
         {
             return a *= s;
         }
+
         friend auto operator*(Vec a, Vec b) -> Vec
         {
             return a *= b;
@@ -210,7 +220,7 @@ namespace manualAoS
 
     inline void pPInteraction(Particle& p1, const Particle& p2, FP ts)
     {
-        auto distance = p1.pos + p2.pos;
+        auto distance = p1.pos - p2.pos;
         distance *= distance;
         const FP distSqr = EPS2 + distance.x + distance.y + distance.z;
         const FP distSixth = distSqr * distSqr * distSqr;
@@ -303,9 +313,9 @@ namespace manualSoA
         FP p2mass,
         FP ts)
     {
-        auto xdistance = p1posx + p2posx;
-        auto ydistance = p1posy + p2posy;
-        auto zdistance = p1posz + p2posz;
+        auto xdistance = p1posx - p2posx;
+        auto ydistance = p1posy - p2posy;
+        auto zdistance = p1posz - p2posz;
         xdistance *= xdistance;
         ydistance *= ydistance;
         zdistance *= zdistance;
@@ -444,9 +454,9 @@ namespace manualAoSoA
         FP p2mass,
         FP ts)
     {
-        auto xdistance = p1posx + p2posx;
-        auto ydistance = p1posy + p2posy;
-        auto zdistance = p1posz + p2posz;
+        auto xdistance = p1posx - p2posx;
+        auto ydistance = p1posy - p2posy;
+        auto zdistance = p1posz - p2posz;
         xdistance *= xdistance;
         ydistance *= ydistance;
         zdistance *= zdistance;
