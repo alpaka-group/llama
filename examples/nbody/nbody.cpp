@@ -485,7 +485,7 @@ namespace manualAoSoA
                     LLAMA_INDEPENDENT_DATA
                     for (std::size_t j = 0; j < LANES; j++)
                     {
-                        auto& blockI = particles[bi];
+                        const auto& blockI = particles[bi];
                         auto& blockJ = particles[bj];
                         pPInteraction(
                             blockJ.pos.x[j],
@@ -514,7 +514,7 @@ namespace manualAoSoA
                             LLAMA_INDEPENDENT_DATA
                             for (std::size_t j = 0; j < LANES; j++)
                             {
-                                auto& blockI = particles[ti * BLOCKS_PER_TILE + bi];
+                                const auto& blockI = particles[ti * BLOCKS_PER_TILE + bi];
                                 auto& blockJ = particles[tj * BLOCKS_PER_TILE + bj];
                                 pPInteraction(
                                     blockJ.pos.x[j],
