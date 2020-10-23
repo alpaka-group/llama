@@ -466,10 +466,10 @@ namespace manualAoSoA
     {
         for (std::size_t i = 0; i < PROBLEM_SIZE / LANES; i++)
         {
-            auto& blockI = particles[i];
-            for (std::size_t ii = 0; ii < LANES; ii++)
+            for (std::size_t j = 0; j < PROBLEM_SIZE / LANES; j++)
             {
-                for (std::size_t j = 0; j < PROBLEM_SIZE / LANES; j++)
+                auto& blockI = particles[i];
+                for (std::size_t ii = 0; ii < LANES; ii++)
                 {
                     auto& blockJ = particles[j];
                     LLAMA_INDEPENDENT_DATA
