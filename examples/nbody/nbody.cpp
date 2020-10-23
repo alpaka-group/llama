@@ -410,11 +410,165 @@ namespace manualSoA
     }
 } // namespace manualSoA
 
+namespace manualAoSoA
+{
+    constexpr auto LANES = 16;
+
+    struct ParticleBlock
+    {
+        struct
+        {
+            FP x[LANES];
+            FP y[LANES];
+            FP z[LANES];
+        } pos;
+        struct
+        {
+            FP x[LANES];
+            FP y[LANES];
+            FP z[LANES];
+        } vel;
+        FP mass[LANES];
+    };
+
+    inline void pPInteraction(
+        FP p1posx,
+        FP p1posy,
+        FP p1posz,
+        FP& p1velx,
+        FP& p1vely,
+        FP& p1velz,
+        FP p2posx,
+        FP p2posy,
+        FP p2posz,
+        FP p2mass,
+        FP ts)
+    {
+        auto xdistance = p1posx + p2posx;
+        auto ydistance = p1posy + p2posy;
+        auto zdistance = p1posz + p2posz;
+        xdistance *= xdistance;
+        ydistance *= ydistance;
+        zdistance *= zdistance;
+        const FP distSqr = EPS2 + xdistance + ydistance + zdistance;
+        const FP distSixth = distSqr * distSqr * distSqr;
+        const FP invDistCube = 1.0f / std::sqrt(distSixth);
+        const FP s = p2mass * invDistCube;
+        xdistance *= s * ts;
+        ydistance *= s * ts;
+        zdistance *= s * ts;
+        p1velx += xdistance;
+        p1vely += ydistance;
+        p1velz += zdistance;
+    }
+
+    void update(ParticleBlock* particles, FP ts)
+    {
+        for (std::size_t i = 0; i < PROBLEM_SIZE / LANES; i++)
+        {
+            auto& blockI = particles[i];
+            for (std::size_t ii = 0; ii < LANES; ii++)
+            {
+                for (std::size_t j = 0; j < PROBLEM_SIZE / LANES; j++)
+                {
+                    auto& blockJ = particles[j];
+                    LLAMA_INDEPENDENT_DATA
+                    for (std::size_t jj = 0; jj < LANES; jj++)
+                    {
+                        pPInteraction(
+                            blockJ.pos.x[jj],
+                            blockJ.pos.y[jj],
+                            blockJ.pos.z[jj],
+                            blockJ.vel.x[jj],
+                            blockJ.vel.y[jj],
+                            blockJ.vel.z[jj],
+                            blockI.pos.x[ii],
+                            blockI.pos.y[ii],
+                            blockI.pos.z[ii],
+                            blockI.mass[ii],
+                            ts);
+                    }
+                }
+            }
+        }
+    }
+
+    void move(ParticleBlock* particles, FP ts)
+    {
+        for (std::size_t i = 0; i < PROBLEM_SIZE / LANES; i++)
+        {
+            auto& block = particles[i];
+            LLAMA_INDEPENDENT_DATA
+            for (std::size_t ii = 0; ii < LANES; ++ii)
+            {
+                block.pos.x[ii] += block.vel.x[ii] * ts;
+                block.pos.y[ii] += block.vel.y[ii] * ts;
+                block.pos.z[ii] += block.vel.z[ii] * ts;
+            }
+        }
+    }
+
+    int main(int argc, char** argv)
+    {
+        constexpr FP ts = 0.0001f;
+
+        std::cout << PROBLEM_SIZE / 1000 << " thousand particles AoSoA\n";
+
+        const auto start = std::chrono::high_resolution_clock::now();
+        std::vector<ParticleBlock> particles(PROBLEM_SIZE / LANES);
+        const auto stop = std::chrono::high_resolution_clock::now();
+        std::cout << "alloc took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+
+        {
+            const auto start = std::chrono::high_resolution_clock::now();
+
+            std::default_random_engine engine;
+            std::normal_distribution<FP> dist(FP(0), FP(1));
+            for (std::size_t i = 0; i < PROBLEM_SIZE / LANES; ++i)
+            {
+                auto& block = particles[i];
+                for (std::size_t ii = 0; ii < LANES; ++ii)
+                {
+                    block.pos.x[ii] = dist(engine);
+                    block.pos.y[ii] = dist(engine);
+                    block.pos.z[ii] = dist(engine);
+                    block.vel.x[ii] = dist(engine) / FP(10);
+                    block.vel.y[ii] = dist(engine) / FP(10);
+                    block.vel.z[ii] = dist(engine) / FP(10);
+                    block.mass[ii] = dist(engine) / FP(100);
+                }
+            }
+
+            const auto stop = std::chrono::high_resolution_clock::now();
+            std::cout << "init took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+        }
+
+        for (std::size_t s = 0; s < STEPS; ++s)
+        {
+            {
+                const auto start = std::chrono::high_resolution_clock::now();
+                update(particles.data(), ts);
+                const auto stop = std::chrono::high_resolution_clock::now();
+                std::cout << "update took " << std::chrono::duration<double>(stop - start).count() << "s\t";
+            }
+            {
+                const auto start = std::chrono::high_resolution_clock::now();
+                move(particles.data(), ts);
+                const auto stop = std::chrono::high_resolution_clock::now();
+                std::cout << "move took   " << std::chrono::duration<double>(stop - start).count() << "s\n";
+            }
+        }
+
+        return 0;
+    }
+} // namespace manualAoSoA
+
 int main(int argc, char** argv)
 {
     int r = 0;
     r += usellama::main(argc, argv);
     r += manualAoS::main(argc, argv);
     r += manualSoA::main(argc, argv);
+    r += manualAoSoA::main(argc, argv);
     return r;
 }
