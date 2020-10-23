@@ -423,6 +423,7 @@ namespace manualSoA
 namespace manualAoSoA
 {
     constexpr auto LANES = 16;
+    constexpr auto L1D_SIZE = 32 * 1024;
 
     struct ParticleBlock
     {
@@ -440,6 +441,9 @@ namespace manualAoSoA
         } vel;
         FP mass[LANES];
     };
+
+    constexpr auto BLOCKS_PER_TILE = 64; // L1D_SIZE / sizeof(ParticleBlock);
+    constexpr auto BLOCKS = PROBLEM_SIZE / LANES;
 
     inline void pPInteraction(
         FP p1posx,
@@ -474,29 +478,66 @@ namespace manualAoSoA
 
     void update(ParticleBlock* particles, FP ts)
     {
-        for (std::size_t i = 0; i < PROBLEM_SIZE / LANES; i++)
+        for (std::size_t bi = 0; bi < BLOCKS; bi++)
         {
-            for (std::size_t j = 0; j < PROBLEM_SIZE / LANES; j++)
+            for (std::size_t bj = 0; bj < BLOCKS; bj++)
             {
-                auto& blockI = particles[i];
-                for (std::size_t ii = 0; ii < LANES; ii++)
+                auto& blockI = particles[bi];
+                for (std::size_t i = 0; i < LANES; i++)
                 {
-                    auto& blockJ = particles[j];
+                    auto& blockJ = particles[bj];
                     LLAMA_INDEPENDENT_DATA
-                    for (std::size_t jj = 0; jj < LANES; jj++)
+                    for (std::size_t j = 0; j < LANES; j++)
                     {
                         pPInteraction(
-                            blockJ.pos.x[jj],
-                            blockJ.pos.y[jj],
-                            blockJ.pos.z[jj],
-                            blockJ.vel.x[jj],
-                            blockJ.vel.y[jj],
-                            blockJ.vel.z[jj],
-                            blockI.pos.x[ii],
-                            blockI.pos.y[ii],
-                            blockI.pos.z[ii],
-                            blockI.mass[ii],
+                            blockJ.pos.x[j],
+                            blockJ.pos.y[j],
+                            blockJ.pos.z[j],
+                            blockJ.vel.x[j],
+                            blockJ.vel.y[j],
+                            blockJ.vel.z[j],
+                            blockI.pos.x[i],
+                            blockI.pos.y[i],
+                            blockI.pos.z[i],
+                            blockI.mass[i],
                             ts);
+                    }
+                }
+            }
+        }
+    }
+
+    void updateTiled(ParticleBlock* particles, FP ts)
+    {
+        for (std::size_t ti = 0; ti < BLOCKS / BLOCKS_PER_TILE; ti++)
+        {
+            for (std::size_t tj = 0; tj < BLOCKS / BLOCKS_PER_TILE; tj++)
+            {
+                for (std::size_t bi = 0; bi < BLOCKS_PER_TILE; bi++)
+                {
+                    auto& blockI = particles[ti * BLOCKS_PER_TILE + bi];
+                    for (std::size_t bj = 0; bj < BLOCKS_PER_TILE; bj++)
+                    {
+                        auto& blockJ = particles[tj * BLOCKS_PER_TILE + bj];
+                        for (std::size_t bi = 0; bi < LANES; bi++)
+                        {
+                            LLAMA_INDEPENDENT_DATA
+                            for (std::size_t bj = 0; bj < LANES; bj++)
+                            {
+                                pPInteraction(
+                                    blockJ.pos.x[bj],
+                                    blockJ.pos.y[bj],
+                                    blockJ.pos.z[bj],
+                                    blockJ.vel.x[bj],
+                                    blockJ.vel.y[bj],
+                                    blockJ.vel.z[bj],
+                                    blockI.pos.x[bi],
+                                    blockI.pos.y[bi],
+                                    blockI.pos.z[bi],
+                                    blockI.mass[bi],
+                                    ts);
+                            }
+                        }
                     }
                 }
             }
@@ -505,27 +546,31 @@ namespace manualAoSoA
 
     void move(ParticleBlock* particles, FP ts)
     {
-        for (std::size_t i = 0; i < PROBLEM_SIZE / LANES; i++)
+        for (std::size_t bi = 0; bi < BLOCKS; bi++)
         {
-            auto& block = particles[i];
+            auto& block = particles[bi];
             LLAMA_INDEPENDENT_DATA
-            for (std::size_t ii = 0; ii < LANES; ++ii)
+            for (std::size_t i = 0; i < LANES; ++i)
             {
-                block.pos.x[ii] += block.vel.x[ii] * ts;
-                block.pos.y[ii] += block.vel.y[ii] * ts;
-                block.pos.z[ii] += block.vel.z[ii] * ts;
+                block.pos.x[i] += block.vel.x[i] * ts;
+                block.pos.y[i] += block.vel.y[i] * ts;
+                block.pos.z[i] += block.vel.z[i] * ts;
             }
         }
     }
 
+    template <bool Tiled>
     int main(int argc, char** argv)
     {
         constexpr FP ts = 0.0001f;
 
-        std::cout << PROBLEM_SIZE / 1000 << " thousand particles AoSoA\n";
+        std::cout << PROBLEM_SIZE / 1000 << " thousand particles AoSoA";
+        if constexpr (Tiled)
+            std::cout << " tiled";
+        std::cout << "\n";
 
         const auto start = std::chrono::high_resolution_clock::now();
-        std::vector<ParticleBlock> particles(PROBLEM_SIZE / LANES);
+        std::vector<ParticleBlock> particles(BLOCKS);
         const auto stop = std::chrono::high_resolution_clock::now();
         std::cout << "alloc took " << std::chrono::duration<double>(stop - start).count() << "s\n";
 
@@ -534,18 +579,18 @@ namespace manualAoSoA
 
             std::default_random_engine engine;
             std::normal_distribution<FP> dist(FP(0), FP(1));
-            for (std::size_t i = 0; i < PROBLEM_SIZE / LANES; ++i)
+            for (std::size_t bi = 0; bi < BLOCKS; ++bi)
             {
-                auto& block = particles[i];
-                for (std::size_t ii = 0; ii < LANES; ++ii)
+                auto& block = particles[bi];
+                for (std::size_t i = 0; i < LANES; ++i)
                 {
-                    block.pos.x[ii] = dist(engine);
-                    block.pos.y[ii] = dist(engine);
-                    block.pos.z[ii] = dist(engine);
-                    block.vel.x[ii] = dist(engine) / FP(10);
-                    block.vel.y[ii] = dist(engine) / FP(10);
-                    block.vel.z[ii] = dist(engine) / FP(10);
-                    block.mass[ii] = dist(engine) / FP(100);
+                    block.pos.x[i] = dist(engine);
+                    block.pos.y[i] = dist(engine);
+                    block.pos.z[i] = dist(engine);
+                    block.vel.x[i] = dist(engine) / FP(10);
+                    block.vel.y[i] = dist(engine) / FP(10);
+                    block.vel.z[i] = dist(engine) / FP(10);
+                    block.mass[i] = dist(engine) / FP(100);
                 }
             }
 
@@ -557,7 +602,10 @@ namespace manualAoSoA
         {
             {
                 const auto start = std::chrono::high_resolution_clock::now();
-                update(particles.data(), ts);
+                if constexpr (Tiled)
+                    updateTiled(particles.data(), ts);
+                else
+                    update(particles.data(), ts);
                 const auto stop = std::chrono::high_resolution_clock::now();
                 std::cout << "update took " << std::chrono::duration<double>(stop - start).count() << "s\t";
             }
@@ -579,6 +627,7 @@ int main(int argc, char** argv)
     r += usellama::main(argc, argv);
     r += manualAoS::main(argc, argv);
     r += manualSoA::main(argc, argv);
-    r += manualAoSoA::main(argc, argv);
+    r += manualAoSoA::main<false>(argc, argv);
+    r += manualAoSoA::main<true>(argc, argv);
     return r;
 }
