@@ -480,12 +480,12 @@ namespace manualAoSoA
     {
         for (std::size_t bi = 0; bi < BLOCKS; bi++)
         {
+            auto& blockI = particles[bi];
             for (std::size_t bj = 0; bj < BLOCKS; bj++)
             {
-                auto& blockI = particles[bi];
+                auto& blockJ = particles[bj];
                 for (std::size_t i = 0; i < LANES; i++)
                 {
-                    auto& blockJ = particles[bj];
                     LLAMA_INDEPENDENT_DATA
                     for (std::size_t j = 0; j < LANES; j++)
                     {
