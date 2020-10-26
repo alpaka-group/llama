@@ -211,6 +211,79 @@ namespace manualSoA
     }
 } // namespace manualSoA
 
+
+namespace manualAoSoA
+{
+    constexpr auto LANES = 16;
+
+    struct alignas(64) VectorBlock
+    {
+        FP x[LANES];
+        FP y[LANES];
+        FP z[LANES];
+    };
+
+    constexpr auto BLOCKS = PROBLEM_SIZE / LANES;
+
+    inline void add(const VectorBlock* a, const VectorBlock* b, VectorBlock* c)
+    {
+        for (std::size_t bi = 0; bi < PROBLEM_SIZE / LANES; bi++)
+        {
+// the unroll 1 is needed to prevent unrolling, which prevents vectorization in GCC
+#pragma GCC unroll 1
+            LLAMA_INDEPENDENT_DATA
+            for (std::size_t i = 0; i < LANES; ++i)
+            {
+                const auto& blockA = a[bi];
+                const auto& blockB = b[bi];
+                auto& blockC = c[bi];
+                blockC.x[i] = blockA.x[i] + blockB.x[i];
+                blockC.y[i] = blockA.y[i] - blockB.y[i];
+                blockC.z[i] = blockA.z[i] * blockB.z[i];
+            }
+        }
+    }
+
+    int main(int argc, char** argv)
+    {
+        std::cout << "AoSoA\n";
+
+        std::vector<VectorBlock> a(BLOCKS);
+        std::vector<VectorBlock> b(BLOCKS);
+        std::vector<VectorBlock> c(BLOCKS);
+
+        const auto start = std::chrono::high_resolution_clock::now();
+
+        for (std::size_t bi = 0; bi < PROBLEM_SIZE / LANES; ++bi)
+        {
+            LLAMA_INDEPENDENT_DATA
+            for (std::size_t i = 0; i < LANES; ++i)
+            {
+                a[bi].x[i] = bi * LANES + i;
+                a[bi].y[i] = bi * LANES + i;
+                a[bi].z[i] = bi * LANES + i;
+                b[bi].x[i] = bi * LANES + i;
+                b[bi].y[i] = bi * LANES + i;
+                b[bi].z[i] = bi * LANES + i;
+            }
+        }
+
+        const auto stop = std::chrono::high_resolution_clock::now();
+        std::cout << "init took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+
+        for (std::size_t s = 0; s < STEPS; ++s)
+        {
+            const auto start = std::chrono::high_resolution_clock::now();
+            add(a.data(), b.data(), c.data());
+            const auto stop = std::chrono::high_resolution_clock::now();
+            std::cout << "add took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+        }
+
+        return c[0].x[0];
+    }
+} // namespace manualAoSoA
+
+
 int main(int argc, char** argv)
 {
     std::cout << PROBLEM_SIZE / 1000 / 1000 << "M values "
@@ -220,5 +293,6 @@ int main(int argc, char** argv)
     r += usellama::main(argc, argv);
     r += manualAoS::main(argc, argv);
     r += manualSoA::main(argc, argv);
+    r += manualAoSoA::main(argc, argv);
     return r;
 }
