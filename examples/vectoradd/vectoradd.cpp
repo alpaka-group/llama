@@ -172,19 +172,16 @@ namespace manualSoA
     {
         std::cout << "SoA\n";
 
-        auto alloc = [] {
-            return std::unique_ptr<FP[]>(
-                static_cast<FP*>(operator new[](sizeof(FP) * PROBLEM_SIZE, std::align_val_t{64})));
-        };
-        auto ax = alloc();
-        auto ay = alloc();
-        auto az = alloc();
-        auto bx = alloc();
-        auto by = alloc();
-        auto bz = alloc();
-        auto cx = alloc();
-        auto cy = alloc();
-        auto cz = alloc();
+        using Vector = std::vector<float, llama::allocator::AlignedAllocator<float, 64>>;
+        Vector ax(PROBLEM_SIZE);
+        Vector ay(PROBLEM_SIZE);
+        Vector az(PROBLEM_SIZE);
+        Vector bx(PROBLEM_SIZE);
+        Vector by(PROBLEM_SIZE);
+        Vector bz(PROBLEM_SIZE);
+        Vector cx(PROBLEM_SIZE);
+        Vector cy(PROBLEM_SIZE);
+        Vector cz(PROBLEM_SIZE);
 
         const auto start = std::chrono::high_resolution_clock::now();
 
@@ -205,7 +202,7 @@ namespace manualSoA
         for (std::size_t s = 0; s < STEPS; ++s)
         {
             const auto start = std::chrono::high_resolution_clock::now();
-            add(ax.get(), ay.get(), az.get(), bx.get(), by.get(), bz.get(), cx.get(), cy.get(), cz.get());
+            add(ax.data(), ay.data(), az.data(), bx.data(), by.data(), bz.data(), cx.data(), cy.data(), cz.data());
             const auto stop = std::chrono::high_resolution_clock::now();
             std::cout << "add took " << std::chrono::duration<double>(stop - start).count() << "s\n";
         }

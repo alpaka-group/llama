@@ -370,17 +370,14 @@ namespace manualSoA
         std::cout << "SoA\n";
 
         const auto start = std::chrono::high_resolution_clock::now();
-        auto alloc = [] {
-            return std::unique_ptr<FP[]>(
-                static_cast<FP*>(operator new[](sizeof(FP) * PROBLEM_SIZE, std::align_val_t{64})));
-        };
-        auto posx = alloc();
-        auto posy = alloc();
-        auto posz = alloc();
-        auto velx = alloc();
-        auto vely = alloc();
-        auto velz = alloc();
-        auto mass = alloc();
+        using Vector = std::vector<FP, llama::allocator::AlignedAllocator<FP, 64>>;
+        Vector posx(PROBLEM_SIZE);
+        Vector posy(PROBLEM_SIZE);
+        Vector posz(PROBLEM_SIZE);
+        Vector velx(PROBLEM_SIZE);
+        Vector vely(PROBLEM_SIZE);
+        Vector velz(PROBLEM_SIZE);
+        Vector mass(PROBLEM_SIZE);
         const auto stop = std::chrono::high_resolution_clock::now();
         std::cout << "alloc took " << std::chrono::duration<double>(stop - start).count() << "s\n";
 
@@ -408,13 +405,13 @@ namespace manualSoA
         {
             {
                 const auto start = std::chrono::high_resolution_clock::now();
-                update(posx.get(), posy.get(), posz.get(), velx.get(), vely.get(), velz.get(), mass.get(), ts);
+                update(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), mass.data(), ts);
                 const auto stop = std::chrono::high_resolution_clock::now();
                 std::cout << "update took " << std::chrono::duration<double>(stop - start).count() << "s\t";
             }
             {
                 const auto start = std::chrono::high_resolution_clock::now();
-                move(posx.get(), posy.get(), posz.get(), velx.get(), vely.get(), velz.get(), mass.get(), ts);
+                move(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), mass.data(), ts);
                 const auto stop = std::chrono::high_resolution_clock::now();
                 std::cout << "move took   " << std::chrono::duration<double>(stop - start).count() << "s\n";
             }
