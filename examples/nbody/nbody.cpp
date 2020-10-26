@@ -105,7 +105,7 @@ namespace usellama
 
         auto particles = llama::allocView(std::move(tmapping));
 
-        std::cout << PROBLEM_SIZE / 1000 << " thousand particles LLAMA\n";
+        std::cout << "LLAMA\n";
 
         const auto start = std::chrono::high_resolution_clock::now();
         const auto stop = std::chrono::high_resolution_clock::now();
@@ -251,7 +251,7 @@ namespace manualAoS
     {
         constexpr FP ts = 0.0001f;
 
-        std::cout << PROBLEM_SIZE / 1000 << " thousand particles AoS\n";
+        std::cout << "AoS\n";
 
         const auto start = std::chrono::high_resolution_clock::now();
         std::vector<Particle> particles(PROBLEM_SIZE);
@@ -367,16 +367,20 @@ namespace manualSoA
     {
         constexpr FP ts = 0.0001f;
 
-        std::cout << PROBLEM_SIZE / 1000 << " thousand particles SoA\n";
+        std::cout << "SoA\n";
 
         const auto start = std::chrono::high_resolution_clock::now();
-        std::vector<FP> posx(PROBLEM_SIZE);
-        std::vector<FP> posy(PROBLEM_SIZE);
-        std::vector<FP> posz(PROBLEM_SIZE);
-        std::vector<FP> velx(PROBLEM_SIZE);
-        std::vector<FP> vely(PROBLEM_SIZE);
-        std::vector<FP> velz(PROBLEM_SIZE);
-        std::vector<FP> mass(PROBLEM_SIZE);
+        auto alloc = [] {
+            return std::unique_ptr<FP[]>(
+                static_cast<FP*>(operator new[](sizeof(FP) * PROBLEM_SIZE, std::align_val_t{64})));
+        };
+        auto posx = alloc();
+        auto posy = alloc();
+        auto posz = alloc();
+        auto velx = alloc();
+        auto vely = alloc();
+        auto velz = alloc();
+        auto mass = alloc();
         const auto stop = std::chrono::high_resolution_clock::now();
         std::cout << "alloc took " << std::chrono::duration<double>(stop - start).count() << "s\n";
 
@@ -404,13 +408,13 @@ namespace manualSoA
         {
             {
                 const auto start = std::chrono::high_resolution_clock::now();
-                update(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), mass.data(), ts);
+                update(posx.get(), posy.get(), posz.get(), velx.get(), vely.get(), velz.get(), mass.get(), ts);
                 const auto stop = std::chrono::high_resolution_clock::now();
                 std::cout << "update took " << std::chrono::duration<double>(stop - start).count() << "s\t";
             }
             {
                 const auto start = std::chrono::high_resolution_clock::now();
-                move(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), mass.data(), ts);
+                move(posx.get(), posy.get(), posz.get(), velx.get(), vely.get(), velz.get(), mass.get(), ts);
                 const auto stop = std::chrono::high_resolution_clock::now();
                 std::cout << "move took   " << std::chrono::duration<double>(stop - start).count() << "s\n";
             }
@@ -552,7 +556,7 @@ namespace manualAoSoA
     {
         constexpr FP ts = 0.0001f;
 
-        std::cout << PROBLEM_SIZE / 1000 << " thousand particles AoSoA";
+        std::cout << "AoSoA";
         if constexpr (Tiled)
             std::cout << " tiled";
         std::cout << "\n";
@@ -611,6 +615,9 @@ namespace manualAoSoA
 
 int main(int argc, char** argv)
 {
+    std::cout << PROBLEM_SIZE / 1000 << "k particles "
+              << "(" << PROBLEM_SIZE * sizeof(float) * 7 / 1024 << "kiB)\n";
+
     int r = 0;
     r += usellama::main(argc, argv);
     r += manualAoS::main(argc, argv);

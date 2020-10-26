@@ -58,7 +58,7 @@ namespace usellama
                     Vector{}};
         }();
 
-        std::cout << PROBLEM_SIZE / 1000 / 1000 << " million vectors LLAMA\n";
+        std::cout << "LLAMA\n";
 
         auto a = allocView(mapping);
         auto b = allocView(mapping);
@@ -112,7 +112,7 @@ namespace manualAoS
 
     int main(int argc, char** argv)
     {
-        std::cout << PROBLEM_SIZE / 1000 / 1000 << " million vectors AoS\n";
+        std::cout << "AoS\n";
 
         std::vector<Vector> a(PROBLEM_SIZE);
         std::vector<Vector> b(PROBLEM_SIZE);
@@ -170,17 +170,21 @@ namespace manualSoA
 
     int main(int argc, char** argv)
     {
-        std::cout << PROBLEM_SIZE / 1000 / 1000 << " million vectors SoA\n";
+        std::cout << "SoA\n";
 
-        std::vector<FP> ax(PROBLEM_SIZE);
-        std::vector<FP> ay(PROBLEM_SIZE);
-        std::vector<FP> az(PROBLEM_SIZE);
-        std::vector<FP> bx(PROBLEM_SIZE);
-        std::vector<FP> by(PROBLEM_SIZE);
-        std::vector<FP> bz(PROBLEM_SIZE);
-        std::vector<FP> cx(PROBLEM_SIZE);
-        std::vector<FP> cy(PROBLEM_SIZE);
-        std::vector<FP> cz(PROBLEM_SIZE);
+        auto alloc = [] {
+            return std::unique_ptr<FP[]>(
+                static_cast<FP*>(operator new[](sizeof(FP) * PROBLEM_SIZE, std::align_val_t{64})));
+        };
+        auto ax = alloc();
+        auto ay = alloc();
+        auto az = alloc();
+        auto bx = alloc();
+        auto by = alloc();
+        auto bz = alloc();
+        auto cx = alloc();
+        auto cy = alloc();
+        auto cz = alloc();
 
         const auto start = std::chrono::high_resolution_clock::now();
 
@@ -201,7 +205,7 @@ namespace manualSoA
         for (std::size_t s = 0; s < STEPS; ++s)
         {
             const auto start = std::chrono::high_resolution_clock::now();
-            add(ax.data(), ay.data(), az.data(), bx.data(), by.data(), bz.data(), cx.data(), cy.data(), cz.data());
+            add(ax.get(), ay.get(), az.get(), bx.get(), by.get(), bz.get(), cx.get(), cy.get(), cz.get());
             const auto stop = std::chrono::high_resolution_clock::now();
             std::cout << "add took " << std::chrono::duration<double>(stop - start).count() << "s\n";
         }
@@ -212,6 +216,9 @@ namespace manualSoA
 
 int main(int argc, char** argv)
 {
+    std::cout << PROBLEM_SIZE / 1000 / 1000 << "M values "
+              << "(" << PROBLEM_SIZE * sizeof(float) / 1024 << "kiB)\n";
+
     int r = 0;
     r += usellama::main(argc, argv);
     r += manualAoS::main(argc, argv);
