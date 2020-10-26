@@ -42,49 +42,46 @@ namespace llama::allocator
         }
     };
 
-    namespace internal
+    template <typename T, std::size_t Alignment>
+    struct AlignedAllocator
     {
-        template <typename T, std::size_t Alignment>
-        struct AlignmentAllocator
+        using value_type = T;
+
+        inline AlignedAllocator() noexcept = default;
+
+        template <typename T2>
+        inline AlignedAllocator(AlignedAllocator<T2, Alignment> const&) noexcept
         {
-            using value_type = T;
+        }
 
-            inline AlignmentAllocator() noexcept = default;
+        inline ~AlignedAllocator() noexcept = default;
 
-            template <typename T2>
-            inline AlignmentAllocator(AlignmentAllocator<T2, Alignment> const&) noexcept
-            {
-            }
+        inline auto allocate(std::size_t n) -> T*
+        {
+            return static_cast<T*>(::operator new[](n * sizeof(T), std::align_val_t{Alignment}));
+        }
 
-            inline ~AlignmentAllocator() noexcept = default;
+        inline void deallocate(T* p, std::size_t)
+        {
+            ::operator delete[](p, std::align_val_t{Alignment});
+        }
 
-            inline auto allocate(std::size_t n) -> T*
-            {
-                return static_cast<T*>(::operator new[](n * sizeof(T), std::align_val_t{Alignment}));
-            }
-
-            inline void deallocate(T* p, std::size_t)
-            {
-                ::operator delete[](p, std::align_val_t{Alignment});
-            }
-
-            template <typename T2>
-            struct rebind
-            {
-                using other = AlignmentAllocator<T2, Alignment>;
-            };
-
-            auto operator!=(const AlignmentAllocator<T, Alignment>& other) const -> bool
-            {
-                return !(*this == other);
-            }
-
-            auto operator==(const AlignmentAllocator<T, Alignment>& other) const -> bool
-            {
-                return true;
-            }
+        template <typename T2>
+        struct rebind
+        {
+            using other = AlignedAllocator<T2, Alignment>;
         };
-    } // namespace internal
+
+        auto operator!=(const AlignedAllocator<T, Alignment>& other) const -> bool
+        {
+            return !(*this == other);
+        }
+
+        auto operator==(const AlignedAllocator<T, Alignment>& other) const -> bool
+        {
+            return true;
+        }
+    };
 
     /// Allocates heap memory managed by a `std::vector` for a \ref View, which
     /// is copied each time a \ref View is copied.
@@ -94,7 +91,7 @@ namespace llama::allocator
     {
         inline auto operator()(std::size_t count) const
         {
-            return std::vector<std::byte, internal::AlignmentAllocator<std::byte, Alignment>>(count);
+            return std::vector<std::byte, AlignedAllocator<std::byte, Alignment>>(count);
         }
     };
 } // namespace llama::allocator
