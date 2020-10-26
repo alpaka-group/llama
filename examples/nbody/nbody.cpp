@@ -426,7 +426,7 @@ namespace manualAoSoA
     constexpr auto LANES = 16;
     constexpr auto L1D_SIZE = 32 * 1024;
 
-    struct ParticleBlock
+    struct alignas(64) ParticleBlock
     {
         struct
         {
