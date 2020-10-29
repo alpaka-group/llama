@@ -193,6 +193,12 @@ if (LLAMA_BUILD_EXAMPLES)
 		add_subdirectory("examples/cuda/pitch")
 		add_subdirectory("examples/cuda/viewcopy")
 	endif()
+
+	# SYCL examples
+	find_package(IntelSYCL)
+	if (IntelSYCL_FOUND)
+		add_subdirectory("examples/sycl/nbody")
+	endif()
 endif()
 
 # install
