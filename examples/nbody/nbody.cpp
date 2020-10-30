@@ -52,8 +52,7 @@ namespace usellama
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
         const FP s = p2(tag::Mass{}) * invDistCube;
-        dist *= s * ts;
-        p1(tag::Vel{}) += dist;
+        p1(tag::Vel{}) += dist * s * ts;
     }
 
     template <typename View>
@@ -323,12 +322,9 @@ namespace manualSoA
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
         const FP s = p2mass * invDistCube;
-        xdistance *= s * ts;
-        ydistance *= s * ts;
-        zdistance *= s * ts;
-        p1velx += xdistance;
-        p1vely += ydistance;
-        p1velz += zdistance;
+        p1velx += xdistance * s * ts;
+        p1vely += ydistance * s * ts;
+        p1velz += zdistance * s * ts;
     }
 
     void update(FP* posx, FP* posy, FP* posz, FP* velx, FP* vely, FP* velz, FP* mass, FP ts)
@@ -469,12 +465,9 @@ namespace manualAoSoA
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
         const FP s = p2mass * invDistCube;
-        xdistance *= s * ts;
-        ydistance *= s * ts;
-        zdistance *= s * ts;
-        p1velx += xdistance;
-        p1vely += ydistance;
-        p1velz += zdistance;
+        p1velx += xdistance * s * ts;
+        p1vely += ydistance * s * ts;
+        p1velz += zdistance * s * ts;
     }
 
     void update(ParticleBlock* particles, FP ts)
