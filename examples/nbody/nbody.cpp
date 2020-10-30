@@ -603,6 +603,223 @@ namespace manualAoSoA
     }
 } // namespace manualAoSoA
 
+#ifdef __AVX2__
+#    include <immintrin.h>
+
+namespace manualAoSoA_manualAVX
+{
+    constexpr auto LANES = sizeof(__m256) / sizeof(float);
+
+    struct alignas(32) ParticleBlock
+    {
+        struct
+        {
+            float x[LANES];
+            float y[LANES];
+            float z[LANES];
+        } pos;
+        struct
+        {
+            float x[LANES];
+            float y[LANES];
+            float z[LANES];
+        } vel;
+        float mass[LANES];
+    };
+
+    constexpr auto BLOCKS = PROBLEM_SIZE / LANES;
+    const __m256 vEPS2 = _mm256_broadcast_ss(&EPS2);
+
+    inline void pPInteraction(
+        __m256 p1posx,
+        __m256 p1posy,
+        __m256 p1posz,
+        __m256& p1velx,
+        __m256& p1vely,
+        __m256& p1velz,
+        __m256 p2posx,
+        __m256 p2posy,
+        __m256 p2posz,
+        __m256 p2mass,
+        __m256 ts)
+    {
+        const __m256 xdistance = _mm256_sub_ps(p1posx, p2posx);
+        const __m256 ydistance = _mm256_sub_ps(p1posy, p2posy);
+        const __m256 zdistance = _mm256_sub_ps(p1posz, p2posz);
+        const __m256 xdistanceSqr = _mm256_mul_ps(xdistance, xdistance);
+        const __m256 ydistanceSqr = _mm256_mul_ps(ydistance, ydistance);
+        const __m256 zdistanceSqr = _mm256_mul_ps(zdistance, zdistance);
+        const __m256 distSqr
+            = _mm256_add_ps(_mm256_add_ps(_mm256_add_ps(vEPS2, xdistanceSqr), ydistanceSqr), zdistanceSqr);
+        const __m256 distSixth = _mm256_mul_ps(_mm256_mul_ps(distSqr, distSqr), distSqr);
+        const __m256 invDistCube = _mm256_rsqrt_ps(distSixth);
+        const __m256 s = _mm256_mul_ps(p2mass, invDistCube);
+        const __m256 sts = _mm256_mul_ps(s, ts);
+        p1velx = _mm256_fmadd_ps(xdistanceSqr, sts, p1velx);
+        p1vely = _mm256_fmadd_ps(ydistanceSqr, sts, p1vely);
+        p1velz = _mm256_fmadd_ps(zdistanceSqr, sts, p1velz);
+    }
+
+    // update (read/write) 8 particles J based on the influence of 1 particle I
+    void update8(ParticleBlock* particles, FP ts)
+    {
+        const auto vts = _mm256_broadcast_ss(&ts);
+        for (std::size_t bi = 0; bi < BLOCKS; bi++)
+            for (std::size_t bj = 0; bj < BLOCKS; bj++)
+                for (std::size_t i = 0; i < LANES; i++)
+                {
+                    const auto& blockI = particles[bi];
+                    const __m256 posxI = _mm256_broadcast_ss(&blockI.pos.x[i]);
+                    const __m256 posyI = _mm256_broadcast_ss(&blockI.pos.y[i]);
+                    const __m256 poszI = _mm256_broadcast_ss(&blockI.pos.z[i]);
+                    const __m256 massI = _mm256_broadcast_ss(&blockI.mass[i]);
+
+                    auto& blockJ = particles[bj];
+                    __m256 p1velx = _mm256_load_ps(blockJ.vel.x);
+                    __m256 p1vely = _mm256_load_ps(blockJ.vel.y);
+                    __m256 p1velz = _mm256_load_ps(blockJ.vel.z);
+                    pPInteraction(
+                        _mm256_load_ps(blockJ.pos.x),
+                        _mm256_load_ps(blockJ.pos.y),
+                        _mm256_load_ps(blockJ.pos.z),
+                        p1velx,
+                        p1vely,
+                        p1velz,
+                        posxI,
+                        posyI,
+                        poszI,
+                        massI,
+                        vts);
+                    _mm256_store_ps(blockJ.vel.x, p1velx);
+                    _mm256_store_ps(blockJ.vel.y, p1vely);
+                    _mm256_store_ps(blockJ.vel.z, p1velz);
+                }
+    }
+
+    inline auto horizontalSum(__m256 v) -> float
+    {
+        // from:
+        // http://jtdz-solenoids.com/stackoverflow_/questions/13879609/horizontal-sum-of-8-packed-32bit-floats/18616679#18616679
+        const __m256 t1 = _mm256_hadd_ps(v, v);
+        const __m256 t2 = _mm256_hadd_ps(t1, t1);
+        const __m128 t3 = _mm256_extractf128_ps(t2, 1);
+        const __m128 t4 = _mm_add_ss(_mm256_castps256_ps128(t2), t3);
+        return _mm_cvtss_f32(t4);
+
+        // alignas(32) float a[LANES];
+        //_mm256_store_ps(a, v);
+        // return a[0] + a[1] + a[2] + a[3] + a[4] + a[5] + a[6] + a[7];
+    }
+
+    // update (read/write) 1 particles J based on the influence of 8 particles I
+    void update1(ParticleBlock* particles, FP ts)
+    {
+        const auto vts = _mm256_broadcast_ss(&ts);
+        for (std::size_t bj = 0; bj < BLOCKS; bj++)
+            for (std::size_t j = 0; j < LANES; j++)
+            {
+                auto& blockJ = particles[bj];
+                const __m256 p1posx = _mm256_broadcast_ss(&blockJ.pos.x[j]);
+                const __m256 p1posy = _mm256_broadcast_ss(&blockJ.pos.y[j]);
+                const __m256 p1posz = _mm256_broadcast_ss(&blockJ.pos.z[j]);
+                __m256 p1velx = _mm256_broadcast_ss(&blockJ.vel.x[j]);
+                __m256 p1vely = _mm256_broadcast_ss(&blockJ.vel.y[j]);
+                __m256 p1velz = _mm256_broadcast_ss(&blockJ.vel.z[j]);
+
+                for (std::size_t bi = 0; bi < BLOCKS; bi++)
+                {
+                    const auto& blockI = particles[bi];
+                    const __m256 posxI = _mm256_load_ps(blockI.pos.x);
+                    const __m256 posyI = _mm256_load_ps(blockI.pos.y);
+                    const __m256 poszI = _mm256_load_ps(blockI.pos.z);
+                    const __m256 massI = _mm256_load_ps(blockI.mass);
+                    pPInteraction(p1posx, p1posy, p1posz, p1velx, p1vely, p1velz, posxI, posyI, poszI, massI, vts);
+                }
+
+                blockJ.vel.x[j] = horizontalSum(p1velx);
+                blockJ.vel.y[j] = horizontalSum(p1vely);
+                blockJ.vel.z[j] = horizontalSum(p1velz);
+            }
+    }
+
+    void move(ParticleBlock* particles, FP ts)
+    {
+        const auto vts = _mm256_broadcast_ss(&ts);
+        for (std::size_t bi = 0; bi < BLOCKS; bi++)
+        {
+            auto& block = particles[bi];
+            _mm256_store_ps(
+                block.pos.x,
+                _mm256_fmadd_ps(_mm256_load_ps(block.vel.x), vts, _mm256_load_ps(block.pos.x)));
+            _mm256_store_ps(
+                block.pos.y,
+                _mm256_fmadd_ps(_mm256_load_ps(block.vel.y), vts, _mm256_load_ps(block.pos.y)));
+            _mm256_store_ps(
+                block.pos.z,
+                _mm256_fmadd_ps(_mm256_load_ps(block.vel.z), vts, _mm256_load_ps(block.pos.z)));
+        }
+    }
+
+    template <bool UseUpdate1>
+    int main(int argc, char** argv)
+    {
+        constexpr FP ts = 0.0001f;
+
+        std::cout << (UseUpdate1 ? "AoSoA AVX2 updating 1 particle from 8\n" : "AoSoA AVX2 updating 8 particles from 1\n ");
+
+        const auto start = std::chrono::high_resolution_clock::now();
+        std::vector<ParticleBlock> particles(BLOCKS);
+        const auto stop = std::chrono::high_resolution_clock::now();
+        std::cout << "alloc took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+
+        {
+            const auto start = std::chrono::high_resolution_clock::now();
+
+            std::default_random_engine engine;
+            std::normal_distribution<FP> dist(FP(0), FP(1));
+            for (std::size_t bi = 0; bi < BLOCKS; ++bi)
+            {
+                auto& block = particles[bi];
+                for (std::size_t i = 0; i < LANES; ++i)
+                {
+                    block.pos.x[i] = dist(engine);
+                    block.pos.y[i] = dist(engine);
+                    block.pos.z[i] = dist(engine);
+                    block.vel.x[i] = dist(engine) / FP(10);
+                    block.vel.y[i] = dist(engine) / FP(10);
+                    block.vel.z[i] = dist(engine) / FP(10);
+                    block.mass[i] = dist(engine) / FP(100);
+                }
+            }
+
+            const auto stop = std::chrono::high_resolution_clock::now();
+            std::cout << "init took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+        }
+
+        for (std::size_t s = 0; s < STEPS; ++s)
+        {
+            {
+                const auto start = std::chrono::high_resolution_clock::now();
+                if constexpr (UseUpdate1)
+                    update1(particles.data(), ts);
+                else
+                    update8(particles.data(), ts);
+                const auto stop = std::chrono::high_resolution_clock::now();
+                std::cout << "update took " << std::chrono::duration<double>(stop - start).count() << "s\t";
+            }
+            {
+                const auto start = std::chrono::high_resolution_clock::now();
+                move(particles.data(), ts);
+                const auto stop = std::chrono::high_resolution_clock::now();
+                std::cout << "move took   " << std::chrono::duration<double>(stop - start).count() << "s\n";
+            }
+        }
+
+        return 0;
+    }
+} // namespace manualAoSoA_manualAVX
+#endif
+
 int main(int argc, char** argv)
 {
     std::cout << PROBLEM_SIZE / 1000 << "k particles "
@@ -614,5 +831,9 @@ int main(int argc, char** argv)
     r += manualSoA::main(argc, argv);
     r += manualAoSoA::main<false>(argc, argv);
     r += manualAoSoA::main<true>(argc, argv);
+#ifdef __AVX2__
+    r += manualAoSoA_manualAVX::main<false>(argc, argv);
+    r += manualAoSoA_manualAVX::main<true>(argc, argv);
+#endif
     return r;
 }
