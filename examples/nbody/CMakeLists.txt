@@ -13,4 +13,9 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clan
 		-march=native
 		-ffast-math
 	)
+elseif(MSVC)
+	target_compile_options(${PROJECT_NAME} PRIVATE
+		/arch:AVX2
+		/fp:fast
+	)
 endif()
