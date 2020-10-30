@@ -23,9 +23,7 @@
 #elif BOOST_COMP_INTEL != 0
 #    define LLAMA_INDEPENDENT_DATA _Pragma("ivdep")
 #elif BOOST_COMP_CLANG
-#    define LLAMA_INDEPENDENT_DATA                                                                                     \
-        _Pragma("clang loop vectorize(enable)") _Pragma("clang loop interleave(enable)")                               \
-            _Pragma("clang loop distribute(enable)")
+#    define LLAMA_INDEPENDENT_DATA _Pragma("clang loop vectorize(enable) interleave(enable) distribute(enable)")
 #elif defined(_MSC_VER)
 #    define LLAMA_INDEPENDENT_DATA __pragma(loop(ivdep))
 #else
