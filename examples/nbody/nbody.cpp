@@ -705,6 +705,10 @@ namespace manualAoSoA_manualAVX
         const __m128 t3 = _mm256_extractf128_ps(t2, 1);
         const __m128 t4 = _mm_add_ss(_mm256_castps256_ps128(t2), t3);
         return _mm_cvtss_f32(t4);
+
+        // alignas(32) float a[LANES];
+        //_mm256_store_ps(a, v);
+        // return a[0] + a[1] + a[2] + a[3] + a[4] + a[5] + a[6] + a[7];
     }
 
     // update (read/write) 1 particles J based on the influence of 8 particles I
