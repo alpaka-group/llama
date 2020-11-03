@@ -11,6 +11,7 @@ constexpr auto MAPPING = 2; ///< 0 native AoS, 1 native SoA, 2 native SoA (separ
 constexpr auto PROBLEM_SIZE = 16 * 1024; ///< total number of particles
 constexpr auto STEPS = 5; ///< number of steps to calculate
 constexpr auto TRACE = false;
+constexpr auto ALLOW_RSQRT = false; // rsqrt can be way faster, but less accurate
 
 using FP = float;
 constexpr FP EPS2 = 0.01f;
@@ -652,7 +653,8 @@ namespace manualAoSoA_manualAVX
         const __m256 distSqr
             = _mm256_add_ps(_mm256_add_ps(_mm256_add_ps(vEPS2, xdistanceSqr), ydistanceSqr), zdistanceSqr);
         const __m256 distSixth = _mm256_mul_ps(_mm256_mul_ps(distSqr, distSqr), distSqr);
-        const __m256 invDistCube = _mm256_rsqrt_ps(distSixth);
+        const __m256 invDistCube
+            = ALLOW_RSQRT ? _mm256_rsqrt_ps(distSixth) : _mm256_div_ps(_mm256_set1_ps(1.0f), _mm256_sqrt_ps(distSixth));
         const __m256 sts = _mm256_mul_ps(_mm256_mul_ps(p2mass, invDistCube), ts);
         p1velx = _mm256_fmadd_ps(xdistanceSqr, sts, p1velx);
         p1vely = _mm256_fmadd_ps(ydistanceSqr, sts, p1vely);
@@ -869,7 +871,7 @@ namespace manualAoSoA_Vc
         const vec zdistanceSqr = zdistance * zdistance;
         const vec distSqr = EPS2 + xdistanceSqr + ydistanceSqr + zdistanceSqr;
         const vec distSixth = distSqr * distSqr * distSqr;
-        const vec invDistCube = Vc::rsqrt(distSixth);
+        const vec invDistCube = ALLOW_RSQRT ? Vc::rsqrt(distSixth) : (1.0f / Vc::sqrt(distSixth));
         const vec sts = p2mass * invDistCube * ts;
         p1velx = xdistanceSqr * sts + p1velx;
         p1vely = ydistanceSqr * sts + p1vely;
