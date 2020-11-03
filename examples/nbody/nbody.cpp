@@ -51,8 +51,8 @@ namespace usellama
         const FP distSqr = EPS2 + dist(tag::X{}) + dist(tag::Y{}) + dist(tag::Z{});
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
-        const FP s = p2(tag::Mass{}) * invDistCube;
-        p1(tag::Vel{}) += dist * s * ts;
+        const FP sts = p2(tag::Mass{}) * invDistCube * ts;
+        p1(tag::Vel{}) += dist * sts;
     }
 
     template <typename View>
@@ -224,8 +224,8 @@ namespace manualAoS
         const FP distSqr = EPS2 + distance.x + distance.y + distance.z;
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
-        const FP s = p2.mass * invDistCube;
-        distance *= s * ts;
+        const FP sts = p2.mass * invDistCube * ts;
+        distance *= sts;
         p1.vel += distance;
     }
 
@@ -321,10 +321,10 @@ namespace manualSoA
         const FP distSqr = EPS2 + xdistance + ydistance + zdistance;
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
-        const FP s = p2mass * invDistCube;
-        p1velx += xdistance * s * ts;
-        p1vely += ydistance * s * ts;
-        p1velz += zdistance * s * ts;
+        const FP sts = p2mass * invDistCube * ts;
+        p1velx += xdistance * sts;
+        p1vely += ydistance * sts;
+        p1velz += zdistance * sts;
     }
 
     void update(FP* posx, FP* posy, FP* posz, FP* velx, FP* vely, FP* velz, FP* mass, FP ts)
@@ -464,10 +464,10 @@ namespace manualAoSoA
         const FP distSqr = EPS2 + xdistance + ydistance + zdistance;
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
-        const FP s = p2mass * invDistCube;
-        p1velx += xdistance * s * ts;
-        p1vely += ydistance * s * ts;
-        p1velz += zdistance * s * ts;
+        const FP sts = p2mass * invDistCube * ts;
+        p1velx += xdistance * sts;
+        p1vely += ydistance * sts;
+        p1velz += zdistance * sts;
     }
 
     void update(ParticleBlock* particles, FP ts)
