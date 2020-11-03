@@ -765,7 +765,7 @@ namespace manualAoSoA_manualAVX
         constexpr FP ts = 0.0001f;
 
         std::cout
-            << (UseUpdate1 ? "AoSoA AVX2 updating 1 particle from 8\n" : "AoSoA AVX2 updating 8 particles from 1\n ");
+            << (UseUpdate1 ? "AoSoA AVX2 updating 1 particle from 8\n" : "AoSoA AVX2 updating 8 particles from 1\n");
 
         const auto start = std::chrono::high_resolution_clock::now();
         std::vector<ParticleBlock> particles(BLOCKS);
@@ -820,6 +820,199 @@ namespace manualAoSoA_manualAVX
 } // namespace manualAoSoA_manualAVX
 #endif
 
+#if __has_include(<Vc/Vc>)
+#    include <Vc/Vc>
+
+namespace manualAoSoA_Vc
+{
+    using Vc::float_v;
+
+    constexpr auto LANES = sizeof(float_v) / sizeof(float);
+
+    struct alignas(32) ParticleBlock
+    {
+        struct
+        {
+            float_v x;
+            float_v y;
+            float_v z;
+        } pos;
+        struct
+        {
+            float_v x;
+            float_v y;
+            float_v z;
+        } vel;
+        float_v mass;
+    };
+
+    constexpr auto BLOCKS = PROBLEM_SIZE / LANES;
+
+    inline void pPInteraction(
+        float_v p1posx,
+        float_v p1posy,
+        float_v p1posz,
+        float_v& p1velx,
+        float_v& p1vely,
+        float_v& p1velz,
+        float_v p2posx,
+        float_v p2posy,
+        float_v p2posz,
+        float_v p2mass,
+        float ts)
+    {
+        const float_v xdistance = p1posx - p2posx;
+        const float_v ydistance = p1posy - p2posy;
+        const float_v zdistance = p1posz - p2posz;
+        const float_v xdistanceSqr = xdistance * xdistance;
+        const float_v ydistanceSqr = ydistance * ydistance;
+        const float_v zdistanceSqr = zdistance * zdistance;
+        const float_v distSqr = EPS2 + xdistanceSqr + ydistanceSqr + zdistanceSqr;
+        const float_v distSixth = distSqr * distSqr * distSqr;
+        const float_v invDistCube = Vc::rsqrt(distSixth);
+        const float_v sts = p2mass * invDistCube * ts;
+        p1velx = xdistanceSqr * sts + p1velx;
+        p1vely = ydistanceSqr * sts + p1vely;
+        p1velz = zdistanceSqr * sts + p1velz;
+    }
+
+    // update (read/write) 8 particles J based on the influence of 1 particle I
+    void update8(ParticleBlock* particles, FP ts)
+    {
+        for (std::size_t bi = 0; bi < BLOCKS; bi++)
+            for (std::size_t bj = 0; bj < BLOCKS; bj++)
+                for (std::size_t i = 0; i < LANES; i++)
+                {
+                    const auto& blockI = particles[bi];
+                    const float_v posxI = blockI.pos.x[i];
+                    const float_v posyI = blockI.pos.y[i];
+                    const float_v poszI = blockI.pos.z[i];
+                    const float_v massI = blockI.mass[i];
+
+                    auto& blockJ = particles[bj];
+                    pPInteraction(
+                        blockJ.pos.x,
+                        blockJ.pos.y,
+                        blockJ.pos.z,
+                        blockJ.vel.x,
+                        blockJ.vel.y,
+                        blockJ.vel.z,
+                        posxI,
+                        posyI,
+                        poszI,
+                        massI,
+                        ts);
+                }
+    }
+
+    // update (read/write) 1 particles J based on the influence of 8 particles I
+    void update1(ParticleBlock* particles, FP ts)
+    {
+        for (std::size_t bj = 0; bj < BLOCKS; bj++)
+            for (std::size_t j = 0; j < LANES; j++)
+            {
+                auto& blockJ = particles[bj];
+                const float_v p1posx = (float) blockJ.pos.x[j];
+                const float_v p1posy = (float) blockJ.pos.y[j];
+                const float_v p1posz = (float) blockJ.pos.z[j];
+                float_v p1velx = (float) blockJ.vel.x[j];
+                float_v p1vely = (float) blockJ.vel.y[j];
+                float_v p1velz = (float) blockJ.vel.z[j];
+
+                for (std::size_t bi = 0; bi < BLOCKS; bi++)
+                {
+                    const auto& blockI = particles[bi];
+                    pPInteraction(
+                        p1posx,
+                        p1posy,
+                        p1posz,
+                        p1velx,
+                        p1vely,
+                        p1velz,
+                        blockI.pos.x,
+                        blockI.pos.y,
+                        blockI.pos.z,
+                        blockI.mass,
+                        ts);
+                }
+
+                blockJ.vel.x[j] = p1velx.sum();
+                blockJ.vel.y[j] = p1vely.sum();
+                blockJ.vel.z[j] = p1velz.sum();
+            }
+    }
+
+    void move(ParticleBlock* particles, FP ts)
+    {
+        for (std::size_t bi = 0; bi < BLOCKS; bi++)
+        {
+            auto& block = particles[bi];
+            block.pos.x += block.vel.x * ts;
+            block.pos.y += block.vel.y * ts;
+            block.pos.z += block.vel.z * ts;
+        }
+    }
+
+    template <bool UseUpdate1>
+    int main(int argc, char** argv)
+    {
+        constexpr FP ts = 0.0001f;
+
+        std::cout << (UseUpdate1 ? "AoSoA Vc updating 1 particle from 8\n" : "AoSoA Vc updating 8 particles from 1\n ");
+
+        const auto start = std::chrono::high_resolution_clock::now();
+        std::vector<ParticleBlock> particles(BLOCKS);
+        const auto stop = std::chrono::high_resolution_clock::now();
+        std::cout << "alloc took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+
+        {
+            const auto start = std::chrono::high_resolution_clock::now();
+
+            std::default_random_engine engine;
+            std::normal_distribution<FP> dist(FP(0), FP(1));
+            for (std::size_t bi = 0; bi < BLOCKS; ++bi)
+            {
+                auto& block = particles[bi];
+                for (std::size_t i = 0; i < LANES; ++i)
+                {
+                    block.pos.x[i] = dist(engine);
+                    block.pos.y[i] = dist(engine);
+                    block.pos.z[i] = dist(engine);
+                    block.vel.x[i] = dist(engine) / FP(10);
+                    block.vel.y[i] = dist(engine) / FP(10);
+                    block.vel.z[i] = dist(engine) / FP(10);
+                    block.mass[i] = dist(engine) / FP(100);
+                }
+            }
+
+            const auto stop = std::chrono::high_resolution_clock::now();
+            std::cout << "init took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+        }
+
+        for (std::size_t s = 0; s < STEPS; ++s)
+        {
+            {
+                const auto start = std::chrono::high_resolution_clock::now();
+                if constexpr (UseUpdate1)
+                    update1(particles.data(), ts);
+                else
+                    update8(particles.data(), ts);
+                const auto stop = std::chrono::high_resolution_clock::now();
+                std::cout << "update took " << std::chrono::duration<double>(stop - start).count() << "s\t";
+            }
+            {
+                const auto start = std::chrono::high_resolution_clock::now();
+                move(particles.data(), ts);
+                const auto stop = std::chrono::high_resolution_clock::now();
+                std::cout << "move took   " << std::chrono::duration<double>(stop - start).count() << "s\n";
+            }
+        }
+
+        return 0;
+    }
+} // namespace manualAoSoA_Vc
+#endif
+
 int main(int argc, char** argv)
 {
     std::cout << PROBLEM_SIZE / 1000 << "k particles "
@@ -834,6 +1027,10 @@ int main(int argc, char** argv)
 #ifdef __AVX2__
     r += manualAoSoA_manualAVX::main<false>(argc, argv);
     r += manualAoSoA_manualAVX::main<true>(argc, argv);
+#endif
+#if __has_include(<Vc/Vc>)
+    r += manualAoSoA_Vc::main<false>(argc, argv);
+    r += manualAoSoA_Vc::main<true>(argc, argv);
 #endif
     return r;
 }
