@@ -628,7 +628,7 @@ namespace manualAoSoA_manualAVX
     };
 
     constexpr auto BLOCKS = PROBLEM_SIZE / LANES;
-    const __m256 vEPS2 = _mm256_broadcast_ss(&EPS2);
+    const __m256 vEPS2 = _mm256_set1_ps(EPS2);
 
     inline void pPInteraction(
         __m256 p1posx,
@@ -660,7 +660,7 @@ namespace manualAoSoA_manualAVX
     }
 
     // update (read/write) 8 particles J based on the influence of 1 particle I
-    void update8(ParticleBlock* particles, FP ts)
+    void update8(ParticleBlock* particles, float ts)
     {
         const auto vts = _mm256_broadcast_ss(&ts);
         for (std::size_t bi = 0; bi < BLOCKS; bi++)
@@ -711,7 +711,7 @@ namespace manualAoSoA_manualAVX
     }
 
     // update (read/write) 1 particles J based on the influence of 8 particles I
-    void update1(ParticleBlock* particles, FP ts)
+    void update1(ParticleBlock* particles, float ts)
     {
         const auto vts = _mm256_broadcast_ss(&ts);
         for (std::size_t bj = 0; bj < BLOCKS; bj++)
@@ -741,7 +741,7 @@ namespace manualAoSoA_manualAVX
             }
     }
 
-    void move(ParticleBlock* particles, FP ts)
+    void move(ParticleBlock* particles, float ts)
     {
         const auto vts = _mm256_broadcast_ss(&ts);
         for (std::size_t bi = 0; bi < BLOCKS; bi++)
