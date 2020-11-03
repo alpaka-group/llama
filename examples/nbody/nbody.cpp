@@ -825,52 +825,52 @@ namespace manualAoSoA_manualAVX
 
 namespace manualAoSoA_Vc
 {
-    using Vc::float_v;
+    using vec = Vc::Vector<FP>;
 
-    constexpr auto LANES = sizeof(float_v) / sizeof(float);
+    constexpr auto LANES = sizeof(vec) / sizeof(FP);
 
     struct alignas(32) ParticleBlock
     {
         struct
         {
-            float_v x;
-            float_v y;
-            float_v z;
+            vec x;
+            vec y;
+            vec z;
         } pos;
         struct
         {
-            float_v x;
-            float_v y;
-            float_v z;
+            vec x;
+            vec y;
+            vec z;
         } vel;
-        float_v mass;
+        vec mass;
     };
 
     constexpr auto BLOCKS = PROBLEM_SIZE / LANES;
 
     inline void pPInteraction(
-        float_v p1posx,
-        float_v p1posy,
-        float_v p1posz,
-        float_v& p1velx,
-        float_v& p1vely,
-        float_v& p1velz,
-        float_v p2posx,
-        float_v p2posy,
-        float_v p2posz,
-        float_v p2mass,
-        float ts)
+        vec p1posx,
+        vec p1posy,
+        vec p1posz,
+        vec& p1velx,
+        vec& p1vely,
+        vec& p1velz,
+        vec p2posx,
+        vec p2posy,
+        vec p2posz,
+        vec p2mass,
+        FP ts)
     {
-        const float_v xdistance = p1posx - p2posx;
-        const float_v ydistance = p1posy - p2posy;
-        const float_v zdistance = p1posz - p2posz;
-        const float_v xdistanceSqr = xdistance * xdistance;
-        const float_v ydistanceSqr = ydistance * ydistance;
-        const float_v zdistanceSqr = zdistance * zdistance;
-        const float_v distSqr = EPS2 + xdistanceSqr + ydistanceSqr + zdistanceSqr;
-        const float_v distSixth = distSqr * distSqr * distSqr;
-        const float_v invDistCube = Vc::rsqrt(distSixth);
-        const float_v sts = p2mass * invDistCube * ts;
+        const vec xdistance = p1posx - p2posx;
+        const vec ydistance = p1posy - p2posy;
+        const vec zdistance = p1posz - p2posz;
+        const vec xdistanceSqr = xdistance * xdistance;
+        const vec ydistanceSqr = ydistance * ydistance;
+        const vec zdistanceSqr = zdistance * zdistance;
+        const vec distSqr = EPS2 + xdistanceSqr + ydistanceSqr + zdistanceSqr;
+        const vec distSixth = distSqr * distSqr * distSqr;
+        const vec invDistCube = Vc::rsqrt(distSixth);
+        const vec sts = p2mass * invDistCube * ts;
         p1velx = xdistanceSqr * sts + p1velx;
         p1vely = ydistanceSqr * sts + p1vely;
         p1velz = zdistanceSqr * sts + p1velz;
@@ -884,10 +884,10 @@ namespace manualAoSoA_Vc
                 for (std::size_t i = 0; i < LANES; i++)
                 {
                     const auto& blockI = particles[bi];
-                    const float_v posxI = blockI.pos.x[i];
-                    const float_v posyI = blockI.pos.y[i];
-                    const float_v poszI = blockI.pos.z[i];
-                    const float_v massI = blockI.mass[i];
+                    const vec posxI = blockI.pos.x[i];
+                    const vec posyI = blockI.pos.y[i];
+                    const vec poszI = blockI.pos.z[i];
+                    const vec massI = blockI.mass[i];
 
                     auto& blockJ = particles[bj];
                     pPInteraction(
@@ -912,12 +912,12 @@ namespace manualAoSoA_Vc
             for (std::size_t j = 0; j < LANES; j++)
             {
                 auto& blockJ = particles[bj];
-                const float_v p1posx = (float) blockJ.pos.x[j];
-                const float_v p1posy = (float) blockJ.pos.y[j];
-                const float_v p1posz = (float) blockJ.pos.z[j];
-                float_v p1velx = (float) blockJ.vel.x[j];
-                float_v p1vely = (float) blockJ.vel.y[j];
-                float_v p1velz = (float) blockJ.vel.z[j];
+                const vec p1posx = (FP) blockJ.pos.x[j];
+                const vec p1posy = (FP) blockJ.pos.y[j];
+                const vec p1posz = (FP) blockJ.pos.z[j];
+                vec p1velx = (FP) blockJ.vel.x[j];
+                vec p1vely = (FP) blockJ.vel.y[j];
+                vec p1velz = (FP) blockJ.vel.z[j];
 
                 for (std::size_t bi = 0; bi < BLOCKS; bi++)
                 {
@@ -1016,7 +1016,7 @@ namespace manualAoSoA_Vc
 int main(int argc, char** argv)
 {
     std::cout << PROBLEM_SIZE / 1000 << "k particles "
-              << "(" << PROBLEM_SIZE * sizeof(float) * 7 / 1024 << "kiB)\n";
+              << "(" << PROBLEM_SIZE * sizeof(FP) * 7 / 1024 << "kiB)\n";
 
     int r = 0;
     r += usellama::main(argc, argv);
