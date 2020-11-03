@@ -653,8 +653,7 @@ namespace manualAoSoA_manualAVX
             = _mm256_add_ps(_mm256_add_ps(_mm256_add_ps(vEPS2, xdistanceSqr), ydistanceSqr), zdistanceSqr);
         const __m256 distSixth = _mm256_mul_ps(_mm256_mul_ps(distSqr, distSqr), distSqr);
         const __m256 invDistCube = _mm256_rsqrt_ps(distSixth);
-        const __m256 s = _mm256_mul_ps(p2mass, invDistCube);
-        const __m256 sts = _mm256_mul_ps(s, ts);
+        const __m256 sts = _mm256_mul_ps(_mm256_mul_ps(p2mass, invDistCube), ts);
         p1velx = _mm256_fmadd_ps(xdistanceSqr, sts, p1velx);
         p1vely = _mm256_fmadd_ps(ydistanceSqr, sts, p1vely);
         p1velz = _mm256_fmadd_ps(zdistanceSqr, sts, p1velz);
@@ -765,7 +764,8 @@ namespace manualAoSoA_manualAVX
     {
         constexpr FP ts = 0.0001f;
 
-        std::cout << (UseUpdate1 ? "AoSoA AVX2 updating 1 particle from 8\n" : "AoSoA AVX2 updating 8 particles from 1\n ");
+        std::cout
+            << (UseUpdate1 ? "AoSoA AVX2 updating 1 particle from 8\n" : "AoSoA AVX2 updating 8 particles from 1\n ");
 
         const auto start = std::chrono::high_resolution_clock::now();
         std::vector<ParticleBlock> particles(BLOCKS);
