@@ -14,6 +14,7 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#include <Vc/Vc>
 #include <algorithm>
 #include <chrono>
 #include <cmath>
@@ -21,18 +22,37 @@
 #include <llama/llama.hpp>
 #include <utility>
 
-using DatumDomain = double;
-
-struct HeatEquationKernel
+template <typename View>
+void kernel(uint32_t idx, const View& uCurrBuf, View& uNextBuf, uint32_t extent, double dx, double dt)
 {
-    template <typename View>
-    void operator()(uint32_t idx, const View& uCurrBuf, View& uNextBuf, uint32_t extent, double dx, double dt) const
+    const auto r = dt / (dx * dx);
+    if (idx > 0 && idx < extent - 1u)
+        uNextBuf[idx] = uCurrBuf[idx] * (1.0 - 2.0 * r) + uCurrBuf[idx - 1] * r + uCurrBuf[idx + 1] * r;
+}
+
+template <typename View>
+void kernel_vec(uint32_t blockIdx, const View& uCurrBuf, View& uNextBuf, uint32_t extent, double dx, double dt)
+{
+    const auto baseIdx = static_cast<uint32_t>(blockIdx * Vc::double_v::size());
+
+    const auto r = dt / (dx * dx);
+
+    const auto idx = baseIdx + Vc::uint32_v{Vc::IndexesFromZero};
+    const auto mask = idx > 0 && idx < extent - 1u;
+    if (mask.isFull())
+        [[likely]]
+        {
+            const auto uNext = Vc::double_v{&uCurrBuf[baseIdx]} * (1.0 - 2.0 * r)
+                + Vc::double_v{&uCurrBuf[baseIdx - 1]} * r + Vc::double_v{&uCurrBuf[baseIdx + 1]} * r;
+            uNext.store(&uNextBuf[baseIdx]);
+        }
+    else
     {
-        const auto r = dt / (dx * dx);
-        if (idx > 0 && idx < extent - 1u)
-            uNextBuf[idx] = uCurrBuf[idx] * (1.0 - 2.0 * r) + uCurrBuf[idx - 1] * r + uCurrBuf[idx + 1] * r;
+        for (auto idx = baseIdx; idx <= baseIdx + Vc::double_v::size(); idx++)
+            if (idx > 0 && idx < extent - 1u)
+                uNextBuf[idx] = uCurrBuf[idx] * (1.0 - 2.0 * r) + uCurrBuf[idx - 1] * r + uCurrBuf[idx + 1] * r;
     }
-};
+}
 
 // Exact solution to the test problem
 // u_t(x, t) = u_xx(x, t), x in [0, 1], t in [0, T]
@@ -61,7 +81,7 @@ auto main() -> int
         return 1;
     }
 
-    const auto mapping = llama::mapping::AoS{llama::ArrayDomain{numNodesX}, DatumDomain{}};
+    const auto mapping = llama::mapping::SoA{llama::ArrayDomain{numNodesX}, double{}};
     auto uNext = llama::allocView(mapping);
     auto uCurr = llama::allocView(mapping);
 
@@ -70,11 +90,14 @@ auto main() -> int
         uCurr[i] = exactSolution(i * dx, 0.0);
 
     const auto start = std::chrono::high_resolution_clock::now();
-    HeatEquationKernel kernel;
     for (int step = 0; step < numTimeSteps; step++)
     {
-        for (auto i = 0; i < numNodesX; i++)
-            kernel(i, uCurr, uNext, numNodesX, dx, dt);
+        // for (auto i = 0; i < numNodesX; i++)
+        //    kernel(i, uCurr, uNext, numNodesX, dx, dt);
+
+        constexpr auto L = Vc::double_v::size();
+        for (auto i = 0; i < (numNodesX + L - 1) / L; i++)
+            kernel_vec(i, uCurr, uNext, numNodesX, dx, dt);
 
         // We assume the boundary conditions are constant and so these values
         // do not need to be updated.
