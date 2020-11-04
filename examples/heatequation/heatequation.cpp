@@ -51,24 +51,30 @@ inline void kernel_vec(uint32_t blockIdx, const View& uCurr, View& uNext, uint32
 }
 
 template <typename View>
-void update(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
+void update_scalar(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
 {
-    // scalar version
-    // for (auto i = 0; i < extent; i++)
-    //    kernel(i, uCurr, uNext, extent, dx, dt);
+    for (auto i = 0; i < extent; i++)
+        kernel(i, uCurr, uNext, extent, dx, dt);
+}
 
+template <typename View>
+void update_Vc(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
+{
     constexpr auto L = Vc::double_v::size();
     const auto blocks = (extent + L - 1) / L;
-
-    // Vc version
     for (auto i = 0; i < blocks; i++)
         kernel_vec(i, uCurr, uNext, extent, dx, dt);
+}
 
-    // Vc version with loop manual peeling
-    //kernel_vec(0, uCurr, uNext, extent, dx, dt);
-    //for (auto i = 1; i < blocks - 1; i++)
-    //    kernel_vec(i, uCurr, uNext, extent, dx, dt);
-    //kernel_vec(blocks - 1, uCurr, uNext, extent, dx, dt);
+template <typename View>
+void update_Vc_peel(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
+{
+    constexpr auto L = Vc::double_v::size();
+    const auto blocks = (extent + L - 1) / L;
+    kernel_vec(0, uCurr, uNext, extent, dx, dt);
+    for (auto i = 1; i < blocks - 1; i++)
+        kernel_vec(i, uCurr, uNext, extent, dx, dt);
+    kernel_vec(blocks - 1, uCurr, uNext, extent, dx, dt);
 }
 
 // Exact solution to the test problem
@@ -102,39 +108,41 @@ auto main() -> int
     auto uNext = llama::allocView(mapping);
     auto uCurr = llama::allocView(mapping);
 
-    // Apply initial conditions for the test problem
-    for (uint32_t i = 0; i < extent; i++)
-        uCurr[i] = exactSolution(i * dx, 0.0);
+    auto run = [&](std::string_view updateName, auto update) {
+        // init
+        for (uint32_t i = 0; i < extent; i++)
+            uCurr[i] = exactSolution(i * dx, 0.0);
 
-    const auto start = std::chrono::high_resolution_clock::now();
-    for (int step = 0; step < timeSteps; step++)
-    {
-        update(uCurr, uNext, extent, dx, dt);
+        // run simulation
+        const auto start = std::chrono::high_resolution_clock::now();
+        for (int step = 0; step < timeSteps; step++)
+        {
+            update(uCurr, uNext, extent, dx, dt);
+            std::swap(uNext, uCurr);
+        }
+        const auto stop = std::chrono::high_resolution_clock::now();
+        std::cout << updateName << " took " << std::chrono::duration<double>(stop - start).count() << "s\t";
 
-        // We assume the boundary conditions are constant and so these values do not need to be updated.
-        std::swap(uNext, uCurr);
-    }
-    const auto end = std::chrono::high_resolution_clock::now();
-    std::cout << "Runtime: " << std::chrono::duration<double>(end - start).count() << "s\n";
+        // calculate error
+        double maxError = 0.0;
+        for (uint32_t i = 0; i < extent; i++)
+        {
+            const auto error = std::abs(uNext[i] - exactSolution(i * dx, tMax));
+            maxError = std::max(maxError, error);
+        }
 
-    // Calculate error
-    double maxError = 0.0;
-    for (uint32_t i = 0; i < extent; i++)
-    {
-        const auto error = std::abs(uNext[i] - exactSolution(i * dx, tMax));
-        maxError = std::max(maxError, error);
-    }
+        const auto errorThreshold = 1e-5;
+        const auto resultCorrect = (maxError < errorThreshold);
+        if (resultCorrect)
+            std::cout << "Correct!\n";
+        else
+            std::cout << "Incorrect! error = " << maxError
+                      << " (the grid resolution may be too low)\n";
+    };
 
-    const auto errorThreshold = 1e-5;
-    const auto resultCorrect = (maxError < errorThreshold);
-    if (resultCorrect)
-    {
-        std::cout << "Execution results correct!\n";
-        return 0;
-    }
-    else
-    {
-        std::cout << "Execution results incorrect: error = " << maxError << " (the grid resolution may be too low)\n";
-        return 2;
-    }
+    run("update_scalar ", [](auto&... args) { update_scalar(args...); });
+    run("update_Vc     ", [](auto&... args) { update_Vc(args...); });
+    run("update_Vc_peel", [](auto&... args) { update_Vc_peel(args...); });
+
+    return 0;
 }
