@@ -11,3 +11,15 @@ endif()
 
 add_executable(${PROJECT_NAME} heatequation.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama Vc::Vc)
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+	target_compile_options(${PROJECT_NAME} PRIVATE
+		-march=native
+		-ffast-math
+	)
+elseif(MSVC)
+	target_compile_options(${PROJECT_NAME} PRIVATE
+		/arch:AVX2
+		/fp:fast
+	)
+endif()

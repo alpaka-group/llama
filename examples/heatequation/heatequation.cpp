@@ -23,35 +23,46 @@
 #include <utility>
 
 template <typename View>
-void kernel(uint32_t idx, const View& uCurrBuf, View& uNextBuf, uint32_t extent, double dx, double dt)
+void kernel(uint32_t idx, const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
 {
     const auto r = dt / (dx * dx);
     if (idx > 0 && idx < extent - 1u)
-        uNextBuf[idx] = uCurrBuf[idx] * (1.0 - 2.0 * r) + uCurrBuf[idx - 1] * r + uCurrBuf[idx + 1] * r;
+        uNext[idx] = uCurr[idx] * (1.0 - 2.0 * r) + uCurr[idx - 1] * r + uCurr[idx + 1] * r;
 }
 
 template <typename View>
-void kernel_vec(uint32_t blockIdx, const View& uCurrBuf, View& uNextBuf, uint32_t extent, double dx, double dt)
+void kernel_vec(uint32_t blockIdx, const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
 {
-    const auto baseIdx = static_cast<uint32_t>(blockIdx * Vc::double_v::size());
-
     const auto r = dt / (dx * dx);
 
-    const auto idx = baseIdx + Vc::uint32_v{Vc::IndexesFromZero};
-    const auto mask = idx > 0 && idx < extent - 1u;
-    if (mask.isFull())
-        [[likely]]
-        {
-            const auto uNext = Vc::double_v{&uCurrBuf[baseIdx]} * (1.0 - 2.0 * r)
-                + Vc::double_v{&uCurrBuf[baseIdx - 1]} * r + Vc::double_v{&uCurrBuf[baseIdx + 1]} * r;
-            uNext.store(&uNextBuf[baseIdx]);
-        }
+    const auto baseIdx = static_cast<uint32_t>(blockIdx * Vc::double_v::size());
+    if (baseIdx > 0 && baseIdx + Vc::double_v::size() < extent)
+    {
+        const auto next = Vc::double_v{&uCurr[baseIdx]} * (1.0 - 2.0 * r) + Vc::double_v{&uCurr[baseIdx - 1]} * r
+            + Vc::double_v{&uCurr[baseIdx + 1]} * r;
+        next.store(&uNext[baseIdx]);
+    }
     else
     {
         for (auto idx = baseIdx; idx <= baseIdx + Vc::double_v::size(); idx++)
             if (idx > 0 && idx < extent - 1u)
-                uNextBuf[idx] = uCurrBuf[idx] * (1.0 - 2.0 * r) + uCurrBuf[idx - 1] * r + uCurrBuf[idx + 1] * r;
+                uNext[idx] = uCurr[idx] * (1.0 - 2.0 * r) + uCurr[idx - 1] * r + uCurr[idx + 1] * r;
     }
+}
+
+template <typename View>
+void update(View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
+{
+    // for (auto i = 0; i < extent; i++)
+    //    kernel(i, uCurr, uNext, extent, dx, dt);
+
+    constexpr auto L = Vc::double_v::size();
+    for (auto i = 0; i < (extent + L - 1) / L; i++)
+        kernel_vec(i, uCurr, uNext, extent, dx, dt);
+
+    // We assume the boundary conditions are constant and so these values
+    // do not need to be updated.
+    std::swap(uNext, uCurr);
 }
 
 // Exact solution to the test problem
@@ -66,13 +77,13 @@ double exactSolution(double const x, double const t)
 
 auto main() -> int
 {
-    // Parameters (a user is supposed to change numNodesX, numTimeSteps)
-    const auto numNodesX = 10000;
-    const auto numTimeSteps = 200000;
+    // Parameters (a user is supposed to change extent, timeSteps)
+    const auto extent = 10000;
+    const auto timeSteps = 200000;
     const auto tMax = 0.001;
     // x in [0, 1], t in [0, tMax]
-    const auto dx = 1.0 / static_cast<double>(numNodesX - 1);
-    const auto dt = tMax / static_cast<double>(numTimeSteps - 1);
+    const auto dx = 1.0 / static_cast<double>(extent - 1);
+    const auto dt = tMax / static_cast<double>(timeSteps - 1);
 
     const auto r = dt / (dx * dx);
     if (r > 0.5)
@@ -81,34 +92,23 @@ auto main() -> int
         return 1;
     }
 
-    const auto mapping = llama::mapping::SoA{llama::ArrayDomain{numNodesX}, double{}};
+    const auto mapping = llama::mapping::SoA{llama::ArrayDomain{extent}, double{}};
     auto uNext = llama::allocView(mapping);
     auto uCurr = llama::allocView(mapping);
 
     // Apply initial conditions for the test problem
-    for (uint32_t i = 0; i < numNodesX; i++)
+    for (uint32_t i = 0; i < extent; i++)
         uCurr[i] = exactSolution(i * dx, 0.0);
 
     const auto start = std::chrono::high_resolution_clock::now();
-    for (int step = 0; step < numTimeSteps; step++)
-    {
-        // for (auto i = 0; i < numNodesX; i++)
-        //    kernel(i, uCurr, uNext, numNodesX, dx, dt);
-
-        constexpr auto L = Vc::double_v::size();
-        for (auto i = 0; i < (numNodesX + L - 1) / L; i++)
-            kernel_vec(i, uCurr, uNext, numNodesX, dx, dt);
-
-        // We assume the boundary conditions are constant and so these values
-        // do not need to be updated.
-        std::swap(uNext, uCurr);
-    }
+    for (int step = 0; step < timeSteps; step++)
+        update(uCurr, uNext, extent, dx, dt);
     const auto end = std::chrono::high_resolution_clock::now();
     std::cout << "Runtime: " << std::chrono::duration<double>(end - start).count() << "s\n";
 
     // Calculate error
     double maxError = 0.0;
-    for (uint32_t i = 0; i < numNodesX; i++)
+    for (uint32_t i = 0; i < extent; i++)
     {
         const auto error = std::abs(uNext[i] - exactSolution(i * dx, tMax));
         maxError = std::max(maxError, error);
