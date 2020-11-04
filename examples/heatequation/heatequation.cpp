@@ -23,7 +23,7 @@
 #include <utility>
 
 template <typename View>
-void kernel(uint32_t idx, const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
+inline void kernel(uint32_t idx, const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
 {
     const auto r = dt / (dx * dx);
     if (idx > 0 && idx < extent - 1u)
@@ -31,7 +31,7 @@ void kernel(uint32_t idx, const View& uCurr, View& uNext, uint32_t extent, doubl
 }
 
 template <typename View>
-void kernel_vec(uint32_t blockIdx, const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
+inline void kernel_vec(uint32_t blockIdx, const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
 {
     const auto r = dt / (dx * dx);
 
@@ -51,18 +51,24 @@ void kernel_vec(uint32_t blockIdx, const View& uCurr, View& uNext, uint32_t exte
 }
 
 template <typename View>
-void update(View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
+void update(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
 {
+    // scalar version
     // for (auto i = 0; i < extent; i++)
     //    kernel(i, uCurr, uNext, extent, dx, dt);
 
     constexpr auto L = Vc::double_v::size();
-    for (auto i = 0; i < (extent + L - 1) / L; i++)
+    const auto blocks = (extent + L - 1) / L;
+
+    // Vc version
+    for (auto i = 0; i < blocks; i++)
         kernel_vec(i, uCurr, uNext, extent, dx, dt);
 
-    // We assume the boundary conditions are constant and so these values
-    // do not need to be updated.
-    std::swap(uNext, uCurr);
+    // Vc version with loop manual peeling
+    //kernel_vec(0, uCurr, uNext, extent, dx, dt);
+    //for (auto i = 1; i < blocks - 1; i++)
+    //    kernel_vec(i, uCurr, uNext, extent, dx, dt);
+    //kernel_vec(blocks - 1, uCurr, uNext, extent, dx, dt);
 }
 
 // Exact solution to the test problem
@@ -102,7 +108,12 @@ auto main() -> int
 
     const auto start = std::chrono::high_resolution_clock::now();
     for (int step = 0; step < timeSteps; step++)
+    {
         update(uCurr, uNext, extent, dx, dt);
+
+        // We assume the boundary conditions are constant and so these values do not need to be updated.
+        std::swap(uNext, uCurr);
+    }
     const auto end = std::chrono::high_resolution_clock::now();
     std::cout << "Runtime: " << std::chrono::duration<double>(end - start).count() << "s\n";
 
