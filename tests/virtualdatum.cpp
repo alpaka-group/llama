@@ -80,104 +80,167 @@ TEST_CASE("VirtualDatum.operator=")
     CHECK(datum(tag::Weight{}) == 5);
 }
 
-TEST_CASE("VirtualDatum.operator+=")
+namespace
 {
-    auto datum = llama::allocVirtualDatumStack<Name>();
+    auto allocVc()
+    {
+        auto datum = llama::allocVirtualDatumStack<Name>();
+        datum(tag::Pos{}, tag::A{}) = 1;
+        datum(tag::Pos{}, tag::Y{}) = 2;
+        datum(tag::Vel{}, tag::X{}) = 3;
+        datum(tag::Vel{}, tag::Y{}) = 4;
+        datum(tag::Vel{}, tag::Z{}) = 5;
+        datum(tag::Weight{}) = 6;
+        return datum;
+    }
+} // namespace
 
-    // scalar to multiple elements in virtual datum
-    datum(tag::Pos{}) += 1;
-    CHECK(datum(tag::Pos{}, tag::A{}) == 1);
-    CHECK(datum(tag::Pos{}, tag::Y{}) == 1);
-    CHECK(datum(tag::Vel{}, tag::X{}) == 0);
-    CHECK(datum(tag::Vel{}, tag::Y{}) == 0);
-    CHECK(datum(tag::Vel{}, tag::Z{}) == 0);
-    CHECK(datum(tag::Weight{}) == 0);
+TEST_CASE("VirtualDatum.operator+=.scalar")
+{
+    {
+        auto datum = allocVc();
+        datum(tag::Pos{}) += 1;
+        CHECK(datum(tag::Pos{}, tag::A{}) == 2);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 4);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 5);
+        CHECK(datum(tag::Weight{}) == 6);
+    }
 
-    // scalar to multiple elements in virtual datum
-    datum += 1;
-    CHECK(datum(tag::Pos{}, tag::A{}) == 2);
-    CHECK(datum(tag::Pos{}, tag::Y{}) == 2);
-    CHECK(datum(tag::Vel{}, tag::X{}) == 1);
-    CHECK(datum(tag::Vel{}, tag::Y{}) == 1);
-    CHECK(datum(tag::Vel{}, tag::Z{}) == 1);
-    CHECK(datum(tag::Weight{}) == 1);
-
-    // smaller virtual datum to larger virtual datum
-    datum(tag::Vel{}) += datum(tag::Pos{});
-    CHECK(datum(tag::Pos{}, tag::A{}) == 2);
-    CHECK(datum(tag::Pos{}, tag::Y{}) == 2);
-    CHECK(datum(tag::Vel{}, tag::X{}) == 1);
-    CHECK(datum(tag::Vel{}, tag::Y{}) == 3); // only Y is propagated
-    CHECK(datum(tag::Vel{}, tag::Z{}) == 1);
-    CHECK(datum(tag::Weight{}) == 1);
-
-    // larger virtual datum to smaller virtual datum
-    datum(tag::Pos{}) += datum(tag::Vel{});
-    CHECK(datum(tag::Pos{}, tag::A{}) == 2);
-    CHECK(datum(tag::Pos{}, tag::Y{}) == 5); // only Y is propagated
-    CHECK(datum(tag::Vel{}, tag::X{}) == 1);
-    CHECK(datum(tag::Vel{}, tag::Y{}) == 3);
-    CHECK(datum(tag::Vel{}, tag::Z{}) == 1);
-    CHECK(datum(tag::Weight{}) == 1);
-
-    // scalar virtual datum to larger virtual datum, full broadcast
-    datum(tag::Vel{}) += datum(tag::Weight{});
-    CHECK(datum(tag::Pos{}, tag::A{}) == 2);
-    CHECK(datum(tag::Pos{}, tag::Y{}) == 5);
-    CHECK(datum(tag::Vel{}, tag::X{}) == 2); // updated
-    CHECK(datum(tag::Vel{}, tag::Y{}) == 4); // updated
-    CHECK(datum(tag::Vel{}, tag::Z{}) == 2); // updated
-    CHECK(datum(tag::Weight{}) == 1);
+    {
+        auto datum = allocVc();
+        datum += 1;
+        CHECK(datum(tag::Pos{}, tag::A{}) == 2);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 4);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 5);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 6);
+        CHECK(datum(tag::Weight{}) == 7);
+    }
 }
 
-TEST_CASE("VirtualDatum.operator+")
+TEST_CASE("VirtualDatum.operator+=.VirtualDatum")
 {
-    auto datum = llama::allocVirtualDatumStack<Name>();
+    {
+        // smaller virtual datum to larger virtual datum
+        auto datum = allocVc();
+        datum(tag::Vel{}) += datum(tag::Pos{});
+        CHECK(datum(tag::Pos{}, tag::A{}) == 1);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 2);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 6);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 5);
+        CHECK(datum(tag::Weight{}) == 6);
+    }
 
-    // scalar to multiple elements in virtual datum
-    datum(tag::Pos{}) = datum(tag::Pos{}) + 1;
-    CHECK(datum(tag::Pos{}, tag::A{}) == 1);
-    CHECK(datum(tag::Pos{}, tag::Y{}) == 1);
-    CHECK(datum(tag::Vel{}, tag::X{}) == 0);
-    CHECK(datum(tag::Vel{}, tag::Y{}) == 0);
-    CHECK(datum(tag::Vel{}, tag::Z{}) == 0);
-    CHECK(datum(tag::Weight{}) == 0);
+    {
+        // larger virtual datum to smaller virtual datum
+        auto datum = allocVc();
+        datum(tag::Pos{}) += datum(tag::Vel{});
+        CHECK(datum(tag::Pos{}, tag::A{}) == 1);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 6);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 4);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 5);
+        CHECK(datum(tag::Weight{}) == 6);
+    }
 
-    // scalar to multiple elements in virtual datum
-    datum = datum + 1;
-    CHECK(datum(tag::Pos{}, tag::A{}) == 2);
-    CHECK(datum(tag::Pos{}, tag::Y{}) == 2);
-    CHECK(datum(tag::Vel{}, tag::X{}) == 1);
-    CHECK(datum(tag::Vel{}, tag::Y{}) == 1);
-    CHECK(datum(tag::Vel{}, tag::Z{}) == 1);
-    CHECK(datum(tag::Weight{}) == 1);
+    {
+        // scalar virtual datum to larger virtual datum, full broadcast
+        auto datum = allocVc();
+        datum(tag::Vel{}) += datum(tag::Weight{});
+        CHECK(datum(tag::Pos{}, tag::A{}) == 1);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 2);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 9);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 10);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 11);
+        CHECK(datum(tag::Weight{}) == 6);
+    }
+}
 
-    // smaller virtual datum to larger virtual datum
-    datum(tag::Vel{}) = datum(tag::Vel{}) + datum(tag::Pos{});
-    CHECK(datum(tag::Pos{}, tag::A{}) == 2);
-    CHECK(datum(tag::Pos{}, tag::Y{}) == 2);
-    CHECK(datum(tag::Vel{}, tag::X{}) == 1);
-    CHECK(datum(tag::Vel{}, tag::Y{}) == 3); // only Y is propagated
-    CHECK(datum(tag::Vel{}, tag::Z{}) == 1);
-    CHECK(datum(tag::Weight{}) == 1);
+TEST_CASE("VirtualDatum.operator+.scalar")
+{
+    {
+        auto datum = allocVc();
+        datum(tag::Pos{}) = datum(tag::Pos{}) + 1;
+        CHECK(datum(tag::Pos{}, tag::A{}) == 2);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 4);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 5);
+        CHECK(datum(tag::Weight{}) == 6);
+    }
+    {
+        auto datum = allocVc();
+        datum(tag::Pos{}) = 1 + datum(tag::Pos{});
+        CHECK(datum(tag::Pos{}, tag::A{}) == 2);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 4);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 5);
+        CHECK(datum(tag::Weight{}) == 6);
+    }
 
-    // larger virtual datum to smaller virtual datum
-    datum(tag::Pos{}) = datum(tag::Pos{}) + datum(tag::Vel{});
-    CHECK(datum(tag::Pos{}, tag::A{}) == 2);
-    CHECK(datum(tag::Pos{}, tag::Y{}) == 5); // only Y is propagated
-    CHECK(datum(tag::Vel{}, tag::X{}) == 1);
-    CHECK(datum(tag::Vel{}, tag::Y{}) == 3);
-    CHECK(datum(tag::Vel{}, tag::Z{}) == 1);
-    CHECK(datum(tag::Weight{}) == 1);
+    {
+        auto datum = allocVc();
+        datum = datum + 1;
+        CHECK(datum(tag::Pos{}, tag::A{}) == 2);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 4);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 5);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 6);
+        CHECK(datum(tag::Weight{}) == 7);
+    }
+    {
+        auto datum = allocVc();
+        datum = 1 + datum;
+        CHECK(datum(tag::Pos{}, tag::A{}) == 2);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 4);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 5);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 6);
+        CHECK(datum(tag::Weight{}) == 7);
+    }
+}
 
-    // scalar virtual datum to larger virtual datum, full broadcast
-    datum(tag::Vel{}) = datum(tag::Vel{}) + datum(tag::Weight{});
-    CHECK(datum(tag::Pos{}, tag::A{}) == 2);
-    CHECK(datum(tag::Pos{}, tag::Y{}) == 5);
-    CHECK(datum(tag::Vel{}, tag::X{}) == 2); // updated
-    CHECK(datum(tag::Vel{}, tag::Y{}) == 4); // updated
-    CHECK(datum(tag::Vel{}, tag::Z{}) == 2); // updated
-    CHECK(datum(tag::Weight{}) == 1);
+TEST_CASE("VirtualDatum.operator+.VirtualDatum")
+{
+    {
+        // smaller virtual datum to larger virtual datum
+        auto datum = allocVc();
+        datum(tag::Vel{}) = datum(tag::Vel{}) + datum(tag::Pos{});
+        CHECK(datum(tag::Pos{}, tag::A{}) == 1);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 2);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 6);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 5);
+        CHECK(datum(tag::Weight{}) == 6);
+    }
+
+    {
+        // larger virtual datum to smaller virtual datum
+        auto datum = allocVc();
+        datum(tag::Pos{}) = datum(tag::Pos{}) + datum(tag::Vel{});
+        CHECK(datum(tag::Pos{}, tag::A{}) == 1);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 6);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 4);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 5);
+        CHECK(datum(tag::Weight{}) == 6);
+    }
+
+    {
+        // scalar virtual datum to larger virtual datum, full broadcast
+        auto datum = allocVc();
+        datum(tag::Vel{}) = datum(tag::Vel{}) + datum(tag::Weight{});
+        CHECK(datum(tag::Pos{}, tag::A{}) == 1);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 2);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 9);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 10);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 11);
+        CHECK(datum(tag::Weight{}) == 6);
+    }
 }
 
 // clang-format off
@@ -292,14 +355,24 @@ TEST_CASE("VirtualDatum.operator<")
     CHECK((datum(tag::Pos{}, tag::Y{}) < 2));
     CHECK((datum(tag::Pos{}) < 2));
     CHECK((datum < 2));
+    CHECK((2 > datum(tag::Pos{}, tag::Y{})));
+    CHECK((2 > datum(tag::Pos{})));
+    CHECK((2 > datum));
+
     CHECK(!(datum(tag::Pos{}, tag::Y{}) < 1));
     CHECK(!(datum(tag::Pos{}) < 1));
     CHECK(!(datum < 1));
+    CHECK(!(1 > datum(tag::Pos{}, tag::Y{})));
+    CHECK(!(1 > datum(tag::Pos{})));
+    CHECK(!(1 > datum));
 
     datum(tag::Pos{}, tag::Y{}) = 2;
 
     CHECK((datum(tag::Pos{}, tag::Y{}) < 3));
     CHECK(!(datum(tag::Pos{}) < 2));
     CHECK(!(datum < 2));
+    CHECK((3 > datum(tag::Pos{}, tag::Y{})));
+    CHECK(!(2 > datum(tag::Pos{})));
+    CHECK(!(2 > datum));
     CHECK(!(datum(tag::Pos{}) < datum(tag::Vel{})));
 }
