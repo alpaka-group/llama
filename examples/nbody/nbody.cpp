@@ -2,6 +2,7 @@
 #include <iostream>
 #include <llama/llama.hpp>
 #include <random>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -15,6 +16,30 @@ constexpr auto ALLOW_RSQRT = false; // rsqrt can be way faster, but less accurat
 
 using FP = float;
 constexpr FP EPS2 = 0.01f;
+
+namespace
+{
+    template <typename F>
+    inline auto timed(std::string_view caption, const F& f, char nl = '\n')
+    {
+        const auto start = std::chrono::high_resolution_clock::now();
+        auto stopAndPrint = [&] {
+            const auto stop = std::chrono::high_resolution_clock::now();
+            std::cout << caption << " took " << std::chrono::duration<double>(stop - start).count() << 's' << nl;
+        };
+        if constexpr (std::is_void_v<decltype(f())>)
+        {
+            f();
+            stopAndPrint();
+        }
+        else
+        {
+            auto r = f();
+            stopAndPrint();
+            return r;
+        }
+    }
+} // namespace
 
 namespace usellama
 {
@@ -75,45 +100,41 @@ namespace usellama
             particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * ts;
     }
 
-    int main(int argc, char** argv)
+    int main()
     {
         constexpr FP ts = 0.0001f;
 
-        const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
-        auto mapping = [&] {
-            if constexpr (MAPPING == 0)
-                return llama::mapping::AoS{arrayDomain, Particle{}};
-            if constexpr (MAPPING == 1)
-                return llama::mapping::SoA{arrayDomain, Particle{}};
-            if constexpr (MAPPING == 2)
-                return llama::mapping::SoA{arrayDomain, Particle{}, std::true_type{}};
-            if constexpr (MAPPING == 3)
-                return llama::mapping::tree::Mapping{arrayDomain, llama::Tuple{}, Particle{}};
-            if constexpr (MAPPING == 4)
-                return llama::mapping::tree::Mapping{
-                    arrayDomain,
-                    llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
-                    Particle{}};
-        }();
-
-        auto tmapping = [&] {
-            if constexpr (TRACE)
-                return llama::mapping::Trace{std::move(mapping)};
-            else
-                return std::move(mapping);
-        }();
-
-        auto particles = llama::allocView(std::move(tmapping));
-
         std::cout << "LLAMA\n";
 
-        const auto start = std::chrono::high_resolution_clock::now();
-        const auto stop = std::chrono::high_resolution_clock::now();
-        std::cout << "alloc took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+        auto particles = timed("alloc", [&] {
+            const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
+            auto mapping = [&] {
+                if constexpr (MAPPING == 0)
+                    return llama::mapping::AoS{arrayDomain, Particle{}};
+                if constexpr (MAPPING == 1)
+                    return llama::mapping::SoA{arrayDomain, Particle{}};
+                if constexpr (MAPPING == 2)
+                    return llama::mapping::SoA{arrayDomain, Particle{}, std::true_type{}};
+                if constexpr (MAPPING == 3)
+                    return llama::mapping::tree::Mapping{arrayDomain, llama::Tuple{}, Particle{}};
+                if constexpr (MAPPING == 4)
+                    return llama::mapping::tree::Mapping{
+                        arrayDomain,
+                        llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
+                        Particle{}};
+            }();
 
-        {
-            const auto start = std::chrono::high_resolution_clock::now();
+            auto tmapping = [&] {
+                if constexpr (TRACE)
+                    return llama::mapping::Trace{std::move(mapping)};
+                else
+                    return std::move(mapping);
+            }();
 
+            return llama::allocView(std::move(tmapping));
+        });
+
+        timed("init", [&] {
             std::default_random_engine engine;
             std::normal_distribution<FP> dist(FP(0), FP(1));
             for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
@@ -127,25 +148,15 @@ namespace usellama
                 p(tag::Vel{}, tag::Z{}) = dist(engine) / FP(10);
                 p(tag::Mass{}) = dist(engine) / FP(100);
             }
-
-            const auto stop = std::chrono::high_resolution_clock::now();
-            std::cout << "init took " << std::chrono::duration<double>(stop - start).count() << "s\n";
-        }
+        });
 
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            {
-                const auto start = std::chrono::high_resolution_clock::now();
-                update(particles, ts);
-                const auto stop = std::chrono::high_resolution_clock::now();
-                std::cout << "update took " << std::chrono::duration<double>(stop - start).count() << "s\t";
-            }
-            {
-                const auto start = std::chrono::high_resolution_clock::now();
-                move(particles, ts);
-                const auto stop = std::chrono::high_resolution_clock::now();
-                std::cout << "move took   " << std::chrono::duration<double>(stop - start).count() << "s\n";
-            }
+            timed(
+                "update",
+                [&] { update(particles, ts); },
+                '\t');
+            timed("move", [&] { move(particles, ts); });
         }
 
         return 0;
@@ -247,20 +258,15 @@ namespace manualAoS
             particles[i].pos += particles[i].vel * ts;
     }
 
-    int main(int argc, char** argv)
+    int main()
     {
         constexpr FP ts = 0.0001f;
 
         std::cout << "AoS\n";
 
-        const auto start = std::chrono::high_resolution_clock::now();
-        std::vector<Particle> particles(PROBLEM_SIZE);
-        const auto stop = std::chrono::high_resolution_clock::now();
-        std::cout << "alloc took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+        auto particles = timed("alloc", [&] { return std::vector<Particle>(PROBLEM_SIZE); });
 
-        {
-            const auto start = std::chrono::high_resolution_clock::now();
-
+        timed("init", [&] {
             std::default_random_engine engine;
             std::normal_distribution<FP> dist(FP(0), FP(1));
             for (auto& p : particles)
@@ -273,25 +279,15 @@ namespace manualAoS
                 p.vel.z = dist(engine) / FP(10);
                 p.mass = dist(engine) / FP(100);
             }
-
-            const auto stop = std::chrono::high_resolution_clock::now();
-            std::cout << "init took " << std::chrono::duration<double>(stop - start).count() << "s\n";
-        }
+        });
 
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            {
-                const auto start = std::chrono::high_resolution_clock::now();
-                update(particles.data(), ts);
-                const auto stop = std::chrono::high_resolution_clock::now();
-                std::cout << "update took " << std::chrono::duration<double>(stop - start).count() << "s\t";
-            }
-            {
-                const auto start = std::chrono::high_resolution_clock::now();
-                move(particles.data(), ts);
-                const auto stop = std::chrono::high_resolution_clock::now();
-                std::cout << "move took   " << std::chrono::duration<double>(stop - start).count() << "s\n";
-            }
+            timed(
+                "update",
+                [&] { update(particles.data(), ts); },
+                '\t');
+            timed("move", [&] { move(particles.data(), ts); });
         }
 
         return 0;
@@ -349,7 +345,7 @@ namespace manualSoA
         }
     }
 
-    void move(FP* posx, FP* posy, FP* posz, FP* velx, FP* vely, FP* velz, FP* mass, FP ts)
+    void move(FP* posx, FP* posy, FP* posz, FP* velx, FP* vely, FP* velz, FP ts)
     {
         LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
@@ -360,27 +356,25 @@ namespace manualSoA
         }
     }
 
-    int main(int argc, char** argv)
+    int main()
     {
         constexpr FP ts = 0.0001f;
 
         std::cout << "SoA\n";
 
-        const auto start = std::chrono::high_resolution_clock::now();
-        using Vector = std::vector<FP, llama::allocator::AlignedAllocator<FP, 64>>;
-        Vector posx(PROBLEM_SIZE);
-        Vector posy(PROBLEM_SIZE);
-        Vector posz(PROBLEM_SIZE);
-        Vector velx(PROBLEM_SIZE);
-        Vector vely(PROBLEM_SIZE);
-        Vector velz(PROBLEM_SIZE);
-        Vector mass(PROBLEM_SIZE);
-        const auto stop = std::chrono::high_resolution_clock::now();
-        std::cout << "alloc took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+        auto [posx, posy, posz, velx, vely, velz, mass] = timed("alloc", [&] {
+            using Vector = std::vector<FP, llama::allocator::AlignedAllocator<FP, 64>>;
+            return std::tuple{
+                Vector(PROBLEM_SIZE),
+                Vector(PROBLEM_SIZE),
+                Vector(PROBLEM_SIZE),
+                Vector(PROBLEM_SIZE),
+                Vector(PROBLEM_SIZE),
+                Vector(PROBLEM_SIZE),
+                Vector(PROBLEM_SIZE)};
+        });
 
-        {
-            const auto start = std::chrono::high_resolution_clock::now();
-
+        timed("init", [&] {
             std::default_random_engine engine;
             std::normal_distribution<FP> dist(FP(0), FP(1));
             for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
@@ -393,25 +387,27 @@ namespace manualSoA
                 velz[i] = dist(engine) / FP(10);
                 mass[i] = dist(engine) / FP(100);
             }
-
-            const auto stop = std::chrono::high_resolution_clock::now();
-            std::cout << "init took " << std::chrono::duration<double>(stop - start).count() << "s\n";
-        }
+        });
 
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            {
-                const auto start = std::chrono::high_resolution_clock::now();
-                update(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), mass.data(), ts);
-                const auto stop = std::chrono::high_resolution_clock::now();
-                std::cout << "update took " << std::chrono::duration<double>(stop - start).count() << "s\t";
-            }
-            {
-                const auto start = std::chrono::high_resolution_clock::now();
-                move(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), mass.data(), ts);
-                const auto stop = std::chrono::high_resolution_clock::now();
-                std::cout << "move took   " << std::chrono::duration<double>(stop - start).count() << "s\n";
-            }
+            timed(
+                "update",
+                [&] {
+                    update(
+                        posx.data(),
+                        posy.data(),
+                        posz.data(),
+                        velx.data(),
+                        vely.data(),
+                        velz.data(),
+                        mass.data(),
+                        ts);
+                },
+                '\t');
+            timed("move", [&] {
+                move(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), ts);
+            });
         }
 
         return 0;
@@ -543,7 +539,7 @@ namespace manualAoSoA
     }
 
     template <bool Tiled>
-    int main(int argc, char** argv)
+    int main()
     {
         constexpr FP ts = 0.0001f;
 
@@ -552,14 +548,9 @@ namespace manualAoSoA
             std::cout << " tiled";
         std::cout << "\n";
 
-        const auto start = std::chrono::high_resolution_clock::now();
-        std::vector<ParticleBlock> particles(BLOCKS);
-        const auto stop = std::chrono::high_resolution_clock::now();
-        std::cout << "alloc took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+        auto particles = timed("alloc", [&] { return std::vector<ParticleBlock>(BLOCKS); });
 
-        {
-            const auto start = std::chrono::high_resolution_clock::now();
-
+        timed("init", [&] {
             std::default_random_engine engine;
             std::normal_distribution<FP> dist(FP(0), FP(1));
             for (std::size_t bi = 0; bi < BLOCKS; ++bi)
@@ -576,28 +567,20 @@ namespace manualAoSoA
                     block.mass[i] = dist(engine) / FP(100);
                 }
             }
-
-            const auto stop = std::chrono::high_resolution_clock::now();
-            std::cout << "init took " << std::chrono::duration<double>(stop - start).count() << "s\n";
-        }
+        });
 
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            {
-                const auto start = std::chrono::high_resolution_clock::now();
-                if constexpr (Tiled)
-                    updateTiled(particles.data(), ts);
-                else
-                    update(particles.data(), ts);
-                const auto stop = std::chrono::high_resolution_clock::now();
-                std::cout << "update took " << std::chrono::duration<double>(stop - start).count() << "s\t";
-            }
-            {
-                const auto start = std::chrono::high_resolution_clock::now();
-                move(particles.data(), ts);
-                const auto stop = std::chrono::high_resolution_clock::now();
-                std::cout << "move took   " << std::chrono::duration<double>(stop - start).count() << "s\n";
-            }
+            timed(
+                "update",
+                [&] {
+                    if constexpr (Tiled)
+                        updateTiled(particles.data(), ts);
+                    else
+                        update(particles.data(), ts);
+                },
+                '\t');
+            timed("move", [&] { move(particles.data(), ts); });
         }
 
         return 0;
@@ -762,21 +745,16 @@ namespace manualAoSoA_manualAVX
     }
 
     template <bool UseUpdate1>
-    int main(int argc, char** argv)
+    int main()
     {
         constexpr FP ts = 0.0001f;
 
         std::cout
             << (UseUpdate1 ? "AoSoA AVX2 updating 1 particle from 8\n" : "AoSoA AVX2 updating 8 particles from 1\n");
 
-        const auto start = std::chrono::high_resolution_clock::now();
-        std::vector<ParticleBlock> particles(BLOCKS);
-        const auto stop = std::chrono::high_resolution_clock::now();
-        std::cout << "alloc took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+        auto particles = timed("alloc", [&] { return std::vector<ParticleBlock>(BLOCKS); });
 
-        {
-            const auto start = std::chrono::high_resolution_clock::now();
-
+        timed("alloc", [&] {
             std::default_random_engine engine;
             std::normal_distribution<FP> dist(FP(0), FP(1));
             for (std::size_t bi = 0; bi < BLOCKS; ++bi)
@@ -793,28 +771,20 @@ namespace manualAoSoA_manualAVX
                     block.mass[i] = dist(engine) / FP(100);
                 }
             }
-
-            const auto stop = std::chrono::high_resolution_clock::now();
-            std::cout << "init took " << std::chrono::duration<double>(stop - start).count() << "s\n";
-        }
+        });
 
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            {
-                const auto start = std::chrono::high_resolution_clock::now();
-                if constexpr (UseUpdate1)
-                    update1(particles.data(), ts);
-                else
-                    update8(particles.data(), ts);
-                const auto stop = std::chrono::high_resolution_clock::now();
-                std::cout << "update took " << std::chrono::duration<double>(stop - start).count() << "s\t";
-            }
-            {
-                const auto start = std::chrono::high_resolution_clock::now();
-                move(particles.data(), ts);
-                const auto stop = std::chrono::high_resolution_clock::now();
-                std::cout << "move took   " << std::chrono::duration<double>(stop - start).count() << "s\n";
-            }
+            timed(
+                "update",
+                [&] {
+                    if constexpr (UseUpdate1)
+                        update1(particles.data(), ts);
+                    else
+                        update8(particles.data(), ts);
+                },
+                '\t');
+            timed("move", [&] { move(particles.data(), ts); });
         }
 
         return 0;
@@ -956,20 +926,15 @@ namespace manualAoSoA_Vc
     }
 
     template <bool UseUpdate1>
-    int main(int argc, char** argv)
+    int main()
     {
         constexpr FP ts = 0.0001f;
 
         std::cout << (UseUpdate1 ? "AoSoA Vc updating 1 particle from 8\n" : "AoSoA Vc updating 8 particles from 1\n ");
 
-        const auto start = std::chrono::high_resolution_clock::now();
-        std::vector<ParticleBlock> particles(BLOCKS);
-        const auto stop = std::chrono::high_resolution_clock::now();
-        std::cout << "alloc took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+        auto particles = timed("alloc", [&] { return std::vector<ParticleBlock>(BLOCKS); });
 
-        {
-            const auto start = std::chrono::high_resolution_clock::now();
-
+        timed("alloc", [&] {
             std::default_random_engine engine;
             std::normal_distribution<FP> dist(FP(0), FP(1));
             for (std::size_t bi = 0; bi < BLOCKS; ++bi)
@@ -986,28 +951,20 @@ namespace manualAoSoA_Vc
                     block.mass[i] = dist(engine) / FP(100);
                 }
             }
-
-            const auto stop = std::chrono::high_resolution_clock::now();
-            std::cout << "init took " << std::chrono::duration<double>(stop - start).count() << "s\n";
-        }
+        });
 
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            {
-                const auto start = std::chrono::high_resolution_clock::now();
-                if constexpr (UseUpdate1)
-                    update1(particles.data(), ts);
-                else
-                    update8(particles.data(), ts);
-                const auto stop = std::chrono::high_resolution_clock::now();
-                std::cout << "update took " << std::chrono::duration<double>(stop - start).count() << "s\t";
-            }
-            {
-                const auto start = std::chrono::high_resolution_clock::now();
-                move(particles.data(), ts);
-                const auto stop = std::chrono::high_resolution_clock::now();
-                std::cout << "move took   " << std::chrono::duration<double>(stop - start).count() << "s\n";
-            }
+            timed(
+                "update",
+                [&] {
+                    if constexpr (UseUpdate1)
+                        update1(particles.data(), ts);
+                    else
+                        update8(particles.data(), ts);
+                },
+                '\t');
+            timed("move", [&] { move(particles.data(), ts); });
         }
 
         return 0;
@@ -1015,24 +972,24 @@ namespace manualAoSoA_Vc
 } // namespace manualAoSoA_Vc
 #endif
 
-int main(int argc, char** argv)
+int main()
 {
     std::cout << PROBLEM_SIZE / 1000 << "k particles "
               << "(" << PROBLEM_SIZE * sizeof(FP) * 7 / 1024 << "kiB)\n";
 
     int r = 0;
-    r += usellama::main(argc, argv);
-    r += manualAoS::main(argc, argv);
-    r += manualSoA::main(argc, argv);
-    r += manualAoSoA::main<false>(argc, argv);
-    r += manualAoSoA::main<true>(argc, argv);
+    r += usellama::main();
+    r += manualAoS::main();
+    r += manualSoA::main();
+    r += manualAoSoA::main<false>();
+    r += manualAoSoA::main<true>();
 #ifdef __AVX2__
-    r += manualAoSoA_manualAVX::main<false>(argc, argv);
-    r += manualAoSoA_manualAVX::main<true>(argc, argv);
+    r += manualAoSoA_manualAVX::main<false>();
+    r += manualAoSoA_manualAVX::main<true>();
 #endif
 #if __has_include(<Vc/Vc>)
-    r += manualAoSoA_Vc::main<false>(argc, argv);
-    r += manualAoSoA_Vc::main<true>(argc, argv);
+    r += manualAoSoA_Vc::main<false>();
+    r += manualAoSoA_Vc::main<true>();
 #endif
     return r;
 }
