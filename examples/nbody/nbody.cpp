@@ -8,13 +8,14 @@
 
 // needs -fno-math-errno, so std::sqrt() can be vectorized
 
+using FP = float;
+
 constexpr auto MAPPING = 2; ///< 0 native AoS, 1 native SoA, 2 native SoA (separate blos), 3 tree AoS, 4 tree SoA
-constexpr auto PROBLEM_SIZE = 16 * 1024; ///< total number of particles
-constexpr auto STEPS = 5; ///< number of steps to calculate
+constexpr auto PROBLEM_SIZE = 16 * 1024;
+constexpr auto STEPS = 5;
 constexpr auto TRACE = false;
 constexpr auto ALLOW_RSQRT = false; // rsqrt can be way faster, but less accurate
-
-using FP = float;
+constexpr FP TIMESTEP = 0.0001f;
 constexpr FP EPS2 = 0.01f;
 
 namespace
@@ -70,40 +71,38 @@ namespace usellama
     // clang-format on
 
     template <typename VirtualParticle>
-    LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticle p1, VirtualParticle p2, FP ts)
+    LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticle p1, VirtualParticle p2)
     {
         auto dist = p1(tag::Pos{}) - p2(tag::Pos{});
         dist *= dist;
         const FP distSqr = EPS2 + dist(tag::X{}) + dist(tag::Y{}) + dist(tag::Z{});
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
-        const FP sts = p2(tag::Mass{}) * invDistCube * ts;
+        const FP sts = p2(tag::Mass{}) * invDistCube * TIMESTEP;
         p1(tag::Vel{}) += dist * sts;
     }
 
     template <typename View>
-    void update(View& particles, FP ts)
+    void update(View& particles)
     {
         for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
             LLAMA_INDEPENDENT_DATA
             for (std::size_t j = 0; j < PROBLEM_SIZE; j++)
-                pPInteraction(particles(j), particles(i), ts);
+                pPInteraction(particles(j), particles(i));
         }
     }
 
     template <typename View>
-    void move(View& particles, FP ts)
+    void move(View& particles)
     {
         LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
-            particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * ts;
+            particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * TIMESTEP;
     }
 
     int main()
     {
-        constexpr FP ts = 0.0001f;
-
         std::cout << "LLAMA\n";
 
         auto particles = timed("alloc", [&] {
@@ -154,9 +153,9 @@ namespace usellama
         {
             timed(
                 "update",
-                [&] { update(particles, ts); },
+                [&] { update(particles); },
                 '\t');
-            timed("move", [&] { move(particles, ts); });
+            timed("move", [&] { move(particles); });
         }
 
         return 0;
@@ -229,39 +228,37 @@ namespace manualAoS
         FP mass;
     };
 
-    inline void pPInteraction(Particle& p1, const Particle& p2, FP ts)
+    inline void pPInteraction(Particle& p1, const Particle& p2)
     {
         auto distance = p1.pos - p2.pos;
         distance *= distance;
         const FP distSqr = EPS2 + distance.x + distance.y + distance.z;
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
-        const FP sts = p2.mass * invDistCube * ts;
+        const FP sts = p2.mass * invDistCube * TIMESTEP;
         distance *= sts;
         p1.vel += distance;
     }
 
-    void update(Particle* particles, FP ts)
+    void update(Particle* particles)
     {
         for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
             LLAMA_INDEPENDENT_DATA
             for (std::size_t j = 0; j < PROBLEM_SIZE; j++)
-                pPInteraction(particles[j], particles[i], ts);
+                pPInteraction(particles[j], particles[i]);
         }
     }
 
-    void move(Particle* particles, FP ts)
+    void move(Particle* particles)
     {
         LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
-            particles[i].pos += particles[i].vel * ts;
+            particles[i].pos += particles[i].vel * TIMESTEP;
     }
 
     int main()
     {
-        constexpr FP ts = 0.0001f;
-
         std::cout << "AoS\n";
 
         auto particles = timed("alloc", [&] { return std::vector<Particle>(PROBLEM_SIZE); });
@@ -285,9 +282,9 @@ namespace manualAoS
         {
             timed(
                 "update",
-                [&] { update(particles.data(), ts); },
+                [&] { update(particles.data()); },
                 '\t');
-            timed("move", [&] { move(particles.data(), ts); });
+            timed("move", [&] { move(particles.data()); });
         }
 
         return 0;
@@ -306,8 +303,7 @@ namespace manualSoA
         FP p2posx,
         FP p2posy,
         FP p2posz,
-        FP p2mass,
-        FP ts)
+        FP p2mass)
     {
         auto xdistance = p1posx - p2posx;
         auto ydistance = p1posy - p2posy;
@@ -318,48 +314,35 @@ namespace manualSoA
         const FP distSqr = EPS2 + xdistance + ydistance + zdistance;
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
-        const FP sts = p2mass * invDistCube * ts;
+        const FP sts = p2mass * invDistCube * TIMESTEP;
         p1velx += xdistance * sts;
         p1vely += ydistance * sts;
         p1velz += zdistance * sts;
     }
 
-    void update(FP* posx, FP* posy, FP* posz, FP* velx, FP* vely, FP* velz, FP* mass, FP ts)
+    void update(FP* posx, FP* posy, FP* posz, FP* velx, FP* vely, FP* velz, FP* mass)
     {
         for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
             LLAMA_INDEPENDENT_DATA
             for (std::size_t j = 0; j < PROBLEM_SIZE; j++)
-                pPInteraction(
-                    posx[j],
-                    posy[j],
-                    posz[j],
-                    velx[j],
-                    vely[j],
-                    velz[j],
-                    posx[i],
-                    posy[i],
-                    posz[i],
-                    mass[i],
-                    ts);
+                pPInteraction(posx[j], posy[j], posz[j], velx[j], vely[j], velz[j], posx[i], posy[i], posz[i], mass[i]);
         }
     }
 
-    void move(FP* posx, FP* posy, FP* posz, FP* velx, FP* vely, FP* velz, FP ts)
+    void move(FP* posx, FP* posy, FP* posz, FP* velx, FP* vely, FP* velz)
     {
         LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
-            posx[i] += velx[i] * ts;
-            posy[i] += vely[i] * ts;
-            posz[i] += velz[i] * ts;
+            posx[i] += velx[i] * TIMESTEP;
+            posy[i] += vely[i] * TIMESTEP;
+            posz[i] += velz[i] * TIMESTEP;
         }
     }
 
     int main()
     {
-        constexpr FP ts = 0.0001f;
-
         std::cout << "SoA\n";
 
         auto [posx, posy, posz, velx, vely, velz, mass] = timed("alloc", [&] {
@@ -394,20 +377,10 @@ namespace manualSoA
             timed(
                 "update",
                 [&] {
-                    update(
-                        posx.data(),
-                        posy.data(),
-                        posz.data(),
-                        velx.data(),
-                        vely.data(),
-                        velz.data(),
-                        mass.data(),
-                        ts);
+                    update(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), mass.data());
                 },
                 '\t');
-            timed("move", [&] {
-                move(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), ts);
-            });
+            timed("move", [&] { move(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data()); });
         }
 
         return 0;
@@ -449,8 +422,7 @@ namespace manualAoSoA
         FP p2posx,
         FP p2posy,
         FP p2posz,
-        FP p2mass,
-        FP ts)
+        FP p2mass)
     {
         auto xdistance = p1posx - p2posx;
         auto ydistance = p1posy - p2posy;
@@ -461,13 +433,13 @@ namespace manualAoSoA
         const FP distSqr = EPS2 + xdistance + ydistance + zdistance;
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
-        const FP sts = p2mass * invDistCube * ts;
+        const FP sts = p2mass * invDistCube * TIMESTEP;
         p1velx += xdistance * sts;
         p1vely += ydistance * sts;
         p1velz += zdistance * sts;
     }
 
-    void update(ParticleBlock* particles, FP ts)
+    void update(ParticleBlock* particles)
     {
         for (std::size_t bi = 0; bi < BLOCKS; bi++)
             for (std::size_t bj = 0; bj < BLOCKS; bj++)
@@ -488,13 +460,12 @@ namespace manualAoSoA
                             blockI.pos.x[i],
                             blockI.pos.y[i],
                             blockI.pos.z[i],
-                            blockI.mass[i],
-                            ts);
+                            blockI.mass[i]);
                     }
                 }
     }
 
-    void updateTiled(ParticleBlock* particles, FP ts)
+    void updateTiled(ParticleBlock* particles)
     {
         for (std::size_t ti = 0; ti < BLOCKS / BLOCKS_PER_TILE; ti++)
             for (std::size_t tj = 0; tj < BLOCKS / BLOCKS_PER_TILE; tj++)
@@ -517,13 +488,12 @@ namespace manualAoSoA
                                     blockI.pos.x[i],
                                     blockI.pos.y[i],
                                     blockI.pos.z[i],
-                                    blockI.mass[i],
-                                    ts);
+                                    blockI.mass[i]);
                             }
                         }
     }
 
-    void move(ParticleBlock* particles, FP ts)
+    void move(ParticleBlock* particles)
     {
         for (std::size_t bi = 0; bi < BLOCKS; bi++)
         {
@@ -531,9 +501,9 @@ namespace manualAoSoA
             LLAMA_INDEPENDENT_DATA
             for (std::size_t i = 0; i < LANES; ++i)
             {
-                block.pos.x[i] += block.vel.x[i] * ts;
-                block.pos.y[i] += block.vel.y[i] * ts;
-                block.pos.z[i] += block.vel.z[i] * ts;
+                block.pos.x[i] += block.vel.x[i] * TIMESTEP;
+                block.pos.y[i] += block.vel.y[i] * TIMESTEP;
+                block.pos.z[i] += block.vel.z[i] * TIMESTEP;
             }
         }
     }
@@ -541,8 +511,6 @@ namespace manualAoSoA
     template <bool Tiled>
     int main()
     {
-        constexpr FP ts = 0.0001f;
-
         std::cout << "AoSoA";
         if constexpr (Tiled)
             std::cout << " tiled";
@@ -575,12 +543,12 @@ namespace manualAoSoA
                 "update",
                 [&] {
                     if constexpr (Tiled)
-                        updateTiled(particles.data(), ts);
+                        updateTiled(particles.data());
                     else
-                        update(particles.data(), ts);
+                        update(particles.data());
                 },
                 '\t');
-            timed("move", [&] { move(particles.data(), ts); });
+            timed("move", [&] { move(particles.data()); });
         }
 
         return 0;
@@ -613,6 +581,7 @@ namespace manualAoSoA_manualAVX
 
     constexpr auto BLOCKS = PROBLEM_SIZE / LANES;
     const __m256 vEPS2 = _mm256_set1_ps(EPS2);
+    const __m256 vTIMESTEP = _mm256_broadcast_ss(&TIMESTEP);
 
     inline void pPInteraction(
         __m256 p1posx,
@@ -624,8 +593,7 @@ namespace manualAoSoA_manualAVX
         __m256 p2posx,
         __m256 p2posy,
         __m256 p2posz,
-        __m256 p2mass,
-        __m256 ts)
+        __m256 p2mass)
     {
         const __m256 xdistance = _mm256_sub_ps(p1posx, p2posx);
         const __m256 ydistance = _mm256_sub_ps(p1posy, p2posy);
@@ -638,16 +606,15 @@ namespace manualAoSoA_manualAVX
         const __m256 distSixth = _mm256_mul_ps(_mm256_mul_ps(distSqr, distSqr), distSqr);
         const __m256 invDistCube
             = ALLOW_RSQRT ? _mm256_rsqrt_ps(distSixth) : _mm256_div_ps(_mm256_set1_ps(1.0f), _mm256_sqrt_ps(distSixth));
-        const __m256 sts = _mm256_mul_ps(_mm256_mul_ps(p2mass, invDistCube), ts);
+        const __m256 sts = _mm256_mul_ps(_mm256_mul_ps(p2mass, invDistCube), vTIMESTEP);
         p1velx = _mm256_fmadd_ps(xdistanceSqr, sts, p1velx);
         p1vely = _mm256_fmadd_ps(ydistanceSqr, sts, p1vely);
         p1velz = _mm256_fmadd_ps(zdistanceSqr, sts, p1velz);
     }
 
     // update (read/write) 8 particles J based on the influence of 1 particle I
-    void update8(ParticleBlock* particles, float ts)
+    void update8(ParticleBlock* particles)
     {
-        const auto vts = _mm256_broadcast_ss(&ts);
         for (std::size_t bi = 0; bi < BLOCKS; bi++)
             for (std::size_t bj = 0; bj < BLOCKS; bj++)
                 for (std::size_t i = 0; i < LANES; i++)
@@ -672,8 +639,7 @@ namespace manualAoSoA_manualAVX
                         posxI,
                         posyI,
                         poszI,
-                        massI,
-                        vts);
+                        massI);
                     _mm256_store_ps(blockJ.vel.x, p1velx);
                     _mm256_store_ps(blockJ.vel.y, p1vely);
                     _mm256_store_ps(blockJ.vel.z, p1velz);
@@ -696,9 +662,8 @@ namespace manualAoSoA_manualAVX
     }
 
     // update (read/write) 1 particles J based on the influence of 8 particles I
-    void update1(ParticleBlock* particles, float ts)
+    void update1(ParticleBlock* particles)
     {
-        const auto vts = _mm256_broadcast_ss(&ts);
         for (std::size_t bj = 0; bj < BLOCKS; bj++)
             for (std::size_t j = 0; j < LANES; j++)
             {
@@ -717,7 +682,7 @@ namespace manualAoSoA_manualAVX
                     const __m256 posyI = _mm256_load_ps(blockI.pos.y);
                     const __m256 poszI = _mm256_load_ps(blockI.pos.z);
                     const __m256 massI = _mm256_load_ps(blockI.mass);
-                    pPInteraction(p1posx, p1posy, p1posz, p1velx, p1vely, p1velz, posxI, posyI, poszI, massI, vts);
+                    pPInteraction(p1posx, p1posy, p1posz, p1velx, p1vely, p1velz, posxI, posyI, poszI, massI);
                 }
 
                 blockJ.vel.x[j] = horizontalSum(p1velx);
@@ -726,29 +691,26 @@ namespace manualAoSoA_manualAVX
             }
     }
 
-    void move(ParticleBlock* particles, float ts)
+    void move(ParticleBlock* particles)
     {
-        const auto vts = _mm256_broadcast_ss(&ts);
         for (std::size_t bi = 0; bi < BLOCKS; bi++)
         {
             auto& block = particles[bi];
             _mm256_store_ps(
                 block.pos.x,
-                _mm256_fmadd_ps(_mm256_load_ps(block.vel.x), vts, _mm256_load_ps(block.pos.x)));
+                _mm256_fmadd_ps(_mm256_load_ps(block.vel.x), vTIMESTEP, _mm256_load_ps(block.pos.x)));
             _mm256_store_ps(
                 block.pos.y,
-                _mm256_fmadd_ps(_mm256_load_ps(block.vel.y), vts, _mm256_load_ps(block.pos.y)));
+                _mm256_fmadd_ps(_mm256_load_ps(block.vel.y), vTIMESTEP, _mm256_load_ps(block.pos.y)));
             _mm256_store_ps(
                 block.pos.z,
-                _mm256_fmadd_ps(_mm256_load_ps(block.vel.z), vts, _mm256_load_ps(block.pos.z)));
+                _mm256_fmadd_ps(_mm256_load_ps(block.vel.z), vTIMESTEP, _mm256_load_ps(block.pos.z)));
         }
     }
 
     template <bool UseUpdate1>
     int main()
     {
-        constexpr FP ts = 0.0001f;
-
         std::cout
             << (UseUpdate1 ? "AoSoA AVX2 updating 1 particle from 8\n" : "AoSoA AVX2 updating 8 particles from 1\n");
 
@@ -779,12 +741,12 @@ namespace manualAoSoA_manualAVX
                 "update",
                 [&] {
                     if constexpr (UseUpdate1)
-                        update1(particles.data(), ts);
+                        update1(particles.data());
                     else
-                        update8(particles.data(), ts);
+                        update8(particles.data());
                 },
                 '\t');
-            timed("move", [&] { move(particles.data(), ts); });
+            timed("move", [&] { move(particles.data()); });
         }
 
         return 0;
@@ -830,8 +792,7 @@ namespace manualAoSoA_Vc
         vec p2posx,
         vec p2posy,
         vec p2posz,
-        vec p2mass,
-        FP ts)
+        vec p2mass)
     {
         const vec xdistance = p1posx - p2posx;
         const vec ydistance = p1posy - p2posy;
@@ -842,14 +803,14 @@ namespace manualAoSoA_Vc
         const vec distSqr = EPS2 + xdistanceSqr + ydistanceSqr + zdistanceSqr;
         const vec distSixth = distSqr * distSqr * distSqr;
         const vec invDistCube = ALLOW_RSQRT ? Vc::rsqrt(distSixth) : (1.0f / Vc::sqrt(distSixth));
-        const vec sts = p2mass * invDistCube * ts;
+        const vec sts = p2mass * invDistCube * TIMESTEP;
         p1velx = xdistanceSqr * sts + p1velx;
         p1vely = ydistanceSqr * sts + p1vely;
         p1velz = zdistanceSqr * sts + p1velz;
     }
 
     // update (read/write) 8 particles J based on the influence of 1 particle I
-    void update8(ParticleBlock* particles, FP ts)
+    void update8(ParticleBlock* particles)
     {
         for (std::size_t bi = 0; bi < BLOCKS; bi++)
             for (std::size_t bj = 0; bj < BLOCKS; bj++)
@@ -872,13 +833,12 @@ namespace manualAoSoA_Vc
                         posxI,
                         posyI,
                         poszI,
-                        massI,
-                        ts);
+                        massI);
                 }
     }
 
     // update (read/write) 1 particles J based on the influence of 8 particles I
-    void update1(ParticleBlock* particles, FP ts)
+    void update1(ParticleBlock* particles)
     {
         for (std::size_t bj = 0; bj < BLOCKS; bj++)
             for (std::size_t j = 0; j < LANES; j++)
@@ -904,8 +864,7 @@ namespace manualAoSoA_Vc
                         blockI.pos.x,
                         blockI.pos.y,
                         blockI.pos.z,
-                        blockI.mass,
-                        ts);
+                        blockI.mass);
                 }
 
                 blockJ.vel.x[j] = p1velx.sum();
@@ -914,22 +873,20 @@ namespace manualAoSoA_Vc
             }
     }
 
-    void move(ParticleBlock* particles, FP ts)
+    void move(ParticleBlock* particles)
     {
         for (std::size_t bi = 0; bi < BLOCKS; bi++)
         {
             auto& block = particles[bi];
-            block.pos.x += block.vel.x * ts;
-            block.pos.y += block.vel.y * ts;
-            block.pos.z += block.vel.z * ts;
+            block.pos.x += block.vel.x * TIMESTEP;
+            block.pos.y += block.vel.y * TIMESTEP;
+            block.pos.z += block.vel.z * TIMESTEP;
         }
     }
 
     template <bool UseUpdate1>
     int main()
     {
-        constexpr FP ts = 0.0001f;
-
         std::cout << (UseUpdate1 ? "AoSoA Vc updating 1 particle from 8\n" : "AoSoA Vc updating 8 particles from 1\n ");
 
         auto particles = timed("alloc", [&] { return std::vector<ParticleBlock>(BLOCKS); });
@@ -959,12 +916,12 @@ namespace manualAoSoA_Vc
                 "update",
                 [&] {
                     if constexpr (UseUpdate1)
-                        update1(particles.data(), ts);
+                        update1(particles.data());
                     else
-                        update8(particles.data(), ts);
+                        update8(particles.data());
                 },
                 '\t');
-            timed("move", [&] { move(particles.data(), ts); });
+            timed("move", [&] { move(particles.data()); });
         }
 
         return 0;
