@@ -40,7 +40,7 @@ void naive_copy(const llama::View<Mapping1, BlobType1>& srcView, llama::View<Map
         throw std::runtime_error{"UserDomain sizes are different"};
 
     for (auto ad : llama::ArrayDomainIndexRange{srcView.mapping.arrayDomainSize})
-        llama::forEach<Mapping1::DatumDomain>([&](auto coord) {
+        llama::forEach<typename Mapping1::DatumDomain>([&](auto coord) {
             dstView(ad)(coord) = srcView(ad)(coord);
             // std::memcpy(
             //    &dstView(ad)(coord),
