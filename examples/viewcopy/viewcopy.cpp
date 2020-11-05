@@ -1,3 +1,5 @@
+#include <boost/functional/hash.hpp>
+#include <boost/mp11.hpp>
 #include <chrono>
 #include <llama/llama.hpp>
 #include <numeric>
@@ -120,15 +122,15 @@ void aosoa_copy(
 }
 
 template <typename Mapping, typename BlobType>
-auto sumAllValues(const llama::View<Mapping, BlobType>& view)
+auto hash(const llama::View<Mapping, BlobType>& view)
 {
-    auto sum = 0.0;
+    std::size_t acc = 0;
     for (auto ad : llama::ArrayDomainIndexRange{view.mapping.arrayDomainSize})
-        llama::forEach<Particle>([&](auto coord) { sum += view(ad)(coord); });
-    return sum;
+        llama::forEach<Particle>([&](auto coord) { boost::hash_combine(acc, view(ad)(coord)); });
+    return acc;
 }
 template <typename Mapping>
-auto prepareViewAndChecksum(Mapping mapping)
+auto prepareViewAndHash(Mapping mapping)
 {
     auto view = llama::allocView(mapping);
 
@@ -145,21 +147,21 @@ auto prepareViewAndChecksum(Mapping mapping)
         p(tag::Mass{}) = value++;
     }
 
-    const auto checkSum = sumAllValues(view);
+    const auto checkSum = hash(view);
     return std::tuple{view, checkSum};
 }
 
 template <typename SrcView, typename DstMapping, typename F>
-void benchmarkCopy(std::string_view name, const SrcView& srcView, double srcCheckSum, DstMapping dstMapping, F copy)
+void benchmarkCopy(std::string_view name, const SrcView& srcView, double srcHash, DstMapping dstMapping, F copy)
 {
     auto dstView = llama::allocView(dstMapping);
     const auto start = std::chrono::high_resolution_clock::now();
     copy(srcView, dstView);
     const auto stop = std::chrono::high_resolution_clock::now();
-    const auto dstCheckSum = sumAllValues(dstView);
+    const auto dstHash = hash(dstView);
 
-    std::cout << name << "\ttook " << std::chrono::duration<double>(stop - start).count() << "s\tchecksum "
-              << (srcCheckSum == dstCheckSum ? "good" : "BAD ") << "\n";
+    std::cout << name << "\ttook " << std::chrono::duration<double>(stop - start).count() << "s\thash "
+              << (srcHash == dstHash ? "good" : "BAD ") << "\n";
 }
 
 int main(int argc, char** argv)
@@ -171,11 +173,11 @@ int main(int argc, char** argv)
         const auto srcMapping = llama::mapping::AoS{userDomain, Particle{}};
         const auto dstMapping = llama::mapping::SoA{userDomain, Particle{}};
 
-        auto [srcView, srcCheckSum] = prepareViewAndChecksum(srcMapping);
-        benchmarkCopy("naive_copy", srcView, srcCheckSum, dstMapping, [](const auto& view1, auto& view2) {
+        auto [srcView, srcHash] = prepareViewAndHash(srcMapping);
+        benchmarkCopy("naive_copy", srcView, srcHash, dstMapping, [](const auto& view1, auto& view2) {
             naive_copy(view1, view2);
         });
-        benchmarkCopy("memcpy    ", srcView, srcCheckSum, dstMapping, [](const auto& view1, auto& view2) {
+        benchmarkCopy("memcpy    ", srcView, srcHash, dstMapping, [](const auto& view1, auto& view2) {
             static_assert(view1.storageBlobs.rank == 1);
             static_assert(view2.storageBlobs.rank == 1);
             std::memcpy(view2.storageBlobs[0].data(), view1.storageBlobs[0].data(), view2.storageBlobs[0].size());
@@ -187,11 +189,11 @@ int main(int argc, char** argv)
         const auto srcMapping = llama::mapping::SoA{userDomain, Particle{}};
         const auto dstMapping = llama::mapping::AoS{userDomain, Particle{}};
 
-        auto [srcView, srcCheckSum] = prepareViewAndChecksum(srcMapping);
-        benchmarkCopy("naive_copy", srcView, srcCheckSum, dstMapping, [](const auto& view1, auto& view2) {
+        auto [srcView, srcHash] = prepareViewAndHash(srcMapping);
+        benchmarkCopy("naive_copy", srcView, srcHash, dstMapping, [](const auto& view1, auto& view2) {
             naive_copy(view1, view2);
         });
-        benchmarkCopy("memcpy    ", srcView, srcCheckSum, dstMapping, [](const auto& view1, auto& view2) {
+        benchmarkCopy("memcpy    ", srcView, srcHash, dstMapping, [](const auto& view1, auto& view2) {
             static_assert(view1.storageBlobs.rank == 1);
             static_assert(view2.storageBlobs.rank == 1);
             std::memcpy(view2.storageBlobs[0].data(), view1.storageBlobs[0].data(), view2.storageBlobs[0].size());
@@ -211,19 +213,19 @@ int main(int argc, char** argv)
         const auto srcMapping = llama::mapping::AoSoA<decltype(userDomain), Particle, LanesSrc>{userDomain};
         const auto dstMapping = llama::mapping::AoSoA<decltype(userDomain), Particle, LanesDst>{userDomain};
 
-        auto [srcView, srcCheckSum] = prepareViewAndChecksum(srcMapping);
-        benchmarkCopy("naive_copy   ", srcView, srcCheckSum, dstMapping, [](const auto& view1, auto& view2) {
+        auto [srcView, srcHash] = prepareViewAndHash(srcMapping);
+        benchmarkCopy("naive_copy   ", srcView, srcHash, dstMapping, [](const auto& view1, auto& view2) {
             naive_copy(view1, view2);
         });
-        benchmarkCopy("memcpy       ", srcView, srcCheckSum, dstMapping, [](const auto& view1, auto& view2) {
+        benchmarkCopy("memcpy       ", srcView, srcHash, dstMapping, [](const auto& view1, auto& view2) {
             static_assert(view1.storageBlobs.rank == 1);
             static_assert(view2.storageBlobs.rank == 1);
             std::memcpy(view2.storageBlobs[0].data(), view1.storageBlobs[0].data(), view2.storageBlobs[0].size());
         });
-        benchmarkCopy("aosoa_copy(r)", srcView, srcCheckSum, dstMapping, [](const auto& view1, auto& view2) {
+        benchmarkCopy("aosoa_copy(r)", srcView, srcHash, dstMapping, [](const auto& view1, auto& view2) {
             aosoa_copy<true>(view1, view2);
         });
-        benchmarkCopy("aosoa_copy(w)", srcView, srcCheckSum, dstMapping, [](const auto& view1, auto& view2) {
+        benchmarkCopy("aosoa_copy(w)", srcView, srcHash, dstMapping, [](const auto& view1, auto& view2) {
             aosoa_copy<false>(view1, view2);
         });
     });
