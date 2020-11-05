@@ -56,11 +56,9 @@ namespace llama
     /// The byte offset of an element in a datum domain if it would be a normal
     /// struct.
     /// \tparam DatumDomain Datum domain tree.
-    /// \tparam ElementCoords... Components of a coordinate of an element in
-    /// datum domain tree.
-    template <typename DatumDomain, std::size_t... ElementCoords>
-    inline constexpr std::size_t offsetOf
-        = internal::offsetOfImpl((DatumDomain*) nullptr, DatumCoord<ElementCoords...>{});
+    /// \tparam DatumCoord Datum coordinate of an element indatum domain tree.
+    template <typename DatumDomain, typename DatumCoord>
+    inline constexpr std::size_t offsetOf = internal::offsetOfImpl((DatumDomain*) nullptr, DatumCoord{});
 
     template <typename T>
     inline constexpr auto isDatumStruct = false;

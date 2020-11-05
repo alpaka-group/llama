@@ -118,19 +118,19 @@ TEST_CASE("sizeOf")
 }
 TEST_CASE("offsetOf")
 {
-    STATIC_REQUIRE(llama::offsetOf<Particle> == 0);
-    STATIC_REQUIRE(llama::offsetOf<Particle, 0> == 0);
-    STATIC_REQUIRE(llama::offsetOf<Particle, 0, 0> == 0);
-    STATIC_REQUIRE(llama::offsetOf<Particle, 0, 1> == 8);
-    STATIC_REQUIRE(llama::offsetOf<Particle, 0, 2> == 16);
-    STATIC_REQUIRE(llama::offsetOf<Particle, 1> == 24);
-    STATIC_REQUIRE(llama::offsetOf<Particle, 2> == 28);
-    STATIC_REQUIRE(llama::offsetOf<Particle, 2, 0> == 28);
-    STATIC_REQUIRE(llama::offsetOf<Particle, 2, 1> == 36);
-    STATIC_REQUIRE(llama::offsetOf<Particle, 2, 2> == 44);
-    STATIC_REQUIRE(llama::offsetOf<Particle, 3> == 52);
-    STATIC_REQUIRE(llama::offsetOf<Particle, 3, 0> == 52);
-    STATIC_REQUIRE(llama::offsetOf<Particle, 3, 1> == 53);
-    STATIC_REQUIRE(llama::offsetOf<Particle, 3, 2> == 54);
-    STATIC_REQUIRE(llama::offsetOf<Particle, 3, 3> == 55);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<>> == 0);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<0>> == 0);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<0, 0>> == 0);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<0, 1>> == 8);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<0, 2>> == 16);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<1>> == 24);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<2>> == 28);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<2, 0>> == 28);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<2, 1>> == 36);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<2, 2>> == 44);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<3>> == 52);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<3, 0>> == 52);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<3, 1>> == 53);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<3, 2>> == 54);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<3, 3>> == 55);
 }

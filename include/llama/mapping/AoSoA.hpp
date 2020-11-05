@@ -44,7 +44,7 @@ namespace llama::mapping
             const auto blockIndex = flatArrayIndex / Lanes;
             const auto laneIndex = flatArrayIndex % Lanes;
             const auto offset = (sizeOf<DatumDomain> * Lanes) * blockIndex
-                + offsetOf<DatumDomain, DatumDomainCoord...> * Lanes
+                + offsetOf<DatumDomain, DatumCoord<DatumDomainCoord...>> * Lanes
                 + sizeof(GetType<DatumDomain, DatumCoord<DatumDomainCoord...>>) * laneIndex;
             return {0, offset};
         }

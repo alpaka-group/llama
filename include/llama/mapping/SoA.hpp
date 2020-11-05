@@ -95,7 +95,7 @@ namespace llama::mapping
                 LLAMA_FORCE_INLINE_RECURSIVE
                 const auto offset = LinearizeArrayDomainFunctor{}(coord, arrayDomainSize)
                         * sizeof(GetType<DatumDomain, DatumCoord<DatumDomainCoord...>>)
-                    + offsetOf<DatumDomain, DatumDomainCoord...> * LinearizeArrayDomainFunctor{}.size(arrayDomainSize);
+                    + offsetOf<DatumDomain, DatumCoord<DatumDomainCoord...>> * LinearizeArrayDomainFunctor{}.size(arrayDomainSize);
                 return {0, offset};
             }
         }
