@@ -1,5 +1,6 @@
 #include <chrono>
 #include <llama/llama.hpp>
+#include <numeric>
 #include <string_view>
 
 // clang-format off
@@ -33,32 +34,36 @@ void naive_copy(const llama::View<Mapping1, BlobType1>& srcView, llama::View<Map
 {
     static_assert(std::is_same_v<typename Mapping1::DatumDomain, typename Mapping2::DatumDomain>);
 
-    if (srcView.mapping.userDomainSize != dstView.mapping.userDomainSize)
+    if (srcView.mapping.arrayDomainSize != dstView.mapping.arrayDomainSize)
         throw std::runtime_error{"UserDomain sizes are different"};
 
-    for (auto ud : llama::UserDomainCoordRange{srcView.mapping.userDomainSize})
-        llama::forEach<Mapping1::DatumDomain>([&](auto, auto inner) { dstView(ud)(inner) = srcView(ud)(inner); });
+    for (auto ad : llama::ArrayDomainIndexRange{srcView.mapping.arrayDomainSize})
+        llama::forEach<Mapping1::DatumDomain>([&](auto coord) {
+            dstView(ad)(coord) = srcView(ad)(coord);
+            // std::memcpy(
+            //    &dstView(ad)(coord),
+            //    &srcView(ad)(coord),
+            //    sizeof(llama::GetType<typename Mapping1::DatumDomain, decltype(coord)>));
+        });
 }
 
 template <typename Mapping, typename BlobType>
 auto sumAllValues(const llama::View<Mapping, BlobType>& view)
 {
     auto sum = 0.0;
-    for (auto ud : llama::UserDomainCoordRange{view.mapping.userDomainSize})
-        llama::forEach<Particle>([&](auto, auto inner) { sum += view(ud)(inner); });
+    for (auto ad : llama::ArrayDomainIndexRange{view.mapping.arrayDomainSize})
+        llama::forEach<Particle>([&](auto coord) { sum += view(ad)(coord); });
     return sum;
 }
-
-template <typename Mapping1, typename Mapping2, typename F>
-void benchmarkCopy(std::string_view name, Mapping1 mapping1, Mapping2 mapping2, F copy)
+template <typename Mapping>
+auto prepareViewAndChecksum(Mapping mapping)
 {
-    auto view1 = llama::allocView(mapping1);
-    auto view2 = llama::allocView(mapping2);
+    auto view = llama::allocView(mapping);
 
     auto value = 0.0f;
-    for (auto ud : llama::UserDomainCoordRange{mapping1.userDomainSize})
+    for (auto ad : llama::ArrayDomainIndexRange{mapping.arrayDomainSize})
     {
-        auto p = view1(ud);
+        auto p = view(ad);
         p(tag::Pos{}, tag::X{}) = value++;
         p(tag::Pos{}, tag::Y{}) = value++;
         p(tag::Pos{}, tag::Z{}) = value++;
@@ -68,23 +73,40 @@ void benchmarkCopy(std::string_view name, Mapping1 mapping1, Mapping2 mapping2, 
         p(tag::Mass{}) = value++;
     }
 
-    const auto checkSum1 = sumAllValues(view1);
+    const auto checkSum = sumAllValues(view);
+    return std::tuple{view, checkSum};
+}
 
+template <typename SrcView, typename DstMapping, typename F>
+void benchmarkCopy(std::string_view name, const SrcView& srcView, double srcCheckSum, DstMapping dstMapping, F copy)
+{
+    auto dstView = llama::allocView(dstMapping);
     const auto start = std::chrono::high_resolution_clock::now();
-    copy(view1, view2);
+    copy(srcView, dstView);
     const auto stop = std::chrono::high_resolution_clock::now();
+    const auto dstCheckSum = sumAllValues(dstView);
 
-    const auto checkSum2 = sumAllValues(view2);
-
-    std::cout << name << "\tchecksum " << (checkSum1 == checkSum2 ? "good" : "BAD ") << "\ttook "
-              << std::chrono::duration<double>(stop - start).count() << "s\n";
+    std::cout << name << "\ttook " << std::chrono::duration<double>(stop - start).count() << "s\tchecksum "
+              << (srcCheckSum == dstCheckSum ? "good" : "BAD ") << "\n";
 }
 
 int main(int argc, char** argv)
 {
-    const auto userDomain = llama::UserDomain{1024, 4096};
-    const auto mapping1 = llama::mapping::AoS{userDomain, Particle{}};
-    const auto mapping2 = llama::mapping::SoA{userDomain, Particle{}};
+    const auto userDomain = llama::ArrayDomain{1024, 1024, 16};
 
-    benchmarkCopy("naive_copy", mapping1, mapping2, [](const auto& view1, auto& view2) { naive_copy(view1, view2); });
+    {
+        std::cout << "AoS -> SoA\n";
+        const auto srcMapping = llama::mapping::AoS{userDomain, Particle{}};
+        const auto dstMapping = llama::mapping::SoA{userDomain, Particle{}};
+
+        auto [srcView, srcCheckSum] = prepareViewAndChecksum(srcMapping);
+        benchmarkCopy("naive_copy", srcView, srcCheckSum, dstMapping, [](const auto& view1, auto& view2) {
+            naive_copy(view1, view2);
+        });
+        benchmarkCopy("memcpy    ", srcView, srcCheckSum, dstMapping, [](const auto& view1, auto& view2) {
+            static_assert(view1.storageBlobs.rank == 1);
+            static_assert(view2.storageBlobs.rank == 1);
+            std::memcpy(view2.storageBlobs[0].data(), view1.storageBlobs[0].data(), view2.storageBlobs[0].size());
+        });
+    }
 }
