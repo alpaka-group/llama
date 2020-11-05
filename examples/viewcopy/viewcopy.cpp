@@ -97,7 +97,7 @@ void aosoa_copy(
                 for (std::size_t j = 0; j < LanesSrc; j += L)
                 {
                     constexpr auto bytes = L * sizeof(llama::GetType<DatumDomain, decltype(coord)>);
-                    std::memcpy(&dst[map(i + j, coord, LanesSrc)], src, bytes);
+                    std::memcpy(&dst[map(i + j, coord, LanesDst)], src, bytes);
                     src += bytes;
                 }
             });
