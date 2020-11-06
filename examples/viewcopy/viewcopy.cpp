@@ -155,7 +155,7 @@ auto prepareViewAndHash(Mapping mapping)
 }
 
 template <typename SrcView, typename DstMapping, typename F>
-void benchmarkCopy(std::string_view name, const SrcView& srcView, double srcHash, DstMapping dstMapping, F copy)
+void benchmarkCopy(std::string_view name, const SrcView& srcView, std::size_t srcHash, DstMapping dstMapping, F copy)
 {
     auto dstView = llama::allocView(dstMapping);
     const auto start = std::chrono::high_resolution_clock::now();
