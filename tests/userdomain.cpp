@@ -105,6 +105,20 @@ TEST_CASE("ArrayDomain.ctor")
     CHECK(ud[0] == 0);
 }
 
+TEST_CASE("ArrayDomainIndexIterator")
+{
+    STATIC_REQUIRE(std::is_same_v<
+                   std::iterator_traits<llama::ArrayDomainIndexIterator<3>>::iterator_category,
+                   std::forward_iterator_tag>);
+
+    llama::ArrayDomainIndexIterator it = std::begin(llama::ArrayDomainIndexRange{llama::ArrayDomain<2>{3, 3}});
+    CHECK(*it == llama::ArrayDomain{0, 0});
+    it++;
+    CHECK(*it == llama::ArrayDomain{0, 1});
+    ++it;
+    CHECK(*it == llama::ArrayDomain{0, 2});
+}
+
 TEST_CASE("ArrayDomainIndexRange1D")
 {
     llama::ArrayDomain<1> ud{3};

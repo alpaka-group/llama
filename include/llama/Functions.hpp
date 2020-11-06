@@ -211,12 +211,17 @@ namespace llama
         : boost::iterator_facade<
               ArrayDomainIndexIterator<Dim>,
               ArrayDomain<Dim>,
-              boost::forward_traversal_tag,
+              std::forward_iterator_tag,
               ArrayDomain<Dim>>
     {
+        ArrayDomainIndexIterator() = default;
+
         ArrayDomainIndexIterator(ArrayDomain<Dim> size, ArrayDomain<Dim> current) : size(size), current(current)
         {
         }
+
+    private:
+        friend class boost::iterator_core_access;
 
         auto dereference() const -> ArrayDomain<Dim>
         {
