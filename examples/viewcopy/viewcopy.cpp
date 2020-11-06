@@ -65,6 +65,9 @@ void aosoa_copy(
         llama::mapping::AoSoA<ArrayDomain, DatumDomain, LanesDst, llama::mapping::LinearizeArrayDomainCpp>,
         BlobType2>& dstView)
 {
+    static_assert(srcView.storageBlobs.rank == 1);
+    static_assert(dstView.storageBlobs.rank == 1);
+
     if (srcView.mapping.arrayDomainSize != dstView.mapping.arrayDomainSize)
         throw std::runtime_error{"UserDomain sizes are different"};
 
@@ -174,13 +177,13 @@ int main(int argc, char** argv)
         const auto dstMapping = llama::mapping::SoA{userDomain, Particle{}};
 
         auto [srcView, srcHash] = prepareViewAndHash(srcMapping);
-        benchmarkCopy("naive_copy", srcView, srcHash, dstMapping, [](const auto& view1, auto& view2) {
-            naive_copy(view1, view2);
+        benchmarkCopy("naive_copy", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+            naive_copy(srcView, dstView);
         });
-        benchmarkCopy("memcpy    ", srcView, srcHash, dstMapping, [](const auto& view1, auto& view2) {
-            static_assert(view1.storageBlobs.rank == 1);
-            static_assert(view2.storageBlobs.rank == 1);
-            std::memcpy(view2.storageBlobs[0].data(), view1.storageBlobs[0].data(), view2.storageBlobs[0].size());
+        benchmarkCopy("memcpy    ", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+            static_assert(srcView.storageBlobs.rank == 1);
+            static_assert(dstView.storageBlobs.rank == 1);
+            std::memcpy(dstView.storageBlobs[0].data(), srcView.storageBlobs[0].data(), dstView.storageBlobs[0].size());
         });
     }
 
@@ -190,13 +193,13 @@ int main(int argc, char** argv)
         const auto dstMapping = llama::mapping::AoS{userDomain, Particle{}};
 
         auto [srcView, srcHash] = prepareViewAndHash(srcMapping);
-        benchmarkCopy("naive_copy", srcView, srcHash, dstMapping, [](const auto& view1, auto& view2) {
-            naive_copy(view1, view2);
+        benchmarkCopy("naive_copy", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+            naive_copy(srcView, dstView);
         });
-        benchmarkCopy("memcpy    ", srcView, srcHash, dstMapping, [](const auto& view1, auto& view2) {
-            static_assert(view1.storageBlobs.rank == 1);
-            static_assert(view2.storageBlobs.rank == 1);
-            std::memcpy(view2.storageBlobs[0].data(), view1.storageBlobs[0].data(), view2.storageBlobs[0].size());
+        benchmarkCopy("memcpy    ", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+            static_assert(srcView.storageBlobs.rank == 1);
+            static_assert(dstView.storageBlobs.rank == 1);
+            std::memcpy(dstView.storageBlobs[0].data(), srcView.storageBlobs[0].data(), dstView.storageBlobs[0].size());
         });
     }
 
@@ -214,19 +217,19 @@ int main(int argc, char** argv)
         const auto dstMapping = llama::mapping::AoSoA<decltype(userDomain), Particle, LanesDst>{userDomain};
 
         auto [srcView, srcHash] = prepareViewAndHash(srcMapping);
-        benchmarkCopy("naive_copy   ", srcView, srcHash, dstMapping, [](const auto& view1, auto& view2) {
-            naive_copy(view1, view2);
+        benchmarkCopy("naive_copy   ", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+            naive_copy(srcView, dstView);
         });
-        benchmarkCopy("memcpy       ", srcView, srcHash, dstMapping, [](const auto& view1, auto& view2) {
-            static_assert(view1.storageBlobs.rank == 1);
-            static_assert(view2.storageBlobs.rank == 1);
-            std::memcpy(view2.storageBlobs[0].data(), view1.storageBlobs[0].data(), view2.storageBlobs[0].size());
+        benchmarkCopy("memcpy       ", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+            static_assert(srcView.storageBlobs.rank == 1);
+            static_assert(dstView.storageBlobs.rank == 1);
+            std::memcpy(dstView.storageBlobs[0].data(), srcView.storageBlobs[0].data(), dstView.storageBlobs[0].size());
         });
-        benchmarkCopy("aosoa_copy(r)", srcView, srcHash, dstMapping, [](const auto& view1, auto& view2) {
-            aosoa_copy<true>(view1, view2);
+        benchmarkCopy("aosoa_copy(r)", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+            aosoa_copy<true>(srcView, dstView);
         });
-        benchmarkCopy("aosoa_copy(w)", srcView, srcHash, dstMapping, [](const auto& view1, auto& view2) {
-            aosoa_copy<false>(view1, view2);
+        benchmarkCopy("aosoa_copy(w)", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+            aosoa_copy<false>(srcView, dstView);
         });
     });
 }
