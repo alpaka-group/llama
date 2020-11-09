@@ -59,6 +59,11 @@ namespace llama
             return true;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator!=(const Array<T, N>& a, const Array<T, N>& b) -> bool
+        {
+            return !(a == b);
+        }
+
         LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator+(const Array<T, N>& a, const Array<T, N>& b) -> Array
         {
             Array temp;
