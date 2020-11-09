@@ -3,6 +3,7 @@
 #include <boost/range/irange.hpp>
 #include <chrono>
 #include <execution>
+#include <fstream>
 #include <iomanip>
 #include <llama/llama.hpp>
 #include <numeric>
@@ -204,16 +205,24 @@ auto prepareViewAndHash(Mapping mapping)
 }
 
 template <typename SrcView, typename DstMapping, typename F>
-void benchmarkCopy(std::string_view name, const SrcView& srcView, std::size_t srcHash, DstMapping dstMapping, F copy)
+void benchmarkCopy(
+    std::string_view name,
+    std::ostream& plotFile,
+    const SrcView& srcView,
+    std::size_t srcHash,
+    DstMapping dstMapping,
+    F copy)
 {
     auto dstView = llama::allocView(dstMapping);
     const auto start = std::chrono::high_resolution_clock::now();
     copy(srcView, dstView);
     const auto stop = std::chrono::high_resolution_clock::now();
+    const auto seconds = std::chrono::duration<double>(stop - start).count();
     const auto dstHash = hash(dstView);
 
-    std::cout << std::setw(15) << std::left << name << "\t" << std::chrono::duration<double>(stop - start).count()
-              << (srcHash == dstHash ? "" : "\thash BAD ") << "\n";
+    std::cout << std::setw(15) << std::left << name << "\t" << seconds << (srcHash == dstHash ? "" : "\thash BAD ")
+              << "\n";
+    plotFile << seconds << "\t";
 }
 
 int main(int argc, char** argv)
@@ -222,24 +231,35 @@ int main(int argc, char** argv)
 
     const auto userDomain = llama::ArrayDomain{1024, 1024, 16};
 
+    std::ofstream plotFile;
+    if (argc == 2)
+    {
+        plotFile.exceptions(std::ios::badbit | std::ios::failbit);
+        plotFile.open(argv[1]);
+    }
+
+    plotFile << "\"\"\t\"naive_copy\"\t\"naive_copy(p)\"\t\"memcpy\"\t\"memcpy(p)\"\t\"aosoa_copy(r)\"\t\"aosoa_copy(w)"
+                "\"\t\"aosoa_copy(r,p)\"\t\"aosoa_copy(w,p)\"\n";
+
     {
         std::cout << "AoS -> SoA\n";
+        plotFile << "\"AoS -> SoA\"\t";
         const auto srcMapping = llama::mapping::AoS{userDomain, Particle{}};
         const auto dstMapping = llama::mapping::SoA{userDomain, Particle{}};
 
         auto [srcView, srcHash] = prepareViewAndHash(srcMapping);
-        benchmarkCopy("naive_copy", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+        benchmarkCopy("naive_copy", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             naive_copy(srcView, dstView);
         });
-        benchmarkCopy("naive_copy(p)", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+        benchmarkCopy("naive_copy(p)", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             naive_copy(srcView, dstView, std::execution::par);
         });
-        benchmarkCopy("memcpy", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+        benchmarkCopy("memcpy", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             static_assert(srcView.storageBlobs.rank == 1);
             static_assert(dstView.storageBlobs.rank == 1);
             std::memcpy(dstView.storageBlobs[0].data(), srcView.storageBlobs[0].data(), dstView.storageBlobs[0].size());
         });
-        benchmarkCopy("memcpy(p)", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+        benchmarkCopy("memcpy(p)", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             static_assert(srcView.storageBlobs.rank == 1);
             static_assert(dstView.storageBlobs.rank == 1);
             parallel_memcpy(
@@ -247,25 +267,37 @@ int main(int argc, char** argv)
                 srcView.storageBlobs[0].data(),
                 dstView.storageBlobs[0].size());
         });
+        plotFile << "0\t";
+        plotFile << "0\t";
+        plotFile << "0\t";
+        plotFile << "0\t";
+        plotFile << "\n";
     }
 
     {
         std::cout << "SoA -> AoS\n";
+        plotFile << "\"SoA -> AoS\"\t";
         const auto srcMapping = llama::mapping::SoA{userDomain, Particle{}};
         const auto dstMapping = llama::mapping::AoS{userDomain, Particle{}};
 
         auto [srcView, srcHash] = prepareViewAndHash(srcMapping);
-        benchmarkCopy("naive_copy", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+        benchmarkCopy("naive_copy", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             naive_copy(srcView, dstView);
         });
-        benchmarkCopy("naive_copy(p)", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+        benchmarkCopy("naive_copy(p)", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             naive_copy(srcView, dstView, std::execution::par);
         });
-        benchmarkCopy("memcpy", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+        benchmarkCopy("memcpy", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             static_assert(srcView.storageBlobs.rank == 1);
             static_assert(dstView.storageBlobs.rank == 1);
             std::memcpy(dstView.storageBlobs[0].data(), srcView.storageBlobs[0].data(), dstView.storageBlobs[0].size());
         });
+        plotFile << "0\t";
+        plotFile << "0\t";
+        plotFile << "0\t";
+        plotFile << "0\t";
+        plotFile << "0\t";
+        plotFile << "\n";
     }
 
     using namespace boost::mp11;
@@ -277,33 +309,53 @@ int main(int argc, char** argv)
         constexpr auto LanesSrc = mp_first<decltype(pair)>::value;
         constexpr auto LanesDst = mp_second<decltype(pair)>::value;
 
-        std::cout << "AoSoA" << LanesSrc << " -> AoSoA" << LanesDst << "\n"; // e.g. AVX2 -> CUDA
+        std::cout << "AoSoA" << LanesSrc << " -> AoSoA" << LanesDst << "\n";
+        plotFile << "\"AoSoA" << LanesSrc << " -> AoSoA" << LanesDst << "\"\t";
         const auto srcMapping = llama::mapping::AoSoA<decltype(userDomain), Particle, LanesSrc>{userDomain};
         const auto dstMapping = llama::mapping::AoSoA<decltype(userDomain), Particle, LanesDst>{userDomain};
 
         auto [srcView, srcHash] = prepareViewAndHash(srcMapping);
-        benchmarkCopy("naive_copy", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+        benchmarkCopy("naive_copy", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             naive_copy(srcView, dstView);
         });
-        benchmarkCopy("naive_copy(p)", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+        benchmarkCopy("naive_copy(p)", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             naive_copy(srcView, dstView, std::execution::par);
         });
-        benchmarkCopy("memcpy", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+        benchmarkCopy("memcpy", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             static_assert(srcView.storageBlobs.rank == 1);
             static_assert(dstView.storageBlobs.rank == 1);
             std::memcpy(dstView.storageBlobs[0].data(), srcView.storageBlobs[0].data(), dstView.storageBlobs[0].size());
         });
-        benchmarkCopy("aosoa_copy(r)", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+        plotFile << "0\t";
+        benchmarkCopy("aosoa_copy(r)", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             aosoa_copy<true>(srcView, dstView);
         });
-        benchmarkCopy("aosoa_copy(w)", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+        benchmarkCopy("aosoa_copy(w)", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             aosoa_copy<false>(srcView, dstView);
         });
-        benchmarkCopy("aosoa_copy(r,p)", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
-            aosoa_copy<true>(srcView, dstView, std::execution::par);
-        });
-        benchmarkCopy("aosoa_copy(w,p)", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
-            aosoa_copy<false>(srcView, dstView, std::execution::par);
-        });
+        benchmarkCopy(
+            "aosoa_copy(r,p)",
+            plotFile,
+            srcView,
+            srcHash,
+            dstMapping,
+            [](const auto& srcView, auto& dstView) { aosoa_copy<true>(srcView, dstView, std::execution::par); });
+        benchmarkCopy(
+            "aosoa_copy(w,p)",
+            plotFile,
+            srcView,
+            srcHash,
+            dstMapping,
+            [](const auto& srcView, auto& dstView) { aosoa_copy<false>(srcView, dstView, std::execution::par); });
+        plotFile << "\n";
     });
+
+    if (argc == 2)
+    {
+        std::cout
+            << "Plot with:\n"
+            << "gnuplot -p -e \"set style data histograms;set style fill solid;set autoscale y;plot '" << argv[1]
+            << R"asdf(' using 2:xtic(1) ti col, \"\" using 3 ti col, \"\" using 4 ti col, \"\" using 5 ti col, \"\" using 6 ti col, \"\" using 7 ti col, \"\" using 8 ti col, \"\" using 9 ti col")asdf"
+            << "\n";
+    }
 }
