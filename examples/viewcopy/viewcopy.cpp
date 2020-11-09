@@ -3,6 +3,7 @@
 #include <boost/range/irange.hpp>
 #include <chrono>
 #include <execution>
+#include <iomanip>
 #include <llama/llama.hpp>
 #include <numeric>
 #include <string_view>
@@ -211,12 +212,14 @@ void benchmarkCopy(std::string_view name, const SrcView& srcView, std::size_t sr
     const auto stop = std::chrono::high_resolution_clock::now();
     const auto dstHash = hash(dstView);
 
-    std::cout << name << "\ttook " << std::chrono::duration<double>(stop - start).count() << "s\thash "
-              << (srcHash == dstHash ? "good" : "BAD ") << "\n";
+    std::cout << std::setw(15) << std::left << name << "\t" << std::chrono::duration<double>(stop - start).count()
+              << (srcHash == dstHash ? "" : "\thash BAD ") << "\n";
 }
 
 int main(int argc, char** argv)
 {
+    std::cout << "Threads: " << std::thread::hardware_concurrency() << "\n";
+
     const auto userDomain = llama::ArrayDomain{1024, 1024, 16};
 
     {
@@ -231,12 +234,12 @@ int main(int argc, char** argv)
         benchmarkCopy("naive_copy(p)", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             naive_copy(srcView, dstView, std::execution::par);
         });
-        benchmarkCopy("memcpy    ", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+        benchmarkCopy("memcpy", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             static_assert(srcView.storageBlobs.rank == 1);
             static_assert(dstView.storageBlobs.rank == 1);
             std::memcpy(dstView.storageBlobs[0].data(), srcView.storageBlobs[0].data(), dstView.storageBlobs[0].size());
         });
-        benchmarkCopy("memcpy(p) ", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+        benchmarkCopy("memcpy(p)", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             static_assert(srcView.storageBlobs.rank == 1);
             static_assert(dstView.storageBlobs.rank == 1);
             parallel_memcpy(
@@ -258,7 +261,7 @@ int main(int argc, char** argv)
         benchmarkCopy("naive_copy(p)", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             naive_copy(srcView, dstView, std::execution::par);
         });
-        benchmarkCopy("memcpy    ", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+        benchmarkCopy("memcpy", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             static_assert(srcView.storageBlobs.rank == 1);
             static_assert(dstView.storageBlobs.rank == 1);
             std::memcpy(dstView.storageBlobs[0].data(), srcView.storageBlobs[0].data(), dstView.storageBlobs[0].size());
@@ -279,13 +282,13 @@ int main(int argc, char** argv)
         const auto dstMapping = llama::mapping::AoSoA<decltype(userDomain), Particle, LanesDst>{userDomain};
 
         auto [srcView, srcHash] = prepareViewAndHash(srcMapping);
-        benchmarkCopy("naive_copy   ", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+        benchmarkCopy("naive_copy", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             naive_copy(srcView, dstView);
         });
         benchmarkCopy("naive_copy(p)", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             naive_copy(srcView, dstView, std::execution::par);
         });
-        benchmarkCopy("memcpy       ", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+        benchmarkCopy("memcpy", srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             static_assert(srcView.storageBlobs.rank == 1);
             static_assert(dstView.storageBlobs.rank == 1);
             std::memcpy(dstView.storageBlobs[0].data(), srcView.storageBlobs[0].data(), dstView.storageBlobs[0].size());
