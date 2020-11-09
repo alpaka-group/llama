@@ -51,7 +51,7 @@ namespace llama
             return element[idx];
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator==(const Array<T, N>& a, const Array<T, N>& b) -> bool
+        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator==(const Array& a, const Array& b) -> bool
         {
             for (std::size_t i = 0; i < N; ++i)
                 if (a.element[i] != b.element[i])
@@ -59,12 +59,12 @@ namespace llama
             return true;
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator!=(const Array<T, N>& a, const Array<T, N>& b) -> bool
+        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator!=(const Array& a, const Array& b) -> bool
         {
             return !(a == b);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator+(const Array<T, N>& a, const Array<T, N>& b) -> Array
+        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator+(const Array& a, const Array& b) -> Array
         {
             Array temp;
             for (std::size_t i = 0; i < N; ++i)
