@@ -693,8 +693,7 @@ namespace manualAoSoA_manualAVX
     template <bool UseUpdate1>
     int main(std::ostream& plotFile)
     {
-        constexpr auto title
-            = UseUpdate1 ? "AoSoA AVX2 updating 1 particle from 8" : "AoSoA AVX2 updating 8 particles from 1";
+        constexpr auto title = UseUpdate1 ? "AoSoA AVX2 w1r8" : "AoSoA AVX2 w8r1";
         std::cout << title << '\n';
         Stopwatch watch;
 
@@ -871,8 +870,7 @@ namespace manualAoSoA_Vc
     template <bool UseUpdate1>
     int main(std::ostream& plotFile)
     {
-        constexpr auto title
-            = UseUpdate1 ? "AoSoA Vc updating 1 particle from 8" : "AoSoA Vc updating 8 particles from 1";
+        constexpr auto title = UseUpdate1 ? "AoSoA Vc w1r8" : "AoSoA Vc w8r1";
         std::cout << title << '\n';
         Stopwatch watch;
 
