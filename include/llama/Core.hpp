@@ -377,12 +377,25 @@ namespace llama
         template <typename... Elements>
         struct FlattenDatumDomainImpl<DatumStruct<Elements...>>
         {
-            using type = boost::mp11::mp_append<typename FlattenDatumDomainImpl<GetDatumElementType<Elements>>::type...>;
+            using type
+                = boost::mp11::mp_append<typename FlattenDatumDomainImpl<GetDatumElementType<Elements>>::type...>;
         };
     } // namespace internal
 
     template <typename DatumDomain>
     using FlattenDatumDomain = typename internal::FlattenDatumDomainImpl<DatumDomain>::type;
+
+    template <typename DatumDomain, typename DatumCoord>
+    inline constexpr auto flatDatumCoord = []() constexpr
+    {
+        std::size_t c = 0;
+        forEach<DatumDomain>([&](auto coord) {
+            if constexpr (DatumCoordCommonPrefixIsBigger<DatumCoord, decltype(coord)>)
+                c++;
+        });
+        return c;
+    }
+    ();
 
     template <typename S>
     auto structName(S) -> std::string

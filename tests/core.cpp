@@ -234,3 +234,22 @@ TEST_CASE("FlattenDatumDomain")
                    llama::FlattenDatumDomain<Particle>,
                    boost::mp11::mp_list<double, double, double, float, int, double, double, bool, bool, bool, bool>>);
 }
+
+TEST_CASE("flatDatumCoord")
+{
+    STATIC_REQUIRE(llama::flatDatumCoord<Particle, llama::DatumCoord<>> == 0);
+    STATIC_REQUIRE(llama::flatDatumCoord<Particle, llama::DatumCoord<0>> == 0);
+    STATIC_REQUIRE(llama::flatDatumCoord<Particle, llama::DatumCoord<0, 0>> == 0);
+    STATIC_REQUIRE(llama::flatDatumCoord<Particle, llama::DatumCoord<0, 1>> == 1);
+    STATIC_REQUIRE(llama::flatDatumCoord<Particle, llama::DatumCoord<0, 2>> == 2);
+    STATIC_REQUIRE(llama::flatDatumCoord<Particle, llama::DatumCoord<1>> == 3);
+    STATIC_REQUIRE(llama::flatDatumCoord<Particle, llama::DatumCoord<2>> == 4);
+    STATIC_REQUIRE(llama::flatDatumCoord<Particle, llama::DatumCoord<3>> == 5);
+    STATIC_REQUIRE(llama::flatDatumCoord<Particle, llama::DatumCoord<3, 0>> == 5);
+    STATIC_REQUIRE(llama::flatDatumCoord<Particle, llama::DatumCoord<3, 1>> == 6);
+    STATIC_REQUIRE(llama::flatDatumCoord<Particle, llama::DatumCoord<4>> == 7);
+    STATIC_REQUIRE(llama::flatDatumCoord<Particle, llama::DatumCoord<4, 0>> == 7);
+    STATIC_REQUIRE(llama::flatDatumCoord<Particle, llama::DatumCoord<4, 1>> == 8);
+    STATIC_REQUIRE(llama::flatDatumCoord<Particle, llama::DatumCoord<4, 2>> == 9);
+    STATIC_REQUIRE(llama::flatDatumCoord<Particle, llama::DatumCoord<4, 3>> == 10);
+}
