@@ -3,16 +3,125 @@
 
 #pragma once
 
+#include "Array.hpp"
 #include "DatumCoord.hpp"
-#include "Types.hpp"
 
 #include <boost/core/demangle.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/mp11.hpp>
+#include <iostream>
 #include <type_traits>
 
 namespace llama
 {
+    /// Anonymous naming for a \ref DatumElement. Especially used for a \ref
+    /// DatumArray.
+    struct NoName
+    {
+    };
+
+    /// The run-time specified array domain.
+    /// \tparam Dim compile time dimensionality of the array domain
+    template <std::size_t Dim>
+    struct ArrayDomain : Array<std::size_t, Dim>
+    {
+    };
+
+    static_assert(
+        std::is_trivially_default_constructible_v<ArrayDomain<1>>); // so ArrayDomain<1>{} will produce a zeroed
+                                                                    // coord. Should hold for all dimensions,
+                                                                    // but just checking for <1> here.
+
+    template <typename... Args>
+    ArrayDomain(Args...) -> ArrayDomain<sizeof...(Args)>;
+} // namespace llama
+
+template <size_t N>
+struct std::tuple_size<llama::ArrayDomain<N>> : std::integral_constant<size_t, N>
+{
+};
+
+template <size_t I, size_t N>
+struct std::tuple_element<I, llama::ArrayDomain<N>>
+{
+    using type = size_t;
+};
+
+namespace llama
+{
+    /// A type list of \ref DatumElement which may be used to define a datum domain.
+    template <typename... Leaves>
+    struct DatumStruct
+    {
+    };
+
+    /// Shortcut alias for \ref DatumStruct.
+    template <typename... Leaves>
+    using DS = DatumStruct<Leaves...>;
+
+    /// Datum domain tree node which may either be a leaf or refer to a child
+    /// tree presented as another \ref DatumStruct or \ref DatumArray.
+    /// \tparam Tag Name of the node. May be any type (struct, class).
+    /// \tparam Type Type of the node. May be either another sub tree consisting
+    /// of a nested \ref DatumStruct or \ref DatumArray or any other type making
+    /// it a leaf of this type.
+    template <typename Tag, typename Type>
+    struct DatumElement
+    {
+    };
+
+    /// Shortcut alias for \ref DatumElement.
+    template <typename Identifier, typename Type>
+    using DE = DatumElement<Identifier, Type>;
+
+    /// Tag describing an index. Used to access members of a \ref DatumArray.
+    template <std::size_t I>
+    using Index = boost::mp11::mp_size_t<I>;
+
+    namespace internal
+    {
+        template <typename ChildType, std::size_t... Is>
+        auto makeDatumArray(std::index_sequence<Is...>)
+        {
+            return DatumStruct<DatumElement<Index<Is>, ChildType>...>{};
+        }
+    } // namespace internal
+
+    /// An array of identical \ref DatumElement with \ref Index specialized on
+    /// consecutive numbers. Can be used anywhere where \ref DatumStruct may
+    /// used.
+    /// \tparam ChildType Type to repeat. May be either a nested \ref
+    /// DatumStruct or DatumArray or any other type making it an array of leaves
+    /// of this type.
+    /// \tparam Count Number of repetitions of ChildType.
+    template <typename ChildType, std::size_t Count>
+    using DatumArray = decltype(internal::makeDatumArray<ChildType>(std::make_index_sequence<Count>{}));
+
+    /// Shortcut alias for \ref DatumArray
+    template <typename ChildType, std::size_t Count>
+    using DA = DatumArray<ChildType, Count>;
+
+    struct NrAndOffset
+    {
+        std::size_t nr;
+        std::size_t offset;
+
+        friend auto operator==(const NrAndOffset& a, const NrAndOffset& b) -> bool
+        {
+            return a.nr == b.nr && a.offset == b.offset;
+        }
+
+        friend auto operator!=(const NrAndOffset& a, const NrAndOffset& b) -> bool
+        {
+            return !(a == b);
+        }
+
+        friend auto operator<<(std::ostream& os, const NrAndOffset& value) -> std::ostream&
+        {
+            return os << "NrAndOffset{" << value.nr << ", " << value.offset << "}";
+        }
+    };
+
     /// Get the tag from a \ref DatumElement.
     template <typename DatumElement>
     using GetDatumElementTag = boost::mp11::mp_first<DatumElement>;
@@ -203,74 +312,59 @@ namespace llama
     using GetCoordFromTagsRelative =
         typename internal::GetCoordFromTagsRelativeImpl<DatumDomain, BaseDatumCoord, Tags...>::type;
 
-    /// Iterator supporting \ref ArrayDomainIndexRange.
-    template <std::size_t Dim>
-    struct ArrayDomainIndexIterator
-        : boost::iterator_facade<
-              ArrayDomainIndexIterator<Dim>,
-              ArrayDomain<Dim>,
-              std::forward_iterator_tag,
-              ArrayDomain<Dim>>
+    namespace internal
     {
-        ArrayDomainIndexIterator() = default;
-
-        ArrayDomainIndexIterator(ArrayDomain<Dim> size, ArrayDomain<Dim> current) : size(size), current(current)
+        template <typename T, std::size_t... Coords, typename Functor>
+        LLAMA_FN_HOST_ACC_INLINE constexpr void forEachImpl(T, DatumCoord<Coords...> coord, Functor&& functor)
         {
-        }
+            functor(coord);
+        };
 
-    private:
-        friend class boost::iterator_core_access;
-
-        auto dereference() const -> ArrayDomain<Dim>
+        template <typename... Children, std::size_t... Coords, typename Functor>
+        LLAMA_FN_HOST_ACC_INLINE constexpr void forEachImpl(
+            DatumStruct<Children...>,
+            DatumCoord<Coords...>,
+            Functor&& functor)
         {
-            return current;
+            LLAMA_FORCE_INLINE_RECURSIVE
+            boost::mp11::mp_for_each<boost::mp11::mp_iota_c<sizeof...(Children)>>([&](auto i) {
+                constexpr auto childIndex = decltype(i)::value;
+                using DatumElement = boost::mp11::mp_at_c<DatumStruct<Children...>, childIndex>;
+
+                LLAMA_FORCE_INLINE_RECURSIVE
+                forEachImpl(
+                    GetDatumElementType<DatumElement>{},
+                    llama::DatumCoord<Coords..., childIndex>{},
+                    std::forward<Functor>(functor));
+            });
         }
+    } // namespace internal
 
-        void increment()
-        {
-            for (auto i = (int) Dim - 1; i >= 0; i--)
-            {
-                current[i]++;
-                if (current[i] != size[i])
-                    return;
-                current[i] = 0;
-            }
-            // we reached the end
-            current[0] = size[0];
-        }
-
-        auto equal(const ArrayDomainIndexIterator& other) const -> bool
-        {
-            return size == other.size && current == other.current;
-        }
-
-        ArrayDomain<Dim> size;
-        ArrayDomain<Dim> current;
-    };
-
-    /// Range allowing to iterate over all indices in a \ref ArrayDomain.
-    template <std::size_t Dim>
-    struct ArrayDomainIndexRange
+    /// Iterates over the datum domain tree and calls a functor on each element.
+    /// \param functor Functor to execute at each element of. Needs to have
+    /// `operator()` with a template parameter for the \ref DatumCoord in the
+    /// datum domain tree.
+    /// \param baseCoord \ref DatumCoord at which the iteration should be
+    /// started. The functor is called on elements beneath this coordinate.
+    template <typename DatumDomain, typename Functor, std::size_t... Coords>
+    LLAMA_FN_HOST_ACC_INLINE constexpr void forEach(Functor&& functor, DatumCoord<Coords...> baseCoord)
     {
-        ArrayDomainIndexRange(ArrayDomain<Dim> size) : size(size)
-        {
-        }
+        LLAMA_FORCE_INLINE_RECURSIVE
+        internal::forEachImpl(GetType<DatumDomain, DatumCoord<Coords...>>{}, baseCoord, std::forward<Functor>(functor));
+    }
 
-        auto begin() const -> ArrayDomainIndexIterator<Dim>
-        {
-            return {size, ArrayDomain<Dim>{}};
-        }
-
-        auto end() const -> ArrayDomainIndexIterator<Dim>
-        {
-            ArrayDomain<Dim> e{};
-            e[0] = size[0];
-            return {size, e};
-        }
-
-    private:
-        ArrayDomain<Dim> size;
-    };
+    /// Iterates over the datum domain tree and calls a functor on each element.
+    /// \param functor Functor to execute at each element of. Needs to have
+    /// `operator()` with a template parameter for the \ref DatumCoord in the
+    /// datum domain tree.
+    /// \param baseTags Tags used to define where the iteration should be
+    /// started. The functor is called on elements beneath this coordinate.
+    template <typename DatumDomain, typename Functor, typename... Tags>
+    LLAMA_FN_HOST_ACC_INLINE constexpr void forEach(Functor&& functor, Tags... baseTags)
+    {
+        LLAMA_FORCE_INLINE_RECURSIVE
+        forEach<DatumDomain>(std::forward<Functor>(functor), GetCoordFromTags<DatumDomain, Tags...>{});
+    }
 
     template <typename S>
     auto structName(S) -> std::string

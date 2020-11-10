@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "../Types.hpp"
 #include "Common.hpp"
 
 namespace llama::mapping

@@ -4,17 +4,17 @@
 #include <llama/llama.hpp>
 
 // clang-format off
-namespace tag {
+namespace tag
+{
     struct Pos {};
+    struct Vel {};
     struct X {};
     struct Y {};
     struct Z {};
-    struct Momentum {};
-    struct Weight {};
     struct Flags {};
+    struct Weight {};
 }
 
-// clang-format off
 using Particle = llama::DS<
     llama::DE<tag::Pos, llama::DS<
         llama::DE<tag::X, double>,
@@ -22,12 +22,19 @@ using Particle = llama::DS<
         llama::DE<tag::Z, double>
     >>,
     llama::DE<tag::Weight, float>,
-    llama::DE<tag::Momentum, llama::DS<
-        llama::DE<tag::X, double>,
-        llama::DE<tag::Y, double>,
-        llama::DE<tag::Z, double>
+    llama::DE<llama::NoName, int>,
+    llama::DE<tag::Vel,llama::DS<
+        llama::DE<tag::Z, double>,
+        llama::DE<tag::X, double>
     >>,
     llama::DE<tag::Flags, llama::DA<bool, 4>>
+>;
+
+using Other = llama::DS<
+    llama::DE<tag::Pos, llama::DS<
+        llama::DE<tag::Z, float>,
+        llama::DE<tag::Y, float>
+    >>
 >;
 // clang-format on
 
@@ -60,18 +67,18 @@ TEST_CASE("prettyPrintType")
         float
     >,
     llama::DatumElement<
-        tag::Momentum,
+        llama::NoName,
+        int
+    >,
+    llama::DatumElement<
+        tag::Vel,
         llama::DatumStruct<
             llama::DatumElement<
-                tag::X,
-                double
-            >,
-            llama::DatumElement<
-                tag::Y,
-                double
-            >,
-            llama::DatumElement<
                 tag::Z,
+                double
+            >,
+            llama::DatumElement<
+                tag::X,
                 double
             >
         >
@@ -114,7 +121,7 @@ TEST_CASE("prettyPrintType")
 
 TEST_CASE("sizeOf")
 {
-    STATIC_REQUIRE(llama::sizeOf<Particle> == 56);
+    STATIC_REQUIRE(llama::sizeOf<Particle> == 52);
 }
 TEST_CASE("offsetOf")
 {
@@ -125,12 +132,98 @@ TEST_CASE("offsetOf")
     STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<0, 2>> == 16);
     STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<1>> == 24);
     STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<2>> == 28);
-    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<2, 0>> == 28);
-    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<2, 1>> == 36);
-    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<2, 2>> == 44);
-    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<3>> == 52);
-    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<3, 0>> == 52);
-    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<3, 1>> == 53);
-    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<3, 2>> == 54);
-    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<3, 3>> == 55);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<3>> == 32);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<3, 0>> == 32);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<3, 1>> == 40);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<4>> == 48);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<4, 0>> == 48);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<4, 1>> == 49);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<4, 2>> == 50);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<4, 3>> == 51);
+}
+
+TEST_CASE("GetCoordFromTags")
+{
+    // clang-format off
+    STATIC_REQUIRE(std::is_same_v<llama::GetCoordFromTags<Particle                             >, llama::DatumCoord<    >>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetCoordFromTags<Particle, tag::Pos                   >, llama::DatumCoord<0   >>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetCoordFromTags<Particle, tag::Pos, tag::X           >, llama::DatumCoord<0, 0>>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetCoordFromTags<Particle, tag::Pos, tag::Y           >, llama::DatumCoord<0, 1>>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetCoordFromTags<Particle, tag::Pos, tag::Z           >, llama::DatumCoord<0, 2>>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetCoordFromTags<Particle, tag::Weight                >, llama::DatumCoord<1   >>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetCoordFromTags<Particle, llama::NoName              >, llama::DatumCoord<2   >>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetCoordFromTags<Particle, tag::Vel, tag::Z           >, llama::DatumCoord<3, 0>>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetCoordFromTags<Particle, tag::Vel, tag::X           >, llama::DatumCoord<3, 1>>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetCoordFromTags<Particle, tag::Flags                 >, llama::DatumCoord<4   >>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetCoordFromTags<Particle, tag::Flags, llama::Index<0>>, llama::DatumCoord<4, 0>>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetCoordFromTags<Particle, tag::Flags, llama::Index<1>>, llama::DatumCoord<4, 1>>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetCoordFromTags<Particle, tag::Flags, llama::Index<2>>, llama::DatumCoord<4, 2>>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetCoordFromTags<Particle, tag::Flags, llama::Index<3>>, llama::DatumCoord<4, 3>>);
+    // clang-format on
+}
+
+TEST_CASE("GetTags")
+{
+    // clang-format off
+    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::DatumCoord<0, 0>>, boost::mp11::mp_list<llama::NoName, tag::Pos, tag::X >>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::DatumCoord<0   >>, boost::mp11::mp_list<llama::NoName, tag::Pos         >>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::DatumCoord<    >>, boost::mp11::mp_list<llama::NoName                   >>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::DatumCoord<3, 1>>, boost::mp11::mp_list<llama::NoName, tag::Vel, tag::X >>);
+    // clang-format on
+}
+
+TEST_CASE("GetTag")
+{
+    // clang-format off
+    STATIC_REQUIRE(std::is_same_v<llama::GetTag<Particle, llama::DatumCoord<0, 0>>, tag::X       >);
+    STATIC_REQUIRE(std::is_same_v<llama::GetTag<Particle, llama::DatumCoord<0   >>, tag::Pos     >);
+    STATIC_REQUIRE(std::is_same_v<llama::GetTag<Particle, llama::DatumCoord<    >>, llama::NoName>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetTag<Particle, llama::DatumCoord<3, 1>>, tag::X       >);
+    // clang-format on
+}
+
+TEST_CASE("hasSameTags")
+{
+    using PosDomain = llama::GetType<Particle, llama::GetCoordFromTags<Particle, tag::Pos>>;
+    using VelDomain = llama::GetType<Particle, llama::GetCoordFromTags<Particle, tag::Vel>>;
+
+    STATIC_REQUIRE(
+        llama::hasSameTags<
+            PosDomain, // DD A
+            llama::DatumCoord<0>, // Local A
+            VelDomain, // DD B
+            llama::DatumCoord<0> // Local B
+            > == false);
+
+    STATIC_REQUIRE(
+        llama::hasSameTags<
+            PosDomain, // DD A
+            llama::DatumCoord<0>, // Local A
+            VelDomain, // DD B
+            llama::DatumCoord<1> // Local B
+            > == true);
+
+    STATIC_REQUIRE(
+        llama::hasSameTags<
+            Particle, // DD A
+            llama::DatumCoord<0, 0>, // Local A
+            Other, // DD B
+            llama::DatumCoord<0, 0> // Local B
+            > == false);
+
+    STATIC_REQUIRE(
+        llama::hasSameTags<
+            Particle, // DD A
+            llama::DatumCoord<0, 2>, // Local A
+            Other, // DD B
+            llama::DatumCoord<0, 0> // Local B
+            > == true);
+
+    STATIC_REQUIRE(
+        llama::hasSameTags<
+            Particle, // DD A
+            llama::DatumCoord<3, 0>, // Local A
+            Other, // DD B
+            llama::DatumCoord<0, 0> // Local B
+            > == false);
 }

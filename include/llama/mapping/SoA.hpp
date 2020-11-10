@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "../Functions.hpp"
-#include "../Types.hpp"
 #include "Common.hpp"
 
 namespace llama::mapping
