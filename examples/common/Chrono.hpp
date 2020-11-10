@@ -2,21 +2,56 @@
 
 #include <chrono>
 #include <iostream>
-#include <string>
+#include <string_view>
 
 struct Chrono
 {
-    Chrono() : last(std::chrono::system_clock::now())
+    void printAndReset(std::string_view eventName)
     {
-    }
-
-    void printAndReset(std::string eventName)
-    {
-        auto end = std::chrono::system_clock::now();
-        std::chrono::duration<double> elapsed_seconds = end - last;
-        std::cout << eventName << ":\t" << elapsed_seconds.count() << " s\n";
+        const auto end = std::chrono::system_clock::now();
+        const auto seconds = std::chrono::duration<double>{end - last}.count();
+        std::cout << eventName << ":\t" << seconds << " s\n";
         last = end;
     }
 
-    std::chrono::time_point<std::chrono::system_clock> last;
+    std::chrono::time_point<std::chrono::system_clock> last = std::chrono::system_clock::now();
 };
+
+template <typename NullaryFunc>
+inline auto timed(const NullaryFunc& f)
+{
+    const auto start = std::chrono::high_resolution_clock::now();
+    if constexpr (std::is_void_v<decltype(f())>)
+    {
+        f();
+        const auto stop = std::chrono::high_resolution_clock::now();
+        return start - stop;
+    }
+    else
+    {
+        auto r = f();
+        const auto stop = std::chrono::high_resolution_clock::now();
+        return std::tuple{start - stop, r};
+    }
+}
+
+template <typename NullaryFunc>
+inline auto printTime(std::string_view caption, const NullaryFunc& f, char nl = '\n')
+{
+    const auto start = std::chrono::high_resolution_clock::now();
+    auto stopAndPrint = [&] {
+        const auto stop = std::chrono::high_resolution_clock::now();
+        std::cout << caption << " took " << std::chrono::duration<double>(stop - start).count() << 's' << nl;
+    };
+    if constexpr (std::is_void_v<decltype(f())>)
+    {
+        f();
+        stopAndPrint();
+    }
+    else
+    {
+        auto r = f();
+        stopAndPrint();
+        return r;
+    }
+}

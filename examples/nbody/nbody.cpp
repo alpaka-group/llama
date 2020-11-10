@@ -1,3 +1,5 @@
+#include "../common/Chrono.hpp"
+
 #include <chrono>
 #include <iostream>
 #include <llama/llama.hpp>
@@ -17,30 +19,6 @@ constexpr auto TRACE = false;
 constexpr auto ALLOW_RSQRT = true; // rsqrt can be way faster, but less accurate
 constexpr FP TIMESTEP = 0.0001f;
 constexpr FP EPS2 = 0.01f;
-
-namespace
-{
-    template <typename F>
-    inline auto timed(std::string_view caption, const F& f, char nl = '\n')
-    {
-        const auto start = std::chrono::high_resolution_clock::now();
-        auto stopAndPrint = [&] {
-            const auto stop = std::chrono::high_resolution_clock::now();
-            std::cout << caption << " took " << std::chrono::duration<double>(stop - start).count() << 's' << nl;
-        };
-        if constexpr (std::is_void_v<decltype(f())>)
-        {
-            f();
-            stopAndPrint();
-        }
-        else
-        {
-            auto r = f();
-            stopAndPrint();
-            return r;
-        }
-    }
-} // namespace
 
 namespace usellama
 {
@@ -105,7 +83,7 @@ namespace usellama
     {
         std::cout << "LLAMA\n";
 
-        auto particles = timed("alloc", [&] {
+        auto particles = printTime("alloc", [&] {
             const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
             auto mapping = [&] {
                 if constexpr (MAPPING == 0)
@@ -133,7 +111,7 @@ namespace usellama
             return llama::allocView(std::move(tmapping));
         });
 
-        timed("init", [&] {
+        printTime("init", [&] {
             std::default_random_engine engine;
             std::normal_distribution<FP> dist(FP(0), FP(1));
             for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
@@ -151,11 +129,11 @@ namespace usellama
 
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            timed(
+            printTime(
                 "update",
                 [&] { update(particles); },
                 '\t');
-            timed("move", [&] { move(particles); });
+            printTime("move", [&] { move(particles); });
         }
 
         return 0;
@@ -261,9 +239,9 @@ namespace manualAoS
     {
         std::cout << "AoS\n";
 
-        auto particles = timed("alloc", [&] { return std::vector<Particle>(PROBLEM_SIZE); });
+        auto particles = printTime("alloc", [&] { return std::vector<Particle>(PROBLEM_SIZE); });
 
-        timed("init", [&] {
+        printTime("init", [&] {
             std::default_random_engine engine;
             std::normal_distribution<FP> dist(FP(0), FP(1));
             for (auto& p : particles)
@@ -280,11 +258,11 @@ namespace manualAoS
 
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            timed(
+            printTime(
                 "update",
                 [&] { update(particles.data()); },
                 '\t');
-            timed("move", [&] { move(particles.data()); });
+            printTime("move", [&] { move(particles.data()); });
         }
 
         return 0;
@@ -345,7 +323,7 @@ namespace manualSoA
     {
         std::cout << "SoA\n";
 
-        auto [posx, posy, posz, velx, vely, velz, mass] = timed("alloc", [&] {
+        auto [posx, posy, posz, velx, vely, velz, mass] = printTime("alloc", [&] {
             using Vector = std::vector<FP, llama::allocator::AlignedAllocator<FP, 64>>;
             return std::tuple{
                 Vector(PROBLEM_SIZE),
@@ -357,7 +335,7 @@ namespace manualSoA
                 Vector(PROBLEM_SIZE)};
         });
 
-        timed("init", [&] {
+        printTime("init", [&] {
             std::default_random_engine engine;
             std::normal_distribution<FP> dist(FP(0), FP(1));
             for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
@@ -374,13 +352,15 @@ namespace manualSoA
 
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            timed(
+            printTime(
                 "update",
                 [&] {
                     update(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), mass.data());
                 },
                 '\t');
-            timed("move", [&] { move(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data()); });
+            printTime("move", [&] {
+                move(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data());
+            });
         }
 
         return 0;
@@ -516,9 +496,9 @@ namespace manualAoSoA
             std::cout << " tiled";
         std::cout << "\n";
 
-        auto particles = timed("alloc", [&] { return std::vector<ParticleBlock>(BLOCKS); });
+        auto particles = printTime("alloc", [&] { return std::vector<ParticleBlock>(BLOCKS); });
 
-        timed("init", [&] {
+        printTime("init", [&] {
             std::default_random_engine engine;
             std::normal_distribution<FP> dist(FP(0), FP(1));
             for (std::size_t bi = 0; bi < BLOCKS; ++bi)
@@ -539,7 +519,7 @@ namespace manualAoSoA
 
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            timed(
+            printTime(
                 "update",
                 [&] {
                     if constexpr (Tiled)
@@ -548,7 +528,7 @@ namespace manualAoSoA
                         update(particles.data());
                 },
                 '\t');
-            timed("move", [&] { move(particles.data()); });
+            printTime("move", [&] { move(particles.data()); });
         }
 
         return 0;
@@ -714,9 +694,9 @@ namespace manualAoSoA_manualAVX
         std::cout
             << (UseUpdate1 ? "AoSoA AVX2 updating 1 particle from 8\n" : "AoSoA AVX2 updating 8 particles from 1\n");
 
-        auto particles = timed("alloc", [&] { return std::vector<ParticleBlock>(BLOCKS); });
+        auto particles = printTime("alloc", [&] { return std::vector<ParticleBlock>(BLOCKS); });
 
-        timed("alloc", [&] {
+        printTime("alloc", [&] {
             std::default_random_engine engine;
             std::normal_distribution<FP> dist(FP(0), FP(1));
             for (std::size_t bi = 0; bi < BLOCKS; ++bi)
@@ -737,7 +717,7 @@ namespace manualAoSoA_manualAVX
 
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            timed(
+            printTime(
                 "update",
                 [&] {
                     if constexpr (UseUpdate1)
@@ -746,7 +726,7 @@ namespace manualAoSoA_manualAVX
                         update8(particles.data());
                 },
                 '\t');
-            timed("move", [&] { move(particles.data()); });
+            printTime("move", [&] { move(particles.data()); });
         }
 
         return 0;
@@ -889,9 +869,9 @@ namespace manualAoSoA_Vc
     {
         std::cout << (UseUpdate1 ? "AoSoA Vc updating 1 particle from 8\n" : "AoSoA Vc updating 8 particles from 1\n ");
 
-        auto particles = timed("alloc", [&] { return std::vector<ParticleBlock>(BLOCKS); });
+        auto particles = printTime("alloc", [&] { return std::vector<ParticleBlock>(BLOCKS); });
 
-        timed("alloc", [&] {
+        printTime("alloc", [&] {
             std::default_random_engine engine;
             std::normal_distribution<FP> dist(FP(0), FP(1));
             for (std::size_t bi = 0; bi < BLOCKS; ++bi)
@@ -912,7 +892,7 @@ namespace manualAoSoA_Vc
 
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            timed(
+            printTime(
                 "update",
                 [&] {
                     if constexpr (UseUpdate1)
@@ -921,7 +901,7 @@ namespace manualAoSoA_Vc
                         update8(particles.data());
                 },
                 '\t');
-            timed("move", [&] { move(particles.data()); });
+            printTime("move", [&] { move(particles.data()); });
         }
 
         return 0;

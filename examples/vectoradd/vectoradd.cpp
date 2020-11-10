@@ -1,3 +1,5 @@
+#include "../common/Chrono.hpp"
+
 #include <chrono>
 #include <iostream>
 #include <llama/llama.hpp>
@@ -40,6 +42,8 @@ namespace usellama
 
     int main(int argc, char** argv)
     {
+        std::cout << "LLAMA\n";
+
         const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
 
         const auto mapping = [&] {
@@ -58,33 +62,23 @@ namespace usellama
                     Vector{}};
         }();
 
-        std::cout << "LLAMA\n";
-
         auto a = allocView(mapping);
         auto b = allocView(mapping);
         auto c = allocView(mapping);
 
-        const auto start = std::chrono::high_resolution_clock::now();
-
-        LLAMA_INDEPENDENT_DATA
-        for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
-        {
-            a[i](tag::X{}) = i; // X
-            a[i](tag::Y{}) = i; // Y
-            a[i](llama::DatumCoord<2>{}) = i; // Z
-            b(i) = i; // writes to all (X, Y, Z)
-        }
-
-        const auto stop = std::chrono::high_resolution_clock::now();
-        std::cout << "init took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+        printTime("init", [&] {
+            LLAMA_INDEPENDENT_DATA
+            for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+            {
+                a[i](tag::X{}) = i; // X
+                a[i](tag::Y{}) = i; // Y
+                a[i](llama::DatumCoord<2>{}) = i; // Z
+                b(i) = i; // writes to all (X, Y, Z)
+            }
+        });
 
         for (std::size_t s = 0; s < STEPS; ++s)
-        {
-            const auto start = std::chrono::high_resolution_clock::now();
-            add(a, b, c);
-            const auto stop = std::chrono::high_resolution_clock::now();
-            std::cout << "add took " << std::chrono::duration<double>(stop - start).count() << "s\n";
-        }
+            printTime("add", [&] { add(a, b, c); });
 
         return (int) c.storageBlobs[0][0];
     }
@@ -118,29 +112,21 @@ namespace manualAoS
         std::vector<Vector> b(PROBLEM_SIZE);
         std::vector<Vector> c(PROBLEM_SIZE);
 
-        const auto start = std::chrono::high_resolution_clock::now();
-
-        LLAMA_INDEPENDENT_DATA
-        for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
-        {
-            a[i].x = i;
-            a[i].y = i;
-            a[i].z = i;
-            b[i].x = i;
-            b[i].y = i;
-            b[i].z = i;
-        }
-
-        const auto stop = std::chrono::high_resolution_clock::now();
-        std::cout << "init took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+        printTime("init", [&] {
+            LLAMA_INDEPENDENT_DATA
+            for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+            {
+                a[i].x = i;
+                a[i].y = i;
+                a[i].z = i;
+                b[i].x = i;
+                b[i].y = i;
+                b[i].z = i;
+            }
+        });
 
         for (std::size_t s = 0; s < STEPS; ++s)
-        {
-            const auto start = std::chrono::high_resolution_clock::now();
-            add(a.data(), b.data(), c.data());
-            const auto stop = std::chrono::high_resolution_clock::now();
-            std::cout << "add took " << std::chrono::duration<double>(stop - start).count() << "s\n";
-        }
+            printTime("add", [&] { add(a.data(), b.data(), c.data()); });
 
         return c[0].x;
     }
@@ -183,29 +169,23 @@ namespace manualSoA
         Vector cy(PROBLEM_SIZE);
         Vector cz(PROBLEM_SIZE);
 
-        const auto start = std::chrono::high_resolution_clock::now();
-
-        LLAMA_INDEPENDENT_DATA
-        for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
-        {
-            ax[i] = i;
-            ay[i] = i;
-            az[i] = i;
-            bx[i] = i;
-            by[i] = i;
-            bz[i] = i;
-        }
-
-        const auto stop = std::chrono::high_resolution_clock::now();
-        std::cout << "init took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+        printTime("init", [&] {
+            LLAMA_INDEPENDENT_DATA
+            for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+            {
+                ax[i] = i;
+                ay[i] = i;
+                az[i] = i;
+                bx[i] = i;
+                by[i] = i;
+                bz[i] = i;
+            }
+        });
 
         for (std::size_t s = 0; s < STEPS; ++s)
-        {
-            const auto start = std::chrono::high_resolution_clock::now();
-            add(ax.data(), ay.data(), az.data(), bx.data(), by.data(), bz.data(), cx.data(), cy.data(), cz.data());
-            const auto stop = std::chrono::high_resolution_clock::now();
-            std::cout << "add took " << std::chrono::duration<double>(stop - start).count() << "s\n";
-        }
+            printTime("add", [&] {
+                add(ax.data(), ay.data(), az.data(), bx.data(), by.data(), bz.data(), cx.data(), cy.data(), cz.data());
+            });
 
         return cx[0];
     }
@@ -252,32 +232,24 @@ namespace manualAoSoA
         std::vector<VectorBlock> b(BLOCKS);
         std::vector<VectorBlock> c(BLOCKS);
 
-        const auto start = std::chrono::high_resolution_clock::now();
-
-        for (std::size_t bi = 0; bi < PROBLEM_SIZE / LANES; ++bi)
-        {
-            LLAMA_INDEPENDENT_DATA
-            for (std::size_t i = 0; i < LANES; ++i)
+        printTime("init", [&] {
+            for (std::size_t bi = 0; bi < PROBLEM_SIZE / LANES; ++bi)
             {
-                a[bi].x[i] = bi * LANES + i;
-                a[bi].y[i] = bi * LANES + i;
-                a[bi].z[i] = bi * LANES + i;
-                b[bi].x[i] = bi * LANES + i;
-                b[bi].y[i] = bi * LANES + i;
-                b[bi].z[i] = bi * LANES + i;
+                LLAMA_INDEPENDENT_DATA
+                for (std::size_t i = 0; i < LANES; ++i)
+                {
+                    a[bi].x[i] = bi * LANES + i;
+                    a[bi].y[i] = bi * LANES + i;
+                    a[bi].z[i] = bi * LANES + i;
+                    b[bi].x[i] = bi * LANES + i;
+                    b[bi].y[i] = bi * LANES + i;
+                    b[bi].z[i] = bi * LANES + i;
+                }
             }
-        }
-
-        const auto stop = std::chrono::high_resolution_clock::now();
-        std::cout << "init took " << std::chrono::duration<double>(stop - start).count() << "s\n";
+        });
 
         for (std::size_t s = 0; s < STEPS; ++s)
-        {
-            const auto start = std::chrono::high_resolution_clock::now();
-            add(a.data(), b.data(), c.data());
-            const auto stop = std::chrono::high_resolution_clock::now();
-            std::cout << "add took " << std::chrono::duration<double>(stop - start).count() << "s\n";
-        }
+            printTime("add", [&] { add(a.data(), b.data(), c.data()); });
 
         return c[0].x[0];
     }
