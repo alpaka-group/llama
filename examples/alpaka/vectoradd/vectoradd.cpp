@@ -6,7 +6,7 @@
  * itself is not under the public domain but LGPL3+.
  */
 
-#include "../../common/Chrono.hpp"
+#include "../../common/Stopwatch.hpp"
 #include "../../common/alpakaHelpers.hpp"
 
 #include <alpaka/alpaka.hpp>
@@ -100,7 +100,7 @@ int main(int argc, char** argv)
     std::cout << PROBLEM_SIZE / 1000 / 1000 << " million vectors\n"
               << PROBLEM_SIZE * llama::sizeOf<Vector> * 2 / 1000 / 1000 << " MB on device\n";
 
-    Chrono chrono;
+    Stopwatch chrono;
 
     const auto bufferSize = Size(mapping.getBlobSize(0));
 

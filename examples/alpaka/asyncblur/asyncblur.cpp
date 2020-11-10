@@ -13,7 +13,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 
-#include "../../common/Chrono.hpp"
+#include "../../common/Stopwatch.hpp"
 #include "../../common/alpakaHelpers.hpp"
 #include "stb_image.h"
 #include "stb_image_write.h"
@@ -223,7 +223,7 @@ int main(int argc, char** argv)
     std::cout << "Image size: " << img_x << ":" << img_y << '\n'
               << hostBufferSize * 2 / 1024 / 1024 << " MB on device\n";
 
-    Chrono chrono;
+    Stopwatch chrono;
 
     auto hostBuffer = alpaka::allocBuf<std::byte, std::size_t>(devHost, hostBufferSize);
     auto hostView = viewAlpakaBuffer(hostMapping, hostBuffer);

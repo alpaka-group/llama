@@ -1,6 +1,7 @@
-#include "../common/Chrono.hpp"
+#include "../common/Stopwatch.hpp"
 
 #include <chrono>
+#include <fstream>
 #include <iostream>
 #include <llama/llama.hpp>
 #include <utility>
@@ -21,11 +22,11 @@ namespace usellama
         struct Z{};
     }
 
-     using Vector = llama::DS<
-         llama::DE<tag::X, FP>,
-         llama::DE<tag::Y, FP>,
-         llama::DE<tag::Z, FP>
-     >;
+    using Vector = llama::DS<
+        llama::DE<tag::X, FP>,
+        llama::DE<tag::Y, FP>,
+        llama::DE<tag::Z, FP>
+    >;
     // clang-format on
 
     template <typename View>
@@ -40,9 +41,10 @@ namespace usellama
         }
     }
 
-    int main()
+    int main(std::ofstream& plotFile)
     {
-        std::cout << "LLAMA\n";
+        std::cout << "\nLLAMA\n";
+        Stopwatch watch;
 
         const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
 
@@ -65,20 +67,25 @@ namespace usellama
         auto a = allocView(mapping);
         auto b = allocView(mapping);
         auto c = allocView(mapping);
+        watch.printAndReset("alloc");
 
-        printTime("init", [&] {
-            LLAMA_INDEPENDENT_DATA
-            for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
-            {
-                a[i](tag::X{}) = i; // X
-                a[i](tag::Y{}) = i; // Y
-                a[i](llama::DatumCoord<2>{}) = i; // Z
-                b(i) = i; // writes to all (X, Y, Z)
-            }
-        });
+        LLAMA_INDEPENDENT_DATA
+        for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+        {
+            a[i](tag::X{}) = i; // X
+            a[i](tag::Y{}) = i; // Y
+            a[i](llama::DatumCoord<2>{}) = i; // Z
+            b(i) = i; // writes to all (X, Y, Z)
+        }
+        watch.printAndReset("init");
 
+        double acc = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
-            printTime("add", [&] { add(a, b, c); });
+        {
+            add(a, b, c);
+            acc += watch.printAndReset("add");
+        }
+        plotFile << "LLAMA\t" << acc / STEPS << '\n';
 
         return (int) c.storageBlobs[0][0];
     }
@@ -104,29 +111,35 @@ namespace manualAoS
         }
     }
 
-    int main()
+    int main(std::ofstream& plotFile)
     {
-        std::cout << "AoS\n";
+        std::cout << "\nAoS\n";
+        Stopwatch watch;
 
         std::vector<Vector> a(PROBLEM_SIZE);
         std::vector<Vector> b(PROBLEM_SIZE);
         std::vector<Vector> c(PROBLEM_SIZE);
+        watch.printAndReset("alloc");
 
-        printTime("init", [&] {
-            LLAMA_INDEPENDENT_DATA
-            for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
-            {
-                a[i].x = i;
-                a[i].y = i;
-                a[i].z = i;
-                b[i].x = i;
-                b[i].y = i;
-                b[i].z = i;
-            }
-        });
+        LLAMA_INDEPENDENT_DATA
+        for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+        {
+            a[i].x = i;
+            a[i].y = i;
+            a[i].z = i;
+            b[i].x = i;
+            b[i].y = i;
+            b[i].z = i;
+        }
+        watch.printAndReset("init");
 
+        double acc = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
-            printTime("add", [&] { add(a.data(), b.data(), c.data()); });
+        {
+            add(a.data(), b.data(), c.data());
+            acc += watch.printAndReset("add");
+        }
+        plotFile << "AoS\t" << acc / STEPS << '\n';
 
         return c[0].x;
     }
@@ -154,9 +167,10 @@ namespace manualSoA
         }
     }
 
-    int main()
+    int main(std::ofstream& plotFile)
     {
-        std::cout << "SoA\n";
+        std::cout << "\nSoA\n";
+        Stopwatch watch;
 
         using Vector = std::vector<float, llama::allocator::AlignedAllocator<float, 64>>;
         Vector ax(PROBLEM_SIZE);
@@ -168,24 +182,27 @@ namespace manualSoA
         Vector cx(PROBLEM_SIZE);
         Vector cy(PROBLEM_SIZE);
         Vector cz(PROBLEM_SIZE);
+        watch.printAndReset("alloc");
 
-        printTime("init", [&] {
-            LLAMA_INDEPENDENT_DATA
-            for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
-            {
-                ax[i] = i;
-                ay[i] = i;
-                az[i] = i;
-                bx[i] = i;
-                by[i] = i;
-                bz[i] = i;
-            }
-        });
+        LLAMA_INDEPENDENT_DATA
+        for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+        {
+            ax[i] = i;
+            ay[i] = i;
+            az[i] = i;
+            bx[i] = i;
+            by[i] = i;
+            bz[i] = i;
+        }
+        watch.printAndReset("init");
 
+        double acc = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
-            printTime("add", [&] {
-                add(ax.data(), ay.data(), az.data(), bx.data(), by.data(), bz.data(), cx.data(), cy.data(), cz.data());
-            });
+        {
+            add(ax.data(), ay.data(), az.data(), bx.data(), by.data(), bz.data(), cx.data(), cy.data(), cz.data());
+            acc += watch.printAndReset("add");
+        }
+        plotFile << "SoA\t" << acc / STEPS << '\n';
 
         return cx[0];
     }
@@ -224,32 +241,38 @@ namespace manualAoSoA
         }
     }
 
-    int main()
+    int main(std::ofstream& plotFile)
     {
-        std::cout << "AoSoA\n";
+        std::cout << "\nAoSoA\n";
+        Stopwatch watch;
 
         std::vector<VectorBlock> a(BLOCKS);
         std::vector<VectorBlock> b(BLOCKS);
         std::vector<VectorBlock> c(BLOCKS);
+        watch.printAndReset("alloc");
 
-        printTime("init", [&] {
-            for (std::size_t bi = 0; bi < PROBLEM_SIZE / LANES; ++bi)
+        for (std::size_t bi = 0; bi < PROBLEM_SIZE / LANES; ++bi)
+        {
+            LLAMA_INDEPENDENT_DATA
+            for (std::size_t i = 0; i < LANES; ++i)
             {
-                LLAMA_INDEPENDENT_DATA
-                for (std::size_t i = 0; i < LANES; ++i)
-                {
-                    a[bi].x[i] = bi * LANES + i;
-                    a[bi].y[i] = bi * LANES + i;
-                    a[bi].z[i] = bi * LANES + i;
-                    b[bi].x[i] = bi * LANES + i;
-                    b[bi].y[i] = bi * LANES + i;
-                    b[bi].z[i] = bi * LANES + i;
-                }
+                a[bi].x[i] = bi * LANES + i;
+                a[bi].y[i] = bi * LANES + i;
+                a[bi].z[i] = bi * LANES + i;
+                b[bi].x[i] = bi * LANES + i;
+                b[bi].y[i] = bi * LANES + i;
+                b[bi].z[i] = bi * LANES + i;
             }
-        });
+        }
+        watch.printAndReset("init");
 
+        double acc = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
-            printTime("add", [&] { add(a.data(), b.data(), c.data()); });
+        {
+            add(a.data(), b.data(), c.data());
+            acc += watch.printAndReset("add");
+        }
+        plotFile << "AoSoA\t" << acc / STEPS << '\n';
 
         return c[0].x[0];
     }
@@ -261,10 +284,23 @@ int main()
     std::cout << PROBLEM_SIZE / 1000 / 1000 << "M values "
               << "(" << PROBLEM_SIZE * sizeof(float) / 1024 << "kiB)\n";
 
+    std::ofstream plotFile{"vectoradd.tsv"};
+    plotFile.exceptions(std::ios::badbit | std::ios::failbit);
+
     int r = 0;
-    r += usellama::main();
-    r += manualAoS::main();
-    r += manualSoA::main();
-    r += manualAoSoA::main();
+    r += usellama::main(plotFile);
+    r += manualAoS::main(plotFile);
+    r += manualSoA::main(plotFile);
+    r += manualAoSoA::main(plotFile);
+
+    std::cout << "Plot with: ./vectoradd.sh\n";
+    std::ofstream{"vectoradd.sh"} << R"(#!/usr/bin/gnuplot -p
+set style data histograms
+set style fill solid
+set key out top center maxrows 3
+set yrange [0:*]
+plot 'vectoradd.tsv' using 2:xtic(1)
+)";
+
     return r;
 }

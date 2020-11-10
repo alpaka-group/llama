@@ -1,3 +1,5 @@
+#include "../common/Stopwatch.hpp"
+
 #include <boost/functional/hash.hpp>
 #include <boost/mp11.hpp>
 #include <boost/range/irange.hpp>
@@ -214,14 +216,11 @@ void benchmarkCopy(
     F copy)
 {
     auto dstView = llama::allocView(dstMapping);
-    const auto start = std::chrono::high_resolution_clock::now();
+    Stopwatch watch;
     copy(srcView, dstView);
-    const auto stop = std::chrono::high_resolution_clock::now();
-    const auto seconds = std::chrono::duration<double>(stop - start).count();
+    const auto seconds = watch.printAndReset(name, '\t');
     const auto dstHash = hash(dstView);
-
-    std::cout << std::setw(15) << std::left << name << "\t" << seconds << (srcHash == dstHash ? "" : "\thash BAD ")
-              << "\n";
+    std::cout << (srcHash == dstHash ? "" : "\thash BAD ") << "\n";
     plotFile << seconds << "\t";
 }
 

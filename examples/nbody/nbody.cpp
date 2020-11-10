@@ -1,4 +1,4 @@
-#include "../common/Chrono.hpp"
+#include "../common/Stopwatch.hpp"
 
 #include <chrono>
 #include <iostream>
@@ -82,62 +82,59 @@ namespace usellama
     int main()
     {
         std::cout << "LLAMA\n";
+        Stopwatch watch;
+        const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
+        auto mapping = [&] {
+            if constexpr (MAPPING == 0)
+                return llama::mapping::AoS{arrayDomain, Particle{}};
+            if constexpr (MAPPING == 1)
+                return llama::mapping::SoA{arrayDomain, Particle{}};
+            if constexpr (MAPPING == 2)
+                return llama::mapping::SoA{arrayDomain, Particle{}, std::true_type{}};
+            if constexpr (MAPPING == 3)
+                return llama::mapping::tree::Mapping{arrayDomain, llama::Tuple{}, Particle{}};
+            if constexpr (MAPPING == 4)
+                return llama::mapping::tree::Mapping{
+                    arrayDomain,
+                    llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
+                    Particle{}};
+        }();
 
-        auto particles = printTime("alloc", [&] {
-            const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
-            auto mapping = [&] {
-                if constexpr (MAPPING == 0)
-                    return llama::mapping::AoS{arrayDomain, Particle{}};
-                if constexpr (MAPPING == 1)
-                    return llama::mapping::SoA{arrayDomain, Particle{}};
-                if constexpr (MAPPING == 2)
-                    return llama::mapping::SoA{arrayDomain, Particle{}, std::true_type{}};
-                if constexpr (MAPPING == 3)
-                    return llama::mapping::tree::Mapping{arrayDomain, llama::Tuple{}, Particle{}};
-                if constexpr (MAPPING == 4)
-                    return llama::mapping::tree::Mapping{
-                        arrayDomain,
-                        llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
-                        Particle{}};
-            }();
+        auto tmapping = [&] {
+            if constexpr (TRACE)
+                return llama::mapping::Trace{std::move(mapping)};
+            else
+                return std::move(mapping);
+        }();
 
-            auto tmapping = [&] {
-                if constexpr (TRACE)
-                    return llama::mapping::Trace{std::move(mapping)};
-                else
-                    return std::move(mapping);
-            }();
+        auto particles = llama::allocView(std::move(tmapping));
+        watch.printAndReset("alloc");
 
-            return llama::allocView(std::move(tmapping));
-        });
-
-        printTime("init", [&] {
-            std::default_random_engine engine;
-            std::normal_distribution<FP> dist(FP(0), FP(1));
-            for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
-            {
-                auto p = particles(i);
-                p(tag::Pos{}, tag::X{}) = dist(engine);
-                p(tag::Pos{}, tag::Y{}) = dist(engine);
-                p(tag::Pos{}, tag::Z{}) = dist(engine);
-                p(tag::Vel{}, tag::X{}) = dist(engine) / FP(10);
-                p(tag::Vel{}, tag::Y{}) = dist(engine) / FP(10);
-                p(tag::Vel{}, tag::Z{}) = dist(engine) / FP(10);
-                p(tag::Mass{}) = dist(engine) / FP(100);
-            }
-        });
+        std::default_random_engine engine;
+        std::normal_distribution<FP> dist(FP(0), FP(1));
+        for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+        {
+            auto p = particles(i);
+            p(tag::Pos{}, tag::X{}) = dist(engine);
+            p(tag::Pos{}, tag::Y{}) = dist(engine);
+            p(tag::Pos{}, tag::Z{}) = dist(engine);
+            p(tag::Vel{}, tag::X{}) = dist(engine) / FP(10);
+            p(tag::Vel{}, tag::Y{}) = dist(engine) / FP(10);
+            p(tag::Vel{}, tag::Z{}) = dist(engine) / FP(10);
+            p(tag::Mass{}) = dist(engine) / FP(100);
+        }
+        watch.printAndReset("init");
 
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            printTime(
-                "update",
-                [&] { update(particles); },
-                '\t');
-            printTime("move", [&] { move(particles); });
+            update(particles);
+            watch.printAndReset("update", '\t');
+            move(particles);
+            watch.printAndReset("move", '\t');
         }
 
         return 0;
-    }
+    } // namespace usellama
 } // namespace usellama
 
 namespace manualAoS
@@ -238,31 +235,31 @@ namespace manualAoS
     int main()
     {
         std::cout << "AoS\n";
+        Stopwatch watch;
 
-        auto particles = printTime("alloc", [&] { return std::vector<Particle>(PROBLEM_SIZE); });
+        std::vector<Particle> particles(PROBLEM_SIZE);
+        watch.printAndReset("alloc");
 
-        printTime("init", [&] {
-            std::default_random_engine engine;
-            std::normal_distribution<FP> dist(FP(0), FP(1));
-            for (auto& p : particles)
-            {
-                p.pos.x = dist(engine);
-                p.pos.y = dist(engine);
-                p.pos.z = dist(engine);
-                p.vel.x = dist(engine) / FP(10);
-                p.vel.y = dist(engine) / FP(10);
-                p.vel.z = dist(engine) / FP(10);
-                p.mass = dist(engine) / FP(100);
-            }
-        });
+        std::default_random_engine engine;
+        std::normal_distribution<FP> dist(FP(0), FP(1));
+        for (auto& p : particles)
+        {
+            p.pos.x = dist(engine);
+            p.pos.y = dist(engine);
+            p.pos.z = dist(engine);
+            p.vel.x = dist(engine) / FP(10);
+            p.vel.y = dist(engine) / FP(10);
+            p.vel.z = dist(engine) / FP(10);
+            p.mass = dist(engine) / FP(100);
+        }
+        watch.printAndReset("init");
 
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            printTime(
-                "update",
-                [&] { update(particles.data()); },
-                '\t');
-            printTime("move", [&] { move(particles.data()); });
+            update(particles.data());
+            watch.printAndReset("update");
+            move(particles.data());
+            watch.printAndReset("move");
         }
 
         return 0;
@@ -322,45 +319,38 @@ namespace manualSoA
     int main()
     {
         std::cout << "SoA\n";
+        Stopwatch watch;
 
-        auto [posx, posy, posz, velx, vely, velz, mass] = printTime("alloc", [&] {
-            using Vector = std::vector<FP, llama::allocator::AlignedAllocator<FP, 64>>;
-            return std::tuple{
-                Vector(PROBLEM_SIZE),
-                Vector(PROBLEM_SIZE),
-                Vector(PROBLEM_SIZE),
-                Vector(PROBLEM_SIZE),
-                Vector(PROBLEM_SIZE),
-                Vector(PROBLEM_SIZE),
-                Vector(PROBLEM_SIZE)};
-        });
+        using Vector = std::vector<FP, llama::allocator::AlignedAllocator<FP, 64>>;
+        Vector posx(PROBLEM_SIZE);
+        Vector posy(PROBLEM_SIZE);
+        Vector posz(PROBLEM_SIZE);
+        Vector velx(PROBLEM_SIZE);
+        Vector vely(PROBLEM_SIZE);
+        Vector velz(PROBLEM_SIZE);
+        Vector mass(PROBLEM_SIZE);
+        watch.printAndReset("alloc");
 
-        printTime("init", [&] {
-            std::default_random_engine engine;
-            std::normal_distribution<FP> dist(FP(0), FP(1));
-            for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
-            {
-                posx[i] = dist(engine);
-                posy[i] = dist(engine);
-                posz[i] = dist(engine);
-                velx[i] = dist(engine) / FP(10);
-                vely[i] = dist(engine) / FP(10);
-                velz[i] = dist(engine) / FP(10);
-                mass[i] = dist(engine) / FP(100);
-            }
-        });
+        std::default_random_engine engine;
+        std::normal_distribution<FP> dist(FP(0), FP(1));
+        for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+        {
+            posx[i] = dist(engine);
+            posy[i] = dist(engine);
+            posz[i] = dist(engine);
+            velx[i] = dist(engine) / FP(10);
+            vely[i] = dist(engine) / FP(10);
+            velz[i] = dist(engine) / FP(10);
+            mass[i] = dist(engine) / FP(100);
+        }
+        watch.printAndReset("init");
 
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            printTime(
-                "update",
-                [&] {
-                    update(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), mass.data());
-                },
-                '\t');
-            printTime("move", [&] {
-                move(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data());
-            });
+            update(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), mass.data());
+            watch.printAndReset("update");
+            move(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data());
+            watch.printAndReset("move");
         }
 
         return 0;
@@ -495,40 +485,38 @@ namespace manualAoSoA
         if constexpr (Tiled)
             std::cout << " tiled";
         std::cout << "\n";
+        Stopwatch watch;
 
-        auto particles = printTime("alloc", [&] { return std::vector<ParticleBlock>(BLOCKS); });
+        std::vector<ParticleBlock> particles(BLOCKS);
+        watch.printAndReset("alloc");
 
-        printTime("init", [&] {
-            std::default_random_engine engine;
-            std::normal_distribution<FP> dist(FP(0), FP(1));
-            for (std::size_t bi = 0; bi < BLOCKS; ++bi)
+        std::default_random_engine engine;
+        std::normal_distribution<FP> dist(FP(0), FP(1));
+        for (std::size_t bi = 0; bi < BLOCKS; ++bi)
+        {
+            auto& block = particles[bi];
+            for (std::size_t i = 0; i < LANES; ++i)
             {
-                auto& block = particles[bi];
-                for (std::size_t i = 0; i < LANES; ++i)
-                {
-                    block.pos.x[i] = dist(engine);
-                    block.pos.y[i] = dist(engine);
-                    block.pos.z[i] = dist(engine);
-                    block.vel.x[i] = dist(engine) / FP(10);
-                    block.vel.y[i] = dist(engine) / FP(10);
-                    block.vel.z[i] = dist(engine) / FP(10);
-                    block.mass[i] = dist(engine) / FP(100);
-                }
+                block.pos.x[i] = dist(engine);
+                block.pos.y[i] = dist(engine);
+                block.pos.z[i] = dist(engine);
+                block.vel.x[i] = dist(engine) / FP(10);
+                block.vel.y[i] = dist(engine) / FP(10);
+                block.vel.z[i] = dist(engine) / FP(10);
+                block.mass[i] = dist(engine) / FP(100);
             }
-        });
+        }
+        watch.printAndReset("init");
 
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            printTime(
-                "update",
-                [&] {
-                    if constexpr (Tiled)
-                        updateTiled(particles.data());
-                    else
-                        update(particles.data());
-                },
-                '\t');
-            printTime("move", [&] { move(particles.data()); });
+            if constexpr (Tiled)
+                updateTiled(particles.data());
+            else
+                update(particles.data());
+            watch.printAndReset("update");
+            move(particles.data());
+            watch.printAndReset("move");
         }
 
         return 0;
@@ -693,40 +681,38 @@ namespace manualAoSoA_manualAVX
     {
         std::cout
             << (UseUpdate1 ? "AoSoA AVX2 updating 1 particle from 8\n" : "AoSoA AVX2 updating 8 particles from 1\n");
+        Stopwatch watch;
 
-        auto particles = printTime("alloc", [&] { return std::vector<ParticleBlock>(BLOCKS); });
+        std::vector<ParticleBlock> particles(BLOCKS);
+        watch.printAndReset("alloc");
 
-        printTime("alloc", [&] {
-            std::default_random_engine engine;
-            std::normal_distribution<FP> dist(FP(0), FP(1));
-            for (std::size_t bi = 0; bi < BLOCKS; ++bi)
+        std::default_random_engine engine;
+        std::normal_distribution<FP> dist(FP(0), FP(1));
+        for (std::size_t bi = 0; bi < BLOCKS; ++bi)
+        {
+            auto& block = particles[bi];
+            for (std::size_t i = 0; i < LANES; ++i)
             {
-                auto& block = particles[bi];
-                for (std::size_t i = 0; i < LANES; ++i)
-                {
-                    block.pos.x[i] = dist(engine);
-                    block.pos.y[i] = dist(engine);
-                    block.pos.z[i] = dist(engine);
-                    block.vel.x[i] = dist(engine) / FP(10);
-                    block.vel.y[i] = dist(engine) / FP(10);
-                    block.vel.z[i] = dist(engine) / FP(10);
-                    block.mass[i] = dist(engine) / FP(100);
-                }
+                block.pos.x[i] = dist(engine);
+                block.pos.y[i] = dist(engine);
+                block.pos.z[i] = dist(engine);
+                block.vel.x[i] = dist(engine) / FP(10);
+                block.vel.y[i] = dist(engine) / FP(10);
+                block.vel.z[i] = dist(engine) / FP(10);
+                block.mass[i] = dist(engine) / FP(100);
             }
-        });
+        }
+        watch.printAndReset("init");
 
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            printTime(
-                "update",
-                [&] {
-                    if constexpr (UseUpdate1)
-                        update1(particles.data());
-                    else
-                        update8(particles.data());
-                },
-                '\t');
-            printTime("move", [&] { move(particles.data()); });
+            if constexpr (UseUpdate1)
+                update1(particles.data());
+            else
+                update8(particles.data());
+            watch.printAndReset("update");
+            move(particles.data());
+            watch.printAndReset("move");
         }
 
         return 0;
@@ -867,41 +853,39 @@ namespace manualAoSoA_Vc
     template <bool UseUpdate1>
     int main()
     {
-        std::cout << (UseUpdate1 ? "AoSoA Vc updating 1 particle from 8\n" : "AoSoA Vc updating 8 particles from 1\n ");
+        std::cout << (UseUpdate1 ? "AoSoA Vc updating 1 particle from 8\n" : "AoSoA Vc updating 8 particles from 1\n");
+        Stopwatch watch;
 
-        auto particles = printTime("alloc", [&] { return std::vector<ParticleBlock>(BLOCKS); });
+        std::vector<ParticleBlock> particles(BLOCKS);
+        watch.printAndReset("alloc");
 
-        printTime("alloc", [&] {
-            std::default_random_engine engine;
-            std::normal_distribution<FP> dist(FP(0), FP(1));
-            for (std::size_t bi = 0; bi < BLOCKS; ++bi)
+        std::default_random_engine engine;
+        std::normal_distribution<FP> dist(FP(0), FP(1));
+        for (std::size_t bi = 0; bi < BLOCKS; ++bi)
+        {
+            auto& block = particles[bi];
+            for (std::size_t i = 0; i < LANES; ++i)
             {
-                auto& block = particles[bi];
-                for (std::size_t i = 0; i < LANES; ++i)
-                {
-                    block.pos.x[i] = dist(engine);
-                    block.pos.y[i] = dist(engine);
-                    block.pos.z[i] = dist(engine);
-                    block.vel.x[i] = dist(engine) / FP(10);
-                    block.vel.y[i] = dist(engine) / FP(10);
-                    block.vel.z[i] = dist(engine) / FP(10);
-                    block.mass[i] = dist(engine) / FP(100);
-                }
+                block.pos.x[i] = dist(engine);
+                block.pos.y[i] = dist(engine);
+                block.pos.z[i] = dist(engine);
+                block.vel.x[i] = dist(engine) / FP(10);
+                block.vel.y[i] = dist(engine) / FP(10);
+                block.vel.z[i] = dist(engine) / FP(10);
+                block.mass[i] = dist(engine) / FP(100);
             }
-        });
+        }
+        watch.printAndReset("init");
 
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            printTime(
-                "update",
-                [&] {
-                    if constexpr (UseUpdate1)
-                        update1(particles.data());
-                    else
-                        update8(particles.data());
-                },
-                '\t');
-            printTime("move", [&] { move(particles.data()); });
+            if constexpr (UseUpdate1)
+                update1(particles.data());
+            else
+                update8(particles.data());
+            watch.printAndReset("update");
+            move(particles.data());
+            watch.printAndReset("move");
         }
 
         return 0;
