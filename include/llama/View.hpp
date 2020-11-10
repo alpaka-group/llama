@@ -5,7 +5,7 @@
 
 #include "Allocators.hpp"
 #include "Array.hpp"
-#include "Functions.hpp"
+#include "Core.hpp"
 #include "macros.hpp"
 #include "mapping/One.hpp"
 

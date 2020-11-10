@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "../Types.hpp"
+#include "../Core.hpp"
 
 #include <climits>
 

@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "Functions.hpp"
+#include "Core.hpp"
 
 #include <boost/container_hash/hash.hpp>
 #include <fmt/format.h>
