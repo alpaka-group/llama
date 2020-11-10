@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "ArrayDomainRange.hpp"
 #include "Core.hpp"
 
 #include <boost/container_hash/hash.hpp>

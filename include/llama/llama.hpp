@@ -32,6 +32,7 @@
 #define LLAMA_VERSION_PATCH 0
 
 #include "Allocators.hpp"
+#include "ArrayDomainRange.hpp"
 #include "Core.hpp"
 #include "View.hpp"
 #include "macros.hpp"
