@@ -1,6 +1,7 @@
 #include "../common/Stopwatch.hpp"
 
 #include <chrono>
+#include <fstream>
 #include <iostream>
 #include <llama/llama.hpp>
 #include <random>
@@ -79,9 +80,10 @@ namespace usellama
             particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * TIMESTEP;
     }
 
-    int main()
+    int main(std::ostream& plotFile)
     {
-        std::cout << "LLAMA\n";
+        constexpr auto title = "LLAMA";
+        std::cout << title << "\n";
         Stopwatch watch;
         const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
         auto mapping = [&] {
@@ -125,13 +127,16 @@ namespace usellama
         }
         watch.printAndReset("init");
 
+        double sumUpdate = 0;
+        double sumMove = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
         {
             update(particles);
-            watch.printAndReset("update", '\t');
+            sumUpdate += watch.printAndReset("update", '\t');
             move(particles);
-            watch.printAndReset("move", '\t');
+            sumMove += watch.printAndReset("move");
         }
+        plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
         return 0;
     } // namespace usellama
@@ -232,9 +237,10 @@ namespace manualAoS
             particles[i].pos += particles[i].vel * TIMESTEP;
     }
 
-    int main()
+    int main(std::ostream& plotFile)
     {
-        std::cout << "AoS\n";
+        constexpr auto title = "AoS";
+        std::cout << title << "\n";
         Stopwatch watch;
 
         std::vector<Particle> particles(PROBLEM_SIZE);
@@ -254,13 +260,16 @@ namespace manualAoS
         }
         watch.printAndReset("init");
 
+        double sumUpdate = 0;
+        double sumMove = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
         {
             update(particles.data());
-            watch.printAndReset("update");
+            sumUpdate += watch.printAndReset("update", '\t');
             move(particles.data());
-            watch.printAndReset("move");
+            sumMove += watch.printAndReset("move");
         }
+        plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
         return 0;
     }
@@ -316,9 +325,10 @@ namespace manualSoA
         }
     }
 
-    int main()
+    int main(std::ostream& plotFile)
     {
-        std::cout << "SoA\n";
+        constexpr auto title = "SoA";
+        std::cout << title << "\n";
         Stopwatch watch;
 
         using Vector = std::vector<FP, llama::allocator::AlignedAllocator<FP, 64>>;
@@ -345,13 +355,16 @@ namespace manualSoA
         }
         watch.printAndReset("init");
 
+        double sumUpdate = 0;
+        double sumMove = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
         {
             update(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), mass.data());
-            watch.printAndReset("update");
+            sumUpdate += watch.printAndReset("update", '\t');
             move(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data());
-            watch.printAndReset("move");
+            sumMove += watch.printAndReset("move");
         }
+        plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
         return 0;
     }
@@ -479,12 +492,10 @@ namespace manualAoSoA
     }
 
     template <bool Tiled>
-    int main()
+    int main(std::ostream& plotFile)
     {
-        std::cout << "AoSoA";
-        if constexpr (Tiled)
-            std::cout << " tiled";
-        std::cout << "\n";
+        constexpr auto title = Tiled ? "AoSoA tiled" : "AoSoA";
+        std::cout << title << "\n";
         Stopwatch watch;
 
         std::vector<ParticleBlock> particles(BLOCKS);
@@ -508,16 +519,19 @@ namespace manualAoSoA
         }
         watch.printAndReset("init");
 
+        double sumUpdate = 0;
+        double sumMove = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
         {
             if constexpr (Tiled)
                 updateTiled(particles.data());
             else
                 update(particles.data());
-            watch.printAndReset("update");
+            sumUpdate += watch.printAndReset("update", '\t');
             move(particles.data());
-            watch.printAndReset("move");
+            sumMove += watch.printAndReset("move");
         }
+        plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
         return 0;
     }
@@ -677,10 +691,11 @@ namespace manualAoSoA_manualAVX
     }
 
     template <bool UseUpdate1>
-    int main()
+    int main(std::ostream& plotFile)
     {
-        std::cout
-            << (UseUpdate1 ? "AoSoA AVX2 updating 1 particle from 8\n" : "AoSoA AVX2 updating 8 particles from 1\n");
+        constexpr auto title
+            = UseUpdate1 ? "AoSoA AVX2 updating 1 particle from 8" : "AoSoA AVX2 updating 8 particles from 1";
+        std::cout << title << '\n';
         Stopwatch watch;
 
         std::vector<ParticleBlock> particles(BLOCKS);
@@ -704,16 +719,19 @@ namespace manualAoSoA_manualAVX
         }
         watch.printAndReset("init");
 
+        double sumUpdate = 0;
+        double sumMove = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
         {
             if constexpr (UseUpdate1)
                 update1(particles.data());
             else
                 update8(particles.data());
-            watch.printAndReset("update");
+            sumUpdate += watch.printAndReset("update", '\t');
             move(particles.data());
-            watch.printAndReset("move");
+            sumMove += watch.printAndReset("move");
         }
+        plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
         return 0;
     }
@@ -851,9 +869,11 @@ namespace manualAoSoA_Vc
     }
 
     template <bool UseUpdate1>
-    int main()
+    int main(std::ostream& plotFile)
     {
-        std::cout << (UseUpdate1 ? "AoSoA Vc updating 1 particle from 8\n" : "AoSoA Vc updating 8 particles from 1\n");
+        constexpr auto title
+            = UseUpdate1 ? "AoSoA Vc updating 1 particle from 8" : "AoSoA Vc updating 8 particles from 1";
+        std::cout << title << '\n';
         Stopwatch watch;
 
         std::vector<ParticleBlock> particles(BLOCKS);
@@ -877,16 +897,19 @@ namespace manualAoSoA_Vc
         }
         watch.printAndReset("init");
 
+        double sumUpdate = 0;
+        double sumMove = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
         {
             if constexpr (UseUpdate1)
                 update1(particles.data());
             else
                 update8(particles.data());
-            watch.printAndReset("update");
+            sumUpdate += watch.printAndReset("update", '\t');
             move(particles.data());
-            watch.printAndReset("move");
+            sumMove += watch.printAndReset("move");
         }
+        plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
         return 0;
     }
@@ -898,19 +921,34 @@ int main()
     std::cout << PROBLEM_SIZE / 1000 << "k particles "
               << "(" << PROBLEM_SIZE * sizeof(FP) * 7 / 1024 << "kiB)\n";
 
+    std::ofstream plotFile{"nbody.tsv"};
+    plotFile.exceptions(std::ios::badbit | std::ios::failbit);
+    plotFile << "\"\"\t\"update\"\t\"move\"\n";
+
     int r = 0;
-    r += usellama::main();
-    r += manualAoS::main();
-    r += manualSoA::main();
-    r += manualAoSoA::main<false>();
-    r += manualAoSoA::main<true>();
+    r += usellama::main(plotFile);
+    r += manualAoS::main(plotFile);
+    r += manualSoA::main(plotFile);
+    r += manualAoSoA::main<false>(plotFile);
+    r += manualAoSoA::main<true>(plotFile);
 #ifdef __AVX2__
-    r += manualAoSoA_manualAVX::main<false>();
-    r += manualAoSoA_manualAVX::main<true>();
+    r += manualAoSoA_manualAVX::main<false>(plotFile);
+    r += manualAoSoA_manualAVX::main<true>(plotFile);
 #endif
 #if __has_include(<Vc/Vc>)
-    r += manualAoSoA_Vc::main<false>();
-    r += manualAoSoA_Vc::main<true>();
+    r += manualAoSoA_Vc::main<false>(plotFile);
+    r += manualAoSoA_Vc::main<true>(plotFile);
 #endif
+
+    std::cout << "Plot with: ./nbody.sh\n";
+    std::ofstream{"nbody.sh"} << R"(#!/usr/bin/gnuplot -p
+set style data histograms
+set style fill solid
+set xtics rotate by 45 right
+set key out top center maxrows 3
+set yrange [0:*]
+plot 'nbody.tsv' using 2:xtic(1) ti col
+)";
+
     return r;
 }
