@@ -40,7 +40,7 @@ namespace usellama
         }
     }
 
-    int main(int argc, char** argv)
+    int main()
     {
         std::cout << "LLAMA\n";
 
@@ -104,7 +104,7 @@ namespace manualAoS
         }
     }
 
-    int main(int argc, char** argv)
+    int main()
     {
         std::cout << "AoS\n";
 
@@ -154,7 +154,7 @@ namespace manualSoA
         }
     }
 
-    int main(int argc, char** argv)
+    int main()
     {
         std::cout << "SoA\n";
 
@@ -224,7 +224,7 @@ namespace manualAoSoA
         }
     }
 
-    int main(int argc, char** argv)
+    int main()
     {
         std::cout << "AoSoA\n";
 
@@ -256,15 +256,15 @@ namespace manualAoSoA
 } // namespace manualAoSoA
 
 
-int main(int argc, char** argv)
+int main()
 {
     std::cout << PROBLEM_SIZE / 1000 / 1000 << "M values "
               << "(" << PROBLEM_SIZE * sizeof(float) / 1024 << "kiB)\n";
 
     int r = 0;
-    r += usellama::main(argc, argv);
-    r += manualAoS::main(argc, argv);
-    r += manualSoA::main(argc, argv);
-    r += manualAoSoA::main(argc, argv);
+    r += usellama::main();
+    r += manualAoS::main();
+    r += manualSoA::main();
+    r += manualAoSoA::main();
     return r;
 }
