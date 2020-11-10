@@ -32,7 +32,6 @@
 #define LLAMA_VERSION_PATCH 0
 
 #include "Allocators.hpp"
-#include "ForEach.hpp"
 #include "Functions.hpp"
 #include "Types.hpp"
 #include "View.hpp"
