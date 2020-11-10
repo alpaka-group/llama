@@ -287,7 +287,14 @@ int main(int argc, char** argv)
             static_assert(dstView.storageBlobs.rank == 1);
             std::memcpy(dstView.storageBlobs[0].data(), srcView.storageBlobs[0].data(), dstView.storageBlobs[0].size());
         });
-        plotFile << "0\t";
+        benchmarkCopy("memcpy(p)", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+            static_assert(srcView.storageBlobs.rank == 1);
+            static_assert(dstView.storageBlobs.rank == 1);
+            parallel_memcpy(
+                dstView.storageBlobs[0].data(),
+                srcView.storageBlobs[0].data(),
+                dstView.storageBlobs[0].size());
+        });
         plotFile << "0\t";
         plotFile << "0\t";
         plotFile << "0\t";
@@ -321,7 +328,14 @@ int main(int argc, char** argv)
             static_assert(dstView.storageBlobs.rank == 1);
             std::memcpy(dstView.storageBlobs[0].data(), srcView.storageBlobs[0].data(), dstView.storageBlobs[0].size());
         });
-        plotFile << "0\t";
+        benchmarkCopy("memcpy(p)", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+            static_assert(srcView.storageBlobs.rank == 1);
+            static_assert(dstView.storageBlobs.rank == 1);
+            parallel_memcpy(
+                dstView.storageBlobs[0].data(),
+                srcView.storageBlobs[0].data(),
+                dstView.storageBlobs[0].size());
+        });
         benchmarkCopy("aosoa copy(r)", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             aosoa_copy<true>(srcView, dstView);
         });
