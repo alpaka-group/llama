@@ -366,6 +366,24 @@ namespace llama
         forEach<DatumDomain>(std::forward<Functor>(functor), GetCoordFromTags<DatumDomain, Tags...>{});
     }
 
+    namespace internal
+    {
+        template <typename T>
+        struct FlattenDatumDomainImpl
+        {
+            using type = boost::mp11::mp_list<T>;
+        };
+
+        template <typename... Elements>
+        struct FlattenDatumDomainImpl<DatumStruct<Elements...>>
+        {
+            using type = boost::mp11::mp_append<typename FlattenDatumDomainImpl<GetDatumElementType<Elements>>::type...>;
+        };
+    } // namespace internal
+
+    template <typename DatumDomain>
+    using FlattenDatumDomain = typename internal::FlattenDatumDomainImpl<DatumDomain>::type;
+
     template <typename S>
     auto structName(S) -> std::string
     {

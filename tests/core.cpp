@@ -227,3 +227,10 @@ TEST_CASE("hasSameTags")
             llama::DatumCoord<0, 0> // Local B
             > == false);
 }
+
+TEST_CASE("FlattenDatumDomain")
+{
+    STATIC_REQUIRE(std::is_same_v<
+                   llama::FlattenDatumDomain<Particle>,
+                   boost::mp11::mp_list<double, double, double, float, int, double, double, bool, bool, bool, bool>>);
+}
