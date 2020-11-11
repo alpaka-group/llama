@@ -1,12 +1,14 @@
 #include "../common/Stopwatch.hpp"
 
 #include <chrono>
+#include <execution>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <llama/llama.hpp>
 #include <random>
 #include <string_view>
+#include <thread>
 #include <utility>
 #include <vector>
 
@@ -794,9 +796,10 @@ namespace manualAoSoA_Vc
     }
 
     // update (read/write) 8 particles I based on the influence of 1 particle J
-    void update8(ParticleBlock* particles)
+    template <typename Ex>
+    void update8(ParticleBlock* particles, Ex ex)
     {
-        for (std::size_t bi = 0; bi < BLOCKS; bi++)
+        std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& blockI) {
             for (std::size_t bj = 0; bj < BLOCKS; bj++)
                 for (std::size_t j = 0; j < LANES; j++)
                 {
@@ -806,7 +809,6 @@ namespace manualAoSoA_Vc
                     const vec pjposz = blockJ.pos.z[j];
                     const vec pjmass = blockJ.mass[j];
 
-                    auto& blockI = particles[bi];
                     pPInteraction(
                         blockI.pos.x,
                         blockI.pos.y,
@@ -819,15 +821,16 @@ namespace manualAoSoA_Vc
                         pjposz,
                         pjmass);
                 }
+        });
     }
 
     // update (read/write) 1 particles I based on the influence of 8 particles J
-    void update1(ParticleBlock* particles)
+    template <typename Ex>
+    void update1(ParticleBlock* particles, Ex ex)
     {
-        for (std::size_t bi = 0; bi < BLOCKS; bi++)
+        std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& blockI) {
             for (std::size_t i = 0; i < LANES; i++)
             {
-                auto& blockI = particles[bi];
                 const vec piposx = (FP) blockI.pos.x[i];
                 const vec piposy = (FP) blockI.pos.y[i];
                 const vec piposz = (FP) blockI.pos.z[i];
@@ -855,23 +858,23 @@ namespace manualAoSoA_Vc
                 blockI.vel.y[i] = pively.sum();
                 blockI.vel.z[i] = pivelz.sum();
             }
+        });
     }
-
-    void move(ParticleBlock* particles)
+    template <typename Ex>
+    void move(ParticleBlock* particles, Ex ex)
     {
-        for (std::size_t bi = 0; bi < BLOCKS; bi++)
-        {
-            auto& block = particles[bi];
+        std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& block) {
             block.pos.x += block.vel.x * TIMESTEP;
             block.pos.y += block.vel.y * TIMESTEP;
             block.pos.z += block.vel.z * TIMESTEP;
-        }
+        });
     }
 
-    template <bool UseUpdate1>
-    int main(std::ostream& plotFile)
+    template <bool UseUpdate1, typename Ex>
+    int main(std::ostream& plotFile, Ex ex)
     {
-        constexpr auto title = UseUpdate1 ? "AoSoA Vc w1r8" : "AoSoA Vc w8r1";
+        const auto title = std::string("AoSoA Vc") + (UseUpdate1 ? " w1r8" : " w8r1")
+            + (std::is_same_v<Ex, std::execution::parallel_policy> ? " parallel" : " sequential");
         std::cout << title << '\n';
         Stopwatch watch;
 
@@ -901,11 +904,11 @@ namespace manualAoSoA_Vc
         for (std::size_t s = 0; s < STEPS; ++s)
         {
             if constexpr (UseUpdate1)
-                update1(particles.data());
+                update1(particles.data(), ex);
             else
-                update8(particles.data());
+                update8(particles.data(), ex);
             sumUpdate += watch.printAndReset("update", '\t');
-            move(particles.data());
+            move(particles.data(), ex);
             sumMove += watch.printAndReset("move");
         }
         plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
@@ -918,7 +921,8 @@ namespace manualAoSoA_Vc
 int main()
 {
     std::cout << PROBLEM_SIZE / 1000 << "k particles "
-              << "(" << PROBLEM_SIZE * sizeof(FP) * 7 / 1024 << "kiB)\n";
+              << "(" << PROBLEM_SIZE * sizeof(FP) * 7 / 1024 << "kiB)\n"
+              << "Threads: " << std::thread::hardware_concurrency() << "\n";
 
     std::ofstream plotFile{"nbody.tsv"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
@@ -935,8 +939,12 @@ int main()
     r += manualAoSoA_manualAVX::main<true>(plotFile);
 #endif
 #if __has_include(<Vc/Vc>)
-    r += manualAoSoA_Vc::main<false>(plotFile);
-    r += manualAoSoA_Vc::main<true>(plotFile);
+    r += manualAoSoA_Vc::main<false>(plotFile, std::execution::seq);
+    r += manualAoSoA_Vc::main<true>(plotFile, std::execution::seq);
+#endif
+#if __has_include(<Vc/Vc>)
+    r += manualAoSoA_Vc::main<false>(plotFile, std::execution::par);
+    r += manualAoSoA_Vc::main<true>(plotFile, std::execution::par);
 #endif
 
     std::cout << "Plot with: ./nbody.sh\n";
