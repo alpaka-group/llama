@@ -67,7 +67,7 @@ struct UpdateKernelSM
     {
         auto sharedView = [&] {
             const auto sharedMapping
-                = llama::mapping::SoA{typename View::ArrayDomain{BlockSize}, typename View::DatumDomain{}};
+                = llama::mapping::SoA(typename View::ArrayDomain{BlockSize}, typename View::DatumDomain{}); // bug: nvcc 11.1 cannot have {} to call ctor
 
             // if there is only 1 thread per block, avoid using shared
             // memory
@@ -77,7 +77,10 @@ struct UpdateKernelSM
             {
                 constexpr auto sharedMemSize = llama::sizeOf<typename View::DatumDomain> * BlockSize;
                 auto& sharedMem = alpaka::allocVar<std::byte[sharedMemSize], __COUNTER__>(acc);
-                return llama::View{sharedMapping, llama::Array{&sharedMem[0]}};
+                return llama::View{
+                    sharedMapping,
+                    llama::Array<std::byte*, 1>{
+                        &sharedMem[0]}}; // bug: nvcc 11.1 needs explicit template args for llama::Array
             }
         }();
 
