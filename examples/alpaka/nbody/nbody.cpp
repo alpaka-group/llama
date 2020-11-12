@@ -66,8 +66,9 @@ struct UpdateKernelSM
     LLAMA_FN_HOST_ACC_INLINE void operator()(const Acc& acc, View particles, FP ts) const
     {
         auto sharedView = [&] {
-            const auto sharedMapping
-                = llama::mapping::SoA(typename View::ArrayDomain{BlockSize}, typename View::DatumDomain{}); // bug: nvcc 11.1 cannot have {} to call ctor
+            const auto sharedMapping = llama::mapping::SoA(
+                typename View::ArrayDomain{BlockSize},
+                typename View::DatumDomain{}); // bug: nvcc 11.1 cannot have {} to call ctor
 
             // if there is only 1 thread per block, avoid using shared
             // memory
@@ -107,7 +108,6 @@ struct UpdateKernelSM
                 for (auto i = start; i < end; ++i)
                     pPInteraction(particles(i), sharedView(pos2), ts);
             }
-
             alpaka::syncBlockThreads(acc);
         }
     }
@@ -120,23 +120,15 @@ struct UpdateKernel
     LLAMA_FN_HOST_ACC_INLINE void operator()(const Acc& acc, View particles, FP ts) const
     {
         const auto ti = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0u];
-        const auto tbi = alpaka::getIdx<alpaka::Block, alpaka::Threads>(acc)[0];
-
         const auto start = ti * Elems;
         const auto end = alpaka::math::min(acc, start + Elems, ProblemSize);
-        LLAMA_INDEPENDENT_DATA
-        for (std::size_t b = 0; b < (ProblemSize + BlockSize - 1u) / BlockSize; ++b)
-        {
-            const auto start2 = b * BlockSize;
-            const auto end2 = alpaka::math::min(acc, start2 + BlockSize, ProblemSize) - start2;
 
+        LLAMA_INDEPENDENT_DATA
+        for (auto j = 0; j < ProblemSize; ++j)
+        {
             LLAMA_INDEPENDENT_DATA
-            for (auto pos2 = decltype(end2)(0); pos2 < end2; ++pos2)
-            {
-                LLAMA_INDEPENDENT_DATA
-                for (auto i = start; i < end; ++i)
-                    pPInteraction(particles(i), particles(start2 + pos2), ts);
-            }
+            for (auto i = start; i < end; ++i)
+                pPInteraction(particles(i), particles(j), ts);
         }
     }
 };
@@ -148,7 +140,6 @@ struct MoveKernel
     LLAMA_FN_HOST_ACC_INLINE void operator()(const Acc& acc, View particles, FP ts) const
     {
         const auto ti = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0];
-
         const auto start = ti * Elems;
         const auto end = alpaka::math::min(acc, start + Elems, ProblemSize);
 
