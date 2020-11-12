@@ -51,24 +51,18 @@ using Particle = llama::DS<
     llama::DE<tag::Mass, FP>>;
 // clang-format on
 
-/// Helper function for particle particle interaction. Gets two virtual
-/// datums like they are real particle objects
-template <typename VirtualDatum1, typename VirtualDatum2>
-LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualDatum1 p1, VirtualDatum2 p2, FP ts)
+template <typename VirtualParticleI, typename VirtualParticleJ>
+LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticleI pi, VirtualParticleJ pj, FP ts)
 {
-    // Creating tempory virtual datum object for distance on stack:
-    auto distance = p1(tag::Pos()) - p2(tag::Pos());
-    distance *= distance; // square for each element
-    const FP distSqr = EPS2 + distance(tag::X()) + distance(tag::Y()) + distance(tag::Z());
+    auto dist = pi(tag::Pos()) - pj(tag::Pos());
+    dist *= dist;
+    const FP distSqr = EPS2 + dist(tag::X()) + dist(tag::Y()) + dist(tag::Z());
     const FP distSixth = distSqr * distSqr * distSqr;
     const FP invDistCube = 1.0f / std::sqrt(distSixth);
-    const FP s = p2(tag::Mass()) * invDistCube;
-    distance *= s * ts;
-    p1(tag::Vel()) += distance;
+    const FP sts = pj(tag::Mass()) * invDistCube * ts;
+    pi(tag::Vel()) += dist * sts;
 }
 
-/// Alpaka kernel for updating the speed of every particle based on the
-/// distance and mass to each other particle. Has complexity O(N²).
 template <std::size_t ProblemSize, std::size_t Elems, std::size_t BlockSize>
 struct UpdateKernel
 {
@@ -134,8 +128,6 @@ struct UpdateKernel
     }
 };
 
-/// Alpaka kernel for moving each particle with its speed. Has complexity
-/// O(N).
 template <std::size_t ProblemSize, std::size_t Elems>
 struct MoveKernel
 {
@@ -153,7 +145,7 @@ struct MoveKernel
     }
 };
 
-int main(int argc, char** argv)
+int main()
 {
     using Dim = alpaka::DimInt<1>;
     using Size = std::size_t;
