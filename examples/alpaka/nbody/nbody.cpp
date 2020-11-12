@@ -64,37 +64,32 @@ LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticleI pi, VirtualParticle
 }
 
 template <std::size_t ProblemSize, std::size_t Elems, std::size_t BlockSize>
-struct UpdateKernel
+struct UpdateKernelSM
 {
     template <typename Acc, typename View>
     LLAMA_FN_HOST_ACC_INLINE void operator()(const Acc& acc, View particles, FP ts) const
     {
-        [[maybe_unused]] auto sharedView = [&] {
-            if constexpr (USE_SHARED)
-            {
-                const auto sharedMapping = [&] {
-                    if constexpr (USE_SHARED_TREE)
-                        return llama::mapping::tree::Mapping{
-                            typename View::ArrayDomain{BlockSize},
-                            llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
-                            typename View::DatumDomain{}};
-                    else
-                        return llama::mapping::SoA{typename View::ArrayDomain{BlockSize}, typename View::DatumDomain{}};
-                }();
-
-                // if there is only 1 thread per block, avoid using shared
-                // memory
-                if constexpr (BlockSize / Elems == 1)
-                    return llama::allocViewStack<View::ArrayDomain::rank, typename View::DatumDomain>();
+        auto sharedView = [&] {
+            const auto sharedMapping = [&] {
+                if constexpr (USE_SHARED_TREE)
+                    return llama::mapping::tree::Mapping{
+                        typename View::ArrayDomain{BlockSize},
+                        llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
+                        typename View::DatumDomain{}};
                 else
-                {
-                    constexpr auto sharedMemSize = llama::sizeOf<typename View::DatumDomain> * BlockSize;
-                    auto& sharedMem = alpaka::allocVar<std::byte[sharedMemSize], __COUNTER__>(acc);
-                    return llama::View{sharedMapping, llama::Array{&sharedMem[0]}};
-                }
-            }
+                    return llama::mapping::SoA{typename View::ArrayDomain{BlockSize}, typename View::DatumDomain{}};
+            }();
+
+            // if there is only 1 thread per block, avoid using shared
+            // memory
+            if constexpr (BlockSize / Elems == 1)
+                return llama::allocViewStack<View::ArrayDomain::rank, typename View::DatumDomain>();
             else
-                return int{}; // dummy
+            {
+                constexpr auto sharedMemSize = llama::sizeOf<typename View::DatumDomain> * BlockSize;
+                auto& sharedMem = alpaka::allocVar<std::byte[sharedMemSize], __COUNTER__>(acc);
+                return llama::View{sharedMapping, llama::Array{&sharedMem[0]}};
+            }
         }();
 
         const auto ti = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0u];
@@ -107,23 +102,49 @@ struct UpdateKernel
         {
             const auto start2 = b * BlockSize;
             const auto end2 = alpaka::math::min(acc, start2 + BlockSize, ProblemSize) - start2;
-            if constexpr (USE_SHARED)
-            {
-                LLAMA_INDEPENDENT_DATA
-                for (auto pos2 = decltype(end2)(0); pos2 + ti < end2; pos2 += BlockSize / Elems)
-                    sharedView(pos2 + tbi) = particles(start2 + pos2 + tbi);
-                alpaka::syncBlockThreads(acc);
-            }
+
+            LLAMA_INDEPENDENT_DATA
+            for (auto pos2 = decltype(end2)(0); pos2 + ti < end2; pos2 += BlockSize / Elems)
+                sharedView(pos2 + tbi) = particles(start2 + pos2 + tbi);
+            alpaka::syncBlockThreads(acc);
+
             LLAMA_INDEPENDENT_DATA
             for (auto pos2 = decltype(end2)(0); pos2 < end2; ++pos2)
+            {
                 LLAMA_INDEPENDENT_DATA
-            for (auto i = start; i < end; ++i)
-                if constexpr (USE_SHARED)
+                for (auto i = start; i < end; ++i)
                     pPInteraction(particles(i), sharedView(pos2), ts);
-                else
+            }
+
+            alpaka::syncBlockThreads(acc);
+        }
+    }
+};
+
+template <std::size_t ProblemSize, std::size_t Elems, std::size_t BlockSize>
+struct UpdateKernel
+{
+    template <typename Acc, typename View>
+    LLAMA_FN_HOST_ACC_INLINE void operator()(const Acc& acc, View particles, FP ts) const
+    {
+        const auto ti = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0u];
+        const auto tbi = alpaka::getIdx<alpaka::Block, alpaka::Threads>(acc)[0];
+
+        const auto start = ti * Elems;
+        const auto end = alpaka::math::min(acc, start + Elems, ProblemSize);
+        LLAMA_INDEPENDENT_DATA
+        for (std::size_t b = 0; b < (ProblemSize + BlockSize - 1u) / BlockSize; ++b)
+        {
+            const auto start2 = b * BlockSize;
+            const auto end2 = alpaka::math::min(acc, start2 + BlockSize, ProblemSize) - start2;
+
+            LLAMA_INDEPENDENT_DATA
+            for (auto pos2 = decltype(end2)(0); pos2 < end2; ++pos2)
+            {
+                LLAMA_INDEPENDENT_DATA
+                for (auto i = start; i < end; ++i)
                     pPInteraction(particles(i), particles(start2 + pos2), ts);
-            if constexpr (USE_SHARED)
-                alpaka::syncBlockThreads(acc);
+            }
         }
     }
 };
@@ -237,7 +258,8 @@ int main()
 
     for (std::size_t s = 0; s < STEPS; ++s)
     {
-        UpdateKernel<PROBLEM_SIZE, elemCount, BLOCK_SIZE> updateKernel;
+        // UpdateKernel<PROBLEM_SIZE, elemCount, BLOCK_SIZE> updateKernel;
+        UpdateKernelSM<PROBLEM_SIZE, elemCount, BLOCK_SIZE> updateKernel;
         alpaka::exec<Acc>(queue, workdiv, updateKernel, accView, ts);
 
         chrono.printAndReset("Update kernel");
