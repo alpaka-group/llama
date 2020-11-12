@@ -51,25 +51,25 @@ namespace usellama
     // clang-format on
 
     template <typename VirtualParticle>
-    LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticle p1, VirtualParticle p2)
+    LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticle pi, VirtualParticle pj)
     {
-        auto dist = p1(tag::Pos{}) - p2(tag::Pos{});
+        auto dist = pi(tag::Pos{}) - pj(tag::Pos{});
         dist *= dist;
         const FP distSqr = EPS2 + dist(tag::X{}) + dist(tag::Y{}) + dist(tag::Z{});
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
-        const FP sts = p2(tag::Mass{}) * invDistCube * TIMESTEP;
-        p1(tag::Vel{}) += dist * sts;
+        const FP sts = pj(tag::Mass{}) * invDistCube * TIMESTEP;
+        pi(tag::Vel{}) += dist * sts;
     }
 
     template <typename View>
     void update(View& particles)
     {
+        LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
-            LLAMA_INDEPENDENT_DATA
             for (std::size_t j = 0; j < PROBLEM_SIZE; j++)
-                pPInteraction(particles(j), particles(i));
+                pPInteraction(particles(i), particles(j));
         }
     }
 
@@ -209,25 +209,25 @@ namespace manualAoS
         FP mass;
     };
 
-    inline void pPInteraction(Particle& p1, const Particle& p2)
+    inline void pPInteraction(Particle& pi, const Particle& pj)
     {
-        auto distance = p1.pos - p2.pos;
+        auto distance = pi.pos - pj.pos;
         distance *= distance;
         const FP distSqr = EPS2 + distance.x + distance.y + distance.z;
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
-        const FP sts = p2.mass * invDistCube * TIMESTEP;
+        const FP sts = pj.mass * invDistCube * TIMESTEP;
         distance *= sts;
-        p1.vel += distance;
+        pi.vel += distance;
     }
 
     void update(Particle* particles)
     {
+        LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
-            LLAMA_INDEPENDENT_DATA
             for (std::size_t j = 0; j < PROBLEM_SIZE; j++)
-                pPInteraction(particles[j], particles[i]);
+                pPInteraction(particles[i], particles[j]);
         }
     }
 
@@ -279,39 +279,39 @@ namespace manualAoS
 namespace manualSoA
 {
     inline void pPInteraction(
-        FP p1posx,
-        FP p1posy,
-        FP p1posz,
-        FP& p1velx,
-        FP& p1vely,
-        FP& p1velz,
-        FP p2posx,
-        FP p2posy,
-        FP p2posz,
-        FP p2mass)
+        FP piposx,
+        FP piposy,
+        FP piposz,
+        FP& pivelx,
+        FP& pively,
+        FP& pivelz,
+        FP pjposx,
+        FP pjposy,
+        FP pjposz,
+        FP pjmass)
     {
-        auto xdistance = p1posx - p2posx;
-        auto ydistance = p1posy - p2posy;
-        auto zdistance = p1posz - p2posz;
+        auto xdistance = piposx - pjposx;
+        auto ydistance = piposy - pjposy;
+        auto zdistance = piposz - pjposz;
         xdistance *= xdistance;
         ydistance *= ydistance;
         zdistance *= zdistance;
         const FP distSqr = EPS2 + xdistance + ydistance + zdistance;
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
-        const FP sts = p2mass * invDistCube * TIMESTEP;
-        p1velx += xdistance * sts;
-        p1vely += ydistance * sts;
-        p1velz += zdistance * sts;
+        const FP sts = pjmass * invDistCube * TIMESTEP;
+        pivelx += xdistance * sts;
+        pively += ydistance * sts;
+        pivelz += zdistance * sts;
     }
 
     void update(FP* posx, FP* posy, FP* posz, FP* velx, FP* vely, FP* velz, FP* mass)
     {
+        LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
-            LLAMA_INDEPENDENT_DATA
             for (std::size_t j = 0; j < PROBLEM_SIZE; j++)
-                pPInteraction(posx[j], posy[j], posz[j], velx[j], vely[j], velz[j], posx[i], posy[i], posz[i], mass[i]);
+                pPInteraction(posx[i], posy[i], posz[i], velx[i], vely[i], velz[i], posx[j], posy[j], posz[j], mass[j]);
         }
     }
 
@@ -397,54 +397,54 @@ namespace manualAoSoA
     constexpr auto BLOCKS = PROBLEM_SIZE / LANES;
 
     inline void pPInteraction(
-        FP p1posx,
-        FP p1posy,
-        FP p1posz,
-        FP& p1velx,
-        FP& p1vely,
-        FP& p1velz,
-        FP p2posx,
-        FP p2posy,
-        FP p2posz,
-        FP p2mass)
+        FP piposx,
+        FP piposy,
+        FP piposz,
+        FP& pivelx,
+        FP& pively,
+        FP& pivelz,
+        FP pjposx,
+        FP pjposy,
+        FP pjposz,
+        FP pjmass)
     {
-        auto xdistance = p1posx - p2posx;
-        auto ydistance = p1posy - p2posy;
-        auto zdistance = p1posz - p2posz;
+        auto xdistance = piposx - pjposx;
+        auto ydistance = piposy - pjposy;
+        auto zdistance = piposz - pjposz;
         xdistance *= xdistance;
         ydistance *= ydistance;
         zdistance *= zdistance;
         const FP distSqr = EPS2 + xdistance + ydistance + zdistance;
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
-        const FP sts = p2mass * invDistCube * TIMESTEP;
-        p1velx += xdistance * sts;
-        p1vely += ydistance * sts;
-        p1velz += zdistance * sts;
+        const FP sts = pjmass * invDistCube * TIMESTEP;
+        pivelx += xdistance * sts;
+        pively += ydistance * sts;
+        pivelz += zdistance * sts;
     }
 
     void update(ParticleBlock* particles)
     {
         for (std::size_t bi = 0; bi < BLOCKS; bi++)
             for (std::size_t bj = 0; bj < BLOCKS; bj++)
-                for (std::size_t i = 0; i < LANES; i++)
+                for (std::size_t j = 0; j < LANES; j++)
                 {
                     LLAMA_INDEPENDENT_DATA
-                    for (std::size_t j = 0; j < LANES; j++)
+                    for (std::size_t i = 0; i < LANES; i++)
                     {
-                        const auto& blockI = particles[bi];
-                        auto& blockJ = particles[bj];
+                        auto& blockI = particles[bi];
+                        const auto& blockJ = particles[bj];
                         pPInteraction(
-                            blockJ.pos.x[j],
-                            blockJ.pos.y[j],
-                            blockJ.pos.z[j],
-                            blockJ.vel.x[j],
-                            blockJ.vel.y[j],
-                            blockJ.vel.z[j],
                             blockI.pos.x[i],
                             blockI.pos.y[i],
                             blockI.pos.z[i],
-                            blockI.mass[i]);
+                            blockI.vel.x[i],
+                            blockI.vel.y[i],
+                            blockI.vel.z[i],
+                            blockJ.pos.x[j],
+                            blockJ.pos.y[j],
+                            blockJ.pos.z[j],
+                            blockJ.mass[j]);
                     }
                 }
     }
@@ -455,24 +455,24 @@ namespace manualAoSoA
             for (std::size_t tj = 0; tj < BLOCKS / BLOCKS_PER_TILE; tj++)
                 for (std::size_t bi = 0; bi < BLOCKS_PER_TILE; bi++)
                     for (std::size_t bj = 0; bj < BLOCKS_PER_TILE; bj++)
-                        for (std::size_t i = 0; i < LANES; i++)
+                        for (std::size_t j = 0; j < LANES; j++)
                         {
                             LLAMA_INDEPENDENT_DATA
-                            for (std::size_t j = 0; j < LANES; j++)
+                            for (std::size_t i = 0; i < LANES; i++)
                             {
-                                const auto& blockI = particles[ti * BLOCKS_PER_TILE + bi];
-                                auto& blockJ = particles[tj * BLOCKS_PER_TILE + bj];
+                                auto& blockI = particles[ti * BLOCKS_PER_TILE + bi];
+                                const auto& blockJ = particles[tj * BLOCKS_PER_TILE + bj];
                                 pPInteraction(
-                                    blockJ.pos.x[j],
-                                    blockJ.pos.y[j],
-                                    blockJ.pos.z[j],
-                                    blockJ.vel.x[j],
-                                    blockJ.vel.y[j],
-                                    blockJ.vel.z[j],
                                     blockI.pos.x[i],
                                     blockI.pos.y[i],
                                     blockI.pos.z[i],
-                                    blockI.mass[i]);
+                                    blockI.vel.x[i],
+                                    blockI.vel.y[i],
+                                    blockI.vel.z[i],
+                                    blockJ.pos.x[j],
+                                    blockJ.pos.y[j],
+                                    blockJ.pos.z[j],
+                                    blockJ.mass[j]);
                             }
                         }
     }
@@ -481,10 +481,10 @@ namespace manualAoSoA
     {
         for (std::size_t bi = 0; bi < BLOCKS; bi++)
         {
-            auto& block = particles[bi];
             LLAMA_INDEPENDENT_DATA
             for (std::size_t i = 0; i < LANES; ++i)
             {
+                auto& block = particles[bi];
                 block.pos.x[i] += block.vel.x[i] * TIMESTEP;
                 block.pos.y[i] += block.vel.y[i] * TIMESTEP;
                 block.pos.z[i] += block.vel.z[i] * TIMESTEP;
@@ -567,20 +567,20 @@ namespace manualAoSoA_manualAVX
     const __m256 vTIMESTEP = _mm256_broadcast_ss(&TIMESTEP);
 
     inline void pPInteraction(
-        __m256 p1posx,
-        __m256 p1posy,
-        __m256 p1posz,
-        __m256& p1velx,
-        __m256& p1vely,
-        __m256& p1velz,
-        __m256 p2posx,
-        __m256 p2posy,
-        __m256 p2posz,
-        __m256 p2mass)
+        __m256 piposx,
+        __m256 piposy,
+        __m256 piposz,
+        __m256& pivelx,
+        __m256& pively,
+        __m256& pivelz,
+        __m256 pjposx,
+        __m256 pjposy,
+        __m256 pjposz,
+        __m256 pjmass)
     {
-        const __m256 xdistance = _mm256_sub_ps(p1posx, p2posx);
-        const __m256 ydistance = _mm256_sub_ps(p1posy, p2posy);
-        const __m256 zdistance = _mm256_sub_ps(p1posz, p2posz);
+        const __m256 xdistance = _mm256_sub_ps(piposx, pjposx);
+        const __m256 ydistance = _mm256_sub_ps(piposy, pjposy);
+        const __m256 zdistance = _mm256_sub_ps(piposz, pjposz);
         const __m256 xdistanceSqr = _mm256_mul_ps(xdistance, xdistance);
         const __m256 ydistanceSqr = _mm256_mul_ps(ydistance, ydistance);
         const __m256 zdistanceSqr = _mm256_mul_ps(zdistance, zdistance);
@@ -589,43 +589,43 @@ namespace manualAoSoA_manualAVX
         const __m256 distSixth = _mm256_mul_ps(_mm256_mul_ps(distSqr, distSqr), distSqr);
         const __m256 invDistCube
             = ALLOW_RSQRT ? _mm256_rsqrt_ps(distSixth) : _mm256_div_ps(_mm256_set1_ps(1.0f), _mm256_sqrt_ps(distSixth));
-        const __m256 sts = _mm256_mul_ps(_mm256_mul_ps(p2mass, invDistCube), vTIMESTEP);
-        p1velx = _mm256_fmadd_ps(xdistanceSqr, sts, p1velx);
-        p1vely = _mm256_fmadd_ps(ydistanceSqr, sts, p1vely);
-        p1velz = _mm256_fmadd_ps(zdistanceSqr, sts, p1velz);
+        const __m256 sts = _mm256_mul_ps(_mm256_mul_ps(pjmass, invDistCube), vTIMESTEP);
+        pivelx = _mm256_fmadd_ps(xdistanceSqr, sts, pivelx);
+        pively = _mm256_fmadd_ps(ydistanceSqr, sts, pively);
+        pivelz = _mm256_fmadd_ps(zdistanceSqr, sts, pivelz);
     }
 
-    // update (read/write) 8 particles J based on the influence of 1 particle I
+    // update (read/write) 8 particles I based on the influence of 1 particle J
     void update8(ParticleBlock* particles)
     {
         for (std::size_t bi = 0; bi < BLOCKS; bi++)
             for (std::size_t bj = 0; bj < BLOCKS; bj++)
-                for (std::size_t i = 0; i < LANES; i++)
+                for (std::size_t j = 0; j < LANES; j++)
                 {
-                    const auto& blockI = particles[bi];
-                    const __m256 posxI = _mm256_broadcast_ss(&blockI.pos.x[i]);
-                    const __m256 posyI = _mm256_broadcast_ss(&blockI.pos.y[i]);
-                    const __m256 poszI = _mm256_broadcast_ss(&blockI.pos.z[i]);
-                    const __m256 massI = _mm256_broadcast_ss(&blockI.mass[i]);
+                    const auto& blockJ = particles[bj];
+                    const __m256 posxJ = _mm256_broadcast_ss(&blockJ.pos.x[j]);
+                    const __m256 posyJ = _mm256_broadcast_ss(&blockJ.pos.y[j]);
+                    const __m256 poszJ = _mm256_broadcast_ss(&blockJ.pos.z[j]);
+                    const __m256 massJ = _mm256_broadcast_ss(&blockJ.mass[j]);
 
-                    auto& blockJ = particles[bj];
-                    __m256 p1velx = _mm256_load_ps(blockJ.vel.x);
-                    __m256 p1vely = _mm256_load_ps(blockJ.vel.y);
-                    __m256 p1velz = _mm256_load_ps(blockJ.vel.z);
+                    auto& blockI = particles[bi];
+                    __m256 pivelx = _mm256_load_ps(blockI.vel.x);
+                    __m256 pively = _mm256_load_ps(blockI.vel.y);
+                    __m256 pivelz = _mm256_load_ps(blockI.vel.z);
                     pPInteraction(
                         _mm256_load_ps(blockJ.pos.x),
                         _mm256_load_ps(blockJ.pos.y),
                         _mm256_load_ps(blockJ.pos.z),
-                        p1velx,
-                        p1vely,
-                        p1velz,
-                        posxI,
-                        posyI,
-                        poszI,
-                        massI);
-                    _mm256_store_ps(blockJ.vel.x, p1velx);
-                    _mm256_store_ps(blockJ.vel.y, p1vely);
-                    _mm256_store_ps(blockJ.vel.z, p1velz);
+                        pivelx,
+                        pively,
+                        pivelz,
+                        posxJ,
+                        posyJ,
+                        poszJ,
+                        massJ);
+                    _mm256_store_ps(blockI.vel.x, pivelx);
+                    _mm256_store_ps(blockI.vel.y, pively);
+                    _mm256_store_ps(blockI.vel.z, pivelz);
                 }
     }
 
@@ -644,33 +644,33 @@ namespace manualAoSoA_manualAVX
         // return a[0] + a[1] + a[2] + a[3] + a[4] + a[5] + a[6] + a[7];
     }
 
-    // update (read/write) 1 particles J based on the influence of 8 particles I
+    // update (read/write) 1 particles I based on the influence of 8 particles J
     void update1(ParticleBlock* particles)
     {
-        for (std::size_t bj = 0; bj < BLOCKS; bj++)
-            for (std::size_t j = 0; j < LANES; j++)
+        for (std::size_t bi = 0; bi < BLOCKS; bi++)
+            for (std::size_t i = 0; i < LANES; i++)
             {
-                auto& blockJ = particles[bj];
-                const __m256 p1posx = _mm256_broadcast_ss(&blockJ.pos.x[j]);
-                const __m256 p1posy = _mm256_broadcast_ss(&blockJ.pos.y[j]);
-                const __m256 p1posz = _mm256_broadcast_ss(&blockJ.pos.z[j]);
-                __m256 p1velx = _mm256_broadcast_ss(&blockJ.vel.x[j]);
-                __m256 p1vely = _mm256_broadcast_ss(&blockJ.vel.y[j]);
-                __m256 p1velz = _mm256_broadcast_ss(&blockJ.vel.z[j]);
+                auto& blockI = particles[bi];
+                const __m256 piposx = _mm256_broadcast_ss(&blockI.pos.x[i]);
+                const __m256 piposy = _mm256_broadcast_ss(&blockI.pos.y[i]);
+                const __m256 piposz = _mm256_broadcast_ss(&blockI.pos.z[i]);
+                __m256 pivelx = _mm256_broadcast_ss(&blockI.vel.x[i]);
+                __m256 pively = _mm256_broadcast_ss(&blockI.vel.y[i]);
+                __m256 pivelz = _mm256_broadcast_ss(&blockI.vel.z[i]);
 
-                for (std::size_t bi = 0; bi < BLOCKS; bi++)
+                for (std::size_t bj = 0; bj < BLOCKS; bj++)
                 {
-                    const auto& blockI = particles[bi];
-                    const __m256 posxI = _mm256_load_ps(blockI.pos.x);
-                    const __m256 posyI = _mm256_load_ps(blockI.pos.y);
-                    const __m256 poszI = _mm256_load_ps(blockI.pos.z);
-                    const __m256 massI = _mm256_load_ps(blockI.mass);
-                    pPInteraction(p1posx, p1posy, p1posz, p1velx, p1vely, p1velz, posxI, posyI, poszI, massI);
+                    const auto& blockJ = particles[bj];
+                    const __m256 pjposx = _mm256_load_ps(blockJ.pos.x);
+                    const __m256 pjposy = _mm256_load_ps(blockJ.pos.y);
+                    const __m256 pjposz = _mm256_load_ps(blockJ.pos.z);
+                    const __m256 pjmass = _mm256_load_ps(blockJ.mass);
+                    pPInteraction(piposx, piposy, piposz, pivelx, pively, pivelz, pjposx, pjposy, pjposz, pjmass);
                 }
 
-                blockJ.vel.x[j] = horizontalSum(p1velx);
-                blockJ.vel.y[j] = horizontalSum(p1vely);
-                blockJ.vel.z[j] = horizontalSum(p1velz);
+                blockI.vel.x[i] = horizontalSum(pivelx);
+                blockI.vel.y[i] = horizontalSum(pively);
+                blockI.vel.z[i] = horizontalSum(pivelz);
             }
     }
 
@@ -767,93 +767,93 @@ namespace manualAoSoA_Vc
     constexpr auto BLOCKS = PROBLEM_SIZE / LANES;
 
     inline void pPInteraction(
-        vec p1posx,
-        vec p1posy,
-        vec p1posz,
-        vec& p1velx,
-        vec& p1vely,
-        vec& p1velz,
-        vec p2posx,
-        vec p2posy,
-        vec p2posz,
-        vec p2mass)
+        vec piposx,
+        vec piposy,
+        vec piposz,
+        vec& pivelx,
+        vec& pively,
+        vec& pivelz,
+        vec pjposx,
+        vec pjposy,
+        vec pjposz,
+        vec pjmass)
     {
-        const vec xdistance = p1posx - p2posx;
-        const vec ydistance = p1posy - p2posy;
-        const vec zdistance = p1posz - p2posz;
+        const vec xdistance = piposx - pjposx;
+        const vec ydistance = piposy - pjposy;
+        const vec zdistance = piposz - pjposz;
         const vec xdistanceSqr = xdistance * xdistance;
         const vec ydistanceSqr = ydistance * ydistance;
         const vec zdistanceSqr = zdistance * zdistance;
         const vec distSqr = EPS2 + xdistanceSqr + ydistanceSqr + zdistanceSqr;
         const vec distSixth = distSqr * distSqr * distSqr;
         const vec invDistCube = ALLOW_RSQRT ? Vc::rsqrt(distSixth) : (1.0f / Vc::sqrt(distSixth));
-        const vec sts = p2mass * invDistCube * TIMESTEP;
-        p1velx = xdistanceSqr * sts + p1velx;
-        p1vely = ydistanceSqr * sts + p1vely;
-        p1velz = zdistanceSqr * sts + p1velz;
+        const vec sts = pjmass * invDistCube * TIMESTEP;
+        pivelx = xdistanceSqr * sts + pivelx;
+        pively = ydistanceSqr * sts + pively;
+        pivelz = zdistanceSqr * sts + pivelz;
     }
 
-    // update (read/write) 8 particles J based on the influence of 1 particle I
+    // update (read/write) 8 particles I based on the influence of 1 particle J
     void update8(ParticleBlock* particles)
     {
         for (std::size_t bi = 0; bi < BLOCKS; bi++)
             for (std::size_t bj = 0; bj < BLOCKS; bj++)
-                for (std::size_t i = 0; i < LANES; i++)
+                for (std::size_t j = 0; j < LANES; j++)
                 {
-                    const auto& blockI = particles[bi];
-                    const vec posxI = blockI.pos.x[i];
-                    const vec posyI = blockI.pos.y[i];
-                    const vec poszI = blockI.pos.z[i];
-                    const vec massI = blockI.mass[i];
+                    const auto& blockJ = particles[bj];
+                    const vec pjposx = blockJ.pos.x[j];
+                    const vec pjposy = blockJ.pos.y[j];
+                    const vec pjposz = blockJ.pos.z[j];
+                    const vec pjmass = blockJ.mass[j];
 
-                    auto& blockJ = particles[bj];
+                    auto& blockI = particles[bi];
                     pPInteraction(
-                        blockJ.pos.x,
-                        blockJ.pos.y,
-                        blockJ.pos.z,
-                        blockJ.vel.x,
-                        blockJ.vel.y,
-                        blockJ.vel.z,
-                        posxI,
-                        posyI,
-                        poszI,
-                        massI);
-                }
-    }
-
-    // update (read/write) 1 particles J based on the influence of 8 particles I
-    void update1(ParticleBlock* particles)
-    {
-        for (std::size_t bj = 0; bj < BLOCKS; bj++)
-            for (std::size_t j = 0; j < LANES; j++)
-            {
-                auto& blockJ = particles[bj];
-                const vec p1posx = (FP) blockJ.pos.x[j];
-                const vec p1posy = (FP) blockJ.pos.y[j];
-                const vec p1posz = (FP) blockJ.pos.z[j];
-                vec p1velx = (FP) blockJ.vel.x[j];
-                vec p1vely = (FP) blockJ.vel.y[j];
-                vec p1velz = (FP) blockJ.vel.z[j];
-
-                for (std::size_t bi = 0; bi < BLOCKS; bi++)
-                {
-                    const auto& blockI = particles[bi];
-                    pPInteraction(
-                        p1posx,
-                        p1posy,
-                        p1posz,
-                        p1velx,
-                        p1vely,
-                        p1velz,
                         blockI.pos.x,
                         blockI.pos.y,
                         blockI.pos.z,
-                        blockI.mass);
+                        blockI.vel.x,
+                        blockI.vel.y,
+                        blockI.vel.z,
+                        pjposx,
+                        pjposy,
+                        pjposz,
+                        pjmass);
+                }
+    }
+
+    // update (read/write) 1 particles I based on the influence of 8 particles J
+    void update1(ParticleBlock* particles)
+    {
+        for (std::size_t bi = 0; bi < BLOCKS; bi++)
+            for (std::size_t i = 0; i < LANES; i++)
+            {
+                auto& blockI = particles[bi];
+                const vec piposx = (FP) blockI.pos.x[i];
+                const vec piposy = (FP) blockI.pos.y[i];
+                const vec piposz = (FP) blockI.pos.z[i];
+                vec pivelx = (FP) blockI.vel.x[i];
+                vec pively = (FP) blockI.vel.y[i];
+                vec pivelz = (FP) blockI.vel.z[i];
+
+                for (std::size_t bj = 0; bj < BLOCKS; bj++)
+                {
+                    const auto& blockJ = particles[bj];
+                    pPInteraction(
+                        piposx,
+                        piposy,
+                        piposz,
+                        pivelx,
+                        pively,
+                        pivelz,
+                        blockJ.pos.x,
+                        blockJ.pos.y,
+                        blockJ.pos.z,
+                        blockJ.mass);
                 }
 
-                blockJ.vel.x[j] = p1velx.sum();
-                blockJ.vel.y[j] = p1vely.sum();
-                blockJ.vel.z[j] = p1velz.sum();
+                blockI.vel.x[i] = pivelx.sum();
+                blockI.vel.y[i] = pively.sum();
+                blockI.vel.z[i] = pivelz.sum();
             }
     }
 
