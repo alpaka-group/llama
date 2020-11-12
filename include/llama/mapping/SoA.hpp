@@ -5,6 +5,8 @@
 
 #include "Common.hpp"
 
+#include <limits>
+
 namespace llama::mapping
 {
     /// Struct of array mapping. Used to create a \ref View via \ref allocView.
@@ -78,10 +80,13 @@ namespace llama::mapping
                             index++;
                     });
                     if (!found)
-                        throw "Passed TargetDatumCoord must be in datum domain";
+                        return std::numeric_limits<std::size_t>::max();
                     return index;
                 }
                 ();
+                static_assert(
+                    blob != std::numeric_limits<std::size_t>::max(),
+                    "Passed TargetDatumCoord must be in datum domain");
 
                 LLAMA_FORCE_INLINE_RECURSIVE
                 const auto offset = LinearizeArrayDomainFunctor{}(coord, arrayDomainSize)
@@ -93,7 +98,9 @@ namespace llama::mapping
                 LLAMA_FORCE_INLINE_RECURSIVE
                 const auto offset = LinearizeArrayDomainFunctor{}(coord, arrayDomainSize)
                         * sizeof(GetType<DatumDomain, DatumCoord<DatumDomainCoord...>>)
-                    + offsetOf<DatumDomain, DatumCoord<DatumDomainCoord...>> * LinearizeArrayDomainFunctor{}.size(arrayDomainSize);
+                    + offsetOf<
+                          DatumDomain,
+                          DatumCoord<DatumDomainCoord...>> * LinearizeArrayDomainFunctor{}.size(arrayDomainSize);
                 return {0, offset};
             }
         }
