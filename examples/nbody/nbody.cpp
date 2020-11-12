@@ -799,6 +799,10 @@ namespace manualAoSoA_Vc
     template <typename Ex>
     void update8(ParticleBlock* particles, Ex ex)
     {
+        //#    pragma omp parallel for
+        //        for (std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
+        //        {
+        //            auto& blockI = particles[bi];
         std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& blockI) {
             for (std::size_t bj = 0; bj < BLOCKS; bj++)
                 for (std::size_t j = 0; j < LANES; j++)
@@ -822,12 +826,17 @@ namespace manualAoSoA_Vc
                         pjmass);
                 }
         });
+        //}
     }
 
     // update (read/write) 1 particles I based on the influence of 8 particles J
     template <typename Ex>
     void update1(ParticleBlock* particles, Ex ex)
     {
+        //#    pragma omp parallel for
+        //        for (std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
+        //        {
+        //            auto& blockI = particles[bi];
         std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& blockI) {
             for (std::size_t i = 0; i < LANES; i++)
             {
@@ -859,6 +868,7 @@ namespace manualAoSoA_Vc
                 blockI.vel.z[i] = pivelz.sum();
             }
         });
+        //}
     }
     template <typename Ex>
     void move(ParticleBlock* particles, Ex ex)
