@@ -17,10 +17,6 @@
 #include <utility>
 
 constexpr auto MAPPING = 0; ///< 0 native AoS, 1 native SoA, 2 native SoA (separate blobs), 3 tree AoS, 4 tree SoA
-constexpr auto USE_SHARED = true; ///< defines whether shared memory shall be used
-constexpr auto USE_SHARED_TREE = true; ///< defines whether the shared memory shall use tree mapping or
-                                       ///< native mapping
-
 constexpr auto PROBLEM_SIZE = 16 * 1024; ///< total number of particles
 constexpr auto BLOCK_SIZE = 256; ///< number of elements per block
 constexpr auto STEPS = 5; ///< number of steps to calculate
@@ -70,15 +66,8 @@ struct UpdateKernelSM
     LLAMA_FN_HOST_ACC_INLINE void operator()(const Acc& acc, View particles, FP ts) const
     {
         auto sharedView = [&] {
-            const auto sharedMapping = [&] {
-                if constexpr (USE_SHARED_TREE)
-                    return llama::mapping::tree::Mapping{
-                        typename View::ArrayDomain{BlockSize},
-                        llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
-                        typename View::DatumDomain{}};
-                else
-                    return llama::mapping::SoA{typename View::ArrayDomain{BlockSize}, typename View::DatumDomain{}};
-            }();
+            const auto sharedMapping
+                = llama::mapping::SoA{typename View::ArrayDomain{BlockSize}, typename View::DatumDomain{}};
 
             // if there is only 1 thread per block, avoid using shared
             // memory
