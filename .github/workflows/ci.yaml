@@ -1,6 +1,9 @@
 name: CI
 on: [push, pull_request]
 
+env:
+  threads: 4
+
 jobs:
   amalgamation:
     runs-on: ubuntu-latest
@@ -50,7 +53,7 @@ jobs:
         export BOOST_ROOT=$BOOST_ROOT_1_72_0
         CXX=g++-10 cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -DASAN_FOR_TESTS=ON -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
     - name: build
-      run: cmake --build build
+      run: cmake --build build -j $threads
     - name: tests
       run: build/tests
 
@@ -92,7 +95,7 @@ jobs:
         $env:BOOST_ROOT = $env:BOOST_ROOT_1_72_0
         cmake .. "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
     - name: build
-      run: cmake --build build --config $env:CONFIG
+      run: cmake --build build -j $env:threads --config $env:CONFIG
     - name: tests
       run: |
         & build/$env:CONFIG/tests
