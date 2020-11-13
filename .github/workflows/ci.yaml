@@ -2,6 +2,25 @@ name: CI
 on: [push, pull_request]
 
 jobs:
+  amalgamation:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: clone amalgamate
+      uses: actions/checkout@v2
+      with:
+        repository: shrpnsld/amalgamate
+        path: build/amalgamate
+    - name: amalgamation
+      run: |
+        cd include/llama
+        ../../build/amalgamate/amalgamate -o ../../build -H
+    - name: upload llama.hpp
+      uses: actions/upload-artifact@v2
+      with:
+        name: llama.hpp
+        path: build/llama-amalgamated/llama.hpp
+
   build-ubuntu:
     runs-on: ubuntu-latest
     steps:
@@ -19,20 +38,6 @@ jobs:
       run: cmake --build build
     - name: tests
       run: build/tests
-    - name: clone amalgamate
-      uses: actions/checkout@v2
-      with:
-        repository: shrpnsld/amalgamate
-        path: build/amalgamate
-    - name: amalgamation
-      run: |
-        cd include/llama
-        ../../build/amalgamate/amalgamate -o ../../build -H
-    - name: upload llama.hpp
-      uses: actions/upload-artifact@v2
-      with:
-        name: llama.hpp
-        path: build/llama-amalgamated/llama.hpp
 
   build-windows:
     runs-on: windows-latest
