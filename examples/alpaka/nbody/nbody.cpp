@@ -17,6 +17,7 @@
 #include <utility>
 
 constexpr auto MAPPING = 0; ///< 0 native AoS, 1 native SoA, 2 native SoA (separate blobs), 3 tree AoS, 4 tree SoA
+constexpr auto USE_SHARED_MEMORY = true; ///< use a kernel using shared memory for caching
 constexpr auto PROBLEM_SIZE = 16 * 1024; ///< total number of particles
 constexpr auto BLOCK_SIZE = 256; ///< number of elements per block
 constexpr auto STEPS = 5; ///< number of steps to calculate
@@ -241,8 +242,12 @@ int main()
 
     for (std::size_t s = 0; s < STEPS; ++s)
     {
-        // UpdateKernel<PROBLEM_SIZE, elemCount, BLOCK_SIZE> updateKernel;
-        UpdateKernelSM<PROBLEM_SIZE, elemCount, BLOCK_SIZE> updateKernel;
+        auto updateKernel = [&] {
+            if constexpr (USE_SHARED_MEMORY)
+                return UpdateKernelSM<PROBLEM_SIZE, elemCount, BLOCK_SIZE>{};
+            else
+                return UpdateKernel<PROBLEM_SIZE, elemCount, BLOCK_SIZE>{};
+        }();
         alpaka::exec<Acc>(queue, workdiv, updateKernel, accView, ts);
 
         chrono.printAndReset("Update kernel");
