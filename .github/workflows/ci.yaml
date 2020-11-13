@@ -2,7 +2,8 @@ name: CI
 on: [push, pull_request]
 
 env:
-  threads: 4
+  THREADS: 4
+  CONFIG: RelWithDebInfo
 
 jobs:
   amalgamation:
@@ -51,9 +52,9 @@ jobs:
         mkdir build
         cd build
         export BOOST_ROOT=$BOOST_ROOT_1_72_0
-        CXX=g++-10 cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -DASAN_FOR_TESTS=ON -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+        CXX=g++-10 cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DASAN_FOR_TESTS=ON -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
     - name: build
-      run: cmake --build build -j $threads
+      run: cmake --build build -j $THREADS
     - name: tests
       run: build/tests
 
@@ -61,7 +62,6 @@ jobs:
     runs-on: windows-latest
     env:
       VCPKG_DEFAULT_TRIPLET: x64-windows
-      CONFIG: RelWithDebInfo
     steps:
     - uses: actions/checkout@v2
     - name: install vcpkg
@@ -95,7 +95,7 @@ jobs:
         $env:BOOST_ROOT = $env:BOOST_ROOT_1_72_0
         cmake .. "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
     - name: build
-      run: cmake --build build -j $env:threads --config $env:CONFIG
+      run: cmake --build build -j $env:THREADS --config $env:CONFIG
     - name: tests
       run: |
         & build/$env:CONFIG/tests
