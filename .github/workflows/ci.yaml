@@ -52,7 +52,7 @@ jobs:
         mkdir build
         cd build
         export BOOST_ROOT=$BOOST_ROOT_1_72_0
-        CXX=g++-10 cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DASAN_FOR_TESTS=ON -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+        CXX=g++-10 cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DASAN_FOR_TESTS=ON -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
     - name: build
       run: cmake --build build -j $THREADS
     - name: tests
@@ -93,7 +93,7 @@ jobs:
         mkdir build
         cd build
         $env:BOOST_ROOT = $env:BOOST_ROOT_1_72_0
-        cmake .. "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+        cmake .. -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
     - name: build
       run: cmake --build build -j $env:THREADS --config $env:CONFIG
     - name: tests
