@@ -26,16 +26,25 @@ jobs:
         path: build/llama-amalgamated/llama.hpp
 
   build-ubuntu-gcc9-cuda:
+    env:
+      CUDA_INSTALLER: cuda_11.1.1_455.32.00_linux.run
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: vcpkg install dependencies
       run: |
         vcpkg install catch2 fmt tbb
+    - name: cache CUDA 11
+      id: cache-cude
+      uses: actions/cache@v2
+      with:
+        path: ${{env.CUDA_INSTALLER}}
+        key: ${{env.CUDA_INSTALLER}}
     - name: install CUDA 11
+      if: steps.cache-cuda.outputs.cache-hit != 'true'
       run: |
-        wget --no-verbose https://developer.download.nvidia.com/compute/cuda/11.1.1/local_installers/cuda_11.1.1_455.32.00_linux.run
-        sudo sh cuda_11.1.1_455.32.00_linux.run --silent --toolkit
+        wget --no-verbose https://developer.download.nvidia.com/compute/cuda/11.1.1/local_installers/$CUDA_INSTALLER
+        sudo sh $CUDA_INSTALLER --silent --toolkit
     - name: install alpaka
       run: |
         git clone https://github.com/alpaka-group/alpaka.git
