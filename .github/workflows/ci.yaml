@@ -28,6 +28,21 @@ jobs:
     - name: vcpkg install dependencies
       run: |
         vcpkg install catch2 fmt
+    - name: install alpaka
+      run: |
+        git clone https://github.com/alpaka-group/alpaka.git
+        mkdir alpaka/build
+        cd alpaka/build
+        export BOOST_ROOT=$BOOST_ROOT_1_72_0
+        cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+        sudo cmake --build . --target install
+    - name: install Vc
+      run: |
+        git clone https://github.com/VcDevel/Vc.git
+        mkdir Vc/build
+        cd Vc/build
+        cmake .. -DBUILD_TESTING=OFF -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+        sudo cmake --build . --target install
     - name: cmake
       run: |
         mkdir build
@@ -43,6 +58,7 @@ jobs:
     runs-on: windows-latest
     env:
       VCPKG_DEFAULT_TRIPLET: x64-windows
+      CONFIG: RelWithDebInfo
     steps:
     - uses: actions/checkout@v2
     - name: install vcpkg
@@ -53,6 +69,22 @@ jobs:
     - name: vcpkg install dependencies
       run: |
         & $env:VCPKG_ROOT/vcpkg install catch2 fmt
+    - name: install alpaka
+      run: |
+        git clone https://github.com/alpaka-group/alpaka.git
+        mkdir alpaka/build
+        cd alpaka/build
+        $env:BOOST_ROOT = $env:BOOST_ROOT_1_72_0
+        cmake .. "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+        cmake --build . --target install --config $env:CONFIG
+# Vc does not currently compile with MSVC
+#    - name: install Vc
+#      run: |
+#        git clone https://github.com/VcDevel/Vc.git
+#        mkdir Vc/build
+#        cd Vc/build
+#        cmake .. -DBUILD_TESTING=OFF "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+#        cmake --build . --target install --config $env:CONFIG
     - name: cmake
       run: |
         mkdir build
@@ -60,6 +92,7 @@ jobs:
         $env:BOOST_ROOT = $env:BOOST_ROOT_1_72_0
         cmake .. "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
     - name: build
-      run: cmake --build build --config RelWithDebInfo
+      run: cmake --build build --config $env:CONFIG
     - name: tests
-      run: build/RelWithDebInfo/tests
+      run: |
+        & build/$env:CONFIG/tests
