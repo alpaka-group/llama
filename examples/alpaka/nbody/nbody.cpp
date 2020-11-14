@@ -150,32 +150,32 @@ struct MoveKernel
     }
 };
 
+using Dim = alpaka::DimInt<1>;
+using Size = std::size_t;
+
+using Acc = alpaka::ExampleDefaultAcc<Dim, Size>;
+// using Acc = alpaka::AccGpuCudaRt<Dim, Size>;
+// using Acc = alpaka::AccCpuSerial<Dim, Size>;
+
+using DevHost = alpaka::DevCpu;
+using DevAcc = alpaka::Dev<Acc>;
+using PltfHost = alpaka::Pltf<DevHost>;
+using PltfAcc = alpaka::Pltf<DevAcc>;
+using Queue = alpaka::Queue<DevAcc, alpaka::Blocking>;
+
+constexpr std::size_t hardwareThreads = 2; // relevant for OpenMP2Threads
+using Distribution = common::ThreadsElemsDistribution<Acc, BLOCK_SIZE, hardwareThreads>;
+constexpr std::size_t elemCount = Distribution::elemCount;
+constexpr std::size_t threadCount = Distribution::threadCount;
+
 int main()
 {
-    using Dim = alpaka::DimInt<1>;
-    using Size = std::size_t;
-
-    using Acc = alpaka::ExampleDefaultAcc<Dim, Size>;
-    // using Acc = alpaka::AccGpuCudaRt<Dim, Size>;
-    // using Acc = alpaka::AccCpuSerial<Dim, Size>;
-
-    using DevHost = alpaka::DevCpu;
-    using DevAcc = alpaka::Dev<Acc>;
-    using PltfHost = alpaka::Pltf<DevHost>;
-    using PltfAcc = alpaka::Pltf<DevAcc>;
-    using Queue = alpaka::Queue<DevAcc, alpaka::Blocking>;
     const DevAcc devAcc(alpaka::getDevByIdx<PltfAcc>(0u));
     const DevHost devHost(alpaka::getDevByIdx<PltfHost>(0u));
     Queue queue(devAcc);
 
-    // NBODY
-    constexpr std::size_t hardwareThreads = 2; // relevant for OpenMP2Threads
-    using Distribution = common::ThreadsElemsDistribution<Acc, BLOCK_SIZE, hardwareThreads>;
-    constexpr std::size_t elemCount = Distribution::elemCount;
-    constexpr std::size_t threadCount = Distribution::threadCount;
     constexpr FP ts = 0.0001;
 
-    // LLAMA
     const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
 
     const auto mapping = [&] {

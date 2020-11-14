@@ -84,13 +84,12 @@ struct BlurKernel
             {
                 // Using SoA for the shared memory
                 constexpr auto sharedChunkSize = ElemsPerBlock + 2 * KernelSize;
-                const auto sharedMapping = llama::mapping::tree::Mapping(
+                const auto sharedMapping = llama::mapping::SoA(
                     typename View::ArrayDomain{sharedChunkSize, sharedChunkSize},
-                    llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
                     typename View::DatumDomain{});
                 constexpr auto sharedMemSize = llama::sizeOf<PixelOnAcc> * sharedChunkSize * sharedChunkSize;
                 auto& sharedMem = alpaka::allocVar<std::byte[sharedMemSize], __COUNTER__>(acc);
-                return llama::View{sharedMapping, llama::Array{&sharedMem[0]}};
+                return llama::View(sharedMapping, llama::Array<std::byte*, 1>{&sharedMem[0]});
             }
             else
                 return int{}; // dummy

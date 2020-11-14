@@ -66,7 +66,7 @@ namespace llama
 
         LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator+(const Array& a, const Array& b) -> Array
         {
-            Array temp;
+            Array temp{};
             for (std::size_t i = 0; i < N; ++i)
                 temp[i] = a[i] + b[i];
             return temp;
