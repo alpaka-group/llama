@@ -1,28 +1,42 @@
-/* To the extent possible under law, Alexander Matthes has waived all
- * copyright and related or neighboring rights to this example of LLAMA using
- * the CC0 license, see https://creativecommons.org/publicdomain/zero/1.0 .
- *
- * This example is meant to be "stolen" from to learn how to use LLAMA, which
- * itself is not under the public domain but LGPL3+.
- */
-
 #include "../../common/Stopwatch.hpp"
-#include "../../common/alpakaHelpers.hpp"
 
 #include <alpaka/alpaka.hpp>
 #include <alpaka/example/ExampleDefaultAcc.hpp>
+#include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <llama/llama.hpp>
 #include <random>
+#include <string>
 #include <utility>
 
-constexpr auto MAPPING = 0; ///< 0 native AoS, 1 native SoA, 2 native SoA (separate blobs), 3 tree AoS, 4 tree SoA
-constexpr auto USE_SHARED_MEMORY = true; ///< use a kernel using shared memory for caching
-constexpr auto PROBLEM_SIZE = 16 * 1024; ///< total number of particles
-constexpr auto BLOCK_SIZE = 256; ///< number of elements per block
-constexpr auto STEPS = 5; ///< number of steps to calculate
-
 using FP = float;
+
+constexpr auto PROBLEM_SIZE = 16 * 1024; ///< total number of particles
+constexpr auto STEPS = 5; ///< number of steps to calculate
+constexpr auto TIMESTEP = FP{0.0001};
+constexpr auto ALLOW_RSQRT = true; // rsqrt can be way faster, but less accurate
+
+#if defined(ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED) || defined(ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED)
+#    if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#        error Cannot enable CUDA together with other backends, because nvcc cannot parse the Vc header, sorry :/
+#    endif
+// nvcc fails to compile Vc headers even if nothing is used from there, so we need to conditionally include it
+#    include <Vc/Vc>
+constexpr auto DESIRED_ELEMENTS_PER_THREAD = Vc::float_v::size();
+constexpr auto THREADS_PER_BLOCK = 1;
+constexpr auto AOSOA_LANES = Vc::float_v::size(); // vectors
+#elif defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+constexpr auto DESIRED_ELEMENTS_PER_THREAD = 1;
+constexpr auto THREADS_PER_BLOCK = 256;
+constexpr auto AOSOA_LANES = 32; // coalesced memory access
+#else
+#    error "Unsupported backend"
+#endif
+
+// makes our life easier for now
+static_assert(PROBLEM_SIZE % (DESIRED_ELEMENTS_PER_THREAD * THREADS_PER_BLOCK) == 0);
+
 constexpr FP EPS2 = 0.01;
 
 // clang-format off
@@ -34,7 +48,7 @@ namespace tag
     struct Y{};
     struct Z{};
     struct Mass{};
-} // namespace tag
+}
 
 using Particle = llama::DS<
     llama::DE<tag::Pos, llama::DS<
@@ -48,89 +62,150 @@ using Particle = llama::DS<
     llama::DE<tag::Mass, FP>>;
 // clang-format on
 
-template <typename VirtualParticleI, typename VirtualParticleJ>
-LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticleI pi, VirtualParticleJ pj, FP ts)
+enum Mapping
 {
-    auto dist = pi(tag::Pos()) - pj(tag::Pos());
-    dist *= dist;
-    const FP distSqr = EPS2 + dist(tag::X()) + dist(tag::Y()) + dist(tag::Z());
-    const FP distSixth = distSqr * distSqr * distSqr;
-    const FP invDistCube = 1.0f / std::sqrt(distSixth);
-    const FP sts = pj(tag::Mass()) * invDistCube * ts;
-    pi(tag::Vel()) += dist * sts;
-}
-
-template <std::size_t ProblemSize, std::size_t Elems, std::size_t BlockSize>
-struct UpdateKernelSM
-{
-    template <typename Acc, typename View>
-    LLAMA_FN_HOST_ACC_INLINE void operator()(const Acc& acc, View particles, FP ts) const
-    {
-        auto sharedView = [&] {
-            const auto sharedMapping = llama::mapping::SoA(
-                typename View::ArrayDomain{BlockSize},
-                typename View::DatumDomain{}); // bug: nvcc 11.1 cannot have {} to call ctor
-
-            // if there is only 1 thread per block, avoid using shared
-            // memory
-            if constexpr (BlockSize / Elems == 1)
-                return llama::allocViewStack<View::ArrayDomain::rank, typename View::DatumDomain>();
-            else
-            {
-                constexpr auto sharedMemSize = llama::sizeOf<typename View::DatumDomain> * BlockSize;
-                auto& sharedMem = alpaka::declareSharedVar<std::byte[sharedMemSize], __COUNTER__>(acc);
-                return llama::View{
-                    sharedMapping,
-                    llama::Array<std::byte*, 1>{
-                        &sharedMem[0]}}; // bug: nvcc 11.1 needs explicit template args for llama::Array
-            }
-        }();
-
-        const auto ti = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0u];
-        const auto tbi = alpaka::getIdx<alpaka::Block, alpaka::Threads>(acc)[0];
-
-        const auto start = ti * Elems;
-        const auto end = alpaka::math::min(acc, start + Elems, ProblemSize);
-        LLAMA_INDEPENDENT_DATA
-        for (std::size_t b = 0; b < (ProblemSize + BlockSize - 1u) / BlockSize; ++b)
-        {
-            const auto start2 = b * BlockSize;
-            const auto end2 = alpaka::math::min(acc, start2 + BlockSize, ProblemSize) - start2;
-
-            LLAMA_INDEPENDENT_DATA
-            for (auto pos2 = decltype(end2)(0); pos2 + ti < end2; pos2 += BlockSize / Elems)
-                sharedView(pos2 + tbi) = particles(start2 + pos2 + tbi);
-            alpaka::syncBlockThreads(acc);
-
-            LLAMA_INDEPENDENT_DATA
-            for (auto pos2 = decltype(end2)(0); pos2 < end2; ++pos2)
-            {
-                LLAMA_INDEPENDENT_DATA
-                for (auto i = start; i < end; ++i)
-                    pPInteraction(particles(i), sharedView(pos2), ts);
-            }
-            alpaka::syncBlockThreads(acc);
-        }
-    }
+    AoS,
+    SoA,
+    AoSoA
 };
 
-template <std::size_t ProblemSize, std::size_t Elems, std::size_t BlockSize>
+namespace stdext
+{
+    LLAMA_FN_HOST_ACC_INLINE FP rsqrt(FP f)
+    {
+        return 1.0f / std::sqrt(f);
+    }
+} // namespace stdext
+
+// FIXME: this makes assumptions that there are always float_v::size() many values blocked in the LLAMA view
+template <typename Vec>
+LLAMA_FN_HOST_ACC_INLINE auto load(const FP& src)
+{
+    if constexpr (std::is_same_v<Vec, FP>)
+        return src;
+    else
+        return Vec(&src);
+}
+
+template <typename Vec>
+LLAMA_FN_HOST_ACC_INLINE auto broadcast(const FP& src)
+{
+    return Vec(src);
+}
+
+template <typename Vec>
+LLAMA_FN_HOST_ACC_INLINE auto store(FP& dst, Vec v)
+{
+    if constexpr (std::is_same_v<Vec, FP>)
+        dst = v;
+    else
+        v.store(&dst);
+}
+
+template <std::size_t Elems>
+struct VecType
+{
+    // TODO: we need a vector type that also works on GPUs
+#ifndef ALPAKA_ACC_GPU_CUDA_ENABLED
+    using type = Vc::SimdArray<FP, Elems>;
+#endif
+};
+template <>
+struct VecType<1>
+{
+    using type = FP;
+};
+
+template <std::size_t Elems, typename ViewParticleI, typename VirtualParticleJ>
+LLAMA_FN_HOST_ACC_INLINE void pPInteraction(ViewParticleI pi, VirtualParticleJ pj)
+{
+    using Vec = typename VecType<Elems>::type;
+
+    using std::sqrt;
+    using stdext::rsqrt;
+#ifndef ALPAKA_ACC_GPU_CUDA_ENABLED
+    using Vc::rsqrt;
+    using Vc::sqrt;
+#endif
+
+    const Vec xdistance = load<Vec>(pi(tag::Pos{}, tag::X{})) - broadcast<Vec>(pj(tag::Pos{}, tag::X{}));
+    const Vec ydistance = load<Vec>(pi(tag::Pos{}, tag::Y{})) - broadcast<Vec>(pj(tag::Pos{}, tag::Y{}));
+    const Vec zdistance = load<Vec>(pi(tag::Pos{}, tag::Z{})) - broadcast<Vec>(pj(tag::Pos{}, tag::Z{}));
+    const Vec xdistanceSqr = xdistance * xdistance;
+    const Vec ydistanceSqr = ydistance * ydistance;
+    const Vec zdistanceSqr = zdistance * zdistance;
+    const Vec distSqr = +EPS2 + xdistanceSqr + ydistanceSqr + zdistanceSqr;
+    const Vec distSixth = distSqr * distSqr * distSqr;
+    const Vec invDistCube = ALLOW_RSQRT ? rsqrt(distSixth) : (1.0f / sqrt(distSixth));
+    const Vec sts = broadcast<Vec>(pj(tag::Mass())) * invDistCube * TIMESTEP;
+    store<Vec>(pi(tag::Vel{}, tag::X{}), xdistanceSqr * sts + load<Vec>(pi(tag::Vel{}, tag::X{})));
+    store<Vec>(pi(tag::Vel{}, tag::Y{}), ydistanceSqr * sts + load<Vec>(pi(tag::Vel{}, tag::Y{})));
+    store<Vec>(pi(tag::Vel{}, tag::Z{}), zdistanceSqr * sts + load<Vec>(pi(tag::Vel{}, tag::Z{})));
+}
+
+template <std::size_t ProblemSize, std::size_t Elems, std::size_t BlockSize, Mapping MappingSM>
 struct UpdateKernel
 {
     template <typename Acc, typename View>
-    LLAMA_FN_HOST_ACC_INLINE void operator()(const Acc& acc, View particles, FP ts) const
+    LLAMA_FN_HOST_ACC_INLINE void operator()(const Acc& acc, View particles) const
     {
-        const auto ti = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0u];
-        const auto start = ti * Elems;
-        const auto end = alpaka::math::min(acc, start + Elems, ProblemSize);
+        auto sharedView = [&] {
+            // if there is only 1 thread per block, use stack instead of shared memory
+            if constexpr (BlockSize == 1)
+                return llama::allocViewStack<View::ArrayDomain::rank, typename View::DatumDomain>();
+            else
+            {
+                constexpr auto sharedMapping = [] {
+                    constexpr auto arrayDomain = llama::ArrayDomain{BlockSize};
+                    if constexpr (MappingSM == AoS)
+                        return llama::mapping::AoS{arrayDomain, Particle{}};
+                    if constexpr (MappingSM == SoA)
+                        return llama::mapping::SoA{arrayDomain, Particle{}};
+                    if constexpr (MappingSM == AoSoA)
+                        return llama::mapping::AoSoA<decltype(arrayDomain), Particle, AOSOA_LANES>{arrayDomain};
+                }();
+                static_assert(decltype(sharedMapping)::blobCount == 1);
+
+                constexpr auto sharedMemSize = llama::sizeOf<typename View::DatumDomain> * BlockSize;
+                auto& sharedMem = alpaka::declareSharedVar<std::byte[sharedMemSize], __COUNTER__>(acc);
+                return llama::View{sharedMapping, llama::Array<std::byte*, 1>{&sharedMem[0]}};
+            }
+        }();
+
+        const auto ti = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0];
+        const auto tbi = alpaka::getIdx<alpaka::Block, alpaka::Threads>(acc)[0];
+
+        // TODO: we could optimize here, because only velocity is ever updated
+        auto pi = [&] {
+            constexpr auto arrayDomain = llama::ArrayDomain{Elems};
+            constexpr auto mapping
+                = llama::mapping::SoA<typename View::ArrayDomain, typename View::DatumDomain, std::false_type>{
+                    arrayDomain};
+            constexpr auto blobAlloc = llama::bloballoc::Stack<llama::sizeOf<typename View::DatumDomain> * Elems>{};
+            return llama::allocView(mapping, blobAlloc);
+        }();
+        // TODO: vector load
+        LLAMA_INDEPENDENT_DATA
+        for (auto e = 0u; e < Elems; e++)
+            pi(e) = particles(ti * Elems + e);
 
         LLAMA_INDEPENDENT_DATA
-        for (auto j = 0; j < ProblemSize; ++j)
+        for (std::size_t blockOffset = 0; blockOffset < ProblemSize; blockOffset += BlockSize)
         {
             LLAMA_INDEPENDENT_DATA
-            for (auto i = start; i < end; ++i)
-                pPInteraction(particles(i), particles(j), ts);
+            for (auto j = tbi; j < BlockSize; j += THREADS_PER_BLOCK)
+                sharedView(j) = particles(blockOffset + j);
+            alpaka::syncBlockThreads(acc);
+
+            LLAMA_INDEPENDENT_DATA
+            for (auto j = std::size_t{0}; j < BlockSize; ++j)
+                pPInteraction<Elems>(pi(0u), sharedView(j));
+            alpaka::syncBlockThreads(acc);
         }
+        // TODO: vector store
+        LLAMA_INDEPENDENT_DATA
+        for (auto e = 0u; e < Elems; e++)
+            particles(ti * Elems + e) = pi(e);
     }
 };
 
@@ -138,84 +213,80 @@ template <std::size_t ProblemSize, std::size_t Elems>
 struct MoveKernel
 {
     template <typename Acc, typename View>
-    LLAMA_FN_HOST_ACC_INLINE void operator()(const Acc& acc, View particles, FP ts) const
+    LLAMA_FN_HOST_ACC_INLINE void operator()(const Acc& acc, View particles) const
     {
         const auto ti = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0];
-        const auto start = ti * Elems;
-        const auto end = alpaka::math::min(acc, start + Elems, ProblemSize);
+        const auto i = ti * Elems;
 
-        LLAMA_INDEPENDENT_DATA
-        for (auto i = start; i < end; ++i)
-            particles(i)(tag::Pos()) += particles(i)(tag::Vel()) * ts;
+        using Vec = typename VecType<Elems>::type;
+        store<Vec>(
+            particles(i)(tag::Pos{}, tag::X{}),
+            load<Vec>(particles(i)(tag::Pos{}, tag::X{})) + load<Vec>(particles(i)(tag::Vel{}, tag::X{})) * TIMESTEP);
+        store<Vec>(
+            particles(i)(tag::Pos{}, tag::Y{}),
+            load<Vec>(particles(i)(tag::Pos{}, tag::Y{})) + load<Vec>(particles(i)(tag::Vel{}, tag::Y{})) * TIMESTEP);
+        store<Vec>(
+            particles(i)(tag::Pos{}, tag::Z{}),
+            load<Vec>(particles(i)(tag::Pos{}, tag::Z{})) + load<Vec>(particles(i)(tag::Vel{}, tag::Z{})) * TIMESTEP);
     }
 };
 
-using Dim = alpaka::DimInt<1>;
-using Size = std::size_t;
-
-using Acc = alpaka::ExampleDefaultAcc<Dim, Size>;
-// using Acc = alpaka::AccGpuCudaRt<Dim, Size>;
-// using Acc = alpaka::AccCpuSerial<Dim, Size>;
-
-using DevHost = alpaka::DevCpu;
-using DevAcc = alpaka::Dev<Acc>;
-using PltfHost = alpaka::Pltf<DevHost>;
-using PltfAcc = alpaka::Pltf<DevAcc>;
-using Queue = alpaka::Queue<DevAcc, alpaka::Blocking>;
-
-constexpr std::size_t hardwareThreads = 2; // relevant for OpenMP2Threads
-using Distribution = common::ThreadsElemsDistribution<Acc, BLOCK_SIZE, hardwareThreads>;
-constexpr std::size_t elemCount = Distribution::elemCount;
-constexpr std::size_t threadCount = Distribution::threadCount;
-
-auto main() -> int
-try
+template <template <typename, typename> typename AccTemplate, Mapping MappingGM, Mapping MappingSM>
+void run(std::ostream& plotFile)
 {
+    using Dim = alpaka::DimInt<1>;
+    using Size = std::size_t;
+    using Acc = AccTemplate<Dim, Size>;
+    using DevHost = alpaka::DevCpu;
+    using DevAcc = alpaka::Dev<Acc>;
+    using PltfHost = alpaka::Pltf<DevHost>;
+    using PltfAcc = alpaka::Pltf<DevAcc>;
+    using Queue = alpaka::Queue<DevAcc, alpaka::Blocking>;
+
+    auto mappingName = [](int m) -> std::string {
+        if (m == 0)
+            return "AoS";
+        if (m == 1)
+            return "SoA";
+        if (m == 2)
+            return "AoSoA" + std::to_string(AOSOA_LANES);
+        std::abort();
+    };
+    const auto title = "GM " + mappingName(MappingGM) + " SM " + mappingName(MappingSM);
+    std::cout << '\n' << title << '\n';
+
     const DevAcc devAcc(alpaka::getDevByIdx<PltfAcc>(0u));
     const DevHost devHost(alpaka::getDevByIdx<PltfHost>(0u));
     Queue queue(devAcc);
 
-    constexpr FP ts = 0.0001;
-
-    const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
-
-    const auto mapping = [&] {
-        if constexpr (MAPPING == 0)
+    auto mapping = [] {
+        const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
+        if constexpr (MappingGM == AoS)
             return llama::mapping::AoS{arrayDomain, Particle{}};
-        if constexpr (MAPPING == 1)
+        if constexpr (MappingGM == SoA)
             return llama::mapping::SoA{arrayDomain, Particle{}};
-        if constexpr (MAPPING == 2)
-            return llama::mapping::SoA{arrayDomain, Particle{}, std::true_type{}};
-        if constexpr (MAPPING == 3)
-            return llama::mapping::tree::Mapping{arrayDomain, llama::Tuple{}, Particle{}};
-        if constexpr (MAPPING == 4)
-            return llama::mapping::tree::Mapping{
-                arrayDomain,
-                llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
-                Particle{}};
+        // if constexpr (MappingGM == 2)
+        //    return llama::mapping::SoA{arrayDomain, Particle{}, std::true_type{}};
+        if constexpr (MappingGM == AoSoA)
+            return llama::mapping::AoSoA<decltype(arrayDomain), Particle, AOSOA_LANES>{arrayDomain};
     }();
 
-    std::cout << PROBLEM_SIZE / 1000 << " thousand particles\n"
-              << PROBLEM_SIZE * llama::sizeOf<Particle> / 1000 / 1000 << "MB \n";
-
-    Stopwatch chrono;
+    Stopwatch watch;
 
     const auto bufferSize = Size(mapping.blobSize(0));
 
     auto hostBuffer = alpaka::allocBuf<std::byte, Size>(devHost, bufferSize);
     auto accBuffer = alpaka::allocBuf<std::byte, Size>(devAcc, bufferSize);
 
-    chrono.printAndReset("Alloc");
+    watch.printAndReset("alloc");
 
     auto hostView = llama::View{mapping, llama::Array{alpaka::getPtrNative(hostBuffer)}};
     auto accView = llama::View{mapping, llama::Array{alpaka::getPtrNative(accBuffer)}};
 
-    chrono.printAndReset("Views");
+    watch.printAndReset("views");
 
-    /// Random initialization of the particles
     std::mt19937_64 generator;
     std::normal_distribution<FP> distribution(FP(0), FP(1));
-    LLAMA_INDEPENDENT_DATA
     for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
     {
         llama::One<Particle> p;
@@ -229,37 +300,72 @@ try
         hostView(i) = p;
     }
 
-    chrono.printAndReset("Init");
+    watch.printAndReset("init");
 
     alpaka::memcpy(queue, accBuffer, hostBuffer, bufferSize);
-    chrono.printAndReset("Copy H->D");
+    watch.printAndReset("copy H->D");
 
-    const alpaka::Vec<Dim, Size> Elems(static_cast<Size>(elemCount));
-    const alpaka::Vec<Dim, Size> threads(static_cast<Size>(threadCount));
-    constexpr auto innerCount = elemCount * threadCount;
-    const alpaka::Vec<Dim, Size> blocks(static_cast<Size>((PROBLEM_SIZE + innerCount - 1u) / innerCount));
+    const auto workdiv = alpaka::WorkDivMembers<Dim, Size>{
+        alpaka::Vec<Dim, Size>{static_cast<Size>(PROBLEM_SIZE / (THREADS_PER_BLOCK * DESIRED_ELEMENTS_PER_THREAD))},
+        alpaka::Vec<Dim, Size>{static_cast<Size>(THREADS_PER_BLOCK)},
+        alpaka::Vec<Dim, Size>{static_cast<Size>(DESIRED_ELEMENTS_PER_THREAD)}};
 
-    const auto workdiv = alpaka::WorkDivMembers<Dim, Size>{blocks, threads, Elems};
-
+    double sumUpdate = 0;
+    double sumMove = 0;
     for (std::size_t s = 0; s < STEPS; ++s)
     {
-        auto updateKernel = [&] {
-            if constexpr (USE_SHARED_MEMORY)
-                return UpdateKernelSM<PROBLEM_SIZE, elemCount, BLOCK_SIZE>{};
-            else
-                return UpdateKernel<PROBLEM_SIZE, elemCount, BLOCK_SIZE>{};
-        }();
-        alpaka::exec<Acc>(queue, workdiv, updateKernel, accView, ts);
+        auto updateKernel = UpdateKernel<PROBLEM_SIZE, DESIRED_ELEMENTS_PER_THREAD, THREADS_PER_BLOCK, MappingSM>{};
+        alpaka::exec<Acc>(queue, workdiv, updateKernel, accView);
+        sumUpdate += watch.printAndReset("update", '\t');
 
-        chrono.printAndReset("Update kernel");
-
-        MoveKernel<PROBLEM_SIZE, elemCount> moveKernel;
-        alpaka::exec<Acc>(queue, workdiv, moveKernel, accView, ts);
-        chrono.printAndReset("Move kernel");
+        auto moveKernel = MoveKernel<PROBLEM_SIZE, DESIRED_ELEMENTS_PER_THREAD>{};
+        alpaka::exec<Acc>(queue, workdiv, moveKernel, accView);
+        sumMove += watch.printAndReset("move");
     }
+    plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
     alpaka::memcpy(queue, hostBuffer, accBuffer, bufferSize);
-    chrono.printAndReset("Copy D->H");
+    watch.printAndReset("copy D->H");
+}
+
+int main()
+try
+{
+    std::cout << PROBLEM_SIZE / 1000 << "k particles (" << PROBLEM_SIZE * llama::sizeOf<Particle> / 1024 << "kiB)\n"
+              << "Caching " << THREADS_PER_BLOCK << " particles (" << THREADS_PER_BLOCK * llama::sizeOf<Particle> / 1024
+              << " kiB) in shared memory\n"
+              << "Reducing on " << DESIRED_ELEMENTS_PER_THREAD << " particles per thread\n"
+              << "Using " << THREADS_PER_BLOCK << " threads per block\n";
+    std::cout << std::fixed;
+
+    std::ofstream plotFile{"nbody.tsv"};
+    plotFile.exceptions(std::ios::badbit | std::ios::failbit);
+    plotFile << "\"\"\t\"update\"\t\"move\"\n";
+
+    // using Acc = alpaka::ExampleDefaultAcc;
+    // using Acc = alpaka::AccGpuCudaRt<Dim, Size>;
+    // using Acc = alpaka::AccCpuSerial<Dim, Size>;
+    // using Acc = alpaka::AccCpuOmp2Blocks<Dim, Size>;
+
+    run<alpaka::ExampleDefaultAcc, AoS, AoS>(plotFile);
+    run<alpaka::ExampleDefaultAcc, AoS, SoA>(plotFile);
+    run<alpaka::ExampleDefaultAcc, AoS, AoSoA>(plotFile);
+    run<alpaka::ExampleDefaultAcc, SoA, AoS>(plotFile);
+    run<alpaka::ExampleDefaultAcc, SoA, SoA>(plotFile);
+    run<alpaka::ExampleDefaultAcc, SoA, AoSoA>(plotFile);
+    run<alpaka::ExampleDefaultAcc, AoSoA, AoS>(plotFile);
+    run<alpaka::ExampleDefaultAcc, AoSoA, SoA>(plotFile);
+    run<alpaka::ExampleDefaultAcc, AoSoA, AoSoA>(plotFile);
+
+    std::cout << "Plot with: ./nbody.sh\n";
+    std::ofstream{"nbody.sh"} << R"(#!/usr/bin/gnuplot -p
+set style data histograms
+set style fill solid
+set xtics rotate by 45 right
+set key out top center maxrows 3
+set yrange [0:*]
+plot 'nbody.tsv' using 2:xtic(1) ti col
+)";
 
     return 0;
 }
