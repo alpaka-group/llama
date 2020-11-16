@@ -15,8 +15,6 @@
 
 #include "../../common/Stopwatch.hpp"
 #include "../../common/alpakaHelpers.hpp"
-#include "stb_image.h"
-#include "stb_image_write.h"
 
 #include <alpaka/alpaka.hpp>
 #include <alpaka/example/ExampleDefaultAcc.hpp>
@@ -24,6 +22,8 @@
 #include <list>
 #include <llama/llama.hpp>
 #include <random>
+#include <stb_image.h>
+#include <stb_image_write.h>
 #include <utility>
 
 constexpr auto ASYNC = true; ///< defines whether the data shall be processed asynchronously
@@ -162,8 +162,7 @@ int main(int argc, char** argv)
     // using Acc = alpaka::AccGpuCudaRt<Dim, Size>;
     // using Acc = alpaka::AccCpuSerial<Dim, Size>;
 
-    using Queue
-        = alpaka::Queue<Acc, std::conditional_t<ASYNC, alpaka::NonBlocking, alpaka::Blocking>>;
+    using Queue = alpaka::Queue<Acc, std::conditional_t<ASYNC, alpaka::NonBlocking, alpaka::Blocking>>;
     using DevHost = alpaka::DevCpu;
     using DevAcc = alpaka::Dev<Acc>;
     using PltfHost = alpaka::Pltf<DevHost>;
@@ -230,8 +229,7 @@ int main(int argc, char** argv)
     std::vector<alpaka::Buf<DevHost, std::byte, alpaka::DimInt<1>, std::size_t>> hostChunkBuffer;
     std::vector<llama::View<decltype(devMapping), std::byte*>> hostChunkView;
 
-    std::vector<alpaka::Buf<DevAcc, std::byte, alpaka::DimInt<1>, std::size_t>> devOldBuffer,
-        devNewBuffer;
+    std::vector<alpaka::Buf<DevAcc, std::byte, alpaka::DimInt<1>, std::size_t>> devOldBuffer, devNewBuffer;
     std::vector<llama::View<decltype(devMapping), std::byte*>> devOldView, devNewView;
 
     for (std::size_t i = 0; i < CHUNK_COUNT; ++i)
