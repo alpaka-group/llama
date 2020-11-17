@@ -65,6 +65,13 @@ if (LLAMA_BUILD_EXAMPLES)
 		add_subdirectory("examples/alpaka/vectoradd")
 		add_subdirectory("examples/alpaka/asyncblur")
 	endif()
+
+	include(CheckLanguage)
+	check_language(CUDA)
+	if (CMAKE_CUDA_COMPILER)
+		enable_language(CUDA)
+		add_subdirectory("examples/cuda/nbody")
+	endif()
 endif()
 
 # install
