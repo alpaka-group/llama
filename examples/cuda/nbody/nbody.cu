@@ -1,11 +1,13 @@
 #include "../../common/Stopwatch.hpp"
 
 #include <cuda_runtime.h>
+#include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <llama/llama.hpp>
 #include <random>
-#include <utility>
 #include <string>
+#include <utility>
 
 using FP = float;
 
@@ -121,7 +123,7 @@ void checkError(cudaError_t code)
 }
 
 template <int Mapping, int MappingSM>
-void run(const char* name, bool useSharedMemory)
+void run(const std::string& name, std::ostream& plotFile, bool useSharedMemory)
 try
 {
     auto mappingName = [](int m) -> std::string {
@@ -132,10 +134,9 @@ try
         if (m == 2)
             return "AoSoA" + std::to_string(AOSOA_LANES);
     };
-    std::cout << '\n' << name << " GlobalMemory " << mappingName(Mapping);
-    if (useSharedMemory)
-        std::cout << " SharedMemory " << mappingName(MappingSM);
-    std::cout << '\n';
+    const auto title = name + " GlobalMemory " + mappingName(Mapping)
+        + (useSharedMemory ? " SharedMemory " + mappingName(MappingSM) : "");
+    std::cout << '\n' << title << '\n';
 
     auto mapping = [] {
         const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
@@ -183,6 +184,8 @@ try
 
     const auto blocks = PROBLEM_SIZE / THREADS_PER_BLOCK;
 
+    double sumUpdate = 0;
+    double sumMove = 0;
     for (std::size_t s = 0; s < STEPS; ++s)
     {
         if (useSharedMemory)
@@ -190,12 +193,13 @@ try
         else
             update<PROBLEM_SIZE><<<blocks, THREADS_PER_BLOCK>>>(accView);
         checkError(cudaDeviceSynchronize());
-        chrono.printAndReset("update", '\t');
+        sumUpdate += chrono.printAndReset("update", '\t');
 
         move<PROBLEM_SIZE><<<blocks, THREADS_PER_BLOCK>>>(accView);
         checkError(cudaDeviceSynchronize());
-        chrono.printAndReset("move");
+        sumMove += chrono.printAndReset("move");
     }
+    plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
     checkError(cudaMemcpy(hostView.storageBlobs[0].data(), accBuffer, bufferSize, cudaMemcpyDeviceToHost));
     chrono.printAndReset("copy D->H");
@@ -219,18 +223,32 @@ int main()
     cudaGetDeviceProperties(&prop, device);
     std::cout << "Running on " << prop.name << " " << prop.sharedMemPerBlock / 1024 << "kiB SM\n";
 
-    run<0, 0>("LLAMA", false);
-    run<1, 0>("LLAMA", false);
-    run<2, 0>("LLAMA", false);
-    run<0, 0>("LLAMA", true);
-    run<0, 1>("LLAMA", true);
-    run<0, 2>("LLAMA", true);
-    run<1, 0>("LLAMA", true);
-    run<1, 1>("LLAMA", true);
-    run<1, 2>("LLAMA", true);
-    run<2, 0>("LLAMA", true);
-    run<2, 1>("LLAMA", true);
-    run<2, 2>("LLAMA", true);
+    std::ofstream plotFile{"nbody.tsv"};
+    plotFile.exceptions(std::ios::badbit | std::ios::failbit);
+    plotFile << "\"\"\t\"update\"\t\"move\"\n";
+
+    run<0, 0>("LLAMA", plotFile, false);
+    run<1, 0>("LLAMA", plotFile, false);
+    run<2, 0>("LLAMA", plotFile, false);
+    run<0, 0>("LLAMA", plotFile, true);
+    run<0, 1>("LLAMA", plotFile, true);
+    run<0, 2>("LLAMA", plotFile, true);
+    run<1, 0>("LLAMA", plotFile, true);
+    run<1, 1>("LLAMA", plotFile, true);
+    run<1, 2>("LLAMA", plotFile, true);
+    run<2, 0>("LLAMA", plotFile, true);
+    run<2, 1>("LLAMA", plotFile, true);
+    run<2, 2>("LLAMA", plotFile, true);
+
+    std::cout << "Plot with: ./nbody.sh\n";
+    std::ofstream{"nbody.sh"} << R"(#!/usr/bin/gnuplot -p
+set style data histograms
+set style fill solid
+set xtics rotate by 45 right
+set key out top center maxrows 3
+set yrange [0:*]
+plot 'nbody.tsv' using 2:xtic(1) ti col
+)";
 
     return 0;
 }
