@@ -123,7 +123,7 @@ void checkError(cudaError_t code)
 }
 
 template <int Mapping, int MappingSM>
-void run(const std::string& name, std::ostream& plotFile, bool useSharedMemory)
+void run(std::ostream& plotFile, bool useSharedMemory)
 try
 {
     auto mappingName = [](int m) -> std::string {
@@ -134,8 +134,7 @@ try
         if (m == 2)
             return "AoSoA" + std::to_string(AOSOA_LANES);
     };
-    const auto title = name + " GlobalMemory " + mappingName(Mapping)
-        + (useSharedMemory ? " SharedMemory " + mappingName(MappingSM) : "");
+    const auto title = "GM " + mappingName(Mapping) + (useSharedMemory ? " SM " + mappingName(MappingSM) : "");
     std::cout << '\n' << title << '\n';
 
     auto mapping = [] {
@@ -227,18 +226,18 @@ int main()
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
     plotFile << "\"\"\t\"update\"\t\"move\"\n";
 
-    run<0, 0>("LLAMA", plotFile, false);
-    run<1, 0>("LLAMA", plotFile, false);
-    run<2, 0>("LLAMA", plotFile, false);
-    run<0, 0>("LLAMA", plotFile, true);
-    run<0, 1>("LLAMA", plotFile, true);
-    run<0, 2>("LLAMA", plotFile, true);
-    run<1, 0>("LLAMA", plotFile, true);
-    run<1, 1>("LLAMA", plotFile, true);
-    run<1, 2>("LLAMA", plotFile, true);
-    run<2, 0>("LLAMA", plotFile, true);
-    run<2, 1>("LLAMA", plotFile, true);
-    run<2, 2>("LLAMA", plotFile, true);
+    run<0, 0>(plotFile, false);
+    run<1, 0>(plotFile, false);
+    run<2, 0>(plotFile, false);
+    run<0, 0>(plotFile, true);
+    run<0, 1>(plotFile, true);
+    run<0, 2>(plotFile, true);
+    run<1, 0>(plotFile, true);
+    run<1, 1>(plotFile, true);
+    run<1, 2>(plotFile, true);
+    run<2, 0>(plotFile, true);
+    run<2, 1>(plotFile, true);
+    run<2, 2>(plotFile, true);
 
     std::cout << "Plot with: ./nbody.sh\n";
     std::ofstream{"nbody.sh"} << R"(#!/usr/bin/gnuplot -p
