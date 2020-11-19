@@ -147,18 +147,18 @@ try
             return llama::mapping::AoSoA<decltype(arrayDomain), Particle, AOSOA_LANES>{arrayDomain};
     }();
 
-    Stopwatch chrono;
+    Stopwatch watch;
 
     const auto bufferSize = mapping.getBlobSize(0);
     std::byte* accBuffer;
     checkError(cudaMalloc(&accBuffer, bufferSize));
 
-    chrono.printAndReset("alloc");
+    watch.printAndReset("alloc");
 
     auto hostView = llama::allocView(mapping);
     auto accView = llama::View<decltype(mapping), std::byte*>{mapping, llama::Array<std::byte*, 1>{accBuffer}};
 
-    chrono.printAndReset("views");
+    watch.printAndReset("views");
 
     std::mt19937_64 generator;
     std::normal_distribution<FP> distribution(FP(0), FP(1));
@@ -175,11 +175,26 @@ try
         hostView(i) = temp;
     }
 
-    chrono.printAndReset("init");
+    watch.printAndReset("init");
+
+    cudaEvent_t startEvent;
+    cudaEvent_t stopEvent;
+    cudaEventCreate(&startEvent);
+    cudaEventCreate(&stopEvent);
+
+    auto start = [&] { checkError(cudaEventRecord(startEvent)); };
+    auto stop = [&] {
+        checkError(cudaEventRecord(stopEvent));
+        checkError(cudaEventSynchronize(stopEvent));
+        float milliseconds = 0;
+        checkError(cudaEventElapsedTime(&milliseconds, startEvent, stopEvent));
+        return milliseconds / 1000;
+    };
 
     static_assert(hostView.storageBlobs.rank == 1);
+    start();
     checkError(cudaMemcpy(accBuffer, hostView.storageBlobs[0].data(), bufferSize, cudaMemcpyHostToDevice));
-    chrono.printAndReset("copy H->D");
+    std::cout << "copy H->D " << stop() << " s\n";
 
     const auto blocks = PROBLEM_SIZE / THREADS_PER_BLOCK;
 
@@ -187,23 +202,30 @@ try
     double sumMove = 0;
     for (std::size_t s = 0; s < STEPS; ++s)
     {
+        start();
         if (useSharedMemory)
             updateSM<PROBLEM_SIZE, SHARED_ELEMENTS_PER_BLOCK, MappingSM><<<blocks, THREADS_PER_BLOCK>>>(accView);
         else
             update<PROBLEM_SIZE><<<blocks, THREADS_PER_BLOCK>>>(accView);
-        checkError(cudaDeviceSynchronize());
-        sumUpdate += chrono.printAndReset("update", '\t');
+        const auto secondsUpdate = stop();
+        std::cout << "update " << secondsUpdate << " s\t";
+        sumUpdate += secondsUpdate;
 
+        start();
         move<PROBLEM_SIZE><<<blocks, THREADS_PER_BLOCK>>>(accView);
-        checkError(cudaDeviceSynchronize());
-        sumMove += chrono.printAndReset("move");
+        const auto secondsMove = stop();
+        std::cout << "move " << secondsMove << " s\n";
+        sumMove += secondsMove;
     }
     plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
+    start();
     checkError(cudaMemcpy(hostView.storageBlobs[0].data(), accBuffer, bufferSize, cudaMemcpyDeviceToHost));
-    chrono.printAndReset("copy D->H");
+    std::cout << "copy D->H " << stop() << " s\n";
 
     checkError(cudaFree(accBuffer));
+    checkError(cudaEventDestroy(startEvent));
+    checkError(cudaEventDestroy(stopEvent));
 }
 catch (const std::exception& e)
 {
@@ -221,6 +243,7 @@ int main()
     cudaDeviceProp prop{};
     cudaGetDeviceProperties(&prop, device);
     std::cout << "Running on " << prop.name << " " << prop.sharedMemPerBlock / 1024 << "kiB SM\n";
+    std::cout << std::fixed;
 
     std::ofstream plotFile{"nbody.tsv"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
