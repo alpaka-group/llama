@@ -5,11 +5,12 @@
 #include <llama/llama.hpp>
 #include <random>
 #include <utility>
+#include <string>
 
 using FP = float;
 
 constexpr auto PROBLEM_SIZE = 32 * 1024; ///< total number of particles
-constexpr auto SHARED_ELEMENTS_PER_BLOCK = 256;
+constexpr auto SHARED_ELEMENTS_PER_BLOCK = 1024;
 constexpr auto STEPS = 5; ///< number of steps to calculate
 constexpr FP TIMESTEP = 0.0001f;
 
@@ -59,13 +60,20 @@ __device__ void pPInteraction(VirtualParticleI pi, VirtualParticleJ pj)
     pi(tag::Vel()) += dist * sts;
 }
 
-template <std::size_t ProblemSize, std::size_t BlockSize, typename View>
+template <std::size_t ProblemSize, std::size_t BlockSize, int MappingSM, typename View>
 __global__ void updateSM(View particles)
 {
     // FIXME: removing this lambda makes nvcc 11 segfault
     auto sharedView = [] {
-        const auto sharedMapping
-            = llama::mapping::AoSoA<llama::ArrayDomain<1>, Particle, 32>(llama::ArrayDomain{BlockSize}, Particle{});
+        auto sharedMapping = [] {
+            const auto arrayDomain = llama::ArrayDomain{BlockSize};
+            if constexpr (MappingSM == 0)
+                return llama::mapping::AoS{arrayDomain, Particle{}};
+            if constexpr (MappingSM == 1)
+                return llama::mapping::SoA{arrayDomain, Particle{}};
+            if constexpr (MappingSM == 2)
+                return llama::mapping::AoSoA<decltype(arrayDomain), Particle, AOSOA_LANES>{arrayDomain};
+        }();
         static_assert(decltype(sharedMapping)::blobCount == 1);
         constexpr auto sharedMemSize = llama::sizeOf<typename View::DatumDomain> * BlockSize;
         __shared__ std::byte sharedMem[sizeof(std::byte[sharedMemSize])];
@@ -112,19 +120,22 @@ void checkError(cudaError_t code)
         throw std::runtime_error(cudaGetErrorString(code));
 }
 
-template <std::size_t Mapping>
+template <int Mapping, int MappingSM>
 void run(const char* name, bool useSharedMemory)
 try
 {
-    const auto mappingName = [] {
-        if constexpr (Mapping == 0)
+    auto mappingName = [](int m) -> std::string {
+        if (m == 0)
             return "AoS";
-        if constexpr (Mapping == 1)
+        if (m == 1)
             return "SoA";
-        if constexpr (Mapping == 2)
-            return "AoSoA";
-    }();
-    std::cout << '\n' << name << ' ' << mappingName << '\n';
+        if (m == 2)
+            return "AoSoA" + std::to_string(AOSOA_LANES);
+    };
+    std::cout << '\n' << name << " GlobalMemory " << mappingName(Mapping);
+    if (useSharedMemory)
+        std::cout << " SharedMemory " << mappingName(MappingSM);
+    std::cout << '\n';
 
     auto mapping = [] {
         const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
@@ -133,7 +144,7 @@ try
         if constexpr (Mapping == 1)
             return llama::mapping::SoA{arrayDomain, Particle{}};
         if constexpr (Mapping == 2)
-            return llama::mapping::AoSoA<std::decay_t<decltype(arrayDomain)>, Particle, AOSOA_LANES>{arrayDomain};
+            return llama::mapping::AoSoA<decltype(arrayDomain), Particle, AOSOA_LANES>{arrayDomain};
     }();
 
     Stopwatch chrono;
@@ -145,8 +156,7 @@ try
     chrono.printAndReset("alloc");
 
     auto hostView = llama::allocView(mapping);
-    auto accView
-        = llama::View<std::decay_t<decltype(mapping)>, std::byte*>{mapping, llama::Array<std::byte*, 1>{accBuffer}};
+    auto accView = llama::View<decltype(mapping), std::byte*>{mapping, llama::Array<std::byte*, 1>{accBuffer}};
 
     chrono.printAndReset("views");
 
@@ -176,7 +186,7 @@ try
     for (std::size_t s = 0; s < STEPS; ++s)
     {
         if (useSharedMemory)
-            updateSM<PROBLEM_SIZE, SHARED_ELEMENTS_PER_BLOCK><<<blocks, THREADS_PER_BLOCK>>>(accView);
+            updateSM<PROBLEM_SIZE, SHARED_ELEMENTS_PER_BLOCK, MappingSM><<<blocks, THREADS_PER_BLOCK>>>(accView);
         else
             update<PROBLEM_SIZE><<<blocks, THREADS_PER_BLOCK>>>(accView);
         checkError(cudaDeviceSynchronize());
@@ -209,12 +219,18 @@ int main()
     cudaGetDeviceProperties(&prop, device);
     std::cout << "Running on " << prop.name << " " << prop.sharedMemPerBlock / 1024 << "kiB SM\n";
 
-    run<0>("LLAMA", false);
-    run<1>("LLAMA", false);
-    run<2>("LLAMA", false);
-    run<0>("LLAMA SM", true);
-    run<1>("LLAMA SM", true);
-    run<2>("LLAMA SM", true);
+    run<0, 0>("LLAMA", false);
+    run<1, 0>("LLAMA", false);
+    run<2, 0>("LLAMA", false);
+    run<0, 0>("LLAMA", true);
+    run<0, 1>("LLAMA", true);
+    run<0, 2>("LLAMA", true);
+    run<1, 0>("LLAMA", true);
+    run<1, 1>("LLAMA", true);
+    run<1, 2>("LLAMA", true);
+    run<2, 0>("LLAMA", true);
+    run<2, 1>("LLAMA", true);
+    run<2, 2>("LLAMA", true);
 
     return 0;
 }
