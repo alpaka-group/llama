@@ -16,8 +16,6 @@ constexpr auto SHARED_ELEMENTS_PER_BLOCK = 1024;
 constexpr auto STEPS = 5; ///< number of steps to calculate
 constexpr FP TIMESTEP = 0.0001f;
 
-constexpr FP ts = 0.0001;
-
 constexpr auto THREADS_PER_BLOCK = 256;
 constexpr auto AOSOA_LANES = 32; // coalesced memory access
 
