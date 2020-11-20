@@ -86,7 +86,7 @@ __global__ void updateSM(View particles)
     for (std::size_t blockOffset = 0; blockOffset < ProblemSize; blockOffset += BlockSize)
     {
         LLAMA_INDEPENDENT_DATA
-        for (auto j = std::size_t{0}; j + ti < BlockSize; j += BlockSize)
+        for (auto j = tbi; j < BlockSize; j += THREADS_PER_BLOCK)
             sharedView(j) = particles(blockOffset + j);
         __syncthreads();
 
