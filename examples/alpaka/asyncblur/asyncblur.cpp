@@ -88,7 +88,7 @@ struct BlurKernel
                     typename View::ArrayDomain{sharedChunkSize, sharedChunkSize},
                     typename View::DatumDomain{});
                 constexpr auto sharedMemSize = llama::sizeOf<PixelOnAcc> * sharedChunkSize * sharedChunkSize;
-                auto& sharedMem = alpaka::allocVar<std::byte[sharedMemSize], __COUNTER__>(acc);
+                auto& sharedMem = alpaka::declareSharedVar<std::byte[sharedMemSize], __COUNTER__>(acc);
                 return llama::View(sharedMapping, llama::Array<std::byte*, 1>{&sharedMem[0]});
             }
             else

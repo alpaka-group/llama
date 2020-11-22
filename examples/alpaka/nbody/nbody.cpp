@@ -78,7 +78,7 @@ struct UpdateKernelSM
             else
             {
                 constexpr auto sharedMemSize = llama::sizeOf<typename View::DatumDomain> * BlockSize;
-                auto& sharedMem = alpaka::allocVar<std::byte[sharedMemSize], __COUNTER__>(acc);
+                auto& sharedMem = alpaka::declareSharedVar<std::byte[sharedMemSize], __COUNTER__>(acc);
                 return llama::View{
                     sharedMapping,
                     llama::Array<std::byte*, 1>{
