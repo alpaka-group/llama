@@ -1,0 +1,8 @@
+camera fovy 45 position 5 5 10 lookAt 0 0 0 up 0 1 0
+sphere radius 3 center 0 0 0
+sphere radius 2 center 0 0 5
+sphere radius 2 center 0 5 0
+sphere radius 2 center 5 0 0
+sphere radius 1 center 0 0 -5
+sphere radius 1 center 0 -5 0
+sphere radius 1 center -5 0 0
