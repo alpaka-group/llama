@@ -316,11 +316,11 @@ namespace tag
 }
 
 using Arrays = llama::DS<
-    llama::DE<tag::A1, llama::DA<int, 3>>,
-    llama::DE<tag::A2, llama::DA<llama::DS<
+    llama::DE<tag::A1, int[3]>,
+    llama::DE<tag::A2, llama::DS<
         llama::DE<tag::X, float>
-    >, 3>>,
-    llama::DE<tag::A3, llama::DA<llama::DA<int, 2>, 2>>
+    >[3]>,
+    llama::DE<tag::A3, int[2][2]>
 >;
 // clang-format on
 
