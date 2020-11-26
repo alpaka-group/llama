@@ -253,3 +253,36 @@ TEST_CASE("flatDatumCoord")
     STATIC_REQUIRE(llama::flatDatumCoord<Particle, llama::DatumCoord<4, 2>> == 9);
     STATIC_REQUIRE(llama::flatDatumCoord<Particle, llama::DatumCoord<4, 3>> == 10);
 }
+
+// clang-format off
+namespace tag
+{
+    struct A1{};
+    struct A2{};
+    struct A3{};
+}
+
+using Arrays = llama::DS<
+    llama::DE<tag::A1, llama::DA<int, 3>>,
+    llama::DE<tag::A2, llama::DA<llama::DS<
+        llama::DE<tag::X, float>
+    >, 3>>,
+    llama::DE<tag::A3, llama::DA<llama::DA<int, 2>, 2>>
+>;
+// clang-format on
+
+TEST_CASE("arrays")
+{
+    auto v = llama::allocView(llama::mapping::AoS{llama::ArrayDomain{1}, Arrays{}});
+
+    v(0u)(tag::A1{}, llama::Index<0>{});
+    v(0u)(tag::A1{}, llama::Index<1>{});
+    v(0u)(tag::A1{}, llama::Index<2>{});
+    v(0u)(tag::A2{}, llama::Index<0>{}, tag::X{});
+    v(0u)(tag::A2{}, llama::Index<1>{}, tag::X{});
+    v(0u)(tag::A2{}, llama::Index<2>{}, tag::X{});
+    v(0u)(tag::A3{}, llama::Index<0>{}, llama::Index<0>{});
+    v(0u)(tag::A3{}, llama::Index<0>{}, llama::Index<1>{});
+    v(0u)(tag::A3{}, llama::Index<1>{}, llama::Index<0>{});
+    v(0u)(tag::A3{}, llama::Index<1>{}, llama::Index<1>{});
+}
