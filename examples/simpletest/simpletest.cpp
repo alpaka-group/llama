@@ -52,7 +52,7 @@ using Name = llama::DS<
         llama::DE<st::Z, double>,
         llama::DE<st::X, double>>>,
     llama::DE<st::Weight, int>,
-    llama::DE<st::Options, llama::DA<bool, 4>>>;
+    llama::DE<st::Options, bool[4]>>;
 // clang-format on
 
 namespace

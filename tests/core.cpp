@@ -28,7 +28,7 @@ using Particle = llama::DS<
         llama::DE<tag::Z, double>,
         llama::DE<tag::X, double>
     >>,
-    llama::DE<tag::Flags, llama::DA<bool, 4>>
+    llama::DE<tag::Flags, bool[4]>
 >;
 
 using Other = llama::DS<
