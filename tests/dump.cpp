@@ -40,7 +40,7 @@ using Particle = llama::DS<
     llama::DE<tag::Pos, Vec>,
     llama::DE<tag::Vel, /*DVec*/Vec>,
     llama::DE<tag::Mass, float>,
-    llama::DE<tag::Flags, llama::DA<bool, 4>>
+    llama::DE<tag::Flags, bool[4]>
 >;
 
 // example with bad alignment:
@@ -51,7 +51,7 @@ using ParticleUnaligned = llama::DS<
         llama::DE<tag::Y, float>
     >>,
     llama::DE<tag::Mass, double>,
-    llama::DE<tag::Flags, llama::DA<bool, 3>>
+    llama::DE<tag::Flags, bool[3]>
 >;
 
 // bad alignment fixed with explicit padding:
@@ -64,7 +64,7 @@ using ParticleAligned = llama::DS<
     >>,
     llama::DE<tag::Pad, Padding<4>>,
     llama::DE<tag::Mass, double>,
-    llama::DE<tag::Flags, llama::DA<bool, 3>>,
+    llama::DE<tag::Flags, bool[3]>,
     llama::DE<tag::Pad, Padding<5>>
 >;
 // clang-format on

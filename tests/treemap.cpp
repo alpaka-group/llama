@@ -60,7 +60,7 @@ using Name = llama::DS<
         llama::DE<tag::Y, double>,
         llama::DE<tag::X, double>
     >>,
-    llama::DE<tag::Flags, llama::DA<bool, 4>>
+    llama::DE<tag::Flags, bool[4]>
 >;
 // clang-format on
 
