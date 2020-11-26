@@ -58,20 +58,20 @@ namespace llama
     template <typename... Leaves>
     using DS = DatumStruct<Leaves...>;
 
+    // FIXME: the documented functionality currently only works through llama::DE, because the Type is not expanded in
+    // case of arrays
     /// Datum domain tree node which may either be a leaf or refer to a child
     /// tree presented as another \ref DatumStruct or \ref DatumArray.
     /// \tparam Tag Name of the node. May be any type (struct, class).
-    /// \tparam Type Type of the node. May be either another sub tree consisting
-    /// of a nested \ref DatumStruct or \ref DatumArray or any other type making
-    /// it a leaf of this type.
+    /// \tparam Type Type of the node. May be one of three cases. 1. another sub tree consisting
+    /// of a nested \ref DatumStruct. 2. an array of any type, in which case a DatumStruct with as many \ref
+    /// DatumElement as the array size is created, named \ref Index specialized on consecutive numbers.
+    /// 3. A scalar type different from \ref DatumStruct, making this node a leaf of this type.
     template <typename Tag, typename Type>
     struct DatumElement
     {
+        static_assert(!std::is_array_v<Type>, "DatumElement does not support array types. Please use DE instead!");
     };
-
-    /// Shortcut alias for \ref DatumElement.
-    template <typename Identifier, typename Type>
-    using DE = DatumElement<Identifier, Type>;
 
     namespace internal
     {
@@ -82,19 +82,22 @@ namespace llama
         }
     } // namespace internal
 
-    /// An array of identical \ref DatumElement with \ref Index specialized on
-    /// consecutive numbers. Can be used anywhere where \ref DatumStruct may
-    /// used.
-    /// \tparam ChildType Type to repeat. May be either a nested \ref
-    /// DatumStruct or DatumArray or any other type making it an array of leaves
-    /// of this type.
-    /// \tparam Count Number of repetitions of ChildType.
-    template <typename ChildType, std::size_t Count>
-    using DatumArray = decltype(internal::makeDatumArray<ChildType>(std::make_index_sequence<Count>{}));
+    template <typename T>
+    struct MakeDatumElementType
+    {
+        using type = T;
+    };
 
-    /// Shortcut alias for \ref DatumArray
     template <typename ChildType, std::size_t Count>
-    using DA = DatumArray<ChildType, Count>;
+    struct MakeDatumElementType<ChildType[Count]>
+    {
+        using type = decltype(internal::makeDatumArray<typename MakeDatumElementType<ChildType>::type>(
+            std::make_index_sequence<Count>{}));
+    };
+
+    /// Shortcut alias for \ref DatumElement.
+    template <typename Identifier, typename Type>
+    using DE = DatumElement<Identifier, typename MakeDatumElementType<Type>::type>;
 
     struct NrAndOffset
     {
