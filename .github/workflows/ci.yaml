@@ -76,7 +76,7 @@ jobs:
         run: |
           # vcpkg fails to build with Intel compilers
           if [ ${{ matrix.intel }} ]; then unset CXX; fi
-          vcpkg install catch2 fmt vc
+          vcpkg install catch2 fmt vc tinyobjloader
       - name: download CUDA 11
         if: ${{ matrix.cuda }}
         run: |
@@ -133,7 +133,7 @@ jobs:
         Start-Process -Wait -FilePath "$env:TEMP\boost.exe" "/SILENT","/SP-","/SUPPRESSMSGBOXES","/DIR=$env:BOOST_ROOT"
     - name: vcpkg install dependencies
       run: |
-        & $env:VCPKG_ROOT/vcpkg install catch2 fmt
+        & $env:VCPKG_ROOT/vcpkg install catch2 fmt tinyobjloader
         & $env:VCPKG_ROOT/vcpkg install vc --head # MSVC patch is not released yet
     - name: install alpaka
       run: |
