@@ -1,0 +1,3 @@
+[submodule "examples/raycast/Sponza"]
+	path = examples/raycast/Sponza
+	url = https://github.com/jimmiebergmann/Sponza
