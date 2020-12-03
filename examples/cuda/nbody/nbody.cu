@@ -49,7 +49,7 @@ using Particle = llama::DS<
 // clang-format on
 
 template <typename VirtualParticleI, typename VirtualParticleJ>
-__device__ void pPInteraction(VirtualParticleI pi, VirtualParticleJ pj)
+__device__ void pPInteraction(VirtualParticleI&& pi, VirtualParticleJ pj)
 {
     auto dist = pi(tag::Pos()) - pj(tag::Pos());
     dist *= dist;
@@ -60,7 +60,7 @@ __device__ void pPInteraction(VirtualParticleI pi, VirtualParticleJ pj)
     pi(tag::Vel()) += dist * sts;
 }
 
-template <std::size_t ProblemSize, std::size_t BlockSize, int MappingSM, typename View>
+template <std::size_t ProblemSize, bool UseAccumulator, std::size_t BlockSize, int MappingSM, typename View>
 __global__ void updateSM(View particles)
 {
     // FIXME: removing this lambda makes nvcc 11 segfault
@@ -88,6 +88,9 @@ __global__ void updateSM(View particles)
     const auto ti = threadIdx.x + blockIdx.x * blockDim.x;
     const auto tbi = blockIdx.x;
 
+    auto pi = llama::allocVirtualDatumStack<Particle>();
+    if constexpr (UseAccumulator)
+        pi = particles(ti);
     for (std::size_t blockOffset = 0; blockOffset < ProblemSize; blockOffset += BlockSize)
     {
         LLAMA_INDEPENDENT_DATA
@@ -97,19 +100,36 @@ __global__ void updateSM(View particles)
 
         LLAMA_INDEPENDENT_DATA
         for (auto j = std::size_t{0}; j < BlockSize; ++j)
-            pPInteraction(particles(ti), sharedView(j));
+        {
+            if constexpr (UseAccumulator)
+                pPInteraction(pi, sharedView(j));
+            else
+                pPInteraction(particles(ti), sharedView(j));
+        }
         __syncthreads();
     }
+    if constexpr (UseAccumulator)
+        particles(ti) = pi;
 }
 
-template <std::size_t ProblemSize, typename View>
+template <std::size_t ProblemSize, bool UseAccumulator, typename View>
 __global__ void update(View particles)
 {
     const auto ti = threadIdx.x + blockIdx.x * blockDim.x;
 
+    auto pi = llama::allocVirtualDatumStack<Particle>();
+    if constexpr (UseAccumulator)
+        pi = particles(ti);
     LLAMA_INDEPENDENT_DATA
     for (auto j = std::size_t{0}; j < ProblemSize; ++j)
-        pPInteraction(particles(ti), particles(j));
+    {
+        if constexpr (UseAccumulator)
+            pPInteraction(pi, particles(j));
+        else
+            pPInteraction(particles(ti), particles(j));
+    }
+    if constexpr (UseAccumulator)
+        particles(ti) = pi;
 }
 
 template <std::size_t ProblemSize, typename View>
@@ -125,7 +145,7 @@ void checkError(cudaError_t code)
         throw std::runtime_error(cudaGetErrorString(code));
 }
 
-template <int Mapping, int MappingSM>
+template <int Mapping, int MappingSM, bool UseAccumulator>
 void run(std::ostream& plotFile, bool useSharedMemory)
 try
 {
@@ -139,7 +159,11 @@ try
         if (m == 3)
             return "AoSoA" + std::to_string(AOSOA_LANES);
     };
-    const auto title = "GM " + mappingName(Mapping) + (useSharedMemory ? " SM " + mappingName(MappingSM) : "");
+    auto title = "GM " + mappingName(Mapping);
+    if (useSharedMemory)
+        title += " SM " + mappingName(MappingSM);
+    if (UseAccumulator)
+        title += " Acc";
     std::cout << '\n' << title << '\n';
 
     auto mapping = [] {
@@ -212,9 +236,10 @@ try
     {
         start();
         if (useSharedMemory)
-            updateSM<PROBLEM_SIZE, SHARED_ELEMENTS_PER_BLOCK, MappingSM><<<blocks, THREADS_PER_BLOCK>>>(accView);
+            updateSM<PROBLEM_SIZE, UseAccumulator, SHARED_ELEMENTS_PER_BLOCK, MappingSM>
+                <<<blocks, THREADS_PER_BLOCK>>>(accView);
         else
-            update<PROBLEM_SIZE><<<blocks, THREADS_PER_BLOCK>>>(accView);
+            update<PROBLEM_SIZE, UseAccumulator><<<blocks, THREADS_PER_BLOCK>>>(accView);
         const auto secondsUpdate = stop();
         std::cout << "update " << secondsUpdate << " s\t";
         sumUpdate += secondsUpdate;
@@ -225,7 +250,10 @@ try
         std::cout << "move " << secondsMove << " s\n";
         sumMove += secondsMove;
     }
-    plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
+    if (!UseAccumulator)
+        plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\t';
+    else
+        plotFile << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
     start();
     for (auto i = 0; i < accBuffers.rank; i++)
@@ -258,11 +286,19 @@ int main()
 
     std::ofstream plotFile{"nbody.tsv"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
-    plotFile << "\"\"\t\"update\"\t\"move\"\n";
+    plotFile << "\"\"\t\"update\"\t\"move\"\t\"update with acc\"\t\"move with acc\"\n";
 
-    boost::mp11::mp_for_each<boost::mp11::mp_iota_c<4>>([&](auto i) { run<decltype(i)::value, 0>(plotFile, false); });
-    boost::mp11::mp_for_each<boost::mp11::mp_iota_c<4>>([&](auto i) {
-        boost::mp11::mp_for_each<boost::mp11::mp_iota_c<4>>([&](auto j) { run<decltype(i)::value, decltype(j)::value>(plotFile, true); });
+    using namespace boost::mp11;
+    mp_for_each<mp_iota_c<4>>([&](auto i) {
+        mp_for_each<mp_list_c<bool, false, true>>(
+            [&](auto useAccumulator) { run<decltype(i)::value, 0, decltype(useAccumulator)::value>(plotFile, false); });
+    });
+    mp_for_each<mp_iota_c<4>>([&](auto i) {
+        mp_for_each<mp_iota_c<4>>([&](auto j) {
+            mp_for_each<mp_list_c<bool, false, true>>([&](auto useAccumulator) {
+                run<decltype(i)::value, decltype(j)::value, decltype(useAccumulator)::value>(plotFile, true);
+            });
+        });
     });
 
     std::cout << "Plot with: ./nbody.sh\n";
@@ -272,7 +308,7 @@ set style fill solid
 set xtics rotate by 45 right
 set key out top center maxrows 3
 set yrange [0:*]
-plot 'nbody.tsv' using 2:xtic(1) ti col
+plot 'nbody.tsv' using 2:xtic(1) ti col, "" using 4 ti col
 )";
 
     return 0;
