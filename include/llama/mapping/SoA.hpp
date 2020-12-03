@@ -42,7 +42,7 @@ namespace llama::mapping
         {
         }
 
-       LLAMA_FN_HOST_ACC_INLINE
+        LLAMA_FN_HOST_ACC_INLINE
         constexpr auto getBlobSize(std::size_t blobIndex) const -> std::size_t
         {
             if constexpr (SeparateBuffers::value)
