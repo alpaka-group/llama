@@ -65,19 +65,24 @@ __global__ void updateSM(View particles)
 {
     // FIXME: removing this lambda makes nvcc 11 segfault
     auto sharedView = [] {
-        auto sharedMapping = [] {
-            const auto arrayDomain = llama::ArrayDomain{BlockSize};
+        constexpr auto sharedMapping = [] {
+            constexpr auto arrayDomain = llama::ArrayDomain{BlockSize};
             if constexpr (MappingSM == 0)
                 return llama::mapping::AoS{arrayDomain, Particle{}};
             if constexpr (MappingSM == 1)
                 return llama::mapping::SoA{arrayDomain, Particle{}};
             if constexpr (MappingSM == 2)
+                return llama::mapping::SoA{arrayDomain, Particle{}, std::true_type{}};
+            if constexpr (MappingSM == 3)
                 return llama::mapping::AoSoA<decltype(arrayDomain), Particle, AOSOA_LANES>{arrayDomain};
         }();
-        static_assert(decltype(sharedMapping)::blobCount == 1);
-        constexpr auto sharedMemSize = llama::sizeOf<typename View::DatumDomain> * BlockSize;
-        __shared__ std::byte sharedMem[sizeof(std::byte[sharedMemSize])];
-        return llama::View{sharedMapping, llama::Array<std::byte*, 1>{&sharedMem[0]}};
+
+        llama::Array<std::byte*, decltype(sharedMapping)::blobCount> sharedMems{};
+        boost::mp11::mp_for_each<boost::mp11::mp_iota_c<decltype(sharedMapping)::blobCount>>([&](auto i) {
+            __shared__ std::byte sharedMem[sizeof(std::byte[sharedMapping.getBlobSize(i)])];
+            sharedMems[i] = &sharedMem[0];
+        });
+        return llama::View{sharedMapping, sharedMems};
     }();
 
     const auto ti = threadIdx.x + blockIdx.x * blockDim.x;
@@ -130,6 +135,8 @@ try
         if (m == 1)
             return "SoA";
         if (m == 2)
+            return "SoA MB";
+        if (m == 3)
             return "AoSoA" + std::to_string(AOSOA_LANES);
     };
     const auto title = "GM " + mappingName(Mapping) + (useSharedMemory ? " SM " + mappingName(MappingSM) : "");
@@ -142,19 +149,21 @@ try
         if constexpr (Mapping == 1)
             return llama::mapping::SoA{arrayDomain, Particle{}};
         if constexpr (Mapping == 2)
+            return llama::mapping::SoA{arrayDomain, Particle{}, std::true_type{}};
+        if constexpr (Mapping == 3)
             return llama::mapping::AoSoA<decltype(arrayDomain), Particle, AOSOA_LANES>{arrayDomain};
     }();
 
     Stopwatch watch;
 
-    const auto bufferSize = mapping.getBlobSize(0);
-    std::byte* accBuffer;
-    checkError(cudaMalloc(&accBuffer, bufferSize));
+    llama::Array<std::byte*, decltype(mapping)::blobCount> accBuffers;
+    for (auto i = 0; i < accBuffers.rank; i++)
+        checkError(cudaMalloc(&accBuffers[i], mapping.getBlobSize(i)));
 
     watch.printAndReset("alloc");
 
     auto hostView = llama::allocView(mapping);
-    auto accView = llama::View<decltype(mapping), std::byte*>{mapping, llama::Array<std::byte*, 1>{accBuffer}};
+    auto accView = llama::View<decltype(mapping), std::byte*>{mapping, accBuffers};
 
     watch.printAndReset("views");
 
@@ -189,9 +198,10 @@ try
         return milliseconds / 1000;
     };
 
-    static_assert(hostView.storageBlobs.rank == 1);
     start();
-    checkError(cudaMemcpy(accBuffer, hostView.storageBlobs[0].data(), bufferSize, cudaMemcpyHostToDevice));
+    for (auto i = 0; i < accBuffers.rank; i++)
+        checkError(
+            cudaMemcpy(accBuffers[i], hostView.storageBlobs[i].data(), mapping.getBlobSize(i), cudaMemcpyHostToDevice));
     std::cout << "copy H->D " << stop() << " s\n";
 
     const auto blocks = PROBLEM_SIZE / THREADS_PER_BLOCK;
@@ -218,10 +228,13 @@ try
     plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
     start();
-    checkError(cudaMemcpy(hostView.storageBlobs[0].data(), accBuffer, bufferSize, cudaMemcpyDeviceToHost));
+    for (auto i = 0; i < accBuffers.rank; i++)
+        checkError(
+            cudaMemcpy(hostView.storageBlobs[i].data(), accBuffers[i], mapping.getBlobSize(i), cudaMemcpyDeviceToHost));
     std::cout << "copy D->H " << stop() << " s\n";
 
-    checkError(cudaFree(accBuffer));
+    for (auto i = 0; i < accBuffers.rank; i++)
+        checkError(cudaFree(accBuffers[i]));
     checkError(cudaEventDestroy(startEvent));
     checkError(cudaEventDestroy(stopEvent));
 }
@@ -247,18 +260,10 @@ int main()
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
     plotFile << "\"\"\t\"update\"\t\"move\"\n";
 
-    run<0, 0>(plotFile, false);
-    run<1, 0>(plotFile, false);
-    run<2, 0>(plotFile, false);
-    run<0, 0>(plotFile, true);
-    run<0, 1>(plotFile, true);
-    run<0, 2>(plotFile, true);
-    run<1, 0>(plotFile, true);
-    run<1, 1>(plotFile, true);
-    run<1, 2>(plotFile, true);
-    run<2, 0>(plotFile, true);
-    run<2, 1>(plotFile, true);
-    run<2, 2>(plotFile, true);
+    boost::mp11::mp_for_each<boost::mp11::mp_iota_c<4>>([&](auto i) { run<decltype(i)::value, 0>(plotFile, false); });
+    boost::mp11::mp_for_each<boost::mp11::mp_iota_c<4>>([&](auto i) {
+        boost::mp11::mp_for_each<boost::mp11::mp_iota_c<4>>([&](auto j) { run<decltype(i)::value, decltype(j)::value>(plotFile, true); });
+    });
 
     std::cout << "Plot with: ./nbody.sh\n";
     std::ofstream{"nbody.sh"} << R"(#!/usr/bin/gnuplot -p
