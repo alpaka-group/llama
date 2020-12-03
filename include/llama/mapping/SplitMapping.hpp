@@ -63,10 +63,10 @@ namespace llama::mapping
         static_assert(Mapping1<ArrayDomain, DatumDomain1>::blobCount == 1);
         static_assert(Mapping2<ArrayDomain, DatumDomain2>::blobCount == 1);
 
-        SplitMapping() = default;
+        constexpr SplitMapping() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        SplitMapping(ArrayDomain size)
+        constexpr SplitMapping(ArrayDomain size)
             : arrayDomainSize(size)
             , mapping1(size)
             , mapping2(size)
@@ -74,13 +74,13 @@ namespace llama::mapping
         {
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto getBlobSize(std::size_t) const -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto getBlobSize(std::size_t) const -> std::size_t
         {
             return mapping1BlobSize + mapping2.getBlobSize(0);
         }
 
         template <std::size_t... DatumDomainCoord>
-        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto getBlobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
         {
             // print_type_in_compilation_error<DatumDomain1>();
             if constexpr (DatumCoordCommonPrefixIsSame<DatumCoordForMapping1, DatumCoord<DatumDomainCoord...>>)
@@ -104,7 +104,7 @@ namespace llama::mapping
 
     private:
         template <std::size_t... DatumDomainCoord, typename Mapping>
-        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto getBlobNrAndOffset(
             DatumCoord<DatumDomainCoord...>,
             ArrayDomain coord,
             const Mapping& mapping) const -> NrAndOffset

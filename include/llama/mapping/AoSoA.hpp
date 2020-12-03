@@ -24,20 +24,19 @@ namespace llama::mapping
         using DatumDomain = T_DatumDomain;
         static constexpr std::size_t blobCount = 1;
 
-        AoSoA() = default;
+        constexpr AoSoA() = default;
 
-        LLAMA_FN_HOST_ACC_INLINE
-        AoSoA(ArrayDomain size, DatumDomain = {}) : arrayDomainSize(size)
+        LLAMA_FN_HOST_ACC_INLINE constexpr AoSoA(ArrayDomain size, DatumDomain = {}) : arrayDomainSize(size)
         {
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto getBlobSize(std::size_t) const -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto getBlobSize(std::size_t) const -> std::size_t
         {
             return LinearizeArrayDomainFunctor{}.size(arrayDomainSize) * sizeOf<DatumDomain>;
         }
 
         template <std::size_t... DatumDomainCoord>
-        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto getBlobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
         {
             const auto flatArrayIndex = LinearizeArrayDomainFunctor{}(coord, arrayDomainSize);
             const auto blockIndex = flatArrayIndex / Lanes;

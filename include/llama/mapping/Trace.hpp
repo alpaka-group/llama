@@ -38,7 +38,7 @@ namespace llama::mapping
         using DatumDomain = typename Mapping::DatumDomain;
         static constexpr std::size_t blobCount = Mapping::blobCount;
 
-        Trace() = default;
+        constexpr Trace() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
         Trace(Mapping mapping) : mapping(mapping)
@@ -62,7 +62,7 @@ namespace llama::mapping
             }
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto getBlobSize(std::size_t i) const -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto getBlobSize(std::size_t i) const -> std::size_t
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return mapping.getBlobSize(i);

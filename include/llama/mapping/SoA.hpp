@@ -35,19 +35,19 @@ namespace llama::mapping
         }
         ();
 
-        SoA() = default;
+        constexpr SoA() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        SoA(ArrayDomain size, DatumDomain = {}, SeparateBuffers = {}) : arrayDomainSize(size)
+        constexpr SoA(ArrayDomain size, DatumDomain = {}, SeparateBuffers = {}) : arrayDomainSize(size)
         {
         }
 
-        LLAMA_FN_HOST_ACC_INLINE
-        auto getBlobSize(std::size_t blobIndex) const -> std::size_t
+       LLAMA_FN_HOST_ACC_INLINE
+        constexpr auto getBlobSize(std::size_t blobIndex) const -> std::size_t
         {
             if constexpr (SeparateBuffers::value)
             {
-                static constexpr llama::Array<std::size_t, blobCount> typeSizes = []() constexpr
+                constexpr llama::Array<std::size_t, blobCount> typeSizes = []() constexpr
                 {
                     llama::Array<std::size_t, blobCount> r{};
                     std::size_t i = 0;
@@ -64,7 +64,7 @@ namespace llama::mapping
         }
 
         template <std::size_t... DatumDomainCoord>
-        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto getBlobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
         {
             if constexpr (SeparateBuffers::value)
             {
