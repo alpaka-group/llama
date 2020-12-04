@@ -14,6 +14,7 @@ using FP = float;
 constexpr auto PROBLEM_SIZE = 64 * 1024; ///< total number of particles
 constexpr auto SHARED_ELEMENTS_PER_BLOCK = 512;
 constexpr auto STEPS = 5; ///< number of steps to calculate
+constexpr auto ALLOW_RSQRT = true; // rsqrt can be way faster, but less accurate
 constexpr FP TIMESTEP = 0.0001f;
 
 constexpr auto THREADS_PER_BLOCK = 256;
@@ -65,7 +66,7 @@ __device__ void pPInteraction(VirtualParticleI&& pi, VirtualParticleJ pj)
     dist *= dist;
     const FP distSqr = EPS2 + dist(tag::X()) + dist(tag::Y()) + dist(tag::Z());
     const FP distSixth = distSqr * distSqr * distSqr;
-    const FP invDistCube = 1.0f / std::sqrt(distSixth);
+    const FP invDistCube = ALLOW_RSQRT ? rsqrt(distSixth) : (1.0f / sqrt(distSixth));
     const FP sts = pj(tag::Mass()) * invDistCube * +TIMESTEP;
     pi(tag::Vel()) += dist * sts;
 }
