@@ -12,7 +12,7 @@
 using FP = float;
 
 constexpr auto PROBLEM_SIZE = 64 * 1024; ///< total number of particles
-constexpr auto SHARED_ELEMENTS_PER_BLOCK = 1024;
+constexpr auto SHARED_ELEMENTS_PER_BLOCK = 512;
 constexpr auto STEPS = 5; ///< number of steps to calculate
 constexpr FP TIMESTEP = 0.0001f;
 
