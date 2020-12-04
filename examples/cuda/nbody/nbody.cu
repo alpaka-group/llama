@@ -46,7 +46,17 @@ using Particle = llama::DS<
         llama::DE<tag::Y, FP>,
         llama::DE<tag::Z, FP>>>,
     llama::DE<tag::Mass, FP>>;
+
+using ParticleJ = llama::DS<
+    llama::DE<tag::Pos, llama::DS<
+        llama::DE<tag::X, FP>,
+        llama::DE<tag::Y, FP>,
+        llama::DE<tag::Z, FP>>>,
+    llama::DE<tag::Mass, FP>>;
 // clang-format on
+
+// using SharedMemoryParticle = Particle;
+using SharedMemoryParticle = ParticleJ;
 
 template <typename VirtualParticleI, typename VirtualParticleJ>
 __device__ void pPInteraction(VirtualParticleI&& pi, VirtualParticleJ pj)
@@ -68,13 +78,13 @@ __global__ void updateSM(View particles)
         constexpr auto sharedMapping = [] {
             constexpr auto arrayDomain = llama::ArrayDomain{BlockSize};
             if constexpr (MappingSM == 0)
-                return llama::mapping::AoS{arrayDomain, Particle{}};
+                return llama::mapping::AoS{arrayDomain, SharedMemoryParticle{}};
             if constexpr (MappingSM == 1)
-                return llama::mapping::SoA{arrayDomain, Particle{}};
+                return llama::mapping::SoA{arrayDomain, SharedMemoryParticle{}};
             if constexpr (MappingSM == 2)
-                return llama::mapping::SoA{arrayDomain, Particle{}, std::true_type{}};
+                return llama::mapping::SoA{arrayDomain, SharedMemoryParticle{}, std::true_type{}};
             if constexpr (MappingSM == 3)
-                return llama::mapping::AoSoA<decltype(arrayDomain), Particle, AOSOA_LANES>{arrayDomain};
+                return llama::mapping::AoSoA<decltype(arrayDomain), SharedMemoryParticle, AOSOA_LANES>{arrayDomain};
         }();
 
         llama::Array<std::byte*, decltype(sharedMapping)::blobCount> sharedMems{};
@@ -279,7 +289,7 @@ int main()
 {
     std::cout << PROBLEM_SIZE / 1000 << "k particles (" << PROBLEM_SIZE * llama::sizeOf<Particle> / 1024 << "kiB)\n"
               << "Caching " << SHARED_ELEMENTS_PER_BLOCK << " particles ("
-              << SHARED_ELEMENTS_PER_BLOCK * llama::sizeOf<Particle> / 1024 << " kiB) in shared memory\n"
+              << SHARED_ELEMENTS_PER_BLOCK * llama::sizeOf<SharedMemoryParticle> / 1024 << " kiB) in shared memory\n"
               << "Using " << THREADS_PER_BLOCK << " per block\n";
     int device = 0;
     cudaGetDevice(&device);
