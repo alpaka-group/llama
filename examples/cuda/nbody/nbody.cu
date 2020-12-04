@@ -180,16 +180,14 @@ try
 
     Stopwatch watch;
 
-    llama::Array<std::byte*, decltype(mapping)::blobCount> accBuffers;
-    for (auto i = 0; i < accBuffers.rank; i++)
-        checkError(cudaMalloc(&accBuffers[i], mapping.getBlobSize(i)));
+    auto hostView = llama::allocView(mapping);
+    auto accView = llama::allocView(mapping, [](std::size_t size) {
+        std::byte* p;
+        checkError(cudaMalloc(&p, size));
+        return p;
+    });
 
     watch.printAndReset("alloc");
-
-    auto hostView = llama::allocView(mapping);
-    auto accView = llama::View<decltype(mapping), std::byte*>{mapping, accBuffers};
-
-    watch.printAndReset("views");
 
     std::mt19937_64 generator;
     std::normal_distribution<FP> distribution(FP(0), FP(1));
@@ -223,9 +221,12 @@ try
     };
 
     start();
-    for (auto i = 0; i < accBuffers.rank; i++)
-        checkError(
-            cudaMemcpy(accBuffers[i], hostView.storageBlobs[i].data(), mapping.getBlobSize(i), cudaMemcpyHostToDevice));
+    for (auto i = 0; i < accView.storageBlobs.rank; i++)
+        checkError(cudaMemcpy(
+            accView.storageBlobs[i],
+            hostView.storageBlobs[i].data(),
+            mapping.getBlobSize(i),
+            cudaMemcpyHostToDevice));
     std::cout << "copy H->D " << stop() << " s\n";
 
     const auto blocks = PROBLEM_SIZE / THREADS_PER_BLOCK;
@@ -256,13 +257,16 @@ try
         plotFile << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
     start();
-    for (auto i = 0; i < accBuffers.rank; i++)
-        checkError(
-            cudaMemcpy(hostView.storageBlobs[i].data(), accBuffers[i], mapping.getBlobSize(i), cudaMemcpyDeviceToHost));
+    for (auto i = 0; i < accView.storageBlobs.rank; i++)
+        checkError(cudaMemcpy(
+            hostView.storageBlobs[i].data(),
+            accView.storageBlobs[i],
+            mapping.getBlobSize(i),
+            cudaMemcpyDeviceToHost));
     std::cout << "copy D->H " << stop() << " s\n";
 
-    for (auto i = 0; i < accBuffers.rank; i++)
-        checkError(cudaFree(accBuffers[i]));
+    for (auto i = 0; i < accView.storageBlobs.rank; i++)
+        checkError(cudaFree(accView.storageBlobs[i]));
     checkError(cudaEventDestroy(startEvent));
     checkError(cudaEventDestroy(stopEvent));
 }
