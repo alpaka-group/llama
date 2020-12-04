@@ -90,7 +90,7 @@ __global__ void updateSM(View particles)
 
         llama::Array<std::byte*, decltype(sharedMapping)::blobCount> sharedMems{};
         boost::mp11::mp_for_each<boost::mp11::mp_iota_c<decltype(sharedMapping)::blobCount>>([&](auto i) {
-            __shared__ std::byte sharedMem[sizeof(std::byte[sharedMapping.getBlobSize(i)])];
+            __shared__ std::byte sharedMem[sharedMapping.getBlobSize(i)];
             sharedMems[i] = &sharedMem[0];
         });
         return llama::View{sharedMapping, sharedMems};
