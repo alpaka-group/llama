@@ -23,7 +23,7 @@ namespace llama
         using AllocatorBlobType = decltype(std::declval<Allocator>()(0));
 
         template <typename Allocator, typename Mapping, std::size_t... Is>
-        LLAMA_FN_HOST_ACC_INLINE static auto makeBlobArray(
+        LLAMA_FN_HOST_ACC_INLINE auto makeBlobArray(
             const Allocator& alloc,
             const Mapping& mapping,
             std::integer_sequence<std::size_t, Is...>) -> Array<AllocatorBlobType<Allocator>, Mapping::blobCount>
@@ -32,16 +32,15 @@ namespace llama
         }
     } // namespace internal
 
-    /// Creates a view based on the given mapping, e.g. \ref mapping::AoS or
-    /// \ref mapping::SoA. For allocating the view's underlying memory, the
-    /// specified allocator is used (or the default one, which is \ref
-    /// allocator::Vector). This function is the preferred way to create a \ref
-    /// View.
+    /// Creates a view based on the given mapping, e.g. \ref mapping::AoS or \ref mapping::SoA. For allocating the
+    /// view's underlying memory, the specified allocator callable is used (or the default one, which is \ref
+    /// allocator::Vector). The allocator callable is called with the size of bytes to allocate for each blob of the
+    /// mapping. This function is the preferred way to create a \ref View.
     template <typename Mapping, typename Allocator = allocator::Vector<>>
     LLAMA_FN_HOST_ACC_INLINE auto allocView(Mapping mapping = {}, const Allocator& alloc = {})
         -> View<Mapping, internal::AllocatorBlobType<Allocator>>
     {
-        auto blobs = internal::makeBlobArray<Allocator>(alloc, mapping, std::make_index_sequence<Mapping::blobCount>{});
+        auto blobs = internal::makeBlobArray(alloc, mapping, std::make_index_sequence<Mapping::blobCount>{});
         return {std::move(mapping), std::move(blobs)};
     }
 
@@ -495,7 +494,7 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE
         View(Mapping mapping, Array<BlobType, Mapping::blobCount> storageBlobs)
             : mapping(std::move(mapping))
-            , storageBlobs(storageBlobs)
+            , storageBlobs(std::move(storageBlobs))
         {
         }
 
