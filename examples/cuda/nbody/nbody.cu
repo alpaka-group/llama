@@ -172,6 +172,8 @@ try
             return "SoA MB";
         if (m == 3)
             return "AoSoA" + std::to_string(AOSOA_LANES);
+        if (m == 4)
+            return "Split SoA";
     };
     auto title = "GM " + mappingName(Mapping);
     if (useSharedMemory)
@@ -190,6 +192,14 @@ try
             return llama::mapping::SoA{arrayDomain, Particle{}, std::true_type{}};
         if constexpr (Mapping == 3)
             return llama::mapping::AoSoA<decltype(arrayDomain), Particle, AOSOA_LANES>{arrayDomain};
+        if constexpr (Mapping == 4)
+            return llama::mapping::SplitMapping<
+                decltype(arrayDomain),
+                Particle,
+                llama::DatumCoord<1>,
+                llama::mapping::SoA,
+                llama::mapping::SoA,
+                true>{arrayDomain};
     }();
 
     Stopwatch watch;
@@ -307,11 +317,11 @@ int main()
     plotFile << "\"\"\t\"update\"\t\"move\"\t\"update with acc\"\t\"move with acc\"\n";
 
     using namespace boost::mp11;
-    mp_for_each<mp_iota_c<4>>([&](auto i) {
+    mp_for_each<mp_iota_c<5>>([&](auto i) {
         mp_for_each<mp_list_c<bool, false, true>>(
             [&](auto useAccumulator) { run<decltype(i)::value, 0, decltype(useAccumulator)::value>(plotFile, false); });
     });
-    mp_for_each<mp_iota_c<4>>([&](auto i) {
+    mp_for_each<mp_iota_c<5>>([&](auto i) {
         mp_for_each<mp_iota_c<4>>([&](auto j) {
             mp_for_each<mp_list_c<bool, false, true>>([&](auto useAccumulator) {
                 run<decltype(i)::value, decltype(j)::value, decltype(useAccumulator)::value>(plotFile, true);
