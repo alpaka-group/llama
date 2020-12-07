@@ -46,7 +46,10 @@ using Particle = llama::DS<
         llama::DE<tag::X, FP>,
         llama::DE<tag::Y, FP>,
         llama::DE<tag::Z, FP>>>,
-    llama::DE<tag::Mass, FP>>;
+    llama::DE<tag::Mass, FP>
+    // adding a padding element would nicely align a single Particle to 8 floats
+    //, llama::DE<llama::NoName, FP>
+>;
 
 using ParticleJ = llama::DS<
     llama::DE<tag::Pos, llama::DS<
