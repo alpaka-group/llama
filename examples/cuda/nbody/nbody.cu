@@ -1,6 +1,7 @@
 #include "../../common/Stopwatch.hpp"
 
 #include <cuda_runtime.h>
+#include <fmt/format.h>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -330,14 +331,15 @@ int main()
     });
 
     std::cout << "Plot with: ./nbody.sh\n";
-    std::ofstream{"nbody.sh"} << R"(#!/usr/bin/gnuplot -p
+    std::ofstream{"nbody.sh"} << fmt::format(R"(#!/usr/bin/gnuplot -p
+set title "nbody CUDA {0}k particles"
 set style data histograms
 set style fill solid
 set xtics rotate by 45 right
 set key out top center maxrows 3
 set yrange [0:*]
 plot 'nbody.tsv' using 2:xtic(1) ti col, "" using 4 ti col
-)";
+)", PROBLEM_SIZE / 1000);
 
     return 0;
 }
