@@ -2,19 +2,20 @@
 
 #include "Core.hpp"
 
-#include <boost/stl_interfaces/iterator_interface.hpp>
+#include <iterator>
 
 namespace llama
 {
     /// Iterator supporting \ref ArrayDomainIndexRange.
     template <std::size_t Dim>
     struct ArrayDomainIndexIterator
-        : boost::stl_interfaces::iterator_interface<
-              ArrayDomainIndexIterator<Dim>,
-              std::forward_iterator_tag,
-              ArrayDomain<Dim>,
-              ArrayDomain<Dim>>
     {
+        using value_type = ArrayDomain<Dim>;
+        using difference_type = std::ptrdiff_t;
+        using reference = value_type;
+        using pointer = value_type*;
+        using iterator_category = std::forward_iterator_tag;
+
         constexpr ArrayDomainIndexIterator() noexcept = default;
 
         constexpr ArrayDomainIndexIterator(ArrayDomain<Dim> size, ArrayDomain<Dim> current) noexcept
@@ -22,6 +23,9 @@ namespace llama
             , current(current)
         {
         }
+
+        constexpr ArrayDomainIndexIterator(const ArrayDomainIndexIterator&) noexcept = default;
+        constexpr auto operator=(const ArrayDomainIndexIterator&) noexcept -> ArrayDomainIndexIterator& = default;
 
         constexpr auto operator*() const noexcept -> ArrayDomain<Dim>
         {
@@ -37,8 +41,9 @@ namespace llama
                     return *this;
                 current[i] = 0;
             }
-            // we reached the end
-            current[0] = size[0];
+            // we reached the end, the iterator now needs to compare equal to a value initialized one
+            current = {};
+            size = {};
             return *this;
         }
 
@@ -47,12 +52,18 @@ namespace llama
             return ++*this;
         }
 
-        //template <std::size_t Dim>
         friend constexpr auto operator==(
             const ArrayDomainIndexIterator<Dim>& a,
             const ArrayDomainIndexIterator<Dim>& b) noexcept -> bool
         {
             return a.size == b.size && a.current == b.current;
+        }
+
+        friend constexpr auto operator!=(
+            const ArrayDomainIndexIterator<Dim>& a,
+            const ArrayDomainIndexIterator<Dim>& b) noexcept -> bool
+        {
+            return !(a == b);
         }
 
     private:
@@ -75,9 +86,7 @@ namespace llama
 
         constexpr auto end() const -> ArrayDomainIndexIterator<Dim>
         {
-            ArrayDomain<Dim> e{};
-            e[0] = size[0];
-            return {size, e};
+            return {};
         }
 
     private:
