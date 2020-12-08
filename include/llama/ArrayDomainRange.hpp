@@ -2,49 +2,71 @@
 
 #include "Core.hpp"
 
+#include <iterator>
+
 namespace llama
 {
     /// Iterator supporting \ref ArrayDomainIndexRange.
     template <std::size_t Dim>
     struct ArrayDomainIndexIterator
-        : boost::iterator_facade<
-              ArrayDomainIndexIterator<Dim>,
-              ArrayDomain<Dim>,
-              std::forward_iterator_tag,
-              ArrayDomain<Dim>>
     {
-        ArrayDomainIndexIterator() = default;
+        using value_type = ArrayDomain<Dim>;
+        using difference_type = std::ptrdiff_t;
+        using reference = value_type;
+        using pointer = value_type*;
+        using iterator_category = std::forward_iterator_tag;
 
-        ArrayDomainIndexIterator(ArrayDomain<Dim> size, ArrayDomain<Dim> current) : size(size), current(current)
+        constexpr ArrayDomainIndexIterator() noexcept = default;
+
+        constexpr ArrayDomainIndexIterator(ArrayDomain<Dim> size, ArrayDomain<Dim> current) noexcept
+            : size(size)
+            , current(current)
         {
         }
 
-    private:
-        friend class boost::iterator_core_access;
+        constexpr ArrayDomainIndexIterator(const ArrayDomainIndexIterator&) noexcept = default;
+        constexpr auto operator=(const ArrayDomainIndexIterator&) noexcept -> ArrayDomainIndexIterator& = default;
 
-        auto dereference() const -> ArrayDomain<Dim>
+        constexpr auto operator*() const noexcept -> ArrayDomain<Dim>
         {
             return current;
         }
 
-        void increment()
+        constexpr auto operator++() noexcept -> ArrayDomainIndexIterator&
         {
             for (auto i = (int) Dim - 1; i >= 0; i--)
             {
                 current[i]++;
                 if (current[i] != size[i])
-                    return;
+                    return *this;
                 current[i] = 0;
             }
-            // we reached the end
-            current[0] = size[0];
+            // we reached the end, the iterator now needs to compare equal to a value initialized one
+            current = {};
+            size = {};
+            return *this;
         }
 
-        auto equal(const ArrayDomainIndexIterator& other) const -> bool
+        constexpr auto operator++(int) noexcept -> ArrayDomainIndexIterator&
         {
-            return size == other.size && current == other.current;
+            return ++*this;
         }
 
+        friend constexpr auto operator==(
+            const ArrayDomainIndexIterator<Dim>& a,
+            const ArrayDomainIndexIterator<Dim>& b) noexcept -> bool
+        {
+            return a.size == b.size && a.current == b.current;
+        }
+
+        friend constexpr auto operator!=(
+            const ArrayDomainIndexIterator<Dim>& a,
+            const ArrayDomainIndexIterator<Dim>& b) noexcept -> bool
+        {
+            return !(a == b);
+        }
+
+    private:
         ArrayDomain<Dim> size;
         ArrayDomain<Dim> current;
     };
@@ -53,20 +75,18 @@ namespace llama
     template <std::size_t Dim>
     struct ArrayDomainIndexRange
     {
-        ArrayDomainIndexRange(ArrayDomain<Dim> size) : size(size)
+        constexpr ArrayDomainIndexRange(ArrayDomain<Dim> size) : size(size)
         {
         }
 
-        auto begin() const -> ArrayDomainIndexIterator<Dim>
+        constexpr auto begin() const -> ArrayDomainIndexIterator<Dim>
         {
             return {size, ArrayDomain<Dim>{}};
         }
 
-        auto end() const -> ArrayDomainIndexIterator<Dim>
+        constexpr auto end() const -> ArrayDomainIndexIterator<Dim>
         {
-            ArrayDomain<Dim> e{};
-            e[0] = size[0];
-            return {size, e};
+            return {};
         }
 
     private:

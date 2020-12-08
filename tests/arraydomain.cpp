@@ -119,6 +119,23 @@ TEST_CASE("ArrayDomainIndexIterator")
     CHECK(*it == llama::ArrayDomain{0, 2});
 }
 
+TEST_CASE("ArrayDomainIndexIterator.constexpr")
+{
+    constexpr auto r = [&]() constexpr
+    {
+        bool b = true;
+        llama::ArrayDomainIndexIterator it = std::begin(llama::ArrayDomainIndexRange{llama::ArrayDomain<2>{3, 3}});
+        b &= *it == llama::ArrayDomain{0, 0};
+        it++;
+        b &= *it == llama::ArrayDomain{0, 1};
+        ++it;
+        b &= *it == llama::ArrayDomain{0, 2};
+        return b;
+    }
+    ();
+    STATIC_REQUIRE(r);
+}
+
 TEST_CASE("ArrayDomainIndexRange1D")
 {
     llama::ArrayDomain<1> ud{3};
@@ -158,6 +175,29 @@ TEST_CASE("ArrayDomainIndexRange3D")
             {1, 0, 0}, {1, 0, 1}, {1, 0, 2}, {1, 1, 0}, {1, 1, 1}, {1, 1, 2}, {1, 2, 0}, {1, 2, 1}, {1, 2, 2},
             {2, 0, 0}, {2, 0, 1}, {2, 0, 2}, {2, 1, 0}, {2, 1, 1}, {2, 1, 2}, {2, 2, 0}, {2, 2, 1}, {2, 2, 2},
         });
+}
+
+TEST_CASE("ArrayDomainIndexRange1D.constexpr")
+{
+    constexpr auto r = []() constexpr
+    {
+        llama::ArrayDomain<1> ud{3};
+        int i = 0;
+        for (auto coord : llama::ArrayDomainIndexRange{ud})
+        {
+            if (i == 0 && coord != llama::ArrayDomain<1>{0})
+                return false;
+            if (i == 1 && coord != llama::ArrayDomain<1>{1})
+                return false;
+            if (i == 2 && coord != llama::ArrayDomain<1>{2})
+                return false;
+            i++;
+        }
+
+        return true;
+    }
+    ();
+    STATIC_REQUIRE(r);
 }
 
 TEST_CASE("ArrayDomainIndexRange3D.destructering")
