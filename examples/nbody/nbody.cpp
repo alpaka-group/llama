@@ -142,7 +142,7 @@ namespace usellama
         plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
         return 0;
-    } // namespace usellama
+    }
 } // namespace usellama
 
 namespace manualAoS
