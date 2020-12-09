@@ -16,13 +16,13 @@
 
 using FP = float;
 
-constexpr auto MAPPING = 2; ///< 0 native AoS, 1 native SoA, 2 native SoA (separate blos), 3 tree AoS, 4 tree SoA
 constexpr auto PROBLEM_SIZE = 16 * 1024;
 constexpr auto STEPS = 5;
 constexpr auto TRACE = false;
 constexpr auto ALLOW_RSQRT = true; // rsqrt can be way faster, but less accurate
 constexpr FP TIMESTEP = 0.0001f;
 constexpr FP EPS2 = 0.01f;
+constexpr auto AOSOA_LANES = 8; // AVX2
 
 namespace usellama
 {
@@ -83,26 +83,43 @@ namespace usellama
             particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * TIMESTEP;
     }
 
+    template <int Mapping>
     int main(std::ostream& plotFile)
     {
-        constexpr auto title = "LLAMA";
+        auto mappingName = [](int m) -> std::string {
+            if (m == 0)
+                return "AoS";
+            if (m == 1)
+                return "SoA";
+            if (m == 2)
+                return "SoA MB";
+            if (m == 3)
+                return "AoSoA" + std::to_string(AOSOA_LANES);
+            if (m == 4)
+                return "Split SoA";
+            std::abort();
+        };
+        const auto title = "LLAMA " + mappingName(Mapping);
         std::cout << title << "\n";
         Stopwatch watch;
-        const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
         auto mapping = [&] {
-            if constexpr (MAPPING == 0)
+            const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
+            if constexpr (Mapping == 0)
                 return llama::mapping::AoS{arrayDomain, Particle{}};
-            if constexpr (MAPPING == 1)
+            if constexpr (Mapping == 1)
                 return llama::mapping::SoA{arrayDomain, Particle{}};
-            if constexpr (MAPPING == 2)
+            if constexpr (Mapping == 2)
                 return llama::mapping::SoA{arrayDomain, Particle{}, std::true_type{}};
-            if constexpr (MAPPING == 3)
-                return llama::mapping::tree::Mapping{arrayDomain, llama::Tuple{}, Particle{}};
-            if constexpr (MAPPING == 4)
-                return llama::mapping::tree::Mapping{
-                    arrayDomain,
-                    llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
-                    Particle{}};
+            if constexpr (Mapping == 3)
+                return llama::mapping::AoSoA<decltype(arrayDomain), Particle, 8>{arrayDomain};
+            if constexpr (Mapping == 4)
+                return llama::mapping::SplitMapping<
+                    decltype(arrayDomain),
+                    Particle,
+                    llama::DatumCoord<1>,
+                    llama::mapping::SoA,
+                    llama::mapping::SoA,
+                    true>{arrayDomain};
         }();
 
         auto tmapping = [&] {
@@ -939,7 +956,8 @@ int main()
     plotFile << "\"\"\t\"update\"\t\"move\"\n";
 
     int r = 0;
-    r += usellama::main(plotFile);
+    boost::mp11::mp_for_each<boost::mp11::mp_iota_c<5>>(
+        [&](auto i) { r += usellama::main<decltype(i)::value>(plotFile); });
     r += manualAoS::main(plotFile);
     r += manualSoA::main(plotFile);
     r += manualAoSoA::main<false>(plotFile);
