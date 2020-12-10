@@ -1224,8 +1224,8 @@ int main()
         // only AoSoA (3) needs lanes
         using Lanes
             = std::conditional_t<decltype(i)::value == 3, mp_list_c<std::size_t, 8, 16>, mp_list_c<std::size_t, 0>>;
-        mp_for_each<Lanes>([&](auto lanes) {
-            mp_for_each<mp_list_c<bool, false, true>>([&](auto useAccumulator) {
+        mp_for_each<Lanes>([&, i](auto lanes) {
+            mp_for_each<mp_list_c<bool, false, true>>([&, i](auto useAccumulator) {
                 r += usellama::main<decltype(i)::value, decltype(useAccumulator)::value, decltype(lanes)::value>(
                     plotFile);
             });
