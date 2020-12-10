@@ -23,7 +23,7 @@ constexpr auto TRACE = false;
 constexpr auto ALLOW_RSQRT = true; // rsqrt can be way faster, but less accurate
 constexpr FP TIMESTEP = 0.0001f;
 constexpr FP EPS2 = 0.01f;
-constexpr auto AOSOA_LANES = 8; // AVX2
+constexpr auto LLAMA_AOSOA_LANES = 8; // AVX2
 
 using namespace std::string_literals;
 
@@ -108,7 +108,7 @@ namespace usellama
             if (m == 2)
                 return "SoA MB";
             if (m == 3)
-                return "AoSoA" + std::to_string(AOSOA_LANES);
+                return "AoSoA" + std::to_string(LLAMA_AOSOA_LANES);
             if (m == 4)
                 return "Split SoA";
             std::abort();
@@ -869,7 +869,7 @@ namespace manualAoSoA_manualAVX
     template <bool UseAccumulator, bool UseUpdate1>
     int main(std::ostream& plotFile)
     {
-        auto title = UseUpdate1 ? "AoSoA AVX2 w1r8"s : "AoSoA AVX2 w8r1"s;
+        auto title = "AoSoA" + std::to_string(LANES) + " AVX2 " + (UseUpdate1 ? "w1r8" : "w8r1");
         if (UseAccumulator)
             title += " Acc";
         std::cout << title << '\n';
@@ -935,6 +935,7 @@ namespace manualAoSoA_Vc
 {
     using vec = Vc::Vector<FP>;
 
+    // this automatically determined LANES based on Vc's chosen vector length
     constexpr auto LANES = sizeof(vec) / sizeof(FP);
 
     struct alignas(32) ParticleBlock
@@ -1140,7 +1141,7 @@ namespace manualAoSoA_Vc
     template <bool UseAccumulator, bool UseUpdate1, typename Ex>
     int main(std::ostream& plotFile, Ex ex)
     {
-        auto title = "AoSoA Vc"s + (UseUpdate1 ? " w1r8" : " w8r1")
+        auto title = "AoSoA" + std::to_string(LANES) + " Vc" + (UseUpdate1 ? " w1r8" : " w8r1")
             + (std::is_same_v<Ex, std::execution::parallel_policy> ? " parallel" : " sequential");
         if (UseAccumulator)
             title += " Acc";
@@ -1223,8 +1224,8 @@ int main()
     r += manualSoA::main<true>(plotFile);
     r += manualAoSoA::main<false, false>(plotFile);
     r += manualAoSoA::main<true, false>(plotFile);
-    //r += manualAoSoA::main<false, true>(plotFile);
-    //r += manualAoSoA::main<true, true>(plotFile);
+    // r += manualAoSoA::main<false, true>(plotFile);
+    // r += manualAoSoA::main<true, true>(plotFile);
 #ifdef __AVX2__
     r += manualAoSoA_manualAVX::main<false, false>(plotFile);
     r += manualAoSoA_manualAVX::main<true, false>(plotFile);
