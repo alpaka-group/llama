@@ -1223,8 +1223,8 @@ int main()
     r += manualSoA::main<true>(plotFile);
     r += manualAoSoA::main<false, false>(plotFile);
     r += manualAoSoA::main<true, false>(plotFile);
-    r += manualAoSoA::main<false, true>(plotFile);
-    r += manualAoSoA::main<true, true>(plotFile);
+    //r += manualAoSoA::main<false, true>(plotFile);
+    //r += manualAoSoA::main<true, true>(plotFile);
 #ifdef __AVX2__
     r += manualAoSoA_manualAVX::main<false, false>(plotFile);
     r += manualAoSoA_manualAVX::main<true, false>(plotFile);
