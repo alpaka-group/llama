@@ -24,7 +24,7 @@ constexpr auto TRACE = false;
 constexpr auto ALLOW_RSQRT = true; // rsqrt can be way faster, but less accurate
 constexpr FP TIMESTEP = 0.0001f;
 constexpr FP EPS2 = 0.01f;
-constexpr auto LLAMA_AOSOA_LANES = 8; // AVX2
+constexpr auto LLAMA_AND_MANUAL_AOSOA_LANES = 8; // AVX2
 
 using namespace std::string_literals;
 
@@ -109,7 +109,7 @@ namespace usellama
             if (m == 2)
                 return "SoA MB";
             if (m == 3)
-                return "AoSoA" + std::to_string(LLAMA_AOSOA_LANES);
+                return "AoSoA" + std::to_string(LLAMA_AND_MANUAL_AOSOA_LANES);
             if (m == 4)
                 return "Split SoA";
             std::abort();
@@ -480,7 +480,7 @@ namespace manualSoA
 
 namespace manualAoSoA
 {
-    constexpr auto LANES = 16;
+    constexpr auto LANES = LLAMA_AND_MANUAL_AOSOA_LANES;
     constexpr auto L1D_SIZE = 32 * 1024;
 
     struct alignas(64) ParticleBlock
@@ -608,7 +608,9 @@ namespace manualAoSoA
     template <bool UseAccumulator, bool Tiled>
     int main(std::ostream& plotFile)
     {
-        auto title = Tiled ? "AoSoA tiled"s : "AoSoA"s;
+        auto title = "AoSoA" + std::to_string(LANES);
+        if (Tiled)
+            title += " tiled";
         if (UseAccumulator)
             title += " Acc";
         std::cout << title << "\n";
@@ -661,6 +663,7 @@ namespace manualAoSoA
 
 namespace manualAoSoA_manualAVX
 {
+    // hard coded to AVX2 register length, should be 8
     constexpr auto LANES = sizeof(__m256) / sizeof(float);
 
     struct alignas(32) ParticleBlock
