@@ -1,5 +1,6 @@
 #include "../common/Stopwatch.hpp"
 
+#include <boost/asio/ip/host_name.hpp>
 #include <chrono>
 #include <execution>
 #include <fmt/format.h>
@@ -1244,7 +1245,7 @@ int main()
     std::cout << "Plot with: ./nbody.sh\n";
     std::ofstream{"nbody.sh"} << fmt::format(
         R"(#!/usr/bin/gnuplot -p
-set title "nbody CPU {0}k particles"
+set title "nbody CPU {0}k particles on {1}"
 set style data histograms
 set style fill solid
 set xtics rotate by 45 right
@@ -1252,7 +1253,8 @@ set key out top center maxrows 3
 set yrange [0:*]
 plot 'nbody.tsv' using 2:xtic(1) ti col, "" using 4 ti col
 )",
-        PROBLEM_SIZE / 1000);
+        PROBLEM_SIZE / 1000,
+        boost::asio::ip::host_name());
 
     return r;
 }
