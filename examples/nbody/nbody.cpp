@@ -24,7 +24,6 @@ constexpr auto TRACE = false;
 constexpr auto ALLOW_RSQRT = true; // rsqrt can be way faster, but less accurate
 constexpr FP TIMESTEP = 0.0001f;
 constexpr FP EPS2 = 0.01f;
-constexpr auto LLAMA_AND_MANUAL_AOSOA_LANES = 8; // AVX2
 
 using namespace std::string_literals;
 
@@ -98,7 +97,7 @@ namespace usellama
             particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * TIMESTEP;
     }
 
-    template <int Mapping, bool UseAccumulator>
+    template <int Mapping, bool UseAccumulator, std::size_t AoSoALanes = 8 /*AVX2*/>
     int main(std::ostream& plotFile)
     {
         auto mappingName = [](int m) -> std::string {
@@ -109,7 +108,7 @@ namespace usellama
             if (m == 2)
                 return "SoA MB";
             if (m == 3)
-                return "AoSoA" + std::to_string(LLAMA_AND_MANUAL_AOSOA_LANES);
+                return "AoSoA" + std::to_string(AoSoALanes);
             if (m == 4)
                 return "Split SoA";
             std::abort();
@@ -128,7 +127,7 @@ namespace usellama
             if constexpr (Mapping == 2)
                 return llama::mapping::SoA{arrayDomain, Particle{}, std::true_type{}};
             if constexpr (Mapping == 3)
-                return llama::mapping::AoSoA<decltype(arrayDomain), Particle, 8>{arrayDomain};
+                return llama::mapping::AoSoA<decltype(arrayDomain), Particle, AoSoALanes>{arrayDomain};
             if constexpr (Mapping == 4)
                 return llama::mapping::SplitMapping<
                     decltype(arrayDomain),
@@ -480,28 +479,25 @@ namespace manualSoA
 
 namespace manualAoSoA
 {
-    constexpr auto LANES = LLAMA_AND_MANUAL_AOSOA_LANES;
     constexpr auto L1D_SIZE = 32 * 1024;
 
+    template <std::size_t Lanes>
     struct alignas(64) ParticleBlock
     {
         struct
         {
-            FP x[LANES];
-            FP y[LANES];
-            FP z[LANES];
+            FP x[Lanes];
+            FP y[Lanes];
+            FP z[Lanes];
         } pos;
         struct
         {
-            FP x[LANES];
-            FP y[LANES];
-            FP z[LANES];
+            FP x[Lanes];
+            FP y[Lanes];
+            FP z[Lanes];
         } vel;
-        FP mass[LANES];
+        FP mass[Lanes];
     };
-
-    constexpr auto BLOCKS_PER_TILE = 64; // L1D_SIZE / sizeof(ParticleBlock);
-    constexpr auto BLOCKS = PROBLEM_SIZE / LANES;
 
     inline void pPInteraction(
         FP piposx,
@@ -530,18 +526,19 @@ namespace manualAoSoA
         pivelz += zdistance * sts;
     }
 
-    template <bool UseAccumulator>
-    void update(ParticleBlock* particles)
+    template <bool UseAccumulator, std::size_t Lanes>
+    void update(ParticleBlock<Lanes>* particles)
     {
-        for (std::size_t bi = 0; bi < BLOCKS; bi++)
+        constexpr auto blocks = PROBLEM_SIZE / Lanes;
+        for (std::size_t bi = 0; bi < blocks; bi++)
         {
-            std::conditional_t<UseAccumulator, ParticleBlock, ParticleBlock&> blockI = particles[bi];
-            for (std::size_t bj = 0; bj < BLOCKS; bj++)
-                for (std::size_t j = 0; j < LANES; j++)
+            std::conditional_t<UseAccumulator, ParticleBlock<Lanes>, ParticleBlock<Lanes>&> blockI = particles[bi];
+            for (std::size_t bj = 0; bj < blocks; bj++)
+                for (std::size_t j = 0; j < Lanes; j++)
                 {
                     const auto& blockJ = particles[bj];
                     LLAMA_INDEPENDENT_DATA
-                    for (std::size_t i = 0; i < LANES; i++)
+                    for (std::size_t i = 0; i < Lanes; i++)
                     {
                         pPInteraction(
                             blockI.pos.x[i],
@@ -561,20 +558,22 @@ namespace manualAoSoA
         }
     }
 
-    template <bool UseAccumulator>
-    void updateTiled(ParticleBlock* particles)
+    template <bool UseAccumulator, std::size_t Lanes>
+    void updateTiled(ParticleBlock<Lanes>* particles)
     {
-        for (std::size_t ti = 0; ti < BLOCKS / BLOCKS_PER_TILE; ti++)
-            for (std::size_t tj = 0; tj < BLOCKS / BLOCKS_PER_TILE; tj++)
-                for (std::size_t bi = 0; bi < BLOCKS_PER_TILE; bi++)
-                    for (std::size_t bj = 0; bj < BLOCKS_PER_TILE; bj++)
-                        for (std::size_t j = 0; j < LANES; j++)
+        constexpr auto blocks = PROBLEM_SIZE / Lanes;
+        constexpr auto blocksPerTile = 64; // L1D_SIZE / sizeof(ParticleBlock<Lanes>);
+        for (std::size_t ti = 0; ti < blocks / blocksPerTile; ti++)
+            for (std::size_t tj = 0; tj < blocks / blocksPerTile; tj++)
+                for (std::size_t bi = 0; bi < blocksPerTile; bi++)
+                    for (std::size_t bj = 0; bj < blocksPerTile; bj++)
+                        for (std::size_t j = 0; j < Lanes; j++)
                         {
                             LLAMA_INDEPENDENT_DATA
-                            for (std::size_t i = 0; i < LANES; i++)
+                            for (std::size_t i = 0; i < Lanes; i++)
                             {
-                                auto& blockI = particles[ti * BLOCKS_PER_TILE + bi];
-                                const auto& blockJ = particles[tj * BLOCKS_PER_TILE + bj];
+                                auto& blockI = particles[ti * blocksPerTile + bi];
+                                const auto& blockJ = particles[tj * blocksPerTile + bj];
                                 pPInteraction(
                                     blockI.pos.x[i],
                                     blockI.pos.y[i],
@@ -590,12 +589,14 @@ namespace manualAoSoA
                         }
     }
 
-    void move(ParticleBlock* particles)
+    template <std::size_t Lanes>
+    void move(ParticleBlock<Lanes>* particles)
     {
-        for (std::size_t bi = 0; bi < BLOCKS; bi++)
+        constexpr auto blocks = PROBLEM_SIZE / Lanes;
+        for (std::size_t bi = 0; bi < blocks; bi++)
         {
             LLAMA_INDEPENDENT_DATA
-            for (std::size_t i = 0; i < LANES; ++i)
+            for (std::size_t i = 0; i < Lanes; ++i)
             {
                 auto& block = particles[bi];
                 block.pos.x[i] += block.vel.x[i] * TIMESTEP;
@@ -605,10 +606,10 @@ namespace manualAoSoA
         }
     }
 
-    template <bool UseAccumulator, bool Tiled>
+    template <bool UseAccumulator, bool Tiled, std::size_t Lanes>
     int main(std::ostream& plotFile)
     {
-        auto title = "AoSoA" + std::to_string(LANES);
+        auto title = "AoSoA" + std::to_string(Lanes);
         if (Tiled)
             title += " tiled";
         if (UseAccumulator)
@@ -616,15 +617,17 @@ namespace manualAoSoA
         std::cout << title << "\n";
         Stopwatch watch;
 
-        std::vector<ParticleBlock> particles(BLOCKS);
+        constexpr auto blocks = PROBLEM_SIZE / Lanes;
+
+        std::vector<ParticleBlock<Lanes>> particles(blocks);
         watch.printAndReset("alloc");
 
         std::default_random_engine engine;
         std::normal_distribution<FP> dist(FP(0), FP(1));
-        for (std::size_t bi = 0; bi < BLOCKS; ++bi)
+        for (std::size_t bi = 0; bi < blocks; ++bi)
         {
             auto& block = particles[bi];
-            for (std::size_t i = 0; i < LANES; ++i)
+            for (std::size_t i = 0; i < Lanes; ++i)
             {
                 block.pos.x[i] = dist(engine);
                 block.pos.y[i] = dist(engine);
@@ -1218,16 +1221,24 @@ int main()
     int r = 0;
     using namespace boost::mp11;
     mp_for_each<mp_iota_c<5>>([&](auto i) {
-        mp_for_each<mp_list_c<bool, false, true>>([&](auto useAccumulator) {
-            r += usellama::main<decltype(i)::value, decltype(useAccumulator)::value>(plotFile);
+        // only AoSoA (3) needs lanes
+        using Lanes
+            = std::conditional_t<decltype(i)::value == 3, mp_list_c<std::size_t, 8, 16>, mp_list_c<std::size_t, 0>>;
+        mp_for_each<Lanes>([&](auto lanes) {
+            mp_for_each<mp_list_c<bool, false, true>>([&](auto useAccumulator) {
+                r += usellama::main<decltype(i)::value, decltype(useAccumulator)::value, decltype(lanes)::value>(
+                    plotFile);
+            });
         });
     });
     r += manualAoS::main<false>(plotFile);
     r += manualAoS::main<true>(plotFile);
     r += manualSoA::main<false>(plotFile);
     r += manualSoA::main<true>(plotFile);
-    r += manualAoSoA::main<false, false>(plotFile);
-    r += manualAoSoA::main<true, false>(plotFile);
+    mp_for_each<mp_list_c<std::size_t, 8, 16>>([&](auto lanes) {
+        r += manualAoSoA::main<false, false, decltype(lanes)::value>(plotFile);
+        r += manualAoSoA::main<true, false, decltype(lanes)::value>(plotFile);
+    });
     // r += manualAoSoA::main<false, true>(plotFile);
     // r += manualAoSoA::main<true, true>(plotFile);
 #ifdef __AVX2__
