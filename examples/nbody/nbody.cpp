@@ -78,7 +78,7 @@ namespace usellama
             if constexpr (UseAccumulator)
                 pi = particles(i);
             LLAMA_INDEPENDENT_DATA
-            for (auto j = std::size_t{0}; j < PROBLEM_SIZE; ++j)
+            for (std::size_t j = 0; j < PROBLEM_SIZE; ++j)
             {
                 if constexpr (UseAccumulator)
                     pPInteraction(pi, particles(j));
@@ -270,7 +270,7 @@ namespace manualAoS
             if constexpr (UseAccumulator)
                 pi = particles[i];
             LLAMA_INDEPENDENT_DATA
-            for (auto j = std::size_t{0}; j < PROBLEM_SIZE; ++j)
+            for (std::size_t j = 0; j < PROBLEM_SIZE; ++j)
             {
                 if constexpr (UseAccumulator)
                     pPInteraction(pi, particles[j]);
@@ -383,7 +383,7 @@ namespace manualSoA
                 pively = vely[i];
                 pivelz = velz[i];
             }
-            for (auto j = std::size_t{0}; j < PROBLEM_SIZE; ++j)
+            for (std::size_t j = 0; j < PROBLEM_SIZE; ++j)
             {
                 if constexpr (UseAccumulator)
                     pPInteraction(piposx, piposy, piposz, pivelx, pively, pivelz, posx[j], posy[j], posz[j], mass[j]);
