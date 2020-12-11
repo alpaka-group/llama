@@ -1,8 +1,6 @@
 #include "../common/Stopwatch.hpp"
 
 #include <boost/asio/ip/host_name.hpp>
-#include <chrono>
-#include <execution>
 #include <fmt/format.h>
 #include <fstream>
 #include <iomanip>
@@ -992,14 +990,13 @@ namespace manualAoSoA_Vc
     }
 
     // update (read/write) 8 particles I based on the influence of 1 particle J
-    template <typename Ex>
-    void update8(ParticleBlock* particles, Ex ex)
+    void update8(ParticleBlock* particles, int threads)
     {
-        //#    pragma omp parallel for
-        //        for (std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
-        //        {
-        //            auto& blockI = particles[bi];
-        std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& blockI) {
+#    pragma omp parallel for schedule(static) num_threads(threads)
+        for (std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
+        {
+            auto& blockI = particles[bi];
+            // std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& blockI) {
             for (std::size_t bj = 0; bj < BLOCKS; bj++)
                 for (std::size_t j = 0; j < LANES; j++)
                 {
@@ -1021,18 +1018,17 @@ namespace manualAoSoA_Vc
                         pjposz,
                         pjmass);
                 }
-        });
-        //}
+            // });
+        }
     }
 
-    template <typename Ex>
-    void update8Acc(ParticleBlock* particles, Ex ex)
+    void update8Acc(ParticleBlock* particles, int threads)
     {
-        //#    pragma omp parallel for
-        //        for (std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
-        //        {
-        //            auto& blockI = particles[bi];
-        std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& blockI) {
+#    pragma omp parallel for schedule(static) num_threads(threads)
+        for (std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
+        {
+            auto& blockI = particles[bi];
+            // std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& blockI) {
             const vec piposx = blockI.pos.x;
             const vec piposy = blockI.pos.y;
             const vec piposz = blockI.pos.z;
@@ -1055,19 +1051,18 @@ namespace manualAoSoA_Vc
             blockI.vel.x = pivelx;
             blockI.vel.y = pively;
             blockI.vel.z = pivelz;
-        });
-        //}
+            // });
+        }
     }
 
     // update (read/write) 1 particles I based on the influence of 8 particles J
-    template <typename Ex>
-    void update1(ParticleBlock* particles, Ex ex)
+    void update1(ParticleBlock* particles, int threads)
     {
-        //#    pragma omp parallel for
-        //        for (std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
-        //        {
-        //            auto& blockI = particles[bi];
-        std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& blockI) {
+#    pragma omp parallel for schedule(static) num_threads(threads)
+        for (std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
+        {
+            auto& blockI = particles[bi];
+            // std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& blockI) {
             for (std::size_t i = 0; i < LANES; i++)
                 for (std::size_t bj = 0; bj < BLOCKS; bj++)
                 {
@@ -1090,18 +1085,17 @@ namespace manualAoSoA_Vc
                     blockI.vel.y[i] = pively.sum();
                     blockI.vel.z[i] = pivelz.sum();
                 }
-        });
-        //}
+            // });
+        }
     }
 
-    template <typename Ex>
-    void update1Acc(ParticleBlock* particles, Ex ex)
+    void update1Acc(ParticleBlock* particles, int threads)
     {
-        //#    pragma omp parallel for
-        //        for (std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
-        //        {
-        //            auto& blockI = particles[bi];
-        std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& blockI) {
+#    pragma omp parallel for schedule(static) num_threads(threads)
+        for (std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
+        {
+            auto& blockI = particles[bi];
+            // std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& blockI) {
             for (std::size_t i = 0; i < LANES; i++)
             {
                 const vec piposx = (FP) blockI.pos.x[i];
@@ -1131,27 +1125,32 @@ namespace manualAoSoA_Vc
                 blockI.vel.y[i] = pively.sum();
                 blockI.vel.z[i] = pivelz.sum();
             }
-        });
-        //}
+            // });
+        }
     }
 
-    template <typename Ex>
-    void move(ParticleBlock* particles, Ex ex)
+    void move(ParticleBlock* particles, int threads)
     {
-        std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& block) {
+#    pragma omp parallel for schedule(static) num_threads(threads)
+        for (std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
+        {
+            // std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& block) {
+            auto& block = particles[bi];
             block.pos.x += block.vel.x * TIMESTEP;
             block.pos.y += block.vel.y * TIMESTEP;
             block.pos.z += block.vel.z * TIMESTEP;
-        });
+            // });
+        }
     }
 
-    template <bool UseAccumulator, bool UseUpdate1, typename Ex>
-    int main(std::ostream& plotFile, Ex ex)
+    template <bool UseAccumulator, bool UseUpdate1>
+    int main(std::ostream& plotFile, int threads)
     {
-        auto title = "AoSoA" + std::to_string(LANES) + " Vc" + (UseUpdate1 ? " w1r8" : " w8r1")
-            + (std::is_same_v<Ex, std::execution::parallel_policy> ? " parallel" : " sequential");
+        auto title = "AoSoA" + std::to_string(LANES) + " Vc" + (UseUpdate1 ? " w1r8" : " w8r1");
         if (UseAccumulator)
             title += " Acc";
+        title += " " + std::to_string(threads) + "Th";
+
         std::cout << title << '\n';
         Stopwatch watch;
 
@@ -1183,19 +1182,19 @@ namespace manualAoSoA_Vc
             if constexpr (UseUpdate1)
             {
                 if constexpr (UseAccumulator)
-                    update1Acc(particles.data(), ex);
+                    update1Acc(particles.data(), threads);
                 else
-                    update1(particles.data(), ex);
+                    update1(particles.data(), threads);
             }
             else
             {
                 if constexpr (UseAccumulator)
-                    update8Acc(particles.data(), ex);
+                    update8Acc(particles.data(), threads);
                 else
-                    update8(particles.data(), ex);
+                    update8(particles.data(), threads);
             }
             sumUpdate += watch.printAndReset("update", '\t');
-            move(particles.data(), ex);
+            move(particles.data(), threads);
             sumMove += watch.printAndReset("move");
         }
         if (!UseAccumulator)
@@ -1248,12 +1247,13 @@ int main()
     r += manualAoSoA_manualAVX::main<true, true>(plotFile);
 #endif
 #if __has_include(<Vc/Vc>)
-    mp_for_each<mp_list<std::execution::sequenced_policy, std::execution::parallel_policy>>([&](auto ex) {
-        r += manualAoSoA_Vc::main<false, false>(plotFile, ex);
-        r += manualAoSoA_Vc::main<true, false>(plotFile, ex);
-        r += manualAoSoA_Vc::main<false, true>(plotFile, ex);
-        r += manualAoSoA_Vc::main<true, true>(plotFile, ex);
-    });
+    for (int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
+    {
+        r += manualAoSoA_Vc::main<false, false>(plotFile, threads);
+        r += manualAoSoA_Vc::main<true, false>(plotFile, threads);
+        r += manualAoSoA_Vc::main<false, true>(plotFile, threads);
+        r += manualAoSoA_Vc::main<true, true>(plotFile, threads);
+    }
 #endif
 
     std::cout << "Plot with: ./nbody.sh\n";
