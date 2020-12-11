@@ -13,6 +13,9 @@
 #include <vector>
 
 // needs -fno-math-errno, so std::sqrt() can be vectorized
+// for multithreading, specify thread affinity (GNU OpenMP):
+// e.g. for a 32 core CPU with SMT/hyperthreading: GOMP_CPU_AFFINITY='0-30:2,1-31:2' llama-nbody
+// e.g. for a 16 core CPU without SMT/hyperthreading: GOMP_CPU_AFFINITY='0-15' llama-nbody
 
 using FP = float;
 
