@@ -617,3 +617,264 @@ TEST_CASE("VirtualDatum.structuredBindings")
         CHECK(datum(tag::Weight{}) == 60);
     }
 }
+
+namespace
+{
+    template <typename T>
+    struct MyPos
+    {
+        T a;
+        T y;
+    };
+
+    template <typename T>
+    struct MyVel
+    {
+        T x;
+        T y;
+        T z;
+    };
+
+    template <typename T>
+    struct MyDatum
+    {
+        MyPos<T> pos;
+        MyVel<T> vel;
+        T weight;
+    };
+
+    template <std::size_t I, typename T>
+    auto get(const MyPos<T>& p)
+    {
+        if constexpr (I == 0)
+            return p.a;
+        if constexpr (I == 1)
+            return p.y;
+    }
+
+    template <std::size_t I, typename T>
+    auto get(const MyVel<T>& p)
+    {
+        if constexpr (I == 0)
+            return p.x;
+        if constexpr (I == 1)
+            return p.y;
+        if constexpr (I == 2)
+            return p.z;
+    }
+
+    template <std::size_t I, typename T>
+    auto get(const MyDatum<T>& p)
+    {
+        if constexpr (I == 0)
+            return p.pos;
+        if constexpr (I == 1)
+            return p.vel;
+        if constexpr (I == 2)
+            return p.weight;
+    }
+} // namespace
+
+template <typename T>
+struct std::tuple_size<MyPos<T>>
+{
+    static constexpr std::size_t value = 2;
+};
+
+template <typename T>
+struct std::tuple_size<MyVel<T>>
+{
+    static constexpr std::size_t value = 3;
+};
+
+template <typename T>
+struct std::tuple_size<MyDatum<T>>
+{
+    static constexpr std::size_t value = 3;
+};
+
+TEST_CASE("VirtualDatum.load.value")
+{
+    llama::One<Name> datum;
+    datum = 1;
+
+    {
+        MyPos<int> pos = datum(tag::Pos{}).load();
+        CHECK(pos.a == 1);
+        CHECK(pos.y == 1);
+    }
+    {
+        MyPos<int> pos = std::as_const(datum)(tag::Pos{}).load();
+        CHECK(pos.a == 1);
+        CHECK(pos.y == 1);
+    }
+
+    {
+        MyDatum<int> d = datum.load();
+        CHECK(d.pos.a == 1);
+        CHECK(d.pos.y == 1);
+        CHECK(d.vel.x == 1);
+        CHECK(d.vel.y == 1);
+        CHECK(d.vel.z == 1);
+        CHECK(d.weight == 1);
+    }
+    {
+        MyDatum<int> d = std::as_const(datum).load();
+        CHECK(d.pos.a == 1);
+        CHECK(d.pos.y == 1);
+        CHECK(d.vel.x == 1);
+        CHECK(d.vel.y == 1);
+        CHECK(d.vel.z == 1);
+        CHECK(d.weight == 1);
+    }
+}
+
+TEST_CASE("VirtualDatum.load.ref")
+{
+    llama::One<Name> datum;
+
+    datum = 1;
+    {
+        MyPos<int&> pos = datum(tag::Pos{}).load();
+        CHECK(pos.a == 1);
+        CHECK(pos.y == 1);
+
+        pos.a = 2;
+        pos.y = 3;
+        CHECK(datum(tag::Pos{}, tag::A{}) == 2);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 1);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 1);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 1);
+        CHECK(datum(tag::Weight{}) == 1);
+    }
+
+    datum = 1;
+    {
+        MyDatum<int&> d = datum.load();
+        CHECK(d.pos.a == 1);
+        CHECK(d.pos.y == 1);
+
+        d.pos.a = 2;
+        d.pos.y = 3;
+        d.vel.x = 4;
+        d.vel.y = 5;
+        d.vel.z = 6;
+        d.weight = 7;
+        CHECK(datum(tag::Pos{}, tag::A{}) == 2);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 4);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 5);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 6);
+        CHECK(datum(tag::Weight{}) == 7);
+    }
+}
+
+TEST_CASE("VirtualDatum.load.constref")
+{
+    llama::One<Name> datum;
+    datum = 1;
+
+    {
+        MyPos<const int&> pos = datum(tag::Pos{}).load();
+        CHECK(pos.a == 1);
+        CHECK(pos.y == 1);
+    }
+    {
+        MyPos<const int&> pos = std::as_const(datum)(tag::Pos{}).load();
+        CHECK(pos.a == 1);
+        CHECK(pos.y == 1);
+    }
+    {
+        MyDatum<const int&> d = datum.load();
+        CHECK(d.pos.a == 1);
+        CHECK(d.pos.y == 1);
+    }
+    {
+        MyDatum<const int&> d = std::as_const(datum).load();
+        CHECK(d.pos.a == 1);
+        CHECK(d.pos.y == 1);
+    }
+}
+
+TEST_CASE("VirtualDatum.store")
+{
+    llama::One<Name> datum;
+
+    datum = 1;
+    {
+        MyPos<int> pos{2, 3};
+        datum(tag::Pos{}).store(pos);
+        CHECK(datum(tag::Pos{}, tag::A{}) == 2);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 1);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 1);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 1);
+        CHECK(datum(tag::Weight{}) == 1);
+    }
+
+    datum = 1;
+    {
+        MyDatum<int> d{{2, 3}, {4, 5, 6}, 7};
+        datum.store(d);
+        CHECK(datum(tag::Pos{}, tag::A{}) == 2);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 4);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 5);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 6);
+        CHECK(datum(tag::Weight{}) == 7);
+    }
+}
+
+TEST_CASE("VirtualDatum.loadAs.value")
+{
+    llama::One<Name> datum;
+    datum = 1;
+
+    {
+        auto pos = datum(tag::Pos{}).loadAs<MyPos<int>>();
+        CHECK(pos.a == 1);
+        CHECK(pos.y == 1);
+    }
+    {
+        auto pos = std::as_const(datum)(tag::Pos{}).loadAs<MyPos<int>>();
+        CHECK(pos.a == 1);
+        CHECK(pos.y == 1);
+    }
+}
+
+TEST_CASE("VirtualDatum.loadAs.ref")
+{
+    llama::One<Name> datum;
+    datum = 1;
+
+    auto pos = datum(tag::Pos{}).loadAs<MyPos<int&>>();
+    CHECK(pos.a == 1);
+    CHECK(pos.y == 1);
+
+    pos.a = 2;
+    pos.y = 3;
+    CHECK(datum(tag::Pos{}, tag::A{}) == 2);
+    CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
+    CHECK(datum(tag::Vel{}, tag::X{}) == 1);
+    CHECK(datum(tag::Vel{}, tag::Y{}) == 1);
+    CHECK(datum(tag::Vel{}, tag::Z{}) == 1);
+    CHECK(datum(tag::Weight{}) == 1);
+}
+
+TEST_CASE("VirtualDatum.loadAs.constref")
+{
+    llama::One<Name> datum;
+    datum = 1;
+
+    {
+        auto pos = datum(tag::Pos{}).loadAs<MyPos<const int&>>();
+        CHECK(pos.a == 1);
+        CHECK(pos.y == 1);
+    }
+    {
+        auto pos = std::as_const(datum)(tag::Pos{}).loadAs<MyPos<const int&>>();
+        CHECK(pos.a == 1);
+        CHECK(pos.y == 1);
+    }
+}
