@@ -503,11 +503,31 @@ TEST_CASE("VirtualDatum.load")
         CHECK(pos.a == 1);
         CHECK(pos.y == 1);
 
-        pos.a = 2;
-        pos.y = 3;
+        datum = 2;
+        MyPos pos2 = std::as_const(datum)(tag::Pos{}).load();
+        CHECK(pos2.a == 2);
+        CHECK(pos2.y == 2);
+    }
+}
+
+TEST_CASE("VirtualDatum.store")
+{
+    auto datum = llama::allocVirtualDatumStack<Name>();
+    datum = 1;
+
+    {
+        MyPos pos{2, 3};
         datum(tag::Pos{}).store(pos);
         CHECK(datum(tag::Pos{}, tag::A{}) == 2);
         CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 1);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 1);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 1);
+        CHECK(datum(tag::Weight{}) == 1);
+
+        datum(tag::Pos{}).store(MyPos{5, 6});
+        CHECK(datum(tag::Pos{}, tag::A{}) == 5);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 6);
         CHECK(datum(tag::Vel{}, tag::X{}) == 1);
         CHECK(datum(tag::Vel{}, tag::Y{}) == 1);
         CHECK(datum(tag::Vel{}, tag::Z{}) == 1);

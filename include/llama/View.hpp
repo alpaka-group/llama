@@ -502,22 +502,22 @@ namespace llama
 
         struct Loader
         {
-            VirtualDatum vd;
+            const VirtualDatum& vd;
 
             template <typename T>
-            operator T()
+            operator T() const
             {
                 return vd.loadAs<T>();
             }
         };
 
-        auto load() -> Loader
+        auto load() const -> Loader
         {
             return Loader{*this};
         }
 
         template <typename T>
-        auto loadAs() -> T
+        auto loadAs() const -> T
         {
             return std::make_from_tuple<T>(asTuple());
         }
