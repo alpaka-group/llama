@@ -469,3 +469,70 @@ TEST_CASE("VirtualDatum.asTuple.structuredBindings")
         CHECK(datum(tag::Weight{}) == 60);
     }
 }
+
+namespace
+{
+    struct MyPos
+    {
+        int a, y;
+    };
+
+    template <std::size_t I>
+    auto get(const MyPos& p)
+    {
+        if constexpr (I == 0)
+            return p.a;
+        if constexpr (I == 1)
+            return p.y;
+    }
+} // namespace
+
+template <>
+struct std::tuple_size<MyPos>
+{
+    static constexpr std::size_t value = 2;
+};
+
+TEST_CASE("VirtualDatum.load")
+{
+    auto datum = llama::allocVirtualDatumStack<Name>();
+    datum = 1;
+
+    {
+        MyPos pos = datum(tag::Pos{}).load();
+        CHECK(pos.a == 1);
+        CHECK(pos.y == 1);
+
+        pos.a = 2;
+        pos.y = 3;
+        datum(tag::Pos{}).store(pos);
+        CHECK(datum(tag::Pos{}, tag::A{}) == 2);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 1);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 1);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 1);
+        CHECK(datum(tag::Weight{}) == 1);
+    }
+}
+
+TEST_CASE("VirtualDatum.loadAs")
+{
+    auto datum = llama::allocVirtualDatumStack<Name>();
+    datum = 1;
+
+    {
+        auto pos = datum(tag::Pos{}).loadAs<MyPos>();
+        CHECK(pos.a == 1);
+        CHECK(pos.y == 1);
+
+        pos.a = 2;
+        pos.y = 3;
+        datum(tag::Pos{}).store(pos);
+        CHECK(datum(tag::Pos{}, tag::A{}) == 2);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 1);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 1);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 1);
+        CHECK(datum(tag::Weight{}) == 1);
+    }
+}

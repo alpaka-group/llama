@@ -222,6 +222,13 @@ namespace llama
         {
             return std::tuple_cat(asTupleImpl(vd(GetDatumElementTag<Elements>{}), GetDatumElementType<Elements>{})...);
         }
+
+        template <typename Tuple1, typename Tuple2, std::size_t... Is>
+        LLAMA_FN_HOST_ACC_INLINE void assignTuples(Tuple1&& dst, Tuple2&& src, std::index_sequence<Is...>)
+        {
+            using std::get;
+            ((get<Is>(std::forward<Tuple1>(dst)) = get<Is>(std::forward<Tuple2>(src))), ...);
+        }
     } // namespace internal
 
     /// Virtual data type returned by \ref View after resolving a user domain
@@ -491,6 +498,40 @@ namespace llama
         auto asTuple() const
         {
             return internal::asTupleImpl(*this, AccessibleDatumDomain{});
+        }
+
+        struct Loader
+        {
+            VirtualDatum vd;
+
+            template <typename T>
+            operator T()
+            {
+                return vd.loadAs<T>();
+            }
+        };
+
+        auto load() -> Loader
+        {
+            return Loader{*this};
+        }
+
+        template <typename T>
+        auto loadAs() -> T
+        {
+            return std::make_from_tuple<T>(asTuple());
+        }
+
+        template <typename TupleLike>
+        void store(TupleLike&& t) // requires T to support tuple protocol
+        {
+            auto dst = asTuple();
+            constexpr auto dstSize = std::tuple_size_v<decltype(dst)>;
+            static_assert(
+                dstSize == std::tuple_size_v<std::decay_t<TupleLike>>,
+                "The value to store must have the same number of data members as this virtual datum has values it "
+                "resolves to");
+            internal::assignTuples(dst, std::forward<TupleLike>(t), std::make_index_sequence<dstSize>{});
         }
     };
 
