@@ -825,8 +825,8 @@ namespace manualAoSoA_manualAVX
     void update1(ParticleBlock* particles)
     {
         for (std::size_t bi = 0; bi < BLOCKS; bi++)
-            for (std::size_t i = 0; i < LANES; i++)
-                for (std::size_t bj = 0; bj < BLOCKS; bj++)
+            for (std::size_t bj = 0; bj < BLOCKS; bj++)
+                for (std::size_t i = 0; i < LANES; i++)
                 {
                     auto& blockI = particles[bi];
                     const __m256 piposx = _mm256_broadcast_ss(&blockI.pos.x[i]);
@@ -1100,8 +1100,8 @@ namespace manualAoSoA_Vc
         {
             auto& blockI = particles[bi];
             // std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& blockI) {
-            for (std::size_t i = 0; i < LANES; i++)
-                for (std::size_t bj = 0; bj < BLOCKS; bj++)
+            for (std::size_t bj = 0; bj < BLOCKS; bj++)
+                for (std::size_t i = 0; i < LANES; i++)
                 {
                     const auto& blockJ = particles[bj];
                     vec pivelx = (FP) blockI.vel.x[i];
