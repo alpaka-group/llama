@@ -1008,11 +1008,6 @@ namespace manualAoSoA_Vc
                 for (std::size_t j = 0; j < LANES; j++)
                 {
                     const auto& blockJ = particles[bj];
-                    const vec pjposx = blockJ.pos.x[j];
-                    const vec pjposy = blockJ.pos.y[j];
-                    const vec pjposz = blockJ.pos.z[j];
-                    const vec pjmass = blockJ.mass[j];
-
                     pPInteraction(
                         blockI.pos.x,
                         blockI.pos.y,
@@ -1020,10 +1015,10 @@ namespace manualAoSoA_Vc
                         blockI.vel.x,
                         blockI.vel.y,
                         blockI.vel.z,
-                        pjposx,
-                        pjposy,
-                        pjposz,
-                        pjmass);
+                        blockJ.pos.x[j],
+                        blockJ.pos.y[j],
+                        blockJ.pos.z[j],
+                        blockJ.mass[j]);
                 }
             // });
         }
