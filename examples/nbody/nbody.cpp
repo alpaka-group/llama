@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <llama/DumpMapping.hpp>
 #include <llama/llama.hpp>
 #include <random>
 #include <string_view>
@@ -22,6 +23,7 @@ using FP = float;
 constexpr auto PROBLEM_SIZE = 16 * 1024;
 constexpr auto STEPS = 5;
 constexpr auto TRACE = false;
+constexpr auto DUMP_MAPPING = false;
 constexpr auto ALLOW_RSQRT = true; // rsqrt can be way faster, but less accurate
 constexpr FP TIMESTEP = 0.0001f;
 constexpr FP EPS2 = 0.01f;
@@ -138,6 +140,8 @@ namespace usellama
                     llama::mapping::SoA,
                     true>{arrayDomain};
         }();
+        if constexpr (DUMP_MAPPING)
+            std::ofstream{title + ".svg"} << llama::toSvg(mapping);
 
         auto tmapping = [&] {
             if constexpr (TRACE)
