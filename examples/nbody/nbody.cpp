@@ -732,10 +732,10 @@ namespace manualAoSoA_manualAVX
                 for (std::size_t j = 0; j < LANES; j++)
                 {
                     const auto& blockJ = particles[bj];
-                    const __m256 posxJ = _mm256_broadcast_ss(&blockJ.pos.x[j]);
-                    const __m256 posyJ = _mm256_broadcast_ss(&blockJ.pos.y[j]);
-                    const __m256 poszJ = _mm256_broadcast_ss(&blockJ.pos.z[j]);
-                    const __m256 massJ = _mm256_broadcast_ss(&blockJ.mass[j]);
+                    const __m256 pjposx = _mm256_broadcast_ss(&blockJ.pos.x[j]);
+                    const __m256 pjposy = _mm256_broadcast_ss(&blockJ.pos.y[j]);
+                    const __m256 pjposz = _mm256_broadcast_ss(&blockJ.pos.z[j]);
+                    const __m256 pjmass = _mm256_broadcast_ss(&blockJ.mass[j]);
 
                     auto& blockI = particles[bi];
                     __m256 pivelx = _mm256_load_ps(blockI.vel.x);
@@ -748,10 +748,10 @@ namespace manualAoSoA_manualAVX
                         pivelx,
                         pively,
                         pivelz,
-                        posxJ,
-                        posyJ,
-                        poszJ,
-                        massJ);
+                        pjposx,
+                        pjposy,
+                        pjposz,
+                        pjmass);
                     _mm256_store_ps(blockI.vel.x, pivelx);
                     _mm256_store_ps(blockI.vel.y, pively);
                     _mm256_store_ps(blockI.vel.z, pivelz);
