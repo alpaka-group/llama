@@ -25,6 +25,8 @@ constexpr auto STEPS = 5;
 constexpr auto TRACE = false;
 constexpr auto DUMP_MAPPING = false;
 constexpr auto ALLOW_RSQRT = true; // rsqrt can be way faster, but less accurate
+constexpr auto NEWTON_RAPHSON_AFTER_RSQRT
+    = true; // generate a newton raphson refinement after explicit calls to rsqrt()
 constexpr FP TIMESTEP = 0.0001f;
 constexpr FP EPS2 = 0.01f;
 
@@ -716,8 +718,24 @@ namespace manualAoSoA_manualAVX
         const __m256 distSqr
             = _mm256_add_ps(_mm256_add_ps(_mm256_add_ps(vEPS2, xdistanceSqr), ydistanceSqr), zdistanceSqr);
         const __m256 distSixth = _mm256_mul_ps(_mm256_mul_ps(distSqr, distSqr), distSqr);
-        const __m256 invDistCube
-            = ALLOW_RSQRT ? _mm256_rsqrt_ps(distSixth) : _mm256_div_ps(_mm256_set1_ps(1.0f), _mm256_sqrt_ps(distSixth));
+        const __m256 invDistCube = [&] {
+            if constexpr (ALLOW_RSQRT)
+            {
+                const __m256 r = _mm256_rsqrt_ps(distSixth);
+                if constexpr (NEWTON_RAPHSON_AFTER_RSQRT)
+                {
+                    // from: http://stackoverflow.com/q/14752399/556899
+                    const __m256 three = _mm256_set1_ps(3.0f);
+                    const __m256 half = _mm256_set1_ps(0.5f);
+                    const __m256 muls = _mm256_mul_ps(_mm256_mul_ps(distSixth, r), r);
+                    return _mm256_mul_ps(_mm256_mul_ps(half, r), _mm256_sub_ps(three, muls));
+                }
+                else
+                    return r;
+            }
+            else
+                return _mm256_div_ps(_mm256_set1_ps(1.0f), _mm256_sqrt_ps(distSixth));
+        }();
         const __m256 sts = _mm256_mul_ps(_mm256_mul_ps(pjmass, invDistCube), vTIMESTEP);
         pivelx = _mm256_fmadd_ps(xdistanceSqr, sts, pivelx);
         pively = _mm256_fmadd_ps(ydistanceSqr, sts, pively);
@@ -989,7 +1007,24 @@ namespace manualAoSoA_Vc
         const vec zdistanceSqr = zdistance * zdistance;
         const vec distSqr = EPS2 + xdistanceSqr + ydistanceSqr + zdistanceSqr;
         const vec distSixth = distSqr * distSqr * distSqr;
-        const vec invDistCube = ALLOW_RSQRT ? Vc::rsqrt(distSixth) : (1.0f / Vc::sqrt(distSixth));
+        const vec invDistCube = [&] {
+            if constexpr (ALLOW_RSQRT)
+            {
+                const vec r = Vc::rsqrt(distSixth);
+                if constexpr (NEWTON_RAPHSON_AFTER_RSQRT)
+                {
+                    // from: http://stackoverflow.com/q/14752399/556899
+                    const vec three = 3.0f;
+                    const vec half = 0.5f;
+                    const vec muls = distSixth * r * r;
+                    return (half * r) * (three - muls);
+                }
+                else
+                    return r;
+            }
+            else
+                return 1.0f / Vc::sqrt(distSixth);
+        }();
         const vec sts = pjmass * invDistCube * TIMESTEP;
         pivelx = xdistanceSqr * sts + pivelx;
         pively = ydistanceSqr * sts + pively;
