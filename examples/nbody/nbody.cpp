@@ -265,8 +265,7 @@ namespace manualAoS
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
         const FP sts = pj.mass * invDistCube * TIMESTEP;
-        distance *= sts;
-        pi.vel += distance;
+        pi.vel += distance * sts;
     }
 
     template <bool UseAccumulator>
@@ -1177,7 +1176,7 @@ namespace manualAoSoA_Vc
 #    pragma omp parallel for schedule(static) num_threads(threads)
         for (std::ptrdiff_t ti2 = 0; ti2 < BLOCKS / (L1TilesPerL2Tile * blocksPerL1Tile); ti2++)
             for (std::size_t tj2 = 0; tj2 < BLOCKS / (L1TilesPerL2Tile * blocksPerL1Tile); tj2++)
-                for (std::ptrdiff_t ti1 = 0; ti1 < L1TilesPerL2Tile; ti1++)
+                for (std::size_t ti1 = 0; ti1 < L1TilesPerL2Tile; ti1++)
                     for (std::size_t tj1 = 0; tj1 < L1TilesPerL2Tile; tj1++)
                         for (std::size_t bi = 0; bi < blocksPerL1Tile; bi++)
                             for (std::size_t bj = 0; bj < blocksPerL1Tile; bj++)
