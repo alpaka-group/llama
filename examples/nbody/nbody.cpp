@@ -1288,11 +1288,11 @@ namespace manualAoSoA_Vc
         }
     }
 
-    template <bool UseAccumulator, bool UseUpdate1, bool Tiled = false>
-    int main(std::ostream& plotFile, int threads)
+    template <bool UseAccumulator>
+    int main(std::ostream& plotFile, int threads, bool useUpdate1, bool tiled = false)
     {
-        auto title = "AoSoA" + std::to_string(LANES) + " Vc" + (UseUpdate1 ? " w1r8" : " w8r1");
-        if (Tiled)
+        auto title = "AoSoA" + std::to_string(LANES) + " Vc" + (useUpdate1 ? " w1r8" : " w8r1");
+        if (tiled)
             title += " tiled";
         if (UseAccumulator)
             title += " Acc";
@@ -1326,23 +1326,23 @@ namespace manualAoSoA_Vc
         double sumMove = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            if constexpr (UseUpdate1)
+            if (useUpdate1)
             {
-                if constexpr (UseAccumulator)
+                if (UseAccumulator)
                     update1Acc(particles.data(), threads);
                 else
                     update1(particles.data(), threads);
             }
             else
             {
-                if constexpr (Tiled && UseAccumulator)
+                if (tiled && UseAccumulator)
                     update8TiledAcc(particles.data(), threads);
-                else if constexpr (Tiled && !UseAccumulator)
-                    update8Tiled2(particles.data(), threads);
-                // update8Tiled(particles.data(), threads);
-                else if constexpr (!Tiled && UseAccumulator)
+                else if (tiled && !UseAccumulator)
+                    // update8Tiled2(particles.data(), threads);
+                    update8Tiled(particles.data(), threads);
+                else if (!tiled && UseAccumulator)
                     update8Acc(particles.data(), threads);
-                else if constexpr (!Tiled && !UseAccumulator)
+                else if (!tiled && !UseAccumulator)
                     update8(particles.data(), threads);
             }
             sumUpdate += watch.printAndReset("update", '\t');
@@ -1400,14 +1400,15 @@ int main()
 #endif
 #if __has_include(<Vc/Vc>)
     for (int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
-    {
-        r += manualAoSoA_Vc::main<false, false>(plotFile, threads);
-        r += manualAoSoA_Vc::main<true, false>(plotFile, threads);
-        r += manualAoSoA_Vc::main<false, false, true>(plotFile, threads);
-        r += manualAoSoA_Vc::main<true, false, true>(plotFile, threads);
-        r += manualAoSoA_Vc::main<false, true>(plotFile, threads);
-        r += manualAoSoA_Vc::main<true, true>(plotFile, threads);
-    }
+        for (auto useUpdate1 : {false, true})
+            for (auto tiled : {false, true})
+            {
+                if (useUpdate1 && tiled)
+                    continue;
+                mp_for_each<mp_list_c<bool, false, true>>([&](auto useAccumulator) {
+                    r += manualAoSoA_Vc::main<decltype(useAccumulator)::value>(plotFile, threads, useUpdate1, tiled);
+                });
+            }
 #endif
 
     std::cout << "Plot with: ./nbody.sh\n";
