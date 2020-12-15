@@ -1,15 +1,20 @@
+#include "../common/Stopwatch.hpp"
+
+#include <boost/asio/ip/host_name.hpp>
 #include <chrono>
-#include <fmt/core.h>
+#include <fmt/format.h>
+#include <fstream>
 #include <iostream>
 #include <llama/llama.hpp>
 #include <random>
 #include <utility>
 #include <vector>
 
-constexpr auto PROBLEM_SIZE = 16 * 1024; ///< total number of particles
-constexpr auto STEPS = 10; ///< number of steps to calculate
+constexpr auto PROBLEM_SIZE = 16 * 1024;
+constexpr auto STEPS = 10;
 
 using FP = float;
+constexpr FP TIMESTEP = 0.0001f;
 constexpr FP EPS2 = 0.01f;
 
 // clang-format off
@@ -39,7 +44,7 @@ using Particle = llama::DS<
 // clang-format on
 
 template <typename VirtualParticle>
-LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticle p1, VirtualParticle p2, FP ts)
+LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticle p1, VirtualParticle p2)
 {
     auto dist = p1(tag::Pos{}) - p2(tag::Pos{});
     dist *= dist;
@@ -47,32 +52,34 @@ LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticle p1, VirtualParticle 
     const FP distSixth = distSqr * distSqr * distSqr;
     const FP invDistCube = 1.0f / std::sqrt(distSixth);
     const FP s = p2(tag::Mass{}) * invDistCube;
-    dist *= s * ts;
+    dist *= s * TIMESTEP;
     p1(tag::Vel{}) += dist;
 }
 
 template <typename View>
-void update(View& particles, FP ts)
+void update(View& particles)
 {
     for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
     {
         LLAMA_INDEPENDENT_DATA
         for (std::size_t j = 0; j < PROBLEM_SIZE; j++)
-            pPInteraction(particles(j), particles(i), ts);
+            pPInteraction(particles(j), particles(i));
     }
 }
 
 template <typename View>
-void move(View& particles, FP ts)
+void move(View& particles)
 {
     LLAMA_INDEPENDENT_DATA
     for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
-        particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * ts;
+        particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * TIMESTEP;
 }
 
 template <std::size_t Mapping, std::size_t Alignment>
-void run()
+void run(std::ostream& plotFile)
 {
+    std::cout << (Mapping == 0 ? "AoS" : Mapping == 1 ? "SoA" : "SoA MB") << ' ' << Alignment << "\n";
+
     constexpr FP ts = 0.0001f;
 
     const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
@@ -101,41 +108,47 @@ void run()
         p(tag::Mass{}) = dist(engine) / FP(100);
     }
 
-    std::chrono::nanoseconds acc{};
+    double sumUpdate = 0;
+    Stopwatch watch;
     for (std::size_t s = 0; s < STEPS; ++s)
     {
-        const auto start = std::chrono::high_resolution_clock::now();
-        update(particles, ts);
-        const auto stop = std::chrono::high_resolution_clock::now();
-        acc += stop - start;
-        move(particles, ts);
+        update(particles);
+        sumUpdate += watch.printAndReset("update", '\t');
+        move(particles);
+        watch.printAndReset("move");
     }
 
-    const auto mappingStr = Mapping == 0 ? "AoS" : Mapping == 1 ? "SoA" : "SoA.B";
-    fmt::print("{:7}\t{:9}\t{:.5}\n", mappingStr, Alignment, std::chrono::duration<double>{acc / STEPS}.count());
+    if (Mapping == 0)
+        plotFile << Alignment;
+    plotFile << '\t' << sumUpdate / STEPS << (Mapping == 2 ? '\n' : '\t');
 }
 
 int main()
 {
     using namespace boost::mp11;
 
-    fmt::print("{:7}\t{:9}\t{}\n", "Mapping", "Alignment", "Time [s]");
+    std::ofstream plotFile{"nbody.tsv"};
+    plotFile.exceptions(std::ios::badbit | std::ios::failbit);
+    plotFile << "\"alignment\"\t\"AoS\"\t\"SoA\"\t\"SoA MB\"\n";
 
-    // AoS
-    mp_for_each<mp_list_c<std::size_t, 0>>([](auto m) {
-        mp_for_each<mp_iota_c<15>>([](auto ae) {
+    mp_for_each<mp_iota_c<28>>([&](auto ae) {
+        mp_for_each<mp_list_c<std::size_t, 0, 1, 2>>([&](auto m) {
             constexpr auto mapping = decltype(m)::value;
             constexpr auto alignment = std::size_t{1} << decltype(ae)::value;
-            run<mapping, alignment>();
+            run<mapping, alignment>(plotFile);
         });
     });
 
-    // SoA single and multi blob
-    mp_for_each<mp_list_c<std::size_t, 1, 2>>([](auto m) {
-        mp_for_each<mp_iota_c<30>>([](auto ae) {
-            constexpr auto mapping = decltype(m)::value;
-            constexpr auto alignment = std::size_t{1} << decltype(ae)::value;
-            run<mapping, alignment>();
-        });
-    });
+    std::cout << "Plot with: ./nbody.sh\n";
+    std::ofstream{"nbody.sh"} << fmt::format(
+        R"(#!/usr/bin/gnuplot -p
+set title "nbody CPU {0}k particles on {1}"
+set style data lines
+set xtics rotate by 90 right
+set key out top center maxrows 3
+set yrange [0:*]
+plot 'nbody.tsv' using 2:xtic(1) ti col, '' using 3:xtic(1) ti col, '' using 4:xtic(1) ti col
+)",
+        PROBLEM_SIZE / 1000,
+        boost::asio::ip::host_name());
 }
