@@ -64,6 +64,15 @@ namespace llama
         {
             return mapping.template getBlobNrAndOffset<Coords...>(udCoord);
         }
+
+        auto color(const std::vector<std::size_t>& ddIndices) -> std::size_t
+        {
+            auto c = (boost::hash_value(ddIndices) & 0xFFFFFF);
+            const auto channelSum = ((c & 0xFF0000) >> 4) + ((c & 0xFF00) >> 2) + c & 0xFF;
+            if (channelSum < 200)
+                c |= 0x404040; // ensure color per channel is at least 0x40.
+            return c;
+        }
     } // namespace internal
 
     /// Returns an SVG image visualizing the memory layout created by the given
@@ -151,7 +160,7 @@ namespace llama
             const auto x = (info.nrAndOffset.offset % wrapByteCount) * byteSizeInPixel;
             const auto y = (info.nrAndOffset.offset / wrapByteCount) * byteSizeInPixel + blobY;
 
-            const auto fill = boost::hash_value(info.ddIndices) & 0xFFFFFF;
+            const auto fill = internal::color(info.ddIndices);
 
             const auto width = byteSizeInPixel * info.size;
             svg += fmt::format(
@@ -300,7 +309,7 @@ namespace llama
 )",
                 cssClass(internal::tagsAsStrings<DatumDomain>(coord)),
                 byteSizeInPixel * size,
-                boost::hash_value(internal::toVec(coord)) & 0xFFFFFF);
+                internal::color(internal::toVec(coord)));
         });
 
         svg += fmt::format(R"(</style>

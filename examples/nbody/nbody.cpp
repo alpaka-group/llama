@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <llama/DumpMapping.hpp>
 #include <llama/llama.hpp>
 #include <random>
 #include <string_view>
@@ -22,7 +23,10 @@ using FP = float;
 constexpr auto PROBLEM_SIZE = 16 * 1024;
 constexpr auto STEPS = 5;
 constexpr auto TRACE = false;
+constexpr auto DUMP_MAPPING = false;
 constexpr auto ALLOW_RSQRT = true; // rsqrt can be way faster, but less accurate
+constexpr auto NEWTON_RAPHSON_AFTER_RSQRT
+    = true; // generate a newton raphson refinement after explicit calls to rsqrt()
 constexpr FP TIMESTEP = 0.0001f;
 constexpr FP EPS2 = 0.01f;
 
@@ -138,6 +142,8 @@ namespace usellama
                     llama::mapping::SoA,
                     true>{arrayDomain};
         }();
+        if constexpr (DUMP_MAPPING)
+            std::ofstream{title + ".svg"} << llama::toSvg(mapping);
 
         auto tmapping = [&] {
             if constexpr (TRACE)
@@ -712,8 +718,24 @@ namespace manualAoSoA_manualAVX
         const __m256 distSqr
             = _mm256_add_ps(_mm256_add_ps(_mm256_add_ps(vEPS2, xdistanceSqr), ydistanceSqr), zdistanceSqr);
         const __m256 distSixth = _mm256_mul_ps(_mm256_mul_ps(distSqr, distSqr), distSqr);
-        const __m256 invDistCube
-            = ALLOW_RSQRT ? _mm256_rsqrt_ps(distSixth) : _mm256_div_ps(_mm256_set1_ps(1.0f), _mm256_sqrt_ps(distSixth));
+        const __m256 invDistCube = [&] {
+            if constexpr (ALLOW_RSQRT)
+            {
+                const __m256 r = _mm256_rsqrt_ps(distSixth);
+                if constexpr (NEWTON_RAPHSON_AFTER_RSQRT)
+                {
+                    // from: http://stackoverflow.com/q/14752399/556899
+                    const __m256 three = _mm256_set1_ps(3.0f);
+                    const __m256 half = _mm256_set1_ps(0.5f);
+                    const __m256 muls = _mm256_mul_ps(_mm256_mul_ps(distSixth, r), r);
+                    return _mm256_mul_ps(_mm256_mul_ps(half, r), _mm256_sub_ps(three, muls));
+                }
+                else
+                    return r;
+            }
+            else
+                return _mm256_div_ps(_mm256_set1_ps(1.0f), _mm256_sqrt_ps(distSixth));
+        }();
         const __m256 sts = _mm256_mul_ps(_mm256_mul_ps(pjmass, invDistCube), vTIMESTEP);
         pivelx = _mm256_fmadd_ps(xdistanceSqr, sts, pivelx);
         pively = _mm256_fmadd_ps(ydistanceSqr, sts, pively);
@@ -728,10 +750,10 @@ namespace manualAoSoA_manualAVX
                 for (std::size_t j = 0; j < LANES; j++)
                 {
                     const auto& blockJ = particles[bj];
-                    const __m256 posxJ = _mm256_broadcast_ss(&blockJ.pos.x[j]);
-                    const __m256 posyJ = _mm256_broadcast_ss(&blockJ.pos.y[j]);
-                    const __m256 poszJ = _mm256_broadcast_ss(&blockJ.pos.z[j]);
-                    const __m256 massJ = _mm256_broadcast_ss(&blockJ.mass[j]);
+                    const __m256 pjposx = _mm256_broadcast_ss(&blockJ.pos.x[j]);
+                    const __m256 pjposy = _mm256_broadcast_ss(&blockJ.pos.y[j]);
+                    const __m256 pjposz = _mm256_broadcast_ss(&blockJ.pos.z[j]);
+                    const __m256 pjmass = _mm256_broadcast_ss(&blockJ.mass[j]);
 
                     auto& blockI = particles[bi];
                     __m256 pivelx = _mm256_load_ps(blockI.vel.x);
@@ -744,10 +766,10 @@ namespace manualAoSoA_manualAVX
                         pivelx,
                         pively,
                         pivelz,
-                        posxJ,
-                        posyJ,
-                        poszJ,
-                        massJ);
+                        pjposx,
+                        pjposy,
+                        pjposz,
+                        pjmass);
                     _mm256_store_ps(blockI.vel.x, pivelx);
                     _mm256_store_ps(blockI.vel.y, pively);
                     _mm256_store_ps(blockI.vel.z, pivelz);
@@ -803,8 +825,8 @@ namespace manualAoSoA_manualAVX
     void update1(ParticleBlock* particles)
     {
         for (std::size_t bi = 0; bi < BLOCKS; bi++)
-            for (std::size_t i = 0; i < LANES; i++)
-                for (std::size_t bj = 0; bj < BLOCKS; bj++)
+            for (std::size_t bj = 0; bj < BLOCKS; bj++)
+                for (std::size_t i = 0; i < LANES; i++)
                 {
                     auto& blockI = particles[bi];
                     const __m256 piposx = _mm256_broadcast_ss(&blockI.pos.x[i]);
@@ -985,7 +1007,24 @@ namespace manualAoSoA_Vc
         const vec zdistanceSqr = zdistance * zdistance;
         const vec distSqr = EPS2 + xdistanceSqr + ydistanceSqr + zdistanceSqr;
         const vec distSixth = distSqr * distSqr * distSqr;
-        const vec invDistCube = ALLOW_RSQRT ? Vc::rsqrt(distSixth) : (1.0f / Vc::sqrt(distSixth));
+        const vec invDistCube = [&] {
+            if constexpr (ALLOW_RSQRT)
+            {
+                const vec r = Vc::rsqrt(distSixth);
+                if constexpr (NEWTON_RAPHSON_AFTER_RSQRT)
+                {
+                    // from: http://stackoverflow.com/q/14752399/556899
+                    const vec three = 3.0f;
+                    const vec half = 0.5f;
+                    const vec muls = distSixth * r * r;
+                    return (half * r) * (three - muls);
+                }
+                else
+                    return r;
+            }
+            else
+                return 1.0f / Vc::sqrt(distSixth);
+        }();
         const vec sts = pjmass * invDistCube * TIMESTEP;
         pivelx = xdistanceSqr * sts + pivelx;
         pively = ydistanceSqr * sts + pively;
@@ -1004,11 +1043,6 @@ namespace manualAoSoA_Vc
                 for (std::size_t j = 0; j < LANES; j++)
                 {
                     const auto& blockJ = particles[bj];
-                    const vec pjposx = blockJ.pos.x[j];
-                    const vec pjposy = blockJ.pos.y[j];
-                    const vec pjposz = blockJ.pos.z[j];
-                    const vec pjmass = blockJ.mass[j];
-
                     pPInteraction(
                         blockI.pos.x,
                         blockI.pos.y,
@@ -1016,10 +1050,10 @@ namespace manualAoSoA_Vc
                         blockI.vel.x,
                         blockI.vel.y,
                         blockI.vel.z,
-                        pjposx,
-                        pjposy,
-                        pjposz,
-                        pjmass);
+                        blockJ.pos.x[j],
+                        blockJ.pos.y[j],
+                        blockJ.pos.z[j],
+                        blockJ.mass[j]);
                 }
             // });
         }
@@ -1066,8 +1100,8 @@ namespace manualAoSoA_Vc
         {
             auto& blockI = particles[bi];
             // std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& blockI) {
-            for (std::size_t i = 0; i < LANES; i++)
-                for (std::size_t bj = 0; bj < BLOCKS; bj++)
+            for (std::size_t bj = 0; bj < BLOCKS; bj++)
+                for (std::size_t i = 0; i < LANES; i++)
                 {
                     const auto& blockJ = particles[bj];
                     vec pivelx = (FP) blockI.vel.x[i];
