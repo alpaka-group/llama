@@ -30,6 +30,9 @@ constexpr auto NEWTON_RAPHSON_AFTER_RSQRT
 constexpr FP TIMESTEP = 0.0001f;
 constexpr FP EPS2 = 0.01f;
 
+constexpr auto L1D_SIZE = 32 * 1024;
+constexpr auto L2D_SIZE = 512 * 1024;
+
 using namespace std::string_literals;
 
 namespace usellama
@@ -262,8 +265,7 @@ namespace manualAoS
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
         const FP sts = pj.mass * invDistCube * TIMESTEP;
-        distance *= sts;
-        pi.vel += distance;
+        pi.vel += distance * sts;
     }
 
     template <bool UseAccumulator>
@@ -486,8 +488,6 @@ namespace manualSoA
 
 namespace manualAoSoA
 {
-    constexpr auto L1D_SIZE = 32 * 1024;
-
     template <std::size_t Lanes>
     struct alignas(64) ParticleBlock
     {
@@ -569,7 +569,8 @@ namespace manualAoSoA
     void updateTiled(ParticleBlock<Lanes>* particles)
     {
         constexpr auto blocks = PROBLEM_SIZE / Lanes;
-        constexpr auto blocksPerTile = 64; // L1D_SIZE / sizeof(ParticleBlock<Lanes>);
+        constexpr auto blocksPerTile = 128; // L1D_SIZE / sizeof(ParticleBlock<Lanes>);
+        static_assert(blocks % blocksPerTile == 0);
         for (std::size_t ti = 0; ti < blocks / blocksPerTile; ti++)
             for (std::size_t tj = 0; tj < blocks / blocksPerTile; tj++)
                 for (std::size_t bi = 0; bi < blocksPerTile; bi++)
@@ -1092,6 +1093,113 @@ namespace manualAoSoA_Vc
         }
     }
 
+    // update (read/write) 8 particles I based on the influence of 1 particle J
+    void update8Tiled(ParticleBlock* particles, int threads)
+    {
+        constexpr auto blocksPerTile = 128; // L1D_SIZE / sizeof(ParticleBlock);
+        static_assert(BLOCKS % blocksPerTile == 0);
+#    pragma omp parallel for schedule(static) num_threads(threads)
+        for (std::ptrdiff_t ti = 0; ti < BLOCKS / blocksPerTile; ti++)
+            for (std::size_t tj = 0; tj < BLOCKS / blocksPerTile; tj++)
+                for (std::size_t bi = 0; bi < blocksPerTile; bi++)
+                    for (std::size_t bj = 0; bj < blocksPerTile; bj++)
+                        for (std::size_t j = 0; j < LANES; j++)
+                        {
+                            auto& blockI = particles[ti * blocksPerTile + bi];
+                            const auto& blockJ = particles[tj * blocksPerTile + bj];
+                            pPInteraction(
+                                blockI.pos.x,
+                                blockI.pos.y,
+                                blockI.pos.z,
+                                blockI.vel.x,
+                                blockI.vel.y,
+                                blockI.vel.z,
+                                blockJ.pos.x[j],
+                                blockJ.pos.y[j],
+                                blockJ.pos.z[j],
+                                blockJ.mass[j]);
+                        }
+    }
+
+    void update8TiledAcc(ParticleBlock* particles, int threads)
+    {
+        constexpr auto blocksPerTile = 128; // L1D_SIZE / sizeof(ParticleBlock);
+        static_assert(BLOCKS % blocksPerTile == 0);
+#    pragma omp parallel for schedule(static) num_threads(threads)
+        for (std::size_t ti = 0; ti < BLOCKS / blocksPerTile; ti++)
+            for (std::size_t bi = 0; bi < blocksPerTile; bi++)
+            {
+                auto& blockI = particles[bi];
+                const vec piposx = blockI.pos.x;
+                const vec piposy = blockI.pos.y;
+                const vec piposz = blockI.pos.z;
+                vec pivelx = blockI.vel.x;
+                vec pively = blockI.vel.y;
+                vec pivelz = blockI.vel.z;
+                for (std::size_t tj = 0; tj < BLOCKS / blocksPerTile; tj++)
+                    for (std::size_t bj = 0; bj < blocksPerTile; bj++)
+                        for (std::size_t j = 0; j < LANES; j++)
+                        {
+                            const auto& blockJ = particles[bj];
+                            const vec pjposx = blockJ.pos.x[j];
+                            const vec pjposy = blockJ.pos.y[j];
+                            const vec pjposz = blockJ.pos.z[j];
+                            const vec pjmass = blockJ.mass[j];
+
+                            pPInteraction(
+                                piposx,
+                                piposy,
+                                piposz,
+                                pivelx,
+                                pively,
+                                pivelz,
+                                pjposx,
+                                pjposy,
+                                pjposz,
+                                pjmass);
+                        }
+
+                blockI.vel.x = pivelx;
+                blockI.vel.y = pively;
+                blockI.vel.z = pivelz;
+            }
+    }
+
+    // update (read/write) 8 particles I based on the influence of 1 particle J
+    void update8Tiled2(ParticleBlock* particles, int threads)
+    {
+        constexpr auto blocksPerL1Tile = 128; // L1D_SIZE / sizeof(ParticleBlock);
+        constexpr auto L1TilesPerL2Tile = 16; // L2D_SIZE / (blocksPerL1Tile * sizeof(ParticleBlock));
+        static_assert(BLOCKS % blocksPerL1Tile == 0);
+        static_assert(BLOCKS % (L1TilesPerL2Tile * blocksPerL1Tile) == 0);
+
+#    pragma omp parallel for schedule(static) num_threads(threads)
+        for (std::ptrdiff_t ti2 = 0; ti2 < BLOCKS / (L1TilesPerL2Tile * blocksPerL1Tile); ti2++)
+            for (std::size_t tj2 = 0; tj2 < BLOCKS / (L1TilesPerL2Tile * blocksPerL1Tile); tj2++)
+                for (std::size_t ti1 = 0; ti1 < L1TilesPerL2Tile; ti1++)
+                    for (std::size_t tj1 = 0; tj1 < L1TilesPerL2Tile; tj1++)
+                        for (std::size_t bi = 0; bi < blocksPerL1Tile; bi++)
+                            for (std::size_t bj = 0; bj < blocksPerL1Tile; bj++)
+                                for (std::size_t j = 0; j < LANES; j++)
+                                {
+                                    auto& blockI = particles
+                                        [ti2 * L1TilesPerL2Tile * blocksPerL1Tile + ti1 * blocksPerL1Tile + bi];
+                                    const auto& blockJ = particles
+                                        [tj2 * L1TilesPerL2Tile * blocksPerL1Tile + tj1 * blocksPerL1Tile + bj];
+                                    pPInteraction(
+                                        blockI.pos.x,
+                                        blockI.pos.y,
+                                        blockI.pos.z,
+                                        blockI.vel.x,
+                                        blockI.vel.y,
+                                        blockI.vel.z,
+                                        blockJ.pos.x[j],
+                                        blockJ.pos.y[j],
+                                        blockJ.pos.z[j],
+                                        blockJ.mass[j]);
+                                }
+    }
+
     // update (read/write) 1 particles I based on the influence of 8 particles J
     void update1(ParticleBlock* particles, int threads)
     {
@@ -1180,10 +1288,12 @@ namespace manualAoSoA_Vc
         }
     }
 
-    template <bool UseAccumulator, bool UseUpdate1>
-    int main(std::ostream& plotFile, int threads)
+    template <bool UseAccumulator>
+    int main(std::ostream& plotFile, int threads, bool useUpdate1, bool tiled = false)
     {
-        auto title = "AoSoA" + std::to_string(LANES) + " Vc" + (UseUpdate1 ? " w1r8" : " w8r1");
+        auto title = "AoSoA" + std::to_string(LANES) + " Vc" + (useUpdate1 ? " w1r8" : " w8r1");
+        if (tiled)
+            title += " tiled";
         if (UseAccumulator)
             title += " Acc";
         title += " " + std::to_string(threads) + "Th";
@@ -1216,18 +1326,23 @@ namespace manualAoSoA_Vc
         double sumMove = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            if constexpr (UseUpdate1)
+            if (useUpdate1)
             {
-                if constexpr (UseAccumulator)
+                if (UseAccumulator)
                     update1Acc(particles.data(), threads);
                 else
                     update1(particles.data(), threads);
             }
             else
             {
-                if constexpr (UseAccumulator)
+                if (tiled && UseAccumulator)
+                    update8TiledAcc(particles.data(), threads);
+                else if (tiled && !UseAccumulator)
+                    // update8Tiled2(particles.data(), threads);
+                    update8Tiled(particles.data(), threads);
+                else if (!tiled && UseAccumulator)
                     update8Acc(particles.data(), threads);
-                else
+                else if (!tiled && !UseAccumulator)
                     update8(particles.data(), threads);
             }
             sumUpdate += watch.printAndReset("update", '\t');
@@ -1285,12 +1400,15 @@ int main()
 #endif
 #if __has_include(<Vc/Vc>)
     for (int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
-    {
-        r += manualAoSoA_Vc::main<false, false>(plotFile, threads);
-        r += manualAoSoA_Vc::main<true, false>(plotFile, threads);
-        r += manualAoSoA_Vc::main<false, true>(plotFile, threads);
-        r += manualAoSoA_Vc::main<true, true>(plotFile, threads);
-    }
+        for (auto useUpdate1 : {false, true})
+            for (auto tiled : {false, true})
+            {
+                if (useUpdate1 && tiled)
+                    continue;
+                mp_for_each<mp_list_c<bool, false, true>>([&](auto useAccumulator) {
+                    r += manualAoSoA_Vc::main<decltype(useAccumulator)::value>(plotFile, threads, useUpdate1, tiled);
+                });
+            }
 #endif
 
     std::cout << "Plot with: ./nbody.sh\n";
