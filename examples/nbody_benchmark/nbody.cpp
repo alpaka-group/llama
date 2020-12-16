@@ -12,6 +12,7 @@
 
 constexpr auto PROBLEM_SIZE = 16 * 1024;
 constexpr auto STEPS = 10;
+constexpr auto PRINT_BLOCK_PLACEMENT = false;
 
 using FP = float;
 constexpr FP TIMESTEP = 0.0001f;
@@ -93,6 +94,28 @@ void run(std::ostream& plotFile)
     }();
 
     auto particles = llama::allocView(std::move(mapping), llama::allocator::Vector<Alignment>{});
+
+    if constexpr (PRINT_BLOCK_PLACEMENT)
+    {
+        std::vector<std::pair<std::uint64_t, std::uint64_t>> blobRanges;
+        for (const auto& blob : particles.storageBlobs)
+        {
+            const auto blobSize = mapping.getBlobSize(blobRanges.size());
+            std::cout << "\tBlob #" << blobRanges.size() << " from " << &blob[0] << " to " << &blob[0] + blobSize
+                      << '\n';
+            const auto start = reinterpret_cast<std::uint64_t>(&blob[0]);
+            blobRanges.emplace_back(start, start + blobSize);
+        }
+        std::sort(begin(blobRanges), end(blobRanges), [](auto a, auto b) { return a.first < b.first; });
+        std::cout << "\tDistances: ";
+        for (auto i = 0; i < blobRanges.size() - 1; i++)
+            std::cout << blobRanges[i + 1].first - blobRanges[i].first << ' ';
+        std::cout << '\n';
+        std::cout << "\tGaps: ";
+        for (auto i = 0; i < blobRanges.size() - 1; i++)
+            std::cout << blobRanges[i + 1].first - blobRanges[i].second << ' ';
+        std::cout << '\n';
+    }
 
     std::default_random_engine engine;
     std::normal_distribution<FP> dist(FP(0), FP(1));
