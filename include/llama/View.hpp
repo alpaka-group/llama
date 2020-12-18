@@ -219,6 +219,19 @@ namespace llama
                 return a %= b;
             }
         };
+
+        template <typename TWithOptionalConst, typename T>
+        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(TWithOptionalConst& leaf, T)
+            -> std::enable_if_t<!is_VirtualDatum<std::decay_t<TWithOptionalConst>>, std::tuple<TWithOptionalConst&>>
+        {
+            return {leaf};
+        }
+
+        template <typename VirtualDatum, typename... Elements>
+        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(VirtualDatum&& vd, DatumStruct<Elements...>)
+        {
+            return std::tuple_cat(asTupleImpl(vd(GetDatumElementTag<Elements>{}), GetDatumElementType<Elements>{})...);
+        }
     } // namespace internal
 
     /// Virtual data type returned by \ref View after resolving a user domain
@@ -470,6 +483,16 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE friend auto operator>=(const T& t, const VirtualDatum& vd) -> bool
         {
             return vd <= t;
+        }
+
+        auto asTuple()
+        {
+            return internal::asTupleImpl(*this, AccessibleDatumDomain{});
+        }
+
+        auto asTuple() const
+        {
+            return internal::asTupleImpl(*this, AccessibleDatumDomain{});
         }
     };
 
