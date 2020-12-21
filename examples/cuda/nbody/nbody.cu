@@ -103,7 +103,7 @@ __global__ void updateSM(View particles)
     const auto ti = threadIdx.x + blockIdx.x * blockDim.x;
     const auto tbi = blockIdx.x;
 
-    auto pi = llama::allocVirtualDatumStack<Particle>();
+    llama::One<Particle> pi;
     if constexpr (UseAccumulator)
         pi = particles(ti);
     for (std::size_t blockOffset = 0; blockOffset < ProblemSize; blockOffset += BlockSize)
@@ -132,7 +132,7 @@ __global__ void update(View particles)
 {
     const auto ti = threadIdx.x + blockIdx.x * blockDim.x;
 
-    auto pi = llama::allocVirtualDatumStack<Particle>();
+    llama::One<Particle> pi;
     if constexpr (UseAccumulator)
         pi = particles(ti);
     LLAMA_INDEPENDENT_DATA
@@ -218,15 +218,15 @@ try
     std::normal_distribution<FP> distribution(FP(0), FP(1));
     for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
     {
-        auto temp = llama::allocVirtualDatumStack<Particle>();
-        temp(tag::Pos(), tag::X()) = distribution(generator);
-        temp(tag::Pos(), tag::Y()) = distribution(generator);
-        temp(tag::Pos(), tag::Z()) = distribution(generator);
-        temp(tag::Vel(), tag::X()) = distribution(generator) / FP(10);
-        temp(tag::Vel(), tag::Y()) = distribution(generator) / FP(10);
-        temp(tag::Vel(), tag::Z()) = distribution(generator) / FP(10);
-        temp(tag::Mass()) = distribution(generator) / FP(100);
-        hostView(i) = temp;
+        llama::One<Particle> p;
+        p(tag::Pos(), tag::X()) = distribution(generator);
+        p(tag::Pos(), tag::Y()) = distribution(generator);
+        p(tag::Pos(), tag::Z()) = distribution(generator);
+        p(tag::Vel(), tag::X()) = distribution(generator) / FP(10);
+        p(tag::Vel(), tag::Y()) = distribution(generator) / FP(10);
+        p(tag::Vel(), tag::Z()) = distribution(generator) / FP(10);
+        p(tag::Mass()) = distribution(generator) / FP(100);
+        hostView(i) = p;
     }
 
     watch.printAndReset("init");

@@ -217,15 +217,15 @@ int main()
     LLAMA_INDEPENDENT_DATA
     for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
     {
-        auto temp = llama::allocVirtualDatumStack<Particle>();
-        temp(tag::Pos(), tag::X()) = distribution(generator);
-        temp(tag::Pos(), tag::Y()) = distribution(generator);
-        temp(tag::Pos(), tag::Z()) = distribution(generator);
-        temp(tag::Vel(), tag::X()) = distribution(generator) / FP(10);
-        temp(tag::Vel(), tag::Y()) = distribution(generator) / FP(10);
-        temp(tag::Vel(), tag::Z()) = distribution(generator) / FP(10);
-        temp(tag::Mass()) = distribution(generator) / FP(100);
-        hostView(i) = temp;
+        llama::One<Particle> p;
+        p(tag::Pos(), tag::X()) = distribution(generator);
+        p(tag::Pos(), tag::Y()) = distribution(generator);
+        p(tag::Pos(), tag::Z()) = distribution(generator);
+        p(tag::Vel(), tag::X()) = distribution(generator) / FP(10);
+        p(tag::Vel(), tag::Y()) = distribution(generator) / FP(10);
+        p(tag::Vel(), tag::Z()) = distribution(generator) / FP(10);
+        p(tag::Mass()) = distribution(generator) / FP(100);
+        hostView(i) = p;
     }
 
     chrono.printAndReset("Init");

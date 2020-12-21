@@ -81,7 +81,7 @@ namespace usellama
         LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
-            auto pi = llama::allocVirtualDatumStack<Particle>();
+            llama::One<Particle> pi;
             if constexpr (UseAccumulator)
                 pi = particles(i);
             LLAMA_INDEPENDENT_DATA
