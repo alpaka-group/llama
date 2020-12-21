@@ -54,12 +54,6 @@ namespace llama
         return allocView(Mapping{}, llama::allocator::Stack<sizeOf<DatumDomain>>{});
     }
 
-    template <typename View>
-    inline constexpr auto IsView = false;
-
-    template <typename Mapping, typename BlobType>
-    inline constexpr auto IsView<View<Mapping, BlobType>> = true;
-
     template <typename View, typename BoundDatumDomain = DatumCoord<>, bool OwnView = false>
     struct VirtualDatum;
 
@@ -622,6 +616,12 @@ namespace llama
             return reinterpret_cast<Type&>(storageBlobs[nr][offset]);
         }
     };
+
+    template <typename View>
+    inline constexpr auto IsView = false;
+
+    template <typename Mapping, typename BlobType>
+    inline constexpr auto IsView<View<Mapping, BlobType>> = true;
 
     /// Acts like a \ref View, but shows only a smaller and/or shifted part of
     /// another view it references, the parent view.
