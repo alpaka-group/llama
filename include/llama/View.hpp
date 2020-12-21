@@ -211,16 +211,30 @@ namespace llama
         };
 
         template <typename TWithOptionalConst, typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(TWithOptionalConst& leaf, T)
+        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(TWithOptionalConst& leaf, T) -> std::
+            enable_if_t<!is_VirtualDatum<std::decay_t<TWithOptionalConst>>, std::reference_wrapper<TWithOptionalConst>>
+        {
+            return leaf;
+        }
+
+        template <typename VirtualDatum, typename... Elements>
+        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(VirtualDatum&& vd, DatumStruct<Elements...>)
+        {
+            return std::make_tuple(asTupleImpl(vd(GetDatumElementTag<Elements>{}), GetDatumElementType<Elements>{})...);
+        }
+
+        template <typename TWithOptionalConst, typename T>
+        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(TWithOptionalConst& leaf, T)
             -> std::enable_if_t<!is_VirtualDatum<std::decay_t<TWithOptionalConst>>, std::tuple<TWithOptionalConst&>>
         {
             return {leaf};
         }
 
         template <typename VirtualDatum, typename... Elements>
-        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(VirtualDatum&& vd, DatumStruct<Elements...>)
+        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(VirtualDatum&& vd, DatumStruct<Elements...>)
         {
-            return std::tuple_cat(asTupleImpl(vd(GetDatumElementTag<Elements>{}), GetDatumElementType<Elements>{})...);
+            return std::tuple_cat(
+                asFlatTupleImpl(vd(GetDatumElementTag<Elements>{}), GetDatumElementType<Elements>{})...);
         }
     } // namespace internal
 
@@ -491,6 +505,16 @@ namespace llama
         auto asTuple() const
         {
             return internal::asTupleImpl(*this, AccessibleDatumDomain{});
+        }
+
+        auto asFlatTuple()
+        {
+            return internal::asFlatTupleImpl(*this, AccessibleDatumDomain{});
+        }
+
+        auto asFlatTuple() const
+        {
+            return internal::asFlatTupleImpl(*this, AccessibleDatumDomain{});
         }
     };
 
