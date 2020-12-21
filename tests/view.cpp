@@ -182,7 +182,7 @@ TEST_CASE("view.assign-one-datum")
     Mapping mapping{arrayDomain};
     auto view = allocView(mapping);
 
-    auto datum = llama::allocVirtualDatumStack<Particle>();
+    llama::One<Particle> datum;
     datum(tag::Pos{}, tag::X{}) = 14.0f;
     datum(tag::Pos{}, tag::Y{}) = 15.0f;
     datum(tag::Pos{}, tag::Z{}) = 16.0f;

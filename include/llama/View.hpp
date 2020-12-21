@@ -69,20 +69,16 @@ namespace llama
     template <typename View, typename BoundDatumDomain, bool OwnView>
     inline constexpr auto is_VirtualDatum<VirtualDatum<View, BoundDatumDomain, OwnView>> = true;
 
-    /// Creates a single \ref VirtualDatum owning a view with stack memory.
+    /// A \ref VirtualDatum that owns and holds a single value.
     template <typename DatumDomain>
-    LLAMA_FN_HOST_ACC_INLINE auto allocVirtualDatumStack()
-        -> VirtualDatum<decltype(llama::allocViewStack<1, DatumDomain>()), DatumCoord<>, true>
-    {
-        return {ArrayDomain<1>{}, llama::allocViewStack<1, DatumDomain>()};
-    }
+    using One = VirtualDatum<decltype(allocViewStack<1, DatumDomain>()), DatumCoord<>, true>;
 
     /// Creates a single \ref VirtualDatum owning a view with stack memory and
     /// copies all values from an existing \ref VirtualDatum.
     template <typename VirtualDatum>
     LLAMA_FN_HOST_ACC_INLINE auto copyVirtualDatumStack(const VirtualDatum& vd) -> decltype(auto)
     {
-        auto temp = allocVirtualDatumStack<typename VirtualDatum::AccessibleDatumDomain>();
+        One<typename VirtualDatum::AccessibleDatumDomain> temp;
         temp = vd;
         return temp;
     }
@@ -258,6 +254,14 @@ namespace llama
         /// BoundDatumDomain. If BoundDatumDomain is `DatumCoord<>` (default)
         /// AccessibleDatumDomain is the same as `Mapping::DatumDomain`.
         using AccessibleDatumDomain = GetType<DatumDomain, BoundDatumDomain>;
+
+        LLAMA_FN_HOST_ACC_INLINE VirtualDatum()
+            /* requires(OwnView) */
+            : userDomainPos({})
+            , view{allocViewStack<1, DatumDomain>()}
+        {
+            static_assert(OwnView, "The default constructor of VirtualDatum is only available if the ");
+        }
 
         LLAMA_FN_HOST_ACC_INLINE
         VirtualDatum(ArrayDomain userDomainPos, std::conditional_t<OwnView, View&&, View&> view)

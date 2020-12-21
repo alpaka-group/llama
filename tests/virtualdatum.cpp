@@ -29,7 +29,7 @@ using Name = llama::DS<
 
 TEST_CASE("VirtualDatum.operator=")
 {
-    auto datum = llama::allocVirtualDatumStack<Name>();
+    llama::One<Name> datum;
 
     // scalar to multiple elements in virtual datum
     datum(tag::Pos{}) = 1;
@@ -84,7 +84,7 @@ namespace
 {
     auto allocVc()
     {
-        auto datum = llama::allocVirtualDatumStack<Name>();
+        llama::One<Name> datum;
         datum(tag::Pos{}, tag::A{}) = 1;
         datum(tag::Pos{}, tag::Y{}) = 2;
         datum(tag::Vel{}, tag::X{}) = 3;
@@ -267,7 +267,7 @@ using Name2 = llama::DS<
 
 TEST_CASE("VirtualDatum.operator=.propagation")
 {
-    auto datum = llama::allocVirtualDatumStack<Name2>();
+    llama::One<Name2> datum;
 
     datum(tag::Part1{}) = 1;
     datum(tag::Part2{}) = 2;
@@ -295,8 +295,8 @@ TEST_CASE("VirtualDatum.operator=.propagation")
 
 TEST_CASE("VirtualDatum.operator=.multiview")
 {
-    auto datum1 = llama::allocVirtualDatumStack<Name>();
-    auto datum2 = llama::allocVirtualDatumStack<Name2>();
+    llama::One<Name> datum1;
+    llama::One<Name2> datum2;
 
     datum2 = 1;
     datum1 = datum2;
@@ -318,7 +318,7 @@ TEST_CASE("VirtualDatum.operator=.multiview")
 
 TEST_CASE("VirtualDatum.operator==")
 {
-    auto datum = llama::allocVirtualDatumStack<Name>();
+    llama::One<Name> datum;
 
     datum = 1;
 
@@ -342,7 +342,7 @@ TEST_CASE("VirtualDatum.operator==")
 
 TEST_CASE("VirtualDatum.operator<")
 {
-    auto datum = llama::allocVirtualDatumStack<Name>();
+    llama::One<Name> datum;
 
     datum = 1;
 
@@ -380,14 +380,14 @@ TEST_CASE("VirtualDatum.operator<")
 TEST_CASE("VirtualDatum.asTuple.types")
 {
     {
-        auto datum = llama::allocVirtualDatumStack<Name>();
+        llama::One<Name> datum;
 
         std::tuple<int&, int&> pos = datum(tag::Pos{}).asTuple();
         std::tuple<int&, int&, int&> vel = datum(tag::Vel{}).asTuple();
         std::tuple<int&, int&, int&, int&, int&, int&> name = datum.asTuple();
     }
     {
-        const auto datum = llama::allocVirtualDatumStack<Name>();
+        const llama::One<Name> datum;
 
         std::tuple<const int&, const int&> pos = datum(tag::Pos{}).asTuple();
         std::tuple<const int&, const int&, const int&> vel = datum(tag::Vel{}).asTuple();
@@ -397,7 +397,7 @@ TEST_CASE("VirtualDatum.asTuple.types")
 
 TEST_CASE("VirtualDatum.asTuple.assign")
 {
-    auto datum = llama::allocVirtualDatumStack<Name>();
+    llama::One<Name> datum;
 
     datum(tag::Pos{}).asTuple() = std::tuple{1, 1};
     CHECK(datum(tag::Pos{}, tag::A{}) == 1);
@@ -426,7 +426,7 @@ TEST_CASE("VirtualDatum.asTuple.assign")
 
 TEST_CASE("VirtualDatum.asTuple.structuredBindings")
 {
-    auto datum = llama::allocVirtualDatumStack<Name>();
+    llama::One<Name> datum;
 
     {
         auto [a, y] = datum(tag::Pos{}).asTuple();
