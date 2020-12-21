@@ -377,6 +377,103 @@ TEST_CASE("VirtualDatum.operator<")
     CHECK(!(datum(tag::Pos{}) < datum(tag::Vel{})));
 }
 
+TEST_CASE("VirtualDatum.asTuple.types")
+{
+    {
+        llama::One<Name> datum;
+
+        std::tuple<int&, int&> pos = datum(tag::Pos{}).asTuple();
+        std::tuple<int&, int&, int&> vel = datum(tag::Vel{}).asTuple();
+        std::tuple<std::tuple<int&, int&>, std::tuple<int&, int&, int&>, int&> name = datum.asTuple();
+    }
+    {
+        const llama::One<Name> datum;
+
+        std::tuple<const int&, const int&> pos = datum(tag::Pos{}).asTuple();
+        std::tuple<const int&, const int&, const int&> vel = datum(tag::Vel{}).asTuple();
+        std::tuple<std::tuple<const int&, const int&>, std::tuple<const int&, const int&, const int&>, const int&> name
+            = datum.asTuple();
+    }
+}
+
+TEST_CASE("VirtualDatum.asTuple.assign")
+{
+    llama::One<Name> datum;
+
+    datum(tag::Pos{}).asTuple() = std::tuple{1, 1};
+    CHECK(datum(tag::Pos{}, tag::A{}) == 1);
+    CHECK(datum(tag::Pos{}, tag::Y{}) == 1);
+    CHECK(datum(tag::Vel{}, tag::X{}) == 0);
+    CHECK(datum(tag::Vel{}, tag::Y{}) == 0);
+    CHECK(datum(tag::Vel{}, tag::Z{}) == 0);
+    CHECK(datum(tag::Weight{}) == 0);
+
+    datum(tag::Vel{}).asTuple() = std::tuple{2, 2, 2};
+    CHECK(datum(tag::Pos{}, tag::A{}) == 1);
+    CHECK(datum(tag::Pos{}, tag::Y{}) == 1);
+    CHECK(datum(tag::Vel{}, tag::X{}) == 2);
+    CHECK(datum(tag::Vel{}, tag::Y{}) == 2);
+    CHECK(datum(tag::Vel{}, tag::Z{}) == 2);
+    CHECK(datum(tag::Weight{}) == 0);
+
+    datum.asTuple() = std::tuple{std::tuple{3, 3}, std::tuple{3, 3, 3}, 3};
+    CHECK(datum(tag::Pos{}, tag::A{}) == 3);
+    CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
+    CHECK(datum(tag::Vel{}, tag::X{}) == 3);
+    CHECK(datum(tag::Vel{}, tag::Y{}) == 3);
+    CHECK(datum(tag::Vel{}, tag::Z{}) == 3);
+    CHECK(datum(tag::Weight{}) == 3);
+}
+
+TEST_CASE("VirtualDatum.asTuple.structuredBindings")
+{
+    llama::One<Name> datum;
+
+    {
+        auto [a, y] = datum(tag::Pos{}).asTuple();
+        a = 1;
+        y = 2;
+        CHECK(datum(tag::Pos{}, tag::A{}) == 1);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 2);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 0);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 0);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 0);
+        CHECK(datum(tag::Weight{}) == 0);
+    }
+
+    {
+        auto [x, y, z] = datum(tag::Vel{}).asTuple();
+        x = 3;
+        y = 4;
+        z = 5;
+        CHECK(datum(tag::Pos{}, tag::A{}) == 1);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 2);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 4);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 5);
+        CHECK(datum(tag::Weight{}) == 0);
+    }
+
+    {
+        auto [pos, vel, w] = datum.asTuple();
+        auto [a, y1] = pos;
+        auto [x, y2, z] = vel;
+        a = 10;
+        y1 = 20;
+        x = 30;
+        y2 = 40;
+        z = 50;
+        w = 60;
+        CHECK(datum(tag::Pos{}, tag::A{}) == 10);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 20);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 30);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 40);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 50);
+        CHECK(datum(tag::Weight{}) == 60);
+    }
+}
+
+
 TEST_CASE("VirtualDatum.asFlatTuple.types")
 {
     {
