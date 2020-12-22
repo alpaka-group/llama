@@ -566,3 +566,54 @@ TEST_CASE("VirtualDatum.asFlatTuple.structuredBindings")
         CHECK(datum(tag::Weight{}) == 60);
     }
 }
+
+template <typename T>
+struct S;
+
+TEST_CASE("VirtualDatum.structuredBindings")
+{
+    llama::One<Name> datum;
+
+    {
+        auto&& [a, y] = datum(tag::Pos{});
+        a = 1;
+        y = 2;
+        CHECK(datum(tag::Pos{}, tag::A{}) == 1);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 2);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 0);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 0);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 0);
+        CHECK(datum(tag::Weight{}) == 0);
+    }
+
+    {
+        auto&& [x, y, z] = datum(tag::Vel{});
+        x = 3;
+        y = 4;
+        z = 5;
+        CHECK(datum(tag::Pos{}, tag::A{}) == 1);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 2);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 4);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 5);
+        CHECK(datum(tag::Weight{}) == 0);
+    }
+
+    {
+        auto&& [pos, vel, w] = datum;
+        auto&& [a, y1] = pos;
+        auto&& [x, y2, z] = vel;
+        a = 10;
+        y1 = 20;
+        x = 30;
+        y2 = 40;
+        z = 50;
+        w = 60;
+        CHECK(datum(tag::Pos{}, tag::A{}) == 10);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 20);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 30);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 40);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 50);
+        CHECK(datum(tag::Weight{}) == 60);
+    }
+}
