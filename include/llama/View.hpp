@@ -516,8 +516,41 @@ namespace llama
         {
             return internal::asFlatTupleImpl(*this, AccessibleDatumDomain{});
         }
-    };
 
+        template <std::size_t I>
+        auto get() -> decltype(auto)
+        {
+            return operator()(DatumCoord<I>{});
+        }
+
+        template <std::size_t I>
+        auto get() const -> decltype(auto)
+        {
+            return operator()(DatumCoord<I>{});
+        }
+    };
+} // namespace llama
+
+template <typename View, typename BoundDatumDomain, bool OwnView>
+struct std::tuple_size<llama::VirtualDatum<View, BoundDatumDomain, OwnView>>
+    : boost::mp11::mp_size<typename llama::VirtualDatum<View, BoundDatumDomain, OwnView>::AccessibleDatumDomain>
+{
+};
+
+template <std::size_t I, typename View, typename BoundDatumDomain, bool OwnView>
+struct std::tuple_element<I, llama::VirtualDatum<View, BoundDatumDomain, OwnView>>
+{
+    using type = decltype(std::declval<llama::VirtualDatum<View, BoundDatumDomain, OwnView>>().template get<I>());
+};
+
+template <std::size_t I, typename View, typename BoundDatumDomain, bool OwnView>
+struct std::tuple_element<I, const llama::VirtualDatum<View, BoundDatumDomain, OwnView>>
+{
+    using type = decltype(std::declval<const llama::VirtualDatum<View, BoundDatumDomain, OwnView>>().template get<I>());
+};
+
+namespace llama
+{
     /// Central LLAMA class holding memory for storage and giving access to
     /// values stored there defined by a mapping. A view should be created using
     /// \ref allocView.
