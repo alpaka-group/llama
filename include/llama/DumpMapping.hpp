@@ -65,7 +65,7 @@ namespace llama
             return mapping.template getBlobNrAndOffset<Coords...>(udCoord);
         }
 
-        auto color(const std::vector<std::size_t>& ddIndices) -> std::size_t
+        inline auto color(const std::vector<std::size_t>& ddIndices) -> std::size_t
         {
             auto c = (boost::hash_value(ddIndices) & 0xFFFFFF);
             const auto channelSum = ((c & 0xFF0000) >> 4) + ((c & 0xFF00) >> 2) + c & 0xFF;
