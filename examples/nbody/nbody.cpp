@@ -154,14 +154,15 @@ namespace usellama
         std::normal_distribution<FP> dist(FP(0), FP(1));
         for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
         {
-            auto p = particles(i);
-            p(0_DC, 0_DC) = dist(engine);
-            p(0_DC, 1_DC) = dist(engine);
-            p(0_DC, 2_DC) = dist(engine);
-            p(1_DC, 0_DC) = dist(engine) / FP(10);
-            p(1_DC, 1_DC) = dist(engine) / FP(10);
-            p(1_DC, 2_DC) = dist(engine) / FP(10);
-            p(2_DC) = dist(engine) / FP(100);
+            Particle p;
+            p.pos.x = dist(engine);
+            p.pos.y = dist(engine);
+            p.pos.z = dist(engine);
+            p.vel.x = dist(engine) / FP(10);
+            p.vel.y = dist(engine) / FP(10);
+            p.vel.z = dist(engine) / FP(10);
+            p.mass = dist(engine) / FP(100);
+            particles(i).store(p);
         }
         watch.printAndReset("init");
 

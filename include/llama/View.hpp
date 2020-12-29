@@ -10,6 +10,7 @@
 #include "macros.hpp"
 #include "mapping/One.hpp"
 
+#include <boost/pfr.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <type_traits>
 
@@ -259,18 +260,50 @@ namespace llama
         template <typename... Ts>
         constexpr inline auto dependentFalse = false;
 
+        template <typename T>
+        constexpr inline auto tupleish_size = []() constexpr
+        {
+            if constexpr (isTupleLike<T>)
+                return std::tuple_size_v<T>;
+            else if constexpr (std::is_aggregate_v<T>) // TODO
+                return boost::pfr::tuple_size_v<T>;
+            else
+                static_assert(
+                    dependentFalse<T>,
+                    "T is not a tuple like type or an aggregate to reflect with boost.pfr");
+        }
+        ();
+
+        template <std::size_t I, typename T>
+        decltype(auto) tupleish_get(T&& t)
+        {
+            using DT = std::decay_t<T>;
+            if constexpr (isTupleLike<DT>)
+            {
+                using std::get;
+                return get<I>(std::forward<T>(t));
+            }
+            else if constexpr (std::is_aggregate_v<DT>) // TODO
+                return boost::pfr::get<I>(std::forward<T>(t));
+            else
+                static_assert(
+                    dependentFalse<T>,
+                    "T is not a tuple like type or an aggregate to reflect with boost.pfr");
+        }
+
         template <typename Tuple1, typename Tuple2, std::size_t... Is>
         LLAMA_FN_HOST_ACC_INLINE void assignTuples(Tuple1&& dst, Tuple2&& src, std::index_sequence<Is...>);
 
         template <typename T1, typename T2>
         LLAMA_FN_HOST_ACC_INLINE void assignTupleElement(T1&& dst, T2&& src)
         {
-            if constexpr (isTupleLike<std::decay_t<T1>> && isTupleLike<std::decay_t<T2>>)
-            {
-                static_assert(std::tuple_size_v<std::decay_t<T1>> == std::tuple_size_v<std::decay_t<T2>>);
-                assignTuples(dst, src, std::make_index_sequence<std::tuple_size_v<std::decay_t<T1>>>{});
-            }
-            else if constexpr (!isTupleLike<std::decay_t<T1>> && !isTupleLike<std::decay_t<T2>>)
+            using DT1 = std::decay_t<T1>;
+            using DT2 = std::decay_t<T2>;
+            constexpr auto isTupleish1 = isTupleLike<DT1> || std::is_aggregate_v<DT1>;
+            constexpr auto isTupleish2 = isTupleLike<DT2> || std::is_aggregate_v<DT2>;
+            if constexpr (isTupleish1 && isTupleish2)
+                assignTuples(dst, src, std::make_index_sequence<tupleish_size<DT1>>{});
+            else if constexpr (!isTupleish1 && !isTupleish2)
                 std::forward<T1>(dst) = std::forward<T2>(src);
             else
                 static_assert(dependentFalse<T1, T2>, "Elements to assign are not tuple/tuple or non-tuple/non-tuple.");
@@ -279,9 +312,11 @@ namespace llama
         template <typename Tuple1, typename Tuple2, std::size_t... Is>
         LLAMA_FN_HOST_ACC_INLINE void assignTuples(Tuple1&& dst, Tuple2&& src, std::index_sequence<Is...>)
         {
-            static_assert(std::tuple_size_v<std::decay_t<Tuple1>> == std::tuple_size_v<std::decay_t<Tuple2>>);
-            using std::get;
-            (assignTupleElement(get<Is>(std::forward<Tuple1>(dst)), get<Is>(std::forward<Tuple2>(src))), ...);
+            static_assert(tupleish_size<std::decay_t<Tuple1>> == tupleish_size<std::decay_t<Tuple2>>);
+            (assignTupleElement(
+                 tupleish_get<Is>(std::forward<Tuple1>(dst)),
+                 tupleish_get<Is>(std::forward<Tuple2>(src))),
+             ...);
         }
 
         template <typename T, typename Tuple, std::size_t... Is>
@@ -659,7 +694,7 @@ namespace llama
         template <typename TupleLike>
         void store(const TupleLike& t)
         {
-            internal::assignTuples(asTuple(), t, std::make_index_sequence<std::tuple_size_v<TupleLike>>{});
+            internal::assignTuples(asTuple(), t, std::make_index_sequence<std::tuple_size_v<decltype(asTuple())>>{});
         }
     };
 } // namespace llama

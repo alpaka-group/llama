@@ -797,7 +797,7 @@ TEST_CASE("VirtualDatum.load.constref")
     }
 }
 
-TEST_CASE("VirtualDatum.store")
+TEST_CASE("VirtualDatum.store.tuplelike")
 {
     llama::One<Name> datum;
 
@@ -876,5 +876,54 @@ TEST_CASE("VirtualDatum.loadAs.constref")
         auto pos = std::as_const(datum)(tag::Pos{}).loadAs<MyPos<const int&>>();
         CHECK(pos.a == 1);
         CHECK(pos.y == 1);
+    }
+}
+
+TEST_CASE("VirtualDatum.store.aggregate")
+{
+    struct MyPosAgg
+    {
+        int a;
+        int y;
+    };
+
+    struct MyVelAgg
+    {
+        int x;
+        int y;
+        int z;
+    };
+
+    struct MyDatumAgg
+    {
+        MyPosAgg pos;
+        MyVelAgg vel;
+        int weight;
+    };
+
+    llama::One<Name> datum;
+
+    datum = 1;
+    {
+        MyPosAgg pos{2, 3};
+        datum(tag::Pos{}).store(pos);
+        CHECK(datum(tag::Pos{}, tag::A{}) == 2);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 1);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 1);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 1);
+        CHECK(datum(tag::Weight{}) == 1);
+    }
+
+    datum = 1;
+    {
+        MyDatumAgg d{{2, 3}, {4, 5, 6}, 7};
+        datum.store(d);
+        CHECK(datum(tag::Pos{}, tag::A{}) == 2);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 4);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 5);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 6);
+        CHECK(datum(tag::Weight{}) == 7);
     }
 }
