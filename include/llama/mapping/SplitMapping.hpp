@@ -53,7 +53,7 @@ namespace llama::mapping
     struct SplitMapping
     {
         using ArrayDomain = T_ArrayDomain;
-        using DatumDomain = T_DatumDomain;
+        using DatumDomain = MakeDatumDomain<T_DatumDomain>;
 
         using DatumDomainPartitions = decltype(internal::partitionDatumDomain(DatumDomain{}, DatumCoordForMapping1{}));
         using DatumDomain1 = boost::mp11::mp_first<DatumDomainPartitions>;

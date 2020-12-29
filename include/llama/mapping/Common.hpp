@@ -5,6 +5,7 @@
 
 #include "../Core.hpp"
 
+#include <boost/pfr.hpp>
 #include <climits>
 
 namespace llama::mapping
@@ -125,4 +126,30 @@ namespace llama::mapping
             return r;
         }
     };
+
+    template <typename S, bool = std::is_class_v<S>>
+    struct StructToDatumStruct
+    {
+        template <std::size_t... Is>
+        static auto f(S, std::index_sequence<Is...>)
+        {
+            return DatumStruct<DatumElement<
+                DatumCoord<Is>,
+                typename StructToDatumStruct<boost::pfr::tuple_element_t<Is, S>>::type>...>{};
+        }
+
+        using type = decltype(f(S{}, std::make_index_sequence<boost::pfr::tuple_size_v<S>>{}));
+    };
+
+    template <typename S>
+    struct StructToDatumStruct<S, false>
+    {
+        using type = S;
+    };
+
+    template <typename DatumDomain>
+    using MakeDatumDomain = std::conditional_t<
+        std::is_class_v<DatumDomain> && !isDatumStruct<DatumDomain>,
+        typename StructToDatumStruct<DatumDomain>::type,
+        DatumDomain>;
 } // namespace llama::mapping

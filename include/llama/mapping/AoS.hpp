@@ -18,13 +18,13 @@ namespace llama::mapping
     struct AoS
     {
         using ArrayDomain = T_ArrayDomain;
-        using DatumDomain = T_DatumDomain;
+        using DatumDomain = MakeDatumDomain<T_DatumDomain>;
         static constexpr std::size_t blobCount = 1;
 
         constexpr AoS() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr AoS(ArrayDomain size, DatumDomain = {}) : arrayDomainSize(size)
+        constexpr AoS(ArrayDomain size, T_DatumDomain = {}) : arrayDomainSize(size)
         {
         }
 

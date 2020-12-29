@@ -34,45 +34,37 @@ constexpr auto L1D_SIZE = 32 * 1024;
 constexpr auto L2D_SIZE = 512 * 1024;
 
 using namespace std::string_literals;
+using namespace llama::literals;
 
 namespace usellama
 {
-    // clang-format off
-    namespace tag
+    struct Particle
     {
-        struct Pos{};
-        struct Vel{};
-        struct X{};
-        struct Y{};
-        struct Z{};
-        struct Mass{};
-    }
-
-    using Particle = llama::DS<
-        llama::DE<tag::Pos, llama::DS<
-            llama::DE<tag::X, FP>,
-            llama::DE<tag::Y, FP>,
-            llama::DE<tag::Z, FP>
-        >>,
-        llama::DE<tag::Vel, llama::DS<
-            llama::DE<tag::X, FP>,
-            llama::DE<tag::Y, FP>,
-            llama::DE<tag::Z, FP>
-        >>,
-        llama::DE<tag::Mass, FP>
-    >;
-    // clang-format on
+        struct Pos
+        {
+            float x;
+            float y;
+            float z;
+        } pos;
+        struct Vel
+        {
+            float x;
+            float y;
+            float z;
+        } vel;
+        float mass;
+    };
 
     template <typename VirtualParticleI, typename VirtualParticleJ>
     LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticleI&& pi, VirtualParticleJ pj)
     {
-        auto dist = pi(tag::Pos{}) - pj(tag::Pos{});
+        auto dist = pi(0_DC) - pj(0_DC);
         dist *= dist;
-        const FP distSqr = EPS2 + dist(tag::X{}) + dist(tag::Y{}) + dist(tag::Z{});
+        const FP distSqr = EPS2 + dist(0_DC) + dist(1_DC) + dist(2_DC);
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
-        const FP sts = pj(tag::Mass{}) * invDistCube * TIMESTEP;
-        pi(tag::Vel{}) += dist * sts;
+        const FP sts = pj(2_DC) * invDistCube * TIMESTEP;
+        pi(1_DC) += dist * sts;
     }
 
     template <bool UseAccumulator, typename View>
@@ -102,7 +94,7 @@ namespace usellama
     {
         LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
-            particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * TIMESTEP;
+            particles(i)(0_DC) += particles(i)(1_DC) * TIMESTEP;
     }
 
     template <int Mapping, bool UseAccumulator, std::size_t AoSoALanes = 8 /*AVX2*/>
@@ -163,13 +155,13 @@ namespace usellama
         for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
         {
             auto p = particles(i);
-            p(tag::Pos{}, tag::X{}) = dist(engine);
-            p(tag::Pos{}, tag::Y{}) = dist(engine);
-            p(tag::Pos{}, tag::Z{}) = dist(engine);
-            p(tag::Vel{}, tag::X{}) = dist(engine) / FP(10);
-            p(tag::Vel{}, tag::Y{}) = dist(engine) / FP(10);
-            p(tag::Vel{}, tag::Z{}) = dist(engine) / FP(10);
-            p(tag::Mass{}) = dist(engine) / FP(100);
+            p(0_DC, 0_DC) = dist(engine);
+            p(0_DC, 1_DC) = dist(engine);
+            p(0_DC, 2_DC) = dist(engine);
+            p(1_DC, 0_DC) = dist(engine) / FP(10);
+            p(1_DC, 1_DC) = dist(engine) / FP(10);
+            p(1_DC, 2_DC) = dist(engine) / FP(10);
+            p(2_DC) = dist(engine) / FP(100);
         }
         watch.printAndReset("init");
 

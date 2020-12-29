@@ -21,12 +21,12 @@ namespace llama::mapping
     struct AoSoA
     {
         using ArrayDomain = T_ArrayDomain;
-        using DatumDomain = T_DatumDomain;
+        using DatumDomain = MakeDatumDomain<T_DatumDomain>;
         static constexpr std::size_t blobCount = 1;
 
         constexpr AoSoA() = default;
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr AoSoA(ArrayDomain size, DatumDomain = {}) : arrayDomainSize(size)
+        LLAMA_FN_HOST_ACC_INLINE constexpr AoSoA(ArrayDomain size, T_DatumDomain = {}) : arrayDomainSize(size)
         {
         }
 

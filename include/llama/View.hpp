@@ -59,8 +59,9 @@ namespace llama
     template <std::size_t Dim, typename DatumDomain>
     LLAMA_FN_HOST_ACC_INLINE auto allocViewStack() -> decltype(auto)
     {
-        using Mapping = llama::mapping::One<ArrayDomain<Dim>, DatumDomain>;
-        return allocView(Mapping{}, llama::allocator::Stack<sizeOf<DatumDomain>>{});
+        using MadeDatumDomain = mapping::MakeDatumDomain<DatumDomain>; // user might pass struct to reflect
+        using Mapping = llama::mapping::One<ArrayDomain<Dim>, MadeDatumDomain>;
+        return allocView(Mapping{}, llama::allocator::Stack<sizeOf<MadeDatumDomain>>{});
     }
 
     template <typename View, typename BoundDatumDomain = DatumCoord<>, bool OwnView = false>
