@@ -38,33 +38,82 @@ using namespace llama::literals;
 
 namespace usellama
 {
+    struct Vec
+    {
+        FP x;
+        FP y;
+        FP z;
+
+        auto operator*=(FP s) -> Vec&
+        {
+            x *= s;
+            y *= s;
+            z *= s;
+            return *this;
+        }
+
+        auto operator*=(Vec v) -> Vec&
+        {
+            x *= v.x;
+            y *= v.y;
+            z *= v.z;
+            return *this;
+        }
+
+        auto operator+=(Vec v) -> Vec&
+        {
+            x += v.x;
+            y += v.y;
+            z += v.z;
+            return *this;
+        }
+
+        auto operator-=(Vec v) -> Vec&
+        {
+            x -= v.x;
+            y -= v.y;
+            z -= v.z;
+            return *this;
+        }
+
+        friend auto operator+(Vec a, Vec b) -> Vec
+        {
+            return a += b;
+        }
+
+        friend auto operator-(Vec a, Vec b) -> Vec
+        {
+            return a -= b;
+        }
+
+        friend auto operator*(Vec a, FP s) -> Vec
+        {
+            return a *= s;
+        }
+
+        friend auto operator*(Vec a, Vec b) -> Vec
+        {
+            return a *= b;
+        }
+    };
+
     struct Particle
     {
-        struct Pos
-        {
-            float x;
-            float y;
-            float z;
-        } pos;
-        struct Vel
-        {
-            float x;
-            float y;
-            float z;
-        } vel;
-        float mass;
+        Vec pos;
+        Vec vel;
+        FP mass;
     };
 
     template <typename VirtualParticleI, typename VirtualParticleJ>
     LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticleI&& pi, VirtualParticleJ pj)
     {
-        auto dist = pi(0_DC) - pj(0_DC);
+        auto dist = pi.template loadAs<Particle>().pos - pj.template loadAs<Particle>().pos;
         dist *= dist;
-        const FP distSqr = EPS2 + dist(0_DC) + dist(1_DC) + dist(2_DC);
+        const FP distSqr = EPS2 + dist.x + dist.y + dist.z;
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
-        const FP sts = pj(2_DC) * invDistCube * TIMESTEP;
-        pi(1_DC) += dist * sts;
+        const FP sts = pj.template loadAs<Particle>().mass * invDistCube * TIMESTEP;
+        pi(1_DC).store(pi.template loadAs<Particle>().vel + dist * sts);
     }
 
     template <bool UseAccumulator, typename View>
