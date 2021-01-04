@@ -27,3 +27,12 @@ TEST_CASE("DatumCoordCommonPrefixIsBigger")
     STATIC_REQUIRE(!llama::DatumCoordCommonPrefixIsBigger<llama::DatumCoord<0      >, llama::DatumCoord<0, 0, 1>>);
     // clang-format on
 }
+
+TEST_CASE("_DT")
+{
+    using namespace llama::literals;
+    STATIC_REQUIRE(std::is_same_v<llama::DatumCoord<0>, decltype(0_DC)>);
+    STATIC_REQUIRE(std::is_same_v<llama::DatumCoord<1>, decltype(1_DC)>);
+    STATIC_REQUIRE(std::is_same_v<llama::DatumCoord<10>, decltype(10_DC)>);
+    STATIC_REQUIRE(std::is_same_v<llama::DatumCoord<165463135>, decltype(165463135_DC)>);
+}

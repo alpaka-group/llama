@@ -74,16 +74,12 @@ namespace llama
     template <typename Identifier, typename Type>
     using DE = DatumElement<Identifier, Type>;
 
-    /// Tag describing an index. Used to access members of a \ref DatumArray.
-    template <std::size_t I>
-    using Index = boost::mp11::mp_size_t<I>;
-
     namespace internal
     {
         template <typename ChildType, std::size_t... Is>
         auto makeDatumArray(std::index_sequence<Is...>)
         {
-            return DatumStruct<DatumElement<Index<Is>, ChildType>...>{};
+            return DatumStruct<DatumElement<DatumCoord<Is>, ChildType>...>{};
         }
     } // namespace internal
 

@@ -26,8 +26,9 @@ namespace llama
             return structName(tag);
         }
 
+        // handle array indices
         template <std::size_t N>
-        auto tagToString(Index<N>)
+        auto tagToString(DatumCoord<N>)
         {
             return std::to_string(N);
         }
