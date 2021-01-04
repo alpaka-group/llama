@@ -166,8 +166,9 @@ TEST_CASE("view.access")
         CHECK(&x == &view(pos)(tag::Pos{}, tag::X{}));
 
         // also test arrays
+        using namespace llama::literals;
         const bool& o0 = view(pos)(tag::Flags{})(llama::DatumCoord<0>{});
-        CHECK(&o0 == &view(pos)(tag::Flags{})(llama::Index<0>{}));
+        CHECK(&o0 == &view(pos)(tag::Flags{})(0_DC));
     };
     l(view);
     l(std::as_const(view));
@@ -175,6 +176,8 @@ TEST_CASE("view.access")
 
 TEST_CASE("view.assign-one-datum")
 {
+    using namespace llama::literals;
+
     using ArrayDomain = llama::ArrayDomain<2>;
     ArrayDomain arrayDomain{16, 16};
 
@@ -188,10 +191,10 @@ TEST_CASE("view.assign-one-datum")
     datum(tag::Pos{}, tag::Z{}) = 16.0f;
     datum(tag::Momentum{}) = 0;
     datum(tag::Weight{}) = 500.0f;
-    datum(tag::Flags{})(llama::Index<0>{}) = true;
-    datum(tag::Flags{})(llama::Index<1>{}) = false;
-    datum(tag::Flags{})(llama::Index<2>{}) = true;
-    datum(tag::Flags{})(llama::Index<3>{}) = false;
+    datum(tag::Flags{})(0_DC) = true;
+    datum(tag::Flags{})(1_DC) = false;
+    datum(tag::Flags{})(2_DC) = true;
+    datum(tag::Flags{})(3_DC) = false;
 
     view({3, 4}) = datum;
 
@@ -202,14 +205,16 @@ TEST_CASE("view.assign-one-datum")
     CHECK(datum(tag::Momentum{}, tag::Y{}) == 0);
     CHECK(datum(tag::Momentum{}, tag::Z{}) == 0);
     CHECK(datum(tag::Weight{}) == 500.0f);
-    CHECK(datum(tag::Flags{})(llama::Index<0>{}) == true);
-    CHECK(datum(tag::Flags{})(llama::Index<1>{}) == false);
-    CHECK(datum(tag::Flags{})(llama::Index<2>{}) == true);
-    CHECK(datum(tag::Flags{})(llama::Index<3>{}) == false);
+    CHECK(datum(tag::Flags{})(0_DC) == true);
+    CHECK(datum(tag::Flags{})(1_DC) == false);
+    CHECK(datum(tag::Flags{})(2_DC) == true);
+    CHECK(datum(tag::Flags{})(3_DC) == false);
 }
 
 TEST_CASE("view.addresses")
 {
+    using namespace llama::literals;
+
     using ArrayDomain = llama::ArrayDomain<2>;
     ArrayDomain arrayDomain{16, 16};
 
@@ -225,10 +230,10 @@ TEST_CASE("view.addresses")
     auto& mx = view(pos)(tag::Momentum{}, tag::X{});
     auto& my = view(pos)(tag::Momentum{}, tag::Y{});
     auto& mz = view(pos)(tag::Momentum{}, tag::Z{});
-    auto& o0 = view(pos)(tag::Flags{})(llama::Index<0>{});
-    auto& o1 = view(pos)(tag::Flags{})(llama::Index<1>{});
-    auto& o2 = view(pos)(tag::Flags{})(llama::Index<2>{});
-    auto& o3 = view(pos)(tag::Flags{})(llama::Index<3>{});
+    auto& o0 = view(pos)(tag::Flags{})(0_DC);
+    auto& o1 = view(pos)(tag::Flags{})(1_DC);
+    auto& o2 = view(pos)(tag::Flags{})(2_DC);
+    auto& o3 = view(pos)(tag::Flags{})(3_DC);
 
     CHECK((size_t) &y - (size_t) &x == 2048);
     CHECK((size_t) &z - (size_t) &x == 4096);

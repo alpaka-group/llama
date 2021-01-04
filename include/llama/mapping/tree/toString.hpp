@@ -18,8 +18,9 @@ namespace llama::mapping::tree
         return "Unknown";
     }
 
+    // handles array indices
     template <std::size_t I>
-    inline auto toString(Index<I>) -> std::string
+    inline auto toString(DatumCoord<I>) -> std::string
     {
         return "";
     }

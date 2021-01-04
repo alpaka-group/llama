@@ -83,10 +83,6 @@ namespace llama
         }
     } // namespace internal
 
-    /// Alias for \ref DatumCoord<I>. Describs an index used to access members of a \ref DatumArray.
-    template <std::size_t I>
-    using Index = DatumCoord<I>;
-
     /// An array of identical \ref DatumElement with \ref Index specialized on
     /// consecutive numbers. Can be used anywhere where \ref DatumStruct may
     /// used.
