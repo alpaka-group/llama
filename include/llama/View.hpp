@@ -236,6 +236,67 @@ namespace llama
             return std::tuple_cat(
                 asFlatTupleImpl(vd(GetDatumElementTag<Elements>{}), GetDatumElementType<Elements>{})...);
         }
+
+        template <typename T, typename = void>
+        constexpr inline auto isTupleLike = false;
+
+        // get<I>(t) and std::tuple_size<T> must be available
+        using std::get; // make sure a get<0>() can be found, so the compiler can compile the trait
+        template <typename T>
+        constexpr inline auto
+            isTupleLike<T, std::void_t<decltype(get<0>(std::declval<T>())), std::tuple_size<T>>> = true;
+
+        template <typename... Ts>
+        constexpr inline auto dependentFalse = false;
+
+        template <typename Tuple1, typename Tuple2, std::size_t... Is>
+        LLAMA_FN_HOST_ACC_INLINE void assignTuples(Tuple1&& dst, Tuple2&& src, std::index_sequence<Is...>);
+
+        template <typename T1, typename T2>
+        LLAMA_FN_HOST_ACC_INLINE void assignTupleElement(T1&& dst, T2&& src)
+        {
+            if constexpr (isTupleLike<T1> && isTupleLike<T2>)
+            {
+                static_assert(std::tuple_size_v<T1> == std::tuple_size_v<T2>);
+                assignTuples(dst, src, std::make_index_sequence<std::tuple_size_v<T1>>{});
+            }
+            else if constexpr (!isTupleLike<T1> && !isTupleLike<T2>)
+                std::forward<T1>(dst) = std::forward<T2>(src);
+            else
+                static_assert(dependentFalse<T1, T2>, "Elements to assign are not tuple/tuple or non-tuple/non-tuple.");
+        }
+
+        template <typename Tuple1, typename Tuple2, std::size_t... Is>
+        LLAMA_FN_HOST_ACC_INLINE void assignTuples(Tuple1&& dst, Tuple2&& src, std::index_sequence<Is...>)
+        {
+            static_assert(std::tuple_size_v<std::decay_t<Tuple1>> == std::tuple_size_v<std::decay_t<Tuple2>>);
+            using std::get;
+            (assignTupleElement(get<Is>(std::forward<Tuple1>(dst)), get<Is>(std::forward<Tuple2>(src))), ...);
+        }
+
+        template <typename T, typename Tuple, std::size_t... Is>
+        LLAMA_FN_HOST_ACC_INLINE auto makeFromTuple(Tuple&& src, std::index_sequence<Is...>)
+        {
+            using std::get;
+            return T{get<Is>(std::forward<Tuple>(src))...};
+        }
+
+        template <typename T, typename SFINAE, typename... Args>
+        constexpr inline auto isDirectListInitializableImpl = false;
+
+        template <typename T, typename... Args>
+        constexpr inline auto
+            isDirectListInitializableImpl<T, std::void_t<decltype(T{std::declval<Args>()...})>, Args...> = true;
+
+        template <typename T, typename... Args>
+        constexpr inline auto isDirectListInitializable = isDirectListInitializableImpl<T, void, Args...>;
+
+        template <typename T, typename Tuple>
+        constexpr inline auto isDirectListInitializableFromTuple = false;
+
+        template <typename T, template <typename...> typename Tuple, typename... Args>
+        constexpr inline auto
+            isDirectListInitializableFromTuple<T, Tuple<Args...>> = isDirectListInitializable<T, Args...>;
     } // namespace internal
 
     /// Virtual data type returned by \ref View after resolving a user domain
@@ -527,6 +588,68 @@ namespace llama
         auto get() const -> decltype(auto)
         {
             return operator()(DatumCoord<I>{});
+        }
+
+        template <typename TupleLike>
+        auto loadAs() -> TupleLike
+        {
+            static_assert(
+                internal::isDirectListInitializableFromTuple<TupleLike, decltype(asFlatTuple())>,
+                "TupleLike must be constructible from as many values as this VirtualDatum recursively represents like "
+                "this: TupleLike{values...}");
+            return internal::makeFromTuple<TupleLike>(
+                asFlatTuple(),
+                std::make_index_sequence<std::tuple_size_v<decltype(asFlatTuple())>>{});
+        }
+
+        template <typename TupleLike>
+        auto loadAs() const -> TupleLike
+        {
+            static_assert(
+                internal::isDirectListInitializableFromTuple<TupleLike, decltype(asFlatTuple())>,
+                "TupleLike must be constructible from as many values as this VirtualDatum recursively represents like "
+                "this: TupleLike{values...}");
+            return internal::makeFromTuple<TupleLike>(
+                asFlatTuple(),
+                std::make_index_sequence<std::tuple_size_v<decltype(asFlatTuple())>>{});
+        }
+
+        struct Loader
+        {
+            VirtualDatum& vd;
+
+            template <typename T>
+            operator T()
+            {
+                return vd.loadAs<T>();
+            }
+        };
+
+        struct LoaderConst
+        {
+            const VirtualDatum& vd;
+
+            template <typename T>
+            operator T() const
+            {
+                return vd.loadAs<T>();
+            }
+        };
+
+        auto load() -> Loader
+        {
+            return {*this};
+        }
+
+        auto load() const -> LoaderConst
+        {
+            return {*this};
+        }
+
+        template <typename TupleLike>
+        void store(const TupleLike& t)
+        {
+            internal::assignTuples(asTuple(), t, std::make_index_sequence<std::tuple_size_v<TupleLike>>{});
         }
     };
 } // namespace llama
