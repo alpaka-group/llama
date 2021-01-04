@@ -87,29 +87,25 @@ TEST_CASE("prettyPrintType")
         tag::Flags,
         llama::DatumStruct<
             llama::DatumElement<
-                std::integral_constant<
-                    unsigned long,
+                llama::DatumCoord<
                     0
                 >,
                 bool
             >,
             llama::DatumElement<
-                std::integral_constant<
-                    unsigned long,
+                llama::DatumCoord<
                     1
                 >,
                 bool
             >,
             llama::DatumElement<
-                std::integral_constant<
-                    unsigned long,
+                llama::DatumCoord<
                     2
                 >,
                 bool
             >,
             llama::DatumElement<
-                std::integral_constant<
-                    unsigned long,
+                llama::DatumCoord<
                     3
                 >,
                 bool

@@ -874,8 +874,7 @@ TEST_CASE("treemapping")
                     tag::Flags,
                     llama::Tuple<
                         llama::mapping::tree::Leaf<
-                            std::integral_constant<
-                                unsigned long,
+                            llama::DatumCoord<
                                 0
                             >,
                             bool,
@@ -885,8 +884,7 @@ TEST_CASE("treemapping")
                             >
                         >,
                         llama::mapping::tree::Leaf<
-                            std::integral_constant<
-                                unsigned long,
+                            llama::DatumCoord<
                                 1
                             >,
                             bool,
@@ -896,8 +894,7 @@ TEST_CASE("treemapping")
                             >
                         >,
                         llama::mapping::tree::Leaf<
-                            std::integral_constant<
-                                unsigned long,
+                            llama::DatumCoord<
                                 2
                             >,
                             bool,
@@ -907,8 +904,7 @@ TEST_CASE("treemapping")
                             >
                         >,
                         llama::mapping::tree::Leaf<
-                            std::integral_constant<
-                                unsigned long,
+                            llama::DatumCoord<
                                 3
                             >,
                             bool,
@@ -997,32 +993,28 @@ TEST_CASE("treemapping")
                     tag::Flags,
                     llama::Tuple<
                         llama::mapping::tree::Leaf<
-                            std::integral_constant<
-                                unsigned long,
+                            llama::DatumCoord<
                                 0
                             >,
                             bool,
                             unsigned long
                         >,
                         llama::mapping::tree::Leaf<
-                            std::integral_constant<
-                                unsigned long,
+                            llama::DatumCoord<
                                 1
                             >,
                             bool,
                             unsigned long
                         >,
                         llama::mapping::tree::Leaf<
-                            std::integral_constant<
-                                unsigned long,
+                            llama::DatumCoord<
                                 2
                             >,
                             bool,
                             unsigned long
                         >,
                         llama::mapping::tree::Leaf<
-                            std::integral_constant<
-                                unsigned long,
+                            llama::DatumCoord<
                                 3
                             >,
                             bool,
