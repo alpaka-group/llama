@@ -107,13 +107,13 @@ namespace usellama
     template <typename VirtualParticleI, typename VirtualParticleJ>
     LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticleI&& pi, VirtualParticleJ pj)
     {
-        auto dist = pi.template loadAs<Particle>().pos - pj.template loadAs<Particle>().pos;
+        auto dist = pi->pos - pj->pos;
         dist *= dist;
         const FP distSqr = EPS2 + dist.x + dist.y + dist.z;
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
-        const FP sts = pj.template loadAs<Particle>().mass * invDistCube * TIMESTEP;
-        pi(1_DC).store(pi.template loadAs<Particle>().vel + dist * sts);
+        const FP sts = pj->mass * invDistCube * TIMESTEP;
+        pi(1_DC).store(pi->vel + dist * sts);
     }
 
     template <bool UseAccumulator, typename View>
@@ -143,7 +143,7 @@ namespace usellama
     {
         LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
-            particles(i)(0_DC) += particles(i)(1_DC) * TIMESTEP;
+            particles(i)(0_DC).store(particles(i)->pos + particles(i)->vel * TIMESTEP);
     }
 
     template <int Mapping, bool UseAccumulator, std::size_t AoSoALanes = 8 /*AVX2*/>

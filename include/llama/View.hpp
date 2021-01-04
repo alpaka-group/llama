@@ -60,8 +60,8 @@ namespace llama
     template <std::size_t Dim, typename DatumDomain>
     LLAMA_FN_HOST_ACC_INLINE auto allocViewStack() -> decltype(auto)
     {
+        using Mapping = llama::mapping::One<ArrayDomain<Dim>, DatumDomain>;
         using MadeDatumDomain = mapping::MakeDatumDomain<DatumDomain>; // user might pass struct to reflect
-        using Mapping = llama::mapping::One<ArrayDomain<Dim>, MadeDatumDomain>;
         return allocView(Mapping{}, llama::allocator::Stack<sizeOf<MadeDatumDomain>>{});
     }
 
@@ -342,7 +342,52 @@ namespace llama
         template <typename T, template <typename...> typename Tuple, typename... Args>
         constexpr inline auto
             isDirectListInitializableFromTuple<T, Tuple<Args...>> = isDirectListInitializable<T, Args...>;
+
+        template <typename Tuplish, typename Coord>
+        struct GetNestedTuplishType;
+
+        template <typename Tuplish, std::size_t Head, std::size_t... Tail>
+        struct GetNestedTuplishType<Tuplish, DatumCoord<Head, Tail...>>
+        {
+            using type = typename GetNestedTuplishType<
+                std::decay_t<decltype(tupleish_get<Head>(std::declval<Tuplish>()))>,
+                DatumCoord<Tail...>>::type;
+        };
+
+        template <typename Tuplish>
+        struct GetNestedTuplishType<Tuplish, DatumCoord<>>
+        {
+            using type = Tuplish;
+        };
+
+        template <typename OriginalDatumDomain, typename BoundDatumDomain>
+        struct GetValueStructOrVoid
+        {
+            using type = typename internal::GetNestedTuplishType<OriginalDatumDomain, BoundDatumDomain>::type;
+        };
+
+        template <typename... Elements, typename BoundDatumDomain>
+        struct GetValueStructOrVoid<DatumStruct<Elements...>, BoundDatumDomain>
+        {
+            using type = void;
+        };
     } // namespace internal
+
+    template <typename T>
+    struct IndirectValue
+    {
+        T value;
+
+        auto operator->() -> T*
+        {
+            return &value;
+        }
+
+        auto operator->() const -> const T*
+        {
+            return &value;
+        }
+    };
 
     /// Virtual data type returned by \ref View after resolving a user domain
     /// coordinate or partially resolving a \ref DatumCoord. A virtual datum
@@ -359,6 +404,8 @@ namespace llama
     private:
         using ArrayDomain = typename View::Mapping::ArrayDomain;
         using DatumDomain = typename View::Mapping::DatumDomain;
+        using ValueStruct = typename internal::
+            GetValueStructOrVoid<typename View::Mapping::OriginalDatumDomain, BoundDatumDomain>::type;
 
         const ArrayDomain userDomainPos;
         std::conditional_t<OwnView, View, View&> view;
@@ -369,10 +416,12 @@ namespace llama
         /// AccessibleDatumDomain is the same as `Mapping::DatumDomain`.
         using AccessibleDatumDomain = GetType<DatumDomain, BoundDatumDomain>;
 
+        static constexpr auto supportsValueLoad = !std::is_void_v<ValueStruct>;
+
         LLAMA_FN_HOST_ACC_INLINE VirtualDatum()
             /* requires(OwnView) */
             : userDomainPos({})
-            , view{allocViewStack<1, DatumDomain>()}
+            , view{allocViewStack<1, std::conditional_t<supportsValueLoad, ValueStruct, DatumDomain>>()}
         {
             static_assert(OwnView, "The default constructor of VirtualDatum is only available if the ");
         }
@@ -689,6 +738,20 @@ namespace llama
         auto load() const -> LoaderConst
         {
             return {*this};
+        }
+
+        // template <typename = std::enable_if_t<supportsValueLoad>>
+        auto operator->() const -> IndirectValue<ValueStruct>
+        {
+            static_assert(supportsValueLoad);
+            return {loadAs<ValueStruct>()};
+        }
+
+        // template <typename = std::enable_if_t<supportsValueLoad>>
+        auto operator*() const -> ValueStruct
+        {
+            static_assert(supportsValueLoad);
+            return loadAs<ValueStruct>();
         }
 
         template <typename TupleLike>

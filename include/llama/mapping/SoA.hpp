@@ -22,6 +22,7 @@ namespace llama::mapping
     {
         using ArrayDomain = T_ArrayDomain;
         using DatumDomain = MakeDatumDomain<T_DatumDomain>;
+        using OriginalDatumDomain = T_DatumDomain;
         static constexpr std::size_t blobCount = []() constexpr
         {
             if constexpr (SeparateBuffers::value)

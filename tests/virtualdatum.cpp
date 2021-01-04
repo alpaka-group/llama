@@ -927,3 +927,72 @@ TEST_CASE("VirtualDatum.store.aggregate")
         CHECK(datum(tag::Weight{}) == 7);
     }
 }
+
+struct NameStruct
+{
+    struct Pos
+    {
+        int a;
+        int y;
+    } pos;
+
+    struct Vel
+    {
+        int x;
+        int y;
+        int z;
+    } vel;
+    int weight;
+};
+
+TEST_CASE("VirtualDatum.operator->")
+{
+    llama::One<NameStruct> datum;
+    datum.store(NameStruct{1, 2, 3, 4, 5, 6});
+
+    auto test = [](auto&& datum) {
+        using namespace llama::literals;
+
+        CHECK(datum->pos.a == 1);
+        CHECK(datum->pos.y == 2);
+        CHECK(datum->vel.x == 3);
+        CHECK(datum->vel.y == 4);
+        CHECK(datum->vel.z == 5);
+        CHECK(datum->weight == 6);
+
+        CHECK(datum(0_DC)->a == 1);
+        CHECK(datum(0_DC)->y == 2);
+        CHECK(datum(1_DC)->x == 3);
+        CHECK(datum(1_DC)->y == 4);
+        CHECK(datum(1_DC)->z == 5);
+    };
+    test(datum);
+    test(std::as_const(datum));
+}
+
+TEST_CASE("VirtualDatum.operator*")
+{
+    llama::One<NameStruct> datum;
+    datum.store(NameStruct{1, 2, 3, 4, 5, 6});
+
+    auto test = [](auto&& datum) {
+        using namespace llama::literals;
+
+        const NameStruct ns = *datum;
+        CHECK(ns.pos.a == 1);
+        CHECK(ns.pos.y == 2);
+        CHECK(ns.vel.x == 3);
+        CHECK(ns.vel.y == 4);
+        CHECK(ns.vel.z == 5);
+        CHECK(ns.weight == 6);
+        const NameStruct::Pos pos = *datum(0_DC);
+        CHECK(pos.a == 1);
+        CHECK(pos.y == 2);
+        const NameStruct::Vel vel = *datum(1_DC);
+        CHECK(vel.x == 3);
+        CHECK(vel.y == 4);
+        CHECK(vel.z == 5);
+    };
+    test(datum);
+    test(std::as_const(datum));
+}

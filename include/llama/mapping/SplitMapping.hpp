@@ -54,6 +54,7 @@ namespace llama::mapping
     {
         using ArrayDomain = T_ArrayDomain;
         using DatumDomain = MakeDatumDomain<T_DatumDomain>;
+        using OriginalDatumDomain = T_DatumDomain;
 
         using DatumDomainPartitions = decltype(internal::partitionDatumDomain(DatumDomain{}, DatumCoordForMapping1{}));
         using DatumDomain1 = boost::mp11::mp_first<DatumDomainPartitions>;
