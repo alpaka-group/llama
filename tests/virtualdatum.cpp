@@ -797,14 +797,14 @@ TEST_CASE("VirtualDatum.convert.constref")
     }
 }
 
-TEST_CASE("VirtualDatum.store.tuplelike")
+TEST_CASE("VirtualDatum.operator=.tuplelike")
 {
     llama::One<Name> datum;
 
     datum = 1;
     {
         MyPos<int> pos{2, 3};
-        datum(tag::Pos{}).store(pos);
+        datum(tag::Pos{}) = pos;
         CHECK(datum(tag::Pos{}, tag::A{}) == 2);
         CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
         CHECK(datum(tag::Vel{}, tag::X{}) == 1);
@@ -816,7 +816,7 @@ TEST_CASE("VirtualDatum.store.tuplelike")
     datum = 1;
     {
         MyDatum<int> d{{2, 3}, {4, 5, 6}, 7};
-        datum.store(d);
+        datum = d;
         CHECK(datum(tag::Pos{}, tag::A{}) == 2);
         CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
         CHECK(datum(tag::Vel{}, tag::X{}) == 4);
@@ -879,7 +879,7 @@ TEST_CASE("VirtualDatum.loadAs.constref")
     }
 }
 
-TEST_CASE("VirtualDatum.store.aggregate")
+TEST_CASE("VirtualDatum.operator=.aggregate")
 {
     struct MyPosAgg
     {
@@ -906,7 +906,7 @@ TEST_CASE("VirtualDatum.store.aggregate")
     datum = 1;
     {
         MyPosAgg pos{2, 3};
-        datum(tag::Pos{}).store(pos);
+        datum(tag::Pos{}) = pos;
         CHECK(datum(tag::Pos{}, tag::A{}) == 2);
         CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
         CHECK(datum(tag::Vel{}, tag::X{}) == 1);
@@ -918,7 +918,7 @@ TEST_CASE("VirtualDatum.store.aggregate")
     datum = 1;
     {
         MyDatumAgg d{{2, 3}, {4, 5, 6}, 7};
-        datum.store(d);
+        datum = d;
         CHECK(datum(tag::Pos{}, tag::A{}) == 2);
         CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
         CHECK(datum(tag::Vel{}, tag::X{}) == 4);
@@ -948,7 +948,7 @@ struct NameStruct
 TEST_CASE("VirtualDatum.operator->")
 {
     llama::One<NameStruct> datum;
-    datum.store(NameStruct{1, 2, 3, 4, 5, 6});
+    datum = NameStruct{1, 2, 3, 4, 5, 6};
 
     auto test = [](auto&& datum) {
         using namespace llama::literals;
@@ -973,7 +973,7 @@ TEST_CASE("VirtualDatum.operator->")
 TEST_CASE("VirtualDatum.operator*")
 {
     llama::One<NameStruct> datum;
-    datum.store(NameStruct{1, 2, 3, 4, 5, 6});
+    datum = NameStruct{1, 2, 3, 4, 5, 6};
 
     auto test = [](auto&& datum) {
         using namespace llama::literals;

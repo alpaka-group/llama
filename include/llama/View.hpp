@@ -502,10 +502,31 @@ namespace llama
             return this->operator=<VirtualDatum>(other);
         }
 
+    private:
+        template <typename T>
+        struct ConvertibleTo
+        {
+            template <typename U>
+            using fn = std::is_convertible<T, U>;
+        };
+
+    public:
+        // TODO: this operator does too much black magic already
         template <typename T>
         LLAMA_FN_HOST_ACC_INLINE auto operator=(const T& other) -> VirtualDatum&
         {
-            return internal::virtualDatumArithOperator<internal::Assign>(*this, other);
+            if constexpr (
+                is_VirtualDatum<
+                    T> || boost::mp11::mp_any_of_q<FlattenDatumDomain<AccessibleDatumDomain>, ConvertibleTo<T>>::value)
+                return internal::virtualDatumArithOperator<internal::Assign>(*this, other);
+            else
+            {
+                internal::assignTuples(
+                    asTuple(),
+                    other,
+                    std::make_index_sequence<std::tuple_size_v<decltype(asTuple())>>{});
+                return *this;
+            }
         }
 
         template <typename T>
@@ -732,12 +753,6 @@ namespace llama
         {
             static_assert(supportsValueLoad);
             return loadAs<ValueStruct>();
-        }
-
-        template <typename TupleLike>
-        void store(const TupleLike& t)
-        {
-            internal::assignTuples(asTuple(), t, std::make_index_sequence<std::tuple_size_v<decltype(asTuple())>>{});
         }
     };
 } // namespace llama
