@@ -693,24 +693,24 @@ struct std::tuple_size<MyDatum<T>>
     static constexpr std::size_t value = 3;
 };
 
-TEST_CASE("VirtualDatum.load.value")
+TEST_CASE("VirtualDatum.convert.value")
 {
     llama::One<Name> datum;
     datum = 1;
 
     {
-        MyPos<int> pos = datum(tag::Pos{}).load();
+        MyPos<int> pos = datum(tag::Pos{});
         CHECK(pos.a == 1);
         CHECK(pos.y == 1);
     }
     {
-        MyPos<int> pos = std::as_const(datum)(tag::Pos{}).load();
+        MyPos<int> pos = std::as_const(datum)(tag::Pos{});
         CHECK(pos.a == 1);
         CHECK(pos.y == 1);
     }
 
     {
-        MyDatum<int> d = datum.load();
+        MyDatum<int> d = datum;
         CHECK(d.pos.a == 1);
         CHECK(d.pos.y == 1);
         CHECK(d.vel.x == 1);
@@ -719,7 +719,7 @@ TEST_CASE("VirtualDatum.load.value")
         CHECK(d.weight == 1);
     }
     {
-        MyDatum<int> d = std::as_const(datum).load();
+        MyDatum<int> d = std::as_const(datum);
         CHECK(d.pos.a == 1);
         CHECK(d.pos.y == 1);
         CHECK(d.vel.x == 1);
@@ -729,13 +729,13 @@ TEST_CASE("VirtualDatum.load.value")
     }
 }
 
-TEST_CASE("VirtualDatum.load.ref")
+TEST_CASE("VirtualDatum.convert.ref")
 {
     llama::One<Name> datum;
 
     datum = 1;
     {
-        MyPos<int&> pos = datum(tag::Pos{}).load();
+        MyPos<int&> pos = datum(tag::Pos{});
         CHECK(pos.a == 1);
         CHECK(pos.y == 1);
 
@@ -751,7 +751,7 @@ TEST_CASE("VirtualDatum.load.ref")
 
     datum = 1;
     {
-        MyDatum<int&> d = datum.load();
+        MyDatum<int&> d = datum;
         CHECK(d.pos.a == 1);
         CHECK(d.pos.y == 1);
 
@@ -770,28 +770,28 @@ TEST_CASE("VirtualDatum.load.ref")
     }
 }
 
-TEST_CASE("VirtualDatum.load.constref")
+TEST_CASE("VirtualDatum.convert.constref")
 {
     llama::One<Name> datum;
     datum = 1;
 
     {
-        MyPos<const int&> pos = datum(tag::Pos{}).load();
+        MyPos<const int&> pos = datum(tag::Pos{});
         CHECK(pos.a == 1);
         CHECK(pos.y == 1);
     }
     {
-        MyPos<const int&> pos = std::as_const(datum)(tag::Pos{}).load();
+        MyPos<const int&> pos = std::as_const(datum)(tag::Pos{});
         CHECK(pos.a == 1);
         CHECK(pos.y == 1);
     }
     {
-        MyDatum<const int&> d = datum.load();
+        MyDatum<const int&> d = datum;
         CHECK(d.pos.a == 1);
         CHECK(d.pos.y == 1);
     }
     {
-        MyDatum<const int&> d = std::as_const(datum).load();
+        MyDatum<const int&> d = std::as_const(datum);
         CHECK(d.pos.a == 1);
         CHECK(d.pos.y == 1);
     }

@@ -708,36 +708,16 @@ namespace llama
                 std::make_index_sequence<std::tuple_size_v<decltype(asFlatTuple())>>{});
         }
 
-        struct Loader
+        template <typename T>
+        operator T()
         {
-            VirtualDatum& vd;
-
-            template <typename T>
-            operator T()
-            {
-                return vd.loadAs<T>();
-            }
-        };
-
-        struct LoaderConst
-        {
-            const VirtualDatum& vd;
-
-            template <typename T>
-            operator T() const
-            {
-                return vd.loadAs<T>();
-            }
-        };
-
-        auto load() -> Loader
-        {
-            return {*this};
+            return loadAs<T>();
         }
 
-        auto load() const -> LoaderConst
+        template <typename T>
+        operator T() const
         {
-            return {*this};
+            return loadAs<T>();
         }
 
         // template <typename = std::enable_if_t<supportsValueLoad>>
