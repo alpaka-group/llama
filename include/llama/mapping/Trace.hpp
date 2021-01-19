@@ -43,7 +43,7 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE
         Trace(Mapping mapping) : mapping(mapping)
         {
-            forEach<DatumDomain>([&](auto coord) { datumHits[internal::coordName<DatumDomain>(coord)] = 0; });
+            forEachLeave<DatumDomain>([&](auto coord) { datumHits[internal::coordName<DatumDomain>(coord)] = 0; });
         }
 
         Trace(const Trace&) = delete;

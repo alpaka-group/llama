@@ -118,7 +118,7 @@ namespace
     }
 } // namespace
 
-/// Example functor for \ref llama::forEach which can also be used to print the
+/// Example functor for \ref llama::forEachLeave which can also be used to print the
 /// coordinates inside of a datum domain when called.
 template <typename VirtualDatum>
 struct SetZeroFunctor
@@ -190,10 +190,10 @@ int main(int argc, char** argv)
         SetZeroFunctor<decltype(view(x, y))> szf{view(x, y)};
         // Applying the functor for the sub tree 0,0 (pos.x), so basically
         // only for this element
-        llama::forEach<Name>(szf, llama::DatumCoord<0, 0>{});
+        llama::forEachLeave<Name>(szf, llama::DatumCoord<0, 0>{});
         // Applying the functor for the sub tree momentum (0), so basically
         // for momentum.z, and momentum.x
-        llama::forEach<Name>(szf, st::Momentum{});
+        llama::forEachLeave<Name>(szf, st::Momentum{});
         // the user domain address can be given as multiple comma separated
         // arguments or as one parameter of type user domain
         view({x, y}) = double(x + y) / double(udSize[0] + udSize[1]);

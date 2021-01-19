@@ -69,7 +69,7 @@ namespace llama
         };
 
         bool collision = false;
-        llama::forEach<typename Mapping::DatumDomain>([&](auto coord) constexpr {
+        llama::forEachLeave<typename Mapping::DatumDomain>([&](auto coord) constexpr {
             if (collision)
                 return;
             for (auto ad : llama::ArrayDomainIndexRange{m.arrayDomainSize})
