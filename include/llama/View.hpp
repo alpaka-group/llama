@@ -99,9 +99,9 @@ namespace llama
             const VirtualDatum<RightView, RightBoundDatumDomain, RightOwnView>& right) -> LeftDatum&
         {
             using RightDatum = VirtualDatum<RightView, RightBoundDatumDomain, RightOwnView>;
-            forEach<typename LeftDatum::AccessibleDatumDomain>([&](auto leftCoord) {
+            forEachLeave<typename LeftDatum::AccessibleDatumDomain>([&](auto leftCoord) {
                 using LeftInnerCoord = decltype(leftCoord);
-                forEach<typename RightDatum::AccessibleDatumDomain>([&](auto rightCoord) {
+                forEachLeave<typename RightDatum::AccessibleDatumDomain>([&](auto rightCoord) {
                     using RightInnerCoord = decltype(rightCoord);
                     if constexpr (hasSameTags<
                                       typename LeftDatum::AccessibleDatumDomain,
@@ -119,7 +119,7 @@ namespace llama
         template <typename Functor, typename LeftDatum, typename T>
         LLAMA_FN_HOST_ACC_INLINE auto virtualDatumArithOperator(LeftDatum& left, const T& right) -> LeftDatum&
         {
-            forEach<typename LeftDatum::AccessibleDatumDomain>(
+            forEachLeave<typename LeftDatum::AccessibleDatumDomain>(
                 [&](auto leftCoord) { Functor{}(left(leftCoord), right); });
             return left;
         }
@@ -136,9 +136,9 @@ namespace llama
         {
             using RightDatum = VirtualDatum<RightView, RightBoundDatumDomain, RightOwnView>;
             bool result = true;
-            forEach<typename LeftDatum::AccessibleDatumDomain>([&](auto leftCoord) {
+            forEachLeave<typename LeftDatum::AccessibleDatumDomain>([&](auto leftCoord) {
                 using LeftInnerCoord = decltype(leftCoord);
-                forEach<typename RightDatum::AccessibleDatumDomain>([&](auto rightCoord) {
+                forEachLeave<typename RightDatum::AccessibleDatumDomain>([&](auto rightCoord) {
                     using RightInnerCoord = decltype(rightCoord);
                     if constexpr (hasSameTags<
                                       typename LeftDatum::AccessibleDatumDomain,
@@ -157,7 +157,7 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto virtualDatumRelOperator(const LeftDatum& left, const T& right) -> bool
         {
             bool result = true;
-            forEach<typename LeftDatum::AccessibleDatumDomain>([&](auto leftCoord) {
+            forEachLeave<typename LeftDatum::AccessibleDatumDomain>([&](auto leftCoord) {
                 result &= Functor{}(
                     left(leftCoord),
                     static_cast<std::remove_reference_t<decltype(left(leftCoord))>>(right));

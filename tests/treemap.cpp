@@ -1061,7 +1061,7 @@ TEST_CASE("treemapping")
         for (size_t y = 0; y < arrayDomain[1]; ++y)
         {
             auto datum = view(x, y);
-            llama::forEach<Name>([&](auto coord) { datum(coord) = 0; }, tag::Momentum{});
+            llama::forEachLeave<Name>([&](auto coord) { datum(coord) = 0; }, tag::Momentum{});
         }
     double sum = 0.0;
     for (size_t x = 0; x < arrayDomain[0]; ++x)

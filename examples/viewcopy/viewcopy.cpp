@@ -53,7 +53,7 @@ void naive_copy(const llama::View<Mapping1, BlobType1>& srcView, llama::View<Map
 
     auto r = llama::ArrayDomainIndexRange{srcView.mapping.arrayDomainSize};
     std::for_each(ex, std::begin(r), std::end(r), [&](auto ad) {
-        llama::forEach<typename Mapping1::DatumDomain>([&](auto coord) {
+        llama::forEachLeave<typename Mapping1::DatumDomain>([&](auto coord) {
             dstView(ad)(coord) = srcView(ad)(coord);
             // std::memcpy(
             //    &dstView(ad)(coord),
@@ -138,7 +138,7 @@ void aosoa_copy(
 
             for (std::size_t i = start; i < stop; i += LanesSrc)
             {
-                llama::forEach<DatumDomain>([&](auto coord) {
+                llama::forEachLeave<DatumDomain>([&](auto coord) {
                     constexpr auto L = std::min(LanesSrc, LanesDst);
                     for (std::size_t j = 0; j < LanesSrc; j += L)
                     {
@@ -162,7 +162,7 @@ void aosoa_copy(
 
             for (std::size_t i = start; i < stop; i += LanesDst)
             {
-                llama::forEach<DatumDomain>([&](auto coord) {
+                llama::forEachLeave<DatumDomain>([&](auto coord) {
                     constexpr auto L = std::min(LanesSrc, LanesDst);
                     for (std::size_t j = 0; j < LanesDst; j += L)
                     {
@@ -181,7 +181,7 @@ auto hash(const llama::View<Mapping, BlobType>& view)
 {
     std::size_t acc = 0;
     for (auto ad : llama::ArrayDomainIndexRange{view.mapping.arrayDomainSize})
-        llama::forEach<Particle>([&](auto coord) { boost::hash_combine(acc, view(ad)(coord)); });
+        llama::forEachLeave<Particle>([&](auto coord) { boost::hash_combine(acc, view(ad)(coord)); });
     return acc;
 }
 template <typename Mapping>

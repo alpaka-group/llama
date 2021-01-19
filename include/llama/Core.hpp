@@ -311,13 +311,13 @@ namespace llama
     namespace internal
     {
         template <typename T, std::size_t... Coords, typename Functor>
-        LLAMA_FN_HOST_ACC_INLINE constexpr void forEachImpl(T, DatumCoord<Coords...> coord, Functor&& functor)
+        LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaveImpl(T, DatumCoord<Coords...> coord, Functor&& functor)
         {
             functor(coord);
         };
 
         template <typename... Children, std::size_t... Coords, typename Functor>
-        LLAMA_FN_HOST_ACC_INLINE constexpr void forEachImpl(
+        LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaveImpl(
             DatumStruct<Children...>,
             DatumCoord<Coords...>,
             Functor&& functor)
@@ -328,7 +328,7 @@ namespace llama
                 using DatumElement = boost::mp11::mp_at_c<DatumStruct<Children...>, childIndex>;
 
                 LLAMA_FORCE_INLINE_RECURSIVE
-                forEachImpl(
+                forEachLeaveImpl(
                     GetDatumElementType<DatumElement>{},
                     llama::DatumCoord<Coords..., childIndex>{},
                     std::forward<Functor>(functor));
@@ -343,10 +343,13 @@ namespace llama
     /// \param baseCoord \ref DatumCoord at which the iteration should be
     /// started. The functor is called on elements beneath this coordinate.
     template <typename DatumDomain, typename Functor, std::size_t... Coords>
-    LLAMA_FN_HOST_ACC_INLINE constexpr void forEach(Functor&& functor, DatumCoord<Coords...> baseCoord)
+    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeave(Functor&& functor, DatumCoord<Coords...> baseCoord)
     {
         LLAMA_FORCE_INLINE_RECURSIVE
-        internal::forEachImpl(GetType<DatumDomain, DatumCoord<Coords...>>{}, baseCoord, std::forward<Functor>(functor));
+        internal::forEachLeaveImpl(
+            GetType<DatumDomain, DatumCoord<Coords...>>{},
+            baseCoord,
+            std::forward<Functor>(functor));
     }
 
     /// Iterates over the datum domain tree and calls a functor on each element.
@@ -356,10 +359,10 @@ namespace llama
     /// \param baseTags Tags used to define where the iteration should be
     /// started. The functor is called on elements beneath this coordinate.
     template <typename DatumDomain, typename Functor, typename... Tags>
-    LLAMA_FN_HOST_ACC_INLINE constexpr void forEach(Functor&& functor, Tags... baseTags)
+    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeave(Functor&& functor, Tags... baseTags)
     {
         LLAMA_FORCE_INLINE_RECURSIVE
-        forEach<DatumDomain>(std::forward<Functor>(functor), GetCoordFromTags<DatumDomain, Tags...>{});
+        forEachLeave<DatumDomain>(std::forward<Functor>(functor), GetCoordFromTags<DatumDomain, Tags...>{});
     }
 
     namespace internal
@@ -385,7 +388,7 @@ namespace llama
     inline constexpr auto flatDatumCoord = []() constexpr
     {
         std::size_t c = 0;
-        forEach<DatumDomain>([&](auto coord) {
+        forEachLeave<DatumDomain>([&](auto coord) {
             if constexpr (DatumCoordCommonPrefixIsBigger<DatumCoord, decltype(coord)>)
                 c++;
         });
