@@ -5,6 +5,7 @@
 
 #include "Allocators.hpp"
 #include "Array.hpp"
+#include "Concepts.hpp"
 #include "Core.hpp"
 #include "macros.hpp"
 #include "mapping/One.hpp"
@@ -14,7 +15,11 @@
 
 namespace llama
 {
-    template <typename Mapping, typename BlobType>
+#ifdef __cpp_concepts
+    template <typename T_Mapping, StorageBlob BlobType>
+#else
+    template <typename T_Mapping, typename BlobType>
+#endif
     struct View;
 
     namespace internal
@@ -681,7 +686,11 @@ namespace llama
     /// memory.
     /// \tparam BlobType The storage type used by the view holding
     /// memory.
+#ifdef __cpp_concepts
+    template <typename T_Mapping, StorageBlob BlobType>
+#else
     template <typename T_Mapping, typename BlobType>
+#endif
     struct View
     {
         using Mapping = T_Mapping;

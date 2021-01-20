@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Array.hpp"
+#include "Concepts.hpp"
 #include "macros.hpp"
 
 #include <cstddef>
@@ -26,6 +27,9 @@ namespace llama::allocator
             return {};
         }
     };
+#ifdef __cpp_concepts
+    static_assert(StorageBlob<decltype(Stack<64>{}(0))>);
+#endif
 
     /// Allocates heap memory managed by a `std::shared_ptr` for a \ref View.
     /// This memory is shared between all copies of a \ref View.
@@ -41,6 +45,9 @@ namespace llama::allocator
             return std::shared_ptr<std::byte[]>{ptr, deleter};
         }
     };
+#ifdef __cpp_concepts
+    static_assert(StorageBlob<decltype(SharedPtr{}(0))>);
+#endif
 
     template <typename T, std::size_t Alignment>
     struct AlignedAllocator
@@ -94,4 +101,7 @@ namespace llama::allocator
             return std::vector<std::byte, AlignedAllocator<std::byte, Alignment>>(count);
         }
     };
+#ifdef __cpp_concepts
+    static_assert(StorageBlob<decltype(Vector{}(0))>);
+#endif
 } // namespace llama::allocator
