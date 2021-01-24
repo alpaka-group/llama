@@ -28,7 +28,7 @@ namespace llama::allocator
         }
     };
 #ifdef __cpp_concepts
-    static_assert(StorageBlob<decltype(Stack<64>{}(0))>);
+    static_assert(BlobAllocator<Stack<64>>);
 #endif
 
     /// Allocates heap memory managed by a `std::shared_ptr` for a \ref View.
@@ -46,7 +46,7 @@ namespace llama::allocator
         }
     };
 #ifdef __cpp_concepts
-    static_assert(StorageBlob<decltype(SharedPtr{}(0))>);
+    static_assert(BlobAllocator<SharedPtr<>>);
 #endif
 
     template <typename T, std::size_t Alignment>
@@ -102,6 +102,6 @@ namespace llama::allocator
         }
     };
 #ifdef __cpp_concepts
-    static_assert(StorageBlob<decltype(Vector{}(0))>);
+    static_assert(BlobAllocator<Vector<>>);
 #endif
 } // namespace llama::allocator

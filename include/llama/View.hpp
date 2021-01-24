@@ -41,7 +41,11 @@ namespace llama
     /// view's underlying memory, the specified allocator callable is used (or the default one, which is \ref
     /// allocator::Vector). The allocator callable is called with the size of bytes to allocate for each blob of the
     /// mapping. This function is the preferred way to create a \ref View.
+#ifdef __cpp_concepts
+    template <typename Mapping, BlobAllocator Allocator = allocator::Vector<>>
+#else
     template <typename Mapping, typename Allocator = allocator::Vector<>>
+#endif
     LLAMA_FN_HOST_ACC_INLINE auto allocView(Mapping mapping = {}, const Allocator& alloc = {})
         -> View<Mapping, internal::AllocatorBlobType<Allocator>>
     {

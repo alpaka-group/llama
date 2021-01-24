@@ -27,6 +27,13 @@ namespace llama
         // other types
         std::is_same_v<decltype(b[i]), std::byte&> || std::is_same_v<decltype(b[i]), unsigned char&>;
     };
+
+    // clang-format off
+    template <typename BA>
+    concept BlobAllocator = requires(BA ba, std::size_t i) {
+        { ba(i) } -> StorageBlob;
+    };
+    // clang-format on
 } // namespace llama
 
 #endif
