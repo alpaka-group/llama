@@ -693,24 +693,24 @@ struct std::tuple_size<MyDatum<T>>
     static constexpr std::size_t value = 3;
 };
 
-TEST_CASE("VirtualDatum.load.value")
+TEST_CASE("VirtualDatum.convert.value")
 {
     llama::One<Name> datum;
     datum = 1;
 
     {
-        MyPos<int> pos = datum(tag::Pos{}).load();
+        MyPos<int> pos = datum(tag::Pos{});
         CHECK(pos.a == 1);
         CHECK(pos.y == 1);
     }
     {
-        MyPos<int> pos = std::as_const(datum)(tag::Pos{}).load();
+        MyPos<int> pos = std::as_const(datum)(tag::Pos{});
         CHECK(pos.a == 1);
         CHECK(pos.y == 1);
     }
 
     {
-        MyDatum<int> d = datum.load();
+        MyDatum<int> d = datum;
         CHECK(d.pos.a == 1);
         CHECK(d.pos.y == 1);
         CHECK(d.vel.x == 1);
@@ -719,7 +719,7 @@ TEST_CASE("VirtualDatum.load.value")
         CHECK(d.weight == 1);
     }
     {
-        MyDatum<int> d = std::as_const(datum).load();
+        MyDatum<int> d = std::as_const(datum);
         CHECK(d.pos.a == 1);
         CHECK(d.pos.y == 1);
         CHECK(d.vel.x == 1);
@@ -729,13 +729,13 @@ TEST_CASE("VirtualDatum.load.value")
     }
 }
 
-TEST_CASE("VirtualDatum.load.ref")
+TEST_CASE("VirtualDatum.convert.ref")
 {
     llama::One<Name> datum;
 
     datum = 1;
     {
-        MyPos<int&> pos = datum(tag::Pos{}).load();
+        MyPos<int&> pos = datum(tag::Pos{});
         CHECK(pos.a == 1);
         CHECK(pos.y == 1);
 
@@ -751,7 +751,7 @@ TEST_CASE("VirtualDatum.load.ref")
 
     datum = 1;
     {
-        MyDatum<int&> d = datum.load();
+        MyDatum<int&> d = datum;
         CHECK(d.pos.a == 1);
         CHECK(d.pos.y == 1);
 
@@ -770,41 +770,41 @@ TEST_CASE("VirtualDatum.load.ref")
     }
 }
 
-TEST_CASE("VirtualDatum.load.constref")
+TEST_CASE("VirtualDatum.convert.constref")
 {
     llama::One<Name> datum;
     datum = 1;
 
     {
-        MyPos<const int&> pos = datum(tag::Pos{}).load();
+        MyPos<const int&> pos = datum(tag::Pos{});
         CHECK(pos.a == 1);
         CHECK(pos.y == 1);
     }
     {
-        MyPos<const int&> pos = std::as_const(datum)(tag::Pos{}).load();
+        MyPos<const int&> pos = std::as_const(datum)(tag::Pos{});
         CHECK(pos.a == 1);
         CHECK(pos.y == 1);
     }
     {
-        MyDatum<const int&> d = datum.load();
+        MyDatum<const int&> d = datum;
         CHECK(d.pos.a == 1);
         CHECK(d.pos.y == 1);
     }
     {
-        MyDatum<const int&> d = std::as_const(datum).load();
+        MyDatum<const int&> d = std::as_const(datum);
         CHECK(d.pos.a == 1);
         CHECK(d.pos.y == 1);
     }
 }
 
-TEST_CASE("VirtualDatum.store")
+TEST_CASE("VirtualDatum.operator=.tuplelike")
 {
     llama::One<Name> datum;
 
     datum = 1;
     {
         MyPos<int> pos{2, 3};
-        datum(tag::Pos{}).store(pos);
+        datum(tag::Pos{}) = pos;
         CHECK(datum(tag::Pos{}, tag::A{}) == 2);
         CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
         CHECK(datum(tag::Vel{}, tag::X{}) == 1);
@@ -816,7 +816,7 @@ TEST_CASE("VirtualDatum.store")
     datum = 1;
     {
         MyDatum<int> d{{2, 3}, {4, 5, 6}, 7};
-        datum.store(d);
+        datum = d;
         CHECK(datum(tag::Pos{}, tag::A{}) == 2);
         CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
         CHECK(datum(tag::Vel{}, tag::X{}) == 4);
@@ -877,4 +877,122 @@ TEST_CASE("VirtualDatum.loadAs.constref")
         CHECK(pos.a == 1);
         CHECK(pos.y == 1);
     }
+}
+
+TEST_CASE("VirtualDatum.operator=.aggregate")
+{
+    struct MyPosAgg
+    {
+        int a;
+        int y;
+    };
+
+    struct MyVelAgg
+    {
+        int x;
+        int y;
+        int z;
+    };
+
+    struct MyDatumAgg
+    {
+        MyPosAgg pos;
+        MyVelAgg vel;
+        int weight;
+    };
+
+    llama::One<Name> datum;
+
+    datum = 1;
+    {
+        MyPosAgg pos{2, 3};
+        datum(tag::Pos{}) = pos;
+        CHECK(datum(tag::Pos{}, tag::A{}) == 2);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 1);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 1);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 1);
+        CHECK(datum(tag::Weight{}) == 1);
+    }
+
+    datum = 1;
+    {
+        MyDatumAgg d{{2, 3}, {4, 5, 6}, 7};
+        datum = d;
+        CHECK(datum(tag::Pos{}, tag::A{}) == 2);
+        CHECK(datum(tag::Pos{}, tag::Y{}) == 3);
+        CHECK(datum(tag::Vel{}, tag::X{}) == 4);
+        CHECK(datum(tag::Vel{}, tag::Y{}) == 5);
+        CHECK(datum(tag::Vel{}, tag::Z{}) == 6);
+        CHECK(datum(tag::Weight{}) == 7);
+    }
+}
+
+struct NameStruct
+{
+    struct Pos
+    {
+        int a;
+        int y;
+    } pos;
+
+    struct Vel
+    {
+        int x;
+        int y;
+        int z;
+    } vel;
+    int weight;
+};
+
+TEST_CASE("VirtualDatum.operator->")
+{
+    llama::One<NameStruct> datum;
+    datum = NameStruct{1, 2, 3, 4, 5, 6};
+
+    auto test = [](auto&& datum) {
+        using namespace llama::literals;
+
+        CHECK(datum->pos.a == 1);
+        CHECK(datum->pos.y == 2);
+        CHECK(datum->vel.x == 3);
+        CHECK(datum->vel.y == 4);
+        CHECK(datum->vel.z == 5);
+        CHECK(datum->weight == 6);
+
+        CHECK(datum(0_DC)->a == 1);
+        CHECK(datum(0_DC)->y == 2);
+        CHECK(datum(1_DC)->x == 3);
+        CHECK(datum(1_DC)->y == 4);
+        CHECK(datum(1_DC)->z == 5);
+    };
+    test(datum);
+    test(std::as_const(datum));
+}
+
+TEST_CASE("VirtualDatum.operator*")
+{
+    llama::One<NameStruct> datum;
+    datum = NameStruct{1, 2, 3, 4, 5, 6};
+
+    auto test = [](auto&& datum) {
+        using namespace llama::literals;
+
+        const NameStruct ns = *datum;
+        CHECK(ns.pos.a == 1);
+        CHECK(ns.pos.y == 2);
+        CHECK(ns.vel.x == 3);
+        CHECK(ns.vel.y == 4);
+        CHECK(ns.vel.z == 5);
+        CHECK(ns.weight == 6);
+        const NameStruct::Pos pos = *datum(0_DC);
+        CHECK(pos.a == 1);
+        CHECK(pos.y == 2);
+        const NameStruct::Vel vel = *datum(1_DC);
+        CHECK(vel.x == 3);
+        CHECK(vel.y == 4);
+        CHECK(vel.z == 5);
+    };
+    test(datum);
+    test(std::as_const(datum));
 }

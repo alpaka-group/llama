@@ -34,45 +34,86 @@ constexpr auto L1D_SIZE = 32 * 1024;
 constexpr auto L2D_SIZE = 512 * 1024;
 
 using namespace std::string_literals;
+using namespace llama::literals;
 
 namespace usellama
 {
-    // clang-format off
-    namespace tag
+    struct Vec
     {
-        struct Pos{};
-        struct Vel{};
-        struct X{};
-        struct Y{};
-        struct Z{};
-        struct Mass{};
-    }
+        FP x;
+        FP y;
+        FP z;
 
-    using Particle = llama::DS<
-        llama::DE<tag::Pos, llama::DS<
-            llama::DE<tag::X, FP>,
-            llama::DE<tag::Y, FP>,
-            llama::DE<tag::Z, FP>
-        >>,
-        llama::DE<tag::Vel, llama::DS<
-            llama::DE<tag::X, FP>,
-            llama::DE<tag::Y, FP>,
-            llama::DE<tag::Z, FP>
-        >>,
-        llama::DE<tag::Mass, FP>
-    >;
-    // clang-format on
+        auto operator*=(FP s) -> Vec&
+        {
+            x *= s;
+            y *= s;
+            z *= s;
+            return *this;
+        }
+
+        auto operator*=(Vec v) -> Vec&
+        {
+            x *= v.x;
+            y *= v.y;
+            z *= v.z;
+            return *this;
+        }
+
+        auto operator+=(Vec v) -> Vec&
+        {
+            x += v.x;
+            y += v.y;
+            z += v.z;
+            return *this;
+        }
+
+        auto operator-=(Vec v) -> Vec&
+        {
+            x -= v.x;
+            y -= v.y;
+            z -= v.z;
+            return *this;
+        }
+
+        friend auto operator+(Vec a, Vec b) -> Vec
+        {
+            return a += b;
+        }
+
+        friend auto operator-(Vec a, Vec b) -> Vec
+        {
+            return a -= b;
+        }
+
+        friend auto operator*(Vec a, FP s) -> Vec
+        {
+            return a *= s;
+        }
+
+        friend auto operator*(Vec a, Vec b) -> Vec
+        {
+            return a *= b;
+        }
+    };
+
+    struct Particle
+    {
+        Vec pos;
+        Vec vel;
+        FP mass;
+    };
 
     template <typename VirtualParticleI, typename VirtualParticleJ>
     LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticleI&& pi, VirtualParticleJ pj)
     {
-        auto dist = pi(tag::Pos{}) - pj(tag::Pos{});
+        auto dist = pi->pos - pj->pos;
         dist *= dist;
-        const FP distSqr = EPS2 + dist(tag::X{}) + dist(tag::Y{}) + dist(tag::Z{});
+        const FP distSqr = EPS2 + dist.x + dist.y + dist.z;
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
-        const FP sts = pj(tag::Mass{}) * invDistCube * TIMESTEP;
-        pi(tag::Vel{}) += dist * sts;
+        const FP sts = pj->mass * invDistCube * TIMESTEP;
+        pi(1_DC) = pi->vel + dist * sts;
     }
 
     template <bool UseAccumulator, typename View>
@@ -102,7 +143,7 @@ namespace usellama
     {
         LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
-            particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * TIMESTEP;
+            particles(i)(0_DC) = particles(i)->pos + particles(i)->vel * TIMESTEP;
     }
 
     template <int Mapping, bool UseAccumulator, std::size_t AoSoALanes = 8 /*AVX2*/>
@@ -162,14 +203,15 @@ namespace usellama
         std::normal_distribution<FP> dist(FP(0), FP(1));
         for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
         {
-            auto p = particles(i);
-            p(tag::Pos{}, tag::X{}) = dist(engine);
-            p(tag::Pos{}, tag::Y{}) = dist(engine);
-            p(tag::Pos{}, tag::Z{}) = dist(engine);
-            p(tag::Vel{}, tag::X{}) = dist(engine) / FP(10);
-            p(tag::Vel{}, tag::Y{}) = dist(engine) / FP(10);
-            p(tag::Vel{}, tag::Z{}) = dist(engine) / FP(10);
-            p(tag::Mass{}) = dist(engine) / FP(100);
+            Particle p;
+            p.pos.x = dist(engine);
+            p.pos.y = dist(engine);
+            p.pos.z = dist(engine);
+            p.vel.x = dist(engine) / FP(10);
+            p.vel.y = dist(engine) / FP(10);
+            p.vel.z = dist(engine) / FP(10);
+            p.mass = dist(engine) / FP(100);
+            particles(i) = p;
         }
         watch.printAndReset("init");
 

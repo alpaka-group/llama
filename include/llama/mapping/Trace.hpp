@@ -36,6 +36,7 @@ namespace llama::mapping
     {
         using ArrayDomain = typename Mapping::ArrayDomain;
         using DatumDomain = typename Mapping::DatumDomain;
+        using OriginalDatumDomain = typename Mapping::OriginalDatumDomain;
         static constexpr std::size_t blobCount = Mapping::blobCount;
 
         constexpr Trace() = default;

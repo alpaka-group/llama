@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../Core.hpp"
+#include "Common.hpp"
 
 namespace llama::mapping
 {
@@ -14,7 +15,8 @@ namespace llama::mapping
     struct One
     {
         using ArrayDomain = T_ArrayDomain;
-        using DatumDomain = T_DatumDomain;
+        using DatumDomain = MakeDatumDomain<T_DatumDomain>;
+        using OriginalDatumDomain = T_DatumDomain;
 
         static constexpr std::size_t blobCount = 1;
 

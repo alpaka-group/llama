@@ -173,6 +173,7 @@ namespace llama::mapping::tree
     {
         using ArrayDomain = T_ArrayDomain;
         using DatumDomain = T_DatumDomain;
+        using OriginalDatumDomain = T_DatumDomain;
         using BasicTree = TreeFromDomains<ArrayDomain, DatumDomain>;
         // TODO, support more than one blob
         static constexpr std::size_t blobCount = 1;

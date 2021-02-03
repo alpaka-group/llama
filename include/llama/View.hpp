@@ -10,6 +10,7 @@
 #include "macros.hpp"
 #include "mapping/One.hpp"
 
+#include <boost/pfr.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <type_traits>
 
@@ -60,7 +61,8 @@ namespace llama
     LLAMA_FN_HOST_ACC_INLINE auto allocViewStack() -> decltype(auto)
     {
         using Mapping = llama::mapping::One<ArrayDomain<Dim>, DatumDomain>;
-        return allocView(Mapping{}, llama::allocator::Stack<sizeOf<DatumDomain>>{});
+        using MadeDatumDomain = mapping::MakeDatumDomain<DatumDomain>; // user might pass struct to reflect
+        return allocView(Mapping{}, llama::allocator::Stack<sizeOf<MadeDatumDomain>>{});
     }
 
     template <typename View, typename BoundDatumDomain = DatumCoord<>, bool OwnView = false>
@@ -258,18 +260,50 @@ namespace llama
         template <typename... Ts>
         constexpr inline auto dependentFalse = false;
 
+        template <typename T>
+        constexpr inline auto tupleish_size = []() constexpr
+        {
+            if constexpr (isTupleLike<T>)
+                return std::tuple_size_v<T>;
+            else if constexpr (std::is_aggregate_v<T>) // TODO
+                return boost::pfr::tuple_size_v<T>;
+            else
+                static_assert(
+                    dependentFalse<T>,
+                    "T is not a tuple like type or an aggregate to reflect with boost.pfr");
+        }
+        ();
+
+        template <std::size_t I, typename T>
+        decltype(auto) tupleish_get(T&& t)
+        {
+            using DT = std::decay_t<T>;
+            if constexpr (isTupleLike<DT>)
+            {
+                using std::get;
+                return get<I>(std::forward<T>(t));
+            }
+            else if constexpr (std::is_aggregate_v<DT>) // TODO
+                return boost::pfr::get<I>(std::forward<T>(t));
+            else
+                static_assert(
+                    dependentFalse<T>,
+                    "T is not a tuple like type or an aggregate to reflect with boost.pfr");
+        }
+
         template <typename Tuple1, typename Tuple2, std::size_t... Is>
         LLAMA_FN_HOST_ACC_INLINE void assignTuples(Tuple1&& dst, Tuple2&& src, std::index_sequence<Is...>);
 
         template <typename T1, typename T2>
         LLAMA_FN_HOST_ACC_INLINE void assignTupleElement(T1&& dst, T2&& src)
         {
-            if constexpr (isTupleLike<std::decay_t<T1>> && isTupleLike<std::decay_t<T2>>)
-            {
-                static_assert(std::tuple_size_v<std::decay_t<T1>> == std::tuple_size_v<std::decay_t<T2>>);
-                assignTuples(dst, src, std::make_index_sequence<std::tuple_size_v<std::decay_t<T1>>>{});
-            }
-            else if constexpr (!isTupleLike<std::decay_t<T1>> && !isTupleLike<std::decay_t<T2>>)
+            using DT1 = std::decay_t<T1>;
+            using DT2 = std::decay_t<T2>;
+            constexpr auto isTupleish1 = isTupleLike<DT1> || std::is_aggregate_v<DT1>;
+            constexpr auto isTupleish2 = isTupleLike<DT2> || std::is_aggregate_v<DT2>;
+            if constexpr (isTupleish1 && isTupleish2)
+                assignTuples(dst, src, std::make_index_sequence<tupleish_size<DT1>>{});
+            else if constexpr (!isTupleish1 && !isTupleish2)
                 std::forward<T1>(dst) = std::forward<T2>(src);
             else
                 static_assert(dependentFalse<T1, T2>, "Elements to assign are not tuple/tuple or non-tuple/non-tuple.");
@@ -278,9 +312,11 @@ namespace llama
         template <typename Tuple1, typename Tuple2, std::size_t... Is>
         LLAMA_FN_HOST_ACC_INLINE void assignTuples(Tuple1&& dst, Tuple2&& src, std::index_sequence<Is...>)
         {
-            static_assert(std::tuple_size_v<std::decay_t<Tuple1>> == std::tuple_size_v<std::decay_t<Tuple2>>);
-            using std::get;
-            (assignTupleElement(get<Is>(std::forward<Tuple1>(dst)), get<Is>(std::forward<Tuple2>(src))), ...);
+            static_assert(tupleish_size<std::decay_t<Tuple1>> == tupleish_size<std::decay_t<Tuple2>>);
+            (assignTupleElement(
+                 tupleish_get<Is>(std::forward<Tuple1>(dst)),
+                 tupleish_get<Is>(std::forward<Tuple2>(src))),
+             ...);
         }
 
         template <typename T, typename Tuple, std::size_t... Is>
@@ -306,7 +342,52 @@ namespace llama
         template <typename T, template <typename...> typename Tuple, typename... Args>
         constexpr inline auto
             isDirectListInitializableFromTuple<T, Tuple<Args...>> = isDirectListInitializable<T, Args...>;
+
+        template <typename Tuplish, typename Coord>
+        struct GetNestedTuplishType;
+
+        template <typename Tuplish, std::size_t Head, std::size_t... Tail>
+        struct GetNestedTuplishType<Tuplish, DatumCoord<Head, Tail...>>
+        {
+            using type = typename GetNestedTuplishType<
+                std::decay_t<decltype(tupleish_get<Head>(std::declval<Tuplish>()))>,
+                DatumCoord<Tail...>>::type;
+        };
+
+        template <typename Tuplish>
+        struct GetNestedTuplishType<Tuplish, DatumCoord<>>
+        {
+            using type = Tuplish;
+        };
+
+        template <typename OriginalDatumDomain, typename BoundDatumDomain>
+        struct GetValueStructOrVoid
+        {
+            using type = typename internal::GetNestedTuplishType<OriginalDatumDomain, BoundDatumDomain>::type;
+        };
+
+        template <typename... Elements, typename BoundDatumDomain>
+        struct GetValueStructOrVoid<DatumStruct<Elements...>, BoundDatumDomain>
+        {
+            using type = void;
+        };
     } // namespace internal
+
+    template <typename T>
+    struct IndirectValue
+    {
+        T value;
+
+        auto operator->() -> T*
+        {
+            return &value;
+        }
+
+        auto operator->() const -> const T*
+        {
+            return &value;
+        }
+    };
 
     /// Virtual data type returned by \ref View after resolving a user domain
     /// coordinate or partially resolving a \ref DatumCoord. A virtual datum
@@ -323,6 +404,8 @@ namespace llama
     private:
         using ArrayDomain = typename View::Mapping::ArrayDomain;
         using DatumDomain = typename View::Mapping::DatumDomain;
+        using ValueStruct = typename internal::
+            GetValueStructOrVoid<typename View::Mapping::OriginalDatumDomain, BoundDatumDomain>::type;
 
         const ArrayDomain userDomainPos;
         std::conditional_t<OwnView, View, View&> view;
@@ -333,10 +416,12 @@ namespace llama
         /// AccessibleDatumDomain is the same as `Mapping::DatumDomain`.
         using AccessibleDatumDomain = GetType<DatumDomain, BoundDatumDomain>;
 
+        static constexpr auto supportsValueLoad = !std::is_void_v<ValueStruct>;
+
         LLAMA_FN_HOST_ACC_INLINE VirtualDatum()
             /* requires(OwnView) */
             : userDomainPos({})
-            , view{allocViewStack<1, DatumDomain>()}
+            , view{allocViewStack<1, std::conditional_t<supportsValueLoad, ValueStruct, DatumDomain>>()}
         {
             static_assert(OwnView, "The default constructor of VirtualDatum is only available if the ");
         }
@@ -417,10 +502,31 @@ namespace llama
             return this->operator=<VirtualDatum>(other);
         }
 
+    private:
+        template <typename T>
+        struct ConvertibleTo
+        {
+            template <typename U>
+            using fn = std::is_convertible<T, U>;
+        };
+
+    public:
+        // TODO: this operator does too much black magic already
         template <typename T>
         LLAMA_FN_HOST_ACC_INLINE auto operator=(const T& other) -> VirtualDatum&
         {
-            return internal::virtualDatumArithOperator<internal::Assign>(*this, other);
+            if constexpr (
+                is_VirtualDatum<
+                    T> || boost::mp11::mp_any_of_q<FlattenDatumDomain<AccessibleDatumDomain>, ConvertibleTo<T>>::value)
+                return internal::virtualDatumArithOperator<internal::Assign>(*this, other);
+            else
+            {
+                internal::assignTuples(
+                    asTuple(),
+                    other,
+                    std::make_index_sequence<std::tuple_size_v<decltype(asTuple())>>{});
+                return *this;
+            }
         }
 
         template <typename T>
@@ -623,42 +729,30 @@ namespace llama
                 std::make_index_sequence<std::tuple_size_v<decltype(asFlatTuple())>>{});
         }
 
-        struct Loader
+        template <typename T>
+        operator T()
         {
-            VirtualDatum& vd;
-
-            template <typename T>
-            operator T()
-            {
-                return vd.loadAs<T>();
-            }
-        };
-
-        struct LoaderConst
-        {
-            const VirtualDatum& vd;
-
-            template <typename T>
-            operator T() const
-            {
-                return vd.loadAs<T>();
-            }
-        };
-
-        auto load() -> Loader
-        {
-            return {*this};
+            return loadAs<T>();
         }
 
-        auto load() const -> LoaderConst
+        template <typename T>
+        operator T() const
         {
-            return {*this};
+            return loadAs<T>();
         }
 
-        template <typename TupleLike>
-        void store(const TupleLike& t)
+        // template <typename = std::enable_if_t<supportsValueLoad>>
+        auto operator->() const -> IndirectValue<ValueStruct>
         {
-            internal::assignTuples(asTuple(), t, std::make_index_sequence<std::tuple_size_v<TupleLike>>{});
+            static_assert(supportsValueLoad);
+            return {loadAs<ValueStruct>()};
+        }
+
+        // template <typename = std::enable_if_t<supportsValueLoad>>
+        auto operator*() const -> ValueStruct
+        {
+            static_assert(supportsValueLoad);
+            return loadAs<ValueStruct>();
         }
     };
 } // namespace llama

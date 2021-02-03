@@ -21,7 +21,8 @@ namespace llama::mapping
     struct SoA
     {
         using ArrayDomain = T_ArrayDomain;
-        using DatumDomain = T_DatumDomain;
+        using DatumDomain = MakeDatumDomain<T_DatumDomain>;
+        using OriginalDatumDomain = T_DatumDomain;
         static constexpr std::size_t blobCount = []() constexpr
         {
             if constexpr (SeparateBuffers::value)
@@ -38,7 +39,7 @@ namespace llama::mapping
         constexpr SoA() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr SoA(ArrayDomain size, DatumDomain = {}, SeparateBuffers = {}) : arrayDomainSize(size)
+        constexpr SoA(ArrayDomain size, T_DatumDomain = {}, SeparateBuffers = {}) : arrayDomainSize(size)
         {
         }
 
