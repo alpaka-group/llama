@@ -40,6 +40,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: install boost
+      run: |
+        sudo apt install libboost-all-dev
     - name: vcpkg install dependencies
       run: |
         vcpkg install catch2 fmt tbb
@@ -59,7 +62,6 @@ jobs:
         git clone https://github.com/alpaka-group/alpaka.git
         mkdir alpaka/build
         cd alpaka/build
-        export BOOST_ROOT=$BOOST_ROOT_1_72_0
         cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
         sudo cmake --build . --target install
     - name: install Vc
@@ -73,7 +75,6 @@ jobs:
       run: |
         mkdir build
         cd build
-        export BOOST_ROOT=$BOOST_ROOT_1_72_0
         CXX=g++-9 cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DASAN_FOR_TESTS=ON -DALPAKA_CXX_STANDARD=17 -DALPAKA_ACC_GPU_CUDA_ENABLE=ON -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
     - name: build tests + examples
       run: cmake --build build -j $THREADS
@@ -84,6 +85,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: install boost
+      run: |
+        sudo apt install libboost-all-dev
     - name: vcpkg install dependencies
       run: |
         vcpkg install catch2 fmt
@@ -92,7 +96,6 @@ jobs:
         git clone https://github.com/alpaka-group/alpaka.git
         mkdir alpaka/build
         cd alpaka/build
-        export BOOST_ROOT=$BOOST_ROOT_1_72_0
         cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
         sudo cmake --build . --target install
     - name: install Vc
@@ -106,7 +109,6 @@ jobs:
       run: |
         mkdir build
         cd build
-        export BOOST_ROOT=$BOOST_ROOT_1_72_0
         CXX=g++-10 cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DASAN_FOR_TESTS=ON -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
     - name: build tests + examples
       run: cmake --build build -j $THREADS
