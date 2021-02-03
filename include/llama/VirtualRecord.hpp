@@ -206,6 +206,18 @@ namespace llama
             return leaf;
         }
 
+        template <typename VirtualRecord, typename T, std::size_t N, std::size_t... Is>
+        LLAMA_FN_HOST_ACC_INLINE auto asTupleImplArr(VirtualRecord&& vd, T(&&a)[N], std::index_sequence<Is...>)
+        {
+            return std::make_tuple(asTupleImpl(vd(RecordCoord<Is>{}), T{})...);
+        }
+
+        template <typename VirtualRecord, typename T, std::size_t N>
+        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(VirtualRecord&& vd, T(&&a)[N])
+        {
+            return asTupleImplArr(std::move(vd), std::move(a), std::make_index_sequence<N>{});
+        }
+
         template <typename VirtualRecord, typename... Fields>
         LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(VirtualRecord&& vd, Record<Fields...>)
         {
@@ -217,6 +229,18 @@ namespace llama
             -> std::enable_if_t<!is_VirtualRecord<std::decay_t<TWithOptionalConst>>, std::tuple<TWithOptionalConst&>>
         {
             return {leaf};
+        }
+
+        template <typename VirtualRecord, typename T, std::size_t N, std::size_t... Is>
+        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImplArr(VirtualRecord&& vd, T(&&a)[N], std::index_sequence<Is...>)
+        {
+            return std::tuple_cat(asFlatTupleImpl(vd(RecordCoord<Is>{}), T{})...);
+        }
+
+        template <typename VirtualRecord, typename T, std::size_t N>
+        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(VirtualRecord&& vd, T(&&a)[N])
+        {
+            return asFlatTupleImplArr(std::move(vd), std::move(a), std::make_index_sequence<N>{});
         }
 
         template <typename VirtualRecord, typename... Fields>

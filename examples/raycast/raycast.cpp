@@ -25,6 +25,34 @@
 
 namespace
 {
+    constexpr auto useStdVectorForTriangles = false;
+
+    // clang-format off
+    struct X {};
+    struct Y {};
+    struct Z {};
+    struct Vertex0 {};
+    struct Edge1 {};
+    struct Edge2 {};
+    struct U {};
+    struct V {};
+    struct TexId{};
+    // clang-format on
+
+    using Vec = llama::Record<llama::Field<X, float>, llama::Field<Y, float>, llama::Field<Z, float>>;
+    using PrepTriangle = llama::Record<
+        llama::Field<Vertex0, Vec>,
+        llama::Field<Edge1, Vec>,
+        llama::Field<Edge2, Vec>,
+        llama::Field<U, float[3]>,
+        llama::Field<V, float[3]>,
+        llama::Field<TexId, int>>;
+
+    using ArrayDomain = llama::ArrayDims<1>;
+    using Mapping = llama::mapping::AoS<ArrayDomain, PrepTriangle, true>;
+    // using Mapping = llama::mapping::SoA<ArrayDomain, PrepTriangle, true>;
+    // using Mapping = llama::mapping::AoSoA<ArrayDomain, PrepTriangle, 8>;
+
     template <typename F>
     struct Vector
     {
@@ -139,6 +167,21 @@ namespace
 
         std::array<F, 3> values = {{0, 0, 0}};
     };
+} // namespace
+
+template <typename T>
+struct std::tuple_size<Vector<T>>
+{
+    static constexpr auto value = 3;
+};
+
+namespace
+{
+    template <std::size_t I, typename T>
+    auto get(const Vector<T>& v)
+    {
+        return v[I];
+    }
 
     template <typename F>
     inline auto dot(const Vector<F>& a, const Vector<F>& b) -> F
@@ -232,6 +275,32 @@ namespace
             return cross(edge1, edge2).normalized();
         }
     };
+} // namespace
+
+template <>
+struct std::tuple_size<PreparedTriangle>
+{
+    static constexpr auto value = 6;
+};
+
+namespace
+{
+    template <std::size_t I>
+    const auto& get(const PreparedTriangle& pt)
+    {
+        if constexpr (I == 0)
+            return pt.vertex0;
+        if constexpr (I == 1)
+            return pt.edge1;
+        if constexpr (I == 2)
+            return pt.edge2;
+        if constexpr (I == 3)
+            return pt.u;
+        if constexpr (I == 4)
+            return pt.v;
+        if constexpr (I == 5)
+            return pt.texIndex;
+    }
 
     inline auto prepare(Triangle t) -> PreparedTriangle
     {
@@ -427,6 +496,39 @@ namespace
         const auto texU = (1 - u - v) * triangle.u[0] + u * triangle.u[1] + v * triangle.u[2];
         const auto texV = (1 - u - v) * triangle.v[0] + u * triangle.v[1] + v * triangle.v[2];
         return {t, triangle.normal(), texU, texV, triangle.texIndex};
+    }
+
+    template <typename PreparedTriangle>
+    inline auto intersect(const Ray& ray, PreparedTriangle triangle) -> Intersection
+    {
+        constexpr auto epsilon = 0.000001f;
+
+        const auto edge2 = triangle(Edge2{}).template loadAs<VectorF>();
+        const auto pvec = cross(ray.direction, edge2);
+        const auto edge1 = triangle(Edge1{}).template loadAs<VectorF>();
+        const auto det = dot(edge1, pvec);
+        if (det > -epsilon && det < epsilon)
+            return {};
+
+        const auto inv_det = 1.0f / det;
+        const auto tvec = ray.origin - triangle(Vertex0{}).template loadAs<VectorF>();
+        const auto u = dot(tvec, pvec) * inv_det;
+        if (u < 0.0f || u > 1.0f)
+            return {};
+
+        const auto qvec = cross(tvec, edge1);
+        const auto v = dot(ray.direction, qvec) * inv_det;
+        if (v < 0.0f || u + v >= 1.0f)
+            return {};
+        const auto t = dot(edge2, qvec) * inv_det;
+        if (t < 0)
+            return {};
+
+        using namespace llama::literals;
+        const auto texU = (1 - u - v) * triangle(U{}, 0_RC) + u * triangle(U{}, 1_RC) + v * triangle(U{}, 2_RC);
+        const auto texV = (1 - u - v) * triangle(V{}, 0_RC) + u * triangle(V{}, 1_RC) + v * triangle(V{}, 2_RC);
+        const auto normal = cross(edge1, edge2).normalized();
+        return {t, normal, texU, texV, triangle(TexId{})};
     }
 
     // from: https://stackoverflow.com/questions/4578967/cube-sphere-intersection-test
@@ -642,13 +744,20 @@ namespace
         return true;
     }
 
+    template <typename VirtualRecord>
+    auto overlaps(const VirtualRecord& t, const AABB& box) -> bool
+    {
+        return overlaps(t.template loadAs<PreparedTriangle>(), box);
+    }
+
     struct OctreeNode
     {
         AABB box{};
 
         struct Objects
         {
-            std::vector<PreparedTriangle> triangles;
+            std::conditional_t<useStdVectorForTriangles, std::vector<PreparedTriangle>, llama::Vector<Mapping>>
+                triangles;
             std::vector<Sphere> spheres;
         };
         using Children = std::array<OctreeNode*, 8>;
@@ -697,10 +806,10 @@ namespace
                 }
                 else
                 {
-                    if constexpr (std::is_same_v<T, PreparedTriangle>)
-                        objects().triangles.push_back(object);
-                    else
+                    if constexpr (std::is_same_v<T, Sphere>)
                         objects().spheres.push_back(object);
+                    else
+                        objects().triangles.push_back(object);
                 }
             }
         }
@@ -770,9 +879,8 @@ namespace
                 if (const auto hit = intersect(ray, sphere);
                     hit.distance != noHit && hit.distance < nearestHit.distance)
                     nearestHit = hit;
-            for (const auto& triangle : objects.triangles)
-                if (const auto hit = intersect(ray, triangle);
-                    hit.distance != noHit && hit.distance < nearestHit.distance)
+            for (const auto& t : objects.triangles)
+                if (const auto hit = intersect(ray, t); hit.distance != noHit && hit.distance < nearestHit.distance)
                     nearestHit = hit;
         }
     }
@@ -1050,7 +1158,16 @@ namespace
         scene.tree.addObject(scene.nodePool, sphere1);
         scene.tree.addObject(scene.nodePool, sphere2);
         for (const auto& t : triangles)
-            scene.tree.addObject(scene.nodePool, prepare(t));
+        {
+            if constexpr (useStdVectorForTriangles)
+                scene.tree.addObject(scene.nodePool, prepare(t));
+            else
+            {
+                llama::One<PrepTriangle> pt;
+                pt.store(prepare(t));
+                scene.tree.addObject(scene.nodePool, pt);
+            }
+        }
 
         return scene;
     }
