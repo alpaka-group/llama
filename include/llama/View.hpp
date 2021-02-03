@@ -567,40 +567,40 @@ namespace llama
             return vd <= t;
         }
 
-        auto asTuple()
+        LLAMA_FN_HOST_ACC_INLINE auto asTuple()
         {
             return internal::asTupleImpl(*this, AccessibleDatumDomain{});
         }
 
-        auto asTuple() const
+        LLAMA_FN_HOST_ACC_INLINE auto asTuple() const
         {
             return internal::asTupleImpl(*this, AccessibleDatumDomain{});
         }
 
-        auto asFlatTuple()
+        LLAMA_FN_HOST_ACC_INLINE auto asFlatTuple()
         {
             return internal::asFlatTupleImpl(*this, AccessibleDatumDomain{});
         }
 
-        auto asFlatTuple() const
+        LLAMA_FN_HOST_ACC_INLINE auto asFlatTuple() const
         {
             return internal::asFlatTupleImpl(*this, AccessibleDatumDomain{});
         }
 
         template <std::size_t I>
-        auto get() -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto get() -> decltype(auto)
         {
             return operator()(DatumCoord<I>{});
         }
 
         template <std::size_t I>
-        auto get() const -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto get() const -> decltype(auto)
         {
             return operator()(DatumCoord<I>{});
         }
 
         template <typename TupleLike>
-        auto loadAs() -> TupleLike
+        LLAMA_FN_HOST_ACC_INLINE auto loadAs() -> TupleLike
         {
             static_assert(
                 internal::isDirectListInitializableFromTuple<TupleLike, decltype(asFlatTuple())>,
@@ -612,7 +612,7 @@ namespace llama
         }
 
         template <typename TupleLike>
-        auto loadAs() const -> TupleLike
+        LLAMA_FN_HOST_ACC_INLINE auto loadAs() const -> TupleLike
         {
             static_assert(
                 internal::isDirectListInitializableFromTuple<TupleLike, decltype(asFlatTuple())>,
@@ -628,7 +628,7 @@ namespace llama
             VirtualDatum& vd;
 
             template <typename T>
-            operator T()
+            LLAMA_FN_HOST_ACC_INLINE operator T()
             {
                 return vd.loadAs<T>();
             }
@@ -639,24 +639,24 @@ namespace llama
             const VirtualDatum& vd;
 
             template <typename T>
-            operator T() const
+            LLAMA_FN_HOST_ACC_INLINE operator T() const
             {
                 return vd.loadAs<T>();
             }
         };
 
-        auto load() -> Loader
+        LLAMA_FN_HOST_ACC_INLINE auto load() -> Loader
         {
             return {*this};
         }
 
-        auto load() const -> LoaderConst
+        LLAMA_FN_HOST_ACC_INLINE auto load() const -> LoaderConst
         {
             return {*this};
         }
 
         template <typename TupleLike>
-        void store(const TupleLike& t)
+        LLAMA_FN_HOST_ACC_INLINE void store(const TupleLike& t)
         {
             internal::assignTuples(asTuple(), t, std::make_index_sequence<std::tuple_size_v<TupleLike>>{});
         }
