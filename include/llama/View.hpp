@@ -264,12 +264,12 @@ namespace llama
         template <typename T1, typename T2>
         LLAMA_FN_HOST_ACC_INLINE void assignTupleElement(T1&& dst, T2&& src)
         {
-            if constexpr (isTupleLike<T1> && isTupleLike<T2>)
+            if constexpr (isTupleLike<std::decay_t<T1>> && isTupleLike<std::decay_t<T2>>)
             {
-                static_assert(std::tuple_size_v<T1> == std::tuple_size_v<T2>);
-                assignTuples(dst, src, std::make_index_sequence<std::tuple_size_v<T1>>{});
+                static_assert(std::tuple_size_v<std::decay_t<T1>> == std::tuple_size_v<std::decay_t<T2>>);
+                assignTuples(dst, src, std::make_index_sequence<std::tuple_size_v<std::decay_t<T1>>>{});
             }
-            else if constexpr (!isTupleLike<T1> && !isTupleLike<T2>)
+            else if constexpr (!isTupleLike<std::decay_t<T1>> && !isTupleLike<std::decay_t<T2>>)
                 std::forward<T1>(dst) = std::forward<T2>(src);
             else
                 static_assert(dependentFalse<T1, T2>, "Elements to assign are not tuple/tuple or non-tuple/non-tuple.");
