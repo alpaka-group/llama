@@ -36,7 +36,7 @@ jobs:
 
   build-ubuntu-gcc9-cuda:
     env:
-      CUDA_INSTALLER: cuda_11.1.1_455.32.00_linux.run
+      CUDA_INSTALLER: cuda_11.2.0_460.27.04_linux.run
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -55,7 +55,7 @@ jobs:
     - name: download CUDA 11
       if: steps.cache-cuda.outputs.cache-hit != 'true'
       run: |
-        wget --no-verbose https://developer.download.nvidia.com/compute/cuda/11.1.1/local_installers/$CUDA_INSTALLER
+        wget --no-verbose https://developer.download.nvidia.com/compute/cuda/11.2.0/local_installers/$CUDA_INSTALLER
     - name: install CUDA 11
       run: |
         sudo sh $CUDA_INSTALLER --silent --toolkit
