@@ -47,15 +47,17 @@ jobs:
       run: |
         vcpkg install catch2 fmt tbb
     - name: cache CUDA 11
-      id: cache-cude
+      id: cache-cuda
       uses: actions/cache@v2
       with:
         path: ${{env.CUDA_INSTALLER}}
         key: ${{env.CUDA_INSTALLER}}
-    - name: install CUDA 11
+    - name: download CUDA 11
       if: steps.cache-cuda.outputs.cache-hit != 'true'
       run: |
         wget --no-verbose https://developer.download.nvidia.com/compute/cuda/11.1.1/local_installers/$CUDA_INSTALLER
+    - name: install CUDA 11
+      run: |
         sudo sh $CUDA_INSTALLER --silent --toolkit
     - name: install alpaka
       run: |
