@@ -25,7 +25,8 @@
 
 namespace
 {
-    constexpr auto useStdVectorForTriangles = false;
+    constexpr auto useStdVectorForTriangles = false; // you can set this to true for a baseline benchmark
+    constexpr auto useMipmaps = true;
 
     // clang-format off
     struct X {};
@@ -37,6 +38,7 @@ namespace
     struct U {};
     struct V {};
     struct TexId{};
+    struct BaseLod{};
     // clang-format on
 
     using Vec = llama::Record<llama::Field<X, float>, llama::Field<Y, float>, llama::Field<Z, float>>;
@@ -46,7 +48,8 @@ namespace
         llama::Field<Edge2, Vec>,
         llama::Field<U, float[3]>,
         llama::Field<V, float[3]>,
-        llama::Field<TexId, int>>;
+        llama::Field<TexId, int>,
+        llama::Field<BaseLod, float>>;
 
     using ArrayDomain = llama::ArrayDims<1>;
     using Mapping = llama::mapping::AoS<ArrayDomain, PrepTriangle, true>;
@@ -149,6 +152,11 @@ namespace
         friend inline auto operator/(F scalar, const Vector& v) -> Vector
         {
             return {scalar / v[0], scalar / v[1], scalar / v[2]};
+        }
+
+        friend inline auto operator/(const Vector& v, F scalar) -> Vector
+        {
+            return {v[0] / scalar, v[1] / scalar, v[2] / scalar};
         }
 
         friend inline auto operator>>(std::istream& is, Vector& v) -> std::istream&
@@ -269,6 +277,7 @@ namespace
         std::array<float, 3> u;
         std::array<float, 3> v;
         int texIndex;
+        float texBaseLod;
 
         inline auto normal() const -> VectorF
         {
@@ -280,7 +289,7 @@ namespace
 template <>
 struct std::tuple_size<PreparedTriangle>
 {
-    static constexpr auto value = 6;
+    static constexpr auto value = 7;
 };
 
 namespace
@@ -300,17 +309,8 @@ namespace
             return pt.v;
         if constexpr (I == 5)
             return pt.texIndex;
-    }
-
-    inline auto prepare(Triangle t) -> PreparedTriangle
-    {
-        return {
-            t[0].pos,
-            t[1].pos - t[0].pos,
-            t[2].pos - t[0].pos,
-            {t[0].u, t[1].u, t[2].u},
-            {t[0].v, t[1].v, t[2].v},
-            t.texIndex};
+        if constexpr (I == 6)
+            return pt.texBaseLod;
     }
 
     class Image
@@ -382,6 +382,7 @@ namespace
         float texU = 0;
         float texV = 0;
         int texIndex = -1;
+        float baseLod = 0;
     };
 
     struct Ray
@@ -495,7 +496,8 @@ namespace
 
         const auto texU = (1 - u - v) * triangle.u[0] + u * triangle.u[1] + v * triangle.u[2];
         const auto texV = (1 - u - v) * triangle.v[0] + u * triangle.v[1] + v * triangle.v[2];
-        return {t, triangle.normal(), texU, texV, triangle.texIndex};
+
+        return {t, triangle.normal(), texU, texV, triangle.texIndex, triangle.texBaseLod};
     }
 
     template <typename PreparedTriangle>
@@ -528,7 +530,7 @@ namespace
         const auto texU = (1 - u - v) * triangle(U{}, 0_RC) + u * triangle(U{}, 1_RC) + v * triangle(U{}, 2_RC);
         const auto texV = (1 - u - v) * triangle(V{}, 0_RC) + u * triangle(V{}, 1_RC) + v * triangle(V{}, 2_RC);
         const auto normal = cross(edge1, edge2).normalized();
-        return {t, normal, texU, texV, triangle(TexId{})};
+        return {t, normal, texU, texV, triangle(TexId{}), triangle(BaseLod{})};
     }
 
     // from: https://stackoverflow.com/questions/4578967/cube-sphere-intersection-test
@@ -903,7 +905,53 @@ namespace
         return r;
     }
 
-    auto tex2D(const Image& tex, float u, float v) -> Image::Pixel
+    auto toFloatColor(Image::Pixel p)
+    {
+        return VectorF{p[0] / 255.0f, p[1] / 255.0f, p[2] / 255.0f};
+    };
+
+    auto toInt8Color(VectorF v)
+    {
+        Image::Pixel p;
+        for (int i = 0; i < 3; i++)
+            p[i] = static_cast<unsigned char>(v[i] * 255);
+        return p;
+    }
+
+    struct Mipmap
+    {
+        Mipmap(Image image)
+        {
+            lods.push_back(std::move(image));
+            if (!useMipmaps)
+                return;
+            while (true)
+            {
+                const auto& last = lods.back();
+                const auto lw = last.width();
+                const auto lh = last.height();
+                if (lw == 1 || lh == 1)
+                    break;
+                assert(lw % 2 == 0 && lh % 2 == 0);
+                Image next(lw / 2, lh / 2);
+                for (auto y = 0; y < lh / 2; y++)
+                {
+                    for (auto x = 0; x < lw / 2; x++)
+                    {
+                        next(x, y) = toInt8Color(
+                            (toFloatColor(last(x * 2, y * 2)) + toFloatColor(last(x * 2 + 1, y * 2))
+                             + toFloatColor(last(x * 2, y * 2 + 1)) + toFloatColor(last(x * 2 + 1, y * 2 + 1)))
+                            / 4.0f);
+                    }
+                }
+                lods.push_back(std::move(next));
+            }
+        }
+
+        std::vector<Image> lods;
+    };
+
+    auto tex2D(const Image& tex, float u, float v) -> VectorF
     {
         // texture coordinate behavior is repeat
         auto texCoordToTexelCoord = [](float coord, unsigned int imgSize)
@@ -915,7 +963,6 @@ namespace
             return std::clamp(normalizedCoord * maxIndex, 0.0f, maxIndex);
         };
 
-        auto toVec = [](Image::Pixel p) { return VectorF{p[0] / 255.0f, p[1] / 255.0f, p[2] / 255.0f}; };
         const float x = texCoordToTexelCoord(u, tex.width());
         const float y = texCoordToTexelCoord(v, tex.height());
 
@@ -929,28 +976,47 @@ namespace
         const float y0 = std::floor(y);
         const float y1 = std::ceil(y);
         const float yFrac = y - static_cast<int>(y);
-        const auto color = (toVec(tex(x0, y0)) * (1 - xFrac) + toVec(tex(x1, y0)) * xFrac) * (1 - yFrac)
-            + (toVec(tex(x0, y1)) * (1 - xFrac) + toVec(tex(x1, y1)) * xFrac) * yFrac;
-        Image::Pixel rgb;
-        for (int i = 0; i < 3; i++)
-            rgb[i] = static_cast<unsigned char>(color[i] * 255);
-        return rgb;
+        const auto color = (toFloatColor(tex(x0, y0)) * (1 - xFrac) + toFloatColor(tex(x1, y0)) * xFrac) * (1 - yFrac)
+            + (toFloatColor(tex(x0, y1)) * (1 - xFrac) + toFloatColor(tex(x1, y1)) * xFrac) * yFrac;
+        return color;
     }
 
-    inline auto colorByTexture(const std::vector<Image>& textures, Intersection hit) -> Image::Pixel
+    inline auto colorByTexture(
+        const std::vector<Mipmap>& mipmaps,
+        VectorF rayDir,
+        float fovy,
+        unsigned int height,
+        Intersection hit) -> Image::Pixel
     {
         if (hit.distance == noHit)
             return {}; // black
-        Image::Pixel r;
-        if (hit.texIndex != -1)
+        if (hit.texIndex == -1)
         {
-            const auto& tex = textures[hit.texIndex];
-            return tex2D(tex, hit.texU, hit.texV);
-        }
-        else
+            // sphere hits are colored by normal
+            Image::Pixel r;
             for (int i = 0; i < 3; i++)
                 r[i] = static_cast<unsigned char>(std::abs(hit.normal[i]) * 255);
-        return r;
+            return r;
+        }
+
+        // triangle hits are colored by texture
+        const auto& mipmap = mipmaps[hit.texIndex];
+        if (!useMipmaps)
+            return toInt8Color(tex2D(mipmap.lods.front(), hit.texU, hit.texV));
+
+        // ray cones lod computation from Ray Tracing Gems chapter 20
+        const auto alpha = std::atan(2.0f * tan(fovy / 2.0f) / static_cast<float>(height)); // ray spread angle estimate
+        const auto lodCones = std::log(alpha * hit.distance * (1.0f / std::abs(dot(hit.normal, rayDir))));
+
+        const auto lodClamped = std::clamp(hit.baseLod + lodCones, 0.0f, static_cast<float>(mipmap.lods.size() - 1));
+        float lodInteg;
+        const auto lodFrac = std::modf(lodClamped, &lodInteg);
+        const auto floorTex = static_cast<unsigned>(lodInteg);
+        const auto color1 = tex2D(mipmap.lods[floorTex], hit.texU, hit.texV);
+        if (floorTex == mipmap.lods.size() - 1)
+            return toInt8Color(color1);
+        const auto color2 = tex2D(mipmap.lods[floorTex + 1], hit.texU, hit.texV);
+        return toInt8Color(color1 * (1.0f - lodFrac) + color2 * lodFrac);
     }
 
     struct Scene
@@ -958,7 +1024,7 @@ namespace
         Camera camera;
         OctreeNode tree;
         std::deque<OctreeNode> nodePool;
-        std::vector<Image> textures;
+        std::vector<Mipmap> mipmaps;
     };
 
     auto raycast(const Scene& scene, unsigned int width, unsigned int height) -> Image
@@ -971,7 +1037,7 @@ namespace
             {
                 const auto ray = createRay(scene.camera, width, height, x, height - 1 - y); // flip
                 const auto nearestHit = intersect(ray, scene.tree);
-                img(x, y) = colorByTexture(scene.textures, nearestHit);
+                img(x, y) = colorByTexture(scene.mipmaps, ray.direction, scene.camera.fovy, height, nearestHit);
             }
         }
 
@@ -984,6 +1050,31 @@ namespace
         const auto right = cross(view, up);
         const auto up2 = cross(right, view).normalized();
         return Camera{fovy, pos, view, up2};
+    }
+
+    // computes basic level of detail from triangle and texture area, cf. ray cones lod computation from Ray Tracing
+    // Gems chapter 20
+    auto computeBaseLod(const Triangle& t, const std::vector<Mipmap>& mipmaps) -> float
+    {
+        if (t.texIndex == -1)
+            return 0.0f;
+        const auto& tex = mipmaps[t.texIndex].lods.front();
+        const auto ta = tex.width() * tex.height()
+            * std::abs((t[1].u - t[0].u) * (t[2].v - t[0].v) - (t[2].u - t[0].u) * (t[1].v - t[0].v));
+        const auto pa = cross(t[1].pos - t[0].pos, t[2].pos - t[0].pos).length();
+        return 0.5f * std::log(ta / pa);
+    }
+
+    inline auto prepare(Triangle t, const std::vector<Mipmap>& mipmaps) -> PreparedTriangle
+    {
+        return {
+            t[0].pos,
+            t[1].pos - t[0].pos,
+            t[2].pos - t[0].pos,
+            {t[0].u, t[1].u, t[2].u},
+            {t[0].v, t[1].v, t[2].v},
+            t.texIndex,
+            computeBaseLod(t, mipmaps)};
     }
 
     // auto cubicBallsScene() -> Scene
@@ -1102,9 +1193,9 @@ namespace
                         return -1;
                     if (const auto it = textureToIndex.find(texName); it != end(textureToIndex))
                         return it->second;
-                    const auto texIndex = static_cast<int>(scene.textures.size());
+                    const auto texIndex = static_cast<int>(scene.mipmaps.size());
                     textureToIndex[texName] = texIndex;
-                    scene.textures.push_back(Image{objFile.parent_path() / texName});
+                    scene.mipmaps.push_back(Mipmap{Image{objFile.parent_path() / texName}});
                     return texIndex;
                 }();
 
@@ -1159,13 +1250,14 @@ namespace
         scene.tree.addObject(scene.nodePool, sphere2);
         for (const auto& t : triangles)
         {
+            const auto pt = prepare(t, scene.mipmaps);
             if constexpr (useStdVectorForTriangles)
-                scene.tree.addObject(scene.nodePool, prepare(t));
+                scene.tree.addObject(scene.nodePool, pt);
             else
             {
-                llama::One<PrepTriangle> pt;
-                pt.store(prepare(t));
-                scene.tree.addObject(scene.nodePool, pt);
+                llama::One<PrepTriangle> llamaPt;
+                llamaPt.store(pt);
+                scene.tree.addObject(scene.nodePool, llamaPt);
             }
         }
 
