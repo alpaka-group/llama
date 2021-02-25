@@ -194,7 +194,7 @@ try
         if constexpr (Mapping == 3)
             return llama::mapping::AoSoA<decltype(arrayDomain), Particle, AOSOA_LANES>{arrayDomain};
         if constexpr (Mapping == 4)
-            return llama::mapping::SplitMapping<
+            return llama::mapping::Split<
                 decltype(arrayDomain),
                 Particle,
                 llama::DatumCoord<1>,

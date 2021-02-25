@@ -16,7 +16,7 @@ namespace llama::mapping
     template <
         typename T_ArrayDomain,
         typename T_DatumDomain,
-        typename SeparateBuffers = std::false_type, // TODO: make this a bool. Needs work in SplitMapping
+        typename SeparateBuffers = std::false_type, // TODO: make this a bool. Needs work in Split mapping
         typename LinearizeArrayDomainFunctor = LinearizeArrayDomainCpp>
     struct SoA
     {

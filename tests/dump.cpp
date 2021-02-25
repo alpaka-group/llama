@@ -96,37 +96,36 @@ TEST_CASE("dump.AoSoA.32")
     dump(llama::mapping::AoSoA<ArrayDomain, Particle, 32>{arrayDomain}, "AoSoAMapping32");
 }
 
-TEST_CASE("dump.SplitMapping.SoA.AoS.1Buffer")
+TEST_CASE("dump.Split.SoA.AoS.1Buffer")
 {
     // split out velocity (written in nbody, the rest is read)
     dump(
-        llama::mapping::
-            SplitMapping<ArrayDomain, Particle, llama::DatumCoord<1>, llama::mapping::SoA, llama::mapping::AoS>{
-                arrayDomain},
-        "SplitMapping.SoA.AoS.1Buffer");
+        llama::mapping::Split<ArrayDomain, Particle, llama::DatumCoord<1>, llama::mapping::SoA, llama::mapping::AoS>{
+            arrayDomain},
+        "Split.SoA.AoS.1Buffer");
 }
 
-TEST_CASE("dump.SplitMapping.SoA.AoS.2Buffer")
+TEST_CASE("dump.Split.SoA.AoS.2Buffer")
 {
     // split out velocity as AoS into separate buffer
     dump(
         llama::mapping::
-            SplitMapping<ArrayDomain, Particle, llama::DatumCoord<1>, llama::mapping::SoA, llama::mapping::AoS, true>{
+            Split<ArrayDomain, Particle, llama::DatumCoord<1>, llama::mapping::SoA, llama::mapping::AoS, true>{
                 arrayDomain},
-        "SplitMapping.SoA.AoS.2Buffer");
+        "Split.SoA.AoS.2Buffer");
 }
 
-TEST_CASE("dump.SplitMapping.AoSoA8.AoS.One.3Buffer")
+TEST_CASE("dump.Split.AoSoA8.AoS.One.3Buffer")
 {
     // split out velocity as AoSoA8 and mass into a single value, the rest as AoS
     dump(
-        llama::mapping::SplitMapping<
+        llama::mapping::Split<
             ArrayDomain,
             Particle,
             llama::DatumCoord<1>,
             llama::mapping::PreconfiguredAoSoA<8>::type,
-            llama::mapping::
-                PreconfiguredSplitMapping<llama::DatumCoord<0>, llama::mapping::AoS, llama::mapping::One, true>::type,
+            llama::mapping::PreconfiguredSplit<llama::DatumCoord<0>, llama::mapping::AoS, llama::mapping::One, true>::
+                type,
             true>{arrayDomain},
-        "SplitMapping.AoSoA8.SoA.One.3Buffer");
+        "Split.AoSoA8.SoA.One.3Buffer");
 }
