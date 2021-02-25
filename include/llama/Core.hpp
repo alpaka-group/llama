@@ -127,45 +127,6 @@ namespace llama
     using GetDatumElementType = boost::mp11::mp_second<DatumElement>;
 
     template <typename T>
-    static constexpr auto sizeOf = sizeof(T);
-
-    /// The size a datum domain if it would be a normal struct.
-    template <typename... DatumElements>
-    static constexpr auto sizeOf<DatumStruct<DatumElements...>> = (sizeOf<GetDatumElementType<DatumElements>> + ...);
-
-    namespace internal
-    {
-        template <typename T>
-        constexpr auto offsetOfImpl(T*, DatumCoord<>)
-        {
-            return 0;
-        }
-
-        template <typename... DatumElements, std::size_t FirstCoord, std::size_t... Coords>
-        constexpr auto offsetOfImpl(DatumStruct<DatumElements...>*, DatumCoord<FirstCoord, Coords...>)
-        {
-            std::size_t acc = 0;
-            boost::mp11::mp_for_each<boost::mp11::mp_iota_c<FirstCoord>>([&](auto i) constexpr {
-                constexpr auto index = decltype(i)::value;
-                using Element = boost::mp11::mp_at_c<DatumStruct<DatumElements...>, index>;
-                acc += sizeOf<GetDatumElementType<Element>>;
-            });
-
-            using Element = boost::mp11::mp_at_c<DatumStruct<DatumElements...>, FirstCoord>;
-            acc += offsetOfImpl((GetDatumElementType<Element>*) nullptr, DatumCoord<Coords...>{});
-
-            return acc;
-        }
-    } // namespace internal
-
-    /// The byte offset of an element in a datum domain if it would be a normal
-    /// struct.
-    /// \tparam DatumDomain Datum domain tree.
-    /// \tparam DatumCoord Datum coordinate of an element indatum domain tree.
-    template <typename DatumDomain, typename DatumCoord>
-    inline constexpr std::size_t offsetOf = internal::offsetOfImpl((DatumDomain*) nullptr, DatumCoord{});
-
-    template <typename T>
     inline constexpr auto isDatumStruct = false;
 
     template <typename... DatumElements>
@@ -395,6 +356,65 @@ namespace llama
         return c;
     }
     ();
+
+    template <typename T, bool Align = false>
+    static constexpr auto sizeOf = sizeof(T);
+
+    /// The size a datum domain if it would be a normal struct.
+    template <typename... DatumElements, bool Align>
+    static constexpr auto sizeOf<DatumStruct<DatumElements...>, Align> = []() constexpr
+    {
+        if constexpr (Align)
+            return sizeof(boost::mp11::mp_rename<
+                          boost::mp11::mp_reverse<FlattenDatumDomain<DatumStruct<DatumElements...>>>,
+                          std::tuple>{});
+        else
+            return (sizeOf<GetDatumElementType<DatumElements>, Align> + ...);
+    }
+    ();
+
+    namespace internal
+    {
+        template <bool Align, typename T>
+        constexpr auto offsetOfImpl(T*, DatumCoord<>)
+        {
+            return 0;
+        }
+
+        template <bool Align, typename... DatumElements, std::size_t FirstCoord, std::size_t... Coords>
+        constexpr auto offsetOfImpl(DatumStruct<DatumElements...>*, DatumCoord<FirstCoord, Coords...>)
+        {
+            std::size_t acc = 0;
+            boost::mp11::mp_for_each<boost::mp11::mp_take_c<DatumStruct<DatumElements...>, FirstCoord>>([&](
+                auto element) constexpr { acc += sizeOf<GetDatumElementType<decltype(element)>>; });
+
+            using Element = boost::mp11::mp_at_c<DatumStruct<DatumElements...>, FirstCoord>;
+            acc += offsetOfImpl<Align>((GetDatumElementType<Element>*) nullptr, DatumCoord<Coords...>{});
+
+            return acc;
+        }
+    } // namespace internal
+
+    /// The byte offset of an element in a datum domain if it would be a normal
+    /// struct.
+    /// \tparam DatumDomain Datum domain tree.
+    /// \tparam DatumCoord Datum coordinate of an element indatum domain tree.
+    template <typename DatumDomain, typename DatumCoord, bool Align = false>
+    inline constexpr std::size_t offsetOf = []() constexpr
+    {
+        if constexpr (Align)
+        {
+            constexpr auto i = flatDatumCoord<DatumDomain, DatumCoord>;
+            using Tuple = boost::mp11::mp_rename<boost::mp11::mp_reverse<FlattenDatumDomain<DatumDomain>>, std::tuple>;
+            constexpr auto n = boost::mp11::mp_size<Tuple>::value;
+            Tuple t;
+            return (std::intptr_t) std::addressof(std::get<n - 1 - i>(t)) - (std::intptr_t) std::addressof(t);
+        }
+        else
+            return internal::offsetOfImpl<Align>((DatumDomain*) nullptr, DatumCoord{});
+    }
+    ();
+
 
     template <typename S>
     auto structName(S) -> std::string

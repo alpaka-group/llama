@@ -6,6 +6,12 @@
 #include <llama/llama.hpp>
 #include <string>
 
+namespace
+{
+    template <std::size_t N>
+    using Padding = std::array<std::byte, N>;
+}
+
 // clang-format off
 namespace tag
 {
@@ -16,8 +22,8 @@ namespace tag
     struct Z {};
     struct Mass {};
     struct Flags {};
-    //struct Id {};
-    //struct Pad {};
+    struct Id {};
+    struct Pad {};
 }
 
 using Vec = llama::DS<
@@ -25,37 +31,42 @@ using Vec = llama::DS<
     llama::DE<tag::Y, float>,
     llama::DE<tag::Z, float>
 >;
+//using DVec = llama::DS<
+//    llama::DE<tag::X, double>,
+//    llama::DE<tag::Y, double>,
+//    llama::DE<tag::Z, double>
+//>;
 using Particle = llama::DS<
     llama::DE<tag::Pos, Vec>,
-    llama::DE<tag::Vel, Vec>,
+    llama::DE<tag::Vel, /*DVec*/Vec>,
     llama::DE<tag::Mass, float>,
     llama::DE<tag::Flags, llama::DA<bool, 4>>
 >;
 
 // example with bad alignment:
-//using Particle = llama::DS<
-//    llama::DE<tag::Id, std::uint16_t>,
-//    llama::DE<tag::Pos, llama::DS<
-//        llama::DE<tag::X, float>,
-//        llama::DE<tag::Y, float>
-//    >>,
-//    llama::DE<tag::Mass, double>,
-//    llama::DE<tag::Flags, llama::DA<bool, 3>>
-//>;
+using ParticleUnaligned = llama::DS<
+    llama::DE<tag::Id, std::uint16_t>,
+    llama::DE<tag::Pos, llama::DS<
+        llama::DE<tag::X, float>,
+        llama::DE<tag::Y, float>
+    >>,
+    llama::DE<tag::Mass, double>,
+    llama::DE<tag::Flags, llama::DA<bool, 3>>
+>;
 
 // bad alignment fixed with explicit padding:
-//using Particle = llama::DS<
-//    llama::DE<tag::Id, std::uint16_t>,
-//    llama::DE<tag::Pad, std::uint16_t>,
-//    llama::DE<tag::Pos, llama::DS<
-//        llama::DE<tag::X, float>,
-//        llama::DE<tag::Y, float>
-//    >>,
-//    llama::DE<tag::Pad, float>,
-//    llama::DE<tag::Mass, double>,
-//    llama::DE<tag::Flags, llama::DA<bool, 3>>,
-//    llama::DE<tag::Pad, llama::DA<bool, 5>>
-//>;
+using ParticleAligned = llama::DS<
+    llama::DE<tag::Id, std::uint16_t>,
+    llama::DE<tag::Pad, Padding<2>>,
+    llama::DE<tag::Pos, llama::DS<
+        llama::DE<tag::X, float>,
+        llama::DE<tag::Y, float>
+    >>,
+    llama::DE<tag::Pad, Padding<4>>,
+    llama::DE<tag::Mass, double>,
+    llama::DE<tag::Flags, llama::DA<bool, 3>>,
+    llama::DE<tag::Pad, Padding<5>>
+>;
 // clang-format on
 
 namespace
@@ -148,4 +159,14 @@ TEST_CASE("dump.Split.AoSoA8.AoS.One.SoA.4Buffer")
                 true>::type,
             true>{arrayDomain},
         "Split.AoSoA8.AoS.One.SoA.4Buffer");
+}
+
+TEST_CASE("dump.AoS.Weird")
+{
+    dump(llama::mapping::AoS{arrayDomain, ParticleUnaligned{}}, "AoS.Weird");
+}
+
+TEST_CASE("dump.AoS.WeirdExplicitAlignment")
+{
+    dump(llama::mapping::AoS{arrayDomain, ParticleAligned{}}, "AoS.WeirdExplicitAlignment");
 }
