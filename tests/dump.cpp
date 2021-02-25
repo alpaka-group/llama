@@ -27,7 +27,7 @@ using Vec = llama::DS<
 >;
 using Particle = llama::DS<
     llama::DE<tag::Pos, Vec>,
-    llama::DE<tag::Vel,Vec>,
+    llama::DE<tag::Vel, Vec>,
     llama::DE<tag::Mass, float>,
     llama::DE<tag::Flags, llama::DA<bool, 4>>
 >;
@@ -124,8 +124,28 @@ TEST_CASE("dump.Split.AoSoA8.AoS.One.3Buffer")
             Particle,
             llama::DatumCoord<1>,
             llama::mapping::PreconfiguredAoSoA<8>::type,
-            llama::mapping::PreconfiguredSplit<llama::DatumCoord<0>, llama::mapping::AoS, llama::mapping::One, true>::
+            llama::mapping::PreconfiguredSplit<llama::DatumCoord<1>, llama::mapping::One, llama::mapping::AoS, true>::
                 type,
             true>{arrayDomain},
         "Split.AoSoA8.SoA.One.3Buffer");
+}
+
+TEST_CASE("dump.Split.AoSoA8.AoS.One.SoA.4Buffer")
+{
+    // split out velocity as AoSoA8, mass into a single value, position into AoS, and the flags into SoA, makes 4
+    // buffers
+    dump(
+        llama::mapping::Split<
+            ArrayDomain,
+            Particle,
+            llama::DatumCoord<1>,
+            llama::mapping::PreconfiguredAoSoA<8>::type,
+            llama::mapping::PreconfiguredSplit<
+                llama::DatumCoord<1>,
+                llama::mapping::One,
+                llama::mapping::
+                    PreconfiguredSplit<llama::DatumCoord<0>, llama::mapping::AoS, llama::mapping::SoA, true>::type,
+                true>::type,
+            true>{arrayDomain},
+        "Split.AoSoA8.AoS.One.SoA.4Buffer");
 }
