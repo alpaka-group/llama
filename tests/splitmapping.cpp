@@ -101,5 +101,5 @@ TEST_CASE("Split.AoSoA8.AoS.One.SoA.4Buffer")
     CHECK(mapping.getBlobNrAndOffset<3, 2>({31}) == llama::NrAndOffset{3, 95});
     CHECK(mapping.getBlobNrAndOffset<3, 3>({31}) == llama::NrAndOffset{3, 127});
 
-    std::ofstream{"Split.AoSoA8.AoS.One.SoA.4Buffer.svg"} << llama::toSvg(mapping);
+    // std::ofstream{"Split.AoSoA8.AoS.One.SoA.4Buffer.svg"} << llama::toSvg(mapping);
 }
