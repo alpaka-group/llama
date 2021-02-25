@@ -74,55 +74,11 @@ namespace llama
                 c |= 0x404040; // ensure color per channel is at least 0x40.
             return c;
         }
-    } // namespace internal
 
-    /// Returns an SVG image visualizing the memory layout created by the given
-    /// mapping. The created memory blocks are wrapped after wrapByteCount
-    /// bytes.
-    template <typename Mapping>
-    auto toSvg(const Mapping& mapping, int wrapByteCount = 64) -> std::string
-    {
-        using ArrayDomain = typename Mapping::ArrayDomain;
-        using DatumDomain = typename Mapping::DatumDomain;
-
-        constexpr auto byteSizeInPixel = 30;
-
-        struct DatumInfo
+        template <std::size_t Dim>
+        auto formatUdCoord(const llama::ArrayDomain<Dim>& coord)
         {
-            ArrayDomain udCoord;
-            std::vector<std::size_t> ddIndices;
-            std::vector<std::string> ddTags;
-            NrAndOffset nrAndOffset;
-            std::size_t size;
-        };
-        std::vector<DatumInfo> infos;
-
-        for (auto udCoord : ArrayDomainIndexRange{mapping.arrayDomainSize})
-        {
-            forEachLeave<DatumDomain>([&](auto coord) {
-                constexpr int size = sizeof(GetType<DatumDomain, decltype(coord)>);
-                infos.push_back(DatumInfo{
-                    udCoord,
-                    internal::toVec(coord),
-                    internal::tagsAsStrings<DatumDomain>(coord),
-                    internal::mappingBlobNrAndOffset(mapping, udCoord, coord),
-                    size});
-            });
-        }
-
-        auto formatDDTags = [](const std::vector<std::string>& tags) {
-            std::string s;
-            for (const auto& tag : tags)
-            {
-                if (!s.empty())
-                    s += ".";
-                s += tag;
-            }
-            return s;
-        };
-
-        auto formatUdCoord = [](const auto& coord) {
-            if constexpr (std::is_same_v<decltype(coord), llama::ArrayDomain<1>>)
+            if constexpr (Dim == 1)
                 return std::to_string(coord[0]);
             else
             {
@@ -136,7 +92,65 @@ namespace llama
                 s += "}";
                 return s;
             }
+        }
+
+        inline auto formatDDTags(const std::vector<std::string>& tags)
+        {
+            std::string s;
+            for (const auto& tag : tags)
+            {
+                if (!s.empty())
+                    s += ".";
+                s += tag;
+            }
+            return s;
+        }
+
+        template <std::size_t Dim>
+        struct DatumBox
+        {
+            ArrayDomain<Dim> udCoord;
+            std::vector<std::size_t> ddIndices;
+            std::vector<std::string> ddTags;
+            NrAndOffset nrAndOffset;
+            std::size_t size;
         };
+
+        template <typename Mapping>
+        auto boxesFromMapping(const Mapping& mapping)
+        {
+            using ArrayDomain = typename Mapping::ArrayDomain;
+            using DatumDomain = typename Mapping::DatumDomain;
+
+            std::vector<DatumBox<Mapping::ArrayDomain::rank>> infos;
+
+            for (auto udCoord : ArrayDomainIndexRange{mapping.arrayDomainSize})
+            {
+                forEachLeave<DatumDomain>([&](auto coord) {
+                    constexpr int size = sizeof(GetType<DatumDomain, decltype(coord)>);
+                    infos.push_back(
+                        {udCoord,
+                         internal::toVec(coord),
+                         internal::tagsAsStrings<DatumDomain>(coord),
+                         internal::mappingBlobNrAndOffset(mapping, udCoord, coord),
+                         size});
+                });
+            }
+
+            return infos;
+        }
+    } // namespace internal
+
+    /// Returns an SVG image visualizing the memory layout created by the given
+    /// mapping. The created memory blocks are wrapped after wrapByteCount
+    /// bytes.
+    template <typename Mapping>
+    auto toSvg(const Mapping& mapping, int wrapByteCount = 64) -> std::string
+    {
+        constexpr auto byteSizeInPixel = 30;
+        constexpr auto blobBlockWidth = 60;
+
+        const auto infos = internal::boxesFromMapping(mapping);
 
         std::string svg;
         svg += fmt::format(
@@ -148,17 +162,28 @@ namespace llama
 )",
             byteSizeInPixel / 2);
 
+        std::array<int, Mapping::blobCount + 1> blobYOffset{};
+        for (auto i = 0; i < Mapping::blobCount; i++)
+        {
+            const auto blobRows = (mapping.getBlobSize(i) + wrapByteCount - 1) / wrapByteCount;
+            blobYOffset[i + 1] = blobYOffset[i] + (blobRows + 1) * byteSizeInPixel; // one row gap between blobs
+            const auto height = blobRows * byteSizeInPixel;
+            svg += fmt::format(
+                R"a(<rect x="0" y="{}" width="{}" height="{}" fill="#AAA" stroke="#000"/>
+<text x="{}" y="{}" fill="#000" text-anchor="middle">Blob: {}</text>
+)a",
+                blobYOffset[i],
+                blobBlockWidth,
+                height,
+                blobBlockWidth / 2,
+                blobYOffset[i] + height / 2,
+                i);
+        }
+
         for (const auto& info : infos)
         {
-            std::size_t blobY = 0;
-            for (auto i = 0; i < info.nrAndOffset.nr; i++)
-            {
-                auto blobRows = (mapping.getBlobSize(i) + wrapByteCount - 1) / wrapByteCount;
-                blobRows++; // one row gap between blobs
-                blobY += blobRows * byteSizeInPixel;
-            }
-
-            const auto x = (info.nrAndOffset.offset % wrapByteCount) * byteSizeInPixel;
+            const auto blobY = blobYOffset[info.nrAndOffset.nr];
+            const auto x = (info.nrAndOffset.offset % wrapByteCount) * byteSizeInPixel + blobBlockWidth;
             const auto y = (info.nrAndOffset.offset / wrapByteCount) * byteSizeInPixel + blobY;
 
             const auto fill = internal::color(info.ddIndices);
@@ -187,8 +212,8 @@ namespace llama
 )",
                 x + width / 2,
                 y + byteSizeInPixel * 3 / 4,
-                formatUdCoord(info.udCoord),
-                formatDDTags(info.ddTags));
+                internal::formatUdCoord(info.udCoord),
+                internal::formatDDTags(info.ddTags));
         }
         svg += "</svg>";
         return svg;
@@ -199,49 +224,20 @@ namespace llama
     template <typename Mapping>
     auto toHtml(const Mapping& mapping) -> std::string
     {
-        using ArrayDomain = typename Mapping::ArrayDomain;
-        using DatumDomain = typename Mapping::DatumDomain;
-
         constexpr auto byteSizeInPixel = 30;
         constexpr auto rulerLengthInBytes = 512;
         constexpr auto rulerByteInterval = 8;
 
-        struct DatumInfo
-        {
-            ArrayDomain udCoord;
-            std::vector<std::size_t> ddIndices;
-            std::vector<std::string> ddTags;
-            NrAndOffset nrAndOffset;
-            std::size_t size;
-        };
-        std::vector<DatumInfo> infos;
-
-        for (auto udCoord : ArrayDomainIndexRange{mapping.arrayDomainSize})
-        {
-            forEachLeave<DatumDomain>([&](auto coord) {
-                constexpr int size = sizeof(GetType<DatumDomain, decltype(coord)>);
-                infos.push_back(DatumInfo{
-                    udCoord,
-                    internal::toVec(coord),
-                    internal::tagsAsStrings<DatumDomain>(coord),
-                    internal::mappingBlobNrAndOffset(mapping, udCoord, coord),
-                    size});
-            });
-        }
-        std::sort(begin(infos), end(infos), [](const DatumInfo& a, const DatumInfo& b) {
+        auto infos = internal::boxesFromMapping(mapping);
+        std::stable_sort(begin(infos), end(infos), [](const auto& a, const auto& b) {
             return std::tie(a.nrAndOffset.nr, a.nrAndOffset.offset) < std::tie(b.nrAndOffset.nr, b.nrAndOffset.offset);
         });
-
-        auto formatDDTags = [](const std::vector<std::string>& tags) {
-            std::string s;
-            for (const auto& tag : tags)
-            {
-                if (!s.empty())
-                    s += ".";
-                s += tag;
-            }
-            return s;
-        };
+        infos.erase(
+            std::unique(
+                begin(infos),
+                end(infos),
+                [](const auto& a, const auto& b) { return a.nrAndOffset == b.nrAndOffset; }),
+            end(infos));
 
         auto cssClass = [](const std::vector<std::string>& tags) {
             std::string s;
@@ -252,23 +248,6 @@ namespace llama
                 s += tag;
             }
             return s;
-        };
-
-        auto formatUdCoord = [](const auto& coord) {
-            if constexpr (std::is_same_v<decltype(coord), llama::ArrayDomain<1>>)
-                return std::to_string(coord[0]);
-            else
-            {
-                std::string s = "{";
-                for (auto v : coord)
-                {
-                    if (s.size() >= 2)
-                        s += ",";
-                    s += std::to_string(v);
-                }
-                s += "}";
-                return s;
-            }
         };
 
         std::string svg;
@@ -299,6 +278,7 @@ namespace llama
 }}
 )",
             byteSizeInPixel);
+        using DatumDomain = typename Mapping::DatumDomain;
         forEachLeave<DatumDomain>([&](auto coord) {
             constexpr int size = sizeof(GetType<DatumDomain, decltype(coord)>);
 
@@ -340,8 +320,8 @@ namespace llama
             svg += fmt::format(
                 R"(<div class="box {0}" title="{1} {2}">{1} {2}</div>)",
                 cssClass(info.ddTags),
-                formatUdCoord(info.udCoord),
-                formatDDTags(info.ddTags));
+                internal::formatUdCoord(info.udCoord),
+                internal::formatDDTags(info.ddTags));
         }
         svg += R"(</body>
 </html>)";
