@@ -27,17 +27,23 @@ namespace llama::mapping
             }
         }
 
-        template <std::size_t FirstDstCoord, std::size_t... DstCoords, std::size_t FirstCoord, std::size_t... Coords>
-        auto offsetCoord(DatumCoord<FirstDstCoord, DstCoords...>, DatumCoord<FirstCoord, Coords...>)
+        template <
+            std::size_t FirstDstCoord,
+            std::size_t... DstCoords,
+            std::size_t FirstSkippedCoord,
+            std::size_t... SkippedCoords>
+        constexpr auto offsetCoord(
+            DatumCoord<FirstDstCoord, DstCoords...>,
+            DatumCoord<FirstSkippedCoord, SkippedCoords...>)
         {
-            if constexpr (FirstDstCoord < FirstCoord)
+            if constexpr (FirstDstCoord < FirstSkippedCoord)
                 return DatumCoord<FirstDstCoord, DstCoords...>{};
-            else if constexpr (FirstDstCoord > FirstCoord)
+            else if constexpr (FirstDstCoord > FirstSkippedCoord)
                 return DatumCoord<FirstDstCoord - 1, DstCoords...>{};
             else
                 return cat(
                     DatumCoord<FirstDstCoord>{},
-                    offsetCoord(DatumCoord<DstCoords...>{}, DatumCoord<Coords...>{}));
+                    offsetCoord(DatumCoord<DstCoords...>{}, DatumCoord<SkippedCoords...>{}));
         }
     } // namespace internal
 
@@ -46,9 +52,9 @@ namespace llama::mapping
         typename T_DatumDomain,
         typename DatumCoordForMapping1,
         template <typename...>
-        typename Mapping1,
+        typename MappingTemplate1,
         template <typename...>
-        typename Mapping2,
+        typename MappingTemplate2,
         bool SeparateBlobs = false>
     struct SplitMapping
     {
@@ -59,25 +65,31 @@ namespace llama::mapping
         using DatumDomain1 = boost::mp11::mp_first<DatumDomainPartitions>;
         using DatumDomain2 = boost::mp11::mp_second<DatumDomainPartitions>;
 
-        static constexpr std::size_t blobCount = SeparateBlobs ? 2 : 1;
-        // = Mapping1<ArrayDomain, DatumDomain1>::blobCount + Mapping2<ArrayDomain, DatumDomain2>::blobCount;
-        static_assert(Mapping1<ArrayDomain, DatumDomain1>::blobCount == 1);
-        static_assert(Mapping2<ArrayDomain, DatumDomain2>::blobCount == 1);
+        using Mapping1 = MappingTemplate1<ArrayDomain, DatumDomain1>;
+        using Mapping2 = MappingTemplate2<ArrayDomain, DatumDomain2>;
+
+        static constexpr std::size_t blobCount = SeparateBlobs ? Mapping1::blobCount + Mapping2::blobCount : 1;
+        static_assert(SeparateBlobs || Mapping1::blobCount == 1);
+        static_assert(SeparateBlobs || Mapping2::blobCount == 1);
 
         constexpr SplitMapping() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr SplitMapping(ArrayDomain size)
-            : arrayDomainSize(size)
-            , mapping1(size)
-            , mapping2(size)
-            , mapping1BlobSize(mapping1.getBlobSize(0))
+        constexpr SplitMapping(ArrayDomain size) : arrayDomainSize(size), mapping1(size), mapping2(size)
         {
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto getBlobSize(std::size_t) const -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto getBlobSize(std::size_t i) const -> std::size_t
         {
-            return mapping1BlobSize + mapping2.getBlobSize(0);
+            if constexpr (SeparateBlobs)
+            {
+                if (i < Mapping1::blobCount)
+                    return mapping1.getBlobSize(i);
+                else
+                    return mapping2.getBlobSize(i - Mapping1::blobCount);
+            }
+            else
+                return mapping1.getBlobSize(0) + mapping2.getBlobSize(0);
         }
 
         template <std::size_t... DatumDomainCoord>
@@ -95,13 +107,16 @@ namespace llama::mapping
             }
             else
             {
-                using DstCoord
-                    = decltype(internal::offsetCoord(DatumCoord<DatumDomainCoord...>{}, DatumCoordForMapping1{}));
-                auto blobNrAndOffset = getBlobNrAndOffset(DstCoord{}, coord, mapping2);
+                constexpr auto dstCoord
+                    = internal::offsetCoord(DatumCoord<DatumDomainCoord...>{}, DatumCoordForMapping1{});
+                auto blobNrAndOffset = getBlobNrAndOffset(dstCoord, coord, mapping2);
                 if constexpr (SeparateBlobs)
-                    blobNrAndOffset.nr = 1;
+                    blobNrAndOffset.nr += Mapping1::blobCount;
                 else
-                    blobNrAndOffset.offset += mapping1BlobSize;
+                {
+                    for (auto i = 0; i < Mapping1::blobCount; i++)
+                        blobNrAndOffset.offset += mapping1.getBlobSize(i);
+                }
                 return blobNrAndOffset;
             }
         }
@@ -118,8 +133,26 @@ namespace llama::mapping
 
     public:
         ArrayDomain arrayDomainSize = {};
-        Mapping1<ArrayDomain, DatumDomain1> mapping1;
-        Mapping2<ArrayDomain, DatumDomain2> mapping2;
-        std::size_t mapping1BlobSize;
+        Mapping1 mapping1;
+        Mapping2 mapping2;
+    };
+
+    template <
+        typename DatumCoordForMapping1,
+        template <typename...>
+        typename MappingTemplate1,
+        template <typename...>
+        typename MappingTemplate2,
+        bool SeparateBlobs = false>
+    struct PreconfiguredSplitMapping
+    {
+        template <typename ArrayDomain, typename DatumDomain>
+        using type = SplitMapping<
+            ArrayDomain,
+            DatumDomain,
+            DatumCoordForMapping1,
+            MappingTemplate1,
+            MappingTemplate2,
+            SeparateBlobs>;
     };
 } // namespace llama::mapping
