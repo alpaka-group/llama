@@ -49,4 +49,11 @@ namespace llama::mapping
 
         ArrayDomain arrayDomainSize;
     };
+
+    template <std::size_t Lanes, typename LinearizeArrayDomainFunctor = LinearizeArrayDomainCpp>
+    struct PreconfiguredAoSoA
+    {
+        template <typename ArrayDomain, typename DatumDomain>
+        using type = AoSoA<ArrayDomain, DatumDomain, Lanes, LinearizeArrayDomainFunctor>;
+    };
 } // namespace llama::mapping

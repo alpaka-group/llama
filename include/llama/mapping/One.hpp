@@ -18,6 +18,13 @@ namespace llama::mapping
 
         static constexpr std::size_t blobCount = 1;
 
+        constexpr One() = default;
+
+        LLAMA_FN_HOST_ACC_INLINE
+        constexpr One(ArrayDomain, DatumDomain = {})
+        {
+        }
+
         LLAMA_FN_HOST_ACC_INLINE constexpr auto getBlobSize(std::size_t) const -> std::size_t
         {
             return sizeOf<DatumDomain>;
