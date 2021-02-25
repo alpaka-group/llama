@@ -119,6 +119,12 @@ TEST_CASE("sizeOf")
 {
     STATIC_REQUIRE(llama::sizeOf<Particle> == 52);
 }
+
+TEST_CASE("sizeOf.Align")
+{
+    STATIC_REQUIRE(llama::sizeOf<Particle, true> == 56);
+}
+
 TEST_CASE("offsetOf")
 {
     STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<>> == 0);
@@ -136,6 +142,48 @@ TEST_CASE("offsetOf")
     STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<4, 1>> == 49);
     STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<4, 2>> == 50);
     STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<4, 3>> == 51);
+}
+
+TEST_CASE("offsetOf.Align")
+{
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<>, true> == 0);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<0>, true> == 0);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<0, 0>, true> == 0);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<0, 1>, true> == 8);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<0, 2>, true> == 16);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<1>, true> == 24);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<2>, true> == 28);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<3>, true> == 32);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<3, 0>, true> == 32);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<3, 1>, true> == 40);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<4>, true> == 48);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<4, 0>, true> == 48);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<4, 1>, true> == 49);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<4, 2>, true> == 50);
+    STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<4, 3>, true> == 51);
+}
+
+TEST_CASE("alignment")
+{
+    using DD = llama::DS<
+        llama::DE<tag::X, float>,
+        llama::DE<tag::Y, double>,
+        llama::DE<tag::Z, bool>,
+        llama::DE<tag::Weight, std::uint16_t>>;
+
+    STATIC_REQUIRE(llama::offsetOf<DD, llama::DatumCoord<>, false> == 0);
+    STATIC_REQUIRE(llama::offsetOf<DD, llama::DatumCoord<0>, false> == 0);
+    STATIC_REQUIRE(llama::offsetOf<DD, llama::DatumCoord<1>, false> == 4);
+    STATIC_REQUIRE(llama::offsetOf<DD, llama::DatumCoord<2>, false> == 12);
+    STATIC_REQUIRE(llama::offsetOf<DD, llama::DatumCoord<3>, false> == 13);
+    STATIC_REQUIRE(llama::sizeOf<DD, false> == 15);
+
+    STATIC_REQUIRE(llama::offsetOf<DD, llama::DatumCoord<>, true> == 0);
+    STATIC_REQUIRE(llama::offsetOf<DD, llama::DatumCoord<0>, true> == 0);
+    STATIC_REQUIRE(llama::offsetOf<DD, llama::DatumCoord<1>, true> == 8); // aligned
+    STATIC_REQUIRE(llama::offsetOf<DD, llama::DatumCoord<2>, true> == 16);
+    STATIC_REQUIRE(llama::offsetOf<DD, llama::DatumCoord<3>, true> == 18); // aligned
+    STATIC_REQUIRE(llama::sizeOf<DD, true> == 24);
 }
 
 TEST_CASE("GetCoordFromTags")
