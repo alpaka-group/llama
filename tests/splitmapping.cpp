@@ -33,14 +33,14 @@ using Particle = llama::DS<
 >;
 // clang-format on
 
-TEST_CASE("splitmapping.SoA.AoS.1Buffer")
+TEST_CASE("Split.SoA.AoS.1Buffer")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
     auto arrayDomain = ArrayDomain{16, 16};
 
     // we layout Pos as SoA, the rest as AoS
-    auto mapping = llama::mapping::
-        SplitMapping<ArrayDomain, Particle, llama::DatumCoord<0>, llama::mapping::SoA, llama::mapping::AoS>{
+    auto mapping
+        = llama::mapping::Split<ArrayDomain, Particle, llama::DatumCoord<0>, llama::mapping::SoA, llama::mapping::AoS>{
             arrayDomain};
 
     constexpr auto mapping1Size = 6120;
@@ -58,22 +58,22 @@ TEST_CASE("splitmapping.SoA.AoS.1Buffer")
     CHECK(mapping.getBlobNrAndOffset<3, 3>(coord) == llama::NrAndOffset{0, mapping1Size + 55});
 }
 
-TEST_CASE("splitmapping.AoSoA8.AoS.One.SoA.4Buffer")
+TEST_CASE("Split.AoSoA8.AoS.One.SoA.4Buffer")
 {
     // split out momentum as AoSoA8, mass into a single value, position into AoS, and the flags into SoA, makes 4
     // buffers
     using ArrayDomain = llama::ArrayDomain<1>;
     auto arrayDomain = ArrayDomain{32};
-    auto mapping = llama::mapping::SplitMapping<
+    auto mapping = llama::mapping::Split<
         ArrayDomain,
         Particle,
         llama::DatumCoord<2>,
         llama::mapping::PreconfiguredAoSoA<8>::type,
-        llama::mapping::PreconfiguredSplitMapping<
+        llama::mapping::PreconfiguredSplit<
             llama::DatumCoord<1>,
             llama::mapping::One,
-            llama::mapping::
-                PreconfiguredSplitMapping<llama::DatumCoord<0>, llama::mapping::AoS, llama::mapping::SoA, true>::type,
+            llama::mapping::PreconfiguredSplit<llama::DatumCoord<0>, llama::mapping::AoS, llama::mapping::SoA, true>::
+                type,
             true>::type,
         true>{arrayDomain};
 
@@ -101,5 +101,5 @@ TEST_CASE("splitmapping.AoSoA8.AoS.One.SoA.4Buffer")
     CHECK(mapping.getBlobNrAndOffset<3, 2>({31}) == llama::NrAndOffset{3, 95});
     CHECK(mapping.getBlobNrAndOffset<3, 3>({31}) == llama::NrAndOffset{3, 127});
 
-    std::ofstream{"Splitmapping.AoSoA8.AoS.One.SoA.4Buffer.svg"} << llama::toSvg(mapping);
+    std::ofstream{"Split.AoSoA8.AoS.One.SoA.4Buffer.svg"} << llama::toSvg(mapping);
 }

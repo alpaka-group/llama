@@ -56,7 +56,7 @@ namespace llama::mapping
         template <typename...>
         typename MappingTemplate2,
         bool SeparateBlobs = false>
-    struct SplitMapping
+    struct Split
     {
         using ArrayDomain = T_ArrayDomain;
         using DatumDomain = T_DatumDomain;
@@ -72,10 +72,10 @@ namespace llama::mapping
         static_assert(SeparateBlobs || Mapping1::blobCount == 1);
         static_assert(SeparateBlobs || Mapping2::blobCount == 1);
 
-        constexpr SplitMapping() = default;
+        constexpr Split() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr SplitMapping(ArrayDomain size) : arrayDomainSize(size), mapping1(size), mapping2(size)
+        constexpr Split(ArrayDomain size) : arrayDomainSize(size), mapping1(size), mapping2(size)
         {
         }
 
@@ -144,15 +144,10 @@ namespace llama::mapping
         template <typename...>
         typename MappingTemplate2,
         bool SeparateBlobs = false>
-    struct PreconfiguredSplitMapping
+    struct PreconfiguredSplit
     {
         template <typename ArrayDomain, typename DatumDomain>
-        using type = SplitMapping<
-            ArrayDomain,
-            DatumDomain,
-            DatumCoordForMapping1,
-            MappingTemplate1,
-            MappingTemplate2,
-            SeparateBlobs>;
+        using type
+            = Split<ArrayDomain, DatumDomain, DatumCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs>;
     };
 } // namespace llama::mapping
