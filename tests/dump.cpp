@@ -163,12 +163,17 @@ TEST_CASE("dump.Split.AoSoA8.AoS.One.SoA.4Buffer")
         "Split.AoSoA8.AoS.One.SoA.4Buffer");
 }
 
-TEST_CASE("dump.AoS.Weird")
+TEST_CASE("dump.AoS.Unaligned")
 {
-    dump(llama::mapping::AoS{arrayDomain, ParticleUnaligned{}}, "AoS.Weird");
+    dump(llama::mapping::AoS{arrayDomain, ParticleUnaligned{}}, "AoS.Unaligned");
 }
 
-TEST_CASE("dump.AoS.WeirdExplicitAlignment")
+TEST_CASE("dump.AoS.Aligned")
 {
-    dump(llama::mapping::AoS{arrayDomain, ParticleAligned{}}, "AoS.WeirdExplicitAlignment");
+    dump(llama::mapping::AoS<decltype(arrayDomain), ParticleUnaligned, true>{arrayDomain}, "AoS.Aligned");
+}
+
+TEST_CASE("dump.AoS.AlignedExplicit")
+{
+    dump(llama::mapping::AoS{arrayDomain, ParticleAligned{}}, "AoS.AlignedExplicit");
 }
