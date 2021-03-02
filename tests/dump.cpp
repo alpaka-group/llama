@@ -111,8 +111,9 @@ TEST_CASE("dump.Split.SoA.AoS.1Buffer")
 {
     // split out velocity (written in nbody, the rest is read)
     dump(
-        llama::mapping::Split<ArrayDomain, Particle, llama::DatumCoord<1>, llama::mapping::SoA, llama::mapping::AoS>{
-            arrayDomain},
+        llama::mapping::
+            Split<ArrayDomain, Particle, llama::DatumCoord<1>, llama::mapping::SoA, llama::mapping::PackedAoS>{
+                arrayDomain},
         "Split.SoA.AoS.1Buffer");
 }
 
@@ -121,7 +122,7 @@ TEST_CASE("dump.Split.SoA.AoS.2Buffer")
     // split out velocity as AoS into separate buffer
     dump(
         llama::mapping::
-            Split<ArrayDomain, Particle, llama::DatumCoord<1>, llama::mapping::SoA, llama::mapping::AoS, true>{
+            Split<ArrayDomain, Particle, llama::DatumCoord<1>, llama::mapping::SoA, llama::mapping::PackedAoS, true>{
                 arrayDomain},
         "Split.SoA.AoS.2Buffer");
 }
@@ -135,8 +136,8 @@ TEST_CASE("dump.Split.AoSoA8.AoS.One.3Buffer")
             Particle,
             llama::DatumCoord<1>,
             llama::mapping::PreconfiguredAoSoA<8>::type,
-            llama::mapping::PreconfiguredSplit<llama::DatumCoord<1>, llama::mapping::One, llama::mapping::AoS, true>::
-                type,
+            llama::mapping::
+                PreconfiguredSplit<llama::DatumCoord<1>, llama::mapping::One, llama::mapping::PackedAoS, true>::type,
             true>{arrayDomain},
         "Split.AoSoA8.SoA.One.3Buffer");
 }
@@ -155,7 +156,8 @@ TEST_CASE("dump.Split.AoSoA8.AoS.One.SoA.4Buffer")
                 llama::DatumCoord<1>,
                 llama::mapping::One,
                 llama::mapping::
-                    PreconfiguredSplit<llama::DatumCoord<0>, llama::mapping::AoS, llama::mapping::SoA, true>::type,
+                    PreconfiguredSplit<llama::DatumCoord<0>, llama::mapping::PackedAoS, llama::mapping::SoA, true>::
+                        type,
                 true>::type,
             true>{arrayDomain},
         "Split.AoSoA8.AoS.One.SoA.4Buffer");
