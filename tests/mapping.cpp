@@ -98,7 +98,8 @@ TEST_CASE("address.AoS.fortran")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
     auto arrayDomain = ArrayDomain{16, 16};
-    auto mapping = llama::mapping::AoS<ArrayDomain, Particle, llama::mapping::LinearizeArrayDomainFortran>{arrayDomain};
+    auto mapping
+        = llama::mapping::AoS<ArrayDomain, Particle, false, llama::mapping::LinearizeArrayDomainFortran>{arrayDomain};
 
     {
         const auto coord = ArrayDomain{0, 0};
@@ -150,7 +151,8 @@ TEST_CASE("address.AoS.morton")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
     auto arrayDomain = ArrayDomain{16, 16};
-    auto mapping = llama::mapping::AoS<ArrayDomain, Particle, llama::mapping::LinearizeArrayDomainMorton>{arrayDomain};
+    auto mapping
+        = llama::mapping::AoS<ArrayDomain, Particle, false, llama::mapping::LinearizeArrayDomainMorton>{arrayDomain};
 
     {
         const auto coord = ArrayDomain{0, 0};
@@ -195,6 +197,58 @@ TEST_CASE("address.AoS.morton")
         CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 165);
         CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 166);
         CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 167);
+    }
+}
+
+TEST_CASE("address.AoS.aligned")
+{
+    using ArrayDomain = llama::ArrayDomain<2>;
+    auto arrayDomain = ArrayDomain{16, 16};
+    auto mapping = llama::mapping::AoS<ArrayDomain, Particle, true>{arrayDomain};
+
+    {
+        const auto coord = ArrayDomain{0, 0};
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 8);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 16);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 24);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 32);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 40);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 48);
+        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 56);
+        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 57);
+        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 58);
+        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 59);
+    }
+
+    {
+        const auto coord = ArrayDomain{0, 1};
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 64);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 72);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 80);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 88);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 96);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 104);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 112);
+        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 120);
+        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 121);
+        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 122);
+        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 123);
+    }
+
+    {
+        const auto coord = ArrayDomain{1, 0};
+        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 1024);
+        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 1032);
+        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 1040);
+        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 1048);
+        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 1056);
+        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 1064);
+        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 1072);
+        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 1080);
+        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 1081);
+        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 1082);
+        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 1083);
     }
 }
 
