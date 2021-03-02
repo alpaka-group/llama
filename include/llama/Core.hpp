@@ -272,14 +272,14 @@ namespace llama
     namespace internal
     {
         template <typename T, std::size_t... Coords, typename Functor>
-        LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaveImpl(T, DatumCoord<Coords...> coord, Functor&& functor)
+        LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaveImpl(T*, DatumCoord<Coords...> coord, Functor&& functor)
         {
             functor(coord);
         };
 
         template <typename... Children, std::size_t... Coords, typename Functor>
         LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaveImpl(
-            DatumStruct<Children...>,
+            DatumStruct<Children...>*,
             DatumCoord<Coords...>,
             Functor&& functor)
         {
@@ -290,7 +290,7 @@ namespace llama
 
                 LLAMA_FORCE_INLINE_RECURSIVE
                 forEachLeaveImpl(
-                    GetDatumElementType<DatumElement>{},
+                    static_cast<GetDatumElementType<DatumElement>*>(nullptr),
                     llama::DatumCoord<Coords..., childIndex>{},
                     std::forward<Functor>(functor));
             });
@@ -308,7 +308,7 @@ namespace llama
     {
         LLAMA_FORCE_INLINE_RECURSIVE
         internal::forEachLeaveImpl(
-            GetType<DatumDomain, DatumCoord<Coords...>>{},
+            static_cast<GetType<DatumDomain, DatumCoord<Coords...>>*>(nullptr),
             baseCoord,
             std::forward<Functor>(functor));
     }
@@ -357,17 +357,43 @@ namespace llama
     }
     ();
 
+    namespace internal
+    {
+        constexpr void roundUpToMultiple(std::size_t& value, std::size_t multiple)
+        {
+            value = ((value + multiple - 1) / multiple) * multiple;
+        }
+    } // namespace internal
+
     template <typename T, bool Align = false>
-    static constexpr auto sizeOf = sizeof(T);
+    inline constexpr std::size_t sizeOf = sizeof(T);
 
     /// The size a datum domain if it would be a normal struct.
     template <typename... DatumElements, bool Align>
-    static constexpr auto sizeOf<DatumStruct<DatumElements...>, Align> = []() constexpr
+    inline constexpr std::size_t sizeOf<DatumStruct<DatumElements...>, Align> = []() constexpr
     {
         if constexpr (Align)
-            return sizeof(boost::mp11::mp_rename<
-                          boost::mp11::mp_reverse<FlattenDatumDomain<DatumStruct<DatumElements...>>>,
-                          std::tuple>{});
+        {
+            using namespace boost::mp11;
+
+#if BOOST_COMP_MSVC
+            std::size_t size;
+            size = 0; // if we join this assignment with the previous line, MSVC crashes :(
+#else
+            std::size_t size = 0;
+#endif
+            using FlatDD = FlattenDatumDomain<DatumStruct<DatumElements...>>;
+            mp_for_each<mp_iota<mp_size<FlatDD>>>([&](auto i) constexpr {
+                using T = mp_at<FlatDD, decltype(i)>;
+                internal::roundUpToMultiple(size, alignof(T));
+                size += sizeof(T);
+            });
+
+            // final padding, so next struct can start right away
+            using FirstType = mp_first<FlatDD>;
+            internal::roundUpToMultiple(size, alignof(FirstType));
+            return size;
+        }
         else
             return (sizeOf<GetDatumElementType<DatumElements>, Align> + ...);
     }
@@ -404,11 +430,19 @@ namespace llama
     {
         if constexpr (Align)
         {
+            using namespace boost::mp11;
+
             constexpr auto i = flatDatumCoord<DatumDomain, DatumCoord>;
-            using Tuple = boost::mp11::mp_rename<boost::mp11::mp_reverse<FlattenDatumDomain<DatumDomain>>, std::tuple>;
-            constexpr auto n = boost::mp11::mp_size<Tuple>::value;
-            Tuple t;
-            return (std::intptr_t) std::addressof(std::get<n - 1 - i>(t)) - (std::intptr_t) std::addressof(t);
+
+            std::size_t offset = 0;
+            using FlatDD = FlattenDatumDomain<DatumDomain>;
+            mp_for_each<mp_iota_c<i>>([&](auto i) constexpr {
+                using T = mp_at<FlatDD, decltype(i)>;
+                internal::roundUpToMultiple(offset, alignof(T));
+                offset += sizeof(T);
+            });
+            internal::roundUpToMultiple(offset, alignof(boost::mp11::mp_at_c<FlatDD, i>));
+            return offset;
         }
         else
             return internal::offsetOfImpl<Align>((DatumDomain*) nullptr, DatumCoord{});

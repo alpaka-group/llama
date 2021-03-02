@@ -15,12 +15,13 @@ namespace tag
     struct Weight {};
 }
 
+using XYZ = llama::DS<
+    llama::DE<tag::X, double>,
+    llama::DE<tag::Y, double>,
+    llama::DE<tag::Z, double>
+>;
 using Particle = llama::DS<
-    llama::DE<tag::Pos, llama::DS<
-        llama::DE<tag::X, double>,
-        llama::DE<tag::Y, double>,
-        llama::DE<tag::Z, double>
-    >>,
+    llama::DE<tag::Pos, XYZ>,
     llama::DE<tag::Weight, float>,
     llama::DE<llama::NoName, int>,
     llama::DE<tag::Vel,llama::DS<
@@ -117,11 +118,15 @@ TEST_CASE("prettyPrintType")
 
 TEST_CASE("sizeOf")
 {
+    STATIC_REQUIRE(llama::sizeOf<float> == 4);
+    STATIC_REQUIRE(llama::sizeOf<XYZ> == 24);
     STATIC_REQUIRE(llama::sizeOf<Particle> == 52);
 }
 
 TEST_CASE("sizeOf.Align")
 {
+    STATIC_REQUIRE(llama::sizeOf<float, true> == 4);
+    STATIC_REQUIRE(llama::sizeOf<XYZ, true> == 24);
     STATIC_REQUIRE(llama::sizeOf<Particle, true> == 56);
 }
 
@@ -163,6 +168,9 @@ TEST_CASE("offsetOf.Align")
     STATIC_REQUIRE(llama::offsetOf<Particle, llama::DatumCoord<4, 3>, true> == 51);
 }
 
+template <int i>
+struct S;
+
 TEST_CASE("alignment")
 {
     using DD = llama::DS<
@@ -183,7 +191,7 @@ TEST_CASE("alignment")
     STATIC_REQUIRE(llama::offsetOf<DD, llama::DatumCoord<1>, true> == 8); // aligned
     STATIC_REQUIRE(llama::offsetOf<DD, llama::DatumCoord<2>, true> == 16);
     STATIC_REQUIRE(llama::offsetOf<DD, llama::DatumCoord<3>, true> == 18); // aligned
-    STATIC_REQUIRE(llama::sizeOf<DD, true> == 24);
+    STATIC_REQUIRE(llama::sizeOf<DD, true> == 20);
 }
 
 TEST_CASE("GetCoordFromTags")
