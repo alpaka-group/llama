@@ -34,6 +34,7 @@
 #include "Allocators.hpp"
 #include "ArrayDomainRange.hpp"
 #include "Core.hpp"
+#include "Iterator.hpp"
 #include "View.hpp"
 #include "macros.hpp"
 #include "mapping/AoS.hpp"
