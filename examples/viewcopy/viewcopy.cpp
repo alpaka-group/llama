@@ -95,8 +95,8 @@ void aosoa_copy(
         BlobType2>& dstView,
     Ex ex = {})
 {
-    static_assert(srcView.storageBlobs.rank == 1);
-    static_assert(dstView.storageBlobs.rank == 1);
+    static_assert(decltype(srcView.storageBlobs)::rank == 1);
+    static_assert(decltype(dstView.storageBlobs)::rank == 1);
 
     if (srcView.mapping.arrayDomainSize != dstView.mapping.arrayDomainSize)
         throw std::runtime_error{"UserDomain sizes are different"};
@@ -249,13 +249,13 @@ int main(int argc, char** argv)
             naive_copy(srcView, dstView, std::execution::par);
         });
         benchmarkCopy("memcpy", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
-            static_assert(srcView.storageBlobs.rank == 1);
-            static_assert(dstView.storageBlobs.rank == 1);
+            static_assert(decltype(srcView.storageBlobs)::rank == 1);
+            static_assert(decltype(dstView.storageBlobs)::rank == 1);
             std::memcpy(dstView.storageBlobs[0].data(), srcView.storageBlobs[0].data(), dstView.storageBlobs[0].size());
         });
         benchmarkCopy("memcpy(p)", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
-            static_assert(srcView.storageBlobs.rank == 1);
-            static_assert(dstView.storageBlobs.rank == 1);
+            static_assert(decltype(srcView.storageBlobs)::rank == 1);
+            static_assert(decltype(dstView.storageBlobs)::rank == 1);
             parallel_memcpy(
                 dstView.storageBlobs[0].data(),
                 srcView.storageBlobs[0].data(),
@@ -282,13 +282,13 @@ int main(int argc, char** argv)
             naive_copy(srcView, dstView, std::execution::par);
         });
         benchmarkCopy("memcpy", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
-            static_assert(srcView.storageBlobs.rank == 1);
-            static_assert(dstView.storageBlobs.rank == 1);
+            static_assert(decltype(srcView.storageBlobs)::rank == 1);
+            static_assert(decltype(dstView.storageBlobs)::rank == 1);
             std::memcpy(dstView.storageBlobs[0].data(), srcView.storageBlobs[0].data(), dstView.storageBlobs[0].size());
         });
         benchmarkCopy("memcpy(p)", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
-            static_assert(srcView.storageBlobs.rank == 1);
-            static_assert(dstView.storageBlobs.rank == 1);
+            static_assert(decltype(srcView.storageBlobs)::rank == 1);
+            static_assert(decltype(dstView.storageBlobs)::rank == 1);
             parallel_memcpy(
                 dstView.storageBlobs[0].data(),
                 srcView.storageBlobs[0].data(),
@@ -323,13 +323,13 @@ int main(int argc, char** argv)
             naive_copy(srcView, dstView, std::execution::par);
         });
         benchmarkCopy("memcpy", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
-            static_assert(srcView.storageBlobs.rank == 1);
-            static_assert(dstView.storageBlobs.rank == 1);
+            static_assert(decltype(srcView.storageBlobs)::rank == 1);
+            static_assert(decltype(dstView.storageBlobs)::rank == 1);
             std::memcpy(dstView.storageBlobs[0].data(), srcView.storageBlobs[0].data(), dstView.storageBlobs[0].size());
         });
         benchmarkCopy("memcpy(p)", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
-            static_assert(srcView.storageBlobs.rank == 1);
-            static_assert(dstView.storageBlobs.rank == 1);
+            static_assert(decltype(srcView.storageBlobs)::rank == 1);
+            static_assert(decltype(dstView.storageBlobs)::rank == 1);
             parallel_memcpy(
                 dstView.storageBlobs[0].data(),
                 srcView.storageBlobs[0].data(),
