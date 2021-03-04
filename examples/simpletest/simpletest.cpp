@@ -99,10 +99,11 @@ namespace
 
     std::string addLineBreaks(std::string raw)
     {
-        boost::replace_all(raw, "<", "<\n");
-        boost::replace_all(raw, ", ", ",\n");
-        boost::replace_all(raw, " >", ">");
-        boost::replace_all(raw, ">", "\n>");
+        using llama::mapping::tree::internal::replace_all;
+        replace_all(raw, "<", "<\n");
+        replace_all(raw, ", ", ",\n");
+        replace_all(raw, " >", ">");
+        replace_all(raw, ">", "\n>");
         auto tokens = split(raw, '\n');
         std::string result = "";
         int indent = 0;
