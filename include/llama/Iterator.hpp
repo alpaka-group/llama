@@ -1,6 +1,5 @@
 #include "View.hpp"
 
-#include <boost/iterator/iterator_facade.hpp>
 //#include <boost/stl_interfaces/iterator_interface.hpp>
 
 namespace llama
@@ -40,46 +39,136 @@ namespace llama
     };
 #endif
 
+    namespace internal
+    {
+        template <typename T>
+        struct IndirectValue
+        {
+            T value;
+
+            auto operator->() -> T*
+            {
+                return &value;
+            }
+
+            auto operator->() const -> const T*
+            {
+                return &value;
+            }
+        };
+    } // namespace internal
+
     template <typename View>
     struct Iterator
-        : boost::iterators::iterator_facade<
-              Iterator<View>,
-              typename View::VirtualDatumType,
-              std::random_access_iterator_tag,
-              typename View::VirtualDatumType,
-              std::ptrdiff_t>
     {
-        constexpr decltype(auto) dereference() const
+        using iterator_category = std::random_access_iterator_tag;
+        using value_type = typename View::VirtualDatumType;
+        using difference_type = std::ptrdiff_t;
+        using pointer = internal::IndirectValue<value_type>;
+        using reference = value_type;
+
+        constexpr auto operator++() -> Iterator&
+        {
+            ++coord[0];
+            return *this;
+        }
+        constexpr auto operator++(int) -> Iterator
+        {
+            auto tmp = *this;
+            ++*this;
+            return tmp;
+        }
+
+        constexpr auto operator--() -> Iterator&
+        {
+            --coord[0];
+            return *this;
+        }
+
+        constexpr auto operator--(int) -> Iterator
+        {
+            auto tmp{*this};
+            --*this;
+            return tmp;
+        }
+
+        constexpr auto operator*() const -> reference
         {
             return (*view)(coord);
         }
 
-        constexpr bool equal(const Iterator& other) const
+        constexpr auto operator->() const -> pointer
         {
-            return coord == other.coord;
+            return internal::IndirectValue{**this};
         }
 
-        constexpr auto increment() -> Iterator&
+        constexpr auto operator[](difference_type i) const -> reference
         {
-            coord[0]++;
+            return *(*this + i);
+        }
+
+        constexpr auto operator+=(difference_type n) -> Iterator&
+        {
+            coord[0] = static_cast<difference_type>(coord[0]) + n;
             return *this;
         }
 
-        constexpr auto decrement() -> Iterator&
+        friend constexpr auto operator+(Iterator it, difference_type n) -> Iterator
         {
-            coord[0]--;
+            it += n;
+            return it;
+        }
+
+        friend constexpr auto operator+(difference_type n, Iterator it) -> Iterator
+        {
+            return it + n;
+        }
+
+        constexpr auto operator-=(difference_type n) -> Iterator&
+        {
+            coord[0] = static_cast<difference_type>(coord[0]) - n;
             return *this;
         }
 
-        constexpr auto advance(std::ptrdiff_t n) -> Iterator&
+        friend constexpr auto operator-(Iterator it, difference_type n) -> Iterator
         {
-            coord[0] += n;
-            return *this;
+            it -= n;
+            return it;
         }
 
-        constexpr auto distance_to(const Iterator& other) const -> std::ptrdiff_t
+        friend constexpr auto operator-(const Iterator& a, const Iterator& b) -> difference_type
         {
-            return static_cast<std::ptrdiff_t>(other.coord[0]) - static_cast<std::ptrdiff_t>(coord[0]);
+            return static_cast<std::ptrdiff_t>(a.coord[0]) - static_cast<std::ptrdiff_t>(b.coord[0]);
+        }
+
+        friend constexpr auto operator==(const Iterator& a, const Iterator& b) -> bool
+        {
+            return a.coord[0] == b.coord[0];
+        }
+
+        friend constexpr auto operator!=(const Iterator& a, const Iterator& b) -> bool
+        {
+            return !(a == b);
+        }
+
+        friend constexpr auto operator<(const Iterator& a, const Iterator& b) -> bool
+        {
+            return a.coord[0] < b.coord[0];
+        }
+
+        friend constexpr auto operator>(const Iterator& a, const Iterator& b) -> bool
+        {
+            return b < a;
+        }
+
+        friend constexpr auto operator<=(const Iterator& a, const Iterator& b) -> bool
+        {
+            return !(a > b);
+        }
+
+        friend constexpr auto operator>=(const Iterator& a, const Iterator& b) -> bool
+        {
+            return !(a < b);
         }
 
         ArrayDomain<1> coord;
@@ -90,13 +179,13 @@ namespace llama
     auto begin(View& view) -> Iterator<View>
     {
         static_assert(View::ArrayDomain::rank == 1, "Iterators for non-1D views are not implemented");
-        return {{}, ArrayDomain<1>{}, &view};
+        return {ArrayDomain<1>{}, &view};
     }
 
     template <typename View>
     auto end(View& view) -> Iterator<View>
     {
         static_assert(View::ArrayDomain::rank == 1, "Iterators for non-1D views are not implemented");
-        return {{}, view.mapping.arrayDomainSize, &view};
+        return {view.mapping.arrayDomainSize, &view};
     }
 } // namespace llama
