@@ -45,7 +45,7 @@ jobs:
         sudo apt install libboost-all-dev
     - name: vcpkg install dependencies
       run: |
-        vcpkg install catch2 fmt tbb
+        vcpkg install catch2 fmt tbb vc
 #    - name: cache CUDA 11
 #      id: cache-cuda
 #      uses: actions/cache@v2
@@ -66,13 +66,6 @@ jobs:
         cd alpaka/build
         cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
         sudo cmake --build . --target install
-    - name: install Vc
-      run: |
-        git clone https://github.com/VcDevel/Vc.git
-        mkdir Vc/build
-        cd Vc/build
-        cmake .. -DBUILD_TESTING=OFF -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
-        sudo cmake --build . --target install
     - name: cmake
       run: |
         mkdir build
@@ -92,20 +85,13 @@ jobs:
         sudo apt install libboost-all-dev
     - name: vcpkg install dependencies
       run: |
-        vcpkg install catch2 fmt
+        vcpkg install catch2 fmt vc
     - name: install alpaka
       run: |
         git clone https://github.com/alpaka-group/alpaka.git
         mkdir alpaka/build
         cd alpaka/build
         cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
-        sudo cmake --build . --target install
-    - name: install Vc
-      run: |
-        git clone https://github.com/VcDevel/Vc.git
-        mkdir Vc/build
-        cd Vc/build
-        cmake .. -DBUILD_TESTING=OFF -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
         sudo cmake --build . --target install
     - name: cmake
       run: |
@@ -126,20 +112,13 @@ jobs:
         sudo apt install libboost-all-dev
     - name: vcpkg install dependencies
       run: |
-        vcpkg install catch2 fmt
+        vcpkg install catch2 fmt vc
     - name: install alpaka
       run: |
         git clone https://github.com/alpaka-group/alpaka.git
         mkdir alpaka/build
         cd alpaka/build
         cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
-        sudo cmake --build . --target install
-    - name: install Vc
-      run: |
-        git clone https://github.com/VcDevel/Vc.git
-        mkdir Vc/build
-        cd Vc/build
-        cmake .. -DBUILD_TESTING=OFF -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
         sudo cmake --build . --target install
     - name: cmake
       run: |
@@ -164,7 +143,8 @@ jobs:
         vcpkgGitCommitId: 76a7e9248fb3c57350b559966dcaa2d52a5e4458
     - name: vcpkg install dependencies
       run: |
-        & $env:VCPKG_ROOT/vcpkg install catch2 fmt
+        # Vc does not currently compile with MSVC
+        & $env:VCPKG_ROOT/vcpkg install catch2 fmt 
     - name: install alpaka
       run: |
         git clone https://github.com/alpaka-group/alpaka.git
@@ -173,14 +153,6 @@ jobs:
         $env:BOOST_ROOT = $env:BOOST_ROOT_1_72_0
         cmake .. "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
         cmake --build . --target install --config $env:CONFIG
-# Vc does not currently compile with MSVC
-#    - name: install Vc
-#      run: |
-#        git clone https://github.com/VcDevel/Vc.git
-#        mkdir Vc/build
-#        cd Vc/build
-#        cmake .. -DBUILD_TESTING=OFF "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
-#        cmake --build . --target install --config $env:CONFIG
     - name: cmake
       run: |
         mkdir build
