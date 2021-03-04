@@ -383,8 +383,8 @@ namespace llama
             std::size_t size = 0;
 #endif
             using FlatDD = FlattenDatumDomain<DatumStruct<DatumElements...>>;
-            mp_for_each<mp_iota<mp_size<FlatDD>>>([&](auto i) constexpr {
-                using T = mp_at<FlatDD, decltype(i)>;
+            mp_for_each<mp_transform<mp_identity, FlatDD>>([&](auto e) constexpr {
+                using T = typename decltype(e)::type;
                 internal::roundUpToMultiple(size, alignof(T));
                 size += sizeof(T);
             });
