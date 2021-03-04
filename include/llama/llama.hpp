@@ -31,6 +31,11 @@
 #define LLAMA_VERSION_MINOR 2
 #define LLAMA_VERSION_PATCH 0
 
+#ifdef __NVCC__
+#    pragma push
+#    pragma diag_suppress 940
+#endif
+
 #include "Allocators.hpp"
 #include "ArrayDomainRange.hpp"
 #include "Core.hpp"
@@ -44,3 +49,7 @@
 #include "mapping/Split.hpp"
 #include "mapping/Trace.hpp"
 #include "mapping/tree/Mapping.hpp"
+
+#ifdef __NVCC__
+#    pragma pop
+#endif
