@@ -7,7 +7,6 @@
 #include "DatumCoord.hpp"
 
 #include <boost/core/demangle.hpp>
-#include <boost/iterator/iterator_facade.hpp>
 #include <boost/mp11.hpp>
 #include <iostream>
 #include <type_traits>
