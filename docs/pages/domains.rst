@@ -91,18 +91,15 @@ A datum domain itself is just a :cpp:`DatumStruct` (or a fundamental type), as s
         llama::DE<alpha, char>
     >;
 
-A :cpp:`DatumArray` is essentially a :cpp:`DatumStruct` with multiple :cpp:`DatumElement`\ s of the same type.
-E.g. :cpp:`DatumArray<float, 4>` is the same as
+One-dimensional arrays of compile-time extent are also supported as arguments to :cpp:`llama::DE`, but not to  :cpp:`llama::DatumElement`.
+Such arrays are expanded into a :cpp:`DatumStruct` with multiple :cpp:`DatumElement`\ s of the same type.
+E.g. :cpp:`llama::DE<Tag, float[4]>` is expanded into
 
 .. code-block:: C++
 
-    llama::DS<
+    llama::DE<Tag, llama::DS<
         llama::DE<llama::Index<0>, float>,
         llama::DE<llama::Index<1>, float>,
         llama::DE<llama::Index<2>, float>,
         llama::DE<llama::Index<3>, float>
-    >
-
-LLAMA also defines a shortcuts for a datum array:
-
-* :cpp:`llama::DatumArray` → :cpp:`llama::DA`
+    >>
