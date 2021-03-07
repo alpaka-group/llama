@@ -1,6 +1,19 @@
 #include <catch2/catch.hpp>
 #include <llama/llama.hpp>
 
+TEST_CASE("RecordCoord.operator==")
+{
+    STATIC_REQUIRE(llama::RecordCoord{} == llama::RecordCoord{});
+    STATIC_REQUIRE(llama::RecordCoord<1, 2, 3>{} == llama::RecordCoord<1, 2, 3>{});
+}
+
+TEST_CASE("RecordCoord.operator!=")
+{
+    STATIC_REQUIRE(llama::RecordCoord{} != llama::RecordCoord<1>{});
+    STATIC_REQUIRE(llama::RecordCoord<1>{} != llama::RecordCoord{});
+    STATIC_REQUIRE(llama::RecordCoord<1, 2, 3>{} != llama::RecordCoord<4, 1, 2, 3>{});
+}
+
 TEST_CASE("RecordCoordCommonPrefixIsBigger")
 {
     // clang-format off

@@ -30,6 +30,24 @@ namespace llama
         static constexpr std::size_t size = 0;
     };
 
+    template <std::size_t... CoordsA, std::size_t... CoordsB>
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(RecordCoord<CoordsA...>, RecordCoord<CoordsB...>)
+    {
+        return false;
+    }
+
+    template <std::size_t... Coords>
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(RecordCoord<Coords...>, RecordCoord<Coords...>)
+    {
+        return true;
+    }
+
+    template <std::size_t... CoordsA, std::size_t... CoordsB>
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator!=(RecordCoord<CoordsA...> a, RecordCoord<CoordsB...> b)
+    {
+        return !(a == b);
+    }
+
     template <typename T>
     inline constexpr bool isRecordCoord = false;
 
