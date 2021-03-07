@@ -33,7 +33,7 @@ namespace llama::mapping::tree
             MergeFunctors(const Tree& tree, const Tuple<Operations...>& treeOperationList)
                 : operation(treeOperationList.first)
                 , treeAfterOp(operation.basicToResult(tree))
-                , next(treeAfterOp, tupleWithoutFirst(treeOperationList))
+                , next(treeAfterOp, pop_front(treeOperationList))
             {
             }
 
@@ -77,7 +77,7 @@ namespace llama::mapping::tree
             MergeFunctors() = default;
 
             LLAMA_FN_HOST_ACC_INLINE
-            MergeFunctors(const Tree&, const Tuple<>& treeOperationList)
+            MergeFunctors(const Tree&, const Tuple<>&)
             {
             }
 
@@ -155,7 +155,7 @@ namespace llama::mapping::tree
                 return getTreeBlobSize(tree.childs, firstArrayIndex)
                     + sumChildrenSmallerThan<firstChildIndex>(
                            tree,
-                           std::make_index_sequence<tupleSize<typename Tree::ChildrenTuple>>{})
+                           std::make_index_sequence<std::tuple_size_v<typename Tree::ChildrenTuple>>{})
                     + getTreeBlobByte(get<firstChildIndex>(tree.childs), treeCoord.rest);
             }
             else

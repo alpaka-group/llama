@@ -9,15 +9,12 @@
 
 namespace llama
 {
-    /// Tuple class like `std::tuple` but suitable for use with offloading devices like GPUs.
     template <typename... Elements>
-    struct Tuple;
-
-    template <>
-    struct Tuple<>
+    struct Tuple
     {
     };
 
+    /// Tuple class like `std::tuple` but suitable for use with offloading devices like GPUs.
     template <typename T_FirstElement, typename... Elements>
     struct Tuple<T_FirstElement, Elements...>
     {
@@ -26,44 +23,43 @@ namespace llama
 
         constexpr Tuple() = default;
 
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr Tuple(FirstElement first, Elements... rest) : first(first), rest(rest...)
+        /// Construct a tuple from values of the same types as the tuple stores.
+        LLAMA_FN_HOST_ACC_INLINE constexpr Tuple(FirstElement first, Elements... rest)
+            : first(std::move(first))
+            , rest(std::move(rest)...)
         {
         }
 
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr Tuple(FirstElement first, Tuple<Elements...> rest) : first(first), rest(rest)
+        // icpc fails to compile the treemap tests with this ctor
+#ifndef __INTEL_COMPILER
+        /// Construct a tuple from forwarded values of potentially different types as the tuple stores.
+        // SFINAE away this ctor if tuple elements cannot be constructed from ctor arguments
+        template <
+            typename T,
+            typename... Ts,
+            std::enable_if_t<
+                sizeof...(Elements) == sizeof...(Ts)
+                    && std::is_constructible_v<T_FirstElement, T> && (std::is_constructible_v<Elements, Ts> && ...),
+                int> = 0>
+        LLAMA_FN_HOST_ACC_INLINE constexpr Tuple(T&& firstArg, Ts&&... restArgs)
+            : first(std::forward<T>(firstArg))
+            , rest(std::forward<Ts>(restArgs)...)
         {
         }
+#endif
 
         FirstElement first; ///< the first element (if existing)
+#ifndef __NVCC__
+        [[no_unique_address]] // nvcc 11.3 ICE
+#endif
         RestTuple rest; ///< the remaining elements
     };
 
-    template <typename T_FirstElement>
-    struct Tuple<T_FirstElement>
-    {
-        using FirstElement = T_FirstElement;
-        using RestTuple = Tuple<>;
-
-        constexpr Tuple() = default;
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr Tuple(FirstElement const first, Tuple<> const rest = Tuple<>()) : first(first)
-        {
-        }
-
-        FirstElement first;
-    };
-
     template <typename... Elements>
-    Tuple(Elements...) -> Tuple<Elements...>;
-
-    template <typename Tuple, std::size_t Pos>
-    using TupleElement = boost::mp11::mp_at_c<Tuple, Pos>;
+    Tuple(Elements...) -> Tuple<std::remove_cv_t<std::remove_reference_t<Elements>>...>;
 
     template <std::size_t Pos, typename... Elements>
-    LLAMA_FN_HOST_ACC_INLINE auto get(const Tuple<Elements...>& tuple)
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto get(Tuple<Elements...>& tuple) -> auto&
     {
         if constexpr (Pos == 0)
             return tuple.first;
@@ -71,13 +67,65 @@ namespace llama
             return get<Pos - 1>(tuple.rest);
     }
 
-    template <typename Tuple>
-    inline constexpr auto tupleSize = boost::mp11::mp_size<Tuple>::value;
+    template <std::size_t Pos, typename... Elements>
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto get(const Tuple<Elements...>& tuple) -> const auto&
+    {
+        if constexpr (Pos == 0)
+            return tuple.first;
+        else
+            return get<Pos - 1>(tuple.rest);
+    }
+} // namespace llama
+
+template <typename... Elements>
+struct std::tuple_size<llama::Tuple<Elements...>>
+{
+    static constexpr auto value = sizeof...(Elements);
+};
+
+template <std::size_t I, typename... Elements>
+struct std::tuple_element<I, llama::Tuple<Elements...>>
+{
+    using type = boost::mp11::mp_at_c<llama::Tuple<Elements...>, I>;
+};
+
+namespace llama
+{
+    namespace internal
+    {
+        template <typename... Elements, std::size_t... Is>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto areEqual(
+            const Tuple<Elements...>& a,
+            const Tuple<Elements...>& b,
+            std::index_sequence<Is...>) -> bool
+        {
+            return ((get<Is>(a) == get<Is>(b)) && ...);
+        }
+    } // namespace internal
+
+    template <typename... ElementsA, typename... ElementsB>
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(const Tuple<ElementsA...>& a, const Tuple<ElementsB...>& b)
+        -> bool
+    {
+        using namespace boost::mp11;
+        if constexpr (sizeof...(ElementsA) == sizeof...(ElementsB))
+            if constexpr (mp_apply<mp_all, mp_transform<std::is_same, mp_list<ElementsA...>, mp_list<ElementsB...>>>::
+                              value)
+                return internal::areEqual(a, b, std::make_index_sequence<sizeof...(ElementsA)>{});
+        return false;
+    }
+
+    template <typename... ElementsA, typename... ElementsB>
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator!=(const Tuple<ElementsA...>& a, const Tuple<ElementsB...>& b)
+        -> bool
+    {
+        return !(a == b);
+    }
 
     namespace internal
     {
         template <typename Tuple1, typename Tuple2, size_t... Is1, size_t... Is2>
-        static LLAMA_FN_HOST_ACC_INLINE auto tupleCatImpl(
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto tupleCatImpl(
             const Tuple1& t1,
             const Tuple2& t2,
             std::index_sequence<Is1...>,
@@ -88,13 +136,13 @@ namespace llama
     } // namespace internal
 
     template <typename Tuple1, typename Tuple2>
-    LLAMA_FN_HOST_ACC_INLINE auto tupleCat(const Tuple1& t1, const Tuple2& t2)
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto tupleCat(const Tuple1& t1, const Tuple2& t2)
     {
         return internal::tupleCatImpl(
             t1,
             t2,
-            std::make_index_sequence<tupleSize<Tuple1>>{},
-            std::make_index_sequence<tupleSize<Tuple2>>{});
+            std::make_index_sequence<std::tuple_size_v<Tuple1>>{},
+            std::make_index_sequence<std::tuple_size_v<Tuple2>>{});
     }
 
     namespace internal
@@ -141,41 +189,31 @@ namespace llama
 
     namespace internal
     {
-        template <typename Seq>
-        struct TupleTransformHelper;
-
-        template <size_t... Is>
-        struct TupleTransformHelper<std::index_sequence<Is...>>
+        template <size_t... Is, typename... Elements, typename Functor>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto tupleTransformHelper(
+            std::index_sequence<Is...>,
+            const Tuple<Elements...>& tuple,
+            const Functor& functor)
         {
-            template <typename... Elements, typename Functor>
-            static LLAMA_FN_HOST_ACC_INLINE auto transform(const Tuple<Elements...>& tuple, const Functor& functor)
-            {
-                // FIXME(bgruber): nvcc fails to compile
-                // Tuple{functor(get<Is>(tuple))...}
-                return Tuple<decltype(functor(std::declval<Elements>()))...>{functor(get<Is>(tuple))...};
-            }
-        };
+            // FIXME(bgruber): nvcc fails to compile
+            // Tuple{functor(get<Is>(tuple))...}
+            return Tuple<decltype(functor(std::declval<Elements>()))...>{functor(get<Is>(tuple))...};
+        }
     } // namespace internal
 
     /// Applies a functor to every element of a tuple, creating a new tuple with the result of the element
     /// transformations. The functor needs to implement a template `operator()` to which all tuple elements are passed.
     // TODO: replace by mp11 version in Boost 1.74.
     template <typename... Elements, typename Functor>
-    LLAMA_FN_HOST_ACC_INLINE auto tupleTransform(const Tuple<Elements...>& tuple, const Functor& functor)
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto tupleTransform(const Tuple<Elements...>& tuple, const Functor& functor)
     {
-        return internal::TupleTransformHelper<std::make_index_sequence<sizeof...(Elements)>>::transform(tuple, functor);
+        return internal::tupleTransformHelper(std::make_index_sequence<sizeof...(Elements)>{}, tuple, functor);
     }
 
     /// Returns a copy of the tuple without the first element.
     template <typename... Elements>
-    LLAMA_FN_HOST_ACC_INLINE auto tupleWithoutFirst(const Tuple<Elements...>& tuple)
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto pop_front(const Tuple<Elements...>& tuple)
     {
         return tuple.rest;
-    }
-
-    template <typename Element>
-    LLAMA_FN_HOST_ACC_INLINE auto tupleWithoutFirst(const Tuple<Element>& tuple)
-    {
-        return Tuple<>{};
     }
 } // namespace llama
