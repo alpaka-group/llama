@@ -79,7 +79,7 @@ namespace llama::mapping::tree::functor
             const NodeOrLeaf& nodeOrLeaf,
             std::size_t arraySize = 0)
         {
-            if constexpr (tupleSize<BasicCoord> == 1)
+            if constexpr (std::tuple_size_v<BasicCoord> == 1)
                 return Tuple{TreeCoordElement<BasicCoord::FirstElement::childIndex>{
                     arraySize + LLAMA_COPY(basicCoord.first.arrayIndex)}};
             else
@@ -192,6 +192,7 @@ namespace llama::mapping::tree::functor
             return internal::changeNodeChildsRuntime<TreeCoord>(
                 internal::changeNodeRuntime<TreeCoord>(
                     tree,
+                    // NOLINTNEXTLINE(clang-analyzer-core.DivideZero)
                     (internal::getNode<TreeCoord>(tree).count + amount - 1) / amount),
                 amount);
         }
@@ -216,7 +217,7 @@ namespace llama::mapping::tree::functor
             if constexpr (std::is_same_v<InternalTreeCoord, Tuple<>>)
             {
                 if constexpr (std::is_same_v<BasicCoord, Tuple<>>)
-                    return Tuple<>{};
+                    return Tuple{};
                 else
                 {
                     const auto& childTree = get<BasicCoord::FirstElement::childIndex>(tree.childs);
@@ -225,7 +226,7 @@ namespace llama::mapping::tree::functor
                         = basicCoord.first.arrayIndex % amount * childTree.count + basicCoord.rest.first.arrayIndex;
                     auto rt1Child = TreeCoordElement<BasicCoord::FirstElement::childIndex>{rt1};
                     auto rt2Child = TreeCoordElement<BasicCoord::RestTuple::FirstElement::childIndex>{rt2};
-                    return tupleCat(Tuple{rt1Child}, tupleCat(Tuple{rt2Child}, tupleWithoutFirst(basicCoord.rest)));
+                    return tupleCat(Tuple{rt1Child}, tupleCat(Tuple{rt2Child}, pop_front(basicCoord.rest)));
                 }
             }
             else
@@ -235,7 +236,7 @@ namespace llama::mapping::tree::functor
                 else
                 {
                     auto rest = basicCoordToResultCoordImpl<typename InternalTreeCoord::RestTuple>(
-                        tupleWithoutFirst(basicCoord),
+                        pop_front(basicCoord),
                         get<BasicCoord::FirstElement::childIndex>(tree.childs));
                     return tupleCat(Tuple{basicCoord.first}, rest);
                 }

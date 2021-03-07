@@ -64,7 +64,7 @@ namespace llama::mapping::tree
     auto treeCoordToString(TreeCoord treeCoord) -> std::string
     {
         return std::string("[ ")
-            + internal::treeCoordToString(treeCoord, std::make_index_sequence<tupleSize<TreeCoord>>{})
+            + internal::treeCoordToString(treeCoord, std::make_index_sequence<std::tuple_size_v<TreeCoord>>{})
             + std::string(" ]");
     }
 
