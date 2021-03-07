@@ -47,11 +47,13 @@ namespace llama::mapping
             return mapping.blobSize(i);
         }
 
-        template<std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayIndex ai, RecordCoord<RecordCoords...> rc = {}) const
-            -> NrAndOffset
+        template<std::size_t... RecordCoords, std::size_t N = 0>
+        LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(
+            ArrayIndex ai,
+            Array<std::size_t, N> dynamicArrayExtents = {},
+            RecordCoord<RecordCoords...> rc = {}) const -> NrAndOffset
         {
-            const auto nao = mapping.blobNrAndOffset(ai, rc);
+            const auto nao = mapping.blobNrAndOffset(ai, dynamicArrayExtents, rc);
             for(std::size_t i = 0; i < sizeof(GetType<RecordDim, RecordCoord<RecordCoords...>>); i++)
                 byteHits[nao.nr][nao.offset + i]++;
             return nao;

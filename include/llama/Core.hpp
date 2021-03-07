@@ -30,6 +30,15 @@ namespace llama
     template<typename T>
     inline constexpr bool isAllowedFieldType = std::is_trivially_destructible_v<T>;
 
+    template<typename... Fields>
+    inline constexpr bool isAllowedFieldType<Record<Fields...>> = true;
+
+    template<typename T, std::size_t N>
+    inline constexpr bool isAllowedFieldType<T[N]> = isAllowedFieldType<T>;
+
+    template<typename T>
+    inline constexpr bool isAllowedFieldType<T[]> = isAllowedFieldType<T>;
+
     /// Record dimension tree node which may either be a leaf or refer to a child tree presented as another \ref
     /// Record.
     /// \tparam Tag Name of the node. May be any type (struct, class).
@@ -97,6 +106,14 @@ namespace llama
         struct GetTagsImpl<ChildType[Count], RecordCoord<FirstCoord, Coords...>>
         {
             using ChildTag = RecordCoord<FirstCoord>;
+            using type
+                = boost::mp11::mp_push_front<typename GetTagsImpl<ChildType, RecordCoord<Coords...>>::type, ChildTag>;
+        };
+
+        template<typename ChildType, std::size_t... Coords>
+        struct GetTagsImpl<ChildType[], RecordCoord<dynamic, Coords...>>
+        {
+            using ChildTag = RecordCoord<dynamic>;
             using type
                 = boost::mp11::mp_push_front<typename GetTagsImpl<ChildType, RecordCoord<Coords...>>::type, ChildTag>;
         };
@@ -198,6 +215,16 @@ namespace llama
                 typename GetCoordFromTagsImpl<ChildType, RecordCoord<ResultCoords..., FirstTag::front>, Tags...>::type;
         };
 
+        template<typename ChildType, std::size_t... ResultCoords, typename FirstTag, typename... Tags>
+        struct GetCoordFromTagsImpl<ChildType[], RecordCoord<ResultCoords...>, FirstTag, Tags...>
+        {
+            static_assert(
+                std::is_same_v<FirstTag, RecordCoord<dynamic>>,
+                "Please use a RecordCoord<dynamic> to index into dynamic arrays");
+            using type =
+                typename GetCoordFromTagsImpl<ChildType, RecordCoord<ResultCoords..., FirstTag::front>, Tags...>::type;
+        };
+
         template<typename RecordDim, typename RecordCoord>
         struct GetCoordFromTagsImpl<RecordDim, RecordCoord>
         {
@@ -239,6 +266,13 @@ namespace llama
         template<typename ChildType, std::size_t N, std::size_t HeadCoord, std::size_t... TailCoords>
         struct GetTypeImpl<ChildType[N], RecordCoord<HeadCoord, TailCoords...>>
         {
+            using type = typename GetTypeImpl<ChildType, RecordCoord<TailCoords...>>::type;
+        };
+
+        template<typename ChildType, std::size_t HeadCoord, std::size_t... TailCoords>
+        struct GetTypeImpl<ChildType[], RecordCoord<HeadCoord, TailCoords...>>
+        {
+            static_assert(HeadCoord == dynamic, "Record coord at a dynamic array must be llama::dynamic");
             using type = typename GetTypeImpl<ChildType, RecordCoord<TailCoords...>>::type;
         };
 
@@ -288,6 +322,12 @@ namespace llama
                     typename LeafRecordCoordsImpl<Child, RecordCoord<RCs..., Is>>::type...>{};
             }
             using type = decltype(help(std::make_index_sequence<N>{}));
+        };
+
+        template<typename Child, std::size_t... RCs>
+        struct LeafRecordCoordsImpl<Child[], RecordCoord<RCs...>>
+        {
+            using type = typename LeafRecordCoordsImpl<Child, RecordCoord<RCs..., dynamic>>::type;
         };
     } // namespace internal
 
@@ -557,6 +597,19 @@ namespace llama
         struct IsBoundedArray<T[N]> : std::true_type
         {
         };
+
+        template<class T>
+        struct is_unbounded_array : std::false_type
+        {
+        };
+
+        template<class T>
+        struct is_unbounded_array<T[]> : std::true_type
+        {
+        };
+
+        template<typename T>
+        inline constexpr bool is_unbounded_array_v = is_unbounded_array<T>::value;
     } // namespace internal
 
     namespace internal

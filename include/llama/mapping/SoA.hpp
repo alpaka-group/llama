@@ -64,14 +64,16 @@ namespace llama::mapping
             }
         }
 
-        template<std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayIndex ad, RecordCoord<RecordCoords...> = {}) const
-            -> NrAndOffset
+        template<std::size_t... RecordCoords, std::size_t N = 0>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
+            ArrayIndex ai,
+            Array<std::size_t, N> = {},
+            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset
         {
             if constexpr(SeparateBuffers)
             {
                 constexpr auto blob = flatRecordCoord<RecordDim, RecordCoord<RecordCoords...>>;
-                const auto offset = LinearizeArrayDimsFunctor{}(ad, extents())
+                const auto offset = LinearizeArrayDimsFunctor{}(ai, extents())
                     * sizeof(GetType<RecordDim, RecordCoord<RecordCoords...>>);
                 return {blob, offset};
             }
@@ -82,7 +84,7 @@ namespace llama::mapping
                     *& // mess with nvcc compiler state to workaround bug
 #endif
                      Flattener::template flatIndex<RecordCoords...>;
-                const auto offset = LinearizeArrayDimsFunctor{}(ad, extents())
+                const auto offset = LinearizeArrayDimsFunctor{}(ai, extents())
                         * sizeof(GetType<RecordDim, RecordCoord<RecordCoords...>>)
                     + flatOffsetOf<
                           typename Flattener::FlatRecordDim,

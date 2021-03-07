@@ -6,11 +6,14 @@
 #include "Meta.hpp"
 
 #include <array>
+#include <limits>
 #include <ostream>
 #include <type_traits>
 
 namespace llama
 {
+    inline constexpr auto dynamic = std::numeric_limits<std::size_t>::max();
+
     /// Represents a coordinate for a record inside the record dimension tree.
     /// \tparam Coords... the compile time coordinate.
     template<std::size_t... Coords>

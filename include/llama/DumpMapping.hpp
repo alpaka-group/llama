@@ -8,6 +8,7 @@
 
 #include "ArrayIndexRange.hpp"
 #include "Core.hpp"
+#include "mapping/OffsetTable.hpp"
 
 #include <boost/functional/hash.hpp>
 #include <fmt/format.h>
@@ -75,11 +76,30 @@ namespace llama
                             {ai,
                              internal::toVec(rc),
                              recordCoordTags<RecordDim>(rc),
-                             mapping.blobNrAndOffset(ai, rc),
+                             mapping.blobNrAndOffset(ai, {}, rc),
                              sizeof(GetType<RecordDim, decltype(rc)>)});
                     });
             }
 
+            return infos;
+        }
+
+        template<typename ArrayExtents, typename RecordDim, typename SubMappings>
+        auto boxesFromMapping(const mapping::OffsetTable<ArrayExtents, RecordDim, SubMappings>& mapping)
+            -> std::vector<FieldBox<ArrayExtents::rank>>
+        {
+            std::size_t previousBlobs = 0;
+            std::vector<FieldBox<ArrayExtents::rank>> infos;
+            boost::mp11::mp_for_each<boost::mp11::mp_iota<boost::mp11::mp_size<decltype(mapping.subMappings)>>>(
+                [&](auto ic)
+                {
+                    const auto& subMapping = get<decltype(ic)::value>(mapping.subMappings);
+                    auto subBoxes = boxesFromMapping(subMapping);
+                    for(auto& box : subBoxes)
+                        box.nrAndOffset.nr += previousBlobs;
+                    infos.insert(infos.end(), subBoxes.begin(), subBoxes.end());
+                    previousBlobs += std::decay_t<decltype(subMapping)>::blobCount;
+                });
             return infos;
         }
 
