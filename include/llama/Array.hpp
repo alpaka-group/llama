@@ -89,6 +89,46 @@ namespace llama
 
     template <typename First, typename... Args>
     Array(First, Args... args) -> Array<First, sizeof...(Args) + 1>;
+
+    template <typename T, std::size_t N>
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto push_front(Array<T, N> a, T v) -> Array<T, N + 1>
+    {
+        Array<T, N + 1> r{};
+        r[0] = v;
+        for (auto i = 0; i < N; i++)
+            r[i + 1] = a[i];
+        return r;
+    }
+
+    template <typename T, std::size_t N>
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto push_back(Array<T, N> a, T v) -> Array<T, N + 1>
+    {
+        Array<T, N + 1> r{};
+        for (auto i = 0; i < N; i++)
+            r[i] = a[i];
+        r[N] = v;
+        return r;
+    }
+
+    template <typename T, std::size_t N>
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto pop_back(Array<T, N> a)
+    {
+        static_assert(N > 0);
+        Array<T, N - 1> r{};
+        for (auto i = 0; i < N - 1; i++)
+            r[i] = a[i];
+        return r;
+    }
+
+    template <typename T, std::size_t N>
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto pop_front(Array<T, N> a)
+    {
+        static_assert(N > 0);
+        Array<T, N - 1> r{};
+        for (auto i = 0; i < N - 1; i++)
+            r[i] = a[i + 1];
+        return r;
+    }
 } // namespace llama
 
 namespace std
