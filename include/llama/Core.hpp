@@ -342,28 +342,52 @@ namespace llama
             using type
                 = boost::mp11::mp_append<typename FlattenDatumDomainImpl<GetDatumElementType<Elements>>::type...>;
         };
+
+        // TODO: MSVC fails to compile if we move this function into an IILE at the callsite
+        template <typename DatumDomain, typename DatumCoord>
+        constexpr auto flatDatumCoordImpl()
+        {
+            std::size_t c = 0;
+            forEachLeave<DatumDomain>([&](auto coord) {
+                if constexpr (DatumCoordCommonPrefixIsBigger<DatumCoord, decltype(coord)>)
+                    c++;
+            });
+            return c;
+        }
     } // namespace internal
 
     template <typename DatumDomain>
     using FlattenDatumDomain = typename internal::FlattenDatumDomainImpl<DatumDomain>::type;
 
     template <typename DatumDomain, typename DatumCoord>
-    inline constexpr auto flatDatumCoord = []() constexpr
-    {
-        std::size_t c = 0;
-        forEachLeave<DatumDomain>([&](auto coord) {
-            if constexpr (DatumCoordCommonPrefixIsBigger<DatumCoord, decltype(coord)>)
-                c++;
-        });
-        return c;
-    }
-    ();
+    inline constexpr std::size_t flatDatumCoord = internal::flatDatumCoordImpl<DatumDomain, DatumCoord>();
 
     namespace internal
     {
         constexpr void roundUpToMultiple(std::size_t& value, std::size_t multiple)
         {
             value = ((value + multiple - 1) / multiple) * multiple;
+        }
+
+        // TODO: MSVC fails to compile if we move this function into an IILE at the callsite
+        template <bool Align, typename... DatumElements>
+        constexpr auto sizeOfDatumStructImpl()
+        {
+            using namespace boost::mp11;
+
+            std::size_t size = 0;
+            using FlatDD = FlattenDatumDomain<DatumStruct<DatumElements...>>;
+            mp_for_each<mp_transform<mp_identity, FlatDD>>([&](auto e) constexpr {
+                using T = typename decltype(e)::type;
+                if constexpr (Align)
+                    roundUpToMultiple(size, alignof(T));
+                size += sizeof(T);
+            });
+
+            // final padding, so next struct can start right away
+            if constexpr (Align)
+                roundUpToMultiple(size, alignof(mp_first<FlatDD>));
+            return size;
         }
     } // namespace internal
 
@@ -372,30 +396,8 @@ namespace llama
 
     /// The size a datum domain if it would be a normal struct.
     template <typename... DatumElements, bool Align>
-    inline constexpr std::size_t sizeOf<DatumStruct<DatumElements...>, Align> = []() constexpr
-    {
-        using namespace boost::mp11;
-
-#if BOOST_COMP_MSVC
-        std::size_t size;
-        size = 0; // if we join this assignment with the previous line, MSVC crashes :(
-#else
-        std::size_t size = 0;
-#endif
-        using FlatDD = FlattenDatumDomain<DatumStruct<DatumElements...>>;
-        mp_for_each<mp_transform<mp_identity, FlatDD>>([&](auto e) constexpr {
-            using T = typename decltype(e)::type;
-            if constexpr (Align)
-                internal::roundUpToMultiple(size, alignof(T));
-            size += sizeof(T);
-        });
-
-        // final padding, so next struct can start right away
-        if constexpr (Align)
-            internal::roundUpToMultiple(size, alignof(mp_first<FlatDD>));
-        return size;
-    }
-    ();
+    inline constexpr std::size_t sizeOf<DatumStruct<DatumElements...>, Align> = internal::
+        sizeOfDatumStructImpl<Align, DatumElements...>();
 
     /// The byte offset of an element in a datum domain if it would be a normal struct.
     /// \tparam DatumDomain Datum domain tree.
