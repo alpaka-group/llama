@@ -844,6 +844,20 @@ namespace llama
         View* view;
     };
 
+    namespace internal
+    {
+        template <typename Mapping, typename DatumCoord, typename = void>
+        struct isComputed : std::false_type
+        {
+        };
+
+        template <typename Mapping, typename DatumCoord>
+        struct isComputed<Mapping, DatumCoord, std::void_t<decltype(Mapping::isComputed(DatumCoord{}))>>
+            : std::bool_constant<Mapping::isComputed(DatumCoord{})>
+        {
+        };
+    } // namespace internal
+
     /// Central LLAMA class holding memory for storage and giving access to
     /// values stored there defined by a mapping. A view should be created using
     /// \ref allocView.
@@ -971,19 +985,30 @@ namespace llama
         friend struct VirtualDatum;
 
         template <std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDomain arrayDomain, DatumCoord<Coords...> = {}) const -> const auto&
+        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDomain arrayDomain, DatumCoord<Coords...> dc = {}) const
+            -> decltype(auto)
         {
-            const auto [nr, offset] = mapping.template blobNrAndOffset<Coords...>(arrayDomain);
-            using Type = GetType<DatumDomain, DatumCoord<Coords...>>;
-            return reinterpret_cast<const Type&>(storageBlobs[nr][offset]);
+            if constexpr (internal::isComputed<Mapping, DatumCoord<Coords...>>::value)
+                return mapping.compute(arrayDomain, dc, storageBlobs);
+            else
+            {
+                const auto [nr, offset] = mapping.template blobNrAndOffset<Coords...>(arrayDomain);
+                using Type = GetType<DatumDomain, DatumCoord<Coords...>>;
+                return reinterpret_cast<const Type&>(storageBlobs[nr][offset]);
+            }
         }
 
         template <std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDomain arrayDomain, DatumCoord<Coords...> coord = {}) -> auto&
+        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDomain arrayDomain, DatumCoord<Coords...> dc = {}) -> decltype(auto)
         {
-            const auto [nr, offset] = mapping.template blobNrAndOffset<Coords...>(arrayDomain);
-            using Type = GetType<DatumDomain, DatumCoord<Coords...>>;
-            return reinterpret_cast<Type&>(storageBlobs[nr][offset]);
+            if constexpr (internal::isComputed<Mapping, DatumCoord<Coords...>>::value)
+                return mapping.compute(arrayDomain, dc, storageBlobs);
+            else
+            {
+                const auto [nr, offset] = mapping.template blobNrAndOffset<Coords...>(arrayDomain);
+                using Type = GetType<DatumDomain, DatumCoord<Coords...>>;
+                return reinterpret_cast<Type&>(storageBlobs[nr][offset]);
+            }
         }
     };
 
