@@ -401,53 +401,27 @@ namespace llama
     }
     ();
 
-    namespace internal
-    {
-        template <bool Align, typename T>
-        constexpr auto offsetOfImpl(T*, DatumCoord<>)
-        {
-            return 0;
-        }
-
-        template <bool Align, typename... DatumElements, std::size_t FirstCoord, std::size_t... Coords>
-        constexpr auto offsetOfImpl(DatumStruct<DatumElements...>*, DatumCoord<FirstCoord, Coords...>)
-        {
-            std::size_t acc = 0;
-            boost::mp11::mp_for_each<boost::mp11::mp_take_c<DatumStruct<DatumElements...>, FirstCoord>>([&](
-                auto element) constexpr { acc += sizeOf<GetDatumElementType<decltype(element)>>; });
-
-            using Element = boost::mp11::mp_at_c<DatumStruct<DatumElements...>, FirstCoord>;
-            acc += offsetOfImpl<Align>((GetDatumElementType<Element>*) nullptr, DatumCoord<Coords...>{});
-
-            return acc;
-        }
-    } // namespace internal
-
-    /// The byte offset of an element in a datum domain if it would be a normal
-    /// struct.
+    /// The byte offset of an element in a datum domain if it would be a normal struct.
     /// \tparam DatumDomain Datum domain tree.
     /// \tparam DatumCoord Datum coordinate of an element indatum domain tree.
     template <typename DatumDomain, typename DatumCoord, bool Align = false>
     inline constexpr std::size_t offsetOf = []() constexpr
     {
-        if constexpr (Align)
-        {
-            using namespace boost::mp11;
+        using namespace boost::mp11;
 
-            constexpr auto i = flatDatumCoord<DatumDomain, DatumCoord>;
+        using FlatDD = FlattenDatumDomain<DatumDomain>;
+        constexpr auto flatCoord = flatDatumCoord<DatumDomain, DatumCoord>;
 
-            std::size_t offset = 0;
-            using FlatDD = FlattenDatumDomain<DatumDomain>;
-            mp_for_each<mp_iota_c<i>>([&](auto i) constexpr {
-                using T = mp_at<FlatDD, decltype(i)>;
+        std::size_t offset = 0;
+        mp_for_each<mp_iota_c<flatCoord>>([&](auto i) constexpr {
+            using T = mp_at<FlatDD, decltype(i)>;
+            if constexpr (Align)
                 internal::roundUpToMultiple(offset, alignof(T));
-                offset += sizeof(T);
-            });
-            internal::roundUpToMultiple(offset, alignof(boost::mp11::mp_at_c<FlatDD, i>));
-            return offset;
-        }
-        else
-            return internal::offsetOfImpl<Align>((DatumDomain*) nullptr, DatumCoord{});
+            offset += sizeof(T);
+        });
+        if constexpr (Align)
+            internal::roundUpToMultiple(offset, alignof(mp_at_c<FlatDD, flatCoord>));
+        return offset;
     }
     ();
 
