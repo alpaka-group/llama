@@ -374,30 +374,26 @@ namespace llama
     template <typename... DatumElements, bool Align>
     inline constexpr std::size_t sizeOf<DatumStruct<DatumElements...>, Align> = []() constexpr
     {
-        if constexpr (Align)
-        {
-            using namespace boost::mp11;
+        using namespace boost::mp11;
 
 #if BOOST_COMP_MSVC
-            std::size_t size;
-            size = 0; // if we join this assignment with the previous line, MSVC crashes :(
+        std::size_t size;
+        size = 0; // if we join this assignment with the previous line, MSVC crashes :(
 #else
-            std::size_t size = 0;
+        std::size_t size = 0;
 #endif
-            using FlatDD = FlattenDatumDomain<DatumStruct<DatumElements...>>;
-            mp_for_each<mp_transform<mp_identity, FlatDD>>([&](auto e) constexpr {
-                using T = typename decltype(e)::type;
+        using FlatDD = FlattenDatumDomain<DatumStruct<DatumElements...>>;
+        mp_for_each<mp_transform<mp_identity, FlatDD>>([&](auto e) constexpr {
+            using T = typename decltype(e)::type;
+            if constexpr (Align)
                 internal::roundUpToMultiple(size, alignof(T));
-                size += sizeof(T);
-            });
+            size += sizeof(T);
+        });
 
-            // final padding, so next struct can start right away
-            using FirstType = mp_first<FlatDD>;
-            internal::roundUpToMultiple(size, alignof(FirstType));
-            return size;
-        }
-        else
-            return (sizeOf<GetDatumElementType<DatumElements>, Align> + ...);
+        // final padding, so next struct can start right away
+        if constexpr (Align)
+            internal::roundUpToMultiple(size, alignof(mp_first<FlatDD>));
+        return size;
     }
     ();
 
