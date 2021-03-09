@@ -263,7 +263,7 @@ try
 {
     run<llama::mapping::PreconfiguredAoS<>::type>("AoS");
     run<llama::mapping::PreconfiguredSoA<>::type>("SoA");
-    run<llama::mapping::PreconfiguredSoA<std::true_type>::type>("SoA_MB");
+    run<llama::mapping::PreconfiguredSoA<true>::type>("SoA_MB");
 }
 catch (const std::exception& e)
 {

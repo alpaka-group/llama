@@ -134,7 +134,7 @@ namespace usellama
             if constexpr (Mapping == 1)
                 return llama::mapping::SoA{arrayDomain, Particle{}};
             if constexpr (Mapping == 2)
-                return llama::mapping::SoA{arrayDomain, Particle{}, std::true_type{}};
+                return llama::mapping::SoA<decltype(arrayDomain), Particle, true>{arrayDomain};
             if constexpr (Mapping == 3)
                 return llama::mapping::AoSoA<decltype(arrayDomain), Particle, AoSoALanes>{arrayDomain};
             if constexpr (Mapping == 4)
@@ -142,8 +142,8 @@ namespace usellama
                     decltype(arrayDomain),
                     Particle,
                     llama::DatumCoord<1>,
-                    llama::mapping::SoA,
-                    llama::mapping::SoA,
+                    llama::mapping::PreconfiguredSoA<>::type,
+                    llama::mapping::PreconfiguredSoA<>::type,
                     true>{arrayDomain};
         }();
         if constexpr (DUMP_MAPPING)

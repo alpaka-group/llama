@@ -94,7 +94,7 @@ TEST_CASE("dump.SoA")
 
 TEST_CASE("dump.SoA.MultiBlob")
 {
-    dump(llama::mapping::SoA{arrayDomain, Particle{}, std::true_type{}}, "SoAMappingMultiBlob");
+    dump(llama::mapping::SoA<ArrayDomain, Particle, true>{arrayDomain}, "SoAMappingMultiBlob");
 }
 
 TEST_CASE("dump.AoSoA.8")
@@ -111,9 +111,12 @@ TEST_CASE("dump.Split.SoA.AoS.1Buffer")
 {
     // split out velocity (written in nbody, the rest is read)
     dump(
-        llama::mapping::
-            Split<ArrayDomain, Particle, llama::DatumCoord<1>, llama::mapping::SoA, llama::mapping::PackedAoS>{
-                arrayDomain},
+        llama::mapping::Split<
+            ArrayDomain,
+            Particle,
+            llama::DatumCoord<1>,
+            llama::mapping::SingleBlobSoA,
+            llama::mapping::PackedAoS>{arrayDomain},
         "Split.SoA.AoS.1Buffer");
 }
 
@@ -121,9 +124,13 @@ TEST_CASE("dump.Split.SoA.AoS.2Buffer")
 {
     // split out velocity as AoS into separate buffer
     dump(
-        llama::mapping::
-            Split<ArrayDomain, Particle, llama::DatumCoord<1>, llama::mapping::SoA, llama::mapping::PackedAoS, true>{
-                arrayDomain},
+        llama::mapping::Split<
+            ArrayDomain,
+            Particle,
+            llama::DatumCoord<1>,
+            llama::mapping::SingleBlobSoA,
+            llama::mapping::PackedAoS,
+            true>{arrayDomain},
         "Split.SoA.AoS.2Buffer");
 }
 
@@ -155,9 +162,11 @@ TEST_CASE("dump.Split.AoSoA8.AoS.One.SoA.4Buffer")
             llama::mapping::PreconfiguredSplit<
                 llama::DatumCoord<1>,
                 llama::mapping::One,
-                llama::mapping::
-                    PreconfiguredSplit<llama::DatumCoord<0>, llama::mapping::PackedAoS, llama::mapping::SoA, true>::
-                        type,
+                llama::mapping::PreconfiguredSplit<
+                    llama::DatumCoord<0>,
+                    llama::mapping::PackedAoS,
+                    llama::mapping::SingleBlobSoA,
+                    true>::type,
                 true>::type,
             true>{arrayDomain},
         "Split.AoSoA8.AoS.One.SoA.4Buffer");
@@ -170,7 +179,7 @@ TEST_CASE("dump.AoS.Unaligned")
 
 TEST_CASE("dump.AoS.Aligned")
 {
-    dump(llama::mapping::AoS<decltype(arrayDomain), ParticleUnaligned, true>{arrayDomain}, "AoS.Aligned");
+    dump(llama::mapping::AoS<ArrayDomain, ParticleUnaligned, true>{arrayDomain}, "AoS.Aligned");
 }
 
 TEST_CASE("dump.AoS.AlignedExplicit")
