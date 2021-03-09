@@ -179,8 +179,7 @@ struct UpdateKernel
         auto pi = [&] {
             constexpr auto arrayDomain = llama::ArrayDomain{Elems};
             constexpr auto mapping
-                = llama::mapping::SoA<typename View::ArrayDomain, typename View::DatumDomain, std::false_type>{
-                    arrayDomain};
+                = llama::mapping::SoA<typename View::ArrayDomain, typename View::DatumDomain, false>{arrayDomain};
             constexpr auto blobAlloc = llama::bloballoc::Stack<llama::sizeOf<typename View::DatumDomain> * Elems>{};
             return llama::allocView(mapping, blobAlloc);
         }();
@@ -266,7 +265,7 @@ void run(std::ostream& plotFile)
         if constexpr (MappingGM == SoA)
             return llama::mapping::SoA{arrayDomain, Particle{}};
         // if constexpr (MappingGM == 2)
-        //    return llama::mapping::SoA{arrayDomain, Particle{}, std::true_type{}};
+        //    return llama::mapping::SoA<decltype(arrayDomain), Particle, true>{arrayDomain};
         if constexpr (MappingGM == AoSoA)
             return llama::mapping::AoSoA<decltype(arrayDomain), Particle, AOSOA_LANES>{arrayDomain};
     }();

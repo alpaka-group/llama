@@ -10,13 +10,13 @@
 namespace llama::mapping
 {
     /// Struct of array mapping. Used to create a \ref View via \ref allocView.
-    /// \tparam LinearizeArrayDomainFunctor Defines how the
-    /// user domain should be mapped into linear numbers and how big the linear
-    /// domain gets.
+    /// \tparam SeparateBuffers If true, every element of the datum domain is mapped to its own buffer.
+    /// \tparam LinearizeArrayDomainFunctor Defines how the user domain should be mapped into linear numbers and how big
+    /// the linear domain gets.
     template <
         typename T_ArrayDomain,
         typename T_DatumDomain,
-        typename SeparateBuffers = std::false_type, // TODO: make this a bool. Needs work in Split mapping
+        bool SeparateBuffers = false,
         typename LinearizeArrayDomainFunctor = LinearizeArrayDomainCpp>
     struct SoA
     {
@@ -24,7 +24,7 @@ namespace llama::mapping
         using DatumDomain = T_DatumDomain;
         static constexpr std::size_t blobCount = []() constexpr
         {
-            if constexpr (SeparateBuffers::value)
+            if constexpr (SeparateBuffers)
             {
                 std::size_t count = 0;
                 forEachLeaf<DatumDomain>([&](auto) constexpr { count++; });
@@ -38,14 +38,14 @@ namespace llama::mapping
         constexpr SoA() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr SoA(ArrayDomain size, DatumDomain = {}, SeparateBuffers = {}) : arrayDomainSize(size)
+        constexpr SoA(ArrayDomain size, DatumDomain = {}) : arrayDomainSize(size)
         {
         }
 
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto blobSize(std::size_t blobIndex) const -> std::size_t
         {
-            if constexpr (SeparateBuffers::value)
+            if constexpr (SeparateBuffers)
             {
                 constexpr llama::Array<std::size_t, blobCount> typeSizes = []() constexpr
                 {
@@ -66,7 +66,7 @@ namespace llama::mapping
         template <std::size_t... DatumDomainCoord>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
         {
-            if constexpr (SeparateBuffers::value)
+            if constexpr (SeparateBuffers)
             {
                 using TargetDatumCoord = DatumCoord<DatumDomainCoord...>;
                 constexpr auto blob = [&]() constexpr
@@ -111,18 +111,16 @@ namespace llama::mapping
         typename ArrayDomain,
         typename DatumDomain,
         typename LinearizeArrayDomainFunctor = LinearizeArrayDomainCpp>
-    using SingleBlobSoA = SoA<ArrayDomain, DatumDomain, std::false_type, LinearizeArrayDomainFunctor>;
+    using SingleBlobSoA = SoA<ArrayDomain, DatumDomain, false, LinearizeArrayDomainFunctor>;
 
     /// Struct of array mapping storing each attribute of the datum domain in a separate blob. See \see SoA.
     template <
         typename ArrayDomain,
         typename DatumDomain,
         typename LinearizeArrayDomainFunctor = LinearizeArrayDomainCpp>
-    using MultiBlobSoA = SoA<ArrayDomain, DatumDomain, std::true_type, LinearizeArrayDomainFunctor>;
+    using MultiBlobSoA = SoA<ArrayDomain, DatumDomain, true, LinearizeArrayDomainFunctor>;
 
-    template <
-        typename SeparateBuffers = std::false_type,
-        typename LinearizeArrayDomainFunctor = LinearizeArrayDomainCpp>
+    template <bool SeparateBuffers = false, typename LinearizeArrayDomainFunctor = LinearizeArrayDomainCpp>
     struct PreconfiguredSoA
     {
         template <typename ArrayDomain, typename DatumDomain>

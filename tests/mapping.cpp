@@ -309,8 +309,7 @@ TEST_CASE("address.SoA.fortran")
     using ArrayDomain = llama::ArrayDomain<2>;
     auto arrayDomain = ArrayDomain{16, 16};
     auto mapping
-        = llama::mapping::SoA<ArrayDomain, Particle, std::false_type, llama::mapping::LinearizeArrayDomainFortran>{
-            arrayDomain};
+        = llama::mapping::SoA<ArrayDomain, Particle, false, llama::mapping::LinearizeArrayDomainFortran>{arrayDomain};
 
     {
         const auto coord = ArrayDomain{0, 0};
@@ -367,8 +366,7 @@ TEST_CASE("address.SoA.morton")
     using ArrayDomain = llama::ArrayDomain<2>;
     auto arrayDomain = ArrayDomain{16, 16};
     auto mapping
-        = llama::mapping::SoA<ArrayDomain, Particle, std::false_type, llama::mapping::LinearizeArrayDomainMorton>{
-            arrayDomain};
+        = llama::mapping::SoA<ArrayDomain, Particle, false, llama::mapping::LinearizeArrayDomainMorton>{arrayDomain};
 
     {
         const auto coord = ArrayDomain{0, 0};
@@ -420,7 +418,7 @@ TEST_CASE("address.SoA.MultiBlob")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
     auto arrayDomain = ArrayDomain{16, 16};
-    auto mapping = llama::mapping::SoA<ArrayDomain, Particle, std::true_type>{arrayDomain};
+    auto mapping = llama::mapping::SoA<ArrayDomain, Particle, true>{arrayDomain};
 
     {
         const auto coord = ArrayDomain{0, 0};

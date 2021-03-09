@@ -40,7 +40,8 @@ TEST_CASE("Split.SoA.AoS.1Buffer")
 
     // we layout Pos as SoA, the rest as AoS
     auto mapping = llama::mapping::
-        Split<ArrayDomain, Particle, llama::DatumCoord<0>, llama::mapping::SoA, llama::mapping::PackedAoS>{arrayDomain};
+        Split<ArrayDomain, Particle, llama::DatumCoord<0>, llama::mapping::SingleBlobSoA, llama::mapping::PackedAoS>{
+            arrayDomain};
 
     constexpr auto mapping1Size = 6120;
     const auto coord = ArrayDomain{0, 0};
@@ -71,8 +72,11 @@ TEST_CASE("Split.AoSoA8.AoS.One.SoA.4Buffer")
         llama::mapping::PreconfiguredSplit<
             llama::DatumCoord<1>,
             llama::mapping::One,
-            llama::mapping::
-                PreconfiguredSplit<llama::DatumCoord<0>, llama::mapping::PackedAoS, llama::mapping::SoA, true>::type,
+            llama::mapping::PreconfiguredSplit<
+                llama::DatumCoord<0>,
+                llama::mapping::PackedAoS,
+                llama::mapping::SingleBlobSoA,
+                true>::type,
             true>::type,
         true>{arrayDomain};
 
