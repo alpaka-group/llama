@@ -109,6 +109,18 @@ namespace llama::mapping
     };
 
     template <
+        typename ArrayDomain,
+        typename DatumDomain,
+        typename LinearizeArrayDomainFunctor = LinearizeArrayDomainCpp>
+    using SingleBlobSoA = SoA<ArrayDomain, DatumDomain, std::false_type, LinearizeArrayDomainFunctor>;
+
+    template <
+        typename ArrayDomain,
+        typename DatumDomain,
+        typename LinearizeArrayDomainFunctor = LinearizeArrayDomainCpp>
+    using MultiBlobSoA = SoA<ArrayDomain, DatumDomain, std::true_type, LinearizeArrayDomainFunctor>;
+
+    template <
         typename SeparateBuffers = std::false_type,
         typename LinearizeArrayDomainFunctor = LinearizeArrayDomainCpp>
     struct PreconfiguredSoA
