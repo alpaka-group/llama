@@ -57,6 +57,7 @@ if (LLAMA_BUILD_EXAMPLES)
 	add_subdirectory("examples/nbody_benchmark")
 	add_subdirectory("examples/heatequation")
 	add_subdirectory("examples/viewcopy")
+	add_subdirectory("examples/bufferguard")
 
 	# alpaka examples
 	find_package(alpaka 0.5.0 QUIET)
