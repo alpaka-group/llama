@@ -107,4 +107,13 @@ namespace llama::mapping
 
         ArrayDomain arrayDomainSize;
     };
+
+    template <
+        typename SeparateBuffers = std::false_type,
+        typename LinearizeArrayDomainFunctor = LinearizeArrayDomainCpp>
+    struct PreconfiguredSoA
+    {
+        template <typename ArrayDomain, typename DatumDomain>
+        using type = SoA<ArrayDomain, DatumDomain, SeparateBuffers, LinearizeArrayDomainFunctor>;
+    };
 } // namespace llama::mapping
