@@ -88,14 +88,12 @@ namespace llama::mapping
                     blob != std::numeric_limits<std::size_t>::max(),
                     "Passed TargetDatumCoord must be in datum domain");
 
-                LLAMA_FORCE_INLINE_RECURSIVE
                 const auto offset = LinearizeArrayDomainFunctor{}(coord, arrayDomainSize)
                     * sizeof(GetType<DatumDomain, DatumCoord<DatumDomainCoord...>>);
                 return {blob, offset};
             }
             else
             {
-                LLAMA_FORCE_INLINE_RECURSIVE
                 const auto offset = LinearizeArrayDomainFunctor{}(coord, arrayDomainSize)
                         * sizeof(GetType<DatumDomain, DatumCoord<DatumDomainCoord...>>)
                     + offsetOf<

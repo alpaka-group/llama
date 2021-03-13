@@ -790,7 +790,7 @@ TEST_CASE("treemapping")
 #ifdef _WIN32
     boost::replace_all(raw, "__int64", "long");
 #endif
-    CHECK(raw == R"(llama::mapping::tree::Node<
+    const auto ref = R"(llama::mapping::tree::Node<
     llama::NoName,
     llama::Tuple<
         llama::mapping::tree::Node<
@@ -924,13 +924,14 @@ TEST_CASE("treemapping")
         >
     >,
     unsigned long
->)");
+>)";
+    CHECK(raw == ref);
 
     auto raw2 = prettyPrintType(mapping.resultTree);
 #ifdef _WIN32
     boost::replace_all(raw2, "__int64", "long");
 #endif
-    CHECK(raw2 == R"(llama::mapping::tree::Node<
+    const auto ref2 = R"(llama::mapping::tree::Node<
     llama::NoName,
     llama::Tuple<
         llama::mapping::tree::Node<
@@ -1037,7 +1038,8 @@ TEST_CASE("treemapping")
         unsigned long,
         1
     >
->)");
+>)";
+    CHECK(raw2 == ref2);
 
     CHECK(
         tree::toString(mapping.basicTree)

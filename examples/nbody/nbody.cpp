@@ -147,7 +147,7 @@ namespace usellama
                     true>{arrayDomain};
         }();
         if constexpr (DUMP_MAPPING)
-            std::ofstream{title + ".svg"} << llama::toSvg(mapping);
+            std::ofstream(title + ".svg") << llama::toSvg(mapping);
 
         auto tmapping = [&] {
             if constexpr (TRACE)
@@ -196,7 +196,7 @@ namespace usellama
             plotFile << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
         if constexpr (HEATMAP)
-            std::ofstream{"nbody_heatmap_" + mappingName(Mapping) + ".dat"} << particles.mapping.toGnuplotDatFile();
+            std::ofstream("nbody_heatmap_" + mappingName(Mapping) + ".dat") << particles.mapping.toGnuplotDatFile();
 
         return 0;
     }

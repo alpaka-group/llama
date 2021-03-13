@@ -45,7 +45,7 @@ TEST_CASE("prettyPrintType")
 #ifdef _WIN32
     boost::replace_all(str, "__int64", "long");
 #endif
-    CHECK(str == R"(llama::DatumStruct<
+    const auto ref = R"(llama::DatumStruct<
     llama::DatumElement<
         tag::Pos,
         llama::DatumStruct<
@@ -113,7 +113,8 @@ TEST_CASE("prettyPrintType")
             >
         >
     >
->)");
+>)";
+    CHECK(str == ref);
 }
 
 TEST_CASE("sizeOf")
