@@ -42,7 +42,7 @@ namespace llama::mapping
         template <std::size_t... DatumDomainCoord>
         LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
         {
-            LLAMA_FORCE_INLINE_RECURSIVE const auto nao = mapping.template blobNrAndOffset<DatumDomainCoord...>(coord);
+            const auto nao = mapping.template blobNrAndOffset<DatumDomainCoord...>(coord);
             for (auto i = 0; i < sizeof(GetType<DatumDomain, DatumCoord<DatumDomainCoord...>>); i++)
                 byteHits[nao.nr][nao.offset + i]++;
             return nao;

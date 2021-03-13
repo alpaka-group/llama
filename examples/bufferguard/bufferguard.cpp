@@ -180,7 +180,8 @@ public:
     ArrayDomain arrayDomainSize;
 };
 
-void printView(const auto& view, std::size_t rows, std::size_t cols)
+template <typename View>
+void printView(const View& view, std::size_t rows, std::size_t cols)
 {
     for (std::size_t row = 0; row < rows; row++)
     {
