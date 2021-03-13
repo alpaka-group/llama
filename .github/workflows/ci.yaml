@@ -130,6 +130,7 @@ jobs:
     runs-on: windows-latest
     env:
       VCPKG_DEFAULT_TRIPLET: x64-windows
+      BOOST_ROOT: C:\hostedtoolcache\windows\Boost\1.75.0\x86_64
     steps:
     - uses: actions/checkout@v2
     - name: install vcpkg
@@ -137,6 +138,12 @@ jobs:
       with:
         setupOnly: true
         vcpkgGitCommitId: 76a7e9248fb3c57350b559966dcaa2d52a5e4458
+    - name: install boost
+      run: |
+        # From: https://github.com/actions/virtual-environments/issues/2667
+        $url = "https://sourceforge.net/projects/boost/files/boost-binaries/1.75.0/boost_1_75_0-msvc-14.1-64.exe"
+        (New-Object System.Net.WebClient).DownloadFile($url, "$env:TEMP\boost.exe")
+        Start-Process -Wait -FilePath "$env:TEMP\boost.exe" "/SILENT","/SP-","/SUPPRESSMSGBOXES","/DIR=$env:BOOST_ROOT"
     - name: vcpkg install dependencies
       run: |
         # Vc does not currently compile with MSVC
@@ -146,14 +153,12 @@ jobs:
         git clone https://github.com/alpaka-group/alpaka.git
         mkdir alpaka/build
         cd alpaka/build
-        $env:BOOST_ROOT = $env:BOOST_ROOT_1_72_0
         cmake .. "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
         cmake --build . --target install --config $env:CONFIG
     - name: cmake
       run: |
         mkdir build
         cd build
-        $env:BOOST_ROOT = $env:BOOST_ROOT_1_72_0
         cmake .. -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
     - name: build tests + examples
       run: cmake --build build -j $env:THREADS --config $env:CONFIG
