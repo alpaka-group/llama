@@ -51,15 +51,31 @@ jobs:
             env: {CXX: clang++-10}
           - name: build-ubuntu-clang11
             env: {CXX: clang++-11, INSTALL_EXTRA: clang-11}
-            
+          - name: build-ubuntu-icpc
+            env: {CXX: icpc}
+            intel: true
+          - name: build-ubuntu-icpx
+            env: {CXX: icpx}
+            intel: true
+
     steps:
       - uses: actions/checkout@v2
+      - name: install OneAPI
+        if: ${{ matrix.intel }}
+        run: |
+          wget https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
+          sudo apt-key add GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
+          sudo add-apt-repository "deb https://apt.repos.intel.com/oneapi all main"
+          sudo apt update
+          sudo apt install intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic
       - name: install boost
         run: |
           sudo apt update
           sudo apt install libboost-all-dev $INSTALL_EXTRA
       - name: vcpkg install dependencies
         run: |
+          # vcpkg fails to build TBB with Intel compilers
+          if [ ${{ matrix.intel }} ]; then unset CXX; fi
           vcpkg install catch2 fmt tbb vc
       - name: download CUDA 11
         if: ${{ matrix.cuda }}
@@ -71,6 +87,7 @@ jobs:
           sudo sh $CUDA_INSTALLER --silent --toolkit
       - name: install alpaka
         run: |
+          if [ ${{ matrix.intel }} ]; then source /opt/intel/oneapi/setvars.sh; fi
           git clone https://github.com/alpaka-group/alpaka.git
           mkdir alpaka/build
           cd alpaka/build
@@ -78,13 +95,18 @@ jobs:
           sudo cmake --build . --target install
       - name: cmake
         run: |
+          if [ ${{ matrix.intel }} ]; then source /opt/intel/oneapi/setvars.sh; fi
           mkdir build
           cd build
           cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DASAN_FOR_TESTS=ON -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
       - name: build tests + examples
-        run: cmake --build build -j $THREADS
+        run: |
+          if [ ${{ matrix.intel }} ]; then source /opt/intel/oneapi/setvars.sh; fi
+          cmake --build build -j $THREADS
       - name: run tests
-        run: build/tests
+        run: |
+          if [ ${{ matrix.intel }} ]; then source /opt/intel/oneapi/setvars.sh; fi
+          build/tests
 
   build-windows:
     runs-on: windows-latest
