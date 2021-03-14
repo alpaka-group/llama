@@ -18,7 +18,7 @@ arbitrary depths and is not limited only to struct of array and array of struct
 data layouts but is also capable to explicitly define padding, blocking,
 striding and any other run time or compile time access pattern simultaneously.
 
-To archieve this goal LLAMA is splitted in mostly independent, orthogonal parts
+To archieve this goal LLAMA is split into mostly independent, orthogonal parts
 completely written in modern C++17 to run on as many architectures and with as
 many compilers as possible while still supporting extensions needed e.g. to run
 on GPU or other many core hardware.
