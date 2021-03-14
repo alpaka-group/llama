@@ -175,6 +175,12 @@ namespace llama
         View* view;
     };
 
+    // Currently, only 1D iterators are supported, becaues higher dimensional iterators are difficult if we also want to
+    // preserve good codegen. Multiple nested loops seem to be superior to a single iterator over multiple dimensions.
+    // At least compilers are able to produce better code.
+    // std::mdspan also discovered similar difficulties and there was a discussion in WG21 in Oulu 2016 to
+    // remove/postpone iterators from the design. In std::mdspan's design, the iterator iterated over the co-domain.
+
     template <typename View>
     auto begin(View& view) -> Iterator<View>
     {
