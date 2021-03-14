@@ -20,6 +20,7 @@ Dependencies
  - Boost 1.66.0 or higher
  - libfmt 6.2.1 or higher
  - `Alpaka <https://github.com/alpaka-group/alpaka>`_ (optional) for building some examples
+ - `Vc <https://github.com/VcDevel/Vc>`_ (optional) for building some examples
 
 
 Building the examples
@@ -34,7 +35,8 @@ As LLAMA is using CMake the examples can be easily built with
 	cmake ..
 
 This will search for all depenencies and create a build system for your platform.
-If Alpaka is not found, all Alpaka examples will be disabled for building and installing.
+If Alpaka or Vc is not found, all Alpaka or Vc examples will be disabled for building and installing.
+
 
 CMake settings after the initial generation may be changed again with:
 
