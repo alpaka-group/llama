@@ -7,7 +7,7 @@ View
 
 The view is the main data structure a LLAMA user will work with. It takes
 coordinates in the array and datum domain and returns a reference to a datum
-in memory which can be read or altered. For more easy use furthermore some
+in memory which can be read from or written to. For easier use some
 useful operations such as :cpp:`+=` are overloaded to operate on all datum
 elements inside the datum domain at once.
 
@@ -26,22 +26,21 @@ The factory creates the view. For this it takes the domains, a
     auto view = allocView(mapping); // optional allocator as 2nd argument
 
 The :ref:`mapping <label-mappings>` and :ref:`allocator <label-allocators>`
-will be explained later, but are not of relevance at this point. It is just
+will be explained later. For now, it is just
 important to know that all those run time and compile time parameters come
 together to create the view.
 
 Data access
 -----------
 
-As LLAMA tries to have an array of struct like interface.
-When accessing an element of the view, the array part comes first and is called array domain.
-The struct part comes afterwards and is called the datum domain.
+LLAMA tries to have an array of struct like interface.
+When accessing an element of the view, the array part comes first, followed by tags from the datum domain.
 
-In C++, runtime parameters like the array domain are normal function parameters whereas compile time parameters usually given as template arguments.
+In C++, runtime values like the array domain coordinate are normal function parameters
+whereas compile time values such as the datum domain tags are usually given as template arguments.
 However, compile time information can be stored in a type, instantiated as a value and then passed to a function template deducing the type again.
 This trick allows to pass both, runtime and compile time values as function arguments.
-E.g. instead of calling :cpp:`f<3>()` we can call :cpp:`f(std::integral_constant<std::size_t, 3>{})`.
-Furthermore, instead of calling :cpp:`f<MyType>()` we can call :cpp:`f(MyType{})`.
+E.g. instead of calling :cpp:`f<MyType>()` we can call :cpp:`f(MyType{})` and let the compiler deduce the template argument of :cpp:`f`.
 
 This trick is used in LLAMA to specify the access to a value of a view.
 An example access with the domains defined in the :ref:`domain section <label-domains>` could look like this:
@@ -50,47 +49,69 @@ An example access with the domains defined in the :ref:`domain section <label-do
 
     view(1, 2, 3)(color{}, g{}) = 1.0;
 
-The objects :cpp:`color{}` and :cpp:`g{}` are not used.
-They just serve as a way to specify the template arguments.
+It is also possible to access the array domain with one compound argument like this:
+
+.. code-block:: C++
+
+    const ArrayDomain pos{1, 2, 3};
+    view(pos)(color{}, g{}) = 1.0;
+    // or
+    view({1, 2, 3})(color{}, g{}) = 1.0;
+
+The values :cpp:`color{}` and :cpp:`g{}` are not used and just serve as a way to specify the template arguments.
 A direct call of the :cpp:`operator()` is also possible and looks like this:
 
 .. code-block:: C++
 
     view(1, 2, 3).operator()<color, g>() = 1.0;
 
-It is also possible to access the array domain with one packed parameter like this:
-
-.. code-block:: C++
-
-    view({1, 2, 3})(color{}, g{}) = 1.0;
-    // or
-    const ArrayDomain pos{1, 2, 3};
-    view(pos)(color{}, g{}) = 1.0;
-
-If the use of tag types is not desired (e.g. with the same algorithm working in the RGB or CYK colour space)
-or if the algorithm wants to iterate over the datum domain at compile time,
-also an adressing with the coordinate inside the tree is possible like this:
+Alternatively, if the use of tag types is not desired or if the algorithm wants to iterate over the datum domain at compile time,
+an adressing with integral datum coordinates is possible like this:
 
 .. code-block:: C++
 
     view(1, 2, 3)(llama::DatumCoord<0, 1>{}) = 1.0; // color.g
 
+This datum coordinates are zero-based, nested indices reflecting the nested tuple-like structure of the datum domain.
+
+Notice that the :cpp:`operator()` is invoked twice in the last example and that an intermediate object is needed for this to work.
+This object is a central data type of LLAMA called :cpp:`VirtualDatum`.
+
 VirtualDatum
-^^^^^^^^^^^^
+------------
 
-A careful reader might have noticed that the :cpp:`operator()` is "overloaded twice"
-for accesses like :cpp:`view(1, 2, 3)( color{}, g{})` and that an intermediate object is needed for this to work.
-This object exists and is not only an internal trick but a central data type of LLAMA called :cpp:`VirtualDatum`.
+During a view accesses like :cpp:`view(1, 2, 3)(color{}, g{})` an intermediate object is needed for this to work.
+This object is a :cpp:`VirtualDatum`.
 
-Resolving the array domain address returns such a :cpp:`VirtualDatum` with a bound array domain address.
+.. code-block:: C++
+
+    auto vd = view(1, 2, 3);
+
+    vd(color{}, g{}) = 1.0;
+    // or:
+    auto vdColor = vd(color{});
+    float& g = vdColor(g{});
+    g = 1.0;
+
+Supplying the array domain coordinates to a view access returns such a :cpp:`VirtualDatum`, storing this array domain coordiante.
 This object can be thought of like a datum in the :math:`N`-dimensional array domain space,
-but as the elements of this datum may not be in contiguous in memory, it is called virtual.
+but as the elements of this datum may not be contiguous in memory, it is not a real object in the C++ sense and thus called virtual.
 
-Nevertheless, it can be used like a real local object.
-A virtual datum can be passed as an argument to a function (as seen in the
+Accessing subparts of a :cpp:`VirtualDatum` is done using `operator()` and the tag types from the datum domain.
+
+If an access describes a final element of in the datum domain, a reference to a value of the corresponding type is returned.
+Such an access is called terminal. If the access is non-termian, i.e. it does not yet reach a leaf in the tree that is the datum domain,
+another :cpp:`VirtualDatum` is returned, binding the tags already used for navigating down the datum domain.
+
+A :cpp:`VirtualDatum` can be used like a real local object in many places. It can be used as a local variable, copied around, passed as an argument to a function (as seen in the
 `nbody example <https://github.com/alpaka-group/llama/blob/master/examples/nbody/nbody.cpp>`_
-).
-Furthermore, several arithmetic and logical operatores are overloaded:
+), etc. A :cpp:`VirtualDatum` is a value type that represents a reference, similar to an iterator in C++.
+
+
+Arithmetic and logical operatores
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+:cpp:`VirtualDatum` overloads several arithmetic and logical operatores:
 
 .. code-block:: C++
 
@@ -203,7 +224,7 @@ datums respectively other type. Let's examine this deeper in an example:
     //result is true, because only the matching "x" matters
 
 A partial addressing of a virtual datum like :cpp:`datum1(color{}) *= 7.0` is also possible.
-:cpp:`datum1(color{})` itself returns a new virtual datum with the first tree coordiante (:cpp:`color`) being bound.
+:cpp:`datum1(color{})` itself returns a new virtual datum with the first datum domain coordiante (:cpp:`color`) being bound.
 This enables e.g. to easily add a velocity to a position like this:
 
 .. code-block:: C++
@@ -229,6 +250,13 @@ This is e.g. used in the
 `nbody example <https://github.com/alpaka-group/llama/blob/master/examples/nbody/nbody.cpp>`_
 to update the particle velocity based on the distances of particles and to
 update the position after one time step movement with the velocity.
+
+
+Tuple interface
+^^^^^^^^^^^^^^^
+
+TODO
+
 
 Compiler steering
 -----------------
