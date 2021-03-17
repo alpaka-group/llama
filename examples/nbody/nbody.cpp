@@ -23,6 +23,7 @@ using FP = float;
 constexpr auto PROBLEM_SIZE = 16 * 1024;
 constexpr auto STEPS = 5;
 constexpr auto TRACE = false;
+constexpr auto HEATMAP = false;
 constexpr auto DUMP_MAPPING = false;
 constexpr auto ALLOW_RSQRT = true; // rsqrt can be way faster, but less accurate
 constexpr auto NEWTON_RAPHSON_AFTER_RSQRT
@@ -155,7 +156,14 @@ namespace usellama
                 return std::move(mapping);
         }();
 
-        auto particles = llama::allocView(std::move(tmapping));
+        auto hmapping = [&] {
+            if constexpr (HEATMAP)
+                return llama::mapping::Heatmap{std::move(tmapping)};
+            else
+                return std::move(tmapping);
+        }();
+
+        auto particles = llama::allocView(std::move(hmapping));
         watch.printAndReset("alloc");
 
         std::default_random_engine engine;
@@ -186,6 +194,9 @@ namespace usellama
             plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\t';
         else
             plotFile << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
+
+        if constexpr (HEATMAP)
+            std::ofstream{"nbody_heatmap_" + mappingName(Mapping) + ".dat"} << particles.mapping.toGnuplotDatFile();
 
         return 0;
     }
