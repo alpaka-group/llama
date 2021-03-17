@@ -1,0 +1,186 @@
+.. include:: common.rst
+
+.. _label-view:
+
+VirtualDatum
+============
+
+During a view accesses like :cpp:`view(1, 2, 3)(color{}, g{})` an intermediate object is needed for this to work.
+This object is a :cpp:`VirtualDatum`.
+
+.. code-block:: C++
+
+    auto vd = view(1, 2, 3);
+
+    vd(color{}, g{}) = 1.0;
+    // or:
+    auto vdColor = vd(color{});
+    float& g = vdColor(g{});
+    g = 1.0;
+
+Supplying the array domain coordinates to a view access returns such a :cpp:`VirtualDatum`, storing this array domain coordiante.
+This object can be thought of like a datum in the :math:`N`-dimensional array domain space,
+but as the elements of this datum may not be contiguous in memory, it is not a real object in the C++ sense and thus called virtual.
+
+Accessing subparts of a :cpp:`VirtualDatum` is done using `operator()` and the tag types from the datum domain.
+
+If an access describes a final element of in the datum domain, a reference to a value of the corresponding type is returned.
+Such an access is called terminal. If the access is non-termian, i.e. it does not yet reach a leaf in the tree that is the datum domain,
+another :cpp:`VirtualDatum` is returned, binding the tags already used for navigating down the datum domain.
+
+A :cpp:`VirtualDatum` can be used like a real local object in many places. It can be used as a local variable, copied around, passed as an argument to a function (as seen in the
+`nbody example <https://github.com/alpaka-group/llama/blob/master/examples/nbody/nbody.cpp>`_
+), etc. A :cpp:`VirtualDatum` is a value type that represents a reference, similar to an iterator in C++.
+
+
+Arithmetic and logical operatores
+---------------------------------
+
+:cpp:`VirtualDatum` overloads several arithmetic and logical operatores:
+
+.. code-block:: C++
+
+    auto datum1 = view(1, 2, 3);
+    auto datum2 = view(3, 2, 1);
+
+    datum1 += datum2;
+    datum1 *= 7.0; //for every element in the datum domain
+
+    foobar(datum2);
+
+    //With this somewhere else:
+    template<typename VirtualDatum>
+    void foobar(VirtualDatum vd)
+    {
+        vd = 42;
+    }
+
+The most common compount assignment operators ( :cpp:`=`, :cpp:`+=`, :cpp:`-=`, :cpp:`*=`,
+:cpp:`/=`, :cpp:`%=` ) are overloaded. These operators directly write into the
+corresponding view. Furthermore several arithmetic operators ( :cpp:`+`, :cpp:`-`,
+:cpp:`*`, :cpp:`/`, :cpp:`%` ) are overloaded too, but they return a temporary object
+on the stack. Althought this temporary value has a basic struct-mapping without padding and
+probaly being not compatible to the mapping of the view at all, the compiler
+will most probably be able to optimize the data accesses anyway as it has full
+knowledge about the data in the stack and can cut out all temporary operations.
+
+These operators work between two virtual datums, even if they have
+different datum domains. It is even possible to work on parts of a virtual
+datum. This returns a virtual datum with the first coordinates in the datum
+domain bound. Every tag existing in both datum domains will be
+matched and operated on. Every non-matching tag is ignored, e.g.
+
+.. code-block:: C++
+
+    using DD1 = llama::DS<
+        llama::DS<llama::DE<pos
+            llama::DE<x, float>
+        >>,
+        llama::DS<llama::DE<vel
+            llama::DE <x, double>
+        >>,
+        llama::DE <x, int>
+    >;
+
+    using DD2 = llama::DS<
+        llama::DS<llama::DE<pos
+            llama::DE<x, double>
+        >>,
+        llama::DS<llama::DE<mom
+            llama::DE<x, double>
+        >>
+    >;
+
+    // Let assume datum1 using DD1 and datum2 using DD2.
+
+    datum1 += datum2;
+    // datum2.pos.x and only datum2.pos.x will be added to datum1.pos.x because
+    // of pos.x existing in both datum domains although having different types.
+
+    datum1(vel{}) *= datum2(mom{});
+    // datum2.mom.x will be multiplied to datum2.vel.x as the first part of the
+    // datum domain coord is explicit given and the same afterwards
+
+The discussed operators are also overloaded for types other than :cpp:`VirtualDatum` as well so that
+:cpp:`datum1 *= 7.0` will multiply 7 to every element in the datum domain.
+This feature should be used with caution!
+
+The comparison operators :cpp:`==`, :cpp:`!=`, :cpp:`<`, :cpp:`<=`, :cpp:`>`
+and :cpp:`>=` are overloaded too and return the boolean value :cpp:`true` if
+the operation is true for **all** matching elements of the two comparing virtual
+datums respectively other type. Let's examine this deeper in an example:
+
+.. code-block:: C++
+
+    using A = llama::DS <
+        llama::DE < x, float >,
+        llama::DE < y, float >
+    >;
+
+    using B = llama::DS<
+        llama::DE<z, double>,
+        llama::DE<x, double>
+    >;
+
+    bool result;
+
+    // Let assume a1 and a2 using A and b using B.
+
+    a1(x{}) = 0.0f;
+    a1(y{}) = 2.0f;
+
+    a2(x{}) = 1.0f;
+    a2(y{}) = 1.0f;
+    //a2() = 1.0f; would do the same
+
+    b (x{}) = 1.0f;
+    b (z{}) = 2.0f;
+
+    result = a1 < a2;
+    //result is false, because a1.y > a2.y
+
+    result = a1 > a2;
+    //result is false, too, because now a1.x > a2.x
+
+    result = a1 != a2;
+    //result is true
+
+    result = a2 == b;
+    //result is true, because only the matching "x" matters
+
+A partial addressing of a virtual datum like :cpp:`datum1(color{}) *= 7.0` is also possible.
+:cpp:`datum1(color{})` itself returns a new virtual datum with the first datum domain coordiante (:cpp:`color`) being bound.
+This enables e.g. to easily add a velocity to a position like this:
+
+.. code-block:: C++
+
+    using Particle = llama::DS<
+        llama::DE<pos, llama::DS<
+            llama::DE<x, float>,
+            llama::DE<y, float>,
+            llama::DE<z, float>
+        >>,
+        llama::DE<vel, llama::DS<
+            llama::DE<x, double>,
+            llama::DE<y, double>,
+            llama::DE<z, double>
+        >>,
+    >;
+
+    // Let datum be a virtual datum with the datum domain "Particle".
+
+    datum(pos{}) += datum(vel{});
+
+This is e.g. used in the
+`nbody example <https://github.com/alpaka-group/llama/blob/master/examples/nbody/nbody.cpp>`_
+to update the particle velocity based on the distances of particles and to
+update the position after one time step movement with the velocity.
+
+
+Tuple interface
+---------------
+
+This is an experimental feature and might completely change in the future.
+
+TODO
+
