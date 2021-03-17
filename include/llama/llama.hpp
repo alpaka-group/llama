@@ -43,6 +43,7 @@
 #include "macros.hpp"
 #include "mapping/AoS.hpp"
 #include "mapping/AoSoA.hpp"
+#include "mapping/Heatmap.hpp"
 #include "mapping/One.hpp"
 #include "mapping/SoA.hpp"
 #include "mapping/Split.hpp"
