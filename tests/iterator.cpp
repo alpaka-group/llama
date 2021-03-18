@@ -58,3 +58,30 @@ TEST_CASE("iterator.std_copy")
         CHECK(vd(tag::Z{}) == ++i);
     }
 }
+
+TEST_CASE("iterator.transform_reduce")
+{
+    constexpr auto arrayDomain = llama::ArrayDomain<1>{32};
+    auto aosView = llama::allocView(llama::mapping::AoS{arrayDomain, Position{}});
+    auto soaView = llama::allocView(llama::mapping::SoA{arrayDomain, Position{}});
+
+    int i = 0;
+    for (auto vd : aosView)
+    {
+        vd(tag::X{}) = ++i;
+        vd(tag::Y{}) = ++i;
+        vd(tag::Z{}) = ++i;
+    }
+    for (auto vd : soaView)
+    {
+        vd(tag::X{}) = ++i;
+        vd(tag::Y{}) = ++i;
+        vd(tag::Z{}) = ++i;
+    }
+    // returned type is a llama::One<Particle>
+    auto [sumX, sumY, sumZ] = std::transform_reduce(begin(aosView), end(aosView), begin(soaView), llama::One<Position>{});
+
+    CHECK(sumX == 242672);
+    CHECK(sumY == 248816);
+    CHECK(sumZ == 255024);
+}
