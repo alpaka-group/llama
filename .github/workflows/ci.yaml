@@ -34,97 +34,57 @@ jobs:
         name: llama.hpp
         path: build/llama-amalgamated/llama.hpp
 
-  build-ubuntu-gcc9-cuda:
-    env:
-      CUDA_INSTALLER: cuda_11.2.0_460.27.04_linux.run
+  build-ubuntu:
     runs-on: ubuntu-latest
+    env: ${{ matrix.env }}
+    name: ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: build-ubuntu-gcc9-cuda
+            env: {CXX: g++-9, CUDA_INSTALLER: cuda_11.2.0_460.27.04_linux.run}
+            cuda: true
+          - name: build-ubuntu-gcc10
+            env: {CXX: g++-10}
+          - name: build-ubuntu-clang10
+            env: {CXX: clang++-10}
+          - name: build-ubuntu-clang11
+            env: {CXX: clang++-11, INSTALL_EXTRA: clang-11}
+            
     steps:
-    - uses: actions/checkout@v2
-    - name: install boost
-      run: |
-        sudo apt update
-        sudo apt install libboost-all-dev
-    - name: vcpkg install dependencies
-      run: |
-        vcpkg install catch2 fmt tbb vc
-    - name: download CUDA 11
-      run: |
-        wget --no-verbose https://developer.download.nvidia.com/compute/cuda/11.2.0/local_installers/$CUDA_INSTALLER
-    - name: install CUDA 11
-      run: |
-        sudo sh $CUDA_INSTALLER --silent --toolkit
-    - name: install alpaka
-      run: |
-        git clone https://github.com/alpaka-group/alpaka.git
-        mkdir alpaka/build
-        cd alpaka/build
-        cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
-        sudo cmake --build . --target install
-    - name: cmake
-      run: |
-        mkdir build
-        cd build
-        CXX=g++-9 cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DASAN_FOR_TESTS=ON -DALPAKA_CXX_STANDARD=17 -DALPAKA_ACC_GPU_CUDA_ENABLE=ON -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
-    - name: build tests + examples
-      run: cmake --build build -j $THREADS
-    - name: run tests
-      run: build/tests
-
-  build-ubuntu-gcc10:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: install boost
-      run: |
-        sudo apt update
-        sudo apt install libboost-all-dev
-    - name: vcpkg install dependencies
-      run: |
-        vcpkg install catch2 fmt vc
-    - name: install alpaka
-      run: |
-        git clone https://github.com/alpaka-group/alpaka.git
-        mkdir alpaka/build
-        cd alpaka/build
-        cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
-        sudo cmake --build . --target install
-    - name: cmake
-      run: |
-        mkdir build
-        cd build
-        CXX=g++-10 cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DASAN_FOR_TESTS=ON -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
-    - name: build tests + examples
-      run: cmake --build build -j $THREADS
-    - name: run tests
-      run: build/tests
-
-  build-ubuntu-clang10:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: install boost
-      run: |
-        sudo apt update
-        sudo apt install libboost-all-dev
-    - name: vcpkg install dependencies
-      run: |
-        vcpkg install catch2 fmt vc
-    - name: install alpaka
-      run: |
-        git clone https://github.com/alpaka-group/alpaka.git
-        mkdir alpaka/build
-        cd alpaka/build
-        cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
-        sudo cmake --build . --target install
-    - name: cmake
-      run: |
-        mkdir build
-        cd build
-        CXX=clang++-10 cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DASAN_FOR_TESTS=ON -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
-    - name: build tests + examples
-      run: cmake --build build -j $THREADS
-    - name: run tests
-      run: build/tests
+      - uses: actions/checkout@v2
+      - name: install boost
+        run: |
+          sudo apt update
+          sudo apt install libboost-all-dev $INSTALL_EXTRA
+      - name: vcpkg install dependencies
+        run: |
+          vcpkg install catch2 fmt tbb vc
+      - name: download CUDA 11
+        if: ${{ matrix.cuda }}
+        run: |
+          wget --no-verbose https://developer.download.nvidia.com/compute/cuda/11.2.0/local_installers/$CUDA_INSTALLER
+      - name: install CUDA 11
+        if: ${{ matrix.cuda }}
+        run: |
+          sudo sh $CUDA_INSTALLER --silent --toolkit
+      - name: install alpaka
+        run: |
+          git clone https://github.com/alpaka-group/alpaka.git
+          mkdir alpaka/build
+          cd alpaka/build
+          cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+          sudo cmake --build . --target install
+      - name: cmake
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DASAN_FOR_TESTS=ON -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+      - name: build tests + examples
+        run: cmake --build build -j $THREADS
+      - name: run tests
+        run: build/tests
 
   build-windows:
     runs-on: windows-latest
