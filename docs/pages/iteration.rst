@@ -30,8 +30,8 @@ offers the :cpp:`begin()` and  :cpp:`end()` member functions with corresponding 
 Datum domain iterating
 ----------------------
 
-Datum domain is done using using meta programming techniques with :cpp:`llama::forEachLeaf`.
-It takes a datum domain as template argument and a functor as run time parameter.
+The datum domain is iterated using :cpp:`llama::forEachLeaf`.
+It takes a datum domain as template argument and a functor as function argument.
 The functor is then called for each leaf of the datum domain tree with a datum coord as argument:
 
 .. code-block:: C++
@@ -54,8 +54,8 @@ The functor is then called for each leaf of the datum domain tree with a datum c
     // * DatumCoord<2, 0> for z.low
     // * DatumCoord<2, 1> for z.high
 
-Optionally, a subtree of the DatumDomain can be chosen.
-The subtree is described either via a `DatumCoord` or a series of tags.
+Optionally, a subtree of the DatumDomain can be chosen for iteration.
+The subtree is selected either via a `DatumCoord` or a series of tags.
 
 .. code-block:: C++
 
@@ -107,7 +107,7 @@ View iterators
 
 Iterators on views are useful but pose a couple of difficulties.
 Therefore, only 1D iterators are supported currently.
-Becaues higher dimensional iterators are difficult to get right if we also want to preserve good codegen.
+Higher dimensional iterators are difficult to get right if we also want to preserve good codegen.
 Multiple nested loops seem to be superior to a single iterator over multiple dimensions.
 
 Having an iterator to a view opens up the standard library for use in conjunction with LLAMA:

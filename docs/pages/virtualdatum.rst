@@ -34,13 +34,13 @@ but as the elements of this datum may not be contiguous in memory, it is not a r
 
 Accessing subparts of a :cpp:`VirtualDatum` is done using `operator()` and the tag types from the datum domain.
 
-If an access describes a final element of in the datum domain, a reference to a value of the corresponding type is returned.
-Such an access is called terminal. If the access is non-termian, i.e. it does not yet reach a leaf in the tree that is the datum domain,
+If an access describes a final/leaf element in the datum domain, a reference to a value of the corresponding type is returned.
+Such an access is called terminal. If the access is non-termian, i.e. it does not yet reach a leaf in the datum domain tree,
 another :cpp:`VirtualDatum` is returned, binding the tags already used for navigating down the datum domain.
 
 A :cpp:`VirtualDatum` can be used like a real local object in many places. It can be used as a local variable, copied around, passed as an argument to a function (as seen in the
-`nbody example <https://github.com/alpaka-group/llama/blob/master/examples/nbody/nbody.cpp>`_
-), etc. A :cpp:`VirtualDatum` is a value type that represents a reference, similar to an iterator in C++.
+`nbody example <https://github.com/alpaka-group/llama/blob/master/examples/nbody/nbody.cpp>`_), etc.
+In general, :cpp:`VirtualDatum` is a value type that represents a reference, similar to an iterator in C++ (:cpp:`One` is a notable exception).
 
 
 One
@@ -209,8 +209,8 @@ WARNING: This is an experimental feature and might completely change in the futu
 
 A struct in C++ can be modelled by a :cpp:`std::tuple` with the same types as the struct's members.
 A :cpp:`VirtualDatum` behaves like a reference to a struct (i.e. the datum) which is decomposed into it's members.
-We can therefore not form a single reference to such a datum, but a reference to the individual members.
-Organizing these references inside a :cpp:`std::tuple` in the same way the datum is represented in the datum domain, gives us an alternative to a :cpp:`VirtualDatum`.
+We can therefore not form a single reference to such a datum, but references to the individual members.
+Organizing these references inside a :cpp:`std::tuple` in the same way the datum is represented in the datum domain gives us an alternative to a :cpp:`VirtualDatum`.
 Mind that creating such a :cpp:`std::tuple` already invokes the mapping function, regardless of whether an actual memory access occurs through the constructed reference later.
 However, such dead address computations are eliminated by most compilers during optimization.
 

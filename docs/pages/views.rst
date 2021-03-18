@@ -7,7 +7,7 @@ View
 
 The view is the main data structure a LLAMA user will work with. It takes
 coordinates in the array and datum domain and returns a reference to a datum
-in memory which can be read from or written to. For easier use some
+in memory which can be read from or written to. For easier use, some
 useful operations such as :cpp:`+=` are overloaded to operate on all datum
 elements inside the datum domain at once.
 
