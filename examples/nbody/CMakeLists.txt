@@ -28,7 +28,7 @@ elseif(MSVC)
 	)
 endif()
 
-if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 	# GCC will try to find TBB and if it is installed use it for the parallel STL
 	# unfortunately, it does not link against TBB automatically
 	find_package(TBB CONFIG QUIET)
