@@ -8,8 +8,24 @@ Iteration
 Array domain iterating
 ----------------------
 
-It is trivial to iterate over the array domain, especially using :cpp:`ArrayDomainRange` and although it is done at run
-time the compiler can optimize a lot e.g. with tree vectorization or loop unrolling, especially with the beforementioned macros.
+The array domain spans an N-dimensional space of integral indices.
+Sometimes we just want to quickly iterate over all coordinates in this index space.
+This is what :cpp:`ArrayDomainRange` is for, which is a range in the C++ sense and
+offers the :cpp:`begin()` and  :cpp:`end()` member functions with corresponding iterators to support STL algorithms or the range-for loop.
+
+.. code-block:: C++
+
+    llama::ArrayDomain<2> ad{3, 3};
+    llama::ArrayDomainIndexRange range{ad};
+    
+    std::for_each(range.begin(), range.end(), [](auto coord) {
+        // coord is {0, 0}, {0, 1}, {0, 2}, {1, 0}, {1, 1}, {1, 2}, {2, 0}, {2, 1}, {2, 2}
+    });
+
+    for (auto coord : range) {
+        // coord is {0, 0}, {0, 1}, {0, 2}, {1, 0}, {1, 1}, {1, 2}, {2, 0}, {2, 1}, {2, 2}
+    }
+
 
 Datum domain iterating
 ----------------------
