@@ -126,7 +126,7 @@ namespace llama
 
             for (auto udCoord : ArrayDomainIndexRange{mapping.arrayDomainSize})
             {
-                forEachLeave<DatumDomain>([&](auto coord) {
+                forEachLeaf<DatumDomain>([&](auto coord) {
                     constexpr int size = sizeof(GetType<DatumDomain, decltype(coord)>);
                     infos.push_back(
                         {udCoord,
@@ -279,7 +279,7 @@ namespace llama
 )",
             byteSizeInPixel);
         using DatumDomain = typename Mapping::DatumDomain;
-        forEachLeave<DatumDomain>([&](auto coord) {
+        forEachLeaf<DatumDomain>([&](auto coord) {
             constexpr int size = sizeof(GetType<DatumDomain, decltype(coord)>);
 
             svg += fmt::format(

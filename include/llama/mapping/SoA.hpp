@@ -27,7 +27,7 @@ namespace llama::mapping
             if constexpr (SeparateBuffers::value)
             {
                 std::size_t count = 0;
-                forEachLeave<DatumDomain>([&](auto) constexpr { count++; });
+                forEachLeaf<DatumDomain>([&](auto) constexpr { count++; });
                 return count;
             }
             else
@@ -51,7 +51,7 @@ namespace llama::mapping
                 {
                     llama::Array<std::size_t, blobCount> r{};
                     std::size_t i = 0;
-                    forEachLeave<DatumDomain>([&](auto coord) constexpr {
+                    forEachLeaf<DatumDomain>([&](auto coord) constexpr {
                         r[i++] = sizeof(GetType<DatumDomain, decltype(coord)>);
                     });
                     return r;
@@ -73,7 +73,7 @@ namespace llama::mapping
                 {
                     std::size_t index = 0;
                     bool found = false;
-                    forEachLeave<DatumDomain>([&](auto c) constexpr {
+                    forEachLeaf<DatumDomain>([&](auto c) constexpr {
                         if constexpr (std::is_same_v<decltype(c), TargetDatumCoord>)
                             found = true;
                         else if (!found)

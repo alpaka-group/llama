@@ -106,7 +106,7 @@ TEST_CASE("virtual view")
                 for (std::size_t b = 0; b < validMiniSize[1]; ++b)
                 {
                     SqrtFunctor<decltype(miniView(a, b))> sqrtF{miniView(a, b)};
-                    llama::forEachLeave<Particle>(sqrtF);
+                    llama::forEachLeaf<Particle>(sqrtF);
                 }
 
             for (std::size_t a = 0; a < validMiniSize[0]; ++a)
