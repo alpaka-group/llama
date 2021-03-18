@@ -137,7 +137,7 @@ jobs:
       uses: lukka/run-vcpkg@v4
       with:
         setupOnly: true
-        vcpkgGitCommitId: 76a7e9248fb3c57350b559966dcaa2d52a5e4458
+        vcpkgGitCommitId: 9ab3bafca4de5dec5a5a8b60f1d654cae7ad95aa
     - name: install boost
       run: |
         # From: https://github.com/actions/virtual-environments/issues/2667
@@ -146,8 +146,8 @@ jobs:
         Start-Process -Wait -FilePath "$env:TEMP\boost.exe" "/SILENT","/SP-","/SUPPRESSMSGBOXES","/DIR=$env:BOOST_ROOT"
     - name: vcpkg install dependencies
       run: |
-        # Vc does not currently compile with MSVC
-        & $env:VCPKG_ROOT/vcpkg install catch2 fmt 
+        & $env:VCPKG_ROOT/vcpkg install catch2 fmt
+        & $env:VCPKG_ROOT/vcpkg install vc --head # MSVC patch is not released yet
     - name: install alpaka
       run: |
         git clone https://github.com/alpaka-group/alpaka.git
