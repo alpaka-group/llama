@@ -1126,7 +1126,7 @@ namespace manualAoSoA_Vc
         constexpr auto blocksPerTile = 128; // L1D_SIZE / sizeof(ParticleBlock);
         static_assert(BLOCKS % blocksPerTile == 0);
 #    pragma omp parallel for schedule(static) num_threads(threads)
-        for (std::size_t ti = 0; ti < BLOCKS / blocksPerTile; ti++)
+        for (std::ptrdiff_t ti = 0; ti < BLOCKS / blocksPerTile; ti++)
             for (std::size_t bi = 0; bi < blocksPerTile; bi++)
             {
                 auto& blockI = particles[bi];
