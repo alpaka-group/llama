@@ -87,7 +87,10 @@ TEST_CASE("iterator.transform_reduce")
     CHECK(sumZ == 255024);
 }
 
-#if __has_include(<ranges>)
+// TODO: clang 10 and 11 fail to compile this currently with the issue described here:
+// https://stackoverflow.com/questions/64300832/why-does-clang-think-gccs-subrange-does-not-satisfy-gccs-ranges-begin-functi
+// let's try again with clang 12
+#if __has_include(<ranges>) && BOOST_COMP_CLANG == 0
 #    include <ranges>
 
 TEST_CASE("ranges")
@@ -96,6 +99,8 @@ TEST_CASE("ranges")
     constexpr auto arrayDomain = ArrayDomain{32};
     constexpr auto mapping = llama::mapping::AoS<ArrayDomain, Position>{arrayDomain};
     auto view = llama::allocView(mapping);
+
+    STATIC_REQUIRE(std::ranges::range<decltype(view)>);
 
     int i = 0;
     for (auto vd : view)
