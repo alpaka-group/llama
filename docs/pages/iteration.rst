@@ -127,6 +127,11 @@ Having an iterator to a view opens up the standard library for use in conjunctio
     std::transform(begin(view), end(view), begin(view), [](auto vd) { return vd * 2; });
     const float sumY = std::accumulate(begin(view), end(view), 0, [](int acc, auto vd) { return acc + vd(y{}); });
 
+    // C++20:
+
+    for (auto x : view | std::views::transform([](auto vd) { return vd(x{}); }) | std::views::take(2))
+        // ...
+
 Since virtual datums interact with each other based on the tags and not the underlying mappings, we can also use iterators from multiple views together:
 
 .. code-block:: C++
