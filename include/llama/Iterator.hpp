@@ -181,17 +181,21 @@ namespace llama
     // std::mdspan also discovered similar difficulties and there was a discussion in WG21 in Oulu 2016 to
     // remove/postpone iterators from the design. In std::mdspan's design, the iterator iterated over the co-domain.
 
-    template <typename View>
-    auto begin(View& view) -> Iterator<View>
+    template <typename Mapping, typename BlobType>
+    auto begin(View<Mapping, BlobType>& view) -> Iterator<View<Mapping, BlobType>>
     {
-        static_assert(View::ArrayDomain::rank == 1, "Iterators for non-1D views are not implemented");
+        static_assert(
+            View<Mapping, BlobType>::ArrayDomain::rank == 1,
+            "Iterators for non-1D views are not implemented");
         return {ArrayDomain<1>{}, &view};
     }
 
-    template <typename View>
-    auto end(View& view) -> Iterator<View>
+    template <typename Mapping, typename BlobType>
+    auto end(View<Mapping, BlobType>& view) -> Iterator<View<Mapping, BlobType>>
     {
-        static_assert(View::ArrayDomain::rank == 1, "Iterators for non-1D views are not implemented");
+        static_assert(
+            View<Mapping, BlobType>::ArrayDomain::rank == 1,
+            "Iterators for non-1D views are not implemented");
         return {view.mapping.arrayDomainSize, &view};
     }
 } // namespace llama
