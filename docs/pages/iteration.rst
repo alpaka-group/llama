@@ -5,16 +5,18 @@
 Iteration
 =========
 
-Datum domain iterating
+Array domain iterating
 ----------------------
 
 It is trivial to iterate over the array domain, especially using :cpp:`ArrayDomainRange` and although it is done at run
 time the compiler can optimize a lot e.g. with tree vectorization or loop unrolling, especially with the beforementioned macros.
 
-It is also possible to iterate over the datum domain.
-This is achieved using meta programming techniques with :cpp:`llama::forEach`.
+Datum domain iterating
+----------------------
+
+Datum domain is done using using meta programming techniques with :cpp:`llama::forEachLeaf`.
 It takes a datum domain as template argument and a functor as run time parameter.
-The functor is then called for each leaf of the datum domain tree:
+The functor is then called for each leaf of the datum domain tree with a datum coord as argument:
 
 .. code-block:: C++
 
@@ -28,13 +30,13 @@ The functor is then called for each leaf of the datum domain tree:
     >;
 
     MyFunctor functor;
+    llama::forEachLeaf<DatumDomain>(functor);
 
-    // "functor" will be called for
-    // * x
-    // * y
-    // * z.low
-    // * z.high
-    llama::forEach<DatumDomain>(functor);
+    // functor will be called with an instance of
+    // * DatumCoord<0> for x
+    // * DatumCoord<1> for y
+    // * DatumCoord<2, 0> for z.low
+    // * DatumCoord<2, 1> for z.high
 
 Optionally, a subtree of the DatumDomain can be chosen.
 The subtree is described either via a `DatumCoord` or a series of tags.
@@ -44,20 +46,28 @@ The subtree is described either via a `DatumCoord` or a series of tags.
     // "functor" will be called for
     // * z.low
     // * z.high
-    llama::forEach<DatumDomain>(functor, z{});
+    llama::forEachLeaf<DatumDomain>(functor, z{});
 
     // "functor" will be called for
     // * z.low
-    llama::forEach<DatumDomain>(functor, z{}, low{});
+    llama::forEachLeaf<DatumDomain>(functor, z{}, low{});
 
     // "functor" will be called for
     // * z.high
-    llama::forEach<DatumDomain>(functor, llama::DatumCoord<2, 1>{});
+    llama::forEachLeaf<DatumDomain>(functor, llama::DatumCoord<2, 1>{});
 
-The functor type itself is a struct which provides the :cpp:`operator()` with one template parameter,
-the coordinate of the leaf in the datum domain tree, the functor is called on.
+The functor type itself needs to provide the :cpp:`operator()` with one templated parameter, to which 
+the coordinate of the leaf in the datum domain tree is passed.
+A polymorphic lambda is recommented to be used as a functor.
 
 .. code-block:: C++
+
+    auto vd = view(23, 43);
+    llama::forEachLeaf<DatumDomain>([&](auto coord) {
+        vd(coord) = 1337.0f;
+    });
+
+    // or using a struct:
 
     template<typename VirtualDatum, typename Value>
     struct SetValueFunctor {
@@ -69,25 +79,12 @@ the coordinate of the leaf in the datum domain tree, the functor is called on.
         const Value value;
     };
 
-    // ...
-
-    auto vd = view(23, 43);
-
     SetValueFunctor<decltype(vd), float> functor{1337.0f};
-    llama::forEach<DatumDomain>(functor);
-
-    // or using a lambda function:
-    llama::forEach<DatumDomain>([&](auto coord) {
-        vd(coord) = value;
-    });
+    llama::forEachLeaf<DatumDomain>(functor);
 
 A more detailed example can be found in the
 `simpletest example <https://github.com/alpaka-group/llama/blob/master/examples/simpletest/simpletest.cpp>`_.
 
-Array domain iterating
-----------------------
-
-TODO
 
 View iterators
 --------------
