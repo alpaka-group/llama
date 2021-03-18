@@ -105,4 +105,36 @@ A more detailed example can be found in the
 View iterators
 --------------
 
-TODO
+Iterators on views are useful but pose a couple of difficulties.
+Therefore, only 1D iterators are supported currently.
+Becaues higher dimensional iterators are difficult to get right if we also want to preserve good codegen.
+Multiple nested loops seem to be superior to a single iterator over multiple dimensions.
+
+Having an iterator to a view opens up the standard library for use in conjunction with LLAMA:
+
+.. code-block:: C++
+
+    using ArrayDomain = llama::ArrayDomain<1>;
+    // ...
+    auto view = llama::allocView(mapping);
+
+    for (auto vd : view) {
+        vd(x{}) = 1.0f;
+        vd(y{}) = 2.0f;
+        vd(z{}, low{}) = 3;
+        vd(z{}, high{}) = 4;
+    }
+    std::transform(begin(view), end(view), begin(view), [](auto vd) { return vd * 2; });
+    const float sumY = std::accumulate(begin(view), end(view), 0, [](int acc, auto vd) { return acc + vd(y{}); });
+
+Since virtual datums interact with each other based on the tags and not the underlying mappings, we can also use iterators from multiple views together:
+
+.. code-block:: C++
+
+    auto aosView = llama::allocView(llama::mapping::AoS<ArrayDomain, DatumDomain>{arrayDomain});
+    auto soaView = llama::allocView(llama::mapping::SoA<ArrayDomain, DatumDomain>{arrayDomain});
+    // ...
+    std::copy(begin(aosView), end(aosView), begin(soaView));
+
+    auto innerProduct = std::transform_reduce(begin(aosView), end(aosView), begin(soaView), llama::One<DatumDomain>{});
+
