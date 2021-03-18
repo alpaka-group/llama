@@ -79,9 +79,36 @@ TEST_CASE("iterator.transform_reduce")
         vd(tag::Z{}) = ++i;
     }
     // returned type is a llama::One<Particle>
-    auto [sumX, sumY, sumZ] = std::transform_reduce(begin(aosView), end(aosView), begin(soaView), llama::One<Position>{});
+    auto [sumX, sumY, sumZ]
+        = std::transform_reduce(begin(aosView), end(aosView), begin(soaView), llama::One<Position>{});
 
     CHECK(sumX == 242672);
     CHECK(sumY == 248816);
     CHECK(sumZ == 255024);
 }
+
+#if __has_include(<ranges>)
+#    include <ranges>
+
+TEST_CASE("ranges")
+{
+    using ArrayDomain = llama::ArrayDomain<1>;
+    constexpr auto arrayDomain = ArrayDomain{32};
+    constexpr auto mapping = llama::mapping::AoS<ArrayDomain, Position>{arrayDomain};
+    auto view = llama::allocView(mapping);
+
+    int i = 0;
+    for (auto vd : view)
+    {
+        vd(tag::X{}) = ++i;
+        vd(tag::Y{}) = ++i;
+        vd(tag::Z{}) = ++i;
+    }
+
+    std::vector<int> v;
+    for (auto y : view | std::views::filter([](auto vd) { return vd(tag::X{}) % 10 == 0; })
+             | std::views::transform([](auto vd) { return vd(tag::Y{}); }) | std::views::take(2))
+        v.push_back(y);
+    CHECK(v == std::vector<int>{11, 41});
+}
+#endif
