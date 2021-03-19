@@ -47,6 +47,11 @@ namespace llama::mapping
         }
     } // namespace internal
 
+    /// Mapping which splits off a part of the datum domain and maps it differently then the rest.
+    /// \tparam DatumCoordForMapping1 A \ref DatumCoord selecting the part of the datum domain to be mapped differently.
+    /// \tparam MappingTemplate1 The mapping used for the selected part of the datum domain.
+    /// \tparam MappingTemplate2 The mapping used for the not selected part of the datum domain.
+    /// \tparam SeparateBlobs If true, both pieces of the datum domain are mapped to separate blobs.
     template <
         typename T_ArrayDomain,
         typename T_DatumDomain,
