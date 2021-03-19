@@ -2,6 +2,7 @@
 
 #include <catch2/catch.hpp>
 #include <llama/llama.hpp>
+#include <numeric>
 
 // clang-format off
 namespace tag {
@@ -122,4 +123,50 @@ TEST_CASE("computedprop")
     CHECK(nx == Approx(0.0f));
     CHECK(ny == Approx(0.0f));
     CHECK(nz == Approx(1.0f));
+}
+
+namespace
+{
+    // Maps accesses to the product of the ArrayDomain coord.
+    template <typename T_ArrayDomain, typename T_DatumDomain>
+    struct ComputedMapping
+    {
+        using ArrayDomain = T_ArrayDomain;
+        using DatumDomain = T_DatumDomain;
+        static constexpr std::size_t blobCount = 0;
+
+        constexpr ComputedMapping() = default;
+
+        constexpr ComputedMapping(ArrayDomain, DatumDomain = {})
+        {
+        }
+
+        template <std::size_t... DatumDomainCoord>
+        static constexpr auto isComputed(llama::DatumCoord<DatumDomainCoord...>)
+        {
+            return true;
+        }
+
+        template <std::size_t... DatumDomainCoord, typename Blob>
+        constexpr auto compute(
+            ArrayDomain coord,
+            llama::DatumCoord<DatumDomainCoord...>,
+            llama::Array<Blob, blobCount>&) const -> std::size_t
+        {
+            return std::reduce(std::begin(coord), std::end(coord), std::size_t{1}, std::multiplies<>{});
+        }
+    };
+} // namespace
+
+TEST_CASE("fully_computed_mapping")
+{
+    auto arrayDomain = llama::ArrayDomain<3>{10, 10, 10};
+    auto mapping = ComputedMapping<decltype(arrayDomain), Triangle>{arrayDomain};
+
+    auto view = llama::allocView(mapping);
+
+    using namespace tag;
+    CHECK(view(0u, 1u, 2u)(A{}, X{}) == 0);
+    CHECK(view(2u, 1u, 2u)(A{}, Y{}) == 4);
+    CHECK(view(2u, 5u, 2u)(A{}, Z{}) == 20);
 }
