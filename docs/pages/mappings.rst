@@ -7,16 +7,18 @@ Mappings
 
 One of the core tasks of LLAMA is to map an address from the array domain and
 datum domain to some address in the allocated memory space.
-This is particularly hard if the compiler shall still be able to optimize the resulting
-memory accesses (vectorization, reodering, aligned loads, etc.).
+This is particularly challenging if the compiler shall still be able to optimize the resulting
+memory accesses (vectorization, reordering, aligned loads, etc.).
 The compiler needs to **understand** the semantic of the mapping at compile time.
 Otherwise the abstraction LLAMA provides will perform poorly.
+Thus, mappings are compile time parameters to LLAMA's views.
+LLAMA provides a manifold of such mappings and users are also free to write their own mappings.
 
-LLAMA mapping interface
------------------------
+Concept
+-------
 
-The LLAMA mapping is used to create views as detailed in the :ref:`allocView API section <label-api-allocView>`.
-Every mapping needs to fulfill the following concept:
+A LLAMA mapping is used to create views as detailed in the :ref:`allocView API section <label-api-allocView>` and views consult the mapping when resolving accesses.
+The view requires each mapping to fulfill the following concept:
 
 .. code-block:: C++
 
@@ -29,22 +31,11 @@ Every mapping needs to fulfill the following concept:
         { m.getBlobNrAndOffset(typename M::ArrayDomain{}) } -> std::same_as<NrAndOffset>;
     };
 
-That is, each Mapping type needs to expose the types :cpp:`M::ArrayDomain` and :cpp:`M::DatumDomain`.
+That is, each mapping type needs to expose the types :cpp:`M::ArrayDomain` and :cpp:`M::DatumDomain`.
 Furthermore, each mapping needs to provide a static constexpr member variable :cpp:`blobCount` and two member functions.
 :cpp:`getBlobSize(i)` gives the size in bytes of the :cpp:`i`\ th block of memory needed for this mapping.
 :cpp:`i` is in the range of :cpp:`0` to :cpp:`blobCount - 1`.
-:cpp:`getBlobNrAndOffset(ud)` implements the core mapping logic by translating a array domain coordinate :cpp:`ud` into a value of :cpp:`llama::NrAndOffset`, containing the blob number of offset within the blob where the value should be stored.
-
-It is possible to directly realize simple mappings such as array of struct,
-struct of array or padding for this interface. However a connecting or mixing
-of these mappings is not possible. To address this, mappings themself can define
-some kind of mapping language themself which itself can archieve such goals.
-
-Which approach of a mapping language is the best, is active research. The later
-shown tree mapping is one attempt of an universal mapping language suitable for
-many architectures. However even if it points out that this approach is not
-working well, it is trivial to switch to a new mapping method without changing
-the whole code as the mapping is independent of the other parts of LLAMA.
+:cpp:`getBlobNrAndOffset(ad)` implements the core mapping logic by translating a array domain coordinate :cpp:`ad` into a value of :cpp:`llama::NrAndOffset`, containing the blob number of offset within the blob where the value should be stored.
 
 AoS mappings
 ------------
@@ -60,7 +51,7 @@ However, they do not vectorize well in practice.
     llama::mapping::AoS<ArrayDomain, DatumDomain, true
         llama::mapping::LinearizeArrayDomainFortran> mapping{arrayDomainSize}; // respect alignment, column major
 
-By default, the :cpp:`ArrayDomain` is linearized using :cpp:`llama::mapping::LinearizeArrayDomainCpp`and the layout is tightly packed.
+By default, the :cpp:`ArrayDomain` is linearized using :cpp:`llama::mapping::LinearizeArrayDomainCpp` and the layout is tightly packed.
 LLAMA provides the aliases :cpp:`llama::mapping::AlignedAoS` and :cpp:`llama::mapping::PackedAoS` for convenience.
 
 
