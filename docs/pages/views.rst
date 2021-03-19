@@ -76,3 +76,19 @@ This datum coordinates are zero-based, nested indices reflecting the nested tupl
 
 Notice that the :cpp:`operator()` is invoked twice in the last example and that an intermediate object is needed for this to work.
 This object is a central data type of LLAMA called :cpp:`llama::VirtualDatum`.
+
+.. _label-virtualview:
+
+VirtualView
+-----------
+
+Virtual views can be created on top of existing views, offering shifted access to a subrange of the array domain.
+
+.. code-block:: C++
+
+    auto view = ...;
+    llama::VirtualView<decltype(view)> virtualView{
+        view,
+        {23, 42}, // offset
+        {13, 37} // size
+    };
