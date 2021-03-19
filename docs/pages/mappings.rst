@@ -14,6 +14,8 @@ Otherwise the abstraction LLAMA provides will perform poorly.
 Thus, mappings are compile time parameters to LLAMA's views.
 LLAMA provides a manifold of such mappings and users are also free to write their own mappings.
 
+.. image:: ../images/mapping.svg
+
 Concept
 -------
 
