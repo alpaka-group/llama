@@ -98,8 +98,8 @@ E.g. :cpp:`llama::DE<Tag, float[4]>` is expanded into
 .. code-block:: C++
 
     llama::DE<Tag, llama::DS<
-        llama::DE<llama::Index<0>, float>,
-        llama::DE<llama::Index<1>, float>,
-        llama::DE<llama::Index<2>, float>,
-        llama::DE<llama::Index<3>, float>
+        llama::DE<llama::DatumCoord<0>, float>,
+        llama::DE<llama::DatumCoord<1>, float>,
+        llama::DE<llama::DatumCoord<2>, float>,
+        llama::DE<llama::DatumCoord<3>, float>
     >>
