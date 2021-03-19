@@ -77,7 +77,7 @@ Library overview
 
 The following diagram gives an overview over the components of LLAMA:
 
-.. image:: ../images/allocView.svg
+.. image:: ../images/overview.svg
 
 The core data structure of LLAMA is the :ref:`View <label-view>`,
 which holds the memory for the data and provides methods to access the data.
