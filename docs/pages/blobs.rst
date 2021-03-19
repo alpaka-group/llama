@@ -1,6 +1,6 @@
 .. include:: common.rst
 
-.. _label-allocators:
+.. _label-blobs:
 
 Blobs
 =====
@@ -15,6 +15,8 @@ Depending on the type of blobs used, this can have different effects, especially
 
 If a :cpp:`std::vector<std::byte>` is used, the full storage will be copied.
 If a :cpp:`std::shared_ptr<std::byte[]>` is used, the storage is shared between each copy of the view.
+
+.. _label-allocators:
 
 Allocators
 ----------
