@@ -33,7 +33,7 @@ That is, each Mapping type needs to expose the types :cpp:`M::ArrayDomain` and :
 Furthermore, each mapping needs to provide a static constexpr member variable :cpp:`blobCount` and two member functions.
 :cpp:`getBlobSize(i)` gives the size in bytes of the :cpp:`i`\ th block of memory needed for this mapping.
 :cpp:`i` is in the range of :cpp:`0` to :cpp:`blobCount - 1`.
-:cpp:`getBlobNrAndOffset(ud)` implements the core mapping logic by translating a array domain coordinate :cpp:`ud` into a value of :cpp:`NrAndOffset`, containing the blob number of offset within the blob where the value should be stored.
+:cpp:`getBlobNrAndOffset(ud)` implements the core mapping logic by translating a array domain coordinate :cpp:`ud` into a value of :cpp:`llama::NrAndOffset`, containing the blob number of offset within the blob where the value should be stored.
 
 It is possible to directly realize simple mappings such as array of struct,
 struct of array or padding for this interface. However a connecting or mixing

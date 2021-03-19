@@ -8,7 +8,7 @@ Blobs
 When a :ref:`view <label-view>` is created, it needs to be given an array of blobs.
 A blob is an object representing a flat region of memory where each byte is accessed using the subscript operator.
 The number of blobs and the size of each blob is a property determined by the mapping used by the view.
-All this is handled by :cpp:`allocView()`, but I needs to be given an allocator to handle the actual allocation of each blob.
+All this is handled by :cpp:`llama::allocView()`, but I needs to be given an allocator to handle the actual allocation of each blob.
 
 Every time a view is copied, it's array of blobs is copied too.
 Depending on the type of blobs used, this can have different effects, especially wrt. the behavior when views are copied.
@@ -19,7 +19,7 @@ If a :cpp:`std::shared_ptr<std::byte[]>` is used, the storage is shared between 
 Allocators
 ----------
 
-An allocator is used for :cpp:`allocView()` to choose a strategy for creating blobs.
+An allocator is used for :cpp:`llama::allocView()` to choose a strategy for creating blobs.
 There is a number of a buildin allocators:
 
 Shared memory
@@ -54,7 +54,7 @@ Stack
 
 When working with small amounts of memory or temporary views created often, it is usually beneficial to store the data directly on the stack.
 
-:cpp:`llama::allocator::Stack` addresses this issue and creates blobs of type :cpp:`Array<std::byte, N>`, where :cpp:`N` is a compile time value passed to the allocator.
+:cpp:`llama::allocator::Stack` addresses this issue and creates blobs of type :cpp:`llama::Array<std::byte, N>`, where :cpp:`N` is a compile time value passed to the allocator.
 These blobs are copied every time their view is copied.
 
 Creating a small view of :math:`4 \times 4` may look like this:

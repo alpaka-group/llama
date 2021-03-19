@@ -59,10 +59,10 @@ This defines this tree
 
 Unfortunately with C++ it is not possible yet to "iterate" over a struct at compile time and extract member types and names,
 as it would be needed for LLAMA's mapping (although there are proposals to provide such a facility).
-For now LLAMA needs to define such a tree itself using two classes, :cpp:`DatumStruct` and :cpp:`DatumElement`.
-:cpp:`DatumStruct` is a compile time list of :cpp:`DatumElement`.
-:cpp:`DatumElement` has a name and a fundamental type **or** another :cpp:`DatumStruct` list of child :cpp:`DatumElement`\ s.
-The name of a :cpp:`DatumElement` needs to be C++ type as well.
+For now LLAMA needs to define such a tree itself using two classes, :cpp:`llama::DatumStruct` and :cpp:`llama::DatumElement`.
+:cpp:`llama::DatumStruct` is a compile time list of :cpp:`llama::DatumElement`.
+:cpp:`llama::DatumElement` has a name and a fundamental type **or** another :cpp:`llama::DatumStruct` list of child :cpp:`llama::DatumElement`\ s.
+The name of a :cpp:`llama::DatumElement` needs to be C++ type as well.
 We recommend creating empty tag types for this.
 These tags serve as names when describing accesses later.
 Furthermore, these tags also enable a semantic binding even between two different datum domains.
@@ -72,7 +72,7 @@ To make the code easier to read, the following shortcuts are defined:
 * :cpp:`llama::DatumStruct` → :cpp:`llama::DS`
 * :cpp:`llama::DatumElement` → :cpp:`llama::DE`
 
-A datum domain itself is just a :cpp:`DatumStruct` (or a fundamental type), as seen here for the given tree:
+A datum domain itself is just a :cpp:`llama::DatumStruct` (or a fundamental type), as seen here for the given tree:
 
 .. code-block:: C++
 
@@ -91,8 +91,8 @@ A datum domain itself is just a :cpp:`DatumStruct` (or a fundamental type), as s
         llama::DE<alpha, char>
     >;
 
-One-dimensional arrays of compile-time extent are also supported as arguments to :cpp:`llama::DE`, but not to  :cpp:`llama::DatumElement`.
-Such arrays are expanded into a :cpp:`DatumStruct` with multiple :cpp:`DatumElement`\ s of the same type.
+Arrays of compile-time extent are also supported as arguments to :cpp:`llama::DE`, but not to  :cpp:`llama::DatumElement`.
+Such arrays are expanded into a :cpp:`llama::DatumStruct` with multiple :cpp:`llama::DatumElement`\ s of the same type.
 E.g. :cpp:`llama::DE<Tag, float[4]>` is expanded into
 
 .. code-block:: C++
