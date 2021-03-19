@@ -48,12 +48,15 @@ namespace llama::mapping
         ArrayDomain arrayDomainSize;
     };
 
+    /// Array of struct mapping preserving the alignment of the element types by inserting padding. See \see AoS.
     template <
         typename ArrayDomain,
         typename DatumDomain,
         typename LinearizeArrayDomainFunctor = LinearizeArrayDomainCpp>
     using AlignedAoS = AoS<ArrayDomain, DatumDomain, true, LinearizeArrayDomainFunctor>;
 
+    /// Array of struct mapping packing the element types tighly, violating the types alignment requirements. See \see
+    /// AoS.
     template <
         typename ArrayDomain,
         typename DatumDomain,

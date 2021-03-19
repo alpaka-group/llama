@@ -13,8 +13,7 @@
 
 namespace llama
 {
-    /// Anonymous naming for a \ref DatumElement. Especially used for a \ref
-    /// DatumArray.
+    /// Anonymous naming for a \ref DatumElement.
     struct NoName
     {
     };
@@ -60,13 +59,13 @@ namespace llama
 
     // FIXME: the documented functionality currently only works through llama::DE, because the Type is not expanded in
     // case of arrays
-    /// Datum domain tree node which may either be a leaf or refer to a child
-    /// tree presented as another \ref DatumStruct or \ref DatumArray.
+    /// Datum domain tree node which may either be a leaf or refer to a child tree presented as another \ref
+    /// DatumStruct.
     /// \tparam Tag Name of the node. May be any type (struct, class).
-    /// \tparam Type Type of the node. May be one of three cases. 1. another sub tree consisting
-    /// of a nested \ref DatumStruct. 2. an array of any type, in which case a DatumStruct with as many \ref
-    /// DatumElement as the array size is created, named \ref Index specialized on consecutive numbers.
-    /// 3. A scalar type different from \ref DatumStruct, making this node a leaf of this type.
+    /// \tparam Type Type of the node. May be one of three cases. 1. another sub tree consisting of a nested \ref
+    /// DatumStruct. 2. an array of any type, in which case a DatumStruct with as many \ref DatumElement as the array
+    /// size is created, named \ref Index specialized on consecutive numbers. 3. A scalar type different from \ref
+    /// DatumStruct, making this node a leaf of this type.
     template <typename Tag, typename Type>
     struct DatumElement
     {

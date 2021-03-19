@@ -108,12 +108,14 @@ namespace llama::mapping
         ArrayDomain arrayDomainSize;
     };
 
+    /// Struct of array mapping storing the entire layout in a single blob. See \see SoA.
     template <
         typename ArrayDomain,
         typename DatumDomain,
         typename LinearizeArrayDomainFunctor = LinearizeArrayDomainCpp>
     using SingleBlobSoA = SoA<ArrayDomain, DatumDomain, std::false_type, LinearizeArrayDomainFunctor>;
 
+    /// Struct of array mapping storing each attribute of the datum domain in a separate blob. See \see SoA.
     template <
         typename ArrayDomain,
         typename DatumDomain,

@@ -43,16 +43,12 @@ Datum domain
 .. doxygentypedef:: llama::DS
 .. doxygenstruct:: llama::DatumElement
 .. doxygentypedef:: llama::DE
-.. doxygentypedef:: llama::DatumArray
-.. doxygentypedef:: llama::DA
 .. doxygenstruct:: llama::NoName
-.. doxygentypedef:: llama::Index
 
 .. doxygentypedef:: llama::GetDatumElementTag
 .. doxygentypedef:: llama::GetDatumElementType
 .. doxygenvariable:: llama::offsetOf
 .. doxygenvariable:: llama::sizeOf
-.. doxygenvariable:: llama::isDatumStruct
 .. doxygentypedef:: llama::GetTags
 .. doxygentypedef:: llama::GetTag
 .. doxygenvariable:: llama::hasSameTags
@@ -60,8 +56,8 @@ Datum domain
 .. doxygentypedef:: llama::GetType
 .. doxygentypedef:: llama::GetCoordFromTagsRelative
 
-.. doxygenfunction:: llama::forEach(Functor &&functor, Tags... baseTags)
-.. doxygenfunction:: llama::forEach(Functor &&functor, DatumCoord<Coords...> baseCoord)
+.. doxygenfunction:: llama::forEachLeaf(Functor &&functor, Tags... baseTags)
+.. doxygenfunction:: llama::forEachLeaf(Functor &&functor, DatumCoord<Coords...> baseCoord)
 
 Datum coordinates
 -----------------
@@ -80,7 +76,7 @@ View creation
 .. _label-api-allocView:
 .. doxygenfunction:: llama::allocView
 .. doxygenfunction:: llama::allocViewStack
-.. doxygenfunction:: llama::allocVirtualDatumStack
+.. doxygentypedef:: llama::One
 .. doxygenfunction:: llama::copyVirtualDatumStack
 
 .. _label-api-allocators:
@@ -98,13 +94,19 @@ Allocators
 Mappings
 --------
 
+.. doxygentypedef:: llama::mapping::AlignedAoS
+.. doxygentypedef:: llama::mapping::PackedAoS
 .. doxygenstruct:: llama::mapping::AoS
    :members:
+.. doxygentypedef:: llama::mapping::SingleBlobSoA
+.. doxygentypedef:: llama::mapping::MultiBlobSoA
 .. doxygenstruct:: llama::mapping::SoA
    :members:
 .. doxygenstruct:: llama::mapping::One
    :members:
 .. doxygenstruct:: llama::mapping::AoSoA
+   :members:
+.. doxygenstruct:: llama::mapping::Split
    :members:
 .. doxygenstruct:: llama::mapping::Trace
    :members:
