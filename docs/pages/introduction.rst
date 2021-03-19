@@ -120,6 +120,6 @@ The memory underneath a view is provided by a customizable :ref:`allocator <labe
 LLAMA again comes with a set of predefined allocators and users can again provider their own.
 Alternatively, a view can also be created on top of an existing memory block.
 
-The :cpp:`allocView()` takes all those user defined classes and creates the view out of their information.
+The :cpp:`llama::allocView()` takes all those user defined classes and creates the view out of their information.
 
 .. image:: ../images/allocView.svg

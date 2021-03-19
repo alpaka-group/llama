@@ -75,4 +75,4 @@ an adressing with integral datum coordinates is possible like this:
 This datum coordinates are zero-based, nested indices reflecting the nested tuple-like structure of the datum domain.
 
 Notice that the :cpp:`operator()` is invoked twice in the last example and that an intermediate object is needed for this to work.
-This object is a central data type of LLAMA called :cpp:`VirtualDatum`.
+This object is a central data type of LLAMA called :cpp:`llama::VirtualDatum`.

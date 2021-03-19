@@ -6,7 +6,7 @@ VirtualDatum
 ============
 
 During a view accesses like :cpp:`view(1, 2, 3)(color{}, g{})` an intermediate object is needed for this to work.
-This object is a :cpp:`VirtualDatum`.
+This object is a :cpp:`llama::VirtualDatum`.
 
 .. code-block:: C++
 
@@ -28,40 +28,40 @@ This object is a :cpp:`VirtualDatum`.
     float& g = vdColor(g{});
     g = 1.0;
 
-Supplying the array domain coordinates to a view access returns such a :cpp:`VirtualDatum`, storing this array domain coordiante.
+Supplying the array domain coordinates to a view access returns such a :cpp:`llama::VirtualDatum`, storing this array domain coordiante.
 This object can be thought of like a datum in the :math:`N`-dimensional array domain space,
 but as the elements of this datum may not be contiguous in memory, it is not a real object in the C++ sense and thus called virtual.
 
-Accessing subparts of a :cpp:`VirtualDatum` is done using `operator()` and the tag types from the datum domain.
+Accessing subparts of a :cpp:`llama::VirtualDatum` is done using `operator()` and the tag types from the datum domain.
 
 If an access describes a final/leaf element in the datum domain, a reference to a value of the corresponding type is returned.
 Such an access is called terminal. If the access is non-termian, i.e. it does not yet reach a leaf in the datum domain tree,
-another :cpp:`VirtualDatum` is returned, binding the tags already used for navigating down the datum domain.
+another :cpp:`llama::VirtualDatum` is returned, binding the tags already used for navigating down the datum domain.
 
-A :cpp:`VirtualDatum` can be used like a real local object in many places. It can be used as a local variable, copied around, passed as an argument to a function (as seen in the
+A :cpp:`llama::VirtualDatum` can be used like a real local object in many places. It can be used as a local variable, copied around, passed as an argument to a function (as seen in the
 `nbody example <https://github.com/alpaka-group/llama/blob/master/examples/nbody/nbody.cpp>`_), etc.
-In general, :cpp:`VirtualDatum` is a value type that represents a reference, similar to an iterator in C++ (:cpp:`One` is a notable exception).
+In general, :cpp:`llama::VirtualDatum` is a value type that represents a reference, similar to an iterator in C++ (:cpp:`llama::One` is a notable exception).
 
 
 One
 ---
 
-:cpp:`One<DatumDomain>` is a shortcut to create a scalar :cpp:`VirtualDatum`.
+:cpp:`llama::One<DatumDomain>` is a shortcut to create a scalar :cpp:`llama::VirtualDatum`.
 This is useful when we want to have a single datum instance e.g. as a local variable.
 
     llama::One<Pixel> datum;
     datum(color{}, g{}) = 1.0;
     auto datum2 = datum; // independent copy
 
-Technically, :cpp:`One` is a :cpp:`VirtualDatum` which stores a scalar :cpp:`View` inside, using the mapping :cpp:`mapping::One`.
-This also has the unfortunate consequence that a :cpp:`One` is now a value type with deep-copy semantic.
+Technically, :cpp:`llama::One` is a :cpp:`llama::VirtualDatum` which stores a scalar :cpp:`llama::View` inside, using the mapping :cpp:`llama::mapping::One`.
+This also has the unfortunate consequence that a :cpp:`llama::One` is now a value type with deep-copy semantic.
 We might address this inconsistency at some point.
 
 
 Arithmetic and logical operatores
 ---------------------------------
 
-:cpp:`VirtualDatum` overloads several arithmetic and logical operatores:
+:cpp:`llama::VirtualDatum` overloads several arithmetic and logical operatores:
 
 .. code-block:: C++
 
@@ -126,7 +126,7 @@ matched and operated on. Every non-matching tag is ignored, e.g.
     // datum2.mom.x will be multiplied to datum2.vel.x as the first part of the
     // datum domain coord is explicit given and the same afterwards
 
-The discussed operators are also overloaded for types other than :cpp:`VirtualDatum` as well so that
+The discussed operators are also overloaded for types other than :cpp:`llama::VirtualDatum` as well so that
 :cpp:`datum1 *= 7.0` will multiply 7 to every element in the datum domain.
 This feature should be used with caution!
 
@@ -208,9 +208,9 @@ Tuple interface
 WARNING: This is an experimental feature and might completely change in the future.
 
 A struct in C++ can be modelled by a :cpp:`std::tuple` with the same types as the struct's members.
-A :cpp:`VirtualDatum` behaves like a reference to a struct (i.e. the datum) which is decomposed into it's members.
+A :cpp:`llama::VirtualDatum` behaves like a reference to a struct (i.e. the datum) which is decomposed into it's members.
 We can therefore not form a single reference to such a datum, but references to the individual members.
-Organizing these references inside a :cpp:`std::tuple` in the same way the datum is represented in the datum domain gives us an alternative to a :cpp:`VirtualDatum`.
+Organizing these references inside a :cpp:`std::tuple` in the same way the datum is represented in the datum domain gives us an alternative to a :cpp:`llama::VirtualDatum`.
 Mind that creating such a :cpp:`std::tuple` already invokes the mapping function, regardless of whether an actual memory access occurs through the constructed reference later.
 However, such dead address computations are eliminated by most compilers during optimization.
 
@@ -221,7 +221,7 @@ However, such dead address computations are eliminated by most compilers during 
     std::tuple<float&, float&, float&, char&> = datum.asFlatTuple();
     auto [r, g, b, a] = datum.asFlatTuple();
 
-Additionally, if the user already has types supporting the tuple interface, :cpp:`VirtualDatum` can integreate with these using the :cpp:`load()`, :cpp:`loadAs<T>` and :cpp:`store(T)` functions.
+Additionally, if the user already has types supporting the tuple interface, :cpp:`llama::VirtualDatum` can integreate with these using the :cpp:`load()`, :cpp:`loadAs<T>()` and :cpp:`store(T)` functions.
 
 .. code-block:: C++
 
@@ -241,7 +241,7 @@ Additionally, if the user already has types supporting the tuple interface, :cpp
     p1.alpha = 255;
     datum.store(p1); // tuple-element-wise assignment from p1 to datum.asFlatTuple()
 
-Keep in mind that the load and store functionality always reads/writes all elements referred to by a :cpp:`VirtualDatum`.
+Keep in mind that the load and store functionality always reads/writes all elements referred to by a :cpp:`llama::VirtualDatum`.
 
 
 Structured bindings
@@ -249,8 +249,8 @@ Structured bindings
 
 WARNING: This is an experimental feature and might completely change in the future.
 
-A :cpp:`VirtualDatum` implementes the tuple interface by providing corresponding specializations of :cpp:`std::tuple_size`, :cpp:`std::tuple_element` and a `get<I>(VirtualDatum)`free functions.
-This allows a :cpp:`VirtualDatum` to be destructured:
+A :cpp:`llama::VirtualDatum` implementes the tuple interface by providing corresponding specializations of :cpp:`std::tuple_size`, :cpp:`std::tuple_element` and a `llama::get<I>(llama::VirtualDatum)`free functions.
+This allows a :cpp:`llama::VirtualDatum` to be destructured:
 
 .. code-block:: C++
 
@@ -258,6 +258,6 @@ This allows a :cpp:`VirtualDatum` to be destructured:
     auto [color, a] = datum; // color is another VirtualDatum, a is a char&, 1 call to mapping function
     auto [r, g, b] = color; // r, g, b are float&, 3 calls to mapping function
 
-Contrary to destructuring a tuple generated by calling :cpp:`asTuple()` or :cpp:`asFlatTuple`,
-the mapping function is not invoked for other instances of :cpp:`VirtualDatum` created during the destructuring.
+Contrary to destructuring a tuple generated by calling :cpp:`asTuple()` or :cpp:`asFlatTuple()`,
+the mapping function is not invoked for other instances of :cpp:`llama::VirtualDatum` created during the destructuring.
 The mapping function is just invoked to form references for terminal accesses.

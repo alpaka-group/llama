@@ -10,7 +10,7 @@ Array domain iterating
 
 The array domain spans an N-dimensional space of integral indices.
 Sometimes we just want to quickly iterate over all coordinates in this index space.
-This is what :cpp:`ArrayDomainRange` is for, which is a range in the C++ sense and
+This is what :cpp:`llama::ArrayDomainRange` is for, which is a range in the C++ sense and
 offers the :cpp:`begin()` and  :cpp:`end()` member functions with corresponding iterators to support STL algorithms or the range-for loop.
 
 .. code-block:: C++
