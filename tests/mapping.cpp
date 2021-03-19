@@ -519,3 +519,24 @@ TEST_CASE("address.AoSoA.4")
         CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 1116);
     }
 }
+
+TEST_CASE("maxLanes")
+{
+    STATIC_REQUIRE(llama::mapping::maxLanes<Particle, 128> == 2);
+    STATIC_REQUIRE(llama::mapping::maxLanes<Particle, 256> == 4);
+    STATIC_REQUIRE(llama::mapping::maxLanes<Particle, 512> == 8);
+
+    STATIC_REQUIRE(llama::mapping::maxLanes<float, 128> == 4);
+    STATIC_REQUIRE(llama::mapping::maxLanes<float, 256> == 8);
+    STATIC_REQUIRE(llama::mapping::maxLanes<float, 512> == 16);
+
+    using DatumDomain1 = llama::DS<llama::DE<tag::X, std::int8_t>, llama::DE<tag::Y, std::uint8_t>>;
+    STATIC_REQUIRE(llama::mapping::maxLanes<DatumDomain1, 128> == 16);
+    STATIC_REQUIRE(llama::mapping::maxLanes<DatumDomain1, 256> == 32);
+    STATIC_REQUIRE(llama::mapping::maxLanes<DatumDomain1, 512> == 64);
+
+    using DatumDomain2 = llama::DS<llama::DE<tag::X, std::int8_t>, llama::DE<tag::Y, std::int16_t>>;
+    STATIC_REQUIRE(llama::mapping::maxLanes<DatumDomain2, 128> == 8);
+    STATIC_REQUIRE(llama::mapping::maxLanes<DatumDomain2, 256> == 16);
+    STATIC_REQUIRE(llama::mapping::maxLanes<DatumDomain2, 512> == 32);
+}

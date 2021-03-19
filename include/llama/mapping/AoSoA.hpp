@@ -4,8 +4,24 @@
 
 #include "Common.hpp"
 
+#include <limits>
+
 namespace llama::mapping
 {
+    /// The maximum number of vector lanes that can be used to fetch each leaf type in the datum domain into a vector
+    /// register of the given size in bits.
+    template <typename DatumDomain, std::size_t VectorRegisterBits>
+    inline constexpr std::size_t maxLanes = []() constexpr
+    {
+        auto max = std::numeric_limits<std::size_t>::max();
+        forEachLeaf<DatumDomain>([&](auto coord) {
+            using AttributeType = GetType<DatumDomain, decltype(coord)>;
+            max = std::min(max, VectorRegisterBits / (sizeof(AttributeType) * CHAR_BIT));
+        });
+        return max;
+    }
+    ();
+
     /// Array of struct of arrays mapping. Used to create a \ref View via \ref
     /// allocView.
     /// \tparam Lanes The size of the inner arrays of this array of struct of
