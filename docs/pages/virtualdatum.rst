@@ -1,6 +1,6 @@
 .. include:: common.rst
 
-.. _label-view:
+.. _label-virtualdatum:
 
 VirtualDatum
 ============

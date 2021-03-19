@@ -51,6 +51,51 @@ An optimal layout is highly dependent on the architecture, the scaling of the pr
 
 Furthermore, third party libraries may expect specific memory layouts at their interface, into which custom data structures need to be converted.
 
+Goals
+-----
+
+LLAMA tries to achieve the following goals:
+
+* Allow users to express a generic data structure independently of how it is stored.
+  Consequently, algorithms written against this data structure’s interface are not bound to the data structure’s layout in memory.
+  This requires a data layout independent way to access the data structure.
+* Provide generic facilities to map the user-defined data structure into a performant data layout.
+  Also allowing specialization of this mapping for specific data structures by the user.
+  A data structure’s mapping is set and resolved statically at compile time, thus guaranteeing the same performance as manually written versions of a data structure.
+* Enable efficient, high throughput copying between different data layouts of the same data structure, which is a necessity in heterogeneous systems.
+  This requires meta data on the data layout.
+  Deep copies are the focus, although LLAMA should include the possibility for zero copies and in-situ transformation of data access.
+  Similar strategies could be adopted for message passing and copies between file systems and memory.
+  (WIP)
+* To be compatible with many architectures, softwares, compilers and third party libraries, LLAMA tries to stay within C++17.
+  No separate description files or language is used.
+* LLAMA should work well with auto vectorization approaches of modern compilers.
+
+
+Library overview
+----------------
+
+The following diagram gives an overview over the components of LLAMA:
+
+.. image:: ../images/allocView.svg
+
+The core data structure of LLAMA is the :ref:`View <label-view>`,
+which holds the memory for the data and provides methods to access the data.
+In order to create a view, a `Mapping` is needed which is an abstract concept.
+LLAMA offers many kinds of mappings and users can also provide their own mappings.
+Mappings are constructed from a :ref:`Datum domain <label-dd>`, containing tags, and an :ref:`Array domain <label-ad>`.
+In addition to a mapping defining the memory layout, an array of :ref:`Blobs <label-blobs>` is needed for a view, supplying the actual storage behind the view.
+A blob is any object representing a contiguous chunk of memory, byte-wise addressable using :cpp:`operator[]`.
+A suitable Blob array is either directly provided by the user or built using an :ref:`Allocator <label-allocators>` when a view is created by a call to `allocView`.
+An allocator is again an abstract concept and any object returning a blob of a requested size when calling :cpp:`operator()`.
+LLAMA comes with a set of predefined allocators and users can again provider their own.
+
+Once a view is created, the user can navigate on the data managed by the view.
+On top of a view, a :ref:`VirtualView <label-virtualview>` can be created, offering access to a subrange of the array domain.
+Elements of the array domain, called datums, are accessed on both, View and VirtualView, by calling :cpp:`operator()` with an instance of the array domain.
+This access returns a :ref:`VirtualDatum <label-virtualdatum>`, allowing further access using the tags from the datum domain, until eventually a reference to actual data in memory is returned.
+
+
 Example use cases
 -----------------
 
@@ -80,46 +125,3 @@ and a fast and easy adaption of the code is needed.
 The shipped
 `examples <https://github.com/alpaka-group/llama/tree/master/examples>`_
 of LLAMA try to showcase the implemented feature in the intended usage.
-
-Challenges
-----------
-
-LLAMA tries to address the following challenges:
-
-* Splitting the view an algorithm has onto data and the actual mapping into memory
-  so that different layouts may be chosen **without touching the algorithm at all**.
-* LLAMA shall *look* like AoS although the mapping may be completely different.
-  This keeps the access logic similar to the way programmers are used to in C++.
-* To be compatible with many architectures, softwares, compilers and third
-  party libraries, LLAMA tries to stay within C++17.
-  The whole description of the layout and the mapping is done with C++17 template meta programming.
-  No separate description files or language is used.
-* LLAMA shall be extensible in the sense of working together with new software
-  but also new memory layouts needed for emerging architectures.
-* LLAMA should work well with auto vectorization approaches of modern compilers.
-
-Library structure
------------------
-
-The library is split in mostly independent parts to ease the development and extensibility.
-Many parts of LLAMA are active research and shall not interfere with orthogonal tasks of the library.
-
-The most important data structure for the user is the :ref:`view <label-view>`
-which holds the memory for the data and provides methods to access the data.
-
-LLAMA wants to look as much as an array of struct approach as possible. To not
-mix up C++ and LLAMA namings, the array-like domain is called
-:ref:`Array domain <label-ad>` in LLAMA whereas the struct-like domain is called
-:ref:`Datum domain <label-dd>`. More details about these domains follow in the
-:ref:`next section <label-domains>`.
-
-An access described in these domains is then mapped to a memory address by the view.
-The mapping is done by a pluggable :ref:`mapping <label-mappings>`.
-LLAMA comes with several predefined mappings, but users are free to create their own.
-The memory underneath a view is provided by a customizable :ref:`allocator <label-allocators>`.
-LLAMA again comes with a set of predefined allocators and users can again provider their own.
-Alternatively, a view can also be created on top of an existing memory block.
-
-The :cpp:`llama::allocView()` takes all those user defined classes and creates the view out of their information.
-
-.. image:: ../images/allocView.svg
