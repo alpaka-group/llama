@@ -46,28 +46,23 @@ many architectures. However even if it points out that this approach is not
 working well, it is trivial to switch to a new mapping method without changing
 the whole code as the mapping is independent of the other parts of LLAMA.
 
-AoS and SoA mappings
---------------------
+AoS mappings
+------------
 
-If only array of struct or struct of array is needed, LLAMA provides two
-native mappings which show a good performance for all tested compilers (gcc,
-clang, cuda, intel, msvc):
-
-.. code-block:: C++
-
-    llama::mapping::SoA<ArrayDomain, DatumDomain> mapping{arrayDomainSize};
-
-    // or using CTAD and an unused argument for the datum domain:
-    llama::mapping::SoA mapping{arrayDomainSize, DatumDomain{});
+LLAMA provides a family of AoS (array of structs) mappings based on a generic implementation.
+AoS mappings keep the data of a single datum close together and therefore maximize locality for accesses to an individual datum.
+However, they do not vectorize well in practice.
 
 .. code-block:: C++
 
     llama::mapping::AoS<ArrayDomain, DatumDomain> mapping{arrayDomainSize};
+    llama::mapping::AoS<ArrayDomain, DatumDomain, true> mapping{arrayDomainSize}; // respect alignment
+    llama::mapping::AoS<ArrayDomain, DatumDomain, true
+        llama::mapping::LinearizeArrayDomainFortran> mapping{arrayDomainSize}; // respect alignment, column major
 
-    // or using CTAD and an unused argument for the datum domain:
-    llama::mapping::AoS mapping{arrayDomainSize, DatumDomain{});
+By default, the :cpp:`ArrayDomain` is linearized using :cpp:`llama::mapping::LinearizeArrayDomainCpp`and the layout is tightly packed.
+LLAMA provides the aliases :cpp:`llama::mapping::AlignedAoS` and :cpp:`llama::mapping::PackedAoS` for convenience.
 
-The template parameters are deduced using CTAD.
 
 There is also a combined array of struct of arrays mapping,
 but, since the mapping code is more complicated, compilers currently fail to auto vectorize view access:
@@ -78,8 +73,81 @@ but, since the mapping code is more complicated, compilers currently fail to aut
 
 .. _label-tree-mapping:
 
-LLAMA tree mapping
+
+SoA mappings
+------------
+
+LLAMA provides a family of SoA (struct of arrays) mappings based on a generic implementation.
+SoA mappings store the attributes of a datum contigiously and therefore maximize locality for accesses to the same attribute of multiple datums.
+This layout auto vectorizes well in practice.
+
+.. code-block:: C++
+
+    llama::mapping::SoA<ArrayDomain, DatumDomain> mapping{arrayDomainSize};
+    llama::mapping::SoA<ArrayDomain, DatumDomain, true> mapping{arrayDomainSize}; // separate blob for each attribute
+    llama::mapping::SoA<ArrayDomain, DatumDomain, true,
+        llama::mapping::LinearizeArrayDomainFortran> mapping{arrayDomainSize}; // separate blob for each attribute, column major
+
+By default, the :cpp:`ArrayDomain` is linearized using :cpp:`llama::mapping::LinearizeArrayDomainCpp` and the layout is mapped into a single blob.
+LLAMA provides the aliases :cpp:`llama::mapping::SingleBlobSoA` and :cpp:`llama::mapping::MultiBlobSoA` for convenience.
+
+
+AoSoA mappings
+--------------
+
+There are also combined AoSoA (array of struct of arrays) mappings.
+Since the mapping code is more complicated, compilers currently fail to auto vectorize view access.
+We are working on this.
+The AoSoA mapping has a mandatory additional parameter specifying the number of elements which are blocked in the inner array of AoSoA.
+
+.. code-block:: C++
+
+    llama::mapping::AoSoA<ArrayDomain, DatumDomain, 8> mapping{arrayDomainSize}; // inner array has 8 values
+    llama::mapping::AoSoA<ArrayDomain, DatumDomain, 8,
+        llama::mapping::LinearizeArrayDomainFortran> mapping{arrayDomainSize}; // inner array has 8 values, column major
+
+By default, the :cpp:`ArrayDomain` is linearized using :cpp:`llama::mapping::LinearizeArrayDomainCpp`.
+
+LLAMA also provides a helper :cpp:`llama::mapping::maxLanes` which can be used to determine the maximum vector lanes which can be used for a given datum domain and vector register size.
+In this example, the inner array a size of N so even the largest type in the datum domain can fit N times into a vector register of 256bits size (e.g. AVX2).
+
+.. code-block:: C++
+
+    llama::mapping::AoSoA<ArrayDomain, DatumDomain,
+        llama::mapping::maxLanes<DatumDomain, 256>> mapping{arrayDomainSize};
+
+
+One mapping
+-----------
+
+The One mapping is intended to map all coordinates in the array domain onto the same memory location.
+This is commonly used in  the `llama::One` virtual datum, but also offers interesting applications in conjunction with the `llama::mapping::Split` mapping.
+
+
+Split mapping
+-------------
+
+WARNING: This is an experimental feature and might completely change in the future.
+
+The Split mapping is a meta mapping in the sense, that it transforms the datum domain and delegates mapping to other mappings.
+Using a datum coordinate, a subtree of the datum domain is selected and mapped using one mapping.
+The remaining datum domain is mapped using a second mapping.
+
+.. code-block:: C++
+
+    llama::mapping::Split<ArrayDomain, DatumDomain,
+        llama::DatumCoord<1>, llama::mapping::SoA, llama::mapping::PackedAoS>
+            mapping{arrayDomainSize}; // maps the subtree at index 1 as SoA, the rest as packed AoS
+
+Split mappings can be nested to map a datum domain into even fancier combinations.
+
+
+.. _label-tree-mapping:
+
+Tree mapping
 ------------------
+
+WARNING: The tree mapping is currently not maintained and we consider deprecation.
 
 The LLAMA tree mapping is one approach to archieve the goal of mixing different mapping approaches.
 Furthermore, it tries to establish a general mapping description language and mapping definition framework.
