@@ -17,7 +17,7 @@ However, efficient use of a system's memory and cache hierarchies is crucial as 
 General solutions or frameworks seem not to exist yet.
 First attempts are AoS/SoA container libraries like
 `SoAx <https://www.sciencedirect.com/science/article/pii/S0010465517303983>`_ or 
-`Intel's SDLT <https://software.intel.com/content/www/us/en/develop/documentation/cpp-compiler-developer-guide-and-reference/top/compiler-reference/libraries/introduction-to-the-simd-data-layout-templates.html>_`),
+`Intel's SDLT <https://software.intel.com/content/www/us/en/develop/documentation/cpp-compiler-developer-guide-and-reference/top/compiler-reference/libraries/introduction-to-the-simd-data-layout-templates.html>`_),
 Kokkos's views or the proposed `std::mdspan <http://wg21.link/p0009r10>`_).
 
 Let's consider an example.
@@ -38,13 +38,14 @@ So the choice of layout already is usually quite infectious on the code we use t
 For this specific example, research and ready to use libraries already exist.
 
 But there are more useful mappings than SoA and AoS, such as:
- - blocking of memory (like partly using SoA inside an AoS approach)
- - strided access of data (e.g. odd indexes after each other)
- - padding
- - separating frequently accessed data from the rest
- - ...
 
-Moreover, software is often using different heterogenous memory architectures such as RAM, VRAM, caches or network cards.
+ * blocking of memory (like partly using SoA inside an AoS approach)
+ * strided access of data (e.g. odd indexes after each other)
+ * padding
+ * separating frequently accessed data from the rest (hot/cold data separation)
+ * ...
+
+Moreover, software is often using various heterogenous memory architectures such as RAM, VRAM, caches, memory-mapped devices or files, etc.
 A data layout optimized for a specific CPU may be inefficient on a GPU or only slowly transferable over network.
 A single layout -- not optimal for each architecture -- is very often a trade-off.
 An optimal layout is highly dependent on the architecture, the scaling of the problem and of course the chosen algorithm.
@@ -64,12 +65,12 @@ LLAMA tries to achieve the following goals:
   A data structure’s mapping is set and resolved statically at compile time, thus guaranteeing the same performance as manually written versions of a data structure.
 * Enable efficient, high throughput copying between different data layouts of the same data structure, which is a necessity in heterogeneous systems.
   This requires meta data on the data layout.
-  Deep copies are the focus, although LLAMA should include the possibility for zero copies and in-situ transformation of data access.
+  Deep copies are the focus, although LLAMA should include the possibility for zero copies and in-situ transformation of data layouts.
   Similar strategies could be adopted for message passing and copies between file systems and memory.
   (WIP)
 * To be compatible with many architectures, softwares, compilers and third party libraries, LLAMA tries to stay within C++17.
   No separate description files or language is used.
-* LLAMA should work well with auto vectorization approaches of modern compilers.
+* LLAMA should work well with auto vectorization approaches of modern compilers, but also support explicit vectorization on top of LLAMA.
 
 
 Library overview
@@ -99,10 +100,17 @@ This access returns a :ref:`VirtualDatum <label-virtualdatum>`, allowing further
 Example use cases
 -----------------
 
-This library is designed and written at the `Helmholtz-Zentrum Dresden -- Rossendorf (HZDR) <https://www.hzdr.de>`_ by the
-`group for computational radiation physics (CRP) <https://www.hzdr.de/crp>`_ and `CASUS <https://www.casus.science>`_.
+This library is designed and written by the `software development for experiments group (EP-SFT) at CERN <https://ep-dep-sft.web.cern.ch/>`_,
+by the `group for computational radiation physics (CRP) at HZDR <https://www.hzdr.de/crp>`_ and `CASUS <https://www.casus.science>`_.
 While developing, we have some in house and partner applications in mind.
 These example use cases are not the only targets of LLAMA, but drove the development and the feature set.
+
+One of the major projects in EP-SFT is the `ROOT data analysis framework <https://root.cern/>`_ for data analysis in high-energy physics.
+A critical component is the fast transfer of petabytes of filesystem data taken from CERN’s detectors into an efficient in-memory representation for subsequent analysis algorithms.
+This data are particle interaction events, each containing a series of variable size attributes.
+A typical analysis involves column selection, cuts, filters, computation of new attributes and histograms.
+The data in ROOT files is stored in columnar blocks and significant effort is made to make the data flow and aggregation as optimal as possible.
+LLAMA will supply the necessary memory layouts for an optimal analysis and automate the data transformations from disk into these layouts.
 
 The CRP group works on a couple of simulation codes, e.g.
 `PIConGPU <https://picongpu.hzdr.de>`_, the fastest particle in cell code
