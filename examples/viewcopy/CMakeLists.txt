@@ -19,6 +19,3 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clan
 		target_link_libraries(${PROJECT_NAME} PRIVATE TBB::tbb Threads::Threads)
 	endif()
 endif()
-
-install(FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}" DESTINATION "bin")
-
