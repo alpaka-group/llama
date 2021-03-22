@@ -11,10 +11,9 @@ The number of blobs and the size of each blob is a property determined by the ma
 All this is handled by :cpp:`llama::allocView()`, but I needs to be given an allocator to handle the actual allocation of each blob.
 
 Every time a view is copied, it's array of blobs is copied too.
-Depending on the type of blobs used, this can have different effects, especially wrt. the behavior when views are copied.
-
-If a :cpp:`std::vector<std::byte>` is used, the full storage will be copied.
-If a :cpp:`std::shared_ptr<std::byte[]>` is used, the storage is shared between each copy of the view.
+Depending on the type of blobs used, this can have different effects.
+If e.g. :cpp:`std::vector<std::byte>` is used, the full storage will be copied.
+Contrary, if a :cpp:`std::shared_ptr<std::byte[]>` is used, the storage is shared between each copy of the view.
 
 .. _label-allocators:
 
@@ -105,13 +104,13 @@ However, a pointer to the underlying storage can be obtained, which may be used 
 
 .. code-block:: C++
 
-    auto buffer = alpaka::mem::buf::alloc<std::byte, std::size_t>(dev, size);
-    auto view = llama::View<Mapping, std::byte*>{mapping, {alpaka::mem::view::getPtrNative(buffer)}};
+    auto buffer = alpaka::allocBuf<std::byte, std::size_t>(dev, size);
+    auto view = llama::View<Mapping, std::byte*>{mapping, {alpaka::getPtrNative(buffer)}};
 
 Shared memory is created by alpaka using a special function returning a reference to a shared variable.
 To allocate storage for LLAMA, we can allocate a shared byte array using alpaka and then pass the address of the first element to a LLAMA view.
 
 .. code-block:: C++
 
-    auto& sharedMem = alpaka::block::shared::st::allocVar<std::byte[sharedMemSize], __COUNTER__>(acc);
+    auto& sharedMem = alpaka::declareSharedVar<std::byte[sharedMemSize], __COUNTER__>(acc);
     auto view = llama::View<Mapping, std::byte*>{mapping, {&sharedMem[0]}};
