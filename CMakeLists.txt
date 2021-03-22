@@ -47,7 +47,6 @@ if (BUILD_TESTING)
 endif()
 
 # examples
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/Modules/")
 option(LLAMA_BUILD_EXAMPLES "Building (and installing) the examples" ON)
 if (LLAMA_BUILD_EXAMPLES)
 	# general examples
