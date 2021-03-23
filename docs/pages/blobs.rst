@@ -15,47 +15,47 @@ Depending on the type of blobs used, this can have different effects.
 If e.g. :cpp:`std::vector<std::byte>` is used, the full storage will be copied.
 Contrary, if a :cpp:`std::shared_ptr<std::byte[]>` is used, the storage is shared between each copy of the view.
 
-.. _label-allocators:
+.. _label-bloballocators:
 
-Allocators
-----------
+Blob allocators
+---------------
 
-An allocator is used for :cpp:`llama::allocView()` to choose a strategy for creating blobs.
-There is a number of a buildin allocators:
+A blob allocator is used for :cpp:`llama::allocView()` to choose a strategy for creating blobs.
+There is a number of a buildin blob allocators:
 
 Shared memory
 ^^^^^^^^^^^^^
 
-:cpp:`llama::allocator::SharedPtr` is an allocator creating blobs of type :cpp:`std::shared_ptr<std::byte[]>`.
+:cpp:`llama::bloballoc::SharedPtr` is a blob allocator creating blobs of type :cpp:`std::shared_ptr<std::byte[]>`.
 These blobs will be shared between each copy of the view and only destroyed then the last view is destroyed.
 
-Furthermore a compile time alignment value can be given to the allocator to specify the byte alignment of the allocated block of memory.
+Furthermore a compile time alignment value can be given to the blob allocator to specify the byte alignment of the allocated block of memory.
 This has implications on the read/write speed on some CPU architectures and may even lead to CPU exceptions if data is not properly aligned.
 
 .. code-block:: C++
 
-    llama::allocator::SharedPtr<256>
+    llama::bloballoc::SharedPtr<256>
 
 Vector
 ^^^^^^
 
 
-:cpp:`llama::allocator::Vector` is an allocator creating blobs of type :cpp:`std::vector<std::byte>`.
+:cpp:`llama::bloballoc::Vector` is a blob allocator creating blobs of type :cpp:`std::vector<std::byte>`.
 This means every time a view is copied, the whole memory is copied
 too. When the view is moved, no extra allocation or copy operation happens.
 
-Analogous to :cpp:`llama::allocator::SharedPtr` an alignment value may be passed to the allocator.
+Analogous to :cpp:`llama::bloballoc::SharedPtr` an alignment value may be passed to the blob allocator.
 
 .. code-block:: C++
 
-    llama::allocator::Vector<256>
+    llama::bloballoc::Vector<256>
 
 Stack
 ^^^^^
 
 When working with small amounts of memory or temporary views created often, it is usually beneficial to store the data directly on the stack.
 
-:cpp:`llama::allocator::Stack` addresses this issue and creates blobs of type :cpp:`llama::Array<std::byte, N>`, where :cpp:`N` is a compile time value passed to the allocator.
+:cpp:`llama::bloballoc::Stack` addresses this issue and creates blobs of type :cpp:`llama::Array<std::byte, N>`, where :cpp:`N` is a compile time value passed to the allocator.
 These blobs are copied every time their view is copied.
 
 Creating a small view of :math:`4 \times 4` may look like this:
@@ -66,11 +66,11 @@ Creating a small view of :math:`4 \times 4` may look like this:
     constexpr ArrayDomain miniSize{4, 4};
 
     using Mapping = /* some simple mapping */;
-    using Allocator = llama::allocator::Stack<
+    using BlobAllocator = llama::bloballoc::Stack<
         miniSize[0] * miniSize[1] * llama::sizeOf</* some datum domain */>::value
     >;
 
-    auto miniView = llama::allocView(Mapping{miniSize}, Allocator{});
+    auto miniView = llama::allocView(Mapping{miniSize}, BlobAllocator{});
 
 For :math:`N`-dimensional one-element views a shortcut exists, returning a view
 with just one element without any padding, aligment, or whatever on the stack:

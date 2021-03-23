@@ -14,7 +14,7 @@
 #    include <aligned_new>
 #endif
 
-namespace llama::allocator
+namespace llama::bloballoc
 {
     /// Allocates stack memory for a \ref View, which is copied each time a \ref
     /// View is copied.
@@ -104,4 +104,4 @@ namespace llama::allocator
 #ifdef __cpp_concepts
     static_assert(BlobAllocator<Vector<>>);
 #endif
-} // namespace llama::allocator
+} // namespace llama::bloballoc
