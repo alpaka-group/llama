@@ -437,7 +437,7 @@ namespace manualSoA
         std::cout << title << "\n";
         Stopwatch watch;
 
-        using Vector = std::vector<FP, llama::allocator::AlignedAllocator<FP, 64>>;
+        using Vector = std::vector<FP, llama::bloballoc::AlignedAllocator<FP, 64>>;
         Vector posx(PROBLEM_SIZE);
         Vector posy(PROBLEM_SIZE);
         Vector posz(PROBLEM_SIZE);

@@ -3,7 +3,7 @@
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <boost/core/demangle.hpp>
-#include <llama/Allocators.hpp>
+#include <llama/BlobAllocators.hpp>
 #include <numeric>
 #include <regex>
 #include <string>

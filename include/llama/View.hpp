@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "Allocators.hpp"
 #include "Array.hpp"
+#include "BlobAllocators.hpp"
 #include "Concepts.hpp"
 #include "Core.hpp"
 #include "macros.hpp"
@@ -16,7 +16,7 @@
 namespace llama
 {
 #ifdef __cpp_concepts
-    template <typename T_Mapping, StorageBlob BlobType>
+    template <typename T_Mapping, Blob BlobType>
 #else
     template <typename T_Mapping, typename BlobType>
 #endif
@@ -39,12 +39,12 @@ namespace llama
 
     /// Creates a view based on the given mapping, e.g. \ref mapping::AoS or \ref mapping::SoA. For allocating the
     /// view's underlying memory, the specified allocator callable is used (or the default one, which is \ref
-    /// allocator::Vector). The allocator callable is called with the size of bytes to allocate for each blob of the
+    /// bloballoc::Vector). The allocator callable is called with the size of bytes to allocate for each blob of the
     /// mapping. This function is the preferred way to create a \ref View.
 #ifdef __cpp_concepts
-    template <typename Mapping, BlobAllocator Allocator = allocator::Vector<>>
+    template <typename Mapping, BlobAllocator Allocator = bloballoc::Vector<>>
 #else
-    template <typename Mapping, typename Allocator = allocator::Vector<>>
+    template <typename Mapping, typename Allocator = bloballoc::Vector<>>
 #endif
     LLAMA_FN_HOST_ACC_INLINE auto allocView(Mapping mapping = {}, const Allocator& alloc = {})
         -> View<Mapping, internal::AllocatorBlobType<Allocator>>
@@ -54,13 +54,13 @@ namespace llama
     }
 
     /// Allocates a \ref View holding a single datum backed by stack memory
-    /// (\ref allocator::Stack).
+    /// (\ref bloballoc::Stack).
     /// \tparam Dim Dimension of the \ref ArrayDomain of the \ref View.
     template <std::size_t Dim, typename DatumDomain>
     LLAMA_FN_HOST_ACC_INLINE auto allocViewStack() -> decltype(auto)
     {
         using Mapping = llama::mapping::One<ArrayDomain<Dim>, DatumDomain>;
-        return allocView(Mapping{}, llama::allocator::Stack<sizeOf<DatumDomain>>{});
+        return allocView(Mapping{}, llama::bloballoc::Stack<sizeOf<DatumDomain>>{});
     }
 
     template <typename View, typename BoundDatumDomain = DatumCoord<>, bool OwnView = false>
@@ -871,7 +871,7 @@ namespace llama
     /// \tparam BlobType The storage type used by the view holding
     /// memory.
 #ifdef __cpp_concepts
-    template <typename T_Mapping, StorageBlob BlobType>
+    template <typename T_Mapping, Blob BlobType>
 #else
     template <typename T_Mapping, typename BlobType>
 #endif

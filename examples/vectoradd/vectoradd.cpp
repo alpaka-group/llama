@@ -172,7 +172,7 @@ namespace manualSoA
         std::cout << "\nSoA\n";
         Stopwatch watch;
 
-        using Vector = std::vector<float, llama::allocator::AlignedAllocator<float, 64>>;
+        using Vector = std::vector<float, llama::bloballoc::AlignedAllocator<float, 64>>;
         Vector ax(PROBLEM_SIZE);
         Vector ay(PROBLEM_SIZE);
         Vector az(PROBLEM_SIZE);

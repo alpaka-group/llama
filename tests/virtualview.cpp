@@ -96,7 +96,7 @@ TEST_CASE("virtual view")
             using MiniMapping = llama::mapping::SoA<ArrayDomain, Particle>;
             auto miniView = allocView(
                 MiniMapping(miniSize),
-                llama::allocator::Stack<miniSize[0] * miniSize[1] * llama::sizeOf<Particle>>{});
+                llama::bloballoc::Stack<miniSize[0] * miniSize[1] * llama::sizeOf<Particle>>{});
 
             for (std::size_t a = 0; a < validMiniSize[0]; ++a)
                 for (std::size_t b = 0; b < validMiniSize[1]; ++b)

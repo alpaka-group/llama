@@ -79,16 +79,16 @@ View creation
 .. doxygentypedef:: llama::One
 .. doxygenfunction:: llama::copyVirtualDatumStack
 
-.. _label-api-allocators:
+.. _label-api-bloballocators:
 
-Allocators
-^^^^^^^^^^
+Blob allocators
+^^^^^^^^^^^^^^^
 
-.. doxygenstruct:: llama::allocator::Vector
+.. doxygenstruct:: llama::bloballoc::Vector
    :members:
-.. doxygenstruct:: llama::allocator::SharedPtr
+.. doxygenstruct:: llama::bloballoc::SharedPtr
    :members:
-.. doxygenstruct:: llama::allocator::Stack
+.. doxygenstruct:: llama::bloballoc::Stack
    :members:
 
 Mappings

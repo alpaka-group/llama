@@ -87,9 +87,9 @@ LLAMA offers many kinds of mappings and users can also provide their own mapping
 Mappings are constructed from a :ref:`Datum domain <label-dd>`, containing tags, and an :ref:`Array domain <label-ad>`.
 In addition to a mapping defining the memory layout, an array of :ref:`Blobs <label-blobs>` is needed for a view, supplying the actual storage behind the view.
 A blob is any object representing a contiguous chunk of memory, byte-wise addressable using :cpp:`operator[]`.
-A suitable Blob array is either directly provided by the user or built using an :ref:`Allocator <label-allocators>` when a view is created by a call to `allocView`.
-An allocator is again an abstract concept and any object returning a blob of a requested size when calling :cpp:`operator()`.
-LLAMA comes with a set of predefined allocators and users can again provider their own.
+A suitable Blob array is either directly provided by the user or built using a :ref:`BlobAllocator <label-bloballocators>` when a view is created by a call to `allocView`.
+A blob allocator is again an abstract concept and any object returning a blob of a requested size when calling :cpp:`operator()`.
+LLAMA comes with a set of predefined blob allocators and users can again provider their own.
 
 Once a view is created, the user can navigate on the data managed by the view.
 On top of a view, a :ref:`VirtualView <label-virtualview>` can be created, offering access to a subrange of the array domain.

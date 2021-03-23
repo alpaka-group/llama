@@ -16,16 +16,16 @@ elements inside the datum domain at once.
 View allocation
 ---------------
 
-The factory creates the view. For this it takes the domains, a
-:ref:`mapping <label-mappings>` and an optional :ref:`allocator <label-allocators>`.
+A view is allocated using the helper function :cpp:`allocView`, which takes a
+:ref:`mapping <label-mappings>` and an optional :ref:`blob allocator <label-bloballocators>`.
 
 .. code-block:: C++
 
     using Mapping = ...; // see next section about mappings
     Mapping mapping(arrayDomainSize); // see section about domains
-    auto view = allocView(mapping); // optional allocator as 2nd argument
+    auto view = allocView(mapping); // optional blob allocator as 2nd argument
 
-The :ref:`mapping <label-mappings>` and :ref:`allocator <label-allocators>`
+The :ref:`mapping <label-mappings>` and :ref:`blob allocator <label-bloballocators>`
 will be explained later. For now, it is just
 important to know that all those run time and compile time parameters come
 together to create the view.
