@@ -198,13 +198,13 @@ namespace llama::mapping::tree
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        auto getBlobSize(std::size_t const) const -> std::size_t
+        auto blobSize(std::size_t const) const -> std::size_t
         {
             return internal::getTreeBlobSize(resultTree);
         }
 
         template <std::size_t... DatumDomainCoord>
-        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
         {
             auto const basicTreeCoord = createTreeCoord<DatumCoord<DatumDomainCoord...>>(coord);
             auto const resultTreeCoord = mergedFunctors.basicCoordToResultCoord(basicTreeCoord, basicTree);

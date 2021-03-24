@@ -14,9 +14,9 @@ namespace llama
     namespace internal
     {
         template <typename Mapping, std::size_t... Is, typename ArrayDomain>
-        constexpr auto getBlobNrAndOffset(const Mapping& m, llama::DatumCoord<Is...>, ArrayDomain ad)
+        constexpr auto blobNrAndOffset(const Mapping& m, llama::DatumCoord<Is...>, ArrayDomain ad)
         {
-            return m.template getBlobNrAndOffset<Is...>(ad);
+            return m.template blobNrAndOffset<Is...>(ad);
         }
 
         constexpr auto divRoundUp(std::size_t dividend, std::size_t divisor) -> std::size_t
@@ -57,7 +57,7 @@ namespace llama
     {
         internal::DynArray<internal::DynArray<std::uint64_t>> blobByteMapped(m.blobCount);
         for (auto i = 0; i < m.blobCount; i++)
-            blobByteMapped.data[i].resize(internal::divRoundUp(m.getBlobSize(i), 64));
+            blobByteMapped.data[i].resize(internal::divRoundUp(m.blobSize(i), 64));
 
         auto testAndSet = [&](auto blob, auto offset) constexpr
         {
@@ -75,7 +75,7 @@ namespace llama
             for (auto ad : llama::ArrayDomainIndexRange{m.arrayDomainSize})
             {
                 using Type = llama::GetType<typename Mapping::DatumDomain, decltype(coord)>;
-                const auto [blob, offset] = internal::getBlobNrAndOffset(m, coord, ad);
+                const auto [blob, offset] = internal::blobNrAndOffset(m, coord, ad);
                 for (auto b = 0; b < sizeof(Type); b++)
                     if (testAndSet(blob, offset + b))
                     {

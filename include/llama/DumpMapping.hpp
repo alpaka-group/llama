@@ -63,7 +63,7 @@ namespace llama
         template <typename Mapping, typename ArrayDomain, std::size_t... Coords>
         auto mappingBlobNrAndOffset(const Mapping& mapping, const ArrayDomain& udCoord, DatumCoord<Coords...>)
         {
-            return mapping.template getBlobNrAndOffset<Coords...>(udCoord);
+            return mapping.template blobNrAndOffset<Coords...>(udCoord);
         }
 
         inline auto color(const std::vector<std::size_t>& ddIndices) -> std::size_t
@@ -165,7 +165,7 @@ namespace llama
         std::array<int, Mapping::blobCount + 1> blobYOffset{};
         for (auto i = 0; i < Mapping::blobCount; i++)
         {
-            const auto blobRows = (mapping.getBlobSize(i) + wrapByteCount - 1) / wrapByteCount;
+            const auto blobRows = (mapping.blobSize(i) + wrapByteCount - 1) / wrapByteCount;
             blobYOffset[i + 1] = blobYOffset[i] + (blobRows + 1) * byteSizeInPixel; // one row gap between blobs
             const auto height = blobRows * byteSizeInPixel;
             svg += fmt::format(

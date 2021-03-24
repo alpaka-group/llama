@@ -102,7 +102,7 @@ TEST_CASE("view.non-memory-owning")
     using Mapping = llama::mapping::SoA<ArrayDomain, DatumDomain>;
     Mapping mapping{arrayDomain};
 
-    std::vector<std::byte> storage(mapping.getBlobSize(0));
+    std::vector<std::byte> storage(mapping.blobSize(0));
     auto view = llama::View<Mapping, std::byte*>{mapping, {storage.data()}};
 
     for (auto i = 0u; i < 256u; i++)

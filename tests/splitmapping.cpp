@@ -44,17 +44,17 @@ TEST_CASE("Split.SoA.AoS.1Buffer")
 
     constexpr auto mapping1Size = 6120;
     const auto coord = ArrayDomain{0, 0};
-    CHECK(mapping.getBlobNrAndOffset<0, 0>(coord) == llama::NrAndOffset{0, 0});
-    CHECK(mapping.getBlobNrAndOffset<0, 1>(coord) == llama::NrAndOffset{0, 2048});
-    CHECK(mapping.getBlobNrAndOffset<0, 2>(coord) == llama::NrAndOffset{0, 4096});
-    CHECK(mapping.getBlobNrAndOffset<1>(coord) == llama::NrAndOffset{0, mapping1Size + 24});
-    CHECK(mapping.getBlobNrAndOffset<2, 0>(coord) == llama::NrAndOffset{0, mapping1Size + 28});
-    CHECK(mapping.getBlobNrAndOffset<2, 1>(coord) == llama::NrAndOffset{0, mapping1Size + 36});
-    CHECK(mapping.getBlobNrAndOffset<2, 2>(coord) == llama::NrAndOffset{0, mapping1Size + 44});
-    CHECK(mapping.getBlobNrAndOffset<3, 0>(coord) == llama::NrAndOffset{0, mapping1Size + 52});
-    CHECK(mapping.getBlobNrAndOffset<3, 1>(coord) == llama::NrAndOffset{0, mapping1Size + 53});
-    CHECK(mapping.getBlobNrAndOffset<3, 2>(coord) == llama::NrAndOffset{0, mapping1Size + 54});
-    CHECK(mapping.getBlobNrAndOffset<3, 3>(coord) == llama::NrAndOffset{0, mapping1Size + 55});
+    CHECK(mapping.blobNrAndOffset<0, 0>(coord) == llama::NrAndOffset{0, 0});
+    CHECK(mapping.blobNrAndOffset<0, 1>(coord) == llama::NrAndOffset{0, 2048});
+    CHECK(mapping.blobNrAndOffset<0, 2>(coord) == llama::NrAndOffset{0, 4096});
+    CHECK(mapping.blobNrAndOffset<1>(coord) == llama::NrAndOffset{0, mapping1Size + 24});
+    CHECK(mapping.blobNrAndOffset<2, 0>(coord) == llama::NrAndOffset{0, mapping1Size + 28});
+    CHECK(mapping.blobNrAndOffset<2, 1>(coord) == llama::NrAndOffset{0, mapping1Size + 36});
+    CHECK(mapping.blobNrAndOffset<2, 2>(coord) == llama::NrAndOffset{0, mapping1Size + 44});
+    CHECK(mapping.blobNrAndOffset<3, 0>(coord) == llama::NrAndOffset{0, mapping1Size + 52});
+    CHECK(mapping.blobNrAndOffset<3, 1>(coord) == llama::NrAndOffset{0, mapping1Size + 53});
+    CHECK(mapping.blobNrAndOffset<3, 2>(coord) == llama::NrAndOffset{0, mapping1Size + 54});
+    CHECK(mapping.blobNrAndOffset<3, 3>(coord) == llama::NrAndOffset{0, mapping1Size + 55});
 }
 
 TEST_CASE("Split.AoSoA8.AoS.One.SoA.4Buffer")
@@ -76,29 +76,29 @@ TEST_CASE("Split.AoSoA8.AoS.One.SoA.4Buffer")
             true>::type,
         true>{arrayDomain};
 
-    CHECK(mapping.getBlobNrAndOffset<0, 0>({0}) == llama::NrAndOffset{2, 0});
-    CHECK(mapping.getBlobNrAndOffset<0, 1>({0}) == llama::NrAndOffset{2, 8});
-    CHECK(mapping.getBlobNrAndOffset<0, 2>({0}) == llama::NrAndOffset{2, 16});
-    CHECK(mapping.getBlobNrAndOffset<1>({0}) == llama::NrAndOffset{1, 0});
-    CHECK(mapping.getBlobNrAndOffset<2, 0>({0}) == llama::NrAndOffset{0, 0});
-    CHECK(mapping.getBlobNrAndOffset<2, 1>({0}) == llama::NrAndOffset{0, 64});
-    CHECK(mapping.getBlobNrAndOffset<2, 2>({0}) == llama::NrAndOffset{0, 128});
-    CHECK(mapping.getBlobNrAndOffset<3, 0>({0}) == llama::NrAndOffset{3, 0});
-    CHECK(mapping.getBlobNrAndOffset<3, 1>({0}) == llama::NrAndOffset{3, 32});
-    CHECK(mapping.getBlobNrAndOffset<3, 2>({0}) == llama::NrAndOffset{3, 64});
-    CHECK(mapping.getBlobNrAndOffset<3, 3>({0}) == llama::NrAndOffset{3, 96});
+    CHECK(mapping.blobNrAndOffset<0, 0>({0}) == llama::NrAndOffset{2, 0});
+    CHECK(mapping.blobNrAndOffset<0, 1>({0}) == llama::NrAndOffset{2, 8});
+    CHECK(mapping.blobNrAndOffset<0, 2>({0}) == llama::NrAndOffset{2, 16});
+    CHECK(mapping.blobNrAndOffset<1>({0}) == llama::NrAndOffset{1, 0});
+    CHECK(mapping.blobNrAndOffset<2, 0>({0}) == llama::NrAndOffset{0, 0});
+    CHECK(mapping.blobNrAndOffset<2, 1>({0}) == llama::NrAndOffset{0, 64});
+    CHECK(mapping.blobNrAndOffset<2, 2>({0}) == llama::NrAndOffset{0, 128});
+    CHECK(mapping.blobNrAndOffset<3, 0>({0}) == llama::NrAndOffset{3, 0});
+    CHECK(mapping.blobNrAndOffset<3, 1>({0}) == llama::NrAndOffset{3, 32});
+    CHECK(mapping.blobNrAndOffset<3, 2>({0}) == llama::NrAndOffset{3, 64});
+    CHECK(mapping.blobNrAndOffset<3, 3>({0}) == llama::NrAndOffset{3, 96});
 
-    CHECK(mapping.getBlobNrAndOffset<0, 0>({31}) == llama::NrAndOffset{2, 744});
-    CHECK(mapping.getBlobNrAndOffset<0, 1>({31}) == llama::NrAndOffset{2, 752});
-    CHECK(mapping.getBlobNrAndOffset<0, 2>({31}) == llama::NrAndOffset{2, 760});
-    CHECK(mapping.getBlobNrAndOffset<1>({31}) == llama::NrAndOffset{1, 0});
-    CHECK(mapping.getBlobNrAndOffset<2, 0>({31}) == llama::NrAndOffset{0, 632});
-    CHECK(mapping.getBlobNrAndOffset<2, 1>({31}) == llama::NrAndOffset{0, 696});
-    CHECK(mapping.getBlobNrAndOffset<2, 2>({31}) == llama::NrAndOffset{0, 760});
-    CHECK(mapping.getBlobNrAndOffset<3, 0>({31}) == llama::NrAndOffset{3, 31});
-    CHECK(mapping.getBlobNrAndOffset<3, 1>({31}) == llama::NrAndOffset{3, 63});
-    CHECK(mapping.getBlobNrAndOffset<3, 2>({31}) == llama::NrAndOffset{3, 95});
-    CHECK(mapping.getBlobNrAndOffset<3, 3>({31}) == llama::NrAndOffset{3, 127});
+    CHECK(mapping.blobNrAndOffset<0, 0>({31}) == llama::NrAndOffset{2, 744});
+    CHECK(mapping.blobNrAndOffset<0, 1>({31}) == llama::NrAndOffset{2, 752});
+    CHECK(mapping.blobNrAndOffset<0, 2>({31}) == llama::NrAndOffset{2, 760});
+    CHECK(mapping.blobNrAndOffset<1>({31}) == llama::NrAndOffset{1, 0});
+    CHECK(mapping.blobNrAndOffset<2, 0>({31}) == llama::NrAndOffset{0, 632});
+    CHECK(mapping.blobNrAndOffset<2, 1>({31}) == llama::NrAndOffset{0, 696});
+    CHECK(mapping.blobNrAndOffset<2, 2>({31}) == llama::NrAndOffset{0, 760});
+    CHECK(mapping.blobNrAndOffset<3, 0>({31}) == llama::NrAndOffset{3, 31});
+    CHECK(mapping.blobNrAndOffset<3, 1>({31}) == llama::NrAndOffset{3, 63});
+    CHECK(mapping.blobNrAndOffset<3, 2>({31}) == llama::NrAndOffset{3, 95});
+    CHECK(mapping.blobNrAndOffset<3, 3>({31}) == llama::NrAndOffset{3, 127});
 
     // std::ofstream{"Split.AoSoA8.AoS.One.SoA.4Buffer.svg"} << llama::toSvg(mapping);
 }

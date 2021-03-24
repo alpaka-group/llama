@@ -57,7 +57,7 @@ namespace
         {
         }
 
-        constexpr auto getBlobSize(std::size_t) const -> std::size_t
+        constexpr auto blobSize(std::size_t) const -> std::size_t
         {
             return std::reduce(
                        std::begin(arrayDomainSize),
@@ -68,7 +68,7 @@ namespace
         }
 
         template <std::size_t... DDCs>
-        constexpr auto getBlobNrAndOffset(ArrayDomain coord) const -> llama::NrAndOffset
+        constexpr auto blobNrAndOffset(ArrayDomain coord) const -> llama::NrAndOffset
         {
             return {0, 0};
         }
@@ -104,13 +104,13 @@ namespace
         {
         }
 
-        constexpr auto getBlobSize(std::size_t) const -> std::size_t
+        constexpr auto blobSize(std::size_t) const -> std::size_t
         {
             return Modulus * llama::sizeOf<DatumDomain>;
         }
 
         template <std::size_t... DDCs>
-        constexpr auto getBlobNrAndOffset(ArrayDomain coord) const -> llama::NrAndOffset
+        constexpr auto blobNrAndOffset(ArrayDomain coord) const -> llama::NrAndOffset
         {
             const auto blob = llama::flatDatumCoord<DatumDomain, llama::DatumCoord<DDCs...>>;
             const auto offset = (llama::mapping::LinearizeArrayDomainCpp{}(coord, arrayDomainSize) % Modulus)

@@ -84,51 +84,51 @@ TEST_CASE("treemapping.empty")
            "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
            "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 14336);
+    CHECK(mapping.blobSize(0) == 14336);
 
     {
         const auto coord = ArrayDomain{0, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 8);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 16);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 24);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 28);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 36);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 44);
-        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 52);
-        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 53);
-        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 54);
-        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 55);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 8);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 16);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 24);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 28);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 36);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 44);
+        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 52);
+        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 53);
+        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 54);
+        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 55);
     }
 
     {
         const auto coord = ArrayDomain{0, 1};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 56);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 64);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 72);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 80);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 84);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 92);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 100);
-        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 108);
-        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 109);
-        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 110);
-        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 111);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 56);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 64);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 72);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 80);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 84);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 92);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 100);
+        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 108);
+        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 109);
+        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 110);
+        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 111);
     }
 
     {
         const auto coord = ArrayDomain{1, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 904);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 912);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 920);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 924);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 932);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 940);
-        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 948);
-        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 949);
-        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 950);
-        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 951);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 896);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 904);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 912);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 920);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 924);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 932);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 940);
+        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 948);
+        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 949);
+        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 950);
+        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 951);
     }
 }
 
@@ -152,51 +152,51 @@ TEST_CASE("treemapping.Idem")
            "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
            "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 14336);
+    CHECK(mapping.blobSize(0) == 14336);
 
     {
         const auto coord = ArrayDomain{0, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 8);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 16);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 24);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 28);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 36);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 44);
-        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 52);
-        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 53);
-        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 54);
-        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 55);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 8);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 16);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 24);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 28);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 36);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 44);
+        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 52);
+        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 53);
+        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 54);
+        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 55);
     }
 
     {
         const auto coord = ArrayDomain{0, 1};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 56);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 64);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 72);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 80);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 84);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 92);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 100);
-        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 108);
-        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 109);
-        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 110);
-        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 111);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 56);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 64);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 72);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 80);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 84);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 92);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 100);
+        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 108);
+        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 109);
+        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 110);
+        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 111);
     }
 
     {
         const auto coord = ArrayDomain{1, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 904);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 912);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 920);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 924);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 932);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 940);
-        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 948);
-        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 949);
-        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 950);
-        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 951);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 896);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 904);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 912);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 920);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 924);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 932);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 940);
+        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 948);
+        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 949);
+        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 950);
+        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 951);
     }
 }
 
@@ -220,51 +220,51 @@ TEST_CASE("treemapping.LeafOnlyRT")
            "1C * Momentum[ 256R * Z(double) , 256R * Y(double) "
            ", 256R * X(double) ] , 1C * Flags[ 256R * (bool) , 256R * (bool) , 256R * (bool) , 256R * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 14336);
+    CHECK(mapping.blobSize(0) == 14336);
 
     {
         const auto coord = ArrayDomain{0, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2048);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 4096);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 6144);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 7168);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 9216);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 11264);
-        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 13312);
-        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 13568);
-        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 13824);
-        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 14080);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 2048);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 4096);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 6144);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 7168);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 9216);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 11264);
+        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 13312);
+        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 13568);
+        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 13824);
+        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 14080);
     }
 
     {
         const auto coord = ArrayDomain{0, 1};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 8);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2056);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 4104);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 6148);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 7176);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 9224);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 11272);
-        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 13313);
-        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 13569);
-        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 13825);
-        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 14081);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 8);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 2056);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 4104);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 6148);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 7176);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 9224);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 11272);
+        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 13313);
+        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 13569);
+        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 13825);
+        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 14081);
     }
 
     {
         const auto coord = ArrayDomain{1, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 128);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2176);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 4224);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 6208);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 7296);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 9344);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 11392);
-        CHECK(mapping.getBlobNrAndOffset<3, 0>(coord).offset == 13328);
-        CHECK(mapping.getBlobNrAndOffset<3, 1>(coord).offset == 13584);
-        CHECK(mapping.getBlobNrAndOffset<3, 2>(coord).offset == 13840);
-        CHECK(mapping.getBlobNrAndOffset<3, 3>(coord).offset == 14096);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 128);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 2176);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 4224);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 6208);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 7296);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 9344);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 11392);
+        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 13328);
+        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 13584);
+        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 13840);
+        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 14096);
     }
 }
 
@@ -288,39 +288,39 @@ TEST_CASE("treemapping.MoveRTDown<>")
            "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
            "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 14336);
+    CHECK(mapping.blobSize(0) == 14336);
 
     {
         const auto coord = ArrayDomain{0, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 8);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 16);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 24);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 28);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 36);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 44);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 8);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 16);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 24);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 28);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 36);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 44);
     }
 
     {
         const auto coord = ArrayDomain{0, 1};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 56);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 64);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 72);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 80);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 84);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 92);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 100);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 56);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 64);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 72);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 80);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 84);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 92);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 100);
     }
 
     {
         const auto coord = ArrayDomain{1, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 904);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 912);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 920);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 924);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 932);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 940);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 896);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 904);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 912);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 920);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 924);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 932);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 940);
     }
 }
 
@@ -344,39 +344,39 @@ TEST_CASE("treemapping.MoveRTDown<0>")
            "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
            "X(double) ] , 4R * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 14336);
+    CHECK(mapping.blobSize(0) == 14336);
 
     {
         const auto coord = ArrayDomain{0, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 8);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 16);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 96);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 112);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 120);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 128);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 8);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 16);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 96);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 112);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 120);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 128);
     }
 
     {
         const auto coord = ArrayDomain{0, 1};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 24);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 32);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 40);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 100);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 136);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 144);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 152);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 24);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 32);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 40);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 100);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 136);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 144);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 152);
     }
 
     {
         const auto coord = ArrayDomain{1, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 904);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 912);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 992);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 1008);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 1016);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 1024);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 896);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 904);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 912);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 992);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 1008);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 1016);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 1024);
     }
 }
 
@@ -400,39 +400,39 @@ TEST_CASE("treemapping.MoveRTDown<0,0>")
            "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
            "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 32768);
+    CHECK(mapping.blobSize(0) == 32768);
 
     {
         const auto coord = ArrayDomain{0, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 32);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 64);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 96);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 100);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 108);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 116);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 32);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 64);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 96);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 100);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 108);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 116);
     }
 
     {
         const auto coord = ArrayDomain{0, 1};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 128);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 160);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 192);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 224);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 228);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 236);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 244);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 128);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 160);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 192);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 224);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 228);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 236);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 244);
     }
 
     {
         const auto coord = ArrayDomain{1, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 2048);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2080);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 2112);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 2144);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 2148);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 2156);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 2164);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 2048);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 2080);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 2112);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 2144);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 2148);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 2156);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 2164);
     }
 }
 
@@ -456,39 +456,39 @@ TEST_CASE("treemapping.MoveRTDownFixed<>")
            "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
            "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 14336);
+    CHECK(mapping.blobSize(0) == 14336);
 
     {
         const auto coord = ArrayDomain{0, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 8);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 16);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 24);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 28);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 36);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 44);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 8);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 16);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 24);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 28);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 36);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 44);
     }
 
     {
         const auto coord = ArrayDomain{0, 1};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 56);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 64);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 72);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 80);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 84);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 92);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 100);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 56);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 64);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 72);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 80);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 84);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 92);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 100);
     }
 
     {
         const auto coord = ArrayDomain{1, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 904);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 912);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 920);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 924);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 932);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 940);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 896);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 904);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 912);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 920);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 924);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 932);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 940);
     }
 }
 
@@ -512,39 +512,39 @@ TEST_CASE("treemapping.MoveRTDownFixed<0>")
            "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
            "X(double) ] , 4R * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 14336);
+    CHECK(mapping.blobSize(0) == 14336);
 
     {
         const auto coord = ArrayDomain{0, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 8);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 16);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 96);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 112);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 120);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 128);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 8);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 16);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 96);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 112);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 120);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 128);
     }
 
     {
         const auto coord = ArrayDomain{0, 1};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 24);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 32);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 40);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 100);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 136);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 144);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 152);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 24);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 32);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 40);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 100);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 136);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 144);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 152);
     }
 
     {
         const auto coord = ArrayDomain{1, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 904);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 912);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 992);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 1008);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 1016);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 1024);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 896);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 904);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 912);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 992);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 1008);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 1016);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 1024);
     }
 }
 
@@ -568,39 +568,39 @@ TEST_CASE("treemapping.MoveRTDownFixed<0,0>")
            "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
            "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 32768);
+    CHECK(mapping.blobSize(0) == 32768);
 
     {
         const auto coord = ArrayDomain{0, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 32);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 64);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 96);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 100);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 108);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 116);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 32);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 64);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 96);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 100);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 108);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 116);
     }
 
     {
         const auto coord = ArrayDomain{0, 1};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 128);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 160);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 192);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 224);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 228);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 236);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 244);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 128);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 160);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 192);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 224);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 228);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 236);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 244);
     }
 
     {
         const auto coord = ArrayDomain{1, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 2048);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 2080);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 2112);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 2144);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 2148);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 2156);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 2164);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 2048);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 2080);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 2112);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 2144);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 2148);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 2156);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 2164);
     }
 }
 
@@ -631,39 +631,39 @@ TEST_CASE("treemapping.vectorblocks.runtime")
            "1R * Momentum[ 8R * Z(double) , 8R * Y(double) , 8R * X(double) ] , 8R * Flags[ 1C * (bool) , 1C * (bool) "
            ", 1C * (bool) , 1C * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 14336);
+    CHECK(mapping.blobSize(0) == 14336);
 
     {
         const auto coord = ArrayDomain{0, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 64);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 128);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 192);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 224);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 288);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 352);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 64);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 128);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 192);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 224);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 288);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 352);
     }
 
     {
         const auto coord = ArrayDomain{0, 1};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 8);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 72);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 136);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 196);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 232);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 296);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 360);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 8);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 72);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 136);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 196);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 232);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 296);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 360);
     }
 
     {
         const auto coord = ArrayDomain{1, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 960);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 1024);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 1088);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 1120);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 1184);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 1248);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 896);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 960);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 1024);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 1088);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 1120);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 1184);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 1248);
     }
 }
 
@@ -694,39 +694,39 @@ TEST_CASE("treemapping.vectorblocks.compiletime")
            "1R * Momentum[ 8R * Z(double) , 8R * Y(double) , 8R * X(double) ] , 8R * Flags[ 1C * (bool) , 1C * (bool) "
            ", 1C * (bool) , 1C * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 14336);
+    CHECK(mapping.blobSize(0) == 14336);
 
     {
         const auto coord = ArrayDomain{0, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 64);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 128);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 192);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 224);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 288);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 352);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 64);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 128);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 192);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 224);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 288);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 352);
     }
 
     {
         const auto coord = ArrayDomain{0, 1};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 8);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 72);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 136);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 196);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 232);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 296);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 360);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 8);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 72);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 136);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 196);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 232);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 296);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 360);
     }
 
     {
         const auto coord = ArrayDomain{1, 0};
-        CHECK(mapping.getBlobNrAndOffset<0, 0>(coord).offset == 896);
-        CHECK(mapping.getBlobNrAndOffset<0, 1>(coord).offset == 960);
-        CHECK(mapping.getBlobNrAndOffset<0, 2>(coord).offset == 1024);
-        CHECK(mapping.getBlobNrAndOffset<1>(coord).offset == 1088);
-        CHECK(mapping.getBlobNrAndOffset<2, 0>(coord).offset == 1120);
-        CHECK(mapping.getBlobNrAndOffset<2, 1>(coord).offset == 1184);
-        CHECK(mapping.getBlobNrAndOffset<2, 2>(coord).offset == 1248);
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 896);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 960);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 1024);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 1088);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 1120);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 1184);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 1248);
     }
 }
 
@@ -1050,9 +1050,9 @@ TEST_CASE("treemapping")
            "1C * Momentum[ 144R * Z(double) , 144R * Y(double) , 144R * X(double) ] , 1C * Flags[ 144R * (bool) , 144R "
            "* (bool) , 144R * (bool) , 144R * (bool) ] ] ]");
 
-    CHECK(mapping.getBlobSize(0) == 8064);
-    CHECK(mapping.getBlobNrAndOffset<2, 1>({50, 100}).offset == 10784);
-    CHECK(mapping.getBlobNrAndOffset<2, 1>({50, 101}).offset == 10792);
+    CHECK(mapping.blobSize(0) == 8064);
+    CHECK(mapping.blobNrAndOffset<2, 1>({50, 100}).offset == 10784);
+    CHECK(mapping.blobNrAndOffset<2, 1>({50, 101}).offset == 10792);
 
     auto view = allocView(mapping);
     zeroStorage(view);

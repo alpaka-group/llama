@@ -142,9 +142,9 @@ int main(int argc, char** argv)
     // Printing the domain informations at runtime
     std::cout << "Datum Domain is " << addLineBreaks(type(Name())) << '\n';
     std::cout << "AoS address of (0,100) <0,1>: "
-              << llama::mapping::AoS<UD, Name>(udSize).getBlobNrAndOffset<0, 1>({0, 100}).offset << '\n';
+              << llama::mapping::AoS<UD, Name>(udSize).blobNrAndOffset<0, 1>({0, 100}).offset << '\n';
     std::cout << "SoA address of (0,100) <0,1>: "
-              << llama::mapping::SoA<UD, Name>(udSize).getBlobNrAndOffset<0, 1>({0, 100}).offset << '\n';
+              << llama::mapping::SoA<UD, Name>(udSize).blobNrAndOffset<0, 1>({0, 100}).offset << '\n';
     std::cout << "sizeOf DatumDomain: " << llama::sizeOf<Name> << '\n';
 
     std::cout << type(llama::GetCoordFromTags<Name, st::Pos, st::X>()) << '\n';

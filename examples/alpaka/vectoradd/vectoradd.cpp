@@ -102,7 +102,7 @@ int main(int argc, char** argv)
 
     Stopwatch chrono;
 
-    const auto bufferSize = Size(mapping.getBlobSize(0));
+    const auto bufferSize = Size(mapping.blobSize(0));
 
     // allocate buffers
     auto hostBufferA = alpaka::allocBuf<std::byte, Size>(devHost, bufferSize);

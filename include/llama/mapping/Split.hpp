@@ -84,21 +84,21 @@ namespace llama::mapping
         {
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto getBlobSize(std::size_t i) const -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(std::size_t i) const -> std::size_t
         {
             if constexpr (SeparateBlobs)
             {
                 if (i < Mapping1::blobCount)
-                    return mapping1.getBlobSize(i);
+                    return mapping1.blobSize(i);
                 else
-                    return mapping2.getBlobSize(i - Mapping1::blobCount);
+                    return mapping2.blobSize(i - Mapping1::blobCount);
             }
             else
-                return mapping1.getBlobSize(0) + mapping2.getBlobSize(0);
+                return mapping1.blobSize(0) + mapping2.blobSize(0);
         }
 
         template <std::size_t... DatumDomainCoord>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto getBlobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
         {
             // print_type_in_compilation_error<DatumDomain1>();
             if constexpr (DatumCoordCommonPrefixIsSame<DatumCoordForMapping1, DatumCoord<DatumDomainCoord...>>)
@@ -108,32 +108,32 @@ namespace llama::mapping
                 constexpr auto prefixLength = DatumCoordForMapping1::size;
                 using Prefix = mp_repeat_c<mp_list_c<std::size_t, 0>, DatumCoordForMapping1::size>;
                 using Suffix = mp_drop_c<mp_list_c<std::size_t, DatumDomainCoord...>, DatumCoordForMapping1::size>;
-                return getBlobNrAndOffset(DatumCoordFromList<mp_append<Prefix, Suffix>>{}, coord, mapping1);
+                return blobNrAndOffset(DatumCoordFromList<mp_append<Prefix, Suffix>>{}, coord, mapping1);
             }
             else
             {
                 constexpr auto dstCoord
                     = internal::offsetCoord(DatumCoord<DatumDomainCoord...>{}, DatumCoordForMapping1{});
-                auto blobNrAndOffset = getBlobNrAndOffset(dstCoord, coord, mapping2);
+                auto nrAndOffset = blobNrAndOffset(dstCoord, coord, mapping2);
                 if constexpr (SeparateBlobs)
-                    blobNrAndOffset.nr += Mapping1::blobCount;
+                    nrAndOffset.nr += Mapping1::blobCount;
                 else
                 {
                     for (auto i = 0; i < Mapping1::blobCount; i++)
-                        blobNrAndOffset.offset += mapping1.getBlobSize(i);
+                        nrAndOffset.offset += mapping1.blobSize(i);
                 }
-                return blobNrAndOffset;
+                return nrAndOffset;
             }
         }
 
     private:
         template <std::size_t... DatumDomainCoord, typename Mapping>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto getBlobNrAndOffset(
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
             DatumCoord<DatumDomainCoord...>,
             ArrayDomain coord,
             const Mapping& mapping) const -> NrAndOffset
         {
-            return mapping.template getBlobNrAndOffset<DatumDomainCoord...>(coord);
+            return mapping.template blobNrAndOffset<DatumDomainCoord...>(coord);
         }
 
     public:

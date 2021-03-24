@@ -43,7 +43,7 @@ namespace llama::mapping
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto getBlobSize(std::size_t blobIndex) const -> std::size_t
+        constexpr auto blobSize(std::size_t blobIndex) const -> std::size_t
         {
             if constexpr (SeparateBuffers::value)
             {
@@ -64,7 +64,7 @@ namespace llama::mapping
         }
 
         template <std::size_t... DatumDomainCoord>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto getBlobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
         {
             if constexpr (SeparateBuffers::value)
             {
