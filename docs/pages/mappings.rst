@@ -29,7 +29,8 @@ The view requires each mapping to fulfill the following concept:
         typename M::ArrayDomain;
         typename M::DatumDomain;
         { M::blobCount } -> std::convertible_to<std::size_t>;
-        { m.blobSize(std::size_t{}) } -> std::convertible_to<std::size_t>;
+        llama::Array<int, M::blobCount>{}; // validates constexpr-ness
+        { m.blobSize(std::size_t{}) } -> std::same_as<std::size_t>;
         { m.blobNrAndOffset(typename M::ArrayDomain{}) } -> std::same_as<NrAndOffset>;
     };
 
