@@ -94,7 +94,7 @@ __global__ void updateSM(View particles)
 
         llama::Array<std::byte*, decltype(sharedMapping)::blobCount> sharedMems{};
         boost::mp11::mp_for_each<boost::mp11::mp_iota_c<decltype(sharedMapping)::blobCount>>([&](auto i) {
-            __shared__ std::byte sharedMem[sharedMapping.getBlobSize(i)];
+            __shared__ std::byte sharedMem[sharedMapping.blobSize(i)];
             sharedMems[i] = &sharedMem[0];
         });
         return llama::View{sharedMapping, sharedMems};
@@ -250,7 +250,7 @@ try
         checkError(cudaMemcpy(
             accView.storageBlobs[i],
             hostView.storageBlobs[i].data(),
-            mapping.getBlobSize(i),
+            mapping.blobSize(i),
             cudaMemcpyHostToDevice));
     std::cout << "copy H->D " << stop() << " s\n";
 
@@ -286,7 +286,7 @@ try
         checkError(cudaMemcpy(
             hostView.storageBlobs[i].data(),
             accView.storageBlobs[i],
-            mapping.getBlobSize(i),
+            mapping.blobSize(i),
             cudaMemcpyDeviceToHost));
     std::cout << "copy D->H " << stop() << " s\n";
 

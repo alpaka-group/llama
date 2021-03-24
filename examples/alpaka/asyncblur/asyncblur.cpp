@@ -215,8 +215,8 @@ int main(int argc, char** argv)
         treeOperationList,
         PixelOnAcc{}};
 
-    const auto hostBufferSize = hostMapping.getBlobSize(0);
-    const auto devBufferSize = devMapping.getBlobSize(0);
+    const auto hostBufferSize = hostMapping.blobSize(0);
+    const auto devBufferSize = devMapping.blobSize(0);
 
     std::cout << "Image size: " << img_x << ":" << img_y << '\n'
               << hostBufferSize * 2 / 1024 / 1024 << " MB on device\n";

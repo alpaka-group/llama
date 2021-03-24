@@ -41,31 +41,31 @@ struct GuardMapping2D
     {
     }
 
-    constexpr auto getBlobSize(std::size_t i) const -> std::size_t
+    constexpr auto blobSize(std::size_t i) const -> std::size_t
     {
         if (i >= centerOff)
-            return center.getBlobSize(i - centerOff);
+            return center.blobSize(i - centerOff);
         if (i >= botOff)
-            return bot.getBlobSize(i - botOff);
+            return bot.blobSize(i - botOff);
         if (i >= topOff)
-            return top.getBlobSize(i - topOff);
+            return top.blobSize(i - topOff);
         if (i >= rightOff)
-            return right.getBlobSize(i - rightOff);
+            return right.blobSize(i - rightOff);
         if (i >= leftOff)
-            return left.getBlobSize(i - leftOff);
+            return left.blobSize(i - leftOff);
         if (i >= rightBotOff)
-            return rightBot.getBlobSize(i - rightBotOff);
+            return rightBot.blobSize(i - rightBotOff);
         if (i >= rightTopOff)
-            return rightTop.getBlobSize(i - rightTopOff);
+            return rightTop.blobSize(i - rightTopOff);
         if (i >= leftBotOff)
-            return leftBot.getBlobSize(i - leftBotOff);
+            return leftBot.blobSize(i - leftBotOff);
         if (i >= leftTopOff)
-            return leftTop.getBlobSize(i - leftTopOff);
+            return leftTop.blobSize(i - leftTopOff);
         std::abort();
     }
 
     template <std::size_t... DatumDomainCoord>
-    constexpr auto getBlobNrAndOffset(ArrayDomain coord) const -> llama::NrAndOffset
+    constexpr auto blobNrAndOffset(ArrayDomain coord) const -> llama::NrAndOffset
     {
         // [0][0] is at left top
         const auto [row, col] = coord;
@@ -74,24 +74,24 @@ struct GuardMapping2D
         if (col == 0)
         {
             if (row == 0)
-                return offsetBlobNr(leftTop.template getBlobNrAndOffset<DatumDomainCoord...>({}), leftTopOff);
+                return offsetBlobNr(leftTop.template blobNrAndOffset<DatumDomainCoord...>({}), leftTopOff);
             if (row == rowMax - 1)
-                return offsetBlobNr(leftBot.template getBlobNrAndOffset<DatumDomainCoord...>({}), leftBotOff);
-            return offsetBlobNr(left.template getBlobNrAndOffset<DatumDomainCoord...>({row - 1}), leftOff);
+                return offsetBlobNr(leftBot.template blobNrAndOffset<DatumDomainCoord...>({}), leftBotOff);
+            return offsetBlobNr(left.template blobNrAndOffset<DatumDomainCoord...>({row - 1}), leftOff);
         }
         if (col == colMax - 1)
         {
             if (row == 0)
-                return offsetBlobNr(rightTop.template getBlobNrAndOffset<DatumDomainCoord...>({}), rightTopOff);
+                return offsetBlobNr(rightTop.template blobNrAndOffset<DatumDomainCoord...>({}), rightTopOff);
             if (row == rowMax - 1)
-                return offsetBlobNr(rightBot.template getBlobNrAndOffset<DatumDomainCoord...>({}), rightBotOff);
-            return offsetBlobNr(right.template getBlobNrAndOffset<DatumDomainCoord...>({row - 1}), rightOff);
+                return offsetBlobNr(rightBot.template blobNrAndOffset<DatumDomainCoord...>({}), rightBotOff);
+            return offsetBlobNr(right.template blobNrAndOffset<DatumDomainCoord...>({row - 1}), rightOff);
         }
         if (row == 0)
-            return offsetBlobNr(top.template getBlobNrAndOffset<DatumDomainCoord...>({col - 1}), topOff);
+            return offsetBlobNr(top.template blobNrAndOffset<DatumDomainCoord...>({col - 1}), topOff);
         if (row == rowMax - 1)
-            return offsetBlobNr(bot.template getBlobNrAndOffset<DatumDomainCoord...>({col - 1}), botOff);
-        return offsetBlobNr(center.template getBlobNrAndOffset<DatumDomainCoord...>({row - 1, col - 1}), centerOff);
+            return offsetBlobNr(bot.template blobNrAndOffset<DatumDomainCoord...>({col - 1}), botOff);
+        return offsetBlobNr(center.template blobNrAndOffset<DatumDomainCoord...>({row - 1, col - 1}), centerOff);
     }
 
     constexpr auto centerBlobs() const
@@ -233,8 +233,8 @@ void run(const std::string& mappingName)
         {
             const auto src = srcBlobs[i];
             const auto dst = dstBlobs[i];
-            assert(mapping.getBlobSize(src) == mapping.getBlobSize(dst));
-            std::memcpy(&dstView.storageBlobs[dst][0], &srcView.storageBlobs[src][0], mapping.getBlobSize(src));
+            assert(mapping.blobSize(src) == mapping.blobSize(dst));
+            std::memcpy(&dstView.storageBlobs[dst][0], &srcView.storageBlobs[src][0], mapping.blobSize(src));
         }
     };
 

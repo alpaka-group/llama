@@ -29,15 +29,15 @@ The view requires each mapping to fulfill the following concept:
         typename M::ArrayDomain;
         typename M::DatumDomain;
         { M::blobCount } -> std::convertible_to<std::size_t>;
-        { m.getBlobSize(std::size_t{}) } -> std::convertible_to<std::size_t>;
-        { m.getBlobNrAndOffset(typename M::ArrayDomain{}) } -> std::same_as<NrAndOffset>;
+        { m.blobSize(std::size_t{}) } -> std::convertible_to<std::size_t>;
+        { m.blobNrAndOffset(typename M::ArrayDomain{}) } -> std::same_as<NrAndOffset>;
     };
 
 That is, each mapping type needs to expose the types :cpp:`M::ArrayDomain` and :cpp:`M::DatumDomain`.
 Furthermore, each mapping needs to provide a static constexpr member variable :cpp:`blobCount` and two member functions.
-:cpp:`getBlobSize(i)` gives the size in bytes of the :cpp:`i`\ th block of memory needed for this mapping.
+:cpp:`blobSize(i)` gives the size in bytes of the :cpp:`i`\ th block of memory needed for this mapping.
 :cpp:`i` is in the range of :cpp:`0` to :cpp:`blobCount - 1`.
-:cpp:`getBlobNrAndOffset(ad)` implements the core mapping logic by translating a array domain coordinate :cpp:`ad` into a value of :cpp:`llama::NrAndOffset`, containing the blob number of offset within the blob where the value should be stored.
+:cpp:`blobNrAndOffset(ad)` implements the core mapping logic by translating a array domain coordinate :cpp:`ad` into a value of :cpp:`llama::NrAndOffset`, containing the blob number of offset within the blob where the value should be stored.
 
 AoS mappings
 ------------

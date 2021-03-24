@@ -62,19 +62,19 @@ namespace llama::mapping
             }
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto getBlobSize(std::size_t i) const -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(std::size_t i) const -> std::size_t
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return mapping.getBlobSize(i);
+            return mapping.blobSize(i);
         }
 
         template <std::size_t... DatumDomainCoord>
-        LLAMA_FN_HOST_ACC_INLINE auto getBlobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
         {
             const static auto name = internal::coordName<DatumDomain>(DatumCoord<DatumDomainCoord...>{});
             datumHits.at(name)++;
 
-            LLAMA_FORCE_INLINE_RECURSIVE return mapping.template getBlobNrAndOffset<DatumDomainCoord...>(coord);
+            LLAMA_FORCE_INLINE_RECURSIVE return mapping.template blobNrAndOffset<DatumDomainCoord...>(coord);
         }
 
         Mapping mapping;

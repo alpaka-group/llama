@@ -100,7 +100,7 @@ void run(std::ostream& plotFile)
         std::vector<std::pair<std::uint64_t, std::uint64_t>> blobRanges;
         for (const auto& blob : particles.storageBlobs)
         {
-            const auto blobSize = mapping.getBlobSize(blobRanges.size());
+            const auto blobSize = mapping.blobSize(blobRanges.size());
             std::cout << "\tBlob #" << blobRanges.size() << " from " << &blob[0] << " to " << &blob[0] + blobSize
                       << '\n';
             const auto start = reinterpret_cast<std::uint64_t>(&blob[0]);

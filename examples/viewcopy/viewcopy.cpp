@@ -110,7 +110,7 @@ void aosoa_copy(
     const std::byte* src = srcView.storageBlobs[0].data();
     std::byte* dst = dstView.storageBlobs[0].data();
 
-    // the same as AoSoA::getBlobNrAndOffset but takes a flat array index
+    // the same as AoSoA::blobNrAndOffset but takes a flat array index
     auto map = [](std::size_t flatArrayIndex, auto coord, std::size_t Lanes) {
         const auto blockIndex = flatArrayIndex / Lanes;
         const auto laneIndex = flatArrayIndex % Lanes;

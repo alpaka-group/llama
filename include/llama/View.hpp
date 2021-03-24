@@ -33,7 +33,7 @@ namespace llama
             const Mapping& mapping,
             std::integer_sequence<std::size_t, Is...>) -> Array<AllocatorBlobType<Allocator>, Mapping::blobCount>
         {
-            return {alloc(mapping.getBlobSize(Is))...};
+            return {alloc(mapping.blobSize(Is))...};
         }
     } // namespace internal
 
@@ -986,7 +986,7 @@ namespace llama
         template <std::size_t... Coords>
         LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDomain arrayDomain, DatumCoord<Coords...> = {}) const -> const auto&
         {
-            const auto [nr, offset] = mapping.template getBlobNrAndOffset<Coords...>(arrayDomain);
+            const auto [nr, offset] = mapping.template blobNrAndOffset<Coords...>(arrayDomain);
             using Type = GetType<DatumDomain, DatumCoord<Coords...>>;
             return reinterpret_cast<const Type&>(storageBlobs[nr][offset]);
         }
@@ -994,7 +994,7 @@ namespace llama
         template <std::size_t... Coords>
         LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDomain arrayDomain, DatumCoord<Coords...> coord = {}) -> auto&
         {
-            const auto [nr, offset] = mapping.template getBlobNrAndOffset<Coords...>(arrayDomain);
+            const auto [nr, offset] = mapping.template blobNrAndOffset<Coords...>(arrayDomain);
             using Type = GetType<DatumDomain, DatumCoord<Coords...>>;
             return reinterpret_cast<Type&>(storageBlobs[nr][offset]);
         }
