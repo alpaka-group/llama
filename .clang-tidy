@@ -1,0 +1,55 @@
+---
+# -bugprone-forward-declaration-namespace # too many false positives in LLAMA
+# -bugprone-exception-escape # bgruber is fine with exceptions escaping main we cannot add main as an exception
+# -cppcoreguidelines-pro-type-member-init # maybe enable in the future
+# -cppcoreguidelines-pro-type-reinterpret-cast # we need some reinterpret casts in LLAMA
+# -hicpp-member-init # maybe enable in the future
+# -readability-misleading-indentation # many false positives because of constexpr if
+Checks: >
+    *,
+    -bugprone-exception-escape,
+    -bugprone-forward-declaration-namespace,
+    -cert-msc32-c,
+    -cert-msc51-cpp,
+    -cppcoreguidelines-avoid-c-arrays,
+    -cppcoreguidelines-avoid-magic-numbers,
+    -cppcoreguidelines-avoid-non-const-global-variables,
+    -cppcoreguidelines-non-private-member-variables-in-classes,
+    -cppcoreguidelines-pro-bounds-constant-array-index,
+    -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+    -cppcoreguidelines-pro-type-member-init,
+    -cppcoreguidelines-pro-type-reinterpret-cast,
+    -fuchsia-default-arguments-calls,
+    -fuchsia-default-arguments-declarations,
+    -fuchsia-overloaded-operator,
+    -fuchsia-trailing-return,
+    -google-build-using-namespace,
+    -google-readability-braces-around-statements,
+    -google-readability-todo,
+    -google-runtime-references,
+    -hicpp-avoid-c-arrays,
+    -hicpp-braces-around-statements,
+    -hicpp-member-init,
+    -hicpp-named-parameter,
+    -hicpp-uppercase-literal-suffix,
+    -llvmlibc-callee-namespace,
+    -llvmlibc-implementation-in-namespace,
+    -llvmlibc-restrict-system-libc-headers,
+    -misc-non-private-member-variables-in-classes,
+    -modernize-avoid-c-arrays,
+    -modernize-use-nodiscard,
+    -openmp-use-default-none,
+    -portability-simd-intrinsics,
+    -readability-braces-around-statements,
+    -readability-magic-numbers,
+    -readability-misleading-indentation,
+    -readability-named-parameter,
+    -readability-uppercase-literal-suffix
+
+WarningsAsErrors: ''
+HeaderFilterRegex: ''
+AnalyzeTemporaryDtors: false
+FormatStyle: none
+User: ''
+CheckOptions:
+...

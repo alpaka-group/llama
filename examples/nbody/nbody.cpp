@@ -47,7 +47,7 @@ namespace usellama
         struct Y{};
         struct Z{};
         struct Mass{};
-    }
+    } // namespace tag
 
     using Particle = llama::DS<
         llama::DE<tag::Pos, llama::DS<
@@ -107,7 +107,7 @@ namespace usellama
     }
 
     template <int Mapping, bool UseAccumulator, std::size_t AoSoALanes = 8 /*AVX2*/>
-    int main(std::ostream& plotFile)
+    auto main(std::ostream& plotFile) -> int
     {
         auto mappingName = [](int m) -> std::string {
             if (m == 0)
@@ -285,7 +285,7 @@ namespace manualAoS
         LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
-            Particle pi;
+            Particle pi{};
             if constexpr (UseAccumulator)
                 pi = particles[i];
             LLAMA_INDEPENDENT_DATA
@@ -309,7 +309,7 @@ namespace manualAoS
     }
 
     template <bool UseAccumulator>
-    int main(std::ostream& plotFile)
+    auto main(std::ostream& plotFile) -> int
     {
         auto title = "AoS"s;
         if (UseAccumulator)
@@ -387,12 +387,12 @@ namespace manualSoA
         LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
-            FP piposx;
-            FP piposy;
-            FP piposz;
-            FP pivelx;
-            FP pively;
-            FP pivelz;
+            FP piposx = 0;
+            FP piposy = 0;
+            FP piposz = 0;
+            FP pivelx = 0;
+            FP pively = 0;
+            FP pivelz = 0;
             if constexpr (UseAccumulator)
             {
                 piposx = posx[i];
@@ -428,7 +428,7 @@ namespace manualSoA
         }
     }
 
-    void move(FP* posx, FP* posy, FP* posz, FP* velx, FP* vely, FP* velz)
+    void move(FP* posx, FP* posy, FP* posz, const FP* velx, const FP* vely, const FP* velz)
     {
         LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
@@ -440,7 +440,7 @@ namespace manualSoA
     }
 
     template <bool UseAccumulator>
-    int main(std::ostream& plotFile)
+    auto main(std::ostream& plotFile) -> int
     {
         auto title = "SoA"s;
         if (UseAccumulator)
@@ -626,7 +626,7 @@ namespace manualAoSoA
     }
 
     template <bool UseAccumulator, bool Tiled, std::size_t Lanes>
-    int main(std::ostream& plotFile)
+    auto main(std::ostream& plotFile) -> int
     {
         auto title = "AoSoA" + std::to_string(Lanes);
         if (Tiled)
@@ -706,8 +706,8 @@ namespace manualAoSoA_manualAVX
     };
 
     constexpr auto BLOCKS = PROBLEM_SIZE / LANES;
-    const __m256 vEPS2 = _mm256_set1_ps(EPS2);
-    const __m256 vTIMESTEP = _mm256_broadcast_ss(&TIMESTEP);
+    const __m256 vEPS2 = _mm256_set1_ps(EPS2); // NOLINT(cert-err58-cpp)
+    const __m256 vTIMESTEP = _mm256_broadcast_ss(&TIMESTEP); // NOLINT(cert-err58-cpp)
 
     inline void pPInteraction(
         __m256 piposx,
@@ -768,13 +768,13 @@ namespace manualAoSoA_manualAVX
                     const __m256 pjmass = _mm256_broadcast_ss(&blockJ.mass[j]);
 
                     auto& blockI = particles[bi];
-                    __m256 pivelx = _mm256_load_ps(blockI.vel.x);
-                    __m256 pively = _mm256_load_ps(blockI.vel.y);
-                    __m256 pivelz = _mm256_load_ps(blockI.vel.z);
+                    __m256 pivelx = _mm256_load_ps(&blockI.vel.x[0]);
+                    __m256 pively = _mm256_load_ps(&blockI.vel.y[0]);
+                    __m256 pivelz = _mm256_load_ps(&blockI.vel.z[0]);
                     pPInteraction(
-                        _mm256_load_ps(blockI.pos.x),
-                        _mm256_load_ps(blockI.pos.y),
-                        _mm256_load_ps(blockI.pos.z),
+                        _mm256_load_ps(&blockI.pos.x[0]),
+                        _mm256_load_ps(&blockI.pos.y[0]),
+                        _mm256_load_ps(&blockI.pos.z[0]),
                         pivelx,
                         pively,
                         pivelz,
@@ -782,9 +782,9 @@ namespace manualAoSoA_manualAVX
                         pjposy,
                         pjposz,
                         pjmass);
-                    _mm256_store_ps(blockI.vel.x, pivelx);
-                    _mm256_store_ps(blockI.vel.y, pively);
-                    _mm256_store_ps(blockI.vel.z, pivelz);
+                    _mm256_store_ps(&blockI.vel.x[0], pivelx);
+                    _mm256_store_ps(&blockI.vel.y[0], pively);
+                    _mm256_store_ps(&blockI.vel.z[0], pivelz);
                 }
     }
 
@@ -794,12 +794,12 @@ namespace manualAoSoA_manualAVX
         for (std::size_t bi = 0; bi < BLOCKS; bi++)
         {
             auto& blockI = particles[bi];
-            const __m256 piposx = _mm256_load_ps(blockI.pos.x);
-            const __m256 piposy = _mm256_load_ps(blockI.pos.y);
-            const __m256 piposz = _mm256_load_ps(blockI.pos.z);
-            __m256 pivelx = _mm256_load_ps(blockI.vel.x);
-            __m256 pively = _mm256_load_ps(blockI.vel.y);
-            __m256 pivelz = _mm256_load_ps(blockI.vel.z);
+            const __m256 piposx = _mm256_load_ps(&blockI.pos.x[0]);
+            const __m256 piposy = _mm256_load_ps(&blockI.pos.y[0]);
+            const __m256 piposz = _mm256_load_ps(&blockI.pos.z[0]);
+            __m256 pivelx = _mm256_load_ps(&blockI.vel.x[0]);
+            __m256 pively = _mm256_load_ps(&blockI.vel.y[0]);
+            __m256 pivelz = _mm256_load_ps(&blockI.vel.z[0]);
 
             for (std::size_t bj = 0; bj < BLOCKS; bj++)
                 for (std::size_t j = 0; j < LANES; j++)
@@ -812,9 +812,9 @@ namespace manualAoSoA_manualAVX
                     pPInteraction(piposx, piposy, piposz, pivelx, pively, pivelz, posxJ, posyJ, poszJ, massJ);
                 }
 
-            _mm256_store_ps(blockI.vel.x, pivelx);
-            _mm256_store_ps(blockI.vel.y, pively);
-            _mm256_store_ps(blockI.vel.z, pivelz);
+            _mm256_store_ps(&blockI.vel.x[0], pivelx);
+            _mm256_store_ps(&blockI.vel.y[0], pively);
+            _mm256_store_ps(&blockI.vel.z[0], pivelz);
         }
     }
 
@@ -824,7 +824,7 @@ namespace manualAoSoA_manualAVX
         // http://jtdz-solenoids.com/stackoverflow_/questions/13879609/horizontal-sum-of-8-packed-32bit-floats/18616679#18616679
         const __m256 t1 = _mm256_hadd_ps(v, v);
         const __m256 t2 = _mm256_hadd_ps(t1, t1);
-        const __m128 t3 = _mm256_extractf128_ps(t2, 1);
+        const __m128 t3 = _mm256_extractf128_ps(t2, 1); // NOLINT(hicpp-use-auto, modernize-use-auto)
         const __m128 t4 = _mm_add_ss(_mm256_castps256_ps128(t2), t3);
         return _mm_cvtss_f32(t4);
 
@@ -849,10 +849,10 @@ namespace manualAoSoA_manualAVX
                     __m256 pivelz = _mm256_broadcast_ss(&blockI.vel.z[i]);
 
                     const auto& blockJ = particles[bj];
-                    const __m256 pjposx = _mm256_load_ps(blockJ.pos.x);
-                    const __m256 pjposy = _mm256_load_ps(blockJ.pos.y);
-                    const __m256 pjposz = _mm256_load_ps(blockJ.pos.z);
-                    const __m256 pjmass = _mm256_load_ps(blockJ.mass);
+                    const __m256 pjposx = _mm256_load_ps(&blockJ.pos.x[0]);
+                    const __m256 pjposy = _mm256_load_ps(&blockJ.pos.y[0]);
+                    const __m256 pjposz = _mm256_load_ps(&blockJ.pos.z[0]);
+                    const __m256 pjmass = _mm256_load_ps(&blockJ.mass[0]);
                     pPInteraction(piposx, piposy, piposz, pivelx, pively, pivelz, pjposx, pjposy, pjposz, pjmass);
 
                     blockI.vel.x[i] = horizontalSum(pivelx);
@@ -878,10 +878,10 @@ namespace manualAoSoA_manualAVX
                 for (std::size_t bj = 0; bj < BLOCKS; bj++)
                 {
                     const auto& blockJ = particles[bj];
-                    const __m256 pjposx = _mm256_load_ps(blockJ.pos.x);
-                    const __m256 pjposy = _mm256_load_ps(blockJ.pos.y);
-                    const __m256 pjposz = _mm256_load_ps(blockJ.pos.z);
-                    const __m256 pjmass = _mm256_load_ps(blockJ.mass);
+                    const __m256 pjposx = _mm256_load_ps(&blockJ.pos.x[0]);
+                    const __m256 pjposy = _mm256_load_ps(&blockJ.pos.y[0]);
+                    const __m256 pjposz = _mm256_load_ps(&blockJ.pos.z[0]);
+                    const __m256 pjmass = _mm256_load_ps(&blockJ.mass[0]);
                     pPInteraction(piposx, piposy, piposz, pivelx, pively, pivelz, pjposx, pjposy, pjposz, pjmass);
                 }
 
@@ -897,21 +897,21 @@ namespace manualAoSoA_manualAVX
         {
             auto& block = particles[bi];
             _mm256_store_ps(
-                block.pos.x,
-                _mm256_fmadd_ps(_mm256_load_ps(block.vel.x), vTIMESTEP, _mm256_load_ps(block.pos.x)));
+                &block.pos.x[0],
+                _mm256_fmadd_ps(_mm256_load_ps(&block.vel.x[0]), vTIMESTEP, _mm256_load_ps(&block.pos.x[0])));
             _mm256_store_ps(
-                block.pos.y,
-                _mm256_fmadd_ps(_mm256_load_ps(block.vel.y), vTIMESTEP, _mm256_load_ps(block.pos.y)));
+                &block.pos.y[0],
+                _mm256_fmadd_ps(_mm256_load_ps(&block.vel.y[0]), vTIMESTEP, _mm256_load_ps(&block.pos.y[0])));
             _mm256_store_ps(
-                block.pos.z,
-                _mm256_fmadd_ps(_mm256_load_ps(block.vel.z), vTIMESTEP, _mm256_load_ps(block.pos.z)));
+                &block.pos.z[0],
+                _mm256_fmadd_ps(_mm256_load_ps(&block.vel.z[0]), vTIMESTEP, _mm256_load_ps(&block.pos.z[0])));
         }
     }
 
     template <bool UseAccumulator, bool UseUpdate1>
-    int main(std::ostream& plotFile)
+    auto main(std::ostream& plotFile) -> int
     {
-        auto title = "AoSoA" + std::to_string(LANES) + " AVX2 " + (UseUpdate1 ? "w1r8" : "w8r1");
+        auto title = "AoSoA" + std::to_string(LANES) + " AVX2 " + (UseUpdate1 ? "w1r8" : "w8r1"); // NOLINT
         if (UseAccumulator)
             title += " Acc";
         std::cout << title << '\n';
@@ -1223,13 +1223,13 @@ namespace manualAoSoA_Vc
                 for (std::size_t i = 0; i < LANES; i++)
                 {
                     const auto& blockJ = particles[bj];
-                    vec pivelx = (FP) blockI.vel.x[i];
-                    vec pively = (FP) blockI.vel.y[i];
-                    vec pivelz = (FP) blockI.vel.z[i];
+                    vec pivelx = static_cast<FP>(blockI.vel.x[i]);
+                    vec pively = static_cast<FP>(blockI.vel.y[i]);
+                    vec pivelz = static_cast<FP>(blockI.vel.z[i]);
                     pPInteraction(
-                        (FP) blockI.pos.x[i],
-                        (FP) blockI.pos.y[i],
-                        (FP) blockI.pos.z[i],
+                        static_cast<FP>(blockI.pos.x[i]),
+                        static_cast<FP>(blockI.pos.y[i]),
+                        static_cast<FP>(blockI.pos.z[i]),
                         pivelx,
                         pively,
                         pivelz,
@@ -1254,12 +1254,12 @@ namespace manualAoSoA_Vc
             // std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& blockI) {
             for (std::size_t i = 0; i < LANES; i++)
             {
-                const vec piposx = (FP) blockI.pos.x[i];
-                const vec piposy = (FP) blockI.pos.y[i];
-                const vec piposz = (FP) blockI.pos.z[i];
-                vec pivelx = (FP) blockI.vel.x[i];
-                vec pively = (FP) blockI.vel.y[i];
-                vec pivelz = (FP) blockI.vel.z[i];
+                const vec piposx = static_cast<FP>(blockI.pos.x[i]);
+                const vec piposy = static_cast<FP>(blockI.pos.y[i]);
+                const vec piposz = static_cast<FP>(blockI.pos.z[i]);
+                vec pivelx = static_cast<FP>(blockI.vel.x[i]);
+                vec pively = static_cast<FP>(blockI.vel.y[i]);
+                vec pivelz = static_cast<FP>(blockI.vel.z[i]);
 
                 for (std::size_t bj = 0; bj < BLOCKS; bj++)
                 {
@@ -1300,9 +1300,9 @@ namespace manualAoSoA_Vc
     }
 
     template <bool UseAccumulator>
-    int main(std::ostream& plotFile, int threads, bool useUpdate1, bool tiled = false)
+    auto main(std::ostream& plotFile, int threads, bool useUpdate1, bool tiled = false) -> int
     {
-        auto title = "AoSoA" + std::to_string(LANES) + " Vc" + (useUpdate1 ? " w1r8" : " w8r1");
+        auto title = "AoSoA" + std::to_string(LANES) + " Vc" + (useUpdate1 ? " w1r8" : " w8r1"); // NOLINT
         if (tiled)
             title += " tiled";
         if (UseAccumulator)
@@ -1370,7 +1370,8 @@ namespace manualAoSoA_Vc
 } // namespace manualAoSoA_Vc
 #endif
 
-int main()
+auto main() -> int
+try
 {
     std::cout << PROBLEM_SIZE / 1000 << "k particles "
               << "(" << PROBLEM_SIZE * sizeof(FP) * 7 / 1024 << "kiB)\n"
@@ -1437,4 +1438,8 @@ plot 'nbody.tsv' using 2:xtic(1) ti col, "" using 4 ti col
         boost::asio::ip::host_name());
 
     return r;
+}
+catch (const std::exception& e)
+{
+    std::cerr << "Exception: " << e.what() << '\n';
 }

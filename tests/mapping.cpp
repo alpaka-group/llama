@@ -13,7 +13,7 @@ namespace tag {
     struct Momentum {};
     struct Weight {};
     struct Flags {};
-}
+} // namespace tag
 
 // clang-format off
 using Particle = llama::DS<

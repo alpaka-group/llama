@@ -106,6 +106,7 @@ TEST_CASE("type noncopyable")
         auto operator=(const Element&) -> Element& = delete;
         Element(Element&&) noexcept = default;
         auto operator=(Element&&) noexcept -> Element& = default;
+        ~Element() = default;
 
         int value;
     };
@@ -135,6 +136,7 @@ TEST_CASE("type nonmoveable")
         auto operator=(const Element&) -> Element& = delete;
         Element(Element&&) noexcept = delete;
         auto operator=(Element&&) noexcept -> Element& = delete;
+        ~Element() = default;
 
         int value;
     };
@@ -208,7 +210,7 @@ namespace
     {
         int value = counter++;
 
-        operator int() const
+        explicit operator int() const
         {
             return value;
         }

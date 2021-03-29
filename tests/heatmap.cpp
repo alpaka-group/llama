@@ -13,7 +13,7 @@ namespace
         struct Y{};
         struct Z{};
         struct Mass{};
-    }
+    } // namespace tag
 
     using Particle = llama::DS<
         llama::DE<tag::Pos, llama::DS<
@@ -34,7 +34,7 @@ namespace
 TEST_CASE("Heatmap.3body")
 {
     constexpr auto N = 100;
-    auto run = [&](std::string name, auto mapping) {
+    auto run = [&](const std::string& name, auto mapping) {
         auto particles = llama::allocView(llama::mapping::Heatmap{mapping});
 
         for (std::size_t i = 0; i < N; i++)

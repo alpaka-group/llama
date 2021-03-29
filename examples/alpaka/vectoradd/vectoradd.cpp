@@ -30,7 +30,7 @@ namespace tag
     struct X{};
     struct Y{};
     struct Z{};
-}
+} // namespace tag
 
 using Vector = llama::DS<
     llama::DE<tag::X, FP>,
@@ -59,7 +59,8 @@ struct AddKernel
     }
 };
 
-int main(int argc, char** argv)
+auto main() -> int
+try
 {
     // ALPAKA
     using Dim = alpaka::DimInt<1>;
@@ -159,4 +160,8 @@ int main(int argc, char** argv)
     chrono.printAndReset("Copy D->H");
 
     return 0;
+}
+catch (const std::exception& e)
+{
+    std::cerr << "Exception: " << e.what() << '\n';
 }

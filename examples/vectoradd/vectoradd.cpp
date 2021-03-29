@@ -20,7 +20,7 @@ namespace usellama
         struct X{};
         struct Y{};
         struct Z{};
-    }
+    } // namespace tag
 
     using Vector = llama::DS<
         llama::DE<tag::X, FP>,
@@ -41,7 +41,7 @@ namespace usellama
         }
     }
 
-    int main(std::ofstream& plotFile)
+    auto main(std::ofstream& plotFile) -> int
     {
         std::cout << "\nLLAMA\n";
         Stopwatch watch;
@@ -87,7 +87,7 @@ namespace usellama
         }
         plotFile << "LLAMA\t" << acc / STEPS << '\n';
 
-        return (int) c.storageBlobs[0][0];
+        return static_cast<int>(c.storageBlobs[0][0]);
     }
 } // namespace usellama
 
@@ -111,7 +111,7 @@ namespace manualAoS
         }
     }
 
-    int main(std::ofstream& plotFile)
+    auto main(std::ofstream& plotFile) -> int
     {
         std::cout << "\nAoS\n";
         Stopwatch watch;
@@ -167,7 +167,7 @@ namespace manualSoA
         }
     }
 
-    int main(std::ofstream& plotFile)
+    auto main(std::ofstream& plotFile) -> int
     {
         std::cout << "\nSoA\n";
         Stopwatch watch;
@@ -241,7 +241,7 @@ namespace manualAoSoA
         }
     }
 
-    int main(std::ofstream& plotFile)
+    auto main(std::ofstream& plotFile) -> int
     {
         std::cout << "\nAoSoA\n";
         Stopwatch watch;
@@ -279,7 +279,8 @@ namespace manualAoSoA
 } // namespace manualAoSoA
 
 
-int main()
+auto main() -> int
+try
 {
     std::cout << PROBLEM_SIZE / 1000 / 1000 << "M values "
               << "(" << PROBLEM_SIZE * sizeof(float) / 1024 << "kiB)\n";
@@ -303,4 +304,8 @@ plot 'vectoradd.tsv' using 2:xtic(1)
 )";
 
     return r;
+}
+catch (const std::exception& e)
+{
+    std::cerr << "Exception: " << e.what() << '\n';
 }

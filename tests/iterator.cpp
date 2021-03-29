@@ -8,7 +8,7 @@ namespace tag {
     struct X {};
     struct Y {};
     struct Z {};
-}
+} // namespace tag
 
 using Position = llama::DS<
     llama::DE<tag::X, int>,

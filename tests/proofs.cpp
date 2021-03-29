@@ -12,7 +12,7 @@ namespace tag {
     struct Momentum {};
     struct Weight {};
     struct Flags {};
-}
+} // namespace tag
 
 using Particle = llama::DS<
     llama::DE<tag::Pos, llama::DS<
@@ -53,7 +53,7 @@ namespace
         static constexpr std::size_t blobCount = 1;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr MapEverythingToZero(ArrayDomain size, DatumDomain = {}) : arrayDomainSize(size)
+        constexpr explicit MapEverythingToZero(ArrayDomain size, DatumDomain = {}) : arrayDomainSize(size)
         {
         }
 
@@ -68,7 +68,7 @@ namespace
         }
 
         template <std::size_t... DDCs>
-        constexpr auto blobNrAndOffset(ArrayDomain coord) const -> llama::NrAndOffset
+        constexpr auto blobNrAndOffset(ArrayDomain) const -> llama::NrAndOffset
         {
             return {0, 0};
         }
@@ -100,7 +100,7 @@ namespace
         static constexpr std::size_t blobCount = boost::mp11::mp_size<llama::FlattenDatumDomain<DatumDomain>>::value;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr ModulusMapping(ArrayDomain size, DatumDomain = {}) : arrayDomainSize(size)
+        constexpr explicit ModulusMapping(ArrayDomain size, DatumDomain = {}) : arrayDomainSize(size)
         {
         }
 

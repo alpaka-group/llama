@@ -12,7 +12,7 @@ namespace tag
     struct Pos {};
     struct Vel {};
     struct Mom {};
-}
+} // namespace tag
 
 using Particle = llama::DS<
     llama::DE<tag::Pos, llama::DS<

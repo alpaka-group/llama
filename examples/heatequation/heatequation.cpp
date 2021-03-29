@@ -85,13 +85,14 @@ void update_Vc_peel(const View& uCurr, View& uNext, uint32_t extent, double dx, 
 // u_t(x, t) = u_xx(x, t), x in [0, 1], t in [0, T]
 // u(0, t) = u(1, t) = 0
 // u(x, 0) = sin(pi * x)
-double exactSolution(double const x, double const t)
+auto exactSolution(double const x, double const t) -> double
 {
     constexpr double pi = 3.14159265358979323846;
     return std::exp(-pi * pi * t) * std::sin(pi * x);
 }
 
 auto main() -> int
+try
 {
     // Parameters (a user is supposed to change extent, timeSteps)
     const auto extent = 10000;
@@ -150,4 +151,8 @@ auto main() -> int
 #endif
 
     return 0;
+}
+catch (const std::exception& e)
+{
+    std::cerr << "Exception: " << e.what() << '\n';
 }

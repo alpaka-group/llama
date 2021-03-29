@@ -34,7 +34,7 @@ namespace tag
     struct Y{};
     struct Z{};
     struct Mass{};
-}
+} // namespace tag
 
 using Particle = llama::DS<
     llama::DE<tag::Pos, llama::DS<
@@ -168,7 +168,8 @@ using Distribution = common::ThreadsElemsDistribution<Acc, BLOCK_SIZE, hardwareT
 constexpr std::size_t elemCount = Distribution::elemCount;
 constexpr std::size_t threadCount = Distribution::threadCount;
 
-int main()
+auto main() -> int
+try
 {
     const DevAcc devAcc(alpaka::getDevByIdx<PltfAcc>(0u));
     const DevHost devHost(alpaka::getDevByIdx<PltfHost>(0u));
@@ -261,4 +262,8 @@ int main()
     chrono.printAndReset("Copy D->H");
 
     return 0;
+}
+catch (const std::exception& e)
+{
+    std::cerr << "Exception: " << e.what() << '\n';
 }
