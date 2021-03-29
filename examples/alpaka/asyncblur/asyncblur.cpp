@@ -53,7 +53,7 @@ namespace tag
     struct R{};
     struct G{};
     struct B{};
-}
+} // namespace tag
 
 /// real datum domain of the image pixel used on the host for loading and saving
 using Pixel = llama::DS<
@@ -130,7 +130,7 @@ struct BlurKernel
             llama::One<PixelOnAcc> sum;
             sum = 0;
 
-            using ItType = long int;
+            using ItType = std::int64_t;
             const ItType iBStart = SHARED ? ItType(y) - ItType(bi[0] * ElemsPerBlock) : y;
             const ItType iAStart = SHARED ? ItType(x) - ItType(bi[1] * ElemsPerBlock) : x;
             const ItType i_b_end
@@ -153,7 +153,8 @@ struct BlurKernel
     }
 };
 
-int main(int argc, char** argv)
+auto main(int argc, char** argv) -> int
+try
 {
     // ALPAKA
     using Dim = alpaka::DimInt<2>;
@@ -171,7 +172,7 @@ int main(int argc, char** argv)
     const DevHost devHost = alpaka::getDevByIdx<PltfHost>(0);
     std::vector<Queue> queue;
     for (std::size_t i = 0; i < CHUNK_COUNT; ++i)
-        queue.push_back(Queue(devAcc));
+        queue.emplace_back(devAcc);
 
     // ASYNCCOPY
     std::size_t img_x = DEFAULT_IMG_X;
@@ -229,8 +230,10 @@ int main(int argc, char** argv)
     std::vector<alpaka::Buf<DevHost, std::byte, alpaka::DimInt<1>, std::size_t>> hostChunkBuffer;
     std::vector<llama::View<decltype(devMapping), std::byte*>> hostChunkView;
 
-    std::vector<alpaka::Buf<DevAcc, std::byte, alpaka::DimInt<1>, std::size_t>> devOldBuffer, devNewBuffer;
-    std::vector<llama::View<decltype(devMapping), std::byte*>> devOldView, devNewView;
+    std::vector<alpaka::Buf<DevAcc, std::byte, alpaka::DimInt<1>, std::size_t>> devOldBuffer;
+    std::vector<alpaka::Buf<DevAcc, std::byte, alpaka::DimInt<1>, std::size_t>> devNewBuffer;
+    std::vector<llama::View<decltype(devMapping), std::byte*>> devOldView;
+    std::vector<llama::View<decltype(devMapping), std::byte*>> devNewView;
 
     for (std::size_t i = 0; i < CHUNK_COUNT; ++i)
     {
@@ -272,9 +275,9 @@ int main(int argc, char** argv)
                 const auto X = std::clamp<std::size_t>(x, KERNEL_SIZE, img_x + KERNEL_SIZE - 1);
                 const auto Y = std::clamp<std::size_t>(y, KERNEL_SIZE, img_y + KERNEL_SIZE - 1);
                 const auto* pixel = &image[((Y - KERNEL_SIZE) * img_x + X - KERNEL_SIZE) * 3];
-                hostView(y, x)(tag::R()) = FP(pixel[0]) / 255.;
-                hostView(y, x)(tag::G()) = FP(pixel[1]) / 255.;
-                hostView(y, x)(tag::B()) = FP(pixel[2]) / 255.;
+                hostView(y, x)(tag::R()) = FP(pixel[0]) / 255;
+                hostView(y, x)(tag::G()) = FP(pixel[1]) / 255;
+                hostView(y, x)(tag::B()) = FP(pixel[2]) / 255;
             }
         }
     }
@@ -394,4 +397,8 @@ int main(int argc, char** argv)
     }
 
     return 0;
+}
+catch (const std::exception& e)
+{
+    std::cerr << "Exception: " << e.what() << '\n';
 }

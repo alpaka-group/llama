@@ -13,7 +13,7 @@ namespace tag
     struct Z {};
     struct Flags {};
     struct Weight {};
-}
+} // namespace tag
 
 using XYZ = llama::DS<
     llama::DE<tag::X, double>,
@@ -313,7 +313,7 @@ namespace tag
     struct A1{};
     struct A2{};
     struct A3{};
-}
+} // namespace tag
 
 using Arrays = llama::DS<
     llama::DE<tag::A1, int[3]>,

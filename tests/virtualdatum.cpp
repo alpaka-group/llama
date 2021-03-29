@@ -14,7 +14,7 @@ namespace tag {
     struct Weight {};
     struct Part1 {};
     struct Part2 {};
-}
+} // namespace tag
 
 using Name = llama::DS<
     llama::DE<tag::Pos, llama::DS<
@@ -385,6 +385,9 @@ TEST_CASE("VirtualDatum.asTuple.types")
         std::tuple<int&, int&> pos = datum(tag::Pos{}).asTuple();
         std::tuple<int&, int&, int&> vel = datum(tag::Vel{}).asTuple();
         std::tuple<std::tuple<int&, int&>, std::tuple<int&, int&, int&>, int&> name = datum.asTuple();
+        static_cast<void>(pos);
+        static_cast<void>(vel);
+        static_cast<void>(name);
     }
     {
         const llama::One<Name> datum;
@@ -393,6 +396,9 @@ TEST_CASE("VirtualDatum.asTuple.types")
         std::tuple<const int&, const int&, const int&> vel = datum(tag::Vel{}).asTuple();
         std::tuple<std::tuple<const int&, const int&>, std::tuple<const int&, const int&, const int&>, const int&> name
             = datum.asTuple();
+        static_cast<void>(pos);
+        static_cast<void>(vel);
+        static_cast<void>(name);
     }
 }
 
@@ -430,7 +436,7 @@ TEST_CASE("VirtualDatum.asTuple.structuredBindings")
     llama::One<Name> datum;
 
     {
-        auto [a, y] = datum(tag::Pos{}).asTuple();
+        auto [a, y] = datum(tag::Pos{}).asTuple(); // NOLINT (clang-analyzer-deadcode.DeadStores)
         a = 1;
         y = 2;
         CHECK(datum(tag::Pos{}, tag::A{}) == 1);
@@ -442,7 +448,7 @@ TEST_CASE("VirtualDatum.asTuple.structuredBindings")
     }
 
     {
-        auto [x, y, z] = datum(tag::Vel{}).asTuple();
+        auto [x, y, z] = datum(tag::Vel{}).asTuple(); // NOLINT (clang-analyzer-deadcode.DeadStores)
         x = 3;
         y = 4;
         z = 5;
@@ -455,9 +461,9 @@ TEST_CASE("VirtualDatum.asTuple.structuredBindings")
     }
 
     {
-        auto [pos, vel, w] = datum.asTuple();
-        auto [a, y1] = pos;
-        auto [x, y2, z] = vel;
+        auto [pos, vel, w] = datum.asTuple(); // NOLINT (clang-analyzer-deadcode.DeadStores)
+        auto [a, y1] = pos; // NOLINT (clang-analyzer-deadcode.DeadStores)
+        auto [x, y2, z] = vel; // NOLINT (clang-analyzer-deadcode.DeadStores)
         a = 10;
         y1 = 20;
         x = 30;
@@ -482,6 +488,9 @@ TEST_CASE("VirtualDatum.asFlatTuple.types")
         std::tuple<int&, int&> pos = datum(tag::Pos{}).asFlatTuple();
         std::tuple<int&, int&, int&> vel = datum(tag::Vel{}).asFlatTuple();
         std::tuple<int&, int&, int&, int&, int&, int&> name = datum.asFlatTuple();
+        static_cast<void>(pos);
+        static_cast<void>(vel);
+        static_cast<void>(name);
     }
     {
         const llama::One<Name> datum;
@@ -489,6 +498,9 @@ TEST_CASE("VirtualDatum.asFlatTuple.types")
         std::tuple<const int&, const int&> pos = datum(tag::Pos{}).asFlatTuple();
         std::tuple<const int&, const int&, const int&> vel = datum(tag::Vel{}).asFlatTuple();
         std::tuple<const int&, const int&, const int&, const int&, const int&, const int&> name = datum.asFlatTuple();
+        static_cast<void>(pos);
+        static_cast<void>(vel);
+        static_cast<void>(name);
     }
 }
 
@@ -526,7 +538,7 @@ TEST_CASE("VirtualDatum.asFlatTuple.structuredBindings")
     llama::One<Name> datum;
 
     {
-        auto [a, y] = datum(tag::Pos{}).asFlatTuple();
+        auto [a, y] = datum(tag::Pos{}).asFlatTuple(); // NOLINT (clang-analyzer-deadcode.DeadStores)
         a = 1;
         y = 2;
         CHECK(datum(tag::Pos{}, tag::A{}) == 1);
@@ -538,7 +550,7 @@ TEST_CASE("VirtualDatum.asFlatTuple.structuredBindings")
     }
 
     {
-        auto [x, y, z] = datum(tag::Vel{}).asFlatTuple();
+        auto [x, y, z] = datum(tag::Vel{}).asFlatTuple(); // NOLINT (clang-analyzer-deadcode.DeadStores)
         x = 3;
         y = 4;
         z = 5;
@@ -551,7 +563,7 @@ TEST_CASE("VirtualDatum.asFlatTuple.structuredBindings")
     }
 
     {
-        auto [a, y1, x, y2, z, w] = datum.asFlatTuple();
+        auto [a, y1, x, y2, z, w] = datum.asFlatTuple(); // NOLINT (clang-analyzer-deadcode.DeadStores)
         a = 10;
         y1 = 20;
         x = 30;

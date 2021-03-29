@@ -10,7 +10,7 @@ namespace
 {
     template <std::size_t N>
     using Padding = std::array<std::byte, N>;
-}
+} // namespace
 
 // clang-format off
 namespace tag
@@ -24,7 +24,7 @@ namespace tag
     struct Flags {};
     struct Id {};
     struct Pad {};
-}
+} // namespace tag
 
 using Vec = llama::DS<
     llama::DE<tag::X, float>,
@@ -75,7 +75,7 @@ namespace
     using ArrayDomain = decltype(arrayDomain);
 
     template <typename Mapping>
-    void dump(const Mapping& mapping, std::string filename)
+    void dump(const Mapping& mapping, const std::string& filename)
     {
         std::ofstream{filename + ".svg"} << llama::toSvg(mapping);
         std::ofstream{filename + ".html"} << llama::toHtml(mapping);

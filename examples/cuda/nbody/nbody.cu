@@ -301,6 +301,7 @@ catch (const std::exception& e)
 }
 
 int main()
+try
 {
     std::cout << PROBLEM_SIZE / 1000 << "k particles (" << PROBLEM_SIZE * llama::sizeOf<Particle> / 1024 << "kiB)\n"
               << "Caching " << SHARED_ELEMENTS_PER_BLOCK << " particles ("
@@ -331,7 +332,8 @@ int main()
     });
 
     std::cout << "Plot with: ./nbody.sh\n";
-    std::ofstream{"nbody.sh"} << fmt::format(R"(#!/usr/bin/gnuplot -p
+    std::ofstream{"nbody.sh"} << fmt::format(
+        R"(#!/usr/bin/gnuplot -p
 set title "nbody CUDA {0}k particles"
 set style data histograms
 set style fill solid
@@ -339,7 +341,12 @@ set xtics rotate by 45 right
 set key out top center maxrows 3
 set yrange [0:*]
 plot 'nbody.tsv' using 2:xtic(1) ti col, "" using 4 ti col
-)", PROBLEM_SIZE / 1000);
+)",
+        PROBLEM_SIZE / 1000);
 
     return 0;
+}
+catch (const std::exception& e)
+{
+    std::cerr << "Exception: " << e.what() << '\n';
 }

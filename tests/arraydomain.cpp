@@ -10,7 +10,7 @@ namespace tag
     struct X {};
     struct Y {};
     struct Z {};
-}
+} // namespace tag
 
 using Name = llama::DS<
     llama::DE<tag::Pos, llama::DS<

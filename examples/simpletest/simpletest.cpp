@@ -32,7 +32,7 @@ namespace st
     struct Momentum{};
     struct Weight{};
     struct Options{};
-}
+} // namespace st
 
 /// A datum domain in LLAMA is a type, probably always a
 /// \ref llama::DatumStruct, which can be shortend to llama::DS. This takes a
@@ -58,7 +58,7 @@ using Name = llama::DS<
 namespace
 {
     template <class T>
-    std::string type(const T& t)
+    auto type(const T& t) -> std::string
     {
         return boost::core::demangle(typeid(t).name());
     }
@@ -66,7 +66,7 @@ namespace
     /// Prints the coordinates of a given \ref llama::DatumCoord for debugging
     /// and testing purposes
     template <std::size_t... T_coords>
-    void printCoords(llama::DatumCoord<T_coords...> dc)
+    void printCoords(llama::DatumCoord<T_coords...>)
     {
         (std::cout << ... << T_coords);
     }
@@ -82,22 +82,22 @@ namespace
         }
     }
 
-    std::vector<std::string> split(const std::string& s, char delim)
+    auto split(const std::string& s, char delim) -> std::vector<std::string>
     {
         std::vector<std::string> elems;
         split(s, delim, std::back_inserter(elems));
         return elems;
     }
 
-    std::string nSpaces(int n)
+    auto nSpaces(int n) -> std::string
     {
-        std::string result = "";
+        std::string result;
         for (int i = 0; i < n; ++i)
             result += " ";
         return result;
     }
 
-    std::string addLineBreaks(std::string raw)
+    auto addLineBreaks(std::string raw) -> std::string
     {
         using llama::mapping::tree::internal::replace_all;
         replace_all(raw, "<", "<\n");
@@ -105,7 +105,7 @@ namespace
         replace_all(raw, " >", ">");
         replace_all(raw, ">", "\n>");
         auto tokens = split(raw, '\n');
-        std::string result = "";
+        std::string result;
         int indent = 0;
         for (auto t : tokens)
         {
@@ -132,7 +132,8 @@ struct SetZeroFunctor
     VirtualDatum vd;
 };
 
-int main(int argc, char** argv)
+auto main() -> int
+try
 {
     // Defining a two-dimensional user domain
     using UD = llama::ArrayDomain<2>;
@@ -175,9 +176,12 @@ int main(int argc, char** argv)
     // will change based on the chosen mapping. When array of struct is chosen
     // instead the elements will be much closer than with struct of array.
     std::cout << &position_x << '\n';
-    std::cout << &momentum_z << " " << (size_t) &momentum_z - (size_t) &position_x << '\n';
-    std::cout << &weight << " " << (size_t) &weight - (size_t) &momentum_z << '\n';
-    std::cout << &options_2 << " " << (size_t) &options_2 - (size_t) &weight << '\n';
+    std::cout << &momentum_z << " "
+              << reinterpret_cast<std::byte*>(&momentum_z) - reinterpret_cast<std::byte*>(&position_x) << '\n';
+    std::cout << &weight << " " << reinterpret_cast<std::byte*>(&weight) - reinterpret_cast<std::byte*>(&momentum_z)
+              << '\n';
+    std::cout << &options_2 << " " << reinterpret_cast<std::byte*>(&options_2) - reinterpret_cast<std::byte*>(&weight)
+              << '\n';
 
     // iterating over the user domain at run time to do some stuff with the
     // allocated data
@@ -207,9 +211,9 @@ int main(int argc, char** argv)
         // Showing different options of access data with llama. Internally
         // all do the same data- and mappingwise
         auto datum = view(x, y);
-        datum(st::Pos{}, st::X{}) += datum(llama::DatumCoord<1, 0>{});
-        datum(st::Pos{}, st::Y{}) += datum(llama::DatumCoord<1, 1>{});
-        datum(st::Pos{}, st::Z{}) += datum(llama::DatumCoord<2>{});
+        datum(st::Pos{}, st::X{}) += static_cast<float>(datum(llama::DatumCoord<1, 0>{}));
+        datum(st::Pos{}, st::Y{}) += static_cast<float>(datum(llama::DatumCoord<1, 1>{}));
+        datum(st::Pos{}, st::Z{}) += static_cast<float>(datum(llama::DatumCoord<2>{}));
 
         // It is also possible to work only on a part of data.
         datum(st::Pos{}) += datum(st::Momentum{});
@@ -223,4 +227,8 @@ int main(int argc, char** argv)
     std::cout << "Sum: " << sum << '\n';
 
     return 0;
+}
+catch (const std::exception& e)
+{
+    std::cerr << "Exception: " << e.what() << '\n';
 }

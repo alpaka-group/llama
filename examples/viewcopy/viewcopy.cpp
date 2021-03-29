@@ -21,7 +21,7 @@ namespace tag
     struct Y{};
     struct Z{};
     struct Mass{};
-}
+} // namespace tag
 
 using Particle = llama::DS<
     llama::DE<tag::Pos, llama::DS<
@@ -224,7 +224,8 @@ void benchmarkCopy(
     plotFile << seconds << "\t";
 }
 
-int main(int argc, char** argv)
+auto main() -> int
+try
 {
     std::cout << "Threads: " << std::thread::hardware_concurrency() << "\n";
 
@@ -366,4 +367,8 @@ set xtics rotate by 45 right
 set key out top center maxrows 3
 plot 'viewcopy.tsv' using 2:xtic(1) ti col, "" using 3 ti col, "" using 4 ti col, "" using 5 ti col, "" using 6 ti col, "" using 7 ti col, "" using 8 ti col, "" using 9 ti col
 )";
+}
+catch (const std::exception& e)
+{
+    std::cerr << "Exception: " << e.what() << '\n';
 }

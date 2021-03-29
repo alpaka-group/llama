@@ -12,7 +12,7 @@ namespace tag
     struct X{};
     struct Y{};
     struct Z{};
-}
+} // namespace tag
 
 using Vector = llama::DS<
     llama::DE<tag::X, int>,
@@ -31,7 +31,7 @@ struct GuardMapping2D
 
     constexpr GuardMapping2D() = default;
 
-    constexpr GuardMapping2D(ArrayDomain size, DatumDomain = {})
+    constexpr explicit GuardMapping2D(ArrayDomain size, DatumDomain = {})
         : arrayDomainSize(size)
         , left({size[0] - 2})
         , right({size[0] - 2})
@@ -147,9 +147,9 @@ private:
     }
 
     template <typename Mapping>
-    constexpr auto blobIndices(const Mapping& mapping, std::size_t offset) const
+    constexpr auto blobIndices(const Mapping&, std::size_t offset) const
     {
-        std::array<std::size_t, Mapping::blobCount> a;
+        std::array<std::size_t, Mapping::blobCount> a{};
         std::generate(begin(a), end(a), [i = offset]() mutable { return i++; });
         return a;
     }
@@ -257,9 +257,14 @@ void run(const std::string& mappingName)
     printView(view1, rows, cols);
 }
 
-int main()
+auto main() -> int
+try
 {
     run<llama::mapping::PreconfiguredAoS<>::type>("AoS");
     run<llama::mapping::PreconfiguredSoA<>::type>("SoA");
     run<llama::mapping::PreconfiguredSoA<std::true_type>::type>("SoA_MB");
+}
+catch (const std::exception& e)
+{
+    std::cerr << "Exception: " << e.what() << '\n';
 }

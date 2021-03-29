@@ -7,7 +7,7 @@
 namespace tag
 {
     struct Value {};
-}
+} // namespace tag
 
 using DatumDomain = llama::DS<
     llama::DE<tag::Value, int>
@@ -107,7 +107,7 @@ TEST_CASE("view.non-memory-owning")
 
     for (auto i = 0u; i < 256u; i++)
     {
-        auto* v = (std::byte*) &view(i)(tag::Value{});
+        auto* v = reinterpret_cast<std::byte*>(&view(i)(tag::Value{}));
         CHECK(&storage.front() <= v);
         CHECK(v <= &storage.back());
     }
@@ -122,7 +122,7 @@ namespace tag {
     struct Momentum {};
     struct Weight {};
     struct Flags {};
-}
+} // namespace tag
 
 // clang-format off
 using Particle = llama::DS<
@@ -235,16 +235,16 @@ TEST_CASE("view.addresses")
     auto& o2 = view(pos)(tag::Flags{})(2_DC);
     auto& o3 = view(pos)(tag::Flags{})(3_DC);
 
-    CHECK((size_t) &y - (size_t) &x == 2048);
-    CHECK((size_t) &z - (size_t) &x == 4096);
-    CHECK((size_t) &mx - (size_t) &x == 7168);
-    CHECK((size_t) &my - (size_t) &x == 9216);
-    CHECK((size_t) &mz - (size_t) &x == 11264);
-    CHECK((size_t) &w - (size_t) &x == 6144);
-    CHECK((size_t) &o0 - (size_t) &x == 13312);
-    CHECK((size_t) &o1 - (size_t) &x == 13568);
-    CHECK((size_t) &o2 - (size_t) &x == 13824);
-    CHECK((size_t) &o3 - (size_t) &x == 14080);
+    CHECK(reinterpret_cast<std::byte*>(&y) - reinterpret_cast<std::byte*>(&x) == 2048);
+    CHECK(reinterpret_cast<std::byte*>(&z) - reinterpret_cast<std::byte*>(&x) == 4096);
+    CHECK(reinterpret_cast<std::byte*>(&mx) - reinterpret_cast<std::byte*>(&x) == 7168);
+    CHECK(reinterpret_cast<std::byte*>(&my) - reinterpret_cast<std::byte*>(&x) == 9216);
+    CHECK(reinterpret_cast<std::byte*>(&mz) - reinterpret_cast<std::byte*>(&x) == 11264);
+    CHECK(reinterpret_cast<std::byte*>(&w) - reinterpret_cast<std::byte*>(&x) == 6144);
+    CHECK(reinterpret_cast<std::byte*>(&o0) - reinterpret_cast<std::byte*>(&x) == 13312);
+    CHECK(reinterpret_cast<std::byte*>(&o1) - reinterpret_cast<std::byte*>(&x) == 13568);
+    CHECK(reinterpret_cast<std::byte*>(&o2) - reinterpret_cast<std::byte*>(&x) == 13824);
+    CHECK(reinterpret_cast<std::byte*>(&o3) - reinterpret_cast<std::byte*>(&x) == 14080);
 }
 
 template <typename VirtualDatum>

@@ -27,7 +27,7 @@ namespace tag
     struct Y{};
     struct Z{};
     struct Mass{};
-}
+} // namespace tag
 
 using Particle = llama::DS<
     llama::DE<tag::Pos, llama::DS<
@@ -146,7 +146,8 @@ void run(std::ostream& plotFile)
     plotFile << '\t' << sumUpdate / STEPS << (Mapping == 2 ? '\n' : '\t');
 }
 
-int main()
+auto main() -> int
+try
 {
     using namespace boost::mp11;
 
@@ -174,4 +175,8 @@ plot 'nbody.tsv' using 2:xtic(1) ti col, '' using 3:xtic(1) ti col, '' using 4:x
 )",
         PROBLEM_SIZE / 1000,
         boost::asio::ip::host_name());
+}
+catch (const std::exception& e)
+{
+    std::cerr << "Exception: " << e.what() << '\n';
 }
