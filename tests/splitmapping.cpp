@@ -17,19 +17,19 @@ namespace tag {
 } // namespace tag
 
 // clang-format off
-using Particle = llama::DS<
-    llama::DE<tag::Pos, llama::DS<
-        llama::DE<tag::X, double>,
-        llama::DE<tag::Y, double>,
-        llama::DE<tag::Z, double>
+using Particle = llama::Record<
+    llama::Field<tag::Pos, llama::Record<
+        llama::Field<tag::X, double>,
+        llama::Field<tag::Y, double>,
+        llama::Field<tag::Z, double>
     >>,
-    llama::DE<tag::Weight, float>,
-    llama::DE<tag::Momentum, llama::DS<
-        llama::DE<tag::X, double>,
-        llama::DE<tag::Y, double>,
-        llama::DE<tag::Z, double>
+    llama::Field<tag::Weight, float>,
+    llama::Field<tag::Momentum, llama::Record<
+        llama::Field<tag::X, double>,
+        llama::Field<tag::Y, double>,
+        llama::Field<tag::Z, double>
     >>,
-    llama::DE<tag::Flags, bool[4]>
+    llama::Field<tag::Flags, bool[4]>
 >;
 // clang-format on
 
@@ -40,7 +40,7 @@ TEST_CASE("Split.SoA.AoS.1Buffer")
 
     // we layout Pos as SoA, the rest as AoS
     auto mapping = llama::mapping::
-        Split<ArrayDomain, Particle, llama::DatumCoord<0>, llama::mapping::SingleBlobSoA, llama::mapping::PackedAoS>{
+        Split<ArrayDomain, Particle, llama::RecordCoord<0>, llama::mapping::SingleBlobSoA, llama::mapping::PackedAoS>{
             arrayDomain};
 
     constexpr auto mapping1Size = 6120;
@@ -67,13 +67,13 @@ TEST_CASE("Split.AoSoA8.AoS.One.SoA.4Buffer")
     auto mapping = llama::mapping::Split<
         ArrayDomain,
         Particle,
-        llama::DatumCoord<2>,
+        llama::RecordCoord<2>,
         llama::mapping::PreconfiguredAoSoA<8>::type,
         llama::mapping::PreconfiguredSplit<
-            llama::DatumCoord<1>,
+            llama::RecordCoord<1>,
             llama::mapping::One,
             llama::mapping::PreconfiguredSplit<
-                llama::DatumCoord<0>,
+                llama::RecordCoord<0>,
                 llama::mapping::PackedAoS,
                 llama::mapping::SingleBlobSoA,
                 true>::type,

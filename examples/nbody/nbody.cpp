@@ -49,18 +49,18 @@ namespace usellama
         struct Mass{};
     } // namespace tag
 
-    using Particle = llama::DS<
-        llama::DE<tag::Pos, llama::DS<
-            llama::DE<tag::X, FP>,
-            llama::DE<tag::Y, FP>,
-            llama::DE<tag::Z, FP>
+    using Particle = llama::Record<
+        llama::Field<tag::Pos, llama::Record<
+            llama::Field<tag::X, FP>,
+            llama::Field<tag::Y, FP>,
+            llama::Field<tag::Z, FP>
         >>,
-        llama::DE<tag::Vel, llama::DS<
-            llama::DE<tag::X, FP>,
-            llama::DE<tag::Y, FP>,
-            llama::DE<tag::Z, FP>
+        llama::Field<tag::Vel, llama::Record<
+            llama::Field<tag::X, FP>,
+            llama::Field<tag::Y, FP>,
+            llama::Field<tag::Z, FP>
         >>,
-        llama::DE<tag::Mass, FP>
+        llama::Field<tag::Mass, FP>
     >;
     // clang-format on
 
@@ -143,7 +143,7 @@ namespace usellama
                 return llama::mapping::Split<
                     decltype(arrayDomain),
                     Particle,
-                    llama::DatumCoord<1>,
+                    llama::RecordCoord<1>,
                     llama::mapping::PreconfiguredSoA<>::type,
                     llama::mapping::PreconfiguredSoA<>::type,
                     true>{arrayDomain};

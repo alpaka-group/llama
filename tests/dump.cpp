@@ -26,46 +26,46 @@ namespace tag
     struct Pad {};
 } // namespace tag
 
-using Vec = llama::DS<
-    llama::DE<tag::X, float>,
-    llama::DE<tag::Y, float>,
-    llama::DE<tag::Z, float>
+using Vec = llama::Record<
+    llama::Field<tag::X, float>,
+    llama::Field<tag::Y, float>,
+    llama::Field<tag::Z, float>
 >;
-//using DVec = llama::DS<
-//    llama::DE<tag::X, double>,
-//    llama::DE<tag::Y, double>,
-//    llama::DE<tag::Z, double>
+//using DVec = llama::Record<
+//    llama::Field<tag::X, double>,
+//    llama::Field<tag::Y, double>,
+//    llama::Field<tag::Z, double>
 //>;
-using Particle = llama::DS<
-    llama::DE<tag::Pos, Vec>,
-    llama::DE<tag::Vel, /*DVec*/Vec>,
-    llama::DE<tag::Mass, float>,
-    llama::DE<tag::Flags, bool[4]>
+using Particle = llama::Record<
+    llama::Field<tag::Pos, Vec>,
+    llama::Field<tag::Vel, /*DVec*/Vec>,
+    llama::Field<tag::Mass, float>,
+    llama::Field<tag::Flags, bool[4]>
 >;
 
 // example with bad alignment:
-using ParticleUnaligned = llama::DS<
-    llama::DE<tag::Id, std::uint16_t>,
-    llama::DE<tag::Pos, llama::DS<
-        llama::DE<tag::X, float>,
-        llama::DE<tag::Y, float>
+using ParticleUnaligned = llama::Record<
+    llama::Field<tag::Id, std::uint16_t>,
+    llama::Field<tag::Pos, llama::Record<
+        llama::Field<tag::X, float>,
+        llama::Field<tag::Y, float>
     >>,
-    llama::DE<tag::Mass, double>,
-    llama::DE<tag::Flags, bool[3]>
+    llama::Field<tag::Mass, double>,
+    llama::Field<tag::Flags, bool[3]>
 >;
 
 // bad alignment fixed with explicit padding:
-using ParticleAligned = llama::DS<
-    llama::DE<tag::Id, std::uint16_t>,
-    llama::DE<tag::Pad, Padding<2>>,
-    llama::DE<tag::Pos, llama::DS<
-        llama::DE<tag::X, float>,
-        llama::DE<tag::Y, float>
+using ParticleAligned = llama::Record<
+    llama::Field<tag::Id, std::uint16_t>,
+    llama::Field<tag::Pad, Padding<2>>,
+    llama::Field<tag::Pos, llama::Record<
+        llama::Field<tag::X, float>,
+        llama::Field<tag::Y, float>
     >>,
-    llama::DE<tag::Pad, Padding<4>>,
-    llama::DE<tag::Mass, double>,
-    llama::DE<tag::Flags, bool[3]>,
-    llama::DE<tag::Pad, Padding<5>>
+    llama::Field<tag::Pad, Padding<4>>,
+    llama::Field<tag::Mass, double>,
+    llama::Field<tag::Flags, bool[3]>,
+    llama::Field<tag::Pad, Padding<5>>
 >;
 // clang-format on
 
@@ -114,7 +114,7 @@ TEST_CASE("dump.Split.SoA.AoS.1Buffer")
         llama::mapping::Split<
             ArrayDomain,
             Particle,
-            llama::DatumCoord<1>,
+            llama::RecordCoord<1>,
             llama::mapping::SingleBlobSoA,
             llama::mapping::PackedAoS>{arrayDomain},
         "Split.SoA.AoS.1Buffer");
@@ -127,7 +127,7 @@ TEST_CASE("dump.Split.SoA.AoS.2Buffer")
         llama::mapping::Split<
             ArrayDomain,
             Particle,
-            llama::DatumCoord<1>,
+            llama::RecordCoord<1>,
             llama::mapping::SingleBlobSoA,
             llama::mapping::PackedAoS,
             true>{arrayDomain},
@@ -141,10 +141,10 @@ TEST_CASE("dump.Split.AoSoA8.AoS.One.3Buffer")
         llama::mapping::Split<
             ArrayDomain,
             Particle,
-            llama::DatumCoord<1>,
+            llama::RecordCoord<1>,
             llama::mapping::PreconfiguredAoSoA<8>::type,
             llama::mapping::
-                PreconfiguredSplit<llama::DatumCoord<1>, llama::mapping::One, llama::mapping::PackedAoS, true>::type,
+                PreconfiguredSplit<llama::RecordCoord<1>, llama::mapping::One, llama::mapping::PackedAoS, true>::type,
             true>{arrayDomain},
         "Split.AoSoA8.SoA.One.3Buffer");
 }
@@ -157,13 +157,13 @@ TEST_CASE("dump.Split.AoSoA8.AoS.One.SoA.4Buffer")
         llama::mapping::Split<
             ArrayDomain,
             Particle,
-            llama::DatumCoord<1>,
+            llama::RecordCoord<1>,
             llama::mapping::PreconfiguredAoSoA<8>::type,
             llama::mapping::PreconfiguredSplit<
-                llama::DatumCoord<1>,
+                llama::RecordCoord<1>,
                 llama::mapping::One,
                 llama::mapping::PreconfiguredSplit<
-                    llama::DatumCoord<0>,
+                    llama::RecordCoord<0>,
                     llama::mapping::PackedAoS,
                     llama::mapping::SingleBlobSoA,
                     true>::type,

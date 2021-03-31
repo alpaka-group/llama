@@ -55,21 +55,21 @@ namespace tag
     struct B{};
 } // namespace tag
 
-/// real datum domain of the image pixel used on the host for loading and saving
-using Pixel = llama::DS<
-    llama::DE<tag::R, FP>,
-    llama::DE<tag::G, FP>,
-    llama::DE<tag::B, FP>>;
+/// real record dimension of the image pixel used on the host for loading and saving
+using Pixel = llama::Record<
+    llama::Field<tag::R, FP>,
+    llama::Field<tag::G, FP>,
+    llama::Field<tag::B, FP>>;
 
-/// datum domain used in the kernel to modify the image
-using PixelOnAcc = llama::DS<
-    llama::DE<tag::R, FP>, // you can remove one here if you want to checkout the difference of the result image ;)
-    llama::DE<tag::G, FP>,
-    llama::DE<tag::B, FP>>;
+/// record dimension used in the kernel to modify the image
+using PixelOnAcc = llama::Record<
+    llama::Field<tag::R, FP>, // you can remove one here if you want to checkout the difference of the result image ;)
+    llama::Field<tag::G, FP>,
+    llama::Field<tag::B, FP>>;
 // clang-format on
 
 /** Alpaka kernel functor used to blur a small image living in the device memory
- *  using the \ref PixelOnAcc datum domain
+ *  using the \ref PixelOnAcc record dimension
  */
 template <std::size_t Elems, std::size_t KernelSize, std::size_t ElemsPerBlock>
 struct BlurKernel
@@ -87,7 +87,7 @@ struct BlurKernel
                 constexpr auto sharedChunkSize = ElemsPerBlock + 2 * KernelSize;
                 const auto sharedMapping = llama::mapping::SoA(
                     typename View::ArrayDomain{sharedChunkSize, sharedChunkSize},
-                    typename View::DatumDomain{});
+                    typename View::RecordDim{});
                 constexpr auto sharedMemSize = llama::sizeOf<PixelOnAcc> * sharedChunkSize * sharedChunkSize;
                 auto& sharedMem = alpaka::declareSharedVar<std::byte[sharedMemSize], __COUNTER__>(acc);
                 return llama::View(sharedMapping, llama::Array<std::byte*, 1>{&sharedMem[0]});

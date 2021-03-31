@@ -9,8 +9,8 @@ namespace tag
     struct Value {};
 } // namespace tag
 
-using DatumDomain = llama::DS<
-    llama::DE<tag::Value, int>
+using RecordDim = llama::Record<
+    llama::Field<tag::Value, int>
 >;
 // clang-format on
 
@@ -19,10 +19,10 @@ TEST_CASE("view.default-ctor")
     using ArrayDomain = llama::ArrayDomain<2>;
     constexpr ArrayDomain viewSize{16, 16};
 
-    [[maybe_unused]] llama::View<llama::mapping::SoA<ArrayDomain, DatumDomain>, std::byte*> view1;
-    [[maybe_unused]] llama::View<llama::mapping::AoS<ArrayDomain, DatumDomain>, std::byte*> view2;
-    [[maybe_unused]] llama::View<llama::mapping::One<ArrayDomain, DatumDomain>, std::byte*> view3;
-    [[maybe_unused]] llama::View<llama::mapping::tree::Mapping<ArrayDomain, DatumDomain, llama::Tuple<>>, std::byte*>
+    [[maybe_unused]] llama::View<llama::mapping::SoA<ArrayDomain, RecordDim>, std::byte*> view1;
+    [[maybe_unused]] llama::View<llama::mapping::AoS<ArrayDomain, RecordDim>, std::byte*> view2;
+    [[maybe_unused]] llama::View<llama::mapping::One<ArrayDomain, RecordDim>, std::byte*> view3;
+    [[maybe_unused]] llama::View<llama::mapping::tree::Mapping<ArrayDomain, RecordDim, llama::Tuple<>>, std::byte*>
         view4;
 }
 
@@ -31,7 +31,7 @@ TEST_CASE("view.move")
     using ArrayDomain = llama::ArrayDomain<2>;
     constexpr ArrayDomain viewSize{16, 16};
 
-    using Mapping = llama::mapping::SoA<ArrayDomain, DatumDomain>;
+    using Mapping = llama::mapping::SoA<ArrayDomain, RecordDim>;
     auto view1 = allocView(Mapping(viewSize));
 
     decltype(view1) view2;
@@ -45,7 +45,7 @@ TEST_CASE("view.swap")
     using ArrayDomain = llama::ArrayDomain<2>;
     constexpr ArrayDomain viewSize{16, 16};
 
-    using Mapping = llama::mapping::SoA<ArrayDomain, DatumDomain>;
+    using Mapping = llama::mapping::SoA<ArrayDomain, RecordDim>;
     auto view1 = allocView(Mapping(viewSize));
     auto view2 = allocView(Mapping(viewSize));
 
@@ -63,7 +63,7 @@ TEST_CASE("view.allocator.Vector")
     using ArrayDomain = llama::ArrayDomain<2>;
     constexpr ArrayDomain viewSize{16, 16};
 
-    using Mapping = llama::mapping::SoA<ArrayDomain, DatumDomain>;
+    using Mapping = llama::mapping::SoA<ArrayDomain, RecordDim>;
     auto view = allocView(Mapping(viewSize), llama::bloballoc::Vector{});
 
     for (auto i : llama::ArrayDomainIndexRange{viewSize})
@@ -75,7 +75,7 @@ TEST_CASE("view.allocator.SharedPtr")
     using ArrayDomain = llama::ArrayDomain<2>;
     constexpr ArrayDomain viewSize{16, 16};
 
-    using Mapping = llama::mapping::SoA<ArrayDomain, DatumDomain>;
+    using Mapping = llama::mapping::SoA<ArrayDomain, RecordDim>;
     auto view = allocView(Mapping(viewSize), llama::bloballoc::SharedPtr{});
 
     for (auto i : llama::ArrayDomainIndexRange{viewSize})
@@ -87,8 +87,8 @@ TEST_CASE("view.allocator.stack")
     using ArrayDomain = llama::ArrayDomain<2>;
     constexpr ArrayDomain viewSize{16, 16};
 
-    using Mapping = llama::mapping::SoA<ArrayDomain, DatumDomain>;
-    auto view = allocView(Mapping(viewSize), llama::bloballoc::Stack<16 * 16 * llama::sizeOf<DatumDomain>>{});
+    using Mapping = llama::mapping::SoA<ArrayDomain, RecordDim>;
+    auto view = allocView(Mapping(viewSize), llama::bloballoc::Stack<16 * 16 * llama::sizeOf<RecordDim>>{});
 
     for (auto i : llama::ArrayDomainIndexRange{viewSize})
         view(i) = 42;
@@ -99,7 +99,7 @@ TEST_CASE("view.non-memory-owning")
     using ArrayDomain = llama::ArrayDomain<1>;
     ArrayDomain arrayDomain{256};
 
-    using Mapping = llama::mapping::SoA<ArrayDomain, DatumDomain>;
+    using Mapping = llama::mapping::SoA<ArrayDomain, RecordDim>;
     Mapping mapping{arrayDomain};
 
     std::vector<std::byte> storage(mapping.blobSize(0));
@@ -125,19 +125,19 @@ namespace tag {
 } // namespace tag
 
 // clang-format off
-using Particle = llama::DS<
-    llama::DE<tag::Pos, llama::DS<
-        llama::DE<tag::X, double>,
-        llama::DE<tag::Y, double>,
-        llama::DE<tag::Z, double>
+using Particle = llama::Record<
+    llama::Field<tag::Pos, llama::Record<
+        llama::Field<tag::X, double>,
+        llama::Field<tag::Y, double>,
+        llama::Field<tag::Z, double>
     >>,
-    llama::DE<tag::Weight, float>,
-    llama::DE<tag::Momentum, llama::DS<
-        llama::DE<tag::X, double>,
-        llama::DE<tag::Y, double>,
-        llama::DE<tag::Z, double>
+    llama::Field<tag::Weight, float>,
+    llama::Field<tag::Momentum, llama::Record<
+        llama::Field<tag::X, double>,
+        llama::Field<tag::Y, double>,
+        llama::Field<tag::Z, double>
     >>,
-    llama::DE<tag::Flags, bool[4]>
+    llama::Field<tag::Flags, bool[4]>
 >;
 // clang-format on
 
@@ -159,23 +159,23 @@ TEST_CASE("view.access")
         CHECK((view(pos) == view[{0, 0}]));
         CHECK((view(pos) == view({0, 0})));
 
-        const auto& x = view(pos)(llama::DatumCoord<0, 0>{});
-        CHECK(&x == &view(pos)(llama::DatumCoord<0>{})(llama::DatumCoord<0>{}));
-        CHECK(&x == &view(pos)(llama::DatumCoord<0>{})(tag::X{}));
-        CHECK(&x == &view(pos)(tag::Pos{})(llama::DatumCoord<0>{}));
+        const auto& x = view(pos)(llama::RecordCoord<0, 0>{});
+        CHECK(&x == &view(pos)(llama::RecordCoord<0>{})(llama::RecordCoord<0>{}));
+        CHECK(&x == &view(pos)(llama::RecordCoord<0>{})(tag::X{}));
+        CHECK(&x == &view(pos)(tag::Pos{})(llama::RecordCoord<0>{}));
         CHECK(&x == &view(pos)(tag::Pos{})(tag::X{}));
         CHECK(&x == &view(pos)(tag::Pos{}, tag::X{}));
 
         // also test arrays
         using namespace llama::literals;
-        const bool& o0 = view(pos)(tag::Flags{})(llama::DatumCoord<0>{});
-        CHECK(&o0 == &view(pos)(tag::Flags{})(0_DC));
+        const bool& o0 = view(pos)(tag::Flags{})(llama::RecordCoord<0>{});
+        CHECK(&o0 == &view(pos)(tag::Flags{})(0_RC));
     };
     l(view);
     l(std::as_const(view));
 }
 
-TEST_CASE("view.assign-one-datum")
+TEST_CASE("view.assign-one-record")
 {
     using namespace llama::literals;
 
@@ -186,30 +186,30 @@ TEST_CASE("view.assign-one-datum")
     Mapping mapping{arrayDomain};
     auto view = allocView(mapping);
 
-    llama::One<Particle> datum;
-    datum(tag::Pos{}, tag::X{}) = 14.0f;
-    datum(tag::Pos{}, tag::Y{}) = 15.0f;
-    datum(tag::Pos{}, tag::Z{}) = 16.0f;
-    datum(tag::Momentum{}) = 0;
-    datum(tag::Weight{}) = 500.0f;
-    datum(tag::Flags{})(0_DC) = true;
-    datum(tag::Flags{})(1_DC) = false;
-    datum(tag::Flags{})(2_DC) = true;
-    datum(tag::Flags{})(3_DC) = false;
+    llama::One<Particle> record;
+    record(tag::Pos{}, tag::X{}) = 14.0f;
+    record(tag::Pos{}, tag::Y{}) = 15.0f;
+    record(tag::Pos{}, tag::Z{}) = 16.0f;
+    record(tag::Momentum{}) = 0;
+    record(tag::Weight{}) = 500.0f;
+    record(tag::Flags{})(0_RC) = true;
+    record(tag::Flags{})(1_RC) = false;
+    record(tag::Flags{})(2_RC) = true;
+    record(tag::Flags{})(3_RC) = false;
 
-    view({3, 4}) = datum;
+    view({3, 4}) = record;
 
-    CHECK(datum(tag::Pos{}, tag::X{}) == 14.0f);
-    CHECK(datum(tag::Pos{}, tag::Y{}) == 15.0f);
-    CHECK(datum(tag::Pos{}, tag::Z{}) == 16.0f);
-    CHECK(datum(tag::Momentum{}, tag::X{}) == 0);
-    CHECK(datum(tag::Momentum{}, tag::Y{}) == 0);
-    CHECK(datum(tag::Momentum{}, tag::Z{}) == 0);
-    CHECK(datum(tag::Weight{}) == 500.0f);
-    CHECK(datum(tag::Flags{})(0_DC) == true);
-    CHECK(datum(tag::Flags{})(1_DC) == false);
-    CHECK(datum(tag::Flags{})(2_DC) == true);
-    CHECK(datum(tag::Flags{})(3_DC) == false);
+    CHECK(record(tag::Pos{}, tag::X{}) == 14.0f);
+    CHECK(record(tag::Pos{}, tag::Y{}) == 15.0f);
+    CHECK(record(tag::Pos{}, tag::Z{}) == 16.0f);
+    CHECK(record(tag::Momentum{}, tag::X{}) == 0);
+    CHECK(record(tag::Momentum{}, tag::Y{}) == 0);
+    CHECK(record(tag::Momentum{}, tag::Z{}) == 0);
+    CHECK(record(tag::Weight{}) == 500.0f);
+    CHECK(record(tag::Flags{})(0_RC) == true);
+    CHECK(record(tag::Flags{})(1_RC) == false);
+    CHECK(record(tag::Flags{})(2_RC) == true);
+    CHECK(record(tag::Flags{})(3_RC) == false);
 }
 
 TEST_CASE("view.addresses")
@@ -231,10 +231,10 @@ TEST_CASE("view.addresses")
     auto& mx = view(pos)(tag::Momentum{}, tag::X{});
     auto& my = view(pos)(tag::Momentum{}, tag::Y{});
     auto& mz = view(pos)(tag::Momentum{}, tag::Z{});
-    auto& o0 = view(pos)(tag::Flags{})(0_DC);
-    auto& o1 = view(pos)(tag::Flags{})(1_DC);
-    auto& o2 = view(pos)(tag::Flags{})(2_DC);
-    auto& o3 = view(pos)(tag::Flags{})(3_DC);
+    auto& o0 = view(pos)(tag::Flags{})(0_RC);
+    auto& o1 = view(pos)(tag::Flags{})(1_RC);
+    auto& o2 = view(pos)(tag::Flags{})(2_RC);
+    auto& o3 = view(pos)(tag::Flags{})(3_RC);
 
     CHECK(reinterpret_cast<std::byte*>(&y) - reinterpret_cast<std::byte*>(&x) == 2048);
     CHECK(reinterpret_cast<std::byte*>(&z) - reinterpret_cast<std::byte*>(&x) == 4096);
@@ -248,7 +248,7 @@ TEST_CASE("view.addresses")
     CHECK(reinterpret_cast<std::byte*>(&o3) - reinterpret_cast<std::byte*>(&x) == 14080);
 }
 
-template <typename VirtualDatum>
+template <typename VirtualRecord>
 struct SetZeroFunctor
 {
     template <typename Coord>
@@ -256,7 +256,7 @@ struct SetZeroFunctor
     {
         vd(coord) = 0;
     }
-    VirtualDatum vd;
+    VirtualRecord vd;
 };
 
 TEST_CASE("view.iteration-and-access")
@@ -274,7 +274,7 @@ TEST_CASE("view.iteration-and-access")
         for (size_t y = 0; y < arrayDomain[1]; ++y)
         {
             SetZeroFunctor<decltype(view(x, y))> szf{view(x, y)};
-            llama::forEachLeaf<Particle>(szf, llama::DatumCoord<0, 0>{});
+            llama::forEachLeaf<Particle>(szf, llama::RecordCoord<0, 0>{});
             llama::forEachLeaf<Particle>(szf, tag::Momentum{});
             view({x, y}) = double(x + y) / double(arrayDomain[0] + arrayDomain[1]);
         }
@@ -282,11 +282,11 @@ TEST_CASE("view.iteration-and-access")
     double sum = 0.0;
     for (size_t x = 0; x < arrayDomain[0]; ++x)
         for (size_t y = 0; y < arrayDomain[1]; ++y)
-            sum += view(x, y)(llama::DatumCoord<2, 0>{});
+            sum += view(x, y)(llama::RecordCoord<2, 0>{});
     CHECK(sum == 120.0);
 }
 
-TEST_CASE("view.datum-access")
+TEST_CASE("view.record-access")
 {
     using ArrayDomain = llama::ArrayDomain<2>;
     ArrayDomain arrayDomain{16, 16};
@@ -300,17 +300,17 @@ TEST_CASE("view.datum-access")
     for (size_t x = 0; x < arrayDomain[0]; ++x)
         for (size_t y = 0; y < arrayDomain[1]; ++y)
         {
-            auto datum = view(x, y);
-            datum(tag::Pos(), tag::X()) += datum(llama::DatumCoord<2, 0>{});
-            datum(tag::Pos(), tag::Y()) += datum(llama::DatumCoord<2, 1>{});
-            datum(tag::Pos(), tag::Z()) += datum(llama::DatumCoord<1>());
-            datum(tag::Pos()) += datum(tag::Momentum());
+            auto record = view(x, y);
+            record(tag::Pos(), tag::X()) += record(llama::RecordCoord<2, 0>{});
+            record(tag::Pos(), tag::Y()) += record(llama::RecordCoord<2, 1>{});
+            record(tag::Pos(), tag::Z()) += record(llama::RecordCoord<1>());
+            record(tag::Pos()) += record(tag::Momentum());
         }
 
     double sum = 0.0;
     for (size_t x = 0; x < arrayDomain[0]; ++x)
         for (size_t y = 0; y < arrayDomain[1]; ++y)
-            sum += view(x, y)(llama::DatumCoord<2, 0>{});
+            sum += view(x, y)(llama::RecordCoord<2, 0>{});
 
     CHECK(sum == 0.0);
 }

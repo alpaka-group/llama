@@ -32,10 +32,10 @@ namespace tag
     struct Z{};
 } // namespace tag
 
-using Vector = llama::DS<
-    llama::DE<tag::X, FP>,
-    llama::DE<tag::Y, FP>,
-    llama::DE<tag::Z, FP>>;
+using Vector = llama::Record<
+    llama::Field<tag::X, FP>,
+    llama::Field<tag::Y, FP>,
+    llama::Field<tag::Z, FP>>;
 // clang-format on
 
 template <std::size_t ProblemSize, std::size_t Elems>

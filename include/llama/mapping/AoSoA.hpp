@@ -8,16 +8,16 @@
 
 namespace llama::mapping
 {
-    /// The maximum number of vector lanes that can be used to fetch each leaf type in the datum domain into a vector
-    /// register of the given size in bits.
-    template <typename DatumDomain, std::size_t VectorRegisterBits>
+    /// The maximum number of vector lanes that can be used to fetch each leaf type in the record dimension into a
+    /// vector register of the given size in bits.
+    template <typename RecordDim, std::size_t VectorRegisterBits>
     inline constexpr std::size_t maxLanes = []() constexpr
     {
         auto max = std::numeric_limits<std::size_t>::max();
-        forEachLeaf<DatumDomain>(
+        forEachLeaf<RecordDim>(
             [&](auto coord)
             {
-                using AttributeType = GetType<DatumDomain, decltype(coord)>;
+                using AttributeType = GetType<RecordDim, decltype(coord)>;
                 max = std::min(max, VectorRegisterBits / (sizeof(AttributeType) * CHAR_BIT));
             });
         return max;
@@ -28,40 +28,39 @@ namespace llama::mapping
     /// allocView.
     /// \tparam Lanes The size of the inner arrays of this array of struct of
     /// arrays.
-    /// \tparam LinearizeArrayDomainFunctor Defines how the
-    /// user domain should be mapped into linear numbers and how big the linear
-    /// domain gets.
+    /// \tparam LinearizeArrayDomainFunctor Defines how the array domain should be mapped into linear numbers and how
+    /// big the linear domain gets.
     template <
         typename T_ArrayDomain,
-        typename T_DatumDomain,
+        typename T_RecordDim,
         std::size_t Lanes,
         typename LinearizeArrayDomainFunctor = LinearizeArrayDomainCpp>
     struct AoSoA
     {
         using ArrayDomain = T_ArrayDomain;
-        using DatumDomain = T_DatumDomain;
+        using RecordDim = T_RecordDim;
         static constexpr std::size_t blobCount = 1;
 
         constexpr AoSoA() = default;
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr AoSoA(ArrayDomain size, DatumDomain = {}) : arrayDomainSize(size)
+        LLAMA_FN_HOST_ACC_INLINE constexpr AoSoA(ArrayDomain size, RecordDim = {}) : arrayDomainSize(size)
         {
         }
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(std::size_t) const -> std::size_t
         {
-            return LinearizeArrayDomainFunctor{}.size(arrayDomainSize) * sizeOf<DatumDomain>;
+            return LinearizeArrayDomainFunctor{}.size(arrayDomainSize) * sizeOf<RecordDim>;
         }
 
-        template <std::size_t... DatumDomainCoord>
+        template <std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
         {
             const auto flatArrayIndex = LinearizeArrayDomainFunctor{}(coord, arrayDomainSize);
             const auto blockIndex = flatArrayIndex / Lanes;
             const auto laneIndex = flatArrayIndex % Lanes;
-            const auto offset = (sizeOf<DatumDomain> * Lanes) * blockIndex
-                + offsetOf<DatumDomain, DatumCoord<DatumDomainCoord...>> * Lanes
-                + sizeof(GetType<DatumDomain, DatumCoord<DatumDomainCoord...>>) * laneIndex;
+            const auto offset = (sizeOf<RecordDim> * Lanes) * blockIndex
+                + offsetOf<RecordDim, RecordCoord<RecordCoords...>> * Lanes
+                + sizeof(GetType<RecordDim, RecordCoord<RecordCoords...>>) * laneIndex;
             return {0, offset};
         }
 
@@ -71,7 +70,7 @@ namespace llama::mapping
     template <std::size_t Lanes, typename LinearizeArrayDomainFunctor = LinearizeArrayDomainCpp>
     struct PreconfiguredAoSoA
     {
-        template <typename ArrayDomain, typename DatumDomain>
-        using type = AoSoA<ArrayDomain, DatumDomain, Lanes, LinearizeArrayDomainFunctor>;
+        template <typename ArrayDomain, typename RecordDim>
+        using type = AoSoA<ArrayDomain, RecordDim, Lanes, LinearizeArrayDomainFunctor>;
     };
 } // namespace llama::mapping

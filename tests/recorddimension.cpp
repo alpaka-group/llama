@@ -12,7 +12,7 @@ TEST_CASE("type int")
     struct Tag
     {
     };
-    using Name = llama::DS<llama::DE<Tag, int>>;
+    using Name = llama::Record<llama::Field<Tag, int>>;
 
     using ArrayDomain = llama::ArrayDomain<1>;
     ArrayDomain arrayDomain{16};
@@ -30,7 +30,7 @@ TEST_CASE("type std::complex<float>")
     struct Tag
     {
     };
-    using Name = llama::DS<llama::DE<Tag, std::complex<float>>>;
+    using Name = llama::Record<llama::Field<Tag, std::complex<float>>>;
 
     using ArrayDomain = llama::ArrayDomain<1>;
     ArrayDomain arrayDomain{16};
@@ -48,7 +48,7 @@ TEST_CASE("type std::array<float, 4>")
     struct Tag
     {
     };
-    using Name = llama::DS<llama::DE<Tag, std::array<float, 4>>>;
+    using Name = llama::Record<llama::Field<Tag, std::array<float, 4>>>;
 
     using ArrayDomain = llama::ArrayDomain<1>;
     ArrayDomain arrayDomain{16};
@@ -66,7 +66,7 @@ TEST_CASE("type std::vector<float>")
     struct Tag
     {
     };
-    using Name = llama::DS<llama::DE<Tag, std::vector<float>>>;
+    using Name = llama::Record<llama::Field<Tag, std::vector<float>>>;
 
     using ArrayDomain = llama::ArrayDomain<1>;
     ArrayDomain arrayDomain{16};
@@ -84,7 +84,7 @@ TEST_CASE("type std::atomic<int>")
     struct Tag
     {
     };
-    using Name = llama::DS<llama::DE<Tag, std::atomic<int>>>;
+    using Name = llama::Record<llama::Field<Tag, std::atomic<int>>>;
 
     using ArrayDomain = llama::ArrayDomain<1>;
     ArrayDomain arrayDomain{16};
@@ -114,7 +114,7 @@ TEST_CASE("type noncopyable")
     struct Tag
     {
     };
-    using Name = llama::DS<llama::DE<Tag, Element>>;
+    using Name = llama::Record<llama::Field<Tag, Element>>;
 
     using ArrayDomain = llama::ArrayDomain<1>;
     ArrayDomain arrayDomain{16};
@@ -144,7 +144,7 @@ TEST_CASE("type nonmoveable")
     struct Tag
     {
     };
-    using Name = llama::DS<llama::DE<Tag, Element>>;
+    using Name = llama::Record<llama::Field<Tag, Element>>;
 
     using ArrayDomain = llama::ArrayDomain<1>;
     ArrayDomain arrayDomain{16};
@@ -168,7 +168,7 @@ TEST_CASE("type not defaultconstructible")
     struct Tag
     {
     };
-    using Name = llama::DS<llama::DE<Tag, Element>>;
+    using Name = llama::Record<llama::Field<Tag, Element>>;
 
     using ArrayDomain = llama::ArrayDomain<1>;
     ArrayDomain arrayDomain{16};
@@ -191,7 +191,7 @@ TEST_CASE("type nottrivial ctor")
     struct Tag
     {
     };
-    using Name = llama::DS<llama::DE<Tag, Element>>;
+    using Name = llama::Record<llama::Field<Tag, Element>>;
 
     using ArrayDomain = llama::ArrayDomain<1>;
     ArrayDomain arrayDomain{16};
@@ -225,7 +225,7 @@ TEST_CASE("type custom initialization")
     struct Tag
     {
     };
-    using Name = llama::DS<llama::DE<Tag, UniqueInt>>;
+    using Name = llama::Record<llama::Field<Tag, UniqueInt>>;
 
     using ArrayDomain = llama::ArrayDomain<1>;
     ArrayDomain arrayDomain{16};
@@ -243,9 +243,9 @@ TEST_CASE("type custom initialization")
 
 TEST_CASE("type just double")
 {
-    using DatumDomain = double;
+    using RecordDim = double;
     llama::ArrayDomain arrayDomain{16};
-    llama::mapping::SoA mapping{arrayDomain, DatumDomain{}};
+    llama::mapping::SoA mapping{arrayDomain, RecordDim{}};
     auto view = allocView(mapping);
 
     STATIC_REQUIRE(std::is_same_v<decltype(view(0u)), double&>);
@@ -268,16 +268,16 @@ TEST_CASE("static array")
     struct Tag
     {
     };
-    using DatumDomain = llama::DS<llama::DE<Tag, int[3]>>;
+    using RecordDim = llama::Record<llama::Field<Tag, int[3]>>;
 
     using ArrayDomain = llama::ArrayDomain<1>;
     ArrayDomain arrayDomain{16};
 
-    using Mapping = llama::mapping::SoA<ArrayDomain, DatumDomain>;
+    using Mapping = llama::mapping::SoA<ArrayDomain, RecordDim>;
     Mapping mapping{arrayDomain};
     auto view = allocView(mapping);
 
-    int& e0 = view(ArrayDomain{0})(Tag{})(0_DC);
-    int& e1 = view(ArrayDomain{0})(Tag{})(1_DC);
-    int& e2 = view(ArrayDomain{0})(Tag{})(2_DC);
+    int& e0 = view(ArrayDomain{0})(Tag{})(0_RC);
+    int& e1 = view(ArrayDomain{0})(Tag{})(1_RC);
+    int& e2 = view(ArrayDomain{0})(Tag{})(2_RC);
 }

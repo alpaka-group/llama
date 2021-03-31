@@ -27,76 +27,76 @@ offers the :cpp:`begin()` and  :cpp:`end()` member functions with corresponding 
     }
 
 
-Datum domain iterating
-----------------------
+Record dimension iterating
+--------------------------
 
-The datum domain is iterated using :cpp:`llama::forEachLeaf`.
-It takes a datum domain as template argument and a functor as function argument.
-The functor is then called for each leaf of the datum domain tree with a datum coord as argument:
+The record dimension is iterated using :cpp:`llama::forEachLeaf`.
+It takes a record dimension as template argument and a functor as function argument.
+The functor is then called for each leaf of the record dimension tree with a record coord as argument:
 
 .. code-block:: C++
 
-    using DatumDomain = llama::DS<
-        llama::DE<x, float>,
-        llama::DE<y, float>,
-        llama::DE<z, llama::DS<
-            llama::DE< low, short>,
-            llama::DE<high, short>
+    using RecordDim = llama::Record<
+        llama::Field<x, float>,
+        llama::Field<y, float>,
+        llama::Field<z, llama::Record<
+            llama::Field< low, short>,
+            llama::Field<high, short>
         > >
     >;
 
     MyFunctor functor;
-    llama::forEachLeaf<DatumDomain>(functor);
+    llama::forEachLeaf<RecordDim>(functor);
 
     // functor will be called with an instance of
-    // * DatumCoord<0> for x
-    // * DatumCoord<1> for y
-    // * DatumCoord<2, 0> for z.low
-    // * DatumCoord<2, 1> for z.high
+    // * RecordCoord<0> for x
+    // * RecordCoord<1> for y
+    // * RecordCoord<2, 0> for z.low
+    // * RecordCoord<2, 1> for z.high
 
-Optionally, a subtree of the DatumDomain can be chosen for iteration.
-The subtree is selected either via a `DatumCoord` or a series of tags.
+Optionally, a subtree of the RecordDim can be chosen for iteration.
+The subtree is selected either via a `RecordCoord` or a series of tags.
 
 .. code-block:: C++
 
     // "functor" will be called for
     // * z.low
     // * z.high
-    llama::forEachLeaf<DatumDomain>(functor, z{});
+    llama::forEachLeaf<RecordDim>(functor, z{});
 
     // "functor" will be called for
     // * z.low
-    llama::forEachLeaf<DatumDomain>(functor, z{}, low{});
+    llama::forEachLeaf<RecordDim>(functor, z{}, low{});
 
     // "functor" will be called for
     // * z.high
-    llama::forEachLeaf<DatumDomain>(functor, llama::DatumCoord<2, 1>{});
+    llama::forEachLeaf<RecordDim>(functor, llama::RecordCoord<2, 1>{});
 
 The functor type itself needs to provide the :cpp:`operator()` with one templated parameter, to which 
-the coordinate of the leaf in the datum domain tree is passed.
+the coordinate of the leaf in the record dimension tree is passed.
 A polymorphic lambda is recommented to be used as a functor.
 
 .. code-block:: C++
 
     auto vd = view(23, 43);
-    llama::forEachLeaf<DatumDomain>([&](auto coord) {
+    llama::forEachLeaf<RecordDim>([&](auto coord) {
         vd(coord) = 1337.0f;
     });
 
     // or using a struct:
 
-    template<typename VirtualDatum, typename Value>
+    template<typename VirtualRecord, typename Value>
     struct SetValueFunctor {
         template<typename Coord>
         void operator()(Coord coord) {
             vd(coord) = value;
         }
-        VirtualDatum vd;
+        VirtualRecord vd;
         const Value value;
     };
 
     SetValueFunctor<decltype(vd), float> functor{1337.0f};
-    llama::forEachLeaf<DatumDomain>(functor);
+    llama::forEachLeaf<RecordDim>(functor);
 
 A more detailed example can be found in the
 `simpletest example <https://github.com/alpaka-group/llama/blob/master/examples/simpletest/simpletest.cpp>`_.
@@ -132,14 +132,14 @@ Having an iterator to a view opens up the standard library for use in conjunctio
     for (auto x : view | std::views::transform([](auto vd) { return vd(x{}); }) | std::views::take(2))
         // ...
 
-Since virtual datums interact with each other based on the tags and not the underlying mappings, we can also use iterators from multiple views together:
+Since virtual records interact with each other based on the tags and not the underlying mappings, we can also use iterators from multiple views together:
 
 .. code-block:: C++
 
-    auto aosView = llama::allocView(llama::mapping::AoS<ArrayDomain, DatumDomain>{arrayDomain});
-    auto soaView = llama::allocView(llama::mapping::SoA<ArrayDomain, DatumDomain>{arrayDomain});
+    auto aosView = llama::allocView(llama::mapping::AoS<ArrayDomain, RecordDim>{arrayDomain});
+    auto soaView = llama::allocView(llama::mapping::SoA<ArrayDomain, RecordDim>{arrayDomain});
     // ...
     std::copy(begin(aosView), end(aosView), begin(soaView));
 
-    auto innerProduct = std::transform_reduce(begin(aosView), end(aosView), begin(soaView), llama::One<DatumDomain>{});
+    auto innerProduct = std::transform_reduce(begin(aosView), end(aosView), begin(soaView), llama::One<RecordDim>{});
 

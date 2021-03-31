@@ -10,10 +10,10 @@ namespace tag {
     struct Z {};
 } // namespace tag
 
-using Position = llama::DS<
-    llama::DE<tag::X, int>,
-    llama::DE<tag::Y, int>,
-    llama::DE<tag::Z, int>
+using Position = llama::Record<
+    llama::Field<tag::X, int>,
+    llama::Field<tag::Y, int>,
+    llama::Field<tag::Z, int>
 >;
 // clang-format on
 

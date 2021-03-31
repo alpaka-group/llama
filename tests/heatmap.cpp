@@ -15,18 +15,18 @@ namespace
         struct Mass{};
     } // namespace tag
 
-    using Particle = llama::DS<
-        llama::DE<tag::Pos, llama::DS<
-            llama::DE<tag::X, float>,
-            llama::DE<tag::Y, float>,
-            llama::DE<tag::Z, float>
+    using Particle = llama::Record<
+        llama::Field<tag::Pos, llama::Record<
+            llama::Field<tag::X, float>,
+            llama::Field<tag::Y, float>,
+            llama::Field<tag::Z, float>
         >>,
-        llama::DE<tag::Vel, llama::DS<
-            llama::DE<tag::X, float>,
-            llama::DE<tag::Y, float>,
-            llama::DE<tag::Z, float>
+        llama::Field<tag::Vel, llama::Record<
+            llama::Field<tag::X, float>,
+            llama::Field<tag::Y, float>,
+            llama::Field<tag::Z, float>
         >>,
-        llama::DE<tag::Mass, float>
+        llama::Field<tag::Mass, float>
     >;
     // clang-format on
 } // namespace

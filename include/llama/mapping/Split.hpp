@@ -6,23 +6,23 @@ namespace llama::mapping
 {
     namespace internal
     {
-        template <typename... DatumElements, std::size_t FirstCoord, std::size_t... Coords>
-        auto partitionDatumDomain(DatumStruct<DatumElements...>, DatumCoord<FirstCoord, Coords...>)
+        template <typename... Fields, std::size_t FirstCoord, std::size_t... Coords>
+        auto partitionRecordDim(Record<Fields...>, RecordCoord<FirstCoord, Coords...>)
         {
             using namespace boost::mp11;
             if constexpr (sizeof...(Coords) == 0)
             {
-                using With = DatumStruct<mp_at_c<DatumStruct<DatumElements...>, FirstCoord>>;
-                using Without = mp_erase_c<DatumStruct<DatumElements...>, FirstCoord, FirstCoord + 1>;
+                using With = Record<mp_at_c<Record<Fields...>, FirstCoord>>;
+                using Without = mp_erase_c<Record<Fields...>, FirstCoord, FirstCoord + 1>;
                 return mp_list<With, Without>{};
             }
             else
             {
-                using Result = decltype(partitionDatumDomain(
-                    DatumStruct<mp_at_c<DatumStruct<DatumElements...>, FirstCoord>>{},
-                    DatumCoord<Coords...>{}));
-                using With = mp_replace_at_c<DatumStruct<DatumElements...>, FirstCoord, mp_first<Result>>;
-                using Without = mp_replace_at_c<DatumStruct<DatumElements...>, FirstCoord, mp_second<Result>>;
+                using Result = decltype(partitionRecordDim(
+                    Record<mp_at_c<Record<Fields...>, FirstCoord>>{},
+                    RecordCoord<Coords...>{}));
+                using With = mp_replace_at_c<Record<Fields...>, FirstCoord, mp_first<Result>>;
+                using Without = mp_replace_at_c<Record<Fields...>, FirstCoord, mp_second<Result>>;
                 return mp_list<With, Without>{};
             }
         }
@@ -33,29 +33,29 @@ namespace llama::mapping
             std::size_t FirstSkippedCoord,
             std::size_t... SkippedCoords>
         constexpr auto offsetCoord(
-            DatumCoord<FirstDstCoord, DstCoords...>,
-            DatumCoord<FirstSkippedCoord, SkippedCoords...>)
+            RecordCoord<FirstDstCoord, DstCoords...>,
+            RecordCoord<FirstSkippedCoord, SkippedCoords...>)
         {
             if constexpr (FirstDstCoord < FirstSkippedCoord)
-                return DatumCoord<FirstDstCoord, DstCoords...>{};
+                return RecordCoord<FirstDstCoord, DstCoords...>{};
             else if constexpr (FirstDstCoord > FirstSkippedCoord)
-                return DatumCoord<FirstDstCoord - 1, DstCoords...>{};
+                return RecordCoord<FirstDstCoord - 1, DstCoords...>{};
             else
                 return cat(
-                    DatumCoord<FirstDstCoord>{},
-                    offsetCoord(DatumCoord<DstCoords...>{}, DatumCoord<SkippedCoords...>{}));
+                    RecordCoord<FirstDstCoord>{},
+                    offsetCoord(RecordCoord<DstCoords...>{}, RecordCoord<SkippedCoords...>{}));
         }
     } // namespace internal
 
-    /// Mapping which splits off a part of the datum domain and maps it differently then the rest.
-    /// \tparam DatumCoordForMapping1 A \ref DatumCoord selecting the part of the datum domain to be mapped differently.
-    /// \tparam MappingTemplate1 The mapping used for the selected part of the datum domain.
-    /// \tparam MappingTemplate2 The mapping used for the not selected part of the datum domain.
-    /// \tparam SeparateBlobs If true, both pieces of the datum domain are mapped to separate blobs.
+    /// Mapping which splits off a part of the record dimension and maps it differently then the rest.
+    /// \tparam RecordCoordForMapping1 A \ref RecordCoord selecting the part of the record dimension to be mapped
+    /// differently. \tparam MappingTemplate1 The mapping used for the selected part of the record dimension. \tparam
+    /// MappingTemplate2 The mapping used for the not selected part of the record dimension. \tparam SeparateBlobs If
+    /// true, both pieces of the record dimension are mapped to separate blobs.
     template <
         typename T_ArrayDomain,
-        typename T_DatumDomain,
-        typename DatumCoordForMapping1,
+        typename T_RecordDim,
+        typename RecordCoordForMapping1,
         template <typename...>
         typename MappingTemplate1,
         template <typename...>
@@ -64,14 +64,14 @@ namespace llama::mapping
     struct Split
     {
         using ArrayDomain = T_ArrayDomain;
-        using DatumDomain = T_DatumDomain;
+        using RecordDim = T_RecordDim;
 
-        using DatumDomainPartitions = decltype(internal::partitionDatumDomain(DatumDomain{}, DatumCoordForMapping1{}));
-        using DatumDomain1 = boost::mp11::mp_first<DatumDomainPartitions>;
-        using DatumDomain2 = boost::mp11::mp_second<DatumDomainPartitions>;
+        using RecordDimPartitions = decltype(internal::partitionRecordDim(RecordDim{}, RecordCoordForMapping1{}));
+        using RecordDim1 = boost::mp11::mp_first<RecordDimPartitions>;
+        using RecordDim2 = boost::mp11::mp_second<RecordDimPartitions>;
 
-        using Mapping1 = MappingTemplate1<ArrayDomain, DatumDomain1>;
-        using Mapping2 = MappingTemplate2<ArrayDomain, DatumDomain2>;
+        using Mapping1 = MappingTemplate1<ArrayDomain, RecordDim1>;
+        using Mapping2 = MappingTemplate2<ArrayDomain, RecordDim2>;
 
         static constexpr std::size_t blobCount = SeparateBlobs ? Mapping1::blobCount + Mapping2::blobCount : 1;
         static_assert(SeparateBlobs || Mapping1::blobCount == 1);
@@ -97,23 +97,22 @@ namespace llama::mapping
                 return mapping1.blobSize(0) + mapping2.blobSize(0);
         }
 
-        template <std::size_t... DatumDomainCoord>
+        template <std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
         {
-            // print_type_in_compilation_error<DatumDomain1>();
-            if constexpr (DatumCoordCommonPrefixIsSame<DatumCoordForMapping1, DatumCoord<DatumDomainCoord...>>)
+            if constexpr (RecordCoordCommonPrefixIsSame<RecordCoordForMapping1, RecordCoord<RecordCoords...>>)
             {
                 using namespace boost::mp11;
-                // zero all coordinate values that are part of DatumCoordForMapping1
-                constexpr auto prefixLength = DatumCoordForMapping1::size;
-                using Prefix = mp_repeat_c<mp_list_c<std::size_t, 0>, DatumCoordForMapping1::size>;
-                using Suffix = mp_drop_c<mp_list_c<std::size_t, DatumDomainCoord...>, DatumCoordForMapping1::size>;
-                return blobNrAndOffset(DatumCoordFromList<mp_append<Prefix, Suffix>>{}, coord, mapping1);
+                // zero all coordinate values that are part of RecordCoordForMapping1
+                constexpr auto prefixLength = RecordCoordForMapping1::size;
+                using Prefix = mp_repeat_c<mp_list_c<std::size_t, 0>, RecordCoordForMapping1::size>;
+                using Suffix = mp_drop_c<mp_list_c<std::size_t, RecordCoords...>, RecordCoordForMapping1::size>;
+                return blobNrAndOffset(RecordCoordFromList<mp_append<Prefix, Suffix>>{}, coord, mapping1);
             }
             else
             {
                 constexpr auto dstCoord
-                    = internal::offsetCoord(DatumCoord<DatumDomainCoord...>{}, DatumCoordForMapping1{});
+                    = internal::offsetCoord(RecordCoord<RecordCoords...>{}, RecordCoordForMapping1{});
                 auto nrAndOffset = blobNrAndOffset(dstCoord, coord, mapping2);
                 if constexpr (SeparateBlobs)
                     nrAndOffset.nr += Mapping1::blobCount;
@@ -127,13 +126,13 @@ namespace llama::mapping
         }
 
     private:
-        template <std::size_t... DatumDomainCoord, typename Mapping>
+        template <std::size_t... RecordCoords, typename Mapping>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
-            DatumCoord<DatumDomainCoord...>,
+            RecordCoord<RecordCoords...>,
             ArrayDomain coord,
             const Mapping& mapping) const -> NrAndOffset
         {
-            return mapping.template blobNrAndOffset<DatumDomainCoord...>(coord);
+            return mapping.template blobNrAndOffset<RecordCoords...>(coord);
         }
 
     public:
@@ -143,7 +142,7 @@ namespace llama::mapping
     };
 
     template <
-        typename DatumCoordForMapping1,
+        typename RecordCoordForMapping1,
         template <typename...>
         typename MappingTemplate1,
         template <typename...>
@@ -151,8 +150,8 @@ namespace llama::mapping
         bool SeparateBlobs = false>
     struct PreconfiguredSplit
     {
-        template <typename ArrayDomain, typename DatumDomain>
+        template <typename ArrayDomain, typename RecordDim>
         using type
-            = Split<ArrayDomain, DatumDomain, DatumCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs>;
+            = Split<ArrayDomain, RecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs>;
     };
 } // namespace llama::mapping

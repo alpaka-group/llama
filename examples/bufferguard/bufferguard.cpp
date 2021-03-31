@@ -14,24 +14,24 @@ namespace tag
     struct Z{};
 } // namespace tag
 
-using Vector = llama::DS<
-    llama::DE<tag::X, int>,
-    llama::DE<tag::Y, int>,
-    llama::DE<tag::Z, int>
+using Vector = llama::Record<
+    llama::Field<tag::X, int>,
+    llama::Field<tag::Y, int>,
+    llama::Field<tag::Z, int>
 >;
 // clang-format on
 
-template <template <typename, typename> typename InnerMapping, typename T_ArrayDomain, typename T_DatumDomain>
+template <template <typename, typename> typename InnerMapping, typename T_ArrayDomain, typename T_RecordDim>
 struct GuardMapping2D
 {
     static_assert(std::is_same_v<T_ArrayDomain, llama::ArrayDomain<2>>, "Only 2D arrays are implemented");
 
     using ArrayDomain = T_ArrayDomain;
-    using DatumDomain = T_DatumDomain;
+    using RecordDim = T_RecordDim;
 
     constexpr GuardMapping2D() = default;
 
-    constexpr explicit GuardMapping2D(ArrayDomain size, DatumDomain = {})
+    constexpr explicit GuardMapping2D(ArrayDomain size, RecordDim = {})
         : arrayDomainSize(size)
         , left({size[0] - 2})
         , right({size[0] - 2})
@@ -64,7 +64,7 @@ struct GuardMapping2D
         std::abort();
     }
 
-    template <std::size_t... DatumDomainCoord>
+    template <std::size_t... RecordCoords>
     constexpr auto blobNrAndOffset(ArrayDomain coord) const -> llama::NrAndOffset
     {
         // [0][0] is at left top
@@ -74,24 +74,24 @@ struct GuardMapping2D
         if (col == 0)
         {
             if (row == 0)
-                return offsetBlobNr(leftTop.template blobNrAndOffset<DatumDomainCoord...>({}), leftTopOff);
+                return offsetBlobNr(leftTop.template blobNrAndOffset<RecordCoords...>({}), leftTopOff);
             if (row == rowMax - 1)
-                return offsetBlobNr(leftBot.template blobNrAndOffset<DatumDomainCoord...>({}), leftBotOff);
-            return offsetBlobNr(left.template blobNrAndOffset<DatumDomainCoord...>({row - 1}), leftOff);
+                return offsetBlobNr(leftBot.template blobNrAndOffset<RecordCoords...>({}), leftBotOff);
+            return offsetBlobNr(left.template blobNrAndOffset<RecordCoords...>({row - 1}), leftOff);
         }
         if (col == colMax - 1)
         {
             if (row == 0)
-                return offsetBlobNr(rightTop.template blobNrAndOffset<DatumDomainCoord...>({}), rightTopOff);
+                return offsetBlobNr(rightTop.template blobNrAndOffset<RecordCoords...>({}), rightTopOff);
             if (row == rowMax - 1)
-                return offsetBlobNr(rightBot.template blobNrAndOffset<DatumDomainCoord...>({}), rightBotOff);
-            return offsetBlobNr(right.template blobNrAndOffset<DatumDomainCoord...>({row - 1}), rightOff);
+                return offsetBlobNr(rightBot.template blobNrAndOffset<RecordCoords...>({}), rightBotOff);
+            return offsetBlobNr(right.template blobNrAndOffset<RecordCoords...>({row - 1}), rightOff);
         }
         if (row == 0)
-            return offsetBlobNr(top.template blobNrAndOffset<DatumDomainCoord...>({col - 1}), topOff);
+            return offsetBlobNr(top.template blobNrAndOffset<RecordCoords...>({col - 1}), topOff);
         if (row == rowMax - 1)
-            return offsetBlobNr(bot.template blobNrAndOffset<DatumDomainCoord...>({col - 1}), botOff);
-        return offsetBlobNr(center.template blobNrAndOffset<DatumDomainCoord...>({row - 1, col - 1}), centerOff);
+            return offsetBlobNr(bot.template blobNrAndOffset<RecordCoords...>({col - 1}), botOff);
+        return offsetBlobNr(center.template blobNrAndOffset<RecordCoords...>({row - 1, col - 1}), centerOff);
     }
 
     constexpr auto centerBlobs() const
@@ -154,15 +154,15 @@ private:
         return a;
     }
 
-    llama::mapping::One<ArrayDomain, DatumDomain> leftTop;
-    llama::mapping::One<ArrayDomain, DatumDomain> leftBot;
-    llama::mapping::One<ArrayDomain, DatumDomain> rightTop;
-    llama::mapping::One<ArrayDomain, DatumDomain> rightBot;
-    InnerMapping<llama::ArrayDomain<1>, DatumDomain> left;
-    InnerMapping<llama::ArrayDomain<1>, DatumDomain> right;
-    InnerMapping<llama::ArrayDomain<1>, DatumDomain> top;
-    InnerMapping<llama::ArrayDomain<1>, DatumDomain> bot;
-    InnerMapping<llama::ArrayDomain<2>, DatumDomain> center;
+    llama::mapping::One<ArrayDomain, RecordDim> leftTop;
+    llama::mapping::One<ArrayDomain, RecordDim> leftBot;
+    llama::mapping::One<ArrayDomain, RecordDim> rightTop;
+    llama::mapping::One<ArrayDomain, RecordDim> rightBot;
+    InnerMapping<llama::ArrayDomain<1>, RecordDim> left;
+    InnerMapping<llama::ArrayDomain<1>, RecordDim> right;
+    InnerMapping<llama::ArrayDomain<1>, RecordDim> top;
+    InnerMapping<llama::ArrayDomain<1>, RecordDim> bot;
+    InnerMapping<llama::ArrayDomain<2>, RecordDim> center;
 
     static constexpr auto leftTopOff = std::size_t{0};
     static constexpr auto leftBotOff = leftTopOff + decltype(leftTop)::blobCount;

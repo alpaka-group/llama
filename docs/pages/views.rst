@@ -6,10 +6,10 @@ View
 ====
 
 The view is the main data structure a LLAMA user will work with. It takes
-coordinates in the array and datum domain and returns a reference to a datum
+coordinates in the array domain and record dimension and returns a reference to a record
 in memory which can be read from or written to. For easier use, some
-useful operations such as :cpp:`+=` are overloaded to operate on all datum
-elements inside the datum domain at once.
+useful operations such as :cpp:`+=` are overloaded to operate on all record
+fields inside the record dimension at once.
 
 .. _label-factory:
 
@@ -34,10 +34,10 @@ Data access
 -----------
 
 LLAMA tries to have an array of struct like interface.
-When accessing an element of the view, the array part comes first, followed by tags from the datum domain.
+When accessing an element of the view, the array part comes first, followed by tags from the record dimension.
 
 In C++, runtime values like the array domain coordinate are normal function parameters
-whereas compile time values such as the datum domain tags are usually given as template arguments.
+whereas compile time values such as the record dimension tags are usually given as template arguments.
 However, compile time information can be stored in a type, instantiated as a value and then passed to a function template deducing the type again.
 This trick allows to pass both, runtime and compile time values as function arguments.
 E.g. instead of calling :cpp:`f<MyType>()` we can call :cpp:`f(MyType{})` and let the compiler deduce the template argument of :cpp:`f`.
@@ -65,17 +65,17 @@ A direct call of the :cpp:`operator()` is also possible and looks like this:
 
     view(1, 2, 3).operator()<color, g>() = 1.0;
 
-Alternatively, if the use of tag types is not desired or if the algorithm wants to iterate over the datum domain at compile time,
-an adressing with integral datum coordinates is possible like this:
+Alternatively, if the use of tag types is not desired or if the algorithm wants to iterate over the record dimension at compile time,
+an adressing with integral record coordinates is possible like this:
 
 .. code-block:: C++
 
-    view(1, 2, 3)(llama::DatumCoord<0, 1>{}) = 1.0; // color.g
+    view(1, 2, 3)(llama::RecordCoord<0, 1>{}) = 1.0; // color.g
 
-This datum coordinates are zero-based, nested indices reflecting the nested tuple-like structure of the datum domain.
+This record coordinates are zero-based, nested indices reflecting the nested tuple-like structure of the record dimension.
 
 Notice that the :cpp:`operator()` is invoked twice in the last example and that an intermediate object is needed for this to work.
-This object is a central data type of LLAMA called :cpp:`llama::VirtualDatum`.
+This object is a central data type of LLAMA called :cpp:`llama::VirtualRecord`.
 
 .. _label-virtualview:
 

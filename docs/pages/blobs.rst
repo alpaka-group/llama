@@ -67,7 +67,7 @@ Creating a small view of :math:`4 \times 4` may look like this:
 
     using Mapping = /* some simple mapping */;
     using BlobAllocator = llama::bloballoc::Stack<
-        miniSize[0] * miniSize[1] * llama::sizeOf</* some datum domain */>::value
+        miniSize[0] * miniSize[1] * llama::sizeOf</* some record dimension */>::value
     >;
 
     auto miniView = llama::allocView(Mapping{miniSize}, BlobAllocator{});
@@ -77,7 +77,7 @@ with just one element without any padding, aligment, or whatever on the stack:
 
 .. code-block:: C++
 
-    auto tempView = llama::allocViewStack< N, /* some datum domain */ >();
+    auto tempView = llama::allocViewStack< N, /* some record dimension */ >();
 
 
 Non-owning blobs

@@ -36,17 +36,15 @@ Array domain
 .. doxygenstruct:: llama::ArrayDomainIndexRange
    :members:
 
-Datum domain
-------------
+Record dimension
+----------------
 
-.. doxygenstruct:: llama::DatumStruct
-.. doxygentypedef:: llama::DS
-.. doxygenstruct:: llama::DatumElement
-.. doxygentypedef:: llama::DE
+.. doxygenstruct:: llama::Record
+.. doxygenstruct:: llama::Field
 .. doxygenstruct:: llama::NoName
 
-.. doxygentypedef:: llama::GetDatumElementTag
-.. doxygentypedef:: llama::GetDatumElementType
+.. doxygentypedef:: llama::GetFieldTag
+.. doxygentypedef:: llama::GetFieldType
 .. doxygenvariable:: llama::offsetOf
 .. doxygenvariable:: llama::sizeOf
 .. doxygentypedef:: llama::GetTags
@@ -57,18 +55,18 @@ Datum domain
 .. doxygentypedef:: llama::GetCoordFromTagsRelative
 
 .. doxygenfunction:: llama::forEachLeaf(Functor &&functor, Tags... baseTags)
-.. doxygenfunction:: llama::forEachLeaf(Functor &&functor, DatumCoord<Coords...> baseCoord)
+.. doxygenfunction:: llama::forEachLeaf(Functor &&functor, RecordCoord<Coords...> baseCoord)
 
-Datum coordinates
------------------
+Record coordinates
+------------------
 
-.. doxygenstruct:: llama::DatumCoord
+.. doxygenstruct:: llama::RecordCoord
    :members:
-.. doxygentypedef:: llama::DatumCoordFromList
+.. doxygentypedef:: llama::RecordCoordFromList
 .. doxygentypedef:: llama::Cat
 .. doxygentypedef:: llama::PopFront
-.. doxygenvariable:: llama::DatumCoordCommonPrefixIsBigger
-.. doxygenvariable:: llama::DatumCoordCommonPrefixIsSame
+.. doxygenvariable:: llama::RecordCoordCommonPrefixIsBigger
+.. doxygenvariable:: llama::RecordCoordCommonPrefixIsSame
 
 View creation
 -------------
@@ -77,7 +75,7 @@ View creation
 .. doxygenfunction:: llama::allocView
 .. doxygenfunction:: llama::allocViewStack
 .. doxygentypedef:: llama::One
-.. doxygenfunction:: llama::copyVirtualDatumStack
+.. doxygenfunction:: llama::copyVirtualRecordStack
 
 .. _label-api-bloballocators:
 
@@ -150,7 +148,7 @@ Data access
    :members:
 .. doxygenstruct:: llama::VirtualView
    :members:
-.. doxygenstruct:: llama::VirtualDatum
+.. doxygenstruct:: llama::VirtualRecord
    :members:
 
 Macros

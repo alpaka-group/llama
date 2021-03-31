@@ -14,7 +14,7 @@ namespace llama
     namespace internal
     {
         template <typename Mapping, std::size_t... Is, typename ArrayDomain>
-        constexpr auto blobNrAndOffset(const Mapping& m, llama::DatumCoord<Is...>, ArrayDomain ad)
+        constexpr auto blobNrAndOffset(const Mapping& m, llama::RecordCoord<Is...>, ArrayDomain ad)
         {
             return m.template blobNrAndOffset<Is...>(ad);
         }
@@ -49,7 +49,7 @@ namespace llama
         };
     } // namespace internal
 
-    // Proofs by exhaustion of the array and datum domain, that all values mapped to memory do not overlap.
+    // Proofs by exhaustion of the array domain and record dimension, that all values mapped to memory do not overlap.
     // Unfortunately, this only works for smallish array domains, because of compiler limits on constexpr evaluation
     // depth.
     template <typename Mapping>
@@ -70,23 +70,23 @@ namespace llama
 
         bool collision = false;
         llama::forEachLeaf<
-            typename Mapping::DatumDomain>([&](auto coord) constexpr
-                                           {
-                                               if (collision)
-                                                   return;
-                                               for (auto ad : llama::ArrayDomainIndexRange{m.arrayDomainSize})
-                                               {
-                                                   using Type
-                                                       = llama::GetType<typename Mapping::DatumDomain, decltype(coord)>;
-                                                   const auto [blob, offset] = internal::blobNrAndOffset(m, coord, ad);
-                                                   for (auto b = 0; b < sizeof(Type); b++)
-                                                       if (testAndSet(blob, offset + b))
-                                                       {
-                                                           collision = true;
-                                                           break;
-                                                       }
-                                               }
-                                           });
+            typename Mapping::RecordDim>([&](auto coord) constexpr
+                                         {
+                                             if (collision)
+                                                 return;
+                                             for (auto ad : llama::ArrayDomainIndexRange{m.arrayDomainSize})
+                                             {
+                                                 using Type
+                                                     = llama::GetType<typename Mapping::RecordDim, decltype(coord)>;
+                                                 const auto [blob, offset] = internal::blobNrAndOffset(m, coord, ad);
+                                                 for (auto b = 0; b < sizeof(Type); b++)
+                                                     if (testAndSet(blob, offset + b))
+                                                     {
+                                                         collision = true;
+                                                         break;
+                                                     }
+                                             }
+                                         });
         return !collision;
     }
 } // namespace llama

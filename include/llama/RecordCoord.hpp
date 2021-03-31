@@ -9,10 +9,10 @@
 
 namespace llama
 {
-    /// Represents a coordinate for an element inside the datum domain tree.
+    /// Represents a coordinate for a record inside the record dimension tree.
     /// \tparam Coords... the compile time coordinate.
     template <std::size_t... Coords>
-    struct DatumCoord
+    struct RecordCoord
     {
         /// The list of integral coordinates as `boost::mp11::mp_list`.
         using List = boost::mp11::mp_list_c<std::size_t, Coords...>;
@@ -23,7 +23,7 @@ namespace llama
     };
 
     template <>
-    struct DatumCoord<>
+    struct RecordCoord<>
     {
         using List = boost::mp11::mp_list_c<std::size_t>;
 
@@ -32,8 +32,9 @@ namespace llama
 
     inline namespace literals
     {
+        /// Literal operator for converting a numeric literal into a \ref RecordCoord.
         template <char... Digits>
-        constexpr auto operator"" _DC()
+        constexpr auto operator"" _RC()
         {
             constexpr auto coord = []() constexpr
             {
@@ -48,7 +49,7 @@ namespace llama
                 return acc;
             }
             ();
-            return DatumCoord<coord>{};
+            return RecordCoord<coord>{};
         }
     } // namespace literals
 
@@ -60,39 +61,39 @@ namespace llama
         template <template <class...> class L, typename... T>
         struct mp_unwrap_sizes_impl<L<T...>>
         {
-            using type = DatumCoord<T::value...>;
+            using type = RecordCoord<T::value...>;
         };
 
         template <typename L>
         using mp_unwrap_sizes = typename mp_unwrap_sizes_impl<L>::type;
     } // namespace internal
 
-    /// Converts a type list of integral constants into a \ref DatumCoord.
+    /// Converts a type list of integral constants into a \ref RecordCoord.
     template <typename L>
-    using DatumCoordFromList = internal::mp_unwrap_sizes<L>;
+    using RecordCoordFromList = internal::mp_unwrap_sizes<L>;
 
-    /// Concatenate two \ref DatumCoord.
-    template <typename DatumCoord1, typename DatumCoord2>
-    using Cat = DatumCoordFromList<boost::mp11::mp_append<typename DatumCoord1::List, typename DatumCoord2::List>>;
+    /// Concatenate two \ref RecordCoord.
+    template <typename RecordCoord1, typename RecordCoord2>
+    using Cat = RecordCoordFromList<boost::mp11::mp_append<typename RecordCoord1::List, typename RecordCoord2::List>>;
 
-    /// Concatenate two \ref DatumCoord instances.
-    template <typename DatumCoord1, typename DatumCoord2>
-    auto cat(DatumCoord1, DatumCoord2)
+    /// Concatenate two \ref RecordCoord instances.
+    template <typename RecordCoord1, typename RecordCoord2>
+    auto cat(RecordCoord1, RecordCoord2)
     {
-        return Cat<DatumCoord1, DatumCoord2>{};
+        return Cat<RecordCoord1, RecordCoord2>{};
     }
 
-    /// DatumCoord without first coordinate component.
-    template <typename DatumCoord>
-    using PopFront = DatumCoordFromList<boost::mp11::mp_pop_front<typename DatumCoord::List>>;
+    /// RecordCoord without first coordinate component.
+    template <typename RecordCoord>
+    using PopFront = RecordCoordFromList<boost::mp11::mp_pop_front<typename RecordCoord::List>>;
 
     namespace internal
     {
         template <typename First, typename Second>
-        struct DatumCoordCommonPrefixIsBiggerImpl;
+        struct RecordCoordCommonPrefixIsBiggerImpl;
 
         template <std::size_t... Coords1, std::size_t... Coords2>
-        struct DatumCoordCommonPrefixIsBiggerImpl<DatumCoord<Coords1...>, DatumCoord<Coords2...>>
+        struct RecordCoordCommonPrefixIsBiggerImpl<RecordCoord<Coords1...>, RecordCoord<Coords2...>>
         {
             static constexpr auto value = []() constexpr
             {
@@ -112,18 +113,18 @@ namespace llama
         };
     } // namespace internal
 
-    /// Checks wether the first DatumCoord is bigger than the second.
+    /// Checks wether the first RecordCoord is bigger than the second.
     template <typename First, typename Second>
-    inline constexpr auto DatumCoordCommonPrefixIsBigger
-        = internal::DatumCoordCommonPrefixIsBiggerImpl<First, Second>::value;
+    inline constexpr auto RecordCoordCommonPrefixIsBigger
+        = internal::RecordCoordCommonPrefixIsBiggerImpl<First, Second>::value;
 
     namespace internal
     {
         template <typename First, typename Second>
-        struct DatumCoordCommonPrefixIsSameImpl;
+        struct RecordCoordCommonPrefixIsSameImpl;
 
         template <std::size_t... Coords1, std::size_t... Coords2>
-        struct DatumCoordCommonPrefixIsSameImpl<DatumCoord<Coords1...>, DatumCoord<Coords2...>>
+        struct RecordCoordCommonPrefixIsSameImpl<RecordCoord<Coords1...>, RecordCoord<Coords2...>>
         {
             static constexpr auto value = []() constexpr
             {
@@ -139,9 +140,9 @@ namespace llama
         };
     } // namespace internal
 
-    /// Checks wether two \ref DatumCoord are the same or one is the prefix of
+    /// Checks wether two \ref RecordCoord are the same or one is the prefix of
     /// the other.
     template <typename First, typename Second>
-    inline constexpr auto DatumCoordCommonPrefixIsSame
-        = internal::DatumCoordCommonPrefixIsSameImpl<First, Second>::value;
+    inline constexpr auto RecordCoordCommonPrefixIsSame
+        = internal::RecordCoordCommonPrefixIsSameImpl<First, Second>::value;
 } // namespace llama

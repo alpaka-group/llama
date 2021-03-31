@@ -14,22 +14,22 @@ namespace tag
     struct Mom {};
 } // namespace tag
 
-using Particle = llama::DS<
-    llama::DE<tag::Pos, llama::DS<
-        llama::DE<tag::X, int>,
-        llama::DE<tag::Y, int>,
-        llama::DE<tag::Z, int>
+using Particle = llama::Record<
+    llama::Field<tag::Pos, llama::Record<
+        llama::Field<tag::X, int>,
+        llama::Field<tag::Y, int>,
+        llama::Field<tag::Z, int>
     >>,
-    llama::DE<tag::Mom, int>,
-    llama::DE<tag::Vel, llama::DS<
-        llama::DE<tag::Z, int>,
-        llama::DE<tag::Y, int>,
-        llama::DE<tag::X, int>
+    llama::Field<tag::Mom, int>,
+    llama::Field<tag::Vel, llama::Record<
+        llama::Field<tag::Z, int>,
+        llama::Field<tag::Y, int>,
+        llama::Field<tag::X, int>
     >>
 >;
 // clang-format on
 
-template <typename VirtualDatum>
+template <typename VirtualRecord>
 struct SqrtFunctor
 {
     template <typename Coord>
@@ -37,7 +37,7 @@ struct SqrtFunctor
     {
         vd(coord) *= std::sqrt(vd(coord));
     }
-    VirtualDatum vd;
+    VirtualRecord vd;
 };
 
 TEST_CASE("fast virtual view")
