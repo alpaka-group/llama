@@ -13,10 +13,10 @@ namespace llama::mapping
 {
     namespace internal
     {
-        template <typename DatumDomain, std::size_t... Coords>
-        auto coordName(DatumCoord<Coords...>) -> std::string
+        template <typename RecordDim, std::size_t... Coords>
+        auto coordName(RecordCoord<Coords...>) -> std::string
         {
-            using Tags = GetTags<DatumDomain, DatumCoord<Coords...>>;
+            using Tags = GetTags<RecordDim, RecordCoord<Coords...>>;
 
             std::string r;
             boost::mp11::mp_for_each<Tags>(
@@ -37,7 +37,7 @@ namespace llama::mapping
     struct Trace
     {
         using ArrayDomain = typename Mapping::ArrayDomain;
-        using DatumDomain = typename Mapping::DatumDomain;
+        using RecordDim = typename Mapping::RecordDim;
         static constexpr std::size_t blobCount = Mapping::blobCount;
 
         constexpr Trace() = default;
@@ -45,7 +45,7 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE
         Trace(Mapping mapping) : mapping(mapping)
         {
-            forEachLeaf<DatumDomain>([&](auto coord) { datumHits[internal::coordName<DatumDomain>(coord)] = 0; });
+            forEachLeaf<RecordDim>([&](auto coord) { fieldHits[internal::coordName<RecordDim>(coord)] = 0; });
         }
 
         Trace(const Trace&) = delete;
@@ -56,10 +56,10 @@ namespace llama::mapping
 
         ~Trace()
         {
-            if (!datumHits.empty())
+            if (!fieldHits.empty())
             {
                 std::cout << "Trace mapping, number of accesses:\n";
-                for (const auto& [k, v] : datumHits)
+                for (const auto& [k, v] : fieldHits)
                     std::cout << '\t' << k << ":\t" << v << '\n';
             }
         }
@@ -70,16 +70,16 @@ namespace llama::mapping
             return mapping.blobSize(i);
         }
 
-        template <std::size_t... DatumDomainCoord>
+        template <std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
         {
-            const static auto name = internal::coordName<DatumDomain>(DatumCoord<DatumDomainCoord...>{});
-            datumHits.at(name)++;
+            const static auto name = internal::coordName<RecordDim>(RecordCoord<RecordCoords...>{});
+            fieldHits.at(name)++;
 
-            LLAMA_FORCE_INLINE_RECURSIVE return mapping.template blobNrAndOffset<DatumDomainCoord...>(coord);
+            LLAMA_FORCE_INLINE_RECURSIVE return mapping.template blobNrAndOffset<RecordCoords...>(coord);
         }
 
         Mapping mapping;
-        mutable std::unordered_map<std::string, std::atomic<std::size_t>> datumHits;
+        mutable std::unordered_map<std::string, std::atomic<std::size_t>> fieldHits;
     };
 } // namespace llama::mapping

@@ -69,21 +69,19 @@ namespace llama::mapping::tree
 
     namespace internal
     {
-        template <typename Tag, typename DatumDomain, typename CountType>
+        template <typename Tag, typename RecordDim, typename CountType>
         struct CreateTreeElement
         {
-            using type = Leaf<Tag, DatumDomain, boost::mp11::mp_size_t<1>>;
+            using type = Leaf<Tag, RecordDim, boost::mp11::mp_size_t<1>>;
         };
 
-        template <typename Tag, typename... DatumElements, typename CountType>
-        struct CreateTreeElement<Tag, DatumStruct<DatumElements...>, CountType>
+        template <typename Tag, typename... Fields, typename CountType>
+        struct CreateTreeElement<Tag, Record<Fields...>, CountType>
         {
             using type = Node<
                 Tag,
-                Tuple<typename CreateTreeElement<
-                    GetDatumElementTag<DatumElements>,
-                    GetDatumElementType<DatumElements>,
-                    boost::mp11::mp_size_t<1>>::type...>,
+                Tuple<typename CreateTreeElement<GetFieldTag<Fields>, GetFieldType<Fields>, boost::mp11::mp_size_t<1>>::
+                          type...>,
                 CountType>;
         };
 
@@ -99,25 +97,25 @@ namespace llama::mapping::tree
             using type = Leaf;
         };
 
-        template <typename DatumDomain>
-        using TreeFromDatumDomainImpl = typename CreateTreeElement<NoName, DatumDomain, std::size_t>::type;
+        template <typename RecordDim>
+        using TreeFromRecordDimImpl = typename CreateTreeElement<NoName, RecordDim, std::size_t>::type;
     } // namespace internal
 
-    template <typename DatumDomain>
-    using TreeFromDatumDomain = internal::TreeFromDatumDomainImpl<DatumDomain>;
+    template <typename RecordDim>
+    using TreeFromRecordDim = internal::TreeFromRecordDimImpl<RecordDim>;
 
-    template <typename ArrayDomain, typename DatumDomain>
+    template <typename ArrayDomain, typename RecordDim>
     using TreeFromDomains =
-        typename internal::WrapInNNodes<internal::TreeFromDatumDomainImpl<DatumDomain>, ArrayDomain::rank - 1>::type;
+        typename internal::WrapInNNodes<internal::TreeFromRecordDimImpl<RecordDim>, ArrayDomain::rank - 1>::type;
 
-    template <typename DatumDomain, typename ArrayDomain, std::size_t Pos = 0>
+    template <typename RecordDim, typename ArrayDomain, std::size_t Pos = 0>
     LLAMA_FN_HOST_ACC_INLINE auto createTree(const ArrayDomain& size)
     {
         if constexpr (Pos == ArrayDomain::rank - 1)
-            return TreeFromDatumDomain<DatumDomain>{size[ArrayDomain::rank - 1]};
+            return TreeFromRecordDim<RecordDim>{size[ArrayDomain::rank - 1]};
         else
         {
-            Tuple inner{createTree<DatumDomain, ArrayDomain, Pos + 1>(size)};
+            Tuple inner{createTree<RecordDim, ArrayDomain, Pos + 1>(size)};
             return Node<NoName, decltype(inner)>{size[Pos], inner};
         }
     };
@@ -126,24 +124,24 @@ namespace llama::mapping::tree
     {
         template <
             typename ArrayDomain,
-            std::size_t... UDIndices,
-            std::size_t FirstDatumDomainCoord,
-            std::size_t... DatumDomainCoords>
+            std::size_t... ADIndices,
+            std::size_t FirstRecordCoord,
+            std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE auto createTreeCoord(
             const ArrayDomain& coord,
-            std::index_sequence<UDIndices...>,
-            DatumCoord<FirstDatumDomainCoord, DatumDomainCoords...>)
+            std::index_sequence<ADIndices...>,
+            RecordCoord<FirstRecordCoord, RecordCoords...>)
         {
             return Tuple{
-                TreeCoordElement<(UDIndices == ArrayDomain::rank - 1 ? FirstDatumDomainCoord : 0)>{coord[UDIndices]}...,
-                TreeCoordElement<DatumDomainCoords, boost::mp11::mp_size_t<0>>{}...,
+                TreeCoordElement<(ADIndices == ArrayDomain::rank - 1 ? FirstRecordCoord : 0)>{coord[ADIndices]}...,
+                TreeCoordElement<RecordCoords, boost::mp11::mp_size_t<0>>{}...,
                 TreeCoordElement<0, boost::mp11::mp_size_t<0>>{}};
         }
     } // namespace internal
 
-    template <typename DatumCoord, typename ArrayDomain>
+    template <typename RecordCoord, typename ArrayDomain>
     LLAMA_FN_HOST_ACC_INLINE auto createTreeCoord(const ArrayDomain& coord)
     {
-        return internal::createTreeCoord(coord, std::make_index_sequence<ArrayDomain::rank>{}, DatumCoord{});
+        return internal::createTreeCoord(coord, std::make_index_sequence<ArrayDomain::rank>{}, RecordCoord{});
     }
 } // namespace llama::mapping::tree

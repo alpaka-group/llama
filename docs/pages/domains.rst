@@ -2,19 +2,17 @@
 
 .. _label-domains:
 
-Domains
-=======
+Dimensions
+==========
 
-As mentioned in the section before, LLAMA distinguishes between the array and the
-datum domain. The most important difference is that the array domain is defined
-at *run time* whereas the datum domain is defined at *compile time*. This allows
-to make the problem size itself a run time value but leaves the compiler room
-to optimize the data access.
+As mentioned in the section before, LLAMA distinguishes between the array domain and the record dimension.
+The most important difference is that the array domain is defined at *run time* whereas the record dimension is defined at *compile time*.
+This allows to make the problem size itself a run time value but leaves the compiler room to optimize the data access.
 
 .. _label-ad:
 
 Array domain
------------
+------------
 
 The array domain is an :math:`N`-dimensional array with :math:`N` itself being a
 compile time value but with run time values inside. LLAMA brings its own
@@ -35,11 +33,11 @@ The full type of :cpp:`arrayDomainSize` is :cpp:`llama::ArrayDomain<3>`.
 
 .. _label-dd:
 
-Datum domain
-------------
+Record dimension
+----------------
 
-The datum domain is a tree structure completely defined at compile time.
-Nested C++ structs, which the datum domain tries to abstract, they are trees too.
+The record dimension is a tree structure completely defined at compile time.
+Nested C++ structs, which the record dimension tries to abstract, they are trees too.
 Let's have a look at this simple example struct for storing a pixel value:
 
 .. code-block:: C++
@@ -59,20 +57,20 @@ This defines this tree
 
 Unfortunately with C++ it is not possible yet to "iterate" over a struct at compile time and extract member types and names,
 as it would be needed for LLAMA's mapping (although there are proposals to provide such a facility).
-For now LLAMA needs to define such a tree itself using two classes, :cpp:`llama::DatumStruct` and :cpp:`llama::DatumElement`.
-:cpp:`llama::DatumStruct` is a compile time list of :cpp:`llama::DatumElement`.
-:cpp:`llama::DatumElement` has a name and a fundamental type **or** another :cpp:`llama::DatumStruct` list of child :cpp:`llama::DatumElement`\ s.
-The name of a :cpp:`llama::DatumElement` needs to be C++ type as well.
+For now LLAMA needs to define such a tree itself using two classes, :cpp:`llama::Record` and :cpp:`llama::Field`.
+:cpp:`llama::Record` is a compile time list of :cpp:`llama::Field`.
+:cpp:`llama::Field` has a name and a fundamental type **or** another :cpp:`llama::Record` list of child :cpp:`llama::Field`\ s.
+The name of a :cpp:`llama::Field` needs to be C++ type as well.
 We recommend creating empty tag types for this.
 These tags serve as names when describing accesses later.
-Furthermore, these tags also enable a semantic binding even between two different datum domains.
+Furthermore, these tags also enable a semantic binding even between two different record dimensions.
 
 To make the code easier to read, the following shortcuts are defined:
 
-* :cpp:`llama::DatumStruct` → :cpp:`llama::DS`
-* :cpp:`llama::DatumElement` → :cpp:`llama::DE`
+* :cpp:`llama::Record` → :cpp:`llama::Record`
+* :cpp:`llama::Field` → :cpp:`llama::Field`
 
-A datum domain itself is just a :cpp:`llama::DatumStruct` (or a fundamental type), as seen here for the given tree:
+A record dimension itself is just a :cpp:`llama::Record` (or a fundamental type), as seen here for the given tree:
 
 .. code-block:: C++
 
@@ -82,24 +80,24 @@ A datum domain itself is just a :cpp:`llama::DatumStruct` (or a fundamental type
     struct g {};
     struct b {};
 
-    using Pixel = llama::DS<
-        llama::DE<color, llama::DS<
-            llama::DE<r, float>,
-            llama::DE<g, float>,
-            llama::DE<b, float>
+    using Pixel = llama::Record<
+        llama::Field<color, llama::Record<
+            llama::Field<r, float>,
+            llama::Field<g, float>,
+            llama::Field<b, float>
         >>,
-        llama::DE<alpha, char>
+        llama::Field<alpha, char>
     >;
 
-Arrays of compile-time extent are also supported as arguments to :cpp:`llama::DE`, but not to  :cpp:`llama::DatumElement`.
-Such arrays are expanded into a :cpp:`llama::DatumStruct` with multiple :cpp:`llama::DatumElement`\ s of the same type.
-E.g. :cpp:`llama::DE<Tag, float[4]>` is expanded into
+Arrays of compile-time extent are also supported as arguments to :cpp:`llama::Field`, but not to  :cpp:`llama::Field`.
+Such arrays are expanded into a :cpp:`llama::Record` with multiple :cpp:`llama::Field`\ s of the same type.
+E.g. :cpp:`llama::Field<Tag, float[4]>` is expanded into
 
 .. code-block:: C++
 
-    llama::DE<Tag, llama::DS<
-        llama::DE<llama::DatumCoord<0>, float>,
-        llama::DE<llama::DatumCoord<1>, float>,
-        llama::DE<llama::DatumCoord<2>, float>,
-        llama::DE<llama::DatumCoord<3>, float>
+    llama::Field<Tag, llama::Record<
+        llama::Field<llama::RecordCoord<0>, float>,
+        llama::Field<llama::RecordCoord<1>, float>,
+        llama::Field<llama::RecordCoord<2>, float>,
+        llama::Field<llama::RecordCoord<3>, float>
     >>

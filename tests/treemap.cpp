@@ -48,19 +48,19 @@ namespace tag
 } // namespace tag
 
 // clang-format off
-using Name = llama::DS<
-    llama::DE<tag::Pos, llama::DS<
-        llama::DE<tag::X, double>,
-        llama::DE<tag::Y, double>,
-        llama::DE<tag::Z, double>
+using Name = llama::Record<
+    llama::Field<tag::Pos, llama::Record<
+        llama::Field<tag::X, double>,
+        llama::Field<tag::Y, double>,
+        llama::Field<tag::Z, double>
     >>,
-    llama::DE<tag::Weight, float>,
-    llama::DE<tag::Momentum, llama::DS<
-        llama::DE<tag::Z, double>,
-        llama::DE<tag::Y, double>,
-        llama::DE<tag::X, double>
+    llama::Field<tag::Weight, float>,
+    llama::Field<tag::Momentum, llama::Record<
+        llama::Field<tag::Z, double>,
+        llama::Field<tag::Y, double>,
+        llama::Field<tag::X, double>
     >>,
-    llama::DE<tag::Flags, bool[4]>
+    llama::Field<tag::Flags, bool[4]>
 >;
 // clang-format on
 
@@ -874,7 +874,7 @@ TEST_CASE("treemapping")
                     tag::Flags,
                     llama::Tuple<
                         llama::mapping::tree::Leaf<
-                            llama::DatumCoord<
+                            llama::RecordCoord<
                                 0
                             >,
                             bool,
@@ -884,7 +884,7 @@ TEST_CASE("treemapping")
                             >
                         >,
                         llama::mapping::tree::Leaf<
-                            llama::DatumCoord<
+                            llama::RecordCoord<
                                 1
                             >,
                             bool,
@@ -894,7 +894,7 @@ TEST_CASE("treemapping")
                             >
                         >,
                         llama::mapping::tree::Leaf<
-                            llama::DatumCoord<
+                            llama::RecordCoord<
                                 2
                             >,
                             bool,
@@ -904,7 +904,7 @@ TEST_CASE("treemapping")
                             >
                         >,
                         llama::mapping::tree::Leaf<
-                            llama::DatumCoord<
+                            llama::RecordCoord<
                                 3
                             >,
                             bool,
@@ -994,28 +994,28 @@ TEST_CASE("treemapping")
                     tag::Flags,
                     llama::Tuple<
                         llama::mapping::tree::Leaf<
-                            llama::DatumCoord<
+                            llama::RecordCoord<
                                 0
                             >,
                             bool,
                             unsigned long
                         >,
                         llama::mapping::tree::Leaf<
-                            llama::DatumCoord<
+                            llama::RecordCoord<
                                 1
                             >,
                             bool,
                             unsigned long
                         >,
                         llama::mapping::tree::Leaf<
-                            llama::DatumCoord<
+                            llama::RecordCoord<
                                 2
                             >,
                             bool,
                             unsigned long
                         >,
                         llama::mapping::tree::Leaf<
-                            llama::DatumCoord<
+                            llama::RecordCoord<
                                 3
                             >,
                             bool,
@@ -1062,13 +1062,13 @@ TEST_CASE("treemapping")
     for (size_t x = 0; x < arrayDomain[0]; ++x)
         for (size_t y = 0; y < arrayDomain[1]; ++y)
         {
-            auto datum = view(x, y);
-            llama::forEachLeaf<Name>([&](auto coord) { datum(coord) = 0; }, tag::Momentum{});
+            auto record = view(x, y);
+            llama::forEachLeaf<Name>([&](auto coord) { record(coord) = 0; }, tag::Momentum{});
         }
     double sum = 0.0;
     for (size_t x = 0; x < arrayDomain[0]; ++x)
         for (size_t y = 0; y < arrayDomain[1]; ++y)
-            sum += view({x, y})(llama::DatumCoord<0, 1>{});
+            sum += view({x, y})(llama::RecordCoord<0, 1>{});
     CHECK(sum == 0);
 }
 
@@ -1076,28 +1076,28 @@ TEST_CASE("treeCoordToString")
 {
     const auto coord = llama::ArrayDomain<3>{6, 7, 8};
     CHECK(
-        tree::treeCoordToString(tree::createTreeCoord<llama::DatumCoord<0, 0>>(coord))
+        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<0, 0>>(coord))
         == "[ 6:0, 7:0, 8:0, 0:0, 0:0 ]");
     CHECK(
-        tree::treeCoordToString(tree::createTreeCoord<llama::DatumCoord<0, 1>>(coord))
+        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<0, 1>>(coord))
         == "[ 6:0, 7:0, 8:0, 0:1, 0:0 ]");
     CHECK(
-        tree::treeCoordToString(tree::createTreeCoord<llama::DatumCoord<0, 2>>(coord))
+        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<0, 2>>(coord))
         == "[ 6:0, 7:0, 8:0, 0:2, 0:0 ]");
-    CHECK(tree::treeCoordToString(tree::createTreeCoord<llama::DatumCoord<1>>(coord)) == "[ 6:0, 7:0, 8:1, 0:0 ]");
+    CHECK(tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<1>>(coord)) == "[ 6:0, 7:0, 8:1, 0:0 ]");
     CHECK(
-        tree::treeCoordToString(tree::createTreeCoord<llama::DatumCoord<2, 0>>(coord))
+        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<2, 0>>(coord))
         == "[ 6:0, 7:0, 8:2, 0:0, 0:0 ]");
     CHECK(
-        tree::treeCoordToString(tree::createTreeCoord<llama::DatumCoord<2, 1>>(coord))
+        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<2, 1>>(coord))
         == "[ 6:0, 7:0, 8:2, 0:1, 0:0 ]");
     CHECK(
-        tree::treeCoordToString(tree::createTreeCoord<llama::DatumCoord<2, 2>>(coord))
+        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<2, 2>>(coord))
         == "[ 6:0, 7:0, 8:2, 0:2, 0:0 ]");
     CHECK(
-        tree::treeCoordToString(tree::createTreeCoord<llama::DatumCoord<3, 0>>(coord))
+        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<3, 0>>(coord))
         == "[ 6:0, 7:0, 8:3, 0:0, 0:0 ]");
     CHECK(
-        tree::treeCoordToString(tree::createTreeCoord<llama::DatumCoord<3, 1>>(coord))
+        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<3, 1>>(coord))
         == "[ 6:0, 7:0, 8:3, 0:1, 0:0 ]");
 }

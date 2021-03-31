@@ -15,7 +15,7 @@ namespace llama
     namespace internal
     {
         template <std::size_t... Coords>
-        auto toVec(DatumCoord<Coords...>) -> std::vector<std::size_t>
+        auto toVec(RecordCoord<Coords...>) -> std::vector<std::size_t>
         {
             return {Coords...};
         }
@@ -28,47 +28,43 @@ namespace llama
 
         // handle array indices
         template <std::size_t N>
-        auto tagToString(DatumCoord<N>)
+        auto tagToString(RecordCoord<N>)
         {
             return std::to_string(N);
         }
 
-        template <
-            typename DatumDomain,
-            std::size_t... CoordsBefore,
-            std::size_t CoordCurrent,
-            std::size_t... CoordsAfter>
+        template <typename RecordDim, std::size_t... CoordsBefore, std::size_t CoordCurrent, std::size_t... CoordsAfter>
         void collectTagsAsStrings(
             std::vector<std::string>& v,
-            DatumCoord<CoordsBefore...> before,
-            DatumCoord<CoordCurrent, CoordsAfter...> after)
+            RecordCoord<CoordsBefore...> before,
+            RecordCoord<CoordCurrent, CoordsAfter...> after)
         {
-            using Tag = GetTag<DatumDomain, DatumCoord<CoordsBefore..., CoordCurrent>>;
+            using Tag = GetTag<RecordDim, RecordCoord<CoordsBefore..., CoordCurrent>>;
             v.push_back(tagToString(Tag{}));
             if constexpr (sizeof...(CoordsAfter) > 0)
-                collectTagsAsStrings<DatumDomain>(
+                collectTagsAsStrings<RecordDim>(
                     v,
-                    DatumCoord<CoordsBefore..., CoordCurrent>{},
-                    DatumCoord<CoordsAfter...>{});
+                    RecordCoord<CoordsBefore..., CoordCurrent>{},
+                    RecordCoord<CoordsAfter...>{});
         }
 
-        template <typename DatumDomain, std::size_t... Coords>
-        auto tagsAsStrings(DatumCoord<Coords...>) -> std::vector<std::string>
+        template <typename RecordDim, std::size_t... Coords>
+        auto tagsAsStrings(RecordCoord<Coords...>) -> std::vector<std::string>
         {
             std::vector<std::string> v;
-            collectTagsAsStrings<DatumDomain>(v, DatumCoord<>{}, DatumCoord<Coords...>{});
+            collectTagsAsStrings<RecordDim>(v, RecordCoord<>{}, RecordCoord<Coords...>{});
             return v;
         }
 
         template <typename Mapping, typename ArrayDomain, std::size_t... Coords>
-        auto mappingBlobNrAndOffset(const Mapping& mapping, const ArrayDomain& udCoord, DatumCoord<Coords...>)
+        auto mappingBlobNrAndOffset(const Mapping& mapping, const ArrayDomain& adCoord, RecordCoord<Coords...>)
         {
-            return mapping.template blobNrAndOffset<Coords...>(udCoord);
+            return mapping.template blobNrAndOffset<Coords...>(adCoord);
         }
 
-        inline auto color(const std::vector<std::size_t>& ddIndices) -> std::size_t
+        inline auto color(const std::vector<std::size_t>& recordCoord) -> std::size_t
         {
-            auto c = (boost::hash_value(ddIndices) & 0xFFFFFF);
+            auto c = (boost::hash_value(recordCoord) & 0xFFFFFF);
             const auto channelSum = ((c & 0xFF0000) >> 4) + ((c & 0xFF00) >> 2) + c & 0xFF;
             if (channelSum < 200)
                 c |= 0x404040; // ensure color per channel is at least 0x40.
@@ -107,11 +103,11 @@ namespace llama
         }
 
         template <std::size_t Dim>
-        struct DatumBox
+        struct FieldBox
         {
-            ArrayDomain<Dim> udCoord;
-            std::vector<std::size_t> ddIndices;
-            std::vector<std::string> ddTags;
+            ArrayDomain<Dim> adCoord;
+            std::vector<std::size_t> recordCoord;
+            std::vector<std::string> recordTags;
             NrAndOffset nrAndOffset;
             std::size_t size;
         };
@@ -120,21 +116,21 @@ namespace llama
         auto boxesFromMapping(const Mapping& mapping)
         {
             using ArrayDomain = typename Mapping::ArrayDomain;
-            using DatumDomain = typename Mapping::DatumDomain;
+            using RecordDim = typename Mapping::RecordDim;
 
-            std::vector<DatumBox<Mapping::ArrayDomain::rank>> infos;
+            std::vector<FieldBox<Mapping::ArrayDomain::rank>> infos;
 
-            for (auto udCoord : ArrayDomainIndexRange{mapping.arrayDomainSize})
+            for (auto adCoord : ArrayDomainIndexRange{mapping.arrayDomainSize})
             {
-                forEachLeaf<DatumDomain>(
+                forEachLeaf<RecordDim>(
                     [&](auto coord)
                     {
-                        constexpr int size = sizeof(GetType<DatumDomain, decltype(coord)>);
+                        constexpr int size = sizeof(GetType<RecordDim, decltype(coord)>);
                         infos.push_back(
-                            {udCoord,
+                            {adCoord,
                              internal::toVec(coord),
-                             internal::tagsAsStrings<DatumDomain>(coord),
-                             internal::mappingBlobNrAndOffset(mapping, udCoord, coord),
+                             internal::tagsAsStrings<RecordDim>(coord),
+                             internal::mappingBlobNrAndOffset(mapping, adCoord, coord),
                              size});
                     });
             }
@@ -188,7 +184,7 @@ namespace llama
             const auto x = (info.nrAndOffset.offset % wrapByteCount) * byteSizeInPixel + blobBlockWidth;
             const auto y = (info.nrAndOffset.offset / wrapByteCount) * byteSizeInPixel + blobY;
 
-            const auto fill = internal::color(info.ddIndices);
+            const auto fill = internal::color(info.recordCoord);
 
             const auto width = byteSizeInPixel * info.size;
             svg += fmt::format(
@@ -214,8 +210,8 @@ namespace llama
 )",
                 x + width / 2,
                 y + byteSizeInPixel * 3 / 4,
-                internal::formatUdCoord(info.udCoord),
-                internal::formatDDTags(info.ddTags));
+                internal::formatUdCoord(info.adCoord),
+                internal::formatDDTags(info.recordTags));
         }
         svg += "</svg>";
         return svg;
@@ -285,11 +281,11 @@ namespace llama
 }}
 )",
             byteSizeInPixel);
-        using DatumDomain = typename Mapping::DatumDomain;
-        forEachLeaf<DatumDomain>(
+        using RecordDim = typename Mapping::RecordDim;
+        forEachLeaf<RecordDim>(
             [&](auto coord)
             {
-                constexpr int size = sizeof(GetType<DatumDomain, decltype(coord)>);
+                constexpr int size = sizeof(GetType<RecordDim, decltype(coord)>);
 
                 svg += fmt::format(
                     R"(.{} {{
@@ -297,7 +293,7 @@ namespace llama
     background-color: #{:X};
 }}
 )",
-                    cssClass(internal::tagsAsStrings<DatumDomain>(coord)),
+                    cssClass(internal::tagsAsStrings<RecordDim>(coord)),
                     byteSizeInPixel * size,
                     internal::color(internal::toVec(coord)));
             });
@@ -328,9 +324,9 @@ namespace llama
             const auto width = byteSizeInPixel * info.size;
             svg += fmt::format(
                 R"(<div class="box {0}" title="{1} {2}">{1} {2}</div>)",
-                cssClass(info.ddTags),
-                internal::formatUdCoord(info.udCoord),
-                internal::formatDDTags(info.ddTags));
+                cssClass(info.recordTags),
+                internal::formatUdCoord(info.adCoord),
+                internal::formatDDTags(info.recordTags));
         }
         svg += R"(</body>
 </html>)";

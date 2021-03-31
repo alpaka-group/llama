@@ -15,36 +15,36 @@ namespace tag {
     struct Normal {};
 }
 
-using Vec3 = llama::DS<
-    llama::DE<tag::X, double>,
-    llama::DE<tag::Y, double>,
-    llama::DE<tag::Z, double>
+using Vec3 = llama::Record<
+    llama::Field<tag::X, double>,
+    llama::Field<tag::Y, double>,
+    llama::Field<tag::Z, double>
 >;
-using Triangle = llama::DS<
-    llama::DE<tag::A, Vec3>,
-    llama::DE<tag::B, Vec3>,
-    llama::DE<tag::C, Vec3>,
-    llama::DE<tag::Normal, Vec3>
+using Triangle = llama::Record<
+    llama::Field<tag::A, Vec3>,
+    llama::Field<tag::B, Vec3>,
+    llama::Field<tag::C, Vec3>,
+    llama::Field<tag::Normal, Vec3>
 >;
 // clang-format on
 
 namespace
 {
-    template <typename ArrayDomain, typename DatumDomain>
-    struct AoSWithComputedNormal : llama::mapping::PackedAoS<ArrayDomain, DatumDomain>
+    template <typename ArrayDomain, typename RecordDim>
+    struct AoSWithComputedNormal : llama::mapping::PackedAoS<ArrayDomain, RecordDim>
     {
-        using Base = llama::mapping::PackedAoS<ArrayDomain, DatumDomain>;
+        using Base = llama::mapping::PackedAoS<ArrayDomain, RecordDim>;
 
-        template <std::size_t... DatumDomainCoord>
-        static constexpr auto isComputed(llama::DatumCoord<DatumDomainCoord...>)
+        template <std::size_t... RecordCoords>
+        static constexpr auto isComputed(llama::RecordCoord<RecordCoords...>)
         {
-            return llama::DatumCoordCommonPrefixIsSame<llama::DatumCoord<DatumDomainCoord...>, llama::DatumCoord<3>>;
+            return llama::RecordCoordCommonPrefixIsSame<llama::RecordCoord<RecordCoords...>, llama::RecordCoord<3>>;
         }
 
-        template <std::size_t... DatumDomainCoord, typename Blob>
+        template <std::size_t... RecordCoords, typename Blob>
         constexpr auto compute(
             ArrayDomain coord,
-            llama::DatumCoord<DatumDomainCoord...>,
+            llama::RecordCoord<RecordCoords...>,
             llama::Array<Blob, Base::blobCount>& storageBlobs) const
         {
             auto fetch = [&](llama::NrAndOffset nrAndOffset) -> double
@@ -77,19 +77,19 @@ namespace
             const auto normaly = crossy / length;
             const auto normalz = crossz / length;
 
-            using DC = llama::DatumCoord<DatumDomainCoord...>;
-            if constexpr (std::is_same_v<DC, llama::DatumCoord<3, 0>>)
+            using DC = llama::RecordCoord<RecordCoords...>;
+            if constexpr (std::is_same_v<DC, llama::RecordCoord<3, 0>>)
                 return normalx;
-            if constexpr (std::is_same_v<DC, llama::DatumCoord<3, 1>>)
+            if constexpr (std::is_same_v<DC, llama::RecordCoord<3, 1>>)
                 return normaly;
-            if constexpr (std::is_same_v<DC, llama::DatumCoord<3, 2>>)
+            if constexpr (std::is_same_v<DC, llama::RecordCoord<3, 2>>)
                 return normalz;
-            // if constexpr (std::is_same_v<DC, llama::DatumCoord<3>>)
+            // if constexpr (std::is_same_v<DC, llama::RecordCoord<3>>)
             //{
-            //    llama::One<llama::GetType<DatumDomain, llama::DatumCoord<3>>> normal;
-            //    normal(llama::DatumCoord<0>{}) = normalx;
-            //    normal(llama::DatumCoord<1>{}) = normaly;
-            //    normal(llama::DatumCoord<2>{}) = normalz;
+            //    llama::One<llama::GetType<RecordDim, llama::RecordCoord<3>>> normal;
+            //    normal(llama::RecordCoord<0>{}) = normalx;
+            //    normal(llama::RecordCoord<1>{}) = normaly;
+            //    normal(llama::RecordCoord<2>{}) = normalz;
             //    return normal;
             //}
         }
@@ -127,30 +127,28 @@ TEST_CASE("computedprop")
 namespace
 {
     // Maps accesses to the product of the ArrayDomain coord.
-    template <typename T_ArrayDomain, typename T_DatumDomain>
+    template <typename T_ArrayDomain, typename T_RecordDim>
     struct ComputedMapping
     {
         using ArrayDomain = T_ArrayDomain;
-        using DatumDomain = T_DatumDomain;
+        using RecordDim = T_RecordDim;
         static constexpr std::size_t blobCount = 0;
 
         constexpr ComputedMapping() = default;
 
-        constexpr ComputedMapping(ArrayDomain, DatumDomain = {})
+        constexpr ComputedMapping(ArrayDomain, RecordDim = {})
         {
         }
 
-        template <std::size_t... DatumDomainCoord>
-        static constexpr auto isComputed(llama::DatumCoord<DatumDomainCoord...>)
+        template <std::size_t... RecordCoords>
+        static constexpr auto isComputed(llama::RecordCoord<RecordCoords...>)
         {
             return true;
         }
 
-        template <std::size_t... DatumDomainCoord, typename Blob>
-        constexpr auto compute(
-            ArrayDomain coord,
-            llama::DatumCoord<DatumDomainCoord...>,
-            llama::Array<Blob, blobCount>&) const -> std::size_t
+        template <std::size_t... RecordCoords, typename Blob>
+        constexpr auto compute(ArrayDomain coord, llama::RecordCoord<RecordCoords...>, llama::Array<Blob, blobCount>&)
+            const -> std::size_t
         {
             return std::reduce(std::begin(coord), std::end(coord), std::size_t{1}, std::multiplies<>{});
         }
@@ -174,13 +172,13 @@ namespace
 {
     template <
         typename T_ArrayDomain,
-        typename T_DatumDomain,
+        typename T_RecordDim,
         typename LinearizeArrayDomainFunctor = llama::mapping::LinearizeArrayDomainCpp>
     struct CompressedBoolMapping
     {
         using ArrayDomain = T_ArrayDomain;
-        using DatumDomain = T_DatumDomain;
-        static constexpr std::size_t blobCount = boost::mp11::mp_size<llama::FlattenDatumDomain<DatumDomain>>::value;
+        using RecordDim = T_RecordDim;
+        static constexpr std::size_t blobCount = boost::mp11::mp_size<llama::FlattenRecordDim<RecordDim>>::value;
 
         constexpr CompressedBoolMapping() = default;
 
@@ -208,27 +206,27 @@ namespace
 
         constexpr auto blobSize(std::size_t) const -> std::size_t
         {
-            llama::forEachLeaf<DatumDomain>([](auto coord) constexpr {
-                static_assert(std::is_same_v<llama::GetType<DatumDomain, decltype(coord)>, bool>);
+            llama::forEachLeaf<RecordDim>([](auto coord) constexpr {
+                static_assert(std::is_same_v<llama::GetType<RecordDim, decltype(coord)>, bool>);
             });
             constexpr std::size_t wordBytes = sizeof(Word);
             return (LinearizeArrayDomainFunctor{}.size(arrayDomainSize) + wordBytes - 1) / wordBytes;
         }
 
-        template <std::size_t... DatumDomainCoord>
-        static constexpr auto isComputed(llama::DatumCoord<DatumDomainCoord...>)
+        template <std::size_t... RecordCoords>
+        static constexpr auto isComputed(llama::RecordCoord<RecordCoords...>)
         {
             return true;
         }
 
-        template <std::size_t... DatumDomainCoord, typename Blob>
+        template <std::size_t... RecordCoords, typename Blob>
         constexpr auto compute(
             ArrayDomain coord,
-            llama::DatumCoord<DatumDomainCoord...>,
+            llama::RecordCoord<RecordCoords...>,
             llama::Array<Blob, blobCount>& blobs) const -> BoolRef
         {
             const auto bitOffset = LinearizeArrayDomainFunctor{}(coord, arrayDomainSize);
-            const auto blob = llama::flatDatumCoord<DatumDomain, llama::DatumCoord<DatumDomainCoord...>>;
+            const auto blob = llama::flatRecordCoord<RecordDim, llama::RecordCoord<RecordCoords...>>;
 
             constexpr std::size_t wordBits = sizeof(Word) * CHAR_BIT;
             return BoolRef{
@@ -240,11 +238,11 @@ namespace
     };
 
     // clang-format off
-    using BoolDomain = llama::DatumStruct<
-        llama::DatumElement<tag::A, bool>,
-        llama::DatumElement<tag::B, llama::DatumStruct<
-            llama::DatumElement<tag::X, bool>,
-            llama::DatumElement<tag::Y, bool>
+    using BoolDomain = llama::Record<
+        llama::Field<tag::A, bool>,
+        llama::Field<tag::B, llama::Record<
+            llama::Field<tag::X, bool>,
+            llama::Field<tag::Y, bool>
         >>
     >;
     // clang-format on

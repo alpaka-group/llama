@@ -16,19 +16,19 @@ namespace tag {
 } // namespace tag
 
 // clang-format off
-using Particle = llama::DS<
-    llama::DE<tag::Pos, llama::DS<
-        llama::DE<tag::X, double>,
-        llama::DE<tag::Y, double>,
-        llama::DE<tag::Z, double>
+using Particle = llama::Record<
+    llama::Field<tag::Pos, llama::Record<
+        llama::Field<tag::X, double>,
+        llama::Field<tag::Y, double>,
+        llama::Field<tag::Z, double>
     >>,
-    llama::DE<tag::Weight, float>,
-    llama::DE<tag::Momentum, llama::DS<
-        llama::DE<tag::X, double>,
-        llama::DE<tag::Y, double>,
-        llama::DE<tag::Z, double>
+    llama::Field<tag::Weight, float>,
+    llama::Field<tag::Momentum, llama::Record<
+        llama::Field<tag::X, double>,
+        llama::Field<tag::Y, double>,
+        llama::Field<tag::Z, double>
     >>,
-    llama::DE<tag::Flags, bool[4]>
+    llama::Field<tag::Flags, bool[4]>
 >;
 // clang-format on
 
@@ -528,13 +528,13 @@ TEST_CASE("maxLanes")
     STATIC_REQUIRE(llama::mapping::maxLanes<float, 256> == 8);
     STATIC_REQUIRE(llama::mapping::maxLanes<float, 512> == 16);
 
-    using DatumDomain1 = llama::DS<llama::DE<tag::X, std::int8_t>, llama::DE<tag::Y, std::uint8_t>>;
-    STATIC_REQUIRE(llama::mapping::maxLanes<DatumDomain1, 128> == 16);
-    STATIC_REQUIRE(llama::mapping::maxLanes<DatumDomain1, 256> == 32);
-    STATIC_REQUIRE(llama::mapping::maxLanes<DatumDomain1, 512> == 64);
+    using RecordDim1 = llama::Record<llama::Field<tag::X, std::int8_t>, llama::Field<tag::Y, std::uint8_t>>;
+    STATIC_REQUIRE(llama::mapping::maxLanes<RecordDim1, 128> == 16);
+    STATIC_REQUIRE(llama::mapping::maxLanes<RecordDim1, 256> == 32);
+    STATIC_REQUIRE(llama::mapping::maxLanes<RecordDim1, 512> == 64);
 
-    using DatumDomain2 = llama::DS<llama::DE<tag::X, std::int8_t>, llama::DE<tag::Y, std::int16_t>>;
-    STATIC_REQUIRE(llama::mapping::maxLanes<DatumDomain2, 128> == 8);
-    STATIC_REQUIRE(llama::mapping::maxLanes<DatumDomain2, 256> == 16);
-    STATIC_REQUIRE(llama::mapping::maxLanes<DatumDomain2, 512> == 32);
+    using RecordDim2 = llama::Record<llama::Field<tag::X, std::int8_t>, llama::Field<tag::Y, std::int16_t>>;
+    STATIC_REQUIRE(llama::mapping::maxLanes<RecordDim2, 128> == 8);
+    STATIC_REQUIRE(llama::mapping::maxLanes<RecordDim2, 256> == 16);
+    STATIC_REQUIRE(llama::mapping::maxLanes<RecordDim2, 512> == 32);
 }

@@ -21,7 +21,7 @@ First attempts are AoS/SoA container libraries like
 Kokkos's views or the proposed `std::mdspan <http://wg21.link/p0009r10>`_).
 
 Let's consider an example.
-It is well-known that accessing complex data in a struct of array (SoA) manner is most of the times faster than array of structs (AoS):
+Accessing structural data in a struct of array (SoA) manner is most of the times faster than array of structs (AoS):
 
 .. code-block:: C++
 
@@ -34,8 +34,9 @@ It is well-known that accessing complex data in a struct of array (SoA) manner i
 
 Even this small decision between SoA and AoS has a quite different access style in code,
 :cpp:`image[x][y].r` vs. :cpp:`image.r[x][y]`.
-So the choice of layout already is usually quite infectious on the code we use to access a data structure.
-For this specific example, research and ready to use libraries already exist.
+So the choice of layout is already quite infectious on the code we use to access a data structure.
+For this specific example, research and ready to use libraries already exist
+(E.g. `SOAContainer <https://gitlab.cern.ch/LHCbOpt/SOAContainer>`_ or `Intel's SDLT <https://software.intel.com/content/www/us/en/develop/documentation/cpp-compiler-developer-guide-and-reference/top/compiler-reference/libraries/introduction-to-the-simd-data-layout-templates.html>`_).
 
 But there are more useful mappings than SoA and AoS, such as:
 
@@ -99,7 +100,7 @@ The core data structure of LLAMA is the :ref:`View <label-view>`,
 which holds the memory for the data and provides methods to access the data space.
 In order to create a view, a `Mapping` is needed which is an abstract concept.
 LLAMA offers many kinds of mappings and users can also provide their own mappings.
-Mappings are constructed from a :ref:`Datum domain <label-dd>`, containing tags, and an :ref:`Array domain <label-ad>`.
+Mappings are constructed from a :ref:`record dimension <label-rd>`, containing tags, and an :ref:`Array domain <label-ad>`.
 In addition to a mapping defining the memory layout, an array of :ref:`Blobs <label-blobs>` is needed for a view, supplying the actual storage behind the view.
 A blob is any object representing a contiguous chunk of memory, byte-wise addressable using :cpp:`operator[]`.
 A suitable Blob array is either directly provided by the user or built using a :ref:`BlobAllocator <label-bloballocators>` when a view is created by a call to `allocView`.
@@ -108,8 +109,8 @@ LLAMA comes with a set of predefined blob allocators and users can again provide
 
 Once a view is created, the user can navigate on the data managed by the view.
 On top of a view, a :ref:`VirtualView <label-virtualview>` can be created, offering access to a subrange of the array domain.
-Elements of the array domain, called datums, are accessed on both, View and VirtualView, by calling :cpp:`operator()` with an instance of the array domain.
-This access returns a :ref:`VirtualDatum <label-virtualdatum>`, allowing further access using the tags from the datum domain, until eventually a reference to actual data in memory is returned.
+Elements of the array domain, called records, are accessed on both, View and VirtualView, by calling :cpp:`operator()` with an instance of the array domain.
+This access returns a :ref:`VirtualRecord <label-virtualrecord>`, allowing further access using the tags from the record dimension, until eventually a reference to actual data in memory is returned.
 
 
 Example use cases

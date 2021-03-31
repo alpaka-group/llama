@@ -21,18 +21,18 @@ namespace tag
     struct Mass{};
 } // namespace tag
 
-using Particle = llama::DS<
-    llama::DE<tag::Pos, llama::DS<
-        llama::DE<tag::X, float>,
-        llama::DE<tag::Y, float>,
-        llama::DE<tag::Z, float>
+using Particle = llama::Record<
+    llama::Field<tag::Pos, llama::Record<
+        llama::Field<tag::X, float>,
+        llama::Field<tag::Y, float>,
+        llama::Field<tag::Z, float>
     >>,
-    llama::DE<tag::Vel, llama::DS<
-        llama::DE<tag::X, float>,
-        llama::DE<tag::Y, float>,
-        llama::DE<tag::Z, float>
+    llama::Field<tag::Vel, llama::Record<
+        llama::Field<tag::X, float>,
+        llama::Field<tag::Y, float>,
+        llama::Field<tag::Z, float>
     >>,
-    llama::DE<tag::Mass, float>
+    llama::Field<tag::Mass, float>
 >;
 // clang-format on
 
@@ -60,7 +60,7 @@ void naive_copy(
     llama::View<Mapping2, BlobType2>& dstView,
     std::size_t numThreads = 1)
 {
-    static_assert(std::is_same_v<typename Mapping1::DatumDomain, typename Mapping2::DatumDomain>);
+    static_assert(std::is_same_v<typename Mapping1::RecordDim, typename Mapping2::RecordDim>);
 
     if (srcView.mapping.arrayDomainSize != dstView.mapping.arrayDomainSize)
         throw std::runtime_error{"UserDomain sizes are different"};
@@ -70,14 +70,14 @@ void naive_copy(
         numThreads,
         [&](auto ad)
         {
-            llama::forEachLeaf<typename Mapping1::DatumDomain>(
+            llama::forEachLeaf<typename Mapping1::RecordDim>(
                 [&](auto coord)
                 {
                     dstView(ad)(coord) = srcView(ad)(coord);
                     // std::memcpy(
                     //    &dstView(ad)(coord),
                     //    &srcView(ad)(coord),
-                    //    sizeof(llama::GetType<typename Mapping1::DatumDomain, decltype(coord)>));
+                    //    sizeof(llama::GetType<typename Mapping1::RecordDim, decltype(coord)>));
                 });
         });
 }
@@ -98,17 +98,17 @@ void parallel_memcpy(std::byte* dst, const std::byte* src, std::size_t size, std
 template <
     bool ReadOpt,
     typename ArrayDomain,
-    typename DatumDomain,
+    typename RecordDim,
     std::size_t LanesSrc,
     typename BlobType1,
     std::size_t LanesDst,
     typename BlobType2>
 void aosoa_copy(
     const llama::View<
-        llama::mapping::AoSoA<ArrayDomain, DatumDomain, LanesSrc, llama::mapping::LinearizeArrayDomainCpp>,
+        llama::mapping::AoSoA<ArrayDomain, RecordDim, LanesSrc, llama::mapping::LinearizeArrayDomainCpp>,
         BlobType1>& srcView,
     llama::View<
-        llama::mapping::AoSoA<ArrayDomain, DatumDomain, LanesDst, llama::mapping::LinearizeArrayDomainCpp>,
+        llama::mapping::AoSoA<ArrayDomain, RecordDim, LanesDst, llama::mapping::LinearizeArrayDomainCpp>,
         BlobType2>& dstView,
     std::size_t numThreads = 1)
 {
@@ -132,9 +132,9 @@ void aosoa_copy(
     {
         const auto blockIndex = flatArrayIndex / Lanes;
         const auto laneIndex = flatArrayIndex % Lanes;
-        const auto offset = (llama::sizeOf<DatumDomain> * Lanes) * blockIndex
-            + llama::offsetOf<DatumDomain, decltype(coord)> * Lanes
-            + sizeof(llama::GetType<DatumDomain, decltype(coord)>) * laneIndex;
+        const auto offset = (llama::sizeOf<RecordDim> * Lanes) * blockIndex
+            + llama::offsetOf<RecordDim, decltype(coord)> * Lanes
+            + sizeof(llama::GetType<RecordDim, decltype(coord)>) * laneIndex;
         return offset;
     };
 
@@ -147,17 +147,17 @@ void aosoa_copy(
             const auto id = static_cast<std::size_t>(omp_get_thread_num());
             const auto start = id * elementsPerThread;
             const auto stop = id == numThreads - 1 ? flatSize : (id + 1) * elementsPerThread;
-            auto* threadSrc = src + map(start, llama::DatumCoord<>{}, LanesSrc);
+            auto* threadSrc = src + map(start, llama::RecordCoord<>{}, LanesSrc);
 
             for (std::size_t i = start; i < stop; i += LanesSrc)
             {
-                llama::forEachLeaf<DatumDomain>(
+                llama::forEachLeaf<RecordDim>(
                     [&](auto coord)
                     {
                         constexpr auto L = std::min(LanesSrc, LanesDst);
                         for (std::size_t j = 0; j < LanesSrc; j += L)
                         {
-                            constexpr auto bytes = L * sizeof(llama::GetType<DatumDomain, decltype(coord)>);
+                            constexpr auto bytes = L * sizeof(llama::GetType<RecordDim, decltype(coord)>);
                             std::memcpy(&dst[map(i + j, coord, LanesDst)], threadSrc, bytes);
                             threadSrc += bytes;
                         }
@@ -175,17 +175,17 @@ void aosoa_copy(
             const auto start = id * elementsPerThread;
             const auto stop = id == numThreads - 1 ? flatSize : (id + 1) * elementsPerThread;
 
-            auto* threadDst = dst + map(start, llama::DatumCoord<>{}, LanesDst);
+            auto* threadDst = dst + map(start, llama::RecordCoord<>{}, LanesDst);
 
             for (std::size_t i = start; i < stop; i += LanesDst)
             {
-                llama::forEachLeaf<DatumDomain>(
+                llama::forEachLeaf<RecordDim>(
                     [&](auto coord)
                     {
                         constexpr auto L = std::min(LanesSrc, LanesDst);
                         for (std::size_t j = 0; j < LanesDst; j += L)
                         {
-                            constexpr auto bytes = L * sizeof(llama::GetType<DatumDomain, decltype(coord)>);
+                            constexpr auto bytes = L * sizeof(llama::GetType<RecordDim, decltype(coord)>);
                             std::memcpy(threadDst, &src[map(i + j, coord, LanesSrc)], bytes);
                             threadDst += bytes;
                         }

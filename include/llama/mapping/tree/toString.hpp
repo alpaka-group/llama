@@ -19,7 +19,7 @@ namespace llama::mapping::tree
 
     // handles array indices
     template <std::size_t I>
-    inline auto toString(DatumCoord<I>) -> std::string
+    inline auto toString(RecordCoord<I>) -> std::string
     {
         return "";
     }

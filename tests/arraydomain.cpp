@@ -12,11 +12,11 @@ namespace tag
     struct Z {};
 } // namespace tag
 
-using Name = llama::DS<
-    llama::DE<tag::Pos, llama::DS<
-        llama::DE<tag::X, float>,
-        llama::DE<tag::Y, float>,
-        llama::DE<tag::Z, float>
+using Name = llama::Record<
+    llama::Field<tag::Pos, llama::Record<
+        llama::Field<tag::X, float>,
+        llama::Field<tag::Y, float>,
+        llama::Field<tag::Z, float>
     >>
 >;
 // clang-format on

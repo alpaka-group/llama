@@ -15,7 +15,7 @@ namespace llama::mapping
     struct Heatmap
     {
         using ArrayDomain = typename Mapping::ArrayDomain;
-        using DatumDomain = typename Mapping::DatumDomain;
+        using RecordDim = typename Mapping::RecordDim;
         static constexpr std::size_t blobCount = Mapping::blobCount;
 
         constexpr Heatmap() = default;
@@ -39,11 +39,11 @@ namespace llama::mapping
             return mapping.blobSize(i);
         }
 
-        template <std::size_t... DatumDomainCoord>
+        template <std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
         {
-            const auto nao = mapping.template blobNrAndOffset<DatumDomainCoord...>(coord);
-            for (auto i = 0; i < sizeof(GetType<DatumDomain, DatumCoord<DatumDomainCoord...>>); i++)
+            const auto nao = mapping.template blobNrAndOffset<RecordCoords...>(coord);
+            for (auto i = 0; i < sizeof(GetType<RecordDim, RecordCoord<RecordCoords...>>); i++)
                 byteHits[nao.nr][nao.offset + i]++;
             return nao;
         }

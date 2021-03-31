@@ -50,16 +50,16 @@ namespace tag
     struct Mass{};
 }
 
-using Particle = llama::DS<
-    llama::DE<tag::Pos, llama::DS<
-        llama::DE<tag::X, FP>,
-        llama::DE<tag::Y, FP>,
-        llama::DE<tag::Z, FP>>>,
-    llama::DE<tag::Vel, llama::DS<
-        llama::DE<tag::X, FP>,
-        llama::DE<tag::Y, FP>,
-        llama::DE<tag::Z, FP>>>,
-    llama::DE<tag::Mass, FP>>;
+using Particle = llama::Record<
+    llama::Field<tag::Pos, llama::Record<
+        llama::Field<tag::X, FP>,
+        llama::Field<tag::Y, FP>,
+        llama::Field<tag::Z, FP>>>,
+    llama::Field<tag::Vel, llama::Record<
+        llama::Field<tag::X, FP>,
+        llama::Field<tag::Y, FP>,
+        llama::Field<tag::Z, FP>>>,
+    llama::Field<tag::Mass, FP>>;
 // clang-format on
 
 enum Mapping
@@ -153,7 +153,7 @@ struct UpdateKernel
         {
             // if there is only 1 thread per block, use stack instead of shared memory
             if constexpr (BlockSize == 1)
-                return llama::allocViewStack<View::ArrayDomain::rank, typename View::DatumDomain>();
+                return llama::allocViewStack<View::ArrayDomain::rank, typename View::RecordDim>();
             else
             {
                 constexpr auto sharedMapping = []
@@ -168,7 +168,7 @@ struct UpdateKernel
                 }();
                 static_assert(decltype(sharedMapping)::blobCount == 1);
 
-                constexpr auto sharedMemSize = llama::sizeOf<typename View::DatumDomain> * BlockSize;
+                constexpr auto sharedMemSize = llama::sizeOf<typename View::RecordDim> * BlockSize;
                 auto& sharedMem = alpaka::declareSharedVar<std::byte[sharedMemSize], __COUNTER__>(acc);
                 return llama::View{sharedMapping, llama::Array<std::byte*, 1>{&sharedMem[0]}};
             }
@@ -182,8 +182,8 @@ struct UpdateKernel
         {
             constexpr auto arrayDomain = llama::ArrayDomain{Elems};
             constexpr auto mapping
-                = llama::mapping::SoA<typename View::ArrayDomain, typename View::DatumDomain, false>{arrayDomain};
-            constexpr auto blobAlloc = llama::bloballoc::Stack<llama::sizeOf<typename View::DatumDomain> * Elems>{};
+                = llama::mapping::SoA<typename View::ArrayDomain, typename View::RecordDim, false>{arrayDomain};
+            constexpr auto blobAlloc = llama::bloballoc::Stack<llama::sizeOf<typename View::RecordDim> * Elems>{};
             return llama::allocView(mapping, blobAlloc);
         }();
         // TODO: vector load

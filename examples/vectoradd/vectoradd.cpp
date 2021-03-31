@@ -22,10 +22,10 @@ namespace usellama
         struct Z{};
     } // namespace tag
 
-    using Vector = llama::DS<
-        llama::DE<tag::X, FP>,
-        llama::DE<tag::Y, FP>,
-        llama::DE<tag::Z, FP>
+    using Vector = llama::Record<
+        llama::Field<tag::X, FP>,
+        llama::Field<tag::Y, FP>,
+        llama::Field<tag::Z, FP>
     >;
     // clang-format on
 
@@ -74,7 +74,7 @@ namespace usellama
         {
             a[i](tag::X{}) = i; // X
             a[i](tag::Y{}) = i; // Y
-            a[i](llama::DatumCoord<2>{}) = i; // Z
+            a[i](llama::RecordCoord<2>{}) = i; // Z
             b(i) = i; // writes to all (X, Y, Z)
         }
         watch.printAndReset("init");

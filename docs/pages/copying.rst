@@ -44,7 +44,7 @@ computation are overloayed as e.g. seen in the
 
 Another benefit is, that the creation and copying of the intermediate view can
 be analyzed and optimized by the compiler (e.g. with vector operations).
-Furthermore different (sub) datum domains may be used. The above mentioned async copy
+Furthermore different (sub) record dimensions may be used. The above mentioned async copy
 example e.g. applies a bluring kernel to an RGB-image, but may work only on
 two or one channel instead of all three. Not used channels are not allocated and
 especially not copied at all.

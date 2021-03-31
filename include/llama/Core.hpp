@@ -4,7 +4,7 @@
 #pragma once
 
 #include "Array.hpp"
-#include "DatumCoord.hpp"
+#include "RecordCoord.hpp"
 
 #include <boost/core/demangle.hpp>
 #include <boost/mp11.hpp>
@@ -13,7 +13,7 @@
 
 namespace llama
 {
-    /// Anonymous naming for a \ref DatumElement.
+    /// Anonymous naming for a \ref Field.
     struct NoName
     {
     };
@@ -47,56 +47,23 @@ struct std::tuple_element<I, llama::ArrayDomain<N>>
 
 namespace llama
 {
-    /// A type list of \ref DatumElement which may be used to define a datum domain.
+    /// A type list of \ref Field which may be used to define a record dimension.
     template <typename... Leaves>
-    struct DatumStruct
+    struct Record
     {
     };
 
-    /// Shortcut alias for \ref DatumStruct.
-    template <typename... Leaves>
-    using DS = DatumStruct<Leaves...>;
-
-    // FIXME: the documented functionality currently only works through llama::DE, because the Type is not expanded in
-    // case of arrays
-    /// Datum domain tree node which may either be a leaf or refer to a child tree presented as another \ref
-    /// DatumStruct.
+    /// Record dimension tree node which may either be a leaf or refer to a child tree presented as another \ref
+    /// Record.
     /// \tparam Tag Name of the node. May be any type (struct, class).
     /// \tparam Type Type of the node. May be one of three cases. 1. another sub tree consisting of a nested \ref
-    /// DatumStruct. 2. an array of any type, in which case a DatumStruct with as many \ref DatumElement as the array
+    /// Record. 2. an array of any type, in which case a Record with as many \ref Field as the array
     /// size is created, named \ref Index specialized on consecutive numbers. 3. A scalar type different from \ref
-    /// DatumStruct, making this node a leaf of this type.
+    /// Record, making this node a leaf of this type.
     template <typename Tag, typename Type>
-    struct DatumElement
+    struct Field
     {
-        static_assert(!std::is_array_v<Type>, "DatumElement does not support array types. Please use DE instead!");
     };
-
-    namespace internal
-    {
-        template <typename ChildType, std::size_t... Is>
-        auto makeDatumArray(std::index_sequence<Is...>)
-        {
-            return DatumStruct<DatumElement<DatumCoord<Is>, ChildType>...>{};
-        }
-    } // namespace internal
-
-    template <typename T>
-    struct MakeDatumElementType
-    {
-        using type = T;
-    };
-
-    template <typename ChildType, std::size_t Count>
-    struct MakeDatumElementType<ChildType[Count]>
-    {
-        using type = decltype(internal::makeDatumArray<typename MakeDatumElementType<ChildType>::type>(
-            std::make_index_sequence<Count>{}));
-    };
-
-    /// Shortcut alias for \ref DatumElement.
-    template <typename Identifier, typename Type>
-    using DE = DatumElement<Identifier, typename MakeDatumElementType<Type>::type>;
 
     struct NrAndOffset
     {
@@ -119,61 +86,83 @@ namespace llama
         }
     };
 
-    /// Get the tag from a \ref DatumElement.
-    template <typename DatumElement>
-    using GetDatumElementTag = boost::mp11::mp_first<DatumElement>;
-
-    /// Get the type from a \ref DatumElement.
-    template <typename DatumElement>
-    using GetDatumElementType = boost::mp11::mp_second<DatumElement>;
-
-    template <typename T>
-    inline constexpr auto isDatumStruct = false;
-
-    template <typename... DatumElements>
-    inline constexpr auto isDatumStruct<DatumStruct<DatumElements...>> = true;
+    /// Get the tag from a \ref Field.
+    template <typename Field>
+    using GetFieldTag = boost::mp11::mp_first<Field>;
 
     namespace internal
     {
-        template <typename CurrTag, typename DatumDomain, typename DatumCoord>
+        template <typename ChildType, std::size_t... Is>
+        auto makeRecordArray(std::index_sequence<Is...>)
+        {
+            return Record<Field<RecordCoord<Is>, ChildType>...>{};
+        }
+
+        template <typename T>
+        struct ArrayToRecord
+        {
+            using type = T;
+        };
+
+        template <typename ChildType, std::size_t Count>
+        struct ArrayToRecord<ChildType[Count]>
+        {
+            using type = decltype(internal::makeRecordArray<typename ArrayToRecord<ChildType>::type>(
+                std::make_index_sequence<Count>{}));
+        };
+    } // namespace internal
+
+    /// Get the type from a \ref Field.
+    template <typename Field>
+    using GetFieldType = typename internal::ArrayToRecord<boost::mp11::mp_second<Field>>::type;
+
+    template <typename T>
+    inline constexpr auto isRecord = false;
+
+    template <typename... Fields>
+    inline constexpr auto isRecord<Record<Fields...>> = true;
+
+    namespace internal
+    {
+        template <typename CurrTag, typename RecordDim, typename RecordCoord>
         struct GetTagsImpl;
 
-        template <typename CurrTag, typename... DatumElements, std::size_t FirstCoord, std::size_t... Coords>
-        struct GetTagsImpl<CurrTag, DatumStruct<DatumElements...>, DatumCoord<FirstCoord, Coords...>>
+        template <typename CurrTag, typename... Fields, std::size_t FirstCoord, std::size_t... Coords>
+        struct GetTagsImpl<CurrTag, Record<Fields...>, RecordCoord<FirstCoord, Coords...>>
         {
-            using DatumElement = boost::mp11::mp_at_c<boost::mp11::mp_list<DatumElements...>, FirstCoord>;
-            using ChildTag = GetDatumElementTag<DatumElement>;
-            using ChildType = GetDatumElementType<DatumElement>;
+            using Field = boost::mp11::mp_at_c<boost::mp11::mp_list<Fields...>, FirstCoord>;
+            using ChildTag = GetFieldTag<Field>;
+            using ChildType = GetFieldType<Field>;
             using type = boost::mp11::
-                mp_push_front<typename GetTagsImpl<ChildTag, ChildType, DatumCoord<Coords...>>::type, CurrTag>;
+                mp_push_front<typename GetTagsImpl<ChildTag, ChildType, RecordCoord<Coords...>>::type, CurrTag>;
         };
 
         template <typename CurrTag, typename T>
-        struct GetTagsImpl<CurrTag, T, DatumCoord<>>
+        struct GetTagsImpl<CurrTag, T, RecordCoord<>>
         {
             using type = boost::mp11::mp_list<CurrTag>;
         };
     } // namespace internal
 
-    /// Get the tags of all \ref DatumElement from the root of the datum domain
-    /// tree until to the node identified by \ref DatumCoord.
-    template <typename DatumDomain, typename DatumCoord>
-    using GetTags = typename internal::GetTagsImpl<NoName, DatumDomain, DatumCoord>::type;
+    /// Get the tags of all \ref Field from the root of the record dimension
+    /// tree until to the node identified by \ref RecordCoord.
+    template <typename RecordDim, typename RecordCoord>
+    using GetTags = typename internal::GetTagsImpl<NoName, RecordDim, RecordCoord>::type;
 
-    /// Get the tag of the \ref DatumElement at a \ref DatumCoord inside the
-    /// datum domain tree.
-    template <typename DatumDomain, typename DatumCoord>
-    using GetTag = boost::mp11::mp_back<GetTags<DatumDomain, DatumCoord>>;
+    /// Get the tag of the \ref Field at a \ref RecordCoord inside the
+    /// record dimension tree.
+    template <typename RecordDim, typename RecordCoord>
+    using GetTag = boost::mp11::mp_back<GetTags<RecordDim, RecordCoord>>;
 
-    /// Is true if, starting at two coordinates in two datum domains, all
-    /// subsequent nodes in the datum domain tree have the same tag.
-    /// \tparam DatumDomainA First user domain.
-    /// \tparam LocalA \ref DatumCoord based on StartA along which the tags are
+    /// Is true if, starting at two coordinates in two record dimensions, all
+    /// subsequent nodes in the record dimension tree have the same tag.
+    /// \tparam RecordDimA First record dimension.
+    /// \tparam LocalA \ref RecordCoord based on StartA along which the tags are
     /// compared.
-    /// \tparam DatumDomainB second user domain
-    /// \tparam LocalB \ref DatumCoord based on StartB along which the tags are
+    /// \tparam RecordDimB second record dimension.
+    /// \tparam LocalB \ref RecordCoord based on StartB along which the tags are
     /// compared.
-    template <typename DatumDomainA, typename LocalA, typename DatumDomainB, typename LocalB>
+    template <typename RecordDimA, typename LocalA, typename RecordDimB, typename LocalB>
     inline constexpr auto hasSameTags = []() constexpr
     {
         if constexpr (LocalA::size != LocalB::size)
@@ -181,107 +170,107 @@ namespace llama
         else if constexpr (LocalA::size == 0 && LocalB::size == 0)
             return true;
         else
-            return std::is_same_v<GetTags<DatumDomainA, LocalA>, GetTags<DatumDomainB, LocalB>>;
+            return std::is_same_v<GetTags<RecordDimA, LocalA>, GetTags<RecordDimB, LocalB>>;
     }
     ();
 
     namespace internal
     {
-        template <typename DatumDomain, typename DatumCoord, typename... Tags>
+        template <typename RecordDim, typename RecordCoord, typename... Tags>
         struct GetCoordFromTagsImpl
         {
-            static_assert(boost::mp11::mp_size<DatumDomain>::value != 0, "Tag combination is not valid");
+            static_assert(boost::mp11::mp_size<RecordDim>::value != 0, "Tag combination is not valid");
         };
 
-        template <typename... DatumElements, std::size_t... ResultCoords, typename FirstTag, typename... Tags>
-        struct GetCoordFromTagsImpl<DatumStruct<DatumElements...>, DatumCoord<ResultCoords...>, FirstTag, Tags...>
+        template <typename... Fields, std::size_t... ResultCoords, typename FirstTag, typename... Tags>
+        struct GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<ResultCoords...>, FirstTag, Tags...>
         {
-            template <typename DatumElement>
-            struct HasTag : std::is_same<GetDatumElementTag<DatumElement>, FirstTag>
+            template <typename Field>
+            struct HasTag : std::is_same<GetFieldTag<Field>, FirstTag>
             {
             };
 
-            static constexpr auto tagIndex
-                = boost::mp11::mp_find_if<boost::mp11::mp_list<DatumElements...>, HasTag>::value;
-            static_assert(tagIndex < sizeof...(DatumElements), "FirstTag was not found inside this DatumStruct");
+            static constexpr auto tagIndex = boost::mp11::mp_find_if<boost::mp11::mp_list<Fields...>, HasTag>::value;
+            static_assert(tagIndex < sizeof...(Fields), "FirstTag was not found inside this Record");
 
-            using ChildType = GetDatumElementType<boost::mp11::mp_at_c<DatumStruct<DatumElements...>, tagIndex>>;
+            using ChildType = GetFieldType<boost::mp11::mp_at_c<Record<Fields...>, tagIndex>>;
 
-            using type = typename GetCoordFromTagsImpl<ChildType, DatumCoord<ResultCoords..., tagIndex>, Tags...>::type;
+            using type =
+                typename GetCoordFromTagsImpl<ChildType, RecordCoord<ResultCoords..., tagIndex>, Tags...>::type;
         };
 
-        template <typename DatumDomain, typename DatumCoord>
-        struct GetCoordFromTagsImpl<DatumDomain, DatumCoord>
+        template <typename RecordDim, typename RecordCoord>
+        struct GetCoordFromTagsImpl<RecordDim, RecordCoord>
         {
-            using type = DatumCoord;
+            using type = RecordCoord;
         };
     } // namespace internal
 
-    /// Converts a series of tags navigating down a datum domain into a \ref
-    /// DatumCoord.
-    template <typename DatumDomain, typename... Tags>
-    using GetCoordFromTags = typename internal::GetCoordFromTagsImpl<DatumDomain, DatumCoord<>, Tags...>::type;
+    /// Converts a series of tags navigating down a record dimension into a \ref RecordCoord.
+    template <typename RecordDim, typename... Tags>
+    using GetCoordFromTags = typename internal::GetCoordFromTagsImpl<RecordDim, RecordCoord<>, Tags...>::type;
 
     namespace internal
     {
-        template <typename DatumDomain, typename... DatumCoordOrTags>
+        template <typename RecordDim, typename... RecordCoordOrTags>
         struct GetTypeImpl;
 
         template <typename... Children, std::size_t HeadCoord, std::size_t... TailCoords>
-        struct GetTypeImpl<DatumStruct<Children...>, DatumCoord<HeadCoord, TailCoords...>>
+        struct GetTypeImpl<Record<Children...>, RecordCoord<HeadCoord, TailCoords...>>
         {
-            using ChildType = GetDatumElementType<boost::mp11::mp_at_c<DatumStruct<Children...>, HeadCoord>>;
-            using type = typename GetTypeImpl<ChildType, DatumCoord<TailCoords...>>::type;
+            using ChildType = GetFieldType<boost::mp11::mp_at_c<Record<Children...>, HeadCoord>>;
+            using type = typename GetTypeImpl<ChildType, RecordCoord<TailCoords...>>::type;
         };
 
         template <typename T>
-        struct GetTypeImpl<T, DatumCoord<>>
+        struct GetTypeImpl<T, RecordCoord<>>
         {
             using type = T;
         };
 
-        template <typename DatumDomain, typename... DatumCoordOrTags>
+        template <typename RecordDim, typename... RecordCoordOrTags>
         struct GetTypeImpl
         {
-            using type = typename GetTypeImpl<DatumDomain, GetCoordFromTags<DatumDomain, DatumCoordOrTags...>>::type;
+            using type = typename GetTypeImpl<RecordDim, GetCoordFromTags<RecordDim, RecordCoordOrTags...>>::type;
         };
     } // namespace internal
 
-    /// Returns the type of a node in a datum domain tree identified by a given
-    /// \ref DatumCoord or a series of tags.
-    template <typename DatumDomain, typename... DatumCoordOrTags>
-    using GetType = typename internal::GetTypeImpl<DatumDomain, DatumCoordOrTags...>::type;
+    /// Returns the type of a node in a record dimension tree identified by a given
+    /// \ref RecordCoord or a series of tags.
+    template <typename RecordDim, typename... RecordCoordOrTags>
+    using GetType = typename internal::GetTypeImpl<RecordDim, RecordCoordOrTags...>::type;
 
     namespace internal
     {
-        template <typename DatumDomain, typename BaseDatumCoord, typename... Tags>
+        template <typename RecordDim, typename BaseRecordCoord, typename... Tags>
         struct GetCoordFromTagsRelativeImpl
         {
             using AbsolutCoord = typename internal::
-                GetCoordFromTagsImpl<GetType<DatumDomain, BaseDatumCoord>, BaseDatumCoord, Tags...>::type;
-            // Only returning the datum coord relative to BaseDatumCoord
-            using type = DatumCoordFromList<boost::mp11::mp_drop_c<typename AbsolutCoord::List, BaseDatumCoord::size>>;
+                GetCoordFromTagsImpl<GetType<RecordDim, BaseRecordCoord>, BaseRecordCoord, Tags...>::type;
+            // Only returning the record coord relative to BaseRecordCoord
+            using type
+                = RecordCoordFromList<boost::mp11::mp_drop_c<typename AbsolutCoord::List, BaseRecordCoord::size>>;
         };
     } // namespace internal
 
-    /// Converts a series of tags navigating down a datum domain, starting at a
-    /// given \ref DatumCoord, into a \ref DatumCoord.
-    template <typename DatumDomain, typename BaseDatumCoord, typename... Tags>
+    /// Converts a series of tags navigating down a record dimension, starting at a
+    /// given \ref RecordCoord, into a \ref RecordCoord.
+    template <typename RecordDim, typename BaseRecordCoord, typename... Tags>
     using GetCoordFromTagsRelative =
-        typename internal::GetCoordFromTagsRelativeImpl<DatumDomain, BaseDatumCoord, Tags...>::type;
+        typename internal::GetCoordFromTagsRelativeImpl<RecordDim, BaseRecordCoord, Tags...>::type;
 
     namespace internal
     {
         template <typename T, std::size_t... Coords, typename Functor>
-        LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafImpl(T*, DatumCoord<Coords...> coord, Functor&& functor)
+        LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafImpl(T*, RecordCoord<Coords...> coord, Functor&& functor)
         {
             functor(coord);
         };
 
         template <typename... Children, std::size_t... Coords, typename Functor>
         LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafImpl(
-            DatumStruct<Children...>*,
-            DatumCoord<Coords...>,
+            Record<Children...>*,
+            RecordCoord<Coords...>,
             Functor&& functor)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
@@ -289,81 +278,80 @@ namespace llama
                 [&](auto i)
                 {
                     constexpr auto childIndex = decltype(i)::value;
-                    using DatumElement = boost::mp11::mp_at_c<DatumStruct<Children...>, childIndex>;
+                    using Field = boost::mp11::mp_at_c<Record<Children...>, childIndex>;
 
                     LLAMA_FORCE_INLINE_RECURSIVE
                     forEachLeafImpl(
-                        static_cast<GetDatumElementType<DatumElement>*>(nullptr),
-                        llama::DatumCoord<Coords..., childIndex>{},
+                        static_cast<GetFieldType<Field>*>(nullptr),
+                        llama::RecordCoord<Coords..., childIndex>{},
                         std::forward<Functor>(functor));
                 });
         }
     } // namespace internal
 
-    /// Iterates over the datum domain tree and calls a functor on each element.
+    /// Iterates over the record dimension tree and calls a functor on each element.
     /// \param functor Functor to execute at each element of. Needs to have
-    /// `operator()` with a template parameter for the \ref DatumCoord in the
-    /// datum domain tree.
-    /// \param baseCoord \ref DatumCoord at which the iteration should be
+    /// `operator()` with a template parameter for the \ref RecordCoord in the
+    /// record dimension tree.
+    /// \param baseCoord \ref RecordCoord at which the iteration should be
     /// started. The functor is called on elements beneath this coordinate.
-    template <typename DatumDomain, typename Functor, std::size_t... Coords>
-    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaf(Functor&& functor, DatumCoord<Coords...> baseCoord)
+    template <typename RecordDim, typename Functor, std::size_t... Coords>
+    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaf(Functor&& functor, RecordCoord<Coords...> baseCoord)
     {
         LLAMA_FORCE_INLINE_RECURSIVE
         internal::forEachLeafImpl(
-            static_cast<GetType<DatumDomain, DatumCoord<Coords...>>*>(nullptr),
+            static_cast<GetType<RecordDim, RecordCoord<Coords...>>*>(nullptr),
             baseCoord,
             std::forward<Functor>(functor));
     }
 
-    /// Iterates over the datum domain tree and calls a functor on each element.
+    /// Iterates over the record dimension tree and calls a functor on each element.
     /// \param functor Functor to execute at each element of. Needs to have
-    /// `operator()` with a template parameter for the \ref DatumCoord in the
-    /// datum domain tree.
+    /// `operator()` with a template parameter for the \ref RecordCoord in the
+    /// record dimension tree.
     /// \param baseTags Tags used to define where the iteration should be
     /// started. The functor is called on elements beneath this coordinate.
-    template <typename DatumDomain, typename Functor, typename... Tags>
+    template <typename RecordDim, typename Functor, typename... Tags>
     LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaf(Functor&& functor, Tags... baseTags)
     {
         LLAMA_FORCE_INLINE_RECURSIVE
-        forEachLeaf<DatumDomain>(std::forward<Functor>(functor), GetCoordFromTags<DatumDomain, Tags...>{});
+        forEachLeaf<RecordDim>(std::forward<Functor>(functor), GetCoordFromTags<RecordDim, Tags...>{});
     }
 
     namespace internal
     {
         template <typename T>
-        struct FlattenDatumDomainImpl
+        struct FlattenRecordDimImpl
         {
             using type = boost::mp11::mp_list<T>;
         };
 
-        template <typename... Elements>
-        struct FlattenDatumDomainImpl<DatumStruct<Elements...>>
+        template <typename... Fields>
+        struct FlattenRecordDimImpl<Record<Fields...>>
         {
-            using type
-                = boost::mp11::mp_append<typename FlattenDatumDomainImpl<GetDatumElementType<Elements>>::type...>;
+            using type = boost::mp11::mp_append<typename FlattenRecordDimImpl<GetFieldType<Fields>>::type...>;
         };
 
         // TODO: MSVC fails to compile if we move this function into an IILE at the callsite
-        template <typename DatumDomain, typename DatumCoord>
-        constexpr auto flatDatumCoordImpl()
+        template <typename RecordDim, typename RecordCoord>
+        constexpr auto flatRecordCoordImpl()
         {
             std::size_t c = 0;
-            forEachLeaf<DatumDomain>(
+            forEachLeaf<RecordDim>(
                 [&](auto coord)
                 {
-                    if constexpr (DatumCoordCommonPrefixIsBigger<DatumCoord, decltype(coord)>)
+                    if constexpr (RecordCoordCommonPrefixIsBigger<RecordCoord, decltype(coord)>)
                         c++;
                 });
             return c;
         }
     } // namespace internal
 
-    template <typename DatumDomain>
-    using FlattenDatumDomain = typename internal::FlattenDatumDomainImpl<DatumDomain>::type;
+    template <typename RecordDim>
+    using FlattenRecordDim = typename internal::FlattenRecordDimImpl<RecordDim>::type;
 
-    template <typename DatumDomain, typename DatumCoord>
-    inline constexpr std::size_t flatDatumCoord = internal::flatDatumCoordImpl<DatumDomain, DatumCoord>();
+    template <typename RecordDim, typename RecordCoord>
+    inline constexpr std::size_t flatRecordCoord = internal::flatRecordCoordImpl<RecordDim, RecordCoord>();
 
     namespace internal
     {
@@ -373,14 +361,14 @@ namespace llama
         }
 
         // TODO: MSVC fails to compile if we move this function into an IILE at the callsite
-        template <bool Align, typename... DatumElements>
-        constexpr auto sizeOfDatumStructImpl()
+        template <bool Align, typename... Fields>
+        constexpr auto sizeOfRecordImpl()
         {
             using namespace boost::mp11;
 
             std::size_t size = 0;
-            using FlatDD = FlattenDatumDomain<DatumStruct<DatumElements...>>;
-            mp_for_each<mp_transform<mp_identity, FlatDD>>([&](auto e) constexpr
+            using FlatRD = FlattenRecordDim<Record<Fields...>>;
+            mp_for_each<mp_transform<mp_identity, FlatRD>>([&](auto e) constexpr
                                                            {
                                                                using T = typename decltype(e)::type;
                                                                if constexpr (Align)
@@ -390,7 +378,7 @@ namespace llama
 
             // final padding, so next struct can start right away
             if constexpr (Align)
-                roundUpToMultiple(size, alignof(mp_first<FlatDD>));
+                roundUpToMultiple(size, alignof(mp_first<FlatRD>));
             return size;
         }
     } // namespace internal
@@ -398,32 +386,31 @@ namespace llama
     template <typename T, bool Align = false>
     inline constexpr std::size_t sizeOf = sizeof(T);
 
-    /// The size a datum domain if it would be a normal struct.
-    template <typename... DatumElements, bool Align>
-    inline constexpr std::size_t sizeOf<DatumStruct<DatumElements...>, Align> = internal::
-        sizeOfDatumStructImpl<Align, DatumElements...>();
+    /// The size a record dimension if it would be a normal struct.
+    template <typename... Fields, bool Align>
+    inline constexpr std::size_t sizeOf<Record<Fields...>, Align> = internal::sizeOfRecordImpl<Align, Fields...>();
 
-    /// The byte offset of an element in a datum domain if it would be a normal struct.
-    /// \tparam DatumDomain Datum domain tree.
-    /// \tparam DatumCoord Datum coordinate of an element indatum domain tree.
-    template <typename DatumDomain, typename DatumCoord, bool Align = false>
+    /// The byte offset of an element in a record dimension if it would be a normal struct.
+    /// \tparam RecordDim Record dimension tree.
+    /// \tparam RecordCoord Record coordinate of an element inrecord dimension tree.
+    template <typename RecordDim, typename RecordCoord, bool Align = false>
     inline constexpr std::size_t offsetOf = []() constexpr
     {
         using namespace boost::mp11;
 
-        using FlatDD = FlattenDatumDomain<DatumDomain>;
-        constexpr auto flatCoord = flatDatumCoord<DatumDomain, DatumCoord>;
+        using FlatRD = FlattenRecordDim<RecordDim>;
+        constexpr auto flatCoord = flatRecordCoord<RecordDim, RecordCoord>;
 
         std::size_t offset = 0;
         mp_for_each<mp_iota_c<flatCoord>>([&](auto i) constexpr
                                           {
-                                              using T = mp_at<FlatDD, decltype(i)>;
+                                              using T = mp_at<FlatRD, decltype(i)>;
                                               if constexpr (Align)
                                                   internal::roundUpToMultiple(offset, alignof(T));
                                               offset += sizeof(T);
                                           });
         if constexpr (Align)
-            internal::roundUpToMultiple(offset, alignof(mp_at_c<FlatDD, flatCoord>));
+            internal::roundUpToMultiple(offset, alignof(mp_at_c<FlatRD, flatCoord>));
         return offset;
     }
     ();
