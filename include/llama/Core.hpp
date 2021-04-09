@@ -190,7 +190,10 @@ namespace llama
             };
 
             static constexpr auto tagIndex = boost::mp11::mp_find_if<boost::mp11::mp_list<Fields...>, HasTag>::value;
-            static_assert(tagIndex < sizeof...(Fields), "FirstTag was not found inside this Record");
+            static_assert(
+                tagIndex < sizeof...(Fields),
+                "FirstTag was not found inside this DatumStruct. Does your datum domain contain the tag you access "
+                "with?");
 
             using ChildType = GetFieldType<boost::mp11::mp_at_c<Record<Fields...>, tagIndex>>;
 
