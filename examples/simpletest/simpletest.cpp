@@ -170,7 +170,7 @@ try
     double& momentum_z = view[pos](st::Momentum{}, st::Z{});
     int& weight = view[{0, 0}](llama::DatumCoord<2>{});
     int& weight_2 = view(pos)(Weight_);
-    bool& options_2 = view[0](st::Options())(llama::DatumCoord<2>());
+    bool& options_2 = view[{0, 0}](st::Options())(llama::DatumCoord<2>());
     bool& options_3 = view(pos)(Options_)(llama::DatumCoord<2>());
     // printing the address and distances of the element in the memory. This
     // will change based on the chosen mapping. When array of struct is chosen

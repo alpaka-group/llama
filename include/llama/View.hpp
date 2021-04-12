@@ -927,6 +927,9 @@ namespace llama
         template <typename... Index>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Index... indices) const -> decltype(auto)
         {
+            static_assert(
+                sizeof...(Index) == ArrayDomain::rank,
+                "Please specify as many indices as your array domain has dimensions");
             LLAMA_FORCE_INLINE_RECURSIVE
             return (*this)(ArrayDomain{indices...});
         }
@@ -934,6 +937,9 @@ namespace llama
         template <typename... Index>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Index... indices) -> decltype(auto)
         {
+            static_assert(
+                sizeof...(Index) == ArrayDomain::rank,
+                "Please specify as many indices as your array domain has dimensions");
             LLAMA_FORCE_INLINE_RECURSIVE
             return (*this)(ArrayDomain{indices...});
         }
@@ -1029,13 +1035,13 @@ namespace llama
         template <std::size_t... Coords>
         LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDomain arrayDomain) const -> const auto&
         {
-            return parentView.template accessor<Coords...>(arrayDomain + offset);
+            return parentView.template accessor<Coords...>(ArrayDomain{arrayDomain + offset});
         }
 
         template <std::size_t... Coords>
         LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDomain arrayDomain) -> auto&
         {
-            return parentView.template accessor<Coords...>(arrayDomain + offset);
+            return parentView.template accessor<Coords...>(ArrayDomain{arrayDomain + offset});
         }
 
         /// Same as \ref View::operator()(ArrayDomain), but shifted by the offset
@@ -1043,13 +1049,13 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDomain arrayDomain) const -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return parentView(arrayDomain + offset);
+            return parentView(ArrayDomain{arrayDomain + offset});
         }
 
         LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDomain arrayDomain) -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return parentView(arrayDomain + offset);
+            return parentView(ArrayDomain{arrayDomain + offset});
         }
 
         /// Same as corresponding operator in \ref View, but shifted by the
@@ -1058,14 +1064,14 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) const -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return parentView(ArrayDomain{indices...} + offset);
+            return parentView(ArrayDomain{ArrayDomain{indices...} + offset});
         }
 
         template <typename... Indices>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) -> VirtualDatumType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return parentView(ArrayDomain{indices...} + offset);
+            return parentView(ArrayDomain{ArrayDomain{indices...} + offset});
         }
 
         template <std::size_t... Coord>
