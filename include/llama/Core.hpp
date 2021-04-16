@@ -455,4 +455,23 @@ namespace llama
                 std::forward<Func>(func)(ArrayDomain<sizeof...(outerIndices) + 1>{outerIndices..., i});
         }
     }
+
+    namespace internal
+    {
+        template <typename T>
+        struct IndirectValue
+        {
+            T value;
+
+            auto operator->() -> T*
+            {
+                return &value;
+            }
+
+            auto operator->() const -> const T*
+            {
+                return &value;
+            }
+        };
+    } // namespace internal
 } // namespace llama

@@ -720,25 +720,6 @@ namespace llama
     };
 #endif
 
-    namespace internal
-    {
-        template <typename T>
-        struct IndirectValue
-        {
-            T value;
-
-            auto operator->() -> T*
-            {
-                return &value;
-            }
-
-            auto operator->() const -> const T*
-            {
-                return &value;
-            }
-        };
-    } // namespace internal
-
     // Currently, only 1D iterators are supported, becaues higher dimensional iterators are difficult if we also
     // want to preserve good codegen. Multiple nested loops seem to be superior to a single iterator over multiple
     // dimensions. At least compilers are able to produce better code. std::mdspan also discovered similar

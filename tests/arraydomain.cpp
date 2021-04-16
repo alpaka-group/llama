@@ -105,18 +105,69 @@ TEST_CASE("ArrayDomain.ctor")
     CHECK(ad[0] == 0);
 }
 
-TEST_CASE("ArrayDomainIndexIterator")
+TEST_CASE("ArrayDomainIndexIterator.concepts")
 {
     STATIC_REQUIRE(std::is_same_v<
                    std::iterator_traits<llama::ArrayDomainIndexIterator<3>>::iterator_category,
-                   std::forward_iterator_tag>);
+                   std::random_access_iterator_tag>);
 
-    llama::ArrayDomainIndexIterator it = std::begin(llama::ArrayDomainIndexRange{llama::ArrayDomain<2>{3, 3}});
+#ifdef __cpp_concepts
+    STATIC_REQUIRE(std::random_access_iterator<llama::ArrayDomainIndexIterator<3>>);
+#endif
+}
+
+TEST_CASE("ArrayDomainIndexIterator")
+{
+    llama::ArrayDomainIndexRange r{llama::ArrayDomain<2>{3, 3}};
+
+    llama::ArrayDomainIndexIterator it = std::begin(r);
     CHECK(*it == llama::ArrayDomain{0, 0});
     it++;
     CHECK(*it == llama::ArrayDomain{0, 1});
     ++it;
     CHECK(*it == llama::ArrayDomain{0, 2});
+    --it;
+    CHECK(*it == llama::ArrayDomain{0, 1});
+    it--;
+    CHECK(*it == llama::ArrayDomain{0, 0});
+
+    it = std::begin(r);
+    it += 2;
+    CHECK(*it == llama::ArrayDomain{0, 2});
+    it += 2;
+    CHECK(*it == llama::ArrayDomain{1, 1});
+    it -= 2;
+    CHECK(*it == llama::ArrayDomain{0, 2});
+    it -= 2;
+    CHECK(*it == llama::ArrayDomain{0, 0});
+
+    it = std::begin(r);
+    CHECK(it[2] == llama::ArrayDomain{0, 2});
+    CHECK(it[4] == llama::ArrayDomain{1, 1});
+    CHECK(it[8] == llama::ArrayDomain{2, 2});
+
+    it = std::begin(r);
+    CHECK(*(it + 8) == llama::ArrayDomain{2, 2});
+    CHECK(*(8 + it) == llama::ArrayDomain{2, 2});
+
+    it += 8;
+    CHECK(*it == llama::ArrayDomain{2, 2});
+    CHECK(*(it - 8) == llama::ArrayDomain{0, 0});
+    it -= 8;
+    CHECK(*it == llama::ArrayDomain{0, 0});
+
+    CHECK(std::end(r) - std::begin(r) == 9);
+    CHECK(std::begin(r) - std::end(r) == -9);
+
+    it = std::begin(r) + 4;
+    CHECK(*it == llama::ArrayDomain{1, 1});
+    CHECK(std::end(r) - it == 5);
+    CHECK(it - std::begin(r) == 4);
+
+    it = std::begin(r);
+    CHECK(it == it);
+    CHECK(it != it + 1);
+    CHECK(it < it + 1);
 }
 
 TEST_CASE("ArrayDomainIndexIterator.constexpr")
@@ -176,6 +227,33 @@ TEST_CASE("ArrayDomainIndexRange3D")
             {2, 0, 0}, {2, 0, 1}, {2, 0, 2}, {2, 1, 0}, {2, 1, 1}, {2, 1, 2}, {2, 2, 0}, {2, 2, 1}, {2, 2, 2},
         });
 }
+
+#if CAN_USE_RANGES
+#    include <ranges>
+
+TEST_CASE("ArrayDomainIndexRange.concepts")
+{
+    STATIC_REQUIRE(std::ranges::range<llama::ArrayDomainIndexRange<3>>);
+    STATIC_REQUIRE(std::ranges::random_access_range<llama::ArrayDomainIndexRange<3>>);
+    // STATIC_REQUIRE(std::ranges::view<llama::ArrayDomainIndexRange<3>>);
+}
+
+TEST_CASE("ArrayDomainIndexRange3D.reverse")
+{
+    llama::ArrayDomain<3> ad{3, 3, 3};
+
+    std::vector<llama::ArrayDomain<3>> coords;
+    for (auto coord : llama::ArrayDomainIndexRange{ad} | std::views::reverse)
+        coords.push_back(coord);
+
+    CHECK(
+        coords
+        == std::vector<llama::ArrayDomain<3>>{
+            {{2, 2, 2}, {2, 2, 1}, {2, 2, 0}, {2, 1, 2}, {2, 1, 1}, {2, 1, 0}, {2, 0, 2}, {2, 0, 1}, {2, 0, 0},
+             {1, 2, 2}, {1, 2, 1}, {1, 2, 0}, {1, 1, 2}, {1, 1, 1}, {1, 1, 0}, {1, 0, 2}, {1, 0, 1}, {1, 0, 0},
+             {0, 2, 2}, {0, 2, 1}, {0, 2, 0}, {0, 1, 2}, {0, 1, 1}, {0, 1, 0}, {0, 0, 2}, {0, 0, 1}, {0, 0, 0}}});
+}
+#endif
 
 TEST_CASE("ArrayDomainIndexRange1D.constexpr")
 {
