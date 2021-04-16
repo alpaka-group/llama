@@ -3,26 +3,11 @@
 
 #pragma once
 
-#include <boost/predef.h>
-
-#if BOOST_COMP_INTEL == 0 // Work around for broken intel detection
-#    if defined(__INTEL_COMPILER)
-#        ifdef BOOST_COMP_INTEL_DETECTION
-#            undef BOOST_COMP_INTEL_DETECTION
-#        endif
-#        define BOOST_COMP_INTEL_DETECTION BOOST_PREDEF_MAKE_10_VVRR(__INTEL_COMPILER)
-#        if defined(BOOST_COMP_INTEL)
-#            undef BOOST_COMP_INTEL
-#        endif
-#        define BOOST_COMP_INTEL BOOST_COMP_INTEL_DETECTION
-#    endif
-#endif
-
-#if BOOST_COMP_GNUC != 0
+#if defined(__GNUC__)
 #    define LLAMA_INDEPENDENT_DATA _Pragma("GCC ivdep")
-#elif BOOST_COMP_INTEL != 0
+#elif defined(__INTEL_COMPILER) || defined(__INTEL_LLVM_COMPILER)
 #    define LLAMA_INDEPENDENT_DATA _Pragma("ivdep")
-#elif BOOST_COMP_CLANG
+#elif defined(__clang__)
 #    define LLAMA_INDEPENDENT_DATA _Pragma("clang loop vectorize(enable) interleave(enable) distribute(enable)")
 #elif defined(_MSC_VER)
 #    define LLAMA_INDEPENDENT_DATA __pragma(loop(ivdep))
@@ -40,11 +25,11 @@
 #endif
 
 #ifndef LLAMA_FN_HOST_ACC_INLINE
-#    if BOOST_COMP_NVCC != 0
+#    if defined(__NVCC__)
 #        define LLAMA_FN_HOST_ACC_INLINE __forceinline__
-#    elif BOOST_COMP_GNUC != 0
+#    elif defined(__GNUC__) || defined(__clang__)
 #        define LLAMA_FN_HOST_ACC_INLINE inline __attribute__((always_inline))
-#    elif defined(_MSC_VER)
+#    elif defined(_MSC_VER) || defined(__INTEL_COMPILER) || defined(__INTEL_LLVM_COMPILER)
 #        define LLAMA_FN_HOST_ACC_INLINE __forceinline
 #    else
 /// Some offloading parallelization language extensions such a CUDA, OpenACC or
@@ -56,10 +41,11 @@
 /// this macro should be defined on the compiler's command line. E.g. for
 /// alpaka: -D'LLAMA_FN_HOST_ACC_INLINE=ALPAKA_FN_HOST_ACC'
 #        define LLAMA_FN_HOST_ACC_INLINE inline
+#        warning LLAMA_FN_HOST_ACC_INLINE not defined for this compiler
 #    endif
 #endif
 
-#if BOOST_COMP_INTEL != 0
+#if defined(__INTEL_COMPILER) /*|| defined(__INTEL_LLVM_COMPILER)*/
 #    define LLAMA_FORCE_INLINE_RECURSIVE _Pragma("forceinline recursive")
 #elif defined(_MSC_VER)
 #    define LLAMA_FORCE_INLINE_RECURSIVE __pragma(inline_depth(255))
