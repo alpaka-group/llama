@@ -10,7 +10,7 @@
 #include <cstddef>
 #include <memory>
 #include <vector>
-#if BOOST_COMP_INTEL != 0
+#ifdef __INTEL_COMPILER
 #    include <aligned_new>
 #endif
 
