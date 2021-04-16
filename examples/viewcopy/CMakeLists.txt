@@ -3,19 +3,9 @@ project(llama-viewcopy)
 
 set(CMAKE_CXX_STANDARD 20)
 
+find_package(OpenMP REQUIRED)
 if (NOT TARGET llama::llama)
 	find_package(llama REQUIRED)
 endif()
 add_executable(${PROJECT_NAME} viewcopy.cpp ../common/Stopwatch.hpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama)
-
-if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-	# GCC will try to find TBB and if it is installed use it for the parallel STL
-	# unfortunately, it does not link against TBB automatically
-	find_package(TBB CONFIG QUIET)
-	if (TBB_FOUND)
-		# TBB needs pthreads
-		find_package(Threads REQUIRED)
-		target_link_libraries(${PROJECT_NAME} PRIVATE TBB::tbb Threads::Threads)
-	endif()
-endif()
+target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama OpenMP::OpenMP_CXX)

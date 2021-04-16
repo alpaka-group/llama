@@ -2,15 +2,13 @@
 
 #include <boost/functional/hash.hpp>
 #include <boost/mp11.hpp>
-#include <boost/range/irange.hpp>
 #include <chrono>
-#include <execution>
 #include <fstream>
 #include <iomanip>
 #include <llama/llama.hpp>
 #include <numeric>
+#include <omp.h>
 #include <string_view>
-#include <thread>
 
 // clang-format off
 namespace tag
@@ -38,21 +36,60 @@ using Particle = llama::DS<
 >;
 // clang-format on
 
-template <
-    typename Mapping1,
-    typename BlobType1,
-    typename Mapping2,
-    typename BlobType2,
-    typename Ex = std::execution::sequenced_policy>
-void naive_copy(const llama::View<Mapping1, BlobType1>& srcView, llama::View<Mapping2, BlobType2>& dstView, Ex ex = {})
+namespace llamaex
+{
+    using namespace llama;
+
+    namespace internal
+    {
+        template <std::size_t Dim>
+        constexpr auto popFront(ArrayDomain<Dim> ad)
+        {
+            ArrayDomain<Dim - 1> result;
+            for (std::size_t i = 0; i < Dim - 1; i++)
+                result[i] = ad[i + 1];
+            return result;
+        }
+    } // namespace internal
+
+    template <std::size_t Dim, typename Func, typename... OuterIndices>
+    void forEachADCoord(ArrayDomain<Dim> adSize, Func&& func, OuterIndices... outerIndices)
+    {
+        for (std::size_t i = 0; i < adSize[0]; i++)
+        {
+            if constexpr (Dim > 1)
+                forEachADCoord(internal::popFront(adSize), std::forward<Func>(func), outerIndices..., i);
+            else
+                std::forward<Func>(func)(ArrayDomain<sizeof...(outerIndices) + 1>{outerIndices..., i});
+        }
+    }
+
+    template <std::size_t Dim, typename Func>
+    void parallelForEachADCoord(ArrayDomain<Dim> adSize, std::size_t numThreads, Func&& func)
+    {
+#pragma omp parallel for num_threads(numThreads)
+        for (std::ptrdiff_t i = 0; i < static_cast<std::ptrdiff_t>(adSize[0]); i++)
+        {
+            if constexpr (Dim > 1)
+                forEachADCoord(internal::popFront(adSize), std::forward<Func>(func), static_cast<std::size_t>(i));
+            else
+                std::forward<Func>(func)(ArrayDomain<Dim>{static_cast<std::size_t>(i)});
+        }
+    }
+} // namespace llamaex
+
+template <typename Mapping1, typename BlobType1, typename Mapping2, typename BlobType2>
+void naive_copy(
+    const llama::View<Mapping1, BlobType1>& srcView,
+    llama::View<Mapping2, BlobType2>& dstView,
+    std::size_t numThreads = 1)
 {
     static_assert(std::is_same_v<typename Mapping1::DatumDomain, typename Mapping2::DatumDomain>);
 
     if (srcView.mapping.arrayDomainSize != dstView.mapping.arrayDomainSize)
         throw std::runtime_error{"UserDomain sizes are different"};
 
-    auto r = llama::ArrayDomainIndexRange{srcView.mapping.arrayDomainSize};
-    std::for_each(ex, std::begin(r), std::end(r), [&](auto ad) {
+    llamaex::parallelForEachADCoord(srcView.mapping.arrayDomainSize, numThreads, [&](auto ad) {
         llama::forEachLeaf<typename Mapping1::DatumDomain>([&](auto coord) {
             dstView(ad)(coord) = srcView(ad)(coord);
             // std::memcpy(
@@ -63,18 +100,17 @@ void naive_copy(const llama::View<Mapping1, BlobType1>& srcView, llama::View<Map
     });
 }
 
-void parallel_memcpy(std::byte* dst, const std::byte* src, std::size_t size)
+void parallel_memcpy(std::byte* dst, const std::byte* src, std::size_t size, std::size_t numThreads = 1)
 {
-    const auto threads = std::size_t{std::thread::hardware_concurrency()};
-    const auto sizePerThread = size / threads;
-    const auto sizeLastThread = sizePerThread + size % threads;
-    auto r = boost::irange(threads);
-    std::for_each(std::execution::par, std::begin(r), std::end(r), [&](auto id) {
-        std::memcpy(
-            dst + id * sizePerThread,
-            src + id * sizePerThread,
-            id == threads - 1 ? sizeLastThread : sizePerThread);
-    });
+    const auto sizePerThread = size / numThreads;
+    const auto sizeLastThread = sizePerThread + size % numThreads;
+
+#pragma omp parallel num_threads(numThreads)
+    {
+        const auto id = static_cast<std::size_t>(omp_get_thread_num());
+        const auto sizeThisThread = id == numThreads - 1 ? sizeLastThread : sizePerThread;
+        std::memcpy(dst + id * sizePerThread, src + id * sizePerThread, sizeThisThread);
+    }
 }
 
 template <
@@ -84,8 +120,7 @@ template <
     std::size_t LanesSrc,
     typename BlobType1,
     std::size_t LanesDst,
-    typename BlobType2,
-    typename Ex = std::execution::sequenced_policy>
+    typename BlobType2>
 void aosoa_copy(
     const llama::View<
         llama::mapping::AoSoA<ArrayDomain, DatumDomain, LanesSrc, llama::mapping::LinearizeArrayDomainCpp>,
@@ -93,7 +128,7 @@ void aosoa_copy(
     llama::View<
         llama::mapping::AoSoA<ArrayDomain, DatumDomain, LanesDst, llama::mapping::LinearizeArrayDomainCpp>,
         BlobType2>& dstView,
-    Ex ex = {})
+    std::size_t numThreads = 1)
 {
     static_assert(decltype(srcView.storageBlobs)::rank == 1);
     static_assert(decltype(dstView.storageBlobs)::rank == 1);
@@ -120,20 +155,15 @@ void aosoa_copy(
         return offset;
     };
 
-    const auto threads = [&]() -> std::size_t {
-        if constexpr (std::is_same_v<Ex, std::execution::sequenced_policy>)
-            return 1u;
-        else
-            return std::thread::hardware_concurrency();
-    }();
-    const auto threadIds = boost::irange(threads);
     if constexpr (ReadOpt)
     {
         // optimized for linear reading
-        const auto elementsPerThread = ((flatSize / LanesSrc) / threads) * LanesSrc;
-        std::for_each(ex, std::begin(threadIds), std::end(threadIds), [&](auto id) {
+        const auto elementsPerThread = ((flatSize / LanesSrc) / numThreads) * LanesSrc;
+#pragma omp parallel num_threads(numThreads)
+        {
+            const auto id = static_cast<std::size_t>(omp_get_thread_num());
             const auto start = id * elementsPerThread;
-            const auto stop = id == threads - 1 ? flatSize : (id + 1) * elementsPerThread;
+            const auto stop = id == numThreads - 1 ? flatSize : (id + 1) * elementsPerThread;
             auto* threadSrc = src + map(start, llama::DatumCoord<>{}, LanesSrc);
 
             for (std::size_t i = start; i < stop; i += LanesSrc)
@@ -148,15 +178,17 @@ void aosoa_copy(
                     }
                 });
             }
-        });
+        }
     }
     else
     {
         // optimized for linear writing
-        const auto elementsPerThread = ((flatSize / LanesDst) / threads) * LanesDst;
-        std::for_each(ex, std::begin(threadIds), std::end(threadIds), [&](auto id) {
+        const auto elementsPerThread = ((flatSize / LanesDst) / numThreads) * LanesDst;
+#pragma omp parallel num_threads(numThreads)
+        {
+            const auto id = static_cast<std::size_t>(omp_get_thread_num());
             const auto start = id * elementsPerThread;
-            const auto stop = id == threads - 1 ? flatSize : (id + 1) * elementsPerThread;
+            const auto stop = id == numThreads - 1 ? flatSize : (id + 1) * elementsPerThread;
 
             auto* threadDst = dst + map(start, llama::DatumCoord<>{}, LanesDst);
 
@@ -172,7 +204,7 @@ void aosoa_copy(
                     }
                 });
             }
-        });
+        }
     }
 }
 
@@ -227,7 +259,8 @@ void benchmarkCopy(
 auto main() -> int
 try
 {
-    std::cout << "Threads: " << std::thread::hardware_concurrency() << "\n";
+    const auto numThreads = static_cast<std::size_t>(omp_get_num_threads());
+    std::cout << "Threads: " << numThreads << "\n";
 
     const auto userDomain = llama::ArrayDomain{1024, 1024, 16};
 
@@ -246,21 +279,22 @@ try
         benchmarkCopy("naive copy", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             naive_copy(srcView, dstView);
         });
-        benchmarkCopy("naive copy(p)", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
-            naive_copy(srcView, dstView, std::execution::par);
+        benchmarkCopy("naive copy(p)", plotFile, srcView, srcHash, dstMapping, [&](const auto& srcView, auto& dstView) {
+            naive_copy(srcView, dstView, numThreads);
         });
         benchmarkCopy("memcpy", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             static_assert(decltype(srcView.storageBlobs)::rank == 1);
             static_assert(decltype(dstView.storageBlobs)::rank == 1);
             std::memcpy(dstView.storageBlobs[0].data(), srcView.storageBlobs[0].data(), dstView.storageBlobs[0].size());
         });
-        benchmarkCopy("memcpy(p)", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+        benchmarkCopy("memcpy(p)", plotFile, srcView, srcHash, dstMapping, [&](const auto& srcView, auto& dstView) {
             static_assert(decltype(srcView.storageBlobs)::rank == 1);
             static_assert(decltype(dstView.storageBlobs)::rank == 1);
             parallel_memcpy(
                 dstView.storageBlobs[0].data(),
                 srcView.storageBlobs[0].data(),
-                dstView.storageBlobs[0].size());
+                dstView.storageBlobs[0].size(),
+                numThreads);
         });
         plotFile << "0\t";
         plotFile << "0\t";
@@ -279,21 +313,22 @@ try
         benchmarkCopy("naive copy", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             naive_copy(srcView, dstView);
         });
-        benchmarkCopy("naive copy(p)", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
-            naive_copy(srcView, dstView, std::execution::par);
+        benchmarkCopy("naive copy(p)", plotFile, srcView, srcHash, dstMapping, [&](const auto& srcView, auto& dstView) {
+            naive_copy(srcView, dstView, numThreads);
         });
         benchmarkCopy("memcpy", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             static_assert(decltype(srcView.storageBlobs)::rank == 1);
             static_assert(decltype(dstView.storageBlobs)::rank == 1);
             std::memcpy(dstView.storageBlobs[0].data(), srcView.storageBlobs[0].data(), dstView.storageBlobs[0].size());
         });
-        benchmarkCopy("memcpy(p)", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+        benchmarkCopy("memcpy(p)", plotFile, srcView, srcHash, dstMapping, [&](const auto& srcView, auto& dstView) {
             static_assert(decltype(srcView.storageBlobs)::rank == 1);
             static_assert(decltype(dstView.storageBlobs)::rank == 1);
             parallel_memcpy(
                 dstView.storageBlobs[0].data(),
                 srcView.storageBlobs[0].data(),
-                dstView.storageBlobs[0].size());
+                dstView.storageBlobs[0].size(),
+                numThreads);
         });
         plotFile << "0\t";
         plotFile << "0\t";
@@ -320,21 +355,22 @@ try
         benchmarkCopy("naive copy", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             naive_copy(srcView, dstView);
         });
-        benchmarkCopy("naive copy(p)", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
-            naive_copy(srcView, dstView, std::execution::par);
+        benchmarkCopy("naive copy(p)", plotFile, srcView, srcHash, dstMapping, [&](const auto& srcView, auto& dstView) {
+            naive_copy(srcView, dstView, numThreads);
         });
         benchmarkCopy("memcpy", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             static_assert(decltype(srcView.storageBlobs)::rank == 1);
             static_assert(decltype(dstView.storageBlobs)::rank == 1);
             std::memcpy(dstView.storageBlobs[0].data(), srcView.storageBlobs[0].data(), dstView.storageBlobs[0].size());
         });
-        benchmarkCopy("memcpy(p)", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
+        benchmarkCopy("memcpy(p)", plotFile, srcView, srcHash, dstMapping, [&](const auto& srcView, auto& dstView) {
             static_assert(decltype(srcView.storageBlobs)::rank == 1);
             static_assert(decltype(dstView.storageBlobs)::rank == 1);
             parallel_memcpy(
                 dstView.storageBlobs[0].data(),
                 srcView.storageBlobs[0].data(),
-                dstView.storageBlobs[0].size());
+                dstView.storageBlobs[0].size(),
+                numThreads);
         });
         benchmarkCopy("aosoa copy(r)", plotFile, srcView, srcHash, dstMapping, [](const auto& srcView, auto& dstView) {
             aosoa_copy<true>(srcView, dstView);
@@ -348,14 +384,14 @@ try
             srcView,
             srcHash,
             dstMapping,
-            [](const auto& srcView, auto& dstView) { aosoa_copy<true>(srcView, dstView, std::execution::par); });
+            [&](const auto& srcView, auto& dstView) { aosoa_copy<true>(srcView, dstView, numThreads); });
         benchmarkCopy(
             "aosoa_copy(w,p)",
             plotFile,
             srcView,
             srcHash,
             dstMapping,
-            [](const auto& srcView, auto& dstView) { aosoa_copy<false>(srcView, dstView, std::execution::par); });
+            [&](const auto& srcView, auto& dstView) { aosoa_copy<false>(srcView, dstView, numThreads); });
         plotFile << "\n";
     });
 
