@@ -431,4 +431,28 @@ namespace llama
             s = s.substr(pos + 1);
         return s;
     }
+
+    namespace internal
+    {
+        template <std::size_t Dim>
+        constexpr auto popFront(ArrayDomain<Dim> ad)
+        {
+            ArrayDomain<Dim - 1> result;
+            for (std::size_t i = 0; i < Dim - 1; i++)
+                result[i] = ad[i + 1];
+            return result;
+        }
+    } // namespace internal
+
+    template <std::size_t Dim, typename Func, typename... OuterIndices>
+    void forEachADCoord(ArrayDomain<Dim> adSize, Func&& func, OuterIndices... outerIndices)
+    {
+        for (std::size_t i = 0; i < adSize[0]; i++)
+        {
+            if constexpr (Dim > 1)
+                forEachADCoord(internal::popFront(adSize), std::forward<Func>(func), outerIndices..., i);
+            else
+                std::forward<Func>(func)(ArrayDomain<sizeof...(outerIndices) + 1>{outerIndices..., i});
+        }
+    }
 } // namespace llama

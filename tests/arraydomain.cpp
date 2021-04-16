@@ -240,3 +240,41 @@ TEST_CASE("Morton")
     CHECK(lin(ArrayDomain{3, 2}, {}) == 14);
     CHECK(lin(ArrayDomain{3, 3}, {}) == 15);
 }
+
+TEST_CASE("forEachADCoord_1D")
+{
+    llama::ArrayDomain<1> adSize{3};
+
+    std::vector<llama::ArrayDomain<1>> coords;
+    llama::forEachADCoord(adSize, [&](llama::ArrayDomain<1> coord) { coords.push_back(coord); });
+
+    CHECK(coords == std::vector<llama::ArrayDomain<1>>{{0}, {1}, {2}});
+}
+
+TEST_CASE("forEachADCoord_2D")
+{
+    llama::ArrayDomain<2> adSize{3, 3};
+
+    std::vector<llama::ArrayDomain<2>> coords;
+    llama::forEachADCoord(adSize, [&](llama::ArrayDomain<2> coord) { coords.push_back(coord); });
+
+    CHECK(
+        coords
+        == std::vector<llama::ArrayDomain<2>>{{0, 0}, {0, 1}, {0, 2}, {1, 0}, {1, 1}, {1, 2}, {2, 0}, {2, 1}, {2, 2}});
+}
+
+TEST_CASE("forEachADCoord_3D")
+{
+    llama::ArrayDomain<3> adSize{3, 3, 3};
+
+    std::vector<llama::ArrayDomain<3>> coords;
+    llama::forEachADCoord(adSize, [&](llama::ArrayDomain<3> coord) { coords.push_back(coord); });
+
+    CHECK(
+        coords
+        == std::vector<llama::ArrayDomain<3>>{
+            {0, 0, 0}, {0, 0, 1}, {0, 0, 2}, {0, 1, 0}, {0, 1, 1}, {0, 1, 2}, {0, 2, 0}, {0, 2, 1}, {0, 2, 2},
+            {1, 0, 0}, {1, 0, 1}, {1, 0, 2}, {1, 1, 0}, {1, 1, 1}, {1, 1, 2}, {1, 2, 0}, {1, 2, 1}, {1, 2, 2},
+            {2, 0, 0}, {2, 0, 1}, {2, 0, 2}, {2, 1, 0}, {2, 1, 1}, {2, 1, 2}, {2, 2, 0}, {2, 2, 1}, {2, 2, 2},
+        });
+}
