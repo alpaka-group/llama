@@ -74,9 +74,9 @@ jobs:
           sudo apt install libboost-all-dev $INSTALL_EXTRA
       - name: vcpkg install dependencies
         run: |
-          # vcpkg fails to build TBB with Intel compilers
+          # vcpkg fails to build with Intel compilers
           if [ ${{ matrix.intel }} ]; then unset CXX; fi
-          vcpkg install catch2 fmt tbb vc
+          vcpkg install catch2 fmt vc
       - name: download CUDA 11
         if: ${{ matrix.cuda }}
         run: |
