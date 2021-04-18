@@ -23,15 +23,15 @@ using Name = llama::DS<
 
 TEST_CASE("ArrayDomain.CTAD")
 {
-    llama::ArrayDomain ud0{};
-    llama::ArrayDomain ud1{1};
-    llama::ArrayDomain ud2{1, 1};
-    llama::ArrayDomain ud3{1, 1, 1};
+    llama::ArrayDomain ad0{};
+    llama::ArrayDomain ad1{1};
+    llama::ArrayDomain ad2{1, 1};
+    llama::ArrayDomain ad3{1, 1, 1};
 
-    STATIC_REQUIRE(decltype(ud0)::rank == 0);
-    STATIC_REQUIRE(decltype(ud1)::rank == 1);
-    STATIC_REQUIRE(decltype(ud2)::rank == 2);
-    STATIC_REQUIRE(decltype(ud3)::rank == 3);
+    STATIC_REQUIRE(decltype(ad0)::rank == 0);
+    STATIC_REQUIRE(decltype(ad1)::rank == 1);
+    STATIC_REQUIRE(decltype(ad2)::rank == 2);
+    STATIC_REQUIRE(decltype(ad3)::rank == 3);
 }
 
 TEST_CASE("ArrayDomain.dim0")
@@ -101,8 +101,8 @@ TEST_CASE("ArrayDomain.dim10")
 
 TEST_CASE("ArrayDomain.ctor")
 {
-    llama::ArrayDomain<1> ud{};
-    CHECK(ud[0] == 0);
+    llama::ArrayDomain<1> ad{};
+    CHECK(ad[0] == 0);
 }
 
 TEST_CASE("ArrayDomainIndexIterator")
@@ -138,10 +138,10 @@ TEST_CASE("ArrayDomainIndexIterator.constexpr")
 
 TEST_CASE("ArrayDomainIndexRange1D")
 {
-    llama::ArrayDomain<1> ud{3};
+    llama::ArrayDomain<1> ad{3};
 
     std::vector<llama::ArrayDomain<1>> coords;
-    for (auto coord : llama::ArrayDomainIndexRange{ud})
+    for (auto coord : llama::ArrayDomainIndexRange{ad})
         coords.push_back(coord);
 
     CHECK(coords == std::vector<llama::ArrayDomain<1>>{{0}, {1}, {2}});
@@ -149,10 +149,10 @@ TEST_CASE("ArrayDomainIndexRange1D")
 
 TEST_CASE("ArrayDomainIndexRange2D")
 {
-    llama::ArrayDomain<2> ud{3, 3};
+    llama::ArrayDomain<2> ad{3, 3};
 
     std::vector<llama::ArrayDomain<2>> coords;
-    for (auto coord : llama::ArrayDomainIndexRange{ud})
+    for (auto coord : llama::ArrayDomainIndexRange{ad})
         coords.push_back(coord);
 
     CHECK(
@@ -162,10 +162,10 @@ TEST_CASE("ArrayDomainIndexRange2D")
 
 TEST_CASE("ArrayDomainIndexRange3D")
 {
-    llama::ArrayDomain<3> ud{3, 3, 3};
+    llama::ArrayDomain<3> ad{3, 3, 3};
 
     std::vector<llama::ArrayDomain<3>> coords;
-    for (auto coord : llama::ArrayDomainIndexRange{ud})
+    for (auto coord : llama::ArrayDomainIndexRange{ad})
         coords.push_back(coord);
 
     CHECK(
@@ -181,9 +181,9 @@ TEST_CASE("ArrayDomainIndexRange1D.constexpr")
 {
     constexpr auto r = []() constexpr
     {
-        llama::ArrayDomain<1> ud{3};
+        llama::ArrayDomain<1> ad{3};
         int i = 0;
-        for (auto coord : llama::ArrayDomainIndexRange{ud})
+        for (auto coord : llama::ArrayDomainIndexRange{ad})
         {
             if (i == 0 && coord != llama::ArrayDomain<1>{0})
                 return false;
@@ -202,9 +202,9 @@ TEST_CASE("ArrayDomainIndexRange1D.constexpr")
 
 TEST_CASE("ArrayDomainIndexRange3D.destructering")
 {
-    llama::ArrayDomain<3> ud{1, 1, 1};
+    llama::ArrayDomain<3> ad{1, 1, 1};
 
-    for (auto [x, y, z] : llama::ArrayDomainIndexRange{ud})
+    for (auto [x, y, z] : llama::ArrayDomainIndexRange{ad})
     {
         CHECK(x == 0);
         CHECK(y == 0);
