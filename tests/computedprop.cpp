@@ -170,3 +170,114 @@ TEST_CASE("fully_computed_mapping")
     CHECK(view(2u, 1u, 2u)(A{}, Y{}) == 4);
     CHECK(view(2u, 5u, 2u)(A{}, Z{}) == 20);
 }
+
+namespace
+{
+    template <
+        typename T_ArrayDomain,
+        typename T_DatumDomain,
+        typename LinearizeArrayDomainFunctor = llama::mapping::LinearizeArrayDomainCpp>
+    struct CompressedBoolMapping
+    {
+        using ArrayDomain = T_ArrayDomain;
+        using DatumDomain = T_DatumDomain;
+        static constexpr std::size_t blobCount = boost::mp11::mp_size<llama::FlattenDatumDomain<DatumDomain>>::value;
+
+        constexpr CompressedBoolMapping() = default;
+
+        constexpr CompressedBoolMapping(ArrayDomain size) : arrayDomainSize(size)
+        {
+        }
+
+        using Word = std::uint64_t;
+
+        struct BoolRef
+        {
+            Word& word;
+            unsigned char bit;
+
+            operator bool() const
+            {
+                return word & (Word{1} << bit);
+            }
+
+            auto operator=(bool b)
+            {
+                word ^= (-Word{b} ^ word) & (Word{1} << bit);
+            }
+        };
+
+        constexpr auto blobSize(std::size_t) const -> std::size_t
+        {
+            llama::forEachLeaf<DatumDomain>([](auto coord) constexpr {
+                static_assert(std::is_same_v<llama::GetType<DatumDomain, decltype(coord)>, bool>);
+            });
+            constexpr std::size_t wordBytes = sizeof(Word);
+            return (LinearizeArrayDomainFunctor{}.size(arrayDomainSize) + wordBytes - 1) / wordBytes;
+        }
+
+        template <std::size_t... DatumDomainCoord>
+        static constexpr auto isComputed(llama::DatumCoord<DatumDomainCoord...>)
+        {
+            return true;
+        }
+
+        template <std::size_t... DatumDomainCoord, typename Blob>
+        constexpr auto compute(
+            ArrayDomain coord,
+            llama::DatumCoord<DatumDomainCoord...>,
+            llama::Array<Blob, blobCount>& blobs) const -> BoolRef
+        {
+            const auto bitOffset = LinearizeArrayDomainFunctor{}(coord, arrayDomainSize);
+            const auto blob = llama::flatDatumCoord<DatumDomain, llama::DatumCoord<DatumDomainCoord...>>;
+
+            constexpr std::size_t wordBits = sizeof(Word) * CHAR_BIT;
+            return BoolRef{
+                reinterpret_cast<Word&>(blobs[blob][bitOffset / wordBits]),
+                static_cast<unsigned char>(bitOffset % wordBits)};
+        }
+
+        ArrayDomain arrayDomainSize;
+    };
+
+    // clang-format off
+    using BoolDomain = llama::DatumStruct<
+        llama::DatumElement<tag::A, bool>,
+        llama::DatumElement<tag::B, llama::DatumStruct<
+            llama::DatumElement<tag::X, bool>,
+            llama::DatumElement<tag::Y, bool>
+        >>
+    >;
+    // clang-format on
+} // namespace
+
+TEST_CASE("compressed_bools")
+{
+    auto arrayDomain = llama::ArrayDomain{8, 8};
+    auto mapping = CompressedBoolMapping<decltype(arrayDomain), BoolDomain>{arrayDomain};
+    STATIC_REQUIRE(decltype(mapping)::blobCount == 3);
+    CHECK(mapping.blobSize(0) == 8);
+    CHECK(mapping.blobSize(1) == 8);
+    CHECK(mapping.blobSize(2) == 8);
+
+    auto view = llama::allocView(mapping);
+    for (auto y = 0u; y < 8; y++)
+    {
+        for (auto x = 0u; x < 8; x++)
+        {
+            view(y, x)(tag::A{}) = static_cast<bool>(x * y & 1);
+            view(y, x)(tag::B{}, tag::X{}) = static_cast<bool>(x & 1);
+            view(y, x)(tag::B{}, tag::Y{}) = static_cast<bool>(y & 1);
+        }
+    }
+
+    for (auto y = 0u; y < 8; y++)
+    {
+        for (auto x = 0u; x < 8; x++)
+        {
+            CHECK(view(y, x)(tag::A{}) == static_cast<bool>(x * y & 1));
+            CHECK(view(y, x)(tag::B{}, tag::X{}) == static_cast<bool>(x & 1));
+            CHECK(view(y, x)(tag::B{}, tag::Y{}) == static_cast<bool>(y & 1));
+        }
+    }
+}
