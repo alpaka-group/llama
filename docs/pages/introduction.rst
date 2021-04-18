@@ -73,6 +73,21 @@ LLAMA tries to achieve the following goals:
 * LLAMA should work well with auto vectorization approaches of modern compilers, but also support explicit vectorization on top of LLAMA.
 
 
+Concept
+-------
+
+.. image:: ../images/concept.svg
+
+LLAMA separates the data structure access and physical memory layout by an opaque abstract data type called data space.
+The data space is an hypercubic index set described by the record dimension and one or more array dimensions.
+The record dimension consistes of a hierarchy of names and describes nested, structured data, much like a :cpp:`struct` in C++.
+The array dimensions are zero-based integral ranges.
+Programs are written against this abstract data space and thus formulated independent of the physical manifestation of the data space.
+Programs can refer to subparts of the data space via virtual records or real l-value references.
+The data space is materialized via a mapping that describes how the index set of the data space is embedded into a physical memory.
+This mapping is exchangeable at compile time and can be augmented with additional information from the programs access pattern and target hardware information.
+Due to a mapping encapsulating the full knowledge of a memory layout, LLAMA supports layout aware copies between instances of the same data space but with different mappings.
+
 Library overview
 ----------------
 
@@ -81,7 +96,7 @@ The following diagram gives an overview over the components of LLAMA:
 .. image:: ../images/overview.svg
 
 The core data structure of LLAMA is the :ref:`View <label-view>`,
-which holds the memory for the data and provides methods to access the data.
+which holds the memory for the data and provides methods to access the data space.
 In order to create a view, a `Mapping` is needed which is an abstract concept.
 LLAMA offers many kinds of mappings and users can also provide their own mappings.
 Mappings are constructed from a :ref:`Datum domain <label-dd>`, containing tags, and an :ref:`Array domain <label-ad>`.
