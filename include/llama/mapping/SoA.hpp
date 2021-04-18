@@ -25,11 +25,7 @@ namespace llama::mapping
         static constexpr std::size_t blobCount = []() constexpr
         {
             if constexpr (SeparateBuffers)
-            {
-                std::size_t count = 0;
-                forEachLeaf<DatumDomain>([&](auto) constexpr { count++; });
-                return count;
-            }
+                return boost::mp11::mp_size<llama::FlattenDatumDomain<DatumDomain>>::value;
             else
                 return 1;
         }
