@@ -69,21 +69,24 @@ namespace llama
         };
 
         bool collision = false;
-        llama::forEachLeaf<typename Mapping::DatumDomain>([&](auto coord) constexpr {
-            if (collision)
-                return;
-            for (auto ad : llama::ArrayDomainIndexRange{m.arrayDomainSize})
-            {
-                using Type = llama::GetType<typename Mapping::DatumDomain, decltype(coord)>;
-                const auto [blob, offset] = internal::blobNrAndOffset(m, coord, ad);
-                for (auto b = 0; b < sizeof(Type); b++)
-                    if (testAndSet(blob, offset + b))
-                    {
-                        collision = true;
-                        break;
-                    }
-            }
-        });
+        llama::forEachLeaf<
+            typename Mapping::DatumDomain>([&](auto coord) constexpr
+                                           {
+                                               if (collision)
+                                                   return;
+                                               for (auto ad : llama::ArrayDomainIndexRange{m.arrayDomainSize})
+                                               {
+                                                   using Type
+                                                       = llama::GetType<typename Mapping::DatumDomain, decltype(coord)>;
+                                                   const auto [blob, offset] = internal::blobNrAndOffset(m, coord, ad);
+                                                   for (auto b = 0; b < sizeof(Type); b++)
+                                                       if (testAndSet(blob, offset + b))
+                                                       {
+                                                           collision = true;
+                                                           break;
+                                                       }
+                                               }
+                                           });
         return !collision;
     }
 } // namespace llama

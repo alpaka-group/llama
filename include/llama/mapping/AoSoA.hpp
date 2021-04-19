@@ -14,10 +14,12 @@ namespace llama::mapping
     inline constexpr std::size_t maxLanes = []() constexpr
     {
         auto max = std::numeric_limits<std::size_t>::max();
-        forEachLeaf<DatumDomain>([&](auto coord) {
-            using AttributeType = GetType<DatumDomain, decltype(coord)>;
-            max = std::min(max, VectorRegisterBits / (sizeof(AttributeType) * CHAR_BIT));
-        });
+        forEachLeaf<DatumDomain>(
+            [&](auto coord)
+            {
+                using AttributeType = GetType<DatumDomain, decltype(coord)>;
+                max = std::min(max, VectorRegisterBits / (sizeof(AttributeType) * CHAR_BIT));
+            });
         return max;
     }
     ();

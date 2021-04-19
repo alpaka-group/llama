@@ -113,7 +113,8 @@ try
     auto uNext = llama::allocView(mapping);
     auto uCurr = llama::allocView(mapping);
 
-    auto run = [&](std::string_view updateName, auto update) {
+    auto run = [&](std::string_view updateName, auto update)
+    {
         // init
         for (uint32_t i = 0; i < extent; i++)
             uCurr[i] = exactSolution(i * dx, 0.0);

@@ -34,7 +34,8 @@ namespace
 TEST_CASE("Heatmap.3body")
 {
     constexpr auto N = 100;
-    auto run = [&](const std::string& name, auto mapping) {
+    auto run = [&](const std::string& name, auto mapping)
+    {
         auto particles = llama::allocView(llama::mapping::Heatmap{mapping});
 
         for (std::size_t i = 0; i < N; i++)

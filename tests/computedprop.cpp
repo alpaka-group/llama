@@ -47,9 +47,8 @@ namespace
             llama::DatumCoord<DatumDomainCoord...>,
             llama::Array<Blob, Base::blobCount>& storageBlobs) const
         {
-            auto fetch = [&](llama::NrAndOffset nrAndOffset) -> double {
-                return *reinterpret_cast<double*>(&storageBlobs[nrAndOffset.nr][nrAndOffset.offset]);
-            };
+            auto fetch = [&](llama::NrAndOffset nrAndOffset) -> double
+            { return *reinterpret_cast<double*>(&storageBlobs[nrAndOffset.nr][nrAndOffset.offset]); };
 
             const auto ax = fetch(Base::template blobNrAndOffset<0, 0>(coord));
             const auto ay = fetch(Base::template blobNrAndOffset<0, 1>(coord));

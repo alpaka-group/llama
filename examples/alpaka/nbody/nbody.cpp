@@ -149,13 +149,15 @@ struct UpdateKernel
     template <typename Acc, typename View>
     LLAMA_FN_HOST_ACC_INLINE void operator()(const Acc& acc, View particles) const
     {
-        auto sharedView = [&] {
+        auto sharedView = [&]
+        {
             // if there is only 1 thread per block, use stack instead of shared memory
             if constexpr (BlockSize == 1)
                 return llama::allocViewStack<View::ArrayDomain::rank, typename View::DatumDomain>();
             else
             {
-                constexpr auto sharedMapping = [] {
+                constexpr auto sharedMapping = []
+                {
                     constexpr auto arrayDomain = llama::ArrayDomain{BlockSize};
                     if constexpr (MappingSM == AoS)
                         return llama::mapping::AoS{arrayDomain, Particle{}};
@@ -176,7 +178,8 @@ struct UpdateKernel
         const auto tbi = alpaka::getIdx<alpaka::Block, alpaka::Threads>(acc)[0];
 
         // TODO: we could optimize here, because only velocity is ever updated
-        auto pi = [&] {
+        auto pi = [&]
+        {
             constexpr auto arrayDomain = llama::ArrayDomain{Elems};
             constexpr auto mapping
                 = llama::mapping::SoA<typename View::ArrayDomain, typename View::DatumDomain, false>{arrayDomain};
@@ -242,7 +245,8 @@ void run(std::ostream& plotFile)
     using PltfAcc = alpaka::Pltf<DevAcc>;
     using Queue = alpaka::Queue<DevAcc, alpaka::Blocking>;
 
-    auto mappingName = [](int m) -> std::string {
+    auto mappingName = [](int m) -> std::string
+    {
         if (m == 0)
             return "AoS";
         if (m == 1)
@@ -258,7 +262,8 @@ void run(std::ostream& plotFile)
     const DevHost devHost(alpaka::getDevByIdx<PltfHost>(0u));
     Queue queue(devAcc);
 
-    auto mapping = [] {
+    auto mapping = []
+    {
         const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
         if constexpr (MappingGM == AoS)
             return llama::mapping::AoS{arrayDomain, Particle{}};

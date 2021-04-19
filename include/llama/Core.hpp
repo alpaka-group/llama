@@ -285,16 +285,18 @@ namespace llama
             Functor&& functor)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            boost::mp11::mp_for_each<boost::mp11::mp_iota_c<sizeof...(Children)>>([&](auto i) {
-                constexpr auto childIndex = decltype(i)::value;
-                using DatumElement = boost::mp11::mp_at_c<DatumStruct<Children...>, childIndex>;
+            boost::mp11::mp_for_each<boost::mp11::mp_iota_c<sizeof...(Children)>>(
+                [&](auto i)
+                {
+                    constexpr auto childIndex = decltype(i)::value;
+                    using DatumElement = boost::mp11::mp_at_c<DatumStruct<Children...>, childIndex>;
 
-                LLAMA_FORCE_INLINE_RECURSIVE
-                forEachLeafImpl(
-                    static_cast<GetDatumElementType<DatumElement>*>(nullptr),
-                    llama::DatumCoord<Coords..., childIndex>{},
-                    std::forward<Functor>(functor));
-            });
+                    LLAMA_FORCE_INLINE_RECURSIVE
+                    forEachLeafImpl(
+                        static_cast<GetDatumElementType<DatumElement>*>(nullptr),
+                        llama::DatumCoord<Coords..., childIndex>{},
+                        std::forward<Functor>(functor));
+                });
         }
     } // namespace internal
 
@@ -347,10 +349,12 @@ namespace llama
         constexpr auto flatDatumCoordImpl()
         {
             std::size_t c = 0;
-            forEachLeaf<DatumDomain>([&](auto coord) {
-                if constexpr (DatumCoordCommonPrefixIsBigger<DatumCoord, decltype(coord)>)
-                    c++;
-            });
+            forEachLeaf<DatumDomain>(
+                [&](auto coord)
+                {
+                    if constexpr (DatumCoordCommonPrefixIsBigger<DatumCoord, decltype(coord)>)
+                        c++;
+                });
             return c;
         }
     } // namespace internal
@@ -376,12 +380,13 @@ namespace llama
 
             std::size_t size = 0;
             using FlatDD = FlattenDatumDomain<DatumStruct<DatumElements...>>;
-            mp_for_each<mp_transform<mp_identity, FlatDD>>([&](auto e) constexpr {
-                using T = typename decltype(e)::type;
-                if constexpr (Align)
-                    roundUpToMultiple(size, alignof(T));
-                size += sizeof(T);
-            });
+            mp_for_each<mp_transform<mp_identity, FlatDD>>([&](auto e) constexpr
+                                                           {
+                                                               using T = typename decltype(e)::type;
+                                                               if constexpr (Align)
+                                                                   roundUpToMultiple(size, alignof(T));
+                                                               size += sizeof(T);
+                                                           });
 
             // final padding, so next struct can start right away
             if constexpr (Align)
@@ -410,12 +415,13 @@ namespace llama
         constexpr auto flatCoord = flatDatumCoord<DatumDomain, DatumCoord>;
 
         std::size_t offset = 0;
-        mp_for_each<mp_iota_c<flatCoord>>([&](auto i) constexpr {
-            using T = mp_at<FlatDD, decltype(i)>;
-            if constexpr (Align)
-                internal::roundUpToMultiple(offset, alignof(T));
-            offset += sizeof(T);
-        });
+        mp_for_each<mp_iota_c<flatCoord>>([&](auto i) constexpr
+                                          {
+                                              using T = mp_at<FlatDD, decltype(i)>;
+                                              if constexpr (Align)
+                                                  internal::roundUpToMultiple(offset, alignof(T));
+                                              offset += sizeof(T);
+                                          });
         if constexpr (Align)
             internal::roundUpToMultiple(offset, alignof(mp_at_c<FlatDD, flatCoord>));
         return offset;

@@ -23,11 +23,13 @@ namespace llama
         constexpr ArrayDomainIndexIterator() noexcept = default;
 
         constexpr ArrayDomainIndexIterator(ArrayDomain<Dim> size, ArrayDomain<Dim> current) noexcept
-            : lastIndex([size]() mutable {
-                for (auto i = 0; i < Dim; i++)
-                    size[i]--;
-                return size;
-            }())
+            : lastIndex(
+                [size]() mutable
+                {
+                    for (auto i = 0; i < Dim; i++)
+                        size[i]--;
+                    return size;
+                }())
             , current(current)
         {
         }

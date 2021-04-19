@@ -82,7 +82,8 @@ try
     // LLAMA
     const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
 
-    const auto mapping = [&] {
+    const auto mapping = [&]
+    {
         if constexpr (MAPPING == 0)
             return llama::mapping::AoS{arrayDomain, Vector{}};
         if constexpr (MAPPING == 1)

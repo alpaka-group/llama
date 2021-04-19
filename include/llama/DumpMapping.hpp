@@ -126,15 +126,17 @@ namespace llama
 
             for (auto udCoord : ArrayDomainIndexRange{mapping.arrayDomainSize})
             {
-                forEachLeaf<DatumDomain>([&](auto coord) {
-                    constexpr int size = sizeof(GetType<DatumDomain, decltype(coord)>);
-                    infos.push_back(
-                        {udCoord,
-                         internal::toVec(coord),
-                         internal::tagsAsStrings<DatumDomain>(coord),
-                         internal::mappingBlobNrAndOffset(mapping, udCoord, coord),
-                         size});
-                });
+                forEachLeaf<DatumDomain>(
+                    [&](auto coord)
+                    {
+                        constexpr int size = sizeof(GetType<DatumDomain, decltype(coord)>);
+                        infos.push_back(
+                            {udCoord,
+                             internal::toVec(coord),
+                             internal::tagsAsStrings<DatumDomain>(coord),
+                             internal::mappingBlobNrAndOffset(mapping, udCoord, coord),
+                             size});
+                    });
             }
 
             return infos;
@@ -229,9 +231,13 @@ namespace llama
         constexpr auto rulerByteInterval = 8;
 
         auto infos = internal::boxesFromMapping(mapping);
-        std::stable_sort(begin(infos), end(infos), [](const auto& a, const auto& b) {
-            return std::tie(a.nrAndOffset.nr, a.nrAndOffset.offset) < std::tie(b.nrAndOffset.nr, b.nrAndOffset.offset);
-        });
+        std::stable_sort(
+            begin(infos),
+            end(infos),
+            [](const auto& a, const auto& b) {
+                return std::tie(a.nrAndOffset.nr, a.nrAndOffset.offset)
+                    < std::tie(b.nrAndOffset.nr, b.nrAndOffset.offset);
+            });
         infos.erase(
             std::unique(
                 begin(infos),
@@ -239,7 +245,8 @@ namespace llama
                 [](const auto& a, const auto& b) { return a.nrAndOffset == b.nrAndOffset; }),
             end(infos));
 
-        auto cssClass = [](const std::vector<std::string>& tags) {
+        auto cssClass = [](const std::vector<std::string>& tags)
+        {
             std::string s;
             for (const auto& tag : tags)
             {
@@ -279,19 +286,21 @@ namespace llama
 )",
             byteSizeInPixel);
         using DatumDomain = typename Mapping::DatumDomain;
-        forEachLeaf<DatumDomain>([&](auto coord) {
-            constexpr int size = sizeof(GetType<DatumDomain, decltype(coord)>);
+        forEachLeaf<DatumDomain>(
+            [&](auto coord)
+            {
+                constexpr int size = sizeof(GetType<DatumDomain, decltype(coord)>);
 
-            svg += fmt::format(
-                R"(.{} {{
+                svg += fmt::format(
+                    R"(.{} {{
     width: {}px;
     background-color: #{:X};
 }}
 )",
-                cssClass(internal::tagsAsStrings<DatumDomain>(coord)),
-                byteSizeInPixel * size,
-                internal::color(internal::toVec(coord)));
-        });
+                    cssClass(internal::tagsAsStrings<DatumDomain>(coord)),
+                    byteSizeInPixel * size,
+                    internal::color(internal::toVec(coord)));
+            });
 
         svg += fmt::format(R"(</style>
 </head>
