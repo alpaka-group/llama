@@ -6,8 +6,7 @@
  * itself is not under the public domain but LGPL3+.
  */
 
-/// Simple example for LLAMA showing how to define an array domain and a record dimension, to create a view and to
-/// access the data
+/// Simple example for LLAMA showing how to define array and record dimensions, to create a view and to access the data.
 
 #include <iostream>
 #include <llama/llama.hpp>
@@ -32,7 +31,10 @@ namespace st
     struct Options{};
 } // namespace st
 
-/// A record dimension in LLAMA is a type, probably always a \ref llama::Record. This takes a template list of all members of this struct-like dimension. Every member needs to be a \ref llama::Field. A Field is a list of two elements itself, first the name of the element as type and secondly the element type itself, which may be a nested Record.
+/// A record dimension in LLAMA is a type, probably always a \ref llama::Record. This takes a template list of all
+/// members of this struct-like dimension. Every member needs to be a \ref llama::Field. A Field is a list of two
+/// elements itself, first the name of the element as type and secondly the element type itself, which may be a nested
+/// Record.
 using Name = llama::Record<
     llama::Field<st::Pos, llama::Record<
         llama::Field<st::X, float>,
@@ -125,36 +127,36 @@ struct SetZeroFunctor
 auto main() -> int
 try
 {
-    // Defining a two-dimensional array domain
-    using UD = llama::ArrayDomain<2>;
-    // Setting the run time size of the array domain to 8192 * 8192
-    UD udSize{8192, 8192};
+    // Defining two array dimensions
+    using ArrayDims = llama::ArrayDims<2>;
+    // Setting the run time size of the array dimensions to 8192 * 8192
+    ArrayDims adSize{8192, 8192};
 
-    // Printing dimension/domain informations at runtime
+    // Printing dimensions information at runtime
     std::cout << "Record dimension is " << addLineBreaks(type(Name())) << '\n';
     std::cout << "AoS address of (0,100) <0,1>: "
-              << llama::mapping::AoS<UD, Name>(udSize).blobNrAndOffset<0, 1>({0, 100}).offset << '\n';
+              << llama::mapping::AoS<ArrayDims, Name>(adSize).blobNrAndOffset<0, 1>({0, 100}).offset << '\n';
     std::cout << "SoA address of (0,100) <0,1>: "
-              << llama::mapping::SoA<UD, Name>(udSize).blobNrAndOffset<0, 1>({0, 100}).offset << '\n';
+              << llama::mapping::SoA<ArrayDims, Name>(adSize).blobNrAndOffset<0, 1>({0, 100}).offset << '\n';
     std::cout << "sizeOf RecordDim: " << llama::sizeOf<Name> << '\n';
 
     std::cout << type(llama::GetCoordFromTags<Name, st::Pos, st::X>()) << '\n';
 
     // chosing a native struct of array mapping for this simple test example
-    using Mapping = llama::mapping::SoA<UD, Name>;
+    using Mapping = llama::mapping::SoA<ArrayDims, Name>;
 
-    // Instantiating the mapping with the array domain size
-    Mapping mapping(udSize);
+    // Instantiating the mapping with the array dimensions size
+    Mapping mapping(adSize);
     // getting a view with memory from the default allocator
     auto view = allocView(mapping);
 
-    // defining a position in the array domain
-    const UD pos{0, 0};
+    // defining a position in the array dimensions
+    const ArrayDims pos{0, 0};
 
     st::Options Options_;
     const auto Weight_ = st::Weight{};
 
-    // using the position in the array domain and a tree coord or a uid in the
+    // using the position in the array dimensions and a tree coord or a uid in the
     // record dimension to get the reference to an element in the view
     float& position_x = view(pos)(llama::RecordCoord<0, 0>{});
     double& momentum_z = view[pos](st::Momentum{}, st::Z{});
@@ -173,13 +175,12 @@ try
     std::cout << &options_2 << " " << reinterpret_cast<std::byte*>(&options_2) - reinterpret_cast<std::byte*>(&weight)
               << '\n';
 
-    // iterating over the array domain at run time to do some stuff with the
-    // allocated data
-    for (size_t x = 0; x < udSize[0]; ++x)
+    // iterating over the array dimensions at run time to do some stuff with the allocated data
+    for (size_t x = 0; x < adSize[0]; ++x)
         // telling the compiler that all data in the following loop is
         // independent to each other and thus can be vectorized
         LLAMA_INDEPENDENT_DATA
-    for (size_t y = 0; y < udSize[1]; ++y)
+    for (size_t y = 0; y < adSize[1]; ++y)
     {
         // Defining a functor for a given virtual record
         SetZeroFunctor<decltype(view(x, y))> szf{view(x, y)};
@@ -189,14 +190,13 @@ try
         // Applying the functor for the sub tree momentum (0), so basically
         // for momentum.z, and momentum.x
         llama::forEachLeaf<Name>(szf, st::Momentum{});
-        // the array domain address can be given as multiple comma separated
-        // arguments or as one parameter of type array domain
-        view({x, y}) = double(x + y) / double(udSize[0] + udSize[1]);
+        // the array dimensions can be given as multiple comma separated arguments or as one parameter of type ArrayDims
+        view({x, y}) = double(x + y) / double(adSize[0] + adSize[1]);
     }
 
-    for (size_t x = 0; x < udSize[0]; ++x)
+    for (size_t x = 0; x < adSize[0]; ++x)
         LLAMA_INDEPENDENT_DATA
-    for (size_t y = 0; y < udSize[1]; ++y)
+    for (size_t y = 0; y < adSize[1]; ++y)
     {
         // Showing different options of access data with llama. Internally
         // all do the same data- and mappingwise
@@ -210,9 +210,9 @@ try
     }
     double sum = 0.0;
     LLAMA_INDEPENDENT_DATA
-    for (size_t x = 0; x < udSize[0]; ++x)
+    for (size_t x = 0; x < adSize[0]; ++x)
         LLAMA_INDEPENDENT_DATA
-    for (size_t y = 0; y < udSize[1]; ++y)
+    for (size_t y = 0; y < adSize[1]; ++y)
         sum += view(x, y)(llama::RecordCoord<1, 0>{});
     std::cout << "Sum: " << sum << '\n';
 

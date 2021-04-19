@@ -36,7 +36,7 @@ namespace llama::mapping
     template <typename Mapping>
     struct Trace
     {
-        using ArrayDomain = typename Mapping::ArrayDomain;
+        using ArrayDims = typename Mapping::ArrayDims;
         using RecordDim = typename Mapping::RecordDim;
         static constexpr std::size_t blobCount = Mapping::blobCount;
 
@@ -71,7 +71,7 @@ namespace llama::mapping
         }
 
         template <std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayDims coord) const -> NrAndOffset
         {
             const static auto name = internal::coordName<RecordDim>(RecordCoord<RecordCoords...>{});
             fieldHits.at(name)++;

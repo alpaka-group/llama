@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "TreeFromDomains.hpp"
+#include "TreeFromDimensions.hpp"
 
 namespace llama::mapping::tree::functor
 {

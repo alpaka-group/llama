@@ -18,29 +18,28 @@ namespace llama
     {
     };
 
-    /// The run-time specified array domain.
-    /// \tparam Dim compile time dimensionality of the array domain
+    /// The run-time specified array dimensions.
+    /// \tparam Dim Compile-time number of dimensions.
     template <std::size_t Dim>
-    struct ArrayDomain : Array<std::size_t, Dim>
+    struct ArrayDims : Array<std::size_t, Dim>
     {
     };
 
-    static_assert(
-        std::is_trivially_default_constructible_v<ArrayDomain<1>>); // so ArrayDomain<1>{} will produce a zeroed
-                                                                    // coord. Should hold for all dimensions,
-                                                                    // but just checking for <1> here.
+    static_assert(std::is_trivially_default_constructible_v<ArrayDims<1>>); // so ArrayDims<1>{} will produce a zeroed
+                                                                            // coord. Should hold for all dimensions,
+                                                                            // but just checking for <1> here.
 
     template <typename... Args>
-    ArrayDomain(Args...) -> ArrayDomain<sizeof...(Args)>;
+    ArrayDims(Args...) -> ArrayDims<sizeof...(Args)>;
 } // namespace llama
 
 template <size_t N>
-struct std::tuple_size<llama::ArrayDomain<N>> : std::integral_constant<size_t, N>
+struct std::tuple_size<llama::ArrayDims<N>> : std::integral_constant<size_t, N>
 {
 };
 
 template <size_t I, size_t N>
-struct std::tuple_element<I, llama::ArrayDomain<N>>
+struct std::tuple_element<I, llama::ArrayDims<N>>
 {
     using type = size_t;
 };
@@ -428,9 +427,9 @@ namespace llama
     namespace internal
     {
         template <std::size_t Dim>
-        constexpr auto popFront(ArrayDomain<Dim> ad)
+        constexpr auto popFront(ArrayDims<Dim> ad)
         {
-            ArrayDomain<Dim - 1> result;
+            ArrayDims<Dim - 1> result;
             for (std::size_t i = 0; i < Dim - 1; i++)
                 result[i] = ad[i + 1];
             return result;
@@ -438,14 +437,14 @@ namespace llama
     } // namespace internal
 
     template <std::size_t Dim, typename Func, typename... OuterIndices>
-    void forEachADCoord(ArrayDomain<Dim> adSize, Func&& func, OuterIndices... outerIndices)
+    void forEachADCoord(ArrayDims<Dim> adSize, Func&& func, OuterIndices... outerIndices)
     {
         for (std::size_t i = 0; i < adSize[0]; i++)
         {
             if constexpr (Dim > 1)
                 forEachADCoord(internal::popFront(adSize), std::forward<Func>(func), outerIndices..., i);
             else
-                std::forward<Func>(func)(ArrayDomain<sizeof...(outerIndices) + 1>{outerIndices..., i});
+                std::forward<Func>(func)(ArrayDims<sizeof...(outerIndices) + 1>{outerIndices..., i});
         }
     }
 

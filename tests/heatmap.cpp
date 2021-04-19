@@ -62,8 +62,8 @@ TEST_CASE("Heatmap.3body")
         std::ofstream{"Heatmap." + name + ".dat"} << particles.mapping.toGnuplotDatFile();
     };
 
-    using ArrayDomain = llama::ArrayDomain<1>;
-    auto arrayDomain = ArrayDomain{N};
-    run("AlignedAoS", llama::mapping::AlignedAoS<ArrayDomain, Particle>{arrayDomain});
-    run("SingleBlobSoA", llama::mapping::SingleBlobSoA<ArrayDomain, Particle>{arrayDomain});
+    using ArrayDims = llama::ArrayDims<1>;
+    auto arrayDims = ArrayDims{N};
+    run("AlignedAoS", llama::mapping::AlignedAoS<ArrayDims, Particle>{arrayDims});
+    run("SingleBlobSoA", llama::mapping::SingleBlobSoA<ArrayDims, Particle>{arrayDims});
 }

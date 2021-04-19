@@ -54,11 +54,11 @@ namespace llama
     }
 
     /// Allocates a \ref View holding a single record backed by stack memory (\ref bloballoc::Stack).
-    /// \tparam Dim Dimension of the \ref ArrayDomain of the \ref View.
+    /// \tparam Dim Dimension of the \ref ArrayDims of the \ref View.
     template <std::size_t Dim, typename RecordDim>
     LLAMA_FN_HOST_ACC_INLINE auto allocViewStack() -> decltype(auto)
     {
-        using Mapping = llama::mapping::One<ArrayDomain<Dim>, RecordDim>;
+        using Mapping = llama::mapping::One<ArrayDims<Dim>, RecordDim>;
         return allocView(Mapping{}, llama::bloballoc::Stack<sizeOf<RecordDim>>{});
     }
 
@@ -315,12 +315,10 @@ namespace llama
             isDirectListInitializableFromTuple<T, Tuple<Args...>> = isDirectListInitializable<T, Args...>;
     } // namespace internal
 
-    /// Virtual record type returned by \ref View after resolving an array domain
-    /// coordinate or partially resolving a \ref RecordCoord. A virtual record
-    /// does not hold data itself (thus named "virtual"), it just binds enough
-    /// information (array domain coord and partial record coord) to retrieve it
-    /// from a \ref View later. Virtual records should not be created by the
-    /// user. They are returned from various access functions in \ref View and
+    /// Virtual record type returned by \ref View after resolving an array dimensions coordinate or partially resolving
+    /// a \ref RecordCoord. A virtual record does not hold data itself (thus named "virtual"), it just binds enough
+    /// information (array dimensions coord and partial record coord) to retrieve it from a \ref View later. Virtual
+    /// records should not be created by the user. They are returned from various access functions in \ref View and
     /// VirtualRecord itself.
     template <typename T_View, typename BoundRecordCoord, bool OwnView>
     struct VirtualRecord
@@ -328,10 +326,10 @@ namespace llama
         using View = T_View; ///< View this virtual record points into.
 
     private:
-        using ArrayDomain = typename View::Mapping::ArrayDomain;
+        using ArrayDims = typename View::Mapping::ArrayDims;
         using RecordDim = typename View::Mapping::RecordDim;
 
-        const ArrayDomain userDomainPos;
+        const ArrayDims arrayDimsCoord;
         std::conditional_t<OwnView, View, View&> view;
 
     public:
@@ -342,15 +340,15 @@ namespace llama
 
         LLAMA_FN_HOST_ACC_INLINE VirtualRecord()
             /* requires(OwnView) */
-            : userDomainPos({})
+            : arrayDimsCoord({})
             , view{allocViewStack<1, RecordDim>()}
         {
             static_assert(OwnView, "The default constructor of VirtualRecord is only available if the ");
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        VirtualRecord(ArrayDomain userDomainPos, std::conditional_t<OwnView, View&&, View&> view)
-            : userDomainPos(userDomainPos)
+        VirtualRecord(ArrayDims arrayDimsCoord, std::conditional_t<OwnView, View&&, View&> view)
+            : arrayDimsCoord(arrayDimsCoord)
             , view{static_cast<decltype(view)>(view)}
         {
         }
@@ -369,12 +367,12 @@ namespace llama
             if constexpr (isRecord<GetType<RecordDim, AbsolutCoord>>)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualRecord<const View, AbsolutCoord>{userDomainPos, this->view};
+                return VirtualRecord<const View, AbsolutCoord>{arrayDimsCoord, this->view};
             }
             else
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return this->view.accessor(userDomainPos, AbsolutCoord{});
+                return this->view.accessor(arrayDimsCoord, AbsolutCoord{});
             }
         }
 
@@ -386,12 +384,12 @@ namespace llama
             if constexpr (isRecord<GetType<RecordDim, AbsolutCoord>>)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualRecord<View, AbsolutCoord>{userDomainPos, this->view};
+                return VirtualRecord<View, AbsolutCoord>{arrayDimsCoord, this->view};
             }
             else
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return this->view.accessor(userDomainPos, AbsolutCoord{});
+                return this->view.accessor(arrayDimsCoord, AbsolutCoord{});
             }
         }
 
@@ -700,7 +698,7 @@ namespace llama
         : boost::stl_interfaces::proxy_iterator_interface<
               Iterator<View>,
               std::random_access_iterator_tag,
-              decltype(std::declval<View>()(ArrayDomain<1>{}))>
+              decltype(std::declval<View>()(ArrayDims<1>{}))>
     {
         constexpr decltype(auto) operator*() const
         {
@@ -723,7 +721,7 @@ namespace llama
             return a.coord == b.coord;
         }
 
-        ArrayDomain<1> coord;
+        ArrayDims<1> coord;
         View* view;
     };
 #endif
@@ -736,7 +734,7 @@ namespace llama
     template <typename View>
     struct Iterator
     {
-        static_assert(View::ArrayDomain::rank == 1, "Iterators for non-1D views are not implemented");
+        static_assert(View::ArrayDims::rank == 1, "Iterators for non-1D views are not implemented");
 
         using iterator_category = std::random_access_iterator_tag;
         using value_type = typename View::VirtualRecordType;
@@ -848,7 +846,7 @@ namespace llama
             return !(a < b);
         }
 
-        ArrayDomain<1> coord;
+        ArrayDims<1> coord;
         View* view;
     };
 
@@ -881,7 +879,7 @@ namespace llama
     struct View
     {
         using Mapping = T_Mapping;
-        using ArrayDomain = typename Mapping::ArrayDomain;
+        using ArrayDims = typename Mapping::ArrayDims;
         using RecordDim = typename Mapping::RecordDim;
         using VirtualRecordType = VirtualRecord<View<Mapping, BlobType>>;
         using VirtualRecordTypeConst = VirtualRecord<const View<Mapping, BlobType>>;
@@ -895,73 +893,73 @@ namespace llama
         {
         }
 
-        /// Retrieves the \ref VirtualRecord at the given \ref ArrayDomain
+        /// Retrieves the \ref VirtualRecord at the given \ref ArrayDims
         /// coordinate.
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDomain arrayDomain) const -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDims arrayDims) const -> decltype(auto)
         {
             if constexpr (isRecord<RecordDim>)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualRecordTypeConst{arrayDomain, *this};
+                return VirtualRecordTypeConst{arrayDims, *this};
             }
             else
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return accessor(arrayDomain, RecordCoord<>{});
+                return accessor(arrayDims, RecordCoord<>{});
             }
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDomain arrayDomain) -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDims arrayDims) -> decltype(auto)
         {
             if constexpr (isRecord<RecordDim>)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualRecordType{arrayDomain, *this};
+                return VirtualRecordType{arrayDims, *this};
             }
             else
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return accessor(arrayDomain, RecordCoord<>{});
+                return accessor(arrayDims, RecordCoord<>{});
             }
         }
 
-        /// Retrieves the \ref VirtualRecord at the \ref ArrayDomain coordinate
+        /// Retrieves the \ref VirtualRecord at the \ref ArrayDims coordinate
         /// constructed from the passed component indices.
         template <typename... Index>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Index... indices) const -> decltype(auto)
         {
             static_assert(
-                sizeof...(Index) == ArrayDomain::rank,
-                "Please specify as many indices as your array domain has dimensions");
+                sizeof...(Index) == ArrayDims::rank,
+                "Please specify as many indices as you have array dimensions");
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this) (ArrayDomain{indices...});
+            return (*this) (ArrayDims{indices...});
         }
 
         template <typename... Index>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Index... indices) -> decltype(auto)
         {
             static_assert(
-                sizeof...(Index) == ArrayDomain::rank,
-                "Please specify as many indices as your array domain has dimensions");
+                sizeof...(Index) == ArrayDims::rank,
+                "Please specify as many indices as you have array dimensions");
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this) (ArrayDomain{indices...});
+            return (*this) (ArrayDims{indices...});
         }
 
-        /// Retrieves the \ref VirtualRecord at the \ref ArrayDomain coordinate
+        /// Retrieves the \ref VirtualRecord at the \ref ArrayDims coordinate
         /// constructed from the passed component indices.
-        LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayDomain arrayDomain) const -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayDims arrayDims) const -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this) (arrayDomain);
+            return (*this) (arrayDims);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayDomain arrayDomain) -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayDims arrayDims) -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this) (arrayDomain);
+            return (*this) (arrayDims);
         }
 
-        /// Retrieves the \ref VirtualRecord at the 1D \ref ArrayDomain coordinate
+        /// Retrieves the \ref VirtualRecord at the 1D \ref ArrayDims coordinate
         /// constructed from the passed index.
         LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t index) const -> decltype(auto)
         {
@@ -977,12 +975,12 @@ namespace llama
 
         auto begin() -> Iterator<View>
         {
-            return {ArrayDomain{}, this};
+            return {ArrayDims{}, this};
         }
 
         auto end() -> Iterator<View>
         {
-            return {mapping.arrayDomainSize, this};
+            return {mapping.arrayDimsSize, this};
         }
 
         Mapping mapping;
@@ -993,28 +991,27 @@ namespace llama
         friend struct VirtualRecord;
 
         template <std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDomain arrayDomain, RecordCoord<Coords...> dc = {}) const
+        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDims arrayDims, RecordCoord<Coords...> dc = {}) const
             -> decltype(auto)
         {
             if constexpr (internal::isComputed<Mapping, RecordCoord<Coords...>>::value)
-                return mapping.compute(arrayDomain, dc, storageBlobs);
+                return mapping.compute(arrayDims, dc, storageBlobs);
             else
             {
-                const auto [nr, offset] = mapping.template blobNrAndOffset<Coords...>(arrayDomain);
+                const auto [nr, offset] = mapping.template blobNrAndOffset<Coords...>(arrayDims);
                 using Type = GetType<RecordDim, RecordCoord<Coords...>>;
                 return reinterpret_cast<const Type&>(storageBlobs[nr][offset]);
             }
         }
 
         template <std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDomain arrayDomain, RecordCoord<Coords...> dc = {})
-            -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDims arrayDims, RecordCoord<Coords...> dc = {}) -> decltype(auto)
         {
             if constexpr (internal::isComputed<Mapping, RecordCoord<Coords...>>::value)
-                return mapping.compute(arrayDomain, dc, storageBlobs);
+                return mapping.compute(arrayDims, dc, storageBlobs);
             else
             {
-                const auto [nr, offset] = mapping.template blobNrAndOffset<Coords...>(arrayDomain);
+                const auto [nr, offset] = mapping.template blobNrAndOffset<Coords...>(arrayDims);
                 using Type = GetType<RecordDim, RecordCoord<Coords...>>;
                 return reinterpret_cast<Type&>(storageBlobs[nr][offset]);
             }
@@ -1034,13 +1031,13 @@ namespace llama
     {
         using ParentView = T_ParentViewType; ///< type of the parent view
         using Mapping = typename ParentView::Mapping; ///< mapping of the parent view
-        using ArrayDomain = typename Mapping::ArrayDomain; ///< array domain of the parent view
+        using ArrayDims = typename Mapping::ArrayDims; ///< array dimensions of the parent view
         using VirtualRecordType = typename ParentView::VirtualRecordType; ///< VirtualRecord type of the
                                                                           ///< parent view
 
         /// Creates a VirtualView given a parent \ref View, offset and size.
         LLAMA_FN_HOST_ACC_INLINE
-        VirtualView(ParentView& parentView, ArrayDomain offset, ArrayDomain size)
+        VirtualView(ParentView& parentView, ArrayDims offset, ArrayDims size)
             : parentView(parentView)
             , offset(offset)
             , size(size)
@@ -1048,29 +1045,29 @@ namespace llama
         }
 
         template <std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDomain arrayDomain) const -> const auto&
+        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDims arrayDims) const -> const auto&
         {
-            return parentView.template accessor<Coords...>(ArrayDomain{arrayDomain + offset});
+            return parentView.template accessor<Coords...>(ArrayDims{arrayDims + offset});
         }
 
         template <std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDomain arrayDomain) -> auto&
+        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDims arrayDims) -> auto&
         {
-            return parentView.template accessor<Coords...>(ArrayDomain{arrayDomain + offset});
+            return parentView.template accessor<Coords...>(ArrayDims{arrayDims + offset});
         }
 
-        /// Same as \ref View::operator()(ArrayDomain), but shifted by the offset
+        /// Same as \ref View::operator()(ArrayDims), but shifted by the offset
         /// of this \ref VirtualView.
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDomain arrayDomain) const -> VirtualRecordType
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDims arrayDims) const -> VirtualRecordType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return parentView(ArrayDomain{arrayDomain + offset});
+            return parentView(ArrayDims{arrayDims + offset});
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDomain arrayDomain) -> VirtualRecordType
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDims arrayDims) -> VirtualRecordType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return parentView(ArrayDomain{arrayDomain + offset});
+            return parentView(ArrayDims{arrayDims + offset});
         }
 
         /// Same as corresponding operator in \ref View, but shifted by the
@@ -1079,33 +1076,33 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) const -> VirtualRecordType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return parentView(ArrayDomain{ArrayDomain{indices...} + offset});
+            return parentView(ArrayDims{ArrayDims{indices...} + offset});
         }
 
         template <typename... Indices>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) -> VirtualRecordType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return parentView(ArrayDomain{ArrayDomain{indices...} + offset});
+            return parentView(ArrayDims{ArrayDims{indices...} + offset});
         }
 
         template <std::size_t... Coord>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coord...>&& dc = {}) const -> const auto&
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return accessor<Coord...>(ArrayDomain{});
+            return accessor<Coord...>(ArrayDims{});
         }
 
         template <std::size_t... Coord>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coord...>&& dc = {}) -> auto&
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return accessor<Coord...>(ArrayDomain{});
+            return accessor<Coord...>(ArrayDims{});
         }
 
         ParentView& parentView; ///< reference to parent view.
-        const ArrayDomain offset; ///< offset this view's \ref ArrayDomain coordinates are
-                                  ///< shifted to the parent view.
-        const ArrayDomain size;
+        const ArrayDims offset; ///< offset this view's \ref ArrayDims coordinates are
+                                ///< shifted to the parent view.
+        const ArrayDims size;
     };
 } // namespace llama

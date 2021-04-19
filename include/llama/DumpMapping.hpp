@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "ArrayDomainRange.hpp"
+#include "ArrayDimsIndexRange.hpp"
 #include "Core.hpp"
 
 #include <boost/container_hash/hash.hpp>
@@ -56,8 +56,8 @@ namespace llama
             return v;
         }
 
-        template <typename Mapping, typename ArrayDomain, std::size_t... Coords>
-        auto mappingBlobNrAndOffset(const Mapping& mapping, const ArrayDomain& adCoord, RecordCoord<Coords...>)
+        template <typename Mapping, typename ArrayDims, std::size_t... Coords>
+        auto mappingBlobNrAndOffset(const Mapping& mapping, const ArrayDims& adCoord, RecordCoord<Coords...>)
         {
             return mapping.template blobNrAndOffset<Coords...>(adCoord);
         }
@@ -72,7 +72,7 @@ namespace llama
         }
 
         template <std::size_t Dim>
-        auto formatUdCoord(const llama::ArrayDomain<Dim>& coord)
+        auto formatUdCoord(const llama::ArrayDims<Dim>& coord)
         {
             if constexpr (Dim == 1)
                 return std::to_string(coord[0]);
@@ -105,7 +105,7 @@ namespace llama
         template <std::size_t Dim>
         struct FieldBox
         {
-            ArrayDomain<Dim> adCoord;
+            ArrayDims<Dim> adCoord;
             std::vector<std::size_t> recordCoord;
             std::vector<std::string> recordTags;
             NrAndOffset nrAndOffset;
@@ -115,12 +115,12 @@ namespace llama
         template <typename Mapping>
         auto boxesFromMapping(const Mapping& mapping)
         {
-            using ArrayDomain = typename Mapping::ArrayDomain;
+            using ArrayDims = typename Mapping::ArrayDims;
             using RecordDim = typename Mapping::RecordDim;
 
-            std::vector<FieldBox<Mapping::ArrayDomain::rank>> infos;
+            std::vector<FieldBox<Mapping::ArrayDims::rank>> infos;
 
-            for (auto adCoord : ArrayDomainIndexRange{mapping.arrayDomainSize})
+            for (auto adCoord : ArrayDimsIndexRange{mapping.arrayDimsSize})
             {
                 forEachLeaf<RecordDim>(
                     [&](auto coord)

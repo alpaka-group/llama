@@ -63,4 +63,8 @@
 // https://stackoverflow.com/questions/64300832/why-does-clang-think-gccs-subrange-does-not-satisfy-gccs-ranges-begin-functi
 // let's try again with clang 12
 // Intel LLVM compiler is also using the clang frontend
-#define CAN_USE_RANGES (__has_include(<ranges>) && defined(__cpp_concepts) && !defined(__clang__) && !defined(__INTEL_LLVM_COMPILER))
+#if (__has_include(<ranges>) && defined(__cpp_concepts) && !defined(__clang__) && !defined(__INTEL_LLVM_COMPILER))
+#    define CAN_USE_RANGES 1
+#else
+#    define CAN_USE_RANGES 0
+#endif

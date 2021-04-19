@@ -53,7 +53,7 @@ namespace llama::mapping
     /// MappingTemplate2 The mapping used for the not selected part of the record dimension. \tparam SeparateBlobs If
     /// true, both pieces of the record dimension are mapped to separate blobs.
     template <
-        typename T_ArrayDomain,
+        typename T_ArrayDims,
         typename T_RecordDim,
         typename RecordCoordForMapping1,
         template <typename...>
@@ -63,15 +63,15 @@ namespace llama::mapping
         bool SeparateBlobs = false>
     struct Split
     {
-        using ArrayDomain = T_ArrayDomain;
+        using ArrayDims = T_ArrayDims;
         using RecordDim = T_RecordDim;
 
         using RecordDimPartitions = decltype(internal::partitionRecordDim(RecordDim{}, RecordCoordForMapping1{}));
         using RecordDim1 = boost::mp11::mp_first<RecordDimPartitions>;
         using RecordDim2 = boost::mp11::mp_second<RecordDimPartitions>;
 
-        using Mapping1 = MappingTemplate1<ArrayDomain, RecordDim1>;
-        using Mapping2 = MappingTemplate2<ArrayDomain, RecordDim2>;
+        using Mapping1 = MappingTemplate1<ArrayDims, RecordDim1>;
+        using Mapping2 = MappingTemplate2<ArrayDims, RecordDim2>;
 
         static constexpr std::size_t blobCount = SeparateBlobs ? Mapping1::blobCount + Mapping2::blobCount : 1;
         static_assert(SeparateBlobs || Mapping1::blobCount == 1);
@@ -80,7 +80,7 @@ namespace llama::mapping
         constexpr Split() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr Split(ArrayDomain size) : arrayDomainSize(size), mapping1(size), mapping2(size)
+        constexpr Split(ArrayDims size) : arrayDimsSize(size), mapping1(size), mapping2(size)
         {
         }
 
@@ -98,7 +98,7 @@ namespace llama::mapping
         }
 
         template <std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayDims coord) const -> NrAndOffset
         {
             if constexpr (RecordCoordCommonPrefixIsSame<RecordCoordForMapping1, RecordCoord<RecordCoords...>>)
             {
@@ -129,14 +129,14 @@ namespace llama::mapping
         template <std::size_t... RecordCoords, typename Mapping>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
             RecordCoord<RecordCoords...>,
-            ArrayDomain coord,
+            ArrayDims coord,
             const Mapping& mapping) const -> NrAndOffset
         {
             return mapping.template blobNrAndOffset<RecordCoords...>(coord);
         }
 
     public:
-        ArrayDomain arrayDomainSize = {};
+        ArrayDims arrayDimsSize = {};
         Mapping1 mapping1;
         Mapping2 mapping2;
     };
@@ -150,8 +150,8 @@ namespace llama::mapping
         bool SeparateBlobs = false>
     struct PreconfiguredSplit
     {
-        template <typename ArrayDomain, typename RecordDim>
+        template <typename ArrayDims, typename RecordDim>
         using type
-            = Split<ArrayDomain, RecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs>;
+            = Split<ArrayDims, RecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs>;
     };
 } // namespace llama::mapping

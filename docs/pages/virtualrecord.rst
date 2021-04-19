@@ -28,8 +28,8 @@ This object is a :cpp:`llama::VirtualRecord`.
     float& g = vdColor(g{});
     g = 1.0;
 
-Supplying the array domain coordinates to a view access returns such a :cpp:`llama::VirtualRecord`, storing this array domain coordiante.
-This object can be thought of like a record in the :math:`N`-dimensional array domain space,
+Supplying the array dimensions coordinate to a view access returns such a :cpp:`llama::VirtualRecord`, storing this array dimensions coordiante.
+This object can be thought of like a record in the :math:`N`-dimensional array dimensions space,
 but as the fields of this record may not be contiguous in memory, it is not a real object in the C++ sense and thus called virtual.
 
 Accessing subparts of a :cpp:`llama::VirtualRecord` is done using `operator()` and the tag types from the record dimension.

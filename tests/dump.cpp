@@ -71,8 +71,8 @@ using ParticleAligned = llama::Record<
 
 namespace
 {
-    llama::ArrayDomain arrayDomain{32};
-    using ArrayDomain = decltype(arrayDomain);
+    llama::ArrayDims arrayDims{32};
+    using ArrayDims = decltype(arrayDims);
 
     template <typename Mapping>
     void dump(const Mapping& mapping, const std::string& filename)
@@ -84,39 +84,36 @@ namespace
 
 TEST_CASE("dump.AoS")
 {
-    dump(llama::mapping::AoS{arrayDomain, Particle{}}, "AoSMapping");
+    dump(llama::mapping::AoS{arrayDims, Particle{}}, "AoSMapping");
 }
 
 TEST_CASE("dump.SoA")
 {
-    dump(llama::mapping::SoA{arrayDomain, Particle{}}, "SoAMapping");
+    dump(llama::mapping::SoA{arrayDims, Particle{}}, "SoAMapping");
 }
 
 TEST_CASE("dump.SoA.MultiBlob")
 {
-    dump(llama::mapping::SoA<ArrayDomain, Particle, true>{arrayDomain}, "SoAMappingMultiBlob");
+    dump(llama::mapping::SoA<ArrayDims, Particle, true>{arrayDims}, "SoAMappingMultiBlob");
 }
 
 TEST_CASE("dump.AoSoA.8")
 {
-    dump(llama::mapping::AoSoA<ArrayDomain, Particle, 8>{arrayDomain}, "AoSoAMapping8");
+    dump(llama::mapping::AoSoA<ArrayDims, Particle, 8>{arrayDims}, "AoSoAMapping8");
 }
 
 TEST_CASE("dump.AoSoA.32")
 {
-    dump(llama::mapping::AoSoA<ArrayDomain, Particle, 32>{arrayDomain}, "AoSoAMapping32");
+    dump(llama::mapping::AoSoA<ArrayDims, Particle, 32>{arrayDims}, "AoSoAMapping32");
 }
 
 TEST_CASE("dump.Split.SoA.AoS.1Buffer")
 {
     // split out velocity (written in nbody, the rest is read)
     dump(
-        llama::mapping::Split<
-            ArrayDomain,
-            Particle,
-            llama::RecordCoord<1>,
-            llama::mapping::SingleBlobSoA,
-            llama::mapping::PackedAoS>{arrayDomain},
+        llama::mapping::
+            Split<ArrayDims, Particle, llama::RecordCoord<1>, llama::mapping::SingleBlobSoA, llama::mapping::PackedAoS>{
+                arrayDims},
         "Split.SoA.AoS.1Buffer");
 }
 
@@ -125,12 +122,12 @@ TEST_CASE("dump.Split.SoA.AoS.2Buffer")
     // split out velocity as AoS into separate buffer
     dump(
         llama::mapping::Split<
-            ArrayDomain,
+            ArrayDims,
             Particle,
             llama::RecordCoord<1>,
             llama::mapping::SingleBlobSoA,
             llama::mapping::PackedAoS,
-            true>{arrayDomain},
+            true>{arrayDims},
         "Split.SoA.AoS.2Buffer");
 }
 
@@ -139,13 +136,13 @@ TEST_CASE("dump.Split.AoSoA8.AoS.One.3Buffer")
     // split out velocity as AoSoA8 and mass into a single value, the rest as AoS
     dump(
         llama::mapping::Split<
-            ArrayDomain,
+            ArrayDims,
             Particle,
             llama::RecordCoord<1>,
             llama::mapping::PreconfiguredAoSoA<8>::type,
             llama::mapping::
                 PreconfiguredSplit<llama::RecordCoord<1>, llama::mapping::One, llama::mapping::PackedAoS, true>::type,
-            true>{arrayDomain},
+            true>{arrayDims},
         "Split.AoSoA8.SoA.One.3Buffer");
 }
 
@@ -155,7 +152,7 @@ TEST_CASE("dump.Split.AoSoA8.AoS.One.SoA.4Buffer")
     // buffers
     dump(
         llama::mapping::Split<
-            ArrayDomain,
+            ArrayDims,
             Particle,
             llama::RecordCoord<1>,
             llama::mapping::PreconfiguredAoSoA<8>::type,
@@ -168,21 +165,21 @@ TEST_CASE("dump.Split.AoSoA8.AoS.One.SoA.4Buffer")
                     llama::mapping::SingleBlobSoA,
                     true>::type,
                 true>::type,
-            true>{arrayDomain},
+            true>{arrayDims},
         "Split.AoSoA8.AoS.One.SoA.4Buffer");
 }
 
 TEST_CASE("dump.AoS.Unaligned")
 {
-    dump(llama::mapping::AoS{arrayDomain, ParticleUnaligned{}}, "AoS.Unaligned");
+    dump(llama::mapping::AoS{arrayDims, ParticleUnaligned{}}, "AoS.Unaligned");
 }
 
 TEST_CASE("dump.AoS.Aligned")
 {
-    dump(llama::mapping::AoS<ArrayDomain, ParticleUnaligned, true>{arrayDomain}, "AoS.Aligned");
+    dump(llama::mapping::AoS<ArrayDims, ParticleUnaligned, true>{arrayDims}, "AoS.Aligned");
 }
 
 TEST_CASE("dump.AoS.AlignedExplicit")
 {
-    dump(llama::mapping::AoS{arrayDomain, ParticleAligned{}}, "AoS.AlignedExplicit");
+    dump(llama::mapping::AoS{arrayDims, ParticleAligned{}}, "AoS.AlignedExplicit");
 }

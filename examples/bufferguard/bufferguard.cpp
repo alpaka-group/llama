@@ -21,18 +21,18 @@ using Vector = llama::Record<
 >;
 // clang-format on
 
-template <template <typename, typename> typename InnerMapping, typename T_ArrayDomain, typename T_RecordDim>
+template <template <typename, typename> typename InnerMapping, typename T_ArrayDims, typename T_RecordDim>
 struct GuardMapping2D
 {
-    static_assert(std::is_same_v<T_ArrayDomain, llama::ArrayDomain<2>>, "Only 2D arrays are implemented");
+    static_assert(std::is_same_v<T_ArrayDims, llama::ArrayDims<2>>, "Only 2D arrays are implemented");
 
-    using ArrayDomain = T_ArrayDomain;
+    using ArrayDims = T_ArrayDims;
     using RecordDim = T_RecordDim;
 
     constexpr GuardMapping2D() = default;
 
-    constexpr explicit GuardMapping2D(ArrayDomain size, RecordDim = {})
-        : arrayDomainSize(size)
+    constexpr explicit GuardMapping2D(ArrayDims size, RecordDim = {})
+        : arrayDimsSize(size)
         , left({size[0] - 2})
         , right({size[0] - 2})
         , top({size[1] - 2})
@@ -65,11 +65,11 @@ struct GuardMapping2D
     }
 
     template <std::size_t... RecordCoords>
-    constexpr auto blobNrAndOffset(ArrayDomain coord) const -> llama::NrAndOffset
+    constexpr auto blobNrAndOffset(ArrayDims coord) const -> llama::NrAndOffset
     {
         // [0][0] is at left top
         const auto [row, col] = coord;
-        const auto [rowMax, colMax] = arrayDomainSize;
+        const auto [rowMax, colMax] = arrayDimsSize;
 
         if (col == 0)
         {
@@ -154,15 +154,15 @@ private:
         return a;
     }
 
-    llama::mapping::One<ArrayDomain, RecordDim> leftTop;
-    llama::mapping::One<ArrayDomain, RecordDim> leftBot;
-    llama::mapping::One<ArrayDomain, RecordDim> rightTop;
-    llama::mapping::One<ArrayDomain, RecordDim> rightBot;
-    InnerMapping<llama::ArrayDomain<1>, RecordDim> left;
-    InnerMapping<llama::ArrayDomain<1>, RecordDim> right;
-    InnerMapping<llama::ArrayDomain<1>, RecordDim> top;
-    InnerMapping<llama::ArrayDomain<1>, RecordDim> bot;
-    InnerMapping<llama::ArrayDomain<2>, RecordDim> center;
+    llama::mapping::One<ArrayDims, RecordDim> leftTop;
+    llama::mapping::One<ArrayDims, RecordDim> leftBot;
+    llama::mapping::One<ArrayDims, RecordDim> rightTop;
+    llama::mapping::One<ArrayDims, RecordDim> rightBot;
+    InnerMapping<llama::ArrayDims<1>, RecordDim> left;
+    InnerMapping<llama::ArrayDims<1>, RecordDim> right;
+    InnerMapping<llama::ArrayDims<1>, RecordDim> top;
+    InnerMapping<llama::ArrayDims<1>, RecordDim> bot;
+    InnerMapping<llama::ArrayDims<2>, RecordDim> center;
 
     static constexpr auto leftTopOff = std::size_t{0};
     static constexpr auto leftBotOff = leftTopOff + decltype(leftTop)::blobCount;
@@ -177,7 +177,7 @@ private:
 public:
     static constexpr auto blobCount = centerOff + decltype(center)::blobCount;
 
-    ArrayDomain arrayDomainSize;
+    ArrayDims arrayDimsSize;
 };
 
 template <typename View>
@@ -202,8 +202,8 @@ void run(const std::string& mappingName)
 
     constexpr auto rows = 7;
     constexpr auto cols = 5;
-    const auto arrayDomain = llama::ArrayDomain{rows, cols};
-    const auto mapping = GuardMapping2D<Mapping, llama::ArrayDomain<2>, Vector>{arrayDomain};
+    const auto arrayDims = llama::ArrayDims{rows, cols};
+    const auto mapping = GuardMapping2D<Mapping, llama::ArrayDims<2>, Vector>{arrayDims};
     std::ofstream{"bufferguard_" + mappingName + ".svg"} << llama::toSvg(mapping);
 
     auto view1 = allocView(mapping);

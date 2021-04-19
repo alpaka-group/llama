@@ -31,7 +31,7 @@ LLAMA is licensed under the LGPL3+.
 
    pages/install
    pages/introduction
-   pages/domains
+   pages/dimensions
    pages/views
    pages/virtualrecord
    pages/iteration

@@ -149,25 +149,25 @@ struct S;
 
 TEST_CASE("alignment")
 {
-    using DD = llama::Record<
+    using RD = llama::Record<
         llama::Field<tag::X, float>,
         llama::Field<tag::Y, double>,
         llama::Field<tag::Z, bool>,
         llama::Field<tag::Weight, std::uint16_t>>;
 
-    STATIC_REQUIRE(llama::offsetOf<DD, llama::RecordCoord<>, false> == 0);
-    STATIC_REQUIRE(llama::offsetOf<DD, llama::RecordCoord<0>, false> == 0);
-    STATIC_REQUIRE(llama::offsetOf<DD, llama::RecordCoord<1>, false> == 4);
-    STATIC_REQUIRE(llama::offsetOf<DD, llama::RecordCoord<2>, false> == 12);
-    STATIC_REQUIRE(llama::offsetOf<DD, llama::RecordCoord<3>, false> == 13);
-    STATIC_REQUIRE(llama::sizeOf<DD, false> == 15);
+    STATIC_REQUIRE(llama::offsetOf<RD, llama::RecordCoord<>, false> == 0);
+    STATIC_REQUIRE(llama::offsetOf<RD, llama::RecordCoord<0>, false> == 0);
+    STATIC_REQUIRE(llama::offsetOf<RD, llama::RecordCoord<1>, false> == 4);
+    STATIC_REQUIRE(llama::offsetOf<RD, llama::RecordCoord<2>, false> == 12);
+    STATIC_REQUIRE(llama::offsetOf<RD, llama::RecordCoord<3>, false> == 13);
+    STATIC_REQUIRE(llama::sizeOf<RD, false> == 15);
 
-    STATIC_REQUIRE(llama::offsetOf<DD, llama::RecordCoord<>, true> == 0);
-    STATIC_REQUIRE(llama::offsetOf<DD, llama::RecordCoord<0>, true> == 0);
-    STATIC_REQUIRE(llama::offsetOf<DD, llama::RecordCoord<1>, true> == 8); // aligned
-    STATIC_REQUIRE(llama::offsetOf<DD, llama::RecordCoord<2>, true> == 16);
-    STATIC_REQUIRE(llama::offsetOf<DD, llama::RecordCoord<3>, true> == 18); // aligned
-    STATIC_REQUIRE(llama::sizeOf<DD, true> == 20);
+    STATIC_REQUIRE(llama::offsetOf<RD, llama::RecordCoord<>, true> == 0);
+    STATIC_REQUIRE(llama::offsetOf<RD, llama::RecordCoord<0>, true> == 0);
+    STATIC_REQUIRE(llama::offsetOf<RD, llama::RecordCoord<1>, true> == 8); // aligned
+    STATIC_REQUIRE(llama::offsetOf<RD, llama::RecordCoord<2>, true> == 16);
+    STATIC_REQUIRE(llama::offsetOf<RD, llama::RecordCoord<3>, true> == 18); // aligned
+    STATIC_REQUIRE(llama::sizeOf<RD, true> == 20);
 }
 
 TEST_CASE("GetCoordFromTags")
@@ -213,46 +213,46 @@ TEST_CASE("GetTag")
 
 TEST_CASE("hasSameTags")
 {
-    using PosDomain = llama::GetType<Particle, llama::GetCoordFromTags<Particle, tag::Pos>>;
-    using VelDomain = llama::GetType<Particle, llama::GetCoordFromTags<Particle, tag::Vel>>;
+    using PosRecord = llama::GetType<Particle, llama::GetCoordFromTags<Particle, tag::Pos>>;
+    using VelRecord = llama::GetType<Particle, llama::GetCoordFromTags<Particle, tag::Vel>>;
 
     STATIC_REQUIRE(
         llama::hasSameTags<
-            PosDomain, // DD A
+            PosRecord, // RD A
             llama::RecordCoord<0>, // Local A
-            VelDomain, // DD B
+            VelRecord, // RD B
             llama::RecordCoord<0> // Local B
             > == false);
 
     STATIC_REQUIRE(
         llama::hasSameTags<
-            PosDomain, // DD A
+            PosRecord, // RD A
             llama::RecordCoord<0>, // Local A
-            VelDomain, // DD B
+            VelRecord, // RD B
             llama::RecordCoord<1> // Local B
             > == true);
 
     STATIC_REQUIRE(
         llama::hasSameTags<
-            Particle, // DD A
+            Particle, // RD A
             llama::RecordCoord<0, 0>, // Local A
-            Other, // DD B
+            Other, // RD B
             llama::RecordCoord<0, 0> // Local B
             > == false);
 
     STATIC_REQUIRE(
         llama::hasSameTags<
-            Particle, // DD A
+            Particle, // RD A
             llama::RecordCoord<0, 2>, // Local A
-            Other, // DD B
+            Other, // RD B
             llama::RecordCoord<0, 0> // Local B
             > == true);
 
     STATIC_REQUIRE(
         llama::hasSameTags<
-            Particle, // DD A
+            Particle, // RD A
             llama::RecordCoord<3, 0>, // Local A
-            Other, // DD B
+            Other, // RD B
             llama::RecordCoord<0, 0> // Local B
             > == false);
 }
@@ -304,7 +304,7 @@ TEST_CASE("arrays")
 {
     using namespace llama::literals;
 
-    auto v = llama::allocView(llama::mapping::AoS{llama::ArrayDomain{1}, Arrays{}});
+    auto v = llama::allocView(llama::mapping::AoS{llama::ArrayDims{1}, Arrays{}});
     v(0u)(tag::A1{}, 0_RC);
     v(0u)(tag::A1{}, 1_RC);
     v(0u)(tag::A1{}, 2_RC);

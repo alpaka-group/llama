@@ -6,15 +6,15 @@
 // std::allocator
 #ifdef __cpp_constexpr_dynamic_alloc
 
-#    include "ArrayDomainRange.hpp"
+#    include "ArrayDimsIndexRange.hpp"
 #    include "Core.hpp"
 
 namespace llama
 {
     namespace internal
     {
-        template <typename Mapping, std::size_t... Is, typename ArrayDomain>
-        constexpr auto blobNrAndOffset(const Mapping& m, llama::RecordCoord<Is...>, ArrayDomain ad)
+        template <typename Mapping, std::size_t... Is, typename ArrayDims>
+        constexpr auto blobNrAndOffset(const Mapping& m, llama::RecordCoord<Is...>, ArrayDims ad)
         {
             return m.template blobNrAndOffset<Is...>(ad);
         }
@@ -49,8 +49,8 @@ namespace llama
         };
     } // namespace internal
 
-    // Proofs by exhaustion of the array domain and record dimension, that all values mapped to memory do not overlap.
-    // Unfortunately, this only works for smallish array domains, because of compiler limits on constexpr evaluation
+    // Proofs by exhaustion of the array and record dimensions, that all values mapped to memory do not overlap.
+    // Unfortunately, this only works for smallish array dimensions, because of compiler limits on constexpr evaluation
     // depth.
     template <typename Mapping>
     constexpr auto mapsNonOverlappingly(const Mapping& m) -> bool
@@ -74,7 +74,7 @@ namespace llama
                                          {
                                              if (collision)
                                                  return;
-                                             for (auto ad : llama::ArrayDomainIndexRange{m.arrayDomainSize})
+                                             for (auto ad : llama::ArrayDimsIndexRange{m.arrayDimsSize})
                                              {
                                                  using Type
                                                      = llama::GetType<typename Mapping::RecordDim, decltype(coord)>;

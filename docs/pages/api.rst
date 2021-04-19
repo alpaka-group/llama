@@ -26,14 +26,14 @@ Useful helpers
    :members:
 .. doxygenfunction:: llama::structName
 
-Array domain
------------
+Array dimensions
+----------------
 
-.. doxygenstruct:: llama::ArrayDomain
+.. doxygenstruct:: llama::ArrayDims
 
-.. doxygenstruct:: llama::ArrayDomainIndexIterator
+.. doxygenstruct:: llama::ArrayDimsIndexIterator
    :members:
-.. doxygenstruct:: llama::ArrayDomainIndexRange
+.. doxygenstruct:: llama::ArrayDimsIndexRange
    :members:
 
 Record dimension
@@ -112,11 +112,11 @@ Mappings
 Common utilities
 ^^^^^^^^^^^^^^^^
 
-.. doxygenstruct:: llama::mapping::LinearizeArrayDomainCpp
+.. doxygenstruct:: llama::mapping::LinearizeArrayDimsCpp
    :members:
-.. doxygenstruct:: llama::mapping::LinearizeArrayDomainFortran
+.. doxygenstruct:: llama::mapping::LinearizeArrayDimsFortran
    :members:
-.. doxygenstruct:: llama::mapping::LinearizeArrayDomainMorton
+.. doxygenstruct:: llama::mapping::LinearizeArrayDimsMorton
    :members:
 
 Tree mapping

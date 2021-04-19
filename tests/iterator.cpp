@@ -19,9 +19,9 @@ using Position = llama::Record<
 
 TEST_CASE("iterator")
 {
-    using ArrayDomain = llama::ArrayDomain<1>;
-    constexpr auto arrayDomain = ArrayDomain{32};
-    constexpr auto mapping = llama::mapping::AoS<ArrayDomain, Position>{arrayDomain};
+    using ArrayDims = llama::ArrayDims<1>;
+    constexpr auto arrayDims = ArrayDims{32};
+    constexpr auto mapping = llama::mapping::AoS<ArrayDims, Position>{arrayDims};
     auto view = llama::allocView(mapping);
 
     for (auto vd : view)
@@ -37,10 +37,10 @@ TEST_CASE("iterator")
 
 TEST_CASE("iterator.std_copy")
 {
-    using ArrayDomain = llama::ArrayDomain<1>;
-    constexpr auto arrayDomain = ArrayDomain{32};
-    auto aosView = llama::allocView(llama::mapping::AoS<ArrayDomain, Position>{arrayDomain});
-    auto soaView = llama::allocView(llama::mapping::SoA<ArrayDomain, Position>{arrayDomain});
+    using ArrayDims = llama::ArrayDims<1>;
+    constexpr auto arrayDims = ArrayDims{32};
+    auto aosView = llama::allocView(llama::mapping::AoS<ArrayDims, Position>{arrayDims});
+    auto soaView = llama::allocView(llama::mapping::SoA<ArrayDims, Position>{arrayDims});
 
     int i = 0;
     for (auto vd : aosView)
@@ -61,9 +61,9 @@ TEST_CASE("iterator.std_copy")
 
 TEST_CASE("iterator.transform_reduce")
 {
-    constexpr auto arrayDomain = llama::ArrayDomain<1>{32};
-    auto aosView = llama::allocView(llama::mapping::AoS{arrayDomain, Position{}});
-    auto soaView = llama::allocView(llama::mapping::SoA{arrayDomain, Position{}});
+    constexpr auto arrayDims = llama::ArrayDims<1>{32};
+    auto aosView = llama::allocView(llama::mapping::AoS{arrayDims, Position{}});
+    auto soaView = llama::allocView(llama::mapping::SoA{arrayDims, Position{}});
 
     int i = 0;
     for (auto vd : aosView)
@@ -96,9 +96,9 @@ TEST_CASE("iterator.transform_reduce")
 
 TEST_CASE("ranges")
 {
-    using ArrayDomain = llama::ArrayDomain<1>;
-    constexpr auto arrayDomain = ArrayDomain{32};
-    constexpr auto mapping = llama::mapping::AoS<ArrayDomain, Position>{arrayDomain};
+    using ArrayDims = llama::ArrayDims<1>;
+    constexpr auto arrayDims = ArrayDims{32};
+    constexpr auto mapping = llama::mapping::AoS<ArrayDims, Position>{arrayDims};
     auto view = llama::allocView(mapping);
 
     STATIC_REQUIRE(std::ranges::range<decltype(view)>);
