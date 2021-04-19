@@ -83,7 +83,8 @@ void run(std::ostream& plotFile)
 
     constexpr FP ts = 0.0001f;
 
-    auto mapping = [&] {
+    auto mapping = [&]
+    {
         const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
         if constexpr (Mapping == 0)
             return llama::mapping::AoS{arrayDomain, Particle{}};
@@ -155,13 +156,17 @@ try
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
     plotFile << "\"alignment\"\t\"AoS\"\t\"SoA\"\t\"SoA MB\"\n";
 
-    mp_for_each<mp_iota_c<28>>([&](auto ae) {
-        mp_for_each<mp_list_c<std::size_t, 0, 1, 2>>([&](auto m) {
-            constexpr auto mapping = decltype(m)::value;
-            constexpr auto alignment = std::size_t{1} << decltype(ae)::value;
-            run<mapping, alignment>(plotFile);
+    mp_for_each<mp_iota_c<28>>(
+        [&](auto ae)
+        {
+            mp_for_each<mp_list_c<std::size_t, 0, 1, 2>>(
+                [&](auto m)
+                {
+                    constexpr auto mapping = decltype(m)::value;
+                    constexpr auto alignment = std::size_t{1} << decltype(ae)::value;
+                    run<mapping, alignment>(plotFile);
+                });
         });
-    });
 
     std::cout << "Plot with: ./nbody.sh\n";
     std::ofstream{"nbody.sh"} << fmt::format(

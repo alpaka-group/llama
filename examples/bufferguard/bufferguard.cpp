@@ -228,7 +228,8 @@ void run(const std::string& mappingName)
     std::cout << "\nView 2:\n";
     printView(view2, rows, cols);
 
-    auto copyBlobs = [&](auto& srcView, auto& dstView, auto srcBlobs, auto dstBlobs) {
+    auto copyBlobs = [&](auto& srcView, auto& dstView, auto srcBlobs, auto dstBlobs)
+    {
         static_assert(srcBlobs.size() == dstBlobs.size());
         for (auto i = 0; i < srcBlobs.size(); i++)
         {

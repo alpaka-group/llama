@@ -152,7 +152,8 @@ TEST_CASE("view.access")
 
     zeroStorage(view);
 
-    auto l = [](auto& view) {
+    auto l = [](auto& view)
+    {
         const ArrayDomain pos{0, 0};
         CHECK((view(pos) == view[pos]));
         CHECK((view(pos) == view[{0, 0}]));

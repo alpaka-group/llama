@@ -99,28 +99,32 @@ namespace llama
             const VirtualDatum<RightView, RightBoundDatumDomain, RightOwnView>& right) -> LeftDatum&
         {
             using RightDatum = VirtualDatum<RightView, RightBoundDatumDomain, RightOwnView>;
-            forEachLeaf<typename LeftDatum::AccessibleDatumDomain>([&](auto leftCoord) {
-                using LeftInnerCoord = decltype(leftCoord);
-                forEachLeaf<typename RightDatum::AccessibleDatumDomain>([&](auto rightCoord) {
-                    using RightInnerCoord = decltype(rightCoord);
-                    if constexpr (hasSameTags<
-                                      typename LeftDatum::AccessibleDatumDomain,
-                                      LeftInnerCoord,
-                                      typename RightDatum::AccessibleDatumDomain,
-                                      RightInnerCoord>)
-                    {
-                        Functor{}(left(leftCoord), right(rightCoord));
-                    }
+            forEachLeaf<typename LeftDatum::AccessibleDatumDomain>(
+                [&](auto leftCoord)
+                {
+                    using LeftInnerCoord = decltype(leftCoord);
+                    forEachLeaf<typename RightDatum::AccessibleDatumDomain>(
+                        [&](auto rightCoord)
+                        {
+                            using RightInnerCoord = decltype(rightCoord);
+                            if constexpr (hasSameTags<
+                                              typename LeftDatum::AccessibleDatumDomain,
+                                              LeftInnerCoord,
+                                              typename RightDatum::AccessibleDatumDomain,
+                                              RightInnerCoord>)
+                            {
+                                Functor{}(left(leftCoord), right(rightCoord));
+                            }
+                        });
                 });
-            });
             return left;
         }
 
         template <typename Functor, typename LeftDatum, typename T>
         LLAMA_FN_HOST_ACC_INLINE auto virtualDatumArithOperator(LeftDatum& left, const T& right) -> LeftDatum&
         {
-            forEachLeaf<typename LeftDatum::AccessibleDatumDomain>(
-                [&](auto leftCoord) { Functor{}(left(leftCoord), right); });
+            forEachLeaf<typename LeftDatum::AccessibleDatumDomain>([&](auto leftCoord)
+                                                                   { Functor{}(left(leftCoord), right); });
             return left;
         }
 
@@ -136,20 +140,24 @@ namespace llama
         {
             using RightDatum = VirtualDatum<RightView, RightBoundDatumDomain, RightOwnView>;
             bool result = true;
-            forEachLeaf<typename LeftDatum::AccessibleDatumDomain>([&](auto leftCoord) {
-                using LeftInnerCoord = decltype(leftCoord);
-                forEachLeaf<typename RightDatum::AccessibleDatumDomain>([&](auto rightCoord) {
-                    using RightInnerCoord = decltype(rightCoord);
-                    if constexpr (hasSameTags<
-                                      typename LeftDatum::AccessibleDatumDomain,
-                                      LeftInnerCoord,
-                                      typename RightDatum::AccessibleDatumDomain,
-                                      RightInnerCoord>)
-                    {
-                        result &= Functor{}(left(leftCoord), right(rightCoord));
-                    }
+            forEachLeaf<typename LeftDatum::AccessibleDatumDomain>(
+                [&](auto leftCoord)
+                {
+                    using LeftInnerCoord = decltype(leftCoord);
+                    forEachLeaf<typename RightDatum::AccessibleDatumDomain>(
+                        [&](auto rightCoord)
+                        {
+                            using RightInnerCoord = decltype(rightCoord);
+                            if constexpr (hasSameTags<
+                                              typename LeftDatum::AccessibleDatumDomain,
+                                              LeftInnerCoord,
+                                              typename RightDatum::AccessibleDatumDomain,
+                                              RightInnerCoord>)
+                            {
+                                result &= Functor{}(left(leftCoord), right(rightCoord));
+                            }
+                        });
                 });
-            });
             return result;
         }
 
@@ -157,11 +165,12 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto virtualDatumRelOperator(const LeftDatum& left, const T& right) -> bool
         {
             bool result = true;
-            forEachLeaf<typename LeftDatum::AccessibleDatumDomain>([&](auto leftCoord) {
-                result &= Functor{}(
-                    left(leftCoord),
-                    static_cast<std::remove_reference_t<decltype(left(leftCoord))>>(right));
-            });
+            forEachLeaf<typename LeftDatum::AccessibleDatumDomain>(
+                [&](auto leftCoord) {
+                    result &= Functor{}(
+                        left(leftCoord),
+                        static_cast<std::remove_reference_t<decltype(left(leftCoord))>>(right));
+                });
             return result;
         }
 
@@ -926,7 +935,7 @@ namespace llama
                 sizeof...(Index) == ArrayDomain::rank,
                 "Please specify as many indices as your array domain has dimensions");
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this)(ArrayDomain{indices...});
+            return (*this) (ArrayDomain{indices...});
         }
 
         template <typename... Index>
@@ -936,7 +945,7 @@ namespace llama
                 sizeof...(Index) == ArrayDomain::rank,
                 "Please specify as many indices as your array domain has dimensions");
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this)(ArrayDomain{indices...});
+            return (*this) (ArrayDomain{indices...});
         }
 
         /// Retrieves the \ref VirtualDatum at the \ref ArrayDomain coordinate
@@ -944,13 +953,13 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayDomain arrayDomain) const -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this)(arrayDomain);
+            return (*this) (arrayDomain);
         }
 
         LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayDomain arrayDomain) -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this)(arrayDomain);
+            return (*this) (arrayDomain);
         }
 
         /// Retrieves the \ref VirtualDatum at the 1D \ref ArrayDomain coordinate
@@ -958,13 +967,13 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t index) const -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this)(index);
+            return (*this) (index);
         }
 
         LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t index) -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this)(index);
+            return (*this) (index);
         }
 
         auto begin() -> Iterator<View>

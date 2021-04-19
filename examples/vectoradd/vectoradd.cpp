@@ -46,7 +46,8 @@ namespace usellama
         std::cout << "\nLLAMA\n";
         Stopwatch watch;
 
-        const auto mapping = [&] {
+        const auto mapping = [&]
+        {
             const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
             if constexpr (MAPPING == 0)
                 return llama::mapping::AoS{arrayDomain, Vector{}};

@@ -79,7 +79,8 @@ struct BlurKernel
     {
         const auto ti = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
 
-        [[maybe_unused]] auto sharedView = [&] {
+        [[maybe_unused]] auto sharedView = [&]
+        {
             if constexpr (SHARED)
             {
                 // Using SoA for the shared memory

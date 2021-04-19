@@ -19,11 +19,13 @@ namespace llama::mapping
             using Tags = GetTags<DatumDomain, DatumCoord<Coords...>>;
 
             std::string r;
-            boost::mp11::mp_for_each<Tags>([&](auto tag) {
-                if (!r.empty())
-                    r += '.';
-                r += structName(tag);
-            });
+            boost::mp11::mp_for_each<Tags>(
+                [&](auto tag)
+                {
+                    if (!r.empty())
+                        r += '.';
+                    r += structName(tag);
+                });
             return r;
         }
     } // namespace internal

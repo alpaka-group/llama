@@ -109,7 +109,8 @@ namespace usellama
     template <int Mapping, bool UseAccumulator, std::size_t AoSoALanes = 8 /*AVX2*/>
     auto main(std::ostream& plotFile) -> int
     {
-        auto mappingName = [](int m) -> std::string {
+        auto mappingName = [](int m) -> std::string
+        {
             if (m == 0)
                 return "AoS";
             if (m == 1)
@@ -127,7 +128,8 @@ namespace usellama
             title += " Acc";
         std::cout << title << "\n";
         Stopwatch watch;
-        auto mapping = [&] {
+        auto mapping = [&]
+        {
             const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
             if constexpr (Mapping == 0)
                 return llama::mapping::AoS{arrayDomain, Particle{}};
@@ -149,14 +151,16 @@ namespace usellama
         if constexpr (DUMP_MAPPING)
             std::ofstream(title + ".svg") << llama::toSvg(mapping);
 
-        auto tmapping = [&] {
+        auto tmapping = [&]
+        {
             if constexpr (TRACE)
                 return llama::mapping::Trace{std::move(mapping)};
             else
                 return std::move(mapping);
         }();
 
-        auto hmapping = [&] {
+        auto hmapping = [&]
+        {
             if constexpr (HEATMAP)
                 return llama::mapping::Heatmap{std::move(tmapping)};
             else
@@ -730,7 +734,8 @@ namespace manualAoSoA_manualAVX
         const __m256 distSqr
             = _mm256_add_ps(_mm256_add_ps(_mm256_add_ps(vEPS2, xdistanceSqr), ydistanceSqr), zdistanceSqr);
         const __m256 distSixth = _mm256_mul_ps(_mm256_mul_ps(distSqr, distSqr), distSqr);
-        const __m256 invDistCube = [&] {
+        const __m256 invDistCube = [&]
+        {
             if constexpr (ALLOW_RSQRT)
             {
                 const __m256 r = _mm256_rsqrt_ps(distSixth);
@@ -1019,7 +1024,8 @@ namespace manualAoSoA_Vc
         const vec zdistanceSqr = zdistance * zdistance;
         const vec distSqr = EPS2 + xdistanceSqr + ydistanceSqr + zdistanceSqr;
         const vec distSixth = distSqr * distSqr * distSqr;
-        const vec invDistCube = [&] {
+        const vec invDistCube = [&]
+        {
             if constexpr (ALLOW_RSQRT)
             {
                 const vec r = Vc::rsqrt(distSixth);
@@ -1383,25 +1389,33 @@ try
 
     int r = 0;
     using namespace boost::mp11;
-    mp_for_each<mp_iota_c<5>>([&](auto i) {
-        // only AoSoA (3) needs lanes
-        using Lanes
-            = std::conditional_t<decltype(i)::value == 3, mp_list_c<std::size_t, 8, 16>, mp_list_c<std::size_t, 0>>;
-        mp_for_each<Lanes>([&, i](auto lanes) {
-            mp_for_each<mp_list_c<bool, false, true>>([&, i](auto useAccumulator) {
-                r += usellama::main<decltype(i)::value, decltype(useAccumulator)::value, decltype(lanes)::value>(
-                    plotFile);
-            });
+    mp_for_each<mp_iota_c<5>>(
+        [&](auto i)
+        {
+            // only AoSoA (3) needs lanes
+            using Lanes
+                = std::conditional_t<decltype(i)::value == 3, mp_list_c<std::size_t, 8, 16>, mp_list_c<std::size_t, 0>>;
+            mp_for_each<Lanes>(
+                [&, i](auto lanes)
+                {
+                    mp_for_each<mp_list_c<bool, false, true>>(
+                        [&, i](auto useAccumulator) {
+                            r += usellama::
+                                main<decltype(i)::value, decltype(useAccumulator)::value, decltype(lanes)::value>(
+                                    plotFile);
+                        });
+                });
         });
-    });
     r += manualAoS::main<false>(plotFile);
     r += manualAoS::main<true>(plotFile);
     r += manualSoA::main<false>(plotFile);
     r += manualSoA::main<true>(plotFile);
-    mp_for_each<mp_list_c<std::size_t, 8, 16>>([&](auto lanes) {
-        r += manualAoSoA::main<false, false, decltype(lanes)::value>(plotFile);
-        r += manualAoSoA::main<true, false, decltype(lanes)::value>(plotFile);
-    });
+    mp_for_each<mp_list_c<std::size_t, 8, 16>>(
+        [&](auto lanes)
+        {
+            r += manualAoSoA::main<false, false, decltype(lanes)::value>(plotFile);
+            r += manualAoSoA::main<true, false, decltype(lanes)::value>(plotFile);
+        });
     // r += manualAoSoA::main<false, true>(plotFile);
     // r += manualAoSoA::main<true, true>(plotFile);
 #ifdef __AVX2__
@@ -1417,9 +1431,14 @@ try
             {
                 if (useUpdate1 && tiled)
                     continue;
-                mp_for_each<mp_list_c<bool, false, true>>([&](auto useAccumulator) {
-                    r += manualAoSoA_Vc::main<decltype(useAccumulator)::value>(plotFile, threads, useUpdate1, tiled);
-                });
+                mp_for_each<mp_list_c<bool, false, true>>(
+                    [&](auto useAccumulator) {
+                        r += manualAoSoA_Vc::main<decltype(useAccumulator)::value>(
+                            plotFile,
+                            threads,
+                            useUpdate1,
+                            tiled);
+                    });
             }
 #endif
 

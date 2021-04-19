@@ -61,9 +61,9 @@ namespace llama::mapping::tree::functor
             const Node<Identifier, Type, CountType>& node,
             std::size_t arraySize)
         {
-            auto children = tupleTransform(node.childs, [&](auto element) {
-                return basicToResultImpl(element, LLAMA_COPY(node.count) * arraySize);
-            });
+            auto children = tupleTransform(
+                node.childs,
+                [&](auto element) { return basicToResultImpl(element, LLAMA_COPY(node.count) * arraySize); });
             return Node<Identifier, decltype(children), boost::mp11::mp_size_t<1>>{{}, children};
         }
 
