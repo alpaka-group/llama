@@ -100,7 +100,7 @@ The core data structure of LLAMA is the :ref:`View <label-view>`,
 which holds the memory for the data and provides methods to access the data space.
 In order to create a view, a `Mapping` is needed which is an abstract concept.
 LLAMA offers many kinds of mappings and users can also provide their own mappings.
-Mappings are constructed from a :ref:`record dimension <label-rd>`, containing tags, and an :ref:`Array domain <label-ad>`.
+Mappings are constructed from a :ref:`record dimension <label-rd>`, containing tags, and :ref:`array dimensions <label-ad>`.
 In addition to a mapping defining the memory layout, an array of :ref:`Blobs <label-blobs>` is needed for a view, supplying the actual storage behind the view.
 A blob is any object representing a contiguous chunk of memory, byte-wise addressable using :cpp:`operator[]`.
 A suitable Blob array is either directly provided by the user or built using a :ref:`BlobAllocator <label-bloballocators>` when a view is created by a call to `allocView`.
@@ -108,8 +108,8 @@ A blob allocator is again an abstract concept and any object returning a blob of
 LLAMA comes with a set of predefined blob allocators and users can again provider their own.
 
 Once a view is created, the user can navigate on the data managed by the view.
-On top of a view, a :ref:`VirtualView <label-virtualview>` can be created, offering access to a subrange of the array domain.
-Elements of the array domain, called records, are accessed on both, View and VirtualView, by calling :cpp:`operator()` with an instance of the array domain.
+On top of a view, a :ref:`VirtualView <label-virtualview>` can be created, offering access to a subspace of the array dimensions.
+Elements of the array dimensions, called records, are accessed on both, View and VirtualView, by calling :cpp:`operator()` with an array dimensions coordinate as instance of :cpp:`ArrayDims`.
 This access returns a :ref:`VirtualRecord <label-virtualrecord>`, allowing further access using the tags from the record dimension, until eventually a reference to actual data in memory is returned.
 
 

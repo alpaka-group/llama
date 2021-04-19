@@ -5,8 +5,8 @@
 Mappings
 ========
 
-One of the core tasks of LLAMA is to map an address from the array domain and
-record dimension to some address in the allocated memory space.
+One of the core tasks of LLAMA is to map an address from the array and
+record dimensions to some address in the allocated memory space.
 This is particularly challenging if the compiler shall still be able to optimize the resulting
 memory accesses (vectorization, reordering, aligned loads, etc.).
 The compiler needs to **understand** the semantic of the mapping at compile time.
@@ -26,19 +26,19 @@ The view requires each mapping to fulfill the following concept:
 
     template <typename M>
     concept Mapping = requires(M m) {
-        typename M::ArrayDomain;
+        typename M::ArrayDims;
         typename M::RecordDim;
         { M::blobCount } -> std::convertible_to<std::size_t>;
         llama::Array<int, M::blobCount>{}; // validates constexpr-ness
         { m.blobSize(std::size_t{}) } -> std::same_as<std::size_t>;
-        { m.blobNrAndOffset(typename M::ArrayDomain{}) } -> std::same_as<NrAndOffset>;
+        { m.blobNrAndOffset(typename M::ArrayDims{}) } -> std::same_as<NrAndOffset>;
     };
 
-That is, each mapping type needs to expose the types :cpp:`M::ArrayDomain` and :cpp:`M::RecordDim`.
+That is, each mapping type needs to expose the types :cpp:`M::ArrayDims` and :cpp:`M::RecordDim`.
 Furthermore, each mapping needs to provide a static constexpr member variable :cpp:`blobCount` and two member functions.
 :cpp:`blobSize(i)` gives the size in bytes of the :cpp:`i`\ th block of memory needed for this mapping.
 :cpp:`i` is in the range of :cpp:`0` to :cpp:`blobCount - 1`.
-:cpp:`blobNrAndOffset(ad)` implements the core mapping logic by translating a array domain coordinate :cpp:`ad` into a value of :cpp:`llama::NrAndOffset`, containing the blob number of offset within the blob where the value should be stored.
+:cpp:`blobNrAndOffset(ad)` implements the core mapping logic by translating an array coordinate :cpp:`ad` into a value of :cpp:`llama::NrAndOffset`, containing the blob number of offset within the blob where the value should be stored.
 
 AoS mappings
 ------------
@@ -49,12 +49,12 @@ However, they do not vectorize well in practice.
 
 .. code-block:: C++
 
-    llama::mapping::AoS<ArrayDomain, RecordDim> mapping{arrayDomainSize};
-    llama::mapping::AoS<ArrayDomain, RecordDim, true> mapping{arrayDomainSize}; // respect alignment
-    llama::mapping::AoS<ArrayDomain, RecordDim, true
-        llama::mapping::LinearizeArrayDomainFortran> mapping{arrayDomainSize}; // respect alignment, column major
+    llama::mapping::AoS<ArrayDims, RecordDim> mapping{arrayDimsSize};
+    llama::mapping::AoS<ArrayDims, RecordDim, true> mapping{arrayDimsSize}; // respect alignment
+    llama::mapping::AoS<ArrayDims, RecordDim, true
+        llama::mapping::LinearizeArrayDimsFortran> mapping{arrayDimsSize}; // respect alignment, column major
 
-By default, the :cpp:`ArrayDomain` is linearized using :cpp:`llama::mapping::LinearizeArrayDomainCpp` and the layout is tightly packed.
+By default, the :cpp:`ArrayDims` is linearized using :cpp:`llama::mapping::LinearizeArrayDimsCpp` and the layout is tightly packed.
 LLAMA provides the aliases :cpp:`llama::mapping::AlignedAoS` and :cpp:`llama::mapping::PackedAoS` for convenience.
 
 
@@ -63,7 +63,7 @@ but, since the mapping code is more complicated, compilers currently fail to aut
 
 .. code-block:: C++
 
-    llama::mapping::AoSoA<ArrayDomain, RecordDim, Lanes> mapping{arrayDomainSize};
+    llama::mapping::AoSoA<ArrayDims, RecordDim, Lanes> mapping{arrayDimsSize};
 
 .. _label-tree-mapping:
 
@@ -77,12 +77,12 @@ This layout auto vectorizes well in practice.
 
 .. code-block:: C++
 
-    llama::mapping::SoA<ArrayDomain, RecordDim> mapping{arrayDomainSize};
-    llama::mapping::SoA<ArrayDomain, RecordDim, true> mapping{arrayDomainSize}; // separate blob for each attribute
-    llama::mapping::SoA<ArrayDomain, RecordDim, true,
-        llama::mapping::LinearizeArrayDomainFortran> mapping{arrayDomainSize}; // separate blob for each attribute, column major
+    llama::mapping::SoA<ArrayDims, RecordDim> mapping{arrayDimsSize};
+    llama::mapping::SoA<ArrayDims, RecordDim, true> mapping{arrayDimsSize}; // separate blob for each attribute
+    llama::mapping::SoA<ArrayDims, RecordDim, true,
+        llama::mapping::LinearizeArrayDimsFortran> mapping{arrayDimsSize}; // separate blob for each attribute, column major
 
-By default, the :cpp:`ArrayDomain` is linearized using :cpp:`llama::mapping::LinearizeArrayDomainCpp` and the layout is mapped into a single blob.
+By default, the :cpp:`ArrayDims` is linearized using :cpp:`llama::mapping::LinearizeArrayDimsCpp` and the layout is mapped into a single blob.
 LLAMA provides the aliases :cpp:`llama::mapping::SingleBlobSoA` and :cpp:`llama::mapping::MultiBlobSoA` for convenience.
 
 
@@ -96,25 +96,25 @@ The AoSoA mapping has a mandatory additional parameter specifying the number of 
 
 .. code-block:: C++
 
-    llama::mapping::AoSoA<ArrayDomain, RecordDim, 8> mapping{arrayDomainSize}; // inner array has 8 values
-    llama::mapping::AoSoA<ArrayDomain, RecordDim, 8,
-        llama::mapping::LinearizeArrayDomainFortran> mapping{arrayDomainSize}; // inner array has 8 values, column major
+    llama::mapping::AoSoA<ArrayDims, RecordDim, 8> mapping{arrayDimsSize}; // inner array has 8 values
+    llama::mapping::AoSoA<ArrayDims, RecordDim, 8,
+        llama::mapping::LinearizeArrayDimsFortran> mapping{arrayDimsSize}; // inner array has 8 values, column major
 
-By default, the :cpp:`ArrayDomain` is linearized using :cpp:`llama::mapping::LinearizeArrayDomainCpp`.
+By default, the :cpp:`ArrayDims` is linearized using :cpp:`llama::mapping::LinearizeArrayDimsCpp`.
 
 LLAMA also provides a helper :cpp:`llama::mapping::maxLanes` which can be used to determine the maximum vector lanes which can be used for a given record dimension and vector register size.
 In this example, the inner array a size of N so even the largest type in the record dimension can fit N times into a vector register of 256bits size (e.g. AVX2).
 
 .. code-block:: C++
 
-    llama::mapping::AoSoA<ArrayDomain, RecordDim,
-        llama::mapping::maxLanes<RecordDim, 256>> mapping{arrayDomainSize};
+    llama::mapping::AoSoA<ArrayDims, RecordDim,
+        llama::mapping::maxLanes<RecordDim, 256>> mapping{arrayDimsSize};
 
 
 One mapping
 -----------
 
-The One mapping is intended to map all coordinates in the array domain onto the same memory location.
+The One mapping is intended to map all coordinates in the array dimensions onto the same memory location.
 This is commonly used in  the `llama::One` virtual record, but also offers interesting applications in conjunction with the `llama::mapping::Split` mapping.
 
 
@@ -129,9 +129,9 @@ The remaining record dimension is mapped using a second mapping.
 
 .. code-block:: C++
 
-    llama::mapping::Split<ArrayDomain, RecordDim,
+    llama::mapping::Split<ArrayDims, RecordDim,
         llama::RecordCoord<1>, llama::mapping::SoA, llama::mapping::PackedAoS>
-            mapping{arrayDomainSize}; // maps the subtree at index 1 as SoA, the rest as packed AoS
+            mapping{arrayDimsSize}; // maps the subtree at index 1 as SoA, the rest as packed AoS
 
 Split mappings can be nested to map a record dimension into even fancier combinations.
 
@@ -145,7 +145,7 @@ WARNING: The tree mapping is currently not maintained and we consider deprecatio
 
 The LLAMA tree mapping is one approach to archieve the goal of mixing different mapping approaches.
 Furthermore, it tries to establish a general mapping description language and mapping definition framework.
-Let's take the example record dimension from the :ref:`domain section<label-domains>`:
+Let's take the example record dimension from the :ref:`dimensions section<label-dimensions>`:
 
 .. image:: ../images/layout_tree.svg
 
@@ -155,9 +155,9 @@ representing the repetition of branches and to define tree operations which
 create new trees out of the old ones while providing methods to translate tree
 coordinates from one tree to another.
 
-This is best demonstrated by an example. First of all the array domain needs to be
-represented as such an tree too. Let's assume a array domain of
-:math:`128 \times 64`:
+This is best demonstrated by an example.
+First of all the array dimensions needs to be represented as such an tree too.
+Let's assume array dimensions of :math:`128 \times 64`:
 
 .. image:: ../images/ud_tree_2.svg
 
@@ -166,8 +166,8 @@ The record dimension is already a tree, but as it has no run time influence, onl
 
 .. image:: ../images/layout_tree_2.svg
 
-Now the two trees are connected so that we can represent array domain and record
-dimension with one tree:
+Now the two trees are connected so that we can represent array and record
+dimensions with one tree:
 
 .. image:: ../images/start_tree_2.svg
 
@@ -189,7 +189,7 @@ Struct of array but with a padding after each 1024 elements may look like this:
 The size of the leaf type in "pad" of course needs to be determined based on the
 desired aligment and sub tree sizes.
 
-Such a tree (with smaller array domain for easier drawing) …
+Such a tree (with smaller array dimensions for easier drawing) …
 
 .. image:: ../images/example_tree.svg
 
@@ -208,19 +208,19 @@ a further constructor parameter for the instantiation of this tuple.
     };
 
     using Mapping = llama::mapping::tree::Mapping<
-        ArrayDomain,
+        ArrayDims,
         RecordDim,
         decltype(treeOperationList)
     >;
 
     Mapping mapping(
-        arrayDomainSize,
+        arrayDimsSize,
         treeOperationList
     );
 
     // or using CTAD and an unused argument for the record dimension:
     llama::mapping::tree::Mapping mapping(
-        arrayDomainSize,
+        arrayDimsSize,
         llama::Tuple{
             llama::mapping::tree::functor::LeafOnlyRT()
         },

@@ -79,17 +79,19 @@ template <std::size_t ProblemSize, bool UseAccumulator, std::size_t BlockSize, i
 __global__ void updateSM(View particles)
 {
     // FIXME: removing this lambda makes nvcc 11 segfault
-    auto sharedView = [] {
-        constexpr auto sharedMapping = [] {
-            constexpr auto arrayDomain = llama::ArrayDomain{BlockSize};
+    auto sharedView = []
+    {
+        constexpr auto sharedMapping = []
+        {
+            constexpr auto arrayDims = llama::ArrayDims{BlockSize};
             if constexpr (MappingSM == 0)
-                return llama::mapping::AoS{arrayDomain, SharedMemoryParticle{}};
+                return llama::mapping::AoS{arrayDims, SharedMemoryParticle{}};
             if constexpr (MappingSM == 1)
-                return llama::mapping::SoA{arrayDomain, SharedMemoryParticle{}};
+                return llama::mapping::SoA{arrayDims, SharedMemoryParticle{}};
             if constexpr (MappingSM == 2)
-                return llama::mapping::SoA{arrayDomain, SharedMemoryParticle{}, std::true_type{}};
+                return llama::mapping::SoA{arrayDims, SharedMemoryParticle{}, std::true_type{}};
             if constexpr (MappingSM == 3)
-                return llama::mapping::AoSoA<decltype(arrayDomain), SharedMemoryParticle, AOSOA_LANES>{arrayDomain};
+                return llama::mapping::AoSoA<decltype(arrayDims), SharedMemoryParticle, AOSOA_LANES>{arrayDims};
         }();
 
         llama::Array<std::byte*, decltype(sharedMapping)::blobCount> sharedMems{};
@@ -183,24 +185,25 @@ try
         title += " Acc";
     std::cout << '\n' << title << '\n';
 
-    auto mapping = [] {
-        const auto arrayDomain = llama::ArrayDomain{PROBLEM_SIZE};
+    auto mapping = []
+    {
+        const auto arrayDims = llama::ArrayDims{PROBLEM_SIZE};
         if constexpr (Mapping == 0)
-            return llama::mapping::AoS{arrayDomain, Particle{}};
+            return llama::mapping::AoS{arrayDims, Particle{}};
         if constexpr (Mapping == 1)
-            return llama::mapping::SoA{arrayDomain, Particle{}};
+            return llama::mapping::SoA{arrayDims, Particle{}};
         if constexpr (Mapping == 2)
-            return llama::mapping::SoA{arrayDomain, Particle{}, std::true_type{}};
+            return llama::mapping::SoA{arrayDims, Particle{}, std::true_type{}};
         if constexpr (Mapping == 3)
-            return llama::mapping::AoSoA<decltype(arrayDomain), Particle, AOSOA_LANES>{arrayDomain};
+            return llama::mapping::AoSoA<decltype(arrayDims), Particle, AOSOA_LANES>{arrayDims};
         if constexpr (Mapping == 4)
             return llama::mapping::Split<
-                decltype(arrayDomain),
+                decltype(arrayDims),
                 Particle,
                 llama::RecordCoord<1>,
                 llama::mapping::SoA,
                 llama::mapping::SoA,
-                true>{arrayDomain};
+                true>{arrayDims};
     }();
 
     Stopwatch watch;

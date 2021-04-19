@@ -13,12 +13,12 @@ namespace llama
     // clang-format off
     template <typename M>
     concept Mapping = requires(M m) {
-        typename M::ArrayDomain;
+        typename M::ArrayDims;
         typename M::RecordDim;
         { M::blobCount } -> std::convertible_to<std::size_t>;
         Array<int, M::blobCount>{}; // validates constexpr-ness
         { m.blobSize(std::size_t{}) } -> std::same_as<std::size_t>;
-        { m.blobNrAndOffset(typename M::ArrayDomain{}) } -> std::same_as<NrAndOffset>;
+        { m.blobNrAndOffset(typename M::ArrayDims{}) } -> std::same_as<NrAndOffset>;
     };
     // clang-format on
 

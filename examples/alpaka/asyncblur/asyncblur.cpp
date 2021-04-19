@@ -86,7 +86,7 @@ struct BlurKernel
                 // Using SoA for the shared memory
                 constexpr auto sharedChunkSize = ElemsPerBlock + 2 * KernelSize;
                 const auto sharedMapping = llama::mapping::SoA(
-                    typename View::ArrayDomain{sharedChunkSize, sharedChunkSize},
+                    typename View::ArrayDims{sharedChunkSize, sharedChunkSize},
                     typename View::RecordDim{});
                 constexpr auto sharedMemSize = llama::sizeOf<PixelOnAcc> * sharedChunkSize * sharedChunkSize;
                 auto& sharedMem = alpaka::declareSharedVar<std::byte[sharedMemSize], __COUNTER__>(acc);
@@ -105,8 +105,8 @@ struct BlurKernel
             const std::size_t bStart[2]
                 = {bi[0] * ElemsPerBlock + threadIdxInBlock[0], bi[1] * ElemsPerBlock + threadIdxInBlock[1]};
             const std::size_t bEnd[2] = {
-                alpaka::math::min(acc, bStart[0] + ElemsPerBlock + 2 * KernelSize, oldImage.mapping.arrayDomainSize[0]),
-                alpaka::math::min(acc, bStart[1] + ElemsPerBlock + 2 * KernelSize, oldImage.mapping.arrayDomainSize[1]),
+                alpaka::math::min(acc, bStart[0] + ElemsPerBlock + 2 * KernelSize, oldImage.mapping.arrayDimsSize[0]),
+                alpaka::math::min(acc, bStart[1] + ElemsPerBlock + 2 * KernelSize, oldImage.mapping.arrayDimsSize[1]),
             };
             LLAMA_INDEPENDENT_DATA
             for (auto y = bStart[0]; y < bEnd[0]; y += threadsPerBlock)
@@ -119,8 +119,8 @@ struct BlurKernel
 
         const std::size_t start[2] = {ti[0] * Elems, ti[1] * Elems};
         const std::size_t end[2] = {
-            alpaka::math::min(acc, start[0] + Elems, oldImage.mapping.arrayDomainSize[0] - 2 * KernelSize),
-            alpaka::math::min(acc, start[1] + Elems, oldImage.mapping.arrayDomainSize[1] - 2 * KernelSize),
+            alpaka::math::min(acc, start[0] + Elems, oldImage.mapping.arrayDimsSize[0] - 2 * KernelSize),
+            alpaka::math::min(acc, start[1] + Elems, oldImage.mapping.arrayDimsSize[1] - 2 * KernelSize),
         };
 
         LLAMA_INDEPENDENT_DATA
@@ -208,12 +208,12 @@ try
     }
 
     // LLAMA
-    using ArrayDomain = llama::ArrayDomain<2>;
+    using ArrayDims = llama::ArrayDims<2>;
 
     auto treeOperationList = llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()};
-    const auto hostMapping = llama::mapping::tree::Mapping{ArrayDomain{buffer_y, buffer_x}, treeOperationList, Pixel{}};
+    const auto hostMapping = llama::mapping::tree::Mapping{ArrayDims{buffer_y, buffer_x}, treeOperationList, Pixel{}};
     const auto devMapping = llama::mapping::tree::Mapping{
-        ArrayDomain{CHUNK_SIZE + 2 * KERNEL_SIZE, CHUNK_SIZE + 2 * KERNEL_SIZE},
+        ArrayDims{CHUNK_SIZE + 2 * KERNEL_SIZE, CHUNK_SIZE + 2 * KERNEL_SIZE},
         treeOperationList,
         PixelOnAcc{}};
 
@@ -298,14 +298,14 @@ try
     struct VirtualHostElement
     {
         llama::VirtualView<decltype(hostView)> virtualHost;
-        const ArrayDomain validMiniSize;
+        const ArrayDims validMiniSize;
     };
     std::list<VirtualHostElement> virtualHostList;
     for (std::size_t chunk_y = 0; chunk_y < chunks[0]; ++chunk_y)
         for (std::size_t chunk_x = 0; chunk_x < chunks[1]; ++chunk_x)
         {
             // Create virtual view with size of mini view
-            const ArrayDomain validMiniSize{
+            const ArrayDims validMiniSize{
                 ((chunk_y < chunks[0] - 1) ? CHUNK_SIZE : (img_y - 1) % CHUNK_SIZE + 1) + 2 * KERNEL_SIZE,
                 ((chunk_x < chunks[1] - 1) ? CHUNK_SIZE : (img_x - 1) % CHUNK_SIZE + 1) + 2 * KERNEL_SIZE};
             llama::VirtualView virtualHost(hostView, {chunk_y * CHUNK_SIZE, chunk_x * CHUNK_SIZE}, validMiniSize);

@@ -5,18 +5,18 @@
 Iteration
 =========
 
-Array domain iterating
-----------------------
+Array dimensions iteration
+--------------------------
 
-The array domain spans an N-dimensional space of integral indices.
+The array dimensions span an N-dimensional space of integral indices.
 Sometimes we just want to quickly iterate over all coordinates in this index space.
-This is what :cpp:`llama::ArrayDomainRange` is for, which is a range in the C++ sense and
+This is what :cpp:`llama::ArrayDimsIndexRange` is for, which is a range in the C++ sense and
 offers the :cpp:`begin()` and  :cpp:`end()` member functions with corresponding iterators to support STL algorithms or the range-for loop.
 
 .. code-block:: C++
 
-    llama::ArrayDomain<2> ad{3, 3};
-    llama::ArrayDomainIndexRange range{ad};
+    llama::ArrayDims<2> ad{3, 3};
+    llama::ArrayDimsIndexRange range{ad};
     
     std::for_each(range.begin(), range.end(), [](auto coord) {
         // coord is {0, 0}, {0, 1}, {0, 2}, {1, 0}, {1, 1}, {1, 2}, {2, 0}, {2, 1}, {2, 2}
@@ -27,7 +27,7 @@ offers the :cpp:`begin()` and  :cpp:`end()` member functions with corresponding 
     }
 
 
-Record dimension iterating
+Record dimension iteration
 --------------------------
 
 The record dimension is iterated using :cpp:`llama::forEachLeaf`.
@@ -114,7 +114,7 @@ Having an iterator to a view opens up the standard library for use in conjunctio
 
 .. code-block:: C++
 
-    using ArrayDomain = llama::ArrayDomain<1>;
+    using ArrayDims = llama::ArrayDims<1>;
     // ...
     auto view = llama::allocView(mapping);
 
@@ -136,8 +136,8 @@ Since virtual records interact with each other based on the tags and not the und
 
 .. code-block:: C++
 
-    auto aosView = llama::allocView(llama::mapping::AoS<ArrayDomain, RecordDim>{arrayDomain});
-    auto soaView = llama::allocView(llama::mapping::SoA<ArrayDomain, RecordDim>{arrayDomain});
+    auto aosView = llama::allocView(llama::mapping::AoS<ArrayDims, RecordDim>{arrayDimsSize});
+    auto soaView = llama::allocView(llama::mapping::SoA<ArrayDims, RecordDim>{arrayDimsSize});
     // ...
     std::copy(begin(aosView), end(aosView), begin(soaView));
 

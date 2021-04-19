@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "TreeFromDomains.hpp"
+#include "TreeFromDimensions.hpp"
 
 #include <boost/core/demangle.hpp>
 #include <string>

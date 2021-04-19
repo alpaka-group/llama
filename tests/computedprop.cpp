@@ -30,10 +30,10 @@ using Triangle = llama::Record<
 
 namespace
 {
-    template <typename ArrayDomain, typename RecordDim>
-    struct AoSWithComputedNormal : llama::mapping::PackedAoS<ArrayDomain, RecordDim>
+    template <typename ArrayDims, typename RecordDim>
+    struct AoSWithComputedNormal : llama::mapping::PackedAoS<ArrayDims, RecordDim>
     {
-        using Base = llama::mapping::PackedAoS<ArrayDomain, RecordDim>;
+        using Base = llama::mapping::PackedAoS<ArrayDims, RecordDim>;
 
         template <std::size_t... RecordCoords>
         static constexpr auto isComputed(llama::RecordCoord<RecordCoords...>)
@@ -43,7 +43,7 @@ namespace
 
         template <std::size_t... RecordCoords, typename Blob>
         constexpr auto compute(
-            ArrayDomain coord,
+            ArrayDims coord,
             llama::RecordCoord<RecordCoords...>,
             llama::Array<Blob, Base::blobCount>& storageBlobs) const
         {
@@ -98,8 +98,8 @@ namespace
 
 TEST_CASE("computedprop")
 {
-    auto arrayDomain = llama::ArrayDomain<1>{10};
-    auto mapping = AoSWithComputedNormal<decltype(arrayDomain), Triangle>{arrayDomain};
+    auto arrayDims = llama::ArrayDims<1>{10};
+    auto mapping = AoSWithComputedNormal<decltype(arrayDims), Triangle>{arrayDims};
 
     STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 10 * 12 * sizeof(double));
@@ -126,17 +126,17 @@ TEST_CASE("computedprop")
 
 namespace
 {
-    // Maps accesses to the product of the ArrayDomain coord.
-    template <typename T_ArrayDomain, typename T_RecordDim>
+    // Maps accesses to the product of the ArrayDims coord.
+    template <typename T_ArrayDims, typename T_RecordDim>
     struct ComputedMapping
     {
-        using ArrayDomain = T_ArrayDomain;
+        using ArrayDims = T_ArrayDims;
         using RecordDim = T_RecordDim;
         static constexpr std::size_t blobCount = 0;
 
         constexpr ComputedMapping() = default;
 
-        constexpr ComputedMapping(ArrayDomain, RecordDim = {})
+        constexpr ComputedMapping(ArrayDims, RecordDim = {})
         {
         }
 
@@ -147,7 +147,7 @@ namespace
         }
 
         template <std::size_t... RecordCoords, typename Blob>
-        constexpr auto compute(ArrayDomain coord, llama::RecordCoord<RecordCoords...>, llama::Array<Blob, blobCount>&)
+        constexpr auto compute(ArrayDims coord, llama::RecordCoord<RecordCoords...>, llama::Array<Blob, blobCount>&)
             const -> std::size_t
         {
             return std::reduce(std::begin(coord), std::end(coord), std::size_t{1}, std::multiplies<>{});
@@ -157,8 +157,8 @@ namespace
 
 TEST_CASE("fully_computed_mapping")
 {
-    auto arrayDomain = llama::ArrayDomain<3>{10, 10, 10};
-    auto mapping = ComputedMapping<decltype(arrayDomain), Triangle>{arrayDomain};
+    auto arrayDims = llama::ArrayDims<3>{10, 10, 10};
+    auto mapping = ComputedMapping<decltype(arrayDims), Triangle>{arrayDims};
 
     auto view = llama::allocView(mapping);
 
@@ -171,18 +171,18 @@ TEST_CASE("fully_computed_mapping")
 namespace
 {
     template <
-        typename T_ArrayDomain,
+        typename T_ArrayDims,
         typename T_RecordDim,
-        typename LinearizeArrayDomainFunctor = llama::mapping::LinearizeArrayDomainCpp>
+        typename LinearizeArrayDimsFunctor = llama::mapping::LinearizeArrayDimsCpp>
     struct CompressedBoolMapping
     {
-        using ArrayDomain = T_ArrayDomain;
+        using ArrayDims = T_ArrayDims;
         using RecordDim = T_RecordDim;
         static constexpr std::size_t blobCount = boost::mp11::mp_size<llama::FlattenRecordDim<RecordDim>>::value;
 
         constexpr CompressedBoolMapping() = default;
 
-        constexpr CompressedBoolMapping(ArrayDomain size) : arrayDomainSize(size)
+        constexpr CompressedBoolMapping(ArrayDims size) : arrayDimsSize(size)
         {
         }
 
@@ -210,7 +210,7 @@ namespace
                 static_assert(std::is_same_v<llama::GetType<RecordDim, decltype(coord)>, bool>);
             });
             constexpr std::size_t wordBytes = sizeof(Word);
-            return (LinearizeArrayDomainFunctor{}.size(arrayDomainSize) + wordBytes - 1) / wordBytes;
+            return (LinearizeArrayDimsFunctor{}.size(arrayDimsSize) + wordBytes - 1) / wordBytes;
         }
 
         template <std::size_t... RecordCoords>
@@ -221,11 +221,11 @@ namespace
 
         template <std::size_t... RecordCoords, typename Blob>
         constexpr auto compute(
-            ArrayDomain coord,
+            ArrayDims coord,
             llama::RecordCoord<RecordCoords...>,
             llama::Array<Blob, blobCount>& blobs) const -> BoolRef
         {
-            const auto bitOffset = LinearizeArrayDomainFunctor{}(coord, arrayDomainSize);
+            const auto bitOffset = LinearizeArrayDimsFunctor{}(coord, arrayDimsSize);
             const auto blob = llama::flatRecordCoord<RecordDim, llama::RecordCoord<RecordCoords...>>;
 
             constexpr std::size_t wordBits = sizeof(Word) * CHAR_BIT;
@@ -234,11 +234,11 @@ namespace
                 static_cast<unsigned char>(bitOffset % wordBits)};
         }
 
-        ArrayDomain arrayDomainSize;
+        ArrayDims arrayDimsSize;
     };
 
     // clang-format off
-    using BoolDomain = llama::Record<
+    using BoolRecord = llama::Record<
         llama::Field<tag::A, bool>,
         llama::Field<tag::B, llama::Record<
             llama::Field<tag::X, bool>,
@@ -250,8 +250,8 @@ namespace
 
 TEST_CASE("compressed_bools")
 {
-    auto arrayDomain = llama::ArrayDomain{8, 8};
-    auto mapping = CompressedBoolMapping<decltype(arrayDomain), BoolDomain>{arrayDomain};
+    auto arrayDims = llama::ArrayDims{8, 8};
+    auto mapping = CompressedBoolMapping<decltype(arrayDims), BoolRecord>{arrayDims};
     STATIC_REQUIRE(decltype(mapping)::blobCount == 3);
     CHECK(mapping.blobSize(0) == 8);
     CHECK(mapping.blobSize(1) == 8);

@@ -17,7 +17,7 @@ namespace llama
     struct Array
     {
         static constexpr std::size_t rank
-            = N; // FIXME this is right from the ArrayDomain's POV, but wrong from the Array's POV
+            = N; // FIXME this is right from the ArrayDims's POV, but wrong from the Array's POV
         T element[N > 0 ? N : 1];
 
         LLAMA_FN_HOST_ACC_INLINE constexpr T* begin()

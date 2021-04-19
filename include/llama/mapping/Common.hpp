@@ -12,7 +12,7 @@ namespace llama::mapping
     namespace internal
     {
         template <std::size_t Dim>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto product(const ArrayDomain<Dim>& size) -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto product(const ArrayDims<Dim>& size) -> std::size_t
         {
             std::size_t prod = 1;
             for (auto s : size)
@@ -21,21 +21,20 @@ namespace llama::mapping
         }
     } // namespace internal
 
-    /// Functor that maps a \ref ArrayDomain coordinate into linear numbers the
-    /// way C++ arrays work.
-    struct LinearizeArrayDomainCpp
+    /// Functor that maps a \ref ArrayDims coordinate into linear numbers the way C++ arrays work.
+    struct LinearizeArrayDimsCpp
     {
         template <std::size_t Dim>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayDomain<Dim>& size) -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayDims<Dim>& size) -> std::size_t
         {
             return internal::product(size);
         }
 
-        /// \param coord coordinate in the array domain
-        /// \param size total size of the array domain
-        /// \return linearized index
+        /// \param coord Coordinate in the array dimensions.
+        /// \param size Total size of the array dimensions.
+        /// \return Linearized index.
         template <std::size_t Dim>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(const ArrayDomain<Dim>& coord, const ArrayDomain<Dim>& size)
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(const ArrayDims<Dim>& coord, const ArrayDims<Dim>& size)
             const -> std::size_t
         {
             std::size_t address = coord[0];
@@ -48,21 +47,20 @@ namespace llama::mapping
         }
     };
 
-    /// Functor that maps a \ref ArrayDomain coordinate into linear numbers the
-    /// way Fortran arrays work.
-    struct LinearizeArrayDomainFortran
+    /// Functor that maps a \ref ArrayDims coordinate into linear numbers the way Fortran arrays work.
+    struct LinearizeArrayDimsFortran
     {
         template <std::size_t Dim>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayDomain<Dim>& size) -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayDims<Dim>& size) -> std::size_t
         {
             return internal::product(size);
         }
 
-        /// \param coord coordinate in the array domain
-        /// \param size total size of the array domain
-        /// \return linearized index
+        /// \param coord Coordinate in the array dimensions.
+        /// \param size Total size of the array dimensions.
+        /// \return Linearized index.
         template <std::size_t Dim>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(const ArrayDomain<Dim>& coord, const ArrayDomain<Dim>& size)
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(const ArrayDims<Dim>& coord, const ArrayDims<Dim>& size)
             const -> std::size_t
         {
             std::size_t address = coord[Dim - 1];
@@ -75,12 +73,12 @@ namespace llama::mapping
         }
     };
 
-    /// Functor that maps a \ref ArrayDomain coordinate into linear numbers using
-    /// the Z-order space filling curve (Morton codes).
-    struct LinearizeArrayDomainMorton
+    /// Functor that maps a \ref ArrayDims coordinate into linear numbers using the Z-order space filling curve (Morton
+    /// codes).
+    struct LinearizeArrayDimsMorton
     {
         template <std::size_t Dim>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayDomain<Dim>& size) const -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayDims<Dim>& size) const -> std::size_t
         {
             std::size_t longest = size[0];
             for (auto i = 1; i < Dim; i++)
@@ -89,8 +87,11 @@ namespace llama::mapping
             return intPow(longestPO2, Dim);
         }
 
+        /// \param coord Coordinate in the array dimensions.
+        /// \param size Total size of the array dimensions.
+        /// \return Linearized index.
         template <std::size_t Dim>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(const ArrayDomain<Dim>& coord, const ArrayDomain<Dim>&) const
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(const ArrayDims<Dim>& coord, const ArrayDims<Dim>&) const
             -> std::size_t
         {
             std::size_t r = 0;

@@ -28,34 +28,34 @@ namespace llama::mapping
     /// allocView.
     /// \tparam Lanes The size of the inner arrays of this array of struct of
     /// arrays.
-    /// \tparam LinearizeArrayDomainFunctor Defines how the array domain should be mapped into linear numbers and how
-    /// big the linear domain gets.
+    /// \tparam LinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
+    /// how big the linear domain gets.
     template <
-        typename T_ArrayDomain,
+        typename T_ArrayDims,
         typename T_RecordDim,
         std::size_t Lanes,
-        typename LinearizeArrayDomainFunctor = LinearizeArrayDomainCpp>
+        typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     struct AoSoA
     {
-        using ArrayDomain = T_ArrayDomain;
+        using ArrayDims = T_ArrayDims;
         using RecordDim = T_RecordDim;
         static constexpr std::size_t blobCount = 1;
 
         constexpr AoSoA() = default;
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr AoSoA(ArrayDomain size, RecordDim = {}) : arrayDomainSize(size)
+        LLAMA_FN_HOST_ACC_INLINE constexpr AoSoA(ArrayDims size, RecordDim = {}) : arrayDimsSize(size)
         {
         }
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(std::size_t) const -> std::size_t
         {
-            return LinearizeArrayDomainFunctor{}.size(arrayDomainSize) * sizeOf<RecordDim>;
+            return LinearizeArrayDimsFunctor{}.size(arrayDimsSize) * sizeOf<RecordDim>;
         }
 
         template <std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayDims coord) const -> NrAndOffset
         {
-            const auto flatArrayIndex = LinearizeArrayDomainFunctor{}(coord, arrayDomainSize);
+            const auto flatArrayIndex = LinearizeArrayDimsFunctor{}(coord, arrayDimsSize);
             const auto blockIndex = flatArrayIndex / Lanes;
             const auto laneIndex = flatArrayIndex % Lanes;
             const auto offset = (sizeOf<RecordDim> * Lanes) * blockIndex
@@ -64,13 +64,13 @@ namespace llama::mapping
             return {0, offset};
         }
 
-        ArrayDomain arrayDomainSize;
+        ArrayDims arrayDimsSize;
     };
 
-    template <std::size_t Lanes, typename LinearizeArrayDomainFunctor = LinearizeArrayDomainCpp>
+    template <std::size_t Lanes, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     struct PreconfiguredAoSoA
     {
-        template <typename ArrayDomain, typename RecordDim>
-        using type = AoSoA<ArrayDomain, RecordDim, Lanes, LinearizeArrayDomainFunctor>;
+        template <typename ArrayDims, typename RecordDim>
+        using type = AoSoA<ArrayDims, RecordDim, Lanes, LinearizeArrayDimsFunctor>;
     };
 } // namespace llama::mapping

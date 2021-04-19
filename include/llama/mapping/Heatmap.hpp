@@ -14,7 +14,7 @@ namespace llama::mapping
     template <typename Mapping, typename CountType = std::size_t>
     struct Heatmap
     {
-        using ArrayDomain = typename Mapping::ArrayDomain;
+        using ArrayDims = typename Mapping::ArrayDims;
         using RecordDim = typename Mapping::RecordDim;
         static constexpr std::size_t blobCount = Mapping::blobCount;
 
@@ -40,7 +40,7 @@ namespace llama::mapping
         }
 
         template <std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayDomain coord) const -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayDims coord) const -> NrAndOffset
         {
             const auto nao = mapping.template blobNrAndOffset<RecordCoords...>(coord);
             for (auto i = 0; i < sizeof(GetType<RecordDim, RecordCoord<RecordCoords...>>); i++)

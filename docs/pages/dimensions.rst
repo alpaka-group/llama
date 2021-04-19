@@ -1,37 +1,36 @@
 .. include:: common.rst
 
-.. _label-domains:
+.. _label-dimensions:
 
 Dimensions
 ==========
 
-As mentioned in the section before, LLAMA distinguishes between the array domain and the record dimension.
-The most important difference is that the array domain is defined at *run time* whereas the record dimension is defined at *compile time*.
+As mentioned in the section before, LLAMA distinguishes between the array and the record dimensions.
+The most important difference is that the array dimensions are defined at *run time* whereas the record dimension is defined at *compile time*.
 This allows to make the problem size itself a run time value but leaves the compiler room to optimize the data access.
 
 .. _label-ad:
 
-Array domain
-------------
+Array dimensions
+----------------
 
-The array domain is an :math:`N`-dimensional array with :math:`N` itself being a
+The array dimensions are an :math:`N`-dimensional array with :math:`N` itself being a
 compile time value but with run time values inside. LLAMA brings its own
 :ref:`array class <label-api-array>` for such kind of data structs which is
 ready for interoperability with hardware accelerator C++ dialects such as CUDA
 (Nvidia) or HIP (AMD), or abstraction libraries such as the already mentioned
 alpaka.
 
-A definition of a three-dimensional array domain of the size
-:math:`128 \times 256 \times 32` looks like this:
+A definition of three array dimensions of the size :math:`128 \times 256 \times 32` looks like this:
 
 .. code-block:: C++
 
-    llama::ArrayDomain arrayDomainSize{128, 256, 32};
+    llama::ArrayDims arrayDimsSize{128, 256, 32};
 
 The template arguments are deduced by the compiler using `CTAD <https://en.cppreference.com/w/cpp/language/class_template_argument_deduction>`_.
-The full type of :cpp:`arrayDomainSize` is :cpp:`llama::ArrayDomain<3>`.
+The full type of :cpp:`arrayDimsSize` is :cpp:`llama::ArrayDims<3>`.
 
-.. _label-dd:
+.. _label-rd:
 
 Record dimension
 ----------------

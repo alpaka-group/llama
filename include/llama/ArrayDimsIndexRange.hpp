@@ -10,19 +10,19 @@
 
 namespace llama
 {
-    /// Iterator supporting \ref ArrayDomainIndexRange.
+    /// Iterator supporting \ref ArrayDimsIndexRange.
     template <std::size_t Dim>
-    struct ArrayDomainIndexIterator
+    struct ArrayDimsIndexIterator
     {
-        using value_type = ArrayDomain<Dim>;
+        using value_type = ArrayDims<Dim>;
         using difference_type = std::ptrdiff_t;
         using reference = value_type;
         using pointer = internal::IndirectValue<value_type>;
         using iterator_category = std::random_access_iterator_tag;
 
-        constexpr ArrayDomainIndexIterator() noexcept = default;
+        constexpr ArrayDimsIndexIterator() noexcept = default;
 
-        constexpr ArrayDomainIndexIterator(ArrayDomain<Dim> size, ArrayDomain<Dim> current) noexcept
+        constexpr ArrayDimsIndexIterator(ArrayDims<Dim> size, ArrayDims<Dim> current) noexcept
             : lastIndex(
                 [size]() mutable
                 {
@@ -34,10 +34,10 @@ namespace llama
         {
         }
 
-        constexpr ArrayDomainIndexIterator(const ArrayDomainIndexIterator&) noexcept = default;
-        constexpr ArrayDomainIndexIterator(ArrayDomainIndexIterator&&) noexcept = default;
-        constexpr auto operator=(const ArrayDomainIndexIterator&) noexcept -> ArrayDomainIndexIterator& = default;
-        constexpr auto operator=(ArrayDomainIndexIterator&&) noexcept -> ArrayDomainIndexIterator& = default;
+        constexpr ArrayDimsIndexIterator(const ArrayDimsIndexIterator&) noexcept = default;
+        constexpr ArrayDimsIndexIterator(ArrayDimsIndexIterator&&) noexcept = default;
+        constexpr auto operator=(const ArrayDimsIndexIterator&) noexcept -> ArrayDimsIndexIterator& = default;
+        constexpr auto operator=(ArrayDimsIndexIterator&&) noexcept -> ArrayDimsIndexIterator& = default;
 
         constexpr auto operator*() const noexcept -> value_type
         {
@@ -49,7 +49,7 @@ namespace llama
             return internal::IndirectValue{**this};
         }
 
-        constexpr auto operator++() noexcept -> ArrayDomainIndexIterator&
+        constexpr auto operator++() noexcept -> ArrayDimsIndexIterator&
         {
             for (auto i = (int) Dim - 1; i >= 0; i--)
             {
@@ -64,14 +64,14 @@ namespace llama
             return *this;
         }
 
-        constexpr auto operator++(int) noexcept -> ArrayDomainIndexIterator
+        constexpr auto operator++(int) noexcept -> ArrayDimsIndexIterator
         {
             auto tmp = *this;
             ++*this;
             return tmp;
         }
 
-        constexpr auto operator--() noexcept -> ArrayDomainIndexIterator&
+        constexpr auto operator--() noexcept -> ArrayDimsIndexIterator&
         {
             for (auto i = (int) Dim - 1; i >= 0; i--)
             {
@@ -86,7 +86,7 @@ namespace llama
             return *this;
         }
 
-        constexpr auto operator--(int) noexcept -> ArrayDomainIndexIterator
+        constexpr auto operator--(int) noexcept -> ArrayDimsIndexIterator
         {
             auto tmp = *this;
             --*this;
@@ -98,7 +98,7 @@ namespace llama
             return *(*this + i);
         }
 
-        constexpr auto operator+=(difference_type n) noexcept -> ArrayDomainIndexIterator&
+        constexpr auto operator+=(difference_type n) noexcept -> ArrayDimsIndexIterator&
         {
             for (auto i = (int) Dim - 1; i >= 0 && n != 0; i--)
             {
@@ -117,32 +117,29 @@ namespace llama
             return *this;
         }
 
-        friend constexpr auto operator+(ArrayDomainIndexIterator it, difference_type n) noexcept
-            -> ArrayDomainIndexIterator
+        friend constexpr auto operator+(ArrayDimsIndexIterator it, difference_type n) noexcept -> ArrayDimsIndexIterator
         {
             it += n;
             return it;
         }
 
-        friend constexpr auto operator+(difference_type n, ArrayDomainIndexIterator it) noexcept
-            -> ArrayDomainIndexIterator
+        friend constexpr auto operator+(difference_type n, ArrayDimsIndexIterator it) noexcept -> ArrayDimsIndexIterator
         {
             return it + n;
         }
 
-        constexpr auto operator-=(difference_type n) noexcept -> ArrayDomainIndexIterator&
+        constexpr auto operator-=(difference_type n) noexcept -> ArrayDimsIndexIterator&
         {
             return operator+=(-n);
         }
 
-        friend constexpr auto operator-(ArrayDomainIndexIterator it, difference_type n) noexcept
-            -> ArrayDomainIndexIterator
+        friend constexpr auto operator-(ArrayDimsIndexIterator it, difference_type n) noexcept -> ArrayDimsIndexIterator
         {
             it -= n;
             return it;
         }
 
-        friend constexpr auto operator-(const ArrayDomainIndexIterator& a, const ArrayDomainIndexIterator& b) noexcept
+        friend constexpr auto operator-(const ArrayDimsIndexIterator& a, const ArrayDimsIndexIterator& b) noexcept
             -> difference_type
         {
             assert(a.lastIndex == b.lastIndex);
@@ -159,21 +156,21 @@ namespace llama
         }
 
         friend constexpr auto operator==(
-            const ArrayDomainIndexIterator<Dim>& a,
-            const ArrayDomainIndexIterator<Dim>& b) noexcept -> bool
+            const ArrayDimsIndexIterator<Dim>& a,
+            const ArrayDimsIndexIterator<Dim>& b) noexcept -> bool
         {
             assert(a.lastIndex == b.lastIndex);
             return a.current == b.current;
         }
 
         friend constexpr auto operator!=(
-            const ArrayDomainIndexIterator<Dim>& a,
-            const ArrayDomainIndexIterator<Dim>& b) noexcept -> bool
+            const ArrayDimsIndexIterator<Dim>& a,
+            const ArrayDimsIndexIterator<Dim>& b) noexcept -> bool
         {
             return !(a == b);
         }
 
-        friend constexpr auto operator<(const ArrayDomainIndexIterator& a, const ArrayDomainIndexIterator& b) noexcept
+        friend constexpr auto operator<(const ArrayDimsIndexIterator& a, const ArrayDimsIndexIterator& b) noexcept
             -> bool
         {
             assert(a.lastIndex == b.lastIndex);
@@ -184,55 +181,55 @@ namespace llama
                 std::end(b.current));
         }
 
-        friend constexpr auto operator>(const ArrayDomainIndexIterator& a, const ArrayDomainIndexIterator& b) noexcept
+        friend constexpr auto operator>(const ArrayDimsIndexIterator& a, const ArrayDimsIndexIterator& b) noexcept
             -> bool
         {
             return b < a;
         }
 
-        friend constexpr auto operator<=(const ArrayDomainIndexIterator& a, const ArrayDomainIndexIterator& b) noexcept
+        friend constexpr auto operator<=(const ArrayDimsIndexIterator& a, const ArrayDimsIndexIterator& b) noexcept
             -> bool
         {
             return !(a > b);
         }
 
-        friend constexpr auto operator>=(const ArrayDomainIndexIterator& a, const ArrayDomainIndexIterator& b) noexcept
+        friend constexpr auto operator>=(const ArrayDimsIndexIterator& a, const ArrayDimsIndexIterator& b) noexcept
             -> bool
         {
             return !(a < b);
         }
 
     private:
-        ArrayDomain<Dim> lastIndex;
-        ArrayDomain<Dim> current;
+        ArrayDims<Dim> lastIndex;
+        ArrayDims<Dim> current;
     };
 
-    /// Range allowing to iterate over all indices in a \ref ArrayDomain.
+    /// Range allowing to iterate over all indices in a \ref ArrayDims.
     template <std::size_t Dim>
-    struct ArrayDomainIndexRange
+    struct ArrayDimsIndexRange
 #if CAN_USE_RANGES
         : std::ranges::view_base
 #endif
     {
-        constexpr ArrayDomainIndexRange() noexcept = default;
+        constexpr ArrayDimsIndexRange() noexcept = default;
 
-        constexpr ArrayDomainIndexRange(ArrayDomain<Dim> size) noexcept : size(size)
+        constexpr ArrayDimsIndexRange(ArrayDims<Dim> size) noexcept : size(size)
         {
         }
 
-        constexpr auto begin() const noexcept -> ArrayDomainIndexIterator<Dim>
+        constexpr auto begin() const noexcept -> ArrayDimsIndexIterator<Dim>
         {
-            return {size, ArrayDomain<Dim>{}};
+            return {size, ArrayDims<Dim>{}};
         }
 
-        constexpr auto end() const noexcept -> ArrayDomainIndexIterator<Dim>
+        constexpr auto end() const noexcept -> ArrayDimsIndexIterator<Dim>
         {
-            auto endPos = ArrayDomain<Dim>{};
+            auto endPos = ArrayDims<Dim>{};
             endPos[0] = size[0];
             return {size, endPos};
         }
 
     private:
-        ArrayDomain<Dim> size;
+        ArrayDims<Dim> size;
     };
 } // namespace llama

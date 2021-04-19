@@ -35,16 +35,16 @@ using Particle = llama::Record<
 
 TEST_CASE("Split.SoA.AoS.1Buffer")
 {
-    using ArrayDomain = llama::ArrayDomain<2>;
-    auto arrayDomain = ArrayDomain{16, 16};
+    using ArrayDims = llama::ArrayDims<2>;
+    auto arrayDims = ArrayDims{16, 16};
 
     // we layout Pos as SoA, the rest as AoS
     auto mapping = llama::mapping::
-        Split<ArrayDomain, Particle, llama::RecordCoord<0>, llama::mapping::SingleBlobSoA, llama::mapping::PackedAoS>{
-            arrayDomain};
+        Split<ArrayDims, Particle, llama::RecordCoord<0>, llama::mapping::SingleBlobSoA, llama::mapping::PackedAoS>{
+            arrayDims};
 
     constexpr auto mapping1Size = 6120;
-    const auto coord = ArrayDomain{0, 0};
+    const auto coord = ArrayDims{0, 0};
     CHECK(mapping.blobNrAndOffset<0, 0>(coord) == llama::NrAndOffset{0, 0});
     CHECK(mapping.blobNrAndOffset<0, 1>(coord) == llama::NrAndOffset{0, 2048});
     CHECK(mapping.blobNrAndOffset<0, 2>(coord) == llama::NrAndOffset{0, 4096});
@@ -62,10 +62,10 @@ TEST_CASE("Split.AoSoA8.AoS.One.SoA.4Buffer")
 {
     // split out momentum as AoSoA8, mass into a single value, position into AoS, and the flags into SoA, makes 4
     // buffers
-    using ArrayDomain = llama::ArrayDomain<1>;
-    auto arrayDomain = ArrayDomain{32};
+    using ArrayDims = llama::ArrayDims<1>;
+    auto arrayDims = ArrayDims{32};
     auto mapping = llama::mapping::Split<
-        ArrayDomain,
+        ArrayDims,
         Particle,
         llama::RecordCoord<2>,
         llama::mapping::PreconfiguredAoSoA<8>::type,
@@ -78,7 +78,7 @@ TEST_CASE("Split.AoSoA8.AoS.One.SoA.4Buffer")
                 llama::mapping::SingleBlobSoA,
                 true>::type,
             true>::type,
-        true>{arrayDomain};
+        true>{arrayDims};
 
     CHECK(mapping.blobNrAndOffset<0, 0>({0}) == llama::NrAndOffset{2, 0});
     CHECK(mapping.blobNrAndOffset<0, 1>({0}) == llama::NrAndOffset{2, 8});

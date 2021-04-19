@@ -41,7 +41,7 @@ namespace llamaex
     using namespace llama;
 
     template <std::size_t Dim, typename Func>
-    void parallelForEachADCoord(ArrayDomain<Dim> adSize, std::size_t numThreads, Func&& func)
+    void parallelForEachADCoord(ArrayDims<Dim> adSize, std::size_t numThreads, Func&& func)
     {
 #pragma omp parallel for num_threads(numThreads)
         for (std::ptrdiff_t i = 0; i < static_cast<std::ptrdiff_t>(adSize[0]); i++)
@@ -49,7 +49,7 @@ namespace llamaex
             if constexpr (Dim > 1)
                 forEachADCoord(internal::popFront(adSize), std::forward<Func>(func), static_cast<std::size_t>(i));
             else
-                std::forward<Func>(func)(ArrayDomain<Dim>{static_cast<std::size_t>(i)});
+                std::forward<Func>(func)(ArrayDims<Dim>{static_cast<std::size_t>(i)});
         }
     }
 } // namespace llamaex
@@ -62,11 +62,11 @@ void naive_copy(
 {
     static_assert(std::is_same_v<typename Mapping1::RecordDim, typename Mapping2::RecordDim>);
 
-    if (srcView.mapping.arrayDomainSize != dstView.mapping.arrayDomainSize)
-        throw std::runtime_error{"UserDomain sizes are different"};
+    if (srcView.mapping.arrayDimsSize != dstView.mapping.arrayDimsSize)
+        throw std::runtime_error{"Array dimensions sizes are different"};
 
     llamaex::parallelForEachADCoord(
-        srcView.mapping.arrayDomainSize,
+        srcView.mapping.arrayDimsSize,
         numThreads,
         [&](auto ad)
         {
@@ -97,7 +97,7 @@ void parallel_memcpy(std::byte* dst, const std::byte* src, std::size_t size, std
 
 template <
     bool ReadOpt,
-    typename ArrayDomain,
+    typename ArrayDims,
     typename RecordDim,
     std::size_t LanesSrc,
     typename BlobType1,
@@ -105,22 +105,22 @@ template <
     typename BlobType2>
 void aosoa_copy(
     const llama::View<
-        llama::mapping::AoSoA<ArrayDomain, RecordDim, LanesSrc, llama::mapping::LinearizeArrayDomainCpp>,
+        llama::mapping::AoSoA<ArrayDims, RecordDim, LanesSrc, llama::mapping::LinearizeArrayDimsCpp>,
         BlobType1>& srcView,
     llama::View<
-        llama::mapping::AoSoA<ArrayDomain, RecordDim, LanesDst, llama::mapping::LinearizeArrayDomainCpp>,
+        llama::mapping::AoSoA<ArrayDims, RecordDim, LanesDst, llama::mapping::LinearizeArrayDimsCpp>,
         BlobType2>& dstView,
     std::size_t numThreads = 1)
 {
     static_assert(decltype(srcView.storageBlobs)::rank == 1);
     static_assert(decltype(dstView.storageBlobs)::rank == 1);
 
-    if (srcView.mapping.arrayDomainSize != dstView.mapping.arrayDomainSize)
-        throw std::runtime_error{"UserDomain sizes are different"};
+    if (srcView.mapping.arrayDimsSize != dstView.mapping.arrayDimsSize)
+        throw std::runtime_error{"Array dimensions sizes are different"};
 
     const auto flatSize = std::reduce(
-        std::begin(dstView.mapping.arrayDomainSize),
-        std::end(dstView.mapping.arrayDomainSize),
+        std::begin(dstView.mapping.arrayDimsSize),
+        std::end(dstView.mapping.arrayDimsSize),
         std::size_t{1},
         std::multiplies<>{});
 
@@ -199,7 +199,7 @@ template <typename Mapping, typename BlobType>
 auto hash(const llama::View<Mapping, BlobType>& view)
 {
     std::size_t acc = 0;
-    for (auto ad : llama::ArrayDomainIndexRange{view.mapping.arrayDomainSize})
+    for (auto ad : llama::ArrayDimsIndexRange{view.mapping.arrayDimsSize})
         llama::forEachLeaf<Particle>([&](auto coord) { boost::hash_combine(acc, view(ad)(coord)); });
     return acc;
 }
@@ -209,7 +209,7 @@ auto prepareViewAndHash(Mapping mapping)
     auto view = llama::allocView(mapping);
 
     auto value = 0.0f;
-    for (auto ad : llama::ArrayDomainIndexRange{mapping.arrayDomainSize})
+    for (auto ad : llama::ArrayDimsIndexRange{mapping.arrayDimsSize})
     {
         auto p = view(ad);
         p(tag::Pos{}, tag::X{}) = value++;
@@ -249,7 +249,7 @@ try
     const auto numThreads = static_cast<std::size_t>(omp_get_num_threads());
     std::cout << "Threads: " << numThreads << "\n";
 
-    const auto userDomain = llama::ArrayDomain{1024, 1024, 16};
+    const auto arrayDims = llama::ArrayDims{1024, 1024, 16};
 
     std::ofstream plotFile{"viewcopy.tsv"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
@@ -259,8 +259,8 @@ try
     {
         std::cout << "AoS -> SoA\n";
         plotFile << "\"AoS -> SoA\"\t";
-        const auto srcMapping = llama::mapping::AoS{userDomain, Particle{}};
-        const auto dstMapping = llama::mapping::SoA{userDomain, Particle{}};
+        const auto srcMapping = llama::mapping::AoS{arrayDims, Particle{}};
+        const auto dstMapping = llama::mapping::SoA{arrayDims, Particle{}};
 
         auto [srcView, srcHash] = prepareViewAndHash(srcMapping);
         benchmarkCopy(
@@ -318,8 +318,8 @@ try
     {
         std::cout << "SoA -> AoS\n";
         plotFile << "\"SoA -> AoS\"\t";
-        const auto srcMapping = llama::mapping::SoA{userDomain, Particle{}};
-        const auto dstMapping = llama::mapping::AoS{userDomain, Particle{}};
+        const auto srcMapping = llama::mapping::SoA{arrayDims, Particle{}};
+        const auto dstMapping = llama::mapping::AoS{arrayDims, Particle{}};
 
         auto [srcView, srcHash] = prepareViewAndHash(srcMapping);
         benchmarkCopy(
@@ -387,8 +387,8 @@ try
 
             std::cout << "AoSoA" << LanesSrc << " -> AoSoA" << LanesDst << "\n";
             plotFile << "\"AoSoA" << LanesSrc << " -> AoSoA" << LanesDst << "\"\t";
-            const auto srcMapping = llama::mapping::AoSoA<decltype(userDomain), Particle, LanesSrc>{userDomain};
-            const auto dstMapping = llama::mapping::AoSoA<decltype(userDomain), Particle, LanesDst>{userDomain};
+            const auto srcMapping = llama::mapping::AoSoA<decltype(arrayDims), Particle, LanesSrc>{arrayDims};
+            const auto dstMapping = llama::mapping::AoSoA<decltype(arrayDims), Particle, LanesDst>{arrayDims};
 
             auto [srcView, srcHash] = prepareViewAndHash(srcMapping);
             benchmarkCopy(
