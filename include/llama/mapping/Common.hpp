@@ -31,11 +31,9 @@ namespace llama::mapping
             return internal::product(size);
         }
 
-        /**
-         * \param coord coordinate in the user domain
-         * \param size total size of the user domain
-         * \return linearized index
-         * */
+        /// \param coord coordinate in the array domain
+        /// \param size total size of the array domain
+        /// \return linearized index
         template <std::size_t Dim>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(const ArrayDomain<Dim>& coord, const ArrayDomain<Dim>& size)
             const -> std::size_t
@@ -60,11 +58,9 @@ namespace llama::mapping
             return internal::product(size);
         }
 
-        /**
-         * \param coord coordinate in the user domain
-         * \param size total size of the user domain
-         * \return linearized index
-         * */
+        /// \param coord coordinate in the array domain
+        /// \param size total size of the array domain
+        /// \return linearized index
         template <std::size_t Dim>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(const ArrayDomain<Dim>& coord, const ArrayDomain<Dim>& size)
             const -> std::size_t
