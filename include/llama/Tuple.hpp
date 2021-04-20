@@ -5,6 +5,8 @@
 
 #include "macros.hpp"
 
+#include <boost/mp11.hpp>
+
 namespace llama
 {
     /// Tuple class like `std::tuple` but suitable for use with offloading

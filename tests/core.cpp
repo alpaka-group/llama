@@ -43,7 +43,7 @@ TEST_CASE("prettyPrintType")
 {
     auto str = prettyPrintType(Particle());
 #ifdef _WIN32
-    boost::replace_all(str, "__int64", "long");
+    replace_all(str, "__int64", "long");
 #endif
     const auto ref = R"(llama::Record<
     llama::Field<
