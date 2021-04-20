@@ -10,7 +10,6 @@
 #include "macros.hpp"
 #include "mapping/One.hpp"
 
-#include <boost/preprocessor/cat.hpp>
 #include <type_traits>
 
 namespace llama
