@@ -788,7 +788,7 @@ TEST_CASE("treemapping")
 
     auto raw = prettyPrintType(mapping.basicTree);
 #ifdef _WIN32
-    boost::replace_all(raw, "__int64", "long");
+    replace_all(raw, "__int64", "long");
 #endif
     const auto ref = R"(llama::mapping::tree::Node<
     llama::NoName,
@@ -929,7 +929,7 @@ TEST_CASE("treemapping")
 
     auto raw2 = prettyPrintType(mapping.resultTree);
 #ifdef _WIN32
-    boost::replace_all(raw2, "__int64", "long");
+    replace_all(raw2, "__int64", "long");
 #endif
     const auto ref2 = R"(llama::mapping::tree::Node<
     llama::NoName,

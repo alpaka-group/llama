@@ -1,13 +1,14 @@
 #pragma once
 
-#include <boost/algorithm/string/replace.hpp>
-#include <boost/algorithm/string/split.hpp>
 #include <boost/core/demangle.hpp>
 #include <llama/BlobAllocators.hpp>
+#include <llama/mapping/tree/toString.hpp>
 #include <numeric>
 #include <regex>
 #include <string>
 #include <typeinfo>
+
+using llama::mapping::tree::internal::replace_all;
 
 template <typename T>
 std::string prettyPrintType(const T& t)
@@ -15,7 +16,7 @@ std::string prettyPrintType(const T& t)
     auto raw = boost::core::demangle(typeid(t).name());
 #ifdef _MSC_VER
     // remove clutter in MSVC
-    boost::replace_all(raw, "struct ", "");
+    replace_all(raw, "struct ", "");
 #endif
 #ifdef __GNUG__
     // remove clutter in g++
@@ -23,27 +24,27 @@ std::string prettyPrintType(const T& t)
     raw = std::regex_replace(raw, ulLiteral, "$1");
 #endif
 
-    boost::replace_all(raw, "<", "<\n");
+    replace_all(raw, "<", "<\n");
 #ifdef _MSC_VER
-    boost::replace_all(raw, ",", ",\n");
+    replace_all(raw, ",", ",\n");
 #else
-    boost::replace_all(raw, ", ", ",\n");
+    replace_all(raw, ", ", ",\n");
 #endif
-    boost::replace_all(raw, " >", ">");
-    boost::replace_all(raw, ">", "\n>");
+    replace_all(raw, " >", ">");
+    replace_all(raw, ">", "\n>");
 
-    std::vector<std::string> tokens;
-    boost::algorithm::split(tokens, raw, [](char c) { return c == '\n'; });
+    std::stringstream rawSS(raw);
+    std::string token;
     std::string result;
     int indent = 0;
-    for (auto t : tokens)
+    while (std::getline(rawSS, token, '\n'))
     {
-        if (t.back() == '>' || (t.length() > 1 && t[t.length() - 2] == '>'))
+        if (token.back() == '>' || (token.length() > 1 && token[token.length() - 2] == '>'))
             indent -= 4;
         for (int i = 0; i < indent; ++i)
             result += ' ';
-        result += t + "\n";
-        if (t.back() == '<')
+        result += token + "\n";
+        if (token.back() == '<')
             indent += 4;
     }
     if (result.back() == '\n')
