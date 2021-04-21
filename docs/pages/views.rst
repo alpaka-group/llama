@@ -85,8 +85,5 @@ Virtual views can be created on top of existing views, offering shifted access t
 .. code-block:: C++
 
     auto view = ...;
-    llama::VirtualView<decltype(view)> virtualView{
-        view,
-        {23, 42}, // offset
-        {13, 37} // size
-    };
+    llama::VirtualView virtualView{view, {10, 20, 30}};
+    virtualView(1, 2, 3)(color{}, g{}) = 1.0; // accesses record {11, 22, 33}

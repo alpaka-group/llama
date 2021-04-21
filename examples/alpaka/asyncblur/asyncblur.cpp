@@ -308,7 +308,7 @@ try
             const ArrayDims validMiniSize{
                 ((chunk_y < chunks[0] - 1) ? CHUNK_SIZE : (img_y - 1) % CHUNK_SIZE + 1) + 2 * KERNEL_SIZE,
                 ((chunk_x < chunks[1] - 1) ? CHUNK_SIZE : (img_x - 1) % CHUNK_SIZE + 1) + 2 * KERNEL_SIZE};
-            llama::VirtualView virtualHost(hostView, {chunk_y * CHUNK_SIZE, chunk_x * CHUNK_SIZE}, validMiniSize);
+            llama::VirtualView virtualHost(hostView, {chunk_y * CHUNK_SIZE, chunk_x * CHUNK_SIZE});
 
             // Find free chunk stream
             std::size_t chunkNr = virtualHostList.size();

@@ -46,7 +46,7 @@ TEST_CASE("virtual view CTAD")
     constexpr ArrayDims viewSize{4096, 4096};
     auto view = allocView(llama::mapping::SoA<ArrayDims, Particle>(viewSize));
 
-    llama::VirtualView virtualView{view, {23, 42}, {13, 37}};
+    llama::VirtualView virtualView{view, {23, 42}};
 }
 
 TEST_CASE("fast virtual view")
@@ -61,14 +61,9 @@ TEST_CASE("fast virtual view")
         for (std::size_t y = 0; y < viewSize[1]; ++y)
             view(x, y) = x * y;
 
-    llama::VirtualView<decltype(view)> virtualView{
-        view,
-        {23, 42}, // offset
-        {13, 37} // size
-    };
+    llama::VirtualView<decltype(view)> virtualView{view, {23, 42}};
 
     CHECK(virtualView.offset == ArrayDims{23, 42});
-    CHECK(virtualView.size == ArrayDims{13, 37});
 
     CHECK(view(virtualView.offset)(tag::Pos(), tag::X()) == 966);
     CHECK(virtualView({0, 0})(tag::Pos(), tag::X()) == 966);
@@ -100,7 +95,7 @@ TEST_CASE("virtual view")
                 (x < iterations[0] - 1) ? miniSize[0] : (viewSize[0] - 1) % miniSize[0] + 1,
                 (y < iterations[1] - 1) ? miniSize[1] : (viewSize[1] - 1) % miniSize[1] + 1};
 
-            llama::VirtualView<decltype(view)> virtualView(view, {x * miniSize[0], y * miniSize[1]}, miniSize);
+            llama::VirtualView<decltype(view)> virtualView(view, {x * miniSize[0], y * miniSize[1]});
 
             using MiniMapping = llama::mapping::SoA<ArrayDims, Particle>;
             auto miniView = allocView(
