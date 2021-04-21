@@ -40,6 +40,15 @@ struct SqrtFunctor
     VirtualRecord vd;
 };
 
+TEST_CASE("virtual view CTAD")
+{
+    using ArrayDims = llama::ArrayDims<2>;
+    constexpr ArrayDims viewSize{4096, 4096};
+    auto view = allocView(llama::mapping::SoA<ArrayDims, Particle>(viewSize));
+
+    llama::VirtualView virtualView{view, {23, 42}, {13, 37}};
+}
+
 TEST_CASE("fast virtual view")
 {
     using ArrayDims = llama::ArrayDims<2>;
