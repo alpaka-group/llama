@@ -57,23 +57,16 @@ It is also possible to access the array dimensions with one compound argument li
     view({1, 2, 3})(color{}, g{}) = 1.0;
 
 The values :cpp:`color{}` and :cpp:`g{}` are not used and just serve as a way to specify the template arguments.
-A direct call of the :cpp:`operator()` is also possible and looks like this:
-
-.. code-block:: C++
-
-    view(1, 2, 3).operator()<color, g>() = 1.0;
-
-Alternatively, if the use of tag types is not desired or if the algorithm wants to iterate over the record dimension at compile time,
-an adressing with integral record coordinates is possible like this:
+Alternatively, an addressing with integral record coordinates is possible like this:
 
 .. code-block:: C++
 
     view(1, 2, 3)(llama::RecordCoord<0, 1>{}) = 1.0; // color.g
 
-This record coordinates are zero-based, nested indices reflecting the nested tuple-like structure of the record dimension.
+These record coordinates are zero-based, nested indices reflecting the nested tuple-like structure of the record dimension.
 
 Notice that the :cpp:`operator()` is invoked twice in the last example and that an intermediate object is needed for this to work.
-This object is a central data type of LLAMA called :cpp:`llama::VirtualRecord`.
+This object is a :cpp:`llama::VirtualRecord`.
 
 .. _label-virtualview:
 
