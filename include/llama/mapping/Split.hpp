@@ -104,7 +104,6 @@ namespace llama::mapping
             {
                 using namespace boost::mp11;
                 // zero all coordinate values that are part of RecordCoordForMapping1
-                constexpr auto prefixLength = RecordCoordForMapping1::size;
                 using Prefix = mp_repeat_c<mp_list_c<std::size_t, 0>, RecordCoordForMapping1::size>;
                 using Suffix = mp_drop_c<mp_list_c<std::size_t, RecordCoords...>, RecordCoordForMapping1::size>;
                 return blobNrAndOffset(RecordCoordFromList<mp_append<Prefix, Suffix>>{}, coord, mapping1);
