@@ -95,10 +95,12 @@ __global__ void updateSM(View particles)
         }();
 
         llama::Array<std::byte*, decltype(sharedMapping)::blobCount> sharedMems{};
-        boost::mp11::mp_for_each<boost::mp11::mp_iota_c<decltype(sharedMapping)::blobCount>>([&](auto i) {
-            __shared__ std::byte sharedMem[sharedMapping.blobSize(i)];
-            sharedMems[i] = &sharedMem[0];
-        });
+        boost::mp11::mp_for_each<boost::mp11::mp_iota_c<decltype(sharedMapping)::blobCount>>(
+            [&](auto i)
+            {
+                __shared__ std::byte sharedMem[sharedMapping.blobSize(i)];
+                sharedMems[i] = &sharedMem[0];
+            });
         return llama::View{sharedMapping, sharedMems};
     }();
 
@@ -166,7 +168,8 @@ template <int Mapping, int MappingSM, bool UseAccumulator>
 void run(std::ostream& plotFile, bool useSharedMemory)
 try
 {
-    auto mappingName = [](int m) -> std::string {
+    auto mappingName = [](int m) -> std::string
+    {
         if (m == 0)
             return "AoS";
         if (m == 1)
@@ -209,11 +212,14 @@ try
     Stopwatch watch;
 
     auto hostView = llama::allocView(mapping);
-    auto accView = llama::allocView(mapping, [](std::size_t size) {
-        std::byte* p;
-        checkError(cudaMalloc(&p, size));
-        return p;
-    });
+    auto accView = llama::allocView(
+        mapping,
+        [](std::size_t size)
+        {
+            std::byte* p;
+            checkError(cudaMalloc(&p, size));
+            return p;
+        });
 
     watch.printAndReset("alloc");
 
@@ -240,7 +246,8 @@ try
     cudaEventCreate(&stopEvent);
 
     auto start = [&] { checkError(cudaEventRecord(startEvent)); };
-    auto stop = [&] {
+    auto stop = [&]
+    {
         checkError(cudaEventRecord(stopEvent));
         checkError(cudaEventSynchronize(stopEvent));
         float milliseconds = 0;
@@ -322,17 +329,27 @@ try
     plotFile << "\"\"\t\"update\"\t\"move\"\t\"update with acc\"\t\"move with acc\"\n";
 
     using namespace boost::mp11;
-    mp_for_each<mp_iota_c<5>>([&](auto i) {
-        mp_for_each<mp_list_c<bool, false, true>>(
-            [&](auto useAccumulator) { run<decltype(i)::value, 0, decltype(useAccumulator)::value>(plotFile, false); });
-    });
-    mp_for_each<mp_iota_c<5>>([&](auto i) {
-        mp_for_each<mp_iota_c<4>>([&](auto j) {
-            mp_for_each<mp_list_c<bool, false, true>>([&](auto useAccumulator) {
-                run<decltype(i)::value, decltype(j)::value, decltype(useAccumulator)::value>(plotFile, true);
-            });
+    mp_for_each<mp_iota_c<5>>(
+        [&](auto i)
+        {
+            mp_for_each<mp_list_c<bool, false, true>>(
+                [&](auto useAccumulator)
+                { run<decltype(i)::value, 0, decltype(useAccumulator)::value>(plotFile, false); });
         });
-    });
+    mp_for_each<mp_iota_c<5>>(
+        [&](auto i)
+        {
+            mp_for_each<mp_iota_c<4>>(
+                [&](auto j)
+                {
+                    mp_for_each<mp_list_c<bool, false, true>>(
+                        [&](auto useAccumulator) {
+                            run<decltype(i)::value, decltype(j)::value, decltype(useAccumulator)::value>(
+                                plotFile,
+                                true);
+                        });
+                });
+        });
 
     std::cout << "Plot with: ./nbody.sh\n";
     std::ofstream{"nbody.sh"} << fmt::format(
