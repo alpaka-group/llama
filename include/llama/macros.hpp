@@ -45,6 +45,13 @@
 #    endif
 #endif
 
+/// Suppresses nvcc warning: 'calling a __host__ function from __host__ __device__ function.'
+#if defined(__NVCC__) && !defined(__clang__)
+#    define LLAMA_SUPPRESS_HOST_DEVICE_WARNING _Pragma("nv_exec_check_disable")
+#else
+#    define LLAMA_SUPPRESS_HOST_DEVICE_WARNING
+#endif
+
 #if defined(__INTEL_COMPILER) /*|| defined(__INTEL_LLVM_COMPILER)*/
 #    define LLAMA_FORCE_INLINE_RECURSIVE _Pragma("forceinline recursive")
 #elif defined(_MSC_VER)
