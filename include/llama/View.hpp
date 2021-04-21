@@ -1036,10 +1036,7 @@ namespace llama
 
         /// Creates a VirtualView given a parent \ref View, offset and size.
         LLAMA_FN_HOST_ACC_INLINE
-        VirtualView(ParentView& parentView, ArrayDims offset, ArrayDims size)
-            : parentView(parentView)
-            , offset(offset)
-            , size(size)
+        VirtualView(ParentView& parentView, ArrayDims offset) : parentView(parentView), offset(offset)
         {
         }
 
@@ -1102,6 +1099,5 @@ namespace llama
         ParentView& parentView; ///< reference to parent view.
         const ArrayDims offset; ///< offset this view's \ref ArrayDims coordinates are
                                 ///< shifted to the parent view.
-        const ArrayDims size;
     };
 } // namespace llama
