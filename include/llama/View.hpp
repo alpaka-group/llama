@@ -26,6 +26,7 @@ namespace llama
         template <typename Allocator>
         using AllocatorBlobType = decltype(std::declval<Allocator>()(0));
 
+        LLAMA_SUPPRESS_HOST_DEVICE_WARNING
         template <typename Allocator, typename Mapping, std::size_t... Is>
         LLAMA_FN_HOST_ACC_INLINE auto makeBlobArray(
             const Allocator& alloc,
@@ -989,6 +990,7 @@ namespace llama
         template <typename T_View, typename T_BoundRecordCoord, bool OwnView>
         friend struct VirtualRecord;
 
+        LLAMA_SUPPRESS_HOST_DEVICE_WARNING
         template <std::size_t... Coords>
         LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDims arrayDims, RecordCoord<Coords...> dc = {}) const
             -> decltype(auto)
@@ -1003,6 +1005,7 @@ namespace llama
             }
         }
 
+        LLAMA_SUPPRESS_HOST_DEVICE_WARNING
         template <std::size_t... Coords>
         LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDims arrayDims, RecordCoord<Coords...> dc = {}) -> decltype(auto)
         {
