@@ -26,7 +26,7 @@
 
 #ifndef LLAMA_FN_HOST_ACC_INLINE
 #    if defined(__NVCC__)
-#        define LLAMA_FN_HOST_ACC_INLINE __forceinline__
+#        define LLAMA_FN_HOST_ACC_INLINE __host__ __device__ __forceinline__
 #    elif defined(__GNUC__) || defined(__clang__)
 #        define LLAMA_FN_HOST_ACC_INLINE inline __attribute__((always_inline))
 #    elif defined(_MSC_VER) || defined(__INTEL_COMPILER) || defined(__INTEL_LLVM_COMPILER)
