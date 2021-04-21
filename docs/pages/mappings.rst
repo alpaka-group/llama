@@ -5,14 +5,12 @@
 Mappings
 ========
 
-One of the core tasks of LLAMA is to map an address from the array and
-record dimensions to some address in the allocated memory space.
-This is particularly challenging if the compiler shall still be able to optimize the resulting
-memory accesses (vectorization, reordering, aligned loads, etc.).
+One of the core tasks of LLAMA is to map an address from the array and record dimensions to some address in the allocated memory space.
+This is particularly challenging if the compiler shall still be able to optimize the resulting memory accesses (vectorization, reordering, aligned loads, etc.).
 The compiler needs to **understand** the semantic of the mapping at compile time.
 Otherwise the abstraction LLAMA provides will perform poorly.
-Thus, mappings are compile time parameters to LLAMA's views.
-LLAMA provides a manifold of such mappings and users are also free to write their own mappings.
+Thus, mappings are compile time parameters to LLAMA's views (and e.g. not hidden behind a virtual dispatch).
+LLAMA provides several ready-to-use mappings, but users are also free to supply their own mappings.
 
 .. image:: ../images/mapping.svg
 

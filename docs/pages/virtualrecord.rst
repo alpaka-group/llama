@@ -61,7 +61,7 @@ We might address this inconsistency at some point.
 Arithmetic and logical operatores
 ---------------------------------
 
-:cpp:`llama::VirtualRecord` overloads several arithmetic and logical operatores:
+:cpp:`llama::VirtualRecord` overloads several operators:
 
 .. code-block:: C++
 
@@ -80,18 +80,12 @@ Arithmetic and logical operatores
         vr = 42;
     }
 
-The most common compount assignment operators ( :cpp:`=`, :cpp:`+=`, :cpp:`-=`, :cpp:`*=`,
-:cpp:`/=`, :cpp:`%=` ) are overloaded. These operators directly write into the
-corresponding view. Furthermore several arithmetic operators ( :cpp:`+`, :cpp:`-`,
-:cpp:`*`, :cpp:`/`, :cpp:`%` ) are overloaded too, but they return a temporary object
-on the stack. Althought this temporary value has a basic struct-mapping without padding and
-probaly being not compatible to the mapping of the view at all, the compiler
-will most probably be able to optimize the data accesses anyway as it has full
-knowledge about the data in the stack and can cut out all temporary operations.
+The assignment operator ( :cpp:`=`) and the arithmetic, non-bitwise, compount assignment operators (:cpp:`=`, :cpp:`+=`, :cpp:`-=`, :cpp:`*=`, :cpp:`/=`, :cpp:`%=` ) are overloaded.
+These operators directly write into the corresponding view.
+Furthermore, the binary, non-bitwise, arithmetic operators ( :cpp:`+`, :cpp:`-`, :cpp:`*`, :cpp:`/`, :cpp:`%` ) are overloaded too,
+but they return a temporary object on the stack (i.e. a :cpp:`llama::One`).
 
-These operators work between two virtual records, even if they have
-different record dimensions. It is even possible to work on parts of a virtual
-record. This returns a virtual record with the first coordinate in the record dimension bound.
+These operators work between two virtual records, even if they have different record dimensions.
 Every tag existing in both record dimensions will be matched and operated on.
 Every non-matching tag is ignored, e.g.
 
@@ -119,7 +113,7 @@ Every non-matching tag is ignored, e.g.
     // Let assume record1 using RecordDim1 and record2 using RecordDim2.
 
     record1 += record2;
-    // record2.pos.x and only record2.pos.x will be added to record1.pos.x because
+    // record2.pos.x will be added to record1.pos.x because
     // of pos.x existing in both record dimensions although having different types.
 
     record1(vel{}) *= record2(mom{});
@@ -196,11 +190,6 @@ This enables e.g. to easily add a velocity to a position like this:
 
     record(pos{}) += record(vel{});
 
-This is e.g. used in the
-`nbody example <https://github.com/alpaka-group/llama/blob/master/examples/nbody/nbody.cpp>`_
-to update the particle velocity based on the distances of particles and to
-update the position after one time step movement with the velocity.
-
 
 Tuple interface
 ---------------
@@ -221,7 +210,7 @@ However, such dead address computations are eliminated by most compilers during 
     std::tuple<float&, float&, float&, char&> = record.asFlatTuple();
     auto [r, g, b, a] = record.asFlatTuple();
 
-Additionally, if the user already has types supporting the tuple interface, :cpp:`llama::VirtualRecord` can integreate with these using the :cpp:`load()`, :cpp:`loadAs<T>()` and :cpp:`store(T)` functions.
+Additionally, if the user already has types supporting the C++ tuple interface, :cpp:`llama::VirtualRecord` can integreate with these using the :cpp:`load()`, :cpp:`loadAs<T>()` and :cpp:`store(T)` functions.
 
 .. code-block:: C++
 
@@ -249,8 +238,7 @@ Structured bindings
 
 WARNING: This is an experimental feature and might completely change in the future.
 
-A :cpp:`llama::VirtualRecord` implementes the tuple interface by providing corresponding specializations of :cpp:`std::tuple_size`, :cpp:`std::tuple_element` and a `llama::get<I>(llama::VirtualRecord)`free functions.
-This allows a :cpp:`llama::VirtualRecord` to be destructured:
+A :cpp:`llama::VirtualRecord` implementes the C++ tuple interface itself to allow destructuring:
 
 .. code-block:: C++
 

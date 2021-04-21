@@ -6,9 +6,9 @@ Blobs
 =====
 
 When a :ref:`view <label-view>` is created, it needs to be given an array of blobs.
-A blob is an object representing a flat region of memory where each byte is accessed using the subscript operator.
+A blob is an object representing a contiguous region of memory where each byte is accessible using the subscript operator.
 The number of blobs and the size of each blob is a property determined by the mapping used by the view.
-All this is handled by :cpp:`llama::allocView()`, but I needs to be given an allocator to handle the actual allocation of each blob.
+All this is handled by :cpp:`llama::allocView()`, but I needs to be given a blob allocator to handle the actual allocation of each blob.
 
 Every time a view is copied, it's array of blobs is copied too.
 Depending on the type of blobs used, this can have different effects.
@@ -20,7 +20,7 @@ Contrary, if a :cpp:`std::shared_ptr<std::byte[]>` is used, the storage is share
 Blob allocators
 ---------------
 
-A blob allocator is used for :cpp:`llama::allocView()` to choose a strategy for creating blobs.
+A blob allocator is a callable which returns an appropriately sized blob given a desired allocation size in bytes.
 There is a number of a buildin blob allocators:
 
 Shared memory
@@ -83,11 +83,11 @@ with just one element without any padding, aligment, or whatever on the stack:
 Non-owning blobs
 ----------------
 
-It is sometimes desirable to create a view based on some already existing memory.
-This is possible by using a non-owning type for the blobs, like a :cpp:`std::span<std::byte>` or just a plain :cpp:`std::byte*`.
+If a view is needed based on already allocated memory, the view can also be directly constructed with an array of blobs,
+e.g. an array of :cpp:`std::byte*` pointers or :cpp:`std::span<std::byte> to the existing memory regions.
 Everything works here as long as it can be subscripted by the view like :cpp:`blob[offset]`.
 One needs to be careful though, since now the ownership of the blob is decoupled from the view.
-It is the responsibility of the user now to ensure that the blob outlives views based on it.
+It is the responsibility of the user now to ensure that the blobs outlive the views based on them.
 
 Alpaka
 ^^^^^^

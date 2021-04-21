@@ -31,8 +31,8 @@ Record dimension iteration
 --------------------------
 
 The record dimension is iterated using :cpp:`llama::forEachLeaf`.
-It takes a record dimension as template argument and a functor as function argument.
-The functor is then called for each leaf of the record dimension tree with a record coord as argument:
+It takes a record dimension as template argument and a callable with a generic parameter as argument.
+This function is then called for each leaf of the record dimension tree with a record coord as argument:
 
 .. code-block:: C++
 
