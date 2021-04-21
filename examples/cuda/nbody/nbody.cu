@@ -89,7 +89,7 @@ __global__ void updateSM(View particles)
             if constexpr (MappingSM == 1)
                 return llama::mapping::SoA{arrayDims, SharedMemoryParticle{}};
             if constexpr (MappingSM == 2)
-                return llama::mapping::SoA{arrayDims, SharedMemoryParticle{}, std::true_type{}};
+                return llama::mapping::SoA<decltype(arrayDims), SharedMemoryParticle, true>{arrayDims};
             if constexpr (MappingSM == 3)
                 return llama::mapping::AoSoA<decltype(arrayDims), SharedMemoryParticle, AOSOA_LANES>{arrayDims};
         }();
@@ -196,7 +196,7 @@ try
         if constexpr (Mapping == 1)
             return llama::mapping::SoA{arrayDims, Particle{}};
         if constexpr (Mapping == 2)
-            return llama::mapping::SoA{arrayDims, Particle{}, std::true_type{}};
+            return llama::mapping::SoA<decltype(arrayDims), Particle, true>{arrayDims, Particle{}};
         if constexpr (Mapping == 3)
             return llama::mapping::AoSoA<decltype(arrayDims), Particle, AOSOA_LANES>{arrayDims};
         if constexpr (Mapping == 4)
@@ -204,8 +204,8 @@ try
                 decltype(arrayDims),
                 Particle,
                 llama::RecordCoord<1>,
-                llama::mapping::SoA,
-                llama::mapping::SoA,
+                llama::mapping::PreconfiguredSoA<>::type,
+                llama::mapping::PreconfiguredSoA<>::type,
                 true>{arrayDims};
     }();
 
