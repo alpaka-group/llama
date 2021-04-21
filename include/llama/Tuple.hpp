@@ -25,7 +25,6 @@ namespace llama
         using FirstElement = T_FirstElement;
         using RestTuple = Tuple<Elements...>;
 
-        LLAMA_FN_HOST_ACC_INLINE
         constexpr Tuple() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
@@ -48,7 +47,6 @@ namespace llama
         using FirstElement = T_FirstElement;
         using RestTuple = Tuple<>;
 
-        LLAMA_FN_HOST_ACC_INLINE
         constexpr Tuple() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
