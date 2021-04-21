@@ -22,14 +22,8 @@ namespace llama::mapping
     {
         using ArrayDims = T_ArrayDims;
         using RecordDim = T_RecordDim;
-        static constexpr std::size_t blobCount = []() constexpr
-        {
-            if constexpr (SeparateBuffers)
-                return boost::mp11::mp_size<llama::FlattenRecordDim<RecordDim>>::value;
-            else
-                return 1;
-        }
-        ();
+        static constexpr std::size_t blobCount
+            = SeparateBuffers ? boost::mp11::mp_size<llama::FlattenRecordDim<RecordDim>>::value : 1;
 
         constexpr SoA() = default;
 
@@ -55,7 +49,9 @@ namespace llama::mapping
                 return LinearizeArrayDimsFunctor{}.size(arrayDimsSize) * typeSizes[blobIndex];
             }
             else
+            {
                 return LinearizeArrayDimsFunctor{}.size(arrayDimsSize) * sizeOf<RecordDim>;
+            }
         }
 
         template <std::size_t... RecordCoords>
