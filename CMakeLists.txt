@@ -64,13 +64,18 @@ if (LLAMA_BUILD_EXAMPLES)
 		add_subdirectory("examples/alpaka/nbody")
 		add_subdirectory("examples/alpaka/vectoradd")
 		add_subdirectory("examples/alpaka/asyncblur")
+	elseif()
+		message(WARNING "Could not find alpaka. Alpaka examples are disabled.")
 	endif()
 
+	# CUDA examples
 	include(CheckLanguage)
 	check_language(CUDA)
 	if (CMAKE_CUDA_COMPILER)
 		enable_language(CUDA)
 		add_subdirectory("examples/cuda/nbody")
+	elseif()
+		message(WARNING "Could not find CUDA. Try setting CMAKE_CUDA_COMPILER. CUDA examples are disabled.")
 	endif()
 endif()
 
