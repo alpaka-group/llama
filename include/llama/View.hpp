@@ -774,7 +774,7 @@ namespace llama
 
         constexpr auto operator->() const -> pointer
         {
-            return internal::IndirectValue{**this};
+            return {**this};
         }
 
         constexpr auto operator[](difference_type i) const -> reference
