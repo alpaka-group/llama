@@ -19,72 +19,87 @@ using Position = llama::Record<
 
 TEST_CASE("iterator")
 {
-    using ArrayDims = llama::ArrayDims<1>;
-    constexpr auto arrayDims = ArrayDims{32};
-    constexpr auto mapping = llama::mapping::AoS<ArrayDims, Position>{arrayDims};
-    auto view = llama::allocView(mapping);
-
-    for (auto vd : view)
+    auto test = [](auto arrayDims)
     {
-        vd(tag::X{}) = 1;
-        vd(tag::Y{}) = 2;
-        vd(tag::Z{}) = 3;
-    }
-    std::transform(begin(view), end(view), begin(view), [](auto vd) { return vd * 2; });
-    const int sumY = std::accumulate(begin(view), end(view), 0, [](int acc, auto vd) { return acc + vd(tag::Y{}); });
-    CHECK(sumY == 128);
+        using ArrayDims = decltype(arrayDims);
+        auto mapping = llama::mapping::AoS<ArrayDims, Position>{arrayDims};
+        auto view = llama::allocView(mapping);
+
+        for (auto vd : view)
+        {
+            vd(tag::X{}) = 1;
+            vd(tag::Y{}) = 2;
+            vd(tag::Z{}) = 3;
+        }
+        std::transform(begin(view), end(view), begin(view), [](auto vd) { return vd * 2; });
+        const int sumY
+            = std::accumulate(begin(view), end(view), 0, [](int acc, auto vd) { return acc + vd(tag::Y{}); });
+        CHECK(sumY == 128);
+    };
+    test(llama::ArrayDims{32});
+    test(llama::ArrayDims{4, 8});
+    test(llama::ArrayDims{4, 2, 4});
 }
 
 TEST_CASE("iterator.std_copy")
 {
-    using ArrayDims = llama::ArrayDims<1>;
-    constexpr auto arrayDims = ArrayDims{32};
-    auto aosView = llama::allocView(llama::mapping::AoS<ArrayDims, Position>{arrayDims});
-    auto soaView = llama::allocView(llama::mapping::SoA<ArrayDims, Position>{arrayDims});
+    auto test = [](auto arrayDims)
+    {
+        auto aosView = llama::allocView(llama::mapping::AoS{arrayDims, Position{}});
+        auto soaView = llama::allocView(llama::mapping::SoA{arrayDims, Position{}});
 
-    int i = 0;
-    for (auto vd : aosView)
-    {
-        vd(tag::X{}) = ++i;
-        vd(tag::Y{}) = ++i;
-        vd(tag::Z{}) = ++i;
-    }
-    std::copy(begin(aosView), end(aosView), begin(soaView));
-    i = 0;
-    for (auto vd : soaView)
-    {
-        CHECK(vd(tag::X{}) == ++i);
-        CHECK(vd(tag::Y{}) == ++i);
-        CHECK(vd(tag::Z{}) == ++i);
-    }
+        int i = 0;
+        for (auto vd : aosView)
+        {
+            vd(tag::X{}) = ++i;
+            vd(tag::Y{}) = ++i;
+            vd(tag::Z{}) = ++i;
+        }
+        std::copy(begin(aosView), end(aosView), begin(soaView));
+        i = 0;
+        for (auto vd : soaView)
+        {
+            CHECK(vd(tag::X{}) == ++i);
+            CHECK(vd(tag::Y{}) == ++i);
+            CHECK(vd(tag::Z{}) == ++i);
+        }
+    };
+    test(llama::ArrayDims{32});
+    test(llama::ArrayDims{4, 8});
+    test(llama::ArrayDims{4, 2, 4});
 }
 
 TEST_CASE("iterator.transform_reduce")
 {
-    constexpr auto arrayDims = llama::ArrayDims<1>{32};
-    auto aosView = llama::allocView(llama::mapping::AoS{arrayDims, Position{}});
-    auto soaView = llama::allocView(llama::mapping::SoA{arrayDims, Position{}});
-
-    int i = 0;
-    for (auto vd : aosView)
+    auto test = [](auto arrayDims)
     {
-        vd(tag::X{}) = ++i;
-        vd(tag::Y{}) = ++i;
-        vd(tag::Z{}) = ++i;
-    }
-    for (auto vd : soaView)
-    {
-        vd(tag::X{}) = ++i;
-        vd(tag::Y{}) = ++i;
-        vd(tag::Z{}) = ++i;
-    }
-    // returned type is a llama::One<Particle>
-    auto [sumX, sumY, sumZ]
-        = std::transform_reduce(begin(aosView), end(aosView), begin(soaView), llama::One<Position>{});
+        auto aosView = llama::allocView(llama::mapping::AoS{arrayDims, Position{}});
+        auto soaView = llama::allocView(llama::mapping::SoA{arrayDims, Position{}});
 
-    CHECK(sumX == 242672);
-    CHECK(sumY == 248816);
-    CHECK(sumZ == 255024);
+        int i = 0;
+        for (auto vd : aosView)
+        {
+            vd(tag::X{}) = ++i;
+            vd(tag::Y{}) = ++i;
+            vd(tag::Z{}) = ++i;
+        }
+        for (auto vd : soaView)
+        {
+            vd(tag::X{}) = ++i;
+            vd(tag::Y{}) = ++i;
+            vd(tag::Z{}) = ++i;
+        }
+        // returned type is a llama::One<Particle>
+        auto [sumX, sumY, sumZ]
+            = std::transform_reduce(begin(aosView), end(aosView), begin(soaView), llama::One<Position>{});
+
+        CHECK(sumX == 242672);
+        CHECK(sumY == 248816);
+        CHECK(sumZ == 255024);
+    };
+    test(llama::ArrayDims{32});
+    test(llama::ArrayDims{4, 8});
+    test(llama::ArrayDims{4, 2, 4});
 }
 
 // TODO: clang 10 and 11 fail to compile this currently with the issue described here:
@@ -96,25 +111,29 @@ TEST_CASE("iterator.transform_reduce")
 
 TEST_CASE("ranges")
 {
-    using ArrayDims = llama::ArrayDims<1>;
-    constexpr auto arrayDims = ArrayDims{32};
-    constexpr auto mapping = llama::mapping::AoS<ArrayDims, Position>{arrayDims};
-    auto view = llama::allocView(mapping);
-
-    STATIC_REQUIRE(std::ranges::range<decltype(view)>);
-
-    int i = 0;
-    for (auto vd : view)
+    auto test = [](auto arrayDims)
     {
-        vd(tag::X{}) = ++i;
-        vd(tag::Y{}) = ++i;
-        vd(tag::Z{}) = ++i;
-    }
+        auto mapping = llama::mapping::AoS{arrayDims, Position{}};
+        auto view = llama::allocView(mapping);
 
-    std::vector<int> v;
-    for (auto y : view | std::views::filter([](auto vd) { return vd(tag::X{}) % 10 == 0; })
-             | std::views::transform([](auto vd) { return vd(tag::Y{}); }) | std::views::take(2))
-        v.push_back(y);
-    CHECK(v == std::vector<int>{11, 41});
+        STATIC_REQUIRE(std::ranges::range<decltype(view)>);
+
+        int i = 0;
+        for (auto vd : view)
+        {
+            vd(tag::X{}) = ++i;
+            vd(tag::Y{}) = ++i;
+            vd(tag::Z{}) = ++i;
+        }
+
+        std::vector<int> v;
+        for (auto y : view | std::views::filter([](auto vd) { return vd(tag::X{}) % 10 == 0; })
+                 | std::views::transform([](auto vd) { return vd(tag::Y{}); }) | std::views::take(2))
+            v.push_back(y);
+        CHECK(v == std::vector<int>{11, 41});
+    };
+    test(llama::ArrayDims{32});
+    test(llama::ArrayDims{4, 8});
+    test(llama::ArrayDims{4, 2, 4});
 }
 #endif

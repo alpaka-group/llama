@@ -726,25 +726,24 @@ namespace llama
     };
 #endif
 
-    // Currently, only 1D iterators are supported, becaues higher dimensional iterators are difficult if we also
-    // want to preserve good codegen. Multiple nested loops seem to be superior to a single iterator over multiple
-    // dimensions. At least compilers are able to produce better code. std::mdspan also discovered similar
-    // difficulties and there was a discussion in WG21 in Oulu 2016 to remove/postpone iterators from the design. In
-    // std::mdspan's design, the iterator iterated over the co-domain.
+    // TODO: Higher dimensional iterators might not have good codegen. Multiple nested loops seem to be superior to a
+    // single iterator over multiple dimensions. At least compilers are able to produce better code. std::mdspan also
+    // discovered similar difficulties and there was a discussion in WG21 in Oulu 2016 to remove/postpone iterators from
+    // the design. In std::mdspan's design, the iterator iterated over the co-domain.
     template <typename View>
     struct Iterator
     {
-        static_assert(View::ArrayDims::rank == 1, "Iterators for non-1D views are not implemented");
+        using ADIterator = ArrayDimsIndexIterator<View::ArrayDims::rank>;
 
         using iterator_category = std::random_access_iterator_tag;
         using value_type = typename View::VirtualRecordType;
-        using difference_type = std::ptrdiff_t;
+        using difference_type = typename ADIterator::difference_type;
         using pointer = internal::IndirectValue<value_type>;
         using reference = value_type;
 
         constexpr auto operator++() -> Iterator&
         {
-            ++coord[0];
+            ++adIndex;
             return *this;
         }
         constexpr auto operator++(int) -> Iterator
@@ -756,7 +755,7 @@ namespace llama
 
         constexpr auto operator--() -> Iterator&
         {
-            --coord[0];
+            --adIndex;
             return *this;
         }
 
@@ -769,7 +768,7 @@ namespace llama
 
         constexpr auto operator*() const -> reference
         {
-            return (*view)(coord);
+            return (*view)(*adIndex);
         }
 
         constexpr auto operator->() const -> pointer
@@ -784,7 +783,7 @@ namespace llama
 
         constexpr auto operator+=(difference_type n) -> Iterator&
         {
-            coord[0] = static_cast<difference_type>(coord[0]) + n;
+            adIndex += n;
             return *this;
         }
 
@@ -801,7 +800,7 @@ namespace llama
 
         constexpr auto operator-=(difference_type n) -> Iterator&
         {
-            coord[0] = static_cast<difference_type>(coord[0]) - n;
+            adIndex -= n;
             return *this;
         }
 
@@ -813,12 +812,12 @@ namespace llama
 
         friend constexpr auto operator-(const Iterator& a, const Iterator& b) -> difference_type
         {
-            return static_cast<std::ptrdiff_t>(a.coord[0]) - static_cast<std::ptrdiff_t>(b.coord[0]);
+            return static_cast<std::ptrdiff_t>(a.adIndex - b.adIndex);
         }
 
         friend constexpr auto operator==(const Iterator& a, const Iterator& b) -> bool
         {
-            return a.coord[0] == b.coord[0];
+            return a.adIndex == b.adIndex;
         }
 
         friend constexpr auto operator!=(const Iterator& a, const Iterator& b) -> bool
@@ -828,7 +827,7 @@ namespace llama
 
         friend constexpr auto operator<(const Iterator& a, const Iterator& b) -> bool
         {
-            return a.coord[0] < b.coord[0];
+            return a.adIndex < b.adIndex;
         }
 
         friend constexpr auto operator>(const Iterator& a, const Iterator& b) -> bool
@@ -846,7 +845,7 @@ namespace llama
             return !(a < b);
         }
 
-        ArrayDims<1> coord;
+        ADIterator adIndex;
         View* view;
     };
 
@@ -883,6 +882,7 @@ namespace llama
         using RecordDim = typename Mapping::RecordDim;
         using VirtualRecordType = VirtualRecord<View<Mapping, BlobType>>;
         using VirtualRecordTypeConst = VirtualRecord<const View<Mapping, BlobType>>;
+        using iterator = Iterator<View>;
 
         View() = default;
 
@@ -973,14 +973,14 @@ namespace llama
             return (*this) (index);
         }
 
-        auto begin() -> Iterator<View>
+        auto begin() -> iterator
         {
-            return {ArrayDims{}, this};
+            return {ArrayDimsIndexRange<ArrayDims::rank>{mapping.arrayDimsSize}.begin(), this};
         }
 
-        auto end() -> Iterator<View>
+        auto end() -> iterator
         {
-            return {mapping.arrayDimsSize, this};
+            return {ArrayDimsIndexRange<ArrayDims::rank>{mapping.arrayDimsSize}.end(), this};
         }
 
         Mapping mapping;
