@@ -100,7 +100,8 @@ namespace llama
 
         constexpr auto operator+=(difference_type n) noexcept -> ArrayDimsIndexIterator&
         {
-            for (auto i = (int) Dim - 1; i >= 0 && n != 0; i--)
+            // add n to all lower dimensions with carry
+            for (auto i = (int) Dim - 1; i > 0 && n != 0; i--)
             {
                 n += static_cast<difference_type>(current[i]);
                 const auto size = static_cast<difference_type>(lastIndex[i]) + 1;
@@ -112,8 +113,17 @@ namespace llama
                     n--;
                 }
                 current[i] = mod;
+                assert(current[i] <= lastIndex[i]);
             }
-            assert(n == 0);
+
+            current[0] = static_cast<difference_type>(current[0]) + n;
+            // current is either within bounds or at the end ([last + 1, 0, 0, ..., 0])
+            assert(
+                (current[0] <= lastIndex[0]
+                 || (current[0] == lastIndex[0] + 1
+                     && std::all_of(std::begin(current) + 1, std::end(current), [](auto c) { return c == 0; })))
+                && "Iterator was moved past the end");
+
             return *this;
         }
 

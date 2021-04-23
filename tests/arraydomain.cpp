@@ -170,6 +170,17 @@ TEST_CASE("ArrayDimsIndexIterator")
     CHECK(it < it + 1);
 }
 
+
+TEST_CASE("ArrayDimsIndexIterator.operator+=")
+{
+    std::vector<llama::ArrayDims<2>> coords;
+    llama::ArrayDimsIndexRange r{llama::ArrayDims<2>{3, 4}};
+    for (auto it = r.begin(); it != r.end(); it += 2)
+        coords.push_back(*it);
+
+    CHECK(coords == std::vector<llama::ArrayDims<2>>{{0, 0}, {0, 2}, {1, 0}, {1, 2}, {2, 0}, {2, 2}});
+}
+
 TEST_CASE("ArrayDimsIndexIterator.constexpr")
 {
     constexpr auto r = [&]() constexpr
