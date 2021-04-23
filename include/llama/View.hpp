@@ -687,45 +687,8 @@ struct std::tuple_element<I, const llama::VirtualRecord<View, BoundRecordCoord, 
         = decltype(std::declval<const llama::VirtualRecord<View, BoundRecordCoord, OwnView>>().template get<I>());
 };
 
-//#include <boost/stl_interfaces/iterator_interface.hpp>
-
 namespace llama
 {
-    // requires Boost 1.74 which is quite new
-#if 0
-    template <typename View>
-    struct Iterator
-        : boost::stl_interfaces::proxy_iterator_interface<
-              Iterator<View>,
-              std::random_access_iterator_tag,
-              decltype(std::declval<View>()(ArrayDims<1>{}))>
-    {
-        constexpr decltype(auto) operator*() const
-        {
-            return (*view)(coord);
-        }
-
-        constexpr auto operator+=(std::ptrdiff_t n) -> Iterator&
-        {
-            coord[0] += n;
-            return *this;
-        }
-
-        friend constexpr auto operator-(const Iterator& a, const Iterator& b)
-        {
-            return a.coord[0] - b.coord[0];
-        }
-
-        friend constexpr bool operator==(const Iterator& a, const Iterator& b)
-        {
-            return a.coord == b.coord;
-        }
-
-        ArrayDims<1> coord;
-        View* view;
-    };
-#endif
-
     // TODO: Higher dimensional iterators might not have good codegen. Multiple nested loops seem to be superior to a
     // single iterator over multiple dimensions. At least compilers are able to produce better code. std::mdspan also
     // discovered similar difficulties and there was a discussion in WG21 in Oulu 2016 to remove/postpone iterators from
