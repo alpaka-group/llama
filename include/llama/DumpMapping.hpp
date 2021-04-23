@@ -120,7 +120,7 @@ namespace llama
 
             std::vector<FieldBox<Mapping::ArrayDims::rank>> infos;
 
-            for (auto adCoord : ArrayDimsIndexRange{mapping.arrayDimsSize})
+            for (auto adCoord : ArrayDimsIndexRange{mapping.arrayDims()})
             {
                 forEachLeaf<RecordDim>(
                     [&](auto coord)

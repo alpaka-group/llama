@@ -57,6 +57,11 @@ namespace
         {
         }
 
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayDims() const -> ArrayDims
+        {
+            return arrayDimsSize;
+        }
+
         constexpr auto blobSize(std::size_t) const -> std::size_t
         {
             return std::reduce(std::begin(arrayDimsSize), std::end(arrayDimsSize), std::size_t{1}, std::multiplies{})
@@ -69,6 +74,7 @@ namespace
             return {0, 0};
         }
 
+    private:
         ArrayDims arrayDimsSize;
     };
 } // namespace
@@ -100,6 +106,11 @@ namespace
         {
         }
 
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayDims() const -> ArrayDims
+        {
+            return arrayDimsSize;
+        }
+
         constexpr auto blobSize(std::size_t) const -> std::size_t
         {
             return Modulus * llama::sizeOf<RecordDim>;
@@ -114,6 +125,7 @@ namespace
             return {blob, offset};
         }
 
+    private:
         ArrayDims arrayDimsSize;
     };
 } // namespace

@@ -15,6 +15,7 @@ namespace llama
     concept Mapping = requires(M m) {
         typename M::ArrayDims;
         typename M::RecordDim;
+        { m.arrayDims() } -> std::same_as<typename M::ArrayDims>;
         { M::blobCount } -> std::convertible_to<std::size_t>;
         Array<int, M::blobCount>{}; // validates constexpr-ness
         { m.blobSize(std::size_t{}) } -> std::same_as<std::size_t>;

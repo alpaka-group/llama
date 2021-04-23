@@ -41,6 +41,11 @@ struct GuardMapping2D
     {
     }
 
+    constexpr auto arrayDims() const -> ArrayDims
+    {
+        return arrayDimsSize;
+    }
+
     constexpr auto blobSize(std::size_t i) const -> std::size_t
     {
         if (i >= centerOff)
@@ -177,6 +182,7 @@ private:
 public:
     static constexpr auto blobCount = centerOff + decltype(center)::blobCount;
 
+private:
     ArrayDims arrayDimsSize;
 };
 

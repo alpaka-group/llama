@@ -80,8 +80,13 @@ namespace llama::mapping
         constexpr Split() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr Split(ArrayDims size) : arrayDimsSize(size), mapping1(size), mapping2(size)
+        constexpr Split(ArrayDims size) : mapping1(size), mapping2(size)
         {
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayDims() const -> ArrayDims
+        {
+            return mapping1.arrayDims();
         }
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(std::size_t i) const -> std::size_t
@@ -135,7 +140,6 @@ namespace llama::mapping
         }
 
     public:
-        ArrayDims arrayDimsSize = {};
         Mapping1 mapping1;
         Mapping2 mapping2;
     };

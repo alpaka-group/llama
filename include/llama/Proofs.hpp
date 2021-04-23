@@ -74,7 +74,7 @@ namespace llama
                                          {
                                              if (collision)
                                                  return;
-                                             for (auto ad : llama::ArrayDimsIndexRange{m.arrayDimsSize})
+                                             for (auto ad : llama::ArrayDimsIndexRange{m.arrayDims()})
                                              {
                                                  using Type
                                                      = llama::GetType<typename Mapping::RecordDim, decltype(coord)>;

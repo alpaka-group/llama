@@ -64,6 +64,11 @@ namespace llama::mapping
             }
         }
 
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayDims() const -> ArrayDims
+        {
+            return mapping.arrayDims();
+        }
+
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(std::size_t i) const -> std::size_t
         {
             LLAMA_FORCE_INLINE_RECURSIVE
