@@ -938,12 +938,12 @@ namespace llama
 
         auto begin() -> iterator
         {
-            return {ArrayDimsIndexRange<ArrayDims::rank>{mapping.arrayDimsSize}.begin(), this};
+            return {ArrayDimsIndexRange<ArrayDims::rank>{mapping.arrayDims()}.begin(), this};
         }
 
         auto end() -> iterator
         {
-            return {ArrayDimsIndexRange<ArrayDims::rank>{mapping.arrayDimsSize}.end(), this};
+            return {ArrayDimsIndexRange<ArrayDims::rank>{mapping.arrayDims()}.end(), this};
         }
 
         Mapping mapping;

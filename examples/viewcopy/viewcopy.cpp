@@ -62,11 +62,11 @@ void naive_copy(
 {
     static_assert(std::is_same_v<typename Mapping1::RecordDim, typename Mapping2::RecordDim>);
 
-    if (srcView.mapping.arrayDimsSize != dstView.mapping.arrayDimsSize)
+    if (srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
         throw std::runtime_error{"Array dimensions sizes are different"};
 
     llamaex::parallelForEachADCoord(
-        srcView.mapping.arrayDimsSize,
+        srcView.mapping.arrayDims(),
         numThreads,
         [&](auto ad)
         {
@@ -115,12 +115,12 @@ void aosoa_copy(
     static_assert(decltype(srcView.storageBlobs)::rank == 1);
     static_assert(decltype(dstView.storageBlobs)::rank == 1);
 
-    if (srcView.mapping.arrayDimsSize != dstView.mapping.arrayDimsSize)
+    if (srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
         throw std::runtime_error{"Array dimensions sizes are different"};
 
     const auto flatSize = std::reduce(
-        std::begin(dstView.mapping.arrayDimsSize),
-        std::end(dstView.mapping.arrayDimsSize),
+        std::begin(dstView.mapping.arrayDims()),
+        std::end(dstView.mapping.arrayDims()),
         std::size_t{1},
         std::multiplies<>{});
 
@@ -199,7 +199,7 @@ template <typename Mapping, typename BlobType>
 auto hash(const llama::View<Mapping, BlobType>& view)
 {
     std::size_t acc = 0;
-    for (auto ad : llama::ArrayDimsIndexRange{view.mapping.arrayDimsSize})
+    for (auto ad : llama::ArrayDimsIndexRange{view.mapping.arrayDims()})
         llama::forEachLeaf<Particle>([&](auto coord) { boost::hash_combine(acc, view(ad)(coord)); });
     return acc;
 }
@@ -209,7 +209,7 @@ auto prepareViewAndHash(Mapping mapping)
     auto view = llama::allocView(mapping);
 
     auto value = 0.0f;
-    for (auto ad : llama::ArrayDimsIndexRange{mapping.arrayDimsSize})
+    for (auto ad : llama::ArrayDimsIndexRange{mapping.arrayDims()})
     {
         auto p = view(ad);
         p(tag::Pos{}, tag::X{}) = value++;

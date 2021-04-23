@@ -89,7 +89,7 @@ TEST_CASE("iterator.transform_reduce")
             vd(tag::Y{}) = ++i;
             vd(tag::Z{}) = ++i;
         }
-        // returned type is a llama::One<Particle>
+        // returned type is a llama::One<Position>
         auto [sumX, sumY, sumZ]
             = std::transform_reduce(begin(aosView), end(aosView), begin(soaView), llama::One<Position>{});
 

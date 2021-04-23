@@ -25,6 +25,15 @@ namespace llama::mapping
         {
         }
 
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayDims() const -> ArrayDims
+        {
+            // TODO: not sure if this is the right approach, since we take any ArrayDims in the ctor
+            ArrayDims ad;
+            for (auto i = 0; i < ArrayDims::rank; i++)
+                ad[i] = 1;
+            return ad;
+        }
+
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(std::size_t) const -> std::size_t
         {
             return sizeOf<RecordDim>;

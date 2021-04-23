@@ -47,6 +47,11 @@ namespace llama::mapping
         {
         }
 
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayDims() const -> ArrayDims
+        {
+            return arrayDimsSize;
+        }
+
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(std::size_t) const -> std::size_t
         {
             return LinearizeArrayDimsFunctor{}.size(arrayDimsSize) * sizeOf<RecordDim>;
@@ -64,6 +69,7 @@ namespace llama::mapping
             return {0, offset};
         }
 
+    private:
         ArrayDims arrayDimsSize;
     };
 

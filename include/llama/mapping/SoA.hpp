@@ -32,6 +32,11 @@ namespace llama::mapping
         {
         }
 
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayDims() const -> ArrayDims
+        {
+            return arrayDimsSize;
+        }
+
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto blobSize(std::size_t blobIndex) const -> std::size_t
         {
@@ -95,6 +100,7 @@ namespace llama::mapping
             }
         }
 
+    private:
         ArrayDims arrayDimsSize;
     };
 
