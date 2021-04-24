@@ -76,25 +76,18 @@ namespace usellama
         pi(tag::Vel{}) += dist * sts;
     }
 
-    template <bool UseAccumulator, typename View>
+    template <typename View>
     void update(View& particles)
     {
         LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
             llama::One<Particle> pi;
-            if constexpr (UseAccumulator)
-                pi = particles(i);
+            pi = particles(i);
             LLAMA_INDEPENDENT_DATA
             for (std::size_t j = 0; j < PROBLEM_SIZE; ++j)
-            {
-                if constexpr (UseAccumulator)
-                    pPInteraction(pi, particles(j));
-                else
-                    pPInteraction(particles(i), particles(j));
-            }
-            if constexpr (UseAccumulator)
-                particles(i) = pi;
+                pPInteraction(pi, particles(j));
+            particles(i) = pi;
         }
     }
 
@@ -106,7 +99,7 @@ namespace usellama
             particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * TIMESTEP;
     }
 
-    template <int Mapping, bool UseAccumulator, std::size_t AoSoALanes = 8 /*AVX2*/>
+    template <int Mapping, std::size_t AoSoALanes = 8 /*AVX2*/>
     auto main(std::ostream& plotFile) -> int
     {
         auto mappingName = [](int m) -> std::string
@@ -124,8 +117,6 @@ namespace usellama
             std::abort();
         };
         auto title = "LLAMA " + mappingName(Mapping);
-        if (UseAccumulator)
-            title += " Acc";
         std::cout << title << "\n";
         Stopwatch watch;
         auto mapping = [&]
@@ -189,15 +180,12 @@ namespace usellama
         double sumMove = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            update<UseAccumulator>(particles);
+            update(particles);
             sumUpdate += watch.printAndReset("update", '\t');
             move(particles);
             sumMove += watch.printAndReset("move");
         }
-        if (!UseAccumulator)
-            plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\t';
-        else
-            plotFile << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
+        plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
         if constexpr (HEATMAP)
             std::ofstream("nbody_heatmap_" + mappingName(Mapping) + ".dat") << particles.mapping.toGnuplotDatFile();
@@ -283,25 +271,16 @@ namespace manualAoS
         pi.vel += distance * sts;
     }
 
-    template <bool UseAccumulator>
     void update(Particle* particles)
     {
         LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
-            Particle pi{};
-            if constexpr (UseAccumulator)
-                pi = particles[i];
+            Particle pi = particles[i];
             LLAMA_INDEPENDENT_DATA
             for (std::size_t j = 0; j < PROBLEM_SIZE; ++j)
-            {
-                if constexpr (UseAccumulator)
-                    pPInteraction(pi, particles[j]);
-                else
-                    pPInteraction(particles[i], particles[j]);
-            }
-            if constexpr (UseAccumulator)
-                particles[i] = pi;
+                pPInteraction(pi, particles[j]);
+            particles[i] = pi;
         }
     }
 
@@ -312,12 +291,9 @@ namespace manualAoS
             particles[i].pos += particles[i].vel * TIMESTEP;
     }
 
-    template <bool UseAccumulator>
     auto main(std::ostream& plotFile) -> int
     {
         auto title = "AoS"s;
-        if (UseAccumulator)
-            title += " Acc";
         std::cout << title << "\n";
         Stopwatch watch;
 
@@ -342,15 +318,12 @@ namespace manualAoS
         double sumMove = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            update<UseAccumulator>(particles.data());
+            update(particles.data());
             sumUpdate += watch.printAndReset("update", '\t');
             move(particles.data());
             sumMove += watch.printAndReset("move");
         }
-        if (!UseAccumulator)
-            plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\t';
-        else
-            plotFile << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
+        plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
         return 0;
     }
@@ -385,50 +358,22 @@ namespace manualSoA
         pivelz += zdistance * sts;
     }
 
-    template <bool UseAccumulator>
     void update(FP* posx, FP* posy, FP* posz, FP* velx, FP* vely, FP* velz, FP* mass)
     {
         LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
-            FP piposx = 0;
-            FP piposy = 0;
-            FP piposz = 0;
-            FP pivelx = 0;
-            FP pively = 0;
-            FP pivelz = 0;
-            if constexpr (UseAccumulator)
-            {
-                piposx = posx[i];
-                piposy = posy[i];
-                piposz = posz[i];
-                pivelx = velx[i];
-                pively = vely[i];
-                pivelz = velz[i];
-            }
+            const FP piposx = posx[i];
+            const FP piposy = posy[i];
+            const FP piposz = posz[i];
+            FP pivelx = velx[i];
+            FP pively = vely[i];
+            FP pivelz = velz[i];
             for (std::size_t j = 0; j < PROBLEM_SIZE; ++j)
-            {
-                if constexpr (UseAccumulator)
-                    pPInteraction(piposx, piposy, piposz, pivelx, pively, pivelz, posx[j], posy[j], posz[j], mass[j]);
-                else
-                    pPInteraction(
-                        posx[i],
-                        posy[i],
-                        posz[i],
-                        velx[i],
-                        vely[i],
-                        velz[i],
-                        posx[j],
-                        posy[j],
-                        posz[j],
-                        mass[j]);
-            }
-            if constexpr (UseAccumulator)
-            {
-                velx[i] = pivelx;
-                vely[i] = pively;
-                velz[i] = pivelz;
-            }
+                pPInteraction(piposx, piposy, piposz, pivelx, pively, pivelz, posx[j], posy[j], posz[j], mass[j]);
+            velx[i] = pivelx;
+            vely[i] = pively;
+            velz[i] = pivelz;
         }
     }
 
@@ -443,12 +388,9 @@ namespace manualSoA
         }
     }
 
-    template <bool UseAccumulator>
     auto main(std::ostream& plotFile) -> int
     {
         auto title = "SoA"s;
-        if (UseAccumulator)
-            title += " Acc";
         std::cout << title << "\n";
         Stopwatch watch;
 
@@ -480,22 +422,12 @@ namespace manualSoA
         double sumMove = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            update<UseAccumulator>(
-                posx.data(),
-                posy.data(),
-                posz.data(),
-                velx.data(),
-                vely.data(),
-                velz.data(),
-                mass.data());
+            update(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), mass.data());
             sumUpdate += watch.printAndReset("update", '\t');
             move(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data());
             sumMove += watch.printAndReset("move");
         }
-        if (!UseAccumulator)
-            plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\t';
-        else
-            plotFile << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
+        plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
         return 0;
     }
@@ -548,20 +480,20 @@ namespace manualAoSoA
         pivelz += zdistance * sts;
     }
 
-    template <bool UseAccumulator, std::size_t Lanes>
+    template <std::size_t Lanes>
     void update(ParticleBlock<Lanes>* particles)
     {
         constexpr auto blocks = PROBLEM_SIZE / Lanes;
         for (std::size_t bi = 0; bi < blocks; bi++)
         {
-            std::conditional_t<UseAccumulator, ParticleBlock<Lanes>, ParticleBlock<Lanes>&> blockI = particles[bi];
+            auto blockI = particles[bi];
             for (std::size_t bj = 0; bj < blocks; bj++)
                 for (std::size_t j = 0; j < Lanes; j++)
                 {
-                    const auto& blockJ = particles[bj];
                     LLAMA_INDEPENDENT_DATA
                     for (std::size_t i = 0; i < Lanes; i++)
                     {
+                        const auto& blockJ = particles[bj];
                         pPInteraction(
                             blockI.pos.x[i],
                             blockI.pos.y[i],
@@ -575,12 +507,12 @@ namespace manualAoSoA
                             blockJ.mass[j]);
                     }
                 }
-            if constexpr (UseAccumulator)
-                particles[bi] = blockI;
+
+            particles[bi].vel = blockI.vel;
         }
     }
 
-    template <bool UseAccumulator, std::size_t Lanes>
+    template <std::size_t Lanes>
     void updateTiled(ParticleBlock<Lanes>* particles)
     {
         constexpr auto blocks = PROBLEM_SIZE / Lanes;
@@ -589,13 +521,14 @@ namespace manualAoSoA
         for (std::size_t ti = 0; ti < blocks / blocksPerTile; ti++)
             for (std::size_t tj = 0; tj < blocks / blocksPerTile; tj++)
                 for (std::size_t bi = 0; bi < blocksPerTile; bi++)
+                {
+                    auto blockI = particles[ti * blocksPerTile + bi];
                     for (std::size_t bj = 0; bj < blocksPerTile; bj++)
                         for (std::size_t j = 0; j < Lanes; j++)
                         {
                             LLAMA_INDEPENDENT_DATA
                             for (std::size_t i = 0; i < Lanes; i++)
                             {
-                                auto& blockI = particles[ti * blocksPerTile + bi];
                                 const auto& blockJ = particles[tj * blocksPerTile + bj];
                                 pPInteraction(
                                     blockI.pos.x[i],
@@ -610,6 +543,8 @@ namespace manualAoSoA
                                     blockJ.mass[j]);
                             }
                         }
+                    particles[bi].vel = blockI.vel;
+                }
     }
 
     template <std::size_t Lanes>
@@ -629,14 +564,12 @@ namespace manualAoSoA
         }
     }
 
-    template <bool UseAccumulator, bool Tiled, std::size_t Lanes>
-    auto main(std::ostream& plotFile) -> int
+    template <std::size_t Lanes>
+    auto main(std::ostream& plotFile, bool tiled) -> int
     {
         auto title = "AoSoA" + std::to_string(Lanes);
-        if (Tiled)
+        if (tiled)
             title += " tiled";
-        if (UseAccumulator)
-            title += " Acc";
         std::cout << title << "\n";
         Stopwatch watch;
 
@@ -667,18 +600,15 @@ namespace manualAoSoA
         double sumMove = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            if constexpr (Tiled)
-                updateTiled<UseAccumulator>(particles.data());
+            if (tiled)
+                updateTiled(particles.data());
             else
-                update<UseAccumulator>(particles.data());
+                update(particles.data());
             sumUpdate += watch.printAndReset("update", '\t');
             move(particles.data());
             sumMove += watch.printAndReset("move");
         }
-        if (!UseAccumulator)
-            plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\t';
-        else
-            plotFile << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
+        plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
         return 0;
     }
@@ -763,40 +693,6 @@ namespace manualAoSoA_manualAVX
     void update8(ParticleBlock* particles)
     {
         for (std::size_t bi = 0; bi < BLOCKS; bi++)
-            for (std::size_t bj = 0; bj < BLOCKS; bj++)
-                for (std::size_t j = 0; j < LANES; j++)
-                {
-                    const auto& blockJ = particles[bj];
-                    const __m256 pjposx = _mm256_broadcast_ss(&blockJ.pos.x[j]);
-                    const __m256 pjposy = _mm256_broadcast_ss(&blockJ.pos.y[j]);
-                    const __m256 pjposz = _mm256_broadcast_ss(&blockJ.pos.z[j]);
-                    const __m256 pjmass = _mm256_broadcast_ss(&blockJ.mass[j]);
-
-                    auto& blockI = particles[bi];
-                    __m256 pivelx = _mm256_load_ps(&blockI.vel.x[0]);
-                    __m256 pively = _mm256_load_ps(&blockI.vel.y[0]);
-                    __m256 pivelz = _mm256_load_ps(&blockI.vel.z[0]);
-                    pPInteraction(
-                        _mm256_load_ps(&blockI.pos.x[0]),
-                        _mm256_load_ps(&blockI.pos.y[0]),
-                        _mm256_load_ps(&blockI.pos.z[0]),
-                        pivelx,
-                        pively,
-                        pivelz,
-                        pjposx,
-                        pjposy,
-                        pjposz,
-                        pjmass);
-                    _mm256_store_ps(&blockI.vel.x[0], pivelx);
-                    _mm256_store_ps(&blockI.vel.y[0], pively);
-                    _mm256_store_ps(&blockI.vel.z[0], pivelz);
-                }
-    }
-
-    // update (read/write) 8 particles I based on the influence of 1 particle J with accumulator
-    void update8Acc(ParticleBlock* particles)
-    {
-        for (std::size_t bi = 0; bi < BLOCKS; bi++)
         {
             auto& blockI = particles[bi];
             const __m256 piposx = _mm256_load_ps(&blockI.pos.x[0]);
@@ -838,36 +734,8 @@ namespace manualAoSoA_manualAVX
         // return a[0] + a[1] + a[2] + a[3] + a[4] + a[5] + a[6] + a[7];
     }
 
-    // update (read/write) 1 particles I based on the influence of 8 particles J
-    void update1(ParticleBlock* particles)
-    {
-        for (std::size_t bi = 0; bi < BLOCKS; bi++)
-            for (std::size_t bj = 0; bj < BLOCKS; bj++)
-                for (std::size_t i = 0; i < LANES; i++)
-                {
-                    auto& blockI = particles[bi];
-                    const __m256 piposx = _mm256_broadcast_ss(&blockI.pos.x[i]);
-                    const __m256 piposy = _mm256_broadcast_ss(&blockI.pos.y[i]);
-                    const __m256 piposz = _mm256_broadcast_ss(&blockI.pos.z[i]);
-                    __m256 pivelx = _mm256_broadcast_ss(&blockI.vel.x[i]);
-                    __m256 pively = _mm256_broadcast_ss(&blockI.vel.y[i]);
-                    __m256 pivelz = _mm256_broadcast_ss(&blockI.vel.z[i]);
-
-                    const auto& blockJ = particles[bj];
-                    const __m256 pjposx = _mm256_load_ps(&blockJ.pos.x[0]);
-                    const __m256 pjposy = _mm256_load_ps(&blockJ.pos.y[0]);
-                    const __m256 pjposz = _mm256_load_ps(&blockJ.pos.z[0]);
-                    const __m256 pjmass = _mm256_load_ps(&blockJ.mass[0]);
-                    pPInteraction(piposx, piposy, piposz, pivelx, pively, pivelz, pjposx, pjposy, pjposz, pjmass);
-
-                    blockI.vel.x[i] = horizontalSum(pivelx);
-                    blockI.vel.y[i] = horizontalSum(pively);
-                    blockI.vel.z[i] = horizontalSum(pivelz);
-                }
-    }
-
     // update (read/write) 1 particles I based on the influence of 8 particles J with accumulator
-    void update1Acc(ParticleBlock* particles)
+    void update1(ParticleBlock* particles)
     {
         for (std::size_t bi = 0; bi < BLOCKS; bi++)
             for (std::size_t i = 0; i < LANES; i++)
@@ -913,12 +781,9 @@ namespace manualAoSoA_manualAVX
         }
     }
 
-    template <bool UseAccumulator, bool UseUpdate1>
-    auto main(std::ostream& plotFile) -> int
+    auto main(std::ostream& plotFile, bool useUpdate1) -> int
     {
-        auto title = "AoSoA" + std::to_string(LANES) + " AVX2 " + (UseUpdate1 ? "w1r8" : "w8r1"); // NOLINT
-        if (UseAccumulator)
-            title += " Acc";
+        auto title = "AoSoA" + std::to_string(LANES) + " AVX2 " + (useUpdate1 ? "w1r8" : "w8r1"); // NOLINT
         std::cout << title << '\n';
         Stopwatch watch;
 
@@ -947,28 +812,15 @@ namespace manualAoSoA_manualAVX
         double sumMove = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            if constexpr (UseUpdate1)
-            {
-                if constexpr (UseAccumulator)
-                    update1Acc(particles.data());
-                else
-                    update1(particles.data());
-            }
+            if (useUpdate1)
+                update1(particles.data());
             else
-            {
-                if constexpr (UseAccumulator)
-                    update8Acc(particles.data());
-                else
-                    update8(particles.data());
-            }
+                update8(particles.data());
             sumUpdate += watch.printAndReset("update", '\t');
             move(particles.data());
             sumMove += watch.printAndReset("move");
         }
-        if (!UseAccumulator)
-            plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\t';
-        else
-            plotFile << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
+        plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
         return 0;
     }
@@ -1049,35 +901,7 @@ namespace manualAoSoA_Vc
         pivelz = zdistanceSqr * sts + pivelz;
     }
 
-    // update (read/write) 8 particles I based on the influence of 1 particle J
     void update8(ParticleBlock* particles, int threads)
-    {
-#    pragma omp parallel for schedule(static) num_threads(threads)
-        for (std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
-        {
-            auto& blockI = particles[bi];
-            // std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& blockI) {
-            for (std::size_t bj = 0; bj < BLOCKS; bj++)
-                for (std::size_t j = 0; j < LANES; j++)
-                {
-                    const auto& blockJ = particles[bj];
-                    pPInteraction(
-                        blockI.pos.x,
-                        blockI.pos.y,
-                        blockI.pos.z,
-                        blockI.vel.x,
-                        blockI.vel.y,
-                        blockI.vel.z,
-                        blockJ.pos.x[j],
-                        blockJ.pos.y[j],
-                        blockJ.pos.z[j],
-                        blockJ.mass[j]);
-                }
-            // });
-        }
-    }
-
-    void update8Acc(ParticleBlock* particles, int threads)
     {
 #    pragma omp parallel for schedule(static) num_threads(threads)
         for (std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
@@ -1110,35 +934,7 @@ namespace manualAoSoA_Vc
         }
     }
 
-    // update (read/write) 8 particles I based on the influence of 1 particle J
     void update8Tiled(ParticleBlock* particles, int threads)
-    {
-        constexpr auto blocksPerTile = 128; // L1D_SIZE / sizeof(ParticleBlock);
-        static_assert(BLOCKS % blocksPerTile == 0);
-#    pragma omp parallel for schedule(static) num_threads(threads)
-        for (std::ptrdiff_t ti = 0; ti < BLOCKS / blocksPerTile; ti++)
-            for (std::size_t tj = 0; tj < BLOCKS / blocksPerTile; tj++)
-                for (std::size_t bi = 0; bi < blocksPerTile; bi++)
-                    for (std::size_t bj = 0; bj < blocksPerTile; bj++)
-                        for (std::size_t j = 0; j < LANES; j++)
-                        {
-                            auto& blockI = particles[ti * blocksPerTile + bi];
-                            const auto& blockJ = particles[tj * blocksPerTile + bj];
-                            pPInteraction(
-                                blockI.pos.x,
-                                blockI.pos.y,
-                                blockI.pos.z,
-                                blockI.vel.x,
-                                blockI.vel.y,
-                                blockI.vel.z,
-                                blockJ.pos.x[j],
-                                blockJ.pos.y[j],
-                                blockJ.pos.z[j],
-                                blockJ.mass[j]);
-                        }
-    }
-
-    void update8TiledAcc(ParticleBlock* particles, int threads)
     {
         constexpr auto blocksPerTile = 128; // L1D_SIZE / sizeof(ParticleBlock);
         static_assert(BLOCKS % blocksPerTile == 0);
@@ -1182,76 +978,7 @@ namespace manualAoSoA_Vc
             }
     }
 
-    // update (read/write) 8 particles I based on the influence of 1 particle J
-    void update8Tiled2(ParticleBlock* particles, int threads)
-    {
-        constexpr auto blocksPerL1Tile = 128; // L1D_SIZE / sizeof(ParticleBlock);
-        constexpr auto L1TilesPerL2Tile = 16; // L2D_SIZE / (blocksPerL1Tile * sizeof(ParticleBlock));
-        static_assert(BLOCKS % blocksPerL1Tile == 0);
-        static_assert(BLOCKS % (L1TilesPerL2Tile * blocksPerL1Tile) == 0);
-
-#    pragma omp parallel for schedule(static) num_threads(threads)
-        for (std::ptrdiff_t ti2 = 0; ti2 < BLOCKS / (L1TilesPerL2Tile * blocksPerL1Tile); ti2++)
-            for (std::size_t tj2 = 0; tj2 < BLOCKS / (L1TilesPerL2Tile * blocksPerL1Tile); tj2++)
-                for (std::size_t ti1 = 0; ti1 < L1TilesPerL2Tile; ti1++)
-                    for (std::size_t tj1 = 0; tj1 < L1TilesPerL2Tile; tj1++)
-                        for (std::size_t bi = 0; bi < blocksPerL1Tile; bi++)
-                            for (std::size_t bj = 0; bj < blocksPerL1Tile; bj++)
-                                for (std::size_t j = 0; j < LANES; j++)
-                                {
-                                    auto& blockI = particles
-                                        [ti2 * L1TilesPerL2Tile * blocksPerL1Tile + ti1 * blocksPerL1Tile + bi];
-                                    const auto& blockJ = particles
-                                        [tj2 * L1TilesPerL2Tile * blocksPerL1Tile + tj1 * blocksPerL1Tile + bj];
-                                    pPInteraction(
-                                        blockI.pos.x,
-                                        blockI.pos.y,
-                                        blockI.pos.z,
-                                        blockI.vel.x,
-                                        blockI.vel.y,
-                                        blockI.vel.z,
-                                        blockJ.pos.x[j],
-                                        blockJ.pos.y[j],
-                                        blockJ.pos.z[j],
-                                        blockJ.mass[j]);
-                                }
-    }
-
-    // update (read/write) 1 particles I based on the influence of 8 particles J
     void update1(ParticleBlock* particles, int threads)
-    {
-#    pragma omp parallel for schedule(static) num_threads(threads)
-        for (std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
-        {
-            auto& blockI = particles[bi];
-            // std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& blockI) {
-            for (std::size_t bj = 0; bj < BLOCKS; bj++)
-                for (std::size_t i = 0; i < LANES; i++)
-                {
-                    const auto& blockJ = particles[bj];
-                    vec pivelx = static_cast<FP>(blockI.vel.x[i]);
-                    vec pively = static_cast<FP>(blockI.vel.y[i]);
-                    vec pivelz = static_cast<FP>(blockI.vel.z[i]);
-                    pPInteraction(
-                        static_cast<FP>(blockI.pos.x[i]),
-                        static_cast<FP>(blockI.pos.y[i]),
-                        static_cast<FP>(blockI.pos.z[i]),
-                        pivelx,
-                        pively,
-                        pivelz,
-                        blockJ.pos.x,
-                        blockJ.pos.y,
-                        blockJ.pos.z,
-                        blockJ.mass);
-                    blockI.vel.x[i] = pivelx.sum();
-                    blockI.vel.y[i] = pively.sum();
-                    blockI.vel.z[i] = pivelz.sum();
-                }
-            // });
-        }
-    }
-
-    void update1Acc(ParticleBlock* particles, int threads)
     {
 #    pragma omp parallel for schedule(static) num_threads(threads)
         for (std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
@@ -1305,14 +1032,11 @@ namespace manualAoSoA_Vc
         }
     }
 
-    template <bool UseAccumulator>
     auto main(std::ostream& plotFile, int threads, bool useUpdate1, bool tiled = false) -> int
     {
         auto title = "AoSoA" + std::to_string(LANES) + " Vc" + (useUpdate1 ? " w1r8" : " w8r1"); // NOLINT
         if (tiled)
             title += " tiled";
-        if (UseAccumulator)
-            title += " Acc";
         title += " " + std::to_string(threads) + "Th";
 
         std::cout << title << '\n';
@@ -1344,32 +1068,19 @@ namespace manualAoSoA_Vc
         for (std::size_t s = 0; s < STEPS; ++s)
         {
             if (useUpdate1)
-            {
-                if (UseAccumulator)
-                    update1Acc(particles.data(), threads);
-                else
-                    update1(particles.data(), threads);
-            }
+                update1(particles.data(), threads);
             else
             {
-                if (tiled && UseAccumulator)
-                    update8TiledAcc(particles.data(), threads);
-                else if (tiled && !UseAccumulator)
-                    // update8Tiled2(particles.data(), threads);
+                if (tiled)
                     update8Tiled(particles.data(), threads);
-                else if (!tiled && UseAccumulator)
-                    update8Acc(particles.data(), threads);
-                else if (!tiled && !UseAccumulator)
+                else
                     update8(particles.data(), threads);
             }
             sumUpdate += watch.printAndReset("update", '\t');
             move(particles.data(), threads);
             sumMove += watch.printAndReset("move");
         }
-        if (!UseAccumulator)
-            plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\t';
-        else
-            plotFile << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
+        plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
         return 0;
     }
@@ -1395,51 +1106,31 @@ try
             // only AoSoA (3) needs lanes
             using Lanes
                 = std::conditional_t<decltype(i)::value == 3, mp_list_c<std::size_t, 8, 16>, mp_list_c<std::size_t, 0>>;
-            mp_for_each<Lanes>(
-                [&, i](auto lanes)
-                {
-                    mp_for_each<mp_list_c<bool, false, true>>(
-                        [&, i](auto useAccumulator) {
-                            r += usellama::
-                                main<decltype(i)::value, decltype(useAccumulator)::value, decltype(lanes)::value>(
-                                    plotFile);
-                        });
-                });
+            mp_for_each<Lanes>([&, i](auto lanes)
+                               { r += usellama::main<decltype(i)::value, decltype(lanes)::value>(plotFile); });
         });
-    r += manualAoS::main<false>(plotFile);
-    r += manualAoS::main<true>(plotFile);
-    r += manualSoA::main<false>(plotFile);
-    r += manualSoA::main<true>(plotFile);
+    r += manualAoS::main(plotFile);
+    r += manualSoA::main(plotFile);
     mp_for_each<mp_list_c<std::size_t, 8, 16>>(
         [&](auto lanes)
         {
-            r += manualAoSoA::main<false, false, decltype(lanes)::value>(plotFile);
-            r += manualAoSoA::main<true, false, decltype(lanes)::value>(plotFile);
+            for (auto tiled : {false, true})
+                r += manualAoSoA::main<decltype(lanes)::value>(plotFile, tiled);
         });
-    // r += manualAoSoA::main<false, true>(plotFile);
-    // r += manualAoSoA::main<true, true>(plotFile);
 #ifdef __AVX2__
-    r += manualAoSoA_manualAVX::main<false, false>(plotFile);
-    r += manualAoSoA_manualAVX::main<true, false>(plotFile);
-    r += manualAoSoA_manualAVX::main<false, true>(plotFile);
-    r += manualAoSoA_manualAVX::main<true, true>(plotFile);
+    for (auto useUpdate1 : {false, true})
+        r += manualAoSoA_manualAVX::main(plotFile, useUpdate1);
 #endif
 #if __has_include(<Vc/Vc>)
-    for (int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
-        for (auto useUpdate1 : {false, true})
-            for (auto tiled : {false, true})
-            {
-                if (useUpdate1 && tiled)
-                    continue;
-                mp_for_each<mp_list_c<bool, false, true>>(
-                    [&](auto useAccumulator) {
-                        r += manualAoSoA_Vc::main<decltype(useAccumulator)::value>(
-                            plotFile,
-                            threads,
-                            useUpdate1,
-                            tiled);
-                    });
-            }
+    // for (int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
+    const auto threads = 1;
+    for (auto useUpdate1 : {false, true})
+        for (auto tiled : {false, true})
+        {
+            if (useUpdate1 && tiled)
+                continue;
+            r += manualAoSoA_Vc::main(plotFile, threads, useUpdate1, tiled);
+        }
 #endif
 
     std::cout << "Plot with: ./nbody.sh\n";
