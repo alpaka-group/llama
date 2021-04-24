@@ -15,7 +15,10 @@ if (Vc_FOUND)
 	target_link_libraries(${PROJECT_NAME} PRIVATE Vc::Vc)
 endif()
 
-if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR
+	CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR
+	CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM" OR
+	CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
 	target_compile_options(${PROJECT_NAME} PRIVATE
 		-fno-math-errno # sqrt prevents vectorization otherwise
 		-march=native
