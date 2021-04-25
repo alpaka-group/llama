@@ -198,9 +198,10 @@ namespace
                 return word & (Word{1} << bit);
             }
 
-            auto operator=(bool b)
+            auto operator=(bool b) -> BoolRef
             {
                 word ^= (-Word{b} ^ word) & (Word{1} << bit);
+                return *this;
             }
         };
 
