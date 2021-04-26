@@ -639,7 +639,7 @@ namespace manualAoSoA_manualAVX
 
     constexpr auto BLOCKS = PROBLEM_SIZE / LANES;
     const __m256 vEPS2 = _mm256_set1_ps(EPS2); // NOLINT(cert-err58-cpp)
-    const __m256 vTIMESTEP = _mm256_broadcast_ss(&TIMESTEP); // NOLINT(cert-err58-cpp)
+    const __m256 vTIMESTEP = _mm256_set1_ps(TIMESTEP); // NOLINT(cert-err58-cpp)
 
     inline void pPInteraction(
         __m256 piposx,
