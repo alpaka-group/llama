@@ -1,12 +1,12 @@
 #pragma once
 
+#include "Array.hpp"
+#include "Core.hpp"
+
+#include <type_traits>
+
 #ifdef __cpp_concepts
-
-#    include "Array.hpp"
-#    include "Core.hpp"
-
 #    include <concepts>
-#    include <type_traits>
 
 namespace llama
 {

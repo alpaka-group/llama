@@ -2,12 +2,12 @@
 
 #pragma once
 
+#include "ArrayDimsIndexRange.hpp"
+#include "Core.hpp"
+
 // FIXME: this test is actually not correct, because __cpp_constexpr_dynamic_alloc only guarantees constexpr
 // std::allocator
 #ifdef __cpp_constexpr_dynamic_alloc
-
-#    include "ArrayDimsIndexRange.hpp"
-#    include "Core.hpp"
 
 namespace llama
 {
