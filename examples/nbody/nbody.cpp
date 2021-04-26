@@ -85,7 +85,7 @@ namespace usellama
             pi = particles(i);
             for (std::size_t j = 0; j < PROBLEM_SIZE; ++j)
                 pPInteraction(pi, particles(j));
-            particles(i) = pi;
+            particles(i)(tag::Vel{}) = pi(tag::Vel{});
         }
     }
 
