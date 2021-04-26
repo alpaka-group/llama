@@ -1037,7 +1037,7 @@ namespace manualAoSoA_Vc
         auto title = "AoSoA" + std::to_string(LANES) + " Vc" + (useUpdate1 ? " w1r8" : " w8r1"); // NOLINT
         if (tiled)
             title += " tiled";
-        title += " " + std::to_string(threads) + "Th";
+        title += " " + std::to_string(threads) + "Thrds";
 
         std::cout << title << '\n';
         Stopwatch watch;
@@ -1209,7 +1209,7 @@ namespace manualAoS_Vc
     template <std::size_t LANES>
     auto main(std::ostream& plotFile, int threads) -> int
     {
-        auto title = "AoS Vc " + std::to_string(LANES) + "Lanes " + std::to_string(threads) + "Threads";
+        auto title = "AoS Vc " + std::to_string(LANES) + "Lns " + std::to_string(threads) + "Thrds";
         std::cout << title << '\n';
         Stopwatch watch;
 
@@ -1255,7 +1255,12 @@ try
 
     std::ofstream plotFile{"nbody.tsv"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
-    plotFile << "\"\"\t\"update\"\t\"move\"\t\"update with acc\"\t\"move with acc\"\n";
+    plotFile << "\"\"\t\"update\"\t\"move\"\n";
+
+    // Note:
+    // Tiled versions did not give any performance benefit, so they are disabled by default.
+    // SIMD versions updating 8 particles by 1 are also a bit faster than updating 1 particle by 8, so the latter are
+    // also disabled.
 
     int r = 0;
     using namespace boost::mp11;
@@ -1273,26 +1278,33 @@ try
     mp_for_each<mp_list_c<std::size_t, 8, 16>>(
         [&](auto lanes)
         {
-            for (auto tiled : {false, true})
-                r += manualAoSoA::main<decltype(lanes)::value>(plotFile, tiled);
+            // for (auto tiled : {false, true})
+            //    r += manualAoSoA::main<decltype(lanes)::value>(plotFile, tiled);
+            r += manualAoSoA::main<decltype(lanes)::value>(plotFile, false);
         });
 #ifdef __AVX2__
-    for (auto useUpdate1 : {false, true})
-        r += manualAoSoA_manualAVX::main(plotFile, useUpdate1);
+    // for (auto useUpdate1 : {false, true})
+    //    r += manualAoSoA_manualAVX::main(plotFile, useUpdate1);
+    r += manualAoSoA_manualAVX::main(plotFile, false);
 #endif
 #if __has_include(<Vc/Vc>)
-    // for (int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
-    const auto threads = 1;
-    for (auto useUpdate1 : {false, true})
-        for (auto tiled : {false, true})
-        {
-            if (useUpdate1 && tiled)
-                continue;
-            r += manualAoSoA_Vc::main(plotFile, threads, useUpdate1, tiled);
-        }
-    // mp_for_each<mp_list_c<std::size_t, 1, 2, 4, 8, 16>>(
-    //    [&](auto lanes) { r += manualAoS_Vc::main<decltype(lanes)::value>(plotFile, threads); });
-    r += manualAoS_Vc::main<manualAoS_Vc::LANES>(plotFile, threads);
+    for (int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
+    {
+        // for (auto useUpdate1 : {false, true})
+        //    for (auto tiled : {false, true})
+        //    {
+        //        if (useUpdate1 && tiled)
+        //            continue;
+        //        r += manualAoSoA_Vc::main(plotFile, threads, useUpdate1, tiled);
+        //    }
+        r += manualAoSoA_Vc::main(plotFile, threads, false, false);
+    }
+    for (int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
+    {
+        // mp_for_each<mp_list_c<std::size_t, 1, 2, 4, 8, 16>>(
+        //    [&](auto lanes) { r += manualAoS_Vc::main<decltype(lanes)::value>(plotFile, threads); });
+        r += manualAoS_Vc::main<manualAoS_Vc::LANES>(plotFile, threads);
+    }
 #endif
 
     std::cout << "Plot with: ./nbody.sh\n";
@@ -1305,7 +1317,7 @@ set xtics rotate by 45 right
 set key out top center maxrows 3
 set yrange [0:*]
 set ylabel "runtime [s]"
-plot 'nbody.tsv' using 2:xtic(1) ti col, "" using 4 ti col
+plot 'nbody.tsv' using 2:xtic(1) ti col
 )",
         PROBLEM_SIZE / 1000,
         boost::asio::ip::host_name());
