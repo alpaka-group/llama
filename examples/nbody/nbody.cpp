@@ -65,7 +65,7 @@ namespace usellama
     // clang-format on
 
     template <typename VirtualParticleI, typename VirtualParticleJ>
-    LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticleI&& pi, VirtualParticleJ pj)
+    LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticleI& pi, VirtualParticleJ pj)
     {
         auto dist = pi(tag::Pos{}) - pj(tag::Pos{});
         dist *= dist;
@@ -84,7 +84,6 @@ namespace usellama
         {
             llama::One<Particle> pi;
             pi = particles(i);
-            LLAMA_INDEPENDENT_DATA
             for (std::size_t j = 0; j < PROBLEM_SIZE; ++j)
                 pPInteraction(pi, particles(j));
             particles(i) = pi;
