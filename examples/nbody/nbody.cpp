@@ -1244,6 +1244,7 @@ set style fill solid
 set xtics rotate by 45 right
 set key out top center maxrows 3
 set yrange [0:*]
+set ylabel "runtime [s]"
 plot 'nbody.tsv' using 2:xtic(1) ti col, "" using 4 ti col
 )",
         PROBLEM_SIZE / 1000,
