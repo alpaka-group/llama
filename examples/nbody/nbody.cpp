@@ -1091,33 +1091,85 @@ namespace manualAoS_Vc
     using manualAoS::Particle;
     using manualAoSoA_Vc::BLOCKS;
     using manualAoSoA_Vc::LANES;
-    using manualAoSoA_Vc::pPInteraction;
-    using manualAoSoA_Vc::vec;
+    // using manualAoSoA_Vc::pPInteraction;
+    // using manualAoSoA_Vc::vec;
 
-    constexpr int offsets[8]
-        = {sizeof(Particle),
-           sizeof(Particle),
-           sizeof(Particle),
-           sizeof(Particle),
-           sizeof(Particle),
-           sizeof(Particle),
-           sizeof(Particle),
-           sizeof(Particle)};
+    static_assert(PROBLEM_SIZE % LANES == 0);
 
+    template <std::size_t LANES>
+    constexpr auto offsets = []()
+    {
+        std::array<std::uint32_t, LANES> o{};
+        std::uint32_t cur = 0;
+        for (auto& i : o)
+        {
+            i = cur;
+            cur += sizeof(Particle) / sizeof(FP);
+        }
+        return o;
+    }();
 
+    template <typename vec>
+    void pPInteraction(
+        vec piposx,
+        vec piposy,
+        vec piposz,
+        vec& pivelx,
+        vec& pively,
+        vec& pivelz,
+        vec pjposx,
+        vec pjposy,
+        vec pjposz,
+        vec pjmass)
+    {
+        const vec xdistance = piposx - pjposx;
+        const vec ydistance = piposy - pjposy;
+        const vec zdistance = piposz - pjposz;
+        const vec xdistanceSqr = xdistance * xdistance;
+        const vec ydistanceSqr = ydistance * ydistance;
+        const vec zdistanceSqr = zdistance * zdistance;
+        const vec distSqr = EPS2 + xdistanceSqr + ydistanceSqr + zdistanceSqr;
+        const vec distSixth = distSqr * distSqr * distSqr;
+        const vec invDistCube = [&]
+        {
+            if constexpr (ALLOW_RSQRT)
+            {
+                const vec r = Vc::rsqrt(distSixth);
+                if constexpr (NEWTON_RAPHSON_AFTER_RSQRT)
+                {
+                    // from: http://stackoverflow.com/q/14752399/556899
+                    const vec three = 3.0f;
+                    const vec half = 0.5f;
+                    const vec muls = distSixth * r * r;
+                    return (half * r) * (three - muls);
+                }
+                else
+                    return r;
+            }
+            else
+                return 1.0f / Vc::sqrt(distSixth);
+        }();
+        const vec sts = pjmass * invDistCube * TIMESTEP;
+        pivelx = xdistanceSqr * sts + pivelx;
+        pively = ydistanceSqr * sts + pively;
+        pivelz = zdistanceSqr * sts + pivelz;
+    }
+
+    template <std::size_t LANES>
     void update(Particle* particles, int threads)
     {
+        using vec = Vc::SimdArray<FP, LANES>;
 #    pragma omp parallel for schedule(static) num_threads(threads)
         for (std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += LANES)
         {
             // gather
             auto& pi = particles[i];
-            const vec piposx = vec(&pi.pos.x, offsets);
-            const vec piposy = vec(&pi.pos.y, offsets);
-            const vec piposz = vec(&pi.pos.z, offsets);
-            vec pivelx = vec(&pi.vel.x, offsets);
-            vec pively = vec(&pi.vel.y, offsets);
-            vec pivelz = vec(&pi.vel.z, offsets);
+            const vec piposx = vec(&pi.pos.x, offsets<LANES>);
+            const vec piposy = vec(&pi.pos.y, offsets<LANES>);
+            const vec piposz = vec(&pi.pos.z, offsets<LANES>);
+            vec pivelx = vec(&pi.vel.x, offsets<LANES>);
+            vec pively = vec(&pi.vel.y, offsets<LANES>);
+            vec pivelz = vec(&pi.vel.z, offsets<LANES>);
 
             for (std::size_t j = 0; j < PROBLEM_SIZE; j++)
             {
@@ -1131,27 +1183,33 @@ namespace manualAoS_Vc
             }
 
             // scatter
-            pivelx.scatter(&pi.vel.x, offsets);
-            pively.scatter(&pi.vel.y, offsets);
-            pivelz.scatter(&pi.vel.z, offsets);
+            pivelx.scatter(&pi.vel.x, offsets<LANES>.data());
+            pively.scatter(&pi.vel.y, offsets<LANES>.data());
+            pivelz.scatter(&pi.vel.z, offsets<LANES>.data());
         }
     }
 
+    template <std::size_t LANES>
     void move(Particle* particles, int threads)
     {
+        using vec = Vc::SimdArray<FP, LANES>;
 #    pragma omp parallel for schedule(static) num_threads(threads)
         for (std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += LANES)
         {
             auto& pi = particles[i];
-            (vec(&pi.pos.x, offsets) + vec(&pi.vel.x, offsets) * TIMESTEP).scatter(&pi.pos.x, offsets);
-            (vec(&pi.pos.y, offsets) + vec(&pi.vel.y, offsets) * TIMESTEP).scatter(&pi.pos.y, offsets);
-            (vec(&pi.pos.z, offsets) + vec(&pi.vel.z, offsets) * TIMESTEP).scatter(&pi.pos.z, offsets);
+            (vec(&pi.pos.x, offsets<LANES>) + vec(&pi.vel.x, offsets<LANES>) * TIMESTEP)
+                .scatter(&pi.pos.x, offsets<LANES>.data());
+            (vec(&pi.pos.y, offsets<LANES>) + vec(&pi.vel.y, offsets<LANES>) * TIMESTEP)
+                .scatter(&pi.pos.y, offsets<LANES>.data());
+            (vec(&pi.pos.z, offsets<LANES>) + vec(&pi.vel.z, offsets<LANES>) * TIMESTEP)
+                .scatter(&pi.pos.z, offsets<LANES>.data());
         }
     }
 
+    template <std::size_t LANES>
     auto main(std::ostream& plotFile, int threads) -> int
     {
-        auto title = "AoS Vc " + std::to_string(LANES) + "L " + std::to_string(threads) + "Th";
+        auto title = "AoS Vc " + std::to_string(LANES) + "Lanes " + std::to_string(threads) + "Threads";
         std::cout << title << '\n';
         Stopwatch watch;
 
@@ -1176,9 +1234,9 @@ namespace manualAoS_Vc
         double sumMove = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            update(particles.data(), threads);
+            update<LANES>(particles.data(), threads);
             sumUpdate += watch.printAndReset("update", '\t');
-            move(particles.data(), threads);
+            move<LANES>(particles.data(), threads);
             sumMove += watch.printAndReset("move");
         }
         plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
@@ -1232,7 +1290,9 @@ try
                 continue;
             r += manualAoSoA_Vc::main(plotFile, threads, useUpdate1, tiled);
         }
-    r += manualAoS_Vc::main(plotFile, threads);
+    // mp_for_each<mp_list_c<std::size_t, 1, 2, 4, 8, 16>>(
+    //    [&](auto lanes) { r += manualAoS_Vc::main<decltype(lanes)::value>(plotFile, threads); });
+    r += manualAoS_Vc::main<manualAoS_Vc::LANES>(plotFile, threads);
 #endif
 
     std::cout << "Plot with: ./nbody.sh\n";
