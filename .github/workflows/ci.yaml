@@ -27,7 +27,7 @@ jobs:
     - name: amalgamation
       run: |
         cd include/llama
-        ../../build/amalgamate/amalgamate -o ../../build -H
+        ../../build/amalgamate/amalgamate -o ../../build -H -v -a
     - name: upload llama.hpp
       uses: actions/upload-artifact@v2
       with:
