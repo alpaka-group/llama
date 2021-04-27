@@ -27,6 +27,7 @@ constexpr auto DUMP_MAPPING = false;
 constexpr auto ALLOW_RSQRT = true; // rsqrt can be way faster, but less accurate
 constexpr auto NEWTON_RAPHSON_AFTER_RSQRT
     = true; // generate a newton raphson refinement after explicit calls to rsqrt()
+constexpr auto RUN_UPATE = true; // run update step. Useful to disable for benchmarking the move step.
 constexpr FP TIMESTEP = 0.0001f;
 constexpr FP EPS2 = 0.01f;
 
@@ -178,8 +179,11 @@ namespace usellama
         double sumMove = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            update(particles);
-            sumUpdate += watch.printAndReset("update", '\t');
+            if constexpr (RUN_UPATE)
+            {
+                update(particles);
+                sumUpdate += watch.printAndReset("update", '\t');
+            }
             move(particles);
             sumMove += watch.printAndReset("move");
         }
@@ -316,8 +320,11 @@ namespace manualAoS
         double sumMove = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            update(particles.data());
-            sumUpdate += watch.printAndReset("update", '\t');
+            if constexpr (RUN_UPATE)
+            {
+                update(particles.data());
+                sumUpdate += watch.printAndReset("update", '\t');
+            }
             move(particles.data());
             sumMove += watch.printAndReset("move");
         }
@@ -420,8 +427,11 @@ namespace manualSoA
         double sumMove = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            update(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), mass.data());
-            sumUpdate += watch.printAndReset("update", '\t');
+            if constexpr (RUN_UPATE)
+            {
+                update(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), mass.data());
+                sumUpdate += watch.printAndReset("update", '\t');
+            }
             move(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data());
             sumMove += watch.printAndReset("move");
         }
@@ -598,11 +608,14 @@ namespace manualAoSoA
         double sumMove = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            if (tiled)
-                updateTiled(particles.data());
-            else
-                update(particles.data());
-            sumUpdate += watch.printAndReset("update", '\t');
+            if constexpr (RUN_UPATE)
+            {
+                if (tiled)
+                    updateTiled(particles.data());
+                else
+                    update(particles.data());
+                sumUpdate += watch.printAndReset("update", '\t');
+            }
             move(particles.data());
             sumMove += watch.printAndReset("move");
         }
@@ -810,11 +823,14 @@ namespace manualAoSoA_manualAVX
         double sumMove = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            if (useUpdate1)
-                update1(particles.data());
-            else
-                update8(particles.data());
-            sumUpdate += watch.printAndReset("update", '\t');
+            if constexpr (RUN_UPATE)
+            {
+                if (useUpdate1)
+                    update1(particles.data());
+                else
+                    update8(particles.data());
+                sumUpdate += watch.printAndReset("update", '\t');
+            }
             move(particles.data());
             sumMove += watch.printAndReset("move");
         }
@@ -1065,16 +1081,19 @@ namespace manualAoSoA_Vc
         double sumMove = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            if (useUpdate1)
-                update1(particles.data(), threads);
-            else
+            if constexpr (RUN_UPATE)
             {
-                if (tiled)
-                    update8Tiled(particles.data(), threads);
+                if (useUpdate1)
+                    update1(particles.data(), threads);
                 else
-                    update8(particles.data(), threads);
+                {
+                    if (tiled)
+                        update8Tiled(particles.data(), threads);
+                    else
+                        update8(particles.data(), threads);
+                }
+                sumUpdate += watch.printAndReset("update", '\t');
             }
-            sumUpdate += watch.printAndReset("update", '\t');
             move(particles.data(), threads);
             sumMove += watch.printAndReset("move");
         }
@@ -1232,8 +1251,11 @@ namespace manualAoS_Vc
         double sumMove = 0;
         for (std::size_t s = 0; s < STEPS; ++s)
         {
-            update<LANES>(particles.data(), threads);
-            sumUpdate += watch.printAndReset("update", '\t');
+            if constexpr (RUN_UPATE)
+            {
+                update<LANES>(particles.data(), threads);
+                sumUpdate += watch.printAndReset("update", '\t');
+            }
             move<LANES>(particles.data(), threads);
             sumMove += watch.printAndReset("move");
         }
@@ -1314,8 +1336,11 @@ set style fill solid
 set xtics rotate by 45 right
 set key out top center maxrows 3
 set yrange [0:*]
-set ylabel "runtime [s]"
-plot 'nbody.tsv' using 2:xtic(1) ti col
+set y2range [0:*]
+set ylabel "update runtime [s]"
+set y2label "move runtime [s]"
+set y2tics auto
+plot 'nbody.tsv' using 2:xtic(1) ti col axis x1y1, "" using 3 ti col axis x1y2
 )",
         PROBLEM_SIZE / 1000,
         boost::asio::ip::host_name());
