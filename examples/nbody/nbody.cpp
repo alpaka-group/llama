@@ -1264,6 +1264,99 @@ namespace manualAoS_Vc
         return 0;
     }
 } // namespace manualAoS_Vc
+
+namespace manualSoA_Vc
+{
+    using manualAoSoA_Vc::BLOCKS;
+    using manualAoSoA_Vc::LANES;
+    using manualAoSoA_Vc::pPInteraction;
+    using manualAoSoA_Vc::vec;
+
+    void update(FP* posx, FP* posy, FP* posz, FP* velx, FP* vely, FP* velz, FP* mass, int threads)
+    {
+#    pragma omp parallel for schedule(static) num_threads(threads)
+        for (std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += LANES)
+        {
+            const vec piposx = vec(posx + i);
+            const vec piposy = vec(posy + i);
+            const vec piposz = vec(posz + i);
+            vec pivelx = vec(velx + i);
+            vec pively = vec(vely + i);
+            vec pivelz = vec(velz + i);
+            for (std::size_t j = 0; j < PROBLEM_SIZE; ++j)
+                pPInteraction(piposx, piposy, piposz, pivelx, pively, pivelz, posx[j], posy[j], posz[j], mass[j]);
+            pivelx.store(velx + i);
+            pively.store(vely + i);
+            pivelz.store(velz + i);
+        }
+    }
+
+    void move(FP* posx, FP* posy, FP* posz, const FP* velx, const FP* vely, const FP* velz, int threads)
+    {
+#    pragma omp parallel for schedule(static) num_threads(threads)
+        for (std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += LANES)
+        {
+            (vec(posx + i) + vec(velx + i) * TIMESTEP).store(posx + i);
+            (vec(posy + i) + vec(vely + i) * TIMESTEP).store(posy + i);
+            (vec(posz + i) + vec(velz + i) * TIMESTEP).store(posz + i);
+        }
+    }
+
+    auto main(std::ostream& plotFile, int threads) -> int
+    {
+        auto title = "SoA Vc " + std::to_string(threads) + "Thrds";
+        std::cout << title << '\n';
+        Stopwatch watch;
+
+        using Vector = std::vector<FP, llama::bloballoc::AlignedAllocator<FP, 64>>;
+        Vector posx(PROBLEM_SIZE);
+        Vector posy(PROBLEM_SIZE);
+        Vector posz(PROBLEM_SIZE);
+        Vector velx(PROBLEM_SIZE);
+        Vector vely(PROBLEM_SIZE);
+        Vector velz(PROBLEM_SIZE);
+        Vector mass(PROBLEM_SIZE);
+        watch.printAndReset("alloc");
+
+        std::default_random_engine engine;
+        std::normal_distribution<FP> dist(FP(0), FP(1));
+        for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+        {
+            posx[i] = dist(engine);
+            posy[i] = dist(engine);
+            posz[i] = dist(engine);
+            velx[i] = dist(engine) / FP(10);
+            vely[i] = dist(engine) / FP(10);
+            velz[i] = dist(engine) / FP(10);
+            mass[i] = dist(engine) / FP(100);
+        }
+        watch.printAndReset("init");
+
+        double sumUpdate = 0;
+        double sumMove = 0;
+        for (std::size_t s = 0; s < STEPS; ++s)
+        {
+            if constexpr (RUN_UPATE)
+            {
+                update(
+                    posx.data(),
+                    posy.data(),
+                    posz.data(),
+                    velx.data(),
+                    vely.data(),
+                    velz.data(),
+                    mass.data(),
+                    threads);
+                sumUpdate += watch.printAndReset("update", '\t');
+            }
+            move(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), threads);
+            sumMove += watch.printAndReset("move");
+        }
+        plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
+
+        return 0;
+    }
+} // namespace manualSoA_Vc
 #endif
 
 auto main() -> int
@@ -1325,6 +1418,8 @@ try
         //    [&](auto lanes) { r += manualAoS_Vc::main<decltype(lanes)::value>(plotFile, threads); });
         r += manualAoS_Vc::main<manualAoS_Vc::LANES>(plotFile, threads);
     }
+    for (int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
+        r += manualSoA_Vc::main(plotFile, threads);
 #endif
 
     std::cout << "Plot with: ./nbody.sh\n";
