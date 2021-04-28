@@ -846,11 +846,7 @@ namespace manualAoSoA_manualAVX
 
 namespace manualAoSoA_Vc
 {
-    using vec = Vc::Vector<FP>;
-
-    // this automatically determined LANES based on Vc's chosen vector length
-    constexpr auto LANES = sizeof(vec) / sizeof(FP);
-
+    template <typename vec>
     struct alignas(32) ParticleBlock
     {
         struct
@@ -868,7 +864,6 @@ namespace manualAoSoA_Vc
         vec mass;
     };
 
-    constexpr auto BLOCKS = PROBLEM_SIZE / LANES;
 
     template <typename vec>
     inline void pPInteraction(
@@ -916,8 +911,12 @@ namespace manualAoSoA_Vc
         pivelz = zdistanceSqr * sts + pivelz;
     }
 
-    void update8(ParticleBlock* particles, int threads)
+    template <typename vec>
+    void update8(ParticleBlock<vec>* particles, int threads)
     {
+        constexpr auto LANES = vec::size();
+        constexpr auto BLOCKS = PROBLEM_SIZE / LANES;
+
 #    pragma omp parallel for schedule(static) num_threads(threads)
         for (std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
         {
@@ -949,8 +948,12 @@ namespace manualAoSoA_Vc
         }
     }
 
-    void update8Tiled(ParticleBlock* particles, int threads)
+    template <typename vec>
+    void update8Tiled(ParticleBlock<vec>* particles, int threads)
     {
+        constexpr auto LANES = vec::size();
+        constexpr auto BLOCKS = PROBLEM_SIZE / LANES;
+
         constexpr auto blocksPerTile = 128; // L1D_SIZE / sizeof(ParticleBlock);
         static_assert(BLOCKS % blocksPerTile == 0);
 #    pragma omp parallel for schedule(static) num_threads(threads)
@@ -993,8 +996,12 @@ namespace manualAoSoA_Vc
             }
     }
 
-    void update1(ParticleBlock* particles, int threads)
+    template <typename vec>
+    void update1(ParticleBlock<vec>* particles, int threads)
     {
+        constexpr auto LANES = vec::size();
+        constexpr auto BLOCKS = PROBLEM_SIZE / LANES;
+
 #    pragma omp parallel for schedule(static) num_threads(threads)
         for (std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
         {
@@ -1033,8 +1040,11 @@ namespace manualAoSoA_Vc
         }
     }
 
-    void move(ParticleBlock* particles, int threads)
+    template <typename vec>
+    void move(ParticleBlock<vec>* particles, int threads)
     {
+        constexpr auto BLOCKS = PROBLEM_SIZE / vec::size();
+
 #    pragma omp parallel for schedule(static) num_threads(threads)
         for (std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
         {
@@ -1047,9 +1057,10 @@ namespace manualAoSoA_Vc
         }
     }
 
+    template <typename vec>
     auto main(std::ostream& plotFile, int threads, bool useUpdate1, bool tiled = false) -> int
     {
-        auto title = "AoSoA" + std::to_string(LANES) + " Vc" + (useUpdate1 ? " w1r8" : " w8r1"); // NOLINT
+        auto title = "AoSoA" + std::to_string(vec::size()) + " Vc" + (useUpdate1 ? " w1r8" : " w8r1"); // NOLINT
         if (tiled)
             title += " tiled";
         if (threads > 1)
@@ -1058,7 +1069,9 @@ namespace manualAoSoA_Vc
         std::cout << title << '\n';
         Stopwatch watch;
 
-        std::vector<ParticleBlock> particles(BLOCKS);
+        static_assert(PROBLEM_SIZE % vec::size() == 0);
+        constexpr auto BLOCKS = PROBLEM_SIZE / vec::size();
+        std::vector<ParticleBlock<vec>> particles(BLOCKS);
         watch.printAndReset("alloc");
 
         std::default_random_engine engine;
@@ -1066,7 +1079,7 @@ namespace manualAoSoA_Vc
         for (std::size_t bi = 0; bi < BLOCKS; ++bi)
         {
             auto& block = particles[bi];
-            for (std::size_t i = 0; i < LANES; ++i)
+            for (std::size_t i = 0; i < vec::size(); ++i)
             {
                 block.pos.x[i] = dist(engine);
                 block.pos.y[i] = dist(engine);
@@ -1108,12 +1121,7 @@ namespace manualAoSoA_Vc
 namespace manualAoS_Vc
 {
     using manualAoS::Particle;
-    using manualAoSoA_Vc::BLOCKS;
-    using manualAoSoA_Vc::LANES;
     using manualAoSoA_Vc::pPInteraction;
-    // using manualAoSoA_Vc::vec;
-
-    static_assert(PROBLEM_SIZE % LANES == 0);
 
     template <std::size_t LANES>
     constexpr auto offsets = []()
@@ -1128,10 +1136,11 @@ namespace manualAoS_Vc
         return o;
     }();
 
-    template <std::size_t LANES>
+    template <typename vec>
     void update(Particle* particles, int threads)
     {
-        using vec = Vc::SimdArray<FP, LANES>;
+        constexpr auto LANES = vec::size();
+
 #    pragma omp parallel for schedule(static) num_threads(threads)
         for (std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += LANES)
         {
@@ -1162,10 +1171,11 @@ namespace manualAoS_Vc
         }
     }
 
-    template <std::size_t LANES>
+    template <typename vec>
     void move(Particle* particles, int threads)
     {
-        using vec = Vc::SimdArray<FP, LANES>;
+        constexpr auto LANES = vec::size();
+
 #    pragma omp parallel for schedule(static) num_threads(threads)
         for (std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += LANES)
         {
@@ -1179,10 +1189,10 @@ namespace manualAoS_Vc
         }
     }
 
-    template <std::size_t LANES>
+    template <typename vec>
     auto main(std::ostream& plotFile, int threads) -> int
     {
-        auto title = "AoS Vc " + std::to_string(LANES) + "Lns";
+        auto title = "AoS Vc"s;
         if (threads > 1)
             title += " " + std::to_string(threads) + "Thrds";
         std::cout << title << '\n';
@@ -1211,10 +1221,10 @@ namespace manualAoS_Vc
         {
             if constexpr (RUN_UPATE)
             {
-                update<LANES>(particles.data(), threads);
+                update<vec>(particles.data(), threads);
                 sumUpdate += watch.printAndReset("update", '\t');
             }
-            move<LANES>(particles.data(), threads);
+            move<vec>(particles.data(), threads);
             sumMove += watch.printAndReset("move");
         }
         plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
@@ -1225,15 +1235,13 @@ namespace manualAoS_Vc
 
 namespace manualSoA_Vc
 {
-    using manualAoSoA_Vc::BLOCKS;
-    using manualAoSoA_Vc::LANES;
     using manualAoSoA_Vc::pPInteraction;
-    using manualAoSoA_Vc::vec;
 
+    template <typename vec>
     void update(FP* posx, FP* posy, FP* posz, FP* velx, FP* vely, FP* velz, FP* mass, int threads)
     {
 #    pragma omp parallel for schedule(static) num_threads(threads)
-        for (std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += LANES)
+        for (std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += vec::size())
         {
             const vec piposx = vec(posx + i);
             const vec piposy = vec(posy + i);
@@ -1259,10 +1267,11 @@ namespace manualSoA_Vc
         }
     }
 
+    template <typename vec>
     void move(FP* posx, FP* posy, FP* posz, const FP* velx, const FP* vely, const FP* velz, int threads)
     {
 #    pragma omp parallel for schedule(static) num_threads(threads)
-        for (std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += LANES)
+        for (std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += vec::size())
         {
             (vec(posx + i) + vec(velx + i) * TIMESTEP).store(posx + i);
             (vec(posy + i) + vec(vely + i) * TIMESTEP).store(posy + i);
@@ -1270,6 +1279,7 @@ namespace manualSoA_Vc
         }
     }
 
+    template <typename vec>
     auto main(std::ostream& plotFile, int threads) -> int
     {
         auto title = "SoA Vc"s;
@@ -1308,7 +1318,7 @@ namespace manualSoA_Vc
         {
             if constexpr (RUN_UPATE)
             {
-                update(
+                update<vec>(
                     posx.data(),
                     posy.data(),
                     posz.data(),
@@ -1319,7 +1329,7 @@ namespace manualSoA_Vc
                     threads);
                 sumUpdate += watch.printAndReset("update", '\t');
             }
-            move(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), threads);
+            move<vec>(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), threads);
             sumMove += watch.printAndReset("move");
         }
         plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
@@ -1332,9 +1342,13 @@ namespace manualSoA_Vc
 auto main() -> int
 try
 {
+    using vec = Vc::Vector<FP>;
+    // using vec = Vc::SimdArray<FP, 16>;
+
     std::cout << PROBLEM_SIZE / 1000 << "k particles "
               << "(" << PROBLEM_SIZE * sizeof(FP) * 7 / 1024 << "kiB)\n"
-              << "Threads: " << std::thread::hardware_concurrency() << "\n";
+              << "Threads: " << std::thread::hardware_concurrency() << "\n"
+              << "SIMD lanes: " << vec::size() << "\n";
 
     std::ofstream plotFile{"nbody.tsv"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
@@ -1378,18 +1392,19 @@ try
         //    {
         //        if (useUpdate1 && tiled)
         //            continue;
-        //        r += manualAoSoA_Vc::main(plotFile, threads, useUpdate1, tiled);
+        //        r += manualAoSoA_Vc::main<vec>(plotFile, threads, useUpdate1, tiled);
         //    }
-        r += manualAoSoA_Vc::main(plotFile, threads, false, false);
+        r += manualAoSoA_Vc::main<vec>(plotFile, threads, false, false);
     }
     for (int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
     {
         // mp_for_each<mp_list_c<std::size_t, 1, 2, 4, 8, 16>>(
-        //    [&](auto lanes) { r += manualAoS_Vc::main<decltype(lanes)::value>(plotFile, threads); });
-        r += manualAoS_Vc::main<manualAoS_Vc::LANES>(plotFile, threads);
+        //    [&](auto lanes) { r += manualAoS_Vc::main<Vc::SimdArray<FP, decltype(lanes)::value>>(plotFile, threads);
+        //    });
+        r += manualAoS_Vc::main<vec>(plotFile, threads);
     }
     for (int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
-        r += manualSoA_Vc::main(plotFile, threads);
+        r += manualSoA_Vc::main<vec>(plotFile, threads);
 #endif
 
     std::cout << "Plot with: ./nbody.sh\n";
