@@ -1342,7 +1342,7 @@ try
     using vec = Vc::Vector<FP>;
     // using vec = Vc::SimdArray<FP, 16>;
 
-    std::cout << PROBLEM_SIZE / 1000 << "k particles "
+    std::cout << PROBLEM_SIZE / 1024 << "ki particles "
               << "(" << PROBLEM_SIZE * sizeof(FP) * 7 / 1024 << "kiB)\n"
               << "Threads: " << std::thread::hardware_concurrency() << "\n"
               << "SIMD lanes: " << vec::size() << "\n";
@@ -1407,7 +1407,7 @@ try
     std::cout << "Plot with: ./nbody.sh\n";
     std::ofstream{"nbody.sh"} << fmt::format(
         R"(#!/usr/bin/gnuplot -p
-set title "nbody CPU {0}k particles on {1}"
+set title "nbody CPU {}ki particles on {}"
 set style data histograms
 set style fill solid
 set xtics rotate by 45 right
@@ -1419,7 +1419,7 @@ set y2label "move runtime [s]"
 set y2tics auto
 plot 'nbody.tsv' using 2:xtic(1) ti col axis x1y1, "" using 3 ti col axis x1y2
 )",
-        PROBLEM_SIZE / 1000,
+        PROBLEM_SIZE / 1024,
         boost::asio::ip::host_name());
 
     return r;
