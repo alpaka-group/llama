@@ -49,6 +49,8 @@ One
 :cpp:`llama::One<RecordDim>` is a shortcut to create a scalar :cpp:`llama::VirtualRecord`.
 This is useful when we want to have a single record instance e.g. as a local variable.
 
+.. code-block:: C++
+
     llama::One<Pixel> pixel;
     pixel(color{}, g{}) = 1.0;
     auto pixel2 = pixel; // independent copy
@@ -143,17 +145,16 @@ Let's examine this deeper in an example:
 
     bool result;
 
-    // Let assume a1 and a2 using A and b using B.
+    llama::One<A> a1, a2;
+    llama::One<B> b;
 
     a1(x{}) = 0.0f;
     a1(y{}) = 2.0f;
 
-    a2(x{}) = 1.0f;
-    a2(y{}) = 1.0f;
-    //a2() = 1.0f; would do the same
+    a2 = 1.0f; // sets x and y to 1.0f
 
-    b (x{}) = 1.0f;
-    b (z{}) = 2.0f;
+    b(x{}) = 1.0f;
+    b(z{}) = 2.0f;
 
     result = a1 < a2;
     //result is false, because a1.y > a2.y

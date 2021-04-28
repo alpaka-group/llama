@@ -59,7 +59,7 @@ Goals
 LLAMA tries to achieve the following goals:
 
 * Allow users to express a generic data structure independently of how it is stored.
-  Consequently, algorithms written against this data structure’s interface are not bound to the data structure’s layout in memory.
+  Consequently, algorithms written against this data structure's interface are not bound to the data structure’s layout in memory.
   This requires a data layout independent way to access the data structure.
 * Provide generic facilities to map the user-defined data structure into a performant data layout.
   Also allowing specialization of this mapping for specific data structures by the user.
