@@ -1123,35 +1123,34 @@ namespace manualAoS_Vc
     using manualAoS::Particle;
     using manualAoSoA_Vc::pPInteraction;
 
-    template <std::size_t LANES>
-    constexpr auto offsets = []()
-    {
-        std::array<std::uint32_t, LANES> o{};
-        std::uint32_t cur = 0;
-        for (auto& i : o)
-        {
-            i = cur;
-            cur += sizeof(Particle) / sizeof(FP);
-        }
-        return o;
-    }();
+    template <typename vec>
+    const auto particleGatherScatterStrides = 42;
+
+    template <typename T>
+    const auto particleGatherScatterStrides<Vc::Vector<T>> = Vc::Vector<std::uint32_t>{Vc::IndexesFromZero}
+        * std::uint32_t{sizeof(Particle) / sizeof(FP)};
+
+    template <typename T, std::size_t N>
+    const auto particleGatherScatterStrides<Vc::SimdArray<T, N>> = Vc::SimdArray<std::uint32_t, N>{Vc::IndexesFromZero}
+        * std::uint32_t{sizeof(Particle) / sizeof(FP)};
 
     template <typename vec>
     void update(Particle* particles, int threads)
     {
         constexpr auto LANES = vec::size();
+        const auto strides = particleGatherScatterStrides<vec>;
 
 #    pragma omp parallel for schedule(static) num_threads(threads)
         for (std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += LANES)
         {
             // gather
             auto& pi = particles[i];
-            const vec piposx = vec(&pi.pos.x, offsets<LANES>);
-            const vec piposy = vec(&pi.pos.y, offsets<LANES>);
-            const vec piposz = vec(&pi.pos.z, offsets<LANES>);
-            vec pivelx = vec(&pi.vel.x, offsets<LANES>);
-            vec pively = vec(&pi.vel.y, offsets<LANES>);
-            vec pivelz = vec(&pi.vel.z, offsets<LANES>);
+            const vec piposx = vec(&pi.pos.x, strides);
+            const vec piposy = vec(&pi.pos.y, strides);
+            const vec piposz = vec(&pi.pos.z, strides);
+            vec pivelx = vec(&pi.vel.x, strides);
+            vec pively = vec(&pi.vel.y, strides);
+            vec pivelz = vec(&pi.vel.z, strides);
 
             for (std::size_t j = 0; j < PROBLEM_SIZE; j++)
             {
@@ -1165,9 +1164,9 @@ namespace manualAoS_Vc
             }
 
             // scatter
-            pivelx.scatter(&pi.vel.x, offsets<LANES>.data());
-            pively.scatter(&pi.vel.y, offsets<LANES>.data());
-            pivelz.scatter(&pi.vel.z, offsets<LANES>.data());
+            pivelx.scatter(&pi.vel.x, strides);
+            pively.scatter(&pi.vel.y, strides);
+            pivelz.scatter(&pi.vel.z, strides);
         }
     }
 
@@ -1175,17 +1174,15 @@ namespace manualAoS_Vc
     void move(Particle* particles, int threads)
     {
         constexpr auto LANES = vec::size();
+        const auto strides = particleGatherScatterStrides<vec>;
 
 #    pragma omp parallel for schedule(static) num_threads(threads)
         for (std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += LANES)
         {
             auto& pi = particles[i];
-            (vec(&pi.pos.x, offsets<LANES>) + vec(&pi.vel.x, offsets<LANES>) * TIMESTEP)
-                .scatter(&pi.pos.x, offsets<LANES>.data());
-            (vec(&pi.pos.y, offsets<LANES>) + vec(&pi.vel.y, offsets<LANES>) * TIMESTEP)
-                .scatter(&pi.pos.y, offsets<LANES>.data());
-            (vec(&pi.pos.z, offsets<LANES>) + vec(&pi.vel.z, offsets<LANES>) * TIMESTEP)
-                .scatter(&pi.pos.z, offsets<LANES>.data());
+            (vec(&pi.pos.x, strides) + vec(&pi.vel.x, strides) * TIMESTEP).scatter(&pi.pos.x, strides);
+            (vec(&pi.pos.y, strides) + vec(&pi.vel.y, strides) * TIMESTEP).scatter(&pi.pos.y, strides);
+            (vec(&pi.pos.z, strides) + vec(&pi.vel.z, strides) * TIMESTEP).scatter(&pi.pos.z, strides);
         }
     }
 
