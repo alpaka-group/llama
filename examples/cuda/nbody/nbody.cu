@@ -1,5 +1,6 @@
 #include "../../common/Stopwatch.hpp"
 
+#include <boost/asio/ip/host_name.hpp>
 #include <cuda_runtime.h>
 #include <fmt/format.h>
 #include <fstream>
@@ -8,7 +9,6 @@
 #include <llama/llama.hpp>
 #include <random>
 #include <string>
-#include <utility>
 
 using FP = float;
 
@@ -16,6 +16,7 @@ constexpr auto PROBLEM_SIZE = 64 * 1024; ///< total number of particles
 constexpr auto SHARED_ELEMENTS_PER_BLOCK = 512;
 constexpr auto STEPS = 5; ///< number of steps to calculate
 constexpr auto ALLOW_RSQRT = true; // rsqrt can be way faster, but less accurate
+constexpr auto RUN_UPATE = true; // run update step. Useful to disable for benchmarking the move step.
 constexpr FP TIMESTEP = 0.0001f;
 
 constexpr auto THREADS_PER_BLOCK = 256;
@@ -75,7 +76,7 @@ __device__ void pPInteraction(VirtualParticleI&& pi, VirtualParticleJ pj)
     pi(tag::Vel()) += dist * sts;
 }
 
-template <std::size_t ProblemSize, bool UseAccumulator, std::size_t BlockSize, int MappingSM, typename View>
+template <std::size_t ProblemSize, std::size_t BlockSize, int MappingSM, typename View>
 __global__ void updateSM(View particles)
 {
     // FIXME: removing this lambda makes nvcc 11 segfault
@@ -108,8 +109,7 @@ __global__ void updateSM(View particles)
     const auto tbi = blockIdx.x;
 
     llama::One<Particle> pi;
-    if constexpr (UseAccumulator)
-        pi = particles(ti);
+    pi = particles(ti);
     for (std::size_t blockOffset = 0; blockOffset < ProblemSize; blockOffset += BlockSize)
     {
         LLAMA_INDEPENDENT_DATA
@@ -119,36 +119,23 @@ __global__ void updateSM(View particles)
 
         LLAMA_INDEPENDENT_DATA
         for (auto j = std::size_t{0}; j < BlockSize; ++j)
-        {
-            if constexpr (UseAccumulator)
-                pPInteraction(pi, sharedView(j));
-            else
-                pPInteraction(particles(ti), sharedView(j));
-        }
+            pPInteraction(pi, sharedView(j));
         __syncthreads();
     }
-    if constexpr (UseAccumulator)
-        particles(ti) = pi;
+    particles(ti)(tag::Vel{}) = pi(tag::Vel{});
 }
 
-template <std::size_t ProblemSize, bool UseAccumulator, typename View>
+template <std::size_t ProblemSize, typename View>
 __global__ void update(View particles)
 {
     const auto ti = threadIdx.x + blockIdx.x * blockDim.x;
 
     llama::One<Particle> pi;
-    if constexpr (UseAccumulator)
-        pi = particles(ti);
+    pi = particles(ti);
     LLAMA_INDEPENDENT_DATA
     for (auto j = std::size_t{0}; j < ProblemSize; ++j)
-    {
-        if constexpr (UseAccumulator)
-            pPInteraction(pi, particles(j));
-        else
-            pPInteraction(particles(ti), particles(j));
-    }
-    if constexpr (UseAccumulator)
-        particles(ti) = pi;
+        pPInteraction(pi, particles(j));
+    particles(ti)(tag::Vel{}) = pi(tag::Vel{});
 }
 
 template <std::size_t ProblemSize, typename View>
@@ -164,7 +151,7 @@ void checkError(cudaError_t code)
         throw std::runtime_error(cudaGetErrorString(code));
 }
 
-template <int Mapping, int MappingSM, bool UseAccumulator>
+template <int Mapping, int MappingSM>
 void run(std::ostream& plotFile, bool useSharedMemory)
 try
 {
@@ -184,8 +171,6 @@ try
     auto title = "GM " + mappingName(Mapping);
     if (useSharedMemory)
         title += " SM " + mappingName(MappingSM);
-    if (UseAccumulator)
-        title += " Acc";
     std::cout << '\n' << title << '\n';
 
     auto mapping = []
@@ -223,18 +208,18 @@ try
 
     watch.printAndReset("alloc");
 
-    std::mt19937_64 generator;
+    std::default_random_engine engine;
     std::normal_distribution<FP> distribution(FP(0), FP(1));
     for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
     {
         llama::One<Particle> p;
-        p(tag::Pos(), tag::X()) = distribution(generator);
-        p(tag::Pos(), tag::Y()) = distribution(generator);
-        p(tag::Pos(), tag::Z()) = distribution(generator);
-        p(tag::Vel(), tag::X()) = distribution(generator) / FP(10);
-        p(tag::Vel(), tag::Y()) = distribution(generator) / FP(10);
-        p(tag::Vel(), tag::Z()) = distribution(generator) / FP(10);
-        p(tag::Mass()) = distribution(generator) / FP(100);
+        p(tag::Pos(), tag::X()) = distribution(engine);
+        p(tag::Pos(), tag::Y()) = distribution(engine);
+        p(tag::Pos(), tag::Z()) = distribution(engine);
+        p(tag::Vel(), tag::X()) = distribution(engine) / FP(10);
+        p(tag::Vel(), tag::Y()) = distribution(engine) / FP(10);
+        p(tag::Vel(), tag::Z()) = distribution(engine) / FP(10);
+        p(tag::Mass()) = distribution(engine) / FP(100);
         hostView(i) = p;
     }
 
@@ -270,15 +255,17 @@ try
     double sumMove = 0;
     for (std::size_t s = 0; s < STEPS; ++s)
     {
-        start();
-        if (useSharedMemory)
-            updateSM<PROBLEM_SIZE, UseAccumulator, SHARED_ELEMENTS_PER_BLOCK, MappingSM>
-                <<<blocks, THREADS_PER_BLOCK>>>(accView);
-        else
-            update<PROBLEM_SIZE, UseAccumulator><<<blocks, THREADS_PER_BLOCK>>>(accView);
-        const auto secondsUpdate = stop();
-        std::cout << "update " << secondsUpdate << " s\t";
-        sumUpdate += secondsUpdate;
+        if constexpr (RUN_UPATE)
+        {
+            start();
+            if (useSharedMemory)
+                updateSM<PROBLEM_SIZE, SHARED_ELEMENTS_PER_BLOCK, MappingSM><<<blocks, THREADS_PER_BLOCK>>>(accView);
+            else
+                update<PROBLEM_SIZE><<<blocks, THREADS_PER_BLOCK>>>(accView);
+            const auto secondsUpdate = stop();
+            std::cout << "update " << secondsUpdate << " s\t";
+            sumUpdate += secondsUpdate;
+        }
 
         start();
         move<PROBLEM_SIZE><<<blocks, THREADS_PER_BLOCK>>>(accView);
@@ -286,10 +273,7 @@ try
         std::cout << "move " << secondsMove << " s\n";
         sumMove += secondsMove;
     }
-    if (!UseAccumulator)
-        plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\t';
-    else
-        plotFile << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
+    plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
     start();
     for (auto i = 0; i < accView.storageBlobs.rank; i++)
@@ -313,7 +297,7 @@ catch (const std::exception& e)
 int main()
 try
 {
-    std::cout << PROBLEM_SIZE / 1000 << "k particles (" << PROBLEM_SIZE * llama::sizeOf<Particle> / 1024 << "kiB)\n"
+    std::cout << PROBLEM_SIZE / 1024 << "ki particles (" << PROBLEM_SIZE * llama::sizeOf<Particle> / 1024 << "kiB)\n"
               << "Caching " << SHARED_ELEMENTS_PER_BLOCK << " particles ("
               << SHARED_ELEMENTS_PER_BLOCK * llama::sizeOf<SharedMemoryParticle> / 1024 << " kiB) in shared memory\n"
               << "Using " << THREADS_PER_BLOCK << " per block\n";
@@ -326,43 +310,31 @@ try
 
     std::ofstream plotFile{"nbody.tsv"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
-    plotFile << "\"\"\t\"update\"\t\"move\"\t\"update with acc\"\t\"move with acc\"\n";
+    plotFile << "\"\"\t\"update\"\t\"move\"\n";
 
     using namespace boost::mp11;
+    mp_for_each<mp_iota_c<5>>([&](auto i) { run<decltype(i)::value, 0>(plotFile, false); });
     mp_for_each<mp_iota_c<5>>(
         [&](auto i)
-        {
-            mp_for_each<mp_list_c<bool, false, true>>(
-                [&](auto useAccumulator)
-                { run<decltype(i)::value, 0, decltype(useAccumulator)::value>(plotFile, false); });
-        });
-    mp_for_each<mp_iota_c<5>>(
-        [&](auto i)
-        {
-            mp_for_each<mp_iota_c<4>>(
-                [&](auto j)
-                {
-                    mp_for_each<mp_list_c<bool, false, true>>(
-                        [&](auto useAccumulator) {
-                            run<decltype(i)::value, decltype(j)::value, decltype(useAccumulator)::value>(
-                                plotFile,
-                                true);
-                        });
-                });
-        });
+        { mp_for_each<mp_iota_c<4>>([&](auto j) { run<decltype(i)::value, decltype(j)::value>(plotFile, true); }); });
 
     std::cout << "Plot with: ./nbody.sh\n";
     std::ofstream{"nbody.sh"} << fmt::format(
         R"(#!/usr/bin/gnuplot -p
-set title "nbody CUDA {0}k particles"
+set title "nbody CUDA {}k particles on {}"
 set style data histograms
 set style fill solid
 set xtics rotate by 45 right
 set key out top center maxrows 3
 set yrange [0:*]
-plot 'nbody.tsv' using 2:xtic(1) ti col, "" using 4 ti col
+set y2range [0:*]
+set ylabel "update runtime [s]"
+set y2label "move runtime [s]"
+set y2tics auto
+plot 'nbody.tsv' using 2:xtic(1) ti col axis x1y1, "" using 3 ti col axis x1y2
 )",
-        PROBLEM_SIZE / 1000);
+        PROBLEM_SIZE / 1024,
+        boost::asio::ip::host_name());
 
     return 0;
 }
