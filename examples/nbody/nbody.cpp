@@ -1052,7 +1052,8 @@ namespace manualAoSoA_Vc
         auto title = "AoSoA" + std::to_string(LANES) + " Vc" + (useUpdate1 ? " w1r8" : " w8r1"); // NOLINT
         if (tiled)
             title += " tiled";
-        title += " " + std::to_string(threads) + "Thrds";
+        if (threads > 1)
+            title += " " + std::to_string(threads) + "Thrds";
 
         std::cout << title << '\n';
         Stopwatch watch;
@@ -1181,7 +1182,9 @@ namespace manualAoS_Vc
     template <std::size_t LANES>
     auto main(std::ostream& plotFile, int threads) -> int
     {
-        auto title = "AoS Vc " + std::to_string(LANES) + "Lns " + std::to_string(threads) + "Thrds";
+        auto title = "AoS Vc " + std::to_string(LANES) + "Lns";
+        if (threads > 1)
+            title += " " + std::to_string(threads) + "Thrds";
         std::cout << title << '\n';
         Stopwatch watch;
 
@@ -1269,7 +1272,9 @@ namespace manualSoA_Vc
 
     auto main(std::ostream& plotFile, int threads) -> int
     {
-        auto title = "SoA Vc " + std::to_string(threads) + "Thrds";
+        auto title = "SoA Vc"s;
+        if (threads > 1)
+            title += " " + std::to_string(threads) + "Thrds";
         std::cout << title << '\n';
         Stopwatch watch;
 
