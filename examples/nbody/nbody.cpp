@@ -870,6 +870,7 @@ namespace manualAoSoA_Vc
 
     constexpr auto BLOCKS = PROBLEM_SIZE / LANES;
 
+    template <typename vec>
     inline void pPInteraction(
         vec piposx,
         vec piposy,
@@ -1108,7 +1109,7 @@ namespace manualAoS_Vc
     using manualAoS::Particle;
     using manualAoSoA_Vc::BLOCKS;
     using manualAoSoA_Vc::LANES;
-    // using manualAoSoA_Vc::pPInteraction;
+    using manualAoSoA_Vc::pPInteraction;
     // using manualAoSoA_Vc::vec;
 
     static_assert(PROBLEM_SIZE % LANES == 0);
@@ -1125,52 +1126,6 @@ namespace manualAoS_Vc
         }
         return o;
     }();
-
-    template <typename vec>
-    void pPInteraction(
-        vec piposx,
-        vec piposy,
-        vec piposz,
-        vec& pivelx,
-        vec& pively,
-        vec& pivelz,
-        vec pjposx,
-        vec pjposy,
-        vec pjposz,
-        vec pjmass)
-    {
-        const vec xdistance = piposx - pjposx;
-        const vec ydistance = piposy - pjposy;
-        const vec zdistance = piposz - pjposz;
-        const vec xdistanceSqr = xdistance * xdistance;
-        const vec ydistanceSqr = ydistance * ydistance;
-        const vec zdistanceSqr = zdistance * zdistance;
-        const vec distSqr = EPS2 + xdistanceSqr + ydistanceSqr + zdistanceSqr;
-        const vec distSixth = distSqr * distSqr * distSqr;
-        const vec invDistCube = [&]
-        {
-            if constexpr (ALLOW_RSQRT)
-            {
-                const vec r = Vc::rsqrt(distSixth);
-                if constexpr (NEWTON_RAPHSON_AFTER_RSQRT)
-                {
-                    // from: http://stackoverflow.com/q/14752399/556899
-                    const vec three = 3.0f;
-                    const vec half = 0.5f;
-                    const vec muls = distSixth * r * r;
-                    return (half * r) * (three - muls);
-                }
-                else
-                    return r;
-            }
-            else
-                return 1.0f / Vc::sqrt(distSixth);
-        }();
-        const vec sts = pjmass * invDistCube * TIMESTEP;
-        pivelx = xdistanceSqr * sts + pivelx;
-        pively = ydistanceSqr * sts + pively;
-        pivelz = zdistanceSqr * sts + pivelz;
-    }
 
     template <std::size_t LANES>
     void update(Particle* particles, int threads)
@@ -1284,7 +1239,17 @@ namespace manualSoA_Vc
             vec pively = vec(vely + i);
             vec pivelz = vec(velz + i);
             for (std::size_t j = 0; j < PROBLEM_SIZE; ++j)
-                pPInteraction(piposx, piposy, piposz, pivelx, pively, pivelz, posx[j], posy[j], posz[j], mass[j]);
+                pPInteraction(
+                    piposx,
+                    piposy,
+                    piposz,
+                    pivelx,
+                    pively,
+                    pivelz,
+                    vec(posx[j]),
+                    vec(posy[j]),
+                    vec(posz[j]),
+                    vec(mass[j]));
             pivelx.store(velx + i);
             pively.store(vely + i);
             pivelz.store(velz + i);
