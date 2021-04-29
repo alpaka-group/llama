@@ -28,6 +28,8 @@ static_assert(SHARED_ELEMENTS_PER_BLOCK % THREADS_PER_BLOCK == 0);
 
 constexpr FP EPS2 = 0.01;
 
+using namespace std::literals;
+
 // clang-format off
 namespace tag
 {
@@ -148,7 +150,7 @@ __global__ void move(View particles)
 void checkError(cudaError_t code)
 {
     if (code != cudaSuccess)
-        throw std::runtime_error(cudaGetErrorString(code));
+        throw std::runtime_error("CUDA Error: "s + cudaGetErrorString(code));
 }
 
 template <int Mapping, int MappingSM>
@@ -305,7 +307,11 @@ try
     cudaGetDevice(&device);
     cudaDeviceProp prop{};
     cudaGetDeviceProperties(&prop, device);
-    std::cout << "Running on " << prop.name << " " << prop.sharedMemPerBlock / 1024 << "kiB SM\n";
+    fmt::print(
+        "Running on {}, {}MiB GM, {}kiB SM\n",
+        prop.name,
+        prop.totalGlobalMem / 1024 / 1024,
+        prop.sharedMemPerBlock / 1024);
     std::cout << std::fixed;
 
     std::ofstream plotFile{"nbody.tsv"};
