@@ -59,11 +59,11 @@ Goals
 LLAMA tries to achieve the following goals:
 
 * Allow users to express a generic data structure independently of how it is stored.
-  Consequently, algorithms written against this data structure's interface are not bound to the data structure’s layout in memory.
+  Consequently, algorithms written against this data structure's interface are not bound to the data structure's layout in memory.
   This requires a data layout independent way to access the data structure.
 * Provide generic facilities to map the user-defined data structure into a performant data layout.
   Also allowing specialization of this mapping for specific data structures by the user.
-  A data structure’s mapping is set and resolved statically at compile time, thus guaranteeing the same performance as manually written versions of a data structure.
+  A data structure's mapping is set and resolved statically at compile time, thus guaranteeing the same performance as manually written versions of a data structure.
 * Enable efficient, high throughput copying between different data layouts of the same data structure, which is a necessity in heterogeneous systems.
   This requires meta data on the data layout.
   Deep copies are the focus, although LLAMA should include the possibility for zero copies and in-situ transformation of data layouts.
@@ -122,7 +122,7 @@ While developing, we have some in house and partner applications in mind.
 These example use cases are not the only targets of LLAMA, but drove the development and the feature set.
 
 One of the major projects in EP-SFT is the `ROOT data analysis framework <https://root.cern/>`_ for data analysis in high-energy physics.
-A critical component is the fast transfer of petabytes of filesystem data taken from CERN’s detectors into an efficient in-memory representation for subsequent analysis algorithms.
+A critical component is the fast transfer of petabytes of filesystem data taken from CERN's detectors into an efficient in-memory representation for subsequent analysis algorithms.
 This data are particle interaction events, each containing a series of variable size attributes.
 A typical analysis involves column selection, cuts, filters, computation of new attributes and histograms.
 The data in ROOT files is stored in columnar blocks and significant effort is made to make the data flow and aggregation as optimal as possible.
