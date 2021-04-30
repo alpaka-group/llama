@@ -296,6 +296,160 @@ catch (const std::exception& e)
     std::cerr << "Exception: " << e.what() << std::endl;
 }
 
+// based on:
+// https://developer.nvidia.com/gpugems/gpugems3/part-v-physics-simulation/chapter-31-fast-n-body-simulation-cuda
+// The original GPU gems implementation is with THREADS_PER_BLOCK == SHARED_ELEMENTS_PER_BLOCK
+namespace manual
+{
+    using FP3 = std::conditional_t<std::is_same_v<FP, float>, float3, double3>;
+    using FP4 = std::conditional_t<std::is_same_v<FP, float>, float4, double4>;
+
+    __device__ FP3 bodyBodyInteraction(FP4 bi, FP4 bj, FP3 ai)
+    {
+        FP3 r;
+        r.x = bj.x - bi.x;
+        r.y = bj.y - bi.y;
+        r.z = bj.z - bi.z;
+        FP distSqr = r.x * r.x + r.y * r.y + r.z * r.z + EPS2;
+        FP distSixth = distSqr * distSqr * distSqr;
+        FP invDistCube = ALLOW_RSQRT ? rsqrt(distSixth) : (1.0f / sqrtf(distSixth));
+        FP s = bj.w * invDistCube;
+        ai.x += r.x * s * +TIMESTEP;
+        ai.y += r.y * s * +TIMESTEP;
+        ai.z += r.z * s * +TIMESTEP;
+        return ai;
+    }
+
+    __shared__ FP4 shPosition[SHARED_ELEMENTS_PER_BLOCK];
+
+    __device__ FP3 tile_calculation(FP4 myPosition, FP3 accel)
+    {
+        for (int i = 0; i < SHARED_ELEMENTS_PER_BLOCK; i++)
+            accel = bodyBodyInteraction(myPosition, shPosition[i], accel);
+        return accel;
+    }
+
+    __global__ void calculate_forces(const FP4* globalX, FP4* globalA)
+    {
+        FP3 acc = {0.0f, 0.0f, 0.0f};
+        const int gtid = blockIdx.x * THREADS_PER_BLOCK + threadIdx.x;
+        const FP4 myPosition = globalX[gtid];
+        for (int i = 0, tile = 0; i < PROBLEM_SIZE; i += SHARED_ELEMENTS_PER_BLOCK, tile++)
+        {
+            for (int j = threadIdx.x; j < SHARED_ELEMENTS_PER_BLOCK; j += THREADS_PER_BLOCK)
+                shPosition[j] = globalX[tile * SHARED_ELEMENTS_PER_BLOCK + j];
+            __syncthreads();
+            acc = tile_calculation(myPosition, acc);
+            __syncthreads();
+        }
+        globalA[gtid] = {acc.x, acc.y, acc.z, 0.0f};
+    }
+
+    __global__ void move(FP4* globalX, const FP4* globalA)
+    {
+        const int gtid = blockIdx.x * THREADS_PER_BLOCK + threadIdx.x;
+        FP4 pos = globalX[gtid];
+        const FP4 vel = globalA[gtid];
+        pos.x += vel.x * +TIMESTEP;
+        pos.y += vel.y * +TIMESTEP;
+        pos.z += vel.z * +TIMESTEP;
+        globalX[gtid] = pos;
+    }
+
+    void run(std::ostream& plotFile)
+    try
+    {
+        auto title = "GPU gems";
+        std::cout << '\n' << title << '\n';
+
+        Stopwatch watch;
+
+        auto hostPositions = std::vector<FP4>(PROBLEM_SIZE);
+        auto hostVelocities = std::vector<FP4>(PROBLEM_SIZE);
+
+        FP4* accPositions;
+        checkError(cudaMalloc(&accPositions, PROBLEM_SIZE * sizeof(FP4)));
+        FP4* accVelocities;
+        checkError(cudaMalloc(&accVelocities, PROBLEM_SIZE * sizeof(FP4)));
+
+        watch.printAndReset("alloc");
+
+        std::default_random_engine engine;
+        std::normal_distribution<FP> distribution(FP(0), FP(1));
+        for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+        {
+            hostPositions[i].x = distribution(engine);
+            hostPositions[i].y = distribution(engine);
+            hostPositions[i].z = distribution(engine);
+            hostVelocities[i].x = distribution(engine);
+            hostVelocities[i].y = distribution(engine);
+            hostVelocities[i].z = distribution(engine);
+            hostPositions[i].w = distribution(engine);
+        }
+
+        watch.printAndReset("init");
+
+        cudaEvent_t startEvent;
+        cudaEvent_t stopEvent;
+        cudaEventCreate(&startEvent);
+        cudaEventCreate(&stopEvent);
+
+        auto start = [&] { checkError(cudaEventRecord(startEvent)); };
+        auto stop = [&]
+        {
+            checkError(cudaEventRecord(stopEvent));
+            checkError(cudaEventSynchronize(stopEvent));
+            float milliseconds = 0;
+            checkError(cudaEventElapsedTime(&milliseconds, startEvent, stopEvent));
+            return milliseconds / 1000;
+        };
+
+        start();
+        checkError(cudaMemcpy(accPositions, hostPositions.data(), PROBLEM_SIZE * sizeof(FP4), cudaMemcpyHostToDevice));
+        checkError(
+            cudaMemcpy(accVelocities, hostVelocities.data(), PROBLEM_SIZE * sizeof(FP4), cudaMemcpyHostToDevice));
+        std::cout << "copy H->D " << stop() << " s\n";
+
+        const auto blocks = PROBLEM_SIZE / THREADS_PER_BLOCK;
+
+        double sumUpdate = 0;
+        double sumMove = 0;
+        for (std::size_t s = 0; s < STEPS; ++s)
+        {
+            if constexpr (RUN_UPATE)
+            {
+                start();
+                calculate_forces<<<blocks, THREADS_PER_BLOCK>>>(accPositions, accVelocities);
+                const auto secondsUpdate = stop();
+                std::cout << "update " << secondsUpdate << " s\t";
+                sumUpdate += secondsUpdate;
+            }
+
+            start();
+            move<<<blocks, THREADS_PER_BLOCK>>>(accPositions, accVelocities);
+            const auto secondsMove = stop();
+            std::cout << "move " << secondsMove << " s\n";
+            sumMove += secondsMove;
+        }
+        plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
+
+        start();
+        checkError(cudaMemcpy(hostPositions.data(), accPositions, PROBLEM_SIZE * sizeof(FP4), cudaMemcpyDeviceToHost));
+        checkError(
+            cudaMemcpy(hostVelocities.data(), accVelocities, PROBLEM_SIZE * sizeof(FP4), cudaMemcpyDeviceToHost));
+        std::cout << "copy D->H " << stop() << " s\n";
+
+        checkError(cudaFree(accPositions));
+        checkError(cudaFree(accVelocities));
+        checkError(cudaEventDestroy(startEvent));
+        checkError(cudaEventDestroy(stopEvent));
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << "Exception: " << e.what() << std::endl;
+    }
+} // namespace manual
+
 int main()
 try
 {
@@ -323,6 +477,7 @@ try
     mp_for_each<mp_iota_c<5>>(
         [&](auto i)
         { mp_for_each<mp_iota_c<4>>([&](auto j) { run<decltype(i)::value, decltype(j)::value>(plotFile, true); }); });
+    manual::run(plotFile);
 
     std::cout << "Plot with: ./nbody.sh\n";
     std::ofstream{"nbody.sh"} << fmt::format(
