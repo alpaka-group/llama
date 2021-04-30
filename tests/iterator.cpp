@@ -32,8 +32,9 @@ TEST_CASE("iterator")
             vd(tag::Z{}) = 3;
         }
         std::transform(begin(view), end(view), begin(view), [](auto vd) { return vd * 2; });
+        const auto& cview = std::as_const(view);
         const int sumY
-            = std::accumulate(begin(view), end(view), 0, [](int acc, auto vd) { return acc + vd(tag::Y{}); });
+            = std::accumulate(begin(cview), end(cview), 0, [](int acc, auto vd) { return acc + vd(tag::Y{}); });
         CHECK(sumY == 128);
     };
     test(llama::ArrayDims{32});
