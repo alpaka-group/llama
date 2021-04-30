@@ -699,7 +699,7 @@ namespace llama
         using ADIterator = ArrayDimsIndexIterator<View::ArrayDims::rank>;
 
         using iterator_category = std::random_access_iterator_tag;
-        using value_type = typename View::VirtualRecordType;
+        using value_type = VirtualRecord<View>;
         using difference_type = typename ADIterator::difference_type;
         using pointer = internal::IndirectValue<value_type>;
         using reference = value_type;
@@ -843,9 +843,10 @@ namespace llama
         using Mapping = T_Mapping;
         using ArrayDims = typename Mapping::ArrayDims;
         using RecordDim = typename Mapping::RecordDim;
-        using VirtualRecordType = VirtualRecord<View<Mapping, BlobType>>;
-        using VirtualRecordTypeConst = VirtualRecord<const View<Mapping, BlobType>>;
+        using VirtualRecordType = VirtualRecord<View>;
+        using VirtualRecordTypeConst = VirtualRecord<const View>;
         using iterator = Iterator<View>;
+        using const_iterator = Iterator<const View>;
 
         View() = default;
 
@@ -941,7 +942,17 @@ namespace llama
             return {ArrayDimsIndexRange<ArrayDims::rank>{mapping.arrayDims()}.begin(), this};
         }
 
+        auto begin() const -> const_iterator
+        {
+            return {ArrayDimsIndexRange<ArrayDims::rank>{mapping.arrayDims()}.begin(), this};
+        }
+
         auto end() -> iterator
+        {
+            return {ArrayDimsIndexRange<ArrayDims::rank>{mapping.arrayDims()}.end(), this};
+        }
+
+        auto end() const -> const_iterator
         {
             return {ArrayDimsIndexRange<ArrayDims::rank>{mapping.arrayDims()}.end(), this};
         }
