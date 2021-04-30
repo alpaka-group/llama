@@ -78,7 +78,7 @@ __device__ void pPInteraction(VirtualParticleI&& pi, VirtualParticleJ pj)
     pi(tag::Vel()) += dist * sts;
 }
 
-template <std::size_t ProblemSize, std::size_t BlockSize, int MappingSM, typename View>
+template <int MappingSM, typename View>
 __global__ void updateSM(View particles)
 {
     // FIXME: removing this lambda makes nvcc 11 segfault
@@ -86,7 +86,7 @@ __global__ void updateSM(View particles)
     {
         constexpr auto sharedMapping = []
         {
-            constexpr auto arrayDims = llama::ArrayDims{BlockSize};
+            constexpr auto arrayDims = llama::ArrayDims{SHARED_ELEMENTS_PER_BLOCK};
             if constexpr (MappingSM == 0)
                 return llama::mapping::AoS{arrayDims, SharedMemoryParticle{}};
             if constexpr (MappingSM == 1)
@@ -112,22 +112,22 @@ __global__ void updateSM(View particles)
 
     llama::One<Particle> pi;
     pi = particles(ti);
-    for (std::size_t blockOffset = 0; blockOffset < ProblemSize; blockOffset += BlockSize)
+    for (std::size_t blockOffset = 0; blockOffset < PROBLEM_SIZE; blockOffset += SHARED_ELEMENTS_PER_BLOCK)
     {
         LLAMA_INDEPENDENT_DATA
-        for (auto j = tbi; j < BlockSize; j += THREADS_PER_BLOCK)
+        for (auto j = tbi; j < SHARED_ELEMENTS_PER_BLOCK; j += THREADS_PER_BLOCK)
             sharedView(j) = particles(blockOffset + j);
         __syncthreads();
 
         LLAMA_INDEPENDENT_DATA
-        for (auto j = std::size_t{0}; j < BlockSize; ++j)
+        for (auto j = std::size_t{0}; j < SHARED_ELEMENTS_PER_BLOCK; ++j)
             pPInteraction(pi, sharedView(j));
         __syncthreads();
     }
     particles(ti)(tag::Vel{}) = pi(tag::Vel{});
 }
 
-template <std::size_t ProblemSize, typename View>
+template <typename View>
 __global__ void update(View particles)
 {
     const auto ti = threadIdx.x + blockIdx.x * blockDim.x;
@@ -135,12 +135,12 @@ __global__ void update(View particles)
     llama::One<Particle> pi;
     pi = particles(ti);
     LLAMA_INDEPENDENT_DATA
-    for (auto j = std::size_t{0}; j < ProblemSize; ++j)
+    for (auto j = std::size_t{0}; j < PROBLEM_SIZE; ++j)
         pPInteraction(pi, particles(j));
     particles(ti)(tag::Vel{}) = pi(tag::Vel{});
 }
 
-template <std::size_t ProblemSize, typename View>
+template <typename View>
 __global__ void move(View particles)
 {
     const auto ti = threadIdx.x + blockIdx.x * blockDim.x;
@@ -261,16 +261,16 @@ try
         {
             start();
             if (useSharedMemory)
-                updateSM<PROBLEM_SIZE, SHARED_ELEMENTS_PER_BLOCK, MappingSM><<<blocks, THREADS_PER_BLOCK>>>(accView);
+                updateSM<MappingSM><<<blocks, THREADS_PER_BLOCK>>>(accView);
             else
-                update<PROBLEM_SIZE><<<blocks, THREADS_PER_BLOCK>>>(accView);
+                update<<<blocks, THREADS_PER_BLOCK>>>(accView);
             const auto secondsUpdate = stop();
             std::cout << "update " << secondsUpdate << " s\t";
             sumUpdate += secondsUpdate;
         }
 
         start();
-        move<PROBLEM_SIZE><<<blocks, THREADS_PER_BLOCK>>>(accView);
+        ::move<<<blocks, THREADS_PER_BLOCK>>>(accView);
         const auto secondsMove = stop();
         std::cout << "move " << secondsMove << " s\n";
         sumMove += secondsMove;
