@@ -169,6 +169,9 @@ try
             return "AoSoA" + std::to_string(AOSOA_LANES);
         if (m == 4)
             return "Split SoA";
+        if (m == 5)
+            return "Split AoS";
+        std::abort();
     };
     auto title = "GM " + mappingName(Mapping);
     if (useSharedMemory)
@@ -193,6 +196,14 @@ try
                 llama::RecordCoord<1>,
                 llama::mapping::PreconfiguredSoA<>::type,
                 llama::mapping::PreconfiguredSoA<>::type,
+                true>{arrayDims};
+        if constexpr (Mapping == 5)
+            return llama::mapping::Split<
+                decltype(arrayDims),
+                Particle,
+                llama::RecordCoord<1>,
+                llama::mapping::PreconfiguredAoS<>::type,
+                llama::mapping::PreconfiguredAoS<>::type,
                 true>{arrayDims};
     }();
 
@@ -473,8 +484,8 @@ try
     plotFile << "\"\"\t\"update\"\t\"move\"\n";
 
     using namespace boost::mp11;
-    mp_for_each<mp_iota_c<5>>([&](auto i) { run<decltype(i)::value, 0>(plotFile, false); });
-    mp_for_each<mp_iota_c<5>>(
+    mp_for_each<mp_iota_c<6>>([&](auto i) { run<decltype(i)::value, 0>(plotFile, false); });
+    mp_for_each<mp_iota_c<6>>(
         [&](auto i)
         { mp_for_each<mp_iota_c<4>>([&](auto j) { run<decltype(i)::value, decltype(j)::value>(plotFile, true); }); });
     manual::run(plotFile);
