@@ -132,11 +132,8 @@ void aosoa_copy(
     if (srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
         throw std::runtime_error{"Array dimensions sizes are different"};
 
-    const auto flatSize = std::reduce(
-        std::begin(dstView.mapping.arrayDims()),
-        std::end(dstView.mapping.arrayDims()),
-        std::size_t{1},
-        std::multiplies<>{});
+    const auto arrayDims = dstView.mapping.arrayDims();
+    const auto flatSize = std::reduce(std::begin(arrayDims), std::end(arrayDims), std::size_t{1}, std::multiplies<>{});
 
     const std::byte* src = srcView.storageBlobs[0].data();
     std::byte* dst = dstView.storageBlobs[0].data();
