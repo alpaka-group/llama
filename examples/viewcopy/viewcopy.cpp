@@ -166,6 +166,8 @@ void aosoa_copy(
                     [&](auto coord)
                     {
                         constexpr auto L = std::min(LanesSrc, LanesDst);
+                        static_assert(LanesSrc % L == 0);
+                        static_assert(LanesDst % L == 0);
                         for (std::size_t j = 0; j < LanesSrc; j += L)
                         {
                             constexpr auto bytes = L * sizeof(llama::GetType<RecordDim, decltype(coord)>);
