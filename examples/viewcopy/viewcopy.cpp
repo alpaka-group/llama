@@ -348,6 +348,7 @@ set style data histograms
 set style fill solid
 set xtics rotate by 45 right
 set key out top center maxrows 3
+set ylabel "runtime [s]"
 plot 'viewcopy.tsv' using 2:xtic(1) ti col, "" using 3 ti col, "" using 4 ti col, "" using 5 ti col, "" using 6 ti col, "" using 7 ti col, "" using 8 ti col, "" using 9 ti col, "" using 10 ti col
 )";
 }
