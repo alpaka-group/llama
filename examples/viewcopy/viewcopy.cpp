@@ -238,24 +238,6 @@ auto prepareViewAndHash(Mapping mapping)
     return std::tuple{view, checkSum};
 }
 
-template <typename SrcView, typename DstMapping, typename F>
-void benchmarkCopy(
-    std::string_view name,
-    std::ostream& plotFile,
-    const SrcView& srcView,
-    std::size_t srcHash,
-    DstMapping dstMapping,
-    F copy)
-{
-    auto dstView = llama::allocView(dstMapping);
-    Stopwatch watch;
-    copy(srcView, dstView);
-    const auto seconds = watch.printAndReset(name, '\t');
-    const auto dstHash = hash(dstView);
-    std::cout << (srcHash == dstHash ? "" : "\thash BAD ") << "\n";
-    plotFile << seconds << "\t";
-}
-
 auto main() -> int
 try
 {
@@ -266,8 +248,22 @@ try
 
     std::ofstream plotFile{"viewcopy.tsv"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
-    plotFile << "\"\"\t\"naive copy\"\t\"naive copy(p)\"\t\"std::copy\"\t\"memcpy\"\t\"memcpy(p)\"\t\"aosoa copy(r)\"\t\"aosoa copy(w)"
+    plotFile << "\"\"\t\"naive copy\"\t\"naive copy(p)\"\t\"std::copy\"\t\"memcpy\"\t\"memcpy(p)\"\t\"aosoa "
+                "copy(r)\"\t\"aosoa copy(w)"
                 "\"\t\"aosoa copy(r,p)\"\t\"aosoa copy(w,p)\"\n";
+
+
+    auto benchmarkCopy
+        = [&](std::string_view name, const auto& srcView, std::size_t srcHash, auto dstMapping, auto copy)
+    {
+        auto dstView = llama::allocView(dstMapping);
+        Stopwatch watch;
+        copy(srcView, dstView);
+        const auto seconds = watch.printAndReset(name, '\t');
+        const auto dstHash = hash(dstView);
+        std::cout << (srcHash == dstHash ? "" : "\thash BAD ") << "\n";
+        plotFile << seconds << "\t";
+    };
 
     {
         std::cout << "AoS -> SoA\n";
@@ -278,28 +274,24 @@ try
         auto [srcView, srcHash] = prepareViewAndHash(srcMapping);
         benchmarkCopy(
             "naive copy",
-            plotFile,
             srcView,
             srcHash,
             dstMapping,
             [](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView); });
         benchmarkCopy(
             "naive copy(p)",
-            plotFile,
             srcView,
             srcHash,
             dstMapping,
             [&](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView, numThreads); });
         benchmarkCopy(
             "std::copy",
-            plotFile,
             srcView,
             srcHash,
             dstMapping,
             [](const auto& srcView, auto& dstView) { std_copy(srcView, dstView); });
         benchmarkCopy(
             "memcpy",
-            plotFile,
             srcView,
             srcHash,
             dstMapping,
@@ -314,7 +306,6 @@ try
             });
         benchmarkCopy(
             "memcpy(p)",
-            plotFile,
             srcView,
             srcHash,
             dstMapping,
@@ -344,28 +335,24 @@ try
         auto [srcView, srcHash] = prepareViewAndHash(srcMapping);
         benchmarkCopy(
             "naive copy",
-            plotFile,
             srcView,
             srcHash,
             dstMapping,
             [](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView); });
         benchmarkCopy(
             "naive copy(p)",
-            plotFile,
             srcView,
             srcHash,
             dstMapping,
             [&](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView, numThreads); });
         benchmarkCopy(
             "std::copy",
-            plotFile,
             srcView,
             srcHash,
             dstMapping,
             [](const auto& srcView, auto& dstView) { std_copy(srcView, dstView); });
         benchmarkCopy(
             "memcpy",
-            plotFile,
             srcView,
             srcHash,
             dstMapping,
@@ -380,7 +367,6 @@ try
             });
         benchmarkCopy(
             "memcpy(p)",
-            plotFile,
             srcView,
             srcHash,
             dstMapping,
@@ -420,28 +406,24 @@ try
             auto [srcView, srcHash] = prepareViewAndHash(srcMapping);
             benchmarkCopy(
                 "naive copy",
-                plotFile,
                 srcView,
                 srcHash,
                 dstMapping,
                 [](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView); });
             benchmarkCopy(
                 "naive copy(p)",
-                plotFile,
                 srcView,
                 srcHash,
                 dstMapping,
                 [&](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView, numThreads); });
             benchmarkCopy(
                 "std::copy",
-                plotFile,
                 srcView,
                 srcHash,
                 dstMapping,
                 [](const auto& srcView, auto& dstView) { std_copy(srcView, dstView); });
             benchmarkCopy(
                 "memcpy",
-                plotFile,
                 srcView,
                 srcHash,
                 dstMapping,
@@ -456,7 +438,6 @@ try
                 });
             benchmarkCopy(
                 "memcpy(p)",
-                plotFile,
                 srcView,
                 srcHash,
                 dstMapping,
@@ -472,28 +453,24 @@ try
                 });
             benchmarkCopy(
                 "aosoa copy(r)",
-                plotFile,
                 srcView,
                 srcHash,
                 dstMapping,
                 [](const auto& srcView, auto& dstView) { aosoa_copy<true>(srcView, dstView); });
             benchmarkCopy(
                 "aosoa copy(w)",
-                plotFile,
                 srcView,
                 srcHash,
                 dstMapping,
                 [](const auto& srcView, auto& dstView) { aosoa_copy<false>(srcView, dstView); });
             benchmarkCopy(
                 "aosoa_copy(r,p)",
-                plotFile,
                 srcView,
                 srcHash,
                 dstMapping,
                 [&](const auto& srcView, auto& dstView) { aosoa_copy<true>(srcView, dstView, numThreads); });
             benchmarkCopy(
                 "aosoa_copy(w,p)",
-                plotFile,
                 srcView,
                 srcHash,
                 dstMapping,
