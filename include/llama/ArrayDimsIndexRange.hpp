@@ -22,6 +22,7 @@ namespace llama
 
         constexpr ArrayDimsIndexIterator() noexcept = default;
 
+        LLAMA_FN_HOST_ACC_INLINE
         constexpr ArrayDimsIndexIterator(ArrayDims<Dim> size, ArrayDims<Dim> current) noexcept
             : lastIndex(
                 [size]() mutable
@@ -39,16 +40,19 @@ namespace llama
         constexpr auto operator=(const ArrayDimsIndexIterator&) noexcept -> ArrayDimsIndexIterator& = default;
         constexpr auto operator=(ArrayDimsIndexIterator&&) noexcept -> ArrayDimsIndexIterator& = default;
 
+        LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator*() const noexcept -> value_type
         {
             return current;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator->() const noexcept -> pointer
         {
             return {**this};
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator++() noexcept -> ArrayDimsIndexIterator&
         {
             for (auto i = (int) Dim - 1; i >= 0; i--)
@@ -64,6 +68,7 @@ namespace llama
             return *this;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator++(int) noexcept -> ArrayDimsIndexIterator
         {
             auto tmp = *this;
@@ -71,6 +76,7 @@ namespace llama
             return tmp;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator--() noexcept -> ArrayDimsIndexIterator&
         {
             for (auto i = (int) Dim - 1; i >= 0; i--)
@@ -86,6 +92,7 @@ namespace llama
             return *this;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator--(int) noexcept -> ArrayDimsIndexIterator
         {
             auto tmp = *this;
@@ -93,11 +100,13 @@ namespace llama
             return tmp;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator[](difference_type i) const noexcept -> reference
         {
             return *(*this + i);
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator+=(difference_type n) noexcept -> ArrayDimsIndexIterator&
         {
             // add n to all lower dimensions with carry
@@ -127,28 +136,33 @@ namespace llama
             return *this;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator+(ArrayDimsIndexIterator it, difference_type n) noexcept -> ArrayDimsIndexIterator
         {
             it += n;
             return it;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator+(difference_type n, ArrayDimsIndexIterator it) noexcept -> ArrayDimsIndexIterator
         {
             return it + n;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator-=(difference_type n) noexcept -> ArrayDimsIndexIterator&
         {
             return operator+=(-n);
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator-(ArrayDimsIndexIterator it, difference_type n) noexcept -> ArrayDimsIndexIterator
         {
             it -= n;
             return it;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator-(const ArrayDimsIndexIterator& a, const ArrayDimsIndexIterator& b) noexcept
             -> difference_type
         {
@@ -165,6 +179,7 @@ namespace llama
             return n;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator==(
             const ArrayDimsIndexIterator<Dim>& a,
             const ArrayDimsIndexIterator<Dim>& b) noexcept -> bool
@@ -173,6 +188,7 @@ namespace llama
             return a.current == b.current;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator!=(
             const ArrayDimsIndexIterator<Dim>& a,
             const ArrayDimsIndexIterator<Dim>& b) noexcept -> bool
@@ -180,6 +196,7 @@ namespace llama
             return !(a == b);
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator<(const ArrayDimsIndexIterator& a, const ArrayDimsIndexIterator& b) noexcept
             -> bool
         {
@@ -191,18 +208,21 @@ namespace llama
                 std::end(b.current));
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator>(const ArrayDimsIndexIterator& a, const ArrayDimsIndexIterator& b) noexcept
             -> bool
         {
             return b < a;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator<=(const ArrayDimsIndexIterator& a, const ArrayDimsIndexIterator& b) noexcept
             -> bool
         {
             return !(a > b);
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator>=(const ArrayDimsIndexIterator& a, const ArrayDimsIndexIterator& b) noexcept
             -> bool
         {
@@ -223,15 +243,18 @@ namespace llama
     {
         constexpr ArrayDimsIndexRange() noexcept = default;
 
+        LLAMA_FN_HOST_ACC_INLINE
         constexpr ArrayDimsIndexRange(ArrayDims<Dim> size) noexcept : size(size)
         {
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         constexpr auto begin() const noexcept -> ArrayDimsIndexIterator<Dim>
         {
             return {size, ArrayDims<Dim>{}};
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         constexpr auto end() const noexcept -> ArrayDimsIndexIterator<Dim>
         {
             auto endPos = ArrayDims<Dim>{};

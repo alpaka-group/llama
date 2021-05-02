@@ -704,11 +704,14 @@ namespace llama
         using pointer = internal::IndirectValue<value_type>;
         using reference = value_type;
 
+        LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator++() -> Iterator&
         {
             ++adIndex;
             return *this;
         }
+
+        LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator++(int) -> Iterator
         {
             auto tmp = *this;
@@ -716,12 +719,14 @@ namespace llama
             return tmp;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator--() -> Iterator&
         {
             --adIndex;
             return *this;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator--(int) -> Iterator
         {
             auto tmp{*this};
@@ -729,80 +734,95 @@ namespace llama
             return tmp;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator*() const -> reference
         {
             return (*view)(*adIndex);
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator->() const -> pointer
         {
             return {**this};
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator[](difference_type i) const -> reference
         {
             return *(*this + i);
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator+=(difference_type n) -> Iterator&
         {
             adIndex += n;
             return *this;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator+(Iterator it, difference_type n) -> Iterator
         {
             it += n;
             return it;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator+(difference_type n, Iterator it) -> Iterator
         {
             return it + n;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator-=(difference_type n) -> Iterator&
         {
             adIndex -= n;
             return *this;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator-(Iterator it, difference_type n) -> Iterator
         {
             it -= n;
             return it;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator-(const Iterator& a, const Iterator& b) -> difference_type
         {
             return static_cast<std::ptrdiff_t>(a.adIndex - b.adIndex);
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator==(const Iterator& a, const Iterator& b) -> bool
         {
             return a.adIndex == b.adIndex;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator!=(const Iterator& a, const Iterator& b) -> bool
         {
             return !(a == b);
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator<(const Iterator& a, const Iterator& b) -> bool
         {
             return a.adIndex < b.adIndex;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator>(const Iterator& a, const Iterator& b) -> bool
         {
             return b < a;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator<=(const Iterator& a, const Iterator& b) -> bool
         {
             return !(a > b);
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator>=(const Iterator& a, const Iterator& b) -> bool
         {
             return !(a < b);
@@ -937,21 +957,25 @@ namespace llama
             return (*this) (index);
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         auto begin() -> iterator
         {
             return {ArrayDimsIndexRange<ArrayDims::rank>{mapping.arrayDims()}.begin(), this};
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         auto begin() const -> const_iterator
         {
             return {ArrayDimsIndexRange<ArrayDims::rank>{mapping.arrayDims()}.begin(), this};
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         auto end() -> iterator
         {
             return {ArrayDimsIndexRange<ArrayDims::rank>{mapping.arrayDims()}.end(), this};
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
         auto end() const -> const_iterator
         {
             return {ArrayDimsIndexRange<ArrayDims::rank>{mapping.arrayDims()}.end(), this};
