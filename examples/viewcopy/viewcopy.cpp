@@ -82,6 +82,20 @@ void naive_copy(
         });
 }
 
+template <typename Mapping1, typename BlobType1, typename Mapping2, typename BlobType2>
+void std_copy(
+    const llama::View<Mapping1, BlobType1>& srcView,
+    llama::View<Mapping2, BlobType2>& dstView,
+    std::size_t numThreads = 1)
+{
+    static_assert(std::is_same_v<typename Mapping1::RecordDim, typename Mapping2::RecordDim>);
+
+    if (srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
+        throw std::runtime_error{"Array dimensions sizes are different"};
+
+    std::copy(srcView.begin(), srcView.end(), dstView.begin());
+}
+
 void parallel_memcpy(std::byte* dst, const std::byte* src, std::size_t size, std::size_t numThreads = 1)
 {
     const auto sizePerThread = size / numThreads;
@@ -253,7 +267,7 @@ try
 
     std::ofstream plotFile{"viewcopy.tsv"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
-    plotFile << "\"\"\t\"naive copy\"\t\"naive copy(p)\"\t\"memcpy\"\t\"memcpy(p)\"\t\"aosoa copy(r)\"\t\"aosoa copy(w)"
+    plotFile << "\"\"\t\"naive copy\"\t\"naive copy(p)\"\t\"std::copy\"\t\"memcpy\"\t\"memcpy(p)\"\t\"aosoa copy(r)\"\t\"aosoa copy(w)"
                 "\"\t\"aosoa copy(r,p)\"\t\"aosoa copy(w,p)\"\n";
 
     {
@@ -277,6 +291,13 @@ try
             srcHash,
             dstMapping,
             [&](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView, numThreads); });
+        benchmarkCopy(
+            "std::copy",
+            plotFile,
+            srcView,
+            srcHash,
+            dstMapping,
+            [](const auto& srcView, auto& dstView) { std_copy(srcView, dstView); });
         benchmarkCopy(
             "memcpy",
             plotFile,
@@ -336,6 +357,13 @@ try
             srcHash,
             dstMapping,
             [&](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView, numThreads); });
+        benchmarkCopy(
+            "std::copy",
+            plotFile,
+            srcView,
+            srcHash,
+            dstMapping,
+            [](const auto& srcView, auto& dstView) { std_copy(srcView, dstView); });
         benchmarkCopy(
             "memcpy",
             plotFile,
@@ -406,6 +434,13 @@ try
                 dstMapping,
                 [&](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView, numThreads); });
             benchmarkCopy(
+                "std::copy",
+                plotFile,
+                srcView,
+                srcHash,
+                dstMapping,
+                [](const auto& srcView, auto& dstView) { std_copy(srcView, dstView); });
+            benchmarkCopy(
                 "memcpy",
                 plotFile,
                 srcView,
@@ -473,7 +508,7 @@ set style data histograms
 set style fill solid
 set xtics rotate by 45 right
 set key out top center maxrows 3
-plot 'viewcopy.tsv' using 2:xtic(1) ti col, "" using 3 ti col, "" using 4 ti col, "" using 5 ti col, "" using 6 ti col, "" using 7 ti col, "" using 8 ti col, "" using 9 ti col
+plot 'viewcopy.tsv' using 2:xtic(1) ti col, "" using 3 ti col, "" using 4 ti col, "" using 5 ti col, "" using 6 ti col, "" using 7 ti col, "" using 8 ti col, "" using 9 ti col, "" using 10 ti col
 )";
 }
 catch (const std::exception& e)
