@@ -238,6 +238,12 @@ auto prepareViewAndHash(Mapping mapping)
     return std::tuple{view, checkSum};
 }
 
+template <typename Mapping>
+inline constexpr auto is_AoSoA = false;
+
+template <typename AD, typename RD, std::size_t L>
+inline constexpr auto is_AoSoA<llama::mapping::AoSoA<AD, RD, L>> = true;
+
 auto main() -> int
 try
 {
@@ -252,231 +258,89 @@ try
                 "copy(r)\"\t\"aosoa copy(w)"
                 "\"\t\"aosoa copy(r,p)\"\t\"aosoa copy(w,p)\"\n";
 
-
-    auto benchmarkCopy
-        = [&](std::string_view name, const auto& srcView, std::size_t srcHash, auto dstMapping, auto copy)
+    auto benchmarkAllCopies = [&](std::string_view srcName, std::string_view dstName, auto srcMapping, auto dstMapping)
     {
-        auto dstView = llama::allocView(dstMapping);
-        Stopwatch watch;
-        copy(srcView, dstView);
-        const auto seconds = watch.printAndReset(name, '\t');
-        const auto dstHash = hash(dstView);
-        std::cout << (srcHash == dstHash ? "" : "\thash BAD ") << "\n";
-        plotFile << seconds << "\t";
-    };
-
-    {
-        std::cout << "AoS -> SoA\n";
-        plotFile << "\"AoS -> SoA\"\t";
-        const auto srcMapping = llama::mapping::AoS{arrayDims, Particle{}};
-        const auto dstMapping = llama::mapping::SoA{arrayDims, Particle{}};
+        std::cout << srcName << " -> " << dstName << "\n";
+        plotFile << "\"" << srcName << " -> " << dstName << "\"\t";
 
         auto [srcView, srcHash] = prepareViewAndHash(srcMapping);
-        benchmarkCopy(
-            "naive copy",
-            srcView,
-            srcHash,
-            dstMapping,
-            [](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView); });
-        benchmarkCopy(
-            "naive copy(p)",
-            srcView,
-            srcHash,
-            dstMapping,
-            [&](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView, numThreads); });
-        benchmarkCopy(
-            "std::copy",
-            srcView,
-            srcHash,
-            dstMapping,
-            [](const auto& srcView, auto& dstView) { std_copy(srcView, dstView); });
-        benchmarkCopy(
-            "memcpy",
-            srcView,
-            srcHash,
-            dstMapping,
-            [](const auto& srcView, auto& dstView)
-            {
-                static_assert(decltype(srcView.storageBlobs)::rank == 1);
-                static_assert(decltype(dstView.storageBlobs)::rank == 1);
-                std::memcpy(
-                    dstView.storageBlobs[0].data(),
-                    srcView.storageBlobs[0].data(),
-                    dstView.storageBlobs[0].size());
-            });
-        benchmarkCopy(
-            "memcpy(p)",
-            srcView,
-            srcHash,
-            dstMapping,
-            [&](const auto& srcView, auto& dstView)
-            {
-                static_assert(decltype(srcView.storageBlobs)::rank == 1);
-                static_assert(decltype(dstView.storageBlobs)::rank == 1);
-                parallel_memcpy(
-                    dstView.storageBlobs[0].data(),
-                    srcView.storageBlobs[0].data(),
-                    dstView.storageBlobs[0].size(),
-                    numThreads);
-            });
-        plotFile << "0\t";
-        plotFile << "0\t";
-        plotFile << "0\t";
-        plotFile << "0\t";
-        plotFile << "\n";
-    }
 
-    {
-        std::cout << "SoA -> AoS\n";
-        plotFile << "\"SoA -> AoS\"\t";
-        const auto srcMapping = llama::mapping::SoA{arrayDims, Particle{}};
-        const auto dstMapping = llama::mapping::AoS{arrayDims, Particle{}};
-
-        auto [srcView, srcHash] = prepareViewAndHash(srcMapping);
-        benchmarkCopy(
-            "naive copy",
-            srcView,
-            srcHash,
-            dstMapping,
-            [](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView); });
-        benchmarkCopy(
-            "naive copy(p)",
-            srcView,
-            srcHash,
-            dstMapping,
-            [&](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView, numThreads); });
-        benchmarkCopy(
-            "std::copy",
-            srcView,
-            srcHash,
-            dstMapping,
-            [](const auto& srcView, auto& dstView) { std_copy(srcView, dstView); });
-        benchmarkCopy(
-            "memcpy",
-            srcView,
-            srcHash,
-            dstMapping,
-            [](const auto& srcView, auto& dstView)
-            {
-                static_assert(decltype(srcView.storageBlobs)::rank == 1);
-                static_assert(decltype(dstView.storageBlobs)::rank == 1);
-                std::memcpy(
-                    dstView.storageBlobs[0].data(),
-                    srcView.storageBlobs[0].data(),
-                    dstView.storageBlobs[0].size());
-            });
-        benchmarkCopy(
-            "memcpy(p)",
-            srcView,
-            srcHash,
-            dstMapping,
-            [&](const auto& srcView, auto& dstView)
-            {
-                static_assert(decltype(srcView.storageBlobs)::rank == 1);
-                static_assert(decltype(dstView.storageBlobs)::rank == 1);
-                parallel_memcpy(
-                    dstView.storageBlobs[0].data(),
-                    srcView.storageBlobs[0].data(),
-                    dstView.storageBlobs[0].size(),
-                    numThreads);
-            });
-        plotFile << "0\t";
-        plotFile << "0\t";
-        plotFile << "0\t";
-        plotFile << "0\t";
-        plotFile << "\n";
-    }
-
-    using namespace boost::mp11;
-    mp_for_each<mp_list<
-        mp_list_c<std::size_t, 8, 32>,
-        mp_list_c<std::size_t, 8, 64>,
-        mp_list_c<std::size_t, 32, 8>,
-        mp_list_c<std::size_t, 64, 8>>>(
-        [&](auto pair)
+        auto benchmarkCopy = [&, srcView = srcView, srcHash = srcHash](std::string_view name, auto copy)
         {
-            constexpr auto LanesSrc = mp_first<decltype(pair)>::value;
-            constexpr auto LanesDst = mp_second<decltype(pair)>::value;
+            auto dstView = llama::allocView(dstMapping);
+            Stopwatch watch;
+            copy(srcView, dstView);
+            const auto seconds = watch.printAndReset(name, '\t');
+            const auto dstHash = hash(dstView);
+            std::cout << (srcHash == dstHash ? "" : "\thash BAD ") << "\n";
+            plotFile << seconds << "\t";
+        };
 
-            std::cout << "AoSoA" << LanesSrc << " -> AoSoA" << LanesDst << "\n";
-            plotFile << "\"AoSoA" << LanesSrc << " -> AoSoA" << LanesDst << "\"\t";
-            const auto srcMapping = llama::mapping::AoSoA<decltype(arrayDims), Particle, LanesSrc>{arrayDims};
-            const auto dstMapping = llama::mapping::AoSoA<decltype(arrayDims), Particle, LanesDst>{arrayDims};
-
-            auto [srcView, srcHash] = prepareViewAndHash(srcMapping);
-            benchmarkCopy(
-                "naive copy",
-                srcView,
-                srcHash,
-                dstMapping,
-                [](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView); });
-            benchmarkCopy(
-                "naive copy(p)",
-                srcView,
-                srcHash,
-                dstMapping,
-                [&](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView, numThreads); });
-            benchmarkCopy(
-                "std::copy",
-                srcView,
-                srcHash,
-                dstMapping,
-                [](const auto& srcView, auto& dstView) { std_copy(srcView, dstView); });
-            benchmarkCopy(
-                "memcpy",
-                srcView,
-                srcHash,
-                dstMapping,
-                [](const auto& srcView, auto& dstView)
-                {
-                    static_assert(decltype(srcView.storageBlobs)::rank == 1);
-                    static_assert(decltype(dstView.storageBlobs)::rank == 1);
-                    std::memcpy(
-                        dstView.storageBlobs[0].data(),
-                        srcView.storageBlobs[0].data(),
-                        dstView.storageBlobs[0].size());
-                });
-            benchmarkCopy(
-                "memcpy(p)",
-                srcView,
-                srcHash,
-                dstMapping,
-                [&](const auto& srcView, auto& dstView)
-                {
-                    static_assert(decltype(srcView.storageBlobs)::rank == 1);
-                    static_assert(decltype(dstView.storageBlobs)::rank == 1);
-                    parallel_memcpy(
-                        dstView.storageBlobs[0].data(),
-                        srcView.storageBlobs[0].data(),
-                        dstView.storageBlobs[0].size(),
-                        numThreads);
-                });
+        benchmarkCopy("naive copy", [](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView); });
+        benchmarkCopy(
+            "naive copy(p)",
+            [&](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView, numThreads); });
+        benchmarkCopy("std::copy", [](const auto& srcView, auto& dstView) { std_copy(srcView, dstView); });
+        benchmarkCopy(
+            "memcpy",
+            [](const auto& srcView, auto& dstView)
+            {
+                static_assert(decltype(srcView.storageBlobs)::rank == 1);
+                static_assert(decltype(dstView.storageBlobs)::rank == 1);
+                std::memcpy(
+                    dstView.storageBlobs[0].data(),
+                    srcView.storageBlobs[0].data(),
+                    dstView.storageBlobs[0].size());
+            });
+        benchmarkCopy(
+            "memcpy(p)",
+            [&](const auto& srcView, auto& dstView)
+            {
+                static_assert(decltype(srcView.storageBlobs)::rank == 1);
+                static_assert(decltype(dstView.storageBlobs)::rank == 1);
+                parallel_memcpy(
+                    dstView.storageBlobs[0].data(),
+                    srcView.storageBlobs[0].data(),
+                    dstView.storageBlobs[0].size(),
+                    numThreads);
+            });
+        if constexpr (is_AoSoA<decltype(srcMapping)> && is_AoSoA<decltype(dstMapping)>)
+        {
             benchmarkCopy(
                 "aosoa copy(r)",
-                srcView,
-                srcHash,
-                dstMapping,
                 [](const auto& srcView, auto& dstView) { aosoa_copy<true>(srcView, dstView); });
             benchmarkCopy(
                 "aosoa copy(w)",
-                srcView,
-                srcHash,
-                dstMapping,
                 [](const auto& srcView, auto& dstView) { aosoa_copy<false>(srcView, dstView); });
             benchmarkCopy(
                 "aosoa_copy(r,p)",
-                srcView,
-                srcHash,
-                dstMapping,
                 [&](const auto& srcView, auto& dstView) { aosoa_copy<true>(srcView, dstView, numThreads); });
             benchmarkCopy(
                 "aosoa_copy(w,p)",
-                srcView,
-                srcHash,
-                dstMapping,
                 [&](const auto& srcView, auto& dstView) { aosoa_copy<false>(srcView, dstView, numThreads); });
-            plotFile << "\n";
-        });
+        }
+        else
+        {
+            plotFile << "0\t";
+            plotFile << "0\t";
+            plotFile << "0\t";
+            plotFile << "0\t";
+        }
+        plotFile << "\n";
+    };
+
+    const auto aosMapping = llama::mapping::AoS{arrayDims, Particle{}};
+    const auto soaMapping = llama::mapping::SoA{arrayDims, Particle{}};
+    const auto aosoa8Mapping = llama::mapping::AoSoA<decltype(arrayDims), Particle, 8>{arrayDims};
+    const auto aosoa32Mapping = llama::mapping::AoSoA<decltype(arrayDims), Particle, 32>{arrayDims};
+    const auto aosoa64Mapping = llama::mapping::AoSoA<decltype(arrayDims), Particle, 64>{arrayDims};
+
+    benchmarkAllCopies("AoS", "SoA", aosMapping, soaMapping);
+    benchmarkAllCopies("SoA", "AoS", soaMapping, aosMapping);
+    benchmarkAllCopies("AoSoA8", "AoSoA32", aosoa8Mapping, aosoa32Mapping);
+    benchmarkAllCopies("AoSoA8", "AoSoA64", aosoa8Mapping, aosoa64Mapping);
+    benchmarkAllCopies("AoSoA32", "AoSoA8", aosoa32Mapping, aosoa8Mapping);
+    benchmarkAllCopies("AoSoA64", "AoSoA8", aosoa64Mapping, aosoa8Mapping);
 
     std::cout << "Plot with: ./viewcopy.sh\n";
     std::ofstream{"viewcopy.sh"} << R"(#!/usr/bin/gnuplot -p
