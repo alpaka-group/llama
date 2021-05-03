@@ -10,6 +10,8 @@
 #include <omp.h>
 #include <string_view>
 
+constexpr auto REPETITIONS = 5;
+
 // clang-format off
 namespace tag
 {
@@ -402,8 +404,9 @@ try
         {
             auto dstView = llama::allocView(dstMapping);
             Stopwatch watch;
-            copy(srcView, dstView);
-            const auto seconds = watch.printAndReset(name, '\t');
+            for (auto i = 0; i < REPETITIONS; i++)
+                copy(srcView, dstView);
+            const auto seconds = watch.printAndReset(name, '\t') / REPETITIONS;
             const auto gbs = (dataSize / seconds) / (1024.0 * 1024.0 * 1024.0);
             const auto dstHash = hash(dstView);
             std::cout << gbs << "GiB/s\t" << (srcHash == dstHash ? "" : "\thash BAD ") << "\n";
