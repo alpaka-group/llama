@@ -251,6 +251,7 @@ try
     std::cout << "Threads: " << numThreads << "\n";
 
     const auto arrayDims = llama::ArrayDims{1024, 1024, 16};
+    const auto dataSize = std::reduce(arrayDims.begin(), arrayDims.end(), std::size_t{1}, std::multiplies{}) * llama::sizeOf<Particle>;
 
     std::ofstream plotFile{"viewcopy.tsv"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
@@ -271,9 +272,10 @@ try
             Stopwatch watch;
             copy(srcView, dstView);
             const auto seconds = watch.printAndReset(name, '\t');
+            const auto gbs = (dataSize / seconds) / (1024.0 * 1024.0 * 1024.0);
             const auto dstHash = hash(dstView);
-            std::cout << (srcHash == dstHash ? "" : "\thash BAD ") << "\n";
-            plotFile << seconds << "\t";
+            std::cout << gbs << "GiB/s\t" << (srcHash == dstHash ? "" : "\thash BAD ") << "\n";
+            plotFile << gbs << "\t";
         };
 
         benchmarkCopy("naive copy", [](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView); });
@@ -348,7 +350,7 @@ set style data histograms
 set style fill solid
 set xtics rotate by 45 right
 set key out top center maxrows 3
-set ylabel "runtime [s]"
+set ylabel "throughput [GiB/s]"
 plot 'viewcopy.tsv' using 2:xtic(1) ti col, "" using 3 ti col, "" using 4 ti col, "" using 5 ti col, "" using 6 ti col, "" using 7 ti col, "" using 8 ti col, "" using 9 ti col, "" using 10 ti col
 )";
 }
