@@ -380,7 +380,7 @@ inline constexpr auto is_AoSoA<llama::mapping::AoSoA<AD, RD, L>> = true;
 auto main() -> int
 try
 {
-    const auto numThreads = static_cast<std::size_t>(omp_get_num_threads());
+    const auto numThreads = static_cast<std::size_t>(omp_get_max_threads());
     std::cout << "Threads: " << numThreads << "\n";
 
     const auto arrayDims = llama::ArrayDims{1024, 1024, 16};
