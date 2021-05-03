@@ -114,6 +114,157 @@ template <
     typename ArrayDims,
     typename RecordDim,
     std::size_t LanesSrc,
+    std::size_t LanesDst,
+    typename View1,
+    typename View2>
+void aosoa_copy_internal(const View1& srcView, View2& dstView, std::size_t numThreads)
+{
+    static_assert(decltype(srcView.storageBlobs)::rank == 1);
+    static_assert(decltype(dstView.storageBlobs)::rank == 1);
+
+    if (srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
+        throw std::runtime_error{"Array dimensions sizes are different"};
+
+    constexpr auto srcIsAoSoA = LanesSrc != std::numeric_limits<std::size_t>::max();
+    constexpr auto dstIsAoSoA = LanesDst != std::numeric_limits<std::size_t>::max();
+
+    const auto arrayDims = dstView.mapping.arrayDims();
+    const auto flatSize = std::reduce(std::begin(arrayDims), std::end(arrayDims), std::size_t{1}, std::multiplies<>{});
+
+    const std::byte* src = &srcView.storageBlobs[0][0];
+    std::byte* dst = &dstView.storageBlobs[0][0];
+
+    // the same as AoSoA::blobNrAndOffset but takes a flat array index
+    auto mapAoSoA = [](std::size_t flatArrayIndex, auto coord, std::size_t Lanes)
+    {
+        const auto blockIndex = flatArrayIndex / Lanes;
+        const auto laneIndex = flatArrayIndex % Lanes;
+        const auto offset = (llama::sizeOf<RecordDim> * Lanes) * blockIndex
+            + llama::offsetOf<RecordDim, decltype(coord)> * Lanes
+            + sizeof(llama::GetType<RecordDim, decltype(coord)>) * laneIndex;
+        return offset;
+    };
+    // the same as SoA::blobNrAndOffset but takes a flat array index
+    auto mapSoA = [&](std::size_t flatArrayIndex, auto coord)
+    {
+        const auto offset = llama::offsetOf<RecordDim, decltype(coord)> * flatSize
+            + sizeof(llama::GetType<RecordDim, decltype(coord)>) * flatArrayIndex;
+        return offset;
+    };
+
+    auto mapSrc = [&mapAoSoA, &mapSoA](std::size_t flatArrayIndex, auto coord)
+    {
+        if constexpr (srcIsAoSoA)
+            return mapAoSoA(flatArrayIndex, coord, LanesSrc);
+        else
+            return mapSoA(flatArrayIndex, coord);
+    };
+    auto mapDst = [&mapAoSoA, &mapSoA](std::size_t flatArrayIndex, auto coord)
+    {
+        if constexpr (dstIsAoSoA)
+            return mapAoSoA(flatArrayIndex, coord, LanesDst);
+        else
+            return mapSoA(flatArrayIndex, coord);
+    };
+
+    constexpr auto L = std::min(LanesSrc, LanesDst);
+    static_assert(!srcIsAoSoA || LanesSrc % L == 0);
+    static_assert(!dstIsAoSoA || LanesDst % L == 0);
+    if constexpr (ReadOpt)
+    {
+        // optimized for linear reading
+        const auto elementsPerThread
+            = srcIsAoSoA ? flatSize / LanesSrc / numThreads * LanesSrc : flatSize / L / numThreads * L;
+#pragma omp parallel num_threads(numThreads)
+        {
+            const auto id = static_cast<std::size_t>(omp_get_thread_num());
+            const auto start = id * elementsPerThread;
+            const auto stop = id == numThreads - 1 ? flatSize : (id + 1) * elementsPerThread;
+
+            if constexpr (srcIsAoSoA)
+            {
+                auto* threadSrc = src + mapSrc(start, llama::RecordCoord<>{});
+                for (std::size_t i = start; i < stop; i += LanesSrc)
+                {
+                    llama::forEachLeaf<RecordDim>(
+                        [&](auto coord)
+                        {
+                            for (std::size_t j = 0; j < LanesSrc; j += L)
+                            {
+                                constexpr auto bytes = L * sizeof(llama::GetType<RecordDim, decltype(coord)>);
+                                std::memcpy(&dst[mapDst(i + j, coord)], threadSrc, bytes);
+                                threadSrc += bytes;
+                            }
+                        });
+                }
+            }
+            else
+            {
+                llama::forEachLeaf<RecordDim>(
+                    [&](auto coord)
+                    {
+                        auto* threadSrc = src + mapSrc(start, coord);
+                        for (std::size_t i = start; i < stop; i += L)
+                        {
+                            constexpr auto bytes = L * sizeof(llama::GetType<RecordDim, decltype(coord)>);
+                            std::memcpy(&dst[mapDst(i, coord)], threadSrc, bytes);
+                            threadSrc += bytes;
+                        }
+                    });
+            }
+        }
+    }
+    else
+    {
+        // optimized for linear writing
+        const auto elementsPerThread
+            = dstIsAoSoA ? ((flatSize / LanesDst) / numThreads) * LanesDst : flatSize / L / numThreads * L;
+#pragma omp parallel num_threads(numThreads)
+        {
+            const auto id = static_cast<std::size_t>(omp_get_thread_num());
+            const auto start = id * elementsPerThread;
+            const auto stop = id == numThreads - 1 ? flatSize : (id + 1) * elementsPerThread;
+
+            if constexpr (dstIsAoSoA)
+            {
+                auto* threadDst = dst + mapDst(start, llama::RecordCoord<>{});
+                for (std::size_t i = start; i < stop; i += LanesDst)
+                {
+                    llama::forEachLeaf<RecordDim>(
+                        [&](auto coord)
+                        {
+                            for (std::size_t j = 0; j < LanesDst; j += L)
+                            {
+                                constexpr auto bytes = L * sizeof(llama::GetType<RecordDim, decltype(coord)>);
+                                std::memcpy(threadDst, &src[mapSrc(i + j, coord)], bytes);
+                                threadDst += bytes;
+                            }
+                        });
+                }
+            }
+            else
+            {
+                llama::forEachLeaf<RecordDim>(
+                    [&](auto coord)
+                    {
+                        auto* threadDst = dst + mapDst(start, coord);
+                        for (std::size_t i = start; i < stop; i += L)
+                        {
+                            constexpr auto bytes = L * sizeof(llama::GetType<RecordDim, decltype(coord)>);
+                            std::memcpy(threadDst, &src[mapSrc(i, coord)], bytes);
+                            threadDst += bytes;
+                        }
+                    });
+            }
+        }
+    }
+}
+
+template <
+    bool ReadOpt,
+    typename ArrayDims,
+    typename RecordDim,
+    std::size_t LanesSrc,
     typename BlobType1,
     std::size_t LanesDst,
     typename BlobType2>
@@ -131,82 +282,62 @@ void aosoa_copy(
 
     if (srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
         throw std::runtime_error{"Array dimensions sizes are different"};
-
-    const auto arrayDims = dstView.mapping.arrayDims();
-    const auto flatSize = std::reduce(std::begin(arrayDims), std::end(arrayDims), std::size_t{1}, std::multiplies<>{});
-
-    const std::byte* src = &srcView.storageBlobs[0][0];
-    std::byte* dst = &dstView.storageBlobs[0][0];
-
-    // the same as AoSoA::blobNrAndOffset but takes a flat array index
-    auto map = [](std::size_t flatArrayIndex, auto coord, std::size_t Lanes)
-    {
-        const auto blockIndex = flatArrayIndex / Lanes;
-        const auto laneIndex = flatArrayIndex % Lanes;
-        const auto offset = (llama::sizeOf<RecordDim> * Lanes) * blockIndex
-            + llama::offsetOf<RecordDim, decltype(coord)> * Lanes
-            + sizeof(llama::GetType<RecordDim, decltype(coord)>) * laneIndex;
-        return offset;
-    };
-
-    if constexpr (ReadOpt)
-    {
-        // optimized for linear reading
-        const auto elementsPerThread = ((flatSize / LanesSrc) / numThreads) * LanesSrc;
-#pragma omp parallel num_threads(numThreads)
-        {
-            const auto id = static_cast<std::size_t>(omp_get_thread_num());
-            const auto start = id * elementsPerThread;
-            const auto stop = id == numThreads - 1 ? flatSize : (id + 1) * elementsPerThread;
-            auto* threadSrc = src + map(start, llama::RecordCoord<>{}, LanesSrc);
-
-            for (std::size_t i = start; i < stop; i += LanesSrc)
-            {
-                llama::forEachLeaf<RecordDim>(
-                    [&](auto coord)
-                    {
-                        constexpr auto L = std::min(LanesSrc, LanesDst);
-                        static_assert(LanesSrc % L == 0);
-                        static_assert(LanesDst % L == 0);
-                        for (std::size_t j = 0; j < LanesSrc; j += L)
-                        {
-                            constexpr auto bytes = L * sizeof(llama::GetType<RecordDim, decltype(coord)>);
-                            std::memcpy(&dst[map(i + j, coord, LanesDst)], threadSrc, bytes);
-                            threadSrc += bytes;
-                        }
-                    });
-            }
-        }
-    }
-    else
-    {
-        // optimized for linear writing
-        const auto elementsPerThread = ((flatSize / LanesDst) / numThreads) * LanesDst;
-#pragma omp parallel num_threads(numThreads)
-        {
-            const auto id = static_cast<std::size_t>(omp_get_thread_num());
-            const auto start = id * elementsPerThread;
-            const auto stop = id == numThreads - 1 ? flatSize : (id + 1) * elementsPerThread;
-
-            auto* threadDst = dst + map(start, llama::RecordCoord<>{}, LanesDst);
-
-            for (std::size_t i = start; i < stop; i += LanesDst)
-            {
-                llama::forEachLeaf<RecordDim>(
-                    [&](auto coord)
-                    {
-                        constexpr auto L = std::min(LanesSrc, LanesDst);
-                        for (std::size_t j = 0; j < LanesDst; j += L)
-                        {
-                            constexpr auto bytes = L * sizeof(llama::GetType<RecordDim, decltype(coord)>);
-                            std::memcpy(threadDst, &src[map(i + j, coord, LanesSrc)], bytes);
-                            threadDst += bytes;
-                        }
-                    });
-            }
-        }
-    }
+    aosoa_copy_internal<ReadOpt, ArrayDims, RecordDim, LanesSrc, LanesDst>(srcView, dstView, numThreads);
 }
+
+template <
+    bool ReadOpt,
+    typename ArrayDims,
+    typename RecordDim,
+    std::size_t LanesSrc,
+    typename BlobType1,
+    typename BlobType2>
+void aosoa_copy(
+    const llama::View<
+        llama::mapping::AoSoA<ArrayDims, RecordDim, LanesSrc, llama::mapping::LinearizeArrayDimsCpp>,
+        BlobType1>& srcView,
+    llama::View<llama::mapping::SoA<ArrayDims, RecordDim, false, llama::mapping::LinearizeArrayDimsCpp>, BlobType2>&
+        dstView,
+    std::size_t numThreads = 1)
+{
+    static_assert(decltype(srcView.storageBlobs)::rank == 1);
+    static_assert(decltype(dstView.storageBlobs)::rank == 1);
+
+    if (srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
+        throw std::runtime_error{"Array dimensions sizes are different"};
+    aosoa_copy_internal<ReadOpt, ArrayDims, RecordDim, LanesSrc, std::numeric_limits<std::size_t>::max()>(
+        srcView,
+        dstView,
+        numThreads);
+}
+
+template <
+    bool ReadOpt,
+    typename ArrayDims,
+    typename RecordDim,
+    typename BlobType1,
+    std::size_t LanesDst,
+    typename BlobType2>
+void aosoa_copy(
+    const llama::View<
+        llama::mapping::SoA<ArrayDims, RecordDim, false, llama::mapping::LinearizeArrayDimsCpp>,
+        BlobType1>& srcView,
+    llama::View<
+        llama::mapping::AoSoA<ArrayDims, RecordDim, LanesDst, llama::mapping::LinearizeArrayDimsCpp>,
+        BlobType2>& dstView,
+    std::size_t numThreads = 1)
+{
+    static_assert(decltype(srcView.storageBlobs)::rank == 1);
+    static_assert(decltype(dstView.storageBlobs)::rank == 1);
+
+    if (srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
+        throw std::runtime_error{"Array dimensions sizes are different"};
+    aosoa_copy_internal<ReadOpt, ArrayDims, RecordDim, std::numeric_limits<std::size_t>::max(), LanesDst>(
+        srcView,
+        dstView,
+        numThreads);
+}
+
 
 template <typename Mapping, typename BlobType>
 auto hash(const llama::View<Mapping, BlobType>& view)
@@ -251,7 +382,8 @@ try
     std::cout << "Threads: " << numThreads << "\n";
 
     const auto arrayDims = llama::ArrayDims{1024, 1024, 16};
-    const auto dataSize = std::reduce(arrayDims.begin(), arrayDims.end(), std::size_t{1}, std::multiplies{}) * llama::sizeOf<Particle>;
+    const auto dataSize
+        = std::reduce(arrayDims.begin(), arrayDims.end(), std::size_t{1}, std::multiplies{}) * llama::sizeOf<Particle>;
 
     std::ofstream plotFile{"viewcopy.tsv"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
@@ -306,7 +438,7 @@ try
                     dstView.storageBlobs[0].size(),
                     numThreads);
             });
-        if constexpr (is_AoSoA<decltype(srcMapping)> && is_AoSoA<decltype(dstMapping)>)
+        if constexpr (is_AoSoA<decltype(srcMapping)> || is_AoSoA<decltype(dstMapping)>)
         {
             benchmarkCopy(
                 "aosoa copy(r)",
@@ -331,17 +463,19 @@ try
         plotFile << "\n";
     };
 
-    const auto aosMapping = llama::mapping::AoS{arrayDims, Particle{}};
-    const auto soaMapping = llama::mapping::SoA{arrayDims, Particle{}};
+    const auto aosMapping = llama::mapping::AoS<decltype(arrayDims), Particle>{arrayDims};
+    const auto soaMapping = llama::mapping::SoA<decltype(arrayDims), Particle>{arrayDims};
     const auto aosoa8Mapping = llama::mapping::AoSoA<decltype(arrayDims), Particle, 8>{arrayDims};
     const auto aosoa32Mapping = llama::mapping::AoSoA<decltype(arrayDims), Particle, 32>{arrayDims};
     const auto aosoa64Mapping = llama::mapping::AoSoA<decltype(arrayDims), Particle, 64>{arrayDims};
 
     benchmarkAllCopies("AoS", "SoA", aosMapping, soaMapping);
     benchmarkAllCopies("SoA", "AoS", soaMapping, aosMapping);
+    benchmarkAllCopies("SoA", "AoSoA32", soaMapping, aosoa32Mapping);
+    benchmarkAllCopies("AoSoA32", "SoA", aosoa32Mapping, soaMapping);
     benchmarkAllCopies("AoSoA8", "AoSoA32", aosoa8Mapping, aosoa32Mapping);
-    benchmarkAllCopies("AoSoA8", "AoSoA64", aosoa8Mapping, aosoa64Mapping);
     benchmarkAllCopies("AoSoA32", "AoSoA8", aosoa32Mapping, aosoa8Mapping);
+    benchmarkAllCopies("AoSoA8", "AoSoA64", aosoa8Mapping, aosoa64Mapping);
     benchmarkAllCopies("AoSoA64", "AoSoA8", aosoa64Mapping, aosoa8Mapping);
 
     std::cout << "Plot with: ./viewcopy.sh\n";
