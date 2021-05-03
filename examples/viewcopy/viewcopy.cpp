@@ -1,8 +1,10 @@
 #include "../common/Stopwatch.hpp"
 
+#include <boost/asio/ip/host_name.hpp>
 #include <boost/functional/hash.hpp>
 #include <boost/mp11.hpp>
 #include <chrono>
+#include <fmt/format.h>
 #include <fstream>
 #include <iomanip>
 #include <llama/llama.hpp>
@@ -482,14 +484,18 @@ try
     benchmarkAllCopies("AoSoA64", "AoSoA8", aosoa64Mapping, aosoa8Mapping);
 
     std::cout << "Plot with: ./viewcopy.sh\n";
-    std::ofstream{"viewcopy.sh"} << R"(#!/usr/bin/gnuplot -p
+    std::ofstream{"viewcopy.sh"} << fmt::format(
+        R"(#!/usr/bin/gnuplot -p
+set title "viewcopy CPU {}MiB particles on {}"
 set style data histograms
 set style fill solid
 set xtics rotate by 45 right
 set key out top center maxrows 3
 set ylabel "throughput [GiB/s]"
 plot 'viewcopy.tsv' using 2:xtic(1) ti col, "" using 3 ti col, "" using 4 ti col, "" using 5 ti col, "" using 6 ti col, "" using 7 ti col, "" using 8 ti col, "" using 9 ti col, "" using 10 ti col
-)";
+)",
+        dataSize / 1024 / 1024,
+        boost::asio::ip::host_name());
 }
 catch (const std::exception& e)
 {
