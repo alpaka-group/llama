@@ -13,6 +13,7 @@
 #include <string_view>
 
 constexpr auto REPETITIONS = 5;
+constexpr auto arrayDims = llama::ArrayDims{1024, 1024, 16};
 
 // clang-format off
 namespace tag
@@ -385,7 +386,6 @@ try
     const auto numThreads = static_cast<std::size_t>(omp_get_max_threads());
     std::cout << "Threads: " << numThreads << "\n";
 
-    const auto arrayDims = llama::ArrayDims{1024, 1024, 16};
     const auto dataSize
         = std::reduce(arrayDims.begin(), arrayDims.end(), std::size_t{1}, std::multiplies{}) * llama::sizeOf<Particle>;
 
