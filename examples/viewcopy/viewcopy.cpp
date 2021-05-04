@@ -6,6 +6,7 @@
 #include <chrono>
 #include <fmt/format.h>
 #include <fstream>
+#include <immintrin.h>
 #include <iomanip>
 #include <llama/llama.hpp>
 #include <numeric>
@@ -101,7 +102,59 @@ void std_copy(
     std::copy(srcView.begin(), srcView.end(), dstView.begin());
 }
 
-void parallel_memcpy(std::byte* dst, const std::byte* src, std::size_t size, std::size_t numThreads = 1)
+// adapted from: https://stackoverflow.com/a/30386256/1034717
+void* memcpy_avx2(void* dst, const void* src, size_t n) noexcept
+{
+#define ALIGN(ptr, align) (((ptr) + (align) -1) & ~((align) -1))
+
+    char* d = static_cast<char*>(dst);
+    const char* s = static_cast<const char*>(src);
+
+    // fall back to memcpy() if dst and src are misaligned
+    if ((reinterpret_cast<uintptr_t>(d) & 31) != (reinterpret_cast<uintptr_t>(s) & 31))
+        return memcpy(d, s, n);
+
+    // align dst/src address multiple of 32
+    if (reinterpret_cast<uintptr_t>(d) & 31)
+    {
+        uintptr_t header_bytes = 32 - (reinterpret_cast<uintptr_t>(d) & 31);
+        assert(header_bytes < 32);
+
+        memcpy(d, s, std::min(header_bytes, n));
+
+        d = reinterpret_cast<char*>(ALIGN(reinterpret_cast<uintptr_t>(d), 32));
+        s = reinterpret_cast<char*>(ALIGN(reinterpret_cast<uintptr_t>(s), 32));
+        n -= std::min(header_bytes, n);
+    }
+
+    constexpr auto unrollFactor = 8;
+    constexpr auto bytesPerIteration = 32 * unrollFactor;
+    while (n >= bytesPerIteration)
+    {
+#pragma unroll
+#pragma GCC unroll unrollFactor
+        for (auto i = 0; i < unrollFactor; i++)
+            _mm256_stream_si256(
+                reinterpret_cast<__m256i*>(d) + i,
+                _mm256_stream_load_si256(reinterpret_cast<const __m256i*>(s) + i));
+        s += bytesPerIteration;
+        d += bytesPerIteration;
+        n -= bytesPerIteration;
+    }
+
+    if (n > 0)
+        memcpy(d, s, n);
+
+    return dst;
+#undef ALIGN
+}
+
+inline void parallel_memcpy(
+    std::byte* dst,
+    const std::byte* src,
+    std::size_t size,
+    decltype(std::memcpy) = std::memcpy,
+    std::size_t numThreads = 1)
 {
     const auto sizePerThread = size / numThreads;
     const auto sizeLastThread = sizePerThread + size % numThreads;
@@ -391,9 +444,9 @@ try
 
     std::ofstream plotFile{"viewcopy.tsv"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
-    plotFile << "\"\"\t\"naive copy\"\t\"naive copy(p)\"\t\"std::copy\"\t\"memcpy\"\t\"memcpy(p)\"\t\"aosoa "
-                "copy(r)\"\t\"aosoa copy(w)"
-                "\"\t\"aosoa copy(r,p)\"\t\"aosoa copy(w,p)\"\n";
+    plotFile << "\"\"\t\"naive copy\"\t\"naive "
+                "copy(p)\"\t\"std::copy\"\t\"memcpy\"\t\"memcpy(p)\"\t\"memcpy_avx2\"\t\"memcpy_avx2(p)\"\t\"aosoa "
+                "copy(r)\"\t\"aosoa copy(w)\"\t\"aosoa copy(r,p)\"\t\"aosoa copy(w,p)\"\n";
 
     auto benchmarkAllCopies = [&](std::string_view srcName, std::string_view dstName, auto srcMapping, auto dstMapping)
     {
@@ -441,6 +494,31 @@ try
                     dstView.storageBlobs[0].data(),
                     srcView.storageBlobs[0].data(),
                     dstView.storageBlobs[0].size(),
+                    std::memcpy,
+                    numThreads);
+            });
+        benchmarkCopy(
+            "memcpy_avx2",
+            [](const auto& srcView, auto& dstView)
+            {
+                static_assert(decltype(srcView.storageBlobs)::rank == 1);
+                static_assert(decltype(dstView.storageBlobs)::rank == 1);
+                memcpy_avx2(
+                    dstView.storageBlobs[0].data(),
+                    srcView.storageBlobs[0].data(),
+                    dstView.storageBlobs[0].size());
+            });
+        benchmarkCopy(
+            "memcpy_avx2(p)",
+            [&](const auto& srcView, auto& dstView)
+            {
+                static_assert(decltype(srcView.storageBlobs)::rank == 1);
+                static_assert(decltype(dstView.storageBlobs)::rank == 1);
+                parallel_memcpy(
+                    dstView.storageBlobs[0].data(),
+                    srcView.storageBlobs[0].data(),
+                    dstView.storageBlobs[0].size(),
+                    memcpy_avx2,
                     numThreads);
             });
         if constexpr (is_AoSoA<decltype(srcMapping)> || is_AoSoA<decltype(dstMapping)>)
@@ -492,7 +570,7 @@ set style fill solid
 set xtics rotate by 45 right
 set key out top center maxrows 3
 set ylabel "throughput [GiB/s]"
-plot 'viewcopy.tsv' using 2:xtic(1) ti col, "" using 3 ti col, "" using 4 ti col, "" using 5 ti col, "" using 6 ti col, "" using 7 ti col, "" using 8 ti col, "" using 9 ti col, "" using 10 ti col
+plot 'viewcopy.tsv' using 2:xtic(1) ti col, "" using 3 ti col, "" using 4 ti col, "" using 5 ti col, "" using 6 ti col, "" using 7 ti col, "" using 8 ti col, "" using 9 ti col, "" using 10 ti col, "" using 11 ti col, "" using 12 ti col
 )",
         dataSize / 1024 / 1024,
         boost::asio::ip::host_name());
