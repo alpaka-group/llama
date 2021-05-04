@@ -239,22 +239,22 @@ void aosoa_copy_internal(const View1& srcView, View2& dstView, std::size_t numTh
             const auto start = id * elementsPerThread;
             const auto stop = id == numThreads - 1 ? flatSize : (id + 1) * elementsPerThread;
 
+            auto copyLBlock = [&](const std::byte*& threadSrc, std::size_t dstIndex, auto coord)
+            {
+                constexpr auto bytes = L * sizeof(llama::GetType<RecordDim, decltype(coord)>);
+                std::memcpy(&dst[mapDst(dstIndex, coord)], threadSrc, bytes);
+                threadSrc += bytes;
+            };
             if constexpr (srcIsAoSoA)
             {
                 auto* threadSrc = src + mapSrc(start, llama::RecordCoord<>{});
                 for (std::size_t i = start; i < stop; i += LanesSrc)
-                {
                     llama::forEachLeaf<RecordDim>(
                         [&](auto coord)
                         {
                             for (std::size_t j = 0; j < LanesSrc; j += L)
-                            {
-                                constexpr auto bytes = L * sizeof(llama::GetType<RecordDim, decltype(coord)>);
-                                std::memcpy(&dst[mapDst(i + j, coord)], threadSrc, bytes);
-                                threadSrc += bytes;
-                            }
+                                copyLBlock(threadSrc, i + j, coord);
                         });
-                }
             }
             else
             {
@@ -263,11 +263,7 @@ void aosoa_copy_internal(const View1& srcView, View2& dstView, std::size_t numTh
                     {
                         auto* threadSrc = src + mapSrc(start, coord);
                         for (std::size_t i = start; i < stop; i += L)
-                        {
-                            constexpr auto bytes = L * sizeof(llama::GetType<RecordDim, decltype(coord)>);
-                            std::memcpy(&dst[mapDst(i, coord)], threadSrc, bytes);
-                            threadSrc += bytes;
-                        }
+                            copyLBlock(threadSrc, i, coord);
                     });
             }
         }
@@ -283,22 +279,22 @@ void aosoa_copy_internal(const View1& srcView, View2& dstView, std::size_t numTh
             const auto start = id * elementsPerThread;
             const auto stop = id == numThreads - 1 ? flatSize : (id + 1) * elementsPerThread;
 
+            auto copyLBlock = [&](std::byte*& threadDst, std::size_t srcIndex, auto coord)
+            {
+                constexpr auto bytes = L * sizeof(llama::GetType<RecordDim, decltype(coord)>);
+                std::memcpy(threadDst, &src[mapSrc(srcIndex, coord)], bytes);
+                threadDst += bytes;
+            };
             if constexpr (dstIsAoSoA)
             {
                 auto* threadDst = dst + mapDst(start, llama::RecordCoord<>{});
                 for (std::size_t i = start; i < stop; i += LanesDst)
-                {
                     llama::forEachLeaf<RecordDim>(
                         [&](auto coord)
                         {
                             for (std::size_t j = 0; j < LanesDst; j += L)
-                            {
-                                constexpr auto bytes = L * sizeof(llama::GetType<RecordDim, decltype(coord)>);
-                                std::memcpy(threadDst, &src[mapSrc(i + j, coord)], bytes);
-                                threadDst += bytes;
-                            }
+                                copyLBlock(threadDst, i + j, coord);
                         });
-                }
             }
             else
             {
@@ -307,11 +303,7 @@ void aosoa_copy_internal(const View1& srcView, View2& dstView, std::size_t numTh
                     {
                         auto* threadDst = dst + mapDst(start, coord);
                         for (std::size_t i = start; i < stop; i += L)
-                        {
-                            constexpr auto bytes = L * sizeof(llama::GetType<RecordDim, decltype(coord)>);
-                            std::memcpy(threadDst, &src[mapSrc(i, coord)], bytes);
-                            threadDst += bytes;
-                        }
+                            copyLBlock(threadDst, i, coord);
                     });
             }
         }
