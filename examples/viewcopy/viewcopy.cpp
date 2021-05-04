@@ -437,8 +437,8 @@ try
     std::ofstream plotFile{"viewcopy.tsv"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
     plotFile << "\"\"\t\"naive copy\"\t\"naive "
-                "copy(p)\"\t\"std::copy\"\t\"memcpy\"\t\"memcpy(p)\"\t\"memcpy_avx2\"\t\"memcpy_avx2(p)\"\t\"aosoa "
-                "copy(r)\"\t\"aosoa copy(w)\"\t\"aosoa copy(r,p)\"\t\"aosoa copy(w,p)\"\n";
+                "copy(p)\"\t\"std::copy\"\t\"memcpy\"\t\"memcpy(p)\"\t\"memcpy\\\\\\_avx2\"\t\"memcpy\\\\\\_avx2(p)"
+                "\"\t\"aosoa copy(r)\"\t\"aosoa copy(w)\"\t\"aosoa copy(r,p)\"\t\"aosoa copy(w,p)\"\n";
 
     auto benchmarkAllCopies = [&](std::string_view srcName, std::string_view dstName, auto srcMapping, auto dstMapping)
     {
