@@ -105,12 +105,11 @@ A more detailed example can be found in the
 View iterators
 --------------
 
-Iterators on views are useful but pose a couple of difficulties.
-Therefore, only 1D iterators are supported currently.
-Higher dimensional iterators are difficult to get right if we also want to preserve good codegen.
-Multiple nested loops seem to be superior to a single iterator over multiple dimensions.
+Iterators on views of any dimension are supported.
+Higher than 1D iterators however are difficult to get right if we also want to achieve well optimized assembly.
+Multiple nested loops seem to be optimized better than a single loop using iterators over multiple dimensions.
 
-Having an iterator to a view opens up the standard library for use in conjunction with LLAMA:
+Nevertheless, having an iterator to a view opens up the standard library for use in conjunction with LLAMA:
 
 .. code-block:: C++
 
