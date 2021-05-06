@@ -436,9 +436,42 @@ try
 
     std::ofstream plotFile{"viewcopy.tsv"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
-    plotFile << "\"\"\t\"naive copy\"\t\"naive "
-                "copy(p)\"\t\"std::copy\"\t\"memcpy\"\t\"memcpy(p)\"\t\"memcpy\\\\\\_avx2\"\t\"memcpy\\\\\\_avx2(p)"
-                "\"\t\"aosoa copy(r)\"\t\"aosoa copy(w)\"\t\"aosoa copy(r,p)\"\t\"aosoa copy(w,p)\"\n";
+    plotFile
+        << "\"\"\t\"memcpy\"\t\"memcpy(p)\"\t\"memcpy\\\\\\_avx2\"\t\"memcpy\\\\\\_avx2(p)\"\t\"naive copy\"\t\"naive "
+           "copy(p)\"\t\"std::copy\"\t\"aosoa copy(r)\"\t\"aosoa copy(w)\"\t\"aosoa copy(r,p)\"\t\"aosoa copy(w,p)\"\n";
+
+    std::vector<std::byte> src(dataSize);
+
+    auto benchmarkMemcpy = [&](std::string_view name, auto memcpy)
+    {
+        std::vector<std::byte> dst(dataSize);
+        Stopwatch watch;
+        for (auto i = 0; i < REPETITIONS; i++)
+            memcpy(dst.data(), src.data(), dataSize);
+        const auto seconds = watch.printAndReset(name, '\t') / REPETITIONS;
+        const auto gbs = (dataSize / seconds) / (1024.0 * 1024.0 * 1024.0);
+        std::cout << gbs << "GiB/s\t\n";
+        plotFile << gbs << "\t";
+    };
+
+    std::cout << "byte[] -> byte[]\n";
+    plotFile << "\"byte[] -> byte[]\"\t";
+    benchmarkMemcpy("memcpy", std::memcpy);
+    benchmarkMemcpy(
+        "memcpy(p)",
+        [&](auto* dst, auto* src, auto size) { parallel_memcpy(dst, src, size, std::memcpy, numThreads); });
+    benchmarkMemcpy("memcpy_avx2", memcpy_avx2);
+    benchmarkMemcpy(
+        "memcpy_avx2(p)",
+        [&](auto* dst, auto* src, auto size) { parallel_memcpy(dst, src, size, memcpy_avx2, numThreads); });
+    plotFile << "0\t";
+    plotFile << "0\t";
+    plotFile << "0\t";
+    plotFile << "0\t";
+    plotFile << "0\t";
+    plotFile << "0\t";
+    plotFile << "0\t";
+    plotFile << "\n";
 
     auto benchmarkAllCopies = [&](std::string_view srcName, std::string_view dstName, auto srcMapping, auto dstMapping)
     {
@@ -460,59 +493,15 @@ try
             plotFile << gbs << "\t";
         };
 
+        plotFile << "0\t";
+        plotFile << "0\t";
+        plotFile << "0\t";
+        plotFile << "0\t";
         benchmarkCopy("naive copy", [](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView); });
         benchmarkCopy(
             "naive copy(p)",
             [&](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView, numThreads); });
         benchmarkCopy("std::copy", [](const auto& srcView, auto& dstView) { std_copy(srcView, dstView); });
-        benchmarkCopy(
-            "memcpy",
-            [](const auto& srcView, auto& dstView)
-            {
-                static_assert(decltype(srcView.storageBlobs)::rank == 1);
-                static_assert(decltype(dstView.storageBlobs)::rank == 1);
-                std::memcpy(
-                    dstView.storageBlobs[0].data(),
-                    srcView.storageBlobs[0].data(),
-                    dstView.storageBlobs[0].size());
-            });
-        benchmarkCopy(
-            "memcpy(p)",
-            [&](const auto& srcView, auto& dstView)
-            {
-                static_assert(decltype(srcView.storageBlobs)::rank == 1);
-                static_assert(decltype(dstView.storageBlobs)::rank == 1);
-                parallel_memcpy(
-                    dstView.storageBlobs[0].data(),
-                    srcView.storageBlobs[0].data(),
-                    dstView.storageBlobs[0].size(),
-                    std::memcpy,
-                    numThreads);
-            });
-        benchmarkCopy(
-            "memcpy_avx2",
-            [](const auto& srcView, auto& dstView)
-            {
-                static_assert(decltype(srcView.storageBlobs)::rank == 1);
-                static_assert(decltype(dstView.storageBlobs)::rank == 1);
-                memcpy_avx2(
-                    dstView.storageBlobs[0].data(),
-                    srcView.storageBlobs[0].data(),
-                    dstView.storageBlobs[0].size());
-            });
-        benchmarkCopy(
-            "memcpy_avx2(p)",
-            [&](const auto& srcView, auto& dstView)
-            {
-                static_assert(decltype(srcView.storageBlobs)::rank == 1);
-                static_assert(decltype(dstView.storageBlobs)::rank == 1);
-                parallel_memcpy(
-                    dstView.storageBlobs[0].data(),
-                    srcView.storageBlobs[0].data(),
-                    dstView.storageBlobs[0].size(),
-                    memcpy_avx2,
-                    numThreads);
-            });
         if constexpr (is_AoSoA<decltype(srcMapping)> || is_AoSoA<decltype(dstMapping)>)
         {
             benchmarkCopy(
@@ -560,7 +549,7 @@ set title "viewcopy CPU {}MiB particles on {}"
 set style data histograms
 set style fill solid
 set xtics rotate by 45 right
-set key out top center maxrows 3
+set key out top center maxrows 4
 set ylabel "throughput [GiB/s]"
 plot 'viewcopy.tsv' using 2:xtic(1) ti col, "" using 3 ti col, "" using 4 ti col, "" using 5 ti col, "" using 6 ti col, "" using 7 ti col, "" using 8 ti col, "" using 9 ti col, "" using 10 ti col, "" using 11 ti col, "" using 12 ti col
 )",
