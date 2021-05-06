@@ -60,13 +60,13 @@ namespace llamaex
     }
 } // namespace llamaex
 
-template <typename Mapping1, typename BlobType1, typename Mapping2, typename BlobType2>
+template <typename SrcMapping, typename SrcBlobType, typename DstMapping, typename DstBlobType>
 void naive_copy(
-    const llama::View<Mapping1, BlobType1>& srcView,
-    llama::View<Mapping2, BlobType2>& dstView,
+    const llama::View<SrcMapping, SrcBlobType>& srcView,
+    llama::View<DstMapping, DstBlobType>& dstView,
     std::size_t numThreads = 1)
 {
-    static_assert(std::is_same_v<typename Mapping1::RecordDim, typename Mapping2::RecordDim>);
+    static_assert(std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>);
 
     if (srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
         throw std::runtime_error{"Array dimensions sizes are different"};
@@ -76,25 +76,25 @@ void naive_copy(
         numThreads,
         [&](auto ad)
         {
-            llama::forEachLeaf<typename Mapping1::RecordDim>(
+            llama::forEachLeaf<typename DstMapping::RecordDim>(
                 [&](auto coord)
                 {
                     dstView(ad)(coord) = srcView(ad)(coord);
                     // std::memcpy(
                     //    &dstView(ad)(coord),
                     //    &srcView(ad)(coord),
-                    //    sizeof(llama::GetType<typename Mapping1::RecordDim, decltype(coord)>));
+                    //    sizeof(llama::GetType<typename SrcMapping::RecordDim, decltype(coord)>));
                 });
         });
 }
 
-template <typename Mapping1, typename BlobType1, typename Mapping2, typename BlobType2>
+template <typename SrcMapping, typename SrcBlobType, typename DstMapping, typename DstBlobType>
 void std_copy(
-    const llama::View<Mapping1, BlobType1>& srcView,
-    llama::View<Mapping2, BlobType2>& dstView,
+    const llama::View<SrcMapping, SrcBlobType>& srcView,
+    llama::View<DstMapping, DstBlobType>& dstView,
     std::size_t numThreads = 1)
 {
-    static_assert(std::is_same_v<typename Mapping1::RecordDim, typename Mapping2::RecordDim>);
+    static_assert(std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>);
 
     if (srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
         throw std::runtime_error{"Array dimensions sizes are different"};
@@ -173,9 +173,9 @@ template <
     typename RecordDim,
     std::size_t LanesSrc,
     std::size_t LanesDst,
-    typename View1,
-    typename View2>
-void aosoa_copy_internal(const View1& srcView, View2& dstView, std::size_t numThreads)
+    typename SrcView,
+    typename DstView>
+void aosoa_copy_internal(const SrcView& srcView, DstView& dstView, std::size_t numThreads)
 {
     static_assert(decltype(srcView.storageBlobs)::rank == 1);
     static_assert(decltype(dstView.storageBlobs)::rank == 1);
@@ -315,16 +315,16 @@ template <
     typename ArrayDims,
     typename RecordDim,
     std::size_t LanesSrc,
-    typename BlobType1,
+    typename SrcBlobType,
     std::size_t LanesDst,
-    typename BlobType2>
+    typename DstBlobType>
 void aosoa_copy(
     const llama::View<
         llama::mapping::AoSoA<ArrayDims, RecordDim, LanesSrc, llama::mapping::LinearizeArrayDimsCpp>,
-        BlobType1>& srcView,
+        SrcBlobType>& srcView,
     llama::View<
         llama::mapping::AoSoA<ArrayDims, RecordDim, LanesDst, llama::mapping::LinearizeArrayDimsCpp>,
-        BlobType2>& dstView,
+        DstBlobType>& dstView,
     std::size_t numThreads = 1)
 {
     static_assert(decltype(srcView.storageBlobs)::rank == 1);
@@ -340,13 +340,13 @@ template <
     typename ArrayDims,
     typename RecordDim,
     std::size_t LanesSrc,
-    typename BlobType1,
-    typename BlobType2>
+    typename SrcBlobType,
+    typename DstBlobType>
 void aosoa_copy(
     const llama::View<
         llama::mapping::AoSoA<ArrayDims, RecordDim, LanesSrc, llama::mapping::LinearizeArrayDimsCpp>,
-        BlobType1>& srcView,
-    llama::View<llama::mapping::SoA<ArrayDims, RecordDim, false, llama::mapping::LinearizeArrayDimsCpp>, BlobType2>&
+        SrcBlobType>& srcView,
+    llama::View<llama::mapping::SoA<ArrayDims, RecordDim, false, llama::mapping::LinearizeArrayDimsCpp>, DstBlobType>&
         dstView,
     std::size_t numThreads = 1)
 {
@@ -365,16 +365,16 @@ template <
     bool ReadOpt,
     typename ArrayDims,
     typename RecordDim,
-    typename BlobType1,
+    typename SrcBlobType,
     std::size_t LanesDst,
-    typename BlobType2>
+    typename DstBlobType>
 void aosoa_copy(
     const llama::View<
         llama::mapping::SoA<ArrayDims, RecordDim, false, llama::mapping::LinearizeArrayDimsCpp>,
-        BlobType1>& srcView,
+        SrcBlobType>& srcView,
     llama::View<
         llama::mapping::AoSoA<ArrayDims, RecordDim, LanesDst, llama::mapping::LinearizeArrayDimsCpp>,
-        BlobType2>& dstView,
+        DstBlobType>& dstView,
     std::size_t numThreads = 1)
 {
     static_assert(decltype(srcView.storageBlobs)::rank == 1);
