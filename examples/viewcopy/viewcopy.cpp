@@ -428,11 +428,11 @@ inline constexpr auto is_AoSoA<llama::mapping::AoSoA<AD, RD, L>> = true;
 auto main() -> int
 try
 {
-    const auto numThreads = static_cast<std::size_t>(omp_get_max_threads());
-    std::cout << "Threads: " << numThreads << "\n";
-
     const auto dataSize
         = std::reduce(arrayDims.begin(), arrayDims.end(), std::size_t{1}, std::multiplies{}) * llama::sizeOf<Particle>;
+    const auto numThreads = static_cast<std::size_t>(omp_get_max_threads());
+    std::cout << "Data size: " << dataSize << "\n";
+    std::cout << "Threads: " << numThreads << "\n";
 
     std::ofstream plotFile{"viewcopy.tsv"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
@@ -440,11 +440,11 @@ try
         << "\"\"\t\"memcpy\"\t\"memcpy(p)\"\t\"memcpy\\\\\\_avx2\"\t\"memcpy\\\\\\_avx2(p)\"\t\"naive copy\"\t\"naive "
            "copy(p)\"\t\"std::copy\"\t\"aosoa copy(r)\"\t\"aosoa copy(w)\"\t\"aosoa copy(r,p)\"\t\"aosoa copy(w,p)\"\n";
 
-    std::vector<std::byte> src(dataSize);
+    std::vector<std::byte, llama::bloballoc::AlignedAllocator<std::byte, 64>> src(dataSize);
 
     auto benchmarkMemcpy = [&](std::string_view name, auto memcpy)
     {
-        std::vector<std::byte> dst(dataSize);
+        std::vector<std::byte, llama::bloballoc::AlignedAllocator<std::byte, 64>> dst(dataSize);
         Stopwatch watch;
         for (auto i = 0; i < REPETITIONS; i++)
             memcpy(dst.data(), src.data(), dataSize);
