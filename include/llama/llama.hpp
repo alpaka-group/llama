@@ -40,6 +40,7 @@
 #include "BlobAllocators.hpp"
 #include "Core.hpp"
 #include "View.hpp"
+#include "VirtualRecord.hpp"
 #include "macros.hpp"
 #include "mapping/AoS.hpp"
 #include "mapping/AoSoA.hpp"
