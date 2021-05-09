@@ -58,8 +58,8 @@ namespace llama
     template <std::size_t Dim, typename RecordDim>
     LLAMA_FN_HOST_ACC_INLINE auto allocViewStack() -> decltype(auto)
     {
-        using Mapping = llama::mapping::One<ArrayDims<Dim>, RecordDim>;
-        return allocView(Mapping{}, llama::bloballoc::Stack<sizeOf<RecordDim>>{});
+        using Mapping = mapping::One<ArrayDims<Dim>, RecordDim>;
+        return allocView(Mapping{}, bloballoc::Stack<sizeOf<RecordDim>>{});
     }
 
     template <typename View, typename BoundRecordCoord = RecordCoord<>, bool OwnView = false>

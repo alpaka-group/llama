@@ -285,7 +285,7 @@ namespace llama
                     LLAMA_FORCE_INLINE_RECURSIVE
                     forEachLeafImpl(
                         static_cast<GetFieldType<Field>*>(nullptr),
-                        llama::RecordCoord<Coords..., childIndex>{},
+                        RecordCoord<Coords..., childIndex>{},
                         std::forward<Functor>(functor));
                 });
         }

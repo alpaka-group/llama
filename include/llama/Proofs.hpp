@@ -14,7 +14,7 @@ namespace llama
     namespace internal
     {
         template <typename Mapping, std::size_t... Is, typename ArrayDims>
-        constexpr auto blobNrAndOffset(const Mapping& m, llama::RecordCoord<Is...>, ArrayDims ad)
+        constexpr auto blobNrAndOffset(const Mapping& m, RecordCoord<Is...>, ArrayDims ad)
         {
             return m.template blobNrAndOffset<Is...>(ad);
         }
@@ -69,24 +69,24 @@ namespace llama
         };
 
         bool collision = false;
-        llama::forEachLeaf<
-            typename Mapping::RecordDim>([&](auto coord) constexpr
-                                         {
-                                             if (collision)
-                                                 return;
-                                             for (auto ad : llama::ArrayDimsIndexRange{m.arrayDims()})
-                                             {
-                                                 using Type
-                                                     = llama::GetType<typename Mapping::RecordDim, decltype(coord)>;
-                                                 const auto [blob, offset] = internal::blobNrAndOffset(m, coord, ad);
-                                                 for (auto b = 0; b < sizeof(Type); b++)
-                                                     if (testAndSet(blob, offset + b))
+        forEachLeaf<typename Mapping::RecordDim>([&](auto coord) constexpr
+                                                 {
+                                                     if (collision)
+                                                         return;
+                                                     for (auto ad : ArrayDimsIndexRange{m.arrayDims()})
                                                      {
-                                                         collision = true;
-                                                         break;
+                                                         using Type
+                                                             = GetType<typename Mapping::RecordDim, decltype(coord)>;
+                                                         const auto [blob, offset]
+                                                             = internal::blobNrAndOffset(m, coord, ad);
+                                                         for (auto b = 0; b < sizeof(Type); b++)
+                                                             if (testAndSet(blob, offset + b))
+                                                             {
+                                                                 collision = true;
+                                                                 break;
+                                                             }
                                                      }
-                                             }
-                                         });
+                                                 });
         return !collision;
     }
 } // namespace llama
