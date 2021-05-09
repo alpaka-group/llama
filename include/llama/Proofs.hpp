@@ -5,10 +5,6 @@
 #include "ArrayDimsIndexRange.hpp"
 #include "Core.hpp"
 
-// FIXME: this test is actually not correct, because __cpp_constexpr_dynamic_alloc only guarantees constexpr
-// std::allocator
-#ifdef __cpp_constexpr_dynamic_alloc
-
 namespace llama
 {
     namespace internal
@@ -23,7 +19,13 @@ namespace llama
         {
             return (dividend + divisor - 1) / divisor;
         }
+    } // namespace internal
 
+// FIXME: this test is actually not correct, because __cpp_constexpr_dynamic_alloc only guarantees constexpr
+// std::allocator
+#ifdef __cpp_constexpr_dynamic_alloc
+    namespace internal
+    {
         template <typename T>
         struct DynArray
         {
@@ -49,7 +51,7 @@ namespace llama
         };
     } // namespace internal
 
-    // Proofs by exhaustion of the array and record dimensions, that all values mapped to memory do not overlap.
+    /// Proofs by exhaustion of the array and record dimensions, that all values mapped to memory do not overlap.
     // Unfortunately, this only works for smallish array dimensions, because of compiler limits on constexpr evaluation
     // depth.
     template <typename Mapping>
@@ -89,6 +91,39 @@ namespace llama
                                          });
         return !collision;
     }
-} // namespace llama
-
 #endif
+
+    /// Proofs by exhaustion of the array and record dimensions, that at least PieceLength elements are always stored
+    /// contiguously.
+    // Unfortunately, this only works for smallish array dimensions, because of compiler limits on constexpr evaluation
+    // depth.
+    template <std::size_t PieceLength, typename Mapping>
+    constexpr auto mapsPiecewiseContiguous(const Mapping& m) -> bool
+    {
+        bool collision = false;
+        forEachLeaf<typename Mapping::RecordDim>([&](auto coord) constexpr
+                                                 {
+                                                     std::size_t flatIndex = 0;
+                                                     std::size_t lastBlob = std::numeric_limits<std::size_t>::max();
+                                                     std::size_t lastOffset = std::numeric_limits<std::size_t>::max();
+                                                     for (auto ad : ArrayDimsIndexRange{m.arrayDims()})
+                                                     {
+                                                         using Type
+                                                             = GetType<typename Mapping::RecordDim, decltype(coord)>;
+                                                         const auto [blob, offset]
+                                                             = internal::blobNrAndOffset(m, coord, ad);
+                                                         if (flatIndex % PieceLength != 0
+                                                             && (lastBlob != blob
+                                                                 || lastOffset + sizeof(Type) != offset))
+                                                         {
+                                                             collision = true;
+                                                             break;
+                                                         }
+                                                         lastBlob = blob;
+                                                         lastOffset = offset;
+                                                         flatIndex++;
+                                                     }
+                                                 });
+        return !collision;
+    }
+} // namespace llama

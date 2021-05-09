@@ -144,3 +144,22 @@ TEST_CASE("mapsNonOverlappingly.ModulusMapping")
     INFO("Test disabled because compiler does not support __cpp_constexpr_dynamic_alloc");
 #endif
 }
+
+TEST_CASE("maps.ModulusMapping")
+{
+    constexpr auto arrayDims = llama::ArrayDims{128};
+    STATIC_REQUIRE(llama::mapsPiecewiseContiguous<1>(llama::mapping::AoS{arrayDims, Particle{}}));
+    STATIC_REQUIRE(!llama::mapsPiecewiseContiguous<8>(llama::mapping::AoS{arrayDims, Particle{}}));
+    STATIC_REQUIRE(!llama::mapsPiecewiseContiguous<16>(llama::mapping::AoS{arrayDims, Particle{}}));
+
+    STATIC_REQUIRE(llama::mapsPiecewiseContiguous<1>(llama::mapping::SoA{arrayDims, Particle{}}));
+    STATIC_REQUIRE(llama::mapsPiecewiseContiguous<8>(llama::mapping::SoA{arrayDims, Particle{}}));
+    STATIC_REQUIRE(llama::mapsPiecewiseContiguous<16>(llama::mapping::SoA{arrayDims, Particle{}}));
+
+    STATIC_REQUIRE(
+        llama::mapsPiecewiseContiguous<1>(llama::mapping::AoSoA<decltype(arrayDims), Particle, 8>{arrayDims}));
+    STATIC_REQUIRE(llama::mapsPiecewiseContiguous<8>(
+        llama::mapping::AoSoA<decltype(arrayDims), Particle, 8>{arrayDims, Particle{}}));
+    STATIC_REQUIRE(!llama::mapsPiecewiseContiguous<16>(
+        llama::mapping::AoSoA<decltype(arrayDims), Particle, 8>{arrayDims, Particle{}}));
+}
