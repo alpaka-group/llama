@@ -72,7 +72,7 @@ namespace llama
         }
 
         template <std::size_t Dim>
-        auto formatUdCoord(const llama::ArrayDims<Dim>& coord)
+        auto formatUdCoord(const ArrayDims<Dim>& coord)
         {
             if constexpr (Dim == 1)
                 return std::to_string(coord[0]);
