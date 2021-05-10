@@ -362,63 +362,72 @@ namespace llama
             value = ((value + multiple - 1) / multiple) * multiple;
         }
 
-        // TODO: MSVC fails to compile if we move this function into an IILE at the callsite
-        template <bool Align, typename... Fields>
-        constexpr auto sizeOfRecordImpl()
+        template <bool Align, typename TypeList>
+        constexpr auto sizeOfImpl() -> std::size_t
         {
             using namespace boost::mp11;
 
             std::size_t size = 0;
             std::size_t maxAlign = 0;
-            using FlatRD = FlattenRecordDim<Record<Fields...>>;
-            mp_for_each<mp_transform<mp_identity, FlatRD>>([&](auto e) constexpr
-                                                           {
-                                                               using T = typename decltype(e)::type;
-                                                               if constexpr (Align)
-                                                                   roundUpToMultiple(size, alignof(T));
-                                                               maxAlign = std::max(maxAlign, alignof(T));
-                                                               size += sizeof(T);
-                                                           });
+            mp_for_each<mp_transform<mp_identity, TypeList>>([&](auto e) constexpr
+                                                             {
+                                                                 using T = typename decltype(e)::type;
+                                                                 if constexpr (Align)
+                                                                 {
+                                                                     roundUpToMultiple(size, alignof(T));
+                                                                     maxAlign = std::max(maxAlign, alignof(T));
+                                                                 }
+                                                                 size += sizeof(T);
+                                                             });
 
             // final padding, so next struct can start right away
             if constexpr (Align)
                 roundUpToMultiple(size, maxAlign);
             return size;
         }
+
+        template <bool Align, typename TypeList, std::size_t I>
+        constexpr std::size_t offsetOfImpl()
+        {
+            using namespace boost::mp11;
+
+            std::size_t offset = 0;
+            mp_for_each<mp_iota_c<I>>([&](auto i) constexpr
+                                      {
+                                          using T = mp_at<TypeList, decltype(i)>;
+                                          if constexpr (Align)
+                                              internal::roundUpToMultiple(offset, alignof(T));
+                                          offset += sizeof(T);
+                                      });
+            if constexpr (Align)
+                internal::roundUpToMultiple(offset, alignof(mp_at_c<TypeList, I>));
+            return offset;
+        }
     } // namespace internal
 
+    /// The size of a type T.
     template <typename T, bool Align = false>
     inline constexpr std::size_t sizeOf = sizeof(T);
 
-    /// The size a record dimension if it would be a normal struct.
+    /// The size of a record dimension if its fields would be in a normal struct.
     template <typename... Fields, bool Align>
-    inline constexpr std::size_t sizeOf<Record<Fields...>, Align> = internal::sizeOfRecordImpl<Align, Fields...>();
+    inline constexpr std::size_t sizeOf<Record<Fields...>, Align> = internal::
+        sizeOfImpl<Align, FlattenRecordDim<Record<Fields...>>>();
+
+    /// The size of a type list if its elements would be in a normal struct.
+    template <typename TypeList, bool Align>
+    inline constexpr std::size_t flatSizeOf = internal::sizeOfImpl<Align, TypeList>();
 
     /// The byte offset of an element in a record dimension if it would be a normal struct.
     /// \tparam RecordDim Record dimension tree.
     /// \tparam RecordCoord Record coordinate of an element inrecord dimension tree.
     template <typename RecordDim, typename RecordCoord, bool Align = false>
-    inline constexpr std::size_t offsetOf = []() constexpr
-    {
-        using namespace boost::mp11;
+    inline constexpr std::size_t offsetOf
+        = internal::offsetOfImpl<Align, FlattenRecordDim<RecordDim>, flatRecordCoord<RecordDim, RecordCoord>>();
 
-        using FlatRD = FlattenRecordDim<RecordDim>;
-        constexpr auto flatCoord = flatRecordCoord<RecordDim, RecordCoord>;
-
-        std::size_t offset = 0;
-        mp_for_each<mp_iota_c<flatCoord>>([&](auto i) constexpr
-                                          {
-                                              using T = mp_at<FlatRD, decltype(i)>;
-                                              if constexpr (Align)
-                                                  internal::roundUpToMultiple(offset, alignof(T));
-                                              offset += sizeof(T);
-                                          });
-        if constexpr (Align)
-            internal::roundUpToMultiple(offset, alignof(mp_at_c<FlatRD, flatCoord>));
-        return offset;
-    }
-    ();
-
+    /// The byte offset of an element in a type list ifs elements would be in a normal struct.
+    template <typename TypeList, std::size_t I, bool Align>
+    inline constexpr std::size_t flatOffsetOf = internal::offsetOfImpl<Align, TypeList, I>();
 
     template <typename S>
     auto structName(S) -> std::string
