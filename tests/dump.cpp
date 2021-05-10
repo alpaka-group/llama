@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include <catch2/catch.hpp>
+#include <fmt/core.h>
 #include <fstream>
 #include <llama/DumpMapping.hpp>
 #include <llama/llama.hpp>
@@ -177,6 +178,28 @@ TEST_CASE("dump.AoS.Unaligned")
 TEST_CASE("dump.AoS.Aligned")
 {
     dump(llama::mapping::AoS<ArrayDims, ParticleUnaligned, true>{arrayDims}, "AoS.Aligned");
+}
+
+TEST_CASE("AoS.Aligned")
+{
+    const auto mapping = llama::mapping::AoS<ArrayDims, ParticleUnaligned, true>{arrayDims};
+    auto view = llama::allocView(mapping);
+    llama::forEachLeaf<ParticleUnaligned>(
+        [&](auto rc)
+        {
+            llama::forEachADCoord(
+                arrayDims,
+                [&](auto ac)
+                {
+                    const auto addr = &view(ac)(rc);
+                    INFO(fmt::format(
+                        "address {}, type {}, array dim {}",
+                        static_cast<void*>(addr),
+                        llama::structName(*addr),
+                        ac[0]));
+                    CHECK(reinterpret_cast<std::intptr_t>(addr) % sizeof(*addr) == 0);
+                });
+        });
 }
 
 TEST_CASE("dump.AoS.AlignedExplicit")
