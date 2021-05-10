@@ -167,7 +167,7 @@ TEST_CASE("alignment")
     STATIC_REQUIRE(llama::offsetOf<RD, llama::RecordCoord<1>, true> == 8); // aligned
     STATIC_REQUIRE(llama::offsetOf<RD, llama::RecordCoord<2>, true> == 16);
     STATIC_REQUIRE(llama::offsetOf<RD, llama::RecordCoord<3>, true> == 18); // aligned
-    STATIC_REQUIRE(llama::sizeOf<RD, true> == 20);
+    STATIC_REQUIRE(llama::sizeOf<RD, true> == 24);
 }
 
 TEST_CASE("GetCoordFromTags")

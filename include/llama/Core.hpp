@@ -369,18 +369,20 @@ namespace llama
             using namespace boost::mp11;
 
             std::size_t size = 0;
+            std::size_t maxAlign = 0;
             using FlatRD = FlattenRecordDim<Record<Fields...>>;
             mp_for_each<mp_transform<mp_identity, FlatRD>>([&](auto e) constexpr
                                                            {
                                                                using T = typename decltype(e)::type;
                                                                if constexpr (Align)
                                                                    roundUpToMultiple(size, alignof(T));
+                                                               maxAlign = std::max(maxAlign, alignof(T));
                                                                size += sizeof(T);
                                                            });
 
             // final padding, so next struct can start right away
             if constexpr (Align)
-                roundUpToMultiple(size, alignof(mp_first<FlatRD>));
+                roundUpToMultiple(size, maxAlign);
             return size;
         }
     } // namespace internal
