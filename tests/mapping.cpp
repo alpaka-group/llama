@@ -223,6 +223,58 @@ TEST_CASE("address.AoS.Aligned")
     }
 }
 
+TEST_CASE("address.AoS.aligned_min")
+{
+    using ArrayDims = llama::ArrayDims<2>;
+    auto arrayDims = ArrayDims{16, 16};
+    auto mapping = llama::mapping::MinAlignedAoS<ArrayDims, Particle>{arrayDims};
+
+    {
+        const auto coord = ArrayDims{0, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 8);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 16);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 24);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 4);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 32);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 40);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 48);
+        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 0);
+        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 1);
+        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 2);
+        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 3);
+    }
+
+    {
+        const auto coord = ArrayDims{0, 1};
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 64);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 72);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 80);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 60);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 88);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 96);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 104);
+        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 56);
+        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 57);
+        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 58);
+        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 59);
+    }
+
+    {
+        const auto coord = ArrayDims{1, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 904);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 912);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 920);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 900);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 928);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 936);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 944);
+        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 896);
+        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 897);
+        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 898);
+        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 899);
+    }
+}
+
 TEST_CASE("address.SoA.SingleBlob")
 {
     using ArrayDims = llama::ArrayDims<2>;

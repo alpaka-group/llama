@@ -117,6 +117,11 @@ TEST_CASE("dump.ParticleUnaligned.AoS_Aligned")
     dump(llama::mapping::AlignedAoS<ArrayDims, ParticleUnaligned>{arrayDims});
 }
 
+TEST_CASE("dump.ParticleUnaligned.AoS_Aligned_Min")
+{
+    dump(llama::mapping::MinAlignedAoS<ArrayDims, ParticleUnaligned>{arrayDims});
+}
+
 TEST_CASE("dump.ParticleUnaligned.SoA_SB")
 {
     dump(llama::mapping::SingleBlobSoA<ArrayDims, ParticleUnaligned>{arrayDims});

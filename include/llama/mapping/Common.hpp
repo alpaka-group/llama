@@ -123,4 +123,54 @@ namespace llama::mapping
             return r;
         }
     };
+
+    /// Flattens the record dimension in the order fields are written.
+    template <typename RecordDim>
+    struct FlattenRecordDimInOrder
+    {
+        using FlatRecordDim = llama::FlatRecordDim<RecordDim>;
+
+        template <std::size_t... RecordCoords>
+        static constexpr std::size_t flatIndex = flatRecordCoord<RecordDim, RecordCoord<RecordCoords...>>;
+    };
+
+    /// Flattens and sorts the record dimension by the alignment of its fields.
+    template <typename RecordDim>
+    struct FlattenRecordDimMinimizePadding
+    {
+    private:
+        template <typename A, typename B>
+        using LessAlignment = std::bool_constant<alignof(A) < alignof(B)>;
+
+        using FlatOrigRecordDim = llama::FlatRecordDim<RecordDim>;
+        using FlatSortedRecordDim = boost::mp11::mp_sort<FlatOrigRecordDim, LessAlignment>;
+
+        template <typename A, typename B>
+        using LessAlignmentForIndices = std::bool_constant<
+            alignof(boost::mp11::mp_at<FlatOrigRecordDim, A>) < alignof(boost::mp11::mp_at<FlatOrigRecordDim, B>)>;
+
+        // A permutation from new FlatSortedRecordDim index to old FlatOrigRecordDim index
+        using PermutedIndices = boost::mp11::
+            mp_sort<boost::mp11::mp_iota<boost::mp11::mp_size<FlatOrigRecordDim>>, LessAlignmentForIndices>;
+
+        template <typename A, typename B>
+        using LessInvertPermutation = std::bool_constant<(
+            boost::mp11::mp_at<PermutedIndices, A>::value < boost::mp11::mp_at<PermutedIndices, B>::value)>;
+
+        // A permutation from old FlatOrigRecordDim index to new FlatSortedRecordDim index
+        using InversePermutedIndices = boost::mp11::
+            mp_sort<boost::mp11::mp_iota<boost::mp11::mp_size<FlatOrigRecordDim>>, LessInvertPermutation>;
+
+    public:
+        using FlatRecordDim = FlatSortedRecordDim;
+
+        template <std::size_t... RecordCoords>
+        static constexpr std::size_t flatIndex = []() constexpr
+        {
+            constexpr auto indexBefore = flatRecordCoord<RecordDim, RecordCoord<RecordCoords...>>;
+            constexpr auto indexAfter = boost::mp11::mp_at_c<InversePermutedIndices, indexBefore>::value;
+            return indexAfter;
+        }
+        ();
+    };
 } // namespace llama::mapping
