@@ -854,13 +854,7 @@ namespace manualAoSoA_Vc
             vec x;
             vec y;
             vec z;
-        } pos;
-        struct
-        {
-            vec x;
-            vec y;
-            vec z;
-        } vel;
+        } pos, vel;
         vec mass;
     };
 
