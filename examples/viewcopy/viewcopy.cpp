@@ -436,9 +436,9 @@ try
 
     std::ofstream plotFile{"viewcopy.tsv"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
-    plotFile
-        << "\"\"\t\"memcpy\"\t\"memcpy(p)\"\t\"memcpy\\\\\\_avx2\"\t\"memcpy\\\\\\_avx2(p)\"\t\"naive copy\"\t\"naive "
-           "copy(p)\"\t\"std::copy\"\t\"aosoa copy(r)\"\t\"aosoa copy(w)\"\t\"aosoa copy(r,p)\"\t\"aosoa copy(w,p)\"\n";
+    plotFile << "\"\"\t\"memcpy\"\t\"memcpy\\\\\\_avx2\"\t\"memcpy(p)\"\t\"memcpy\\\\\\_avx2(p)\"\t\"naive "
+                "copy\"\t\"std::copy\"\t\"aosoa copy(r)\"\t\"aosoa copy(w)\"\t\"naive copy(p)\"\t\"aosoa "
+                "copy(r,p)\"\t\"aosoa copy(w,p)\"\n";
 
     std::vector<std::byte, llama::bloballoc::AlignedAllocator<std::byte, 64>> src(dataSize);
 
@@ -457,10 +457,10 @@ try
     std::cout << "byte[] -> byte[]\n";
     plotFile << "\"byte[] -> byte[]\"\t";
     benchmarkMemcpy("memcpy", std::memcpy);
+    benchmarkMemcpy("memcpy_avx2", memcpy_avx2);
     benchmarkMemcpy(
         "memcpy(p)",
         [&](auto* dst, auto* src, auto size) { parallel_memcpy(dst, src, size, std::memcpy, numThreads); });
-    benchmarkMemcpy("memcpy_avx2", memcpy_avx2);
     benchmarkMemcpy(
         "memcpy_avx2(p)",
         [&](auto* dst, auto* src, auto size) { parallel_memcpy(dst, src, size, memcpy_avx2, numThreads); });
@@ -498,11 +498,9 @@ try
         plotFile << "0\t";
         plotFile << "0\t";
         benchmarkCopy("naive copy", [](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView); });
-        benchmarkCopy(
-            "naive copy(p)",
-            [&](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView, numThreads); });
         benchmarkCopy("std::copy", [](const auto& srcView, auto& dstView) { std_copy(srcView, dstView); });
-        if constexpr (is_AoSoA<decltype(srcMapping)> || is_AoSoA<decltype(dstMapping)>)
+        constexpr auto oneIsAoSoA = is_AoSoA<decltype(srcMapping)> || is_AoSoA<decltype(dstMapping)>;
+        if constexpr (oneIsAoSoA)
         {
             benchmarkCopy(
                 "aosoa copy(r)",
@@ -510,6 +508,17 @@ try
             benchmarkCopy(
                 "aosoa copy(w)",
                 [](const auto& srcView, auto& dstView) { aosoa_copy<false>(srcView, dstView); });
+        }
+        else
+        {
+            plotFile << "0\t";
+            plotFile << "0\t";
+        }
+        benchmarkCopy(
+            "naive copy(p)",
+            [&](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView, numThreads); });
+        if constexpr (oneIsAoSoA)
+        {
             benchmarkCopy(
                 "aosoa_copy(r,p)",
                 [&](const auto& srcView, auto& dstView) { aosoa_copy<true>(srcView, dstView, numThreads); });
@@ -519,8 +528,6 @@ try
         }
         else
         {
-            plotFile << "0\t";
-            plotFile << "0\t";
             plotFile << "0\t";
             plotFile << "0\t";
         }
