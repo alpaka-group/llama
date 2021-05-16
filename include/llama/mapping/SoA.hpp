@@ -23,7 +23,7 @@ namespace llama::mapping
         using ArrayDims = T_ArrayDims;
         using RecordDim = T_RecordDim;
         static constexpr std::size_t blobCount
-            = SeparateBuffers ? boost::mp11::mp_size<FlattenRecordDim<RecordDim>>::value : 1;
+            = SeparateBuffers ? boost::mp11::mp_size<FlatRecordDim<RecordDim>>::value : 1;
 
         constexpr SoA() = default;
 

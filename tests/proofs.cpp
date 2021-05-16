@@ -99,7 +99,7 @@ namespace
     {
         using ArrayDims = T_ArrayDims;
         using RecordDim = T_RecordDim;
-        static constexpr std::size_t blobCount = boost::mp11::mp_size<llama::FlattenRecordDim<RecordDim>>::value;
+        static constexpr std::size_t blobCount = boost::mp11::mp_size<llama::FlatRecordDim<RecordDim>>::value;
 
         LLAMA_FN_HOST_ACC_INLINE
         constexpr explicit ModulusMapping(ArrayDims size, RecordDim = {}) : arrayDimsSize(size)
