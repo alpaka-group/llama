@@ -406,13 +406,15 @@ namespace llama
             using namespace boost::mp11;
 
             std::size_t offset = 0;
-            mp_for_each<mp_iota_c<I>>([&](auto i) constexpr
-                                      {
-                                          using T = mp_at<TypeList, decltype(i)>;
-                                          if constexpr (Align)
-                                              internal::roundUpToMultiple(offset, alignof(T));
-                                          offset += sizeof(T);
-                                      });
+        mp_for_each<mp_transform<mp_identity, mp_take_c<TypeList, I>>>([&](auto t) constexpr
+                                                                             {
+                                                                                 using T = typename decltype(t)::type;
+                                                                                 if constexpr (Align)
+                                                                                     internal::roundUpToMultiple(
+                                                                                         offset,
+                                                                                         alignof(T));
+                                                                                 offset += sizeof(T);
+                                                                             });
             if constexpr (Align)
                 internal::roundUpToMultiple(offset, alignof(mp_at_c<TypeList, I>));
             return offset;
