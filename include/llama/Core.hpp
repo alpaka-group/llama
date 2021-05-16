@@ -444,7 +444,7 @@ namespace llama
     inline constexpr std::size_t flatOffsetOf = internal::offsetOfImpl<Align, TypeList, I>();
 
     template <typename S>
-    auto structName(S) -> std::string
+    auto structName(S = {}) -> std::string
     {
         auto s = boost::core::demangle(typeid(S).name());
         if (const auto pos = s.rfind(':'); pos != std::string::npos)
