@@ -406,21 +406,16 @@ namespace llama
         template <bool Align, typename TypeList, std::size_t I>
         constexpr std::size_t offsetOfImpl()
         {
-            using namespace boost::mp11;
-
-            std::size_t offset = 0;
-            mp_for_each<mp_transform<mp_identity, mp_take_c<TypeList, I>>>([&](auto t) constexpr
-                                                                           {
-                                                                               using T = typename decltype(t)::type;
-                                                                               if constexpr (Align)
-                                                                                   roundUpToMultiple(
-                                                                                       offset,
-                                                                                       alignof(T));
-                                                                               offset += sizeof(T);
-                                                                           });
-            if constexpr (Align)
-                roundUpToMultiple(offset, alignof(mp_at_c<TypeList, I>));
-            return offset;
+            if constexpr (I == 0)
+                return 0;
+            else
+            {
+                std::size_t offset
+                    = offsetOfImpl<Align, TypeList, I - 1>() + sizeof(boost::mp11::mp_at_c<TypeList, I - 1>);
+                if constexpr (Align)
+                    roundUpToMultiple(offset, alignof(boost::mp11::mp_at_c<TypeList, I>));
+                return offset;
+            }
         }
     } // namespace internal
 
