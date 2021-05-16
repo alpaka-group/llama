@@ -334,18 +334,31 @@ namespace llama
             using type = boost::mp11::mp_append<typename FlattenRecordDimImpl<GetFieldType<Fields>>::type...>;
         };
 
-        // TODO: MSVC fails to compile if we move this function into an IILE at the callsite
-        template <typename RecordDim, typename RecordCoord>
-        constexpr auto flatRecordCoordImpl()
+        template <typename T>
+        constexpr auto recursiveFieldCount(T*) -> std::size_t
         {
-            std::size_t c = 0;
-            forEachLeaf<RecordDim>(
-                [&](auto coord)
-                {
-                    if constexpr (RecordCoordCommonPrefixIsBigger<RecordCoord, decltype(coord)>)
-                        c++;
-                });
-            return c;
+            return 1;
+        }
+
+        template <typename... Children>
+        constexpr auto recursiveFieldCount(Record<Children...>*) -> std::size_t
+        {
+            return (recursiveFieldCount(static_cast<GetFieldType<Children>*>(nullptr)) + ... + 0);
+        }
+
+        template <typename T>
+        constexpr auto flatRecordCoordImpl(T*, RecordCoord<>) -> std::size_t
+        {
+            return 0;
+        }
+
+        template <typename... Children, std::size_t I, std::size_t... Is>
+        constexpr auto flatRecordCoordImpl(Record<Children...>*, RecordCoord<I, Is...>) -> std::size_t
+        {
+            return recursiveFieldCount(static_cast<boost::mp11::mp_take_c<Record<Children...>, I>*>(nullptr))
+                + flatRecordCoordImpl(
+                       static_cast<GetFieldType<boost::mp11::mp_at_c<Record<Children...>, I>>*>(nullptr),
+                       RecordCoord<Is...>{});
         }
     } // namespace internal
 
@@ -353,7 +366,8 @@ namespace llama
     using FlattenRecordDim = typename internal::FlattenRecordDimImpl<RecordDim>::type;
 
     template <typename RecordDim, typename RecordCoord>
-    inline constexpr std::size_t flatRecordCoord = internal::flatRecordCoordImpl<RecordDim, RecordCoord>();
+    inline constexpr std::size_t flatRecordCoord
+        = internal::flatRecordCoordImpl(static_cast<RecordDim*>(nullptr), RecordCoord{});
 
     namespace internal
     {
