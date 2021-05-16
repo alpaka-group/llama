@@ -363,7 +363,7 @@ namespace llama
     } // namespace internal
 
     template <typename RecordDim>
-    using FlattenRecordDim = typename internal::FlattenRecordDimImpl<RecordDim>::type;
+    using FlatRecordDim = typename internal::FlattenRecordDimImpl<RecordDim>::type;
 
     template <typename RecordDim, typename RecordCoord>
     inline constexpr std::size_t flatRecordCoord
@@ -406,15 +406,15 @@ namespace llama
             using namespace boost::mp11;
 
             std::size_t offset = 0;
-        mp_for_each<mp_transform<mp_identity, mp_take_c<TypeList, I>>>([&](auto t) constexpr
-                                                                             {
-                                                                                 using T = typename decltype(t)::type;
-                                                                                 if constexpr (Align)
-                                                                                     internal::roundUpToMultiple(
-                                                                                         offset,
-                                                                                         alignof(T));
-                                                                                 offset += sizeof(T);
-                                                                             });
+            mp_for_each<mp_transform<mp_identity, mp_take_c<TypeList, I>>>([&](auto t) constexpr
+                                                                           {
+                                                                               using T = typename decltype(t)::type;
+                                                                               if constexpr (Align)
+                                                                                   internal::roundUpToMultiple(
+                                                                                       offset,
+                                                                                       alignof(T));
+                                                                               offset += sizeof(T);
+                                                                           });
             if constexpr (Align)
                 internal::roundUpToMultiple(offset, alignof(mp_at_c<TypeList, I>));
             return offset;
@@ -428,7 +428,7 @@ namespace llama
     /// The size of a record dimension if its fields would be in a normal struct.
     template <typename... Fields, bool Align>
     inline constexpr std::size_t sizeOf<Record<Fields...>, Align> = internal::
-        sizeOfImpl<Align, FlattenRecordDim<Record<Fields...>>>();
+        sizeOfImpl<Align, FlatRecordDim<Record<Fields...>>>();
 
     /// The size of a type list if its elements would be in a normal struct.
     template <typename TypeList, bool Align>
@@ -439,7 +439,7 @@ namespace llama
     /// \tparam RecordCoord Record coordinate of an element inrecord dimension tree.
     template <typename RecordDim, typename RecordCoord, bool Align = false>
     inline constexpr std::size_t offsetOf
-        = internal::offsetOfImpl<Align, FlattenRecordDim<RecordDim>, flatRecordCoord<RecordDim, RecordCoord>>();
+        = internal::offsetOfImpl<Align, FlatRecordDim<RecordDim>, flatRecordCoord<RecordDim, RecordCoord>>();
 
     /// The byte offset of an element in a type list ifs elements would be in a normal struct.
     template <typename TypeList, std::size_t I, bool Align>

@@ -257,10 +257,10 @@ TEST_CASE("hasSameTags")
             > == false);
 }
 
-TEST_CASE("FlattenRecordDim")
+TEST_CASE("FlatRecordDim")
 {
     STATIC_REQUIRE(std::is_same_v<
-                   llama::FlattenRecordDim<Particle>,
+                   llama::FlatRecordDim<Particle>,
                    boost::mp11::mp_list<double, double, double, float, int, double, double, bool, bool, bool, bool>>);
 }
 

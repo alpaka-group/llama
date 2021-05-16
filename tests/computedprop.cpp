@@ -178,7 +178,7 @@ namespace
     {
         using ArrayDims = T_ArrayDims;
         using RecordDim = T_RecordDim;
-        static constexpr std::size_t blobCount = boost::mp11::mp_size<llama::FlattenRecordDim<RecordDim>>::value;
+        static constexpr std::size_t blobCount = boost::mp11::mp_size<llama::FlatRecordDim<RecordDim>>::value;
 
         constexpr CompressedBoolMapping() = default;
 
