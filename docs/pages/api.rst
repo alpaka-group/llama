@@ -53,6 +53,8 @@ Record dimension
 .. doxygentypedef:: llama::GetCoordFromTags
 .. doxygentypedef:: llama::GetType
 .. doxygentypedef:: llama::GetCoordFromTagsRelative
+.. doxygentypedef:: llama::FlatRecordDim
+.. doxygenvariable:: llama::flatRecordCoord
 
 .. doxygenfunction:: llama::forEachLeaf(Functor &&functor, Tags... baseTags)
 .. doxygenfunction:: llama::forEachLeaf(Functor &&functor, RecordCoord<Coords...> baseCoord)
