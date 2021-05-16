@@ -362,9 +362,12 @@ namespace llama
         }
     } // namespace internal
 
+    /// Returns a flat type list containing all leaf field types of the given record dimension.
     template <typename RecordDim>
     using FlatRecordDim = typename internal::FlattenRecordDimImpl<RecordDim>::type;
 
+    /// The equivalent zero based index into a flat record dimension (\ref FlatRecordDim) of the given hierarchical
+    /// record coordinate.
     template <typename RecordDim, typename RecordCoord>
     inline constexpr std::size_t flatRecordCoord
         = internal::flatRecordCoordImpl(static_cast<RecordDim*>(nullptr), RecordCoord{});
