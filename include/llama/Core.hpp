@@ -413,16 +413,20 @@ namespace llama
                                                                            {
                                                                                using T = typename decltype(t)::type;
                                                                                if constexpr (Align)
-                                                                                   internal::roundUpToMultiple(
+                                                                                   roundUpToMultiple(
                                                                                        offset,
                                                                                        alignof(T));
                                                                                offset += sizeof(T);
                                                                            });
             if constexpr (Align)
-                internal::roundUpToMultiple(offset, alignof(mp_at_c<TypeList, I>));
+                roundUpToMultiple(offset, alignof(mp_at_c<TypeList, I>));
             return offset;
         }
     } // namespace internal
+
+    /// The size of a type list if its elements would be in a normal struct.
+    template <typename TypeList, bool Align>
+    inline constexpr std::size_t flatSizeOf = internal::sizeOfImpl<Align, TypeList>();
 
     /// The size of a type T.
     template <typename T, bool Align = false>
@@ -430,23 +434,18 @@ namespace llama
 
     /// The size of a record dimension if its fields would be in a normal struct.
     template <typename... Fields, bool Align>
-    inline constexpr std::size_t sizeOf<Record<Fields...>, Align> = internal::
-        sizeOfImpl<Align, FlatRecordDim<Record<Fields...>>>();
+    inline constexpr std::size_t sizeOf<Record<Fields...>, Align> = flatSizeOf<FlatRecordDim<Record<Fields...>>, Align>;
 
-    /// The size of a type list if its elements would be in a normal struct.
-    template <typename TypeList, bool Align>
-    inline constexpr std::size_t flatSizeOf = internal::sizeOfImpl<Align, TypeList>();
+    /// The byte offset of an element in a type list ifs elements would be in a normal struct.
+    template <typename TypeList, std::size_t I, bool Align>
+    inline constexpr std::size_t flatOffsetOf = internal::offsetOfImpl<Align, TypeList, I>();
 
     /// The byte offset of an element in a record dimension if it would be a normal struct.
     /// \tparam RecordDim Record dimension tree.
     /// \tparam RecordCoord Record coordinate of an element inrecord dimension tree.
     template <typename RecordDim, typename RecordCoord, bool Align = false>
     inline constexpr std::size_t offsetOf
-        = internal::offsetOfImpl<Align, FlatRecordDim<RecordDim>, flatRecordCoord<RecordDim, RecordCoord>>();
-
-    /// The byte offset of an element in a type list ifs elements would be in a normal struct.
-    template <typename TypeList, std::size_t I, bool Align>
-    inline constexpr std::size_t flatOffsetOf = internal::offsetOfImpl<Align, TypeList, I>();
+        = flatOffsetOf<FlatRecordDim<RecordDim>, flatRecordCoord<RecordDim, RecordCoord>, Align>;
 
     template <typename S>
     auto structName(S = {}) -> std::string
