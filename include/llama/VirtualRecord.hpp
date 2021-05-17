@@ -45,24 +45,36 @@ namespace llama
             const VirtualRecord<RightView, RightBoundRecordDim, RightOwnView>& right) -> LeftRecord&
         {
             using RightRecord = VirtualRecord<RightView, RightBoundRecordDim, RightOwnView>;
-            forEachLeaf<typename LeftRecord::AccessibleRecordDim>(
-                [&](auto leftCoord)
-                {
-                    using LeftInnerCoord = decltype(leftCoord);
-                    forEachLeaf<typename RightRecord::AccessibleRecordDim>(
-                        [&](auto rightCoord)
-                        {
-                            using RightInnerCoord = decltype(rightCoord);
-                            if constexpr (hasSameTags<
-                                              typename LeftRecord::AccessibleRecordDim,
-                                              LeftInnerCoord,
-                                              typename RightRecord::AccessibleRecordDim,
-                                              RightInnerCoord>)
+            // if the record dimension left and right is the same, a single loop is enough and no tag check is needed.
+            // this safes a lot of compilation time.
+            if constexpr (std::is_same_v<
+                              typename LeftRecord::AccessibleRecordDim,
+                              typename RightRecord::AccessibleRecordDim>)
+            {
+                forEachLeaf<typename LeftRecord::AccessibleRecordDim>([&](auto coord)
+                                                                      { Functor{}(left(coord), right(coord)); });
+            }
+            else
+            {
+                forEachLeaf<typename LeftRecord::AccessibleRecordDim>(
+                    [&](auto leftCoord)
+                    {
+                        using LeftInnerCoord = decltype(leftCoord);
+                        forEachLeaf<typename RightRecord::AccessibleRecordDim>(
+                            [&](auto rightCoord)
                             {
-                                Functor{}(left(leftCoord), right(rightCoord));
-                            }
-                        });
-                });
+                                using RightInnerCoord = decltype(rightCoord);
+                                if constexpr (hasSameTags<
+                                                  typename LeftRecord::AccessibleRecordDim,
+                                                  LeftInnerCoord,
+                                                  typename RightRecord::AccessibleRecordDim,
+                                                  RightInnerCoord>)
+                                {
+                                    Functor{}(left(leftCoord), right(rightCoord));
+                                }
+                            });
+                    });
+            }
             return left;
         }
 
@@ -86,24 +98,36 @@ namespace llama
         {
             using RightRecord = VirtualRecord<RightView, RightBoundRecordDim, RightOwnView>;
             bool result = true;
-            forEachLeaf<typename LeftRecord::AccessibleRecordDim>(
-                [&](auto leftCoord)
-                {
-                    using LeftInnerCoord = decltype(leftCoord);
-                    forEachLeaf<typename RightRecord::AccessibleRecordDim>(
-                        [&](auto rightCoord)
-                        {
-                            using RightInnerCoord = decltype(rightCoord);
-                            if constexpr (hasSameTags<
-                                              typename LeftRecord::AccessibleRecordDim,
-                                              LeftInnerCoord,
-                                              typename RightRecord::AccessibleRecordDim,
-                                              RightInnerCoord>)
+            // if the record dimension left and right is the same, a single loop is enough and no tag check is needed.
+            // this safes a lot of compilation time.
+            if constexpr (std::is_same_v<
+                              typename LeftRecord::AccessibleRecordDim,
+                              typename RightRecord::AccessibleRecordDim>)
+            {
+                forEachLeaf<typename LeftRecord::AccessibleRecordDim>(
+                    [&](auto coord) { result &= Functor{}(left(coord), right(coord)); });
+            }
+            else
+            {
+                forEachLeaf<typename LeftRecord::AccessibleRecordDim>(
+                    [&](auto leftCoord)
+                    {
+                        using LeftInnerCoord = decltype(leftCoord);
+                        forEachLeaf<typename RightRecord::AccessibleRecordDim>(
+                            [&](auto rightCoord)
                             {
-                                result &= Functor{}(left(leftCoord), right(rightCoord));
-                            }
-                        });
-                });
+                                using RightInnerCoord = decltype(rightCoord);
+                                if constexpr (hasSameTags<
+                                                  typename LeftRecord::AccessibleRecordDim,
+                                                  LeftInnerCoord,
+                                                  typename RightRecord::AccessibleRecordDim,
+                                                  RightInnerCoord>)
+                                {
+                                    result &= Functor{}(left(leftCoord), right(rightCoord));
+                                }
+                            });
+                    });
+            }
             return result;
         }
 
