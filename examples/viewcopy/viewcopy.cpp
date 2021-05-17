@@ -394,7 +394,7 @@ auto hash(const llama::View<Mapping, BlobType>& view)
 {
     std::size_t acc = 0;
     for (auto ad : llama::ArrayDimsIndexRange{view.mapping.arrayDims()})
-        llama::forEachLeaf<Particle>([&](auto coord) { boost::hash_combine(acc, view(ad)(coord)); });
+        llama::forEachLeaf<typename Mapping::RecordDim>([&](auto coord) { boost::hash_combine(acc, view(ad)(coord)); });
     return acc;
 }
 template <typename Mapping>
