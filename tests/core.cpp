@@ -154,12 +154,12 @@ TEST_CASE("fieldCount")
 
 TEST_CASE("fieldCountBefore")
 {
-    STATIC_REQUIRE(llama::internal::fieldCountBefore<0>(Particle{}) == 0);
-    STATIC_REQUIRE(llama::internal::fieldCountBefore<1>(Particle{}) == 3);
-    STATIC_REQUIRE(llama::internal::fieldCountBefore<2>(Particle{}) == 4);
-    STATIC_REQUIRE(llama::internal::fieldCountBefore<3>(Particle{}) == 5);
-    STATIC_REQUIRE(llama::internal::fieldCountBefore<4>(Particle{}) == 7);
-    STATIC_REQUIRE(llama::internal::fieldCountBefore<5>(Particle{}) == 11);
+    STATIC_REQUIRE(llama::internal::fieldCountBefore<0, Particle> == 0);
+    STATIC_REQUIRE(llama::internal::fieldCountBefore<1, Particle> == 3);
+    STATIC_REQUIRE(llama::internal::fieldCountBefore<2, Particle> == 4);
+    STATIC_REQUIRE(llama::internal::fieldCountBefore<3, Particle> == 5);
+    STATIC_REQUIRE(llama::internal::fieldCountBefore<4, Particle> == 7);
+    STATIC_REQUIRE(llama::internal::fieldCountBefore<5, Particle> == 11);
 }
 
 template <int i>
