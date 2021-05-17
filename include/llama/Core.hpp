@@ -415,20 +415,26 @@ namespace llama
             return size;
         }
 
+        template <bool Align, typename TypeList, std::size_t I>
+        constexpr std::size_t offsetOfImplWorkaround();
+
         // recursive formulation to benefit from template instantiation memoization
         // this massively improves compilation time when this template is instantiated with a lot of different I
         template <bool Align, typename TypeList, std::size_t I>
-        inline constexpr std::size_t offsetOfImpl = []() constexpr
+        inline constexpr std::size_t offsetOfImpl
+            = offsetOfImplWorkaround<Align, TypeList, I>(); // FIXME: MSVC fails to compile an IILE here.
+
+        template <bool Align, typename TypeList>
+        inline constexpr std::size_t offsetOfImpl<Align, TypeList, 0> = 0;
+
+        template <bool Align, typename TypeList, std::size_t I>
+        constexpr std::size_t offsetOfImplWorkaround()
         {
             std::size_t offset = offsetOfImpl<Align, TypeList, I - 1> + sizeof(boost::mp11::mp_at_c<TypeList, I - 1>);
             if constexpr (Align)
                 roundUpToMultiple(offset, alignof(boost::mp11::mp_at_c<TypeList, I>));
             return offset;
         }
-        ();
-
-        template <bool Align, typename TypeList>
-        inline constexpr std::size_t offsetOfImpl<Align, TypeList, 0> = 0;
     } // namespace internal
 
     /// The size of a type list if its elements would be in a normal struct.
