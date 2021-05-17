@@ -348,6 +348,17 @@ namespace llama
 
     namespace internal
     {
+        // recursive formulation to benefit from template instantiation memoization
+        template <std::size_t I, typename... Children>
+        constexpr auto fieldCountBefore(Record<Children...> r) -> std::size_t
+        {
+            if constexpr (I == 0)
+                return 0;
+            else
+                return fieldCountBefore<I - 1>(r)
+                    + fieldCount<GetFieldType<boost::mp11::mp_at_c<Record<Children...>, I - 1>>>;
+        }
+
         template <typename T>
         constexpr auto flatRecordCoordImpl(T*, RecordCoord<>) -> std::size_t
         {
@@ -357,9 +368,10 @@ namespace llama
         template <typename... Children, std::size_t I, std::size_t... Is>
         constexpr auto flatRecordCoordImpl(Record<Children...>*, RecordCoord<I, Is...>) -> std::size_t
         {
-            return fieldCount<boost::mp11::mp_take_c<
-                       Record<Children...>,
-                       I>> + flatRecordCoordImpl(static_cast<GetFieldType<boost::mp11::mp_at_c<Record<Children...>, I>>*>(nullptr), RecordCoord<Is...>{});
+            return fieldCountBefore<I>(Record<Children...>{})
+                + flatRecordCoordImpl(
+                       static_cast<GetFieldType<boost::mp11::mp_at_c<Record<Children...>, I>>*>(nullptr),
+                       RecordCoord<Is...>{});
         }
     } // namespace internal
 
