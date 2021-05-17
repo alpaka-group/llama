@@ -415,20 +415,20 @@ namespace llama
             return size;
         }
 
+        // recursive formulation to benefit from template instantiation memoization
+        // this massively improves compilation time when this template is instantiated with a lot of different I
         template <bool Align, typename TypeList, std::size_t I>
-        constexpr std::size_t offsetOfImpl()
+        inline constexpr std::size_t offsetOfImpl = []() constexpr
         {
-            if constexpr (I == 0)
-                return 0;
-            else
-            {
-                std::size_t offset
-                    = offsetOfImpl<Align, TypeList, I - 1>() + sizeof(boost::mp11::mp_at_c<TypeList, I - 1>);
-                if constexpr (Align)
-                    roundUpToMultiple(offset, alignof(boost::mp11::mp_at_c<TypeList, I>));
-                return offset;
-            }
+            std::size_t offset = offsetOfImpl<Align, TypeList, I - 1> + sizeof(boost::mp11::mp_at_c<TypeList, I - 1>);
+            if constexpr (Align)
+                roundUpToMultiple(offset, alignof(boost::mp11::mp_at_c<TypeList, I>));
+            return offset;
         }
+        ();
+
+        template <bool Align, typename TypeList>
+        inline constexpr std::size_t offsetOfImpl<Align, TypeList, 0> = 0;
     } // namespace internal
 
     /// The size of a type list if its elements would be in a normal struct.
@@ -445,7 +445,7 @@ namespace llama
 
     /// The byte offset of an element in a type list ifs elements would be in a normal struct.
     template <typename TypeList, std::size_t I, bool Align>
-    inline constexpr std::size_t flatOffsetOf = internal::offsetOfImpl<Align, TypeList, I>();
+    inline constexpr std::size_t flatOffsetOf = internal::offsetOfImpl<Align, TypeList, I>;
 
     /// The byte offset of an element in a record dimension if it would be a normal struct.
     /// \tparam RecordDim Record dimension tree.
