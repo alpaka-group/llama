@@ -144,6 +144,14 @@ TEST_CASE("offsetOf.Align")
     STATIC_REQUIRE(llama::offsetOf<Particle, llama::RecordCoord<4, 3>, true> == 51);
 }
 
+TEST_CASE("fieldCount")
+{
+    STATIC_REQUIRE(llama::fieldCount<int> == 1);
+    STATIC_REQUIRE(llama::fieldCount<XYZ> == 3);
+    STATIC_REQUIRE(llama::fieldCount<Particle> == 11);
+    STATIC_REQUIRE(llama::fieldCount<Other> == 2);
+}
+
 template <int i>
 struct S;
 
