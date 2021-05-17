@@ -333,19 +333,21 @@ namespace llama
         {
             using type = boost::mp11::mp_append<typename FlattenRecordDimImpl<GetFieldType<Fields>>::type...>;
         };
+    } // namespace internal
 
-        template <typename T>
-        constexpr auto recursiveFieldCount(T*) -> std::size_t
-        {
-            return 1;
-        }
+    /// Returns a flat type list containing all leaf field types of the given record dimension.
+    template <typename RecordDim>
+    using FlatRecordDim = typename internal::FlattenRecordDimImpl<RecordDim>::type;
 
-        template <typename... Children>
-        constexpr auto recursiveFieldCount(Record<Children...>*) -> std::size_t
-        {
-            return (recursiveFieldCount(static_cast<GetFieldType<Children>*>(nullptr)) + ... + 0);
-        }
+    /// The total number of fields in the recursively expanded record dimension.
+    template <typename RecordDim>
+    inline constexpr std::size_t fieldCount = 1;
 
+    template <typename... Children>
+    inline constexpr std::size_t fieldCount<Record<Children...>> = (fieldCount<GetFieldType<Children>> + ... + 0);
+
+    namespace internal
+    {
         template <typename T>
         constexpr auto flatRecordCoordImpl(T*, RecordCoord<>) -> std::size_t
         {
@@ -355,16 +357,11 @@ namespace llama
         template <typename... Children, std::size_t I, std::size_t... Is>
         constexpr auto flatRecordCoordImpl(Record<Children...>*, RecordCoord<I, Is...>) -> std::size_t
         {
-            return recursiveFieldCount(static_cast<boost::mp11::mp_take_c<Record<Children...>, I>*>(nullptr))
-                + flatRecordCoordImpl(
-                       static_cast<GetFieldType<boost::mp11::mp_at_c<Record<Children...>, I>>*>(nullptr),
-                       RecordCoord<Is...>{});
+            return fieldCount<boost::mp11::mp_take_c<
+                       Record<Children...>,
+                       I>> + flatRecordCoordImpl(static_cast<GetFieldType<boost::mp11::mp_at_c<Record<Children...>, I>>*>(nullptr), RecordCoord<Is...>{});
         }
     } // namespace internal
-
-    /// Returns a flat type list containing all leaf field types of the given record dimension.
-    template <typename RecordDim>
-    using FlatRecordDim = typename internal::FlattenRecordDimImpl<RecordDim>::type;
 
     /// The equivalent zero based index into a flat record dimension (\ref FlatRecordDim) of the given hierarchical
     /// record coordinate.
