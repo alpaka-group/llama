@@ -1,9 +1,9 @@
 #include "../common/Stopwatch.hpp"
+#include "../common/ttjet_13tev_june2019.hpp"
 
 #include <boost/asio/ip/host_name.hpp>
 #include <boost/functional/hash.hpp>
 #include <boost/mp11.hpp>
-#include <chrono>
 #include <fmt/format.h>
 #include <fstream>
 #include <immintrin.h>
@@ -14,7 +14,7 @@
 #include <string_view>
 
 constexpr auto REPETITIONS = 5;
-constexpr auto arrayDims = llama::ArrayDims{1024, 1024, 16};
+constexpr auto arrayDims = llama::ArrayDims{512, 512, 16};
 
 // clang-format off
 namespace tag
@@ -41,6 +41,10 @@ using Particle = llama::Record<
     llama::Field<tag::Mass, float>
 >;
 // clang-format on
+
+// using RecordDim = Particle;
+using RecordDim = boost::mp11::mp_take_c<Event, 20>;
+// using RecordDim = Event; // WARN: expect long compilation time
 
 namespace llamaex
 {
@@ -402,18 +406,9 @@ auto prepareViewAndHash(Mapping mapping)
 {
     auto view = llama::allocView(mapping);
 
-    auto value = 0.0f;
+    auto value = std::size_t{0};
     for (auto ad : llama::ArrayDimsIndexRange{mapping.arrayDims()})
-    {
-        auto p = view(ad);
-        p(tag::Pos{}, tag::X{}) = value++;
-        p(tag::Pos{}, tag::Y{}) = value++;
-        p(tag::Pos{}, tag::Z{}) = value++;
-        p(tag::Vel{}, tag::X{}) = value++;
-        p(tag::Vel{}, tag::Y{}) = value++;
-        p(tag::Vel{}, tag::Z{}) = value++;
-        p(tag::Mass{}) = value++;
-    }
+        llama::forEachLeaf<typename Mapping::RecordDim>([&](auto coord) { view(ad)(coord) = value++; });
 
     const auto checkSum = hash(view);
     return std::tuple{view, checkSum};
@@ -429,7 +424,7 @@ auto main() -> int
 try
 {
     const auto dataSize
-        = std::reduce(arrayDims.begin(), arrayDims.end(), std::size_t{1}, std::multiplies{}) * llama::sizeOf<Particle>;
+        = std::reduce(arrayDims.begin(), arrayDims.end(), std::size_t{1}, std::multiplies{}) * llama::sizeOf<RecordDim>;
     const auto numThreads = static_cast<std::size_t>(omp_get_max_threads());
     std::cout << "Data size: " << dataSize << "\n";
     std::cout << "Threads: " << numThreads << "\n";
@@ -534,11 +529,11 @@ try
         plotFile << "\n";
     };
 
-    const auto aosMapping = llama::mapping::AoS<decltype(arrayDims), Particle>{arrayDims};
-    const auto soaMapping = llama::mapping::SoA<decltype(arrayDims), Particle>{arrayDims};
-    const auto aosoa8Mapping = llama::mapping::AoSoA<decltype(arrayDims), Particle, 8>{arrayDims};
-    const auto aosoa32Mapping = llama::mapping::AoSoA<decltype(arrayDims), Particle, 32>{arrayDims};
-    const auto aosoa64Mapping = llama::mapping::AoSoA<decltype(arrayDims), Particle, 64>{arrayDims};
+    const auto aosMapping = llama::mapping::AoS<decltype(arrayDims), RecordDim>{arrayDims};
+    const auto soaMapping = llama::mapping::SoA<decltype(arrayDims), RecordDim>{arrayDims};
+    const auto aosoa8Mapping = llama::mapping::AoSoA<decltype(arrayDims), RecordDim, 8>{arrayDims};
+    const auto aosoa32Mapping = llama::mapping::AoSoA<decltype(arrayDims), RecordDim, 32>{arrayDims};
+    const auto aosoa64Mapping = llama::mapping::AoSoA<decltype(arrayDims), RecordDim, 64>{arrayDims};
 
     benchmarkAllCopies("AoS", "SoA", aosMapping, soaMapping);
     benchmarkAllCopies("SoA", "AoS", soaMapping, aosMapping);
