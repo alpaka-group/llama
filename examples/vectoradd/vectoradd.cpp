@@ -285,8 +285,15 @@ try
     std::cout << PROBLEM_SIZE / 1000 / 1000 << "M values "
               << "(" << PROBLEM_SIZE * sizeof(float) / 1024 << "kiB)\n";
 
-    std::ofstream plotFile{"vectoradd.tsv"};
+    std::ofstream plotFile{"vectoradd.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
+    plotFile << R"(#!/usr/bin/gnuplot -p
+set style data histograms
+set style fill solid
+set key out top center maxrows 3
+set yrange [0:*]
+$data << EOD
+)";
 
     int r = 0;
     r += usellama::main(plotFile);
@@ -294,14 +301,10 @@ try
     r += manualSoA::main(plotFile);
     r += manualAoSoA::main(plotFile);
 
-    std::cout << "Plot with: ./vectoradd.sh\n";
-    std::ofstream{"vectoradd.sh"} << R"(#!/usr/bin/gnuplot -p
-set style data histograms
-set style fill solid
-set key out top center maxrows 3
-set yrange [0:*]
-plot 'vectoradd.tsv' using 2:xtic(1)
+    plotFile << R"(EOD
+plot $data using 2:xtic(1)
 )";
+    std::cout << "Plot with: ./vectoradd.sh\n";
 
     return r;
 }

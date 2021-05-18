@@ -1341,8 +1341,24 @@ try
               << "Threads: " << std::thread::hardware_concurrency() << "\n"
               << "SIMD lanes: " << vec::size() << "\n";
 
-    std::ofstream plotFile{"nbody.tsv"};
+    std::ofstream plotFile{"nbody.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
+    plotFile << fmt::format(
+        R"(#!/usr/bin/gnuplot -p
+set title "nbody CPU {}ki particles on {}"
+set style data histograms
+set style fill solid
+set xtics rotate by 45 right
+set key out top center maxrows 3
+set yrange [0:*]
+set y2range [0:*]
+set ylabel "update runtime [s]"
+set y2label "move runtime [s]"
+set y2tics auto
+$data << EOD
+)",
+        PROBLEM_SIZE / 1024,
+        boost::asio::ip::host_name());
     plotFile << "\"\"\t\"update\"\t\"move\"\n";
 
     // Note:
@@ -1398,23 +1414,10 @@ try
         r += manualSoA_Vc::main<vec>(plotFile, threads);
 #endif
 
+    plotFile << R"(EOD
+plot $data using 2:xtic(1) ti col axis x1y1, "" using 3 ti col axis x1y2
+)";
     std::cout << "Plot with: ./nbody.sh\n";
-    std::ofstream{"nbody.sh"} << fmt::format(
-        R"(#!/usr/bin/gnuplot -p
-set title "nbody CPU {}ki particles on {}"
-set style data histograms
-set style fill solid
-set xtics rotate by 45 right
-set key out top center maxrows 3
-set yrange [0:*]
-set y2range [0:*]
-set ylabel "update runtime [s]"
-set y2label "move runtime [s]"
-set y2tics auto
-plot 'nbody.tsv' using 2:xtic(1) ti col axis x1y1, "" using 3 ti col axis x1y2
-)",
-        PROBLEM_SIZE / 1024,
-        boost::asio::ip::host_name());
 
     return r;
 }
