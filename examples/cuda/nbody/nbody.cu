@@ -479,19 +479,9 @@ try
         prop.sharedMemPerBlock / 1024);
     std::cout << std::fixed;
 
-    std::ofstream plotFile{"nbody.tsv"};
+    std::ofstream plotFile{"nbody_cuda.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
-    plotFile << "\"\"\t\"update\"\t\"move\"\n";
-
-    using namespace boost::mp11;
-    mp_for_each<mp_iota_c<6>>([&](auto i) { run<decltype(i)::value, 0>(plotFile, false); });
-    mp_for_each<mp_iota_c<6>>(
-        [&](auto i)
-        { mp_for_each<mp_iota_c<4>>([&](auto j) { run<decltype(i)::value, decltype(j)::value>(plotFile, true); }); });
-    manual::run(plotFile);
-
-    std::cout << "Plot with: ./nbody.sh\n";
-    std::ofstream{"nbody.sh"} << fmt::format(
+    plotFile << fmt::format(
         R"(#!/usr/bin/gnuplot -p
 set title "nbody CUDA {}k particles on {}"
 set style data histograms
@@ -503,10 +493,24 @@ set y2range [0:*]
 set ylabel "update runtime [s]"
 set y2label "move runtime [s]"
 set y2tics auto
-plot 'nbody.tsv' using 2:xtic(1) ti col axis x1y1, "" using 3 ti col axis x1y2
+$data << EOD
 )",
         PROBLEM_SIZE / 1024,
         boost::asio::ip::host_name());
+    plotFile << "\"\"\t\"update\"\t\"move\"\n";
+
+    using namespace boost::mp11;
+    mp_for_each<mp_iota_c<6>>([&](auto i) { run<decltype(i)::value, 0>(plotFile, false); });
+    mp_for_each<mp_iota_c<6>>(
+        [&](auto i)
+        { mp_for_each<mp_iota_c<4>>([&](auto j) { run<decltype(i)::value, decltype(j)::value>(plotFile, true); }); });
+    manual::run(plotFile);
+
+    plotFile <<
+        R"(EOD
+plot $data using 2:xtic(1) ti col axis x1y1, "" using 3 ti col axis x1y2
+)";
+    std::cout << "Plot with: ./nbody_cuda.sh\n";
 
     return 0;
 }

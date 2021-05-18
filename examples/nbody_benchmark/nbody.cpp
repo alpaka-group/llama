@@ -152,9 +152,20 @@ try
 {
     using namespace boost::mp11;
 
-    std::ofstream plotFile{"nbody.tsv"};
+    std::ofstream plotFile{"nbody.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
     plotFile << "\"alignment\"\t\"AoS\"\t\"SoA\"\t\"SoA MB\"\n";
+    plotFile << fmt::format(
+        R"(#!/usr/bin/gnuplot -p
+set title "nbody CPU {0}k particles on {1}"
+set style data lines
+set xtics rotate by 90 right
+set key out top center maxrows 3
+set yrange [0:*]
+$data << EOD
+)",
+        PROBLEM_SIZE / 1000,
+        boost::asio::ip::host_name());
 
     mp_for_each<mp_iota_c<28>>(
         [&](auto ae)
@@ -168,18 +179,11 @@ try
                 });
         });
 
+    plotFile <<
+        R"(EOD
+plot $data using 2:xtic(1) ti col, '' using 3:xtic(1) ti col, '' using 4:xtic(1) ti col
+)";
     std::cout << "Plot with: ./nbody.sh\n";
-    std::ofstream{"nbody.sh"} << fmt::format(
-        R"(#!/usr/bin/gnuplot -p
-set title "nbody CPU {0}k particles on {1}"
-set style data lines
-set xtics rotate by 90 right
-set key out top center maxrows 3
-set yrange [0:*]
-plot 'nbody.tsv' using 2:xtic(1) ti col, '' using 3:xtic(1) ti col, '' using 4:xtic(1) ti col
-)",
-        PROBLEM_SIZE / 1000,
-        boost::asio::ip::host_name());
 }
 catch (const std::exception& e)
 {

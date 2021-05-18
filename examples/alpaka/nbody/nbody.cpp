@@ -342,8 +342,16 @@ try
               << "Using " << THREADS_PER_BLOCK << " threads per block\n";
     std::cout << std::fixed;
 
-    std::ofstream plotFile{"nbody.tsv"};
+    std::ofstream plotFile{"nbody.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
+    std::ofstream{"nbody.sh"} << R"(#!/usr/bin/gnuplot -p
+set style data histograms
+set style fill solid
+set xtics rotate by 45 right
+set key out top center maxrows 3
+set yrange [0:*]
+$data << EOD
+)";
     plotFile << "\"\"\t\"update\"\t\"move\"\n";
 
     // using Acc = alpaka::ExampleDefaultAcc;
@@ -361,15 +369,10 @@ try
     run<alpaka::ExampleDefaultAcc, AoSoA, SoA>(plotFile);
     run<alpaka::ExampleDefaultAcc, AoSoA, AoSoA>(plotFile);
 
-    std::cout << "Plot with: ./nbody.sh\n";
-    std::ofstream{"nbody.sh"} << R"(#!/usr/bin/gnuplot -p
-set style data histograms
-set style fill solid
-set xtics rotate by 45 right
-set key out top center maxrows 3
-set yrange [0:*]
-plot 'nbody.tsv' using 2:xtic(1) ti col
+    plotFile << R"(EOD
+plot $data using 2:xtic(1) ti col
 )";
+    std::cout << "Plot with: ./nbody.sh\n";
 
     return 0;
 }
