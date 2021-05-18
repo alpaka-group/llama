@@ -1,10 +1,10 @@
 #include "../common/Stopwatch.hpp"
 
-#include <chrono>
+#include <boost/asio/ip/host_name.hpp>
+#include <fmt/format.h>
 #include <fstream>
 #include <iostream>
 #include <llama/llama.hpp>
-#include <utility>
 
 constexpr auto MAPPING = 2; ///< 0 native AoS, 1 native SoA, 2 native SoA (separate blobs), 3 tree AoS, 4 tree SoA
 constexpr auto PROBLEM_SIZE = 64 * 1024 * 1024; ///< problem size
@@ -287,13 +287,18 @@ try
 
     std::ofstream plotFile{"vectoradd.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
-    plotFile << R"(#!/usr/bin/gnuplot -p
+    plotFile << fmt::format(
+        R"(#!/usr/bin/gnuplot -p
+set title "vectoradd CPU {}Mi elements on {}"
 set style data histograms
 set style fill solid
-set key out top center maxrows 3
+#set key out top center maxrows 3
 set yrange [0:*]
+set ylabel "update runtime [s]"
 $data << EOD
-)";
+)",
+        PROBLEM_SIZE / 1024 / 1024,
+        boost::asio::ip::host_name());
 
     int r = 0;
     r += usellama::main(plotFile);
@@ -302,7 +307,7 @@ $data << EOD
     r += manualAoSoA::main(plotFile);
 
     plotFile << R"(EOD
-plot $data using 2:xtic(1)
+plot $data using 2:xtic(1) ti "runtime"
 )";
     std::cout << "Plot with: ./vectoradd.sh\n";
 
