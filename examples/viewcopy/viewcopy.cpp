@@ -421,8 +421,21 @@ try
     std::cout << "Data size: " << dataSize << "\n";
     std::cout << "Threads: " << numThreads << "\n";
 
-    std::ofstream plotFile{"viewcopy.tsv"};
+    std::ofstream plotFile{"viewcopy.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
+    plotFile << fmt::format(
+        R"(#!/usr/bin/gnuplot -p
+set title "viewcopy CPU {}MiB particles on {}"
+set style data histograms
+set style fill solid
+set xtics rotate by 45 right
+set key out top center maxrows 4
+set ylabel "throughput [GiB/s]"
+$data << EOD
+)",
+        dataSize / 1024 / 1024,
+        boost::asio::ip::host_name());
+
     plotFile << "\"\"\t\"memcpy\"\t\"memcpy\\\\\\_avx2\"\t\"memcpy(p)\"\t\"memcpy\\\\\\_avx2(p)\"\t\"naive "
                 "copy\"\t\"std::copy\"\t\"aosoa copy(r)\"\t\"aosoa copy(w)\"\t\"naive copy(p)\"\t\"aosoa "
                 "copy(r,p)\"\t\"aosoa copy(w,p)\"\n";
@@ -536,19 +549,10 @@ try
     benchmarkAllCopies("AoSoA8", "AoSoA64", aosoa8Mapping, aosoa64Mapping);
     benchmarkAllCopies("AoSoA64", "AoSoA8", aosoa64Mapping, aosoa8Mapping);
 
+    plotFile << R"(EOD
+plot $data using 2:xtic(1) ti col, "" using 3 ti col, "" using 4 ti col, "" using 5 ti col, "" using 6 ti col, "" using 7 ti col, "" using 8 ti col, "" using 9 ti col, "" using 10 ti col, "" using 11 ti col, "" using 12 ti col
+)";
     std::cout << "Plot with: ./viewcopy.sh\n";
-    std::ofstream{"viewcopy.sh"} << fmt::format(
-        R"(#!/usr/bin/gnuplot -p
-set title "viewcopy CPU {}MiB particles on {}"
-set style data histograms
-set style fill solid
-set xtics rotate by 45 right
-set key out top center maxrows 4
-set ylabel "throughput [GiB/s]"
-plot 'viewcopy.tsv' using 2:xtic(1) ti col, "" using 3 ti col, "" using 4 ti col, "" using 5 ti col, "" using 6 ti col, "" using 7 ti col, "" using 8 ti col, "" using 9 ti col, "" using 10 ti col, "" using 11 ti col, "" using 12 ti col
-)",
-        dataSize / 1024 / 1024,
-        boost::asio::ip::host_name());
 }
 catch (const std::exception& e)
 {
