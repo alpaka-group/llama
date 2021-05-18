@@ -483,7 +483,7 @@ try
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
     plotFile << fmt::format(
         R"(#!/usr/bin/gnuplot -p
-set title "nbody CUDA {}k particles on {}"
+set title "nbody CUDA {}ki particles on {}"
 set style data histograms
 set style fill solid
 set xtics rotate by 45 right
