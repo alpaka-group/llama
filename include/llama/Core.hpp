@@ -47,7 +47,7 @@ struct std::tuple_element<I, llama::ArrayDims<N>>
 namespace llama
 {
     /// A type list of \ref Field which may be used to define a record dimension.
-    template <typename... Leaves>
+    template <typename... Fields>
     struct Record
     {
     };
