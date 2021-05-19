@@ -282,7 +282,7 @@ namespace manualAoS
             LLAMA_INDEPENDENT_DATA
             for (std::size_t j = 0; j < PROBLEM_SIZE; ++j)
                 pPInteraction(pi, particles[j]);
-            particles[i] = pi;
+            particles[i].vel = pi.vel;
         }
     }
 
