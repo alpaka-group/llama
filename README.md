@@ -25,6 +25,10 @@ https://llama-doc.rtfd.io
 Doxygen generated API documentation is located here:
 https://alpaka-group.github.io/llama/
 
+We gave a talk on LLAMA at CERN's Compute Accelerator Forum on 2021-05-12.
+The video recording (starting at 40:00) and slides are available here:
+https://indico.cern.ch/event/975010/
+
 Rules for contributions can be found in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 LLAMA is licensed under the LGPL3+.
