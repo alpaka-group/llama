@@ -78,7 +78,7 @@ namespace llama
 
     /// Concatenate two \ref RecordCoord instances.
     template <typename RecordCoord1, typename RecordCoord2>
-    auto cat(RecordCoord1, RecordCoord2)
+    constexpr auto cat(RecordCoord1, RecordCoord2)
     {
         return Cat<RecordCoord1, RecordCoord2>{};
     }

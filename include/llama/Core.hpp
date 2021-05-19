@@ -263,33 +263,31 @@ namespace llama
 
     namespace internal
     {
-        template <typename T, std::size_t... Coords, typename Functor>
-        LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafImpl(T*, RecordCoord<Coords...> coord, Functor&& functor)
+        template <typename RecordDim, typename RecordCoord>
+        struct LeafRecordCoordsImpl;
+
+        template <typename T, std::size_t... RCs>
+        struct LeafRecordCoordsImpl<T, RecordCoord<RCs...>>
         {
-            functor(coord);
+            using type = boost::mp11::mp_list<RecordCoord<RCs...>>;
         };
 
-        template <typename... Children, std::size_t... Coords, typename Functor>
-        LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafImpl(
-            Record<Children...>*,
-            RecordCoord<Coords...>,
-            Functor&& functor)
+        template <typename... Fields, std::size_t... RCs>
+        struct LeafRecordCoordsImpl<Record<Fields...>, RecordCoord<RCs...>>
         {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            boost::mp11::mp_for_each<boost::mp11::mp_iota_c<sizeof...(Children)>>(
-                [&](auto i)
-                {
-                    constexpr auto childIndex = decltype(i)::value;
-                    using Field = boost::mp11::mp_at_c<Record<Children...>, childIndex>;
-
-                    LLAMA_FORCE_INLINE_RECURSIVE
-                    forEachLeafImpl(
-                        static_cast<GetFieldType<Field>*>(nullptr),
-                        RecordCoord<Coords..., childIndex>{},
-                        std::forward<Functor>(functor));
-                });
-        }
+            template <std::size_t... Is>
+            static auto help(std::index_sequence<Is...>)
+            {
+                return boost::mp11::mp_append<
+                    typename LeafRecordCoordsImpl<GetFieldType<Fields>, RecordCoord<RCs..., Is>>::type...>{};
+            }
+            using type = decltype(help(std::make_index_sequence<sizeof...(Fields)>{}));
+        };
     } // namespace internal
+
+    /// Returns a flat type list containing all record coordinates to all leaves of the given record dimension.
+    template <typename RecordDim>
+    using LeafRecordCoords = typename internal::LeafRecordCoordsImpl<RecordDim, RecordCoord<>>::type;
 
     /// Iterates over the record dimension tree and calls a functor on each element.
     /// \param functor Functor to execute at each element of. Needs to have
@@ -301,10 +299,8 @@ namespace llama
     LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaf(Functor&& functor, RecordCoord<Coords...> baseCoord)
     {
         LLAMA_FORCE_INLINE_RECURSIVE
-        internal::forEachLeafImpl(
-            static_cast<GetType<RecordDim, RecordCoord<Coords...>>*>(nullptr),
-            baseCoord,
-            std::forward<Functor>(functor));
+        boost::mp11::mp_for_each<LeafRecordCoords<GetType<RecordDim, RecordCoord<Coords...>>>>([&](
+            auto innerCoord) constexpr { functor(cat(baseCoord, innerCoord)); });
     }
 
     /// Iterates over the record dimension tree and calls a functor on each element.
