@@ -55,16 +55,14 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator++() noexcept -> ArrayDimsIndexIterator&
         {
-            for (auto i = (int) Dim - 1; i >= 0; i--)
+            current[Dim - 1]++;
+            for (auto i = (int) Dim - 2; i >= 0; i--)
             {
-                if (current[i] < lastIndex[i])
-                {
-                    current[i]++;
+                if (current[i + 1] != lastIndex[i + 1] + 1)
                     return *this;
-                }
-                current[i] = 0;
+                current[i + 1] = 0;
+                current[i]++;
             }
-            current[0] = lastIndex[0] + 1;
             return *this;
         }
 
@@ -79,14 +77,13 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator--() noexcept -> ArrayDimsIndexIterator&
         {
-            for (auto i = (int) Dim - 1; i >= 0; i--)
+            current[Dim - 1]--;
+            for (auto i = (int) Dim - 2; i >= 0; i--)
             {
-                if (current[i] > 0)
-                {
-                    current[i]--;
+                if (current[i + 1] != std::numeric_limits<std::size_t>::max())
                     return *this;
-                }
-                current[i] = lastIndex[i];
+                current[i + 1] = lastIndex[i];
+                current[i]--;
             }
             // decrementing beyond [0, 0, ..., 0] is UB
             return *this;
