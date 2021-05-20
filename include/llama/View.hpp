@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Array.hpp"
+#include "ArrayDimsIndexRange.hpp"
 #include "BlobAllocators.hpp"
 #include "Concepts.hpp"
 #include "Core.hpp"
