@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <iterator>
+#include <limits>
 #if CAN_USE_RANGES
 #    include <ranges>
 #endif
@@ -24,13 +25,7 @@ namespace llama
 
         LLAMA_FN_HOST_ACC_INLINE
         constexpr ArrayDimsIndexIterator(ArrayDims<Dim> size, ArrayDims<Dim> current) noexcept
-            : lastIndex(
-                [size]() mutable
-                {
-                    for (auto i = 0; i < Dim; i++)
-                        size[i]--;
-                    return size;
-                }())
+            : size(size)
             , current(current)
         {
         }
@@ -58,7 +53,7 @@ namespace llama
             current[Dim - 1]++;
             for (auto i = (int) Dim - 2; i >= 0; i--)
             {
-                if (current[i + 1] != lastIndex[i + 1] + 1)
+                if (current[i + 1] != size[i + 1])
                     return *this;
                 current[i + 1] = 0;
                 current[i]++;
@@ -82,7 +77,7 @@ namespace llama
             {
                 if (current[i + 1] != std::numeric_limits<std::size_t>::max())
                     return *this;
-                current[i + 1] = lastIndex[i];
+                current[i + 1] = size[i] - 1;
                 current[i]--;
             }
             // decrementing beyond [0, 0, ..., 0] is UB
@@ -110,23 +105,23 @@ namespace llama
             for (auto i = (int) Dim - 1; i > 0 && n != 0; i--)
             {
                 n += static_cast<difference_type>(current[i]);
-                const auto size = static_cast<difference_type>(lastIndex[i]) + 1;
-                auto mod = n % size;
-                n /= size;
+                const auto s = static_cast<difference_type>(size[i]);
+                auto mod = n % s;
+                n /= s;
                 if (mod < 0)
                 {
-                    mod += size;
+                    mod += s;
                     n--;
                 }
                 current[i] = mod;
-                assert(current[i] <= lastIndex[i]);
+                assert(current[i] < size[i]);
             }
 
             current[0] = static_cast<difference_type>(current[0]) + n;
             // current is either within bounds or at the end ([last + 1, 0, 0, ..., 0])
             assert(
-                (current[0] <= lastIndex[0]
-                 || (current[0] == lastIndex[0] + 1
+                (current[0] < size[0]
+                 || (current[0] == size[0]
                      && std::all_of(std::begin(current) + 1, std::end(current), [](auto c) { return c == 0; })))
                 && "Iterator was moved past the end");
 
@@ -163,14 +158,14 @@ namespace llama
         friend constexpr auto operator-(const ArrayDimsIndexIterator& a, const ArrayDimsIndexIterator& b) noexcept
             -> difference_type
         {
-            assert(a.lastIndex == b.lastIndex);
+            assert(a.size == b.size);
 
             difference_type n = a.current[Dim - 1] - b.current[Dim - 1];
-            difference_type size = a.lastIndex[Dim - 1] + 1;
+            difference_type size = a.size[Dim - 1];
             for (auto i = (int) Dim - 2; i >= 0; i--)
             {
                 n += (a.current[i] - b.current[i]) * size;
-                size *= a.lastIndex[i] + 1;
+                size *= a.size[i];
             }
 
             return n;
@@ -181,7 +176,7 @@ namespace llama
             const ArrayDimsIndexIterator<Dim>& a,
             const ArrayDimsIndexIterator<Dim>& b) noexcept -> bool
         {
-            assert(a.lastIndex == b.lastIndex);
+            assert(a.size == b.size);
             return a.current == b.current;
         }
 
@@ -197,7 +192,7 @@ namespace llama
         friend constexpr auto operator<(const ArrayDimsIndexIterator& a, const ArrayDimsIndexIterator& b) noexcept
             -> bool
         {
-            assert(a.lastIndex == b.lastIndex);
+            assert(a.size == b.size);
             return std::lexicographical_compare(
                 std::begin(a.current),
                 std::end(a.current),
@@ -227,7 +222,7 @@ namespace llama
         }
 
     private:
-        ArrayDims<Dim> lastIndex;
+        ArrayDims<Dim> size;
         ArrayDims<Dim> current;
     };
 
