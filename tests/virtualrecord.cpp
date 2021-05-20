@@ -909,3 +909,15 @@ TEST_CASE("VirtualRecord.One_ctor_from_view")
     CHECK(vr4 == 4);
     CHECK(view(1u) == 1);
 }
+
+TEST_CASE("VirtualRecord.One_range_for")
+{
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{5}, Name{}});
+    for (auto p : view) // p is a reference object
+        p = 1;
+    CHECK(view(1u) == 1);
+
+    for (llama::One<Name> p : view) // p is a copy
+        p = 2;
+    CHECK(view(1u) == 1);
+}
