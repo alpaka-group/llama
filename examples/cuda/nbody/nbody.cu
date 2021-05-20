@@ -110,8 +110,7 @@ __global__ void updateSM(View particles)
     const auto ti = threadIdx.x + blockIdx.x * blockDim.x;
     const auto tbi = blockIdx.x;
 
-    llama::One<Particle> pi;
-    pi = particles(ti);
+    llama::One<Particle> pi = particles(ti);
     for (std::size_t blockOffset = 0; blockOffset < PROBLEM_SIZE; blockOffset += SHARED_ELEMENTS_PER_BLOCK)
     {
         LLAMA_INDEPENDENT_DATA
@@ -132,8 +131,7 @@ __global__ void update(View particles)
 {
     const auto ti = threadIdx.x + blockIdx.x * blockDim.x;
 
-    llama::One<Particle> pi;
-    pi = particles(ti);
+    llama::One<Particle> pi = particles(ti);
     LLAMA_INDEPENDENT_DATA
     for (auto j = std::size_t{0}; j < PROBLEM_SIZE; ++j)
         pPInteraction(pi, particles(j));

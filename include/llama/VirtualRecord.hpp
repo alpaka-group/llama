@@ -309,12 +309,13 @@ namespace llama
         /// AccessibleRecordDim is the same as `Mapping::RecordDim`.
         using AccessibleRecordDim = GetType<RecordDim, BoundRecordCoord>;
 
+        /// Creates an empty VirtualRecord. Only available for if the view is owned. Used by llama::One.
         LLAMA_FN_HOST_ACC_INLINE VirtualRecord()
             /* requires(OwnView) */
             : arrayDimsCoord({})
             , view{allocViewStack<1, RecordDim>()}
         {
-            static_assert(OwnView, "The default constructor of VirtualRecord is only available if the ");
+            static_assert(OwnView, "The default constructor of VirtualRecord is only available if it owns the view.");
         }
 
         LLAMA_FN_HOST_ACC_INLINE
@@ -326,6 +327,20 @@ namespace llama
 
         VirtualRecord(const VirtualRecord&) = default;
         VirtualRecord(VirtualRecord&&) = default;
+
+        /// Create a VirtuaRecord from a single value or a different VirtualRecord. Only available for if the view is
+        /// owned. Used by llama::One.
+        template <typename T>
+        LLAMA_FN_HOST_ACC_INLINE VirtualRecord(const T& other)
+            /* requires(OwnView) */
+            : VirtualRecord()
+        {
+            static_assert(
+                OwnView,
+                "The copy constructor of VirtualRecord from a different VirtualRecord is only available if it owns the "
+                "view.");
+            *this = other;
+        }
 
         /// Access a record in the record dimension underneath the current virtual
         /// record using a \ref RecordCoord. If the access resolves to a leaf, a

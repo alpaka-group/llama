@@ -890,3 +890,22 @@ TEST_CASE("VirtualRecord.loadAs.constref")
         CHECK(pos.y == 1);
     }
 }
+
+TEST_CASE("VirtualRecord.One_ctor_from_view")
+{
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{5}, Name{}});
+    view(1u) = 1;
+
+    llama::One<Name> vr2 = view(1u);
+    llama::One<Name> vr3(view(1u));
+    llama::One<Name> vr4{view(1u)};
+
+    vr2 = 2;
+    vr3 = 3;
+    vr4 = 4;
+
+    CHECK(vr2 == 2);
+    CHECK(vr3 == 3);
+    CHECK(vr4 == 4);
+    CHECK(view(1u) == 1);
+}

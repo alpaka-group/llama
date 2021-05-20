@@ -82,8 +82,7 @@ namespace usellama
         LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
-            llama::One<Particle> pi;
-            pi = particles(i);
+            llama::One<Particle> pi = particles(i);
             for (std::size_t j = 0; j < PROBLEM_SIZE; ++j)
                 pPInteraction(pi, particles(j));
             particles(i)(tag::Vel{}) = pi(tag::Vel{});
