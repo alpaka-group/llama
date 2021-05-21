@@ -189,7 +189,7 @@ namespace usellama
         plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
         if constexpr (HEATMAP)
-            std::ofstream("nbody_heatmap_" + mappingName(Mapping) + ".dat") << particles.mapping.toGnuplotDatFile();
+            std::ofstream("nbody_heatmap_" + mappingName(Mapping) + ".sh") << particles.mapping.toGnuplotScript();
 
         return 0;
     }
