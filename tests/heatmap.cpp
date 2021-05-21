@@ -59,7 +59,7 @@ TEST_CASE("Heatmap.3body")
         for (std::size_t i = 0; i < N; i++)
             particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * TIMESTEP;
 
-        std::ofstream{"Heatmap." + name + ".dat"} << particles.mapping.toGnuplotDatFile();
+        std::ofstream{"Heatmap." + name + ".sh"} << particles.mapping.toGnuplotScript();
     };
 
     using ArrayDims = llama::ArrayDims<1>;

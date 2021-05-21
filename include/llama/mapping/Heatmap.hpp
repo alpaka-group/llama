@@ -53,22 +53,29 @@ namespace llama::mapping
             return nao;
         }
 
-        // gnuplot with:
-        // set view map
-        // set yrange [] reverse
-        // splot "./file.dat" matrix with image
-        auto toGnuplotDatFile() const -> std::string
+        auto toGnuplotScript(std::size_t wrapAfterBytes = 64) const -> std::string
         {
             std::stringstream f;
+            f << "#!/usr/bin/gnuplot -p\n$data << EOD\n";
             for (auto i = 0; i < blobCount; i++)
             {
                 std::size_t byteCount = 0;
                 for (const auto& hits : byteHits[i])
-                    f << hits << ((++byteCount % 64 == 0) ? '\n' : ' ');
-                while (byteCount++ % 64 != 0)
+                    f << hits << ((++byteCount % wrapAfterBytes == 0) ? '\n' : ' ');
+                while (byteCount++ % wrapAfterBytes != 0)
                     f << "0 ";
                 f << '\n';
             }
+            f << R"(EOD
+set view map
+set xtics format ""
+set x2tics autofreq 8
+set yrange [] reverse
+set link x2; set link y2
+set ylabel "Cacheline"
+set x2label "Byte"
+plot $data matrix with image axes x2y1
+)";
             return f.str();
         }
 
