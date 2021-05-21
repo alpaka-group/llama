@@ -418,7 +418,7 @@ try
     const auto dataSize
         = std::reduce(arrayDims.begin(), arrayDims.end(), std::size_t{1}, std::multiplies{}) * llama::sizeOf<RecordDim>;
     const auto numThreads = static_cast<std::size_t>(omp_get_max_threads());
-    std::cout << "Data size: " << dataSize << "\n";
+    std::cout << "Data size: " << dataSize / 1024 / 1024 << "MiB\n";
     std::cout << "Threads: " << numThreads << "\n";
 
     std::ofstream plotFile{"viewcopy.sh"};
