@@ -31,7 +31,7 @@ namespace
     // clang-format on
 } // namespace
 
-TEST_CASE("Heatmap.3body")
+TEST_CASE("Heatmap.nbody")
 {
     constexpr auto N = 100;
     auto run = [&](const std::string& name, auto mapping)
@@ -44,9 +44,10 @@ TEST_CASE("Heatmap.3body")
         constexpr float TIMESTEP = 0.0001f;
         constexpr float EPS2 = 0.01f;
         for (std::size_t i = 0; i < N; i++)
+        {
+            llama::One<Particle> pi = particles(i);
             for (std::size_t j = 0; j < N; ++j)
             {
-                auto pi = particles(i);
                 auto pj = particles(j);
                 auto dist = pi(tag::Pos{}) - pj(tag::Pos{});
                 dist *= dist;
@@ -56,6 +57,8 @@ TEST_CASE("Heatmap.3body")
                 const float sts = pj(tag::Mass{}) * invDistCube * TIMESTEP;
                 pi(tag::Vel{}) += dist * sts;
             }
+            particles(i) = pi;
+        }
         for (std::size_t i = 0; i < N; i++)
             particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * TIMESTEP;
 
