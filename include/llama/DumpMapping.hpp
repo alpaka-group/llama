@@ -113,7 +113,7 @@ namespace llama
         };
 
         template <typename Mapping>
-        auto boxesFromMapping(const Mapping& mapping)
+        auto boxesFromMapping(const Mapping& mapping) -> std::vector<FieldBox<Mapping::ArrayDims::rank>>
         {
             using ArrayDims = typename Mapping::ArrayDims;
             using RecordDim = typename Mapping::RecordDim;
@@ -137,18 +137,39 @@ namespace llama
 
             return infos;
         }
+
+        template <std::size_t Dim>
+        auto breakBoxes(std::vector<FieldBox<Dim>> boxes, std::size_t wrapByteCount) -> std::vector<FieldBox<Dim>>
+        {
+            for (std::size_t i = 0; i < boxes.size(); i++)
+            {
+                auto& fb = boxes[i];
+                if (fb.nrAndOffset.offset / wrapByteCount != (fb.nrAndOffset.offset + fb.size - 1) / wrapByteCount)
+                {
+                    const auto remainingSpace = wrapByteCount - fb.nrAndOffset.offset % wrapByteCount;
+                    auto newFb = fb;
+                    newFb.nrAndOffset.offset = fb.nrAndOffset.offset + remainingSpace;
+                    newFb.size = fb.size - remainingSpace;
+                    fb.size = remainingSpace;
+                    boxes.push_back(newFb);
+                }
+            }
+            return boxes;
+        }
     } // namespace internal
 
     /// Returns an SVG image visualizing the memory layout created by the given
     /// mapping. The created memory blocks are wrapped after wrapByteCount
     /// bytes.
     template <typename Mapping>
-    auto toSvg(const Mapping& mapping, int wrapByteCount = 64) -> std::string
+    auto toSvg(const Mapping& mapping, std::size_t wrapByteCount = 64, bool breakBoxes = true) -> std::string
     {
         constexpr auto byteSizeInPixel = 30;
         constexpr auto blobBlockWidth = 60;
 
-        const auto infos = internal::boxesFromMapping(mapping);
+        auto infos = internal::boxesFromMapping(mapping);
+        if (breakBoxes)
+            infos = internal::breakBoxes(std::move(infos), wrapByteCount);
 
         std::string svg;
         svg += fmt::format(
