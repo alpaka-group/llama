@@ -7,12 +7,6 @@
 #include <llama/llama.hpp>
 #include <string>
 
-namespace
-{
-    template <std::size_t N>
-    using Padding = std::array<std::byte, N>;
-} // namespace
-
 // clang-format off
 namespace tag
 {
@@ -43,31 +37,6 @@ using Particle = llama::Record<
     llama::Field<tag::Mass, float>,
     llama::Field<tag::Flags, bool[4]>
 >;
-
-// example with bad alignment:
-using ParticleUnaligned = llama::Record<
-    llama::Field<tag::Id, std::uint16_t>,
-    llama::Field<tag::Pos, llama::Record<
-        llama::Field<tag::X, float>,
-        llama::Field<tag::Y, float>
-    >>,
-    llama::Field<tag::Mass, double>,
-    llama::Field<tag::Flags, bool[3]>
->;
-
-// bad alignment fixed with explicit padding:
-using ParticleAligned = llama::Record<
-    llama::Field<tag::Id, std::uint16_t>,
-    llama::Field<tag::Pad, Padding<2>>,
-    llama::Field<tag::Pos, llama::Record<
-        llama::Field<tag::X, float>,
-        llama::Field<tag::Y, float>
-    >>,
-    llama::Field<tag::Pad, Padding<4>>,
-    llama::Field<tag::Mass, double>,
-    llama::Field<tag::Flags, bool[3]>,
-    llama::Field<tag::Pad, Padding<5>>
->;
 // clang-format on
 
 namespace
@@ -76,108 +45,201 @@ namespace
     using ArrayDims = decltype(arrayDims);
 
     template <typename Mapping>
-    void dump(const Mapping& mapping, const std::string& filename)
+    void dump(const Mapping& mapping)
     {
+        // undocumented Catch feature, see: https://github.com/catchorg/Catch2/issues/510
+        const auto filename = Catch::getResultCapture().getCurrentTestName();
         std::ofstream{filename + ".svg"} << llama::toSvg(mapping);
         std::ofstream{filename + ".html"} << llama::toHtml(mapping);
     }
 } // namespace
 
-TEST_CASE("dump.AoS")
+TEST_CASE("dump.Particle.AoS")
 {
-    dump(llama::mapping::AoS{arrayDims, Particle{}}, "AoSMapping");
+    dump(llama::mapping::AoS{arrayDims, Particle{}});
 }
 
-TEST_CASE("dump.SoA")
+TEST_CASE("dump.Particle.SoA")
 {
-    dump(llama::mapping::SoA{arrayDims, Particle{}}, "SoAMapping");
+    dump(llama::mapping::SoA{arrayDims, Particle{}});
 }
 
-TEST_CASE("dump.SoA.MultiBlob")
+TEST_CASE("dump.Particle.SoA_MB")
 {
-    dump(llama::mapping::SoA<ArrayDims, Particle, true>{arrayDims}, "SoAMappingMultiBlob");
+    dump(llama::mapping::SoA<ArrayDims, Particle, true>{arrayDims});
 }
 
-TEST_CASE("dump.AoSoA.8")
+TEST_CASE("dump.Particle.AoSoA8")
 {
-    dump(llama::mapping::AoSoA<ArrayDims, Particle, 8>{arrayDims}, "AoSoAMapping8");
+    dump(llama::mapping::AoSoA<ArrayDims, Particle, 8>{arrayDims});
 }
 
-TEST_CASE("dump.AoSoA.32")
+TEST_CASE("dump.Particle.AoSoA32")
 {
-    dump(llama::mapping::AoSoA<ArrayDims, Particle, 32>{arrayDims}, "AoSoAMapping32");
+    dump(llama::mapping::AoSoA<ArrayDims, Particle, 32>{arrayDims});
 }
 
-TEST_CASE("dump.Split.SoA.AoS.1Buffer")
+TEST_CASE("dump.Particle.Split.SoA.AoS.1Buffer")
 {
     // split out velocity (written in nbody, the rest is read)
     dump(
         llama::mapping::
             Split<ArrayDims, Particle, llama::RecordCoord<1>, llama::mapping::SingleBlobSoA, llama::mapping::PackedAoS>{
-                arrayDims},
-        "Split.SoA.AoS.1Buffer");
+                arrayDims});
 }
 
-TEST_CASE("dump.Split.SoA.AoS.2Buffer")
+TEST_CASE("dump.Particle.Split.SoA.AoS.2Buffer")
 {
     // split out velocity as AoS into separate buffer
-    dump(
-        llama::mapping::Split<
-            ArrayDims,
-            Particle,
-            llama::RecordCoord<1>,
-            llama::mapping::SingleBlobSoA,
-            llama::mapping::PackedAoS,
-            true>{arrayDims},
-        "Split.SoA.AoS.2Buffer");
+    dump(llama::mapping::Split<
+         ArrayDims,
+         Particle,
+         llama::RecordCoord<1>,
+         llama::mapping::SingleBlobSoA,
+         llama::mapping::PackedAoS,
+         true>{arrayDims});
 }
 
-TEST_CASE("dump.Split.AoSoA8.AoS.One.3Buffer")
+TEST_CASE("dump.Particle.Split.AoSoA8.AoS.One")
 {
     // split out velocity as AoSoA8 and mass into a single value, the rest as AoS
-    dump(
-        llama::mapping::Split<
-            ArrayDims,
-            Particle,
-            llama::RecordCoord<1>,
-            llama::mapping::PreconfiguredAoSoA<8>::type,
-            llama::mapping::
-                PreconfiguredSplit<llama::RecordCoord<1>, llama::mapping::One, llama::mapping::PackedAoS, true>::type,
-            true>{arrayDims},
-        "Split.AoSoA8.SoA.One.3Buffer");
+    dump(llama::mapping::Split<
+         ArrayDims,
+         Particle,
+         llama::RecordCoord<1>,
+         llama::mapping::PreconfiguredAoSoA<8>::type,
+         llama::mapping::
+             PreconfiguredSplit<llama::RecordCoord<1>, llama::mapping::One, llama::mapping::PackedAoS, true>::type,
+         true>{arrayDims});
 }
 
-TEST_CASE("dump.Split.AoSoA8.AoS.One.SoA.4Buffer")
+TEST_CASE("dump.Particle.Split.AoSoA8.AoS.One.SoA")
 {
     // split out velocity as AoSoA8, mass into a single value, position into AoS, and the flags into SoA, makes 4
     // buffers
-    dump(
-        llama::mapping::Split<
-            ArrayDims,
-            Particle,
-            llama::RecordCoord<1>,
-            llama::mapping::PreconfiguredAoSoA<8>::type,
-            llama::mapping::PreconfiguredSplit<
-                llama::RecordCoord<1>,
-                llama::mapping::One,
-                llama::mapping::PreconfiguredSplit<
-                    llama::RecordCoord<0>,
-                    llama::mapping::PackedAoS,
-                    llama::mapping::SingleBlobSoA,
-                    true>::type,
-                true>::type,
-            true>{arrayDims},
-        "Split.AoSoA8.AoS.One.SoA.4Buffer");
+    dump(llama::mapping::Split<
+         ArrayDims,
+         Particle,
+         llama::RecordCoord<1>,
+         llama::mapping::PreconfiguredAoSoA<8>::type,
+         llama::mapping::PreconfiguredSplit<
+             llama::RecordCoord<1>,
+             llama::mapping::One,
+             llama::mapping::PreconfiguredSplit<
+                 llama::RecordCoord<0>,
+                 llama::mapping::PackedAoS,
+                 llama::mapping::SingleBlobSoA,
+                 true>::type,
+             true>::type,
+         true>{arrayDims});
 }
 
-TEST_CASE("dump.AoS.Unaligned")
+// clang-format off
+using Vec2 = llama::Record<
+    llama::Field<tag::X, float>,
+    llama::Field<tag::Y, float>
+>;
+using ParticleUnaligned = llama::Record<
+    llama::Field<tag::Id, std::uint16_t>,
+    llama::Field<tag::Pos, Vec2>,
+    llama::Field<tag::Mass, double>,
+    llama::Field<tag::Flags, bool[3]>
+>;
+// clang-format on
+
+TEST_CASE("dump.ParticleUnaligned.AoS")
 {
-    dump(llama::mapping::AoS{arrayDims, ParticleUnaligned{}}, "AoS.Unaligned");
+    dump(llama::mapping::AoS{arrayDims, ParticleUnaligned{}});
 }
 
-TEST_CASE("dump.AoS.Aligned")
+TEST_CASE("dump.ParticleUnaligned.AoS_Aligned")
 {
-    dump(llama::mapping::AoS<ArrayDims, ParticleUnaligned, true>{arrayDims}, "AoS.Aligned");
+    dump(llama::mapping::AoS<ArrayDims, ParticleUnaligned, true>{arrayDims});
+}
+
+TEST_CASE("dump.ParticleUnaligned.SoA")
+{
+    dump(llama::mapping::SoA{arrayDims, ParticleUnaligned{}});
+}
+
+TEST_CASE("dump.ParticleUnaligned.SoA_MB")
+{
+    dump(llama::mapping::SoA<ArrayDims, ParticleUnaligned, true>{arrayDims});
+}
+
+TEST_CASE("dump.ParticleUnaligned.AoSoA8")
+{
+    dump(llama::mapping::AoSoA<ArrayDims, ParticleUnaligned, 8>{arrayDims});
+}
+
+TEST_CASE("dump.ParticleUnaligned.AoSoA32")
+{
+    dump(llama::mapping::AoSoA<ArrayDims, ParticleUnaligned, 32>{arrayDims});
+}
+
+TEST_CASE("dump.ParticleUnaligned.Split.SoA.AoS.1Buffer")
+{
+    dump(llama::mapping::Split<
+         ArrayDims,
+         ParticleUnaligned,
+         llama::RecordCoord<1>,
+         llama::mapping::SingleBlobSoA,
+         llama::mapping::PackedAoS>{arrayDims});
+}
+
+TEST_CASE("dump.ParticleUnaligned.Split.SoA.AoS.2Buffer")
+{
+    dump(llama::mapping::Split<
+         ArrayDims,
+         ParticleUnaligned,
+         llama::RecordCoord<1>,
+         llama::mapping::SingleBlobSoA,
+         llama::mapping::PackedAoS,
+         true>{arrayDims});
+}
+
+TEST_CASE("dump.ParticleUnaligned.Split.SoA_MB.AoS_Aligned.One")
+{
+    dump(llama::mapping::Split<
+         ArrayDims,
+         ParticleUnaligned,
+         llama::RecordCoord<1>,
+         llama::mapping::PreconfiguredSoA<true>::type,
+         llama::mapping::
+             PreconfiguredSplit<llama::RecordCoord<1>, llama::mapping::One, llama::mapping::AlignedAoS, true>::type,
+         true>{arrayDims});
+}
+
+TEST_CASE("dump.ParticleUnaligned.Split.AoSoA8.AoS_Aligned.One")
+{
+    dump(llama::mapping::Split<
+         ArrayDims,
+         ParticleUnaligned,
+         llama::RecordCoord<1>,
+         llama::mapping::PreconfiguredAoSoA<8>::type,
+         llama::mapping::
+             PreconfiguredSplit<llama::RecordCoord<1>, llama::mapping::One, llama::mapping::AlignedAoS, true>::type,
+         true>{arrayDims});
+}
+
+TEST_CASE("dump.ParticleUnaligned.Split.AoSoA8.SoA.One.AoS")
+{
+    // split out velocity as AoSoA8 and mass into a single value, the rest as AoS
+    dump(llama::mapping::Split<
+         ArrayDims,
+         ParticleUnaligned,
+         llama::RecordCoord<1>,
+         llama::mapping::PreconfiguredAoSoA<8>::type,
+         llama::mapping::PreconfiguredSplit<
+             llama::RecordCoord<1>,
+             llama::mapping::One,
+             llama::mapping::PreconfiguredSplit<
+                 llama::RecordCoord<0>,
+                 llama::mapping::PreconfiguredSoA<>::type,
+                 llama::mapping::PackedAoS,
+                 true>::type,
+             true>::type,
+         true>{arrayDims});
 }
 
 TEST_CASE("AoS.Aligned")
@@ -202,7 +264,29 @@ TEST_CASE("AoS.Aligned")
         });
 }
 
-TEST_CASE("dump.AoS.AlignedExplicit")
+namespace
 {
-    dump(llama::mapping::AoS{arrayDims, ParticleAligned{}}, "AoS.AlignedExplicit");
+    template <std::size_t N>
+    using Padding = std::array<std::byte, N>;
+} // namespace
+
+// bad alignment fixed with explicit padding:
+// clang-format off
+using ParticleAligned = llama::Record<
+    llama::Field<tag::Id, std::uint16_t>,
+    llama::Field<tag::Pad, Padding<2>>,
+    llama::Field<tag::Pos, llama::Record<
+        llama::Field<tag::X, float>,
+        llama::Field<tag::Y, float>
+    >>,
+    llama::Field<tag::Pad, Padding<4>>,
+    llama::Field<tag::Mass, double>,
+    llama::Field<tag::Flags, bool[3]>,
+    llama::Field<tag::Pad, Padding<5>>
+>;
+// clang-format on
+
+TEST_CASE("dump.ParticleAligned.AoS")
+{
+    dump(llama::mapping::AoS{arrayDims, ParticleAligned{}});
 }
