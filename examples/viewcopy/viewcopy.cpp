@@ -78,8 +78,9 @@ void naive_copy(
     llamaex::parallelForEachADCoord(
         srcView.mapping.arrayDims(),
         numThreads,
-        [&](auto ad) {
-            llama::forEachLeaf<typename DstMapping::RecordDim>([&](auto coord)
+        [&](auto ad) LLAMA_LAMBDA_INLINE
+        {
+            llama::forEachLeaf<typename DstMapping::RecordDim>([&](auto coord) LLAMA_LAMBDA_INLINE
                                                                { dstView(ad)(coord) = srcView(ad)(coord); });
         });
 }
