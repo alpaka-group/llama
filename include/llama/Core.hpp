@@ -289,6 +289,17 @@ namespace llama
     template <typename RecordDim>
     using LeafRecordCoords = typename internal::LeafRecordCoordsImpl<RecordDim, RecordCoord<>>::type;
 
+    namespace internal
+    {
+        // adapted from boost::mp11, but with LLAMA_FN_HOST_ACC_INLINE
+        template <template <typename...> typename L, typename... T, typename F>
+        LLAMA_FN_HOST_ACC_INLINE constexpr void mp_for_each_inlined(L<T...>, F&& f)
+        {
+            using A = int[sizeof...(T)];
+            (void) A{((void) f(T{}), 0)...};
+        }
+    } // namespace internal
+
     /// Iterates over the record dimension tree and calls a functor on each element.
     /// \param functor Functor to execute at each element of. Needs to have
     /// `operator()` with a template parameter for the \ref RecordCoord in the
@@ -299,8 +310,9 @@ namespace llama
     LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaf(Functor&& functor, RecordCoord<Coords...> baseCoord)
     {
         LLAMA_FORCE_INLINE_RECURSIVE
-        boost::mp11::mp_for_each<LeafRecordCoords<GetType<RecordDim, RecordCoord<Coords...>>>>([&](
-            auto innerCoord) constexpr { functor(cat(baseCoord, innerCoord)); });
+        internal::mp_for_each_inlined(
+            LeafRecordCoords<GetType<RecordDim, RecordCoord<Coords...>>>{},
+            [&](auto innerCoord) constexpr { std::forward<Functor>(functor)(cat(baseCoord, innerCoord)); });
     }
 
     /// Iterates over the record dimension tree and calls a functor on each element.
