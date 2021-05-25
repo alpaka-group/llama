@@ -45,6 +45,23 @@
 #    endif
 #endif
 
+#ifndef LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS
+#    if defined(__clang__) || defined(__INTEL_LLVM_COMPILER)
+#        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...) __attribute__((always_inline)) __VA_ARGS__
+#    elif defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__NVCC__)
+#        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...) __VA_ARGS__ __attribute__((always_inline))
+#    elif defined(_MSC_VER)
+#        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...)                                                               \
+            __VA_ARGS__ /* FIXME: MSVC cannot combine constexpr and [[msvc::forceinline]] */
+#    else
+#        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...) __VA_ARGS__
+#        warning LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS not defined for this compiler
+#    endif
+#endif
+#ifndef LLAMA_LAMBDA_INLINE
+#    define LLAMA_LAMBDA_INLINE LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS()
+#endif
+
 /// Suppresses nvcc warning: 'calling a __host__ function from __host__ __device__ function.'
 #if defined(__NVCC__) && !defined(__clang__)
 #    define LLAMA_SUPPRESS_HOST_DEVICE_WARNING _Pragma("nv_exec_check_disable")
