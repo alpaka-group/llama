@@ -468,7 +468,7 @@ namespace llama
     namespace internal
     {
         template <std::size_t Dim>
-        constexpr auto popFront(ArrayDims<Dim> ad)
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto popFront(ArrayDims<Dim> ad)
         {
             ArrayDims<Dim - 1> result;
             for (std::size_t i = 0; i < Dim - 1; i++)
@@ -478,7 +478,7 @@ namespace llama
     } // namespace internal
 
     template <std::size_t Dim, typename Func, typename... OuterIndices>
-    void forEachADCoord(ArrayDims<Dim> adSize, Func&& func, OuterIndices... outerIndices)
+    LLAMA_FN_HOST_ACC_INLINE void forEachADCoord(ArrayDims<Dim> adSize, Func&& func, OuterIndices... outerIndices)
     {
         for (std::size_t i = 0; i < adSize[0]; i++)
         {
