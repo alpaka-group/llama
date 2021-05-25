@@ -51,17 +51,17 @@ namespace llama
                               typename LeftRecord::AccessibleRecordDim,
                               typename RightRecord::AccessibleRecordDim>)
             {
-                forEachLeaf<typename LeftRecord::AccessibleRecordDim>([&](auto coord)
+                forEachLeaf<typename LeftRecord::AccessibleRecordDim>([&](auto coord) LLAMA_LAMBDA_INLINE
                                                                       { Functor{}(left(coord), right(coord)); });
             }
             else
             {
                 forEachLeaf<typename LeftRecord::AccessibleRecordDim>(
-                    [&](auto leftCoord)
+                    [&](auto leftCoord) LLAMA_LAMBDA_INLINE
                     {
                         using LeftInnerCoord = decltype(leftCoord);
                         forEachLeaf<typename RightRecord::AccessibleRecordDim>(
-                            [&](auto rightCoord)
+                            [&](auto rightCoord) LLAMA_LAMBDA_INLINE
                             {
                                 using RightInnerCoord = decltype(rightCoord);
                                 if constexpr (hasSameTags<
@@ -81,7 +81,7 @@ namespace llama
         template <typename Functor, typename LeftRecord, typename T>
         LLAMA_FN_HOST_ACC_INLINE auto virtualRecordArithOperator(LeftRecord& left, const T& right) -> LeftRecord&
         {
-            forEachLeaf<typename LeftRecord::AccessibleRecordDim>([&](auto leftCoord)
+            forEachLeaf<typename LeftRecord::AccessibleRecordDim>([&](auto leftCoord) LLAMA_LAMBDA_INLINE
                                                                   { Functor{}(left(leftCoord), right); });
             return left;
         }
@@ -105,16 +105,16 @@ namespace llama
                               typename RightRecord::AccessibleRecordDim>)
             {
                 forEachLeaf<typename LeftRecord::AccessibleRecordDim>(
-                    [&](auto coord) { result &= Functor{}(left(coord), right(coord)); });
+                    [&](auto coord) LLAMA_LAMBDA_INLINE { result &= Functor{}(left(coord), right(coord)); });
             }
             else
             {
                 forEachLeaf<typename LeftRecord::AccessibleRecordDim>(
-                    [&](auto leftCoord)
+                    [&](auto leftCoord) LLAMA_LAMBDA_INLINE
                     {
                         using LeftInnerCoord = decltype(leftCoord);
                         forEachLeaf<typename RightRecord::AccessibleRecordDim>(
-                            [&](auto rightCoord)
+                            [&](auto rightCoord) LLAMA_LAMBDA_INLINE
                             {
                                 using RightInnerCoord = decltype(rightCoord);
                                 if constexpr (hasSameTags<
@@ -136,7 +136,7 @@ namespace llama
         {
             bool result = true;
             forEachLeaf<typename LeftRecord::AccessibleRecordDim>(
-                [&](auto leftCoord) {
+                [&](auto leftCoord) LLAMA_LAMBDA_INLINE {
                     result &= Functor{}(
                         left(leftCoord),
                         static_cast<std::remove_reference_t<decltype(left(leftCoord))>>(right));
