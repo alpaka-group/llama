@@ -312,7 +312,8 @@ namespace llama
         LLAMA_FORCE_INLINE_RECURSIVE
         internal::mp_for_each_inlined(
             LeafRecordCoords<GetType<RecordDim, RecordCoord<Coords...>>>{},
-            [&](auto innerCoord) constexpr { std::forward<Functor>(functor)(cat(baseCoord, innerCoord)); });
+            [&](auto innerCoord) LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(constexpr)
+            { std::forward<Functor>(functor)(cat(baseCoord, innerCoord)); });
     }
 
     /// Iterates over the record dimension tree and calls a functor on each element.
