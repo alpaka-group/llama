@@ -172,14 +172,6 @@ namespace llama
             infos = internal::breakBoxes(std::move(infos), wrapByteCount);
 
         std::string svg;
-        svg += fmt::format(
-            R"(<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns="http://www.w3.org/2000/svg">
-    <style>
-        .label {{ font: {}px sans-serif; }}
-    </style>
-)",
-            byteSizeInPixel / 2);
 
         std::array<int, Mapping::blobCount + 1> blobYOffset{};
         for (auto i = 0; i < Mapping::blobCount; i++)
@@ -198,6 +190,18 @@ namespace llama
                 blobYOffset[i] + height / 2,
                 i);
         }
+
+        svg = fmt::format(
+                  R"(<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="{}" height="{}" xmlns="http://www.w3.org/2000/svg">
+    <style>
+        .label {{ font: {}px sans-serif; }}
+    </style>
+)",
+                  blobBlockWidth + wrapByteCount * byteSizeInPixel,
+                  blobYOffset.back() - byteSizeInPixel,
+                  byteSizeInPixel / 2)
+            + svg;
 
         for (const auto& info : infos)
         {
