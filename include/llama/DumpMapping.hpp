@@ -206,12 +206,24 @@ namespace llama
         for (const auto& info : infos)
         {
             const auto blobY = blobYOffset[info.nrAndOffset.nr];
-            const auto x = (info.nrAndOffset.offset % wrapByteCount) * byteSizeInPixel + blobBlockWidth;
-            const auto y = (info.nrAndOffset.offset / wrapByteCount) * byteSizeInPixel + blobY;
-
+            auto x = (info.nrAndOffset.offset % wrapByteCount) * byteSizeInPixel + blobBlockWidth;
+            auto y = (info.nrAndOffset.offset / wrapByteCount) * byteSizeInPixel + blobY;
             const auto fill = internal::color(info.recordCoord);
-
             const auto width = byteSizeInPixel * info.size;
+
+            constexpr auto cropBoxes = true;
+            if (cropBoxes)
+            {
+                svg += fmt::format(
+                    R"(<svg x="{}" y="{}" width="{}" height="{}">
+)",
+                    x,
+                    y,
+                    width,
+                    byteSizeInPixel);
+                x = 0;
+                y = 0;
+            }
             svg += fmt::format(
                 R"(<rect x="{}" y="{}" width="{}" height="{}" fill="#{:X}" stroke="#000"/>
 )",
@@ -237,6 +249,9 @@ namespace llama
                 y + byteSizeInPixel * 3 / 4,
                 internal::formatUdCoord(info.adCoord),
                 internal::formatDDTags(info.recordTags));
+            if (cropBoxes)
+                svg += R"(</svg>
+)";
         }
         svg += "</svg>";
         return svg;
