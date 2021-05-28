@@ -1,6 +1,6 @@
 #include "../common/Stopwatch.hpp"
+#include "../common/hostname.hpp"
 
-#include <boost/asio/ip/host_name.hpp>
 #include <chrono>
 #include <fmt/format.h>
 #include <fstream>
@@ -165,7 +165,7 @@ set yrange [0:*]
 $data << EOD
 )",
         PROBLEM_SIZE / 1000,
-        boost::asio::ip::host_name());
+        common::hostname());
 
     mp_for_each<mp_iota_c<28>>(
         [&](auto ae)
