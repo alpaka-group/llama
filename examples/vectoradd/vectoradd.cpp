@@ -1,6 +1,6 @@
 #include "../common/Stopwatch.hpp"
+#include "../common/hostname.hpp"
 
-#include <boost/asio/ip/host_name.hpp>
 #include <fmt/format.h>
 #include <fstream>
 #include <iostream>
@@ -298,7 +298,7 @@ set ylabel "update runtime [s]"
 $data << EOD
 )",
         PROBLEM_SIZE / 1024 / 1024,
-        boost::asio::ip::host_name());
+        common::hostname());
 
     int r = 0;
     r += usellama::main(plotFile);

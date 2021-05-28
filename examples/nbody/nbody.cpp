@@ -1,6 +1,6 @@
 #include "../common/Stopwatch.hpp"
+#include "../common/hostname.hpp"
 
-#include <boost/asio/ip/host_name.hpp>
 #include <fmt/format.h>
 #include <fstream>
 #include <iomanip>
@@ -1357,7 +1357,7 @@ set y2tics auto
 $data << EOD
 )",
         PROBLEM_SIZE / 1024,
-        boost::asio::ip::host_name());
+        common::hostname());
     plotFile << "\"\"\t\"update\"\t\"move\"\n";
 
     // Note:

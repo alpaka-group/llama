@@ -1,6 +1,6 @@
 #include "../../common/Stopwatch.hpp"
+#include "../../common/hostname.hpp"
 
-#include <boost/asio/ip/host_name.hpp>
 #include <cuda_runtime.h>
 #include <fmt/format.h>
 #include <fstream>
@@ -494,7 +494,7 @@ set y2tics auto
 $data << EOD
 )",
         PROBLEM_SIZE / 1024,
-        boost::asio::ip::host_name());
+        common::hostname());
     plotFile << "\"\"\t\"update\"\t\"move\"\n";
 
     using namespace boost::mp11;

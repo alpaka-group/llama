@@ -1,7 +1,7 @@
 #include "../common/Stopwatch.hpp"
+#include "../common/hostname.hpp"
 #include "../common/ttjet_13tev_june2019.hpp"
 
-#include <boost/asio/ip/host_name.hpp>
 #include <boost/functional/hash.hpp>
 #include <boost/mp11.hpp>
 #include <fmt/format.h>
@@ -435,7 +435,7 @@ set ylabel "throughput [GiB/s]"
 $data << EOD
 )",
         dataSize / 1024 / 1024,
-        boost::asio::ip::host_name());
+        common::hostname());
 
     plotFile << "\"\"\t\"memcpy\"\t\"memcpy\\\\\\_avx2\"\t\"memcpy(p)\"\t\"memcpy\\\\\\_avx2(p)\"\t\"naive "
                 "copy\"\t\"std::copy\"\t\"aosoa copy(r)\"\t\"aosoa copy(w)\"\t\"naive copy(p)\"\t\"aosoa "
