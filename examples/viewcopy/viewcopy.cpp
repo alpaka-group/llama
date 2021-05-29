@@ -189,7 +189,7 @@ void aosoa_copy_internal(const SrcView& srcView, DstView& dstView, std::size_t n
     const auto flatSize = std::reduce(std::begin(arrayDims), std::end(arrayDims), std::size_t{1}, std::multiplies<>{});
 
     // the same as AoSoA::blobNrAndOffset but takes a flat array index
-    auto mapAoSoA = [](std::size_t flatArrayIndex, auto coord, std::size_t Lanes)
+    auto mapAoSoA = [](std::size_t flatArrayIndex, auto coord, std::size_t Lanes) LLAMA_LAMBDA_INLINE
     {
         const auto blockIndex = flatArrayIndex / Lanes;
         const auto laneIndex = flatArrayIndex % Lanes;
@@ -199,7 +199,7 @@ void aosoa_copy_internal(const SrcView& srcView, DstView& dstView, std::size_t n
         return offset;
     };
     // the same as SoA::blobNrAndOffset but takes a flat array index
-    auto mapSoA = [&](std::size_t flatArrayIndex, auto coord, bool mb) -> llama::NrAndOffset
+    auto mapSoA = [&](std::size_t flatArrayIndex, auto coord, bool mb) LLAMA_LAMBDA_INLINE -> llama::NrAndOffset
     {
         const auto blob = mb * llama::flatRecordCoord<RecordDim, decltype(coord)>;
         const auto offset = !mb * llama::offsetOf<RecordDim, decltype(coord)> * flatSize
@@ -207,7 +207,7 @@ void aosoa_copy_internal(const SrcView& srcView, DstView& dstView, std::size_t n
         return {blob, offset};
     };
 
-    auto mapSrc = [&srcView, &mapAoSoA, &mapSoA](std::size_t flatArrayIndex, auto coord)
+    auto mapSrc = [&srcView, &mapAoSoA, &mapSoA](std::size_t flatArrayIndex, auto coord) LLAMA_LAMBDA_INLINE
     {
         if constexpr (srcIsAoSoA)
             return &srcView.storageBlobs[0][0] + mapAoSoA(flatArrayIndex, coord, LanesSrc);
@@ -217,7 +217,7 @@ void aosoa_copy_internal(const SrcView& srcView, DstView& dstView, std::size_t n
             return &srcView.storageBlobs[blob][off];
         }
     };
-    auto mapDst = [&dstView, &mapAoSoA, &mapSoA](std::size_t flatArrayIndex, auto coord)
+    auto mapDst = [&dstView, &mapAoSoA, &mapSoA](std::size_t flatArrayIndex, auto coord) LLAMA_LAMBDA_INLINE
     {
         if constexpr (dstIsAoSoA)
             return &dstView.storageBlobs[0][0] + mapAoSoA(flatArrayIndex, coord, LanesDst);
@@ -242,7 +242,7 @@ void aosoa_copy_internal(const SrcView& srcView, DstView& dstView, std::size_t n
             const auto start = id * elementsPerThread;
             const auto stop = id == numThreads - 1 ? flatSize : (id + 1) * elementsPerThread;
 
-            auto copyLBlock = [&](const std::byte*& threadSrc, std::size_t dstIndex, auto coord)
+            auto copyLBlock = [&](const std::byte*& threadSrc, std::size_t dstIndex, auto coord) LLAMA_LAMBDA_INLINE
             {
                 constexpr auto bytes = L * sizeof(llama::GetType<RecordDim, decltype(coord)>);
                 std::memcpy(mapDst(dstIndex, coord), threadSrc, bytes);
@@ -253,7 +253,7 @@ void aosoa_copy_internal(const SrcView& srcView, DstView& dstView, std::size_t n
                 auto* threadSrc = mapSrc(start, llama::RecordCoord<>{});
                 for (std::size_t i = start; i < stop; i += LanesSrc)
                     llama::forEachLeaf<RecordDim>(
-                        [&](auto coord)
+                        [&](auto coord) LLAMA_LAMBDA_INLINE
                         {
                             for (std::size_t j = 0; j < LanesSrc; j += L)
                                 copyLBlock(threadSrc, i + j, coord);
@@ -262,7 +262,7 @@ void aosoa_copy_internal(const SrcView& srcView, DstView& dstView, std::size_t n
             else
             {
                 llama::forEachLeaf<RecordDim>(
-                    [&](auto coord)
+                    [&](auto coord) LLAMA_LAMBDA_INLINE
                     {
                         auto* threadSrc = mapSrc(start, coord);
                         for (std::size_t i = start; i < stop; i += L)
@@ -282,7 +282,7 @@ void aosoa_copy_internal(const SrcView& srcView, DstView& dstView, std::size_t n
             const auto start = id * elementsPerThread;
             const auto stop = id == numThreads - 1 ? flatSize : (id + 1) * elementsPerThread;
 
-            auto copyLBlock = [&](std::byte*& threadDst, std::size_t srcIndex, auto coord)
+            auto copyLBlock = [&](std::byte*& threadDst, std::size_t srcIndex, auto coord) LLAMA_LAMBDA_INLINE
             {
                 constexpr auto bytes = L * sizeof(llama::GetType<RecordDim, decltype(coord)>);
                 std::memcpy(threadDst, mapSrc(srcIndex, coord), bytes);
@@ -293,7 +293,7 @@ void aosoa_copy_internal(const SrcView& srcView, DstView& dstView, std::size_t n
                 auto* threadDst = mapDst(start, llama::RecordCoord<>{});
                 for (std::size_t i = start; i < stop; i += LanesDst)
                     llama::forEachLeaf<RecordDim>(
-                        [&](auto coord)
+                        [&](auto coord) LLAMA_LAMBDA_INLINE
                         {
                             for (std::size_t j = 0; j < LanesDst; j += L)
                                 copyLBlock(threadDst, i + j, coord);
@@ -302,7 +302,7 @@ void aosoa_copy_internal(const SrcView& srcView, DstView& dstView, std::size_t n
             else
             {
                 llama::forEachLeaf<RecordDim>(
-                    [&](auto coord)
+                    [&](auto coord) LLAMA_LAMBDA_INLINE
                     {
                         auto* threadDst = mapDst(start, coord);
                         for (std::size_t i = start; i < stop; i += L)
