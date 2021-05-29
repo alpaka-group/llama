@@ -170,24 +170,23 @@ template <
     typename RecordDim,
     std::size_t LanesSrc,
     std::size_t LanesDst,
+    bool MBSrc,
+    bool MBDst,
     typename SrcView,
     typename DstView>
 void aosoa_copy_internal(const SrcView& srcView, DstView& dstView, std::size_t numThreads)
 {
-    static_assert(decltype(srcView.storageBlobs)::rank == 1);
-    static_assert(decltype(dstView.storageBlobs)::rank == 1);
-
     if (srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
         throw std::runtime_error{"Array dimensions sizes are different"};
 
     constexpr auto srcIsAoSoA = LanesSrc != std::numeric_limits<std::size_t>::max();
     constexpr auto dstIsAoSoA = LanesDst != std::numeric_limits<std::size_t>::max();
 
+    static_assert(!srcIsAoSoA || decltype(srcView.storageBlobs)::rank == 1);
+    static_assert(!dstIsAoSoA || decltype(dstView.storageBlobs)::rank == 1);
+
     const auto arrayDims = dstView.mapping.arrayDims();
     const auto flatSize = std::reduce(std::begin(arrayDims), std::end(arrayDims), std::size_t{1}, std::multiplies<>{});
-
-    const std::byte* src = &srcView.storageBlobs[0][0];
-    std::byte* dst = &dstView.storageBlobs[0][0];
 
     // the same as AoSoA::blobNrAndOffset but takes a flat array index
     auto mapAoSoA = [](std::size_t flatArrayIndex, auto coord, std::size_t Lanes)
@@ -200,26 +199,33 @@ void aosoa_copy_internal(const SrcView& srcView, DstView& dstView, std::size_t n
         return offset;
     };
     // the same as SoA::blobNrAndOffset but takes a flat array index
-    auto mapSoA = [&](std::size_t flatArrayIndex, auto coord)
+    auto mapSoA = [&](std::size_t flatArrayIndex, auto coord, bool mb) -> llama::NrAndOffset
     {
-        const auto offset = llama::offsetOf<RecordDim, decltype(coord)> * flatSize
+        const auto blob = mb * llama::flatRecordCoord<RecordDim, decltype(coord)>;
+        const auto offset = !mb * llama::offsetOf<RecordDim, decltype(coord)> * flatSize
             + sizeof(llama::GetType<RecordDim, decltype(coord)>) * flatArrayIndex;
-        return offset;
+        return {blob, offset};
     };
 
-    auto mapSrc = [src, &mapAoSoA, &mapSoA](std::size_t flatArrayIndex, auto coord)
+    auto mapSrc = [&srcView, &mapAoSoA, &mapSoA](std::size_t flatArrayIndex, auto coord)
     {
         if constexpr (srcIsAoSoA)
-            return src + mapAoSoA(flatArrayIndex, coord, LanesSrc);
+            return &srcView.storageBlobs[0][0] + mapAoSoA(flatArrayIndex, coord, LanesSrc);
         else
-            return src + mapSoA(flatArrayIndex, coord);
+        {
+            const auto [blob, off] = mapSoA(flatArrayIndex, coord, MBSrc);
+            return &srcView.storageBlobs[blob][off];
+        }
     };
-    auto mapDst = [dst, &mapAoSoA, &mapSoA](std::size_t flatArrayIndex, auto coord)
+    auto mapDst = [&dstView, &mapAoSoA, &mapSoA](std::size_t flatArrayIndex, auto coord)
     {
         if constexpr (dstIsAoSoA)
-            return dst + mapAoSoA(flatArrayIndex, coord, LanesDst);
+            return &dstView.storageBlobs[0][0] + mapAoSoA(flatArrayIndex, coord, LanesDst);
         else
-            return dst + mapSoA(flatArrayIndex, coord);
+        {
+            const auto [blob, off] = mapSoA(flatArrayIndex, coord, MBDst);
+            return &dstView.storageBlobs[blob][off];
+        }
     };
 
     constexpr auto L = std::min(LanesSrc, LanesDst);
@@ -324,12 +330,7 @@ void aosoa_copy(
         DstBlobType>& dstView,
     std::size_t numThreads = 1)
 {
-    static_assert(decltype(srcView.storageBlobs)::rank == 1);
-    static_assert(decltype(dstView.storageBlobs)::rank == 1);
-
-    if (srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
-        throw std::runtime_error{"Array dimensions sizes are different"};
-    aosoa_copy_internal<ReadOpt, ArrayDims, RecordDim, LanesSrc, LanesDst>(srcView, dstView, numThreads);
+    aosoa_copy_internal<ReadOpt, ArrayDims, RecordDim, LanesSrc, LanesDst, false, false>(srcView, dstView, numThreads);
 }
 
 template <
@@ -349,15 +350,14 @@ void aosoa_copy(
         DstBlobType>& dstView,
     std::size_t numThreads = 1)
 {
-    static_assert(decltype(srcView.storageBlobs)::rank == 1);
-    static_assert(decltype(dstView.storageBlobs)::rank == 1);
-
-    if (srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
-        throw std::runtime_error{"Array dimensions sizes are different"};
-    aosoa_copy_internal<ReadOpt, ArrayDims, RecordDim, LanesSrc, std::numeric_limits<std::size_t>::max()>(
-        srcView,
-        dstView,
-        numThreads);
+    aosoa_copy_internal<
+        ReadOpt,
+        ArrayDims,
+        RecordDim,
+        LanesSrc,
+        std::numeric_limits<std::size_t>::max(),
+        false,
+        DstSeparateBuffers>(srcView, dstView, numThreads);
 }
 
 template <
@@ -377,15 +377,14 @@ void aosoa_copy(
         DstBlobType>& dstView,
     std::size_t numThreads = 1)
 {
-    static_assert(decltype(srcView.storageBlobs)::rank == 1);
-    static_assert(decltype(dstView.storageBlobs)::rank == 1);
-
-    if (srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
-        throw std::runtime_error{"Array dimensions sizes are different"};
-    aosoa_copy_internal<ReadOpt, ArrayDims, RecordDim, std::numeric_limits<std::size_t>::max(), LanesDst>(
-        srcView,
-        dstView,
-        numThreads);
+    aosoa_copy_internal<
+        ReadOpt,
+        ArrayDims,
+        RecordDim,
+        std::numeric_limits<std::size_t>::max(),
+        LanesDst,
+        SrcSeparateBuffers,
+        false>(srcView, dstView, numThreads);
 }
 
 
@@ -540,7 +539,7 @@ $data << EOD
 
     const auto packedAoSMapping = llama::mapping::PackedAoS<decltype(arrayDims), RecordDim>{arrayDims};
     const auto alignedAoSMapping = llama::mapping::AlignedAoS<decltype(arrayDims), RecordDim>{arrayDims};
-    const auto singleBlobSoAMapping = llama::mapping::SingleBlobSoA<decltype(arrayDims), RecordDim>{arrayDims};
+    const auto multiBlobSoAMapping = llama::mapping::MultiBlobSoA<decltype(arrayDims), RecordDim>{arrayDims};
     const auto aosoa8Mapping = llama::mapping::AoSoA<decltype(arrayDims), RecordDim, 8>{arrayDims};
     const auto aosoa32Mapping = llama::mapping::AoSoA<decltype(arrayDims), RecordDim, 32>{arrayDims};
     const auto aosoa64Mapping = llama::mapping::AoSoA<decltype(arrayDims), RecordDim, 64>{arrayDims};
@@ -548,11 +547,11 @@ $data << EOD
     benchmarkAllCopies("PackedAoS", "AlignedAoS", packedAoSMapping, alignedAoSMapping);
     benchmarkAllCopies("AlignedAoS", "PackedAoS", alignedAoSMapping, packedAoSMapping);
 
-    benchmarkAllCopies("AlignedAoS", "SoA SB", alignedAoSMapping, singleBlobSoAMapping);
-    benchmarkAllCopies("SoA SB", "AlignedAoS", singleBlobSoAMapping, alignedAoSMapping);
+    benchmarkAllCopies("AlignedAoS", "SoA MB", alignedAoSMapping, multiBlobSoAMapping);
+    benchmarkAllCopies("SoA MB", "AlignedAoS", multiBlobSoAMapping, alignedAoSMapping);
 
-    benchmarkAllCopies("SoA SB", "AoSoA32", singleBlobSoAMapping, aosoa32Mapping);
-    benchmarkAllCopies("AoSoA32", "SoA SB", aosoa32Mapping, singleBlobSoAMapping);
+    benchmarkAllCopies("SoA MB", "AoSoA32", multiBlobSoAMapping, aosoa32Mapping);
+    benchmarkAllCopies("AoSoA32", "SoA MB", aosoa32Mapping, multiBlobSoAMapping);
 
     benchmarkAllCopies("AoSoA8", "AoSoA32", aosoa8Mapping, aosoa32Mapping);
     benchmarkAllCopies("AoSoA32", "AoSoA8", aosoa32Mapping, aosoa8Mapping);
