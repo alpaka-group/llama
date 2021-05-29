@@ -207,19 +207,19 @@ void aosoa_copy_internal(const SrcView& srcView, DstView& dstView, std::size_t n
         return offset;
     };
 
-    auto mapSrc = [&mapAoSoA, &mapSoA](std::size_t flatArrayIndex, auto coord)
+    auto mapSrc = [src, &mapAoSoA, &mapSoA](std::size_t flatArrayIndex, auto coord)
     {
         if constexpr (srcIsAoSoA)
-            return mapAoSoA(flatArrayIndex, coord, LanesSrc);
+            return src + mapAoSoA(flatArrayIndex, coord, LanesSrc);
         else
-            return mapSoA(flatArrayIndex, coord);
+            return src + mapSoA(flatArrayIndex, coord);
     };
-    auto mapDst = [&mapAoSoA, &mapSoA](std::size_t flatArrayIndex, auto coord)
+    auto mapDst = [dst, &mapAoSoA, &mapSoA](std::size_t flatArrayIndex, auto coord)
     {
         if constexpr (dstIsAoSoA)
-            return mapAoSoA(flatArrayIndex, coord, LanesDst);
+            return dst + mapAoSoA(flatArrayIndex, coord, LanesDst);
         else
-            return mapSoA(flatArrayIndex, coord);
+            return dst + mapSoA(flatArrayIndex, coord);
     };
 
     constexpr auto L = std::min(LanesSrc, LanesDst);
@@ -239,12 +239,12 @@ void aosoa_copy_internal(const SrcView& srcView, DstView& dstView, std::size_t n
             auto copyLBlock = [&](const std::byte*& threadSrc, std::size_t dstIndex, auto coord)
             {
                 constexpr auto bytes = L * sizeof(llama::GetType<RecordDim, decltype(coord)>);
-                std::memcpy(&dst[mapDst(dstIndex, coord)], threadSrc, bytes);
+                std::memcpy(mapDst(dstIndex, coord), threadSrc, bytes);
                 threadSrc += bytes;
             };
             if constexpr (srcIsAoSoA)
             {
-                auto* threadSrc = src + mapSrc(start, llama::RecordCoord<>{});
+                auto* threadSrc = mapSrc(start, llama::RecordCoord<>{});
                 for (std::size_t i = start; i < stop; i += LanesSrc)
                     llama::forEachLeaf<RecordDim>(
                         [&](auto coord)
@@ -258,7 +258,7 @@ void aosoa_copy_internal(const SrcView& srcView, DstView& dstView, std::size_t n
                 llama::forEachLeaf<RecordDim>(
                     [&](auto coord)
                     {
-                        auto* threadSrc = src + mapSrc(start, coord);
+                        auto* threadSrc = mapSrc(start, coord);
                         for (std::size_t i = start; i < stop; i += L)
                             copyLBlock(threadSrc, i, coord);
                     });
@@ -279,12 +279,12 @@ void aosoa_copy_internal(const SrcView& srcView, DstView& dstView, std::size_t n
             auto copyLBlock = [&](std::byte*& threadDst, std::size_t srcIndex, auto coord)
             {
                 constexpr auto bytes = L * sizeof(llama::GetType<RecordDim, decltype(coord)>);
-                std::memcpy(threadDst, &src[mapSrc(srcIndex, coord)], bytes);
+                std::memcpy(threadDst, mapSrc(srcIndex, coord), bytes);
                 threadDst += bytes;
             };
             if constexpr (dstIsAoSoA)
             {
-                auto* threadDst = dst + mapDst(start, llama::RecordCoord<>{});
+                auto* threadDst = mapDst(start, llama::RecordCoord<>{});
                 for (std::size_t i = start; i < stop; i += LanesDst)
                     llama::forEachLeaf<RecordDim>(
                         [&](auto coord)
@@ -298,7 +298,7 @@ void aosoa_copy_internal(const SrcView& srcView, DstView& dstView, std::size_t n
                 llama::forEachLeaf<RecordDim>(
                     [&](auto coord)
                     {
-                        auto* threadDst = dst + mapDst(start, coord);
+                        auto* threadDst = mapDst(start, coord);
                         for (std::size_t i = start; i < stop; i += L)
                             copyLBlock(threadDst, i, coord);
                     });
