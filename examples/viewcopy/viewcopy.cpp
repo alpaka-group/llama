@@ -544,11 +544,11 @@ $data << EOD
     const auto aosoa32Mapping = llama::mapping::AoSoA<decltype(arrayDims), RecordDim, 32>{arrayDims};
     const auto aosoa64Mapping = llama::mapping::AoSoA<decltype(arrayDims), RecordDim, 64>{arrayDims};
 
-    benchmarkAllCopies("PackedAoS", "AlignedAoS", packedAoSMapping, alignedAoSMapping);
-    benchmarkAllCopies("AlignedAoS", "PackedAoS", alignedAoSMapping, packedAoSMapping);
+    benchmarkAllCopies("P AoS", "A AoS", packedAoSMapping, alignedAoSMapping);
+    benchmarkAllCopies("A AoS", "P AoS", alignedAoSMapping, packedAoSMapping);
 
-    benchmarkAllCopies("AlignedAoS", "SoA MB", alignedAoSMapping, multiBlobSoAMapping);
-    benchmarkAllCopies("SoA MB", "AlignedAoS", multiBlobSoAMapping, alignedAoSMapping);
+    benchmarkAllCopies("A AoS", "SoA MB", alignedAoSMapping, multiBlobSoAMapping);
+    benchmarkAllCopies("SoA MB", "A AoS", multiBlobSoAMapping, alignedAoSMapping);
 
     benchmarkAllCopies("SoA MB", "AoSoA32", multiBlobSoAMapping, aosoa32Mapping);
     benchmarkAllCopies("AoSoA32", "SoA MB", aosoa32Mapping, multiBlobSoAMapping);
