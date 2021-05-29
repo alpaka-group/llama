@@ -548,11 +548,11 @@ $data << EOD
     benchmarkAllCopies("PackedAoS", "AlignedAoS", packedAoSMapping, alignedAoSMapping);
     benchmarkAllCopies("AlignedAoS", "PackedAoS", alignedAoSMapping, packedAoSMapping);
 
-    benchmarkAllCopies("AlignedAoS", "SoA", alignedAoSMapping, singleBlobSoAMapping);
-    benchmarkAllCopies("SoA", "AlignedAoS", singleBlobSoAMapping, alignedAoSMapping);
+    benchmarkAllCopies("AlignedAoS", "SoA SB", alignedAoSMapping, singleBlobSoAMapping);
+    benchmarkAllCopies("SoA SB", "AlignedAoS", singleBlobSoAMapping, alignedAoSMapping);
 
-    benchmarkAllCopies("SoA", "AoSoA32", singleBlobSoAMapping, aosoa32Mapping);
-    benchmarkAllCopies("AoSoA32", "SoA", aosoa32Mapping, singleBlobSoAMapping);
+    benchmarkAllCopies("SoA SB", "AoSoA32", singleBlobSoAMapping, aosoa32Mapping);
+    benchmarkAllCopies("AoSoA32", "SoA SB", aosoa32Mapping, singleBlobSoAMapping);
 
     benchmarkAllCopies("AoSoA8", "AoSoA32", aosoa8Mapping, aosoa32Mapping);
     benchmarkAllCopies("AoSoA32", "AoSoA8", aosoa32Mapping, aosoa8Mapping);
