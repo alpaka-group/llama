@@ -338,13 +338,15 @@ template <
     typename RecordDim,
     std::size_t LanesSrc,
     typename SrcBlobType,
+    bool DstSeparateBuffers,
     typename DstBlobType>
 void aosoa_copy(
     const llama::View<
         llama::mapping::AoSoA<ArrayDims, RecordDim, LanesSrc, llama::mapping::LinearizeArrayDimsCpp>,
         SrcBlobType>& srcView,
-    llama::View<llama::mapping::SoA<ArrayDims, RecordDim, false, llama::mapping::LinearizeArrayDimsCpp>, DstBlobType>&
-        dstView,
+    llama::View<
+        llama::mapping::SoA<ArrayDims, RecordDim, DstSeparateBuffers, llama::mapping::LinearizeArrayDimsCpp>,
+        DstBlobType>& dstView,
     std::size_t numThreads = 1)
 {
     static_assert(decltype(srcView.storageBlobs)::rank == 1);
@@ -362,12 +364,13 @@ template <
     bool ReadOpt,
     typename ArrayDims,
     typename RecordDim,
+    bool SrcSeparateBuffers,
     typename SrcBlobType,
     std::size_t LanesDst,
     typename DstBlobType>
 void aosoa_copy(
     const llama::View<
-        llama::mapping::SoA<ArrayDims, RecordDim, false, llama::mapping::LinearizeArrayDimsCpp>,
+        llama::mapping::SoA<ArrayDims, RecordDim, SrcSeparateBuffers, llama::mapping::LinearizeArrayDimsCpp>,
         SrcBlobType>& srcView,
     llama::View<
         llama::mapping::AoSoA<ArrayDims, RecordDim, LanesDst, llama::mapping::LinearizeArrayDimsCpp>,
@@ -535,18 +538,25 @@ $data << EOD
         plotFile << "\n";
     };
 
-    const auto aosMapping = llama::mapping::AoS<decltype(arrayDims), RecordDim>{arrayDims};
-    const auto soaMapping = llama::mapping::SoA<decltype(arrayDims), RecordDim>{arrayDims};
+    const auto packedAoSMapping = llama::mapping::PackedAoS<decltype(arrayDims), RecordDim>{arrayDims};
+    const auto alignedAoSMapping = llama::mapping::AlignedAoS<decltype(arrayDims), RecordDim>{arrayDims};
+    const auto singleBlobSoAMapping = llama::mapping::SingleBlobSoA<decltype(arrayDims), RecordDim>{arrayDims};
     const auto aosoa8Mapping = llama::mapping::AoSoA<decltype(arrayDims), RecordDim, 8>{arrayDims};
     const auto aosoa32Mapping = llama::mapping::AoSoA<decltype(arrayDims), RecordDim, 32>{arrayDims};
     const auto aosoa64Mapping = llama::mapping::AoSoA<decltype(arrayDims), RecordDim, 64>{arrayDims};
 
-    benchmarkAllCopies("AoS", "SoA", aosMapping, soaMapping);
-    benchmarkAllCopies("SoA", "AoS", soaMapping, aosMapping);
-    benchmarkAllCopies("SoA", "AoSoA32", soaMapping, aosoa32Mapping);
-    benchmarkAllCopies("AoSoA32", "SoA", aosoa32Mapping, soaMapping);
+    benchmarkAllCopies("PackedAoS", "AlignedAoS", packedAoSMapping, alignedAoSMapping);
+    benchmarkAllCopies("AlignedAoS", "PackedAoS", alignedAoSMapping, packedAoSMapping);
+
+    benchmarkAllCopies("AlignedAoS", "SoA", alignedAoSMapping, singleBlobSoAMapping);
+    benchmarkAllCopies("SoA", "AlignedAoS", singleBlobSoAMapping, alignedAoSMapping);
+
+    benchmarkAllCopies("SoA", "AoSoA32", singleBlobSoAMapping, aosoa32Mapping);
+    benchmarkAllCopies("AoSoA32", "SoA", aosoa32Mapping, singleBlobSoAMapping);
+
     benchmarkAllCopies("AoSoA8", "AoSoA32", aosoa8Mapping, aosoa32Mapping);
     benchmarkAllCopies("AoSoA32", "AoSoA8", aosoa32Mapping, aosoa8Mapping);
+
     benchmarkAllCopies("AoSoA8", "AoSoA64", aosoa8Mapping, aosoa64Mapping);
     benchmarkAllCopies("AoSoA64", "AoSoA8", aosoa64Mapping, aosoa8Mapping);
 
