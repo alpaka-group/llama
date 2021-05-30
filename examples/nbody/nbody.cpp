@@ -7,6 +7,7 @@
 #include <iostream>
 #include <llama/DumpMapping.hpp>
 #include <llama/llama.hpp>
+#include <omp.h>
 #include <random>
 #include <thread>
 #include <utility>
@@ -1335,15 +1336,27 @@ try
     using vec = Vc::Vector<FP>;
     // using vec = Vc::SimdArray<FP, 16>;
 
-    std::cout << PROBLEM_SIZE / 1024 << "ki particles "
-              << "(" << PROBLEM_SIZE * sizeof(FP) * 7 / 1024 << "kiB)\n"
-              << "Threads: " << std::thread::hardware_concurrency() << "\n"
-              << "SIMD lanes: " << vec::size() << "\n";
+    const auto numThreads = static_cast<std::size_t>(omp_get_max_threads());
+    const char* affinity = std::getenv("GOMP_CPU_AFFINITY");
+    affinity = affinity == nullptr ? "NONE - PLEASE PIN YOUR THREADS!" : affinity;
+
+    fmt::print(
+        R"({}ki particles ({}kiB)
+Threads: {}
+Affinity: {}
+SIMD lanes: {}
+)",
+        PROBLEM_SIZE / 1024,
+        PROBLEM_SIZE * sizeof(FP) * 7 / 1024,
+        numThreads,
+        affinity,
+        vec::size());
 
     std::ofstream plotFile{"nbody.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
     plotFile << fmt::format(
         R"(#!/usr/bin/gnuplot -p
+# threads: {} affinity: {} SIMD lanes: {}
 set title "nbody CPU {}ki particles on {}"
 set style data histograms
 set style fill solid
@@ -1356,6 +1369,9 @@ set y2label "move runtime [s]"
 set y2tics auto
 $data << EOD
 )",
+        numThreads,
+        affinity,
+        vec::size(),
         PROBLEM_SIZE / 1024,
         common::hostname());
     plotFile << "\"\"\t\"update\"\t\"move\"\n";
