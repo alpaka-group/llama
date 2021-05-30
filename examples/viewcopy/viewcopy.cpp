@@ -421,13 +421,22 @@ try
     const auto dataSize
         = std::reduce(arrayDims.begin(), arrayDims.end(), std::size_t{1}, std::multiplies{}) * llama::sizeOf<RecordDim>;
     const auto numThreads = static_cast<std::size_t>(omp_get_max_threads());
-    std::cout << "Data size: " << dataSize / 1024 / 1024 << "MiB\n";
-    std::cout << "Threads: " << numThreads << "\n";
+    const char* affinity = std::getenv("GOMP_CPU_AFFINITY");
+    affinity = affinity == nullptr ? "NONE - PLEASE PIN YOUR THREADS!" : affinity;
+    fmt::print(
+        R"(Data size: {}MiB
+Threads: {}
+Affinity: {}
+)",
+        dataSize / 1024 / 1024,
+        numThreads,
+        affinity);
 
     std::ofstream plotFile{"viewcopy.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
     plotFile << fmt::format(
         R"(#!/usr/bin/gnuplot -p
+# threads: {} affinity: {}
 set title "viewcopy CPU {}MiB particles on {}"
 set style data histograms
 set style fill solid
@@ -436,6 +445,8 @@ set key out top center maxrows 4
 set ylabel "throughput [GiB/s]"
 $data << EOD
 )",
+        numThreads,
+        affinity,
         dataSize / 1024 / 1024,
         common::hostname());
 
