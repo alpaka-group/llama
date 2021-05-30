@@ -199,12 +199,12 @@ void aosoa_copy_internal(const SrcView& srcView, DstView& dstView, std::size_t n
         return offset;
     };
     // the same as SoA::blobNrAndOffset but takes a flat array index
-    auto mapSoA = [&](std::size_t flatArrayIndex, auto coord, bool mb) LLAMA_LAMBDA_INLINE -> llama::NrAndOffset
+    auto mapSoA = [&](std::size_t flatArrayIndex, auto coord, bool mb) LLAMA_LAMBDA_INLINE
     {
         const auto blob = mb * llama::flatRecordCoord<RecordDim, decltype(coord)>;
         const auto offset = !mb * llama::offsetOf<RecordDim, decltype(coord)> * flatSize
             + sizeof(llama::GetType<RecordDim, decltype(coord)>) * flatArrayIndex;
-        return {blob, offset};
+        return llama::NrAndOffset{blob, offset};
     };
 
     auto mapSrc = [&srcView, &mapAoSoA, &mapSoA](std::size_t flatArrayIndex, auto coord) LLAMA_LAMBDA_INLINE
