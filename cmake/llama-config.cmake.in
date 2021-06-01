@@ -1,41 +1,25 @@
-# - Config file for the llama package
-# It defines the following variables
+# Config file for the llama package.
+# It defines the following variables:
 #  LLAMA_INCLUDE_DIR      - include directory for LLAMA
-#  LLAMA_DEFINITIONS      - necessary definitions
 #  LLAMA_FOUND            - whether LLAMA was found and is useable
 
-###############################################################################
-# LLAMA
-###############################################################################
-cmake_minimum_required (VERSION 3.3.0)
+cmake_minimum_required (VERSION 3.16)
 
 @PACKAGE_INIT@
 
 if(NOT TARGET llama)
     add_library(llama INTERFACE)
-
     target_compile_features(llama INTERFACE cxx_std_17)
-
     add_library(llama::llama ALIAS llama)
 endif()
 
 set(llama_INCLUDE_DIR ${llama_INCLUDE_DIR} "${PACKAGE_PREFIX_DIR}/include")
-
 target_include_directories(llama INTERFACE ${llama_INCLUDE_DIR})
 
-################################################################################
-# BOOST LIB
-################################################################################
-find_package(Boost 1.66.0 REQUIRED)
+# Boost
+find_package(Boost 1.70.0 REQUIRED)
 target_link_libraries(llama INTERFACE Boost::headers)
 
-################################################################################
-# Returning whether LLAMA could be found
-################################################################################
 
 INCLUDE(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS("llama"
-                                    REQUIRED_VARS
-                                        llama_INCLUDE_DIR
-                                        Boost_FOUND
-                                )
+FIND_PACKAGE_HANDLE_STANDARD_ARGS("llama" REQUIRED_VARS llama_INCLUDE_DIR Boost_FOUND)
