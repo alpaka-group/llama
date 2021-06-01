@@ -32,10 +32,10 @@ Supplying the array dimensions coordinate to a view access returns such a :cpp:`
 This object can be thought of like a record in the :math:`N`-dimensional array dimensions space,
 but as the fields of this record may not be contiguous in memory, it is not a real object in the C++ sense and thus called virtual.
 
-Accessing subparts of a :cpp:`llama::VirtualRecord` is done using `operator()` and the tag types from the record dimension.
+Accessing subparts of a :cpp:`llama::VirtualRecord` is done using :cpp:`operator()` and the tag types from the record dimension.
 
 If an access describes a final/leaf element in the record dimension, a reference to a value of the corresponding type is returned.
-Such an access is called terminal. If the access is non-termian, i.e. it does not yet reach a leaf in the record dimension tree,
+Such an access is called terminal. If the access is non-terminal, i.e. it does not yet reach a leaf in the record dimension tree,
 another :cpp:`llama::VirtualRecord` is returned, binding the tags already used for navigating down the record dimension.
 
 A :cpp:`llama::VirtualRecord` can be used like a real local object in many places. It can be used as a local variable, copied around, passed as an argument to a function (as seen in the
@@ -56,8 +56,7 @@ This is useful when we want to have a single record instance e.g. as a local var
     auto pixel2 = pixel; // independent copy
 
 Technically, :cpp:`llama::One` is a :cpp:`llama::VirtualRecord` which stores a scalar :cpp:`llama::View` inside, using the mapping :cpp:`llama::mapping::One`.
-This also has the unfortunate consequence that a :cpp:`llama::One` is now a value type with deep-copy semantic.
-We might address this inconsistency at some point.
+This also has the consequence that a :cpp:`llama::One` is now a value type with deep-copy semantic.
 
 
 Arithmetic and logical operatores

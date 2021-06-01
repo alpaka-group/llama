@@ -67,7 +67,7 @@ Creating a small view of :math:`4 \times 4` may look like this:
 
     using Mapping = /* some simple mapping */;
     using BlobAllocator = llama::bloballoc::Stack<
-        miniSize[0] * miniSize[1] * llama::sizeOf</* some record dimension */>::value
+        miniSize[0] * miniSize[1] * llama::sizeOf<RecordDim>::value
     >;
 
     auto miniView = llama::allocView(Mapping{miniSize}, BlobAllocator{});
@@ -77,14 +77,14 @@ with just one element without any padding, aligment, or whatever on the stack:
 
 .. code-block:: C++
 
-    auto tempView = llama::allocViewStack< N, /* some record dimension */ >();
+    auto tempView = llama::allocViewStack<N, RecordDim>();
 
 
 Non-owning blobs
 ----------------
 
 If a view is needed based on already allocated memory, the view can also be directly constructed with an array of blobs,
-e.g. an array of :cpp:`std::byte*` pointers or :cpp:`std::span<std::byte> to the existing memory regions.
+e.g. an array of :cpp:`std::byte*` pointers or :cpp:`std::span<std::byte>` to the existing memory regions.
 Everything works here as long as it can be subscripted by the view like :cpp:`blob[offset]`.
 One needs to be careful though, since now the ownership of the blob is decoupled from the view.
 It is the responsibility of the user now to ensure that the blobs outlive the views based on them.

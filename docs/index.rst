@@ -1,8 +1,3 @@
-.. LLAMA documentation master file, created by
-   sphinx-quickstart on Wed Sep 26 13:28:02 2018.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 .. image:: images/logo.svg
 
 Low Level Abstraction of Memory Access
@@ -18,7 +13,7 @@ arbitrary depths. It is not limited to struct of array and array of struct
 data layouts but also capable to explicitly define memory layouts with padding, blocking,
 striding or any other run time or compile time access pattern.
 
-To archieve this goal LLAMA is split into mostly independent, orthogonal parts
+To achieve this goal LLAMA is split into mostly independent, orthogonal parts
 completely written in modern C++17 to run on as many architectures and with as
 many compilers as possible while still supporting extensions needed e.g. to run
 on GPU or other many core hardware.
