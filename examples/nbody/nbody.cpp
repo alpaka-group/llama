@@ -1333,8 +1333,13 @@ namespace manualSoA_Vc
 auto main() -> int
 try
 {
+#if __has_include(<Vc/Vc>)
     using vec = Vc::Vector<FP>;
     // using vec = Vc::SimdArray<FP, 16>;
+    constexpr auto SIMDLanes = vec::size();
+#else
+    constexpr auto SIMDLanes = 1;
+#endif
 
     const auto numThreads = static_cast<std::size_t>(omp_get_max_threads());
     const char* affinity = std::getenv("GOMP_CPU_AFFINITY");
@@ -1350,7 +1355,7 @@ SIMD lanes: {}
         PROBLEM_SIZE * sizeof(FP) * 7 / 1024,
         numThreads,
         affinity,
-        vec::size());
+        SIMDLanes);
 
     std::ofstream plotFile{"nbody.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
@@ -1371,7 +1376,7 @@ $data << EOD
 )",
         numThreads,
         affinity,
-        vec::size(),
+        SIMDLanes,
         PROBLEM_SIZE / 1024,
         common::hostname());
     plotFile << "\"\"\t\"update\"\t\"move\"\n";
