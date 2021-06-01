@@ -59,6 +59,7 @@
 #    endif
 #endif
 #ifndef LLAMA_LAMBDA_INLINE
+/// Gives strong indication to the compiler to inline the attributed lambda.
 #    define LLAMA_LAMBDA_INLINE LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS()
 #endif
 

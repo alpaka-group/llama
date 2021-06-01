@@ -106,9 +106,12 @@ Mappings
    :members:
 .. doxygenstruct:: llama::mapping::AoSoA
    :members:
+.. doxygenvariable:: llama::mapping::maxLanes
 .. doxygenstruct:: llama::mapping::Split
    :members:
 .. doxygenstruct:: llama::mapping::Trace
+   :members:
+.. doxygenstruct:: llama::mapping::Heatmap
    :members:
 
 Common utilities
@@ -121,8 +124,8 @@ Common utilities
 .. doxygenstruct:: llama::mapping::LinearizeArrayDimsMorton
    :members:
 
-Tree mapping
-^^^^^^^^^^^^
+Tree mapping (deprecated)
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. doxygenstruct:: llama::mapping::tree::Mapping
    :members:
@@ -137,9 +140,9 @@ For a detailed description of the tree mapping concept have a look at
 .. doxygenstruct:: llama::mapping::tree::functor::MoveRTDown
 
 .. FIXME: doxygen fails to parse the source code ...
-   Dumping
-   ^^^^^^^
-   
+Dumping
+^^^^^^^
+
    .. doxygenfunction:: llama::toSvg
    .. doxygenfunction:: llama::toHtml
 
@@ -158,5 +161,6 @@ Macros
 
 .. doxygendefine:: LLAMA_INDEPENDENT_DATA
 .. doxygendefine:: LLAMA_FN_HOST_ACC_INLINE
+.. doxygendefine:: LLAMA_LAMBDA_INLINE
 .. doxygendefine:: LLAMA_FORCE_INLINE_RECURSIVE
 .. doxygendefine:: LLAMA_COPY

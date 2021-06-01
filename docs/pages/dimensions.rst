@@ -79,16 +79,17 @@ A record dimension itself is just a :cpp:`llama::Record` (or a fundamental type)
     struct g {};
     struct b {};
 
+    using RGB = llama::Record<
+        llama::Field<r, float>,
+        llama::Field<g, float>,
+        llama::Field<b, float>
+    >;
     using Pixel = llama::Record<
-        llama::Field<color, llama::Record<
-            llama::Field<r, float>,
-            llama::Field<g, float>,
-            llama::Field<b, float>
-        >>,
+        llama::Field<color, RGB>,
         llama::Field<alpha, char>
     >;
 
-Arrays of compile-time extent are also supported as arguments to :cpp:`llama::Field`, but not to  :cpp:`llama::Field`.
+Arrays of compile-time extent are also supported as arguments to :cpp:`llama::Field`.
 Such arrays are expanded into a :cpp:`llama::Record` with multiple :cpp:`llama::Field`\ s of the same type.
 E.g. :cpp:`llama::Field<Tag, float[4]>` is expanded into
 
