@@ -16,7 +16,7 @@ namespace tag {
     struct Part2 {};
 } // namespace tag
 
-using Name = llama::Record<
+using Particle = llama::Record<
     llama::Field<tag::Pos, llama::Record<
         llama::Field<tag::A, int>,
         llama::Field<tag::Y, int>>>,
@@ -29,7 +29,7 @@ using Name = llama::Record<
 
 TEST_CASE("VirtualRecord.operator=")
 {
-    llama::One<Name> record;
+    llama::One<Particle> record;
 
     // scalar to multiple elements in virtual record
     record(tag::Pos{}) = 1;
@@ -82,9 +82,9 @@ TEST_CASE("VirtualRecord.operator=")
 
 namespace
 {
-    auto allocVc()
+    auto oneParticle()
     {
-        llama::One<Name> record;
+        llama::One<Particle> record;
         record(tag::Pos{}, tag::A{}) = 1;
         record(tag::Pos{}, tag::Y{}) = 2;
         record(tag::Vel{}, tag::X{}) = 3;
@@ -98,7 +98,7 @@ namespace
 TEST_CASE("VirtualRecord.operator+=.scalar")
 {
     {
-        auto record = allocVc();
+        auto record = oneParticle();
         record(tag::Pos{}) += 1;
         CHECK(record(tag::Pos{}, tag::A{}) == 2);
         CHECK(record(tag::Pos{}, tag::Y{}) == 3);
@@ -109,7 +109,7 @@ TEST_CASE("VirtualRecord.operator+=.scalar")
     }
 
     {
-        auto record = allocVc();
+        auto record = oneParticle();
         record += 1;
         CHECK(record(tag::Pos{}, tag::A{}) == 2);
         CHECK(record(tag::Pos{}, tag::Y{}) == 3);
@@ -124,7 +124,7 @@ TEST_CASE("VirtualRecord.operator+=.VirtualRecord")
 {
     {
         // smaller virtual record to larger virtual record
-        auto record = allocVc();
+        auto record = oneParticle();
         record(tag::Vel{}) += record(tag::Pos{});
         CHECK(record(tag::Pos{}, tag::A{}) == 1);
         CHECK(record(tag::Pos{}, tag::Y{}) == 2);
@@ -136,7 +136,7 @@ TEST_CASE("VirtualRecord.operator+=.VirtualRecord")
 
     {
         // larger virtual record to smaller virtual record
-        auto record = allocVc();
+        auto record = oneParticle();
         record(tag::Pos{}) += record(tag::Vel{});
         CHECK(record(tag::Pos{}, tag::A{}) == 1);
         CHECK(record(tag::Pos{}, tag::Y{}) == 6);
@@ -148,7 +148,7 @@ TEST_CASE("VirtualRecord.operator+=.VirtualRecord")
 
     {
         // scalar virtual record to larger virtual record, full broadcast
-        auto record = allocVc();
+        auto record = oneParticle();
         record(tag::Vel{}) += record(tag::Weight{});
         CHECK(record(tag::Pos{}, tag::A{}) == 1);
         CHECK(record(tag::Pos{}, tag::Y{}) == 2);
@@ -162,7 +162,7 @@ TEST_CASE("VirtualRecord.operator+=.VirtualRecord")
 TEST_CASE("VirtualRecord.operator+.scalar")
 {
     {
-        auto record = allocVc();
+        auto record = oneParticle();
         record(tag::Pos{}) = record(tag::Pos{}) + 1;
         CHECK(record(tag::Pos{}, tag::A{}) == 2);
         CHECK(record(tag::Pos{}, tag::Y{}) == 3);
@@ -172,7 +172,7 @@ TEST_CASE("VirtualRecord.operator+.scalar")
         CHECK(record(tag::Weight{}) == 6);
     }
     {
-        auto record = allocVc();
+        auto record = oneParticle();
         record(tag::Pos{}) = 1 + record(tag::Pos{});
         CHECK(record(tag::Pos{}, tag::A{}) == 2);
         CHECK(record(tag::Pos{}, tag::Y{}) == 3);
@@ -183,7 +183,7 @@ TEST_CASE("VirtualRecord.operator+.scalar")
     }
 
     {
-        auto record = allocVc();
+        auto record = oneParticle();
         record = record + 1;
         CHECK(record(tag::Pos{}, tag::A{}) == 2);
         CHECK(record(tag::Pos{}, tag::Y{}) == 3);
@@ -193,7 +193,7 @@ TEST_CASE("VirtualRecord.operator+.scalar")
         CHECK(record(tag::Weight{}) == 7);
     }
     {
-        auto record = allocVc();
+        auto record = oneParticle();
         record = 1 + record;
         CHECK(record(tag::Pos{}, tag::A{}) == 2);
         CHECK(record(tag::Pos{}, tag::Y{}) == 3);
@@ -208,7 +208,7 @@ TEST_CASE("VirtualRecord.operator+.VirtualRecord")
 {
     {
         // smaller virtual record to larger virtual record
-        auto record = allocVc();
+        auto record = oneParticle();
         record(tag::Vel{}) = record(tag::Vel{}) + record(tag::Pos{});
         CHECK(record(tag::Pos{}, tag::A{}) == 1);
         CHECK(record(tag::Pos{}, tag::Y{}) == 2);
@@ -220,7 +220,7 @@ TEST_CASE("VirtualRecord.operator+.VirtualRecord")
 
     {
         // larger virtual record to smaller virtual record
-        auto record = allocVc();
+        auto record = oneParticle();
         record(tag::Pos{}) = record(tag::Pos{}) + record(tag::Vel{});
         CHECK(record(tag::Pos{}, tag::A{}) == 1);
         CHECK(record(tag::Pos{}, tag::Y{}) == 6);
@@ -232,7 +232,7 @@ TEST_CASE("VirtualRecord.operator+.VirtualRecord")
 
     {
         // scalar virtual record to larger virtual record, full broadcast
-        auto record = allocVc();
+        auto record = oneParticle();
         record(tag::Vel{}) = record(tag::Vel{}) + record(tag::Weight{});
         CHECK(record(tag::Pos{}, tag::A{}) == 1);
         CHECK(record(tag::Pos{}, tag::Y{}) == 2);
@@ -295,7 +295,7 @@ TEST_CASE("VirtualRecord.operator=.propagation")
 
 TEST_CASE("VirtualRecord.operator=.multiview")
 {
-    llama::One<Name> record1;
+    llama::One<Particle> record1;
     llama::One<Name2> record2;
 
     record2 = 1;
@@ -318,7 +318,7 @@ TEST_CASE("VirtualRecord.operator=.multiview")
 
 TEST_CASE("VirtualRecord.operator==")
 {
-    llama::One<Name> record;
+    llama::One<Particle> record;
 
     record = 1;
 
@@ -342,7 +342,7 @@ TEST_CASE("VirtualRecord.operator==")
 
 TEST_CASE("VirtualRecord.operator<")
 {
-    llama::One<Name> record;
+    llama::One<Particle> record;
 
     record = 1;
 
@@ -380,7 +380,7 @@ TEST_CASE("VirtualRecord.operator<")
 TEST_CASE("VirtualRecord.asTuple.types")
 {
     {
-        llama::One<Name> record;
+        llama::One<Particle> record;
 
         std::tuple<int&, int&> pos = record(tag::Pos{}).asTuple();
         std::tuple<int&, int&, int&> vel = record(tag::Vel{}).asTuple();
@@ -390,7 +390,7 @@ TEST_CASE("VirtualRecord.asTuple.types")
         static_cast<void>(name);
     }
     {
-        const llama::One<Name> record;
+        const llama::One<Particle> record;
 
         std::tuple<const int&, const int&> pos = record(tag::Pos{}).asTuple();
         std::tuple<const int&, const int&, const int&> vel = record(tag::Vel{}).asTuple();
@@ -404,7 +404,7 @@ TEST_CASE("VirtualRecord.asTuple.types")
 
 TEST_CASE("VirtualRecord.asTuple.assign")
 {
-    llama::One<Name> record;
+    llama::One<Particle> record;
 
     record(tag::Pos{}).asTuple() = std::tuple{1, 1};
     CHECK(record(tag::Pos{}, tag::A{}) == 1);
@@ -433,7 +433,7 @@ TEST_CASE("VirtualRecord.asTuple.assign")
 
 TEST_CASE("VirtualRecord.asTuple.structuredBindings")
 {
-    llama::One<Name> record;
+    llama::One<Particle> record;
 
     {
         auto [a, y] = record(tag::Pos{}).asTuple(); // NOLINT (clang-analyzer-deadcode.DeadStores)
@@ -483,7 +483,7 @@ TEST_CASE("VirtualRecord.asTuple.structuredBindings")
 TEST_CASE("VirtualRecord.asFlatTuple.types")
 {
     {
-        llama::One<Name> record;
+        llama::One<Particle> record;
 
         std::tuple<int&, int&> pos = record(tag::Pos{}).asFlatTuple();
         std::tuple<int&, int&, int&> vel = record(tag::Vel{}).asFlatTuple();
@@ -493,7 +493,7 @@ TEST_CASE("VirtualRecord.asFlatTuple.types")
         static_cast<void>(name);
     }
     {
-        const llama::One<Name> record;
+        const llama::One<Particle> record;
 
         std::tuple<const int&, const int&> pos = record(tag::Pos{}).asFlatTuple();
         std::tuple<const int&, const int&, const int&> vel = record(tag::Vel{}).asFlatTuple();
@@ -506,7 +506,7 @@ TEST_CASE("VirtualRecord.asFlatTuple.types")
 
 TEST_CASE("VirtualRecord.asFlatTuple.assign")
 {
-    llama::One<Name> record;
+    llama::One<Particle> record;
 
     record(tag::Pos{}).asFlatTuple() = std::tuple{1, 1};
     CHECK(record(tag::Pos{}, tag::A{}) == 1);
@@ -535,7 +535,7 @@ TEST_CASE("VirtualRecord.asFlatTuple.assign")
 
 TEST_CASE("VirtualRecord.asFlatTuple.structuredBindings")
 {
-    llama::One<Name> record;
+    llama::One<Particle> record;
 
     {
         auto [a, y] = record(tag::Pos{}).asFlatTuple(); // NOLINT (clang-analyzer-deadcode.DeadStores)
@@ -584,7 +584,7 @@ struct S;
 
 TEST_CASE("VirtualRecord.structuredBindings")
 {
-    llama::One<Name> record;
+    llama::One<Particle> record;
 
     {
         auto&& [a, y] = record(tag::Pos{});
@@ -707,7 +707,7 @@ struct std::tuple_size<MyStruct<T>>
 
 TEST_CASE("VirtualRecord.load.value")
 {
-    llama::One<Name> record;
+    llama::One<Particle> record;
     record = 1;
 
     {
@@ -743,7 +743,7 @@ TEST_CASE("VirtualRecord.load.value")
 
 TEST_CASE("VirtualRecord.load.ref")
 {
-    llama::One<Name> record;
+    llama::One<Particle> record;
 
     record = 1;
     {
@@ -784,7 +784,7 @@ TEST_CASE("VirtualRecord.load.ref")
 
 TEST_CASE("VirtualRecord.load.constref")
 {
-    llama::One<Name> record;
+    llama::One<Particle> record;
     record = 1;
 
     {
@@ -811,7 +811,7 @@ TEST_CASE("VirtualRecord.load.constref")
 
 TEST_CASE("VirtualRecord.store")
 {
-    llama::One<Name> record;
+    llama::One<Particle> record;
 
     record = 1;
     {
@@ -840,7 +840,7 @@ TEST_CASE("VirtualRecord.store")
 
 TEST_CASE("VirtualRecord.loadAs.value")
 {
-    llama::One<Name> record;
+    llama::One<Particle> record;
     record = 1;
 
     {
@@ -857,7 +857,7 @@ TEST_CASE("VirtualRecord.loadAs.value")
 
 TEST_CASE("VirtualRecord.loadAs.ref")
 {
-    llama::One<Name> record;
+    llama::One<Particle> record;
     record = 1;
 
     auto pos = record(tag::Pos{}).loadAs<MyPos<int&>>();
@@ -876,7 +876,7 @@ TEST_CASE("VirtualRecord.loadAs.ref")
 
 TEST_CASE("VirtualRecord.loadAs.constref")
 {
-    llama::One<Name> record;
+    llama::One<Particle> record;
     record = 1;
 
     {
@@ -893,12 +893,12 @@ TEST_CASE("VirtualRecord.loadAs.constref")
 
 TEST_CASE("VirtualRecord.One_ctor_from_view")
 {
-    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{5}, Name{}});
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{5}, Particle{}});
     view(1u) = 1;
 
-    llama::One<Name> vr2 = view(1u);
-    llama::One<Name> vr3(view(1u));
-    llama::One<Name> vr4{view(1u)};
+    llama::One<Particle> vr2 = view(1u);
+    llama::One<Particle> vr3(view(1u));
+    llama::One<Particle> vr4{view(1u)};
 
     vr2 = 2;
     vr3 = 3;
@@ -912,12 +912,12 @@ TEST_CASE("VirtualRecord.One_ctor_from_view")
 
 TEST_CASE("VirtualRecord.One_range_for")
 {
-    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{5}, Name{}});
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{5}, Particle{}});
     for (auto p : view) // p is a reference object
         p = 1;
     CHECK(view(1u) == 1);
 
-    for (llama::One<Name> p : view) // p is a copy
+    for (llama::One<Particle> p : view) // p is a copy
         p = 2;
     CHECK(view(1u) == 1);
 }
