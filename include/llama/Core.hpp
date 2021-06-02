@@ -56,9 +56,9 @@ namespace llama
     /// Record.
     /// \tparam Tag Name of the node. May be any type (struct, class).
     /// \tparam Type Type of the node. May be one of three cases. 1. another sub tree consisting of a nested \ref
-    /// Record. 2. an array of any type, in which case a Record with as many \ref Field as the array
-    /// size is created, named \ref Index specialized on consecutive numbers. 3. A scalar type different from \ref
-    /// Record, making this node a leaf of this type.
+    /// Record. 2. an array of static size of any type, in which case a Record with as many \ref Field as the array
+    /// size is created, named \ref RecordCoord specialized on consecutive numbers I. 3. A scalar type different from
+    /// \ref Record, making this node a leaf of this type.
     template <typename Tag, typename Type>
     struct Field
     {
