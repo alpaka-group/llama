@@ -91,8 +91,9 @@ namespace llama::mapping
         /// \param size Total size of the array dimensions.
         /// \return Linearized index.
         template <std::size_t Dim>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(const ArrayDims<Dim>& coord, const ArrayDims<Dim>&) const
-            -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(
+            const ArrayDims<Dim>& coord,
+            [[maybe_unused]] const ArrayDims<Dim>& size) const -> std::size_t
         {
             std::size_t r = 0;
             for (std::size_t bit = 0; bit < (sizeof(std::size_t) * CHAR_BIT) / Dim; bit++)
