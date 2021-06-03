@@ -187,3 +187,15 @@ TEST_CASE("recorddim.int")
     view[llama::ArrayDims{0}] = 42;
     CHECK(view[llama::ArrayDims{0}] == 42);
 }
+
+TEST_CASE("recorddim.int[3]")
+{
+    using namespace llama::literals;
+
+    using RecordDim = int[3];
+    auto view = allocView(llama::mapping::AoS<llama::ArrayDims<1>, RecordDim>{llama::ArrayDims{1}});
+
+    view(0u)(0_RC) = 42;
+    view(0u)(1_RC) = 43;
+    view(0u)(2_RC) = 44;
+}

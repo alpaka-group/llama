@@ -231,9 +231,16 @@ namespace llama
             using type = typename GetTypeImpl<ChildType, RecordCoord<TailCoords...>>::type;
         };
 
+        template <typename ChildType, std::size_t N, std::size_t HeadCoord, std::size_t... TailCoords>
+        struct GetTypeImpl<ChildType[N], RecordCoord<HeadCoord, TailCoords...>>
+        {
+            using type = typename GetTypeImpl<ChildType, RecordCoord<TailCoords...>>::type;
+        };
+
         template <typename T>
         struct GetTypeImpl<T, RecordCoord<>>
         {
+            static_assert(isAllowedFieldType<T>);
             using type = T;
         };
 
@@ -349,6 +356,11 @@ namespace llama
         {
             using type = boost::mp11::mp_append<typename FlattenRecordDimImpl<GetFieldType<Fields>>::type...>;
         };
+        template <typename Child, std::size_t N>
+        struct FlattenRecordDimImpl<Child[N]>
+        {
+            using type = boost::mp11::mp_repeat_c<boost::mp11::mp_list<Child>, N>;
+        };
     } // namespace internal
 
     /// Returns a flat type list containing all leaf field types of the given record dimension.
@@ -361,6 +373,9 @@ namespace llama
 
     template <typename... Children>
     inline constexpr std::size_t fieldCount<Record<Children...>> = (fieldCount<GetFieldType<Children>> + ... + 0);
+
+    template <typename Child, std::size_t N>
+    inline constexpr std::size_t fieldCount<Child[N]> = fieldCount<Child>* N;
 
     namespace internal
     {
@@ -377,28 +392,30 @@ namespace llama
             I,
             Record<
                 Children...>> = fieldCountBefore<I - 1, Record<Children...>> + fieldCount<GetFieldType<boost::mp11::mp_at_c<Record<Children...>, I - 1>>>;
-
-        template <typename T>
-        constexpr auto flatRecordCoordImpl(T*, RecordCoord<>) -> std::size_t
-        {
-            return 0;
-        }
-
-        template <typename... Children, std::size_t I, std::size_t... Is>
-        constexpr auto flatRecordCoordImpl(Record<Children...>*, RecordCoord<I, Is...>) -> std::size_t
-        {
-            return fieldCountBefore<
-                       I,
-                       Record<
-                           Children...>> + flatRecordCoordImpl(static_cast<GetFieldType<boost::mp11::mp_at_c<Record<Children...>, I>>*>(nullptr), RecordCoord<Is...>{});
-        }
     } // namespace internal
 
     /// The equivalent zero based index into a flat record dimension (\ref FlatRecordDim) of the given hierarchical
     /// record coordinate.
     template <typename RecordDim, typename RecordCoord>
-    inline constexpr std::size_t flatRecordCoord
-        = internal::flatRecordCoordImpl(static_cast<RecordDim*>(nullptr), RecordCoord{});
+    inline constexpr std::size_t flatRecordCoord = 0;
+
+    template <typename T>
+    inline constexpr std::size_t flatRecordCoord<T, RecordCoord<>> = 0;
+
+    template <typename... Children, std::size_t I, std::size_t... Is>
+    inline constexpr std::size_t flatRecordCoord<
+        Record<Children...>,
+        RecordCoord<
+            I,
+            Is...>> = internal::
+                          fieldCountBefore<
+                              I,
+                              Record<
+                                  Children...>> + flatRecordCoord<GetFieldType<boost::mp11::mp_at_c<Record<Children...>, I>>, RecordCoord<Is...>>;
+
+    template <typename Child, std::size_t N, std::size_t I, std::size_t... Is>
+    inline constexpr std::size_t flatRecordCoord<Child[N], RecordCoord<I, Is...>> = fieldCount<Child>* I
+        + flatRecordCoord<Child, RecordCoord<Is...>>;
 
     namespace internal
     {
