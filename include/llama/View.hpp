@@ -221,6 +221,17 @@ namespace llama
             : std::bool_constant<Mapping::isComputed(RecordCoord{})>
         {
         };
+
+        // TODO: replace in C++20
+        template <class T>
+        struct is_bounded_array : std::false_type
+        {
+        };
+
+        template <class T, std::size_t N>
+        struct is_bounded_array<T[N]> : std::true_type
+        {
+        };
     } // namespace internal
 
     /// Central LLAMA class holding memory for storage and giving access to
@@ -258,7 +269,7 @@ namespace llama
         /// coordinate.
         LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDims arrayDims) const -> decltype(auto)
         {
-            if constexpr (isRecord<RecordDim>)
+            if constexpr (isRecord<RecordDim> || internal::is_bounded_array<RecordDim>::value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
                 return VirtualRecordTypeConst{arrayDims, *this};
@@ -272,7 +283,7 @@ namespace llama
 
         LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDims arrayDims) -> decltype(auto)
         {
-            if constexpr (isRecord<RecordDim>)
+            if constexpr (isRecord<RecordDim> || internal::is_bounded_array<RecordDim>::value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
                 return VirtualRecordType{arrayDims, *this};
