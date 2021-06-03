@@ -2,7 +2,7 @@ name: Publish documentation to gh-pages
 on:
   push:
     branches:
-      - master
+      - develop
 
 jobs:
   gh-pages:
