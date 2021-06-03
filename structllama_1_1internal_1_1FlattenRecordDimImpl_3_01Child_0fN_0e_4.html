@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Low Level Abstraction of Memory Access: llama::internal::ArrayToRecord&lt; ChildType[Count]&gt; Struct Template Reference</title>
+<title>Low Level Abstraction of Memory Access: llama::internal::FlattenRecordDimImpl&lt; Child[N]&gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -63,7 +63,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('structllama_1_1internal_1_1ArrayToRecord_3_01ChildType_0fCount_0e_4.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('structllama_1_1internal_1_1FlattenRecordDimImpl_3_01Child_0fN_0e_4.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -84,9 +84,9 @@ $(document).ready(function(){initNavTree('structllama_1_1internal_1_1ArrayToReco
 <div class="header">
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
-<a href="structllama_1_1internal_1_1ArrayToRecord_3_01ChildType_0fCount_0e_4-members.html">List of all members</a>  </div>
+<a href="structllama_1_1internal_1_1FlattenRecordDimImpl_3_01Child_0fN_0e_4-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">llama::internal::ArrayToRecord&lt; ChildType[Count]&gt; Struct Template Reference</div>  </div>
+<div class="title">llama::internal::FlattenRecordDimImpl&lt; Child[N]&gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -94,31 +94,31 @@ $(document).ready(function(){initNavTree('structllama_1_1internal_1_1ArrayToReco
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:af869d66d44ef0810f1cad0a81c8ede7b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1ArrayToRecord_3_01ChildType_0fCount_0e_4.html#af869d66d44ef0810f1cad0a81c8ede7b">type</a> = decltype(<a class="el" href="namespacellama_1_1internal.html#a8ffe8eb6d737d5efc2db30144f8bd254">internal::makeRecordArray</a>&lt; typename <a class="el" href="structllama_1_1internal_1_1ArrayToRecord.html">ArrayToRecord</a>&lt; ChildType &gt;::<a class="el" href="structllama_1_1internal_1_1ArrayToRecord_3_01ChildType_0fCount_0e_4.html#af869d66d44ef0810f1cad0a81c8ede7b">type</a> &gt;(std::make_index_sequence&lt; Count &gt;{}))</td></tr>
-<tr class="separator:af869d66d44ef0810f1cad0a81c8ede7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e8bb8bd1039c971cdb2501c603d728a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1FlattenRecordDimImpl_3_01Child_0fN_0e_4.html#a0e8bb8bd1039c971cdb2501c603d728a">type</a> = boost::mp11::mp_repeat_c&lt; typename <a class="el" href="structllama_1_1internal_1_1FlattenRecordDimImpl.html">FlattenRecordDimImpl</a>&lt; Child &gt;::<a class="el" href="structllama_1_1internal_1_1FlattenRecordDimImpl_3_01Child_0fN_0e_4.html#a0e8bb8bd1039c971cdb2501c603d728a">type</a>, N &gt;</td></tr>
+<tr class="separator:a0e8bb8bd1039c971cdb2501c603d728a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename ChildType, std::size_t Count&gt;<br />
-struct llama::internal::ArrayToRecord&lt; ChildType[Count]&gt;</h3>
+<div class="textblock"><h3>template&lt;typename Child, std::size_t N&gt;<br />
+struct llama::internal::FlattenRecordDimImpl&lt; Child[N]&gt;</h3>
 
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00114">114</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00375">375</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="af869d66d44ef0810f1cad0a81c8ede7b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af869d66d44ef0810f1cad0a81c8ede7b">&#9670;&nbsp;</a></span>type</h2>
+<a id="a0e8bb8bd1039c971cdb2501c603d728a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e8bb8bd1039c971cdb2501c603d728a">&#9670;&nbsp;</a></span>type</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename ChildType , std::size_t Count&gt; </div>
+template&lt;typename Child , std::size_t N&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1internal_1_1ArrayToRecord.html">llama::internal::ArrayToRecord</a>&lt; ChildType[Count]&gt;::<a class="el" href="structllama_1_1internal_1_1ArrayToRecord_3_01ChildType_0fCount_0e_4.html#af869d66d44ef0810f1cad0a81c8ede7b">type</a> =  decltype(<a class="el" href="namespacellama_1_1internal.html#a8ffe8eb6d737d5efc2db30144f8bd254">internal::makeRecordArray</a>&lt;typename <a class="el" href="structllama_1_1internal_1_1ArrayToRecord.html">ArrayToRecord</a>&lt;ChildType&gt;::<a class="el" href="structllama_1_1internal_1_1ArrayToRecord_3_01ChildType_0fCount_0e_4.html#af869d66d44ef0810f1cad0a81c8ede7b">type</a>&gt;( std::make_index_sequence&lt;Count&gt;{}))</td>
+          <td class="memname">using <a class="el" href="structllama_1_1internal_1_1FlattenRecordDimImpl.html">llama::internal::FlattenRecordDimImpl</a>&lt; Child[N]&gt;::<a class="el" href="structllama_1_1internal_1_1FlattenRecordDimImpl_3_01Child_0fN_0e_4.html#a0e8bb8bd1039c971cdb2501c603d728a">type</a> =  boost::mp11::mp_repeat_c&lt;typename <a class="el" href="structllama_1_1internal_1_1FlattenRecordDimImpl.html">FlattenRecordDimImpl</a>&lt;Child&gt;::<a class="el" href="structllama_1_1internal_1_1FlattenRecordDimImpl_3_01Child_0fN_0e_4.html#a0e8bb8bd1039c971cdb2501c603d728a">type</a>, N&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00117">117</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00377">377</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -130,8 +130,8 @@ template&lt;typename ChildType , std::size_t Count&gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1internal.html">internal</a></li><li class="navelem"><a class="el" href="structllama_1_1internal_1_1ArrayToRecord_3_01ChildType_0fCount_0e_4.html">ArrayToRecord&lt; ChildType[Count]&gt;</a></li>
-    <li class="footer">Generated on Thu Jun 3 2021 13:36:44 for Low Level Abstraction of Memory Access by
+    <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1internal.html">internal</a></li><li class="navelem"><a class="el" href="structllama_1_1internal_1_1FlattenRecordDimImpl_3_01Child_0fN_0e_4.html">FlattenRecordDimImpl&lt; Child[N]&gt;</a></li>
+    <li class="footer">Generated on Thu Jun 3 2021 17:32:04 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -14,6 +14,8 @@ var RecordCoord_8hpp =
     [ "RecordCoordFromList", "RecordCoord_8hpp.html#aa8b38b8cac9a0623d4956a75fa1a63fd", null ],
     [ "cat", "RecordCoord_8hpp.html#a9d7f22a92084de95c8aaf8096ac34552", null ],
     [ "operator\"\"_RC", "RecordCoord_8hpp.html#aafe5ae24f96109b3ca3d05eaf550e880", null ],
+    [ "isRecordCoord", "RecordCoord_8hpp.html#a548294a2b7b4f2e76954d9cf9edcdec7", null ],
+    [ "isRecordCoord< RecordCoord< Coords... > >", "RecordCoord_8hpp.html#a9c898b6940a90559b91b4057b85fb74b", null ],
     [ "RecordCoordCommonPrefixIsBigger", "RecordCoord_8hpp.html#a167bf28d08f395c481af0260eb7e1e1c", null ],
     [ "RecordCoordCommonPrefixIsSame", "RecordCoord_8hpp.html#a5d62fb6d777b67e3f73b80cc97d1cd44", null ]
 ];

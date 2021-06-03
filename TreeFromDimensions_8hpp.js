@@ -5,6 +5,7 @@ var TreeFromDimensions_8hpp =
     [ "TreeCoordElement", "structllama_1_1mapping_1_1tree_1_1TreeCoordElement.html", "structllama_1_1mapping_1_1tree_1_1TreeCoordElement" ],
     [ "CreateTreeElement", "structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement.html", "structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement" ],
     [ "CreateTreeElement< Tag, Record< Fields... >, CountType >", "structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement_3_01Tag_00_01Record_3_01Fields_8_8_8_01_4_00_01CountType_01_4.html", "structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement_3_01Tag_00_01Record_3_01Fields_8_8_8_01_4_00_01CountType_01_4" ],
+    [ "CreateTreeElement< Tag, ChildType[Count], CountType >", "structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement_3_01Tag_00_01ChildType_0fCount_0e_00_01CountType_01_4.html", "structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement_3_01Tag_00_01ChildType_0fCount_0e_00_01CountType_01_4" ],
     [ "WrapInNNodes", "structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes.html", "structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes" ],
     [ "WrapInNNodes< Leaf, 0 >", "structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes_3_01Leaf_00_010_01_4.html", "structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes_3_01Leaf_00_010_01_4" ],
     [ "TreeCoord", "TreeFromDimensions_8hpp.html#ad5b9ef0bed3b8a2e014b6583d780180d", null ],
