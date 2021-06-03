@@ -10,7 +10,7 @@ namespace llama::mapping
     /// Array of struct mapping. Used to create a \ref View via \ref allocView.
     /// \tparam AlignAndPad If true, padding bytes are inserted to guarantee that struct members are properly aligned.
     /// If false, struct members are tightly packed.
-    /// \tparam LinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
+    /// \tparam T_LinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
     /// how big the linear domain gets.
     /// \tparam FlattenRecordDim Defines how the record dimension's fields should be flattended. See \ref
     /// FlattenRecordDimInOrder and \ref FlattenRecordDimMinimizePadding.
@@ -18,12 +18,13 @@ namespace llama::mapping
         typename T_ArrayDims,
         typename T_RecordDim,
         bool AlignAndPad = true,
-        typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+        typename T_LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
         template <typename> typename FlattenRecordDim = FlattenRecordDimInOrder>
     struct AoS
     {
         using ArrayDims = T_ArrayDims;
         using RecordDim = T_RecordDim;
+        using LinearizeArrayDimsFunctor = T_LinearizeArrayDimsFunctor;
         static constexpr std::size_t blobCount = 1;
 
         constexpr AoS() = default;

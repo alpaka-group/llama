@@ -17,11 +17,12 @@ namespace llama::mapping
         typename T_ArrayDims,
         typename T_RecordDim,
         bool SeparateBuffers = true,
-        typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+        typename T_LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     struct SoA
     {
         using ArrayDims = T_ArrayDims;
         using RecordDim = T_RecordDim;
+        using LinearizeArrayDimsFunctor = T_LinearizeArrayDimsFunctor;
         static constexpr std::size_t blobCount
             = SeparateBuffers ? boost::mp11::mp_size<FlatRecordDim<RecordDim>>::value : 1;
 

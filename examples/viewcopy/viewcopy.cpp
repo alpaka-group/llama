@@ -46,48 +46,6 @@ using Particle = llama::Record<
 using RecordDim = boost::mp11::mp_take_c<Event, 20>;
 // using RecordDim = Event; // WARN: expect long compilation time
 
-namespace llamaex
-{
-    using namespace llama;
-
-    template <std::size_t Dim, typename Func>
-    void parallelForEachADCoord(ArrayDims<Dim> adSize, std::size_t numThreads, Func&& func)
-    {
-#pragma omp parallel for num_threads(numThreads)
-        for (std::ptrdiff_t i = 0; i < static_cast<std::ptrdiff_t>(adSize[0]); i++)
-        {
-            if constexpr (Dim > 1)
-                forEachADCoord(
-                    ArrayDims<Dim - 1>{pop_front(adSize)},
-                    std::forward<Func>(func),
-                    static_cast<std::size_t>(i));
-            else
-                std::forward<Func>(func)(ArrayDims<Dim>{static_cast<std::size_t>(i)});
-        }
-    }
-} // namespace llamaex
-
-template <typename SrcMapping, typename SrcBlobType, typename DstMapping, typename DstBlobType>
-void naive_copy(
-    const llama::View<SrcMapping, SrcBlobType>& srcView,
-    llama::View<DstMapping, DstBlobType>& dstView,
-    std::size_t numThreads = 1)
-{
-    static_assert(std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>);
-
-    if (srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
-        throw std::runtime_error{"Array dimensions sizes are different"};
-
-    llamaex::parallelForEachADCoord(
-        srcView.mapping.arrayDims(),
-        numThreads,
-        [&](auto ad) LLAMA_LAMBDA_INLINE
-        {
-            llama::forEachLeaf<typename DstMapping::RecordDim>([&](auto coord) LLAMA_LAMBDA_INLINE
-                                                               { dstView(ad)(coord) = srcView(ad)(coord); });
-        });
-}
-
 template <typename SrcMapping, typename SrcBlobType, typename DstMapping, typename DstBlobType>
 void std_copy(const llama::View<SrcMapping, SrcBlobType>& srcView, llama::View<DstMapping, DstBlobType>& dstView)
 {
@@ -142,248 +100,6 @@ auto memcpy_avx2(void* dst, const void* src, size_t n) noexcept -> void*
     return dst;
 }
 #endif
-
-inline void parallel_memcpy(
-    std::byte* dst,
-    const std::byte* src,
-    std::size_t size,
-    decltype(std::memcpy) = std::memcpy,
-    std::size_t numThreads = 1)
-{
-    const auto sizePerThread = size / numThreads;
-    const auto sizeLastThread = sizePerThread + size % numThreads;
-
-#pragma omp parallel num_threads(numThreads)
-    {
-        const auto id = static_cast<std::size_t>(omp_get_thread_num());
-        const auto sizeThisThread = id == numThreads - 1 ? sizeLastThread : sizePerThread;
-        std::memcpy(dst + id * sizePerThread, src + id * sizePerThread, sizeThisThread);
-    }
-}
-
-template <
-    bool ReadOpt,
-    typename ArrayDims,
-    typename RecordDim,
-    std::size_t LanesSrc,
-    std::size_t LanesDst,
-    bool MBSrc,
-    bool MBDst,
-    typename SrcView,
-    typename DstView>
-void aosoa_copy_internal(const SrcView& srcView, DstView& dstView, std::size_t numThreads)
-{
-    if (srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
-        throw std::runtime_error{"Array dimensions sizes are different"};
-
-    constexpr auto srcIsAoSoA = LanesSrc != std::numeric_limits<std::size_t>::max();
-    constexpr auto dstIsAoSoA = LanesDst != std::numeric_limits<std::size_t>::max();
-
-    static_assert(!srcIsAoSoA || decltype(srcView.storageBlobs)::rank == 1);
-    static_assert(!dstIsAoSoA || decltype(dstView.storageBlobs)::rank == 1);
-
-    const auto arrayDims = dstView.mapping.arrayDims();
-    const auto flatSize = std::reduce(std::begin(arrayDims), std::end(arrayDims), std::size_t{1}, std::multiplies<>{});
-
-    // the same as AoSoA::blobNrAndOffset but takes a flat array index
-    auto mapAoSoA = [](std::size_t flatArrayIndex, auto coord, std::size_t Lanes) LLAMA_LAMBDA_INLINE
-    {
-        const auto blockIndex = flatArrayIndex / Lanes;
-        const auto laneIndex = flatArrayIndex % Lanes;
-        const auto offset = (llama::sizeOf<RecordDim> * Lanes) * blockIndex
-            + llama::offsetOf<RecordDim, decltype(coord)> * Lanes
-            + sizeof(llama::GetType<RecordDim, decltype(coord)>) * laneIndex;
-        return offset;
-    };
-    // the same as SoA::blobNrAndOffset but takes a flat array index
-    auto mapSoA = [&](std::size_t flatArrayIndex, auto coord, bool mb) LLAMA_LAMBDA_INLINE
-    {
-        const auto blob = mb * llama::flatRecordCoord<RecordDim, decltype(coord)>;
-        const auto offset = !mb * llama::offsetOf<RecordDim, decltype(coord)> * flatSize
-            + sizeof(llama::GetType<RecordDim, decltype(coord)>) * flatArrayIndex;
-        return llama::NrAndOffset{blob, offset};
-    };
-
-    auto mapSrc = [&srcView, &mapAoSoA, &mapSoA](std::size_t flatArrayIndex, auto coord) LLAMA_LAMBDA_INLINE
-    {
-        if constexpr (srcIsAoSoA)
-            return &srcView.storageBlobs[0][0] + mapAoSoA(flatArrayIndex, coord, LanesSrc);
-        else
-        {
-            const auto [blob, off] = mapSoA(flatArrayIndex, coord, MBSrc);
-            return &srcView.storageBlobs[blob][off];
-        }
-    };
-    auto mapDst = [&dstView, &mapAoSoA, &mapSoA](std::size_t flatArrayIndex, auto coord) LLAMA_LAMBDA_INLINE
-    {
-        if constexpr (dstIsAoSoA)
-            return &dstView.storageBlobs[0][0] + mapAoSoA(flatArrayIndex, coord, LanesDst);
-        else
-        {
-            const auto [blob, off] = mapSoA(flatArrayIndex, coord, MBDst);
-            return &dstView.storageBlobs[blob][off];
-        }
-    };
-
-    constexpr auto L = std::min(LanesSrc, LanesDst);
-    static_assert(!srcIsAoSoA || LanesSrc % L == 0);
-    static_assert(!dstIsAoSoA || LanesDst % L == 0);
-    if constexpr (ReadOpt)
-    {
-        // optimized for linear reading
-        const auto elementsPerThread
-            = srcIsAoSoA ? flatSize / LanesSrc / numThreads * LanesSrc : flatSize / L / numThreads * L;
-#pragma omp parallel num_threads(numThreads)
-        {
-            const auto id = static_cast<std::size_t>(omp_get_thread_num());
-            const auto start = id * elementsPerThread;
-            const auto stop = id == numThreads - 1 ? flatSize : (id + 1) * elementsPerThread;
-
-            auto copyLBlock = [&](const std::byte*& threadSrc, std::size_t dstIndex, auto coord) LLAMA_LAMBDA_INLINE
-            {
-                constexpr auto bytes = L * sizeof(llama::GetType<RecordDim, decltype(coord)>);
-                std::memcpy(mapDst(dstIndex, coord), threadSrc, bytes);
-                threadSrc += bytes;
-            };
-            if constexpr (srcIsAoSoA)
-            {
-                auto* threadSrc = mapSrc(start, llama::RecordCoord<>{});
-                for (std::size_t i = start; i < stop; i += LanesSrc)
-                    llama::forEachLeaf<RecordDim>(
-                        [&](auto coord) LLAMA_LAMBDA_INLINE
-                        {
-                            for (std::size_t j = 0; j < LanesSrc; j += L)
-                                copyLBlock(threadSrc, i + j, coord);
-                        });
-            }
-            else
-            {
-                llama::forEachLeaf<RecordDim>(
-                    [&](auto coord) LLAMA_LAMBDA_INLINE
-                    {
-                        auto* threadSrc = mapSrc(start, coord);
-                        for (std::size_t i = start; i < stop; i += L)
-                            copyLBlock(threadSrc, i, coord);
-                    });
-            }
-        }
-    }
-    else
-    {
-        // optimized for linear writing
-        const auto elementsPerThread
-            = dstIsAoSoA ? ((flatSize / LanesDst) / numThreads) * LanesDst : flatSize / L / numThreads * L;
-#pragma omp parallel num_threads(numThreads)
-        {
-            const auto id = static_cast<std::size_t>(omp_get_thread_num());
-            const auto start = id * elementsPerThread;
-            const auto stop = id == numThreads - 1 ? flatSize : (id + 1) * elementsPerThread;
-
-            auto copyLBlock = [&](std::byte*& threadDst, std::size_t srcIndex, auto coord) LLAMA_LAMBDA_INLINE
-            {
-                constexpr auto bytes = L * sizeof(llama::GetType<RecordDim, decltype(coord)>);
-                std::memcpy(threadDst, mapSrc(srcIndex, coord), bytes);
-                threadDst += bytes;
-            };
-            if constexpr (dstIsAoSoA)
-            {
-                auto* threadDst = mapDst(start, llama::RecordCoord<>{});
-                for (std::size_t i = start; i < stop; i += LanesDst)
-                    llama::forEachLeaf<RecordDim>(
-                        [&](auto coord) LLAMA_LAMBDA_INLINE
-                        {
-                            for (std::size_t j = 0; j < LanesDst; j += L)
-                                copyLBlock(threadDst, i + j, coord);
-                        });
-            }
-            else
-            {
-                llama::forEachLeaf<RecordDim>(
-                    [&](auto coord) LLAMA_LAMBDA_INLINE
-                    {
-                        auto* threadDst = mapDst(start, coord);
-                        for (std::size_t i = start; i < stop; i += L)
-                            copyLBlock(threadDst, i, coord);
-                    });
-            }
-        }
-    }
-}
-
-template <
-    bool ReadOpt,
-    typename ArrayDims,
-    typename RecordDim,
-    std::size_t LanesSrc,
-    typename SrcBlobType,
-    std::size_t LanesDst,
-    typename DstBlobType>
-void aosoa_copy(
-    const llama::View<
-        llama::mapping::AoSoA<ArrayDims, RecordDim, LanesSrc, llama::mapping::LinearizeArrayDimsCpp>,
-        SrcBlobType>& srcView,
-    llama::View<
-        llama::mapping::AoSoA<ArrayDims, RecordDim, LanesDst, llama::mapping::LinearizeArrayDimsCpp>,
-        DstBlobType>& dstView,
-    std::size_t numThreads = 1)
-{
-    aosoa_copy_internal<ReadOpt, ArrayDims, RecordDim, LanesSrc, LanesDst, false, false>(srcView, dstView, numThreads);
-}
-
-template <
-    bool ReadOpt,
-    typename ArrayDims,
-    typename RecordDim,
-    std::size_t LanesSrc,
-    typename SrcBlobType,
-    bool DstSeparateBuffers,
-    typename DstBlobType>
-void aosoa_copy(
-    const llama::View<
-        llama::mapping::AoSoA<ArrayDims, RecordDim, LanesSrc, llama::mapping::LinearizeArrayDimsCpp>,
-        SrcBlobType>& srcView,
-    llama::View<
-        llama::mapping::SoA<ArrayDims, RecordDim, DstSeparateBuffers, llama::mapping::LinearizeArrayDimsCpp>,
-        DstBlobType>& dstView,
-    std::size_t numThreads = 1)
-{
-    aosoa_copy_internal<
-        ReadOpt,
-        ArrayDims,
-        RecordDim,
-        LanesSrc,
-        std::numeric_limits<std::size_t>::max(),
-        false,
-        DstSeparateBuffers>(srcView, dstView, numThreads);
-}
-
-template <
-    bool ReadOpt,
-    typename ArrayDims,
-    typename RecordDim,
-    bool SrcSeparateBuffers,
-    typename SrcBlobType,
-    std::size_t LanesDst,
-    typename DstBlobType>
-void aosoa_copy(
-    const llama::View<
-        llama::mapping::SoA<ArrayDims, RecordDim, SrcSeparateBuffers, llama::mapping::LinearizeArrayDimsCpp>,
-        SrcBlobType>& srcView,
-    llama::View<
-        llama::mapping::AoSoA<ArrayDims, RecordDim, LanesDst, llama::mapping::LinearizeArrayDimsCpp>,
-        DstBlobType>& dstView,
-    std::size_t numThreads = 1)
-{
-    aosoa_copy_internal<
-        ReadOpt,
-        ArrayDims,
-        RecordDim,
-        std::numeric_limits<std::size_t>::max(),
-        LanesDst,
-        SrcSeparateBuffers,
-        false>(srcView, dstView, numThreads);
-}
-
 
 template <typename Mapping, typename BlobType>
 auto hash(const llama::View<Mapping, BlobType>& view)
@@ -475,11 +191,19 @@ $data << EOD
 #endif
     benchmarkMemcpy(
         "memcpy(p)",
-        [&](auto* dst, auto* src, auto size) { parallel_memcpy(dst, src, size, std::memcpy, numThreads); });
+        [&](auto* dst, auto* src, auto size)
+        {
+#pragma omp parallel
+            llama::internal::parallel_memcpy(dst, src, size, omp_get_thread_num(), omp_get_num_threads(), std::memcpy);
+        });
 #ifdef __AVX2__
     benchmarkMemcpy(
         "memcpy_avx2(p)",
-        [&](auto* dst, auto* src, auto size) { parallel_memcpy(dst, src, size, memcpy_avx2, numThreads); });
+        [&](auto* dst, auto* src, auto size)
+        {
+#    pragma omp parallel
+            llama::internal::parallel_memcpy(dst, src, size, omp_get_thread_num(), omp_get_num_threads(), memcpy_avx2);
+        });
 #else
     plotFile << "0\t";
 #endif
@@ -516,17 +240,17 @@ $data << EOD
         plotFile << "0\t";
         plotFile << "0\t";
         plotFile << "0\t";
-        benchmarkCopy("naive copy", [](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView); });
+        benchmarkCopy("naive copy", [](const auto& srcView, auto& dstView) { llama::fieldWiseCopy(srcView, dstView); });
         benchmarkCopy("std::copy", [](const auto& srcView, auto& dstView) { std_copy(srcView, dstView); });
         constexpr auto oneIsAoSoA = is_AoSoA<decltype(srcMapping)> || is_AoSoA<decltype(dstMapping)>;
         if constexpr (oneIsAoSoA)
         {
             benchmarkCopy(
                 "aosoa copy(r)",
-                [](const auto& srcView, auto& dstView) { aosoa_copy<true>(srcView, dstView); });
+                [](const auto& srcView, auto& dstView) { llama::aosoaCommonBlockCopy(srcView, dstView, true); });
             benchmarkCopy(
                 "aosoa copy(w)",
-                [](const auto& srcView, auto& dstView) { aosoa_copy<false>(srcView, dstView); });
+                [](const auto& srcView, auto& dstView) { llama::aosoaCommonBlockCopy(srcView, dstView, false); });
         }
         else
         {
@@ -535,15 +259,30 @@ $data << EOD
         }
         benchmarkCopy(
             "naive copy(p)",
-            [&](const auto& srcView, auto& dstView) { naive_copy(srcView, dstView, numThreads); });
+            [&](const auto& srcView, auto& dstView)
+            {
+#pragma omp parallel
+                // NOLINTNEXTLINE(openmp-exception-escape)
+                llama::fieldWiseCopy(srcView, dstView, omp_get_thread_num(), omp_get_num_threads());
+            });
         if constexpr (oneIsAoSoA)
         {
             benchmarkCopy(
                 "aosoa_copy(r,p)",
-                [&](const auto& srcView, auto& dstView) { aosoa_copy<true>(srcView, dstView, numThreads); });
+                [&](const auto& srcView, auto& dstView)
+                {
+#pragma omp parallel
+                    // NOLINTNEXTLINE(openmp-exception-escape)
+                    llama::aosoaCommonBlockCopy(srcView, dstView, true, omp_get_thread_num(), omp_get_num_threads());
+                });
             benchmarkCopy(
                 "aosoa_copy(w,p)",
-                [&](const auto& srcView, auto& dstView) { aosoa_copy<false>(srcView, dstView, numThreads); });
+                [&](const auto& srcView, auto& dstView)
+                {
+#pragma omp parallel
+                    // NOLINTNEXTLINE(openmp-exception-escape)
+                    llama::aosoaCommonBlockCopy(srcView, dstView, false, omp_get_thread_num(), omp_get_num_threads());
+                });
         }
         else
         {

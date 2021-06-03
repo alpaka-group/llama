@@ -16,10 +16,6 @@ E.g. when both mappings use SoA, but one time with, one time without padding, or
 Or two AoSoA mappings with a different inner array length.
 In those cases an optimized copy procedure is possible, copying larger chunks than mere fields.
 
-.. For the moment, LLAMA implements a generic, field-wise copy with specializations for combinations of SoA and AoSoA mappings, reflect the properties of these.
-.. This is sub-optimal, because for every new mapping new specializations are needed.
-
-.. One thus needs new approaches on how to improve copying because LLAMA can provide the necessary infrastructure:
 Four solutions exist for this problem:
 
 1. Implement specializations for specific combinations of mappings, which reflect the properties of these.
@@ -42,3 +38,42 @@ A good approach could use smaller intermediate views to shuffle a chunk from one
 The `async copy example <https://github.com/alpaka-group/llama/blob/master/examples/asynccopy/asynccopy.cpp>`_ tries to show an asynchronous copy/shuffle/compute workflow.
 This example applies a bluring kernel to an RGB-image, but also may work only on two or one channel instead of all three.
 Not used channels are not allocated and especially not copied.
+
+
+For the moment, LLAMA implements a generic, field-wise copy algorithm with faster specializations for combinations of SoA and AoSoA mappings.
+
+.. code-block:: C++
+
+    auto srcView = llama::allocView(srcMapping);
+    auto dstView = llama::allocView(dstMapping);
+    llama::copy(srcView, dstView); // use best copy strategy
+
+Internally, :cpp:`llama::copy` will choose a copy strategy depending on the source and destination mapping.
+This choice is done via template specializations of the :cpp:`llama::Copy` class template.
+Users can add specializations of :cpp:`llama::Copy` to provide additional copy strategies:
+
+.. code-block:: C++
+
+    // provide special copy from AoS -> UserDefinedMapping
+    template <typename ArrayDims, typename RecordDim, bool Aligned, typename LinearizeArrayDims>
+    struct Copy<
+        llama::mapping::AoS<ArrayDims, RecordDim, Aligned, LinearizeArrayDims>,
+        UserDefinedMapping<ArrayDims, RecordDim>>
+    {
+        template <typename SrcBlob, typename DstBlob>
+        void operator()(
+            const View<mapping::AoS<ArrayDims, RecordDim, Aligned, LinearizeArrayDims>, SrcBlob>& srcView,
+            View<mapping::SoA<ArrayDims, RecordDim, DstSeparateBuffers, LinearizeArrayDims>, DstBlob>& dstView,
+            std::size_t threadId, std::size_t threadCount) {
+            ...
+        }
+    };
+
+    llama::copy(srcView, dstView); // can delegate to above specialization now
+
+LLAMA also allows direct access to its two copy implementations, which is mainly used for benchmarking them:
+
+.. code-block:: C++
+
+    llama::fieldWiseCopy(srcView, dstView); // explicit field-wise copy
+    llama::aosoaCommonBlockCopy(srcView, dstView); // explicit SoA/AoSoA copy
