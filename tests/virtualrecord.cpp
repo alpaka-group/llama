@@ -1,8 +1,10 @@
 #include "common.h"
 
+#include <algorithm>
 #include <catch2/catch.hpp>
 #include <llama/llama.hpp>
 #include <sstream>
+#include <vector>
 
 // clang-format off
 namespace tag {
@@ -921,6 +923,30 @@ TEST_CASE("VirtualRecord.One_range_for")
     for (llama::One<Particle> p : view) // p is a copy
         p = 2;
     CHECK(view(1u) == 1);
+}
+
+TEST_CASE("VirtualRecord.One_concepts")
+{
+#ifdef __cpp_concepts
+    STATIC_REQUIRE(std::regular<llama::One<Particle>>);
+#endif
+}
+
+TEST_CASE("VirtualRecord.One_inside_std::vector")
+{
+    std::vector<llama::One<Particle>> v(2); // create 2 One
+    v.push_back(oneParticle()); // add 1 more
+    v[0](tag::Weight{}) = 20;
+    v[1](tag::Weight{}) = 30;
+    v[2](tag::Weight{}) = 10;
+    std::sort(
+        std::begin(v),
+        std::end(v),
+        [](const llama::One<Particle>& a, const llama::One<Particle>& b)
+        { return a(tag::Weight{}) < b(tag::Weight{}); });
+    CHECK(v[0](tag::Weight{}) == 10);
+    CHECK(v[1](tag::Weight{}) == 20);
+    CHECK(v[2](tag::Weight{}) == 30);
 }
 
 TEST_CASE("VirtualRecord.operator<<")
