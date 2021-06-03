@@ -1,8 +1,11 @@
 var structllama_1_1mapping_1_1One =
 [
-    [ "ArrayDomain", "structllama_1_1mapping_1_1One.html#ae7456dd8848b90f4e6cf0335855d3a03", null ],
-    [ "DatumDomain", "structllama_1_1mapping_1_1One.html#a786d5076360ae1fa943bad6f40d9bced", null ],
-    [ "getBlobNrAndOffset", "structllama_1_1mapping_1_1One.html#a7c05ff570b92590b142bf49c1eaea71e", null ],
-    [ "getBlobSize", "structllama_1_1mapping_1_1One.html#ad8f38ef2ff26f0d435cce30d2e9a0f83", null ],
-    [ "blobCount", "structllama_1_1mapping_1_1One.html#aee502c5548eb9ef32a59de1e18ff42c3", null ]
+    [ "ArrayDims", "structllama_1_1mapping_1_1One.html#a72ba4dc40a1e0e6ef196274bb874b506", null ],
+    [ "RecordDim", "structllama_1_1mapping_1_1One.html#a8ed56e8967e5ac96e7e3bda41be0be25", null ],
+    [ "One", "structllama_1_1mapping_1_1One.html#a7e59a54fcaa4c3f97649c4e8e664b68a", null ],
+    [ "One", "structllama_1_1mapping_1_1One.html#a19eb8bfa04956262ffca762aefadfc57", null ],
+    [ "arrayDims", "structllama_1_1mapping_1_1One.html#adf9ac113726dc02730bd4917d30bdfac", null ],
+    [ "blobNrAndOffset", "structllama_1_1mapping_1_1One.html#a9aea8ebfdb980e96c20ff9e1494722a0", null ],
+    [ "blobSize", "structllama_1_1mapping_1_1One.html#ad94f9ffc73d97bb8874ef6d50047340d", null ],
+    [ "blobCount", "structllama_1_1mapping_1_1One.html#a82e7455627f288258db5d4faacd22291", null ]
 ];

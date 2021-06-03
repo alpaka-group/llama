@@ -1,5 +1,0 @@
-var structllama_1_1internal_1_1GetTypeImpl_3_01DatumStruct_3_01Children_8_8_8_01_4_00_01DatumCoord_38455032b17ec18cace1abc9c6eb3a82e =
-[
-    [ "ChildType", "structllama_1_1internal_1_1GetTypeImpl_3_01DatumStruct_3_01Children_8_8_8_01_4_00_01DatumCoord_38455032b17ec18cace1abc9c6eb3a82e.html#ae34c4052cb939178ff92bcd0199988bc", null ],
-    [ "type", "structllama_1_1internal_1_1GetTypeImpl_3_01DatumStruct_3_01Children_8_8_8_01_4_00_01DatumCoord_38455032b17ec18cace1abc9c6eb3a82e.html#abd6d7759eec09bab0dba7ee4ea39c793", null ]
-];

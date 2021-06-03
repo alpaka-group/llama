@@ -1,9 +1,5 @@
 var searchData=
 [
-  ['tag',['tag',['../namespaceusellama_1_1tag.html',1,'usellama']]],
-  ['update',['update',['../namespaceusellama.html#ae360fecd5f899760a9b292447a057593',1,'usellama::update()'],['../namespacemanualAoS.html#ab3bca01e5a647dad9651d2a09f535ab4',1,'manualAoS::update()'],['../namespacemanualSoA.html#a65cd5344a1c6fcb724ffed738397e231',1,'manualSoA::update()']]],
-  ['updatekernel',['UpdateKernel',['../structUpdateKernel.html',1,'']]],
-  ['use_5fshared',['USE_SHARED',['../alpaka_2nbody_2nbody_8cpp.html#a5dda953d191e2a3c4b5c75c4bfb1396f',1,'nbody.cpp']]],
-  ['use_5fshared_5ftree',['USE_SHARED_TREE',['../alpaka_2nbody_2nbody_8cpp.html#a69efd44e24fa2ca156375db2d26f5d4e',1,'nbody.cpp']]],
-  ['usellama',['usellama',['../namespaceusellama.html',1,'']]]
+  ['_7ealignedallocator_348',['~AlignedAllocator',['../structllama_1_1bloballoc_1_1AlignedAllocator.html#a69f76180554034f8b63d4793475605bf',1,'llama::bloballoc::AlignedAllocator']]],
+  ['_7etrace_349',['~Trace',['../structllama_1_1mapping_1_1Trace.html#a8feb8f4eba7493c7f1841de134f3a044',1,'llama::mapping::Trace']]]
 ];

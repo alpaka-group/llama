@@ -1,19 +1,18 @@
 var structllama_1_1VirtualView =
 [
-    [ "ArrayDomain", "structllama_1_1VirtualView.html#aa64679c4d115a7fbedaeee98e53eb86c", null ],
+    [ "ArrayDims", "structllama_1_1VirtualView.html#a27b8f9807bf4256f2a55fe23bdf1975c", null ],
     [ "Mapping", "structllama_1_1VirtualView.html#ab8b386434df0aed417e974b69a7379b3", null ],
     [ "ParentView", "structllama_1_1VirtualView.html#a13b6273ccd2fa7b6c1b7b00950cf307f", null ],
-    [ "VirtualDatumType", "structllama_1_1VirtualView.html#a95061d3ecfa6229c2606378cb1f78f33", null ],
-    [ "VirtualView", "structllama_1_1VirtualView.html#a194526cd39a97b034d7de937a0a38c82", null ],
-    [ "accessor", "structllama_1_1VirtualView.html#a312669758df3b8f22b1ef721c18e623c", null ],
-    [ "accessor", "structllama_1_1VirtualView.html#a316411459b1ddeb0f0efb9127fd471ee", null ],
-    [ "operator()", "structllama_1_1VirtualView.html#a28764cc7c3dcaba090777a15c80fcd99", null ],
-    [ "operator()", "structllama_1_1VirtualView.html#aadc9be3fdfd8ae6794ae895719521464", null ],
-    [ "operator()", "structllama_1_1VirtualView.html#a4bdf6055d98e0489ee6f71d19d8ad524", null ],
-    [ "operator()", "structllama_1_1VirtualView.html#ac97637b4d2777233ecb0ae80db836dd8", null ],
-    [ "operator()", "structllama_1_1VirtualView.html#ada1af8088dfe769573c3cf725d12c5c1", null ],
-    [ "operator()", "structllama_1_1VirtualView.html#a3b1a6975fb9d250c5f8ed6b162f11737", null ],
-    [ "offset", "structllama_1_1VirtualView.html#ae779d6bb35e025f55c24c386f4e17bff", null ],
-    [ "parentView", "structllama_1_1VirtualView.html#abca62490ac2e860c543ef5c1d11c878b", null ],
-    [ "size", "structllama_1_1VirtualView.html#a2253d88db4a63de2c1759d4231c340b2", null ]
+    [ "VirtualRecordType", "structllama_1_1VirtualView.html#a8ee0455a4d81a960dc492496b5fd168e", null ],
+    [ "VirtualView", "structllama_1_1VirtualView.html#a498c75d09e4fd2f2508cf7c74cb02c00", null ],
+    [ "accessor", "structllama_1_1VirtualView.html#a001c14ab762c0d9aeeee76da8dded616", null ],
+    [ "accessor", "structllama_1_1VirtualView.html#a89594d83cd8202b2f68eb243b63fb571", null ],
+    [ "operator()", "structllama_1_1VirtualView.html#a0bbd17d2a3c021f52da663787acabb22", null ],
+    [ "operator()", "structllama_1_1VirtualView.html#a8f06c907a8289b2d2ae0e010c7ee9290", null ],
+    [ "operator()", "structllama_1_1VirtualView.html#aa5b1851896105c2ca7b36cdb426df009", null ],
+    [ "operator()", "structllama_1_1VirtualView.html#ad9026877f470a54483fda3ab1aa11992", null ],
+    [ "operator()", "structllama_1_1VirtualView.html#ad38926a5f5205565e334ef9340c5e107", null ],
+    [ "operator()", "structllama_1_1VirtualView.html#aadb2f0b1954da1fed917a0819980b3c3", null ],
+    [ "offset", "structllama_1_1VirtualView.html#a1cc496f637e8e00464d52fc4d3259175", null ],
+    [ "parentView", "structllama_1_1VirtualView.html#abca62490ac2e860c543ef5c1d11c878b", null ]
 ];

@@ -1,4 +1,0 @@
-var structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement_3_01Tag_00_01DatumStruct_3_01Datc3ccbed44d6a97714ab93e0f6f41fa37 =
-[
-    [ "type", "structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement_3_01Tag_00_01DatumStruct_3_01Datc3ccbed44d6a97714ab93e0f6f41fa37.html#a1e13421acd50117f63fef48211103ff2", null ]
-];

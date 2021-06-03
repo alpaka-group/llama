@@ -1,11 +1,6 @@
 <map id="/home/runner/work/llama/llama/include/llama/mapping/One.hpp" name="/home/runner/work/llama/llama/include/llama/mapping/One.hpp">
-<area shape="rect" id="node2" href="$View_8hpp.html" title="/home/runner/work/llama\l/llama/include/llama/View.hpp" alt="" coords="514,109,709,151"/>
-<area shape="rect" id="node3" href="$llama_8hpp.html" title="/home/runner/work/llama\l/llama/include/llama/llama.hpp" alt="" coords="579,199,777,240"/>
-<area shape="rect" id="node4" href="$asyncblur_8cpp.html" title="/home/runner/work/llama\l/llama/examples/alpaka\l/asyncblur/asyncblur.cpp" alt="" coords="5,288,172,344"/>
-<area shape="rect" id="node5" href="$alpaka_2nbody_2nbody_8cpp.html" title="/home/runner/work/llama\l/llama/examples/alpaka\l/nbody/nbody.cpp" alt="" coords="197,288,362,344"/>
-<area shape="rect" id="node6" href="$alpaka_2vectoradd_2vectoradd_8cpp.html" title="/home/runner/work/llama\l/llama/examples/alpaka\l/vectoradd/vectoradd.cpp" alt="" coords="387,288,556,344"/>
-<area shape="rect" id="node7" href="$heatequation_8cpp.html" title="/home/runner/work/llama\l/llama/examples/heatequation\l/heatequation.cpp" alt="" coords="581,288,775,344"/>
-<area shape="rect" id="node8" href="$nbody_2nbody_8cpp.html" title="/home/runner/work/llama\l/llama/examples/nbody\l/nbody.cpp" alt="" coords="799,288,965,344"/>
-<area shape="rect" id="node9" href="$simpletest_8cpp.html" title="Simple example for LLAMA showing how to define a user and datum domain, to create a view and to acces..." alt="" coords="989,288,1170,344"/>
-<area shape="rect" id="node10" href="$vectoradd_2vectoradd_8cpp.html" title="/home/runner/work/llama\l/llama/examples/vectoradd\l/vectoradd.cpp" alt="" coords="1194,288,1373,344"/>
+<area shape="rect" id="node1" title=" " alt="" coords="85,5,301,61"/>
+<area shape="rect" id="node2" href="$View_8hpp.html" title=" " alt="" coords="10,109,229,151"/>
+<area shape="rect" id="node3" href="$llama_8hpp.html" title=" " alt="" coords="16,303,240,344"/>
+<area shape="rect" id="node4" href="$VirtualRecord_8hpp.html" title=" " alt="" coords="26,199,229,255"/>
 </map>

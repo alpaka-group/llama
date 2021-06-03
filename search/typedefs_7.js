@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['list',['List',['../structllama_1_1DatumCoord.html#ae0be960abc2e7bc26bc5a2d1140b17e4',1,'llama::DatumCoord::List()'],['../structllama_1_1DatumCoord_3_4.html#a1e8bf56673f38aa8f04a37def7fd573d',1,'llama::DatumCoord&lt;&gt;::List()']]]
+  ['leafrecordcoords_681',['LeafRecordCoords',['../namespacellama.html#ab0c1ac83b09aa8a960eca20d2aea3a98',1,'llama']]],
+  ['list_682',['List',['../structllama_1_1RecordCoord.html#a3d0e76f270b2cd29cb8c679457e80d69',1,'llama::RecordCoord::List()'],['../structllama_1_1RecordCoord_3_4.html#af136f6c5e5834f593c30a4b8370054c3',1,'llama::RecordCoord&lt;&gt;::List()']]]
 ];

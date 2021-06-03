@@ -1,10 +1,22 @@
 <map id="/home/runner/work/llama/llama/include/llama/mapping/tree/Mapping.hpp" name="/home/runner/work/llama/llama/include/llama/mapping/tree/Mapping.hpp">
-<area shape="rect" id="node2" href="$Tuple_8hpp.html" title="../../Tuple.hpp" alt="" coords="451,273,553,300"/>
-<area shape="rect" id="node5" href="$Types_8hpp.html" title="../../Types.hpp" alt="" coords="145,191,251,218"/>
-<area shape="rect" id="node11" href="$Common_8hpp.html" title="../Common.hpp" alt="" coords="235,109,347,136"/>
-<area shape="rect" id="node13" href="$Functors_8hpp.html" title="Functors.hpp" alt="" coords="523,109,622,136"/>
-<area shape="rect" id="node14" href="$TreeFromDomains_8hpp.html" title="TreeFromDomains.hpp" alt="" coords="473,191,627,218"/>
-<area shape="rect" id="node17" href="$toString_8hpp.html" title="toString.hpp" alt="" coords="679,109,771,136"/>
-<area shape="rect" id="node3" href="$macros_8hpp.html" title="macros.hpp" alt="" coords="275,348,366,375"/>
-<area shape="rect" id="node6" href="$Array_8hpp.html" title="Array.hpp" alt="" coords="5,273,84,300"/>
+<area shape="rect" id="node1" title=" " alt="" coords="592,5,808,61"/>
+<area shape="rect" id="node2" href="$Common_8hpp.html" title=" " alt="" coords="406,109,527,136"/>
+<area shape="rect" id="node10" title=" " alt="" coords="550,408,642,435"/>
+<area shape="rect" id="node14" href="$Functors_8hpp.html" title=" " alt="" coords="557,109,662,136"/>
+<area shape="rect" id="node15" href="$TreeFromDimensions_8hpp.html" title=" " alt="" coords="516,184,703,211"/>
+<area shape="rect" id="node19" href="$toString_8hpp.html" title=" " alt="" coords="737,109,839,136"/>
+<area shape="rect" id="node3" href="$Core_8hpp.html" title=" " alt="" coords="421,259,513,285"/>
+<area shape="rect" id="node13" title=" " alt="" coords="363,184,429,211"/>
+<area shape="rect" id="node4" href="$Array_8hpp.html" title=" " alt="" coords="5,333,88,360"/>
+<area shape="rect" id="node7" href="$RecordCoord_8hpp.html" title=" " alt="" coords="400,333,533,360"/>
+<area shape="rect" id="node9" title=" " alt="" coords="290,408,417,435"/>
+<area shape="rect" id="node11" title=" " alt="" coords="659,333,845,360"/>
+<area shape="rect" id="node12" title=" " alt="" coords="245,333,325,360"/>
+<area shape="rect" id="node5" href="$macros_8hpp.html" title=" " alt="" coords="108,408,207,435"/>
+<area shape="rect" id="node6" title=" " alt="" coords="19,408,74,435"/>
+<area shape="rect" id="node8" title=" " alt="" coords="441,408,497,435"/>
+<area shape="rect" id="node16" href="$Tuple_8hpp.html" title=" " alt="" coords="113,333,221,360"/>
+<area shape="rect" id="node17" title=" " alt="" coords="643,259,714,285"/>
+<area shape="rect" id="node18" title=" " alt="" coords="828,259,887,285"/>
+<area shape="rect" id="node20" title=" " alt="" coords="786,184,862,211"/>
 </map>

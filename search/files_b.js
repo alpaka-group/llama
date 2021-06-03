@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['vectoradd_2ecpp',['vectoradd.cpp',['../alpaka_2vectoradd_2vectoradd_8cpp.html',1,'(Global Namespace)'],['../vectoradd_2vectoradd_8cpp.html',1,'(Global Namespace)']]],
-  ['view_2ehpp',['View.hpp',['../View_8hpp.html',1,'']]]
+  ['soa_2ehpp_479',['SoA.hpp',['../SoA_8hpp.html',1,'']]],
+  ['split_2ehpp_480',['Split.hpp',['../Split_8hpp.html',1,'']]]
 ];

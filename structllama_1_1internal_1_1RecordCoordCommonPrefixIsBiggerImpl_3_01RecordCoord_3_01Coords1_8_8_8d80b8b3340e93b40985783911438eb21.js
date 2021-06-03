@@ -1,0 +1,4 @@
+var structllama_1_1internal_1_1RecordCoordCommonPrefixIsBiggerImpl_3_01RecordCoord_3_01Coords1_8_8_8d80b8b3340e93b40985783911438eb21 =
+[
+    [ "value", "structllama_1_1internal_1_1RecordCoordCommonPrefixIsBiggerImpl_3_01RecordCoord_3_01Coords1_8_8_8d80b8b3340e93b40985783911438eb21.html#a1343a62da379f3699a92e0e47c670114", null ]
+];

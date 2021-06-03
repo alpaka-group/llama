@@ -1,0 +1,4 @@
+var structstd_1_1tuple__element_3_01I_00_01llama_1_1VirtualRecord_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4 =
+[
+    [ "type", "structstd_1_1tuple__element_3_01I_00_01llama_1_1VirtualRecord_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html#a05a8df86edec9f2b0c745ff0c608a4f4", null ]
+];

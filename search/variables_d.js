@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['offset',['offset',['../structllama_1_1NrAndOffset.html#ac988896db6d94d5e95b2cdf6ad26c129',1,'llama::NrAndOffset::offset()'],['../structllama_1_1VirtualView.html#ae779d6bb35e025f55c24c386f4e17bff',1,'llama::VirtualView::offset()']]],
-  ['offsetof',['offsetOf',['../namespacellama.html#a160903369d7b696ba3c2b50c6be968ee',1,'llama']]],
-  ['one',['one',['../namespacellama_1_1mapping_1_1tree.html#afbd4ba87d1acf92e1418324f097a68c8',1,'llama::mapping::tree']]],
-  ['operation',['operation',['../structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors_3_01Tree_00_01Tuple_3_01Operations_8_8_8_01_4_01_4.html#a414a8d97cea69b25adb091fd077cd9aa',1,'llama::mapping::tree::internal::MergeFunctors&lt; Tree, Tuple&lt; Operations... &gt; &gt;']]]
+  ['size_645',['size',['../structllama_1_1RecordCoord.html#a3710d7a4f643b8b004809005a7d81f44',1,'llama::RecordCoord::size()'],['../structllama_1_1RecordCoord_3_4.html#a88c46f2ba080197e2c49a2e4066b841a',1,'llama::RecordCoord&lt;&gt;::size()']]],
+  ['sizeof_646',['sizeOf',['../namespacellama.html#a421aea0c56a990358d138e4958313bbe',1,'llama']]],
+  ['sizeof_3c_20record_3c_20fields_2e_2e_2e_20_3e_2c_20align_20_3e_647',['sizeOf&lt; Record&lt; Fields... &gt;, Align &gt;',['../namespacellama.html#af6bad179c5383f7f2d31edeb78e7a7fe',1,'llama']]],
+  ['storageblobs_648',['storageBlobs',['../structllama_1_1View.html#afc31355f951aaed3f18b2f8e53a507f8',1,'llama::View']]]
 ];

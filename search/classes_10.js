@@ -1,9 +1,5 @@
 var searchData=
 [
-  ['vec',['Vec',['../structmanualAoS_1_1Vec.html',1,'manualAoS']]],
-  ['vector',['Vector',['../structllama_1_1allocator_1_1Vector.html',1,'llama::allocator::Vector&lt; Alignment &gt;'],['../structmanualAoS_1_1Vector.html',1,'manualAoS::Vector']]],
-  ['vel',['Vel',['../structusellama_1_1tag_1_1Vel.html',1,'usellama::tag::Vel'],['../structtag_1_1Vel.html',1,'tag::Vel']]],
-  ['view',['View',['../structllama_1_1View.html',1,'llama']]],
-  ['virtualdatum',['VirtualDatum',['../structllama_1_1VirtualDatum.html',1,'llama']]],
-  ['virtualview',['VirtualView',['../structllama_1_1VirtualView.html',1,'llama']]]
+  ['wrapinnnodes_453',['WrapInNNodes',['../structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes.html',1,'llama::mapping::tree::internal']]],
+  ['wrapinnnodes_3c_20leaf_2c_200_20_3e_454',['WrapInNNodes&lt; Leaf, 0 &gt;',['../structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes_3_01Leaf_00_010_01_4.html',1,'llama::mapping::tree::internal']]]
 ];

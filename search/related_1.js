@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['virtualdatum',['VirtualDatum',['../structllama_1_1View.html#ad5698397bb4d4936af9126912618573e',1,'llama::View']]]
+  ['virtualrecord_727',['VirtualRecord',['../structllama_1_1View.html#a73c6031066ac874a71c88cebb181a06c',1,'llama::View']]]
 ];

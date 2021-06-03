@@ -1,0 +1,7 @@
+var structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoor9dc4730dbf0b2c94fd53092536b251f3 =
+[
+    [ "HasTag", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoor097fc6d4759914143ed6b970ceeaa1d4.html", null ],
+    [ "ChildType", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoor9dc4730dbf0b2c94fd53092536b251f3.html#a23006ae8e5587512ba999f6119817292", null ],
+    [ "type", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoor9dc4730dbf0b2c94fd53092536b251f3.html#ad70d55152fed64d1733912813f8bc7e8", null ],
+    [ "tagIndex", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoor9dc4730dbf0b2c94fd53092536b251f3.html#ac06a88c25005e549fabd1cb3c41d8c4e", null ]
+];
