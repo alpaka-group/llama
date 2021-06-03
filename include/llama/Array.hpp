@@ -16,6 +16,7 @@ namespace llama
     template <typename T, std::size_t N>
     struct Array
     {
+        using value_type = T;
         static constexpr std::size_t rank
             = N; // FIXME this is right from the ArrayDims's POV, but wrong from the Array's POV
         T element[N > 0 ? N : 1];
