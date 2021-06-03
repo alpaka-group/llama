@@ -286,24 +286,30 @@ namespace llama
 
         /// Retrieves the \ref VirtualRecord at the \ref ArrayDims coordinate
         /// constructed from the passed component indices.
-        template <typename... Index>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(Index... indices) const -> decltype(auto)
+        template <typename... Indices>
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) const -> decltype(auto)
         {
             static_assert(
-                sizeof...(Index) == ArrayDims::rank,
+                sizeof...(Indices) == ArrayDims::rank,
                 "Please specify as many indices as you have array dimensions");
+            static_assert(
+                std::conjunction_v<std::is_convertible<Indices, std::size_t>...>,
+                "Indices must be convertible to std::size_t");
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this) (ArrayDims{indices...});
+            return (*this) (ArrayDims{static_cast<typename ArrayDims::value_type>(indices)...});
         }
 
-        template <typename... Index>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(Index... indices) -> decltype(auto)
+        template <typename... Indices>
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) -> decltype(auto)
         {
             static_assert(
-                sizeof...(Index) == ArrayDims::rank,
+                sizeof...(Indices) == ArrayDims::rank,
                 "Please specify as many indices as you have array dimensions");
+            static_assert(
+                std::conjunction_v<std::is_convertible<Indices, std::size_t>...>,
+                "Indices must be convertible to std::size_t");
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this) (ArrayDims{indices...});
+            return (*this) (ArrayDims{static_cast<typename ArrayDims::value_type>(indices)...});
         }
 
         /// Retrieves the \ref VirtualRecord at the \ref ArrayDims coordinate
@@ -449,15 +455,27 @@ namespace llama
         template <typename... Indices>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) const -> VirtualRecordType
         {
+            static_assert(
+                sizeof...(Indices) == ArrayDims::rank,
+                "Please specify as many indices as you have array dimensions");
+            static_assert(
+                std::conjunction_v<std::is_convertible<Indices, std::size_t>...>,
+                "Indices must be convertible to std::size_t");
             LLAMA_FORCE_INLINE_RECURSIVE
-            return parentView(ArrayDims{ArrayDims{indices...} + offset});
+            return parentView(ArrayDims{ArrayDims{static_cast<typename ArrayDims::value_type>(indices)...} + offset});
         }
 
         template <typename... Indices>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) -> VirtualRecordType
         {
+            static_assert(
+                sizeof...(Indices) == ArrayDims::rank,
+                "Please specify as many indices as you have array dimensions");
+            static_assert(
+                std::conjunction_v<std::is_convertible<Indices, std::size_t>...>,
+                "Indices must be convertible to std::size_t");
             LLAMA_FORCE_INLINE_RECURSIVE
-            return parentView(ArrayDims{ArrayDims{indices...} + offset});
+            return parentView(ArrayDims{ArrayDims{static_cast<typename ArrayDims::value_type>(indices)...} + offset});
         }
 
         template <std::size_t... Coord>

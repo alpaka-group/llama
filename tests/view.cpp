@@ -313,3 +313,35 @@ TEST_CASE("view.record-access")
 
     CHECK(sum == 0.0);
 }
+
+TEST_CASE("view.indexing")
+{
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{16, 16}, Particle{}});
+    view(0u, 0u)(tag::Weight{}) = 42.0f;
+
+    using integrals = boost::mp11::
+        mp_list<char, unsigned char, signed char, short, unsigned short, int, unsigned int, long, unsigned long>;
+
+    boost::mp11::mp_for_each<integrals>(
+        [&](auto i)
+        {
+            boost::mp11::mp_for_each<integrals>(
+                [&](auto j)
+                {
+                    const float& w = view(i, j)(tag::Weight{});
+                    CHECK(w == 42.0f);
+                });
+        });
+
+    llama::VirtualView virtualView{view, {0, 0}};
+    boost::mp11::mp_for_each<integrals>(
+        [&](auto i)
+        {
+            boost::mp11::mp_for_each<integrals>(
+                [&](auto j)
+                {
+                    const float& w = virtualView(i, j)(tag::Weight{});
+                    CHECK(w == 42.0f);
+                });
+        });
+}
