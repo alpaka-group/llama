@@ -22,6 +22,7 @@ var VirtualRecord_8hpp =
     [ "asTupleImpl", "VirtualRecord_8hpp.html#a41ee18760d75ee7c2ebafab4f589596e", null ],
     [ "copyVirtualRecordStack", "VirtualRecord_8hpp.html#a8183deaf1069415900815fd9f2f1e373", null ],
     [ "makeFromTuple", "VirtualRecord_8hpp.html#a0f1653ed919838d951dd7753b22cac7e", null ],
+    [ "operator<<", "VirtualRecord_8hpp.html#aea5db41fdf4f7b59a4abd18d276ef746", null ],
     [ "virtualRecordArithOperator", "VirtualRecord_8hpp.html#a0ccd09257d037252569bc7347523515b", null ],
     [ "virtualRecordArithOperator", "VirtualRecord_8hpp.html#a124e4d559d771e918724b3fee4a86e39", null ],
     [ "virtualRecordRelOperator", "VirtualRecord_8hpp.html#af476b9e4a01d4dfc44a62af21e8c30f2", null ],

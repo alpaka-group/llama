@@ -263,6 +263,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a8183deaf1069415900815fd9f2f1e373"><td class="memTemplParams" colspan="2">template&lt;typename VirtualRecord &gt; </td></tr>
 <tr class="memitem:a8183deaf1069415900815fd9f2f1e373"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a8183deaf1069415900815fd9f2f1e373">copyVirtualRecordStack</a> (const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;vd) -&gt; decltype(auto)</td></tr>
 <tr class="separator:a8183deaf1069415900815fd9f2f1e373"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea5db41fdf4f7b59a4abd18d276ef746"><td class="memTemplParams" colspan="2">template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </td></tr>
+<tr class="memitem:aea5db41fdf4f7b59a4abd18d276ef746"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aea5db41fdf4f7b59a4abd18d276ef746">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; <a class="el" href="structllama_1_1View.html">View</a>, BoundRecordCoord, OwnView &gt; &amp;vr) -&gt; std::ostream &amp;</td></tr>
+<tr class="separator:aea5db41fdf4f7b59a4abd18d276ef746"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -540,7 +543,7 @@ template&lt;typename RecordDim &gt; </div>
 
 <p>A <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> that owns and holds a single value. </p>
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00023">23</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00024">24</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -801,7 +804,7 @@ template&lt;typename VirtualRecord &gt; </div>
 </div><div class="memdoc">
 <p>Creates a single <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> owning a view with stack memory and copies all values from an existing <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00028">28</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00029">29</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1004,6 +1007,39 @@ template&lt;std::size_t PieceLength, typename Mapping &gt; </div>
 <p>Proofs by exhaustion of the array and record dimensions, that at least PieceLength elements are always stored contiguously. </p>
 
 <p class="definition">Definition at line <a class="el" href="Proofs_8hpp_source.html#l00101">101</a> of file <a class="el" href="Proofs_8hpp_source.html">Proofs.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aea5db41fdf4f7b59a4abd18d276ef746"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea5db41fdf4f7b59a4abd18d276ef746">&#9670;&nbsp;</a></span>operator&lt;&lt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">auto llama::operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; <a class="el" href="structllama_1_1View.html">View</a>, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> -&gt; std::ostream&amp;
+    </td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00658">658</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1439,7 +1475,7 @@ template&lt;typename View &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00016">16</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00017">17</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1465,7 +1501,7 @@ template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00019">19</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00020">20</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1750,7 +1786,7 @@ template&lt;typename Tuple &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Thu Jun 3 2021 11:30:50 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Jun 3 2021 12:36:52 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
