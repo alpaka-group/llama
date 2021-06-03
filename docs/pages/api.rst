@@ -157,6 +157,15 @@ Data access
 .. doxygenstruct:: llama::VirtualRecord
    :members:
 
+Copying
+-------
+
+.. doxygenfunction:: llama::copy
+.. doxygenstruct:: llama::Copy
+   :members:
+.. doxygenfunction:: llama::fieldWiseCopy
+.. doxygenfunction:: llama::aosoaCommonBlockCopy
+
 Macros
 ------
 

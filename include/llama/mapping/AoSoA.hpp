@@ -26,17 +26,18 @@ namespace llama::mapping
 
     /// Array of struct of arrays mapping. Used to create a \ref View via \ref allocView.
     /// \tparam Lanes The size of the inner arrays of this array of struct of arrays.
-    /// \tparam LinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
+    /// \tparam T_LinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
     /// how big the linear domain gets.
     template <
         typename T_ArrayDims,
         typename T_RecordDim,
         std::size_t Lanes,
-        typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+        typename T_LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     struct AoSoA
     {
         using ArrayDims = T_ArrayDims;
         using RecordDim = T_RecordDim;
+        using LinearizeArrayDimsFunctor = T_LinearizeArrayDimsFunctor;
         static constexpr std::size_t blobCount = 1;
 
         constexpr AoSoA() = default;
