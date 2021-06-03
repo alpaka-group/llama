@@ -7,97 +7,71 @@
 #include <llama/llama.hpp>
 #include <vector>
 
-TEST_CASE("type int")
+namespace
 {
     struct Tag
     {
     };
-    using Name = llama::Record<llama::Field<Tag, int>>;
+} // namespace
 
-    using ArrayDims = llama::ArrayDims<1>;
-    ArrayDims arrayDims{16};
+TEST_CASE("recorddim.record_with_int")
+{
+    using RecordDim = llama::Record<llama::Field<Tag, int>>;
+    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
 
-    using Mapping = llama::mapping::SoA<ArrayDims, Name>;
-    Mapping mapping{arrayDims};
-    auto view = allocView(mapping);
-
-    int& e = view(ArrayDims{0})(Tag{});
+    int& e = view(0u)(Tag{});
     e = 0;
 }
 
-TEST_CASE("type std::complex<float>")
+TEST_CASE("recorddim.record_with_int[3]")
 {
-    struct Tag
-    {
-    };
-    using Name = llama::Record<llama::Field<Tag, std::complex<float>>>;
+    using namespace llama::literals;
 
-    using ArrayDims = llama::ArrayDims<1>;
-    ArrayDims arrayDims{16};
+    using RecordDim = llama::Record<llama::Field<Tag, int[3]>>;
+    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
 
-    using Mapping = llama::mapping::SoA<ArrayDims, Name>;
-    Mapping mapping{arrayDims};
-    auto view = allocView(mapping);
+    int& e0 = view(0u)(Tag{})(0_RC);
+    int& e1 = view(0u)(Tag{})(1_RC);
+    int& e2 = view(0u)(Tag{})(2_RC);
+}
 
-    std::complex<float>& e = view(ArrayDims{0})(Tag{});
+TEST_CASE("recorddim.record_with_std::complex<float>")
+{
+    using RecordDim = llama::Record<llama::Field<Tag, std::complex<float>>>;
+    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
+
+    std::complex<float>& e = view(0u)(Tag{});
     e = {2, 3};
 }
 
-TEST_CASE("type std::array<float, 4>")
+TEST_CASE("recorddim.record_with_std::array<float, 4>")
 {
-    struct Tag
-    {
-    };
-    using Name = llama::Record<llama::Field<Tag, std::array<float, 4>>>;
+    using RecordDim = llama::Record<llama::Field<Tag, std::array<float, 4>>>;
+    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
 
-    using ArrayDims = llama::ArrayDims<1>;
-    ArrayDims arrayDims{16};
-
-    using Mapping = llama::mapping::SoA<ArrayDims, Name>;
-    Mapping mapping{arrayDims};
-    auto view = allocView(mapping);
-
-    std::array<float, 4>& e = view(ArrayDims{0})(Tag{});
+    std::array<float, 4>& e = view(0u)(Tag{});
     e = {2, 3, 4, 5};
 }
 
-TEST_CASE("type std::vector<float>")
+TEST_CASE("recorddim.record_with_std::vector<float>")
 {
-    struct Tag
-    {
-    };
-    using Name = llama::Record<llama::Field<Tag, std::vector<float>>>;
+    using RecordDim = llama::Record<llama::Field<Tag, std::vector<float>>>;
+    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
 
-    using ArrayDims = llama::ArrayDims<1>;
-    ArrayDims arrayDims{16};
-
-    using Mapping = llama::mapping::SoA<ArrayDims, Name>;
-    Mapping mapping{arrayDims};
-    auto view = allocView(mapping);
-
-    std::vector<float>& e = view(ArrayDims{0})(Tag{});
+    std::vector<float>& e = view(0u)(Tag{});
     // e = {2, 3, 4, 5}; // FIXME: LLAMA memory is uninitialized
 }
 
-TEST_CASE("type std::atomic<int>")
+TEST_CASE("recorddim.record_with_std::atomic<int>")
 {
-    struct Tag
-    {
-    };
-    using Name = llama::Record<llama::Field<Tag, std::atomic<int>>>;
+    using RecordDim = llama::Record<llama::Field<Tag, std::atomic<int>>>;
+    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
 
-    using ArrayDims = llama::ArrayDims<1>;
-    ArrayDims arrayDims{16};
-
-    using Mapping = llama::mapping::SoA<ArrayDims, Name>;
-    Mapping mapping{arrayDims};
-    auto view = allocView(mapping);
-
-    std::atomic<int>& e = view(ArrayDims{0})(Tag{});
+    std::atomic<int>& e = view(0u)(Tag{});
     // e++; // FIXME: LLAMA memory is uninitialized
 }
 
-TEST_CASE("type noncopyable")
+TEST_CASE("recorddim.record_with_noncopyable")
 {
     struct Element
     {
@@ -111,23 +85,14 @@ TEST_CASE("type noncopyable")
         int value;
     };
 
-    struct Tag
-    {
-    };
-    using Name = llama::Record<llama::Field<Tag, Element>>;
+    using RecordDim = llama::Record<llama::Field<Tag, Element>>;
+    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
 
-    using ArrayDims = llama::ArrayDims<1>;
-    ArrayDims arrayDims{16};
-
-    using Mapping = llama::mapping::SoA<ArrayDims, Name>;
-    Mapping mapping{arrayDims};
-    auto view = allocView(mapping);
-
-    Element& e = view(ArrayDims{0})(Tag{});
+    Element& e = view(0u)(Tag{});
     e.value = 0;
 }
 
-TEST_CASE("type nonmoveable")
+TEST_CASE("recorddim.record_with_nonmoveable")
 {
     struct Element
     {
@@ -141,23 +106,14 @@ TEST_CASE("type nonmoveable")
         int value;
     };
 
-    struct Tag
-    {
-    };
-    using Name = llama::Record<llama::Field<Tag, Element>>;
+    using RecordDim = llama::Record<llama::Field<Tag, Element>>;
+    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
 
-    using ArrayDims = llama::ArrayDims<1>;
-    ArrayDims arrayDims{16};
-
-    using Mapping = llama::mapping::SoA<ArrayDims, Name>;
-    Mapping mapping{arrayDims};
-    auto view = allocView(mapping);
-
-    Element& e = view(ArrayDims{0})(Tag{});
+    Element& e = view(0u)(Tag{});
     e.value = 0;
 }
 
-TEST_CASE("type not defaultconstructible")
+TEST_CASE("recorddim.record_with_nondefaultconstructible")
 {
     struct Element
     {
@@ -165,42 +121,24 @@ TEST_CASE("type not defaultconstructible")
         int value;
     };
 
-    struct Tag
-    {
-    };
-    using Name = llama::Record<llama::Field<Tag, Element>>;
+    using RecordDim = llama::Record<llama::Field<Tag, Element>>;
+    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
 
-    using ArrayDims = llama::ArrayDims<1>;
-    ArrayDims arrayDims{16};
-
-    using Mapping = llama::mapping::SoA<ArrayDims, Name>;
-    Mapping mapping{arrayDims};
-    auto view = allocView(mapping);
-
-    Element& e = view(ArrayDims{0})(Tag{});
+    Element& e = view(0u)(Tag{});
     e.value = 0;
 }
 
-TEST_CASE("type nottrivial ctor")
+TEST_CASE("recorddim.record_with_nontrivial_ctor")
 {
     struct Element
     {
         int value = 42;
     };
 
-    struct Tag
-    {
-    };
-    using Name = llama::Record<llama::Field<Tag, Element>>;
+    using RecordDim = llama::Record<llama::Field<Tag, Element>>;
+    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
 
-    using ArrayDims = llama::ArrayDims<1>;
-    ArrayDims arrayDims{16};
-
-    using Mapping = llama::mapping::SoA<ArrayDims, Name>;
-    Mapping mapping{arrayDims};
-    auto view = allocView(mapping);
-
-    Element& e = view(ArrayDims{0})(Tag{});
+    Element& e = view(0u)(Tag{});
     // CHECK(e.value == 42); // FIXME: LLAMA memory is uninitialized
 }
 
@@ -220,19 +158,10 @@ namespace
     };
 } // namespace
 
-TEST_CASE("type custom initialization")
+TEST_CASE("recorddim.record_with_nontrivial_ctor2")
 {
-    struct Tag
-    {
-    };
-    using Name = llama::Record<llama::Field<Tag, UniqueInt>>;
-
-    using ArrayDims = llama::ArrayDims<1>;
-    ArrayDims arrayDims{16};
-
-    using Mapping = llama::mapping::SoA<ArrayDims, Name>;
-    Mapping mapping{arrayDims};
-    auto view = allocView(mapping);
+    using RecordDim = llama::Record<llama::Field<Tag, UniqueInt>>;
+    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
 
     // FIXME: LLAMA memory is uninitialized
     // CHECK(view(ArrayDims{0})(Tag{}) == 0);
@@ -241,43 +170,20 @@ TEST_CASE("type custom initialization")
     // CHECK(view(ArrayDims{15})(Tag{}) == 15);
 }
 
-TEST_CASE("type just double")
+TEST_CASE("recorddim.int")
 {
-    using RecordDim = double;
-    llama::ArrayDims arrayDims{16};
-    llama::mapping::SoA mapping{arrayDims, RecordDim{}};
-    auto view = allocView(mapping);
+    using RecordDim = int;
+    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
 
-    STATIC_REQUIRE(std::is_same_v<decltype(view(0u)), double&>);
-    view(0u) = 42.0;
-    CHECK(view(0u) == 42.0);
+    STATIC_REQUIRE(std::is_same_v<decltype(view(0u)), int&>);
+    view(0u) = 42;
+    CHECK(view(0u) == 42);
 
-    STATIC_REQUIRE(std::is_same_v<decltype(view[0u]), double&>);
-    view[0u] = 42.0;
-    CHECK(view[0u] == 42.0);
+    STATIC_REQUIRE(std::is_same_v<decltype(view[0u]), int&>);
+    view[0u] = 42;
+    CHECK(view[0u] == 42);
 
-    STATIC_REQUIRE(std::is_same_v<decltype(view[llama::ArrayDims{0}]), double&>);
-    view[llama::ArrayDims{0}] = 42.0;
-    CHECK(view[llama::ArrayDims{0}] == 42.0);
-}
-
-TEST_CASE("static array")
-{
-    using namespace llama::literals;
-
-    struct Tag
-    {
-    };
-    using RecordDim = llama::Record<llama::Field<Tag, int[3]>>;
-
-    using ArrayDims = llama::ArrayDims<1>;
-    ArrayDims arrayDims{16};
-
-    using Mapping = llama::mapping::SoA<ArrayDims, RecordDim>;
-    Mapping mapping{arrayDims};
-    auto view = allocView(mapping);
-
-    int& e0 = view(ArrayDims{0})(Tag{})(0_RC);
-    int& e1 = view(ArrayDims{0})(Tag{})(1_RC);
-    int& e2 = view(ArrayDims{0})(Tag{})(2_RC);
+    STATIC_REQUIRE(std::is_same_v<decltype(view[llama::ArrayDims{0}]), int&>);
+    view[llama::ArrayDims{0}] = 42;
+    CHECK(view[llama::ArrayDims{0}] == 42);
 }
