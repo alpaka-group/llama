@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"structllama_1_1internal_1_1GetTypeImpl_3_01Record_3_01Children_8_8_8_01_4_00_01RecordCoord_3_01Hd335281b58bf9419f48b7fc65f5657ab.html#abf3e13c2433911563d020538d2a04f4b":[2,0,0,1,14,0],
 "structllama_1_1internal_1_1GetTypeImpl_3_01T_00_01RecordCoord_3_4_01_4.html":[2,0,0,1,15],
 "structllama_1_1internal_1_1GetTypeImpl_3_01T_00_01RecordCoord_3_4_01_4.html#a474df5888cc1b6a4ef60cef1700126ea":[2,0,0,1,15,0],
 "structllama_1_1internal_1_1IndirectValue.html":[2,0,0,1,16],
