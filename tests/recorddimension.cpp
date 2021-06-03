@@ -35,14 +35,14 @@ TEST_CASE("recorddim.record_with_int[3]")
     int& e2 = view(0u)(Tag{})(2_RC);
 }
 
-TEST_CASE("recorddim.record_with_std::complex<float>")
-{
-    using RecordDim = llama::Record<llama::Field<Tag, std::complex<float>>>;
-    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
-
-    std::complex<float>& e = view(0u)(Tag{});
-    e = {2, 3};
-}
+// TEST_CASE("recorddim.record_with_std::complex<float>")
+//{
+//    using RecordDim = llama::Record<llama::Field<Tag, std::complex<float>>>;
+//    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
+//
+//    std::complex<float>& e = view(0u)(Tag{});
+//    e = {2, 3};
+//}
 
 TEST_CASE("recorddim.record_with_std::array<float, 4>")
 {
@@ -53,23 +53,23 @@ TEST_CASE("recorddim.record_with_std::array<float, 4>")
     e = {2, 3, 4, 5};
 }
 
-TEST_CASE("recorddim.record_with_std::vector<float>")
-{
-    using RecordDim = llama::Record<llama::Field<Tag, std::vector<float>>>;
-    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
+// TEST_CASE("recorddim.record_with_std::vector<float>")
+//{
+//    using RecordDim = llama::Record<llama::Field<Tag, std::vector<float>>>;
+//    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
+//
+//    std::vector<float>& e = view(0u)(Tag{});
+//    // e = {2, 3, 4, 5}; // FIXME: LLAMA memory is uninitialized
+//}
 
-    std::vector<float>& e = view(0u)(Tag{});
-    // e = {2, 3, 4, 5}; // FIXME: LLAMA memory is uninitialized
-}
-
-TEST_CASE("recorddim.record_with_std::atomic<int>")
-{
-    using RecordDim = llama::Record<llama::Field<Tag, std::atomic<int>>>;
-    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
-
-    std::atomic<int>& e = view(0u)(Tag{});
-    // e++; // FIXME: LLAMA memory is uninitialized
-}
+// TEST_CASE("recorddim.record_with_std::atomic<int>")
+//{
+//    using RecordDim = llama::Record<llama::Field<Tag, std::atomic<int>>>;
+//    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
+//
+//    std::atomic<int>& e = view(0u)(Tag{});
+//    // e++; // FIXME: LLAMA memory is uninitialized
+//}
 
 TEST_CASE("recorddim.record_with_noncopyable")
 {
@@ -113,62 +113,62 @@ TEST_CASE("recorddim.record_with_nonmoveable")
     e.value = 0;
 }
 
-TEST_CASE("recorddim.record_with_nondefaultconstructible")
-{
-    struct Element
-    {
-        Element() = delete;
-        int value;
-    };
+// TEST_CASE("recorddim.record_with_nondefaultconstructible")
+//{
+//    struct Element
+//    {
+//        Element() = delete;
+//        int value;
+//    };
+//
+//    using RecordDim = llama::Record<llama::Field<Tag, Element>>;
+//    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
+//
+//    Element& e = view(0u)(Tag{});
+//    e.value = 0;
+//}
 
-    using RecordDim = llama::Record<llama::Field<Tag, Element>>;
-    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
+// TEST_CASE("recorddim.record_with_nontrivial_ctor")
+//{
+//    struct Element
+//    {
+//        int value = 42;
+//    };
+//
+//    using RecordDim = llama::Record<llama::Field<Tag, Element>>;
+//    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
+//
+//    Element& e = view(0u)(Tag{});
+//    // CHECK(e.value == 42); // FIXME: LLAMA memory is uninitialized
+//}
 
-    Element& e = view(0u)(Tag{});
-    e.value = 0;
-}
-
-TEST_CASE("recorddim.record_with_nontrivial_ctor")
-{
-    struct Element
-    {
-        int value = 42;
-    };
-
-    using RecordDim = llama::Record<llama::Field<Tag, Element>>;
-    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
-
-    Element& e = view(0u)(Tag{});
-    // CHECK(e.value == 42); // FIXME: LLAMA memory is uninitialized
-}
-
-namespace
-{
-    struct UniqueInt
-    {
-        int value = counter++;
-
-        explicit operator int() const
-        {
-            return value;
-        }
-
-    private:
-        inline static int counter = 0;
-    };
-} // namespace
-
-TEST_CASE("recorddim.record_with_nontrivial_ctor2")
-{
-    using RecordDim = llama::Record<llama::Field<Tag, UniqueInt>>;
-    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
-
-    // FIXME: LLAMA memory is uninitialized
-    // CHECK(view(ArrayDims{0})(Tag{}) == 0);
-    // CHECK(view(ArrayDims{1})(Tag{}) == 1);
-    // CHECK(view(ArrayDims{2})(Tag{}) == 2);
-    // CHECK(view(ArrayDims{15})(Tag{}) == 15);
-}
+// namespace
+//{
+//    struct UniqueInt
+//    {
+//        int value = counter++;
+//
+//        explicit operator int() const
+//        {
+//            return value;
+//        }
+//
+//    private:
+//        inline static int counter = 0;
+//    };
+//} // namespace
+//
+// TEST_CASE("recorddim.record_with_nontrivial_ctor2")
+//{
+//    using RecordDim = llama::Record<llama::Field<Tag, UniqueInt>>;
+//    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
+//
+//    // FIXME: LLAMA memory is uninitialized
+//    // CHECK(view(ArrayDims{0})(Tag{}) == 0);
+//    // CHECK(view(ArrayDims{1})(Tag{}) == 1);
+//    // CHECK(view(ArrayDims{2})(Tag{}) == 2);
+//    // CHECK(view(ArrayDims{15})(Tag{}) == 15);
+//}
 
 TEST_CASE("recorddim.int")
 {

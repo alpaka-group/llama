@@ -52,6 +52,12 @@ namespace llama
     {
     };
 
+    /// @brief Tells whether the given type is allowed as a field type in LLAMA. Such types need to be trivially
+    /// constructible and trivially destructible.
+    template <typename T>
+    inline constexpr bool isAllowedFieldType
+        = std::is_trivially_constructible_v<T>&& std::is_trivially_destructible_v<T>;
+
     /// Record dimension tree node which may either be a leaf or refer to a child tree presented as another \ref
     /// Record.
     /// \tparam Tag Name of the node. May be any type (struct, class).
@@ -62,6 +68,7 @@ namespace llama
     template <typename Tag, typename Type>
     struct Field
     {
+        static_assert(isAllowedFieldType<Type>, "This field's type is not allowed");
     };
 
     struct NrAndOffset
