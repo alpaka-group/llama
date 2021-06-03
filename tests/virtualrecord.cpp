@@ -2,6 +2,7 @@
 
 #include <catch2/catch.hpp>
 #include <llama/llama.hpp>
+#include <sstream>
 
 // clang-format off
 namespace tag {
@@ -920,4 +921,19 @@ TEST_CASE("VirtualRecord.One_range_for")
     for (llama::One<Particle> p : view) // p is a copy
         p = 2;
     CHECK(view(1u) == 1);
+}
+
+TEST_CASE("VirtualRecord.operator<<")
+{
+    auto p = oneParticle();
+
+    std::stringstream ss;
+    ss << p;
+    CHECK(ss.str() == "{Pos: {A: 1, Y: 2}, Vel: {X: 3, Y: 4, Z: 5}, Weight: 6}");
+
+    ss = {};
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{1}, Particle{}});
+    view(0u) = p;
+    ss << view(0u);
+    CHECK(ss.str() == "{Pos: {A: 1, Y: 2}, Vel: {X: 3, Y: 4, Z: 5}, Weight: 6}");
 }

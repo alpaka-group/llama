@@ -5,6 +5,7 @@
 
 #include "View.hpp"
 
+#include <iosfwd>
 #include <type_traits>
 
 namespace llama
@@ -652,6 +653,26 @@ namespace llama
             internal::assignTuples(asTuple(), t, std::make_index_sequence<std::tuple_size_v<TupleLike>>{});
         }
     };
+
+    template <typename View, typename BoundRecordCoord, bool OwnView>
+    auto operator<<(std::ostream& os, const VirtualRecord<View, BoundRecordCoord, OwnView>& vr) -> std::ostream&
+    {
+        using RecordDim = typename VirtualRecord<View, BoundRecordCoord, OwnView>::AccessibleRecordDim;
+        os << "{";
+        constexpr auto size = boost::mp11::mp_size<RecordDim>::value;
+        boost::mp11::mp_for_each<boost::mp11::mp_iota_c<size>>(
+            [&](auto ic)
+            {
+                constexpr std::size_t i = decltype(ic)::value;
+                using Field = boost::mp11::mp_at_c<RecordDim, i>;
+                using Tag = GetFieldTag<Field>;
+                os << structName<Tag>() << ": " << vr(RecordCoord<i>{});
+                if (i + 1 < size)
+                    os << ", ";
+            });
+        os << "}";
+        return os;
+    }
 } // namespace llama
 
 template <typename View, typename BoundRecordCoord, bool OwnView>
