@@ -43,8 +43,8 @@ TEST_CASE("ArrayDims.dim0")
     Mapping mapping{arrayDims};
     auto view = allocView(mapping);
 
-    float& x = view(ArrayDims{})(tag::Pos{}, tag::X{});
-    x = 0;
+    float& x1 = view(ArrayDims{})(tag::Pos{}, tag::X{});
+    float& x2 = view()(tag::Pos{}, tag::X{});
 }
 
 TEST_CASE("ArrayDims.dim1")
