@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.3] - 2021-06-xx
+## [0.3] - 2021-06-04
 
 ### Added features
 - added multi-blob SoA mapping allowing to map to one blob per field #111
