@@ -300,37 +300,3 @@ TEST_CASE("flatRecordCoord")
     STATIC_REQUIRE(llama::flatRecordCoord<Particle, llama::RecordCoord<4, 2>> == 9);
     STATIC_REQUIRE(llama::flatRecordCoord<Particle, llama::RecordCoord<4, 3>> == 10);
 }
-
-// clang-format off
-namespace tag
-{
-    struct A1{};
-    struct A2{};
-    struct A3{};
-} // namespace tag
-
-using Arrays = llama::Record<
-    llama::Field<tag::A1, int[3]>,
-    llama::Field<tag::A2, llama::Record<
-        llama::Field<tag::X, float>
-    >[3]>,
-    llama::Field<tag::A3, int[2][2]>
->;
-// clang-format on
-
-TEST_CASE("arrays")
-{
-    using namespace llama::literals;
-
-    auto v = llama::allocView(llama::mapping::AoS{llama::ArrayDims{1}, Arrays{}});
-    v(0u)(tag::A1{}, 0_RC);
-    v(0u)(tag::A1{}, 1_RC);
-    v(0u)(tag::A1{}, 2_RC);
-    v(0u)(tag::A2{}, 0_RC, tag::X{});
-    v(0u)(tag::A2{}, 1_RC, tag::X{});
-    v(0u)(tag::A2{}, 2_RC, tag::X{});
-    v(0u)(tag::A3{}, 0_RC, 0_RC);
-    v(0u)(tag::A3{}, 0_RC, 1_RC);
-    v(0u)(tag::A3{}, 1_RC, 0_RC);
-    v(0u)(tag::A3{}, 1_RC, 1_RC);
-}

@@ -199,3 +199,71 @@ TEST_CASE("recorddim.int[3]")
     view(0u)(1_RC) = 43;
     view(0u)(2_RC) = 44;
 }
+
+// if we lift the array size higher, we hit the limit on template instantiations
+TEST_CASE("recorddim.int[200]")
+{
+    using namespace llama::literals;
+
+    using RecordDim = int[200];
+    auto view = allocView(llama::mapping::AoS<llama::ArrayDims<1>, RecordDim>{llama::ArrayDims{1}});
+
+    view(0u)(0_RC) = 42;
+    view(0u)(199_RC) = 43;
+}
+
+TEST_CASE("recorddim.int[3][2]")
+{
+    using namespace llama::literals;
+
+    using RecordDim = int[3][2];
+    auto view = allocView(llama::mapping::AoS<llama::ArrayDims<1>, RecordDim>{llama::ArrayDims{1}});
+
+    view(0u)(0_RC)(0_RC) = 42;
+    view(0u)(0_RC)(1_RC) = 43;
+    view(0u)(1_RC)(0_RC) = 44;
+    view(0u)(1_RC)(1_RC) = 45;
+    view(0u)(2_RC)(0_RC) = 46;
+    view(0u)(2_RC)(1_RC) = 47;
+}
+
+TEST_CASE("recorddim.int[1][1][1][1][1][1][1][1][1][1]")
+{
+    using namespace llama::literals;
+
+    using RecordDim = int[1][1][1][1][1][1][1][1][1][1];
+    auto view = allocView(llama::mapping::AoS<llama::ArrayDims<1>, RecordDim>{llama::ArrayDims{1}});
+
+    view(0u)(0_RC)(0_RC) (0_RC) (0_RC) (0_RC) (0_RC) (0_RC) (0_RC) (0_RC) (0_RC) = 42;
+}
+
+// clang-format off
+struct A1{};
+struct A2{};
+struct A3{};
+
+using Arrays = llama::Record<
+    llama::Field<A1, int[3]>,
+    llama::Field<A2, llama::Record<
+        llama::Field<Tag, float>
+    >[3]>,
+    llama::Field<A3, int[2][2]>
+>;
+// clang-format on
+
+TEST_CASE("recorddim.record_with_arrays")
+{
+    using namespace llama::literals;
+
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{1}, Arrays{}});
+    view(0u)(A1{}, 0_RC);
+    view(0u)(A1{}, 1_RC);
+    view(0u)(A1{}, 2_RC);
+    view(0u)(A2{}, 0_RC, Tag{});
+    view(0u)(A2{}, 1_RC, Tag{});
+    view(0u)(A2{}, 2_RC, Tag{});
+    view(0u)(A3{}, 0_RC, 0_RC);
+    view(0u)(A3{}, 0_RC, 1_RC);
+    view(0u)(A3{}, 1_RC, 0_RC);
+    view(0u)(A3{}, 1_RC, 1_RC);
+}
