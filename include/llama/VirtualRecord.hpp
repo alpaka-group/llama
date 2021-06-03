@@ -21,7 +21,7 @@ namespace llama
 
     /// A \ref VirtualRecord that owns and holds a single value.
     template <typename RecordDim>
-    using One = VirtualRecord<decltype(allocViewStack<1, RecordDim>()), RecordCoord<>, true>;
+    using One = VirtualRecord<decltype(allocViewStack<0, RecordDim>()), RecordCoord<>, true>;
 
     /// Creates a single \ref VirtualRecord owning a view with stack memory and
     /// copies all values from an existing \ref VirtualRecord.
@@ -301,7 +301,7 @@ namespace llama
         using ArrayDims = typename View::Mapping::ArrayDims;
         using RecordDim = typename View::Mapping::RecordDim;
 
-        const ArrayDims arrayDimsCoord;
+        [[no_unique_address]] const ArrayDims arrayDimsCoord;
         std::conditional_t<OwnView, View, View&> view;
 
     public:
@@ -314,7 +314,7 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE VirtualRecord()
             /* requires(OwnView) */
             : arrayDimsCoord({})
-            , view{allocViewStack<1, RecordDim>()}
+            , view{allocViewStack<0, RecordDim>()}
         {
             static_assert(OwnView, "The default constructor of VirtualRecord is only available if it owns the view.");
         }
