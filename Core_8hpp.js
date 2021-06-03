@@ -58,6 +58,7 @@ var Core_8hpp =
     [ "flatRecordCoord", "Core_8hpp.html#a6c3056b43b48f32a66160a6dd273662d", null ],
     [ "flatSizeOf", "Core_8hpp.html#a9d1c60ad5529635b678544cc8e451f8c", null ],
     [ "hasSameTags", "Core_8hpp.html#a39d280955e5b9deb36f6c8fa1124ca2b", null ],
+    [ "isAllowedFieldType", "Core_8hpp.html#acca32b49e2be7c3c136e940939c531ae", null ],
     [ "isRecord", "Core_8hpp.html#a3b2aa8fd3e43e43b830bc4a71b180175", null ],
     [ "isRecord< Record< Fields... > >", "Core_8hpp.html#adee8dc812f8d14dbea092728c88a937d", null ],
     [ "offsetOf", "Core_8hpp.html#aae03df933faef61723569d4655563bbe", null ],
