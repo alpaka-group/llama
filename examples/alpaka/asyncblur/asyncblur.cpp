@@ -128,7 +128,7 @@ struct BlurKernel
             LLAMA_INDEPENDENT_DATA
         for (auto x = start[1]; x < end[1]; ++x)
         {
-            llama::One<PixelOnAcc> sum = 0;
+            llama::One<PixelOnAcc> sum{0};
 
             using ItType = std::int64_t;
             const ItType iBStart = SHARED ? ItType(y) - ItType(bi[0] * ElemsPerBlock) : y;
