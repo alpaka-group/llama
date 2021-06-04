@@ -121,9 +121,13 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a53eaae49070d6c384a3e9e1a49b898db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa2ce88a12cd4b61e08ab01bd5d11315"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#aaa2ce88a12cd4b61e08ab01bd5d11315">VirtualRecord</a> (<a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;&amp;)=default</td></tr>
 <tr class="separator:aaa2ce88a12cd4b61e08ab01bd5d11315"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0312719d037ea384969adb121a835a1"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ac0312719d037ea384969adb121a835a1"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#ac0312719d037ea384969adb121a835a1">VirtualRecord</a> (const T &amp;other)</td></tr>
-<tr class="separator:ac0312719d037ea384969adb121a835a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd74604d873353440105c147232e2dca"><td class="memTemplParams" colspan="2">template&lt;typename OtherView , typename OtherBoundRecordCoord , bool OtherOwnView&gt; </td></tr>
+<tr class="memitem:abd74604d873353440105c147232e2dca"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#abd74604d873353440105c147232e2dca">VirtualRecord</a> (const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; OtherView, OtherBoundRecordCoord, OtherOwnView &gt; &amp;virtualRecord)</td></tr>
+<tr class="separator:abd74604d873353440105c147232e2dca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63871f7dae4a86a6503eb9bedc799665"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&gt;&gt;&gt; </td></tr>
+<tr class="memitem:a63871f7dae4a86a6503eb9bedc799665"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a63871f7dae4a86a6503eb9bedc799665">VirtualRecord</a> (const T &amp;scalar)</td></tr>
+<tr class="memdesc:a63871f7dae4a86a6503eb9bedc799665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a VirtuaRecord from a scalar. Only available for if the view is owned. Used by <a class="el" href="namespacellama.html#a2f44282e6b70a3eedaa8e7355a6f7dd0" title="A VirtualRecord that owns and holds a single value.">llama::One</a>.  <a href="structllama_1_1VirtualRecord.html#a63871f7dae4a86a6503eb9bedc799665">More...</a><br /></td></tr>
+<tr class="separator:a63871f7dae4a86a6503eb9bedc799665"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad959aa65f6674c04b79d214d2dea09ce"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Coord&gt; </td></tr>
 <tr class="memitem:ad959aa65f6674c04b79d214d2dea09ce"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#ad959aa65f6674c04b79d214d2dea09ce">operator()</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coord... &gt;={}) const -&gt; decltype(auto)</td></tr>
 <tr class="separator:ad959aa65f6674c04b79d214d2dea09ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -293,7 +297,7 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a8ea9db5b4eaf3a7f3970e7a435efef02"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8ea9db5b4eaf3a7f3970e7a435efef02">&#9670;&nbsp;</a></span>VirtualRecord() <span class="overload">[1/5]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ea9db5b4eaf3a7f3970e7a435efef02">&#9670;&nbsp;</a></span>VirtualRecord() <span class="overload">[1/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -324,7 +328,7 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 </div>
 </div>
 <a id="a612b8ee5b4d62dc9774887d5c16b1963"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a612b8ee5b4d62dc9774887d5c16b1963">&#9670;&nbsp;</a></span>VirtualRecord() <span class="overload">[2/5]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a612b8ee5b4d62dc9774887d5c16b1963">&#9670;&nbsp;</a></span>VirtualRecord() <span class="overload">[2/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -364,7 +368,7 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 </div>
 </div>
 <a id="a53eaae49070d6c384a3e9e1a49b898db"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a53eaae49070d6c384a3e9e1a49b898db">&#9670;&nbsp;</a></span>VirtualRecord() <span class="overload">[3/5]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a53eaae49070d6c384a3e9e1a49b898db">&#9670;&nbsp;</a></span>VirtualRecord() <span class="overload">[3/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -392,7 +396,7 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 </div>
 </div>
 <a id="aaa2ce88a12cd4b61e08ab01bd5d11315"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaa2ce88a12cd4b61e08ab01bd5d11315">&#9670;&nbsp;</a></span>VirtualRecord() <span class="overload">[4/5]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa2ce88a12cd4b61e08ab01bd5d11315">&#9670;&nbsp;</a></span>VirtualRecord() <span class="overload">[4/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -419,15 +423,15 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 
 </div>
 </div>
-<a id="ac0312719d037ea384969adb121a835a1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac0312719d037ea384969adb121a835a1">&#9670;&nbsp;</a></span>VirtualRecord() <span class="overload">[5/5]</span></h2>
+<a id="abd74604d873353440105c147232e2dca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd74604d873353440105c147232e2dca">&#9670;&nbsp;</a></span>VirtualRecord() <span class="overload">[5/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
-template&lt;typename T &gt; </div>
+template&lt;typename OtherView , typename OtherBoundRecordCoord , bool OtherOwnView&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -435,8 +439,8 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname"><a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::<a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> </td>
           <td>(</td>
-          <td class="paramtype">const T &amp;&#160;</td>
-          <td class="paramname"><em>other</em></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; OtherView, OtherBoundRecordCoord, OtherOwnView &gt; &amp;&#160;</td>
+          <td class="paramname"><em>virtualRecord</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -446,9 +450,43 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Create a VirtuaRecord from a single value or a different <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>. Only available for if the view is owned. Used by <a class="el" href="namespacellama.html#a2f44282e6b70a3eedaa8e7355a6f7dd0" title="A VirtualRecord that owns and holds a single value.">llama::One</a>. </p>
+<p>Create a VirtuaRecord from a different <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>. Only available for if the view is owned. Used by <a class="el" href="namespacellama.html#a2f44282e6b70a3eedaa8e7355a6f7dd0" title="A VirtualRecord that owns and holds a single value.">llama::One</a>. </p>
 
 <p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00335">335</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a63871f7dae4a86a6503eb9bedc799665"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63871f7dae4a86a6503eb9bedc799665">&#9670;&nbsp;</a></span>VirtualRecord() <span class="overload">[6/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+<div class="memtemplate">
+template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&gt;&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::<a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> </td>
+          <td>(</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>scalar</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create a VirtuaRecord from a scalar. Only available for if the view is owned. Used by <a class="el" href="namespacellama.html#a2f44282e6b70a3eedaa8e7355a6f7dd0" title="A VirtualRecord that owns and holds a single value.">llama::One</a>. </p>
+
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00350">350</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -478,7 +516,7 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00574">574</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00588">588</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -507,7 +545,7 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00579">579</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00593">593</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -536,7 +574,7 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00564">564</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00578">578</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -565,7 +603,7 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00569">569</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00583">583</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -597,7 +635,7 @@ template&lt;std::size_t I&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00585">585</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00599">599</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -629,7 +667,7 @@ template&lt;std::size_t I&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00591">591</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00605">605</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -659,7 +697,7 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00642">642</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00656">656</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -689,7 +727,7 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00647">647</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00661">661</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -721,7 +759,7 @@ template&lt;typename TupleLike &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00597">597</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00611">611</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -753,7 +791,7 @@ template&lt;typename TupleLike &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00609">609</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00623">623</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -786,7 +824,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00445">445</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00459">459</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -819,7 +857,7 @@ template&lt;std::size_t... Coord&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00369">369</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00383">383</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -853,7 +891,7 @@ template&lt;std::size_t... Coord&gt; </div>
 </div><div class="memdoc">
 <p>Access a record in the record dimension underneath the current virtual record using a <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>. If the access resolves to a leaf, a reference to a variable inside the <a class="el" href="structllama_1_1View.html">View</a> storage is returned, otherwise another virtual record. </p>
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00351">351</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00365">365</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -886,7 +924,7 @@ template&lt;typename... Tags&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00400">400</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00414">414</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -920,7 +958,7 @@ template&lt;typename... Tags&gt; </div>
 </div><div class="memdoc">
 <p>Access a record in the record dimension underneath the current virtual record using a series of tags. If the access resolves to a leaf, a reference to a variable inside the <a class="el" href="structllama_1_1View.html">View</a> storage is returned, otherwise another virtual record. </p>
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00390">390</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00404">404</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -953,7 +991,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00433">433</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00447">447</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -986,7 +1024,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00421">421</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00435">435</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1019,7 +1057,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00427">427</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00441">441</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1052,7 +1090,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00439">439</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00453">453</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1085,7 +1123,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00415">415</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00429">429</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1116,7 +1154,7 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00409">409</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00423">423</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1148,7 +1186,7 @@ template&lt;typename TupleLike &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00653">653</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00667">667</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1192,7 +1230,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00511">511</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00525">525</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1235,7 +1273,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00505">505</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00519">519</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1277,7 +1315,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00487">487</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00501">501</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1319,7 +1357,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00475">475</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00489">489</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1361,7 +1399,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00469">469</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00483">483</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1403,7 +1441,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00457">457</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00471">471</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1445,7 +1483,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00451">451</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00465">465</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1487,7 +1525,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00463">463</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00477">477</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1529,7 +1567,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00481">481</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00495">495</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1572,7 +1610,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00523">523</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00537">537</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1615,7 +1653,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00517">517</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00531">531</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1658,7 +1696,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00535">535</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00549">549</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1701,7 +1739,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00529">529</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00543">543</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1744,7 +1782,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00499">499</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00513">513</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1787,7 +1825,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00493">493</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00507">507</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1830,7 +1868,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00547">547</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00561">561</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1873,7 +1911,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00541">541</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00555">555</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1916,7 +1954,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00559">559</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00573">573</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1959,7 +1997,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00553">553</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00567">567</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1973,7 +2011,7 @@ template&lt;typename T &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a></li>
-    <li class="footer">Generated on Fri Jun 4 2021 09:14:20 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Fri Jun 4 2021 12:49:37 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
