@@ -329,10 +329,11 @@ namespace llama
         VirtualRecord(const VirtualRecord&) = default;
         VirtualRecord(VirtualRecord&&) = default;
 
-        /// Create a VirtuaRecord from a single value or a different VirtualRecord. Only available for if the view is
-        /// owned. Used by llama::One.
-        template <typename T>
-        LLAMA_FN_HOST_ACC_INLINE VirtualRecord(const T& other)
+        /// Create a VirtuaRecord from a different VirtualRecord. Only available for if the view is owned. Used by
+        /// llama::One.
+        template <typename OtherView, typename OtherBoundRecordCoord, bool OtherOwnView>
+        LLAMA_FN_HOST_ACC_INLINE VirtualRecord(
+            const VirtualRecord<OtherView, OtherBoundRecordCoord, OtherOwnView>& virtualRecord)
             /* requires(OwnView) */
             : VirtualRecord()
         {
@@ -340,7 +341,20 @@ namespace llama
                 OwnView,
                 "The copy constructor of VirtualRecord from a different VirtualRecord is only available if it owns the "
                 "view.");
-            *this = other;
+            *this = virtualRecord;
+        }
+
+        // TODO: unify with previous in C++20 and use explicit(cond)
+        /// Create a VirtuaRecord from a scalar. Only available for if the view is owned. Used by llama::One.
+        template <typename T, typename = std::enable_if_t<!is_VirtualRecord<T>>>
+        LLAMA_FN_HOST_ACC_INLINE explicit VirtualRecord(const T& scalar)
+            /* requires(OwnView) */
+            : VirtualRecord()
+        {
+            static_assert(
+                OwnView,
+                "The copy constructor of VirtualRecord from a scalar is only available if it owns the view.");
+            *this = scalar;
         }
 
         /// Access a record in the record dimension underneath the current virtual

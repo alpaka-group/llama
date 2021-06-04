@@ -949,6 +949,17 @@ TEST_CASE("VirtualRecord.One_inside_std::vector")
     CHECK(v[2](tag::Weight{}) == 30);
 }
 
+TEST_CASE("VirtualRecord.One_from_scalar")
+{
+    llama::One<Particle> p{42};
+    CHECK(p(tag::Pos{}, tag::A{}) == 42);
+    CHECK(p(tag::Pos{}, tag::Y{}) == 42);
+    CHECK(p(tag::Vel{}, tag::X{}) == 42);
+    CHECK(p(tag::Vel{}, tag::Y{}) == 42);
+    CHECK(p(tag::Vel{}, tag::Z{}) == 42);
+    CHECK(p(tag::Weight{}) == 42);
+}
+
 TEST_CASE("VirtualRecord.operator<<")
 {
     auto p = oneParticle();
