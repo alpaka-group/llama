@@ -21,15 +21,18 @@
     "contributors": [
         {
             "name": "Wesarg, Bert",
-            "affiliation": "TU Dresden"
+            "affiliation": "TU Dresden",
+            "type": "Other"
         },
         {
             "name": "Velten, Markus",
-            "affiliation": "TU Dresden"
+            "affiliation": "TU Dresden",
+            "type": "Other"
         },
         {
             "name": "Werner, Matthias",
-            "affiliation": "Helmholtz-Zentrum Dresden-Rossendorf"
+            "affiliation": "Helmholtz-Zentrum Dresden-Rossendorf",
+            "type": "Other"
         }
     ],
     "access_right": "open",
@@ -45,9 +48,6 @@
     "grants": [
         {
             "id": "654220"
-        },
-        {
-            "id": "05E18CHA"
         }
     ]
 }
