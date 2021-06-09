@@ -1,35 +1,8 @@
+#include "common.h"
+
 #include <catch2/catch.hpp>
 #include <fstream>
 #include <llama/llama.hpp>
-
-namespace
-{
-    // clang-format off
-    namespace tag
-    {
-        struct Pos{};
-        struct Vel{};
-        struct X{};
-        struct Y{};
-        struct Z{};
-        struct Mass{};
-    } // namespace tag
-
-    using Particle = llama::Record<
-        llama::Field<tag::Pos, llama::Record<
-            llama::Field<tag::X, float>,
-            llama::Field<tag::Y, float>,
-            llama::Field<tag::Z, float>
-        >>,
-        llama::Field<tag::Vel, llama::Record<
-            llama::Field<tag::X, float>,
-            llama::Field<tag::Y, float>,
-            llama::Field<tag::Z, float>
-        >>,
-        llama::Field<tag::Mass, float>
-    >;
-    // clang-format on
-} // namespace
 
 TEST_CASE("Heatmap.nbody")
 {
@@ -45,7 +18,7 @@ TEST_CASE("Heatmap.nbody")
         constexpr float EPS2 = 0.01f;
         for (std::size_t i = 0; i < N; i++)
         {
-            llama::One<Particle> pi = particles(i);
+            llama::One<ParticleHeatmap> pi = particles(i);
             for (std::size_t j = 0; j < N; ++j)
             {
                 auto pj = particles(j);
@@ -67,6 +40,6 @@ TEST_CASE("Heatmap.nbody")
 
     using ArrayDims = llama::ArrayDims<1>;
     auto arrayDims = ArrayDims{N};
-    run("AlignedAoS", llama::mapping::AlignedAoS<ArrayDims, Particle>{arrayDims});
-    run("SingleBlobSoA", llama::mapping::SingleBlobSoA<ArrayDims, Particle>{arrayDims});
+    run("AlignedAoS", llama::mapping::AlignedAoS<ArrayDims, ParticleHeatmap>{arrayDims});
+    run("SingleBlobSoA", llama::mapping::SingleBlobSoA<ArrayDims, ParticleHeatmap>{arrayDims});
 }

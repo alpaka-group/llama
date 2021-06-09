@@ -3,39 +3,13 @@
 #include <catch2/catch.hpp>
 #include <llama/llama.hpp>
 
-// clang-format off
-namespace tag
-{
-    struct X {};
-    struct Y {};
-    struct Z {};
-    struct Pos {};
-    struct Vel {};
-    struct Mom {};
-} // namespace tag
-
-using Particle = llama::Record<
-    llama::Field<tag::Pos, llama::Record<
-        llama::Field<tag::X, int>,
-        llama::Field<tag::Y, int>,
-        llama::Field<tag::Z, int>
-    >>,
-    llama::Field<tag::Mom, int>,
-    llama::Field<tag::Vel, llama::Record<
-        llama::Field<tag::Z, int>,
-        llama::Field<tag::Y, int>,
-        llama::Field<tag::X, int>
-    >>
->;
-// clang-format on
-
 template <typename VirtualRecord>
-struct SqrtFunctor
+struct DoubleFunctor
 {
     template <typename Coord>
     void operator()(Coord coord)
     {
-        vd(coord) *= std::sqrt(vd(coord));
+        vd(coord) *= 2;
     }
     VirtualRecord vd;
 };
@@ -109,7 +83,7 @@ TEST_CASE("virtual view")
             for (std::size_t a = 0; a < validMiniSize[0]; ++a)
                 for (std::size_t b = 0; b < validMiniSize[1]; ++b)
                 {
-                    SqrtFunctor<decltype(miniView(a, b))> sqrtF{miniView(a, b)};
+                    DoubleFunctor<decltype(miniView(a, b))> sqrtF{miniView(a, b)};
                     llama::forEachLeaf<Particle>(sqrtF);
                 }
 
@@ -120,5 +94,5 @@ TEST_CASE("virtual view")
 
     for (std::size_t x = 0; x < viewSize[0]; ++x)
         for (std::size_t y = 0; y < viewSize[1]; ++y)
-            CHECK((view(x, y) == x * y * std::sqrt(x * y)));
+            CHECK((view(x, y)) == x * y * 2);
 }

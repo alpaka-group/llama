@@ -7,16 +7,6 @@ namespace tree = llama::mapping::tree;
 
 namespace tag
 {
-    // clang-format off
-    struct Pos {};
-    struct X {};
-    struct Y {};
-    struct Z {};
-    struct Momentum {};
-    struct Weight {};
-    struct Flags {};
-    // clang-format on
-
     auto toString(Pos)
     {
         return "Pos";
@@ -33,13 +23,13 @@ namespace tag
     {
         return "Z";
     }
-    auto toString(Momentum)
+    auto toString(Vel)
     {
-        return "Momentum";
+        return "Vel";
     }
-    auto toString(Weight)
+    auto toString(Mass)
     {
-        return "Weight";
+        return "Mass";
     }
     auto toString(Flags)
     {
@@ -47,42 +37,25 @@ namespace tag
     }
 } // namespace tag
 
-// clang-format off
-using Name = llama::Record<
-    llama::Field<tag::Pos, llama::Record<
-        llama::Field<tag::X, double>,
-        llama::Field<tag::Y, double>,
-        llama::Field<tag::Z, double>
-    >>,
-    llama::Field<tag::Weight, float>,
-    llama::Field<tag::Momentum, llama::Record<
-        llama::Field<tag::Z, double>,
-        llama::Field<tag::Y, double>,
-        llama::Field<tag::X, double>
-    >>,
-    llama::Field<tag::Flags, bool[4]>
->;
-// clang-format on
-
 TEST_CASE("treemapping.empty")
 {
     using ArrayDims = llama::ArrayDims<2>;
     const ArrayDims arrayDims{16, 16};
 
     auto treeOperationList = llama::Tuple{};
-    using Mapping = tree::Mapping<ArrayDims, Name, decltype(treeOperationList)>;
+    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
     const Mapping mapping(arrayDims, treeOperationList);
 
     CHECK(
         tree::toString(mapping.basicTree)
-        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * "
-           "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
-           "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
+        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Mass(float) , 1C * "
+           "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
+           "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(
         tree::toString(mapping.resultTree)
-        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * "
-           "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
-           "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
+        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Mass(float) , 1C * "
+           "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
+           "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
     CHECK(mapping.blobSize(0) == 14336);
 
@@ -138,19 +111,19 @@ TEST_CASE("treemapping.Idem")
     const ArrayDims arrayDims{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::Idem()};
-    using Mapping = tree::Mapping<ArrayDims, Name, decltype(treeOperationList)>;
+    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
     const Mapping mapping(arrayDims, treeOperationList);
 
     CHECK(
         tree::toString(mapping.basicTree)
-        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * "
-           "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
-           "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
+        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Mass(float) , 1C * "
+           "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
+           "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(
         tree::toString(mapping.resultTree)
-        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * "
-           "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
-           "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
+        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Mass(float) , 1C * "
+           "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
+           "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
     CHECK(mapping.blobSize(0) == 14336);
 
@@ -206,19 +179,19 @@ TEST_CASE("treemapping.LeafOnlyRT")
     const ArrayDims arrayDims{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::LeafOnlyRT()};
-    using Mapping = tree::Mapping<ArrayDims, Name, decltype(treeOperationList)>;
+    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
     const Mapping mapping(arrayDims, treeOperationList);
 
     CHECK(
         tree::toString(mapping.basicTree)
-        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * "
-           "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
-           "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
+        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Mass(float) , 1C * "
+           "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
+           "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(
         tree::toString(mapping.resultTree)
-        == "1C * [ 1C * [ 1C * Pos[ 256R * X(double) , 256R * Y(double) , 256R * Z(double) ] , 256R * Weight(float) , "
-           "1C * Momentum[ 256R * Z(double) , 256R * Y(double) "
-           ", 256R * X(double) ] , 1C * Flags[ 256R * (bool) , 256R * (bool) , 256R * (bool) , 256R * (bool) ] ] ]");
+        == "1C * [ 1C * [ 1C * Pos[ 256R * X(double) , 256R * Y(double) , 256R * Z(double) ] , 256R * Mass(float) , "
+           "1C * Vel[ 256R * X(double) , 256R * Y(double) "
+           ", 256R * Z(double) ] , 1C * Flags[ 256R * (bool) , 256R * (bool) , 256R * (bool) , 256R * (bool) ] ] ]");
 
     CHECK(mapping.blobSize(0) == 14336);
 
@@ -274,19 +247,19 @@ TEST_CASE("treemapping.MoveRTDown<>")
     const ArrayDims arrayDims{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::MoveRTDown<tree::TreeCoord<>>{4}};
-    using Mapping = tree::Mapping<ArrayDims, Name, decltype(treeOperationList)>;
+    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
     const Mapping mapping(arrayDims, treeOperationList);
 
     CHECK(
         tree::toString(mapping.basicTree)
-        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * "
-           "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
-           "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
+        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Mass(float) , 1C * "
+           "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
+           "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(
         tree::toString(mapping.resultTree)
-        == "4R * [ 64R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * "
-           "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
-           "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
+        == "4R * [ 64R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Mass(float) , 1C * "
+           "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
+           "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
     CHECK(mapping.blobSize(0) == 14336);
 
@@ -330,19 +303,19 @@ TEST_CASE("treemapping.MoveRTDown<0>")
     const ArrayDims arrayDims{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::MoveRTDown<tree::TreeCoord<0>>{4}};
-    using Mapping = tree::Mapping<ArrayDims, Name, decltype(treeOperationList)>;
+    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
     const Mapping mapping(arrayDims, treeOperationList);
 
     CHECK(
         tree::toString(mapping.basicTree)
-        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * "
-           "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
-           "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
+        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Mass(float) , 1C * "
+           "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
+           "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(
         tree::toString(mapping.resultTree)
-        == "16R * [ 4R * [ 4R * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 4R * Weight(float) , 4R * "
-           "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
-           "X(double) ] , 4R * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
+        == "16R * [ 4R * [ 4R * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 4R * Mass(float) , 4R * "
+           "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
+           "Z(double) ] , 4R * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
     CHECK(mapping.blobSize(0) == 14336);
 
@@ -386,19 +359,19 @@ TEST_CASE("treemapping.MoveRTDown<0,0>")
     const ArrayDims arrayDims{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::MoveRTDown<tree::TreeCoord<0, 0>>{4}};
-    using Mapping = tree::Mapping<ArrayDims, Name, decltype(treeOperationList)>;
+    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
     const Mapping mapping(arrayDims, treeOperationList);
 
     CHECK(
         tree::toString(mapping.basicTree)
-        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * "
-           "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
-           "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
+        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Mass(float) , 1C * "
+           "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
+           "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(
         tree::toString(mapping.resultTree)
-        == "16R * [ 16R * [ 1R * Pos[ 4R * X(double) , 4R * Y(double) , 4R * Z(double) ] , 1C * Weight(float) , 1C * "
-           "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
-           "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
+        == "16R * [ 16R * [ 1R * Pos[ 4R * X(double) , 4R * Y(double) , 4R * Z(double) ] , 1C * Mass(float) , 1C * "
+           "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
+           "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
     CHECK(mapping.blobSize(0) == 32768);
 
@@ -442,19 +415,19 @@ TEST_CASE("treemapping.MoveRTDownFixed<>")
     const ArrayDims arrayDims{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::MoveRTDownFixed<tree::TreeCoord<>, 4>{}};
-    using Mapping = tree::Mapping<ArrayDims, Name, decltype(treeOperationList)>;
+    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
     const Mapping mapping(arrayDims, treeOperationList);
 
     CHECK(
         tree::toString(mapping.basicTree)
-        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * "
-           "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
-           "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
+        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Mass(float) , 1C * "
+           "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
+           "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(
         tree::toString(mapping.resultTree)
-        == "4R * [ 64R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * "
-           "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
-           "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
+        == "4R * [ 64R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Mass(float) , 1C * "
+           "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
+           "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
     CHECK(mapping.blobSize(0) == 14336);
 
@@ -498,19 +471,19 @@ TEST_CASE("treemapping.MoveRTDownFixed<0>")
     const ArrayDims arrayDims{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::MoveRTDownFixed<tree::TreeCoord<0>, 4>{}};
-    using Mapping = tree::Mapping<ArrayDims, Name, decltype(treeOperationList)>;
+    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
     const Mapping mapping(arrayDims, treeOperationList);
 
     CHECK(
         tree::toString(mapping.basicTree)
-        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * "
-           "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
-           "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
+        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Mass(float) , 1C * "
+           "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
+           "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(
         tree::toString(mapping.resultTree)
-        == "16R * [ 4R * [ 4R * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 4R * Weight(float) , 4R * "
-           "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
-           "X(double) ] , 4R * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
+        == "16R * [ 4R * [ 4R * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 4R * Mass(float) , 4R * "
+           "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
+           "Z(double) ] , 4R * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
     CHECK(mapping.blobSize(0) == 14336);
 
@@ -554,19 +527,19 @@ TEST_CASE("treemapping.MoveRTDownFixed<0,0>")
     const ArrayDims arrayDims{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::MoveRTDownFixed<tree::TreeCoord<0, 0>, 4>{}};
-    using Mapping = tree::Mapping<ArrayDims, Name, decltype(treeOperationList)>;
+    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
     const Mapping mapping(arrayDims, treeOperationList);
 
     CHECK(
         tree::toString(mapping.basicTree)
-        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * "
-           "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
-           "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
+        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Mass(float) , 1C * "
+           "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
+           "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(
         tree::toString(mapping.resultTree)
-        == "16R * [ 16R * [ 1R * Pos[ 4R * X(double) , 4R * Y(double) , 4R * Z(double) ] , 1C * Weight(float) , 1C * "
-           "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
-           "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
+        == "16R * [ 16R * [ 1R * Pos[ 4R * X(double) , 4R * Y(double) , 4R * Z(double) ] , 1C * Mass(float) , 1C * "
+           "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
+           "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
     CHECK(mapping.blobSize(0) == 32768);
 
@@ -613,22 +586,22 @@ TEST_CASE("treemapping.vectorblocks.runtime")
 
     auto treeOperationList = llama::Tuple{
         tree::functor::MoveRTDown<tree::TreeCoord<0>>{vectorWidth}, // move 8 down from ArrayDims (to
-                                                                    // Position/Weight/Momentum)
+                                                                    // Position/Mass/Vel)
         tree::functor::MoveRTDown<tree::TreeCoord<0, 0>>{vectorWidth}, // move 8 down from Position (to X/Y/Z)
-        tree::functor::MoveRTDown<tree::TreeCoord<0, 2>>{vectorWidth}, // move 8 down from Momentum (to X/Y/Z)
+        tree::functor::MoveRTDown<tree::TreeCoord<0, 2>>{vectorWidth}, // move 8 down from Vel (to X/Y/Z)
     };
-    using Mapping = tree::Mapping<ArrayDims, Name, decltype(treeOperationList)>;
+    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
     const Mapping mapping(arrayDims, treeOperationList);
 
     CHECK(
         tree::toString(mapping.basicTree)
-        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * "
-           "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
-           "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
+        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Mass(float) , 1C * "
+           "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
+           "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(
         tree::toString(mapping.resultTree)
-        == "16R * [ 2R * [ 1R * Pos[ 8R * X(double) , 8R * Y(double) , 8R * Z(double) ] , 8R * Weight(float) , "
-           "1R * Momentum[ 8R * Z(double) , 8R * Y(double) , 8R * X(double) ] , 8R * Flags[ 1C * (bool) , 1C * (bool) "
+        == "16R * [ 2R * [ 1R * Pos[ 8R * X(double) , 8R * Y(double) , 8R * Z(double) ] , 8R * Mass(float) , "
+           "1R * Vel[ 8R * X(double) , 8R * Y(double) , 8R * Z(double) ] , 8R * Flags[ 1C * (bool) , 1C * (bool) "
            ", 1C * (bool) , 1C * (bool) ] ] ]");
 
     CHECK(mapping.blobSize(0) == 14336);
@@ -676,22 +649,22 @@ TEST_CASE("treemapping.vectorblocks.compiletime")
 
     auto treeOperationList = llama::Tuple{
         tree::functor::MoveRTDownFixed<tree::TreeCoord<0>, vectorWidth>{}, // move 8 down from ArrayDims (to
-                                                                           // Position/Weight/Momentum)
+                                                                           // Position/Mass/Vel)
         tree::functor::MoveRTDownFixed<tree::TreeCoord<0, 0>, vectorWidth>{}, // move 8 down from Position (to X/Y/Z)
-        tree::functor::MoveRTDownFixed<tree::TreeCoord<0, 2>, vectorWidth>{}, // move 8 down from Momentum (to X/Y/Z)
+        tree::functor::MoveRTDownFixed<tree::TreeCoord<0, 2>, vectorWidth>{}, // move 8 down from Vel (to X/Y/Z)
     };
-    using Mapping = tree::Mapping<ArrayDims, Name, decltype(treeOperationList)>;
+    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
     const Mapping mapping(arrayDims, treeOperationList);
 
     CHECK(
         tree::toString(mapping.basicTree)
-        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * "
-           "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
-           "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
+        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Mass(float) , 1C * "
+           "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
+           "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(
         tree::toString(mapping.resultTree)
-        == "16R * [ 2R * [ 1R * Pos[ 8R * X(double) , 8R * Y(double) , 8R * Z(double) ] , 8R * Weight(float) , "
-           "1R * Momentum[ 8R * Z(double) , 8R * Y(double) , 8R * X(double) ] , 8R * Flags[ 1C * (bool) , 1C * (bool) "
+        == "16R * [ 2R * [ 1R * Pos[ 8R * X(double) , 8R * Y(double) , 8R * Z(double) ] , 8R * Mass(float) , "
+           "1R * Vel[ 8R * X(double) , 8R * Y(double) , 8R * Z(double) ] , 8R * Flags[ 1C * (bool) , 1C * (bool) "
            ", 1C * (bool) , 1C * (bool) ] ] ]");
 
     CHECK(mapping.blobSize(0) == 14336);
@@ -736,7 +709,7 @@ TEST_CASE("treemapping.getNode")
     const ArrayDims arrayDims{16, 16};
 
     auto treeOperationList = llama::Tuple{};
-    using Mapping = tree::Mapping<ArrayDims, Name, decltype(treeOperationList)>;
+    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
     const Mapping mapping(arrayDims, treeOperationList);
 
     using namespace tree;
@@ -744,13 +717,13 @@ TEST_CASE("treemapping.getNode")
 
     CHECK(
         toString(getNode<TreeCoord<>>(mapping.resultTree))
-        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) "
-           ", 1C * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * X(double) ] , 1C * Flags[ 1C * (bool) , 1C * "
+        == "16R * [ 16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Mass(float) "
+           ", 1C * Vel[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * "
            "(bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(
         toString(getNode<TreeCoord<0>>(mapping.resultTree))
-        == "16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * "
-           "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C "
+        == "16R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Mass(float) , 1C * "
+           "Vel[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C "
            "* (bool) , 1C * (bool) ] ]");
     CHECK(
         toString(getNode<TreeCoord<0, 0>>(mapping.resultTree))
@@ -758,13 +731,13 @@ TEST_CASE("treemapping.getNode")
     CHECK(toString(getNode<TreeCoord<0, 0, 0>>(mapping.resultTree)) == "1C * X(double)");
     CHECK(toString(getNode<TreeCoord<0, 0, 1>>(mapping.resultTree)) == "1C * Y(double)");
     CHECK(toString(getNode<TreeCoord<0, 0, 2>>(mapping.resultTree)) == "1C * Z(double)");
-    CHECK(toString(getNode<TreeCoord<0, 1>>(mapping.resultTree)) == "1C * Weight(float)");
+    CHECK(toString(getNode<TreeCoord<0, 1>>(mapping.resultTree)) == "1C * Mass(float)");
     CHECK(
         toString(getNode<TreeCoord<0, 2>>(mapping.resultTree))
-        == "1C * Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * X(double) ]");
-    CHECK(toString(getNode<TreeCoord<0, 2, 0>>(mapping.resultTree)) == "1C * Z(double)");
+        == "1C * Vel[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ]");
+    CHECK(toString(getNode<TreeCoord<0, 2, 0>>(mapping.resultTree)) == "1C * X(double)");
     CHECK(toString(getNode<TreeCoord<0, 2, 1>>(mapping.resultTree)) == "1C * Y(double)");
-    CHECK(toString(getNode<TreeCoord<0, 2, 2>>(mapping.resultTree)) == "1C * X(double)");
+    CHECK(toString(getNode<TreeCoord<0, 2, 2>>(mapping.resultTree)) == "1C * Z(double)");
     CHECK(
         toString(getNode<TreeCoord<0, 3>>(mapping.resultTree))
         == "1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ]");
@@ -783,7 +756,7 @@ TEST_CASE("treemapping")
 
     auto treeOperationList = llama::Tuple{tree::functor::Idem(), tree::functor::LeafOnlyRT{}, tree::functor::Idem{}};
 
-    using Mapping = tree::Mapping<ArrayDims, Name, decltype(treeOperationList)>;
+    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
     const Mapping mapping(arrayDims, treeOperationList);
 
     auto raw = prettyPrintType(mapping.basicTree);
@@ -830,7 +803,7 @@ TEST_CASE("treemapping")
                     >
                 >,
                 llama::mapping::tree::Leaf<
-                    tag::Weight,
+                    tag::Mass,
                     float,
                     std::integral_constant<
                         unsigned long,
@@ -838,10 +811,10 @@ TEST_CASE("treemapping")
                     >
                 >,
                 llama::mapping::tree::Node<
-                    tag::Momentum,
+                    tag::Vel,
                     llama::Tuple<
                         llama::mapping::tree::Leaf<
-                            tag::Z,
+                            tag::X,
                             double,
                             std::integral_constant<
                                 unsigned long,
@@ -857,7 +830,7 @@ TEST_CASE("treemapping")
                             >
                         >,
                         llama::mapping::tree::Leaf<
-                            tag::X,
+                            tag::Z,
                             double,
                             std::integral_constant<
                                 unsigned long,
@@ -962,15 +935,15 @@ TEST_CASE("treemapping")
                     >
                 >,
                 llama::mapping::tree::Leaf<
-                    tag::Weight,
+                    tag::Mass,
                     float,
                     unsigned long
                 >,
                 llama::mapping::tree::Node<
-                    tag::Momentum,
+                    tag::Vel,
                     llama::Tuple<
                         llama::mapping::tree::Leaf<
-                            tag::Z,
+                            tag::X,
                             double,
                             unsigned long
                         >,
@@ -980,7 +953,7 @@ TEST_CASE("treemapping")
                             unsigned long
                         >,
                         llama::mapping::tree::Leaf<
-                            tag::X,
+                            tag::Z,
                             double,
                             unsigned long
                         >
@@ -1043,13 +1016,13 @@ TEST_CASE("treemapping")
 
     CHECK(
         tree::toString(mapping.basicTree)
-        == "12R * [ 12R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Weight(float) , 1C * "
-           "Momentum[ 1C * Z(double) , 1C * Y(double) , 1C * "
-           "X(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
+        == "12R * [ 12R * [ 1C * Pos[ 1C * X(double) , 1C * Y(double) , 1C * Z(double) ] , 1C * Mass(float) , 1C * "
+           "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
+           "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
     CHECK(
         tree::toString(mapping.resultTree)
-        == "1C * [ 1C * [ 1C * Pos[ 144R * X(double) , 144R * Y(double) , 144R * Z(double) ] , 144R * Weight(float) , "
-           "1C * Momentum[ 144R * Z(double) , 144R * Y(double) , 144R * X(double) ] , 1C * Flags[ 144R * (bool) , 144R "
+        == "1C * [ 1C * [ 1C * Pos[ 144R * X(double) , 144R * Y(double) , 144R * Z(double) ] , 144R * Mass(float) , "
+           "1C * Vel[ 144R * X(double) , 144R * Y(double) , 144R * Z(double) ] , 1C * Flags[ 144R * (bool) , 144R "
            "* (bool) , 144R * (bool) , 144R * (bool) ] ] ]");
 
     CHECK(mapping.blobSize(0) == 8064);
@@ -1063,7 +1036,7 @@ TEST_CASE("treemapping")
         for (size_t y = 0; y < arrayDims[1]; ++y)
         {
             auto record = view(x, y);
-            llama::forEachLeaf<Name>([&](auto coord) { record(coord) = 0; }, tag::Momentum{});
+            llama::forEachLeaf<Particle>([&](auto coord) { record(coord) = 0; }, tag::Vel{});
         }
     double sum = 0.0;
     for (size_t x = 0; x < arrayDims[0]; ++x)
