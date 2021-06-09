@@ -4,32 +4,14 @@
 #include <llama/llama.hpp>
 #include <numeric>
 
-// clang-format off
-namespace tag {
-    struct X {};
-    struct Y {};
-    struct Z {};
-    struct A {};
-    struct B {};
-    struct C {};
-    struct Normal {};
-}
-
-using Vec3 = llama::Record<
-    llama::Field<tag::X, double>,
-    llama::Field<tag::Y, double>,
-    llama::Field<tag::Z, double>
->;
-using Triangle = llama::Record<
-    llama::Field<tag::A, Vec3>,
-    llama::Field<tag::B, Vec3>,
-    llama::Field<tag::C, Vec3>,
-    llama::Field<tag::Normal, Vec3>
->;
-// clang-format on
-
 namespace
 {
+    using Triangle = llama::Record<
+        llama::Field<tag::A, Vec3D>,
+        llama::Field<tag::B, Vec3D>,
+        llama::Field<tag::C, Vec3D>,
+        llama::Field<tag::Normal, Vec3D>>;
+
     template <typename ArrayDims, typename RecordDim>
     struct AoSWithComputedNormal : llama::mapping::PackedAoS<ArrayDims, RecordDim>
     {

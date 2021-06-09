@@ -8,6 +8,58 @@
 #include <string>
 #include <typeinfo>
 
+// clang-format off
+namespace tag
+{
+    struct Pos {};
+    struct Vel {};
+    struct X {};
+    struct Y {};
+    struct Z {};
+    struct Mass {};
+    struct Flags {};
+    struct Id {};
+    struct A {};
+    struct B {};
+    struct C {};
+    struct Normal {};
+    struct Part1 {};
+    struct Part2 {};
+} // namespace tag
+
+using Vec2F = llama::Record<
+    llama::Field<tag::X, float>,
+    llama::Field<tag::Y, float>
+>;
+using Vec3D = llama::Record<
+    llama::Field<tag::X, double>,
+    llama::Field<tag::Y, double>,
+    llama::Field<tag::Z, double>
+>;
+using Vec3I = llama::Record<
+    llama::Field<tag::X, int>,
+    llama::Field<tag::Y, int>,
+    llama::Field<tag::Z, int>
+>;
+using Particle = llama::Record<
+    llama::Field<tag::Pos, Vec3D>,
+    llama::Field<tag::Mass, float>,
+    llama::Field<tag::Vel, Vec3D>,
+    llama::Field<tag::Flags, bool[4]>
+>;
+using ParticleHeatmap = llama::Record<
+    llama::Field<tag::Pos, Vec3D>,
+    llama::Field<tag::Vel, Vec3D>,
+    llama::Field<tag::Mass, float>
+>;
+using ParticleUnaligned = llama::Record<
+    llama::Field<tag::Id, std::uint16_t>,
+    llama::Field<tag::Pos, Vec2F>,
+    llama::Field<tag::Mass, double>,
+    llama::Field<tag::Flags, bool[3]>
+>;
+// clang-format on
+
 using llama::mapping::tree::internal::replace_all;
 
 template <typename T>

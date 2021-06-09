@@ -5,34 +5,6 @@
 #include <llama/DumpMapping.hpp>
 #include <llama/llama.hpp>
 
-// clang-format off
-namespace tag {
-    struct Pos {};
-    struct X {};
-    struct Y {};
-    struct Z {};
-    struct Momentum {};
-    struct Weight {};
-    struct Flags {};
-} // namespace tag
-
-// clang-format off
-using Particle = llama::Record<
-    llama::Field<tag::Pos, llama::Record<
-        llama::Field<tag::X, double>,
-        llama::Field<tag::Y, double>,
-        llama::Field<tag::Z, double>
-    >>,
-    llama::Field<tag::Weight, float>,
-    llama::Field<tag::Momentum, llama::Record<
-        llama::Field<tag::X, double>,
-        llama::Field<tag::Y, double>,
-        llama::Field<tag::Z, double>
-    >>,
-    llama::Field<tag::Flags, bool[4]>
->;
-// clang-format on
-
 TEST_CASE("Split.SoA.AoS.1Buffer")
 {
     using ArrayDims = llama::ArrayDims<2>;

@@ -112,34 +112,6 @@ TEST_CASE("view.non-memory-owning")
     }
 }
 
-// clang-format off
-namespace tag {
-    struct Pos {};
-    struct X {};
-    struct Y {};
-    struct Z {};
-    struct Momentum {};
-    struct Weight {};
-    struct Flags {};
-} // namespace tag
-
-// clang-format off
-using Particle = llama::Record<
-    llama::Field<tag::Pos, llama::Record<
-        llama::Field<tag::X, double>,
-        llama::Field<tag::Y, double>,
-        llama::Field<tag::Z, double>
-    >>,
-    llama::Field<tag::Weight, float>,
-    llama::Field<tag::Momentum, llama::Record<
-        llama::Field<tag::X, double>,
-        llama::Field<tag::Y, double>,
-        llama::Field<tag::Z, double>
-    >>,
-    llama::Field<tag::Flags, bool[4]>
->;
-// clang-format on
-
 TEST_CASE("view.access")
 {
     using ArrayDims = llama::ArrayDims<2>;
@@ -189,8 +161,8 @@ TEST_CASE("view.assign-one-record")
     record(tag::Pos{}, tag::X{}) = 14.0f;
     record(tag::Pos{}, tag::Y{}) = 15.0f;
     record(tag::Pos{}, tag::Z{}) = 16.0f;
-    record(tag::Momentum{}) = 0;
-    record(tag::Weight{}) = 500.0f;
+    record(tag::Vel{}) = 0;
+    record(tag::Mass{}) = 500.0f;
     record(tag::Flags{})(0_RC) = true;
     record(tag::Flags{})(1_RC) = false;
     record(tag::Flags{})(2_RC) = true;
@@ -201,10 +173,10 @@ TEST_CASE("view.assign-one-record")
     CHECK(record(tag::Pos{}, tag::X{}) == 14.0f);
     CHECK(record(tag::Pos{}, tag::Y{}) == 15.0f);
     CHECK(record(tag::Pos{}, tag::Z{}) == 16.0f);
-    CHECK(record(tag::Momentum{}, tag::X{}) == 0);
-    CHECK(record(tag::Momentum{}, tag::Y{}) == 0);
-    CHECK(record(tag::Momentum{}, tag::Z{}) == 0);
-    CHECK(record(tag::Weight{}) == 500.0f);
+    CHECK(record(tag::Vel{}, tag::X{}) == 0);
+    CHECK(record(tag::Vel{}, tag::Y{}) == 0);
+    CHECK(record(tag::Vel{}, tag::Z{}) == 0);
+    CHECK(record(tag::Mass{}) == 500.0f);
     CHECK(record(tag::Flags{})(0_RC) == true);
     CHECK(record(tag::Flags{})(1_RC) == false);
     CHECK(record(tag::Flags{})(2_RC) == true);
@@ -226,10 +198,10 @@ TEST_CASE("view.addresses")
     auto& x = view(pos)(tag::Pos{}, tag::X{});
     auto& y = view(pos)(tag::Pos{}, tag::Y{});
     auto& z = view(pos)(tag::Pos{}, tag::Z{});
-    auto& w = view(pos)(tag::Weight{});
-    auto& mx = view(pos)(tag::Momentum{}, tag::X{});
-    auto& my = view(pos)(tag::Momentum{}, tag::Y{});
-    auto& mz = view(pos)(tag::Momentum{}, tag::Z{});
+    auto& w = view(pos)(tag::Mass{});
+    auto& mx = view(pos)(tag::Vel{}, tag::X{});
+    auto& my = view(pos)(tag::Vel{}, tag::Y{});
+    auto& mz = view(pos)(tag::Vel{}, tag::Z{});
     auto& o0 = view(pos)(tag::Flags{})(0_RC);
     auto& o1 = view(pos)(tag::Flags{})(1_RC);
     auto& o2 = view(pos)(tag::Flags{})(2_RC);
@@ -274,7 +246,7 @@ TEST_CASE("view.iteration-and-access")
         {
             SetZeroFunctor<decltype(view(x, y))> szf{view(x, y)};
             llama::forEachLeaf<Particle>(szf, llama::RecordCoord<0, 0>{});
-            llama::forEachLeaf<Particle>(szf, tag::Momentum{});
+            llama::forEachLeaf<Particle>(szf, tag::Vel{});
             view({x, y}) = double(x + y) / double(arrayDims[0] + arrayDims[1]);
         }
 
@@ -303,7 +275,7 @@ TEST_CASE("view.record-access")
             record(tag::Pos(), tag::X()) += record(llama::RecordCoord<2, 0>{});
             record(tag::Pos(), tag::Y()) += record(llama::RecordCoord<2, 1>{});
             record(tag::Pos(), tag::Z()) += record(llama::RecordCoord<1>());
-            record(tag::Pos()) += record(tag::Momentum());
+            record(tag::Pos()) += record(tag::Vel());
         }
 
     double sum = 0.0;
@@ -317,7 +289,7 @@ TEST_CASE("view.record-access")
 TEST_CASE("view.indexing")
 {
     auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{16, 16}, Particle{}});
-    view(0u, 0u)(tag::Weight{}) = 42.0f;
+    view(0u, 0u)(tag::Mass{}) = 42.0f;
 
     using integrals = boost::mp11::
         mp_list<char, unsigned char, signed char, short, unsigned short, int, unsigned int, long, unsigned long>;
@@ -328,7 +300,7 @@ TEST_CASE("view.indexing")
             boost::mp11::mp_for_each<integrals>(
                 [&](auto j)
                 {
-                    const float& w = view(i, j)(tag::Weight{});
+                    const float& w = view(i, j)(tag::Mass{});
                     CHECK(w == 42.0f);
                 });
         });
@@ -340,7 +312,7 @@ TEST_CASE("view.indexing")
             boost::mp11::mp_for_each<integrals>(
                 [&](auto j)
                 {
-                    const float& w = virtualView(i, j)(tag::Weight{});
+                    const float& w = virtualView(i, j)(tag::Mass{});
                     CHECK(w == 42.0f);
                 });
         });

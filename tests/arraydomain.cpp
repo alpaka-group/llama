@@ -3,24 +3,6 @@
 #include <catch2/catch.hpp>
 #include <llama/llama.hpp>
 
-// clang-format off
-namespace tag
-{
-    struct Pos {};
-    struct X {};
-    struct Y {};
-    struct Z {};
-} // namespace tag
-
-using Name = llama::Record<
-    llama::Field<tag::Pos, llama::Record<
-        llama::Field<tag::X, float>,
-        llama::Field<tag::Y, float>,
-        llama::Field<tag::Z, float>
-    >>
->;
-// clang-format on
-
 TEST_CASE("ArrayDims.CTAD")
 {
     llama::ArrayDims ad0{};
@@ -39,12 +21,12 @@ TEST_CASE("ArrayDims.dim0")
     using ArrayDims = llama::ArrayDims<0>;
     ArrayDims arrayDims{};
 
-    using Mapping = llama::mapping::SoA<ArrayDims, Name>;
+    using Mapping = llama::mapping::SoA<ArrayDims, Particle>;
     Mapping mapping{arrayDims};
     auto view = allocView(mapping);
 
-    float& x1 = view(ArrayDims{})(tag::Pos{}, tag::X{});
-    float& x2 = view()(tag::Pos{}, tag::X{});
+    double& x1 = view(ArrayDims{})(tag::Pos{}, tag::X{});
+    double& x2 = view()(tag::Pos{}, tag::X{});
 }
 
 TEST_CASE("ArrayDims.dim1")
@@ -52,11 +34,11 @@ TEST_CASE("ArrayDims.dim1")
     using ArrayDims = llama::ArrayDims<1>;
     ArrayDims arrayDims{16};
 
-    using Mapping = llama::mapping::SoA<ArrayDims, Name>;
+    using Mapping = llama::mapping::SoA<ArrayDims, Particle>;
     Mapping mapping{arrayDims};
     auto view = allocView(mapping);
 
-    float& x = view(ArrayDims{0})(tag::Pos{}, tag::X{});
+    double& x = view(ArrayDims{0})(tag::Pos{}, tag::X{});
     x = 0;
 }
 
@@ -65,11 +47,11 @@ TEST_CASE("ArrayDims.dim2")
     using ArrayDims = llama::ArrayDims<2>;
     ArrayDims arrayDims{16, 16};
 
-    using Mapping = llama::mapping::SoA<ArrayDims, Name>;
+    using Mapping = llama::mapping::SoA<ArrayDims, Particle>;
     Mapping mapping{arrayDims};
     auto view = allocView(mapping);
 
-    float& x = view(ArrayDims{0, 0})(tag::Pos{}, tag::X{});
+    double& x = view(ArrayDims{0, 0})(tag::Pos{}, tag::X{});
     x = 0;
 }
 
@@ -78,11 +60,11 @@ TEST_CASE("ArrayDims.dim3")
     using ArrayDims = llama::ArrayDims<3>;
     ArrayDims arrayDims{16, 16, 16};
 
-    using Mapping = llama::mapping::SoA<ArrayDims, Name>;
+    using Mapping = llama::mapping::SoA<ArrayDims, Particle>;
     Mapping mapping{arrayDims};
     auto view = allocView(mapping);
 
-    float& x = view(ArrayDims{0, 0, 0})(tag::Pos{}, tag::X{});
+    double& x = view(ArrayDims{0, 0, 0})(tag::Pos{}, tag::X{});
     x = 0;
 }
 
@@ -91,11 +73,11 @@ TEST_CASE("ArrayDims.dim10")
     using ArrayDims = llama::ArrayDims<10>;
     ArrayDims arrayDims{2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
 
-    using Mapping = llama::mapping::SoA<ArrayDims, Name>;
+    using Mapping = llama::mapping::SoA<ArrayDims, Particle>;
     Mapping mapping{arrayDims};
     auto view = allocView(mapping);
 
-    float& x = view(ArrayDims{0, 0, 0, 0, 0, 0, 0, 0, 0, 0})(tag::Pos{}, tag::X{});
+    double& x = view(ArrayDims{0, 0, 0, 0, 0, 0, 0, 0, 0, 0})(tag::Pos{}, tag::X{});
     x = 0;
 }
 
