@@ -222,7 +222,7 @@ namespace llama
         }
 
     private:
-        ArrayDims<Dim> size;
+        ArrayDims<Dim> size; // TODO: we only need to store Dim - 1 sizes
         ArrayDims<Dim> current;
     };
 
