@@ -39,6 +39,7 @@
 #include "ArrayDimsIndexRange.hpp"
 #include "BlobAllocators.hpp"
 #include "Core.hpp"
+#include "Vector.hpp"
 #include "View.hpp"
 #include "VirtualRecord.hpp"
 #include "macros.hpp"
