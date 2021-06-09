@@ -5,6 +5,7 @@ LLAMA – Low Level Abstraction of Memory Access
 [![Doxygen](https://img.shields.io/badge/API-Doxygen-blue.svg)](https://alpaka-group.github.io/llama)
 [![Language](https://img.shields.io/badge/Language-C%2B%2B17-blue.svg)](https://isocpp.org/)
 [![Platforms](https://img.shields.io/badge/Platform-linux%20%7C%20windows-blue.svg)](https://github.com/alpaka-group/alpaka)
+[![Preprint](https://img.shields.io/badge/Preprint-arXiv-blue.svg)](https://arxiv.org/abs/2106.04284)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4911493.svg)](https://doi.org/10.5281/zenodo.4911493)
 
 ![LLAMA](docs/images/logo_400x169.png)
@@ -30,6 +31,8 @@ https://llama-doc.rtfd.io
 
 Doxygen generated API documentation is located here:
 https://alpaka-group.github.io/llama/
+
+We submitted a preprint on LLAMA to arXiv here: https://arxiv.org/abs/2106.04284.
 
 We gave a talk on LLAMA at CERN's Compute Accelerator Forum on 2021-05-12.
 The video recording (starting at 40:00) and slides are available here:
