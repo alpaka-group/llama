@@ -675,14 +675,27 @@ namespace llama
     {
         using RecordDim = typename VirtualRecord<View, BoundRecordCoord, OwnView>::AccessibleRecordDim;
         os << "{";
-        constexpr auto size = boost::mp11::mp_size<RecordDim>::value;
+        constexpr auto isArray = std::is_array_v<RecordDim>;
+        constexpr auto size = [&]
+        {
+            if constexpr (isArray)
+                return std::extent_v<RecordDim>;
+            else
+                return boost::mp11::mp_size<RecordDim>::value;
+        }();
         boost::mp11::mp_for_each<boost::mp11::mp_iota_c<size>>(
             [&](auto ic)
             {
                 constexpr std::size_t i = decltype(ic)::value;
-                using Field = boost::mp11::mp_at_c<RecordDim, i>;
-                using Tag = GetFieldTag<Field>;
-                os << structName<Tag>() << ": " << vr(RecordCoord<i>{});
+                if constexpr (isArray)
+                    os << '[' << i << ']';
+                else
+                {
+                    using Field = boost::mp11::mp_at_c<RecordDim, i>;
+                    using Tag = GetFieldTag<Field>;
+                    os << structName<Tag>();
+                }
+                os << ": " << vr(RecordCoord<i>{});
                 if (i + 1 < size)
                     os << ", ";
             });
