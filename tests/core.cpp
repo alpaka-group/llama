@@ -144,22 +144,22 @@ TEST_CASE("offsetOf.Align")
     STATIC_REQUIRE(llama::offsetOf<Particle, llama::RecordCoord<4, 3>, true> == 51);
 }
 
-TEST_CASE("fieldCount")
+TEST_CASE("flatFieldCount")
 {
-    STATIC_REQUIRE(llama::fieldCount<int> == 1);
-    STATIC_REQUIRE(llama::fieldCount<XYZ> == 3);
-    STATIC_REQUIRE(llama::fieldCount<Particle> == 11);
-    STATIC_REQUIRE(llama::fieldCount<Other> == 2);
+    STATIC_REQUIRE(llama::flatFieldCount<int> == 1);
+    STATIC_REQUIRE(llama::flatFieldCount<XYZ> == 3);
+    STATIC_REQUIRE(llama::flatFieldCount<Particle> == 11);
+    STATIC_REQUIRE(llama::flatFieldCount<Other> == 2);
 }
 
-TEST_CASE("fieldCountBefore")
+TEST_CASE("flatFieldCountBefore")
 {
-    STATIC_REQUIRE(llama::internal::fieldCountBefore<0, Particle> == 0);
-    STATIC_REQUIRE(llama::internal::fieldCountBefore<1, Particle> == 3);
-    STATIC_REQUIRE(llama::internal::fieldCountBefore<2, Particle> == 4);
-    STATIC_REQUIRE(llama::internal::fieldCountBefore<3, Particle> == 5);
-    STATIC_REQUIRE(llama::internal::fieldCountBefore<4, Particle> == 7);
-    STATIC_REQUIRE(llama::internal::fieldCountBefore<5, Particle> == 11);
+    STATIC_REQUIRE(llama::internal::flatFieldCountBefore<0, Particle> == 0);
+    STATIC_REQUIRE(llama::internal::flatFieldCountBefore<1, Particle> == 3);
+    STATIC_REQUIRE(llama::internal::flatFieldCountBefore<2, Particle> == 4);
+    STATIC_REQUIRE(llama::internal::flatFieldCountBefore<3, Particle> == 5);
+    STATIC_REQUIRE(llama::internal::flatFieldCountBefore<4, Particle> == 7);
+    STATIC_REQUIRE(llama::internal::flatFieldCountBefore<5, Particle> == 11);
 }
 
 template <int i>
