@@ -17,16 +17,16 @@ struct DoubleFunctor
 TEST_CASE("virtual view CTAD")
 {
     using ArrayDims = llama::ArrayDims<2>;
-    constexpr ArrayDims viewSize{4096, 4096};
+    constexpr ArrayDims viewSize{10, 10};
     auto view = allocView(llama::mapping::SoA<ArrayDims, Particle>(viewSize));
 
-    llama::VirtualView virtualView{view, {23, 42}};
+    llama::VirtualView virtualView{view, {2, 4}};
 }
 
 TEST_CASE("fast virtual view")
 {
     using ArrayDims = llama::ArrayDims<2>;
-    constexpr ArrayDims viewSize{4096, 4096};
+    constexpr ArrayDims viewSize{10, 10};
 
     using Mapping = llama::mapping::SoA<ArrayDims, Particle>;
     auto view = allocView(Mapping(viewSize));
@@ -35,21 +35,21 @@ TEST_CASE("fast virtual view")
         for (std::size_t y = 0; y < viewSize[1]; ++y)
             view(x, y) = x * y;
 
-    llama::VirtualView<decltype(view)> virtualView{view, {23, 42}};
+    llama::VirtualView<decltype(view)> virtualView{view, {2, 4}};
 
-    CHECK(virtualView.offset == ArrayDims{23, 42});
+    CHECK(virtualView.offset == ArrayDims{2, 4});
 
-    CHECK(view(virtualView.offset)(tag::Pos(), tag::X()) == 966);
-    CHECK(virtualView({0, 0})(tag::Pos(), tag::X()) == 966);
+    CHECK(view(virtualView.offset)(tag::Pos(), tag::X()) == 8.0);
+    CHECK(virtualView({0, 0})(tag::Pos(), tag::X()) == 8.0);
 
-    CHECK(view({virtualView.offset[0] + 2, virtualView.offset[1] + 3})(tag::Vel(), tag::Z()) == 1125);
-    CHECK(virtualView({2, 3})(tag::Vel(), tag::Z()) == 1125);
+    CHECK(view({virtualView.offset[0] + 2, virtualView.offset[1] + 3})(tag::Vel(), tag::Z()) == 28.0);
+    CHECK(virtualView({2, 3})(tag::Vel(), tag::Z()) == 28.0);
 }
 
 TEST_CASE("virtual view")
 {
     using ArrayDims = llama::ArrayDims<2>;
-    constexpr ArrayDims viewSize{256, 256};
+    constexpr ArrayDims viewSize{32, 32};
     constexpr ArrayDims miniSize{8, 8};
     using Mapping = llama::mapping::SoA<ArrayDims, Particle>;
     auto view = allocView(Mapping(viewSize));
