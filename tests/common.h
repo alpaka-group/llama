@@ -11,7 +11,7 @@
 using llama::mapping::tree::internal::replace_all;
 
 template <typename T>
-std::string prettyPrintType(const T& t)
+std::string prettyPrintType(const T& t = {})
 {
     auto raw = boost::core::demangle(typeid(t).name());
 #ifdef _MSC_VER
