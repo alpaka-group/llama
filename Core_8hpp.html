@@ -306,25 +306,25 @@ Variables</h2></td></tr>
 <tr class="memitem:a39d280955e5b9deb36f6c8fa1124ca2b"><td class="memTemplParams" colspan="2">template&lt;typename RecordDimA , typename LocalA , typename RecordDimB , typename LocalB &gt; </td></tr>
 <tr class="memitem:a39d280955e5b9deb36f6c8fa1124ca2b"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a39d280955e5b9deb36f6c8fa1124ca2b">llama::hasSameTags</a></td></tr>
 <tr class="separator:a39d280955e5b9deb36f6c8fa1124ca2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a80e257d2fa8519e4ea12509ee89c6614"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
-<tr class="memitem:a80e257d2fa8519e4ea12509ee89c6614"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a80e257d2fa8519e4ea12509ee89c6614">llama::fieldCount</a> = 1</td></tr>
-<tr class="memdesc:a80e257d2fa8519e4ea12509ee89c6614"><td class="mdescLeft">&#160;</td><td class="mdescRight">The total number of fields in the recursively expanded record dimension.  <a href="namespacellama.html#a80e257d2fa8519e4ea12509ee89c6614">More...</a><br /></td></tr>
-<tr class="separator:a80e257d2fa8519e4ea12509ee89c6614"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5462bdae3433ea73622805af9d1975b8"><td class="memTemplParams" colspan="2">template&lt;typename... Children&gt; </td></tr>
-<tr class="memitem:a5462bdae3433ea73622805af9d1975b8"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a5462bdae3433ea73622805af9d1975b8">llama::fieldCount&lt; Record&lt; Children... &gt; &gt;</a> = (fieldCount&lt;GetFieldType&lt;Children&gt;&gt; + ... + 0)</td></tr>
-<tr class="separator:a5462bdae3433ea73622805af9d1975b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2bebbf0aeb012bad2acdcf3ac54a328b"><td class="memTemplParams" colspan="2">template&lt;typename Child , std::size_t N&gt; </td></tr>
-<tr class="memitem:a2bebbf0aeb012bad2acdcf3ac54a328b"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a2bebbf0aeb012bad2acdcf3ac54a328b">llama::fieldCount&lt; Child[N]&gt;</a> = fieldCount&lt;Child&gt;* N</td></tr>
-<tr class="separator:a2bebbf0aeb012bad2acdcf3ac54a328b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a551948d42ecd7f146932fe5f1f30c461"><td class="memTemplParams" colspan="2">template&lt;std::size_t I, typename RecordDim &gt; </td></tr>
-<tr class="memitem:a551948d42ecd7f146932fe5f1f30c461"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a551948d42ecd7f146932fe5f1f30c461">llama::internal::fieldCountBefore</a> = 0</td></tr>
-<tr class="separator:a551948d42ecd7f146932fe5f1f30c461"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7e1a9f32952df72ffa0302e3a2b870fe"><td class="memTemplParams" colspan="2">template&lt;typename... Children&gt; </td></tr>
-<tr class="memitem:a7e1a9f32952df72ffa0302e3a2b870fe"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a7e1a9f32952df72ffa0302e3a2b870fe">llama::internal::fieldCountBefore&lt; 0, Record&lt; Children... &gt; &gt;</a> = 0</td></tr>
-<tr class="separator:a7e1a9f32952df72ffa0302e3a2b870fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3113bd3d5afd1ce0df099744241aea40"><td class="memTemplParams" colspan="2">template&lt;std::size_t I, typename... Children&gt; </td></tr>
-<tr class="memitem:a3113bd3d5afd1ce0df099744241aea40"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a3113bd3d5afd1ce0df099744241aea40">llama::internal::fieldCountBefore&lt; I, Record&lt; Children... &gt; &gt;</a> = fieldCountBefore&lt;I - 1, Record&lt;Children...&gt;&gt; + fieldCount&lt;GetFieldType&lt;boost::mp11::mp_at_c&lt;Record&lt;Children...&gt;, I - 1&gt;&gt;&gt;</td></tr>
-<tr class="separator:a3113bd3d5afd1ce0df099744241aea40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6c960189f5edc242be631e2e8757914"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
+<tr class="memitem:aa6c960189f5edc242be631e2e8757914"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aa6c960189f5edc242be631e2e8757914">llama::flatFieldCount</a> = 1</td></tr>
+<tr class="memdesc:aa6c960189f5edc242be631e2e8757914"><td class="mdescLeft">&#160;</td><td class="mdescRight">The total number of fields in the recursively expanded record dimension.  <a href="namespacellama.html#aa6c960189f5edc242be631e2e8757914">More...</a><br /></td></tr>
+<tr class="separator:aa6c960189f5edc242be631e2e8757914"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9692409342a1118048ffccba3ed1938e"><td class="memTemplParams" colspan="2">template&lt;typename... Children&gt; </td></tr>
+<tr class="memitem:a9692409342a1118048ffccba3ed1938e"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a9692409342a1118048ffccba3ed1938e">llama::flatFieldCount&lt; Record&lt; Children... &gt; &gt;</a> = (flatFieldCount&lt;GetFieldType&lt;Children&gt;&gt; + ... + 0)</td></tr>
+<tr class="separator:a9692409342a1118048ffccba3ed1938e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0cf4c61546502674c83b7e32611aca4d"><td class="memTemplParams" colspan="2">template&lt;typename Child , std::size_t N&gt; </td></tr>
+<tr class="memitem:a0cf4c61546502674c83b7e32611aca4d"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a0cf4c61546502674c83b7e32611aca4d">llama::flatFieldCount&lt; Child[N]&gt;</a> = flatFieldCount&lt;Child&gt;* N</td></tr>
+<tr class="separator:a0cf4c61546502674c83b7e32611aca4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1dc0436b8f0598e4fe3e707051be5b5f"><td class="memTemplParams" colspan="2">template&lt;std::size_t I, typename RecordDim &gt; </td></tr>
+<tr class="memitem:a1dc0436b8f0598e4fe3e707051be5b5f"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a1dc0436b8f0598e4fe3e707051be5b5f">llama::internal::flatFieldCountBefore</a> = 0</td></tr>
+<tr class="separator:a1dc0436b8f0598e4fe3e707051be5b5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6eeb732eb19f17e2eb85e50b07fe3f42"><td class="memTemplParams" colspan="2">template&lt;typename... Children&gt; </td></tr>
+<tr class="memitem:a6eeb732eb19f17e2eb85e50b07fe3f42"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a6eeb732eb19f17e2eb85e50b07fe3f42">llama::internal::flatFieldCountBefore&lt; 0, Record&lt; Children... &gt; &gt;</a> = 0</td></tr>
+<tr class="separator:a6eeb732eb19f17e2eb85e50b07fe3f42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a6972426a3c2ab551a48d21cac6370c"><td class="memTemplParams" colspan="2">template&lt;std::size_t I, typename... Children&gt; </td></tr>
+<tr class="memitem:a0a6972426a3c2ab551a48d21cac6370c"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a0a6972426a3c2ab551a48d21cac6370c">llama::internal::flatFieldCountBefore&lt; I, Record&lt; Children... &gt; &gt;</a> = flatFieldCountBefore&lt;I - 1, Record&lt;Children...&gt;&gt; + flatFieldCount&lt;GetFieldType&lt;boost::mp11::mp_at_c&lt;Record&lt;Children...&gt;, I - 1&gt;&gt;&gt;</td></tr>
+<tr class="separator:a0a6972426a3c2ab551a48d21cac6370c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c3056b43b48f32a66160a6dd273662d"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename RecordCoord &gt; </td></tr>
 <tr class="memitem:a6c3056b43b48f32a66160a6dd273662d"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a6c3056b43b48f32a66160a6dd273662d">llama::flatRecordCoord</a> = 0</td></tr>
 <tr class="separator:a6c3056b43b48f32a66160a6dd273662d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -369,7 +369,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Core_8hpp.html">Core.hpp</a></li>
-    <li class="footer">Generated on Wed Jun 9 2021 11:58:39 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Jun 10 2021 20:05:42 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
