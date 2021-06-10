@@ -675,30 +675,34 @@ namespace llama
     {
         using RecordDim = typename VirtualRecord<View, BoundRecordCoord, OwnView>::AccessibleRecordDim;
         os << "{";
-        constexpr auto isArray = std::is_array_v<RecordDim>;
-        constexpr auto size = [&]
+        // TODO: I tried refactoring both branches into one, but MSVC and icpc have troubles with correctly discarding
+        // the discarded if constexpr branch and not instantiating templates inside them.
+        if constexpr (std::is_array_v<RecordDim>)
         {
-            if constexpr (isArray)
-                return std::extent_v<RecordDim>;
-            else
-                return boost::mp11::mp_size<RecordDim>::value;
-        }();
-        boost::mp11::mp_for_each<boost::mp11::mp_iota_c<size>>(
-            [&](auto ic)
-            {
-                constexpr std::size_t i = decltype(ic)::value;
-                if constexpr (isArray)
-                    os << '[' << i << ']';
-                else
+            constexpr auto size = std::extent_v<RecordDim>;
+            boost::mp11::mp_for_each<boost::mp11::mp_iota_c<size>>(
+                [&](auto ic)
                 {
+                    constexpr std::size_t i = decltype(ic)::value;
+                    os << '[' << i << ']' << ": " << vr(RecordCoord<i>{});
+                    if (i + 1 < size)
+                        os << ", ";
+                });
+        }
+        else
+        {
+            constexpr auto size = boost::mp11::mp_size<RecordDim>::value;
+            boost::mp11::mp_for_each<boost::mp11::mp_iota_c<size>>(
+                [&](auto ic)
+                {
+                    constexpr std::size_t i = decltype(ic)::value;
                     using Field = boost::mp11::mp_at_c<RecordDim, i>;
                     using Tag = GetFieldTag<Field>;
-                    os << structName<Tag>();
-                }
-                os << ": " << vr(RecordCoord<i>{});
-                if (i + 1 < size)
-                    os << ", ";
-            });
+                    os << structName<Tag>() << ": " << vr(RecordCoord<i>{});
+                    if (i + 1 < size)
+                        os << ", ";
+                });
+        }
         os << "}";
         return os;
     }
