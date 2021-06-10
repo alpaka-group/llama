@@ -384,29 +384,30 @@ namespace llama
 
     /// The total number of fields in the recursively expanded record dimension.
     template <typename RecordDim>
-    inline constexpr std::size_t fieldCount = 1;
+    inline constexpr std::size_t flatFieldCount = 1;
 
     template <typename... Children>
-    inline constexpr std::size_t fieldCount<Record<Children...>> = (fieldCount<GetFieldType<Children>> + ... + 0);
+    inline constexpr std::size_t flatFieldCount<
+        Record<Children...>> = (flatFieldCount<GetFieldType<Children>> + ... + 0);
 
     template <typename Child, std::size_t N>
-    inline constexpr std::size_t fieldCount<Child[N]> = fieldCount<Child>* N;
+    inline constexpr std::size_t flatFieldCount<Child[N]> = flatFieldCount<Child>* N;
 
     namespace internal
     {
         template <std::size_t I, typename RecordDim>
-        inline constexpr std::size_t fieldCountBefore = 0;
+        inline constexpr std::size_t flatFieldCountBefore = 0;
 
         template <typename... Children>
-        inline constexpr std::size_t fieldCountBefore<0, Record<Children...>> = 0;
+        inline constexpr std::size_t flatFieldCountBefore<0, Record<Children...>> = 0;
 
         // recursive formulation to benefit from template instantiation memoization
         // this massively improves compilation time when this template is instantiated with a lot of different I
         template <std::size_t I, typename... Children>
-        inline constexpr std::size_t fieldCountBefore<
+        inline constexpr std::size_t flatFieldCountBefore<
             I,
             Record<
-                Children...>> = fieldCountBefore<I - 1, Record<Children...>> + fieldCount<GetFieldType<boost::mp11::mp_at_c<Record<Children...>, I - 1>>>;
+                Children...>> = flatFieldCountBefore<I - 1, Record<Children...>> + flatFieldCount<GetFieldType<boost::mp11::mp_at_c<Record<Children...>, I - 1>>>;
     } // namespace internal
 
     /// The equivalent zero based index into a flat record dimension (\ref FlatRecordDim) of the given hierarchical
@@ -423,13 +424,13 @@ namespace llama
         RecordCoord<
             I,
             Is...>> = internal::
-                          fieldCountBefore<
+                          flatFieldCountBefore<
                               I,
                               Record<
                                   Children...>> + flatRecordCoord<GetFieldType<boost::mp11::mp_at_c<Record<Children...>, I>>, RecordCoord<Is...>>;
 
     template <typename Child, std::size_t N, std::size_t I, std::size_t... Is>
-    inline constexpr std::size_t flatRecordCoord<Child[N], RecordCoord<I, Is...>> = fieldCount<Child>* I
+    inline constexpr std::size_t flatRecordCoord<Child[N], RecordCoord<I, Is...>> = flatFieldCount<Child>* I
         + flatRecordCoord<Child, RecordCoord<Is...>>;
 
     namespace internal
