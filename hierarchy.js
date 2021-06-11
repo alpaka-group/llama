@@ -121,6 +121,7 @@ var hierarchy =
     [ "llama::internal::TupleTransformHelper< Seq >", "structllama_1_1internal_1_1TupleTransformHelper.html", null ],
     [ "llama::internal::TupleTransformHelper< std::index_sequence< Is... > >", "structllama_1_1internal_1_1TupleTransformHelper_3_01std_1_1index__sequence_3_01Is_8_8_8_01_4_01_4.html", null ],
     [ "llama::bloballoc::Vector< Alignment >", "structllama_1_1bloballoc_1_1Vector.html", null ],
+    [ "llama::Vector< Mapping >", "structllama_1_1Vector.html", null ],
     [ "llama::View< T_Mapping, BlobType >", "structllama_1_1View.html", null ],
     [ "llama::VirtualRecord< T_View, BoundRecordCoord, OwnView >", "structllama_1_1VirtualRecord.html", null ],
     [ "llama::VirtualView< T_ParentViewType >", "structllama_1_1VirtualView.html", null ],

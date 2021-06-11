@@ -21,6 +21,9 @@ var dir_1edeeca147c2d4fb57fec1b01c02fb14 =
     [ "Proofs.hpp", "Proofs_8hpp.html", "Proofs_8hpp" ],
     [ "RecordCoord.hpp", "RecordCoord_8hpp.html", "RecordCoord_8hpp" ],
     [ "Tuple.hpp", "Tuple_8hpp.html", "Tuple_8hpp" ],
+    [ "Vector.hpp", "Vector_8hpp.html", [
+      [ "Vector", "structllama_1_1Vector.html", "structllama_1_1Vector" ]
+    ] ],
     [ "View.hpp", "View_8hpp.html", "View_8hpp" ],
     [ "VirtualRecord.hpp", "VirtualRecord_8hpp.html", "VirtualRecord_8hpp" ]
 ];
