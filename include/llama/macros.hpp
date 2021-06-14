@@ -6,7 +6,7 @@
 #if defined(__INTEL_COMPILER) || defined(__INTEL_LLVM_COMPILER)
 #    define LLAMA_INDEPENDENT_DATA _Pragma("ivdep")
 #elif defined(__clang__)
-#    define LLAMA_INDEPENDENT_DATA _Pragma("clang loop vectorize(enable) interleave(enable) distribute(enable)")
+#    define LLAMA_INDEPENDENT_DATA _Pragma("clang loop vectorize(assume_safety) interleave(assume_safety)")
 #elif defined(__GNUC__)
 #    define LLAMA_INDEPENDENT_DATA _Pragma("GCC ivdep")
 #elif defined(_MSC_VER)
