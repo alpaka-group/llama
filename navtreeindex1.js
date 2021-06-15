@@ -1,5 +1,9 @@
 var NAVTREEINDEX1 =
 {
+"namespacellama_1_1mapping.html":[1,0,0,3],
+"namespacellama_1_1mapping.html":[2,0,0,2],
+"namespacellama_1_1mapping_1_1internal.html":[1,0,0,3,0],
+"namespacellama_1_1mapping_1_1tree.html":[1,0,0,3,1],
 "namespacellama_1_1mapping_1_1tree.html":[2,0,0,2,0],
 "namespacellama_1_1mapping_1_1tree_1_1functor.html":[2,0,0,2,0,0],
 "namespacellama_1_1mapping_1_1tree_1_1functor.html":[1,0,0,3,1,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX1 =
 "structllama_1_1VirtualRecord.html#af331517d549e5e4623435d46196bf093":[2,0,0,20,41],
 "structllama_1_1VirtualRecord.html#af6c4f943cd36f1b91bcfd2869669b4e1":[2,0,0,20,32],
 "structllama_1_1VirtualRecord.html#af8f6a250f72997e26d6cc2123f2ff02d":[2,0,0,20,3],
-"structllama_1_1VirtualRecord.html#af9c8c8f92cdbfadb691fc6696bd171d6":[2,0,0,20,27],
-"structllama_1_1VirtualRecord.html#afd55f69365ba46717ed811383a9e6314":[2,0,0,20,49],
-"structllama_1_1VirtualRecord_1_1Loader.html":[2,0,0,20,0],
-"structllama_1_1VirtualRecord_1_1Loader.html#a5b087474f98e49ee3b7735ad1fda227f":[2,0,0,20,0,1],
-"structllama_1_1VirtualRecord_1_1Loader.html#adc475b84c14111f0c732bad207f5c720":[2,0,0,20,0,0]
+"structllama_1_1VirtualRecord.html#af9c8c8f92cdbfadb691fc6696bd171d6":[2,0,0,20,27]
 };

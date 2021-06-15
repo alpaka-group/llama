@@ -58,9 +58,9 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"namespacellama_1_1mapping_1_1tree.html",
-"structllama_1_1VirtualRecord_1_1LoaderConst.html",
-"structllama_1_1mapping_1_1tree_1_1functor_1_1Idem.html"
+"namespacellama_1_1mapping.html",
+"structllama_1_1VirtualRecord.html#afd55f69365ba46717ed811383a9e6314",
+"structllama_1_1mapping_1_1tree_1_1Node.html#aea91d27ab7fe5a3d8c0952996e59e082"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

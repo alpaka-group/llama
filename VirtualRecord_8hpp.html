@@ -205,12 +205,24 @@ Functions</h2></td></tr>
 <tr class="memitem:abfb11f2849d48e2f4e84f64fd1ff02fd"><td class="memTemplParams" colspan="2">template&lt;typename TWithOptionalConst , typename T &gt; </td></tr>
 <tr class="memitem:abfb11f2849d48e2f4e84f64fd1ff02fd"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#abfb11f2849d48e2f4e84f64fd1ff02fd">llama::internal::asTupleImpl</a> (TWithOptionalConst &amp;leaf, T) -&gt; std::enable_if_t&lt;!is_VirtualRecord&lt; std::decay_t&lt; TWithOptionalConst &gt;&gt;, std::reference_wrapper&lt; TWithOptionalConst &gt;&gt;</td></tr>
 <tr class="separator:abfb11f2849d48e2f4e84f64fd1ff02fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0c8b5166d61f8d007b35c06785821b5"><td class="memTemplParams" colspan="2">template&lt;typename VirtualRecord , typename T , std::size_t N, std::size_t... Is&gt; </td></tr>
+<tr class="memitem:ad0c8b5166d61f8d007b35c06785821b5"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#ad0c8b5166d61f8d007b35c06785821b5">llama::internal::asTupleImplArr</a> (VirtualRecord &amp;&amp;vd, T(&amp;&amp;a)[N], std::index_sequence&lt; Is... &gt;)</td></tr>
+<tr class="separator:ad0c8b5166d61f8d007b35c06785821b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d229a179de21d39ba5d016e5f506120"><td class="memTemplParams" colspan="2">template&lt;typename VirtualRecord , typename T , std::size_t N&gt; </td></tr>
+<tr class="memitem:a5d229a179de21d39ba5d016e5f506120"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a5d229a179de21d39ba5d016e5f506120">llama::internal::asTupleImpl</a> (VirtualRecord &amp;&amp;vd, T(&amp;&amp;a)[N])</td></tr>
+<tr class="separator:a5d229a179de21d39ba5d016e5f506120"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41ee18760d75ee7c2ebafab4f589596e"><td class="memTemplParams" colspan="2">template&lt;typename VirtualRecord , typename... Fields&gt; </td></tr>
 <tr class="memitem:a41ee18760d75ee7c2ebafab4f589596e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a41ee18760d75ee7c2ebafab4f589596e">llama::internal::asTupleImpl</a> (VirtualRecord &amp;&amp;vd, Record&lt; Fields... &gt;)</td></tr>
 <tr class="separator:a41ee18760d75ee7c2ebafab4f589596e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a764791872d14bf66a5bbd4573f265f48"><td class="memTemplParams" colspan="2">template&lt;typename TWithOptionalConst , typename T &gt; </td></tr>
 <tr class="memitem:a764791872d14bf66a5bbd4573f265f48"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a764791872d14bf66a5bbd4573f265f48">llama::internal::asFlatTupleImpl</a> (TWithOptionalConst &amp;leaf, T) -&gt; std::enable_if_t&lt;!is_VirtualRecord&lt; std::decay_t&lt; TWithOptionalConst &gt;&gt;, std::tuple&lt; TWithOptionalConst &amp; &gt;&gt;</td></tr>
 <tr class="separator:a764791872d14bf66a5bbd4573f265f48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a12d4f7decef76ddbef852c1895d34e"><td class="memTemplParams" colspan="2">template&lt;typename VirtualRecord , typename T , std::size_t N, std::size_t... Is&gt; </td></tr>
+<tr class="memitem:a4a12d4f7decef76ddbef852c1895d34e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a4a12d4f7decef76ddbef852c1895d34e">llama::internal::asFlatTupleImplArr</a> (VirtualRecord &amp;&amp;vd, T(&amp;&amp;a)[N], std::index_sequence&lt; Is... &gt;)</td></tr>
+<tr class="separator:a4a12d4f7decef76ddbef852c1895d34e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a258d477909450a4ca08fefe41161de7e"><td class="memTemplParams" colspan="2">template&lt;typename VirtualRecord , typename T , std::size_t N&gt; </td></tr>
+<tr class="memitem:a258d477909450a4ca08fefe41161de7e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a258d477909450a4ca08fefe41161de7e">llama::internal::asFlatTupleImpl</a> (VirtualRecord &amp;&amp;vd, T(&amp;&amp;a)[N])</td></tr>
+<tr class="separator:a258d477909450a4ca08fefe41161de7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58dd0700e3ecc81a48b6ce0e465b6db3"><td class="memTemplParams" colspan="2">template&lt;typename VirtualRecord , typename... Fields&gt; </td></tr>
 <tr class="memitem:a58dd0700e3ecc81a48b6ce0e465b6db3"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a58dd0700e3ecc81a48b6ce0e465b6db3">llama::internal::asFlatTupleImpl</a> (VirtualRecord &amp;&amp;vd, Record&lt; Fields... &gt;)</td></tr>
 <tr class="separator:a58dd0700e3ecc81a48b6ce0e465b6db3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -260,7 +272,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="VirtualRecord_8hpp.html">VirtualRecord.hpp</a></li>
-    <li class="footer">Generated on Mon Jun 14 2021 16:05:42 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue Jun 15 2021 07:21:27 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
