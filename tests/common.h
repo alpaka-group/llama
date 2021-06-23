@@ -5,6 +5,7 @@
 #include <llama/mapping/tree/toString.hpp>
 #include <numeric>
 #include <regex>
+#include <sstream>
 #include <string>
 #include <typeinfo>
 
