@@ -15,7 +15,7 @@
 
 namespace llama
 {
-#ifdef __cpp_concepts
+#ifdef __cpp_lib_concepts
     template <typename T_Mapping, Blob BlobType>
 #else
     template <typename T_Mapping, typename BlobType>
@@ -42,7 +42,7 @@ namespace llama
     /// memory, the specified allocator callable is used (or the default one, which is \ref bloballoc::Vector). The
     /// allocator callable is called with the size of bytes to allocate for each blob of the mapping. This function is
     /// the preferred way to create a \ref View.
-#ifdef __cpp_concepts
+#ifdef __cpp_lib_concepts
     template <typename Mapping, BlobAllocator Allocator = bloballoc::Vector<>>
 #else
     template <typename Mapping, typename Allocator = bloballoc::Vector<>>
@@ -227,7 +227,7 @@ namespace llama
     /// view should be created using \ref allocView.
     /// \tparam T_Mapping The mapping used by the view to map accesses into memory.
     /// \tparam BlobType The storage type used by the view holding memory.
-#ifdef __cpp_concepts
+#ifdef __cpp_lib_concepts
     template <typename T_Mapping, Blob BlobType>
 #else
     template <typename T_Mapping, typename BlobType>

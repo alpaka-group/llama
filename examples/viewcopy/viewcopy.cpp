@@ -99,10 +99,11 @@ void std_copy(
     std::copy(srcView.begin(), srcView.end(), dstView.begin());
 }
 
+#ifdef __AVX2__
 // adapted from: https://stackoverflow.com/a/30386256/1034717
 void* memcpy_avx2(void* dst, const void* src, size_t n) noexcept
 {
-#define ALIGN(ptr, align) (((ptr) + (align) -1) & ~((align) -1))
+#    define ALIGN(ptr, align) (((ptr) + (align) -1) & ~((align) -1))
 
     char* d = static_cast<char*>(dst);
     const char* s = static_cast<const char*>(src);
@@ -128,8 +129,8 @@ void* memcpy_avx2(void* dst, const void* src, size_t n) noexcept
     constexpr auto bytesPerIteration = 32 * unrollFactor;
     while (n >= bytesPerIteration)
     {
-#pragma unroll
-#pragma GCC unroll unrollFactor
+#    pragma unroll
+#    pragma GCC unroll unrollFactor
         for (auto i = 0; i < unrollFactor; i++)
             _mm256_stream_si256(
                 reinterpret_cast<__m256i*>(d) + i,
@@ -143,8 +144,9 @@ void* memcpy_avx2(void* dst, const void* src, size_t n) noexcept
         memcpy(d, s, n);
 
     return dst;
-#undef ALIGN
+#    undef ALIGN
 }
+#endif
 
 inline void parallel_memcpy(
     std::byte* dst,
@@ -471,13 +473,21 @@ $data << EOD
     std::cout << "byte[] -> byte[]\n";
     plotFile << "\"byte[] -> byte[]\"\t";
     benchmarkMemcpy("memcpy", std::memcpy);
+#ifdef __AVX2__
     benchmarkMemcpy("memcpy_avx2", memcpy_avx2);
+#else
+    plotFile << "0\t";
+#endif
     benchmarkMemcpy(
         "memcpy(p)",
         [&](auto* dst, auto* src, auto size) { parallel_memcpy(dst, src, size, std::memcpy, numThreads); });
+#ifdef __AVX2__
     benchmarkMemcpy(
         "memcpy_avx2(p)",
         [&](auto* dst, auto* src, auto size) { parallel_memcpy(dst, src, size, memcpy_avx2, numThreads); });
+#else
+    plotFile << "0\t";
+#endif
     plotFile << "0\t";
     plotFile << "0\t";
     plotFile << "0\t";

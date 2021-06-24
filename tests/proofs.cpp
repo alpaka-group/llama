@@ -1,7 +1,6 @@
 #include <catch2/catch.hpp>
 #include <llama/Proofs.hpp>
 #include <llama/llama.hpp>
-#include <numeric>
 
 // clang-format off
 namespace tag {
@@ -64,8 +63,10 @@ namespace
 
         constexpr auto blobSize(std::size_t) const -> std::size_t
         {
-            return std::reduce(std::begin(arrayDimsSize), std::end(arrayDimsSize), std::size_t{1}, std::multiplies{})
-                * llama::sizeOf<RecordDim>;
+            std::size_t arraySize = 1;
+            for (auto i = 0; i < ArrayDims::rank; i++)
+                arraySize *= arrayDimsSize[i];
+            return arraySize * llama::sizeOf<RecordDim>;
         }
 
         template <std::size_t... DDCs>

@@ -13,6 +13,9 @@
 #ifdef __INTEL_COMPILER
 #    include <aligned_new>
 #endif
+#if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION < 11000
+#    include <boost/shared_ptr.hpp>
+#endif
 
 namespace llama::bloballoc
 {
@@ -26,7 +29,7 @@ namespace llama::bloballoc
             return {};
         }
     };
-#ifdef __cpp_concepts
+#ifdef __cpp_lib_concepts
     static_assert(BlobAllocator<Stack<64>>);
 #endif
 
@@ -36,15 +39,24 @@ namespace llama::bloballoc
     template <std::size_t Alignment = 64>
     struct SharedPtr
     {
-        inline auto operator()(std::size_t count) const -> std::shared_ptr<std::byte[]>
+        // libc++ below 11.0.0 does not yet support shared_ptr with arrays
+        template <typename T>
+        using shared_ptr =
+#if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION < 11000
+            boost::shared_ptr<T>;
+#else
+            std::shared_ptr<T>;
+#endif
+
+        inline auto operator()(std::size_t count) const -> shared_ptr<std::byte[]>
         {
             auto* ptr
                 = static_cast<std::byte*>(::operator new[](count * sizeof(std::byte), std::align_val_t{Alignment}));
             auto deleter = [=](std::byte* ptr) { ::operator delete[](ptr, std::align_val_t{Alignment}); };
-            return std::shared_ptr<std::byte[]>{ptr, deleter};
+            return shared_ptr<std::byte[]>{ptr, deleter};
         }
     };
-#ifdef __cpp_concepts
+#ifdef __cpp_lib_concepts
     static_assert(BlobAllocator<SharedPtr<>>);
 #endif
 
@@ -101,7 +113,7 @@ namespace llama::bloballoc
             return std::vector<std::byte, AlignedAllocator<std::byte, Alignment>>(count);
         }
     };
-#ifdef __cpp_concepts
+#ifdef __cpp_lib_concepts
     static_assert(BlobAllocator<Vector<>>);
 #endif
 } // namespace llama::bloballoc
