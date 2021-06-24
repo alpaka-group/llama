@@ -93,7 +93,7 @@ TEST_CASE("ArrayDimsIndexIterator.concepts")
                    std::iterator_traits<llama::ArrayDimsIndexIterator<3>>::iterator_category,
                    std::random_access_iterator_tag>);
 
-#ifdef __cpp_concepts
+#ifdef __cpp_lib_concepts
     STATIC_REQUIRE(std::random_access_iterator<llama::ArrayDimsIndexIterator<3>>);
 #endif
 }

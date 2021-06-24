@@ -1118,15 +1118,8 @@ namespace manualAoS_Vc
     using manualAoSoA_Vc::pPInteraction;
 
     template <typename vec>
-    const auto particleGatherScatterStrides = 42;
-
-    template <typename T>
-    const auto particleGatherScatterStrides<Vc::Vector<T>> = Vc::Vector<std::uint32_t>{Vc::IndexesFromZero}
-        * std::uint32_t{sizeof(Particle) / sizeof(FP)};
-
-    template <typename T, std::size_t N>
-    const auto particleGatherScatterStrides<Vc::SimdArray<T, N>> = Vc::SimdArray<std::uint32_t, N>{Vc::IndexesFromZero}
-        * std::uint32_t{sizeof(Particle) / sizeof(FP)};
+    const auto particleGatherScatterStrides = typename vec::IndexType{Vc::IndexesFromZero} *
+        typename vec::IndexType::value_type{sizeof(Particle) / sizeof(FP)};
 
     template <typename vec>
     void update(Particle* particles, int threads)

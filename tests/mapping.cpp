@@ -4,7 +4,7 @@
 #include <llama/Concepts.hpp>
 #include <llama/llama.hpp>
 
-#ifdef __cpp_concepts
+#ifdef __cpp_lib_concepts
 TEST_CASE("mapping.concepts")
 {
     STATIC_REQUIRE(llama::Mapping<llama::mapping::AoS<llama::ArrayDims<2>, Particle>>);

@@ -18,7 +18,8 @@ endif()
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR
 	CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR
 	CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM" OR
-	CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
+	CMAKE_CXX_COMPILER_ID STREQUAL "Intel" OR
+	CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
 	target_compile_options(${PROJECT_NAME} PRIVATE
 		#-fno-math-errno # sqrt prevents vectorization otherwise
 		-march=native

@@ -917,7 +917,7 @@ TEST_CASE("VirtualRecord.One_range_for")
 
 TEST_CASE("VirtualRecord.One_concepts")
 {
-#ifdef __cpp_concepts
+#ifdef __cpp_lib_concepts
     STATIC_REQUIRE(std::regular<llama::One<ParticleInt>>);
 #endif
 }
@@ -961,7 +961,7 @@ TEST_CASE("VirtualRecord.operator<<")
         = "{Pos: {X: 1, Y: 2, Z: 3}, Mass: 4, Vel: {X: 5, Y: 6, Z: 7}, Flags: {[0]: 1, [1]: 1, [2]: 1, [3]: 1}}";
     CHECK(ss.str() == expected);
 
-    ss = {};
+    ss = std::stringstream{};
     auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{1}, Particle{}});
     view(0u) = p;
     ss << view(0u);

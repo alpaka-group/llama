@@ -5,9 +5,10 @@
 
 #include <type_traits>
 
-#ifdef __cpp_concepts
+#if __has_include(<concepts>)
 #    include <concepts>
-
+#endif
+#ifdef __cpp_lib_concepts
 namespace llama
 {
     // clang-format off

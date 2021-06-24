@@ -91,7 +91,7 @@ jobs:
           git clone https://github.com/alpaka-group/alpaka.git
           mkdir alpaka/build
           cd alpaka/build
-          cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+          cmake .. -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
           sudo cmake --build . --target install
       - name: cmake
         run: |
@@ -103,7 +103,7 @@ jobs:
             unset CUDACXX
           fi
           echo "nvcc is here: $CUDACXX"
-          cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DASAN_FOR_TESTS=ON -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLE=${{ !matrix.cuda }} -DALPAKA_ACC_GPU_CUDA_ENABLE=${{ matrix.cuda }} -DALPAKA_CXX_STANDARD=17 -DCMAKE_CUDA_COMPILER=$CUDACXX -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+          cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DASAN_FOR_TESTS=ON -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLE=${{ !matrix.cuda }} -DALPAKA_ACC_GPU_CUDA_ENABLE=${{ matrix.cuda }} -DALPAKA_CXX_STANDARD=17 -DCMAKE_CUDA_COMPILER=$CUDACXX -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
       - name: build tests + examples
         run: |
           if [ ${{ matrix.intel }} ]; then source /opt/intel/oneapi/setvars.sh; fi
@@ -152,3 +152,33 @@ jobs:
     - name: run tests
       run: |
         & build/$env:CONFIG/tests
+
+  build-macos:
+    runs-on: macos-latest
+    env: {CXX: clang++}
+    steps:
+      - uses: actions/checkout@v2
+      - name: brew install dependencies
+        run: |
+          brew install boost libomp
+      - name: vcpkg install dependencies
+        run: |
+          vcpkg install catch2 fmt vc tinyobjloader
+      - name: install alpaka
+        run: |
+          git clone https://github.com/alpaka-group/alpaka.git
+          mkdir alpaka/build
+          cd alpaka/build
+          cmake .. -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
+          sudo cmake --build . --target install
+      - name: cmake
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON -DALPAKA_CXX_STANDARD=17 -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
+      - name: build tests + examples
+        run: |
+          cmake --build build -j $THREADS
+      - name: run tests
+        run: |
+          build/tests
