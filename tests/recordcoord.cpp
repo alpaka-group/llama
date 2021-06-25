@@ -14,6 +14,44 @@ TEST_CASE("RecordCoord.operator!=")
     STATIC_REQUIRE(llama::RecordCoord<1, 2, 3>{} != llama::RecordCoord<4, 1, 2, 3>{});
 }
 
+TEST_CASE("Cat")
+{
+    STATIC_REQUIRE(std::is_same_v<llama::Cat<>, llama::RecordCoord<>>);
+
+    STATIC_REQUIRE(std::is_same_v<llama::Cat<llama::RecordCoord<>>, llama::RecordCoord<>>);
+    STATIC_REQUIRE(std::is_same_v<llama::Cat<llama::RecordCoord<1, 2, 3>>, llama::RecordCoord<1, 2, 3>>);
+
+    STATIC_REQUIRE(std::is_same_v<llama::Cat<llama::RecordCoord<>, llama::RecordCoord<>>, llama::RecordCoord<>>);
+    STATIC_REQUIRE(std::is_same_v<llama::Cat<llama::RecordCoord<1>, llama::RecordCoord<>>, llama::RecordCoord<1>>);
+    STATIC_REQUIRE(std::is_same_v<llama::Cat<llama::RecordCoord<>, llama::RecordCoord<1>>, llama::RecordCoord<1>>);
+    STATIC_REQUIRE(std::is_same_v<llama::Cat<llama::RecordCoord<1>, llama::RecordCoord<1>>, llama::RecordCoord<1, 1>>);
+
+    STATIC_REQUIRE(std::is_same_v<
+                   llama::Cat<llama::RecordCoord<1, 2>, llama::RecordCoord<>, llama::RecordCoord<3>>,
+                   llama::RecordCoord<1, 2, 3>>);
+
+    STATIC_REQUIRE(std::is_same_v<
+                   llama::Cat<
+                       llama::RecordCoord<>,
+                       llama::RecordCoord<1, 2>,
+                       llama::RecordCoord<3, 4, 5, 6>,
+                       llama::RecordCoord<>,
+                       llama::RecordCoord<7>>,
+                   llama::RecordCoord<1, 2, 3, 4, 5, 6, 7>>);
+}
+
+TEST_CASE("cat")
+{
+    STATIC_REQUIRE(
+        llama::cat(
+            llama::RecordCoord{},
+            llama::RecordCoord<1, 2>{},
+            llama::RecordCoord<3, 4, 5, 6>{},
+            llama::RecordCoord{},
+            llama::RecordCoord<7>{})
+        == llama::RecordCoord<1, 2, 3, 4, 5, 6, 7>{});
+}
+
 TEST_CASE("RecordCoordCommonPrefixIsBigger")
 {
     // clang-format off

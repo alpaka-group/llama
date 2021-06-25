@@ -96,15 +96,15 @@ namespace llama
     template <typename L>
     using RecordCoordFromList = internal::mp_unwrap_sizes<L>;
 
-    /// Concatenate two \ref RecordCoord.
-    template <typename RecordCoord1, typename RecordCoord2>
-    using Cat = RecordCoordFromList<boost::mp11::mp_append<typename RecordCoord1::List, typename RecordCoord2::List>>;
+    /// Concatenate a set of \ref RecordCoord.
+    template <typename... RecordCoords>
+    using Cat = RecordCoordFromList<boost::mp11::mp_append<typename RecordCoords::List...>>;
 
-    /// Concatenate two \ref RecordCoord instances.
-    template <typename RecordCoord1, typename RecordCoord2>
-    constexpr auto cat(RecordCoord1, RecordCoord2)
+    /// Concatenate a set of \ref RecordCoord instances.
+    template <typename... RecordCoords>
+    constexpr auto cat(RecordCoords...)
     {
-        return Cat<RecordCoord1, RecordCoord2>{};
+        return Cat<RecordCoords...>{};
     }
 
     /// RecordCoord without first coordinate component.
