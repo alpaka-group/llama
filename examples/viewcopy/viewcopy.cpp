@@ -86,10 +86,7 @@ void naive_copy(
 }
 
 template <typename SrcMapping, typename SrcBlobType, typename DstMapping, typename DstBlobType>
-void std_copy(
-    const llama::View<SrcMapping, SrcBlobType>& srcView,
-    llama::View<DstMapping, DstBlobType>& dstView,
-    std::size_t numThreads = 1)
+void std_copy(const llama::View<SrcMapping, SrcBlobType>& srcView, llama::View<DstMapping, DstBlobType>& dstView)
 {
     static_assert(std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>);
 
@@ -101,28 +98,24 @@ void std_copy(
 
 #ifdef __AVX2__
 // adapted from: https://stackoverflow.com/a/30386256/1034717
-void* memcpy_avx2(void* dst, const void* src, size_t n) noexcept
+auto memcpy_avx2(void* dst, const void* src, size_t n) noexcept -> void*
 {
-#    define ALIGN(ptr, align) (((ptr) + (align) -1) & ~((align) -1))
-
-    char* d = static_cast<char*>(dst);
-    const char* s = static_cast<const char*>(src);
+    auto* d = static_cast<std::byte*>(dst);
+    const auto* s = static_cast<const std::byte*>(src);
 
     // fall back to memcpy() if dst and src are misaligned
-    if ((reinterpret_cast<uintptr_t>(d) & 31) != (reinterpret_cast<uintptr_t>(s) & 31))
+    const auto lowerDstBits = reinterpret_cast<uintptr_t>(d) & 31u;
+    if (lowerDstBits != (reinterpret_cast<uintptr_t>(s) & 31u))
         return memcpy(d, s, n);
 
     // align dst/src address multiple of 32
-    if (reinterpret_cast<uintptr_t>(d) & 31)
+    if (lowerDstBits != 0u)
     {
-        uintptr_t header_bytes = 32 - (reinterpret_cast<uintptr_t>(d) & 31);
-        assert(header_bytes < 32);
-
-        memcpy(d, s, std::min(header_bytes, n));
-
-        d = reinterpret_cast<char*>(ALIGN(reinterpret_cast<uintptr_t>(d), 32));
-        s = reinterpret_cast<char*>(ALIGN(reinterpret_cast<uintptr_t>(s), 32));
-        n -= std::min(header_bytes, n);
+        const auto header_bytes = std::min(static_cast<size_t>(32 - lowerDstBits), n);
+        memcpy(d, s, header_bytes);
+        d += header_bytes;
+        s += header_bytes;
+        n -= header_bytes;
     }
 
     constexpr auto unrollFactor = 8;
@@ -144,7 +137,6 @@ void* memcpy_avx2(void* dst, const void* src, size_t n) noexcept
         memcpy(d, s, n);
 
     return dst;
-#    undef ALIGN
 }
 #endif
 
@@ -423,7 +415,7 @@ try
     const auto dataSize
         = std::reduce(arrayDims.begin(), arrayDims.end(), std::size_t{1}, std::multiplies{}) * llama::sizeOf<RecordDim>;
     const auto numThreads = static_cast<std::size_t>(omp_get_max_threads());
-    const char* affinity = std::getenv("GOMP_CPU_AFFINITY");
+    const char* affinity = std::getenv("GOMP_CPU_AFFINITY"); // NOLINT(concurrency-mt-unsafe)
     affinity = affinity == nullptr ? "NONE - PLEASE PIN YOUR THREADS!" : affinity;
     fmt::print(
         R"(Data size: {}MiB

@@ -766,7 +766,7 @@ TEST_CASE("treemapping")
 #ifdef _LIBCPP_VERSION
     replace_all(raw, "std::__1::", "std::");
 #endif
-    const auto ref = R"(llama::mapping::tree::Node<
+    const auto* const ref = R"(llama::mapping::tree::Node<
     llama::NoName,
     llama::Tuple<
         llama::mapping::tree::Node<
@@ -910,7 +910,7 @@ TEST_CASE("treemapping")
 #ifdef _LIBCPP_VERSION
     replace_all(raw2, "std::__1::", "std::");
 #endif
-    const auto ref2 = R"(llama::mapping::tree::Node<
+    const auto* const ref2 = R"(llama::mapping::tree::Node<
     llama::NoName,
     llama::Tuple<
         llama::mapping::tree::Node<

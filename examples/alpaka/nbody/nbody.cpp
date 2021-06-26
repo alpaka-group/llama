@@ -48,7 +48,7 @@ namespace tag
     struct Y{};
     struct Z{};
     struct Mass{};
-}
+} // namespace tag
 
 using Particle = llama::Record<
     llama::Field<tag::Pos, llama::Record<
@@ -71,7 +71,7 @@ enum Mapping
 
 namespace stdext
 {
-    LLAMA_FN_HOST_ACC_INLINE FP rsqrt(FP f)
+    LLAMA_FN_HOST_ACC_INLINE auto rsqrt(FP f) -> FP
     {
         return 1.0f / std::sqrt(f);
     }
@@ -332,7 +332,7 @@ void run(std::ostream& plotFile)
     watch.printAndReset("copy D->H");
 }
 
-int main()
+auto main() -> int
 try
 {
     std::cout << PROBLEM_SIZE / 1000 << "k particles (" << PROBLEM_SIZE * llama::sizeOf<Particle> / 1024 << "kiB)\n"

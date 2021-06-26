@@ -44,7 +44,10 @@ Checks: >
     -readability-magic-numbers,
     -readability-misleading-indentation,
     -readability-named-parameter,
-    -readability-uppercase-literal-suffix
+    -readability-uppercase-literal-suffix,
+    -readability-function-cognitive-complexity,
+    -altera-struct-pack-align,
+    -misc-no-recursion
 
 WarningsAsErrors: ''
 HeaderFilterRegex: ''

@@ -295,7 +295,7 @@ struct std::tuple_size<PreparedTriangle>
 namespace
 {
     template <std::size_t I>
-    const auto& get(const PreparedTriangle& pt)
+    auto get(const PreparedTriangle& pt) -> const auto&
     {
         if constexpr (I == 0)
             return pt.vertex0;
@@ -318,7 +318,7 @@ namespace
     public:
         using Pixel = Vector<unsigned char>;
 
-        Image(const std::filesystem::path& filename)
+        explicit Image(const std::filesystem::path& filename)
         {
             int x = 0;
             int y = 0;
@@ -363,7 +363,8 @@ namespace
 
         void write(const std::filesystem::path& filename) const
         {
-            if (!stbi_write_png(filename.string().c_str(), w, h, 3, pixels.data(), 0))
+            if (stbi_write_png(filename.string().c_str(), static_cast<int>(w), static_cast<int>(h), 3, pixels.data(), 0)
+                == 0)
                 throw std::runtime_error("Failed to write image " + filename.string());
         }
 
@@ -400,12 +401,13 @@ namespace
         const auto xVec = cross(camera.view, camera.up);
         const auto yVec = camera.up;
 
-        const auto delta = (std::tan(camera.fovy * boost::math::constants::pi<float>() / 180.0f) * 2) / (height - 1);
+        const auto delta = (std::tan(camera.fovy * boost::math::constants::pi<float>() / 180.0f) * 2)
+            / static_cast<float>(height - 1);
         const auto xDeltaVec = xVec * delta;
         const auto yDeltaVec = yVec * delta;
 
-        const auto xRel = (x - static_cast<float>(width - 1) / 2);
-        const auto yRel = (y - static_cast<float>(height - 1) / 2);
+        const auto xRel = static_cast<float>(x) - static_cast<float>(width - 1) / 2;
+        const auto yRel = static_cast<float>(y) - static_cast<float>(height - 1) / 2;
 
         const auto pixel = center + xDeltaVec * xRel + yDeltaVec * yRel;
 
@@ -425,7 +427,10 @@ namespace
     {
         const auto invdir = 1.0f / r.direction;
         const VectorF bounds[] = {box.lower, box.upper};
-        const int sign[] = {r.direction[0] < 0, r.direction[1] < 0, r.direction[2] < 0};
+        const int sign[]
+            = {static_cast<int>(r.direction[0] < 0),
+               static_cast<int>(r.direction[1] < 0),
+               static_cast<int>(r.direction[2] < 0)};
 
         float tmin = (bounds[sign[0]][0] - r.origin[0]) * invdir[0];
         float tmax = (bounds[1 - sign[0]][0] - r.origin[0]) * invdir[0];
@@ -553,20 +558,22 @@ namespace
     // from https://fileadmin.cs.lth.se/cs/Personal/Tomas_Akenine-Moller/code/tribox3.txt
     auto overlaps(const PreparedTriangle& t, const AABB& box) -> bool
     {
+        // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define FINDMINMAX(x0, x1, x2, min, max)                                                                               \
-    min = max = x0;                                                                                                    \
-    if (x1 < min)                                                                                                      \
-        min = x1;                                                                                                      \
-    if (x1 > max)                                                                                                      \
-        max = x1;                                                                                                      \
-    if (x2 < min)                                                                                                      \
-        min = x2;                                                                                                      \
-    if (x2 > max)                                                                                                      \
-        max = x2;
+    min = (max) = x0;                                                                                                  \
+    if ((x1) < (min))                                                                                                  \
+        (min) = x1;                                                                                                    \
+    if ((x1) > (max))                                                                                                  \
+        (max) = x1;                                                                                                    \
+    if ((x2) < (min))                                                                                                  \
+        (min) = x2;                                                                                                    \
+    if ((x2) > (max))                                                                                                  \
+        (max) = x2;
 
         auto planeBoxOverlap = [](VectorF normal, VectorF vert, VectorF maxbox) -> bool
         {
-            VectorF vmin, vmax;
+            VectorF vmin;
+            VectorF vmax;
             for (int q : {0, 1, 2})
             {
                 float v = vert[q];
@@ -584,14 +591,13 @@ namespace
 
             if (dot(normal, vmin) > 0.0f)
                 return false;
-            if (dot(normal, vmax) >= 0.0f)
-                return true;
-            return false;
+            return dot(normal, vmax) >= 0.0f;
         };
 
+        // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AXISTEST_X01(a, b, fa, fb)                                                                                     \
-    p0 = a * v0[1] - b * v0[2];                                                                                        \
-    p2 = a * v2[1] - b * v2[2];                                                                                        \
+    p0 = (a) *v0[1] - (b) *v0[2];                                                                                      \
+    p2 = (a) *v2[1] - (b) *v2[2];                                                                                      \
     if (p0 < p2)                                                                                                       \
     {                                                                                                                  \
         min = p0;                                                                                                      \
@@ -602,13 +608,14 @@ namespace
         min = p2;                                                                                                      \
         max = p0;                                                                                                      \
     }                                                                                                                  \
-    rad = fa * boxhalfsize[1] + fb * boxhalfsize[2];                                                                   \
+    rad = (fa) *boxhalfsize[1] + (fb) *boxhalfsize[2];                                                                 \
     if (min > rad || max < -rad)                                                                                       \
         return false;
 
+        // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AXISTEST_X2(a, b, fa, fb)                                                                                      \
-    p0 = a * v0[1] - b * v0[2];                                                                                        \
-    p1 = a * v1[1] - b * v1[2];                                                                                        \
+    p0 = (a) *v0[1] - (b) *v0[2];                                                                                      \
+    p1 = (a) *v1[1] - (b) *v1[2];                                                                                      \
     if (p0 < p1)                                                                                                       \
     {                                                                                                                  \
         min = p0;                                                                                                      \
@@ -619,13 +626,14 @@ namespace
         min = p1;                                                                                                      \
         max = p0;                                                                                                      \
     }                                                                                                                  \
-    rad = fa * boxhalfsize[1] + fb * boxhalfsize[2];                                                                   \
+    rad = (fa) *boxhalfsize[1] + (fb) *boxhalfsize[2];                                                                 \
     if (min > rad || max < -rad)                                                                                       \
         return false;
 
+        // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AXISTEST_Y02(a, b, fa, fb)                                                                                     \
-    p0 = -a * v0[0] + b * v0[2];                                                                                       \
-    p2 = -a * v2[0] + b * v2[2];                                                                                       \
+    p0 = -(a) *v0[0] + (b) *v0[2];                                                                                     \
+    p2 = -(a) *v2[0] + (b) *v2[2];                                                                                     \
     if (p0 < p2)                                                                                                       \
     {                                                                                                                  \
         min = p0;                                                                                                      \
@@ -636,13 +644,14 @@ namespace
         min = p2;                                                                                                      \
         max = p0;                                                                                                      \
     }                                                                                                                  \
-    rad = fa * boxhalfsize[0] + fb * boxhalfsize[2];                                                                   \
+    rad = (fa) *boxhalfsize[0] + (fb) *boxhalfsize[2];                                                                 \
     if (min > rad || max < -rad)                                                                                       \
         return false;
 
+        // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AXISTEST_Y1(a, b, fa, fb)                                                                                      \
-    p0 = -a * v0[0] + b * v0[2];                                                                                       \
-    p1 = -a * v1[0] + b * v1[2];                                                                                       \
+    p0 = -(a) *v0[0] + (b) *v0[2];                                                                                     \
+    p1 = -(a) *v1[0] + (b) *v1[2];                                                                                     \
     if (p0 < p1)                                                                                                       \
     {                                                                                                                  \
         min = p0;                                                                                                      \
@@ -653,13 +662,14 @@ namespace
         min = p1;                                                                                                      \
         max = p0;                                                                                                      \
     }                                                                                                                  \
-    rad = fa * boxhalfsize[0] + fb * boxhalfsize[2];                                                                   \
+    rad = (fa) *boxhalfsize[0] + (fb) *boxhalfsize[2];                                                                 \
     if (min > rad || max < -rad)                                                                                       \
         return false;
 
+        // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AXISTEST_Z12(a, b, fa, fb)                                                                                     \
-    p1 = a * v1[0] - b * v1[1];                                                                                        \
-    p2 = a * v2[0] - b * v2[1];                                                                                        \
+    p1 = (a) *v1[0] - (b) *v1[1];                                                                                      \
+    p2 = (a) *v2[0] - (b) *v2[1];                                                                                      \
     if (p2 < p1)                                                                                                       \
     {                                                                                                                  \
         min = p2;                                                                                                      \
@@ -670,13 +680,14 @@ namespace
         min = p1;                                                                                                      \
         max = p2;                                                                                                      \
     }                                                                                                                  \
-    rad = fa * boxhalfsize[0] + fb * boxhalfsize[1];                                                                   \
+    rad = (fa) *boxhalfsize[0] + (fb) *boxhalfsize[1];                                                                 \
     if (min > rad || max < -rad)                                                                                       \
         return false;
 
+        // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define AXISTEST_Z0(a, b, fa, fb)                                                                                      \
-    p0 = a * v0[0] - b * v0[1];                                                                                        \
-    p1 = a * v1[0] - b * v1[1];                                                                                        \
+    p0 = (a) *v0[0] - (b) *v0[1];                                                                                      \
+    p1 = (a) *v1[0] - (b) *v1[1];                                                                                      \
     if (p0 < p1)                                                                                                       \
     {                                                                                                                  \
         min = p0;                                                                                                      \
@@ -687,13 +698,18 @@ namespace
         min = p1;                                                                                                      \
         max = p0;                                                                                                      \
     }                                                                                                                  \
-    rad = fa * boxhalfsize[0] + fb * boxhalfsize[1];                                                                   \
+    rad = (fa) *boxhalfsize[0] + (fb) *boxhalfsize[1];                                                                 \
     if (min > rad || max < -rad)                                                                                       \
         return false;
 
         const auto boxcenter = box.center();
         const auto boxhalfsize = (box.upper - box.lower) * 0.5;
-        float min, max, p0, p1, p2, rad;
+        float min = 0;
+        float max = 0;
+        float p0 = 0;
+        float p1 = 0;
+        float p2 = 0;
+        float rad = 0;
 
         // const auto v0 = t[0] - boxcenter;
         // const auto v1 = t[1] - boxcenter;
@@ -740,10 +756,7 @@ namespace
             return false;
 
         const auto normal = cross(e0, e1);
-        if (!planeBoxOverlap(normal, v0, boxhalfsize))
-            return false;
-
-        return true;
+        return planeBoxOverlap(normal, v0, boxhalfsize);
     }
 
     template <typename VirtualRecord>
@@ -793,26 +806,26 @@ namespace
         template <typename T>
         void addObject(std::deque<OctreeNode>& pool, const T& object, int depth = 0)
         {
-            if (hasChildren())
+            auto addToChildren = [&]
             {
                 for (auto& c : children())
                     if (overlaps(object, c->box))
                         c->addObject(pool, object, depth + 1);
+            };
+
+            if (hasChildren())
+                addToChildren();
+            else if (shouldSplit(depth))
+            {
+                split(pool, depth);
+                addToChildren();
             }
             else
             {
-                if (shouldSplit(depth))
-                {
-                    split(pool, depth);
-                    addObject(pool, object, depth);
-                }
+                if constexpr (std::is_same_v<T, Sphere>)
+                    objects().spheres.push_back(object);
                 else
-                {
-                    if constexpr (std::is_same_v<T, Sphere>)
-                        objects().spheres.push_back(object);
-                    else
-                        objects().triangles.push_back(object);
-                }
+                    objects().triangles.push_back(object);
             }
         }
 
@@ -822,7 +835,7 @@ namespace
 
         inline auto shouldSplit(int depth) const -> bool
         {
-            auto& objects = std::get<Objects>(content);
+            const auto& objects = std::get<Objects>(content);
             return depth < maxDepth && objects.triangles.size() >= maxTrianglesPerNode;
         }
 
@@ -895,19 +908,12 @@ namespace
         return nearestHit;
     }
 
-    inline auto colorByIntersectionNormal(Intersection hit) -> Image::Pixel
-    {
-        if (hit.distance == noHit)
-            return {}; // black
-        Image::Pixel r;
-        for (int i = 0; i < 3; i++)
-            r[i] = static_cast<unsigned char>(std::abs(hit.normal[i]) * 255);
-        return r;
-    }
-
     auto toFloatColor(Image::Pixel p)
     {
-        return VectorF{p[0] / 255.0f, p[1] / 255.0f, p[2] / 255.0f};
+        return VectorF{
+            static_cast<float>(p[0]) / 255.0f,
+            static_cast<float>(p[1]) / 255.0f,
+            static_cast<float>(p[2]) / 255.0f};
     };
 
     auto toInt8Color(VectorF v)
@@ -920,7 +926,7 @@ namespace
 
     struct Mipmap
     {
-        Mipmap(Image image)
+        explicit Mipmap(Image image)
         {
             lods.push_back(std::move(image));
             if (!useMipmaps)
@@ -957,27 +963,31 @@ namespace
         auto texCoordToTexelCoord = [](float coord, unsigned int imgSize)
         {
             const auto maxIndex = static_cast<float>(imgSize - 1);
-            auto normalizedCoord = coord - static_cast<int>(coord);
+            auto normalizedCoord = coord - std::trunc(coord);
             if (normalizedCoord < 0)
                 normalizedCoord++;
             return std::clamp(normalizedCoord * maxIndex, 0.0f, maxIndex);
         };
 
+        auto texelFetch
+            = [&](float x, float y) { return tex(static_cast<unsigned int>(x), static_cast<unsigned int>(y)); };
+
         const float x = texCoordToTexelCoord(u, tex.width());
         const float y = texCoordToTexelCoord(v, tex.height());
 
-        //// nearest texel
-        // return tex(static_cast<int>(std::round(x)), static_cast<int>(std::round(y)));
+        // nearest texel
+        // return texelFetch(std::round(x), std::round(y));
 
         // bilinear
         const float x0 = std::floor(x);
         const float x1 = std::ceil(x);
-        const float xFrac = x - static_cast<int>(x);
+        const float xFrac = x - x0;
         const float y0 = std::floor(y);
         const float y1 = std::ceil(y);
-        const float yFrac = y - static_cast<int>(y);
-        const auto color = (toFloatColor(tex(x0, y0)) * (1 - xFrac) + toFloatColor(tex(x1, y0)) * xFrac) * (1 - yFrac)
-            + (toFloatColor(tex(x0, y1)) * (1 - xFrac) + toFloatColor(tex(x1, y1)) * xFrac) * yFrac;
+        const float yFrac = y - y0;
+        const auto color
+            = (toFloatColor(texelFetch(x0, y0)) * (1 - xFrac) + toFloatColor(texelFetch(x1, y0)) * xFrac) * (1 - yFrac)
+            + (toFloatColor(texelFetch(x0, y1)) * (1 - xFrac) + toFloatColor(texelFetch(x1, y1)) * xFrac) * yFrac;
         return color;
     }
 
@@ -1009,7 +1019,7 @@ namespace
         const auto lodCones = std::log(alpha * hit.distance * (1.0f / std::abs(dot(hit.normal, rayDir))));
 
         const auto lodClamped = std::clamp(hit.baseLod + lodCones, 0.0f, static_cast<float>(mipmap.lods.size() - 1));
-        float lodInteg;
+        float lodInteg = 0;
         const auto lodFrac = std::modf(lodClamped, &lodInteg);
         const auto floorTex = static_cast<unsigned>(lodInteg);
         const auto color1 = tex2D(mipmap.lods[floorTex], hit.texU, hit.texV);
@@ -1059,7 +1069,7 @@ namespace
         if (t.texIndex == -1)
             return 0.0f;
         const auto& tex = mipmaps[t.texIndex].lods.front();
-        const auto ta = tex.width() * tex.height()
+        const auto ta = static_cast<float>(tex.width() * tex.height())
             * std::abs((t[1].u - t[0].u) * (t[2].v - t[0].v) - (t[2].u - t[0].u) * (t[1].v - t[0].v));
         const auto pa = cross(t[1].pos - t[0].pos, t[2].pos - t[0].pos).length();
         return 0.5f * std::log(ta / pa);
@@ -1189,7 +1199,7 @@ namespace
                     if (matId == -1)
                         return -1;
                     const auto texName = materials.at(matId).diffuse_texname;
-                    if (texName == "")
+                    if (texName.empty())
                         return -1;
                     if (const auto it = textureToIndex.find(texName); it != end(textureToIndex))
                         return it->second;
@@ -1290,7 +1300,7 @@ namespace
     }
 } // namespace
 
-int main(int argc, const char* argv[])
+auto main(int argc, const char* argv[]) -> int
 try
 {
     const auto width = 1024;

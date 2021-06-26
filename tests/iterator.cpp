@@ -35,7 +35,7 @@ TEST_CASE("iterator")
         const auto& cview = std::as_const(view);
         const int sumY
             = std::accumulate(begin(cview), end(cview), 0, [](int acc, auto vd) { return acc + vd(tag::Y{}); });
-        CHECK(sumY == 128);
+        CHECK(sumY == 128); // NOLINT(bugprone-infinite-loop)
     };
     test(llama::ArrayDims{32});
     test(llama::ArrayDims{4, 8});

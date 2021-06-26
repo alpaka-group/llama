@@ -128,8 +128,8 @@ try
     LLAMA_INDEPENDENT_DATA
     for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
     {
-        hostA(i) = seed + i;
-        hostB(i) = seed - i;
+        hostA(i) = seed + static_cast<FP>(i);
+        hostB(i) = seed - static_cast<FP>(i);
     }
     chrono.printAndReset("Init");
 

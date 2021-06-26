@@ -72,10 +72,11 @@ namespace usellama
         LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
         {
-            a[i](tag::X{}) = i; // X
-            a[i](tag::Y{}) = i; // Y
-            a[i](llama::RecordCoord<2>{}) = i; // Z
-            b(i) = i; // writes to all (X, Y, Z)
+            const auto value = static_cast<FP>(i);
+            a[i](tag::X{}) = value; // X
+            a[i](tag::Y{}) = value; // Y
+            a[i](llama::RecordCoord<2>{}) = value; // Z
+            b(i) = value; // writes to all (X, Y, Z)
         }
         watch.printAndReset("init");
 
@@ -124,12 +125,13 @@ namespace manualAoS
         LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
         {
-            a[i].x = i;
-            a[i].y = i;
-            a[i].z = i;
-            b[i].x = i;
-            b[i].y = i;
-            b[i].z = i;
+            const auto value = static_cast<FP>(i);
+            a[i].x = value;
+            a[i].y = value;
+            a[i].z = value;
+            b[i].x = value;
+            b[i].y = value;
+            b[i].z = value;
         }
         watch.printAndReset("init");
 
@@ -141,7 +143,7 @@ namespace manualAoS
         }
         plotFile << "AoS\t" << acc / STEPS << '\n';
 
-        return c[0].x;
+        return static_cast<int>(c[0].x);
     }
 } // namespace manualAoS
 
@@ -187,12 +189,13 @@ namespace manualSoA
         LLAMA_INDEPENDENT_DATA
         for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
         {
-            ax[i] = i;
-            ay[i] = i;
-            az[i] = i;
-            bx[i] = i;
-            by[i] = i;
-            bz[i] = i;
+            const auto value = static_cast<FP>(i);
+            ax[i] = value;
+            ay[i] = value;
+            az[i] = value;
+            bx[i] = value;
+            by[i] = value;
+            bz[i] = value;
         }
         watch.printAndReset("init");
 
@@ -204,7 +207,7 @@ namespace manualSoA
         }
         plotFile << "SoA\t" << acc / STEPS << '\n';
 
-        return cx[0];
+        return static_cast<int>(cx[0]);
     }
 } // namespace manualSoA
 
@@ -256,12 +259,13 @@ namespace manualAoSoA
             LLAMA_INDEPENDENT_DATA
             for (std::size_t i = 0; i < LANES; ++i)
             {
-                a[bi].x[i] = bi * LANES + i;
-                a[bi].y[i] = bi * LANES + i;
-                a[bi].z[i] = bi * LANES + i;
-                b[bi].x[i] = bi * LANES + i;
-                b[bi].y[i] = bi * LANES + i;
-                b[bi].z[i] = bi * LANES + i;
+                const auto value = static_cast<float>(bi * LANES + i);
+                a[bi].x[i] = value;
+                a[bi].y[i] = value;
+                a[bi].z[i] = value;
+                b[bi].x[i] = value;
+                b[bi].y[i] = value;
+                b[bi].z[i] = value;
             }
         }
         watch.printAndReset("init");
@@ -274,7 +278,7 @@ namespace manualAoSoA
         }
         plotFile << "AoSoA\t" << acc / STEPS << '\n';
 
-        return c[0].x[0];
+        return static_cast<int>(c[0].x[0]);
     }
 } // namespace manualAoSoA
 

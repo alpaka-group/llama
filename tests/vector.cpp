@@ -47,7 +47,7 @@ TEST_CASE("vector.copy_ctor")
     llama::One<RecordDim> p{42};
     const Vector v(10, p);
 
-    const Vector v2(v);
+    const Vector v2(v); // NOLINT(performance-unnecessary-copy-initialization)
     for (auto i = 0; i < 10; i++)
         CHECK(v2[i] == p);
 }
@@ -60,7 +60,7 @@ TEST_CASE("vector.move_ctor")
     Vector v2(std::move(v));
     for (auto i = 0; i < 10; i++)
         CHECK(v2[i] == p);
-    CHECK(v.empty());
+    CHECK(v.empty()); // NOLINT(bugprone-use-after-move,hicpp-invalid-access-moved)
 }
 
 TEST_CASE("vector.copy_assign")
@@ -83,7 +83,7 @@ TEST_CASE("vector.move_assign")
     v2 = std::move(v);
     for (auto i = 0; i < 10; i++)
         CHECK(v2[i] == p);
-    CHECK(v.empty());
+    CHECK(v.empty()); // NOLINT(bugprone-use-after-move,hicpp-invalid-access-moved)
 }
 
 namespace

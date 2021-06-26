@@ -69,6 +69,7 @@ TEST_CASE("view.allocator.Vector")
         view(i) = 42;
 }
 
+#ifndef __clang_analyzer__
 TEST_CASE("view.allocator.SharedPtr")
 {
     using ArrayDims = llama::ArrayDims<2>;
@@ -80,6 +81,7 @@ TEST_CASE("view.allocator.SharedPtr")
     for (auto i : llama::ArrayDimsIndexRange{viewSize})
         view(i) = 42;
 }
+#endif
 
 TEST_CASE("view.allocator.stack")
 {
@@ -291,8 +293,16 @@ TEST_CASE("view.indexing")
     auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{16, 16}, Particle{}});
     view(0u, 0u)(tag::Mass{}) = 42.0f;
 
-    using integrals = boost::mp11::
-        mp_list<char, unsigned char, signed char, short, unsigned short, int, unsigned int, long, unsigned long>;
+    using integrals = boost::mp11::mp_list<
+        char,
+        unsigned char,
+        signed char,
+        short, // NOLINT(google-runtime-int)
+        unsigned short, // NOLINT(google-runtime-int)
+        int,
+        unsigned int,
+        long, // NOLINT(google-runtime-int)
+        unsigned long>; // NOLINT(google-runtime-int)
 
     boost::mp11::mp_for_each<integrals>(
         [&](auto i)

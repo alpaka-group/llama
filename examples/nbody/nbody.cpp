@@ -1222,7 +1222,15 @@ namespace manualSoA_Vc
     using manualAoSoA_Vc::pPInteraction;
 
     template <typename vec>
-    void update(FP* posx, FP* posy, FP* posz, FP* velx, FP* vely, FP* velz, FP* mass, int threads)
+    void update(
+        const FP* posx,
+        const FP* posy,
+        const FP* posz,
+        FP* velx,
+        FP* vely,
+        FP* velz,
+        const FP* mass,
+        int threads)
     {
 #    pragma omp parallel for schedule(static) num_threads(threads)
         for (std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += vec::size())
@@ -1335,7 +1343,7 @@ try
 #endif
 
     const auto numThreads = static_cast<std::size_t>(omp_get_max_threads());
-    const char* affinity = std::getenv("GOMP_CPU_AFFINITY");
+    const char* affinity = std::getenv("GOMP_CPU_AFFINITY"); // NOLINT(concurrency-mt-unsafe)
     affinity = affinity == nullptr ? "NONE - PLEASE PIN YOUR THREADS!" : affinity;
 
     fmt::print(

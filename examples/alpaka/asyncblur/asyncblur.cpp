@@ -388,12 +388,12 @@ try
             for (std::size_t x = 0; x < img_x; ++x)
             {
                 auto* pixel = &image[(y * img_x + x) * 3];
-                pixel[0] = hostView(y + KERNEL_SIZE, x + KERNEL_SIZE)(tag::R()) * 255.;
-                pixel[1] = hostView(y + KERNEL_SIZE, x + KERNEL_SIZE)(tag::G()) * 255.;
-                pixel[2] = hostView(y + KERNEL_SIZE, x + KERNEL_SIZE)(tag::B()) * 255.;
+                pixel[0] = static_cast<unsigned char>(hostView(y + KERNEL_SIZE, x + KERNEL_SIZE)(tag::R()) * 255.);
+                pixel[1] = static_cast<unsigned char>(hostView(y + KERNEL_SIZE, x + KERNEL_SIZE)(tag::G()) * 255.);
+                pixel[2] = static_cast<unsigned char>(hostView(y + KERNEL_SIZE, x + KERNEL_SIZE)(tag::B()) * 255.);
             }
         }
-        stbi_write_png(out_filename.c_str(), img_x, img_y, 3, image.data(), 0);
+        stbi_write_png(out_filename.c_str(), static_cast<int>(img_x), static_cast<int>(img_y), 3, image.data(), 0);
     }
 
     return 0;
