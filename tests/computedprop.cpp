@@ -118,7 +118,7 @@ namespace
 
         constexpr ComputedMapping() = default;
 
-        constexpr ComputedMapping(ArrayDims, RecordDim = {})
+        constexpr explicit ComputedMapping(ArrayDims, RecordDim = {})
         {
         }
 
@@ -164,7 +164,7 @@ namespace
 
         constexpr CompressedBoolMapping() = default;
 
-        constexpr CompressedBoolMapping(ArrayDims size) : arrayDimsSize(size)
+        constexpr explicit CompressedBoolMapping(ArrayDims size) : arrayDimsSize(size)
         {
         }
 
@@ -175,14 +175,14 @@ namespace
             Word& word;
             unsigned char bit;
 
-            operator bool() const
+            operator bool() const // NOLINT(google-explicit-constructor,hicpp-explicit-conversions)
             {
-                return word & (Word{1} << bit);
+                return (word & (Word{1} << bit)) != 0;
             }
 
-            auto operator=(bool b) -> BoolRef
+            auto operator=(bool b) -> BoolRef&
             {
-                word ^= (-Word{b} ^ word) & (Word{1} << bit);
+                word ^= (-static_cast<Word>(b) ^ word) & (Word{1} << bit);
                 return *this;
             }
         };
@@ -245,9 +245,9 @@ TEST_CASE("compressed_bools")
     {
         for (auto x = 0u; x < 8; x++)
         {
-            view(y, x)(tag::A{}) = static_cast<bool>(x * y & 1);
-            view(y, x)(tag::B{}, tag::X{}) = static_cast<bool>(x & 1);
-            view(y, x)(tag::B{}, tag::Y{}) = static_cast<bool>(y & 1);
+            view(y, x)(tag::A{}) = static_cast<bool>(x * y & 1u);
+            view(y, x)(tag::B{}, tag::X{}) = static_cast<bool>(x & 1u);
+            view(y, x)(tag::B{}, tag::Y{}) = static_cast<bool>(y & 1u);
         }
     }
 
@@ -255,9 +255,9 @@ TEST_CASE("compressed_bools")
     {
         for (auto x = 0u; x < 8; x++)
         {
-            CHECK(view(y, x)(tag::A{}) == static_cast<bool>(x * y & 1));
-            CHECK(view(y, x)(tag::B{}, tag::X{}) == static_cast<bool>(x & 1));
-            CHECK(view(y, x)(tag::B{}, tag::Y{}) == static_cast<bool>(y & 1));
+            CHECK(view(y, x)(tag::A{}) == static_cast<bool>(x * y & 1u));
+            CHECK(view(y, x)(tag::B{}, tag::X{}) == static_cast<bool>(x & 1u));
+            CHECK(view(y, x)(tag::B{}, tag::Y{}) == static_cast<bool>(y & 1u));
         }
     }
 }

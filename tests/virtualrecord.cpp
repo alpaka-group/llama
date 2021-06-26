@@ -957,7 +957,7 @@ TEST_CASE("VirtualRecord.operator<<")
 
     std::stringstream ss;
     ss << p;
-    const auto expected
+    const auto* const expected
         = "{Pos: {X: 1, Y: 2, Z: 3}, Mass: 4, Vel: {X: 5, Y: 6, Z: 7}, Flags: {[0]: 1, [1]: 1, [2]: 1, [3]: 1}}";
     CHECK(ss.str() == expected);
 
