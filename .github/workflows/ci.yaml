@@ -15,6 +15,34 @@ jobs:
         exclude: './thirdparty'
         clangFormatVersion: 12
 
+  clang-tidy:
+    runs-on: ubuntu-latest
+    env: {CXX: clang++-12}
+    steps:
+    - uses: actions/checkout@v2
+    - name: apt install boost and clang-12
+      run: |
+        wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
+        sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-12 main'
+        sudo apt update
+        sudo apt install libboost-all-dev clang-12 libomp-12-dev clang-tidy-12
+    - name: vcpkg install dependencies
+      run: |
+        vcpkg install catch2 fmt vc tinyobjloader
+    - name: install alpaka
+      run: |
+        git clone https://github.com/alpaka-group/alpaka.git
+        mkdir alpaka/build
+        cd alpaka/build
+        cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+        sudo cmake --build . --target install
+    - name: run clang-tidy
+      run: |
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=$CONFIG -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON -DALPAKA_CXX_STANDARD=17 -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+        run-clang-tidy-12
+
   amalgamation:
     runs-on: ubuntu-latest
     steps:
