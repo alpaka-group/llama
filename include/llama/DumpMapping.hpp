@@ -158,9 +158,8 @@ namespace llama
         }
     } // namespace internal
 
-    /// Returns an SVG image visualizing the memory layout created by the given
-    /// mapping. The created memory blocks are wrapped after wrapByteCount
-    /// bytes.
+    /// Returns an SVG image visualizing the memory layout created by the given mapping. The created memory blocks are
+    /// wrapped after wrapByteCount bytes.
     template <typename Mapping>
     auto toSvg(const Mapping& mapping, std::size_t wrapByteCount = 64, bool breakBoxes = true) -> std::string
     {
@@ -257,8 +256,8 @@ namespace llama
         return svg;
     }
 
-    /// Returns an HTML document visualizing the memory layout created by the
-    /// given mapping. The visualization is resizeable.
+    /// Returns an HTML document visualizing the memory layout created by the given mapping. The visualization is
+    /// resizeable.
     template <typename Mapping>
     auto toHtml(const Mapping& mapping) -> std::string
     {

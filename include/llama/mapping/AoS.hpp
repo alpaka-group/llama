@@ -52,12 +52,13 @@ namespace llama::mapping
         ArrayDims arrayDimsSize;
     };
 
-    /// Array of struct mapping preserving the alignment of the element types by inserting padding. See \see AoS.
+    /// Array of struct mapping preserving the alignment of the element types by inserting padding.
+    /// \see AoS
     template <typename ArrayDims, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     using AlignedAoS = AoS<ArrayDims, RecordDim, true, LinearizeArrayDimsFunctor>;
 
-    /// Array of struct mapping packing the element types tighly, violating the types alignment requirements. See \see
-    /// AoS.
+    /// Array of struct mapping packing the element types tighly, violating the types alignment requirements.
+    /// \see AoS
     template <typename ArrayDims, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     using PackedAoS = AoS<ArrayDims, RecordDim, false, LinearizeArrayDimsFunctor>;
 

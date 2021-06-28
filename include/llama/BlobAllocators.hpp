@@ -16,8 +16,7 @@
 
 namespace llama::bloballoc
 {
-    /// Allocates stack memory for a \ref View, which is copied each time a \ref
-    /// View is copied.
+    /// Allocates stack memory for a \ref View, which is copied each time a \ref View is copied.
     /// \tparam BytesToReserve the amount of memory to reserve.
     template <std::size_t BytesToReserve>
     struct Stack
@@ -31,8 +30,8 @@ namespace llama::bloballoc
     static_assert(BlobAllocator<Stack<64>>);
 #endif
 
-    /// Allocates heap memory managed by a `std::shared_ptr` for a \ref View.
-    /// This memory is shared between all copies of a \ref View.
+    /// Allocates heap memory managed by a `std::shared_ptr` for a \ref View. This memory is shared between all copies
+    /// of a \ref View.
     /// \tparam Alignment aligment of the allocated block of memory.
     template <std::size_t Alignment = 64>
     struct SharedPtr
@@ -49,6 +48,7 @@ namespace llama::bloballoc
     static_assert(BlobAllocator<SharedPtr<>>);
 #endif
 
+    /// An STL compatible allocator allowing to specify alignment.
     template <typename T, std::size_t Alignment>
     struct AlignedAllocator
     {
@@ -90,8 +90,8 @@ namespace llama::bloballoc
         }
     };
 
-    /// Allocates heap memory managed by a `std::vector` for a \ref View, which
-    /// is copied each time a \ref View is copied.
+    /// Allocates heap memory managed by a `std::vector` for a \ref View, which is copied each time a \ref View is
+    /// copied.
     /// \tparam Alignment aligment of the allocated block of memory.
     template <std::size_t Alignment = 64u>
     struct Vector

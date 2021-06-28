@@ -7,9 +7,8 @@
 
 namespace llama::mapping
 {
-    /// Maps all ArrayDims coordinates into the same location and layouts
-    /// struct members consecutively. This mapping is used for temporary, single
-    /// element views.
+    /// Maps all ArrayDims coordinates into the same location and layouts struct members consecutively. This mapping is
+    /// used for temporary, single element views.
     template <typename T_ArrayDims, typename T_RecordDim>
     struct One
     {

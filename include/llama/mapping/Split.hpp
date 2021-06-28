@@ -49,9 +49,10 @@ namespace llama::mapping
 
     /// Mapping which splits off a part of the record dimension and maps it differently then the rest.
     /// \tparam RecordCoordForMapping1 A \ref RecordCoord selecting the part of the record dimension to be mapped
-    /// differently. \tparam MappingTemplate1 The mapping used for the selected part of the record dimension. \tparam
-    /// MappingTemplate2 The mapping used for the not selected part of the record dimension. \tparam SeparateBlobs If
-    /// true, both pieces of the record dimension are mapped to separate blobs.
+    /// differently.
+    /// \tparam MappingTemplate1 The mapping used for the selected part of the record dimension.
+    /// \tparam MappingTemplate2 The mapping used for the not selected part of the record dimension.
+    /// \tparam SeparateBlobs If true, both pieces of the record dimension are mapped to separate blobs.
     template <
         typename T_ArrayDims,
         typename T_RecordDim,

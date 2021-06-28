@@ -23,8 +23,8 @@ namespace llama
     template <typename RecordDim>
     using One = VirtualRecord<decltype(allocViewStack<0, RecordDim>()), RecordCoord<>, true>;
 
-    /// Creates a single \ref VirtualRecord owning a view with stack memory and
-    /// copies all values from an existing \ref VirtualRecord.
+    /// Creates a single \ref VirtualRecord owning a view with stack memory and copies all values from an existing \ref
+    /// VirtualRecord.
     template <typename VirtualRecord>
     LLAMA_FN_HOST_ACC_INLINE auto copyVirtualRecordStack(const VirtualRecord& vd) -> decltype(auto)
     {
@@ -329,9 +329,8 @@ namespace llama
         std::conditional_t<OwnView, View, View&> view;
 
     public:
-        /// Subtree of the record dimension of View starting at
-        /// BoundRecordCoord. If BoundRecordCoord is `RecordCoord<>` (default)
-        /// AccessibleRecordDim is the same as `Mapping::RecordDim`.
+        /// Subtree of the record dimension of View starting at BoundRecordCoord. If BoundRecordCoord is `RecordCoord<>`
+        /// (default) AccessibleRecordDim is the same as `Mapping::RecordDim`.
         using AccessibleRecordDim = GetType<RecordDim, BoundRecordCoord>;
 
         /// Creates an empty VirtualRecord. Only available for if the view is owned. Used by llama::One.
@@ -381,10 +380,9 @@ namespace llama
             *this = scalar;
         }
 
-        /// Access a record in the record dimension underneath the current virtual
-        /// record using a \ref RecordCoord. If the access resolves to a leaf, a
-        /// reference to a variable inside the \ref View storage is returned,
-        /// otherwise another virtual record.
+        /// Access a record in the record dimension underneath the current virtual record using a \ref RecordCoord. If
+        /// the access resolves to a leaf, a reference to a variable inside the \ref View storage is returned, otherwise
+        /// another virtual record.
         template <std::size_t... Coord>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coord...> = {}) const -> decltype(auto)
         {
@@ -420,10 +418,9 @@ namespace llama
             }
         }
 
-        /// Access a record in the record dimension underneath the current virtual
-        /// record using a series of tags. If the access resolves to a leaf, a
-        /// reference to a variable inside the \ref View storage is returned,
-        /// otherwise another virtual record.
+        /// Access a record in the record dimension underneath the current virtual record using a series of tags. If the
+        /// access resolves to a leaf, a reference to a variable inside the \ref View storage is returned, otherwise
+        /// another virtual record.
         template <typename... Tags>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Tags...) const -> decltype(auto)
         {

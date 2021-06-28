@@ -96,11 +96,11 @@ namespace llama
     template <typename L>
     using RecordCoordFromList = internal::mp_unwrap_sizes<L>;
 
-    /// Concatenate a set of \ref RecordCoord.
+    /// Concatenate a set of \ref RecordCoord%s.
     template <typename... RecordCoords>
     using Cat = RecordCoordFromList<boost::mp11::mp_append<typename RecordCoords::List...>>;
 
-    /// Concatenate a set of \ref RecordCoord instances.
+    /// Concatenate a set of \ref RecordCoord%s instances.
     template <typename... RecordCoords>
     constexpr auto cat(RecordCoords...)
     {
@@ -164,8 +164,7 @@ namespace llama
         };
     } // namespace internal
 
-    /// Checks wether two \ref RecordCoord are the same or one is the prefix of
-    /// the other.
+    /// Checks whether two \ref RecordCoord%s are the same or one is the prefix of the other.
     template <typename First, typename Second>
     inline constexpr auto RecordCoordCommonPrefixIsSame
         = internal::RecordCoordCommonPrefixIsSameImpl<First, Second>::value;

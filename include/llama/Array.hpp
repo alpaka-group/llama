@@ -9,8 +9,7 @@
 
 namespace llama
 {
-    /// Array class like `std::array` but suitable for use with offloading
-    /// devices like GPUs.
+    /// Array class like `std::array` but suitable for use with offloading devices like GPUs.
     /// \tparam T type if array elements.
     /// \tparam N rank of the array.
     template <typename T, std::size_t N>
