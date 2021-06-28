@@ -79,6 +79,9 @@ jobs:
             env: {CXX: clang++-10}
           - name: build-ubuntu-clang11
             env: {CXX: clang++-11, INSTALL_EXTRA: clang-11}
+          - name: build-ubuntu-clang12
+            env: {CXX: clang++-12, INSTALL_EXTRA: clang-12 libomp-12-dev}
+            add-llvm-repo: true
           - name: build-ubuntu-icpc
             env: {CXX: icpc}
             intel: true
@@ -88,6 +91,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: add LLVM APT repo
+        if: ${{ matrix.add-llvm-repo }}
+        run: |
+          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
+          sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-12 main'
       - name: install OneAPI
         if: ${{ matrix.intel }}
         run: |
