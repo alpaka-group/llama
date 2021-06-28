@@ -208,6 +208,18 @@ Functions</h2></td></tr>
 <tr class="memitem:a690689d38b43930430e58bb7fe17aca7"><td class="memTemplParams" colspan="2">template&lt;typename First , typename... Args&gt; </td></tr>
 <tr class="memitem:a690689d38b43930430e58bb7fe17aca7"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a690689d38b43930430e58bb7fe17aca7">Array</a> (First, Args... args) -&gt; <a class="el" href="structllama_1_1Array.html">Array</a>&lt; First, sizeof...(Args)+1 &gt;</td></tr>
 <tr class="separator:a690689d38b43930430e58bb7fe17aca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a171382a213d899b3bd5d3528eb6fc8e1"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N&gt; </td></tr>
+<tr class="memitem:a171382a213d899b3bd5d3528eb6fc8e1"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a171382a213d899b3bd5d3528eb6fc8e1">push_front</a> (<a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N &gt; a, T v) -&gt; <a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N+1 &gt;</td></tr>
+<tr class="separator:a171382a213d899b3bd5d3528eb6fc8e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae929dda9cf1ef680caf2ae864eb14ca3"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N&gt; </td></tr>
+<tr class="memitem:ae929dda9cf1ef680caf2ae864eb14ca3"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ae929dda9cf1ef680caf2ae864eb14ca3">push_back</a> (<a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N &gt; a, T v) -&gt; <a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N+1 &gt;</td></tr>
+<tr class="separator:ae929dda9cf1ef680caf2ae864eb14ca3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a876ba441676d79dd2bdad1a1be26047c"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N&gt; </td></tr>
+<tr class="memitem:a876ba441676d79dd2bdad1a1be26047c"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a876ba441676d79dd2bdad1a1be26047c">pop_back</a> (<a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N &gt; a)</td></tr>
+<tr class="separator:a876ba441676d79dd2bdad1a1be26047c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a025e344f02bf146a481823805a93800a"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N&gt; </td></tr>
+<tr class="memitem:a025e344f02bf146a481823805a93800a"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a025e344f02bf146a481823805a93800a">pop_front</a> (<a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N &gt; a)</td></tr>
+<tr class="separator:a025e344f02bf146a481823805a93800a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac99ade3cc2e49f4a201fe637ddfc3788"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
 <tr class="memitem:ac99ade3cc2e49f4a201fe637ddfc3788"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ac99ade3cc2e49f4a201fe637ddfc3788">ArrayDims</a> (Args...) -&gt; <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>&lt; sizeof...(Args)&gt;</td></tr>
 <tr class="separator:ac99ade3cc2e49f4a201fe637ddfc3788"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1186,6 +1198,148 @@ template&lt;std::size_t... CoordsA, std::size_t... CoordsB&gt; </div>
 
 </div>
 </div>
+<a id="a876ba441676d79dd2bdad1a1be26047c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a876ba441676d79dd2bdad1a1be26047c">&#9670;&nbsp;</a></span>pop_back()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , std::size_t N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::pop_back </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N &gt;&#160;</td>
+          <td class="paramname"><em>a</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00114">114</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a025e344f02bf146a481823805a93800a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a025e344f02bf146a481823805a93800a">&#9670;&nbsp;</a></span>pop_front()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , std::size_t N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::pop_front </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N &gt;&#160;</td>
+          <td class="paramname"><em>a</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00124">124</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ae929dda9cf1ef680caf2ae864eb14ca3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae929dda9cf1ef680caf2ae864eb14ca3">&#9670;&nbsp;</a></span>push_back()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , std::size_t N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::push_back </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N &gt;&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>v</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> -&gt; <a class="el" href="structllama_1_1Array.html">Array</a>&lt;T, N + 1&gt;
+    </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00104">104</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a171382a213d899b3bd5d3528eb6fc8e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a171382a213d899b3bd5d3528eb6fc8e1">&#9670;&nbsp;</a></span>push_front()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , std::size_t N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::push_front </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N &gt;&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>v</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> -&gt; <a class="el" href="structllama_1_1Array.html">Array</a>&lt;T, N + 1&gt;
+    </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00094">94</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a86a72929fc8c71b9aa2b514a74ab34eb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a86a72929fc8c71b9aa2b514a74ab34eb">&#9670;&nbsp;</a></span>structName()</h2>
 
@@ -2122,7 +2276,7 @@ template&lt;typename Tuple &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Mon Jun 28 2021 14:25:12 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Jun 28 2021 16:30:10 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

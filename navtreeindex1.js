@@ -1,5 +1,9 @@
 var NAVTREEINDEX1 =
 {
+"namespacellama.html":[1,0,0],
+"namespacellama.html":[2,0,0],
+"namespacellama_1_1bloballoc.html":[2,0,0,0],
+"namespacellama_1_1bloballoc.html":[1,0,0,0],
 "namespacellama_1_1internal.html":[2,0,0,1],
 "namespacellama_1_1internal.html":[1,0,0,1],
 "namespacellama_1_1literals.html":[1,0,0,2],
@@ -245,9 +249,5 @@ var NAVTREEINDEX1 =
 "structllama_1_1VirtualRecord.html#acd65696a387d75eec64a0d80a3bdee06":[2,0,0,20,39],
 "structllama_1_1VirtualRecord.html#ad2cc4f52e7d3ac55de213ce75c32af0e":[2,0,0,20,29],
 "structllama_1_1VirtualRecord.html#ad959aa65f6674c04b79d214d2dea09ce":[2,0,0,20,22],
-"structllama_1_1VirtualRecord.html#ae4713e292f0f76d0337d488ab7b18a03":[2,0,0,20,15],
-"structllama_1_1VirtualRecord.html#ae6e9d6fcbe6193f32de78c2e4d7a82d3":[2,0,0,20,25],
-"structllama_1_1VirtualRecord.html#ae7daad53e8a14f6575c003673545ca4b":[2,0,0,20,40],
-"structllama_1_1VirtualRecord.html#aec4e2893450f445152dc3e142c5313a9":[2,0,0,20,20],
-"structllama_1_1VirtualRecord.html#af331517d549e5e4623435d46196bf093":[2,0,0,20,41]
+"structllama_1_1VirtualRecord.html#ae4713e292f0f76d0337d488ab7b18a03":[2,0,0,20,15]
 };
