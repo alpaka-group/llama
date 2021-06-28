@@ -7,17 +7,19 @@
 #ifdef __cpp_lib_concepts
 TEST_CASE("mapping.concepts")
 {
-    STATIC_REQUIRE(llama::Mapping<llama::mapping::AoS<llama::ArrayDims<2>, Particle>>);
-    STATIC_REQUIRE(llama::Mapping<llama::mapping::SoA<llama::ArrayDims<2>, Particle>>);
+    STATIC_REQUIRE(llama::Mapping<llama::mapping::AlignedAoS<llama::ArrayDims<2>, Particle>>);
+    STATIC_REQUIRE(llama::Mapping<llama::mapping::PackedAoS<llama::ArrayDims<2>, Particle>>);
+    STATIC_REQUIRE(llama::Mapping<llama::mapping::SingleBlobSoA<llama::ArrayDims<2>, Particle>>);
+    STATIC_REQUIRE(llama::Mapping<llama::mapping::MultiBlobSoA<llama::ArrayDims<2>, Particle>>);
     STATIC_REQUIRE(llama::Mapping<llama::mapping::AoSoA<llama::ArrayDims<2>, Particle, 8>>);
 }
 #endif
 
-TEST_CASE("address.AoS")
+TEST_CASE("address.AoS.Packed")
 {
     using ArrayDims = llama::ArrayDims<2>;
     auto arrayDims = ArrayDims{16, 16};
-    auto mapping = llama::mapping::AoS<ArrayDims, Particle>{arrayDims};
+    auto mapping = llama::mapping::PackedAoS<ArrayDims, Particle>{arrayDims};
 
     {
         const auto coord = ArrayDims{0, 0};
@@ -65,12 +67,11 @@ TEST_CASE("address.AoS")
     }
 }
 
-TEST_CASE("address.AoS.fortran")
+TEST_CASE("address.AoS.Packed.fortran")
 {
     using ArrayDims = llama::ArrayDims<2>;
     auto arrayDims = ArrayDims{16, 16};
-    auto mapping
-        = llama::mapping::AoS<ArrayDims, Particle, false, llama::mapping::LinearizeArrayDimsFortran>{arrayDims};
+    auto mapping = llama::mapping::PackedAoS<ArrayDims, Particle, llama::mapping::LinearizeArrayDimsFortran>{arrayDims};
 
     {
         const auto coord = ArrayDims{0, 0};
@@ -118,11 +119,11 @@ TEST_CASE("address.AoS.fortran")
     }
 }
 
-TEST_CASE("address.AoS.morton")
+TEST_CASE("address.AoS.Packed.morton")
 {
     using ArrayDims = llama::ArrayDims<2>;
     auto arrayDims = ArrayDims{16, 16};
-    auto mapping = llama::mapping::AoS<ArrayDims, Particle, false, llama::mapping::LinearizeArrayDimsMorton>{arrayDims};
+    auto mapping = llama::mapping::PackedAoS<ArrayDims, Particle, llama::mapping::LinearizeArrayDimsMorton>{arrayDims};
 
     {
         const auto coord = ArrayDims{0, 0};
@@ -170,11 +171,11 @@ TEST_CASE("address.AoS.morton")
     }
 }
 
-TEST_CASE("address.AoS.aligned")
+TEST_CASE("address.AoS.Aligned")
 {
     using ArrayDims = llama::ArrayDims<2>;
     auto arrayDims = ArrayDims{16, 16};
-    auto mapping = llama::mapping::AoS<ArrayDims, Particle, true>{arrayDims};
+    auto mapping = llama::mapping::AlignedAoS<ArrayDims, Particle>{arrayDims};
 
     {
         const auto coord = ArrayDims{0, 0};
@@ -222,11 +223,11 @@ TEST_CASE("address.AoS.aligned")
     }
 }
 
-TEST_CASE("address.SoA")
+TEST_CASE("address.SoA.SingleBlob")
 {
     using ArrayDims = llama::ArrayDims<2>;
     auto arrayDims = ArrayDims{16, 16};
-    auto mapping = llama::mapping::SoA<ArrayDims, Particle>{arrayDims};
+    auto mapping = llama::mapping::SingleBlobSoA<ArrayDims, Particle>{arrayDims};
 
     {
         const auto coord = ArrayDims{0, 0};
@@ -274,12 +275,12 @@ TEST_CASE("address.SoA")
     }
 }
 
-TEST_CASE("address.SoA.fortran")
+TEST_CASE("address.SoA.SingleBlob.fortran")
 {
     using ArrayDims = llama::ArrayDims<2>;
     auto arrayDims = ArrayDims{16, 16};
     auto mapping
-        = llama::mapping::SoA<ArrayDims, Particle, false, llama::mapping::LinearizeArrayDimsFortran>{arrayDims};
+        = llama::mapping::SingleBlobSoA<ArrayDims, Particle, llama::mapping::LinearizeArrayDimsFortran>{arrayDims};
 
     {
         const auto coord = ArrayDims{0, 0};
@@ -327,7 +328,7 @@ TEST_CASE("address.SoA.fortran")
     }
 }
 
-TEST_CASE("address.SoA.morton")
+TEST_CASE("address.SoA.SingleBlob.morton")
 {
     struct Value
     {
@@ -335,7 +336,8 @@ TEST_CASE("address.SoA.morton")
 
     using ArrayDims = llama::ArrayDims<2>;
     auto arrayDims = ArrayDims{16, 16};
-    auto mapping = llama::mapping::SoA<ArrayDims, Particle, false, llama::mapping::LinearizeArrayDimsMorton>{arrayDims};
+    auto mapping
+        = llama::mapping::SingleBlobSoA<ArrayDims, Particle, llama::mapping::LinearizeArrayDimsMorton>{arrayDims};
 
     {
         const auto coord = ArrayDims{0, 0};
@@ -387,7 +389,7 @@ TEST_CASE("address.SoA.MultiBlob")
 {
     using ArrayDims = llama::ArrayDims<2>;
     auto arrayDims = ArrayDims{16, 16};
-    auto mapping = llama::mapping::SoA<ArrayDims, Particle, true>{arrayDims};
+    auto mapping = llama::mapping::MultiBlobSoA<ArrayDims, Particle>{arrayDims};
 
     {
         const auto coord = ArrayDims{0, 0};

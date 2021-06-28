@@ -242,6 +242,10 @@ namespace llama
         using iterator = Iterator<View>;
         using const_iterator = Iterator<const View>;
 
+        static_assert(
+            !std::is_reference_v<ArrayDims>,
+            "Mapping::ArrayDims must not be a reference. Are you using decltype(...) as mapping template argument?");
+
         View() = default;
 
         LLAMA_FN_HOST_ACC_INLINE

@@ -29,12 +29,19 @@ using Particle = llama::Record<
 >;
 // clang-format on
 
-TEST_CASE("mapsNonOverlappingly.AoS")
+TEST_CASE("mapsNonOverlappingly.PackedAoS")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    constexpr auto arrayDims = ArrayDims{32, 32};
-    constexpr auto mapping = llama::mapping::AoS<ArrayDims, Particle>{arrayDims};
+    constexpr auto mapping = llama::mapping::PackedAoS<llama::ArrayDims<2>, Particle>{{32, 32}};
+#ifdef __cpp_constexpr_dynamic_alloc
+    STATIC_REQUIRE(llama::mapsNonOverlappingly(mapping));
+#else
+    INFO("Test disabled because compiler does not support __cpp_constexpr_dynamic_alloc");
+#endif
+}
 
+TEST_CASE("mapsNonOverlappingly.AlignedAoS")
+{
+    constexpr auto mapping = llama::mapping::AlignedAoS<llama::ArrayDims<2>, Particle>{{32, 32}};
 #ifdef __cpp_constexpr_dynamic_alloc
     STATIC_REQUIRE(llama::mapsNonOverlappingly(mapping));
 #else
