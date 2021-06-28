@@ -182,7 +182,7 @@ Typedefs</h2></td></tr>
 <tr class="separator:aa8b38b8cac9a0623d4956a75fa1a63fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21d2f247af9c167ca2238eaa09f1bada"><td class="memTemplParams" colspan="2">template&lt;typename... RecordCoords&gt; </td></tr>
 <tr class="memitem:a21d2f247af9c167ca2238eaa09f1bada"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a21d2f247af9c167ca2238eaa09f1bada">llama::Cat</a> = RecordCoordFromList&lt; boost::mp11::mp_append&lt; typename RecordCoords::List... &gt; &gt;</td></tr>
-<tr class="memdesc:a21d2f247af9c167ca2238eaa09f1bada"><td class="mdescLeft">&#160;</td><td class="mdescRight">Concatenate a set of <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>.  <a href="namespacellama.html#a21d2f247af9c167ca2238eaa09f1bada">More...</a><br /></td></tr>
+<tr class="memdesc:a21d2f247af9c167ca2238eaa09f1bada"><td class="mdescLeft">&#160;</td><td class="mdescRight">Concatenate a set of <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>s.  <a href="namespacellama.html#a21d2f247af9c167ca2238eaa09f1bada">More...</a><br /></td></tr>
 <tr class="separator:a21d2f247af9c167ca2238eaa09f1bada"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25d8302ec14d00c68dd886d296a1373d"><td class="memTemplParams" colspan="2">template&lt;typename RecordCoord &gt; </td></tr>
 <tr class="memitem:a25d8302ec14d00c68dd886d296a1373d"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a25d8302ec14d00c68dd886d296a1373d">llama::PopFront</a> = RecordCoordFromList&lt; boost::mp11::mp_pop_front&lt; typename RecordCoord::List &gt; &gt;</td></tr>
@@ -206,7 +206,7 @@ Functions</h2></td></tr>
 <tr class="separator:aafe5ae24f96109b3ca3d05eaf550e880"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42cdd926d98388052f028ab19c94b649"><td class="memTemplParams" colspan="2">template&lt;typename... RecordCoords&gt; </td></tr>
 <tr class="memitem:a42cdd926d98388052f028ab19c94b649"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a42cdd926d98388052f028ab19c94b649">llama::cat</a> (RecordCoords...)</td></tr>
-<tr class="memdesc:a42cdd926d98388052f028ab19c94b649"><td class="mdescLeft">&#160;</td><td class="mdescRight">Concatenate a set of <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> instances.  <a href="namespacellama.html#a42cdd926d98388052f028ab19c94b649">More...</a><br /></td></tr>
+<tr class="memdesc:a42cdd926d98388052f028ab19c94b649"><td class="mdescLeft">&#160;</td><td class="mdescRight">Concatenate a set of <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>s instances.  <a href="namespacellama.html#a42cdd926d98388052f028ab19c94b649">More...</a><br /></td></tr>
 <tr class="separator:a42cdd926d98388052f028ab19c94b649"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
@@ -223,6 +223,7 @@ Variables</h2></td></tr>
 <tr class="separator:a167bf28d08f395c481af0260eb7e1e1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d62fb6d777b67e3f73b80cc97d1cd44"><td class="memTemplParams" colspan="2">template&lt;typename First , typename Second &gt; </td></tr>
 <tr class="memitem:a5d62fb6d777b67e3f73b80cc97d1cd44"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a5d62fb6d777b67e3f73b80cc97d1cd44">llama::RecordCoordCommonPrefixIsSame</a> = internal::RecordCoordCommonPrefixIsSameImpl&lt;First, Second&gt;::value</td></tr>
+<tr class="memdesc:a5d62fb6d777b67e3f73b80cc97d1cd44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether two <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>s are the same or one is the prefix of the other.  <a href="namespacellama.html#a5d62fb6d777b67e3f73b80cc97d1cd44">More...</a><br /></td></tr>
 <tr class="separator:a5d62fb6d777b67e3f73b80cc97d1cd44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
@@ -231,7 +232,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="RecordCoord_8hpp.html">RecordCoord.hpp</a></li>
-    <li class="footer">Generated on Mon Jun 28 2021 16:30:10 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Jun 28 2021 17:21:36 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

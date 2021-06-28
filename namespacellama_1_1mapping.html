@@ -136,18 +136,15 @@ Classes</h2></td></tr>
 Typedefs</h2></td></tr>
 <tr class="memitem:a8123437f92ed834bccec09563137a33e"><td class="memTemplParams" colspan="2">template&lt;typename ArrayDims , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </td></tr>
 <tr class="memitem:a8123437f92ed834bccec09563137a33e"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a8123437f92ed834bccec09563137a33e">AlignedAoS</a> = <a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a>&lt; <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>, RecordDim, true, LinearizeArrayDimsFunctor &gt;</td></tr>
-<tr class="memdesc:a8123437f92ed834bccec09563137a33e"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structllama_1_1Array.html">Array</a> of struct mapping preserving the alignment of the element types by inserting padding. See.  <a href="namespacellama_1_1mapping.html#a8123437f92ed834bccec09563137a33e">More...</a><br /></td></tr>
 <tr class="separator:a8123437f92ed834bccec09563137a33e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e1c9145cc0805f5aa1e09f13f9ee9ce"><td class="memTemplParams" colspan="2">template&lt;typename ArrayDims , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </td></tr>
 <tr class="memitem:a8e1c9145cc0805f5aa1e09f13f9ee9ce"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a8e1c9145cc0805f5aa1e09f13f9ee9ce">PackedAoS</a> = <a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a>&lt; <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>, RecordDim, false, LinearizeArrayDimsFunctor &gt;</td></tr>
 <tr class="separator:a8e1c9145cc0805f5aa1e09f13f9ee9ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5162345b1fe451d924851b414b8305f"><td class="memTemplParams" colspan="2">template&lt;typename ArrayDims , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </td></tr>
 <tr class="memitem:aa5162345b1fe451d924851b414b8305f"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#aa5162345b1fe451d924851b414b8305f">SingleBlobSoA</a> = <a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a>&lt; <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>, RecordDim, false, LinearizeArrayDimsFunctor &gt;</td></tr>
-<tr class="memdesc:aa5162345b1fe451d924851b414b8305f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct of array mapping storing the entire layout in a single blob. See.  <a href="namespacellama_1_1mapping.html#aa5162345b1fe451d924851b414b8305f">More...</a><br /></td></tr>
 <tr class="separator:aa5162345b1fe451d924851b414b8305f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8710eb92ae3140063db07d2bb5077463"><td class="memTemplParams" colspan="2">template&lt;typename ArrayDims , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </td></tr>
 <tr class="memitem:a8710eb92ae3140063db07d2bb5077463"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a8710eb92ae3140063db07d2bb5077463">MultiBlobSoA</a> = <a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a>&lt; <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>, RecordDim, true, LinearizeArrayDimsFunctor &gt;</td></tr>
-<tr class="memdesc:a8710eb92ae3140063db07d2bb5077463"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct of array mapping storing each attribute of the record dimension in a separate blob. See.  <a href="namespacellama_1_1mapping.html#a8710eb92ae3140063db07d2bb5077463">More...</a><br /></td></tr>
 <tr class="separator:a8710eb92ae3140063db07d2bb5077463"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
@@ -170,11 +167,9 @@ template&lt;typename ArrayDims , typename RecordDim , typename LinearizeArrayDim
         </tr>
       </table>
 </div><div class="memdoc">
+<p><a class="el" href="structllama_1_1Array.html">Array</a> of struct mapping preserving the alignment of the element types by inserting padding. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a> </dd></dl>
 
-<p><a class="el" href="structllama_1_1Array.html">Array</a> of struct mapping preserving the alignment of the element types by inserting padding. See. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a>. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00057">57</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00058">58</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
 
 </div>
 </div>
@@ -191,11 +186,9 @@ template&lt;typename ArrayDims , typename RecordDim , typename LinearizeArrayDim
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Struct of array mapping storing each attribute of the record dimension in a separate blob. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a> </dd></dl>
 
-<p>Struct of array mapping storing each attribute of the record dimension in a separate blob. See. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a>. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00090">90</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00092">92</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -212,9 +205,9 @@ template&lt;typename ArrayDims , typename RecordDim , typename LinearizeArrayDim
         </tr>
       </table>
 </div><div class="memdoc">
-<p><a class="el" href="structllama_1_1Array.html">Array</a> of struct mapping packing the element types tighly, violating the types alignment requirements. See </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a>. </dd></dl>
+<p><a class="el" href="structllama_1_1Array.html">Array</a> of struct mapping packing the element types tighly, violating the types alignment requirements. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00062">62</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00063">63</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
 
 </div>
 </div>
@@ -231,11 +224,9 @@ template&lt;typename ArrayDims , typename RecordDim , typename LinearizeArrayDim
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Struct of array mapping storing the entire layout in a single blob. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a> </dd></dl>
 
-<p>Struct of array mapping storing the entire layout in a single blob. See. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a>. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00086">86</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00087">87</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -281,12 +272,12 @@ template&lt;typename RecordDim , std::size_t VectorRegisterBits&gt; </div>
 </div>
 </div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="anamespacellama_html_acdfb627d325de5ab6c18cdc842cd7350"><div class="ttname"><a href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">llama::GetType</a></div><div class="ttdeci">typename internal::GetTypeImpl&lt; RecordDim, RecordCoordOrTags... &gt;::type GetType</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00261">Core.hpp:261</a></div></div>
+<div class="ttc" id="anamespacellama_html_acdfb627d325de5ab6c18cdc842cd7350"><div class="ttname"><a href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">llama::GetType</a></div><div class="ttdeci">typename internal::GetTypeImpl&lt; RecordDim, RecordCoordOrTags... &gt;::type GetType</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00258">Core.hpp:258</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li>
-    <li class="footer">Generated on Mon Jun 28 2021 16:30:11 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Jun 28 2021 17:21:36 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

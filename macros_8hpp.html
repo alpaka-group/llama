@@ -140,8 +140,10 @@ Macros</h2></td></tr>
 <tr class="memdesc:abe08b7d43a4670c1332a03f52d6010ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suppresses nvcc warning: 'calling a <b>host</b> function from <b>host</b> <b>device</b> function.'.  <a href="macros_8hpp.html#abe08b7d43a4670c1332a03f52d6010ac">More...</a><br /></td></tr>
 <tr class="separator:abe08b7d43a4670c1332a03f52d6010ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a48abf2d81c1aac87ff87f95bb427049a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="macros_8hpp.html#a48abf2d81c1aac87ff87f95bb427049a">LLAMA_FORCE_INLINE_RECURSIVE</a></td></tr>
+<tr class="memdesc:a48abf2d81c1aac87ff87f95bb427049a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forces the compiler to recursively inline the call hiearchy started by the subsequent function call.  <a href="macros_8hpp.html#a48abf2d81c1aac87ff87f95bb427049a">More...</a><br /></td></tr>
 <tr class="separator:a48abf2d81c1aac87ff87f95bb427049a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c7addf59d59bed9110075644e115f97"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="macros_8hpp.html#a2c7addf59d59bed9110075644e115f97">LLAMA_COPY</a>(x)&#160;&#160;&#160;decltype(x)(x)</td></tr>
+<tr class="memdesc:a2c7addf59d59bed9110075644e115f97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forces a copy of a value. This is useful to prevent ODR usage of constants when compiling for GPU targets.  <a href="macros_8hpp.html#a2c7addf59d59bed9110075644e115f97">More...</a><br /></td></tr>
 <tr class="separator:a2c7addf59d59bed9110075644e115f97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46ce794a2a02ddc4a84b9119b5f66ab8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="macros_8hpp.html#a46ce794a2a02ddc4a84b9119b5f66ab8">CAN_USE_RANGES</a>&#160;&#160;&#160;0</td></tr>
 <tr class="separator:a46ce794a2a02ddc4a84b9119b5f66ab8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -159,7 +161,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00094">94</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00089">89</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -178,9 +180,10 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
 <p>Forces a copy of a value. This is useful to prevent ODR usage of constants when compiling for GPU targets. </p>
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00085">85</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00080">80</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -197,7 +200,7 @@ Macros</h2></td></tr>
 </div><div class="memdoc">
 <p>Some offloading parallelization language extensions such a CUDA, OpenACC or OpenMP 4.5 need to specify whether a class, struct, function or method "resides" on the host, the accelerator (the offloading device) or both. LLAMA supports this with marking every function needed on an accelerator with <code>LLAMA_FN_HOST_ACC_INLINE</code>. When using such a language (or e.g. <a href="https://github.com/alpaka-group/alpaka">alpaka</a>) this macro should be defined on the compiler's command line. E.g. for alpaka: -D'LLAMA_FN_HOST_ACC_INLINE=ALPAKA_FN_HOST_ACC' </p>
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00043">43</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00040">40</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -212,9 +215,10 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
 <p>Forces the compiler to recursively inline the call hiearchy started by the subsequent function call. </p>
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00080">80</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00076">76</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -229,7 +233,7 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>May be put in front of a loop statement. Indicates that all (!) data access inside the loop is indepent, so the loop can be safely vectorized. Example: </p><div class="fragment"><div class="line"><a class="code" href="macros_8hpp.html#aa201f5c2567527b34eae5fbdab0e2416">LLAMA_INDEPENDENT_DATA</a></div>
+<p>May be put in front of a loop statement. Indicates that all (!) data access inside the loop is indepent, so the loop can be safely vectorized. Example:</p><div class="fragment"><div class="line"><a class="code" href="macros_8hpp.html#aa201f5c2567527b34eae5fbdab0e2416">LLAMA_INDEPENDENT_DATA</a></div>
 <div class="line"><span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; N; ++i)</div>
 <div class="line">    <span class="comment">// because of LLAMA_INDEPENDENT_DATA the compiler knows that a and b</span></div>
 <div class="line">    <span class="comment">// do not overlap and the operation can safely be vectorized</span></div>
@@ -253,7 +257,7 @@ Macros</h2></td></tr>
 
 <p>Gives strong indication to the compiler to inline the attributed lambda. </p>
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00063">63</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00060">60</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -273,7 +277,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00057">57</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00054">54</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -291,7 +295,7 @@ Macros</h2></td></tr>
 
 <p>Suppresses nvcc warning: 'calling a <b>host</b> function from <b>host</b> <b>device</b> function.'. </p>
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00070">70</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00067">67</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -302,7 +306,7 @@ Macros</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="macros_8hpp.html">macros.hpp</a></li>
-    <li class="footer">Generated on Mon Jun 28 2021 16:30:10 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Jun 28 2021 17:21:36 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

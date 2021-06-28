@@ -163,7 +163,7 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstd_1_1tuple__element_3_01I_00_01llama_1_1ArrayDims_3_01N_01_4_01_4.html">std::tuple_element&lt; I, llama::ArrayDims&lt; N &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Record.html">llama::Record&lt; Fields &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A type list of <a class="el" href="structllama_1_1Field.html">Field</a> which may be used to define a record dimension.  <a href="structllama_1_1Record.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A type list of <a class="el" href="structllama_1_1Field.html">Field</a>s which may be used to define a record dimension.  <a href="structllama_1_1Record.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Field.html">llama::Field&lt; Tag, Type &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -240,6 +240,7 @@ Typedefs</h2></td></tr>
 <tr class="separator:a274e97edd71d84e2df802ea2b70ec997"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89cb1509a9d1306665220038e45b41db"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename RecordCoord &gt; </td></tr>
 <tr class="memitem:a89cb1509a9d1306665220038e45b41db"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a89cb1509a9d1306665220038e45b41db">llama::GetTag</a> = boost::mp11::mp_back&lt; GetTags&lt; RecordDim, RecordCoord &gt; &gt;</td></tr>
+<tr class="memdesc:a89cb1509a9d1306665220038e45b41db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the tag of the <a class="el" href="structllama_1_1Field.html">Field</a> at a <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> inside the record dimension tree.  <a href="namespacellama.html#a89cb1509a9d1306665220038e45b41db">More...</a><br /></td></tr>
 <tr class="separator:a89cb1509a9d1306665220038e45b41db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62c0b490774fc0bbdc859c10af82b8c2"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename... Tags&gt; </td></tr>
 <tr class="memitem:a62c0b490774fc0bbdc859c10af82b8c2"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a62c0b490774fc0bbdc859c10af82b8c2">llama::GetCoordFromTags</a> = typename internal::GetCoordFromTagsImpl&lt; RecordDim, RecordCoord&lt;&gt;, Tags... &gt;::type</td></tr>
@@ -370,7 +371,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Core_8hpp.html">Core.hpp</a></li>
-    <li class="footer">Generated on Mon Jun 28 2021 16:30:10 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Jun 28 2021 17:21:36 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
