@@ -83,6 +83,7 @@ $(document).ready(function(){initNavTree('structllama_1_1bloballoc_1_1SharedPtr.
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="structllama_1_1bloballoc_1_1SharedPtr-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -92,10 +93,16 @@ $(document).ready(function(){initNavTree('structllama_1_1bloballoc_1_1SharedPtr.
 
 <p><code>#include &lt;<a class="el" href="BlobAllocators_8hpp_source.html">BlobAllocators.hpp</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a30618a33557b511f650f5a5305eebf85"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a30618a33557b511f650f5a5305eebf85"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1bloballoc_1_1SharedPtr.html#a30618a33557b511f650f5a5305eebf85">shared_ptr</a> = std::shared_ptr&lt; T &gt;</td></tr>
+<tr class="separator:a30618a33557b511f650f5a5305eebf85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae2acddc583a64d9e727262ba6b9480a4"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1bloballoc_1_1SharedPtr.html#ae2acddc583a64d9e727262ba6b9480a4">operator()</a> (std::size_t count) const -&gt; std::shared_ptr&lt; std::byte[]&gt;</td></tr>
-<tr class="separator:ae2acddc583a64d9e727262ba6b9480a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7025755f2c0da24e7a917213e47b055"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1bloballoc_1_1SharedPtr.html#af7025755f2c0da24e7a917213e47b055">operator()</a> (std::size_t count) const -&gt; <a class="el" href="structllama_1_1bloballoc_1_1SharedPtr.html#a30618a33557b511f650f5a5305eebf85">shared_ptr</a>&lt; std::byte[]&gt;</td></tr>
+<tr class="separator:af7025755f2c0da24e7a917213e47b055"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;std::size_t Alignment = 64&gt;<br />
@@ -108,10 +115,31 @@ struct llama::bloballoc::SharedPtr&lt; Alignment &gt;</h3>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="BlobAllocators_8hpp_source.html#l00037">37</a> of file <a class="el" href="BlobAllocators_8hpp_source.html">BlobAllocators.hpp</a>.</p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ae2acddc583a64d9e727262ba6b9480a4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae2acddc583a64d9e727262ba6b9480a4">&#9670;&nbsp;</a></span>operator()()</h2>
+<p class="definition">Definition at line <a class="el" href="BlobAllocators_8hpp_source.html#l00040">40</a> of file <a class="el" href="BlobAllocators_8hpp_source.html">BlobAllocators.hpp</a>.</p>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a30618a33557b511f650f5a5305eebf85"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30618a33557b511f650f5a5305eebf85">&#9670;&nbsp;</a></span>shared_ptr</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;std::size_t Alignment = 64&gt; </div>
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structllama_1_1bloballoc_1_1SharedPtr.html">llama::bloballoc::SharedPtr</a>&lt; Alignment &gt;::<a class="el" href="structllama_1_1bloballoc_1_1SharedPtr.html#a30618a33557b511f650f5a5305eebf85">shared_ptr</a> =  std::shared_ptr&lt;T&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BlobAllocators_8hpp_source.html#l00048">48</a> of file <a class="el" href="BlobAllocators_8hpp_source.html">BlobAllocators.hpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="af7025755f2c0da24e7a917213e47b055"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7025755f2c0da24e7a917213e47b055">&#9670;&nbsp;</a></span>operator()()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -126,7 +154,7 @@ template&lt;std::size_t Alignment = 64&gt; </div>
           <td>(</td>
           <td class="paramtype">std::size_t&#160;</td>
           <td class="paramname"><em>count</em></td><td>)</td>
-          <td> const -&gt; std::shared_ptr&lt;std::byte[]&gt;
+          <td> const -&gt; <a class="el" href="structllama_1_1bloballoc_1_1SharedPtr.html#a30618a33557b511f650f5a5305eebf85">shared_ptr</a>&lt;std::byte[]&gt;
         </td>
         </tr>
       </table>
@@ -137,7 +165,7 @@ template&lt;std::size_t Alignment = 64&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BlobAllocators_8hpp_source.html#l00039">39</a> of file <a class="el" href="BlobAllocators_8hpp_source.html">BlobAllocators.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BlobAllocators_8hpp_source.html#l00051">51</a> of file <a class="el" href="BlobAllocators_8hpp_source.html">BlobAllocators.hpp</a>.</p>
 
 </div>
 </div>
@@ -150,7 +178,7 @@ template&lt;std::size_t Alignment = 64&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1bloballoc.html">bloballoc</a></li><li class="navelem"><a class="el" href="structllama_1_1bloballoc_1_1SharedPtr.html">SharedPtr</a></li>
-    <li class="footer">Generated on Mon Jun 28 2021 17:21:36 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Jun 28 2021 22:01:03 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
