@@ -49,7 +49,7 @@ Checks: >
     -altera-struct-pack-align,
     -misc-no-recursion
 
-WarningsAsErrors: ''
+WarningsAsErrors: '*'
 HeaderFilterRegex: ''
 AnalyzeTemporaryDtors: false
 FormatStyle: none
