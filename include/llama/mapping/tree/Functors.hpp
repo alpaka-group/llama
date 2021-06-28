@@ -7,8 +7,7 @@
 
 namespace llama::mapping::tree::functor
 {
-    /// Functor for \ref tree::Mapping. Does nothing with the mapping tree. Is
-    /// used for testing.
+    /// Functor for \ref tree::Mapping. Does nothing with the mapping tree. Is used for testing.
     struct Idem
     {
         template <typename Tree>
@@ -32,8 +31,7 @@ namespace llama::mapping::tree::functor
         }
     };
 
-    /// Functor for \ref tree::Mapping. Moves all run time parts to the leaves,
-    /// creating a SoA layout.
+    /// Functor for \ref tree::Mapping. Moves all run time parts to the leaves, creating a SoA layout.
     struct LeafOnlyRT
     {
         template <typename Tree>
@@ -179,11 +177,10 @@ namespace llama::mapping::tree::functor
         }
     } // namespace internal
 
-    /// Functor for \ref tree::Mapping. Move the run time part of a node one
-    /// level down in direction of the leaves by the given amount (runtime or
-    /// compile time value).
-    /// \tparam TreeCoord tree coordinate in the mapping tree which's run time
-    /// part shall be moved down one level \see tree::Mapping
+    /// Functor for \ref tree::Mapping. Move the run time part of a node one level down in direction of the leaves by
+    /// the given amount (runtime or compile time value).
+    /// \tparam TreeCoord tree coordinate in the mapping tree which's run time part shall be moved down one level
+    /// \see tree::Mapping
     template <typename TreeCoord, typename Amount = std::size_t>
     struct MoveRTDown
     {

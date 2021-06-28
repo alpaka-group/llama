@@ -163,11 +163,10 @@ namespace llama::mapping::tree
         }
     } // namespace internal
 
-    /// An experimental attempt to provide a general purpose description of a
-    /// mapping. \ref ArrayDims and record dimension are represented by a compile
-    /// time tree data structure. This tree is mapped into memory by means of a
-    /// breadth-first tree traversal. By specifying additional tree operations,
-    /// the tree can be modified at compile time before being mapped to memory.
+    /// An experimental attempt to provide a general purpose description of a mapping. \ref ArrayDims and record
+    /// dimension are represented by a compile time tree data structure. This tree is mapped into memory by means of a
+    /// breadth-first tree traversal. By specifying additional tree operations, the tree can be modified at compile time
+    /// before being mapped to memory.
     template <typename T_ArrayDims, typename T_RecordDim, typename TreeOperationList>
     struct Mapping
     {

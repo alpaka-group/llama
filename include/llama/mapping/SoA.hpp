@@ -81,11 +81,13 @@ namespace llama::mapping
         ArrayDims arrayDimsSize;
     };
 
-    /// Struct of array mapping storing the entire layout in a single blob. See \see SoA.
+    /// Struct of array mapping storing the entire layout in a single blob.
+    /// \see SoA
     template <typename ArrayDims, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     using SingleBlobSoA = SoA<ArrayDims, RecordDim, false, LinearizeArrayDimsFunctor>;
 
-    /// Struct of array mapping storing each attribute of the record dimension in a separate blob. See \see SoA.
+    /// Struct of array mapping storing each attribute of the record dimension in a separate blob.
+    /// \see SoA
     template <typename ArrayDims, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     using MultiBlobSoA = SoA<ArrayDims, RecordDim, true, LinearizeArrayDimsFunctor>;
 

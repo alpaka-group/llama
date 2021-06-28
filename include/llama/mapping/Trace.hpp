@@ -30,8 +30,8 @@ namespace llama::mapping
         }
     } // namespace internal
 
-    /// Forwards all calls to the inner mapping. Traces all accesses made
-    /// through this mapping and prints a summary on destruction.
+    /// Forwards all calls to the inner mapping. Traces all accesses made through this mapping and prints a summary on
+    /// destruction.
     /// \tparam Mapping The type of the inner mapping.
     template <typename Mapping>
     struct Trace

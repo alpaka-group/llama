@@ -38,10 +38,10 @@ namespace llama
         }
     } // namespace internal
 
-    /// Creates a view based on the given mapping, e.g. \ref mapping::AoS or \ref mapping::SoA. For allocating the
-    /// view's underlying memory, the specified allocator callable is used (or the default one, which is \ref
-    /// bloballoc::Vector). The allocator callable is called with the size of bytes to allocate for each blob of the
-    /// mapping. This function is the preferred way to create a \ref View.
+    /// Creates a view based on the given mapping, e.g. \ref AoS or \ref :SoA. For allocating the view's underlying
+    /// memory, the specified allocator callable is used (or the default one, which is \ref bloballoc::Vector). The
+    /// allocator callable is called with the size of bytes to allocate for each blob of the mapping. This function is
+    /// the preferred way to create a \ref View.
 #ifdef __cpp_concepts
     template <typename Mapping, BlobAllocator Allocator = bloballoc::Vector<>>
 #else
@@ -223,13 +223,10 @@ namespace llama
         };
     } // namespace internal
 
-    /// Central LLAMA class holding memory for storage and giving access to
-    /// values stored there defined by a mapping. A view should be created using
-    /// \ref allocView.
-    /// \tparam T_Mapping The mapping used by the view to map accesses into
-    /// memory.
-    /// \tparam BlobType The storage type used by the view holding
-    /// memory.
+    /// Central LLAMA class holding memory for storage and giving access to values stored there defined by a mapping. A
+    /// view should be created using \ref allocView.
+    /// \tparam T_Mapping The mapping used by the view to map accesses into memory.
+    /// \tparam BlobType The storage type used by the view holding memory.
 #ifdef __cpp_concepts
     template <typename T_Mapping, Blob BlobType>
 #else
@@ -254,8 +251,7 @@ namespace llama
         {
         }
 
-        /// Retrieves the \ref VirtualRecord at the given \ref ArrayDims
-        /// coordinate.
+        /// Retrieves the \ref VirtualRecord at the given \ref ArrayDims coordinate.
         LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDims arrayDims) const -> decltype(auto)
         {
             if constexpr (isRecord<RecordDim> || internal::is_bounded_array<RecordDim>::value)
@@ -284,8 +280,8 @@ namespace llama
             }
         }
 
-        /// Retrieves the \ref VirtualRecord at the \ref ArrayDims coordinate
-        /// constructed from the passed component indices.
+        /// Retrieves the \ref VirtualRecord at the \ref ArrayDims coordinate constructed from the passed component
+        /// indices.
         template <typename... Indices>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) const -> decltype(auto)
         {
@@ -312,8 +308,8 @@ namespace llama
             return (*this) (ArrayDims{static_cast<typename ArrayDims::value_type>(indices)...});
         }
 
-        /// Retrieves the \ref VirtualRecord at the \ref ArrayDims coordinate
-        /// constructed from the passed component indices.
+        /// Retrieves the \ref VirtualRecord at the \ref ArrayDims coordinate constructed from the passed component
+        /// indices.
         LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayDims arrayDims) const -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
@@ -326,8 +322,7 @@ namespace llama
             return (*this) (arrayDims);
         }
 
-        /// Retrieves the \ref VirtualRecord at the 1D \ref ArrayDims coordinate
-        /// constructed from the passed index.
+        /// Retrieves the \ref VirtualRecord at the 1D \ref ArrayDims coordinate constructed from the passed index.
         LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t index) const -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
@@ -407,8 +402,8 @@ namespace llama
     template <typename Mapping, typename BlobType>
     inline constexpr auto IsView<View<Mapping, BlobType>> = true;
 
-    /// Acts like a \ref View, but shows only a smaller and/or shifted part of
-    /// another view it references, the parent view.
+    /// Acts like a \ref View, but shows only a smaller and/or shifted part of another view it references, the parent
+    /// view.
     template <typename T_ParentViewType>
     struct VirtualView
     {
@@ -436,8 +431,7 @@ namespace llama
             return parentView.template accessor<Coords...>(ArrayDims{arrayDims + offset});
         }
 
-        /// Same as \ref View::operator()(ArrayDims), but shifted by the offset
-        /// of this \ref VirtualView.
+        /// Same as \ref View::operator()(ArrayDims), but shifted by the offset of this \ref VirtualView.
         LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDims arrayDims) const -> VirtualRecordType
         {
             LLAMA_FORCE_INLINE_RECURSIVE
@@ -450,8 +444,7 @@ namespace llama
             return parentView(ArrayDims{arrayDims + offset});
         }
 
-        /// Same as corresponding operator in \ref View, but shifted by the
-        /// offset of this \ref VirtualView.
+        /// Same as corresponding operator in \ref View, but shifted by the offset of this \ref VirtualView.
         template <typename... Indices>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) const -> VirtualRecordType
         {
@@ -493,7 +486,6 @@ namespace llama
         }
 
         ParentView& parentView; ///< reference to parent view.
-        const ArrayDims offset; ///< offset this view's \ref ArrayDims coordinates are
-                                ///< shifted to the parent view.
+        const ArrayDims offset; ///< offset this view's \ref ArrayDims coordinates are shifted to the parent view.
     };
 } // namespace llama

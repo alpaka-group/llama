@@ -46,7 +46,7 @@ struct std::tuple_element<I, llama::ArrayDims<N>>
 
 namespace llama
 {
-    /// A type list of \ref Field which may be used to define a record dimension.
+    /// A type list of \ref Field%s which may be used to define a record dimension.
     template <typename... Fields>
     struct Record
     {
@@ -141,24 +141,21 @@ namespace llama
         };
     } // namespace internal
 
-    /// Get the tags of all \ref Field from the root of the record dimension
-    /// tree until to the node identified by \ref RecordCoord.
+    /// Get the tags of all \ref Field%s from the root of the record dimension tree until to the node identified by \ref
+    /// RecordCoord.
     template <typename RecordDim, typename RecordCoord>
     using GetTags = typename internal::GetTagsImpl<NoName, RecordDim, RecordCoord>::type;
 
-    /// Get the tag of the \ref Field at a \ref RecordCoord inside the
-    /// record dimension tree.
+    /// Get the tag of the \ref Field at a \ref RecordCoord inside the record dimension tree.
     template <typename RecordDim, typename RecordCoord>
     using GetTag = boost::mp11::mp_back<GetTags<RecordDim, RecordCoord>>;
 
-    /// Is true if, starting at two coordinates in two record dimensions, all
-    /// subsequent nodes in the record dimension tree have the same tag.
+    /// Is true if, starting at two coordinates in two record dimensions, all subsequent nodes in the record dimension
+    /// tree have the same tag.
     /// \tparam RecordDimA First record dimension.
-    /// \tparam LocalA \ref RecordCoord based on StartA along which the tags are
-    /// compared.
+    /// \tparam LocalA \ref RecordCoord based on StartA along which the tags are compared.
     /// \tparam RecordDimB second record dimension.
-    /// \tparam LocalB \ref RecordCoord based on StartB along which the tags are
-    /// compared.
+    /// \tparam LocalB \ref RecordCoord based on StartB along which the tags are compared.
     template <typename RecordDimA, typename LocalA, typename RecordDimB, typename LocalB>
     inline constexpr auto hasSameTags = []() constexpr
     {
@@ -255,8 +252,8 @@ namespace llama
         };
     } // namespace internal
 
-    /// Returns the type of a node in a record dimension tree identified by a given
-    /// \ref RecordCoord or a series of tags.
+    /// Returns the type of a node in a record dimension tree identified by a given \ref RecordCoord or a series of
+    /// tags.
     template <typename RecordDim, typename... RecordCoordOrTags>
     using GetType = typename internal::GetTypeImpl<RecordDim, RecordCoordOrTags...>::type;
 
@@ -273,8 +270,8 @@ namespace llama
         };
     } // namespace internal
 
-    /// Converts a series of tags navigating down a record dimension, starting at a
-    /// given \ref RecordCoord, into a \ref RecordCoord.
+    /// Converts a series of tags navigating down a record dimension, starting at a given \ref RecordCoord, into a \ref
+    /// RecordCoord.
     template <typename RecordDim, typename BaseRecordCoord, typename... Tags>
     using GetCoordFromTagsRelative =
         typename internal::GetCoordFromTagsRelativeImpl<RecordDim, BaseRecordCoord, Tags...>::type;
@@ -330,11 +327,10 @@ namespace llama
     } // namespace internal
 
     /// Iterates over the record dimension tree and calls a functor on each element.
-    /// \param functor Functor to execute at each element of. Needs to have
-    /// `operator()` with a template parameter for the \ref RecordCoord in the
-    /// record dimension tree.
-    /// \param baseCoord \ref RecordCoord at which the iteration should be
-    /// started. The functor is called on elements beneath this coordinate.
+    /// \param functor Functor to execute at each element of. Needs to have `operator()` with a template parameter for
+    /// the \ref RecordCoord in the record dimension tree.
+    /// \param baseCoord \ref RecordCoord at which the iteration should be started. The functor is called on elements
+    /// beneath this coordinate.
     template <typename RecordDim, typename Functor, std::size_t... Coords>
     LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaf(Functor&& functor, RecordCoord<Coords...> baseCoord)
     {
@@ -346,11 +342,10 @@ namespace llama
     }
 
     /// Iterates over the record dimension tree and calls a functor on each element.
-    /// \param functor Functor to execute at each element of. Needs to have
-    /// `operator()` with a template parameter for the \ref RecordCoord in the
-    /// record dimension tree.
-    /// \param baseTags Tags used to define where the iteration should be
-    /// started. The functor is called on elements beneath this coordinate.
+    /// \param functor Functor to execute at each element of. Needs to have `operator()` with a template parameter for
+    /// the \ref RecordCoord in the record dimension tree.
+    /// \param baseTags Tags used to define where the iteration should be started. The functor is called on elements
+    /// beneath this coordinate.
     template <typename RecordDim, typename Functor, typename... Tags>
     LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaf(Functor&& functor, Tags... baseTags)
     {

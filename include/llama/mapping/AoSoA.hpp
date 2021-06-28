@@ -24,10 +24,8 @@ namespace llama::mapping
     }
     ();
 
-    /// Array of struct of arrays mapping. Used to create a \ref View via \ref
-    /// allocView.
-    /// \tparam Lanes The size of the inner arrays of this array of struct of
-    /// arrays.
+    /// Array of struct of arrays mapping. Used to create a \ref View via \ref allocView.
+    /// \tparam Lanes The size of the inner arrays of this array of struct of arrays.
     /// \tparam LinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
     /// how big the linear domain gets.
     template <
