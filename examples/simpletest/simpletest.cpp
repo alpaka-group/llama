@@ -134,8 +134,10 @@ try
 
     // Printing dimensions information at runtime
     std::cout << "Record dimension is " << addLineBreaks(type(Name())) << '\n';
-    std::cout << "AoS address of (0,100) <0,1>: "
-              << llama::mapping::AoS<ArrayDims, Name>(adSize).blobNrAndOffset<0, 1>({0, 100}).offset << '\n';
+    std::cout << "AlignedAoS address of (0,100) <0,1>: "
+              << llama::mapping::AlignedAoS<ArrayDims, Name>(adSize).blobNrAndOffset<0, 1>({0, 100}).offset << '\n';
+    std::cout << "PackedAoS address of (0,100) <0,1>: "
+              << llama::mapping::PackedAoS<ArrayDims, Name>(adSize).blobNrAndOffset<0, 1>({0, 100}).offset << '\n';
     std::cout << "SoA address of (0,100) <0,1>: "
               << llama::mapping::SoA<ArrayDims, Name>(adSize).blobNrAndOffset<0, 1>({0, 100}).offset << '\n';
     std::cout << "sizeOf RecordDim: " << llama::sizeOf<Name> << '\n';

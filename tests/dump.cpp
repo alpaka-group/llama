@@ -22,19 +22,24 @@ namespace
     }
 } // namespace
 
-TEST_CASE("dump.Particle.AoS")
+TEST_CASE("dump.Particle.AoS_Aligned")
 {
-    dump(llama::mapping::AoS{arrayDims, Particle{}});
+    dump(llama::mapping::AlignedAoS<ArrayDims, Particle>{arrayDims});
 }
 
-TEST_CASE("dump.Particle.SoA")
+TEST_CASE("dump.Particle.AoS_Packed")
 {
-    dump(llama::mapping::SoA{arrayDims, Particle{}});
+    dump(llama::mapping::PackedAoS<ArrayDims, Particle>{arrayDims});
+}
+
+TEST_CASE("dump.Particle.SoA_SB")
+{
+    dump(llama::mapping::SingleBlobSoA<ArrayDims, Particle>{arrayDims});
 }
 
 TEST_CASE("dump.Particle.SoA_MB")
 {
-    dump(llama::mapping::SoA<ArrayDims, Particle, true>{arrayDims});
+    dump(llama::mapping::MultiBlobSoA<ArrayDims, Particle>{arrayDims});
 }
 
 TEST_CASE("dump.Particle.AoSoA8")
@@ -104,22 +109,22 @@ TEST_CASE("dump.Particle.Split.AoSoA8.AoS.One.SoA")
 
 TEST_CASE("dump.ParticleUnaligned.AoS")
 {
-    dump(llama::mapping::AoS{arrayDims, ParticleUnaligned{}});
+    dump(llama::mapping::PackedAoS<ArrayDims, ParticleUnaligned>{arrayDims});
 }
 
 TEST_CASE("dump.ParticleUnaligned.AoS_Aligned")
 {
-    dump(llama::mapping::AoS<ArrayDims, ParticleUnaligned, true>{arrayDims});
+    dump(llama::mapping::AlignedAoS<ArrayDims, ParticleUnaligned>{arrayDims});
 }
 
-TEST_CASE("dump.ParticleUnaligned.SoA")
+TEST_CASE("dump.ParticleUnaligned.SoA_SB")
 {
-    dump(llama::mapping::SoA{arrayDims, ParticleUnaligned{}});
+    dump(llama::mapping::SingleBlobSoA<ArrayDims, ParticleUnaligned>{arrayDims});
 }
 
 TEST_CASE("dump.ParticleUnaligned.SoA_MB")
 {
-    dump(llama::mapping::SoA<ArrayDims, ParticleUnaligned, true>{arrayDims});
+    dump(llama::mapping::MultiBlobSoA<ArrayDims, ParticleUnaligned>{arrayDims});
 }
 
 TEST_CASE("dump.ParticleUnaligned.AoSoA8")
@@ -199,7 +204,7 @@ TEST_CASE("dump.ParticleUnaligned.Split.AoSoA8.SoA.One.AoS")
 
 TEST_CASE("AoS.Aligned")
 {
-    const auto mapping = llama::mapping::AoS<ArrayDims, ParticleUnaligned, true>{arrayDims};
+    const auto mapping = llama::mapping::AlignedAoS<ArrayDims, ParticleUnaligned>{arrayDims};
     auto view = llama::allocView(mapping);
     llama::forEachLeaf<ParticleUnaligned>(
         [&](auto rc)
@@ -246,7 +251,7 @@ using ParticleAligned = llama::Record<
 >;
 // clang-format on
 
-TEST_CASE("dump.ParticleAligned.AoS")
+TEST_CASE("dump.ParticleAligned.PackedAoS")
 {
-    dump(llama::mapping::AoS{arrayDims, ParticleAligned{}});
+    dump(llama::mapping::PackedAoS<ArrayDims, ParticleAligned>{arrayDims});
 }

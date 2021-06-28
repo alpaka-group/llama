@@ -5,7 +5,7 @@
 #include <llama/DumpMapping.hpp>
 #include <llama/llama.hpp>
 
-TEST_CASE("Split.SoA.AoS.1Buffer")
+TEST_CASE("Split.SoA_SingleBlob.AoS_Packed.1Buffer")
 {
     using ArrayDims = llama::ArrayDims<2>;
     auto arrayDims = ArrayDims{16, 16};
@@ -30,7 +30,7 @@ TEST_CASE("Split.SoA.AoS.1Buffer")
     CHECK(mapping.blobNrAndOffset<3, 3>(coord) == llama::NrAndOffset{0, mapping1Size + 55});
 }
 
-TEST_CASE("Split.AoSoA8.AoS.One.SoA.4Buffer")
+TEST_CASE("Split.AoSoA8.AoS_Packed.One.SoA_SingleBlob.4Buffer")
 {
     // split out momentum as AoSoA8, mass into a single value, position into AoS, and the flags into SoA, makes 4
     // buffers

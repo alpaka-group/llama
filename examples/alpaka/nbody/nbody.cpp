@@ -162,7 +162,7 @@ struct UpdateKernel
                     if constexpr (MappingSM == AoS)
                         return llama::mapping::AoS{arrayDims, Particle{}};
                     if constexpr (MappingSM == SoA)
-                        return llama::mapping::SoA{arrayDims, Particle{}};
+                        return llama::mapping::SoA<decltype(arrayDims), Particle, false>{arrayDims};
                     if constexpr (MappingSM == AoSoA)
                         return llama::mapping::AoSoA<decltype(arrayDims), Particle, AOSOA_LANES>{arrayDims};
                 }();
@@ -268,7 +268,7 @@ void run(std::ostream& plotFile)
         if constexpr (MappingGM == AoS)
             return llama::mapping::AoS{arrayDims, Particle{}};
         if constexpr (MappingGM == SoA)
-            return llama::mapping::SoA{arrayDims, Particle{}};
+            return llama::mapping::SoA<decltype(arrayDims), Particle, false>{arrayDims};
         // if constexpr (MappingGM == 2)
         //    return llama::mapping::SoA<decltype(arrayDims), Particle, true>{arrayDims};
         if constexpr (MappingGM == AoSoA)

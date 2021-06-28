@@ -80,14 +80,13 @@ try
     Queue queue(devAcc);
 
     // LLAMA
-    const auto arrayDims = llama::ArrayDims{PROBLEM_SIZE};
-
     const auto mapping = [&]
     {
+        const auto arrayDims = llama::ArrayDims{PROBLEM_SIZE};
         if constexpr (MAPPING == 0)
             return llama::mapping::AoS{arrayDims, Vector{}};
         if constexpr (MAPPING == 1)
-            return llama::mapping::SoA{arrayDims, Vector{}};
+            return llama::mapping::SoA<decltype(arrayDims), Vector, false>{arrayDims, Vector{}};
         if constexpr (MAPPING == 2)
             return llama::mapping::SoA<decltype(arrayDims), Vector, true>{arrayDims};
         if constexpr (MAPPING == 3)

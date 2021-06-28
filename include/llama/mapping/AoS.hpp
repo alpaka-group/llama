@@ -15,7 +15,7 @@ namespace llama::mapping
     template <
         typename T_ArrayDims,
         typename T_RecordDim,
-        bool AlignAndPad = false,
+        bool AlignAndPad = true,
         typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     struct AoS
     {

@@ -16,7 +16,7 @@ namespace llama::mapping
     template <
         typename T_ArrayDims,
         typename T_RecordDim,
-        bool SeparateBuffers = false,
+        bool SeparateBuffers = true,
         typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     struct SoA
     {
