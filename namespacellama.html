@@ -187,10 +187,10 @@ Typedefs</h2></td></tr>
 <tr class="memitem:aa8b38b8cac9a0623d4956a75fa1a63fd"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aa8b38b8cac9a0623d4956a75fa1a63fd">RecordCoordFromList</a> = <a class="el" href="namespacellama_1_1internal.html#a7f5181ee5a37449e252d4db6199f566f">internal::mp_unwrap_sizes</a>&lt; L &gt;</td></tr>
 <tr class="memdesc:aa8b38b8cac9a0623d4956a75fa1a63fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a type list of integral constants into a <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>.  <a href="namespacellama.html#aa8b38b8cac9a0623d4956a75fa1a63fd">More...</a><br /></td></tr>
 <tr class="separator:aa8b38b8cac9a0623d4956a75fa1a63fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaef113c4d5969d2a085b96cd0a7ade38"><td class="memTemplParams" colspan="2">template&lt;typename RecordCoord1 , typename RecordCoord2 &gt; </td></tr>
-<tr class="memitem:aaef113c4d5969d2a085b96cd0a7ade38"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aaef113c4d5969d2a085b96cd0a7ade38">Cat</a> = <a class="el" href="namespacellama.html#aa8b38b8cac9a0623d4956a75fa1a63fd">RecordCoordFromList</a>&lt; boost::mp11::mp_append&lt; typename RecordCoord1::List, typename RecordCoord2::List &gt; &gt;</td></tr>
-<tr class="memdesc:aaef113c4d5969d2a085b96cd0a7ade38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Concatenate two <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>.  <a href="namespacellama.html#aaef113c4d5969d2a085b96cd0a7ade38">More...</a><br /></td></tr>
-<tr class="separator:aaef113c4d5969d2a085b96cd0a7ade38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21d2f247af9c167ca2238eaa09f1bada"><td class="memTemplParams" colspan="2">template&lt;typename... RecordCoords&gt; </td></tr>
+<tr class="memitem:a21d2f247af9c167ca2238eaa09f1bada"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a21d2f247af9c167ca2238eaa09f1bada">Cat</a> = <a class="el" href="namespacellama.html#aa8b38b8cac9a0623d4956a75fa1a63fd">RecordCoordFromList</a>&lt; boost::mp11::mp_append&lt; typename RecordCoords::List... &gt; &gt;</td></tr>
+<tr class="memdesc:a21d2f247af9c167ca2238eaa09f1bada"><td class="mdescLeft">&#160;</td><td class="mdescRight">Concatenate a set of <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>.  <a href="namespacellama.html#a21d2f247af9c167ca2238eaa09f1bada">More...</a><br /></td></tr>
+<tr class="separator:a21d2f247af9c167ca2238eaa09f1bada"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25d8302ec14d00c68dd886d296a1373d"><td class="memTemplParams" colspan="2">template&lt;typename RecordCoord &gt; </td></tr>
 <tr class="memitem:a25d8302ec14d00c68dd886d296a1373d"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a25d8302ec14d00c68dd886d296a1373d">PopFront</a> = <a class="el" href="namespacellama.html#aa8b38b8cac9a0623d4956a75fa1a63fd">RecordCoordFromList</a>&lt; boost::mp11::mp_pop_front&lt; typename <a class="el" href="structllama_1_1RecordCoord.html#a3d0e76f270b2cd29cb8c679457e80d69">RecordCoord::List</a> &gt; &gt;</td></tr>
 <tr class="memdesc:a25d8302ec14d00c68dd886d296a1373d"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> without first coordinate component.  <a href="namespacellama.html#a25d8302ec14d00c68dd886d296a1373d">More...</a><br /></td></tr>
@@ -226,14 +226,23 @@ Functions</h2></td></tr>
 <tr class="memitem:a32bf07b53ebc403eee401038fc95b591"><td class="memTemplParams" colspan="2">template&lt;std::size_t PieceLength, typename Mapping &gt; </td></tr>
 <tr class="memitem:a32bf07b53ebc403eee401038fc95b591"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a32bf07b53ebc403eee401038fc95b591">mapsPiecewiseContiguous</a> (const Mapping &amp;m) -&gt; bool</td></tr>
 <tr class="separator:a32bf07b53ebc403eee401038fc95b591"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4563c1a92d9123c8e0dbe2e78e82954"><td class="memTemplParams" colspan="2">template&lt;std::size_t... CoordsA, std::size_t... CoordsB&gt; </td></tr>
+<tr class="memitem:ab4563c1a92d9123c8e0dbe2e78e82954"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ab4563c1a92d9123c8e0dbe2e78e82954">operator==</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; CoordsA... &gt;, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; CoordsB... &gt;)</td></tr>
+<tr class="separator:ab4563c1a92d9123c8e0dbe2e78e82954"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e0623fc3bde02f3310ca46c116a3df8"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Coords&gt; </td></tr>
+<tr class="memitem:a8e0623fc3bde02f3310ca46c116a3df8"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a8e0623fc3bde02f3310ca46c116a3df8">operator==</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords... &gt;, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords... &gt;)</td></tr>
+<tr class="separator:a8e0623fc3bde02f3310ca46c116a3df8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b6c9452091052f330217e1dbb448b96"><td class="memTemplParams" colspan="2">template&lt;std::size_t... CoordsA, std::size_t... CoordsB&gt; </td></tr>
+<tr class="memitem:a6b6c9452091052f330217e1dbb448b96"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a6b6c9452091052f330217e1dbb448b96">operator!=</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; CoordsA... &gt; a, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; CoordsB... &gt; b)</td></tr>
+<tr class="separator:a6b6c9452091052f330217e1dbb448b96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafe5ae24f96109b3ca3d05eaf550e880"><td class="memTemplParams" colspan="2">template&lt;char... Digits&gt; </td></tr>
 <tr class="memitem:aafe5ae24f96109b3ca3d05eaf550e880"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1literals.html#aafe5ae24f96109b3ca3d05eaf550e880">operator&quot;&quot;_RC</a> ()</td></tr>
 <tr class="memdesc:aafe5ae24f96109b3ca3d05eaf550e880"><td class="mdescLeft">&#160;</td><td class="mdescRight">Literal operator for converting a numeric literal into a <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>.  <a href="namespacellama_1_1literals.html#aafe5ae24f96109b3ca3d05eaf550e880">More...</a><br /></td></tr>
 <tr class="separator:aafe5ae24f96109b3ca3d05eaf550e880"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d7f22a92084de95c8aaf8096ac34552"><td class="memTemplParams" colspan="2">template&lt;typename RecordCoord1 , typename RecordCoord2 &gt; </td></tr>
-<tr class="memitem:a9d7f22a92084de95c8aaf8096ac34552"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a9d7f22a92084de95c8aaf8096ac34552">cat</a> (RecordCoord1, RecordCoord2)</td></tr>
-<tr class="memdesc:a9d7f22a92084de95c8aaf8096ac34552"><td class="mdescLeft">&#160;</td><td class="mdescRight">Concatenate two <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> instances.  <a href="namespacellama.html#a9d7f22a92084de95c8aaf8096ac34552">More...</a><br /></td></tr>
-<tr class="separator:a9d7f22a92084de95c8aaf8096ac34552"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42cdd926d98388052f028ab19c94b649"><td class="memTemplParams" colspan="2">template&lt;typename... RecordCoords&gt; </td></tr>
+<tr class="memitem:a42cdd926d98388052f028ab19c94b649"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a42cdd926d98388052f028ab19c94b649">cat</a> (RecordCoords...)</td></tr>
+<tr class="memdesc:a42cdd926d98388052f028ab19c94b649"><td class="mdescLeft">&#160;</td><td class="mdescRight">Concatenate a set of <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> instances.  <a href="namespacellama.html#a42cdd926d98388052f028ab19c94b649">More...</a><br /></td></tr>
+<tr class="separator:a42cdd926d98388052f028ab19c94b649"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f0e730e035aabe1036c265d331d6c27"><td class="memTemplParams" colspan="2">template&lt;typename... Elements&gt; </td></tr>
 <tr class="memitem:a1f0e730e035aabe1036c265d331d6c27"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a1f0e730e035aabe1036c265d331d6c27">Tuple</a> (Elements...) -&gt; <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt;</td></tr>
 <tr class="separator:a1f0e730e035aabe1036c265d331d6c27"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -355,23 +364,23 @@ Variables</h2></td></tr>
 <tr class="separator:a9c9e2ef4bd6659e881e281fdaced37ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
-<a id="aaef113c4d5969d2a085b96cd0a7ade38"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaef113c4d5969d2a085b96cd0a7ade38">&#9670;&nbsp;</a></span>Cat</h2>
+<a id="a21d2f247af9c167ca2238eaa09f1bada"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21d2f247af9c167ca2238eaa09f1bada">&#9670;&nbsp;</a></span>Cat</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename RecordCoord1 , typename RecordCoord2 &gt; </div>
+template&lt;typename... RecordCoords&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacellama.html#aaef113c4d5969d2a085b96cd0a7ade38">llama::Cat</a> = typedef <a class="el" href="namespacellama.html#aa8b38b8cac9a0623d4956a75fa1a63fd">RecordCoordFromList</a>&lt;boost::mp11::mp_append&lt;typename RecordCoord1::List, typename RecordCoord2::List&gt; &gt;</td>
+          <td class="memname">using <a class="el" href="namespacellama.html#a21d2f247af9c167ca2238eaa09f1bada">llama::Cat</a> = typedef <a class="el" href="namespacellama.html#aa8b38b8cac9a0623d4956a75fa1a63fd">RecordCoordFromList</a>&lt;boost::mp11::mp_append&lt;typename RecordCoords::List...&gt; &gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Concatenate two <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>. </p>
+<p>Concatenate a set of <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00083">83</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00101">101</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
 
 </div>
 </div>
@@ -587,7 +596,7 @@ template&lt;typename RecordCoord &gt; </div>
 
 <p><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> without first coordinate component. </p>
 
-<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00094">94</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00112">112</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
 
 </div>
 </div>
@@ -607,7 +616,7 @@ template&lt;typename L &gt; </div>
 
 <p>Converts a type list of integral constants into a <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00079">79</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00097">97</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
 
 </div>
 </div>
@@ -758,13 +767,13 @@ template&lt;typename... Args&gt; </div>
 
 </div>
 </div>
-<a id="a9d7f22a92084de95c8aaf8096ac34552"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9d7f22a92084de95c8aaf8096ac34552">&#9670;&nbsp;</a></span>cat()</h2>
+<a id="a42cdd926d98388052f028ab19c94b649"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42cdd926d98388052f028ab19c94b649">&#9670;&nbsp;</a></span>cat()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename RecordCoord1 , typename RecordCoord2 &gt; </div>
+template&lt;typename... RecordCoords&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -772,19 +781,9 @@ template&lt;typename RecordCoord1 , typename RecordCoord2 &gt; </div>
         <tr>
           <td class="memname">constexpr auto llama::cat </td>
           <td>(</td>
-          <td class="paramtype">RecordCoord1&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">RecordCoords...&#160;</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
-          <td class="paramtype">RecordCoord2&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -794,9 +793,9 @@ template&lt;typename RecordCoord1 , typename RecordCoord2 &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Concatenate two <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> instances. </p>
+<p>Concatenate a set of <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> instances. </p>
 
-<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00087">87</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00105">105</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1034,6 +1033,46 @@ template&lt;std::size_t PieceLength, typename Mapping &gt; </div>
 
 </div>
 </div>
+<a id="a6b6c9452091052f330217e1dbb448b96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b6c9452091052f330217e1dbb448b96">&#9670;&nbsp;</a></span>operator!=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;std::size_t... CoordsA, std::size_t... CoordsB&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> auto llama::operator!= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; CoordsA... &gt;&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; CoordsB... &gt;&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00046">46</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+
+</div>
+</div>
 <a id="aea5db41fdf4f7b59a4abd18d276ef746"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aea5db41fdf4f7b59a4abd18d276ef746">&#9670;&nbsp;</a></span>operator&lt;&lt;()</h2>
 
@@ -1064,6 +1103,86 @@ template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00698">698</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a8e0623fc3bde02f3310ca46c116a3df8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e0623fc3bde02f3310ca46c116a3df8">&#9670;&nbsp;</a></span>operator==() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;std::size_t... Coords&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> auto llama::operator== </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords... &gt;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords... &gt;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00040">40</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ab4563c1a92d9123c8e0dbe2e78e82954"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4563c1a92d9123c8e0dbe2e78e82954">&#9670;&nbsp;</a></span>operator==() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;std::size_t... CoordsA, std::size_t... CoordsB&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> auto llama::operator== </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; CoordsA... &gt;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; CoordsB... &gt;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00034">34</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1742,7 +1861,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00034">34</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00052">52</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1768,7 +1887,7 @@ template&lt;std::size_t... Coords&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00037">37</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00055">55</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1881,7 +2000,7 @@ template&lt;typename First , typename Second &gt; </div>
 
 <p>Checks wether the first <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> is bigger than the second. </p>
 
-<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00125">125</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00143">143</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1908,7 +2027,7 @@ template&lt;typename First , typename Second &gt; </div>
 </div><div class="memdoc">
 <p>Checks wether two <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> are the same or one is the prefix of the other. </p>
 
-<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00153">153</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00171">171</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
 
 </div>
 </div>
@@ -2003,7 +2122,7 @@ template&lt;typename Tuple &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Wed Jun 23 2021 10:48:05 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Jun 28 2021 14:25:12 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

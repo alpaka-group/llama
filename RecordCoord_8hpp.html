@@ -180,10 +180,10 @@ Typedefs</h2></td></tr>
 <tr class="memitem:aa8b38b8cac9a0623d4956a75fa1a63fd"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aa8b38b8cac9a0623d4956a75fa1a63fd">llama::RecordCoordFromList</a> = internal::mp_unwrap_sizes&lt; L &gt;</td></tr>
 <tr class="memdesc:aa8b38b8cac9a0623d4956a75fa1a63fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a type list of integral constants into a <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>.  <a href="namespacellama.html#aa8b38b8cac9a0623d4956a75fa1a63fd">More...</a><br /></td></tr>
 <tr class="separator:aa8b38b8cac9a0623d4956a75fa1a63fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaef113c4d5969d2a085b96cd0a7ade38"><td class="memTemplParams" colspan="2">template&lt;typename RecordCoord1 , typename RecordCoord2 &gt; </td></tr>
-<tr class="memitem:aaef113c4d5969d2a085b96cd0a7ade38"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aaef113c4d5969d2a085b96cd0a7ade38">llama::Cat</a> = RecordCoordFromList&lt; boost::mp11::mp_append&lt; typename RecordCoord1::List, typename RecordCoord2::List &gt; &gt;</td></tr>
-<tr class="memdesc:aaef113c4d5969d2a085b96cd0a7ade38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Concatenate two <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>.  <a href="namespacellama.html#aaef113c4d5969d2a085b96cd0a7ade38">More...</a><br /></td></tr>
-<tr class="separator:aaef113c4d5969d2a085b96cd0a7ade38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21d2f247af9c167ca2238eaa09f1bada"><td class="memTemplParams" colspan="2">template&lt;typename... RecordCoords&gt; </td></tr>
+<tr class="memitem:a21d2f247af9c167ca2238eaa09f1bada"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a21d2f247af9c167ca2238eaa09f1bada">llama::Cat</a> = RecordCoordFromList&lt; boost::mp11::mp_append&lt; typename RecordCoords::List... &gt; &gt;</td></tr>
+<tr class="memdesc:a21d2f247af9c167ca2238eaa09f1bada"><td class="mdescLeft">&#160;</td><td class="mdescRight">Concatenate a set of <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>.  <a href="namespacellama.html#a21d2f247af9c167ca2238eaa09f1bada">More...</a><br /></td></tr>
+<tr class="separator:a21d2f247af9c167ca2238eaa09f1bada"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25d8302ec14d00c68dd886d296a1373d"><td class="memTemplParams" colspan="2">template&lt;typename RecordCoord &gt; </td></tr>
 <tr class="memitem:a25d8302ec14d00c68dd886d296a1373d"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a25d8302ec14d00c68dd886d296a1373d">llama::PopFront</a> = RecordCoordFromList&lt; boost::mp11::mp_pop_front&lt; typename RecordCoord::List &gt; &gt;</td></tr>
 <tr class="memdesc:a25d8302ec14d00c68dd886d296a1373d"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> without first coordinate component.  <a href="namespacellama.html#a25d8302ec14d00c68dd886d296a1373d">More...</a><br /></td></tr>
@@ -191,14 +191,23 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:ab4563c1a92d9123c8e0dbe2e78e82954"><td class="memTemplParams" colspan="2">template&lt;std::size_t... CoordsA, std::size_t... CoordsB&gt; </td></tr>
+<tr class="memitem:ab4563c1a92d9123c8e0dbe2e78e82954"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ab4563c1a92d9123c8e0dbe2e78e82954">llama::operator==</a> (RecordCoord&lt; CoordsA... &gt;, RecordCoord&lt; CoordsB... &gt;)</td></tr>
+<tr class="separator:ab4563c1a92d9123c8e0dbe2e78e82954"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e0623fc3bde02f3310ca46c116a3df8"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Coords&gt; </td></tr>
+<tr class="memitem:a8e0623fc3bde02f3310ca46c116a3df8"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a8e0623fc3bde02f3310ca46c116a3df8">llama::operator==</a> (RecordCoord&lt; Coords... &gt;, RecordCoord&lt; Coords... &gt;)</td></tr>
+<tr class="separator:a8e0623fc3bde02f3310ca46c116a3df8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b6c9452091052f330217e1dbb448b96"><td class="memTemplParams" colspan="2">template&lt;std::size_t... CoordsA, std::size_t... CoordsB&gt; </td></tr>
+<tr class="memitem:a6b6c9452091052f330217e1dbb448b96"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a6b6c9452091052f330217e1dbb448b96">llama::operator!=</a> (RecordCoord&lt; CoordsA... &gt; a, RecordCoord&lt; CoordsB... &gt; b)</td></tr>
+<tr class="separator:a6b6c9452091052f330217e1dbb448b96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafe5ae24f96109b3ca3d05eaf550e880"><td class="memTemplParams" colspan="2">template&lt;char... Digits&gt; </td></tr>
 <tr class="memitem:aafe5ae24f96109b3ca3d05eaf550e880"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1literals.html#aafe5ae24f96109b3ca3d05eaf550e880">llama::literals::operator&quot;&quot;_RC</a> ()</td></tr>
 <tr class="memdesc:aafe5ae24f96109b3ca3d05eaf550e880"><td class="mdescLeft">&#160;</td><td class="mdescRight">Literal operator for converting a numeric literal into a <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>.  <a href="namespacellama_1_1literals.html#aafe5ae24f96109b3ca3d05eaf550e880">More...</a><br /></td></tr>
 <tr class="separator:aafe5ae24f96109b3ca3d05eaf550e880"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d7f22a92084de95c8aaf8096ac34552"><td class="memTemplParams" colspan="2">template&lt;typename RecordCoord1 , typename RecordCoord2 &gt; </td></tr>
-<tr class="memitem:a9d7f22a92084de95c8aaf8096ac34552"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a9d7f22a92084de95c8aaf8096ac34552">llama::cat</a> (RecordCoord1, RecordCoord2)</td></tr>
-<tr class="memdesc:a9d7f22a92084de95c8aaf8096ac34552"><td class="mdescLeft">&#160;</td><td class="mdescRight">Concatenate two <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> instances.  <a href="namespacellama.html#a9d7f22a92084de95c8aaf8096ac34552">More...</a><br /></td></tr>
-<tr class="separator:a9d7f22a92084de95c8aaf8096ac34552"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42cdd926d98388052f028ab19c94b649"><td class="memTemplParams" colspan="2">template&lt;typename... RecordCoords&gt; </td></tr>
+<tr class="memitem:a42cdd926d98388052f028ab19c94b649"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a42cdd926d98388052f028ab19c94b649">llama::cat</a> (RecordCoords...)</td></tr>
+<tr class="memdesc:a42cdd926d98388052f028ab19c94b649"><td class="mdescLeft">&#160;</td><td class="mdescRight">Concatenate a set of <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> instances.  <a href="namespacellama.html#a42cdd926d98388052f028ab19c94b649">More...</a><br /></td></tr>
+<tr class="separator:a42cdd926d98388052f028ab19c94b649"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -222,7 +231,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="RecordCoord_8hpp.html">RecordCoord.hpp</a></li>
-    <li class="footer">Generated on Wed Jun 23 2021 10:48:05 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Jun 28 2021 14:25:12 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
