@@ -75,6 +75,9 @@ jobs:
             cuda: true
           - name: build-ubuntu-gcc10
             env: {CXX: g++-10}
+          - name: build-ubuntu-gcc11
+            env: {CXX: g++-11, INSTALL_EXTRA: g++-11}
+            add-toolchain-repo: true
           - name: build-ubuntu-clang10
             env: {CXX: clang++-10}
           - name: build-ubuntu-clang11
@@ -91,6 +94,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: add ubuntu toolchain repo
+        if: ${{ matrix.add-toolchain-repo }}
+        run: |
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test
       - name: add LLVM APT repo
         if: ${{ matrix.add-llvm-repo }}
         run: |
