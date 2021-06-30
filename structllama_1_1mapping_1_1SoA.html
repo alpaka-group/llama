@@ -121,7 +121,7 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:abe0f027dfcd7fb9805c8ecd1f01d8a6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename T_ArrayDims, typename T_RecordDim, bool SeparateBuffers = false, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp&gt;<br />
+<div class="textblock"><h3>template&lt;typename T_ArrayDims, typename T_RecordDim, bool SeparateBuffers = true, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp&gt;<br />
 struct llama::mapping::SoA&lt; T_ArrayDims, T_RecordDim, SeparateBuffers, LinearizeArrayDimsFunctor &gt;</h3>
 
 <p>Struct of array mapping. Used to create a <a class="el" href="structllama_1_1View.html">View</a> via <a class="el" href="namespacellama.html#af9dcf355d9fa87ed98864dadb8e685a1">allocView</a>. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
@@ -140,7 +140,7 @@ struct llama::mapping::SoA&lt; T_ArrayDims, T_RecordDim, SeparateBuffers, Linear
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_ArrayDims , typename T_RecordDim , bool SeparateBuffers = false, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </div>
+template&lt;typename T_ArrayDims , typename T_RecordDim , bool SeparateBuffers = true, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1SoA.html">llama::mapping::SoA</a>&lt; T_ArrayDims, T_RecordDim, SeparateBuffers, LinearizeArrayDimsFunctor &gt;::<a class="el" href="structllama_1_1mapping_1_1SoA.html#add8eab54a04e38dd9a9c5e70eaf75bf9">ArrayDims</a> =  T_ArrayDims</td>
@@ -158,7 +158,7 @@ template&lt;typename T_ArrayDims , typename T_RecordDim , bool SeparateBuffers =
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_ArrayDims , typename T_RecordDim , bool SeparateBuffers = false, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </div>
+template&lt;typename T_ArrayDims , typename T_RecordDim , bool SeparateBuffers = true, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1SoA.html">llama::mapping::SoA</a>&lt; T_ArrayDims, T_RecordDim, SeparateBuffers, LinearizeArrayDimsFunctor &gt;::<a class="el" href="structllama_1_1mapping_1_1SoA.html#ab654e76a28806e1e1e2f043d4824e59a">RecordDim</a> =  T_RecordDim</td>
@@ -177,7 +177,7 @@ template&lt;typename T_ArrayDims , typename T_RecordDim , bool SeparateBuffers =
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_ArrayDims , typename T_RecordDim , bool SeparateBuffers = false, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </div>
+template&lt;typename T_ArrayDims , typename T_RecordDim , bool SeparateBuffers = true, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -204,7 +204,7 @@ template&lt;typename T_ArrayDims , typename T_RecordDim , bool SeparateBuffers =
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_ArrayDims , typename T_RecordDim , bool SeparateBuffers = false, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </div>
+template&lt;typename T_ArrayDims , typename T_RecordDim , bool SeparateBuffers = true, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -245,7 +245,7 @@ template&lt;typename T_ArrayDims , typename T_RecordDim , bool SeparateBuffers =
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_ArrayDims , typename T_RecordDim , bool SeparateBuffers = false, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </div>
+template&lt;typename T_ArrayDims , typename T_RecordDim , bool SeparateBuffers = true, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -275,7 +275,7 @@ template&lt;typename T_ArrayDims , typename T_RecordDim , bool SeparateBuffers =
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_ArrayDims , typename T_RecordDim , bool SeparateBuffers = false, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </div>
+template&lt;typename T_ArrayDims , typename T_RecordDim , bool SeparateBuffers = true, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </div>
 <div class="memtemplate">
 template&lt;std::size_t... RecordCoords&gt; </div>
 <table class="mlabels">
@@ -308,7 +308,7 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_ArrayDims , typename T_RecordDim , bool SeparateBuffers = false, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </div>
+template&lt;typename T_ArrayDims , typename T_RecordDim , bool SeparateBuffers = true, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -340,7 +340,7 @@ template&lt;typename T_ArrayDims , typename T_RecordDim , bool SeparateBuffers =
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_ArrayDims , typename T_RecordDim , bool SeparateBuffers = false, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </div>
+template&lt;typename T_ArrayDims , typename T_RecordDim , bool SeparateBuffers = true, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -369,7 +369,7 @@ template&lt;typename T_ArrayDims , typename T_RecordDim , bool SeparateBuffers =
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a></li>
-    <li class="footer">Generated on Tue Jun 29 2021 11:49:47 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Jun 30 2021 22:41:40 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
