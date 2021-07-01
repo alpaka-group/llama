@@ -64,8 +64,7 @@ var menudata={children:[
 {text:"m",url:"namespacemembers_vars.html#index_m"},
 {text:"o",url:"namespacemembers_vars.html#index_o"},
 {text:"r",url:"namespacemembers_vars.html#index_r"},
-{text:"s",url:"namespacemembers_vars.html#index_s"},
-{text:"t",url:"namespacemembers_vars.html#index_t"}]},
+{text:"s",url:"namespacemembers_vars.html#index_s"}]},
 {text:"Typedefs",url:"namespacemembers_type.html"}]}]},
 {text:"Classes",url:"annotated.html",children:[
 {text:"Class List",url:"annotated.html"},

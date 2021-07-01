@@ -133,13 +133,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordCoord_3_4.html">RecordCoord&lt;&gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Tuple.html">Tuple</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structllama_1_1Tuple.html" title="Tuple class like std::tuple but suitable for use with offloading devices like GPUs.">Tuple</a> class like <code>std::tuple</code> but suitable for use with offloading devices like GPUs.  <a href="structllama_1_1Tuple.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Tuple_3_01T__FirstElement_01_4.html">Tuple&lt; T_FirstElement &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Tuple_3_01T__FirstElement_00_01Elements_8_8_8_01_4.html">Tuple&lt; T_FirstElement, Elements... &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Tuple_3_4.html">Tuple&lt;&gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structllama_1_1Tuple.html">Tuple</a> class like <code>std::tuple</code> but suitable for use with offloading devices like GPUs.  <a href="structllama_1_1Tuple_3_01T__FirstElement_00_01Elements_8_8_8_01_4.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html">Vector</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -197,9 +193,6 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a25d8302ec14d00c68dd886d296a1373d"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a25d8302ec14d00c68dd886d296a1373d">PopFront</a> = <a class="el" href="namespacellama.html#aa8b38b8cac9a0623d4956a75fa1a63fd">RecordCoordFromList</a>&lt; boost::mp11::mp_pop_front&lt; typename <a class="el" href="structllama_1_1RecordCoord.html#a3d0e76f270b2cd29cb8c679457e80d69">RecordCoord::List</a> &gt; &gt;</td></tr>
 <tr class="memdesc:a25d8302ec14d00c68dd886d296a1373d"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> without first coordinate component.  <a href="namespacellama.html#a25d8302ec14d00c68dd886d296a1373d">More...</a><br /></td></tr>
 <tr class="separator:a25d8302ec14d00c68dd886d296a1373d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad63c91f2bc67a3ac3d472c9b9e8e9a52"><td class="memTemplParams" colspan="2">template&lt;typename Tuple , std::size_t Pos&gt; </td></tr>
-<tr class="memitem:ad63c91f2bc67a3ac3d472c9b9e8e9a52"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ad63c91f2bc67a3ac3d472c9b9e8e9a52">TupleElement</a> = boost::mp11::mp_at_c&lt; <a class="el" href="structllama_1_1Tuple.html">Tuple</a>, Pos &gt;</td></tr>
-<tr class="separator:ad63c91f2bc67a3ac3d472c9b9e8e9a52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f44282e6b70a3eedaa8e7355a6f7dd0"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
 <tr class="memitem:a2f44282e6b70a3eedaa8e7355a6f7dd0"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a2f44282e6b70a3eedaa8e7355a6f7dd0">One</a> = <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; decltype(<a class="el" href="namespacellama.html#a3750d27a7f8dd111fbe32dc769b44120">allocViewStack</a>&lt; 0, RecordDim &gt;()), <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt;&gt;, true &gt;</td></tr>
 <tr class="memdesc:a2f44282e6b70a3eedaa8e7355a6f7dd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">A <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> that owns and holds a single value.  <a href="namespacellama.html#a2f44282e6b70a3eedaa8e7355a6f7dd0">More...</a><br /></td></tr>
@@ -257,29 +250,35 @@ Functions</h2></td></tr>
 <tr class="memitem:a42cdd926d98388052f028ab19c94b649"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a42cdd926d98388052f028ab19c94b649">cat</a> (RecordCoords...)</td></tr>
 <tr class="memdesc:a42cdd926d98388052f028ab19c94b649"><td class="mdescLeft">&#160;</td><td class="mdescRight">Concatenate a set of <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>s instances.  <a href="namespacellama.html#a42cdd926d98388052f028ab19c94b649">More...</a><br /></td></tr>
 <tr class="separator:a42cdd926d98388052f028ab19c94b649"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f0e730e035aabe1036c265d331d6c27"><td class="memTemplParams" colspan="2">template&lt;typename... Elements&gt; </td></tr>
-<tr class="memitem:a1f0e730e035aabe1036c265d331d6c27"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a1f0e730e035aabe1036c265d331d6c27">Tuple</a> (Elements...) -&gt; <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt;</td></tr>
-<tr class="separator:a1f0e730e035aabe1036c265d331d6c27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a162aeb3707028b975a08e90fd3aaae8a"><td class="memTemplParams" colspan="2">template&lt;std::size_t Pos, typename... Elements&gt; </td></tr>
-<tr class="memitem:a162aeb3707028b975a08e90fd3aaae8a"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a162aeb3707028b975a08e90fd3aaae8a">get</a> (const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt; &amp;tuple)</td></tr>
-<tr class="separator:a162aeb3707028b975a08e90fd3aaae8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9cf29cdcbec3964dfb7617d747d0091c"><td class="memTemplParams" colspan="2">template&lt;typename Tuple1 , typename Tuple2 &gt; </td></tr>
-<tr class="memitem:a9cf29cdcbec3964dfb7617d747d0091c"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a9cf29cdcbec3964dfb7617d747d0091c">tupleCat</a> (const Tuple1 &amp;t1, const Tuple2 &amp;t2)</td></tr>
-<tr class="separator:a9cf29cdcbec3964dfb7617d747d0091c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1604e8162498ff814c1b1efacd212e95"><td class="memTemplParams" colspan="2">template&lt;typename... Elements&gt; </td></tr>
+<tr class="memitem:a1604e8162498ff814c1b1efacd212e95"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a1604e8162498ff814c1b1efacd212e95">Tuple</a> (Elements...) -&gt; <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; std::remove_cv_t&lt; std::remove_reference_t&lt; Elements &gt;&gt;... &gt;</td></tr>
+<tr class="separator:a1604e8162498ff814c1b1efacd212e95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4a445e00f595ee5e2f75fc0a0e81b07"><td class="memTemplParams" colspan="2">template&lt;std::size_t Pos, typename... Elements&gt; </td></tr>
+<tr class="memitem:ab4a445e00f595ee5e2f75fc0a0e81b07"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ab4a445e00f595ee5e2f75fc0a0e81b07">get</a> (<a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt; &amp;tuple) -&gt; auto &amp;</td></tr>
+<tr class="separator:ab4a445e00f595ee5e2f75fc0a0e81b07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b641cbeb889f9a3002ae9ec9b6569c9"><td class="memTemplParams" colspan="2">template&lt;std::size_t Pos, typename... Elements&gt; </td></tr>
+<tr class="memitem:a0b641cbeb889f9a3002ae9ec9b6569c9"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a0b641cbeb889f9a3002ae9ec9b6569c9">get</a> (const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt; &amp;tuple) -&gt; const auto &amp;</td></tr>
+<tr class="separator:a0b641cbeb889f9a3002ae9ec9b6569c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad527d6d304c87d6ab25d4d78e15cebc4"><td class="memTemplParams" colspan="2">template&lt;typename... ElementsA, typename... ElementsB&gt; </td></tr>
+<tr class="memitem:ad527d6d304c87d6ab25d4d78e15cebc4"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ad527d6d304c87d6ab25d4d78e15cebc4">operator==</a> (const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; ElementsA... &gt; &amp;a, const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; ElementsB... &gt; &amp;b) -&gt; bool</td></tr>
+<tr class="separator:ad527d6d304c87d6ab25d4d78e15cebc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07c4b4fb7b3d91e88bca98224400ac32"><td class="memTemplParams" colspan="2">template&lt;typename... ElementsA, typename... ElementsB&gt; </td></tr>
+<tr class="memitem:a07c4b4fb7b3d91e88bca98224400ac32"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a07c4b4fb7b3d91e88bca98224400ac32">operator!=</a> (const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; ElementsA... &gt; &amp;a, const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; ElementsB... &gt; &amp;b) -&gt; bool</td></tr>
+<tr class="separator:a07c4b4fb7b3d91e88bca98224400ac32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42df604d705148baf4262104f6541560"><td class="memTemplParams" colspan="2">template&lt;typename Tuple1 , typename Tuple2 &gt; </td></tr>
+<tr class="memitem:a42df604d705148baf4262104f6541560"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a42df604d705148baf4262104f6541560">tupleCat</a> (const Tuple1 &amp;t1, const Tuple2 &amp;t2)</td></tr>
+<tr class="separator:a42df604d705148baf4262104f6541560"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ff00876dfd6bde55becc1bd80967a64"><td class="memTemplParams" colspan="2">template&lt;std::size_t Pos, typename Tuple , typename Replacement &gt; </td></tr>
 <tr class="memitem:a3ff00876dfd6bde55becc1bd80967a64"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a3ff00876dfd6bde55becc1bd80967a64">tupleReplace</a> (<a class="el" href="structllama_1_1Tuple.html">Tuple</a> tuple, Replacement replacement)</td></tr>
 <tr class="memdesc:a3ff00876dfd6bde55becc1bd80967a64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a copy of a tuple with the element at position Pos replaced by replacement.  <a href="namespacellama.html#a3ff00876dfd6bde55becc1bd80967a64">More...</a><br /></td></tr>
 <tr class="separator:a3ff00876dfd6bde55becc1bd80967a64"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0c5930a1a62a2969d1d906d95ff41c6"><td class="memTemplParams" colspan="2">template&lt;typename... Elements, typename Functor &gt; </td></tr>
-<tr class="memitem:ae0c5930a1a62a2969d1d906d95ff41c6"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ae0c5930a1a62a2969d1d906d95ff41c6">tupleTransform</a> (const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt; &amp;tuple, const Functor &amp;functor)</td></tr>
-<tr class="separator:ae0c5930a1a62a2969d1d906d95ff41c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec4cc6b3189b050209859eb0d64fef91"><td class="memTemplParams" colspan="2">template&lt;typename... Elements&gt; </td></tr>
-<tr class="memitem:aec4cc6b3189b050209859eb0d64fef91"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aec4cc6b3189b050209859eb0d64fef91">tupleWithoutFirst</a> (const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt; &amp;tuple)</td></tr>
-<tr class="memdesc:aec4cc6b3189b050209859eb0d64fef91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a copy of the tuple without the first element.  <a href="namespacellama.html#aec4cc6b3189b050209859eb0d64fef91">More...</a><br /></td></tr>
-<tr class="separator:aec4cc6b3189b050209859eb0d64fef91"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a373fe3651851d8a7c944483271588619"><td class="memTemplParams" colspan="2">template&lt;typename Element &gt; </td></tr>
-<tr class="memitem:a373fe3651851d8a7c944483271588619"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a373fe3651851d8a7c944483271588619">tupleWithoutFirst</a> (const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Element &gt; &amp;tuple)</td></tr>
-<tr class="separator:a373fe3651851d8a7c944483271588619"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba450a02d1e534f8cea4073bf6fda830"><td class="memTemplParams" colspan="2">template&lt;typename... Elements, typename Functor &gt; </td></tr>
+<tr class="memitem:aba450a02d1e534f8cea4073bf6fda830"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aba450a02d1e534f8cea4073bf6fda830">tupleTransform</a> (const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt; &amp;tuple, const Functor &amp;functor)</td></tr>
+<tr class="separator:aba450a02d1e534f8cea4073bf6fda830"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb8d9886d24543b5cf05b4dc83fd0947"><td class="memTemplParams" colspan="2">template&lt;typename... Elements&gt; </td></tr>
+<tr class="memitem:abb8d9886d24543b5cf05b4dc83fd0947"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#abb8d9886d24543b5cf05b4dc83fd0947">pop_front</a> (const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt; &amp;tuple)</td></tr>
+<tr class="memdesc:abb8d9886d24543b5cf05b4dc83fd0947"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a copy of the tuple without the first element.  <a href="namespacellama.html#abb8d9886d24543b5cf05b4dc83fd0947">More...</a><br /></td></tr>
+<tr class="separator:abb8d9886d24543b5cf05b4dc83fd0947"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9dcf355d9fa87ed98864dadb8e685a1"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename Allocator  = bloballoc::Vector&lt;&gt;&gt; </td></tr>
 <tr class="memitem:af9dcf355d9fa87ed98864dadb8e685a1"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#af9dcf355d9fa87ed98864dadb8e685a1">allocView</a> (Mapping mapping={}, const Allocator &amp;alloc={}) -&gt; <a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, <a class="el" href="namespacellama_1_1internal.html#a652fac1c34a93cbf3be72ffe979a8381">internal::AllocatorBlobType</a>&lt; Allocator &gt;&gt;</td></tr>
 <tr class="separator:af9dcf355d9fa87ed98864dadb8e685a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -363,9 +362,6 @@ Variables</h2></td></tr>
 <tr class="memitem:a5d62fb6d777b67e3f73b80cc97d1cd44"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a5d62fb6d777b67e3f73b80cc97d1cd44">RecordCoordCommonPrefixIsSame</a> = <a class="el" href="structllama_1_1internal_1_1RecordCoordCommonPrefixIsSameImpl.html">internal::RecordCoordCommonPrefixIsSameImpl</a>&lt;First, Second&gt;::value</td></tr>
 <tr class="memdesc:a5d62fb6d777b67e3f73b80cc97d1cd44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether two <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>s are the same or one is the prefix of the other.  <a href="namespacellama.html#a5d62fb6d777b67e3f73b80cc97d1cd44">More...</a><br /></td></tr>
 <tr class="separator:a5d62fb6d777b67e3f73b80cc97d1cd44"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4dab552f80b940c9f393f97cb8d4d791"><td class="memTemplParams" colspan="2">template&lt;typename Tuple &gt; </td></tr>
-<tr class="memitem:a4dab552f80b940c9f393f97cb8d4d791"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a4dab552f80b940c9f393f97cb8d4d791">tupleSize</a> = boost::mp11::mp_size&lt;<a class="el" href="structllama_1_1Tuple.html">Tuple</a>&gt;::value</td></tr>
-<tr class="separator:a4dab552f80b940c9f393f97cb8d4d791"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9950d7fcb0405c5c7f10238b7752fa6d"><td class="memTemplParams" colspan="2">template&lt;typename View &gt; </td></tr>
 <tr class="memitem:a9950d7fcb0405c5c7f10238b7752fa6d"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a9950d7fcb0405c5c7f10238b7752fa6d">IsView</a> = false</td></tr>
 <tr class="separator:a9950d7fcb0405c5c7f10238b7752fa6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -634,24 +630,6 @@ template&lt;typename L &gt; </div>
 <p>Converts a type list of integral constants into a <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>. </p>
 
 <p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00097">97</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
-
-</div>
-</div>
-<a id="ad63c91f2bc67a3ac3d472c9b9e8e9a52"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad63c91f2bc67a3ac3d472c9b9e8e9a52">&#9670;&nbsp;</a></span>TupleElement</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Tuple , std::size_t Pos&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="namespacellama.html#ad63c91f2bc67a3ac3d472c9b9e8e9a52">llama::TupleElement</a> = typedef boost::mp11::mp_at_c&lt;<a class="el" href="structllama_1_1Tuple.html">Tuple</a>, Pos&gt;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00063">63</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
 
 </div>
 </div>
@@ -988,8 +966,8 @@ template&lt;typename RecordDim , typename Functor , typename... Tags&gt; </div>
 
 </div>
 </div>
-<a id="a162aeb3707028b975a08e90fd3aaae8a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a162aeb3707028b975a08e90fd3aaae8a">&#9670;&nbsp;</a></span>get()</h2>
+<a id="a0b641cbeb889f9a3002ae9ec9b6569c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b641cbeb889f9a3002ae9ec9b6569c9">&#9670;&nbsp;</a></span>get() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1000,21 +978,53 @@ template&lt;std::size_t Pos, typename... Elements&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto llama::get </td>
+          <td class="memname">constexpr auto llama::get </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt; &amp;&#160;</td>
           <td class="paramname"><em>tuple</em></td><td>)</td>
-          <td></td>
+          <td> -&gt; const auto&amp;
+    </td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00066">66</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00071">71</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ab4a445e00f595ee5e2f75fc0a0e81b07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4a445e00f595ee5e2f75fc0a0e81b07">&#9670;&nbsp;</a></span>get() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;std::size_t Pos, typename... Elements&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::get </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt; &amp;&#160;</td>
+          <td class="paramname"><em>tuple</em></td><td>)</td>
+          <td> -&gt; auto&amp;
+    </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00062">62</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
 
 </div>
 </div>
@@ -1050,8 +1060,49 @@ template&lt;std::size_t PieceLength, typename Mapping &gt; </div>
 
 </div>
 </div>
+<a id="a07c4b4fb7b3d91e88bca98224400ac32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07c4b4fb7b3d91e88bca98224400ac32">&#9670;&nbsp;</a></span>operator!=() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename... ElementsA, typename... ElementsB&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::operator!= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; ElementsA... &gt; &amp;&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; ElementsB... &gt; &amp;&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> -&gt; bool
+    </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00119">119</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a6b6c9452091052f330217e1dbb448b96"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6b6c9452091052f330217e1dbb448b96">&#9670;&nbsp;</a></span>operator!=()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b6c9452091052f330217e1dbb448b96">&#9670;&nbsp;</a></span>operator!=() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1123,8 +1174,49 @@ template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </div>
 
 </div>
 </div>
+<a id="ad527d6d304c87d6ab25d4d78e15cebc4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad527d6d304c87d6ab25d4d78e15cebc4">&#9670;&nbsp;</a></span>operator==() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename... ElementsA, typename... ElementsB&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; ElementsA... &gt; &amp;&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; ElementsB... &gt; &amp;&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> -&gt; bool
+    </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00107">107</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a8e0623fc3bde02f3310ca46c116a3df8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8e0623fc3bde02f3310ca46c116a3df8">&#9670;&nbsp;</a></span>operator==() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e0623fc3bde02f3310ca46c116a3df8">&#9670;&nbsp;</a></span>operator==() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1164,7 +1256,7 @@ template&lt;std::size_t... Coords&gt; </div>
 </div>
 </div>
 <a id="ab4563c1a92d9123c8e0dbe2e78e82954"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab4563c1a92d9123c8e0dbe2e78e82954">&#9670;&nbsp;</a></span>operator==() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4563c1a92d9123c8e0dbe2e78e82954">&#9670;&nbsp;</a></span>operator==() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1234,7 +1326,7 @@ template&lt;typename T , std::size_t N&gt; </div>
 </div>
 </div>
 <a id="a025e344f02bf146a481823805a93800a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a025e344f02bf146a481823805a93800a">&#9670;&nbsp;</a></span>pop_front()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a025e344f02bf146a481823805a93800a">&#9670;&nbsp;</a></span>pop_front() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1260,6 +1352,38 @@ template&lt;typename T , std::size_t N&gt; </div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00123">123</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+
+</div>
+</div>
+<a id="abb8d9886d24543b5cf05b4dc83fd0947"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb8d9886d24543b5cf05b4dc83fd0947">&#9670;&nbsp;</a></span>pop_front() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename... Elements&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::pop_front </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt; &amp;&#160;</td>
+          <td class="paramname"><em>tuple</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a copy of the tuple without the first element. </p>
+
+<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00215">215</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
 
 </div>
 </div>
@@ -1368,8 +1492,8 @@ template&lt;typename S &gt; </div>
 
 </div>
 </div>
-<a id="a1f0e730e035aabe1036c265d331d6c27"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1f0e730e035aabe1036c265d331d6c27">&#9670;&nbsp;</a></span>Tuple()</h2>
+<a id="a1604e8162498ff814c1b1efacd212e95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1604e8162498ff814c1b1efacd212e95">&#9670;&nbsp;</a></span>Tuple()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1381,15 +1505,15 @@ template&lt;typename... Elements&gt; </div>
           <td>(</td>
           <td class="paramtype">Elements...&#160;</td>
           <td class="paramname"></td><td>)</td>
-          <td> -&gt;  <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt;</td>
+          <td> -&gt;  <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; std::remove_cv_t&lt; std::remove_reference_t&lt; Elements &gt;&gt;... &gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a9cf29cdcbec3964dfb7617d747d0091c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9cf29cdcbec3964dfb7617d747d0091c">&#9670;&nbsp;</a></span>tupleCat()</h2>
+<a id="a42df604d705148baf4262104f6541560"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42df604d705148baf4262104f6541560">&#9670;&nbsp;</a></span>tupleCat()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1400,7 +1524,7 @@ template&lt;typename Tuple1 , typename Tuple2 &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto llama::tupleCat </td>
+          <td class="memname">constexpr auto llama::tupleCat </td>
           <td>(</td>
           <td class="paramtype">const Tuple1 &amp;&#160;</td>
           <td class="paramname"><em>t1</em>, </td>
@@ -1419,12 +1543,12 @@ template&lt;typename Tuple1 , typename Tuple2 &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00091">91</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00139">139</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
 
 </div>
 </div>
@@ -1466,12 +1590,12 @@ template&lt;std::size_t Pos, typename Tuple , typename Replacement &gt; </div>
 
 <p>Creates a copy of a tuple with the element at position Pos replaced by replacement. </p>
 
-<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00137">137</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00185">185</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ae0c5930a1a62a2969d1d906d95ff41c6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae0c5930a1a62a2969d1d906d95ff41c6">&#9670;&nbsp;</a></span>tupleTransform()</h2>
+<a id="aba450a02d1e534f8cea4073bf6fda830"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba450a02d1e534f8cea4073bf6fda830">&#9670;&nbsp;</a></span>tupleTransform()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1482,7 +1606,7 @@ template&lt;typename... Elements, typename Functor &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto llama::tupleTransform </td>
+          <td class="memname">constexpr auto llama::tupleTransform </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt; &amp;&#160;</td>
           <td class="paramname"><em>tuple</em>, </td>
@@ -1501,75 +1625,13 @@ template&lt;typename... Elements, typename Functor &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 <p>Applies a functor to every element of a tuple, creating a new tuple with the result of the element transformations. The functor needs to implement a template <code>operator()</code> to which all tuple elements are passed. </p>
 
-<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00164">164</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a373fe3651851d8a7c944483271588619"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a373fe3651851d8a7c944483271588619">&#9670;&nbsp;</a></span>tupleWithoutFirst() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Element &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">auto llama::tupleWithoutFirst </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Element &gt; &amp;&#160;</td>
-          <td class="paramname"><em>tuple</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00177">177</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
-
-</div>
-</div>
-<a id="aec4cc6b3189b050209859eb0d64fef91"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec4cc6b3189b050209859eb0d64fef91">&#9670;&nbsp;</a></span>tupleWithoutFirst() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Elements&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">auto llama::tupleWithoutFirst </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt; &amp;&#160;</td>
-          <td class="paramname"><em>tuple</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns a copy of the tuple without the first element. </p>
-
-<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00171">171</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00208">208</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
 
 </div>
 </div>
@@ -2248,32 +2310,6 @@ template&lt;typename... Fields, bool Align&gt; </div>
 
 </div>
 </div>
-<a id="a4dab552f80b940c9f393f97cb8d4d791"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4dab552f80b940c9f393f97cb8d4d791">&#9670;&nbsp;</a></span>tupleSize</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Tuple &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr auto llama::tupleSize = boost::mp11::mp_size&lt;<a class="el" href="structllama_1_1Tuple.html">Tuple</a>&gt;::value</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00075">75</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
-
-</div>
-</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="anamespacellama_html_a6c3056b43b48f32a66160a6dd273662d"><div class="ttname"><a href="namespacellama.html#a6c3056b43b48f32a66160a6dd273662d">llama::flatRecordCoord</a></div><div class="ttdeci">constexpr std::size_t flatRecordCoord</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00411">Core.hpp:411</a></div></div>
@@ -2283,7 +2319,7 @@ template&lt;typename Tuple &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Wed Jun 30 2021 22:41:40 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Jul 1 2021 21:04:04 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

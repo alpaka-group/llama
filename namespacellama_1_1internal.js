@@ -39,7 +39,5 @@ var namespacellama_1_1internal =
     [ "RecordCoordCommonPrefixIsSameImpl< RecordCoord< Coords1... >, RecordCoord< Coords2... > >", "structllama_1_1internal_1_1RecordCoordCommonPrefixIsSameImpl_3_01RecordCoord_3_01Coords1_8_8_8_0f195a8b8a0db2355fe3190fcb9b6d969.html", "structllama_1_1internal_1_1RecordCoordCommonPrefixIsSameImpl_3_01RecordCoord_3_01Coords1_8_8_8_0f195a8b8a0db2355fe3190fcb9b6d969" ],
     [ "TupleReplaceImpl", "structllama_1_1internal_1_1TupleReplaceImpl.html", "structllama_1_1internal_1_1TupleReplaceImpl" ],
     [ "TupleReplaceImpl< 0, Tuple< Elements... >, Replacement >", "structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01Elements_8_8_8_01_4_00_01Replacement_01_4.html", "structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01Elements_8_8_8_01_4_00_01Replacement_01_4" ],
-    [ "TupleReplaceImpl< 0, Tuple< OneElement >, Replacement >", "structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01OneElement_01_4_00_01Replacement_01_4.html", "structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01OneElement_01_4_00_01Replacement_01_4" ],
-    [ "TupleTransformHelper", "structllama_1_1internal_1_1TupleTransformHelper.html", null ],
-    [ "TupleTransformHelper< std::index_sequence< Is... > >", "structllama_1_1internal_1_1TupleTransformHelper_3_01std_1_1index__sequence_3_01Is_8_8_8_01_4_01_4.html", "structllama_1_1internal_1_1TupleTransformHelper_3_01std_1_1index__sequence_3_01Is_8_8_8_01_4_01_4" ]
+    [ "TupleReplaceImpl< 0, Tuple< OneElement >, Replacement >", "structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01OneElement_01_4_00_01Replacement_01_4.html", "structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01OneElement_01_4_00_01Replacement_01_4" ]
 ];

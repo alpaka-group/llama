@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Low Level Abstraction of Memory Access: llama::internal::TupleTransformHelper&lt; std::index_sequence&lt; Is... &gt; &gt; Struct Template Reference</title>
+<title>Low Level Abstraction of Memory Access: std::tuple_size&lt; llama::Tuple&lt; Elements... &gt; &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -63,7 +63,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('structllama_1_1internal_1_1TupleTransformHelper_3_01std_1_1index__sequence_3_01Is_8_8_8_01_4_01_4.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('structstd_1_1tuple__size_3_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -83,67 +83,50 @@ $(document).ready(function(){initNavTree('structllama_1_1internal_1_1TupleTransf
 
 <div class="header">
   <div class="summary">
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="structllama_1_1internal_1_1TupleTransformHelper_3_01std_1_1index__sequence_3_01Is_8_8_8_01_4_01_4-members.html">List of all members</a>  </div>
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="structstd_1_1tuple__size_3_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">llama::internal::TupleTransformHelper&lt; std::index_sequence&lt; Is... &gt; &gt; Struct Template Reference</div>  </div>
+<div class="title">std::tuple_size&lt; llama::Tuple&lt; Elements... &gt; &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a7f60f25b757f675118a765d2849e6a1a"><td class="memTemplParams" colspan="2">template&lt;typename... Elements, typename Functor &gt; </td></tr>
-<tr class="memitem:a7f60f25b757f675118a765d2849e6a1a"><td class="memTemplItemLeft" align="right" valign="top">static auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1TupleTransformHelper_3_01std_1_1index__sequence_3_01Is_8_8_8_01_4_01_4.html#a7f60f25b757f675118a765d2849e6a1a">transform</a> (const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt; &amp;tuple, const Functor &amp;functor)</td></tr>
-<tr class="separator:a7f60f25b757f675118a765d2849e6a1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:abfb585e14c073fe0440706749d845b00"><td class="memItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstd_1_1tuple__size_3_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html#abfb585e14c073fe0440706749d845b00">value</a> = sizeof...(Elements)</td></tr>
+<tr class="separator:abfb585e14c073fe0440706749d845b00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;size_t... Is&gt;<br />
-struct llama::internal::TupleTransformHelper&lt; std::index_sequence&lt; Is... &gt; &gt;</h3>
+<div class="textblock"><h3>template&lt;typename... Elements&gt;<br />
+struct std::tuple_size&lt; llama::Tuple&lt; Elements... &gt; &gt;</h3>
 
 
-<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00148">148</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a7f60f25b757f675118a765d2849e6a1a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7f60f25b757f675118a765d2849e6a1a">&#9670;&nbsp;</a></span>transform()</h2>
+<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00081">81</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a id="abfb585e14c073fe0440706749d845b00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abfb585e14c073fe0440706749d845b00">&#9670;&nbsp;</a></span>value</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;size_t... Is&gt; </div>
-<div class="memtemplate">
-template&lt;typename... Elements, typename Functor &gt; </div>
+template&lt;typename... Elements&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static auto <a class="el" href="structllama_1_1internal_1_1TupleTransformHelper.html">llama::internal::TupleTransformHelper</a>&lt; std::index_sequence&lt; Is... &gt; &gt;::transform </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt; &amp;&#160;</td>
-          <td class="paramname"><em>tuple</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const Functor &amp;&#160;</td>
-          <td class="paramname"><em>functor</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="memname">constexpr auto std::tuple_size&lt; <a class="el" href="structllama_1_1Tuple.html">llama::Tuple</a>&lt; Elements... &gt; &gt;::value = sizeof...(Elements)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00151">151</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00083">83</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
 
 </div>
 </div>
@@ -155,8 +138,8 @@ template&lt;typename... Elements, typename Functor &gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1internal.html">internal</a></li><li class="navelem"><a class="el" href="structllama_1_1internal_1_1TupleTransformHelper_3_01std_1_1index__sequence_3_01Is_8_8_8_01_4_01_4.html">TupleTransformHelper&lt; std::index_sequence&lt; Is... &gt; &gt;</a></li>
-    <li class="footer">Generated on Wed Jun 30 2021 22:41:40 for Low Level Abstraction of Memory Access by
+    <li class="navelem"><b>std</b></li><li class="navelem"><a class="el" href="structstd_1_1tuple__size_3_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html">tuple_size&lt; llama::Tuple&lt; Elements... &gt; &gt;</a></li>
+    <li class="footer">Generated on Thu Jul 1 2021 21:04:04 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
