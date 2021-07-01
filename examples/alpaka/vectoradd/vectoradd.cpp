@@ -84,9 +84,9 @@ try
     {
         const auto arrayDims = llama::ArrayDims{PROBLEM_SIZE};
         if constexpr (MAPPING == 0)
-            return llama::mapping::AoS{arrayDims, Vector{}};
+            return llama::mapping::AoS<decltype(arrayDims), Vector>{arrayDims};
         if constexpr (MAPPING == 1)
-            return llama::mapping::SoA<decltype(arrayDims), Vector, false>{arrayDims, Vector{}};
+            return llama::mapping::SoA<decltype(arrayDims), Vector, false>{arrayDims};
         if constexpr (MAPPING == 2)
             return llama::mapping::SoA<decltype(arrayDims), Vector, true>{arrayDims};
         if constexpr (MAPPING == 3)
