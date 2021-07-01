@@ -88,9 +88,9 @@ __global__ void updateSM(View particles)
         {
             constexpr auto arrayDims = llama::ArrayDims{SHARED_ELEMENTS_PER_BLOCK};
             if constexpr (MappingSM == 0)
-                return llama::mapping::AoS{arrayDims, SharedMemoryParticle{}};
+                return llama::mapping::AoS<decltype(arrayDims), SharedMemoryParticle>{arrayDims};
             if constexpr (MappingSM == 1)
-                return llama::mapping::SoA{arrayDims, SharedMemoryParticle{}};
+                return llama::mapping::SoA<decltype(arrayDims), SharedMemoryParticle, false>{arrayDims};
             if constexpr (MappingSM == 2)
                 return llama::mapping::SoA<decltype(arrayDims), SharedMemoryParticle, true>{arrayDims};
             if constexpr (MappingSM == 3)
@@ -180,11 +180,11 @@ try
     {
         const auto arrayDims = llama::ArrayDims{PROBLEM_SIZE};
         if constexpr (Mapping == 0)
-            return llama::mapping::AoS{arrayDims, Particle{}};
+            return llama::mapping::AoS<decltype(arrayDims), Particle>{arrayDims};
         if constexpr (Mapping == 1)
-            return llama::mapping::SoA{arrayDims, Particle{}};
+            return llama::mapping::SoA<decltype(arrayDims), Particle, false>{arrayDims};
         if constexpr (Mapping == 2)
-            return llama::mapping::SoA<decltype(arrayDims), Particle, true>{arrayDims, Particle{}};
+            return llama::mapping::SoA<decltype(arrayDims), Particle, true>{arrayDims};
         if constexpr (Mapping == 3)
             return llama::mapping::AoSoA<decltype(arrayDims), Particle, AOSOA_LANES>{arrayDims};
         if constexpr (Mapping == 4)

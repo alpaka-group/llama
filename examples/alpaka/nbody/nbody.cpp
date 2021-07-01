@@ -158,7 +158,7 @@ struct UpdateKernel
             {
                 constexpr auto sharedMapping = []
                 {
-                    constexpr auto arrayDims = llama::ArrayDims{BlockSize};
+                    constexpr auto arrayDims = llama::ArrayDims<1>{BlockSize};
                     if constexpr (MappingSM == AoS)
                         return llama::mapping::AoS{arrayDims, Particle{}};
                     if constexpr (MappingSM == SoA)
@@ -180,7 +180,7 @@ struct UpdateKernel
         // TODO: we could optimize here, because only velocity is ever updated
         auto pi = [&]
         {
-            constexpr auto arrayDims = llama::ArrayDims{Elems};
+            constexpr auto arrayDims = llama::ArrayDims<1>{Elems};
             constexpr auto mapping
                 = llama::mapping::SoA<typename View::ArrayDims, typename View::RecordDim, false>{arrayDims};
             constexpr auto blobAlloc = llama::bloballoc::Stack<llama::sizeOf<typename View::RecordDim> * Elems>{};
@@ -266,7 +266,7 @@ void run(std::ostream& plotFile)
     {
         const auto arrayDims = llama::ArrayDims{PROBLEM_SIZE};
         if constexpr (MappingGM == AoS)
-            return llama::mapping::AoS{arrayDims, Particle{}};
+            return llama::mapping::AoS<decltype(arrayDims), Particle>{arrayDims};
         if constexpr (MappingGM == SoA)
             return llama::mapping::SoA<decltype(arrayDims), Particle, false>{arrayDims};
         // if constexpr (MappingGM == 2)
@@ -284,8 +284,8 @@ void run(std::ostream& plotFile)
 
     watch.printAndReset("alloc");
 
-    auto hostView = llama::View{mapping, llama::Array{alpaka::getPtrNative(hostBuffer)}};
-    auto accView = llama::View{mapping, llama::Array{alpaka::getPtrNative(accBuffer)}};
+    auto hostView = llama::View(mapping, llama::Array{alpaka::getPtrNative(hostBuffer)});
+    auto accView = llama::View(mapping, llama::Array{alpaka::getPtrNative(accBuffer)});
 
     watch.printAndReset("views");
 
