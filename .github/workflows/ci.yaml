@@ -70,8 +70,20 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: build-ubuntu-gcc9-cuda
-            env: {CXX: g++-9, CUDA_INSTALLER: cuda_11.2.0_460.27.04_linux.run}
+          #- name: build-ubuntu-gcc9-cuda11.0
+          #  env: {CXX: g++-9, CUDA_URL: "https://developer.download.nvidia.com/compute/cuda/11.0.3/local_installers/cuda_11.0.3_450.51.06_linux.run"}
+          #  cuda: true
+          #- name: build-ubuntu-gcc9-cuda11.1
+          #  env: {CXX: g++-9, CUDA_URL: "https://developer.download.nvidia.com/compute/cuda/11.1.1/local_installers/cuda_11.1.1_455.32.00_linux.run"}
+          #  cuda: true
+          - name: build-ubuntu-gcc9-cuda11.2
+            env: {CXX: g++-9, CUDA_URL: "https://developer.download.nvidia.com/compute/cuda/11.2.1/local_installers/cuda_11.2.1_460.32.03_linux.run"}
+            cuda: true
+          - name: build-ubuntu-gcc9-cuda11.3
+            env: {CXX: g++-9, CUDA_URL: "https://developer.download.nvidia.com/compute/cuda/11.3.1/local_installers/cuda_11.3.1_465.19.01_linux.run"}
+            cuda: true
+          - name: build-ubuntu-gcc9-cuda11.4
+            env: {CXX: g++-9, CUDA_URL: "https://developer.download.nvidia.com/compute/cuda/11.4.0/local_installers/cuda_11.4.0_470.42.01_linux.run"}
             cuda: true
           - name: build-ubuntu-gcc10
             env: {CXX: g++-10}
@@ -123,11 +135,11 @@ jobs:
       - name: download CUDA 11
         if: ${{ matrix.cuda }}
         run: |
-          wget --no-verbose https://developer.download.nvidia.com/compute/cuda/11.2.0/local_installers/$CUDA_INSTALLER
+          wget --no-verbose -O cuda_installer.run $CUDA_URL
       - name: install CUDA 11
         if: ${{ matrix.cuda }}
         run: |
-          sudo sh $CUDA_INSTALLER --silent --toolkit
+          sudo sh cuda_installer.run --silent --toolkit
       - name: install alpaka
         run: |
           if [ ${{ matrix.intel }} ]; then source /opt/intel/oneapi/setvars.sh; fi
