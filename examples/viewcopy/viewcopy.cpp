@@ -57,7 +57,10 @@ namespace llamaex
         for (std::ptrdiff_t i = 0; i < static_cast<std::ptrdiff_t>(adSize[0]); i++)
         {
             if constexpr (Dim > 1)
-                forEachADCoord(internal::popFront(adSize), std::forward<Func>(func), static_cast<std::size_t>(i));
+                forEachADCoord(
+                    ArrayDims<Dim - 1>{pop_front(adSize)},
+                    std::forward<Func>(func),
+                    static_cast<std::size_t>(i));
             else
                 std::forward<Func>(func)(ArrayDims<Dim>{static_cast<std::size_t>(i)});
         }
