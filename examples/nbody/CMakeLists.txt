@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.15)
-project(llama-nbody)
+project(llama-nbody CXX)
 
 find_package(fmt CONFIG REQUIRED)
 find_package(OpenMP REQUIRED)

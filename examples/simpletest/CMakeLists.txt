@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.15)
-project (llama-simpletest)
+project (llama-simpletest CXX)
 
 if (NOT TARGET llama::llama)
 	find_package(llama CONFIG REQUIRED)

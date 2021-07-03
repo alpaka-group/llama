@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.15)
-project(llama-viewcopy)
+project(llama-viewcopy CXX)
 
 find_package(OpenMP REQUIRED)
 if (NOT TARGET llama::llama)

@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.15)
-project(llama-nbody_benchmark)
+project(llama-nbody_benchmark CXX)
 
 if (NOT TARGET llama::llama)
 	find_package(llama REQUIRED)

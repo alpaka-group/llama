@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.15)
-project(llama-alpaka-nbody)
+project(llama-alpaka-nbody CXX)
 
 find_package(Vc REQUIRED)
 if (NOT TARGET llama::llama)
