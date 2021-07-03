@@ -60,7 +60,7 @@ if (LLAMA_BUILD_EXAMPLES)
 	add_subdirectory("examples/raycast")
 
 	# alpaka examples
-	find_package(alpaka 0.5.0 QUIET)
+	find_package(alpaka 0.7.0 QUIET)
 	if (_ALPAKA_FOUND)
 		add_subdirectory("examples/alpaka/nbody")
 		add_subdirectory("examples/alpaka/vectoradd")
