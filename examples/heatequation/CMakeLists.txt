@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.15)
-project(llama-heatequation)
+project(llama-heatequation CXX)
 
 find_package(Vc QUIET)
 if (NOT TARGET llama::llama)

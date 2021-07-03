@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.15)
-project (llama-raycast)
+project (llama-raycast CXX)
 
 find_package(tinyobjloader CONFIG REQUIRED)
 if (NOT TARGET llama::llama)

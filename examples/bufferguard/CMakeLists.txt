@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.15)
-project(llama-bufferguard)
+project(llama-bufferguard CXX)
 
 if (NOT TARGET llama::llama)
 	find_package(llama REQUIRED)
