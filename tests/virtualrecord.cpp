@@ -950,6 +950,19 @@ TEST_CASE("VirtualRecord.One_from_scalar")
     CHECK(p(tag::Mass{}) == 42);
 }
 
+#ifdef __has_cpp_attribute
+#    if __has_cpp_attribute(no_unique_address)
+TEST_CASE("VirtualRecord.One.size")
+{
+    STATIC_REQUIRE(llama::mapping::MinAlignedOne<llama::ArrayDims<0>, Particle>{}.blobSize(0) == 56);
+    [[maybe_unused]] const auto v = llama::allocViewStack<0, Particle>();
+    STATIC_REQUIRE(sizeof(v) == 56);
+    [[maybe_unused]] const auto p = llama::One<Particle>{};
+    STATIC_REQUIRE(sizeof(p) == 56);
+}
+#    endif
+#endif
+
 TEST_CASE("VirtualRecord.operator<<")
 {
     llama::One<Particle> p;
