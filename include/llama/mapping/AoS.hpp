@@ -12,7 +12,7 @@ namespace llama::mapping
     /// If false, struct members are tightly packed.
     /// \tparam T_LinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
     /// how big the linear domain gets.
-    /// \tparam FlattenRecordDim Defines how the record dimension's fields should be flattended. See \ref
+    /// \tparam FlattenRecordDim Defines how the record dimension's fields should be flattened. See \ref
     /// FlattenRecordDimInOrder and \ref FlattenRecordDimMinimizePadding.
     template <
         typename T_ArrayDims,
@@ -71,7 +71,8 @@ namespace llama::mapping
     using AlignedAoS = AoS<ArrayDims, RecordDim, true, LinearizeArrayDimsFunctor>;
 
     /// Array of struct mapping preserving the alignment of the field types by inserting padding and permuting the field
-    /// order to minimize this padding. \see AoS
+    /// order to minimize this padding.
+    /// \see AoS
     template <typename ArrayDims, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     using MinAlignedAoS = AoS<ArrayDims, RecordDim, true, LinearizeArrayDimsFunctor, FlattenRecordDimMinimizePadding>;
 
