@@ -37,13 +37,18 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(const ArrayDims<Dim>& coord, const ArrayDims<Dim>& size)
             const -> std::size_t
         {
-            std::size_t address = coord[0];
-            for (auto i = 1; i < Dim; i++)
+            if constexpr (Dim == 0)
+                return 0;
+            else
             {
-                address *= size[i];
-                address += coord[i];
+                std::size_t address = coord[0];
+                for (auto i = 1; i < Dim; i++)
+                {
+                    address *= size[i];
+                    address += coord[i];
+                }
+                return address;
             }
-            return address;
         }
     };
 
@@ -63,13 +68,18 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(const ArrayDims<Dim>& coord, const ArrayDims<Dim>& size)
             const -> std::size_t
         {
-            std::size_t address = coord[Dim - 1];
-            for (int i = (int) Dim - 2; i >= 0; i--)
+            if constexpr (Dim == 0)
+                return 0;
+            else
             {
-                address *= size[i];
-                address += coord[i];
+                std::size_t address = coord[Dim - 1];
+                for (int i = (int) Dim - 2; i >= 0; i--)
+                {
+                    address *= size[i];
+                    address += coord[i];
+                }
+                return address;
             }
-            return address;
         }
     };
 
@@ -80,11 +90,16 @@ namespace llama::mapping
         template <std::size_t Dim>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayDims<Dim>& size) const -> std::size_t
         {
-            std::size_t longest = size[0];
-            for (auto i = 1; i < Dim; i++)
-                longest = std::max(longest, size[i]);
-            const auto longestPO2 = bit_ceil(longest);
-            return intPow(longestPO2, Dim);
+            if constexpr (Dim == 0)
+                return 0;
+            else
+            {
+                std::size_t longest = size[0];
+                for (auto i = 1; i < Dim; i++)
+                    longest = std::max(longest, size[i]);
+                const auto longestPO2 = bit_ceil(longest);
+                return intPow(longestPO2, Dim);
+            }
         }
 
         /// \param coord Coordinate in the array dimensions.

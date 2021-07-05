@@ -38,12 +38,12 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE constexpr T* end()
         {
             return &element[N];
-        };
+        }
 
         LLAMA_FN_HOST_ACC_INLINE constexpr const T* end() const
         {
             return &element[N];
-        };
+        }
 
         template <typename IndexType>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](IndexType&& idx) -> T&
@@ -91,6 +91,53 @@ namespace llama
         }
     };
 
+    template <typename T>
+    struct Array<T, 0>
+    {
+        using value_type = T;
+        static constexpr std::size_t rank = 0;
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto size() const
+        {
+            return 0;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr T* begin()
+        {
+            return nullptr;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr const T* begin() const
+        {
+            return nullptr;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr T* end()
+        {
+            return nullptr;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr const T* end() const
+        {
+            return nullptr;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator==(const Array& a, const Array& b) -> bool
+        {
+            return true;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator!=(const Array& a, const Array& b) -> bool
+        {
+            return false;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator+(const Array& a, const Array& b) -> Array
+        {
+            return {};
+        }
+    };
+
     template <typename First, typename... Args>
     Array(First, Args... args) -> Array<First, sizeof...(Args) + 1>;
 
@@ -99,8 +146,9 @@ namespace llama
     {
         Array<T, N + 1> r{};
         r[0] = v;
-        for (auto i = 0; i < N; i++)
-            r[i + 1] = a[i];
+        if constexpr (N > 0)
+            for (auto i = 0; i < N; i++)
+                r[i + 1] = a[i];
         return r;
     }
 
@@ -108,8 +156,9 @@ namespace llama
     LLAMA_FN_HOST_ACC_INLINE constexpr auto push_back(Array<T, N> a, T v) -> Array<T, N + 1>
     {
         Array<T, N + 1> r{};
-        for (auto i = 0; i < N; i++)
-            r[i] = a[i];
+        if constexpr (N > 0)
+            for (auto i = 0; i < N; i++)
+                r[i] = a[i];
         r[N] = v;
         return r;
     }
@@ -119,8 +168,9 @@ namespace llama
     {
         static_assert(N > 0);
         Array<T, N - 1> r{};
-        for (auto i = 0; i < N - 1; i++)
-            r[i] = a[i];
+        if constexpr (N > 1)
+            for (auto i = 0; i < N - 1; i++)
+                r[i] = a[i];
         return r;
     }
 
@@ -129,8 +179,9 @@ namespace llama
     {
         static_assert(N > 0);
         Array<T, N - 1> r{};
-        for (auto i = 0; i < N - 1; i++)
-            r[i] = a[i + 1];
+        if constexpr (N > 1)
+            for (auto i = 0; i < N - 1; i++)
+                r[i] = a[i + 1];
         return r;
     }
 } // namespace llama
