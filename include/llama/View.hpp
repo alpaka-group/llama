@@ -59,8 +59,8 @@ namespace llama
     template <std::size_t Dim, typename RecordDim>
     LLAMA_FN_HOST_ACC_INLINE auto allocViewStack() -> decltype(auto)
     {
-        using Mapping = mapping::One<ArrayDims<Dim>, RecordDim>;
-        return allocView(Mapping{}, bloballoc::Stack<sizeOf<RecordDim>>{});
+        constexpr auto mapping = mapping::MinAlignedOne<ArrayDims<Dim>, RecordDim>{};
+        return allocView(mapping, bloballoc::Stack<mapping.blobSize(0)>{});
     }
 
     template <typename View, typename BoundRecordCoord = RecordCoord<>, bool OwnView = false>
@@ -367,7 +367,7 @@ namespace llama
             return {ArrayDimsIndexRange<ArrayDims::rank>{mapping.arrayDims()}.end(), this};
         }
 
-        Mapping mapping;
+        [[no_unique_address]] Mapping mapping;
         Array<BlobType, Mapping::blobCount> storageBlobs;
 
     private:
