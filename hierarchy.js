@@ -1,7 +1,7 @@
 var hierarchy =
 [
     [ "llama::bloballoc::AlignedAllocator< T, Alignment >", "structllama_1_1bloballoc_1_1AlignedAllocator.html", null ],
-    [ "llama::mapping::AoS< T_ArrayDims, T_RecordDim, AlignAndPad, LinearizeArrayDimsFunctor >", "structllama_1_1mapping_1_1AoS.html", null ],
+    [ "llama::mapping::AoS< T_ArrayDims, T_RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim >", "structllama_1_1mapping_1_1AoS.html", null ],
     [ "llama::mapping::AoSoA< T_ArrayDims, T_RecordDim, Lanes, LinearizeArrayDimsFunctor >", "structllama_1_1mapping_1_1AoSoA.html", null ],
     [ "llama::Array< T, N >", "structllama_1_1Array.html", null ],
     [ "llama::Array< BlobType, Mapping::blobCount >", "structllama_1_1Array.html", null ],
@@ -28,6 +28,8 @@ var hierarchy =
     [ "llama::internal::FlattenRecordDimImpl< T >", "structllama_1_1internal_1_1FlattenRecordDimImpl.html", null ],
     [ "llama::internal::FlattenRecordDimImpl< Child[N]>", "structllama_1_1internal_1_1FlattenRecordDimImpl_3_01Child_0fN_0e_4.html", null ],
     [ "llama::internal::FlattenRecordDimImpl< Record< Fields... > >", "structllama_1_1internal_1_1FlattenRecordDimImpl_3_01Record_3_01Fields_8_8_8_01_4_01_4.html", null ],
+    [ "llama::mapping::FlattenRecordDimInOrder< RecordDim >", "structllama_1_1mapping_1_1FlattenRecordDimInOrder.html", null ],
+    [ "llama::mapping::FlattenRecordDimMinimizePadding< RecordDim >", "structllama_1_1mapping_1_1FlattenRecordDimMinimizePadding.html", null ],
     [ "llama::internal::GetCoordFromTagsImpl< RecordDim, RecordCoord, Tags >", "structllama_1_1internal_1_1GetCoordFromTagsImpl.html", null ],
     [ "llama::internal::GetCoordFromTagsImpl< ChildType[Count], RecordCoord< ResultCoords... >, FirstTag, Tags... >", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01ChildType_0fCount_0e_00_01RecordCoord_3_01Rea82f6370a44084538dfd07ee1f739c70.html", null ],
     [ "llama::internal::GetCoordFromTagsImpl< Record< Fields... >, RecordCoord< ResultCoords... >, FirstTag, Tags... >", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoor9dc4730dbf0b2c94fd53092536b251f3.html", null ],

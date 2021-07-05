@@ -95,7 +95,7 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 : <a class="el" href="structllama_1_1Iterator.html#a0d0a0e1b6d42270585f08a2718eee8ac">llama::Iterator&lt; View &gt;</a>
 </li>
 <li>ArrayDims
-: <a class="el" href="structllama_1_1mapping_1_1AoS.html#afa839723382544a4d68e15cef0754a5e">llama::mapping::AoS&lt; T_ArrayDims, T_RecordDim, AlignAndPad, LinearizeArrayDimsFunctor &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1AoS.html#ab536a92c21b23312d8470a434cac6c3b">llama::mapping::AoS&lt; T_ArrayDims, T_RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a0ab3608cd80bf712113d4fb7bcfd82b5">llama::mapping::AoSoA&lt; T_ArrayDims, T_RecordDim, Lanes, LinearizeArrayDimsFunctor &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Heatmap.html#af7529e58f295a66c8026b3e0e8034b51">llama::mapping::Heatmap&lt; Mapping, CountType &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1One.html#a72ba4dc40a1e0e6ef196274bb874b506">llama::mapping::One&lt; T_ArrayDims, T_RecordDim &gt;</a>
@@ -149,6 +149,10 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 </li>
 <li>FirstElement
 : <a class="el" href="structllama_1_1Tuple_3_01T__FirstElement_00_01Elements_8_8_8_01_4.html#ab5cbc0cb6579b9d59ccd90f0c7c0830d">llama::Tuple&lt; T_FirstElement, Elements... &gt;</a>
+</li>
+<li>FlatRecordDim
+: <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimInOrder.html#a2a95feabe41a0dddadbb416de12f0f94">llama::mapping::FlattenRecordDimInOrder&lt; RecordDim &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimMinimizePadding.html#a5008ed05c3b297165d7230b244fb9bda">llama::mapping::FlattenRecordDimMinimizePadding&lt; RecordDim &gt;</a>
 </li>
 </ul>
 
@@ -214,7 +218,7 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 
 <h3><a id="index_r"></a>- r -</h3><ul>
 <li>RecordDim
-: <a class="el" href="structllama_1_1mapping_1_1AoS.html#ab6ab214935e50e6b62e4691dbef8915c">llama::mapping::AoS&lt; T_ArrayDims, T_RecordDim, AlignAndPad, LinearizeArrayDimsFunctor &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1AoS.html#a46ab31780dd703e4af9e792472d6c4d9">llama::mapping::AoS&lt; T_ArrayDims, T_RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a1259dd9448f3ef495a0d2cb02079440a">llama::mapping::AoSoA&lt; T_ArrayDims, T_RecordDim, Lanes, LinearizeArrayDimsFunctor &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Heatmap.html#ae2fd102c11592cdf9245df997fad0aa9">llama::mapping::Heatmap&lt; Mapping, CountType &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1One.html#a8ed56e8967e5ac96e7e3bda41be0be25">llama::mapping::One&lt; T_ArrayDims, T_RecordDim &gt;</a>
@@ -325,7 +329,7 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sat Jul 3 2021 15:53:15 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Jul 5 2021 13:57:01 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

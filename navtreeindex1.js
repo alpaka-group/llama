@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af":[3,0,0,0,8,2],
 "macros_8hpp_source.html":[3,0,0,0,8],
 "namespacellama.html":[1,0,0],
 "namespacellama.html":[2,0,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "structllama_1_1VirtualRecord.html#ae7daad53e8a14f6575c003673545ca4b":[2,0,0,18,40],
 "structllama_1_1VirtualRecord.html#aec4e2893450f445152dc3e142c5313a9":[2,0,0,18,20],
 "structllama_1_1VirtualRecord.html#af331517d549e5e4623435d46196bf093":[2,0,0,18,41],
-"structllama_1_1VirtualRecord.html#af6c4f943cd36f1b91bcfd2869669b4e1":[2,0,0,18,32],
-"structllama_1_1VirtualRecord.html#af8f6a250f72997e26d6cc2123f2ff02d":[2,0,0,18,3]
+"structllama_1_1VirtualRecord.html#af6c4f943cd36f1b91bcfd2869669b4e1":[2,0,0,18,32]
 };
