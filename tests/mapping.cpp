@@ -541,6 +541,75 @@ TEST_CASE("address.AoSoA.4")
     }
 }
 
+TEST_CASE("address.PackedOne")
+{
+    using ArrayDims = llama::ArrayDims<2>;
+    auto arrayDims = ArrayDims{16, 16};
+    auto mapping = llama::mapping::PackedOne<ArrayDims, Particle>{arrayDims};
+
+    STATIC_REQUIRE(mapping.blobSize(0) == 56);
+    for (const auto coord : {ArrayDims{0, 0}, ArrayDims{0, 1}, ArrayDims{1, 0}})
+    {
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 8);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 16);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 24);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 28);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 36);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 44);
+        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 52);
+        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 53);
+        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 54);
+        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 55);
+    }
+}
+
+TEST_CASE("address.AlignedOne")
+{
+    using ArrayDims = llama::ArrayDims<2>;
+    auto arrayDims = ArrayDims{16, 16};
+    auto mapping = llama::mapping::AlignedOne<ArrayDims, Particle>{arrayDims};
+
+    STATIC_REQUIRE(mapping.blobSize(0) == 60);
+    for (const auto coord : {ArrayDims{0, 0}, ArrayDims{0, 1}, ArrayDims{1, 0}})
+    {
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 8);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 16);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 24);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 32);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 40);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 48);
+        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 56);
+        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 57);
+        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 58);
+        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 59);
+    }
+}
+
+TEST_CASE("address.MinAlignedOne")
+{
+    using ArrayDims = llama::ArrayDims<2>;
+    auto arrayDims = ArrayDims{16, 16};
+    auto mapping = llama::mapping::MinAlignedOne<ArrayDims, Particle>{arrayDims};
+
+    STATIC_REQUIRE(mapping.blobSize(0) == 56);
+    for (const auto coord : {ArrayDims{0, 0}, ArrayDims{0, 1}, ArrayDims{1, 0}})
+    {
+        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 8);
+        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 16);
+        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 24);
+        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 4);
+        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 32);
+        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 40);
+        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 48);
+        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 0);
+        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 1);
+        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 2);
+        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 3);
+    }
+}
+
 TEST_CASE("maxLanes")
 {
     STATIC_REQUIRE(llama::mapping::maxLanes<Particle, 128> == 2);

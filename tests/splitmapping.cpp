@@ -43,7 +43,7 @@ TEST_CASE("Split.AoSoA8.AoS_Packed.One.SoA_SingleBlob.4Buffer")
         llama::mapping::PreconfiguredAoSoA<8>::type,
         llama::mapping::PreconfiguredSplit<
             llama::RecordCoord<1>,
-            llama::mapping::One,
+            llama::mapping::PackedOne,
             llama::mapping::PreconfiguredSplit<
                 llama::RecordCoord<0>,
                 llama::mapping::PackedAoS,

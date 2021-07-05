@@ -435,7 +435,7 @@ namespace llama
             value = ((value + multiple - 1) / multiple) * multiple;
         }
 
-        template <bool Align, typename TypeList>
+        template <typename TypeList, bool Align, bool IncludeTailPadding>
         constexpr auto sizeOfImpl() -> std::size_t
         {
             using namespace boost::mp11;
@@ -454,7 +454,7 @@ namespace llama
                                                              });
 
             // final padding, so next struct can start right away
-            if constexpr (Align)
+            if constexpr (Align && IncludeTailPadding)
                 roundUpToMultiple(size, maxAlign);
             return size;
         }
@@ -482,16 +482,19 @@ namespace llama
     } // namespace internal
 
     /// The size of a type list if its elements would be in a normal struct.
-    template <typename TypeList, bool Align>
-    inline constexpr std::size_t flatSizeOf = internal::sizeOfImpl<Align, TypeList>();
+    template <typename TypeList, bool Align, bool IncludeTailPadding = true>
+    inline constexpr std::size_t flatSizeOf = internal::sizeOfImpl<TypeList, Align, IncludeTailPadding>();
 
     /// The size of a type T.
-    template <typename T, bool Align = false>
+    template <typename T, bool Align = false, bool IncludeTailPadding = true>
     inline constexpr std::size_t sizeOf = sizeof(T);
 
     /// The size of a record dimension if its fields would be in a normal struct.
-    template <typename... Fields, bool Align>
-    inline constexpr std::size_t sizeOf<Record<Fields...>, Align> = flatSizeOf<FlatRecordDim<Record<Fields...>>, Align>;
+    template <typename... Fields, bool Align, bool IncludeTailPadding>
+    inline constexpr std::size_t sizeOf<Record<Fields...>, Align, IncludeTailPadding> = flatSizeOf<
+        FlatRecordDim<Record<Fields...>>,
+        Align,
+        IncludeTailPadding>;
 
     /// The byte offset of an element in a type list ifs elements would be in a normal struct.
     template <typename TypeList, std::size_t I, bool Align>

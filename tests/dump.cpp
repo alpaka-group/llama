@@ -82,7 +82,8 @@ TEST_CASE("dump.Particle.Split.AoSoA8.AoS.One")
          llama::RecordCoord<2>,
          llama::mapping::PreconfiguredAoSoA<8>::type,
          llama::mapping::
-             PreconfiguredSplit<llama::RecordCoord<1>, llama::mapping::One, llama::mapping::PackedAoS, true>::type,
+             PreconfiguredSplit<llama::RecordCoord<1>, llama::mapping::PackedOne, llama::mapping::PackedAoS, true>::
+                 type,
          true>{arrayDims});
 }
 
@@ -97,7 +98,7 @@ TEST_CASE("dump.Particle.Split.AoSoA8.AoS.One.SoA")
          llama::mapping::PreconfiguredAoSoA<8>::type,
          llama::mapping::PreconfiguredSplit<
              llama::RecordCoord<1>,
-             llama::mapping::One,
+             llama::mapping::PackedOne,
              llama::mapping::PreconfiguredSplit<
                  llama::RecordCoord<0>,
                  llama::mapping::PackedAoS,
@@ -132,9 +133,19 @@ TEST_CASE("dump.ParticleUnaligned.SoA_MB")
     dump(llama::mapping::MultiBlobSoA<ArrayDims, ParticleUnaligned>{arrayDims});
 }
 
+TEST_CASE("dump.ParticleUnaligned.AoSoA4")
+{
+    dump(llama::mapping::AoSoA<ArrayDims, ParticleUnaligned, 4>{arrayDims});
+}
+
 TEST_CASE("dump.ParticleUnaligned.AoSoA8")
 {
     dump(llama::mapping::AoSoA<ArrayDims, ParticleUnaligned, 8>{arrayDims});
+}
+
+TEST_CASE("dump.ParticleUnaligned.AoSoA8_27elements")
+{
+    dump(llama::mapping::AoSoA<ArrayDims, ParticleUnaligned, 8>{{27}});
 }
 
 TEST_CASE("dump.ParticleUnaligned.AoSoA32")
@@ -171,7 +182,8 @@ TEST_CASE("dump.ParticleUnaligned.Split.SoA_MB.AoS_Aligned.One")
          llama::RecordCoord<1>,
          llama::mapping::PreconfiguredSoA<true>::type,
          llama::mapping::
-             PreconfiguredSplit<llama::RecordCoord<1>, llama::mapping::One, llama::mapping::AlignedAoS, true>::type,
+             PreconfiguredSplit<llama::RecordCoord<1>, llama::mapping::PackedOne, llama::mapping::AlignedAoS, true>::
+                 type,
          true>{arrayDims});
 }
 
@@ -183,7 +195,8 @@ TEST_CASE("dump.ParticleUnaligned.Split.AoSoA8.AoS_Aligned.One")
          llama::RecordCoord<1>,
          llama::mapping::PreconfiguredAoSoA<8>::type,
          llama::mapping::
-             PreconfiguredSplit<llama::RecordCoord<1>, llama::mapping::One, llama::mapping::AlignedAoS, true>::type,
+             PreconfiguredSplit<llama::RecordCoord<1>, llama::mapping::PackedOne, llama::mapping::AlignedAoS, true>::
+                 type,
          true>{arrayDims});
 }
 
@@ -197,7 +210,7 @@ TEST_CASE("dump.ParticleUnaligned.Split.AoSoA8.SoA.One.AoS")
          llama::mapping::PreconfiguredAoSoA<8>::type,
          llama::mapping::PreconfiguredSplit<
              llama::RecordCoord<1>,
-             llama::mapping::One,
+             llama::mapping::PackedOne,
              llama::mapping::PreconfiguredSplit<
                  llama::RecordCoord<0>,
                  llama::mapping::PreconfiguredSoA<>::type,
