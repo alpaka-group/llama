@@ -223,6 +223,10 @@ namespace llama
         };
     } // namespace internal
 
+    /// Returns true if the field accessed via the given mapping and record coordinate is a computed value.
+    template <typename Mapping, typename RecordCoord>
+    inline constexpr bool isComputed = internal::isComputed<Mapping, RecordCoord>::value;
+
     /// Central LLAMA class holding memory for storage and giving access to values stored there defined by a mapping. A
     /// view should be created using \ref allocView.
     /// \tparam T_Mapping The mapping used by the view to map accesses into memory.
@@ -375,7 +379,7 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDims arrayDims, RecordCoord<Coords...> dc = {}) const
             -> decltype(auto)
         {
-            if constexpr (internal::isComputed<Mapping, RecordCoord<Coords...>>::value)
+            if constexpr (isComputed<Mapping, RecordCoord<Coords...>>)
                 return mapping.compute(arrayDims, dc, storageBlobs);
             else
             {
@@ -389,7 +393,7 @@ namespace llama
         template <std::size_t... Coords>
         LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDims arrayDims, RecordCoord<Coords...> dc = {}) -> decltype(auto)
         {
-            if constexpr (internal::isComputed<Mapping, RecordCoord<Coords...>>::value)
+            if constexpr (isComputed<Mapping, RecordCoord<Coords...>>)
                 return mapping.compute(arrayDims, dc, storageBlobs);
             else
             {
