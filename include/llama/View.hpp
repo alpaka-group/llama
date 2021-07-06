@@ -367,7 +367,10 @@ namespace llama
             return {ArrayDimsIndexRange<ArrayDims::rank>{mapping.arrayDims()}.end(), this};
         }
 
-        [[no_unique_address]] Mapping mapping;
+#ifndef __NVCC__
+        [[no_unique_address]] // nvcc 11.x ICE
+#endif
+        Mapping mapping;
         Array<BlobType, Mapping::blobCount> storageBlobs;
 
     private:
