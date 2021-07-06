@@ -20,6 +20,11 @@ namespace llama
             = N; // FIXME this is right from the ArrayDims's POV, but wrong from the Array's POV
         T element[N > 0 ? N : 1];
 
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto size() const
+        {
+            return N;
+        }
+
         LLAMA_FN_HOST_ACC_INLINE constexpr T* begin()
         {
             return &element[0];
