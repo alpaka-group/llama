@@ -116,6 +116,17 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ArrayDimsIndexRange.html">ArrayDimsIndexRange</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Range allowing to iterate over all indices in a <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>.  <a href="structllama_1_1ArrayDimsIndexRange.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Copy.html">Copy</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic implementation of <a class="el" href="namespacellama.html#ab67a5448cc031309dc1aa8580b7d4950">copy</a> defaulting to <a class="el" href="namespacellama.html#af977754d689a5f3cc10fd80d4b37ba1f">fieldWiseCopy</a>. LLAMA provides several specializations of this construct for specific mappings. Users are encouraged to also specialize this template with better copy algorithms for further combinations of mappings, if they can and want to provide a better implementation.  <a href="structllama_1_1Copy.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Copy_3_01Mapping_00_01Mapping_01_4.html">Copy&lt; Mapping, Mapping &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayDims_00_01RecordDim_00_01LanesSrc_00_01Linearif7270c06dfd5cd8bbacf61849cb30345.html">Copy&lt; mapping::AoSoA&lt; ArrayDims, RecordDim, LanesSrc, LinearizeArrayDims &gt;, mapping::AoSoA&lt; ArrayDims, RecordDim, LanesDst, LinearizeArrayDims &gt;, std::enable_if_t&lt; LanesSrc !=LanesDst &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayDims_00_01RecordDim_00_01LanesSrc_00_01Lineari6b6c0ada09a6ec04035a1ae0e30750c2.html">Copy&lt; mapping::AoSoA&lt; ArrayDims, RecordDim, LanesSrc, LinearizeArrayDims &gt;, mapping::SoA&lt; ArrayDims, RecordDim, DstSeparateBuffers, LinearizeArrayDims &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayDims_00_01RecordDim_00_01SrcSeparateBuffers_00_0042d41fc32647d3fc532107ff3b31084.html">Copy&lt; mapping::SoA&lt; ArrayDims, RecordDim, SrcSeparateBuffers, LinearizeArrayDims &gt;, mapping::AoSoA&lt; ArrayDims, RecordDim, LanesDst, LinearizeArrayDims &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Field.html">Field</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Iterator.html">Iterator</a></td></tr>
@@ -215,6 +226,18 @@ Functions</h2></td></tr>
 <tr class="memitem:a025e344f02bf146a481823805a93800a"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N&gt; </td></tr>
 <tr class="memitem:a025e344f02bf146a481823805a93800a"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a025e344f02bf146a481823805a93800a">pop_front</a> (<a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N &gt; a)</td></tr>
 <tr class="separator:a025e344f02bf146a481823805a93800a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22c65b7815a74750d6b589d95d19d703"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename SrcBlob , typename DstBlob &gt; </td></tr>
+<tr class="memitem:a22c65b7815a74750d6b589d95d19d703"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a22c65b7815a74750d6b589d95d19d703">blobMemcpy</a> (const <a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, SrcBlob &gt; &amp;srcView, <a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, DstBlob &gt; &amp;dstView, std::size_t threadId=0, std::size_t threadCount=1)</td></tr>
+<tr class="separator:a22c65b7815a74750d6b589d95d19d703"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af977754d689a5f3cc10fd80d4b37ba1f"><td class="memTemplParams" colspan="2">template&lt;typename SrcMapping , typename SrcBlob , typename DstMapping , typename DstBlob &gt; </td></tr>
+<tr class="memitem:af977754d689a5f3cc10fd80d4b37ba1f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#af977754d689a5f3cc10fd80d4b37ba1f">fieldWiseCopy</a> (const <a class="el" href="structllama_1_1View.html">View</a>&lt; SrcMapping, SrcBlob &gt; &amp;srcView, <a class="el" href="structllama_1_1View.html">View</a>&lt; DstMapping, DstBlob &gt; &amp;dstView, std::size_t threadId=0, std::size_t threadCount=1)</td></tr>
+<tr class="separator:af977754d689a5f3cc10fd80d4b37ba1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abaefce711ff5d4566ea761ef08fab469"><td class="memTemplParams" colspan="2">template&lt;typename SrcMapping , typename SrcBlob , typename DstMapping , typename DstBlob &gt; </td></tr>
+<tr class="memitem:abaefce711ff5d4566ea761ef08fab469"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#abaefce711ff5d4566ea761ef08fab469">aosoaCommonBlockCopy</a> (const <a class="el" href="structllama_1_1View.html">View</a>&lt; SrcMapping, SrcBlob &gt; &amp;srcView, <a class="el" href="structllama_1_1View.html">View</a>&lt; DstMapping, DstBlob &gt; &amp;dstView, bool readOpt, std::size_t threadId=0, std::size_t threadCount=1)</td></tr>
+<tr class="separator:abaefce711ff5d4566ea761ef08fab469"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab67a5448cc031309dc1aa8580b7d4950"><td class="memTemplParams" colspan="2">template&lt;typename SrcMapping , typename SrcBlob , typename DstMapping , typename DstBlob &gt; </td></tr>
+<tr class="memitem:ab67a5448cc031309dc1aa8580b7d4950"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ab67a5448cc031309dc1aa8580b7d4950">copy</a> (const <a class="el" href="structllama_1_1View.html">View</a>&lt; SrcMapping, SrcBlob &gt; &amp;srcView, <a class="el" href="structllama_1_1View.html">View</a>&lt; DstMapping, DstBlob &gt; &amp;dstView, std::size_t threadId=0, std::size_t threadCount=1)</td></tr>
+<tr class="separator:ab67a5448cc031309dc1aa8580b7d4950"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac99ade3cc2e49f4a201fe637ddfc3788"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
 <tr class="memitem:ac99ade3cc2e49f4a201fe637ddfc3788"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ac99ade3cc2e49f4a201fe637ddfc3788">ArrayDims</a> (Args...) -&gt; <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>&lt; sizeof...(Args)&gt;</td></tr>
 <tr class="separator:ac99ade3cc2e49f4a201fe637ddfc3788"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -712,6 +735,63 @@ template&lt;std::size_t Dim, typename RecordDim &gt; </div>
 
 </div>
 </div>
+<a id="abaefce711ff5d4566ea761ef08fab469"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abaefce711ff5d4566ea761ef08fab469">&#9670;&nbsp;</a></span>aosoaCommonBlockCopy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename SrcMapping , typename SrcBlob , typename DstMapping , typename DstBlob &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void llama::aosoaCommonBlockCopy </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1View.html">View</a>&lt; SrcMapping, SrcBlob &gt; &amp;&#160;</td>
+          <td class="paramname"><em>srcView</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a>&lt; DstMapping, DstBlob &gt; &amp;&#160;</td>
+          <td class="paramname"><em>dstView</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>readOpt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>threadId</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>threadCount</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>AoSoA copy strategy which transfers data in common blocks. SoA mappings are also allowed for at most 1 argument. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">threadId</td><td>Optional. Zero-based id of calling thread for multi-threaded invocations. </td></tr>
+    <tr><td class="paramname">threadCount</td><td>Optional. Thread count in case of multi-threaded invocation. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00113">113</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a690689d38b43930430e58bb7fe17aca7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a690689d38b43930430e58bb7fe17aca7">&#9670;&nbsp;</a></span>Array()</h2>
 
@@ -762,6 +842,57 @@ template&lt;typename... Args&gt; </div>
 
 </div>
 </div>
+<a id="a22c65b7815a74750d6b589d95d19d703"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22c65b7815a74750d6b589d95d19d703">&#9670;&nbsp;</a></span>blobMemcpy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping , typename SrcBlob , typename DstBlob &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void llama::blobMemcpy </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, SrcBlob &gt; &amp;&#160;</td>
+          <td class="paramname"><em>srcView</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, DstBlob &gt; &amp;&#160;</td>
+          <td class="paramname"><em>dstView</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>threadId</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>threadCount</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Direct memcpy from source view blobs to destination view blobs. Both views need to have the same mappings with the same array dimensions. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">threadId</td><td>Optional. Zero-based id of calling thread for multi-threaded invocations. </td></tr>
+    <tr><td class="paramname">threadCount</td><td>Optional. Thread count in case of multi-threaded invocation. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00036">36</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a42cdd926d98388052f028ab19c94b649"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a42cdd926d98388052f028ab19c94b649">&#9670;&nbsp;</a></span>cat()</h2>
 
@@ -794,6 +925,57 @@ template&lt;typename... RecordCoords&gt; </div>
 
 </div>
 </div>
+<a id="ab67a5448cc031309dc1aa8580b7d4950"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab67a5448cc031309dc1aa8580b7d4950">&#9670;&nbsp;</a></span>copy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename SrcMapping , typename SrcBlob , typename DstMapping , typename DstBlob &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void llama::copy </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1View.html">View</a>&lt; SrcMapping, SrcBlob &gt; &amp;&#160;</td>
+          <td class="paramname"><em>srcView</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a>&lt; DstMapping, DstBlob &gt; &amp;&#160;</td>
+          <td class="paramname"><em>dstView</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>threadId</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>threadCount</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p><a class="el" href="structllama_1_1Copy.html" title="Generic implementation of copy defaulting to fieldWiseCopy. LLAMA provides several specializations of...">Copy</a> data from source view to destination view. Both views need to have the same array and record dimensions. Delegates to <a class="el" href="structllama_1_1Copy.html">Copy</a> to choose an implementation. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">threadId</td><td>Optional. Zero-based id of calling thread for multi-threaded invocations. </td></tr>
+    <tr><td class="paramname">threadCount</td><td>Optional. Thread count in case of multi-threaded invocation. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00381">381</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a8183deaf1069415900815fd9f2f1e373"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8183deaf1069415900815fd9f2f1e373">&#9670;&nbsp;</a></span>copyVirtualRecordStack()</h2>
 
@@ -823,6 +1005,57 @@ template&lt;typename VirtualRecord &gt; </div>
 <p>Creates a single <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> owning a view with stack memory and copies all values from an existing <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>. </p>
 
 <p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00029">29</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af977754d689a5f3cc10fd80d4b37ba1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af977754d689a5f3cc10fd80d4b37ba1f">&#9670;&nbsp;</a></span>fieldWiseCopy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename SrcMapping , typename SrcBlob , typename DstMapping , typename DstBlob &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void llama::fieldWiseCopy </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1View.html">View</a>&lt; SrcMapping, SrcBlob &gt; &amp;&#160;</td>
+          <td class="paramname"><em>srcView</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a>&lt; DstMapping, DstBlob &gt; &amp;&#160;</td>
+          <td class="paramname"><em>dstView</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>threadId</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>threadCount</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Field-wise copy from source to destination view. Both views need to have the same array and record dimensions. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">threadId</td><td>Optional. Thread id in case of multi-threaded copy. </td></tr>
+    <tr><td class="paramname">threadCount</td><td>Optional. Thread count in case of multi-threaded copy. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00060">60</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
 
 </div>
 </div>
@@ -2319,7 +2552,7 @@ template&lt;typename... Fields, bool Align&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Mon Jul 5 2021 13:57:01 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue Jul 6 2021 16:04:52 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -1,8 +1,8 @@
 var hierarchy =
 [
     [ "llama::bloballoc::AlignedAllocator< T, Alignment >", "structllama_1_1bloballoc_1_1AlignedAllocator.html", null ],
-    [ "llama::mapping::AoS< T_ArrayDims, T_RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim >", "structllama_1_1mapping_1_1AoS.html", null ],
-    [ "llama::mapping::AoSoA< T_ArrayDims, T_RecordDim, Lanes, LinearizeArrayDimsFunctor >", "structllama_1_1mapping_1_1AoSoA.html", null ],
+    [ "llama::mapping::AoS< T_ArrayDims, T_RecordDim, AlignAndPad, T_LinearizeArrayDimsFunctor, FlattenRecordDim >", "structllama_1_1mapping_1_1AoS.html", null ],
+    [ "llama::mapping::AoSoA< T_ArrayDims, T_RecordDim, Lanes, T_LinearizeArrayDimsFunctor >", "structllama_1_1mapping_1_1AoSoA.html", null ],
     [ "llama::Array< T, N >", "structllama_1_1Array.html", null ],
     [ "llama::Array< BlobType, Mapping::blobCount >", "structllama_1_1Array.html", null ],
     [ "llama::Array< std::size_t, Dim >", "structllama_1_1Array.html", [
@@ -16,6 +16,11 @@ var hierarchy =
       [ "llama::internal::isComputed< Mapping, RecordCoord, std::void_t< decltype(Mapping::isComputed(RecordCoord{}))> >", "structllama_1_1internal_1_1isComputed_3_01Mapping_00_01RecordCoord_00_01std_1_1void__t_3_01declt90ee9238cb4500a8941bc2798fc813a7.html", null ]
     ] ],
     [ "llama::mapping::tree::functor::internal::ChangeNodeChildsRuntimeFunctor", "structllama_1_1mapping_1_1tree_1_1functor_1_1internal_1_1ChangeNodeChildsRuntimeFunctor.html", null ],
+    [ "llama::Copy< SrcMapping, DstMapping, SFINAE >", "structllama_1_1Copy.html", null ],
+    [ "llama::Copy< Mapping, Mapping >", "structllama_1_1Copy_3_01Mapping_00_01Mapping_01_4.html", null ],
+    [ "llama::Copy< mapping::AoSoA< ArrayDims, RecordDim, LanesSrc, LinearizeArrayDims >, mapping::AoSoA< ArrayDims, RecordDim, LanesDst, LinearizeArrayDims >, std::enable_if_t< LanesSrc !=LanesDst > >", "structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayDims_00_01RecordDim_00_01LanesSrc_00_01Linearif7270c06dfd5cd8bbacf61849cb30345.html", null ],
+    [ "llama::Copy< mapping::AoSoA< ArrayDims, RecordDim, LanesSrc, LinearizeArrayDims >, mapping::SoA< ArrayDims, RecordDim, DstSeparateBuffers, LinearizeArrayDims > >", "structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayDims_00_01RecordDim_00_01LanesSrc_00_01Lineari6b6c0ada09a6ec04035a1ae0e30750c2.html", null ],
+    [ "llama::Copy< mapping::SoA< ArrayDims, RecordDim, SrcSeparateBuffers, LinearizeArrayDims >, mapping::AoSoA< ArrayDims, RecordDim, LanesDst, LinearizeArrayDims > >", "structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayDims_00_01RecordDim_00_01SrcSeparateBuffers_00_0042d41fc32647d3fc532107ff3b31084.html", null ],
     [ "llama::mapping::tree::internal::CreateTreeElement< Tag, RecordDim, CountType >", "structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement.html", null ],
     [ "llama::mapping::tree::internal::CreateTreeElement< Tag, ChildType[Count], CountType >", "structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement_3_01Tag_00_01ChildType_0fCount_0e_00_01CountType_01_4.html", null ],
     [ "llama::mapping::tree::internal::CreateTreeElement< Tag, Record< Fields... >, CountType >", "structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement_3_01Tag_00_01Record_3_01Fields_8_8_8_01_4_00_01CountType_01_4.html", null ],
@@ -100,7 +105,7 @@ var hierarchy =
     [ "llama::internal::RecordCoordCommonPrefixIsSameImpl< First, Second >", "structllama_1_1internal_1_1RecordCoordCommonPrefixIsSameImpl.html", null ],
     [ "llama::internal::RecordCoordCommonPrefixIsSameImpl< RecordCoord< Coords1... >, RecordCoord< Coords2... > >", "structllama_1_1internal_1_1RecordCoordCommonPrefixIsSameImpl_3_01RecordCoord_3_01Coords1_8_8_8_0f195a8b8a0db2355fe3190fcb9b6d969.html", null ],
     [ "llama::bloballoc::SharedPtr< Alignment >", "structllama_1_1bloballoc_1_1SharedPtr.html", null ],
-    [ "llama::mapping::SoA< T_ArrayDims, T_RecordDim, SeparateBuffers, LinearizeArrayDimsFunctor >", "structllama_1_1mapping_1_1SoA.html", null ],
+    [ "llama::mapping::SoA< T_ArrayDims, T_RecordDim, SeparateBuffers, T_LinearizeArrayDimsFunctor >", "structllama_1_1mapping_1_1SoA.html", null ],
     [ "llama::mapping::Split< T_ArrayDims, T_RecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs >", "structllama_1_1mapping_1_1Split.html", null ],
     [ "llama::bloballoc::Stack< BytesToReserve >", "structllama_1_1bloballoc_1_1Stack.html", null ],
     [ "llama::mapping::Trace< Mapping >", "structllama_1_1mapping_1_1Trace.html", null ],
@@ -120,8 +125,8 @@ var hierarchy =
     [ "llama::internal::TupleReplaceImpl< Pos, Tuple, Replacement >", "structllama_1_1internal_1_1TupleReplaceImpl.html", null ],
     [ "llama::internal::TupleReplaceImpl< 0, Tuple< Elements... >, Replacement >", "structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01Elements_8_8_8_01_4_00_01Replacement_01_4.html", null ],
     [ "llama::internal::TupleReplaceImpl< 0, Tuple< OneElement >, Replacement >", "structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01OneElement_01_4_00_01Replacement_01_4.html", null ],
-    [ "llama::Vector< Mapping >", "structllama_1_1Vector.html", null ],
     [ "llama::bloballoc::Vector< Alignment >", "structllama_1_1bloballoc_1_1Vector.html", null ],
+    [ "llama::Vector< Mapping >", "structllama_1_1Vector.html", null ],
     [ "llama::View< T_Mapping, BlobType >", "structllama_1_1View.html", null ],
     [ "llama::VirtualRecord< T_View, BoundRecordCoord, OwnView >", "structllama_1_1VirtualRecord.html", null ],
     [ "llama::VirtualView< T_ParentViewType >", "structllama_1_1VirtualView.html", null ],

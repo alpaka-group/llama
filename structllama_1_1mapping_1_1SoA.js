@@ -1,11 +1,12 @@
 var structllama_1_1mapping_1_1SoA =
 [
-    [ "ArrayDims", "structllama_1_1mapping_1_1SoA.html#add8eab54a04e38dd9a9c5e70eaf75bf9", null ],
-    [ "RecordDim", "structllama_1_1mapping_1_1SoA.html#ab654e76a28806e1e1e2f043d4824e59a", null ],
-    [ "SoA", "structllama_1_1mapping_1_1SoA.html#a0941a8181667aafc6b112c09a4a9aad5", null ],
-    [ "SoA", "structllama_1_1mapping_1_1SoA.html#a9a1ac237b7f843cf96728b66e9d6c0dc", null ],
-    [ "arrayDims", "structllama_1_1mapping_1_1SoA.html#ade528a71eed0db06889a8acfce717399", null ],
-    [ "blobNrAndOffset", "structllama_1_1mapping_1_1SoA.html#a4add9b9510eed25b6bf96ff3ae9826a6", null ],
-    [ "blobSize", "structllama_1_1mapping_1_1SoA.html#a2559656e9c13ec4da78afb2258cf3a4f", null ],
-    [ "blobCount", "structllama_1_1mapping_1_1SoA.html#abe0f027dfcd7fb9805c8ecd1f01d8a6a", null ]
+    [ "ArrayDims", "structllama_1_1mapping_1_1SoA.html#a27a1b41104405a5d6fcbb4aec5e8d1fe", null ],
+    [ "LinearizeArrayDimsFunctor", "structllama_1_1mapping_1_1SoA.html#a0d774782324482c578e8dc788e1d01c1", null ],
+    [ "RecordDim", "structllama_1_1mapping_1_1SoA.html#a4d45abf5607e7fcd86e914ed0e07e9c9", null ],
+    [ "SoA", "structllama_1_1mapping_1_1SoA.html#a53f66923c3a507290fe0b916f8866bab", null ],
+    [ "SoA", "structllama_1_1mapping_1_1SoA.html#ae276c897385c859ebae57bf180c939c3", null ],
+    [ "arrayDims", "structllama_1_1mapping_1_1SoA.html#a49d79b015319b0632c289e597da6568f", null ],
+    [ "blobNrAndOffset", "structllama_1_1mapping_1_1SoA.html#a22fdc0e6fc28a569ad72540ae4b36eeb", null ],
+    [ "blobSize", "structllama_1_1mapping_1_1SoA.html#ac7274ef0f6446e387fd45a07aba4a2e1", null ],
+    [ "blobCount", "structllama_1_1mapping_1_1SoA.html#a5b638dc1b9cfa347bb79f0dabd05d4da", null ]
 ];

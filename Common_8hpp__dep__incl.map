@@ -1,11 +1,12 @@
 <map id="/home/runner/work/llama/llama/include/llama/mapping/Common.hpp" name="/home/runner/work/llama/llama/include/llama/mapping/Common.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="725,5,941,61"/>
-<area shape="rect" id="node2" href="$AoS_8hpp.html" title=" " alt="" coords="5,109,221,165"/>
-<area shape="rect" id="node4" href="$AoSoA_8hpp.html" title=" " alt="" coords="245,109,461,165"/>
-<area shape="rect" id="node5" href="$Heatmap_8hpp.html" title=" " alt="" coords="485,109,701,165"/>
-<area shape="rect" id="node6" href="$SoA_8hpp.html" title=" " alt="" coords="725,109,941,165"/>
-<area shape="rect" id="node7" href="$Split_8hpp.html" title=" " alt="" coords="965,109,1181,165"/>
-<area shape="rect" id="node8" href="$Trace_8hpp.html" title=" " alt="" coords="1205,109,1421,165"/>
-<area shape="rect" id="node9" href="$Mapping_8hpp.html" title=" " alt="" coords="1445,109,1661,165"/>
-<area shape="rect" id="node3" href="$llama_8hpp.html" title=" " alt="" coords="721,213,945,255"/>
+<area shape="rect" id="node1" title=" " alt="" coords="631,5,847,61"/>
+<area shape="rect" id="node2" href="$AoSoA_8hpp.html" title=" " alt="" coords="5,109,221,165"/>
+<area shape="rect" id="node5" href="$SoA_8hpp.html" title=" " alt="" coords="245,109,461,165"/>
+<area shape="rect" id="node6" href="$AoS_8hpp.html" title=" " alt="" coords="391,213,607,269"/>
+<area shape="rect" id="node7" href="$Heatmap_8hpp.html" title=" " alt="" coords="631,213,847,269"/>
+<area shape="rect" id="node8" href="$Split_8hpp.html" title=" " alt="" coords="871,213,1087,269"/>
+<area shape="rect" id="node9" href="$Trace_8hpp.html" title=" " alt="" coords="827,109,1043,165"/>
+<area shape="rect" id="node10" href="$Mapping_8hpp.html" title=" " alt="" coords="1067,109,1283,165"/>
+<area shape="rect" id="node3" href="$Copy_8hpp.html" title=" " alt="" coords="97,221,316,262"/>
+<area shape="rect" id="node4" href="$llama_8hpp.html" title=" " alt="" coords="507,317,731,359"/>
 </map>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Low Level Abstraction of Memory Access: llama::mapping::AoS&lt; T_ArrayDims, T_RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim &gt; Struct Template Reference</title>
+<title>Low Level Abstraction of Memory Access: llama::mapping::AoS&lt; T_ArrayDims, T_RecordDim, AlignAndPad, T_LinearizeArrayDimsFunctor, FlattenRecordDim &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -88,7 +88,7 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1AoS.html',''
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="structllama_1_1mapping_1_1AoS-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">llama::mapping::AoS&lt; T_ArrayDims, T_RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim &gt; Struct Template Reference</div>  </div>
+<div class="title">llama::mapping::AoS&lt; T_ArrayDims, T_RecordDim, AlignAndPad, T_LinearizeArrayDimsFunctor, FlattenRecordDim &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -96,38 +96,40 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1AoS.html',''
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ab536a92c21b23312d8470a434cac6c3b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoS.html#ab536a92c21b23312d8470a434cac6c3b">ArrayDims</a> = T_ArrayDims</td></tr>
-<tr class="separator:ab536a92c21b23312d8470a434cac6c3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46ab31780dd703e4af9e792472d6c4d9"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoS.html#a46ab31780dd703e4af9e792472d6c4d9">RecordDim</a> = T_RecordDim</td></tr>
-<tr class="separator:a46ab31780dd703e4af9e792472d6c4d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bc172e9f1dfbee5c9f92edd416e69d5"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoS.html#a0bc172e9f1dfbee5c9f92edd416e69d5">ArrayDims</a> = T_ArrayDims</td></tr>
+<tr class="separator:a0bc172e9f1dfbee5c9f92edd416e69d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf0ed284c0cb6b5e16c101e20bb3019d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoS.html#abf0ed284c0cb6b5e16c101e20bb3019d">RecordDim</a> = T_RecordDim</td></tr>
+<tr class="separator:abf0ed284c0cb6b5e16c101e20bb3019d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba43156465df2f1f9be36e2a5b667657"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoS.html#aba43156465df2f1f9be36e2a5b667657">LinearizeArrayDimsFunctor</a> = T_LinearizeArrayDimsFunctor</td></tr>
+<tr class="separator:aba43156465df2f1f9be36e2a5b667657"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a4fd903c306ed0907810aa83d88ea1ae1"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoS.html#a4fd903c306ed0907810aa83d88ea1ae1">AoS</a> ()=default</td></tr>
-<tr class="separator:a4fd903c306ed0907810aa83d88ea1ae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad9346b54bf82fa2b6c55eeae89397c3d"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoS.html#ad9346b54bf82fa2b6c55eeae89397c3d">AoS</a> (<a class="el" href="structllama_1_1mapping_1_1AoS.html#ab536a92c21b23312d8470a434cac6c3b">ArrayDims</a> size, <a class="el" href="structllama_1_1mapping_1_1AoS.html#a46ab31780dd703e4af9e792472d6c4d9">RecordDim</a>={})</td></tr>
-<tr class="separator:ad9346b54bf82fa2b6c55eeae89397c3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a123779bc63e8c4e10e3ba4f8c0566135"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoS.html#a123779bc63e8c4e10e3ba4f8c0566135">arrayDims</a> () const -&gt; <a class="el" href="structllama_1_1mapping_1_1AoS.html#ab536a92c21b23312d8470a434cac6c3b">ArrayDims</a></td></tr>
-<tr class="separator:a123779bc63e8c4e10e3ba4f8c0566135"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5dc5a5fb04f3f51307da1e92d9443861"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoS.html#a5dc5a5fb04f3f51307da1e92d9443861">blobSize</a> (std::size_t) const -&gt; std::size_t</td></tr>
-<tr class="separator:a5dc5a5fb04f3f51307da1e92d9443861"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44611f824f6aa728d11c863a41cf68a9"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
-<tr class="memitem:a44611f824f6aa728d11c863a41cf68a9"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoS.html#a44611f824f6aa728d11c863a41cf68a9">blobNrAndOffset</a> (<a class="el" href="structllama_1_1mapping_1_1AoS.html#ab536a92c21b23312d8470a434cac6c3b">ArrayDims</a> coord) const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a></td></tr>
-<tr class="separator:a44611f824f6aa728d11c863a41cf68a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31e756ff0004d1421c665bf051ff9309"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoS.html#a31e756ff0004d1421c665bf051ff9309">AoS</a> ()=default</td></tr>
+<tr class="separator:a31e756ff0004d1421c665bf051ff9309"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acee38d1dfbbedf91b59bf00bfa0fea8c"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoS.html#acee38d1dfbbedf91b59bf00bfa0fea8c">AoS</a> (<a class="el" href="structllama_1_1mapping_1_1AoS.html#a0bc172e9f1dfbee5c9f92edd416e69d5">ArrayDims</a> size, <a class="el" href="structllama_1_1mapping_1_1AoS.html#abf0ed284c0cb6b5e16c101e20bb3019d">RecordDim</a>={})</td></tr>
+<tr class="separator:acee38d1dfbbedf91b59bf00bfa0fea8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94739e0a1acadc562447af9c4effd37e"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoS.html#a94739e0a1acadc562447af9c4effd37e">arrayDims</a> () const -&gt; <a class="el" href="structllama_1_1mapping_1_1AoS.html#a0bc172e9f1dfbee5c9f92edd416e69d5">ArrayDims</a></td></tr>
+<tr class="separator:a94739e0a1acadc562447af9c4effd37e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f0c3a6750fc94dbfdfe367e611adae3"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoS.html#a6f0c3a6750fc94dbfdfe367e611adae3">blobSize</a> (std::size_t) const -&gt; std::size_t</td></tr>
+<tr class="separator:a6f0c3a6750fc94dbfdfe367e611adae3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64a1aaf97e5752e68a67c185025a8744"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
+<tr class="memitem:a64a1aaf97e5752e68a67c185025a8744"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoS.html#a64a1aaf97e5752e68a67c185025a8744">blobNrAndOffset</a> (<a class="el" href="structllama_1_1mapping_1_1AoS.html#a0bc172e9f1dfbee5c9f92edd416e69d5">ArrayDims</a> coord) const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a></td></tr>
+<tr class="separator:a64a1aaf97e5752e68a67c185025a8744"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:abae4338d2d1c74534345fcb92c5dcce4"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoS.html#abae4338d2d1c74534345fcb92c5dcce4">blobCount</a> = 1</td></tr>
-<tr class="separator:abae4338d2d1c74534345fcb92c5dcce4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4c5a42ad72ccbd21b9ac974d6e3d096"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoS.html#aa4c5a42ad72ccbd21b9ac974d6e3d096">blobCount</a> = 1</td></tr>
+<tr class="separator:aa4c5a42ad72ccbd21b9ac974d6e3d096"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename T_ArrayDims, typename T_RecordDim, bool AlignAndPad = true, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDim = FlattenRecordDimInOrder&gt;<br />
-struct llama::mapping::AoS&lt; T_ArrayDims, T_RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim &gt;</h3>
+<div class="textblock"><h3>template&lt;typename T_ArrayDims, typename T_RecordDim, bool AlignAndPad = true, typename T_LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDim = FlattenRecordDimInOrder&gt;<br />
+struct llama::mapping::AoS&lt; T_ArrayDims, T_RecordDim, AlignAndPad, T_LinearizeArrayDimsFunctor, FlattenRecordDim &gt;</h3>
 
 <p><a class="el" href="structllama_1_1Array.html">Array</a> of struct mapping. Used to create a <a class="el" href="structllama_1_1View.html">View</a> via <a class="el" href="namespacellama.html#af9dcf355d9fa87ed98864dadb8e685a1">allocView</a>. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">AlignAndPad</td><td>If true, padding bytes are inserted to guarantee that struct members are properly aligned. If false, struct members are tightly packed. </td></tr>
-    <tr><td class="paramname">LinearizeArrayDimsFunctor</td><td>Defines how the array dimensions should be mapped into linear numbers and how big the linear domain gets. </td></tr>
+    <tr><td class="paramname">T_LinearizeArrayDimsFunctor</td><td>Defines how the array dimensions should be mapped into linear numbers and how big the linear domain gets. </td></tr>
     <tr><td class="paramname">FlattenRecordDim</td><td>Defines how the record dimension's fields should be flattended. See <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimInOrder.html">FlattenRecordDimInOrder</a> and <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimMinimizePadding.html">FlattenRecordDimMinimizePadding</a>. </td></tr>
   </table>
   </dd>
@@ -135,16 +137,16 @@ struct llama::mapping::AoS&lt; T_ArrayDims, T_RecordDim, AlignAndPad, LinearizeA
 
 <p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00023">23</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="ab536a92c21b23312d8470a434cac6c3b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab536a92c21b23312d8470a434cac6c3b">&#9670;&nbsp;</a></span>ArrayDims</h2>
+<a id="a0bc172e9f1dfbee5c9f92edd416e69d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0bc172e9f1dfbee5c9f92edd416e69d5">&#9670;&nbsp;</a></span>ArrayDims</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = true, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDim = FlattenRecordDimInOrder&gt; </div>
+template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = true, typename T_LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDim = FlattenRecordDimInOrder&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1AoS.html">llama::mapping::AoS</a>&lt; T_ArrayDims, T_RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim &gt;::<a class="el" href="structllama_1_1mapping_1_1AoS.html#ab536a92c21b23312d8470a434cac6c3b">ArrayDims</a> =  T_ArrayDims</td>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1AoS.html">llama::mapping::AoS</a>&lt; T_ArrayDims, T_RecordDim, AlignAndPad, T_LinearizeArrayDimsFunctor, FlattenRecordDim &gt;::<a class="el" href="structllama_1_1mapping_1_1AoS.html#a0bc172e9f1dfbee5c9f92edd416e69d5">ArrayDims</a> =  T_ArrayDims</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -153,16 +155,34 @@ template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = tru
 
 </div>
 </div>
-<a id="a46ab31780dd703e4af9e792472d6c4d9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a46ab31780dd703e4af9e792472d6c4d9">&#9670;&nbsp;</a></span>RecordDim</h2>
+<a id="aba43156465df2f1f9be36e2a5b667657"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba43156465df2f1f9be36e2a5b667657">&#9670;&nbsp;</a></span>LinearizeArrayDimsFunctor</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = true, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDim = FlattenRecordDimInOrder&gt; </div>
+template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = true, typename T_LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDim = FlattenRecordDimInOrder&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1AoS.html">llama::mapping::AoS</a>&lt; T_ArrayDims, T_RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim &gt;::<a class="el" href="structllama_1_1mapping_1_1AoS.html#a46ab31780dd703e4af9e792472d6c4d9">RecordDim</a> =  T_RecordDim</td>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1AoS.html">llama::mapping::AoS</a>&lt; T_ArrayDims, T_RecordDim, AlignAndPad, T_LinearizeArrayDimsFunctor, FlattenRecordDim &gt;::<a class="el" href="structllama_1_1mapping_1_1AoS.html#aba43156465df2f1f9be36e2a5b667657">LinearizeArrayDimsFunctor</a> =  T_LinearizeArrayDimsFunctor</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00027">27</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
+
+</div>
+</div>
+<a id="abf0ed284c0cb6b5e16c101e20bb3019d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf0ed284c0cb6b5e16c101e20bb3019d">&#9670;&nbsp;</a></span>RecordDim</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = true, typename T_LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDim = FlattenRecordDimInOrder&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1AoS.html">llama::mapping::AoS</a>&lt; T_ArrayDims, T_RecordDim, AlignAndPad, T_LinearizeArrayDimsFunctor, FlattenRecordDim &gt;::<a class="el" href="structllama_1_1mapping_1_1AoS.html#abf0ed284c0cb6b5e16c101e20bb3019d">RecordDim</a> =  T_RecordDim</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -172,19 +192,19 @@ template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = tru
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a4fd903c306ed0907810aa83d88ea1ae1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4fd903c306ed0907810aa83d88ea1ae1">&#9670;&nbsp;</a></span>AoS() <span class="overload">[1/2]</span></h2>
+<a id="a31e756ff0004d1421c665bf051ff9309"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31e756ff0004d1421c665bf051ff9309">&#9670;&nbsp;</a></span>AoS() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = true, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDim = FlattenRecordDimInOrder&gt; </div>
+template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = true, typename T_LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDim = FlattenRecordDimInOrder&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr <a class="el" href="structllama_1_1mapping_1_1AoS.html">llama::mapping::AoS</a>&lt; T_ArrayDims, T_RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim &gt;::<a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a> </td>
+          <td class="memname">constexpr <a class="el" href="structllama_1_1mapping_1_1AoS.html">llama::mapping::AoS</a>&lt; T_ArrayDims, T_RecordDim, AlignAndPad, T_LinearizeArrayDimsFunctor, FlattenRecordDim &gt;::<a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -199,27 +219,27 @@ template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = tru
 
 </div>
 </div>
-<a id="ad9346b54bf82fa2b6c55eeae89397c3d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad9346b54bf82fa2b6c55eeae89397c3d">&#9670;&nbsp;</a></span>AoS() <span class="overload">[2/2]</span></h2>
+<a id="acee38d1dfbbedf91b59bf00bfa0fea8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acee38d1dfbbedf91b59bf00bfa0fea8c">&#9670;&nbsp;</a></span>AoS() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = true, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDim = FlattenRecordDimInOrder&gt; </div>
+template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = true, typename T_LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDim = FlattenRecordDimInOrder&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr <a class="el" href="structllama_1_1mapping_1_1AoS.html">llama::mapping::AoS</a>&lt; T_ArrayDims, T_RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim &gt;::<a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a> </td>
+          <td class="memname">constexpr <a class="el" href="structllama_1_1mapping_1_1AoS.html">llama::mapping::AoS</a>&lt; T_ArrayDims, T_RecordDim, AlignAndPad, T_LinearizeArrayDimsFunctor, FlattenRecordDim &gt;::<a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1mapping_1_1AoS.html#ab536a92c21b23312d8470a434cac6c3b">ArrayDims</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1mapping_1_1AoS.html#a0bc172e9f1dfbee5c9f92edd416e69d5">ArrayDims</a>&#160;</td>
           <td class="paramname"><em>size</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structllama_1_1mapping_1_1AoS.html#a46ab31780dd703e4af9e792472d6c4d9">RecordDim</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1mapping_1_1AoS.html#abf0ed284c0cb6b5e16c101e20bb3019d">RecordDim</a>&#160;</td>
           <td class="paramname"> = <code>{}</code>&#160;</td>
         </tr>
         <tr>
@@ -235,27 +255,27 @@ template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = tru
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00032">32</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00033">33</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a123779bc63e8c4e10e3ba4f8c0566135"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a123779bc63e8c4e10e3ba4f8c0566135">&#9670;&nbsp;</a></span>arrayDims()</h2>
+<a id="a94739e0a1acadc562447af9c4effd37e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94739e0a1acadc562447af9c4effd37e">&#9670;&nbsp;</a></span>arrayDims()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = true, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDim = FlattenRecordDimInOrder&gt; </div>
+template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = true, typename T_LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDim = FlattenRecordDimInOrder&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1AoS.html">llama::mapping::AoS</a>&lt; T_ArrayDims, T_RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim &gt;::arrayDims </td>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1AoS.html">llama::mapping::AoS</a>&lt; T_ArrayDims, T_RecordDim, AlignAndPad, T_LinearizeArrayDimsFunctor, FlattenRecordDim &gt;::arrayDims </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const -&gt; <a class="el" href="structllama_1_1mapping_1_1AoS.html#ab536a92c21b23312d8470a434cac6c3b">ArrayDims</a>
+          <td> const -&gt; <a class="el" href="structllama_1_1mapping_1_1AoS.html#a0bc172e9f1dfbee5c9f92edd416e69d5">ArrayDims</a>
         </td>
         </tr>
       </table>
@@ -266,17 +286,17 @@ template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = tru
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00036">36</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00037">37</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a44611f824f6aa728d11c863a41cf68a9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a44611f824f6aa728d11c863a41cf68a9">&#9670;&nbsp;</a></span>blobNrAndOffset()</h2>
+<a id="a64a1aaf97e5752e68a67c185025a8744"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64a1aaf97e5752e68a67c185025a8744">&#9670;&nbsp;</a></span>blobNrAndOffset()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = true, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDim = FlattenRecordDimInOrder&gt; </div>
+template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = true, typename T_LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDim = FlattenRecordDimInOrder&gt; </div>
 <div class="memtemplate">
 template&lt;std::size_t... RecordCoords&gt; </div>
 <table class="mlabels">
@@ -284,9 +304,9 @@ template&lt;std::size_t... RecordCoords&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1AoS.html">llama::mapping::AoS</a>&lt; T_ArrayDims, T_RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim &gt;::blobNrAndOffset </td>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1AoS.html">llama::mapping::AoS</a>&lt; T_ArrayDims, T_RecordDim, AlignAndPad, T_LinearizeArrayDimsFunctor, FlattenRecordDim &gt;::blobNrAndOffset </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1mapping_1_1AoS.html#ab536a92c21b23312d8470a434cac6c3b">ArrayDims</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1mapping_1_1AoS.html#a0bc172e9f1dfbee5c9f92edd416e69d5">ArrayDims</a>&#160;</td>
           <td class="paramname"><em>coord</em></td><td>)</td>
           <td> const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a>
         </td>
@@ -299,23 +319,23 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00048">48</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00049">49</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a5dc5a5fb04f3f51307da1e92d9443861"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5dc5a5fb04f3f51307da1e92d9443861">&#9670;&nbsp;</a></span>blobSize()</h2>
+<a id="a6f0c3a6750fc94dbfdfe367e611adae3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f0c3a6750fc94dbfdfe367e611adae3">&#9670;&nbsp;</a></span>blobSize()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = true, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDim = FlattenRecordDimInOrder&gt; </div>
+template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = true, typename T_LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDim = FlattenRecordDimInOrder&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1AoS.html">llama::mapping::AoS</a>&lt; T_ArrayDims, T_RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim &gt;::blobSize </td>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1AoS.html">llama::mapping::AoS</a>&lt; T_ArrayDims, T_RecordDim, AlignAndPad, T_LinearizeArrayDimsFunctor, FlattenRecordDim &gt;::blobSize </td>
           <td>(</td>
           <td class="paramtype">std::size_t&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -330,24 +350,24 @@ template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = tru
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00041">41</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00042">42</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="abae4338d2d1c74534345fcb92c5dcce4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abae4338d2d1c74534345fcb92c5dcce4">&#9670;&nbsp;</a></span>blobCount</h2>
+<a id="aa4c5a42ad72ccbd21b9ac974d6e3d096"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4c5a42ad72ccbd21b9ac974d6e3d096">&#9670;&nbsp;</a></span>blobCount</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = true, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDim = FlattenRecordDimInOrder&gt; </div>
+template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = true, typename T_LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDim = FlattenRecordDimInOrder&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr std::size_t <a class="el" href="structllama_1_1mapping_1_1AoS.html">llama::mapping::AoS</a>&lt; T_ArrayDims, T_RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim &gt;::blobCount = 1</td>
+          <td class="memname">constexpr std::size_t <a class="el" href="structllama_1_1mapping_1_1AoS.html">llama::mapping::AoS</a>&lt; T_ArrayDims, T_RecordDim, AlignAndPad, T_LinearizeArrayDimsFunctor, FlattenRecordDim &gt;::blobCount = 1</td>
         </tr>
       </table>
   </td>
@@ -357,7 +377,7 @@ template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = tru
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00027">27</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00028">28</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
 
 </div>
 </div>
@@ -370,7 +390,7 @@ template&lt;typename T_ArrayDims , typename T_RecordDim , bool AlignAndPad = tru
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a></li>
-    <li class="footer">Generated on Mon Jul 5 2021 13:57:01 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue Jul 6 2021 16:04:53 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

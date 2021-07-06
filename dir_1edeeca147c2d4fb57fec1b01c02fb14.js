@@ -14,6 +14,7 @@ var dir_1edeeca147c2d4fb57fec1b01c02fb14 =
       [ "Vector", "structllama_1_1bloballoc_1_1Vector.html", "structllama_1_1bloballoc_1_1Vector" ]
     ] ],
     [ "Concepts.hpp", "Concepts_8hpp.html", null ],
+    [ "Copy.hpp", "Copy_8hpp.html", "Copy_8hpp" ],
     [ "Core.hpp", "Core_8hpp.html", "Core_8hpp" ],
     [ "DumpMapping.hpp", "DumpMapping_8hpp.html", null ],
     [ "llama.hpp", "llama_8hpp.html", "llama_8hpp" ],

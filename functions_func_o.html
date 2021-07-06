@@ -102,6 +102,11 @@ $(document).ready(function(){initNavTree('functions_func_o.html',''); initResiza
 : <a class="el" href="structllama_1_1bloballoc_1_1SharedPtr.html#af7025755f2c0da24e7a917213e47b055">llama::bloballoc::SharedPtr&lt; Alignment &gt;</a>
 , <a class="el" href="structllama_1_1bloballoc_1_1Stack.html#aa1802fbb089685a684c49cad9cb62213">llama::bloballoc::Stack&lt; BytesToReserve &gt;</a>
 , <a class="el" href="structllama_1_1bloballoc_1_1Vector.html#a36ef3a2cc750b4c1ab737653fe4c8d9d">llama::bloballoc::Vector&lt; Alignment &gt;</a>
+, <a class="el" href="structllama_1_1Copy.html#a5456c747d230db86a65cb67f67d1aa05">llama::Copy&lt; SrcMapping, DstMapping, SFINAE &gt;</a>
+, <a class="el" href="structllama_1_1Copy_3_01Mapping_00_01Mapping_01_4.html#a07d8bb1043f704c649aba7ec2090b4c0">llama::Copy&lt; Mapping, Mapping &gt;</a>
+, <a class="el" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayDims_00_01RecordDim_00_01LanesSrc_00_01Linearif7270c06dfd5cd8bbacf61849cb30345.html#a0b1f75cfe6a1f5987d09fe2700e2eef3">llama::Copy&lt; mapping::AoSoA&lt; ArrayDims, RecordDim, LanesSrc, LinearizeArrayDims &gt;, mapping::AoSoA&lt; ArrayDims, RecordDim, LanesDst, LinearizeArrayDims &gt;, std::enable_if_t&lt; LanesSrc !=LanesDst &gt; &gt;</a>
+, <a class="el" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayDims_00_01RecordDim_00_01LanesSrc_00_01Lineari6b6c0ada09a6ec04035a1ae0e30750c2.html#a04e932646cb328a73f97d47d211e5d39">llama::Copy&lt; mapping::AoSoA&lt; ArrayDims, RecordDim, LanesSrc, LinearizeArrayDims &gt;, mapping::SoA&lt; ArrayDims, RecordDim, DstSeparateBuffers, LinearizeArrayDims &gt; &gt;</a>
+, <a class="el" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayDims_00_01RecordDim_00_01SrcSeparateBuffers_00_0042d41fc32647d3fc532107ff3b31084.html#abde84fe94c2efb21846c3f6d572e1795">llama::Copy&lt; mapping::SoA&lt; ArrayDims, RecordDim, SrcSeparateBuffers, LinearizeArrayDims &gt;, mapping::AoSoA&lt; ArrayDims, RecordDim, LanesDst, LinearizeArrayDims &gt; &gt;</a>
 , <a class="el" href="structllama_1_1internal_1_1Assign.html#abcd7d6135da47ecd89bc6f3fa0728afd">llama::internal::Assign</a>
 , <a class="el" href="structllama_1_1internal_1_1DivideAssign.html#af846a9f3c8e8ef7027c09daee492e863">llama::internal::DivideAssign</a>
 , <a class="el" href="structllama_1_1internal_1_1MinusAssign.html#a014905284d7c6c62ac7a6fd834b9141f">llama::internal::MinusAssign</a>
@@ -117,7 +122,7 @@ $(document).ready(function(){initNavTree('functions_func_o.html',''); initResiza
 , <a class="el" href="structllama_1_1mapping_1_1tree_1_1functor_1_1internal_1_1ChangeNodeChildsRuntimeFunctor.html#a32b64325b2b8255a3965a073fd4075d0">llama::mapping::tree::functor::internal::ChangeNodeChildsRuntimeFunctor</a>
 , <a class="el" href="structllama_1_1View.html#aedc7479ae1541e2b95041e69a43ea69a">llama::View&lt; T_Mapping, BlobType &gt;</a>
 , <a class="el" href="structllama_1_1VirtualRecord.html#ad959aa65f6674c04b79d214d2dea09ce">llama::VirtualRecord&lt; T_View, BoundRecordCoord, OwnView &gt;</a>
-, <a class="el" href="structllama_1_1VirtualView.html#a8f06c907a8289b2d2ae0e010c7ee9290">llama::VirtualView&lt; T_ParentViewType &gt;</a>
+, <a class="el" href="structllama_1_1VirtualView.html#ad38926a5f5205565e334ef9340c5e107">llama::VirtualView&lt; T_ParentViewType &gt;</a>
 </li>
 <li>operator*()
 : <a class="el" href="structllama_1_1ArrayDimsIndexIterator.html#a1e7c62d270e1c208b813769710bac4b7">llama::ArrayDimsIndexIterator&lt; Dim &gt;</a>
@@ -137,7 +142,7 @@ $(document).ready(function(){initNavTree('functions_func_o.html',''); initResiza
 </li>
 <li>operator--()
 : <a class="el" href="structllama_1_1ArrayDimsIndexIterator.html#a6f69d3215141168cc69d35ad16da79da">llama::ArrayDimsIndexIterator&lt; Dim &gt;</a>
-, <a class="el" href="structllama_1_1Iterator.html#aeee99cc02b53356ae49018fca42545ce">llama::Iterator&lt; View &gt;</a>
+, <a class="el" href="structllama_1_1Iterator.html#a8c51c62fb62cc6ee312758abc6614bc9">llama::Iterator&lt; View &gt;</a>
 </li>
 <li>operator-=()
 : <a class="el" href="structllama_1_1ArrayDimsIndexIterator.html#a564ceb4ab2bb754b44083981b2efd840">llama::ArrayDimsIndexIterator&lt; Dim &gt;</a>
@@ -155,15 +160,15 @@ $(document).ready(function(){initNavTree('functions_func_o.html',''); initResiza
 <li>operator=()
 : <a class="el" href="structllama_1_1ArrayDimsIndexIterator.html#a3017df18bc53eb1f252abe00008a132b">llama::ArrayDimsIndexIterator&lt; Dim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Heatmap.html#aac10be68bbd3e4bf3afa2b5767846e6b">llama::mapping::Heatmap&lt; Mapping, CountType &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1Trace.html#ae93708151ca7e2742d1bd9576ab95464">llama::mapping::Trace&lt; Mapping &gt;</a>
-, <a class="el" href="structllama_1_1Vector.html#a36792850ed3212ef272c31d1f6006bd7">llama::Vector&lt; Mapping &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1Trace.html#a52eef7a20f2921e73c6e4d0726b8998f">llama::mapping::Trace&lt; Mapping &gt;</a>
+, <a class="el" href="structllama_1_1Vector.html#ad88717ebe1926f89d629072afb2c0893">llama::Vector&lt; Mapping &gt;</a>
 , <a class="el" href="structllama_1_1VirtualRecord.html#a756efc25ace998733fa8624fb65ad8a0">llama::VirtualRecord&lt; T_View, BoundRecordCoord, OwnView &gt;</a>
 </li>
 <li>operator==()
 : <a class="el" href="structllama_1_1bloballoc_1_1AlignedAllocator.html#a10fa4bbd3ecddd3eb3f29cd29cfd7898">llama::bloballoc::AlignedAllocator&lt; T, Alignment &gt;</a>
 </li>
 <li>operator[]()
-: <a class="el" href="structllama_1_1Array.html#afb5972c69fe2ec584bd1b5cbf48d7a67">llama::Array&lt; T, N &gt;</a>
+: <a class="el" href="structllama_1_1Array.html#a18c4dca04c7d6ed3091def6653a8ae75">llama::Array&lt; T, N &gt;</a>
 , <a class="el" href="structllama_1_1ArrayDimsIndexIterator.html#a4edc343c9c4cdf002ba525428eea9d58">llama::ArrayDimsIndexIterator&lt; Dim &gt;</a>
 , <a class="el" href="structllama_1_1Iterator.html#a1fd67ec2c13b9fee525c8757ae494d61">llama::Iterator&lt; View &gt;</a>
 , <a class="el" href="structllama_1_1Vector.html#a3354718fe917a4754c4c881351dd07c8">llama::Vector&lt; Mapping &gt;</a>
@@ -175,7 +180,7 @@ $(document).ready(function(){initNavTree('functions_func_o.html',''); initResiza
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon Jul 5 2021 13:57:01 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue Jul 6 2021 16:04:53 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

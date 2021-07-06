@@ -89,11 +89,11 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 : <a class="el" href="structllama_1_1Array.html#a02e48c26d7e90c2b91d73653420a09b5">llama::Array&lt; T, N &gt;</a>
 </li>
 <li>RecordDim
-: <a class="el" href="structllama_1_1mapping_1_1AoS.html#a46ab31780dd703e4af9e792472d6c4d9">llama::mapping::AoS&lt; T_ArrayDims, T_RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a1259dd9448f3ef495a0d2cb02079440a">llama::mapping::AoSoA&lt; T_ArrayDims, T_RecordDim, Lanes, LinearizeArrayDimsFunctor &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1AoS.html#abf0ed284c0cb6b5e16c101e20bb3019d">llama::mapping::AoS&lt; T_ArrayDims, T_RecordDim, AlignAndPad, T_LinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a82a52c7aabd8c171d3c3d27224f4eef7">llama::mapping::AoSoA&lt; T_ArrayDims, T_RecordDim, Lanes, T_LinearizeArrayDimsFunctor &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Heatmap.html#ae2fd102c11592cdf9245df997fad0aa9">llama::mapping::Heatmap&lt; Mapping, CountType &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1One.html#a8ed56e8967e5ac96e7e3bda41be0be25">llama::mapping::One&lt; T_ArrayDims, T_RecordDim &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1SoA.html#ab654e76a28806e1e1e2f043d4824e59a">llama::mapping::SoA&lt; T_ArrayDims, T_RecordDim, SeparateBuffers, LinearizeArrayDimsFunctor &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1SoA.html#a4d45abf5607e7fcd86e914ed0e07e9c9">llama::mapping::SoA&lt; T_ArrayDims, T_RecordDim, SeparateBuffers, T_LinearizeArrayDimsFunctor &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Split.html#a5f1ad8a6e3a007c42624b6db4c752f11">llama::mapping::Split&lt; T_ArrayDims, T_RecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Trace.html#a2cda914e6fd4df3ae6e44c05acc4facf">llama::mapping::Trace&lt; Mapping &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#a7fe9aee7053c6c379eba4f252cfc1a1a">llama::mapping::tree::Mapping&lt; T_ArrayDims, T_RecordDim, TreeOperationList &gt;</a>
@@ -134,10 +134,12 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 </li>
 <li>ResultTree
 : <a class="el" href="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors_3_01Tree_00_01Tuple_3_01Operations_8_8_8_01_4_01_4.html#a40455feecb37c12d9319fe73acf29674">llama::mapping::tree::internal::MergeFunctors&lt; Tree, Tuple&lt; Operations... &gt; &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#ae04741a1fb342942ff75df8766f291db">llama::mapping::tree::Mapping&lt; T_ArrayDims, T_RecordDim, TreeOperationList &gt;</a>
 </li>
 <li>resultTree
 : <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#af059251ed6ae282f66cdbfe479c39670">llama::mapping::tree::Mapping&lt; T_ArrayDims, T_RecordDim, TreeOperationList &gt;</a>
+</li>
+<li>ResultTree
+: <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#ae04741a1fb342942ff75df8766f291db">llama::mapping::tree::Mapping&lt; T_ArrayDims, T_RecordDim, TreeOperationList &gt;</a>
 </li>
 </ul>
 </div><!-- contents -->
@@ -145,7 +147,7 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon Jul 5 2021 13:57:01 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue Jul 6 2021 16:04:53 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

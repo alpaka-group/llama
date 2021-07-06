@@ -103,23 +103,24 @@ $(document).ready(function(){initNavTree('llama_8hpp_source.html',''); initResiz
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="ArrayDimsIndexRange_8hpp.html">ArrayDimsIndexRange.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="BlobAllocators_8hpp.html">BlobAllocators.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Core_8hpp.html">Core.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Vector_8hpp.html">Vector.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="View_8hpp.html">View.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="VirtualRecord_8hpp.html">VirtualRecord.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="macros_8hpp.html">macros.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="AoS_8hpp.html">mapping/AoS.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="AoSoA_8hpp.html">mapping/AoSoA.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Heatmap_8hpp.html">mapping/Heatmap.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="One_8hpp.html">mapping/One.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="SoA_8hpp.html">mapping/SoA.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Split_8hpp.html">mapping/Split.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Trace_8hpp.html">mapping/Trace.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Mapping_8hpp.html">mapping/tree/Mapping.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">#ifdef __NVCC__</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#    pragma pop</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Copy_8hpp.html">Copy.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Core_8hpp.html">Core.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Vector_8hpp.html">Vector.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="View_8hpp.html">View.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="VirtualRecord_8hpp.html">VirtualRecord.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="macros_8hpp.html">macros.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="AoS_8hpp.html">mapping/AoS.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="AoSoA_8hpp.html">mapping/AoSoA.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Heatmap_8hpp.html">mapping/Heatmap.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="One_8hpp.html">mapping/One.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="SoA_8hpp.html">mapping/SoA.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Split_8hpp.html">mapping/Split.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Trace_8hpp.html">mapping/Trace.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Mapping_8hpp.html">mapping/tree/Mapping.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#ifdef __NVCC__</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">#    pragma pop</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aVirtualRecord_8hpp_html"><div class="ttname"><a href="VirtualRecord_8hpp.html">VirtualRecord.hpp</a></div></div>
@@ -137,11 +138,12 @@ $(document).ready(function(){initNavTree('llama_8hpp_source.html',''); initResiz
 <div class="ttc" id="aHeatmap_8hpp_html"><div class="ttname"><a href="Heatmap_8hpp.html">Heatmap.hpp</a></div></div>
 <div class="ttc" id="aBlobAllocators_8hpp_html"><div class="ttname"><a href="BlobAllocators_8hpp.html">BlobAllocators.hpp</a></div></div>
 <div class="ttc" id="aVector_8hpp_html"><div class="ttname"><a href="Vector_8hpp.html">Vector.hpp</a></div></div>
+<div class="ttc" id="aCopy_8hpp_html"><div class="ttname"><a href="Copy_8hpp.html">Copy.hpp</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="llama_8hpp.html">llama.hpp</a></li>
-    <li class="footer">Generated on Mon Jul 5 2021 13:57:01 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue Jul 6 2021 16:04:52 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
