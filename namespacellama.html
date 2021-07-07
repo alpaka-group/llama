@@ -385,6 +385,10 @@ Variables</h2></td></tr>
 <tr class="memitem:a5d62fb6d777b67e3f73b80cc97d1cd44"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a5d62fb6d777b67e3f73b80cc97d1cd44">RecordCoordCommonPrefixIsSame</a> = <a class="el" href="structllama_1_1internal_1_1RecordCoordCommonPrefixIsSameImpl.html">internal::RecordCoordCommonPrefixIsSameImpl</a>&lt;First, Second&gt;::value</td></tr>
 <tr class="memdesc:a5d62fb6d777b67e3f73b80cc97d1cd44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether two <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>s are the same or one is the prefix of the other.  <a href="namespacellama.html#a5d62fb6d777b67e3f73b80cc97d1cd44">More...</a><br /></td></tr>
 <tr class="separator:a5d62fb6d777b67e3f73b80cc97d1cd44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9676a3903b134df116791bcae533d6c6"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename RecordCoord &gt; </td></tr>
+<tr class="memitem:a9676a3903b134df116791bcae533d6c6"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a9676a3903b134df116791bcae533d6c6">isComputed</a> = <a class="el" href="structllama_1_1internal_1_1isComputed.html">internal::isComputed</a>&lt;Mapping, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&gt;::value</td></tr>
+<tr class="memdesc:a9676a3903b134df116791bcae533d6c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the field accessed via the given mapping and record coordinate is a computed value.  <a href="namespacellama.html#a9676a3903b134df116791bcae533d6c6">More...</a><br /></td></tr>
+<tr class="separator:a9676a3903b134df116791bcae533d6c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9950d7fcb0405c5c7f10238b7752fa6d"><td class="memTemplParams" colspan="2">template&lt;typename View &gt; </td></tr>
 <tr class="memitem:a9950d7fcb0405c5c7f10238b7752fa6d"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a9950d7fcb0405c5c7f10238b7752fa6d">IsView</a> = false</td></tr>
 <tr class="separator:a9950d7fcb0405c5c7f10238b7752fa6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1554,7 +1558,7 @@ template&lt;typename T , std::size_t N&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00113">113</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00118">118</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
 
 </div>
 </div>
@@ -1584,7 +1588,7 @@ template&lt;typename T , std::size_t N&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00123">123</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00128">128</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
 
 </div>
 </div>
@@ -1657,7 +1661,7 @@ template&lt;typename T , std::size_t N&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00103">103</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00108">108</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
 
 </div>
 </div>
@@ -1698,7 +1702,7 @@ template&lt;typename T , std::size_t N&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00093">93</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00098">98</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
 
 </div>
 </div>
@@ -2242,6 +2246,34 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a id="a9676a3903b134df116791bcae533d6c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9676a3903b134df116791bcae533d6c6">&#9670;&nbsp;</a></span>isComputed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping , typename RecordCoord &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool llama::isComputed = <a class="el" href="structllama_1_1internal_1_1isComputed.html">internal::isComputed</a>&lt;Mapping, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&gt;::value</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if the field accessed via the given mapping and record coordinate is a computed value. </p>
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00228">228</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a3b2aa8fd3e43e43b830bc4a71b180175"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3b2aa8fd3e43e43b830bc4a71b180175">&#9670;&nbsp;</a></span>isRecord</h2>
 
@@ -2368,7 +2400,7 @@ template&lt;typename View &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00404">404</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00408">408</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -2394,7 +2426,7 @@ template&lt;typename Mapping , typename BlobType &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00407">407</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00411">411</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -2552,7 +2584,7 @@ template&lt;typename... Fields, bool Align&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Tue Jul 6 2021 16:04:52 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Jul 7 2021 14:34:21 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

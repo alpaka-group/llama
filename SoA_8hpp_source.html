@@ -135,7 +135,7 @@ $(document).ready(function(){initNavTree('SoA_8hpp_source.html',''); initResizab
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                    <span class="keywordflow">return</span> r;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                }</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                ();</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="structllama_1_1mapping_1_1SoA.html#a0d774782324482c578e8dc788e1d01c1">LinearizeArrayDimsFunctor</a>{}.size(arrayDimsSize) * typeSizes[blobIndex];</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="structllama_1_1mapping_1_1SoA.html#a0d774782324482c578e8dc788e1d01c1">LinearizeArrayDimsFunctor</a>{}.<a class="code" href="structllama_1_1Array.html#aa20a497723e6189dfaf7145ddc256534">size</a>(arrayDimsSize) * typeSizes[blobIndex];</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;            }</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="structllama_1_1mapping_1_1SoA.html#a0d774782324482c578e8dc788e1d01c1">LinearizeArrayDimsFunctor</a>{}.size(arrayDimsSize) * sizeOf&lt;RecordDim&gt;;</div>
@@ -182,6 +182,7 @@ $(document).ready(function(){initNavTree('SoA_8hpp_source.html',''); initResizab
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="astructllama_1_1mapping_1_1SoA_html_ae276c897385c859ebae57bf180c939c3"><div class="ttname"><a href="structllama_1_1mapping_1_1SoA.html#ae276c897385c859ebae57bf180c939c3">llama::mapping::SoA::SoA</a></div><div class="ttdeci">constexpr SoA(ArrayDims size, RecordDim={})</div><div class="ttdef"><b>Definition:</b> <a href="SoA_8hpp_source.html#l00032">SoA.hpp:32</a></div></div>
+<div class="ttc" id="astructllama_1_1Array_html_aa20a497723e6189dfaf7145ddc256534"><div class="ttname"><a href="structllama_1_1Array.html#aa20a497723e6189dfaf7145ddc256534">llama::Array::size</a></div><div class="ttdeci">constexpr auto size() const</div><div class="ttdef"><b>Definition:</b> <a href="Array_8hpp_source.html#l00023">Array.hpp:23</a></div></div>
 <div class="ttc" id="anamespacellama_1_1mapping_html"><div class="ttname"><a href="namespacellama_1_1mapping.html">llama::mapping</a></div><div class="ttdef"><b>Definition:</b> <a href="AoS_8hpp_source.html#l00008">AoS.hpp:8</a></div></div>
 <div class="ttc" id="anamespacellama_html_acdfb627d325de5ab6c18cdc842cd7350"><div class="ttname"><a href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">llama::GetType</a></div><div class="ttdeci">typename internal::GetTypeImpl&lt; RecordDim, RecordCoordOrTags... &gt;::type GetType</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00258">Core.hpp:258</a></div></div>
 <div class="ttc" id="aCommon_8hpp_html"><div class="ttname"><a href="Common_8hpp.html">Common.hpp</a></div></div>
@@ -207,7 +208,7 @@ $(document).ready(function(){initNavTree('SoA_8hpp_source.html',''); initResizab
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="SoA_8hpp.html">SoA.hpp</a></li>
-    <li class="footer">Generated on Tue Jul 6 2021 16:04:52 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Jul 7 2021 14:34:20 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -9,7 +9,7 @@ var searchData=
   ['is_5fvirtualrecord_159',['is_VirtualRecord',['../namespacellama.html#ad46854783d9c1cfa01ab277dbc5b5de8',1,'llama']]],
   ['is_5fvirtualrecord_3c_20virtualrecord_3c_20view_2c_20boundrecordcoord_2c_20ownview_20_3e_20_3e_160',['is_VirtualRecord&lt; VirtualRecord&lt; View, BoundRecordCoord, OwnView &gt; &gt;',['../namespacellama.html#a9c9e2ef4bd6659e881e281fdaced37ef',1,'llama']]],
   ['isallowedfieldtype_161',['isAllowedFieldType',['../namespacellama.html#acca32b49e2be7c3c136e940939c531ae',1,'llama']]],
-  ['iscomputed_162',['isComputed',['../structllama_1_1internal_1_1isComputed.html',1,'llama::internal']]],
+  ['iscomputed_162',['isComputed',['../structllama_1_1internal_1_1isComputed.html',1,'llama::internal::isComputed&lt; Mapping, RecordCoord, typename &gt;'],['../namespacellama.html#a9676a3903b134df116791bcae533d6c6',1,'llama::isComputed()']]],
   ['iscomputed_3c_20mapping_2c_20recordcoord_2c_20std_3a_3avoid_5ft_3c_20decltype_28mapping_3a_3aiscomputed_28recordcoord_7b_7d_29_29_3e_20_3e_163',['isComputed&lt; Mapping, RecordCoord, std::void_t&lt; decltype(Mapping::isComputed(RecordCoord{}))&gt; &gt;',['../structllama_1_1internal_1_1isComputed_3_01Mapping_00_01RecordCoord_00_01std_1_1void__t_3_01declt90ee9238cb4500a8941bc2798fc813a7.html',1,'llama::internal']]],
   ['isdirectlistinitializable_164',['isDirectListInitializable',['../namespacellama_1_1internal.html#ab894af475936b236e92c32b9ddde4003',1,'llama::internal']]],
   ['isdirectlistinitializablefromtuple_165',['isDirectListInitializableFromTuple',['../namespacellama_1_1internal.html#adac3b860082c6e49c312325ae0a2d166',1,'llama::internal']]],
