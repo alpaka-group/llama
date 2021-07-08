@@ -44,7 +44,7 @@ using Particle = llama::Record<
 >;
 // clang-format on
 
-template <typename VirtualParticle>
+template<typename VirtualParticle>
 LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticle p1, VirtualParticle p2)
 {
     auto dist = p1(tag::Pos{}) - p2(tag::Pos{});
@@ -57,26 +57,26 @@ LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticle p1, VirtualParticle 
     p1(tag::Vel{}) += dist;
 }
 
-template <typename View>
+template<typename View>
 void update(View& particles)
 {
-    for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
+    for(std::size_t i = 0; i < PROBLEM_SIZE; i++)
     {
         LLAMA_INDEPENDENT_DATA
-        for (std::size_t j = 0; j < PROBLEM_SIZE; j++)
+        for(std::size_t j = 0; j < PROBLEM_SIZE; j++)
             pPInteraction(particles(j), particles(i));
     }
 }
 
-template <typename View>
+template<typename View>
 void move(View& particles)
 {
     LLAMA_INDEPENDENT_DATA
-    for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
+    for(std::size_t i = 0; i < PROBLEM_SIZE; i++)
         particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * TIMESTEP;
 }
 
-template <std::size_t Mapping, std::size_t Alignment>
+template<std::size_t Mapping, std::size_t Alignment>
 void run(std::ostream& plotFile)
 {
     std::cout << (Mapping == 0 ? "AoS" : Mapping == 1 ? "SoA" : "SoA MB") << ' ' << Alignment << "\n";
@@ -86,20 +86,20 @@ void run(std::ostream& plotFile)
     auto mapping = [&]
     {
         const auto arrayDims = llama::ArrayDims{PROBLEM_SIZE};
-        if constexpr (Mapping == 0)
+        if constexpr(Mapping == 0)
             return llama::mapping::AoS{arrayDims, Particle{}};
-        if constexpr (Mapping == 1)
+        if constexpr(Mapping == 1)
             return llama::mapping::SoA{arrayDims, Particle{}};
-        if constexpr (Mapping == 2)
+        if constexpr(Mapping == 2)
             return llama::mapping::SoA<decltype(arrayDims), Particle, true>{arrayDims};
     }();
 
     auto particles = llama::allocView(std::move(mapping), llama::bloballoc::Vector<Alignment>{});
 
-    if constexpr (PRINT_BLOCK_PLACEMENT)
+    if constexpr(PRINT_BLOCK_PLACEMENT)
     {
         std::vector<std::pair<std::uint64_t, std::uint64_t>> blobRanges;
-        for (const auto& blob : particles.storageBlobs)
+        for(const auto& blob : particles.storageBlobs)
         {
             const auto blobSize = mapping.blobSize(blobRanges.size());
             std::cout << "\tBlob #" << blobRanges.size() << " from " << &blob[0] << " to " << &blob[0] + blobSize
@@ -109,18 +109,18 @@ void run(std::ostream& plotFile)
         }
         std::sort(begin(blobRanges), end(blobRanges), [](auto a, auto b) { return a.first < b.first; });
         std::cout << "\tDistances: ";
-        for (auto i = 0; i < blobRanges.size() - 1; i++)
+        for(auto i = 0; i < blobRanges.size() - 1; i++)
             std::cout << blobRanges[i + 1].first - blobRanges[i].first << ' ';
         std::cout << '\n';
         std::cout << "\tGaps: ";
-        for (auto i = 0; i < blobRanges.size() - 1; i++)
+        for(auto i = 0; i < blobRanges.size() - 1; i++)
             std::cout << blobRanges[i + 1].first - blobRanges[i].second << ' ';
         std::cout << '\n';
     }
 
     std::default_random_engine engine;
     std::normal_distribution<FP> dist(FP(0), FP(1));
-    for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+    for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
     {
         auto p = particles(i);
         p(tag::Pos{}, tag::X{}) = dist(engine);
@@ -134,7 +134,7 @@ void run(std::ostream& plotFile)
 
     double sumUpdate = 0;
     Stopwatch watch;
-    for (std::size_t s = 0; s < STEPS; ++s)
+    for(std::size_t s = 0; s < STEPS; ++s)
     {
         update(particles);
         sumUpdate += watch.printAndReset("update", '\t');
@@ -142,7 +142,7 @@ void run(std::ostream& plotFile)
         watch.printAndReset("move");
     }
 
-    if (Mapping == 0)
+    if(Mapping == 0)
         plotFile << Alignment;
     plotFile << '\t' << sumUpdate / STEPS << (Mapping == 2 ? '\n' : '\t');
 }
@@ -185,7 +185,7 @@ plot $data using 2:xtic(1) ti col, '' using 3:xtic(1) ti col, '' using 4:xtic(1)
 )";
     std::cout << "Plot with: ./nbody.sh\n";
 }
-catch (const std::exception& e)
+catch(const std::exception& e)
 {
     std::cerr << "Exception: " << e.what() << '\n';
 }

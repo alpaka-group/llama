@@ -26,19 +26,19 @@ TEST_CASE("Vector.ctor.count_and_value")
     llama::One<RecordDim> p{42};
     const Vector v(10, p);
     CHECK(v.size() == 10);
-    for (auto i = 0; i < 10; i++)
+    for(auto i = 0; i < 10; i++)
         CHECK(v[i] == p);
 }
 
 TEST_CASE("Vector.ctor.iterator_pair")
 {
     auto view = llama::allocView(Mapping{llama::ArrayDims{10}});
-    for (auto i = 0; i < 10; i++)
+    for(auto i = 0; i < 10; i++)
         view[i] = i;
 
     const Vector v{view.begin(), view.end()};
     CHECK(v.size() == 10);
-    for (auto i = 0; i < 10; i++)
+    for(auto i = 0; i < 10; i++)
         CHECK(v[i] == i);
 }
 
@@ -48,7 +48,7 @@ TEST_CASE("vector.copy_ctor")
     const Vector v(10, p);
 
     const Vector v2(v); // NOLINT(performance-unnecessary-copy-initialization)
-    for (auto i = 0; i < 10; i++)
+    for(auto i = 0; i < 10; i++)
         CHECK(v2[i] == p);
 }
 
@@ -58,7 +58,7 @@ TEST_CASE("vector.move_ctor")
     Vector v(10, p);
 
     Vector v2(std::move(v));
-    for (auto i = 0; i < 10; i++)
+    for(auto i = 0; i < 10; i++)
         CHECK(v2[i] == p);
     CHECK(v.empty()); // NOLINT(bugprone-use-after-move,hicpp-invalid-access-moved)
 }
@@ -70,7 +70,7 @@ TEST_CASE("vector.copy_assign")
 
     Vector v2;
     v2 = v;
-    for (auto i = 0; i < 10; i++)
+    for(auto i = 0; i < 10; i++)
         CHECK(v2[i] == p);
 }
 
@@ -81,7 +81,7 @@ TEST_CASE("vector.move_assign")
 
     Vector v2;
     v2 = std::move(v);
-    for (auto i = 0; i < 10; i++)
+    for(auto i = 0; i < 10; i++)
         CHECK(v2[i] == p);
     CHECK(v.empty()); // NOLINT(bugprone-use-after-move,hicpp-invalid-access-moved)
 }
@@ -91,7 +91,7 @@ namespace
     auto iotaVec(std::size_t count)
     {
         Vector v(count);
-        for (auto i = 0; i < count; i++)
+        for(auto i = 0; i < count; i++)
             v[i] = i;
         return v;
     }
@@ -106,18 +106,18 @@ TEST_CASE("vector.swap")
 
     swap(v1, v2);
 
-    for (auto i = 0; i < 10; i++)
+    for(auto i = 0; i < 10; i++)
         CHECK(v1[i] == i);
-    for (auto i = 0; i < 5; i++)
+    for(auto i = 0; i < 5; i++)
         CHECK(v2[i] == p);
 }
 
 TEST_CASE("vector.subscript")
 {
     auto v = iotaVec(10);
-    for (auto i = 0; i < 10; i++)
+    for(auto i = 0; i < 10; i++)
         CHECK(v[i] == i);
-    for (auto i = 0; i < 10; i++)
+    for(auto i = 0; i < 10; i++)
         CHECK(v.at(i) == i);
     CHECK_THROWS(v.at(10));
 }
@@ -141,12 +141,12 @@ TEST_CASE("vector.begin_end")
     auto e = v.end();
     CHECK(*b == 0);
     CHECK(e[-1] == 9);
-    for (auto i = 0; b != e; ++b, i++)
+    for(auto i = 0; b != e; ++b, i++)
         CHECK(*b == i);
     b = v.begin();
-    for (auto i = 0; b != e; ++b, i++)
+    for(auto i = 0; b != e; ++b, i++)
         *b = i * 2;
-    for (auto i = 0; i < 10; i++)
+    for(auto i = 0; i < 10; i++)
         CHECK(v[i] == i * 2);
 }
 
@@ -157,7 +157,7 @@ TEST_CASE("vector.cbegin_cend")
     auto e = v.cend();
     CHECK(*b == 0);
     CHECK(e[-1] == 9);
-    for (auto i = 0; b != e; ++b, i++)
+    for(auto i = 0; b != e; ++b, i++)
         CHECK(*b == i);
 }
 

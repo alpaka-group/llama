@@ -12,7 +12,7 @@ namespace
     llama::ArrayDims arrayDims{32};
     using ArrayDims = decltype(arrayDims);
 
-    template <typename Mapping>
+    template<typename Mapping>
     void dump(const Mapping& mapping)
     {
         // undocumented Catch feature, see: https://github.com/catchorg/Catch2/issues/510
@@ -55,10 +55,12 @@ TEST_CASE("dump.Particle.AoSoA32")
 TEST_CASE("dump.Particle.Split.SoA.AoS.1Buffer")
 {
     // split out velocity (written in nbody, the rest is read)
-    dump(
-        llama::mapping::
-            Split<ArrayDims, Particle, llama::RecordCoord<2>, llama::mapping::SingleBlobSoA, llama::mapping::PackedAoS>{
-                arrayDims});
+    dump(llama::mapping::Split<
+         ArrayDims,
+         Particle,
+         llama::RecordCoord<2>,
+         llama::mapping::SingleBlobSoA,
+         llama::mapping::PackedAoS>{arrayDims});
 }
 
 TEST_CASE("dump.Particle.Split.SoA.AoS.2Buffer")
@@ -244,7 +246,7 @@ TEST_CASE("AoS.Aligned")
 
 namespace
 {
-    template <std::size_t N>
+    template<std::size_t N>
     using Padding = std::array<std::byte, N>;
 } // namespace
 

@@ -10,20 +10,20 @@ namespace llama::mapping::tree::functor
     /// Functor for \ref tree::Mapping. Does nothing with the mapping tree. Is used for testing.
     struct Idem
     {
-        template <typename Tree>
+        template<typename Tree>
         LLAMA_FN_HOST_ACC_INLINE auto basicToResult(const Tree& tree) const -> Tree
         {
             return tree;
         }
 
-        template <typename Tree, typename TreeCoord>
+        template<typename Tree, typename TreeCoord>
         LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(const TreeCoord& basicCoord, const Tree&) const
             -> TreeCoord
         {
             return basicCoord;
         }
 
-        template <typename Tree, typename TreeCoord>
+        template<typename Tree, typename TreeCoord>
         LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(const TreeCoord& resultCoord, const Tree&) const
             -> TreeCoord
         {
@@ -34,19 +34,19 @@ namespace llama::mapping::tree::functor
     /// Functor for \ref tree::Mapping. Moves all run time parts to the leaves, creating a SoA layout.
     struct LeafOnlyRT
     {
-        template <typename Tree>
+        template<typename Tree>
         LLAMA_FN_HOST_ACC_INLINE auto basicToResult(Tree tree) const
         {
             return basicToResultImpl(tree, 1);
         }
 
-        template <typename Tree, typename BasicCoord>
+        template<typename Tree, typename BasicCoord>
         LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(const BasicCoord& basicCoord, const Tree& tree) const
         {
             return basicCoordToResultCoordImpl(basicCoord, tree);
         }
 
-        template <typename Tree, typename ResultCoord>
+        template<typename Tree, typename ResultCoord>
         LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(const ResultCoord& resultCoord, const Tree& tree) const
             -> ResultCoord
         {
@@ -54,7 +54,7 @@ namespace llama::mapping::tree::functor
         }
 
     private:
-        template <typename Identifier, typename Type, typename CountType>
+        template<typename Identifier, typename Type, typename CountType>
         LLAMA_FN_HOST_ACC_INLINE static auto basicToResultImpl(
             const Node<Identifier, Type, CountType>& node,
             std::size_t arraySize)
@@ -65,7 +65,7 @@ namespace llama::mapping::tree::functor
             return Node<Identifier, decltype(children), boost::mp11::mp_size_t<1>>{{}, children};
         }
 
-        template <typename Identifier, typename Type, typename CountType>
+        template<typename Identifier, typename Type, typename CountType>
         LLAMA_FN_HOST_ACC_INLINE static auto basicToResultImpl(
             const Leaf<Identifier, Type, CountType>& leaf,
             std::size_t arraySize)
@@ -73,13 +73,13 @@ namespace llama::mapping::tree::functor
             return Leaf<Identifier, Type, std::size_t>{LLAMA_COPY(leaf.count) * arraySize};
         }
 
-        template <typename BasicCoord, typename NodeOrLeaf>
+        template<typename BasicCoord, typename NodeOrLeaf>
         LLAMA_FN_HOST_ACC_INLINE static auto basicCoordToResultCoordImpl(
             const BasicCoord& basicCoord,
             const NodeOrLeaf& nodeOrLeaf,
             std::size_t arraySize = 0)
         {
-            if constexpr (std::tuple_size_v<BasicCoord> == 1)
+            if constexpr(std::tuple_size_v<BasicCoord> == 1)
                 return Tuple{TreeCoordElement<BasicCoord::FirstElement::childIndex>{
                     arraySize + LLAMA_COPY(basicCoord.first.arrayIndex)}};
             else
@@ -99,21 +99,21 @@ namespace llama::mapping::tree::functor
 
     namespace internal
     {
-        template <typename TreeCoord, typename Node>
+        template<typename TreeCoord, typename Node>
         LLAMA_FN_HOST_ACC_INLINE auto getNode(const Node& node)
         {
-            if constexpr (std::is_same_v<TreeCoord, Tuple<>>)
+            if constexpr(std::is_same_v<TreeCoord, Tuple<>>)
                 return node;
             else
                 return getNode<typename TreeCoord::RestTuple>(get<TreeCoord::FirstElement::childIndex>(node.childs));
         }
 
-        template <typename TreeCoord, typename Identifier, typename Type, typename CountType>
+        template<typename TreeCoord, typename Identifier, typename Type, typename CountType>
         LLAMA_FN_HOST_ACC_INLINE auto changeNodeRuntime(
             const Node<Identifier, Type, CountType>& tree,
             std::size_t newValue)
         {
-            if constexpr (std::is_same_v<TreeCoord, Tuple<>>)
+            if constexpr(std::is_same_v<TreeCoord, Tuple<>>)
                 return Node<Identifier, Type>{newValue, tree.childs};
             else
             {
@@ -124,7 +124,7 @@ namespace llama::mapping::tree::functor
             }
         }
 
-        template <typename TreeCoord, typename Identifier, typename Type, typename CountType>
+        template<typename TreeCoord, typename Identifier, typename Type, typename CountType>
         LLAMA_FN_HOST_ACC_INLINE auto changeNodeRuntime(
             const Leaf<Identifier, Type, CountType>& tree,
             std::size_t newValue)
@@ -136,25 +136,25 @@ namespace llama::mapping::tree::functor
         {
             const std::size_t newValue;
 
-            template <typename Identifier, typename Type, typename CountType>
+            template<typename Identifier, typename Type, typename CountType>
             LLAMA_FN_HOST_ACC_INLINE auto operator()(const Node<Identifier, Type, CountType>& element) const
             {
                 return Node<Identifier, Type, std::size_t>{element.count * newValue, element.childs};
             }
 
-            template <typename Identifier, typename Type, typename CountType>
+            template<typename Identifier, typename Type, typename CountType>
             LLAMA_FN_HOST_ACC_INLINE auto operator()(const Leaf<Identifier, Type, CountType>& element) const
             {
                 return Leaf<Identifier, Type, std::size_t>{element.count * newValue};
             }
         };
 
-        template <typename TreeCoord, typename Identifier, typename Type, typename CountType>
+        template<typename TreeCoord, typename Identifier, typename Type, typename CountType>
         LLAMA_FN_HOST_ACC_INLINE auto changeNodeChildsRuntime(
             const Node<Identifier, Type, CountType>& tree,
             std::size_t newValue)
         {
-            if constexpr (std::is_same_v<TreeCoord, Tuple<>>)
+            if constexpr(std::is_same_v<TreeCoord, Tuple<>>)
             {
                 auto children = tupleTransform(tree.childs, ChangeNodeChildsRuntimeFunctor{newValue});
                 return Node<Identifier, decltype(children)>{tree.count, children};
@@ -168,7 +168,7 @@ namespace llama::mapping::tree::functor
             }
         }
 
-        template <typename TreeCoord, typename Identifier, typename Type, typename CountType>
+        template<typename TreeCoord, typename Identifier, typename Type, typename CountType>
         LLAMA_FN_HOST_ACC_INLINE auto changeNodeChildsRuntime(
             const Leaf<Identifier, Type, CountType>& tree,
             std::size_t newValue)
@@ -181,12 +181,12 @@ namespace llama::mapping::tree::functor
     /// the given amount (runtime or compile time value).
     /// \tparam TreeCoord tree coordinate in the mapping tree which's run time part shall be moved down one level
     /// \see tree::Mapping
-    template <typename TreeCoord, typename Amount = std::size_t>
+    template<typename TreeCoord, typename Amount = std::size_t>
     struct MoveRTDown
     {
         const Amount amount = {};
 
-        template <typename Tree>
+        template<typename Tree>
         LLAMA_FN_HOST_ACC_INLINE auto basicToResult(const Tree& tree) const
         {
             return internal::changeNodeChildsRuntime<TreeCoord>(
@@ -197,13 +197,13 @@ namespace llama::mapping::tree::functor
                 amount);
         }
 
-        template <typename Tree, typename BasicCoord>
+        template<typename Tree, typename BasicCoord>
         LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(const BasicCoord& basicCoord, const Tree& tree) const
         {
             return basicCoordToResultCoordImpl<TreeCoord>(basicCoord, tree);
         }
 
-        template <typename Tree, typename ResultCoord>
+        template<typename Tree, typename ResultCoord>
         LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(const ResultCoord& resultCoord, const Tree&) const
             -> ResultCoord
         {
@@ -211,12 +211,12 @@ namespace llama::mapping::tree::functor
         }
 
     private:
-        template <typename InternalTreeCoord, typename BasicCoord, typename Tree>
+        template<typename InternalTreeCoord, typename BasicCoord, typename Tree>
         LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoordImpl(const BasicCoord& basicCoord, const Tree& tree) const
         {
-            if constexpr (std::is_same_v<InternalTreeCoord, Tuple<>>)
+            if constexpr(std::is_same_v<InternalTreeCoord, Tuple<>>)
             {
-                if constexpr (std::is_same_v<BasicCoord, Tuple<>>)
+                if constexpr(std::is_same_v<BasicCoord, Tuple<>>)
                     return Tuple{};
                 else
                 {
@@ -231,7 +231,7 @@ namespace llama::mapping::tree::functor
             }
             else
             {
-                if constexpr (InternalTreeCoord::FirstElement::childIndex != BasicCoord::FirstElement::childIndex)
+                if constexpr(InternalTreeCoord::FirstElement::childIndex != BasicCoord::FirstElement::childIndex)
                     return basicCoord;
                 else
                 {
@@ -244,6 +244,6 @@ namespace llama::mapping::tree::functor
         }
     };
 
-    template <typename TreeCoord, std::size_t Amount>
+    template<typename TreeCoord, std::size_t Amount>
     using MoveRTDownFixed = MoveRTDown<TreeCoord, boost::mp11::mp_size_t<Amount>>;
 } // namespace llama::mapping::tree::functor

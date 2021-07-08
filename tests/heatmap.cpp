@@ -11,15 +11,15 @@ TEST_CASE("Heatmap.nbody")
     {
         auto particles = llama::allocView(llama::mapping::Heatmap{mapping});
 
-        for (std::size_t i = 0; i < N; i++)
+        for(std::size_t i = 0; i < N; i++)
             particles(i) = 0;
 
         constexpr float TIMESTEP = 0.0001f;
         constexpr float EPS2 = 0.01f;
-        for (std::size_t i = 0; i < N; i++)
+        for(std::size_t i = 0; i < N; i++)
         {
             llama::One<ParticleHeatmap> pi = particles(i);
-            for (std::size_t j = 0; j < N; ++j)
+            for(std::size_t j = 0; j < N; ++j)
             {
                 auto pj = particles(j);
                 auto dist = pi(tag::Pos{}) - pj(tag::Pos{});
@@ -32,7 +32,7 @@ TEST_CASE("Heatmap.nbody")
             }
             particles(i) = pi;
         }
-        for (std::size_t i = 0; i < N; i++)
+        for(std::size_t i = 0; i < N; i++)
             particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * TIMESTEP;
 
         std::ofstream{"Heatmap." + name + ".sh"} << particles.mapping.toGnuplotScript();

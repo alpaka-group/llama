@@ -21,7 +21,7 @@ using Vector = llama::Record<
 >;
 // clang-format on
 
-template <template <typename, typename> typename InnerMapping, typename T_ArrayDims, typename T_RecordDim>
+template<template<typename, typename> typename InnerMapping, typename T_ArrayDims, typename T_RecordDim>
 struct GuardMapping2D
 {
     static_assert(std::is_same_v<T_ArrayDims, llama::ArrayDims<2>>, "Only 2D arrays are implemented");
@@ -48,53 +48,53 @@ struct GuardMapping2D
 
     constexpr auto blobSize(std::size_t i) const -> std::size_t
     {
-        if (i >= centerOff)
+        if(i >= centerOff)
             return center.blobSize(i - centerOff);
-        if (i >= botOff)
+        if(i >= botOff)
             return bot.blobSize(i - botOff);
-        if (i >= topOff)
+        if(i >= topOff)
             return top.blobSize(i - topOff);
-        if (i >= rightOff)
+        if(i >= rightOff)
             return right.blobSize(i - rightOff);
-        if (i >= leftOff)
+        if(i >= leftOff)
             return left.blobSize(i - leftOff);
-        if (i >= rightBotOff)
+        if(i >= rightBotOff)
             return rightBot.blobSize(i - rightBotOff);
-        if (i >= rightTopOff)
+        if(i >= rightTopOff)
             return rightTop.blobSize(i - rightTopOff);
-        if (i >= leftBotOff)
+        if(i >= leftBotOff)
             return leftBot.blobSize(i - leftBotOff);
-        if (i >= leftTopOff)
+        if(i >= leftTopOff)
             return leftTop.blobSize(i - leftTopOff);
         std::abort();
     }
 
-    template <std::size_t... RecordCoords>
+    template<std::size_t... RecordCoords>
     constexpr auto blobNrAndOffset(ArrayDims coord) const -> llama::NrAndOffset
     {
         // [0][0] is at left top
         const auto [row, col] = coord;
         const auto [rowMax, colMax] = arrayDimsSize;
 
-        if (col == 0)
+        if(col == 0)
         {
-            if (row == 0)
+            if(row == 0)
                 return offsetBlobNr(leftTop.template blobNrAndOffset<RecordCoords...>({}), leftTopOff);
-            if (row == rowMax - 1)
+            if(row == rowMax - 1)
                 return offsetBlobNr(leftBot.template blobNrAndOffset<RecordCoords...>({}), leftBotOff);
             return offsetBlobNr(left.template blobNrAndOffset<RecordCoords...>({row - 1}), leftOff);
         }
-        if (col == colMax - 1)
+        if(col == colMax - 1)
         {
-            if (row == 0)
+            if(row == 0)
                 return offsetBlobNr(rightTop.template blobNrAndOffset<RecordCoords...>({}), rightTopOff);
-            if (row == rowMax - 1)
+            if(row == rowMax - 1)
                 return offsetBlobNr(rightBot.template blobNrAndOffset<RecordCoords...>({}), rightBotOff);
             return offsetBlobNr(right.template blobNrAndOffset<RecordCoords...>({row - 1}), rightOff);
         }
-        if (row == 0)
+        if(row == 0)
             return offsetBlobNr(top.template blobNrAndOffset<RecordCoords...>({col - 1}), topOff);
-        if (row == rowMax - 1)
+        if(row == rowMax - 1)
             return offsetBlobNr(bot.template blobNrAndOffset<RecordCoords...>({col - 1}), botOff);
         return offsetBlobNr(center.template blobNrAndOffset<RecordCoords...>({row - 1, col - 1}), centerOff);
     }
@@ -151,7 +151,7 @@ private:
         return nao;
     }
 
-    template <typename Mapping>
+    template<typename Mapping>
     constexpr auto blobIndices(const Mapping&, std::size_t offset) const
     {
         std::array<std::size_t, Mapping::blobCount> a{};
@@ -186,12 +186,12 @@ private:
     ArrayDims arrayDimsSize;
 };
 
-template <typename View>
+template<typename View>
 void printView(const View& view, std::size_t rows, std::size_t cols)
 {
-    for (std::size_t row = 0; row < rows; row++)
+    for(std::size_t row = 0; row < rows; row++)
     {
-        for (std::size_t col = 0; col < cols; col++)
+        for(std::size_t col = 0; col < cols; col++)
             std::cout << fmt::format(
                 "[{:3},{:3},{:3}]",
                 view(row, col)(tag::X{}),
@@ -201,7 +201,7 @@ void printView(const View& view, std::size_t rows, std::size_t cols)
     }
 }
 
-template <template <typename, typename> typename Mapping>
+template<template<typename, typename> typename Mapping>
 void run(const std::string& mappingName)
 {
     std::cout << "\n===== Mapping " << mappingName << " =====\n\n";
@@ -215,8 +215,8 @@ void run(const std::string& mappingName)
     auto view1 = allocView(mapping);
 
     int i = 0;
-    for (std::size_t row = 0; row < rows; row++)
-        for (std::size_t col = 0; col < cols; col++)
+    for(std::size_t row = 0; row < rows; row++)
+        for(std::size_t col = 0; col < cols; col++)
         {
             view1(row, col)(tag::X{}) = ++i;
             view1(row, col)(tag::Y{}) = ++i;
@@ -227,8 +227,8 @@ void run(const std::string& mappingName)
     printView(view1, rows, cols);
 
     auto view2 = allocView(mapping);
-    for (std::size_t row = 0; row < rows; row++)
-        for (std::size_t col = 0; col < cols; col++)
+    for(std::size_t row = 0; row < rows; row++)
+        for(std::size_t col = 0; col < cols; col++)
             view2(row, col) = 0; // broadcast
 
     std::cout << "\nView 2:\n";
@@ -237,7 +237,7 @@ void run(const std::string& mappingName)
     auto copyBlobs = [&](auto& srcView, auto& dstView, auto srcBlobs, auto dstBlobs)
     {
         static_assert(srcBlobs.size() == dstBlobs.size());
-        for (auto i = 0; i < srcBlobs.size(); i++)
+        for(auto i = 0; i < srcBlobs.size(); i++)
         {
             const auto src = srcBlobs[i];
             const auto dst = dstBlobs[i];
@@ -272,7 +272,7 @@ try
     run<llama::mapping::PreconfiguredSoA<>::type>("SoA");
     run<llama::mapping::PreconfiguredSoA<true>::type>("SoA_MB");
 }
-catch (const std::exception& e)
+catch(const std::exception& e)
 {
     std::cerr << "Exception: " << e.what() << '\n';
 }

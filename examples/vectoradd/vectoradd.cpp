@@ -29,11 +29,11 @@ namespace usellama
     >;
     // clang-format on
 
-    template <typename View>
+    template<typename View>
     void add(const View& a, const View& b, View& c)
     {
         LLAMA_INDEPENDENT_DATA
-        for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
+        for(std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
             c(i)(tag::X{}) = a(i)(tag::X{}) + b(i)(tag::X{});
             c(i)(tag::Y{}) = a(i)(tag::Y{}) - b(i)(tag::Y{});
@@ -49,15 +49,15 @@ namespace usellama
         const auto mapping = [&]
         {
             const auto arrayDims = llama::ArrayDims{PROBLEM_SIZE};
-            if constexpr (MAPPING == 0)
+            if constexpr(MAPPING == 0)
                 return llama::mapping::AoS{arrayDims, Vector{}};
-            if constexpr (MAPPING == 1)
+            if constexpr(MAPPING == 1)
                 return llama::mapping::SoA{arrayDims, Vector{}};
-            if constexpr (MAPPING == 2)
+            if constexpr(MAPPING == 2)
                 return llama::mapping::SoA<decltype(arrayDims), Vector, true>{arrayDims};
-            if constexpr (MAPPING == 3)
+            if constexpr(MAPPING == 3)
                 return llama::mapping::tree::Mapping{arrayDims, llama::Tuple{}, Vector{}};
-            if constexpr (MAPPING == 4)
+            if constexpr(MAPPING == 4)
                 return llama::mapping::tree::Mapping{
                     arrayDims,
                     llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
@@ -70,7 +70,7 @@ namespace usellama
         watch.printAndReset("alloc");
 
         LLAMA_INDEPENDENT_DATA
-        for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+        for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
         {
             const auto value = static_cast<FP>(i);
             a[i](tag::X{}) = value; // X
@@ -81,7 +81,7 @@ namespace usellama
         watch.printAndReset("init");
 
         double acc = 0;
-        for (std::size_t s = 0; s < STEPS; ++s)
+        for(std::size_t s = 0; s < STEPS; ++s)
         {
             add(a, b, c);
             acc += watch.printAndReset("add");
@@ -104,7 +104,7 @@ namespace manualAoS
     inline void add(const Vector* a, const Vector* b, Vector* c)
     {
         LLAMA_INDEPENDENT_DATA
-        for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
+        for(std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
             c[i].x = a[i].x + b[i].x;
             c[i].y = a[i].y - b[i].y;
@@ -123,7 +123,7 @@ namespace manualAoS
         watch.printAndReset("alloc");
 
         LLAMA_INDEPENDENT_DATA
-        for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+        for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
         {
             const auto value = static_cast<FP>(i);
             a[i].x = value;
@@ -136,7 +136,7 @@ namespace manualAoS
         watch.printAndReset("init");
 
         double acc = 0;
-        for (std::size_t s = 0; s < STEPS; ++s)
+        for(std::size_t s = 0; s < STEPS; ++s)
         {
             add(a.data(), b.data(), c.data());
             acc += watch.printAndReset("add");
@@ -161,7 +161,7 @@ namespace manualSoA
         FP* cz)
     {
         LLAMA_INDEPENDENT_DATA
-        for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
+        for(std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
             cx[i] = ax[i] + bx[i];
             cy[i] = ay[i] - by[i];
@@ -187,7 +187,7 @@ namespace manualSoA
         watch.printAndReset("alloc");
 
         LLAMA_INDEPENDENT_DATA
-        for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+        for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
         {
             const auto value = static_cast<FP>(i);
             ax[i] = value;
@@ -200,7 +200,7 @@ namespace manualSoA
         watch.printAndReset("init");
 
         double acc = 0;
-        for (std::size_t s = 0; s < STEPS; ++s)
+        for(std::size_t s = 0; s < STEPS; ++s)
         {
             add(ax.data(), ay.data(), az.data(), bx.data(), by.data(), bz.data(), cx.data(), cy.data(), cz.data());
             acc += watch.printAndReset("add");
@@ -227,12 +227,12 @@ namespace manualAoSoA
 
     inline void add(const VectorBlock* a, const VectorBlock* b, VectorBlock* c)
     {
-        for (std::size_t bi = 0; bi < PROBLEM_SIZE / LANES; bi++)
+        for(std::size_t bi = 0; bi < PROBLEM_SIZE / LANES; bi++)
         {
 // the unroll 1 is needed to prevent unrolling, which prevents vectorization in GCC
 #pragma GCC unroll 1
             LLAMA_INDEPENDENT_DATA
-            for (std::size_t i = 0; i < LANES; ++i)
+            for(std::size_t i = 0; i < LANES; ++i)
             {
                 const auto& blockA = a[bi];
                 const auto& blockB = b[bi];
@@ -254,10 +254,10 @@ namespace manualAoSoA
         std::vector<VectorBlock> c(BLOCKS);
         watch.printAndReset("alloc");
 
-        for (std::size_t bi = 0; bi < PROBLEM_SIZE / LANES; ++bi)
+        for(std::size_t bi = 0; bi < PROBLEM_SIZE / LANES; ++bi)
         {
             LLAMA_INDEPENDENT_DATA
-            for (std::size_t i = 0; i < LANES; ++i)
+            for(std::size_t i = 0; i < LANES; ++i)
             {
                 const auto value = static_cast<float>(bi * LANES + i);
                 a[bi].x[i] = value;
@@ -271,7 +271,7 @@ namespace manualAoSoA
         watch.printAndReset("init");
 
         double acc = 0;
-        for (std::size_t s = 0; s < STEPS; ++s)
+        for(std::size_t s = 0; s < STEPS; ++s)
         {
             add(a.data(), b.data(), c.data());
             acc += watch.printAndReset("add");
@@ -317,7 +317,7 @@ plot $data using 2:xtic(1) ti "runtime"
 
     return r;
 }
-catch (const std::exception& e)
+catch(const std::exception& e)
 {
     std::cerr << "Exception: " << e.what() << '\n';
 }

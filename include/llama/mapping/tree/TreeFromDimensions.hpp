@@ -11,13 +11,13 @@
 
 namespace llama::mapping::tree
 {
-    template <typename T>
+    template<typename T>
     inline constexpr auto one = 1;
 
-    template <>
+    template<>
     inline constexpr auto one<boost::mp11::mp_size_t<1>> = boost::mp11::mp_size_t<1>{};
 
-    template <typename T_Identifier, typename T_Type, typename CountType = std::size_t>
+    template<typename T_Identifier, typename T_Type, typename CountType = std::size_t>
     struct Leaf
     {
         using Identifier = T_Identifier;
@@ -26,7 +26,7 @@ namespace llama::mapping::tree
         const CountType count = one<CountType>;
     };
 
-    template <typename T_Identifier, typename T_ChildrenTuple, typename CountType = std::size_t>
+    template<typename T_Identifier, typename T_ChildrenTuple, typename CountType = std::size_t>
     struct Node
     {
         using Identifier = T_Identifier;
@@ -36,19 +36,19 @@ namespace llama::mapping::tree
         const ChildrenTuple childs = {};
     };
 
-    template <std::size_t ChildIndex = 0, typename ArrayIndexType = std::size_t>
+    template<std::size_t ChildIndex = 0, typename ArrayIndexType = std::size_t>
     struct TreeCoordElement
     {
         static constexpr boost::mp11::mp_size_t<ChildIndex> childIndex = {};
         const ArrayIndexType arrayIndex = {};
     };
 
-    template <std::size_t... Coords>
+    template<std::size_t... Coords>
     using TreeCoord = Tuple<TreeCoordElement<Coords, boost::mp11::mp_size_t<0>>...>;
 
     namespace internal
     {
-        template <typename... Coords, std::size_t... Is>
+        template<typename... Coords, std::size_t... Is>
         auto treeCoordToString(Tuple<Coords...> treeCoord, std::index_sequence<Is...>) -> std::string
         {
             auto s
@@ -60,7 +60,7 @@ namespace llama::mapping::tree
         }
     } // namespace internal
 
-    template <typename TreeCoord>
+    template<typename TreeCoord>
     auto treeCoordToString(TreeCoord treeCoord) -> std::string
     {
         return std::string("[ ")
@@ -70,26 +70,27 @@ namespace llama::mapping::tree
 
     namespace internal
     {
-        template <typename Tag, typename RecordDim, typename CountType>
+        template<typename Tag, typename RecordDim, typename CountType>
         struct CreateTreeElement
         {
             using type = Leaf<Tag, RecordDim, boost::mp11::mp_size_t<1>>;
         };
 
-        template <typename Tag, typename... Fields, typename CountType>
+        template<typename Tag, typename... Fields, typename CountType>
         struct CreateTreeElement<Tag, Record<Fields...>, CountType>
         {
             using type = Node<
                 Tag,
-                Tuple<typename CreateTreeElement<GetFieldTag<Fields>, GetFieldType<Fields>, boost::mp11::mp_size_t<1>>::
-                          type...>,
+                Tuple<
+                    typename CreateTreeElement<GetFieldTag<Fields>, GetFieldType<Fields>, boost::mp11::mp_size_t<1>>::
+                        type...>,
                 CountType>;
         };
 
-        template <typename Tag, typename ChildType, std::size_t Count, typename CountType>
+        template<typename Tag, typename ChildType, std::size_t Count, typename CountType>
         struct CreateTreeElement<Tag, ChildType[Count], CountType>
         {
-            template <std::size_t... Is>
+            template<std::size_t... Is>
             static auto createChildren(std::index_sequence<Is...>)
             {
                 return Tuple<
@@ -99,33 +100,33 @@ namespace llama::mapping::tree
             using type = Node<Tag, decltype(createChildren(std::make_index_sequence<Count>{})), CountType>;
         };
 
-        template <typename Leaf, std::size_t Count>
+        template<typename Leaf, std::size_t Count>
         struct WrapInNNodes
         {
             using type = Node<NoName, Tuple<typename WrapInNNodes<Leaf, Count - 1>::type>>;
         };
 
-        template <typename Leaf>
+        template<typename Leaf>
         struct WrapInNNodes<Leaf, 0>
         {
             using type = Leaf;
         };
 
-        template <typename RecordDim>
+        template<typename RecordDim>
         using TreeFromRecordDimImpl = typename CreateTreeElement<NoName, RecordDim, std::size_t>::type;
     } // namespace internal
 
-    template <typename RecordDim>
+    template<typename RecordDim>
     using TreeFromRecordDim = internal::TreeFromRecordDimImpl<RecordDim>;
 
-    template <typename ArrayDims, typename RecordDim>
+    template<typename ArrayDims, typename RecordDim>
     using TreeFromDimensions =
         typename internal::WrapInNNodes<internal::TreeFromRecordDimImpl<RecordDim>, ArrayDims::rank - 1>::type;
 
-    template <typename RecordDim, typename ArrayDims, std::size_t Pos = 0>
+    template<typename RecordDim, typename ArrayDims, std::size_t Pos = 0>
     LLAMA_FN_HOST_ACC_INLINE auto createTree(const ArrayDims& size)
     {
-        if constexpr (Pos == ArrayDims::rank - 1)
+        if constexpr(Pos == ArrayDims::rank - 1)
             return TreeFromRecordDim<RecordDim>{size[ArrayDims::rank - 1]};
         else
         {
@@ -136,7 +137,7 @@ namespace llama::mapping::tree
 
     namespace internal
     {
-        template <
+        template<
             typename ArrayDims,
             std::size_t... ADIndices,
             std::size_t FirstRecordCoord,
@@ -153,7 +154,7 @@ namespace llama::mapping::tree
         }
     } // namespace internal
 
-    template <typename RecordCoord, typename ArrayDims>
+    template<typename RecordCoord, typename ArrayDims>
     LLAMA_FN_HOST_ACC_INLINE auto createTreeCoord(const ArrayDims& coord)
     {
         return internal::createTreeCoord(coord, std::make_index_sequence<ArrayDims::rank>{}, RecordCoord{});

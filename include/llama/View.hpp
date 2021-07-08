@@ -16,19 +16,19 @@
 namespace llama
 {
 #ifdef __cpp_lib_concepts
-    template <typename T_Mapping, Blob BlobType>
+    template<typename T_Mapping, Blob BlobType>
 #else
-    template <typename T_Mapping, typename BlobType>
+    template<typename T_Mapping, typename BlobType>
 #endif
     struct View;
 
     namespace internal
     {
-        template <typename Allocator>
+        template<typename Allocator>
         using AllocatorBlobType = decltype(std::declval<Allocator>()(0));
 
         LLAMA_SUPPRESS_HOST_DEVICE_WARNING
-        template <typename Allocator, typename Mapping, std::size_t... Is>
+        template<typename Allocator, typename Mapping, std::size_t... Is>
         LLAMA_FN_HOST_ACC_INLINE auto makeBlobArray(
             const Allocator& alloc,
             const Mapping& mapping,
@@ -43,9 +43,9 @@ namespace llama
     /// allocator callable is called with the size of bytes to allocate for each blob of the mapping. This function is
     /// the preferred way to create a \ref View.
 #ifdef __cpp_lib_concepts
-    template <typename Mapping, BlobAllocator Allocator = bloballoc::Vector<>>
+    template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector<>>
 #else
-    template <typename Mapping, typename Allocator = bloballoc::Vector<>>
+    template<typename Mapping, typename Allocator = bloballoc::Vector<>>
 #endif
     LLAMA_FN_HOST_ACC_INLINE auto allocView(Mapping mapping = {}, const Allocator& alloc = {})
         -> View<Mapping, internal::AllocatorBlobType<Allocator>>
@@ -56,21 +56,21 @@ namespace llama
 
     /// Allocates a \ref View holding a single record backed by stack memory (\ref bloballoc::Stack).
     /// \tparam Dim Dimension of the \ref ArrayDims of the \ref View.
-    template <std::size_t Dim, typename RecordDim>
+    template<std::size_t Dim, typename RecordDim>
     LLAMA_FN_HOST_ACC_INLINE auto allocViewStack() -> decltype(auto)
     {
         constexpr auto mapping = mapping::MinAlignedOne<ArrayDims<Dim>, RecordDim>{};
         return allocView(mapping, bloballoc::Stack<mapping.blobSize(0)>{});
     }
 
-    template <typename View, typename BoundRecordCoord = RecordCoord<>, bool OwnView = false>
+    template<typename View, typename BoundRecordCoord = RecordCoord<>, bool OwnView = false>
     struct VirtualRecord;
 
     // TODO: Higher dimensional iterators might not have good codegen. Multiple nested loops seem to be superior to a
     // single iterator over multiple dimensions. At least compilers are able to produce better code. std::mdspan also
-    // discovered similar difficulties and there was a discussion in WG21 in Oulu 2016 to remove/postpone iterators from
-    // the design. In std::mdspan's design, the iterator iterated over the co-domain.
-    template <typename View>
+    // discovered similar difficulties and there was a discussion in WG21 in Oulu 2016 to remove/postpone iterators
+    // from the design. In std::mdspan's design, the iterator iterated over the co-domain.
+    template<typename View>
     struct Iterator
     {
         using ADIterator = ArrayDimsIndexIterator<View::ArrayDims::rank>;
@@ -211,12 +211,12 @@ namespace llama
 
     namespace internal
     {
-        template <typename Mapping, typename RecordCoord, typename = void>
+        template<typename Mapping, typename RecordCoord, typename = void>
         struct isComputed : std::false_type
         {
         };
 
-        template <typename Mapping, typename RecordCoord>
+        template<typename Mapping, typename RecordCoord>
         struct isComputed<Mapping, RecordCoord, std::void_t<decltype(Mapping::isComputed(RecordCoord{}))>>
             : std::bool_constant<Mapping::isComputed(RecordCoord{})>
         {
@@ -224,7 +224,7 @@ namespace llama
     } // namespace internal
 
     /// Returns true if the field accessed via the given mapping and record coordinate is a computed value.
-    template <typename Mapping, typename RecordCoord>
+    template<typename Mapping, typename RecordCoord>
     inline constexpr bool isComputed = internal::isComputed<Mapping, RecordCoord>::value;
 
     /// Central LLAMA class holding memory for storage and giving access to values stored there defined by a mapping. A
@@ -232,9 +232,9 @@ namespace llama
     /// \tparam T_Mapping The mapping used by the view to map accesses into memory.
     /// \tparam BlobType The storage type used by the view holding memory.
 #ifdef __cpp_lib_concepts
-    template <typename T_Mapping, Blob BlobType>
+    template<typename T_Mapping, Blob BlobType>
 #else
-    template <typename T_Mapping, typename BlobType>
+    template<typename T_Mapping, typename BlobType>
 #endif
     struct View
     {
@@ -262,7 +262,7 @@ namespace llama
         /// Retrieves the \ref VirtualRecord at the given \ref ArrayDims coordinate.
         LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDims arrayDims) const -> decltype(auto)
         {
-            if constexpr (isRecord<RecordDim> || internal::is_bounded_array<RecordDim>::value)
+            if constexpr(isRecord<RecordDim> || internal::is_bounded_array<RecordDim>::value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
                 return VirtualRecordTypeConst{arrayDims, *this};
@@ -276,7 +276,7 @@ namespace llama
 
         LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDims arrayDims) -> decltype(auto)
         {
-            if constexpr (isRecord<RecordDim> || internal::is_bounded_array<RecordDim>::value)
+            if constexpr(isRecord<RecordDim> || internal::is_bounded_array<RecordDim>::value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
                 return VirtualRecordType{arrayDims, *this};
@@ -290,7 +290,7 @@ namespace llama
 
         /// Retrieves the \ref VirtualRecord at the \ref ArrayDims coordinate constructed from the passed component
         /// indices.
-        template <typename... Indices>
+        template<typename... Indices>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) const -> decltype(auto)
         {
             static_assert(
@@ -303,7 +303,7 @@ namespace llama
             return (*this) (ArrayDims{static_cast<typename ArrayDims::value_type>(indices)...});
         }
 
-        template <typename... Indices>
+        template<typename... Indices>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) -> decltype(auto)
         {
             static_assert(
@@ -374,15 +374,15 @@ namespace llama
         Array<BlobType, Mapping::blobCount> storageBlobs;
 
     private:
-        template <typename T_View, typename T_BoundRecordCoord, bool OwnView>
+        template<typename T_View, typename T_BoundRecordCoord, bool OwnView>
         friend struct VirtualRecord;
 
         LLAMA_SUPPRESS_HOST_DEVICE_WARNING
-        template <std::size_t... Coords>
+        template<std::size_t... Coords>
         LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDims arrayDims, RecordCoord<Coords...> dc = {}) const
             -> decltype(auto)
         {
-            if constexpr (isComputed<Mapping, RecordCoord<Coords...>>)
+            if constexpr(isComputed<Mapping, RecordCoord<Coords...>>)
                 return mapping.compute(arrayDims, dc, storageBlobs);
             else
             {
@@ -393,10 +393,10 @@ namespace llama
         }
 
         LLAMA_SUPPRESS_HOST_DEVICE_WARNING
-        template <std::size_t... Coords>
+        template<std::size_t... Coords>
         LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDims arrayDims, RecordCoord<Coords...> dc = {}) -> decltype(auto)
         {
-            if constexpr (isComputed<Mapping, RecordCoord<Coords...>>)
+            if constexpr(isComputed<Mapping, RecordCoord<Coords...>>)
                 return mapping.compute(arrayDims, dc, storageBlobs);
             else
             {
@@ -407,15 +407,15 @@ namespace llama
         }
     };
 
-    template <typename View>
+    template<typename View>
     inline constexpr auto IsView = false;
 
-    template <typename Mapping, typename BlobType>
+    template<typename Mapping, typename BlobType>
     inline constexpr auto IsView<View<Mapping, BlobType>> = true;
 
     /// Acts like a \ref View, but shows only a smaller and/or shifted part of another view it references, the parent
     /// view.
-    template <typename T_ParentViewType>
+    template<typename T_ParentViewType>
     struct VirtualView
     {
         using ParentView = T_ParentViewType; ///< type of the parent view
@@ -430,13 +430,13 @@ namespace llama
         {
         }
 
-        template <std::size_t... Coords>
+        template<std::size_t... Coords>
         LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDims arrayDims) const -> const auto&
         {
             return parentView.template accessor<Coords...>(ArrayDims{arrayDims + offset});
         }
 
-        template <std::size_t... Coords>
+        template<std::size_t... Coords>
         LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDims arrayDims) -> auto&
         {
             return parentView.template accessor<Coords...>(ArrayDims{arrayDims + offset});
@@ -456,7 +456,7 @@ namespace llama
         }
 
         /// Same as corresponding operator in \ref View, but shifted by the offset of this \ref VirtualView.
-        template <typename... Indices>
+        template<typename... Indices>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) const -> VirtualRecordType
         {
             static_assert(
@@ -469,7 +469,7 @@ namespace llama
             return parentView(ArrayDims{ArrayDims{static_cast<typename ArrayDims::value_type>(indices)...} + offset});
         }
 
-        template <typename... Indices>
+        template<typename... Indices>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) -> VirtualRecordType
         {
             static_assert(
@@ -482,14 +482,14 @@ namespace llama
             return parentView(ArrayDims{ArrayDims{static_cast<typename ArrayDims::value_type>(indices)...} + offset});
         }
 
-        template <std::size_t... Coord>
+        template<std::size_t... Coord>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coord...>&& dc = {}) const -> const auto&
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return accessor<Coord...>(ArrayDims{});
         }
 
-        template <std::size_t... Coord>
+        template<std::size_t... Coord>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coord...>&& dc = {}) -> auto&
         {
             LLAMA_FORCE_INLINE_RECURSIVE

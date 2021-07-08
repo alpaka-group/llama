@@ -71,7 +71,8 @@ TEST_CASE("address.AoS.Packed.fortran")
 {
     using ArrayDims = llama::ArrayDims<2>;
     auto arrayDims = ArrayDims{16, 16};
-    auto mapping = llama::mapping::PackedAoS<ArrayDims, Particle, llama::mapping::LinearizeArrayDimsFortran>{arrayDims};
+    auto mapping
+        = llama::mapping::PackedAoS<ArrayDims, Particle, llama::mapping::LinearizeArrayDimsFortran>{arrayDims};
 
     {
         const auto coord = ArrayDims{0, 0};
@@ -548,7 +549,7 @@ TEST_CASE("address.PackedOne")
     auto mapping = llama::mapping::PackedOne<ArrayDims, Particle>{arrayDims};
 
     STATIC_REQUIRE(mapping.blobSize(0) == 56);
-    for (const auto coord : {ArrayDims{0, 0}, ArrayDims{0, 1}, ArrayDims{1, 0}})
+    for(const auto coord : {ArrayDims{0, 0}, ArrayDims{0, 1}, ArrayDims{1, 0}})
     {
         CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
         CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 8);
@@ -571,7 +572,7 @@ TEST_CASE("address.AlignedOne")
     auto mapping = llama::mapping::AlignedOne<ArrayDims, Particle>{arrayDims};
 
     STATIC_REQUIRE(mapping.blobSize(0) == 60);
-    for (const auto coord : {ArrayDims{0, 0}, ArrayDims{0, 1}, ArrayDims{1, 0}})
+    for(const auto coord : {ArrayDims{0, 0}, ArrayDims{0, 1}, ArrayDims{1, 0}})
     {
         CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
         CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 8);
@@ -594,7 +595,7 @@ TEST_CASE("address.MinAlignedOne")
     auto mapping = llama::mapping::MinAlignedOne<ArrayDims, Particle>{arrayDims};
 
     STATIC_REQUIRE(mapping.blobSize(0) == 56);
-    for (const auto coord : {ArrayDims{0, 0}, ArrayDims{0, 1}, ArrayDims{1, 0}})
+    for(const auto coord : {ArrayDims{0, 0}, ArrayDims{0, 1}, ArrayDims{1, 0}})
     {
         CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 8);
         CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 16);

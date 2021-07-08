@@ -24,7 +24,7 @@ namespace llama
     };
     // clang-format on
 
-    template <typename B>
+    template<typename B>
     concept Blob = requires(B b, std::size_t i)
     {
         // according to http://eel.is/c++draft/intro.object#3 only std::byte and unsigned char can provide storage for

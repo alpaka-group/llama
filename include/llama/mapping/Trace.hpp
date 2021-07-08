@@ -13,7 +13,7 @@ namespace llama::mapping
 {
     namespace internal
     {
-        template <typename RecordDim, std::size_t... Coords>
+        template<typename RecordDim, std::size_t... Coords>
         auto coordName(RecordCoord<Coords...>) -> std::string
         {
             using Tags = GetTags<RecordDim, RecordCoord<Coords...>>;
@@ -22,7 +22,7 @@ namespace llama::mapping
             boost::mp11::mp_for_each<Tags>(
                 [&](auto tag)
                 {
-                    if (!r.empty())
+                    if(!r.empty())
                         r += '.';
                     r += structName(tag);
                 });
@@ -33,7 +33,7 @@ namespace llama::mapping
     /// Forwards all calls to the inner mapping. Traces all accesses made through this mapping and prints a summary on
     /// destruction.
     /// \tparam Mapping The type of the inner mapping.
-    template <typename Mapping>
+    template<typename Mapping>
     struct Trace
     {
         using ArrayDims = typename Mapping::ArrayDims;
@@ -56,10 +56,10 @@ namespace llama::mapping
 
         ~Trace()
         {
-            if (!fieldHits.empty())
+            if(!fieldHits.empty())
             {
                 std::cout << "Trace mapping, number of accesses:\n";
-                for (const auto& [k, v] : fieldHits)
+                for(const auto& [k, v] : fieldHits)
                     std::cout << '\t' << k << ":\t" << v << '\n';
             }
         }
@@ -75,7 +75,7 @@ namespace llama::mapping
             return mapping.blobSize(i);
         }
 
-        template <std::size_t... RecordCoords>
+        template<std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayDims coord) const -> NrAndOffset
         {
             const static auto name = internal::coordName<RecordDim>(RecordCoord<RecordCoords...>{});

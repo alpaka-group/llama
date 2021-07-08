@@ -16,7 +16,7 @@ namespace llama
     /// exception guarantee.
     /// WARNING: This class is experimental.
     /// @tparam Mapping The mapping to be used for the underlying view. Needs to have 1 array dimension.
-    template <typename Mapping>
+    template<typename Mapping>
     struct Vector
     {
         static_assert(Mapping::ArrayDims::rank == 1, "llama::Vector only supports 1D mappings");
@@ -29,22 +29,22 @@ namespace llama
 
         Vector() = default;
 
-        template <typename VirtualRecord = One<RecordDim>>
+        template<typename VirtualRecord = One<RecordDim>>
         LLAMA_FN_HOST_ACC_INLINE explicit Vector(std::size_t count, const VirtualRecord& value = {})
         {
             reserve(count);
-            for (std::size_t i = 0; i < count; i++)
+            for(std::size_t i = 0; i < count; i++)
                 push_back(value);
         }
 
-        template <typename Iterator>
+        template<typename Iterator>
         LLAMA_FN_HOST_ACC_INLINE Vector(Iterator first, Iterator last)
         {
-            if constexpr (std::is_same_v<
-                              typename std::iterator_traits<Iterator>::iterator_category,
-                              std::random_access_iterator_tag>)
+            if constexpr(std::is_same_v<
+                             typename std::iterator_traits<Iterator>::iterator_category,
+                             std::random_access_iterator_tag>)
                 reserve(std::distance(first, last));
-            for (; first != last; ++first)
+            for(; first != last; ++first)
                 push_back(*first);
         }
 
@@ -76,7 +76,7 @@ namespace llama
 
         LLAMA_FN_HOST_ACC_INLINE decltype(auto) at(std::size_t i)
         {
-            if (i >= m_size)
+            if(i >= m_size)
                 throw std::out_of_range{
                     "Index " + std::to_string(i) + "out of range [0:" + std::to_string(m_size) + "["};
             return m_view(i);
@@ -84,7 +84,7 @@ namespace llama
 
         LLAMA_FN_HOST_ACC_INLINE decltype(auto) at(std::size_t i) const
         {
-            if (i >= m_size)
+            if(i >= m_size)
                 throw std::out_of_range{
                     "Index " + std::to_string(i) + "out of range [0:" + std::to_string(m_size) + "["};
             return m_view(i);
@@ -172,7 +172,7 @@ namespace llama
 
         LLAMA_FN_HOST_ACC_INLINE void reserve(std::size_t cap)
         {
-            if (cap > capacity())
+            if(cap > capacity())
                 changeCapacity(cap);
         }
 
@@ -191,7 +191,7 @@ namespace llama
             m_size = 0;
         }
 
-        template <typename T>
+        template<typename T>
         LLAMA_FN_HOST_ACC_INLINE auto insert(iterator pos, T&& t) -> iterator
         {
             const auto i = pos - begin();
@@ -218,10 +218,10 @@ namespace llama
 
         // TODO: T here is probably a virtual record. We could also allow any struct that is storable to the view via
         // VirtualRecord::store().
-        template <typename T>
+        template<typename T>
         LLAMA_FN_HOST_ACC_INLINE void push_back(T&& t)
         {
-            if (const auto cap = capacity(); m_size == cap)
+            if(const auto cap = capacity(); m_size == cap)
                 reserve(std::max(cap + cap / 2, m_size + 1));
 
             m_view[m_size++] = std::forward<T>(t);
@@ -234,18 +234,18 @@ namespace llama
             m_size--;
         }
 
-        template <typename VirtualRecord = One<RecordDim>>
+        template<typename VirtualRecord = One<RecordDim>>
         LLAMA_FN_HOST_ACC_INLINE void resize(std::size_t count, const VirtualRecord& value = {})
         {
             reserve(count);
-            for (std::size_t i = m_size; i < count; i++)
+            for(std::size_t i = m_size; i < count; i++)
                 m_view[i] = value;
             m_size = count;
         }
 
         LLAMA_FN_HOST_ACC_INLINE friend auto operator==(const Vector& a, const Vector& b) -> bool
         {
-            if (a.m_size != b.m_size)
+            if(a.m_size != b.m_size)
                 return false;
             return std::equal(a.begin(), a.end(), b.begin());
         }

@@ -38,10 +38,10 @@ using Vector = llama::Record<
     llama::Field<tag::Z, FP>>;
 // clang-format on
 
-template <std::size_t ProblemSize, std::size_t Elems>
+template<std::size_t ProblemSize, std::size_t Elems>
 struct AddKernel
 {
-    template <typename Acc, typename View>
+    template<typename Acc, typename View>
     LLAMA_FN_HOST_ACC_INLINE void operator()(const Acc& acc, View a, View b) const
     {
         const auto ti = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0];
@@ -50,7 +50,7 @@ struct AddKernel
         const auto end = alpaka::math::min(acc, start + Elems, ProblemSize);
 
         LLAMA_INDEPENDENT_DATA
-        for (auto i = start; i < end; ++i)
+        for(auto i = start; i < end; ++i)
         {
             a(i)(tag::X{}) += b(i)(tag::X{});
             a(i)(tag::Y{}) -= b(i)(tag::Y{});
@@ -83,15 +83,15 @@ try
     const auto mapping = [&]
     {
         const auto arrayDims = llama::ArrayDims{PROBLEM_SIZE};
-        if constexpr (MAPPING == 0)
+        if constexpr(MAPPING == 0)
             return llama::mapping::AoS<decltype(arrayDims), Vector>{arrayDims};
-        if constexpr (MAPPING == 1)
+        if constexpr(MAPPING == 1)
             return llama::mapping::SoA<decltype(arrayDims), Vector, false>{arrayDims};
-        if constexpr (MAPPING == 2)
+        if constexpr(MAPPING == 2)
             return llama::mapping::SoA<decltype(arrayDims), Vector, true>{arrayDims};
-        if constexpr (MAPPING == 3)
+        if constexpr(MAPPING == 3)
             return llama::mapping::tree::Mapping{arrayDims, llama::Tuple{}, Vector{}};
-        if constexpr (MAPPING == 4)
+        if constexpr(MAPPING == 4)
             return llama::mapping::tree::Mapping{
                 arrayDims,
                 llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
@@ -125,7 +125,7 @@ try
     std::normal_distribution<FP> distribution(FP(0), FP(1));
     auto seed = distribution(generator);
     LLAMA_INDEPENDENT_DATA
-    for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+    for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
     {
         hostA(i) = seed + static_cast<FP>(i);
         hostB(i) = seed - static_cast<FP>(i);
@@ -148,7 +148,7 @@ try
 
     const auto workdiv = alpaka::WorkDivMembers<Dim, Size>{blocks, threads, elems};
 
-    for (std::size_t s = 0; s < STEPS; ++s)
+    for(std::size_t s = 0; s < STEPS; ++s)
     {
         alpaka::exec<Acc>(queue, workdiv, AddKernel<PROBLEM_SIZE, elemCount>{}, devA, devB);
         chrono.printAndReset("Add kernel");
@@ -161,7 +161,7 @@ try
 
     return 0;
 }
-catch (const std::exception& e)
+catch(const std::exception& e)
 {
     std::cerr << "Exception: " << e.what() << '\n';
 }

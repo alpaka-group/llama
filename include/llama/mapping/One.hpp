@@ -14,11 +14,11 @@ namespace llama::mapping
     /// If false, struct members are tightly packed.
     /// \tparam FlattenRecordDim Defines how the record dimension's fields should be flattened. See \ref
     /// FlattenRecordDimInOrder and \ref FlattenRecordDimMinimizePadding.
-    template <
+    template<
         typename T_ArrayDims,
         typename T_RecordDim,
         bool AlignAndPad = true,
-        template <typename> typename FlattenRecordDim = FlattenRecordDimMinimizePadding>
+        template<typename> typename FlattenRecordDim = FlattenRecordDimMinimizePadding>
     struct One
     {
         using ArrayDims = T_ArrayDims;
@@ -37,7 +37,7 @@ namespace llama::mapping
         {
             // TODO: not sure if this is the right approach, since we take any ArrayDims in the ctor
             ArrayDims ad;
-            for (auto i = 0; i < ArrayDims::rank; i++)
+            for(auto i = 0; i < ArrayDims::rank; i++)
                 ad[i] = 1;
             return ad;
         }
@@ -47,7 +47,7 @@ namespace llama::mapping
             return flatSizeOf<typename Flattener::FlatRecordDim, AlignAndPad, false>; // no tail padding
         }
 
-        template <std::size_t... RecordCoords>
+        template<std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayDims) const -> NrAndOffset
         {
             constexpr std::size_t flatIndex =
@@ -66,17 +66,17 @@ namespace llama::mapping
 
     /// One mapping preserving the alignment of the field types by inserting padding.
     /// \see One
-    template <typename ArrayDims, typename RecordDim>
+    template<typename ArrayDims, typename RecordDim>
     using AlignedOne = One<ArrayDims, RecordDim, true, FlattenRecordDimInOrder>;
 
     /// One mapping preserving the alignment of the field types by inserting padding and permuting the field order to
     /// minimize this padding.
     /// \see One
-    template <typename ArrayDims, typename RecordDim>
+    template<typename ArrayDims, typename RecordDim>
     using MinAlignedOne = One<ArrayDims, RecordDim, true, FlattenRecordDimMinimizePadding>;
 
     /// One mapping packing the field types tightly, violating the types' alignment requirements.
     /// \see One
-    template <typename ArrayDims, typename RecordDim>
+    template<typename ArrayDims, typename RecordDim>
     using PackedOne = One<ArrayDims, RecordDim, false, FlattenRecordDimInOrder>;
 } // namespace llama::mapping

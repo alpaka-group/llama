@@ -32,7 +32,7 @@ namespace llama
     /// the same array dimensions.
     /// @param threadId Optional. Zero-based id of calling thread for multi-threaded invocations.
     /// @param threadCount Optional. Thread count in case of multi-threaded invocation.
-    template <typename Mapping, typename SrcBlob, typename DstBlob>
+    template<typename Mapping, typename SrcBlob, typename DstBlob>
     void blobMemcpy(
         const View<Mapping, SrcBlob>& srcView,
         View<Mapping, DstBlob>& dstView,
@@ -40,11 +40,11 @@ namespace llama
         std::size_t threadCount = 1)
     {
         // TODO: we do not verify if the mappings have other runtime state than the array dimensions
-        if (srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
+        if(srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
             throw std::runtime_error{"Array dimensions sizes are different"};
 
         // TODO: this is maybe not the best parallel copying strategy
-        for (std::size_t i = 0; i < Mapping::blobCount; i++)
+        for(std::size_t i = 0; i < Mapping::blobCount; i++)
             internal::parallel_memcpy(
                 &dstView.storageBlobs[i][0],
                 &srcView.storageBlobs[i][0],
@@ -56,7 +56,7 @@ namespace llama
     /// Field-wise copy from source to destination view. Both views need to have the same array and record dimensions.
     /// @param threadId Optional. Thread id in case of multi-threaded copy.
     /// @param threadCount Optional. Thread count in case of multi-threaded copy.
-    template <typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
+    template<typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
     void fieldWiseCopy(
         const View<SrcMapping, SrcBlob>& srcView,
         View<DstMapping, DstBlob>& dstView,
@@ -68,7 +68,7 @@ namespace llama
             std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>,
             "The source and destination record dimensions must be the same");
 
-        if (srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
+        if(srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
             throw std::runtime_error{"Array dimensions sizes are different"};
 
         auto copyOne = [&](auto ad) LLAMA_LAMBDA_INLINE
@@ -82,9 +82,9 @@ namespace llama
         const auto workPerThread = (adSize[0] + threadCount - 1) / threadCount;
         const auto start = threadId * workPerThread;
         const auto end = std::min((threadId + 1) * workPerThread, adSize[0]);
-        for (auto i = threadId * workPerThread; i < end; i++)
+        for(auto i = threadId * workPerThread; i < end; i++)
         {
-            if constexpr (dims > 1)
+            if constexpr(dims > 1)
                 forEachADCoord(ArrayDims<dims - 1>{pop_front(adSize)}, copyOne, static_cast<std::size_t>(i));
             else
                 copyOne(ArrayDims<dims>{static_cast<std::size_t>(i)});
@@ -93,23 +93,24 @@ namespace llama
 
     namespace internal
     {
-        template <typename Mapping>
+        template<typename Mapping>
         inline constexpr std::size_t aosoaLanes = 0;
 
-        template <typename ArrayDims, typename RecordDim, bool SeparateBuffers, typename LinearizeArrayDimsFunctor>
+        template<typename ArrayDims, typename RecordDim, bool SeparateBuffers, typename LinearizeArrayDimsFunctor>
         inline constexpr std::size_t aosoaLanes<
             mapping::SoA<ArrayDims, RecordDim, SeparateBuffers, LinearizeArrayDimsFunctor>> = std::
             numeric_limits<std::size_t>::max();
 
-        template <typename ArrayDims, typename RecordDim, std::size_t Lanes, typename LinearizeArrayDimsFunctor>
+        template<typename ArrayDims, typename RecordDim, std::size_t Lanes, typename LinearizeArrayDimsFunctor>
         inline constexpr std::size_t
             aosoaLanes<mapping::AoSoA<ArrayDims, RecordDim, Lanes, LinearizeArrayDimsFunctor>> = Lanes;
     } // namespace internal
 
-    /// AoSoA copy strategy which transfers data in common blocks. SoA mappings are also allowed for at most 1 argument.
+    /// AoSoA copy strategy which transfers data in common blocks. SoA mappings are also allowed for at most 1
+    /// argument.
     /// @param threadId Optional. Zero-based id of calling thread for multi-threaded invocations.
     /// @param threadCount Optional. Thread count in case of multi-threaded invocation.
-    template <typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
+    template<typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
     void aosoaCommonBlockCopy(
         const View<SrcMapping, SrcBlob>& srcView,
         View<DstMapping, DstBlob>& dstView,
@@ -133,7 +134,7 @@ namespace llama
         static constexpr auto LanesSrc = internal::aosoaLanes<SrcMapping>;
         static constexpr auto LanesDst = internal::aosoaLanes<DstMapping>;
 
-        if (srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
+        if(srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
             throw std::runtime_error{"Array dimensions sizes are different"};
 
         static constexpr auto srcIsAoSoA = LanesSrc != std::numeric_limits<std::size_t>::max();
@@ -152,10 +153,10 @@ namespace llama
             = std::reduce(std::begin(arrayDims), std::end(arrayDims), std::size_t{1}, std::multiplies<>{});
 
         // TODO: implement the following by adding additional copy loops for the remaining elements
-        if (!srcIsAoSoA && flatSize % LanesDst != 0)
+        if(!srcIsAoSoA && flatSize % LanesDst != 0)
             throw std::runtime_error{"Source SoA mapping's total array elements must be evenly divisible by the "
                                      "destination AoSoA Lane count."};
-        if (!dstIsAoSoA && flatSize % LanesSrc != 0)
+        if(!dstIsAoSoA && flatSize % LanesSrc != 0)
             throw std::runtime_error{"Destination SoA mapping's total array elements must be evenly divisible by the "
                                      "source AoSoA Lane count."};
 
@@ -179,7 +180,7 @@ namespace llama
 
         auto mapSrc = [&srcView, &mapAoSoA, &mapSoA](std::size_t flatArrayIndex, auto coord) LLAMA_LAMBDA_INLINE
         {
-            if constexpr (srcIsAoSoA)
+            if constexpr(srcIsAoSoA)
                 return &srcView.storageBlobs[0][0] + mapAoSoA(flatArrayIndex, coord, LanesSrc);
             else
             {
@@ -189,7 +190,7 @@ namespace llama
         };
         auto mapDst = [&dstView, &mapAoSoA, &mapSoA](std::size_t flatArrayIndex, auto coord) LLAMA_LAMBDA_INLINE
         {
-            if constexpr (dstIsAoSoA)
+            if constexpr(dstIsAoSoA)
                 return &dstView.storageBlobs[0][0] + mapAoSoA(flatArrayIndex, coord, LanesDst);
             else
             {
@@ -200,11 +201,11 @@ namespace llama
 
         constexpr auto L = []
         {
-            if constexpr (srcIsAoSoA && dstIsAoSoA)
+            if constexpr(srcIsAoSoA && dstIsAoSoA)
                 return std::gcd(LanesSrc, LanesDst);
             return std::min(LanesSrc, LanesDst);
         }();
-        if (readOpt)
+        if(readOpt)
         {
             // optimized for linear reading
             constexpr auto srcL = srcIsAoSoA ? LanesSrc : L;
@@ -213,20 +214,21 @@ namespace llama
                 const auto start = threadId * elementsPerThread;
                 const auto stop = threadId == threadCount - 1 ? flatSize : (threadId + 1) * elementsPerThread;
 
-                auto copyLBlock = [&](const std::byte*& threadSrc, std::size_t dstIndex, auto coord) LLAMA_LAMBDA_INLINE
+                auto copyLBlock
+                    = [&](const std::byte*& threadSrc, std::size_t dstIndex, auto coord) LLAMA_LAMBDA_INLINE
                 {
                     constexpr auto bytes = L * sizeof(GetType<RecordDim, decltype(coord)>);
                     std::memcpy(mapDst(dstIndex, coord), threadSrc, bytes);
                     threadSrc += bytes;
                 };
-                if constexpr (srcIsAoSoA)
+                if constexpr(srcIsAoSoA)
                 {
                     auto* threadSrc = mapSrc(start, RecordCoord<>{});
-                    for (std::size_t i = start; i < stop; i += LanesSrc)
+                    for(std::size_t i = start; i < stop; i += LanesSrc)
                         forEachLeaf<RecordDim>(
                             [&](auto coord) LLAMA_LAMBDA_INLINE
                             {
-                                for (std::size_t j = 0; j < LanesSrc; j += L)
+                                for(std::size_t j = 0; j < LanesSrc; j += L)
                                     copyLBlock(threadSrc, i + j, coord);
                             });
                 }
@@ -236,7 +238,7 @@ namespace llama
                         [&](auto coord) LLAMA_LAMBDA_INLINE
                         {
                             auto* threadSrc = mapSrc(start, coord);
-                            for (std::size_t i = start; i < stop; i += L)
+                            for(std::size_t i = start; i < stop; i += L)
                                 copyLBlock(threadSrc, i, coord);
                         });
                 }
@@ -257,14 +259,14 @@ namespace llama
                     std::memcpy(threadDst, mapSrc(srcIndex, coord), bytes);
                     threadDst += bytes;
                 };
-                if constexpr (dstIsAoSoA)
+                if constexpr(dstIsAoSoA)
                 {
                     auto* threadDst = mapDst(start, RecordCoord<>{});
-                    for (std::size_t i = start; i < stop; i += LanesDst)
+                    for(std::size_t i = start; i < stop; i += LanesDst)
                         forEachLeaf<RecordDim>(
                             [&](auto coord) LLAMA_LAMBDA_INLINE
                             {
-                                for (std::size_t j = 0; j < LanesDst; j += L)
+                                for(std::size_t j = 0; j < LanesDst; j += L)
                                     copyLBlock(threadDst, i + j, coord);
                             });
                 }
@@ -274,7 +276,7 @@ namespace llama
                         [&](auto coord) LLAMA_LAMBDA_INLINE
                         {
                             auto* threadDst = mapDst(start, coord);
-                            for (std::size_t i = start; i < stop; i += L)
+                            for(std::size_t i = start; i < stop; i += L)
                                 copyLBlock(threadDst, i, coord);
                         });
                 }
@@ -286,27 +288,27 @@ namespace llama
     /// specializations of this construct for specific mappings. Users are encouraged to also specialize this template
     /// with better copy algorithms for further combinations of mappings, if they can and want to provide a better
     /// implementation.
-    template <typename SrcMapping, typename DstMapping, typename SFINAE = void>
+    template<typename SrcMapping, typename DstMapping, typename SFINAE = void>
     struct Copy
     {
-        template <typename SrcView, typename DstView>
+        template<typename SrcView, typename DstView>
         void operator()(const SrcView& srcView, DstView& dstView, std::size_t threadId, std::size_t threadCount) const
         {
             fieldWiseCopy(srcView, dstView, threadId, threadCount);
         }
     };
 
-    template <typename Mapping>
+    template<typename Mapping>
     struct Copy<Mapping, Mapping>
     {
-        template <typename SrcView, typename DstView>
+        template<typename SrcView, typename DstView>
         void operator()(const SrcView& srcView, DstView& dstView, std::size_t threadId, std::size_t threadCount) const
         {
             blobMemcpy(srcView, dstView, threadId, threadCount);
         }
     };
 
-    template <
+    template<
         typename ArrayDims,
         typename RecordDim,
         typename LinearizeArrayDims,
@@ -317,7 +319,7 @@ namespace llama
         mapping::AoSoA<ArrayDims, RecordDim, LanesDst, LinearizeArrayDims>,
         std::enable_if_t<LanesSrc != LanesDst>>
     {
-        template <typename SrcBlob, typename DstBlob>
+        template<typename SrcBlob, typename DstBlob>
         void operator()(
             const View<mapping::AoSoA<ArrayDims, RecordDim, LanesSrc, LinearizeArrayDims>, SrcBlob>& srcView,
             View<mapping::AoSoA<ArrayDims, RecordDim, LanesDst, LinearizeArrayDims>, DstBlob>& dstView,
@@ -329,7 +331,7 @@ namespace llama
         }
     };
 
-    template <
+    template<
         typename ArrayDims,
         typename RecordDim,
         typename LinearizeArrayDims,
@@ -339,7 +341,7 @@ namespace llama
         mapping::AoSoA<ArrayDims, RecordDim, LanesSrc, LinearizeArrayDims>,
         mapping::SoA<ArrayDims, RecordDim, DstSeparateBuffers, LinearizeArrayDims>>
     {
-        template <typename SrcBlob, typename DstBlob>
+        template<typename SrcBlob, typename DstBlob>
         void operator()(
             const View<mapping::AoSoA<ArrayDims, RecordDim, LanesSrc, LinearizeArrayDims>, SrcBlob>& srcView,
             View<mapping::SoA<ArrayDims, RecordDim, DstSeparateBuffers, LinearizeArrayDims>, DstBlob>& dstView,
@@ -351,7 +353,7 @@ namespace llama
         }
     };
 
-    template <
+    template<
         typename ArrayDims,
         typename RecordDim,
         typename LinearizeArrayDims,
@@ -361,7 +363,7 @@ namespace llama
         mapping::SoA<ArrayDims, RecordDim, SrcSeparateBuffers, LinearizeArrayDims>,
         mapping::AoSoA<ArrayDims, RecordDim, LanesDst, LinearizeArrayDims>>
     {
-        template <typename SrcBlob, typename DstBlob>
+        template<typename SrcBlob, typename DstBlob>
         void operator()(
             const View<mapping::SoA<ArrayDims, RecordDim, SrcSeparateBuffers, LinearizeArrayDims>, SrcBlob>& srcView,
             View<mapping::AoSoA<ArrayDims, RecordDim, LanesDst, LinearizeArrayDims>, DstBlob>& dstView,
@@ -377,7 +379,7 @@ namespace llama
     /// dimensions. Delegates to \ref Copy to choose an implementation.
     /// @param threadId Optional. Zero-based id of calling thread for multi-threaded invocations.
     /// @param threadCount Optional. Thread count in case of multi-threaded invocation.
-    template <typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
+    template<typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
     void copy(
         const View<SrcMapping, SrcBlob>& srcView,
         View<DstMapping, DstBlob>& dstView,

@@ -51,7 +51,7 @@ TEST_CASE("mapsNonOverlappingly.AlignedAoS")
 
 namespace
 {
-    template <typename T_ArrayDims, typename T_RecordDim>
+    template<typename T_ArrayDims, typename T_RecordDim>
     struct MapEverythingToZero
     {
         using ArrayDims = T_ArrayDims;
@@ -71,12 +71,12 @@ namespace
         constexpr auto blobSize(std::size_t) const -> std::size_t
         {
             std::size_t arraySize = 1;
-            for (auto i = 0; i < ArrayDims::rank; i++)
+            for(auto i = 0; i < ArrayDims::rank; i++)
                 arraySize *= arrayDimsSize[i];
             return arraySize * llama::sizeOf<RecordDim>;
         }
 
-        template <std::size_t... DDCs>
+        template<std::size_t... DDCs>
         constexpr auto blobNrAndOffset(ArrayDims) const -> llama::NrAndOffset
         {
             return {0, 0};
@@ -102,7 +102,7 @@ namespace
 {
     // maps each element of the record dimension into a separate blobs. Each blob stores Modulus elements. If the array
     // dimensions are larger than Modulus, elements are overwritten.
-    template <typename T_ArrayDims, typename T_RecordDim, std::size_t Modulus>
+    template<typename T_ArrayDims, typename T_RecordDim, std::size_t Modulus>
     struct ModulusMapping
     {
         using ArrayDims = T_ArrayDims;
@@ -124,7 +124,7 @@ namespace
             return Modulus * llama::sizeOf<RecordDim>;
         }
 
-        template <std::size_t... DDCs>
+        template<std::size_t... DDCs>
         constexpr auto blobNrAndOffset(ArrayDims coord) const -> llama::NrAndOffset
         {
             const auto blob = llama::flatRecordCoord<RecordDim, llama::RecordCoord<DDCs...>>;

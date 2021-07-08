@@ -18,7 +18,7 @@ namespace common
     /** Returns a good guess for an optimal number of threads and elements in a
      *  block based on the total number of elements in the block.
      */
-    template <typename T_Acc, std::size_t blockSize, std::size_t hardwareThreads>
+    template<typename T_Acc, std::size_t blockSize, std::size_t hardwareThreads>
     struct ThreadsElemsDistribution
     {
         /// number of elements per thread
@@ -28,7 +28,7 @@ namespace common
     };
 
 #ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
-    template <std::size_t blockSize, std::size_t hardwareThreads, typename T_Dim, typename T_Size>
+    template<std::size_t blockSize, std::size_t hardwareThreads, typename T_Dim, typename T_Size>
     struct ThreadsElemsDistribution<alpaka::AccGpuCudaRt<T_Dim, T_Size>, blockSize, hardwareThreads>
     {
         static constexpr std::size_t elemCount = THREADELEMDIST_MIN_ELEM;
@@ -37,7 +37,7 @@ namespace common
 #endif
 
 #ifdef ALPAKA_ACC_CPU_B_SEQ_T_OMP2_ENABLED
-    template <std::size_t blockSize, std::size_t hardwareThreads, typename T_Dim, typename T_Size>
+    template<std::size_t blockSize, std::size_t hardwareThreads, typename T_Dim, typename T_Size>
     struct ThreadsElemsDistribution<alpaka::AccCpuOmp2Threads<T_Dim, T_Size>, blockSize, hardwareThreads>
     {
         static constexpr std::size_t elemCount = (blockSize + hardwareThreads - 1u) / hardwareThreads;

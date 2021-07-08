@@ -65,7 +65,7 @@ namespace usellama
     >;
     // clang-format on
 
-    template <typename VirtualParticleI, typename VirtualParticleJ>
+    template<typename VirtualParticleI, typename VirtualParticleJ>
     LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticleI& pi, VirtualParticleJ pj)
     {
         auto dist = pi(tag::Pos{}) - pj(tag::Pos{});
@@ -77,41 +77,41 @@ namespace usellama
         pi(tag::Vel{}) += dist * sts;
     }
 
-    template <typename View>
+    template<typename View>
     void update(View& particles)
     {
         LLAMA_INDEPENDENT_DATA
-        for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
+        for(std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
             llama::One<Particle> pi = particles(i);
-            for (std::size_t j = 0; j < PROBLEM_SIZE; ++j)
+            for(std::size_t j = 0; j < PROBLEM_SIZE; ++j)
                 pPInteraction(pi, particles(j));
             particles(i)(tag::Vel{}) = pi(tag::Vel{});
         }
     }
 
-    template <typename View>
+    template<typename View>
     void move(View& particles)
     {
         LLAMA_INDEPENDENT_DATA
-        for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
+        for(std::size_t i = 0; i < PROBLEM_SIZE; i++)
             particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * TIMESTEP;
     }
 
-    template <int Mapping, std::size_t AoSoALanes = 8 /*AVX2*/>
+    template<int Mapping, std::size_t AoSoALanes = 8 /*AVX2*/>
     auto main(std::ostream& plotFile) -> int
     {
         auto mappingName = [](int m) -> std::string
         {
-            if (m == 0)
+            if(m == 0)
                 return "AoS";
-            if (m == 1)
+            if(m == 1)
                 return "SoA";
-            if (m == 2)
+            if(m == 2)
                 return "SoA MB";
-            if (m == 3)
+            if(m == 3)
                 return "AoSoA" + std::to_string(AoSoALanes);
-            if (m == 4)
+            if(m == 4)
                 return "Split SoA";
             std::abort();
         };
@@ -121,15 +121,15 @@ namespace usellama
         auto mapping = [&]
         {
             const auto arrayDims = llama::ArrayDims{PROBLEM_SIZE};
-            if constexpr (Mapping == 0)
+            if constexpr(Mapping == 0)
                 return llama::mapping::AoS{arrayDims, Particle{}};
-            if constexpr (Mapping == 1)
+            if constexpr(Mapping == 1)
                 return llama::mapping::SoA{arrayDims, Particle{}};
-            if constexpr (Mapping == 2)
+            if constexpr(Mapping == 2)
                 return llama::mapping::SoA<decltype(arrayDims), Particle, true>{arrayDims};
-            if constexpr (Mapping == 3)
+            if constexpr(Mapping == 3)
                 return llama::mapping::AoSoA<decltype(arrayDims), Particle, AoSoALanes>{arrayDims};
-            if constexpr (Mapping == 4)
+            if constexpr(Mapping == 4)
                 return llama::mapping::Split<
                     decltype(arrayDims),
                     Particle,
@@ -138,12 +138,12 @@ namespace usellama
                     llama::mapping::PreconfiguredSoA<>::type,
                     true>{arrayDims};
         }();
-        if constexpr (DUMP_MAPPING)
+        if constexpr(DUMP_MAPPING)
             std::ofstream(title + ".svg") << llama::toSvg(mapping);
 
         auto tmapping = [&]
         {
-            if constexpr (TRACE)
+            if constexpr(TRACE)
                 return llama::mapping::Trace{std::move(mapping)};
             else
                 return std::move(mapping);
@@ -151,7 +151,7 @@ namespace usellama
 
         auto hmapping = [&]
         {
-            if constexpr (HEATMAP)
+            if constexpr(HEATMAP)
                 return llama::mapping::Heatmap{std::move(tmapping)};
             else
                 return std::move(tmapping);
@@ -162,7 +162,7 @@ namespace usellama
 
         std::default_random_engine engine;
         std::normal_distribution<FP> dist(FP(0), FP(1));
-        for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+        for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
         {
             auto p = particles(i);
             p(tag::Pos{}, tag::X{}) = dist(engine);
@@ -177,9 +177,9 @@ namespace usellama
 
         double sumUpdate = 0;
         double sumMove = 0;
-        for (std::size_t s = 0; s < STEPS; ++s)
+        for(std::size_t s = 0; s < STEPS; ++s)
         {
-            if constexpr (RUN_UPATE)
+            if constexpr(RUN_UPATE)
             {
                 update(particles);
                 sumUpdate += watch.printAndReset("update", '\t');
@@ -189,7 +189,7 @@ namespace usellama
         }
         plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
-        if constexpr (HEATMAP)
+        if constexpr(HEATMAP)
             std::ofstream("nbody_heatmap_" + mappingName(Mapping) + ".sh") << particles.mapping.toGnuplotScript();
 
         return 0;
@@ -276,11 +276,11 @@ namespace manualAoS
     void update(Particle* particles)
     {
         LLAMA_INDEPENDENT_DATA
-        for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
+        for(std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
             Particle pi = particles[i];
             LLAMA_INDEPENDENT_DATA
-            for (std::size_t j = 0; j < PROBLEM_SIZE; ++j)
+            for(std::size_t j = 0; j < PROBLEM_SIZE; ++j)
                 pPInteraction(pi, particles[j]);
             particles[i].vel = pi.vel;
         }
@@ -289,7 +289,7 @@ namespace manualAoS
     void move(Particle* particles)
     {
         LLAMA_INDEPENDENT_DATA
-        for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
+        for(std::size_t i = 0; i < PROBLEM_SIZE; i++)
             particles[i].pos += particles[i].vel * TIMESTEP;
     }
 
@@ -304,7 +304,7 @@ namespace manualAoS
 
         std::default_random_engine engine;
         std::normal_distribution<FP> dist(FP(0), FP(1));
-        for (auto& p : particles)
+        for(auto& p : particles)
         {
             p.pos.x = dist(engine);
             p.pos.y = dist(engine);
@@ -318,9 +318,9 @@ namespace manualAoS
 
         double sumUpdate = 0;
         double sumMove = 0;
-        for (std::size_t s = 0; s < STEPS; ++s)
+        for(std::size_t s = 0; s < STEPS; ++s)
         {
-            if constexpr (RUN_UPATE)
+            if constexpr(RUN_UPATE)
             {
                 update(particles.data());
                 sumUpdate += watch.printAndReset("update", '\t');
@@ -366,7 +366,7 @@ namespace manualSoA
     void update(FP* posx, FP* posy, FP* posz, FP* velx, FP* vely, FP* velz, FP* mass)
     {
         LLAMA_INDEPENDENT_DATA
-        for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
+        for(std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
             const FP piposx = posx[i];
             const FP piposy = posy[i];
@@ -374,7 +374,7 @@ namespace manualSoA
             FP pivelx = velx[i];
             FP pively = vely[i];
             FP pivelz = velz[i];
-            for (std::size_t j = 0; j < PROBLEM_SIZE; ++j)
+            for(std::size_t j = 0; j < PROBLEM_SIZE; ++j)
                 pPInteraction(piposx, piposy, piposz, pivelx, pively, pivelz, posx[j], posy[j], posz[j], mass[j]);
             velx[i] = pivelx;
             vely[i] = pively;
@@ -385,7 +385,7 @@ namespace manualSoA
     void move(FP* posx, FP* posy, FP* posz, const FP* velx, const FP* vely, const FP* velz)
     {
         LLAMA_INDEPENDENT_DATA
-        for (std::size_t i = 0; i < PROBLEM_SIZE; i++)
+        for(std::size_t i = 0; i < PROBLEM_SIZE; i++)
         {
             posx[i] += velx[i] * TIMESTEP;
             posy[i] += vely[i] * TIMESTEP;
@@ -411,7 +411,7 @@ namespace manualSoA
 
         std::default_random_engine engine;
         std::normal_distribution<FP> dist(FP(0), FP(1));
-        for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+        for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
         {
             posx[i] = dist(engine);
             posy[i] = dist(engine);
@@ -425,9 +425,9 @@ namespace manualSoA
 
         double sumUpdate = 0;
         double sumMove = 0;
-        for (std::size_t s = 0; s < STEPS; ++s)
+        for(std::size_t s = 0; s < STEPS; ++s)
         {
-            if constexpr (RUN_UPATE)
+            if constexpr(RUN_UPATE)
             {
                 update(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), mass.data());
                 sumUpdate += watch.printAndReset("update", '\t');
@@ -443,7 +443,7 @@ namespace manualSoA
 
 namespace manualAoSoA
 {
-    template <std::size_t Lanes>
+    template<std::size_t Lanes>
     struct alignas(64) ParticleBlock
     {
         struct
@@ -488,18 +488,18 @@ namespace manualAoSoA
         pivelz += zdistance * sts;
     }
 
-    template <std::size_t Lanes>
+    template<std::size_t Lanes>
     void update(ParticleBlock<Lanes>* particles)
     {
         constexpr auto blocks = PROBLEM_SIZE / Lanes;
-        for (std::size_t bi = 0; bi < blocks; bi++)
+        for(std::size_t bi = 0; bi < blocks; bi++)
         {
             auto blockI = particles[bi];
-            for (std::size_t bj = 0; bj < blocks; bj++)
-                for (std::size_t j = 0; j < Lanes; j++)
+            for(std::size_t bj = 0; bj < blocks; bj++)
+                for(std::size_t j = 0; j < Lanes; j++)
                 {
                     LLAMA_INDEPENDENT_DATA
-                    for (std::size_t i = 0; i < Lanes; i++)
+                    for(std::size_t i = 0; i < Lanes; i++)
                     {
                         const auto& blockJ = particles[bj];
                         pPInteraction(
@@ -520,22 +520,22 @@ namespace manualAoSoA
         }
     }
 
-    template <std::size_t Lanes>
+    template<std::size_t Lanes>
     void updateTiled(ParticleBlock<Lanes>* particles)
     {
         constexpr auto blocks = PROBLEM_SIZE / Lanes;
         constexpr auto blocksPerTile = 128; // L1D_SIZE / sizeof(ParticleBlock<Lanes>);
         static_assert(blocks % blocksPerTile == 0);
-        for (std::size_t ti = 0; ti < blocks / blocksPerTile; ti++)
-            for (std::size_t tj = 0; tj < blocks / blocksPerTile; tj++)
-                for (std::size_t bi = 0; bi < blocksPerTile; bi++)
+        for(std::size_t ti = 0; ti < blocks / blocksPerTile; ti++)
+            for(std::size_t tj = 0; tj < blocks / blocksPerTile; tj++)
+                for(std::size_t bi = 0; bi < blocksPerTile; bi++)
                 {
                     auto blockI = particles[ti * blocksPerTile + bi];
-                    for (std::size_t bj = 0; bj < blocksPerTile; bj++)
-                        for (std::size_t j = 0; j < Lanes; j++)
+                    for(std::size_t bj = 0; bj < blocksPerTile; bj++)
+                        for(std::size_t j = 0; j < Lanes; j++)
                         {
                             LLAMA_INDEPENDENT_DATA
-                            for (std::size_t i = 0; i < Lanes; i++)
+                            for(std::size_t i = 0; i < Lanes; i++)
                             {
                                 const auto& blockJ = particles[tj * blocksPerTile + bj];
                                 pPInteraction(
@@ -555,14 +555,14 @@ namespace manualAoSoA
                 }
     }
 
-    template <std::size_t Lanes>
+    template<std::size_t Lanes>
     void move(ParticleBlock<Lanes>* particles)
     {
         constexpr auto blocks = PROBLEM_SIZE / Lanes;
-        for (std::size_t bi = 0; bi < blocks; bi++)
+        for(std::size_t bi = 0; bi < blocks; bi++)
         {
             LLAMA_INDEPENDENT_DATA
-            for (std::size_t i = 0; i < Lanes; ++i)
+            for(std::size_t i = 0; i < Lanes; ++i)
             {
                 auto& block = particles[bi];
                 block.pos.x[i] += block.vel.x[i] * TIMESTEP;
@@ -572,11 +572,11 @@ namespace manualAoSoA
         }
     }
 
-    template <std::size_t Lanes>
+    template<std::size_t Lanes>
     auto main(std::ostream& plotFile, bool tiled) -> int
     {
         auto title = "AoSoA" + std::to_string(Lanes);
-        if (tiled)
+        if(tiled)
             title += " tiled";
         std::cout << title << "\n";
         Stopwatch watch;
@@ -588,10 +588,10 @@ namespace manualAoSoA
 
         std::default_random_engine engine;
         std::normal_distribution<FP> dist(FP(0), FP(1));
-        for (std::size_t bi = 0; bi < blocks; ++bi)
+        for(std::size_t bi = 0; bi < blocks; ++bi)
         {
             auto& block = particles[bi];
-            for (std::size_t i = 0; i < Lanes; ++i)
+            for(std::size_t i = 0; i < Lanes; ++i)
             {
                 block.pos.x[i] = dist(engine);
                 block.pos.y[i] = dist(engine);
@@ -606,11 +606,11 @@ namespace manualAoSoA
 
         double sumUpdate = 0;
         double sumMove = 0;
-        for (std::size_t s = 0; s < STEPS; ++s)
+        for(std::size_t s = 0; s < STEPS; ++s)
         {
-            if constexpr (RUN_UPATE)
+            if constexpr(RUN_UPATE)
             {
-                if (tiled)
+                if(tiled)
                     updateTiled(particles.data());
                 else
                     update(particles.data());
@@ -677,10 +677,10 @@ namespace manualAoSoA_manualAVX
         const __m256 distSixth = _mm256_mul_ps(_mm256_mul_ps(distSqr, distSqr), distSqr);
         const __m256 invDistCube = [&]
         {
-            if constexpr (ALLOW_RSQRT)
+            if constexpr(ALLOW_RSQRT)
             {
                 const __m256 r = _mm256_rsqrt_ps(distSixth);
-                if constexpr (NEWTON_RAPHSON_AFTER_RSQRT)
+                if constexpr(NEWTON_RAPHSON_AFTER_RSQRT)
                 {
                     // from: http://stackoverflow.com/q/14752399/556899
                     const __m256 three = _mm256_set1_ps(3.0f);
@@ -703,7 +703,7 @@ namespace manualAoSoA_manualAVX
     // update (read/write) 8 particles I based on the influence of 1 particle J
     void update8(ParticleBlock* particles)
     {
-        for (std::size_t bi = 0; bi < BLOCKS; bi++)
+        for(std::size_t bi = 0; bi < BLOCKS; bi++)
         {
             auto& blockI = particles[bi];
             const __m256 piposx = _mm256_load_ps(&blockI.pos.x[0]);
@@ -713,8 +713,8 @@ namespace manualAoSoA_manualAVX
             __m256 pively = _mm256_load_ps(&blockI.vel.y[0]);
             __m256 pivelz = _mm256_load_ps(&blockI.vel.z[0]);
 
-            for (std::size_t bj = 0; bj < BLOCKS; bj++)
-                for (std::size_t j = 0; j < LANES; j++)
+            for(std::size_t bj = 0; bj < BLOCKS; bj++)
+                for(std::size_t j = 0; j < LANES; j++)
                 {
                     const auto& blockJ = particles[bj];
                     const __m256 posxJ = _mm256_broadcast_ss(&blockJ.pos.x[j]);
@@ -748,8 +748,8 @@ namespace manualAoSoA_manualAVX
     // update (read/write) 1 particles I based on the influence of 8 particles J with accumulator
     void update1(ParticleBlock* particles)
     {
-        for (std::size_t bi = 0; bi < BLOCKS; bi++)
-            for (std::size_t i = 0; i < LANES; i++)
+        for(std::size_t bi = 0; bi < BLOCKS; bi++)
+            for(std::size_t i = 0; i < LANES; i++)
             {
                 auto& blockI = particles[bi];
                 const __m256 piposx = _mm256_broadcast_ss(&blockI.pos.x[i]);
@@ -759,7 +759,7 @@ namespace manualAoSoA_manualAVX
                 __m256 pively = _mm256_broadcast_ss(&blockI.vel.y[i]);
                 __m256 pivelz = _mm256_broadcast_ss(&blockI.vel.z[i]);
 
-                for (std::size_t bj = 0; bj < BLOCKS; bj++)
+                for(std::size_t bj = 0; bj < BLOCKS; bj++)
                 {
                     const auto& blockJ = particles[bj];
                     const __m256 pjposx = _mm256_load_ps(&blockJ.pos.x[0]);
@@ -777,7 +777,7 @@ namespace manualAoSoA_manualAVX
 
     void move(ParticleBlock* particles)
     {
-        for (std::size_t bi = 0; bi < BLOCKS; bi++)
+        for(std::size_t bi = 0; bi < BLOCKS; bi++)
         {
             auto& block = particles[bi];
             _mm256_store_ps(
@@ -803,10 +803,10 @@ namespace manualAoSoA_manualAVX
 
         std::default_random_engine engine;
         std::normal_distribution<FP> dist(FP(0), FP(1));
-        for (std::size_t bi = 0; bi < BLOCKS; ++bi)
+        for(std::size_t bi = 0; bi < BLOCKS; ++bi)
         {
             auto& block = particles[bi];
-            for (std::size_t i = 0; i < LANES; ++i)
+            for(std::size_t i = 0; i < LANES; ++i)
             {
                 block.pos.x[i] = dist(engine);
                 block.pos.y[i] = dist(engine);
@@ -821,11 +821,11 @@ namespace manualAoSoA_manualAVX
 
         double sumUpdate = 0;
         double sumMove = 0;
-        for (std::size_t s = 0; s < STEPS; ++s)
+        for(std::size_t s = 0; s < STEPS; ++s)
         {
-            if constexpr (RUN_UPATE)
+            if constexpr(RUN_UPATE)
             {
-                if (useUpdate1)
+                if(useUpdate1)
                     update1(particles.data());
                 else
                     update8(particles.data());
@@ -846,7 +846,7 @@ namespace manualAoSoA_manualAVX
 
 namespace manualAoSoA_Vc
 {
-    template <typename vec>
+    template<typename vec>
     struct alignas(32) ParticleBlock
     {
         struct
@@ -859,7 +859,7 @@ namespace manualAoSoA_Vc
     };
 
 
-    template <typename vec>
+    template<typename vec>
     inline void pPInteraction(
         vec piposx,
         vec piposy,
@@ -882,10 +882,10 @@ namespace manualAoSoA_Vc
         const vec distSixth = distSqr * distSqr * distSqr;
         const vec invDistCube = [&]
         {
-            if constexpr (ALLOW_RSQRT)
+            if constexpr(ALLOW_RSQRT)
             {
                 const vec r = Vc::rsqrt(distSixth);
-                if constexpr (NEWTON_RAPHSON_AFTER_RSQRT)
+                if constexpr(NEWTON_RAPHSON_AFTER_RSQRT)
                 {
                     // from: http://stackoverflow.com/q/14752399/556899
                     const vec three = 3.0f;
@@ -905,14 +905,14 @@ namespace manualAoSoA_Vc
         pivelz = zdistanceSqr * sts + pivelz;
     }
 
-    template <typename vec>
+    template<typename vec>
     void update8(ParticleBlock<vec>* particles, int threads)
     {
         constexpr auto LANES = vec::size();
         constexpr auto BLOCKS = PROBLEM_SIZE / LANES;
 
 #    pragma omp parallel for schedule(static) num_threads(threads)
-        for (std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
+        for(std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
         {
             auto& blockI = particles[bi];
             // std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& blockI) {
@@ -923,8 +923,8 @@ namespace manualAoSoA_Vc
             vec pively = blockI.vel.y;
             vec pivelz = blockI.vel.z;
 
-            for (std::size_t bj = 0; bj < BLOCKS; bj++)
-                for (std::size_t j = 0; j < LANES; j++)
+            for(std::size_t bj = 0; bj < BLOCKS; bj++)
+                for(std::size_t j = 0; j < LANES; j++)
                 {
                     const auto& blockJ = particles[bj];
                     const vec pjposx = blockJ.pos.x[j];
@@ -942,7 +942,7 @@ namespace manualAoSoA_Vc
         }
     }
 
-    template <typename vec>
+    template<typename vec>
     void update8Tiled(ParticleBlock<vec>* particles, int threads)
     {
         constexpr auto LANES = vec::size();
@@ -951,8 +951,8 @@ namespace manualAoSoA_Vc
         constexpr auto blocksPerTile = 128; // L1D_SIZE / sizeof(ParticleBlock);
         static_assert(BLOCKS % blocksPerTile == 0);
 #    pragma omp parallel for schedule(static) num_threads(threads)
-        for (std::ptrdiff_t ti = 0; ti < BLOCKS / blocksPerTile; ti++)
-            for (std::size_t bi = 0; bi < blocksPerTile; bi++)
+        for(std::ptrdiff_t ti = 0; ti < BLOCKS / blocksPerTile; ti++)
+            for(std::size_t bi = 0; bi < blocksPerTile; bi++)
             {
                 auto& blockI = particles[bi];
                 const vec piposx = blockI.pos.x;
@@ -961,9 +961,9 @@ namespace manualAoSoA_Vc
                 vec pivelx = blockI.vel.x;
                 vec pively = blockI.vel.y;
                 vec pivelz = blockI.vel.z;
-                for (std::size_t tj = 0; tj < BLOCKS / blocksPerTile; tj++)
-                    for (std::size_t bj = 0; bj < blocksPerTile; bj++)
-                        for (std::size_t j = 0; j < LANES; j++)
+                for(std::size_t tj = 0; tj < BLOCKS / blocksPerTile; tj++)
+                    for(std::size_t bj = 0; bj < blocksPerTile; bj++)
+                        for(std::size_t j = 0; j < LANES; j++)
                         {
                             const auto& blockJ = particles[bj];
                             const vec pjposx = blockJ.pos.x[j];
@@ -990,18 +990,18 @@ namespace manualAoSoA_Vc
             }
     }
 
-    template <typename vec>
+    template<typename vec>
     void update1(ParticleBlock<vec>* particles, int threads)
     {
         constexpr auto LANES = vec::size();
         constexpr auto BLOCKS = PROBLEM_SIZE / LANES;
 
 #    pragma omp parallel for schedule(static) num_threads(threads)
-        for (std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
+        for(std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
         {
             auto& blockI = particles[bi];
             // std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& blockI) {
-            for (std::size_t i = 0; i < LANES; i++)
+            for(std::size_t i = 0; i < LANES; i++)
             {
                 const vec piposx = static_cast<FP>(blockI.pos.x[i]);
                 const vec piposy = static_cast<FP>(blockI.pos.y[i]);
@@ -1010,7 +1010,7 @@ namespace manualAoSoA_Vc
                 vec pively = static_cast<FP>(blockI.vel.y[i]);
                 vec pivelz = static_cast<FP>(blockI.vel.z[i]);
 
-                for (std::size_t bj = 0; bj < BLOCKS; bj++)
+                for(std::size_t bj = 0; bj < BLOCKS; bj++)
                 {
                     const auto& blockJ = particles[bj];
                     pPInteraction(
@@ -1034,13 +1034,13 @@ namespace manualAoSoA_Vc
         }
     }
 
-    template <typename vec>
+    template<typename vec>
     void move(ParticleBlock<vec>* particles, int threads)
     {
         constexpr auto BLOCKS = PROBLEM_SIZE / vec::size();
 
 #    pragma omp parallel for schedule(static) num_threads(threads)
-        for (std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
+        for(std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
         {
             // std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& block) {
             auto& block = particles[bi];
@@ -1051,13 +1051,13 @@ namespace manualAoSoA_Vc
         }
     }
 
-    template <typename vec>
+    template<typename vec>
     auto main(std::ostream& plotFile, int threads, bool useUpdate1, bool tiled = false) -> int
     {
         auto title = "AoSoA" + std::to_string(vec::size()) + " Vc" + (useUpdate1 ? " w1r8" : " w8r1"); // NOLINT
-        if (tiled)
+        if(tiled)
             title += " tiled";
-        if (threads > 1)
+        if(threads > 1)
             title += " " + std::to_string(threads) + "Thrds";
 
         std::cout << title << '\n';
@@ -1070,10 +1070,10 @@ namespace manualAoSoA_Vc
 
         std::default_random_engine engine;
         std::normal_distribution<FP> dist(FP(0), FP(1));
-        for (std::size_t bi = 0; bi < BLOCKS; ++bi)
+        for(std::size_t bi = 0; bi < BLOCKS; ++bi)
         {
             auto& block = particles[bi];
-            for (std::size_t i = 0; i < vec::size(); ++i)
+            for(std::size_t i = 0; i < vec::size(); ++i)
             {
                 block.pos.x[i] = dist(engine);
                 block.pos.y[i] = dist(engine);
@@ -1088,15 +1088,15 @@ namespace manualAoSoA_Vc
 
         double sumUpdate = 0;
         double sumMove = 0;
-        for (std::size_t s = 0; s < STEPS; ++s)
+        for(std::size_t s = 0; s < STEPS; ++s)
         {
-            if constexpr (RUN_UPATE)
+            if constexpr(RUN_UPATE)
             {
-                if (useUpdate1)
+                if(useUpdate1)
                     update1(particles.data(), threads);
                 else
                 {
-                    if (tiled)
+                    if(tiled)
                         update8Tiled(particles.data(), threads);
                     else
                         update8(particles.data(), threads);
@@ -1117,18 +1117,18 @@ namespace manualAoS_Vc
     using manualAoS::Particle;
     using manualAoSoA_Vc::pPInteraction;
 
-    template <typename vec>
+    template<typename vec>
     const auto particleGatherScatterStrides = typename vec::IndexType{Vc::IndexesFromZero} *
         typename vec::IndexType::value_type{sizeof(Particle) / sizeof(FP)};
 
-    template <typename vec>
+    template<typename vec>
     void update(Particle* particles, int threads)
     {
         constexpr auto LANES = vec::size();
         const auto strides = particleGatherScatterStrides<vec>;
 
 #    pragma omp parallel for schedule(static) num_threads(threads)
-        for (std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += LANES)
+        for(std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += LANES)
         {
             // gather
             auto& pi = particles[i];
@@ -1139,7 +1139,7 @@ namespace manualAoS_Vc
             vec pively = vec(&pi.vel.y, strides);
             vec pivelz = vec(&pi.vel.z, strides);
 
-            for (std::size_t j = 0; j < PROBLEM_SIZE; j++)
+            for(std::size_t j = 0; j < PROBLEM_SIZE; j++)
             {
                 const auto& pj = particles[j];
                 const vec pjposx = pj.pos.x;
@@ -1157,14 +1157,14 @@ namespace manualAoS_Vc
         }
     }
 
-    template <typename vec>
+    template<typename vec>
     void move(Particle* particles, int threads)
     {
         constexpr auto LANES = vec::size();
         const auto strides = particleGatherScatterStrides<vec>;
 
 #    pragma omp parallel for schedule(static) num_threads(threads)
-        for (std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += LANES)
+        for(std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += LANES)
         {
             auto& pi = particles[i];
             (vec(&pi.pos.x, strides) + vec(&pi.vel.x, strides) * TIMESTEP).scatter(&pi.pos.x, strides);
@@ -1173,11 +1173,11 @@ namespace manualAoS_Vc
         }
     }
 
-    template <typename vec>
+    template<typename vec>
     auto main(std::ostream& plotFile, int threads) -> int
     {
         auto title = "AoS Vc"s;
-        if (threads > 1)
+        if(threads > 1)
             title += " " + std::to_string(threads) + "Thrds";
         std::cout << title << '\n';
         Stopwatch watch;
@@ -1187,7 +1187,7 @@ namespace manualAoS_Vc
 
         std::default_random_engine engine;
         std::normal_distribution<FP> dist(FP(0), FP(1));
-        for (auto& p : particles)
+        for(auto& p : particles)
         {
             p.pos.x = dist(engine);
             p.pos.y = dist(engine);
@@ -1201,9 +1201,9 @@ namespace manualAoS_Vc
 
         double sumUpdate = 0;
         double sumMove = 0;
-        for (std::size_t s = 0; s < STEPS; ++s)
+        for(std::size_t s = 0; s < STEPS; ++s)
         {
-            if constexpr (RUN_UPATE)
+            if constexpr(RUN_UPATE)
             {
                 update<vec>(particles.data(), threads);
                 sumUpdate += watch.printAndReset("update", '\t');
@@ -1221,7 +1221,7 @@ namespace manualSoA_Vc
 {
     using manualAoSoA_Vc::pPInteraction;
 
-    template <typename vec>
+    template<typename vec>
     void update(
         const FP* posx,
         const FP* posy,
@@ -1233,7 +1233,7 @@ namespace manualSoA_Vc
         int threads)
     {
 #    pragma omp parallel for schedule(static) num_threads(threads)
-        for (std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += vec::size())
+        for(std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += vec::size())
         {
             const vec piposx = vec(posx + i);
             const vec piposy = vec(posy + i);
@@ -1241,7 +1241,7 @@ namespace manualSoA_Vc
             vec pivelx = vec(velx + i);
             vec pively = vec(vely + i);
             vec pivelz = vec(velz + i);
-            for (std::size_t j = 0; j < PROBLEM_SIZE; ++j)
+            for(std::size_t j = 0; j < PROBLEM_SIZE; ++j)
                 pPInteraction(
                     piposx,
                     piposy,
@@ -1259,11 +1259,11 @@ namespace manualSoA_Vc
         }
     }
 
-    template <typename vec>
+    template<typename vec>
     void move(FP* posx, FP* posy, FP* posz, const FP* velx, const FP* vely, const FP* velz, int threads)
     {
 #    pragma omp parallel for schedule(static) num_threads(threads)
-        for (std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += vec::size())
+        for(std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += vec::size())
         {
             (vec(posx + i) + vec(velx + i) * TIMESTEP).store(posx + i);
             (vec(posy + i) + vec(vely + i) * TIMESTEP).store(posy + i);
@@ -1271,11 +1271,11 @@ namespace manualSoA_Vc
         }
     }
 
-    template <typename vec>
+    template<typename vec>
     auto main(std::ostream& plotFile, int threads) -> int
     {
         auto title = "SoA Vc"s;
-        if (threads > 1)
+        if(threads > 1)
             title += " " + std::to_string(threads) + "Thrds";
         std::cout << title << '\n';
         Stopwatch watch;
@@ -1292,7 +1292,7 @@ namespace manualSoA_Vc
 
         std::default_random_engine engine;
         std::normal_distribution<FP> dist(FP(0), FP(1));
-        for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+        for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
         {
             posx[i] = dist(engine);
             posy[i] = dist(engine);
@@ -1306,9 +1306,9 @@ namespace manualSoA_Vc
 
         double sumUpdate = 0;
         double sumMove = 0;
-        for (std::size_t s = 0; s < STEPS; ++s)
+        for(std::size_t s = 0; s < STEPS; ++s)
         {
-            if constexpr (RUN_UPATE)
+            if constexpr(RUN_UPATE)
             {
                 update<vec>(
                     posx.data(),
@@ -1393,8 +1393,8 @@ $data << EOD
         [&](auto i)
         {
             // only AoSoA (3) needs lanes
-            using Lanes
-                = std::conditional_t<decltype(i)::value == 3, mp_list_c<std::size_t, 8, 16>, mp_list_c<std::size_t, 0>>;
+            using Lanes = std::
+                conditional_t<decltype(i)::value == 3, mp_list_c<std::size_t, 8, 16>, mp_list_c<std::size_t, 0>>;
             mp_for_each<Lanes>([&, i](auto lanes)
                                { r += usellama::main<decltype(i)::value, decltype(lanes)::value>(plotFile); });
         });
@@ -1413,7 +1413,7 @@ $data << EOD
     r += manualAoSoA_manualAVX::main(plotFile, false);
 #endif
 #if __has_include(<Vc/Vc>)
-    for (int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
+    for(int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
     {
         // for (auto useUpdate1 : {false, true})
         //    for (auto tiled : {false, true})
@@ -1424,14 +1424,14 @@ $data << EOD
         //    }
         r += manualAoSoA_Vc::main<vec>(plotFile, threads, false, false);
     }
-    for (int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
+    for(int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
     {
         // mp_for_each<mp_list_c<std::size_t, 1, 2, 4, 8, 16>>(
         //    [&](auto lanes) { r += manualAoS_Vc::main<Vc::SimdArray<FP, decltype(lanes)::value>>(plotFile, threads);
         //    });
         r += manualAoS_Vc::main<vec>(plotFile, threads);
     }
-    for (int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
+    for(int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
         r += manualSoA_Vc::main<vec>(plotFile, threads);
 #endif
 
@@ -1442,7 +1442,7 @@ plot $data using 2:xtic(1) ti col axis x1y1, "" using 3 ti col axis x1y2
 
     return r;
 }
-catch (const std::exception& e)
+catch(const std::exception& e)
 {
     std::cerr << "Exception: " << e.what() << '\n';
 }
