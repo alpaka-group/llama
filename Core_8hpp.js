@@ -47,7 +47,7 @@ var Core_8hpp =
     [ "mp_for_each_inlined", "Core_8hpp.html#af16d07d01be7acc8ced82a040bac87da", null ],
     [ "offsetOfImplWorkaround", "Core_8hpp.html#a73eb0087b689dae5f64d631484cb9aeb", null ],
     [ "roundUpToMultiple", "Core_8hpp.html#a365660e6c469c94566ee7fa45aa3e262", null ],
-    [ "sizeOfImpl", "Core_8hpp.html#a8a922a0fff3233e8c219c4037a36273d", null ],
+    [ "sizeOfImpl", "Core_8hpp.html#aeab53e4609fe07abfb6f5f2d532cd388", null ],
     [ "structName", "Core_8hpp.html#a86a72929fc8c71b9aa2b514a74ab34eb", null ],
     [ "flatFieldCount", "Core_8hpp.html#aa6c960189f5edc242be631e2e8757914", null ],
     [ "flatFieldCount< Child[N]>", "Core_8hpp.html#a0cf4c61546502674c83b7e32611aca4d", null ],
@@ -60,7 +60,7 @@ var Core_8hpp =
     [ "flatRecordCoord< Child[N], RecordCoord< I, Is... > >", "Core_8hpp.html#aef46edda82bf9ef35a2d461b77b5911f", null ],
     [ "flatRecordCoord< Record< Children... >, RecordCoord< I, Is... > >", "Core_8hpp.html#a49085229ed957d67678ce1e04c704e67", null ],
     [ "flatRecordCoord< T, RecordCoord<> >", "Core_8hpp.html#a03ce8695c9b67882c44356056ad3156d", null ],
-    [ "flatSizeOf", "Core_8hpp.html#a9d1c60ad5529635b678544cc8e451f8c", null ],
+    [ "flatSizeOf", "Core_8hpp.html#ac8f48517b46c35c1a511273f08d2abb3", null ],
     [ "hasSameTags", "Core_8hpp.html#a39d280955e5b9deb36f6c8fa1124ca2b", null ],
     [ "isAllowedFieldType", "Core_8hpp.html#acca32b49e2be7c3c136e940939c531ae", null ],
     [ "isRecord", "Core_8hpp.html#a3b2aa8fd3e43e43b830bc4a71b180175", null ],
@@ -68,6 +68,6 @@ var Core_8hpp =
     [ "offsetOf", "Core_8hpp.html#aae03df933faef61723569d4655563bbe", null ],
     [ "offsetOfImpl", "Core_8hpp.html#aa2299e5867f7c90d4c67225474bd27a8", null ],
     [ "offsetOfImpl< Align, TypeList, 0 >", "Core_8hpp.html#ae1f7c19ca39d418ef7d866f6d41e41ea", null ],
-    [ "sizeOf", "Core_8hpp.html#a421aea0c56a990358d138e4958313bbe", null ],
-    [ "sizeOf< Record< Fields... >, Align >", "Core_8hpp.html#af6bad179c5383f7f2d31edeb78e7a7fe", null ]
+    [ "sizeOf", "Core_8hpp.html#a2404e09083dc2c685bc283cd4ead0edc", null ],
+    [ "sizeOf< Record< Fields... >, Align, IncludeTailPadding >", "Core_8hpp.html#a585d55cd3a51152ec452bc1f2d49a3ec", null ]
 ];

@@ -98,7 +98,7 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 : <a class="el" href="structllama_1_1mapping_1_1AoS.html#a0bc172e9f1dfbee5c9f92edd416e69d5">llama::mapping::AoS&lt; T_ArrayDims, T_RecordDim, AlignAndPad, T_LinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a7ec49e5e8864c580b96c85cc0c421bc4">llama::mapping::AoSoA&lt; T_ArrayDims, T_RecordDim, Lanes, T_LinearizeArrayDimsFunctor &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Heatmap.html#af7529e58f295a66c8026b3e0e8034b51">llama::mapping::Heatmap&lt; Mapping, CountType &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1One.html#a72ba4dc40a1e0e6ef196274bb874b506">llama::mapping::One&lt; T_ArrayDims, T_RecordDim &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1One.html#a98a9e8555df35871a4e323f331a273ed">llama::mapping::One&lt; T_ArrayDims, T_RecordDim, AlignAndPad, FlattenRecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1SoA.html#a27a1b41104405a5d6fcbb4aec5e8d1fe">llama::mapping::SoA&lt; T_ArrayDims, T_RecordDim, SeparateBuffers, T_LinearizeArrayDimsFunctor &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Split.html#a1349c29b59f5814b85605d7c38a2cba5">llama::mapping::Split&lt; T_ArrayDims, T_RecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Trace.html#ad8d4678361a2ab1ab1321ebab79f7351">llama::mapping::Trace&lt; Mapping &gt;</a>
@@ -226,7 +226,7 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 : <a class="el" href="structllama_1_1mapping_1_1AoS.html#abf0ed284c0cb6b5e16c101e20bb3019d">llama::mapping::AoS&lt; T_ArrayDims, T_RecordDim, AlignAndPad, T_LinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a82a52c7aabd8c171d3c3d27224f4eef7">llama::mapping::AoSoA&lt; T_ArrayDims, T_RecordDim, Lanes, T_LinearizeArrayDimsFunctor &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Heatmap.html#ae2fd102c11592cdf9245df997fad0aa9">llama::mapping::Heatmap&lt; Mapping, CountType &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1One.html#a8ed56e8967e5ac96e7e3bda41be0be25">llama::mapping::One&lt; T_ArrayDims, T_RecordDim &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1One.html#a8cab0377b73780693bade9fdc720e0d4">llama::mapping::One&lt; T_ArrayDims, T_RecordDim, AlignAndPad, FlattenRecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1SoA.html#a4d45abf5607e7fcd86e914ed0e07e9c9">llama::mapping::SoA&lt; T_ArrayDims, T_RecordDim, SeparateBuffers, T_LinearizeArrayDimsFunctor &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Split.html#a5f1ad8a6e3a007c42624b6db4c752f11">llama::mapping::Split&lt; T_ArrayDims, T_RecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Trace.html#a2cda914e6fd4df3ae6e44c05acc4facf">llama::mapping::Trace&lt; Mapping &gt;</a>
@@ -310,6 +310,7 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 <h3><a id="index_v"></a>- v -</h3><ul>
 <li>value_type
 : <a class="el" href="structllama_1_1Array.html#a0774edd854887549deb6cd3b7c606af8">llama::Array&lt; T, N &gt;</a>
+, <a class="el" href="structllama_1_1Array_3_01T_00_010_01_4.html#a1efa9138d873ccd7ea49c2d60b8f1bde">llama::Array&lt; T, 0 &gt;</a>
 , <a class="el" href="structllama_1_1ArrayDimsIndexIterator.html#ae562302fa78c388f4fce63dcd3e2f247">llama::ArrayDimsIndexIterator&lt; Dim &gt;</a>
 , <a class="el" href="structllama_1_1bloballoc_1_1AlignedAllocator.html#a5c4611d39117e5bef57bf756e5e80a1b">llama::bloballoc::AlignedAllocator&lt; T, Alignment &gt;</a>
 , <a class="el" href="structllama_1_1Iterator.html#a7ff0c92ce9f90fcc6832ecfc1982a859">llama::Iterator&lt; View &gt;</a>
@@ -334,7 +335,7 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Jul 7 2021 14:34:21 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Jul 8 2021 14:44:43 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

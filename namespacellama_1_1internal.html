@@ -193,9 +193,9 @@ Functions</h2></td></tr>
 <tr class="separator:af16d07d01be7acc8ced82a040bac87da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a365660e6c469c94566ee7fa45aa3e262"><td class="memItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a365660e6c469c94566ee7fa45aa3e262">roundUpToMultiple</a> (std::size_t &amp;value, std::size_t multiple)</td></tr>
 <tr class="separator:a365660e6c469c94566ee7fa45aa3e262"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a922a0fff3233e8c219c4037a36273d"><td class="memTemplParams" colspan="2">template&lt;bool Align, typename TypeList &gt; </td></tr>
-<tr class="memitem:a8a922a0fff3233e8c219c4037a36273d"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a8a922a0fff3233e8c219c4037a36273d">sizeOfImpl</a> () -&gt; std::size_t</td></tr>
-<tr class="separator:a8a922a0fff3233e8c219c4037a36273d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeab53e4609fe07abfb6f5f2d532cd388"><td class="memTemplParams" colspan="2">template&lt;typename TypeList , bool Align, bool IncludeTailPadding&gt; </td></tr>
+<tr class="memitem:aeab53e4609fe07abfb6f5f2d532cd388"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#aeab53e4609fe07abfb6f5f2d532cd388">sizeOfImpl</a> () -&gt; std::size_t</td></tr>
+<tr class="separator:aeab53e4609fe07abfb6f5f2d532cd388"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a73eb0087b689dae5f64d631484cb9aeb"><td class="memTemplParams" colspan="2">template&lt;bool Align, typename TypeList , std::size_t I&gt; </td></tr>
 <tr class="memitem:a73eb0087b689dae5f64d631484cb9aeb"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a73eb0087b689dae5f64d631484cb9aeb">offsetOfImplWorkaround</a> ()</td></tr>
 <tr class="separator:a73eb0087b689dae5f64d631484cb9aeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1148,13 +1148,13 @@ template&lt;bool Align, typename TypeList , std::size_t I&gt; </div>
 
 </div>
 </div>
-<a id="a8a922a0fff3233e8c219c4037a36273d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8a922a0fff3233e8c219c4037a36273d">&#9670;&nbsp;</a></span>sizeOfImpl()</h2>
+<a id="aeab53e4609fe07abfb6f5f2d532cd388"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeab53e4609fe07abfb6f5f2d532cd388">&#9670;&nbsp;</a></span>sizeOfImpl()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;bool Align, typename TypeList &gt; </div>
+template&lt;typename TypeList , bool Align, bool IncludeTailPadding&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1759,7 +1759,7 @@ template&lt;bool Align, typename TypeList &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Wed Jul 7 2021 14:34:21 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Jul 8 2021 14:44:43 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

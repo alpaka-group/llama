@@ -90,7 +90,7 @@ $(document).ready(function(){initNavTree('functions_o.html',''); initResizable()
 , <a class="el" href="structllama_1_1VirtualView.html#a1cc496f637e8e00464d52fc4d3259175">llama::VirtualView&lt; T_ParentViewType &gt;</a>
 </li>
 <li>One()
-: <a class="el" href="structllama_1_1mapping_1_1One.html#a19eb8bfa04956262ffca762aefadfc57">llama::mapping::One&lt; T_ArrayDims, T_RecordDim &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1One.html#a7a089aa947385679df6ee23ef6644552">llama::mapping::One&lt; T_ArrayDims, T_RecordDim, AlignAndPad, FlattenRecordDim &gt;</a>
 </li>
 <li>operation
 : <a class="el" href="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors_3_01Tree_00_01Tuple_3_01Operations_8_8_8_01_4_01_4.html#a414a8d97cea69b25adb091fd077cd9aa">llama::mapping::tree::internal::MergeFunctors&lt; Tree, Tuple&lt; Operations... &gt; &gt;</a>
@@ -101,12 +101,13 @@ $(document).ready(function(){initNavTree('functions_o.html',''); initResizable()
 </li>
 <li>operator!=
 : <a class="el" href="structllama_1_1Array.html#a79c4e9b69ae046deace9f3583974d42a">llama::Array&lt; T, N &gt;</a>
+, <a class="el" href="structllama_1_1Array_3_01T_00_010_01_4.html#a79c4e9b69ae046deace9f3583974d42a">llama::Array&lt; T, 0 &gt;</a>
 , <a class="el" href="structllama_1_1ArrayDimsIndexIterator.html#a70f2a83e6405d236f0970f71d6e0cbd3">llama::ArrayDimsIndexIterator&lt; Dim &gt;</a>
 , <a class="el" href="structllama_1_1bloballoc_1_1AlignedAllocator.html#a684eb9d179b19cfff2857631b175b411">llama::bloballoc::AlignedAllocator&lt; T, Alignment &gt;</a>
 , <a class="el" href="structllama_1_1Iterator.html#a76667c2aae49f9687e6b6421315cc32d">llama::Iterator&lt; View &gt;</a>
 , <a class="el" href="structllama_1_1NrAndOffset.html#a880f9ff151e3977e576b5451cd1a0bf1">llama::NrAndOffset</a>
 , <a class="el" href="structllama_1_1Vector.html#aaf46beb086f0ae4e85a48f02781fc803">llama::Vector&lt; Mapping &gt;</a>
-, <a class="el" href="structllama_1_1VirtualRecord.html#a76a50e0b7d7e610f9463d2979611cf08">llama::VirtualRecord&lt; T_View, BoundRecordCoord, OwnView &gt;</a>
+, <a class="el" href="structllama_1_1VirtualRecord.html#af6c4f943cd36f1b91bcfd2869669b4e1">llama::VirtualRecord&lt; T_View, BoundRecordCoord, OwnView &gt;</a>
 </li>
 <li>operator%
 : <a class="el" href="structllama_1_1VirtualRecord.html#a57e2af26958e01cbdbc482de440e7c98">llama::VirtualRecord&lt; T_View, BoundRecordCoord, OwnView &gt;</a>
@@ -150,6 +151,7 @@ $(document).ready(function(){initNavTree('functions_o.html',''); initResizable()
 </li>
 <li>operator+
 : <a class="el" href="structllama_1_1Array.html#a17babdb41e8863ccd94806c23e501355">llama::Array&lt; T, N &gt;</a>
+, <a class="el" href="structllama_1_1Array_3_01T_00_010_01_4.html#a17babdb41e8863ccd94806c23e501355">llama::Array&lt; T, 0 &gt;</a>
 , <a class="el" href="structllama_1_1ArrayDimsIndexIterator.html#a42681895a2d15f46b4d72ad8d549b2da">llama::ArrayDimsIndexIterator&lt; Dim &gt;</a>
 , <a class="el" href="structllama_1_1Iterator.html#a9fc80ea72157cefe76d1b05979a6c8f7">llama::Iterator&lt; View &gt;</a>
 , <a class="el" href="structllama_1_1VirtualRecord.html#a4c3da8b83dac7ae89f17397afb04c6ff">llama::VirtualRecord&lt; T_View, BoundRecordCoord, OwnView &gt;</a>
@@ -204,14 +206,15 @@ $(document).ready(function(){initNavTree('functions_o.html',''); initResizable()
 , <a class="el" href="structllama_1_1VirtualRecord.html#ab89ac907e6c8f7f0df117d73366ca012">llama::VirtualRecord&lt; T_View, BoundRecordCoord, OwnView &gt;</a>
 </li>
 <li>operator=()
-: <a class="el" href="structllama_1_1ArrayDimsIndexIterator.html#a3017df18bc53eb1f252abe00008a132b">llama::ArrayDimsIndexIterator&lt; Dim &gt;</a>
+: <a class="el" href="structllama_1_1ArrayDimsIndexIterator.html#ae96328b18941bef3e2948119b0066e7f">llama::ArrayDimsIndexIterator&lt; Dim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Heatmap.html#a6ae70b7b451c70f822ab26743ba1ea85">llama::mapping::Heatmap&lt; Mapping, CountType &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1Trace.html#a52eef7a20f2921e73c6e4d0726b8998f">llama::mapping::Trace&lt; Mapping &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1Trace.html#ae93708151ca7e2742d1bd9576ab95464">llama::mapping::Trace&lt; Mapping &gt;</a>
 , <a class="el" href="structllama_1_1Vector.html#a36792850ed3212ef272c31d1f6006bd7">llama::Vector&lt; Mapping &gt;</a>
 , <a class="el" href="structllama_1_1VirtualRecord.html#ad2cc4f52e7d3ac55de213ce75c32af0e">llama::VirtualRecord&lt; T_View, BoundRecordCoord, OwnView &gt;</a>
 </li>
 <li>operator==
 : <a class="el" href="structllama_1_1Array.html#a81059810842ccf4dc4608e61e12e9c7a">llama::Array&lt; T, N &gt;</a>
+, <a class="el" href="structllama_1_1Array_3_01T_00_010_01_4.html#a81059810842ccf4dc4608e61e12e9c7a">llama::Array&lt; T, 0 &gt;</a>
 , <a class="el" href="structllama_1_1ArrayDimsIndexIterator.html#a496250d2821bd9f382cb7acfb668bc60">llama::ArrayDimsIndexIterator&lt; Dim &gt;</a>
 , <a class="el" href="structllama_1_1bloballoc_1_1AlignedAllocator.html#a10fa4bbd3ecddd3eb3f29cd29cfd7898">llama::bloballoc::AlignedAllocator&lt; T, Alignment &gt;</a>
 , <a class="el" href="structllama_1_1Iterator.html#a8ebf1aa1356423456d1a77aac73a8593">llama::Iterator&lt; View &gt;</a>
@@ -223,7 +226,7 @@ $(document).ready(function(){initNavTree('functions_o.html',''); initResizable()
 : <a class="el" href="structllama_1_1ArrayDimsIndexIterator.html#aa3a61705d2295b4d37b19c35408e7664">llama::ArrayDimsIndexIterator&lt; Dim &gt;</a>
 , <a class="el" href="structllama_1_1Iterator.html#a7ad593041aeb7f426ff005bb1aa3755c">llama::Iterator&lt; View &gt;</a>
 , <a class="el" href="structllama_1_1Vector.html#a9843ac4bcf20c49d604744274f5f3481">llama::Vector&lt; Mapping &gt;</a>
-, <a class="el" href="structllama_1_1VirtualRecord.html#ab39510167275591efc0bb58748c46ecd">llama::VirtualRecord&lt; T_View, BoundRecordCoord, OwnView &gt;</a>
+, <a class="el" href="structllama_1_1VirtualRecord.html#a26c12757b0c0c80346369eaf2d146aa1">llama::VirtualRecord&lt; T_View, BoundRecordCoord, OwnView &gt;</a>
 </li>
 <li>operator&gt;=
 : <a class="el" href="structllama_1_1ArrayDimsIndexIterator.html#a54278bc63d0b4323ad237e4377d8ca57">llama::ArrayDimsIndexIterator&lt; Dim &gt;</a>
@@ -235,8 +238,8 @@ $(document).ready(function(){initNavTree('functions_o.html',''); initResizable()
 : <a class="el" href="structllama_1_1Array.html#afb5972c69fe2ec584bd1b5cbf48d7a67">llama::Array&lt; T, N &gt;</a>
 , <a class="el" href="structllama_1_1ArrayDimsIndexIterator.html#a4edc343c9c4cdf002ba525428eea9d58">llama::ArrayDimsIndexIterator&lt; Dim &gt;</a>
 , <a class="el" href="structllama_1_1Iterator.html#a1fd67ec2c13b9fee525c8757ae494d61">llama::Iterator&lt; View &gt;</a>
-, <a class="el" href="structllama_1_1Vector.html#a986aaf25de32b46804d6094a109bf991">llama::Vector&lt; Mapping &gt;</a>
-, <a class="el" href="structllama_1_1View.html#ae80d249aedd9a917443fc8fa1a554d08">llama::View&lt; T_Mapping, BlobType &gt;</a>
+, <a class="el" href="structllama_1_1Vector.html#a3354718fe917a4754c4c881351dd07c8">llama::Vector&lt; Mapping &gt;</a>
+, <a class="el" href="structllama_1_1View.html#a0f932989faaefcde5765276ba74c8a78">llama::View&lt; T_Mapping, BlobType &gt;</a>
 </li>
 <li>other
 : <a class="el" href="structllama_1_1bloballoc_1_1AlignedAllocator_1_1rebind.html#a21f94f8b3f97ad48279888f0d6a6cc2e">llama::bloballoc::AlignedAllocator&lt; T, Alignment &gt;::rebind&lt; T2 &gt;</a>
@@ -247,7 +250,7 @@ $(document).ready(function(){initNavTree('functions_o.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Jul 7 2021 14:34:21 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Jul 8 2021 14:44:43 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

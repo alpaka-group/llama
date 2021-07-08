@@ -4,6 +4,7 @@ var namespacellama =
     [ "internal", "namespacellama_1_1internal.html", "namespacellama_1_1internal" ],
     [ "mapping", "namespacellama_1_1mapping.html", "namespacellama_1_1mapping" ],
     [ "Array", "structllama_1_1Array.html", "structllama_1_1Array" ],
+    [ "Array< T, 0 >", "structllama_1_1Array_3_01T_00_010_01_4.html", "structllama_1_1Array_3_01T_00_010_01_4" ],
     [ "ArrayDims", "structllama_1_1ArrayDims.html", null ],
     [ "ArrayDimsIndexIterator", "structllama_1_1ArrayDimsIndexIterator.html", "structllama_1_1ArrayDimsIndexIterator" ],
     [ "ArrayDimsIndexRange", "structllama_1_1ArrayDimsIndexRange.html", "structllama_1_1ArrayDimsIndexRange" ],

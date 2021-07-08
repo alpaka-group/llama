@@ -8,6 +8,7 @@ var hierarchy =
     [ "llama::Array< std::size_t, Dim >", "structllama_1_1Array.html", [
       [ "llama::ArrayDims< Dim >", "structllama_1_1ArrayDims.html", null ]
     ] ],
+    [ "llama::Array< T, 0 >", "structllama_1_1Array_3_01T_00_010_01_4.html", null ],
     [ "llama::ArrayDimsIndexIterator< Dim >", "structllama_1_1ArrayDimsIndexIterator.html", null ],
     [ "llama::ArrayDimsIndexIterator< View::ArrayDims::rank >", "structllama_1_1ArrayDimsIndexIterator.html", null ],
     [ "llama::ArrayDimsIndexRange< Dim >", "structllama_1_1ArrayDimsIndexRange.html", null ],
@@ -90,7 +91,7 @@ var hierarchy =
     [ "llama::mapping::tree::Node< T_Identifier, T_ChildrenTuple, CountType >", "structllama_1_1mapping_1_1tree_1_1Node.html", null ],
     [ "llama::NoName", "structllama_1_1NoName.html", null ],
     [ "llama::NrAndOffset", "structllama_1_1NrAndOffset.html", null ],
-    [ "llama::mapping::One< T_ArrayDims, T_RecordDim >", "structllama_1_1mapping_1_1One.html", null ],
+    [ "llama::mapping::One< T_ArrayDims, T_RecordDim, AlignAndPad, FlattenRecordDim >", "structllama_1_1mapping_1_1One.html", null ],
     [ "llama::internal::PlusAssign", "structllama_1_1internal_1_1PlusAssign.html", null ],
     [ "llama::mapping::PreconfiguredAoS< AlignAndPad, LinearizeArrayDimsFunctor >", "structllama_1_1mapping_1_1PreconfiguredAoS.html", null ],
     [ "llama::mapping::PreconfiguredAoSoA< Lanes, LinearizeArrayDimsFunctor >", "structllama_1_1mapping_1_1PreconfiguredAoSoA.html", null ],
