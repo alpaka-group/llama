@@ -10,12 +10,12 @@
 /// portability for multicore, manycore and gpu applications with the very same code.
 ///
 /// In contrast to many other solutions LLAMA can define nested data structures of arbitrary depths and is not limited
-/// only to struct of array and array of struct data layouts. It is also capable to explicitly define padding, blocking,
-/// striding and any other run time or compile time access pattern simultaneously.
+/// only to struct of array and array of struct data layouts. It is also capable to explicitly define padding,
+/// blocking, striding and any other run time or compile time access pattern simultaneously.
 ///
-/// To archieve this goal LLAMA is split into mostly independent, orthogonal parts completely written in modern C++17 to
-/// run on as many architectures and with as many compilers as possible while still supporting extensions needed e.g. to
-/// run on GPU or other many core hardware.
+/// To archieve this goal LLAMA is split into mostly independent, orthogonal parts completely written in modern C++17
+/// to run on as many architectures and with as many compilers as possible while still supporting extensions needed
+/// e.g. to run on GPU or other many core hardware.
 ///
 /// This page documents the API of LLAMA. The user documentation and an overview about the concepts and ideas can be
 /// found here: https://llama-doc.rtfd.io

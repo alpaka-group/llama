@@ -14,12 +14,12 @@ namespace llama::mapping
     /// how big the linear domain gets.
     /// \tparam FlattenRecordDim Defines how the record dimension's fields should be flattened. See \ref
     /// FlattenRecordDimInOrder and \ref FlattenRecordDimMinimizePadding.
-    template <
+    template<
         typename T_ArrayDims,
         typename T_RecordDim,
         bool AlignAndPad = true,
         typename T_LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
-        template <typename> typename FlattenRecordDim = FlattenRecordDimInOrder>
+        template<typename> typename FlattenRecordDim = FlattenRecordDimInOrder>
     struct AoS
     {
         using ArrayDims = T_ArrayDims;
@@ -45,7 +45,7 @@ namespace llama::mapping
                 * flatSizeOf<typename Flattener::FlatRecordDim, AlignAndPad>;
         }
 
-        template <std::size_t... RecordCoords>
+        template<std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayDims coord) const -> NrAndOffset
         {
             constexpr std::size_t flatIndex =
@@ -54,9 +54,11 @@ namespace llama::mapping
 #else
                 Flattener::template flatIndex<RecordCoords...>;
 #endif
-            const auto offset = LinearizeArrayDimsFunctor{}(coord, arrayDimsSize)
-                    * flatSizeOf<typename Flattener::FlatRecordDim,
-                                 AlignAndPad> + flatOffsetOf<typename Flattener::FlatRecordDim, flatIndex, AlignAndPad>;
+            const auto offset
+                = LinearizeArrayDimsFunctor{}(coord, arrayDimsSize)
+                    * flatSizeOf<
+                        typename Flattener::FlatRecordDim,
+                        AlignAndPad> + flatOffsetOf<typename Flattener::FlatRecordDim, flatIndex, AlignAndPad>;
             return {0, offset};
         }
 
@@ -67,24 +69,23 @@ namespace llama::mapping
 
     /// Array of struct mapping preserving the alignment of the field types by inserting padding.
     /// \see AoS
-    template <typename ArrayDims, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+    template<typename ArrayDims, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     using AlignedAoS = AoS<ArrayDims, RecordDim, true, LinearizeArrayDimsFunctor>;
 
-    /// Array of struct mapping preserving the alignment of the field types by inserting padding and permuting the field
-    /// order to minimize this padding.
-    /// \see AoS
-    template <typename ArrayDims, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+    /// Array of struct mapping preserving the alignment of the field types by inserting padding and permuting the
+    /// field order to minimize this padding. \see AoS
+    template<typename ArrayDims, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     using MinAlignedAoS = AoS<ArrayDims, RecordDim, true, LinearizeArrayDimsFunctor, FlattenRecordDimMinimizePadding>;
 
     /// Array of struct mapping packing the field types tightly, violating the types alignment requirements.
     /// \see AoS
-    template <typename ArrayDims, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+    template<typename ArrayDims, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     using PackedAoS = AoS<ArrayDims, RecordDim, false, LinearizeArrayDimsFunctor>;
 
-    template <bool AlignAndPad = false, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+    template<bool AlignAndPad = false, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     struct PreconfiguredAoS
     {
-        template <typename ArrayDims, typename RecordDim>
+        template<typename ArrayDims, typename RecordDim>
         using type = AoS<ArrayDims, RecordDim, AlignAndPad, LinearizeArrayDimsFunctor>;
     };
 } // namespace llama::mapping

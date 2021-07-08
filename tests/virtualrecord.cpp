@@ -572,7 +572,7 @@ TEST_CASE("VirtualRecord.asFlatTuple.structuredBindings")
     }
 }
 
-template <typename T>
+template<typename T>
 struct S;
 
 TEST_CASE("VirtualRecord.structuredBindings")
@@ -625,14 +625,14 @@ TEST_CASE("VirtualRecord.structuredBindings")
 
 namespace
 {
-    template <typename T>
+    template<typename T>
     struct MyPos
     {
         T a;
         T y;
     };
 
-    template <typename T>
+    template<typename T>
     struct MyVel
     {
         T x;
@@ -640,7 +640,7 @@ namespace
         T z;
     };
 
-    template <typename T>
+    template<typename T>
     struct MyStruct
     {
         MyPos<T> pos;
@@ -648,51 +648,51 @@ namespace
         T weight;
     };
 
-    template <std::size_t I, typename T>
+    template<std::size_t I, typename T>
     auto get(const MyPos<T>& p)
     {
-        if constexpr (I == 0)
+        if constexpr(I == 0)
             return p.a;
-        if constexpr (I == 1)
+        if constexpr(I == 1)
             return p.y;
     }
 
-    template <std::size_t I, typename T>
+    template<std::size_t I, typename T>
     auto get(const MyVel<T>& p)
     {
-        if constexpr (I == 0)
+        if constexpr(I == 0)
             return p.x;
-        if constexpr (I == 1)
+        if constexpr(I == 1)
             return p.y;
-        if constexpr (I == 2)
+        if constexpr(I == 2)
             return p.z;
     }
 
-    template <std::size_t I, typename T>
+    template<std::size_t I, typename T>
     auto get(const MyStruct<T>& p)
     {
-        if constexpr (I == 0)
+        if constexpr(I == 0)
             return p.pos;
-        if constexpr (I == 1)
+        if constexpr(I == 1)
             return p.vel;
-        if constexpr (I == 2)
+        if constexpr(I == 2)
             return p.weight;
     }
 } // namespace
 
-template <typename T>
+template<typename T>
 struct std::tuple_size<MyPos<T>>
 {
     static constexpr std::size_t value = 2;
 };
 
-template <typename T>
+template<typename T>
 struct std::tuple_size<MyVel<T>>
 {
     static constexpr std::size_t value = 3;
 };
 
-template <typename T>
+template<typename T>
 struct std::tuple_size<MyStruct<T>>
 {
     static constexpr std::size_t value = 3;
@@ -906,11 +906,11 @@ TEST_CASE("VirtualRecord.One_ctor_from_view")
 TEST_CASE("VirtualRecord.One_range_for")
 {
     auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{5}, ParticleInt{}});
-    for (auto p : view) // p is a reference object
+    for(auto p : view) // p is a reference object
         p = 1;
     CHECK(view(1u) == 1);
 
-    for (llama::One<ParticleInt> p : view) // p is a copy
+    for(llama::One<ParticleInt> p : view) // p is a copy
         p = 2;
     CHECK(view(1u) == 1);
 }

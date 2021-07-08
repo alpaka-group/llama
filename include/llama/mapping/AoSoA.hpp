@@ -10,7 +10,7 @@ namespace llama::mapping
 {
     /// The maximum number of vector lanes that can be used to fetch each leaf type in the record dimension into a
     /// vector register of the given size in bits.
-    template <typename RecordDim, std::size_t VectorRegisterBits>
+    template<typename RecordDim, std::size_t VectorRegisterBits>
     inline constexpr std::size_t maxLanes = []() constexpr
     {
         auto max = std::numeric_limits<std::size_t>::max();
@@ -28,7 +28,7 @@ namespace llama::mapping
     /// \tparam Lanes The size of the inner arrays of this array of struct of arrays.
     /// \tparam T_LinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
     /// how big the linear domain gets.
-    template <
+    template<
         typename T_ArrayDims,
         typename T_RecordDim,
         std::size_t Lanes,
@@ -56,7 +56,7 @@ namespace llama::mapping
             return LinearizeArrayDimsFunctor{}.size(arrayDimsSize) * sizeOf<RecordDim>;
         }
 
-        template <std::size_t... RecordCoords>
+        template<std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayDims coord) const -> NrAndOffset
         {
             const auto flatArrayIndex = LinearizeArrayDimsFunctor{}(coord, arrayDimsSize);
@@ -72,10 +72,10 @@ namespace llama::mapping
         ArrayDims arrayDimsSize;
     };
 
-    template <std::size_t Lanes, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+    template<std::size_t Lanes, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     struct PreconfiguredAoSoA
     {
-        template <typename ArrayDims, typename RecordDim>
+        template<typename ArrayDims, typename RecordDim>
         using type = AoSoA<ArrayDims, RecordDim, Lanes, LinearizeArrayDimsFunctor>;
     };
 } // namespace llama::mapping

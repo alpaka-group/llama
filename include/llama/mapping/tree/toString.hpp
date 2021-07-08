@@ -11,14 +11,14 @@
 
 namespace llama::mapping::tree
 {
-    template <typename T>
+    template<typename T>
     auto toString(T) -> std::string
     {
         return "Unknown";
     }
 
     // handles array indices
-    template <std::size_t I>
+    template<std::size_t I>
     inline auto toString(RecordCoord<I>) -> std::string
     {
         return "";
@@ -29,10 +29,10 @@ namespace llama::mapping::tree
         return "";
     }
 
-    template <typename... Elements>
+    template<typename... Elements>
     auto toString(Tuple<Elements...> tree) -> std::string
     {
-        if constexpr (sizeof...(Elements) > 1)
+        if constexpr(sizeof...(Elements) > 1)
             return toString(tree.first) + " , " + toString(tree.rest);
         else
             return toString(tree.first);
@@ -43,18 +43,18 @@ namespace llama::mapping::tree
         inline void replace_all(std::string& str, const std::string& search, const std::string& replace)
         {
             std::string::size_type i = 0;
-            while ((i = str.find(search, i)) != std::string::npos)
+            while((i = str.find(search, i)) != std::string::npos)
             {
                 str.replace(i, search.length(), replace);
                 i += replace.length();
             }
         }
 
-        template <typename NodeOrLeaf>
+        template<typename NodeOrLeaf>
         auto countAndIdentToString(const NodeOrLeaf& nodeOrLeaf) -> std::string
         {
             auto r = std::to_string(nodeOrLeaf.count);
-            if constexpr (std::is_same_v<std::decay_t<decltype(nodeOrLeaf.count)>, std::size_t>)
+            if constexpr(std::is_same_v<std::decay_t<decltype(nodeOrLeaf.count)>, std::size_t>)
                 r += "R"; // runtime
             else
                 r += "C"; // compile time
@@ -63,13 +63,13 @@ namespace llama::mapping::tree
         }
     } // namespace internal
 
-    template <typename Identifier, typename Type, typename CountType>
+    template<typename Identifier, typename Type, typename CountType>
     auto toString(const Node<Identifier, Type, CountType>& node) -> std::string
     {
         return internal::countAndIdentToString(node) + "[ " + toString(node.childs) + " ]";
     }
 
-    template <typename Identifier, typename Type, typename CountType>
+    template<typename Identifier, typename Type, typename CountType>
     auto toString(const Leaf<Identifier, Type, CountType>& leaf) -> std::string
     {
         auto raw = boost::core::demangle(typeid(Type).name());

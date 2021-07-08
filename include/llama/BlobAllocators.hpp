@@ -21,7 +21,7 @@ namespace llama::bloballoc
 {
     /// Allocates stack memory for a \ref View, which is copied each time a \ref View is copied.
     /// \tparam BytesToReserve the amount of memory to reserve.
-    template <std::size_t BytesToReserve>
+    template<std::size_t BytesToReserve>
     struct Stack
     {
         LLAMA_FN_HOST_ACC_INLINE auto operator()(std::size_t) const -> Array<std::byte, BytesToReserve>
@@ -36,11 +36,11 @@ namespace llama::bloballoc
     /// Allocates heap memory managed by a `std::shared_ptr` for a \ref View. This memory is shared between all copies
     /// of a \ref View.
     /// \tparam Alignment aligment of the allocated block of memory.
-    template <std::size_t Alignment = 64>
+    template<std::size_t Alignment = 64>
     struct SharedPtr
     {
         // libc++ below 11.0.0 does not yet support shared_ptr with arrays
-        template <typename T>
+        template<typename T>
         using shared_ptr =
 #if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION < 11000
             boost::shared_ptr<T>;
@@ -61,14 +61,14 @@ namespace llama::bloballoc
 #endif
 
     /// An STL compatible allocator allowing to specify alignment.
-    template <typename T, std::size_t Alignment>
+    template<typename T, std::size_t Alignment>
     struct AlignedAllocator
     {
         using value_type = T;
 
         inline AlignedAllocator() noexcept = default;
 
-        template <typename T2>
+        template<typename T2>
         inline AlignedAllocator(AlignedAllocator<T2, Alignment> const&) noexcept
         {
         }
@@ -85,7 +85,7 @@ namespace llama::bloballoc
             ::operator delete[](p, std::align_val_t{Alignment});
         }
 
-        template <typename T2>
+        template<typename T2>
         struct rebind
         {
             using other = AlignedAllocator<T2, Alignment>;
@@ -105,7 +105,7 @@ namespace llama::bloballoc
     /// Allocates heap memory managed by a `std::vector` for a \ref View, which is copied each time a \ref View is
     /// copied.
     /// \tparam Alignment aligment of the allocated block of memory.
-    template <std::size_t Alignment = 64u>
+    template<std::size_t Alignment = 64u>
     struct Vector
     {
         inline auto operator()(std::size_t count) const

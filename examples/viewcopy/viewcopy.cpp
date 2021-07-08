@@ -46,12 +46,12 @@ using Particle = llama::Record<
 using RecordDim = boost::mp11::mp_take_c<Event, 20>;
 // using RecordDim = Event; // WARN: expect long compilation time
 
-template <typename SrcMapping, typename SrcBlobType, typename DstMapping, typename DstBlobType>
+template<typename SrcMapping, typename SrcBlobType, typename DstMapping, typename DstBlobType>
 void std_copy(const llama::View<SrcMapping, SrcBlobType>& srcView, llama::View<DstMapping, DstBlobType>& dstView)
 {
     static_assert(std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>);
 
-    if (srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
+    if(srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
         throw std::runtime_error{"Array dimensions sizes are different"};
 
     std::copy(srcView.begin(), srcView.end(), dstView.begin());
@@ -66,11 +66,11 @@ auto memcpy_avx2(void* dst, const void* src, size_t n) noexcept -> void*
 
     // fall back to memcpy() if dst and src are misaligned
     const auto lowerDstBits = reinterpret_cast<uintptr_t>(d) & 31u;
-    if (lowerDstBits != (reinterpret_cast<uintptr_t>(s) & 31u))
+    if(lowerDstBits != (reinterpret_cast<uintptr_t>(s) & 31u))
         return memcpy(d, s, n);
 
     // align dst/src address multiple of 32
-    if (lowerDstBits != 0u)
+    if(lowerDstBits != 0u)
     {
         const auto header_bytes = std::min(static_cast<size_t>(32 - lowerDstBits), n);
         memcpy(d, s, header_bytes);
@@ -81,11 +81,11 @@ auto memcpy_avx2(void* dst, const void* src, size_t n) noexcept -> void*
 
     constexpr auto unrollFactor = 8;
     constexpr auto bytesPerIteration = 32 * unrollFactor;
-    while (n >= bytesPerIteration)
+    while(n >= bytesPerIteration)
     {
 #    pragma unroll
 #    pragma GCC unroll unrollFactor
-        for (auto i = 0; i < unrollFactor; i++)
+        for(auto i = 0; i < unrollFactor; i++)
             _mm256_stream_si256(
                 reinterpret_cast<__m256i*>(d) + i,
                 _mm256_stream_load_si256(reinterpret_cast<const __m256i*>(s) + i));
@@ -94,45 +94,46 @@ auto memcpy_avx2(void* dst, const void* src, size_t n) noexcept -> void*
         n -= bytesPerIteration;
     }
 
-    if (n > 0)
+    if(n > 0)
         memcpy(d, s, n);
 
     return dst;
 }
 #endif
 
-template <typename Mapping, typename BlobType>
+template<typename Mapping, typename BlobType>
 auto hash(const llama::View<Mapping, BlobType>& view)
 {
     std::size_t acc = 0;
-    for (auto ad : llama::ArrayDimsIndexRange{view.mapping.arrayDims()})
-        llama::forEachLeaf<typename Mapping::RecordDim>([&](auto coord) { boost::hash_combine(acc, view(ad)(coord)); });
+    for(auto ad : llama::ArrayDimsIndexRange{view.mapping.arrayDims()})
+        llama::forEachLeaf<typename Mapping::RecordDim>([&](auto coord)
+                                                        { boost::hash_combine(acc, view(ad)(coord)); });
     return acc;
 }
-template <typename Mapping>
+template<typename Mapping>
 auto prepareViewAndHash(Mapping mapping)
 {
     auto view = llama::allocView(mapping);
 
     auto value = std::size_t{0};
-    for (auto ad : llama::ArrayDimsIndexRange{mapping.arrayDims()})
+    for(auto ad : llama::ArrayDimsIndexRange{mapping.arrayDims()})
         llama::forEachLeaf<typename Mapping::RecordDim>([&](auto coord) { view(ad)(coord) = value++; });
 
     const auto checkSum = hash(view);
     return std::tuple{view, checkSum};
 }
 
-template <typename Mapping>
+template<typename Mapping>
 inline constexpr auto is_AoSoA = false;
 
-template <typename AD, typename RD, std::size_t L>
+template<typename AD, typename RD, std::size_t L>
 inline constexpr auto is_AoSoA<llama::mapping::AoSoA<AD, RD, L>> = true;
 
 auto main() -> int
 try
 {
-    const auto dataSize
-        = std::reduce(arrayDims.begin(), arrayDims.end(), std::size_t{1}, std::multiplies{}) * llama::sizeOf<RecordDim>;
+    const auto dataSize = std::reduce(arrayDims.begin(), arrayDims.end(), std::size_t{1}, std::multiplies{})
+        * llama::sizeOf<RecordDim>;
     const auto numThreads = static_cast<std::size_t>(omp_get_max_threads());
     const char* affinity = std::getenv("GOMP_CPU_AFFINITY"); // NOLINT(concurrency-mt-unsafe)
     affinity = affinity == nullptr ? "NONE - PLEASE PIN YOUR THREADS!" : affinity;
@@ -173,7 +174,7 @@ $data << EOD
     {
         std::vector<std::byte, llama::bloballoc::AlignedAllocator<std::byte, 64>> dst(dataSize);
         Stopwatch watch;
-        for (auto i = 0; i < REPETITIONS; i++)
+        for(auto i = 0; i < REPETITIONS; i++)
             memcpy(dst.data(), src.data(), dataSize);
         const auto seconds = watch.printAndReset(name, '\t') / REPETITIONS;
         const auto gbs = (dataSize / seconds) / (1024.0 * 1024.0 * 1024.0);
@@ -227,7 +228,7 @@ $data << EOD
         {
             auto dstView = llama::allocView(dstMapping);
             Stopwatch watch;
-            for (auto i = 0; i < REPETITIONS; i++)
+            for(auto i = 0; i < REPETITIONS; i++)
                 copy(srcView, dstView);
             const auto seconds = watch.printAndReset(name, '\t') / REPETITIONS;
             const auto gbs = (dataSize / seconds) / (1024.0 * 1024.0 * 1024.0);
@@ -240,10 +241,12 @@ $data << EOD
         plotFile << "0\t";
         plotFile << "0\t";
         plotFile << "0\t";
-        benchmarkCopy("naive copy", [](const auto& srcView, auto& dstView) { llama::fieldWiseCopy(srcView, dstView); });
+        benchmarkCopy(
+            "naive copy",
+            [](const auto& srcView, auto& dstView) { llama::fieldWiseCopy(srcView, dstView); });
         benchmarkCopy("std::copy", [](const auto& srcView, auto& dstView) { std_copy(srcView, dstView); });
         constexpr auto oneIsAoSoA = is_AoSoA<decltype(srcMapping)> || is_AoSoA<decltype(dstMapping)>;
-        if constexpr (oneIsAoSoA)
+        if constexpr(oneIsAoSoA)
         {
             benchmarkCopy(
                 "aosoa copy(r)",
@@ -265,7 +268,7 @@ $data << EOD
                 // NOLINTNEXTLINE(openmp-exception-escape)
                 llama::fieldWiseCopy(srcView, dstView, omp_get_thread_num(), omp_get_num_threads());
             });
-        if constexpr (oneIsAoSoA)
+        if constexpr(oneIsAoSoA)
         {
             benchmarkCopy(
                 "aosoa_copy(r,p)",
@@ -319,7 +322,7 @@ plot $data using 2:xtic(1) ti col, "" using 3 ti col, "" using 4 ti col, "" usin
 )";
     std::cout << "Plot with: ./viewcopy.sh\n";
 }
-catch (const std::exception& e)
+catch(const std::exception& e)
 {
     std::cerr << "Exception: " << e.what() << '\n';
 }

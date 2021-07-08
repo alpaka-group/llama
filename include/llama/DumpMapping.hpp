@@ -14,26 +14,26 @@ namespace llama
 {
     namespace internal
     {
-        template <std::size_t... Coords>
+        template<std::size_t... Coords>
         auto toVec(RecordCoord<Coords...>) -> std::vector<std::size_t>
         {
             return {Coords...};
         }
 
-        template <typename Tag>
+        template<typename Tag>
         auto tagToString(Tag tag)
         {
             return structName(tag);
         }
 
         // handle array indices
-        template <std::size_t N>
+        template<std::size_t N>
         auto tagToString(RecordCoord<N>)
         {
             return std::to_string(N);
         }
 
-        template <typename RecordDim, std::size_t... CoordsBefore, std::size_t CoordCurrent, std::size_t... CoordsAfter>
+        template<typename RecordDim, std::size_t... CoordsBefore, std::size_t CoordCurrent, std::size_t... CoordsAfter>
         void collectTagsAsStrings(
             std::vector<std::string>& v,
             RecordCoord<CoordsBefore...> before,
@@ -41,14 +41,14 @@ namespace llama
         {
             using Tag = GetTag<RecordDim, RecordCoord<CoordsBefore..., CoordCurrent>>;
             v.push_back(tagToString(Tag{}));
-            if constexpr (sizeof...(CoordsAfter) > 0)
+            if constexpr(sizeof...(CoordsAfter) > 0)
                 collectTagsAsStrings<RecordDim>(
                     v,
                     RecordCoord<CoordsBefore..., CoordCurrent>{},
                     RecordCoord<CoordsAfter...>{});
         }
 
-        template <typename RecordDim, std::size_t... Coords>
+        template<typename RecordDim, std::size_t... Coords>
         auto tagsAsStrings(RecordCoord<Coords...>) -> std::vector<std::string>
         {
             std::vector<std::string> v;
@@ -56,7 +56,7 @@ namespace llama
             return v;
         }
 
-        template <typename Mapping, typename ArrayDims, std::size_t... Coords>
+        template<typename Mapping, typename ArrayDims, std::size_t... Coords>
         auto mappingBlobNrAndOffset(const Mapping& mapping, const ArrayDims& adCoord, RecordCoord<Coords...>)
         {
             return mapping.template blobNrAndOffset<Coords...>(adCoord);
@@ -66,22 +66,22 @@ namespace llama
         {
             auto c = boost::hash<std::vector<std::size_t>>{}(recordCoord) &0xFFFFFF;
             const auto channelSum = ((c & 0xFF0000) >> 4) + ((c & 0xFF00) >> 2) + c & 0xFF;
-            if (channelSum < 200)
+            if(channelSum < 200)
                 c |= 0x404040; // ensure color per channel is at least 0x40.
             return c;
         }
 
-        template <std::size_t Dim>
+        template<std::size_t Dim>
         auto formatUdCoord(const ArrayDims<Dim>& coord)
         {
-            if constexpr (Dim == 1)
+            if constexpr(Dim == 1)
                 return std::to_string(coord[0]);
             else
             {
                 std::string s = "{";
-                for (auto v : coord)
+                for(auto v : coord)
                 {
-                    if (s.size() >= 2)
+                    if(s.size() >= 2)
                         s += ",";
                     s += std::to_string(v);
                 }
@@ -93,16 +93,16 @@ namespace llama
         inline auto formatDDTags(const std::vector<std::string>& tags)
         {
             std::string s;
-            for (const auto& tag : tags)
+            for(const auto& tag : tags)
             {
-                if (!s.empty())
+                if(!s.empty())
                     s += ".";
                 s += tag;
             }
             return s;
         }
 
-        template <std::size_t Dim>
+        template<std::size_t Dim>
         struct FieldBox
         {
             ArrayDims<Dim> adCoord;
@@ -112,7 +112,7 @@ namespace llama
             std::size_t size;
         };
 
-        template <typename Mapping>
+        template<typename Mapping>
         auto boxesFromMapping(const Mapping& mapping) -> std::vector<FieldBox<Mapping::ArrayDims::rank>>
         {
             using ArrayDims = typename Mapping::ArrayDims;
@@ -120,7 +120,7 @@ namespace llama
 
             std::vector<FieldBox<Mapping::ArrayDims::rank>> infos;
 
-            for (auto adCoord : ArrayDimsIndexRange{mapping.arrayDims()})
+            for(auto adCoord : ArrayDimsIndexRange{mapping.arrayDims()})
             {
                 forEachLeaf<RecordDim>(
                     [&](auto coord)
@@ -138,13 +138,13 @@ namespace llama
             return infos;
         }
 
-        template <std::size_t Dim>
+        template<std::size_t Dim>
         auto breakBoxes(std::vector<FieldBox<Dim>> boxes, std::size_t wrapByteCount) -> std::vector<FieldBox<Dim>>
         {
-            for (std::size_t i = 0; i < boxes.size(); i++)
+            for(std::size_t i = 0; i < boxes.size(); i++)
             {
                 auto& fb = boxes[i];
-                if (fb.nrAndOffset.offset / wrapByteCount != (fb.nrAndOffset.offset + fb.size - 1) / wrapByteCount)
+                if(fb.nrAndOffset.offset / wrapByteCount != (fb.nrAndOffset.offset + fb.size - 1) / wrapByteCount)
                 {
                     const auto remainingSpace = wrapByteCount - fb.nrAndOffset.offset % wrapByteCount;
                     auto newFb = fb;
@@ -160,20 +160,20 @@ namespace llama
 
     /// Returns an SVG image visualizing the memory layout created by the given mapping. The created memory blocks are
     /// wrapped after wrapByteCount bytes.
-    template <typename Mapping>
+    template<typename Mapping>
     auto toSvg(const Mapping& mapping, std::size_t wrapByteCount = 64, bool breakBoxes = true) -> std::string
     {
         constexpr auto byteSizeInPixel = 30;
         constexpr auto blobBlockWidth = 60;
 
         auto infos = internal::boxesFromMapping(mapping);
-        if (breakBoxes)
+        if(breakBoxes)
             infos = internal::breakBoxes(std::move(infos), wrapByteCount);
 
         std::string svg;
 
         std::array<int, Mapping::blobCount + 1> blobYOffset{};
-        for (auto i = 0; i < Mapping::blobCount; i++)
+        for(auto i = 0; i < Mapping::blobCount; i++)
         {
             const auto blobRows = (mapping.blobSize(i) + wrapByteCount - 1) / wrapByteCount;
             blobYOffset[i + 1] = blobYOffset[i] + (blobRows + 1) * byteSizeInPixel; // one row gap between blobs
@@ -202,7 +202,7 @@ namespace llama
                   byteSizeInPixel / 2)
             + svg;
 
-        for (const auto& info : infos)
+        for(const auto& info : infos)
         {
             const auto blobY = blobYOffset[info.nrAndOffset.nr];
             auto x = (info.nrAndOffset.offset % wrapByteCount) * byteSizeInPixel + blobBlockWidth;
@@ -211,7 +211,7 @@ namespace llama
             const auto width = byteSizeInPixel * info.size;
 
             constexpr auto cropBoxes = true;
-            if (cropBoxes)
+            if(cropBoxes)
             {
                 svg += fmt::format(
                     R"(<svg x="{}" y="{}" width="{}" height="{}">
@@ -231,7 +231,7 @@ namespace llama
                 width,
                 byteSizeInPixel,
                 fill);
-            for (auto i = 1; i < info.size; i++)
+            for(auto i = 1; i < info.size; i++)
             {
                 svg += fmt::format(
                     R"(<line x1="{}" y1="{}" x2="{}" y2="{}" stroke="#777"/>
@@ -248,7 +248,7 @@ namespace llama
                 y + byteSizeInPixel * 3 / 4,
                 internal::formatUdCoord(info.adCoord),
                 internal::formatDDTags(info.recordTags));
-            if (cropBoxes)
+            if(cropBoxes)
                 svg += R"(</svg>
 )";
         }
@@ -258,7 +258,7 @@ namespace llama
 
     /// Returns an HTML document visualizing the memory layout created by the given mapping. The visualization is
     /// resizeable.
-    template <typename Mapping>
+    template<typename Mapping>
     auto toHtml(const Mapping& mapping) -> std::string
     {
         constexpr auto byteSizeInPixel = 30;
@@ -283,9 +283,9 @@ namespace llama
         auto cssClass = [](const std::vector<std::string>& tags)
         {
             std::string s;
-            for (const auto& tag : tags)
+            for(const auto& tag : tags)
             {
-                if (!s.empty())
+                if(!s.empty())
                     s += "_";
                 s += tag;
             }
@@ -342,7 +342,7 @@ namespace llama
 <body>
     <header id="ruler">
 )");
-        for (auto i = 0; i < rulerLengthInBytes; i += rulerByteInterval)
+        for(auto i = 0; i < rulerLengthInBytes; i += rulerByteInterval)
             svg += fmt::format(
                 R"(</style>
         <div style="margin-left: {}px;">{}</div>)",
@@ -353,9 +353,9 @@ namespace llama
 )");
 
         auto currentBlobNr = std::numeric_limits<std::size_t>::max();
-        for (const auto& info : infos)
+        for(const auto& info : infos)
         {
-            if (currentBlobNr != info.nrAndOffset.nr)
+            if(currentBlobNr != info.nrAndOffset.nr)
             {
                 currentBlobNr = info.nrAndOffset.nr;
                 svg += fmt::format("<h1>Blob: {}</h1>", currentBlobNr);

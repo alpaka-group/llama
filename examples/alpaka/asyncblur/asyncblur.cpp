@@ -39,7 +39,7 @@ constexpr auto ELEMS_PER_BLOCK = 16; /// number of elements per direction(!) eve
 
 using FP = float;
 
-template <typename Mapping, typename AlpakaBuffer>
+template<typename Mapping, typename AlpakaBuffer>
 auto viewAlpakaBuffer(
     Mapping& mapping,
     AlpakaBuffer& buffer) // taking mapping by & on purpose, so Mapping can deduce const
@@ -71,17 +71,17 @@ using PixelOnAcc = llama::Record<
 /** Alpaka kernel functor used to blur a small image living in the device memory
  *  using the \ref PixelOnAcc record dimension
  */
-template <std::size_t Elems, std::size_t KernelSize, std::size_t ElemsPerBlock>
+template<std::size_t Elems, std::size_t KernelSize, std::size_t ElemsPerBlock>
 struct BlurKernel
 {
-    template <typename Acc, typename View>
+    template<typename Acc, typename View>
     LLAMA_FN_HOST_ACC_INLINE void operator()(const Acc& acc, View oldImage, View newImage) const
     {
         const auto ti = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
 
         [[maybe_unused]] auto sharedView = [&]
         {
-            if constexpr (SHARED)
+            if constexpr(SHARED)
             {
                 // Using SoA for the shared memory
                 constexpr auto sharedChunkSize = ElemsPerBlock + 2 * KernelSize;
@@ -97,7 +97,7 @@ struct BlurKernel
         }();
 
         [[maybe_unused]] const auto bi = alpaka::getIdx<alpaka::Grid, alpaka::Blocks>(acc);
-        if constexpr (SHARED)
+        if constexpr(SHARED)
         {
             constexpr auto threadsPerBlock = ElemsPerBlock / Elems;
             const auto threadIdxInBlock = alpaka::getIdx<alpaka::Block, alpaka::Threads>(acc);
@@ -109,9 +109,9 @@ struct BlurKernel
                 alpaka::math::min(acc, bStart[1] + ElemsPerBlock + 2 * KernelSize, oldImage.mapping.arrayDimsSize[1]),
             };
             LLAMA_INDEPENDENT_DATA
-            for (auto y = bStart[0]; y < bEnd[0]; y += threadsPerBlock)
+            for(auto y = bStart[0]; y < bEnd[0]; y += threadsPerBlock)
                 LLAMA_INDEPENDENT_DATA
-            for (auto x = bStart[1]; x < bEnd[1]; x += threadsPerBlock)
+            for(auto x = bStart[1]; x < bEnd[1]; x += threadsPerBlock)
                 sharedView(y - bi[0] * ElemsPerBlock, x - bi[1] * ElemsPerBlock) = oldImage(y, x);
 
             alpaka::syncBlockThreads(acc);
@@ -124,9 +124,9 @@ struct BlurKernel
         };
 
         LLAMA_INDEPENDENT_DATA
-        for (auto y = start[0]; y < end[0]; ++y)
+        for(auto y = start[0]; y < end[0]; ++y)
             LLAMA_INDEPENDENT_DATA
-        for (auto x = start[1]; x < end[1]; ++x)
+        for(auto x = start[1]; x < end[1]; ++x)
         {
             llama::One<PixelOnAcc> sum{0};
 
@@ -138,11 +138,11 @@ struct BlurKernel
             const ItType i_a_end
                 = SHARED ? ItType(x + 2 * KernelSize + 1) - ItType(bi[1] * ElemsPerBlock) : x + 2 * KernelSize + 1;
             LLAMA_INDEPENDENT_DATA
-            for (auto b = iBStart; b < i_b_end; ++b)
+            for(auto b = iBStart; b < i_b_end; ++b)
                 LLAMA_INDEPENDENT_DATA
-            for (auto a = iAStart; a < i_a_end; ++a)
+            for(auto a = iAStart; a < i_a_end; ++a)
             {
-                if constexpr (SHARED)
+                if constexpr(SHARED)
                     sum += sharedView(std::size_t(b), std::size_t(a));
                 else
                     sum += oldImage(std::size_t(b), std::size_t(a));
@@ -171,7 +171,7 @@ try
     const DevAcc devAcc = alpaka::getDevByIdx<PltfAcc>(0);
     const DevHost devHost = alpaka::getDevByIdx<PltfHost>(0);
     std::vector<Queue> queue;
-    for (std::size_t i = 0; i < CHUNK_COUNT; ++i)
+    for(std::size_t i = 0; i < CHUNK_COUNT; ++i)
         queue.emplace_back(devAcc);
 
     // ASYNCCOPY
@@ -188,7 +188,7 @@ try
     std::vector<unsigned char> image;
     std::string out_filename = "output.png";
 
-    if (argc > 1)
+    if(argc > 1)
     {
         int x = 0;
         int y = 0;
@@ -202,7 +202,7 @@ try
         buffer_x = x + 2 * KERNEL_SIZE;
         buffer_y = y + 2 * KERNEL_SIZE;
 
-        if (argc > 2)
+        if(argc > 2)
             out_filename = std::string(argv[2]);
     }
 
@@ -235,7 +235,7 @@ try
     std::vector<llama::View<decltype(devMapping), std::byte*>> devOldView;
     std::vector<llama::View<decltype(devMapping), std::byte*>> devNewView;
 
-    for (std::size_t i = 0; i < CHUNK_COUNT; ++i)
+    for(std::size_t i = 0; i < CHUNK_COUNT; ++i)
     {
         hostChunkBuffer.push_back(alpaka::allocBuf<std::byte, std::size_t>(devHost, devBufferSize));
         hostChunkView.push_back(viewAlpakaBuffer(devMapping, hostChunkBuffer.back()));
@@ -249,15 +249,15 @@ try
 
     chrono.printAndReset("Alloc");
 
-    if (image.empty())
+    if(image.empty())
     {
         image.resize(img_x * img_y * 3);
         std::default_random_engine generator;
         std::normal_distribution<FP> distribution{FP(0), FP(0.5)};
-        for (std::size_t y = 0; y < buffer_y; ++y)
+        for(std::size_t y = 0; y < buffer_y; ++y)
         {
             LLAMA_INDEPENDENT_DATA
-            for (std::size_t x = 0; x < buffer_x; ++x)
+            for(std::size_t x = 0; x < buffer_x; ++x)
             {
                 hostView(y, x)(tag::R()) = std::abs(distribution(generator));
                 hostView(y, x)(tag::G()) = std::abs(distribution(generator));
@@ -267,10 +267,10 @@ try
     }
     else
     {
-        for (std::size_t y = 0; y < buffer_y; ++y)
+        for(std::size_t y = 0; y < buffer_y; ++y)
         {
             LLAMA_INDEPENDENT_DATA
-            for (std::size_t x = 0; x < buffer_x; ++x)
+            for(std::size_t x = 0; x < buffer_x; ++x)
             {
                 const auto X = std::clamp<std::size_t>(x, KERNEL_SIZE, img_x + KERNEL_SIZE - 1);
                 const auto Y = std::clamp<std::size_t>(y, KERNEL_SIZE, img_y + KERNEL_SIZE - 1);
@@ -300,8 +300,8 @@ try
         const ArrayDims validMiniSize;
     };
     std::list<VirtualHostElement> virtualHostList;
-    for (std::size_t chunk_y = 0; chunk_y < chunks[0]; ++chunk_y)
-        for (std::size_t chunk_x = 0; chunk_x < chunks[1]; ++chunk_x)
+    for(std::size_t chunk_y = 0; chunk_y < chunks[0]; ++chunk_y)
+        for(std::size_t chunk_x = 0; chunk_x < chunks[1]; ++chunk_x)
         {
             // Create virtual view with size of mini view
             const ArrayDims validMiniSize{
@@ -311,24 +311,24 @@ try
 
             // Find free chunk stream
             std::size_t chunkNr = virtualHostList.size();
-            if (virtualHostList.size() < CHUNK_COUNT)
+            if(virtualHostList.size() < CHUNK_COUNT)
                 virtualHostList.push_back({virtualHost, validMiniSize});
             else
             {
                 bool notFound = true;
-                while (notFound)
+                while(notFound)
                 {
                     auto chunkIt = virtualHostList.begin();
-                    for (chunkNr = 0; chunkNr < CHUNK_COUNT; ++chunkNr)
+                    for(chunkNr = 0; chunkNr < CHUNK_COUNT; ++chunkNr)
                     {
-                        if (alpaka::empty(queue[chunkNr]))
+                        if(alpaka::empty(queue[chunkNr]))
                         {
                             // Copy data back
                             LLAMA_INDEPENDENT_DATA
-                            for (std::size_t y = 0; y < chunkIt->validMiniSize[0] - 2 * KERNEL_SIZE; ++y)
+                            for(std::size_t y = 0; y < chunkIt->validMiniSize[0] - 2 * KERNEL_SIZE; ++y)
                             {
                                 LLAMA_INDEPENDENT_DATA
-                                for (std::size_t x = 0; x < chunkIt->validMiniSize[1] - 2 * KERNEL_SIZE; ++x)
+                                for(std::size_t x = 0; x < chunkIt->validMiniSize[1] - 2 * KERNEL_SIZE; ++x)
                                     chunkIt->virtualHost(y + KERNEL_SIZE, x + KERNEL_SIZE)
                                         = hostChunkView[chunkNr](y + KERNEL_SIZE, x + KERNEL_SIZE);
                             }
@@ -339,16 +339,16 @@ try
                         }
                         chunkIt++;
                     }
-                    if (notFound)
+                    if(notFound)
                         std::this_thread::sleep_for(std::chrono::microseconds{1});
                 }
             }
 
             // Copy data from virtual view to mini view
-            for (std::size_t y = 0; y < validMiniSize[0]; ++y)
+            for(std::size_t y = 0; y < validMiniSize[0]; ++y)
             {
                 LLAMA_INDEPENDENT_DATA
-                for (std::size_t x = 0; x < validMiniSize[1]; ++x)
+                for(std::size_t x = 0; x < validMiniSize[1]; ++x)
                     hostChunkView[chunkNr](y, x) = virtualHost(y, x);
             }
             alpaka::memcpy(queue[chunkNr], devOldBuffer[chunkNr], hostChunkBuffer[chunkNr], devBufferSize);
@@ -365,14 +365,14 @@ try
 
     // Wait for not finished tasks on accelerator
     auto chunkIt = virtualHostList.begin();
-    for (std::size_t chunkNr = 0; chunkNr < CHUNK_COUNT; ++chunkNr)
+    for(std::size_t chunkNr = 0; chunkNr < CHUNK_COUNT; ++chunkNr)
     {
         alpaka::wait(queue[chunkNr]);
         // Copy data back
-        for (std::size_t y = 0; y < chunkIt->validMiniSize[0] - 2 * KERNEL_SIZE; ++y)
+        for(std::size_t y = 0; y < chunkIt->validMiniSize[0] - 2 * KERNEL_SIZE; ++y)
         {
             LLAMA_INDEPENDENT_DATA
-            for (std::size_t x = 0; x < chunkIt->validMiniSize[1] - 2 * KERNEL_SIZE; ++x)
+            for(std::size_t x = 0; x < chunkIt->validMiniSize[1] - 2 * KERNEL_SIZE; ++x)
                 chunkIt->virtualHost(y + KERNEL_SIZE, x + KERNEL_SIZE)
                     = hostChunkView[chunkNr](y + KERNEL_SIZE, x + KERNEL_SIZE);
         }
@@ -380,12 +380,12 @@ try
     }
     chrono.printAndReset("Blur kernel");
 
-    if (SAVE)
+    if(SAVE)
     {
-        for (std::size_t y = 0; y < img_y; ++y)
+        for(std::size_t y = 0; y < img_y; ++y)
         {
             LLAMA_INDEPENDENT_DATA
-            for (std::size_t x = 0; x < img_x; ++x)
+            for(std::size_t x = 0; x < img_x; ++x)
             {
                 auto* pixel = &image[(y * img_x + x) * 3];
                 pixel[0] = static_cast<unsigned char>(hostView(y + KERNEL_SIZE, x + KERNEL_SIZE)(tag::R()) * 255.);
@@ -398,7 +398,7 @@ try
 
     return 0;
 }
-catch (const std::exception& e)
+catch(const std::exception& e)
 {
     std::cerr << "Exception: " << e.what() << '\n';
 }

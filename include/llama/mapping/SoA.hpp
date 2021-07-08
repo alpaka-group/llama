@@ -13,7 +13,7 @@ namespace llama::mapping
     /// \tparam SeparateBuffers If true, every element of the record dimension is mapped to its own buffer.
     /// \tparam LinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
     /// how big the linear domain gets.
-    template <
+    template<
         typename T_ArrayDims,
         typename T_RecordDim,
         bool SeparateBuffers = true,
@@ -41,7 +41,7 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto blobSize(std::size_t blobIndex) const -> std::size_t
         {
-            if constexpr (SeparateBuffers)
+            if constexpr(SeparateBuffers)
             {
                 constexpr Array<std::size_t, blobCount> typeSizes = []() constexpr
                 {
@@ -57,10 +57,10 @@ namespace llama::mapping
                 return LinearizeArrayDimsFunctor{}.size(arrayDimsSize) * sizeOf<RecordDim>;
         }
 
-        template <std::size_t... RecordCoords>
+        template<std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayDims coord) const -> NrAndOffset
         {
-            if constexpr (SeparateBuffers)
+            if constexpr(SeparateBuffers)
             {
                 constexpr auto blob = flatRecordCoord<RecordDim, RecordCoord<RecordCoords...>>;
                 const auto offset = LinearizeArrayDimsFunctor{}(coord, arrayDimsSize)
@@ -84,18 +84,18 @@ namespace llama::mapping
 
     /// Struct of array mapping storing the entire layout in a single blob.
     /// \see SoA
-    template <typename ArrayDims, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+    template<typename ArrayDims, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     using SingleBlobSoA = SoA<ArrayDims, RecordDim, false, LinearizeArrayDimsFunctor>;
 
     /// Struct of array mapping storing each attribute of the record dimension in a separate blob.
     /// \see SoA
-    template <typename ArrayDims, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+    template<typename ArrayDims, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     using MultiBlobSoA = SoA<ArrayDims, RecordDim, true, LinearizeArrayDimsFunctor>;
 
-    template <bool SeparateBuffers = false, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+    template<bool SeparateBuffers = false, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     struct PreconfiguredSoA
     {
-        template <typename ArrayDims, typename RecordDim>
+        template<typename ArrayDims, typename RecordDim>
         using type = SoA<ArrayDims, RecordDim, SeparateBuffers, LinearizeArrayDimsFunctor>;
     };
 } // namespace llama::mapping

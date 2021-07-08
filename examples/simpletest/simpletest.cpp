@@ -6,7 +6,8 @@
  * itself is not under the public domain but LGPL3+.
  */
 
-/// Simple example for LLAMA showing how to define array and record dimensions, to create a view and to access the data.
+/// Simple example for LLAMA showing how to define array and record dimensions, to create a view and to access the
+/// data.
 
 #include <iostream>
 #include <llama/llama.hpp>
@@ -49,7 +50,7 @@ using Name = llama::Record<
 
 namespace
 {
-    template <class T>
+    template<class T>
     auto type(const T& t) -> std::string
     {
         return boost::core::demangle(typeid(t).name());
@@ -57,18 +58,18 @@ namespace
 
     /// Prints the coordinates of a given \ref llama::RecordCoord for debugging
     /// and testing purposes
-    template <std::size_t... RecordCoords>
+    template<std::size_t... RecordCoords>
     void printCoords(llama::RecordCoord<RecordCoords...>)
     {
         (std::cout << ... << RecordCoords);
     }
 
-    template <typename Out>
+    template<typename Out>
     void split(const std::string& s, char delim, Out result)
     {
         std::stringstream ss(s);
         std::string item;
-        while (std::getline(ss, item, delim))
+        while(std::getline(ss, item, delim))
         {
             *(result++) = item;
         }
@@ -84,7 +85,7 @@ namespace
     auto nSpaces(int n) -> std::string
     {
         std::string result;
-        for (int i = 0; i < n; ++i)
+        for(int i = 0; i < n; ++i)
             result += " ";
         return result;
     }
@@ -99,12 +100,12 @@ namespace
         auto tokens = split(raw, '\n');
         std::string result;
         int indent = 0;
-        for (auto t : tokens)
+        for(auto t : tokens)
         {
-            if (t.back() == '>' || (t.length() > 1 && t[t.length() - 2] == '>'))
+            if(t.back() == '>' || (t.length() > 1 && t[t.length() - 2] == '>'))
                 indent -= 4;
             result += nSpaces(indent) + t + "\n";
-            if (t.back() == '<')
+            if(t.back() == '<')
                 indent += 4;
         }
         return result;
@@ -113,10 +114,10 @@ namespace
 
 /// Example functor for \ref llama::forEachLeaf which can also be used to print the
 /// coordinates inside of a record dimension when called.
-template <typename VirtualRecord>
+template<typename VirtualRecord>
 struct SetZeroFunctor
 {
-    template <typename Coord>
+    template<typename Coord>
     void operator()(Coord coord)
     {
         vd(coord) = 0;
@@ -178,11 +179,11 @@ try
               << '\n';
 
     // iterating over the array dimensions at run time to do some stuff with the allocated data
-    for (size_t x = 0; x < adSize[0]; ++x)
+    for(size_t x = 0; x < adSize[0]; ++x)
         // telling the compiler that all data in the following loop is
         // independent to each other and thus can be vectorized
         LLAMA_INDEPENDENT_DATA
-    for (size_t y = 0; y < adSize[1]; ++y)
+    for(size_t y = 0; y < adSize[1]; ++y)
     {
         // Defining a functor for a given virtual record
         SetZeroFunctor<decltype(view(x, y))> szf{view(x, y)};
@@ -192,13 +193,14 @@ try
         // Applying the functor for the sub tree momentum (0), so basically
         // for momentum.z, and momentum.x
         llama::forEachLeaf<Name>(szf, st::Momentum{});
-        // the array dimensions can be given as multiple comma separated arguments or as one parameter of type ArrayDims
+        // the array dimensions can be given as multiple comma separated arguments or as one parameter of type
+        // ArrayDims
         view({x, y}) = double(x + y) / double(adSize[0] + adSize[1]);
     }
 
-    for (size_t x = 0; x < adSize[0]; ++x)
+    for(size_t x = 0; x < adSize[0]; ++x)
         LLAMA_INDEPENDENT_DATA
-    for (size_t y = 0; y < adSize[1]; ++y)
+    for(size_t y = 0; y < adSize[1]; ++y)
     {
         // Showing different options of access data with llama. Internally
         // all do the same data- and mappingwise
@@ -212,15 +214,15 @@ try
     }
     double sum = 0.0;
     LLAMA_INDEPENDENT_DATA
-    for (size_t x = 0; x < adSize[0]; ++x)
+    for(size_t x = 0; x < adSize[0]; ++x)
         LLAMA_INDEPENDENT_DATA
-    for (size_t y = 0; y < adSize[1]; ++y)
+    for(size_t y = 0; y < adSize[1]; ++y)
         sum += view(x, y)(llama::RecordCoord<1, 0>{});
     std::cout << "Sum: " << sum << '\n';
 
     return 0;
 }
-catch (const std::exception& e)
+catch(const std::exception& e)
 {
     std::cerr << "Exception: " << e.what() << '\n';
 }

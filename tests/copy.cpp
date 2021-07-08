@@ -8,14 +8,14 @@ namespace
     using ArrayDims = llama::ArrayDims<2>;
     using RecordDim = Vec3I;
 
-    template <typename SrcMapping, typename DstMapping, typename CopyFunc>
+    template<typename SrcMapping, typename DstMapping, typename CopyFunc>
     void testCopy(CopyFunc copy)
     {
         const auto viewSize = ArrayDims{4, 8};
         const auto srcMapping = SrcMapping(viewSize);
         auto srcView = llama::allocView(srcMapping);
         auto value = std::size_t{0};
-        for (auto ad : llama::ArrayDimsIndexRange{srcMapping.arrayDims()})
+        for(auto ad : llama::ArrayDimsIndexRange{srcMapping.arrayDims()})
             llama::forEachLeaf<RecordDim>(
                 [&](auto coord)
                 {
@@ -27,7 +27,7 @@ namespace
         copy(srcView, dstView);
 
         value = 0;
-        for (auto ad : llama::ArrayDimsIndexRange{srcMapping.arrayDims()})
+        for(auto ad : llama::ArrayDimsIndexRange{srcMapping.arrayDims()})
             llama::forEachLeaf<RecordDim>(
                 [&](auto coord)
                 {
@@ -36,10 +36,10 @@ namespace
                 });
     }
 
-    template <typename Mapping>
+    template<typename Mapping>
     inline constexpr bool isSoA = false;
 
-    template <typename ArrayDims, typename RecordDim, bool SeparateBuffers, typename LinearizeArrayDimsFunctor>
+    template<typename ArrayDims, typename RecordDim, bool SeparateBuffers, typename LinearizeArrayDimsFunctor>
     inline constexpr bool
         isSoA<llama::mapping::SoA<ArrayDims, RecordDim, SeparateBuffers, LinearizeArrayDimsFunctor>> = true;
 
@@ -64,7 +64,7 @@ namespace
 
     using AllMappingsProduct = boost::mp11::mp_product<boost::mp11::mp_list, AllMappings, AllMappings>;
 
-    template <typename List>
+    template<typename List>
     using BothAreSoAOrHaveDifferentLinearizer = std::bool_constant<
         (isSoA<boost::mp11::mp_first<List>> && isSoA<boost::mp11::mp_second<List>>)
         || !std::is_same_v<

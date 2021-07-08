@@ -11,7 +11,7 @@ namespace llama::mapping
 {
     /// Forwards all calls to the inner mapping. Counts all accesses made to all bytes, allowing to extract a heatmap.
     /// \tparam Mapping The type of the inner mapping.
-    template <typename Mapping, typename CountType = std::size_t>
+    template<typename Mapping, typename CountType = std::size_t>
     struct Heatmap
     {
         using ArrayDims = typename Mapping::ArrayDims;
@@ -23,7 +23,7 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE
         Heatmap(Mapping mapping) : mapping(mapping)
         {
-            for (auto i = 0; i < blobCount; i++)
+            for(auto i = 0; i < blobCount; i++)
                 byteHits[i] = std::vector<std::atomic<CountType>>(blobSize(i));
         }
 
@@ -44,11 +44,11 @@ namespace llama::mapping
             return mapping.blobSize(i);
         }
 
-        template <std::size_t... RecordCoords>
+        template<std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayDims coord) const -> NrAndOffset
         {
             const auto nao = mapping.template blobNrAndOffset<RecordCoords...>(coord);
-            for (auto i = 0; i < sizeof(GetType<RecordDim, RecordCoord<RecordCoords...>>); i++)
+            for(auto i = 0; i < sizeof(GetType<RecordDim, RecordCoord<RecordCoords...>>); i++)
                 byteHits[nao.nr][nao.offset + i]++;
             return nao;
         }
@@ -57,12 +57,12 @@ namespace llama::mapping
         {
             std::stringstream f;
             f << "#!/usr/bin/gnuplot -p\n$data << EOD\n";
-            for (auto i = 0; i < blobCount; i++)
+            for(auto i = 0; i < blobCount; i++)
             {
                 std::size_t byteCount = 0;
-                for (const auto& hits : byteHits[i])
+                for(const auto& hits : byteHits[i])
                     f << hits << ((++byteCount % wrapAfterBytes == 0) ? '\n' : ' ');
-                while (byteCount++ % wrapAfterBytes != 0)
+                while(byteCount++ % wrapAfterBytes != 0)
                     f << "0 ";
                 f << '\n';
             }

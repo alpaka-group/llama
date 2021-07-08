@@ -12,18 +12,18 @@ namespace
         llama::Field<tag::C, Vec3D>,
         llama::Field<tag::Normal, Vec3D>>;
 
-    template <typename ArrayDims, typename RecordDim>
+    template<typename ArrayDims, typename RecordDim>
     struct AoSWithComputedNormal : llama::mapping::PackedAoS<ArrayDims, RecordDim>
     {
         using Base = llama::mapping::PackedAoS<ArrayDims, RecordDim>;
 
-        template <std::size_t... RecordCoords>
+        template<std::size_t... RecordCoords>
         static constexpr auto isComputed(llama::RecordCoord<RecordCoords...>)
         {
             return llama::RecordCoordCommonPrefixIsSame<llama::RecordCoord<RecordCoords...>, llama::RecordCoord<3>>;
         }
 
-        template <std::size_t... RecordCoords, typename Blob>
+        template<std::size_t... RecordCoords, typename Blob>
         constexpr auto compute(
             ArrayDims coord,
             llama::RecordCoord<RecordCoords...>,
@@ -60,11 +60,11 @@ namespace
             const auto normalz = crossz / length;
 
             using DC = llama::RecordCoord<RecordCoords...>;
-            if constexpr (std::is_same_v<DC, llama::RecordCoord<3, 0>>)
+            if constexpr(std::is_same_v<DC, llama::RecordCoord<3, 0>>)
                 return normalx;
-            if constexpr (std::is_same_v<DC, llama::RecordCoord<3, 1>>)
+            if constexpr(std::is_same_v<DC, llama::RecordCoord<3, 1>>)
                 return normaly;
-            if constexpr (std::is_same_v<DC, llama::RecordCoord<3, 2>>)
+            if constexpr(std::is_same_v<DC, llama::RecordCoord<3, 2>>)
                 return normalz;
             // if constexpr (std::is_same_v<DC, llama::RecordCoord<3>>)
             //{
@@ -109,7 +109,7 @@ TEST_CASE("computedprop")
 namespace
 {
     // Maps accesses to the product of the ArrayDims coord.
-    template <typename T_ArrayDims, typename T_RecordDim>
+    template<typename T_ArrayDims, typename T_RecordDim>
     struct ComputedMapping
     {
         using ArrayDims = T_ArrayDims;
@@ -122,13 +122,13 @@ namespace
         {
         }
 
-        template <std::size_t... RecordCoords>
+        template<std::size_t... RecordCoords>
         static constexpr auto isComputed(llama::RecordCoord<RecordCoords...>)
         {
             return true;
         }
 
-        template <std::size_t... RecordCoords, typename Blob>
+        template<std::size_t... RecordCoords, typename Blob>
         constexpr auto compute(ArrayDims coord, llama::RecordCoord<RecordCoords...>, llama::Array<Blob, blobCount>&)
             const -> std::size_t
         {
@@ -152,7 +152,7 @@ TEST_CASE("fully_computed_mapping")
 
 namespace
 {
-    template <
+    template<
         typename T_ArrayDims,
         typename T_RecordDim,
         typename LinearizeArrayDimsFunctor = llama::mapping::LinearizeArrayDimsCpp>
@@ -196,13 +196,13 @@ namespace
             return (LinearizeArrayDimsFunctor{}.size(arrayDimsSize) + wordBytes - 1) / wordBytes;
         }
 
-        template <std::size_t... RecordCoords>
+        template<std::size_t... RecordCoords>
         static constexpr auto isComputed(llama::RecordCoord<RecordCoords...>)
         {
             return true;
         }
 
-        template <std::size_t... RecordCoords, typename Blob>
+        template<std::size_t... RecordCoords, typename Blob>
         constexpr auto compute(
             ArrayDims coord,
             llama::RecordCoord<RecordCoords...>,
@@ -241,9 +241,9 @@ TEST_CASE("compressed_bools")
     CHECK(mapping.blobSize(2) == 8);
 
     auto view = llama::allocView(mapping);
-    for (auto y = 0u; y < 8; y++)
+    for(auto y = 0u; y < 8; y++)
     {
-        for (auto x = 0u; x < 8; x++)
+        for(auto x = 0u; x < 8; x++)
         {
             view(y, x)(tag::A{}) = static_cast<bool>(x * y & 1u);
             view(y, x)(tag::B{}, tag::X{}) = static_cast<bool>(x & 1u);
@@ -251,9 +251,9 @@ TEST_CASE("compressed_bools")
         }
     }
 
-    for (auto y = 0u; y < 8; y++)
+    for(auto y = 0u; y < 8; y++)
     {
-        for (auto x = 0u; x < 8; x++)
+        for(auto x = 0u; x < 8; x++)
         {
             CHECK(view(y, x)(tag::A{}) == static_cast<bool>(x * y & 1u));
             CHECK(view(y, x)(tag::B{}, tag::X{}) == static_cast<bool>(x & 1u));

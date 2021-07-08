@@ -9,13 +9,13 @@
 
 namespace llama
 {
-    template <typename... Elements>
+    template<typename... Elements>
     struct Tuple
     {
     };
 
     /// Tuple class like `std::tuple` but suitable for use with offloading devices like GPUs.
-    template <typename T_FirstElement, typename... Elements>
+    template<typename T_FirstElement, typename... Elements>
     struct Tuple<T_FirstElement, Elements...>
     {
         using FirstElement = T_FirstElement;
@@ -34,7 +34,7 @@ namespace llama
 #ifndef __INTEL_COMPILER
         /// Construct a tuple from forwarded values of potentially different types as the tuple stores.
         // SFINAE away this ctor if tuple elements cannot be constructed from ctor arguments
-        template <
+        template<
             typename T,
             typename... Ts,
             std::enable_if_t<
@@ -55,35 +55,35 @@ namespace llama
         RestTuple rest; ///< the remaining elements
     };
 
-    template <typename... Elements>
+    template<typename... Elements>
     Tuple(Elements...) -> Tuple<std::remove_cv_t<std::remove_reference_t<Elements>>...>;
 
-    template <std::size_t Pos, typename... Elements>
+    template<std::size_t Pos, typename... Elements>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto get(Tuple<Elements...>& tuple) -> auto&
     {
-        if constexpr (Pos == 0)
+        if constexpr(Pos == 0)
             return tuple.first;
         else
             return get<Pos - 1>(tuple.rest);
     }
 
-    template <std::size_t Pos, typename... Elements>
+    template<std::size_t Pos, typename... Elements>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto get(const Tuple<Elements...>& tuple) -> const auto&
     {
-        if constexpr (Pos == 0)
+        if constexpr(Pos == 0)
             return tuple.first;
         else
             return get<Pos - 1>(tuple.rest);
     }
 } // namespace llama
 
-template <typename... Elements>
+template<typename... Elements>
 struct std::tuple_size<llama::Tuple<Elements...>>
 {
     static constexpr auto value = sizeof...(Elements);
 };
 
-template <std::size_t I, typename... Elements>
+template<std::size_t I, typename... Elements>
 struct std::tuple_element<I, llama::Tuple<Elements...>>
 {
     using type = boost::mp11::mp_at_c<llama::Tuple<Elements...>, I>;
@@ -93,7 +93,7 @@ namespace llama
 {
     namespace internal
     {
-        template <typename... Elements, std::size_t... Is>
+        template<typename... Elements, std::size_t... Is>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto areEqual(
             const Tuple<Elements...>& a,
             const Tuple<Elements...>& b,
@@ -103,19 +103,19 @@ namespace llama
         }
     } // namespace internal
 
-    template <typename... ElementsA, typename... ElementsB>
+    template<typename... ElementsA, typename... ElementsB>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(const Tuple<ElementsA...>& a, const Tuple<ElementsB...>& b)
         -> bool
     {
         using namespace boost::mp11;
-        if constexpr (sizeof...(ElementsA) == sizeof...(ElementsB))
-            if constexpr (mp_apply<mp_all, mp_transform<std::is_same, mp_list<ElementsA...>, mp_list<ElementsB...>>>::
-                              value)
+        if constexpr(sizeof...(ElementsA) == sizeof...(ElementsB))
+            if constexpr(mp_apply<mp_all, mp_transform<std::is_same, mp_list<ElementsA...>, mp_list<ElementsB...>>>::
+                             value)
                 return internal::areEqual(a, b, std::make_index_sequence<sizeof...(ElementsA)>{});
         return false;
     }
 
-    template <typename... ElementsA, typename... ElementsB>
+    template<typename... ElementsA, typename... ElementsB>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto operator!=(const Tuple<ElementsA...>& a, const Tuple<ElementsB...>& b)
         -> bool
     {
@@ -124,7 +124,7 @@ namespace llama
 
     namespace internal
     {
-        template <typename Tuple1, typename Tuple2, size_t... Is1, size_t... Is2>
+        template<typename Tuple1, typename Tuple2, size_t... Is1, size_t... Is2>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto tupleCatImpl(
             const Tuple1& t1,
             const Tuple2& t2,
@@ -135,7 +135,7 @@ namespace llama
         }
     } // namespace internal
 
-    template <typename Tuple1, typename Tuple2>
+    template<typename Tuple1, typename Tuple2>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto tupleCat(const Tuple1& t1, const Tuple2& t2)
     {
         return internal::tupleCatImpl(
@@ -147,7 +147,7 @@ namespace llama
 
     namespace internal
     {
-        template <std::size_t Pos, typename Tuple, typename Replacement>
+        template<std::size_t Pos, typename Tuple, typename Replacement>
         struct TupleReplaceImpl
         {
             LLAMA_FN_HOST_ACC_INLINE
@@ -159,7 +159,7 @@ namespace llama
             };
         };
 
-        template <typename... Elements, typename Replacement>
+        template<typename... Elements, typename Replacement>
         struct TupleReplaceImpl<0, Tuple<Elements...>, Replacement>
         {
             LLAMA_FN_HOST_ACC_INLINE
@@ -169,7 +169,7 @@ namespace llama
             };
         };
 
-        template <typename OneElement, typename Replacement>
+        template<typename OneElement, typename Replacement>
         struct TupleReplaceImpl<0, Tuple<OneElement>, Replacement>
         {
             LLAMA_FN_HOST_ACC_INLINE
@@ -181,7 +181,7 @@ namespace llama
     } // namespace internal
 
     /// Creates a copy of a tuple with the element at position Pos replaced by replacement.
-    template <std::size_t Pos, typename Tuple, typename Replacement>
+    template<std::size_t Pos, typename Tuple, typename Replacement>
     LLAMA_FN_HOST_ACC_INLINE auto tupleReplace(Tuple tuple, Replacement replacement)
     {
         return internal::TupleReplaceImpl<Pos, Tuple, Replacement>()(tuple, replacement);
@@ -189,7 +189,7 @@ namespace llama
 
     namespace internal
     {
-        template <size_t... Is, typename... Elements, typename Functor>
+        template<size_t... Is, typename... Elements, typename Functor>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto tupleTransformHelper(
             std::index_sequence<Is...>,
             const Tuple<Elements...>& tuple,
@@ -204,14 +204,14 @@ namespace llama
     /// Applies a functor to every element of a tuple, creating a new tuple with the result of the element
     /// transformations. The functor needs to implement a template `operator()` to which all tuple elements are passed.
     // TODO: replace by mp11 version in Boost 1.74.
-    template <typename... Elements, typename Functor>
+    template<typename... Elements, typename Functor>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto tupleTransform(const Tuple<Elements...>& tuple, const Functor& functor)
     {
         return internal::tupleTransformHelper(std::make_index_sequence<sizeof...(Elements)>{}, tuple, functor);
     }
 
     /// Returns a copy of the tuple without the first element.
-    template <typename... Elements>
+    template<typename... Elements>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto pop_front(const Tuple<Elements...>& tuple)
     {
         return tuple.rest;

@@ -25,7 +25,7 @@ TEST_CASE("iterator")
         auto mapping = llama::mapping::AoS<ArrayDims, Position>{arrayDims};
         auto view = llama::allocView(mapping);
 
-        for (auto vd : view)
+        for(auto vd : view)
         {
             vd(tag::X{}) = 1;
             vd(tag::Y{}) = 2;
@@ -50,7 +50,7 @@ TEST_CASE("iterator.std_copy")
         auto soaView = llama::allocView(llama::mapping::SoA{arrayDims, Position{}});
 
         int i = 0;
-        for (auto vd : aosView)
+        for(auto vd : aosView)
         {
             vd(tag::X{}) = ++i;
             vd(tag::Y{}) = ++i;
@@ -58,7 +58,7 @@ TEST_CASE("iterator.std_copy")
         }
         std::copy(begin(aosView), end(aosView), begin(soaView));
         i = 0;
-        for (auto vd : soaView)
+        for(auto vd : soaView)
         {
             CHECK(vd(tag::X{}) == ++i);
             CHECK(vd(tag::Y{}) == ++i);
@@ -78,13 +78,13 @@ TEST_CASE("iterator.transform_reduce")
         auto soaView = llama::allocView(llama::mapping::SoA{arrayDims, Position{}});
 
         int i = 0;
-        for (auto vd : aosView)
+        for(auto vd : aosView)
         {
             vd(tag::X{}) = ++i;
             vd(tag::Y{}) = ++i;
             vd(tag::Z{}) = ++i;
         }
-        for (auto vd : soaView)
+        for(auto vd : soaView)
         {
             vd(tag::X{}) = ++i;
             vd(tag::Y{}) = ++i;
@@ -118,7 +118,7 @@ TEST_CASE("iterator.different_record_dim")
     auto soaView = llama::allocView(llama::mapping::SoA{arrayDims, Position{}});
 
     int i = 0;
-    for (auto vd : aosView)
+    for(auto vd : aosView)
     {
         vd(Pos1{}, tag::X{}) = ++i;
         vd(Pos1{}, tag::Y{}) = ++i;
@@ -127,7 +127,7 @@ TEST_CASE("iterator.different_record_dim")
     std::transform(begin(aosView), end(aosView), begin(soaView), [](auto wp) { return wp(Pos1{}) * 2; });
 
     i = 0;
-    for (auto vd : soaView)
+    for(auto vd : soaView)
     {
         CHECK(vd(tag::X{}) == ++i * 2);
         CHECK(vd(tag::Y{}) == ++i * 2);
@@ -152,7 +152,7 @@ TEST_CASE("ranges")
         STATIC_REQUIRE(std::ranges::range<decltype(view)>);
 
         int i = 0;
-        for (auto vd : view)
+        for(auto vd : view)
         {
             vd(tag::X{}) = ++i;
             vd(tag::Y{}) = ++i;
@@ -160,8 +160,8 @@ TEST_CASE("ranges")
         }
 
         std::vector<int> v;
-        for (auto y : view | std::views::filter([](auto vd) { return vd(tag::X{}) % 10 == 0; })
-                 | std::views::transform([](auto vd) { return vd(tag::Y{}); }) | std::views::take(2))
+        for(auto y : view | std::views::filter([](auto vd) { return vd(tag::X{}) % 10 == 0; })
+                | std::views::transform([](auto vd) { return vd(tag::Y{}); }) | std::views::take(2))
             v.push_back(y);
         CHECK(v == std::vector<int>{11, 41});
     };

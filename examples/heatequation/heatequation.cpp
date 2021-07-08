@@ -21,31 +21,31 @@
 #include <llama/llama.hpp>
 #include <utility>
 
-template <typename View>
+template<typename View>
 inline void kernel(uint32_t idx, const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
 {
     const auto r = dt / (dx * dx);
-    if (idx > 0 && idx < extent - 1u)
+    if(idx > 0 && idx < extent - 1u)
         uNext[idx] = uCurr[idx] * (1.0 - 2.0 * r) + uCurr[idx - 1] * r + uCurr[idx + 1] * r;
 }
 
-template <typename View>
+template<typename View>
 void update_scalar(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
 {
-    for (auto i = 0; i < extent; i++)
+    for(auto i = 0; i < extent; i++)
         kernel(i, uCurr, uNext, extent, dx, dt);
 }
 
 #if __has_include(<Vc/Vc>)
 #    include <Vc/Vc>
 
-template <typename View>
+template<typename View>
 inline void kernel_vec(uint32_t blockIdx, const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
 {
     const auto r = dt / (dx * dx);
 
     const auto baseIdx = static_cast<uint32_t>(blockIdx * Vc::double_v::size());
-    if (baseIdx > 0 && baseIdx + Vc::double_v::size() < extent)
+    if(baseIdx > 0 && baseIdx + Vc::double_v::size() < extent)
     {
         const auto next = Vc::double_v{&uCurr[baseIdx]} * (1.0 - 2.0 * r) + Vc::double_v{&uCurr[baseIdx - 1]} * r
             + Vc::double_v{&uCurr[baseIdx + 1]} * r;
@@ -53,28 +53,28 @@ inline void kernel_vec(uint32_t blockIdx, const View& uCurr, View& uNext, uint32
     }
     else
     {
-        for (auto idx = baseIdx; idx <= baseIdx + Vc::double_v::size(); idx++)
-            if (idx > 0 && idx < extent - 1u)
+        for(auto idx = baseIdx; idx <= baseIdx + Vc::double_v::size(); idx++)
+            if(idx > 0 && idx < extent - 1u)
                 uNext[idx] = uCurr[idx] * (1.0 - 2.0 * r) + uCurr[idx - 1] * r + uCurr[idx + 1] * r;
     }
 }
 
-template <typename View>
+template<typename View>
 void update_Vc(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
 {
     constexpr auto L = Vc::double_v::size();
     const auto blocks = (extent + L - 1) / L;
-    for (auto i = 0; i < blocks; i++)
+    for(auto i = 0; i < blocks; i++)
         kernel_vec(i, uCurr, uNext, extent, dx, dt);
 }
 
-template <typename View>
+template<typename View>
 void update_Vc_peel(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
 {
     constexpr auto L = Vc::double_v::size();
     const auto blocks = (extent + L - 1) / L;
     kernel_vec(0, uCurr, uNext, extent, dx, dt);
-    for (auto i = 1; i < blocks - 1; i++)
+    for(auto i = 1; i < blocks - 1; i++)
         kernel_vec(i, uCurr, uNext, extent, dx, dt);
     kernel_vec(blocks - 1, uCurr, uNext, extent, dx, dt);
 }
@@ -103,7 +103,7 @@ try
     const auto dt = tMax / static_cast<double>(timeSteps - 1);
 
     const auto r = dt / (dx * dx);
-    if (r > 0.5)
+    if(r > 0.5)
     {
         std::cerr << "Stability condition check failed: dt/dx^2 = " << r << ", it is required to be <= 0.5\n";
         return 1;
@@ -116,12 +116,12 @@ try
     auto run = [&](std::string_view updateName, auto update)
     {
         // init
-        for (uint32_t i = 0; i < extent; i++)
+        for(uint32_t i = 0; i < extent; i++)
             uCurr[i] = exactSolution(i * dx, 0.0);
 
         // run simulation
         const auto start = std::chrono::high_resolution_clock::now();
-        for (int step = 0; step < timeSteps; step++)
+        for(int step = 0; step < timeSteps; step++)
         {
             update(uCurr, uNext, extent, dx, dt);
             std::swap(uNext, uCurr);
@@ -131,7 +131,7 @@ try
 
         // calculate error
         double maxError = 0.0;
-        for (uint32_t i = 0; i < extent; i++)
+        for(uint32_t i = 0; i < extent; i++)
         {
             const auto error = std::abs(uNext[i] - exactSolution(i * dx, tMax));
             maxError = std::max(maxError, error);
@@ -139,7 +139,7 @@ try
 
         const auto errorThreshold = 1e-5;
         const auto resultCorrect = (maxError < errorThreshold);
-        if (resultCorrect)
+        if(resultCorrect)
             std::cout << "Correct!\n";
         else
             std::cout << "Incorrect! error = " << maxError << " (the grid resolution may be too low)\n";
@@ -153,7 +153,7 @@ try
 
     return 0;
 }
-catch (const std::exception& e)
+catch(const std::exception& e)
 {
     std::cerr << "Exception: " << e.what() << '\n';
 }

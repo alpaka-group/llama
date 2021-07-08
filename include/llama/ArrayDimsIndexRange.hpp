@@ -12,7 +12,7 @@
 namespace llama
 {
     /// Iterator supporting \ref ArrayDimsIndexRange.
-    template <std::size_t Dim>
+    template<std::size_t Dim>
     struct ArrayDimsIndexIterator
     {
         using value_type = ArrayDims<Dim>;
@@ -51,9 +51,9 @@ namespace llama
         constexpr auto operator++() noexcept -> ArrayDimsIndexIterator&
         {
             current[Dim - 1]++;
-            for (auto i = (int) Dim - 2; i >= 0; i--)
+            for(auto i = (int) Dim - 2; i >= 0; i--)
             {
-                if (current[i + 1] != size[i + 1])
+                if(current[i + 1] != size[i + 1])
                     return *this;
                 current[i + 1] = 0;
                 current[i]++;
@@ -73,9 +73,9 @@ namespace llama
         constexpr auto operator--() noexcept -> ArrayDimsIndexIterator&
         {
             current[Dim - 1]--;
-            for (auto i = (int) Dim - 2; i >= 0; i--)
+            for(auto i = (int) Dim - 2; i >= 0; i--)
             {
-                if (current[i + 1] != std::numeric_limits<std::size_t>::max())
+                if(current[i + 1] != std::numeric_limits<std::size_t>::max())
                     return *this;
                 current[i + 1] = size[i] - 1;
                 current[i]--;
@@ -102,13 +102,13 @@ namespace llama
         constexpr auto operator+=(difference_type n) noexcept -> ArrayDimsIndexIterator&
         {
             // add n to all lower dimensions with carry
-            for (auto i = (int) Dim - 1; i > 0 && n != 0; i--)
+            for(auto i = (int) Dim - 1; i > 0 && n != 0; i--)
             {
                 n += static_cast<difference_type>(current[i]);
                 const auto s = static_cast<difference_type>(size[i]);
                 auto mod = n % s;
                 n /= s;
-                if (mod < 0)
+                if(mod < 0)
                 {
                     mod += s;
                     n--;
@@ -129,14 +129,16 @@ namespace llama
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator+(ArrayDimsIndexIterator it, difference_type n) noexcept -> ArrayDimsIndexIterator
+        friend constexpr auto operator+(ArrayDimsIndexIterator it, difference_type n) noexcept
+            -> ArrayDimsIndexIterator
         {
             it += n;
             return it;
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator+(difference_type n, ArrayDimsIndexIterator it) noexcept -> ArrayDimsIndexIterator
+        friend constexpr auto operator+(difference_type n, ArrayDimsIndexIterator it) noexcept
+            -> ArrayDimsIndexIterator
         {
             return it + n;
         }
@@ -148,7 +150,8 @@ namespace llama
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator-(ArrayDimsIndexIterator it, difference_type n) noexcept -> ArrayDimsIndexIterator
+        friend constexpr auto operator-(ArrayDimsIndexIterator it, difference_type n) noexcept
+            -> ArrayDimsIndexIterator
         {
             it -= n;
             return it;
@@ -162,7 +165,7 @@ namespace llama
 
             difference_type n = a.current[Dim - 1] - b.current[Dim - 1];
             difference_type size = a.size[Dim - 1];
-            for (auto i = (int) Dim - 2; i >= 0; i--)
+            for(auto i = (int) Dim - 2; i >= 0; i--)
             {
                 n += (a.current[i] - b.current[i]) * size;
                 size *= a.size[i];
@@ -227,7 +230,7 @@ namespace llama
     };
 
     /// Range allowing to iterate over all indices in a \ref ArrayDims.
-    template <std::size_t Dim>
+    template<std::size_t Dim>
     struct ArrayDimsIndexRange
 #if CAN_USE_RANGES
         : std::ranges::view_base

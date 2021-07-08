@@ -157,7 +157,7 @@ TEST_CASE("ArrayDimsIndexIterator.operator+=")
 {
     std::vector<llama::ArrayDims<2>> coords;
     llama::ArrayDimsIndexRange r{llama::ArrayDims<2>{3, 4}};
-    for (auto it = r.begin(); it != r.end(); it += 2)
+    for(auto it = r.begin(); it != r.end(); it += 2)
         coords.push_back(*it);
 
     CHECK(coords == std::vector<llama::ArrayDims<2>>{{0, 0}, {0, 2}, {1, 0}, {1, 2}, {2, 0}, {2, 2}});
@@ -185,7 +185,7 @@ TEST_CASE("ArrayDimsIndexRange1D")
     llama::ArrayDims<1> ad{3};
 
     std::vector<llama::ArrayDims<1>> coords;
-    for (auto coord : llama::ArrayDimsIndexRange{ad})
+    for(auto coord : llama::ArrayDimsIndexRange{ad})
         coords.push_back(coord);
 
     CHECK(coords == std::vector<llama::ArrayDims<1>>{{0}, {1}, {2}});
@@ -196,7 +196,7 @@ TEST_CASE("ArrayDimsIndexRange2D")
     llama::ArrayDims<2> ad{3, 3};
 
     std::vector<llama::ArrayDims<2>> coords;
-    for (auto coord : llama::ArrayDimsIndexRange{ad})
+    for(auto coord : llama::ArrayDimsIndexRange{ad})
         coords.push_back(coord);
 
     CHECK(
@@ -209,7 +209,7 @@ TEST_CASE("ArrayDimsIndexRange3D")
     llama::ArrayDims<3> ad{3, 3, 3};
 
     std::vector<llama::ArrayDims<3>> coords;
-    for (auto coord : llama::ArrayDimsIndexRange{ad})
+    for(auto coord : llama::ArrayDimsIndexRange{ad})
         coords.push_back(coord);
 
     CHECK(
@@ -236,7 +236,7 @@ TEST_CASE("ArrayDimsIndexRange3D.reverse")
     llama::ArrayDims<3> ad{3, 3, 3};
 
     std::vector<llama::ArrayDims<3>> coords;
-    for (auto coord : llama::ArrayDimsIndexRange{ad} | std::views::reverse)
+    for(auto coord : llama::ArrayDimsIndexRange{ad} | std::views::reverse)
         coords.push_back(coord);
 
     CHECK(coords == std::vector<llama::ArrayDims<3>>{{{2, 2, 2}, {2, 2, 1}, {2, 2, 0}, {2, 1, 2}, {2, 1, 1}, {2, 1, 0},
@@ -253,13 +253,13 @@ TEST_CASE("ArrayDimsIndexRange1D.constexpr")
     {
         llama::ArrayDims<1> ad{3};
         int i = 0;
-        for (auto coord : llama::ArrayDimsIndexRange{ad})
+        for(auto coord : llama::ArrayDimsIndexRange{ad})
         {
-            if (i == 0 && coord != llama::ArrayDims<1>{0})
+            if(i == 0 && coord != llama::ArrayDims<1>{0})
                 return false;
-            if (i == 1 && coord != llama::ArrayDims<1>{1})
+            if(i == 1 && coord != llama::ArrayDims<1>{1})
                 return false;
-            if (i == 2 && coord != llama::ArrayDims<1>{2})
+            if(i == 2 && coord != llama::ArrayDims<1>{2})
                 return false;
             i++;
         }
@@ -274,7 +274,7 @@ TEST_CASE("ArrayDimsIndexRange3D.destructering")
 {
     llama::ArrayDims<3> ad{1, 1, 1};
 
-    for (auto [x, y, z] : llama::ArrayDimsIndexRange{ad})
+    for(auto [x, y, z] : llama::ArrayDimsIndexRange{ad})
     {
         CHECK(x == 0);
         CHECK(y == 0);

@@ -1038,15 +1038,15 @@ TEST_CASE("treemapping")
     auto view = allocView(mapping);
     zeroStorage(view);
 
-    for (size_t x = 0; x < arrayDims[0]; ++x)
-        for (size_t y = 0; y < arrayDims[1]; ++y)
+    for(size_t x = 0; x < arrayDims[0]; ++x)
+        for(size_t y = 0; y < arrayDims[1]; ++y)
         {
             auto record = view(x, y);
             llama::forEachLeaf<Particle>([&](auto coord) { record(coord) = 0; }, tag::Vel{});
         }
     double sum = 0.0;
-    for (size_t x = 0; x < arrayDims[0]; ++x)
-        for (size_t y = 0; y < arrayDims[1]; ++y)
+    for(size_t x = 0; x < arrayDims[0]; ++x)
+        for(size_t y = 0; y < arrayDims[1]; ++y)
             sum += view({x, y})(llama::RecordCoord<0, 1>{});
     CHECK(sum == 0);
 }
