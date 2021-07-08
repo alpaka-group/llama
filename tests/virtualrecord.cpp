@@ -1,4 +1,4 @@
-#include "common.h"
+#include "common.hpp"
 
 #include <algorithm>
 #include <catch2/catch.hpp>
