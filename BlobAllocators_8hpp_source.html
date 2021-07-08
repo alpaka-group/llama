@@ -107,7 +107,7 @@ $(document).ready(function(){initNavTree('BlobAllocators_8hpp_source.html',''); 
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
 <div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="namespacellama_1_1bloballoc.html">   20</a></span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacellama_1_1bloballoc.html">llama::bloballoc</a></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;{</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keyword">template</span> &lt;std::<span class="keywordtype">size_t</span> BytesToReserve&gt;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keyword">template</span>&lt;std::<span class="keywordtype">size_t</span> BytesToReserve&gt;</div>
 <div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="structllama_1_1bloballoc_1_1Stack.html">   25</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structllama_1_1bloballoc_1_1Stack.html">Stack</a></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    {</div>
 <div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="structllama_1_1bloballoc_1_1Stack.html#aa1802fbb089685a684c49cad9cb62213">   27</a></span>&#160;        <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> <span class="keyword">auto</span> <a class="code" href="structllama_1_1bloballoc_1_1Stack.html#aa1802fbb089685a684c49cad9cb62213">operator()</a>(std::size_t) <span class="keyword">const</span> -&gt; <a class="code" href="structllama_1_1Array.html">Array&lt;std::byte, BytesToReserve&gt;</a></div>
@@ -119,11 +119,11 @@ $(document).ready(function(){initNavTree('BlobAllocators_8hpp_source.html',''); 
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    static_assert(BlobAllocator&lt;Stack&lt;64&gt;&gt;);</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">template</span> &lt;std::<span class="keywordtype">size_t</span> Alignment = 64&gt;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">template</span>&lt;std::<span class="keywordtype">size_t</span> Alignment = 64&gt;</div>
 <div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="structllama_1_1bloballoc_1_1SharedPtr.html">   40</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structllama_1_1bloballoc_1_1SharedPtr.html">SharedPtr</a></div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    {</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="comment">// libc++ below 11.0.0 does not yet support shared_ptr with arrays</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keyword">using</span> <a class="code" href="structllama_1_1bloballoc_1_1SharedPtr.html#a30618a33557b511f650f5a5305eebf85">shared_ptr</a> =</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor">#if defined(_LIBCPP_VERSION) &amp;&amp; _LIBCPP_VERSION &lt; 11000</span></div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            boost::shared_ptr&lt;T&gt;;</div>
@@ -143,14 +143,14 @@ $(document).ready(function(){initNavTree('BlobAllocators_8hpp_source.html',''); 
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    static_assert(BlobAllocator&lt;SharedPtr&lt;&gt;&gt;);</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, std::<span class="keywordtype">size_t</span> Alignment&gt;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, std::<span class="keywordtype">size_t</span> Alignment&gt;</div>
 <div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="structllama_1_1bloballoc_1_1AlignedAllocator.html">   65</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structllama_1_1bloballoc_1_1AlignedAllocator.html">AlignedAllocator</a></div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    {</div>
 <div class="line"><a name="l00067"></a><span class="lineno"><a class="line" href="structllama_1_1bloballoc_1_1AlignedAllocator.html#a5c4611d39117e5bef57bf756e5e80a1b">   67</a></span>&#160;        <span class="keyword">using</span> <a class="code" href="structllama_1_1bloballoc_1_1AlignedAllocator.html#a5c4611d39117e5bef57bf756e5e80a1b">value_type</a> = T;</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keyword">inline</span> <a class="code" href="structllama_1_1bloballoc_1_1AlignedAllocator.html#afc1b74be5b9bec25c966fe343f0aa235">AlignedAllocator</a>() noexcept = default;</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        template &lt;typename T2&gt;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        template&lt;typename T2&gt;</div>
 <div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="structllama_1_1bloballoc_1_1AlignedAllocator.html#a36f6a75a027a96d79fd6a8623359d8a8">   72</a></span>&#160;        inline <a class="code" href="structllama_1_1bloballoc_1_1AlignedAllocator.html">AlignedAllocator</a>(<a class="code" href="structllama_1_1bloballoc_1_1AlignedAllocator.html">AlignedAllocator</a>&lt;T2, Alignment&gt; const&amp;) noexcept</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        {</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        }</div>
@@ -167,7 +167,7 @@ $(document).ready(function(){initNavTree('BlobAllocators_8hpp_source.html',''); 
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            ::operator <span class="keyword">delete</span>[](p, std::align_val_t{Alignment});</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        }</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T2&gt;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T2&gt;</div>
 <div class="line"><a name="l00089"></a><span class="lineno"><a class="line" href="structllama_1_1bloballoc_1_1AlignedAllocator_1_1rebind.html">   89</a></span>&#160;        <span class="keyword">struct </span><a class="code" href="structllama_1_1bloballoc_1_1AlignedAllocator_1_1rebind.html">rebind</a></div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        {</div>
 <div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="structllama_1_1bloballoc_1_1AlignedAllocator_1_1rebind.html#a21f94f8b3f97ad48279888f0d6a6cc2e">   91</a></span>&#160;            <span class="keyword">using</span> <a class="code" href="structllama_1_1bloballoc_1_1AlignedAllocator.html">other</a> = <a class="code" href="structllama_1_1bloballoc_1_1AlignedAllocator.html">AlignedAllocator&lt;T2, Alignment&gt;</a>;</div>
@@ -184,7 +184,7 @@ $(document).ready(function(){initNavTree('BlobAllocators_8hpp_source.html',''); 
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        }</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    };</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keyword">template</span> &lt;std::<span class="keywordtype">size_t</span> Alignment = 64u&gt;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keyword">template</span>&lt;std::<span class="keywordtype">size_t</span> Alignment = 64u&gt;</div>
 <div class="line"><a name="l00109"></a><span class="lineno"><a class="line" href="structllama_1_1bloballoc_1_1Vector.html">  109</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structllama_1_1bloballoc_1_1Vector.html">Vector</a></div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    {</div>
 <div class="line"><a name="l00111"></a><span class="lineno"><a class="line" href="structllama_1_1bloballoc_1_1Vector.html#a36ef3a2cc750b4c1ab737653fe4c8d9d">  111</a></span>&#160;        <span class="keyword">inline</span> <span class="keyword">auto</span> <a class="code" href="structllama_1_1bloballoc_1_1Vector.html#a36ef3a2cc750b4c1ab737653fe4c8d9d">operator()</a>(std::size_t count)<span class="keyword"> const</span></div>
@@ -203,7 +203,7 @@ $(document).ready(function(){initNavTree('BlobAllocators_8hpp_source.html',''); 
 <div class="ttc" id="astructllama_1_1bloballoc_1_1AlignedAllocator_html_a5c4611d39117e5bef57bf756e5e80a1b"><div class="ttname"><a href="structllama_1_1bloballoc_1_1AlignedAllocator.html#a5c4611d39117e5bef57bf756e5e80a1b">llama::bloballoc::AlignedAllocator::value_type</a></div><div class="ttdeci">T value_type</div><div class="ttdef"><b>Definition:</b> <a href="BlobAllocators_8hpp_source.html#l00067">BlobAllocators.hpp:67</a></div></div>
 <div class="ttc" id="anamespacellama_1_1bloballoc_html"><div class="ttname"><a href="namespacellama_1_1bloballoc.html">llama::bloballoc</a></div><div class="ttdef"><b>Definition:</b> <a href="BlobAllocators_8hpp_source.html#l00020">BlobAllocators.hpp:20</a></div></div>
 <div class="ttc" id="aConcepts_8hpp_html"><div class="ttname"><a href="Concepts_8hpp.html">Concepts.hpp</a></div></div>
-<div class="ttc" id="amacros_8hpp_html_adad0b5fb27fb373cb41c47ed7ab419af"><div class="ttname"><a href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a></div><div class="ttdeci">#define LLAMA_FN_HOST_ACC_INLINE</div><div class="ttdef"><b>Definition:</b> <a href="macros_8hpp_source.html#l00040">macros.hpp:40</a></div></div>
+<div class="ttc" id="amacros_8hpp_html_adad0b5fb27fb373cb41c47ed7ab419af"><div class="ttname"><a href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a></div><div class="ttdeci">#define LLAMA_FN_HOST_ACC_INLINE</div><div class="ttdef"><b>Definition:</b> <a href="macros_8hpp_source.html#l00039">macros.hpp:39</a></div></div>
 <div class="ttc" id="astructllama_1_1bloballoc_1_1SharedPtr_html"><div class="ttname"><a href="structllama_1_1bloballoc_1_1SharedPtr.html">llama::bloballoc::SharedPtr</a></div><div class="ttdef"><b>Definition:</b> <a href="BlobAllocators_8hpp_source.html#l00040">BlobAllocators.hpp:40</a></div></div>
 <div class="ttc" id="astructllama_1_1bloballoc_1_1SharedPtr_html_af7025755f2c0da24e7a917213e47b055"><div class="ttname"><a href="structllama_1_1bloballoc_1_1SharedPtr.html#af7025755f2c0da24e7a917213e47b055">llama::bloballoc::SharedPtr::operator()</a></div><div class="ttdeci">auto operator()(std::size_t count) const -&gt; shared_ptr&lt; std::byte[]&gt;</div><div class="ttdef"><b>Definition:</b> <a href="BlobAllocators_8hpp_source.html#l00051">BlobAllocators.hpp:51</a></div></div>
 <div class="ttc" id="astructllama_1_1bloballoc_1_1SharedPtr_html_a30618a33557b511f650f5a5305eebf85"><div class="ttname"><a href="structllama_1_1bloballoc_1_1SharedPtr.html#a30618a33557b511f650f5a5305eebf85">llama::bloballoc::SharedPtr::shared_ptr</a></div><div class="ttdeci">std::shared_ptr&lt; T &gt; shared_ptr</div><div class="ttdef"><b>Definition:</b> <a href="BlobAllocators_8hpp_source.html#l00048">BlobAllocators.hpp:48</a></div></div>
@@ -225,7 +225,7 @@ $(document).ready(function(){initNavTree('BlobAllocators_8hpp_source.html',''); 
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="BlobAllocators_8hpp.html">BlobAllocators.hpp</a></li>
-    <li class="footer">Generated on Thu Jul 8 2021 14:44:43 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Jul 8 2021 15:31:01 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

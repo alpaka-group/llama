@@ -94,11 +94,11 @@ $(document).ready(function(){initNavTree('Split_8hpp_source.html',''); initResiz
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;{</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    <span class="keyword">namespace </span>internal</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    {</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span>... Fields, std::size_t FirstCoord, std::size_t... Coords&gt;</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Fields, std::size_t FirstCoord, std::size_t... Coords&gt;</div>
 <div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="namespacellama_1_1mapping_1_1internal.html#a6e7e517f779808ecc12e1549170d2c16">   10</a></span>&#160;        <span class="keyword">auto</span> <a class="code" href="namespacellama_1_1mapping_1_1internal.html#a6e7e517f779808ecc12e1549170d2c16">partitionRecordDim</a>(<a class="code" href="structllama_1_1Record.html">Record&lt;Fields...&gt;</a>, <a class="code" href="structllama_1_1RecordCoord.html">RecordCoord&lt;FirstCoord, Coords...&gt;</a>)</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        {</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;            <span class="keyword">using namespace </span>boost::mp11;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;            <span class="keywordflow">if</span> constexpr (<span class="keyword">sizeof</span>...(Coords) == 0)</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;            <span class="keywordflow">if</span> constexpr(<span class="keyword">sizeof</span>...(Coords) == 0)</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;            {</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;                <span class="keyword">using</span> With = <a class="code" href="structllama_1_1Record.html">Record</a>&lt;mp_at_c&lt;<a class="code" href="structllama_1_1Record.html">Record</a>&lt;Fields...&gt;, FirstCoord&gt;&gt;;</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;                <span class="keyword">using</span> Without = mp_erase_c&lt;<a class="code" href="structllama_1_1Record.html">Record</a>&lt;Fields...&gt;, FirstCoord, FirstCoord + 1&gt;;</div>
@@ -115,7 +115,7 @@ $(document).ready(function(){initNavTree('Split_8hpp_source.html',''); initResiz
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;            }</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        }</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keyword">template</span> &lt;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keyword">template</span>&lt;</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            std::size_t FirstDstCoord,</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;            std::size_t... DstCoords,</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;            std::size_t FirstSkippedCoord,</div>
@@ -124,9 +124,9 @@ $(document).ready(function(){initNavTree('Split_8hpp_source.html',''); initResiz
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            <a class="code" href="structllama_1_1RecordCoord.html">RecordCoord&lt;FirstDstCoord, DstCoords...&gt;</a>,</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            <a class="code" href="structllama_1_1RecordCoord.html">RecordCoord&lt;FirstSkippedCoord, SkippedCoords...&gt;</a>)</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        {</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            <span class="keywordflow">if</span> constexpr (FirstDstCoord &lt; FirstSkippedCoord)</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            <span class="keywordflow">if</span> constexpr(FirstDstCoord &lt; FirstSkippedCoord)</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt;FirstDstCoord, DstCoords...&gt;{};</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr (FirstDstCoord &gt; FirstSkippedCoord)</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr(FirstDstCoord &gt; FirstSkippedCoord)</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt;FirstDstCoord - 1, DstCoords...&gt;{};</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="namespacellama.html#a42cdd926d98388052f028ab19c94b649">cat</a>(</div>
@@ -135,13 +135,13 @@ $(document).ready(function(){initNavTree('Split_8hpp_source.html',''); initResiz
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        }</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    } <span class="comment">// namespace internal</span></div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keyword">template</span> &lt;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keyword">template</span>&lt;</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keyword">typename</span> T_ArrayDims,</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keyword">typename</span> T_RecordDim,</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keyword">typename</span> RecordCoordForMapping1,</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span>...&gt;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>...&gt;</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keyword">typename</span> MappingTemplate1,</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span>...&gt;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>...&gt;</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keyword">typename</span> MappingTemplate2,</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keywordtype">bool</span> SeparateBlobs = <span class="keyword">false</span>&gt;</div>
 <div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="structllama_1_1mapping_1_1Split.html">   65</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structllama_1_1mapping_1_1Split.html">Split</a></div>
@@ -174,9 +174,9 @@ $(document).ready(function(){initNavTree('Split_8hpp_source.html',''); initResiz
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
 <div class="line"><a name="l00093"></a><span class="lineno"><a class="line" href="structllama_1_1mapping_1_1Split.html#a72f6aca7fdd74e91facfcb7627ae9de5">   93</a></span>&#160;        <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> constexpr <span class="keyword">auto</span> <a class="code" href="structllama_1_1mapping_1_1Split.html#a72f6aca7fdd74e91facfcb7627ae9de5">blobSize</a>(std::size_t i) <span class="keyword">const</span> -&gt; std::size_t</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        {</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <span class="keywordflow">if</span> constexpr (SeparateBlobs)</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <span class="keywordflow">if</span> constexpr(SeparateBlobs)</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            {</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                <span class="keywordflow">if</span> (i &lt; Mapping1::blobCount)</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                <span class="keywordflow">if</span>(i &lt; Mapping1::blobCount)</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                    <span class="keywordflow">return</span> mapping1.blobSize(i);</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                    <span class="keywordflow">return</span> mapping2.blobSize(i - Mapping1::blobCount);</div>
@@ -185,10 +185,10 @@ $(document).ready(function(){initNavTree('Split_8hpp_source.html',''); initResiz
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                <span class="keywordflow">return</span> mapping1.blobSize(0) + mapping2.blobSize(0);</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        }</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keyword">template</span> &lt;std::size_t... RecordCoords&gt;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keyword">template</span>&lt;std::size_t... RecordCoords&gt;</div>
 <div class="line"><a name="l00107"></a><span class="lineno"><a class="line" href="structllama_1_1mapping_1_1Split.html#af34e0cc8692cd75dfd737150e70c3605">  107</a></span>&#160;        <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> constexpr <span class="keyword">auto</span> <a class="code" href="structllama_1_1mapping_1_1Split.html#af34e0cc8692cd75dfd737150e70c3605">blobNrAndOffset</a>(<a class="code" href="structllama_1_1mapping_1_1Split.html#a1349c29b59f5814b85605d7c38a2cba5">ArrayDims</a> coord) <span class="keyword">const</span> -&gt; <a class="code" href="structllama_1_1NrAndOffset.html">NrAndOffset</a></div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        {</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            <span class="keywordflow">if</span> constexpr (<a class="code" href="namespacellama.html#a5d62fb6d777b67e3f73b80cc97d1cd44">RecordCoordCommonPrefixIsSame</a>&lt;RecordCoordForMapping1, <a class="code" href="structllama_1_1RecordCoord.html">RecordCoord&lt;RecordCoords...&gt;</a>&gt;)</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            <span class="keywordflow">if</span> constexpr(<a class="code" href="namespacellama.html#a5d62fb6d777b67e3f73b80cc97d1cd44">RecordCoordCommonPrefixIsSame</a>&lt;RecordCoordForMapping1, <a class="code" href="structllama_1_1RecordCoord.html">RecordCoord&lt;RecordCoords...&gt;</a>&gt;)</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;            {</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                <span class="keyword">using namespace </span>boost::mp11;</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;                <span class="comment">// zero all coordinate values that are part of RecordCoordForMapping1</span></div>
@@ -201,11 +201,11 @@ $(document).ready(function(){initNavTree('Split_8hpp_source.html',''); initResiz
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;                constexpr <span class="keyword">auto</span> dstCoord</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                    = <a class="code" href="namespacellama_1_1mapping_1_1internal.html#a7927f944cddebbb1667e82924459b46c">internal::offsetCoord</a>(<a class="code" href="structllama_1_1RecordCoord.html">RecordCoord&lt;RecordCoords...&gt;</a>{}, RecordCoordForMapping1{});</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;                <span class="keyword">auto</span> nrAndOffset = <a class="code" href="namespacellama_1_1internal.html#ac74f631870ff3d18892d46be8935a040">blobNrAndOffset</a>(dstCoord, coord, mapping2);</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;                <span class="keywordflow">if</span> constexpr (SeparateBlobs)</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;                <span class="keywordflow">if</span> constexpr(SeparateBlobs)</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;                    nrAndOffset.nr += Mapping1::blobCount;</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;                <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;                {</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;                    <span class="keywordflow">for</span> (<span class="keyword">auto</span> i = 0; i &lt; Mapping1::blobCount; i++)</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;                    <span class="keywordflow">for</span>(<span class="keyword">auto</span> i = 0; i &lt; Mapping1::blobCount; i++)</div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;                        nrAndOffset.offset += mapping1.blobSize(i);</div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;                }</div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;                <span class="keywordflow">return</span> nrAndOffset;</div>
@@ -213,7 +213,7 @@ $(document).ready(function(){initNavTree('Split_8hpp_source.html',''); initResiz
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        }</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        <span class="keyword">template</span> &lt;std::size_t... RecordCoords, <span class="keyword">typename</span> Mapping&gt;</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        <span class="keyword">template</span>&lt;std::size_t... RecordCoords, <span class="keyword">typename</span> Mapping&gt;</div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> constexpr <span class="keyword">auto</span> <a class="code" href="namespacellama_1_1internal.html#ac74f631870ff3d18892d46be8935a040">blobNrAndOffset</a>(</div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;            <a class="code" href="structllama_1_1RecordCoord.html">RecordCoord&lt;RecordCoords...&gt;</a>,</div>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;            <a class="code" href="structllama_1_1ArrayDims.html">ArrayDims</a> coord,</div>
@@ -227,16 +227,16 @@ $(document).ready(function(){initNavTree('Split_8hpp_source.html',''); initResiz
 <div class="line"><a name="l00145"></a><span class="lineno"><a class="line" href="structllama_1_1mapping_1_1Split.html#a0926a9a4c2b3169eabb7cbcf4c001d51">  145</a></span>&#160;        <a class="code" href="structllama_1_1mapping_1_1Split.html#ac482cdd5f48ea6c203b314a244485f71">Mapping2</a> <a class="code" href="structllama_1_1mapping_1_1Split.html#a0926a9a4c2b3169eabb7cbcf4c001d51">mapping2</a>;</div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    };</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    <span class="keyword">template</span> &lt;</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    <span class="keyword">template</span>&lt;</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        <span class="keyword">typename</span> RecordCoordForMapping1,</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span>...&gt;</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>...&gt;</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        <span class="keyword">typename</span> MappingTemplate1,</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span>...&gt;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>...&gt;</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        <span class="keyword">typename</span> MappingTemplate2,</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        <span class="keywordtype">bool</span> SeparateBlobs = <span class="keyword">false</span>&gt;</div>
 <div class="line"><a name="l00155"></a><span class="lineno"><a class="line" href="structllama_1_1mapping_1_1PreconfiguredSplit.html">  155</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structllama_1_1mapping_1_1PreconfiguredSplit.html">PreconfiguredSplit</a></div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    {</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ArrayDims, <span class="keyword">typename</span> RecordDim&gt;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> ArrayDims, <span class="keyword">typename</span> RecordDim&gt;</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <span class="keyword">using</span> <a class="code" href="structllama_1_1mapping_1_1Split.html">type</a></div>
 <div class="line"><a name="l00159"></a><span class="lineno"><a class="line" href="structllama_1_1mapping_1_1PreconfiguredSplit.html#ab73093a1ff47af270c2bf9bafc74ab30">  159</a></span>&#160;            = <a class="code" href="structllama_1_1mapping_1_1Split.html">Split&lt;ArrayDims, RecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs&gt;</a>;</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    };</div>
@@ -254,7 +254,7 @@ $(document).ready(function(){initNavTree('Split_8hpp_source.html',''); initResiz
 <div class="ttc" id="aCommon_8hpp_html"><div class="ttname"><a href="Common_8hpp.html">Common.hpp</a></div></div>
 <div class="ttc" id="astructllama_1_1mapping_1_1Split_html_a39c216b7efafcb4469ec5887a066d517"><div class="ttname"><a href="structllama_1_1mapping_1_1Split.html#a39c216b7efafcb4469ec5887a066d517">llama::mapping::Split::mapping1</a></div><div class="ttdeci">Mapping1 mapping1</div><div class="ttdef"><b>Definition:</b> <a href="Split_8hpp_source.html#l00144">Split.hpp:144</a></div></div>
 <div class="ttc" id="astructllama_1_1mapping_1_1Split_html_a5dfc0feacef8b04f199b8979e1eeae46"><div class="ttname"><a href="structllama_1_1mapping_1_1Split.html#a5dfc0feacef8b04f199b8979e1eeae46">llama::mapping::Split::RecordDim1</a></div><div class="ttdeci">boost::mp11::mp_first&lt; RecordDimPartitions &gt; RecordDim1</div><div class="ttdef"><b>Definition:</b> <a href="Split_8hpp_source.html#l00071">Split.hpp:71</a></div></div>
-<div class="ttc" id="amacros_8hpp_html_adad0b5fb27fb373cb41c47ed7ab419af"><div class="ttname"><a href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a></div><div class="ttdeci">#define LLAMA_FN_HOST_ACC_INLINE</div><div class="ttdef"><b>Definition:</b> <a href="macros_8hpp_source.html#l00040">macros.hpp:40</a></div></div>
+<div class="ttc" id="amacros_8hpp_html_adad0b5fb27fb373cb41c47ed7ab419af"><div class="ttname"><a href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a></div><div class="ttdeci">#define LLAMA_FN_HOST_ACC_INLINE</div><div class="ttdef"><b>Definition:</b> <a href="macros_8hpp_source.html#l00039">macros.hpp:39</a></div></div>
 <div class="ttc" id="astructllama_1_1mapping_1_1Split_html_a957c565797421cc0194e3be49a926816"><div class="ttname"><a href="structllama_1_1mapping_1_1Split.html#a957c565797421cc0194e3be49a926816">llama::mapping::Split::Split</a></div><div class="ttdeci">constexpr Split(ArrayDims size)</div><div class="ttdef"><b>Definition:</b> <a href="Split_8hpp_source.html#l00084">Split.hpp:84</a></div></div>
 <div class="ttc" id="astructllama_1_1NrAndOffset_html"><div class="ttname"><a href="structllama_1_1NrAndOffset.html">llama::NrAndOffset</a></div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00074">Core.hpp:74</a></div></div>
 <div class="ttc" id="astructllama_1_1mapping_1_1Split_html_a1349c29b59f5814b85605d7c38a2cba5"><div class="ttname"><a href="structllama_1_1mapping_1_1Split.html#a1349c29b59f5814b85605d7c38a2cba5">llama::mapping::Split::ArrayDims</a></div><div class="ttdeci">T_ArrayDims ArrayDims</div><div class="ttdef"><b>Definition:</b> <a href="Split_8hpp_source.html#l00067">Split.hpp:67</a></div></div>
@@ -275,7 +275,7 @@ $(document).ready(function(){initNavTree('Split_8hpp_source.html',''); initResiz
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="Split_8hpp.html">Split.hpp</a></li>
-    <li class="footer">Generated on Thu Jul 8 2021 14:44:43 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Jul 8 2021 15:31:01 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
