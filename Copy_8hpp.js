@@ -6,6 +6,7 @@ var Copy_8hpp =
     [ "Copy< mapping::AoSoA< ArrayDims, RecordDim, LanesSrc, LinearizeArrayDims >, mapping::SoA< ArrayDims, RecordDim, DstSeparateBuffers, LinearizeArrayDims > >", "structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayDims_00_01RecordDim_00_01LanesSrc_00_01Lineari6b6c0ada09a6ec04035a1ae0e30750c2.html", "structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayDims_00_01RecordDim_00_01LanesSrc_00_01Lineari6b6c0ada09a6ec04035a1ae0e30750c2" ],
     [ "Copy< mapping::SoA< ArrayDims, RecordDim, SrcSeparateBuffers, LinearizeArrayDims >, mapping::AoSoA< ArrayDims, RecordDim, LanesDst, LinearizeArrayDims > >", "structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayDims_00_01RecordDim_00_01SrcSeparateBuffers_00_0042d41fc32647d3fc532107ff3b31084.html", "structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayDims_00_01RecordDim_00_01SrcSeparateBuffers_00_0042d41fc32647d3fc532107ff3b31084" ],
     [ "aosoaCommonBlockCopy", "Copy_8hpp.html#abaefce711ff5d4566ea761ef08fab469", null ],
+    [ "assertTrivialCopyable", "Copy_8hpp.html#aafa8c3b0fd47fb8140b6b9aec0b61cb0", null ],
     [ "blobMemcpy", "Copy_8hpp.html#a22c65b7815a74750d6b589d95d19d703", null ],
     [ "copy", "Copy_8hpp.html#ab67a5448cc031309dc1aa8580b7d4950", null ],
     [ "fieldWiseCopy", "Copy_8hpp.html#af977754d689a5f3cc10fd80d4b37ba1f", null ],
