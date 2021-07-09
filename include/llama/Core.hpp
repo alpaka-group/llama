@@ -56,7 +56,7 @@ namespace llama
     /// constructible and trivially destructible.
     template<typename T>
     inline constexpr bool isAllowedFieldType
-        = std::is_trivially_constructible_v<T>&& std::is_trivially_destructible_v<T>;
+        = std::is_trivially_default_constructible_v<T>&& std::is_trivially_destructible_v<T>;
 
     /// Record dimension tree node which may either be a leaf or refer to a child tree presented as another \ref
     /// Record.
