@@ -13,6 +13,18 @@ namespace llama
 {
     namespace internal
     {
+        template<typename RecordDim>
+        void assertTrivialCopyable()
+        {
+            forEachLeaf<RecordDim>(
+                [](auto coord)
+                {
+                    static_assert(
+                        std::is_trivially_copyable_v<GetType<RecordDim, decltype(coord)>>,
+                        "All types in the record dimension must be trivially copyable");
+                });
+        }
+
         inline void parallel_memcpy(
             std::byte* dst,
             const std::byte* src,
@@ -39,6 +51,8 @@ namespace llama
         std::size_t threadId = 0,
         std::size_t threadCount = 1)
     {
+        internal::assertTrivialCopyable<typename Mapping::RecordDim>();
+
         // TODO: we do not verify if the mappings have other runtime state than the array dimensions
         if(srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
             throw std::runtime_error{"Array dimensions sizes are different"};
@@ -128,6 +142,7 @@ namespace llama
                 typename DstMapping::LinearizeArrayDimsFunctor>,
             "Source and destination mapping need to use the same array dimensions linearizer");
         using RecordDim = typename SrcMapping::RecordDim;
+        internal::assertTrivialCopyable<RecordDim>();
 
         constexpr bool MBSrc = SrcMapping::blobCount > 1;
         constexpr bool MBDst = DstMapping::blobCount > 1;
