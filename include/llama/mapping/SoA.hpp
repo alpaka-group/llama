@@ -54,7 +54,9 @@ namespace llama::mapping
                 return LinearizeArrayDimsFunctor{}.size(arrayDimsSize) * typeSizes[blobIndex];
             }
             else
+            {
                 return LinearizeArrayDimsFunctor{}.size(arrayDimsSize) * sizeOf<RecordDim>;
+            }
         }
 
         template<std::size_t... RecordCoords>
