@@ -44,7 +44,7 @@
 #ifndef LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS
 #    if defined(__clang__) || defined(__INTEL_LLVM_COMPILER)
 #        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...) __attribute__((always_inline)) __VA_ARGS__
-#    elif defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__NVCC__)
+#    elif defined(__GNUC__) || defined(__INTEL_COMPILER) || (defined(__NVCC__) && !defined(_MSC_VER))
 #        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...) __VA_ARGS__ __attribute__((always_inline))
 #    elif defined(_MSC_VER)
 #        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...)                                                              \
