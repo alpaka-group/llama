@@ -52,10 +52,9 @@ namespace llama::mapping
         {
             constexpr std::size_t flatIndex =
 #ifdef __NVCC__
-                Flattener{}.template flatIndex<RecordCoords...>;
-#else
-                Flattener::template flatIndex<RecordCoords...>;
+                *& // mess with nvcc compiler state to workaround bug
 #endif
+                 Flattener::template flatIndex<RecordCoords...>;
             constexpr auto offset = flatOffsetOf<typename Flattener::FlatRecordDim, flatIndex, AlignAndPad>;
             return {0, offset};
         }
