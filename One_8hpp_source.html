@@ -134,27 +134,26 @@ $(document).ready(function(){initNavTree('One_8hpp_source.html',''); initResizab
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        {</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;            constexpr std::size_t flatIndex =</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="preprocessor">#ifdef __NVCC__</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                Flattener{}.template flatIndex&lt;RecordCoords...&gt;;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                Flattener::template flatIndex&lt;RecordCoords...&gt;;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            constexpr <span class="keyword">auto</span> offset = flatOffsetOf&lt;typename Flattener::FlatRecordDim, flatIndex, AlignAndPad&gt;;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            <span class="keywordflow">return</span> {0, offset};</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        }</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keyword">using</span> Flattener = FlattenRecordDim&lt;T_RecordDim&gt;;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    };</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> ArrayDims, <span class="keyword">typename</span> RecordDim&gt;</div>
-<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="namespacellama_1_1mapping.html#ab753e777e0d0cf12f682f68c13e0c58c">   70</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="structllama_1_1mapping_1_1One.html">AlignedOne</a> = <a class="code" href="structllama_1_1mapping_1_1One.html">One&lt;ArrayDims, RecordDim, true, FlattenRecordDimInOrder&gt;</a>;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> ArrayDims, <span class="keyword">typename</span> RecordDim&gt;</div>
-<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="namespacellama_1_1mapping.html#aef7cbcc4973badb3b90c057487f87720">   76</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="structllama_1_1mapping_1_1One.html">MinAlignedOne</a> = <a class="code" href="structllama_1_1mapping_1_1One.html">One&lt;ArrayDims, RecordDim, true, FlattenRecordDimMinimizePadding&gt;</a>;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> ArrayDims, <span class="keyword">typename</span> RecordDim&gt;</div>
-<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="namespacellama_1_1mapping.html#aa300c4e99921b2858832808298b281e5">   81</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="structllama_1_1mapping_1_1One.html">PackedOne</a> = <a class="code" href="structllama_1_1mapping_1_1One.html">One&lt;ArrayDims, RecordDim, false, FlattenRecordDimInOrder&gt;</a>;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;} <span class="comment">// namespace llama::mapping</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                *&amp; <span class="comment">// mess with nvcc compiler state to workaround bug</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                 Flattener::template flatIndex&lt;RecordCoords...&gt;;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            constexpr <span class="keyword">auto</span> offset = flatOffsetOf&lt;typename Flattener::FlatRecordDim, flatIndex, AlignAndPad&gt;;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            <span class="keywordflow">return</span> {0, offset};</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        }</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keyword">using</span> Flattener = FlattenRecordDim&lt;T_RecordDim&gt;;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    };</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> ArrayDims, <span class="keyword">typename</span> RecordDim&gt;</div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="namespacellama_1_1mapping.html#ab753e777e0d0cf12f682f68c13e0c58c">   69</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="structllama_1_1mapping_1_1One.html">AlignedOne</a> = <a class="code" href="structllama_1_1mapping_1_1One.html">One&lt;ArrayDims, RecordDim, true, FlattenRecordDimInOrder&gt;</a>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> ArrayDims, <span class="keyword">typename</span> RecordDim&gt;</div>
+<div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="namespacellama_1_1mapping.html#aef7cbcc4973badb3b90c057487f87720">   75</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="structllama_1_1mapping_1_1One.html">MinAlignedOne</a> = <a class="code" href="structllama_1_1mapping_1_1One.html">One&lt;ArrayDims, RecordDim, true, FlattenRecordDimMinimizePadding&gt;</a>;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> ArrayDims, <span class="keyword">typename</span> RecordDim&gt;</div>
+<div class="line"><a name="l00080"></a><span class="lineno"><a class="line" href="namespacellama_1_1mapping.html#aa300c4e99921b2858832808298b281e5">   80</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="structllama_1_1mapping_1_1One.html">PackedOne</a> = <a class="code" href="structllama_1_1mapping_1_1One.html">One&lt;ArrayDims, RecordDim, false, FlattenRecordDimInOrder&gt;</a>;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;} <span class="comment">// namespace llama::mapping</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="astructllama_1_1mapping_1_1One_html_a8cab0377b73780693bade9fdc720e0d4"><div class="ttname"><a href="structllama_1_1mapping_1_1One.html#a8cab0377b73780693bade9fdc720e0d4">llama::mapping::One::RecordDim</a></div><div class="ttdeci">T_RecordDim RecordDim</div><div class="ttdef"><b>Definition:</b> <a href="One_8hpp_source.html#l00025">One.hpp:25</a></div></div>
@@ -175,7 +174,7 @@ $(document).ready(function(){initNavTree('One_8hpp_source.html',''); initResizab
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="One_8hpp.html">One.hpp</a></li>
-    <li class="footer">Generated on Fri Jul 9 2021 14:09:04 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Aug 12 2021 15:34:53 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
