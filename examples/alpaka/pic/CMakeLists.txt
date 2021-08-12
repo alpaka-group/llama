@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.3)
-project(llama-pic)
+project(llama-alpaka-pic)
 
 if (NOT TARGET llama::llama)
 	find_package(llama REQUIRED)
