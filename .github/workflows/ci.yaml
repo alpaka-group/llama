@@ -83,13 +83,17 @@ jobs:
             env: {CXX: g++-9, CUDA_URL: "https://developer.download.nvidia.com/compute/cuda/11.3.1/local_installers/cuda_11.3.1_465.19.01_linux.run"}
             cuda: true
           - name: build-ubuntu-gcc9-cuda11.4
-            env: {CXX: g++-9, CUDA_URL: "https://developer.download.nvidia.com/compute/cuda/11.4.0/local_installers/cuda_11.4.0_470.42.01_linux.run"}
+            env: {CXX: g++-9, CUDA_URL: "https://developer.download.nvidia.com/compute/cuda/11.4.1/local_installers/cuda_11.4.1_470.57.02_linux.run"}
             cuda: true
           - name: build-ubuntu-gcc10
             env: {CXX: g++-10}
           - name: build-ubuntu-gcc11
             env: {CXX: g++-11, INSTALL_EXTRA: g++-11}
             add-toolchain-repo: true
+          - name: build-ubuntu-gcc11-cuda11.4
+            env: {CXX: g++-11, INSTALL_EXTRA: g++-11, CUDA_URL: "https://developer.download.nvidia.com/compute/cuda/11.4.1/local_installers/cuda_11.4.1_470.57.02_linux.run"}
+            add-toolchain-repo: true
+            cuda: true
           - name: build-ubuntu-clang10
             env: {CXX: clang++-10}
           - name: build-ubuntu-clang11
