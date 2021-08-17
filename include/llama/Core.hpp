@@ -558,4 +558,11 @@ namespace llama
         {
         };
     } // namespace internal
+
+    /// Returns the integral n rounded up to be a multiple of mult.
+    template<typename Integral>
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto roundUpToMultiple(Integral n, Integral mult) -> Integral
+    {
+        return (n + mult - 1) / mult * mult;
+    }
 } // namespace llama
