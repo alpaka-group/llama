@@ -631,3 +631,32 @@ TEST_CASE("maxLanes")
     STATIC_REQUIRE(llama::mapping::maxLanes<RecordDim2, 256> == 16);
     STATIC_REQUIRE(llama::mapping::maxLanes<RecordDim2, 512> == 32);
 }
+
+TEST_CASE("AoSoA.size_round_up")
+{
+    using AoSoA = llama::mapping::AoSoA<llama::ArrayDims<1>, Particle, 4>;
+    constexpr auto psize = llama::sizeOf<Particle>;
+
+    CHECK(AoSoA{{0}}.blobSize(0) == 0 * psize);
+    CHECK(AoSoA{{1}}.blobSize(0) == 4 * psize);
+    CHECK(AoSoA{{2}}.blobSize(0) == 4 * psize);
+    CHECK(AoSoA{{3}}.blobSize(0) == 4 * psize);
+    CHECK(AoSoA{{4}}.blobSize(0) == 4 * psize);
+    CHECK(AoSoA{{5}}.blobSize(0) == 8 * psize);
+    CHECK(AoSoA{{6}}.blobSize(0) == 8 * psize);
+    CHECK(AoSoA{{7}}.blobSize(0) == 8 * psize);
+    CHECK(AoSoA{{8}}.blobSize(0) == 8 * psize);
+    CHECK(AoSoA{{9}}.blobSize(0) == 12 * psize);
+}
+
+TEST_CASE("AoSoA.address_within_bounds")
+{
+    using AD = llama::ArrayDims<1>;
+    using AoSoA = llama::mapping::AoSoA<AD, Particle, 4>;
+
+    const auto ad = AD{3};
+    auto mapping = AoSoA{ad};
+    for(auto i : llama::ArrayDimsIndexRange{ad})
+        llama::forEachLeaf<Particle>([&](auto rc)
+                                     { CHECK(mapping.blobNrAndOffset(i, rc).offset < mapping.blobSize(0)); });
+}
