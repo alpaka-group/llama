@@ -595,7 +595,13 @@ $(document).ready(function(){initNavTree('Core_8hpp_source.html',''); initResiza
 <div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;        {</div>
 <div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;        };</div>
 <div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;    } <span class="comment">// namespace internal</span></div>
-<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160;} <span class="comment">// namespace llama</span></div>
+<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160; </div>
+<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Integral&gt;</div>
+<div class="line"><a name="l00564"></a><span class="lineno"><a class="line" href="namespacellama.html#ab9c5c0a1ca0698a8871689b9924736ac">  564</a></span>&#160;    <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> constexpr <span class="keyword">auto</span> <a class="code" href="namespacellama_1_1internal.html#a365660e6c469c94566ee7fa45aa3e262">roundUpToMultiple</a>(Integral n, Integral mult) -&gt; Integral</div>
+<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;    {</div>
+<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;        <span class="keywordflow">return</span> (n + mult - 1) / mult * mult;</div>
+<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;    }</div>
+<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;} <span class="comment">// namespace llama</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="anamespacellama_html"><div class="ttname"><a href="namespacellama.html">llama</a></div><div class="ttdef"><b>Definition:</b> <a href="Array_8hpp_source.html#l00010">Array.hpp:10</a></div></div>
@@ -689,7 +695,7 @@ $(document).ready(function(){initNavTree('Core_8hpp_source.html',''); initResiza
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Core_8hpp.html">Core.hpp</a></li>
-    <li class="footer">Generated on Sat Aug 14 2021 09:13:47 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Aug 18 2021 07:53:06 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -113,9 +113,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac643000956b3c449fc69c188f9328e5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe6df810b7b9ad8884f9e614b77136d1"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoSoA.html#afe6df810b7b9ad8884f9e614b77136d1">blobSize</a> (std::size_t) const -&gt; std::size_t</td></tr>
 <tr class="separator:afe6df810b7b9ad8884f9e614b77136d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9949c75707bb90f982c0715591219cee"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
-<tr class="memitem:a9949c75707bb90f982c0715591219cee"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a9949c75707bb90f982c0715591219cee">blobNrAndOffset</a> (<a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a7ec49e5e8864c580b96c85cc0c421bc4">ArrayDims</a> coord) const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a></td></tr>
-<tr class="separator:a9949c75707bb90f982c0715591219cee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30d5d3b084bd32e428b7c3332c175754"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
+<tr class="memitem:a30d5d3b084bd32e428b7c3332c175754"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a30d5d3b084bd32e428b7c3332c175754">blobNrAndOffset</a> (<a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a7ec49e5e8864c580b96c85cc0c421bc4">ArrayDims</a> coord, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt;={}) const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a></td></tr>
+<tr class="separator:a30d5d3b084bd32e428b7c3332c175754"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -289,8 +289,8 @@ template&lt;typename T_ArrayDims , typename T_RecordDim , std::size_t Lanes, typ
 
 </div>
 </div>
-<a id="a9949c75707bb90f982c0715591219cee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9949c75707bb90f982c0715591219cee">&#9670;&nbsp;</a></span>blobNrAndOffset()</h2>
+<a id="a30d5d3b084bd32e428b7c3332c175754"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30d5d3b084bd32e428b7c3332c175754">&#9670;&nbsp;</a></span>blobNrAndOffset()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -306,8 +306,18 @@ template&lt;std::size_t... RecordCoords&gt; </div>
           <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1AoSoA.html">llama::mapping::AoSoA</a>&lt; T_ArrayDims, T_RecordDim, Lanes, T_LinearizeArrayDimsFunctor &gt;::blobNrAndOffset </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a7ec49e5e8864c580b96c85cc0c421bc4">ArrayDims</a>&#160;</td>
-          <td class="paramname"><em>coord</em></td><td>)</td>
-          <td> const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a>
+          <td class="paramname"><em>coord</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt;&#160;</td>
+          <td class="paramname"> = <code>{}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a>
         </td>
         </tr>
       </table>
@@ -318,7 +328,7 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AoSoA_8hpp_source.html#l00060">60</a> of file <a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoSoA_8hpp_source.html#l00062">62</a> of file <a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -389,7 +399,7 @@ template&lt;typename T_ArrayDims , typename T_RecordDim , std::size_t Lanes, typ
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1AoSoA.html">AoSoA</a></li>
-    <li class="footer">Generated on Sat Aug 14 2021 09:13:47 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Aug 18 2021 07:53:06 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

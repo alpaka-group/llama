@@ -255,6 +255,10 @@ Functions</h2></td></tr>
 <tr class="memitem:a8cf6c983757c6ebe94d81c6beede3e5b"><td class="memTemplParams" colspan="2">template&lt;std::size_t Dim, typename Func , typename... OuterIndices&gt; </td></tr>
 <tr class="memitem:a8cf6c983757c6ebe94d81c6beede3e5b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a8cf6c983757c6ebe94d81c6beede3e5b">forEachADCoord</a> (<a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>&lt; Dim &gt; adSize, Func &amp;&amp;func, OuterIndices... outerIndices)</td></tr>
 <tr class="separator:a8cf6c983757c6ebe94d81c6beede3e5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9c5c0a1ca0698a8871689b9924736ac"><td class="memTemplParams" colspan="2">template&lt;typename Integral &gt; </td></tr>
+<tr class="memitem:ab9c5c0a1ca0698a8871689b9924736ac"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ab9c5c0a1ca0698a8871689b9924736ac">roundUpToMultiple</a> (Integral n, Integral mult) -&gt; Integral</td></tr>
+<tr class="memdesc:ab9c5c0a1ca0698a8871689b9924736ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the integral n rounded up to be a multiple of mult.  <a href="namespacellama.html#ab9c5c0a1ca0698a8871689b9924736ac">More...</a><br /></td></tr>
+<tr class="separator:ab9c5c0a1ca0698a8871689b9924736ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32bf07b53ebc403eee401038fc95b591"><td class="memTemplParams" colspan="2">template&lt;std::size_t PieceLength, typename Mapping &gt; </td></tr>
 <tr class="memitem:a32bf07b53ebc403eee401038fc95b591"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a32bf07b53ebc403eee401038fc95b591">mapsPiecewiseContiguous</a> (const Mapping &amp;m) -&gt; bool</td></tr>
 <tr class="separator:a32bf07b53ebc403eee401038fc95b591"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1708,6 +1712,49 @@ template&lt;typename T , std::size_t N&gt; </div>
 
 </div>
 </div>
+<a id="ab9c5c0a1ca0698a8871689b9924736ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9c5c0a1ca0698a8871689b9924736ac">&#9670;&nbsp;</a></span>roundUpToMultiple()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Integral &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::roundUpToMultiple </td>
+          <td>(</td>
+          <td class="paramtype">Integral&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Integral&#160;</td>
+          <td class="paramname"><em>mult</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> -&gt; Integral
+    </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the integral n rounded up to be a multiple of mult. </p>
+
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00564">564</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a86a72929fc8c71b9aa2b514a74ab34eb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a86a72929fc8c71b9aa2b514a74ab34eb">&#9670;&nbsp;</a></span>structName()</h2>
 
@@ -2592,7 +2639,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Sat Aug 14 2021 09:13:47 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Aug 18 2021 07:53:06 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

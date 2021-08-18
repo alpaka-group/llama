@@ -46,6 +46,7 @@ var Core_8hpp =
     [ "forEachLeaf", "Core_8hpp.html#a90e79610dc6b5c1b8f472e61018cd61f", null ],
     [ "mp_for_each_inlined", "Core_8hpp.html#af16d07d01be7acc8ced82a040bac87da", null ],
     [ "offsetOfImplWorkaround", "Core_8hpp.html#a73eb0087b689dae5f64d631484cb9aeb", null ],
+    [ "roundUpToMultiple", "Core_8hpp.html#ab9c5c0a1ca0698a8871689b9924736ac", null ],
     [ "roundUpToMultiple", "Core_8hpp.html#a365660e6c469c94566ee7fa45aa3e262", null ],
     [ "sizeOfImpl", "Core_8hpp.html#aeab53e4609fe07abfb6f5f2d532cd388", null ],
     [ "structName", "Core_8hpp.html#a86a72929fc8c71b9aa2b514a74ab34eb", null ],
