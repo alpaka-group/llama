@@ -698,7 +698,45 @@ namespace llama
         {
             internal::assignTuples(asTuple(), t, std::make_index_sequence<std::tuple_size_v<TupleLike>>{});
         }
+
+        // swap for equal VirtualRecord
+        LLAMA_FN_HOST_ACC_INLINE friend void swap(
+            std::conditional_t<OwnView, VirtualRecord&, VirtualRecord> a,
+            std::conditional_t<OwnView, VirtualRecord&, VirtualRecord> b) noexcept
+        {
+            forEachLeaf<AccessibleRecordDim>(
+                [&](auto coord) LLAMA_LAMBDA_INLINE
+                {
+                    using std::swap;
+                    swap(a(coord), b(coord));
+                });
+        }
     };
+
+    // swap for heterogeneous VirtualRecord
+    template<
+        typename ViewA,
+        typename BoundRecordDimA,
+        bool OwnViewA,
+        typename ViewB,
+        typename BoundRecordDimB,
+        bool OwnViewB>
+    LLAMA_FN_HOST_ACC_INLINE auto swap(
+        VirtualRecord<ViewA, BoundRecordDimA, OwnViewA>& a,
+        VirtualRecord<ViewB, BoundRecordDimB, OwnViewB>& b) noexcept
+        -> std::enable_if_t<std::is_same_v<
+            typename VirtualRecord<ViewA, BoundRecordDimA, OwnViewA>::AccessibleRecordDim,
+            typename VirtualRecord<ViewB, BoundRecordDimB, OwnViewB>::AccessibleRecordDim>>
+    {
+        using LeftRecord = VirtualRecord<ViewA, BoundRecordDimA, OwnViewA>;
+        using RightRecord = VirtualRecord<ViewB, BoundRecordDimB, OwnViewB>;
+        forEachLeaf<typename LeftRecord::AccessibleRecordDim>(
+            [&](auto coord) LLAMA_LAMBDA_INLINE
+            {
+                using std::swap;
+                swap(std::forward<LeftRecord>(a)(coord), std::forward<LeftRecord>(b)(coord));
+            });
+    }
 
     template<typename View, typename BoundRecordCoord, bool OwnView>
     auto operator<<(std::ostream& os, const VirtualRecord<View, BoundRecordCoord, OwnView>& vr) -> std::ostream&

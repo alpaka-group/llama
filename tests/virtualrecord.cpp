@@ -980,3 +980,26 @@ TEST_CASE("VirtualRecord.operator<<")
     ss << view(0u);
     CHECK(ss.str() == expected);
 }
+
+TEST_CASE("VirtualRecord.swap")
+{
+    llama::One<Vec3I> p1{1};
+    llama::One<Vec3I> p2{2};
+
+    llama::forEachLeaf<Vec3I>(
+        [&](auto coord)
+        {
+            CHECK(p1(coord) == 1);
+            CHECK(p2(coord) == 2);
+        });
+
+    using std::swap; // to check that overload set (std::swap, llama::swap) is not ambigious
+    swap(p1, p2);
+
+    llama::forEachLeaf<Vec3I>(
+        [&](auto coord)
+        {
+            CHECK(p1(coord) == 2);
+            CHECK(p2(coord) == 1);
+        });
+}
