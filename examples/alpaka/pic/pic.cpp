@@ -28,8 +28,8 @@
 using Real = double;
 
 // simulation parameters
-constexpr size_t X_ = 1000; // grid size (normalized units, speed of light = 1)
-constexpr size_t Y_ = 1000; // grid size
+constexpr size_t CELLS_X = 1000; // grid size (normalized units, speed of light = 1)
+constexpr size_t CELLS_Y = 1000; // grid size
 constexpr Real dx = 0.01; // size of the cell
 constexpr Real dt = 0.99 * dx / M_SQRT2; // length of a timestep
 constexpr int ppc = 10; // particles per cell
@@ -52,6 +52,9 @@ constexpr auto reportInterval = 10;
 // tuning parameters
 constexpr auto AOSOA_LANES = 32;
 constexpr auto THREADS_PER_BLOCK = 128;
+
+constexpr size_t X_ = CELLS_X + 2; // grid size including ghost cells
+constexpr size_t Y_ = CELLS_Y + 2; // grid size including ghost cells
 
 // clang-format off
 struct X{};
@@ -385,18 +388,20 @@ template<typename VirtualParticle, typename FieldView>
 LLAMA_FN_HOST_ACC_INLINE void advance_particle(VirtualParticle part, const FieldView& E, const FieldView& B)
 {
     /* Interpolate fields (nearest-neighbor) */
-    /*FIXME: These are wrong. Even NGP interpolation must respect staggering! */
     const auto i = static_cast<size_t>(part(R{}, X{}) * inv_dx);
+    const auto i_shift = static_cast<size_t>(std::lround(part(R{}, X{}) * inv_dx));
     const auto j = static_cast<size_t>(part(R{}, Y{}) * inv_dx);
-    const auto El = E(i, j);
-    const auto Bl = B(i, j);
+    const auto j_shift = static_cast<size_t>(std::lround(part(R{}, Y{}) * inv_dx));
+
+    const auto E_ngp = makeV3Real(E(i_shift, j)(X{}), E(i, j_shift)(Y{}), E(i, j)(Z{}));
+    const auto B_ngp = makeV3Real(B(i, j_shift)(X{}), B(i_shift, j)(Y{}), B(i_shift, j_shift)(Z{}));
 
     /* q/m [SI] -> 2*PI*q/m in dimensionless */
     const Real qmpidt = part(Q{}) / part(M{}) * PI * dt;
     const Real igamma = 1 / sqrt(1 + squaredNorm(part(U{})));
 
-    const auto F_E = qmpidt * El;
-    const auto F_B = igamma * qmpidt * Bl;
+    const auto F_E = qmpidt * E_ngp;
+    const auto F_B = igamma * qmpidt * B_ngp;
 
     /* Buneman-Boris scheme */
     const auto u_m = part(U{}) + F_E;
@@ -421,13 +426,13 @@ LLAMA_FN_HOST_ACC_INLINE void particle_boundary_conditions(VirtualParticle p)
 {
     //* Periodic boundary condition
     if(p(R{}, X{}) < dx)
-        p(R{}, X{}) += (X_ - 2) * dx;
-    else if(p(R{}, X{}) > (X_ - 1) * dx)
-        p(R{}, X{}) -= (X_ - 2) * dx;
+        p(R{}, X{}) += (X_ - 3) * dx;
+    else if(p(R{}, X{}) > (X_ - 2) * dx)
+        p(R{}, X{}) -= (X_ - 3) * dx;
     if(p(R{}, Y{}) < dx)
-        p(R{}, Y{}) += (Y_ - 2) * dx;
-    else if(p(R{}, Y{}) > (Y_ - 1) * dx)
-        p(R{}, Y{}) -= (Y_ - 2) * dx;
+        p(R{}, Y{}) += (Y_ - 3) * dx;
+    else if(p(R{}, Y{}) > (Y_ - 2) * dx)
+        p(R{}, Y{}) -= (Y_ - 3) * dx;
 }
 
 template<typename VirtualParticle, typename FieldView>
@@ -439,17 +444,29 @@ LLAMA_FN_HOST_ACC_INLINE void deposit_current(const VirtualParticle& part, Field
 
     /* Particle position to cell coordinates */
     const auto i = static_cast<size_t>(part(R{}, X{}) * inv_dx);
+    const auto i_shift = static_cast<size_t>(std::lround(part(R{}, X{}) * inv_dx));
     const auto j = static_cast<size_t>(part(R{}, Y{}) * inv_dx);
+    const auto j_shift = static_cast<size_t>(std::lround(part(R{}, Y{}) * inv_dx));
 
     const auto i_old = static_cast<size_t>(r_old(X{}) * inv_dx);
+    const auto i_old_shift = static_cast<size_t>(std::lround(r_old(X{}) * inv_dx));
     const auto j_old = static_cast<size_t>(r_old(Y{}) * inv_dx);
+    const auto j_old_shift = static_cast<size_t>(std::lround(r_old(Y{}) * inv_dx));
 
     /* Current density deposition */
     const auto F = density * part(Q{}) * igamma * part(U{});
 
-    /*FIXME: J is defined mid-edge, so this is not NGP.*/
-    J(i_old, j_old) -= F;
-    J(i, j) += F;
+    // mid-x edge at (0.5, 0)
+    J(i_old_shift, j_old)(X{}) -= F(X{});
+    J(i_shift, j)(X{}) += F(X{});
+
+    // mid-y edge at (0, 0.5)
+    J(i_old, j_old_shift)(Y{}) -= F(Y{});
+    J(i, j_shift)(Y{}) += F(Y{});
+
+    // Fake mid-z edge at node (0, 0)
+    J(i_old, j_old)(Z{}) -= F(Z{});
+    J(i, j)(Z{}) += F(Z{});
 }
 
 /* Half-step in B */
