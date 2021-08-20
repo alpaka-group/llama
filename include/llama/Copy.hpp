@@ -144,8 +144,8 @@ namespace llama
         using RecordDim = typename SrcMapping::RecordDim;
         internal::assertTrivialCopyable<RecordDim>();
 
-        constexpr bool MBSrc = SrcMapping::blobCount > 1;
-        constexpr bool MBDst = DstMapping::blobCount > 1;
+        static constexpr bool MBSrc = SrcMapping::blobCount > 1;
+        static constexpr bool MBDst = DstMapping::blobCount > 1;
         static constexpr auto LanesSrc = internal::aosoaLanes<SrcMapping>;
         static constexpr auto LanesDst = internal::aosoaLanes<DstMapping>;
 
@@ -214,7 +214,7 @@ namespace llama
             }
         };
 
-        constexpr auto L = []
+        static constexpr auto L = []
         {
             if constexpr(srcIsAoSoA && dstIsAoSoA)
                 return std::gcd(LanesSrc, LanesDst);
