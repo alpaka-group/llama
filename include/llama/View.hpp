@@ -66,6 +66,10 @@ namespace llama
     template<typename View, typename BoundRecordCoord = RecordCoord<>, bool OwnView = false>
     struct VirtualRecord;
 
+    /// A \ref VirtualRecord that owns and holds a single value.
+    template<typename RecordDim>
+    using One = VirtualRecord<decltype(allocViewStack<0, RecordDim>()), RecordCoord<>, true>;
+
     // TODO: Higher dimensional iterators might not have good codegen. Multiple nested loops seem to be superior to a
     // single iterator over multiple dimensions. At least compilers are able to produce better code. std::mdspan also
     // discovered similar difficulties and there was a discussion in WG21 in Oulu 2016 to remove/postpone iterators
@@ -76,10 +80,10 @@ namespace llama
         using ADIterator = ArrayDimsIndexIterator<View::ArrayDims::rank>;
 
         using iterator_category = std::random_access_iterator_tag;
-        using value_type = VirtualRecord<View>;
+        using value_type = One<typename View::RecordDim>;
         using difference_type = typename ADIterator::difference_type;
-        using pointer = internal::IndirectValue<value_type>;
-        using reference = value_type;
+        using pointer = internal::IndirectValue<VirtualRecord<View>>;
+        using reference = VirtualRecord<View>;
 
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator++() -> Iterator&
@@ -237,6 +241,9 @@ namespace llama
     template<typename T_Mapping, typename BlobType>
 #endif
     struct View
+#if CAN_USE_RANGES
+        : std::ranges::view_base
+#endif
     {
         using Mapping = T_Mapping;
         using ArrayDims = typename Mapping::ArrayDims;
