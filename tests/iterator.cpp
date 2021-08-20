@@ -2,6 +2,7 @@
 #include <catch2/catch.hpp>
 #include <llama/llama.hpp>
 #include <numeric>
+#include <random>
 
 // clang-format off
 namespace tag {
@@ -170,3 +171,24 @@ TEST_CASE("ranges")
     test(llama::ArrayDims{4, 2, 4});
 }
 #endif
+
+TEST_CASE("iterator.sort")
+{
+    constexpr auto n = 10;
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{n}, Position{}});
+
+    std::default_random_engine e{};
+    std::uniform_int_distribution<int> d{0, 1000};
+    for(auto vd : view)
+    {
+        vd(tag::X{}) = d(e);
+        vd(tag::Y{}) = d(e);
+        vd(tag::Z{}) = d(e);
+    }
+    auto manhattan_less = [](auto a, auto b)
+    { return a(tag::X{}) + a(tag::Y{}) + a(tag::Z{}) < b(tag::X{}) + b(tag::Y{}) + b(tag::Z{}); };
+    std::sort(begin(view), end(view), manhattan_less);
+
+    for(auto i = 1; i < n; i++)
+        CHECK(manhattan_less(view[i - 1], view[i]));
+}

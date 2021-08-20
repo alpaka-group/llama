@@ -19,10 +19,6 @@ namespace llama
     template<typename View, typename BoundRecordCoord, bool OwnView>
     inline constexpr auto is_VirtualRecord<VirtualRecord<View, BoundRecordCoord, OwnView>> = true;
 
-    /// A \ref VirtualRecord that owns and holds a single value.
-    template<typename RecordDim>
-    using One = VirtualRecord<decltype(allocViewStack<0, RecordDim>()), RecordCoord<>, true>;
-
     /// Creates a single \ref VirtualRecord owning a view with stack memory and copies all values from an existing \ref
     /// VirtualRecord.
     template<typename VirtualRecord>
@@ -794,3 +790,29 @@ struct std::tuple_element<I, const llama::VirtualRecord<View, BoundRecordCoord, 
     using type
         = decltype(std::declval<const llama::VirtualRecord<View, BoundRecordCoord, OwnView>>().template get<I>());
 };
+
+#if CAN_USE_RANGES
+template<
+    typename ViewA,
+    typename BoundA,
+    bool OwnA,
+    typename ViewB,
+    typename BoundB,
+    bool OwnB,
+    template<class>
+    class TQual,
+    template<class>
+    class UQual>
+struct std::basic_common_reference<
+    llama::VirtualRecord<ViewA, BoundA, OwnA>,
+    llama::VirtualRecord<ViewB, BoundB, OwnB>,
+    TQual,
+    UQual>
+{
+    using type = std::enable_if_t<
+        std::is_same_v<
+            typename llama::VirtualRecord<ViewA, BoundA, OwnA>::AccessibleRecordDim,
+            typename llama::VirtualRecord<ViewB, BoundB, OwnB>::AccessibleRecordDim>,
+        llama::One<typename ViewA::RecordDim>>;
+};
+#endif
