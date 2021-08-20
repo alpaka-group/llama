@@ -18,8 +18,8 @@ namespace common
     // additional dependency.
     inline auto hostname() -> std::string
     {
-        std::string name(256, '\0');
-        ::gethostname(name.data(), 256);
+        char name[256];
+        ::gethostname(name, 256);
         return name;
     }
 } // namespace common
