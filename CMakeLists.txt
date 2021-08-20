@@ -28,9 +28,11 @@ if (BUILD_TESTING)
 	file(GLOB_RECURSE testSources "${CMAKE_CURRENT_SOURCE_DIR}/tests/**")
 	add_executable(tests ${testSources})
 	source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/tests" FILES ${testSources})
-	target_compile_features(tests PRIVATE cxx_std_20)
 	if (MSVC)
+		target_compile_options(tests PRIVATE /std:c++latest) # C++20 does not include ranges yet in MSVC, because the ABI is not finalized
 		target_compile_options(tests PRIVATE /permissive- /constexpr:steps10000000 /diagnostics:caret)
+	else()
+		target_compile_features(tests PRIVATE cxx_std_20)
 	endif()
 	target_link_libraries(tests PRIVATE Catch2::Catch2 llama::llama)
 
