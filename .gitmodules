@@ -1,3 +1,6 @@
 [submodule "examples/raycast/Sponza"]
 	path = examples/raycast/Sponza
 	url = https://github.com/jimmiebergmann/Sponza
+[submodule "thirdparty/thrust"]
+	path = thirdparty/thrust
+	url = https://github.com/bernhardmgruber/thrust.git

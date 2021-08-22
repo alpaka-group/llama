@@ -124,11 +124,11 @@ namespace llama
 
             current[0] = static_cast<difference_type>(current[0]) + n;
             // current is either within bounds or at the end ([last + 1, 0, 0, ..., 0])
-            assert(
-                (current[0] < extents[0]
-                 || (current[0] == extents[0]
-                     && std::all_of(std::begin(current) + 1, std::end(current), [](auto c) { return c == 0; })))
-                && "Iterator was moved past the end");
+            //assert(
+            //    (current[0] < extents[0]
+            //     || (current[0] == extents[0]
+            //         && std::all_of(std::begin(current) + 1, std::end(current), [](auto c) { return c == 0; })))
+            //    && "Iterator was moved past the end");
 
             return *this;
         }

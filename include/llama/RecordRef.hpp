@@ -13,6 +13,15 @@
 #include <iosfwd>
 #include <type_traits>
 
+namespace thrust
+{
+    template<typename Element, typename Pointer, typename Derived>
+    class reference;
+
+    template<typename T>
+    class device_reference;
+} // namespace thrust
+
 namespace llama
 {
     LLAMA_EXPORT
@@ -77,6 +86,23 @@ namespace llama
                     });
             }
             return left;
+        }
+
+        template<typename Functor, typename LeftRecord, typename Element, typename Pointer, typename Derived>
+        LLAMA_FN_HOST_ACC_INLINE auto virtualRecordArithOperator(
+            LeftRecord& left,
+            const thrust::reference<Element, Pointer, Derived>& right) -> LeftRecord&
+        {
+            return virtualRecordArithOperator<Functor>(left, *(&right).get());
+        }
+
+        template<typename Functor, typename LeftRecord, typename Element>
+        LLAMA_FN_HOST_ACC_INLINE auto virtualRecordArithOperator(
+            LeftRecord& left,
+            const thrust::device_reference<Element>& right) -> LeftRecord&
+        {
+            // printf("thrust::device_reference\n");
+            return virtualRecordArithOperator<Functor>(left, *(&right).get());
         }
 
         template<typename Functor, typename LeftRecord, typename T>
@@ -352,7 +378,8 @@ namespace llama
         using ArrayIndex = typename View::Mapping::ArrayExtents::Index;
         using RecordDim = typename View::Mapping::RecordDim;
 
-        std::conditional_t<OwnView, View, View&> view;
+        // std::conditional_t<OwnView, View, View&> view;
+        View view;
 
     public:
         /// Subtree of the record dimension of View starting at BoundRecordCoord. If BoundRecordCoord is
