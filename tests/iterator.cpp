@@ -104,6 +104,88 @@ TEST_CASE("iterator.transform_reduce")
     test(llama::ArrayDims{4, 2, 4});
 }
 
+TEST_CASE("iterator.transform_inplace")
+{
+    auto test = [](auto arrayDims)
+    {
+        auto view = llama::allocView(llama::mapping::AoS{arrayDims, Position{}});
+
+        int i = 0;
+        for(auto vd : view)
+        {
+            vd(tag::X{}) = ++i;
+            vd(tag::Y{}) = ++i;
+            vd(tag::Z{}) = ++i;
+        }
+
+        std::transform(
+            begin(view),
+            end(view),
+            begin(view),
+            [](llama::One<Position> p)
+            {
+                p *= 2;
+                return p;
+            });
+
+        i = 0;
+        for(auto vd : view)
+        {
+            CHECK(vd(tag::X{}) == ++i * 2);
+            CHECK(vd(tag::Y{}) == ++i * 2);
+            CHECK(vd(tag::Z{}) == ++i * 2);
+        }
+    };
+    test(llama::ArrayDims{32});
+    test(llama::ArrayDims{4, 8});
+    test(llama::ArrayDims{4, 2, 4});
+}
+
+TEST_CASE("iterator.transform_to")
+{
+    auto test = [](auto arrayDims)
+    {
+        auto view = llama::allocView(llama::mapping::AoS{arrayDims, Position{}});
+
+        int i = 0;
+        for(auto vd : view)
+        {
+            vd(tag::X{}) = ++i;
+            vd(tag::Y{}) = ++i;
+            vd(tag::Z{}) = ++i;
+        }
+
+        auto dst = llama::allocView(llama::mapping::SoA{arrayDims, Position{}});
+        std::transform(
+            begin(view),
+            end(view),
+            begin(dst),
+            [](llama::One<Position> p)
+            {
+                p *= 2;
+                return p;
+            });
+
+        i = 0;
+        for(auto vd : view)
+        {
+            CHECK(vd(tag::X{}) == ++i);
+            CHECK(vd(tag::Y{}) == ++i);
+            CHECK(vd(tag::Z{}) == ++i);
+        }
+        i = 0;
+        for(auto vd : dst)
+        {
+            CHECK(vd(tag::X{}) == ++i * 2);
+            CHECK(vd(tag::Y{}) == ++i * 2);
+            CHECK(vd(tag::Z{}) == ++i * 2);
+        }
+    };
+    test(llama::ArrayDims{32});
+    test(llama::ArrayDims{4, 8});
+    test(llama::ArrayDims{4, 2, 4});
+}
+
 TEST_CASE("iterator.different_record_dim")
 {
     struct Pos1
