@@ -178,7 +178,7 @@ namespace llama
 
         LLAMA_FN_HOST_ACC_INLINE auto capacity() const -> std::size_t
         {
-            return m_view.mapping.arrayDims()[0];
+            return m_view.mapping().arrayDims()[0];
         }
 
         LLAMA_FN_HOST_ACC_INLINE void shrink_to_fit()

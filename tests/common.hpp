@@ -122,7 +122,7 @@ template<typename View>
 void zeroStorage(View& view)
 {
     for(auto i = 0; i < View::Mapping::blobCount; i++)
-        internal::zeroBlob(view.storageBlobs[i], view.mapping.blobSize(i));
+        internal::zeroBlob(view.storageBlobs[i], view.mapping().blobSize(i));
 }
 
 template<typename View>
@@ -131,6 +131,6 @@ void iotaStorage(View& view)
     for(auto i = 0; i < View::Mapping::blobCount; i++)
     {
         auto fillFunc = [val = 0]() mutable { return static_cast<typename View::BlobType::PrimType>(val++); };
-        std::generate_n(view.storageBlobs[i].storageBlobs.get(), view.mapping.blobSize(i), fillFunc);
+        std::generate_n(view.storageBlobs[i].storageBlobs.get(), view.mapping().blobSize(i), fillFunc);
     }
 }
