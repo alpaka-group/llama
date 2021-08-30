@@ -28,6 +28,10 @@ namespace llama
     static_assert(std::is_trivially_default_constructible_v<ArrayDims<1>>); // so ArrayDims<1>{} will produce a zeroed
                                                                             // coord. Should hold for all dimensions,
                                                                             // but just checking for <1> here.
+    static_assert(std::is_trivially_copy_constructible_v<ArrayDims<1>>);
+    static_assert(std::is_trivially_move_constructible_v<ArrayDims<1>>);
+    static_assert(std::is_trivially_copy_assignable_v<ArrayDims<1>>);
+    static_assert(std::is_trivially_move_assignable_v<ArrayDims<1>>);
 
     template<typename... Args>
     ArrayDims(Args...) -> ArrayDims<sizeof...(Args)>;
