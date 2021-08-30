@@ -87,3 +87,9 @@
 #else
 #    define CAN_USE_RANGES 0
 #endif
+
+// nvcc 11.3 and below ICE with [[no_unique_address]]
+#if defined(__CUDACC_VER_MAJOR__) && defined(__CUDACC_VER_MINOR__)                                                    \
+    && (__CUDACC_VER_MAJOR__ < 11 || (__CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ < 4))
+#    define NVCC_NO_UNIQUE_ADDRESS_ICE
+#endif

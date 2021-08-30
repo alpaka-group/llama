@@ -328,8 +328,8 @@ namespace llama
         using ArrayDims = typename View::Mapping::ArrayDims;
         using RecordDim = typename View::Mapping::RecordDim;
 
-#ifndef __NVCC__
-        [[no_unique_address]] // nvcc 11.x ICE
+#ifndef NVCC_NO_UNIQUE_ADDRESS_ICE
+        [[no_unique_address]]
 #endif
         const ArrayDims arrayDimsCoord;
         std::conditional_t<OwnView, View, View&> view;
