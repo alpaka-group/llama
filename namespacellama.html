@@ -317,6 +317,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a8183deaf1069415900815fd9f2f1e373"><td class="memTemplParams" colspan="2">template&lt;typename VirtualRecord &gt; </td></tr>
 <tr class="memitem:a8183deaf1069415900815fd9f2f1e373"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a8183deaf1069415900815fd9f2f1e373">copyVirtualRecordStack</a> (const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;vd) -&gt; decltype(auto)</td></tr>
 <tr class="separator:a8183deaf1069415900815fd9f2f1e373"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0d8ff2d635e29b9e259af59fe796741"><td class="memTemplParams" colspan="2">template&lt;typename ViewA , typename BoundRecordDimA , bool OwnViewA, typename ViewB , typename BoundRecordDimB , bool OwnViewB&gt; </td></tr>
+<tr class="memitem:af0d8ff2d635e29b9e259af59fe796741"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#af0d8ff2d635e29b9e259af59fe796741">swap</a> (<a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; ViewA, BoundRecordDimA, OwnViewA &gt; &amp;a, <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; ViewB, BoundRecordDimB, OwnViewB &gt; &amp;b) noexcept -&gt; std::enable_if_t&lt; std::is_same_v&lt; typename <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; ViewA, BoundRecordDimA, OwnViewA &gt;::AccessibleRecordDim, typename <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; ViewB, BoundRecordDimB, OwnViewB &gt;::AccessibleRecordDim &gt;&gt;</td></tr>
+<tr class="separator:af0d8ff2d635e29b9e259af59fe796741"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea5db41fdf4f7b59a4abd18d276ef746"><td class="memTemplParams" colspan="2">template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </td></tr>
 <tr class="memitem:aea5db41fdf4f7b59a4abd18d276ef746"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aea5db41fdf4f7b59a4abd18d276ef746">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; <a class="el" href="structllama_1_1View.html">View</a>, BoundRecordCoord, OwnView &gt; &amp;vr) -&gt; std::ostream &amp;</td></tr>
 <tr class="separator:aea5db41fdf4f7b59a4abd18d276ef746"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1413,7 +1416,7 @@ template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00704">704</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00742">742</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1775,6 +1778,49 @@ template&lt;typename S &gt; </div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00512">512</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af0d8ff2d635e29b9e259af59fe796741"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0d8ff2d635e29b9e259af59fe796741">&#9670;&nbsp;</a></span>swap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ViewA , typename BoundRecordDimA , bool OwnViewA, typename ViewB , typename BoundRecordDimB , bool OwnViewB&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto llama::swap </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; ViewA, BoundRecordDimA, OwnViewA &gt; &amp;&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; ViewB, BoundRecordDimB, OwnViewB &gt; &amp;&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> -&gt; std::enable_if_t&lt;std::is_same_v&lt;
+            typename <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt;ViewA, BoundRecordDimA, OwnViewA&gt;::AccessibleRecordDim,
+            typename <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt;ViewB, BoundRecordDimB, OwnViewB&gt;::AccessibleRecordDim&gt;&gt;
+    </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00724">724</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -2639,7 +2685,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Fri Aug 20 2021 15:26:11 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Aug 30 2021 11:48:10 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -7,5 +7,6 @@ var searchData=
   ['split_656',['Split',['../structllama_1_1mapping_1_1Split.html#a0962606a6cf5d04ee0e14f1337d36c3e',1,'llama::mapping::Split::Split()=default'],['../structllama_1_1mapping_1_1Split.html#a957c565797421cc0194e3be49a926816',1,'llama::mapping::Split::Split(ArrayDims size)']]],
   ['store_657',['store',['../structllama_1_1VirtualRecord.html#a41ff9529160e4acfbf5983430f641f22',1,'llama::VirtualRecord']]],
   ['structname_658',['structName',['../namespacellama.html#a86a72929fc8c71b9aa2b514a74ab34eb',1,'llama']]],
-  ['sumchildrensmallerthan_659',['sumChildrenSmallerThan',['../namespacellama_1_1mapping_1_1tree_1_1internal.html#ac64ac187e14ff4540b332b55e4fdc7f7',1,'llama::mapping::tree::internal']]]
+  ['sumchildrensmallerthan_659',['sumChildrenSmallerThan',['../namespacellama_1_1mapping_1_1tree_1_1internal.html#ac64ac187e14ff4540b332b55e4fdc7f7',1,'llama::mapping::tree::internal']]],
+  ['swap_660',['swap',['../namespacellama.html#af0d8ff2d635e29b9e259af59fe796741',1,'llama']]]
 ];

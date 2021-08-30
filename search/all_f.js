@@ -17,5 +17,5 @@ var searchData=
   ['store_341',['store',['../structllama_1_1VirtualRecord.html#a41ff9529160e4acfbf5983430f641f22',1,'llama::VirtualRecord']]],
   ['structname_342',['structName',['../namespacellama.html#a86a72929fc8c71b9aa2b514a74ab34eb',1,'llama']]],
   ['sumchildrensmallerthan_343',['sumChildrenSmallerThan',['../namespacellama_1_1mapping_1_1tree_1_1internal.html#ac64ac187e14ff4540b332b55e4fdc7f7',1,'llama::mapping::tree::internal']]],
-  ['swap_344',['swap',['../structllama_1_1Vector.html#a83f69184d753889d37b68b9169a34113',1,'llama::Vector']]]
+  ['swap_344',['swap',['../structllama_1_1Vector.html#a83f69184d753889d37b68b9169a34113',1,'llama::Vector::swap()'],['../structllama_1_1VirtualRecord.html#a8d445e33790c005518c8400be083965e',1,'llama::VirtualRecord::swap()'],['../namespacellama.html#af0d8ff2d635e29b9e259af59fe796741',1,'llama::swap()']]]
 ];

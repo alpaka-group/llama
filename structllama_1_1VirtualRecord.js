@@ -50,5 +50,6 @@ var structllama_1_1VirtualRecord =
     [ "operator>", "structllama_1_1VirtualRecord.html#ab39510167275591efc0bb58748c46ecd", null ],
     [ "operator>", "structllama_1_1VirtualRecord.html#a26c12757b0c0c80346369eaf2d146aa1", null ],
     [ "operator>=", "structllama_1_1VirtualRecord.html#afd55f69365ba46717ed811383a9e6314", null ],
-    [ "operator>=", "structllama_1_1VirtualRecord.html#a7667cf3d24dad6259706ce9276119fa1", null ]
+    [ "operator>=", "structllama_1_1VirtualRecord.html#a7667cf3d24dad6259706ce9276119fa1", null ],
+    [ "swap", "structllama_1_1VirtualRecord.html#a8d445e33790c005518c8400be083965e", null ]
 ];

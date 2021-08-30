@@ -247,6 +247,8 @@ Friends</h2></td></tr>
 <tr class="memitem:afd55f69365ba46717ed811383a9e6314"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&gt;&gt;&gt; </td></tr>
 <tr class="memitem:afd55f69365ba46717ed811383a9e6314"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#afd55f69365ba46717ed811383a9e6314">operator&gt;=</a> (const T &amp;t, const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;vd) -&gt; bool</td></tr>
 <tr class="separator:afd55f69365ba46717ed811383a9e6314"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d445e33790c005518c8400be083965e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a8d445e33790c005518c8400be083965e">swap</a> (std::conditional_t&lt; OwnView, <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;, <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &gt; a, std::conditional_t&lt; OwnView, <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;, <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &gt; b) noexcept</td></tr>
+<tr class="separator:a8d445e33790c005518c8400be083965e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename T_View, typename BoundRecordCoord, bool OwnView&gt;<br />
@@ -2001,6 +2003,46 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a id="a8d445e33790c005518c8400be083965e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d445e33790c005518c8400be083965e">&#9670;&nbsp;</a></span>swap</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void swap </td>
+          <td>(</td>
+          <td class="paramtype">std::conditional_t&lt; OwnView, <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;, <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &gt;&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::conditional_t&lt; OwnView, <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;, <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &gt;&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00703">703</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this struct was generated from the following files:<ul>
 <li>/home/runner/work/llama/llama/include/llama/<a class="el" href="View_8hpp_source.html">View.hpp</a></li>
 <li>/home/runner/work/llama/llama/include/llama/<a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a></li>
@@ -2011,7 +2053,7 @@ template&lt;typename T &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a></li>
-    <li class="footer">Generated on Fri Aug 20 2021 15:26:11 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Aug 30 2021 11:48:10 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
