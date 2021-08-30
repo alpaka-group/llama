@@ -955,20 +955,17 @@ TEST_CASE("VirtualRecord.size")
     auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{5}, ParticleInt{}});
     [[maybe_unused]] auto vr = view[0];
     STATIC_REQUIRE(
-        sizeof(vr) == sizeof(llama::ArrayDims<1>::value_type) + sizeof(&view)); // sizeof array dims and view reference
+        sizeof(vr)
+        == sizeof(llama::ArrayDims<1>::value_type) + sizeof(&view)); // sizeof array dims and view reference // NOLINT
 }
 
 TEST_CASE("VirtualRecord.One.size")
 {
     STATIC_REQUIRE(llama::mapping::MinAlignedOne<llama::ArrayDims<0>, Particle>{}.blobSize(0) == 56);
-#ifdef __has_cpp_attribute
-#    if __has_cpp_attribute(no_unique_address)
     [[maybe_unused]] const auto v = llama::allocViewStack<0, Particle>();
     STATIC_REQUIRE(sizeof(v) == 56);
     [[maybe_unused]] const auto p = llama::One<Particle>{};
     STATIC_REQUIRE(sizeof(p) == 56);
-#    endif
-#endif
 }
 
 TEST_CASE("VirtualRecord.operator<<")

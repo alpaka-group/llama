@@ -241,8 +241,9 @@ namespace llama
     template<typename T_Mapping, typename BlobType>
 #endif
     struct View
+        : private T_Mapping
 #if CAN_USE_RANGES
-        : std::ranges::view_base
+        , std::ranges::view_base
 #endif
     {
         using Mapping = T_Mapping;
@@ -261,9 +262,19 @@ namespace llama
 
         LLAMA_FN_HOST_ACC_INLINE
         View(Mapping mapping, Array<BlobType, Mapping::blobCount> storageBlobs)
-            : mapping(std::move(mapping))
+            : Mapping(std::move(mapping))
             , storageBlobs(std::move(storageBlobs))
         {
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE auto mapping() -> Mapping&
+        {
+            return static_cast<Mapping&>(*this);
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE auto mapping() const -> const Mapping&
+        {
+            return static_cast<const Mapping&>(*this);
         }
 
         /// Retrieves the \ref VirtualRecord at the given \ref ArrayDims coordinate.
@@ -353,31 +364,27 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE
         auto begin() -> iterator
         {
-            return {ArrayDimsIndexRange<ArrayDims::rank>{mapping.arrayDims()}.begin(), this};
+            return {ArrayDimsIndexRange<ArrayDims::rank>{mapping().arrayDims()}.begin(), this};
         }
 
         LLAMA_FN_HOST_ACC_INLINE
         auto begin() const -> const_iterator
         {
-            return {ArrayDimsIndexRange<ArrayDims::rank>{mapping.arrayDims()}.begin(), this};
+            return {ArrayDimsIndexRange<ArrayDims::rank>{mapping().arrayDims()}.begin(), this};
         }
 
         LLAMA_FN_HOST_ACC_INLINE
         auto end() -> iterator
         {
-            return {ArrayDimsIndexRange<ArrayDims::rank>{mapping.arrayDims()}.end(), this};
+            return {ArrayDimsIndexRange<ArrayDims::rank>{mapping().arrayDims()}.end(), this};
         }
 
         LLAMA_FN_HOST_ACC_INLINE
         auto end() const -> const_iterator
         {
-            return {ArrayDimsIndexRange<ArrayDims::rank>{mapping.arrayDims()}.end(), this};
+            return {ArrayDimsIndexRange<ArrayDims::rank>{mapping().arrayDims()}.end(), this};
         }
 
-#ifndef __NVCC__
-        [[no_unique_address]] // nvcc 11.x ICE
-#endif
-        Mapping mapping;
         Array<BlobType, Mapping::blobCount> storageBlobs;
 
     private:
@@ -390,10 +397,10 @@ namespace llama
             -> decltype(auto)
         {
             if constexpr(isComputed<Mapping, RecordCoord<Coords...>>)
-                return mapping.compute(arrayDims, dc, storageBlobs);
+                return mapping().compute(arrayDims, dc, storageBlobs);
             else
             {
-                const auto [nr, offset] = mapping.template blobNrAndOffset<Coords...>(arrayDims);
+                const auto [nr, offset] = mapping().template blobNrAndOffset<Coords...>(arrayDims);
                 using Type = GetType<RecordDim, RecordCoord<Coords...>>;
                 return reinterpret_cast<const Type&>(storageBlobs[nr][offset]);
             }
@@ -404,10 +411,10 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDims arrayDims, RecordCoord<Coords...> dc = {}) -> decltype(auto)
         {
             if constexpr(isComputed<Mapping, RecordCoord<Coords...>>)
-                return mapping.compute(arrayDims, dc, storageBlobs);
+                return mapping().compute(arrayDims, dc, storageBlobs);
             else
             {
-                const auto [nr, offset] = mapping.template blobNrAndOffset<Coords...>(arrayDims);
+                const auto [nr, offset] = mapping().template blobNrAndOffset<Coords...>(arrayDims);
                 using Type = GetType<RecordDim, RecordCoord<Coords...>>;
                 return reinterpret_cast<Type&>(storageBlobs[nr][offset]);
             }

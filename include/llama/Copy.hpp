@@ -54,7 +54,7 @@ namespace llama
         internal::assertTrivialCopyable<typename Mapping::RecordDim>();
 
         // TODO: we do not verify if the mappings have other runtime state than the array dimensions
-        if(srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
+        if(srcView.mapping().arrayDims() != dstView.mapping().arrayDims())
             throw std::runtime_error{"Array dimensions sizes are different"};
 
         // TODO: this is maybe not the best parallel copying strategy
@@ -62,7 +62,7 @@ namespace llama
             internal::parallel_memcpy(
                 &dstView.storageBlobs[i][0],
                 &srcView.storageBlobs[i][0],
-                dstView.mapping.blobSize(i),
+                dstView.mapping().blobSize(i),
                 threadId,
                 threadCount);
     }
@@ -82,7 +82,7 @@ namespace llama
             std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>,
             "The source and destination record dimensions must be the same");
 
-        if(srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
+        if(srcView.mapping().arrayDims() != dstView.mapping().arrayDims())
             throw std::runtime_error{"Array dimensions sizes are different"};
 
         auto copyOne = [&](auto ad) LLAMA_LAMBDA_INLINE
@@ -92,7 +92,7 @@ namespace llama
         };
 
         constexpr auto dims = SrcMapping::ArrayDims::rank;
-        const auto& adSize = srcView.mapping.arrayDims();
+        const auto& adSize = srcView.mapping().arrayDims();
         const auto workPerThread = (adSize[0] + threadCount - 1) / threadCount;
         const auto start = threadId * workPerThread;
         const auto end = std::min((threadId + 1) * workPerThread, adSize[0]);
@@ -149,7 +149,7 @@ namespace llama
         static constexpr auto LanesSrc = internal::aosoaLanes<SrcMapping>;
         static constexpr auto LanesDst = internal::aosoaLanes<DstMapping>;
 
-        if(srcView.mapping.arrayDims() != dstView.mapping.arrayDims())
+        if(srcView.mapping().arrayDims() != dstView.mapping().arrayDims())
             throw std::runtime_error{"Array dimensions sizes are different"};
 
         static constexpr auto srcIsAoSoA = LanesSrc != std::numeric_limits<std::size_t>::max();
@@ -163,7 +163,7 @@ namespace llama
             !dstIsAoSoA || decltype(dstView.storageBlobs)::rank == 1,
             "Implementation assumes AoSoA with single blob");
 
-        const auto arrayDims = dstView.mapping.arrayDims();
+        const auto arrayDims = dstView.mapping().arrayDims();
         const auto flatSize
             = std::reduce(std::begin(arrayDims), std::end(arrayDims), std::size_t{1}, std::multiplies<>{});
 

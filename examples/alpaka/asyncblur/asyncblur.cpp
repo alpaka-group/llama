@@ -105,8 +105,14 @@ struct BlurKernel
             const std::size_t bStart[2]
                 = {bi[0] * ElemsPerBlock + threadIdxInBlock[0], bi[1] * ElemsPerBlock + threadIdxInBlock[1]};
             const std::size_t bEnd[2] = {
-                alpaka::math::min(acc, bStart[0] + ElemsPerBlock + 2 * KernelSize, oldImage.mapping.arrayDimsSize[0]),
-                alpaka::math::min(acc, bStart[1] + ElemsPerBlock + 2 * KernelSize, oldImage.mapping.arrayDimsSize[1]),
+                alpaka::math::min(
+                    acc,
+                    bStart[0] + ElemsPerBlock + 2 * KernelSize,
+                    oldImage.mapping().arrayDimsSize[0]),
+                alpaka::math::min(
+                    acc,
+                    bStart[1] + ElemsPerBlock + 2 * KernelSize,
+                    oldImage.mapping().arrayDimsSize[1]),
             };
             LLAMA_INDEPENDENT_DATA
             for(auto y = bStart[0]; y < bEnd[0]; y += threadsPerBlock)
@@ -119,8 +125,8 @@ struct BlurKernel
 
         const std::size_t start[2] = {ti[0] * Elems, ti[1] * Elems};
         const std::size_t end[2] = {
-            alpaka::math::min(acc, start[0] + Elems, oldImage.mapping.arrayDimsSize[0] - 2 * KernelSize),
-            alpaka::math::min(acc, start[1] + Elems, oldImage.mapping.arrayDimsSize[1] - 2 * KernelSize),
+            alpaka::math::min(acc, start[0] + Elems, oldImage.mapping().arrayDimsSize[0] - 2 * KernelSize),
+            alpaka::math::min(acc, start[1] + Elems, oldImage.mapping().arrayDimsSize[1] - 2 * KernelSize),
         };
 
         LLAMA_INDEPENDENT_DATA
