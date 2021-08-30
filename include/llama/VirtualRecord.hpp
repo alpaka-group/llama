@@ -316,7 +316,7 @@ namespace llama
     /// records should not be created by the user. They are returned from various access functions in \ref View and
     /// VirtualRecord itself.
     template<typename T_View, typename BoundRecordCoord, bool OwnView>
-    struct VirtualRecord
+    struct VirtualRecord : private T_View::Mapping::ArrayDims
     {
         using View = T_View; ///< View this virtual record points into.
 
@@ -324,10 +324,6 @@ namespace llama
         using ArrayDims = typename View::Mapping::ArrayDims;
         using RecordDim = typename View::Mapping::RecordDim;
 
-#ifndef __NVCC__
-        [[no_unique_address]] // nvcc 11.x ICE
-#endif
-        const ArrayDims arrayDimsCoord;
         std::conditional_t<OwnView, View, View&> view;
 
     public:
@@ -338,7 +334,7 @@ namespace llama
         /// Creates an empty VirtualRecord. Only available for if the view is owned. Used by llama::One.
         LLAMA_FN_HOST_ACC_INLINE VirtualRecord()
             /* requires(OwnView) */
-            : arrayDimsCoord({})
+            : ArrayDims{}
             , view{allocViewStack<0, RecordDim>()}
         {
             static_assert(OwnView, "The default constructor of VirtualRecord is only available if it owns the view.");
@@ -346,13 +342,18 @@ namespace llama
 
         LLAMA_FN_HOST_ACC_INLINE
         VirtualRecord(ArrayDims arrayDimsCoord, std::conditional_t<OwnView, View&&, View&> view)
-            : arrayDimsCoord(arrayDimsCoord)
+            : ArrayDims{arrayDimsCoord}
             , view{static_cast<decltype(view)>(view)}
         {
         }
 
         VirtualRecord(const VirtualRecord&) = default;
         VirtualRecord(VirtualRecord&&) = default;
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayDimsCoord() const
+        {
+            return static_cast<const ArrayDims&>(*this);
+        }
 
         /// Create a VirtuaRecord from a different VirtualRecord. Only available for if the view is owned. Used by
         /// llama::One.
@@ -394,12 +395,12 @@ namespace llama
             if constexpr(isRecord<AccessedType> || internal::is_bounded_array<AccessedType>::value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualRecord<const View, AbsolutCoord>{arrayDimsCoord, this->view};
+                return VirtualRecord<const View, AbsolutCoord>{arrayDimsCoord(), this->view};
             }
             else
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return this->view.accessor(arrayDimsCoord, AbsolutCoord{});
+                return this->view.accessor(arrayDimsCoord(), AbsolutCoord{});
             }
         }
 
@@ -412,12 +413,12 @@ namespace llama
             if constexpr(isRecord<AccessedType> || internal::is_bounded_array<AccessedType>::value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualRecord<View, AbsolutCoord>{arrayDimsCoord, this->view};
+                return VirtualRecord<View, AbsolutCoord>{arrayDimsCoord(), this->view};
             }
             else
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return this->view.accessor(arrayDimsCoord, AbsolutCoord{});
+                return this->view.accessor(arrayDimsCoord(), AbsolutCoord{});
             }
         }
 
