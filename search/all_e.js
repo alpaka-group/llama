@@ -17,7 +17,7 @@ var searchData=
   ['recorddim1_315',['RecordDim1',['../structllama_1_1mapping_1_1Split.html#a5dfc0feacef8b04f199b8979e1eeae46',1,'llama::mapping::Split']]],
   ['recorddim2_316',['RecordDim2',['../structllama_1_1mapping_1_1Split.html#a8be1931ffdb006bf470bb5056bd5478d',1,'llama::mapping::Split']]],
   ['recorddimpartitions_317',['RecordDimPartitions',['../structllama_1_1mapping_1_1Split.html#a560a20eda9831df15f675e4281698007',1,'llama::mapping::Split']]],
-  ['reference_318',['reference',['../structllama_1_1ArrayDimsIndexIterator.html#a5fc12c0adedc6927c9861ece0dd9f811',1,'llama::ArrayDimsIndexIterator::reference()'],['../structllama_1_1Iterator.html#a50344b096666c88b6a1928ee0b4fd6a3',1,'llama::Iterator::reference()']]],
+  ['reference_318',['reference',['../structllama_1_1ArrayDimsIndexIterator.html#a5fc12c0adedc6927c9861ece0dd9f811',1,'llama::ArrayDimsIndexIterator::reference()'],['../structllama_1_1Iterator.html#ac0401c5929b8c25cddfba1dfd1bba1b8',1,'llama::Iterator::reference()']]],
   ['replace_5fall_319',['replace_all',['../namespacellama_1_1mapping_1_1tree_1_1internal.html#a6b39b161bd95fa5675def587a43a0b86',1,'llama::mapping::tree::internal']]],
   ['reserve_320',['reserve',['../structllama_1_1Vector.html#aa7f762278dc34a5fb1a9bf544dd305da',1,'llama::Vector']]],
   ['resize_321',['resize',['../structllama_1_1Vector.html#a949298d191f40b8f2e73fb3fa57fa8b1',1,'llama::Vector']]],

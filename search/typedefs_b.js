@@ -5,7 +5,7 @@ var searchData=
   ['recorddim1_802',['RecordDim1',['../structllama_1_1mapping_1_1Split.html#a5dfc0feacef8b04f199b8979e1eeae46',1,'llama::mapping::Split']]],
   ['recorddim2_803',['RecordDim2',['../structllama_1_1mapping_1_1Split.html#a8be1931ffdb006bf470bb5056bd5478d',1,'llama::mapping::Split']]],
   ['recorddimpartitions_804',['RecordDimPartitions',['../structllama_1_1mapping_1_1Split.html#a560a20eda9831df15f675e4281698007',1,'llama::mapping::Split']]],
-  ['reference_805',['reference',['../structllama_1_1ArrayDimsIndexIterator.html#a5fc12c0adedc6927c9861ece0dd9f811',1,'llama::ArrayDimsIndexIterator::reference()'],['../structllama_1_1Iterator.html#a50344b096666c88b6a1928ee0b4fd6a3',1,'llama::Iterator::reference()']]],
+  ['reference_805',['reference',['../structllama_1_1ArrayDimsIndexIterator.html#a5fc12c0adedc6927c9861ece0dd9f811',1,'llama::ArrayDimsIndexIterator::reference()'],['../structllama_1_1Iterator.html#ac0401c5929b8c25cddfba1dfd1bba1b8',1,'llama::Iterator::reference()']]],
   ['resttuple_806',['RestTuple',['../structllama_1_1Tuple_3_01T__FirstElement_00_01Elements_8_8_8_01_4.html#a92fbdab21ab19e7d07b390530e6efb61',1,'llama::Tuple&lt; T_FirstElement, Elements... &gt;']]],
   ['resulttree_807',['ResultTree',['../structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors_3_01Tree_00_01Tuple_3_01Operations_8_8_8_01_4_01_4.html#a40455feecb37c12d9319fe73acf29674',1,'llama::mapping::tree::internal::MergeFunctors&lt; Tree, Tuple&lt; Operations... &gt; &gt;::ResultTree()'],['../structllama_1_1mapping_1_1tree_1_1Mapping.html#ae04741a1fb342942ff75df8766f291db',1,'llama::mapping::tree::Mapping::ResultTree()']]]
 ];

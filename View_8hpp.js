@@ -8,6 +8,7 @@ var View_8hpp =
     [ "View", "structllama_1_1View.html", "structllama_1_1View" ],
     [ "VirtualView", "structllama_1_1VirtualView.html", "structllama_1_1VirtualView" ],
     [ "AllocatorBlobType", "View_8hpp.html#a652fac1c34a93cbf3be72ffe979a8381", null ],
+    [ "One", "View_8hpp.html#a2f44282e6b70a3eedaa8e7355a6f7dd0", null ],
     [ "allocView", "View_8hpp.html#af9dcf355d9fa87ed98864dadb8e685a1", null ],
     [ "allocViewStack", "View_8hpp.html#a3750d27a7f8dd111fbe32dc769b44120", null ],
     [ "makeBlobArray", "View_8hpp.html#a41b44539ebbad9d8cda992b563197b6e", null ],
