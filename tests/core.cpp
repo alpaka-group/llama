@@ -110,6 +110,25 @@ TEST_CASE("offsetOf.Align")
     STATIC_REQUIRE(llama::offsetOf<Particle, llama::RecordCoord<3, 3>, true> == 59);
 }
 
+TEST_CASE("alignOf")
+{
+    STATIC_REQUIRE(llama::alignOf<std::byte> == 1);
+    STATIC_REQUIRE(llama::alignOf<unsigned short> == 2);
+    STATIC_REQUIRE(llama::alignOf<float> == 4);
+    STATIC_REQUIRE(llama::alignOf<Vec3D> == 8);
+    STATIC_REQUIRE(llama::alignOf<Vec2F> == 4);
+    STATIC_REQUIRE(llama::alignOf<Particle> == 8);
+
+    struct alignas(32) Overaligned
+    {
+    };
+
+    using OveralignedRD = llama::Record<llama::Field<int, Overaligned>>;
+
+    STATIC_REQUIRE(llama::alignOf<Overaligned> == 32);
+    STATIC_REQUIRE(llama::alignOf<OveralignedRD> == 32);
+}
+
 namespace
 {
     // clang-format off

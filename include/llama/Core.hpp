@@ -435,6 +435,35 @@ namespace llama
 
     namespace internal
     {
+        template<typename TypeList>
+        constexpr auto flatAlignOfImpl()
+        {
+            using namespace boost::mp11;
+
+            std::size_t maxAlign = 0;
+            mp_for_each<mp_transform<mp_identity, TypeList>>([&](auto e) constexpr
+                                                             {
+                                                                 using T = typename decltype(e)::type;
+                                                                 maxAlign = std::max(maxAlign, alignof(T));
+                                                             });
+            return maxAlign;
+        }
+    } // namespace internal
+
+    /// The alignment of a type list if its elements would be in a normal struct.
+    template<typename TypeList>
+    inline constexpr std::size_t flatAlignOf = internal::flatAlignOfImpl<TypeList>();
+
+    /// The alignment of a type T.
+    template<typename T>
+    inline constexpr std::size_t alignOf = alignof(T);
+
+    /// The alignment of a record dimension if its fields would be in a normal struct.
+    template<typename... Fields>
+    inline constexpr std::size_t alignOf<Record<Fields...>> = flatAlignOf<FlatRecordDim<Record<Fields...>>>;
+
+    namespace internal
+    {
         constexpr void roundUpToMultiple(std::size_t& value, std::size_t multiple)
         {
             value = ((value + multiple - 1) / multiple) * multiple;
@@ -460,7 +489,8 @@ namespace llama
 
             // final padding, so next struct can start right away
             if constexpr(Align && IncludeTailPadding)
-                roundUpToMultiple(size, maxAlign);
+                roundUpToMultiple(size, maxAlign); // TODO: we could use flatAlignOf<TypeList> here, at the cost of
+                                                   // more template instantiations
             return size;
         }
 

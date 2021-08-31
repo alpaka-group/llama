@@ -47,6 +47,7 @@ Record dimension
 .. doxygentypedef:: llama::GetFieldType
 .. doxygenvariable:: llama::offsetOf
 .. doxygenvariable:: llama::sizeOf
+.. doxygenvariable:: llama::alignOf
 .. doxygentypedef:: llama::GetTags
 .. doxygentypedef:: llama::GetTag
 .. doxygenvariable:: llama::hasSameTags
