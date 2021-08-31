@@ -101,9 +101,6 @@ jobs:
           - name: build-ubuntu-clang12
             env: {CXX: clang++-12, INSTALL_EXTRA: clang-12 libomp-12-dev}
             add-llvm-repo: true
-          - name: build-ubuntu-icpc
-            env: {CXX: icpc}
-            intel: true
           - name: build-ubuntu-icpx
             env: {CXX: icpx}
             intel: true
