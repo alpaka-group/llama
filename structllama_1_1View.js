@@ -13,6 +13,8 @@ var structllama_1_1View =
     [ "begin", "structllama_1_1View.html#a50eef26f2117408aed60eb3d09a2aec4", null ],
     [ "end", "structllama_1_1View.html#ad1a84585dcc6d576a0292977eba1615f", null ],
     [ "end", "structllama_1_1View.html#a1d4852444fcfad8838ef16d86039c059", null ],
+    [ "mapping", "structllama_1_1View.html#a9c557a8305ead2fd15259bdbf2f37286", null ],
+    [ "mapping", "structllama_1_1View.html#a72fc74a1e1d184f44e8c012ddce7eebd", null ],
     [ "operator()", "structllama_1_1View.html#a1275ee665a4fc028c259b719050fcff5", null ],
     [ "operator()", "structllama_1_1View.html#aedc7479ae1541e2b95041e69a43ea69a", null ],
     [ "operator()", "structllama_1_1View.html#a354f0fd1b674318e95c844a3016ccf8e", null ],
@@ -22,6 +24,5 @@ var structllama_1_1View =
     [ "operator[]", "structllama_1_1View.html#ae80d249aedd9a917443fc8fa1a554d08", null ],
     [ "operator[]", "structllama_1_1View.html#a0f932989faaefcde5765276ba74c8a78", null ],
     [ "VirtualRecord", "structllama_1_1View.html#a73c6031066ac874a71c88cebb181a06c", null ],
-    [ "mapping", "structllama_1_1View.html#abeb3b3b25e4ca8487c30558222690d4d", null ],
     [ "storageBlobs", "structllama_1_1View.html#afc31355f951aaed3f18b2f8e53a507f8", null ]
 ];

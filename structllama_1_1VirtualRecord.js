@@ -10,6 +10,7 @@ var structllama_1_1VirtualRecord =
     [ "VirtualRecord", "structllama_1_1VirtualRecord.html#aaa2ce88a12cd4b61e08ab01bd5d11315", null ],
     [ "VirtualRecord", "structllama_1_1VirtualRecord.html#abd74604d873353440105c147232e2dca", null ],
     [ "VirtualRecord", "structllama_1_1VirtualRecord.html#a63871f7dae4a86a6503eb9bedc799665", null ],
+    [ "arrayDimsCoord", "structllama_1_1VirtualRecord.html#a98523dbb19bd99b95a16e916ed9b842d", null ],
     [ "asFlatTuple", "structllama_1_1VirtualRecord.html#acbacfe2c859113ce667da6eb325ea321", null ],
     [ "asFlatTuple", "structllama_1_1VirtualRecord.html#a7b118f7b6fa532ab6c4b23024efb9e59", null ],
     [ "asTuple", "structllama_1_1VirtualRecord.html#a09ab30511467cb3d44614beeee848f60", null ],
