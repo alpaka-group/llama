@@ -4,7 +4,8 @@
 #pragma once
 
 #ifdef __INTEL_COMPILER
-#    error LLAMA has stopped supporting the Intel Classic Compiler after Intel announced its planned deprecation and replacement by the Intel LLVM-based compiler. Please migrate to Intel's LLVM-based compiler.
+#    error LLAMA has stopped supporting the Intel Classic Compiler after Intel announced its planned deprecation and \
+ replacement by the Intel LLVM-based compiler. Please migrate to the Intel LLVM-based compiler.
 #endif
 
 #if defined(__INTEL_LLVM_COMPILER)
