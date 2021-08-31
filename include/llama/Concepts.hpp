@@ -34,8 +34,8 @@ namespace llama
 
     // clang-format off
     template <typename BA>
-    concept BlobAllocator = requires(BA ba, std::size_t i) {
-        { ba(i) } -> Blob;
+    concept BlobAllocator = requires(BA ba, std::integral_constant<std::size_t, 16> alignment, std::size_t size) {
+        { ba(alignment, size) } -> Blob;
     };
     // clang-format on
 } // namespace llama

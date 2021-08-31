@@ -968,6 +968,13 @@ TEST_CASE("VirtualRecord.One.size")
     STATIC_REQUIRE(sizeof(p) == 56);
 }
 
+TEST_CASE("VirtualRecord.One.alignment")
+{
+    STATIC_REQUIRE(alignof(llama::One<Vec2F>) == 4);
+    STATIC_REQUIRE(alignof(llama::One<Vec3I>) == 4);
+    STATIC_REQUIRE(alignof(llama::One<Particle>) == 8);
+}
+
 TEST_CASE("VirtualRecord.operator<<")
 {
     llama::One<Particle> p;
