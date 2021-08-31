@@ -210,10 +210,11 @@ try
     auto hostView = llama::allocView(mapping);
     auto accView = llama::allocView(
         mapping,
-        [](std::size_t size)
+        [](auto alignment, std::size_t size)
         {
             std::byte* p;
             checkError(cudaMalloc(&p, size));
+            assert(reinterpret_cast<std::intptr_t>(p) & (alignment - 1) == 0); // assert cudaMalloc sufficiently aligns
             return p;
         });
 

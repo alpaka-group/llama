@@ -7,8 +7,14 @@ Blobs
 
 When a :ref:`view <label-view>` is created, it needs to be given an array of blobs.
 A blob is an object representing a contiguous region of memory where each byte is accessible using the subscript operator.
-The number of blobs and the size of each blob is a property determined by the mapping used by the view.
+The number of blobs and the alignment/size of each blob is a property determined by the mapping used by the view.
 All this is handled by :cpp:`llama::allocView()`, but I needs to be given a blob allocator to handle the actual allocation of each blob.
+
+.. code-block:: C++
+
+    auto blobAllocator = ...;
+    auto view = llama::allocView(mapping, blobAllocator);
+
 
 Every time a view is copied, it's array of blobs is copied too.
 Depending on the type of blobs used, this can have different effects.
@@ -20,8 +26,16 @@ Contrary, if a :cpp:`std::shared_ptr<std::byte[]>` is used, the storage is share
 Blob allocators
 ---------------
 
-A blob allocator is a callable which returns an appropriately sized blob given a desired allocation size in bytes.
-There is a number of a buildin blob allocators:
+A blob allocator is a callable which returns an appropriately sized blob given a desired compile-time alignment and runtime allocation size in bytes.
+Choosing the right compile-time alignment has implications on the read/write speed on some CPU architectures and may even lead to CPU exceptions if data is not properly aligned.
+A blob allocator is called like this:
+
+.. code-block:: C++
+
+    auto blobAllocator = ...;
+    auto blob = blobAllocator(std::integral_constant<std::size_t, Alignment>{}, size);
+
+There is a number of a built-in blob allocators:
 
 Shared memory
 ^^^^^^^^^^^^^
@@ -29,34 +43,21 @@ Shared memory
 :cpp:`llama::bloballoc::SharedPtr` is a blob allocator creating blobs of type :cpp:`std::shared_ptr<std::byte[]>`.
 These blobs will be shared between each copy of the view and only destroyed then the last view is destroyed.
 
-Furthermore a compile time alignment value can be given to the blob allocator to specify the byte alignment of the allocated block of memory.
-This has implications on the read/write speed on some CPU architectures and may even lead to CPU exceptions if data is not properly aligned.
-
-.. code-block:: C++
-
-    llama::bloballoc::SharedPtr<256>
-
 Vector
 ^^^^^^
 
-
 :cpp:`llama::bloballoc::Vector` is a blob allocator creating blobs of type :cpp:`std::vector<std::byte>`.
-This means every time a view is copied, the whole memory is copied
-too. When the view is moved, no extra allocation or copy operation happens.
-
-Analogous to :cpp:`llama::bloballoc::SharedPtr` an alignment value may be passed to the blob allocator.
-
-.. code-block:: C++
-
-    llama::bloballoc::Vector<256>
+This means every time a view is copied, the whole memory is copied too.
+When the view is moved, no extra allocation or copy operation happens.
 
 Stack
 ^^^^^
 
-When working with small amounts of memory or temporary views created often, it is usually beneficial to store the data directly on the stack.
+When working with small amounts of memory or temporary views created frequently, it is usually beneficial to store the data directly inside the view, avoiding a heap allocation.
 
 :cpp:`llama::bloballoc::Stack` addresses this issue and creates blobs of type :cpp:`llama::Array<std::byte, N>`, where :cpp:`N` is a compile time value passed to the allocator.
 These blobs are copied every time their view is copied.
+:cpp:`llama::One` uses this facility.
 
 Creating a small view of :math:`4 \times 4` may look like this:
 
@@ -66,14 +67,12 @@ Creating a small view of :math:`4 \times 4` may look like this:
     constexpr ArrayDims miniSize{4, 4};
 
     using Mapping = /* some simple mapping */;
-    using BlobAllocator = llama::bloballoc::Stack<
+    auto blobAllocator = llama::bloballoc::Stack<
         miniSize[0] * miniSize[1] * llama::sizeOf<RecordDim>::value
     >;
+    auto miniView = llama::allocView(Mapping{miniSize}, blobAllocator);
 
-    auto miniView = llama::allocView(Mapping{miniSize}, BlobAllocator{});
-
-For :math:`N`-dimensional one-element views a shortcut exists, returning a view
-with just one element without any padding, aligment, or whatever on the stack:
+For :math:`N`-dimensional one-record views a shortcut exists, returning a view with just one record on the stack:
 
 .. code-block:: C++
 

@@ -21,9 +21,13 @@ namespace llama::bloballoc
     template<std::size_t BytesToReserve>
     struct Stack
     {
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(std::size_t) const -> Array<std::byte, BytesToReserve>
+        template<std::size_t Alignment>
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t) const
         {
-            return {};
+            struct alignas(Alignment) AlignedArray : Array<std::byte, BytesToReserve>
+            {
+            };
+            return AlignedArray{};
         }
     };
 #ifdef __cpp_lib_concepts
@@ -32,8 +36,6 @@ namespace llama::bloballoc
 
     /// Allocates heap memory managed by a `std::shared_ptr` for a \ref View. This memory is shared between all copies
     /// of a \ref View.
-    /// \tparam Alignment aligment of the allocated block of memory.
-    template<std::size_t Alignment = 64>
     struct SharedPtr
     {
         // libc++ below 11.0.0 does not yet support shared_ptr with arrays
@@ -45,7 +47,9 @@ namespace llama::bloballoc
             std::shared_ptr<T>;
 #endif
 
-        inline auto operator()(std::size_t count) const -> shared_ptr<std::byte[]>
+        template<std::size_t Alignment>
+        auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
+            -> shared_ptr<std::byte[]>
         {
             auto* ptr
                 = static_cast<std::byte*>(::operator new[](count * sizeof(std::byte), std::align_val_t{Alignment}));
@@ -54,7 +58,7 @@ namespace llama::bloballoc
         }
     };
 #ifdef __cpp_lib_concepts
-    static_assert(BlobAllocator<SharedPtr<>>);
+    static_assert(BlobAllocator<SharedPtr>);
 #endif
 
     /// An STL compatible allocator allowing to specify alignment.
@@ -101,16 +105,15 @@ namespace llama::bloballoc
 
     /// Allocates heap memory managed by a `std::vector` for a \ref View, which is copied each time a \ref View is
     /// copied.
-    /// \tparam Alignment aligment of the allocated block of memory.
-    template<std::size_t Alignment = 64u>
     struct Vector
     {
-        inline auto operator()(std::size_t count) const
+        template<std::size_t Alignment>
+        inline auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
         {
             return std::vector<std::byte, AlignedAllocator<std::byte, Alignment>>(count);
         }
     };
 #ifdef __cpp_lib_concepts
-    static_assert(BlobAllocator<Vector<>>);
+    static_assert(BlobAllocator<Vector>);
 #endif
 } // namespace llama::bloballoc

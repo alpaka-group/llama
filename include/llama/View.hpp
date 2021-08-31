@@ -24,17 +24,20 @@ namespace llama
 
     namespace internal
     {
-        template<typename Allocator>
-        using AllocatorBlobType = decltype(std::declval<Allocator>()(0));
+        template<typename Allocator, typename RecordDim>
+        using AllocatorBlobType
+            = decltype(std::declval<Allocator>()(std::integral_constant<std::size_t, alignOf<RecordDim>>{}, 0));
 
         LLAMA_SUPPRESS_HOST_DEVICE_WARNING
         template<typename Allocator, typename Mapping, std::size_t... Is>
         LLAMA_FN_HOST_ACC_INLINE auto makeBlobArray(
             const Allocator& alloc,
             const Mapping& mapping,
-            std::integer_sequence<std::size_t, Is...>) -> Array<AllocatorBlobType<Allocator>, Mapping::blobCount>
+            std::integer_sequence<std::size_t, Is...>)
+            -> Array<AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Mapping::blobCount>
         {
-            return {alloc(mapping.blobSize(Is))...};
+            constexpr auto alignment = alignOf<typename Mapping::RecordDim>;
+            return {alloc(std::integral_constant<std::size_t, alignment>{}, mapping.blobSize(Is))...};
         }
     } // namespace internal
 
@@ -43,12 +46,12 @@ namespace llama
     /// allocator callable is called with the size of bytes to allocate for each blob of the mapping. This function is
     /// the preferred way to create a \ref View.
 #ifdef __cpp_lib_concepts
-    template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector<>>
+    template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector>
 #else
-    template<typename Mapping, typename Allocator = bloballoc::Vector<>>
+    template<typename Mapping, typename Allocator = bloballoc::Vector>
 #endif
     LLAMA_FN_HOST_ACC_INLINE auto allocView(Mapping mapping = {}, const Allocator& alloc = {})
-        -> View<Mapping, internal::AllocatorBlobType<Allocator>>
+        -> View<Mapping, internal::AllocatorBlobType<Allocator, typename Mapping::RecordDim>>
     {
         auto blobs = internal::makeBlobArray(alloc, mapping, std::make_index_sequence<Mapping::blobCount>{});
         return {std::move(mapping), std::move(blobs)};
