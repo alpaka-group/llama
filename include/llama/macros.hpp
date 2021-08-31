@@ -3,7 +3,11 @@
 
 #pragma once
 
-#if defined(__INTEL_COMPILER) || defined(__INTEL_LLVM_COMPILER)
+#ifdef __INTEL_COMPILER
+#    error LLAMA has stopped supporting the Intel Classic Compiler after Intel announced its planned deprecation and replacement by the Intel LLVM-based compiler. Please migrate to Intel's LLVM-based compiler.
+#endif
+
+#if defined(__INTEL_LLVM_COMPILER)
 #    define LLAMA_INDEPENDENT_DATA _Pragma("ivdep")
 #elif defined(__clang__)
 #    define LLAMA_INDEPENDENT_DATA _Pragma("clang loop vectorize(assume_safety) interleave(assume_safety)")
@@ -28,7 +32,7 @@
 #        define LLAMA_FN_HOST_ACC_INLINE __host__ __device__ __forceinline__
 #    elif defined(__GNUC__) || defined(__clang__)
 #        define LLAMA_FN_HOST_ACC_INLINE inline __attribute__((always_inline))
-#    elif defined(_MSC_VER) || defined(__INTEL_COMPILER) || defined(__INTEL_LLVM_COMPILER)
+#    elif defined(_MSC_VER) || defined(__INTEL_LLVM_COMPILER)
 #        define LLAMA_FN_HOST_ACC_INLINE __forceinline
 #    else
 /// Some offloading parallelization language extensions such a CUDA, OpenACC or OpenMP 4.5 need to specify whether a
@@ -44,7 +48,7 @@
 #ifndef LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS
 #    if defined(__clang__) || defined(__INTEL_LLVM_COMPILER)
 #        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...) __attribute__((always_inline)) __VA_ARGS__
-#    elif defined(__GNUC__) || defined(__INTEL_COMPILER) || (defined(__NVCC__) && !defined(_MSC_VER))
+#    elif defined(__GNUC__) || (defined(__NVCC__) && !defined(_MSC_VER))
 #        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...) __VA_ARGS__ __attribute__((always_inline))
 #    elif defined(_MSC_VER)
 #        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...)                                                              \
@@ -66,9 +70,7 @@
 #    define LLAMA_SUPPRESS_HOST_DEVICE_WARNING
 #endif
 
-#if defined(__INTEL_COMPILER) /*|| defined(__INTEL_LLVM_COMPILER)*/
-#    define LLAMA_FORCE_INLINE_RECURSIVE _Pragma("forceinline recursive")
-#elif defined(_MSC_VER)
+#if defined(_MSC_VER)
 #    define LLAMA_FORCE_INLINE_RECURSIVE __pragma(inline_depth(255))
 #else
 /// Forces the compiler to recursively inline the call hiearchy started by the subsequent function call.

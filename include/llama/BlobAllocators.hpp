@@ -10,9 +10,6 @@
 #include <cstddef>
 #include <memory>
 #include <vector>
-#ifdef __INTEL_COMPILER
-#    include <aligned_new>
-#endif
 #if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION < 11000
 #    include <boost/shared_ptr.hpp>
 #endif

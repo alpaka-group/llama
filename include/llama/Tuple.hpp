@@ -30,8 +30,6 @@ namespace llama
         {
         }
 
-        // icpc fails to compile the treemap tests with this ctor
-#ifndef __INTEL_COMPILER
         /// Construct a tuple from forwarded values of potentially different types as the tuple stores.
         // SFINAE away this ctor if tuple elements cannot be constructed from ctor arguments
         template<
@@ -46,7 +44,6 @@ namespace llama
             , rest(std::forward<Ts>(restArgs)...)
         {
         }
-#endif
 
         FirstElement first; ///< the first element (if existing)
 #ifndef __NVCC__
