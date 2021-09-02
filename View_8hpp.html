@@ -175,9 +175,9 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a652fac1c34a93cbf3be72ffe979a8381"><td class="memTemplParams" colspan="2">template&lt;typename Allocator &gt; </td></tr>
-<tr class="memitem:a652fac1c34a93cbf3be72ffe979a8381"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a652fac1c34a93cbf3be72ffe979a8381">llama::internal::AllocatorBlobType</a> = decltype(std::declval&lt; Allocator &gt;()(0))</td></tr>
-<tr class="separator:a652fac1c34a93cbf3be72ffe979a8381"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b703634fd8ad7364cf42588add461bc"><td class="memTemplParams" colspan="2">template&lt;typename Allocator , typename RecordDim &gt; </td></tr>
+<tr class="memitem:a6b703634fd8ad7364cf42588add461bc"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a6b703634fd8ad7364cf42588add461bc">llama::internal::AllocatorBlobType</a> = decltype(std::declval&lt; Allocator &gt;()(std::integral_constant&lt; std::size_t, alignOf&lt; RecordDim &gt; &gt;{}, 0))</td></tr>
+<tr class="separator:a6b703634fd8ad7364cf42588add461bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f44282e6b70a3eedaa8e7355a6f7dd0"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
 <tr class="memitem:a2f44282e6b70a3eedaa8e7355a6f7dd0"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a2f44282e6b70a3eedaa8e7355a6f7dd0">llama::One</a> = VirtualRecord&lt; decltype(allocViewStack&lt; 0, RecordDim &gt;()), RecordCoord&lt;&gt;, true &gt;</td></tr>
 <tr class="memdesc:a2f44282e6b70a3eedaa8e7355a6f7dd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">A <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> that owns and holds a single value.  <a href="namespacellama.html#a2f44282e6b70a3eedaa8e7355a6f7dd0">More...</a><br /></td></tr>
@@ -185,12 +185,12 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a41b44539ebbad9d8cda992b563197b6e"><td class="memTemplParams" colspan="2">template&lt;typename Allocator , typename Mapping , std::size_t... Is&gt; </td></tr>
-<tr class="memitem:a41b44539ebbad9d8cda992b563197b6e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a41b44539ebbad9d8cda992b563197b6e">llama::internal::makeBlobArray</a> (const Allocator &amp;alloc, const Mapping &amp;mapping, std::integer_sequence&lt; std::size_t, Is... &gt;) -&gt; Array&lt; AllocatorBlobType&lt; Allocator &gt;, Mapping::blobCount &gt;</td></tr>
-<tr class="separator:a41b44539ebbad9d8cda992b563197b6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9dcf355d9fa87ed98864dadb8e685a1"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename Allocator  = bloballoc::Vector&lt;&gt;&gt; </td></tr>
-<tr class="memitem:af9dcf355d9fa87ed98864dadb8e685a1"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#af9dcf355d9fa87ed98864dadb8e685a1">llama::allocView</a> (Mapping mapping={}, const Allocator &amp;alloc={}) -&gt; View&lt; Mapping, internal::AllocatorBlobType&lt; Allocator &gt;&gt;</td></tr>
-<tr class="separator:af9dcf355d9fa87ed98864dadb8e685a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36b0736740116d5e9fff6172f5b202af"><td class="memTemplParams" colspan="2">template&lt;typename Allocator , typename Mapping , std::size_t... Is&gt; </td></tr>
+<tr class="memitem:a36b0736740116d5e9fff6172f5b202af"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a36b0736740116d5e9fff6172f5b202af">llama::internal::makeBlobArray</a> (const Allocator &amp;alloc, const Mapping &amp;mapping, std::integer_sequence&lt; std::size_t, Is... &gt;) -&gt; Array&lt; AllocatorBlobType&lt; Allocator, typename Mapping::RecordDim &gt;, Mapping::blobCount &gt;</td></tr>
+<tr class="separator:a36b0736740116d5e9fff6172f5b202af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99567a2429e7d7b3155116a8e81d4059"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename Allocator  = bloballoc::Vector&gt; </td></tr>
+<tr class="memitem:a99567a2429e7d7b3155116a8e81d4059"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a99567a2429e7d7b3155116a8e81d4059">llama::allocView</a> (Mapping mapping={}, const Allocator &amp;alloc={}) -&gt; View&lt; Mapping, internal::AllocatorBlobType&lt; Allocator, typename Mapping::RecordDim &gt;&gt;</td></tr>
+<tr class="separator:a99567a2429e7d7b3155116a8e81d4059"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3750d27a7f8dd111fbe32dc769b44120"><td class="memTemplParams" colspan="2">template&lt;std::size_t Dim, typename RecordDim &gt; </td></tr>
 <tr class="memitem:a3750d27a7f8dd111fbe32dc769b44120"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a3750d27a7f8dd111fbe32dc769b44120">llama::allocViewStack</a> () -&gt; decltype(auto)</td></tr>
 <tr class="separator:a3750d27a7f8dd111fbe32dc769b44120"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -214,7 +214,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="View_8hpp.html">View.hpp</a></li>
-    <li class="footer">Generated on Thu Sep 2 2021 08:05:45 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Sep 2 2021 10:12:35 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

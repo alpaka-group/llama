@@ -180,9 +180,9 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a7f5181ee5a37449e252d4db6199f566f"><td class="memTemplParams" colspan="2">template&lt;typename L &gt; </td></tr>
 <tr class="memitem:a7f5181ee5a37449e252d4db6199f566f"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a7f5181ee5a37449e252d4db6199f566f">mp_unwrap_sizes</a> = typename <a class="el" href="structllama_1_1internal_1_1mp__unwrap__sizes__impl.html">mp_unwrap_sizes_impl</a>&lt; L &gt;::type</td></tr>
 <tr class="separator:a7f5181ee5a37449e252d4db6199f566f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a652fac1c34a93cbf3be72ffe979a8381"><td class="memTemplParams" colspan="2">template&lt;typename Allocator &gt; </td></tr>
-<tr class="memitem:a652fac1c34a93cbf3be72ffe979a8381"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a652fac1c34a93cbf3be72ffe979a8381">AllocatorBlobType</a> = decltype(std::declval&lt; Allocator &gt;()(0))</td></tr>
-<tr class="separator:a652fac1c34a93cbf3be72ffe979a8381"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b703634fd8ad7364cf42588add461bc"><td class="memTemplParams" colspan="2">template&lt;typename Allocator , typename RecordDim &gt; </td></tr>
+<tr class="memitem:a6b703634fd8ad7364cf42588add461bc"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a6b703634fd8ad7364cf42588add461bc">AllocatorBlobType</a> = decltype(std::declval&lt; Allocator &gt;()(std::integral_constant&lt; std::size_t, <a class="el" href="namespacellama.html#af54c80b077fb3d417466c83d0d005907">alignOf</a>&lt; RecordDim &gt; &gt;{}, 0))</td></tr>
+<tr class="separator:a6b703634fd8ad7364cf42588add461bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -194,6 +194,9 @@ Functions</h2></td></tr>
 <tr class="memitem:af16d07d01be7acc8ced82a040bac87da"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename... &gt; typename L, typename... T, typename F &gt; </td></tr>
 <tr class="memitem:af16d07d01be7acc8ced82a040bac87da"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#af16d07d01be7acc8ced82a040bac87da">mp_for_each_inlined</a> (L&lt; T... &gt;, F &amp;&amp;f)</td></tr>
 <tr class="separator:af16d07d01be7acc8ced82a040bac87da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2413ee7f2d6487f7e306148cf2b46ac4"><td class="memTemplParams" colspan="2">template&lt;typename TypeList &gt; </td></tr>
+<tr class="memitem:a2413ee7f2d6487f7e306148cf2b46ac4"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a2413ee7f2d6487f7e306148cf2b46ac4">flatAlignOfImpl</a> ()</td></tr>
+<tr class="separator:a2413ee7f2d6487f7e306148cf2b46ac4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a365660e6c469c94566ee7fa45aa3e262"><td class="memItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a365660e6c469c94566ee7fa45aa3e262">roundUpToMultiple</a> (std::size_t &amp;value, std::size_t multiple)</td></tr>
 <tr class="separator:a365660e6c469c94566ee7fa45aa3e262"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeab53e4609fe07abfb6f5f2d532cd388"><td class="memTemplParams" colspan="2">template&lt;typename TypeList , bool Align, bool IncludeTailPadding&gt; </td></tr>
@@ -216,9 +219,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a76aaf566f3c6233df18940831d184aa9"><td class="memTemplParams" colspan="2">template&lt;size_t... Is, typename... Elements, typename Functor &gt; </td></tr>
 <tr class="memitem:a76aaf566f3c6233df18940831d184aa9"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a76aaf566f3c6233df18940831d184aa9">tupleTransformHelper</a> (std::index_sequence&lt; Is... &gt;, const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt; &amp;tuple, const Functor &amp;functor)</td></tr>
 <tr class="separator:a76aaf566f3c6233df18940831d184aa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a41b44539ebbad9d8cda992b563197b6e"><td class="memTemplParams" colspan="2">template&lt;typename Allocator , typename Mapping , std::size_t... Is&gt; </td></tr>
-<tr class="memitem:a41b44539ebbad9d8cda992b563197b6e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a41b44539ebbad9d8cda992b563197b6e">makeBlobArray</a> (const Allocator &amp;alloc, const Mapping &amp;mapping, std::integer_sequence&lt; std::size_t, Is... &gt;) -&gt; <a class="el" href="structllama_1_1Array.html">Array</a>&lt; <a class="el" href="namespacellama_1_1internal.html#a652fac1c34a93cbf3be72ffe979a8381">AllocatorBlobType</a>&lt; Allocator &gt;, Mapping::blobCount &gt;</td></tr>
-<tr class="separator:a41b44539ebbad9d8cda992b563197b6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36b0736740116d5e9fff6172f5b202af"><td class="memTemplParams" colspan="2">template&lt;typename Allocator , typename Mapping , std::size_t... Is&gt; </td></tr>
+<tr class="memitem:a36b0736740116d5e9fff6172f5b202af"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a36b0736740116d5e9fff6172f5b202af">makeBlobArray</a> (const Allocator &amp;alloc, const Mapping &amp;mapping, std::integer_sequence&lt; std::size_t, Is... &gt;) -&gt; <a class="el" href="structllama_1_1Array.html">Array</a>&lt; <a class="el" href="namespacellama_1_1internal.html#a6b703634fd8ad7364cf42588add461bc">AllocatorBlobType</a>&lt; Allocator, typename Mapping::RecordDim &gt;, Mapping::blobCount &gt;</td></tr>
+<tr class="separator:a36b0736740116d5e9fff6172f5b202af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a124e4d559d771e918724b3fee4a86e39"><td class="memTemplParams" colspan="2">template&lt;typename Functor , typename LeftRecord , typename RightView , typename RightBoundRecordDim , bool RightOwnView&gt; </td></tr>
 <tr class="memitem:a124e4d559d771e918724b3fee4a86e39"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a124e4d559d771e918724b3fee4a86e39">virtualRecordArithOperator</a> (LeftRecord &amp;left, const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; RightView, RightBoundRecordDim, RightOwnView &gt; &amp;right) -&gt; LeftRecord &amp;</td></tr>
 <tr class="separator:a124e4d559d771e918724b3fee4a86e39"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -305,21 +308,21 @@ Variables</h2></td></tr>
 <tr class="separator:a4522640644ac2790e930a57ea0ec85c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
-<a id="a652fac1c34a93cbf3be72ffe979a8381"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a652fac1c34a93cbf3be72ffe979a8381">&#9670;&nbsp;</a></span>AllocatorBlobType</h2>
+<a id="a6b703634fd8ad7364cf42588add461bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b703634fd8ad7364cf42588add461bc">&#9670;&nbsp;</a></span>AllocatorBlobType</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Allocator &gt; </div>
+template&lt;typename Allocator , typename RecordDim &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacellama_1_1internal.html#a652fac1c34a93cbf3be72ffe979a8381">llama::internal::AllocatorBlobType</a> = typedef decltype(std::declval&lt;Allocator&gt;()(0))</td>
+          <td class="memname">using <a class="el" href="namespacellama_1_1internal.html#a6b703634fd8ad7364cf42588add461bc">llama::internal::AllocatorBlobType</a> = typedef decltype(std::declval&lt;Allocator&gt;()(std::integral_constant&lt;std::size_t, <a class="el" href="namespacellama.html#af54c80b077fb3d417466c83d0d005907">alignOf</a>&lt;RecordDim&gt; &gt;{}, 0))</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00028">28</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00029">29</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -917,8 +920,37 @@ template&lt;typename Mapping , std::size_t... Is, typename ArrayDims &gt; </div>
 
 </div>
 </div>
-<a id="a41b44539ebbad9d8cda992b563197b6e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a41b44539ebbad9d8cda992b563197b6e">&#9670;&nbsp;</a></span>makeBlobArray()</h2>
+<a id="a2413ee7f2d6487f7e306148cf2b46ac4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2413ee7f2d6487f7e306148cf2b46ac4">&#9670;&nbsp;</a></span>flatAlignOfImpl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TypeList &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::internal::flatAlignOfImpl </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00439">439</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a36b0736740116d5e9fff6172f5b202af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36b0736740116d5e9fff6172f5b202af">&#9670;&nbsp;</a></span>makeBlobArray()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -949,7 +981,7 @@ template&lt;typename Allocator , typename Mapping , std::size_t... Is&gt; </div>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> -&gt; <a class="el" href="structllama_1_1Array.html">Array</a>&lt;<a class="el" href="namespacellama_1_1internal.html#a652fac1c34a93cbf3be72ffe979a8381">AllocatorBlobType</a>&lt;Allocator&gt;, Mapping::blobCount&gt;
+          <td></td><td> -&gt; <a class="el" href="structllama_1_1Array.html">Array</a>&lt;<a class="el" href="namespacellama_1_1internal.html#a6b703634fd8ad7364cf42588add461bc">AllocatorBlobType</a>&lt;Allocator, typename Mapping::RecordDim&gt;, Mapping::blobCount&gt;
         </td>
         </tr>
       </table>
@@ -960,7 +992,7 @@ template&lt;typename Allocator , typename Mapping , std::size_t... Is&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00032">32</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00033">33</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1069,7 +1101,7 @@ template&lt;bool Align, typename TypeList , std::size_t I&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00480">480</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00510">510</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1169,7 +1201,7 @@ template&lt;bool Align, typename TypeList , std::size_t I&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00438">438</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00467">467</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1199,7 +1231,7 @@ template&lt;typename TypeList , bool Align, bool IncludeTailPadding&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00444">444</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00473">473</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1748,7 +1780,7 @@ template&lt;bool Align, typename TypeList , std::size_t I&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00474">474</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00504">504</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1774,7 +1806,7 @@ template&lt;bool Align, typename TypeList &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00477">477</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00507">507</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1784,7 +1816,7 @@ template&lt;bool Align, typename TypeList &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Thu Sep 2 2021 08:05:45 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Sep 2 2021 10:12:35 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

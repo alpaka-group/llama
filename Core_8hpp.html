@@ -276,6 +276,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a90e79610dc6b5c1b8f472e61018cd61f"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename Functor , typename... Tags&gt; </td></tr>
 <tr class="memitem:a90e79610dc6b5c1b8f472e61018cd61f"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a90e79610dc6b5c1b8f472e61018cd61f">llama::forEachLeaf</a> (Functor &amp;&amp;functor, Tags... baseTags)</td></tr>
 <tr class="separator:a90e79610dc6b5c1b8f472e61018cd61f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2413ee7f2d6487f7e306148cf2b46ac4"><td class="memTemplParams" colspan="2">template&lt;typename TypeList &gt; </td></tr>
+<tr class="memitem:a2413ee7f2d6487f7e306148cf2b46ac4"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a2413ee7f2d6487f7e306148cf2b46ac4">llama::internal::flatAlignOfImpl</a> ()</td></tr>
+<tr class="separator:a2413ee7f2d6487f7e306148cf2b46ac4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a365660e6c469c94566ee7fa45aa3e262"><td class="memItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a365660e6c469c94566ee7fa45aa3e262">llama::internal::roundUpToMultiple</a> (std::size_t &amp;value, std::size_t multiple)</td></tr>
 <tr class="separator:a365660e6c469c94566ee7fa45aa3e262"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeab53e4609fe07abfb6f5f2d532cd388"><td class="memTemplParams" colspan="2">template&lt;typename TypeList , bool Align, bool IncludeTailPadding&gt; </td></tr>
@@ -341,6 +344,18 @@ Variables</h2></td></tr>
 <tr class="memitem:aef46edda82bf9ef35a2d461b77b5911f"><td class="memTemplParams" colspan="2">template&lt;typename Child , std::size_t N, std::size_t I, std::size_t... Is&gt; </td></tr>
 <tr class="memitem:aef46edda82bf9ef35a2d461b77b5911f"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aef46edda82bf9ef35a2d461b77b5911f">llama::flatRecordCoord&lt; Child[N], RecordCoord&lt; I, Is... &gt; &gt;</a></td></tr>
 <tr class="separator:aef46edda82bf9ef35a2d461b77b5911f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f2067ffe5979128e7efaf1fd4c35810"><td class="memTemplParams" colspan="2">template&lt;typename TypeList &gt; </td></tr>
+<tr class="memitem:a6f2067ffe5979128e7efaf1fd4c35810"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a6f2067ffe5979128e7efaf1fd4c35810">llama::flatAlignOf</a> = internal::flatAlignOfImpl&lt;TypeList&gt;()</td></tr>
+<tr class="memdesc:a6f2067ffe5979128e7efaf1fd4c35810"><td class="mdescLeft">&#160;</td><td class="mdescRight">The alignment of a type list if its elements would be in a normal struct.  <a href="namespacellama.html#a6f2067ffe5979128e7efaf1fd4c35810">More...</a><br /></td></tr>
+<tr class="separator:a6f2067ffe5979128e7efaf1fd4c35810"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af54c80b077fb3d417466c83d0d005907"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:af54c80b077fb3d417466c83d0d005907"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#af54c80b077fb3d417466c83d0d005907">llama::alignOf</a> = alignof(T)</td></tr>
+<tr class="memdesc:af54c80b077fb3d417466c83d0d005907"><td class="mdescLeft">&#160;</td><td class="mdescRight">The alignment of a type T.  <a href="namespacellama.html#af54c80b077fb3d417466c83d0d005907">More...</a><br /></td></tr>
+<tr class="separator:af54c80b077fb3d417466c83d0d005907"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a945addc7fc78f444f37bb79d099cfd84"><td class="memTemplParams" colspan="2">template&lt;typename... Fields&gt; </td></tr>
+<tr class="memitem:a945addc7fc78f444f37bb79d099cfd84"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a945addc7fc78f444f37bb79d099cfd84">llama::alignOf&lt; Record&lt; Fields... &gt; &gt;</a> = flatAlignOf&lt;FlatRecordDim&lt;Record&lt;Fields...&gt;&gt;&gt;</td></tr>
+<tr class="memdesc:a945addc7fc78f444f37bb79d099cfd84"><td class="mdescLeft">&#160;</td><td class="mdescRight">The alignment of a record dimension if its fields would be in a normal struct.  <a href="namespacellama.html#a945addc7fc78f444f37bb79d099cfd84">More...</a><br /></td></tr>
+<tr class="separator:a945addc7fc78f444f37bb79d099cfd84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2299e5867f7c90d4c67225474bd27a8"><td class="memTemplParams" colspan="2">template&lt;bool Align, typename TypeList , std::size_t I&gt; </td></tr>
 <tr class="memitem:aa2299e5867f7c90d4c67225474bd27a8"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#aa2299e5867f7c90d4c67225474bd27a8">llama::internal::offsetOfImpl</a> = offsetOfImplWorkaround&lt;Align, TypeList, I&gt;()</td></tr>
 <tr class="separator:aa2299e5867f7c90d4c67225474bd27a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -373,7 +388,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Core_8hpp.html">Core.hpp</a></li>
-    <li class="footer">Generated on Thu Sep 2 2021 08:05:45 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Sep 2 2021 10:12:35 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
