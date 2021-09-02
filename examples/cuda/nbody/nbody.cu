@@ -66,7 +66,7 @@ using ParticleJ = llama::Record<
 // using SharedMemoryParticle = Particle;
 using SharedMemoryParticle = ParticleJ;
 
-template <typename VirtualParticleI, typename VirtualParticleJ>
+template<typename VirtualParticleI, typename VirtualParticleJ>
 __device__ void pPInteraction(VirtualParticleI&& pi, VirtualParticleJ pj)
 {
     auto dist = pi(tag::Pos()) - pj(tag::Pos());
@@ -78,7 +78,7 @@ __device__ void pPInteraction(VirtualParticleI&& pi, VirtualParticleJ pj)
     pi(tag::Vel()) += dist * sts;
 }
 
-template <int MappingSM, typename View>
+template<int MappingSM, typename View>
 __global__ void updateSM(View particles)
 {
     // FIXME: removing this lambda makes nvcc 11 segfault
@@ -87,13 +87,13 @@ __global__ void updateSM(View particles)
         constexpr auto sharedMapping = []
         {
             constexpr auto arrayDims = llama::ArrayDims{SHARED_ELEMENTS_PER_BLOCK};
-            if constexpr (MappingSM == 0)
+            if constexpr(MappingSM == 0)
                 return llama::mapping::AoS<decltype(arrayDims), SharedMemoryParticle>{arrayDims};
-            if constexpr (MappingSM == 1)
+            if constexpr(MappingSM == 1)
                 return llama::mapping::SoA<decltype(arrayDims), SharedMemoryParticle, false>{arrayDims};
-            if constexpr (MappingSM == 2)
+            if constexpr(MappingSM == 2)
                 return llama::mapping::SoA<decltype(arrayDims), SharedMemoryParticle, true>{arrayDims};
-            if constexpr (MappingSM == 3)
+            if constexpr(MappingSM == 3)
                 return llama::mapping::AoSoA<decltype(arrayDims), SharedMemoryParticle, AOSOA_LANES>{arrayDims};
         }();
 
@@ -111,34 +111,34 @@ __global__ void updateSM(View particles)
     const auto tbi = blockIdx.x;
 
     llama::One<Particle> pi = particles(ti);
-    for (std::size_t blockOffset = 0; blockOffset < PROBLEM_SIZE; blockOffset += SHARED_ELEMENTS_PER_BLOCK)
+    for(std::size_t blockOffset = 0; blockOffset < PROBLEM_SIZE; blockOffset += SHARED_ELEMENTS_PER_BLOCK)
     {
         LLAMA_INDEPENDENT_DATA
-        for (auto j = tbi; j < SHARED_ELEMENTS_PER_BLOCK; j += THREADS_PER_BLOCK)
+        for(auto j = tbi; j < SHARED_ELEMENTS_PER_BLOCK; j += THREADS_PER_BLOCK)
             sharedView(j) = particles(blockOffset + j);
         __syncthreads();
 
         LLAMA_INDEPENDENT_DATA
-        for (auto j = std::size_t{0}; j < SHARED_ELEMENTS_PER_BLOCK; ++j)
+        for(auto j = std::size_t{0}; j < SHARED_ELEMENTS_PER_BLOCK; ++j)
             pPInteraction(pi, sharedView(j));
         __syncthreads();
     }
     particles(ti)(tag::Vel{}) = pi(tag::Vel{});
 }
 
-template <typename View>
+template<typename View>
 __global__ void update(View particles)
 {
     const auto ti = threadIdx.x + blockIdx.x * blockDim.x;
 
     llama::One<Particle> pi = particles(ti);
     LLAMA_INDEPENDENT_DATA
-    for (auto j = std::size_t{0}; j < PROBLEM_SIZE; ++j)
+    for(auto j = std::size_t{0}; j < PROBLEM_SIZE; ++j)
         pPInteraction(pi, particles(j));
     particles(ti)(tag::Vel{}) = pi(tag::Vel{});
 }
 
-template <typename View>
+template<typename View>
 __global__ void move(View particles)
 {
     const auto ti = threadIdx.x + blockIdx.x * blockDim.x;
@@ -147,47 +147,47 @@ __global__ void move(View particles)
 
 void checkError(cudaError_t code)
 {
-    if (code != cudaSuccess)
+    if(code != cudaSuccess)
         throw std::runtime_error("CUDA Error: "s + cudaGetErrorString(code));
 }
 
-template <int Mapping, int MappingSM>
+template<int Mapping, int MappingSM>
 void run(std::ostream& plotFile, bool useSharedMemory)
 try
 {
     auto mappingName = [](int m) -> std::string
     {
-        if (m == 0)
+        if(m == 0)
             return "AoS";
-        if (m == 1)
+        if(m == 1)
             return "SoA";
-        if (m == 2)
+        if(m == 2)
             return "SoA MB";
-        if (m == 3)
+        if(m == 3)
             return "AoSoA" + std::to_string(AOSOA_LANES);
-        if (m == 4)
+        if(m == 4)
             return "Split SoA";
-        if (m == 5)
+        if(m == 5)
             return "Split AoS";
         std::abort();
     };
     auto title = "GM " + mappingName(Mapping);
-    if (useSharedMemory)
+    if(useSharedMemory)
         title += " SM " + mappingName(MappingSM);
     std::cout << '\n' << title << '\n';
 
     auto mapping = []
     {
         const auto arrayDims = llama::ArrayDims{PROBLEM_SIZE};
-        if constexpr (Mapping == 0)
+        if constexpr(Mapping == 0)
             return llama::mapping::AoS<decltype(arrayDims), Particle>{arrayDims};
-        if constexpr (Mapping == 1)
+        if constexpr(Mapping == 1)
             return llama::mapping::SoA<decltype(arrayDims), Particle, false>{arrayDims};
-        if constexpr (Mapping == 2)
+        if constexpr(Mapping == 2)
             return llama::mapping::SoA<decltype(arrayDims), Particle, true>{arrayDims};
-        if constexpr (Mapping == 3)
+        if constexpr(Mapping == 3)
             return llama::mapping::AoSoA<decltype(arrayDims), Particle, AOSOA_LANES>{arrayDims};
-        if constexpr (Mapping == 4)
+        if constexpr(Mapping == 4)
             return llama::mapping::Split<
                 decltype(arrayDims),
                 Particle,
@@ -195,7 +195,7 @@ try
                 llama::mapping::PreconfiguredSoA<>::type,
                 llama::mapping::PreconfiguredSoA<>::type,
                 true>{arrayDims};
-        if constexpr (Mapping == 5)
+        if constexpr(Mapping == 5)
             return llama::mapping::Split<
                 decltype(arrayDims),
                 Particle,
@@ -221,7 +221,7 @@ try
 
     std::default_random_engine engine;
     std::normal_distribution<FP> distribution(FP(0), FP(1));
-    for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+    for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
     {
         llama::One<Particle> p;
         p(tag::Pos(), tag::X()) = distribution(engine);
@@ -252,7 +252,7 @@ try
     };
 
     start();
-    for (auto i = 0; i < accView.storageBlobs.rank; i++)
+    for(auto i = 0; i < accView.storageBlobs.rank; i++)
         checkError(cudaMemcpy(
             accView.storageBlobs[i],
             hostView.storageBlobs[i].data(),
@@ -264,12 +264,12 @@ try
 
     double sumUpdate = 0;
     double sumMove = 0;
-    for (std::size_t s = 0; s < STEPS; ++s)
+    for(std::size_t s = 0; s < STEPS; ++s)
     {
-        if constexpr (RUN_UPATE)
+        if constexpr(RUN_UPATE)
         {
             start();
-            if (useSharedMemory)
+            if(useSharedMemory)
                 updateSM<MappingSM><<<blocks, THREADS_PER_BLOCK>>>(accView);
             else
                 update<<<blocks, THREADS_PER_BLOCK>>>(accView);
@@ -287,7 +287,7 @@ try
     plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
     start();
-    for (auto i = 0; i < accView.storageBlobs.rank; i++)
+    for(auto i = 0; i < accView.storageBlobs.rank; i++)
         checkError(cudaMemcpy(
             hostView.storageBlobs[i].data(),
             accView.storageBlobs[i],
@@ -295,12 +295,12 @@ try
             cudaMemcpyDeviceToHost));
     std::cout << "copy D->H " << stop() << " s\n";
 
-    for (auto i = 0; i < accView.storageBlobs.rank; i++)
+    for(auto i = 0; i < accView.storageBlobs.rank; i++)
         checkError(cudaFree(accView.storageBlobs[i]));
     checkError(cudaEventDestroy(startEvent));
     checkError(cudaEventDestroy(stopEvent));
 }
-catch (const std::exception& e)
+catch(const std::exception& e)
 {
     std::cerr << "Exception: " << e.what() << std::endl;
 }
@@ -333,7 +333,7 @@ namespace manual
 
     __device__ FP3 tile_calculation(FP4 myPosition, FP3 accel)
     {
-        for (int i = 0; i < SHARED_ELEMENTS_PER_BLOCK; i++)
+        for(int i = 0; i < SHARED_ELEMENTS_PER_BLOCK; i++)
             accel = bodyBodyInteraction(myPosition, shPosition[i], accel);
         return accel;
     }
@@ -343,9 +343,9 @@ namespace manual
         FP3 acc = {0.0f, 0.0f, 0.0f};
         const int gtid = blockIdx.x * THREADS_PER_BLOCK + threadIdx.x;
         const FP4 myPosition = globalX[gtid];
-        for (int i = 0, tile = 0; i < PROBLEM_SIZE; i += SHARED_ELEMENTS_PER_BLOCK, tile++)
+        for(int i = 0, tile = 0; i < PROBLEM_SIZE; i += SHARED_ELEMENTS_PER_BLOCK, tile++)
         {
-            for (int j = threadIdx.x; j < SHARED_ELEMENTS_PER_BLOCK; j += THREADS_PER_BLOCK)
+            for(int j = threadIdx.x; j < SHARED_ELEMENTS_PER_BLOCK; j += THREADS_PER_BLOCK)
                 shPosition[j] = globalX[tile * SHARED_ELEMENTS_PER_BLOCK + j];
             __syncthreads();
             acc = tile_calculation(myPosition, acc);
@@ -385,7 +385,7 @@ namespace manual
 
         std::default_random_engine engine;
         std::normal_distribution<FP> distribution(FP(0), FP(1));
-        for (std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+        for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
         {
             hostPositions[i].x = distribution(engine);
             hostPositions[i].y = distribution(engine);
@@ -423,9 +423,9 @@ namespace manual
 
         double sumUpdate = 0;
         double sumMove = 0;
-        for (std::size_t s = 0; s < STEPS; ++s)
+        for(std::size_t s = 0; s < STEPS; ++s)
         {
-            if constexpr (RUN_UPATE)
+            if constexpr(RUN_UPATE)
             {
                 start();
                 calculate_forces<<<blocks, THREADS_PER_BLOCK>>>(accPositions, accVelocities);
@@ -453,7 +453,7 @@ namespace manual
         checkError(cudaEventDestroy(startEvent));
         checkError(cudaEventDestroy(stopEvent));
     }
-    catch (const std::exception& e)
+    catch(const std::exception& e)
     {
         std::cerr << "Exception: " << e.what() << std::endl;
     }
@@ -512,7 +512,7 @@ plot $data using 2:xtic(1) ti col axis x1y1, "" using 3 ti col axis x1y2
 
     return 0;
 }
-catch (const std::exception& e)
+catch(const std::exception& e)
 {
     std::cerr << "Exception: " << e.what() << '\n';
 }
