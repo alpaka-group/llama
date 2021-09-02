@@ -13,6 +13,7 @@ jobs:
     - uses: DoozyX/clang-format-lint-action@v0.12
       with:
         exclude: './thirdparty'
+        extensions: 'cpp,hpp,h,cu'
         clangFormatVersion: 12
 
   clang-tidy:
