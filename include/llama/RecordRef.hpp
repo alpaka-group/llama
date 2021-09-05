@@ -378,8 +378,7 @@ namespace llama
         using ArrayIndex = typename View::Mapping::ArrayExtents::Index;
         using RecordDim = typename View::Mapping::RecordDim;
 
-        // std::conditional_t<OwnView, View, View&> view;
-        View view;
+        std::conditional_t<OwnView, View, View&> view;
 
     public:
         /// Subtree of the record dimension of View starting at BoundRecordCoord. If BoundRecordCoord is

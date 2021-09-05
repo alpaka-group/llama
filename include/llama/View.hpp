@@ -219,9 +219,9 @@ namespace llama
 
         constexpr Iterator() = default;
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr Iterator(ArrayIndexIterator arrayIndex, View view)
+        LLAMA_FN_HOST_ACC_INLINE constexpr Iterator(ArrayIndexIterator arrayIndex, View* view)
             : arrayIndex(arrayIndex)
-            , view(std::move(view))
+            , view(view)
         {
         }
 
@@ -258,7 +258,7 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator*() const -> reference
         {
-            return const_cast<View&>(view)(*arrayIndex);
+            return (*view)(*arrayIndex);
         }
 
         LLAMA_FN_HOST_ACC_INLINE
@@ -353,7 +353,7 @@ namespace llama
         }
 
         ArrayIndexIterator arrayIndex;
-        View view;
+        View* view;
     };
 
     /// Using a mapping, maps the given array index and record coordinate to a memory reference onto the given blobs.
@@ -546,25 +546,25 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE
         auto begin() -> iterator
         {
-            return {ArrayIndexRange<ArrayExtents>{extents()}.begin(), *this};
+            return {ArrayIndexRange<ArrayExtents>{extents()}.begin(), this};
         }
 
         LLAMA_FN_HOST_ACC_INLINE
         auto begin() const -> const_iterator
         {
-            return {ArrayIndexRange<ArrayExtents>{extents()}.begin(), *this};
+            return {ArrayIndexRange<ArrayExtents>{extents()}.begin(), this};
         }
 
         LLAMA_FN_HOST_ACC_INLINE
         auto end() -> iterator
         {
-            return {ArrayIndexRange<ArrayExtents>{extents()}.end(), *this};
+            return {ArrayIndexRange<ArrayExtents>{extents()}.end(), this};
         }
 
         LLAMA_FN_HOST_ACC_INLINE
         auto end() const -> const_iterator
         {
-            return {ArrayIndexRange<ArrayExtents>{extents()}.end(), *this};
+            return {ArrayIndexRange<ArrayExtents>{extents()}.end(), this};
         }
 
         LLAMA_FN_HOST_ACC_INLINE auto blobs() -> Array<BlobType, Mapping::blobCount>&
