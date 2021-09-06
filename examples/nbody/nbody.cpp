@@ -45,6 +45,29 @@ constexpr auto l2CacheSize = 512 * 1024;
 
 using namespace std::string_literals;
 
+#ifdef HAVE_XSIMD
+template<typename Batch>
+struct llama::SimdTraits<Batch, std::enable_if_t<xsimd::is_batch<Batch>::value>>
+{
+    using value_type = typename Batch::value_type;
+
+    inline static constexpr std::size_t lanes = Batch::size;
+
+    static LLAMA_FORCE_INLINE auto loadUnaligned(const value_type* mem) -> Batch
+    {
+        return Batch::load_unaligned(mem);
+    }
+
+    static LLAMA_FORCE_INLINE void storeUnaligned(Batch batch, value_type* mem)
+    {
+        batch.store_unaligned(mem);
+    }
+};
+
+template<typename T>
+using MakeBatch = xsimd::batch<T>;
+#endif
+
 struct Vec3
 {
     FP x;
@@ -123,32 +146,94 @@ namespace usellama
         struct Mass{};
     } // namespace tag
 
+    using V3 = llama::Record<
+        llama::Field<tag::X, FP>,
+        llama::Field<tag::Y, FP>,
+        llama::Field<tag::Z, FP>>;
     using Particle = llama::Record<
-        llama::Field<tag::Pos, llama::Record<
-            llama::Field<tag::X, FP>,
-            llama::Field<tag::Y, FP>,
-            llama::Field<tag::Z, FP>
-        >>,
-        llama::Field<tag::Vel, llama::Record<
-            llama::Field<tag::X, FP>,
-            llama::Field<tag::Y, FP>,
-            llama::Field<tag::Z, FP>
-        >>,
-        llama::Field<tag::Mass, FP>
-    >;
+        llama::Field<tag::Pos, V3>,
+        llama::Field<tag::Vel, V3>,
+        llama::Field<tag::Mass, FP>>;
     // clang-format on
+
+    namespace stdext
+    {
+        LLAMA_FN_HOST_ACC_INLINE auto rsqrt(FP f) -> FP
+        {
+            return 1.0f / std::sqrt(f);
+        }
+    } // namespace stdext
 
     template<typename ParticleRefI, typename ParticleRefJ>
     LLAMA_FN_HOST_ACC_INLINE void pPInteraction(ParticleRefI& pi, ParticleRefJ pj)
     {
         auto dist = pi(tag::Pos{}) - pj(tag::Pos{});
         dist *= dist;
-        const FP distSqr = epS2 + dist(tag::X{}) + dist(tag::Y{}) + dist(tag::Z{});
-        const FP distSixth = distSqr * distSqr * distSqr;
-        const FP invDistCube = 1.0f / std::sqrt(distSixth);
-        const FP sts = pj(tag::Mass{}) * invDistCube * timestep;
+        const auto distSqr = epS2 + dist(tag::X{}) + dist(tag::Y{}) + dist(tag::Z{});
+        const auto distSixth = distSqr * distSqr * distSqr;
+        const auto invDistCube = [&]
+        {
+            if constexpr(allowRsqrt)
+            {
+#ifdef HAVE_XSIMD
+                using xsimd::rsqrt;
+#endif
+                using stdext::rsqrt;
+                const auto r = rsqrt(distSixth);
+                if constexpr(newtonRaphsonAfterRsqrt)
+                {
+                    // from: http://stackoverflow.com/q/14752399/556899
+                    const auto three = FP{3};
+                    const auto half = FP{0.5};
+                    const auto muls = distSixth * r * r;
+                    return (half * r) * (three - muls);
+                }
+                else
+                    return r;
+            }
+            else
+            {
+#ifdef HAVE_XSIMD
+                using xsimd::sqrt;
+#endif
+                using std::sqrt;
+                return 1.0f / sqrt(distSixth);
+            }
+        }();
+        const auto sts = (pj(tag::Mass{}) * timestep) * invDistCube;
         pi(tag::Vel{}) += dist * sts;
     }
+
+#ifdef HAVE_XSIMD
+    template<typename View>
+    void updateSimd(View& particles)
+    {
+        constexpr auto width = llama::simdLanesFor<typename View::RecordDim, MakeBatch>;
+        for(std::size_t i = 0; i < problemSize; i += width)
+        {
+            llama::SimdN<typename View::RecordDim, width, xsimd::make_sized_batch_t> pis;
+            llama::loadSimd(pis, particles(i));
+            for(std::size_t j = 0; j < problemSize; ++j)
+                pPInteraction(pis, particles(j));
+            llama::storeSimd(particles(i)(tag::Vel{}), pis(tag::Vel{}));
+        }
+    }
+
+    template<typename View>
+    void moveSimd(View& particles)
+    {
+        constexpr auto width = llama::simdLanesFor<typename View::RecordDim, MakeBatch>;
+        LLAMA_INDEPENDENT_DATA // TODO(bgruber): why is this needed
+            for(std::size_t i = 0; i < problemSize; i += width)
+        {
+            llama::SimdN<llama::GetType<typename View::RecordDim, tag::Pos>, width, xsimd::make_sized_batch_t> pos;
+            llama::SimdN<llama::GetType<typename View::RecordDim, tag::Vel>, width, xsimd::make_sized_batch_t> vel;
+            llama::loadSimd(pos, particles(i)(tag::Pos{}));
+            llama::loadSimd(vel, particles(i)(tag::Vel{}));
+            llama::storeSimd(particles(i)(tag::Pos{}), pos + vel * timestep);
+        }
+    }
+#endif
 
     template<typename View>
     void update(View& particles)
@@ -171,7 +256,7 @@ namespace usellama
             particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * timestep;
     }
 
-    template<int Mapping, std::size_t AoSoALanes = 8 /*AVX2*/>
+    template<bool UseSimd, int Mapping, std::size_t AoSoALanes = 8 /*AVX2*/>
     auto main(std::ostream& plotFile) -> Vec3
     {
         auto mappingName = [](int m) -> std::string
@@ -196,7 +281,7 @@ namespace usellama
                 return "BitPack SoA 11e4 CT";
             std::abort();
         };
-        auto title = "LLAMA " + mappingName(Mapping);
+        auto title = "LLAMA " + mappingName(Mapping) + (UseSimd ? " SIMD" : "");
         std::cout << title << "\n";
         Stopwatch watch;
         auto mapping = [&]
@@ -274,10 +359,16 @@ namespace usellama
         {
             if constexpr(runUpate)
             {
-                update(particles);
+                if constexpr(UseSimd)
+                    updateSimd(particles);
+                else
+                    update(particles);
                 sumUpdate += watch.printAndReset("update", '\t');
             }
-            move(particles);
+            if constexpr(UseSimd)
+                moveSimd(particles);
+            else
+                move(particles);
             sumMove += watch.printAndReset("move");
         }
         plotFile << std::quoted(title) << "\t" << sumUpdate / steps << '\t' << sumMove / steps << '\n';
@@ -1434,7 +1525,7 @@ try
     // using Simd = xsimd::make_sized_batch_t<FP, 16>;
     constexpr auto simdLanes = Simd::size;
 #else
-    constexpr auto SIMDLanes = 1;
+    constexpr auto simdLanes = 1;
 #endif
 
     const auto numThreads = static_cast<std::size_t>(omp_get_max_threads());
@@ -1485,14 +1576,20 @@ $data << EOD
     std::vector<Vec3> finalPositions;
     using namespace boost::mp11;
     mp_for_each<mp_iota_c<8>>(
-        [&](auto i)
+        [&](auto ic)
         {
+            static constexpr auto i = decltype(ic)::value;
             // only AoSoA (3) needs lanes
-            using Lanes = std::
-                conditional_t<decltype(i)::value == 3, mp_list_c<std::size_t, 8, 16>, mp_list_c<std::size_t, 0>>;
+            using Lanes = std::conditional_t<i == 3, mp_list_c<std::size_t, 8, 16>, mp_list_c<std::size_t, 0>>;
             mp_for_each<Lanes>(
-                [&, i](auto lanes)
-                { finalPositions.push_back(usellama::main<decltype(i)::value, decltype(lanes)::value>(plotFile)); });
+                [&](auto lanes)
+                {
+                    finalPositions.push_back(usellama::main<false, i, decltype(lanes)::value>(plotFile));
+#ifdef HAVE_XSIMD
+                    if constexpr(i < 5) // TODO(bgruber): simd does not work with proxy references yet
+                        finalPositions.push_back(usellama::main<true, i, decltype(lanes)::value>(plotFile));
+#endif
+                });
         });
     finalPositions.push_back(manualAoS::main(plotFile));
     finalPositions.push_back(manualSoA::main(plotFile));
@@ -1509,6 +1606,7 @@ $data << EOD
     finalPositions.push_back(manualAoSoAManualAVX::main(plotFile, false));
 #endif
 #ifdef HAVE_XSIMD
+    const auto maxThreads = std::thread::hardware_concurrency();
     for(int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
     {
         // for (auto useUpdate1 : {false, true})
@@ -1520,7 +1618,7 @@ $data << EOD
         //    }
         finalPositions.push_back(manualAoSoASIMD::main<Simd>(plotFile, threads, false, false));
     }
-    for(int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
+    for(int threads = 1; threads <= maxThreads; threads *= 2)
     {
         //        mp_for_each<mp_list_c<std::size_t, 1, 2, 4, 8, 16>>(
         //            [&](auto lanes)
@@ -1531,7 +1629,7 @@ $data << EOD
         //            });
         finalPositions.push_back(manualAoSSIMD::main<Simd>(plotFile, threads));
     }
-    for(int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
+    for(int threads = 1; threads <= maxThreads; threads *= 2)
         finalPositions.push_back(manualSoASIMD::main<Simd>(plotFile, threads));
 #endif
 

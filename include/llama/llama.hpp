@@ -51,6 +51,7 @@
 #include "Meta.hpp"
 #include "ProxyRefOpMixin.hpp"
 #include "RecordRef.hpp"
+#include "Simd.hpp"
 #include "StructName.hpp"
 #include "Vector.hpp"
 #include "View.hpp"
