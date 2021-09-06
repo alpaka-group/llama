@@ -741,6 +741,14 @@ namespace llama
                     swap(a(rc), b(rc));
                 });
         }
+
+        // FIXME(bgruber): the SIMD load/store functions need to navigate back from a record ref to the contained view
+        // to find subsequent elements. This is not a great design for now and the SIMD load/store functions should
+        // probably take iterators to records.
+        template<typename Simd, typename RecordRef>
+        friend void loadSimd(Simd& simd, const RecordRef& rr);
+        template<typename RecordRef, typename Simd>
+        friend void storeSimd(RecordRef&& rr, Simd simd);
     };
 
     // swap for heterogeneous RecordRef

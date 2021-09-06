@@ -209,6 +209,21 @@ Copying
 .. doxygenfunction:: llama::fieldWiseCopy
 .. doxygenfunction:: llama::aosoaCommonBlockCopy
 
+SIMD
+----
+
+.. doxygenstruct:: llama::SimdTraits
+.. doxygenvariable:: llama::simdLanes
+.. doxygentypedef:: llama::SimdizeN
+.. doxygentypedef:: llama::Simdize
+.. doxygenvariable:: llama::simdLanesFor
+.. doxygentypedef:: llama::SimdN
+.. doxygentypedef:: llama::Simd
+.. doxygenfunction:: llama::loadSimd
+.. doxygenfunction:: llama::storeSimd
+.. doxygenfunction:: llama::simdForEachN
+.. doxygenfunction:: llama::simdForEach
+
 Macros
 ------
 

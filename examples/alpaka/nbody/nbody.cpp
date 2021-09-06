@@ -42,6 +42,39 @@ static_assert(problemSize % (desiredElementsPerThread * threadsPerBlock) == 0);
 
 constexpr FP epS2 = 0.01;
 
+#ifdef HAVE_XSIMD
+template<typename Batch>
+struct llama::SimdTraits<Batch, std::enable_if_t<xsimd::is_batch<Batch>::value>>
+{
+    using value_type = typename Batch::value_type;
+
+    inline static constexpr std::size_t lanes = Batch::size;
+
+    static LLAMA_FORCE_INLINE auto loadUnaligned(const value_type* mem) -> Batch
+    {
+        return Batch::load_unaligned(mem);
+    }
+
+    static LLAMA_FORCE_INLINE void storeUnaligned(Batch batch, value_type* mem)
+    {
+        batch.store_unaligned(mem);
+    }
+};
+
+template<typename T>
+using MakeBatch = xsimd::batch<T>;
+
+template<typename T, std::size_t N>
+struct MakeSizedBatchImpl
+{
+    using type = xsimd::make_sized_batch_t<T, N>;
+    static_assert(!std::is_void_v<type>);
+};
+
+template<typename T, std::size_t N>
+using MakeSizedBatch = typename MakeSizedBatchImpl<T, N>::type;
+#endif
+
 // clang-format off
 namespace tag
 {
@@ -53,15 +86,13 @@ namespace tag
     struct Mass{};
 } // namespace tag
 
+using Vec3 = llama::Record<
+    llama::Field<tag::X, FP>,
+    llama::Field<tag::Y, FP>,
+    llama::Field<tag::Z, FP>>;
 using Particle = llama::Record<
-    llama::Field<tag::Pos, llama::Record<
-        llama::Field<tag::X, FP>,
-        llama::Field<tag::Y, FP>,
-        llama::Field<tag::Z, FP>>>,
-    llama::Field<tag::Vel, llama::Record<
-        llama::Field<tag::X, FP>,
-        llama::Field<tag::Y, FP>,
-        llama::Field<tag::Z, FP>>>,
+    llama::Field<tag::Pos, Vec3>,
+    llama::Field<tag::Vel, Vec3>,
     llama::Field<tag::Mass, FP>>;
 // clang-format on
 
@@ -80,68 +111,21 @@ namespace stdext
     }
 } // namespace stdext
 
-// FIXME: this makes assumptions that there are always Simd::size many values blocked in the LLAMA view
-template<typename Simd>
-LLAMA_FN_HOST_ACC_INLINE auto load(const FP& src)
+template<typename ViewParticleI, typename ParticleRefJ>
+LLAMA_FN_HOST_ACC_INLINE void pPInteraction(ViewParticleI& pis, ParticleRefJ pj)
 {
-    if constexpr(std::is_same_v<Simd, FP>)
-        return src;
-    else
-        return Simd::load_unaligned(&src);
-}
-
-template<typename Simd>
-LLAMA_FN_HOST_ACC_INLINE auto broadcast(const FP& src)
-{
-    return Simd(src);
-}
-
-template<typename Vec>
-LLAMA_FN_HOST_ACC_INLINE auto store(FP& dst, Vec v)
-{
-    if constexpr(std::is_same_v<Vec, FP>)
-        dst = v;
-    else
-        v.store_unaligned(&dst);
-}
-
-template<int Elems>
-struct SimdType
-{
-    // TODO(bgruber): we need a vector type that also works on GPUs
-    using type = xsimd::make_sized_batch_t<FP, Elems>;
-    static_assert(!std::is_void_v<type>, "xsimd does not have a SIMD type for this element count");
-};
-
-template<>
-struct SimdType<1>
-{
-    using type = FP;
-};
-
-template<int Elems, typename ViewParticleI, typename ParticleRefJ>
-LLAMA_FN_HOST_ACC_INLINE void pPInteraction(ViewParticleI pi, ParticleRefJ pj)
-{
-    using Simd = typename SimdType<Elems>::type;
-
     using std::sqrt;
     using stdext::rsqrt;
     using xsimd::rsqrt;
     using xsimd::sqrt;
 
-    const Simd xdistance = load<Simd>(pi(tag::Pos{}, tag::X{})) - broadcast<Simd>(pj(tag::Pos{}, tag::X{}));
-    const Simd ydistance = load<Simd>(pi(tag::Pos{}, tag::Y{})) - broadcast<Simd>(pj(tag::Pos{}, tag::Y{}));
-    const Simd zdistance = load<Simd>(pi(tag::Pos{}, tag::Z{})) - broadcast<Simd>(pj(tag::Pos{}, tag::Z{}));
-    const Simd xdistanceSqr = xdistance * xdistance;
-    const Simd ydistanceSqr = ydistance * ydistance;
-    const Simd zdistanceSqr = zdistance * zdistance;
-    const Simd distSqr = +epS2 + xdistanceSqr + ydistanceSqr + zdistanceSqr;
-    const Simd distSixth = distSqr * distSqr * distSqr;
-    const Simd invDistCube = allowRsqrt ? rsqrt(distSixth) : (1.0f / sqrt(distSixth));
-    const Simd sts = broadcast<Simd>(pj(tag::Mass())) * invDistCube * timestep;
-    store<Simd>(pi(tag::Vel{}, tag::X{}), xdistanceSqr * sts + load<Simd>(pi(tag::Vel{}, tag::X{})));
-    store<Simd>(pi(tag::Vel{}, tag::Y{}), ydistanceSqr * sts + load<Simd>(pi(tag::Vel{}, tag::Y{})));
-    store<Simd>(pi(tag::Vel{}, tag::Z{}), zdistanceSqr * sts + load<Simd>(pi(tag::Vel{}, tag::Z{})));
+    auto dist = pis(tag::Pos{}) - pj(tag::Pos{});
+    dist *= dist;
+    const auto distSqr = +epS2 + dist(tag::X{}) + dist(tag::Y{}) + dist(tag::Z{});
+    const auto distSixth = distSqr * distSqr * distSqr;
+    const auto invDistCube = allowRsqrt ? rsqrt(distSixth) : (1.0f / sqrt(distSixth));
+    const auto sts = (pj(tag::Mass{}) * timestep) * invDistCube;
+    pis(tag::Vel{}) += dist * sts;
 }
 
 template<int ProblemSize, int Elems, int BlockSize, Mapping MappingSM>
@@ -152,7 +136,7 @@ struct UpdateKernel
     {
         auto sharedView = [&]
         {
-            // if there is only 1 thread per block, use stack instead of shared memory
+            // if there is only 1 thread per block, use just a variable (in registers) instead of shared memory
             if constexpr(BlockSize == 1)
                 return llama::allocViewStack<View::ArrayExtents::rank, typename View::RecordDim>();
             else
@@ -178,17 +162,8 @@ struct UpdateKernel
         const auto ti = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0];
         const auto tbi = alpaka::getIdx<alpaka::Block, alpaka::Threads>(acc)[0];
 
-        // TODO(bgruber): we could optimize here, because only velocity is ever updated
-        auto pi = [&]
-        {
-            constexpr auto mapping
-                = llama::mapping::SoA<llama::ArrayExtents<int, Elems>, typename View::RecordDim, false>{};
-            return llama::allocViewUninitialized(mapping, llama::bloballoc::Stack<mapping.blobSize(0)>{});
-        }();
-        // TODO(bgruber): vector load
-        LLAMA_INDEPENDENT_DATA
-        for(auto e = 0u; e < Elems; e++)
-            pi(e) = particles(ti * Elems + e);
+        auto pis = llama::SimdN<typename View::RecordDim, Elems, MakeSizedBatch>{};
+        llama::loadSimd(pis, particles(ti * Elems));
 
         LLAMA_INDEPENDENT_DATA
         for(int blockOffset = 0; blockOffset < ProblemSize; blockOffset += BlockSize)
@@ -200,13 +175,10 @@ struct UpdateKernel
 
             LLAMA_INDEPENDENT_DATA
             for(int j = 0; j < BlockSize; ++j)
-                pPInteraction<Elems>(pi(0u), sharedView(j));
+                pPInteraction(pis, sharedView(j));
             alpaka::syncBlockThreads(acc);
         }
-        // TODO(bgruber): vector store
-        LLAMA_INDEPENDENT_DATA
-        for(int e = 0u; e < Elems; e++)
-            particles(ti * Elems + e) = pi(e);
+        llama::storeSimd(particles(ti * Elems)(tag::Vel{}), pis(tag::Vel{}));
     }
 };
 
@@ -218,20 +190,11 @@ struct MoveKernel
     {
         const auto ti = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0];
         const auto i = ti * Elems;
-
-        using Simd = typename SimdType<Elems>::type;
-        store<Simd>(
-            particles(i)(tag::Pos{}, tag::X{}),
-            load<Simd>(particles(i)(tag::Pos{}, tag::X{}))
-                + load<Simd>(particles(i)(tag::Vel{}, tag::X{})) * timestep);
-        store<Simd>(
-            particles(i)(tag::Pos{}, tag::Y{}),
-            load<Simd>(particles(i)(tag::Pos{}, tag::Y{}))
-                + load<Simd>(particles(i)(tag::Vel{}, tag::Y{})) * timestep);
-        store<Simd>(
-            particles(i)(tag::Pos{}, tag::Z{}),
-            load<Simd>(particles(i)(tag::Pos{}, tag::Z{}))
-                + load<Simd>(particles(i)(tag::Vel{}, tag::Z{})) * timestep);
+        llama::SimdN<Vec3, Elems, MakeSizedBatch> pos;
+        llama::SimdN<Vec3, Elems, MakeSizedBatch> vel;
+        llama::loadSimd(pos, particles(i)(tag::Pos{}));
+        llama::loadSimd(vel, particles(i)(tag::Vel{}));
+        llama::storeSimd(particles(i)(tag::Pos{}), pos + vel * +timestep);
     }
 };
 

@@ -34,6 +34,7 @@ LLAMA is licensed under the LGPL3+.
    pages/proxyreferences
    pages/blobs
    pages/copying
+   pages/simd
    pages/macros
    pages/api
    pages/llama_vs_cpp
