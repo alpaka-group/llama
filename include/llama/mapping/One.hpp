@@ -78,4 +78,10 @@ namespace llama::mapping
     /// \see One
     template<typename ArrayDims, typename RecordDim>
     using PackedOne = One<ArrayDims, RecordDim, false, FlattenRecordDimInOrder>;
+
+    template<typename Mapping>
+    inline constexpr bool isOne = false;
+
+    template<typename ArrayDims, typename RecordDim, bool AlignAndPad, template<typename> typename FlattenRecordDim>
+    inline constexpr bool isOne<One<ArrayDims, RecordDim, AlignAndPad, FlattenRecordDim>> = true;
 } // namespace llama::mapping

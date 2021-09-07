@@ -100,4 +100,10 @@ namespace llama::mapping
         template<typename ArrayDims, typename RecordDim>
         using type = SoA<ArrayDims, RecordDim, SeparateBuffers, LinearizeArrayDimsFunctor>;
     };
+
+    template<typename Mapping>
+    inline constexpr bool isSoA = false;
+
+    template<typename ArrayDims, typename RecordDim, bool SeparateBuffers, typename LinearizeArrayDimsFunctor>
+    inline constexpr bool isSoA<SoA<ArrayDims, RecordDim, SeparateBuffers, LinearizeArrayDimsFunctor>> = true;
 } // namespace llama::mapping

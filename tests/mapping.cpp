@@ -15,6 +15,44 @@ TEST_CASE("mapping.concepts")
 }
 #endif
 
+TEST_CASE("mapping.traits")
+{
+    using AAoS = llama::mapping::AlignedAoS<llama::ArrayDims<2>, Particle>;
+    using PAoS = llama::mapping::PackedAoS<llama::ArrayDims<2>, Particle>;
+    using SBSoA = llama::mapping::SingleBlobSoA<llama::ArrayDims<2>, Particle>;
+    using MBSoA = llama::mapping::MultiBlobSoA<llama::ArrayDims<2>, Particle>;
+    using AoAoS = llama::mapping::AoSoA<llama::ArrayDims<2>, Particle, 8>;
+    using One = llama::mapping::One<llama::ArrayDims<2>, Particle>;
+
+    STATIC_REQUIRE(llama::mapping::isAoS<AAoS>);
+    STATIC_REQUIRE(llama::mapping::isAoS<PAoS>);
+    STATIC_REQUIRE(!llama::mapping::isAoS<SBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isAoS<MBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isAoS<AoAoS>);
+    STATIC_REQUIRE(!llama::mapping::isAoS<One>);
+
+    STATIC_REQUIRE(!llama::mapping::isSoA<AAoS>);
+    STATIC_REQUIRE(!llama::mapping::isSoA<PAoS>);
+    STATIC_REQUIRE(llama::mapping::isSoA<SBSoA>);
+    STATIC_REQUIRE(llama::mapping::isSoA<MBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isSoA<AoAoS>);
+    STATIC_REQUIRE(!llama::mapping::isSoA<One>);
+
+    STATIC_REQUIRE(!llama::mapping::isAoSoA<AAoS>);
+    STATIC_REQUIRE(!llama::mapping::isAoSoA<PAoS>);
+    STATIC_REQUIRE(!llama::mapping::isAoSoA<SBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isAoSoA<MBSoA>);
+    STATIC_REQUIRE(llama::mapping::isAoSoA<AoAoS>);
+    STATIC_REQUIRE(!llama::mapping::isAoSoA<One>);
+
+    STATIC_REQUIRE(!llama::mapping::isOne<AAoS>);
+    STATIC_REQUIRE(!llama::mapping::isOne<PAoS>);
+    STATIC_REQUIRE(!llama::mapping::isOne<SBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isOne<MBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isOne<AoAoS>);
+    STATIC_REQUIRE(llama::mapping::isOne<One>);
+}
+
 TEST_CASE("address.AoS.Packed")
 {
     using ArrayDims = llama::ArrayDims<2>;

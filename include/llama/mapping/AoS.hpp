@@ -87,4 +87,17 @@ namespace llama::mapping
         template<typename ArrayDims, typename RecordDim>
         using type = AoS<ArrayDims, RecordDim, AlignAndPad, LinearizeArrayDimsFunctor>;
     };
+
+    template<typename Mapping>
+    inline constexpr bool isAoS = false;
+
+    template<
+        typename ArrayDims,
+        typename RecordDim,
+        bool AlignAndPad,
+        typename LinearizeArrayDimsFunctor,
+        template<typename>
+        typename FlattenRecordDim>
+    inline constexpr bool
+        isAoS<AoS<ArrayDims, RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim>> = true;
 } // namespace llama::mapping

@@ -122,13 +122,6 @@ auto prepareViewAndHash(Mapping mapping)
     const auto checkSum = hash(view);
     return std::tuple{view, checkSum};
 }
-
-template<typename Mapping>
-inline constexpr auto is_AoSoA = false;
-
-template<typename AD, typename RD, std::size_t L>
-inline constexpr auto is_AoSoA<llama::mapping::AoSoA<AD, RD, L>> = true;
-
 auto main() -> int
 try
 {
@@ -245,7 +238,8 @@ $data << EOD
             "naive copy",
             [](const auto& srcView, auto& dstView) { llama::fieldWiseCopy(srcView, dstView); });
         benchmarkCopy("std::copy", [](const auto& srcView, auto& dstView) { std_copy(srcView, dstView); });
-        constexpr auto oneIsAoSoA = is_AoSoA<decltype(srcMapping)> || is_AoSoA<decltype(dstMapping)>;
+        constexpr auto oneIsAoSoA
+            = llama::mapping::isAoSoA<decltype(srcMapping)> || llama::mapping::isAoSoA<decltype(dstMapping)>;
         if constexpr(oneIsAoSoA)
         {
             benchmarkCopy(
