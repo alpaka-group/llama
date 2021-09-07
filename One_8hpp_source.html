@@ -153,7 +153,13 @@ $(document).ready(function(){initNavTree('One_8hpp_source.html',''); initResizab
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> ArrayDims, <span class="keyword">typename</span> RecordDim&gt;</div>
 <div class="line"><a name="l00080"></a><span class="lineno"><a class="line" href="namespacellama_1_1mapping.html#aa300c4e99921b2858832808298b281e5">   80</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="structllama_1_1mapping_1_1One.html">PackedOne</a> = <a class="code" href="structllama_1_1mapping_1_1One.html">One&lt;ArrayDims, RecordDim, false, FlattenRecordDimInOrder&gt;</a>;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;} <span class="comment">// namespace llama::mapping</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Mapping&gt;</div>
+<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="namespacellama_1_1mapping.html#a3f61909f579ae3a51762dd71aaae2556">   83</a></span>&#160;    <span class="keyword">inline</span> constexpr <span class="keywordtype">bool</span> <a class="code" href="namespacellama_1_1mapping.html#a3f61909f579ae3a51762dd71aaae2556">isOne</a> = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> ArrayDims, <span class="keyword">typename</span> RecordDim, <span class="keywordtype">bool</span> AlignAndPad, <span class="keyword">template</span>&lt;<span class="keyword">typename</span>&gt; <span class="keyword">typename</span> FlattenRecordDim&gt;</div>
+<div class="line"><a name="l00086"></a><span class="lineno"><a class="line" href="namespacellama_1_1mapping.html#acc69b37ffb11f0ec1685d04ad22b3a2d">   86</a></span>&#160;    <span class="keyword">inline</span> constexpr <span class="keywordtype">bool</span> isOne&lt;One&lt;ArrayDims, RecordDim, AlignAndPad, FlattenRecordDim&gt;&gt; = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;} <span class="comment">// namespace llama::mapping</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="astructllama_1_1mapping_1_1One_html_a8cab0377b73780693bade9fdc720e0d4"><div class="ttname"><a href="structllama_1_1mapping_1_1One.html#a8cab0377b73780693bade9fdc720e0d4">llama::mapping::One::RecordDim</a></div><div class="ttdeci">T_RecordDim RecordDim</div><div class="ttdef"><b>Definition:</b> <a href="One_8hpp_source.html#l00025">One.hpp:25</a></div></div>
@@ -169,12 +175,13 @@ $(document).ready(function(){initNavTree('One_8hpp_source.html',''); initResizab
 <div class="ttc" id="astructllama_1_1mapping_1_1One_html_a52a70b61a001b98b0c1cd10f210d7425"><div class="ttname"><a href="structllama_1_1mapping_1_1One.html#a52a70b61a001b98b0c1cd10f210d7425">llama::mapping::One::One</a></div><div class="ttdeci">constexpr One()=default</div></div>
 <div class="ttc" id="astructllama_1_1mapping_1_1One_html_a6d04d9723f8549e4823ab8ee10e8092e"><div class="ttname"><a href="structllama_1_1mapping_1_1One.html#a6d04d9723f8549e4823ab8ee10e8092e">llama::mapping::One::blobSize</a></div><div class="ttdeci">constexpr auto blobSize(std::size_t) const -&gt; std::size_t</div><div class="ttdef"><b>Definition:</b> <a href="One_8hpp_source.html#l00045">One.hpp:45</a></div></div>
 <div class="ttc" id="astructllama_1_1mapping_1_1One_html_a3f4c4bee07d3f274099f8edded5d33f3"><div class="ttname"><a href="structllama_1_1mapping_1_1One.html#a3f4c4bee07d3f274099f8edded5d33f3">llama::mapping::One::blobNrAndOffset</a></div><div class="ttdeci">constexpr auto blobNrAndOffset(ArrayDims) const -&gt; NrAndOffset</div><div class="ttdef"><b>Definition:</b> <a href="One_8hpp_source.html#l00051">One.hpp:51</a></div></div>
+<div class="ttc" id="anamespacellama_1_1mapping_html_a3f61909f579ae3a51762dd71aaae2556"><div class="ttname"><a href="namespacellama_1_1mapping.html#a3f61909f579ae3a51762dd71aaae2556">llama::mapping::isOne</a></div><div class="ttdeci">constexpr bool isOne</div><div class="ttdef"><b>Definition:</b> <a href="One_8hpp_source.html#l00083">One.hpp:83</a></div></div>
 <div class="ttc" id="astructllama_1_1Array_html_a02e48c26d7e90c2b91d73653420a09b5"><div class="ttname"><a href="structllama_1_1Array.html#a02e48c26d7e90c2b91d73653420a09b5">llama::Array&lt; std::size_t, Dim &gt;::rank</a></div><div class="ttdeci">static constexpr std::size_t rank</div><div class="ttdef"><b>Definition:</b> <a href="Array_8hpp_source.html#l00020">Array.hpp:20</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="One_8hpp.html">One.hpp</a></li>
-    <li class="footer">Generated on Mon Sep 6 2021 11:56:26 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue Sep 7 2021 08:42:13 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

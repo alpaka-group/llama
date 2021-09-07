@@ -180,11 +180,18 @@ $(document).ready(function(){initNavTree('SoA_8hpp_source.html',''); initResizab
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> ArrayDims, <span class="keyword">typename</span> RecordDim&gt;</div>
 <div class="line"><a name="l00101"></a><span class="lineno"><a class="line" href="structllama_1_1mapping_1_1PreconfiguredSoA.html#acc26cff405ca5be9cdef155b934a0c5f">  101</a></span>&#160;        <span class="keyword">using</span> <a class="code" href="structllama_1_1mapping_1_1SoA.html">type</a> = <a class="code" href="structllama_1_1mapping_1_1SoA.html">SoA&lt;ArrayDims, RecordDim, SeparateBuffers, LinearizeArrayDimsFunctor&gt;</a>;</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    };</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;} <span class="comment">// namespace llama::mapping</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Mapping&gt;</div>
+<div class="line"><a name="l00105"></a><span class="lineno"><a class="line" href="namespacellama_1_1mapping.html#a131edc0148d778b3ebe27f58df87ffc1">  105</a></span>&#160;    <span class="keyword">inline</span> constexpr <span class="keywordtype">bool</span> <a class="code" href="namespacellama_1_1mapping.html#a131edc0148d778b3ebe27f58df87ffc1">isSoA</a> = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> ArrayDims, <span class="keyword">typename</span> RecordDim, <span class="keywordtype">bool</span> SeparateBuffers, <span class="keyword">typename</span> LinearizeArrayDimsFunctor&gt;</div>
+<div class="line"><a name="l00108"></a><span class="lineno"><a class="line" href="namespacellama_1_1mapping.html#aaaba6181baacde0e7ef2af781b471eaa">  108</a></span>&#160;    <span class="keyword">inline</span> constexpr <span class="keywordtype">bool</span> isSoA&lt;SoA&lt;ArrayDims, RecordDim, SeparateBuffers, LinearizeArrayDimsFunctor&gt;&gt; = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;} <span class="comment">// namespace llama::mapping</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="astructllama_1_1mapping_1_1SoA_html_ae276c897385c859ebae57bf180c939c3"><div class="ttname"><a href="structllama_1_1mapping_1_1SoA.html#ae276c897385c859ebae57bf180c939c3">llama::mapping::SoA::SoA</a></div><div class="ttdeci">constexpr SoA(ArrayDims size, RecordDim={})</div><div class="ttdef"><b>Definition:</b> <a href="SoA_8hpp_source.html#l00032">SoA.hpp:32</a></div></div>
 <div class="ttc" id="astructllama_1_1Array_html_aa20a497723e6189dfaf7145ddc256534"><div class="ttname"><a href="structllama_1_1Array.html#aa20a497723e6189dfaf7145ddc256534">llama::Array::size</a></div><div class="ttdeci">constexpr auto size() const</div><div class="ttdef"><b>Definition:</b> <a href="Array_8hpp_source.html#l00023">Array.hpp:23</a></div></div>
+<div class="ttc" id="anamespacellama_1_1mapping_html_a131edc0148d778b3ebe27f58df87ffc1"><div class="ttname"><a href="namespacellama_1_1mapping.html#a131edc0148d778b3ebe27f58df87ffc1">llama::mapping::isSoA</a></div><div class="ttdeci">constexpr bool isSoA</div><div class="ttdef"><b>Definition:</b> <a href="SoA_8hpp_source.html#l00105">SoA.hpp:105</a></div></div>
 <div class="ttc" id="anamespacellama_1_1mapping_html"><div class="ttname"><a href="namespacellama_1_1mapping.html">llama::mapping</a></div><div class="ttdef"><b>Definition:</b> <a href="AoS_8hpp_source.html#l00008">AoS.hpp:8</a></div></div>
 <div class="ttc" id="anamespacellama_html_acdfb627d325de5ab6c18cdc842cd7350"><div class="ttname"><a href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">llama::GetType</a></div><div class="ttdeci">typename internal::GetTypeImpl&lt; RecordDim, RecordCoordOrTags... &gt;::type GetType</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00262">Core.hpp:262</a></div></div>
 <div class="ttc" id="aCommon_8hpp_html"><div class="ttname"><a href="Common_8hpp.html">Common.hpp</a></div></div>
@@ -210,7 +217,7 @@ $(document).ready(function(){initNavTree('SoA_8hpp_source.html',''); initResizab
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="SoA_8hpp.html">SoA.hpp</a></li>
-    <li class="footer">Generated on Mon Sep 6 2021 11:56:26 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue Sep 7 2021 08:42:13 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

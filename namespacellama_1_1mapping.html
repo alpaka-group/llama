@@ -167,9 +167,33 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
+<tr class="memitem:a8ccdc77397e087a2a223e32b544006fa"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
+<tr class="memitem:a8ccdc77397e087a2a223e32b544006fa"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a8ccdc77397e087a2a223e32b544006fa">isAoS</a> = false</td></tr>
+<tr class="separator:a8ccdc77397e087a2a223e32b544006fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afab167ddb89c37479ba40a59cbfd6ba0"><td class="memTemplParams" colspan="2">template&lt;typename ArrayDims , typename RecordDim , bool AlignAndPad, typename LinearizeArrayDimsFunctor , template&lt; typename &gt; typename FlattenRecordDim&gt; </td></tr>
+<tr class="memitem:afab167ddb89c37479ba40a59cbfd6ba0"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#afab167ddb89c37479ba40a59cbfd6ba0">isAoS&lt; AoS&lt; ArrayDims, RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim &gt; &gt;</a> = true</td></tr>
+<tr class="separator:afab167ddb89c37479ba40a59cbfd6ba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abde584824d91d31ec24b7c326632a3c3"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , std::size_t VectorRegisterBits&gt; </td></tr>
 <tr class="memitem:abde584824d91d31ec24b7c326632a3c3"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#abde584824d91d31ec24b7c326632a3c3">maxLanes</a></td></tr>
 <tr class="separator:abde584824d91d31ec24b7c326632a3c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f9ae52631dd878c1ae2c2e73f353580"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
+<tr class="memitem:a5f9ae52631dd878c1ae2c2e73f353580"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a5f9ae52631dd878c1ae2c2e73f353580">isAoSoA</a> = false</td></tr>
+<tr class="separator:a5f9ae52631dd878c1ae2c2e73f353580"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb57c4acd88bf544ff5f78588fa6d13e"><td class="memTemplParams" colspan="2">template&lt;typename AD , typename RD , std::size_t L&gt; </td></tr>
+<tr class="memitem:acb57c4acd88bf544ff5f78588fa6d13e"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#acb57c4acd88bf544ff5f78588fa6d13e">isAoSoA&lt; AoSoA&lt; AD, RD, L &gt; &gt;</a> = true</td></tr>
+<tr class="separator:acb57c4acd88bf544ff5f78588fa6d13e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f61909f579ae3a51762dd71aaae2556"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
+<tr class="memitem:a3f61909f579ae3a51762dd71aaae2556"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a3f61909f579ae3a51762dd71aaae2556">isOne</a> = false</td></tr>
+<tr class="separator:a3f61909f579ae3a51762dd71aaae2556"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc69b37ffb11f0ec1685d04ad22b3a2d"><td class="memTemplParams" colspan="2">template&lt;typename ArrayDims , typename RecordDim , bool AlignAndPad, template&lt; typename &gt; typename FlattenRecordDim&gt; </td></tr>
+<tr class="memitem:acc69b37ffb11f0ec1685d04ad22b3a2d"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#acc69b37ffb11f0ec1685d04ad22b3a2d">isOne&lt; One&lt; ArrayDims, RecordDim, AlignAndPad, FlattenRecordDim &gt; &gt;</a> = true</td></tr>
+<tr class="separator:acc69b37ffb11f0ec1685d04ad22b3a2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a131edc0148d778b3ebe27f58df87ffc1"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
+<tr class="memitem:a131edc0148d778b3ebe27f58df87ffc1"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a131edc0148d778b3ebe27f58df87ffc1">isSoA</a> = false</td></tr>
+<tr class="separator:a131edc0148d778b3ebe27f58df87ffc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaaba6181baacde0e7ef2af781b471eaa"><td class="memTemplParams" colspan="2">template&lt;typename ArrayDims , typename RecordDim , bool SeparateBuffers, typename LinearizeArrayDimsFunctor &gt; </td></tr>
+<tr class="memitem:aaaba6181baacde0e7ef2af781b471eaa"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#aaaba6181baacde0e7ef2af781b471eaa">isSoA&lt; SoA&lt; ArrayDims, RecordDim, SeparateBuffers, LinearizeArrayDimsFunctor &gt; &gt;</a> = true</td></tr>
+<tr class="separator:aaaba6181baacde0e7ef2af781b471eaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
 <a id="a8123437f92ed834bccec09563137a33e"></a>
@@ -325,6 +349,214 @@ template&lt;typename ArrayDims , typename RecordDim , typename LinearizeArrayDim
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
+<a id="a8ccdc77397e087a2a223e32b544006fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ccdc77397e087a2a223e32b544006fa">&#9670;&nbsp;</a></span>isAoS</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool llama::mapping::isAoS = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00092">92</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
+
+</div>
+</div>
+<a id="afab167ddb89c37479ba40a59cbfd6ba0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afab167ddb89c37479ba40a59cbfd6ba0">&#9670;&nbsp;</a></span>isAoS&lt; AoS&lt; ArrayDims, RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim &gt; &gt;</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ArrayDims , typename RecordDim , bool AlignAndPad, typename LinearizeArrayDimsFunctor , template&lt; typename &gt; typename FlattenRecordDim&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="namespacellama_1_1mapping.html#a8ccdc77397e087a2a223e32b544006fa">llama::mapping::isAoS</a>&lt; <a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a>&lt; <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>, RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim &gt; &gt; = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00102">102</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a5f9ae52631dd878c1ae2c2e73f353580"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f9ae52631dd878c1ae2c2e73f353580">&#9670;&nbsp;</a></span>isAoSoA</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool llama::mapping::isAoSoA = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="AoSoA_8hpp_source.html#l00086">86</a> of file <a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a>.</p>
+
+</div>
+</div>
+<a id="acb57c4acd88bf544ff5f78588fa6d13e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb57c4acd88bf544ff5f78588fa6d13e">&#9670;&nbsp;</a></span>isAoSoA&lt; AoSoA&lt; AD, RD, L &gt; &gt;</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename AD , typename RD , std::size_t L&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="namespacellama_1_1mapping.html#a5f9ae52631dd878c1ae2c2e73f353580">llama::mapping::isAoSoA</a>&lt; <a class="el" href="structllama_1_1mapping_1_1AoSoA.html">AoSoA</a>&lt; AD, RD, L &gt; &gt; = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="AoSoA_8hpp_source.html#l00089">89</a> of file <a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a3f61909f579ae3a51762dd71aaae2556"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f61909f579ae3a51762dd71aaae2556">&#9670;&nbsp;</a></span>isOne</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool llama::mapping::isOne = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="One_8hpp_source.html#l00083">83</a> of file <a class="el" href="One_8hpp_source.html">One.hpp</a>.</p>
+
+</div>
+</div>
+<a id="acc69b37ffb11f0ec1685d04ad22b3a2d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc69b37ffb11f0ec1685d04ad22b3a2d">&#9670;&nbsp;</a></span>isOne&lt; One&lt; ArrayDims, RecordDim, AlignAndPad, FlattenRecordDim &gt; &gt;</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ArrayDims , typename RecordDim , bool AlignAndPad, template&lt; typename &gt; typename FlattenRecordDim&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="namespacellama_1_1mapping.html#a3f61909f579ae3a51762dd71aaae2556">llama::mapping::isOne</a>&lt; <a class="el" href="structllama_1_1mapping_1_1One.html">One</a>&lt; <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>, RecordDim, AlignAndPad, FlattenRecordDim &gt; &gt; = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="One_8hpp_source.html#l00086">86</a> of file <a class="el" href="One_8hpp_source.html">One.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a131edc0148d778b3ebe27f58df87ffc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a131edc0148d778b3ebe27f58df87ffc1">&#9670;&nbsp;</a></span>isSoA</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool llama::mapping::isSoA = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00105">105</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aaaba6181baacde0e7ef2af781b471eaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaaba6181baacde0e7ef2af781b471eaa">&#9670;&nbsp;</a></span>isSoA&lt; SoA&lt; ArrayDims, RecordDim, SeparateBuffers, LinearizeArrayDimsFunctor &gt; &gt;</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ArrayDims , typename RecordDim , bool SeparateBuffers, typename LinearizeArrayDimsFunctor &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="namespacellama_1_1mapping.html#a131edc0148d778b3ebe27f58df87ffc1">llama::mapping::isSoA</a>&lt; <a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a>&lt; <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>, RecordDim, SeparateBuffers, LinearizeArrayDimsFunctor &gt; &gt; = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00108">108</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+
+</div>
+</div>
 <a id="abde584824d91d31ec24b7c326632a3c3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abde584824d91d31ec24b7c326632a3c3">&#9670;&nbsp;</a></span>maxLanes</h2>
 
@@ -371,7 +603,7 @@ template&lt;typename RecordDim , std::size_t VectorRegisterBits&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li>
-    <li class="footer">Generated on Mon Sep 6 2021 11:56:26 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue Sep 7 2021 08:42:13 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
