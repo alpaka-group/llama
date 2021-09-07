@@ -36,13 +36,6 @@ namespace
                 });
     }
 
-    template<typename Mapping>
-    inline constexpr bool isSoA = false;
-
-    template<typename ArrayDims, typename RecordDim, bool SeparateBuffers, typename LinearizeArrayDimsFunctor>
-    inline constexpr bool
-        isSoA<llama::mapping::SoA<ArrayDims, RecordDim, SeparateBuffers, LinearizeArrayDimsFunctor>> = true;
-
     // Do not test all combinations as this exlodes the unit test compile and runtime.
     using AoSMappings = boost::mp11::mp_list<
         llama::mapping::AoS<ArrayDims, RecordDim, false, llama::mapping::LinearizeArrayDimsCpp>,
@@ -66,7 +59,7 @@ namespace
 
     template<typename List>
     using BothAreSoAOrHaveDifferentLinearizer = std::bool_constant<
-        (isSoA<boost::mp11::mp_first<List>> && isSoA<boost::mp11::mp_second<List>>)
+        (llama::mapping::isSoA<boost::mp11::mp_first<List>> && llama::mapping::isSoA<boost::mp11::mp_second<List>>)
         || !std::is_same_v<
             typename boost::mp11::mp_first<List>::LinearizeArrayDimsFunctor,
             typename boost::mp11::mp_second<List>::LinearizeArrayDimsFunctor>>;

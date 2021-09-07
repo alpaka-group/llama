@@ -81,4 +81,11 @@ namespace llama::mapping
         template<typename ArrayDims, typename RecordDim>
         using type = AoSoA<ArrayDims, RecordDim, Lanes, LinearizeArrayDimsFunctor>;
     };
+
+    template<typename Mapping>
+    inline constexpr bool isAoSoA = false;
+
+    template<typename AD, typename RD, std::size_t L>
+    inline constexpr bool isAoSoA<AoSoA<AD, RD, L>> = true;
+
 } // namespace llama::mapping
