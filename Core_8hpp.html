@@ -218,6 +218,12 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1is__bounded__array_3_01T_0fN_0e_4.html">llama::internal::is_bounded_array&lt; T[N]&gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1TransformLeavesImpl.html">llama::internal::TransformLeavesImpl&lt; T, TypeFunctor &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1TransformLeavesImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01TypeFunctor_01_4.html">llama::internal::TransformLeavesImpl&lt; Record&lt; Fields... &gt;, TypeFunctor &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1TransformLeavesImpl_3_01Child_0fN_0e_00_01TypeFunctor_01_4.html">llama::internal::TransformLeavesImpl&lt; Child[N], TypeFunctor &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
@@ -261,6 +267,9 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a1fddf1f638927edfb8da8e3c78da4e1c"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">llama::FlatRecordDim</a> = typename internal::FlattenRecordDimImpl&lt; RecordDim &gt;::type</td></tr>
 <tr class="memdesc:a1fddf1f638927edfb8da8e3c78da4e1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a flat type list containing all leaf field types of the given record dimension.  <a href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">More...</a><br /></td></tr>
 <tr class="separator:a1fddf1f638927edfb8da8e3c78da4e1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea850368a25989a05b5c158bb3a537d2"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , template&lt; typename &gt; typename FieldTypeFunctor&gt; </td></tr>
+<tr class="memitem:aea850368a25989a05b5c158bb3a537d2"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aea850368a25989a05b5c158bb3a537d2">llama::TransformLeaves</a> = typename internal::TransformLeavesImpl&lt; RecordDim, FieldTypeFunctor &gt;::type</td></tr>
+<tr class="separator:aea850368a25989a05b5c158bb3a537d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -388,7 +397,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Core_8hpp.html">Core.hpp</a></li>
-    <li class="footer">Generated on Tue Sep 7 2021 08:42:13 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Fri Sep 17 2021 17:06:59 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -194,6 +194,9 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a1fddf1f638927edfb8da8e3c78da4e1c"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">FlatRecordDim</a> = typename <a class="el" href="structllama_1_1internal_1_1FlattenRecordDimImpl.html">internal::FlattenRecordDimImpl</a>&lt; RecordDim &gt;::type</td></tr>
 <tr class="memdesc:a1fddf1f638927edfb8da8e3c78da4e1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a flat type list containing all leaf field types of the given record dimension.  <a href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">More...</a><br /></td></tr>
 <tr class="separator:a1fddf1f638927edfb8da8e3c78da4e1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea850368a25989a05b5c158bb3a537d2"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , template&lt; typename &gt; typename FieldTypeFunctor&gt; </td></tr>
+<tr class="memitem:aea850368a25989a05b5c158bb3a537d2"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aea850368a25989a05b5c158bb3a537d2">TransformLeaves</a> = typename <a class="el" href="structllama_1_1internal_1_1TransformLeavesImpl.html">internal::TransformLeavesImpl</a>&lt; RecordDim, FieldTypeFunctor &gt;::type</td></tr>
+<tr class="separator:aea850368a25989a05b5c158bb3a537d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8b38b8cac9a0623d4956a75fa1a63fd"><td class="memTemplParams" colspan="2">template&lt;typename L &gt; </td></tr>
 <tr class="memitem:aa8b38b8cac9a0623d4956a75fa1a63fd"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aa8b38b8cac9a0623d4956a75fa1a63fd">RecordCoordFromList</a> = <a class="el" href="namespacellama_1_1internal.html#a7f5181ee5a37449e252d4db6199f566f">internal::mp_unwrap_sizes</a>&lt; L &gt;</td></tr>
 <tr class="memdesc:aa8b38b8cac9a0623d4956a75fa1a63fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a type list of integral constants into a <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>.  <a href="namespacellama.html#aa8b38b8cac9a0623d4956a75fa1a63fd">More...</a><br /></td></tr>
@@ -678,6 +681,25 @@ template&lt;typename L &gt; </div>
 <p>Converts a type list of integral constants into a <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>. </p>
 
 <p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00097">97</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aea850368a25989a05b5c158bb3a537d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea850368a25989a05b5c158bb3a537d2">&#9670;&nbsp;</a></span>TransformLeaves</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename RecordDim , template&lt; typename &gt; typename FieldTypeFunctor&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama.html#aea850368a25989a05b5c158bb3a537d2">llama::TransformLeaves</a> = typedef typename <a class="el" href="structllama_1_1internal_1_1TransformLeavesImpl.html">internal::TransformLeavesImpl</a>&lt;RecordDim, FieldTypeFunctor&gt;::type</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to the original leaf field's type. </p>
+
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00627">627</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -2781,7 +2803,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Tue Sep 7 2021 08:42:13 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Fri Sep 17 2021 17:06:59 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

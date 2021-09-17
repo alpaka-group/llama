@@ -1,5 +1,12 @@
 var NAVTREEINDEX3 =
 {
+"structllama_1_1mapping_1_1PreconfiguredSoA.html#acc26cff405ca5be9cdef155b934a0c5f":[2,0,0,2,12,0],
+"structllama_1_1mapping_1_1PreconfiguredSplit.html":[2,0,0,2,13],
+"structllama_1_1mapping_1_1PreconfiguredSplit.html#ab73093a1ff47af270c2bf9bafc74ab30":[2,0,0,2,13,0],
+"structllama_1_1mapping_1_1SoA.html":[2,0,0,2,14],
+"structllama_1_1mapping_1_1SoA.html#a0d774782324482c578e8dc788e1d01c1":[2,0,0,2,14,1],
+"structllama_1_1mapping_1_1SoA.html#a22fdc0e6fc28a569ad72540ae4b36eeb":[2,0,0,2,14,6],
+"structllama_1_1mapping_1_1SoA.html#a27a1b41104405a5d6fcbb4aec5e8d1fe":[2,0,0,2,14,0],
 "structllama_1_1mapping_1_1SoA.html#a49d79b015319b0632c289e597da6568f":[2,0,0,2,14,5],
 "structllama_1_1mapping_1_1SoA.html#a4d45abf5607e7fcd86e914ed0e07e9c9":[2,0,0,2,14,2],
 "structllama_1_1mapping_1_1SoA.html#a53f66923c3a507290fe0b916f8866bab":[2,0,0,2,14,3],

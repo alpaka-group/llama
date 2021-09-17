@@ -1,0 +1,4 @@
+var structllama_1_1internal_1_1TransformLeavesImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01TypeFunctor_01_4 =
+[
+    [ "type", "structllama_1_1internal_1_1TransformLeavesImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01TypeFunctor_01_4.html#ab351ffacdcb57ee8bc25c077e424add1", null ]
+];
