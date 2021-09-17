@@ -297,3 +297,21 @@ TEST_CASE("flatRecordCoord")
     STATIC_REQUIRE(llama::flatRecordCoord<Particle, llama::RecordCoord<3, 2>> == 9);
     STATIC_REQUIRE(llama::flatRecordCoord<Particle, llama::RecordCoord<3, 3>> == 10);
 }
+
+TEST_CASE("TransformLeaves")
+{
+    STATIC_REQUIRE(std::is_same_v<llama::TransformLeaves<int, std::add_pointer_t>, int*>);
+    STATIC_REQUIRE(std::is_same_v<llama::TransformLeaves<int[3], std::add_pointer_t>, int* [3]>);
+    STATIC_REQUIRE(std::is_same_v<
+                   llama::TransformLeaves<llama::Record<llama::Field<int, int>>, std::add_pointer_t>,
+                   llama::Record<llama::Field<int, int*>>>);
+
+    using Vec3DTransformed
+        = llama::Record<llama::Field<tag::X, double*>, llama::Field<tag::Y, double*>, llama::Field<tag::Z, double*>>;
+    using ParticleTransformed = llama::Record<
+        llama::Field<tag::Pos, Vec3DTransformed>,
+        llama::Field<tag::Mass, float*>,
+        llama::Field<tag::Vel, Vec3DTransformed>,
+        llama::Field<tag::Flags, bool* [4]>>;
+    STATIC_REQUIRE(std::is_same_v<llama::TransformLeaves<Particle, std::add_pointer_t>, ParticleTransformed>);
+}
