@@ -599,4 +599,30 @@ namespace llama
     {
         return (n + mult - 1) / mult * mult;
     }
+
+    namespace internal
+    {
+        template<typename T, template<typename> typename TypeFunctor>
+        struct TransformLeavesImpl
+        {
+            using type = TypeFunctor<T>;
+        };
+
+        template<typename... Fields, template<typename> typename TypeFunctor>
+        struct TransformLeavesImpl<Record<Fields...>, TypeFunctor>
+        {
+            using type = Record<
+                Field<GetFieldTag<Fields>, typename TransformLeavesImpl<GetFieldType<Fields>, TypeFunctor>::type>...>;
+        };
+        template<typename Child, std::size_t N, template<typename> typename TypeFunctor>
+        struct TransformLeavesImpl<Child[N], TypeFunctor>
+        {
+            using type = typename TransformLeavesImpl<Child, TypeFunctor>::type[N];
+        };
+    } // namespace internal
+
+    /// Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to
+    /// the original leaf field's type.
+    template<typename RecordDim, template<typename> typename FieldTypeFunctor>
+    using TransformLeaves = typename internal::TransformLeavesImpl<RecordDim, FieldTypeFunctor>::type;
 } // namespace llama
