@@ -19,13 +19,13 @@ TEST_CASE("view.default-ctor")
     using ArrayDims = llama::ArrayDims<2>;
     constexpr ArrayDims viewSize{16, 16};
 
-    [[maybe_unused]] llama::View<llama::mapping::AlignedAoS<ArrayDims, RecordDim>, std::byte*> view1;
-    [[maybe_unused]] llama::View<llama::mapping::PackedAoS<ArrayDims, RecordDim>, std::byte*> view2;
-    [[maybe_unused]] llama::View<llama::mapping::SingleBlobSoA<ArrayDims, RecordDim>, std::byte*> view3;
-    [[maybe_unused]] llama::View<llama::mapping::MultiBlobSoA<ArrayDims, RecordDim>, std::byte*> view4;
-    [[maybe_unused]] llama::View<llama::mapping::One<ArrayDims, RecordDim>, std::byte*> view5;
+    [[maybe_unused]] llama::View<llama::mapping::AlignedAoS<ArrayDims, RecordDim>, std::byte*> view1{};
+    [[maybe_unused]] llama::View<llama::mapping::PackedAoS<ArrayDims, RecordDim>, std::byte*> view2{};
+    [[maybe_unused]] llama::View<llama::mapping::SingleBlobSoA<ArrayDims, RecordDim>, std::byte*> view3{};
+    [[maybe_unused]] llama::View<llama::mapping::MultiBlobSoA<ArrayDims, RecordDim>, std::byte*> view4{};
+    [[maybe_unused]] llama::View<llama::mapping::One<ArrayDims, RecordDim>, std::byte*> view5{};
     [[maybe_unused]] llama::View<llama::mapping::tree::Mapping<ArrayDims, RecordDim, llama::Tuple<>>, std::byte*>
-        view6;
+        view6{};
 }
 
 TEST_CASE("view.move")

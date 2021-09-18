@@ -15,22 +15,22 @@ namespace llama::mapping
     /// \tparam FlattenRecordDim Defines how the record dimension's fields should be flattened. See \ref
     /// FlattenRecordDimInOrder and \ref FlattenRecordDimMinimizePadding.
     template<
-        typename T_ArrayDims,
-        typename T_RecordDim,
+        typename TArrayDims,
+        typename TRecordDim,
         bool AlignAndPad = true,
-        typename T_LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
         template<typename> typename FlattenRecordDim = FlattenRecordDimInOrder>
     struct AoS
     {
-        using ArrayDims = T_ArrayDims;
-        using RecordDim = T_RecordDim;
-        using LinearizeArrayDimsFunctor = T_LinearizeArrayDimsFunctor;
+        using ArrayDims = TArrayDims;
+        using RecordDim = TRecordDim;
+        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
         static constexpr std::size_t blobCount = 1;
 
         constexpr AoS() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr AoS(ArrayDims size, RecordDim = {}) : arrayDimsSize(size)
+        constexpr explicit AoS(ArrayDims size, RecordDim = {}) : arrayDimsSize(size)
         {
         }
 
@@ -62,7 +62,7 @@ namespace llama::mapping
         }
 
     private:
-        using Flattener = FlattenRecordDim<T_RecordDim>;
+        using Flattener = FlattenRecordDim<TRecordDim>;
         ArrayDims arrayDimsSize;
     };
 

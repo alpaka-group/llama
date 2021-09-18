@@ -105,7 +105,7 @@ LLAMA_FN_HOST_ACC_INLINE auto store(FP& dst, Vec v)
 template<std::size_t Elems>
 struct VecType
 {
-    // TODO: we need a vector type that also works on GPUs
+    // TODO(bgruber): we need a vector type that also works on GPUs
 #ifndef ALPAKA_ACC_GPU_CUDA_ENABLED
     using type = Vc::SimdArray<FP, Elems>;
 #endif
@@ -177,7 +177,7 @@ struct UpdateKernel
         const auto ti = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0];
         const auto tbi = alpaka::getIdx<alpaka::Block, alpaka::Threads>(acc)[0];
 
-        // TODO: we could optimize here, because only velocity is ever updated
+        // TODO(bgruber): we could optimize here, because only velocity is ever updated
         auto pi = [&]
         {
             constexpr auto arrayDims = llama::ArrayDims<1>{Elems};
@@ -186,7 +186,7 @@ struct UpdateKernel
             constexpr auto blobAlloc = llama::bloballoc::Stack<llama::sizeOf<typename View::RecordDim> * Elems>{};
             return llama::allocView(mapping, blobAlloc);
         }();
-        // TODO: vector load
+        // TODO(bgruber): vector load
         LLAMA_INDEPENDENT_DATA
         for(auto e = 0u; e < Elems; e++)
             pi(e) = particles(ti * Elems + e);
@@ -204,7 +204,7 @@ struct UpdateKernel
                 pPInteraction<Elems>(pi(0u), sharedView(j));
             alpaka::syncBlockThreads(acc);
         }
-        // TODO: vector store
+        // TODO(bgruber): vector store
         LLAMA_INDEPENDENT_DATA
         for(auto e = 0u; e < Elems; e++)
             particles(ti * Elems + e) = pi(e);

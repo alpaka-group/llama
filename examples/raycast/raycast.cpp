@@ -228,7 +228,7 @@ namespace
 
     struct Camera
     {
-        float fovy; // in degree
+        float fovy = 0; // in degree
         VectorF position;
         VectorF view;
         VectorF up;
@@ -237,19 +237,19 @@ namespace
     struct Sphere
     {
         VectorF center;
-        float radius;
+        float radius = 0;
     };
 
     struct Vertex
     {
         VectorF pos;
-        float u;
-        float v;
+        float u = 0;
+        float v = 0;
     };
 
     struct Triangle : std::array<Vertex, 3>
     {
-        int texIndex;
+        int texIndex = 0;
     };
 
     struct AABB
@@ -260,12 +260,6 @@ namespace
         inline auto center() const -> VectorF
         {
             return (lower + upper) * 0.5f;
-        }
-
-        inline auto contains(VectorF v) const -> bool
-        {
-            return lower[0] <= v[0] && v[0] <= upper[0] && lower[1] <= v[1] && v[1] <= upper[1] && lower[2] <= v[2]
-                && v[2] <= upper[2];
         }
     };
 

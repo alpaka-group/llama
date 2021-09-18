@@ -25,22 +25,22 @@ namespace llama
             return N;
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr T* begin()
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto begin() -> T*
         {
             return &element[0];
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr const T* begin() const
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto begin() const -> const T*
         {
             return &element[0];
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr T* end()
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto end() -> T*
         {
             return &element[N];
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr const T* end() const
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto end() const -> const T*
         {
             return &element[N];
         }
@@ -102,37 +102,37 @@ namespace llama
             return 0;
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr T* begin()
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto begin() -> T*
         {
             return nullptr;
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr const T* begin() const
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto begin() const -> const T*
         {
             return nullptr;
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr T* end()
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto end() -> T*
         {
             return nullptr;
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr const T* end() const
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto end() const -> const T*
         {
             return nullptr;
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator==(const Array& a, const Array& b) -> bool
+        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator==(const Array&, const Array&) -> bool
         {
             return true;
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator!=(const Array& a, const Array& b) -> bool
+        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator!=(const Array&, const Array&) -> bool
         {
             return false;
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator+(const Array& a, const Array& b) -> Array
+        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator+(const Array&, const Array&) -> Array
         {
             return {};
         }

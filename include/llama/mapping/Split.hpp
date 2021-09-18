@@ -54,8 +54,8 @@ namespace llama::mapping
     /// \tparam MappingTemplate2 The mapping used for the not selected part of the record dimension.
     /// \tparam SeparateBlobs If true, both pieces of the record dimension are mapped to separate blobs.
     template<
-        typename T_ArrayDims,
-        typename T_RecordDim,
+        typename TArrayDims,
+        typename TRecordDim,
         typename RecordCoordForMapping1,
         template<typename...>
         typename MappingTemplate1,
@@ -64,8 +64,8 @@ namespace llama::mapping
         bool SeparateBlobs = false>
     struct Split
     {
-        using ArrayDims = T_ArrayDims;
-        using RecordDim = T_RecordDim;
+        using ArrayDims = TArrayDims;
+        using RecordDim = TRecordDim;
 
         using RecordDimPartitions = decltype(internal::partitionRecordDim(RecordDim{}, RecordCoordForMapping1{}));
         using RecordDim1 = boost::mp11::mp_first<RecordDimPartitions>;
@@ -81,7 +81,7 @@ namespace llama::mapping
         constexpr Split() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr Split(ArrayDims size) : mapping1(size), mapping2(size)
+        constexpr explicit Split(ArrayDims size) : mapping1(size), mapping2(size)
         {
         }
 
@@ -96,8 +96,7 @@ namespace llama::mapping
             {
                 if(i < Mapping1::blobCount)
                     return mapping1.blobSize(i);
-                else
-                    return mapping2.blobSize(i - Mapping1::blobCount);
+                return mapping2.blobSize(i - Mapping1::blobCount);
             }
             else
                 return mapping1.blobSize(0) + mapping2.blobSize(0);

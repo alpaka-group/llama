@@ -25,13 +25,15 @@ namespace llama
                 });
         }
 
+        using memcopyFunc = void* (*) (void*, const void*, std::size_t);
+
         inline void parallel_memcpy(
             std::byte* dst,
             const std::byte* src,
             std::size_t size,
             std::size_t threadId = 0,
             std::size_t threadCount = 1,
-            decltype(std::memcpy) singleThreadMemcpy = std::memcpy)
+            memcopyFunc singleThreadMemcpy = std::memcpy)
         {
             const auto sizePerThread = size / threadCount;
             const auto sizeLastThread = sizePerThread + size % threadCount;
@@ -53,11 +55,11 @@ namespace llama
     {
         internal::assertTrivialCopyable<typename Mapping::RecordDim>();
 
-        // TODO: we do not verify if the mappings have other runtime state than the array dimensions
+        // TODO(bgruber): we do not verify if the mappings have other runtime state than the array dimensions
         if(srcView.mapping().arrayDims() != dstView.mapping().arrayDims())
             throw std::runtime_error{"Array dimensions sizes are different"};
 
-        // TODO: this is maybe not the best parallel copying strategy
+        // TODO(bgruber): this is maybe not the best parallel copying strategy
         for(std::size_t i = 0; i < Mapping::blobCount; i++)
             internal::parallel_memcpy(
                 &dstView.storageBlobs[i][0],
@@ -77,7 +79,7 @@ namespace llama
         std::size_t threadId = 0,
         std::size_t threadCount = 1)
     {
-        // TODO: think if we can remove this restriction
+        // TODO(bgruber): think if we can remove this restriction
         static_assert(
             std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>,
             "The source and destination record dimensions must be the same");
@@ -132,7 +134,7 @@ namespace llama
         std::size_t threadId = 0,
         std::size_t threadCount = 1)
     {
-        // TODO: think if we can remove this restriction
+        // TODO(bgruber): think if we can remove this restriction
         static_assert(
             std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>,
             "The source and destination record dimensions must be the same");
@@ -167,7 +169,7 @@ namespace llama
         const auto flatSize
             = std::reduce(std::begin(arrayDims), std::end(arrayDims), std::size_t{1}, std::multiplies<>{});
 
-        // TODO: implement the following by adding additional copy loops for the remaining elements
+        // TODO(bgruber): implement the following by adding additional copy loops for the remaining elements
         if(!srcIsAoSoA && flatSize % LanesDst != 0)
             throw std::runtime_error{"Source SoA mapping's total array elements must be evenly divisible by the "
                                      "destination AoSoA Lane count."};
@@ -341,7 +343,7 @@ namespace llama
             std::size_t threadId,
             std::size_t threadCount)
         {
-            constexpr auto readOpt = true; // TODO: how to choose?
+            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
             aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
         }
     };
@@ -363,7 +365,7 @@ namespace llama
             std::size_t threadId,
             std::size_t threadCount)
         {
-            constexpr auto readOpt = true; // TODO: how to choose?
+            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
             aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
         }
     };
@@ -385,7 +387,7 @@ namespace llama
             std::size_t threadId,
             std::size_t threadCount)
         {
-            constexpr auto readOpt = true; // TODO: how to choose?
+            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
             aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
         }
     };

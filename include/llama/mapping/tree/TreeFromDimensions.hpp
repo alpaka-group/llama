@@ -17,20 +17,20 @@ namespace llama::mapping::tree
     template<>
     inline constexpr auto one<boost::mp11::mp_size_t<1>> = boost::mp11::mp_size_t<1>{};
 
-    template<typename T_Identifier, typename T_Type, typename CountType = std::size_t>
+    template<typename TIdentifier, typename TType, typename CountType = std::size_t>
     struct Leaf
     {
-        using Identifier = T_Identifier;
-        using Type = T_Type;
+        using Identifier = TIdentifier;
+        using Type = TType;
 
         const CountType count = one<CountType>;
     };
 
-    template<typename T_Identifier, typename T_ChildrenTuple, typename CountType = std::size_t>
+    template<typename TIdentifier, typename TChildrenTuple, typename CountType = std::size_t>
     struct Node
     {
-        using Identifier = T_Identifier;
-        using ChildrenTuple = T_ChildrenTuple;
+        using Identifier = TIdentifier;
+        using ChildrenTuple = TChildrenTuple;
 
         const CountType count = one<CountType>;
         const ChildrenTuple childs = {};
