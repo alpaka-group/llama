@@ -39,7 +39,7 @@ namespace tag
     struct Y{};
     struct Z{};
     struct Mass{};
-}
+} // namespace tag
 
 using Particle = llama::Record<
     llama::Field<tag::Pos, llama::Record<
@@ -212,9 +212,10 @@ try
         mapping,
         [](auto alignment, std::size_t size)
         {
-            std::byte* p;
+            std::byte* p = nullptr;
             checkError(cudaMalloc(&p, size));
-            assert(reinterpret_cast<std::intptr_t>(p) & (alignment - 1) == 0); // assert cudaMalloc sufficiently aligns
+            if(reinterpret_cast<std::uintptr_t>(p) & (alignment - 1 != 0u))
+                throw std::runtime_error{"cudaMalloc does not align sufficiently"};
             return p;
         });
 
@@ -237,8 +238,8 @@ try
 
     watch.printAndReset("init");
 
-    cudaEvent_t startEvent;
-    cudaEvent_t stopEvent;
+    cudaEvent_t startEvent = {};
+    cudaEvent_t stopEvent = {};
     cudaEventCreate(&startEvent);
     cudaEventCreate(&stopEvent);
 
@@ -314,7 +315,7 @@ namespace manual
     using FP3 = std::conditional_t<std::is_same_v<FP, float>, float3, double3>;
     using FP4 = std::conditional_t<std::is_same_v<FP, float>, float4, double4>;
 
-    __device__ FP3 bodyBodyInteraction(FP4 bi, FP4 bj, FP3 ai)
+    __device__ auto bodyBodyInteraction(FP4 bi, FP4 bj, FP3 ai) -> FP3
     {
         FP3 r;
         r.x = bj.x - bi.x;
@@ -330,23 +331,24 @@ namespace manual
         return ai;
     }
 
+    // NOLINTNEXTLINE(fuchsia-statically-constructed-objects)
     __shared__ FP4 shPosition[SHARED_ELEMENTS_PER_BLOCK];
 
-    __device__ FP3 tile_calculation(FP4 myPosition, FP3 accel)
+    __device__ auto tile_calculation(FP4 myPosition, FP3 accel) -> FP3
     {
-        for(int i = 0; i < SHARED_ELEMENTS_PER_BLOCK; i++)
-            accel = bodyBodyInteraction(myPosition, shPosition[i], accel);
+        for(auto& i : shPosition)
+            accel = bodyBodyInteraction(myPosition, i, accel);
         return accel;
     }
 
     __global__ void calculate_forces(const FP4* globalX, FP4* globalA)
     {
         FP3 acc = {0.0f, 0.0f, 0.0f};
-        const int gtid = blockIdx.x * THREADS_PER_BLOCK + threadIdx.x;
+        const unsigned gtid = blockIdx.x * THREADS_PER_BLOCK + threadIdx.x;
         const FP4 myPosition = globalX[gtid];
-        for(int i = 0, tile = 0; i < PROBLEM_SIZE; i += SHARED_ELEMENTS_PER_BLOCK, tile++)
+        for(unsigned i = 0, tile = 0; i < PROBLEM_SIZE; i += SHARED_ELEMENTS_PER_BLOCK, tile++)
         {
-            for(int j = threadIdx.x; j < SHARED_ELEMENTS_PER_BLOCK; j += THREADS_PER_BLOCK)
+            for(unsigned j = threadIdx.x; j < SHARED_ELEMENTS_PER_BLOCK; j += THREADS_PER_BLOCK)
                 shPosition[j] = globalX[tile * SHARED_ELEMENTS_PER_BLOCK + j];
             __syncthreads();
             acc = tile_calculation(myPosition, acc);
@@ -357,7 +359,7 @@ namespace manual
 
     __global__ void move(FP4* globalX, const FP4* globalA)
     {
-        const int gtid = blockIdx.x * THREADS_PER_BLOCK + threadIdx.x;
+        const unsigned gtid = blockIdx.x * THREADS_PER_BLOCK + threadIdx.x;
         FP4 pos = globalX[gtid];
         const FP4 vel = globalA[gtid];
         pos.x += vel.x * +TIMESTEP;
@@ -369,7 +371,7 @@ namespace manual
     void run(std::ostream& plotFile)
     try
     {
-        auto title = "GPU gems";
+        const auto* title = "GPU gems";
         std::cout << '\n' << title << '\n';
 
         Stopwatch watch;
@@ -377,9 +379,9 @@ namespace manual
         auto hostPositions = std::vector<FP4>(PROBLEM_SIZE);
         auto hostVelocities = std::vector<FP4>(PROBLEM_SIZE);
 
-        FP4* accPositions;
+        FP4* accPositions = nullptr;
         checkError(cudaMalloc(&accPositions, PROBLEM_SIZE * sizeof(FP4)));
-        FP4* accVelocities;
+        FP4* accVelocities = nullptr;
         checkError(cudaMalloc(&accVelocities, PROBLEM_SIZE * sizeof(FP4)));
 
         watch.printAndReset("alloc");
@@ -399,8 +401,8 @@ namespace manual
 
         watch.printAndReset("init");
 
-        cudaEvent_t startEvent;
-        cudaEvent_t stopEvent;
+        cudaEvent_t startEvent = {};
+        cudaEvent_t stopEvent = {};
         cudaEventCreate(&startEvent);
         cudaEventCreate(&stopEvent);
 
@@ -460,7 +462,7 @@ namespace manual
     }
 } // namespace manual
 
-int main()
+auto main() -> int
 try
 {
     std::cout << PROBLEM_SIZE / 1024 << "ki particles (" << PROBLEM_SIZE * llama::sizeOf<Particle> / 1024 << "kiB)\n"

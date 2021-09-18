@@ -21,13 +21,13 @@ using Vector = llama::Record<
 >;
 // clang-format on
 
-template<template<typename, typename> typename InnerMapping, typename T_ArrayDims, typename T_RecordDim>
+template<template<typename, typename> typename InnerMapping, typename TArrayDims, typename TRecordDim>
 struct GuardMapping2D
 {
-    static_assert(std::is_same_v<T_ArrayDims, llama::ArrayDims<2>>, "Only 2D arrays are implemented");
+    static_assert(std::is_same_v<TArrayDims, llama::ArrayDims<2>>, "Only 2D arrays are implemented");
 
-    using ArrayDims = T_ArrayDims;
-    using RecordDim = T_RecordDim;
+    using ArrayDims = TArrayDims;
+    using RecordDim = TRecordDim;
 
     constexpr GuardMapping2D() = default;
 

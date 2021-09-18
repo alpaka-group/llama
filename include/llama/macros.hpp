@@ -93,7 +93,7 @@
 /// Forces a copy of a value. This is useful to prevent ODR usage of constants when compiling for GPU targets.
 #define LLAMA_COPY(x) decltype(x)(x)
 
-// TODO: clang 10 and 11 fail to compile this currently with the issue described here:
+// TODO(bgruber): clang 10 and 11 fail to compile this currently with the issue described here:
 // https://stackoverflow.com/questions/64300832/why-does-clang-think-gccs-subrange-does-not-satisfy-gccs-ranges-begin-functi
 // let's try again with clang 12
 // Intel LLVM compiler is also using the clang frontend

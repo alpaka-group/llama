@@ -15,16 +15,16 @@ namespace llama
     };
 
     /// Tuple class like `std::tuple` but suitable for use with offloading devices like GPUs.
-    template<typename T_FirstElement, typename... Elements>
-    struct Tuple<T_FirstElement, Elements...>
+    template<typename TFirstElement, typename... Elements>
+    struct Tuple<TFirstElement, Elements...>
     {
-        using FirstElement = T_FirstElement;
+        using FirstElement = TFirstElement;
         using RestTuple = Tuple<Elements...>;
 
         constexpr Tuple() = default;
 
         /// Construct a tuple from values of the same types as the tuple stores.
-        LLAMA_FN_HOST_ACC_INLINE constexpr Tuple(FirstElement first, Elements... rest)
+        LLAMA_FN_HOST_ACC_INLINE constexpr explicit Tuple(FirstElement first, Elements... rest)
             : first(std::move(first))
             , rest(std::move(rest)...)
         {
@@ -37,9 +37,9 @@ namespace llama
             typename... Ts,
             std::enable_if_t<
                 sizeof...(Elements) == sizeof...(Ts)
-                    && std::is_constructible_v<T_FirstElement, T> && (std::is_constructible_v<Elements, Ts> && ...),
+                    && std::is_constructible_v<TFirstElement, T> && (std::is_constructible_v<Elements, Ts> && ...),
                 int> = 0>
-        LLAMA_FN_HOST_ACC_INLINE constexpr Tuple(T&& firstArg, Ts&&... restArgs)
+        LLAMA_FN_HOST_ACC_INLINE constexpr explicit Tuple(T&& firstArg, Ts&&... restArgs)
             : first(std::forward<T>(firstArg))
             , rest(std::forward<Ts>(restArgs)...)
         {
@@ -200,7 +200,7 @@ namespace llama
 
     /// Applies a functor to every element of a tuple, creating a new tuple with the result of the element
     /// transformations. The functor needs to implement a template `operator()` to which all tuple elements are passed.
-    // TODO: replace by mp11 version in Boost 1.74.
+    // TODO(bgruber): replace by mp11 version in Boost 1.74.
     template<typename... Elements, typename Functor>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto tupleTransform(const Tuple<Elements...>& tuple, const Functor& functor)
     {

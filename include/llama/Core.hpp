@@ -352,7 +352,7 @@ namespace llama
     /// \param baseTags Tags used to define where the iteration should be started. The functor is called on elements
     /// beneath this coordinate.
     template<typename RecordDim, typename Functor, typename... Tags>
-    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaf(Functor&& functor, Tags... baseTags)
+    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaf(Functor&& functor, Tags... /*baseTags*/)
     {
         LLAMA_FORCE_INLINE_RECURSIVE
         forEachLeaf<RecordDim>(std::forward<Functor>(functor), GetCoordFromTags<RecordDim, Tags...>{});
@@ -484,18 +484,19 @@ namespace llama
                                                                      roundUpToMultiple(size, alignof(T));
                                                                      maxAlign = std::max(maxAlign, alignof(T));
                                                                  }
+                                                                 // NOLINTNEXTLINE(readability-misleading-indentation)
                                                                  size += sizeof(T);
                                                              });
 
             // final padding, so next struct can start right away
             if constexpr(Align && IncludeTailPadding)
-                roundUpToMultiple(size, maxAlign); // TODO: we could use flatAlignOf<TypeList> here, at the cost of
-                                                   // more template instantiations
+                roundUpToMultiple(size, maxAlign); // TODO(bgruber): we could use flatAlignOf<TypeList> here, at the
+                                                   // cost of more template instantiations
             return size;
         }
 
         template<bool Align, typename TypeList, std::size_t I>
-        constexpr std::size_t offsetOfImplWorkaround();
+        constexpr auto offsetOfImplWorkaround() -> std::size_t;
 
         // recursive formulation to benefit from template instantiation memoization
         // this massively improves compilation time when this template is instantiated with a lot of different I
@@ -507,7 +508,7 @@ namespace llama
         inline constexpr std::size_t offsetOfImpl<Align, TypeList, 0> = 0;
 
         template<bool Align, typename TypeList, std::size_t I>
-        constexpr std::size_t offsetOfImplWorkaround()
+        constexpr auto offsetOfImplWorkaround() -> std::size_t
         {
             std::size_t offset = offsetOfImpl<Align, TypeList, I - 1> + sizeof(boost::mp11::mp_at_c<TypeList, I - 1>);
             if constexpr(Align)
@@ -581,14 +582,14 @@ namespace llama
             }
         };
 
-        // TODO: replace in C++20
+        // TODO(bgruber): replace in C++20
         template<class T>
-        struct is_bounded_array : std::false_type
+        struct IsBoundedArray : std::false_type
         {
         };
 
         template<class T, std::size_t N>
-        struct is_bounded_array<T[N]> : std::true_type
+        struct IsBoundedArray<T[N]> : std::true_type
         {
         };
     } // namespace internal

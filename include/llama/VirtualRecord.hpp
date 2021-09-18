@@ -144,7 +144,7 @@ namespace llama
         struct Assign
         {
             template<typename A, typename B>
-            LLAMA_FN_HOST_ACC_INLINE decltype(auto) operator()(A& a, const B& b) const
+            LLAMA_FN_HOST_ACC_INLINE auto operator()(A& a, const B& b) const -> decltype(auto)
             {
                 return a = b;
             }
@@ -153,7 +153,7 @@ namespace llama
         struct PlusAssign
         {
             template<typename A, typename B>
-            LLAMA_FN_HOST_ACC_INLINE decltype(auto) operator()(A& a, const B& b) const
+            LLAMA_FN_HOST_ACC_INLINE auto operator()(A& a, const B& b) const -> decltype(auto)
             {
                 return a += b;
             }
@@ -162,7 +162,7 @@ namespace llama
         struct MinusAssign
         {
             template<typename A, typename B>
-            LLAMA_FN_HOST_ACC_INLINE decltype(auto) operator()(A& a, const B& b) const
+            LLAMA_FN_HOST_ACC_INLINE auto operator()(A& a, const B& b) const -> decltype(auto)
             {
                 return a -= b;
             }
@@ -171,7 +171,7 @@ namespace llama
         struct MultiplyAssign
         {
             template<typename A, typename B>
-            LLAMA_FN_HOST_ACC_INLINE decltype(auto) operator()(A& a, const B& b) const
+            LLAMA_FN_HOST_ACC_INLINE auto operator()(A& a, const B& b) const -> decltype(auto)
             {
                 return a *= b;
             }
@@ -180,7 +180,7 @@ namespace llama
         struct DivideAssign
         {
             template<typename A, typename B>
-            LLAMA_FN_HOST_ACC_INLINE decltype(auto) operator()(A& a, const B& b) const
+            LLAMA_FN_HOST_ACC_INLINE auto operator()(A& a, const B& b) const -> decltype(auto)
             {
                 return a /= b;
             }
@@ -189,7 +189,7 @@ namespace llama
         struct ModuloAssign
         {
             template<typename A, typename B>
-            LLAMA_FN_HOST_ACC_INLINE decltype(auto) operator()(A& a, const B& b) const
+            LLAMA_FN_HOST_ACC_INLINE auto operator()(A& a, const B& b) const -> decltype(auto)
             {
                 return a %= b;
             }
@@ -204,7 +204,7 @@ namespace llama
         }
 
         template<typename VirtualRecord, typename T, std::size_t N, std::size_t... Is>
-        LLAMA_FN_HOST_ACC_INLINE auto asTupleImplArr(VirtualRecord&& vd, T(&&a)[N], std::index_sequence<Is...>)
+        LLAMA_FN_HOST_ACC_INLINE auto asTupleImplArr(VirtualRecord&& vd, T(&&)[N], std::index_sequence<Is...>)
         {
             return std::make_tuple(asTupleImpl(vd(RecordCoord<Is>{}), T{})...);
         }
@@ -212,7 +212,7 @@ namespace llama
         template<typename VirtualRecord, typename T, std::size_t N>
         LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(VirtualRecord&& vd, T(&&a)[N])
         {
-            return asTupleImplArr(std::move(vd), std::move(a), std::make_index_sequence<N>{});
+            return asTupleImplArr(std::forward<VirtualRecord>(vd), std::move(a), std::make_index_sequence<N>{});
         }
 
         template<typename VirtualRecord, typename... Fields>
@@ -229,7 +229,7 @@ namespace llama
         }
 
         template<typename VirtualRecord, typename T, std::size_t N, std::size_t... Is>
-        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImplArr(VirtualRecord&& vd, T(&&a)[N], std::index_sequence<Is...>)
+        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImplArr(VirtualRecord&& vd, T(&&)[N], std::index_sequence<Is...>)
         {
             return std::tuple_cat(asFlatTupleImpl(vd(RecordCoord<Is>{}), T{})...);
         }
@@ -237,7 +237,7 @@ namespace llama
         template<typename VirtualRecord, typename T, std::size_t N>
         LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(VirtualRecord&& vd, T(&&a)[N])
         {
-            return asFlatTupleImplArr(std::move(vd), std::move(a), std::make_index_sequence<N>{});
+            return asFlatTupleImplArr(std::forward<VirtualRecord>(vd), std::move(a), std::make_index_sequence<N>{});
         }
 
         template<typename VirtualRecord, typename... Fields>
@@ -315,10 +315,10 @@ namespace llama
     /// information (array dimensions coord and partial record coord) to retrieve it from a \ref View later. Virtual
     /// records should not be created by the user. They are returned from various access functions in \ref View and
     /// VirtualRecord itself.
-    template<typename T_View, typename BoundRecordCoord, bool OwnView>
-    struct VirtualRecord : private T_View::Mapping::ArrayDims
+    template<typename TView, typename BoundRecordCoord, bool OwnView>
+    struct VirtualRecord : private TView::Mapping::ArrayDims
     {
-        using View = T_View; ///< View this virtual record points into.
+        using View = TView; ///< View this virtual record points into.
 
     private:
         using ArrayDims = typename View::Mapping::ArrayDims;
@@ -348,7 +348,18 @@ namespace llama
         }
 
         VirtualRecord(const VirtualRecord&) = default;
-        VirtualRecord(VirtualRecord&&) = default;
+
+        // NOLINTNEXTLINE(cert-oop54-cpp)
+        LLAMA_FN_HOST_ACC_INLINE auto operator=(const VirtualRecord& other) -> VirtualRecord&
+        {
+            // NOLINTNEXTLINE(cppcoreguidelines-c-copy-assignment-signature,misc-unconventional-assign-operator)
+            return this->operator=<VirtualRecord>(other);
+        }
+
+        VirtualRecord(VirtualRecord&&) noexcept = default;
+        auto operator=(VirtualRecord&&) noexcept -> VirtualRecord& = default;
+
+        ~VirtualRecord() = default;
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayDimsCoord() const
         {
@@ -358,6 +369,7 @@ namespace llama
         /// Create a VirtuaRecord from a different VirtualRecord. Only available for if the view is owned. Used by
         /// llama::One.
         template<typename OtherView, typename OtherBoundRecordCoord, bool OtherOwnView>
+        // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
         LLAMA_FN_HOST_ACC_INLINE VirtualRecord(
             const VirtualRecord<OtherView, OtherBoundRecordCoord, OtherOwnView>& virtualRecord)
             /* requires(OwnView) */
@@ -371,7 +383,7 @@ namespace llama
             *this = virtualRecord;
         }
 
-        // TODO: unify with previous in C++20 and use explicit(cond)
+        // TODO(bgruber): unify with previous in C++20 and use explicit(cond)
         /// Create a VirtuaRecord from a scalar. Only available for if the view is owned. Used by llama::One.
         template<typename T, typename = std::enable_if_t<!is_VirtualRecord<T>>>
         LLAMA_FN_HOST_ACC_INLINE explicit VirtualRecord(const T& scalar)
@@ -392,7 +404,7 @@ namespace llama
         {
             using AbsolutCoord = Cat<BoundRecordCoord, RecordCoord<Coord...>>;
             using AccessedType = GetType<RecordDim, AbsolutCoord>;
-            if constexpr(isRecord<AccessedType> || internal::is_bounded_array<AccessedType>::value)
+            if constexpr(isRecord<AccessedType> || internal::IsBoundedArray<AccessedType>::value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
                 return VirtualRecord<const View, AbsolutCoord>{arrayDimsCoord(), this->view};
@@ -406,11 +418,11 @@ namespace llama
 
         // FIXME(bgruber): remove redundancy
         template<std::size_t... Coord>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coord...> coord = {}) -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coord...> = {}) -> decltype(auto)
         {
             using AbsolutCoord = Cat<BoundRecordCoord, RecordCoord<Coord...>>;
             using AccessedType = GetType<RecordDim, AbsolutCoord>;
-            if constexpr(isRecord<AccessedType> || internal::is_bounded_array<AccessedType>::value)
+            if constexpr(isRecord<AccessedType> || internal::IsBoundedArray<AccessedType>::value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
                 return VirtualRecord<View, AbsolutCoord>{arrayDimsCoord(), this->view};
@@ -444,15 +456,10 @@ namespace llama
             return operator()(RecordCoord{});
         }
 
-        // we need this one to disable the compiler generated copy assignment
-        LLAMA_FN_HOST_ACC_INLINE auto operator=(const VirtualRecord& other) -> VirtualRecord&
-        {
-            return this->operator=<VirtualRecord>(other);
-        }
-
         template<typename T>
         LLAMA_FN_HOST_ACC_INLINE auto operator=(const T& other) -> VirtualRecord&
         {
+            // NOLINTNEXTLINE(cppcoreguidelines-c-copy-assignment-signature,misc-unconventional-assign-operator)
             return internal::virtualRecordArithOperator<internal::Assign>(*this, other);
         }
 
@@ -663,6 +670,7 @@ namespace llama
             VirtualRecord& vd;
 
             template<typename T>
+            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
             LLAMA_FN_HOST_ACC_INLINE operator T()
             {
                 return vd.loadAs<T>();
@@ -674,6 +682,7 @@ namespace llama
             const VirtualRecord& vd;
 
             template<typename T>
+            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
             LLAMA_FN_HOST_ACC_INLINE operator T() const
             {
                 return vd.loadAs<T>();
@@ -740,8 +749,8 @@ namespace llama
     {
         using RecordDim = typename VirtualRecord<View, BoundRecordCoord, OwnView>::AccessibleRecordDim;
         os << "{";
-        // TODO: I tried refactoring both branches into one, but MSVC and icpc have troubles with correctly discarding
-        // the discarded if constexpr branch and not instantiating templates inside them.
+        // TODO(bgruber): I tried refactoring both branches into one, but MSVC and icpc have troubles with correctly
+        // discarding the discarded if constexpr branch and not instantiating templates inside them.
         if constexpr(std::is_array_v<RecordDim>)
         {
             constexpr auto size = std::extent_v<RecordDim>;

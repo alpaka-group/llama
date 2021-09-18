@@ -761,10 +761,10 @@ TEST_CASE("treemapping")
 
     auto raw = prettyPrintType(mapping.basicTree);
 #ifdef _WIN32
-    replace_all(raw, "__int64", "long");
+    tree::internal::replace_all(raw, "__int64", "long");
 #endif
 #ifdef _LIBCPP_VERSION
-    replace_all(raw, "std::__1::", "std::");
+    tree::internal::replace_all(raw, "std::__1::", "std::");
 #endif
     const auto* const ref = R"(llama::mapping::tree::Node<
     llama::NoName,
@@ -905,10 +905,10 @@ TEST_CASE("treemapping")
 
     auto raw2 = prettyPrintType(mapping.resultTree);
 #ifdef _WIN32
-    replace_all(raw2, "__int64", "long");
+    tree::internal::replace_all(raw2, "__int64", "long");
 #endif
 #ifdef _LIBCPP_VERSION
-    replace_all(raw2, "std::__1::", "std::");
+    tree::internal::replace_all(raw2, "std::__1::", "std::");
 #endif
     const auto* const ref2 = R"(llama::mapping::tree::Node<
     llama::NoName,

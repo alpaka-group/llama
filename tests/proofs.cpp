@@ -51,11 +51,11 @@ TEST_CASE("mapsNonOverlappingly.AlignedAoS")
 
 namespace
 {
-    template<typename T_ArrayDims, typename T_RecordDim>
+    template<typename TArrayDims, typename TRecordDim>
     struct MapEverythingToZero
     {
-        using ArrayDims = T_ArrayDims;
-        using RecordDim = T_RecordDim;
+        using ArrayDims = TArrayDims;
+        using RecordDim = TRecordDim;
         static constexpr std::size_t blobCount = 1;
 
         LLAMA_FN_HOST_ACC_INLINE
@@ -102,11 +102,11 @@ namespace
 {
     // maps each element of the record dimension into a separate blobs. Each blob stores Modulus elements. If the array
     // dimensions are larger than Modulus, elements are overwritten.
-    template<typename T_ArrayDims, typename T_RecordDim, std::size_t Modulus>
+    template<typename TArrayDims, typename TRecordDim, std::size_t Modulus>
     struct ModulusMapping
     {
-        using ArrayDims = T_ArrayDims;
-        using RecordDim = T_RecordDim;
+        using ArrayDims = TArrayDims;
+        using RecordDim = TRecordDim;
         static constexpr std::size_t blobCount = boost::mp11::mp_size<llama::FlatRecordDim<RecordDim>>::value;
 
         LLAMA_FN_HOST_ACC_INLINE

@@ -30,11 +30,6 @@ namespace llama
         {
         }
 
-        constexpr ArrayDimsIndexIterator(const ArrayDimsIndexIterator&) noexcept = default;
-        constexpr ArrayDimsIndexIterator(ArrayDimsIndexIterator&&) noexcept = default;
-        constexpr auto operator=(const ArrayDimsIndexIterator&) noexcept -> ArrayDimsIndexIterator& = default;
-        constexpr auto operator=(ArrayDimsIndexIterator&&) noexcept -> ArrayDimsIndexIterator& = default;
-
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator*() const noexcept -> value_type
         {
@@ -51,7 +46,7 @@ namespace llama
         constexpr auto operator++() noexcept -> ArrayDimsIndexIterator&
         {
             current[Dim - 1]++;
-            for(auto i = (int) Dim - 2; i >= 0; i--)
+            for(auto i = static_cast<int>(Dim) - 2; i >= 0; i--)
             {
                 if(current[i + 1] != size[i + 1])
                     return *this;
@@ -73,7 +68,7 @@ namespace llama
         constexpr auto operator--() noexcept -> ArrayDimsIndexIterator&
         {
             current[Dim - 1]--;
-            for(auto i = (int) Dim - 2; i >= 0; i--)
+            for(auto i = static_cast<int>(Dim) - 2; i >= 0; i--)
             {
                 if(current[i + 1] != std::numeric_limits<std::size_t>::max())
                     return *this;
@@ -102,7 +97,7 @@ namespace llama
         constexpr auto operator+=(difference_type n) noexcept -> ArrayDimsIndexIterator&
         {
             // add n to all lower dimensions with carry
-            for(auto i = (int) Dim - 1; i > 0 && n != 0; i--)
+            for(auto i = static_cast<int>(Dim) - 1; i > 0 && n != 0; i--)
             {
                 n += static_cast<difference_type>(current[i]);
                 const auto s = static_cast<difference_type>(size[i]);
@@ -165,7 +160,7 @@ namespace llama
 
             difference_type n = a.current[Dim - 1] - b.current[Dim - 1];
             difference_type size = a.size[Dim - 1];
-            for(auto i = (int) Dim - 2; i >= 0; i--)
+            for(auto i = static_cast<int>(Dim) - 2; i >= 0; i--)
             {
                 n += (a.current[i] - b.current[i]) * size;
                 size *= a.size[i];
@@ -225,7 +220,7 @@ namespace llama
         }
 
     private:
-        ArrayDims<Dim> size; // TODO: we only need to store Dim - 1 sizes
+        ArrayDims<Dim> size; // TODO(bgruber): we only need to store Dim - 1 sizes
         ArrayDims<Dim> current;
     };
 
@@ -239,7 +234,7 @@ namespace llama
         constexpr ArrayDimsIndexRange() noexcept = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr ArrayDimsIndexRange(ArrayDims<Dim> size) noexcept : size(size)
+        constexpr explicit ArrayDimsIndexRange(ArrayDims<Dim> size) noexcept : size(size)
         {
         }
 

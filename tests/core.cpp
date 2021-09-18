@@ -7,7 +7,7 @@ TEST_CASE("prettyPrintType")
 {
     auto str = prettyPrintType<Particle>();
 #ifdef _WIN32
-    replace_all(str, "__int64", "long");
+    llama::mapping::tree::internal::replace_all(str, "__int64", "long");
 #endif
     const auto* const ref = R"(llama::Record<
     llama::Field<
@@ -157,9 +157,6 @@ TEST_CASE("flatFieldCountBefore")
     STATIC_REQUIRE(llama::internal::flatFieldCountBefore<3, Particle> == 7);
     STATIC_REQUIRE(llama::internal::flatFieldCountBefore<4, Particle> == 11);
 }
-
-template<int i>
-struct S;
 
 TEST_CASE("alignment")
 {

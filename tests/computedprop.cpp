@@ -17,6 +17,8 @@ namespace
     {
         using Base = llama::mapping::PackedAoS<ArrayDims, RecordDim>;
 
+        using Base::Base;
+
         template<std::size_t... RecordCoords>
         static constexpr auto isComputed(llama::RecordCoord<RecordCoords...>)
         {
@@ -109,11 +111,11 @@ TEST_CASE("computedprop")
 namespace
 {
     // Maps accesses to the product of the ArrayDims coord.
-    template<typename T_ArrayDims, typename T_RecordDim>
+    template<typename TArrayDims, typename TRecordDim>
     struct ComputedMapping
     {
-        using ArrayDims = T_ArrayDims;
-        using RecordDim = T_RecordDim;
+        using ArrayDims = TArrayDims;
+        using RecordDim = TRecordDim;
         static constexpr std::size_t blobCount = 0;
 
         constexpr ComputedMapping() = default;
@@ -153,13 +155,13 @@ TEST_CASE("fully_computed_mapping")
 namespace
 {
     template<
-        typename T_ArrayDims,
-        typename T_RecordDim,
+        typename TArrayDims,
+        typename TRecordDim,
         typename LinearizeArrayDimsFunctor = llama::mapping::LinearizeArrayDimsCpp>
     struct CompressedBoolMapping
     {
-        using ArrayDims = T_ArrayDims;
-        using RecordDim = T_RecordDim;
+        using ArrayDims = TArrayDims;
+        using RecordDim = TRecordDim;
         static constexpr std::size_t blobCount = boost::mp11::mp_size<llama::FlatRecordDim<RecordDim>>::value;
 
         constexpr CompressedBoolMapping() = default;

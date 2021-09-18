@@ -88,15 +88,15 @@ namespace llama::mapping::tree
             }
 
             template<typename TreeCoord>
-            LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(TreeCoord const& basicCoord, Tree const& tree) const
-                -> TreeCoord
+            LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(TreeCoord const& basicCoord, Tree const& /*tree*/)
+                const -> TreeCoord
             {
                 return basicCoord;
             }
 
             template<typename TreeCoord>
-            LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(TreeCoord const& resultCoord, Tree const& tree) const
-                -> TreeCoord
+            LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(TreeCoord const& resultCoord, Tree const& /*tree*/)
+                const -> TreeCoord
             {
                 return resultCoord;
             }
@@ -111,7 +111,7 @@ namespace llama::mapping::tree
         template<typename... Children, std::size_t... Is, typename Count>
         LLAMA_FN_HOST_ACC_INLINE auto getChildrenBlobSize(
             const Tuple<Children...>& childs,
-            std::index_sequence<Is...> ii,
+            std::index_sequence<Is...> /*ii*/,
             const Count& count) -> std::size_t
         {
             return count * (getTreeBlobSize(get<Is>(childs)) + ...);
@@ -167,13 +167,13 @@ namespace llama::mapping::tree
     /// dimension are represented by a compile time tree data structure. This tree is mapped into memory by means of a
     /// breadth-first tree traversal. By specifying additional tree operations, the tree can be modified at compile
     /// time before being mapped to memory.
-    template<typename T_ArrayDims, typename T_RecordDim, typename TreeOperationList>
+    template<typename TArrayDims, typename TRecordDim, typename TreeOperationList>
     struct Mapping
     {
-        using ArrayDims = T_ArrayDims;
-        using RecordDim = T_RecordDim;
+        using ArrayDims = TArrayDims;
+        using RecordDim = TRecordDim;
         using BasicTree = TreeFromDimensions<ArrayDims, RecordDim>;
-        // TODO, support more than one blob
+        // TODO(bgruber): , support more than one blob
         static constexpr std::size_t blobCount = 1;
 
         using MergedFunctors = internal::MergeFunctors<BasicTree, TreeOperationList>;
