@@ -43,7 +43,7 @@ namespace llama::mapping
         constexpr Trace() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        Trace(Mapping mapping) : mapping(mapping)
+        explicit Trace(Mapping mapping) : mapping(mapping)
         {
             forEachLeaf<RecordDim>([&](auto coord) { fieldHits[internal::coordName<RecordDim>(coord)] = 0; });
         }

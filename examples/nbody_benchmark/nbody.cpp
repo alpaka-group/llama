@@ -121,7 +121,7 @@ void run(std::ostream& plotFile)
         std::cout << '\n';
     }
 
-    std::default_random_engine engine;
+    std::default_random_engine engine; // NOLINT(readability-misleading-indentation)
     std::normal_distribution<FP> dist(FP(0), FP(1));
     for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
     {

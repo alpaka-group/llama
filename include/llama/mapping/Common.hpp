@@ -73,7 +73,7 @@ namespace llama::mapping
             else
             {
                 std::size_t address = coord[Dim - 1];
-                for(int i = (int) Dim - 2; i >= 0; i--)
+                for(int i = static_cast<int>(Dim) - 2; i >= 0; i--)
                 {
                     address *= size[i];
                     address += coord[i];
@@ -122,7 +122,7 @@ namespace llama::mapping
         {
             std::size_t r = 1;
             while(r < n)
-                r <<= 1;
+                r <<= 1u;
             return r;
         }
 
@@ -130,7 +130,7 @@ namespace llama::mapping
         {
             e--;
             auto r = b;
-            while(e)
+            while(e != 0u)
             {
                 r *= b;
                 e--;

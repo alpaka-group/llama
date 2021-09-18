@@ -11,7 +11,7 @@
 
 namespace llama
 {
-    // TODO: expose blob allocator
+    // TODO(bgruber): expose blob allocator
     /// An equivalent of std::vector<T> backed by a \ref View. Elements are never value initialized though. No strong
     /// exception guarantee.
     /// WARNING: This class is experimental.
@@ -48,23 +48,14 @@ namespace llama
                 push_back(*first);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE Vector(const Vector& other)
-        {
-            m_view = other.m_view; // we depend on the copy semantic of View here
-            m_size = other.m_size;
-        }
+        LLAMA_FN_HOST_ACC_INLINE Vector(const Vector& other) = default;
 
         LLAMA_FN_HOST_ACC_INLINE Vector(Vector&& other) noexcept
         {
             swap(other);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto operator=(const Vector& other) -> Vector&
-        {
-            m_view = other.m_view; // we depend on the copy semantic of View here
-            m_size = other.m_size;
-            return *this;
-        }
+        LLAMA_FN_HOST_ACC_INLINE auto operator=(const Vector& other) -> Vector& = default;
 
         LLAMA_FN_HOST_ACC_INLINE auto operator=(Vector&& other) noexcept -> Vector&
         {
@@ -72,9 +63,11 @@ namespace llama
             return *this;
         }
 
-        // TODO: assign
+        ~Vector() = default;
 
-        LLAMA_FN_HOST_ACC_INLINE decltype(auto) at(std::size_t i)
+        // TODO(bgruber): assign
+
+        LLAMA_FN_HOST_ACC_INLINE auto at(std::size_t i) -> decltype(auto)
         {
             if(i >= m_size)
                 throw std::out_of_range{
@@ -82,7 +75,7 @@ namespace llama
             return m_view(i);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE decltype(auto) at(std::size_t i) const
+        LLAMA_FN_HOST_ACC_INLINE auto at(std::size_t i) const -> decltype(auto)
         {
             if(i >= m_size)
                 throw std::out_of_range{
@@ -90,72 +83,72 @@ namespace llama
             return m_view(i);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE decltype(auto) operator[](std::size_t i)
+        LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t i) -> decltype(auto)
         {
             return m_view(i);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE decltype(auto) operator[](std::size_t i) const
+        LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t i) const -> decltype(auto)
         {
             return m_view(i);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE decltype(auto) front()
+        LLAMA_FN_HOST_ACC_INLINE auto front() -> decltype(auto)
         {
             return m_view(0);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE decltype(auto) front() const
+        LLAMA_FN_HOST_ACC_INLINE auto front() const -> decltype(auto)
         {
             return m_view(0);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE decltype(auto) back()
+        LLAMA_FN_HOST_ACC_INLINE auto back() -> decltype(auto)
         {
             return m_view(m_size - 1);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE decltype(auto) back() const
+        LLAMA_FN_HOST_ACC_INLINE auto back() const -> decltype(auto)
         {
             return m_view(m_size - 1);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE decltype(auto) begin()
+        LLAMA_FN_HOST_ACC_INLINE auto begin() -> decltype(auto)
         {
             return m_view.begin();
         }
 
-        LLAMA_FN_HOST_ACC_INLINE decltype(auto) begin() const
+        LLAMA_FN_HOST_ACC_INLINE auto begin() const -> decltype(auto)
         {
             return m_view.begin();
         }
 
-        LLAMA_FN_HOST_ACC_INLINE decltype(auto) cbegin()
+        LLAMA_FN_HOST_ACC_INLINE auto cbegin() -> decltype(auto)
         {
             return std::as_const(m_view).begin();
         }
 
-        LLAMA_FN_HOST_ACC_INLINE decltype(auto) cbegin() const
+        LLAMA_FN_HOST_ACC_INLINE auto cbegin() const -> decltype(auto)
         {
             return m_view.begin();
         }
 
-        LLAMA_FN_HOST_ACC_INLINE decltype(auto) end()
+        LLAMA_FN_HOST_ACC_INLINE auto end() -> decltype(auto)
         {
             return m_view.begin() + m_size;
         }
 
-        LLAMA_FN_HOST_ACC_INLINE decltype(auto) end() const
+        LLAMA_FN_HOST_ACC_INLINE auto end() const -> decltype(auto)
         {
             return m_view.begin() + m_size;
         }
 
-        LLAMA_FN_HOST_ACC_INLINE decltype(auto) cend()
+        LLAMA_FN_HOST_ACC_INLINE auto cend() -> decltype(auto)
         {
             return std::as_const(m_view).begin() + m_size;
         }
 
-        LLAMA_FN_HOST_ACC_INLINE decltype(auto) cend() const
+        LLAMA_FN_HOST_ACC_INLINE auto cend() const -> decltype(auto)
         {
             return m_view.begin() + m_size;
         }
@@ -203,9 +196,9 @@ namespace llama
             return pos;
         }
 
-        // TODO: more insert overloads
+        // TODO(bgruber): more insert overloads
 
-        // TODO emplace
+        // TODO(bgruber): emplace
 
         LLAMA_FN_HOST_ACC_INLINE auto erase(iterator pos) -> iterator
         {
@@ -214,10 +207,10 @@ namespace llama
             return pos;
         }
 
-        // TODO: more erase overloads
+        // TODO(bgruber): more erase overloads
 
-        // TODO: T here is probably a virtual record. We could also allow any struct that is storable to the view via
-        // VirtualRecord::store().
+        // TODO(bgruber): T here is probably a virtual record. We could also allow any struct that is storable to the
+        // view via VirtualRecord::store().
         template<typename T>
         LLAMA_FN_HOST_ACC_INLINE void push_back(T&& t)
         {
@@ -227,7 +220,7 @@ namespace llama
             m_view[m_size++] = std::forward<T>(t);
         }
 
-        // TODO: emplace_back
+        // TODO(bgruber): emplace_back
 
         LLAMA_FN_HOST_ACC_INLINE void pop_back()
         {
@@ -290,7 +283,7 @@ namespace llama
             swap(m_view, newView); // depends on move semantic of View
         }
 
-        LLAMA_FN_HOST_ACC_INLINE void swap(Vector& other)
+        LLAMA_FN_HOST_ACC_INLINE void swap(Vector& other) noexcept
         {
             using std::swap;
             swap(m_view, other.m_view); // depends on move semantic of View

@@ -29,20 +29,20 @@ namespace llama::mapping
     /// \tparam T_LinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
     /// how big the linear domain gets.
     template<
-        typename T_ArrayDims,
-        typename T_RecordDim,
+        typename TArrayDims,
+        typename TRecordDim,
         std::size_t Lanes,
-        typename T_LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     struct AoSoA
     {
-        using ArrayDims = T_ArrayDims;
-        using RecordDim = T_RecordDim;
-        using LinearizeArrayDimsFunctor = T_LinearizeArrayDimsFunctor;
+        using ArrayDims = TArrayDims;
+        using RecordDim = TRecordDim;
+        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
         static constexpr std::size_t blobCount = 1;
 
         constexpr AoSoA() = default;
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr AoSoA(ArrayDims size, RecordDim = {}) : arrayDimsSize(size)
+        LLAMA_FN_HOST_ACC_INLINE constexpr explicit AoSoA(ArrayDims size, RecordDim = {}) : arrayDimsSize(size)
         {
         }
 

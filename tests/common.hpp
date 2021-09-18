@@ -61,11 +61,11 @@ using ParticleUnaligned = llama::Record<
 >;
 // clang-format on
 
-using llama::mapping::tree::internal::replace_all;
-
 template<typename T>
-std::string prettyPrintType(const T& t = {})
+auto prettyPrintType(const T& t = {}) -> std::string
 {
+    using llama::mapping::tree::internal::replace_all;
+
     auto raw = boost::core::demangle(typeid(t).name());
 #ifdef _MSC_VER
     // remove clutter in MSVC

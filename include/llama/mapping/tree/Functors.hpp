@@ -47,7 +47,7 @@ namespace llama::mapping::tree::functor
         }
 
         template<typename Tree, typename ResultCoord>
-        LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(const ResultCoord& resultCoord, const Tree& tree) const
+        LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(const ResultCoord& resultCoord, const Tree& /*tree*/) const
             -> ResultCoord
         {
             return resultCoord;
@@ -126,7 +126,7 @@ namespace llama::mapping::tree::functor
 
         template<typename TreeCoord, typename Identifier, typename Type, typename CountType>
         LLAMA_FN_HOST_ACC_INLINE auto changeNodeRuntime(
-            const Leaf<Identifier, Type, CountType>& tree,
+            const Leaf<Identifier, Type, CountType>& /*tree*/,
             std::size_t newValue)
         {
             return Leaf<Identifier, Type, std::size_t>{newValue};
@@ -171,7 +171,7 @@ namespace llama::mapping::tree::functor
         template<typename TreeCoord, typename Identifier, typename Type, typename CountType>
         LLAMA_FN_HOST_ACC_INLINE auto changeNodeChildsRuntime(
             const Leaf<Identifier, Type, CountType>& tree,
-            std::size_t newValue)
+            std::size_t /*newValue*/)
         {
             return tree;
         }

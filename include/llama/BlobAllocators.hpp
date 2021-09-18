@@ -70,11 +70,9 @@ namespace llama::bloballoc
         inline AlignedAllocator() noexcept = default;
 
         template<typename T2>
-        inline AlignedAllocator(AlignedAllocator<T2, Alignment> const&) noexcept
+        inline explicit AlignedAllocator(AlignedAllocator<T2, Alignment> const&) noexcept
         {
         }
-
-        inline ~AlignedAllocator() noexcept = default;
 
         inline auto allocate(std::size_t n) -> T*
         {
@@ -87,7 +85,7 @@ namespace llama::bloballoc
         }
 
         template<typename T2>
-        struct rebind
+        struct rebind // NOLINT(readability-identifier-naming)
         {
             using other = AlignedAllocator<T2, Alignment>;
         };
@@ -97,7 +95,7 @@ namespace llama::bloballoc
             return !(*this == other);
         }
 
-        auto operator==(const AlignedAllocator<T, Alignment>& other) const -> bool
+        auto operator==(const AlignedAllocator<T, Alignment>&) const -> bool
         {
             return true;
         }

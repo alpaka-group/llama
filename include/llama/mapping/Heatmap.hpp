@@ -21,7 +21,7 @@ namespace llama::mapping
         constexpr Heatmap() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        Heatmap(Mapping mapping) : mapping(mapping)
+        explicit Heatmap(Mapping mapping) : mapping(mapping)
         {
             for(auto i = 0; i < blobCount; i++)
                 byteHits[i] = std::vector<std::atomic<CountType>>(blobSize(i));
@@ -32,6 +32,8 @@ namespace llama::mapping
 
         Heatmap(Heatmap&&) noexcept = default;
         auto operator=(Heatmap&&) noexcept -> Heatmap& = default;
+
+        ~Heatmap() = default;
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayDims() const -> ArrayDims
         {

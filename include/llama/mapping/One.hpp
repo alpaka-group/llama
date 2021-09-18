@@ -15,27 +15,27 @@ namespace llama::mapping
     /// \tparam FlattenRecordDim Defines how the record dimension's fields should be flattened. See \ref
     /// FlattenRecordDimInOrder and \ref FlattenRecordDimMinimizePadding.
     template<
-        typename T_ArrayDims,
-        typename T_RecordDim,
+        typename TArrayDims,
+        typename TRecordDim,
         bool AlignAndPad = true,
         template<typename> typename FlattenRecordDim = FlattenRecordDimMinimizePadding>
     struct One
     {
-        using ArrayDims = T_ArrayDims;
-        using RecordDim = T_RecordDim;
+        using ArrayDims = TArrayDims;
+        using RecordDim = TRecordDim;
 
         static constexpr std::size_t blobCount = 1;
 
         constexpr One() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr One(ArrayDims, RecordDim = {})
+        constexpr explicit One(ArrayDims, RecordDim = {})
         {
         }
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayDims() const -> ArrayDims
         {
-            // TODO: not sure if this is the right approach, since we take any ArrayDims in the ctor
+            // TODO(bgruber): not sure if this is the right approach, since we take any ArrayDims in the ctor
             ArrayDims ad;
             for(auto i = 0; i < ArrayDims::rank; i++)
                 ad[i] = 1;
@@ -60,7 +60,7 @@ namespace llama::mapping
         }
 
     private:
-        using Flattener = FlattenRecordDim<T_RecordDim>;
+        using Flattener = FlattenRecordDim<TRecordDim>;
     };
 
     /// One mapping preserving the alignment of the field types by inserting padding.

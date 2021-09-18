@@ -158,9 +158,6 @@ TEST_CASE("flatFieldCountBefore")
     STATIC_REQUIRE(llama::internal::flatFieldCountBefore<4, Particle> == 11);
 }
 
-template<int i>
-struct S;
-
 TEST_CASE("alignment")
 {
     using RD = llama::Record<
