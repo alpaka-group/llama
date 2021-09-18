@@ -1,10 +1,10 @@
 ---
 # -bugprone-forward-declaration-namespace # too many false positives in LLAMA
+# -cppcoreguidelines-macro-usage # too many macros flagged, which cannot be replaced by constexpr
 # -bugprone-exception-escape # bgruber is fine with exceptions escaping main we cannot add main as an exception
-# -cppcoreguidelines-pro-type-member-init # maybe enable in the future
 # -cppcoreguidelines-pro-type-reinterpret-cast # we need some reinterpret casts in LLAMA
-# -hicpp-member-init # maybe enable in the future
 # -readability-misleading-indentation # many false positives because of constexpr if
+# -readability-static-accessed-through-instance # flags threadIdx/blockIdx in CUDA code
 Checks: >
     *,
     -bugprone-exception-escape,
@@ -17,7 +17,6 @@ Checks: >
     -cppcoreguidelines-non-private-member-variables-in-classes,
     -cppcoreguidelines-pro-bounds-constant-array-index,
     -cppcoreguidelines-pro-bounds-pointer-arithmetic,
-    -cppcoreguidelines-pro-type-member-init,
     -cppcoreguidelines-pro-type-reinterpret-cast,
     -fuchsia-default-arguments-calls,
     -fuchsia-default-arguments-declarations,
@@ -25,11 +24,9 @@ Checks: >
     -fuchsia-trailing-return,
     -google-build-using-namespace,
     -google-readability-braces-around-statements,
-    -google-readability-todo,
     -google-runtime-references,
     -hicpp-avoid-c-arrays,
     -hicpp-braces-around-statements,
-    -hicpp-member-init,
     -hicpp-named-parameter,
     -hicpp-uppercase-literal-suffix,
     -llvmlibc-callee-namespace,
@@ -42,12 +39,14 @@ Checks: >
     -portability-simd-intrinsics,
     -readability-braces-around-statements,
     -readability-magic-numbers,
-    -readability-misleading-indentation,
     -readability-named-parameter,
     -readability-uppercase-literal-suffix,
     -readability-function-cognitive-complexity,
+    -readability-static-accessed-through-instance,
     -altera-struct-pack-align,
-    -misc-no-recursion
+    -misc-no-recursion,
+    -llvm-header-guard,
+    -cppcoreguidelines-macro-usage
 
 WarningsAsErrors: '*'
 HeaderFilterRegex: ''
@@ -55,4 +54,13 @@ AnalyzeTemporaryDtors: false
 FormatStyle: none
 User: ''
 CheckOptions:
-...
+  - { key: readability-identifier-naming.ClassCase, value: CamelCase}
+  - { key: readability-identifier-naming.EnumCase, value: CamelCase}
+  - { key: readability-identifier-naming.StructCase, value: CamelCase}
+  - { key: readability-identifier-naming.MacroDefinitionCase, value: UPPER_CASE}
+#  - { key: readability-identifier-naming.TemplateParameterCase, value: CamelCase} # bug in C++20: https://bugs.llvm.org/show_bug.cgi?id=46752
+  - { key: readability-identifier-naming.TemplateTemplateParameterCase, value: CamelCase}
+  - { key: readability-identifier-naming.TypedefCase, value: CamelCase}
+#  - { key: readability-identifier-naming.TypeTemplateParameterCase, value: CamelCase} # bug in C++20: https://bugs.llvm.org/show_bug.cgi?id=46752
+  - { key: readability-identifier-naming.UnionCase, value: CamelCase}
+  - { key: readability-identifier-naming.ValueTemplateParameterCase, value: CamelCase}
