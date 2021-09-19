@@ -26,13 +26,15 @@ namespace llama::mapping
 
     /// Array of struct of arrays mapping. Used to create a \ref View via \ref allocView.
     /// \tparam Lanes The size of the inner arrays of this array of struct of arrays.
-    /// \tparam T_LinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
-    /// how big the linear domain gets.
+    /// \tparam FlattenRecordDim Defines how the record dimension's fields should be flattened. See \ref
+    /// FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref FlattenRecordDimDecreasingAlignment and
+    /// \ref FlattenRecordDimMinimizePadding.
     template<
         typename TArrayDims,
         typename TRecordDim,
         std::size_t Lanes,
-        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+        template<typename> typename FlattenRecordDim = FlattenRecordDimInOrder>
     struct AoSoA
     {
         using ArrayDims = TArrayDims;
@@ -62,16 +64,22 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayDims coord, RecordCoord<RecordCoords...> = {})
             const -> NrAndOffset
         {
+            constexpr std::size_t flatFieldIndex =
+#ifdef __NVCC__
+                *& // mess with nvcc compiler state to workaround bug
+#endif
+                 Flattener::template flatIndex<RecordCoords...>;
             const auto flatArrayIndex = LinearizeArrayDimsFunctor{}(coord, arrayDimsSize);
             const auto blockIndex = flatArrayIndex / Lanes;
             const auto laneIndex = flatArrayIndex % Lanes;
             const auto offset = (sizeOf<RecordDim> * Lanes) * blockIndex
-                + offsetOf<RecordDim, RecordCoord<RecordCoords...>> * Lanes
+                + flatOffsetOf<typename Flattener::FlatRecordDim, flatFieldIndex, false> * Lanes
                 + sizeof(GetType<RecordDim, RecordCoord<RecordCoords...>>) * laneIndex;
             return {0, offset};
         }
 
     private:
+        using Flattener = FlattenRecordDim<TRecordDim>;
         ArrayDims arrayDimsSize;
     };
 

@@ -13,7 +13,8 @@ namespace llama::mapping
     /// \tparam AlignAndPad If true, padding bytes are inserted to guarantee that struct members are properly aligned.
     /// If false, struct members are tightly packed.
     /// \tparam FlattenRecordDim Defines how the record dimension's fields should be flattened. See \ref
-    /// FlattenRecordDimInOrder and \ref FlattenRecordDimMinimizePadding.
+    /// FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref FlattenRecordDimDecreasingAlignment and
+    /// \ref FlattenRecordDimMinimizePadding.
     template<
         typename TArrayDims,
         typename TRecordDim,
@@ -51,12 +52,12 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayDims, RecordCoord<RecordCoords...> = {}) const
             -> NrAndOffset
         {
-            constexpr std::size_t flatIndex =
+            constexpr std::size_t flatFieldIndex =
 #ifdef __NVCC__
                 *& // mess with nvcc compiler state to workaround bug
 #endif
                  Flattener::template flatIndex<RecordCoords...>;
-            constexpr auto offset = flatOffsetOf<typename Flattener::FlatRecordDim, flatIndex, AlignAndPad>;
+            constexpr auto offset = flatOffsetOf<typename Flattener::FlatRecordDim, flatFieldIndex, AlignAndPad>;
             return {0, offset};
         }
 

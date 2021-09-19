@@ -13,7 +13,8 @@ namespace llama::mapping
     /// \tparam T_LinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
     /// how big the linear domain gets.
     /// \tparam FlattenRecordDim Defines how the record dimension's fields should be flattened. See \ref
-    /// FlattenRecordDimInOrder and \ref FlattenRecordDimMinimizePadding.
+    /// FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref FlattenRecordDimDecreasingAlignment and
+    /// \ref FlattenRecordDimMinimizePadding.
     template<
         typename TArrayDims,
         typename TRecordDim,
@@ -49,7 +50,7 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayDims coord, RecordCoord<RecordCoords...> = {})
             const -> NrAndOffset
         {
-            constexpr std::size_t flatIndex =
+            constexpr std::size_t flatFieldIndex =
 #ifdef __NVCC__
                 *& // mess with nvcc compiler state to workaround bug
 #endif
@@ -58,7 +59,7 @@ namespace llama::mapping
                 = LinearizeArrayDimsFunctor{}(coord, arrayDimsSize)
                     * flatSizeOf<
                         typename Flattener::FlatRecordDim,
-                        AlignAndPad> + flatOffsetOf<typename Flattener::FlatRecordDim, flatIndex, AlignAndPad>;
+                        AlignAndPad> + flatOffsetOf<typename Flattener::FlatRecordDim, flatFieldIndex, AlignAndPad>;
             return {0, offset};
         }
 

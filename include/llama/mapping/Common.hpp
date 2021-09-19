@@ -149,24 +149,23 @@ namespace llama::mapping
         static constexpr std::size_t flatIndex = flatRecordCoord<RecordDim, RecordCoord<RecordCoords...>>;
     };
 
-    /// Flattens and sorts the record dimension by the alignment of its fields.
-    template<typename RecordDim>
-    struct FlattenRecordDimMinimizePadding
+    /// Flattens the record dimension by sorting the fields according to a given predicate on the field types.
+    /// @tparam Less A binary predicate accepting two field types, which exposes a member value. Value must be true if
+    /// the first field type is less than the second one, otherwise false.
+    template<typename RecordDim, template<typename, typename> typename Less>
+    struct FlattenRecordDimSorted
     {
     private:
-        template<typename A, typename B>
-        using LessAlignment = std::bool_constant<alignof(A) < alignof(B)>;
-
         using FlatOrigRecordDim = llama::FlatRecordDim<RecordDim>;
-        using FlatSortedRecordDim = boost::mp11::mp_sort<FlatOrigRecordDim, LessAlignment>;
+        using FlatSortedRecordDim = boost::mp11::mp_sort<FlatOrigRecordDim, Less>;
 
         template<typename A, typename B>
-        using LessAlignmentForIndices = std::bool_constant<
-            alignof(boost::mp11::mp_at<FlatOrigRecordDim, A>) < alignof(boost::mp11::mp_at<FlatOrigRecordDim, B>)>;
+        using LessWithIndices
+            = Less<boost::mp11::mp_at<FlatOrigRecordDim, A>, boost::mp11::mp_at<FlatOrigRecordDim, B>>;
 
         // A permutation from new FlatSortedRecordDim index to old FlatOrigRecordDim index
-        using PermutedIndices = boost::mp11::
-            mp_sort<boost::mp11::mp_iota<boost::mp11::mp_size<FlatOrigRecordDim>>, LessAlignmentForIndices>;
+        using PermutedIndices
+            = boost::mp11::mp_sort<boost::mp11::mp_iota<boost::mp11::mp_size<FlatOrigRecordDim>>, LessWithIndices>;
 
         template<typename A, typename B>
         using LessInvertPermutation = std::bool_constant<(
@@ -188,4 +187,25 @@ namespace llama::mapping
         }
         ();
     };
+
+    namespace internal
+    {
+        template<typename A, typename B>
+        using LessAlignment = std::bool_constant<alignof(A) < alignof(B)>;
+
+        template<typename A, typename B>
+        using MoreAlignment = std::bool_constant<(alignof(A) > alignof(B))>;
+    } // namespace internal
+
+    /// Flattens and sorts the record dimension by increasing alignment of its fields.
+    template<typename RecordDim>
+    using FlattenRecordDimIncreasingAlignment = FlattenRecordDimSorted<RecordDim, internal::LessAlignment>;
+
+    /// Flattens and sorts the record dimension by decreasing alignment of its fields.
+    template<typename RecordDim>
+    using FlattenRecordDimDecreasingAlignment = FlattenRecordDimSorted<RecordDim, internal::MoreAlignment>;
+
+    /// Flattens and sorts the record dimension by the alignment of its fields to minimize padding.
+    template<typename RecordDim>
+    using FlattenRecordDimMinimizePadding = FlattenRecordDimIncreasingAlignment<RecordDim>;
 } // namespace llama::mapping

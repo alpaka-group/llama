@@ -698,3 +698,63 @@ TEST_CASE("AoSoA.address_within_bounds")
         llama::forEachLeaf<Particle>([&](auto rc)
                                      { CHECK(mapping.blobNrAndOffset(i, rc).offset < mapping.blobSize(0)); });
 }
+
+TEST_CASE("FlattenRecordDimInOrder")
+{
+    using F = llama::mapping::FlattenRecordDimInOrder<Particle>;
+    STATIC_REQUIRE(
+        std::is_same_v<
+            F::FlatRecordDim,
+            boost::mp11::mp_list<double, double, double, float, double, double, double, bool, bool, bool, bool>>);
+    STATIC_REQUIRE(F::flatIndex<0, 0> == 0);
+    STATIC_REQUIRE(F::flatIndex<0, 1> == 1);
+    STATIC_REQUIRE(F::flatIndex<0, 2> == 2);
+    STATIC_REQUIRE(F::flatIndex<1> == 3);
+    STATIC_REQUIRE(F::flatIndex<2, 0> == 4);
+    STATIC_REQUIRE(F::flatIndex<2, 1> == 5);
+    STATIC_REQUIRE(F::flatIndex<2, 2> == 6);
+    STATIC_REQUIRE(F::flatIndex<3, 0> == 7);
+    STATIC_REQUIRE(F::flatIndex<3, 1> == 8);
+    STATIC_REQUIRE(F::flatIndex<3, 2> == 9);
+    STATIC_REQUIRE(F::flatIndex<3, 3> == 10);
+}
+
+TEST_CASE("FlattenRecordDimIncreasingAlignment")
+{
+    using F = llama::mapping::FlattenRecordDimIncreasingAlignment<Particle>;
+    STATIC_REQUIRE(
+        std::is_same_v<
+            F::FlatRecordDim,
+            boost::mp11::mp_list<bool, bool, bool, bool, float, double, double, double, double, double, double>>);
+    STATIC_REQUIRE(F::flatIndex<0, 0> == 5);
+    STATIC_REQUIRE(F::flatIndex<0, 1> == 6);
+    STATIC_REQUIRE(F::flatIndex<0, 2> == 7);
+    STATIC_REQUIRE(F::flatIndex<1> == 4);
+    STATIC_REQUIRE(F::flatIndex<2, 0> == 8);
+    STATIC_REQUIRE(F::flatIndex<2, 1> == 9);
+    STATIC_REQUIRE(F::flatIndex<2, 2> == 10);
+    STATIC_REQUIRE(F::flatIndex<3, 0> == 0);
+    STATIC_REQUIRE(F::flatIndex<3, 1> == 1);
+    STATIC_REQUIRE(F::flatIndex<3, 2> == 2);
+    STATIC_REQUIRE(F::flatIndex<3, 3> == 3);
+}
+
+TEST_CASE("FlattenRecordDimDecreasingAlignment")
+{
+    using F = llama::mapping::FlattenRecordDimDecreasingAlignment<Particle>;
+    STATIC_REQUIRE(
+        std::is_same_v<
+            F::FlatRecordDim,
+            boost::mp11::mp_list<double, double, double, double, double, double, float, bool, bool, bool, bool>>);
+    STATIC_REQUIRE(F::flatIndex<0, 0> == 0);
+    STATIC_REQUIRE(F::flatIndex<0, 1> == 1);
+    STATIC_REQUIRE(F::flatIndex<0, 2> == 2);
+    STATIC_REQUIRE(F::flatIndex<1> == 6);
+    STATIC_REQUIRE(F::flatIndex<2, 0> == 3);
+    STATIC_REQUIRE(F::flatIndex<2, 1> == 4);
+    STATIC_REQUIRE(F::flatIndex<2, 2> == 5);
+    STATIC_REQUIRE(F::flatIndex<3, 0> == 7);
+    STATIC_REQUIRE(F::flatIndex<3, 1> == 8);
+    STATIC_REQUIRE(F::flatIndex<3, 2> == 9);
+    STATIC_REQUIRE(F::flatIndex<3, 3> == 10);
+}
