@@ -116,6 +116,15 @@ Mappings
 .. doxygenstruct:: llama::mapping::Heatmap
    :members:
 
+RecordDim flattener
+^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: llama::mapping::FlattenRecordDimInOrder
+.. doxygenstruct:: llama::mapping::FlattenRecordDimSorted
+.. doxygentypedef:: llama::mapping::FlattenRecordDimIncreasingAlignment
+.. doxygentypedef:: llama::mapping::FlattenRecordDimDecreasingAlignment
+.. doxygentypedef:: llama::mapping::FlattenRecordDimMinimizePadding
+
 Common utilities
 ^^^^^^^^^^^^^^^^
 

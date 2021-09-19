@@ -13,11 +13,15 @@ namespace llama::mapping
     /// \tparam SeparateBuffers If true, every element of the record dimension is mapped to its own buffer.
     /// \tparam LinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
     /// how big the linear domain gets.
+    /// \tparam FlattenRecordDim Defines how the record dimension's fields should be flattened if SeparateBuffers is
+    /// false. See \ref FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref
+    /// FlattenRecordDimDecreasingAlignment and \ref FlattenRecordDimMinimizePadding.
     template<
         typename TArrayDims,
         typename TRecordDim,
         bool SeparateBuffers = true,
-        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+        template<typename> typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder>
     struct SoA
     {
         using ArrayDims = TArrayDims;
@@ -72,16 +76,23 @@ namespace llama::mapping
             }
             else
             {
+                constexpr std::size_t flatFieldIndex =
+#ifdef __NVCC__
+                    *& // mess with nvcc compiler state to workaround bug
+#endif
+                     Flattener::template flatIndex<RecordCoords...>;
                 const auto offset = LinearizeArrayDimsFunctor{}(coord, arrayDimsSize)
                         * sizeof(GetType<RecordDim, RecordCoord<RecordCoords...>>)
-                    + offsetOf<
-                          RecordDim,
-                          RecordCoord<RecordCoords...>> * LinearizeArrayDimsFunctor{}.size(arrayDimsSize);
+                    + flatOffsetOf<
+                          typename Flattener::FlatRecordDim,
+                          flatFieldIndex,
+                          false> * LinearizeArrayDimsFunctor{}.size(arrayDimsSize);
                 return {0, offset};
             }
         }
 
     private:
+        using Flattener = FlattenRecordDimSingleBlob<TRecordDim>;
         ArrayDims arrayDimsSize;
     };
 
