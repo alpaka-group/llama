@@ -1,5 +1,7 @@
 var NAVTREEINDEX2 =
 {
+"structllama_1_1View.html#ac4bb5b414d1c636e3f4bbbfd2206ce06":[2,0,0,23,18],
+"structllama_1_1View.html#ad1a84585dcc6d576a0292977eba1615f":[2,0,0,23,11],
 "structllama_1_1View.html#ae80d249aedd9a917443fc8fa1a554d08":[2,0,0,23,21],
 "structllama_1_1View.html#aedc7479ae1541e2b95041e69a43ea69a":[2,0,0,23,16],
 "structllama_1_1View.html#af0fbc1691d3575f777a64d3abb53bd56":[2,0,0,23,8],
@@ -247,7 +249,5 @@ var NAVTREEINDEX2 =
 "structllama_1_1mapping_1_1One.html#ae1ac1f3c1195015b55d515229626bc1d":[2,0,0,2,9,7],
 "structllama_1_1mapping_1_1PreconfiguredAoS.html":[2,0,0,2,10],
 "structllama_1_1mapping_1_1PreconfiguredAoS.html#a63f54129307d4e69474bae701c76b3de":[2,0,0,2,10,0],
-"structllama_1_1mapping_1_1PreconfiguredAoSoA.html":[2,0,0,2,11],
-"structllama_1_1mapping_1_1PreconfiguredAoSoA.html#a074dcd8471a0bf80cd319a7b02b9b5e5":[2,0,0,2,11,0],
-"structllama_1_1mapping_1_1PreconfiguredSoA.html":[2,0,0,2,12]
+"structllama_1_1mapping_1_1PreconfiguredAoSoA.html":[2,0,0,2,11]
 };

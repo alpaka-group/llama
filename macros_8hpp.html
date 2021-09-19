@@ -130,7 +130,12 @@ $(document).ready(function(){initNavTree('macros_8hpp.html',''); initResizable()
 Macros</h2></td></tr>
 <tr class="memitem:aa201f5c2567527b34eae5fbdab0e2416"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="macros_8hpp.html#aa201f5c2567527b34eae5fbdab0e2416">LLAMA_INDEPENDENT_DATA</a></td></tr>
 <tr class="separator:aa201f5c2567527b34eae5fbdab0e2416"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adad0b5fb27fb373cb41c47ed7ab419af"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a>&#160;&#160;&#160;inline</td></tr>
+<tr class="memitem:a602fc531cfc17c6b8fadea678b7c937b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="macros_8hpp.html#a602fc531cfc17c6b8fadea678b7c937b">LLAMA_FORCE_INLINE</a>&#160;&#160;&#160;inline</td></tr>
+<tr class="memdesc:a602fc531cfc17c6b8fadea678b7c937b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forces the compiler to inline a function annotated with this macro.  <a href="macros_8hpp.html#a602fc531cfc17c6b8fadea678b7c937b">More...</a><br /></td></tr>
+<tr class="separator:a602fc531cfc17c6b8fadea678b7c937b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0df9a6bf4db1561110a18783a7276900"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="macros_8hpp.html#a0df9a6bf4db1561110a18783a7276900">LLAMA_HOST_ACC</a></td></tr>
+<tr class="separator:a0df9a6bf4db1561110a18783a7276900"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adad0b5fb27fb373cb41c47ed7ab419af"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a>&#160;&#160;&#160;<a class="el" href="macros_8hpp.html#a602fc531cfc17c6b8fadea678b7c937b">LLAMA_FORCE_INLINE</a> <a class="el" href="macros_8hpp.html#a0df9a6bf4db1561110a18783a7276900">LLAMA_HOST_ACC</a></td></tr>
 <tr class="separator:adad0b5fb27fb373cb41c47ed7ab419af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4721c0034a032224eb82625124525689"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="macros_8hpp.html#a4721c0034a032224eb82625124525689">LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS</a>(...)&#160;&#160;&#160;__VA_ARGS__</td></tr>
 <tr class="separator:a4721c0034a032224eb82625124525689"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -162,7 +167,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00091">91</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00103">103</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -184,7 +189,7 @@ Macros</h2></td></tr>
 
 <p>Forces a copy of a value. This is useful to prevent ODR usage of constants when compiling for GPU targets. </p>
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00082">82</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00094">94</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -195,13 +200,30 @@ Macros</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define LLAMA_FN_HOST_ACC_INLINE&#160;&#160;&#160;inline</td>
+          <td class="memname">#define LLAMA_FN_HOST_ACC_INLINE&#160;&#160;&#160;<a class="el" href="macros_8hpp.html#a602fc531cfc17c6b8fadea678b7c937b">LLAMA_FORCE_INLINE</a> <a class="el" href="macros_8hpp.html#a0df9a6bf4db1561110a18783a7276900">LLAMA_HOST_ACC</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Some offloading parallelization language extensions such a CUDA, OpenACC or OpenMP 4.5 need to specify whether a class, struct, function or method "resides" on the host, the accelerator (the offloading device) or both. LLAMA supports this with marking every function needed on an accelerator with <code>LLAMA_FN_HOST_ACC_INLINE</code>. When using such a language (or e.g. <a href="https://github.com/alpaka-group/alpaka">alpaka</a>) this macro should be defined on the compiler's command line. E.g. for alpaka: -D'LLAMA_FN_HOST_ACC_INLINE=ALPAKA_FN_HOST_ACC' </p>
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00044">44</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00059">59</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a602fc531cfc17c6b8fadea678b7c937b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a602fc531cfc17c6b8fadea678b7c937b">&#9670;&nbsp;</a></span>LLAMA_FORCE_INLINE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define LLAMA_FORCE_INLINE&#160;&#160;&#160;inline</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Forces the compiler to inline a function annotated with this macro. </p>
+
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00040">40</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -219,7 +241,24 @@ Macros</h2></td></tr>
 
 <p>Forces the compiler to recursively inline the call hiearchy started by the subsequent function call. </p>
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00078">78</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00090">90</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a0df9a6bf4db1561110a18783a7276900"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0df9a6bf4db1561110a18783a7276900">&#9670;&nbsp;</a></span>LLAMA_HOST_ACC</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define LLAMA_HOST_ACC</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Some offloading parallelization language extensions such a CUDA, OpenACC or OpenMP 4.5 need to specify whether a class, struct, function or method "resides" on the host, the accelerator (the offloading device) or both. LLAMA supports this with marking every function needed on an accelerator with <code>LLAMA_HOST_ACC</code>. </p>
+
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00054">54</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -258,7 +297,7 @@ Macros</h2></td></tr>
 
 <p>Gives strong indication to the compiler to inline the attributed lambda. </p>
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00064">64</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00076">76</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -278,7 +317,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00058">58</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00070">70</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -296,7 +335,7 @@ Macros</h2></td></tr>
 
 <p>Suppresses nvcc warning: 'calling a <b>host</b> function from <b>host</b> <b>device</b> function.'. </p>
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00071">71</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00083">83</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -307,7 +346,7 @@ Macros</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="macros_8hpp.html">macros.hpp</a></li>
-    <li class="footer">Generated on Fri Sep 17 2021 17:06:59 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sun Sep 19 2021 13:41:17 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

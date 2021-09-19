@@ -1,5 +1,7 @@
 var NAVTREEINDEX3 =
 {
+"structllama_1_1mapping_1_1PreconfiguredAoSoA.html#a074dcd8471a0bf80cd319a7b02b9b5e5":[2,0,0,2,11,0],
+"structllama_1_1mapping_1_1PreconfiguredSoA.html":[2,0,0,2,12],
 "structllama_1_1mapping_1_1PreconfiguredSoA.html#acc26cff405ca5be9cdef155b934a0c5f":[2,0,0,2,12,0],
 "structllama_1_1mapping_1_1PreconfiguredSplit.html":[2,0,0,2,13],
 "structllama_1_1mapping_1_1PreconfiguredSplit.html#ab73093a1ff47af270c2bf9bafc74ab30":[2,0,0,2,13,0],

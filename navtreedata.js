@@ -59,8 +59,8 @@ var NAVTREEINDEX =
 [
 ".html",
 "functions_o.html",
-"structllama_1_1View.html#ae80d249aedd9a917443fc8fa1a554d08",
-"structllama_1_1mapping_1_1PreconfiguredSoA.html#acc26cff405ca5be9cdef155b934a0c5f"
+"structllama_1_1View.html#ac4bb5b414d1c636e3f4bbbfd2206ce06",
+"structllama_1_1mapping_1_1PreconfiguredAoSoA.html#a074dcd8471a0bf80cd319a7b02b9b5e5"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
