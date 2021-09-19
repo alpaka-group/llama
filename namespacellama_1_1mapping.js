@@ -4,7 +4,7 @@ var namespacellama_1_1mapping =
     [ "AoS", "structllama_1_1mapping_1_1AoS.html", "structllama_1_1mapping_1_1AoS" ],
     [ "AoSoA", "structllama_1_1mapping_1_1AoSoA.html", "structllama_1_1mapping_1_1AoSoA" ],
     [ "FlattenRecordDimInOrder", "structllama_1_1mapping_1_1FlattenRecordDimInOrder.html", "structllama_1_1mapping_1_1FlattenRecordDimInOrder" ],
-    [ "FlattenRecordDimMinimizePadding", "structllama_1_1mapping_1_1FlattenRecordDimMinimizePadding.html", "structllama_1_1mapping_1_1FlattenRecordDimMinimizePadding" ],
+    [ "FlattenRecordDimSorted", "structllama_1_1mapping_1_1FlattenRecordDimSorted.html", "structllama_1_1mapping_1_1FlattenRecordDimSorted" ],
     [ "Heatmap", "structllama_1_1mapping_1_1Heatmap.html", "structllama_1_1mapping_1_1Heatmap" ],
     [ "LinearizeArrayDimsCpp", "structllama_1_1mapping_1_1LinearizeArrayDimsCpp.html", "structllama_1_1mapping_1_1LinearizeArrayDimsCpp" ],
     [ "LinearizeArrayDimsFortran", "structllama_1_1mapping_1_1LinearizeArrayDimsFortran.html", "structllama_1_1mapping_1_1LinearizeArrayDimsFortran" ],

@@ -83,12 +83,22 @@ $(document).ready(function(){initNavTree('namespacellama_1_1mapping_1_1internal.
 
 <div class="header">
   <div class="summary">
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">llama::mapping::internal Namespace Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a761919af792a2052749e060dec4adafe"><td class="memTemplParams" colspan="2">template&lt;typename A , typename B &gt; </td></tr>
+<tr class="memitem:a761919af792a2052749e060dec4adafe"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a761919af792a2052749e060dec4adafe">LessAlignment</a> = std::bool_constant&lt; alignof(A)&lt; alignof(B)&gt;</td></tr>
+<tr class="separator:a761919af792a2052749e060dec4adafe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c7482b69fbb2e73fe12f9acc59e95a3"><td class="memTemplParams" colspan="2">template&lt;typename A , typename B &gt; </td></tr>
+<tr class="memitem:a8c7482b69fbb2e73fe12f9acc59e95a3"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a8c7482b69fbb2e73fe12f9acc59e95a3">MoreAlignment</a> = std::bool_constant&lt;(alignof(A) &gt; alignof(B))&gt;</td></tr>
+<tr class="separator:a8c7482b69fbb2e73fe12f9acc59e95a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:aa4b75ca84c3fa889c52339a0b3c33363"><td class="memTemplParams" colspan="2">template&lt;std::size_t Dim&gt; </td></tr>
@@ -104,6 +114,43 @@ Functions</h2></td></tr>
 <tr class="memitem:a475d43fe9e877bb253ddc2bf2cc0545c"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a475d43fe9e877bb253ddc2bf2cc0545c">coordName</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords... &gt;) -&gt; std::string</td></tr>
 <tr class="separator:a475d43fe9e877bb253ddc2bf2cc0545c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a id="a761919af792a2052749e060dec4adafe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a761919af792a2052749e060dec4adafe">&#9670;&nbsp;</a></span>LessAlignment</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename A , typename B &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a761919af792a2052749e060dec4adafe">llama::mapping::internal::LessAlignment</a> = typedef std::bool_constant&lt;alignof(A) &lt; alignof(B)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00194">194</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a8c7482b69fbb2e73fe12f9acc59e95a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c7482b69fbb2e73fe12f9acc59e95a3">&#9670;&nbsp;</a></span>MoreAlignment</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename A , typename B &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a8c7482b69fbb2e73fe12f9acc59e95a3">llama::mapping::internal::MoreAlignment</a> = typedef std::bool_constant&lt;(alignof(A) &gt; alignof(B))&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00197">197</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a475d43fe9e877bb253ddc2bf2cc0545c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a475d43fe9e877bb253ddc2bf2cc0545c">&#9670;&nbsp;</a></span>coordName()</h2>
@@ -237,7 +284,7 @@ template&lt;std::size_t Dim&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Sun Sep 19 2021 19:41:47 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sun Sep 19 2021 22:34:12 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

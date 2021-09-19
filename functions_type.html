@@ -96,10 +96,10 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 </li>
 <li>ArrayDims
 : <a class="el" href="structllama_1_1mapping_1_1AoS.html#ad19eac03f75b004042df806e61456a39">llama::mapping::AoS&lt; TArrayDims, TRecordDim, AlignAndPad, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#ab742fd4bb9a8dc4d50ad6fbe181ddd3d">llama::mapping::AoSoA&lt; TArrayDims, TRecordDim, Lanes, TLinearizeArrayDimsFunctor &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a9c7d6d0825facc70078f34c31cb9713f">llama::mapping::AoSoA&lt; TArrayDims, TRecordDim, Lanes, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Heatmap.html#af7529e58f295a66c8026b3e0e8034b51">llama::mapping::Heatmap&lt; Mapping, CountType &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1One.html#a4c2064b1567699ccf4ef25af9e10796a">llama::mapping::One&lt; TArrayDims, TRecordDim, AlignAndPad, FlattenRecordDim &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1SoA.html#a25f3f1b4f715b4530b480c03cd4b14de">llama::mapping::SoA&lt; TArrayDims, TRecordDim, SeparateBuffers, TLinearizeArrayDimsFunctor &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1SoA.html#a9f22086d0ca944d8b094ad1c84bb1f52">llama::mapping::SoA&lt; TArrayDims, TRecordDim, SeparateBuffers, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Split.html#a47b41aeb748df0c0014d4427fcf7adfc">llama::mapping::Split&lt; TArrayDims, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Trace.html#ad8d4678361a2ab1ab1321ebab79f7351">llama::mapping::Trace&lt; Mapping &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#af214360f500097c8a885483313597387">llama::mapping::tree::Mapping&lt; TArrayDims, TRecordDim, TreeOperationList &gt;</a>
@@ -152,7 +152,7 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 </li>
 <li>FlatRecordDim
 : <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimInOrder.html#a2a95feabe41a0dddadbb416de12f0f94">llama::mapping::FlattenRecordDimInOrder&lt; RecordDim &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimMinimizePadding.html#a5008ed05c3b297165d7230b244fb9bda">llama::mapping::FlattenRecordDimMinimizePadding&lt; RecordDim &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimSorted.html#a5bdae1c12b6d6d6631376409a5b3f885">llama::mapping::FlattenRecordDimSorted&lt; RecordDim, Less &gt;</a>
 </li>
 <li>fn
 : <a class="el" href="structboost_1_1mp11_1_1detail_1_1mp__flatten__impl.html#ac13795631d270b2ada803e1cfd8c9f7f">boost::mp11::detail::mp_flatten_impl&lt; L2 &gt;</a>
@@ -179,8 +179,8 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 <h3><a id="index_l"></a>- l -</h3><ul>
 <li>LinearizeArrayDimsFunctor
 : <a class="el" href="structllama_1_1mapping_1_1AoS.html#a06f691b76bb181943be7e9b5032943ac">llama::mapping::AoS&lt; TArrayDims, TRecordDim, AlignAndPad, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#ac9fdcdab33c5169c4777f8100b622827">llama::mapping::AoSoA&lt; TArrayDims, TRecordDim, Lanes, TLinearizeArrayDimsFunctor &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1SoA.html#a28f9f565ac54531f8e4e2e0812f9f27e">llama::mapping::SoA&lt; TArrayDims, TRecordDim, SeparateBuffers, TLinearizeArrayDimsFunctor &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a19efd8ab9fd043a3390331b8b3e8124e">llama::mapping::AoSoA&lt; TArrayDims, TRecordDim, Lanes, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1SoA.html#a0dfbc905eecfe3f77254029526c8653e">llama::mapping::SoA&lt; TArrayDims, TRecordDim, SeparateBuffers, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;</a>
 </li>
 <li>List
 : <a class="el" href="structllama_1_1RecordCoord.html#a3d0e76f270b2cd29cb8c679457e80d69">llama::RecordCoord&lt; Coords &gt;</a>
@@ -227,10 +227,10 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 <h3><a id="index_r"></a>- r -</h3><ul>
 <li>RecordDim
 : <a class="el" href="structllama_1_1mapping_1_1AoS.html#af3e598cad11c454559ec4c2adf751789">llama::mapping::AoS&lt; TArrayDims, TRecordDim, AlignAndPad, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#ae87fc04595eb1ea5107d78b05c8ae5f0">llama::mapping::AoSoA&lt; TArrayDims, TRecordDim, Lanes, TLinearizeArrayDimsFunctor &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#ad44f7c5090ac250dece34fd387550ad1">llama::mapping::AoSoA&lt; TArrayDims, TRecordDim, Lanes, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Heatmap.html#ae2fd102c11592cdf9245df997fad0aa9">llama::mapping::Heatmap&lt; Mapping, CountType &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1One.html#ad7eac3158ff0941f3ad918d2180b6f71">llama::mapping::One&lt; TArrayDims, TRecordDim, AlignAndPad, FlattenRecordDim &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1SoA.html#ac0de594427b3522598b0c67485727367">llama::mapping::SoA&lt; TArrayDims, TRecordDim, SeparateBuffers, TLinearizeArrayDimsFunctor &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1SoA.html#a0380afe7bbe8abffe66eb563e396be4b">llama::mapping::SoA&lt; TArrayDims, TRecordDim, SeparateBuffers, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Split.html#acabf89abadd1456f7cddaf2c411e03cc">llama::mapping::Split&lt; TArrayDims, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Trace.html#a2cda914e6fd4df3ae6e44c05acc4facf">llama::mapping::Trace&lt; Mapping &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#a7f3272fc957ef1f38517842bca66013e">llama::mapping::tree::Mapping&lt; TArrayDims, TRecordDim, TreeOperationList &gt;</a>
@@ -341,7 +341,7 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun Sep 19 2021 19:41:47 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sun Sep 19 2021 22:34:12 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

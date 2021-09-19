@@ -108,8 +108,7 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimInOrder.html">FlattenRecordDimInOrder</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flattens the record dimension in the order fields are written.  <a href="structllama_1_1mapping_1_1FlattenRecordDimInOrder.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimMinimizePadding.html">FlattenRecordDimMinimizePadding</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flattens and sorts the record dimension by the alignment of its fields.  <a href="structllama_1_1mapping_1_1FlattenRecordDimMinimizePadding.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimSorted.html">FlattenRecordDimSorted</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html">Heatmap</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -144,16 +143,28 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a8123437f92ed834bccec09563137a33e"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a8123437f92ed834bccec09563137a33e">AlignedAoS</a> = <a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a>&lt; <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>, RecordDim, true, LinearizeArrayDimsFunctor &gt;</td></tr>
 <tr class="separator:a8123437f92ed834bccec09563137a33e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afbd95648a4b55a658517667a436bf524"><td class="memTemplParams" colspan="2">template&lt;typename ArrayDims , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </td></tr>
-<tr class="memitem:afbd95648a4b55a658517667a436bf524"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#afbd95648a4b55a658517667a436bf524">MinAlignedAoS</a> = <a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a>&lt; <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>, RecordDim, true, LinearizeArrayDimsFunctor, <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimMinimizePadding.html">FlattenRecordDimMinimizePadding</a> &gt;</td></tr>
+<tr class="memitem:afbd95648a4b55a658517667a436bf524"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#afbd95648a4b55a658517667a436bf524">MinAlignedAoS</a> = <a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a>&lt; <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>, RecordDim, true, LinearizeArrayDimsFunctor, <a class="el" href="namespacellama_1_1mapping.html#a65287f3ded6e419e868b0e2819777206">FlattenRecordDimMinimizePadding</a> &gt;</td></tr>
 <tr class="separator:afbd95648a4b55a658517667a436bf524"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e1c9145cc0805f5aa1e09f13f9ee9ce"><td class="memTemplParams" colspan="2">template&lt;typename ArrayDims , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </td></tr>
 <tr class="memitem:a8e1c9145cc0805f5aa1e09f13f9ee9ce"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a8e1c9145cc0805f5aa1e09f13f9ee9ce">PackedAoS</a> = <a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a>&lt; <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>, RecordDim, false, LinearizeArrayDimsFunctor &gt;</td></tr>
 <tr class="separator:a8e1c9145cc0805f5aa1e09f13f9ee9ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2426632bf12fc075d5508b09a1feed4e"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
+<tr class="memitem:a2426632bf12fc075d5508b09a1feed4e"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a2426632bf12fc075d5508b09a1feed4e">FlattenRecordDimIncreasingAlignment</a> = <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimSorted.html">FlattenRecordDimSorted</a>&lt; RecordDim, <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a761919af792a2052749e060dec4adafe">internal::LessAlignment</a> &gt;</td></tr>
+<tr class="memdesc:a2426632bf12fc075d5508b09a1feed4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flattens and sorts the record dimension by increasing alignment of its fields.  <a href="namespacellama_1_1mapping.html#a2426632bf12fc075d5508b09a1feed4e">More...</a><br /></td></tr>
+<tr class="separator:a2426632bf12fc075d5508b09a1feed4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a100e4e327b6795d55012446cc37c50ed"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
+<tr class="memitem:a100e4e327b6795d55012446cc37c50ed"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a100e4e327b6795d55012446cc37c50ed">FlattenRecordDimDecreasingAlignment</a> = <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimSorted.html">FlattenRecordDimSorted</a>&lt; RecordDim, <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a8c7482b69fbb2e73fe12f9acc59e95a3">internal::MoreAlignment</a> &gt;</td></tr>
+<tr class="memdesc:a100e4e327b6795d55012446cc37c50ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flattens and sorts the record dimension by decreasing alignment of its fields.  <a href="namespacellama_1_1mapping.html#a100e4e327b6795d55012446cc37c50ed">More...</a><br /></td></tr>
+<tr class="separator:a100e4e327b6795d55012446cc37c50ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65287f3ded6e419e868b0e2819777206"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
+<tr class="memitem:a65287f3ded6e419e868b0e2819777206"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a65287f3ded6e419e868b0e2819777206">FlattenRecordDimMinimizePadding</a> = <a class="el" href="namespacellama_1_1mapping.html#a2426632bf12fc075d5508b09a1feed4e">FlattenRecordDimIncreasingAlignment</a>&lt; RecordDim &gt;</td></tr>
+<tr class="memdesc:a65287f3ded6e419e868b0e2819777206"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flattens and sorts the record dimension by the alignment of its fields to minimize padding.  <a href="namespacellama_1_1mapping.html#a65287f3ded6e419e868b0e2819777206">More...</a><br /></td></tr>
+<tr class="separator:a65287f3ded6e419e868b0e2819777206"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab753e777e0d0cf12f682f68c13e0c58c"><td class="memTemplParams" colspan="2">template&lt;typename ArrayDims , typename RecordDim &gt; </td></tr>
 <tr class="memitem:ab753e777e0d0cf12f682f68c13e0c58c"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#ab753e777e0d0cf12f682f68c13e0c58c">AlignedOne</a> = <a class="el" href="structllama_1_1mapping_1_1One.html">One</a>&lt; <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>, RecordDim, true, <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimInOrder.html">FlattenRecordDimInOrder</a> &gt;</td></tr>
 <tr class="separator:ab753e777e0d0cf12f682f68c13e0c58c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef7cbcc4973badb3b90c057487f87720"><td class="memTemplParams" colspan="2">template&lt;typename ArrayDims , typename RecordDim &gt; </td></tr>
-<tr class="memitem:aef7cbcc4973badb3b90c057487f87720"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#aef7cbcc4973badb3b90c057487f87720">MinAlignedOne</a> = <a class="el" href="structllama_1_1mapping_1_1One.html">One</a>&lt; <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>, RecordDim, true, <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimMinimizePadding.html">FlattenRecordDimMinimizePadding</a> &gt;</td></tr>
+<tr class="memitem:aef7cbcc4973badb3b90c057487f87720"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#aef7cbcc4973badb3b90c057487f87720">MinAlignedOne</a> = <a class="el" href="structllama_1_1mapping_1_1One.html">One</a>&lt; <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>, RecordDim, true, <a class="el" href="namespacellama_1_1mapping.html#a65287f3ded6e419e868b0e2819777206">FlattenRecordDimMinimizePadding</a> &gt;</td></tr>
 <tr class="separator:aef7cbcc4973badb3b90c057487f87720"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa300c4e99921b2858832808298b281e5"><td class="memTemplParams" colspan="2">template&lt;typename ArrayDims , typename RecordDim &gt; </td></tr>
 <tr class="memitem:aa300c4e99921b2858832808298b281e5"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#aa300c4e99921b2858832808298b281e5">PackedOne</a> = <a class="el" href="structllama_1_1mapping_1_1One.html">One</a>&lt; <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>, RecordDim, false, <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimInOrder.html">FlattenRecordDimInOrder</a> &gt;</td></tr>
@@ -211,7 +222,7 @@ template&lt;typename ArrayDims , typename RecordDim , typename LinearizeArrayDim
 </div><div class="memdoc">
 <p><a class="el" href="structllama_1_1Array.html">Array</a> of struct mapping preserving the alignment of the field types by inserting padding. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00073">73</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00074">74</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
 
 </div>
 </div>
@@ -230,7 +241,67 @@ template&lt;typename ArrayDims , typename RecordDim &gt; </div>
 </div><div class="memdoc">
 <p><a class="el" href="structllama_1_1mapping_1_1One.html">One</a> mapping preserving the alignment of the field types by inserting padding. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="structllama_1_1mapping_1_1One.html">One</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="One_8hpp_source.html#l00070">70</a> of file <a class="el" href="One_8hpp_source.html">One.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="One_8hpp_source.html#l00071">71</a> of file <a class="el" href="One_8hpp_source.html">One.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a100e4e327b6795d55012446cc37c50ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a100e4e327b6795d55012446cc37c50ed">&#9670;&nbsp;</a></span>FlattenRecordDimDecreasingAlignment</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename RecordDim &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama_1_1mapping.html#a100e4e327b6795d55012446cc37c50ed">llama::mapping::FlattenRecordDimDecreasingAlignment</a> = typedef <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimSorted.html">FlattenRecordDimSorted</a>&lt;RecordDim, <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a8c7482b69fbb2e73fe12f9acc59e95a3">internal::MoreAlignment</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Flattens and sorts the record dimension by decreasing alignment of its fields. </p>
+
+<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00206">206</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a2426632bf12fc075d5508b09a1feed4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2426632bf12fc075d5508b09a1feed4e">&#9670;&nbsp;</a></span>FlattenRecordDimIncreasingAlignment</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename RecordDim &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama_1_1mapping.html#a2426632bf12fc075d5508b09a1feed4e">llama::mapping::FlattenRecordDimIncreasingAlignment</a> = typedef <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimSorted.html">FlattenRecordDimSorted</a>&lt;RecordDim, <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a761919af792a2052749e060dec4adafe">internal::LessAlignment</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Flattens and sorts the record dimension by increasing alignment of its fields. </p>
+
+<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00202">202</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a65287f3ded6e419e868b0e2819777206"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65287f3ded6e419e868b0e2819777206">&#9670;&nbsp;</a></span>FlattenRecordDimMinimizePadding</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename RecordDim &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama_1_1mapping.html#a65287f3ded6e419e868b0e2819777206">llama::mapping::FlattenRecordDimMinimizePadding</a> = typedef <a class="el" href="namespacellama_1_1mapping.html#a2426632bf12fc075d5508b09a1feed4e">FlattenRecordDimIncreasingAlignment</a>&lt;RecordDim&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Flattens and sorts the record dimension by the alignment of its fields to minimize padding. </p>
+
+<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00210">210</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
 
 </div>
 </div>
@@ -243,13 +314,13 @@ template&lt;typename ArrayDims , typename RecordDim &gt; </div>
 template&lt;typename ArrayDims , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacellama_1_1mapping.html#afbd95648a4b55a658517667a436bf524">llama::mapping::MinAlignedAoS</a> = typedef <a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a>&lt;<a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>, RecordDim, true, LinearizeArrayDimsFunctor, <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimMinimizePadding.html">FlattenRecordDimMinimizePadding</a>&gt;</td>
+          <td class="memname">using <a class="el" href="namespacellama_1_1mapping.html#afbd95648a4b55a658517667a436bf524">llama::mapping::MinAlignedAoS</a> = typedef <a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a>&lt;<a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>, RecordDim, true, LinearizeArrayDimsFunctor, <a class="el" href="namespacellama_1_1mapping.html#a65287f3ded6e419e868b0e2819777206">FlattenRecordDimMinimizePadding</a>&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p><a class="el" href="structllama_1_1Array.html">Array</a> of struct mapping preserving the alignment of the field types by inserting padding and permuting the field order to minimize this padding. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00078">78</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00079">79</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
 
 </div>
 </div>
@@ -262,13 +333,13 @@ template&lt;typename ArrayDims , typename RecordDim , typename LinearizeArrayDim
 template&lt;typename ArrayDims , typename RecordDim &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacellama_1_1mapping.html#aef7cbcc4973badb3b90c057487f87720">llama::mapping::MinAlignedOne</a> = typedef <a class="el" href="structllama_1_1mapping_1_1One.html">One</a>&lt;<a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>, RecordDim, true, <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimMinimizePadding.html">FlattenRecordDimMinimizePadding</a>&gt;</td>
+          <td class="memname">using <a class="el" href="namespacellama_1_1mapping.html#aef7cbcc4973badb3b90c057487f87720">llama::mapping::MinAlignedOne</a> = typedef <a class="el" href="structllama_1_1mapping_1_1One.html">One</a>&lt;<a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>, RecordDim, true, <a class="el" href="namespacellama_1_1mapping.html#a65287f3ded6e419e868b0e2819777206">FlattenRecordDimMinimizePadding</a>&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p><a class="el" href="structllama_1_1mapping_1_1One.html">One</a> mapping preserving the alignment of the field types by inserting padding and permuting the field order to minimize this padding. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="structllama_1_1mapping_1_1One.html">One</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="One_8hpp_source.html#l00076">76</a> of file <a class="el" href="One_8hpp_source.html">One.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="One_8hpp_source.html#l00077">77</a> of file <a class="el" href="One_8hpp_source.html">One.hpp</a>.</p>
 
 </div>
 </div>
@@ -287,7 +358,7 @@ template&lt;typename ArrayDims , typename RecordDim , typename LinearizeArrayDim
 </div><div class="memdoc">
 <p>Struct of array mapping storing each attribute of the record dimension in a separate blob. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00096">96</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00107">107</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -306,7 +377,7 @@ template&lt;typename ArrayDims , typename RecordDim , typename LinearizeArrayDim
 </div><div class="memdoc">
 <p><a class="el" href="structllama_1_1Array.html">Array</a> of struct mapping packing the field types tightly, violating the types alignment requirements. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00083">83</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00084">84</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
 
 </div>
 </div>
@@ -325,7 +396,7 @@ template&lt;typename ArrayDims , typename RecordDim &gt; </div>
 </div><div class="memdoc">
 <p><a class="el" href="structllama_1_1mapping_1_1One.html">One</a> mapping packing the field types tightly, violating the types' alignment requirements. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="structllama_1_1mapping_1_1One.html">One</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="One_8hpp_source.html#l00081">81</a> of file <a class="el" href="One_8hpp_source.html">One.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="One_8hpp_source.html#l00082">82</a> of file <a class="el" href="One_8hpp_source.html">One.hpp</a>.</p>
 
 </div>
 </div>
@@ -344,7 +415,7 @@ template&lt;typename ArrayDims , typename RecordDim , typename LinearizeArrayDim
 </div><div class="memdoc">
 <p>Struct of array mapping storing the entire layout in a single blob. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00091">91</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00102">102</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -371,7 +442,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00093">93</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00094">94</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
 
 </div>
 </div>
@@ -397,7 +468,7 @@ template&lt;typename ArrayDims , typename RecordDim , bool AlignAndPad, typename
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00103">103</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00104">104</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
 
 </div>
 </div>
@@ -423,7 +494,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AoSoA_8hpp_source.html#l00086">86</a> of file <a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoSoA_8hpp_source.html#l00094">94</a> of file <a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -449,7 +520,7 @@ template&lt;typename AD , typename RD , std::size_t L&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AoSoA_8hpp_source.html#l00089">89</a> of file <a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoSoA_8hpp_source.html#l00097">97</a> of file <a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -475,7 +546,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="One_8hpp_source.html#l00084">84</a> of file <a class="el" href="One_8hpp_source.html">One.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="One_8hpp_source.html#l00085">85</a> of file <a class="el" href="One_8hpp_source.html">One.hpp</a>.</p>
 
 </div>
 </div>
@@ -501,7 +572,7 @@ template&lt;typename ArrayDims , typename RecordDim , bool AlignAndPad, template
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="One_8hpp_source.html#l00087">87</a> of file <a class="el" href="One_8hpp_source.html">One.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="One_8hpp_source.html#l00088">88</a> of file <a class="el" href="One_8hpp_source.html">One.hpp</a>.</p>
 
 </div>
 </div>
@@ -527,7 +598,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00106">106</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00117">117</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -553,7 +624,7 @@ template&lt;typename ArrayDims , typename RecordDim , bool SeparateBuffers, type
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00109">109</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00120">120</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -603,7 +674,7 @@ template&lt;typename RecordDim , std::size_t VectorRegisterBits&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li>
-    <li class="footer">Generated on Sun Sep 19 2021 19:41:47 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sun Sep 19 2021 22:34:12 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

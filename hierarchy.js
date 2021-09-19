@@ -2,7 +2,7 @@ var hierarchy =
 [
     [ "llama::bloballoc::AlignedAllocator< T, Alignment >", "structllama_1_1bloballoc_1_1AlignedAllocator.html", null ],
     [ "llama::mapping::AoS< TArrayDims, TRecordDim, AlignAndPad, TLinearizeArrayDimsFunctor, FlattenRecordDim >", "structllama_1_1mapping_1_1AoS.html", null ],
-    [ "llama::mapping::AoSoA< TArrayDims, TRecordDim, Lanes, TLinearizeArrayDimsFunctor >", "structllama_1_1mapping_1_1AoSoA.html", null ],
+    [ "llama::mapping::AoSoA< TArrayDims, TRecordDim, Lanes, TLinearizeArrayDimsFunctor, FlattenRecordDim >", "structllama_1_1mapping_1_1AoSoA.html", null ],
     [ "llama::Array< T, N >", "structllama_1_1Array.html", null ],
     [ "llama::Array< BlobType, Mapping::blobCount >", "structllama_1_1Array.html", null ],
     [ "llama::Array< std::size_t, Dim >", "structllama_1_1Array.html", [
@@ -35,7 +35,7 @@ var hierarchy =
     [ "llama::internal::FlattenRecordDimImpl< Child[N]>", "structllama_1_1internal_1_1FlattenRecordDimImpl_3_01Child_0fN_0e_4.html", null ],
     [ "llama::internal::FlattenRecordDimImpl< Record< Fields... > >", "structllama_1_1internal_1_1FlattenRecordDimImpl_3_01Record_3_01Fields_8_8_8_01_4_01_4.html", null ],
     [ "llama::mapping::FlattenRecordDimInOrder< RecordDim >", "structllama_1_1mapping_1_1FlattenRecordDimInOrder.html", null ],
-    [ "llama::mapping::FlattenRecordDimMinimizePadding< RecordDim >", "structllama_1_1mapping_1_1FlattenRecordDimMinimizePadding.html", null ],
+    [ "llama::mapping::FlattenRecordDimSorted< RecordDim, Less >", "structllama_1_1mapping_1_1FlattenRecordDimSorted.html", null ],
     [ "llama::internal::GetCoordFromTagsImpl< RecordDim, RecordCoord, Tags >", "structllama_1_1internal_1_1GetCoordFromTagsImpl.html", null ],
     [ "llama::internal::GetCoordFromTagsImpl< ChildType[Count], RecordCoord< ResultCoords... >, FirstTag, Tags... >", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01ChildType_0fCount_0e_00_01RecordCoord_3_01Rea82f6370a44084538dfd07ee1f739c70.html", null ],
     [ "llama::internal::GetCoordFromTagsImpl< Record< Fields... >, RecordCoord< ResultCoords... >, FirstTag, Tags... >", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoor9dc4730dbf0b2c94fd53092536b251f3.html", null ],
@@ -107,7 +107,7 @@ var hierarchy =
     [ "llama::internal::RecordCoordCommonPrefixIsSameImpl< First, Second >", "structllama_1_1internal_1_1RecordCoordCommonPrefixIsSameImpl.html", null ],
     [ "llama::internal::RecordCoordCommonPrefixIsSameImpl< RecordCoord< Coords1... >, RecordCoord< Coords2... > >", "structllama_1_1internal_1_1RecordCoordCommonPrefixIsSameImpl_3_01RecordCoord_3_01Coords1_8_8_8_0f195a8b8a0db2355fe3190fcb9b6d969.html", null ],
     [ "llama::bloballoc::SharedPtr", "structllama_1_1bloballoc_1_1SharedPtr.html", null ],
-    [ "llama::mapping::SoA< TArrayDims, TRecordDim, SeparateBuffers, TLinearizeArrayDimsFunctor >", "structllama_1_1mapping_1_1SoA.html", null ],
+    [ "llama::mapping::SoA< TArrayDims, TRecordDim, SeparateBuffers, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob >", "structllama_1_1mapping_1_1SoA.html", null ],
     [ "llama::mapping::Split< TArrayDims, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs >", "structllama_1_1mapping_1_1Split.html", null ],
     [ "llama::bloballoc::Stack< BytesToReserve >", "structllama_1_1bloballoc_1_1Stack.html", null ],
     [ "llama::mapping::Trace< Mapping >", "structllama_1_1mapping_1_1Trace.html", null ],
