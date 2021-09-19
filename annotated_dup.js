@@ -1,5 +1,6 @@
 var annotated_dup =
 [
+    [ "boost", "namespaceboost.html", "namespaceboost" ],
     [ "llama", "namespacellama.html", "namespacellama" ],
     [ "std", null, [
       [ "tuple_element< I, const llama::VirtualRecord< View, BoundRecordCoord, OwnView > >", "structstd_1_1tuple__element_3_01I_00_01const_01llama_1_1VirtualRecord_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html", "structstd_1_1tuple__element_3_01I_00_01const_01llama_1_1VirtualRecord_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4" ],

@@ -92,6 +92,7 @@ $(document).ready(function(){initNavTree('llama_8hpp.html',''); initResizable();
 <code>#include &quot;<a class="el" href="BlobAllocators_8hpp_source.html">BlobAllocators.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Core_8hpp_source.html">Core.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Meta_8hpp_source.html">Meta.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="View_8hpp_source.html">View.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>&quot;</code><br />
@@ -111,52 +112,53 @@ $(document).ready(function(){initNavTree('llama_8hpp.html',''); initResizable();
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="llama_8hpp__incl.png" border="0" usemap="#_2home_2runner_2work_2llama_2llama_2include_2llama_2llama_8hpp" alt=""/></div>
 <map name="_2home_2runner_2work_2llama_2llama_2include_2llama_2llama_8hpp" id="_2home_2runner_2work_2llama_2llama_2include_2llama_2llama_8hpp">
-<area shape="rect" title=" " alt="" coords="1107,5,1331,47"/>
-<area shape="rect" href="ArrayDimsIndexRange_8hpp.html" title=" " alt="" coords="1145,319,1341,345"/>
-<area shape="rect" href="Core_8hpp.html" title=" " alt="" coords="944,468,1024,495"/>
-<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="108,617,207,644"/>
-<area shape="rect" href="BlobAllocators_8hpp.html" title=" " alt="" coords="221,319,365,345"/>
-<area shape="rect" href="Copy_8hpp.html" title=" " alt="" coords="1221,169,1302,196"/>
-<area shape="rect" href="View_8hpp.html" title=" " alt="" coords="638,244,719,271"/>
-<area shape="rect" href="One_8hpp.html" title=" " alt="" coords="1365,319,1502,345"/>
-<area shape="rect" href="AoSoA_8hpp.html" title=" " alt="" coords="1602,244,1755,271"/>
-<area shape="rect" href="SoA_8hpp.html" title=" " alt="" coords="1441,244,1577,271"/>
-<area shape="rect" href="Vector_8hpp.html" title=" " alt="" coords="953,95,1044,121"/>
-<area shape="rect" href="VirtualRecord_8hpp.html" title=" " alt="" coords="609,169,748,196"/>
-<area shape="rect" href="AoS_8hpp.html" title=" " alt="" coords="1799,95,1935,121"/>
-<area shape="rect" href="Heatmap_8hpp.html" title=" " alt="" coords="2108,319,2279,345"/>
-<area shape="rect" href="Split_8hpp.html" title=" " alt="" coords="1631,95,1771,121"/>
-<area shape="rect" href="Trace_8hpp.html" title=" " alt="" coords="1933,319,2078,345"/>
-<area shape="rect" href="Mapping_8hpp.html" title=" " alt="" coords="744,244,941,271"/>
-<area shape="rect" title=" " alt="" coords="1149,393,1235,420"/>
-<area shape="rect" title=" " alt="" coords="1361,393,1431,420"/>
-<area shape="rect" title=" " alt="" coords="1509,393,1568,420"/>
-<area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="369,543,452,569"/>
-<area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="971,543,1104,569"/>
-<area shape="rect" title=" " alt="" coords="870,617,997,644"/>
-<area shape="rect" title=" " alt="" coords="602,617,694,644"/>
-<area shape="rect" title=" " alt="" coords="1128,543,1315,569"/>
-<area shape="rect" title=" " alt="" coords="1669,543,1749,569"/>
-<area shape="rect" title=" " alt="" coords="383,617,438,644"/>
-<area shape="rect" title=" " alt="" coords="1681,617,1737,644"/>
-<area shape="rect" href="Concepts_8hpp.html" title=" " alt="" coords="449,393,559,420"/>
-<area shape="rect" title=" " alt="" coords="302,468,373,495"/>
-<area shape="rect" title=" " alt="" coords="245,393,323,420"/>
-<area shape="rect" title=" " alt="" coords="2078,393,2141,420"/>
-<area shape="rect" title=" " alt="" coords="1201,244,1268,271"/>
-<area shape="rect" title=" " alt="" coords="1292,244,1367,271"/>
-<area shape="rect" href="Common_8hpp.html" title=" " alt="" coords="1592,393,1701,420"/>
-<area shape="rect" title=" " alt="" coords="1613,468,1680,495"/>
-<area shape="rect" title=" " alt="" coords="931,169,1018,196"/>
-<area shape="rect" title=" " alt="" coords="1707,468,1765,495"/>
-<area shape="rect" title=" " alt="" coords="212,244,276,271"/>
-<area shape="rect" title=" " alt="" coords="2165,393,2232,420"/>
-<area shape="rect" title=" " alt="" coords="2256,393,2331,420"/>
-<area shape="rect" title=" " alt="" coords="1827,393,1951,420"/>
-<area shape="rect" href="Functors_8hpp.html" title=" " alt="" coords="787,319,893,345"/>
-<area shape="rect" href="TreeFromDimensions_8hpp.html" title=" " alt="" coords="736,393,923,420"/>
-<area shape="rect" href="toString_8hpp.html" title=" " alt="" coords="917,319,1019,345"/>
-<area shape="rect" href="Tuple_8hpp.html" title=" " alt="" coords="686,543,794,569"/>
+<area shape="rect" title=" " alt="" coords="1168,5,1392,47"/>
+<area shape="rect" href="ArrayDimsIndexRange_8hpp.html" title=" " alt="" coords="1099,319,1295,345"/>
+<area shape="rect" href="Core_8hpp.html" title=" " alt="" coords="1008,468,1088,495"/>
+<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="159,617,257,644"/>
+<area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="1075,617,1157,644"/>
+<area shape="rect" href="BlobAllocators_8hpp.html" title=" " alt="" coords="187,319,331,345"/>
+<area shape="rect" href="Copy_8hpp.html" title=" " alt="" coords="661,169,742,196"/>
+<area shape="rect" href="View_8hpp.html" title=" " alt="" coords="570,244,651,271"/>
+<area shape="rect" href="One_8hpp.html" title=" " alt="" coords="1473,319,1610,345"/>
+<area shape="rect" href="AoSoA_8hpp.html" title=" " alt="" coords="1302,244,1455,271"/>
+<area shape="rect" href="SoA_8hpp.html" title=" " alt="" coords="1480,244,1616,271"/>
+<area shape="rect" href="Vector_8hpp.html" title=" " alt="" coords="1235,95,1325,121"/>
+<area shape="rect" href="VirtualRecord_8hpp.html" title=" " alt="" coords="885,169,1024,196"/>
+<area shape="rect" href="AoS_8hpp.html" title=" " alt="" coords="1685,95,1821,121"/>
+<area shape="rect" href="Heatmap_8hpp.html" title=" " alt="" coords="1939,319,2109,345"/>
+<area shape="rect" href="Split_8hpp.html" title=" " alt="" coords="1846,95,1986,121"/>
+<area shape="rect" href="Trace_8hpp.html" title=" " alt="" coords="2134,319,2279,345"/>
+<area shape="rect" href="Mapping_8hpp.html" title=" " alt="" coords="676,244,873,271"/>
+<area shape="rect" title=" " alt="" coords="1347,393,1432,420"/>
+<area shape="rect" title=" " alt="" coords="1251,393,1322,420"/>
+<area shape="rect" title=" " alt="" coords="1456,393,1515,420"/>
+<area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="319,543,401,569"/>
+<area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="997,543,1131,569"/>
+<area shape="rect" title=" " alt="" coords="813,617,905,644"/>
+<area shape="rect" title=" " alt="" coords="1205,543,1392,569"/>
+<area shape="rect" title=" " alt="" coords="1735,543,1815,569"/>
+<area shape="rect" title=" " alt="" coords="333,617,387,644"/>
+<area shape="rect" title=" " alt="" coords="1053,692,1179,719"/>
+<area shape="rect" title=" " alt="" coords="1712,617,1768,644"/>
+<area shape="rect" href="Concepts_8hpp.html" title=" " alt="" coords="398,393,509,420"/>
+<area shape="rect" title=" " alt="" coords="499,468,570,495"/>
+<area shape="rect" title=" " alt="" coords="93,393,171,420"/>
+<area shape="rect" title=" " alt="" coords="1978,393,2041,420"/>
+<area shape="rect" title=" " alt="" coords="380,244,447,271"/>
+<area shape="rect" title=" " alt="" coords="471,244,545,271"/>
+<area shape="rect" href="Common_8hpp.html" title=" " alt="" coords="1644,393,1753,420"/>
+<area shape="rect" title=" " alt="" coords="1665,468,1732,495"/>
+<area shape="rect" title=" " alt="" coords="1302,169,1389,196"/>
+<area shape="rect" title=" " alt="" coords="1759,468,1817,495"/>
+<area shape="rect" title=" " alt="" coords="948,244,1012,271"/>
+<area shape="rect" title=" " alt="" coords="2065,393,2132,420"/>
+<area shape="rect" title=" " alt="" coords="1828,393,1903,420"/>
+<area shape="rect" title=" " alt="" coords="2309,393,2433,420"/>
+<area shape="rect" href="Functors_8hpp.html" title=" " alt="" coords="691,319,797,345"/>
+<area shape="rect" href="TreeFromDimensions_8hpp.html" title=" " alt="" coords="635,393,821,420"/>
+<area shape="rect" href="toString_8hpp.html" title=" " alt="" coords="923,319,1024,345"/>
+<area shape="rect" href="Tuple_8hpp.html" title=" " alt="" coords="662,543,770,569"/>
 <area shape="rect" title=" " alt="" coords="947,393,1023,420"/>
 </map>
 </div>
@@ -227,7 +229,7 @@ Macros</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="llama_8hpp.html">llama.hpp</a></li>
-    <li class="footer">Generated on Sun Sep 19 2021 19:30:40 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sun Sep 19 2021 19:41:47 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

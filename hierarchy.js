@@ -53,10 +53,10 @@ var hierarchy =
     [ "llama::mapping::tree::functor::Idem", "structllama_1_1mapping_1_1tree_1_1functor_1_1Idem.html", null ],
     [ "llama::internal::IndirectValue< T >", "structllama_1_1internal_1_1IndirectValue.html", null ],
     [ "integral_constant", null, [
-      [ "std::tuple_size< llama::Array< T, N > >", "structstd_1_1tuple__size_3_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html", null ]
+      [ "std::tuple_size< llama::ArrayDims< N > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayDims_3_01N_01_4_01_4.html", null ]
     ] ],
     [ "integral_constant", null, [
-      [ "std::tuple_size< llama::ArrayDims< N > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayDims_3_01N_01_4_01_4.html", null ]
+      [ "std::tuple_size< llama::Array< T, N > >", "structstd_1_1tuple__size_3_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html", null ]
     ] ],
     [ "is_same", null, [
       [ "llama::internal::GetCoordFromTagsImpl< Record< Fields... >, RecordCoord< ResultCoords... >, FirstTag, Tags... >::HasTag< Field >", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoor097fc6d4759914143ed6b970ceeaa1d4.html", null ]
@@ -82,6 +82,7 @@ var hierarchy =
     [ "llama::internal::MinusAssign", "structllama_1_1internal_1_1MinusAssign.html", null ],
     [ "llama::internal::ModuloAssign", "structllama_1_1internal_1_1ModuloAssign.html", null ],
     [ "llama::mapping::tree::functor::MoveRTDown< TreeCoord, Amount >", "structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown.html", null ],
+    [ "boost::mp11::detail::mp_flatten_impl< L2 >", "structboost_1_1mp11_1_1detail_1_1mp__flatten__impl.html", null ],
     [ "mp_size", null, [
       [ "std::tuple_size< llama::VirtualRecord< View, BoundRecordCoord, OwnView > >", "structstd_1_1tuple__size_3_01llama_1_1VirtualRecord_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html", null ]
     ] ],
@@ -129,8 +130,8 @@ var hierarchy =
     [ "llama::internal::TupleReplaceImpl< Pos, Tuple, Replacement >", "structllama_1_1internal_1_1TupleReplaceImpl.html", null ],
     [ "llama::internal::TupleReplaceImpl< 0, Tuple< Elements... >, Replacement >", "structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01Elements_8_8_8_01_4_00_01Replacement_01_4.html", null ],
     [ "llama::internal::TupleReplaceImpl< 0, Tuple< OneElement >, Replacement >", "structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01OneElement_01_4_00_01Replacement_01_4.html", null ],
-    [ "llama::Vector< Mapping >", "structllama_1_1Vector.html", null ],
     [ "llama::bloballoc::Vector", "structllama_1_1bloballoc_1_1Vector.html", null ],
+    [ "llama::Vector< Mapping >", "structllama_1_1Vector.html", null ],
     [ "llama::View< TMapping, BlobType >", "structllama_1_1View.html", null ],
     [ "llama::VirtualRecord< TView, BoundRecordCoord, OwnView >", "structllama_1_1VirtualRecord.html", null ],
     [ "llama::VirtualView< TParentViewType >", "structllama_1_1VirtualView.html", null ],

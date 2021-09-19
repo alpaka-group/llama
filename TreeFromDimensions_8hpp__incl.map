@@ -1,16 +1,17 @@
 <map id="/home/runner/work/llama/llama/include/llama/mapping/tree/TreeFromDimensions.hpp" name="/home/runner/work/llama/llama/include/llama/mapping/tree/TreeFromDimensions.hpp">
 <area shape="rect" id="node1" title=" " alt="" coords="303,5,525,61"/>
 <area shape="rect" id="node2" href="$Core_8hpp.html" title=" " alt="" coords="273,109,377,136"/>
-<area shape="rect" id="node9" title=" " alt="" coords="5,259,97,285"/>
-<area shape="rect" id="node12" href="$Tuple_8hpp.html" title=" " alt="" coords="612,184,720,211"/>
-<area shape="rect" id="node13" title=" " alt="" coords="452,109,523,136"/>
-<area shape="rect" id="node14" title=" " alt="" coords="547,109,606,136"/>
+<area shape="rect" id="node10" title=" " alt="" coords="5,259,97,285"/>
+<area shape="rect" id="node13" href="$Tuple_8hpp.html" title=" " alt="" coords="612,184,720,211"/>
+<area shape="rect" id="node14" title=" " alt="" coords="452,109,523,136"/>
+<area shape="rect" id="node15" title=" " alt="" coords="547,109,606,136"/>
 <area shape="rect" id="node3" href="$Array_8hpp.html" title=" " alt="" coords="745,184,827,211"/>
-<area shape="rect" id="node6" href="$RecordCoord_8hpp.html" title=" " alt="" coords="89,184,222,211"/>
-<area shape="rect" id="node8" title=" " alt="" coords="205,259,332,285"/>
-<area shape="rect" id="node10" title=" " alt="" coords="297,184,483,211"/>
-<area shape="rect" id="node11" title=" " alt="" coords="507,184,587,211"/>
+<area shape="rect" id="node6" href="$Meta_8hpp.html" title=" " alt="" coords="218,259,301,285"/>
+<area shape="rect" id="node8" href="$RecordCoord_8hpp.html" title=" " alt="" coords="89,184,222,211"/>
+<area shape="rect" id="node11" title=" " alt="" coords="297,184,483,211"/>
+<area shape="rect" id="node12" title=" " alt="" coords="507,184,587,211"/>
 <area shape="rect" id="node4" href="$macros_8hpp.html" title=" " alt="" coords="626,259,725,285"/>
 <area shape="rect" id="node5" title=" " alt="" coords="759,259,813,285"/>
-<area shape="rect" id="node7" title=" " alt="" coords="125,259,181,285"/>
+<area shape="rect" id="node7" title=" " alt="" coords="196,333,323,360"/>
+<area shape="rect" id="node9" title=" " alt="" coords="127,259,183,285"/>
 </map>
