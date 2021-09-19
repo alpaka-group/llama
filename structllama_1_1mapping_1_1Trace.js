@@ -8,7 +8,7 @@ var structllama_1_1mapping_1_1Trace =
     [ "Trace", "structllama_1_1mapping_1_1Trace.html#a9a386934616e82fcf34bb53c93c35372", null ],
     [ "~Trace", "structllama_1_1mapping_1_1Trace.html#a8feb8f4eba7493c7f1841de134f3a044", null ],
     [ "arrayDims", "structllama_1_1mapping_1_1Trace.html#ac38fd16cd86b561e3840d0730ab686e8", null ],
-    [ "blobNrAndOffset", "structllama_1_1mapping_1_1Trace.html#a61c821a8f71ccf76561e6d10731c2f8d", null ],
+    [ "blobNrAndOffset", "structllama_1_1mapping_1_1Trace.html#a8840476b1e8ff6950b8964655f317231", null ],
     [ "blobSize", "structllama_1_1mapping_1_1Trace.html#aa2476f46c7bce6ddae59877354e0448e", null ],
     [ "operator=", "structllama_1_1mapping_1_1Trace.html#ae93708151ca7e2742d1bd9576ab95464", null ],
     [ "operator=", "structllama_1_1mapping_1_1Trace.html#a52eef7a20f2921e73c6e4d0726b8998f", null ],

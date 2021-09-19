@@ -213,9 +213,6 @@ Functions</h2></td></tr>
 <tr class="memitem:a8420725970ab9da75999e4dfad4e8590"><td class="memTemplParams" colspan="2">template&lt;bool Align, typename TypeList , std::size_t I&gt; </td></tr>
 <tr class="memitem:a8420725970ab9da75999e4dfad4e8590"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a8420725970ab9da75999e4dfad4e8590">offsetOfImplWorkaround</a> () -&gt; std::size_t</td></tr>
 <tr class="separator:a8420725970ab9da75999e4dfad4e8590"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac74f631870ff3d18892d46be8935a040"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , std::size_t... Is, typename ArrayDims &gt; </td></tr>
-<tr class="memitem:ac74f631870ff3d18892d46be8935a040"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#ac74f631870ff3d18892d46be8935a040">blobNrAndOffset</a> (const Mapping &amp;m, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Is... &gt;, <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a> ad)</td></tr>
-<tr class="separator:ac74f631870ff3d18892d46be8935a040"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a158338076284b27d9f1875797789bd59"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a158338076284b27d9f1875797789bd59">divRoundUp</a> (std::size_t dividend, std::size_t divisor) -&gt; std::size_t</td></tr>
 <tr class="separator:a158338076284b27d9f1875797789bd59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad6320a13162da7c7c045674a49a741b4"><td class="memTemplParams" colspan="2">template&lt;typename... Elements, std::size_t... Is&gt; </td></tr>
@@ -859,52 +856,6 @@ template&lt;typename VirtualRecord , typename T , std::size_t N, std::size_t... 
 
 </div>
 </div>
-<a id="ac74f631870ff3d18892d46be8935a040"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac74f631870ff3d18892d46be8935a040">&#9670;&nbsp;</a></span>blobNrAndOffset()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Mapping , std::size_t... Is, typename ArrayDims &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr auto llama::internal::blobNrAndOffset </td>
-          <td>(</td>
-          <td class="paramtype">const Mapping &amp;&#160;</td>
-          <td class="paramname"><em>m</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Is... &gt;&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>&#160;</td>
-          <td class="paramname"><em>ad</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="Proofs_8hpp_source.html#l00013">13</a> of file <a class="el" href="Proofs_8hpp_source.html">Proofs.hpp</a>.</p>
-
-</div>
-</div>
 <a id="a158338076284b27d9f1875797789bd59"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a158338076284b27d9f1875797789bd59">&#9670;&nbsp;</a></span>divRoundUp()</h2>
 
@@ -940,7 +891,7 @@ template&lt;typename Mapping , std::size_t... Is, typename ArrayDims &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Proofs_8hpp_source.html#l00018">18</a> of file <a class="el" href="Proofs_8hpp_source.html">Proofs.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Proofs_8hpp_source.html#l00012">12</a> of file <a class="el" href="Proofs_8hpp_source.html">Proofs.hpp</a>.</p>
 
 </div>
 </div>
@@ -1840,7 +1791,7 @@ template&lt;bool Align, typename TypeList &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Sun Sep 19 2021 16:27:28 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sun Sep 19 2021 17:23:29 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

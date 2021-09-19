@@ -135,9 +135,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2f7935cda7a161982b9aa77240eccae2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a51bb81741917566d3ae2080b0d5d113b"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#a51bb81741917566d3ae2080b0d5d113b">blobSize</a> (std::size_t i) const -&gt; std::size_t</td></tr>
 <tr class="separator:a51bb81741917566d3ae2080b0d5d113b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a359ae2a92c78e7ed7bae7d0affcd3ff5"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
-<tr class="memitem:a359ae2a92c78e7ed7bae7d0affcd3ff5"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#a359ae2a92c78e7ed7bae7d0affcd3ff5">blobNrAndOffset</a> (<a class="el" href="structllama_1_1mapping_1_1Heatmap.html#af7529e58f295a66c8026b3e0e8034b51">ArrayDims</a> coord) const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a></td></tr>
-<tr class="separator:a359ae2a92c78e7ed7bae7d0affcd3ff5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44da95203f8efa8b4c62d69b0fa43279"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
+<tr class="memitem:a44da95203f8efa8b4c62d69b0fa43279"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#a44da95203f8efa8b4c62d69b0fa43279">blobNrAndOffset</a> (<a class="el" href="structllama_1_1mapping_1_1Heatmap.html#af7529e58f295a66c8026b3e0e8034b51">ArrayDims</a> coord, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt; rc={}) const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a></td></tr>
+<tr class="separator:a44da95203f8efa8b4c62d69b0fa43279"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7f06bad00d2cdb67014dfc374e0ef08"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#aa7f06bad00d2cdb67014dfc374e0ef08">toGnuplotScript</a> (std::size_t wrapAfterBytes=64) const -&gt; std::string</td></tr>
 <tr class="separator:aa7f06bad00d2cdb67014dfc374e0ef08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -374,8 +374,8 @@ template&lt;typename Mapping , typename CountType  = std::size_t&gt; </div>
 
 </div>
 </div>
-<a id="a359ae2a92c78e7ed7bae7d0affcd3ff5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a359ae2a92c78e7ed7bae7d0affcd3ff5">&#9670;&nbsp;</a></span>blobNrAndOffset()</h2>
+<a id="a44da95203f8efa8b4c62d69b0fa43279"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44da95203f8efa8b4c62d69b0fa43279">&#9670;&nbsp;</a></span>blobNrAndOffset()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -391,8 +391,18 @@ template&lt;std::size_t... RecordCoords&gt; </div>
           <td class="memname">auto <a class="el" href="structllama_1_1mapping_1_1Heatmap.html">llama::mapping::Heatmap</a>&lt; Mapping, CountType &gt;::blobNrAndOffset </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#af7529e58f295a66c8026b3e0e8034b51">ArrayDims</a>&#160;</td>
-          <td class="paramname"><em>coord</em></td><td>)</td>
-          <td> const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a>
+          <td class="paramname"><em>coord</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt;&#160;</td>
+          <td class="paramname"><em>rc</em> = <code>{}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a>
         </td>
         </tr>
       </table>
@@ -521,7 +531,7 @@ template&lt;typename Mapping , typename CountType  = std::size_t&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00058">58</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00059">59</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
 
 </div>
 </div>
@@ -574,7 +584,7 @@ template&lt;typename Mapping , typename CountType  = std::size_t&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00076">76</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00077">77</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
 
 </div>
 </div>
@@ -592,7 +602,7 @@ template&lt;typename Mapping , typename CountType  = std::size_t&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00075">75</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00076">76</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
 
 </div>
 </div>
@@ -605,7 +615,7 @@ template&lt;typename Mapping , typename CountType  = std::size_t&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html">Heatmap</a></li>
-    <li class="footer">Generated on Sun Sep 19 2021 16:27:28 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sun Sep 19 2021 17:23:29 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

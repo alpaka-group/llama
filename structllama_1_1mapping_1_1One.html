@@ -111,9 +111,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6ec3f335ebb819d7836ad305572bee3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1fccb45e8a65305a705fd2103483e33"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1One.html#ac1fccb45e8a65305a705fd2103483e33">blobSize</a> (std::size_t) const -&gt; std::size_t</td></tr>
 <tr class="separator:ac1fccb45e8a65305a705fd2103483e33"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb7b48fc4fe501f93d6a42ecab4422b9"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
-<tr class="memitem:aeb7b48fc4fe501f93d6a42ecab4422b9"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1One.html#aeb7b48fc4fe501f93d6a42ecab4422b9">blobNrAndOffset</a> (<a class="el" href="structllama_1_1mapping_1_1One.html#a4c2064b1567699ccf4ef25af9e10796a">ArrayDims</a>) const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a></td></tr>
-<tr class="separator:aeb7b48fc4fe501f93d6a42ecab4422b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac32dabfc85a5326f3bb089ec2a300cc1"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
+<tr class="memitem:ac32dabfc85a5326f3bb089ec2a300cc1"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1One.html#ac32dabfc85a5326f3bb089ec2a300cc1">blobNrAndOffset</a> (<a class="el" href="structllama_1_1mapping_1_1One.html#a4c2064b1567699ccf4ef25af9e10796a">ArrayDims</a>, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt;={}) const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a></td></tr>
+<tr class="separator:ac32dabfc85a5326f3bb089ec2a300cc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -269,8 +269,8 @@ template&lt;typename TArrayDims , typename TRecordDim , bool AlignAndPad = true,
 
 </div>
 </div>
-<a id="aeb7b48fc4fe501f93d6a42ecab4422b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeb7b48fc4fe501f93d6a42ecab4422b9">&#9670;&nbsp;</a></span>blobNrAndOffset()</h2>
+<a id="ac32dabfc85a5326f3bb089ec2a300cc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac32dabfc85a5326f3bb089ec2a300cc1">&#9670;&nbsp;</a></span>blobNrAndOffset()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -286,8 +286,18 @@ template&lt;std::size_t... RecordCoords&gt; </div>
           <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1One.html">llama::mapping::One</a>&lt; TArrayDims, TRecordDim, AlignAndPad, FlattenRecordDim &gt;::blobNrAndOffset </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structllama_1_1mapping_1_1One.html#a4c2064b1567699ccf4ef25af9e10796a">ArrayDims</a>&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt;&#160;</td>
+          <td class="paramname"> = <code>{}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a>
         </td>
         </tr>
       </table>
@@ -369,7 +379,7 @@ template&lt;typename TArrayDims , typename TRecordDim , bool AlignAndPad = true,
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1One.html">One</a></li>
-    <li class="footer">Generated on Sun Sep 19 2021 16:27:28 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sun Sep 19 2021 17:23:29 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

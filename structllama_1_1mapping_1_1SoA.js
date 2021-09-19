@@ -6,7 +6,7 @@ var structllama_1_1mapping_1_1SoA =
     [ "SoA", "structllama_1_1mapping_1_1SoA.html#a4a623af57d7f6237729cc584559fee61", null ],
     [ "SoA", "structllama_1_1mapping_1_1SoA.html#a06cb75b1c4dd36c0900db98b771d2ec8", null ],
     [ "arrayDims", "structllama_1_1mapping_1_1SoA.html#a3ed15011d11463b4d6d6591ff6e6d31b", null ],
-    [ "blobNrAndOffset", "structllama_1_1mapping_1_1SoA.html#ab4c2060431831651813adbf4762dcf96", null ],
+    [ "blobNrAndOffset", "structllama_1_1mapping_1_1SoA.html#aa84594392197a104d3ea608425a4b5be", null ],
     [ "blobSize", "structllama_1_1mapping_1_1SoA.html#a0cc99868cab761e9dc0632a2423d4ec7", null ],
     [ "blobCount", "structllama_1_1mapping_1_1SoA.html#a2942e04058f410b96d82151cd1662190", null ]
 ];
