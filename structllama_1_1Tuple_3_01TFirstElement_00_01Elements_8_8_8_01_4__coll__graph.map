@@ -1,0 +1,4 @@
+<map id="llama::Tuple&lt; TFirstElement, Elements... &gt;" name="llama::Tuple&lt; TFirstElement, Elements... &gt;">
+<area shape="rect" id="node1" title="Tuple class like std::tuple but suitable for use with offloading devices like GPUs." alt="" coords="5,95,216,136"/>
+<area shape="rect" id="node2" href="$structllama_1_1Tuple.html" title=" " alt="" coords="9,5,213,32"/>
+</map>

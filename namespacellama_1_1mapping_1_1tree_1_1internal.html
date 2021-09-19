@@ -124,9 +124,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a11f58f162722edf45582c4f3a409dde3"><td class="memTemplParams" colspan="2">template&lt;typename Identifier , typename Type , typename CountType &gt; </td></tr>
 <tr class="memitem:a11f58f162722edf45582c4f3a409dde3"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree_1_1internal.html#a11f58f162722edf45582c4f3a409dde3">getTreeBlobSize</a> (const <a class="el" href="structllama_1_1mapping_1_1tree_1_1Leaf.html">Leaf</a>&lt; Identifier, Type, CountType &gt; &amp;leaf) -&gt; std::size_t</td></tr>
 <tr class="separator:a11f58f162722edf45582c4f3a409dde3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1bed5971ebdf980d0779195d72ab4410"><td class="memTemplParams" colspan="2">template&lt;typename... Children, std::size_t... Is, typename Count &gt; </td></tr>
-<tr class="memitem:a1bed5971ebdf980d0779195d72ab4410"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree_1_1internal.html#a1bed5971ebdf980d0779195d72ab4410">getChildrenBlobSize</a> (const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Children... &gt; &amp;childs, std::index_sequence&lt; Is... &gt; ii, const Count &amp;count) -&gt; std::size_t</td></tr>
-<tr class="separator:a1bed5971ebdf980d0779195d72ab4410"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bbee2eb82b2b9e2fdc3e20c9712bdfa"><td class="memTemplParams" colspan="2">template&lt;typename... Children, std::size_t... Is, typename Count &gt; </td></tr>
+<tr class="memitem:a7bbee2eb82b2b9e2fdc3e20c9712bdfa"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree_1_1internal.html#a7bbee2eb82b2b9e2fdc3e20c9712bdfa">getChildrenBlobSize</a> (const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Children... &gt; &amp;childs, std::index_sequence&lt; Is... &gt;, const Count &amp;count) -&gt; std::size_t</td></tr>
+<tr class="separator:a7bbee2eb82b2b9e2fdc3e20c9712bdfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2eb7732be218b043c755eb7bc8ccd6a"><td class="memTemplParams" colspan="2">template&lt;typename Childs , typename CountType &gt; </td></tr>
 <tr class="memitem:ac2eb7732be218b043c755eb7bc8ccd6a"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree_1_1internal.html#ac2eb7732be218b043c755eb7bc8ccd6a">getTreeBlobSize</a> (const Childs &amp;childs, const CountType &amp;count) -&gt; std::size_t</td></tr>
 <tr class="separator:ac2eb7732be218b043c755eb7bc8ccd6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -237,8 +237,8 @@ template&lt;typename ArrayDims , std::size_t... ADIndices, std::size_t FirstReco
 
 </div>
 </div>
-<a id="a1bed5971ebdf980d0779195d72ab4410"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1bed5971ebdf980d0779195d72ab4410">&#9670;&nbsp;</a></span>getChildrenBlobSize()</h2>
+<a id="a7bbee2eb82b2b9e2fdc3e20c9712bdfa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7bbee2eb82b2b9e2fdc3e20c9712bdfa">&#9670;&nbsp;</a></span>getChildrenBlobSize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -258,7 +258,7 @@ template&lt;typename... Children, std::size_t... Is, typename Count &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::index_sequence&lt; Is... &gt;&#160;</td>
-          <td class="paramname"><em>ii</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -550,7 +550,7 @@ template&lt;typename... Coords, std::size_t... Is&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping_1_1tree.html">tree</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping_1_1tree_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Sun Sep 19 2021 13:41:18 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sun Sep 19 2021 16:27:28 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

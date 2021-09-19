@@ -6,6 +6,7 @@ var structllama_1_1mapping_1_1Heatmap =
     [ "Heatmap", "structllama_1_1mapping_1_1Heatmap.html#a21a87507462a053bf084f195588294e5", null ],
     [ "Heatmap", "structllama_1_1mapping_1_1Heatmap.html#ad7f2539737a902d2973f817d94b05867", null ],
     [ "Heatmap", "structllama_1_1mapping_1_1Heatmap.html#a1b57041e6d1cef396d2d6cfd1e99959d", null ],
+    [ "~Heatmap", "structllama_1_1mapping_1_1Heatmap.html#a487f4c6de502d48e5dbb1dc94c0fca52", null ],
     [ "arrayDims", "structllama_1_1mapping_1_1Heatmap.html#a2f7935cda7a161982b9aa77240eccae2", null ],
     [ "blobNrAndOffset", "structllama_1_1mapping_1_1Heatmap.html#a359ae2a92c78e7ed7bae7d0affcd3ff5", null ],
     [ "blobSize", "structllama_1_1mapping_1_1Heatmap.html#a51bb81741917566d3ae2080b0d5d113b", null ],

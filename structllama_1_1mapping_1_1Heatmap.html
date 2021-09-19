@@ -129,6 +129,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1b57041e6d1cef396d2d6cfd1e99959d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac10be68bbd3e4bf3afa2b5767846e6b"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#aac10be68bbd3e4bf3afa2b5767846e6b">operator=</a> (<a class="el" href="structllama_1_1mapping_1_1Heatmap.html">Heatmap</a> &amp;&amp;) noexcept -&gt; <a class="el" href="structllama_1_1mapping_1_1Heatmap.html">Heatmap</a> &amp;=default</td></tr>
 <tr class="separator:aac10be68bbd3e4bf3afa2b5767846e6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a487f4c6de502d48e5dbb1dc94c0fca52"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#a487f4c6de502d48e5dbb1dc94c0fca52">~Heatmap</a> ()=default</td></tr>
+<tr class="separator:a487f4c6de502d48e5dbb1dc94c0fca52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f7935cda7a161982b9aa77240eccae2"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#a2f7935cda7a161982b9aa77240eccae2">arrayDims</a> () const -&gt; <a class="el" href="structllama_1_1mapping_1_1Heatmap.html#af7529e58f295a66c8026b3e0e8034b51">ArrayDims</a></td></tr>
 <tr class="separator:a2f7935cda7a161982b9aa77240eccae2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a51bb81741917566d3ae2080b0d5d113b"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#a51bb81741917566d3ae2080b0d5d113b">blobSize</a> (std::size_t i) const -&gt; std::size_t</td></tr>
@@ -249,7 +251,7 @@ template&lt;typename Mapping , typename CountType  = std::size_t&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -314,6 +316,33 @@ template&lt;typename Mapping , typename CountType  = std::size_t&gt; </div>
 
 </div>
 </div>
+<a id="a487f4c6de502d48e5dbb1dc94c0fca52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a487f4c6de502d48e5dbb1dc94c0fca52">&#9670;&nbsp;</a></span>~Heatmap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping , typename CountType  = std::size_t&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html">llama::mapping::Heatmap</a>&lt; Mapping, CountType &gt;::~<a class="el" href="structllama_1_1mapping_1_1Heatmap.html">Heatmap</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a2f7935cda7a161982b9aa77240eccae2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2f7935cda7a161982b9aa77240eccae2">&#9670;&nbsp;</a></span>arrayDims()</h2>
@@ -341,7 +370,7 @@ template&lt;typename Mapping , typename CountType  = std::size_t&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00036">36</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00038">38</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
 
 </div>
 </div>
@@ -374,7 +403,7 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00048">48</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00050">50</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
 
 </div>
 </div>
@@ -405,7 +434,7 @@ template&lt;typename Mapping , typename CountType  = std::size_t&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00041">41</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00043">43</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
 
 </div>
 </div>
@@ -492,7 +521,7 @@ template&lt;typename Mapping , typename CountType  = std::size_t&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00056">56</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00058">58</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
 
 </div>
 </div>
@@ -545,7 +574,7 @@ template&lt;typename Mapping , typename CountType  = std::size_t&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00074">74</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00076">76</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
 
 </div>
 </div>
@@ -563,7 +592,7 @@ template&lt;typename Mapping , typename CountType  = std::size_t&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00073">73</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00075">75</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
 
 </div>
 </div>
@@ -576,7 +605,7 @@ template&lt;typename Mapping , typename CountType  = std::size_t&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html">Heatmap</a></li>
-    <li class="footer">Generated on Sun Sep 19 2021 13:41:18 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sun Sep 19 2021 16:27:28 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

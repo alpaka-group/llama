@@ -3,8 +3,8 @@ var searchData=
   ['field_101',['Field',['../structllama_1_1Field.html',1,'llama::Field&lt; Tag, Type &gt;'],['../structllama_1_1internal_1_1GetTagsImpl_3_01CurrTag_00_01Record_3_01Fields_8_8_8_01_4_00_01Record7901748d8214fe0ef9dc00fd4214fa7e.html#aea820bf335a42832c6b4b5bf078bf6e2',1,'llama::internal::GetTagsImpl&lt; CurrTag, Record&lt; Fields... &gt;, RecordCoord&lt; FirstCoord, Coords... &gt; &gt;::Field()']]],
   ['fieldhits_102',['fieldHits',['../structllama_1_1mapping_1_1Trace.html#a1e21a0f301f0821ed00625ae0d051781',1,'llama::mapping::Trace']]],
   ['fieldwisecopy_103',['fieldWiseCopy',['../namespacellama.html#af977754d689a5f3cc10fd80d4b37ba1f',1,'llama']]],
-  ['first_104',['first',['../structllama_1_1Tuple_3_01T__FirstElement_00_01Elements_8_8_8_01_4.html#ab88f5afaa483c67b8cd30bc3b7343fac',1,'llama::Tuple&lt; T_FirstElement, Elements... &gt;']]],
-  ['firstelement_105',['FirstElement',['../structllama_1_1Tuple_3_01T__FirstElement_00_01Elements_8_8_8_01_4.html#ab5cbc0cb6579b9d59ccd90f0c7c0830d',1,'llama::Tuple&lt; T_FirstElement, Elements... &gt;']]],
+  ['first_104',['first',['../structllama_1_1Tuple_3_01TFirstElement_00_01Elements_8_8_8_01_4.html#acb2350ca3e35eb6ee7378ad83ccf769d',1,'llama::Tuple&lt; TFirstElement, Elements... &gt;']]],
+  ['firstelement_105',['FirstElement',['../structllama_1_1Tuple_3_01TFirstElement_00_01Elements_8_8_8_01_4.html#a6aa6d32f8e6f71fa072225a742234dcc',1,'llama::Tuple&lt; TFirstElement, Elements... &gt;']]],
   ['flatalignof_106',['flatAlignOf',['../namespacellama.html#a6f2067ffe5979128e7efaf1fd4c35810',1,'llama']]],
   ['flatalignofimpl_107',['flatAlignOfImpl',['../namespacellama_1_1internal.html#a2413ee7f2d6487f7e306148cf2b46ac4',1,'llama::internal']]],
   ['flatfieldcount_108',['flatFieldCount',['../namespacellama.html#aa6c960189f5edc242be631e2e8757914',1,'llama']]],
@@ -27,7 +27,7 @@ var searchData=
   ['flattenrecorddiminorder_125',['FlattenRecordDimInOrder',['../structllama_1_1mapping_1_1FlattenRecordDimInOrder.html',1,'llama::mapping']]],
   ['flattenrecorddimminimizepadding_126',['FlattenRecordDimMinimizePadding',['../structllama_1_1mapping_1_1FlattenRecordDimMinimizePadding.html',1,'llama::mapping']]],
   ['foreachadcoord_127',['forEachADCoord',['../namespacellama.html#a8cf6c983757c6ebe94d81c6beede3e5b',1,'llama']]],
-  ['foreachleaf_128',['forEachLeaf',['../namespacellama.html#afbef0c057ea8566963fb7386bcbfa52d',1,'llama::forEachLeaf(Functor &amp;&amp;functor, RecordCoord&lt; Coords... &gt; baseCoord)'],['../namespacellama.html#a90e79610dc6b5c1b8f472e61018cd61f',1,'llama::forEachLeaf(Functor &amp;&amp;functor, Tags... baseTags)']]],
-  ['front_129',['front',['../structllama_1_1RecordCoord.html#a9eba3978f93a2195c99e8f459a291f9e',1,'llama::RecordCoord::front()'],['../structllama_1_1Vector.html#a057a59e995670b1ee8cac75969120cf9',1,'llama::Vector::front()'],['../structllama_1_1Vector.html#aa77f1c71dd64dd0238cc425a2073ea54',1,'llama::Vector::front() const']]],
+  ['foreachleaf_128',['forEachLeaf',['../namespacellama.html#afbef0c057ea8566963fb7386bcbfa52d',1,'llama::forEachLeaf(Functor &amp;&amp;functor, RecordCoord&lt; Coords... &gt; baseCoord)'],['../namespacellama.html#a79d8ab742402b4241f3492611508ae4b',1,'llama::forEachLeaf(Functor &amp;&amp;functor, Tags...)']]],
+  ['front_129',['front',['../structllama_1_1RecordCoord.html#a9eba3978f93a2195c99e8f459a291f9e',1,'llama::RecordCoord::front()'],['../structllama_1_1Vector.html#ae53571551352f291d724e36967e2bb3a',1,'llama::Vector::front() -&gt; decltype(auto)'],['../structllama_1_1Vector.html#a6ec0b09092e029905c52458f8a62fe33',1,'llama::Vector::front() const -&gt; decltype(auto)']]],
   ['functors_2ehpp_130',['Functors.hpp',['../Functors_8hpp.html',1,'']]]
 ];

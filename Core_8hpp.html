@@ -214,9 +214,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1IndirectValue.html">llama::internal::IndirectValue&lt; T &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1is__bounded__array.html">llama::internal::is_bounded_array&lt; T &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1IsBoundedArray.html">llama::internal::IsBoundedArray&lt; T &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1is__bounded__array_3_01T_0fN_0e_4.html">llama::internal::is_bounded_array&lt; T[N]&gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1IsBoundedArray_3_01T_0fN_0e_4.html">llama::internal::IsBoundedArray&lt; T[N]&gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1TransformLeavesImpl.html">llama::internal::TransformLeavesImpl&lt; T, TypeFunctor &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -282,9 +282,9 @@ Functions</h2></td></tr>
 <tr class="memitem:afbef0c057ea8566963fb7386bcbfa52d"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename Functor , std::size_t... Coords&gt; </td></tr>
 <tr class="memitem:afbef0c057ea8566963fb7386bcbfa52d"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#afbef0c057ea8566963fb7386bcbfa52d">llama::forEachLeaf</a> (Functor &amp;&amp;functor, RecordCoord&lt; Coords... &gt; baseCoord)</td></tr>
 <tr class="separator:afbef0c057ea8566963fb7386bcbfa52d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90e79610dc6b5c1b8f472e61018cd61f"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename Functor , typename... Tags&gt; </td></tr>
-<tr class="memitem:a90e79610dc6b5c1b8f472e61018cd61f"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a90e79610dc6b5c1b8f472e61018cd61f">llama::forEachLeaf</a> (Functor &amp;&amp;functor, Tags... baseTags)</td></tr>
-<tr class="separator:a90e79610dc6b5c1b8f472e61018cd61f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79d8ab742402b4241f3492611508ae4b"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename Functor , typename... Tags&gt; </td></tr>
+<tr class="memitem:a79d8ab742402b4241f3492611508ae4b"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a79d8ab742402b4241f3492611508ae4b">llama::forEachLeaf</a> (Functor &amp;&amp;functor, Tags...)</td></tr>
+<tr class="separator:a79d8ab742402b4241f3492611508ae4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2413ee7f2d6487f7e306148cf2b46ac4"><td class="memTemplParams" colspan="2">template&lt;typename TypeList &gt; </td></tr>
 <tr class="memitem:a2413ee7f2d6487f7e306148cf2b46ac4"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a2413ee7f2d6487f7e306148cf2b46ac4">llama::internal::flatAlignOfImpl</a> ()</td></tr>
 <tr class="separator:a2413ee7f2d6487f7e306148cf2b46ac4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -293,9 +293,9 @@ Functions</h2></td></tr>
 <tr class="memitem:aeab53e4609fe07abfb6f5f2d532cd388"><td class="memTemplParams" colspan="2">template&lt;typename TypeList , bool Align, bool IncludeTailPadding&gt; </td></tr>
 <tr class="memitem:aeab53e4609fe07abfb6f5f2d532cd388"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#aeab53e4609fe07abfb6f5f2d532cd388">llama::internal::sizeOfImpl</a> () -&gt; std::size_t</td></tr>
 <tr class="separator:aeab53e4609fe07abfb6f5f2d532cd388"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73eb0087b689dae5f64d631484cb9aeb"><td class="memTemplParams" colspan="2">template&lt;bool Align, typename TypeList , std::size_t I&gt; </td></tr>
-<tr class="memitem:a73eb0087b689dae5f64d631484cb9aeb"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a73eb0087b689dae5f64d631484cb9aeb">llama::internal::offsetOfImplWorkaround</a> ()</td></tr>
-<tr class="separator:a73eb0087b689dae5f64d631484cb9aeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8420725970ab9da75999e4dfad4e8590"><td class="memTemplParams" colspan="2">template&lt;bool Align, typename TypeList , std::size_t I&gt; </td></tr>
+<tr class="memitem:a8420725970ab9da75999e4dfad4e8590"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a8420725970ab9da75999e4dfad4e8590">llama::internal::offsetOfImplWorkaround</a> () -&gt; std::size_t</td></tr>
+<tr class="separator:a8420725970ab9da75999e4dfad4e8590"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86a72929fc8c71b9aa2b514a74ab34eb"><td class="memTemplParams" colspan="2">template&lt;typename S &gt; </td></tr>
 <tr class="memitem:a86a72929fc8c71b9aa2b514a74ab34eb"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a86a72929fc8c71b9aa2b514a74ab34eb">llama::structName</a> (S={}) -&gt; std::string</td></tr>
 <tr class="separator:a86a72929fc8c71b9aa2b514a74ab34eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -397,7 +397,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Core_8hpp.html">Core.hpp</a></li>
-    <li class="footer">Generated on Sun Sep 19 2021 13:41:17 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sun Sep 19 2021 16:27:28 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

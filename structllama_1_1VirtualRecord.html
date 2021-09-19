@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Low Level Abstraction of Memory Access: llama::VirtualRecord&lt; T_View, BoundRecordCoord, OwnView &gt; Struct Template Reference</title>
+<title>Low Level Abstraction of Memory Access: llama::VirtualRecord&lt; TView, BoundRecordCoord, OwnView &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -89,7 +89,7 @@ $(document).ready(function(){initNavTree('structllama_1_1VirtualRecord.html','')
 <a href="#friends">Friends</a> &#124;
 <a href="structllama_1_1VirtualRecord-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">llama::VirtualRecord&lt; T_View, BoundRecordCoord, OwnView &gt; Struct Template Reference</div>  </div>
+<div class="title">llama::VirtualRecord&lt; TView, BoundRecordCoord, OwnView &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -104,91 +104,95 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:af8f6a250f72997e26d6cc2123f2ff02d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#af8f6a250f72997e26d6cc2123f2ff02d">View</a> = T_View</td></tr>
-<tr class="memdesc:af8f6a250f72997e26d6cc2123f2ff02d"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structllama_1_1View.html">View</a> this virtual record points into.  <a href="structllama_1_1VirtualRecord.html#af8f6a250f72997e26d6cc2123f2ff02d">More...</a><br /></td></tr>
-<tr class="separator:af8f6a250f72997e26d6cc2123f2ff02d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac26b8e578dd5b00b1540092b288c23ea"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#ac26b8e578dd5b00b1540092b288c23ea">AccessibleRecordDim</a> = <a class="el" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt; RecordDim, BoundRecordCoord &gt;</td></tr>
-<tr class="separator:ac26b8e578dd5b00b1540092b288c23ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b7b169f80cd26b4242d7a3ae5402778"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a6b7b169f80cd26b4242d7a3ae5402778">View</a> = TView</td></tr>
+<tr class="memdesc:a6b7b169f80cd26b4242d7a3ae5402778"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structllama_1_1View.html">View</a> this virtual record points into.  <a href="structllama_1_1VirtualRecord.html#a6b7b169f80cd26b4242d7a3ae5402778">More...</a><br /></td></tr>
+<tr class="separator:a6b7b169f80cd26b4242d7a3ae5402778"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afacc7a6098f4e3a3c3d33290e186a8a7"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#afacc7a6098f4e3a3c3d33290e186a8a7">AccessibleRecordDim</a> = <a class="el" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt; RecordDim, BoundRecordCoord &gt;</td></tr>
+<tr class="separator:afacc7a6098f4e3a3c3d33290e186a8a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a8ea9db5b4eaf3a7f3970e7a435efef02"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a8ea9db5b4eaf3a7f3970e7a435efef02">VirtualRecord</a> ()</td></tr>
-<tr class="memdesc:a8ea9db5b4eaf3a7f3970e7a435efef02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an empty <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>. Only available for if the view is owned. Used by <a class="el" href="namespacellama.html#a2f44282e6b70a3eedaa8e7355a6f7dd0" title="A VirtualRecord that owns and holds a single value.">llama::One</a>.  <a href="structllama_1_1VirtualRecord.html#a8ea9db5b4eaf3a7f3970e7a435efef02">More...</a><br /></td></tr>
-<tr class="separator:a8ea9db5b4eaf3a7f3970e7a435efef02"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a612b8ee5b4d62dc9774887d5c16b1963"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a612b8ee5b4d62dc9774887d5c16b1963">VirtualRecord</a> (ArrayDims <a class="el" href="structllama_1_1VirtualRecord.html#a98523dbb19bd99b95a16e916ed9b842d">arrayDimsCoord</a>, std::conditional_t&lt; OwnView, <a class="el" href="structllama_1_1VirtualRecord.html#af8f6a250f72997e26d6cc2123f2ff02d">View</a> &amp;&amp;, <a class="el" href="structllama_1_1VirtualRecord.html#af8f6a250f72997e26d6cc2123f2ff02d">View</a> &amp; &gt; view)</td></tr>
-<tr class="separator:a612b8ee5b4d62dc9774887d5c16b1963"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a53eaae49070d6c384a3e9e1a49b898db"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a53eaae49070d6c384a3e9e1a49b898db">VirtualRecord</a> (const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;)=default</td></tr>
-<tr class="separator:a53eaae49070d6c384a3e9e1a49b898db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa2ce88a12cd4b61e08ab01bd5d11315"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#aaa2ce88a12cd4b61e08ab01bd5d11315">VirtualRecord</a> (<a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;&amp;)=default</td></tr>
-<tr class="separator:aaa2ce88a12cd4b61e08ab01bd5d11315"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98523dbb19bd99b95a16e916ed9b842d"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a98523dbb19bd99b95a16e916ed9b842d">arrayDimsCoord</a> () const</td></tr>
-<tr class="separator:a98523dbb19bd99b95a16e916ed9b842d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd74604d873353440105c147232e2dca"><td class="memTemplParams" colspan="2">template&lt;typename OtherView , typename OtherBoundRecordCoord , bool OtherOwnView&gt; </td></tr>
-<tr class="memitem:abd74604d873353440105c147232e2dca"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#abd74604d873353440105c147232e2dca">VirtualRecord</a> (const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; OtherView, OtherBoundRecordCoord, OtherOwnView &gt; &amp;virtualRecord)</td></tr>
-<tr class="separator:abd74604d873353440105c147232e2dca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63871f7dae4a86a6503eb9bedc799665"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&gt;&gt;&gt; </td></tr>
-<tr class="memitem:a63871f7dae4a86a6503eb9bedc799665"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a63871f7dae4a86a6503eb9bedc799665">VirtualRecord</a> (const T &amp;scalar)</td></tr>
-<tr class="memdesc:a63871f7dae4a86a6503eb9bedc799665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a VirtuaRecord from a scalar. Only available for if the view is owned. Used by <a class="el" href="namespacellama.html#a2f44282e6b70a3eedaa8e7355a6f7dd0" title="A VirtualRecord that owns and holds a single value.">llama::One</a>.  <a href="structllama_1_1VirtualRecord.html#a63871f7dae4a86a6503eb9bedc799665">More...</a><br /></td></tr>
-<tr class="separator:a63871f7dae4a86a6503eb9bedc799665"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad959aa65f6674c04b79d214d2dea09ce"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Coord&gt; </td></tr>
-<tr class="memitem:ad959aa65f6674c04b79d214d2dea09ce"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#ad959aa65f6674c04b79d214d2dea09ce">operator()</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coord... &gt;={}) const -&gt; decltype(auto)</td></tr>
-<tr class="separator:ad959aa65f6674c04b79d214d2dea09ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a823e3f5f0fda03293173857bd6ecc4e7"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Coord&gt; </td></tr>
-<tr class="memitem:a823e3f5f0fda03293173857bd6ecc4e7"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a823e3f5f0fda03293173857bd6ecc4e7">operator()</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coord... &gt; coord={}) -&gt; decltype(auto)</td></tr>
-<tr class="separator:a823e3f5f0fda03293173857bd6ecc4e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0eda74dd93ea8c61f8f255197269234d"><td class="memTemplParams" colspan="2">template&lt;typename... Tags&gt; </td></tr>
-<tr class="memitem:a0eda74dd93ea8c61f8f255197269234d"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a0eda74dd93ea8c61f8f255197269234d">operator()</a> (Tags...) const -&gt; decltype(auto)</td></tr>
-<tr class="separator:a0eda74dd93ea8c61f8f255197269234d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8573fd09aae550ef271dfec83603960e"><td class="memTemplParams" colspan="2">template&lt;typename... Tags&gt; </td></tr>
-<tr class="memitem:a8573fd09aae550ef271dfec83603960e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a8573fd09aae550ef271dfec83603960e">operator()</a> (Tags...) -&gt; decltype(auto)</td></tr>
-<tr class="separator:a8573fd09aae550ef271dfec83603960e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a756efc25ace998733fa8624fb65ad8a0"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a756efc25ace998733fa8624fb65ad8a0">operator=</a> (const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;other) -&gt; <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;</td></tr>
-<tr class="separator:a756efc25ace998733fa8624fb65ad8a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2cc4f52e7d3ac55de213ce75c32af0e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ad2cc4f52e7d3ac55de213ce75c32af0e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#ad2cc4f52e7d3ac55de213ce75c32af0e">operator=</a> (const T &amp;other) -&gt; <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;</td></tr>
-<tr class="separator:ad2cc4f52e7d3ac55de213ce75c32af0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a884f7daa3f2afb226344081326548a5b"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a884f7daa3f2afb226344081326548a5b"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a884f7daa3f2afb226344081326548a5b">operator+=</a> (const T &amp;other) -&gt; <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;</td></tr>
-<tr class="separator:a884f7daa3f2afb226344081326548a5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9c8c8f92cdbfadb691fc6696bd171d6"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:af9c8c8f92cdbfadb691fc6696bd171d6"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#af9c8c8f92cdbfadb691fc6696bd171d6">operator-=</a> (const T &amp;other) -&gt; <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;</td></tr>
-<tr class="separator:af9c8c8f92cdbfadb691fc6696bd171d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6e9d6fcbe6193f32de78c2e4d7a82d3"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ae6e9d6fcbe6193f32de78c2e4d7a82d3"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#ae6e9d6fcbe6193f32de78c2e4d7a82d3">operator*=</a> (const T &amp;other) -&gt; <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;</td></tr>
-<tr class="separator:ae6e9d6fcbe6193f32de78c2e4d7a82d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acbff15bc1250d7e6a6de0f109d678956"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:acbff15bc1250d7e6a6de0f109d678956"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#acbff15bc1250d7e6a6de0f109d678956">operator/=</a> (const T &amp;other) -&gt; <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;</td></tr>
-<tr class="separator:acbff15bc1250d7e6a6de0f109d678956"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec4e2893450f445152dc3e142c5313a9"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:aec4e2893450f445152dc3e142c5313a9"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#aec4e2893450f445152dc3e142c5313a9">operator%=</a> (const T &amp;other) -&gt; <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;</td></tr>
-<tr class="separator:aec4e2893450f445152dc3e142c5313a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09ab30511467cb3d44614beeee848f60"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a09ab30511467cb3d44614beeee848f60">asTuple</a> ()</td></tr>
-<tr class="separator:a09ab30511467cb3d44614beeee848f60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac778dfdc5415133493e47915b52d071"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#aac778dfdc5415133493e47915b52d071">asTuple</a> () const</td></tr>
-<tr class="separator:aac778dfdc5415133493e47915b52d071"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acbacfe2c859113ce667da6eb325ea321"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#acbacfe2c859113ce667da6eb325ea321">asFlatTuple</a> ()</td></tr>
-<tr class="separator:acbacfe2c859113ce667da6eb325ea321"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b118f7b6fa532ab6c4b23024efb9e59"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a7b118f7b6fa532ab6c4b23024efb9e59">asFlatTuple</a> () const</td></tr>
-<tr class="separator:a7b118f7b6fa532ab6c4b23024efb9e59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7a9ef17384a5d575728faa166d483ea"><td class="memTemplParams" colspan="2">template&lt;std::size_t I&gt; </td></tr>
-<tr class="memitem:aa7a9ef17384a5d575728faa166d483ea"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#aa7a9ef17384a5d575728faa166d483ea">get</a> () -&gt; decltype(auto)</td></tr>
-<tr class="separator:aa7a9ef17384a5d575728faa166d483ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4713e292f0f76d0337d488ab7b18a03"><td class="memTemplParams" colspan="2">template&lt;std::size_t I&gt; </td></tr>
-<tr class="memitem:ae4713e292f0f76d0337d488ab7b18a03"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#ae4713e292f0f76d0337d488ab7b18a03">get</a> () const -&gt; decltype(auto)</td></tr>
-<tr class="separator:ae4713e292f0f76d0337d488ab7b18a03"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2681ff76ed4cd20ac064929c54855cd2"><td class="memTemplParams" colspan="2">template&lt;typename TupleLike &gt; </td></tr>
-<tr class="memitem:a2681ff76ed4cd20ac064929c54855cd2"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a2681ff76ed4cd20ac064929c54855cd2">loadAs</a> () -&gt; TupleLike</td></tr>
-<tr class="separator:a2681ff76ed4cd20ac064929c54855cd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3bfce2922f081960403606be5be103fe"><td class="memTemplParams" colspan="2">template&lt;typename TupleLike &gt; </td></tr>
-<tr class="memitem:a3bfce2922f081960403606be5be103fe"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a3bfce2922f081960403606be5be103fe">loadAs</a> () const -&gt; TupleLike</td></tr>
-<tr class="separator:a3bfce2922f081960403606be5be103fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a74b64181c4636b1481b056321dcedc59"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a74b64181c4636b1481b056321dcedc59">load</a> () -&gt; <a class="el" href="structllama_1_1VirtualRecord_1_1Loader.html">Loader</a></td></tr>
-<tr class="separator:a74b64181c4636b1481b056321dcedc59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac59d990af9b1461952d1875c2a41e2e1"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#ac59d990af9b1461952d1875c2a41e2e1">load</a> () const -&gt; <a class="el" href="structllama_1_1VirtualRecord_1_1LoaderConst.html">LoaderConst</a></td></tr>
-<tr class="separator:ac59d990af9b1461952d1875c2a41e2e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a41ff9529160e4acfbf5983430f641f22"><td class="memTemplParams" colspan="2">template&lt;typename TupleLike &gt; </td></tr>
-<tr class="memitem:a41ff9529160e4acfbf5983430f641f22"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a41ff9529160e4acfbf5983430f641f22">store</a> (const TupleLike &amp;t)</td></tr>
-<tr class="separator:a41ff9529160e4acfbf5983430f641f22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29f6a66589c0ee6131a5e4dadce17b16"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a29f6a66589c0ee6131a5e4dadce17b16">VirtualRecord</a> ()</td></tr>
+<tr class="memdesc:a29f6a66589c0ee6131a5e4dadce17b16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an empty <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>. Only available for if the view is owned. Used by <a class="el" href="namespacellama.html#a2f44282e6b70a3eedaa8e7355a6f7dd0" title="A VirtualRecord that owns and holds a single value.">llama::One</a>.  <a href="structllama_1_1VirtualRecord.html#a29f6a66589c0ee6131a5e4dadce17b16">More...</a><br /></td></tr>
+<tr class="separator:a29f6a66589c0ee6131a5e4dadce17b16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74a682ceb1033d7593bb18f56ceddf42"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a74a682ceb1033d7593bb18f56ceddf42">VirtualRecord</a> (ArrayDims <a class="el" href="structllama_1_1VirtualRecord.html#ad8d9f601880929a1125ca5a20672dee9">arrayDimsCoord</a>, std::conditional_t&lt; OwnView, <a class="el" href="structllama_1_1VirtualRecord.html#a6b7b169f80cd26b4242d7a3ae5402778">View</a> &amp;&amp;, <a class="el" href="structllama_1_1VirtualRecord.html#a6b7b169f80cd26b4242d7a3ae5402778">View</a> &amp; &gt; view)</td></tr>
+<tr class="separator:a74a682ceb1033d7593bb18f56ceddf42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79ab1793a47e3fccd35413601c4903b4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a79ab1793a47e3fccd35413601c4903b4">VirtualRecord</a> (const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;)=default</td></tr>
+<tr class="separator:a79ab1793a47e3fccd35413601c4903b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd7b4204aafc9a6df384f08774eaeb7e"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#abd7b4204aafc9a6df384f08774eaeb7e">operator=</a> (const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;other) -&gt; <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;</td></tr>
+<tr class="separator:abd7b4204aafc9a6df384f08774eaeb7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3b4ffc338af04ed5cb9ca8902648918"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#af3b4ffc338af04ed5cb9ca8902648918">VirtualRecord</a> (<a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;&amp;) noexcept=default</td></tr>
+<tr class="separator:af3b4ffc338af04ed5cb9ca8902648918"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63e5a68ac30c91cf66c51dfc97b32d3a"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a63e5a68ac30c91cf66c51dfc97b32d3a">operator=</a> (<a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;&amp;) noexcept -&gt; <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;=default</td></tr>
+<tr class="separator:a63e5a68ac30c91cf66c51dfc97b32d3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74aeb37923555c4b59b481334532fba1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a74aeb37923555c4b59b481334532fba1">~VirtualRecord</a> ()=default</td></tr>
+<tr class="separator:a74aeb37923555c4b59b481334532fba1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8d9f601880929a1125ca5a20672dee9"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#ad8d9f601880929a1125ca5a20672dee9">arrayDimsCoord</a> () const</td></tr>
+<tr class="separator:ad8d9f601880929a1125ca5a20672dee9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c21ffbc4bba26e9e52cf5e325ca4b53"><td class="memTemplParams" colspan="2">template&lt;typename OtherView , typename OtherBoundRecordCoord , bool OtherOwnView&gt; </td></tr>
+<tr class="memitem:a8c21ffbc4bba26e9e52cf5e325ca4b53"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a8c21ffbc4bba26e9e52cf5e325ca4b53">VirtualRecord</a> (const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; OtherView, OtherBoundRecordCoord, OtherOwnView &gt; &amp;virtualRecord)</td></tr>
+<tr class="separator:a8c21ffbc4bba26e9e52cf5e325ca4b53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1460b1421118f873133f7f3eccf5b091"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&gt;&gt;&gt; </td></tr>
+<tr class="memitem:a1460b1421118f873133f7f3eccf5b091"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a1460b1421118f873133f7f3eccf5b091">VirtualRecord</a> (const T &amp;scalar)</td></tr>
+<tr class="memdesc:a1460b1421118f873133f7f3eccf5b091"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a VirtuaRecord from a scalar. Only available for if the view is owned. Used by <a class="el" href="namespacellama.html#a2f44282e6b70a3eedaa8e7355a6f7dd0" title="A VirtualRecord that owns and holds a single value.">llama::One</a>.  <a href="structllama_1_1VirtualRecord.html#a1460b1421118f873133f7f3eccf5b091">More...</a><br /></td></tr>
+<tr class="separator:a1460b1421118f873133f7f3eccf5b091"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76cd9da48ae5cbf3d9e4dcd581fc03e9"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Coord&gt; </td></tr>
+<tr class="memitem:a76cd9da48ae5cbf3d9e4dcd581fc03e9"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a76cd9da48ae5cbf3d9e4dcd581fc03e9">operator()</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coord... &gt;={}) const -&gt; decltype(auto)</td></tr>
+<tr class="separator:a76cd9da48ae5cbf3d9e4dcd581fc03e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a775bd1c940cd2954d2c4cce84fcd8089"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Coord&gt; </td></tr>
+<tr class="memitem:a775bd1c940cd2954d2c4cce84fcd8089"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a775bd1c940cd2954d2c4cce84fcd8089">operator()</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coord... &gt;={}) -&gt; decltype(auto)</td></tr>
+<tr class="separator:a775bd1c940cd2954d2c4cce84fcd8089"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e3ca5bdf90f11a78a7b3f5dda78f870"><td class="memTemplParams" colspan="2">template&lt;typename... Tags&gt; </td></tr>
+<tr class="memitem:a9e3ca5bdf90f11a78a7b3f5dda78f870"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a9e3ca5bdf90f11a78a7b3f5dda78f870">operator()</a> (Tags...) const -&gt; decltype(auto)</td></tr>
+<tr class="separator:a9e3ca5bdf90f11a78a7b3f5dda78f870"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb2a5808d2753fd61a5f3ae58a4998a9"><td class="memTemplParams" colspan="2">template&lt;typename... Tags&gt; </td></tr>
+<tr class="memitem:adb2a5808d2753fd61a5f3ae58a4998a9"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#adb2a5808d2753fd61a5f3ae58a4998a9">operator()</a> (Tags...) -&gt; decltype(auto)</td></tr>
+<tr class="separator:adb2a5808d2753fd61a5f3ae58a4998a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a980f4853f99d342b582630fdfda66ad1"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a980f4853f99d342b582630fdfda66ad1"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a980f4853f99d342b582630fdfda66ad1">operator=</a> (const T &amp;other) -&gt; <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;</td></tr>
+<tr class="separator:a980f4853f99d342b582630fdfda66ad1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8896ed8f5dc4a718a7eef537b03913b4"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a8896ed8f5dc4a718a7eef537b03913b4"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a8896ed8f5dc4a718a7eef537b03913b4">operator+=</a> (const T &amp;other) -&gt; <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;</td></tr>
+<tr class="separator:a8896ed8f5dc4a718a7eef537b03913b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55e689cbea4fa56fee6f0fe165edd960"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a55e689cbea4fa56fee6f0fe165edd960"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a55e689cbea4fa56fee6f0fe165edd960">operator-=</a> (const T &amp;other) -&gt; <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;</td></tr>
+<tr class="separator:a55e689cbea4fa56fee6f0fe165edd960"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b83e721c3d5284b05a06782e1226393"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a6b83e721c3d5284b05a06782e1226393"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a6b83e721c3d5284b05a06782e1226393">operator*=</a> (const T &amp;other) -&gt; <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;</td></tr>
+<tr class="separator:a6b83e721c3d5284b05a06782e1226393"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace7f68427168eff5488b0cd29d61d2e9"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ace7f68427168eff5488b0cd29d61d2e9"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#ace7f68427168eff5488b0cd29d61d2e9">operator/=</a> (const T &amp;other) -&gt; <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;</td></tr>
+<tr class="separator:ace7f68427168eff5488b0cd29d61d2e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af23b1c2190ba5d9aa53a6cd9804c5949"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:af23b1c2190ba5d9aa53a6cd9804c5949"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#af23b1c2190ba5d9aa53a6cd9804c5949">operator%=</a> (const T &amp;other) -&gt; <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;</td></tr>
+<tr class="separator:af23b1c2190ba5d9aa53a6cd9804c5949"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c6e2c058d44344f523f342848535b08"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a0c6e2c058d44344f523f342848535b08">asTuple</a> ()</td></tr>
+<tr class="separator:a0c6e2c058d44344f523f342848535b08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fc89c3adae7fe23c95893036fde049d"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a5fc89c3adae7fe23c95893036fde049d">asTuple</a> () const</td></tr>
+<tr class="separator:a5fc89c3adae7fe23c95893036fde049d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfcb04516e400ef32a52a8daeae96fab"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#abfcb04516e400ef32a52a8daeae96fab">asFlatTuple</a> ()</td></tr>
+<tr class="separator:abfcb04516e400ef32a52a8daeae96fab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92df8e3822d0213ff5f75495a6b29f72"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a92df8e3822d0213ff5f75495a6b29f72">asFlatTuple</a> () const</td></tr>
+<tr class="separator:a92df8e3822d0213ff5f75495a6b29f72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cd9154e36917dadc03725e5f37df6e2"><td class="memTemplParams" colspan="2">template&lt;std::size_t I&gt; </td></tr>
+<tr class="memitem:a4cd9154e36917dadc03725e5f37df6e2"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a4cd9154e36917dadc03725e5f37df6e2">get</a> () -&gt; decltype(auto)</td></tr>
+<tr class="separator:a4cd9154e36917dadc03725e5f37df6e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a261ceb0a6bef8a6b5316dbaf69d52f"><td class="memTemplParams" colspan="2">template&lt;std::size_t I&gt; </td></tr>
+<tr class="memitem:a7a261ceb0a6bef8a6b5316dbaf69d52f"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a7a261ceb0a6bef8a6b5316dbaf69d52f">get</a> () const -&gt; decltype(auto)</td></tr>
+<tr class="separator:a7a261ceb0a6bef8a6b5316dbaf69d52f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12a5b77778fdcfd37cba2186c969a3f3"><td class="memTemplParams" colspan="2">template&lt;typename TupleLike &gt; </td></tr>
+<tr class="memitem:a12a5b77778fdcfd37cba2186c969a3f3"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a12a5b77778fdcfd37cba2186c969a3f3">loadAs</a> () -&gt; TupleLike</td></tr>
+<tr class="separator:a12a5b77778fdcfd37cba2186c969a3f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdeda90ded2dbcabddbee5f2135d64b0"><td class="memTemplParams" colspan="2">template&lt;typename TupleLike &gt; </td></tr>
+<tr class="memitem:acdeda90ded2dbcabddbee5f2135d64b0"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#acdeda90ded2dbcabddbee5f2135d64b0">loadAs</a> () const -&gt; TupleLike</td></tr>
+<tr class="separator:acdeda90ded2dbcabddbee5f2135d64b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af24391fbc4554c0eb6f195e5b5be0372"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#af24391fbc4554c0eb6f195e5b5be0372">load</a> () -&gt; <a class="el" href="structllama_1_1VirtualRecord_1_1Loader.html">Loader</a></td></tr>
+<tr class="separator:af24391fbc4554c0eb6f195e5b5be0372"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d96bfb6d00a154fb534ee2602ade50c"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a5d96bfb6d00a154fb534ee2602ade50c">load</a> () const -&gt; <a class="el" href="structllama_1_1VirtualRecord_1_1LoaderConst.html">LoaderConst</a></td></tr>
+<tr class="separator:a5d96bfb6d00a154fb534ee2602ade50c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23f753f3aaa9c65bc3b05f0dbe4a324d"><td class="memTemplParams" colspan="2">template&lt;typename TupleLike &gt; </td></tr>
+<tr class="memitem:a23f753f3aaa9c65bc3b05f0dbe4a324d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html#a23f753f3aaa9c65bc3b05f0dbe4a324d">store</a> (const TupleLike &amp;t)</td></tr>
+<tr class="separator:a23f753f3aaa9c65bc3b05f0dbe4a324d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -253,23 +257,23 @@ Friends</h2></td></tr>
 <tr class="separator:a8d445e33790c005518c8400be083965e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename T_View, typename BoundRecordCoord, bool OwnView&gt;<br />
-struct llama::VirtualRecord&lt; T_View, BoundRecordCoord, OwnView &gt;</h3>
+<div class="textblock"><h3>template&lt;typename TView, typename BoundRecordCoord, bool OwnView&gt;<br />
+struct llama::VirtualRecord&lt; TView, BoundRecordCoord, OwnView &gt;</h3>
 
 <p>Virtual record type returned by <a class="el" href="structllama_1_1View.html">View</a> after resolving an array dimensions coordinate or partially resolving a <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>. A virtual record does not hold data itself (thus named "virtual"), it just binds enough information (array dimensions coord and partial record coord) to retrieve it from a <a class="el" href="structllama_1_1View.html">View</a> later. Virtual records should not be created by the user. They are returned from various access functions in <a class="el" href="structllama_1_1View.html">View</a> and <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> itself. </p>
 
 <p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00070">70</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="ac26b8e578dd5b00b1540092b288c23ea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac26b8e578dd5b00b1540092b288c23ea">&#9670;&nbsp;</a></span>AccessibleRecordDim</h2>
+<a id="afacc7a6098f4e3a3c3d33290e186a8a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afacc7a6098f4e3a3c3d33290e186a8a7">&#9670;&nbsp;</a></span>AccessibleRecordDim</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::<a class="el" href="structllama_1_1VirtualRecord.html#ac26b8e578dd5b00b1540092b288c23ea">AccessibleRecordDim</a> =  <a class="el" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;RecordDim, BoundRecordCoord&gt;</td>
+          <td class="memname">using <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::<a class="el" href="structllama_1_1VirtualRecord.html#afacc7a6098f4e3a3c3d33290e186a8a7">AccessibleRecordDim</a> =  <a class="el" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;RecordDim, BoundRecordCoord&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -279,16 +283,16 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 
 </div>
 </div>
-<a id="af8f6a250f72997e26d6cc2123f2ff02d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af8f6a250f72997e26d6cc2123f2ff02d">&#9670;&nbsp;</a></span>View</h2>
+<a id="a6b7b169f80cd26b4242d7a3ae5402778"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b7b169f80cd26b4242d7a3ae5402778">&#9670;&nbsp;</a></span>View</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::<a class="el" href="structllama_1_1VirtualRecord.html#af8f6a250f72997e26d6cc2123f2ff02d">View</a> =  T_View</td>
+          <td class="memname">using <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::<a class="el" href="structllama_1_1VirtualRecord.html#a6b7b169f80cd26b4242d7a3ae5402778">View</a> =  TView</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -300,19 +304,19 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a8ea9db5b4eaf3a7f3970e7a435efef02"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8ea9db5b4eaf3a7f3970e7a435efef02">&#9670;&nbsp;</a></span>VirtualRecord() <span class="overload">[1/6]</span></h2>
+<a id="a29f6a66589c0ee6131a5e4dadce17b16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29f6a66589c0ee6131a5e4dadce17b16">&#9670;&nbsp;</a></span>VirtualRecord() <span class="overload">[1/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::<a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> </td>
+          <td class="memname"><a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::<a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -331,19 +335,19 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 
 </div>
 </div>
-<a id="a612b8ee5b4d62dc9774887d5c16b1963"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a612b8ee5b4d62dc9774887d5c16b1963">&#9670;&nbsp;</a></span>VirtualRecord() <span class="overload">[2/6]</span></h2>
+<a id="a74a682ceb1033d7593bb18f56ceddf42"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74a682ceb1033d7593bb18f56ceddf42">&#9670;&nbsp;</a></span>VirtualRecord() <span class="overload">[2/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::<a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> </td>
+          <td class="memname"><a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::<a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> </td>
           <td>(</td>
           <td class="paramtype">ArrayDims&#160;</td>
           <td class="paramname"><em>arrayDimsCoord</em>, </td>
@@ -351,7 +355,7 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::conditional_t&lt; OwnView, <a class="el" href="structllama_1_1VirtualRecord.html#af8f6a250f72997e26d6cc2123f2ff02d">View</a> &amp;&amp;, <a class="el" href="structllama_1_1VirtualRecord.html#af8f6a250f72997e26d6cc2123f2ff02d">View</a> &amp; &gt;&#160;</td>
+          <td class="paramtype">std::conditional_t&lt; OwnView, <a class="el" href="structllama_1_1VirtualRecord.html#a6b7b169f80cd26b4242d7a3ae5402778">View</a> &amp;&amp;, <a class="el" href="structllama_1_1VirtualRecord.html#a6b7b169f80cd26b4242d7a3ae5402778">View</a> &amp; &gt;&#160;</td>
           <td class="paramname"><em>view</em>&#160;</td>
         </tr>
         <tr>
@@ -371,21 +375,21 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 
 </div>
 </div>
-<a id="a53eaae49070d6c384a3e9e1a49b898db"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a53eaae49070d6c384a3e9e1a49b898db">&#9670;&nbsp;</a></span>VirtualRecord() <span class="overload">[3/6]</span></h2>
+<a id="a79ab1793a47e3fccd35413601c4903b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79ab1793a47e3fccd35413601c4903b4">&#9670;&nbsp;</a></span>VirtualRecord() <span class="overload">[3/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::<a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> </td>
+          <td class="memname"><a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::<a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -399,21 +403,48 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 
 </div>
 </div>
-<a id="aaa2ce88a12cd4b61e08ab01bd5d11315"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaa2ce88a12cd4b61e08ab01bd5d11315">&#9670;&nbsp;</a></span>VirtualRecord() <span class="overload">[4/6]</span></h2>
+<a id="af3b4ffc338af04ed5cb9ca8902648918"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3b4ffc338af04ed5cb9ca8902648918">&#9670;&nbsp;</a></span>VirtualRecord() <span class="overload">[4/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::<a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> </td>
+          <td class="memname"><a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::<a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;&amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;&amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a74aeb37923555c4b59b481334532fba1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74aeb37923555c4b59b481334532fba1">&#9670;&nbsp;</a></span>~VirtualRecord()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::~<a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> </td>
+          <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -427,13 +458,13 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 
 </div>
 </div>
-<a id="abd74604d873353440105c147232e2dca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abd74604d873353440105c147232e2dca">&#9670;&nbsp;</a></span>VirtualRecord() <span class="overload">[5/6]</span></h2>
+<a id="a8c21ffbc4bba26e9e52cf5e325ca4b53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c21ffbc4bba26e9e52cf5e325ca4b53">&#9670;&nbsp;</a></span>VirtualRecord() <span class="overload">[5/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename OtherView , typename OtherBoundRecordCoord , bool OtherOwnView&gt; </div>
 <table class="mlabels">
@@ -441,7 +472,7 @@ template&lt;typename OtherView , typename OtherBoundRecordCoord , bool OtherOwnV
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::<a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> </td>
+          <td class="memname"><a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::<a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; OtherView, OtherBoundRecordCoord, OtherOwnView &gt; &amp;&#160;</td>
           <td class="paramname"><em>virtualRecord</em></td><td>)</td>
@@ -456,17 +487,17 @@ template&lt;typename OtherView , typename OtherBoundRecordCoord , bool OtherOwnV
 </div><div class="memdoc">
 <p>Create a VirtuaRecord from a different <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>. Only available for if the view is owned. Used by <a class="el" href="namespacellama.html#a2f44282e6b70a3eedaa8e7355a6f7dd0" title="A VirtualRecord that owns and holds a single value.">llama::One</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00361">361</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00373">373</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a63871f7dae4a86a6503eb9bedc799665"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a63871f7dae4a86a6503eb9bedc799665">&#9670;&nbsp;</a></span>VirtualRecord() <span class="overload">[6/6]</span></h2>
+<a id="a1460b1421118f873133f7f3eccf5b091"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1460b1421118f873133f7f3eccf5b091">&#9670;&nbsp;</a></span>VirtualRecord() <span class="overload">[6/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&gt;&gt;&gt; </div>
 <table class="mlabels">
@@ -474,7 +505,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::<a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> </td>
+          <td class="memname"><a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::<a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> </td>
           <td>(</td>
           <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>scalar</em></td><td>)</td>
@@ -490,24 +521,24 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 
 <p>Create a VirtuaRecord from a scalar. Only available for if the view is owned. Used by <a class="el" href="namespacellama.html#a2f44282e6b70a3eedaa8e7355a6f7dd0" title="A VirtualRecord that owns and holds a single value.">llama::One</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00377">377</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00389">389</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a98523dbb19bd99b95a16e916ed9b842d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a98523dbb19bd99b95a16e916ed9b842d">&#9670;&nbsp;</a></span>arrayDimsCoord()</h2>
+<a id="ad8d9f601880929a1125ca5a20672dee9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8d9f601880929a1125ca5a20672dee9">&#9670;&nbsp;</a></span>arrayDimsCoord()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::arrayDimsCoord </td>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::arrayDimsCoord </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -520,23 +551,23 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00353">353</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00364">364</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
-<a id="acbacfe2c859113ce667da6eb325ea321"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acbacfe2c859113ce667da6eb325ea321">&#9670;&nbsp;</a></span>asFlatTuple() <span class="overload">[1/2]</span></h2>
+<a id="abfcb04516e400ef32a52a8daeae96fab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abfcb04516e400ef32a52a8daeae96fab">&#9670;&nbsp;</a></span>asFlatTuple() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::asFlatTuple </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::asFlatTuple </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -549,23 +580,23 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00613">613</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00620">620</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a7b118f7b6fa532ab6c4b23024efb9e59"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b118f7b6fa532ab6c4b23024efb9e59">&#9670;&nbsp;</a></span>asFlatTuple() <span class="overload">[2/2]</span></h2>
+<a id="a92df8e3822d0213ff5f75495a6b29f72"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92df8e3822d0213ff5f75495a6b29f72">&#9670;&nbsp;</a></span>asFlatTuple() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::asFlatTuple </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::asFlatTuple </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -578,23 +609,23 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00618">618</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00625">625</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a09ab30511467cb3d44614beeee848f60"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a09ab30511467cb3d44614beeee848f60">&#9670;&nbsp;</a></span>asTuple() <span class="overload">[1/2]</span></h2>
+<a id="a0c6e2c058d44344f523f342848535b08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c6e2c058d44344f523f342848535b08">&#9670;&nbsp;</a></span>asTuple() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::asTuple </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::asTuple </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -607,23 +638,23 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00603">603</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00610">610</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
-<a id="aac778dfdc5415133493e47915b52d071"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aac778dfdc5415133493e47915b52d071">&#9670;&nbsp;</a></span>asTuple() <span class="overload">[2/2]</span></h2>
+<a id="a5fc89c3adae7fe23c95893036fde049d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fc89c3adae7fe23c95893036fde049d">&#9670;&nbsp;</a></span>asTuple() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::asTuple </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::asTuple </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -636,17 +667,17 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00608">608</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00615">615</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
-<a id="aa7a9ef17384a5d575728faa166d483ea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa7a9ef17384a5d575728faa166d483ea">&#9670;&nbsp;</a></span>get() <span class="overload">[1/2]</span></h2>
+<a id="a4cd9154e36917dadc03725e5f37df6e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4cd9154e36917dadc03725e5f37df6e2">&#9670;&nbsp;</a></span>get() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;std::size_t I&gt; </div>
 <table class="mlabels">
@@ -654,7 +685,7 @@ template&lt;std::size_t I&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::get </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::get </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> -&gt; decltype(auto)
@@ -668,17 +699,17 @@ template&lt;std::size_t I&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00624">624</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00631">631</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ae4713e292f0f76d0337d488ab7b18a03"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae4713e292f0f76d0337d488ab7b18a03">&#9670;&nbsp;</a></span>get() <span class="overload">[2/2]</span></h2>
+<a id="a7a261ceb0a6bef8a6b5316dbaf69d52f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a261ceb0a6bef8a6b5316dbaf69d52f">&#9670;&nbsp;</a></span>get() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;std::size_t I&gt; </div>
 <table class="mlabels">
@@ -686,7 +717,7 @@ template&lt;std::size_t I&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::get </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::get </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const -&gt; decltype(auto)
@@ -700,23 +731,23 @@ template&lt;std::size_t I&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00630">630</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00637">637</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a74b64181c4636b1481b056321dcedc59"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a74b64181c4636b1481b056321dcedc59">&#9670;&nbsp;</a></span>load() <span class="overload">[1/2]</span></h2>
+<a id="af24391fbc4554c0eb6f195e5b5be0372"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af24391fbc4554c0eb6f195e5b5be0372">&#9670;&nbsp;</a></span>load() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::load </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::load </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> -&gt; <a class="el" href="structllama_1_1VirtualRecord_1_1Loader.html">Loader</a>
@@ -730,23 +761,23 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00683">683</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00692">692</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ac59d990af9b1461952d1875c2a41e2e1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac59d990af9b1461952d1875c2a41e2e1">&#9670;&nbsp;</a></span>load() <span class="overload">[2/2]</span></h2>
+<a id="a5d96bfb6d00a154fb534ee2602ade50c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d96bfb6d00a154fb534ee2602ade50c">&#9670;&nbsp;</a></span>load() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::load </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::load </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const -&gt; <a class="el" href="structllama_1_1VirtualRecord_1_1LoaderConst.html">LoaderConst</a>
@@ -760,17 +791,17 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00688">688</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00697">697</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a2681ff76ed4cd20ac064929c54855cd2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2681ff76ed4cd20ac064929c54855cd2">&#9670;&nbsp;</a></span>loadAs() <span class="overload">[1/2]</span></h2>
+<a id="a12a5b77778fdcfd37cba2186c969a3f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12a5b77778fdcfd37cba2186c969a3f3">&#9670;&nbsp;</a></span>loadAs() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename TupleLike &gt; </div>
 <table class="mlabels">
@@ -778,7 +809,7 @@ template&lt;typename TupleLike &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::loadAs </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::loadAs </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> -&gt; TupleLike
@@ -792,17 +823,17 @@ template&lt;typename TupleLike &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00636">636</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00643">643</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a3bfce2922f081960403606be5be103fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3bfce2922f081960403606be5be103fe">&#9670;&nbsp;</a></span>loadAs() <span class="overload">[2/2]</span></h2>
+<a id="acdeda90ded2dbcabddbee5f2135d64b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acdeda90ded2dbcabddbee5f2135d64b0">&#9670;&nbsp;</a></span>loadAs() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename TupleLike &gt; </div>
 <table class="mlabels">
@@ -810,7 +841,7 @@ template&lt;typename TupleLike &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::loadAs </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::loadAs </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const -&gt; TupleLike
@@ -824,17 +855,17 @@ template&lt;typename TupleLike &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00649">649</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00656">656</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
-<a id="aec4e2893450f445152dc3e142c5313a9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec4e2893450f445152dc3e142c5313a9">&#9670;&nbsp;</a></span>operator%=()</h2>
+<a id="af23b1c2190ba5d9aa53a6cd9804c5949"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af23b1c2190ba5d9aa53a6cd9804c5949">&#9670;&nbsp;</a></span>operator%=()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename T &gt; </div>
 <table class="mlabels">
@@ -842,7 +873,7 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::operator%= </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::operator%= </td>
           <td>(</td>
           <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>other</em></td><td>)</td>
@@ -857,17 +888,17 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00484">484</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00491">491</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a823e3f5f0fda03293173857bd6ecc4e7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a823e3f5f0fda03293173857bd6ecc4e7">&#9670;&nbsp;</a></span>operator()() <span class="overload">[1/4]</span></h2>
+<a id="a775bd1c940cd2954d2c4cce84fcd8089"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a775bd1c940cd2954d2c4cce84fcd8089">&#9670;&nbsp;</a></span>operator()() <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;std::size_t... Coord&gt; </div>
 <table class="mlabels">
@@ -875,10 +906,10 @@ template&lt;std::size_t... Coord&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::operator() </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::operator() </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coord... &gt;&#160;</td>
-          <td class="paramname"><em>coord</em> = <code>{}</code></td><td>)</td>
+          <td class="paramname"> = <code>{}</code></td><td>)</td>
           <td> -&gt; decltype(auto)
         </td>
         </tr>
@@ -890,17 +921,17 @@ template&lt;std::size_t... Coord&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00409">409</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00421">421</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ad959aa65f6674c04b79d214d2dea09ce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad959aa65f6674c04b79d214d2dea09ce">&#9670;&nbsp;</a></span>operator()() <span class="overload">[2/4]</span></h2>
+<a id="a76cd9da48ae5cbf3d9e4dcd581fc03e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76cd9da48ae5cbf3d9e4dcd581fc03e9">&#9670;&nbsp;</a></span>operator()() <span class="overload">[2/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;std::size_t... Coord&gt; </div>
 <table class="mlabels">
@@ -908,7 +939,7 @@ template&lt;std::size_t... Coord&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::operator() </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::operator() </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coord... &gt;&#160;</td>
           <td class="paramname"> = <code>{}</code></td><td>)</td>
@@ -924,17 +955,17 @@ template&lt;std::size_t... Coord&gt; </div>
 </div><div class="memdoc">
 <p>Access a record in the record dimension underneath the current virtual record using a <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>. If the access resolves to a leaf, a reference to a variable inside the <a class="el" href="structllama_1_1View.html">View</a> storage is returned, otherwise another virtual record. </p>
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00391">391</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00403">403</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a8573fd09aae550ef271dfec83603960e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8573fd09aae550ef271dfec83603960e">&#9670;&nbsp;</a></span>operator()() <span class="overload">[3/4]</span></h2>
+<a id="adb2a5808d2753fd61a5f3ae58a4998a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb2a5808d2753fd61a5f3ae58a4998a9">&#9670;&nbsp;</a></span>operator()() <span class="overload">[3/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename... Tags&gt; </div>
 <table class="mlabels">
@@ -942,7 +973,7 @@ template&lt;typename... Tags&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::operator() </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::operator() </td>
           <td>(</td>
           <td class="paramtype">Tags...&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -957,17 +988,17 @@ template&lt;typename... Tags&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00439">439</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00451">451</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a0eda74dd93ea8c61f8f255197269234d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0eda74dd93ea8c61f8f255197269234d">&#9670;&nbsp;</a></span>operator()() <span class="overload">[4/4]</span></h2>
+<a id="a9e3ca5bdf90f11a78a7b3f5dda78f870"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e3ca5bdf90f11a78a7b3f5dda78f870">&#9670;&nbsp;</a></span>operator()() <span class="overload">[4/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename... Tags&gt; </div>
 <table class="mlabels">
@@ -975,7 +1006,7 @@ template&lt;typename... Tags&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::operator() </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::operator() </td>
           <td>(</td>
           <td class="paramtype">Tags...&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -991,17 +1022,17 @@ template&lt;typename... Tags&gt; </div>
 </div><div class="memdoc">
 <p>Access a record in the record dimension underneath the current virtual record using a series of tags. If the access resolves to a leaf, a reference to a variable inside the <a class="el" href="structllama_1_1View.html">View</a> storage is returned, otherwise another virtual record. </p>
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00429">429</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00441">441</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ae6e9d6fcbe6193f32de78c2e4d7a82d3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae6e9d6fcbe6193f32de78c2e4d7a82d3">&#9670;&nbsp;</a></span>operator*=()</h2>
+<a id="a6b83e721c3d5284b05a06782e1226393"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b83e721c3d5284b05a06782e1226393">&#9670;&nbsp;</a></span>operator*=()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename T &gt; </div>
 <table class="mlabels">
@@ -1009,7 +1040,7 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::operator*= </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::operator*= </td>
           <td>(</td>
           <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>other</em></td><td>)</td>
@@ -1024,17 +1055,17 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00472">472</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00479">479</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a884f7daa3f2afb226344081326548a5b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a884f7daa3f2afb226344081326548a5b">&#9670;&nbsp;</a></span>operator+=()</h2>
+<a id="a8896ed8f5dc4a718a7eef537b03913b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8896ed8f5dc4a718a7eef537b03913b4">&#9670;&nbsp;</a></span>operator+=()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename T &gt; </div>
 <table class="mlabels">
@@ -1042,7 +1073,106 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::operator+= </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::operator+= </td>
+          <td>(</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> -&gt; <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&amp;
+        </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00467">467</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a55e689cbea4fa56fee6f0fe165edd960"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55e689cbea4fa56fee6f0fe165edd960">&#9670;&nbsp;</a></span>operator-=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::operator-= </td>
+          <td>(</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> -&gt; <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&amp;
+        </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00473">473</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ace7f68427168eff5488b0cd29d61d2e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace7f68427168eff5488b0cd29d61d2e9">&#9670;&nbsp;</a></span>operator/=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::operator/= </td>
+          <td>(</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> -&gt; <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&amp;
+        </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00485">485</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a980f4853f99d342b582630fdfda66ad1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a980f4853f99d342b582630fdfda66ad1">&#9670;&nbsp;</a></span>operator=() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::operator= </td>
           <td>(</td>
           <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>other</em></td><td>)</td>
@@ -1061,23 +1191,21 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="af9c8c8f92cdbfadb691fc6696bd171d6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af9c8c8f92cdbfadb691fc6696bd171d6">&#9670;&nbsp;</a></span>operator-=()</h2>
+<a id="abd7b4204aafc9a6df384f08774eaeb7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd7b4204aafc9a6df384f08774eaeb7e">&#9670;&nbsp;</a></span>operator=() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::operator-= </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::operator= </td>
           <td>(</td>
-          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
           <td class="paramname"><em>other</em></td><td>)</td>
           <td> -&gt; <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&amp;
         </td>
@@ -1090,114 +1218,45 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00466">466</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00353">353</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
-<a id="acbff15bc1250d7e6a6de0f109d678956"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acbff15bc1250d7e6a6de0f109d678956">&#9670;&nbsp;</a></span>operator/=()</h2>
+<a id="a63e5a68ac30c91cf66c51dfc97b32d3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63e5a68ac30c91cf66c51dfc97b32d3a">&#9670;&nbsp;</a></span>operator=() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::operator/= </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::operator= </td>
           <td>(</td>
-          <td class="paramtype">const T &amp;&#160;</td>
-          <td class="paramname"><em>other</em></td><td>)</td>
-          <td> -&gt; <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&amp;
-        </td>
+          <td class="paramtype"><a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;&amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> -&gt;  <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;=default</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">default</span><span class="mlabel">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00478">478</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
-
 </div>
 </div>
-<a id="ad2cc4f52e7d3ac55de213ce75c32af0e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad2cc4f52e7d3ac55de213ce75c32af0e">&#9670;&nbsp;</a></span>operator=() <span class="overload">[1/2]</span></h2>
+<a id="a23f753f3aaa9c65bc3b05f0dbe4a324d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23f753f3aaa9c65bc3b05f0dbe4a324d">&#9670;&nbsp;</a></span>store()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::operator= </td>
-          <td>(</td>
-          <td class="paramtype">const T &amp;&#160;</td>
-          <td class="paramname"><em>other</em></td><td>)</td>
-          <td> -&gt; <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&amp;
-        </td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00454">454</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a756efc25ace998733fa8624fb65ad8a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a756efc25ace998733fa8624fb65ad8a0">&#9670;&nbsp;</a></span>operator=() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::operator= </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
-          <td class="paramname"><em>other</em></td><td>)</td>
-          <td> -&gt; <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&amp;
-        </td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00448">448</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a41ff9529160e4acfbf5983430f641f22"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a41ff9529160e4acfbf5983430f641f22">&#9670;&nbsp;</a></span>store()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename TupleLike &gt; </div>
 <table class="mlabels">
@@ -1205,7 +1264,7 @@ template&lt;typename TupleLike &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt;::store </td>
+          <td class="memname">void <a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt;::store </td>
           <td>(</td>
           <td class="paramtype">const TupleLike &amp;&#160;</td>
           <td class="paramname"><em>t</em></td><td>)</td>
@@ -1219,7 +1278,7 @@ template&lt;typename TupleLike &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00694">694</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00703">703</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1230,7 +1289,7 @@ template&lt;typename TupleLike &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&gt;&gt;&gt; </div>
 <table class="mlabels">
@@ -1246,7 +1305,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
           <td class="paramname"><em>vd</em>&#160;</td>
         </tr>
         <tr>
@@ -1263,7 +1322,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00550">550</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00557">557</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1273,7 +1332,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename T &gt; </div>
 <table class="mlabels">
@@ -1283,7 +1342,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">auto operator!= </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
           <td class="paramname"><em>vd</em>, </td>
         </tr>
         <tr>
@@ -1306,7 +1365,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00544">544</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00551">551</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1316,7 +1375,7 @@ template&lt;typename T &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename T &gt; </div>
 <table class="mlabels">
@@ -1326,7 +1385,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">auto operator% </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
           <td class="paramname"><em>vd</em>, </td>
         </tr>
         <tr>
@@ -1348,7 +1407,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00526">526</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00533">533</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1358,7 +1417,7 @@ template&lt;typename T &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&gt;&gt;&gt; </div>
 <table class="mlabels">
@@ -1374,7 +1433,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
           <td class="paramname"><em>vd</em>&#160;</td>
         </tr>
         <tr>
@@ -1390,7 +1449,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00514">514</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00521">521</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1400,7 +1459,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename T &gt; </div>
 <table class="mlabels">
@@ -1410,7 +1469,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">auto operator* </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
           <td class="paramname"><em>vd</em>, </td>
         </tr>
         <tr>
@@ -1432,7 +1491,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00508">508</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00515">515</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1442,7 +1501,7 @@ template&lt;typename T &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&gt;&gt;&gt; </div>
 <table class="mlabels">
@@ -1458,7 +1517,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
           <td class="paramname"><em>vd</em>&#160;</td>
         </tr>
         <tr>
@@ -1474,7 +1533,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00496">496</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00503">503</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1484,7 +1543,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename T &gt; </div>
 <table class="mlabels">
@@ -1494,7 +1553,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">auto operator+ </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
           <td class="paramname"><em>vd</em>, </td>
         </tr>
         <tr>
@@ -1516,7 +1575,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00490">490</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00497">497</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1526,7 +1585,7 @@ template&lt;typename T &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename T &gt; </div>
 <table class="mlabels">
@@ -1536,7 +1595,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">auto operator- </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
           <td class="paramname"><em>vd</em>, </td>
         </tr>
         <tr>
@@ -1558,7 +1617,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00502">502</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00509">509</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1568,7 +1627,7 @@ template&lt;typename T &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename T &gt; </div>
 <table class="mlabels">
@@ -1578,7 +1637,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">auto operator/ </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
           <td class="paramname"><em>vd</em>, </td>
         </tr>
         <tr>
@@ -1600,7 +1659,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00520">520</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00527">527</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1610,7 +1669,7 @@ template&lt;typename T &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&gt;&gt;&gt; </div>
 <table class="mlabels">
@@ -1626,7 +1685,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
           <td class="paramname"><em>vd</em>&#160;</td>
         </tr>
         <tr>
@@ -1643,7 +1702,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00562">562</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00569">569</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1653,7 +1712,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename T &gt; </div>
 <table class="mlabels">
@@ -1663,7 +1722,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">auto operator&lt; </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
           <td class="paramname"><em>vd</em>, </td>
         </tr>
         <tr>
@@ -1686,7 +1745,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00556">556</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00563">563</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1696,7 +1755,7 @@ template&lt;typename T &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&gt;&gt;&gt; </div>
 <table class="mlabels">
@@ -1712,7 +1771,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
           <td class="paramname"><em>vd</em>&#160;</td>
         </tr>
         <tr>
@@ -1729,7 +1788,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00574">574</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00581">581</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1739,7 +1798,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename T &gt; </div>
 <table class="mlabels">
@@ -1749,7 +1808,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">auto operator&lt;= </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
           <td class="paramname"><em>vd</em>, </td>
         </tr>
         <tr>
@@ -1772,7 +1831,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00568">568</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00575">575</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1782,7 +1841,7 @@ template&lt;typename T &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&gt;&gt;&gt; </div>
 <table class="mlabels">
@@ -1798,7 +1857,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
           <td class="paramname"><em>vd</em>&#160;</td>
         </tr>
         <tr>
@@ -1815,7 +1874,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00538">538</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00545">545</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1825,7 +1884,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename T &gt; </div>
 <table class="mlabels">
@@ -1835,7 +1894,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">auto operator== </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
           <td class="paramname"><em>vd</em>, </td>
         </tr>
         <tr>
@@ -1858,7 +1917,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00532">532</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00539">539</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1868,7 +1927,7 @@ template&lt;typename T &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&gt;&gt;&gt; </div>
 <table class="mlabels">
@@ -1884,7 +1943,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
           <td class="paramname"><em>vd</em>&#160;</td>
         </tr>
         <tr>
@@ -1901,7 +1960,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00586">586</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00593">593</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1911,7 +1970,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename T &gt; </div>
 <table class="mlabels">
@@ -1921,7 +1980,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">auto operator&gt; </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
           <td class="paramname"><em>vd</em>, </td>
         </tr>
         <tr>
@@ -1944,7 +2003,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00580">580</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00587">587</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1954,7 +2013,7 @@ template&lt;typename T &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&gt;&gt;&gt; </div>
 <table class="mlabels">
@@ -1970,7 +2029,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
           <td class="paramname"><em>vd</em>&#160;</td>
         </tr>
         <tr>
@@ -1987,7 +2046,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00598">598</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00605">605</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1997,7 +2056,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!is_VirtualRecord&lt;T&
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
 template&lt;typename T &gt; </div>
 <table class="mlabels">
@@ -2007,7 +2066,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">auto operator&gt;= </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;&#160;</td>
           <td class="paramname"><em>vd</em>, </td>
         </tr>
         <tr>
@@ -2030,7 +2089,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00592">592</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00599">599</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -2040,7 +2099,7 @@ template&lt;typename T &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div>
+template&lt;typename TView , typename BoundRecordCoord , bool OwnView&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -2048,13 +2107,13 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
         <tr>
           <td class="memname">void swap </td>
           <td>(</td>
-          <td class="paramtype">std::conditional_t&lt; OwnView, <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;, <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &gt;&#160;</td>
+          <td class="paramtype">std::conditional_t&lt; OwnView, <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;, <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &gt;&#160;</td>
           <td class="paramname"><em>a</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::conditional_t&lt; OwnView, <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &amp;, <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; T_View, BoundRecordCoord, OwnView &gt; &gt;&#160;</td>
+          <td class="paramtype">std::conditional_t&lt; OwnView, <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &amp;, <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; TView, BoundRecordCoord, OwnView &gt; &gt;&#160;</td>
           <td class="paramname"><em>b</em>&#160;</td>
         </tr>
         <tr>
@@ -2070,7 +2129,7 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00700">700</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00709">709</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -2084,7 +2143,7 @@ template&lt;typename T_View , typename BoundRecordCoord , bool OwnView&gt; </div
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a></li>
-    <li class="footer">Generated on Sun Sep 19 2021 13:41:17 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sun Sep 19 2021 16:27:28 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

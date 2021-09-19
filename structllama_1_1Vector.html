@@ -100,7 +100,7 @@ Public Types</h2></td></tr>
 <tr class="separator:a76fed48612017cbd342fbc91a06f885b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9cb6cd05cc9474af335517ef3889cfb4"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a9cb6cd05cc9474af335517ef3889cfb4">RecordDim</a> = typename Mapping::RecordDim</td></tr>
 <tr class="separator:a9cb6cd05cc9474af335517ef3889cfb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7cb2da4cdee69566d96d906796ac96ff"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a7cb2da4cdee69566d96d906796ac96ff">iterator</a> = decltype(std::declval&lt; <a class="el" href="structllama_1_1Vector.html#a76fed48612017cbd342fbc91a06f885b">ViewType</a> &gt;().<a class="el" href="structllama_1_1Vector.html#ab0cb55ef49592672b1e3c3e034891104">begin</a>())</td></tr>
+<tr class="memitem:a7cb2da4cdee69566d96d906796ac96ff"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a7cb2da4cdee69566d96d906796ac96ff">iterator</a> = decltype(std::declval&lt; <a class="el" href="structllama_1_1Vector.html#a76fed48612017cbd342fbc91a06f885b">ViewType</a> &gt;().<a class="el" href="structllama_1_1Vector.html#af438bc9d6748c1e56b47c298d7c1b600">begin</a>())</td></tr>
 <tr class="separator:a7cb2da4cdee69566d96d906796ac96ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67955fe1bcd5a0ef79854df41d86cfcf"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a67955fe1bcd5a0ef79854df41d86cfcf">value_type</a> = typename iterator::value_type</td></tr>
 <tr class="separator:a67955fe1bcd5a0ef79854df41d86cfcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -115,46 +115,48 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a49dbe6f358e92ca8a4ce73cac19376a1"><td class="memTemplParams" colspan="2">template&lt;typename Iterator &gt; </td></tr>
 <tr class="memitem:a49dbe6f358e92ca8a4ce73cac19376a1"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a49dbe6f358e92ca8a4ce73cac19376a1">Vector</a> (<a class="el" href="structllama_1_1Iterator.html">Iterator</a> first, <a class="el" href="structllama_1_1Iterator.html">Iterator</a> last)</td></tr>
 <tr class="separator:a49dbe6f358e92ca8a4ce73cac19376a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf95dbdf5979a4a44a8b1098813f8c78"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#abf95dbdf5979a4a44a8b1098813f8c78">Vector</a> (const <a class="el" href="structllama_1_1Vector.html">Vector</a> &amp;other)</td></tr>
-<tr class="separator:abf95dbdf5979a4a44a8b1098813f8c78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec188ca107a1acab83c6e80f2e23ecc4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#aec188ca107a1acab83c6e80f2e23ecc4">Vector</a> (const <a class="el" href="structllama_1_1Vector.html">Vector</a> &amp;other)=default</td></tr>
+<tr class="separator:aec188ca107a1acab83c6e80f2e23ecc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd58f2dc60ac5b37dff5c0f538e90504"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#afd58f2dc60ac5b37dff5c0f538e90504">Vector</a> (<a class="el" href="structllama_1_1Vector.html">Vector</a> &amp;&amp;other) noexcept</td></tr>
 <tr class="separator:afd58f2dc60ac5b37dff5c0f538e90504"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad88717ebe1926f89d629072afb2c0893"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#ad88717ebe1926f89d629072afb2c0893">operator=</a> (const <a class="el" href="structllama_1_1Vector.html">Vector</a> &amp;other) -&gt; <a class="el" href="structllama_1_1Vector.html">Vector</a> &amp;</td></tr>
-<tr class="separator:ad88717ebe1926f89d629072afb2c0893"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9438c49ab6897f544779b06f5a3d8c8c"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a9438c49ab6897f544779b06f5a3d8c8c">operator=</a> (const <a class="el" href="structllama_1_1Vector.html">Vector</a> &amp;other) -&gt; <a class="el" href="structllama_1_1Vector.html">Vector</a> &amp;=default</td></tr>
+<tr class="separator:a9438c49ab6897f544779b06f5a3d8c8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36792850ed3212ef272c31d1f6006bd7"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a36792850ed3212ef272c31d1f6006bd7">operator=</a> (<a class="el" href="structllama_1_1Vector.html">Vector</a> &amp;&amp;other) noexcept -&gt; <a class="el" href="structllama_1_1Vector.html">Vector</a> &amp;</td></tr>
 <tr class="separator:a36792850ed3212ef272c31d1f6006bd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad66798ddee8f30a8949d06a8eb93eaaa"><td class="memItemLeft" align="right" valign="top">decltype(auto)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#ad66798ddee8f30a8949d06a8eb93eaaa">at</a> (std::size_t i)</td></tr>
-<tr class="separator:ad66798ddee8f30a8949d06a8eb93eaaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18c8e8f888c0a23e15a38fb6b43beb70"><td class="memItemLeft" align="right" valign="top">decltype(auto)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a18c8e8f888c0a23e15a38fb6b43beb70">at</a> (std::size_t i) const</td></tr>
-<tr class="separator:a18c8e8f888c0a23e15a38fb6b43beb70"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3354718fe917a4754c4c881351dd07c8"><td class="memItemLeft" align="right" valign="top">decltype(auto)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a3354718fe917a4754c4c881351dd07c8">operator[]</a> (std::size_t i)</td></tr>
-<tr class="separator:a3354718fe917a4754c4c881351dd07c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a986aaf25de32b46804d6094a109bf991"><td class="memItemLeft" align="right" valign="top">decltype(auto)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a986aaf25de32b46804d6094a109bf991">operator[]</a> (std::size_t i) const</td></tr>
-<tr class="separator:a986aaf25de32b46804d6094a109bf991"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a057a59e995670b1ee8cac75969120cf9"><td class="memItemLeft" align="right" valign="top">decltype(auto)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a057a59e995670b1ee8cac75969120cf9">front</a> ()</td></tr>
-<tr class="separator:a057a59e995670b1ee8cac75969120cf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa77f1c71dd64dd0238cc425a2073ea54"><td class="memItemLeft" align="right" valign="top">decltype(auto)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#aa77f1c71dd64dd0238cc425a2073ea54">front</a> () const</td></tr>
-<tr class="separator:aa77f1c71dd64dd0238cc425a2073ea54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71be2ac37799becc42f3a98faf47fa87"><td class="memItemLeft" align="right" valign="top">decltype(auto)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a71be2ac37799becc42f3a98faf47fa87">back</a> ()</td></tr>
-<tr class="separator:a71be2ac37799becc42f3a98faf47fa87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50c7dbac1a5f9d0782bd57a4275306ae"><td class="memItemLeft" align="right" valign="top">decltype(auto)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a50c7dbac1a5f9d0782bd57a4275306ae">back</a> () const</td></tr>
-<tr class="separator:a50c7dbac1a5f9d0782bd57a4275306ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0cb55ef49592672b1e3c3e034891104"><td class="memItemLeft" align="right" valign="top">decltype(auto)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#ab0cb55ef49592672b1e3c3e034891104">begin</a> ()</td></tr>
-<tr class="separator:ab0cb55ef49592672b1e3c3e034891104"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc4cf98071d2ea57ab07f259c721d3bf"><td class="memItemLeft" align="right" valign="top">decltype(auto)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#afc4cf98071d2ea57ab07f259c721d3bf">begin</a> () const</td></tr>
-<tr class="separator:afc4cf98071d2ea57ab07f259c721d3bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec5b907dd9bfc94e466366ad46401cbf"><td class="memItemLeft" align="right" valign="top">decltype(auto)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#aec5b907dd9bfc94e466366ad46401cbf">cbegin</a> ()</td></tr>
-<tr class="separator:aec5b907dd9bfc94e466366ad46401cbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d06d3981755ed09379bedb5922ce26d"><td class="memItemLeft" align="right" valign="top">decltype(auto)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a4d06d3981755ed09379bedb5922ce26d">cbegin</a> () const</td></tr>
-<tr class="separator:a4d06d3981755ed09379bedb5922ce26d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af5772e0bd8927bb51bac0ab02dd06934"><td class="memItemLeft" align="right" valign="top">decltype(auto)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#af5772e0bd8927bb51bac0ab02dd06934">end</a> ()</td></tr>
-<tr class="separator:af5772e0bd8927bb51bac0ab02dd06934"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af356b36637d3a676f9e2d1c4682a4565"><td class="memItemLeft" align="right" valign="top">decltype(auto)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#af356b36637d3a676f9e2d1c4682a4565">end</a> () const</td></tr>
-<tr class="separator:af356b36637d3a676f9e2d1c4682a4565"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec50980918fe8e92bf4d07ef75b16229"><td class="memItemLeft" align="right" valign="top">decltype(auto)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#aec50980918fe8e92bf4d07ef75b16229">cend</a> ()</td></tr>
-<tr class="separator:aec50980918fe8e92bf4d07ef75b16229"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9460ef543c2f4f6db907625c97f8e05e"><td class="memItemLeft" align="right" valign="top">decltype(auto)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a9460ef543c2f4f6db907625c97f8e05e">cend</a> () const</td></tr>
-<tr class="separator:a9460ef543c2f4f6db907625c97f8e05e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae0e4b5751d0f1743011f6f1372d3f50"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#aae0e4b5751d0f1743011f6f1372d3f50">~Vector</a> ()=default</td></tr>
+<tr class="separator:aae0e4b5751d0f1743011f6f1372d3f50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2e662b87127d338fc88de7fd3cd5f74"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#af2e662b87127d338fc88de7fd3cd5f74">at</a> (std::size_t i) -&gt; decltype(auto)</td></tr>
+<tr class="separator:af2e662b87127d338fc88de7fd3cd5f74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03629946d2f862997d2bdb48eb53addd"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a03629946d2f862997d2bdb48eb53addd">at</a> (std::size_t i) const -&gt; decltype(auto)</td></tr>
+<tr class="separator:a03629946d2f862997d2bdb48eb53addd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada6b38ec5f5db39d8051c4a06da0c96c"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#ada6b38ec5f5db39d8051c4a06da0c96c">operator[]</a> (std::size_t i) -&gt; decltype(auto)</td></tr>
+<tr class="separator:ada6b38ec5f5db39d8051c4a06da0c96c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b51d15429f4a8009565c7b250d35c21"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a3b51d15429f4a8009565c7b250d35c21">operator[]</a> (std::size_t i) const -&gt; decltype(auto)</td></tr>
+<tr class="separator:a3b51d15429f4a8009565c7b250d35c21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae53571551352f291d724e36967e2bb3a"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#ae53571551352f291d724e36967e2bb3a">front</a> () -&gt; decltype(auto)</td></tr>
+<tr class="separator:ae53571551352f291d724e36967e2bb3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ec0b09092e029905c52458f8a62fe33"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a6ec0b09092e029905c52458f8a62fe33">front</a> () const -&gt; decltype(auto)</td></tr>
+<tr class="separator:a6ec0b09092e029905c52458f8a62fe33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a0cd3f659a34299c62d2a1a2b50fcc8"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a3a0cd3f659a34299c62d2a1a2b50fcc8">back</a> () -&gt; decltype(auto)</td></tr>
+<tr class="separator:a3a0cd3f659a34299c62d2a1a2b50fcc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52be79586ce8cc24c49d3d4b39409188"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a52be79586ce8cc24c49d3d4b39409188">back</a> () const -&gt; decltype(auto)</td></tr>
+<tr class="separator:a52be79586ce8cc24c49d3d4b39409188"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af438bc9d6748c1e56b47c298d7c1b600"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#af438bc9d6748c1e56b47c298d7c1b600">begin</a> () -&gt; decltype(auto)</td></tr>
+<tr class="separator:af438bc9d6748c1e56b47c298d7c1b600"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b117446406402c58036738aae357f84"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a6b117446406402c58036738aae357f84">begin</a> () const -&gt; decltype(auto)</td></tr>
+<tr class="separator:a6b117446406402c58036738aae357f84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80a45f6abdbe5474ba64bf74dddc7cc5"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a80a45f6abdbe5474ba64bf74dddc7cc5">cbegin</a> () -&gt; decltype(auto)</td></tr>
+<tr class="separator:a80a45f6abdbe5474ba64bf74dddc7cc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4ffac914906e5f4e585924f405c82ec"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#ac4ffac914906e5f4e585924f405c82ec">cbegin</a> () const -&gt; decltype(auto)</td></tr>
+<tr class="separator:ac4ffac914906e5f4e585924f405c82ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a426d9ce87ce0e0c834cb34e153445e47"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a426d9ce87ce0e0c834cb34e153445e47">end</a> () -&gt; decltype(auto)</td></tr>
+<tr class="separator:a426d9ce87ce0e0c834cb34e153445e47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a740bad9bba7b6b5a202d22a733a7dcc6"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a740bad9bba7b6b5a202d22a733a7dcc6">end</a> () const -&gt; decltype(auto)</td></tr>
+<tr class="separator:a740bad9bba7b6b5a202d22a733a7dcc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac69bf7c27634524c18ef47b78a2705b4"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#ac69bf7c27634524c18ef47b78a2705b4">cend</a> () -&gt; decltype(auto)</td></tr>
+<tr class="separator:ac69bf7c27634524c18ef47b78a2705b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c8f7ba8b84bb9f3baa853626f7b2c09"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a6c8f7ba8b84bb9f3baa853626f7b2c09">cend</a> () const -&gt; decltype(auto)</td></tr>
+<tr class="separator:a6c8f7ba8b84bb9f3baa853626f7b2c09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a810ee5694772da3167d1e1c99a983288"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a810ee5694772da3167d1e1c99a983288">empty</a> () const -&gt; bool</td></tr>
 <tr class="separator:a810ee5694772da3167d1e1c99a983288"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3608dac5aada4f2b6b0fc2cdb19c4f3c"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a3608dac5aada4f2b6b0fc2cdb19c4f3c">size</a> () const -&gt; std::size_t</td></tr>
@@ -220,7 +222,7 @@ struct llama::Vector&lt; Mapping &gt;</h3>
 template&lt;typename Mapping &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::<a class="el" href="structllama_1_1Vector.html#a7cb2da4cdee69566d96d906796ac96ff">iterator</a> =  decltype(std::declval&lt;<a class="el" href="structllama_1_1Vector.html#a76fed48612017cbd342fbc91a06f885b">ViewType</a>&gt;().<a class="el" href="structllama_1_1Vector.html#ab0cb55ef49592672b1e3c3e034891104">begin</a>())</td>
+          <td class="memname">using <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::<a class="el" href="structllama_1_1Vector.html#a7cb2da4cdee69566d96d906796ac96ff">iterator</a> =  decltype(std::declval&lt;<a class="el" href="structllama_1_1Vector.html#a76fed48612017cbd342fbc91a06f885b">ViewType</a>&gt;().<a class="el" href="structllama_1_1Vector.html#af438bc9d6748c1e56b47c298d7c1b600">begin</a>())</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -395,8 +397,8 @@ template&lt;typename Iterator &gt; </div>
 
 </div>
 </div>
-<a id="abf95dbdf5979a4a44a8b1098813f8c78"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abf95dbdf5979a4a44a8b1098813f8c78">&#9670;&nbsp;</a></span>Vector() <span class="overload">[4/5]</span></h2>
+<a id="aec188ca107a1acab83c6e80f2e23ecc4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec188ca107a1acab83c6e80f2e23ecc4">&#9670;&nbsp;</a></span>Vector() <span class="overload">[4/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -416,12 +418,10 @@ template&lt;typename Mapping &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">default</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00051">51</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
@@ -451,13 +451,40 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00057">57</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00053">53</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aae0e4b5751d0f1743011f6f1372d3f50"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae0e4b5751d0f1743011f6f1372d3f50">&#9670;&nbsp;</a></span>~Vector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::~<a class="el" href="structllama_1_1Vector.html">Vector</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ad66798ddee8f30a8949d06a8eb93eaaa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad66798ddee8f30a8949d06a8eb93eaaa">&#9670;&nbsp;</a></span>at() <span class="overload">[1/2]</span></h2>
+<a id="af2e662b87127d338fc88de7fd3cd5f74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2e662b87127d338fc88de7fd3cd5f74">&#9670;&nbsp;</a></span>at() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -468,11 +495,12 @@ template&lt;typename Mapping &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">decltype(auto) <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::at </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::at </td>
           <td>(</td>
           <td class="paramtype">std::size_t&#160;</td>
           <td class="paramname"><em>i</em></td><td>)</td>
-          <td></td>
+          <td> -&gt; decltype(auto)
+        </td>
         </tr>
       </table>
   </td>
@@ -482,12 +510,12 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00077">77</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00070">70</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a18c8e8f888c0a23e15a38fb6b43beb70"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a18c8e8f888c0a23e15a38fb6b43beb70">&#9670;&nbsp;</a></span>at() <span class="overload">[2/2]</span></h2>
+<a id="a03629946d2f862997d2bdb48eb53addd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03629946d2f862997d2bdb48eb53addd">&#9670;&nbsp;</a></span>at() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -498,11 +526,12 @@ template&lt;typename Mapping &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">decltype(auto) <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::at </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::at </td>
           <td>(</td>
           <td class="paramtype">std::size_t&#160;</td>
           <td class="paramname"><em>i</em></td><td>)</td>
-          <td> const</td>
+          <td> const -&gt; decltype(auto)
+        </td>
         </tr>
       </table>
   </td>
@@ -512,12 +541,12 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00085">85</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00078">78</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a71be2ac37799becc42f3a98faf47fa87"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a71be2ac37799becc42f3a98faf47fa87">&#9670;&nbsp;</a></span>back() <span class="overload">[1/2]</span></h2>
+<a id="a3a0cd3f659a34299c62d2a1a2b50fcc8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a0cd3f659a34299c62d2a1a2b50fcc8">&#9670;&nbsp;</a></span>back() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -528,10 +557,11 @@ template&lt;typename Mapping &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">decltype(auto) <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::back </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::back </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> -&gt; decltype(auto)
+        </td>
         </tr>
       </table>
   </td>
@@ -541,12 +571,12 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00113">113</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00106">106</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a50c7dbac1a5f9d0782bd57a4275306ae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a50c7dbac1a5f9d0782bd57a4275306ae">&#9670;&nbsp;</a></span>back() <span class="overload">[2/2]</span></h2>
+<a id="a52be79586ce8cc24c49d3d4b39409188"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52be79586ce8cc24c49d3d4b39409188">&#9670;&nbsp;</a></span>back() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -557,10 +587,11 @@ template&lt;typename Mapping &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">decltype(auto) <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::back </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::back </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td> const -&gt; decltype(auto)
+        </td>
         </tr>
       </table>
   </td>
@@ -570,12 +601,12 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00118">118</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00111">111</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ab0cb55ef49592672b1e3c3e034891104"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab0cb55ef49592672b1e3c3e034891104">&#9670;&nbsp;</a></span>begin() <span class="overload">[1/2]</span></h2>
+<a id="af438bc9d6748c1e56b47c298d7c1b600"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af438bc9d6748c1e56b47c298d7c1b600">&#9670;&nbsp;</a></span>begin() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -586,10 +617,11 @@ template&lt;typename Mapping &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">decltype(auto) <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::begin </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::begin </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> -&gt; decltype(auto)
+        </td>
         </tr>
       </table>
   </td>
@@ -599,12 +631,12 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00123">123</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00116">116</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
-<a id="afc4cf98071d2ea57ab07f259c721d3bf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc4cf98071d2ea57ab07f259c721d3bf">&#9670;&nbsp;</a></span>begin() <span class="overload">[2/2]</span></h2>
+<a id="a6b117446406402c58036738aae357f84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b117446406402c58036738aae357f84">&#9670;&nbsp;</a></span>begin() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -615,10 +647,11 @@ template&lt;typename Mapping &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">decltype(auto) <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::begin </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::begin </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td> const -&gt; decltype(auto)
+        </td>
         </tr>
       </table>
   </td>
@@ -628,7 +661,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00128">128</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00121">121</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
@@ -658,12 +691,12 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00179">179</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00172">172</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
-<a id="aec5b907dd9bfc94e466366ad46401cbf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec5b907dd9bfc94e466366ad46401cbf">&#9670;&nbsp;</a></span>cbegin() <span class="overload">[1/2]</span></h2>
+<a id="a80a45f6abdbe5474ba64bf74dddc7cc5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80a45f6abdbe5474ba64bf74dddc7cc5">&#9670;&nbsp;</a></span>cbegin() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -674,10 +707,11 @@ template&lt;typename Mapping &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">decltype(auto) <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::cbegin </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::cbegin </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> -&gt; decltype(auto)
+        </td>
         </tr>
       </table>
   </td>
@@ -687,12 +721,12 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00133">133</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00126">126</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a4d06d3981755ed09379bedb5922ce26d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4d06d3981755ed09379bedb5922ce26d">&#9670;&nbsp;</a></span>cbegin() <span class="overload">[2/2]</span></h2>
+<a id="ac4ffac914906e5f4e585924f405c82ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4ffac914906e5f4e585924f405c82ec">&#9670;&nbsp;</a></span>cbegin() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -703,10 +737,11 @@ template&lt;typename Mapping &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">decltype(auto) <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::cbegin </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::cbegin </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td> const -&gt; decltype(auto)
+        </td>
         </tr>
       </table>
   </td>
@@ -716,12 +751,12 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00138">138</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00131">131</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
-<a id="aec50980918fe8e92bf4d07ef75b16229"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec50980918fe8e92bf4d07ef75b16229">&#9670;&nbsp;</a></span>cend() <span class="overload">[1/2]</span></h2>
+<a id="ac69bf7c27634524c18ef47b78a2705b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac69bf7c27634524c18ef47b78a2705b4">&#9670;&nbsp;</a></span>cend() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -732,10 +767,11 @@ template&lt;typename Mapping &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">decltype(auto) <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::cend </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::cend </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> -&gt; decltype(auto)
+        </td>
         </tr>
       </table>
   </td>
@@ -745,12 +781,12 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00153">153</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00146">146</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a9460ef543c2f4f6db907625c97f8e05e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9460ef543c2f4f6db907625c97f8e05e">&#9670;&nbsp;</a></span>cend() <span class="overload">[2/2]</span></h2>
+<a id="a6c8f7ba8b84bb9f3baa853626f7b2c09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c8f7ba8b84bb9f3baa853626f7b2c09">&#9670;&nbsp;</a></span>cend() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -761,10 +797,11 @@ template&lt;typename Mapping &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">decltype(auto) <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::cend </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::cend </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td> const -&gt; decltype(auto)
+        </td>
         </tr>
       </table>
   </td>
@@ -774,7 +811,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00158">158</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00151">151</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
@@ -803,7 +840,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00189">189</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00182">182</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
@@ -833,12 +870,12 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00163">163</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00156">156</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
-<a id="af5772e0bd8927bb51bac0ab02dd06934"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af5772e0bd8927bb51bac0ab02dd06934">&#9670;&nbsp;</a></span>end() <span class="overload">[1/2]</span></h2>
+<a id="a426d9ce87ce0e0c834cb34e153445e47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a426d9ce87ce0e0c834cb34e153445e47">&#9670;&nbsp;</a></span>end() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -849,10 +886,11 @@ template&lt;typename Mapping &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">decltype(auto) <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::end </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::end </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> -&gt; decltype(auto)
+        </td>
         </tr>
       </table>
   </td>
@@ -862,12 +900,12 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00143">143</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00136">136</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
-<a id="af356b36637d3a676f9e2d1c4682a4565"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af356b36637d3a676f9e2d1c4682a4565">&#9670;&nbsp;</a></span>end() <span class="overload">[2/2]</span></h2>
+<a id="a740bad9bba7b6b5a202d22a733a7dcc6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a740bad9bba7b6b5a202d22a733a7dcc6">&#9670;&nbsp;</a></span>end() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -878,10 +916,11 @@ template&lt;typename Mapping &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">decltype(auto) <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::end </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::end </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td> const -&gt; decltype(auto)
+        </td>
         </tr>
       </table>
   </td>
@@ -891,7 +930,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00148">148</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00141">141</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
@@ -922,12 +961,12 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00210">210</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00203">203</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a057a59e995670b1ee8cac75969120cf9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a057a59e995670b1ee8cac75969120cf9">&#9670;&nbsp;</a></span>front() <span class="overload">[1/2]</span></h2>
+<a id="ae53571551352f291d724e36967e2bb3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae53571551352f291d724e36967e2bb3a">&#9670;&nbsp;</a></span>front() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -938,10 +977,11 @@ template&lt;typename Mapping &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">decltype(auto) <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::front </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::front </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> -&gt; decltype(auto)
+        </td>
         </tr>
       </table>
   </td>
@@ -951,12 +991,12 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00103">103</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00096">96</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
-<a id="aa77f1c71dd64dd0238cc425a2073ea54"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa77f1c71dd64dd0238cc425a2073ea54">&#9670;&nbsp;</a></span>front() <span class="overload">[2/2]</span></h2>
+<a id="a6ec0b09092e029905c52458f8a62fe33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ec0b09092e029905c52458f8a62fe33">&#9670;&nbsp;</a></span>front() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -967,10 +1007,11 @@ template&lt;typename Mapping &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">decltype(auto) <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::front </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::front </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td> const -&gt; decltype(auto)
+        </td>
         </tr>
       </table>
   </td>
@@ -980,7 +1021,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00108">108</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00101">101</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
@@ -1023,12 +1064,12 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00195">195</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00188">188</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ad88717ebe1926f89d629072afb2c0893"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad88717ebe1926f89d629072afb2c0893">&#9670;&nbsp;</a></span>operator=() <span class="overload">[1/2]</span></h2>
+<a id="a9438c49ab6897f544779b06f5a3d8c8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9438c49ab6897f544779b06f5a3d8c8c">&#9670;&nbsp;</a></span>operator=() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1043,18 +1084,15 @@ template&lt;typename Mapping &gt; </div>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="structllama_1_1Vector.html">Vector</a>&lt; Mapping &gt; &amp;&#160;</td>
           <td class="paramname"><em>other</em></td><td>)</td>
-          <td> -&gt; <a class="el" href="structllama_1_1Vector.html">Vector</a>&amp;
-        </td>
+          <td> -&gt;  <a class="el" href="structllama_1_1Vector.html">Vector</a> &amp;=default</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">default</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00062">62</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
@@ -1085,12 +1123,12 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00069">69</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00060">60</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a3354718fe917a4754c4c881351dd07c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3354718fe917a4754c4c881351dd07c8">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[1/2]</span></h2>
+<a id="ada6b38ec5f5db39d8051c4a06da0c96c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada6b38ec5f5db39d8051c4a06da0c96c">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1101,11 +1139,12 @@ template&lt;typename Mapping &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">decltype(auto) <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::operator[] </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::operator[] </td>
           <td>(</td>
           <td class="paramtype">std::size_t&#160;</td>
           <td class="paramname"><em>i</em></td><td>)</td>
-          <td></td>
+          <td> -&gt; decltype(auto)
+        </td>
         </tr>
       </table>
   </td>
@@ -1115,12 +1154,12 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00093">93</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00086">86</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a986aaf25de32b46804d6094a109bf991"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a986aaf25de32b46804d6094a109bf991">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[2/2]</span></h2>
+<a id="a3b51d15429f4a8009565c7b250d35c21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b51d15429f4a8009565c7b250d35c21">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1131,11 +1170,12 @@ template&lt;typename Mapping &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">decltype(auto) <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::operator[] </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::operator[] </td>
           <td>(</td>
           <td class="paramtype">std::size_t&#160;</td>
           <td class="paramname"><em>i</em></td><td>)</td>
-          <td> const</td>
+          <td> const -&gt; decltype(auto)
+        </td>
         </tr>
       </table>
   </td>
@@ -1145,7 +1185,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00098">98</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00091">91</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
@@ -1174,7 +1214,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00232">232</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00225">225</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
@@ -1206,7 +1246,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00222">222</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00215">215</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
@@ -1236,7 +1276,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00173">173</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00166">166</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
@@ -1278,7 +1318,7 @@ template&lt;typename VirtualRecord  = One&lt;RecordDim&gt;&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00238">238</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00231">231</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
@@ -1307,7 +1347,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00184">184</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00177">177</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
@@ -1337,7 +1377,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00168">168</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00161">161</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
@@ -1379,7 +1419,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00253">253</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00246">246</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
@@ -1420,7 +1460,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00258">258</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00251">251</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
@@ -1461,7 +1501,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00263">263</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00256">256</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
@@ -1502,7 +1542,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00246">246</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00239">239</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
@@ -1543,7 +1583,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00268">268</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00261">261</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
@@ -1584,7 +1624,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00273">273</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00266">266</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
@@ -1624,7 +1664,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00278">278</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Vector_8hpp_source.html#l00271">271</a> of file <a class="el" href="Vector_8hpp_source.html">Vector.hpp</a>.</p>
 
 </div>
 </div>
@@ -1637,7 +1677,7 @@ template&lt;typename Mapping &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="structllama_1_1Vector.html">Vector</a></li>
-    <li class="footer">Generated on Sun Sep 19 2021 13:41:17 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sun Sep 19 2021 16:27:28 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

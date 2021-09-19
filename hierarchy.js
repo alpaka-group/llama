@@ -1,8 +1,8 @@
 var hierarchy =
 [
     [ "llama::bloballoc::AlignedAllocator< T, Alignment >", "structllama_1_1bloballoc_1_1AlignedAllocator.html", null ],
-    [ "llama::mapping::AoS< T_ArrayDims, T_RecordDim, AlignAndPad, T_LinearizeArrayDimsFunctor, FlattenRecordDim >", "structllama_1_1mapping_1_1AoS.html", null ],
-    [ "llama::mapping::AoSoA< T_ArrayDims, T_RecordDim, Lanes, T_LinearizeArrayDimsFunctor >", "structllama_1_1mapping_1_1AoSoA.html", null ],
+    [ "llama::mapping::AoS< TArrayDims, TRecordDim, AlignAndPad, TLinearizeArrayDimsFunctor, FlattenRecordDim >", "structllama_1_1mapping_1_1AoS.html", null ],
+    [ "llama::mapping::AoSoA< TArrayDims, TRecordDim, Lanes, TLinearizeArrayDimsFunctor >", "structllama_1_1mapping_1_1AoSoA.html", null ],
     [ "llama::Array< T, N >", "structllama_1_1Array.html", null ],
     [ "llama::Array< BlobType, Mapping::blobCount >", "structllama_1_1Array.html", null ],
     [ "llama::Array< std::size_t, Dim >", "structllama_1_1Array.html", [
@@ -14,7 +14,7 @@ var hierarchy =
     [ "llama::ArrayDimsIndexRange< Dim >", "structllama_1_1ArrayDimsIndexRange.html", null ],
     [ "llama::internal::Assign", "structllama_1_1internal_1_1Assign.html", null ],
     [ "bool_constant", null, [
-      [ "llama::internal::isComputed< Mapping, RecordCoord, std::void_t< decltype(Mapping::isComputed(RecordCoord{}))> >", "structllama_1_1internal_1_1isComputed_3_01Mapping_00_01RecordCoord_00_01std_1_1void__t_3_01declt90ee9238cb4500a8941bc2798fc813a7.html", null ]
+      [ "llama::internal::IsComputed< Mapping, RecordCoord, std::void_t< decltype(Mapping::isComputed(RecordCoord{}))> >", "structllama_1_1internal_1_1IsComputed_3_01Mapping_00_01RecordCoord_00_01std_1_1void__t_3_01declt31ec39d02aa75d5ea3308109fe018112.html", null ]
     ] ],
     [ "llama::mapping::tree::functor::internal::ChangeNodeChildsRuntimeFunctor", "structllama_1_1mapping_1_1tree_1_1functor_1_1internal_1_1ChangeNodeChildsRuntimeFunctor.html", null ],
     [ "llama::Copy< SrcMapping, DstMapping, SFINAE >", "structllama_1_1Copy.html", null ],
@@ -27,8 +27,8 @@ var hierarchy =
     [ "llama::mapping::tree::internal::CreateTreeElement< Tag, Record< Fields... >, CountType >", "structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement_3_01Tag_00_01Record_3_01Fields_8_8_8_01_4_00_01CountType_01_4.html", null ],
     [ "llama::internal::DivideAssign", "structllama_1_1internal_1_1DivideAssign.html", null ],
     [ "false_type", null, [
-      [ "llama::internal::is_bounded_array< T >", "structllama_1_1internal_1_1is__bounded__array.html", null ],
-      [ "llama::internal::isComputed< Mapping, RecordCoord, typename >", "structllama_1_1internal_1_1isComputed.html", null ]
+      [ "llama::internal::IsBoundedArray< T >", "structllama_1_1internal_1_1IsBoundedArray.html", null ],
+      [ "llama::internal::IsComputed< Mapping, RecordCoord, typename >", "structllama_1_1internal_1_1IsComputed.html", null ]
     ] ],
     [ "llama::Field< Tag, Type >", "structllama_1_1Field.html", null ],
     [ "llama::internal::FlattenRecordDimImpl< T >", "structllama_1_1internal_1_1FlattenRecordDimImpl.html", null ],
@@ -53,16 +53,16 @@ var hierarchy =
     [ "llama::mapping::tree::functor::Idem", "structllama_1_1mapping_1_1tree_1_1functor_1_1Idem.html", null ],
     [ "llama::internal::IndirectValue< T >", "structllama_1_1internal_1_1IndirectValue.html", null ],
     [ "integral_constant", null, [
-      [ "std::tuple_size< llama::ArrayDims< N > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayDims_3_01N_01_4_01_4.html", null ]
+      [ "std::tuple_size< llama::Array< T, N > >", "structstd_1_1tuple__size_3_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html", null ]
     ] ],
     [ "integral_constant", null, [
-      [ "std::tuple_size< llama::Array< T, N > >", "structstd_1_1tuple__size_3_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html", null ]
+      [ "std::tuple_size< llama::ArrayDims< N > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayDims_3_01N_01_4_01_4.html", null ]
     ] ],
     [ "is_same", null, [
       [ "llama::internal::GetCoordFromTagsImpl< Record< Fields... >, RecordCoord< ResultCoords... >, FirstTag, Tags... >::HasTag< Field >", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoor097fc6d4759914143ed6b970ceeaa1d4.html", null ]
     ] ],
     [ "llama::Iterator< View >", "structllama_1_1Iterator.html", null ],
-    [ "llama::mapping::tree::Leaf< T_Identifier, T_Type, CountType >", "structllama_1_1mapping_1_1tree_1_1Leaf.html", null ],
+    [ "llama::mapping::tree::Leaf< TIdentifier, TType, CountType >", "structllama_1_1mapping_1_1tree_1_1Leaf.html", null ],
     [ "llama::mapping::tree::functor::LeafOnlyRT", "structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT.html", null ],
     [ "llama::internal::LeafRecordCoordsImpl< RecordDim, RecordCoord >", "structllama_1_1internal_1_1LeafRecordCoordsImpl.html", null ],
     [ "llama::internal::LeafRecordCoordsImpl< Child[N], RecordCoord< RCs... > >", "structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Child_0fN_0e_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html", null ],
@@ -71,9 +71,9 @@ var hierarchy =
     [ "llama::mapping::LinearizeArrayDimsCpp", "structllama_1_1mapping_1_1LinearizeArrayDimsCpp.html", null ],
     [ "llama::mapping::LinearizeArrayDimsFortran", "structllama_1_1mapping_1_1LinearizeArrayDimsFortran.html", null ],
     [ "llama::mapping::LinearizeArrayDimsMorton", "structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html", null ],
-    [ "llama::VirtualRecord< T_View, BoundRecordCoord, OwnView >::Loader", "structllama_1_1VirtualRecord_1_1Loader.html", null ],
-    [ "llama::VirtualRecord< T_View, BoundRecordCoord, OwnView >::LoaderConst", "structllama_1_1VirtualRecord_1_1LoaderConst.html", null ],
-    [ "llama::mapping::tree::Mapping< T_ArrayDims, T_RecordDim, TreeOperationList >", "structllama_1_1mapping_1_1tree_1_1Mapping.html", null ],
+    [ "llama::VirtualRecord< TView, BoundRecordCoord, OwnView >::Loader", "structllama_1_1VirtualRecord_1_1Loader.html", null ],
+    [ "llama::VirtualRecord< TView, BoundRecordCoord, OwnView >::LoaderConst", "structllama_1_1VirtualRecord_1_1LoaderConst.html", null ],
+    [ "llama::mapping::tree::Mapping< TArrayDims, TRecordDim, TreeOperationList >", "structllama_1_1mapping_1_1tree_1_1Mapping.html", null ],
     [ "llama::mapping::tree::internal::MergeFunctors< Tree, TreeOperationList >", "structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors.html", null ],
     [ "llama::mapping::tree::internal::MergeFunctors< BasicTree, TreeOperationList >", "structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors.html", null ],
     [ "llama::mapping::tree::internal::MergeFunctors< ResultTree, boost::mp11::mp_drop_c< llama::Tuple< Operations... >, 1 > >", "structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors.html", null ],
@@ -88,10 +88,10 @@ var hierarchy =
     [ "llama::internal::mp_unwrap_sizes_impl< L >", "structllama_1_1internal_1_1mp__unwrap__sizes__impl.html", null ],
     [ "llama::internal::mp_unwrap_sizes_impl< L< T... > >", "structllama_1_1internal_1_1mp__unwrap__sizes__impl_3_01L_3_01T_8_8_8_01_4_01_4.html", null ],
     [ "llama::internal::MultiplyAssign", "structllama_1_1internal_1_1MultiplyAssign.html", null ],
-    [ "llama::mapping::tree::Node< T_Identifier, T_ChildrenTuple, CountType >", "structllama_1_1mapping_1_1tree_1_1Node.html", null ],
+    [ "llama::mapping::tree::Node< TIdentifier, TChildrenTuple, CountType >", "structllama_1_1mapping_1_1tree_1_1Node.html", null ],
     [ "llama::NoName", "structllama_1_1NoName.html", null ],
     [ "llama::NrAndOffset", "structllama_1_1NrAndOffset.html", null ],
-    [ "llama::mapping::One< T_ArrayDims, T_RecordDim, AlignAndPad, FlattenRecordDim >", "structllama_1_1mapping_1_1One.html", null ],
+    [ "llama::mapping::One< TArrayDims, TRecordDim, AlignAndPad, FlattenRecordDim >", "structllama_1_1mapping_1_1One.html", null ],
     [ "llama::internal::PlusAssign", "structllama_1_1internal_1_1PlusAssign.html", null ],
     [ "llama::mapping::PreconfiguredAoS< AlignAndPad, LinearizeArrayDimsFunctor >", "structllama_1_1mapping_1_1PreconfiguredAoS.html", null ],
     [ "llama::mapping::PreconfiguredAoSoA< Lanes, LinearizeArrayDimsFunctor >", "structllama_1_1mapping_1_1PreconfiguredAoSoA.html", null ],
@@ -106,8 +106,8 @@ var hierarchy =
     [ "llama::internal::RecordCoordCommonPrefixIsSameImpl< First, Second >", "structllama_1_1internal_1_1RecordCoordCommonPrefixIsSameImpl.html", null ],
     [ "llama::internal::RecordCoordCommonPrefixIsSameImpl< RecordCoord< Coords1... >, RecordCoord< Coords2... > >", "structllama_1_1internal_1_1RecordCoordCommonPrefixIsSameImpl_3_01RecordCoord_3_01Coords1_8_8_8_0f195a8b8a0db2355fe3190fcb9b6d969.html", null ],
     [ "llama::bloballoc::SharedPtr", "structllama_1_1bloballoc_1_1SharedPtr.html", null ],
-    [ "llama::mapping::SoA< T_ArrayDims, T_RecordDim, SeparateBuffers, T_LinearizeArrayDimsFunctor >", "structllama_1_1mapping_1_1SoA.html", null ],
-    [ "llama::mapping::Split< T_ArrayDims, T_RecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs >", "structllama_1_1mapping_1_1Split.html", null ],
+    [ "llama::mapping::SoA< TArrayDims, TRecordDim, SeparateBuffers, TLinearizeArrayDimsFunctor >", "structllama_1_1mapping_1_1SoA.html", null ],
+    [ "llama::mapping::Split< TArrayDims, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs >", "structllama_1_1mapping_1_1Split.html", null ],
     [ "llama::bloballoc::Stack< BytesToReserve >", "structllama_1_1bloballoc_1_1Stack.html", null ],
     [ "llama::mapping::Trace< Mapping >", "structllama_1_1mapping_1_1Trace.html", null ],
     [ "llama::internal::TransformLeavesImpl< T, TypeFunctor >", "structllama_1_1internal_1_1TransformLeavesImpl.html", null ],
@@ -115,11 +115,11 @@ var hierarchy =
     [ "llama::internal::TransformLeavesImpl< Record< Fields... >, TypeFunctor >", "structllama_1_1internal_1_1TransformLeavesImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01TypeFunctor_01_4.html", null ],
     [ "llama::mapping::tree::TreeCoordElement< ChildIndex, ArrayIndexType >", "structllama_1_1mapping_1_1tree_1_1TreeCoordElement.html", null ],
     [ "true_type", null, [
-      [ "llama::internal::is_bounded_array< T[N]>", "structllama_1_1internal_1_1is__bounded__array_3_01T_0fN_0e_4.html", null ]
+      [ "llama::internal::IsBoundedArray< T[N]>", "structllama_1_1internal_1_1IsBoundedArray_3_01T_0fN_0e_4.html", null ]
     ] ],
     [ "llama::Tuple< Elements >", "structllama_1_1Tuple.html", null ],
     [ "llama::Tuple< Elements... >", "structllama_1_1Tuple.html", null ],
-    [ "llama::Tuple< T_FirstElement, Elements... >", "structllama_1_1Tuple_3_01T__FirstElement_00_01Elements_8_8_8_01_4.html", null ],
+    [ "llama::Tuple< TFirstElement, Elements... >", "structllama_1_1Tuple_3_01TFirstElement_00_01Elements_8_8_8_01_4.html", null ],
     [ "std::tuple_element< I, const llama::VirtualRecord< View, BoundRecordCoord, OwnView > >", "structstd_1_1tuple__element_3_01I_00_01const_01llama_1_1VirtualRecord_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html", null ],
     [ "std::tuple_element< I, llama::Array< T, N > >", "structstd_1_1tuple__element_3_01I_00_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html", null ],
     [ "std::tuple_element< I, llama::ArrayDims< N > >", "structstd_1_1tuple__element_3_01I_00_01llama_1_1ArrayDims_3_01N_01_4_01_4.html", null ],
@@ -131,9 +131,9 @@ var hierarchy =
     [ "llama::internal::TupleReplaceImpl< 0, Tuple< OneElement >, Replacement >", "structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01OneElement_01_4_00_01Replacement_01_4.html", null ],
     [ "llama::Vector< Mapping >", "structllama_1_1Vector.html", null ],
     [ "llama::bloballoc::Vector", "structllama_1_1bloballoc_1_1Vector.html", null ],
-    [ "llama::View< T_Mapping, BlobType >", "structllama_1_1View.html", null ],
-    [ "llama::VirtualRecord< T_View, BoundRecordCoord, OwnView >", "structllama_1_1VirtualRecord.html", null ],
-    [ "llama::VirtualView< T_ParentViewType >", "structllama_1_1VirtualView.html", null ],
+    [ "llama::View< TMapping, BlobType >", "structllama_1_1View.html", null ],
+    [ "llama::VirtualRecord< TView, BoundRecordCoord, OwnView >", "structllama_1_1VirtualRecord.html", null ],
+    [ "llama::VirtualView< TParentViewType >", "structllama_1_1VirtualView.html", null ],
     [ "llama::mapping::tree::internal::WrapInNNodes< Leaf, Count >", "structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes.html", null ],
     [ "llama::mapping::tree::internal::WrapInNNodes< Leaf, 0 >", "structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes_3_01Leaf_00_010_01_4.html", null ]
 ];
