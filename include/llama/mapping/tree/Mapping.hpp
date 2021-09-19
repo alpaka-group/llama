@@ -203,7 +203,8 @@ namespace llama::mapping::tree
         }
 
         template<std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayDims coord) const -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayDims coord, RecordCoord<RecordCoords...> = {}) const
+            -> NrAndOffset
         {
             auto const basicTreeCoord = createTreeCoord<RecordCoord<RecordCoords...>>(coord);
             auto const resultTreeCoord = mergedFunctors.basicCoordToResultCoord(basicTreeCoord, basicTree);

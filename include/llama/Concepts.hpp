@@ -21,6 +21,8 @@ namespace llama
         Array<int, M::blobCount>{}; // validates constexpr-ness
         { m.blobSize(std::size_t{}) } -> std::same_as<std::size_t>;
         { m.blobNrAndOffset(typename M::ArrayDims{}) } -> std::same_as<NrAndOffset>;
+        { m.template blobNrAndOffset<0>(typename M::ArrayDims{}) } -> std::same_as<NrAndOffset>;
+        { m.blobNrAndOffset(typename M::ArrayDims{}, llama::RecordCoord<0>{}) } -> std::same_as<NrAndOffset>;
     };
     // clang-format on
 

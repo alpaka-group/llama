@@ -76,12 +76,13 @@ namespace llama::mapping
         }
 
         template<std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayDims coord) const -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayDims coord, RecordCoord<RecordCoords...> rc = {}) const
+            -> NrAndOffset
         {
             const static auto name = internal::coordName<RecordDim>(RecordCoord<RecordCoords...>{});
             fieldHits.at(name)++;
 
-            LLAMA_FORCE_INLINE_RECURSIVE return mapping.template blobNrAndOffset<RecordCoords...>(coord);
+            LLAMA_FORCE_INLINE_RECURSIVE return mapping.blobNrAndOffset(coord, rc);
         }
 
         Mapping mapping;

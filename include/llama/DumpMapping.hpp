@@ -56,12 +56,6 @@ namespace llama
             return v;
         }
 
-        template<typename Mapping, typename ArrayDims, std::size_t... Coords>
-        auto mappingBlobNrAndOffset(const Mapping& mapping, const ArrayDims& adCoord, RecordCoord<Coords...>)
-        {
-            return mapping.template blobNrAndOffset<Coords...>(adCoord);
-        }
-
         inline auto color(const std::vector<std::size_t>& recordCoord) -> std::size_t
         {
             auto c = boost::hash<std::vector<std::size_t>>{}(recordCoord) &0xFFFFFF;
@@ -130,7 +124,7 @@ namespace llama
                             {adCoord,
                              internal::toVec(coord),
                              internal::tagsAsStrings<RecordDim>(coord),
-                             internal::mappingBlobNrAndOffset(mapping, adCoord, coord),
+                             mapping.blobNrAndOffset(adCoord, coord),
                              size});
                     });
             }

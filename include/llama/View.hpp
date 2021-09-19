@@ -396,14 +396,14 @@ namespace llama
 
         LLAMA_SUPPRESS_HOST_DEVICE_WARNING
         template<std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDims arrayDims, RecordCoord<Coords...> dc = {}) const
+        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDims arrayDims, RecordCoord<Coords...> rc = {}) const
             -> decltype(auto)
         {
             if constexpr(isComputed<Mapping, RecordCoord<Coords...>>)
-                return mapping().compute(arrayDims, dc, storageBlobs);
+                return mapping().compute(arrayDims, rc, storageBlobs);
             else
             {
-                const auto [nr, offset] = mapping().template blobNrAndOffset<Coords...>(arrayDims);
+                const auto [nr, offset] = mapping().blobNrAndOffset(arrayDims, rc);
                 using Type = GetType<RecordDim, RecordCoord<Coords...>>;
                 return reinterpret_cast<const Type&>(storageBlobs[nr][offset]);
             }
@@ -411,13 +411,13 @@ namespace llama
 
         LLAMA_SUPPRESS_HOST_DEVICE_WARNING
         template<std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDims arrayDims, RecordCoord<Coords...> dc = {}) -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDims arrayDims, RecordCoord<Coords...> rc = {}) -> decltype(auto)
         {
             if constexpr(isComputed<Mapping, RecordCoord<Coords...>>)
-                return mapping().compute(arrayDims, dc, storageBlobs);
+                return mapping().compute(arrayDims, rc, storageBlobs);
             else
             {
-                const auto [nr, offset] = mapping().template blobNrAndOffset<Coords...>(arrayDims);
+                const auto [nr, offset] = mapping().blobNrAndOffset(arrayDims, rc);
                 using Type = GetType<RecordDim, RecordCoord<Coords...>>;
                 return reinterpret_cast<Type&>(storageBlobs[nr][offset]);
             }

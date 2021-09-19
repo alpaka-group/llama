@@ -70,7 +70,8 @@ struct GuardMapping2D
     }
 
     template<std::size_t... RecordCoords>
-    constexpr auto blobNrAndOffset(ArrayDims coord) const -> llama::NrAndOffset
+    constexpr auto blobNrAndOffset(ArrayDims coord, llama::RecordCoord<RecordCoords...> rc = {}) const
+        -> llama::NrAndOffset
     {
         // [0][0] is at left top
         const auto [row, col] = coord;
@@ -79,24 +80,24 @@ struct GuardMapping2D
         if(col == 0)
         {
             if(row == 0)
-                return offsetBlobNr(leftTop.template blobNrAndOffset<RecordCoords...>({}), leftTopOff);
+                return offsetBlobNr(leftTop.blobNrAndOffset({}, rc), leftTopOff);
             if(row == rowMax - 1)
-                return offsetBlobNr(leftBot.template blobNrAndOffset<RecordCoords...>({}), leftBotOff);
-            return offsetBlobNr(left.template blobNrAndOffset<RecordCoords...>({row - 1}), leftOff);
+                return offsetBlobNr(leftBot.blobNrAndOffset({}, rc), leftBotOff);
+            return offsetBlobNr(left.blobNrAndOffset({row - 1}, rc), leftOff);
         }
         if(col == colMax - 1)
         {
             if(row == 0)
-                return offsetBlobNr(rightTop.template blobNrAndOffset<RecordCoords...>({}), rightTopOff);
+                return offsetBlobNr(rightTop.blobNrAndOffset({}, rc), rightTopOff);
             if(row == rowMax - 1)
-                return offsetBlobNr(rightBot.template blobNrAndOffset<RecordCoords...>({}), rightBotOff);
-            return offsetBlobNr(right.template blobNrAndOffset<RecordCoords...>({row - 1}), rightOff);
+                return offsetBlobNr(rightBot.blobNrAndOffset({}, rc), rightBotOff);
+            return offsetBlobNr(right.blobNrAndOffset({row - 1}, rc), rightOff);
         }
         if(row == 0)
-            return offsetBlobNr(top.template blobNrAndOffset<RecordCoords...>({col - 1}), topOff);
+            return offsetBlobNr(top.blobNrAndOffset({col - 1}, rc), topOff);
         if(row == rowMax - 1)
-            return offsetBlobNr(bot.template blobNrAndOffset<RecordCoords...>({col - 1}), botOff);
-        return offsetBlobNr(center.template blobNrAndOffset<RecordCoords...>({row - 1, col - 1}), centerOff);
+            return offsetBlobNr(bot.blobNrAndOffset({col - 1}, rc), botOff);
+        return offsetBlobNr(center.blobNrAndOffset({row - 1, col - 1}, rc), centerOff);
     }
 
     constexpr auto centerBlobs() const
