@@ -43,7 +43,7 @@
 #endif
 
 #ifndef LLAMA_HOST_ACC
-#    if defined(__NVCC__)
+#    if defined(__NVCC__) || (defined(__clang__) && defined(__CUDA__))
 #        define LLAMA_HOST_ACC __host__ __device__
 #    elif defined(__GNUC__) || defined(__clang__) || defined(_MSC_VER) || defined(__INTEL_LLVM_COMPILER)
 #        define LLAMA_HOST_ACC
