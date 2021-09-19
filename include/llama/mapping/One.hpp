@@ -48,7 +48,8 @@ namespace llama::mapping
         }
 
         template<std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayDims) const -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayDims, RecordCoord<RecordCoords...> = {}) const
+            -> NrAndOffset
         {
             constexpr std::size_t flatIndex =
 #ifdef __NVCC__

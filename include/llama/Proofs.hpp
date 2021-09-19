@@ -9,12 +9,6 @@ namespace llama
 {
     namespace internal
     {
-        template<typename Mapping, std::size_t... Is, typename ArrayDims>
-        constexpr auto blobNrAndOffset(const Mapping& m, RecordCoord<Is...>, ArrayDims ad)
-        {
-            return m.template blobNrAndOffset<Is...>(ad);
-        }
-
         constexpr auto divRoundUp(std::size_t dividend, std::size_t divisor) -> std::size_t
         {
             return (dividend + divisor - 1) / divisor;
@@ -79,8 +73,7 @@ namespace llama
                                                      {
                                                          using Type
                                                              = GetType<typename Mapping::RecordDim, decltype(coord)>;
-                                                         const auto [blob, offset]
-                                                             = internal::blobNrAndOffset(m, coord, ad);
+                                                         const auto [blob, offset] = m.blobNrAndOffset(ad, coord);
                                                          for(auto b = 0; b < sizeof(Type); b++)
                                                              if(testAndSet(blob, offset + b))
                                                              {
@@ -110,8 +103,7 @@ namespace llama
                                                      {
                                                          using Type
                                                              = GetType<typename Mapping::RecordDim, decltype(coord)>;
-                                                         const auto [blob, offset]
-                                                             = internal::blobNrAndOffset(m, coord, ad);
+                                                         const auto [blob, offset] = m.blobNrAndOffset(ad, coord);
                                                          if(flatIndex % PieceLength != 0
                                                             && (lastBlob != blob
                                                                 || lastOffset + sizeof(Type) != offset))
