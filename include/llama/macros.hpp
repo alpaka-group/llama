@@ -28,23 +28,35 @@
 #    define LLAMA_INDEPENDENT_DATA
 #endif
 
-#ifndef LLAMA_FN_HOST_ACC_INLINE
+#ifndef LLAMA_FORCE_INLINE
 #    if defined(__NVCC__)
-#        define LLAMA_FN_HOST_ACC_INLINE __host__ __device__ __forceinline__
+#        define LLAMA_FORCE_INLINE __forceinline__
 #    elif defined(__GNUC__) || defined(__clang__)
-#        define LLAMA_FN_HOST_ACC_INLINE inline __attribute__((always_inline))
+#        define LLAMA_FORCE_INLINE inline __attribute__((always_inline))
 #    elif defined(_MSC_VER) || defined(__INTEL_LLVM_COMPILER)
-#        define LLAMA_FN_HOST_ACC_INLINE __forceinline
+#        define LLAMA_FORCE_INLINE __forceinline
+#    else
+/// Forces the compiler to inline a function annotated with this macro
+#        define LLAMA_FORCE_INLINE inline
+#        warning LLAMA_FORCE_INLINE is only defined to "inline" for this compiler
+#    endif
+#endif
+
+#ifndef LLAMA_HOST_ACC
+#    if defined(__NVCC__)
+#        define LLAMA_HOST_ACC __host__ __device__
+#    elif defined(__GNUC__) || defined(__clang__) || defined(_MSC_VER) || defined(__INTEL_LLVM_COMPILER)
+#        define LLAMA_HOST_ACC
 #    else
 /// Some offloading parallelization language extensions such a CUDA, OpenACC or OpenMP 4.5 need to specify whether a
 /// class, struct, function or method "resides" on the host, the accelerator (the offloading device) or both. LLAMA
-/// supports this with marking every function needed on an accelerator with `LLAMA_FN_HOST_ACC_INLINE`. When using such
-/// a language (or e.g. <a href="https://github.com/alpaka-group/alpaka">alpaka</a>) this macro should be defined on
-/// the compiler's command line. E.g. for alpaka: -D'LLAMA_FN_HOST_ACC_INLINE=ALPAKA_FN_HOST_ACC'
-#        define LLAMA_FN_HOST_ACC_INLINE inline
-#        warning LLAMA_FN_HOST_ACC_INLINE not defined for this compiler
+/// supports this with marking every function needed on an accelerator with `LLAMA_HOST_ACC`.
+#        define LLAMA_HOST_ACC
+#        warning LLAMA_HOST_ACC is only defined empty for this compiler
 #    endif
 #endif
+
+#define LLAMA_FN_HOST_ACC_INLINE LLAMA_FORCE_INLINE LLAMA_HOST_ACC
 
 #ifndef LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS
 #    if defined(__clang__) || defined(__INTEL_LLVM_COMPILER)

@@ -171,6 +171,8 @@ Macros
 ------
 
 .. doxygendefine:: LLAMA_INDEPENDENT_DATA
+.. doxygendefine:: LLAMA_FORCE_INLINE
+.. doxygendefine:: LLAMA_HOST_ACC
 .. doxygendefine:: LLAMA_FN_HOST_ACC_INLINE
 .. doxygendefine:: LLAMA_LAMBDA_INLINE
 .. doxygendefine:: LLAMA_FORCE_INLINE_RECURSIVE
