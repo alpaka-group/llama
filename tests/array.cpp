@@ -3,6 +3,21 @@
 #include <catch2/catch.hpp>
 #include <llama/llama.hpp>
 
+TEST_CASE("Array.operator<<")
+{
+    auto put = [](auto rc)
+    {
+        std::stringstream ss;
+        ss << rc;
+        return ss.str();
+    };
+
+    CHECK(put(llama::Array<int, 0>{}) == "Array{}");
+    CHECK(put(llama::Array{1}) == "Array{1}");
+    CHECK(put(llama::Array{1, 2, 3}) == "Array{1, 2, 3}");
+    CHECK(put(llama::Array{1.1, 2.2, 3.3}) == "Array{1.1, 2.2, 3.3}");
+}
+
 TEST_CASE("Array.push_front")
 {
     STATIC_REQUIRE(push_front(llama::Array<int, 0>{}, 1) == llama::Array{1});
