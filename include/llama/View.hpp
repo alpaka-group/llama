@@ -437,7 +437,7 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDims arrayDims, RecordCoord<Coords...> rc = {}) const
             -> decltype(auto)
         {
-            if constexpr(isComputed<Mapping, RecordCoord<Coords...>>)
+            if constexpr(llama::isComputed<Mapping, RecordCoord<Coords...>>)
                 return mapping().compute(arrayDims, rc, storageBlobs);
             else
             {
@@ -451,7 +451,7 @@ namespace llama
         template<std::size_t... Coords>
         LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDims arrayDims, RecordCoord<Coords...> rc = {}) -> decltype(auto)
         {
-            if constexpr(isComputed<Mapping, RecordCoord<Coords...>>)
+            if constexpr(llama::isComputed<Mapping, RecordCoord<Coords...>>)
                 return mapping().compute(arrayDims, rc, storageBlobs);
             else
             {
