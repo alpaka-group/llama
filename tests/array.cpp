@@ -5,10 +5,10 @@
 
 TEST_CASE("Array.operator<<")
 {
-    auto put = [](auto rc)
+    auto put = [](auto array)
     {
         std::stringstream ss;
-        ss << rc;
+        ss << array;
         return ss.str();
     };
 
@@ -16,6 +16,19 @@ TEST_CASE("Array.operator<<")
     CHECK(put(llama::Array{1}) == "Array{1}");
     CHECK(put(llama::Array{1, 2, 3}) == "Array{1, 2, 3}");
     CHECK(put(llama::Array{1.1, 2.2, 3.3}) == "Array{1.1, 2.2, 3.3}");
+}
+TEST_CASE("ArrayDims.operator<<")
+{
+    auto put = [](auto array)
+    {
+        std::stringstream ss;
+        ss << array;
+        return ss.str();
+    };
+
+    CHECK(put(llama::ArrayDims<0>{}) == "Array{}");
+    CHECK(put(llama::ArrayDims{1}) == "Array{1}");
+    CHECK(put(llama::ArrayDims{1, 2, 3}) == "Array{1, 2, 3}");
 }
 
 TEST_CASE("Array.push_front")
