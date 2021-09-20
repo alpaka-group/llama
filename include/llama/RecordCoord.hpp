@@ -6,6 +6,7 @@
 #include "Meta.hpp"
 
 #include <array>
+#include <ostream>
 #include <type_traits>
 
 namespace llama
@@ -54,6 +55,23 @@ namespace llama
 
     template<std::size_t... Coords>
     inline constexpr bool isRecordCoord<RecordCoord<Coords...>> = true;
+
+    template<std::size_t... RCs>
+    auto operator<<(std::ostream& os, RecordCoord<RCs...>) -> std::ostream&
+    {
+        os << "RecordCoord<";
+        bool first = true;
+        for(auto rc : std::array<std::size_t, sizeof...(RCs)>{RCs...})
+        {
+            if(first)
+                first = false;
+            else
+                os << ", ";
+            os << rc;
+        }
+        os << ">";
+        return os;
+    }
 
     inline namespace literals
     {
