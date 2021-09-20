@@ -94,6 +94,7 @@ $(document).ready(function(){initNavTree('RecordCoord_8hpp.html',''); initResiza
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="Meta_8hpp_source.html">Meta.hpp</a>&quot;</code><br />
 <code>#include &lt;array&gt;</code><br />
+<code>#include &lt;ostream&gt;</code><br />
 <code>#include &lt;type_traits&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for RecordCoord.hpp:</div>
@@ -102,10 +103,11 @@ $(document).ready(function(){initNavTree('RecordCoord_8hpp.html',''); initResiza
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="RecordCoord_8hpp__incl.png" border="0" usemap="#_2home_2runner_2work_2llama_2llama_2include_2llama_2RecordCoord_8hpp" alt=""/></div>
 <map name="_2home_2runner_2work_2llama_2llama_2include_2llama_2RecordCoord_8hpp" id="_2home_2runner_2work_2llama_2llama_2include_2llama_2RecordCoord_8hpp">
-<area shape="rect" title=" " alt="" coords="27,5,297,47"/>
+<area shape="rect" title=" " alt="" coords="72,5,343,47"/>
 <area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="27,95,110,121"/>
 <area shape="rect" title=" " alt="" coords="134,95,190,121"/>
-<area shape="rect" title=" " alt="" coords="215,95,307,121"/>
+<area shape="rect" title=" " alt="" coords="215,95,291,121"/>
+<area shape="rect" title=" " alt="" coords="315,95,407,121"/>
 <area shape="rect" title=" " alt="" coords="5,169,132,196"/>
 </map>
 </div>
@@ -202,6 +204,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a6b6c9452091052f330217e1dbb448b96"><td class="memTemplParams" colspan="2">template&lt;std::size_t... CoordsA, std::size_t... CoordsB&gt; </td></tr>
 <tr class="memitem:a6b6c9452091052f330217e1dbb448b96"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a6b6c9452091052f330217e1dbb448b96">llama::operator!=</a> (RecordCoord&lt; CoordsA... &gt; a, RecordCoord&lt; CoordsB... &gt; b)</td></tr>
 <tr class="separator:a6b6c9452091052f330217e1dbb448b96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a056e745a18ef7e0342d719e1ce678b17"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RCs&gt; </td></tr>
+<tr class="memitem:a056e745a18ef7e0342d719e1ce678b17"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a056e745a18ef7e0342d719e1ce678b17">llama::operator&lt;&lt;</a> (std::ostream &amp;os, RecordCoord&lt; RCs... &gt;) -&gt; std::ostream &amp;</td></tr>
+<tr class="separator:a056e745a18ef7e0342d719e1ce678b17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafe5ae24f96109b3ca3d05eaf550e880"><td class="memTemplParams" colspan="2">template&lt;char... Digits&gt; </td></tr>
 <tr class="memitem:aafe5ae24f96109b3ca3d05eaf550e880"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1literals.html#aafe5ae24f96109b3ca3d05eaf550e880">llama::literals::operator&quot;&quot;_RC</a> ()</td></tr>
 <tr class="memdesc:aafe5ae24f96109b3ca3d05eaf550e880"><td class="mdescLeft">&#160;</td><td class="mdescRight">Literal operator for converting a numeric literal into a <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>.  <a href="namespacellama_1_1literals.html#aafe5ae24f96109b3ca3d05eaf550e880">More...</a><br /></td></tr>
@@ -234,7 +239,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="RecordCoord_8hpp.html">RecordCoord.hpp</a></li>
-    <li class="footer">Generated on Sun Sep 19 2021 22:34:12 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Sep 20 2021 12:20:44 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

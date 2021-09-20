@@ -91,6 +91,7 @@ $(document).ready(function(){initNavTree('Array_8hpp.html',''); initResizable();
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="macros_8hpp_source.html">macros.hpp</a>&quot;</code><br />
+<code>#include &lt;ostream&gt;</code><br />
 <code>#include &lt;tuple&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for Array.hpp:</div>
@@ -99,9 +100,10 @@ $(document).ready(function(){initNavTree('Array_8hpp.html',''); initResizable();
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="Array_8hpp__incl.png" border="0" usemap="#_2home_2runner_2work_2llama_2llama_2include_2llama_2Array_8hpp" alt=""/></div>
 <map name="_2home_2runner_2work_2llama_2llama_2include_2llama_2Array_8hpp" id="_2home_2runner_2work_2llama_2llama_2include_2llama_2Array_8hpp">
-<area shape="rect" title=" " alt="" coords="5,5,225,47"/>
-<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="15,95,114,121"/>
-<area shape="rect" title=" " alt="" coords="139,95,193,121"/>
+<area shape="rect" title=" " alt="" coords="57,5,277,47"/>
+<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="5,95,104,121"/>
+<area shape="rect" title=" " alt="" coords="129,95,205,121"/>
+<area shape="rect" title=" " alt="" coords="229,95,283,121"/>
 </map>
 </div>
 </div><div class="textblock"><div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -161,6 +163,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a690689d38b43930430e58bb7fe17aca7"><td class="memTemplParams" colspan="2">template&lt;typename First , typename... Args&gt; </td></tr>
 <tr class="memitem:a690689d38b43930430e58bb7fe17aca7"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a690689d38b43930430e58bb7fe17aca7">llama::Array</a> (First, Args... args) -&gt; Array&lt; First, sizeof...(Args)+1 &gt;</td></tr>
 <tr class="separator:a690689d38b43930430e58bb7fe17aca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b9492ccf576f0f3683d893e35882a54"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N&gt; </td></tr>
+<tr class="memitem:a6b9492ccf576f0f3683d893e35882a54"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a6b9492ccf576f0f3683d893e35882a54">llama::operator&lt;&lt;</a> (std::ostream &amp;os, const Array&lt; T, N &gt; &amp;a) -&gt; std::ostream &amp;</td></tr>
+<tr class="separator:a6b9492ccf576f0f3683d893e35882a54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a171382a213d899b3bd5d3528eb6fc8e1"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N&gt; </td></tr>
 <tr class="memitem:a171382a213d899b3bd5d3528eb6fc8e1"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a171382a213d899b3bd5d3528eb6fc8e1">llama::push_front</a> (Array&lt; T, N &gt; a, T v) -&gt; Array&lt; T, N+1 &gt;</td></tr>
 <tr class="separator:a171382a213d899b3bd5d3528eb6fc8e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -180,7 +185,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Array_8hpp.html">Array.hpp</a></li>
-    <li class="footer">Generated on Sun Sep 19 2021 22:34:11 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Sep 20 2021 12:20:44 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

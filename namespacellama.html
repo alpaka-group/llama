@@ -219,6 +219,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a690689d38b43930430e58bb7fe17aca7"><td class="memTemplParams" colspan="2">template&lt;typename First , typename... Args&gt; </td></tr>
 <tr class="memitem:a690689d38b43930430e58bb7fe17aca7"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a690689d38b43930430e58bb7fe17aca7">Array</a> (First, Args... args) -&gt; <a class="el" href="structllama_1_1Array.html">Array</a>&lt; First, sizeof...(Args)+1 &gt;</td></tr>
 <tr class="separator:a690689d38b43930430e58bb7fe17aca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b9492ccf576f0f3683d893e35882a54"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N&gt; </td></tr>
+<tr class="memitem:a6b9492ccf576f0f3683d893e35882a54"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a6b9492ccf576f0f3683d893e35882a54">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N &gt; &amp;a) -&gt; std::ostream &amp;</td></tr>
+<tr class="separator:a6b9492ccf576f0f3683d893e35882a54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a171382a213d899b3bd5d3528eb6fc8e1"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N&gt; </td></tr>
 <tr class="memitem:a171382a213d899b3bd5d3528eb6fc8e1"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a171382a213d899b3bd5d3528eb6fc8e1">push_front</a> (<a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N &gt; a, T v) -&gt; <a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N+1 &gt;</td></tr>
 <tr class="separator:a171382a213d899b3bd5d3528eb6fc8e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -274,6 +277,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a6b6c9452091052f330217e1dbb448b96"><td class="memTemplParams" colspan="2">template&lt;std::size_t... CoordsA, std::size_t... CoordsB&gt; </td></tr>
 <tr class="memitem:a6b6c9452091052f330217e1dbb448b96"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a6b6c9452091052f330217e1dbb448b96">operator!=</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; CoordsA... &gt; a, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; CoordsB... &gt; b)</td></tr>
 <tr class="separator:a6b6c9452091052f330217e1dbb448b96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a056e745a18ef7e0342d719e1ce678b17"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RCs&gt; </td></tr>
+<tr class="memitem:a056e745a18ef7e0342d719e1ce678b17"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a056e745a18ef7e0342d719e1ce678b17">operator&lt;&lt;</a> (std::ostream &amp;os, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RCs... &gt;) -&gt; std::ostream &amp;</td></tr>
+<tr class="separator:a056e745a18ef7e0342d719e1ce678b17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafe5ae24f96109b3ca3d05eaf550e880"><td class="memTemplParams" colspan="2">template&lt;char... Digits&gt; </td></tr>
 <tr class="memitem:aafe5ae24f96109b3ca3d05eaf550e880"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1literals.html#aafe5ae24f96109b3ca3d05eaf550e880">operator&quot;&quot;_RC</a> ()</td></tr>
 <tr class="memdesc:aafe5ae24f96109b3ca3d05eaf550e880"><td class="mdescLeft">&#160;</td><td class="mdescRight">Literal operator for converting a numeric literal into a <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>.  <a href="namespacellama_1_1literals.html#aafe5ae24f96109b3ca3d05eaf550e880">More...</a><br /></td></tr>
@@ -443,7 +449,7 @@ template&lt;typename... RecordCoords&gt; </div>
 
 <p>Concatenate a set of <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>s. </p>
 
-<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00102">102</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00120">120</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
 
 </div>
 </div>
@@ -660,7 +666,7 @@ template&lt;typename RecordCoord &gt; </div>
 
 <p><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> without first coordinate component. </p>
 
-<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00113">113</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00131">131</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
 
 </div>
 </div>
@@ -680,7 +686,7 @@ template&lt;typename L &gt; </div>
 
 <p>Converts a type list of integral constants into a <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00098">98</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00116">116</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
 
 </div>
 </div>
@@ -968,7 +974,7 @@ template&lt;typename... RecordCoords&gt; </div>
 
 <p>Concatenate a set of <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>s instances. </p>
 
-<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00106">106</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00124">124</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1417,12 +1423,45 @@ template&lt;std::size_t... CoordsA, std::size_t... CoordsB&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00047">47</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00048">48</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a6b9492ccf576f0f3683d893e35882a54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b9492ccf576f0f3683d893e35882a54">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , std::size_t N&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">auto llama::operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N &gt; &amp;&#160;</td>
+          <td class="paramname"><em>a</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> -&gt; std::ostream&amp;
+    </td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00146">146</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
 
 </div>
 </div>
 <a id="aea5db41fdf4f7b59a4abd18d276ef746"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aea5db41fdf4f7b59a4abd18d276ef746">&#9670;&nbsp;</a></span>operator&lt;&lt;()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aea5db41fdf4f7b59a4abd18d276ef746">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1451,6 +1490,39 @@ template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00748">748</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a056e745a18ef7e0342d719e1ce678b17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a056e745a18ef7e0342d719e1ce678b17">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;std::size_t... RCs&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">auto llama::operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RCs... &gt;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> -&gt; std::ostream&amp;
+    </td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00060">60</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1531,7 +1603,7 @@ template&lt;std::size_t... Coords&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00041">41</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00042">42</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1571,7 +1643,7 @@ template&lt;std::size_t... CoordsA, std::size_t... CoordsB&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00035">35</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00036">36</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1601,7 +1673,7 @@ template&lt;typename T , std::size_t N&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00167">167</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00185">185</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
 
 </div>
 </div>
@@ -1631,7 +1703,7 @@ template&lt;typename T , std::size_t N&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00178">178</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00196">196</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
 
 </div>
 </div>
@@ -1704,7 +1776,7 @@ template&lt;typename T , std::size_t N&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00156">156</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00174">174</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
 
 </div>
 </div>
@@ -1745,7 +1817,7 @@ template&lt;typename T , std::size_t N&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00145">145</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00163">163</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
 
 </div>
 </div>
@@ -2561,7 +2633,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00053">53</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00054">54</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
 
 </div>
 </div>
@@ -2587,7 +2659,7 @@ template&lt;std::size_t... Coords&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00056">56</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00057">57</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
 
 </div>
 </div>
@@ -2700,7 +2772,7 @@ template&lt;typename First , typename Second &gt; </div>
 
 <p>Checks wether the first <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> is bigger than the second. </p>
 
-<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00144">144</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00162">162</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
 
 </div>
 </div>
@@ -2728,7 +2800,7 @@ template&lt;typename First , typename Second &gt; </div>
 
 <p>Checks whether two <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>s are the same or one is the prefix of the other. </p>
 
-<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00171">171</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00189">189</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
 
 </div>
 </div>
@@ -2803,7 +2875,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Sun Sep 19 2021 22:34:12 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Sep 20 2021 12:20:44 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

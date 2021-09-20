@@ -15,6 +15,7 @@ var RecordCoord_8hpp =
     [ "cat", "RecordCoord_8hpp.html#a42cdd926d98388052f028ab19c94b649", null ],
     [ "operator!=", "RecordCoord_8hpp.html#a6b6c9452091052f330217e1dbb448b96", null ],
     [ "operator\"\"_RC", "RecordCoord_8hpp.html#aafe5ae24f96109b3ca3d05eaf550e880", null ],
+    [ "operator<<", "RecordCoord_8hpp.html#a056e745a18ef7e0342d719e1ce678b17", null ],
     [ "operator==", "RecordCoord_8hpp.html#a8e0623fc3bde02f3310ca46c116a3df8", null ],
     [ "operator==", "RecordCoord_8hpp.html#ab4563c1a92d9123c8e0dbe2e78e82954", null ],
     [ "isRecordCoord", "RecordCoord_8hpp.html#a548294a2b7b4f2e76954d9cf9edcdec7", null ],
