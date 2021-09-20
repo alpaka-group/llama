@@ -5,6 +5,7 @@
 
 #include "macros.hpp"
 
+#include <ostream>
 #include <tuple>
 
 namespace llama
@@ -140,6 +141,23 @@ namespace llama
 
     template<typename First, typename... Args>
     Array(First, Args... args) -> Array<First, sizeof...(Args) + 1>;
+
+    template<typename T, std::size_t N>
+    auto operator<<(std::ostream& os, const Array<T, N>& a) -> std::ostream&
+    {
+        os << "Array{";
+        bool first = true;
+        for(auto e : a)
+        {
+            if(first)
+                first = false;
+            else
+                os << ", ";
+            os << e;
+        }
+        os << "}";
+        return os;
+    }
 
     template<typename T, std::size_t N>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto push_front(Array<T, N> a, T v) -> Array<T, N + 1>
