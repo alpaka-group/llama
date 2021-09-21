@@ -11,9 +11,6 @@ TEST_CASE("Heatmap.nbody")
     {
         auto particles = llama::allocView(llama::mapping::Heatmap{mapping});
 
-        for(std::size_t i = 0; i < N; i++)
-            particles(i) = 0;
-
         constexpr float TIMESTEP = 0.0001f;
         constexpr float EPS2 = 0.01f;
         for(std::size_t i = 0; i < N; i++)

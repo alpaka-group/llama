@@ -1035,9 +1035,7 @@ TEST_CASE("treemapping")
     CHECK(mapping.blobNrAndOffset<2, 1>({50, 100}).offset == 10784);
     CHECK(mapping.blobNrAndOffset<2, 1>({50, 101}).offset == 10792);
 
-    auto view = allocView(mapping);
-    zeroStorage(view);
-
+    auto view = llama::allocView(mapping);
     for(size_t x = 0; x < arrayDims[0]; ++x)
         for(size_t y = 0; y < arrayDims[1]; ++y)
         {

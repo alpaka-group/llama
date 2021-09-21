@@ -151,7 +151,7 @@ try
     // Instantiating the mapping with the array dimensions size
     Mapping mapping(adSize);
     // getting a view with memory from the default allocator
-    auto view = allocView(mapping);
+    auto view = llama::allocViewUninitialized(mapping);
 
     // defining a position in the array dimensions
     const ArrayDims pos{0, 0};

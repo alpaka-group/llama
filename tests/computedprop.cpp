@@ -88,7 +88,7 @@ TEST_CASE("computedprop")
     STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 10 * 12 * sizeof(double));
 
-    auto view = llama::allocView(mapping);
+    auto view = llama::allocViewUninitialized(mapping);
 
     using namespace tag;
     view(5u)(A{}, X{}) = 0.0f;
@@ -124,6 +124,11 @@ namespace
         {
         }
 
+        auto arrayDims() const
+        {
+            return ArrayDims{};
+        }
+
         template<std::size_t... RecordCoords>
         static constexpr auto isComputed(llama::RecordCoord<RecordCoords...>)
         {
@@ -142,14 +147,14 @@ namespace
 TEST_CASE("fully_computed_mapping")
 {
     auto arrayDims = llama::ArrayDims<3>{10, 10, 10};
-    auto mapping = ComputedMapping<decltype(arrayDims), Triangle>{arrayDims};
+    auto mapping = ComputedMapping<decltype(arrayDims), int>{arrayDims};
 
-    auto view = llama::allocView(mapping);
+    auto view = llama::allocViewUninitialized(mapping);
 
     using namespace tag;
-    CHECK(view(0u, 1u, 2u)(A{}, X{}) == 0);
-    CHECK(view(2u, 1u, 2u)(A{}, Y{}) == 4);
-    CHECK(view(2u, 5u, 2u)(A{}, Z{}) == 20);
+    CHECK(view(0u, 1u, 2u) == 0);
+    CHECK(view(2u, 1u, 2u) == 4);
+    CHECK(view(2u, 5u, 2u) == 20);
 }
 
 namespace
@@ -168,6 +173,11 @@ namespace
 
         constexpr explicit CompressedBoolMapping(ArrayDims size) : arrayDimsSize(size)
         {
+        }
+
+        auto arrayDims() const
+        {
+            return arrayDimsSize;
         }
 
         using Word = std::uint64_t;
@@ -242,7 +252,7 @@ TEST_CASE("compressed_bools")
     CHECK(mapping.blobSize(1) == 8);
     CHECK(mapping.blobSize(2) == 8);
 
-    auto view = llama::allocView(mapping);
+    auto view = llama::allocViewUninitialized(mapping);
     for(auto y = 0u; y < 8; y++)
     {
         for(auto x = 0u; x < 8; x++)

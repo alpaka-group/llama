@@ -38,8 +38,9 @@ namespace llama::mapping
         {
             // TODO(bgruber): not sure if this is the right approach, since we take any ArrayDims in the ctor
             ArrayDims ad;
-            for(auto i = 0; i < ArrayDims::rank; i++)
-                ad[i] = 1;
+            if constexpr(ArrayDims::rank > 0)
+                for(auto i = 0; i < ArrayDims::rank; i++)
+                    ad[i] = 1;
             return ad;
         }
 

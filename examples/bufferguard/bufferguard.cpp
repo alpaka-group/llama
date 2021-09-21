@@ -213,7 +213,7 @@ void run(const std::string& mappingName)
     const auto mapping = GuardMapping2D<Mapping, llama::ArrayDims<2>, Vector>{arrayDims};
     std::ofstream{"bufferguard_" + mappingName + ".svg"} << llama::toSvg(mapping);
 
-    auto view1 = allocView(mapping);
+    auto view1 = llama::allocViewUninitialized(mapping);
 
     int i = 0;
     for(std::size_t row = 0; row < rows; row++)
@@ -227,7 +227,7 @@ void run(const std::string& mappingName)
     std::cout << "View 1:\n";
     printView(view1, rows, cols);
 
-    auto view2 = allocView(mapping);
+    auto view2 = llama::allocViewUninitialized(mapping);
     for(std::size_t row = 0; row < rows; row++)
         for(std::size_t col = 0; col < cols; col++)
             view2(row, col) = 0; // broadcast

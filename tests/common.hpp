@@ -119,13 +119,6 @@ namespace internal
 } // namespace internal
 
 template<typename View>
-void zeroStorage(View& view)
-{
-    for(auto i = 0; i < View::Mapping::blobCount; i++)
-        internal::zeroBlob(view.storageBlobs[i], view.mapping().blobSize(i));
-}
-
-template<typename View>
 void iotaStorage(View& view)
 {
     for(auto i = 0; i < View::Mapping::blobCount; i++)

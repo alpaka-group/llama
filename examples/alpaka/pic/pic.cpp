@@ -297,9 +297,9 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& devHost)
     std::vector<decltype(alpaka::allocBuf<std::byte, Size>(dev, std::size_t{}))> buffers;
     auto allocAlpakaBuffer = [&](auto, std::size_t s)
     { return alpaka::getPtrNative(buffers.emplace_back(alpaka::allocBuf<std::byte, Size>(dev, s))); };
-    auto E = llama::allocView(fieldMapping, allocAlpakaBuffer);
-    auto B = llama::allocView(fieldMapping, allocAlpakaBuffer);
-    auto J = llama::allocView(fieldMapping, allocAlpakaBuffer);
+    auto E = llama::allocViewUninitialized(fieldMapping, allocAlpakaBuffer);
+    auto B = llama::allocViewUninitialized(fieldMapping, allocAlpakaBuffer);
+    auto J = llama::allocViewUninitialized(fieldMapping, allocAlpakaBuffer);
 
     initFields<Acc>(queue, E, B, J);
 
@@ -320,8 +320,8 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& devHost)
     }();
     const auto particleBufferSize = particleMapping.blobSize(0);
 
-    auto particles = llama::allocView(particleMapping, allocAlpakaBuffer);
-    auto particlesHost = llama::allocView(particleMapping);
+    auto particles = llama::allocViewUninitialized(particleMapping, allocAlpakaBuffer);
+    auto particlesHost = llama::allocViewUninitialized(particleMapping);
 
     std::default_random_engine engine;
     auto uniform = [&] { return std::uniform_real_distribution<Real>{}(engine); };
@@ -824,7 +824,7 @@ void run(std::ostream& plotFile)
             {
                 const auto fieldMapping = E.mapping();
                 constexpr auto blobsPerField = decltype(fieldMapping)::blobCount;
-                auto hostFieldView = llama::allocView(fieldMapping);
+                auto hostFieldView = llama::allocViewUninitialized(fieldMapping);
                 auto copyBlobs = [&, &buffers = buffers](std::size_t bufferOffset)
                 {
                     for(auto i = 0; i < blobsPerField; i++)
@@ -844,7 +844,7 @@ void run(std::ostream& plotFile)
                 output(n, "J", hostFieldView);
             }
 
-            auto hostParticleView = llama::allocView(particles.mapping());
+            auto hostParticleView = llama::allocViewUninitialized(particles.mapping());
             for(auto i = 0; i < std::remove_reference_t<decltype(particles.mapping())>::blobCount; i++)
             {
                 auto dst = alpaka::ViewPlainPtr<DevHost, std::byte, alpaka::DimInt<1>, Size>{

@@ -36,6 +36,8 @@ Array dimensions
 .. doxygenstruct:: llama::ArrayDimsIndexRange
    :members:
 
+.. doxygenfunction:: llama::forEachADCoord
+
 Record dimension
 ----------------
 
@@ -77,6 +79,8 @@ View creation
 
 .. _label-api-allocView:
 .. doxygenfunction:: llama::allocView
+.. doxygenfunction:: llama::constructFields
+.. doxygenfunction:: llama::allocViewUninitialized
 .. doxygenfunction:: llama::allocViewStack
 .. doxygentypedef:: llama::One
 .. doxygenfunction:: llama::copyVirtualRecordStack

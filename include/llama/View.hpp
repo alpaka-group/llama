@@ -41,10 +41,66 @@ namespace llama
         }
     } // namespace internal
 
+    /// Same as \ref allocView but does not run field constructors.
+#ifdef __cpp_lib_concepts
+    template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector>
+#else
+    template<typename Mapping, typename Allocator = bloballoc::Vector>
+#endif
+    LLAMA_FN_HOST_ACC_INLINE auto allocViewUninitialized(Mapping mapping = {}, const Allocator& alloc = {})
+        -> View<Mapping, internal::AllocatorBlobType<Allocator, typename Mapping::RecordDim>>
+    {
+        auto blobs = internal::makeBlobArray(alloc, mapping, std::make_index_sequence<Mapping::blobCount>{});
+        return {std::move(mapping), std::move(blobs)};
+    }
+
+    namespace internal
+    {
+        template<typename Mapping, typename RecordCoord, typename = void>
+        struct IsComputed : std::false_type
+        {
+        };
+
+        template<typename Mapping, typename RecordCoord>
+        struct IsComputed<Mapping, RecordCoord, std::void_t<decltype(Mapping::isComputed(RecordCoord{}))>>
+            : std::bool_constant<Mapping::isComputed(RecordCoord{})>
+        {
+        };
+    } // namespace internal
+
+    /// Returns true if the field accessed via the given mapping and record coordinate is a computed value.
+    template<typename Mapping, typename RecordCoord>
+    inline constexpr bool isComputed = internal::IsComputed<Mapping, RecordCoord>::value;
+
+    /// Runs the constructor of all fields reachable through the given view. Computed fields are not constructed.
+    template<typename Mapping, typename BlobType>
+    LLAMA_FN_HOST_ACC_INLINE void constructFields(View<Mapping, BlobType>& view)
+    {
+        using View = View<Mapping, BlobType>;
+        using RecordDim = typename View::RecordDim;
+        forEachADCoord(
+            view.mapping().arrayDims(),
+            [&](typename View::ArrayDims ad)
+            {
+                if constexpr(isRecord<RecordDim> || internal::IsBoundedArray<RecordDim>::value)
+                    forEachLeaf<RecordDim>(
+                        [&](auto coord)
+                        {
+                            // TODO(bgruber): we could initialize computed fields if we can write to those. We could
+                            // test if the returned value can be cast to a T& and then attempt to write.
+                            if constexpr(!isComputed<Mapping, decltype(coord)>)
+                                new(&view(ad)(coord)) GetType<RecordDim, decltype(coord)>;
+                        });
+                else if constexpr(!isComputed<Mapping, RecordCoord<>>)
+                    new(&view(ad)) RecordDim;
+            });
+    }
+
     /// Creates a view based on the given mapping, e.g. \ref AoS or \ref :SoA. For allocating the view's underlying
     /// memory, the specified allocator callable is used (or the default one, which is \ref bloballoc::Vector). The
-    /// allocator callable is called with the size of bytes to allocate for each blob of the mapping. This function is
-    /// the preferred way to create a \ref View.
+    /// allocator callable is called with the alignment and size of bytes to allocate for each blob of the mapping.
+    /// The constructors are run for all fields by calling \ref constructFields. This function is the preferred way to
+    /// create a \ref View. See also \ref allocViewUninitialized.
 #ifdef __cpp_lib_concepts
     template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector>
 #else
@@ -53,8 +109,9 @@ namespace llama
     LLAMA_FN_HOST_ACC_INLINE auto allocView(Mapping mapping = {}, const Allocator& alloc = {})
         -> View<Mapping, internal::AllocatorBlobType<Allocator, typename Mapping::RecordDim>>
     {
-        auto blobs = internal::makeBlobArray(alloc, mapping, std::make_index_sequence<Mapping::blobCount>{});
-        return {std::move(mapping), std::move(blobs)};
+        auto view = allocViewUninitialized(std::move(mapping), alloc);
+        constructFields(view);
+        return view;
     }
 
     /// Allocates a \ref View holding a single record backed by stack memory (\ref bloballoc::Stack).
@@ -215,24 +272,6 @@ namespace llama
         ADIterator adIndex;
         View* view;
     };
-
-    namespace internal
-    {
-        template<typename Mapping, typename RecordCoord, typename = void>
-        struct IsComputed : std::false_type
-        {
-        };
-
-        template<typename Mapping, typename RecordCoord>
-        struct IsComputed<Mapping, RecordCoord, std::void_t<decltype(Mapping::isComputed(RecordCoord{}))>>
-            : std::bool_constant<Mapping::isComputed(RecordCoord{})>
-        {
-        };
-    } // namespace internal
-
-    /// Returns true if the field accessed via the given mapping and record coordinate is a computed value.
-    template<typename Mapping, typename RecordCoord>
-    inline constexpr bool isComputed = internal::IsComputed<Mapping, RecordCoord>::value;
 
     /// Central LLAMA class holding memory for storage and giving access to values stored there defined by a mapping. A
     /// view should be created using \ref allocView.

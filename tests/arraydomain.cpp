@@ -23,7 +23,7 @@ TEST_CASE("ArrayDims.dim0")
 
     using Mapping = llama::mapping::SoA<ArrayDims, Particle>;
     Mapping mapping{arrayDims};
-    auto view = allocView(mapping);
+    auto view = llama::allocView(mapping);
 
     double& x1 = view(ArrayDims{})(tag::Pos{}, tag::X{});
     double& x2 = view()(tag::Pos{}, tag::X{});
@@ -36,7 +36,7 @@ TEST_CASE("ArrayDims.dim1")
 
     using Mapping = llama::mapping::SoA<ArrayDims, Particle>;
     Mapping mapping{arrayDims};
-    auto view = allocView(mapping);
+    auto view = llama::allocView(mapping);
 
     double& x = view(ArrayDims{0})(tag::Pos{}, tag::X{});
     x = 0;
@@ -49,7 +49,7 @@ TEST_CASE("ArrayDims.dim2")
 
     using Mapping = llama::mapping::SoA<ArrayDims, Particle>;
     Mapping mapping{arrayDims};
-    auto view = allocView(mapping);
+    auto view = llama::allocView(mapping);
 
     double& x = view(ArrayDims{0, 0})(tag::Pos{}, tag::X{});
     x = 0;
@@ -62,7 +62,7 @@ TEST_CASE("ArrayDims.dim3")
 
     using Mapping = llama::mapping::SoA<ArrayDims, Particle>;
     Mapping mapping{arrayDims};
-    auto view = allocView(mapping);
+    auto view = llama::allocView(mapping);
 
     double& x = view(ArrayDims{0, 0, 0})(tag::Pos{}, tag::X{});
     x = 0;
@@ -75,7 +75,7 @@ TEST_CASE("ArrayDims.dim10")
 
     using Mapping = llama::mapping::SoA<ArrayDims, Particle>;
     Mapping mapping{arrayDims};
-    auto view = allocView(mapping);
+    auto view = llama::allocView(mapping);
 
     double& x = view(ArrayDims{0, 0, 0, 0, 0, 0, 0, 0, 0, 0})(tag::Pos{}, tag::X{});
     x = 0;
