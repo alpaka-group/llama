@@ -100,21 +100,29 @@ TEST_CASE("view.allocator.stack")
 
 TEST_CASE("view.non-memory-owning")
 {
-    using ArrayDims = llama::ArrayDims<1>;
-    ArrayDims arrayDims{256};
-
-    using Mapping = llama::mapping::SoA<ArrayDims, RecordDim>;
-    Mapping mapping{arrayDims};
-
-    std::vector<std::byte> storage(mapping.blobSize(0));
-    auto view = llama::View<Mapping, std::byte*>{mapping, {storage.data()}};
-
-    for(auto i = 0u; i < 256u; i++)
+    auto test = [](auto typeHolder)
     {
-        auto* v = reinterpret_cast<std::byte*>(&view(i)(tag::Value{}));
-        CHECK(&storage.front() <= v);
-        CHECK(v <= &storage.back());
-    }
+        using byte = typename decltype(typeHolder)::type;
+
+        using ArrayDims = llama::ArrayDims<1>;
+        ArrayDims arrayDims{256};
+
+        using Mapping = llama::mapping::SoA<ArrayDims, RecordDim>;
+        Mapping mapping{arrayDims};
+
+        const auto blobSize = mapping.blobSize(0);
+        const auto storage = std::make_unique<byte[]>(blobSize);
+        auto view = llama::View{mapping, llama::Array{storage.get()}};
+
+        for(auto i = 0u; i < 256u; i++)
+        {
+            auto* v = reinterpret_cast<decltype(storage.get())>(&view(i)(tag::Value{}));
+            CHECK(storage.get() <= v);
+            CHECK(v <= storage.get() + blobSize);
+        }
+    };
+    test(boost::mp11::mp_identity<std::byte>{});
+    test(boost::mp11::mp_identity<const std::byte>{});
 }
 
 TEST_CASE("view.access")

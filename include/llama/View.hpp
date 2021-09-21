@@ -419,7 +419,11 @@ namespace llama
             {
                 const auto [nr, offset] = mapping().blobNrAndOffset(arrayDims, rc);
                 using Type = GetType<RecordDim, RecordCoord<Coords...>>;
-                return reinterpret_cast<Type&>(storageBlobs[nr][offset]);
+                using QualifiedType = std::conditional_t<
+                    std::is_const_v<std::remove_reference_t<decltype(storageBlobs[nr][offset])>>,
+                    const Type,
+                    Type>;
+                return reinterpret_cast<QualifiedType&>(storageBlobs[nr][offset]);
             }
         }
     };
