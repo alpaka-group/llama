@@ -184,7 +184,7 @@ struct UpdateKernel
             constexpr auto mapping
                 = llama::mapping::SoA<typename View::ArrayDims, typename View::RecordDim, false>{arrayDims};
             constexpr auto blobAlloc = llama::bloballoc::Stack<llama::sizeOf<typename View::RecordDim> * Elems>{};
-            return llama::allocView(mapping, blobAlloc);
+            return llama::allocViewUninitialized(mapping, blobAlloc);
         }();
         // TODO(bgruber): vector load
         LLAMA_INDEPENDENT_DATA

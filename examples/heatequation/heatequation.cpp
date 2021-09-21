@@ -110,8 +110,8 @@ try
     }
 
     const auto mapping = llama::mapping::SoA{llama::ArrayDims{extent}, double{}};
-    auto uNext = llama::allocView(mapping);
-    auto uCurr = llama::allocView(mapping);
+    auto uNext = llama::allocViewUninitialized(mapping);
+    auto uCurr = llama::allocViewUninitialized(mapping);
 
     auto run = [&](std::string_view updateName, auto update)
     {

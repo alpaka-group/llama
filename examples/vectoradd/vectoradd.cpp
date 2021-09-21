@@ -64,9 +64,9 @@ namespace usellama
                     Vector{}};
         }();
 
-        auto a = allocView(mapping);
-        auto b = allocView(mapping);
-        auto c = allocView(mapping);
+        auto a = allocViewUninitialized(mapping);
+        auto b = allocViewUninitialized(mapping);
+        auto c = allocViewUninitialized(mapping);
         watch.printAndReset("alloc");
 
         LLAMA_INDEPENDENT_DATA

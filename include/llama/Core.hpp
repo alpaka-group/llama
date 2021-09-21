@@ -59,8 +59,7 @@ namespace llama
     /// @brief Tells whether the given type is allowed as a field type in LLAMA. Such types need to be trivially
     /// constructible and trivially destructible.
     template<typename T>
-    inline constexpr bool isAllowedFieldType
-        = std::is_trivially_default_constructible_v<T>&& std::is_trivially_destructible_v<T>;
+    inline constexpr bool isAllowedFieldType = std::is_trivially_destructible_v<T>;
 
     /// Record dimension tree node which may either be a leaf or refer to a child tree presented as another \ref
     /// Record.
@@ -555,13 +554,11 @@ namespace llama
     template<std::size_t Dim, typename Func, typename... OuterIndices>
     LLAMA_FN_HOST_ACC_INLINE void forEachADCoord(ArrayDims<Dim> adSize, Func&& func, OuterIndices... outerIndices)
     {
-        for(std::size_t i = 0; i < adSize[0]; i++)
-        {
-            if constexpr(Dim > 1)
+        if constexpr(Dim > 0)
+            for(std::size_t i = 0; i < adSize[0]; i++)
                 forEachADCoord(ArrayDims<Dim - 1>{pop_front(adSize)}, std::forward<Func>(func), outerIndices..., i);
-            else
-                std::forward<Func>(func)(ArrayDims<sizeof...(outerIndices) + 1>{outerIndices..., i});
-        }
+        else
+            std::forward<Func>(func)(ArrayDims<sizeof...(outerIndices)>{outerIndices...});
     }
 
     namespace internal

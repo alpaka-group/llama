@@ -196,6 +196,11 @@ namespace llama::mapping::tree
         {
         }
 
+        LLAMA_FN_HOST_ACC_INLINE auto arrayDims() const
+        {
+            return arrayDimsSize;
+        }
+
         LLAMA_FN_HOST_ACC_INLINE
         auto blobSize(std::size_t const) const -> std::size_t
         {

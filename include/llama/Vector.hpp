@@ -21,7 +21,7 @@ namespace llama
     {
         static_assert(Mapping::ArrayDims::rank == 1, "llama::Vector only supports 1D mappings");
 
-        using ViewType = decltype(allocView<Mapping>());
+        using ViewType = decltype(allocViewUninitialized<Mapping>());
         using RecordDim = typename Mapping::RecordDim;
 
         using iterator = decltype(std::declval<ViewType>().begin());
@@ -276,7 +276,7 @@ namespace llama
     private:
         LLAMA_FN_HOST_ACC_INLINE void changeCapacity(std::size_t cap)
         {
-            auto newView = llama::allocView<Mapping>(Mapping{typename Mapping::ArrayDims{cap}});
+            auto newView = allocViewUninitialized<Mapping>(Mapping{typename Mapping::ArrayDims{cap}});
             auto b = begin();
             std::copy(begin(), b + std::min(m_size, cap), newView.begin());
             using std::swap;

@@ -157,7 +157,7 @@ namespace usellama
                 return std::move(tmapping);
         }();
 
-        auto particles = llama::allocView(std::move(hmapping));
+        auto particles = llama::allocViewUninitialized(std::move(hmapping));
         watch.printAndReset("alloc");
 
         std::default_random_engine engine;

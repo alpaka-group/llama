@@ -207,8 +207,8 @@ try
 
     Stopwatch watch;
 
-    auto hostView = llama::allocView(mapping);
-    auto accView = llama::allocView(
+    auto hostView = llama::allocViewUninitialized(mapping);
+    auto accView = llama::allocViewUninitialized(
         mapping,
         [](auto alignment, std::size_t size)
         {

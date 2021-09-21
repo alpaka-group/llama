@@ -112,7 +112,7 @@ auto hash(const llama::View<Mapping, BlobType>& view)
 template<typename Mapping>
 auto prepareViewAndHash(Mapping mapping)
 {
-    auto view = llama::allocView(mapping);
+    auto view = llama::allocViewUninitialized(mapping);
 
     auto value = std::size_t{0};
     for(auto ad : llama::ArrayDimsIndexRange{mapping.arrayDims()})
@@ -218,7 +218,7 @@ $data << EOD
 
         auto benchmarkCopy = [&, srcView = srcView, srcHash = srcHash](std::string_view name, auto copy)
         {
-            auto dstView = llama::allocView(dstMapping);
+            auto dstView = llama::allocViewUninitialized(dstMapping);
             Stopwatch watch;
             for(auto i = 0; i < REPETITIONS; i++)
                 copy(srcView, dstView);

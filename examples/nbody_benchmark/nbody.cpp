@@ -94,7 +94,7 @@ void run(std::ostream& plotFile)
             return llama::mapping::SoA<decltype(arrayDims), Particle, true>{arrayDims};
     }();
 
-    auto particles = llama::allocView(
+    auto particles = llama::allocViewUninitialized(
         std::move(mapping),
         [](auto, std::size_t size)
         { return llama::bloballoc::Vector{}(std::integral_constant<std::size_t, Alignment>{}, size); });
