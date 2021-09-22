@@ -291,8 +291,6 @@ namespace llama
         using Mapping = TMapping;
         using ArrayDims = typename Mapping::ArrayDims;
         using RecordDim = typename Mapping::RecordDim;
-        using VirtualRecordType = VirtualRecord<View>;
-        using VirtualRecordTypeConst = VirtualRecord<const View>;
         using iterator = Iterator<View>;
         using const_iterator = Iterator<const View>;
 
@@ -325,7 +323,7 @@ namespace llama
             if constexpr(isRecord<RecordDim> || internal::IsBoundedArray<RecordDim>::value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualRecordTypeConst{arrayDims, *this};
+                return VirtualRecord<const View>{arrayDims, *this};
             }
             else
             {
@@ -339,7 +337,7 @@ namespace llama
             if constexpr(isRecord<RecordDim> || internal::IsBoundedArray<RecordDim>::value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualRecordType{arrayDims, *this};
+                return VirtualRecord<View>{arrayDims, *this};
             }
             else
             {
@@ -481,8 +479,6 @@ namespace llama
         using ParentView = TParentViewType; ///< type of the parent view
         using Mapping = typename ParentView::Mapping; ///< mapping of the parent view
         using ArrayDims = typename Mapping::ArrayDims; ///< array dimensions of the parent view
-        using VirtualRecordType = typename ParentView::VirtualRecordType; ///< VirtualRecord type of the
-                                                                          ///< parent view
 
         /// Creates a VirtualView given a parent \ref View, offset and size.
         LLAMA_FN_HOST_ACC_INLINE
@@ -503,13 +499,13 @@ namespace llama
         }
 
         /// Same as \ref View::operator()(ArrayDims), but shifted by the offset of this \ref VirtualView.
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDims arrayDims) const -> VirtualRecordType
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDims arrayDims) const -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return parentView(ArrayDims{arrayDims + offset});
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDims arrayDims) -> VirtualRecordType
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDims arrayDims) -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return parentView(ArrayDims{arrayDims + offset});
@@ -517,7 +513,7 @@ namespace llama
 
         /// Same as corresponding operator in \ref View, but shifted by the offset of this \ref VirtualView.
         template<typename... Indices>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) const -> VirtualRecordType
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) const -> decltype(auto)
         {
             static_assert(
                 sizeof...(Indices) == ArrayDims::rank,
@@ -530,7 +526,7 @@ namespace llama
         }
 
         template<typename... Indices>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) -> VirtualRecordType
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) -> decltype(auto)
         {
             static_assert(
                 sizeof...(Indices) == ArrayDims::rank,
