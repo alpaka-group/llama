@@ -97,13 +97,17 @@ namespace llama
         const auto extents = srcView.mapping().extents().toArray();
         const auto workPerThread = (extents[0] + threadCount - 1) / threadCount;
         const auto start = threadId * workPerThread;
-        const auto end = std::min((threadId + 1) * workPerThread, extents[0]);
+        const auto end = std::min((threadId + 1) * workPerThread, static_cast<std::size_t>(extents[0]));
         for(auto i = start; i < end; i++)
         {
+            using SrcSizeType = typename SrcMapping::ArrayExtents::value_type;
             if constexpr(dims > 1)
-                forEachADCoord(ArrayIndex<dims - 1>{pop_front(extents)}, copyOne, static_cast<std::size_t>(i));
+                forEachADCoord(
+                    ArrayIndex<SrcSizeType, dims - 1>{pop_front(extents)},
+                    copyOne,
+                    static_cast<SrcSizeType>(i));
             else
-                copyOne(ArrayIndex<dims>{static_cast<std::size_t>(i)});
+                copyOne(ArrayIndex<SrcSizeType, dims>{static_cast<std::size_t>(i)});
         }
     }
 

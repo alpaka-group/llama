@@ -107,7 +107,7 @@ namespace llamaex
         template<std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
             typename Base::ArrayIndex ai,
-            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset
+            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<std::size_t>
         {
             constexpr std::size_t flatFieldIndex =
 #ifdef __NVCC__
@@ -134,7 +134,7 @@ try
         prop.totalGlobalMem / 1024 / 1024,
         prop.sharedMemPerBlock / 1024);
 
-    const auto extents = llama::ArrayExtents{600, 800}; // height, width
+    const auto extents = llama::ArrayExtents<std::size_t, llama::dyn, llama::dyn>{600, 800}; // height, width
     const auto widthBytes = extents[1] * sizeof(RGB);
 
     const auto blockDim = dim3{16, 32, 1};
@@ -151,7 +151,7 @@ try
         checkError(cudaMallocPitch(&mem, &rowPitch, widthBytes, extents[0]));
         fmt::print("Row pitch: {} B ({} B padding)\n", rowPitch, rowPitch - widthBytes);
 
-        auto mapping = llamaex::PitchedAoS<llama::ArrayExtentsDynamic<2>, RGB>{extents, rowPitch};
+        auto mapping = llamaex::PitchedAoS<llama::ArrayExtentsDynamic<std::size_t, 2>, RGB>{extents, rowPitch};
         assert(mapping.blobSize(0) == rowPitch * extents[0]);
         auto view = llama::View{mapping, llama::Array{mem}};
 

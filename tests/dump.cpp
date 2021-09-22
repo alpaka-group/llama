@@ -8,7 +8,7 @@
 #if !(defined(__APPLE__) && __clang_major__ == 13 && __clang_minor__ == 0)
 namespace
 {
-    llama::ArrayExtentsDynamic<1> extents{32};
+    llama::ArrayExtentsDynamic<std::size_t, 1> extents{32};
     using ArrayExtents = decltype(extents);
 
     template<typename Mapping>

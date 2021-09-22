@@ -132,7 +132,7 @@ TEMPLATE_TEST_CASE("mapping.BitPackedFloatSoA", "", float, double)
 TEST_CASE("mapping.BitPackedFloatSoA.ReducedPrecisionComputation")
 {
     constexpr auto N = 1000;
-    auto view = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<N>, Vec3D>{{}});
+    auto view = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<std::size_t, N>, Vec3D>{{}});
     std::default_random_engine engine;
     std::uniform_real_distribution dist{0.0f, 1e20f};
     for(auto i = 0; i < N; i++)
@@ -143,10 +143,12 @@ TEST_CASE("mapping.BitPackedFloatSoA.ReducedPrecisionComputation")
     }
 
     // copy into packed representation
-    auto packedView = llama::allocView(
-        llama::mapping::
-            BitPackedFloatSoA<llama::ArrayExtents<N>, Vec3D, llama::Constant<8>, llama::Constant<23>>{}); // basically
-                                                                                                          // float
+    auto packedView = llama::allocView(llama::mapping::BitPackedFloatSoA<
+                                       llama::ArrayExtents<std::size_t, N>,
+                                       Vec3D,
+                                       llama::Constant<8>,
+                                       llama::Constant<23>>{}); // basically
+                                                                // float
     llama::copy(view, packedView);
 
     // compute on original representation
@@ -169,18 +171,24 @@ TEST_CASE("mapping.BitPackedFloatSoA.ReducedPrecisionComputation")
 
 TEST_CASE("mapping.BitPackedFloatSoA.Size")
 {
-    STATIC_REQUIRE(std::is_empty_v<
-                   llama::mapping::
-                       BitPackedFloatSoA<llama::ArrayExtents<16>, float, llama::Constant<7>, llama::Constant<16>>>);
+    STATIC_REQUIRE(std::is_empty_v<llama::mapping::BitPackedFloatSoA<
+                       llama::ArrayExtents<std::size_t, 16>,
+                       float,
+                       llama::Constant<7>,
+                       llama::Constant<16>>>);
     STATIC_REQUIRE(
-        sizeof(llama::mapping::BitPackedFloatSoA<llama::ArrayExtents<16>, float, llama::Constant<7>, unsigned>{
-            {},
-            {},
-            16})
+        sizeof(llama::mapping::
+                   BitPackedFloatSoA<llama::ArrayExtents<std::size_t, 16>, float, llama::Constant<7>, unsigned>{
+                       {},
+                       {},
+                       16})
         == sizeof(unsigned));
     STATIC_REQUIRE(
-        sizeof(llama::mapping::BitPackedFloatSoA<llama::ArrayExtents<16>, float, unsigned, llama::Constant<16>>{{}, 7})
+        sizeof(
+            llama::mapping::
+                BitPackedFloatSoA<llama::ArrayExtents<std::size_t, 16>, float, unsigned, llama::Constant<16>>{{}, 7})
         == sizeof(unsigned));
     STATIC_REQUIRE(
-        sizeof(llama::mapping::BitPackedFloatSoA<llama::ArrayExtents<16>, float>{{}, 7, 16}) == 2 * sizeof(unsigned));
+        sizeof(llama::mapping::BitPackedFloatSoA<llama::ArrayExtents<std::size_t, 16>, float>{{}, 7, 16})
+        == 2 * sizeof(unsigned));
 }

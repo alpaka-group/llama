@@ -17,10 +17,10 @@ namespace llama::mapping
         /// specified bit offset.
         /// @tparam Integral Integral data type which can be loaded and store through this reference.
         /// @tparam StoredIntegralPointer Pointer to integral type used for storing the bits.
-        template<typename Integral, typename StoredIntegralPointer, typename VHBits>
+        template<typename Integral, typename StoredIntegralPointer, typename VHBits, typename SizeType>
         struct BitPackedIntRef
             : private VHBits
-            , ProxyRefOpMixin<BitPackedIntRef<Integral, StoredIntegralPointer, VHBits>, Integral>
+            , ProxyRefOpMixin<BitPackedIntRef<Integral, StoredIntegralPointer, VHBits, SizeType>, Integral>
         {
         private:
             using StoredIntegral = std::remove_const_t<std::remove_pointer_t<StoredIntegralPointer>>;
@@ -33,19 +33,19 @@ namespace llama::mapping
                 "retrieve");
 
             StoredIntegralPointer ptr;
-            std::size_t bitOffset;
+            SizeType bitOffset;
 #ifndef NDEBUG
             StoredIntegralPointer endPtr;
 #endif
 
-            static constexpr auto bitsPerStoredIntegral = sizeof(StoredIntegral) * CHAR_BIT;
+            static constexpr auto bitsPerStoredIntegral = static_cast<SizeType>(sizeof(StoredIntegral) * CHAR_BIT);
 
         public:
             using value_type = Integral;
 
             LLAMA_FN_HOST_ACC_INLINE constexpr BitPackedIntRef(
                 StoredIntegralPointer ptr,
-                std::size_t bitOffset,
+                SizeType bitOffset,
                 VHBits vhBits
 #ifndef NDEBUG
                 ,
@@ -179,6 +179,8 @@ namespace llama::mapping
     {
     private:
         using Base = MappingBase<TArrayExtents, TRecordDim>;
+        using VHBits = llama::internal::BoxedValue<Bits>;
+        using size_type = typename TArrayExtents::value_type;
 
         template<typename T>
         using IsAllowedFieldType = boost::mp11::mp_or<std::is_integral<T>, std::is_enum<T>>;
@@ -186,8 +188,6 @@ namespace llama::mapping
         static_assert(
             boost::mp11::mp_all_of<FlatRecordDim<TRecordDim>, IsAllowedFieldType>::value,
             "All record dimension field types must be integral");
-
-        using VHBits = llama::internal::BoxedValue<Bits>;
 
     public:
         static constexpr std::size_t blobCount = boost::mp11::mp_size<FlatRecordDim<TRecordDim>>::value;
@@ -201,10 +201,11 @@ namespace llama::mapping
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto blobSize(std::size_t /*blobIndex*/) const -> std::size_t
+        constexpr auto blobSize(size_type /*blobIndex*/) const -> size_type
         {
-            constexpr auto bitsPerStoredIntegral = sizeof(StoredIntegral) * CHAR_BIT;
-            const auto bitsNeeded = LinearizeArrayDimsFunctor{}.size(Base::extents()) * VHBits::value();
+            constexpr auto bitsPerStoredIntegral = static_cast<size_type>(sizeof(StoredIntegral) * CHAR_BIT);
+            const auto bitsNeeded
+                = LinearizeArrayDimsFunctor{}.size(Base::extents()) * static_cast<size_type>(VHBits::value());
             return roundUpToMultiple(bitsNeeded, bitsPerStoredIntegral) / CHAR_BIT;
         }
 
@@ -221,11 +222,12 @@ namespace llama::mapping
             Blobs& blobs) const
         {
             constexpr auto blob = flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>;
-            const auto bitOffset = LinearizeArrayDimsFunctor{}(ai, Base::extents()) * VHBits::value();
+            const auto bitOffset
+                = LinearizeArrayDimsFunctor{}(ai, Base::extents()) * static_cast<size_type>(VHBits::value());
 
             using QualifiedStoredIntegral = CopyConst<Blobs, StoredIntegral>;
             using DstType = GetType<TRecordDim, RecordCoord<RecordCoords...>>;
-            return internal::BitPackedIntRef<DstType, QualifiedStoredIntegral*, VHBits>{
+            return internal::BitPackedIntRef<DstType, QualifiedStoredIntegral*, VHBits, size_type>{
                 reinterpret_cast<QualifiedStoredIntegral*>(&blobs[blob][0]),
                 bitOffset,
                 static_cast<VHBits>(*this)

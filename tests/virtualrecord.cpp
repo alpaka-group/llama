@@ -948,19 +948,29 @@ TEST_CASE("VirtualRecord.One_from_scalar")
     CHECK(p(tag::Mass{}) == 42);
 }
 
-TEST_CASE("VirtualRecord.size")
+TEST_CASE("VirtualRecord.size.int")
 {
     auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{5}, ParticleInt{}});
     [[maybe_unused]] auto vr = view[0];
     STATIC_REQUIRE(
         sizeof(vr)
-        == sizeof(llama::ArrayExtents<llama::dyn>::value_type)
+        == sizeof(llama::ArrayExtents<int, llama::dyn>::value_type) + 4 // padding
+            + sizeof(&view)); // sizeof array dims and view reference // NOLINT
+}
+
+TEST_CASE("VirtualRecord.size.size_t")
+{
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{std::size_t{5}}, ParticleInt{}});
+    [[maybe_unused]] auto vr = view[0];
+    STATIC_REQUIRE(
+        sizeof(vr)
+        == sizeof(llama::ArrayExtents<std::size_t, llama::dyn>::value_type)
             + sizeof(&view)); // sizeof array dims and view reference // NOLINT
 }
 
 TEST_CASE("VirtualRecord.One.size")
 {
-    using Mapping = llama::mapping::MinAlignedOne<llama::ArrayExtents<>, Particle>;
+    using Mapping = llama::mapping::MinAlignedOne<llama::ArrayExtents<int>, Particle>;
     STATIC_REQUIRE(Mapping{}.blobSize(0) == 56);
     STATIC_REQUIRE(std::is_empty_v<Mapping::ArrayIndex>);
 

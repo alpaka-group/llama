@@ -223,7 +223,7 @@ TEST_CASE("recorddim.int[3]")
 
     using RecordDim = int[3];
     auto view
-        = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<llama::dyn>, RecordDim>{llama::ArrayExtents{1}});
+        = llama::allocView(llama::mapping::AoS<llama::ArrayExtentsDynamic<int, 1>, RecordDim>{llama::ArrayExtents{1}});
 
     view(0u)(0_RC) = 42;
     view(0u)(1_RC) = 43;
@@ -237,7 +237,7 @@ TEST_CASE("recorddim.int[200]")
 
     using RecordDim = int[200];
     auto view
-        = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<llama::dyn>, RecordDim>{llama::ArrayExtents{1}});
+        = llama::allocView(llama::mapping::AoS<llama::ArrayExtentsDynamic<int, 1>, RecordDim>{llama::ArrayExtents{1}});
 
     view(0u)(0_RC) = 42;
     view(0u)(199_RC) = 43;
@@ -249,7 +249,7 @@ TEST_CASE("recorddim.int[3][2]")
 
     using RecordDim = int[3][2];
     auto view
-        = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<llama::dyn>, RecordDim>{llama::ArrayExtents{1}});
+        = llama::allocView(llama::mapping::AoS<llama::ArrayExtentsDynamic<int, 1>, RecordDim>{llama::ArrayExtents{1}});
 
     view(0u)(0_RC)(0_RC) = 42;
     view(0u)(0_RC)(1_RC) = 43;
@@ -265,7 +265,7 @@ TEST_CASE("recorddim.int[1][1][1][1][1][1][1][1][1][1]")
 
     using RecordDim = int[1][1][1][1][1][1][1][1][1][1];
     auto view
-        = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<llama::dyn>, RecordDim>{llama::ArrayExtents{1}});
+        = llama::allocView(llama::mapping::AoS<llama::ArrayExtentsDynamic<int, 1>, RecordDim>{llama::ArrayExtents{1}});
 
     view(0u)(0_RC)(0_RC)(0_RC)(0_RC)(0_RC)(0_RC)(0_RC)(0_RC)(0_RC)(0_RC) = 42;
 }

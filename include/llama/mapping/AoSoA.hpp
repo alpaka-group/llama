@@ -32,7 +32,7 @@ namespace llama::mapping
     template<
         typename TArrayExtents,
         typename TRecordDim,
-        std::size_t Lanes,
+        typename TArrayExtents::value_type Lanes,
         typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
         template<typename> typename FlattenRecordDim = FlattenRecordDimInOrder>
     struct AoSoA : MappingBase<TArrayExtents, TRecordDim>
@@ -40,6 +40,7 @@ namespace llama::mapping
     private:
         using Base = MappingBase<TArrayExtents, TRecordDim>;
         using Flattener = FlattenRecordDim<TRecordDim>;
+        using size_type = typename Base::size_type;
 
     public:
         using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
@@ -47,17 +48,16 @@ namespace llama::mapping
 
         using Base::Base;
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(std::size_t) const -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
         {
-            return roundUpToMultiple(
-                LinearizeArrayDimsFunctor{}.size(Base::extents()) * sizeOf<TRecordDim>,
-                Lanes * sizeOf<TRecordDim>);
+            const auto rs = static_cast<size_type>(sizeOf<TRecordDim>);
+            return roundUpToMultiple(LinearizeArrayDimsFunctor{}.size(Base::extents()) * rs, Lanes * rs);
         }
 
         template<std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
             typename Base::ArrayIndex ai,
-            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset
+            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
         {
             constexpr std::size_t flatFieldIndex =
 #ifdef __NVCC__
@@ -67,9 +67,10 @@ namespace llama::mapping
             const auto flatArrayIndex = LinearizeArrayDimsFunctor{}(ai, Base::extents());
             const auto blockIndex = flatArrayIndex / Lanes;
             const auto laneIndex = flatArrayIndex % Lanes;
-            const auto offset = (sizeOf<TRecordDim> * Lanes) * blockIndex
-                + flatOffsetOf<typename Flattener::FlatRecordDim, flatFieldIndex, false> * Lanes
-                + sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>) * laneIndex;
+            const auto offset = static_cast<size_type>(sizeOf<TRecordDim> * Lanes) * blockIndex
+                + static_cast<size_type>(flatOffsetOf<typename Flattener::FlatRecordDim, flatFieldIndex, false>)
+                    * Lanes
+                + static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>)) * laneIndex;
             return {0, offset};
         }
     };
@@ -86,7 +87,7 @@ namespace llama::mapping
     template<typename Mapping>
     inline constexpr bool isAoSoA = false;
 
-    template<typename AD, typename RD, std::size_t L>
+    template<typename AD, typename RD, typename AD::value_type L>
     inline constexpr bool isAoSoA<AoSoA<AD, RD, L>> = true;
 
 } // namespace llama::mapping

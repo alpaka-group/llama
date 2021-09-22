@@ -8,6 +8,9 @@
 #include <string>
 #include <typeinfo>
 
+using SizeTypes = boost::mp11::mp_list<int, unsigned, long, unsigned long, long long, unsigned long long>;
+static_assert(boost::mp11::mp_contains<SizeTypes, std::size_t>::value);
+
 // clang-format off
 namespace tag
 {

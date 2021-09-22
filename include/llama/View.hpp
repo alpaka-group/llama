@@ -121,7 +121,7 @@ namespace llama
     template<std::size_t Dim, typename RecordDim>
     LLAMA_FN_HOST_ACC_INLINE auto allocViewStack() -> decltype(auto)
     {
-        constexpr auto mapping = mapping::MinAlignedOne<ArrayExtentsStatic<Dim, 1>, RecordDim>{};
+        constexpr auto mapping = mapping::MinAlignedOne<ArrayExtentsNCube<int, Dim, 1>, RecordDim>{};
         return allocView(mapping, bloballoc::Stack<mapping.blobSize(0)>{});
     }
 
@@ -346,6 +346,7 @@ namespace llama
         using RecordDim = typename Mapping::RecordDim;
         using iterator = Iterator<View>;
         using const_iterator = Iterator<const View>;
+        using size_type = typename ArrayExtents::value_type;
 
         static_assert(
             std::is_same_v<Mapping, std::decay_t<Mapping>>,
@@ -373,6 +374,12 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto mapping() const -> const Mapping&
         {
             return static_cast<const Mapping&>(*this);
+        }
+
+        template<typename V>
+        auto operator()(llama::ArrayIndex<V, ArrayIndex::rank>) const
+        {
+            static_assert(!sizeof(V), "Passed ArrayIndex with SizeType different than Mapping::ArrayExtent");
         }
 
         /// Retrieves the \ref VirtualRecord at the given \ref ArrayIndex index.
@@ -406,28 +413,26 @@ namespace llama
 
         /// Retrieves the \ref VirtualRecord at the \ref ArrayIndex index constructed from the passed component
         /// indices.
-        template<typename... Indices>
+        template<
+            typename... Indices,
+            std::enable_if_t<std::conjunction_v<std::is_convertible<Indices, size_type>...>, int> = 0>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) const -> decltype(auto)
         {
             static_assert(
                 sizeof...(Indices) == ArrayIndex::rank,
                 "Please specify as many indices as you have array dimensions");
-            static_assert(
-                std::conjunction_v<std::is_convertible<Indices, std::size_t>...>,
-                "Indices must be convertible to std::size_t");
             LLAMA_FORCE_INLINE_RECURSIVE
             return (*this)(ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...});
         }
 
-        template<typename... Indices>
+        template<
+            typename... Indices,
+            std::enable_if_t<std::conjunction_v<std::is_convertible<Indices, size_type>...>, int> = 0>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) -> decltype(auto)
         {
             static_assert(
                 sizeof...(Indices) == ArrayIndex::rank,
                 "Please specify as many indices as you have array dimensions");
-            static_assert(
-                std::conjunction_v<std::is_convertible<Indices, std::size_t>...>,
-                "Indices must be convertible to std::size_t");
             LLAMA_FORCE_INLINE_RECURSIVE
             return (*this)(ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...});
         }
@@ -446,14 +451,20 @@ namespace llama
             return (*this)(ai);
         }
 
+        template<typename V>
+        auto operator[](llama::ArrayIndex<V, ArrayIndex::rank>) const
+        {
+            static_assert(!sizeof(V), "Passed ArrayIndex with SizeType different than Mapping::ArrayExtent");
+        }
+
         /// Retrieves the \ref VirtualRecord at the 1D \ref ArrayIndex index constructed from the passed index.
-        LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t index) const -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator[](size_type index) const -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return (*this)(index);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t index) -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator[](size_type index) -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
             return (*this)(index);
@@ -521,6 +532,8 @@ namespace llama
         using ArrayExtents = typename Mapping::ArrayExtents; ///< array extents of the parent view
         using ArrayIndex = typename Mapping::ArrayIndex; ///< array index of the parent view
 
+        using size_type = typename ArrayExtents::value_type;
+
         /// Creates a VirtualView given a parent \ref View and offset.
         template<typename StoredParentViewFwd>
         LLAMA_FN_HOST_ACC_INLINE VirtualView(StoredParentViewFwd&& parentView, ArrayIndex offset)
@@ -562,8 +575,8 @@ namespace llama
                 sizeof...(Indices) == ArrayIndex::rank,
                 "Please specify as many indices as you have array dimensions");
             static_assert(
-                std::conjunction_v<std::is_convertible<Indices, std::size_t>...>,
-                "Indices must be convertible to std::size_t");
+                std::conjunction_v<std::is_convertible<Indices, size_type>...>,
+                "Indices must be convertible to ArrayExtents::size_type");
             LLAMA_FORCE_INLINE_RECURSIVE
             return parentView(
                 ArrayIndex{ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...} + offset});
@@ -576,8 +589,8 @@ namespace llama
                 sizeof...(Indices) == ArrayIndex::rank,
                 "Please specify as many indices as you have array dimensions");
             static_assert(
-                std::conjunction_v<std::is_convertible<Indices, std::size_t>...>,
-                "Indices must be convertible to std::size_t");
+                std::conjunction_v<std::is_convertible<Indices, size_type>...>,
+                "Indices must be convertible to ArrayExtents::size_type");
             LLAMA_FORCE_INLINE_RECURSIVE
             return parentView(
                 ArrayIndex{ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...} + offset});

@@ -85,8 +85,10 @@ struct BlurKernel
             {
                 // Using SoA for the shared memory
                 constexpr auto sharedChunkSize = ElemsPerBlock + 2 * KernelSize;
-                constexpr auto sharedMapping = llama::mapping::
-                    SoA<llama::ArrayExtents<sharedChunkSize, sharedChunkSize>, typename View::RecordDim, false>{};
+                constexpr auto sharedMapping = llama::mapping::SoA<
+                    llama::ArrayExtents<std::size_t, sharedChunkSize, sharedChunkSize>,
+                    typename View::RecordDim,
+                    false>{};
                 auto& sharedMem = alpaka::declareSharedVar<std::byte[sharedMapping.blobSize(0)], __COUNTER__>(acc);
                 return llama::View(sharedMapping, llama::Array<std::byte*, 1>{&sharedMem[0]});
             }
@@ -211,7 +213,7 @@ try
     const auto hostMapping
         = llama::mapping::tree::Mapping{llama::ArrayExtents{buffer_y, buffer_x}, treeOperationList, Pixel{}};
     const auto devMapping = llama::mapping::tree::Mapping{
-        llama::ArrayExtents<CHUNK_SIZE + 2 * KERNEL_SIZE, CHUNK_SIZE + 2 * KERNEL_SIZE>{},
+        llama::ArrayExtents<std::size_t, CHUNK_SIZE + 2 * KERNEL_SIZE, CHUNK_SIZE + 2 * KERNEL_SIZE>{},
         treeOperationList,
         PixelOnAcc{}};
     using DevMapping = std::decay_t<decltype(devMapping)>;

@@ -1,6 +1,6 @@
 #include "common.hpp"
 
-using ArrayExtents = llama::ArrayExtents<16>;
+using ArrayExtents = llama::ArrayExtents<int, 16>;
 using Mapping = llama::mapping::AoS<ArrayExtents, Vec3I>;
 
 TEST_CASE("bloballocators.Stack")

@@ -21,12 +21,12 @@ namespace llama
         { m.extents() } -> std::same_as<typename M::ArrayExtents>;
         { M::blobCount } -> std::convertible_to<std::size_t>;
         Array<int, M::blobCount>{}; // validates constexpr-ness
-        { m.blobSize(std::size_t{}) } -> std::same_as<std::size_t>;
+        { m.blobSize(typename M::ArrayExtents::value_type{}) } -> std::same_as<typename M::ArrayExtents::value_type>;
     };
 
     template <typename M, typename RC>
     concept PhysicalField = requires(M m, typename M::ArrayIndex ai) {
-        { m.blobNrAndOffset(ai, RC{}) } -> std::same_as<NrAndOffset>;
+        { m.blobNrAndOffset(ai, RC{}) } -> std::same_as<NrAndOffset<typename M::ArrayExtents::value_type>>;
     };
 
     template<typename M>

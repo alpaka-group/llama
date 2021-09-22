@@ -36,7 +36,7 @@ namespace tag
 
 TEST_CASE("mapping.Tree.empty")
 {
-    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
     const ArrayExtents extents{16, 16};
 
     auto treeOperationList = llama::Tuple{};
@@ -105,7 +105,7 @@ TEST_CASE("mapping.Tree.empty")
 
 TEST_CASE("mapping.Tree.Idem")
 {
-    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
     const ArrayExtents extents{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::Idem()};
@@ -174,7 +174,7 @@ TEST_CASE("mapping.Tree.Idem")
 
 TEST_CASE("mapping.Tree.LeafOnlyRT")
 {
-    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
     const ArrayExtents extents{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::LeafOnlyRT()};
@@ -243,7 +243,7 @@ TEST_CASE("mapping.Tree.LeafOnlyRT")
 
 TEST_CASE("mapping.Tree.MoveRTDown<>")
 {
-    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
     const ArrayExtents extents{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::MoveRTDown<tree::TreeCoord<>>{4}};
@@ -300,7 +300,7 @@ TEST_CASE("mapping.Tree.MoveRTDown<>")
 
 TEST_CASE("mapping.Tree.MoveRTDown<0>")
 {
-    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
     const ArrayExtents extents{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::MoveRTDown<tree::TreeCoord<0>>{4}};
@@ -357,7 +357,7 @@ TEST_CASE("mapping.Tree.MoveRTDown<0>")
 
 TEST_CASE("mapping.Tree.MoveRTDown<0,0>")
 {
-    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
     const ArrayExtents extents{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::MoveRTDown<tree::TreeCoord<0, 0>>{4}};
@@ -414,7 +414,7 @@ TEST_CASE("mapping.Tree.MoveRTDown<0,0>")
 
 TEST_CASE("mapping.Tree.MoveRTDownFixed<>")
 {
-    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
     const ArrayExtents extents{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::MoveRTDownFixed<tree::TreeCoord<>, 4>{}};
@@ -471,7 +471,7 @@ TEST_CASE("mapping.Tree.MoveRTDownFixed<>")
 
 TEST_CASE("mapping.Tree.MoveRTDownFixed<0>")
 {
-    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
     const ArrayExtents extents{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::MoveRTDownFixed<tree::TreeCoord<0>, 4>{}};
@@ -528,7 +528,7 @@ TEST_CASE("mapping.Tree.MoveRTDownFixed<0>")
 
 TEST_CASE("mapping.Tree.MoveRTDownFixed<0,0>")
 {
-    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
     const ArrayExtents extents{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::MoveRTDownFixed<tree::TreeCoord<0, 0>, 4>{}};
@@ -585,7 +585,7 @@ TEST_CASE("mapping.Tree.MoveRTDownFixed<0,0>")
 
 TEST_CASE("mapping.Tree.vectorblocks.runtime")
 {
-    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
     const ArrayExtents extents{16, 16};
 
     const auto vectorWidth = 8;
@@ -649,7 +649,7 @@ TEST_CASE("mapping.Tree.vectorblocks.runtime")
 
 TEST_CASE("mapping.Tree.vectorblocks.compiletime")
 {
-    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
     const ArrayExtents extents{16, 16};
 
     constexpr auto vectorWidth = 8;
@@ -713,7 +713,7 @@ TEST_CASE("mapping.Tree.vectorblocks.compiletime")
 
 TEST_CASE("mapping.Tree.getNode")
 {
-    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
     const ArrayExtents extents{16, 16};
 
     auto treeOperationList = llama::Tuple{};
@@ -757,7 +757,7 @@ TEST_CASE("mapping.Tree.getNode")
 
 TEST_CASE("mapping.Tree")
 {
-    using ArrayExtents = llama::ArrayExtents<12, 12>;
+    using ArrayExtents = llama::ArrayExtents<std::size_t, 12, 12>;
     constexpr ArrayExtents extents{};
 
     auto treeOperationList = llama::Tuple{tree::functor::Idem(), tree::functor::LeafOnlyRT{}, tree::functor::Idem{}};
@@ -1051,7 +1051,7 @@ TEST_CASE("mapping.Tree")
     double sum = 0.0;
     for(size_t x = 0; x < extents[0]; ++x)
         for(size_t y = 0; y < extents[1]; ++y)
-            sum += view({x, y})(llama::RecordCoord<0, 1>{});
+            sum += view(x, y)(llama::RecordCoord<0, 1>{});
     CHECK(sum == 0);
 }
 

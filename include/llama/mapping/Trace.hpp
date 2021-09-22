@@ -14,6 +14,10 @@ namespace llama::mapping
     template<typename Mapping>
     struct Trace : Mapping
     {
+    private:
+        using size_type = typename Mapping::ArrayExtents::value_type;
+
+    public:
         using RecordDim = typename Mapping::RecordDim;
 
         constexpr Trace() = default;
@@ -57,7 +61,7 @@ namespace llama::mapping
         template<std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(
             typename Mapping::ArrayIndex ai,
-            RecordCoord<RecordCoords...> rc = {}) const -> NrAndOffset
+            RecordCoord<RecordCoords...> rc = {}) const -> NrAndOffset<size_type>
         {
             ++fieldHits[flatRecordCoord<RecordDim, RecordCoord<RecordCoords...>>];
             return Mapping::blobNrAndOffset(ai, rc);

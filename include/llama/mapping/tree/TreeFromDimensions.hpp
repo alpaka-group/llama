@@ -123,14 +123,14 @@ namespace llama::mapping::tree
     using TreeFromDimensions =
         typename internal::WrapInNNodes<internal::TreeFromRecordDimImpl<RecordDim>, ArrayExtents::rank - 1>::type;
 
-    template<typename RecordDim, std::size_t N, std::size_t Pos = 0>
-    LLAMA_FN_HOST_ACC_INLINE auto createTree(const ArrayIndex<N>& size)
+    template<typename RecordDim, typename V, std::size_t N, std::size_t Pos = 0>
+    LLAMA_FN_HOST_ACC_INLINE auto createTree(const ArrayIndex<V, N>& size)
     {
         if constexpr(Pos == N - 1)
             return TreeFromRecordDim<RecordDim>{size[N - 1]};
         else
         {
-            Tuple inner{createTree<RecordDim, N, Pos + 1>(size)};
+            Tuple inner{createTree<RecordDim, V, N, Pos + 1>(size)};
             return Node<NoName, decltype(inner)>{size[Pos], inner};
         }
     };
@@ -148,7 +148,8 @@ namespace llama::mapping::tree
             RecordCoord<FirstRecordCoord, RecordCoords...>)
         {
             return Tuple{
-                TreeCoordElement<(ADIndices == ArrayIndex::rank - 1 ? FirstRecordCoord : 0)>{ai[ADIndices]}...,
+                TreeCoordElement<(ADIndices == ArrayIndex::rank - 1 ? FirstRecordCoord : 0)>{
+                    (std::size_t) ai[ADIndices]}..., // TODO
                 TreeCoordElement<RecordCoords, boost::mp11::mp_size_t<0>>{}...,
                 TreeCoordElement<0, boost::mp11::mp_size_t<0>>{}};
         }

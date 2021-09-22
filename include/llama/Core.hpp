@@ -43,26 +43,32 @@ namespace llama
         static_assert(isAllowedFieldType<Type>, "This field's type is not allowed");
     };
 
+    template<typename T>
     struct NrAndOffset
     {
-        std::size_t nr;
-        std::size_t offset;
-
-        friend auto operator==(const NrAndOffset& a, const NrAndOffset& b) -> bool
-        {
-            return a.nr == b.nr && a.offset == b.offset;
-        }
-
-        friend auto operator!=(const NrAndOffset& a, const NrAndOffset& b) -> bool
-        {
-            return !(a == b);
-        }
+        T nr;
+        T offset;
 
         friend auto operator<<(std::ostream& os, const NrAndOffset& value) -> std::ostream&
         {
             return os << "NrAndOffset{" << value.nr << ", " << value.offset << "}";
         }
     };
+
+    template<typename Int>
+    NrAndOffset(Int, Int) -> NrAndOffset<Int>;
+
+    template<typename TA, typename TB>
+    auto operator==(const NrAndOffset<TA>& a, const NrAndOffset<TB>& b) -> bool
+    {
+        return a.nr == b.nr && a.offset == b.offset;
+    }
+
+    template<typename TA, typename TB>
+    auto operator!=(const NrAndOffset<TA>& a, const NrAndOffset<TB>& b) -> bool
+    {
+        return !(a == b);
+    }
 
     /// Get the tag from a \ref Field.
     template<typename Field>

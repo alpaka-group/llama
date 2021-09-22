@@ -137,7 +137,7 @@ try
     auto run = [&](std::string_view updateName, auto update)
     {
         // init
-        for(uint32_t i = 0; i < extent; i++)
+        for(int i = 0; i < extent; i++)
             uCurr[i] = exactSolution(i * dx, 0.0);
         uNext[0] = 0;
         uNext[extent - 1] = 0;
@@ -154,7 +154,7 @@ try
 
         // calculate error
         double maxError = 0.0;
-        for(uint32_t i = 0; i < extent; i++)
+        for(int i = 0; i < extent; i++)
         {
             const auto error = std::abs(uNext[i] - exactSolution(i * dx, tMax));
             maxError = std::max(maxError, error);

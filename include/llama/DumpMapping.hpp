@@ -38,8 +38,8 @@ namespace llama
             return c;
         }
 
-        template<std::size_t Dim>
-        auto formatArrayIndex(const ArrayIndex<Dim>& ai)
+        template<typename T, std::size_t Dim>
+        auto formatArrayIndex(const ArrayIndex<T, Dim>& ai)
         {
             if constexpr(Dim == 1)
                 return std::to_string(ai[0]);
@@ -57,13 +57,13 @@ namespace llama
             }
         }
 
-        template<std::size_t Dim>
+        template<typename ArrayIndex>
         struct FieldBox
         {
-            ArrayIndex<Dim> arrayIndex;
+            ArrayIndex arrayIndex;
             std::vector<std::size_t> recordCoord;
             std::string recordTags;
-            NrAndOffset nrAndOffset;
+            NrAndOffset<typename ArrayIndex::value_type> nrAndOffset;
             std::size_t size;
         };
 
@@ -80,12 +80,12 @@ namespace llama
             View& view,
             typename View::Mapping::ArrayIndex ai,
             RecordCoord rc,
-            std::vector<FieldBox<View::Mapping::ArrayIndex::rank>>& infos)
+            std::vector<FieldBox<typename View::Mapping::ArrayIndex>>& infos)
         {
             using Mapping = typename View::Mapping;
             using RecordDim = typename Mapping::RecordDim;
 
-            auto emitInfo = [&](NrAndOffset nrAndOffset, std::size_t size) {
+            auto emitInfo = [&](auto nrAndOffset, std::size_t size) {
                 infos.push_back({ai, internal::toVec(rc), recordCoordTags<RecordDim>(rc), nrAndOffset, size});
             };
 
@@ -149,13 +149,13 @@ namespace llama
             }
 
             // if we come here, we could not find out where the value is coming from
-            emitInfo(NrAndOffset{Mapping::blobCount, 0}, sizeof(Type));
+            emitInfo(NrAndOffset{Mapping::blobCount, std::size_t{0}}, sizeof(Type));
         }
 
         template<typename Mapping>
-        auto boxesFromMapping(const Mapping& mapping) -> std::vector<FieldBox<Mapping::ArrayIndex::rank>>
+        auto boxesFromMapping(const Mapping& mapping) -> std::vector<FieldBox<typename Mapping::ArrayIndex>>
         {
-            std::vector<FieldBox<Mapping::ArrayIndex::rank>> infos;
+            std::vector<FieldBox<typename Mapping::ArrayIndex>> infos;
 
             std::optional<decltype(allocView(mapping))> view;
             if constexpr(hasAnyComputedField<Mapping>())
@@ -181,8 +181,9 @@ namespace llama
             return infos;
         }
 
-        template<std::size_t Dim>
-        auto breakBoxes(std::vector<FieldBox<Dim>> boxes, std::size_t wrapByteCount) -> std::vector<FieldBox<Dim>>
+        template<typename ArrayIndex>
+        auto breakBoxes(std::vector<FieldBox<ArrayIndex>> boxes, std::size_t wrapByteCount)
+            -> std::vector<FieldBox<ArrayIndex>>
         {
             for(std::size_t i = 0; i < boxes.size(); i++)
             {

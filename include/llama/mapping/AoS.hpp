@@ -26,6 +26,7 @@ namespace llama::mapping
     private:
         using Base = MappingBase<TArrayExtents, TRecordDim>;
         using Flattener = FlattenRecordDim<TRecordDim>;
+        using size_type = typename Base::size_type;
 
     public:
         using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
@@ -33,7 +34,7 @@ namespace llama::mapping
 
         using Base::Base;
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(std::size_t) const -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
         {
             return LinearizeArrayDimsFunctor{}.size(Base::extents())
                 * flatSizeOf<typename Flattener::FlatRecordDim, AlignAndPad>;
@@ -42,19 +43,17 @@ namespace llama::mapping
         template<std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
             typename Base::ArrayIndex ai,
-            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset
+            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
         {
             constexpr std::size_t flatFieldIndex =
 #ifdef __NVCC__
                 *& // mess with nvcc compiler state to workaround bug
 #endif
                  Flattener::template flatIndex<RecordCoords...>;
-            const auto offset
-                = LinearizeArrayDimsFunctor{}(ai, Base::extents())
-                    * flatSizeOf<
-                        typename Flattener::FlatRecordDim,
-                        AlignAndPad> + flatOffsetOf<typename Flattener::FlatRecordDim, flatFieldIndex, AlignAndPad>;
-            return {0, offset};
+            const auto offset = LinearizeArrayDimsFunctor{}(ai, Base::extents())
+                    * static_cast<size_type>(flatSizeOf<typename Flattener::FlatRecordDim, AlignAndPad>)
+                + static_cast<size_type>(flatOffsetOf<typename Flattener::FlatRecordDim, flatFieldIndex, AlignAndPad>);
+            return {size_type{0}, offset};
         }
     };
 

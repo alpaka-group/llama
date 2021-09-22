@@ -24,10 +24,10 @@ TEST_CASE("mapping.One.Packed.address")
             CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 55);
         }
     };
-    test(llama::ArrayExtentsDynamic<2>{16, 16});
-    test(llama::ArrayExtents<16, llama::dyn>{16});
-    test(llama::ArrayExtents<llama::dyn, 16>{16});
-    test(llama::ArrayExtents<16, 16>{});
+    test(llama::ArrayExtentsDynamic<std::size_t, 2>{16, 16});
+    test(llama::ArrayExtents<int, 16, llama::dyn>{16});
+    test(llama::ArrayExtents<int, llama::dyn, 16>{16});
+    test(llama::ArrayExtents<int, 16, 16>{});
 }
 
 TEST_CASE("mapping.One.Aligned.address")
@@ -54,10 +54,10 @@ TEST_CASE("mapping.One.Aligned.address")
             CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 59);
         }
     };
-    test(llama::ArrayExtentsDynamic<2>{16, 16});
-    test(llama::ArrayExtents<16, llama::dyn>{16});
-    test(llama::ArrayExtents<llama::dyn, 16>{16});
-    test(llama::ArrayExtents<16, 16>{});
+    test(llama::ArrayExtentsDynamic<std::size_t, 2>{16, 16});
+    test(llama::ArrayExtents<int, 16, llama::dyn>{16});
+    test(llama::ArrayExtents<int, llama::dyn, 16>{16});
+    test(llama::ArrayExtents<int, 16, 16>{});
 }
 
 TEST_CASE("mapping.One.MinAligned.address")
@@ -84,8 +84,8 @@ TEST_CASE("mapping.One.MinAligned.address")
             CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 3);
         }
     };
-    test(llama::ArrayExtentsDynamic<2>{16, 16});
-    test(llama::ArrayExtents<16, llama::dyn>{16});
-    test(llama::ArrayExtents<llama::dyn, 16>{16});
-    test(llama::ArrayExtents<16, 16>{});
+    test(llama::ArrayExtentsDynamic<std::size_t, 2>{16, 16});
+    test(llama::ArrayExtents<int, 16, llama::dyn>{16});
+    test(llama::ArrayExtents<int, llama::dyn, 16>{16});
+    test(llama::ArrayExtents<int, 16, 16>{});
 }

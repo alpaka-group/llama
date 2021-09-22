@@ -173,12 +173,16 @@ namespace llama::mapping::tree
         using ArrayExtents = TArrayExtents;
         using ArrayIndex = typename ArrayExtents::Index;
         using RecordDim = TRecordDim;
-        using BasicTree = TreeFromDimensions<ArrayExtents, RecordDim>;
+
         // TODO(bgruber): , support more than one blob
         static constexpr std::size_t blobCount = 1;
 
-        using MergedFunctors = internal::MergeFunctors<BasicTree, TreeOperationList>;
+    private:
+        using size_type = typename ArrayExtents::value_type;
 
+    public:
+        using BasicTree = TreeFromDimensions<ArrayExtents, RecordDim>;
+        using MergedFunctors = internal::MergeFunctors<BasicTree, TreeOperationList>;
         BasicTree basicTree;
         MergedFunctors mergedFunctors;
 
@@ -202,15 +206,17 @@ namespace llama::mapping::tree
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        auto blobSize(std::size_t const) const -> std::size_t
+        auto blobSize(size_type const) const -> size_type
         {
+            // TODO(bgruber): propagate use of size_type
             return internal::getTreeBlobSize(resultTree);
         }
 
         template<std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayIndex ai, RecordCoord<RecordCoords...> = {}) const
-            -> NrAndOffset
+            -> NrAndOffset<size_type>
         {
+            // TODO(bgruber): propagate use of size_type
             auto const basicTreeCoord = createTreeCoord<RecordCoord<RecordCoords...>>(ai);
             auto const resultTreeCoord = mergedFunctors.basicCoordToResultCoord(basicTreeCoord, basicTree);
             const auto offset = internal::getTreeBlobByte(resultTree, resultTreeCoord);

@@ -5,7 +5,7 @@
 TEST_CASE("mapsNonOverlappingly.PackedAoS")
 {
 #ifdef __cpp_constexpr_dynamic_alloc
-    constexpr auto mapping = llama::mapping::PackedAoS<llama::ArrayExtentsDynamic<2>, Particle>{{32, 32}};
+    constexpr auto mapping = llama::mapping::PackedAoS<llama::ArrayExtentsDynamic<std::size_t, 2>, Particle>{{32, 32}};
     STATIC_REQUIRE(llama::mapsNonOverlappingly(mapping));
 #else
     INFO("Test disabled because compiler does not support __cpp_constexpr_dynamic_alloc");
@@ -15,7 +15,8 @@ TEST_CASE("mapsNonOverlappingly.PackedAoS")
 TEST_CASE("mapsNonOverlappingly.AlignedAoS")
 {
 #ifdef __cpp_constexpr_dynamic_alloc
-    constexpr auto mapping = llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<2>, Particle>{{32, 32}};
+    constexpr auto mapping
+        = llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<std::size_t, 2>, Particle>{{32, 32}};
     STATIC_REQUIRE(llama::mapsNonOverlappingly(mapping));
 #else
     INFO("Test disabled because compiler does not support __cpp_constexpr_dynamic_alloc");
@@ -49,7 +50,7 @@ namespace
 
         template<std::size_t... RecordCoords>
         constexpr auto blobNrAndOffset(ArrayIndex, llama::RecordCoord<RecordCoords...> = {}) const
-            -> llama::NrAndOffset
+            -> llama::NrAndOffset<std::size_t>
         {
             return {0, 0};
         }
@@ -59,10 +60,12 @@ namespace
 TEST_CASE("mapsNonOverlappingly.MapEverythingToZero")
 {
 #ifdef __cpp_constexpr_dynamic_alloc
-    STATIC_REQUIRE(llama::mapsNonOverlappingly(MapEverythingToZero{llama::ArrayExtentsDynamic<1>{1}, double{}}));
-    STATIC_REQUIRE(!llama::mapsNonOverlappingly(MapEverythingToZero{llama::ArrayExtentsDynamic<1>{2}, double{}}));
     STATIC_REQUIRE(
-        !llama::mapsNonOverlappingly(MapEverythingToZero{llama::ArrayExtentsDynamic<2>{32, 32}, Particle{}}));
+        llama::mapsNonOverlappingly(MapEverythingToZero{llama::ArrayExtentsDynamic<std::size_t, 1>{1}, double{}}));
+    STATIC_REQUIRE(
+        !llama::mapsNonOverlappingly(MapEverythingToZero{llama::ArrayExtentsDynamic<std::size_t, 1>{2}, double{}}));
+    STATIC_REQUIRE(!llama::mapsNonOverlappingly(
+        MapEverythingToZero{llama::ArrayExtentsDynamic<std::size_t, 2>{32, 32}, Particle{}}));
 #else
     INFO("Test disabled because compiler does not support __cpp_constexpr_dynamic_alloc");
 #endif
@@ -97,7 +100,7 @@ namespace
 
         template<std::size_t... RecordCoords>
         constexpr auto blobNrAndOffset(ArrayIndex ai, llama::RecordCoord<RecordCoords...> = {}) const
-            -> llama::NrAndOffset
+            -> llama::NrAndOffset<std::size_t>
         {
             const auto blob = llama::flatRecordCoord<RecordDim, llama::RecordCoord<RecordCoords...>>;
             const auto offset = (llama::mapping::LinearizeArrayDimsCpp{}(ai, extents()) % Modulus)
@@ -110,12 +113,12 @@ namespace
 TEST_CASE("mapsNonOverlappingly.ModulusMapping")
 {
 #ifdef __cpp_constexpr_dynamic_alloc
-    using Modulus10Mapping = ModulusMapping<llama::ArrayExtentsDynamic<1>, Particle, 10>;
-    STATIC_REQUIRE(llama::mapsNonOverlappingly(Modulus10Mapping{llama::ArrayExtentsDynamic<1>{1}}));
-    STATIC_REQUIRE(llama::mapsNonOverlappingly(Modulus10Mapping{llama::ArrayExtentsDynamic<1>{9}}));
-    STATIC_REQUIRE(llama::mapsNonOverlappingly(Modulus10Mapping{llama::ArrayExtentsDynamic<1>{10}}));
-    STATIC_REQUIRE(!llama::mapsNonOverlappingly(Modulus10Mapping{llama::ArrayExtentsDynamic<1>{11}}));
-    STATIC_REQUIRE(!llama::mapsNonOverlappingly(Modulus10Mapping{llama::ArrayExtentsDynamic<1>{25}}));
+    using Modulus10Mapping = ModulusMapping<llama::ArrayExtentsDynamic<std::size_t, 1>, Particle, 10>;
+    STATIC_REQUIRE(llama::mapsNonOverlappingly(Modulus10Mapping{llama::ArrayExtentsDynamic<std::size_t, 1>{1}}));
+    STATIC_REQUIRE(llama::mapsNonOverlappingly(Modulus10Mapping{llama::ArrayExtentsDynamic<std::size_t, 1>{9}}));
+    STATIC_REQUIRE(llama::mapsNonOverlappingly(Modulus10Mapping{llama::ArrayExtentsDynamic<std::size_t, 1>{10}}));
+    STATIC_REQUIRE(!llama::mapsNonOverlappingly(Modulus10Mapping{llama::ArrayExtentsDynamic<std::size_t, 1>{11}}));
+    STATIC_REQUIRE(!llama::mapsNonOverlappingly(Modulus10Mapping{llama::ArrayExtentsDynamic<std::size_t, 1>{25}}));
 #else
     INFO("Test disabled because compiler does not support __cpp_constexpr_dynamic_alloc");
 #endif
@@ -123,7 +126,7 @@ TEST_CASE("mapsNonOverlappingly.ModulusMapping")
 
 TEST_CASE("maps.ModulusMapping")
 {
-    constexpr auto extents = llama::ArrayExtentsDynamic<1>{128};
+    constexpr auto extents = llama::ArrayExtentsDynamic<std::size_t, 1>{128};
     STATIC_REQUIRE(llama::mapsPiecewiseContiguous<1>(llama::mapping::AoS{extents, Particle{}}));
     STATIC_REQUIRE(!llama::mapsPiecewiseContiguous<8>(llama::mapping::AoS{extents, Particle{}}));
     STATIC_REQUIRE(!llama::mapsPiecewiseContiguous<16>(llama::mapping::AoS{extents, Particle{}}));

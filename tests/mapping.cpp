@@ -1,54 +1,66 @@
 #include "common.hpp"
 
 #ifdef __cpp_lib_concepts
-TEST_CASE("mapping.concepts")
+TEMPLATE_LIST_TEST_CASE("mapping.concepts", "", SizeTypes)
 {
-    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<2>, Particle>>);
-    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::PackedAoS<llama::ArrayExtentsDynamic<2>, Particle>>);
-    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::SingleBlobSoA<llama::ArrayExtentsDynamic<2>, Particle>>);
-    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::MultiBlobSoA<llama::ArrayExtentsDynamic<2>, Particle>>);
-    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::AoSoA<llama::ArrayExtentsDynamic<2>, Particle, 8>>);
+    STATIC_REQUIRE(
+        llama::PhysicalMapping<llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<TestType, 2>, Particle>>);
+    STATIC_REQUIRE(
+        llama::PhysicalMapping<llama::mapping::PackedAoS<llama::ArrayExtentsDynamic<TestType, 2>, Particle>>);
+    STATIC_REQUIRE(
+        llama::PhysicalMapping<llama::mapping::SingleBlobSoA<llama::ArrayExtentsDynamic<TestType, 2>, Particle>>);
+    STATIC_REQUIRE(
+        llama::PhysicalMapping<llama::mapping::MultiBlobSoA<llama::ArrayExtentsDynamic<TestType, 2>, Particle>>);
+    STATIC_REQUIRE(
+        llama::PhysicalMapping<llama::mapping::AoSoA<llama::ArrayExtentsDynamic<TestType, 2>, Particle, 8>>);
 
-    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::AlignedAoS<llama::ArrayExtents<2>, Particle>>);
-    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::PackedAoS<llama::ArrayExtents<2>, Particle>>);
-    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::SingleBlobSoA<llama::ArrayExtents<2>, Particle>>);
-    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::MultiBlobSoA<llama::ArrayExtents<2>, Particle>>);
-    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::AoSoA<llama::ArrayExtents<2>, Particle, 8>>);
+    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::AlignedAoS<llama::ArrayExtents<TestType, 2>, Particle>>);
+    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::PackedAoS<llama::ArrayExtents<TestType, 2>, Particle>>);
+    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::SingleBlobSoA<llama::ArrayExtents<TestType, 2>, Particle>>);
+    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::MultiBlobSoA<llama::ArrayExtents<TestType, 2>, Particle>>);
+    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::AoSoA<llama::ArrayExtents<TestType, 2>, Particle, 8>>);
 
-    using Inner = llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<2>, Particle>;
+    using Inner = llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<TestType, 2>, Particle>;
     STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::Trace<Inner>>);
     STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::Heatmap<Inner>>);
 
-    STATIC_REQUIRE(llama::FullyComputedMapping<llama::mapping::Null<llama::ArrayExtentsDynamic<2>, Particle>>);
-    STATIC_REQUIRE(llama::FullyComputedMapping<
-                   llama::mapping::Bytesplit<llama::ArrayExtentsDynamic<2>, Particle, llama::mapping::BindAoS<>::fn>>);
-    STATIC_REQUIRE(llama::FullyComputedMapping<llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<2>, Vec3I>>);
     STATIC_REQUIRE(
-        llama::FullyComputedMapping<llama::mapping::BitPackedFloatSoA<llama::ArrayExtentsDynamic<2>, Vec3D>>);
+        llama::FullyComputedMapping<llama::mapping::Null<llama::ArrayExtentsDynamic<TestType, 2>, Particle>>);
+    STATIC_REQUIRE(llama::FullyComputedMapping<
+                   llama::mapping::
+                       Bytesplit<llama::ArrayExtentsDynamic<TestType, 2>, Particle, llama::mapping::BindAoS<>::fn>>);
+    STATIC_REQUIRE(
+        llama::FullyComputedMapping<llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<TestType, 2>, Vec3I>>);
+    STATIC_REQUIRE(llama::FullyComputedMapping<
+                   llama::mapping::BitPackedFloatSoA<llama::ArrayExtentsDynamic<TestType, 2>, Vec3D>>);
 
     STATIC_REQUIRE(llama::PartiallyComputedMapping<llama::mapping::ChangeType<
-                       llama::ArrayExtentsDynamic<2>,
+                       llama::ArrayExtentsDynamic<TestType, 2>,
                        Particle,
                        llama::mapping::BindAoS<>::fn,
                        boost::mp11::mp_list<boost::mp11::mp_list<bool, int>>>>);
 }
 #endif
 
-TEST_CASE("mapping.traits")
+TEMPLATE_LIST_TEST_CASE("mapping.traits", "", SizeTypes)
 {
-    using AAoS = llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<2>, Particle>;
-    using PAoS = llama::mapping::PackedAoS<llama::ArrayExtentsDynamic<2>, Particle>;
-    using SBSoA = llama::mapping::SingleBlobSoA<llama::ArrayExtentsDynamic<2>, Particle>;
-    using MBSoA = llama::mapping::MultiBlobSoA<llama::ArrayExtentsDynamic<2>, Particle>;
-    using AoAoS = llama::mapping::AoSoA<llama::ArrayExtentsDynamic<2>, Particle, 8>;
-    using One = llama::mapping::One<llama::ArrayExtentsDynamic<2>, Particle>;
+    using AAoS = llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<TestType, 2>, Particle>;
+    using PAoS = llama::mapping::PackedAoS<llama::ArrayExtentsDynamic<TestType, 2>, Particle>;
+    using SBSoA = llama::mapping::SingleBlobSoA<llama::ArrayExtentsDynamic<TestType, 2>, Particle>;
+    using MBSoA = llama::mapping::MultiBlobSoA<llama::ArrayExtentsDynamic<TestType, 2>, Particle>;
+    using AoAoS = llama::mapping::AoSoA<llama::ArrayExtentsDynamic<TestType, 2>, Particle, 8>;
+    using One = llama::mapping::One<llama::ArrayExtentsDynamic<TestType, 2>, Particle>;
 
-    using Null = llama::mapping::Null<llama::ArrayExtentsDynamic<2>, Particle>;
-    using BS = llama::mapping::Bytesplit<llama::ArrayExtentsDynamic<2>, Particle, llama::mapping::BindAoS<>::fn>;
-    using CT = llama::mapping::
-        ChangeType<llama::ArrayExtentsDynamic<2>, Particle, llama::mapping::BindAoS<>::fn, boost::mp11::mp_list<>>;
-    using BPI = llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<2>, Vec3I>;
-    using BPF = llama::mapping::BitPackedFloatSoA<llama::ArrayExtentsDynamic<2>, Vec3D>;
+    using Null = llama::mapping::Null<llama::ArrayExtentsDynamic<TestType, 2>, Particle>;
+    using BS
+        = llama::mapping::Bytesplit<llama::ArrayExtentsDynamic<TestType, 2>, Particle, llama::mapping::BindAoS<>::fn>;
+    using CT = llama::mapping::ChangeType<
+        llama::ArrayExtentsDynamic<TestType, 2>,
+        Particle,
+        llama::mapping::BindAoS<>::fn,
+        boost::mp11::mp_list<>>;
+    using BPI = llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<TestType, 2>, Vec3I>;
+    using BPF = llama::mapping::BitPackedFloatSoA<llama::ArrayExtentsDynamic<TestType, 2>, Vec3D>;
 
     STATIC_REQUIRE(llama::mapping::isAoS<AAoS>);
     STATIC_REQUIRE(llama::mapping::isAoS<PAoS>);
@@ -171,7 +183,7 @@ TEST_CASE("mapping.LinearizeArrayDimsCpp.size")
 TEST_CASE("mapping.LinearizeArrayDimsCpp")
 {
     llama::mapping::LinearizeArrayDimsCpp lin;
-    const auto extents = llama::ArrayExtents<4, 4>{};
+    const auto extents = llama::ArrayExtents<int, 4, 4>{};
     CHECK(lin(llama::ArrayIndex{0, 0}, extents) == 0);
     CHECK(lin(llama::ArrayIndex{0, 1}, extents) == 1);
     CHECK(lin(llama::ArrayIndex{0, 2}, extents) == 2);
@@ -202,7 +214,7 @@ TEST_CASE("mapping.LinearizeArrayDimsFortran.size")
 TEST_CASE("mapping.LinearizeArrayDimsFortran")
 {
     llama::mapping::LinearizeArrayDimsFortran lin;
-    const auto extents = llama::ArrayExtents<4, 4>{};
+    const auto extents = llama::ArrayExtents<int, 4, 4>{};
     CHECK(lin(llama::ArrayIndex{0, 0}, extents) == 0);
     CHECK(lin(llama::ArrayIndex{0, 1}, extents) == 4);
     CHECK(lin(llama::ArrayIndex{0, 2}, extents) == 8);
@@ -233,7 +245,7 @@ TEST_CASE("mapping.LinearizeArrayDimsMorton.size")
 TEST_CASE("mapping.LinearizeArrayDimsMorton")
 {
     llama::mapping::LinearizeArrayDimsMorton lin;
-    const auto extents = llama::ArrayExtents<4, 4>{};
+    const auto extents = llama::ArrayExtents<int, 4, 4>{};
     CHECK(lin(llama::ArrayIndex{0, 0}, extents) == 0);
     CHECK(lin(llama::ArrayIndex{0, 1}, extents) == 1);
     CHECK(lin(llama::ArrayIndex{0, 2}, extents) == 4);

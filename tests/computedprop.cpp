@@ -30,7 +30,7 @@ namespace
             llama::RecordCoord<RecordCoords...>,
             llama::Array<Blob, Base::blobCount>& storageBlobs) const
         {
-            auto fetch = [&](llama::NrAndOffset nrAndOffset) -> double
+            auto fetch = [&](llama::NrAndOffset<std::size_t> nrAndOffset) -> double
             { return *reinterpret_cast<double*>(&storageBlobs[nrAndOffset.nr][nrAndOffset.offset]); };
 
             const auto ax = fetch(Base::template blobNrAndOffset<0, 0>(ai));
@@ -81,7 +81,7 @@ namespace
 
 TEST_CASE("computedprop")
 {
-    auto extents = llama::ArrayExtentsDynamic<1>{10};
+    auto extents = llama::ArrayExtentsDynamic<std::size_t, 1>{10};
     auto mapping = AoSWithComputedNormal<decltype(extents), Triangle>{extents};
 
     STATIC_REQUIRE(mapping.blobCount == 1);
@@ -146,7 +146,7 @@ namespace
 
 TEST_CASE("fully_computed_mapping")
 {
-    auto mapping = ComputedMapping<llama::ArrayExtents<10, 10, 10>, int>{{}};
+    auto mapping = ComputedMapping<llama::ArrayExtents<std::size_t, 10, 10, 10>, int>{{}};
     auto view = llama::allocViewUninitialized(mapping);
 
     using namespace tag;
@@ -242,7 +242,7 @@ namespace
 
 TEST_CASE("compressed_bools")
 {
-    auto mapping = CompressedBoolMapping<llama::ArrayExtents<8, 8>, BoolRecord>{{}};
+    auto mapping = CompressedBoolMapping<llama::ArrayExtents<std::size_t, 8, 8>, BoolRecord>{{}};
     STATIC_REQUIRE(decltype(mapping)::blobCount == 3);
     CHECK(mapping.blobSize(0) == 8);
     CHECK(mapping.blobSize(1) == 8);
