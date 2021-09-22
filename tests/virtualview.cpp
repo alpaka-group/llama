@@ -14,7 +14,7 @@ struct DoubleFunctor
     VirtualRecord vd;
 };
 
-TEST_CASE("virtual view CTAD")
+TEST_CASE("VirtualView.CTAD")
 {
     using ArrayDims = llama::ArrayDims<2>;
     constexpr ArrayDims viewSize{10, 10};
@@ -23,7 +23,7 @@ TEST_CASE("virtual view CTAD")
     llama::VirtualView virtualView{view, {2, 4}};
 }
 
-TEST_CASE("fast virtual view")
+TEST_CASE("VirtualView.fast")
 {
     using ArrayDims = llama::ArrayDims<2>;
     constexpr ArrayDims viewSize{10, 10};
@@ -46,7 +46,7 @@ TEST_CASE("fast virtual view")
     CHECK(virtualView({2, 3})(tag::Vel(), tag::Z()) == 28.0);
 }
 
-TEST_CASE("virtual view")
+TEST_CASE("VirtualView")
 {
     using ArrayDims = llama::ArrayDims<2>;
     constexpr ArrayDims viewSize{32, 32};
@@ -95,4 +95,38 @@ TEST_CASE("virtual view")
     for(std::size_t x = 0; x < viewSize[0]; ++x)
         for(std::size_t y = 0; y < viewSize[1]; ++y)
             CHECK((view(x, y)) == x * y * 2);
+}
+
+TEST_CASE("VirtualView.negative_indices")
+{
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{10, 10}, int{}});
+    auto shiftedView = llama::VirtualView{view, {2, 4}};
+
+    int i = 0;
+    for(int y = -2; y < 8; y++)
+        for(int x = -4; x < 6; x++)
+            shiftedView(y, x) = i++;
+
+    i = 0;
+    for(int y = 0; y < 10; y++)
+        for(int x = 0; x < 10; x++)
+            CHECK(view(y, x) == i++);
+}
+
+
+TEST_CASE("VirtualView.negative_offsets")
+{
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{10, 10}, int{}});
+    auto shiftedView = llama::VirtualView{view, {2, 4}};
+    auto shiftedView2 = llama::VirtualView{shiftedView, {static_cast<std::size_t>(-2), static_cast<std::size_t>(-4)}};
+
+    int i = 0;
+    for(int y = 0; y < 10; y++)
+        for(int x = 0; x < 10; x++)
+            shiftedView2(y, x) = i++;
+
+    i = 0;
+    for(int y = 0; y < 10; y++)
+        for(int x = 0; x < 10; x++)
+            CHECK(view(y, x) == i++);
 }
