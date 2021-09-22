@@ -2,7 +2,7 @@
 
 TEST_CASE("VirtualView.CTAD")
 {
-    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
     constexpr ArrayExtents viewSize{10, 10};
     const auto mapping = llama::mapping::SoA<ArrayExtents, Vec3D>(viewSize);
     auto view = llama::allocViewUninitialized(mapping);
@@ -38,14 +38,14 @@ TEST_CASE("VirtualView.CTAD")
 
 TEST_CASE("VirtualView.fast")
 {
-    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<int, 2>;
     constexpr ArrayExtents viewSize{10, 10};
 
     using Mapping = llama::mapping::SoA<ArrayExtents, Vec3D>;
     auto view = llama::allocViewUninitialized(Mapping(viewSize));
 
-    for(std::size_t x = 0; x < viewSize[0]; ++x)
-        for(std::size_t y = 0; y < viewSize[1]; ++y)
+    for(int x = 0; x < viewSize[0]; ++x)
+        for(int y = 0; y < viewSize[1]; ++y)
             view(x, y) = x * y;
 
     llama::VirtualView<decltype(view)&> virtualView{view, {2, 4}};
@@ -75,7 +75,7 @@ namespace
 
 TEST_CASE("VirtualView")
 {
-    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
     constexpr ArrayExtents viewSize{32, 32};
     constexpr ArrayExtents miniSize{8, 8};
     using Mapping = llama::mapping::SoA<ArrayExtents, Vec3D>;
@@ -143,9 +143,9 @@ TEST_CASE("VirtualView.negative_indices")
 
 TEST_CASE("VirtualView.negative_offsets")
 {
-    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{10, 10}, int{}});
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{10u, 10u}, int{}});
     auto shiftedView = llama::VirtualView{view, {2, 4}};
-    auto shiftedView2 = llama::VirtualView{shiftedView, {static_cast<std::size_t>(-2), static_cast<std::size_t>(-4)}};
+    auto shiftedView2 = llama::VirtualView{shiftedView, {static_cast<unsigned>(-2), static_cast<unsigned>(-4)}};
 
     int i = 0;
     for(int y = 0; y < 10; y++)

@@ -49,10 +49,12 @@ TEST_CASE("Heatmap.nbody")
         std::ofstream{"Heatmap." + name + ".sh"} << script;
         CHECK(script == expectedScript);
     };
-    run("AlignedAoS", heatmapAlignedAoS, llama::mapping::AlignedAoS<llama::ArrayExtents<N>, ParticleHeatmap>{});
+    run("AlignedAoS",
+        heatmapAlignedAoS,
+        llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
     run("SingleBlobSoA",
         heatmapSingleBlobSoA,
-        llama::mapping::SingleBlobSoA<llama::ArrayExtents<N>, ParticleHeatmap>{});
+        llama::mapping::SingleBlobSoA<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
 }
 
 TEST_CASE("Trace.nbody")
@@ -71,8 +73,8 @@ TEST_CASE("Trace.nbody")
         CHECK(hits[5] == 400);
         CHECK(hits[6] == 10300);
     };
-    run(llama::mapping::AlignedAoS<llama::ArrayExtents<N>, ParticleHeatmap>{});
-    run(llama::mapping::SingleBlobSoA<llama::ArrayExtents<N>, ParticleHeatmap>{});
+    run(llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
+    run(llama::mapping::SingleBlobSoA<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
 }
 
 TEST_CASE("Trace.print_dtor")
@@ -81,7 +83,7 @@ TEST_CASE("Trace.print_dtor")
     std::streambuf* old = std::cout.rdbuf(buffer.rdbuf());
     {
         auto particles = llama::allocView(
-            llama::mapping::Trace{llama::mapping::AlignedAoS<llama::ArrayExtents<N>, ParticleHeatmap>{}});
+            llama::mapping::Trace{llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{}});
         updateAndMove(particles);
     }
     std::cout.rdbuf(old);

@@ -127,7 +127,7 @@ namespace usellama
         Stopwatch watch;
         auto mapping = [&]
         {
-            using ArrayExtents = llama::ArrayExtentsDynamic<1>;
+            using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 1>;
             const auto extents = ArrayExtents{PROBLEM_SIZE};
             if constexpr(Mapping == 0)
                 return llama::mapping::AoS<ArrayExtents, Particle>{extents};

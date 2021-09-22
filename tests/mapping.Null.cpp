@@ -4,7 +4,7 @@
 
 TEST_CASE("mapping.Null")
 {
-    auto mapping = llama::mapping::Null<llama::ArrayExtents<128>, Particle>{{}};
+    auto mapping = llama::mapping::Null<llama::ArrayExtents<std::size_t, 128>, Particle>{{}};
     STATIC_REQUIRE(decltype(mapping)::blobCount == 0);
 
     auto view = llama::allocView(mapping);

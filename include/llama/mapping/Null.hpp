@@ -33,6 +33,7 @@ namespace llama::mapping
     {
     private:
         using Base = MappingBase<TArrayExtents, TRecordDim>;
+        using size_type = typename TArrayExtents::value_type;
 
     public:
         static constexpr std::size_t blobCount = 0;
@@ -40,7 +41,7 @@ namespace llama::mapping
         using Base::Base;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto blobSize(std::size_t /*blobIndex*/) const -> std::size_t
+        constexpr auto blobSize(size_type /*blobIndex*/) const -> size_type
         {
             return 0;
         }

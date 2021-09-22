@@ -26,7 +26,7 @@ using Data = llama::Record<
 auto main() -> int
 {
     constexpr auto N = 128;
-    using ArrayExtents = llama::ArrayExtentsDynamic<1>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 1>;
     const auto mapping = llama::mapping::Bytesplit<ArrayExtents, Data, llama::mapping::BindSoA<false>::fn>{{N}};
 
     auto view = llama::allocView(mapping);

@@ -309,7 +309,7 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& devHost)
 
     auto particleMapping = [&]
     {
-        using ArrayExtents = llama::ArrayExtents<llama::dyn>;
+        using ArrayExtents = llama::ArrayExtentsDynamic<1>;
         const auto particleExtents = ArrayExtents{numpart};
         if constexpr(ParticleMapping == 0)
             return llama::mapping::AoS<ArrayExtents, Particle>{particleExtents};

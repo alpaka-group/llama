@@ -102,7 +102,7 @@ LLAMA_FN_HOST_ACC_INLINE auto store(FP& dst, Vec v)
         v.store(&dst);
 }
 
-template<std::size_t Elems>
+template<int Elems>
 struct VecType
 {
     // TODO(bgruber): we need a vector type that also works on GPUs
@@ -116,7 +116,7 @@ struct VecType<1>
     using type = FP;
 };
 
-template<std::size_t Elems, typename ViewParticleI, typename VirtualParticleJ>
+template<int Elems, typename ViewParticleI, typename VirtualParticleJ>
 LLAMA_FN_HOST_ACC_INLINE void pPInteraction(ViewParticleI pi, VirtualParticleJ pj)
 {
     using Vec = typename VecType<Elems>::type;
@@ -143,7 +143,7 @@ LLAMA_FN_HOST_ACC_INLINE void pPInteraction(ViewParticleI pi, VirtualParticleJ p
     store<Vec>(pi(tag::Vel{}, tag::Z{}), zdistanceSqr * sts + load<Vec>(pi(tag::Vel{}, tag::Z{})));
 }
 
-template<std::size_t ProblemSize, std::size_t Elems, std::size_t BlockSize, Mapping MappingSM>
+template<int ProblemSize, int Elems, int BlockSize, Mapping MappingSM>
 struct UpdateKernel
 {
     template<typename Acc, typename View>
@@ -158,7 +158,7 @@ struct UpdateKernel
             {
                 constexpr auto sharedMapping = []
                 {
-                    using ArrayExtents = llama::ArrayExtents<BlockSize>;
+                    using ArrayExtents = llama::ArrayExtents<int, BlockSize>;
                     if constexpr(MappingSM == AoS)
                         return llama::mapping::AoS<ArrayExtents, Particle>{};
                     if constexpr(MappingSM == SoA)
@@ -181,7 +181,7 @@ struct UpdateKernel
         auto pi = [&]
         {
             constexpr auto mapping
-                = llama::mapping::SoA<llama::ArrayExtents<Elems>, typename View::RecordDim, false>{};
+                = llama::mapping::SoA<llama::ArrayExtents<int, Elems>, typename View::RecordDim, false>{};
             return llama::allocViewUninitialized(mapping, llama::bloballoc::Stack<mapping.blobSize(0)>{});
         }();
         // TODO(bgruber): vector load
@@ -190,26 +190,26 @@ struct UpdateKernel
             pi(e) = particles(ti * Elems + e);
 
         LLAMA_INDEPENDENT_DATA
-        for(std::size_t blockOffset = 0; blockOffset < ProblemSize; blockOffset += BlockSize)
+        for(int blockOffset = 0; blockOffset < ProblemSize; blockOffset += BlockSize)
         {
             LLAMA_INDEPENDENT_DATA
-            for(auto j = tbi; j < BlockSize; j += THREADS_PER_BLOCK)
+            for(int j = tbi; j < BlockSize; j += THREADS_PER_BLOCK)
                 sharedView(j) = particles(blockOffset + j);
             alpaka::syncBlockThreads(acc);
 
             LLAMA_INDEPENDENT_DATA
-            for(auto j = std::size_t{0}; j < BlockSize; ++j)
+            for(int j = 0; j < BlockSize; ++j)
                 pPInteraction<Elems>(pi(0u), sharedView(j));
             alpaka::syncBlockThreads(acc);
         }
         // TODO(bgruber): vector store
         LLAMA_INDEPENDENT_DATA
-        for(auto e = 0u; e < Elems; e++)
+        for(int e = 0u; e < Elems; e++)
             particles(ti * Elems + e) = pi(e);
     }
 };
 
-template<std::size_t ProblemSize, std::size_t Elems>
+template<int ProblemSize, int Elems>
 struct MoveKernel
 {
     template<typename Acc, typename View>
@@ -235,7 +235,7 @@ template<template<typename, typename> typename AccTemplate, Mapping MappingGM, M
 void run(std::ostream& plotFile)
 {
     using Dim = alpaka::DimInt<1>;
-    using Size = std::size_t;
+    using Size = int;
     using Acc = AccTemplate<Dim, Size>;
     using DevHost = alpaka::DevCpu;
     using DevAcc = alpaka::Dev<Acc>;
@@ -262,7 +262,7 @@ void run(std::ostream& plotFile)
 
     auto mapping = []
     {
-        using ArrayExtents = llama::ArrayExtents<llama::dyn>;
+        using ArrayExtents = llama::ArrayExtentsDynamic<1, int>;
         const auto extents = ArrayExtents{PROBLEM_SIZE};
         if constexpr(MappingGM == AoS)
             return llama::mapping::AoS<ArrayExtents, Particle>{extents};
@@ -290,7 +290,7 @@ void run(std::ostream& plotFile)
 
     std::mt19937_64 generator;
     std::normal_distribution<FP> distribution(FP(0), FP(1));
-    for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+    for(int i = 0; i < PROBLEM_SIZE; ++i)
     {
         llama::One<Particle> p;
         p(tag::Pos(), tag::X()) = distribution(generator);
@@ -315,7 +315,7 @@ void run(std::ostream& plotFile)
 
     double sumUpdate = 0;
     double sumMove = 0;
-    for(std::size_t s = 0; s < STEPS; ++s)
+    for(int s = 0; s < STEPS; ++s)
     {
         auto updateKernel = UpdateKernel<PROBLEM_SIZE, DESIRED_ELEMENTS_PER_THREAD, THREADS_PER_BLOCK, MappingSM>{};
         alpaka::exec<Acc>(queue, workdiv, updateKernel, accView);

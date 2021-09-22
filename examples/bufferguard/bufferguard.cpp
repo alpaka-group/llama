@@ -21,16 +21,16 @@ using Vector = llama::Record<
 // clang-format on
 
 template<template<typename, typename> typename InnerMapping, typename TRecordDim>
-struct GuardMapping2D : llama::ArrayExtentsDynamic<2>
+struct GuardMapping2D : llama::ArrayExtentsDynamic<std::size_t, 2>
 {
-    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
-    using ArrayIndex = llama::ArrayIndex<2>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
+    using ArrayIndex = llama::ArrayIndex<std::size_t, 2>;
     using RecordDim = TRecordDim;
 
     constexpr GuardMapping2D() = default;
 
     constexpr explicit GuardMapping2D(ArrayExtents extents, RecordDim = {})
-        : llama::ArrayExtentsDynamic<2>(extents)
+        : llama::ArrayExtentsDynamic<std::size_t, 2>(extents)
         , left({extents[0] - 2})
         , right({extents[0] - 2})
         , top({extents[1] - 2})
@@ -69,7 +69,7 @@ struct GuardMapping2D : llama::ArrayExtentsDynamic<2>
 
     template<std::size_t... RecordCoords>
     constexpr auto blobNrAndOffset(ArrayIndex ai, llama::RecordCoord<RecordCoords...> rc = {}) const
-        -> llama::NrAndOffset
+        -> llama::NrAndOffset<std::size_t>
     {
         // [0][0] is at left top
         const auto [row, col] = ai;
@@ -144,7 +144,8 @@ struct GuardMapping2D : llama::ArrayExtentsDynamic<2>
     }
 
 private:
-    constexpr auto offsetBlobNr(llama::NrAndOffset nao, std::size_t blobNrOffset) const -> llama::NrAndOffset
+    constexpr auto offsetBlobNr(llama::NrAndOffset<std::size_t> nao, std::size_t blobNrOffset) const
+        -> llama::NrAndOffset<std::size_t>
     {
         nao.nr += blobNrOffset;
         return nao;
@@ -162,11 +163,11 @@ private:
     llama::mapping::One<llama::ArrayExtents<>, RecordDim> leftBot;
     llama::mapping::One<llama::ArrayExtents<>, RecordDim> rightTop;
     llama::mapping::One<llama::ArrayExtents<>, RecordDim> rightBot;
-    InnerMapping<llama::ArrayExtentsDynamic<1>, RecordDim> left;
-    InnerMapping<llama::ArrayExtentsDynamic<1>, RecordDim> right;
-    InnerMapping<llama::ArrayExtentsDynamic<1>, RecordDim> top;
-    InnerMapping<llama::ArrayExtentsDynamic<1>, RecordDim> bot;
-    InnerMapping<llama::ArrayExtentsDynamic<2>, RecordDim> center;
+    InnerMapping<llama::ArrayExtentsDynamic<std::size_t, 1>, RecordDim> left;
+    InnerMapping<llama::ArrayExtentsDynamic<std::size_t, 1>, RecordDim> right;
+    InnerMapping<llama::ArrayExtentsDynamic<std::size_t, 1>, RecordDim> top;
+    InnerMapping<llama::ArrayExtentsDynamic<std::size_t, 1>, RecordDim> bot;
+    InnerMapping<llama::ArrayExtentsDynamic<std::size_t, 2>, RecordDim> center;
 
     static constexpr auto leftTopOff = std::size_t{0};
     static constexpr auto leftBotOff = leftTopOff + decltype(leftTop)::blobCount;
@@ -202,8 +203,8 @@ void run(const std::string& mappingName)
 {
     std::cout << "\n===== Mapping " << mappingName << " =====\n\n";
 
-    constexpr auto rows = 7;
-    constexpr auto cols = 5;
+    constexpr std::size_t rows = 7;
+    constexpr std::size_t cols = 5;
     const auto extents = llama::ArrayExtents{rows, cols};
     const auto mapping = GuardMapping2D<Mapping, Vector>{extents};
     std::ofstream{"bufferguard_" + mappingName + ".svg"} << llama::toSvg(mapping);

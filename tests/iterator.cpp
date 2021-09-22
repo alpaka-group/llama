@@ -8,7 +8,7 @@ using Position = Vec3I;
 
 TEST_CASE("iterator.concepts")
 {
-    using Mapping = llama::mapping::AoS<llama::ArrayExtents<llama::dyn>, Position>;
+    using Mapping = llama::mapping::AoS<llama::ArrayExtentsDynamic<std::size_t, 1>, Position>;
     using View = llama::View<Mapping, std::byte*>;
     using Iterator = typename View::iterator;
 
@@ -251,7 +251,7 @@ TEST_CASE("ranges")
 TEST_CASE("iterator.sort")
 {
     constexpr auto N = 10;
-    auto view = llama::allocViewUninitialized(llama::mapping::AoS{llama::ArrayExtents<N>{}, Position{}});
+    auto view = llama::allocViewUninitialized(llama::mapping::AoS{llama::ArrayExtents<std::size_t, N>{}, Position{}});
 
     std::default_random_engine e{};
     std::uniform_int_distribution<int> d{0, 1000};

@@ -26,14 +26,15 @@ namespace llama
 
         using iterator = decltype(std::declval<ViewType>().begin());
         using value_type = typename iterator::value_type;
+        using size_type = typename Mapping::ArrayExtents::value_type;
 
         Vector() = default;
 
         template<typename VirtualRecord = One<RecordDim>>
-        LLAMA_FN_HOST_ACC_INLINE explicit Vector(std::size_t count, const VirtualRecord& value = {})
+        LLAMA_FN_HOST_ACC_INLINE explicit Vector(size_type count, const VirtualRecord& value = {})
         {
             reserve(count);
-            for(std::size_t i = 0; i < count; i++)
+            for(size_type i = 0; i < count; i++)
                 push_back(value);
         }
 
@@ -67,7 +68,7 @@ namespace llama
 
         // TODO(bgruber): assign
 
-        LLAMA_FN_HOST_ACC_INLINE auto at(std::size_t i) -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto at(size_type i) -> decltype(auto)
         {
             if(i >= m_size)
                 throw std::out_of_range{
@@ -75,7 +76,7 @@ namespace llama
             return m_view(i);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto at(std::size_t i) const -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto at(size_type i) const -> decltype(auto)
         {
             if(i >= m_size)
                 throw std::out_of_range{
@@ -83,12 +84,12 @@ namespace llama
             return m_view(i);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t i) -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator[](size_type i) -> decltype(auto)
         {
             return m_view(i);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t i) const -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator[](size_type i) const -> decltype(auto)
         {
             return m_view(i);
         }
@@ -158,18 +159,18 @@ namespace llama
             return m_size == 0;
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto size() const -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE auto size() const -> size_type
         {
             return m_size;
         }
 
-        LLAMA_FN_HOST_ACC_INLINE void reserve(std::size_t cap)
+        LLAMA_FN_HOST_ACC_INLINE void reserve(size_type cap)
         {
             if(cap > capacity())
                 changeCapacity(cap);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto capacity() const -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE auto capacity() const -> size_type
         {
             return m_view.mapping().extents()[0];
         }
@@ -228,10 +229,10 @@ namespace llama
         }
 
         template<typename VirtualRecord = One<RecordDim>>
-        LLAMA_FN_HOST_ACC_INLINE void resize(std::size_t count, const VirtualRecord& value = {})
+        LLAMA_FN_HOST_ACC_INLINE void resize(size_type count, const VirtualRecord& value = {})
         {
             reserve(count);
-            for(std::size_t i = m_size; i < count; i++)
+            for(size_type i = m_size; i < count; i++)
                 m_view[i] = value;
             m_size = count;
         }
@@ -274,7 +275,7 @@ namespace llama
         }
 
     private:
-        LLAMA_FN_HOST_ACC_INLINE void changeCapacity(std::size_t cap)
+        LLAMA_FN_HOST_ACC_INLINE void changeCapacity(size_type cap)
         {
             auto newView = allocViewUninitialized<Mapping>(Mapping{typename Mapping::ArrayExtents{cap}});
             auto b = begin();
@@ -291,7 +292,7 @@ namespace llama
         }
 
         ViewType m_view = {};
-        std::size_t m_size = 0;
+        size_type m_size = 0;
     };
 
 

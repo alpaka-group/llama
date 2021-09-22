@@ -34,7 +34,7 @@ namespace llama::mapping
         template<std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(
             typename Mapping::ArrayIndex ai,
-            RecordCoord<RecordCoords...> rc = {}) const -> NrAndOffset
+            RecordCoord<RecordCoords...> rc = {}) const -> NrAndOffset<typename Mapping::ArrayExtents::value_type>
         {
             const auto nao = Mapping::blobNrAndOffset(ai, rc);
             using Type = GetType<typename Mapping::RecordDim, RecordCoord<RecordCoords...>>;

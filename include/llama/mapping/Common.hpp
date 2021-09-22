@@ -15,6 +15,7 @@ namespace llama::mapping
         using ArrayExtents = TArrayExtents;
         using ArrayIndex = typename ArrayExtents::Index;
         using RecordDim = TRecordDim;
+        using size_type = typename ArrayExtents::value_type;
 
         constexpr MappingBase() = default;
 
@@ -35,7 +36,7 @@ namespace llama::mapping
     struct LinearizeArrayDimsCpp
     {
         template<typename ArrayExtents>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) -> typename ArrayExtents::value_type
         {
             return product(extents);
         }
@@ -46,14 +47,14 @@ namespace llama::mapping
         template<typename ArrayExtents>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(
             const typename ArrayExtents::Index& ai,
-            const ArrayExtents& extents) const -> std::size_t
+            const ArrayExtents& extents) const -> typename ArrayExtents::value_type
         {
             if constexpr(ArrayExtents::rank == 0)
                 return 0;
             else
             {
-                std::size_t address = ai[0];
-                for(std::size_t i = 1; i < ArrayExtents::rank; i++)
+                auto address = ai[0];
+                for(int i = 1; i < static_cast<int>(ArrayExtents::rank); i++)
                 {
                     address *= extents[i];
                     address += ai[i];
@@ -69,7 +70,7 @@ namespace llama::mapping
     struct LinearizeArrayDimsFortran
     {
         template<typename ArrayExtents>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) -> typename ArrayExtents::value_type
         {
             return product(extents);
         }
@@ -80,13 +81,13 @@ namespace llama::mapping
         template<typename ArrayExtents>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(
             const typename ArrayExtents::Index& ai,
-            const ArrayExtents& extents) const -> std::size_t
+            const ArrayExtents& extents) const -> typename ArrayExtents::value_type
         {
             if constexpr(ArrayExtents::rank == 0)
                 return 0;
             else
             {
-                std::size_t address = ai[ArrayExtents::rank - 1];
+                auto address = ai[ArrayExtents::rank - 1];
                 for(int i = static_cast<int>(ArrayExtents::rank) - 2; i >= 0; i--)
                 {
                     address *= extents[i];
@@ -101,17 +102,18 @@ namespace llama::mapping
     struct LinearizeArrayDimsMorton
     {
         template<typename ArrayExtents>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) const -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) const ->
+            typename ArrayExtents::value_type
         {
             if constexpr(ArrayExtents::rank == 0)
                 return 0;
             else
             {
-                std::size_t longest = extents[0];
-                for(std::size_t i = 1; i < ArrayExtents::rank; i++)
+                auto longest = extents[0];
+                for(int i = 1; i < static_cast<int>(ArrayExtents::rank); i++)
                     longest = std::max(longest, extents[i]);
                 const auto longestPO2 = bit_ceil(longest);
-                return intPow(longestPO2, ArrayExtents::rank);
+                return intPow(longestPO2, static_cast<typename ArrayExtents::value_type>(ArrayExtents::rank));
             }
         }
 
@@ -121,25 +123,29 @@ namespace llama::mapping
         template<typename ArrayExtents>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(
             const typename ArrayExtents::Index& ai,
-            [[maybe_unused]] const ArrayExtents& extents) const -> std::size_t
+            [[maybe_unused]] const ArrayExtents& extents) const -> typename ArrayExtents::value_type
         {
-            std::size_t r = 0;
-            for(std::size_t bit = 0; bit < (sizeof(std::size_t) * CHAR_BIT) / ArrayExtents::rank; bit++)
-                for(std::size_t i = 0; i < ArrayExtents::rank; i++)
-                    r |= (ai[i] & (std::size_t{1} << bit)) << ((bit + 1) * (ArrayExtents::rank - 1) - i);
+            using size_type = typename ArrayExtents::value_type;
+            constexpr auto rank = static_cast<size_type>(ArrayExtents::rank);
+            size_type r = 0;
+            for(size_type bit = 0; bit < (static_cast<size_type>(sizeof(size_type)) * CHAR_BIT) / rank; bit++)
+                for(size_type i = 0; i < rank; i++)
+                    r |= (ai[i] & (size_type{1} << bit)) << ((bit + 1) * (rank - 1) - i);
             return r;
         }
 
     private:
-        LLAMA_FN_HOST_ACC_INLINE static constexpr auto bit_ceil(std::size_t n) -> std::size_t
+        template<typename T>
+        LLAMA_FN_HOST_ACC_INLINE static constexpr auto bit_ceil(T n) -> T
         {
-            std::size_t r = 1;
+            T r = 1u;
             while(r < n)
                 r <<= 1u;
             return r;
         }
 
-        LLAMA_FN_HOST_ACC_INLINE static constexpr auto intPow(std::size_t b, std::size_t e) -> std::size_t
+        template<typename T>
+        LLAMA_FN_HOST_ACC_INLINE static constexpr auto intPow(T b, T e) -> T
         {
             e--;
             auto r = b;

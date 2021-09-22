@@ -75,7 +75,8 @@ namespace llama
             current[rank - 1]--;
             for(auto i = static_cast<int>(rank) - 2; i >= 0; i--)
             {
-                if(current[i + 1] != std::numeric_limits<std::size_t>::max())
+                // return if no underflow
+                if(current[i + 1] != static_cast<typename ArrayExtents::value_type>(-1))
                     return *this;
                 current[i + 1] = extents[i] - 1;
                 current[i]--;

@@ -50,7 +50,7 @@ TEST_CASE("mapping.Split.partitionRecordDim.Particle.List")
 
 TEST_CASE("mapping.Split.SoA_SingleBlob.AoS_Packed.1Buffer")
 {
-    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<int, 2>;
     auto extents = ArrayExtents{16, 16};
 
     // we layout Pos as SoA, the rest as AoS
@@ -77,7 +77,7 @@ TEST_CASE("mapping.Split.AoSoA8.AoS_Packed.One.SoA_SingleBlob.4Buffer")
 {
     // split out momentum as AoSoA8, mass into a single value, position into AoS, and the flags into SoA, makes 4
     // buffers
-    using ArrayExtents = llama::ArrayExtentsDynamic<1>;
+    using ArrayExtents = llama::ArrayExtents<int, llama::dyn>;
     auto extents = ArrayExtents{32};
     auto mapping = llama::mapping::Split<
         ArrayExtents,
@@ -123,7 +123,7 @@ TEST_CASE("mapping.Split.AoSoA8.AoS_Packed.One.SoA_SingleBlob.4Buffer")
 TEST_CASE("mapping.Split.Multilist.SoA.One")
 {
     // split out Pos and Vel into SoA, the rest into One
-    using ArrayExtents = llama::ArrayExtentsDynamic<1>;
+    using ArrayExtents = llama::ArrayExtents<int, llama::dyn>;
     auto extents = ArrayExtents{32};
     auto mapping = llama::mapping::Split<
         ArrayExtents,
@@ -163,7 +163,7 @@ TEST_CASE("mapping.Split.Multilist.SoA.One")
 TEST_CASE("mapping.Split.BitPacked")
 {
     // split out Pos and Vel into SoA, the rest into One
-    using ArrayExtents = llama::ArrayExtentsDynamic<1>;
+    using ArrayExtents = llama::ArrayExtents<int, llama::dyn>;
     auto extents = ArrayExtents{32};
     auto mapping = llama::mapping::Split<
         ArrayExtents,

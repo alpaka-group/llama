@@ -45,7 +45,7 @@ Array dimensions
 
 .. doxygenstruct:: llama::ArrayExtents
 .. doxygentypedef:: llama::ArrayExtentsDynamic
-.. doxygentypedef:: llama::ArrayExtentsStatic
+.. doxygentypedef:: llama::ArrayExtentsNCube
 .. doxygenstruct:: llama::ArrayIndex
 
 .. doxygenstruct:: llama::ArrayIndexIterator

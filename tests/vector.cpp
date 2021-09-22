@@ -1,14 +1,14 @@
 #include "common.hpp"
 
 using RecordDim = Vec3D;
-using Mapping = llama::mapping::AoS<llama::ArrayExtents<llama::dyn>, RecordDim>;
+using Mapping = llama::mapping::AoS<llama::ArrayExtentsDynamic<std::size_t, 1>, RecordDim>;
 using Vector = llama::Vector<Mapping>;
 
 TEST_CASE("Vector.ctor.default")
 {
     const Vector v;
     CHECK(v.empty());
-    CHECK(v.size() == 0);
+    CHECK(v.size() == 0); // NOLINT(readability-container-size-empty)
 }
 
 TEST_CASE("Vector.ctor.count")
@@ -29,7 +29,7 @@ TEST_CASE("Vector.ctor.count_and_value")
 
 TEST_CASE("Vector.ctor.iterator_pair")
 {
-    auto view = llama::allocView(Mapping{llama::ArrayExtents{10}});
+    auto view = llama::allocView(Mapping{llama::ArrayExtents{std::size_t{10}}});
     for(auto i = 0; i < 10; i++)
         view[i] = i;
 
@@ -162,10 +162,10 @@ TEST_CASE("vector.reserve")
 {
     Vector v;
     CHECK(v.capacity() == 0);
-    CHECK(v.size() == 0);
+    CHECK(v.empty());
     v.reserve(100);
     CHECK(v.capacity() == 100);
-    CHECK(v.size() == 0);
+    CHECK(v.empty());
 }
 
 TEST_CASE("vector.clear_shrink_to_fit")
@@ -175,10 +175,10 @@ TEST_CASE("vector.clear_shrink_to_fit")
     CHECK(v.size() == 10);
     v.clear();
     CHECK(v.capacity() == 10);
-    CHECK(v.size() == 0);
+    CHECK(v.empty());
     v.shrink_to_fit();
     CHECK(v.capacity() == 0);
-    CHECK(v.size() == 0);
+    CHECK(v.empty());
 }
 
 TEST_CASE("vector.insert")
@@ -223,7 +223,7 @@ TEST_CASE("vector.pop_back")
     CHECK(v.size() == 1);
     CHECK(v[0] == 0);
     v.pop_back();
-    CHECK(v.size() == 0);
+    CHECK(v.empty());
 }
 
 TEST_CASE("vector.resize")
@@ -252,7 +252,7 @@ TEST_CASE("vector.resize")
     CHECK(v[0] == 0);
     CHECK(v[1] == 1);
     v.resize(0);
-    CHECK(v.size() == 0);
+    CHECK(v.empty());
 }
 
 TEST_CASE("vector.erase")

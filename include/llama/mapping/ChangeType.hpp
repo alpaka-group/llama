@@ -113,7 +113,7 @@ namespace llama::mapping
 
         template<std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayIndex ai, RecordCoord<RecordCoords...> rc = {})
-            const -> NrAndOffset
+            const -> NrAndOffset<typename ArrayExtents::value_type>
         {
             static_assert(!isComputed(rc));
             return Inner::blobNrAndOffset(ai, rc);

@@ -53,10 +53,10 @@ TEST_CASE("mapping.AoS.Packed.address")
             CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 951);
         }
     };
-    test(llama::ArrayExtentsDynamic<2>{16, 16});
-    test(llama::ArrayExtents<16, llama::dyn>{16});
-    test(llama::ArrayExtents<llama::dyn, 16>{16});
-    test(llama::ArrayExtents<16, 16>{});
+    test(llama::ArrayExtentsDynamic<std::size_t, 2>{16, 16});
+    test(llama::ArrayExtents<int, 16, llama::dyn>{16});
+    test(llama::ArrayExtents<int, llama::dyn, 16>{16});
+    test(llama::ArrayExtents<int, 16, 16>{});
 }
 
 TEST_CASE("mapping.AoS.Packed.fortran.address")
@@ -113,10 +113,10 @@ TEST_CASE("mapping.AoS.Packed.fortran.address")
             CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 111);
         }
     };
-    test(llama::ArrayExtentsDynamic<2>{16, 16});
-    test(llama::ArrayExtents<16, llama::dyn>{16});
-    test(llama::ArrayExtents<llama::dyn, 16>{16});
-    test(llama::ArrayExtents<16, 16>{});
+    test(llama::ArrayExtentsDynamic<std::size_t, 2>{16, 16});
+    test(llama::ArrayExtents<int, 16, llama::dyn>{16});
+    test(llama::ArrayExtents<int, llama::dyn, 16>{16});
+    test(llama::ArrayExtents<int, 16, 16>{});
 }
 
 TEST_CASE("mapping.AoS.Packed.morton.address")
@@ -173,10 +173,10 @@ TEST_CASE("mapping.AoS.Packed.morton.address")
             CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 167);
         }
     };
-    test(llama::ArrayExtentsDynamic<2>{16, 16});
-    test(llama::ArrayExtents<16, llama::dyn>{16});
-    test(llama::ArrayExtents<llama::dyn, 16>{16});
-    test(llama::ArrayExtents<16, 16>{});
+    test(llama::ArrayExtentsDynamic<std::size_t, 2>{16, 16});
+    test(llama::ArrayExtents<int, 16, llama::dyn>{16});
+    test(llama::ArrayExtents<int, llama::dyn, 16>{16});
+    test(llama::ArrayExtents<int, 16, 16>{});
 }
 
 TEST_CASE("mapping.AoS.Aligned.address")
@@ -232,10 +232,10 @@ TEST_CASE("mapping.AoS.Aligned.address")
             CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 1083);
         }
     };
-    test(llama::ArrayExtentsDynamic<2>{16, 16});
-    test(llama::ArrayExtents<16, llama::dyn>{16});
-    test(llama::ArrayExtents<llama::dyn, 16>{16});
-    test(llama::ArrayExtents<16, 16>{});
+    test(llama::ArrayExtentsDynamic<std::size_t, 2>{16, 16});
+    test(llama::ArrayExtents<int, 16, llama::dyn>{16});
+    test(llama::ArrayExtents<int, llama::dyn, 16>{16});
+    test(llama::ArrayExtents<int, 16, 16>{});
 }
 
 TEST_CASE("mapping.AoS.aligned_min.address")
@@ -291,8 +291,8 @@ TEST_CASE("mapping.AoS.aligned_min.address")
             CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 899);
         }
     };
-    test(llama::ArrayExtentsDynamic<2>{16, 16});
-    test(llama::ArrayExtents<16, llama::dyn>{16});
-    test(llama::ArrayExtents<llama::dyn, 16>{16});
-    test(llama::ArrayExtents<16, 16>{});
+    test(llama::ArrayExtentsDynamic<std::size_t, 2>{16, 16});
+    test(llama::ArrayExtents<int, 16, llama::dyn>{16});
+    test(llama::ArrayExtents<int, llama::dyn, 16>{16});
+    test(llama::ArrayExtents<int, 16, 16>{});
 }

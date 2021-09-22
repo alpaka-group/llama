@@ -74,15 +74,15 @@ TEST_CASE("mapping.AoSoA.4.address")
             CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 1116);
         }
     };
-    test(llama::ArrayExtentsDynamic<2>{16, 16});
-    test(llama::ArrayExtents<16, llama::dyn>{16});
-    test(llama::ArrayExtents<llama::dyn, 16>{16});
-    test(llama::ArrayExtents<16, 16>{});
+    test(llama::ArrayExtentsDynamic<std::size_t, 2>{16, 16});
+    test(llama::ArrayExtents<int, 16, llama::dyn>{16});
+    test(llama::ArrayExtents<int, llama::dyn, 16>{16});
+    test(llama::ArrayExtents<int, 16, 16>{});
 }
 
 TEST_CASE("AoSoA.size_round_up")
 {
-    using AoSoA = llama::mapping::AoSoA<llama::ArrayExtentsDynamic<1>, Particle, 4>;
+    using AoSoA = llama::mapping::AoSoA<llama::ArrayExtentsDynamic<std::size_t, 1>, Particle, 4>;
     constexpr auto psize = llama::sizeOf<Particle>;
 
     CHECK(AoSoA{{0}}.blobSize(0) == 0 * psize);
@@ -99,7 +99,7 @@ TEST_CASE("AoSoA.size_round_up")
 
 TEST_CASE("AoSoA.address_within_bounds")
 {
-    using ArrayExtents = llama::ArrayExtentsDynamic<1>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 1>;
     using AoSoA = llama::mapping::AoSoA<ArrayExtents, Particle, 4>;
 
     const auto ad = ArrayExtents{3};

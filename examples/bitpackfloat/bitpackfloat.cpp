@@ -21,7 +21,7 @@ auto main() -> int
     constexpr auto exponentBits = 5;
     constexpr auto mantissaBits = 13;
     const auto mapping
-        = llama::mapping::BitPackedFloatSoA{llama::ArrayExtents<llama::dyn>{N}, exponentBits, mantissaBits, Vector{}};
+        = llama::mapping::BitPackedFloatSoA{llama::ArrayExtents{N}, exponentBits, mantissaBits, Vector{}};
 
     auto view = llama::allocView(mapping);
 

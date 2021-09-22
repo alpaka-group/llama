@@ -2,7 +2,7 @@
 
 namespace
 {
-    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
     using RecordDim = Vec3I;
 
     template<typename SrcMapping, typename DstMapping, typename CopyFunc>

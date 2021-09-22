@@ -27,6 +27,7 @@ namespace llama::mapping
     private:
         using Base = MappingBase<TArrayExtents, TRecordDim>;
         using Flattener = FlattenRecordDimSingleBlob<TRecordDim>;
+        using size_type = typename TArrayExtents::value_type;
 
     public:
         using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
@@ -36,13 +37,13 @@ namespace llama::mapping
         using Base::Base;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto blobSize([[maybe_unused]] std::size_t blobIndex) const -> std::size_t
+        constexpr auto blobSize([[maybe_unused]] size_type blobIndex) const -> size_type
         {
             if constexpr(SeparateBuffers)
             {
-                constexpr Array<std::size_t, blobCount> typeSizes = []() constexpr
+                constexpr auto typeSizes = []() constexpr
                 {
-                    Array<std::size_t, blobCount> r{};
+                    Array<size_type, blobCount> r{};
                     forEachLeafCoord<TRecordDim>([&r, i = 0](auto rc) mutable constexpr
                                                  { r[i++] = sizeof(GetType<TRecordDim, decltype(rc)>); });
                     return r;
@@ -52,20 +53,20 @@ namespace llama::mapping
             }
             else
             {
-                return LinearizeArrayDimsFunctor{}.size(Base::extents()) * sizeOf<TRecordDim>;
+                return LinearizeArrayDimsFunctor{}.size(Base::extents()) * static_cast<size_type>(sizeOf<TRecordDim>);
             }
         }
 
         template<std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
             typename Base::ArrayIndex ad,
-            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset
+            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
         {
             if constexpr(SeparateBuffers)
             {
                 constexpr auto blob = flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>;
                 const auto offset = LinearizeArrayDimsFunctor{}(ad, Base::extents())
-                    * sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>);
+                    * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
                 return {blob, offset};
             }
             else
@@ -76,11 +77,9 @@ namespace llama::mapping
 #endif
                      Flattener::template flatIndex<RecordCoords...>;
                 const auto offset = LinearizeArrayDimsFunctor{}(ad, Base::extents())
-                        * sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>)
-                    + flatOffsetOf<
-                          typename Flattener::FlatRecordDim,
-                          flatFieldIndex,
-                          false> * LinearizeArrayDimsFunctor{}.size(Base::extents());
+                        * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>))
+                    + static_cast<size_type>(flatOffsetOf<typename Flattener::FlatRecordDim, flatFieldIndex, false>)
+                        * LinearizeArrayDimsFunctor{}.size(Base::extents());
                 return {0, offset};
             }
         }

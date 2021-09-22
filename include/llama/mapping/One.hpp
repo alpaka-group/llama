@@ -24,13 +24,14 @@ namespace llama::mapping
     {
     private:
         using Base = MappingBase<TArrayExtents, TRecordDim>;
+        using size_type = typename Base::size_type;
 
     public:
         static constexpr std::size_t blobCount = 1;
 
         using Base::Base;
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(std::size_t) const -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
         {
             return flatSizeOf<typename Flattener::FlatRecordDim, AlignAndPad, false>; // no tail padding
         }
@@ -38,15 +39,16 @@ namespace llama::mapping
         template<std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
             typename Base::ArrayIndex,
-            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset
+            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
         {
             constexpr std::size_t flatFieldIndex =
 #ifdef __NVCC__
                 *& // mess with nvcc compiler state to workaround bug
 #endif
                  Flattener::template flatIndex<RecordCoords...>;
-            constexpr auto offset = flatOffsetOf<typename Flattener::FlatRecordDim, flatFieldIndex, AlignAndPad>;
-            return {0, offset};
+            constexpr auto offset
+                = static_cast<size_type>(flatOffsetOf<typename Flattener::FlatRecordDim, flatFieldIndex, AlignAndPad>);
+            return {size_type{0}, offset};
         }
 
     private:

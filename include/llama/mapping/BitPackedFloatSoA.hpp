@@ -99,11 +99,11 @@ namespace llama::mapping
         /// specified bit offset.
         /// @tparam Float Floating-point data type which can be loaded and store through this reference.
         /// @tparam StoredIntegralPointer Pointer to integral type used for storing the bits.
-        template<typename Float, typename StoredIntegralPointer, typename VHExp, typename VHMan>
+        template<typename Float, typename StoredIntegralPointer, typename VHExp, typename VHMan, typename SizeType>
         struct LLAMA_DECLSPEC_EMPTY_BASES BitPackedFloatRef
             : private VHExp
             , private VHMan
-            , ProxyRefOpMixin<BitPackedFloatRef<Float, StoredIntegralPointer, VHExp, VHMan>, Float>
+            , ProxyRefOpMixin<BitPackedFloatRef<Float, StoredIntegralPointer, VHExp, VHMan, SizeType>, Float>
         {
         private:
             static_assert(
@@ -118,7 +118,8 @@ namespace llama::mapping
             BitPackedIntRef<
                 FloatBits,
                 StoredIntegralPointer,
-                decltype(integBits(std::declval<VHExp>(), std::declval<VHMan>()))>
+                decltype(integBits(std::declval<VHExp>(), std::declval<VHMan>())),
+                SizeType>
                 intref;
 
         public:
@@ -126,7 +127,7 @@ namespace llama::mapping
 
             LLAMA_FN_HOST_ACC_INLINE constexpr BitPackedFloatRef(
                 StoredIntegralPointer p,
-                std::size_t bitOffset,
+                SizeType bitOffset,
                 VHExp vhExp,
                 VHMan vhMan
 #ifndef NDEBUG
@@ -206,6 +207,7 @@ namespace llama::mapping
         using Base = MappingBase<TArrayExtents, TRecordDim>;
         using VHExp = llama::internal::BoxedValue<ExponentBits, 0>;
         using VHMan = llama::internal::BoxedValue<MantissaBits, 1>;
+        using size_type = typename TArrayExtents::value_type;
 
     public:
         static constexpr std::size_t blobCount = boost::mp11::mp_size<FlatRecordDim<TRecordDim>>::value;
@@ -223,11 +225,11 @@ namespace llama::mapping
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto blobSize(std::size_t /*blobIndex*/) const -> std::size_t
+        constexpr auto blobSize(size_type /*blobIndex*/) const -> size_type
         {
-            constexpr auto bitsPerStoredIntegral = sizeof(StoredIntegral) * CHAR_BIT;
-            const auto bitsNeeded
-                = LinearizeArrayDimsFunctor{}.size(Base::extents()) * (VHExp::value() + VHMan::value() + 1);
+            constexpr auto bitsPerStoredIntegral = static_cast<size_type>(sizeof(StoredIntegral) * CHAR_BIT);
+            const auto bitsNeeded = LinearizeArrayDimsFunctor{}.size(Base::extents())
+                * (static_cast<size_type>(VHExp::value()) + static_cast<size_type>(VHMan::value()) + 1);
             return roundUpToMultiple(bitsNeeded, bitsPerStoredIntegral) / CHAR_BIT;
         }
 
@@ -244,12 +246,12 @@ namespace llama::mapping
             Blobs& blobs) const
         {
             constexpr auto blob = llama::flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>;
-            const auto bitOffset
-                = LinearizeArrayDimsFunctor{}(ai, Base::extents()) * (VHExp::value() + VHMan::value() + 1);
+            const auto bitOffset = LinearizeArrayDimsFunctor{}(ai, Base::extents())
+                * (static_cast<size_type>(VHExp::value()) + static_cast<size_type>(VHMan::value()) + 1);
 
             using QualifiedStoredIntegral = CopyConst<Blobs, StoredIntegral>;
             using DstType = GetType<TRecordDim, RecordCoord<RecordCoords...>>;
-            return internal::BitPackedFloatRef<DstType, QualifiedStoredIntegral*, VHExp, VHMan>{
+            return internal::BitPackedFloatRef<DstType, QualifiedStoredIntegral*, VHExp, VHMan, size_type>{
                 reinterpret_cast<QualifiedStoredIntegral*>(&blobs[blob][0]),
                 bitOffset,
                 static_cast<VHExp>(*this),

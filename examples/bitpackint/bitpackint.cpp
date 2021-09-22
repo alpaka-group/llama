@@ -22,7 +22,8 @@ auto main() -> int
     constexpr auto N = 128;
     constexpr auto bits = 7;
     const auto mapping
-        = llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<1>, Vector, llama::Constant<bits>>{{N}};
+        = llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<std::size_t, 1>, Vector, llama::Constant<bits>>{
+            {N}};
 
     auto view = llama::allocView(mapping);
 
@@ -49,7 +50,7 @@ auto main() -> int
 
     // extract into a view of full size integers
     auto viewExtracted
-        = llama::allocViewUninitialized(llama::mapping::AoS<llama::ArrayExtents<llama::dyn>, Vector>{{N}});
+        = llama::allocViewUninitialized(llama::mapping::AoS<llama::ArrayExtentsDynamic<std::size_t, 1>, Vector>{{N}});
     llama::copy(view, viewExtracted);
     if(!std::equal(view.begin(), view.end(), viewExtracted.begin(), viewExtracted.end()))
         fmt::print("ERROR: unpacked view is different\n");

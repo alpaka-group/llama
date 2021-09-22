@@ -86,7 +86,7 @@ __global__ void updateSM(View particles)
     {
         constexpr auto sharedMapping = []
         {
-            using ArrayExtents = llama::ArrayExtents<SHARED_ELEMENTS_PER_BLOCK>;
+            using ArrayExtents = llama::ArrayExtents<int, SHARED_ELEMENTS_PER_BLOCK>;
             if constexpr(MappingSM == 0)
                 return llama::mapping::AoS<ArrayExtents, SharedMemoryParticle>{};
             if constexpr(MappingSM == 1)
@@ -111,15 +111,15 @@ __global__ void updateSM(View particles)
     const auto tbi = blockIdx.x;
 
     llama::One<Particle> pi = particles(ti);
-    for(std::size_t blockOffset = 0; blockOffset < PROBLEM_SIZE; blockOffset += SHARED_ELEMENTS_PER_BLOCK)
+    for(int blockOffset = 0; blockOffset < PROBLEM_SIZE; blockOffset += SHARED_ELEMENTS_PER_BLOCK)
     {
         LLAMA_INDEPENDENT_DATA
-        for(auto j = tbi; j < SHARED_ELEMENTS_PER_BLOCK; j += THREADS_PER_BLOCK)
+        for(int j = tbi; j < SHARED_ELEMENTS_PER_BLOCK; j += THREADS_PER_BLOCK)
             sharedView(j) = particles(blockOffset + j);
         __syncthreads();
 
         LLAMA_INDEPENDENT_DATA
-        for(auto j = std::size_t{0}; j < SHARED_ELEMENTS_PER_BLOCK; ++j)
+        for(int j = 0; j < SHARED_ELEMENTS_PER_BLOCK; ++j)
             pPInteraction(pi, sharedView(j));
         __syncthreads();
     }
@@ -133,7 +133,7 @@ __global__ void update(View particles)
 
     llama::One<Particle> pi = particles(ti);
     LLAMA_INDEPENDENT_DATA
-    for(auto j = std::size_t{0}; j < PROBLEM_SIZE; ++j)
+    for(int j = 0; j < PROBLEM_SIZE; ++j)
         pPInteraction(pi, particles(j));
     particles(ti)(tag::Vel{}) = pi(tag::Vel{});
 }
@@ -178,7 +178,7 @@ try
 
     auto mapping = []
     {
-        using ArrayExtents = llama::ArrayExtents<llama::dyn>;
+        using ArrayExtents = llama::ArrayExtentsDynamic<int, 1>;
         const auto extents = ArrayExtents{PROBLEM_SIZE};
         if constexpr(Mapping == 0)
             return llama::mapping::AoS<ArrayExtents, Particle>{extents};
@@ -224,7 +224,7 @@ try
 
     std::default_random_engine engine;
     std::normal_distribution<FP> distribution(FP(0), FP(1));
-    for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+    for(int i = 0; i < PROBLEM_SIZE; ++i)
     {
         llama::One<Particle> p;
         p(tag::Pos(), tag::X()) = distribution(engine);
@@ -267,7 +267,7 @@ try
 
     double sumUpdate = 0;
     double sumMove = 0;
-    for(std::size_t s = 0; s < STEPS; ++s)
+    for(int s = 0; s < STEPS; ++s)
     {
         if constexpr(RUN_UPATE)
         {
@@ -388,7 +388,7 @@ namespace manual
 
         std::default_random_engine engine;
         std::normal_distribution<FP> distribution(FP(0), FP(1));
-        for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+        for(int i = 0; i < PROBLEM_SIZE; ++i)
         {
             hostPositions[i].x = distribution(engine);
             hostPositions[i].y = distribution(engine);
@@ -426,7 +426,7 @@ namespace manual
 
         double sumUpdate = 0;
         double sumMove = 0;
-        for(std::size_t s = 0; s < STEPS; ++s)
+        for(int s = 0; s < STEPS; ++s)
         {
             if constexpr(RUN_UPATE)
             {

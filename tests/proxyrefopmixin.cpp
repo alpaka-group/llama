@@ -230,29 +230,30 @@ namespace
 
 TEST_CASE("proxyrefopmixin.Bytesplit")
 {
-    auto view
-        = llama::allocView(llama::mapping::Bytesplit<llama::ArrayExtents<4>, Vec3I, llama::mapping::BindAoS<>::fn>{
-            llama::ArrayExtents<4>{}});
+    auto view = llama::allocView(
+        llama::mapping::Bytesplit<llama::ArrayExtents<std::size_t, 4>, Vec3I, llama::mapping::BindAoS<>::fn>{
+            llama::ArrayExtents<std::size_t, 4>{}});
     testProxyRef(view(2)(tag::X{}));
 }
 
 TEST_CASE("proxyrefopmixin.BitPackedIntSoA")
 {
-    auto view = llama::allocView(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<4>, Vec3I>{{}, 12});
+    auto view = llama::allocView(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<std::size_t, 4>, Vec3I>{{}, 12});
     testProxyRef(view(2)(tag::X{}));
 }
 
 TEST_CASE("proxyrefopmixin.BitPackedFloatSoA")
 {
     auto view = llama::allocView(
-        llama::mapping::BitPackedFloatSoA<llama::ArrayExtents<4>, Vec3D, llama::Constant<6>, llama::Constant<20>>{});
+        llama::mapping::
+            BitPackedFloatSoA<llama::ArrayExtents<std::size_t, 4>, Vec3D, llama::Constant<6>, llama::Constant<20>>{});
     testProxyRef(view(2)(tag::X{}));
 }
 
 TEST_CASE("proxyrefopmixin.ChangeType")
 {
     auto view = llama::allocView(llama::mapping::ChangeType<
-                                 llama::ArrayExtents<4>,
+                                 llama::ArrayExtents<std::size_t, 4>,
                                  Vec3D,
                                  llama::mapping::BindAoS<false>::fn,
                                  boost::mp11::mp_list<boost::mp11::mp_list<double, float>>>{{}});

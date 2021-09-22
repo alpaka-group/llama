@@ -106,6 +106,11 @@ namespace llama::mapping
         static_assert(SeparateBlobs || Mapping1::blobCount == 1);
         static_assert(SeparateBlobs || Mapping2::blobCount == 1);
 
+    private:
+        using size_type = typename ArrayExtents::value_type;
+        static constexpr size_type m1bc = static_cast<size_type>(Mapping1::blobCount);
+
+    public:
         constexpr Split() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
@@ -132,13 +137,13 @@ namespace llama::mapping
             return mapping1.extents();
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize([[maybe_unused]] std::size_t i) const -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize([[maybe_unused]] size_type i) const -> size_type
         {
             if constexpr(SeparateBlobs)
             {
-                if(i < Mapping1::blobCount)
+                if(i < m1bc)
                     return mapping1.blobSize(i);
-                return mapping2.blobSize(i - Mapping1::blobCount);
+                return mapping2.blobSize(i - m1bc);
             }
             else
                 return mapping1.blobSize(0) + mapping2.blobSize(0);
@@ -146,7 +151,7 @@ namespace llama::mapping
 
         template<std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayIndex ai, RecordCoord<RecordCoords...> = {}) const
-            -> NrAndOffset
+            -> NrAndOffset<size_type>
         {
             using Tags = GetTags<RecordDim, RecordCoord<RecordCoords...>>;
 
@@ -156,10 +161,10 @@ namespace llama::mapping
             {
                 auto nrAndOffset = mapping2.blobNrAndOffset(ai, GetCoordFromTags<RecordDim2, Tags>{});
                 if constexpr(SeparateBlobs)
-                    nrAndOffset.nr += Mapping1::blobCount;
+                    nrAndOffset.nr += m1bc;
                 else
                 {
-                    for(std::size_t i = 0; i < Mapping1::blobCount; i++)
+                    for(size_type i = 0; i < m1bc; i++)
                         nrAndOffset.offset += mapping1.blobSize(i);
                 }
                 return nrAndOffset;
@@ -167,7 +172,7 @@ namespace llama::mapping
         }
 
         template<std::size_t... RecordCoords>
-        static constexpr auto isComputed(llama::RecordCoord<RecordCoords...>) -> bool
+        static constexpr auto isComputed(RecordCoord<RecordCoords...>) -> bool
         {
             using Tags = GetTags<RecordDim, RecordCoord<RecordCoords...>>;
             if constexpr(internal::isSelected<RecordCoord<RecordCoords...>, RecordCoordForMapping1>)
@@ -177,10 +182,8 @@ namespace llama::mapping
         }
 
         template<std::size_t... RecordCoords, typename Blobs>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto compute(
-            ArrayIndex ai,
-            llama::RecordCoord<RecordCoords...>,
-            Blobs& blobs) const
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto compute(ArrayIndex ai, RecordCoord<RecordCoords...>, Blobs& blobs)
+            const
         {
             using Tags = GetTags<RecordDim, RecordCoord<RecordCoords...>>;
             if constexpr(internal::isSelected<RecordCoord<RecordCoords...>, RecordCoordForMapping1>)
@@ -188,7 +191,7 @@ namespace llama::mapping
             else
             {
                 // only pass on blobs for mapping 2, so it can index starting from 0
-                auto* blobs2 = &blobs[0] + Mapping1::blobCount;
+                auto* blobs2 = &blobs[0] + m1bc;
                 return mapping2.compute(ai, GetCoordFromTags<RecordDim2, Tags>{}, blobs2);
             }
         }
