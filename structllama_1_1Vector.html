@@ -96,11 +96,11 @@ $(document).ready(function(){initNavTree('structllama_1_1Vector.html',''); initR
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a76fed48612017cbd342fbc91a06f885b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a76fed48612017cbd342fbc91a06f885b">ViewType</a> = decltype(<a class="el" href="namespacellama.html#a99567a2429e7d7b3155116a8e81d4059">allocView</a>&lt; Mapping &gt;())</td></tr>
-<tr class="separator:a76fed48612017cbd342fbc91a06f885b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3bb6141fb09a14f15976d8a2f57e3bc"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#af3bb6141fb09a14f15976d8a2f57e3bc">ViewType</a> = decltype(<a class="el" href="namespacellama.html#a41836d1bd1b74b791e3ee54319e67c59">allocViewUninitialized</a>&lt; Mapping &gt;())</td></tr>
+<tr class="separator:af3bb6141fb09a14f15976d8a2f57e3bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9cb6cd05cc9474af335517ef3889cfb4"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a9cb6cd05cc9474af335517ef3889cfb4">RecordDim</a> = typename Mapping::RecordDim</td></tr>
 <tr class="separator:a9cb6cd05cc9474af335517ef3889cfb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7cb2da4cdee69566d96d906796ac96ff"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a7cb2da4cdee69566d96d906796ac96ff">iterator</a> = decltype(std::declval&lt; <a class="el" href="structllama_1_1Vector.html#a76fed48612017cbd342fbc91a06f885b">ViewType</a> &gt;().<a class="el" href="structllama_1_1Vector.html#af438bc9d6748c1e56b47c298d7c1b600">begin</a>())</td></tr>
+<tr class="memitem:a7cb2da4cdee69566d96d906796ac96ff"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a7cb2da4cdee69566d96d906796ac96ff">iterator</a> = decltype(std::declval&lt; <a class="el" href="structllama_1_1Vector.html#af3bb6141fb09a14f15976d8a2f57e3bc">ViewType</a> &gt;().<a class="el" href="structllama_1_1Vector.html#af438bc9d6748c1e56b47c298d7c1b600">begin</a>())</td></tr>
 <tr class="separator:a7cb2da4cdee69566d96d906796ac96ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67955fe1bcd5a0ef79854df41d86cfcf"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html#a67955fe1bcd5a0ef79854df41d86cfcf">value_type</a> = typename iterator::value_type</td></tr>
 <tr class="separator:a67955fe1bcd5a0ef79854df41d86cfcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -222,7 +222,7 @@ struct llama::Vector&lt; Mapping &gt;</h3>
 template&lt;typename Mapping &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::<a class="el" href="structllama_1_1Vector.html#a7cb2da4cdee69566d96d906796ac96ff">iterator</a> =  decltype(std::declval&lt;<a class="el" href="structllama_1_1Vector.html#a76fed48612017cbd342fbc91a06f885b">ViewType</a>&gt;().<a class="el" href="structllama_1_1Vector.html#af438bc9d6748c1e56b47c298d7c1b600">begin</a>())</td>
+          <td class="memname">using <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::<a class="el" href="structllama_1_1Vector.html#a7cb2da4cdee69566d96d906796ac96ff">iterator</a> =  decltype(std::declval&lt;<a class="el" href="structllama_1_1Vector.html#af3bb6141fb09a14f15976d8a2f57e3bc">ViewType</a>&gt;().<a class="el" href="structllama_1_1Vector.html#af438bc9d6748c1e56b47c298d7c1b600">begin</a>())</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -267,8 +267,8 @@ template&lt;typename Mapping &gt; </div>
 
 </div>
 </div>
-<a id="a76fed48612017cbd342fbc91a06f885b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a76fed48612017cbd342fbc91a06f885b">&#9670;&nbsp;</a></span>ViewType</h2>
+<a id="af3bb6141fb09a14f15976d8a2f57e3bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3bb6141fb09a14f15976d8a2f57e3bc">&#9670;&nbsp;</a></span>ViewType</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -276,7 +276,7 @@ template&lt;typename Mapping &gt; </div>
 template&lt;typename Mapping &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::<a class="el" href="structllama_1_1Vector.html#a76fed48612017cbd342fbc91a06f885b">ViewType</a> =  decltype(<a class="el" href="namespacellama.html#a99567a2429e7d7b3155116a8e81d4059">allocView</a>&lt;Mapping&gt;())</td>
+          <td class="memname">using <a class="el" href="structllama_1_1Vector.html">llama::Vector</a>&lt; Mapping &gt;::<a class="el" href="structllama_1_1Vector.html#af3bb6141fb09a14f15976d8a2f57e3bc">ViewType</a> =  decltype(<a class="el" href="namespacellama.html#a41836d1bd1b74b791e3ee54319e67c59">allocViewUninitialized</a>&lt;Mapping&gt;())</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1677,7 +1677,7 @@ template&lt;typename Mapping &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="structllama_1_1Vector.html">Vector</a></li>
-    <li class="footer">Generated on Tue Sep 21 2021 17:57:32 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Sep 22 2021 11:15:39 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

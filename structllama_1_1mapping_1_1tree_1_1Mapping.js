@@ -7,6 +7,7 @@ var structllama_1_1mapping_1_1tree_1_1Mapping =
     [ "ResultTree", "structllama_1_1mapping_1_1tree_1_1Mapping.html#aa7f911b57d9af014405e7be518b069b3", null ],
     [ "Mapping", "structllama_1_1mapping_1_1tree_1_1Mapping.html#ad750deca49e3bfdbe74cffbbce26732d", null ],
     [ "Mapping", "structllama_1_1mapping_1_1tree_1_1Mapping.html#a01940bc4343e092b4ec0d4e647f4447c", null ],
+    [ "arrayDims", "structllama_1_1mapping_1_1tree_1_1Mapping.html#ac6018bfc2db76f191cbaeb6fcef6a86c", null ],
     [ "blobNrAndOffset", "structllama_1_1mapping_1_1tree_1_1Mapping.html#a698d3008b0d4ba8d592450ae9c3e311c", null ],
     [ "blobSize", "structllama_1_1mapping_1_1tree_1_1Mapping.html#ac21c7c99823756cc2359721c3992f32a", null ],
     [ "arrayDimsSize", "structllama_1_1mapping_1_1tree_1_1Mapping.html#accea3cdf14b2a0667eeefc154c0c9f75", null ],

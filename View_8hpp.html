@@ -155,13 +155,13 @@ $(document).ready(function(){initNavTree('View_8hpp.html',''); initResizable(); 
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html">llama::View&lt; TMapping, BlobType &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord&lt; TView, BoundRecordCoord, OwnView &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Iterator.html">llama::Iterator&lt; View &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1IsComputed.html">llama::internal::IsComputed&lt; Mapping, RecordCoord, typename &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1IsComputed_3_01Mapping_00_01RecordCoord_00_01std_1_1void__t_3_01declt31ec39d02aa75d5ea3308109fe018112.html">llama::internal::IsComputed&lt; Mapping, RecordCoord, std::void_t&lt; decltype(Mapping::isComputed(RecordCoord{}))&gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord&lt; TView, BoundRecordCoord, OwnView &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Iterator.html">llama::Iterator&lt; View &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html">llama::View&lt; TMapping, BlobType &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -190,6 +190,14 @@ Functions</h2></td></tr>
 <tr class="memitem:a36b0736740116d5e9fff6172f5b202af"><td class="memTemplParams" colspan="2">template&lt;typename Allocator , typename Mapping , std::size_t... Is&gt; </td></tr>
 <tr class="memitem:a36b0736740116d5e9fff6172f5b202af"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a36b0736740116d5e9fff6172f5b202af">llama::internal::makeBlobArray</a> (const Allocator &amp;alloc, const Mapping &amp;mapping, std::integer_sequence&lt; std::size_t, Is... &gt;) -&gt; Array&lt; AllocatorBlobType&lt; Allocator, typename Mapping::RecordDim &gt;, Mapping::blobCount &gt;</td></tr>
 <tr class="separator:a36b0736740116d5e9fff6172f5b202af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41836d1bd1b74b791e3ee54319e67c59"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename Allocator  = bloballoc::Vector&gt; </td></tr>
+<tr class="memitem:a41836d1bd1b74b791e3ee54319e67c59"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a41836d1bd1b74b791e3ee54319e67c59">llama::allocViewUninitialized</a> (Mapping mapping={}, const Allocator &amp;alloc={}) -&gt; View&lt; Mapping, internal::AllocatorBlobType&lt; Allocator, typename Mapping::RecordDim &gt;&gt;</td></tr>
+<tr class="memdesc:a41836d1bd1b74b791e3ee54319e67c59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as <a class="el" href="namespacellama.html#a99567a2429e7d7b3155116a8e81d4059">allocView</a> but does not run field constructors.  <a href="namespacellama.html#a41836d1bd1b74b791e3ee54319e67c59">More...</a><br /></td></tr>
+<tr class="separator:a41836d1bd1b74b791e3ee54319e67c59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0294f7d0aa47fdf5f11075cc8d92d0f8"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename BlobType &gt; </td></tr>
+<tr class="memitem:a0294f7d0aa47fdf5f11075cc8d92d0f8"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a0294f7d0aa47fdf5f11075cc8d92d0f8">llama::constructFields</a> (View&lt; Mapping, BlobType &gt; &amp;view)</td></tr>
+<tr class="memdesc:a0294f7d0aa47fdf5f11075cc8d92d0f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs the constructor of all fields reachable through the given view. Computed fields are not constructed.  <a href="namespacellama.html#a0294f7d0aa47fdf5f11075cc8d92d0f8">More...</a><br /></td></tr>
+<tr class="separator:a0294f7d0aa47fdf5f11075cc8d92d0f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99567a2429e7d7b3155116a8e81d4059"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename Allocator  = bloballoc::Vector&gt; </td></tr>
 <tr class="memitem:a99567a2429e7d7b3155116a8e81d4059"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a99567a2429e7d7b3155116a8e81d4059">llama::allocView</a> (Mapping mapping={}, const Allocator &amp;alloc={}) -&gt; View&lt; Mapping, internal::AllocatorBlobType&lt; Allocator, typename Mapping::RecordDim &gt;&gt;</td></tr>
 <tr class="separator:a99567a2429e7d7b3155116a8e81d4059"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -216,7 +224,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="View_8hpp.html">View.hpp</a></li>
-    <li class="footer">Generated on Tue Sep 21 2021 17:57:32 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Sep 22 2021 11:15:39 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

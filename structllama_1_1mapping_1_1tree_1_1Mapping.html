@@ -125,6 +125,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad750deca49e3bfdbe74cffbbce26732d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01940bc4343e092b4ec0d4e647f4447c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#a01940bc4343e092b4ec0d4e647f4447c">Mapping</a> (<a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#af214360f500097c8a885483313597387">ArrayDims</a> size, TreeOperationList treeOperationList, <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#a7f3272fc957ef1f38517842bca66013e">RecordDim</a>={})</td></tr>
 <tr class="separator:a01940bc4343e092b4ec0d4e647f4447c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6018bfc2db76f191cbaeb6fcef6a86c"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#ac6018bfc2db76f191cbaeb6fcef6a86c">arrayDims</a> () const</td></tr>
+<tr class="separator:ac6018bfc2db76f191cbaeb6fcef6a86c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac21c7c99823756cc2359721c3992f32a"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#ac21c7c99823756cc2359721c3992f32a">blobSize</a> (std::size_t const) const -&gt; std::size_t</td></tr>
 <tr class="separator:ac21c7c99823756cc2359721c3992f32a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a698d3008b0d4ba8d592450ae9c3e311c"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
@@ -320,6 +322,35 @@ template&lt;typename TArrayDims , typename TRecordDim , typename TreeOperationLi
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac6018bfc2db76f191cbaeb6fcef6a86c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6018bfc2db76f191cbaeb6fcef6a86c">&#9670;&nbsp;</a></span>arrayDims()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TArrayDims , typename TRecordDim , typename TreeOperationList &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html">llama::mapping::tree::Mapping</a>&lt; TArrayDims, TRecordDim, TreeOperationList &gt;::arrayDims </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Mapping_8hpp_source.html#l00199">199</a> of file <a class="el" href="Mapping_8hpp_source.html">Mapping.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a698d3008b0d4ba8d592450ae9c3e311c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a698d3008b0d4ba8d592450ae9c3e311c">&#9670;&nbsp;</a></span>blobNrAndOffset()</h2>
 
@@ -359,7 +390,7 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Mapping_8hpp_source.html#l00206">206</a> of file <a class="el" href="Mapping_8hpp_source.html">Mapping.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Mapping_8hpp_source.html#l00211">211</a> of file <a class="el" href="Mapping_8hpp_source.html">Mapping.hpp</a>.</p>
 
 </div>
 </div>
@@ -390,7 +421,7 @@ template&lt;typename TArrayDims , typename TRecordDim , typename TreeOperationLi
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Mapping_8hpp_source.html#l00200">200</a> of file <a class="el" href="Mapping_8hpp_source.html">Mapping.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Mapping_8hpp_source.html#l00205">205</a> of file <a class="el" href="Mapping_8hpp_source.html">Mapping.hpp</a>.</p>
 
 </div>
 </div>
@@ -502,7 +533,7 @@ template&lt;typename TArrayDims , typename TRecordDim , typename TreeOperationLi
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping_1_1tree.html">tree</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html">Mapping</a></li>
-    <li class="footer">Generated on Tue Sep 21 2021 17:57:33 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Sep 22 2021 11:15:39 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

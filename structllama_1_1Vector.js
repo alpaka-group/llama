@@ -3,7 +3,7 @@ var structllama_1_1Vector =
     [ "iterator", "structllama_1_1Vector.html#a7cb2da4cdee69566d96d906796ac96ff", null ],
     [ "RecordDim", "structllama_1_1Vector.html#a9cb6cd05cc9474af335517ef3889cfb4", null ],
     [ "value_type", "structllama_1_1Vector.html#a67955fe1bcd5a0ef79854df41d86cfcf", null ],
-    [ "ViewType", "structllama_1_1Vector.html#a76fed48612017cbd342fbc91a06f885b", null ],
+    [ "ViewType", "structllama_1_1Vector.html#af3bb6141fb09a14f15976d8a2f57e3bc", null ],
     [ "Vector", "structllama_1_1Vector.html#af72a80392c4fbaaa7b6525f2088533b0", null ],
     [ "Vector", "structllama_1_1Vector.html#a4dab2c3f6b26cd4c8f10f2c3431c45dd", null ],
     [ "Vector", "structllama_1_1Vector.html#a49dbe6f358e92ca8a4ce73cac19376a1", null ],
