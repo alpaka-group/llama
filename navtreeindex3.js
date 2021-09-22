@@ -1,8 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"structllama_1_1mapping_1_1LinearizeArrayDimsCpp.html#af76a952613cc7ac6e827a184521ae964":[2,0,1,2,6,1],
-"structllama_1_1mapping_1_1LinearizeArrayDimsFortran.html":[2,0,1,2,7],
-"structllama_1_1mapping_1_1LinearizeArrayDimsFortran.html#a42e41c4bb38560cb4cd0041040b83704":[2,0,1,2,7,0],
 "structllama_1_1mapping_1_1LinearizeArrayDimsFortran.html#ad44b27dec3cd94cdc5fe99f1e94fc1da":[2,0,1,2,7,1],
 "structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html":[2,0,1,2,8],
 "structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html#a951c7d5bcd04766fd2c81383928f8ae8":[2,0,1,2,8,1],

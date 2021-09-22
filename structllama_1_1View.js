@@ -5,8 +5,6 @@ var structllama_1_1View =
     [ "iterator", "structllama_1_1View.html#a47384b6a68647023bcca2232d7887bb0", null ],
     [ "Mapping", "structllama_1_1View.html#a1d19c6b7c54dd3a3c14f89eea804485b", null ],
     [ "RecordDim", "structllama_1_1View.html#a078855f1e6995af9bce14b4a13075cc9", null ],
-    [ "VirtualRecordType", "structllama_1_1View.html#a5d922645c15ad37c6780ca00f55b4c76", null ],
-    [ "VirtualRecordTypeConst", "structllama_1_1View.html#a78caeda607209773933db7b098b6362f", null ],
     [ "View", "structllama_1_1View.html#a19e942f05c14f71b377de88b781fbc33", null ],
     [ "View", "structllama_1_1View.html#a594394222d4b6913c58f61d6fb631f49", null ],
     [ "begin", "structllama_1_1View.html#a634770fe86bb151e67187f324941bb75", null ],
