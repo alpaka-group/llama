@@ -32,6 +32,8 @@ if (BUILD_TESTING)
 
 	file(GLOB_RECURSE testSources "${CMAKE_CURRENT_SOURCE_DIR}/tests/**")
 	add_executable(tests ${testSources})
+	include(Catch)
+	catch_discover_tests(tests)
 	source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/tests" FILES ${testSources})
 	if (MSVC)
 		target_compile_options(tests PRIVATE /std:c++latest) # C++20 does not include ranges yet in MSVC, because the ABI is not finalized
