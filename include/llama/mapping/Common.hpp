@@ -21,7 +21,9 @@ namespace llama::mapping
         }
     } // namespace internal
 
-    /// Functor that maps a \ref ArrayDims coordinate into linear numbers the way C++ arrays work.
+    /// Functor that maps a \ref ArrayDims coordinate into linear numbers the way C++ arrays work. The fast moving
+    /// index of the ArrayDims object should be the last one. E.g. ArrayDims<3> a; stores 3 indices where a[2] should
+    /// be incremented in the innermost loop.
     struct LinearizeArrayDimsCpp
     {
         template<std::size_t Dim>
@@ -52,7 +54,9 @@ namespace llama::mapping
         }
     };
 
-    /// Functor that maps a \ref ArrayDims coordinate into linear numbers the way Fortran arrays work.
+    /// Functor that maps a \ref ArrayDims coordinate into linear numbers the way Fortran arrays work. The fast moving
+    /// index of the ArrayDims object should be the last one. E.g. ArrayDims<3> a; stores 3 indices where a[2] should
+    /// be incremented in the innermost loop.
     struct LinearizeArrayDimsFortran
     {
         template<std::size_t Dim>
