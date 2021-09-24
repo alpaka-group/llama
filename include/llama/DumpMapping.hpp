@@ -2,6 +2,10 @@
 
 #pragma once
 
+#if !__has_include(<fmt/format.h>)
+#    error DumpMapping.hpp requires the fmt library
+#endif
+
 #include "ArrayDimsIndexRange.hpp"
 #include "Core.hpp"
 
