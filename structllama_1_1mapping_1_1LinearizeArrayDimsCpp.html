@@ -90,9 +90,6 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1LinearizeArr
 </div><!--header-->
 <div class="contents">
 
-<p>Functor that maps a <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a> coordinate into linear numbers the way C++ arrays work.  
- <a href="structllama_1_1mapping_1_1LinearizeArrayDimsCpp.html#details">More...</a></p>
-
 <p><code>#include &lt;<a class="el" href="Common_8hpp_source.html">Common.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -105,9 +102,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4028dbf7cd371c30e7dbf823c1e89c57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Functor that maps a <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a> coordinate into linear numbers the way C++ arrays work. </p>
+<div class="textblock"><p>Functor that maps a <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a> coordinate into linear numbers the way C++ arrays work. The fast moving index of the <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a> object should be the last one. E.g. ArrayDims&lt;3&gt; a; stores 3 indices where a[2] should be incremented in the innermost loop. </p>
 
-<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00025">25</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00027">27</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a4028dbf7cd371c30e7dbf823c1e89c57"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4028dbf7cd371c30e7dbf823c1e89c57">&#9670;&nbsp;</a></span>operator()()</h2>
@@ -154,7 +151,7 @@ template&lt;std::size_t Dim&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Linearized index. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00037">37</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00039">39</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
 
 </div>
 </div>
@@ -185,7 +182,7 @@ template&lt;std::size_t Dim&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00028">28</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00030">30</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
 
 </div>
 </div>
@@ -198,7 +195,7 @@ template&lt;std::size_t Dim&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1LinearizeArrayDimsCpp.html">LinearizeArrayDimsCpp</a></li>
-    <li class="footer">Generated on Mon Sep 27 2021 13:09:47 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Sep 27 2021 13:25:51 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
