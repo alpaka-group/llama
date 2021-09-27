@@ -109,7 +109,7 @@ $(document).ready(function(){initNavTree('Heatmap_8hpp_source.html',''); initRes
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a></div>
 <div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="structllama_1_1mapping_1_1Heatmap.html#a21a87507462a053bf084f195588294e5">   24</a></span>&#160;        <span class="keyword">explicit</span> <a class="code" href="structllama_1_1mapping_1_1Heatmap.html#a21a87507462a053bf084f195588294e5">Heatmap</a>(Mapping <a class="code" href="structllama_1_1mapping_1_1Heatmap.html#a82b4b95305ad3e5a4be41f429cbcd95d">mapping</a>) : <a class="code" href="structllama_1_1mapping_1_1Heatmap.html#a82b4b95305ad3e5a4be41f429cbcd95d">mapping</a>(<a class="code" href="structllama_1_1mapping_1_1Heatmap.html#a82b4b95305ad3e5a4be41f429cbcd95d">mapping</a>)</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        {</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;            <span class="keywordflow">for</span>(<span class="keyword">auto</span> i = 0; i &lt; <a class="code" href="structllama_1_1mapping_1_1Heatmap.html#a638b77bb13d6e2cd646cef26fa6cf8f9">blobCount</a>; i++)</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;            <span class="keywordflow">for</span>(std::size_t i = 0; i &lt; <a class="code" href="structllama_1_1mapping_1_1Heatmap.html#a638b77bb13d6e2cd646cef26fa6cf8f9">blobCount</a>; i++)</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                <a class="code" href="structllama_1_1mapping_1_1Heatmap.html#ad645b06bed71d11233b3fc87e2099d2e">byteHits</a>[i] = std::vector&lt;std::atomic&lt;CountType&gt;&gt;(<a class="code" href="structllama_1_1mapping_1_1Heatmap.html#a51bb81741917566d3ae2080b0d5d113b">blobSize</a>(i));</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        }</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
@@ -137,7 +137,7 @@ $(document).ready(function(){initNavTree('Heatmap_8hpp_source.html',''); initRes
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;            -&gt; <a class="code" href="structllama_1_1NrAndOffset.html">NrAndOffset</a></div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        {</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> nao = <a class="code" href="structllama_1_1mapping_1_1Heatmap.html#a82b4b95305ad3e5a4be41f429cbcd95d">mapping</a>.blobNrAndOffset(coord, rc);</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keywordflow">for</span>(<span class="keyword">auto</span> i = 0; i &lt; <span class="keyword">sizeof</span>(<a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;<a class="code" href="structllama_1_1mapping_1_1Heatmap.html#ae2fd102c11592cdf9245df997fad0aa9">RecordDim</a>, <a class="code" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt;RecordCoords...&gt;&gt;); i++)</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keywordflow">for</span>(std::size_t i = 0; i &lt; <span class="keyword">sizeof</span>(<a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;<a class="code" href="structllama_1_1mapping_1_1Heatmap.html#ae2fd102c11592cdf9245df997fad0aa9">RecordDim</a>, <a class="code" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt;RecordCoords...&gt;&gt;); i++)</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                <a class="code" href="structllama_1_1mapping_1_1Heatmap.html#ad645b06bed71d11233b3fc87e2099d2e">byteHits</a>[nao.nr][nao.offset + i]++;</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            <span class="keywordflow">return</span> nao;</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        }</div>
@@ -146,7 +146,7 @@ $(document).ready(function(){initNavTree('Heatmap_8hpp_source.html',''); initRes
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        {</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            std::stringstream f;</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            f &lt;&lt; <span class="stringliteral">&quot;#!/usr/bin/gnuplot -p\n$data &lt;&lt; EOD\n&quot;</span>;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            <span class="keywordflow">for</span>(<span class="keyword">auto</span> i = 0; i &lt; <a class="code" href="structllama_1_1mapping_1_1Heatmap.html#a638b77bb13d6e2cd646cef26fa6cf8f9">blobCount</a>; i++)</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            <span class="keywordflow">for</span>(std::size_t i = 0; i &lt; <a class="code" href="structllama_1_1mapping_1_1Heatmap.html#a638b77bb13d6e2cd646cef26fa6cf8f9">blobCount</a>; i++)</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            {</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                std::size_t byteCount = 0;</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; hits : <a class="code" href="structllama_1_1mapping_1_1Heatmap.html#ad645b06bed71d11233b3fc87e2099d2e">byteHits</a>[i])</div>
@@ -199,7 +199,7 @@ $(document).ready(function(){initNavTree('Heatmap_8hpp_source.html',''); initRes
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="Heatmap_8hpp.html">Heatmap.hpp</a></li>
-    <li class="footer">Generated on Mon Sep 27 2021 13:25:51 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Sep 27 2021 13:52:27 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

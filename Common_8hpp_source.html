@@ -126,7 +126,7 @@ $(document).ready(function(){initNavTree('Common_8hpp_source.html',''); initResi
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            {</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;                std::size_t address = coord[0];</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                <span class="keywordflow">for</span>(<span class="keyword">auto</span> i = 1; i &lt; Dim; i++)</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                <span class="keywordflow">for</span>(std::size_t i = 1; i &lt; Dim; i++)</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                {</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                    address *= <a class="code" href="structllama_1_1mapping_1_1LinearizeArrayDimsCpp.html#af76a952613cc7ac6e827a184521ae964">size</a>[i];</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                    address += coord[i];</div>
@@ -173,7 +173,7 @@ $(document).ready(function(){initNavTree('Common_8hpp_source.html',''); initResi
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            {</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                std::size_t longest = <a class="code" href="structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html#a951c7d5bcd04766fd2c81383928f8ae8">size</a>[0];</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                <span class="keywordflow">for</span>(<span class="keyword">auto</span> i = 1; i &lt; Dim; i++)</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                <span class="keywordflow">for</span>(std::size_t i = 1; i &lt; Dim; i++)</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                    longest = std::max(longest, <a class="code" href="structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html#a951c7d5bcd04766fd2c81383928f8ae8">size</a>[i]);</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> longestPO2 = bit_ceil(longest);</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                <span class="keywordflow">return</span> intPow(longestPO2, Dim);</div>
@@ -307,7 +307,7 @@ $(document).ready(function(){initNavTree('Common_8hpp_source.html',''); initResi
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="Common_8hpp.html">Common.hpp</a></li>
-    <li class="footer">Generated on Mon Sep 27 2021 13:25:51 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Sep 27 2021 13:52:27 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

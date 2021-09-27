@@ -139,7 +139,7 @@ $(document).ready(function(){initNavTree('Proofs_8hpp_source.html',''); initResi
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    constexpr <span class="keyword">auto</span> mapsNonOverlappingly(<span class="keyword">const</span> Mapping&amp; m) -&gt; <span class="keywordtype">bool</span></div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    {</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        internal::DynArray&lt;internal::DynArray&lt;std::uint64_t&gt;&gt; blobByteMapped(m.blobCount);</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordflow">for</span>(<span class="keyword">auto</span> i = 0; i &lt; m.blobCount; i++)</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordflow">for</span>(std::size_t i = 0; i &lt; m.blobCount; i++)</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            blobByteMapped.data[i].resize(<a class="code" href="namespacellama_1_1internal.html#a158338076284b27d9f1875797789bd59">internal::divRoundUp</a>(m.blobSize(i), 64));</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keyword">auto</span> testAndSet = [&amp;](<span class="keyword">auto</span> blob, <span class="keyword">auto</span> offset) constexpr</div>
@@ -161,7 +161,7 @@ $(document).ready(function(){initNavTree('Proofs_8hpp_source.html',''); initResi
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                                                         <span class="keyword">using</span> Type</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                                                             = <a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;<span class="keyword">typename</span> Mapping::RecordDim, decltype(coord)&gt;;</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                                                         <span class="keyword">const</span> <span class="keyword">auto</span> [blob, offset] = m.blobNrAndOffset(ad, coord);</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                                                         <span class="keywordflow">for</span>(<span class="keyword">auto</span> b = 0; b &lt; <span class="keyword">sizeof</span>(Type); b++)</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                                                         <span class="keywordflow">for</span>(std::size_t b = 0; b &lt; <span class="keyword">sizeof</span>(Type); b++)</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                                                             <span class="keywordflow">if</span>(testAndSet(blob, offset + b))</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                                                             {</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;                                                                 collision = <span class="keyword">true</span>;</div>
@@ -217,7 +217,7 @@ $(document).ready(function(){initNavTree('Proofs_8hpp_source.html',''); initResi
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Proofs_8hpp.html">Proofs.hpp</a></li>
-    <li class="footer">Generated on Mon Sep 27 2021 13:25:51 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Sep 27 2021 13:52:27 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
