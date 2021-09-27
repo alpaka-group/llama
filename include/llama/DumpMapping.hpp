@@ -36,8 +36,8 @@ namespace llama
         template<typename RecordDim, std::size_t... CoordsBefore, std::size_t CoordCurrent, std::size_t... CoordsAfter>
         void collectTagsAsStrings(
             std::vector<std::string>& v,
-            RecordCoord<CoordsBefore...> before,
-            RecordCoord<CoordCurrent, CoordsAfter...> after)
+            RecordCoord<CoordsBefore...> /*before*/,
+            RecordCoord<CoordCurrent, CoordsAfter...> /*after*/)
         {
             using Tag = GetTag<RecordDim, RecordCoord<CoordsBefore..., CoordCurrent>>;
             v.push_back(tagToString(Tag{}));
@@ -109,11 +109,9 @@ namespace llama
         template<typename Mapping>
         auto boxesFromMapping(const Mapping& mapping) -> std::vector<FieldBox<Mapping::ArrayDims::rank>>
         {
-            using ArrayDims = typename Mapping::ArrayDims;
-            using RecordDim = typename Mapping::RecordDim;
-
             std::vector<FieldBox<Mapping::ArrayDims::rank>> infos;
 
+            using RecordDim = typename Mapping::RecordDim;
             for(auto adCoord : ArrayDimsIndexRange{mapping.arrayDims()})
             {
                 forEachLeaf<RecordDim>(
@@ -167,7 +165,7 @@ namespace llama
         std::string svg;
 
         std::array<int, Mapping::blobCount + 1> blobYOffset{};
-        for(auto i = 0; i < Mapping::blobCount; i++)
+        for(std::size_t i = 0; i < Mapping::blobCount; i++)
         {
             const auto blobRows = (mapping.blobSize(i) + wrapByteCount - 1) / wrapByteCount;
             blobYOffset[i + 1] = blobYOffset[i] + (blobRows + 1) * byteSizeInPixel; // one row gap between blobs
@@ -225,7 +223,7 @@ namespace llama
                 width,
                 byteSizeInPixel,
                 fill);
-            for(auto i = 1; i < info.size; i++)
+            for(std::size_t i = 1; i < info.size; i++)
             {
                 svg += fmt::format(
                     R"(<line x1="{}" y1="{}" x2="{}" y2="{}" stroke="#777"/>
@@ -286,8 +284,8 @@ namespace llama
             return s;
         };
 
-        std::string svg;
-        svg += fmt::format(
+        std::string html;
+        html += fmt::format(
             R"(<!DOCTYPE html>
 <html>
 <head>
@@ -320,7 +318,7 @@ namespace llama
             {
                 constexpr int size = sizeof(GetType<RecordDim, decltype(coord)>);
 
-                svg += fmt::format(
+                html += fmt::format(
                     R"(.{} {{
     width: {}px;
     background-color: #{:X};
@@ -331,18 +329,18 @@ namespace llama
                     internal::color(internal::toVec(coord)));
             });
 
-        svg += fmt::format(R"(</style>
+        html += fmt::format(R"(</style>
 </head>
 <body>
     <header id="ruler">
 )");
         for(auto i = 0; i < rulerLengthInBytes; i += rulerByteInterval)
-            svg += fmt::format(
+            html += fmt::format(
                 R"(</style>
         <div style="margin-left: {}px;">{}</div>)",
                 i * byteSizeInPixel,
                 i);
-        svg += fmt::format(R"(
+        html += fmt::format(R"(
     </header>
 )");
 
@@ -352,17 +350,16 @@ namespace llama
             if(currentBlobNr != info.nrAndOffset.nr)
             {
                 currentBlobNr = info.nrAndOffset.nr;
-                svg += fmt::format("<h1>Blob: {}</h1>", currentBlobNr);
+                html += fmt::format("<h1>Blob: {}</h1>", currentBlobNr);
             }
-            const auto width = byteSizeInPixel * info.size;
-            svg += fmt::format(
+            html += fmt::format(
                 R"(<div class="box {0}" title="{1} {2}">{1} {2}</div>)",
                 cssClass(info.recordTags),
                 internal::formatUdCoord(info.adCoord),
                 internal::formatDDTags(info.recordTags));
         }
-        svg += R"(</body>
+        html += R"(</body>
 </html>)";
-        return svg;
+        return html;
     }
 } // namespace llama

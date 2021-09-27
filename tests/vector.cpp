@@ -91,7 +91,7 @@ namespace
     auto iotaVec(std::size_t count)
     {
         Vector v(count);
-        for(auto i = 0; i < count; i++)
+        for(std::size_t i = 0; i < count; i++)
             v[i] = i;
         return v;
     }

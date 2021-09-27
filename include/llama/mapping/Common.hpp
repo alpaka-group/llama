@@ -42,7 +42,7 @@ namespace llama::mapping
             else
             {
                 std::size_t address = coord[0];
-                for(auto i = 1; i < Dim; i++)
+                for(std::size_t i = 1; i < Dim; i++)
                 {
                     address *= size[i];
                     address += coord[i];
@@ -95,7 +95,7 @@ namespace llama::mapping
             else
             {
                 std::size_t longest = size[0];
-                for(auto i = 1; i < Dim; i++)
+                for(std::size_t i = 1; i < Dim; i++)
                     longest = std::max(longest, size[i]);
                 const auto longestPO2 = bit_ceil(longest);
                 return intPow(longestPO2, Dim);

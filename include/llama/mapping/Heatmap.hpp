@@ -23,7 +23,7 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE
         explicit Heatmap(Mapping mapping) : mapping(mapping)
         {
-            for(auto i = 0; i < blobCount; i++)
+            for(std::size_t i = 0; i < blobCount; i++)
                 byteHits[i] = std::vector<std::atomic<CountType>>(blobSize(i));
         }
 
@@ -51,7 +51,7 @@ namespace llama::mapping
             -> NrAndOffset
         {
             const auto nao = mapping.blobNrAndOffset(coord, rc);
-            for(auto i = 0; i < sizeof(GetType<RecordDim, RecordCoord<RecordCoords...>>); i++)
+            for(std::size_t i = 0; i < sizeof(GetType<RecordDim, RecordCoord<RecordCoords...>>); i++)
                 byteHits[nao.nr][nao.offset + i]++;
             return nao;
         }
@@ -60,7 +60,7 @@ namespace llama::mapping
         {
             std::stringstream f;
             f << "#!/usr/bin/gnuplot -p\n$data << EOD\n";
-            for(auto i = 0; i < blobCount; i++)
+            for(std::size_t i = 0; i < blobCount; i++)
             {
                 std::size_t byteCount = 0;
                 for(const auto& hits : byteHits[i])
