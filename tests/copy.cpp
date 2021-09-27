@@ -14,7 +14,7 @@ namespace
         const auto viewSize = ArrayDims{4, 8};
         const auto srcMapping = SrcMapping(viewSize);
         auto srcView = llama::allocViewUninitialized(srcMapping);
-        auto value = std::size_t{0};
+        auto value = 0;
         for(auto ad : llama::ArrayDimsIndexRange{srcMapping.arrayDims()})
             llama::forEachLeaf<RecordDim>(
                 [&](auto coord)

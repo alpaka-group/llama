@@ -25,8 +25,8 @@ TEST_CASE("ArrayDims.dim0")
     Mapping mapping{arrayDims};
     auto view = llama::allocView(mapping);
 
-    double& x1 = view(ArrayDims{})(tag::Pos{}, tag::X{});
-    double& x2 = view()(tag::Pos{}, tag::X{});
+    [[maybe_unused]] double& x1 = view(ArrayDims{})(tag::Pos{}, tag::X{});
+    [[maybe_unused]] double& x2 = view()(tag::Pos{}, tag::X{});
 }
 
 TEST_CASE("ArrayDims.dim1")
@@ -285,7 +285,6 @@ TEST_CASE("ArrayDimsIndexRange3D.destructering")
 TEST_CASE("Morton")
 {
     using ArrayDims = llama::ArrayDims<2>;
-    ArrayDims arrayDims{2, 3};
 
     llama::mapping::LinearizeArrayDimsMorton lin;
     CHECK(lin.size(ArrayDims{2, 3}) == 4 * 4);

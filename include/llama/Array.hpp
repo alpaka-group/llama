@@ -165,7 +165,7 @@ namespace llama
         Array<T, N + 1> r{};
         r[0] = v;
         if constexpr(N > 0)
-            for(auto i = 0; i < N; i++)
+            for(std::size_t i = 0; i < N; i++)
                 r[i + 1] = a[i];
         return r;
     }
@@ -175,7 +175,7 @@ namespace llama
     {
         Array<T, N + 1> r{};
         if constexpr(N > 0)
-            for(auto i = 0; i < N; i++)
+            for(std::size_t i = 0; i < N; i++)
                 r[i] = a[i];
         r[N] = v;
         return r;
@@ -187,7 +187,7 @@ namespace llama
         static_assert(N > 0);
         Array<T, N - 1> r{};
         if constexpr(N > 1)
-            for(auto i = 0; i < N - 1; i++)
+            for(std::size_t i = 0; i < N - 1; i++)
                 r[i] = a[i];
         return r;
     }
@@ -198,7 +198,7 @@ namespace llama
         static_assert(N > 0);
         Array<T, N - 1> r{};
         if constexpr(N > 1)
-            for(auto i = 0; i < N - 1; i++)
+            for(std::size_t i = 0; i < N - 1; i++)
                 r[i] = a[i + 1];
         return r;
     }

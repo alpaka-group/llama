@@ -98,7 +98,7 @@ namespace llama
         const auto workPerThread = (adSize[0] + threadCount - 1) / threadCount;
         const auto start = threadId * workPerThread;
         const auto end = std::min((threadId + 1) * workPerThread, adSize[0]);
-        for(auto i = threadId * workPerThread; i < end; i++)
+        for(auto i = start; i < end; i++)
         {
             if constexpr(dims > 1)
                 forEachADCoord(ArrayDims<dims - 1>{pop_front(adSize)}, copyOne, static_cast<std::size_t>(i));
@@ -195,7 +195,7 @@ namespace llama
             return NrAndOffset{blob, offset};
         };
 
-        auto mapSrc = [&srcView, &mapAoSoA, &mapSoA](std::size_t flatArrayIndex, auto coord) LLAMA_LAMBDA_INLINE
+        auto mapSrc = [&](std::size_t flatArrayIndex, auto coord) LLAMA_LAMBDA_INLINE
         {
             if constexpr(srcIsAoSoA)
                 return &srcView.storageBlobs[0][0] + mapAoSoA(flatArrayIndex, coord, LanesSrc);
@@ -205,7 +205,7 @@ namespace llama
                 return &srcView.storageBlobs[blob][off];
             }
         };
-        auto mapDst = [&dstView, &mapAoSoA, &mapSoA](std::size_t flatArrayIndex, auto coord) LLAMA_LAMBDA_INLINE
+        auto mapDst = [&](std::size_t flatArrayIndex, auto coord) LLAMA_LAMBDA_INLINE
         {
             if constexpr(dstIsAoSoA)
                 return &dstView.storageBlobs[0][0] + mapAoSoA(flatArrayIndex, coord, LanesDst);

@@ -40,6 +40,7 @@ if (BUILD_TESTING)
 		target_compile_options(tests PRIVATE /permissive- /constexpr:steps10000000 /diagnostics:caret)
 	else()
 		target_compile_features(tests PRIVATE cxx_std_20)
+		target_compile_options(tests PRIVATE -Wall -Wextra -Wno-missing-braces)
 	endif()
 	target_link_libraries(tests PRIVATE Catch2::Catch2 llama::llama)
 

@@ -36,7 +36,8 @@ namespace llama
             std::integer_sequence<std::size_t, Is...>)
             -> Array<AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Mapping::blobCount>
         {
-            constexpr auto alignment = alignOf<typename Mapping::RecordDim>;
+            [[maybe_unused]] constexpr auto alignment
+                = alignOf<typename Mapping::RecordDim>; // g++-12 warns that alignment is unsed
             return {alloc(std::integral_constant<std::size_t, alignment>{}, mapping.blobSize(Is))...};
         }
     } // namespace internal

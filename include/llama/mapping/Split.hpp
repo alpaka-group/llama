@@ -123,7 +123,7 @@ namespace llama::mapping
                     nrAndOffset.nr += Mapping1::blobCount;
                 else
                 {
-                    for(auto i = 0; i < Mapping1::blobCount; i++)
+                    for(std::size_t i = 0; i < Mapping1::blobCount; i++)
                         nrAndOffset.offset += mapping1.blobSize(i);
                 }
                 return nrAndOffset;

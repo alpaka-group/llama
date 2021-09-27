@@ -38,9 +38,9 @@ TEST_CASE("Tuple.structured_binding")
 {
     const auto t = llama::Tuple{1, 1.0f, nullptr};
     const auto [a, b, c] = t;
-    CHECK(llama::get<0>(t) == 1);
-    CHECK(llama::get<1>(t) == 1.0f);
-    CHECK(llama::get<2>(t) == nullptr);
+    CHECK(a == 1);
+    CHECK(b == 1.0f);
+    CHECK(c == nullptr);
 }
 
 #ifndef __INTEL_COMPILER

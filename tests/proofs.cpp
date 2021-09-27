@@ -71,7 +71,7 @@ namespace
         constexpr auto blobSize(std::size_t) const -> std::size_t
         {
             std::size_t arraySize = 1;
-            for(auto i = 0; i < ArrayDims::rank; i++)
+            for(std::size_t i = 0; i < ArrayDims::rank; i++)
                 arraySize *= arrayDimsSize[i];
             return arraySize * llama::sizeOf<RecordDim>;
         }

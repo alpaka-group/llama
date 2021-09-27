@@ -735,12 +735,11 @@ namespace llama
             typename VirtualRecord<ViewB, BoundRecordDimB, OwnViewB>::AccessibleRecordDim>>
     {
         using LeftRecord = VirtualRecord<ViewA, BoundRecordDimA, OwnViewA>;
-        using RightRecord = VirtualRecord<ViewB, BoundRecordDimB, OwnViewB>;
         forEachLeaf<typename LeftRecord::AccessibleRecordDim>(
             [&](auto coord) LLAMA_LAMBDA_INLINE
             {
                 using std::swap;
-                swap(std::forward<LeftRecord>(a)(coord), std::forward<LeftRecord>(b)(coord));
+                swap(a(coord), b(coord));
             });
     }
 

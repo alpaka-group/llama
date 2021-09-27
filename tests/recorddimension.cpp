@@ -30,9 +30,9 @@ TEST_CASE("recorddim.record_with_int[3]")
     using RecordDim = llama::Record<llama::Field<Tag, int[3]>>;
     auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
 
-    int& e0 = view(0u)(Tag{})(0_RC);
-    int& e1 = view(0u)(Tag{})(1_RC);
-    int& e2 = view(0u)(Tag{})(2_RC);
+    [[maybe_unused]] int& e0 = view(0u)(Tag{})(0_RC);
+    [[maybe_unused]] int& e1 = view(0u)(Tag{})(1_RC);
+    [[maybe_unused]] int& e2 = view(0u)(Tag{})(2_RC);
 }
 
 TEST_CASE("recorddim.record_with_std::complex<float>")
@@ -182,7 +182,7 @@ TEST_CASE("recorddim.uninitialized_trivial")
         [](auto /*alignment*/, std::size_t size) { return std::vector(size, std::byte{0xAA}); });
 
     for(auto i = 0u; i < 256u; i++)
-        CHECK(view(i) == 0xAAAAAAAA);
+        CHECK(view(i) == static_cast<int>(0xAAAAAAAA));
 }
 
 TEST_CASE("recorddim.uninitialized_ctor.constructFields")
@@ -193,7 +193,7 @@ TEST_CASE("recorddim.uninitialized_ctor.constructFields")
         [](auto /*alignment*/, std::size_t size) { return std::vector(size, std::byte{0xAA}); });
 
     for(auto i = 0u; i < 256u; i++)
-        CHECK(view(i).value == 0xAAAAAAAA); // ctor has not run
+        CHECK(view(i).value == static_cast<int>(0xAAAAAAAA)); // ctor has not run
 
     llama::constructFields(view); // run ctors
 

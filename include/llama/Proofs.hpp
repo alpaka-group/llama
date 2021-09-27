@@ -52,7 +52,7 @@ namespace llama
     constexpr auto mapsNonOverlappingly(const Mapping& m) -> bool
     {
         internal::DynArray<internal::DynArray<std::uint64_t>> blobByteMapped(m.blobCount);
-        for(auto i = 0; i < m.blobCount; i++)
+        for(std::size_t i = 0; i < m.blobCount; i++)
             blobByteMapped.data[i].resize(internal::divRoundUp(m.blobSize(i), 64));
 
         auto testAndSet = [&](auto blob, auto offset) constexpr
@@ -74,7 +74,7 @@ namespace llama
                                                          using Type
                                                              = GetType<typename Mapping::RecordDim, decltype(coord)>;
                                                          const auto [blob, offset] = m.blobNrAndOffset(ad, coord);
-                                                         for(auto b = 0; b < sizeof(Type); b++)
+                                                         for(std::size_t b = 0; b < sizeof(Type); b++)
                                                              if(testAndSet(blob, offset + b))
                                                              {
                                                                  collision = true;
