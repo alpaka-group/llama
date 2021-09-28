@@ -48,16 +48,16 @@ namespace llama
                              typename LeftRecord::AccessibleRecordDim,
                              typename RightRecord::AccessibleRecordDim>)
             {
-                forEachLeaf<typename LeftRecord::AccessibleRecordDim>([&](auto coord) LLAMA_LAMBDA_INLINE
-                                                                      { Functor{}(left(coord), right(coord)); });
+                forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>([&](auto coord) LLAMA_LAMBDA_INLINE
+                                                                           { Functor{}(left(coord), right(coord)); });
             }
             else
             {
-                forEachLeaf<typename LeftRecord::AccessibleRecordDim>(
+                forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>(
                     [&](auto leftCoord) LLAMA_LAMBDA_INLINE
                     {
                         using LeftInnerCoord = decltype(leftCoord);
-                        forEachLeaf<typename RightRecord::AccessibleRecordDim>(
+                        forEachLeafCoord<typename RightRecord::AccessibleRecordDim>(
                             [&](auto rightCoord) LLAMA_LAMBDA_INLINE
                             {
                                 using RightInnerCoord = decltype(rightCoord);
@@ -78,8 +78,8 @@ namespace llama
         template<typename Functor, typename LeftRecord, typename T>
         LLAMA_FN_HOST_ACC_INLINE auto virtualRecordArithOperator(LeftRecord& left, const T& right) -> LeftRecord&
         {
-            forEachLeaf<typename LeftRecord::AccessibleRecordDim>([&](auto leftCoord) LLAMA_LAMBDA_INLINE
-                                                                  { Functor{}(left(leftCoord), right); });
+            forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>([&](auto leftCoord) LLAMA_LAMBDA_INLINE
+                                                                       { Functor{}(left(leftCoord), right); });
             return left;
         }
 
@@ -101,16 +101,16 @@ namespace llama
                              typename LeftRecord::AccessibleRecordDim,
                              typename RightRecord::AccessibleRecordDim>)
             {
-                forEachLeaf<typename LeftRecord::AccessibleRecordDim>(
+                forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>(
                     [&](auto coord) LLAMA_LAMBDA_INLINE { result &= Functor{}(left(coord), right(coord)); });
             }
             else
             {
-                forEachLeaf<typename LeftRecord::AccessibleRecordDim>(
+                forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>(
                     [&](auto leftCoord) LLAMA_LAMBDA_INLINE
                     {
                         using LeftInnerCoord = decltype(leftCoord);
-                        forEachLeaf<typename RightRecord::AccessibleRecordDim>(
+                        forEachLeafCoord<typename RightRecord::AccessibleRecordDim>(
                             [&](auto rightCoord) LLAMA_LAMBDA_INLINE
                             {
                                 using RightInnerCoord = decltype(rightCoord);
@@ -132,7 +132,7 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto virtualRecordRelOperator(const LeftRecord& left, const T& right) -> bool
         {
             bool result = true;
-            forEachLeaf<typename LeftRecord::AccessibleRecordDim>(
+            forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>(
                 [&](auto leftCoord) LLAMA_LAMBDA_INLINE {
                     result &= Functor{}(
                         left(leftCoord),
@@ -710,7 +710,7 @@ namespace llama
             std::conditional_t<OwnView, VirtualRecord&, VirtualRecord> a,
             std::conditional_t<OwnView, VirtualRecord&, VirtualRecord> b) noexcept
         {
-            forEachLeaf<AccessibleRecordDim>(
+            forEachLeafCoord<AccessibleRecordDim>(
                 [&](auto coord) LLAMA_LAMBDA_INLINE
                 {
                     using std::swap;
@@ -735,7 +735,7 @@ namespace llama
             typename VirtualRecord<ViewB, BoundRecordDimB, OwnViewB>::AccessibleRecordDim>>
     {
         using LeftRecord = VirtualRecord<ViewA, BoundRecordDimA, OwnViewA>;
-        forEachLeaf<typename LeftRecord::AccessibleRecordDim>(
+        forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>(
             [&](auto coord) LLAMA_LAMBDA_INLINE
             {
                 using std::swap;

@@ -336,7 +336,7 @@ namespace llama
     /// \param baseCoord \ref RecordCoord at which the iteration should be started. The functor is called on elements
     /// beneath this coordinate.
     template<typename RecordDim, typename Functor, std::size_t... Coords>
-    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaf(Functor&& functor, RecordCoord<Coords...> baseCoord)
+    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafCoord(Functor&& functor, RecordCoord<Coords...> baseCoord)
     {
         LLAMA_FORCE_INLINE_RECURSIVE
         internal::mp_for_each_inlined(
@@ -351,10 +351,10 @@ namespace llama
     /// \param baseTags Tags used to define where the iteration should be started. The functor is called on elements
     /// beneath this coordinate.
     template<typename RecordDim, typename Functor, typename... Tags>
-    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaf(Functor&& functor, Tags... /*baseTags*/)
+    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafCoord(Functor&& functor, Tags... /*baseTags*/)
     {
         LLAMA_FORCE_INLINE_RECURSIVE
-        forEachLeaf<RecordDim>(std::forward<Functor>(functor), GetCoordFromTags<RecordDim, Tags...>{});
+        forEachLeafCoord<RecordDim>(std::forward<Functor>(functor), GetCoordFromTags<RecordDim, Tags...>{});
     }
 
     namespace internal

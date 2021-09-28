@@ -84,7 +84,7 @@ namespace llama
             [&](typename View::ArrayDims ad)
             {
                 if constexpr(isRecord<RecordDim> || internal::IsBoundedArray<RecordDim>::value)
-                    forEachLeaf<RecordDim>(
+                    forEachLeafCoord<RecordDim>(
                         [&](auto coord)
                         {
                             // TODO(bgruber): we could initialize computed fields if we can write to those. We could

@@ -112,7 +112,7 @@ namespace
     }
 } // namespace
 
-/// Example functor for \ref llama::forEachLeaf which can also be used to print the
+/// Example functor for \ref llama::forEachLeafCoord which can also be used to print the
 /// coordinates inside of a record dimension when called.
 template<typename VirtualRecord>
 struct SetZeroFunctor
@@ -189,10 +189,10 @@ try
         SetZeroFunctor<decltype(view(x, y))> szf{view(x, y)};
         // Applying the functor for the sub tree 0,0 (pos.x), so basically
         // only for this element
-        llama::forEachLeaf<Name>(szf, llama::RecordCoord<0, 0>{});
+        llama::forEachLeafCoord<Name>(szf, llama::RecordCoord<0, 0>{});
         // Applying the functor for the sub tree momentum (0), so basically
         // for momentum.z, and momentum.x
-        llama::forEachLeaf<Name>(szf, st::Momentum{});
+        llama::forEachLeafCoord<Name>(szf, st::Momentum{});
         // the array dimensions can be given as multiple comma separated arguments or as one parameter of type
         // ArrayDims
         view({x, y}) = double(x + y) / double(adSize[0] + adSize[1]);

@@ -16,7 +16,7 @@ namespace llama
         template<typename RecordDim>
         void assertTrivialCopyable()
         {
-            forEachLeaf<RecordDim>(
+            forEachLeafCoord<RecordDim>(
                 [](auto coord)
                 {
                     static_assert(
@@ -89,8 +89,8 @@ namespace llama
 
         auto copyOne = [&](auto ad) LLAMA_LAMBDA_INLINE
         {
-            forEachLeaf<typename DstMapping::RecordDim>([&](auto coord) LLAMA_LAMBDA_INLINE
-                                                        { dstView(ad)(coord) = srcView(ad)(coord); });
+            forEachLeafCoord<typename DstMapping::RecordDim>([&](auto coord) LLAMA_LAMBDA_INLINE
+                                                             { dstView(ad)(coord) = srcView(ad)(coord); });
         };
 
         constexpr auto dims = SrcMapping::ArrayDims::rank;
@@ -242,7 +242,7 @@ namespace llama
                 {
                     auto* threadSrc = mapSrc(start, RecordCoord<>{});
                     for(std::size_t i = start; i < stop; i += LanesSrc)
-                        forEachLeaf<RecordDim>(
+                        forEachLeafCoord<RecordDim>(
                             [&](auto coord) LLAMA_LAMBDA_INLINE
                             {
                                 for(std::size_t j = 0; j < LanesSrc; j += L)
@@ -251,7 +251,7 @@ namespace llama
                 }
                 else
                 {
-                    forEachLeaf<RecordDim>(
+                    forEachLeafCoord<RecordDim>(
                         [&](auto coord) LLAMA_LAMBDA_INLINE
                         {
                             auto* threadSrc = mapSrc(start, coord);
@@ -280,7 +280,7 @@ namespace llama
                 {
                     auto* threadDst = mapDst(start, RecordCoord<>{});
                     for(std::size_t i = start; i < stop; i += LanesDst)
-                        forEachLeaf<RecordDim>(
+                        forEachLeafCoord<RecordDim>(
                             [&](auto coord) LLAMA_LAMBDA_INLINE
                             {
                                 for(std::size_t j = 0; j < LanesDst; j += L)
@@ -289,7 +289,7 @@ namespace llama
                 }
                 else
                 {
-                    forEachLeaf<RecordDim>(
+                    forEachLeafCoord<RecordDim>(
                         [&](auto coord) LLAMA_LAMBDA_INLINE
                         {
                             auto* threadDst = mapDst(start, coord);

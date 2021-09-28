@@ -84,7 +84,7 @@ TEST_CASE("VirtualView")
                 for(std::size_t b = 0; b < validMiniSize[1]; ++b)
                 {
                     DoubleFunctor<decltype(miniView(a, b))> sqrtF{miniView(a, b)};
-                    llama::forEachLeaf<Vec3D>(sqrtF);
+                    llama::forEachLeafCoord<Vec3D>(sqrtF);
                 }
 
             for(std::size_t a = 0; a < validMiniSize[0]; ++a)

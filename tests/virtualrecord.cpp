@@ -978,7 +978,7 @@ TEST_CASE("VirtualRecord.One.alignment")
 TEST_CASE("VirtualRecord.operator<<")
 {
     llama::One<Particle> p;
-    llama::forEachLeaf<Particle>([&, i = 0](auto coord) mutable { p(coord) = ++i; });
+    llama::forEachLeafCoord<Particle>([&, i = 0](auto coord) mutable { p(coord) = ++i; });
 
     std::stringstream ss;
     ss << p;
@@ -998,7 +998,7 @@ TEST_CASE("VirtualRecord.swap")
     llama::One<Vec3I> p1{1};
     llama::One<Vec3I> p2{2};
 
-    llama::forEachLeaf<Vec3I>(
+    llama::forEachLeafCoord<Vec3I>(
         [&](auto coord)
         {
             CHECK(p1(coord) == 1);
@@ -1008,7 +1008,7 @@ TEST_CASE("VirtualRecord.swap")
     using std::swap; // to check that overload set (std::swap, llama::swap) is not ambigious
     swap(p1, p2);
 
-    llama::forEachLeaf<Vec3I>(
+    llama::forEachLeafCoord<Vec3I>(
         [&](auto coord)
         {
             CHECK(p1(coord) == 2);

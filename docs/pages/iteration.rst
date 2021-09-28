@@ -29,14 +29,14 @@ offers the :cpp:`begin()` and  :cpp:`end()` member functions with corresponding 
 Record dimension iteration
 --------------------------
 
-The record dimension is iterated using :cpp:`llama::forEachLeaf`.
+The record dimension is iterated using :cpp:`llama::forEachLeafCoord`.
 It takes a record dimension as template argument and a callable with a generic parameter as argument.
 This function's :cpp:`operator()` is then called for each leaf of the record dimension tree with a record coord as argument.
 A polymorphic lambda is recommented to be used as a functor.
 
 .. code-block:: C++
 
-    llama::forEachLeaf<Pixel>([&](auto coord) {
+    llama::forEachLeafCoord<Pixel>([&](auto coord) {
         // coord is RecordCoord <0, 0 >{}, RecordCoord <0, 1>{}, RecordCoord <0, 2>{} and RecordCoord <1>{}
     });
 
@@ -45,11 +45,11 @@ The subtree is selected either via a `RecordCoord` or a series of tags.
 
 .. code-block:: C++
 
-    llama::forEachLeaf<Pixel>([&](auto coord) {
+    llama::forEachLeafCoord<Pixel>([&](auto coord) {
         // coord is RecordCoord <0, 0 >{}, RecordCoord <0, 1>{} and RecordCoord <0, 2>{}
     }, color{});
 
-    llama::forEachLeaf<Pixel>([&](auto coord) {
+    llama::forEachLeafCoord<Pixel>([&](auto coord) {
         // coord is RecordCoord <0, 1>{}
     }, color{}, g{});
 

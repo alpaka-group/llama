@@ -695,8 +695,8 @@ TEST_CASE("AoSoA.address_within_bounds")
     const auto ad = AD{3};
     auto mapping = AoSoA{ad};
     for(auto i : llama::ArrayDimsIndexRange{ad})
-        llama::forEachLeaf<Particle>([&](auto rc)
-                                     { CHECK(mapping.blobNrAndOffset(i, rc).offset < mapping.blobSize(0)); });
+        llama::forEachLeafCoord<Particle>([&](auto rc)
+                                          { CHECK(mapping.blobNrAndOffset(i, rc).offset < mapping.blobSize(0)); });
 }
 
 TEST_CASE("FlattenRecordDimInOrder")
