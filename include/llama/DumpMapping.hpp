@@ -63,9 +63,7 @@ namespace llama
         inline auto color(const std::vector<std::size_t>& recordCoord) -> std::size_t
         {
             auto c = boost::hash<std::vector<std::size_t>>{}(recordCoord) &0xFFFFFF;
-            const auto channelSum = ((c & 0xFF0000) >> 4) + ((c & 0xFF00) >> 2) + c & 0xFF;
-            if(channelSum < 200)
-                c |= 0x404040; // ensure color per channel is at least 0x40.
+            c |= 0x404040; // ensure color per channel is at least 0x40.
             return c;
         }
 
