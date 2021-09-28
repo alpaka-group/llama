@@ -45,7 +45,7 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE
         explicit Trace(Mapping mapping) : mapping(mapping)
         {
-            forEachLeaf<RecordDim>([&](auto coord) { fieldHits[internal::coordName<RecordDim>(coord)] = 0; });
+            forEachLeafCoord<RecordDim>([&](auto coord) { fieldHits[internal::coordName<RecordDim>(coord)] = 0; });
         }
 
         Trace(const Trace&) = delete;

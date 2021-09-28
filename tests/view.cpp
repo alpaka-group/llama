@@ -251,8 +251,8 @@ TEST_CASE("view.iteration-and-access")
         for(size_t y = 0; y < arrayDims[1]; ++y)
         {
             SetZeroFunctor<decltype(view(x, y))> szf{view(x, y)};
-            llama::forEachLeaf<Particle>(szf, llama::RecordCoord<0, 0>{});
-            llama::forEachLeaf<Particle>(szf, tag::Vel{});
+            llama::forEachLeafCoord<Particle>(szf, llama::RecordCoord<0, 0>{});
+            llama::forEachLeafCoord<Particle>(szf, tag::Vel{});
             view({x, y}) = double(x + y) / double(arrayDims[0] + arrayDims[1]);
         }
 

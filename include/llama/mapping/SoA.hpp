@@ -50,8 +50,8 @@ namespace llama::mapping
                 constexpr Array<std::size_t, blobCount> typeSizes = []() constexpr
                 {
                     Array<std::size_t, blobCount> r{};
-                    forEachLeaf<RecordDim>([&r, i = 0](auto coord) mutable constexpr
-                                           { r[i++] = sizeof(GetType<RecordDim, decltype(coord)>); });
+                    forEachLeafCoord<RecordDim>([&r, i = 0](auto coord) mutable constexpr
+                                                { r[i++] = sizeof(GetType<RecordDim, decltype(coord)>); });
                     return r;
                 }
                 ();

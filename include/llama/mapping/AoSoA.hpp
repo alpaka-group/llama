@@ -14,7 +14,7 @@ namespace llama::mapping
     inline constexpr std::size_t maxLanes = []() constexpr
     {
         auto max = std::numeric_limits<std::size_t>::max();
-        forEachLeaf<RecordDim>(
+        forEachLeafCoord<RecordDim>(
             [&](auto coord)
             {
                 using AttributeType = GetType<RecordDim, decltype(coord)>;

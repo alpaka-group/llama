@@ -226,7 +226,7 @@ TEST_CASE("AoS.Aligned")
 {
     const auto mapping = llama::mapping::AlignedAoS<ArrayDims, ParticleUnaligned>{arrayDims};
     auto view = llama::allocView(mapping);
-    llama::forEachLeaf<ParticleUnaligned>(
+    llama::forEachLeafCoord<ParticleUnaligned>(
         [&](auto rc)
         {
             llama::forEachADCoord(

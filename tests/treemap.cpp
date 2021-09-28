@@ -1040,7 +1040,7 @@ TEST_CASE("treemapping")
         for(size_t y = 0; y < arrayDims[1]; ++y)
         {
             auto record = view(x, y);
-            llama::forEachLeaf<Particle>([&](auto coord) { record(coord) = 0; }, tag::Vel{});
+            llama::forEachLeafCoord<Particle>([&](auto coord) { record(coord) = 0; }, tag::Vel{});
         }
     double sum = 0.0;
     for(size_t x = 0; x < arrayDims[0]; ++x)

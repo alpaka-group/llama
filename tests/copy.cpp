@@ -16,7 +16,7 @@ namespace
         auto srcView = llama::allocViewUninitialized(srcMapping);
         auto value = 0;
         for(auto ad : llama::ArrayDimsIndexRange{srcMapping.arrayDims()})
-            llama::forEachLeaf<RecordDim>(
+            llama::forEachLeafCoord<RecordDim>(
                 [&](auto coord)
                 {
                     srcView(ad)(coord) = value;
@@ -28,7 +28,7 @@ namespace
 
         value = 0;
         for(auto ad : llama::ArrayDimsIndexRange{srcMapping.arrayDims()})
-            llama::forEachLeaf<RecordDim>(
+            llama::forEachLeafCoord<RecordDim>(
                 [&](auto coord)
                 {
                     CHECK(dstView(ad)(coord) == value);

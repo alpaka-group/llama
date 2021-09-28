@@ -116,7 +116,7 @@ namespace llama
             using RecordDim = typename Mapping::RecordDim;
             for(auto adCoord : ArrayDimsIndexRange{mapping.arrayDims()})
             {
-                forEachLeaf<RecordDim>(
+                forEachLeafCoord<RecordDim>(
                     [&](auto coord)
                     {
                         constexpr int size = sizeof(GetType<RecordDim, decltype(coord)>);
@@ -315,7 +315,7 @@ namespace llama
 )",
             byteSizeInPixel);
         using RecordDim = typename Mapping::RecordDim;
-        forEachLeaf<RecordDim>(
+        forEachLeafCoord<RecordDim>(
             [&](auto coord)
             {
                 constexpr int size = sizeof(GetType<RecordDim, decltype(coord)>);

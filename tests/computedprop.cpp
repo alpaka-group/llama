@@ -201,7 +201,7 @@ namespace
 
         constexpr auto blobSize(std::size_t) const -> std::size_t
         {
-            llama::forEachLeaf<RecordDim>([](auto coord) constexpr {
+            llama::forEachLeafCoord<RecordDim>([](auto coord) constexpr {
                 static_assert(std::is_same_v<llama::GetType<RecordDim, decltype(coord)>, bool>);
             });
             constexpr std::size_t wordBytes = sizeof(Word);
