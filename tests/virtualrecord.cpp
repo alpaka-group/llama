@@ -1015,3 +1015,33 @@ TEST_CASE("VirtualRecord.swap")
             CHECK(p2(coord) == 1);
         });
 }
+
+TEST_CASE("VirtualRecord.forEachLeaf")
+{
+    llama::One<Particle> p;
+    llama::forEachLeaf(p, [i = 0](auto& field) mutable { field = ++i; });
+    CHECK(p(tag::Pos{}, tag::X{}) == 1);
+    CHECK(p(tag::Pos{}, tag::Y{}) == 2);
+    CHECK(p(tag::Pos{}, tag::Z{}) == 3);
+    CHECK(p(tag::Mass{}) == 4);
+    CHECK(p(tag::Vel{}, tag::X{}) == 5);
+    CHECK(p(tag::Vel{}, tag::Y{}) == 6);
+    CHECK(p(tag::Vel{}, tag::Z{}) == 7);
+    CHECK(p(tag::Flags{})(llama::RecordCoord<0>{}) == true);
+    CHECK(p(tag::Flags{})(llama::RecordCoord<0>{}) == true);
+    CHECK(p(tag::Flags{})(llama::RecordCoord<0>{}) == true);
+    CHECK(p(tag::Flags{})(llama::RecordCoord<0>{}) == true);
+
+    llama::forEachLeaf(p(tag::Pos{}), [i = 10](auto& field) mutable { field = ++i; });
+    CHECK(p(tag::Pos{}, tag::X{}) == 11);
+    CHECK(p(tag::Pos{}, tag::Y{}) == 12);
+    CHECK(p(tag::Pos{}, tag::Z{}) == 13);
+    CHECK(p(tag::Mass{}) == 4);
+    CHECK(p(tag::Vel{}, tag::X{}) == 5);
+    CHECK(p(tag::Vel{}, tag::Y{}) == 6);
+    CHECK(p(tag::Vel{}, tag::Z{}) == 7);
+    CHECK(p(tag::Flags{})(llama::RecordCoord<0>{}) == true);
+    CHECK(p(tag::Flags{})(llama::RecordCoord<0>{}) == true);
+    CHECK(p(tag::Flags{})(llama::RecordCoord<0>{}) == true);
+    CHECK(p(tag::Flags{})(llama::RecordCoord<0>{}) == true);
+}

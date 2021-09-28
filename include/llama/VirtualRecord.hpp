@@ -315,10 +315,12 @@ namespace llama
     /// information (array dimensions coord and partial record coord) to retrieve it from a \ref View later. Virtual
     /// records should not be created by the user. They are returned from various access functions in \ref View and
     /// VirtualRecord itself.
-    template<typename TView, typename BoundRecordCoord, bool OwnView>
+    template<typename TView, typename TBoundRecordCoord, bool OwnView>
     struct VirtualRecord : private TView::Mapping::ArrayDims
     {
         using View = TView; ///< View this virtual record points into.
+        using BoundRecordCoord
+            = TBoundRecordCoord; ///< Record coords into View::RecordDim which are already bound by this VirtualRecord.
 
     private:
         using ArrayDims = typename View::Mapping::ArrayDims;
@@ -778,6 +780,16 @@ namespace llama
         }
         os << "}";
         return os;
+    }
+
+    template<typename VirtualRecordFwd, typename Functor>
+    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaf(VirtualRecordFwd&& vr, Functor&& functor)
+    {
+        using VirtualRecord = std::remove_reference_t<VirtualRecordFwd>;
+        LLAMA_FORCE_INLINE_RECURSIVE
+        forEachLeafCoord<typename VirtualRecord::AccessibleRecordDim>(
+            [functor = std::forward<Functor>(functor), &vr = vr](auto rc)
+                LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(constexpr mutable) { std::forward<Functor>(functor)(vr(rc)); });
     }
 } // namespace llama
 
