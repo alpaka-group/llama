@@ -1,4 +1,4 @@
-<map id="llama::VirtualRecord&lt; TView, BoundRecordCoord, OwnView &gt;::Loader" name="llama::VirtualRecord&lt; TView, BoundRecordCoord, OwnView &gt;::Loader">
-<area shape="rect" id="node1" title=" " alt="" coords="5,124,219,180"/>
-<area shape="rect" id="node2" href="$structllama_1_1VirtualRecord.html" title=" " alt="" coords="5,5,219,61"/>
+<map id="llama::VirtualRecord&lt; TView, TBoundRecordCoord, OwnView &gt;::Loader" name="llama::VirtualRecord&lt; TView, TBoundRecordCoord, OwnView &gt;::Loader">
+<area shape="rect" id="node1" title=" " alt="" coords="5,124,227,180"/>
+<area shape="rect" id="node2" href="$structllama_1_1VirtualRecord.html" title=" " alt="" coords="5,5,227,61"/>
 </map>

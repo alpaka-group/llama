@@ -204,7 +204,7 @@ $(document).ready(function(){initNavTree('DumpMapping_8hpp_source.html',''); ini
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;            <span class="keyword">using</span> RecordDim = <span class="keyword">typename</span> Mapping::RecordDim;</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;            <span class="keywordflow">for</span>(<span class="keyword">auto</span> adCoord : ArrayDimsIndexRange{mapping.arrayDims()})</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;            {</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;                forEachLeaf&lt;RecordDim&gt;(</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;                forEachLeafCoord&lt;RecordDim&gt;(</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                    [&amp;](<span class="keyword">auto</span> coord)</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;                    {</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;                        infos.push_back(</div>
@@ -398,7 +398,7 @@ $(document).ready(function(){initNavTree('DumpMapping_8hpp_source.html',''); ini
 <div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;<span class="stringliteral">)&quot;,</span></div>
 <div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;<span class="stringliteral">            byteSizeInPixel);</span></div>
 <div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;<span class="stringliteral">        </span><span class="keyword">using</span> RecordDim = <span class="keyword">typename</span> Mapping::RecordDim;</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        forEachLeaf&lt;RecordDim&gt;(</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        forEachLeafCoord&lt;RecordDim&gt;(</div>
 <div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;            [&amp;](<span class="keyword">auto</span> coord)</div>
 <div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;            {</div>
 <div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;                constexpr <span class="keywordtype">int</span> size = <span class="keyword">sizeof</span>(<a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;RecordDim, decltype(coord)&gt;);</div>
@@ -460,7 +460,7 @@ $(document).ready(function(){initNavTree('DumpMapping_8hpp_source.html',''); ini
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="DumpMapping_8hpp.html">DumpMapping.hpp</a></li>
-    <li class="footer">Generated on Wed Sep 29 2021 15:36:16 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Sep 29 2021 15:36:28 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

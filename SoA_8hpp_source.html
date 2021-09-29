@@ -131,8 +131,8 @@ $(document).ready(function(){initNavTree('SoA_8hpp_source.html',''); initResizab
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                constexpr <a class="code" href="structllama_1_1Array.html">Array&lt;std::size_t, blobCount&gt;</a> typeSizes = []() constexpr</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                {</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                    <a class="code" href="structllama_1_1Array.html">Array&lt;std::size_t, blobCount&gt;</a> r{};</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                    forEachLeaf&lt;RecordDim&gt;([&amp;r, i = 0](<span class="keyword">auto</span> coord) <span class="keyword">mutable</span> constexpr</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                                           { r[i++] = <span class="keyword">sizeof</span>(<a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;<a class="code" href="structllama_1_1mapping_1_1SoA.html#a0380afe7bbe8abffe66eb563e396be4b">RecordDim</a>, decltype(coord)&gt;); });</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                    forEachLeafCoord&lt;RecordDim&gt;([&amp;r, i = 0](<span class="keyword">auto</span> coord) <span class="keyword">mutable</span> constexpr</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                                                { r[i++] = <span class="keyword">sizeof</span>(<a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;<a class="code" href="structllama_1_1mapping_1_1SoA.html#a0380afe7bbe8abffe66eb563e396be4b">RecordDim</a>, decltype(coord)&gt;); });</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                    <span class="keywordflow">return</span> r;</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                }</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                ();</div>
@@ -225,7 +225,7 @@ $(document).ready(function(){initNavTree('SoA_8hpp_source.html',''); initResizab
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="SoA_8hpp.html">SoA.hpp</a></li>
-    <li class="footer">Generated on Wed Sep 29 2021 15:36:16 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Sep 29 2021 15:36:28 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

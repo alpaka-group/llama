@@ -130,7 +130,7 @@ $(document).ready(function(){initNavTree('Trace_8hpp_source.html',''); initResiz
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a></div>
 <div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="structllama_1_1mapping_1_1Trace.html#a905c419daebd74a348ba0be6d45c4db8">   46</a></span>&#160;        <span class="keyword">explicit</span> <a class="code" href="structllama_1_1mapping_1_1Trace.html#a905c419daebd74a348ba0be6d45c4db8">Trace</a>(Mapping <a class="code" href="structllama_1_1mapping_1_1Trace.html#a4de28c7220fbe298bd65a27d295fa5ca">mapping</a>) : <a class="code" href="structllama_1_1mapping_1_1Trace.html#a4de28c7220fbe298bd65a27d295fa5ca">mapping</a>(<a class="code" href="structllama_1_1mapping_1_1Trace.html#a4de28c7220fbe298bd65a27d295fa5ca">mapping</a>)</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        {</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            forEachLeaf&lt;RecordDim&gt;([&amp;](<span class="keyword">auto</span> coord) { <a class="code" href="structllama_1_1mapping_1_1Trace.html#a1e21a0f301f0821ed00625ae0d051781">fieldHits</a>[internal::coordName&lt;RecordDim&gt;(coord)] = 0; });</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            forEachLeafCoord&lt;RecordDim&gt;([&amp;](<span class="keyword">auto</span> coord) { <a class="code" href="structllama_1_1mapping_1_1Trace.html#a1e21a0f301f0821ed00625ae0d051781">fieldHits</a>[internal::coordName&lt;RecordDim&gt;(coord)] = 0; });</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        }</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <a class="code" href="structllama_1_1mapping_1_1Trace.html#afb7cd0af480647f63d5962127e3b1450">Trace</a>(<span class="keyword">const</span> <a class="code" href="structllama_1_1mapping_1_1Trace.html">Trace</a>&amp;) = <span class="keyword">delete</span>;</div>
@@ -202,7 +202,7 @@ $(document).ready(function(){initNavTree('Trace_8hpp_source.html',''); initResiz
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="Trace_8hpp.html">Trace.hpp</a></li>
-    <li class="footer">Generated on Wed Sep 29 2021 15:36:16 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Sep 29 2021 15:36:28 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

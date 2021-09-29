@@ -147,7 +147,7 @@ $(document).ready(function(){initNavTree('VirtualRecord_8hpp.html',''); initResi
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord&lt; TView, BoundRecordCoord, OwnView &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord&lt; TView, TBoundRecordCoord, OwnView &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1Assign.html">llama::internal::Assign</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -161,11 +161,11 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1ModuloAssign.html">llama::internal::ModuloAssign</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord&lt; TView, BoundRecordCoord, OwnView &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord.html">llama::VirtualRecord&lt; TView, TBoundRecordCoord, OwnView &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord_1_1Loader.html">llama::VirtualRecord&lt; TView, BoundRecordCoord, OwnView &gt;::Loader</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord_1_1Loader.html">llama::VirtualRecord&lt; TView, TBoundRecordCoord, OwnView &gt;::Loader</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord_1_1LoaderConst.html">llama::VirtualRecord&lt; TView, BoundRecordCoord, OwnView &gt;::LoaderConst</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualRecord_1_1LoaderConst.html">llama::VirtualRecord&lt; TView, TBoundRecordCoord, OwnView &gt;::LoaderConst</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstd_1_1tuple__size_3_01llama_1_1VirtualRecord_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html">std::tuple_size&lt; llama::VirtualRecord&lt; View, BoundRecordCoord, OwnView &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -237,6 +237,9 @@ Functions</h2></td></tr>
 <tr class="memitem:aea5db41fdf4f7b59a4abd18d276ef746"><td class="memTemplParams" colspan="2">template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </td></tr>
 <tr class="memitem:aea5db41fdf4f7b59a4abd18d276ef746"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aea5db41fdf4f7b59a4abd18d276ef746">llama::operator&lt;&lt;</a> (std::ostream &amp;os, const VirtualRecord&lt; View, BoundRecordCoord, OwnView &gt; &amp;vr) -&gt; std::ostream &amp;</td></tr>
 <tr class="separator:aea5db41fdf4f7b59a4abd18d276ef746"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e88640d42d178be469e422db475886f"><td class="memTemplParams" colspan="2">template&lt;typename VirtualRecordFwd , typename Functor &gt; </td></tr>
+<tr class="memitem:a3e88640d42d178be469e422db475886f"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a3e88640d42d178be469e422db475886f">llama::forEachLeaf</a> (VirtualRecordFwd &amp;&amp;vr, Functor &amp;&amp;functor)</td></tr>
+<tr class="separator:a3e88640d42d178be469e422db475886f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -271,7 +274,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="VirtualRecord_8hpp.html">VirtualRecord.hpp</a></li>
-    <li class="footer">Generated on Wed Sep 29 2021 15:36:16 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Sep 29 2021 15:36:29 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

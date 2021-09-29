@@ -24,6 +24,7 @@ var VirtualRecord_8hpp =
     [ "asTupleImpl", "VirtualRecord_8hpp.html#a5d229a179de21d39ba5d016e5f506120", null ],
     [ "asTupleImplArr", "VirtualRecord_8hpp.html#ace9183814fca82fac4b9f8b806d20841", null ],
     [ "copyVirtualRecordStack", "VirtualRecord_8hpp.html#a8183deaf1069415900815fd9f2f1e373", null ],
+    [ "forEachLeaf", "VirtualRecord_8hpp.html#a3e88640d42d178be469e422db475886f", null ],
     [ "makeFromTuple", "VirtualRecord_8hpp.html#a0f1653ed919838d951dd7753b22cac7e", null ],
     [ "operator<<", "VirtualRecord_8hpp.html#aea5db41fdf4f7b59a4abd18d276ef746", null ],
     [ "swap", "VirtualRecord_8hpp.html#af0d8ff2d635e29b9e259af59fe796741", null ],

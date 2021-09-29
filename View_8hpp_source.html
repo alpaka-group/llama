@@ -169,7 +169,7 @@ $(document).ready(function(){initNavTree('View_8hpp_source.html',''); initResiza
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            [&amp;](<span class="keyword">typename</span> <a class="code" href="structllama_1_1View.html#aaae609de79766a2f982c5a9f57dff499">View::ArrayDims</a> ad)</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            {</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                if constexpr(isRecord&lt;RecordDim&gt; || internal::IsBoundedArray&lt;RecordDim&gt;::value)</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                    forEachLeaf&lt;RecordDim&gt;(</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                    forEachLeafCoord&lt;RecordDim&gt;(</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;                        [&amp;](auto coord)</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                        {</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                            <span class="comment">// TODO(bgruber): we could initialize computed fields if we can write to those. We could</span></div>
@@ -722,7 +722,7 @@ $(document).ready(function(){initNavTree('View_8hpp_source.html',''); initResiza
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="View_8hpp.html">View.hpp</a></li>
-    <li class="footer">Generated on Wed Sep 29 2021 15:36:16 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Sep 29 2021 15:36:28 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

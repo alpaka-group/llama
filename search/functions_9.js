@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['load_658',['load',['../structllama_1_1VirtualRecord.html#af24391fbc4554c0eb6f195e5b5be0372',1,'llama::VirtualRecord::load() -&gt; Loader'],['../structllama_1_1VirtualRecord.html#a5d96bfb6d00a154fb534ee2602ade50c',1,'llama::VirtualRecord::load() const -&gt; LoaderConst']]],
-  ['loadas_659',['loadAs',['../structllama_1_1VirtualRecord.html#a12a5b77778fdcfd37cba2186c969a3f3',1,'llama::VirtualRecord::loadAs() -&gt; TupleLike'],['../structllama_1_1VirtualRecord.html#acdeda90ded2dbcabddbee5f2135d64b0',1,'llama::VirtualRecord::loadAs() const -&gt; TupleLike']]]
+  ['load_661',['load',['../structllama_1_1VirtualRecord.html#abe9b5e725e3e9d499876fe3ee31f9929',1,'llama::VirtualRecord::load() -&gt; Loader'],['../structllama_1_1VirtualRecord.html#aa2474f362f8fecaaadbdd0e25970d2c8',1,'llama::VirtualRecord::load() const -&gt; LoaderConst']]],
+  ['loadas_662',['loadAs',['../structllama_1_1VirtualRecord.html#aefba2710c28023c4f847a4b6f6d26d9f',1,'llama::VirtualRecord::loadAs() -&gt; TupleLike'],['../structllama_1_1VirtualRecord.html#aa4d1c2005cd3da1c7ba08b43d819061e',1,'llama::VirtualRecord::loadAs() const -&gt; TupleLike']]]
 ];

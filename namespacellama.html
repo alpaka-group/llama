@@ -249,12 +249,12 @@ Functions</h2></td></tr>
 <tr class="memitem:ac99ade3cc2e49f4a201fe637ddfc3788"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
 <tr class="memitem:ac99ade3cc2e49f4a201fe637ddfc3788"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ac99ade3cc2e49f4a201fe637ddfc3788">ArrayDims</a> (Args...) -&gt; <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>&lt; sizeof...(Args)&gt;</td></tr>
 <tr class="separator:ac99ade3cc2e49f4a201fe637ddfc3788"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afbef0c057ea8566963fb7386bcbfa52d"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename Functor , std::size_t... Coords&gt; </td></tr>
-<tr class="memitem:afbef0c057ea8566963fb7386bcbfa52d"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#afbef0c057ea8566963fb7386bcbfa52d">forEachLeaf</a> (Functor &amp;&amp;functor, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords... &gt; baseCoord)</td></tr>
-<tr class="separator:afbef0c057ea8566963fb7386bcbfa52d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79d8ab742402b4241f3492611508ae4b"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename Functor , typename... Tags&gt; </td></tr>
-<tr class="memitem:a79d8ab742402b4241f3492611508ae4b"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a79d8ab742402b4241f3492611508ae4b">forEachLeaf</a> (Functor &amp;&amp;functor, Tags...)</td></tr>
-<tr class="separator:a79d8ab742402b4241f3492611508ae4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91f5d2462d07fc7d5cfa0dac05946c63"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename Functor , std::size_t... Coords&gt; </td></tr>
+<tr class="memitem:a91f5d2462d07fc7d5cfa0dac05946c63"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a91f5d2462d07fc7d5cfa0dac05946c63">forEachLeafCoord</a> (Functor &amp;&amp;functor, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords... &gt; baseCoord)</td></tr>
+<tr class="separator:a91f5d2462d07fc7d5cfa0dac05946c63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28ad5ce29085756570effc3b27378a5c"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename Functor , typename... Tags&gt; </td></tr>
+<tr class="memitem:a28ad5ce29085756570effc3b27378a5c"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a28ad5ce29085756570effc3b27378a5c">forEachLeafCoord</a> (Functor &amp;&amp;functor, Tags...)</td></tr>
+<tr class="separator:a28ad5ce29085756570effc3b27378a5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86a72929fc8c71b9aa2b514a74ab34eb"><td class="memTemplParams" colspan="2">template&lt;typename S &gt; </td></tr>
 <tr class="memitem:a86a72929fc8c71b9aa2b514a74ab34eb"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a86a72929fc8c71b9aa2b514a74ab34eb">structName</a> (S={}) -&gt; std::string</td></tr>
 <tr class="separator:a86a72929fc8c71b9aa2b514a74ab34eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -340,6 +340,9 @@ Functions</h2></td></tr>
 <tr class="memitem:aea5db41fdf4f7b59a4abd18d276ef746"><td class="memTemplParams" colspan="2">template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </td></tr>
 <tr class="memitem:aea5db41fdf4f7b59a4abd18d276ef746"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aea5db41fdf4f7b59a4abd18d276ef746">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; <a class="el" href="structllama_1_1View.html">View</a>, BoundRecordCoord, OwnView &gt; &amp;vr) -&gt; std::ostream &amp;</td></tr>
 <tr class="separator:aea5db41fdf4f7b59a4abd18d276ef746"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e88640d42d178be469e422db475886f"><td class="memTemplParams" colspan="2">template&lt;typename VirtualRecordFwd , typename Functor &gt; </td></tr>
+<tr class="memitem:a3e88640d42d178be469e422db475886f"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a3e88640d42d178be469e422db475886f">forEachLeaf</a> (VirtualRecordFwd &amp;&amp;vr, Functor &amp;&amp;functor)</td></tr>
+<tr class="separator:a3e88640d42d178be469e422db475886f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -1241,8 +1244,48 @@ template&lt;std::size_t Dim, typename Func , typename... OuterIndices&gt; </div>
 
 </div>
 </div>
-<a id="afbef0c057ea8566963fb7386bcbfa52d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afbef0c057ea8566963fb7386bcbfa52d">&#9670;&nbsp;</a></span>forEachLeaf() <span class="overload">[1/2]</span></h2>
+<a id="a3e88640d42d178be469e422db475886f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e88640d42d178be469e422db475886f">&#9670;&nbsp;</a></span>forEachLeaf()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename VirtualRecordFwd , typename Functor &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr void llama::forEachLeaf </td>
+          <td>(</td>
+          <td class="paramtype">VirtualRecordFwd &amp;&amp;&#160;</td>
+          <td class="paramname"><em>vr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Functor &amp;&amp;&#160;</td>
+          <td class="paramname"><em>functor</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00786">786</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a91f5d2462d07fc7d5cfa0dac05946c63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91f5d2462d07fc7d5cfa0dac05946c63">&#9670;&nbsp;</a></span>forEachLeafCoord() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1253,7 +1296,7 @@ template&lt;typename RecordDim , typename Functor , std::size_t... Coords&gt; </
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr void llama::forEachLeaf </td>
+          <td class="memname">constexpr void llama::forEachLeafCoord </td>
           <td>(</td>
           <td class="paramtype">Functor &amp;&amp;&#160;</td>
           <td class="paramname"><em>functor</em>, </td>
@@ -1288,8 +1331,8 @@ template&lt;typename RecordDim , typename Functor , std::size_t... Coords&gt; </
 
 </div>
 </div>
-<a id="a79d8ab742402b4241f3492611508ae4b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a79d8ab742402b4241f3492611508ae4b">&#9670;&nbsp;</a></span>forEachLeaf() <span class="overload">[2/2]</span></h2>
+<a id="a28ad5ce29085756570effc3b27378a5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28ad5ce29085756570effc3b27378a5c">&#9670;&nbsp;</a></span>forEachLeafCoord() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1300,7 +1343,7 @@ template&lt;typename RecordDim , typename Functor , typename... Tags&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr void llama::forEachLeaf </td>
+          <td class="memname">constexpr void llama::forEachLeafCoord </td>
           <td>(</td>
           <td class="paramtype">Functor &amp;&amp;&#160;</td>
           <td class="paramname"><em>functor</em>, </td>
@@ -1572,7 +1615,7 @@ template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00747">747</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00749">749</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -2009,7 +2052,7 @@ template&lt;typename ViewA , typename BoundRecordDimA , bool OwnViewA, typename 
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00730">730</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00732">732</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -2958,7 +3001,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Wed Sep 29 2021 15:36:16 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Sep 29 2021 15:36:29 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
