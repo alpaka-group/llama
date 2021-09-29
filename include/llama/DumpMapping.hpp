@@ -119,13 +119,12 @@ namespace llama
                 forEachLeaf<RecordDim>(
                     [&](auto coord)
                     {
-                        constexpr int size = sizeof(GetType<RecordDim, decltype(coord)>);
                         infos.push_back(
                             {adCoord,
                              internal::toVec(coord),
                              internal::tagsAsStrings<RecordDim>(coord),
                              mapping.blobNrAndOffset(adCoord, coord),
-                             size});
+                             sizeof(GetType<RecordDim, decltype(coord)>)});
                     });
             }
 
