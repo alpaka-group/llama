@@ -15,19 +15,8 @@ if (Vc_FOUND)
 	target_link_libraries(${PROJECT_NAME} PRIVATE Vc::Vc)
 endif()
 
-if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR
-	CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR
-	CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM" OR
-	CMAKE_CXX_COMPILER_ID STREQUAL "Intel" OR
-	CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
-	target_compile_options(${PROJECT_NAME} PRIVATE
-		#-fno-math-errno # sqrt prevents vectorization otherwise
-		-march=native
-		-ffast-math
-	)
-elseif(MSVC)
-	target_compile_options(${PROJECT_NAME} PRIVATE
-		/arch:AVX2
-		/fp:fast
-	)
+if (MSVC)
+	target_compile_options(${PROJECT_NAME} PRIVATE /arch:AVX2 /fp:fast)
+else()
+	target_compile_options(${PROJECT_NAME} PRIVATE -march=native -ffast-math)
 endif()
