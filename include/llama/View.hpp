@@ -4,7 +4,7 @@
 #pragma once
 
 #include "Array.hpp"
-#include "ArrayDimsIndexRange.hpp"
+#include "ArrayIndexRange.hpp"
 #include "BlobAllocators.hpp"
 #include "Concepts.hpp"
 #include "Core.hpp"
@@ -80,20 +80,20 @@ namespace llama
         using View = View<Mapping, BlobType>;
         using RecordDim = typename View::RecordDim;
         forEachADCoord(
-            view.mapping().arrayDims(),
-            [&](typename View::ArrayDims ad)
+            view.mapping().extents(),
+            [&](typename View::ArrayIndex ai)
             {
                 if constexpr(isRecord<RecordDim> || internal::IsBoundedArray<RecordDim>::value)
                     forEachLeafCoord<RecordDim>(
-                        [&](auto coord)
+                        [&](auto rc)
                         {
                             // TODO(bgruber): we could initialize computed fields if we can write to those. We could
                             // test if the returned value can be cast to a T& and then attempt to write.
-                            if constexpr(!isComputed<Mapping, decltype(coord)>)
-                                new(&view(ad)(coord)) GetType<RecordDim, decltype(coord)>;
+                            if constexpr(!isComputed<Mapping, decltype(rc)>)
+                                new(&view(ai)(rc)) GetType<RecordDim, decltype(rc)>;
                         });
                 else if constexpr(!isComputed<Mapping, RecordCoord<>>)
-                    new(&view(ad)) RecordDim;
+                    new(&view(ai)) RecordDim;
             });
     }
 
@@ -116,11 +116,11 @@ namespace llama
     }
 
     /// Allocates a \ref View holding a single record backed by stack memory (\ref bloballoc::Stack).
-    /// \tparam Dim Dimension of the \ref ArrayDims of the \ref View.
+    /// \tparam Dim Dimension of the \ref ArrayExtents of the \ref View.
     template<std::size_t Dim, typename RecordDim>
     LLAMA_FN_HOST_ACC_INLINE auto allocViewStack() -> decltype(auto)
     {
-        constexpr auto mapping = mapping::MinAlignedOne<ArrayDims<Dim>, RecordDim>{};
+        constexpr auto mapping = mapping::MinAlignedOne<ArrayExtentsStatic<Dim, 1>, RecordDim>{};
         return allocView(mapping, bloballoc::Stack<mapping.blobSize(0)>{});
     }
 
@@ -138,7 +138,7 @@ namespace llama
     template<typename View>
     struct Iterator
     {
-        using ADIterator = ArrayDimsIndexIterator<View::ArrayDims::rank>;
+        using ADIterator = ArrayIndexIterator<typename View::ArrayExtents>;
 
         using iterator_category = std::random_access_iterator_tag;
         using value_type = One<typename View::RecordDim>;
@@ -290,14 +290,16 @@ namespace llama
 #endif
     {
         using Mapping = TMapping;
-        using ArrayDims = typename Mapping::ArrayDims;
+        using ArrayExtents = typename Mapping::ArrayExtents;
+        using ArrayIndex = typename Mapping::ArrayIndex;
         using RecordDim = typename Mapping::RecordDim;
         using iterator = Iterator<View>;
         using const_iterator = Iterator<const View>;
 
         static_assert(
-            !std::is_reference_v<ArrayDims>,
-            "Mapping::ArrayDims must not be a reference. Are you using decltype(...) as mapping template argument?");
+            !std::is_reference_v<ArrayExtents>,
+            "Mapping::ArrayExtents must not be a reference. Are you using decltype(...) as mapping template "
+            "argument?");
 
         View() = default;
 
@@ -318,78 +320,78 @@ namespace llama
             return static_cast<const Mapping&>(*this);
         }
 
-        /// Retrieves the \ref VirtualRecord at the given \ref ArrayDims coordinate.
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDims arrayDims) const -> decltype(auto)
+        /// Retrieves the \ref VirtualRecord at the given \ref ArrayIndex index.
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) const -> decltype(auto)
         {
             if constexpr(isRecord<RecordDim> || internal::IsBoundedArray<RecordDim>::value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualRecord<const View>{arrayDims, *this};
+                return VirtualRecord<const View>{ai, *this};
             }
             else
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return accessor(arrayDims, RecordCoord<>{});
+                return accessor(ai, RecordCoord<>{});
             }
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDims arrayDims) -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) -> decltype(auto)
         {
             if constexpr(isRecord<RecordDim> || internal::IsBoundedArray<RecordDim>::value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualRecord<View>{arrayDims, *this};
+                return VirtualRecord<View>{ai, *this};
             }
             else
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return accessor(arrayDims, RecordCoord<>{});
+                return accessor(ai, RecordCoord<>{});
             }
         }
 
-        /// Retrieves the \ref VirtualRecord at the \ref ArrayDims coordinate constructed from the passed component
+        /// Retrieves the \ref VirtualRecord at the \ref ArrayIndex index constructed from the passed component
         /// indices.
         template<typename... Indices>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) const -> decltype(auto)
         {
             static_assert(
-                sizeof...(Indices) == ArrayDims::rank,
+                sizeof...(Indices) == ArrayIndex::rank,
                 "Please specify as many indices as you have array dimensions");
             static_assert(
                 std::conjunction_v<std::is_convertible<Indices, std::size_t>...>,
                 "Indices must be convertible to std::size_t");
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this) (ArrayDims{static_cast<typename ArrayDims::value_type>(indices)...});
+            return (*this) (ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...});
         }
 
         template<typename... Indices>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) -> decltype(auto)
         {
             static_assert(
-                sizeof...(Indices) == ArrayDims::rank,
+                sizeof...(Indices) == ArrayIndex::rank,
                 "Please specify as many indices as you have array dimensions");
             static_assert(
                 std::conjunction_v<std::is_convertible<Indices, std::size_t>...>,
                 "Indices must be convertible to std::size_t");
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this) (ArrayDims{static_cast<typename ArrayDims::value_type>(indices)...});
+            return (*this) (ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...});
         }
 
-        /// Retrieves the \ref VirtualRecord at the \ref ArrayDims coordinate constructed from the passed component
+        /// Retrieves the \ref VirtualRecord at the \ref ArrayIndex index constructed from the passed component
         /// indices.
-        LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayDims arrayDims) const -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayIndex ai) const -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this) (arrayDims);
+            return (*this) (ai);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayDims arrayDims) -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayIndex ai) -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this) (arrayDims);
+            return (*this) (ai);
         }
 
-        /// Retrieves the \ref VirtualRecord at the 1D \ref ArrayDims coordinate constructed from the passed index.
+        /// Retrieves the \ref VirtualRecord at the 1D \ref ArrayIndex index constructed from the passed index.
         LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t index) const -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
@@ -405,25 +407,25 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE
         auto begin() -> iterator
         {
-            return {ArrayDimsIndexRange<ArrayDims::rank>{mapping().arrayDims()}.begin(), this};
+            return {ArrayIndexRange<ArrayExtents>{mapping().extents()}.begin(), this};
         }
 
         LLAMA_FN_HOST_ACC_INLINE
         auto begin() const -> const_iterator
         {
-            return {ArrayDimsIndexRange<ArrayDims::rank>{mapping().arrayDims()}.begin(), this};
+            return {ArrayIndexRange<ArrayExtents>{mapping().extents()}.begin(), this};
         }
 
         LLAMA_FN_HOST_ACC_INLINE
         auto end() -> iterator
         {
-            return {ArrayDimsIndexRange<ArrayDims::rank>{mapping().arrayDims()}.end(), this};
+            return {ArrayIndexRange<ArrayExtents>{mapping().extents()}.end(), this};
         }
 
         LLAMA_FN_HOST_ACC_INLINE
         auto end() const -> const_iterator
         {
-            return {ArrayDimsIndexRange<ArrayDims::rank>{mapping().arrayDims()}.end(), this};
+            return {ArrayIndexRange<ArrayExtents>{mapping().extents()}.end(), this};
         }
 
         Array<BlobType, Mapping::blobCount> storageBlobs;
@@ -434,14 +436,13 @@ namespace llama
 
         LLAMA_SUPPRESS_HOST_DEVICE_WARNING
         template<std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDims arrayDims, RecordCoord<Coords...> rc = {}) const
-            -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayIndex ai, RecordCoord<Coords...> rc = {}) const -> decltype(auto)
         {
             if constexpr(llama::isComputed<Mapping, RecordCoord<Coords...>>)
-                return mapping().compute(arrayDims, rc, storageBlobs);
+                return mapping().compute(ai, rc, storageBlobs);
             else
             {
-                const auto [nr, offset] = mapping().blobNrAndOffset(arrayDims, rc);
+                const auto [nr, offset] = mapping().blobNrAndOffset(ai, rc);
                 using Type = GetType<RecordDim, RecordCoord<Coords...>>;
                 return reinterpret_cast<const Type&>(storageBlobs[nr][offset]);
             }
@@ -449,13 +450,13 @@ namespace llama
 
         LLAMA_SUPPRESS_HOST_DEVICE_WARNING
         template<std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDims arrayDims, RecordCoord<Coords...> rc = {}) -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayIndex ai, RecordCoord<Coords...> rc = {}) -> decltype(auto)
         {
             if constexpr(llama::isComputed<Mapping, RecordCoord<Coords...>>)
-                return mapping().compute(arrayDims, rc, storageBlobs);
+                return mapping().compute(ai, rc, storageBlobs);
             else
             {
-                const auto [nr, offset] = mapping().blobNrAndOffset(arrayDims, rc);
+                const auto [nr, offset] = mapping().blobNrAndOffset(ai, rc);
                 using Type = GetType<RecordDim, RecordCoord<Coords...>>;
                 using QualifiedType = std::conditional_t<
                     std::is_const_v<std::remove_reference_t<decltype(storageBlobs[nr][offset])>>,
@@ -474,42 +475,43 @@ namespace llama
 
     /// Acts like a \ref View, but shows only a smaller and/or shifted part of another view it references, the parent
     /// view.
-    template<typename TParentViewType>
+    template<typename TParentView>
     struct VirtualView
     {
-        using ParentView = TParentViewType; ///< type of the parent view
+        using ParentView = TParentView; ///< type of the parent view
         using Mapping = typename ParentView::Mapping; ///< mapping of the parent view
-        using ArrayDims = typename Mapping::ArrayDims; ///< array dimensions of the parent view
+        using ArrayExtents = typename Mapping::ArrayExtents; ///< array extents of the parent view
+        using ArrayIndex = typename Mapping::ArrayIndex; ///< array index of the parent view
 
-        /// Creates a VirtualView given a parent \ref View, offset and size.
+        /// Creates a VirtualView given a parent \ref View and offset.
         LLAMA_FN_HOST_ACC_INLINE
-        VirtualView(ParentView& parentView, ArrayDims offset) : parentView(parentView), offset(offset)
+        VirtualView(ParentView& parentView, ArrayIndex offset) : parentView(parentView), offset(offset)
         {
         }
 
         template<std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDims arrayDims) const -> const auto&
+        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayIndex ai) const -> const auto&
         {
-            return parentView.template accessor<Coords...>(ArrayDims{arrayDims + offset});
+            return parentView.template accessor<Coords...>(ArrayIndex{ai + offset});
         }
 
         template<std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayDims arrayDims) -> auto&
+        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayIndex ai) -> auto&
         {
-            return parentView.template accessor<Coords...>(ArrayDims{arrayDims + offset});
+            return parentView.template accessor<Coords...>(ArrayIndex{ai + offset});
         }
 
-        /// Same as \ref View::operator()(ArrayDims), but shifted by the offset of this \ref VirtualView.
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDims arrayDims) const -> decltype(auto)
+        /// Same as \ref View::operator()(ArrayIndex), but shifted by the offset of this \ref VirtualView.
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) const -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return parentView(ArrayDims{arrayDims + offset});
+            return parentView(ArrayIndex{ai + offset});
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayDims arrayDims) -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return parentView(ArrayDims{arrayDims + offset});
+            return parentView(ArrayIndex{ai + offset});
         }
 
         /// Same as corresponding operator in \ref View, but shifted by the offset of this \ref VirtualView.
@@ -517,43 +519,46 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) const -> decltype(auto)
         {
             static_assert(
-                sizeof...(Indices) == ArrayDims::rank,
+                sizeof...(Indices) == ArrayIndex::rank,
                 "Please specify as many indices as you have array dimensions");
             static_assert(
                 std::conjunction_v<std::is_convertible<Indices, std::size_t>...>,
                 "Indices must be convertible to std::size_t");
             LLAMA_FORCE_INLINE_RECURSIVE
-            return parentView(ArrayDims{ArrayDims{static_cast<typename ArrayDims::value_type>(indices)...} + offset});
+            return parentView(
+                ArrayIndex{ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...} + offset});
         }
 
         template<typename... Indices>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) -> decltype(auto)
         {
             static_assert(
-                sizeof...(Indices) == ArrayDims::rank,
+                sizeof...(Indices) == ArrayIndex::rank,
                 "Please specify as many indices as you have array dimensions");
             static_assert(
                 std::conjunction_v<std::is_convertible<Indices, std::size_t>...>,
                 "Indices must be convertible to std::size_t");
             LLAMA_FORCE_INLINE_RECURSIVE
-            return parentView(ArrayDims{ArrayDims{static_cast<typename ArrayDims::value_type>(indices)...} + offset});
+            return parentView(
+                ArrayIndex{ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...} + offset});
         }
 
         template<std::size_t... Coord>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coord...> = {}) const -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return accessor<Coord...>(ArrayDims{});
+            return accessor<Coord...>(ArrayIndex{});
         }
 
         template<std::size_t... Coord>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coord...> = {}) -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return accessor<Coord...>(ArrayDims{});
+            return accessor<Coord...>(ArrayIndex{});
         }
 
         ParentView& parentView; ///< reference to parent view.
-        const ArrayDims offset; ///< offset this view's \ref ArrayDims coordinates are shifted to the parent view.
+        const ArrayIndex
+            offset; ///< offset this view's \ref ArrayIndex indices are shifted when passed to the parent view.
     };
 } // namespace llama

@@ -109,7 +109,7 @@ try
         return 1;
     }
 
-    const auto mapping = llama::mapping::SoA{llama::ArrayDims{extent}, double{}};
+    const auto mapping = llama::mapping::SoA{llama::ArrayExtents{extent}, double{}};
     auto uNext = llama::allocViewUninitialized(mapping);
     auto uCurr = llama::allocViewUninitialized(mapping);
 

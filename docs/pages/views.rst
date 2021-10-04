@@ -20,7 +20,7 @@ A view is allocated using the helper function :cpp:`allocView`, which takes a
 .. code-block:: C++
 
     using Mapping = ...; // see next section about mappings
-    Mapping mapping(arrayDimsSize); // see section about dimensions
+    Mapping mapping(extents); // see section about dimensions
     auto view = allocView(mapping); // optional blob allocator as 2nd argument
 
 The :ref:`mapping <label-mappings>` and :ref:`blob allocator <label-bloballocators>`
@@ -51,7 +51,7 @@ It is also possible to access the array dimensions with one compound argument li
 
 .. code-block:: C++
 
-    const ArrayDims pos{1, 2, 3};
+    const llama::ArrayIndex pos{1, 2, 3};
     view(pos)(color{}, g{}) = 1.0;
     // or
     view({1, 2, 3})(color{}, g{}) = 1.0;

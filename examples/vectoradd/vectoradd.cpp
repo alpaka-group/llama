@@ -48,7 +48,7 @@ namespace usellama
 
         const auto mapping = [&]
         {
-            const auto arrayDims = llama::ArrayDims{PROBLEM_SIZE};
+            const auto arrayDims = llama::ArrayExtents{PROBLEM_SIZE};
             if constexpr(MAPPING == 0)
                 return llama::mapping::AoS{arrayDims, Vector{}};
             if constexpr(MAPPING == 1)

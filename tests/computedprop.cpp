@@ -12,10 +12,11 @@ namespace
         llama::Field<tag::C, Vec3D>,
         llama::Field<tag::Normal, Vec3D>>;
 
-    template<typename ArrayDims, typename RecordDim>
-    struct AoSWithComputedNormal : llama::mapping::PackedAoS<ArrayDims, RecordDim>
+    template<typename ArrayExtents, typename RecordDim>
+    struct AoSWithComputedNormal : llama::mapping::PackedAoS<ArrayExtents, RecordDim>
     {
-        using Base = llama::mapping::PackedAoS<ArrayDims, RecordDim>;
+        using Base = llama::mapping::PackedAoS<ArrayExtents, RecordDim>;
+        using typename Base::ArrayIndex;
 
         using Base::Base;
 
@@ -27,22 +28,22 @@ namespace
 
         template<std::size_t... RecordCoords, typename Blob>
         constexpr auto compute(
-            ArrayDims coord,
+            ArrayIndex ai,
             llama::RecordCoord<RecordCoords...>,
             llama::Array<Blob, Base::blobCount>& storageBlobs) const
         {
             auto fetch = [&](llama::NrAndOffset nrAndOffset) -> double
             { return *reinterpret_cast<double*>(&storageBlobs[nrAndOffset.nr][nrAndOffset.offset]); };
 
-            const auto ax = fetch(Base::template blobNrAndOffset<0, 0>(coord));
-            const auto ay = fetch(Base::template blobNrAndOffset<0, 1>(coord));
-            const auto az = fetch(Base::template blobNrAndOffset<0, 2>(coord));
-            const auto bx = fetch(Base::template blobNrAndOffset<1, 0>(coord));
-            const auto by = fetch(Base::template blobNrAndOffset<1, 1>(coord));
-            const auto bz = fetch(Base::template blobNrAndOffset<1, 2>(coord));
-            const auto cx = fetch(Base::template blobNrAndOffset<2, 0>(coord));
-            const auto cy = fetch(Base::template blobNrAndOffset<2, 1>(coord));
-            const auto cz = fetch(Base::template blobNrAndOffset<2, 2>(coord));
+            const auto ax = fetch(Base::template blobNrAndOffset<0, 0>(ai));
+            const auto ay = fetch(Base::template blobNrAndOffset<0, 1>(ai));
+            const auto az = fetch(Base::template blobNrAndOffset<0, 2>(ai));
+            const auto bx = fetch(Base::template blobNrAndOffset<1, 0>(ai));
+            const auto by = fetch(Base::template blobNrAndOffset<1, 1>(ai));
+            const auto bz = fetch(Base::template blobNrAndOffset<1, 2>(ai));
+            const auto cx = fetch(Base::template blobNrAndOffset<2, 0>(ai));
+            const auto cy = fetch(Base::template blobNrAndOffset<2, 1>(ai));
+            const auto cz = fetch(Base::template blobNrAndOffset<2, 2>(ai));
 
             const auto e1x = bx - ax;
             const auto e1y = by - ay;
@@ -82,8 +83,8 @@ namespace
 
 TEST_CASE("computedprop")
 {
-    auto arrayDims = llama::ArrayDims<1>{10};
-    auto mapping = AoSWithComputedNormal<decltype(arrayDims), Triangle>{arrayDims};
+    auto extents = llama::ArrayExtentsDynamic<1>{10};
+    auto mapping = AoSWithComputedNormal<decltype(extents), Triangle>{extents};
 
     STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 10 * 12 * sizeof(double));
@@ -110,23 +111,24 @@ TEST_CASE("computedprop")
 
 namespace
 {
-    // Maps accesses to the product of the ArrayDims coord.
-    template<typename TArrayDims, typename TRecordDim>
+    // Maps accesses to the product of the ArrayIndex.
+    template<typename TArrayExtents, typename TRecordDim>
     struct ComputedMapping
     {
-        using ArrayDims = TArrayDims;
+        using ArrayExtents = TArrayExtents;
+        using ArrayIndex = typename ArrayExtents::Index;
         using RecordDim = TRecordDim;
         static constexpr std::size_t blobCount = 0;
 
         constexpr ComputedMapping() = default;
 
-        constexpr explicit ComputedMapping(ArrayDims, RecordDim = {})
+        constexpr explicit ComputedMapping(ArrayExtents = {}, RecordDim = {})
         {
         }
 
-        auto arrayDims() const
+        constexpr auto extents() const
         {
-            return ArrayDims{};
+            return ArrayExtents{};
         }
 
         template<std::size_t... RecordCoords>
@@ -136,19 +138,17 @@ namespace
         }
 
         template<std::size_t... RecordCoords, typename Blob>
-        constexpr auto compute(ArrayDims coord, llama::RecordCoord<RecordCoords...>, llama::Array<Blob, blobCount>&)
+        constexpr auto compute(ArrayIndex ai, llama::RecordCoord<RecordCoords...>, llama::Array<Blob, blobCount>&)
             const -> std::size_t
         {
-            return std::reduce(std::begin(coord), std::end(coord), std::size_t{1}, std::multiplies<>{});
+            return std::reduce(std::begin(ai), std::end(ai), std::size_t{1}, std::multiplies<>{});
         }
     };
 } // namespace
 
 TEST_CASE("fully_computed_mapping")
 {
-    auto arrayDims = llama::ArrayDims<3>{10, 10, 10};
-    auto mapping = ComputedMapping<decltype(arrayDims), int>{arrayDims};
-
+    auto mapping = ComputedMapping<llama::ArrayExtents<10, 10, 10>, int>{{}};
     auto view = llama::allocViewUninitialized(mapping);
 
     using namespace tag;
@@ -160,24 +160,25 @@ TEST_CASE("fully_computed_mapping")
 namespace
 {
     template<
-        typename TArrayDims,
+        typename TArrayExtents,
         typename TRecordDim,
         typename LinearizeArrayDimsFunctor = llama::mapping::LinearizeArrayDimsCpp>
-    struct CompressedBoolMapping
+    struct CompressedBoolMapping : TArrayExtents
     {
-        using ArrayDims = TArrayDims;
+        using ArrayExtents = TArrayExtents;
+        using ArrayIndex = typename ArrayExtents::Index;
         using RecordDim = TRecordDim;
         static constexpr std::size_t blobCount = boost::mp11::mp_size<llama::FlatRecordDim<RecordDim>>::value;
 
         constexpr CompressedBoolMapping() = default;
 
-        constexpr explicit CompressedBoolMapping(ArrayDims size) : arrayDimsSize(size)
+        constexpr explicit CompressedBoolMapping(ArrayExtents extents = {}) : ArrayExtents(extents)
         {
         }
 
-        auto arrayDims() const
+        constexpr auto extents() const -> ArrayExtents
         {
-            return arrayDimsSize;
+            return ArrayExtents{*this};
         }
 
         using Word = std::uint64_t;
@@ -201,11 +202,11 @@ namespace
 
         constexpr auto blobSize(std::size_t) const -> std::size_t
         {
-            llama::forEachLeafCoord<RecordDim>([](auto coord) constexpr {
-                static_assert(std::is_same_v<llama::GetType<RecordDim, decltype(coord)>, bool>);
+            llama::forEachLeafCoord<RecordDim>([](auto rc) constexpr {
+                static_assert(std::is_same_v<llama::GetType<RecordDim, decltype(rc)>, bool>);
             });
             constexpr std::size_t wordBytes = sizeof(Word);
-            return (LinearizeArrayDimsFunctor{}.size(arrayDimsSize) + wordBytes - 1) / wordBytes;
+            return (LinearizeArrayDimsFunctor{}.size(extents()) + wordBytes - 1) / wordBytes;
         }
 
         template<std::size_t... RecordCoords>
@@ -216,11 +217,11 @@ namespace
 
         template<std::size_t... RecordCoords, typename Blob>
         constexpr auto compute(
-            ArrayDims coord,
+            ArrayIndex ai,
             llama::RecordCoord<RecordCoords...>,
             llama::Array<Blob, blobCount>& blobs) const -> BoolRef
         {
-            const auto bitOffset = LinearizeArrayDimsFunctor{}(coord, arrayDimsSize);
+            const auto bitOffset = LinearizeArrayDimsFunctor{}(ai, extents());
             const auto blob = llama::flatRecordCoord<RecordDim, llama::RecordCoord<RecordCoords...>>;
 
             constexpr std::size_t wordBits = sizeof(Word) * CHAR_BIT;
@@ -228,8 +229,6 @@ namespace
                 reinterpret_cast<Word&>(blobs[blob][bitOffset / wordBits]),
                 static_cast<unsigned char>(bitOffset % wordBits)};
         }
-
-        ArrayDims arrayDimsSize;
     };
 
     // clang-format off
@@ -245,8 +244,7 @@ namespace
 
 TEST_CASE("compressed_bools")
 {
-    auto arrayDims = llama::ArrayDims{8, 8};
-    auto mapping = CompressedBoolMapping<decltype(arrayDims), BoolRecord>{arrayDims};
+    auto mapping = CompressedBoolMapping<llama::ArrayExtents<8, 8>, BoolRecord>{{}};
     STATIC_REQUIRE(decltype(mapping)::blobCount == 3);
     CHECK(mapping.blobSize(0) == 8);
     CHECK(mapping.blobSize(1) == 8);

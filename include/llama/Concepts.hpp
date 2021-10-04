@@ -14,15 +14,16 @@ namespace llama
     // clang-format off
     template <typename M>
     concept Mapping = requires(M m) {
-        typename M::ArrayDims;
+        typename M::ArrayExtents;
+        typename M::ArrayIndex;
         typename M::RecordDim;
-        { m.arrayDims() } -> std::same_as<typename M::ArrayDims>;
+        { m.extents() } -> std::same_as<typename M::ArrayExtents>;
         { M::blobCount } -> std::convertible_to<std::size_t>;
         Array<int, M::blobCount>{}; // validates constexpr-ness
         { m.blobSize(std::size_t{}) } -> std::same_as<std::size_t>;
-        { m.blobNrAndOffset(typename M::ArrayDims{}) } -> std::same_as<NrAndOffset>;
-        { m.template blobNrAndOffset<0>(typename M::ArrayDims{}) } -> std::same_as<NrAndOffset>;
-        { m.blobNrAndOffset(typename M::ArrayDims{}, llama::RecordCoord<0>{}) } -> std::same_as<NrAndOffset>;
+        { m.blobNrAndOffset(typename M::ArrayIndex{}) } -> std::same_as<NrAndOffset>;
+        { m.template blobNrAndOffset<0>(typename M::ArrayIndex{}) } -> std::same_as<NrAndOffset>;
+        { m.blobNrAndOffset(typename M::ArrayIndex{}, llama::RecordCoord<0>{}) } -> std::same_as<NrAndOffset>;
     };
     // clang-format on
 

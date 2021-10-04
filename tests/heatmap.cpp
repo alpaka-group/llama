@@ -35,8 +35,8 @@ TEST_CASE("Heatmap.nbody")
         std::ofstream{"Heatmap." + name + ".sh"} << particles.mapping().toGnuplotScript();
     };
 
-    using ArrayDims = llama::ArrayDims<1>;
-    auto arrayDims = ArrayDims{N};
+    using ArrayDims = llama::ArrayExtents<N>;
+    auto arrayDims = ArrayDims{};
     run("AlignedAoS", llama::mapping::AlignedAoS<ArrayDims, ParticleHeatmap>{arrayDims});
     run("SingleBlobSoA", llama::mapping::SingleBlobSoA<ArrayDims, ParticleHeatmap>{arrayDims});
 }

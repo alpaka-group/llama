@@ -58,19 +58,24 @@ When working with small amounts of memory or temporary views created frequently,
 :cpp:`llama::bloballoc::Stack` addresses this issue and creates blobs of type :cpp:`llama::Array<std::byte, N>`, where :cpp:`N` is a compile time value passed to the allocator.
 These blobs are copied every time their view is copied.
 :cpp:`llama::One` uses this facility.
+In many such cases, the extents of the array dimensions are also known at compile time, so they can be specified in the template argument list of :cpp:`llama::ArrayExtents`.
 
 Creating a small view of :math:`4 \times 4` may look like this:
 
 .. code-block:: C++
 
-    using ArrayDims = llama::ArrayDims<2>;
-    constexpr ArrayDims miniSize{4, 4};
+    using ArrayExtents = llama::ArrayExtents<4, 4>;
+    constexpr ArrayExtents extents{};
 
-    using Mapping = /* some simple mapping */;
+    using Mapping = /* a simple mapping */;
     auto blobAllocator = llama::bloballoc::Stack<
-        miniSize[0] * miniSize[1] * llama::sizeOf<RecordDim>::value
+        extents[0] * extents[1] * llama::sizeOf<RecordDim>::value
     >;
-    auto miniView = llama::allocView(Mapping{miniSize}, blobAllocator);
+    auto miniView = llama::allocView(Mapping{extents}, blobAllocator);
+
+    // or in case the mapping is constexpr and produces just 1 blob:
+    constexpr auto mapping = Mapping{extents};
+    auto miniView = llama::allocView(mapping, llama::bloballoc::Stack<mapping.blobSize(0)>{});
 
 For :math:`N`-dimensional one-record views a shortcut exists, returning a view with just one record on the stack:
 

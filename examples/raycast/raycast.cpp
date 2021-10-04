@@ -51,10 +51,10 @@ namespace
         llama::Field<TexId, int>,
         llama::Field<BaseLod, float>>;
 
-    using ArrayDomain = llama::ArrayDims<1>;
-    using Mapping = llama::mapping::AoS<ArrayDomain, PrepTriangle, true>;
-    // using Mapping = llama::mapping::SoA<ArrayDomain, PrepTriangle, true>;
-    // using Mapping = llama::mapping::AoSoA<ArrayDomain, PrepTriangle, 8>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<1>;
+    using Mapping = llama::mapping::AoS<ArrayExtents, PrepTriangle, true>;
+    // using Mapping = llama::mapping::SoA<ArrayExtents, PrepTriangle, true>;
+    // using Mapping = llama::mapping::AoSoA<ArrayExtents, PrepTriangle, 8>;
 
     template<typename F>
     struct Vector

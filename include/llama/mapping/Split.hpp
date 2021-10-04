@@ -54,7 +54,7 @@ namespace llama::mapping
     /// \tparam MappingTemplate2 The mapping used for the not selected part of the record dimension.
     /// \tparam SeparateBlobs If true, both pieces of the record dimension are mapped to separate blobs.
     template<
-        typename TArrayDims,
+        typename TArrayExtents,
         typename TRecordDim,
         typename RecordCoordForMapping1,
         template<typename...>
@@ -64,15 +64,16 @@ namespace llama::mapping
         bool SeparateBlobs = false>
     struct Split
     {
-        using ArrayDims = TArrayDims;
+        using ArrayExtents = TArrayExtents;
+        using ArrayIndex = typename ArrayExtents::Index;
         using RecordDim = TRecordDim;
 
         using RecordDimPartitions = decltype(internal::partitionRecordDim(RecordDim{}, RecordCoordForMapping1{}));
         using RecordDim1 = boost::mp11::mp_first<RecordDimPartitions>;
         using RecordDim2 = boost::mp11::mp_second<RecordDimPartitions>;
 
-        using Mapping1 = MappingTemplate1<ArrayDims, RecordDim1>;
-        using Mapping2 = MappingTemplate2<ArrayDims, RecordDim2>;
+        using Mapping1 = MappingTemplate1<ArrayExtents, RecordDim1>;
+        using Mapping2 = MappingTemplate2<ArrayExtents, RecordDim2>;
 
         static constexpr std::size_t blobCount = SeparateBlobs ? Mapping1::blobCount + Mapping2::blobCount : 1;
         static_assert(SeparateBlobs || Mapping1::blobCount == 1);
@@ -81,13 +82,13 @@ namespace llama::mapping
         constexpr Split() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr explicit Split(ArrayDims size) : mapping1(size), mapping2(size)
+        constexpr explicit Split(ArrayExtents extents) : mapping1(extents), mapping2(extents)
         {
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayDims() const -> ArrayDims
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayExtents
         {
-            return mapping1.arrayDims();
+            return mapping1.extents();
         }
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(std::size_t i) const -> std::size_t
@@ -103,8 +104,8 @@ namespace llama::mapping
         }
 
         template<std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayDims coord, RecordCoord<RecordCoords...> = {})
-            const -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayIndex ai, RecordCoord<RecordCoords...> = {}) const
+            -> NrAndOffset
         {
             if constexpr(RecordCoordCommonPrefixIsSame<RecordCoordForMapping1, RecordCoord<RecordCoords...>>)
             {
@@ -112,13 +113,13 @@ namespace llama::mapping
                 // zero all coordinate values that are part of RecordCoordForMapping1
                 using Prefix = mp_repeat_c<mp_list_c<std::size_t, 0>, RecordCoordForMapping1::size>;
                 using Suffix = mp_drop_c<mp_list_c<std::size_t, RecordCoords...>, RecordCoordForMapping1::size>;
-                return mapping1.blobNrAndOffset(coord, RecordCoordFromList<mp_append<Prefix, Suffix>>{});
+                return mapping1.blobNrAndOffset(ai, RecordCoordFromList<mp_append<Prefix, Suffix>>{});
             }
             else
             {
                 constexpr auto dstCoord
                     = internal::offsetCoord(RecordCoord<RecordCoords...>{}, RecordCoordForMapping1{});
-                auto nrAndOffset = mapping2.blobNrAndOffset(coord, dstCoord);
+                auto nrAndOffset = mapping2.blobNrAndOffset(ai, dstCoord);
                 if constexpr(SeparateBlobs)
                     nrAndOffset.nr += Mapping1::blobCount;
                 else
@@ -143,8 +144,13 @@ namespace llama::mapping
         bool SeparateBlobs = false>
     struct PreconfiguredSplit
     {
-        template<typename ArrayDims, typename RecordDim>
-        using type
-            = Split<ArrayDims, RecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs>;
+        template<typename ArrayExtents, typename RecordDim>
+        using type = Split<
+            ArrayExtents,
+            RecordDim,
+            RecordCoordForMapping1,
+            MappingTemplate1,
+            MappingTemplate2,
+            SeparateBlobs>;
     };
 } // namespace llama::mapping

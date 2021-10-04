@@ -13,7 +13,7 @@
 #include <string_view>
 
 constexpr auto REPETITIONS = 5;
-constexpr auto arrayDims = llama::ArrayDims{512, 512, 16};
+constexpr auto extents = llama::ArrayExtents{512, 512, 16};
 
 // clang-format off
 namespace tag
@@ -50,7 +50,7 @@ void std_copy(const llama::View<SrcMapping, SrcBlobType>& srcView, llama::View<D
 {
     static_assert(std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>);
 
-    if(srcView.mapping().arrayDims() != dstView.mapping().arrayDims())
+    if(srcView.mapping().extents() != dstView.mapping().extents())
         throw std::runtime_error{"Array dimensions sizes are different"};
 
     std::copy(srcView.begin(), srcView.end(), dstView.begin());
@@ -106,9 +106,8 @@ template<typename Mapping, typename BlobType>
 auto hash(const llama::View<Mapping, BlobType>& view)
 {
     std::size_t acc = 0;
-    for(auto ad : llama::ArrayDimsIndexRange{view.mapping().arrayDims()})
-        llama::forEachLeafCoord<typename Mapping::RecordDim>([&](auto coord)
-                                                             { boost::hash_combine(acc, view(ad)(coord)); });
+    for(auto ad : llama::ArrayIndexRange{view.mapping().extents()})
+        llama::forEachLeafCoord<typename Mapping::RecordDim>([&](auto rc) { boost::hash_combine(acc, view(ad)(rc)); });
     return acc;
 }
 template<typename Mapping>
@@ -117,8 +116,8 @@ auto prepareViewAndHash(Mapping mapping)
     auto view = llama::allocViewUninitialized(mapping);
 
     auto value = std::size_t{0};
-    for(auto ad : llama::ArrayDimsIndexRange{mapping.arrayDims()})
-        llama::forEachLeafCoord<typename Mapping::RecordDim>([&](auto coord) { view(ad)(coord) = value++; });
+    for(auto ad : llama::ArrayIndexRange{mapping.extents()})
+        llama::forEachLeafCoord<typename Mapping::RecordDim>([&](auto rc) { view(ad)(rc) = value++; });
 
     const auto checkSum = hash(view);
     return std::tuple{view, checkSum};
@@ -126,8 +125,7 @@ auto prepareViewAndHash(Mapping mapping)
 auto main() -> int
 try
 {
-    const auto dataSize = std::reduce(arrayDims.begin(), arrayDims.end(), std::size_t{1}, std::multiplies{})
-        * llama::sizeOf<RecordDim>;
+    const auto dataSize = llama::product(extents) * llama::sizeOf<RecordDim>;
     const auto numThreads = static_cast<std::size_t>(omp_get_max_threads());
     const char* affinity = std::getenv("GOMP_CPU_AFFINITY"); // NOLINT(concurrency-mt-unsafe)
     affinity = affinity == nullptr ? "NONE - PLEASE PIN YOUR THREADS!" : affinity;
@@ -290,12 +288,12 @@ $data << EOD
         plotFile << "\n";
     };
 
-    const auto packedAoSMapping = llama::mapping::PackedAoS<decltype(arrayDims), RecordDim>{arrayDims};
-    const auto alignedAoSMapping = llama::mapping::AlignedAoS<decltype(arrayDims), RecordDim>{arrayDims};
-    const auto multiBlobSoAMapping = llama::mapping::MultiBlobSoA<decltype(arrayDims), RecordDim>{arrayDims};
-    const auto aosoa8Mapping = llama::mapping::AoSoA<decltype(arrayDims), RecordDim, 8>{arrayDims};
-    const auto aosoa32Mapping = llama::mapping::AoSoA<decltype(arrayDims), RecordDim, 32>{arrayDims};
-    const auto aosoa64Mapping = llama::mapping::AoSoA<decltype(arrayDims), RecordDim, 64>{arrayDims};
+    const auto packedAoSMapping = llama::mapping::PackedAoS<decltype(extents), RecordDim>{extents};
+    const auto alignedAoSMapping = llama::mapping::AlignedAoS<decltype(extents), RecordDim>{extents};
+    const auto multiBlobSoAMapping = llama::mapping::MultiBlobSoA<decltype(extents), RecordDim>{extents};
+    const auto aosoa8Mapping = llama::mapping::AoSoA<decltype(extents), RecordDim, 8>{extents};
+    const auto aosoa32Mapping = llama::mapping::AoSoA<decltype(extents), RecordDim, 32>{extents};
+    const auto aosoa64Mapping = llama::mapping::AoSoA<decltype(extents), RecordDim, 64>{extents};
 
     benchmarkAllCopies("P AoS", "A AoS", packedAoSMapping, alignedAoSMapping);
     benchmarkAllCopies("A AoS", "P AoS", alignedAoSMapping, packedAoSMapping);

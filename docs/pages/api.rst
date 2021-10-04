@@ -29,11 +29,14 @@ Useful helpers
 Array dimensions
 ----------------
 
-.. doxygenstruct:: llama::ArrayDims
+.. doxygenstruct:: llama::ArrayExtents
+.. doxygentypedef:: llama::ArrayIndexDynamic
+.. doxygentypedef:: llama::ArrayIndexStatic
+.. doxygenstruct:: llama::ArrayIndex
 
-.. doxygenstruct:: llama::ArrayDimsIndexIterator
+.. doxygenstruct:: llama::ArrayIndexIterator
    :members:
-.. doxygenstruct:: llama::ArrayDimsIndexRange
+.. doxygenstruct:: llama::ArrayIndexRange
    :members:
 
 .. doxygenfunction:: llama::forEachADCoord

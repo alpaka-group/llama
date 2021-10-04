@@ -16,22 +16,22 @@ using RecordDim = llama::Record<
 
 TEST_CASE("view.default-ctor")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    [[maybe_unused]] llama::View<llama::mapping::AlignedAoS<ArrayDims, RecordDim>, std::byte*> view1{};
-    [[maybe_unused]] llama::View<llama::mapping::PackedAoS<ArrayDims, RecordDim>, std::byte*> view2{};
-    [[maybe_unused]] llama::View<llama::mapping::SingleBlobSoA<ArrayDims, RecordDim>, std::byte*> view3{};
-    [[maybe_unused]] llama::View<llama::mapping::MultiBlobSoA<ArrayDims, RecordDim>, std::byte*> view4{};
-    [[maybe_unused]] llama::View<llama::mapping::One<ArrayDims, RecordDim>, std::byte*> view5{};
-    [[maybe_unused]] llama::View<llama::mapping::tree::Mapping<ArrayDims, RecordDim, llama::Tuple<>>, std::byte*>
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    [[maybe_unused]] llama::View<llama::mapping::AlignedAoS<ArrayExtents, RecordDim>, std::byte*> view1{};
+    [[maybe_unused]] llama::View<llama::mapping::PackedAoS<ArrayExtents, RecordDim>, std::byte*> view2{};
+    [[maybe_unused]] llama::View<llama::mapping::SingleBlobSoA<ArrayExtents, RecordDim>, std::byte*> view3{};
+    [[maybe_unused]] llama::View<llama::mapping::MultiBlobSoA<ArrayExtents, RecordDim>, std::byte*> view4{};
+    [[maybe_unused]] llama::View<llama::mapping::One<ArrayExtents, RecordDim>, std::byte*> view5{};
+    [[maybe_unused]] llama::View<llama::mapping::tree::Mapping<ArrayExtents, RecordDim, llama::Tuple<>>, std::byte*>
         view6{};
 }
 
 TEST_CASE("view.move")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    constexpr ArrayDims viewSize{16, 16};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    constexpr ArrayExtents viewSize{16, 16};
 
-    using Mapping = llama::mapping::SoA<ArrayDims, RecordDim>;
+    using Mapping = llama::mapping::SoA<ArrayExtents, RecordDim>;
     auto view1 = llama::allocView(Mapping(viewSize));
 
     decltype(view1) view2;
@@ -42,10 +42,10 @@ TEST_CASE("view.move")
 
 TEST_CASE("view.swap")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    constexpr ArrayDims viewSize{16, 16};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    constexpr ArrayExtents viewSize{16, 16};
 
-    using Mapping = llama::mapping::SoA<ArrayDims, RecordDim>;
+    using Mapping = llama::mapping::SoA<ArrayExtents, RecordDim>;
     auto view1 = llama::allocView(Mapping(viewSize));
     auto view2 = llama::allocView(Mapping(viewSize));
 
@@ -60,39 +60,39 @@ TEST_CASE("view.swap")
 
 TEST_CASE("view.allocator.Vector")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    constexpr ArrayDims viewSize{16, 16};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    constexpr ArrayExtents viewSize{16, 16};
 
-    using Mapping = llama::mapping::SoA<ArrayDims, RecordDim>;
+    using Mapping = llama::mapping::SoA<ArrayExtents, RecordDim>;
     auto view = llama::allocView(Mapping(viewSize), llama::bloballoc::Vector{});
 
-    for(auto i : llama::ArrayDimsIndexRange{viewSize})
+    for(auto i : llama::ArrayIndexRange{viewSize})
         view(i) = 42;
 }
 
 #ifndef __clang_analyzer__
 TEST_CASE("view.allocator.SharedPtr")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    constexpr ArrayDims viewSize{16, 16};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    constexpr ArrayExtents viewSize{16, 16};
 
-    using Mapping = llama::mapping::SoA<ArrayDims, RecordDim>;
+    using Mapping = llama::mapping::SoA<ArrayExtents, RecordDim>;
     auto view = llama::allocView(Mapping(viewSize), llama::bloballoc::SharedPtr{});
 
-    for(auto i : llama::ArrayDimsIndexRange{viewSize})
+    for(auto i : llama::ArrayIndexRange{viewSize})
         view(i) = 42;
 }
 #endif
 
 TEST_CASE("view.allocator.stack")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    constexpr ArrayDims viewSize{16, 16};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    constexpr ArrayExtents viewSize{16, 16};
 
-    using Mapping = llama::mapping::SoA<ArrayDims, RecordDim>;
+    using Mapping = llama::mapping::SoA<ArrayExtents, RecordDim>;
     auto view = llama::allocView(Mapping(viewSize), llama::bloballoc::Stack<16 * 16 * llama::sizeOf<RecordDim>>{});
 
-    for(auto i : llama::ArrayDimsIndexRange{viewSize})
+    for(auto i : llama::ArrayIndexRange{viewSize})
         view(i) = 42;
 }
 
@@ -102,11 +102,11 @@ TEST_CASE("view.non-memory-owning")
     {
         using byte = typename decltype(typeHolder)::type;
 
-        using ArrayDims = llama::ArrayDims<1>;
-        ArrayDims arrayDims{256};
+        using ArrayExtents = llama::ArrayExtentsDynamic<1>;
+        ArrayExtents extents{256};
 
-        using Mapping = llama::mapping::SoA<ArrayDims, RecordDim>;
-        Mapping mapping{arrayDims};
+        using Mapping = llama::mapping::SoA<ArrayExtents, RecordDim>;
+        Mapping mapping{extents};
 
         const auto blobSize = mapping.blobSize(0);
         const auto storage = std::make_unique<byte[]>(blobSize);
@@ -125,15 +125,15 @@ TEST_CASE("view.non-memory-owning")
 
 TEST_CASE("view.access")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    ArrayDims arrayDims{16, 16};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    ArrayExtents extents{16, 16};
 
-    using Mapping = llama::mapping::SoA<ArrayDims, Particle>;
-    Mapping mapping{arrayDims};
+    using Mapping = llama::mapping::SoA<ArrayExtents, Particle>;
+    Mapping mapping{extents};
     auto view = llama::allocView(mapping);
     auto l = [](auto& view)
     {
-        const ArrayDims pos{0, 0};
+        const llama::ArrayIndex pos{0, 0};
         CHECK((view(pos) == view[pos]));
         CHECK((view(pos) == view[{0, 0}]));
         CHECK((view(pos) == view({0, 0})));
@@ -158,11 +158,11 @@ TEST_CASE("view.assign-one-record")
 {
     using namespace llama::literals;
 
-    using ArrayDims = llama::ArrayDims<2>;
-    ArrayDims arrayDims{16, 16};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    ArrayExtents extents{16, 16};
 
-    using Mapping = llama::mapping::SoA<ArrayDims, Particle>;
-    Mapping mapping{arrayDims};
+    using Mapping = llama::mapping::SoA<ArrayExtents, Particle>;
+    Mapping mapping{extents};
     auto view = llama::allocView(mapping);
 
     llama::One<Particle> record;
@@ -195,14 +195,14 @@ TEST_CASE("view.addresses")
 {
     using namespace llama::literals;
 
-    using ArrayDims = llama::ArrayDims<2>;
-    ArrayDims arrayDims{16, 16};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    ArrayExtents extents{16, 16};
 
-    using Mapping = llama::mapping::SingleBlobSoA<ArrayDims, Particle>;
-    Mapping mapping{arrayDims};
+    using Mapping = llama::mapping::SingleBlobSoA<ArrayExtents, Particle>;
+    Mapping mapping{extents};
     auto view = llama::allocView(mapping);
 
-    const ArrayDims pos{0, 0};
+    const llama::ArrayIndex pos{0, 0};
     auto& x = view(pos)(tag::Pos{}, tag::X{});
     auto& y = view(pos)(tag::Pos{}, tag::Y{});
     auto& z = view(pos)(tag::Pos{}, tag::Z{});
@@ -230,50 +230,50 @@ TEST_CASE("view.addresses")
 template<typename VirtualRecord>
 struct SetZeroFunctor
 {
-    template<typename Coord>
-    void operator()(Coord coord)
+    template<typename RecordCoord>
+    void operator()(RecordCoord rc)
     {
-        vd(coord) = 0;
+        vd(rc) = 0;
     }
     VirtualRecord vd;
 };
 
 TEST_CASE("view.iteration-and-access")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    ArrayDims arrayDims{16, 16};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    ArrayExtents extents{16, 16};
 
-    using Mapping = llama::mapping::SoA<ArrayDims, Particle>;
-    Mapping mapping{arrayDims};
+    using Mapping = llama::mapping::SoA<ArrayExtents, Particle>;
+    Mapping mapping{extents};
     auto view = llama::allocView(mapping);
 
-    for(size_t x = 0; x < arrayDims[0]; ++x)
-        for(size_t y = 0; y < arrayDims[1]; ++y)
+    for(size_t x = 0; x < extents[0]; ++x)
+        for(size_t y = 0; y < extents[1]; ++y)
         {
             SetZeroFunctor<decltype(view(x, y))> szf{view(x, y)};
             llama::forEachLeafCoord<Particle>(szf, llama::RecordCoord<0, 0>{});
             llama::forEachLeafCoord<Particle>(szf, tag::Vel{});
-            view({x, y}) = double(x + y) / double(arrayDims[0] + arrayDims[1]);
+            view({x, y}) = double(x + y) / double(extents[0] + extents[1]);
         }
 
     double sum = 0.0;
-    for(size_t x = 0; x < arrayDims[0]; ++x)
-        for(size_t y = 0; y < arrayDims[1]; ++y)
+    for(size_t x = 0; x < extents[0]; ++x)
+        for(size_t y = 0; y < extents[1]; ++y)
             sum += view(x, y)(llama::RecordCoord<2, 0>{});
     CHECK(sum == 120.0);
 }
 
 TEST_CASE("view.record-access")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    ArrayDims arrayDims{16, 16};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    ArrayExtents extents{16, 16};
 
-    using Mapping = llama::mapping::SoA<ArrayDims, Particle>;
-    Mapping mapping{arrayDims};
+    using Mapping = llama::mapping::SoA<ArrayExtents, Particle>;
+    Mapping mapping{extents};
     auto view = llama::allocView(mapping);
 
-    for(size_t x = 0; x < arrayDims[0]; ++x)
-        for(size_t y = 0; y < arrayDims[1]; ++y)
+    for(size_t x = 0; x < extents[0]; ++x)
+        for(size_t y = 0; y < extents[1]; ++y)
         {
             auto record = view(x, y);
             record(tag::Pos(), tag::X()) += record(llama::RecordCoord<2, 0>{});
@@ -283,8 +283,8 @@ TEST_CASE("view.record-access")
         }
 
     double sum = 0.0;
-    for(size_t x = 0; x < arrayDims[0]; ++x)
-        for(size_t y = 0; y < arrayDims[1]; ++y)
+    for(size_t x = 0; x < extents[0]; ++x)
+        for(size_t y = 0; y < extents[1]; ++y)
             sum += view(x, y)(llama::RecordCoord<2, 0>{});
 
     CHECK(sum == 0.0);
@@ -292,7 +292,7 @@ TEST_CASE("view.record-access")
 
 TEST_CASE("view.indexing")
 {
-    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{16, 16}, Particle{}});
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{16, 16}, Particle{}});
     view(0u, 0u)(tag::Mass{}) = 42.0f;
 
     using integrals = boost::mp11::mp_list<

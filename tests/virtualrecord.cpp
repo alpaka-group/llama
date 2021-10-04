@@ -886,7 +886,7 @@ TEST_CASE("VirtualRecord.loadAs.constref")
 
 TEST_CASE("VirtualRecord.One_ctor_from_view")
 {
-    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{5}, ParticleInt{}});
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{5}, ParticleInt{}});
     view(1u) = 1;
 
     llama::One<ParticleInt> vr2 = view(1u);
@@ -905,7 +905,7 @@ TEST_CASE("VirtualRecord.One_ctor_from_view")
 
 TEST_CASE("VirtualRecord.One_range_for")
 {
-    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{5}, ParticleInt{}});
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{5}, ParticleInt{}});
     for(auto p : view) // p is a reference object
         p = 1;
     CHECK(view(1u) == 1);
@@ -952,18 +952,29 @@ TEST_CASE("VirtualRecord.One_from_scalar")
 
 TEST_CASE("VirtualRecord.size")
 {
-    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{5}, ParticleInt{}});
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{5}, ParticleInt{}});
     [[maybe_unused]] auto vr = view[0];
     STATIC_REQUIRE(
         sizeof(vr)
-        == sizeof(llama::ArrayDims<1>::value_type) + sizeof(&view)); // sizeof array dims and view reference // NOLINT
+        == sizeof(llama::ArrayExtents<llama::dyn>::value_type)
+            + sizeof(&view)); // sizeof array dims and view reference // NOLINT
 }
 
 TEST_CASE("VirtualRecord.One.size")
 {
-    STATIC_REQUIRE(llama::mapping::MinAlignedOne<llama::ArrayDims<0>, Particle>{}.blobSize(0) == 56);
+    using Mapping = llama::mapping::MinAlignedOne<llama::ArrayExtents<>, Particle>;
+    STATIC_REQUIRE(Mapping{}.blobSize(0) == 56);
+
+    struct S : Mapping::ArrayIndex
+    {
+        char c;
+    };
+    STATIC_REQUIRE(sizeof(S) == sizeof(char));
+
     [[maybe_unused]] const auto v = llama::allocViewStack<0, Particle>();
+    STATIC_REQUIRE(std::is_same_v<typename decltype(v)::Mapping, Mapping>);
     STATIC_REQUIRE(sizeof(v) == 56);
+
     [[maybe_unused]] const auto p = llama::One<Particle>{};
     STATIC_REQUIRE(sizeof(p) == 56);
 }
@@ -978,7 +989,7 @@ TEST_CASE("VirtualRecord.One.alignment")
 TEST_CASE("VirtualRecord.operator<<")
 {
     llama::One<Particle> p;
-    llama::forEachLeafCoord<Particle>([&, i = 0](auto coord) mutable { p(coord) = ++i; });
+    llama::forEachLeafCoord<Particle>([&, i = 0](auto rc) mutable { p(rc) = ++i; });
 
     std::stringstream ss;
     ss << p;
@@ -987,7 +998,7 @@ TEST_CASE("VirtualRecord.operator<<")
     CHECK(ss.str() == expected);
 
     ss = std::stringstream{};
-    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{1}, Particle{}});
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{1}, Particle{}});
     view(0u) = p;
     ss << view(0u);
     CHECK(ss.str() == expected);
@@ -999,20 +1010,20 @@ TEST_CASE("VirtualRecord.swap")
     llama::One<Vec3I> p2{2};
 
     llama::forEachLeafCoord<Vec3I>(
-        [&](auto coord)
+        [&](auto rc)
         {
-            CHECK(p1(coord) == 1);
-            CHECK(p2(coord) == 2);
+            CHECK(p1(rc) == 1);
+            CHECK(p2(rc) == 2);
         });
 
     using std::swap; // to check that overload set (std::swap, llama::swap) is not ambigious
     swap(p1, p2);
 
     llama::forEachLeafCoord<Vec3I>(
-        [&](auto coord)
+        [&](auto rc)
         {
-            CHECK(p1(coord) == 2);
-            CHECK(p2(coord) == 1);
+            CHECK(p1(rc) == 2);
+            CHECK(p2(rc) == 1);
         });
 }
 

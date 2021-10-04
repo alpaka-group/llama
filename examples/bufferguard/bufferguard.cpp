@@ -21,29 +21,28 @@ using Vector = llama::Record<
 >;
 // clang-format on
 
-template<template<typename, typename> typename InnerMapping, typename TArrayDims, typename TRecordDim>
-struct GuardMapping2D
+template<template<typename, typename> typename InnerMapping, typename TRecordDim>
+struct GuardMapping2D : llama::ArrayExtentsDynamic<2>
 {
-    static_assert(std::is_same_v<TArrayDims, llama::ArrayDims<2>>, "Only 2D arrays are implemented");
-
-    using ArrayDims = TArrayDims;
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    using ArrayIndex = llama::ArrayIndex<2>;
     using RecordDim = TRecordDim;
 
     constexpr GuardMapping2D() = default;
 
-    constexpr explicit GuardMapping2D(ArrayDims size, RecordDim = {})
-        : arrayDimsSize(size)
-        , left({size[0] - 2})
-        , right({size[0] - 2})
-        , top({size[1] - 2})
-        , bot({size[1] - 2})
-        , center({size[0] - 2, size[1] - 2})
+    constexpr explicit GuardMapping2D(ArrayExtents extents, RecordDim = {})
+        : llama::ArrayExtentsDynamic<2>(extents)
+        , left({extents[0] - 2})
+        , right({extents[0] - 2})
+        , top({extents[1] - 2})
+        , bot({extents[1] - 2})
+        , center({extents[0] - 2, extents[1] - 2})
     {
     }
 
-    constexpr auto arrayDims() const -> ArrayDims
+    constexpr auto extents() const -> ArrayExtents
     {
-        return arrayDimsSize;
+        return *this; // NOLINT(cppcoreguidelines-slicing)
     }
 
     constexpr auto blobSize(std::size_t i) const -> std::size_t
@@ -70,12 +69,12 @@ struct GuardMapping2D
     }
 
     template<std::size_t... RecordCoords>
-    constexpr auto blobNrAndOffset(ArrayDims coord, llama::RecordCoord<RecordCoords...> rc = {}) const
+    constexpr auto blobNrAndOffset(ArrayIndex ai, llama::RecordCoord<RecordCoords...> rc = {}) const
         -> llama::NrAndOffset
     {
         // [0][0] is at left top
-        const auto [row, col] = coord;
-        const auto [rowMax, colMax] = arrayDimsSize;
+        const auto [row, col] = ai;
+        const auto [rowMax, colMax] = extents();
 
         if(col == 0)
         {
@@ -156,19 +155,19 @@ private:
     constexpr auto blobIndices(const Mapping&, std::size_t offset) const
     {
         std::array<std::size_t, Mapping::blobCount> a{};
-        std::generate(begin(a), end(a), [i = offset]() mutable { return i++; });
+        std::generate(a.begin(), a.end(), [i = offset]() mutable { return i++; });
         return a;
     }
 
-    llama::mapping::One<ArrayDims, RecordDim> leftTop;
-    llama::mapping::One<ArrayDims, RecordDim> leftBot;
-    llama::mapping::One<ArrayDims, RecordDim> rightTop;
-    llama::mapping::One<ArrayDims, RecordDim> rightBot;
-    InnerMapping<llama::ArrayDims<1>, RecordDim> left;
-    InnerMapping<llama::ArrayDims<1>, RecordDim> right;
-    InnerMapping<llama::ArrayDims<1>, RecordDim> top;
-    InnerMapping<llama::ArrayDims<1>, RecordDim> bot;
-    InnerMapping<llama::ArrayDims<2>, RecordDim> center;
+    llama::mapping::One<llama::ArrayExtents<>, RecordDim> leftTop;
+    llama::mapping::One<llama::ArrayExtents<>, RecordDim> leftBot;
+    llama::mapping::One<llama::ArrayExtents<>, RecordDim> rightTop;
+    llama::mapping::One<llama::ArrayExtents<>, RecordDim> rightBot;
+    InnerMapping<llama::ArrayExtentsDynamic<1>, RecordDim> left;
+    InnerMapping<llama::ArrayExtentsDynamic<1>, RecordDim> right;
+    InnerMapping<llama::ArrayExtentsDynamic<1>, RecordDim> top;
+    InnerMapping<llama::ArrayExtentsDynamic<1>, RecordDim> bot;
+    InnerMapping<llama::ArrayExtentsDynamic<2>, RecordDim> center;
 
     static constexpr auto leftTopOff = std::size_t{0};
     static constexpr auto leftBotOff = leftTopOff + decltype(leftTop)::blobCount;
@@ -182,9 +181,6 @@ private:
 
 public:
     static constexpr auto blobCount = centerOff + decltype(center)::blobCount;
-
-private:
-    ArrayDims arrayDimsSize;
 };
 
 template<typename View>
@@ -209,8 +205,8 @@ void run(const std::string& mappingName)
 
     constexpr auto rows = 7;
     constexpr auto cols = 5;
-    const auto arrayDims = llama::ArrayDims{rows, cols};
-    const auto mapping = GuardMapping2D<Mapping, llama::ArrayDims<2>, Vector>{arrayDims};
+    const auto extents = llama::ArrayExtents{rows, cols};
+    const auto mapping = GuardMapping2D<Mapping, Vector>{extents};
     std::ofstream{"bufferguard_" + mappingName + ".svg"} << llama::toSvg(mapping);
 
     auto view1 = llama::allocViewUninitialized(mapping);

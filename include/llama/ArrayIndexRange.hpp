@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ArrayExtents.hpp"
 #include "Core.hpp"
 
 #include <algorithm>
@@ -11,22 +12,22 @@
 
 namespace llama
 {
-    /// Iterator supporting \ref ArrayDimsIndexRange.
-    template<std::size_t Dim>
-    struct ArrayDimsIndexIterator
+    /// Iterator supporting \ref ArrayIndexRange.
+    template<typename ArrayExtents>
+    struct ArrayIndexIterator
     {
-        using value_type = ArrayDims<Dim>;
+        using value_type = typename ArrayExtents::Index;
         using difference_type = std::ptrdiff_t;
         using reference = value_type;
         using pointer = internal::IndirectValue<value_type>;
         using iterator_category = std::random_access_iterator_tag;
 
-        constexpr ArrayDimsIndexIterator() noexcept = default;
+        static constexpr std::size_t rank = ArrayExtents::rank;
+
+        constexpr ArrayIndexIterator() noexcept = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr ArrayDimsIndexIterator(ArrayDims<Dim> size, ArrayDims<Dim> current) noexcept
-            : size(size)
-            , current(current)
+        constexpr ArrayIndexIterator(ArrayExtents size, value_type current) noexcept : size(size), current(current)
         {
         }
 
@@ -43,10 +44,10 @@ namespace llama
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator++() noexcept -> ArrayDimsIndexIterator&
+        constexpr auto operator++() noexcept -> ArrayIndexIterator&
         {
-            current[Dim - 1]++;
-            for(auto i = static_cast<int>(Dim) - 2; i >= 0; i--)
+            current[rank - 1]++;
+            for(auto i = static_cast<int>(rank) - 2; i >= 0; i--)
             {
                 if(current[i + 1] != size[i + 1])
                     return *this;
@@ -57,7 +58,7 @@ namespace llama
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator++(int) noexcept -> ArrayDimsIndexIterator
+        constexpr auto operator++(int) noexcept -> ArrayIndexIterator
         {
             auto tmp = *this;
             ++*this;
@@ -65,10 +66,10 @@ namespace llama
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator--() noexcept -> ArrayDimsIndexIterator&
+        constexpr auto operator--() noexcept -> ArrayIndexIterator&
         {
-            current[Dim - 1]--;
-            for(auto i = static_cast<int>(Dim) - 2; i >= 0; i--)
+            current[rank - 1]--;
+            for(auto i = static_cast<int>(rank) - 2; i >= 0; i--)
             {
                 if(current[i + 1] != std::numeric_limits<std::size_t>::max())
                     return *this;
@@ -80,7 +81,7 @@ namespace llama
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator--(int) noexcept -> ArrayDimsIndexIterator
+        constexpr auto operator--(int) noexcept -> ArrayIndexIterator
         {
             auto tmp = *this;
             --*this;
@@ -94,10 +95,10 @@ namespace llama
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator+=(difference_type n) noexcept -> ArrayDimsIndexIterator&
+        constexpr auto operator+=(difference_type n) noexcept -> ArrayIndexIterator&
         {
             // add n to all lower dimensions with carry
-            for(auto i = static_cast<int>(Dim) - 1; i > 0 && n != 0; i--)
+            for(auto i = static_cast<int>(rank) - 1; i > 0 && n != 0; i--)
             {
                 n += static_cast<difference_type>(current[i]);
                 const auto s = static_cast<difference_type>(size[i]);
@@ -124,43 +125,40 @@ namespace llama
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator+(ArrayDimsIndexIterator it, difference_type n) noexcept
-            -> ArrayDimsIndexIterator
+        friend constexpr auto operator+(ArrayIndexIterator it, difference_type n) noexcept -> ArrayIndexIterator
         {
             it += n;
             return it;
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator+(difference_type n, ArrayDimsIndexIterator it) noexcept
-            -> ArrayDimsIndexIterator
+        friend constexpr auto operator+(difference_type n, ArrayIndexIterator it) noexcept -> ArrayIndexIterator
         {
             return it + n;
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator-=(difference_type n) noexcept -> ArrayDimsIndexIterator&
+        constexpr auto operator-=(difference_type n) noexcept -> ArrayIndexIterator&
         {
             return operator+=(-n);
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator-(ArrayDimsIndexIterator it, difference_type n) noexcept
-            -> ArrayDimsIndexIterator
+        friend constexpr auto operator-(ArrayIndexIterator it, difference_type n) noexcept -> ArrayIndexIterator
         {
             it -= n;
             return it;
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator-(const ArrayDimsIndexIterator& a, const ArrayDimsIndexIterator& b) noexcept
+        friend constexpr auto operator-(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept
             -> difference_type
         {
             assert(a.size == b.size);
 
-            difference_type n = a.current[Dim - 1] - b.current[Dim - 1];
-            difference_type size = a.size[Dim - 1];
-            for(auto i = static_cast<int>(Dim) - 2; i >= 0; i--)
+            difference_type n = a.current[rank - 1] - b.current[rank - 1];
+            difference_type size = a.size[rank - 1];
+            for(auto i = static_cast<int>(rank) - 2; i >= 0; i--)
             {
                 n += (a.current[i] - b.current[i]) * size;
                 size *= a.size[i];
@@ -171,8 +169,8 @@ namespace llama
 
         LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator==(
-            const ArrayDimsIndexIterator<Dim>& a,
-            const ArrayDimsIndexIterator<Dim>& b) noexcept -> bool
+            const ArrayIndexIterator<ArrayExtents>& a,
+            const ArrayIndexIterator<ArrayExtents>& b) noexcept -> bool
         {
             assert(a.size == b.size);
             return a.current == b.current;
@@ -180,15 +178,14 @@ namespace llama
 
         LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator!=(
-            const ArrayDimsIndexIterator<Dim>& a,
-            const ArrayDimsIndexIterator<Dim>& b) noexcept -> bool
+            const ArrayIndexIterator<ArrayExtents>& a,
+            const ArrayIndexIterator<ArrayExtents>& b) noexcept -> bool
         {
             return !(a == b);
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator<(const ArrayDimsIndexIterator& a, const ArrayDimsIndexIterator& b) noexcept
-            -> bool
+        friend constexpr auto operator<(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept -> bool
         {
             assert(a.size == b.size);
             return std::lexicographical_compare(
@@ -199,60 +196,55 @@ namespace llama
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator>(const ArrayDimsIndexIterator& a, const ArrayDimsIndexIterator& b) noexcept
-            -> bool
+        friend constexpr auto operator>(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept -> bool
         {
             return b < a;
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator<=(const ArrayDimsIndexIterator& a, const ArrayDimsIndexIterator& b) noexcept
-            -> bool
+        friend constexpr auto operator<=(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept -> bool
         {
             return !(a > b);
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator>=(const ArrayDimsIndexIterator& a, const ArrayDimsIndexIterator& b) noexcept
-            -> bool
+        friend constexpr auto operator>=(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept -> bool
         {
             return !(a < b);
         }
 
     private:
-        ArrayDims<Dim> size; // TODO(bgruber): we only need to store Dim - 1 sizes
-        ArrayDims<Dim> current;
+        ArrayExtents size; // TODO(bgruber): we only need to store rank - 1 sizes
+        value_type current;
     };
 
-    /// Range allowing to iterate over all indices in a \ref ArrayDims.
-    template<std::size_t Dim>
-    struct ArrayDimsIndexRange
+    /// Range allowing to iterate over all indices in an \ref ArrayExtents.
+    template<typename ArrayExtents>
+    struct ArrayIndexRange
+        : private ArrayExtents
 #if CAN_USE_RANGES
-        : std::ranges::view_base
+        , std::ranges::view_base
 #endif
     {
-        constexpr ArrayDimsIndexRange() noexcept = default;
+        constexpr ArrayIndexRange() noexcept = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr explicit ArrayDimsIndexRange(ArrayDims<Dim> size) noexcept : size(size)
+        constexpr explicit ArrayIndexRange(ArrayExtents extents) noexcept : ArrayExtents(extents)
         {
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto begin() const noexcept -> ArrayDimsIndexIterator<Dim>
+        constexpr auto begin() const noexcept -> ArrayIndexIterator<ArrayExtents>
         {
-            return {size, ArrayDims<Dim>{}};
+            return {*this, typename ArrayExtents::Index{}};
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto end() const noexcept -> ArrayDimsIndexIterator<Dim>
+        constexpr auto end() const noexcept -> ArrayIndexIterator<ArrayExtents>
         {
-            auto endPos = ArrayDims<Dim>{};
-            endPos[0] = size[0];
-            return {size, endPos};
+            auto endPos = typename ArrayExtents::Index{};
+            endPos[0] = this->toArray()[0];
+            return {*this, endPos};
         }
-
-    private:
-        ArrayDims<Dim> size;
     };
 } // namespace llama

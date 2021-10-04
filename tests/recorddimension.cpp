@@ -17,7 +17,7 @@ namespace
 TEST_CASE("recorddim.record_with_int")
 {
     using RecordDim = llama::Record<llama::Field<Tag, int>>;
-    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{1}, RecordDim{}});
 
     int& e = view(0u)(Tag{});
     e = 0;
@@ -28,7 +28,7 @@ TEST_CASE("recorddim.record_with_int[3]")
     using namespace llama::literals;
 
     using RecordDim = llama::Record<llama::Field<Tag, int[3]>>;
-    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{1}, RecordDim{}});
 
     [[maybe_unused]] int& e0 = view(0u)(Tag{})(0_RC);
     [[maybe_unused]] int& e1 = view(0u)(Tag{})(1_RC);
@@ -38,7 +38,7 @@ TEST_CASE("recorddim.record_with_int[3]")
 TEST_CASE("recorddim.record_with_std::complex<float>")
 {
     using RecordDim = llama::Record<llama::Field<Tag, std::complex<float>>>;
-    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{1}, RecordDim{}});
 
     std::complex<float>& e = view(0u)(Tag{});
     e = {2, 3};
@@ -47,7 +47,7 @@ TEST_CASE("recorddim.record_with_std::complex<float>")
 TEST_CASE("recorddim.record_with_std::array<float, 4>")
 {
     using RecordDim = llama::Record<llama::Field<Tag, std::array<float, 4>>>;
-    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{1}, RecordDim{}});
 
     std::array<float, 4>& e = view(0u)(Tag{});
     e = {2, 3, 4, 5};
@@ -57,7 +57,7 @@ TEST_CASE("recorddim.record_with_std::array<float, 4>")
 // TEST_CASE("recorddim.record_with_std::vector<float>")
 //{
 //    using RecordDim = llama::Record<llama::Field<Tag, std::vector<float>>>;
-//    auto view = allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
+//    auto view = allocView(llama::mapping::AoS{llama::ArrayExtents{1}, RecordDim{}});
 //
 //    std::vector<float>& e = view(0u)(Tag{});
 //    e = {2, 3, 4, 5};
@@ -66,7 +66,7 @@ TEST_CASE("recorddim.record_with_std::array<float, 4>")
 TEST_CASE("recorddim.record_with_std::atomic<int>")
 {
     using RecordDim = llama::Record<llama::Field<Tag, std::atomic<int>>>;
-    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{1}, RecordDim{}});
 
     std::atomic<int>& e = view(0u)(Tag{});
     e++;
@@ -87,7 +87,7 @@ TEST_CASE("recorddim.record_with_noncopyable")
     };
 
     using RecordDim = llama::Record<llama::Field<Tag, Element>>;
-    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{1}, RecordDim{}});
 
     Element& e = view(0u)(Tag{});
     e.value = 0;
@@ -108,7 +108,7 @@ TEST_CASE("recorddim.record_with_nonmoveable")
     };
 
     using RecordDim = llama::Record<llama::Field<Tag, Element>>;
-    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{1}, RecordDim{}});
 
     Element& e = view(0u)(Tag{});
     e.value = 0;
@@ -123,7 +123,7 @@ TEST_CASE("recorddim.record_with_nondefaultconstructible")
     };
 
     using RecordDim = llama::Record<llama::Field<Tag, Element>>;
-    auto view = llama::allocViewUninitialized(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
+    auto view = llama::allocViewUninitialized(llama::mapping::AoS{llama::ArrayExtents{1}, RecordDim{}});
 
     Element& e = view(0u)(Tag{});
     e.value = 0;
@@ -140,7 +140,7 @@ namespace
 TEST_CASE("recorddim.record_with_nontrivial_ctor")
 {
     using RecordDim = llama::Record<llama::Field<Tag, ElementWithCtor>>;
-    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{1}, RecordDim{}});
 
     ElementWithCtor& e = view(0u)(Tag{});
     CHECK(e.value == 42);
@@ -165,18 +165,18 @@ namespace
 TEST_CASE("recorddim.record_with_nontrivial_ctor2")
 {
     using RecordDim = llama::Record<llama::Field<Tag, UniqueInt>>;
-    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{16}, RecordDim{}});
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{16}, RecordDim{}});
 
-    CHECK(view(llama::ArrayDims{0})(Tag{}).value == 0);
-    CHECK(view(llama::ArrayDims{1})(Tag{}).value == 1);
-    CHECK(view(llama::ArrayDims{2})(Tag{}).value == 2);
-    CHECK(view(llama::ArrayDims{15})(Tag{}).value == 15);
+    CHECK(view(llama::ArrayIndex{0})(Tag{}).value == 0);
+    CHECK(view(llama::ArrayIndex{1})(Tag{}).value == 1);
+    CHECK(view(llama::ArrayIndex{2})(Tag{}).value == 2);
+    CHECK(view(llama::ArrayIndex{15})(Tag{}).value == 15);
 }
 
 TEST_CASE("recorddim.uninitialized_trivial")
 {
     using RecordDim = int;
-    auto mapping = llama::mapping::AoS{llama::ArrayDims{256}, RecordDim{}};
+    auto mapping = llama::mapping::AoS{llama::ArrayExtents{256}, RecordDim{}};
     auto view = llama::allocViewUninitialized(
         mapping,
         [](auto /*alignment*/, std::size_t size) { return std::vector(size, std::byte{0xAA}); });
@@ -187,7 +187,7 @@ TEST_CASE("recorddim.uninitialized_trivial")
 
 TEST_CASE("recorddim.uninitialized_ctor.constructFields")
 {
-    auto mapping = llama::mapping::AoS{llama::ArrayDims{256}, ElementWithCtor{}};
+    auto mapping = llama::mapping::AoS{llama::ArrayExtents{256}, ElementWithCtor{}};
     auto view = llama::allocViewUninitialized(
         mapping,
         [](auto /*alignment*/, std::size_t size) { return std::vector(size, std::byte{0xAA}); });
@@ -204,7 +204,7 @@ TEST_CASE("recorddim.uninitialized_ctor.constructFields")
 TEST_CASE("recorddim.int")
 {
     using RecordDim = int;
-    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{1}, RecordDim{}});
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{1}, RecordDim{}});
 
     STATIC_REQUIRE(std::is_same_v<decltype(view(0u)), int&>);
     view(0u) = 42;
@@ -214,9 +214,9 @@ TEST_CASE("recorddim.int")
     view[0u] = 42;
     CHECK(view[0u] == 42);
 
-    STATIC_REQUIRE(std::is_same_v<decltype(view[llama::ArrayDims{0}]), int&>);
-    view[llama::ArrayDims{0}] = 42;
-    CHECK(view[llama::ArrayDims{0}] == 42);
+    STATIC_REQUIRE(std::is_same_v<decltype(view[llama::ArrayIndex{0}]), int&>);
+    view[llama::ArrayIndex{0}] = 42;
+    CHECK(view[llama::ArrayIndex{0}] == 42);
 }
 
 TEST_CASE("recorddim.int[3]")
@@ -224,7 +224,8 @@ TEST_CASE("recorddim.int[3]")
     using namespace llama::literals;
 
     using RecordDim = int[3];
-    auto view = llama::allocView(llama::mapping::AoS<llama::ArrayDims<1>, RecordDim>{llama::ArrayDims{1}});
+    auto view
+        = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<llama::dyn>, RecordDim>{llama::ArrayExtents{1}});
 
     view(0u)(0_RC) = 42;
     view(0u)(1_RC) = 43;
@@ -237,7 +238,8 @@ TEST_CASE("recorddim.int[200]")
     using namespace llama::literals;
 
     using RecordDim = int[200];
-    auto view = llama::allocView(llama::mapping::AoS<llama::ArrayDims<1>, RecordDim>{llama::ArrayDims{1}});
+    auto view
+        = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<llama::dyn>, RecordDim>{llama::ArrayExtents{1}});
 
     view(0u)(0_RC) = 42;
     view(0u)(199_RC) = 43;
@@ -248,7 +250,8 @@ TEST_CASE("recorddim.int[3][2]")
     using namespace llama::literals;
 
     using RecordDim = int[3][2];
-    auto view = llama::allocView(llama::mapping::AoS<llama::ArrayDims<1>, RecordDim>{llama::ArrayDims{1}});
+    auto view
+        = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<llama::dyn>, RecordDim>{llama::ArrayExtents{1}});
 
     view(0u)(0_RC)(0_RC) = 42;
     view(0u)(0_RC)(1_RC) = 43;
@@ -263,7 +266,8 @@ TEST_CASE("recorddim.int[1][1][1][1][1][1][1][1][1][1]")
     using namespace llama::literals;
 
     using RecordDim = int[1][1][1][1][1][1][1][1][1][1];
-    auto view = llama::allocView(llama::mapping::AoS<llama::ArrayDims<1>, RecordDim>{llama::ArrayDims{1}});
+    auto view
+        = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<llama::dyn>, RecordDim>{llama::ArrayExtents{1}});
 
     view(0u)(0_RC)(0_RC) (0_RC) (0_RC) (0_RC) (0_RC) (0_RC) (0_RC) (0_RC) (0_RC) = 42;
 }
@@ -286,7 +290,7 @@ TEST_CASE("recorddim.record_with_arrays")
 {
     using namespace llama::literals;
 
-    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{1}, Arrays{}});
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{1}, Arrays{}});
     view(0u)(A1{}, 0_RC);
     view(0u)(A1{}, 1_RC);
     view(0u)(A1{}, 2_RC);

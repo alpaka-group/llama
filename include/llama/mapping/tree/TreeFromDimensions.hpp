@@ -119,18 +119,18 @@ namespace llama::mapping::tree
     template<typename RecordDim>
     using TreeFromRecordDim = internal::TreeFromRecordDimImpl<RecordDim>;
 
-    template<typename ArrayDims, typename RecordDim>
+    template<typename ArrayExtents, typename RecordDim>
     using TreeFromDimensions =
-        typename internal::WrapInNNodes<internal::TreeFromRecordDimImpl<RecordDim>, ArrayDims::rank - 1>::type;
+        typename internal::WrapInNNodes<internal::TreeFromRecordDimImpl<RecordDim>, ArrayExtents::rank - 1>::type;
 
-    template<typename RecordDim, typename ArrayDims, std::size_t Pos = 0>
-    LLAMA_FN_HOST_ACC_INLINE auto createTree(const ArrayDims& size)
+    template<typename RecordDim, std::size_t N, std::size_t Pos = 0>
+    LLAMA_FN_HOST_ACC_INLINE auto createTree(const ArrayIndex<N>& size)
     {
-        if constexpr(Pos == ArrayDims::rank - 1)
-            return TreeFromRecordDim<RecordDim>{size[ArrayDims::rank - 1]};
+        if constexpr(Pos == N - 1)
+            return TreeFromRecordDim<RecordDim>{size[N - 1]};
         else
         {
-            Tuple inner{createTree<RecordDim, ArrayDims, Pos + 1>(size)};
+            Tuple inner{createTree<RecordDim, N, Pos + 1>(size)};
             return Node<NoName, decltype(inner)>{size[Pos], inner};
         }
     };
@@ -138,25 +138,25 @@ namespace llama::mapping::tree
     namespace internal
     {
         template<
-            typename ArrayDims,
+            typename ArrayIndex,
             std::size_t... ADIndices,
             std::size_t FirstRecordCoord,
             std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE auto createTreeCoord(
-            const ArrayDims& coord,
+            const ArrayIndex& ai,
             std::index_sequence<ADIndices...>,
             RecordCoord<FirstRecordCoord, RecordCoords...>)
         {
             return Tuple{
-                TreeCoordElement<(ADIndices == ArrayDims::rank - 1 ? FirstRecordCoord : 0)>{coord[ADIndices]}...,
+                TreeCoordElement<(ADIndices == ArrayIndex::rank - 1 ? FirstRecordCoord : 0)>{ai[ADIndices]}...,
                 TreeCoordElement<RecordCoords, boost::mp11::mp_size_t<0>>{}...,
                 TreeCoordElement<0, boost::mp11::mp_size_t<0>>{}};
         }
     } // namespace internal
 
-    template<typename RecordCoord, typename ArrayDims>
-    LLAMA_FN_HOST_ACC_INLINE auto createTreeCoord(const ArrayDims& coord)
+    template<typename RecordCoord, typename ArrayIndex>
+    LLAMA_FN_HOST_ACC_INLINE auto createTreeCoord(const ArrayIndex& ai)
     {
-        return internal::createTreeCoord(coord, std::make_index_sequence<ArrayDims::rank>{}, RecordCoord{});
+        return internal::createTreeCoord(ai, std::make_index_sequence<ArrayIndex::rank>{}, RecordCoord{});
     }
 } // namespace llama::mapping::tree

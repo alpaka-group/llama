@@ -14,7 +14,8 @@ namespace llama::mapping
     template<typename Mapping, typename CountType = std::size_t>
     struct Heatmap
     {
-        using ArrayDims = typename Mapping::ArrayDims;
+        using ArrayExtents = typename Mapping::ArrayExtents;
+        using ArrayIndex = typename Mapping::ArrayIndex;
         using RecordDim = typename Mapping::RecordDim;
         static constexpr std::size_t blobCount = Mapping::blobCount;
 
@@ -35,9 +36,9 @@ namespace llama::mapping
 
         ~Heatmap() = default;
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayDims() const -> ArrayDims
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayExtents
         {
-            return mapping.arrayDims();
+            return mapping.extents();
         }
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(std::size_t i) const -> std::size_t
@@ -47,10 +48,10 @@ namespace llama::mapping
         }
 
         template<std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayDims coord, RecordCoord<RecordCoords...> rc = {}) const
+        LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayIndex ai, RecordCoord<RecordCoords...> rc = {}) const
             -> NrAndOffset
         {
-            const auto nao = mapping.blobNrAndOffset(coord, rc);
+            const auto nao = mapping.blobNrAndOffset(ai, rc);
             for(std::size_t i = 0; i < sizeof(GetType<RecordDim, RecordCoord<RecordCoords...>>); i++)
                 byteHits[nao.nr][nao.offset + i]++;
             return nao;

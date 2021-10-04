@@ -36,7 +36,8 @@ namespace llama::mapping
     template<typename Mapping>
     struct Trace
     {
-        using ArrayDims = typename Mapping::ArrayDims;
+        using ArrayExtents = typename Mapping::ArrayExtents;
+        using ArrayIndex = typename Mapping::ArrayIndex;
         using RecordDim = typename Mapping::RecordDim;
         static constexpr std::size_t blobCount = Mapping::blobCount;
 
@@ -45,7 +46,7 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE
         explicit Trace(Mapping mapping) : mapping(mapping)
         {
-            forEachLeafCoord<RecordDim>([&](auto coord) { fieldHits[internal::coordName<RecordDim>(coord)] = 0; });
+            forEachLeafCoord<RecordDim>([&](auto rc) { fieldHits[internal::coordName<RecordDim>(rc)] = 0; });
         }
 
         Trace(const Trace&) = delete;
@@ -64,9 +65,9 @@ namespace llama::mapping
             }
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayDims() const -> ArrayDims
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayIndex
         {
-            return mapping.arrayDims();
+            return mapping.extents();
         }
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(std::size_t i) const -> std::size_t
@@ -76,13 +77,13 @@ namespace llama::mapping
         }
 
         template<std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayDims coord, RecordCoord<RecordCoords...> rc = {}) const
+        LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayIndex ai, RecordCoord<RecordCoords...> rc = {}) const
             -> NrAndOffset
         {
             const static auto name = internal::coordName<RecordDim>(RecordCoord<RecordCoords...>{});
             fieldHits.at(name)++;
 
-            LLAMA_FORCE_INLINE_RECURSIVE return mapping.blobNrAndOffset(coord, rc);
+            LLAMA_FORCE_INLINE_RECURSIVE return mapping.blobNrAndOffset(ai, rc);
         }
 
         Mapping mapping;

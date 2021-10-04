@@ -86,15 +86,15 @@ __global__ void updateSM(View particles)
     {
         constexpr auto sharedMapping = []
         {
-            constexpr auto arrayDims = llama::ArrayDims{SHARED_ELEMENTS_PER_BLOCK};
+            constexpr auto extents = llama::ArrayExtents<SHARED_ELEMENTS_PER_BLOCK>{};
             if constexpr(MappingSM == 0)
-                return llama::mapping::AoS<decltype(arrayDims), SharedMemoryParticle>{arrayDims};
+                return llama::mapping::AoS<decltype(extents), SharedMemoryParticle>{};
             if constexpr(MappingSM == 1)
-                return llama::mapping::SoA<decltype(arrayDims), SharedMemoryParticle, false>{arrayDims};
+                return llama::mapping::SoA<decltype(extents), SharedMemoryParticle, false>{};
             if constexpr(MappingSM == 2)
-                return llama::mapping::SoA<decltype(arrayDims), SharedMemoryParticle, true>{arrayDims};
+                return llama::mapping::SoA<decltype(extents), SharedMemoryParticle, true>{};
             if constexpr(MappingSM == 3)
-                return llama::mapping::AoSoA<decltype(arrayDims), SharedMemoryParticle, AOSOA_LANES>{arrayDims};
+                return llama::mapping::AoSoA<decltype(extents), SharedMemoryParticle, AOSOA_LANES>{};
         }();
 
         llama::Array<std::byte*, decltype(sharedMapping)::blobCount> sharedMems{};
@@ -178,31 +178,31 @@ try
 
     auto mapping = []
     {
-        const auto arrayDims = llama::ArrayDims{PROBLEM_SIZE};
+        const auto extents = llama::ArrayExtents<PROBLEM_SIZE>{};
         if constexpr(Mapping == 0)
-            return llama::mapping::AoS<decltype(arrayDims), Particle>{arrayDims};
+            return llama::mapping::AoS<decltype(extents), Particle>{extents};
         if constexpr(Mapping == 1)
-            return llama::mapping::SoA<decltype(arrayDims), Particle, false>{arrayDims};
+            return llama::mapping::SoA<decltype(extents), Particle, false>{extents};
         if constexpr(Mapping == 2)
-            return llama::mapping::SoA<decltype(arrayDims), Particle, true>{arrayDims};
+            return llama::mapping::SoA<decltype(extents), Particle, true>{extents};
         if constexpr(Mapping == 3)
-            return llama::mapping::AoSoA<decltype(arrayDims), Particle, AOSOA_LANES>{arrayDims};
+            return llama::mapping::AoSoA<decltype(extents), Particle, AOSOA_LANES>{extents};
         if constexpr(Mapping == 4)
             return llama::mapping::Split<
-                decltype(arrayDims),
+                decltype(extents),
                 Particle,
                 llama::RecordCoord<1>,
                 llama::mapping::PreconfiguredSoA<>::type,
                 llama::mapping::PreconfiguredSoA<>::type,
-                true>{arrayDims};
+                true>{extents};
         if constexpr(Mapping == 5)
             return llama::mapping::Split<
-                decltype(arrayDims),
+                decltype(extents),
                 Particle,
                 llama::RecordCoord<1>,
                 llama::mapping::PreconfiguredAoS<>::type,
                 llama::mapping::PreconfiguredAoS<>::type,
-                true>{arrayDims};
+                true>{extents};
     }();
 
     Stopwatch watch;

@@ -20,10 +20,9 @@ using Position = llama::Record<
 
 TEST_CASE("iterator")
 {
-    auto test = [](auto arrayDims)
+    auto test = [](auto extents)
     {
-        using ArrayDims = decltype(arrayDims);
-        auto mapping = llama::mapping::AoS<ArrayDims, Position>{arrayDims};
+        auto mapping = llama::mapping::AoS{extents, Position{}};
         auto view = llama::allocViewUninitialized(mapping);
 
         for(auto vd : view)
@@ -38,17 +37,17 @@ TEST_CASE("iterator")
             = std::accumulate(begin(cview), end(cview), 0, [](int acc, auto vd) { return acc + vd(tag::Y{}); });
         CHECK(sumY == 128); // NOLINT(bugprone-infinite-loop)
     };
-    test(llama::ArrayDims{32});
-    test(llama::ArrayDims{4, 8});
-    test(llama::ArrayDims{4, 2, 4});
+    test(llama::ArrayExtents{32});
+    test(llama::ArrayExtents{4, 8});
+    test(llama::ArrayExtents{4, 2, 4});
 }
 
 TEST_CASE("iterator.std_copy")
 {
-    auto test = [](auto arrayDims)
+    auto test = [](auto extents)
     {
-        auto aosView = llama::allocViewUninitialized(llama::mapping::AoS{arrayDims, Position{}});
-        auto soaView = llama::allocViewUninitialized(llama::mapping::SoA{arrayDims, Position{}});
+        auto aosView = llama::allocViewUninitialized(llama::mapping::AoS{extents, Position{}});
+        auto soaView = llama::allocViewUninitialized(llama::mapping::SoA{extents, Position{}});
 
         int i = 0;
         for(auto vd : aosView)
@@ -66,17 +65,17 @@ TEST_CASE("iterator.std_copy")
             CHECK(vd(tag::Z{}) == ++i);
         }
     };
-    test(llama::ArrayDims{32});
-    test(llama::ArrayDims{4, 8});
-    test(llama::ArrayDims{4, 2, 4});
+    test(llama::ArrayExtents{32});
+    test(llama::ArrayExtents{4, 8});
+    test(llama::ArrayExtents{4, 2, 4});
 }
 
 TEST_CASE("iterator.transform_reduce")
 {
-    auto test = [](auto arrayDims)
+    auto test = [](auto extents)
     {
-        auto aosView = llama::allocViewUninitialized(llama::mapping::AoS{arrayDims, Position{}});
-        auto soaView = llama::allocViewUninitialized(llama::mapping::SoA{arrayDims, Position{}});
+        auto aosView = llama::allocViewUninitialized(llama::mapping::AoS{extents, Position{}});
+        auto soaView = llama::allocViewUninitialized(llama::mapping::SoA{extents, Position{}});
 
         int i = 0;
         for(auto vd : aosView)
@@ -99,16 +98,16 @@ TEST_CASE("iterator.transform_reduce")
         CHECK(sumY == 248816);
         CHECK(sumZ == 255024);
     };
-    test(llama::ArrayDims{32});
-    test(llama::ArrayDims{4, 8});
-    test(llama::ArrayDims{4, 2, 4});
+    test(llama::ArrayExtents{32});
+    test(llama::ArrayExtents{4, 8});
+    test(llama::ArrayExtents{4, 2, 4});
 }
 
 TEST_CASE("iterator.transform_inplace")
 {
-    auto test = [](auto arrayDims)
+    auto test = [](auto extents)
     {
-        auto view = llama::allocViewUninitialized(llama::mapping::AoS{arrayDims, Position{}});
+        auto view = llama::allocViewUninitialized(llama::mapping::AoS{extents, Position{}});
 
         int i = 0;
         for(auto vd : view)
@@ -136,16 +135,16 @@ TEST_CASE("iterator.transform_inplace")
             CHECK(vd(tag::Z{}) == ++i * 2);
         }
     };
-    test(llama::ArrayDims{32});
-    test(llama::ArrayDims{4, 8});
-    test(llama::ArrayDims{4, 2, 4});
+    test(llama::ArrayExtents{32});
+    test(llama::ArrayExtents{4, 8});
+    test(llama::ArrayExtents{4, 2, 4});
 }
 
 TEST_CASE("iterator.transform_to")
 {
-    auto test = [](auto arrayDims)
+    auto test = [](auto extents)
     {
-        auto view = llama::allocViewUninitialized(llama::mapping::AoS{arrayDims, Position{}});
+        auto view = llama::allocViewUninitialized(llama::mapping::AoS{extents, Position{}});
 
         int i = 0;
         for(auto vd : view)
@@ -155,7 +154,7 @@ TEST_CASE("iterator.transform_to")
             vd(tag::Z{}) = ++i;
         }
 
-        auto dst = llama::allocViewUninitialized(llama::mapping::SoA{arrayDims, Position{}});
+        auto dst = llama::allocViewUninitialized(llama::mapping::SoA{extents, Position{}});
         std::transform(
             begin(view),
             end(view),
@@ -181,9 +180,9 @@ TEST_CASE("iterator.transform_to")
             CHECK(vd(tag::Z{}) == ++i * 2);
         }
     };
-    test(llama::ArrayDims{32});
-    test(llama::ArrayDims{4, 8});
-    test(llama::ArrayDims{4, 2, 4});
+    test(llama::ArrayExtents{32});
+    test(llama::ArrayExtents{4, 8});
+    test(llama::ArrayExtents{4, 2, 4});
 }
 
 TEST_CASE("iterator.different_record_dim")
@@ -196,9 +195,9 @@ TEST_CASE("iterator.different_record_dim")
     };
     using WrappedPos = llama::Record<llama::Field<Pos1, Position>, llama::Field<Pos2, Position>>;
 
-    auto arrayDims = llama::ArrayDims{32};
-    auto aosView = llama::allocViewUninitialized(llama::mapping::AoS{arrayDims, WrappedPos{}});
-    auto soaView = llama::allocViewUninitialized(llama::mapping::SoA{arrayDims, Position{}});
+    auto extents = llama::ArrayExtents{32};
+    auto aosView = llama::allocViewUninitialized(llama::mapping::AoS{extents, WrappedPos{}});
+    auto soaView = llama::allocViewUninitialized(llama::mapping::SoA{extents, Position{}});
 
     int i = 0;
     for(auto vd : aosView)
@@ -227,9 +226,9 @@ TEST_CASE("iterator.different_record_dim")
 
 TEST_CASE("ranges")
 {
-    auto test = [](auto arrayDims)
+    auto test = [](auto extents)
     {
-        auto mapping = llama::mapping::AoS{arrayDims, Position{}};
+        auto mapping = llama::mapping::AoS{extents, Position{}};
         auto view = llama::allocViewUninitialized(mapping);
 
         STATIC_REQUIRE(std::ranges::range<decltype(view)>);
@@ -248,16 +247,16 @@ TEST_CASE("ranges")
             v.push_back(y);
         CHECK(v == std::vector<int>{11, 41});
     };
-    test(llama::ArrayDims{32});
-    test(llama::ArrayDims{4, 8});
-    test(llama::ArrayDims{4, 2, 4});
+    test(llama::ArrayExtents{32});
+    test(llama::ArrayExtents{4, 8});
+    test(llama::ArrayExtents{4, 2, 4});
 }
 #endif
 
 TEST_CASE("iterator.sort")
 {
-    constexpr auto n = 10;
-    auto view = llama::allocViewUninitialized(llama::mapping::AoS{llama::ArrayDims{n}, Position{}});
+    constexpr auto N = 10;
+    auto view = llama::allocViewUninitialized(llama::mapping::AoS{llama::ArrayExtents<N>{}, Position{}});
 
     std::default_random_engine e{};
     std::uniform_int_distribution<int> d{0, 1000};
@@ -271,6 +270,6 @@ TEST_CASE("iterator.sort")
     { return a(tag::X{}) + a(tag::Y{}) + a(tag::Z{}) < b(tag::X{}) + b(tag::Y{}) + b(tag::Z{}); };
     std::sort(begin(view), end(view), manhattan_less);
 
-    for(auto i = 1; i < n; i++)
+    for(auto i = 1; i < N; i++)
         CHECK(manhattan_less(view[i - 1], view[i]));
 }

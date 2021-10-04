@@ -85,13 +85,13 @@ void run(std::ostream& plotFile)
 
     auto mapping = [&]
     {
-        const auto arrayDims = llama::ArrayDims{PROBLEM_SIZE};
+        const auto extents = llama::ArrayExtents{PROBLEM_SIZE};
         if constexpr(Mapping == 0)
-            return llama::mapping::AoS{arrayDims, Particle{}};
+            return llama::mapping::AoS{extents, Particle{}};
         if constexpr(Mapping == 1)
-            return llama::mapping::SoA{arrayDims, Particle{}};
+            return llama::mapping::SoA{extents, Particle{}};
         if constexpr(Mapping == 2)
-            return llama::mapping::SoA<decltype(arrayDims), Particle, true>{arrayDims};
+            return llama::mapping::SoA<decltype(extents), Particle, true>{extents};
     }();
 
     auto particles = llama::allocViewUninitialized(

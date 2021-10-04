@@ -5,53 +5,53 @@
 
 namespace
 {
-    using ArrayDims = llama::ArrayDims<2>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
     using RecordDim = Vec3I;
 
     template<typename SrcMapping, typename DstMapping, typename CopyFunc>
     void testCopy(CopyFunc copy)
     {
-        const auto viewSize = ArrayDims{4, 8};
-        const auto srcMapping = SrcMapping(viewSize);
+        const auto viewExtents = ArrayExtents{4, 8};
+        const auto srcMapping = SrcMapping(viewExtents);
         auto srcView = llama::allocViewUninitialized(srcMapping);
         auto value = 0;
-        for(auto ad : llama::ArrayDimsIndexRange{srcMapping.arrayDims()})
+        for(auto ad : llama::ArrayIndexRange{srcMapping.extents()})
             llama::forEachLeafCoord<RecordDim>(
-                [&](auto coord)
+                [&](auto rc)
                 {
-                    srcView(ad)(coord) = value;
+                    srcView(ad)(rc) = value;
                     value++;
                 });
 
-        auto dstView = llama::allocViewUninitialized(DstMapping(viewSize));
+        auto dstView = llama::allocViewUninitialized(DstMapping(viewExtents));
         copy(srcView, dstView);
 
         value = 0;
-        for(auto ad : llama::ArrayDimsIndexRange{srcMapping.arrayDims()})
+        for(auto ad : llama::ArrayIndexRange{srcMapping.extents()})
             llama::forEachLeafCoord<RecordDim>(
-                [&](auto coord)
+                [&](auto rc)
                 {
-                    CHECK(dstView(ad)(coord) == value);
+                    CHECK(dstView(ad)(rc) == value);
                     value++;
                 });
     }
 
     // Do not test all combinations as this exlodes the unit test compile and runtime.
     using AoSMappings = boost::mp11::mp_list<
-        llama::mapping::AoS<ArrayDims, RecordDim, false, llama::mapping::LinearizeArrayDimsCpp>,
-        // llama::mapping::AoS<ArrayDims, RecordDim, false, llama::mapping::LinearizeArrayDimsFortran>,
-        // llama::mapping::AoS<ArrayDims, RecordDim, true, llama::mapping::LinearizeArrayDimsCpp>,
-        llama::mapping::AoS<ArrayDims, RecordDim, true, llama::mapping::LinearizeArrayDimsFortran>>;
+        llama::mapping::AoS<ArrayExtents, RecordDim, false, llama::mapping::LinearizeArrayDimsCpp>,
+        // llama::mapping::AoS<ArrayExtents, RecordDim, false, llama::mapping::LinearizeArrayDimsFortran>,
+        // llama::mapping::AoS<ArrayExtents, RecordDim, true, llama::mapping::LinearizeArrayDimsCpp>,
+        llama::mapping::AoS<ArrayExtents, RecordDim, true, llama::mapping::LinearizeArrayDimsFortran>>;
 
     using OtherMappings = boost::mp11::mp_list<
-        llama::mapping::SoA<ArrayDims, RecordDim, false, llama::mapping::LinearizeArrayDimsCpp>,
-        // llama::mapping::SoA<ArrayDims, RecordDim, false, llama::mapping::LinearizeArrayDimsFortran>,
-        // llama::mapping::SoA<ArrayDims, RecordDim, true, llama::mapping::LinearizeArrayDimsCpp>,
-        llama::mapping::SoA<ArrayDims, RecordDim, true, llama::mapping::LinearizeArrayDimsFortran>,
-        llama::mapping::AoSoA<ArrayDims, RecordDim, 4, llama::mapping::LinearizeArrayDimsCpp>,
-        // llama::mapping::AoSoA<ArrayDims, RecordDim, 4, llama::mapping::LinearizeArrayDimsFortran>,
-        // llama::mapping::AoSoA<ArrayDims, RecordDim, 8, llama::mapping::LinearizeArrayDimsCpp>,
-        llama::mapping::AoSoA<ArrayDims, RecordDim, 8, llama::mapping::LinearizeArrayDimsFortran>>;
+        llama::mapping::SoA<ArrayExtents, RecordDim, false, llama::mapping::LinearizeArrayDimsCpp>,
+        // llama::mapping::SoA<ArrayExtents, RecordDim, false, llama::mapping::LinearizeArrayDimsFortran>,
+        // llama::mapping::SoA<ArrayExtents, RecordDim, true, llama::mapping::LinearizeArrayDimsCpp>,
+        llama::mapping::SoA<ArrayExtents, RecordDim, true, llama::mapping::LinearizeArrayDimsFortran>,
+        llama::mapping::AoSoA<ArrayExtents, RecordDim, 4, llama::mapping::LinearizeArrayDimsCpp>,
+        // llama::mapping::AoSoA<ArrayExtents, RecordDim, 4, llama::mapping::LinearizeArrayDimsFortran>,
+        // llama::mapping::AoSoA<ArrayExtents, RecordDim, 8, llama::mapping::LinearizeArrayDimsCpp>,
+        llama::mapping::AoSoA<ArrayExtents, RecordDim, 8, llama::mapping::LinearizeArrayDimsFortran>>;
 
     using AllMappings = boost::mp11::mp_append<AoSMappings, OtherMappings>;
 

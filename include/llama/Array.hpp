@@ -18,7 +18,8 @@ namespace llama
     {
         using value_type = T;
         static constexpr std::size_t rank
-            = N; // FIXME this is right from the ArrayDims's POV, but wrong from the Array's POV
+            = N; // FIXME this is right from the ArrayIndex's POV, but wrong from the Array's POV
+        //static constexpr std::size_t rank_dynamic = rank; // to be exchangable with ArrayExtents
         T element[N > 0 ? N : 1];
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto size() const
@@ -201,6 +202,15 @@ namespace llama
             for(std::size_t i = 0; i < N - 1; i++)
                 r[i] = a[i + 1];
         return r;
+    }
+
+    template<typename T, std::size_t N>
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto product(Array<T, N> a) -> T
+    {
+        T prod = 1;
+        for(auto s : a)
+            prod *= s;
+        return prod;
     }
 } // namespace llama
 

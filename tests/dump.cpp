@@ -9,8 +9,8 @@
 
 namespace
 {
-    llama::ArrayDims arrayDims{32};
-    using ArrayDims = decltype(arrayDims);
+    llama::ArrayExtentsDynamic<1> extents{32};
+    using ArrayExtents = decltype(extents);
 
     template<typename Mapping>
     void dump(const Mapping& mapping)
@@ -24,69 +24,69 @@ namespace
 
 TEST_CASE("dump.Particle.AoS_Aligned")
 {
-    dump(llama::mapping::AlignedAoS<ArrayDims, Particle>{arrayDims});
+    dump(llama::mapping::AlignedAoS<ArrayExtents, Particle>{extents});
 }
 
 TEST_CASE("dump.Particle.AoS_Packed")
 {
-    dump(llama::mapping::PackedAoS<ArrayDims, Particle>{arrayDims});
+    dump(llama::mapping::PackedAoS<ArrayExtents, Particle>{extents});
 }
 
 TEST_CASE("dump.Particle.SoA_SB")
 {
-    dump(llama::mapping::SingleBlobSoA<ArrayDims, Particle>{arrayDims});
+    dump(llama::mapping::SingleBlobSoA<ArrayExtents, Particle>{extents});
 }
 
 TEST_CASE("dump.Particle.SoA_MB")
 {
-    dump(llama::mapping::MultiBlobSoA<ArrayDims, Particle>{arrayDims});
+    dump(llama::mapping::MultiBlobSoA<ArrayExtents, Particle>{extents});
 }
 
 TEST_CASE("dump.Particle.AoSoA8")
 {
-    dump(llama::mapping::AoSoA<ArrayDims, Particle, 8>{arrayDims});
+    dump(llama::mapping::AoSoA<ArrayExtents, Particle, 8>{extents});
 }
 
 TEST_CASE("dump.Particle.AoSoA32")
 {
-    dump(llama::mapping::AoSoA<ArrayDims, Particle, 32>{arrayDims});
+    dump(llama::mapping::AoSoA<ArrayExtents, Particle, 32>{extents});
 }
 
 TEST_CASE("dump.Particle.Split.SoA.AoS.1Buffer")
 {
     // split out velocity (written in nbody, the rest is read)
     dump(llama::mapping::Split<
-         ArrayDims,
+         ArrayExtents,
          Particle,
          llama::RecordCoord<2>,
          llama::mapping::SingleBlobSoA,
-         llama::mapping::PackedAoS>{arrayDims});
+         llama::mapping::PackedAoS>{extents});
 }
 
 TEST_CASE("dump.Particle.Split.SoA.AoS.2Buffer")
 {
     // split out velocity as AoS into separate buffer
     dump(llama::mapping::Split<
-         ArrayDims,
+         ArrayExtents,
          Particle,
          llama::RecordCoord<2>,
          llama::mapping::SingleBlobSoA,
          llama::mapping::PackedAoS,
-         true>{arrayDims});
+         true>{extents});
 }
 
 TEST_CASE("dump.Particle.Split.AoSoA8.AoS.One")
 {
     // split out velocity as AoSoA8 and mass into a single value, the rest as AoS
     dump(llama::mapping::Split<
-         ArrayDims,
+         ArrayExtents,
          Particle,
          llama::RecordCoord<2>,
          llama::mapping::PreconfiguredAoSoA<8>::type,
          llama::mapping::
              PreconfiguredSplit<llama::RecordCoord<1>, llama::mapping::PackedOne, llama::mapping::PackedAoS, true>::
                  type,
-         true>{arrayDims});
+         true>{extents});
 }
 
 TEST_CASE("dump.Particle.Split.AoSoA8.AoS.One.SoA")
@@ -94,7 +94,7 @@ TEST_CASE("dump.Particle.Split.AoSoA8.AoS.One.SoA")
     // split out velocity as AoSoA8, mass into a single value, position into AoS, and the flags into SoA, makes 4
     // buffers
     dump(llama::mapping::Split<
-         ArrayDims,
+         ArrayExtents,
          Particle,
          llama::RecordCoord<2>,
          llama::mapping::PreconfiguredAoSoA<8>::type,
@@ -107,106 +107,106 @@ TEST_CASE("dump.Particle.Split.AoSoA8.AoS.One.SoA")
                  llama::mapping::SingleBlobSoA,
                  true>::type,
              true>::type,
-         true>{arrayDims});
+         true>{extents});
 }
 
 TEST_CASE("dump.ParticleUnaligned.AoS")
 {
-    dump(llama::mapping::PackedAoS<ArrayDims, ParticleUnaligned>{arrayDims});
+    dump(llama::mapping::PackedAoS<ArrayExtents, ParticleUnaligned>{extents});
 }
 
 TEST_CASE("dump.ParticleUnaligned.AoS_Aligned")
 {
-    dump(llama::mapping::AlignedAoS<ArrayDims, ParticleUnaligned>{arrayDims});
+    dump(llama::mapping::AlignedAoS<ArrayExtents, ParticleUnaligned>{extents});
 }
 
 TEST_CASE("dump.ParticleUnaligned.AoS_Aligned_Min")
 {
-    dump(llama::mapping::MinAlignedAoS<ArrayDims, ParticleUnaligned>{arrayDims});
+    dump(llama::mapping::MinAlignedAoS<ArrayExtents, ParticleUnaligned>{extents});
 }
 
 TEST_CASE("dump.ParticleUnaligned.SoA_SB")
 {
-    dump(llama::mapping::SingleBlobSoA<ArrayDims, ParticleUnaligned>{arrayDims});
+    dump(llama::mapping::SingleBlobSoA<ArrayExtents, ParticleUnaligned>{extents});
 }
 
 TEST_CASE("dump.ParticleUnaligned.SoA_MB")
 {
-    dump(llama::mapping::MultiBlobSoA<ArrayDims, ParticleUnaligned>{arrayDims});
+    dump(llama::mapping::MultiBlobSoA<ArrayExtents, ParticleUnaligned>{extents});
 }
 
 TEST_CASE("dump.ParticleUnaligned.AoSoA4")
 {
-    dump(llama::mapping::AoSoA<ArrayDims, ParticleUnaligned, 4>{arrayDims});
+    dump(llama::mapping::AoSoA<ArrayExtents, ParticleUnaligned, 4>{extents});
 }
 
 TEST_CASE("dump.ParticleUnaligned.AoSoA8")
 {
-    dump(llama::mapping::AoSoA<ArrayDims, ParticleUnaligned, 8>{arrayDims});
+    dump(llama::mapping::AoSoA<ArrayExtents, ParticleUnaligned, 8>{extents});
 }
 
 TEST_CASE("dump.ParticleUnaligned.AoSoA8_27elements")
 {
-    dump(llama::mapping::AoSoA<ArrayDims, ParticleUnaligned, 8>{{27}});
+    dump(llama::mapping::AoSoA<ArrayExtents, ParticleUnaligned, 8>{{27}});
 }
 
 TEST_CASE("dump.ParticleUnaligned.AoSoA32")
 {
-    dump(llama::mapping::AoSoA<ArrayDims, ParticleUnaligned, 32>{arrayDims});
+    dump(llama::mapping::AoSoA<ArrayExtents, ParticleUnaligned, 32>{extents});
 }
 
 TEST_CASE("dump.ParticleUnaligned.Split.SoA.AoS.1Buffer")
 {
     dump(llama::mapping::Split<
-         ArrayDims,
+         ArrayExtents,
          ParticleUnaligned,
          llama::RecordCoord<1>,
          llama::mapping::SingleBlobSoA,
-         llama::mapping::PackedAoS>{arrayDims});
+         llama::mapping::PackedAoS>{extents});
 }
 
 TEST_CASE("dump.ParticleUnaligned.Split.SoA.AoS.2Buffer")
 {
     dump(llama::mapping::Split<
-         ArrayDims,
+         ArrayExtents,
          ParticleUnaligned,
          llama::RecordCoord<1>,
          llama::mapping::SingleBlobSoA,
          llama::mapping::PackedAoS,
-         true>{arrayDims});
+         true>{extents});
 }
 
 TEST_CASE("dump.ParticleUnaligned.Split.SoA_MB.AoS_Aligned.One")
 {
     dump(llama::mapping::Split<
-         ArrayDims,
+         ArrayExtents,
          ParticleUnaligned,
          llama::RecordCoord<1>,
          llama::mapping::PreconfiguredSoA<true>::type,
          llama::mapping::
              PreconfiguredSplit<llama::RecordCoord<1>, llama::mapping::PackedOne, llama::mapping::AlignedAoS, true>::
                  type,
-         true>{arrayDims});
+         true>{extents});
 }
 
 TEST_CASE("dump.ParticleUnaligned.Split.AoSoA8.AoS_Aligned.One")
 {
     dump(llama::mapping::Split<
-         ArrayDims,
+         ArrayExtents,
          ParticleUnaligned,
          llama::RecordCoord<1>,
          llama::mapping::PreconfiguredAoSoA<8>::type,
          llama::mapping::
              PreconfiguredSplit<llama::RecordCoord<1>, llama::mapping::PackedOne, llama::mapping::AlignedAoS, true>::
                  type,
-         true>{arrayDims});
+         true>{extents});
 }
 
 TEST_CASE("dump.ParticleUnaligned.Split.AoSoA8.SoA.One.AoS")
 {
     // split out velocity as AoSoA8 and mass into a single value, the rest as AoS
     dump(llama::mapping::Split<
-         ArrayDims,
+         ArrayExtents,
          ParticleUnaligned,
          llama::RecordCoord<1>,
          llama::mapping::PreconfiguredAoSoA<8>::type,
@@ -219,18 +219,18 @@ TEST_CASE("dump.ParticleUnaligned.Split.AoSoA8.SoA.One.AoS")
                  llama::mapping::PackedAoS,
                  true>::type,
              true>::type,
-         true>{arrayDims});
+         true>{extents});
 }
 
 TEST_CASE("AoS.Aligned")
 {
-    const auto mapping = llama::mapping::AlignedAoS<ArrayDims, ParticleUnaligned>{arrayDims};
+    const auto mapping = llama::mapping::AlignedAoS<ArrayExtents, ParticleUnaligned>{extents};
     auto view = llama::allocView(mapping);
     llama::forEachLeafCoord<ParticleUnaligned>(
         [&](auto rc)
         {
             llama::forEachADCoord(
-                arrayDims,
+                extents,
                 [&](auto ac)
                 {
                     const auto addr = &view(ac)(rc);
@@ -273,5 +273,5 @@ using ParticleAligned = llama::Record<
 
 TEST_CASE("dump.ParticleAligned.PackedAoS")
 {
-    dump(llama::mapping::PackedAoS<ArrayDims, ParticleAligned>{arrayDims});
+    dump(llama::mapping::PackedAoS<ArrayExtents, ParticleAligned>{extents});
 }

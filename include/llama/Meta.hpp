@@ -49,3 +49,21 @@ namespace boost::mp11
     using mp_flatten = mp_apply<mp_append, mp_push_front<mp_transform_q<detail::mp_flatten_impl<L2>, L>, mp_clear<L>>>;
 } // namespace boost::mp11
 #endif
+
+namespace llama
+{
+    namespace internal
+    {
+        template<typename FromList, template<auto...> class ToList>
+        struct mp_unwrap_values_into_impl;
+
+        template<template<class...> class FromList, typename... Values, template<auto...> class ToList>
+        struct mp_unwrap_values_into_impl<FromList<Values...>, ToList>
+        {
+            using type = ToList<Values::value...>;
+        };
+
+        template<typename FromList, template<auto...> class ToList>
+        using mp_unwrap_values_into = typename mp_unwrap_values_into_impl<FromList, ToList>::type;
+    } // namespace internal
+} // namespace llama
