@@ -368,7 +368,7 @@ namespace
         std::vector<Pixel> pixels;
     };
 
-    constexpr auto noHit = std::numeric_limits<float>::infinity();
+    constexpr auto noHit = std::numeric_limits<float>::max(); // must be within finite math for -ffast-math
 
     struct Intersection
     {
