@@ -8,18 +8,8 @@ add_executable(${PROJECT_NAME} vectoradd.cpp ../common/Stopwatch.hpp)
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama)
 
-if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR
-	CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR
-	CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM" OR
-	CMAKE_CXX_COMPILER_ID STREQUAL "Intel" OR
-	CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
-	target_compile_options(${PROJECT_NAME} PRIVATE
-		-march=native
-		-ffast-math
-	)
-elseif(MSVC)
-	target_compile_options(${PROJECT_NAME} PRIVATE
-		/arch:AVX2
-		/fp:fast
-	)
+if (MSVC)
+	target_compile_options(${PROJECT_NAME} PRIVATE /arch:AVX2 /fp:fast)
+else()
+	target_compile_options(${PROJECT_NAME} PRIVATE -march=native -ffast-math)
 endif()

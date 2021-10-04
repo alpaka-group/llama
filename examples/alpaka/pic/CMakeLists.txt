@@ -12,14 +12,7 @@ target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama fmt::fmt alpaka::alpaka OpenMP::OpenMP_CXX)
 
 if (MSVC)
-	target_compile_options(${PROJECT_NAME} PRIVATE
-		/arch:AVX2
-		/fp:fast
-	)
-elseif()
-	target_compile_options(${PROJECT_NAME} PRIVATE
-		#-fno-math-errno # sqrt prevents vectorization otherwise
-		-march=native
-		-ffast-math
-	)
+	target_compile_options(${PROJECT_NAME} PRIVATE /arch:AVX2 /fp:fast)
+else()
+	target_compile_options(${PROJECT_NAME} PRIVATE -march=native -ffast-math)
 endif()
