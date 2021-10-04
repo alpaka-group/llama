@@ -153,18 +153,18 @@ struct UpdateKernel
         {
             // if there is only 1 thread per block, use stack instead of shared memory
             if constexpr(BlockSize == 1)
-                return llama::allocViewStack<View::ArrayDims::rank, typename View::RecordDim>();
+                return llama::allocViewStack<View::ArrayExtents::rank, typename View::RecordDim>();
             else
             {
                 constexpr auto sharedMapping = []
                 {
-                    constexpr auto arrayDims = llama::ArrayDims<1>{BlockSize};
+                    constexpr auto extents = llama::ArrayExtents<BlockSize>{};
                     if constexpr(MappingSM == AoS)
-                        return llama::mapping::AoS{arrayDims, Particle{}};
+                        return llama::mapping::AoS{extents, Particle{}};
                     if constexpr(MappingSM == SoA)
-                        return llama::mapping::SoA<decltype(arrayDims), Particle, false>{arrayDims};
+                        return llama::mapping::SoA<decltype(extents), Particle, false>{extents};
                     if constexpr(MappingSM == AoSoA)
-                        return llama::mapping::AoSoA<decltype(arrayDims), Particle, AOSOA_LANES>{arrayDims};
+                        return llama::mapping::AoSoA<decltype(extents), Particle, AOSOA_LANES>{extents};
                 }();
                 static_assert(decltype(sharedMapping)::blobCount == 1);
 
@@ -180,9 +180,8 @@ struct UpdateKernel
         // TODO(bgruber): we could optimize here, because only velocity is ever updated
         auto pi = [&]
         {
-            constexpr auto arrayDims = llama::ArrayDims<1>{Elems};
-            constexpr auto mapping
-                = llama::mapping::SoA<typename View::ArrayDims, typename View::RecordDim, false>{arrayDims};
+            constexpr auto extents = llama::ArrayExtents<Elems>{};
+            constexpr auto mapping = llama::mapping::SoA<decltype(extents), typename View::RecordDim, false>{extents};
             constexpr auto blobAlloc = llama::bloballoc::Stack<llama::sizeOf<typename View::RecordDim> * Elems>{};
             return llama::allocViewUninitialized(mapping, blobAlloc);
         }();
@@ -264,15 +263,15 @@ void run(std::ostream& plotFile)
 
     auto mapping = []
     {
-        const auto arrayDims = llama::ArrayDims{PROBLEM_SIZE};
+        const auto extents = llama::ArrayExtents{PROBLEM_SIZE};
         if constexpr(MappingGM == AoS)
-            return llama::mapping::AoS<decltype(arrayDims), Particle>{arrayDims};
+            return llama::mapping::AoS<decltype(extents), Particle>{extents};
         if constexpr(MappingGM == SoA)
-            return llama::mapping::SoA<decltype(arrayDims), Particle, false>{arrayDims};
+            return llama::mapping::SoA<decltype(extents), Particle, false>{extents};
         // if constexpr (MappingGM == 2)
-        //    return llama::mapping::SoA<decltype(arrayDims), Particle, true>{arrayDims};
+        //    return llama::mapping::SoA<decltype(extents), Particle, true>{extents};
         if constexpr(MappingGM == AoSoA)
-            return llama::mapping::AoSoA<decltype(arrayDims), Particle, AOSOA_LANES>{arrayDims};
+            return llama::mapping::AoSoA<decltype(extents), Particle, AOSOA_LANES>{extents};
     }();
 
     Stopwatch watch;

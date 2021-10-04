@@ -6,7 +6,7 @@
 #    error DumpMapping.hpp requires the fmt library
 #endif
 
-#include "ArrayDimsIndexRange.hpp"
+#include "ArrayIndexRange.hpp"
 #include "Core.hpp"
 
 #include <boost/functional/hash.hpp>
@@ -68,14 +68,14 @@ namespace llama
         }
 
         template<std::size_t Dim>
-        auto formatUdCoord(const ArrayDims<Dim>& coord)
+        auto formatArrayIndex(const ArrayIndex<Dim>& ai)
         {
             if constexpr(Dim == 1)
-                return std::to_string(coord[0]);
+                return std::to_string(ai[0]);
             else
             {
                 std::string s = "{";
-                for(auto v : coord)
+                for(auto v : ai)
                 {
                     if(s.size() >= 2)
                         s += ",";
@@ -101,7 +101,7 @@ namespace llama
         template<std::size_t Dim>
         struct FieldBox
         {
-            ArrayDims<Dim> adCoord;
+            ArrayIndex<Dim> arrayIndex;
             std::vector<std::size_t> recordCoord;
             std::vector<std::string> recordTags;
             NrAndOffset nrAndOffset;
@@ -109,22 +109,22 @@ namespace llama
         };
 
         template<typename Mapping>
-        auto boxesFromMapping(const Mapping& mapping) -> std::vector<FieldBox<Mapping::ArrayDims::rank>>
+        auto boxesFromMapping(const Mapping& mapping) -> std::vector<FieldBox<Mapping::ArrayIndex::rank>>
         {
-            std::vector<FieldBox<Mapping::ArrayDims::rank>> infos;
+            std::vector<FieldBox<Mapping::ArrayIndex::rank>> infos;
 
             using RecordDim = typename Mapping::RecordDim;
-            for(auto adCoord : ArrayDimsIndexRange{mapping.arrayDims()})
+            for(auto ai : ArrayIndexRange{mapping.extents()})
             {
                 forEachLeafCoord<RecordDim>(
-                    [&](auto coord)
+                    [&](auto rc)
                     {
                         infos.push_back(
-                            {adCoord,
-                             internal::toVec(coord),
-                             internal::tagsAsStrings<RecordDim>(coord),
-                             mapping.blobNrAndOffset(adCoord, coord),
-                             sizeof(GetType<RecordDim, decltype(coord)>)});
+                            {ai,
+                             internal::toVec(rc),
+                             internal::tagsAsStrings<RecordDim>(rc),
+                             mapping.blobNrAndOffset(ai, rc),
+                             sizeof(GetType<RecordDim, decltype(rc)>)});
                     });
             }
 
@@ -239,7 +239,7 @@ namespace llama
 )",
                 x + width / 2,
                 y + byteSizeInPixel * 3 / 4,
-                internal::formatUdCoord(info.adCoord),
+                internal::formatArrayIndex(info.arrayIndex),
                 internal::formatDDTags(info.recordTags));
             if(cropBoxes)
                 svg += R"(</svg>
@@ -315,9 +315,9 @@ namespace llama
             byteSizeInPixel);
         using RecordDim = typename Mapping::RecordDim;
         forEachLeafCoord<RecordDim>(
-            [&](auto coord)
+            [&](auto rc)
             {
-                constexpr int size = sizeof(GetType<RecordDim, decltype(coord)>);
+                constexpr int size = sizeof(GetType<RecordDim, decltype(rc)>);
 
                 html += fmt::format(
                     R"(.{} {{
@@ -325,9 +325,9 @@ namespace llama
     background-color: #{:X};
 }}
 )",
-                    cssClass(internal::tagsAsStrings<RecordDim>(coord)),
+                    cssClass(internal::tagsAsStrings<RecordDim>(rc)),
                     byteSizeInPixel * size,
-                    internal::color(internal::toVec(coord)));
+                    internal::color(internal::toVec(rc)));
             });
 
         html += fmt::format(R"(</style>
@@ -356,7 +356,7 @@ namespace llama
             html += fmt::format(
                 R"(<div class="box {0}" title="{1} {2}">{1} {2}</div>)",
                 cssClass(info.recordTags),
-                internal::formatUdCoord(info.adCoord),
+                internal::formatArrayIndex(info.arrayIndex),
                 internal::formatDDTags(info.recordTags));
         }
         html += R"(</body>

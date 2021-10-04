@@ -14,21 +14,51 @@ This allows to make the problem size itself a run time value but leaves the comp
 Array dimensions
 ----------------
 
-The array dimensions are an :math:`N`-dimensional array with :math:`N` itself being a
-compile time value but with run time values inside. LLAMA brings its own
-:ref:`array class <label-api-array>` for such kind of data structs which is
-ready for interoperability with hardware accelerator C++ dialects such as CUDA
-(Nvidia) or HIP (AMD), or abstraction libraries such as the already mentioned
-alpaka.
+The array dimensions form an :math:`N`-dimensional array with :math:`N` itself being a compile time value.
+The extent of each dimension can be a compile time or runtime values.
 
-A definition of three array dimensions of the size :math:`128 \times 256 \times 32` looks like this:
+A simple definition of three array dimensions of the extents :math:`128 \times 256 \times 32` looks like this:
 
 .. code-block:: C++
 
-    llama::ArrayDims arrayDimsSize{128, 256, 32};
+    llama::ArrayExtents extents{128, 256, 32};
 
 The template arguments are deduced by the compiler using `CTAD <https://en.cppreference.com/w/cpp/language/class_template_argument_deduction>`_.
-The full type of :cpp:`arrayDimsSize` is :cpp:`llama::ArrayDims<3>`.
+The full type of :cpp:`extents` is :cpp:`llama::ArrayExtents<llama::dyn, llama::dyn, llama::dyn>`.
+
+By explicitely specifying the template arguments, we can mix compile time and runtime extents, where the constant :cpp:`llama::dyn` denotes a dynamic extent:
+
+.. code-block:: C++
+
+    llama::ArrayExtents<llama::dyn, 256, llama::dyn> extents{128, 32};
+
+The template argument list specifies the order and nature (compile vs. runtime) of the extents.
+An instance of :cpp:`llama::ArrayExtents` can then be constructed with as many runtime extents as :cpp:`llama::dyn`s specified in the template argument list.
+
+By setting a specific value for all template arguments, the array extents are fully determined at compile time.
+
+.. code-block:: C++
+
+    llama::ArrayExtents<128, 256, 32> extents{};
+
+This is important if such extents are later embedded into other LLAMA objects such as mappings or views, where they should not occupy any additional memory.
+
+.. code-block:: C++
+
+    llama::ArrayExtents<128, 256, 32> extents{};
+    sizeof(extents) == 1; // no object can have size 0
+    struct S : llama::ArrayExtents<128, 256, 32> { char c; } s;
+    static_assert(sizeof(s) == sizeof(char)); // empty base optimization eliminates storage
+
+To later described indices into the array dimensions described by a :cpp:`llama::ArrayExtents`, an instance of :cpp:`llama::ArrayIndex` is used:
+
+.. code-block:: C++
+
+    llama::ArrayIndex i{2, 3, 4};
+    // full type of i: llama::ArrayIndex<3>
+
+Contrary to :cpp:`llama::ArrayExtents` which can store a mix of compile and runtime values, :cpp:`llama::ArrayIndex` only stores runtime indices, so it is templated on the number of dimensions.
+This might change at some point in the future, if we find sufficient evidence that a design similar to :cpp:`llama::ArrayExtents` is also useful for :cpp:`llama::ArrayIndex`.
 
 .. _label-rd:
 

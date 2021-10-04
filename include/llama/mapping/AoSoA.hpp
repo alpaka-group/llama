@@ -15,9 +15,9 @@ namespace llama::mapping
     {
         auto max = std::numeric_limits<std::size_t>::max();
         forEachLeafCoord<RecordDim>(
-            [&](auto coord)
+            [&](auto rc)
             {
-                using AttributeType = GetType<RecordDim, decltype(coord)>;
+                using AttributeType = GetType<RecordDim, decltype(rc)>;
                 max = std::min(max, VectorRegisterBits / (sizeof(AttributeType) * CHAR_BIT));
             });
         return max;
@@ -30,46 +30,47 @@ namespace llama::mapping
     /// FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref FlattenRecordDimDecreasingAlignment and
     /// \ref FlattenRecordDimMinimizePadding.
     template<
-        typename TArrayDims,
+        typename TArrayExtents,
         typename TRecordDim,
         std::size_t Lanes,
         typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
         template<typename> typename FlattenRecordDim = FlattenRecordDimInOrder>
-    struct AoSoA
+    struct AoSoA : private TArrayExtents
     {
-        using ArrayDims = TArrayDims;
+        using ArrayExtents = TArrayExtents;
+        using ArrayIndex = typename ArrayExtents::Index;
         using RecordDim = TRecordDim;
         using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
         static constexpr std::size_t blobCount = 1;
 
         constexpr AoSoA() = default;
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr explicit AoSoA(ArrayDims size, RecordDim = {}) : arrayDimsSize(size)
+        LLAMA_FN_HOST_ACC_INLINE constexpr explicit AoSoA(ArrayExtents extents, RecordDim = {}) : ArrayExtents(extents)
         {
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayDims() const -> ArrayDims
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayExtents
         {
-            return arrayDimsSize;
+            return ArrayExtents{*this};
         }
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(std::size_t) const -> std::size_t
         {
             return roundUpToMultiple(
-                LinearizeArrayDimsFunctor{}.size(arrayDimsSize) * sizeOf<RecordDim>,
+                LinearizeArrayDimsFunctor{}.size(extents()) * sizeOf<RecordDim>,
                 Lanes * sizeOf<RecordDim>);
         }
 
         template<std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayDims coord, RecordCoord<RecordCoords...> = {})
-            const -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayIndex ai, RecordCoord<RecordCoords...> = {}) const
+            -> NrAndOffset
         {
             constexpr std::size_t flatFieldIndex =
 #ifdef __NVCC__
                 *& // mess with nvcc compiler state to workaround bug
 #endif
                  Flattener::template flatIndex<RecordCoords...>;
-            const auto flatArrayIndex = LinearizeArrayDimsFunctor{}(coord, arrayDimsSize);
+            const auto flatArrayIndex = LinearizeArrayDimsFunctor{}(ai, extents());
             const auto blockIndex = flatArrayIndex / Lanes;
             const auto laneIndex = flatArrayIndex % Lanes;
             const auto offset = (sizeOf<RecordDim> * Lanes) * blockIndex
@@ -80,14 +81,13 @@ namespace llama::mapping
 
     private:
         using Flattener = FlattenRecordDim<TRecordDim>;
-        ArrayDims arrayDimsSize;
     };
 
     template<std::size_t Lanes, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     struct PreconfiguredAoSoA
     {
-        template<typename ArrayDims, typename RecordDim>
-        using type = AoSoA<ArrayDims, RecordDim, Lanes, LinearizeArrayDimsFunctor>;
+        template<typename ArrayExtents, typename RecordDim>
+        using type = AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayDimsFunctor>;
     };
 
     template<typename Mapping>

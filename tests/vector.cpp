@@ -4,7 +4,7 @@
 #include <llama/llama.hpp>
 
 using RecordDim = Vec3D;
-using Mapping = llama::mapping::AoS<llama::ArrayDims<1>, RecordDim>;
+using Mapping = llama::mapping::AoS<llama::ArrayExtents<llama::dyn>, RecordDim>;
 using Vector = llama::Vector<Mapping>;
 
 TEST_CASE("Vector.ctor.default")
@@ -32,7 +32,7 @@ TEST_CASE("Vector.ctor.count_and_value")
 
 TEST_CASE("Vector.ctor.iterator_pair")
 {
-    auto view = llama::allocView(Mapping{llama::ArrayDims{10}});
+    auto view = llama::allocView(Mapping{llama::ArrayExtents{10}});
     for(auto i = 0; i < 10; i++)
         view[i] = i;
 

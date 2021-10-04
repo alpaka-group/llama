@@ -31,7 +31,8 @@
 #    pragma diag_suppress 940
 #endif
 
-#include "ArrayDimsIndexRange.hpp"
+#include "ArrayExtents.hpp"
+#include "ArrayIndexRange.hpp"
 #include "BlobAllocators.hpp"
 #include "Copy.hpp"
 #include "Core.hpp"

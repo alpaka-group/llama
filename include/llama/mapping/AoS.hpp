@@ -16,14 +16,15 @@ namespace llama::mapping
     /// FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref FlattenRecordDimDecreasingAlignment and
     /// \ref FlattenRecordDimMinimizePadding.
     template<
-        typename TArrayDims,
+        typename TArrayExtents,
         typename TRecordDim,
         bool AlignAndPad = true,
         typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
         template<typename> typename FlattenRecordDim = FlattenRecordDimInOrder>
-    struct AoS
+    struct AoS : private TArrayExtents
     {
-        using ArrayDims = TArrayDims;
+        using ArrayExtents = TArrayExtents;
+        using ArrayIndex = typename ArrayExtents::Index;
         using RecordDim = TRecordDim;
         using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
         static constexpr std::size_t blobCount = 1;
@@ -31,24 +32,24 @@ namespace llama::mapping
         constexpr AoS() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr explicit AoS(ArrayDims size, RecordDim = {}) : arrayDimsSize(size)
+        constexpr explicit AoS(ArrayExtents extents, RecordDim = {}) : ArrayExtents(extents)
         {
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayDims() const -> ArrayDims
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayExtents
         {
-            return arrayDimsSize;
+            return *this;
         }
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(std::size_t) const -> std::size_t
         {
-            return LinearizeArrayDimsFunctor{}.size(arrayDimsSize)
+            return LinearizeArrayDimsFunctor{}.size(extents())
                 * flatSizeOf<typename Flattener::FlatRecordDim, AlignAndPad>;
         }
 
         template<std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayDims coord, RecordCoord<RecordCoords...> = {})
-            const -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayIndex ai, RecordCoord<RecordCoords...> = {}) const
+            -> NrAndOffset
         {
             constexpr std::size_t flatFieldIndex =
 #ifdef __NVCC__
@@ -56,7 +57,7 @@ namespace llama::mapping
 #endif
                  Flattener::template flatIndex<RecordCoords...>;
             const auto offset
-                = LinearizeArrayDimsFunctor{}(coord, arrayDimsSize)
+                = LinearizeArrayDimsFunctor{}(ai, extents())
                     * flatSizeOf<
                         typename Flattener::FlatRecordDim,
                         AlignAndPad> + flatOffsetOf<typename Flattener::FlatRecordDim, flatFieldIndex, AlignAndPad>;
@@ -65,41 +66,41 @@ namespace llama::mapping
 
     private:
         using Flattener = FlattenRecordDim<TRecordDim>;
-        ArrayDims arrayDimsSize;
     };
 
     /// Array of struct mapping preserving the alignment of the field types by inserting padding.
     /// \see AoS
-    template<typename ArrayDims, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
-    using AlignedAoS = AoS<ArrayDims, RecordDim, true, LinearizeArrayDimsFunctor>;
+    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+    using AlignedAoS = AoS<ArrayExtents, RecordDim, true, LinearizeArrayDimsFunctor>;
 
     /// Array of struct mapping preserving the alignment of the field types by inserting padding and permuting the
     /// field order to minimize this padding. \see AoS
-    template<typename ArrayDims, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
-    using MinAlignedAoS = AoS<ArrayDims, RecordDim, true, LinearizeArrayDimsFunctor, FlattenRecordDimMinimizePadding>;
+    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+    using MinAlignedAoS
+        = AoS<ArrayExtents, RecordDim, true, LinearizeArrayDimsFunctor, FlattenRecordDimMinimizePadding>;
 
     /// Array of struct mapping packing the field types tightly, violating the types alignment requirements.
     /// \see AoS
-    template<typename ArrayDims, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
-    using PackedAoS = AoS<ArrayDims, RecordDim, false, LinearizeArrayDimsFunctor>;
+    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+    using PackedAoS = AoS<ArrayExtents, RecordDim, false, LinearizeArrayDimsFunctor>;
 
     template<bool AlignAndPad = true, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     struct PreconfiguredAoS
     {
-        template<typename ArrayDims, typename RecordDim>
-        using type = AoS<ArrayDims, RecordDim, AlignAndPad, LinearizeArrayDimsFunctor>;
+        template<typename ArrayExtents, typename RecordDim>
+        using type = AoS<ArrayExtents, RecordDim, AlignAndPad, LinearizeArrayDimsFunctor>;
     };
 
     template<typename Mapping>
     inline constexpr bool isAoS = false;
 
     template<
-        typename ArrayDims,
+        typename ArrayExtents,
         typename RecordDim,
         bool AlignAndPad,
         typename LinearizeArrayDimsFunctor,
         template<typename>
         typename FlattenRecordDim>
     inline constexpr bool
-        isAoS<AoS<ArrayDims, RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim>> = true;
+        isAoS<AoS<ArrayExtents, RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim>> = true;
 } // namespace llama::mapping

@@ -31,7 +31,7 @@ using Particle = llama::Record<
 
 TEST_CASE("mapsNonOverlappingly.PackedAoS")
 {
-    constexpr auto mapping = llama::mapping::PackedAoS<llama::ArrayDims<2>, Particle>{{32, 32}};
+    constexpr auto mapping = llama::mapping::PackedAoS<llama::ArrayExtentsDynamic<2>, Particle>{{32, 32}};
 #ifdef __cpp_constexpr_dynamic_alloc
     STATIC_REQUIRE(llama::mapsNonOverlappingly(mapping));
 #else
@@ -41,7 +41,7 @@ TEST_CASE("mapsNonOverlappingly.PackedAoS")
 
 TEST_CASE("mapsNonOverlappingly.AlignedAoS")
 {
-    constexpr auto mapping = llama::mapping::AlignedAoS<llama::ArrayDims<2>, Particle>{{32, 32}};
+    constexpr auto mapping = llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<2>, Particle>{{32, 32}};
 #ifdef __cpp_constexpr_dynamic_alloc
     STATIC_REQUIRE(llama::mapsNonOverlappingly(mapping));
 #else
@@ -51,48 +51,45 @@ TEST_CASE("mapsNonOverlappingly.AlignedAoS")
 
 namespace
 {
-    template<typename TArrayDims, typename TRecordDim>
-    struct MapEverythingToZero
+    template<typename TArrayExtents, typename TRecordDim>
+    struct MapEverythingToZero : TArrayExtents
     {
-        using ArrayDims = TArrayDims;
+        using ArrayExtents = TArrayExtents;
+        using ArrayIndex = typename ArrayExtents::Index;
         using RecordDim = TRecordDim;
         static constexpr std::size_t blobCount = 1;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr explicit MapEverythingToZero(ArrayDims size, RecordDim = {}) : arrayDimsSize(size)
+        constexpr explicit MapEverythingToZero(ArrayExtents extents, RecordDim = {}) : ArrayExtents(extents)
         {
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayDims() const -> ArrayDims
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> const ArrayExtents&
         {
-            return arrayDimsSize;
+            return *this;
         }
 
         constexpr auto blobSize(std::size_t) const -> std::size_t
         {
-            std::size_t arraySize = 1;
-            for(std::size_t i = 0; i < ArrayDims::rank; i++)
-                arraySize *= arrayDimsSize[i];
-            return arraySize * llama::sizeOf<RecordDim>;
+            return llama::product(extents()) * llama::sizeOf<RecordDim>;
         }
 
         template<std::size_t... RecordCoords>
-        constexpr auto blobNrAndOffset(ArrayDims, llama::RecordCoord<RecordCoords...> = {}) const -> llama::NrAndOffset
+        constexpr auto blobNrAndOffset(ArrayIndex, llama::RecordCoord<RecordCoords...> = {}) const
+            -> llama::NrAndOffset
         {
             return {0, 0};
         }
-
-    private:
-        ArrayDims arrayDimsSize;
     };
 } // namespace
 
 TEST_CASE("mapsNonOverlappingly.MapEverythingToZero")
 {
 #ifdef __cpp_constexpr_dynamic_alloc
-    STATIC_REQUIRE(llama::mapsNonOverlappingly(MapEverythingToZero{llama::ArrayDims<1>{1}, double{}}));
-    STATIC_REQUIRE(!llama::mapsNonOverlappingly(MapEverythingToZero{llama::ArrayDims<1>{2}, double{}}));
-    STATIC_REQUIRE(!llama::mapsNonOverlappingly(MapEverythingToZero{llama::ArrayDims<2>{32, 32}, Particle{}}));
+    STATIC_REQUIRE(llama::mapsNonOverlappingly(MapEverythingToZero{llama::ArrayExtentsDynamic<1>{1}, double{}}));
+    STATIC_REQUIRE(!llama::mapsNonOverlappingly(MapEverythingToZero{llama::ArrayExtentsDynamic<1>{2}, double{}}));
+    STATIC_REQUIRE(
+        !llama::mapsNonOverlappingly(MapEverythingToZero{llama::ArrayExtentsDynamic<2>{32, 32}, Particle{}}));
 #else
     INFO("Test disabled because compiler does not support __cpp_constexpr_dynamic_alloc");
 #endif
@@ -102,21 +99,22 @@ namespace
 {
     // maps each element of the record dimension into a separate blobs. Each blob stores Modulus elements. If the array
     // dimensions are larger than Modulus, elements are overwritten.
-    template<typename TArrayDims, typename TRecordDim, std::size_t Modulus>
-    struct ModulusMapping
+    template<typename TArrayExtents, typename TRecordDim, std::size_t Modulus>
+    struct ModulusMapping : TArrayExtents
     {
-        using ArrayDims = TArrayDims;
+        using ArrayExtents = TArrayExtents;
+        using ArrayIndex = typename ArrayExtents::Index;
         using RecordDim = TRecordDim;
         static constexpr std::size_t blobCount = boost::mp11::mp_size<llama::FlatRecordDim<RecordDim>>::value;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr explicit ModulusMapping(ArrayDims size, RecordDim = {}) : arrayDimsSize(size)
+        constexpr explicit ModulusMapping(ArrayExtents extents, RecordDim = {}) : ArrayExtents(extents)
         {
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayDims() const -> ArrayDims
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> const ArrayExtents&
         {
-            return arrayDimsSize;
+            return *this;
         }
 
         constexpr auto blobSize(std::size_t) const -> std::size_t
@@ -125,30 +123,27 @@ namespace
         }
 
         template<std::size_t... RecordCoords>
-        constexpr auto blobNrAndOffset(ArrayDims coord, llama::RecordCoord<RecordCoords...> = {}) const
+        constexpr auto blobNrAndOffset(ArrayIndex ai, llama::RecordCoord<RecordCoords...> = {}) const
             -> llama::NrAndOffset
         {
             const auto blob = llama::flatRecordCoord<RecordDim, llama::RecordCoord<RecordCoords...>>;
-            const auto offset = (llama::mapping::LinearizeArrayDimsCpp{}(coord, arrayDimsSize) % Modulus)
+            const auto offset = (llama::mapping::LinearizeArrayDimsCpp{}(ai, extents()) % Modulus)
                 * sizeof(llama::GetType<RecordDim, llama::RecordCoord<RecordCoords...>>);
             return {blob, offset};
         }
-
-    private:
-        ArrayDims arrayDimsSize;
     };
 } // namespace
 
 TEST_CASE("mapsNonOverlappingly.ModulusMapping")
 {
-    using Modulus10Mapping = ModulusMapping<llama::ArrayDims<1>, Particle, 10>;
+    using Modulus10Mapping = ModulusMapping<llama::ArrayExtentsDynamic<1>, Particle, 10>;
 
 #ifdef __cpp_constexpr_dynamic_alloc
-    STATIC_REQUIRE(llama::mapsNonOverlappingly(Modulus10Mapping{llama::ArrayDims<1>{1}}));
-    STATIC_REQUIRE(llama::mapsNonOverlappingly(Modulus10Mapping{llama::ArrayDims<1>{9}}));
-    STATIC_REQUIRE(llama::mapsNonOverlappingly(Modulus10Mapping{llama::ArrayDims<1>{10}}));
-    STATIC_REQUIRE(!llama::mapsNonOverlappingly(Modulus10Mapping{llama::ArrayDims<1>{11}}));
-    STATIC_REQUIRE(!llama::mapsNonOverlappingly(Modulus10Mapping{llama::ArrayDims<1>{25}}));
+    STATIC_REQUIRE(llama::mapsNonOverlappingly(Modulus10Mapping{llama::ArrayExtentsDynamic<1>{1}}));
+    STATIC_REQUIRE(llama::mapsNonOverlappingly(Modulus10Mapping{llama::ArrayExtentsDynamic<1>{9}}));
+    STATIC_REQUIRE(llama::mapsNonOverlappingly(Modulus10Mapping{llama::ArrayExtentsDynamic<1>{10}}));
+    STATIC_REQUIRE(!llama::mapsNonOverlappingly(Modulus10Mapping{llama::ArrayExtentsDynamic<1>{11}}));
+    STATIC_REQUIRE(!llama::mapsNonOverlappingly(Modulus10Mapping{llama::ArrayExtentsDynamic<1>{25}}));
 #else
     INFO("Test disabled because compiler does not support __cpp_constexpr_dynamic_alloc");
 #endif
@@ -156,19 +151,18 @@ TEST_CASE("mapsNonOverlappingly.ModulusMapping")
 
 TEST_CASE("maps.ModulusMapping")
 {
-    constexpr auto arrayDims = llama::ArrayDims{128};
-    STATIC_REQUIRE(llama::mapsPiecewiseContiguous<1>(llama::mapping::AoS{arrayDims, Particle{}}));
-    STATIC_REQUIRE(!llama::mapsPiecewiseContiguous<8>(llama::mapping::AoS{arrayDims, Particle{}}));
-    STATIC_REQUIRE(!llama::mapsPiecewiseContiguous<16>(llama::mapping::AoS{arrayDims, Particle{}}));
+    constexpr auto extents = llama::ArrayExtentsDynamic<1>{128};
+    STATIC_REQUIRE(llama::mapsPiecewiseContiguous<1>(llama::mapping::AoS{extents, Particle{}}));
+    STATIC_REQUIRE(!llama::mapsPiecewiseContiguous<8>(llama::mapping::AoS{extents, Particle{}}));
+    STATIC_REQUIRE(!llama::mapsPiecewiseContiguous<16>(llama::mapping::AoS{extents, Particle{}}));
 
-    STATIC_REQUIRE(llama::mapsPiecewiseContiguous<1>(llama::mapping::SoA{arrayDims, Particle{}}));
-    STATIC_REQUIRE(llama::mapsPiecewiseContiguous<8>(llama::mapping::SoA{arrayDims, Particle{}}));
-    STATIC_REQUIRE(llama::mapsPiecewiseContiguous<16>(llama::mapping::SoA{arrayDims, Particle{}}));
+    STATIC_REQUIRE(llama::mapsPiecewiseContiguous<1>(llama::mapping::SoA{extents, Particle{}}));
+    STATIC_REQUIRE(llama::mapsPiecewiseContiguous<8>(llama::mapping::SoA{extents, Particle{}}));
+    STATIC_REQUIRE(llama::mapsPiecewiseContiguous<16>(llama::mapping::SoA{extents, Particle{}}));
 
+    STATIC_REQUIRE(llama::mapsPiecewiseContiguous<1>(llama::mapping::AoSoA<decltype(extents), Particle, 8>{extents}));
     STATIC_REQUIRE(
-        llama::mapsPiecewiseContiguous<1>(llama::mapping::AoSoA<decltype(arrayDims), Particle, 8>{arrayDims}));
-    STATIC_REQUIRE(llama::mapsPiecewiseContiguous<8>(
-        llama::mapping::AoSoA<decltype(arrayDims), Particle, 8>{arrayDims, Particle{}}));
+        llama::mapsPiecewiseContiguous<8>(llama::mapping::AoSoA<decltype(extents), Particle, 8>{extents, Particle{}}));
     STATIC_REQUIRE(!llama::mapsPiecewiseContiguous<16>(
-        llama::mapping::AoSoA<decltype(arrayDims), Particle, 8>{arrayDims, Particle{}}));
+        llama::mapping::AoSoA<decltype(extents), Particle, 8>{extents, Particle{}}));
 }

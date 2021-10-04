@@ -120,7 +120,7 @@ namespace usellama
         Stopwatch watch;
         auto mapping = [&]
         {
-            const auto arrayDims = llama::ArrayDims{PROBLEM_SIZE};
+            const auto arrayDims = llama::ArrayExtents{PROBLEM_SIZE};
             if constexpr(Mapping == 0)
                 return llama::mapping::AoS{arrayDims, Particle{}};
             if constexpr(Mapping == 1)

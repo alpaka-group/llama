@@ -10,19 +10,19 @@ Array dimensions iteration
 
 The array dimensions span an N-dimensional space of integral indices.
 Sometimes we just want to quickly iterate over all coordinates in this index space.
-This is what :cpp:`llama::ArrayDimsIndexRange` is for, which is a range in the C++ sense and
+This is what :cpp:`llama::ArrayIndexRange` is for, which is a range in the C++ sense and
 offers the :cpp:`begin()` and  :cpp:`end()` member functions with corresponding iterators to support STL algorithms or the range-for loop.
 
 .. code-block:: C++
 
-    llama::ArrayDimsIndexRange range{llama::ArrayDims{3, 3}};
-    
-    std::for_each(range.begin(), range.end(), [](llama::ArrayDims<2> coord) {
-        // coord is {0, 0}, {0, 1}, {0, 2}, {1, 0}, {1, 1}, {1, 2}, {2, 0}, {2, 1}, {2, 2}
+    llama::ArrayIndexRange range{llama::ArrayIndex{3, 3}};
+
+    std::for_each(range.begin(), range.end(), [](llama::ArrayIndex<2> ai) {
+        // ai is {0, 0}, {0, 1}, {0, 2}, {1, 0}, {1, 1}, {1, 2}, {2, 0}, {2, 1}, {2, 2}
     });
 
-    for (auto coord : range) {
-        // coord is {0, 0}, {0, 1}, {0, 2}, {1, 0}, {1, 1}, {1, 2}, {2, 0}, {2, 1}, {2, 2}
+    for (auto ai : range) {
+        // ai is {0, 0}, {0, 1}, {0, 2}, {1, 0}, {1, 1}, {1, 2}, {2, 0}, {2, 1}, {2, 2}
     }
 
 
@@ -36,8 +36,8 @@ A polymorphic lambda is recommented to be used as a functor.
 
 .. code-block:: C++
 
-    llama::forEachLeafCoord<Pixel>([&](auto coord) {
-        // coord is RecordCoord <0, 0 >{}, RecordCoord <0, 1>{}, RecordCoord <0, 2>{} and RecordCoord <1>{}
+    llama::forEachLeafCoord<Pixel>([&](auto rc) {
+        // rc is RecordCoord <0, 0 >{}, RecordCoord <0, 1>{}, RecordCoord <0, 2>{} and RecordCoord <1>{}
     });
 
 Optionally, a subtree of the record dimension can be chosen for iteration.
@@ -45,12 +45,12 @@ The subtree is selected either via a `RecordCoord` or a series of tags.
 
 .. code-block:: C++
 
-    llama::forEachLeafCoord<Pixel>([&](auto coord) {
-        // coord is RecordCoord <0, 0 >{}, RecordCoord <0, 1>{} and RecordCoord <0, 2>{}
+    llama::forEachLeafCoord<Pixel>([&](auto rc) {
+        // rc is RecordCoord <0, 0 >{}, RecordCoord <0, 1>{} and RecordCoord <0, 2>{}
     }, color{});
 
-    llama::forEachLeafCoord<Pixel>([&](auto coord) {
-        // coord is RecordCoord <0, 1>{}
+    llama::forEachLeafCoord<Pixel>([&](auto rc) {
+        // rc is RecordCoord <0, 1>{}
     }, color{}, g{});
 
 A more detailed example can be found in the
@@ -65,7 +65,7 @@ Iterators on views of any dimension are supported and open up the standard libra
 .. code-block:: C++
 
     using Pixel = ...;
-    using ArrayDims = llama::ArrayDims<1>;
+    using ArrayExtents = llama::ArrayExtents<llama::dyn>;
     // ...
     auto view = llama::allocView(mapping);
     // ...

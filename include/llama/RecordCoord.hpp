@@ -96,24 +96,9 @@ namespace llama
         }
     } // namespace literals
 
-    namespace internal
-    {
-        template<class L>
-        struct mp_unwrap_sizes_impl;
-
-        template<template<class...> class L, typename... T>
-        struct mp_unwrap_sizes_impl<L<T...>>
-        {
-            using type = RecordCoord<T::value...>;
-        };
-
-        template<typename L>
-        using mp_unwrap_sizes = typename mp_unwrap_sizes_impl<L>::type;
-    } // namespace internal
-
     /// Converts a type list of integral constants into a \ref RecordCoord.
     template<typename L>
-    using RecordCoordFromList = internal::mp_unwrap_sizes<L>;
+    using RecordCoordFromList = internal::mp_unwrap_values_into<L, RecordCoord>;
 
     /// Concatenate a set of \ref RecordCoord%s.
     template<typename... RecordCoords>

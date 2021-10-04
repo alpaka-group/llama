@@ -6,29 +6,29 @@
 template<typename VirtualRecord>
 struct DoubleFunctor
 {
-    template<typename Coord>
-    void operator()(Coord coord)
+    template<typename RecordCoord>
+    void operator()(RecordCoord rc)
     {
-        vd(coord) *= 2;
+        vd(rc) *= 2;
     }
     VirtualRecord vd;
 };
 
 TEST_CASE("VirtualView.CTAD")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    constexpr ArrayDims viewSize{10, 10};
-    auto view = llama::allocViewUninitialized(llama::mapping::SoA<ArrayDims, Vec3D>(viewSize));
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    constexpr ArrayExtents viewSize{10, 10};
+    auto view = llama::allocViewUninitialized(llama::mapping::SoA<ArrayExtents, Vec3D>(viewSize));
 
     llama::VirtualView virtualView{view, {2, 4}};
 }
 
 TEST_CASE("VirtualView.fast")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    constexpr ArrayDims viewSize{10, 10};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    constexpr ArrayExtents viewSize{10, 10};
 
-    using Mapping = llama::mapping::SoA<ArrayDims, Vec3D>;
+    using Mapping = llama::mapping::SoA<ArrayExtents, Vec3D>;
     auto view = llama::allocViewUninitialized(Mapping(viewSize));
 
     for(std::size_t x = 0; x < viewSize[0]; ++x)
@@ -37,7 +37,7 @@ TEST_CASE("VirtualView.fast")
 
     llama::VirtualView<decltype(view)> virtualView{view, {2, 4}};
 
-    CHECK(virtualView.offset == ArrayDims{2, 4});
+    CHECK(virtualView.offset == llama::ArrayIndex{2, 4});
 
     CHECK(view(virtualView.offset)(tag::X()) == 8.0);
     CHECK(virtualView({0, 0})(tag::X()) == 8.0);
@@ -48,30 +48,30 @@ TEST_CASE("VirtualView.fast")
 
 TEST_CASE("VirtualView")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    constexpr ArrayDims viewSize{32, 32};
-    constexpr ArrayDims miniSize{8, 8};
-    using Mapping = llama::mapping::SoA<ArrayDims, Vec3D>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    constexpr ArrayExtents viewSize{32, 32};
+    constexpr ArrayExtents miniSize{8, 8};
+    using Mapping = llama::mapping::SoA<ArrayExtents, Vec3D>;
     auto view = llama::allocViewUninitialized(Mapping(viewSize));
 
     for(std::size_t x = 0; x < viewSize[0]; ++x)
         for(std::size_t y = 0; y < viewSize[1]; ++y)
             view(x, y) = x * y;
 
-    constexpr ArrayDims iterations{
+    constexpr llama::ArrayIndex iterations{
         (viewSize[0] + miniSize[0] - 1) / miniSize[0],
         (viewSize[1] + miniSize[1] - 1) / miniSize[1]};
 
     for(std::size_t x = 0; x < iterations[0]; ++x)
         for(std::size_t y = 0; y < iterations[1]; ++y)
         {
-            const ArrayDims validMiniSize{
+            const llama::ArrayIndex validMiniSize{
                 (x < iterations[0] - 1) ? miniSize[0] : (viewSize[0] - 1) % miniSize[0] + 1,
                 (y < iterations[1] - 1) ? miniSize[1] : (viewSize[1] - 1) % miniSize[1] + 1};
 
             llama::VirtualView<decltype(view)> virtualView(view, {x * miniSize[0], y * miniSize[1]});
 
-            using MiniMapping = llama::mapping::SoA<ArrayDims, Vec3D>;
+            using MiniMapping = llama::mapping::SoA<ArrayExtents, Vec3D>;
             auto miniView = llama::allocViewUninitialized(
                 MiniMapping(miniSize),
                 llama::bloballoc::Stack<miniSize[0] * miniSize[1] * llama::sizeOf<Vec3D>>{});
@@ -99,7 +99,7 @@ TEST_CASE("VirtualView")
 
 TEST_CASE("VirtualView.negative_indices")
 {
-    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{10, 10}, int{}});
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{10, 10}, int{}});
     auto shiftedView = llama::VirtualView{view, {2, 4}};
 
     int i = 0;
@@ -116,7 +116,7 @@ TEST_CASE("VirtualView.negative_indices")
 
 TEST_CASE("VirtualView.negative_offsets")
 {
-    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayDims{10, 10}, int{}});
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{10, 10}, int{}});
     auto shiftedView = llama::VirtualView{view, {2, 4}};
     auto shiftedView2 = llama::VirtualView{shiftedView, {static_cast<std::size_t>(-2), static_cast<std::size_t>(-4)}};
 

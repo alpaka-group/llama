@@ -39,12 +39,12 @@ namespace tag
 
 TEST_CASE("treemapping.empty")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    const ArrayDims arrayDims{16, 16};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    const ArrayExtents extents{16, 16};
 
     auto treeOperationList = llama::Tuple{};
-    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
-    const Mapping mapping(arrayDims, treeOperationList);
+    using Mapping = tree::Mapping<ArrayExtents, Particle, decltype(treeOperationList)>;
+    const Mapping mapping(extents, treeOperationList);
 
     CHECK(
         tree::toString(mapping.basicTree)
@@ -59,60 +59,61 @@ TEST_CASE("treemapping.empty")
 
     CHECK(mapping.blobSize(0) == 14336);
 
+    using ArrayIndex = typename Mapping::ArrayIndex;
     {
-        const auto coord = ArrayDims{0, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 8);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 16);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 24);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 28);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 36);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 44);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 52);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 53);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 54);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 55);
+        const auto ai = ArrayIndex{0, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 8);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 16);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 24);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 28);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 36);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 44);
+        CHECK(mapping.blobNrAndOffset<3, 0>(ai).offset == 52);
+        CHECK(mapping.blobNrAndOffset<3, 1>(ai).offset == 53);
+        CHECK(mapping.blobNrAndOffset<3, 2>(ai).offset == 54);
+        CHECK(mapping.blobNrAndOffset<3, 3>(ai).offset == 55);
     }
 
     {
-        const auto coord = ArrayDims{0, 1};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 56);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 64);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 72);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 80);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 84);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 92);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 100);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 108);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 109);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 110);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 111);
+        const auto ai = ArrayIndex{0, 1};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 56);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 64);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 72);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 80);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 84);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 92);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 100);
+        CHECK(mapping.blobNrAndOffset<3, 0>(ai).offset == 108);
+        CHECK(mapping.blobNrAndOffset<3, 1>(ai).offset == 109);
+        CHECK(mapping.blobNrAndOffset<3, 2>(ai).offset == 110);
+        CHECK(mapping.blobNrAndOffset<3, 3>(ai).offset == 111);
     }
 
     {
-        const auto coord = ArrayDims{1, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 896);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 904);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 912);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 920);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 924);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 932);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 940);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 948);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 949);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 950);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 951);
+        const auto ai = ArrayIndex{1, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 896);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 904);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 912);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 920);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 924);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 932);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 940);
+        CHECK(mapping.blobNrAndOffset<3, 0>(ai).offset == 948);
+        CHECK(mapping.blobNrAndOffset<3, 1>(ai).offset == 949);
+        CHECK(mapping.blobNrAndOffset<3, 2>(ai).offset == 950);
+        CHECK(mapping.blobNrAndOffset<3, 3>(ai).offset == 951);
     }
 }
 
 TEST_CASE("treemapping.Idem")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    const ArrayDims arrayDims{16, 16};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    const ArrayExtents extents{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::Idem()};
-    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
-    const Mapping mapping(arrayDims, treeOperationList);
+    using Mapping = tree::Mapping<ArrayExtents, Particle, decltype(treeOperationList)>;
+    const Mapping mapping(extents, treeOperationList);
 
     CHECK(
         tree::toString(mapping.basicTree)
@@ -127,60 +128,61 @@ TEST_CASE("treemapping.Idem")
 
     CHECK(mapping.blobSize(0) == 14336);
 
+    using ArrayIndex = typename Mapping::ArrayIndex;
     {
-        const auto coord = ArrayDims{0, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 8);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 16);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 24);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 28);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 36);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 44);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 52);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 53);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 54);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 55);
+        const auto ai = ArrayIndex{0, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 8);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 16);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 24);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 28);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 36);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 44);
+        CHECK(mapping.blobNrAndOffset<3, 0>(ai).offset == 52);
+        CHECK(mapping.blobNrAndOffset<3, 1>(ai).offset == 53);
+        CHECK(mapping.blobNrAndOffset<3, 2>(ai).offset == 54);
+        CHECK(mapping.blobNrAndOffset<3, 3>(ai).offset == 55);
     }
 
     {
-        const auto coord = ArrayDims{0, 1};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 56);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 64);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 72);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 80);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 84);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 92);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 100);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 108);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 109);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 110);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 111);
+        const auto ai = ArrayIndex{0, 1};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 56);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 64);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 72);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 80);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 84);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 92);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 100);
+        CHECK(mapping.blobNrAndOffset<3, 0>(ai).offset == 108);
+        CHECK(mapping.blobNrAndOffset<3, 1>(ai).offset == 109);
+        CHECK(mapping.blobNrAndOffset<3, 2>(ai).offset == 110);
+        CHECK(mapping.blobNrAndOffset<3, 3>(ai).offset == 111);
     }
 
     {
-        const auto coord = ArrayDims{1, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 896);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 904);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 912);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 920);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 924);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 932);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 940);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 948);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 949);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 950);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 951);
+        const auto ai = ArrayIndex{1, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 896);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 904);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 912);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 920);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 924);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 932);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 940);
+        CHECK(mapping.blobNrAndOffset<3, 0>(ai).offset == 948);
+        CHECK(mapping.blobNrAndOffset<3, 1>(ai).offset == 949);
+        CHECK(mapping.blobNrAndOffset<3, 2>(ai).offset == 950);
+        CHECK(mapping.blobNrAndOffset<3, 3>(ai).offset == 951);
     }
 }
 
 TEST_CASE("treemapping.LeafOnlyRT")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    const ArrayDims arrayDims{16, 16};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    const ArrayExtents extents{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::LeafOnlyRT()};
-    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
-    const Mapping mapping(arrayDims, treeOperationList);
+    using Mapping = tree::Mapping<ArrayExtents, Particle, decltype(treeOperationList)>;
+    const Mapping mapping(extents, treeOperationList);
 
     CHECK(
         tree::toString(mapping.basicTree)
@@ -195,60 +197,61 @@ TEST_CASE("treemapping.LeafOnlyRT")
 
     CHECK(mapping.blobSize(0) == 14336);
 
+    using ArrayIndex = typename Mapping::ArrayIndex;
     {
-        const auto coord = ArrayDims{0, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 2048);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 4096);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 6144);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 7168);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 9216);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 11264);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 13312);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 13568);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 13824);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 14080);
+        const auto ai = ArrayIndex{0, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 2048);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 4096);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 6144);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 7168);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 9216);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 11264);
+        CHECK(mapping.blobNrAndOffset<3, 0>(ai).offset == 13312);
+        CHECK(mapping.blobNrAndOffset<3, 1>(ai).offset == 13568);
+        CHECK(mapping.blobNrAndOffset<3, 2>(ai).offset == 13824);
+        CHECK(mapping.blobNrAndOffset<3, 3>(ai).offset == 14080);
     }
 
     {
-        const auto coord = ArrayDims{0, 1};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 8);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 2056);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 4104);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 6148);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 7176);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 9224);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 11272);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 13313);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 13569);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 13825);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 14081);
+        const auto ai = ArrayIndex{0, 1};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 8);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 2056);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 4104);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 6148);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 7176);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 9224);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 11272);
+        CHECK(mapping.blobNrAndOffset<3, 0>(ai).offset == 13313);
+        CHECK(mapping.blobNrAndOffset<3, 1>(ai).offset == 13569);
+        CHECK(mapping.blobNrAndOffset<3, 2>(ai).offset == 13825);
+        CHECK(mapping.blobNrAndOffset<3, 3>(ai).offset == 14081);
     }
 
     {
-        const auto coord = ArrayDims{1, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 128);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 2176);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 4224);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 6208);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 7296);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 9344);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 11392);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 13328);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 13584);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 13840);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 14096);
+        const auto ai = ArrayIndex{1, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 128);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 2176);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 4224);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 6208);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 7296);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 9344);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 11392);
+        CHECK(mapping.blobNrAndOffset<3, 0>(ai).offset == 13328);
+        CHECK(mapping.blobNrAndOffset<3, 1>(ai).offset == 13584);
+        CHECK(mapping.blobNrAndOffset<3, 2>(ai).offset == 13840);
+        CHECK(mapping.blobNrAndOffset<3, 3>(ai).offset == 14096);
     }
 }
 
 TEST_CASE("treemapping.MoveRTDown<>")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    const ArrayDims arrayDims{16, 16};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    const ArrayExtents extents{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::MoveRTDown<tree::TreeCoord<>>{4}};
-    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
-    const Mapping mapping(arrayDims, treeOperationList);
+    using Mapping = tree::Mapping<ArrayExtents, Particle, decltype(treeOperationList)>;
+    const Mapping mapping(extents, treeOperationList);
 
     CHECK(
         tree::toString(mapping.basicTree)
@@ -263,48 +266,49 @@ TEST_CASE("treemapping.MoveRTDown<>")
 
     CHECK(mapping.blobSize(0) == 14336);
 
+    using ArrayIndex = typename Mapping::ArrayIndex;
     {
-        const auto coord = ArrayDims{0, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 8);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 16);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 24);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 28);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 36);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 44);
+        const auto ai = ArrayIndex{0, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 8);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 16);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 24);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 28);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 36);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 44);
     }
 
     {
-        const auto coord = ArrayDims{0, 1};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 56);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 64);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 72);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 80);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 84);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 92);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 100);
+        const auto ai = ArrayIndex{0, 1};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 56);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 64);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 72);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 80);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 84);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 92);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 100);
     }
 
     {
-        const auto coord = ArrayDims{1, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 896);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 904);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 912);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 920);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 924);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 932);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 940);
+        const auto ai = ArrayIndex{1, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 896);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 904);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 912);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 920);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 924);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 932);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 940);
     }
 }
 
 TEST_CASE("treemapping.MoveRTDown<0>")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    const ArrayDims arrayDims{16, 16};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    const ArrayExtents extents{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::MoveRTDown<tree::TreeCoord<0>>{4}};
-    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
-    const Mapping mapping(arrayDims, treeOperationList);
+    using Mapping = tree::Mapping<ArrayExtents, Particle, decltype(treeOperationList)>;
+    const Mapping mapping(extents, treeOperationList);
 
     CHECK(
         tree::toString(mapping.basicTree)
@@ -319,48 +323,49 @@ TEST_CASE("treemapping.MoveRTDown<0>")
 
     CHECK(mapping.blobSize(0) == 14336);
 
+    using ArrayIndex = typename Mapping::ArrayIndex;
     {
-        const auto coord = ArrayDims{0, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 8);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 16);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 96);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 112);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 120);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 128);
+        const auto ai = ArrayIndex{0, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 8);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 16);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 96);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 112);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 120);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 128);
     }
 
     {
-        const auto coord = ArrayDims{0, 1};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 24);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 32);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 40);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 100);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 136);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 144);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 152);
+        const auto ai = ArrayIndex{0, 1};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 24);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 32);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 40);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 100);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 136);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 144);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 152);
     }
 
     {
-        const auto coord = ArrayDims{1, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 896);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 904);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 912);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 992);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 1008);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 1016);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 1024);
+        const auto ai = ArrayIndex{1, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 896);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 904);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 912);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 992);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 1008);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 1016);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 1024);
     }
 }
 
 TEST_CASE("treemapping.MoveRTDown<0,0>")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    const ArrayDims arrayDims{16, 16};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    const ArrayExtents extents{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::MoveRTDown<tree::TreeCoord<0, 0>>{4}};
-    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
-    const Mapping mapping(arrayDims, treeOperationList);
+    using Mapping = tree::Mapping<ArrayExtents, Particle, decltype(treeOperationList)>;
+    const Mapping mapping(extents, treeOperationList);
 
     CHECK(
         tree::toString(mapping.basicTree)
@@ -375,48 +380,49 @@ TEST_CASE("treemapping.MoveRTDown<0,0>")
 
     CHECK(mapping.blobSize(0) == 32768);
 
+    using ArrayIndex = typename Mapping::ArrayIndex;
     {
-        const auto coord = ArrayDims{0, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 32);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 64);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 96);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 100);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 108);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 116);
+        const auto ai = ArrayIndex{0, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 32);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 64);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 96);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 100);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 108);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 116);
     }
 
     {
-        const auto coord = ArrayDims{0, 1};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 128);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 160);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 192);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 224);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 228);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 236);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 244);
+        const auto ai = ArrayIndex{0, 1};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 128);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 160);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 192);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 224);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 228);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 236);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 244);
     }
 
     {
-        const auto coord = ArrayDims{1, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 2048);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 2080);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 2112);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 2144);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 2148);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 2156);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 2164);
+        const auto ai = ArrayIndex{1, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 2048);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 2080);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 2112);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 2144);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 2148);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 2156);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 2164);
     }
 }
 
 TEST_CASE("treemapping.MoveRTDownFixed<>")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    const ArrayDims arrayDims{16, 16};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    const ArrayExtents extents{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::MoveRTDownFixed<tree::TreeCoord<>, 4>{}};
-    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
-    const Mapping mapping(arrayDims, treeOperationList);
+    using Mapping = tree::Mapping<ArrayExtents, Particle, decltype(treeOperationList)>;
+    const Mapping mapping(extents, treeOperationList);
 
     CHECK(
         tree::toString(mapping.basicTree)
@@ -431,48 +437,49 @@ TEST_CASE("treemapping.MoveRTDownFixed<>")
 
     CHECK(mapping.blobSize(0) == 14336);
 
+    using ArrayIndex = typename Mapping::ArrayIndex;
     {
-        const auto coord = ArrayDims{0, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 8);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 16);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 24);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 28);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 36);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 44);
+        const auto ai = ArrayIndex{0, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 8);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 16);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 24);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 28);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 36);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 44);
     }
 
     {
-        const auto coord = ArrayDims{0, 1};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 56);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 64);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 72);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 80);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 84);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 92);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 100);
+        const auto ai = ArrayIndex{0, 1};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 56);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 64);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 72);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 80);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 84);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 92);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 100);
     }
 
     {
-        const auto coord = ArrayDims{1, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 896);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 904);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 912);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 920);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 924);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 932);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 940);
+        const auto ai = ArrayIndex{1, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 896);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 904);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 912);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 920);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 924);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 932);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 940);
     }
 }
 
 TEST_CASE("treemapping.MoveRTDownFixed<0>")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    const ArrayDims arrayDims{16, 16};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    const ArrayExtents extents{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::MoveRTDownFixed<tree::TreeCoord<0>, 4>{}};
-    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
-    const Mapping mapping(arrayDims, treeOperationList);
+    using Mapping = tree::Mapping<ArrayExtents, Particle, decltype(treeOperationList)>;
+    const Mapping mapping(extents, treeOperationList);
 
     CHECK(
         tree::toString(mapping.basicTree)
@@ -487,48 +494,49 @@ TEST_CASE("treemapping.MoveRTDownFixed<0>")
 
     CHECK(mapping.blobSize(0) == 14336);
 
+    using ArrayIndex = typename Mapping::ArrayIndex;
     {
-        const auto coord = ArrayDims{0, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 8);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 16);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 96);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 112);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 120);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 128);
+        const auto ai = ArrayIndex{0, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 8);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 16);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 96);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 112);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 120);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 128);
     }
 
     {
-        const auto coord = ArrayDims{0, 1};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 24);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 32);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 40);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 100);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 136);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 144);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 152);
+        const auto ai = ArrayIndex{0, 1};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 24);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 32);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 40);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 100);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 136);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 144);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 152);
     }
 
     {
-        const auto coord = ArrayDims{1, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 896);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 904);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 912);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 992);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 1008);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 1016);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 1024);
+        const auto ai = ArrayIndex{1, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 896);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 904);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 912);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 992);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 1008);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 1016);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 1024);
     }
 }
 
 TEST_CASE("treemapping.MoveRTDownFixed<0,0>")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    const ArrayDims arrayDims{16, 16};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    const ArrayExtents extents{16, 16};
 
     auto treeOperationList = llama::Tuple{tree::functor::MoveRTDownFixed<tree::TreeCoord<0, 0>, 4>{}};
-    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
-    const Mapping mapping(arrayDims, treeOperationList);
+    using Mapping = tree::Mapping<ArrayExtents, Particle, decltype(treeOperationList)>;
+    const Mapping mapping(extents, treeOperationList);
 
     CHECK(
         tree::toString(mapping.basicTree)
@@ -543,55 +551,56 @@ TEST_CASE("treemapping.MoveRTDownFixed<0,0>")
 
     CHECK(mapping.blobSize(0) == 32768);
 
+    using ArrayIndex = typename Mapping::ArrayIndex;
     {
-        const auto coord = ArrayDims{0, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 32);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 64);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 96);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 100);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 108);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 116);
+        const auto ai = ArrayIndex{0, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 32);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 64);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 96);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 100);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 108);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 116);
     }
 
     {
-        const auto coord = ArrayDims{0, 1};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 128);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 160);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 192);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 224);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 228);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 236);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 244);
+        const auto ai = ArrayIndex{0, 1};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 128);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 160);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 192);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 224);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 228);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 236);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 244);
     }
 
     {
-        const auto coord = ArrayDims{1, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 2048);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 2080);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 2112);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 2144);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 2148);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 2156);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 2164);
+        const auto ai = ArrayIndex{1, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 2048);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 2080);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 2112);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 2144);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 2148);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 2156);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 2164);
     }
 }
 
 TEST_CASE("treemapping.vectorblocks.runtime")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    const ArrayDims arrayDims{16, 16};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    const ArrayExtents extents{16, 16};
 
     const auto vectorWidth = 8;
 
     auto treeOperationList = llama::Tuple{
-        tree::functor::MoveRTDown<tree::TreeCoord<0>>{vectorWidth}, // move 8 down from ArrayDims (to
+        tree::functor::MoveRTDown<tree::TreeCoord<0>>{vectorWidth}, // move 8 down from ArrayExtents (to
                                                                     // Position/Mass/Vel)
         tree::functor::MoveRTDown<tree::TreeCoord<0, 0>>{vectorWidth}, // move 8 down from Position (to X/Y/Z)
         tree::functor::MoveRTDown<tree::TreeCoord<0, 2>>{vectorWidth}, // move 8 down from Vel (to X/Y/Z)
     };
-    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
-    const Mapping mapping(arrayDims, treeOperationList);
+    using Mapping = tree::Mapping<ArrayExtents, Particle, decltype(treeOperationList)>;
+    const Mapping mapping(extents, treeOperationList);
 
     CHECK(
         tree::toString(mapping.basicTree)
@@ -606,55 +615,56 @@ TEST_CASE("treemapping.vectorblocks.runtime")
 
     CHECK(mapping.blobSize(0) == 14336);
 
+    using ArrayIndex = typename Mapping::ArrayIndex;
     {
-        const auto coord = ArrayDims{0, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 64);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 128);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 192);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 224);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 288);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 352);
+        const auto ai = ArrayIndex{0, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 64);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 128);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 192);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 224);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 288);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 352);
     }
 
     {
-        const auto coord = ArrayDims{0, 1};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 8);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 72);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 136);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 196);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 232);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 296);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 360);
+        const auto ai = ArrayIndex{0, 1};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 8);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 72);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 136);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 196);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 232);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 296);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 360);
     }
 
     {
-        const auto coord = ArrayDims{1, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 896);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 960);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 1024);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 1088);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 1120);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 1184);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 1248);
+        const auto ai = ArrayIndex{1, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 896);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 960);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 1024);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 1088);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 1120);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 1184);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 1248);
     }
 }
 
 TEST_CASE("treemapping.vectorblocks.compiletime")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    const ArrayDims arrayDims{16, 16};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    const ArrayExtents extents{16, 16};
 
     constexpr auto vectorWidth = 8;
 
     auto treeOperationList = llama::Tuple{
-        tree::functor::MoveRTDownFixed<tree::TreeCoord<0>, vectorWidth>{}, // move 8 down from ArrayDims (to
+        tree::functor::MoveRTDownFixed<tree::TreeCoord<0>, vectorWidth>{}, // move 8 down from ArrayExtents (to
                                                                            // Position/Mass/Vel)
         tree::functor::MoveRTDownFixed<tree::TreeCoord<0, 0>, vectorWidth>{}, // move 8 down from Position (to X/Y/Z)
         tree::functor::MoveRTDownFixed<tree::TreeCoord<0, 2>, vectorWidth>{}, // move 8 down from Vel (to X/Y/Z)
     };
-    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
-    const Mapping mapping(arrayDims, treeOperationList);
+    using Mapping = tree::Mapping<ArrayExtents, Particle, decltype(treeOperationList)>;
+    const Mapping mapping(extents, treeOperationList);
 
     CHECK(
         tree::toString(mapping.basicTree)
@@ -669,48 +679,49 @@ TEST_CASE("treemapping.vectorblocks.compiletime")
 
     CHECK(mapping.blobSize(0) == 14336);
 
+    using ArrayIndex = typename Mapping::ArrayIndex;
     {
-        const auto coord = ArrayDims{0, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 64);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 128);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 192);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 224);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 288);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 352);
+        const auto ai = ArrayIndex{0, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 0);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 64);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 128);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 192);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 224);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 288);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 352);
     }
 
     {
-        const auto coord = ArrayDims{0, 1};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 8);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 72);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 136);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 196);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 232);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 296);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 360);
+        const auto ai = ArrayIndex{0, 1};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 8);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 72);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 136);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 196);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 232);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 296);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 360);
     }
 
     {
-        const auto coord = ArrayDims{1, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 896);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 960);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 1024);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 1088);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 1120);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 1184);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 1248);
+        const auto ai = ArrayIndex{1, 0};
+        CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 896);
+        CHECK(mapping.blobNrAndOffset<0, 1>(ai).offset == 960);
+        CHECK(mapping.blobNrAndOffset<0, 2>(ai).offset == 1024);
+        CHECK(mapping.blobNrAndOffset<1>(ai).offset == 1088);
+        CHECK(mapping.blobNrAndOffset<2, 0>(ai).offset == 1120);
+        CHECK(mapping.blobNrAndOffset<2, 1>(ai).offset == 1184);
+        CHECK(mapping.blobNrAndOffset<2, 2>(ai).offset == 1248);
     }
 }
 
 TEST_CASE("treemapping.getNode")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    const ArrayDims arrayDims{16, 16};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    const ArrayExtents extents{16, 16};
 
     auto treeOperationList = llama::Tuple{};
-    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
-    const Mapping mapping(arrayDims, treeOperationList);
+    using Mapping = tree::Mapping<ArrayExtents, Particle, decltype(treeOperationList)>;
+    const Mapping mapping(extents, treeOperationList);
 
     using namespace tree;
     using namespace tree::functor::internal;
@@ -749,15 +760,13 @@ TEST_CASE("treemapping.getNode")
 
 TEST_CASE("treemapping")
 {
-    constexpr std::size_t arrayDimsSize = 12;
-
-    using ArrayDims = llama::ArrayDims<2>;
-    const ArrayDims arrayDims{arrayDimsSize, arrayDimsSize};
+    using ArrayExtents = llama::ArrayExtents<12, 12>;
+    constexpr ArrayExtents extents{};
 
     auto treeOperationList = llama::Tuple{tree::functor::Idem(), tree::functor::LeafOnlyRT{}, tree::functor::Idem{}};
 
-    using Mapping = tree::Mapping<ArrayDims, Particle, decltype(treeOperationList)>;
-    const Mapping mapping(arrayDims, treeOperationList);
+    using Mapping = tree::Mapping<ArrayExtents, Particle, decltype(treeOperationList)>;
+    const Mapping mapping(extents, treeOperationList);
 
     auto raw = prettyPrintType(mapping.basicTree);
 #ifdef _WIN32
@@ -1036,45 +1045,37 @@ TEST_CASE("treemapping")
     CHECK(mapping.blobNrAndOffset<2, 1>({50, 101}).offset == 10792);
 
     auto view = llama::allocView(mapping);
-    for(size_t x = 0; x < arrayDims[0]; ++x)
-        for(size_t y = 0; y < arrayDims[1]; ++y)
+    for(size_t x = 0; x < extents[0]; ++x)
+        for(size_t y = 0; y < extents[1]; ++y)
         {
             auto record = view(x, y);
-            llama::forEachLeafCoord<Particle>([&](auto coord) { record(coord) = 0; }, tag::Vel{});
+            llama::forEachLeafCoord<Particle>([&](auto ai) { record(ai) = 0; }, tag::Vel{});
         }
     double sum = 0.0;
-    for(size_t x = 0; x < arrayDims[0]; ++x)
-        for(size_t y = 0; y < arrayDims[1]; ++y)
+    for(size_t x = 0; x < extents[0]; ++x)
+        for(size_t y = 0; y < extents[1]; ++y)
             sum += view({x, y})(llama::RecordCoord<0, 1>{});
     CHECK(sum == 0);
 }
 
 TEST_CASE("treeCoordToString")
 {
-    const auto coord = llama::ArrayDims<3>{6, 7, 8};
+    const auto ai = llama::ArrayIndex{6, 7, 8};
     CHECK(
-        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<0, 0>>(coord))
-        == "[ 6:0, 7:0, 8:0, 0:0, 0:0 ]");
+        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<0, 0>>(ai)) == "[ 6:0, 7:0, 8:0, 0:0, 0:0 ]");
     CHECK(
-        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<0, 1>>(coord))
-        == "[ 6:0, 7:0, 8:0, 0:1, 0:0 ]");
+        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<0, 1>>(ai)) == "[ 6:0, 7:0, 8:0, 0:1, 0:0 ]");
     CHECK(
-        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<0, 2>>(coord))
-        == "[ 6:0, 7:0, 8:0, 0:2, 0:0 ]");
-    CHECK(tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<1>>(coord)) == "[ 6:0, 7:0, 8:1, 0:0 ]");
+        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<0, 2>>(ai)) == "[ 6:0, 7:0, 8:0, 0:2, 0:0 ]");
+    CHECK(tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<1>>(ai)) == "[ 6:0, 7:0, 8:1, 0:0 ]");
     CHECK(
-        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<2, 0>>(coord))
-        == "[ 6:0, 7:0, 8:2, 0:0, 0:0 ]");
+        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<2, 0>>(ai)) == "[ 6:0, 7:0, 8:2, 0:0, 0:0 ]");
     CHECK(
-        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<2, 1>>(coord))
-        == "[ 6:0, 7:0, 8:2, 0:1, 0:0 ]");
+        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<2, 1>>(ai)) == "[ 6:0, 7:0, 8:2, 0:1, 0:0 ]");
     CHECK(
-        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<2, 2>>(coord))
-        == "[ 6:0, 7:0, 8:2, 0:2, 0:0 ]");
+        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<2, 2>>(ai)) == "[ 6:0, 7:0, 8:2, 0:2, 0:0 ]");
     CHECK(
-        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<3, 0>>(coord))
-        == "[ 6:0, 7:0, 8:3, 0:0, 0:0 ]");
+        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<3, 0>>(ai)) == "[ 6:0, 7:0, 8:3, 0:0, 0:0 ]");
     CHECK(
-        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<3, 1>>(coord))
-        == "[ 6:0, 7:0, 8:3, 0:1, 0:0 ]");
+        tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<3, 1>>(ai)) == "[ 6:0, 7:0, 8:3, 0:1, 0:0 ]");
 }

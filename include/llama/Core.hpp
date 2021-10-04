@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "Array.hpp"
+#include "ArrayExtents.hpp"
 #include "Meta.hpp"
 #include "RecordCoord.hpp"
 
@@ -18,38 +18,6 @@ namespace llama
     {
     };
 
-    /// The run-time specified array dimensions.
-    /// \tparam Dim Compile-time number of dimensions.
-    template<std::size_t Dim>
-    struct ArrayDims : Array<std::size_t, Dim>
-    {
-    };
-
-    static_assert(std::is_trivially_default_constructible_v<ArrayDims<1>>); // so ArrayDims<1>{} will produce a zeroed
-                                                                            // coord. Should hold for all dimensions,
-                                                                            // but just checking for <1> here.
-    static_assert(std::is_trivially_copy_constructible_v<ArrayDims<1>>);
-    static_assert(std::is_trivially_move_constructible_v<ArrayDims<1>>);
-    static_assert(std::is_trivially_copy_assignable_v<ArrayDims<1>>);
-    static_assert(std::is_trivially_move_assignable_v<ArrayDims<1>>);
-
-    template<typename... Args>
-    ArrayDims(Args...) -> ArrayDims<sizeof...(Args)>;
-} // namespace llama
-
-template<size_t N>
-struct std::tuple_size<llama::ArrayDims<N>> : std::integral_constant<size_t, N>
-{
-};
-
-template<size_t I, size_t N>
-struct std::tuple_element<I, llama::ArrayDims<N>>
-{
-    using type = size_t;
-};
-
-namespace llama
-{
     /// A type list of \ref Field%s which may be used to define a record dimension.
     template<typename... Fields>
     struct Record
@@ -552,13 +520,19 @@ namespace llama
     }
 
     template<std::size_t Dim, typename Func, typename... OuterIndices>
-    LLAMA_FN_HOST_ACC_INLINE void forEachADCoord(ArrayDims<Dim> adSize, Func&& func, OuterIndices... outerIndices)
+    LLAMA_FN_HOST_ACC_INLINE void forEachADCoord(ArrayIndex<Dim> adSize, Func&& func, OuterIndices... outerIndices)
     {
         if constexpr(Dim > 0)
             for(std::size_t i = 0; i < adSize[0]; i++)
-                forEachADCoord(ArrayDims<Dim - 1>{pop_front(adSize)}, std::forward<Func>(func), outerIndices..., i);
+                forEachADCoord(ArrayIndex<Dim - 1>{pop_front(adSize)}, std::forward<Func>(func), outerIndices..., i);
         else
-            std::forward<Func>(func)(ArrayDims<sizeof...(outerIndices)>{outerIndices...});
+            std::forward<Func>(func)(ArrayIndex<sizeof...(outerIndices)>{outerIndices...});
+    }
+
+    template<std::size_t... Sizes, typename Func>
+    LLAMA_FN_HOST_ACC_INLINE void forEachADCoord(ArrayExtents<Sizes...> extents, Func&& func)
+    {
+        forEachADCoord(extents.toArray(), std::forward<Func>(func));
     }
 
     namespace internal

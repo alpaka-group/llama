@@ -163,22 +163,22 @@ namespace llama::mapping::tree
         }
     } // namespace internal
 
-    /// An experimental attempt to provide a general purpose description of a mapping. \ref ArrayDims and record
-    /// dimension are represented by a compile time tree data structure. This tree is mapped into memory by means of a
+    /// An experimental attempt to provide a general purpose description of a mapping. \ref Array and record
+    /// dimensions are represented by a compile time tree data structure. This tree is mapped into memory by means of a
     /// breadth-first tree traversal. By specifying additional tree operations, the tree can be modified at compile
     /// time before being mapped to memory.
-    template<typename TArrayDims, typename TRecordDim, typename TreeOperationList>
-    struct Mapping
+    template<typename TArrayExtents, typename TRecordDim, typename TreeOperationList>
+    struct Mapping : private TArrayExtents
     {
-        using ArrayDims = TArrayDims;
+        using ArrayExtents = TArrayExtents;
+        using ArrayIndex = typename ArrayExtents::Index;
         using RecordDim = TRecordDim;
-        using BasicTree = TreeFromDimensions<ArrayDims, RecordDim>;
+        using BasicTree = TreeFromDimensions<ArrayExtents, RecordDim>;
         // TODO(bgruber): , support more than one blob
         static constexpr std::size_t blobCount = 1;
 
         using MergedFunctors = internal::MergeFunctors<BasicTree, TreeOperationList>;
 
-        ArrayDims arrayDimsSize = {};
         BasicTree basicTree;
         MergedFunctors mergedFunctors;
 
@@ -188,17 +188,17 @@ namespace llama::mapping::tree
         Mapping() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        Mapping(ArrayDims size, TreeOperationList treeOperationList, RecordDim = {})
-            : arrayDimsSize(size)
-            , basicTree(createTree<RecordDim>(size))
+        Mapping(ArrayExtents extents, TreeOperationList treeOperationList, RecordDim = {})
+            : ArrayExtents(extents)
+            , basicTree(createTree<RecordDim>(extents.toArray()))
             , mergedFunctors(basicTree, treeOperationList)
             , resultTree(mergedFunctors.basicToResult(basicTree))
         {
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto arrayDims() const
+        LLAMA_FN_HOST_ACC_INLINE auto extents() const -> ArrayExtents
         {
-            return arrayDimsSize;
+            return ArrayExtents{*this};
         }
 
         LLAMA_FN_HOST_ACC_INLINE
@@ -208,10 +208,10 @@ namespace llama::mapping::tree
         }
 
         template<std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayDims coord, RecordCoord<RecordCoords...> = {}) const
+        LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayIndex ai, RecordCoord<RecordCoords...> = {}) const
             -> NrAndOffset
         {
-            auto const basicTreeCoord = createTreeCoord<RecordCoord<RecordCoords...>>(coord);
+            auto const basicTreeCoord = createTreeCoord<RecordCoord<RecordCoords...>>(ai);
             auto const resultTreeCoord = mergedFunctors.basicCoordToResultCoord(basicTreeCoord, basicTree);
             const auto offset = internal::getTreeBlobByte(resultTree, resultTreeCoord);
             return {0, offset};

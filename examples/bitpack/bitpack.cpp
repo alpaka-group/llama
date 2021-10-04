@@ -18,12 +18,13 @@ using Vector = llama::Record<
 // clang-format on
 
 template<
-    typename TArrayDims,
+    typename TArrayExtents,
     typename TRecordDim,
     typename LinearizeArrayDimsFunctor = llama::mapping::LinearizeArrayDimsCpp>
-struct BitpackSoA
+struct BitpackSoA : TArrayExtents
 {
-    using ArrayDims = TArrayDims;
+    using ArrayExtents = TArrayExtents;
+    using ArrayIndex = typename ArrayExtents::Index;
     using RecordDim = TRecordDim;
 
     static constexpr std::size_t blobCount = boost::mp11::mp_size<llama::FlatRecordDim<RecordDim>>::value;
@@ -31,19 +32,21 @@ struct BitpackSoA
     constexpr BitpackSoA() = default;
 
     LLAMA_FN_HOST_ACC_INLINE
-    constexpr explicit BitpackSoA(unsigned bits, ArrayDims size, RecordDim = {}) : bits{bits}, arrayDimsSize(size)
+    constexpr explicit BitpackSoA(unsigned bits, ArrayExtents extents, RecordDim = {})
+        : ArrayExtents(extents)
+        , bits{bits}
     {
     }
 
-    LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayDims() const -> ArrayDims
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayExtents
     {
-        return arrayDimsSize;
+        return *this; // NOLINT(cppcoreguidelines-slicing)
     }
 
     LLAMA_FN_HOST_ACC_INLINE
     constexpr auto blobSize(std::size_t /*blobIndex*/) const -> std::size_t
     {
-        return (LinearizeArrayDimsFunctor{}.size(arrayDimsSize) * bits + CHAR_BIT - 1) / CHAR_BIT;
+        return (LinearizeArrayDimsFunctor{}.size(extents()) * bits + CHAR_BIT - 1) / CHAR_BIT;
     }
 
     template<std::size_t... RecordCoords>
@@ -122,12 +125,12 @@ struct BitpackSoA
 
     template<std::size_t... RecordCoords, typename Blob>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto compute(
-        ArrayDims coord,
+        ArrayIndex ai,
         llama::RecordCoord<RecordCoords...>,
         llama::Array<Blob, blobCount>& blobs) const
     {
         constexpr auto blob = llama::flatRecordCoord<RecordDim, llama::RecordCoord<RecordCoords...>>;
-        const auto bitOffset = LinearizeArrayDimsFunctor{}(coord, arrayDimsSize) * bits;
+        const auto bitOffset = LinearizeArrayDimsFunctor{}(ai, extents()) * bits;
 
         using DstType = llama::GetType<RecordDim, llama::RecordCoord<RecordCoords...>>;
         return Reference<DstType, RegisterInt*>{reinterpret_cast<RegisterInt*>(&blobs[blob][0]), bitOffset, bits};
@@ -135,12 +138,12 @@ struct BitpackSoA
 
     template<std::size_t... RecordCoords, typename Blob>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto compute(
-        ArrayDims coord,
+        ArrayIndex ai,
         llama::RecordCoord<RecordCoords...>,
         const llama::Array<Blob, blobCount>& blobs) const
     {
         constexpr auto blob = llama::flatRecordCoord<RecordDim, llama::RecordCoord<RecordCoords...>>;
-        const auto bitOffset = LinearizeArrayDimsFunctor{}(coord, arrayDimsSize) * bits;
+        const auto bitOffset = LinearizeArrayDimsFunctor{}(ai, extents()) * bits;
 
         using DstType = llama::GetType<RecordDim, llama::RecordCoord<RecordCoords...>>;
         return Reference<DstType, const RegisterInt*>{
@@ -151,14 +154,13 @@ struct BitpackSoA
 
 private:
     unsigned bits = 0;
-    ArrayDims arrayDimsSize = {};
 };
 
 auto main() -> int
 {
     constexpr auto N = 128;
     constexpr auto bits = 7;
-    const auto mapping = BitpackSoA{bits, llama::ArrayDims{N}, Vector{}};
+    const auto mapping = BitpackSoA{bits, llama::ArrayExtents<llama::dyn>{N}, Vector{}};
 
     auto view = llama::allocView(mapping);
 
@@ -184,7 +186,8 @@ auto main() -> int
         fmt::print("[{}, {}, {}]\n", view(i)(tag::X{}), view(i)(tag::Y{}), view(i)(tag::Z{}));
 
     // extract into a view of full size integers
-    auto viewExtracted = llama::allocViewUninitialized(llama::mapping::AoS<llama::ArrayDims<1>, Vector>{{N}});
+    auto viewExtracted
+        = llama::allocViewUninitialized(llama::mapping::AoS<llama::ArrayExtents<llama::dyn>, Vector>{{N}});
     llama::copy(view, viewExtracted);
     if(!std::equal(view.begin(), view.end(), viewExtracted.begin(), viewExtracted.end()))
         fmt::print("ERROR: unpacked view is different\n");

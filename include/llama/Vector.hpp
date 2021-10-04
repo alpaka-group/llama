@@ -19,7 +19,7 @@ namespace llama
     template<typename Mapping>
     struct Vector
     {
-        static_assert(Mapping::ArrayDims::rank == 1, "llama::Vector only supports 1D mappings");
+        static_assert(Mapping::ArrayExtents::rank == 1, "llama::Vector only supports 1D mappings");
 
         using ViewType = decltype(allocViewUninitialized<Mapping>());
         using RecordDim = typename Mapping::RecordDim;
@@ -171,7 +171,7 @@ namespace llama
 
         LLAMA_FN_HOST_ACC_INLINE auto capacity() const -> std::size_t
         {
-            return m_view.mapping().arrayDims()[0];
+            return m_view.mapping().extents()[0];
         }
 
         LLAMA_FN_HOST_ACC_INLINE void shrink_to_fit()
@@ -276,7 +276,7 @@ namespace llama
     private:
         LLAMA_FN_HOST_ACC_INLINE void changeCapacity(std::size_t cap)
         {
-            auto newView = allocViewUninitialized<Mapping>(Mapping{typename Mapping::ArrayDims{cap}});
+            auto newView = allocViewUninitialized<Mapping>(Mapping{typename Mapping::ArrayExtents{cap}});
             auto b = begin();
             std::copy(begin(), b + std::min(m_size, cap), newView.begin());
             using std::swap;

@@ -196,10 +196,10 @@ void output(int n, const ParticleView& particles)
     };
     auto addFloat = [&](float f) { buffer.push_back(swapBytes(f)); };
 
-    const auto pointCount = particles.mapping().arrayDims()[0];
+    const auto pointCount = particles.mapping().extents()[0];
     outP << "POINTS " << pointCount << " float\n";
     buffer.reserve(pointCount * 3);
-    for(auto i : llama::ArrayDimsIndexRange{particles.mapping().arrayDims()})
+    for(auto i : llama::ArrayIndexRange{particles.mapping().extents()})
     {
         auto p = particles(i);
         addFloat(0);
@@ -210,7 +210,7 @@ void output(int n, const ParticleView& particles)
 
     outP << "POINT_DATA " << pointCount << "\nVECTORS velocity float\n";
     buffer.clear();
-    for(auto i : llama::ArrayDimsIndexRange{particles.mapping().arrayDims()})
+    for(auto i : llama::ArrayIndexRange{particles.mapping().extents()})
     {
         auto p = particles(i);
         addFloat(p(U{}, Z{}));
@@ -221,13 +221,13 @@ void output(int n, const ParticleView& particles)
 
     outP << "SCALARS q float 1\nLOOKUP_TABLE default\n";
     buffer.clear();
-    for(auto i : llama::ArrayDimsIndexRange{particles.mapping().arrayDims()})
+    for(auto i : llama::ArrayIndexRange{particles.mapping().extents()})
         addFloat(particles(i)(Q{}));
     flushBuffer();
 
     outP << "SCALARS m float 1\nLOOKUP_TABLE default\n";
     buffer.clear();
-    for(auto i : llama::ArrayDimsIndexRange{particles.mapping().arrayDims()})
+    for(auto i : llama::ArrayIndexRange{particles.mapping().extents()})
         addFloat(particles(i)(M{}));
     flushBuffer();
 }
@@ -263,33 +263,33 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& devHost)
 
     auto fieldMapping = []
     {
-        const auto fieldAd = llama::ArrayDims<2>{{X_, Y_}};
+        const auto fieldExtents = llama::ArrayExtentsDynamic<2>{{X_, Y_}};
         if constexpr(FieldMapping == 0)
-            return llama::mapping::AoS<decltype(fieldAd), V3Real>(fieldAd);
+            return llama::mapping::AoS<decltype(fieldExtents), V3Real>(fieldExtents);
         if constexpr(FieldMapping == 1)
-            return llama::mapping::AoS<decltype(fieldAd), V3Real, true, llama::mapping::LinearizeArrayDimsFortran>(
-                fieldAd);
+            return llama::mapping::
+                AoS<decltype(fieldExtents), V3Real, true, llama::mapping::LinearizeArrayDimsFortran>(fieldExtents);
         if constexpr(FieldMapping == 2)
-            return llama::mapping::AoS<decltype(fieldAd), V3Real, true, llama::mapping::LinearizeArrayDimsMorton>(
-                fieldAd);
+            return llama::mapping::AoS<decltype(fieldExtents), V3Real, true, llama::mapping::LinearizeArrayDimsMorton>(
+                fieldExtents);
         if constexpr(FieldMapping == 3)
-            return llama::mapping::SoA<decltype(fieldAd), V3Real, false>(fieldAd);
+            return llama::mapping::SoA<decltype(fieldExtents), V3Real, false>(fieldExtents);
         if constexpr(FieldMapping == 4)
-            return llama::mapping::SoA<decltype(fieldAd), V3Real, false, llama::mapping::LinearizeArrayDimsFortran>(
-                fieldAd);
+            return llama::mapping::
+                SoA<decltype(fieldExtents), V3Real, false, llama::mapping::LinearizeArrayDimsFortran>(fieldExtents);
         if constexpr(FieldMapping == 5)
-            return llama::mapping::SoA<decltype(fieldAd), V3Real, false, llama::mapping::LinearizeArrayDimsMorton>(
-                fieldAd);
+            return llama::mapping::
+                SoA<decltype(fieldExtents), V3Real, false, llama::mapping::LinearizeArrayDimsMorton>(fieldExtents);
         if constexpr(FieldMapping == 6)
-            return llama::mapping::SoA<decltype(fieldAd), V3Real, true>(fieldAd);
+            return llama::mapping::SoA<decltype(fieldExtents), V3Real, true>(fieldExtents);
         if constexpr(FieldMapping == 7)
-            return llama::mapping::SoA<decltype(fieldAd), V3Real, true, llama::mapping::LinearizeArrayDimsFortran>(
-                fieldAd);
+            return llama::mapping::
+                SoA<decltype(fieldExtents), V3Real, true, llama::mapping::LinearizeArrayDimsFortran>(fieldExtents);
         if constexpr(FieldMapping == 8)
-            return llama::mapping::SoA<decltype(fieldAd), V3Real, true, llama::mapping::LinearizeArrayDimsMorton>(
-                fieldAd);
+            return llama::mapping::SoA<decltype(fieldExtents), V3Real, true, llama::mapping::LinearizeArrayDimsMorton>(
+                fieldExtents);
         if constexpr(FieldMapping == 9)
-            return llama::mapping::AoSoA<decltype(fieldAd), V3Real, AOSOA_LANES>{fieldAd};
+            return llama::mapping::AoSoA<decltype(fieldExtents), V3Real, AOSOA_LANES>{fieldExtents};
     }();
 
     const auto fieldBufferSize = fieldMapping.blobSize(0);
@@ -308,15 +308,15 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& devHost)
 
     auto particleMapping = [&]
     {
-        const auto particleAd = llama::ArrayDims{numpart};
+        const auto particleExtents = llama::ArrayExtents{numpart};
         if constexpr(ParticleMapping == 0)
-            return llama::mapping::AoS<decltype(particleAd), Particle>{particleAd};
+            return llama::mapping::AoS<decltype(particleExtents), Particle>{particleExtents};
         if constexpr(ParticleMapping == 1)
-            return llama::mapping::SoA<decltype(particleAd), Particle, false>{particleAd};
+            return llama::mapping::SoA<decltype(particleExtents), Particle, false>{particleExtents};
         if constexpr(ParticleMapping == 2)
-            return llama::mapping::SoA<decltype(particleAd), Particle, true>{particleAd};
+            return llama::mapping::SoA<decltype(particleExtents), Particle, true>{particleExtents};
         if constexpr(ParticleMapping == 3)
-            return llama::mapping::AoSoA<decltype(particleAd), Particle, AOSOA_LANES>{particleAd};
+            return llama::mapping::AoSoA<decltype(particleExtents), Particle, AOSOA_LANES>{particleExtents};
     }();
     const auto particleBufferSize = particleMapping.blobSize(0);
 

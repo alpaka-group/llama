@@ -8,7 +8,7 @@
 
 namespace llama::mapping
 {
-    /// Maps all ArrayDims coordinates into the same location and layouts struct members consecutively. This mapping is
+    /// Maps all array dimension indices to the same location and layouts struct members consecutively. This mapping is
     /// used for temporary, single element views.
     /// \tparam AlignAndPad If true, padding bytes are inserted to guarantee that struct members are properly aligned.
     /// If false, struct members are tightly packed.
@@ -16,13 +16,14 @@ namespace llama::mapping
     /// FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref FlattenRecordDimDecreasingAlignment and
     /// \ref FlattenRecordDimMinimizePadding.
     template<
-        typename TArrayDims,
+        typename TArrayExtents,
         typename TRecordDim,
         bool AlignAndPad = true,
         template<typename> typename FlattenRecordDim = FlattenRecordDimMinimizePadding>
-    struct One
+    struct One : TArrayExtents
     {
-        using ArrayDims = TArrayDims;
+        using ArrayExtents = TArrayExtents;
+        using ArrayIndex = typename ArrayExtents::Index;
         using RecordDim = TRecordDim;
 
         static constexpr std::size_t blobCount = 1;
@@ -30,18 +31,13 @@ namespace llama::mapping
         constexpr One() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr explicit One(ArrayDims, RecordDim = {})
+        constexpr explicit One(ArrayExtents extents, RecordDim = {}) : ArrayExtents(extents)
         {
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayDims() const -> ArrayDims
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayExtents
         {
-            // TODO(bgruber): not sure if this is the right approach, since we take any ArrayDims in the ctor
-            ArrayDims ad;
-            if constexpr(ArrayDims::rank > 0)
-                for(auto i = 0; i < ArrayDims::rank; i++)
-                    ad[i] = 1;
-            return ad;
+            return ArrayExtents{*this};
         }
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(std::size_t) const -> std::size_t
@@ -50,7 +46,7 @@ namespace llama::mapping
         }
 
         template<std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayDims, RecordCoord<RecordCoords...> = {}) const
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayIndex, RecordCoord<RecordCoords...> = {}) const
             -> NrAndOffset
         {
             constexpr std::size_t flatFieldIndex =
@@ -68,23 +64,23 @@ namespace llama::mapping
 
     /// One mapping preserving the alignment of the field types by inserting padding.
     /// \see One
-    template<typename ArrayDims, typename RecordDim>
-    using AlignedOne = One<ArrayDims, RecordDim, true, FlattenRecordDimInOrder>;
+    template<typename ArrayExtents, typename RecordDim>
+    using AlignedOne = One<ArrayExtents, RecordDim, true, FlattenRecordDimInOrder>;
 
     /// One mapping preserving the alignment of the field types by inserting padding and permuting the field order to
     /// minimize this padding.
     /// \see One
-    template<typename ArrayDims, typename RecordDim>
-    using MinAlignedOne = One<ArrayDims, RecordDim, true, FlattenRecordDimMinimizePadding>;
+    template<typename ArrayExtents, typename RecordDim>
+    using MinAlignedOne = One<ArrayExtents, RecordDim, true, FlattenRecordDimMinimizePadding>;
 
     /// One mapping packing the field types tightly, violating the types' alignment requirements.
     /// \see One
-    template<typename ArrayDims, typename RecordDim>
-    using PackedOne = One<ArrayDims, RecordDim, false, FlattenRecordDimInOrder>;
+    template<typename ArrayExtents, typename RecordDim>
+    using PackedOne = One<ArrayExtents, RecordDim, false, FlattenRecordDimInOrder>;
 
     template<typename Mapping>
     inline constexpr bool isOne = false;
 
-    template<typename ArrayDims, typename RecordDim, bool AlignAndPad, template<typename> typename FlattenRecordDim>
-    inline constexpr bool isOne<One<ArrayDims, RecordDim, AlignAndPad, FlattenRecordDim>> = true;
+    template<typename ArrayExtents, typename RecordDim, bool AlignAndPad, template<typename> typename FlattenRecordDim>
+    inline constexpr bool isOne<One<ArrayExtents, RecordDim, AlignAndPad, FlattenRecordDim>> = true;
 } // namespace llama::mapping

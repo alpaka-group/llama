@@ -48,26 +48,26 @@ namespace llama
                              typename LeftRecord::AccessibleRecordDim,
                              typename RightRecord::AccessibleRecordDim>)
             {
-                forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>([&](auto coord) LLAMA_LAMBDA_INLINE
-                                                                           { Functor{}(left(coord), right(coord)); });
+                forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE
+                                                                           { Functor{}(left(rc), right(rc)); });
             }
             else
             {
                 forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>(
-                    [&](auto leftCoord) LLAMA_LAMBDA_INLINE
+                    [&](auto leftRC) LLAMA_LAMBDA_INLINE
                     {
-                        using LeftInnerCoord = decltype(leftCoord);
+                        using LeftInnerCoord = decltype(leftRC);
                         forEachLeafCoord<typename RightRecord::AccessibleRecordDim>(
-                            [&](auto rightCoord) LLAMA_LAMBDA_INLINE
+                            [&](auto rightRC) LLAMA_LAMBDA_INLINE
                             {
-                                using RightInnerCoord = decltype(rightCoord);
+                                using RightInnerCoord = decltype(rightRC);
                                 if constexpr(hasSameTags<
                                                  typename LeftRecord::AccessibleRecordDim,
                                                  LeftInnerCoord,
                                                  typename RightRecord::AccessibleRecordDim,
                                                  RightInnerCoord>)
                                 {
-                                    Functor{}(left(leftCoord), right(rightCoord));
+                                    Functor{}(left(leftRC), right(rightRC));
                                 }
                             });
                     });
@@ -78,8 +78,8 @@ namespace llama
         template<typename Functor, typename LeftRecord, typename T>
         LLAMA_FN_HOST_ACC_INLINE auto virtualRecordArithOperator(LeftRecord& left, const T& right) -> LeftRecord&
         {
-            forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>([&](auto leftCoord) LLAMA_LAMBDA_INLINE
-                                                                       { Functor{}(left(leftCoord), right); });
+            forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>([&](auto leftRC) LLAMA_LAMBDA_INLINE
+                                                                       { Functor{}(left(leftRC), right); });
             return left;
         }
 
@@ -102,25 +102,25 @@ namespace llama
                              typename RightRecord::AccessibleRecordDim>)
             {
                 forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>(
-                    [&](auto coord) LLAMA_LAMBDA_INLINE { result &= Functor{}(left(coord), right(coord)); });
+                    [&](auto rc) LLAMA_LAMBDA_INLINE { result &= Functor{}(left(rc), right(rc)); });
             }
             else
             {
                 forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>(
-                    [&](auto leftCoord) LLAMA_LAMBDA_INLINE
+                    [&](auto leftRC) LLAMA_LAMBDA_INLINE
                     {
-                        using LeftInnerCoord = decltype(leftCoord);
+                        using LeftInnerCoord = decltype(leftRC);
                         forEachLeafCoord<typename RightRecord::AccessibleRecordDim>(
-                            [&](auto rightCoord) LLAMA_LAMBDA_INLINE
+                            [&](auto rightRC) LLAMA_LAMBDA_INLINE
                             {
-                                using RightInnerCoord = decltype(rightCoord);
+                                using RightInnerCoord = decltype(rightRC);
                                 if constexpr(hasSameTags<
                                                  typename LeftRecord::AccessibleRecordDim,
                                                  LeftInnerCoord,
                                                  typename RightRecord::AccessibleRecordDim,
                                                  RightInnerCoord>)
                                 {
-                                    result &= Functor{}(left(leftCoord), right(rightCoord));
+                                    result &= Functor{}(left(leftRC), right(rightRC));
                                 }
                             });
                     });
@@ -133,10 +133,10 @@ namespace llama
         {
             bool result = true;
             forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>(
-                [&](auto leftCoord) LLAMA_LAMBDA_INLINE {
+                [&](auto leftRC) LLAMA_LAMBDA_INLINE {
                     result &= Functor{}(
-                        left(leftCoord),
-                        static_cast<std::remove_reference_t<decltype(left(leftCoord))>>(right));
+                        left(leftRC),
+                        static_cast<std::remove_reference_t<decltype(left(leftRC))>>(right));
                 });
             return result;
         }
@@ -316,14 +316,14 @@ namespace llama
     /// records should not be created by the user. They are returned from various access functions in \ref View and
     /// VirtualRecord itself.
     template<typename TView, typename TBoundRecordCoord, bool OwnView>
-    struct VirtualRecord : private TView::Mapping::ArrayDims
+    struct VirtualRecord : private TView::Mapping::ArrayIndex
     {
         using View = TView; ///< View this virtual record points into.
         using BoundRecordCoord
             = TBoundRecordCoord; ///< Record coords into View::RecordDim which are already bound by this VirtualRecord.
 
     private:
-        using ArrayDims = typename View::Mapping::ArrayDims;
+        using ArrayIndex = typename View::Mapping::ArrayIndex;
         using RecordDim = typename View::Mapping::RecordDim;
 
         std::conditional_t<OwnView, View, View&> view;
@@ -336,15 +336,15 @@ namespace llama
         /// Creates an empty VirtualRecord. Only available for if the view is owned. Used by llama::One.
         LLAMA_FN_HOST_ACC_INLINE VirtualRecord()
             /* requires(OwnView) */
-            : ArrayDims{}
+            : ArrayIndex{}
             , view{allocViewStack<0, RecordDim>()}
         {
             static_assert(OwnView, "The default constructor of VirtualRecord is only available if it owns the view.");
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        VirtualRecord(ArrayDims arrayDimsCoord, std::conditional_t<OwnView, View&&, View&> view)
-            : ArrayDims{arrayDimsCoord}
+        VirtualRecord(ArrayIndex ai, std::conditional_t<OwnView, View&&, View&> view)
+            : ArrayIndex{ai}
             , view{static_cast<decltype(view)>(view)}
         {
         }
@@ -363,9 +363,9 @@ namespace llama
 
         ~VirtualRecord() = default;
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayDimsCoord() const
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayIndex() const -> ArrayIndex
         {
-            return static_cast<const ArrayDims&>(*this);
+            return *this;
         }
 
         /// Create a VirtuaRecord from a different VirtualRecord. Only available for if the view is owned. Used by
@@ -409,12 +409,12 @@ namespace llama
             if constexpr(isRecord<AccessedType> || internal::IsBoundedArray<AccessedType>::value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualRecord<const View, AbsolutCoord>{arrayDimsCoord(), this->view};
+                return VirtualRecord<const View, AbsolutCoord>{arrayIndex(), this->view};
             }
             else
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return this->view.accessor(arrayDimsCoord(), AbsolutCoord{});
+                return this->view.accessor(arrayIndex(), AbsolutCoord{});
             }
         }
 
@@ -427,12 +427,12 @@ namespace llama
             if constexpr(isRecord<AccessedType> || internal::IsBoundedArray<AccessedType>::value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualRecord<View, AbsolutCoord>{arrayDimsCoord(), this->view};
+                return VirtualRecord<View, AbsolutCoord>{arrayIndex(), this->view};
             }
             else
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return this->view.accessor(arrayDimsCoord(), AbsolutCoord{});
+                return this->view.accessor(arrayIndex(), AbsolutCoord{});
             }
         }
 
@@ -713,10 +713,10 @@ namespace llama
             std::conditional_t<OwnView, VirtualRecord&, VirtualRecord> b) noexcept
         {
             forEachLeafCoord<AccessibleRecordDim>(
-                [&](auto coord) LLAMA_LAMBDA_INLINE
+                [&](auto rc) LLAMA_LAMBDA_INLINE
                 {
                     using std::swap;
-                    swap(a(coord), b(coord));
+                    swap(a(rc), b(rc));
                 });
         }
     };
@@ -738,10 +738,10 @@ namespace llama
     {
         using LeftRecord = VirtualRecord<ViewA, BoundRecordDimA, OwnViewA>;
         forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>(
-            [&](auto coord) LLAMA_LAMBDA_INLINE
+            [&](auto rc) LLAMA_LAMBDA_INLINE
             {
                 using std::swap;
-                swap(a(coord), b(coord));
+                swap(a(rc), b(rc));
             });
     }
 

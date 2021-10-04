@@ -7,22 +7,28 @@
 #ifdef __cpp_lib_concepts
 TEST_CASE("mapping.concepts")
 {
-    STATIC_REQUIRE(llama::Mapping<llama::mapping::AlignedAoS<llama::ArrayDims<2>, Particle>>);
-    STATIC_REQUIRE(llama::Mapping<llama::mapping::PackedAoS<llama::ArrayDims<2>, Particle>>);
-    STATIC_REQUIRE(llama::Mapping<llama::mapping::SingleBlobSoA<llama::ArrayDims<2>, Particle>>);
-    STATIC_REQUIRE(llama::Mapping<llama::mapping::MultiBlobSoA<llama::ArrayDims<2>, Particle>>);
-    STATIC_REQUIRE(llama::Mapping<llama::mapping::AoSoA<llama::ArrayDims<2>, Particle, 8>>);
+    STATIC_REQUIRE(llama::Mapping<llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<2>, Particle>>);
+    STATIC_REQUIRE(llama::Mapping<llama::mapping::PackedAoS<llama::ArrayExtentsDynamic<2>, Particle>>);
+    STATIC_REQUIRE(llama::Mapping<llama::mapping::SingleBlobSoA<llama::ArrayExtentsDynamic<2>, Particle>>);
+    STATIC_REQUIRE(llama::Mapping<llama::mapping::MultiBlobSoA<llama::ArrayExtentsDynamic<2>, Particle>>);
+    STATIC_REQUIRE(llama::Mapping<llama::mapping::AoSoA<llama::ArrayExtentsDynamic<2>, Particle, 8>>);
+
+    STATIC_REQUIRE(llama::Mapping<llama::mapping::AlignedAoS<llama::ArrayExtents<2>, Particle>>);
+    STATIC_REQUIRE(llama::Mapping<llama::mapping::PackedAoS<llama::ArrayExtents<2>, Particle>>);
+    STATIC_REQUIRE(llama::Mapping<llama::mapping::SingleBlobSoA<llama::ArrayExtents<2>, Particle>>);
+    STATIC_REQUIRE(llama::Mapping<llama::mapping::MultiBlobSoA<llama::ArrayExtents<2>, Particle>>);
+    STATIC_REQUIRE(llama::Mapping<llama::mapping::AoSoA<llama::ArrayExtents<2>, Particle, 8>>);
 }
 #endif
 
 TEST_CASE("mapping.traits")
 {
-    using AAoS = llama::mapping::AlignedAoS<llama::ArrayDims<2>, Particle>;
-    using PAoS = llama::mapping::PackedAoS<llama::ArrayDims<2>, Particle>;
-    using SBSoA = llama::mapping::SingleBlobSoA<llama::ArrayDims<2>, Particle>;
-    using MBSoA = llama::mapping::MultiBlobSoA<llama::ArrayDims<2>, Particle>;
-    using AoAoS = llama::mapping::AoSoA<llama::ArrayDims<2>, Particle, 8>;
-    using One = llama::mapping::One<llama::ArrayDims<2>, Particle>;
+    using AAoS = llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<2>, Particle>;
+    using PAoS = llama::mapping::PackedAoS<llama::ArrayExtentsDynamic<2>, Particle>;
+    using SBSoA = llama::mapping::SingleBlobSoA<llama::ArrayExtentsDynamic<2>, Particle>;
+    using MBSoA = llama::mapping::MultiBlobSoA<llama::ArrayExtentsDynamic<2>, Particle>;
+    using AoAoS = llama::mapping::AoSoA<llama::ArrayExtentsDynamic<2>, Particle, 8>;
+    using One = llama::mapping::One<llama::ArrayExtentsDynamic<2>, Particle>;
 
     STATIC_REQUIRE(llama::mapping::isAoS<AAoS>);
     STATIC_REQUIRE(llama::mapping::isAoS<PAoS>);
@@ -55,368 +61,418 @@ TEST_CASE("mapping.traits")
 
 TEST_CASE("address.AoS.Packed")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    auto arrayDims = ArrayDims{16, 16};
-    auto mapping = llama::mapping::PackedAoS<ArrayDims, Particle>{arrayDims};
-
+    auto test = [](auto arrayExtents)
     {
-        const auto coord = ArrayDims{0, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 8);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 16);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 24);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 28);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 36);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 44);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 52);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 53);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 54);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 55);
-    }
+        using Mapping = llama::mapping::PackedAoS<decltype(arrayExtents), Particle>;
+        auto mapping = Mapping{arrayExtents};
+        using ArrayIndex = typename Mapping::ArrayIndex;
 
-    {
-        const auto coord = ArrayDims{0, 1};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 56);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 64);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 72);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 80);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 84);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 92);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 100);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 108);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 109);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 110);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 111);
-    }
+        {
+            const auto ai = ArrayIndex{0, 0};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 0);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 8);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 16);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 24);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 28);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 36);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 44);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 52);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 53);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 54);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 55);
+        }
 
-    {
-        const auto coord = ArrayDims{1, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 896);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 904);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 912);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 920);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 924);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 932);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 940);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 948);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 949);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 950);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 951);
-    }
+        {
+            const auto ai = ArrayIndex{0, 1};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 56);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 64);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 72);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 80);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 84);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 92);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 100);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 108);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 109);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 110);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 111);
+        }
+
+        {
+            const auto ai = ArrayIndex{1, 0};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 896);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 904);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 912);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 920);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 924);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 932);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 940);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 948);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 949);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 950);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 951);
+        }
+    };
+    test(llama::ArrayExtentsDynamic<2>{16, 16});
+    test(llama::ArrayExtents<16, llama::dyn>{16});
+    test(llama::ArrayExtents<llama::dyn, 16>{16});
+    test(llama::ArrayExtents<16, 16>{});
 }
 
 TEST_CASE("address.AoS.Packed.fortran")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    auto arrayDims = ArrayDims{16, 16};
-    auto mapping
-        = llama::mapping::PackedAoS<ArrayDims, Particle, llama::mapping::LinearizeArrayDimsFortran>{arrayDims};
-
+    auto test = [](auto arrayExtents)
     {
-        const auto coord = ArrayDims{0, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 8);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 16);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 24);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 28);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 36);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 44);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 52);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 53);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 54);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 55);
-    }
+        using Mapping
+            = llama::mapping::PackedAoS<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayDimsFortran>;
+        auto mapping = Mapping{arrayExtents};
+        using ArrayIndex = typename Mapping::ArrayIndex;
 
-    {
-        const auto coord = ArrayDims{0, 1};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 896);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 904);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 912);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 920);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 924);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 932);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 940);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 948);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 949);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 950);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 951);
-    }
+        {
+            const auto ai = ArrayIndex{0, 0};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 0);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 8);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 16);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 24);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 28);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 36);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 44);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 52);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 53);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 54);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 55);
+        }
 
-    {
-        const auto coord = ArrayDims{1, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 56);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 64);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 72);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 80);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 84);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 92);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 100);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 108);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 109);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 110);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 111);
-    }
+        {
+            const auto ai = ArrayIndex{0, 1};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 896);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 904);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 912);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 920);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 924);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 932);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 940);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 948);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 949);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 950);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 951);
+        }
+
+        {
+            const auto ai = ArrayIndex{1, 0};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 56);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 64);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 72);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 80);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 84);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 92);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 100);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 108);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 109);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 110);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 111);
+        }
+    };
+    test(llama::ArrayExtentsDynamic<2>{16, 16});
+    test(llama::ArrayExtents<16, llama::dyn>{16});
+    test(llama::ArrayExtents<llama::dyn, 16>{16});
+    test(llama::ArrayExtents<16, 16>{});
 }
 
 TEST_CASE("address.AoS.Packed.morton")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    auto arrayDims = ArrayDims{16, 16};
-    auto mapping = llama::mapping::PackedAoS<ArrayDims, Particle, llama::mapping::LinearizeArrayDimsMorton>{arrayDims};
-
+    auto test = [](auto arrayExtents)
     {
-        const auto coord = ArrayDims{0, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 8);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 16);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 24);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 28);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 36);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 44);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 52);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 53);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 54);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 55);
-    }
+        using Mapping
+            = llama::mapping::PackedAoS<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayDimsMorton>;
+        auto mapping = Mapping{arrayExtents};
+        using ArrayIndex = typename Mapping::ArrayIndex;
 
-    {
-        const auto coord = ArrayDims{0, 1};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 56);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 64);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 72);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 80);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 84);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 92);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 100);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 108);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 109);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 110);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 111);
-    }
+        {
+            const auto ai = ArrayIndex{0, 0};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 0);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 8);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 16);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 24);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 28);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 36);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 44);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 52);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 53);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 54);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 55);
+        }
 
-    {
-        const auto coord = ArrayDims{1, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 112);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 120);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 128);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 136);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 140);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 148);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 156);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 164);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 165);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 166);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 167);
-    }
+        {
+            const auto ai = ArrayIndex{0, 1};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 56);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 64);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 72);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 80);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 84);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 92);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 100);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 108);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 109);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 110);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 111);
+        }
+
+        {
+            const auto ai = ArrayIndex{1, 0};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 112);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 120);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 128);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 136);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 140);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 148);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 156);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 164);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 165);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 166);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 167);
+        }
+    };
+    test(llama::ArrayExtentsDynamic<2>{16, 16});
+    test(llama::ArrayExtents<16, llama::dyn>{16});
+    test(llama::ArrayExtents<llama::dyn, 16>{16});
+    test(llama::ArrayExtents<16, 16>{});
 }
 
 TEST_CASE("address.AoS.Aligned")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    auto arrayDims = ArrayDims{16, 16};
-    auto mapping = llama::mapping::AlignedAoS<ArrayDims, Particle>{arrayDims};
-
+    auto test = [](auto arrayExtents)
     {
-        const auto coord = ArrayDims{0, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 8);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 16);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 24);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 32);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 40);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 48);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 56);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 57);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 58);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 59);
-    }
+        using Mapping = llama::mapping::AlignedAoS<decltype(arrayExtents), Particle>;
+        auto mapping = Mapping{arrayExtents};
+        using ArrayIndex = typename Mapping::ArrayIndex;
 
-    {
-        const auto coord = ArrayDims{0, 1};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 64);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 72);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 80);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 88);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 96);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 104);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 112);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 120);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 121);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 122);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 123);
-    }
+        {
+            const auto ai = ArrayIndex{0, 0};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 0);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 8);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 16);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 24);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 32);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 40);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 48);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 56);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 57);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 58);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 59);
+        }
 
-    {
-        const auto coord = ArrayDims{1, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 1024);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 1032);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 1040);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 1048);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 1056);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 1064);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 1072);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 1080);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 1081);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 1082);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 1083);
-    }
+        {
+            const auto ai = ArrayIndex{0, 1};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 64);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 72);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 80);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 88);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 96);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 104);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 112);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 120);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 121);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 122);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 123);
+        }
+
+        {
+            const auto ai = ArrayIndex{1, 0};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 1024);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 1032);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 1040);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 1048);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 1056);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 1064);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 1072);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 1080);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 1081);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 1082);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 1083);
+        }
+    };
+    test(llama::ArrayExtentsDynamic<2>{16, 16});
+    test(llama::ArrayExtents<16, llama::dyn>{16});
+    test(llama::ArrayExtents<llama::dyn, 16>{16});
+    test(llama::ArrayExtents<16, 16>{});
 }
 
 TEST_CASE("address.AoS.aligned_min")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    auto arrayDims = ArrayDims{16, 16};
-    auto mapping = llama::mapping::MinAlignedAoS<ArrayDims, Particle>{arrayDims};
-
+    auto test = [](auto arrayExtents)
     {
-        const auto coord = ArrayDims{0, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 8);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 16);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 24);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 4);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 32);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 40);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 48);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 0);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 1);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 2);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 3);
-    }
+        using Mapping = llama::mapping::MinAlignedAoS<decltype(arrayExtents), Particle>;
+        auto mapping = Mapping{arrayExtents};
+        using ArrayIndex = typename Mapping::ArrayIndex;
 
-    {
-        const auto coord = ArrayDims{0, 1};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 64);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 72);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 80);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 60);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 88);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 96);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 104);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 56);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 57);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 58);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 59);
-    }
+        {
+            const auto ai = ArrayIndex{0, 0};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 8);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 16);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 24);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 4);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 32);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 40);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 48);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 0);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 1);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 2);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 3);
+        }
 
-    {
-        const auto coord = ArrayDims{1, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 904);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 912);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 920);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 900);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 928);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 936);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 944);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 896);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 897);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 898);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 899);
-    }
+        {
+            const auto ai = ArrayIndex{0, 1};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 64);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 72);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 80);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 60);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 88);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 96);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 104);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 56);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 57);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 58);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 59);
+        }
+
+        {
+            const auto ai = ArrayIndex{1, 0};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 904);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 912);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 920);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 900);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 928);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 936);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 944);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 896);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 897);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 898);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 899);
+        }
+    };
+    test(llama::ArrayExtentsDynamic<2>{16, 16});
+    test(llama::ArrayExtents<16, llama::dyn>{16});
+    test(llama::ArrayExtents<llama::dyn, 16>{16});
+    test(llama::ArrayExtents<16, 16>{});
 }
 
 TEST_CASE("address.SoA.SingleBlob")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    auto arrayDims = ArrayDims{16, 16};
-    auto mapping = llama::mapping::SingleBlobSoA<ArrayDims, Particle>{arrayDims};
-
+    auto test = [](auto arrayExtents)
     {
-        const auto coord = ArrayDims{0, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 2048);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 4096);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 6144);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 7168);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 9216);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 11264);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 13312);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 13568);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 13824);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 14080);
-    }
+        using Mapping = llama::mapping::SingleBlobSoA<decltype(arrayExtents), Particle>;
+        auto mapping = Mapping{arrayExtents};
+        using ArrayIndex = typename Mapping::ArrayIndex;
 
-    {
-        const auto coord = ArrayDims{0, 1};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 8);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 2056);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 4104);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 6148);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 7176);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 9224);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 11272);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 13313);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 13569);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 13825);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 14081);
-    }
+        {
+            const auto ai = ArrayIndex{0, 0};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 0);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 2048);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 4096);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 6144);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 7168);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 9216);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 11264);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 13312);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 13568);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 13824);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 14080);
+        }
 
-    {
-        const auto coord = ArrayDims{1, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 128);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 2176);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 4224);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 6208);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 7296);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 9344);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 11392);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 13328);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 13584);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 13840);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 14096);
-    }
+        {
+            const auto ai = ArrayIndex{0, 1};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 8);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 2056);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 4104);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 6148);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 7176);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 9224);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 11272);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 13313);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 13569);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 13825);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 14081);
+        }
+
+        {
+            const auto ai = ArrayIndex{1, 0};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 128);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 2176);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 4224);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 6208);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 7296);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 9344);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 11392);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 13328);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 13584);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 13840);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 14096);
+        }
+    };
+    test(llama::ArrayExtentsDynamic<2>{16, 16});
+    test(llama::ArrayExtents<16, llama::dyn>{16});
+    test(llama::ArrayExtents<llama::dyn, 16>{16});
+    test(llama::ArrayExtents<16, 16>{});
 }
 
 TEST_CASE("address.SoA.SingleBlob.fortran")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    auto arrayDims = ArrayDims{16, 16};
-    auto mapping
-        = llama::mapping::SingleBlobSoA<ArrayDims, Particle, llama::mapping::LinearizeArrayDimsFortran>{arrayDims};
-
+    auto test = [](auto arrayExtents)
     {
-        const auto coord = ArrayDims{0, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 2048);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 4096);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 6144);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 7168);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 9216);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 11264);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 13312);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 13568);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 13824);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 14080);
-    }
+        using Mapping = llama::mapping::
+            SingleBlobSoA<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayDimsFortran>;
+        auto mapping = Mapping{arrayExtents};
+        using ArrayIndex = typename Mapping::ArrayIndex;
 
-    {
-        const auto coord = ArrayDims{0, 1};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 128);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 2176);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 4224);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 6208);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 7296);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 9344);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 11392);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 13328);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 13584);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 13840);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 14096);
-    }
+        {
+            const auto ai = ArrayIndex{0, 0};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 0);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 2048);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 4096);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 6144);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 7168);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 9216);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 11264);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 13312);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 13568);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 13824);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 14080);
+        }
 
-    {
-        const auto coord = ArrayDims{1, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 8);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 2056);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 4104);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 6148);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 7176);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 9224);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 11272);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 13313);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 13569);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 13825);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 14081);
-    }
+        {
+            const auto ai = ArrayIndex{0, 1};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 128);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 2176);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 4224);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 6208);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 7296);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 9344);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 11392);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 13328);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 13584);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 13840);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 14096);
+        }
+
+        {
+            const auto ai = ArrayIndex{1, 0};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 8);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 2056);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 4104);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 6148);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 7176);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 9224);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 11272);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 13313);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 13569);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 13825);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 14081);
+        }
+    };
+    test(llama::ArrayExtentsDynamic<2>{16, 16});
+    test(llama::ArrayExtents<16, llama::dyn>{16});
+    test(llama::ArrayExtents<llama::dyn, 16>{16});
+    test(llama::ArrayExtents<16, 16>{});
 }
 
 TEST_CASE("address.SoA.SingleBlob.morton")
@@ -425,229 +481,272 @@ TEST_CASE("address.SoA.SingleBlob.morton")
     {
     };
 
-    using ArrayDims = llama::ArrayDims<2>;
-    auto arrayDims = ArrayDims{16, 16};
-    auto mapping
-        = llama::mapping::SingleBlobSoA<ArrayDims, Particle, llama::mapping::LinearizeArrayDimsMorton>{arrayDims};
-
+    auto test = [](auto arrayExtents)
     {
-        const auto coord = ArrayDims{0, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 2048);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 4096);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 6144);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 7168);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 9216);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 11264);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 13312);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 13568);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 13824);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 14080);
-    }
+        using Mapping = llama::mapping::
+            SingleBlobSoA<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayDimsMorton>;
+        auto mapping = Mapping{arrayExtents};
+        using ArrayIndex = typename Mapping::ArrayIndex;
 
-    {
-        const auto coord = ArrayDims{0, 1};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 8);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 2056);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 4104);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 6148);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 7176);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 9224);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 11272);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 13313);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 13569);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 13825);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 14081);
-    }
+        {
+            const auto ai = ArrayIndex{0, 0};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 0);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 2048);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 4096);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 6144);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 7168);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 9216);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 11264);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 13312);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 13568);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 13824);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 14080);
+        }
 
-    {
-        const auto coord = ArrayDims{1, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 16);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 2064);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 4112);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 6152);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 7184);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 9232);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 11280);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 13314);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 13570);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 13826);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 14082);
-    }
+        {
+            const auto ai = ArrayIndex{0, 1};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 8);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 2056);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 4104);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 6148);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 7176);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 9224);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 11272);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 13313);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 13569);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 13825);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 14081);
+        }
+
+        {
+            const auto ai = ArrayIndex{1, 0};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 16);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 2064);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 4112);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 6152);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 7184);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 9232);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 11280);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 13314);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 13570);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 13826);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 14082);
+        }
+    };
+    test(llama::ArrayExtentsDynamic<2>{16, 16});
+    test(llama::ArrayExtents<16, llama::dyn>{16});
+    test(llama::ArrayExtents<llama::dyn, 16>{16});
+    test(llama::ArrayExtents<16, 16>{});
 }
 
 TEST_CASE("address.SoA.MultiBlob")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    auto arrayDims = ArrayDims{16, 16};
-    auto mapping = llama::mapping::MultiBlobSoA<ArrayDims, Particle>{arrayDims};
-
+    auto test = [](auto arrayExtents)
     {
-        const auto coord = ArrayDims{0, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord) == llama::NrAndOffset{0, 0});
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord) == llama::NrAndOffset{1, 0});
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord) == llama::NrAndOffset{2, 0});
-        CHECK(mapping.blobNrAndOffset<1>(coord) == llama::NrAndOffset{3, 0});
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord) == llama::NrAndOffset{4, 0});
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord) == llama::NrAndOffset{5, 0});
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord) == llama::NrAndOffset{6, 0});
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord) == llama::NrAndOffset{7, 0});
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord) == llama::NrAndOffset{8, 0});
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord) == llama::NrAndOffset{9, 0});
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord) == llama::NrAndOffset{10, 0});
-    }
+        using Mapping = llama::mapping::MultiBlobSoA<decltype(arrayExtents), Particle>;
+        auto mapping = Mapping{arrayExtents};
+        using ArrayIndex = typename Mapping::ArrayIndex;
 
-    {
-        const auto coord = ArrayDims{0, 1};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord) == llama::NrAndOffset{0, 8});
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord) == llama::NrAndOffset{1, 8});
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord) == llama::NrAndOffset{2, 8});
-        CHECK(mapping.blobNrAndOffset<1>(coord) == llama::NrAndOffset{3, 4});
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord) == llama::NrAndOffset{4, 8});
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord) == llama::NrAndOffset{5, 8});
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord) == llama::NrAndOffset{6, 8});
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord) == llama::NrAndOffset{7, 1});
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord) == llama::NrAndOffset{8, 1});
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord) == llama::NrAndOffset{9, 1});
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord) == llama::NrAndOffset{10, 1});
-    }
+        {
+            const auto ai = ArrayIndex{0, 0};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai) == llama::NrAndOffset{0, 0});
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai) == llama::NrAndOffset{1, 0});
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai) == llama::NrAndOffset{2, 0});
+            CHECK(mapping.template blobNrAndOffset<1>(ai) == llama::NrAndOffset{3, 0});
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai) == llama::NrAndOffset{4, 0});
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai) == llama::NrAndOffset{5, 0});
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai) == llama::NrAndOffset{6, 0});
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai) == llama::NrAndOffset{7, 0});
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai) == llama::NrAndOffset{8, 0});
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai) == llama::NrAndOffset{9, 0});
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai) == llama::NrAndOffset{10, 0});
+        }
 
-    {
-        const auto coord = ArrayDims{1, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord) == llama::NrAndOffset{0, 128});
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord) == llama::NrAndOffset{1, 128});
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord) == llama::NrAndOffset{2, 128});
-        CHECK(mapping.blobNrAndOffset<1>(coord) == llama::NrAndOffset{3, 64});
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord) == llama::NrAndOffset{4, 128});
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord) == llama::NrAndOffset{5, 128});
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord) == llama::NrAndOffset{6, 128});
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord) == llama::NrAndOffset{7, 16});
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord) == llama::NrAndOffset{8, 16});
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord) == llama::NrAndOffset{9, 16});
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord) == llama::NrAndOffset{10, 16});
-    }
+        {
+            const auto ai = ArrayIndex{0, 1};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai) == llama::NrAndOffset{0, 8});
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai) == llama::NrAndOffset{1, 8});
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai) == llama::NrAndOffset{2, 8});
+            CHECK(mapping.template blobNrAndOffset<1>(ai) == llama::NrAndOffset{3, 4});
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai) == llama::NrAndOffset{4, 8});
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai) == llama::NrAndOffset{5, 8});
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai) == llama::NrAndOffset{6, 8});
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai) == llama::NrAndOffset{7, 1});
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai) == llama::NrAndOffset{8, 1});
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai) == llama::NrAndOffset{9, 1});
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai) == llama::NrAndOffset{10, 1});
+        }
+
+        {
+            const auto ai = ArrayIndex{1, 0};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai) == llama::NrAndOffset{0, 128});
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai) == llama::NrAndOffset{1, 128});
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai) == llama::NrAndOffset{2, 128});
+            CHECK(mapping.template blobNrAndOffset<1>(ai) == llama::NrAndOffset{3, 64});
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai) == llama::NrAndOffset{4, 128});
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai) == llama::NrAndOffset{5, 128});
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai) == llama::NrAndOffset{6, 128});
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai) == llama::NrAndOffset{7, 16});
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai) == llama::NrAndOffset{8, 16});
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai) == llama::NrAndOffset{9, 16});
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai) == llama::NrAndOffset{10, 16});
+        }
+    };
+    test(llama::ArrayExtentsDynamic<2>{16, 16});
+    test(llama::ArrayExtents<16, llama::dyn>{16});
+    test(llama::ArrayExtents<llama::dyn, 16>{16});
+    test(llama::ArrayExtents<16, 16>{});
 }
 
 TEST_CASE("address.AoSoA.4")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    auto arrayDims = ArrayDims{16, 16};
-    auto mapping = llama::mapping::AoSoA<ArrayDims, Particle, 4>{arrayDims};
-
+    auto test = [](auto arrayExtents)
     {
-        const auto coord = ArrayDims{0, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 32);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 64);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 96);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 112);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 144);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 176);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 208);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 212);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 216);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 220);
-    }
+        using Mapping = llama::mapping::AoSoA<decltype(arrayExtents), Particle, 4>;
+        auto mapping = Mapping{arrayExtents};
+        using ArrayIndex = typename Mapping::ArrayIndex;
 
-    {
-        const auto coord = ArrayDims{0, 1};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 8);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 40);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 72);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 100);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 120);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 152);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 184);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 209);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 213);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 217);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 221);
-    }
+        {
+            const auto ai = ArrayIndex{0, 0};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 0);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 32);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 64);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 96);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 112);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 144);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 176);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 208);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 212);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 216);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 220);
+        }
 
-    {
-        const auto coord = ArrayDims{1, 0};
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 896);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 928);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 960);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 992);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 1008);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 1040);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 1072);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 1104);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 1108);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 1112);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 1116);
-    }
+        {
+            const auto ai = ArrayIndex{0, 1};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 8);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 40);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 72);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 100);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 120);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 152);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 184);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 209);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 213);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 217);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 221);
+        }
+
+        {
+            const auto ai = ArrayIndex{1, 0};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 896);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 928);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 960);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 992);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 1008);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 1040);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 1072);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 1104);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 1108);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 1112);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 1116);
+        }
+    };
+    test(llama::ArrayExtentsDynamic<2>{16, 16});
+    test(llama::ArrayExtents<16, llama::dyn>{16});
+    test(llama::ArrayExtents<llama::dyn, 16>{16});
+    test(llama::ArrayExtents<16, 16>{});
 }
 
 TEST_CASE("address.PackedOne")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    auto arrayDims = ArrayDims{16, 16};
-    auto mapping = llama::mapping::PackedOne<ArrayDims, Particle>{arrayDims};
-
-    STATIC_REQUIRE(mapping.blobSize(0) == 56);
-    for(const auto coord : {ArrayDims{0, 0}, ArrayDims{0, 1}, ArrayDims{1, 0}})
+    auto test = [](auto arrayExtents)
     {
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 8);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 16);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 24);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 28);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 36);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 44);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 52);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 53);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 54);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 55);
-    }
+        using Mapping = llama::mapping::PackedOne<decltype(arrayExtents), Particle>;
+        auto mapping = Mapping{arrayExtents};
+        using ArrayIndex = typename Mapping::ArrayIndex;
+
+        STATIC_REQUIRE(mapping.blobSize(0) == 56);
+        for(const auto ai : {ArrayIndex{0, 0}, ArrayIndex{0, 1}, ArrayIndex{1, 0}})
+        {
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 0);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 8);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 16);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 24);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 28);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 36);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 44);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 52);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 53);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 54);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 55);
+        }
+    };
+    test(llama::ArrayExtentsDynamic<2>{16, 16});
+    test(llama::ArrayExtents<16, llama::dyn>{16});
+    test(llama::ArrayExtents<llama::dyn, 16>{16});
+    test(llama::ArrayExtents<16, 16>{});
 }
 
 TEST_CASE("address.AlignedOne")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    auto arrayDims = ArrayDims{16, 16};
-    auto mapping = llama::mapping::AlignedOne<ArrayDims, Particle>{arrayDims};
-
-    STATIC_REQUIRE(mapping.blobSize(0) == 60);
-    for(const auto coord : {ArrayDims{0, 0}, ArrayDims{0, 1}, ArrayDims{1, 0}})
+    auto test = [](auto arrayExtents)
     {
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 0);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 8);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 16);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 24);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 32);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 40);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 48);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 56);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 57);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 58);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 59);
-    }
+        using Mapping = llama::mapping::AlignedOne<decltype(arrayExtents), Particle>;
+        auto mapping = Mapping{arrayExtents};
+        using ArrayIndex = typename Mapping::ArrayIndex;
+
+        STATIC_REQUIRE(mapping.blobSize(0) == 60);
+        for(const auto ai : {ArrayIndex{0, 0}, ArrayIndex{0, 1}, ArrayIndex{1, 0}})
+        {
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 0);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 8);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 16);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 24);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 32);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 40);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 48);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 56);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 57);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 58);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 59);
+        }
+    };
+    test(llama::ArrayExtentsDynamic<2>{16, 16});
+    test(llama::ArrayExtents<16, llama::dyn>{16});
+    test(llama::ArrayExtents<llama::dyn, 16>{16});
+    test(llama::ArrayExtents<16, 16>{});
 }
 
 TEST_CASE("address.MinAlignedOne")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    auto arrayDims = ArrayDims{16, 16};
-    auto mapping = llama::mapping::MinAlignedOne<ArrayDims, Particle>{arrayDims};
-
-    STATIC_REQUIRE(mapping.blobSize(0) == 56);
-    for(const auto coord : {ArrayDims{0, 0}, ArrayDims{0, 1}, ArrayDims{1, 0}})
+    auto test = [](auto arrayExtents)
     {
-        CHECK(mapping.blobNrAndOffset<0, 0>(coord).offset == 8);
-        CHECK(mapping.blobNrAndOffset<0, 1>(coord).offset == 16);
-        CHECK(mapping.blobNrAndOffset<0, 2>(coord).offset == 24);
-        CHECK(mapping.blobNrAndOffset<1>(coord).offset == 4);
-        CHECK(mapping.blobNrAndOffset<2, 0>(coord).offset == 32);
-        CHECK(mapping.blobNrAndOffset<2, 1>(coord).offset == 40);
-        CHECK(mapping.blobNrAndOffset<2, 2>(coord).offset == 48);
-        CHECK(mapping.blobNrAndOffset<3, 0>(coord).offset == 0);
-        CHECK(mapping.blobNrAndOffset<3, 1>(coord).offset == 1);
-        CHECK(mapping.blobNrAndOffset<3, 2>(coord).offset == 2);
-        CHECK(mapping.blobNrAndOffset<3, 3>(coord).offset == 3);
-    }
+        using Mapping = llama::mapping::MinAlignedOne<decltype(arrayExtents), Particle>;
+        auto mapping = Mapping{arrayExtents};
+        using ArrayIndex = typename Mapping::ArrayIndex;
+
+        STATIC_REQUIRE(mapping.blobSize(0) == 56);
+        for(const auto ai : {ArrayIndex{0, 0}, ArrayIndex{0, 1}, ArrayIndex{1, 0}})
+        {
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 8);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 16);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 24);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 4);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 32);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 40);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 48);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 0);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 1);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 2);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 3);
+        }
+    };
+    test(llama::ArrayExtentsDynamic<2>{16, 16});
+    test(llama::ArrayExtents<16, llama::dyn>{16});
+    test(llama::ArrayExtents<llama::dyn, 16>{16});
+    test(llama::ArrayExtents<16, 16>{});
 }
+
 
 TEST_CASE("maxLanes")
 {
@@ -672,7 +771,7 @@ TEST_CASE("maxLanes")
 
 TEST_CASE("AoSoA.size_round_up")
 {
-    using AoSoA = llama::mapping::AoSoA<llama::ArrayDims<1>, Particle, 4>;
+    using AoSoA = llama::mapping::AoSoA<llama::ArrayExtentsDynamic<1>, Particle, 4>;
     constexpr auto psize = llama::sizeOf<Particle>;
 
     CHECK(AoSoA{{0}}.blobSize(0) == 0 * psize);
@@ -689,12 +788,12 @@ TEST_CASE("AoSoA.size_round_up")
 
 TEST_CASE("AoSoA.address_within_bounds")
 {
-    using AD = llama::ArrayDims<1>;
-    using AoSoA = llama::mapping::AoSoA<AD, Particle, 4>;
+    using ArrayExtents = llama::ArrayExtentsDynamic<1>;
+    using AoSoA = llama::mapping::AoSoA<ArrayExtents, Particle, 4>;
 
-    const auto ad = AD{3};
+    const auto ad = ArrayExtents{3};
     auto mapping = AoSoA{ad};
-    for(auto i : llama::ArrayDimsIndexRange{ad})
+    for(auto i : llama::ArrayIndexRange{ad})
         llama::forEachLeafCoord<Particle>([&](auto rc)
                                           { CHECK(mapping.blobNrAndOffset(i, rc).offset < mapping.blobSize(0)); });
 }

@@ -109,7 +109,7 @@ LLAMA comes with a set of predefined blob allocators and users can again provide
 
 Once a view is created, the user can navigate on the data managed by the view.
 On top of a view, a :ref:`VirtualView <label-virtualview>` can be created, offering access to a subspace of the array dimensions.
-Elements of the array dimensions, called records, are accessed on both, View and VirtualView, by calling :cpp:`operator()` with an array dimensions coordinate as instance of :cpp:`ArrayDims`.
+Elements of the array dimensions, called records, are accessed on both, View and VirtualView, by calling :cpp:`operator()` with an array index as instance of :cpp:`ArrayIndex`.
 This access returns a :ref:`VirtualRecord <label-virtualrecord>`, allowing further access using the tags from the record dimension, until eventually a reference to actual data in memory is returned.
 
 

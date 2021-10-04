@@ -7,37 +7,37 @@
 
 TEST_CASE("Split.SoA_SingleBlob.AoS_Packed.1Buffer")
 {
-    using ArrayDims = llama::ArrayDims<2>;
-    auto arrayDims = ArrayDims{16, 16};
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+    auto extents = ArrayExtents{16, 16};
 
     // we layout Pos as SoA, the rest as AoS
     auto mapping = llama::mapping::
-        Split<ArrayDims, Particle, llama::RecordCoord<0>, llama::mapping::SingleBlobSoA, llama::mapping::PackedAoS>{
-            arrayDims};
+        Split<ArrayExtents, Particle, llama::RecordCoord<0>, llama::mapping::SingleBlobSoA, llama::mapping::PackedAoS>{
+            extents};
 
     constexpr auto mapping1Size = 6120;
-    const auto coord = ArrayDims{0, 0};
-    CHECK(mapping.blobNrAndOffset<0, 0>(coord) == llama::NrAndOffset{0, 0});
-    CHECK(mapping.blobNrAndOffset<0, 1>(coord) == llama::NrAndOffset{0, 2048});
-    CHECK(mapping.blobNrAndOffset<0, 2>(coord) == llama::NrAndOffset{0, 4096});
-    CHECK(mapping.blobNrAndOffset<1>(coord) == llama::NrAndOffset{0, mapping1Size + 24});
-    CHECK(mapping.blobNrAndOffset<2, 0>(coord) == llama::NrAndOffset{0, mapping1Size + 28});
-    CHECK(mapping.blobNrAndOffset<2, 1>(coord) == llama::NrAndOffset{0, mapping1Size + 36});
-    CHECK(mapping.blobNrAndOffset<2, 2>(coord) == llama::NrAndOffset{0, mapping1Size + 44});
-    CHECK(mapping.blobNrAndOffset<3, 0>(coord) == llama::NrAndOffset{0, mapping1Size + 52});
-    CHECK(mapping.blobNrAndOffset<3, 1>(coord) == llama::NrAndOffset{0, mapping1Size + 53});
-    CHECK(mapping.blobNrAndOffset<3, 2>(coord) == llama::NrAndOffset{0, mapping1Size + 54});
-    CHECK(mapping.blobNrAndOffset<3, 3>(coord) == llama::NrAndOffset{0, mapping1Size + 55});
+    const auto ai = llama::ArrayIndex{0, 0};
+    CHECK(mapping.blobNrAndOffset<0, 0>(ai) == llama::NrAndOffset{0, 0});
+    CHECK(mapping.blobNrAndOffset<0, 1>(ai) == llama::NrAndOffset{0, 2048});
+    CHECK(mapping.blobNrAndOffset<0, 2>(ai) == llama::NrAndOffset{0, 4096});
+    CHECK(mapping.blobNrAndOffset<1>(ai) == llama::NrAndOffset{0, mapping1Size + 24});
+    CHECK(mapping.blobNrAndOffset<2, 0>(ai) == llama::NrAndOffset{0, mapping1Size + 28});
+    CHECK(mapping.blobNrAndOffset<2, 1>(ai) == llama::NrAndOffset{0, mapping1Size + 36});
+    CHECK(mapping.blobNrAndOffset<2, 2>(ai) == llama::NrAndOffset{0, mapping1Size + 44});
+    CHECK(mapping.blobNrAndOffset<3, 0>(ai) == llama::NrAndOffset{0, mapping1Size + 52});
+    CHECK(mapping.blobNrAndOffset<3, 1>(ai) == llama::NrAndOffset{0, mapping1Size + 53});
+    CHECK(mapping.blobNrAndOffset<3, 2>(ai) == llama::NrAndOffset{0, mapping1Size + 54});
+    CHECK(mapping.blobNrAndOffset<3, 3>(ai) == llama::NrAndOffset{0, mapping1Size + 55});
 }
 
 TEST_CASE("Split.AoSoA8.AoS_Packed.One.SoA_SingleBlob.4Buffer")
 {
     // split out momentum as AoSoA8, mass into a single value, position into AoS, and the flags into SoA, makes 4
     // buffers
-    using ArrayDims = llama::ArrayDims<1>;
-    auto arrayDims = ArrayDims{32};
+    using ArrayExtents = llama::ArrayExtentsDynamic<1>;
+    auto extents = ArrayExtents{32};
     auto mapping = llama::mapping::Split<
-        ArrayDims,
+        ArrayExtents,
         Particle,
         llama::RecordCoord<2>,
         llama::mapping::PreconfiguredAoSoA<8>::type,
@@ -50,7 +50,7 @@ TEST_CASE("Split.AoSoA8.AoS_Packed.One.SoA_SingleBlob.4Buffer")
                 llama::mapping::SingleBlobSoA,
                 true>::type,
             true>::type,
-        true>{arrayDims};
+        true>{extents};
 
     CHECK(mapping.blobNrAndOffset<0, 0>({0}) == llama::NrAndOffset{2, 0});
     CHECK(mapping.blobNrAndOffset<0, 1>({0}) == llama::NrAndOffset{2, 8});
