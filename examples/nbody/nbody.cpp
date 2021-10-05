@@ -120,23 +120,24 @@ namespace usellama
         Stopwatch watch;
         auto mapping = [&]
         {
-            const auto arrayDims = llama::ArrayExtents{PROBLEM_SIZE};
+            using ArrayExtents = llama::ArrayExtentsDynamic<1>;
+            const auto extents = ArrayExtents{PROBLEM_SIZE};
             if constexpr(Mapping == 0)
-                return llama::mapping::AoS{arrayDims, Particle{}};
+                return llama::mapping::AoS<ArrayExtents, Particle>{extents};
             if constexpr(Mapping == 1)
-                return llama::mapping::SoA{arrayDims, Particle{}};
+                return llama::mapping::SoA<ArrayExtents, Particle>{extents};
             if constexpr(Mapping == 2)
-                return llama::mapping::SoA<decltype(arrayDims), Particle, true>{arrayDims};
+                return llama::mapping::SoA<ArrayExtents, Particle, true>{extents};
             if constexpr(Mapping == 3)
-                return llama::mapping::AoSoA<decltype(arrayDims), Particle, AoSoALanes>{arrayDims};
+                return llama::mapping::AoSoA<ArrayExtents, Particle, AoSoALanes>{extents};
             if constexpr(Mapping == 4)
                 return llama::mapping::Split<
-                    decltype(arrayDims),
+                    ArrayExtents,
                     Particle,
                     llama::RecordCoord<1>,
                     llama::mapping::PreconfiguredSoA<>::type,
                     llama::mapping::PreconfiguredSoA<>::type,
-                    true>{arrayDims};
+                    true>{extents};
         }();
         if constexpr(DUMP_MAPPING)
             std::ofstream(title + ".svg") << llama::toSvg(mapping);

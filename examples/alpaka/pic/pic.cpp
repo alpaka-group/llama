@@ -261,35 +261,36 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& devHost)
 {
     // std::cout << "dt = " << dt << '\n';
 
-    auto fieldMapping = []
+    const auto fieldMapping = []
     {
-        const auto fieldExtents = llama::ArrayExtentsDynamic<2>{{X_, Y_}};
+        using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+        const auto fieldExtents = ArrayExtents{{X_, Y_}};
         if constexpr(FieldMapping == 0)
-            return llama::mapping::AoS<decltype(fieldExtents), V3Real>(fieldExtents);
+            return llama::mapping::AoS<ArrayExtents, V3Real>(fieldExtents);
         if constexpr(FieldMapping == 1)
-            return llama::mapping::
-                AoS<decltype(fieldExtents), V3Real, true, llama::mapping::LinearizeArrayDimsFortran>(fieldExtents);
+            return llama::mapping::AoS<ArrayExtents, V3Real, true, llama::mapping::LinearizeArrayDimsFortran>(
+                fieldExtents);
         if constexpr(FieldMapping == 2)
-            return llama::mapping::AoS<decltype(fieldExtents), V3Real, true, llama::mapping::LinearizeArrayDimsMorton>(
+            return llama::mapping::AoS<ArrayExtents, V3Real, true, llama::mapping::LinearizeArrayDimsMorton>(
                 fieldExtents);
         if constexpr(FieldMapping == 3)
-            return llama::mapping::SoA<decltype(fieldExtents), V3Real, false>(fieldExtents);
+            return llama::mapping::SoA<ArrayExtents, V3Real, false>(fieldExtents);
         if constexpr(FieldMapping == 4)
-            return llama::mapping::
-                SoA<decltype(fieldExtents), V3Real, false, llama::mapping::LinearizeArrayDimsFortran>(fieldExtents);
+            return llama::mapping::SoA<ArrayExtents, V3Real, false, llama::mapping::LinearizeArrayDimsFortran>(
+                fieldExtents);
         if constexpr(FieldMapping == 5)
-            return llama::mapping::
-                SoA<decltype(fieldExtents), V3Real, false, llama::mapping::LinearizeArrayDimsMorton>(fieldExtents);
+            return llama::mapping::SoA<ArrayExtents, V3Real, false, llama::mapping::LinearizeArrayDimsMorton>(
+                fieldExtents);
         if constexpr(FieldMapping == 6)
-            return llama::mapping::SoA<decltype(fieldExtents), V3Real, true>(fieldExtents);
+            return llama::mapping::SoA<ArrayExtents, V3Real, true>(fieldExtents);
         if constexpr(FieldMapping == 7)
-            return llama::mapping::
-                SoA<decltype(fieldExtents), V3Real, true, llama::mapping::LinearizeArrayDimsFortran>(fieldExtents);
+            return llama::mapping::SoA<ArrayExtents, V3Real, true, llama::mapping::LinearizeArrayDimsFortran>(
+                fieldExtents);
         if constexpr(FieldMapping == 8)
-            return llama::mapping::SoA<decltype(fieldExtents), V3Real, true, llama::mapping::LinearizeArrayDimsMorton>(
+            return llama::mapping::SoA<ArrayExtents, V3Real, true, llama::mapping::LinearizeArrayDimsMorton>(
                 fieldExtents);
         if constexpr(FieldMapping == 9)
-            return llama::mapping::AoSoA<decltype(fieldExtents), V3Real, AOSOA_LANES>{fieldExtents};
+            return llama::mapping::AoSoA<ArrayExtents, V3Real, AOSOA_LANES>{fieldExtents};
     }();
 
     const auto fieldBufferSize = fieldMapping.blobSize(0);
@@ -308,15 +309,16 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& devHost)
 
     auto particleMapping = [&]
     {
-        const auto particleExtents = llama::ArrayExtents{numpart};
+        using ArrayExtents = llama::ArrayExtents<llama::dyn>;
+        const auto particleExtents = ArrayExtents{numpart};
         if constexpr(ParticleMapping == 0)
-            return llama::mapping::AoS<decltype(particleExtents), Particle>{particleExtents};
+            return llama::mapping::AoS<ArrayExtents, Particle>{particleExtents};
         if constexpr(ParticleMapping == 1)
-            return llama::mapping::SoA<decltype(particleExtents), Particle, false>{particleExtents};
+            return llama::mapping::SoA<ArrayExtents, Particle, false>{particleExtents};
         if constexpr(ParticleMapping == 2)
-            return llama::mapping::SoA<decltype(particleExtents), Particle, true>{particleExtents};
+            return llama::mapping::SoA<ArrayExtents, Particle, true>{particleExtents};
         if constexpr(ParticleMapping == 3)
-            return llama::mapping::AoSoA<decltype(particleExtents), Particle, AOSOA_LANES>{particleExtents};
+            return llama::mapping::AoSoA<ArrayExtents, Particle, AOSOA_LANES>{particleExtents};
     }();
     const auto particleBufferSize = particleMapping.blobSize(0);
 

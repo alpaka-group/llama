@@ -138,18 +138,26 @@ namespace llama
     template<typename View>
     struct Iterator
     {
-        using ADIterator = ArrayIndexIterator<typename View::ArrayExtents>;
+        using ArrayIndexIterator = llama::ArrayIndexIterator<typename View::ArrayExtents>;
 
         using iterator_category = std::random_access_iterator_tag;
         using value_type = One<typename View::RecordDim>;
-        using difference_type = typename ADIterator::difference_type;
+        using difference_type = typename ArrayIndexIterator::difference_type;
         using pointer = internal::IndirectValue<VirtualRecord<View>>;
         using reference = VirtualRecord<View>;
+
+        constexpr Iterator() = default;
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr Iterator(ArrayIndexIterator arrayIndex, View* view)
+            : arrayIndex(arrayIndex)
+            , view(view)
+        {
+        }
 
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator++() -> Iterator&
         {
-            ++adIndex;
+            ++arrayIndex;
             return *this;
         }
 
@@ -164,7 +172,7 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator--() -> Iterator&
         {
-            --adIndex;
+            --arrayIndex;
             return *this;
         }
 
@@ -179,7 +187,7 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator*() const -> reference
         {
-            return (*view)(*adIndex);
+            return (*view)(*arrayIndex);
         }
 
         LLAMA_FN_HOST_ACC_INLINE
@@ -197,7 +205,7 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator+=(difference_type n) -> Iterator&
         {
-            adIndex += n;
+            arrayIndex += n;
             return *this;
         }
 
@@ -217,7 +225,7 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto operator-=(difference_type n) -> Iterator&
         {
-            adIndex -= n;
+            arrayIndex -= n;
             return *this;
         }
 
@@ -231,13 +239,15 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator-(const Iterator& a, const Iterator& b) -> difference_type
         {
-            return static_cast<std::ptrdiff_t>(a.adIndex - b.adIndex);
+            assert(a.view == b.view);
+            return static_cast<std::ptrdiff_t>(a.arrayIndex - b.arrayIndex);
         }
 
         LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator==(const Iterator& a, const Iterator& b) -> bool
         {
-            return a.adIndex == b.adIndex;
+            assert(a.view == b.view);
+            return a.arrayIndex == b.arrayIndex;
         }
 
         LLAMA_FN_HOST_ACC_INLINE
@@ -249,7 +259,8 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator<(const Iterator& a, const Iterator& b) -> bool
         {
-            return a.adIndex < b.adIndex;
+            assert(a.view == b.view);
+            return a.arrayIndex < b.arrayIndex;
         }
 
         LLAMA_FN_HOST_ACC_INLINE
@@ -270,7 +281,7 @@ namespace llama
             return !(a < b);
         }
 
-        ADIterator adIndex;
+        ArrayIndexIterator arrayIndex;
         View* view;
     };
 
@@ -289,6 +300,7 @@ namespace llama
         , std::ranges::view_base
 #endif
     {
+        static_assert(!std::is_const_v<TMapping>);
         using Mapping = TMapping;
         using ArrayExtents = typename Mapping::ArrayExtents;
         using ArrayIndex = typename Mapping::ArrayIndex;
@@ -297,9 +309,13 @@ namespace llama
         using const_iterator = Iterator<const View>;
 
         static_assert(
-            !std::is_reference_v<ArrayExtents>,
-            "Mapping::ArrayExtents must not be a reference. Are you using decltype(...) as mapping template "
+            std::is_same_v<Mapping, std::decay_t<Mapping>>,
+            "Mapping must not be const qualified or a reference. Are you using decltype(...) as View template "
             "argument?");
+        static_assert(
+            std::is_same_v<ArrayExtents, std::decay_t<ArrayExtents>>,
+            "Mapping::ArrayExtents must not be const qualified or a reference. Are you using decltype(...) as mapping "
+            "template argument?");
 
         View() = default;
 

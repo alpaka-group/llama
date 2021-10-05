@@ -120,6 +120,12 @@ namespace llama
     template<typename... Args>
     ArrayExtents(Args... args) -> ArrayExtents<(Args{}, dyn)...>;
 
+    static_assert(std::is_trivially_default_constructible_v<ArrayExtents<1>>);
+    static_assert(std::is_trivially_copy_constructible_v<ArrayExtents<1>>);
+    static_assert(std::is_trivially_move_constructible_v<ArrayExtents<1>>);
+    static_assert(std::is_trivially_copy_assignable_v<ArrayExtents<1>>);
+    static_assert(std::is_trivially_move_assignable_v<ArrayExtents<1>>);
+
     template<std::size_t... SizesA, std::size_t... SizesB>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(ArrayExtents<SizesA...> a, ArrayExtents<SizesB...> b) -> bool
     {

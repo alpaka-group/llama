@@ -18,6 +18,18 @@ using Position = llama::Record<
 >;
 // clang-format on
 
+TEST_CASE("iterator.concepts")
+{
+    using Mapping = llama::mapping::AoS<llama::ArrayExtents<llama::dyn>, Position>;
+    using View = llama::View<Mapping, std::byte*>;
+    using Iterator = typename View::iterator;
+
+    STATIC_REQUIRE(std::is_same_v<std::iterator_traits<Iterator>::iterator_category, std::random_access_iterator_tag>);
+    //#ifdef __cpp_lib_concepts
+    //    STATIC_REQUIRE(std::random_access_iterator<Iterator>);
+    //#endif
+}
+
 TEST_CASE("iterator")
 {
     auto test = [](auto extents)

@@ -48,14 +48,14 @@ namespace llama
                 push_back(*first);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE Vector(const Vector& other) = default;
+        Vector(const Vector& other) = default;
 
         LLAMA_FN_HOST_ACC_INLINE Vector(Vector&& other) noexcept
         {
             swap(other);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto operator=(const Vector& other) -> Vector& = default;
+        auto operator=(const Vector& other) -> Vector& = default;
 
         LLAMA_FN_HOST_ACC_INLINE auto operator=(Vector&& other) noexcept -> Vector&
         {

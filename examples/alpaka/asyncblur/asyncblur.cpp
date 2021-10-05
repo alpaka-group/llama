@@ -44,7 +44,7 @@ auto viewAlpakaBuffer(
     Mapping& mapping,
     AlpakaBuffer& buffer) // taking mapping by & on purpose, so Mapping can deduce const
 {
-    return llama::View<Mapping, std::byte*>{mapping, {alpaka::getPtrNative(buffer)}};
+    return llama::View<std::decay_t<Mapping>, std::byte*>{mapping, {alpaka::getPtrNative(buffer)}};
 }
 
 // clang-format off
@@ -211,9 +211,10 @@ try
     const auto hostMapping
         = llama::mapping::tree::Mapping{llama::ArrayExtents{buffer_y, buffer_x}, treeOperationList, Pixel{}};
     const auto devMapping = llama::mapping::tree::Mapping{
-        llama::ArrayExtents{CHUNK_SIZE + 2 * KERNEL_SIZE, CHUNK_SIZE + 2 * KERNEL_SIZE},
+        llama::ArrayExtents<CHUNK_SIZE + 2 * KERNEL_SIZE, CHUNK_SIZE + 2 * KERNEL_SIZE>{},
         treeOperationList,
         PixelOnAcc{}};
+    using DevMapping = std::decay_t<decltype(devMapping)>;
 
     const auto hostBufferSize = hostMapping.blobSize(0);
     const auto devBufferSize = devMapping.blobSize(0);
@@ -227,12 +228,12 @@ try
     auto hostView = viewAlpakaBuffer(hostMapping, hostBuffer);
 
     std::vector<alpaka::Buf<DevHost, std::byte, alpaka::DimInt<1>, std::size_t>> hostChunkBuffer;
-    std::vector<llama::View<decltype(devMapping), std::byte*>> hostChunkView;
+    std::vector<llama::View<DevMapping, std::byte*>> hostChunkView;
 
     std::vector<alpaka::Buf<DevAcc, std::byte, alpaka::DimInt<1>, std::size_t>> devOldBuffer;
     std::vector<alpaka::Buf<DevAcc, std::byte, alpaka::DimInt<1>, std::size_t>> devNewBuffer;
-    std::vector<llama::View<decltype(devMapping), std::byte*>> devOldView;
-    std::vector<llama::View<decltype(devMapping), std::byte*>> devNewView;
+    std::vector<llama::View<DevMapping, std::byte*>> devOldView;
+    std::vector<llama::View<DevMapping, std::byte*>> devNewView;
 
     for(std::size_t i = 0; i < CHUNK_COUNT; ++i)
     {
