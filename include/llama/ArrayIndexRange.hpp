@@ -16,6 +16,8 @@ namespace llama
     template<typename ArrayExtents>
     struct ArrayIndexIterator
     {
+        static_assert(!std::is_const_v<ArrayExtents>);
+
         using value_type = typename ArrayExtents::Index;
         using difference_type = std::ptrdiff_t;
         using reference = value_type;
@@ -26,8 +28,9 @@ namespace llama
 
         constexpr ArrayIndexIterator() noexcept = default;
 
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr ArrayIndexIterator(ArrayExtents size, value_type current) noexcept : size(size), current(current)
+        LLAMA_FN_HOST_ACC_INLINE constexpr ArrayIndexIterator(ArrayExtents extents, value_type current) noexcept
+            : extents(extents)
+            , current(current)
         {
         }
 
@@ -49,7 +52,7 @@ namespace llama
             current[rank - 1]++;
             for(auto i = static_cast<int>(rank) - 2; i >= 0; i--)
             {
-                if(current[i + 1] != size[i + 1])
+                if(current[i + 1] != extents[i + 1])
                     return *this;
                 current[i + 1] = 0;
                 current[i]++;
@@ -73,7 +76,7 @@ namespace llama
             {
                 if(current[i + 1] != std::numeric_limits<std::size_t>::max())
                     return *this;
-                current[i + 1] = size[i] - 1;
+                current[i + 1] = extents[i] - 1;
                 current[i]--;
             }
             // decrementing beyond [0, 0, ..., 0] is UB
@@ -101,7 +104,7 @@ namespace llama
             for(auto i = static_cast<int>(rank) - 1; i > 0 && n != 0; i--)
             {
                 n += static_cast<difference_type>(current[i]);
-                const auto s = static_cast<difference_type>(size[i]);
+                const auto s = static_cast<difference_type>(extents[i]);
                 auto mod = n % s;
                 n /= s;
                 if(mod < 0)
@@ -110,14 +113,14 @@ namespace llama
                     n--;
                 }
                 current[i] = mod;
-                assert(current[i] < size[i]);
+                assert(current[i] < extents[i]);
             }
 
             current[0] = static_cast<difference_type>(current[0]) + n;
             // current is either within bounds or at the end ([last + 1, 0, 0, ..., 0])
             assert(
-                (current[0] < size[0]
-                 || (current[0] == size[0]
+                (current[0] < extents[0]
+                 || (current[0] == extents[0]
                      && std::all_of(std::begin(current) + 1, std::end(current), [](auto c) { return c == 0; })))
                 && "Iterator was moved past the end");
 
@@ -154,14 +157,14 @@ namespace llama
         friend constexpr auto operator-(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept
             -> difference_type
         {
-            assert(a.size == b.size);
+            assert(a.extents == b.extents);
 
             difference_type n = a.current[rank - 1] - b.current[rank - 1];
-            difference_type size = a.size[rank - 1];
+            difference_type size = a.extents[rank - 1];
             for(auto i = static_cast<int>(rank) - 2; i >= 0; i--)
             {
                 n += (a.current[i] - b.current[i]) * size;
-                size *= a.size[i];
+                size *= a.extents[i];
             }
 
             return n;
@@ -172,7 +175,7 @@ namespace llama
             const ArrayIndexIterator<ArrayExtents>& a,
             const ArrayIndexIterator<ArrayExtents>& b) noexcept -> bool
         {
-            assert(a.size == b.size);
+            assert(a.extents == b.extents);
             return a.current == b.current;
         }
 
@@ -187,7 +190,7 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE
         friend constexpr auto operator<(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept -> bool
         {
-            assert(a.size == b.size);
+            assert(a.extents == b.extents);
             return std::lexicographical_compare(
                 std::begin(a.current),
                 std::end(a.current),
@@ -214,7 +217,7 @@ namespace llama
         }
 
     private:
-        ArrayExtents size; // TODO(bgruber): we only need to store rank - 1 sizes
+        ArrayExtents extents; // TODO(bgruber): we only need to store rank - 1 sizes
         value_type current;
     };
 
@@ -226,6 +229,8 @@ namespace llama
         , std::ranges::view_base
 #endif
     {
+        static_assert(!std::is_const_v<ArrayExtents>);
+
         constexpr ArrayIndexRange() noexcept = default;
 
         LLAMA_FN_HOST_ACC_INLINE

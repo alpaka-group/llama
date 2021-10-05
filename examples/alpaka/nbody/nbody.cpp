@@ -158,13 +158,13 @@ struct UpdateKernel
             {
                 constexpr auto sharedMapping = []
                 {
-                    constexpr auto extents = llama::ArrayExtents<BlockSize>{};
+                    using ArrayExtents = llama::ArrayExtents<BlockSize>;
                     if constexpr(MappingSM == AoS)
-                        return llama::mapping::AoS{extents, Particle{}};
+                        return llama::mapping::AoS<ArrayExtents, Particle>{};
                     if constexpr(MappingSM == SoA)
-                        return llama::mapping::SoA<decltype(extents), Particle, false>{extents};
+                        return llama::mapping::SoA<ArrayExtents, Particle, false>{};
                     if constexpr(MappingSM == AoSoA)
-                        return llama::mapping::AoSoA<decltype(extents), Particle, AOSOA_LANES>{extents};
+                        return llama::mapping::AoSoA<ArrayExtents, Particle, AOSOA_LANES>{};
                 }();
                 static_assert(decltype(sharedMapping)::blobCount == 1);
 
@@ -180,10 +180,9 @@ struct UpdateKernel
         // TODO(bgruber): we could optimize here, because only velocity is ever updated
         auto pi = [&]
         {
-            constexpr auto extents = llama::ArrayExtents<Elems>{};
-            constexpr auto mapping = llama::mapping::SoA<decltype(extents), typename View::RecordDim, false>{extents};
-            constexpr auto blobAlloc = llama::bloballoc::Stack<llama::sizeOf<typename View::RecordDim> * Elems>{};
-            return llama::allocViewUninitialized(mapping, blobAlloc);
+            constexpr auto mapping
+                = llama::mapping::SoA<llama::ArrayExtents<Elems>, typename View::RecordDim, false>{};
+            return llama::allocViewUninitialized(mapping, llama::bloballoc::Stack<mapping.blobSize(0)>{});
         }();
         // TODO(bgruber): vector load
         LLAMA_INDEPENDENT_DATA
@@ -263,15 +262,16 @@ void run(std::ostream& plotFile)
 
     auto mapping = []
     {
-        const auto extents = llama::ArrayExtents{PROBLEM_SIZE};
+        using ArrayExtents = llama::ArrayExtents<llama::dyn>;
+        const auto extents = ArrayExtents{PROBLEM_SIZE};
         if constexpr(MappingGM == AoS)
-            return llama::mapping::AoS<decltype(extents), Particle>{extents};
+            return llama::mapping::AoS<ArrayExtents, Particle>{extents};
         if constexpr(MappingGM == SoA)
-            return llama::mapping::SoA<decltype(extents), Particle, false>{extents};
+            return llama::mapping::SoA<ArrayExtents, Particle, false>{extents};
         // if constexpr (MappingGM == 2)
-        //    return llama::mapping::SoA<decltype(extents), Particle, true>{extents};
+        //    return llama::mapping::SoA<ArrayExtents, Particle, true>{extents};
         if constexpr(MappingGM == AoSoA)
-            return llama::mapping::AoSoA<decltype(extents), Particle, AOSOA_LANES>{extents};
+            return llama::mapping::AoSoA<ArrayExtents, Particle, AOSOA_LANES>{extents};
     }();
 
     Stopwatch watch;

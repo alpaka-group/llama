@@ -288,12 +288,13 @@ $data << EOD
         plotFile << "\n";
     };
 
-    const auto packedAoSMapping = llama::mapping::PackedAoS<decltype(extents), RecordDim>{extents};
-    const auto alignedAoSMapping = llama::mapping::AlignedAoS<decltype(extents), RecordDim>{extents};
-    const auto multiBlobSoAMapping = llama::mapping::MultiBlobSoA<decltype(extents), RecordDim>{extents};
-    const auto aosoa8Mapping = llama::mapping::AoSoA<decltype(extents), RecordDim, 8>{extents};
-    const auto aosoa32Mapping = llama::mapping::AoSoA<decltype(extents), RecordDim, 32>{extents};
-    const auto aosoa64Mapping = llama::mapping::AoSoA<decltype(extents), RecordDim, 64>{extents};
+    using ArrayExtents = std::remove_const_t<decltype(extents)>;
+    const auto packedAoSMapping = llama::mapping::PackedAoS<ArrayExtents, RecordDim>{extents};
+    const auto alignedAoSMapping = llama::mapping::AlignedAoS<ArrayExtents, RecordDim>{extents};
+    const auto multiBlobSoAMapping = llama::mapping::MultiBlobSoA<ArrayExtents, RecordDim>{extents};
+    const auto aosoa8Mapping = llama::mapping::AoSoA<ArrayExtents, RecordDim, 8>{extents};
+    const auto aosoa32Mapping = llama::mapping::AoSoA<ArrayExtents, RecordDim, 32>{extents};
+    const auto aosoa64Mapping = llama::mapping::AoSoA<ArrayExtents, RecordDim, 64>{extents};
 
     benchmarkAllCopies("P AoS", "A AoS", packedAoSMapping, alignedAoSMapping);
     benchmarkAllCopies("A AoS", "P AoS", alignedAoSMapping, packedAoSMapping);

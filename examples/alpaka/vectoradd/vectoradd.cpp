@@ -82,13 +82,14 @@ try
     // LLAMA
     const auto mapping = [&]
     {
-        const auto extents = llama::ArrayExtents{PROBLEM_SIZE};
+        using ArrayExtents = llama::ArrayExtents<llama::dyn>;
+        const auto extents = ArrayExtents{PROBLEM_SIZE};
         if constexpr(MAPPING == 0)
-            return llama::mapping::AoS<decltype(extents), Vector>{extents};
+            return llama::mapping::AoS<ArrayExtents, Vector>{extents};
         if constexpr(MAPPING == 1)
-            return llama::mapping::SoA<decltype(extents), Vector, false>{extents};
+            return llama::mapping::SoA<ArrayExtents, Vector, false>{extents};
         if constexpr(MAPPING == 2)
-            return llama::mapping::SoA<decltype(extents), Vector, true>{extents};
+            return llama::mapping::SoA<ArrayExtents, Vector, true>{extents};
         if constexpr(MAPPING == 3)
             return llama::mapping::tree::Mapping{extents, llama::Tuple{}, Vector{}};
         if constexpr(MAPPING == 4)

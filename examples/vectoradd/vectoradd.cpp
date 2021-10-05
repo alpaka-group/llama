@@ -48,18 +48,19 @@ namespace usellama
 
         const auto mapping = [&]
         {
-            const auto arrayDims = llama::ArrayExtents{PROBLEM_SIZE};
+            using ArrayExtents = llama::ArrayExtents<llama::dyn>;
+            const auto extents = ArrayExtents{PROBLEM_SIZE};
             if constexpr(MAPPING == 0)
-                return llama::mapping::AoS{arrayDims, Vector{}};
+                return llama::mapping::AoS{extents, Vector{}};
             if constexpr(MAPPING == 1)
-                return llama::mapping::SoA{arrayDims, Vector{}};
+                return llama::mapping::SoA{extents, Vector{}};
             if constexpr(MAPPING == 2)
-                return llama::mapping::SoA<decltype(arrayDims), Vector, true>{arrayDims};
+                return llama::mapping::SoA<ArrayExtents, Vector, true>{extents};
             if constexpr(MAPPING == 3)
-                return llama::mapping::tree::Mapping{arrayDims, llama::Tuple{}, Vector{}};
+                return llama::mapping::tree::Mapping{extents, llama::Tuple{}, Vector{}};
             if constexpr(MAPPING == 4)
                 return llama::mapping::tree::Mapping{
-                    arrayDims,
+                    extents,
                     llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
                     Vector{}};
         }();

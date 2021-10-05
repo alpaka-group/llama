@@ -86,15 +86,15 @@ __global__ void updateSM(View particles)
     {
         constexpr auto sharedMapping = []
         {
-            constexpr auto extents = llama::ArrayExtents<SHARED_ELEMENTS_PER_BLOCK>{};
+            using ArrayExtents = llama::ArrayExtents<SHARED_ELEMENTS_PER_BLOCK>;
             if constexpr(MappingSM == 0)
-                return llama::mapping::AoS<decltype(extents), SharedMemoryParticle>{};
+                return llama::mapping::AoS<ArrayExtents, SharedMemoryParticle>{};
             if constexpr(MappingSM == 1)
-                return llama::mapping::SoA<decltype(extents), SharedMemoryParticle, false>{};
+                return llama::mapping::SoA<ArrayExtents, SharedMemoryParticle, false>{};
             if constexpr(MappingSM == 2)
-                return llama::mapping::SoA<decltype(extents), SharedMemoryParticle, true>{};
+                return llama::mapping::SoA<ArrayExtents, SharedMemoryParticle, true>{};
             if constexpr(MappingSM == 3)
-                return llama::mapping::AoSoA<decltype(extents), SharedMemoryParticle, AOSOA_LANES>{};
+                return llama::mapping::AoSoA<ArrayExtents, SharedMemoryParticle, AOSOA_LANES>{};
         }();
 
         llama::Array<std::byte*, decltype(sharedMapping)::blobCount> sharedMems{};
@@ -178,18 +178,19 @@ try
 
     auto mapping = []
     {
-        const auto extents = llama::ArrayExtents<PROBLEM_SIZE>{};
+        using ArrayExtents = llama::ArrayExtents<llama::dyn>;
+        const auto extents = ArrayExtents{PROBLEM_SIZE};
         if constexpr(Mapping == 0)
-            return llama::mapping::AoS<decltype(extents), Particle>{extents};
+            return llama::mapping::AoS<ArrayExtents, Particle>{extents};
         if constexpr(Mapping == 1)
-            return llama::mapping::SoA<decltype(extents), Particle, false>{extents};
+            return llama::mapping::SoA<ArrayExtents, Particle, false>{extents};
         if constexpr(Mapping == 2)
-            return llama::mapping::SoA<decltype(extents), Particle, true>{extents};
+            return llama::mapping::SoA<ArrayExtents, Particle, true>{extents};
         if constexpr(Mapping == 3)
-            return llama::mapping::AoSoA<decltype(extents), Particle, AOSOA_LANES>{extents};
+            return llama::mapping::AoSoA<ArrayExtents, Particle, AOSOA_LANES>{extents};
         if constexpr(Mapping == 4)
             return llama::mapping::Split<
-                decltype(extents),
+                ArrayExtents,
                 Particle,
                 llama::RecordCoord<1>,
                 llama::mapping::PreconfiguredSoA<>::type,
@@ -197,7 +198,7 @@ try
                 true>{extents};
         if constexpr(Mapping == 5)
             return llama::mapping::Split<
-                decltype(extents),
+                ArrayExtents,
                 Particle,
                 llama::RecordCoord<1>,
                 llama::mapping::PreconfiguredAoS<>::type,
