@@ -212,7 +212,14 @@ jobs:
         & build/$env:CONFIG/tests
 
   build-macos:
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
+    name: build-${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-10.15
+          - os: macos-11
     env: {CXX: clang++}
     steps:
       - uses: actions/checkout@v2
