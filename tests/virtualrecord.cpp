@@ -1056,3 +1056,26 @@ TEST_CASE("VirtualRecord.forEachLeaf")
     CHECK(p(tag::Flags{})(llama::RecordCoord<0>{}) == true);
     CHECK(p(tag::Flags{})(llama::RecordCoord<0>{}) == true);
 }
+
+TEST_CASE("VirtualRecord.reference_to_One")
+{
+    llama::One<Vec3I> v;
+    llama::forEachLeaf(v, [i = 0](auto& field) mutable { field = ++i; });
+    CHECK(v(tag::X{}) == 1);
+    CHECK(v(tag::Y{}) == 2);
+    CHECK(v(tag::Z{}) == 3);
+
+    auto r = v(llama::RecordCoord<>{});
+    CHECK(r(tag::X{}) == 1);
+    CHECK(r(tag::Y{}) == 2);
+    CHECK(r(tag::Z{}) == 3);
+
+    r(tag::Y{}) = 22;
+    CHECK(r(tag::X{}) == 1);
+    CHECK(r(tag::Y{}) == 22);
+    CHECK(r(tag::Z{}) == 3);
+
+    CHECK(v(tag::X{}) == 1);
+    CHECK(v(tag::Y{}) == 22);
+    CHECK(v(tag::Z{}) == 3);
+}
