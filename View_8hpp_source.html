@@ -504,7 +504,7 @@ $(document).ready(function(){initNavTree('View_8hpp_source.html',''); initResiza
 <div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;        <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> <span class="keyword">auto</span> accessor(<a class="code" href="structllama_1_1View.html#aaae609de79766a2f982c5a9f57dff499">ArrayDims</a> arrayDims, <a class="code" href="structllama_1_1RecordCoord.html">RecordCoord&lt;Coords...&gt;</a> rc = {}) <span class="keyword">const</span></div>
 <div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;            -&gt; decltype(<span class="keyword">auto</span>)</div>
 <div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;        {</div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;            <span class="keywordflow">if</span> constexpr(<a class="code" href="namespacellama.html#a9676a3903b134df116791bcae533d6c6">isComputed</a>&lt;Mapping, <a class="code" href="structllama_1_1RecordCoord.html">RecordCoord&lt;Coords...&gt;</a>&gt;)</div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;            <span class="keywordflow">if</span> constexpr(<a class="code" href="namespacellama.html#a9676a3903b134df116791bcae533d6c6">llama::isComputed</a>&lt;Mapping, <a class="code" href="structllama_1_1RecordCoord.html">RecordCoord&lt;Coords...&gt;</a>&gt;)</div>
 <div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;                return mapping().compute(arrayDims, rc, storageBlobs);</div>
 <div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;            else</div>
 <div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;            {</div>
@@ -518,7 +518,7 @@ $(document).ready(function(){initNavTree('View_8hpp_source.html',''); initResiza
 <div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;        <span class="keyword">template</span>&lt;std::size_t... Coords&gt;</div>
 <div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;        <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> <span class="keyword">auto</span> accessor(<a class="code" href="namespacellama.html#ac99ade3cc2e49f4a201fe637ddfc3788">ArrayDims</a> arrayDims, RecordCoord&lt;Coords...&gt; rc = {}) -&gt; decltype(<span class="keyword">auto</span>)</div>
 <div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;        {</div>
-<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;            <span class="keywordflow">if</span> constexpr(<a class="code" href="namespacellama.html#a9676a3903b134df116791bcae533d6c6">isComputed</a>&lt;Mapping, RecordCoord&lt;Coords...&gt;&gt;)</div>
+<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;            <span class="keywordflow">if</span> constexpr(<a class="code" href="namespacellama.html#a9676a3903b134df116791bcae533d6c6">llama::isComputed</a>&lt;Mapping, RecordCoord&lt;Coords...&gt;&gt;)</div>
 <div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;                return mapping().compute(arrayDims, rc, storageBlobs);</div>
 <div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;            else</div>
 <div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;            {</div>
@@ -722,7 +722,7 @@ $(document).ready(function(){initNavTree('View_8hpp_source.html',''); initResiza
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="View_8hpp.html">View.hpp</a></li>
-    <li class="footer">Generated on Wed Oct 6 2021 08:58:32 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Oct 6 2021 12:02:20 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
