@@ -255,7 +255,7 @@ try
     };
 
     start();
-    for(auto i = 0; i < accView.storageBlobs.rank; i++)
+    for(auto i = 0; i < accView.storageBlobs.size(); i++)
         checkError(cudaMemcpy(
             accView.storageBlobs[i],
             hostView.storageBlobs[i].data(),
@@ -290,7 +290,7 @@ try
     plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
     start();
-    for(auto i = 0; i < accView.storageBlobs.rank; i++)
+    for(auto i = 0; i < accView.storageBlobs.size(); i++)
         checkError(cudaMemcpy(
             hostView.storageBlobs[i].data(),
             accView.storageBlobs[i],
@@ -298,7 +298,7 @@ try
             cudaMemcpyDeviceToHost));
     std::cout << "copy D->H " << stop() << " s\n";
 
-    for(auto i = 0; i < accView.storageBlobs.rank; i++)
+    for(auto i = 0; i < accView.storageBlobs.size(); i++)
         checkError(cudaFree(accView.storageBlobs[i]));
     checkError(cudaEventDestroy(startEvent));
     checkError(cudaEventDestroy(stopEvent));

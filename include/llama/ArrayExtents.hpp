@@ -16,6 +16,7 @@ namespace llama
     template<std::size_t Dim>
     struct ArrayIndex : Array<std::size_t, Dim>
     {
+        static constexpr std::size_t rank = Dim;
     };
 
     static_assert(
