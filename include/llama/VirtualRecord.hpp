@@ -394,7 +394,7 @@ namespace llama
         {
             static_assert(
                 OwnView,
-                "The copy constructor of VirtualRecord from a scalar is only available if it owns the view.");
+                "The constructor of VirtualRecord from a scalar is only available if it owns the view.");
             *this = scalar;
         }
 
