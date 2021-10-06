@@ -44,7 +44,9 @@ namespace llama::mapping
         constexpr Trace() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        explicit Trace(Mapping mapping) : mapping(mapping)
+        explicit Trace(Mapping mapping, bool printOnDestruction = true)
+            : mapping(mapping)
+            , printOnDestruction(printOnDestruction)
         {
             forEachLeafCoord<RecordDim>([&](auto rc) { fieldHits[internal::coordName<RecordDim>(rc)] = 0; });
         }
@@ -57,12 +59,8 @@ namespace llama::mapping
 
         ~Trace()
         {
-            if(!fieldHits.empty())
-            {
-                std::cout << "Trace mapping, number of accesses:\n";
-                for(const auto& [k, v] : fieldHits)
-                    std::cout << '\t' << k << ":\t" << v << '\n';
-            }
+            if(printOnDestruction && !fieldHits.empty())
+                print();
         }
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayIndex
@@ -86,7 +84,15 @@ namespace llama::mapping
             LLAMA_FORCE_INLINE_RECURSIVE return mapping.blobNrAndOffset(ai, rc);
         }
 
+        void print() const
+        {
+            std::cout << "Trace mapping, number of accesses:\n";
+            for(const auto& [k, v] : fieldHits)
+                std::cout << '\t' << k << ":\t" << v << '\n';
+        }
+
         Mapping mapping;
         mutable std::unordered_map<std::string, std::atomic<std::size_t>> fieldHits;
+        bool printOnDestruction;
     };
 } // namespace llama::mapping
