@@ -17,9 +17,6 @@ namespace llama
     struct Array
     {
         using value_type = T;
-        static constexpr std::size_t rank
-            = N; // FIXME this is right from the ArrayIndex's POV, but wrong from the Array's POV
-        //static constexpr std::size_t rank_dynamic = rank; // to be exchangable with ArrayExtents
         T element[N > 0 ? N : 1];
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto size() const
@@ -97,7 +94,6 @@ namespace llama
     struct Array<T, 0>
     {
         using value_type = T;
-        static constexpr std::size_t rank = 0;
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto size() const
         {

@@ -159,10 +159,10 @@ namespace llama
 
         static_assert(srcIsAoSoA || dstIsAoSoA, "At least one of the mappings must be an AoSoA mapping");
         static_assert(
-            !srcIsAoSoA || decltype(srcView.storageBlobs)::rank == 1,
+            !srcIsAoSoA || std::tuple_size_v<decltype(srcView.storageBlobs)> == 1,
             "Implementation assumes AoSoA with single blob");
         static_assert(
-            !dstIsAoSoA || decltype(dstView.storageBlobs)::rank == 1,
+            !dstIsAoSoA || std::tuple_size_v<decltype(dstView.storageBlobs)> == 1,
             "Implementation assumes AoSoA with single blob");
 
         const auto flatSize = product(dstView.mapping().extents());
