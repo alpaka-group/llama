@@ -104,22 +104,24 @@ $(document).ready(function(){initNavTree('TreeFromDimensions_8hpp.html',''); ini
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="TreeFromDimensions_8hpp__incl.png" border="0" usemap="#_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2tree_2TreeFromDimensions_8hpp" alt=""/></div>
 <map name="_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2tree_2TreeFromDimensions_8hpp" id="_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2tree_2TreeFromDimensions_8hpp">
-<area shape="rect" title=" " alt="" coords="326,5,547,61"/>
-<area shape="rect" href="Core_8hpp.html" title=" " alt="" coords="295,109,399,136"/>
-<area shape="rect" title=" " alt="" coords="5,259,97,285"/>
-<area shape="rect" href="Tuple_8hpp.html" title=" " alt="" coords="740,184,848,211"/>
-<area shape="rect" title=" " alt="" coords="475,109,545,136"/>
-<area shape="rect" title=" " alt="" coords="570,109,629,136"/>
-<area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="267,184,350,211"/>
-<area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="382,259,465,285"/>
-<area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="110,184,243,211"/>
-<area shape="rect" title=" " alt="" coords="425,184,611,211"/>
-<area shape="rect" title=" " alt="" coords="635,184,715,211"/>
-<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="627,259,726,285"/>
-<area shape="rect" title=" " alt="" coords="203,259,279,285"/>
-<area shape="rect" title=" " alt="" coords="303,259,357,285"/>
-<area shape="rect" title=" " alt="" coords="360,333,487,360"/>
-<area shape="rect" title=" " alt="" coords="122,259,178,285"/>
+<area shape="rect" title=" " alt="" coords="805,5,1027,61"/>
+<area shape="rect" href="Core_8hpp.html" title=" " alt="" coords="499,109,603,136"/>
+<area shape="rect" title=" " alt="" coords="565,259,657,285"/>
+<area shape="rect" href="Tuple_8hpp.html" title=" " alt="" coords="37,184,145,211"/>
+<area shape="rect" title=" " alt="" coords="954,109,1025,136"/>
+<area shape="rect" title=" " alt="" coords="1049,109,1108,136"/>
+<area shape="rect" href="ArrayExtents_8hpp.html" title=" " alt="" coords="221,184,355,211"/>
+<area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="137,259,220,285"/>
+<area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="380,184,513,211"/>
+<area shape="rect" title=" " alt="" coords="588,184,775,211"/>
+<area shape="rect" title=" " alt="" coords="799,184,879,211"/>
+<area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="244,259,327,285"/>
+<area shape="rect" title=" " alt="" coords="351,259,409,285"/>
+<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="5,333,104,360"/>
+<area shape="rect" title=" " alt="" coords="383,333,459,360"/>
+<area shape="rect" title=" " alt="" coords="279,333,334,360"/>
+<area shape="rect" title=" " alt="" coords="129,333,255,360"/>
+<area shape="rect" title=" " alt="" coords="484,259,540,285"/>
 </map>
 </div>
 </div><div class="textblock"><div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -180,9 +182,9 @@ Typedefs</h2></td></tr>
 <tr class="memitem:aa2770ac2c1d1a9d930488072572cc47f"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
 <tr class="memitem:aa2770ac2c1d1a9d930488072572cc47f"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree.html#aa2770ac2c1d1a9d930488072572cc47f">llama::mapping::tree::TreeFromRecordDim</a> = internal::TreeFromRecordDimImpl&lt; RecordDim &gt;</td></tr>
 <tr class="separator:aa2770ac2c1d1a9d930488072572cc47f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a339db2930cc75fdf5d6be57dba7360db"><td class="memTemplParams" colspan="2">template&lt;typename ArrayDims , typename RecordDim &gt; </td></tr>
-<tr class="memitem:a339db2930cc75fdf5d6be57dba7360db"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree.html#a339db2930cc75fdf5d6be57dba7360db">llama::mapping::tree::TreeFromDimensions</a> = typename internal::WrapInNNodes&lt; internal::TreeFromRecordDimImpl&lt; RecordDim &gt;, ArrayDims::rank - 1 &gt;::type</td></tr>
-<tr class="separator:a339db2930cc75fdf5d6be57dba7360db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1ecec8e7fd7fc84ab0a83df9b680310"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim &gt; </td></tr>
+<tr class="memitem:ad1ecec8e7fd7fc84ab0a83df9b680310"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree.html#ad1ecec8e7fd7fc84ab0a83df9b680310">llama::mapping::tree::TreeFromDimensions</a> = typename internal::WrapInNNodes&lt; internal::TreeFromRecordDimImpl&lt; RecordDim &gt;, ArrayExtents::rank - 1 &gt;::type</td></tr>
+<tr class="separator:ad1ecec8e7fd7fc84ab0a83df9b680310"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -192,15 +194,15 @@ Functions</h2></td></tr>
 <tr class="memitem:a5db1654176ea82f4ed22c4c247133dab"><td class="memTemplParams" colspan="2">template&lt;typename TreeCoord &gt; </td></tr>
 <tr class="memitem:a5db1654176ea82f4ed22c4c247133dab"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree.html#a5db1654176ea82f4ed22c4c247133dab">llama::mapping::tree::treeCoordToString</a> (TreeCoord treeCoord) -&gt; std::string</td></tr>
 <tr class="separator:a5db1654176ea82f4ed22c4c247133dab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08edcca251e841d697878921073d5209"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename ArrayDims , std::size_t Pos = 0&gt; </td></tr>
-<tr class="memitem:a08edcca251e841d697878921073d5209"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree.html#a08edcca251e841d697878921073d5209">llama::mapping::tree::createTree</a> (const ArrayDims &amp;size)</td></tr>
-<tr class="separator:a08edcca251e841d697878921073d5209"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8949e72fe5e2c40e8925ce02f30397b"><td class="memTemplParams" colspan="2">template&lt;typename ArrayDims , std::size_t... ADIndices, std::size_t FirstRecordCoord, std::size_t... RecordCoords&gt; </td></tr>
-<tr class="memitem:af8949e72fe5e2c40e8925ce02f30397b"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree_1_1internal.html#af8949e72fe5e2c40e8925ce02f30397b">llama::mapping::tree::internal::createTreeCoord</a> (const ArrayDims &amp;coord, std::index_sequence&lt; ADIndices... &gt;, RecordCoord&lt; FirstRecordCoord, RecordCoords... &gt;)</td></tr>
-<tr class="separator:af8949e72fe5e2c40e8925ce02f30397b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab16fbbe9a49e44eaffc9f9bfb0cf008b"><td class="memTemplParams" colspan="2">template&lt;typename RecordCoord , typename ArrayDims &gt; </td></tr>
-<tr class="memitem:ab16fbbe9a49e44eaffc9f9bfb0cf008b"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree.html#ab16fbbe9a49e44eaffc9f9bfb0cf008b">llama::mapping::tree::createTreeCoord</a> (const ArrayDims &amp;coord)</td></tr>
-<tr class="separator:ab16fbbe9a49e44eaffc9f9bfb0cf008b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39b9213a8f82848c240936541f8505b9"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , std::size_t N, std::size_t Pos = 0&gt; </td></tr>
+<tr class="memitem:a39b9213a8f82848c240936541f8505b9"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree.html#a39b9213a8f82848c240936541f8505b9">llama::mapping::tree::createTree</a> (const ArrayIndex&lt; N &gt; &amp;size)</td></tr>
+<tr class="separator:a39b9213a8f82848c240936541f8505b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1888103916dd5726db1e4f151c38b0d"><td class="memTemplParams" colspan="2">template&lt;typename ArrayIndex , std::size_t... ADIndices, std::size_t FirstRecordCoord, std::size_t... RecordCoords&gt; </td></tr>
+<tr class="memitem:ac1888103916dd5726db1e4f151c38b0d"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree_1_1internal.html#ac1888103916dd5726db1e4f151c38b0d">llama::mapping::tree::internal::createTreeCoord</a> (const ArrayIndex &amp;ai, std::index_sequence&lt; ADIndices... &gt;, RecordCoord&lt; FirstRecordCoord, RecordCoords... &gt;)</td></tr>
+<tr class="separator:ac1888103916dd5726db1e4f151c38b0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2116f38159bee878ad9cfb2f0558cba2"><td class="memTemplParams" colspan="2">template&lt;typename RecordCoord , typename ArrayIndex &gt; </td></tr>
+<tr class="memitem:a2116f38159bee878ad9cfb2f0558cba2"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree.html#a2116f38159bee878ad9cfb2f0558cba2">llama::mapping::tree::createTreeCoord</a> (const ArrayIndex &amp;ai)</td></tr>
+<tr class="separator:a2116f38159bee878ad9cfb2f0558cba2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -214,7 +216,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="dir_167d1c89d05e547509b1688d85c563df.html">tree</a></li><li class="navelem"><a class="el" href="TreeFromDimensions_8hpp.html">TreeFromDimensions.hpp</a></li>
-    <li class="footer">Generated on Wed Oct 6 2021 12:02:20 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Oct 7 2021 07:56:11 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

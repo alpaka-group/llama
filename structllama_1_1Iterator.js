@@ -1,11 +1,13 @@
 var structllama_1_1Iterator =
 [
-    [ "ADIterator", "structllama_1_1Iterator.html#a0d0a0e1b6d42270585f08a2718eee8ac", null ],
-    [ "difference_type", "structllama_1_1Iterator.html#aa7feb42faffb77ec946b8a6ccadd2edd", null ],
+    [ "ArrayIndexIterator", "structllama_1_1Iterator.html#a4e7d52688099b1e34a1b11bd407ddc03", null ],
+    [ "difference_type", "structllama_1_1Iterator.html#a1c4827ad584ac0c5cd8eadd3465adb33", null ],
     [ "iterator_category", "structllama_1_1Iterator.html#a9e213325f5a69c320be804d24e0b1ccd", null ],
     [ "pointer", "structllama_1_1Iterator.html#a72dda896ba4ad13eea5ff8ecd3728f0c", null ],
     [ "reference", "structllama_1_1Iterator.html#ac0401c5929b8c25cddfba1dfd1bba1b8", null ],
     [ "value_type", "structllama_1_1Iterator.html#a9c90d997ce6c6ef17fb23b3aa0907bf4", null ],
+    [ "Iterator", "structllama_1_1Iterator.html#afa877e06adc28f4c7bb7644b2aa77d67", null ],
+    [ "Iterator", "structllama_1_1Iterator.html#a87ca77106e3bf02e1ddf3124fd00a5de", null ],
     [ "operator*", "structllama_1_1Iterator.html#ac406e8f60f2dd8779a535d1f94dbc795", null ],
     [ "operator++", "structllama_1_1Iterator.html#ae8ae5582cfdbdcefc5507083a83422d7", null ],
     [ "operator++", "structllama_1_1Iterator.html#a7c9b13ab0033fe418550d192dbf8c8e1", null ],
@@ -25,6 +27,6 @@ var structllama_1_1Iterator =
     [ "operator==", "structllama_1_1Iterator.html#a8ebf1aa1356423456d1a77aac73a8593", null ],
     [ "operator>", "structllama_1_1Iterator.html#a7ad593041aeb7f426ff005bb1aa3755c", null ],
     [ "operator>=", "structllama_1_1Iterator.html#a388dabde0551f294a303b5eb6f29a3f0", null ],
-    [ "adIndex", "structllama_1_1Iterator.html#a750642216ce82ab11632c213b2ad3d1e", null ],
+    [ "arrayIndex", "structllama_1_1Iterator.html#afdae9444dfa6396d38463b08cdabff4d", null ],
     [ "view", "structllama_1_1Iterator.html#a6d5bad87b068fd6786c1c8828bb3367f", null ]
 ];

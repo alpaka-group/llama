@@ -90,7 +90,7 @@ $(document).ready(function(){initNavTree('functions_m.html',''); initResizable()
 , <a class="el" href="structllama_1_1mapping_1_1Trace.html#a4de28c7220fbe298bd65a27d295fa5ca">llama::mapping::Trace&lt; Mapping &gt;</a>
 </li>
 <li>Mapping()
-: <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#ad750deca49e3bfdbe74cffbbce26732d">llama::mapping::tree::Mapping&lt; TArrayDims, TRecordDim, TreeOperationList &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#a5a86485e3f5a72228c2831ff8a708125">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
 </li>
 <li>mapping()
 : <a class="el" href="structllama_1_1View.html#a1ee795f3207adbe19e5e91a100047cf9">llama::View&lt; TMapping, BlobType &gt;</a>
@@ -102,25 +102,25 @@ $(document).ready(function(){initNavTree('functions_m.html',''); initResizable()
 : <a class="el" href="structllama_1_1View.html#ab30a81d3be6170c1575d7d0a9b81711c">llama::View&lt; TMapping, BlobType &gt;</a>
 </li>
 <li>Mapping
-: <a class="el" href="structllama_1_1VirtualView.html#a022a188ea19f638ddb01117ba9a7eebe">llama::VirtualView&lt; TParentViewType &gt;</a>
+: <a class="el" href="structllama_1_1VirtualView.html#af05304e6788cb0ea5a236388b595c6a7">llama::VirtualView&lt; TParentView &gt;</a>
 </li>
 <li>mapping1
-: <a class="el" href="structllama_1_1mapping_1_1Split.html#aa3eeade815732eed40bd07c843420319">llama::mapping::Split&lt; TArrayDims, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1Split.html#ab122d03d23fba214e2e9b62526d2172c">llama::mapping::Split&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 </li>
 <li>Mapping1
-: <a class="el" href="structllama_1_1mapping_1_1Split.html#a232e0d52cc3ca736e12247798404478a">llama::mapping::Split&lt; TArrayDims, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1Split.html#a93be969da1394375c5fe928649e698c0">llama::mapping::Split&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 </li>
 <li>mapping2
-: <a class="el" href="structllama_1_1mapping_1_1Split.html#a0e087323600e72da06ab10d050312442">llama::mapping::Split&lt; TArrayDims, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1Split.html#ac8f0841cd14873d74c7aee30d0c4b922">llama::mapping::Split&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 </li>
 <li>Mapping2
-: <a class="el" href="structllama_1_1mapping_1_1Split.html#ac4b08d7cffd40e1a0609952bb37c0008">llama::mapping::Split&lt; TArrayDims, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
-</li>
-<li>MergedFunctors
-: <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#a3fd8f7edc2271ae327beaa55c284b4e8">llama::mapping::tree::Mapping&lt; TArrayDims, TRecordDim, TreeOperationList &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1Split.html#ad6cf4ef595ef48f41e80bf64c83cfe18">llama::mapping::Split&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 </li>
 <li>mergedFunctors
-: <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#a018cb13550b5ade83ed926920ef7f9ff">llama::mapping::tree::Mapping&lt; TArrayDims, TRecordDim, TreeOperationList &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#a4361d3fef8c59d58c37bdeb5fb209cd8">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
+</li>
+<li>MergedFunctors
+: <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#a497d204c1f51e5c9213fe50f4fe6199c">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
 </li>
 <li>MergeFunctors()
 : <a class="el" href="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors_3_01Tree_00_01Tuple_3_01Operations_8_8_8_01_4_01_4.html#ab99604ea7d89b69746842fc591b37d16">llama::mapping::tree::internal::MergeFunctors&lt; Tree, Tuple&lt; Operations... &gt; &gt;</a>
@@ -132,7 +132,7 @@ $(document).ready(function(){initNavTree('functions_m.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Oct 6 2021 12:02:21 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Oct 7 2021 07:56:11 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

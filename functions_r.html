@@ -86,32 +86,42 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 
 <h3><a id="index_r"></a>- r -</h3><ul>
 <li>rank
-: <a class="el" href="structllama_1_1Array.html#a02e48c26d7e90c2b91d73653420a09b5">llama::Array&lt; T, N &gt;</a>
-, <a class="el" href="structllama_1_1Array_3_01T_00_010_01_4.html#a7ac82d9ddca55af3bf30a51172b971cf">llama::Array&lt; T, 0 &gt;</a>
+: <a class="el" href="structllama_1_1ArrayExtents.html#ae2468d5c2b3714c09f81c60467b6a4cc">llama::ArrayExtents&lt; Sizes &gt;</a>
+, <a class="el" href="structllama_1_1ArrayExtents_3_4.html#a2f35b8ccc62b336d436e194867db787e">llama::ArrayExtents&lt;&gt;</a>
+, <a class="el" href="structllama_1_1ArrayIndex.html#a6022c08ea149111568660f1a82875f6b">llama::ArrayIndex&lt; Dim &gt;</a>
+, <a class="el" href="structllama_1_1ArrayIndexIterator.html#a3eb86c873b8b0e82f711d9b2bf43ca43">llama::ArrayIndexIterator&lt; ArrayExtents &gt;</a>
+</li>
+<li>rank_dynamic
+: <a class="el" href="structllama_1_1ArrayExtents.html#ae5c4d0fa925533034aab8c4aed3c52d2">llama::ArrayExtents&lt; Sizes &gt;</a>
+, <a class="el" href="structllama_1_1ArrayExtents_3_4.html#a7a4bfecbba269c9280325ee68a9436b1">llama::ArrayExtents&lt;&gt;</a>
+</li>
+<li>rank_static
+: <a class="el" href="structllama_1_1ArrayExtents.html#ac49f3c0b9da81e379e8ff81fdb5bc107">llama::ArrayExtents&lt; Sizes &gt;</a>
+, <a class="el" href="structllama_1_1ArrayExtents_3_4.html#a1369b69043db718d3f62c35c9439e696">llama::ArrayExtents&lt;&gt;</a>
 </li>
 <li>RecordDim
-: <a class="el" href="structllama_1_1mapping_1_1AoS.html#af3e598cad11c454559ec4c2adf751789">llama::mapping::AoS&lt; TArrayDims, TRecordDim, AlignAndPad, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#ad44f7c5090ac250dece34fd387550ad1">llama::mapping::AoSoA&lt; TArrayDims, TRecordDim, Lanes, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1AoS.html#a943157b673b59a749759d40f502646ab">llama::mapping::AoS&lt; TArrayExtents, TRecordDim, AlignAndPad, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a1174a6de60a370115f88ba3a5f4e8645">llama::mapping::AoSoA&lt; TArrayExtents, TRecordDim, Lanes, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Heatmap.html#ae2fd102c11592cdf9245df997fad0aa9">llama::mapping::Heatmap&lt; Mapping, CountType &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1One.html#ad7eac3158ff0941f3ad918d2180b6f71">llama::mapping::One&lt; TArrayDims, TRecordDim, AlignAndPad, FlattenRecordDim &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1SoA.html#a0380afe7bbe8abffe66eb563e396be4b">llama::mapping::SoA&lt; TArrayDims, TRecordDim, SeparateBuffers, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1Split.html#acabf89abadd1456f7cddaf2c411e03cc">llama::mapping::Split&lt; TArrayDims, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1One.html#a639c0ee6452734d5941843c1f8be2b91">llama::mapping::One&lt; TArrayExtents, TRecordDim, AlignAndPad, FlattenRecordDim &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1SoA.html#af5ce92216721e76879c6a4d1633b9809">llama::mapping::SoA&lt; TArrayExtents, TRecordDim, SeparateBuffers, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1Split.html#a6009d5d660d810dea23c84f90594e560">llama::mapping::Split&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Trace.html#a2cda914e6fd4df3ae6e44c05acc4facf">llama::mapping::Trace&lt; Mapping &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#a7f3272fc957ef1f38517842bca66013e">llama::mapping::tree::Mapping&lt; TArrayDims, TRecordDim, TreeOperationList &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#a918b6b31180de12b1cc42bcb340411a5">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
 , <a class="el" href="structllama_1_1Vector.html#a9cb6cd05cc9474af335517ef3889cfb4">llama::Vector&lt; Mapping &gt;</a>
 , <a class="el" href="structllama_1_1View.html#a078855f1e6995af9bce14b4a13075cc9">llama::View&lt; TMapping, BlobType &gt;</a>
 </li>
 <li>RecordDim1
-: <a class="el" href="structllama_1_1mapping_1_1Split.html#a2f4384933194fe2a9db80fa7be84a25b">llama::mapping::Split&lt; TArrayDims, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1Split.html#a28eaff4176cd793388c247b069af68b0">llama::mapping::Split&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 </li>
 <li>RecordDim2
-: <a class="el" href="structllama_1_1mapping_1_1Split.html#a8d24ee4abe6d82b54c7599970a1be775">llama::mapping::Split&lt; TArrayDims, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1Split.html#a07b155e3bd5d0f74618e7818c1e4ba5f">llama::mapping::Split&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 </li>
 <li>RecordDimPartitions
-: <a class="el" href="structllama_1_1mapping_1_1Split.html#a7fe4def1a83844133908abcabce184f7">llama::mapping::Split&lt; TArrayDims, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1Split.html#a682b8f9368a3fbb7a42c0cff8ff67597">llama::mapping::Split&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 </li>
 <li>reference
-: <a class="el" href="structllama_1_1ArrayDimsIndexIterator.html#a5fc12c0adedc6927c9861ece0dd9f811">llama::ArrayDimsIndexIterator&lt; Dim &gt;</a>
+: <a class="el" href="structllama_1_1ArrayIndexIterator.html#a29a20a406c9fb9e4a2c9033d01969ac4">llama::ArrayIndexIterator&lt; ArrayExtents &gt;</a>
 , <a class="el" href="structllama_1_1Iterator.html#ac0401c5929b8c25cddfba1dfd1bba1b8">llama::Iterator&lt; View &gt;</a>
 </li>
 <li>reserve()
@@ -135,12 +145,10 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 </li>
 <li>ResultTree
 : <a class="el" href="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors_3_01Tree_00_01Tuple_3_01Operations_8_8_8_01_4_01_4.html#a40455feecb37c12d9319fe73acf29674">llama::mapping::tree::internal::MergeFunctors&lt; Tree, Tuple&lt; Operations... &gt; &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#acb96520922aa3b98fd2ed8b14e7d8e04">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
 </li>
 <li>resultTree
-: <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#a7eaf16e083370d7fb22159b238909387">llama::mapping::tree::Mapping&lt; TArrayDims, TRecordDim, TreeOperationList &gt;</a>
-</li>
-<li>ResultTree
-: <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#aa7f911b57d9af014405e7be518b069b3">llama::mapping::tree::Mapping&lt; TArrayDims, TRecordDim, TreeOperationList &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#a05de6e64a1ae1d70c6ee6dd7e8387636">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
 </li>
 </ul>
 </div><!-- contents -->
@@ -148,7 +156,7 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Oct 6 2021 12:02:21 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Oct 7 2021 07:56:11 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -99,21 +99,23 @@ $(document).ready(function(){initNavTree('AoS_8hpp.html',''); initResizable(); }
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="AoS_8hpp__incl.png" border="0" usemap="#_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2AoS_8hpp" alt=""/></div>
 <map name="_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2AoS_8hpp" id="_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2AoS_8hpp">
-<area shape="rect" title=" " alt="" coords="433,5,649,61"/>
-<area shape="rect" href="Common_8hpp.html" title=" " alt="" coords="487,109,596,136"/>
-<area shape="rect" href="Core_8hpp.html" title=" " alt="" coords="443,184,535,211"/>
-<area shape="rect" title=" " alt="" coords="560,184,627,211"/>
-<area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="160,259,243,285"/>
-<area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="308,333,391,360"/>
-<area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="371,259,504,285"/>
-<area shape="rect" title=" " alt="" coords="495,333,587,360"/>
-<area shape="rect" title=" " alt="" coords="579,259,765,285"/>
-<area shape="rect" title=" " alt="" coords="789,259,869,285"/>
-<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="5,333,104,360"/>
-<area shape="rect" title=" " alt="" coords="207,333,283,360"/>
-<area shape="rect" title=" " alt="" coords="129,333,183,360"/>
-<area shape="rect" title=" " alt="" coords="286,408,413,435"/>
-<area shape="rect" title=" " alt="" coords="415,333,471,360"/>
+<area shape="rect" title=" " alt="" coords="403,5,619,61"/>
+<area shape="rect" href="Common_8hpp.html" title=" " alt="" coords="456,109,565,136"/>
+<area shape="rect" href="Core_8hpp.html" title=" " alt="" coords="413,184,505,211"/>
+<area shape="rect" title=" " alt="" coords="529,184,596,211"/>
+<area shape="rect" href="ArrayExtents_8hpp.html" title=" " alt="" coords="130,259,265,285"/>
+<area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="421,333,504,360"/>
+<area shape="rect" title=" " alt="" coords="254,333,346,360"/>
+<area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="340,259,473,285"/>
+<area shape="rect" title=" " alt="" coords="548,259,735,285"/>
+<area shape="rect" title=" " alt="" coords="759,259,839,285"/>
+<area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="64,333,147,360"/>
+<area shape="rect" title=" " alt="" coords="171,333,229,360"/>
+<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="5,408,104,435"/>
+<area shape="rect" title=" " alt="" coords="254,408,330,435"/>
+<area shape="rect" title=" " alt="" coords="129,408,183,435"/>
+<area shape="rect" title=" " alt="" coords="399,408,526,435"/>
+<area shape="rect" title=" " alt="" coords="528,333,584,360"/>
 </map>
 </div>
 </div><div class="textblock"><div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -132,7 +134,7 @@ $(document).ready(function(){initNavTree('AoS_8hpp.html',''); initResizable(); }
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoS.html">llama::mapping::AoS&lt; TArrayDims, TRecordDim, AlignAndPad, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoS.html">llama::mapping::AoS&lt; TArrayExtents, TRecordDim, AlignAndPad, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1PreconfiguredAoS.html">llama::mapping::PreconfiguredAoS&lt; AlignAndPad, LinearizeArrayDimsFunctor &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -146,24 +148,24 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a8123437f92ed834bccec09563137a33e"><td class="memTemplParams" colspan="2">template&lt;typename ArrayDims , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </td></tr>
-<tr class="memitem:a8123437f92ed834bccec09563137a33e"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a8123437f92ed834bccec09563137a33e">llama::mapping::AlignedAoS</a> = AoS&lt; ArrayDims, RecordDim, true, LinearizeArrayDimsFunctor &gt;</td></tr>
-<tr class="separator:a8123437f92ed834bccec09563137a33e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afbd95648a4b55a658517667a436bf524"><td class="memTemplParams" colspan="2">template&lt;typename ArrayDims , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </td></tr>
-<tr class="memitem:afbd95648a4b55a658517667a436bf524"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#afbd95648a4b55a658517667a436bf524">llama::mapping::MinAlignedAoS</a> = AoS&lt; ArrayDims, RecordDim, true, LinearizeArrayDimsFunctor, FlattenRecordDimMinimizePadding &gt;</td></tr>
-<tr class="separator:afbd95648a4b55a658517667a436bf524"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e1c9145cc0805f5aa1e09f13f9ee9ce"><td class="memTemplParams" colspan="2">template&lt;typename ArrayDims , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </td></tr>
-<tr class="memitem:a8e1c9145cc0805f5aa1e09f13f9ee9ce"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a8e1c9145cc0805f5aa1e09f13f9ee9ce">llama::mapping::PackedAoS</a> = AoS&lt; ArrayDims, RecordDim, false, LinearizeArrayDimsFunctor &gt;</td></tr>
-<tr class="separator:a8e1c9145cc0805f5aa1e09f13f9ee9ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3695faa8a6c5702ee9de9fda033d5fc1"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </td></tr>
+<tr class="memitem:a3695faa8a6c5702ee9de9fda033d5fc1"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a3695faa8a6c5702ee9de9fda033d5fc1">llama::mapping::AlignedAoS</a> = AoS&lt; ArrayExtents, RecordDim, true, LinearizeArrayDimsFunctor &gt;</td></tr>
+<tr class="separator:a3695faa8a6c5702ee9de9fda033d5fc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeac5020f4d483fa193c7112bbf8e046b"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </td></tr>
+<tr class="memitem:aeac5020f4d483fa193c7112bbf8e046b"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#aeac5020f4d483fa193c7112bbf8e046b">llama::mapping::MinAlignedAoS</a> = AoS&lt; ArrayExtents, RecordDim, true, LinearizeArrayDimsFunctor, FlattenRecordDimMinimizePadding &gt;</td></tr>
+<tr class="separator:aeac5020f4d483fa193c7112bbf8e046b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15f85a9f76c702975e3c96d0304fa10d"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </td></tr>
+<tr class="memitem:a15f85a9f76c702975e3c96d0304fa10d"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a15f85a9f76c702975e3c96d0304fa10d">llama::mapping::PackedAoS</a> = AoS&lt; ArrayExtents, RecordDim, false, LinearizeArrayDimsFunctor &gt;</td></tr>
+<tr class="separator:a15f85a9f76c702975e3c96d0304fa10d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a8ccdc77397e087a2a223e32b544006fa"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
 <tr class="memitem:a8ccdc77397e087a2a223e32b544006fa"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a8ccdc77397e087a2a223e32b544006fa">llama::mapping::isAoS</a> = false</td></tr>
 <tr class="separator:a8ccdc77397e087a2a223e32b544006fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afab167ddb89c37479ba40a59cbfd6ba0"><td class="memTemplParams" colspan="2">template&lt;typename ArrayDims , typename RecordDim , bool AlignAndPad, typename LinearizeArrayDimsFunctor , template&lt; typename &gt; typename FlattenRecordDim&gt; </td></tr>
-<tr class="memitem:afab167ddb89c37479ba40a59cbfd6ba0"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#afab167ddb89c37479ba40a59cbfd6ba0">llama::mapping::isAoS&lt; AoS&lt; ArrayDims, RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim &gt; &gt;</a> = true</td></tr>
-<tr class="separator:afab167ddb89c37479ba40a59cbfd6ba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3c0dd9c619fcff7196da0a6ec08d1d0"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , bool AlignAndPad, typename LinearizeArrayDimsFunctor , template&lt; typename &gt; typename FlattenRecordDim&gt; </td></tr>
+<tr class="memitem:af3c0dd9c619fcff7196da0a6ec08d1d0"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#af3c0dd9c619fcff7196da0a6ec08d1d0">llama::mapping::isAoS&lt; AoS&lt; ArrayExtents, RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim &gt; &gt;</a> = true</td></tr>
+<tr class="separator:af3c0dd9c619fcff7196da0a6ec08d1d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -171,7 +173,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="AoS_8hpp.html">AoS.hpp</a></li>
-    <li class="footer">Generated on Wed Oct 6 2021 12:02:20 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Oct 7 2021 07:56:11 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

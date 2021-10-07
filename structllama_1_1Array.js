@@ -13,6 +13,5 @@ var structllama_1_1Array =
     [ "operator!=", "structllama_1_1Array.html#a79c4e9b69ae046deace9f3583974d42a", null ],
     [ "operator+", "structllama_1_1Array.html#a17babdb41e8863ccd94806c23e501355", null ],
     [ "operator==", "structllama_1_1Array.html#a81059810842ccf4dc4608e61e12e9c7a", null ],
-    [ "element", "structllama_1_1Array.html#adcb4206c8a2d2bc2cbe141d354a6185b", null ],
-    [ "rank", "structllama_1_1Array.html#a02e48c26d7e90c2b91d73653420a09b5", null ]
+    [ "element", "structllama_1_1Array.html#adcb4206c8a2d2bc2cbe141d354a6185b", null ]
 ];

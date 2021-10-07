@@ -111,8 +111,10 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1Trace.html',
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ad8d4678361a2ab1ab1321ebab79f7351"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#ad8d4678361a2ab1ab1321ebab79f7351">ArrayDims</a> = typename Mapping::ArrayDims</td></tr>
-<tr class="separator:ad8d4678361a2ab1ab1321ebab79f7351"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fbbf39fedab8c28a23231717f8baac4"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#a1fbbf39fedab8c28a23231717f8baac4">ArrayExtents</a> = typename Mapping::ArrayExtents</td></tr>
+<tr class="separator:a1fbbf39fedab8c28a23231717f8baac4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe44236318684553533c9322ee5ce95e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#abe44236318684553533c9322ee5ce95e">ArrayIndex</a> = typename Mapping::ArrayIndex</td></tr>
+<tr class="separator:abe44236318684553533c9322ee5ce95e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2cda914e6fd4df3ae6e44c05acc4facf"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#a2cda914e6fd4df3ae6e44c05acc4facf">RecordDim</a> = typename Mapping::RecordDim</td></tr>
 <tr class="separator:a2cda914e6fd4df3ae6e44c05acc4facf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -120,8 +122,8 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:afb7cd0af480647f63d5962127e3b1450"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#afb7cd0af480647f63d5962127e3b1450">Trace</a> ()=default</td></tr>
 <tr class="separator:afb7cd0af480647f63d5962127e3b1450"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a905c419daebd74a348ba0be6d45c4db8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#a905c419daebd74a348ba0be6d45c4db8">Trace</a> (Mapping <a class="el" href="structllama_1_1mapping_1_1Trace.html#a4de28c7220fbe298bd65a27d295fa5ca">mapping</a>)</td></tr>
-<tr class="separator:a905c419daebd74a348ba0be6d45c4db8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfb5b537aa8504392616ddd7781803e8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#adfb5b537aa8504392616ddd7781803e8">Trace</a> (Mapping <a class="el" href="structllama_1_1mapping_1_1Trace.html#a4de28c7220fbe298bd65a27d295fa5ca">mapping</a>, bool <a class="el" href="structllama_1_1mapping_1_1Trace.html#a0a1716bb80ec5379e3d05a1eac9c4544">printOnDestruction</a>=true)</td></tr>
+<tr class="separator:adfb5b537aa8504392616ddd7781803e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b0435b68d2741eb5101c14c31f9c14f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#a6b0435b68d2741eb5101c14c31f9c14f">Trace</a> (const <a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a> &amp;)=delete</td></tr>
 <tr class="separator:a6b0435b68d2741eb5101c14c31f9c14f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae93708151ca7e2742d1bd9576ab95464"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#ae93708151ca7e2742d1bd9576ab95464">operator=</a> (const <a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a> &amp;) -&gt; <a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a> &amp;=delete</td></tr>
@@ -132,13 +134,15 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a52eef7a20f2921e73c6e4d0726b8998f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8feb8f4eba7493c7f1841de134f3a044"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#a8feb8f4eba7493c7f1841de134f3a044">~Trace</a> ()</td></tr>
 <tr class="separator:a8feb8f4eba7493c7f1841de134f3a044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac38fd16cd86b561e3840d0730ab686e8"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#ac38fd16cd86b561e3840d0730ab686e8">arrayDims</a> () const -&gt; <a class="el" href="structllama_1_1mapping_1_1Trace.html#ad8d4678361a2ab1ab1321ebab79f7351">ArrayDims</a></td></tr>
-<tr class="separator:ac38fd16cd86b561e3840d0730ab686e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa45d7b9f09e0693fbf377727befee65f"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#aa45d7b9f09e0693fbf377727befee65f">extents</a> () const -&gt; <a class="el" href="structllama_1_1mapping_1_1Trace.html#abe44236318684553533c9322ee5ce95e">ArrayIndex</a></td></tr>
+<tr class="separator:aa45d7b9f09e0693fbf377727befee65f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2476f46c7bce6ddae59877354e0448e"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#aa2476f46c7bce6ddae59877354e0448e">blobSize</a> (std::size_t i) const -&gt; std::size_t</td></tr>
 <tr class="separator:aa2476f46c7bce6ddae59877354e0448e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8840476b1e8ff6950b8964655f317231"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
-<tr class="memitem:a8840476b1e8ff6950b8964655f317231"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#a8840476b1e8ff6950b8964655f317231">blobNrAndOffset</a> (<a class="el" href="structllama_1_1mapping_1_1Trace.html#ad8d4678361a2ab1ab1321ebab79f7351">ArrayDims</a> coord, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt; rc={}) const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a></td></tr>
-<tr class="separator:a8840476b1e8ff6950b8964655f317231"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ee699c26049a9298a88b05e63354552"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
+<tr class="memitem:a7ee699c26049a9298a88b05e63354552"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#a7ee699c26049a9298a88b05e63354552">blobNrAndOffset</a> (<a class="el" href="structllama_1_1mapping_1_1Trace.html#abe44236318684553533c9322ee5ce95e">ArrayIndex</a> ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt; rc={}) const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a></td></tr>
+<tr class="separator:a7ee699c26049a9298a88b05e63354552"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab7abf557bd8ab060e3484353a3172bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#aab7abf557bd8ab060e3484353a3172bd">print</a> () const</td></tr>
+<tr class="separator:aab7abf557bd8ab060e3484353a3172bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -146,6 +150,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a4de28c7220fbe298bd65a27d295fa5ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e21a0f301f0821ed00625ae0d051781"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::atomic&lt; std::size_t &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#a1e21a0f301f0821ed00625ae0d051781">fieldHits</a></td></tr>
 <tr class="separator:a1e21a0f301f0821ed00625ae0d051781"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a1716bb80ec5379e3d05a1eac9c4544"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#a0a1716bb80ec5379e3d05a1eac9c4544">printOnDestruction</a></td></tr>
+<tr class="separator:a0a1716bb80ec5379e3d05a1eac9c4544"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -165,8 +171,8 @@ struct llama::mapping::Trace&lt; Mapping &gt;</h3>
 
 <p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00037">37</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="ad8d4678361a2ab1ab1321ebab79f7351"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad8d4678361a2ab1ab1321ebab79f7351">&#9670;&nbsp;</a></span>ArrayDims</h2>
+<a id="a1fbbf39fedab8c28a23231717f8baac4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fbbf39fedab8c28a23231717f8baac4">&#9670;&nbsp;</a></span>ArrayExtents</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -174,12 +180,30 @@ struct llama::mapping::Trace&lt; Mapping &gt;</h3>
 template&lt;typename Mapping &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping &gt;::<a class="el" href="structllama_1_1mapping_1_1Trace.html#ad8d4678361a2ab1ab1321ebab79f7351">ArrayDims</a> =  typename Mapping::ArrayDims</td>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping &gt;::<a class="el" href="structllama_1_1mapping_1_1Trace.html#a1fbbf39fedab8c28a23231717f8baac4">ArrayExtents</a> =  typename Mapping::ArrayExtents</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00039">39</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+
+</div>
+</div>
+<a id="abe44236318684553533c9322ee5ce95e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe44236318684553533c9322ee5ce95e">&#9670;&nbsp;</a></span>ArrayIndex</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping &gt;::<a class="el" href="structllama_1_1mapping_1_1Trace.html#abe44236318684553533c9322ee5ce95e">ArrayIndex</a> =  typename Mapping::ArrayIndex</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00040">40</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
 
 </div>
 </div>
@@ -197,7 +221,7 @@ template&lt;typename Mapping &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00040">40</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00041">41</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
 
 </div>
 </div>
@@ -229,8 +253,8 @@ template&lt;typename Mapping &gt; </div>
 
 </div>
 </div>
-<a id="a905c419daebd74a348ba0be6d45c4db8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a905c419daebd74a348ba0be6d45c4db8">&#9670;&nbsp;</a></span>Trace() <span class="overload">[2/4]</span></h2>
+<a id="adfb5b537aa8504392616ddd7781803e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfb5b537aa8504392616ddd7781803e8">&#9670;&nbsp;</a></span>Trace() <span class="overload">[2/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -244,8 +268,18 @@ template&lt;typename Mapping &gt; </div>
           <td class="memname"><a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping &gt;::<a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a> </td>
           <td>(</td>
           <td class="paramtype">Mapping&#160;</td>
-          <td class="paramname"><em>mapping</em></td><td>)</td>
+          <td class="paramname"><em>mapping</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>printOnDestruction</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -255,7 +289,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00046">46</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00047">47</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
 
 </div>
 </div>
@@ -340,43 +374,13 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00057">57</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00060">60</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac38fd16cd86b561e3840d0730ab686e8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac38fd16cd86b561e3840d0730ab686e8">&#9670;&nbsp;</a></span>arrayDims()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Mapping &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping &gt;::arrayDims </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const -&gt; <a class="el" href="structllama_1_1mapping_1_1Trace.html#ad8d4678361a2ab1ab1321ebab79f7351">ArrayDims</a>
-        </td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00067">67</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a8840476b1e8ff6950b8964655f317231"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8840476b1e8ff6950b8964655f317231">&#9670;&nbsp;</a></span>blobNrAndOffset()</h2>
+<a id="a7ee699c26049a9298a88b05e63354552"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ee699c26049a9298a88b05e63354552">&#9670;&nbsp;</a></span>blobNrAndOffset()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -391,8 +395,8 @@ template&lt;std::size_t... RecordCoords&gt; </div>
         <tr>
           <td class="memname">auto <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping &gt;::blobNrAndOffset </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1mapping_1_1Trace.html#ad8d4678361a2ab1ab1321ebab79f7351">ArrayDims</a>&#160;</td>
-          <td class="paramname"><em>coord</em>, </td>
+          <td class="paramtype"><a class="el" href="structllama_1_1mapping_1_1Trace.html#abe44236318684553533c9322ee5ce95e">ArrayIndex</a>&#160;</td>
+          <td class="paramname"><em>ai</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -414,7 +418,7 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00079">79</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00078">78</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
 
 </div>
 </div>
@@ -445,7 +449,37 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00072">72</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00071">71</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa45d7b9f09e0693fbf377727befee65f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa45d7b9f09e0693fbf377727befee65f">&#9670;&nbsp;</a></span>extents()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping &gt;::extents </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const -&gt; <a class="el" href="structllama_1_1mapping_1_1Trace.html#abe44236318684553533c9322ee5ce95e">ArrayIndex</a>
+        </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00066">66</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
 
 </div>
 </div>
@@ -505,6 +539,35 @@ template&lt;typename Mapping &gt; </div>
 
 </div>
 </div>
+<a id="aab7abf557bd8ab060e3484353a3172bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab7abf557bd8ab060e3484353a3172bd">&#9670;&nbsp;</a></span>print()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping &gt;::print </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00087">87</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a5248b9cc8a6a9f569009d33d24cb2108"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5248b9cc8a6a9f569009d33d24cb2108">&#9670;&nbsp;</a></span>blobCount</h2>
@@ -528,7 +591,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00041">41</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00042">42</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
 
 </div>
 </div>
@@ -554,7 +617,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00089">89</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00095">95</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
 
 </div>
 </div>
@@ -572,7 +635,25 @@ template&lt;typename Mapping &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00088">88</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00094">94</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a0a1716bb80ec5379e3d05a1eac9c4544"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a1716bb80ec5379e3d05a1eac9c4544">&#9670;&nbsp;</a></span>printOnDestruction</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping &gt;::printOnDestruction</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00096">96</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
 
 </div>
 </div>
@@ -585,7 +666,7 @@ template&lt;typename Mapping &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a></li>
-    <li class="footer">Generated on Wed Oct 6 2021 12:02:20 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Oct 7 2021 07:56:11 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

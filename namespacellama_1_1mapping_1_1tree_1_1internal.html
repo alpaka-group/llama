@@ -144,9 +144,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a2c18fb59a758ab64477a2719ad0ce4bc"><td class="memTemplParams" colspan="2">template&lt;typename... Coords, std::size_t... Is&gt; </td></tr>
 <tr class="memitem:a2c18fb59a758ab64477a2719ad0ce4bc"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree_1_1internal.html#a2c18fb59a758ab64477a2719ad0ce4bc">treeCoordToString</a> (<a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Coords... &gt; treeCoord, std::index_sequence&lt; Is... &gt;) -&gt; std::string</td></tr>
 <tr class="separator:a2c18fb59a758ab64477a2719ad0ce4bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8949e72fe5e2c40e8925ce02f30397b"><td class="memTemplParams" colspan="2">template&lt;typename ArrayDims , std::size_t... ADIndices, std::size_t FirstRecordCoord, std::size_t... RecordCoords&gt; </td></tr>
-<tr class="memitem:af8949e72fe5e2c40e8925ce02f30397b"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree_1_1internal.html#af8949e72fe5e2c40e8925ce02f30397b">createTreeCoord</a> (const <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a> &amp;coord, std::index_sequence&lt; ADIndices... &gt;, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; FirstRecordCoord, RecordCoords... &gt;)</td></tr>
-<tr class="separator:af8949e72fe5e2c40e8925ce02f30397b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1888103916dd5726db1e4f151c38b0d"><td class="memTemplParams" colspan="2">template&lt;typename ArrayIndex , std::size_t... ADIndices, std::size_t FirstRecordCoord, std::size_t... RecordCoords&gt; </td></tr>
+<tr class="memitem:ac1888103916dd5726db1e4f151c38b0d"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree_1_1internal.html#ac1888103916dd5726db1e4f151c38b0d">createTreeCoord</a> (const <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> &amp;ai, std::index_sequence&lt; ADIndices... &gt;, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; FirstRecordCoord, RecordCoords... &gt;)</td></tr>
+<tr class="separator:ac1888103916dd5726db1e4f151c38b0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
 <a id="ab24406f0b8b84c41b373b9857ef0b917"></a>
@@ -191,13 +191,13 @@ template&lt;typename NodeOrLeaf &gt; </div>
 
 </div>
 </div>
-<a id="af8949e72fe5e2c40e8925ce02f30397b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af8949e72fe5e2c40e8925ce02f30397b">&#9670;&nbsp;</a></span>createTreeCoord()</h2>
+<a id="ac1888103916dd5726db1e4f151c38b0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1888103916dd5726db1e4f151c38b0d">&#9670;&nbsp;</a></span>createTreeCoord()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename ArrayDims , std::size_t... ADIndices, std::size_t FirstRecordCoord, std::size_t... RecordCoords&gt; </div>
+template&lt;typename ArrayIndex , std::size_t... ADIndices, std::size_t FirstRecordCoord, std::size_t... RecordCoords&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -205,8 +205,8 @@ template&lt;typename ArrayDims , std::size_t... ADIndices, std::size_t FirstReco
         <tr>
           <td class="memname">auto llama::mapping::tree::internal::createTreeCoord </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a> &amp;&#160;</td>
-          <td class="paramname"><em>coord</em>, </td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> &amp;&#160;</td>
+          <td class="paramname"><em>ai</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -550,7 +550,7 @@ template&lt;typename... Coords, std::size_t... Is&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping_1_1tree.html">tree</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping_1_1tree_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Wed Oct 6 2021 12:02:20 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Oct 7 2021 07:56:11 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

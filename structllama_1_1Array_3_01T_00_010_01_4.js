@@ -8,6 +8,5 @@ var structllama_1_1Array_3_01T_00_010_01_4 =
     [ "size", "structllama_1_1Array_3_01T_00_010_01_4.html#a08fddf3bf8a634b0bc53d99f68b3abea", null ],
     [ "operator!=", "structllama_1_1Array_3_01T_00_010_01_4.html#a65c83a49c3e5e3b9ec5d9ac124104025", null ],
     [ "operator+", "structllama_1_1Array_3_01T_00_010_01_4.html#a29729a64f80d4237bc82b3e71f68b39d", null ],
-    [ "operator==", "structllama_1_1Array_3_01T_00_010_01_4.html#aeef9745b5e3c85f81b7922a132f57407", null ],
-    [ "rank", "structllama_1_1Array_3_01T_00_010_01_4.html#a7ac82d9ddca55af3bf30a51172b971cf", null ]
+    [ "operator==", "structllama_1_1Array_3_01T_00_010_01_4.html#aeef9745b5e3c85f81b7922a132f57407", null ]
 ];

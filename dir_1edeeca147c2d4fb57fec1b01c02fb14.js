@@ -2,9 +2,10 @@ var dir_1edeeca147c2d4fb57fec1b01c02fb14 =
 [
     [ "mapping", "dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html", "dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc" ],
     [ "Array.hpp", "Array_8hpp.html", "Array_8hpp" ],
-    [ "ArrayDimsIndexRange.hpp", "ArrayDimsIndexRange_8hpp.html", [
-      [ "ArrayDimsIndexIterator", "structllama_1_1ArrayDimsIndexIterator.html", "structllama_1_1ArrayDimsIndexIterator" ],
-      [ "ArrayDimsIndexRange", "structllama_1_1ArrayDimsIndexRange.html", "structllama_1_1ArrayDimsIndexRange" ]
+    [ "ArrayExtents.hpp", "ArrayExtents_8hpp.html", "ArrayExtents_8hpp" ],
+    [ "ArrayIndexRange.hpp", "ArrayIndexRange_8hpp.html", [
+      [ "ArrayIndexIterator", "structllama_1_1ArrayIndexIterator.html", "structllama_1_1ArrayIndexIterator" ],
+      [ "ArrayIndexRange", "structllama_1_1ArrayIndexRange.html", "structllama_1_1ArrayIndexRange" ]
     ] ],
     [ "BlobAllocators.hpp", "BlobAllocators_8hpp.html", [
       [ "Stack", "structllama_1_1bloballoc_1_1Stack.html", "structllama_1_1bloballoc_1_1Stack" ],

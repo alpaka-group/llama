@@ -94,7 +94,7 @@ $(document).ready(function(){initNavTree('DumpMapping_8hpp_source.html',''); ini
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#    error DumpMapping.hpp requires the fmt library</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="ArrayDimsIndexRange_8hpp.html">ArrayDimsIndexRange.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="ArrayIndexRange_8hpp.html">ArrayIndexRange.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Core_8hpp.html">Core.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;boost/functional/hash.hpp&gt;</span></div>
@@ -156,14 +156,14 @@ $(document).ready(function(){initNavTree('DumpMapping_8hpp_source.html',''); ini
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        }</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keyword">template</span>&lt;std::<span class="keywordtype">size_t</span> Dim&gt;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keyword">auto</span> formatUdCoord(<span class="keyword">const</span> ArrayDims&lt;Dim&gt;&amp; coord)</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keyword">auto</span> formatArrayIndex(<span class="keyword">const</span> ArrayIndex&lt;Dim&gt;&amp; ai)</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        {</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            <span class="keywordflow">if</span> constexpr(Dim == 1)</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                return std::to_string(coord[0]);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                return std::to_string(ai[0]);</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            else</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            {</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                std::string s = <span class="stringliteral">&quot;{&quot;</span>;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                <span class="keywordflow">for</span>(<span class="keyword">auto</span> v : coord)</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                <span class="keywordflow">for</span>(<span class="keyword">auto</span> v : ai)</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                {</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;                    <span class="keywordflow">if</span>(s.size() &gt;= 2)</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                        s += <span class="stringliteral">&quot;,&quot;</span>;</div>
@@ -189,7 +189,7 @@ $(document).ready(function(){initNavTree('DumpMapping_8hpp_source.html',''); ini
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="keyword">template</span>&lt;std::<span class="keywordtype">size_t</span> Dim&gt;</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keyword">struct </span>FieldBox</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        {</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            ArrayDims&lt;Dim&gt; adCoord;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            ArrayIndex&lt;Dim&gt; arrayIndex;</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            std::vector&lt;std::size_t&gt; recordCoord;</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            std::vector&lt;std::string&gt; recordTags;</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            NrAndOffset nrAndOffset;</div>
@@ -197,22 +197,22 @@ $(document).ready(function(){initNavTree('DumpMapping_8hpp_source.html',''); ini
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        };</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Mapping&gt;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="keyword">auto</span> boxesFromMapping(<span class="keyword">const</span> Mapping&amp; mapping) -&gt; std::vector&lt;FieldBox&lt;Mapping::ArrayDims::rank&gt;&gt;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="keyword">auto</span> boxesFromMapping(<span class="keyword">const</span> Mapping&amp; mapping) -&gt; std::vector&lt;FieldBox&lt;Mapping::ArrayIndex::rank&gt;&gt;</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        {</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            std::vector&lt;FieldBox&lt;Mapping::ArrayDims::rank&gt;&gt; infos;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            std::vector&lt;FieldBox&lt;Mapping::ArrayIndex::rank&gt;&gt; infos;</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;            <span class="keyword">using</span> RecordDim = <span class="keyword">typename</span> Mapping::RecordDim;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;            <span class="keywordflow">for</span>(<span class="keyword">auto</span> adCoord : ArrayDimsIndexRange{mapping.arrayDims()})</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;            <span class="keywordflow">for</span>(<span class="keyword">auto</span> ai : ArrayIndexRange{mapping.extents()})</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;            {</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;                forEachLeafCoord&lt;RecordDim&gt;(</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                    [&amp;](<span class="keyword">auto</span> coord)</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                    [&amp;](<span class="keyword">auto</span> rc)</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;                    {</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;                        infos.push_back(</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;                            {adCoord,</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;                             internal::toVec(coord),</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;                             internal::tagsAsStrings&lt;RecordDim&gt;(coord),</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;                             mapping.blobNrAndOffset(adCoord, coord),</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;                             <span class="keyword">sizeof</span>(<a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;RecordDim, decltype(coord)&gt;)});</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;                            {ai,</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;                             internal::toVec(rc),</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;                             internal::tagsAsStrings&lt;RecordDim&gt;(rc),</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;                             mapping.blobNrAndOffset(ai, rc),</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;                             <span class="keyword">sizeof</span>(<a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;RecordDim, decltype(rc)&gt;)});</div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;                    });</div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;            }</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
@@ -325,7 +325,7 @@ $(document).ready(function(){initNavTree('DumpMapping_8hpp_source.html',''); ini
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;<span class="stringliteral">)&quot;,</span></div>
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;<span class="stringliteral">                x + width / 2,</span></div>
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;<span class="stringliteral">                y + byteSizeInPixel * 3 / 4,</span></div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;<span class="stringliteral">                internal::formatUdCoord(info.adCoord),</span></div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;<span class="stringliteral">                internal::formatArrayIndex(info.arrayIndex),</span></div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;<span class="stringliteral">                internal::formatDDTags(info.recordTags));</span></div>
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;<span class="stringliteral">            </span><span class="keywordflow">if</span>(cropBoxes)</div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;                svg += R<span class="stringliteral">&quot;(&lt;/svg&gt;</span></div>
@@ -399,9 +399,9 @@ $(document).ready(function(){initNavTree('DumpMapping_8hpp_source.html',''); ini
 <div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;<span class="stringliteral">            byteSizeInPixel);</span></div>
 <div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;<span class="stringliteral">        </span><span class="keyword">using</span> RecordDim = <span class="keyword">typename</span> Mapping::RecordDim;</div>
 <div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        forEachLeafCoord&lt;RecordDim&gt;(</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;            [&amp;](<span class="keyword">auto</span> coord)</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;            [&amp;](<span class="keyword">auto</span> rc)</div>
 <div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;            {</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;                constexpr <span class="keywordtype">int</span> size = <span class="keyword">sizeof</span>(<a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;RecordDim, decltype(coord)&gt;);</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;                constexpr <span class="keywordtype">int</span> size = <span class="keyword">sizeof</span>(<a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;RecordDim, decltype(rc)&gt;);</div>
 <div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160; </div>
 <div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;                html += fmt::format(</div>
 <div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;                    R<span class="stringliteral">&quot;(.{} {{</span></div>
@@ -409,9 +409,9 @@ $(document).ready(function(){initNavTree('DumpMapping_8hpp_source.html',''); ini
 <div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;<span class="stringliteral">    background-color: #{:X};</span></div>
 <div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;<span class="stringliteral">}}</span></div>
 <div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;<span class="stringliteral">)&quot;,</span></div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;<span class="stringliteral">                    cssClass(internal::tagsAsStrings&lt;RecordDim&gt;(coord)),</span></div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;<span class="stringliteral">                    cssClass(internal::tagsAsStrings&lt;RecordDim&gt;(rc)),</span></div>
 <div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;<span class="stringliteral">                    byteSizeInPixel * size,</span></div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;<span class="stringliteral">                    internal::color(internal::toVec(coord)));</span></div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;<span class="stringliteral">                    internal::color(internal::toVec(rc)));</span></div>
 <div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;<span class="stringliteral">            });</span></div>
 <div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;<span class="stringliteral">        html += fmt::format(R</span><span class="stringliteral">&quot;(&lt;/style&gt;</span></div>
@@ -440,7 +440,7 @@ $(document).ready(function(){initNavTree('DumpMapping_8hpp_source.html',''); ini
 <div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;            html += fmt::format(</div>
 <div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;                R<span class="stringliteral">&quot;(&lt;div class=&quot;box {0}&quot; title=&quot;{1} {2}&quot;&gt;{1} {2}&lt;/div&gt;)&quot;,</span></div>
 <div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;<span class="stringliteral">                cssClass(info.recordTags),</span></div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;<span class="stringliteral">                internal::formatUdCoord(info.adCoord),</span></div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;<span class="stringliteral">                internal::formatArrayIndex(info.arrayIndex),</span></div>
 <div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;<span class="stringliteral">                internal::formatDDTags(info.recordTags));</span></div>
 <div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;<span class="stringliteral">        }</span></div>
 <div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;<span class="stringliteral">        html += R</span><span class="stringliteral">&quot;(&lt;/body&gt;</span></div>
@@ -451,16 +451,16 @@ $(document).ready(function(){initNavTree('DumpMapping_8hpp_source.html',''); ini
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="anamespacellama_html"><div class="ttname"><a href="namespacellama.html">llama</a></div><div class="ttdef"><b>Definition:</b> <a href="Array_8hpp_source.html#l00011">Array.hpp:11</a></div></div>
-<div class="ttc" id="anamespacellama_html_acdfb627d325de5ab6c18cdc842cd7350"><div class="ttname"><a href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">llama::GetType</a></div><div class="ttdeci">typename internal::GetTypeImpl&lt; RecordDim, RecordCoordOrTags... &gt;::type GetType</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00261">Core.hpp:261</a></div></div>
-<div class="ttc" id="anamespacellama_html_a89cb1509a9d1306665220038e45b41db"><div class="ttname"><a href="namespacellama.html#a89cb1509a9d1306665220038e45b41db">llama::GetTag</a></div><div class="ttdeci">boost::mp11::mp_back&lt; GetTags&lt; RecordDim, RecordCoord &gt; &gt; GetTag</div><div class="ttdoc">Get the tag of the Field at a RecordCoord inside the record dimension tree.</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00154">Core.hpp:154</a></div></div>
-<div class="ttc" id="anamespacellama_html_a86a72929fc8c71b9aa2b514a74ab34eb"><div class="ttname"><a href="namespacellama.html#a86a72929fc8c71b9aa2b514a74ab34eb">llama::structName</a></div><div class="ttdeci">auto structName(S={}) -&gt; std::string</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00546">Core.hpp:546</a></div></div>
-<div class="ttc" id="aArrayDimsIndexRange_8hpp_html"><div class="ttname"><a href="ArrayDimsIndexRange_8hpp.html">ArrayDimsIndexRange.hpp</a></div></div>
+<div class="ttc" id="anamespacellama_html_acdfb627d325de5ab6c18cdc842cd7350"><div class="ttname"><a href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">llama::GetType</a></div><div class="ttdeci">typename internal::GetTypeImpl&lt; RecordDim, RecordCoordOrTags... &gt;::type GetType</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00229">Core.hpp:229</a></div></div>
+<div class="ttc" id="anamespacellama_html_a89cb1509a9d1306665220038e45b41db"><div class="ttname"><a href="namespacellama.html#a89cb1509a9d1306665220038e45b41db">llama::GetTag</a></div><div class="ttdeci">boost::mp11::mp_back&lt; GetTags&lt; RecordDim, RecordCoord &gt; &gt; GetTag</div><div class="ttdoc">Get the tag of the Field at a RecordCoord inside the record dimension tree.</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00122">Core.hpp:122</a></div></div>
+<div class="ttc" id="anamespacellama_html_a86a72929fc8c71b9aa2b514a74ab34eb"><div class="ttname"><a href="namespacellama.html#a86a72929fc8c71b9aa2b514a74ab34eb">llama::structName</a></div><div class="ttdeci">auto structName(S={}) -&gt; std::string</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00514">Core.hpp:514</a></div></div>
+<div class="ttc" id="aArrayIndexRange_8hpp_html"><div class="ttname"><a href="ArrayIndexRange_8hpp.html">ArrayIndexRange.hpp</a></div></div>
 <div class="ttc" id="aCore_8hpp_html"><div class="ttname"><a href="Core_8hpp.html">Core.hpp</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="DumpMapping_8hpp.html">DumpMapping.hpp</a></li>
-    <li class="footer">Generated on Wed Oct 6 2021 12:02:20 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Oct 7 2021 07:56:11 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

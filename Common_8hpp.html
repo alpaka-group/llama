@@ -85,8 +85,7 @@ $(document).ready(function(){initNavTree('Common_8hpp.html',''); initResizable()
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#typedef-members">Typedefs</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#typedef-members">Typedefs</a>  </div>
   <div class="headertitle">
 <div class="title">Common.hpp File Reference</div>  </div>
 </div><!--header-->
@@ -100,20 +99,22 @@ $(document).ready(function(){initNavTree('Common_8hpp.html',''); initResizable()
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="Common_8hpp__incl.png" border="0" usemap="#_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2Common_8hpp" alt=""/></div>
 <map name="_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2Common_8hpp" id="_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2Common_8hpp">
-<area shape="rect" title=" " alt="" coords="433,5,649,61"/>
-<area shape="rect" href="Core_8hpp.html" title=" " alt="" coords="443,109,535,136"/>
-<area shape="rect" title=" " alt="" coords="560,109,627,136"/>
-<area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="160,184,243,211"/>
-<area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="308,259,391,285"/>
-<area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="371,184,504,211"/>
-<area shape="rect" title=" " alt="" coords="495,259,587,285"/>
-<area shape="rect" title=" " alt="" coords="579,184,765,211"/>
-<area shape="rect" title=" " alt="" coords="789,184,869,211"/>
-<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="5,259,104,285"/>
-<area shape="rect" title=" " alt="" coords="207,259,283,285"/>
-<area shape="rect" title=" " alt="" coords="129,259,183,285"/>
-<area shape="rect" title=" " alt="" coords="286,333,413,360"/>
-<area shape="rect" title=" " alt="" coords="415,259,471,285"/>
+<area shape="rect" title=" " alt="" coords="403,5,619,61"/>
+<area shape="rect" href="Core_8hpp.html" title=" " alt="" coords="413,109,505,136"/>
+<area shape="rect" title=" " alt="" coords="529,109,596,136"/>
+<area shape="rect" href="ArrayExtents_8hpp.html" title=" " alt="" coords="130,184,265,211"/>
+<area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="421,259,504,285"/>
+<area shape="rect" title=" " alt="" coords="254,259,346,285"/>
+<area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="340,184,473,211"/>
+<area shape="rect" title=" " alt="" coords="548,184,735,211"/>
+<area shape="rect" title=" " alt="" coords="759,184,839,211"/>
+<area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="64,259,147,285"/>
+<area shape="rect" title=" " alt="" coords="171,259,229,285"/>
+<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="5,333,104,360"/>
+<area shape="rect" title=" " alt="" coords="254,333,330,360"/>
+<area shape="rect" title=" " alt="" coords="129,333,183,360"/>
+<area shape="rect" title=" " alt="" coords="399,333,526,360"/>
+<area shape="rect" title=" " alt="" coords="528,259,584,285"/>
 </map>
 </div>
 </div><div class="textblock"><div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -149,6 +150,7 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1LinearizeArrayDimsFortran.html">llama::mapping::LinearizeArrayDimsFortran</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html">llama::mapping::LinearizeArrayDimsMorton</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Functor that maps an <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> into linear numbers using the Z-order space filling curve (Morton codes).  <a href="structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimInOrder.html">llama::mapping::FlattenRecordDimInOrder&lt; RecordDim &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flattens the record dimension in the order fields are written.  <a href="structllama_1_1mapping_1_1FlattenRecordDimInOrder.html#details">More...</a><br /></td></tr>
@@ -185,12 +187,6 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a65287f3ded6e419e868b0e2819777206"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a65287f3ded6e419e868b0e2819777206">llama::mapping::FlattenRecordDimMinimizePadding</a> = FlattenRecordDimIncreasingAlignment&lt; RecordDim &gt;</td></tr>
 <tr class="memdesc:a65287f3ded6e419e868b0e2819777206"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flattens and sorts the record dimension by the alignment of its fields to minimize padding.  <a href="namespacellama_1_1mapping.html#a65287f3ded6e419e868b0e2819777206">More...</a><br /></td></tr>
 <tr class="separator:a65287f3ded6e419e868b0e2819777206"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:aa4b75ca84c3fa889c52339a0b3c33363"><td class="memTemplParams" colspan="2">template&lt;std::size_t Dim&gt; </td></tr>
-<tr class="memitem:aa4b75ca84c3fa889c52339a0b3c33363"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#aa4b75ca84c3fa889c52339a0b3c33363">llama::mapping::internal::product</a> (const ArrayDims&lt; Dim &gt; &amp;size) -&gt; std::size_t</td></tr>
-<tr class="separator:aa4b75ca84c3fa889c52339a0b3c33363"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -198,7 +194,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="Common_8hpp.html">Common.hpp</a></li>
-    <li class="footer">Generated on Wed Oct 6 2021 12:02:20 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Oct 7 2021 07:56:11 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

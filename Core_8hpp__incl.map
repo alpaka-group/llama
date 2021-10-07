@@ -1,14 +1,16 @@
 <map id="/home/runner/work/llama/llama/include/llama/Core.hpp" name="/home/runner/work/llama/llama/include/llama/Core.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="381,5,598,47"/>
-<area shape="rect" id="node2" href="$Array_8hpp.html" title=" " alt="" coords="160,95,243,121"/>
-<area shape="rect" id="node6" href="$Meta_8hpp.html" title=" " alt="" coords="308,169,391,196"/>
-<area shape="rect" id="node8" href="$RecordCoord_8hpp.html" title=" " alt="" coords="371,95,504,121"/>
-<area shape="rect" id="node10" title=" " alt="" coords="495,169,587,196"/>
-<area shape="rect" id="node11" title=" " alt="" coords="579,95,765,121"/>
-<area shape="rect" id="node12" title=" " alt="" coords="789,95,869,121"/>
-<area shape="rect" id="node3" href="$macros_8hpp.html" title=" " alt="" coords="5,169,104,196"/>
-<area shape="rect" id="node4" title=" " alt="" coords="207,169,283,196"/>
-<area shape="rect" id="node5" title=" " alt="" coords="129,169,183,196"/>
-<area shape="rect" id="node7" title=" " alt="" coords="286,244,413,271"/>
-<area shape="rect" id="node9" title=" " alt="" coords="415,169,471,196"/>
+<area shape="rect" id="node1" title=" " alt="" coords="350,5,567,47"/>
+<area shape="rect" id="node2" href="$ArrayExtents_8hpp.html" title=" " alt="" coords="130,95,265,121"/>
+<area shape="rect" id="node7" href="$Meta_8hpp.html" title=" " alt="" coords="421,169,504,196"/>
+<area shape="rect" id="node10" title=" " alt="" coords="254,169,346,196"/>
+<area shape="rect" id="node11" href="$RecordCoord_8hpp.html" title=" " alt="" coords="340,95,473,121"/>
+<area shape="rect" id="node13" title=" " alt="" coords="548,95,735,121"/>
+<area shape="rect" id="node14" title=" " alt="" coords="759,95,839,121"/>
+<area shape="rect" id="node3" href="$Array_8hpp.html" title=" " alt="" coords="64,169,147,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="171,169,229,196"/>
+<area shape="rect" id="node4" href="$macros_8hpp.html" title=" " alt="" coords="5,244,104,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="254,244,330,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="129,244,183,271"/>
+<area shape="rect" id="node8" title=" " alt="" coords="399,244,526,271"/>
+<area shape="rect" id="node12" title=" " alt="" coords="528,169,584,196"/>
 </map>

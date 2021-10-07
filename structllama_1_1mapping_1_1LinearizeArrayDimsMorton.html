@@ -90,29 +90,32 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1LinearizeArr
 </div><!--header-->
 <div class="contents">
 
+<p>Functor that maps an <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> into linear numbers using the Z-order space filling curve (Morton codes).  
+ <a href="structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="Common_8hpp_source.html">Common.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a951c7d5bcd04766fd2c81383928f8ae8"><td class="memTemplParams" colspan="2">template&lt;std::size_t Dim&gt; </td></tr>
-<tr class="memitem:a951c7d5bcd04766fd2c81383928f8ae8"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html#a951c7d5bcd04766fd2c81383928f8ae8">size</a> (const <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>&lt; Dim &gt; &amp;size) const -&gt; std::size_t</td></tr>
-<tr class="separator:a951c7d5bcd04766fd2c81383928f8ae8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98360ab7a3d84e490d40b96e86040e1d"><td class="memTemplParams" colspan="2">template&lt;std::size_t Dim&gt; </td></tr>
-<tr class="memitem:a98360ab7a3d84e490d40b96e86040e1d"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html#a98360ab7a3d84e490d40b96e86040e1d">operator()</a> (const <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>&lt; Dim &gt; &amp;coord, [[maybe_unused]] const <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>&lt; Dim &gt; &amp;<a class="el" href="structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html#a951c7d5bcd04766fd2c81383928f8ae8">size</a>) const -&gt; std::size_t</td></tr>
-<tr class="separator:a98360ab7a3d84e490d40b96e86040e1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa70296f5a8e7fb5df6bda08fe9fb7264"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents &gt; </td></tr>
+<tr class="memitem:aa70296f5a8e7fb5df6bda08fe9fb7264"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html#aa70296f5a8e7fb5df6bda08fe9fb7264">size</a> (const <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a> &amp;extents) const -&gt; std::size_t</td></tr>
+<tr class="separator:aa70296f5a8e7fb5df6bda08fe9fb7264"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c01bc31770104f8bbf315cf1a7fcd8c"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents &gt; </td></tr>
+<tr class="memitem:a7c01bc31770104f8bbf315cf1a7fcd8c"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html#a7c01bc31770104f8bbf315cf1a7fcd8c">operator()</a> (const typename <a class="el" href="structllama_1_1ArrayExtents.html#a794d74d0ed53e82d42ea0f3c2dacd983">ArrayExtents::Index</a> &amp;ai, [[maybe_unused]] const <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a> &amp;extents) const -&gt; std::size_t</td></tr>
+<tr class="separator:a7c01bc31770104f8bbf315cf1a7fcd8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Functor that maps a <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a> coordinate into linear numbers using the Z-order space filling curve (Morton codes). </p>
+<div class="textblock"><p>Functor that maps an <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> into linear numbers using the Z-order space filling curve (Morton codes). </p>
 
-<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00092">92</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00081">81</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a98360ab7a3d84e490d40b96e86040e1d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a98360ab7a3d84e490d40b96e86040e1d">&#9670;&nbsp;</a></span>operator()()</h2>
+<a id="a7c01bc31770104f8bbf315cf1a7fcd8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c01bc31770104f8bbf315cf1a7fcd8c">&#9670;&nbsp;</a></span>operator()()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;std::size_t Dim&gt; </div>
+template&lt;typename ArrayExtents &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -120,14 +123,14 @@ template&lt;std::size_t Dim&gt; </div>
         <tr>
           <td class="memname">constexpr auto llama::mapping::LinearizeArrayDimsMorton::operator() </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>&lt; Dim &gt; &amp;&#160;</td>
-          <td class="paramname"><em>coord</em>, </td>
+          <td class="paramtype">const typename <a class="el" href="structllama_1_1ArrayExtents.html#a794d74d0ed53e82d42ea0f3c2dacd983">ArrayExtents::Index</a> &amp;&#160;</td>
+          <td class="paramname"><em>ai</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">[[maybe_unused] ] const <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>&lt; Dim &gt; &amp;&#160;</td>
-          <td class="paramname"><em>size</em>&#160;</td>
+          <td class="paramtype">[[maybe_unused] ] const <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a> &amp;&#160;</td>
+          <td class="paramname"><em>extents</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -144,24 +147,24 @@ template&lt;std::size_t Dim&gt; </div>
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">coord</td><td>Coordinate in the array dimensions. </td></tr>
-    <tr><td class="paramname">size</td><td>Total size of the array dimensions. </td></tr>
+    <tr><td class="paramname">ai</td><td>Coordinate in the array dimensions. </td></tr>
+    <tr><td class="paramname">extents</td><td>Total size of the array dimensions. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Linearized index. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00113">113</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00102">102</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a951c7d5bcd04766fd2c81383928f8ae8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a951c7d5bcd04766fd2c81383928f8ae8">&#9670;&nbsp;</a></span>size()</h2>
+<a id="aa70296f5a8e7fb5df6bda08fe9fb7264"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa70296f5a8e7fb5df6bda08fe9fb7264">&#9670;&nbsp;</a></span>size()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;std::size_t Dim&gt; </div>
+template&lt;typename ArrayExtents &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -169,8 +172,8 @@ template&lt;std::size_t Dim&gt; </div>
         <tr>
           <td class="memname">constexpr auto llama::mapping::LinearizeArrayDimsMorton::size </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a>&lt; Dim &gt; &amp;&#160;</td>
-          <td class="paramname"><em>size</em></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a> &amp;&#160;</td>
+          <td class="paramname"><em>extents</em></td><td>)</td>
           <td> const -&gt; std::size_t
         </td>
         </tr>
@@ -182,7 +185,7 @@ template&lt;std::size_t Dim&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00095">95</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00084">84</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
 
 </div>
 </div>
@@ -195,7 +198,7 @@ template&lt;std::size_t Dim&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html">LinearizeArrayDimsMorton</a></li>
-    <li class="footer">Generated on Wed Oct 6 2021 12:02:20 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Oct 7 2021 07:56:11 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

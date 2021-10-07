@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('Core_8hpp.html',''); initResizable(); 
 <div class="title">Core.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="Array_8hpp_source.html">Array.hpp</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Meta_8hpp_source.html">Meta.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>&quot;</code><br />
 <code>#include &lt;boost/core/demangle.hpp&gt;</code><br />
@@ -105,18 +105,20 @@ $(document).ready(function(){initNavTree('Core_8hpp.html',''); initResizable(); 
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="Core_8hpp__incl.png" border="0" usemap="#_2home_2runner_2work_2llama_2llama_2include_2llama_2Core_8hpp" alt=""/></div>
 <map name="_2home_2runner_2work_2llama_2llama_2include_2llama_2Core_8hpp" id="_2home_2runner_2work_2llama_2llama_2include_2llama_2Core_8hpp">
-<area shape="rect" title=" " alt="" coords="381,5,598,47"/>
-<area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="160,95,243,121"/>
-<area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="308,169,391,196"/>
-<area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="371,95,504,121"/>
-<area shape="rect" title=" " alt="" coords="495,169,587,196"/>
-<area shape="rect" title=" " alt="" coords="579,95,765,121"/>
-<area shape="rect" title=" " alt="" coords="789,95,869,121"/>
-<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="5,169,104,196"/>
-<area shape="rect" title=" " alt="" coords="207,169,283,196"/>
-<area shape="rect" title=" " alt="" coords="129,169,183,196"/>
-<area shape="rect" title=" " alt="" coords="286,244,413,271"/>
-<area shape="rect" title=" " alt="" coords="415,169,471,196"/>
+<area shape="rect" title=" " alt="" coords="350,5,567,47"/>
+<area shape="rect" href="ArrayExtents_8hpp.html" title=" " alt="" coords="130,95,265,121"/>
+<area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="421,169,504,196"/>
+<area shape="rect" title=" " alt="" coords="254,169,346,196"/>
+<area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="340,95,473,121"/>
+<area shape="rect" title=" " alt="" coords="548,95,735,121"/>
+<area shape="rect" title=" " alt="" coords="759,95,839,121"/>
+<area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="64,169,147,196"/>
+<area shape="rect" title=" " alt="" coords="171,169,229,196"/>
+<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="5,244,104,271"/>
+<area shape="rect" title=" " alt="" coords="254,244,330,271"/>
+<area shape="rect" title=" " alt="" coords="129,244,183,271"/>
+<area shape="rect" title=" " alt="" coords="399,244,526,271"/>
+<area shape="rect" title=" " alt="" coords="528,169,584,196"/>
 </map>
 </div>
 </div><div class="textblock"><div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -127,7 +129,7 @@ $(document).ready(function(){initNavTree('Core_8hpp.html',''); initResizable(); 
 <div class="center"><img src="Core_8hpp__dep__incl.png" border="0" usemap="#_2home_2runner_2work_2llama_2llama_2include_2llama_2Core_8hppdep" alt=""/></div>
 <map name="_2home_2runner_2work_2llama_2llama_2include_2llama_2Core_8hppdep" id="_2home_2runner_2work_2llama_2llama_2include_2llama_2Core_8hppdep">
 <area shape="rect" title=" " alt="" coords="609,5,826,47"/>
-<area shape="rect" href="ArrayDimsIndexRange_8hpp.html" title=" " alt="" coords="299,95,527,151"/>
+<area shape="rect" href="ArrayIndexRange_8hpp.html" title=" " alt="" coords="298,95,529,151"/>
 <area shape="rect" href="View_8hpp.html" title=" " alt="" coords="659,310,877,351"/>
 <area shape="rect" href="llama_8hpp.html" title=" " alt="" coords="999,615,1223,656"/>
 <area shape="rect" href="DumpMapping_8hpp.html" title=" " alt="" coords="43,206,325,247"/>
@@ -158,12 +160,6 @@ $(document).ready(function(){initNavTree('Core_8hpp.html',''); initResizable(); 
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1NoName.html">llama::NoName</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Anonymous naming for a <a class="el" href="structllama_1_1Field.html">Field</a>.  <a href="structllama_1_1NoName.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ArrayDims.html">llama::ArrayDims&lt; Dim &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstd_1_1tuple__size_3_01llama_1_1ArrayDims_3_01N_01_4_01_4.html">std::tuple_size&lt; llama::ArrayDims&lt; N &gt; &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstd_1_1tuple__element_3_01I_00_01llama_1_1ArrayDims_3_01N_01_4_01_4.html">std::tuple_element&lt; I, llama::ArrayDims&lt; N &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Record.html">llama::Record&lt; Fields &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A type list of <a class="el" href="structllama_1_1Field.html">Field</a>s which may be used to define a record dimension.  <a href="structllama_1_1Record.html#details">More...</a><br /></td></tr>
@@ -275,9 +271,6 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ac99ade3cc2e49f4a201fe637ddfc3788"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
-<tr class="memitem:ac99ade3cc2e49f4a201fe637ddfc3788"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ac99ade3cc2e49f4a201fe637ddfc3788">llama::ArrayDims</a> (Args...) -&gt; ArrayDims&lt; sizeof...(Args)&gt;</td></tr>
-<tr class="separator:ac99ade3cc2e49f4a201fe637ddfc3788"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af16d07d01be7acc8ced82a040bac87da"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename... &gt; typename L, typename... T, typename F &gt; </td></tr>
 <tr class="memitem:af16d07d01be7acc8ced82a040bac87da"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#af16d07d01be7acc8ced82a040bac87da">llama::internal::mp_for_each_inlined</a> (L&lt; T... &gt;, F &amp;&amp;f)</td></tr>
 <tr class="separator:af16d07d01be7acc8ced82a040bac87da"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -301,9 +294,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a86a72929fc8c71b9aa2b514a74ab34eb"><td class="memTemplParams" colspan="2">template&lt;typename S &gt; </td></tr>
 <tr class="memitem:a86a72929fc8c71b9aa2b514a74ab34eb"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a86a72929fc8c71b9aa2b514a74ab34eb">llama::structName</a> (S={}) -&gt; std::string</td></tr>
 <tr class="separator:a86a72929fc8c71b9aa2b514a74ab34eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8cf6c983757c6ebe94d81c6beede3e5b"><td class="memTemplParams" colspan="2">template&lt;std::size_t Dim, typename Func , typename... OuterIndices&gt; </td></tr>
-<tr class="memitem:a8cf6c983757c6ebe94d81c6beede3e5b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a8cf6c983757c6ebe94d81c6beede3e5b">llama::forEachADCoord</a> (ArrayDims&lt; Dim &gt; adSize, Func &amp;&amp;func, OuterIndices... outerIndices)</td></tr>
-<tr class="separator:a8cf6c983757c6ebe94d81c6beede3e5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbf92b00b74f32b216133e8092bc68c6"><td class="memTemplParams" colspan="2">template&lt;std::size_t Dim, typename Func , typename... OuterIndices&gt; </td></tr>
+<tr class="memitem:acbf92b00b74f32b216133e8092bc68c6"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#acbf92b00b74f32b216133e8092bc68c6">llama::forEachADCoord</a> (ArrayIndex&lt; Dim &gt; adSize, Func &amp;&amp;func, OuterIndices... outerIndices)</td></tr>
+<tr class="separator:acbf92b00b74f32b216133e8092bc68c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a075ee11c5354aee4827df3816598e0c5"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Sizes, typename Func &gt; </td></tr>
+<tr class="memitem:a075ee11c5354aee4827df3816598e0c5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a075ee11c5354aee4827df3816598e0c5">llama::forEachADCoord</a> (ArrayExtents&lt; Sizes... &gt; extents, Func &amp;&amp;func)</td></tr>
+<tr class="separator:a075ee11c5354aee4827df3816598e0c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9c5c0a1ca0698a8871689b9924736ac"><td class="memTemplParams" colspan="2">template&lt;typename Integral &gt; </td></tr>
 <tr class="memitem:ab9c5c0a1ca0698a8871689b9924736ac"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ab9c5c0a1ca0698a8871689b9924736ac">llama::roundUpToMultiple</a> (Integral n, Integral mult) -&gt; Integral</td></tr>
 <tr class="memdesc:ab9c5c0a1ca0698a8871689b9924736ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the integral n rounded up to be a multiple of mult.  <a href="namespacellama.html#ab9c5c0a1ca0698a8871689b9924736ac">More...</a><br /></td></tr>
@@ -399,7 +395,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Core_8hpp.html">Core.hpp</a></li>
-    <li class="footer">Generated on Wed Oct 6 2021 12:02:20 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Oct 7 2021 07:56:11 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

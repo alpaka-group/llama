@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Low Level Abstraction of Memory Access: llama::VirtualView&lt; TParentViewType &gt; Struct Template Reference</title>
+<title>Low Level Abstraction of Memory Access: llama::VirtualView&lt; TParentView &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -88,7 +88,7 @@ $(document).ready(function(){initNavTree('structllama_1_1VirtualView.html',''); 
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="structllama_1_1VirtualView-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">llama::VirtualView&lt; TParentViewType &gt; Struct Template Reference</div>  </div>
+<div class="title">llama::VirtualView&lt; TParentView &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -96,145 +96,168 @@ $(document).ready(function(){initNavTree('structllama_1_1VirtualView.html',''); 
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a5978917ede09394cf1bf965cfa9df373"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#a5978917ede09394cf1bf965cfa9df373">ParentView</a> = TParentViewType</td></tr>
-<tr class="memdesc:a5978917ede09394cf1bf965cfa9df373"><td class="mdescLeft">&#160;</td><td class="mdescRight">type of the parent view  <a href="structllama_1_1VirtualView.html#a5978917ede09394cf1bf965cfa9df373">More...</a><br /></td></tr>
-<tr class="separator:a5978917ede09394cf1bf965cfa9df373"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a022a188ea19f638ddb01117ba9a7eebe"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#a022a188ea19f638ddb01117ba9a7eebe">Mapping</a> = typename ParentView::Mapping</td></tr>
-<tr class="memdesc:a022a188ea19f638ddb01117ba9a7eebe"><td class="mdescLeft">&#160;</td><td class="mdescRight">mapping of the parent view  <a href="structllama_1_1VirtualView.html#a022a188ea19f638ddb01117ba9a7eebe">More...</a><br /></td></tr>
-<tr class="separator:a022a188ea19f638ddb01117ba9a7eebe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a524fdc1fe3b3e112dfcc16b9e0ed00f9"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#a524fdc1fe3b3e112dfcc16b9e0ed00f9">ArrayDims</a> = typename Mapping::ArrayDims</td></tr>
-<tr class="memdesc:a524fdc1fe3b3e112dfcc16b9e0ed00f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">array dimensions of the parent view  <a href="structllama_1_1VirtualView.html#a524fdc1fe3b3e112dfcc16b9e0ed00f9">More...</a><br /></td></tr>
-<tr class="separator:a524fdc1fe3b3e112dfcc16b9e0ed00f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d5a6b58293881b8299649b006ee3124"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#a1d5a6b58293881b8299649b006ee3124">ParentView</a> = TParentView</td></tr>
+<tr class="memdesc:a1d5a6b58293881b8299649b006ee3124"><td class="mdescLeft">&#160;</td><td class="mdescRight">type of the parent view  <a href="structllama_1_1VirtualView.html#a1d5a6b58293881b8299649b006ee3124">More...</a><br /></td></tr>
+<tr class="separator:a1d5a6b58293881b8299649b006ee3124"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af05304e6788cb0ea5a236388b595c6a7"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#af05304e6788cb0ea5a236388b595c6a7">Mapping</a> = typename ParentView::Mapping</td></tr>
+<tr class="memdesc:af05304e6788cb0ea5a236388b595c6a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">mapping of the parent view  <a href="structllama_1_1VirtualView.html#af05304e6788cb0ea5a236388b595c6a7">More...</a><br /></td></tr>
+<tr class="separator:af05304e6788cb0ea5a236388b595c6a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aecf8b1a22bcca242121613829939bb28"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#aecf8b1a22bcca242121613829939bb28">ArrayExtents</a> = typename Mapping::ArrayExtents</td></tr>
+<tr class="memdesc:aecf8b1a22bcca242121613829939bb28"><td class="mdescLeft">&#160;</td><td class="mdescRight">array extents of the parent view  <a href="structllama_1_1VirtualView.html#aecf8b1a22bcca242121613829939bb28">More...</a><br /></td></tr>
+<tr class="separator:aecf8b1a22bcca242121613829939bb28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3ee89ed9953f86008addbde7d2a38b5"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#aa3ee89ed9953f86008addbde7d2a38b5">ArrayIndex</a> = typename Mapping::ArrayIndex</td></tr>
+<tr class="memdesc:aa3ee89ed9953f86008addbde7d2a38b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">array index of the parent view  <a href="structllama_1_1VirtualView.html#aa3ee89ed9953f86008addbde7d2a38b5">More...</a><br /></td></tr>
+<tr class="separator:aa3ee89ed9953f86008addbde7d2a38b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3a9f6bf4aecbb6927045fba8c42d8184"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#a3a9f6bf4aecbb6927045fba8c42d8184">VirtualView</a> (<a class="el" href="structllama_1_1VirtualView.html#a5978917ede09394cf1bf965cfa9df373">ParentView</a> &amp;<a class="el" href="structllama_1_1VirtualView.html#ab928a2e9ce53e2974c6d93fcdb3e8de1">parentView</a>, <a class="el" href="structllama_1_1VirtualView.html#a524fdc1fe3b3e112dfcc16b9e0ed00f9">ArrayDims</a> <a class="el" href="structllama_1_1VirtualView.html#a66e4ac08ce138d06043f2f570b271b38">offset</a>)</td></tr>
-<tr class="memdesc:a3a9f6bf4aecbb6927045fba8c42d8184"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="structllama_1_1VirtualView.html">VirtualView</a> given a parent <a class="el" href="structllama_1_1View.html">View</a>, offset and size.  <a href="structllama_1_1VirtualView.html#a3a9f6bf4aecbb6927045fba8c42d8184">More...</a><br /></td></tr>
-<tr class="separator:a3a9f6bf4aecbb6927045fba8c42d8184"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ae73d44168c0164e73ffc766e73b4ee"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Coords&gt; </td></tr>
-<tr class="memitem:a0ae73d44168c0164e73ffc766e73b4ee"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#a0ae73d44168c0164e73ffc766e73b4ee">accessor</a> (<a class="el" href="structllama_1_1VirtualView.html#a524fdc1fe3b3e112dfcc16b9e0ed00f9">ArrayDims</a> arrayDims) const -&gt; const auto &amp;</td></tr>
-<tr class="separator:a0ae73d44168c0164e73ffc766e73b4ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afbfe0045bfd289ba10d5875fb331cdeb"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Coords&gt; </td></tr>
-<tr class="memitem:afbfe0045bfd289ba10d5875fb331cdeb"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#afbfe0045bfd289ba10d5875fb331cdeb">accessor</a> (<a class="el" href="structllama_1_1VirtualView.html#a524fdc1fe3b3e112dfcc16b9e0ed00f9">ArrayDims</a> arrayDims) -&gt; auto &amp;</td></tr>
-<tr class="separator:afbfe0045bfd289ba10d5875fb331cdeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6160458467bfef99ae115e84413e87f6"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#a6160458467bfef99ae115e84413e87f6">operator()</a> (<a class="el" href="structllama_1_1VirtualView.html#a524fdc1fe3b3e112dfcc16b9e0ed00f9">ArrayDims</a> arrayDims) const -&gt; decltype(auto)</td></tr>
-<tr class="memdesc:a6160458467bfef99ae115e84413e87f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as <a class="el" href="structllama_1_1View.html#ad5b62c29d6b47901128f6fa5cf0a6263">View::operator()(ArrayDims)</a>, but shifted by the offset of this <a class="el" href="structllama_1_1VirtualView.html">VirtualView</a>.  <a href="structllama_1_1VirtualView.html#a6160458467bfef99ae115e84413e87f6">More...</a><br /></td></tr>
-<tr class="separator:a6160458467bfef99ae115e84413e87f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab62870fb1db415bb6718e74606920ae0"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#ab62870fb1db415bb6718e74606920ae0">operator()</a> (<a class="el" href="structllama_1_1VirtualView.html#a524fdc1fe3b3e112dfcc16b9e0ed00f9">ArrayDims</a> arrayDims) -&gt; decltype(auto)</td></tr>
-<tr class="separator:ab62870fb1db415bb6718e74606920ae0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d86460c7fa03207cfc3129234374971"><td class="memTemplParams" colspan="2">template&lt;typename... Indices&gt; </td></tr>
-<tr class="memitem:a1d86460c7fa03207cfc3129234374971"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#a1d86460c7fa03207cfc3129234374971">operator()</a> (Indices... indices) const -&gt; decltype(auto)</td></tr>
-<tr class="memdesc:a1d86460c7fa03207cfc3129234374971"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as corresponding operator in <a class="el" href="structllama_1_1View.html">View</a>, but shifted by the offset of this <a class="el" href="structllama_1_1VirtualView.html">VirtualView</a>.  <a href="structllama_1_1VirtualView.html#a1d86460c7fa03207cfc3129234374971">More...</a><br /></td></tr>
-<tr class="separator:a1d86460c7fa03207cfc3129234374971"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a954749a70eb85adc61f0419b31aef9a1"><td class="memTemplParams" colspan="2">template&lt;typename... Indices&gt; </td></tr>
-<tr class="memitem:a954749a70eb85adc61f0419b31aef9a1"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#a954749a70eb85adc61f0419b31aef9a1">operator()</a> (Indices... indices) -&gt; decltype(auto)</td></tr>
-<tr class="separator:a954749a70eb85adc61f0419b31aef9a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a324d5ee5e3f4c14045e8eef71f036c38"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Coord&gt; </td></tr>
-<tr class="memitem:a324d5ee5e3f4c14045e8eef71f036c38"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#a324d5ee5e3f4c14045e8eef71f036c38">operator()</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coord... &gt;={}) const -&gt; decltype(auto)</td></tr>
-<tr class="separator:a324d5ee5e3f4c14045e8eef71f036c38"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad65af953983792d7c5e11d6a646a886"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Coord&gt; </td></tr>
-<tr class="memitem:aad65af953983792d7c5e11d6a646a886"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#aad65af953983792d7c5e11d6a646a886">operator()</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coord... &gt;={}) -&gt; decltype(auto)</td></tr>
-<tr class="separator:aad65af953983792d7c5e11d6a646a886"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ababfc1bd023f1d95cfc005f943717f47"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#ababfc1bd023f1d95cfc005f943717f47">VirtualView</a> (<a class="el" href="structllama_1_1VirtualView.html#a1d5a6b58293881b8299649b006ee3124">ParentView</a> &amp;<a class="el" href="structllama_1_1VirtualView.html#ab031c791f130a623cc469296da3343d1">parentView</a>, <a class="el" href="structllama_1_1VirtualView.html#aa3ee89ed9953f86008addbde7d2a38b5">ArrayIndex</a> <a class="el" href="structllama_1_1VirtualView.html#ad6536e0ccf41cf956c24f359a6d5ca4c">offset</a>)</td></tr>
+<tr class="memdesc:ababfc1bd023f1d95cfc005f943717f47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="structllama_1_1VirtualView.html">VirtualView</a> given a parent <a class="el" href="structllama_1_1View.html">View</a> and offset.  <a href="structllama_1_1VirtualView.html#ababfc1bd023f1d95cfc005f943717f47">More...</a><br /></td></tr>
+<tr class="separator:ababfc1bd023f1d95cfc005f943717f47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa19cab9a2e62a5b846be347ae14cc9a"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Coords&gt; </td></tr>
+<tr class="memitem:afa19cab9a2e62a5b846be347ae14cc9a"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#afa19cab9a2e62a5b846be347ae14cc9a">accessor</a> (<a class="el" href="structllama_1_1VirtualView.html#aa3ee89ed9953f86008addbde7d2a38b5">ArrayIndex</a> ai) const -&gt; const auto &amp;</td></tr>
+<tr class="separator:afa19cab9a2e62a5b846be347ae14cc9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af92d8e28959320625b165be7bb5e9163"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Coords&gt; </td></tr>
+<tr class="memitem:af92d8e28959320625b165be7bb5e9163"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#af92d8e28959320625b165be7bb5e9163">accessor</a> (<a class="el" href="structllama_1_1VirtualView.html#aa3ee89ed9953f86008addbde7d2a38b5">ArrayIndex</a> ai) -&gt; auto &amp;</td></tr>
+<tr class="separator:af92d8e28959320625b165be7bb5e9163"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7a12796ec2dcb644c1e777b02a5d516"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#af7a12796ec2dcb644c1e777b02a5d516">operator()</a> (<a class="el" href="structllama_1_1VirtualView.html#aa3ee89ed9953f86008addbde7d2a38b5">ArrayIndex</a> ai) const -&gt; decltype(auto)</td></tr>
+<tr class="memdesc:af7a12796ec2dcb644c1e777b02a5d516"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as <a class="el" href="structllama_1_1View.html#a94e531e3ba3858373f44fe69410f1989">View::operator()(ArrayIndex)</a>, but shifted by the offset of this <a class="el" href="structllama_1_1VirtualView.html">VirtualView</a>.  <a href="structllama_1_1VirtualView.html#af7a12796ec2dcb644c1e777b02a5d516">More...</a><br /></td></tr>
+<tr class="separator:af7a12796ec2dcb644c1e777b02a5d516"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7e54b9558daf351dfae8773c3c6f6e5"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#ac7e54b9558daf351dfae8773c3c6f6e5">operator()</a> (<a class="el" href="structllama_1_1VirtualView.html#aa3ee89ed9953f86008addbde7d2a38b5">ArrayIndex</a> ai) -&gt; decltype(auto)</td></tr>
+<tr class="separator:ac7e54b9558daf351dfae8773c3c6f6e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0056e31fafb01cc6b8d0eaec7b6ff093"><td class="memTemplParams" colspan="2">template&lt;typename... Indices&gt; </td></tr>
+<tr class="memitem:a0056e31fafb01cc6b8d0eaec7b6ff093"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#a0056e31fafb01cc6b8d0eaec7b6ff093">operator()</a> (Indices... indices) const -&gt; decltype(auto)</td></tr>
+<tr class="memdesc:a0056e31fafb01cc6b8d0eaec7b6ff093"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as corresponding operator in <a class="el" href="structllama_1_1View.html">View</a>, but shifted by the offset of this <a class="el" href="structllama_1_1VirtualView.html">VirtualView</a>.  <a href="structllama_1_1VirtualView.html#a0056e31fafb01cc6b8d0eaec7b6ff093">More...</a><br /></td></tr>
+<tr class="separator:a0056e31fafb01cc6b8d0eaec7b6ff093"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a021ba84083370732c7461295d9d52488"><td class="memTemplParams" colspan="2">template&lt;typename... Indices&gt; </td></tr>
+<tr class="memitem:a021ba84083370732c7461295d9d52488"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#a021ba84083370732c7461295d9d52488">operator()</a> (Indices... indices) -&gt; decltype(auto)</td></tr>
+<tr class="separator:a021ba84083370732c7461295d9d52488"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96f866c9936c27bf60eb146063a71547"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Coord&gt; </td></tr>
+<tr class="memitem:a96f866c9936c27bf60eb146063a71547"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#a96f866c9936c27bf60eb146063a71547">operator()</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coord... &gt;={}) const -&gt; decltype(auto)</td></tr>
+<tr class="separator:a96f866c9936c27bf60eb146063a71547"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40e8e8adc35eec4656a27125f53b665d"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Coord&gt; </td></tr>
+<tr class="memitem:a40e8e8adc35eec4656a27125f53b665d"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#a40e8e8adc35eec4656a27125f53b665d">operator()</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coord... &gt;={}) -&gt; decltype(auto)</td></tr>
+<tr class="separator:a40e8e8adc35eec4656a27125f53b665d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ab928a2e9ce53e2974c6d93fcdb3e8de1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structllama_1_1VirtualView.html#a5978917ede09394cf1bf965cfa9df373">ParentView</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#ab928a2e9ce53e2974c6d93fcdb3e8de1">parentView</a></td></tr>
-<tr class="memdesc:ab928a2e9ce53e2974c6d93fcdb3e8de1"><td class="mdescLeft">&#160;</td><td class="mdescRight">reference to parent view.  <a href="structllama_1_1VirtualView.html#ab928a2e9ce53e2974c6d93fcdb3e8de1">More...</a><br /></td></tr>
-<tr class="separator:ab928a2e9ce53e2974c6d93fcdb3e8de1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66e4ac08ce138d06043f2f570b271b38"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structllama_1_1VirtualView.html#a524fdc1fe3b3e112dfcc16b9e0ed00f9">ArrayDims</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#a66e4ac08ce138d06043f2f570b271b38">offset</a></td></tr>
-<tr class="memdesc:a66e4ac08ce138d06043f2f570b271b38"><td class="mdescLeft">&#160;</td><td class="mdescRight">offset this view's <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a> coordinates are shifted to the parent view.  <a href="structllama_1_1VirtualView.html#a66e4ac08ce138d06043f2f570b271b38">More...</a><br /></td></tr>
-<tr class="separator:a66e4ac08ce138d06043f2f570b271b38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab031c791f130a623cc469296da3343d1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structllama_1_1VirtualView.html#a1d5a6b58293881b8299649b006ee3124">ParentView</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#ab031c791f130a623cc469296da3343d1">parentView</a></td></tr>
+<tr class="memdesc:ab031c791f130a623cc469296da3343d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">reference to parent view.  <a href="structllama_1_1VirtualView.html#ab031c791f130a623cc469296da3343d1">More...</a><br /></td></tr>
+<tr class="separator:ab031c791f130a623cc469296da3343d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6536e0ccf41cf956c24f359a6d5ca4c"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structllama_1_1VirtualView.html#aa3ee89ed9953f86008addbde7d2a38b5">ArrayIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1VirtualView.html#ad6536e0ccf41cf956c24f359a6d5ca4c">offset</a></td></tr>
+<tr class="memdesc:ad6536e0ccf41cf956c24f359a6d5ca4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">offset this view's <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> indices are shifted when passed to the parent view.  <a href="structllama_1_1VirtualView.html#ad6536e0ccf41cf956c24f359a6d5ca4c">More...</a><br /></td></tr>
+<tr class="separator:ad6536e0ccf41cf956c24f359a6d5ca4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename TParentViewType&gt;<br />
-struct llama::VirtualView&lt; TParentViewType &gt;</h3>
+<div class="textblock"><h3>template&lt;typename TParentView&gt;<br />
+struct llama::VirtualView&lt; TParentView &gt;</h3>
 
 <p>Acts like a <a class="el" href="structllama_1_1View.html">View</a>, but shows only a smaller and/or shifted part of another view it references, the parent view. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00478">478</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00495">495</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a524fdc1fe3b3e112dfcc16b9e0ed00f9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a524fdc1fe3b3e112dfcc16b9e0ed00f9">&#9670;&nbsp;</a></span>ArrayDims</h2>
+<a id="aecf8b1a22bcca242121613829939bb28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aecf8b1a22bcca242121613829939bb28">&#9670;&nbsp;</a></span>ArrayExtents</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TParentViewType &gt; </div>
+template&lt;typename TParentView &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentViewType &gt;::<a class="el" href="structllama_1_1VirtualView.html#a524fdc1fe3b3e112dfcc16b9e0ed00f9">ArrayDims</a> =  typename Mapping::ArrayDims</td>
+          <td class="memname">using <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentView &gt;::<a class="el" href="structllama_1_1VirtualView.html#aecf8b1a22bcca242121613829939bb28">ArrayExtents</a> =  typename Mapping::ArrayExtents</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>array dimensions of the parent view </p>
+<p>array extents of the parent view </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00482">482</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00499">499</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a022a188ea19f638ddb01117ba9a7eebe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a022a188ea19f638ddb01117ba9a7eebe">&#9670;&nbsp;</a></span>Mapping</h2>
+<a id="aa3ee89ed9953f86008addbde7d2a38b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3ee89ed9953f86008addbde7d2a38b5">&#9670;&nbsp;</a></span>ArrayIndex</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TParentViewType &gt; </div>
+template&lt;typename TParentView &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentViewType &gt;::<a class="el" href="structllama_1_1VirtualView.html#a022a188ea19f638ddb01117ba9a7eebe">Mapping</a> =  typename ParentView::Mapping</td>
+          <td class="memname">using <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentView &gt;::<a class="el" href="structllama_1_1VirtualView.html#aa3ee89ed9953f86008addbde7d2a38b5">ArrayIndex</a> =  typename Mapping::ArrayIndex</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>array index of the parent view </p>
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00500">500</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af05304e6788cb0ea5a236388b595c6a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af05304e6788cb0ea5a236388b595c6a7">&#9670;&nbsp;</a></span>Mapping</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TParentView &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentView &gt;::<a class="el" href="structllama_1_1VirtualView.html#af05304e6788cb0ea5a236388b595c6a7">Mapping</a> =  typename ParentView::Mapping</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>mapping of the parent view </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00481">481</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00498">498</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a5978917ede09394cf1bf965cfa9df373"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5978917ede09394cf1bf965cfa9df373">&#9670;&nbsp;</a></span>ParentView</h2>
+<a id="a1d5a6b58293881b8299649b006ee3124"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d5a6b58293881b8299649b006ee3124">&#9670;&nbsp;</a></span>ParentView</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TParentViewType &gt; </div>
+template&lt;typename TParentView &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentViewType &gt;::<a class="el" href="structllama_1_1VirtualView.html#a5978917ede09394cf1bf965cfa9df373">ParentView</a> =  TParentViewType</td>
+          <td class="memname">using <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentView &gt;::<a class="el" href="structllama_1_1VirtualView.html#a1d5a6b58293881b8299649b006ee3124">ParentView</a> =  TParentView</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>type of the parent view </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00480">480</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00497">497</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a3a9f6bf4aecbb6927045fba8c42d8184"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3a9f6bf4aecbb6927045fba8c42d8184">&#9670;&nbsp;</a></span>VirtualView()</h2>
+<a id="ababfc1bd023f1d95cfc005f943717f47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ababfc1bd023f1d95cfc005f943717f47">&#9670;&nbsp;</a></span>VirtualView()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TParentViewType &gt; </div>
+template&lt;typename TParentView &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentViewType &gt;::<a class="el" href="structllama_1_1VirtualView.html">VirtualView</a> </td>
+          <td class="memname"><a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentView &gt;::<a class="el" href="structllama_1_1VirtualView.html">VirtualView</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1VirtualView.html#a5978917ede09394cf1bf965cfa9df373">ParentView</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1VirtualView.html#a1d5a6b58293881b8299649b006ee3124">ParentView</a> &amp;&#160;</td>
           <td class="paramname"><em>parentView</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structllama_1_1VirtualView.html#a524fdc1fe3b3e112dfcc16b9e0ed00f9">ArrayDims</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1VirtualView.html#aa3ee89ed9953f86008addbde7d2a38b5">ArrayIndex</a>&#160;</td>
           <td class="paramname"><em>offset</em>&#160;</td>
         </tr>
         <tr>
@@ -250,20 +273,20 @@ template&lt;typename TParentViewType &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Creates a <a class="el" href="structllama_1_1VirtualView.html">VirtualView</a> given a parent <a class="el" href="structllama_1_1View.html">View</a>, offset and size. </p>
+<p>Creates a <a class="el" href="structllama_1_1VirtualView.html">VirtualView</a> given a parent <a class="el" href="structllama_1_1View.html">View</a> and offset. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00486">486</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00504">504</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="afbfe0045bfd289ba10d5875fb331cdeb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afbfe0045bfd289ba10d5875fb331cdeb">&#9670;&nbsp;</a></span>accessor() <span class="overload">[1/2]</span></h2>
+<a id="af92d8e28959320625b165be7bb5e9163"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af92d8e28959320625b165be7bb5e9163">&#9670;&nbsp;</a></span>accessor() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TParentViewType &gt; </div>
+template&lt;typename TParentView &gt; </div>
 <div class="memtemplate">
 template&lt;std::size_t... Coords&gt; </div>
 <table class="mlabels">
@@ -271,10 +294,10 @@ template&lt;std::size_t... Coords&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentViewType &gt;::accessor </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentView &gt;::accessor </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1VirtualView.html#a524fdc1fe3b3e112dfcc16b9e0ed00f9">ArrayDims</a>&#160;</td>
-          <td class="paramname"><em>arrayDims</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1VirtualView.html#aa3ee89ed9953f86008addbde7d2a38b5">ArrayIndex</a>&#160;</td>
+          <td class="paramname"><em>ai</em></td><td>)</td>
           <td> -&gt; auto&amp;
         </td>
         </tr>
@@ -286,17 +309,17 @@ template&lt;std::size_t... Coords&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00497">497</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00515">515</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a0ae73d44168c0164e73ffc766e73b4ee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0ae73d44168c0164e73ffc766e73b4ee">&#9670;&nbsp;</a></span>accessor() <span class="overload">[2/2]</span></h2>
+<a id="afa19cab9a2e62a5b846be347ae14cc9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa19cab9a2e62a5b846be347ae14cc9a">&#9670;&nbsp;</a></span>accessor() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TParentViewType &gt; </div>
+template&lt;typename TParentView &gt; </div>
 <div class="memtemplate">
 template&lt;std::size_t... Coords&gt; </div>
 <table class="mlabels">
@@ -304,42 +327,11 @@ template&lt;std::size_t... Coords&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentViewType &gt;::accessor </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentView &gt;::accessor </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1VirtualView.html#a524fdc1fe3b3e112dfcc16b9e0ed00f9">ArrayDims</a>&#160;</td>
-          <td class="paramname"><em>arrayDims</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1VirtualView.html#aa3ee89ed9953f86008addbde7d2a38b5">ArrayIndex</a>&#160;</td>
+          <td class="paramname"><em>ai</em></td><td>)</td>
           <td> const -&gt; const auto&amp;
-        </td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00491">491</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
-
-</div>
-</div>
-<a id="ab62870fb1db415bb6718e74606920ae0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab62870fb1db415bb6718e74606920ae0">&#9670;&nbsp;</a></span>operator()() <span class="overload">[1/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename TParentViewType &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentViewType &gt;::operator() </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1VirtualView.html#a524fdc1fe3b3e112dfcc16b9e0ed00f9">ArrayDims</a>&#160;</td>
-          <td class="paramname"><em>arrayDims</em></td><td>)</td>
-          <td> -&gt; decltype(auto)
         </td>
         </tr>
       </table>
@@ -354,22 +346,53 @@ template&lt;typename TParentViewType &gt; </div>
 
 </div>
 </div>
-<a id="a6160458467bfef99ae115e84413e87f6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6160458467bfef99ae115e84413e87f6">&#9670;&nbsp;</a></span>operator()() <span class="overload">[2/6]</span></h2>
+<a id="ac7e54b9558daf351dfae8773c3c6f6e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7e54b9558daf351dfae8773c3c6f6e5">&#9670;&nbsp;</a></span>operator()() <span class="overload">[1/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TParentViewType &gt; </div>
+template&lt;typename TParentView &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentViewType &gt;::operator() </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentView &gt;::operator() </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1VirtualView.html#a524fdc1fe3b3e112dfcc16b9e0ed00f9">ArrayDims</a>&#160;</td>
-          <td class="paramname"><em>arrayDims</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1VirtualView.html#aa3ee89ed9953f86008addbde7d2a38b5">ArrayIndex</a>&#160;</td>
+          <td class="paramname"><em>ai</em></td><td>)</td>
+          <td> -&gt; decltype(auto)
+        </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00527">527</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af7a12796ec2dcb644c1e777b02a5d516"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7a12796ec2dcb644c1e777b02a5d516">&#9670;&nbsp;</a></span>operator()() <span class="overload">[2/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TParentView &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentView &gt;::operator() </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1VirtualView.html#aa3ee89ed9953f86008addbde7d2a38b5">ArrayIndex</a>&#160;</td>
+          <td class="paramname"><em>ai</em></td><td>)</td>
           <td> const -&gt; decltype(auto)
         </td>
         </tr>
@@ -381,19 +404,19 @@ template&lt;typename TParentViewType &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Same as <a class="el" href="structllama_1_1View.html#ad5b62c29d6b47901128f6fa5cf0a6263">View::operator()(ArrayDims)</a>, but shifted by the offset of this <a class="el" href="structllama_1_1VirtualView.html">VirtualView</a>. </p>
+<p>Same as <a class="el" href="structllama_1_1View.html#a94e531e3ba3858373f44fe69410f1989">View::operator()(ArrayIndex)</a>, but shifted by the offset of this <a class="el" href="structllama_1_1VirtualView.html">VirtualView</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00503">503</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00521">521</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a954749a70eb85adc61f0419b31aef9a1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a954749a70eb85adc61f0419b31aef9a1">&#9670;&nbsp;</a></span>operator()() <span class="overload">[3/6]</span></h2>
+<a id="a021ba84083370732c7461295d9d52488"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a021ba84083370732c7461295d9d52488">&#9670;&nbsp;</a></span>operator()() <span class="overload">[3/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TParentViewType &gt; </div>
+template&lt;typename TParentView &gt; </div>
 <div class="memtemplate">
 template&lt;typename... Indices&gt; </div>
 <table class="mlabels">
@@ -401,7 +424,7 @@ template&lt;typename... Indices&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentViewType &gt;::operator() </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentView &gt;::operator() </td>
           <td>(</td>
           <td class="paramtype">Indices...&#160;</td>
           <td class="paramname"><em>indices</em></td><td>)</td>
@@ -416,17 +439,17 @@ template&lt;typename... Indices&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00530">530</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00549">549</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a1d86460c7fa03207cfc3129234374971"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1d86460c7fa03207cfc3129234374971">&#9670;&nbsp;</a></span>operator()() <span class="overload">[4/6]</span></h2>
+<a id="a0056e31fafb01cc6b8d0eaec7b6ff093"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0056e31fafb01cc6b8d0eaec7b6ff093">&#9670;&nbsp;</a></span>operator()() <span class="overload">[4/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TParentViewType &gt; </div>
+template&lt;typename TParentView &gt; </div>
 <div class="memtemplate">
 template&lt;typename... Indices&gt; </div>
 <table class="mlabels">
@@ -434,7 +457,7 @@ template&lt;typename... Indices&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentViewType &gt;::operator() </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentView &gt;::operator() </td>
           <td>(</td>
           <td class="paramtype">Indices...&#160;</td>
           <td class="paramname"><em>indices</em></td><td>)</td>
@@ -451,17 +474,17 @@ template&lt;typename... Indices&gt; </div>
 
 <p>Same as corresponding operator in <a class="el" href="structllama_1_1View.html">View</a>, but shifted by the offset of this <a class="el" href="structllama_1_1VirtualView.html">VirtualView</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00517">517</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00535">535</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="aad65af953983792d7c5e11d6a646a886"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aad65af953983792d7c5e11d6a646a886">&#9670;&nbsp;</a></span>operator()() <span class="overload">[5/6]</span></h2>
+<a id="a40e8e8adc35eec4656a27125f53b665d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40e8e8adc35eec4656a27125f53b665d">&#9670;&nbsp;</a></span>operator()() <span class="overload">[5/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TParentViewType &gt; </div>
+template&lt;typename TParentView &gt; </div>
 <div class="memtemplate">
 template&lt;std::size_t... Coord&gt; </div>
 <table class="mlabels">
@@ -469,7 +492,7 @@ template&lt;std::size_t... Coord&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentViewType &gt;::operator() </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentView &gt;::operator() </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coord... &gt;&#160;</td>
           <td class="paramname"> = <code>{}</code></td><td>)</td>
@@ -484,17 +507,17 @@ template&lt;std::size_t... Coord&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00550">550</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00570">570</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a324d5ee5e3f4c14045e8eef71f036c38"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a324d5ee5e3f4c14045e8eef71f036c38">&#9670;&nbsp;</a></span>operator()() <span class="overload">[6/6]</span></h2>
+<a id="a96f866c9936c27bf60eb146063a71547"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96f866c9936c27bf60eb146063a71547">&#9670;&nbsp;</a></span>operator()() <span class="overload">[6/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TParentViewType &gt; </div>
+template&lt;typename TParentView &gt; </div>
 <div class="memtemplate">
 template&lt;std::size_t... Coord&gt; </div>
 <table class="mlabels">
@@ -502,7 +525,7 @@ template&lt;std::size_t... Coord&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentViewType &gt;::operator() </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentView &gt;::operator() </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coord... &gt;&#160;</td>
           <td class="paramname"> = <code>{}</code></td><td>)</td>
@@ -517,48 +540,48 @@ template&lt;std::size_t... Coord&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00543">543</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00563">563</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a66e4ac08ce138d06043f2f570b271b38"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a66e4ac08ce138d06043f2f570b271b38">&#9670;&nbsp;</a></span>offset</h2>
+<a id="ad6536e0ccf41cf956c24f359a6d5ca4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6536e0ccf41cf956c24f359a6d5ca4c">&#9670;&nbsp;</a></span>offset</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TParentViewType &gt; </div>
+template&lt;typename TParentView &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="structllama_1_1VirtualView.html#a524fdc1fe3b3e112dfcc16b9e0ed00f9">ArrayDims</a> <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentViewType &gt;::offset</td>
+          <td class="memname">const <a class="el" href="structllama_1_1VirtualView.html#aa3ee89ed9953f86008addbde7d2a38b5">ArrayIndex</a> <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentView &gt;::offset</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>offset this view's <a class="el" href="structllama_1_1ArrayDims.html">ArrayDims</a> coordinates are shifted to the parent view. </p>
+<p>offset this view's <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> indices are shifted when passed to the parent view. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00557">557</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00578">578</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ab928a2e9ce53e2974c6d93fcdb3e8de1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab928a2e9ce53e2974c6d93fcdb3e8de1">&#9670;&nbsp;</a></span>parentView</h2>
+<a id="ab031c791f130a623cc469296da3343d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab031c791f130a623cc469296da3343d1">&#9670;&nbsp;</a></span>parentView</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TParentViewType &gt; </div>
+template&lt;typename TParentView &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structllama_1_1VirtualView.html#a5978917ede09394cf1bf965cfa9df373">ParentView</a>&amp; <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentViewType &gt;::parentView</td>
+          <td class="memname"><a class="el" href="structllama_1_1VirtualView.html#a1d5a6b58293881b8299649b006ee3124">ParentView</a>&amp; <a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a>&lt; TParentView &gt;::parentView</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>reference to parent view. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00556">556</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00576">576</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -571,7 +594,7 @@ template&lt;typename TParentViewType &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="structllama_1_1VirtualView.html">VirtualView</a></li>
-    <li class="footer">Generated on Wed Oct 6 2021 12:02:20 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Oct 7 2021 07:56:11 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

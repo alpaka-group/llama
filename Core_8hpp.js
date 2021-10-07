@@ -1,9 +1,6 @@
 var Core_8hpp =
 [
     [ "NoName", "structllama_1_1NoName.html", null ],
-    [ "ArrayDims", "structllama_1_1ArrayDims.html", null ],
-    [ "tuple_size< llama::ArrayDims< N > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayDims_3_01N_01_4_01_4.html", null ],
-    [ "tuple_element< I, llama::ArrayDims< N > >", "structstd_1_1tuple__element_3_01I_00_01llama_1_1ArrayDims_3_01N_01_4_01_4.html", "structstd_1_1tuple__element_3_01I_00_01llama_1_1ArrayDims_3_01N_01_4_01_4" ],
     [ "Record", "structllama_1_1Record.html", null ],
     [ "Field", "structllama_1_1Field.html", null ],
     [ "NrAndOffset", "structllama_1_1NrAndOffset.html", "structllama_1_1NrAndOffset" ],
@@ -44,9 +41,9 @@ var Core_8hpp =
     [ "GetType", "Core_8hpp.html#acdfb627d325de5ab6c18cdc842cd7350", null ],
     [ "LeafRecordCoords", "Core_8hpp.html#ab0c1ac83b09aa8a960eca20d2aea3a98", null ],
     [ "TransformLeaves", "Core_8hpp.html#aea850368a25989a05b5c158bb3a537d2", null ],
-    [ "ArrayDims", "Core_8hpp.html#ac99ade3cc2e49f4a201fe637ddfc3788", null ],
     [ "flatAlignOfImpl", "Core_8hpp.html#a2413ee7f2d6487f7e306148cf2b46ac4", null ],
-    [ "forEachADCoord", "Core_8hpp.html#a8cf6c983757c6ebe94d81c6beede3e5b", null ],
+    [ "forEachADCoord", "Core_8hpp.html#a075ee11c5354aee4827df3816598e0c5", null ],
+    [ "forEachADCoord", "Core_8hpp.html#acbf92b00b74f32b216133e8092bc68c6", null ],
     [ "forEachLeafCoord", "Core_8hpp.html#a91f5d2462d07fc7d5cfa0dac05946c63", null ],
     [ "forEachLeafCoord", "Core_8hpp.html#a28ad5ce29085756570effc3b27378a5c", null ],
     [ "mp_for_each_inlined", "Core_8hpp.html#af16d07d01be7acc8ced82a040bac87da", null ],

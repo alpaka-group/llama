@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['difference_5ftype_830',['difference_type',['../structllama_1_1ArrayDimsIndexIterator.html#a5db937f98a8dcfff5a88f885079d99cd',1,'llama::ArrayDimsIndexIterator::difference_type()'],['../structllama_1_1Iterator.html#aa7feb42faffb77ec946b8a6ccadd2edd',1,'llama::Iterator::difference_type()']]]
+  ['difference_5ftype_860',['difference_type',['../structllama_1_1ArrayIndexIterator.html#afd99e3fda129714e52502e5ae3ac8bdd',1,'llama::ArrayIndexIterator::difference_type()'],['../structllama_1_1Iterator.html#a1c4827ad584ac0c5cd8eadd3465adb33',1,'llama::Iterator::difference_type()']]]
 ];
