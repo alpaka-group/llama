@@ -144,54 +144,54 @@ namespace llama
         struct Assign
         {
             template<typename A, typename B>
-            LLAMA_FN_HOST_ACC_INLINE auto operator()(A& a, const B& b) const -> decltype(auto)
+            LLAMA_FN_HOST_ACC_INLINE auto operator()(A&& a, const B& b) const -> decltype(auto)
             {
-                return a = b;
+                return std::forward<A>(a) = b;
             }
         };
 
         struct PlusAssign
         {
             template<typename A, typename B>
-            LLAMA_FN_HOST_ACC_INLINE auto operator()(A& a, const B& b) const -> decltype(auto)
+            LLAMA_FN_HOST_ACC_INLINE auto operator()(A&& a, const B& b) const -> decltype(auto)
             {
-                return a += b;
+                return std::forward<A>(a) += b;
             }
         };
 
         struct MinusAssign
         {
             template<typename A, typename B>
-            LLAMA_FN_HOST_ACC_INLINE auto operator()(A& a, const B& b) const -> decltype(auto)
+            LLAMA_FN_HOST_ACC_INLINE auto operator()(A&& a, const B& b) const -> decltype(auto)
             {
-                return a -= b;
+                return std::forward<A>(a) -= b;
             }
         };
 
         struct MultiplyAssign
         {
             template<typename A, typename B>
-            LLAMA_FN_HOST_ACC_INLINE auto operator()(A& a, const B& b) const -> decltype(auto)
+            LLAMA_FN_HOST_ACC_INLINE auto operator()(A&& a, const B& b) const -> decltype(auto)
             {
-                return a *= b;
+                return std::forward<A>(a) *= b;
             }
         };
 
         struct DivideAssign
         {
             template<typename A, typename B>
-            LLAMA_FN_HOST_ACC_INLINE auto operator()(A& a, const B& b) const -> decltype(auto)
+            LLAMA_FN_HOST_ACC_INLINE auto operator()(A&& a, const B& b) const -> decltype(auto)
             {
-                return a /= b;
+                return std::forward<A>(a) /= b;
             }
         };
 
         struct ModuloAssign
         {
             template<typename A, typename B>
-            LLAMA_FN_HOST_ACC_INLINE auto operator()(A& a, const B& b) const -> decltype(auto)
+            LLAMA_FN_HOST_ACC_INLINE auto operator()(A&& a, const B& b) const -> decltype(auto)
             {
-                return a %= b;
+                return std::forward<A>(a) %= b;
             }
         };
 
