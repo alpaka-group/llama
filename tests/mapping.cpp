@@ -59,6 +59,34 @@ TEST_CASE("mapping.traits")
     STATIC_REQUIRE(llama::mapping::isOne<One>);
 }
 
+TEST_CASE("mapping.LinearizeArrayDimsMorton")
+{
+    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+
+    llama::mapping::LinearizeArrayDimsMorton lin;
+    CHECK(lin.size(ArrayExtents{2, 3}) == 4 * 4);
+    CHECK(lin.size(ArrayExtents{2, 4}) == 4 * 4);
+    CHECK(lin.size(ArrayExtents{2, 5}) == 8 * 8);
+    CHECK(lin.size(ArrayExtents{8, 8}) == 8 * 8);
+
+    CHECK(lin(llama::ArrayIndex{0, 0}, ArrayExtents{}) == 0);
+    CHECK(lin(llama::ArrayIndex{0, 1}, ArrayExtents{}) == 1);
+    CHECK(lin(llama::ArrayIndex{0, 2}, ArrayExtents{}) == 4);
+    CHECK(lin(llama::ArrayIndex{0, 3}, ArrayExtents{}) == 5);
+    CHECK(lin(llama::ArrayIndex{1, 0}, ArrayExtents{}) == 2);
+    CHECK(lin(llama::ArrayIndex{1, 1}, ArrayExtents{}) == 3);
+    CHECK(lin(llama::ArrayIndex{1, 2}, ArrayExtents{}) == 6);
+    CHECK(lin(llama::ArrayIndex{1, 3}, ArrayExtents{}) == 7);
+    CHECK(lin(llama::ArrayIndex{2, 0}, ArrayExtents{}) == 8);
+    CHECK(lin(llama::ArrayIndex{2, 1}, ArrayExtents{}) == 9);
+    CHECK(lin(llama::ArrayIndex{2, 2}, ArrayExtents{}) == 12);
+    CHECK(lin(llama::ArrayIndex{2, 3}, ArrayExtents{}) == 13);
+    CHECK(lin(llama::ArrayIndex{3, 0}, ArrayExtents{}) == 10);
+    CHECK(lin(llama::ArrayIndex{3, 1}, ArrayExtents{}) == 11);
+    CHECK(lin(llama::ArrayIndex{3, 2}, ArrayExtents{}) == 14);
+    CHECK(lin(llama::ArrayIndex{3, 3}, ArrayExtents{}) == 15);
+}
+
 TEST_CASE("address.AoS.Packed")
 {
     auto test = [](auto arrayExtents)
