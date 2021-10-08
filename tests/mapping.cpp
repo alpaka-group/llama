@@ -59,32 +59,97 @@ TEST_CASE("mapping.traits")
     STATIC_REQUIRE(llama::mapping::isOne<One>);
 }
 
+TEST_CASE("mapping.LinearizeArrayDimsCpp.size")
+{
+    llama::mapping::LinearizeArrayDimsCpp lin;
+    CHECK(lin.size(llama::ArrayExtents{2, 3}) == 2 * 3);
+    CHECK(lin.size(llama::ArrayExtents{2, 4}) == 2 * 4);
+    CHECK(lin.size(llama::ArrayExtents{2, 5}) == 2 * 5);
+    CHECK(lin.size(llama::ArrayExtents{8, 8}) == 8 * 8);
+}
+
+TEST_CASE("mapping.LinearizeArrayDimsCpp")
+{
+    llama::mapping::LinearizeArrayDimsCpp lin;
+    const auto extents = llama::ArrayExtents<4, 4>{};
+    CHECK(lin(llama::ArrayIndex{0, 0}, extents) == 0);
+    CHECK(lin(llama::ArrayIndex{0, 1}, extents) == 1);
+    CHECK(lin(llama::ArrayIndex{0, 2}, extents) == 2);
+    CHECK(lin(llama::ArrayIndex{0, 3}, extents) == 3);
+    CHECK(lin(llama::ArrayIndex{1, 0}, extents) == 4);
+    CHECK(lin(llama::ArrayIndex{1, 1}, extents) == 5);
+    CHECK(lin(llama::ArrayIndex{1, 2}, extents) == 6);
+    CHECK(lin(llama::ArrayIndex{1, 3}, extents) == 7);
+    CHECK(lin(llama::ArrayIndex{2, 0}, extents) == 8);
+    CHECK(lin(llama::ArrayIndex{2, 1}, extents) == 9);
+    CHECK(lin(llama::ArrayIndex{2, 2}, extents) == 10);
+    CHECK(lin(llama::ArrayIndex{2, 3}, extents) == 11);
+    CHECK(lin(llama::ArrayIndex{3, 0}, extents) == 12);
+    CHECK(lin(llama::ArrayIndex{3, 1}, extents) == 13);
+    CHECK(lin(llama::ArrayIndex{3, 2}, extents) == 14);
+    CHECK(lin(llama::ArrayIndex{3, 3}, extents) == 15);
+}
+
+TEST_CASE("mapping.LinearizeArrayDimsFortran.size")
+{
+    llama::mapping::LinearizeArrayDimsFortran lin;
+    CHECK(lin.size(llama::ArrayExtents{2, 3}) == 2 * 3);
+    CHECK(lin.size(llama::ArrayExtents{2, 4}) == 2 * 4);
+    CHECK(lin.size(llama::ArrayExtents{2, 5}) == 2 * 5);
+    CHECK(lin.size(llama::ArrayExtents{8, 8}) == 8 * 8);
+}
+
+TEST_CASE("mapping.LinearizeArrayDimsFortran")
+{
+    llama::mapping::LinearizeArrayDimsFortran lin;
+    const auto extents = llama::ArrayExtents<4, 4>{};
+    CHECK(lin(llama::ArrayIndex{0, 0}, extents) == 0);
+    CHECK(lin(llama::ArrayIndex{0, 1}, extents) == 4);
+    CHECK(lin(llama::ArrayIndex{0, 2}, extents) == 8);
+    CHECK(lin(llama::ArrayIndex{0, 3}, extents) == 12);
+    CHECK(lin(llama::ArrayIndex{1, 0}, extents) == 1);
+    CHECK(lin(llama::ArrayIndex{1, 1}, extents) == 5);
+    CHECK(lin(llama::ArrayIndex{1, 2}, extents) == 9);
+    CHECK(lin(llama::ArrayIndex{1, 3}, extents) == 13);
+    CHECK(lin(llama::ArrayIndex{2, 0}, extents) == 2);
+    CHECK(lin(llama::ArrayIndex{2, 1}, extents) == 6);
+    CHECK(lin(llama::ArrayIndex{2, 2}, extents) == 10);
+    CHECK(lin(llama::ArrayIndex{2, 3}, extents) == 14);
+    CHECK(lin(llama::ArrayIndex{3, 0}, extents) == 3);
+    CHECK(lin(llama::ArrayIndex{3, 1}, extents) == 7);
+    CHECK(lin(llama::ArrayIndex{3, 2}, extents) == 11);
+    CHECK(lin(llama::ArrayIndex{3, 3}, extents) == 15);
+}
+
+TEST_CASE("mapping.LinearizeArrayDimsMorton.size")
+{
+    llama::mapping::LinearizeArrayDimsMorton lin;
+    CHECK(lin.size(llama::ArrayExtents{2, 3}) == 4 * 4);
+    CHECK(lin.size(llama::ArrayExtents{2, 4}) == 4 * 4);
+    CHECK(lin.size(llama::ArrayExtents{2, 5}) == 8 * 8);
+    CHECK(lin.size(llama::ArrayExtents{8, 8}) == 8 * 8);
+}
+
 TEST_CASE("mapping.LinearizeArrayDimsMorton")
 {
-    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
-
     llama::mapping::LinearizeArrayDimsMorton lin;
-    CHECK(lin.size(ArrayExtents{2, 3}) == 4 * 4);
-    CHECK(lin.size(ArrayExtents{2, 4}) == 4 * 4);
-    CHECK(lin.size(ArrayExtents{2, 5}) == 8 * 8);
-    CHECK(lin.size(ArrayExtents{8, 8}) == 8 * 8);
-
-    CHECK(lin(llama::ArrayIndex{0, 0}, ArrayExtents{}) == 0);
-    CHECK(lin(llama::ArrayIndex{0, 1}, ArrayExtents{}) == 1);
-    CHECK(lin(llama::ArrayIndex{0, 2}, ArrayExtents{}) == 4);
-    CHECK(lin(llama::ArrayIndex{0, 3}, ArrayExtents{}) == 5);
-    CHECK(lin(llama::ArrayIndex{1, 0}, ArrayExtents{}) == 2);
-    CHECK(lin(llama::ArrayIndex{1, 1}, ArrayExtents{}) == 3);
-    CHECK(lin(llama::ArrayIndex{1, 2}, ArrayExtents{}) == 6);
-    CHECK(lin(llama::ArrayIndex{1, 3}, ArrayExtents{}) == 7);
-    CHECK(lin(llama::ArrayIndex{2, 0}, ArrayExtents{}) == 8);
-    CHECK(lin(llama::ArrayIndex{2, 1}, ArrayExtents{}) == 9);
-    CHECK(lin(llama::ArrayIndex{2, 2}, ArrayExtents{}) == 12);
-    CHECK(lin(llama::ArrayIndex{2, 3}, ArrayExtents{}) == 13);
-    CHECK(lin(llama::ArrayIndex{3, 0}, ArrayExtents{}) == 10);
-    CHECK(lin(llama::ArrayIndex{3, 1}, ArrayExtents{}) == 11);
-    CHECK(lin(llama::ArrayIndex{3, 2}, ArrayExtents{}) == 14);
-    CHECK(lin(llama::ArrayIndex{3, 3}, ArrayExtents{}) == 15);
+    const auto extents = llama::ArrayExtents<4, 4>{};
+    CHECK(lin(llama::ArrayIndex{0, 0}, extents) == 0);
+    CHECK(lin(llama::ArrayIndex{0, 1}, extents) == 1);
+    CHECK(lin(llama::ArrayIndex{0, 2}, extents) == 4);
+    CHECK(lin(llama::ArrayIndex{0, 3}, extents) == 5);
+    CHECK(lin(llama::ArrayIndex{1, 0}, extents) == 2);
+    CHECK(lin(llama::ArrayIndex{1, 1}, extents) == 3);
+    CHECK(lin(llama::ArrayIndex{1, 2}, extents) == 6);
+    CHECK(lin(llama::ArrayIndex{1, 3}, extents) == 7);
+    CHECK(lin(llama::ArrayIndex{2, 0}, extents) == 8);
+    CHECK(lin(llama::ArrayIndex{2, 1}, extents) == 9);
+    CHECK(lin(llama::ArrayIndex{2, 2}, extents) == 12);
+    CHECK(lin(llama::ArrayIndex{2, 3}, extents) == 13);
+    CHECK(lin(llama::ArrayIndex{3, 0}, extents) == 10);
+    CHECK(lin(llama::ArrayIndex{3, 1}, extents) == 11);
+    CHECK(lin(llama::ArrayIndex{3, 2}, extents) == 14);
+    CHECK(lin(llama::ArrayIndex{3, 3}, extents) == 15);
 }
 
 TEST_CASE("address.AoS.Packed")
