@@ -60,6 +60,7 @@ using ParticleUnaligned = llama::Record<
 >;
 // clang-format on
 
+// TODO: replace by boost::core::type_name<T>() once released and available
 template<typename T>
 auto prettyPrintType(const T& t = {}) -> std::string
 {
