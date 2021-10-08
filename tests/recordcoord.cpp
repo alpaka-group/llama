@@ -1,5 +1,5 @@
-#include <catch2/catch.hpp>
-#include <llama/llama.hpp>
+#include "common.hpp"
+
 #include <sstream>
 
 TEST_CASE("RecordCoord.operator==")

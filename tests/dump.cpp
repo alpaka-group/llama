@@ -1,10 +1,8 @@
 #include "common.hpp"
 
-#include <catch2/catch.hpp>
 #include <fmt/core.h>
 #include <fstream>
 #include <llama/DumpMapping.hpp>
-#include <llama/llama.hpp>
 #include <string>
 
 namespace

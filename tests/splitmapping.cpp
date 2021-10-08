@@ -1,9 +1,7 @@
 #include "common.hpp"
 
-#include <catch2/catch.hpp>
 #include <fstream>
 #include <llama/DumpMapping.hpp>
-#include <llama/llama.hpp>
 
 TEST_CASE("Split.SoA_SingleBlob.AoS_Packed.1Buffer")
 {

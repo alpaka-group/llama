@@ -1,8 +1,5 @@
 #include "common.hpp"
 
-#include <catch2/catch.hpp>
-#include <llama/llama.hpp>
-
 using RecordDim = Vec3D;
 using Mapping = llama::mapping::AoS<llama::ArrayExtents<llama::dyn>, RecordDim>;
 using Vector = llama::Vector<Mapping>;

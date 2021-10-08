@@ -2,9 +2,7 @@
 
 #include <array>
 #include <atomic>
-#include <catch2/catch.hpp>
 #include <complex>
-#include <llama/llama.hpp>
 #include <vector>
 
 namespace
