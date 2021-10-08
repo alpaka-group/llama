@@ -1,9 +1,8 @@
 #pragma once
 
 #include <boost/core/demangle.hpp>
-#include <llama/BlobAllocators.hpp>
-#include <llama/mapping/tree/toString.hpp>
-#include <numeric>
+#include <catch2/catch.hpp>
+#include <llama/llama.hpp>
 #include <regex>
 #include <sstream>
 #include <string>
@@ -126,4 +125,34 @@ void iotaStorage(View& view)
         auto fillFunc = [val = 0]() mutable { return static_cast<typename View::BlobType::PrimType>(val++); };
         std::generate_n(view.storageBlobs[i].storageBlobs.get(), view.mapping().blobSize(i), fillFunc);
     }
+}
+
+template<typename View>
+void iotaFillView(View& view)
+{
+    std::int64_t value = 0;
+    using RecordDim = typename View::RecordDim;
+    for(auto ai : llama::ArrayIndexRange{view.mapping().extents()})
+        llama::forEachLeafCoord<RecordDim>(
+            [&](auto rc)
+            {
+                using Type = llama::GetType<RecordDim, decltype(rc)>;
+                view(ai)(rc) = static_cast<Type>(value);
+                ++value;
+            });
+}
+
+template<typename View>
+void iotaCheckView(View& view)
+{
+    std::int64_t value = 0;
+    using RecordDim = typename View::RecordDim;
+    for(auto ai : llama::ArrayIndexRange{view.mapping().extents()})
+        llama::forEachLeafCoord<RecordDim>(
+            [&](auto rc)
+            {
+                using Type = llama::GetType<RecordDim, decltype(rc)>;
+                CHECK(view(ai)(rc) == static_cast<Type>(value));
+                ++value;
+            });
 }

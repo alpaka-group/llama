@@ -1,22 +1,10 @@
+#include "common.hpp"
+
 #include <algorithm>
-#include <catch2/catch.hpp>
-#include <llama/llama.hpp>
 #include <numeric>
 #include <random>
 
-// clang-format off
-namespace tag {
-    struct X {};
-    struct Y {};
-    struct Z {};
-} // namespace tag
-
-using Position = llama::Record<
-    llama::Field<tag::X, int>,
-    llama::Field<tag::Y, int>,
-    llama::Field<tag::Z, int>
->;
-// clang-format on
+using Position = Vec3I;
 
 TEST_CASE("iterator.concepts")
 {

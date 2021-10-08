@@ -1,8 +1,6 @@
 #include "common.hpp"
 
 #include <algorithm>
-#include <catch2/catch.hpp>
-#include <llama/llama.hpp>
 #include <sstream>
 #include <vector>
 

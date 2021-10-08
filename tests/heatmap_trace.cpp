@@ -1,8 +1,6 @@
 #include "common.hpp"
 
-#include <catch2/catch.hpp>
 #include <fstream>
-#include <llama/llama.hpp>
 
 namespace
 {

@@ -1,8 +1,5 @@
 #include "common.hpp"
 
-#include <catch2/catch.hpp>
-#include <llama/llama.hpp>
-
 TEST_CASE("ArrayExtents.CTAD")
 {
     llama::ArrayExtents ad0{};

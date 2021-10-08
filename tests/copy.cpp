@@ -1,8 +1,5 @@
 #include "common.hpp"
 
-#include <catch2/catch.hpp>
-#include <llama/llama.hpp>
-
 namespace
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<2>;
@@ -14,26 +11,12 @@ namespace
         const auto viewExtents = ArrayExtents{4, 8};
         const auto srcMapping = SrcMapping(viewExtents);
         auto srcView = llama::allocViewUninitialized(srcMapping);
-        auto value = 0;
-        for(auto ad : llama::ArrayIndexRange{srcMapping.extents()})
-            llama::forEachLeafCoord<RecordDim>(
-                [&](auto rc)
-                {
-                    srcView(ad)(rc) = value;
-                    value++;
-                });
+        iotaFillView(srcView);
 
         auto dstView = llama::allocViewUninitialized(DstMapping(viewExtents));
         copy(srcView, dstView);
 
-        value = 0;
-        for(auto ad : llama::ArrayIndexRange{srcMapping.extents()})
-            llama::forEachLeafCoord<RecordDim>(
-                [&](auto rc)
-                {
-                    CHECK(dstView(ad)(rc) == value);
-                    value++;
-                });
+        iotaCheckView(dstView);
     }
 
     // Do not test all combinations as this exlodes the unit test compile and runtime.

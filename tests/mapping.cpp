@@ -1,9 +1,5 @@
 #include "common.hpp"
 
-#include <catch2/catch.hpp>
-#include <llama/Concepts.hpp>
-#include <llama/llama.hpp>
-
 #ifdef __cpp_lib_concepts
 TEST_CASE("mapping.concepts")
 {

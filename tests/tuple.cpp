@@ -1,8 +1,5 @@
 #include "common.hpp"
 
-#include <catch2/catch.hpp>
-#include <llama/llama.hpp>
-
 TEST_CASE("Tuple.CTAD")
 {
     constexpr auto t0 = llama::Tuple{};
