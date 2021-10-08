@@ -155,6 +155,23 @@ namespace llama
     template<std::size_t N, std::size_t Extent>
     using ArrayExtentsStatic = internal::
         mp_unwrap_values_into<boost::mp11::mp_repeat_c<boost::mp11::mp_list_c<std::size_t, Extent>, N>, ArrayExtents>;
+
+    template<std::size_t Dim, typename Func, typename... OuterIndices>
+    LLAMA_FN_HOST_ACC_INLINE void forEachADCoord(ArrayIndex<Dim> adSize, Func&& func, OuterIndices... outerIndices)
+    {
+        if constexpr(Dim > 0)
+            for(std::size_t i = 0; i < adSize[0]; i++)
+                forEachADCoord(ArrayIndex<Dim - 1>{pop_front(adSize)}, std::forward<Func>(func), outerIndices..., i);
+        else
+            std::forward<Func>(func)(ArrayIndex<sizeof...(outerIndices)>{outerIndices...});
+    }
+
+    template<std::size_t... Sizes, typename Func>
+    LLAMA_FN_HOST_ACC_INLINE void forEachADCoord(ArrayExtents<Sizes...> extents, Func&& func)
+    {
+        forEachADCoord(extents.toArray(), std::forward<Func>(func));
+    }
+
 } // namespace llama
 
 template<std::size_t... Sizes>
