@@ -138,7 +138,7 @@ namespace
     // clang-format on
 } // namespace
 
-TEST_CASE("fieldCount")
+TEST_CASE("flatFieldCount")
 {
     STATIC_REQUIRE(llama::flatFieldCount<int> == 1);
     STATIC_REQUIRE(llama::flatFieldCount<Vec3D> == 3);
