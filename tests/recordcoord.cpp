@@ -2,6 +2,31 @@
 
 #include <sstream>
 
+TEST_CASE("RecordCoord.List")
+{
+    STATIC_REQUIRE(std::is_same_v<typename llama::RecordCoord<>::List, boost::mp11::mp_list_c<std::size_t>>);
+    STATIC_REQUIRE(
+        std::is_same_v<typename llama::RecordCoord<1, 2, 3>::List, boost::mp11::mp_list_c<std::size_t, 1, 2, 3>>);
+}
+
+TEST_CASE("RecordCoord.front")
+{
+    STATIC_REQUIRE(llama::RecordCoord<1, 2, 3>::front == 1);
+}
+
+TEST_CASE("RecordCoord.back")
+{
+    STATIC_REQUIRE(llama::RecordCoord<1, 2, 3>::back == 3);
+}
+
+TEST_CASE("RecordCoord.size")
+{
+    STATIC_REQUIRE(llama::RecordCoord<>::size == 0);
+    STATIC_REQUIRE(llama::RecordCoord<1>::size == 1);
+    STATIC_REQUIRE(llama::RecordCoord<1, 2>::size == 2);
+    STATIC_REQUIRE(llama::RecordCoord<1, 2, 3>::size == 3);
+}
+
 TEST_CASE("RecordCoord.operator==")
 {
     STATIC_REQUIRE(llama::RecordCoord{} == llama::RecordCoord{});
