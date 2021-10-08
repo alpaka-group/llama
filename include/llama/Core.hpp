@@ -230,25 +230,6 @@ namespace llama
 
     namespace internal
     {
-        template<typename RecordDim, typename BaseRecordCoord, typename... Tags>
-        struct GetCoordFromTagsRelativeImpl
-        {
-            using AbsolutCoord = typename internal::
-                GetCoordFromTagsImpl<GetType<RecordDim, BaseRecordCoord>, BaseRecordCoord, Tags...>::type;
-            // Only returning the record coord relative to BaseRecordCoord
-            using type
-                = RecordCoordFromList<boost::mp11::mp_drop_c<typename AbsolutCoord::List, BaseRecordCoord::size>>;
-        };
-    } // namespace internal
-
-    /// Converts a series of tags navigating down a record dimension, starting at a given \ref RecordCoord, into a \ref
-    /// RecordCoord.
-    template<typename RecordDim, typename BaseRecordCoord, typename... Tags>
-    using GetCoordFromTagsRelative =
-        typename internal::GetCoordFromTagsRelativeImpl<RecordDim, BaseRecordCoord, Tags...>::type;
-
-    namespace internal
-    {
         template<typename RecordDim, typename RecordCoord>
         struct LeafRecordCoordsImpl;
 

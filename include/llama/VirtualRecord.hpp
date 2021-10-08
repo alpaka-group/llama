@@ -442,7 +442,7 @@ namespace llama
         template<typename... Tags>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Tags...) const -> decltype(auto)
         {
-            using RecordCoord = GetCoordFromTagsRelative<RecordDim, BoundRecordCoord, Tags...>;
+            using RecordCoord = GetCoordFromTags<AccessibleRecordDim, Tags...>;
 
             LLAMA_FORCE_INLINE_RECURSIVE
             return operator()(RecordCoord{});
@@ -452,7 +452,7 @@ namespace llama
         template<typename... Tags>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Tags...) -> decltype(auto)
         {
-            using RecordCoord = GetCoordFromTagsRelative<RecordDim, BoundRecordCoord, Tags...>;
+            using RecordCoord = GetCoordFromTags<AccessibleRecordDim, Tags...>;
 
             LLAMA_FORCE_INLINE_RECURSIVE
             return operator()(RecordCoord{});
