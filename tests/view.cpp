@@ -55,44 +55,6 @@ TEST_CASE("view.swap")
     CHECK(view2({3, 3}) == 1);
 }
 
-TEST_CASE("view.allocator.Vector")
-{
-    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
-    constexpr ArrayExtents viewSize{16, 16};
-
-    using Mapping = llama::mapping::SoA<ArrayExtents, RecordDim>;
-    auto view = llama::allocView(Mapping(viewSize), llama::bloballoc::Vector{});
-
-    for(auto i : llama::ArrayIndexRange{viewSize})
-        view(i) = 42;
-}
-
-#ifndef __clang_analyzer__
-TEST_CASE("view.allocator.SharedPtr")
-{
-    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
-    constexpr ArrayExtents viewSize{16, 16};
-
-    using Mapping = llama::mapping::SoA<ArrayExtents, RecordDim>;
-    auto view = llama::allocView(Mapping(viewSize), llama::bloballoc::SharedPtr{});
-
-    for(auto i : llama::ArrayIndexRange{viewSize})
-        view(i) = 42;
-}
-#endif
-
-TEST_CASE("view.allocator.stack")
-{
-    using ArrayExtents = llama::ArrayExtentsDynamic<2>;
-    constexpr ArrayExtents viewSize{16, 16};
-
-    using Mapping = llama::mapping::SoA<ArrayExtents, RecordDim>;
-    auto view = llama::allocView(Mapping(viewSize), llama::bloballoc::Stack<16 * 16 * llama::sizeOf<RecordDim>>{});
-
-    for(auto i : llama::ArrayIndexRange{viewSize})
-        view(i) = 42;
-}
-
 TEST_CASE("view.non-memory-owning")
 {
     auto test = [](auto typeHolder)
