@@ -58,7 +58,6 @@ Record dimension
 .. doxygenvariable:: llama::hasSameTags
 .. doxygentypedef:: llama::GetCoordFromTags
 .. doxygentypedef:: llama::GetType
-.. doxygentypedef:: llama::GetCoordFromTagsRelative
 .. doxygentypedef:: llama::FlatRecordDim
 .. doxygenvariable:: llama::flatRecordCoord
 .. doxygentypedef:: llama::LeafRecordCoords
