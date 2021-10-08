@@ -14,6 +14,10 @@ TEST_CASE("mapping.concepts")
     STATIC_REQUIRE(llama::Mapping<llama::mapping::SingleBlobSoA<llama::ArrayExtents<2>, Particle>>);
     STATIC_REQUIRE(llama::Mapping<llama::mapping::MultiBlobSoA<llama::ArrayExtents<2>, Particle>>);
     STATIC_REQUIRE(llama::Mapping<llama::mapping::AoSoA<llama::ArrayExtents<2>, Particle, 8>>);
+
+    using Inner = llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<2>, Particle>;
+    STATIC_REQUIRE(llama::Mapping<llama::mapping::Trace<Inner>>);
+    STATIC_REQUIRE(llama::Mapping<llama::mapping::Heatmap<Inner>>);
 }
 #endif
 

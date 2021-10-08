@@ -63,7 +63,7 @@ namespace llama::mapping
                 print();
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayIndex
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayExtents
         {
             return mapping.extents();
         }
