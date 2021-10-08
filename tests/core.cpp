@@ -199,6 +199,29 @@ TEST_CASE("GetCoordFromTags")
     // clang-format on
 }
 
+TEST_CASE("GetType")
+{
+    STATIC_REQUIRE(std::is_same_v<llama::GetType<Particle, llama::RecordCoord<>>, Particle>);
+
+    STATIC_REQUIRE(std::is_same_v<llama::GetType<Particle, llama::RecordCoord<0>>, Vec3D>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetType<Particle, llama::RecordCoord<0, 0>>, double>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetType<Particle, llama::RecordCoord<0, 1>>, double>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetType<Particle, llama::RecordCoord<0, 2>>, double>);
+
+    STATIC_REQUIRE(std::is_same_v<llama::GetType<Particle, llama::RecordCoord<1>>, float>);
+
+    STATIC_REQUIRE(std::is_same_v<llama::GetType<Particle, llama::RecordCoord<2>>, Vec3D>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetType<Particle, llama::RecordCoord<2, 0>>, double>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetType<Particle, llama::RecordCoord<2, 1>>, double>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetType<Particle, llama::RecordCoord<2, 2>>, double>);
+
+    STATIC_REQUIRE(std::is_same_v<llama::GetType<Particle, llama::RecordCoord<3>>, bool[4]>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetType<Particle, llama::RecordCoord<3, 0>>, bool>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetType<Particle, llama::RecordCoord<3, 1>>, bool>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetType<Particle, llama::RecordCoord<3, 2>>, bool>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetType<Particle, llama::RecordCoord<3, 3>>, bool>);
+}
+
 TEST_CASE("GetTags")
 {
     // clang-format off
@@ -217,6 +240,24 @@ TEST_CASE("GetTag")
     STATIC_REQUIRE(std::is_same_v<llama::GetTag<Particle, llama::RecordCoord<    >>, llama::NoName>);
     STATIC_REQUIRE(std::is_same_v<llama::GetTag<Particle, llama::RecordCoord<2, 1>>, tag::Y       >);
     // clang-format on
+}
+
+TEST_CASE("LeafRecordCoords")
+{
+    STATIC_REQUIRE(std::is_same_v<
+                   llama::LeafRecordCoords<Particle>,
+                   boost::mp11::mp_list<
+                       llama::RecordCoord<0, 0>,
+                       llama::RecordCoord<0, 1>,
+                       llama::RecordCoord<0, 2>,
+                       llama::RecordCoord<1>,
+                       llama::RecordCoord<2, 0>,
+                       llama::RecordCoord<2, 1>,
+                       llama::RecordCoord<2, 2>,
+                       llama::RecordCoord<3, 0>,
+                       llama::RecordCoord<3, 1>,
+                       llama::RecordCoord<3, 2>,
+                       llama::RecordCoord<3, 3>>>);
 }
 
 TEST_CASE("hasSameTags")
