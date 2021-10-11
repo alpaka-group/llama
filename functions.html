@@ -91,6 +91,9 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 <li>accessor()
 : <a class="el" href="structllama_1_1VirtualView.html#afa19cab9a2e62a5b846be347ae14cc9a">llama::VirtualView&lt; TParentView &gt;</a>
 </li>
+<li>ai
+: <a class="el" href="structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#a94feee46f4ff0a60980c99e42c583b44">llama::mapping::Bytesplit&lt; TArrayExtents, TRecordDim, InnerMapping &gt;::Reference&lt; QualifiedBase, RC, BlobArray &gt;</a>
+</li>
 <li>AlignedAllocator()
 : <a class="el" href="structllama_1_1bloballoc_1_1AlignedAllocator.html#afc1b74be5b9bec25c966fe343f0aa235">llama::bloballoc::AlignedAllocator&lt; T, Alignment &gt;</a>
 </li>
@@ -109,6 +112,7 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 <li>ArrayExtents
 : <a class="el" href="structllama_1_1mapping_1_1AoS.html#a05faa93943f6217920857c46717a4b23">llama::mapping::AoS&lt; TArrayExtents, TRecordDim, AlignAndPad, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a652bf139b705d892f3c0dd6ba8c9c75d">llama::mapping::AoSoA&lt; TArrayExtents, TRecordDim, Lanes, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1Bytesplit.html#ab942705376994560a1052eeba7a62b17">llama::mapping::Bytesplit&lt; TArrayExtents, TRecordDim, InnerMapping &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Heatmap.html#a67a56ce7fdceff33bdd6c8df919e4a0b">llama::mapping::Heatmap&lt; Mapping, CountType &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1One.html#a30fd2da702f9f7b3b19a2f6dbcfac0c7">llama::mapping::One&lt; TArrayExtents, TRecordDim, AlignAndPad, FlattenRecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1SoA.html#a2ee0aaf6bb28d12531053fb97d426581">llama::mapping::SoA&lt; TArrayExtents, TRecordDim, SeparateBuffers, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;</a>
@@ -124,6 +128,7 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 <li>ArrayIndex
 : <a class="el" href="structllama_1_1mapping_1_1AoS.html#a88a09ac3cae4a5e42cf240bc86e6e407">llama::mapping::AoS&lt; TArrayExtents, TRecordDim, AlignAndPad, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#aa73c1fa49ba1ee11d3b21e661ab2e56b">llama::mapping::AoSoA&lt; TArrayExtents, TRecordDim, Lanes, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1Bytesplit.html#af88fb1f31f88a5c9af8154d477720058">llama::mapping::Bytesplit&lt; TArrayExtents, TRecordDim, InnerMapping &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Heatmap.html#a65bcf056e0bc80b63f2114d94d55fccd">llama::mapping::Heatmap&lt; Mapping, CountType &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1One.html#ab37f97c27994fa8b9beba55e2859f8c9">llama::mapping::One&lt; TArrayExtents, TRecordDim, AlignAndPad, FlattenRecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1SoA.html#a526349bb72b9bc041f16ebbc7700ff71">llama::mapping::SoA&lt; TArrayExtents, TRecordDim, SeparateBuffers, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;</a>
@@ -148,7 +153,7 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 , <a class="el" href="structllama_1_1Iterator.html#a4e7d52688099b1e34a1b11bd407ddc03">llama::Iterator&lt; View &gt;</a>
 </li>
 <li>ArrayIndexRange()
-: <a class="el" href="structllama_1_1ArrayIndexRange.html#adb4a13f3b0f61525dc61117bebbe72d4">llama::ArrayIndexRange&lt; ArrayExtents &gt;</a>
+: <a class="el" href="structllama_1_1ArrayIndexRange.html#aa5af48e1e3d800158a648bc619c39ec6">llama::ArrayIndexRange&lt; ArrayExtents &gt;</a>
 </li>
 <li>asFlatTuple()
 : <a class="el" href="structllama_1_1VirtualRecord.html#a7da15d1f0b4b6501ebf0a1ce88ed773a">llama::VirtualRecord&lt; TView, TBoundRecordCoord, OwnView &gt;</a>
@@ -165,7 +170,7 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon Oct 11 2021 12:47:55 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Oct 11 2021 16:04:12 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

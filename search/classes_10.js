@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['wrapinnnodes_570',['WrapInNNodes',['../structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes.html',1,'llama::mapping::tree::internal']]],
-  ['wrapinnnodes_3c_20leaf_2c_200_20_3e_571',['WrapInNNodes&lt; Leaf, 0 &gt;',['../structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes_3_01Leaf_00_010_01_4.html',1,'llama::mapping::tree::internal']]]
+  ['vector_579',['Vector',['../structllama_1_1bloballoc_1_1Vector.html',1,'llama::bloballoc::Vector'],['../structllama_1_1Vector.html',1,'llama::Vector&lt; Mapping &gt;']]],
+  ['view_580',['View',['../structllama_1_1View.html',1,'llama']]],
+  ['virtualrecord_581',['VirtualRecord',['../structllama_1_1VirtualRecord.html',1,'llama']]],
+  ['virtualview_582',['VirtualView',['../structllama_1_1VirtualView.html',1,'llama']]]
 ];

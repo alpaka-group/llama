@@ -1,10 +1,5 @@
 var searchData=
 [
-  ['idem_492',['Idem',['../structllama_1_1mapping_1_1tree_1_1functor_1_1Idem.html',1,'llama::mapping::tree::functor']]],
-  ['indirectvalue_493',['IndirectValue',['../structllama_1_1internal_1_1IndirectValue.html',1,'llama::internal']]],
-  ['isboundedarray_494',['IsBoundedArray',['../structllama_1_1internal_1_1IsBoundedArray.html',1,'llama::internal']]],
-  ['isboundedarray_3c_20t_5bn_5d_3e_495',['IsBoundedArray&lt; T[N]&gt;',['../structllama_1_1internal_1_1IsBoundedArray_3_01T_0fN_0e_4.html',1,'llama::internal']]],
-  ['iscomputed_496',['IsComputed',['../structllama_1_1internal_1_1IsComputed.html',1,'llama::internal']]],
-  ['iscomputed_3c_20mapping_2c_20recordcoord_2c_20std_3a_3avoid_5ft_3c_20decltype_28mapping_3a_3aiscomputed_28recordcoord_7b_7d_29_29_3e_20_3e_497',['IsComputed&lt; Mapping, RecordCoord, std::void_t&lt; decltype(Mapping::isComputed(RecordCoord{}))&gt; &gt;',['../structllama_1_1internal_1_1IsComputed_3_01Mapping_00_01RecordCoord_00_01std_1_1void__t_3_01declt31ec39d02aa75d5ea3308109fe018112.html',1,'llama::internal']]],
-  ['iterator_498',['Iterator',['../structllama_1_1Iterator.html',1,'llama']]]
+  ['hastag_502',['HasTag',['../structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoor097fc6d4759914143ed6b970ceeaa1d4.html',1,'llama::internal::GetCoordFromTagsImpl&lt; Record&lt; Fields... &gt;, RecordCoord&lt; ResultCoords... &gt;, FirstTag, Tags... &gt;']]],
+  ['heatmap_503',['Heatmap',['../structllama_1_1mapping_1_1Heatmap.html',1,'llama::mapping']]]
 ];

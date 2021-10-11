@@ -55,12 +55,15 @@ var hierarchy =
     [ "llama::mapping::Heatmap< Mapping, CountType >", "structllama_1_1mapping_1_1Heatmap.html", null ],
     [ "llama::mapping::tree::functor::Idem", "structllama_1_1mapping_1_1tree_1_1functor_1_1Idem.html", null ],
     [ "llama::internal::IndirectValue< T >", "structllama_1_1internal_1_1IndirectValue.html", null ],
-    [ "integral_constant", null, [
-      [ "std::tuple_size< llama::ArrayExtents< Sizes... > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayExtents_3_01Sizes_8_8_8_01_4_01_4.html", null ],
-      [ "std::tuple_size< llama::ArrayIndex< N > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayIndex_3_01N_01_4_01_4.html", null ]
+    [ "InnerMapping", null, [
+      [ "llama::mapping::Bytesplit< TArrayExtents, TRecordDim, InnerMapping >", "structllama_1_1mapping_1_1Bytesplit.html", null ]
     ] ],
     [ "integral_constant", null, [
       [ "std::tuple_size< llama::Array< T, N > >", "structstd_1_1tuple__size_3_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html", null ]
+    ] ],
+    [ "integral_constant", null, [
+      [ "std::tuple_size< llama::ArrayExtents< Sizes... > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayExtents_3_01Sizes_8_8_8_01_4_01_4.html", null ],
+      [ "std::tuple_size< llama::ArrayIndex< N > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayIndex_3_01N_01_4_01_4.html", null ]
     ] ],
     [ "is_same", null, [
       [ "llama::internal::GetCoordFromTagsImpl< Record< Fields... >, RecordCoord< ResultCoords... >, FirstTag, Tags... >::HasTag< Field >", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoor097fc6d4759914143ed6b970ceeaa1d4.html", null ]
@@ -108,6 +111,7 @@ var hierarchy =
     [ "llama::internal::RecordCoordCommonPrefixIsBiggerImpl< RecordCoord< Coords1... >, RecordCoord< Coords2... > >", "structllama_1_1internal_1_1RecordCoordCommonPrefixIsBiggerImpl_3_01RecordCoord_3_01Coords1_8_8_8d80b8b3340e93b40985783911438eb21.html", null ],
     [ "llama::internal::RecordCoordCommonPrefixIsSameImpl< First, Second >", "structllama_1_1internal_1_1RecordCoordCommonPrefixIsSameImpl.html", null ],
     [ "llama::internal::RecordCoordCommonPrefixIsSameImpl< RecordCoord< Coords1... >, RecordCoord< Coords2... > >", "structllama_1_1internal_1_1RecordCoordCommonPrefixIsSameImpl_3_01RecordCoord_3_01Coords1_8_8_8_0f195a8b8a0db2355fe3190fcb9b6d969.html", null ],
+    [ "llama::mapping::Bytesplit< TArrayExtents, TRecordDim, InnerMapping >::Reference< QualifiedBase, RC, BlobArray >", "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html", null ],
     [ "llama::bloballoc::SharedPtr", "structllama_1_1bloballoc_1_1SharedPtr.html", null ],
     [ "llama::mapping::Split< TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs >", "structllama_1_1mapping_1_1Split.html", null ],
     [ "llama::bloballoc::Stack< BytesToReserve >", "structllama_1_1bloballoc_1_1Stack.html", null ],
@@ -139,8 +143,8 @@ var hierarchy =
     [ "llama::internal::TupleReplaceImpl< Pos, Tuple, Replacement >", "structllama_1_1internal_1_1TupleReplaceImpl.html", null ],
     [ "llama::internal::TupleReplaceImpl< 0, Tuple< Elements... >, Replacement >", "structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01Elements_8_8_8_01_4_00_01Replacement_01_4.html", null ],
     [ "llama::internal::TupleReplaceImpl< 0, Tuple< OneElement >, Replacement >", "structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01OneElement_01_4_00_01Replacement_01_4.html", null ],
-    [ "llama::Vector< Mapping >", "structllama_1_1Vector.html", null ],
     [ "llama::bloballoc::Vector", "structllama_1_1bloballoc_1_1Vector.html", null ],
+    [ "llama::Vector< Mapping >", "structllama_1_1Vector.html", null ],
     [ "llama::View< TMapping, BlobType >", "structllama_1_1View.html", null ],
     [ "llama::VirtualRecord< TView, TBoundRecordCoord, OwnView >", "structllama_1_1VirtualRecord.html", null ],
     [ "llama::VirtualView< TParentView >", "structllama_1_1VirtualView.html", null ],

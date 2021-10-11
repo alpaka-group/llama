@@ -1,16 +1,14 @@
 var searchData=
 [
-  ['mapping_510',['Mapping',['../structllama_1_1mapping_1_1tree_1_1Mapping.html',1,'llama::mapping::tree']]],
-  ['mergefunctors_511',['MergeFunctors',['../structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors.html',1,'llama::mapping::tree::internal']]],
-  ['mergefunctors_3c_20basictree_2c_20treeoperationlist_20_3e_512',['MergeFunctors&lt; BasicTree, TreeOperationList &gt;',['../structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors.html',1,'llama::mapping::tree::internal']]],
-  ['mergefunctors_3c_20resulttree_2c_20boost_3a_3amp11_3a_3amp_5fdrop_5fc_3c_20llama_3a_3atuple_3c_20operations_2e_2e_2e_20_3e_2c_201_20_3e_20_3e_513',['MergeFunctors&lt; ResultTree, boost::mp11::mp_drop_c&lt; llama::Tuple&lt; Operations... &gt;, 1 &gt; &gt;',['../structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors.html',1,'llama::mapping::tree::internal']]],
-  ['mergefunctors_3c_20tree_2c_20tuple_3c_20operations_2e_2e_2e_20_3e_20_3e_514',['MergeFunctors&lt; Tree, Tuple&lt; Operations... &gt; &gt;',['../structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors_3_01Tree_00_01Tuple_3_01Operations_8_8_8_01_4_01_4.html',1,'llama::mapping::tree::internal']]],
-  ['mergefunctors_3c_20tree_2c_20tuple_3c_3e_20_3e_515',['MergeFunctors&lt; Tree, Tuple&lt;&gt; &gt;',['../structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors_3_01Tree_00_01Tuple_3_4_01_4.html',1,'llama::mapping::tree::internal']]],
-  ['minusassign_516',['MinusAssign',['../structllama_1_1internal_1_1MinusAssign.html',1,'llama::internal']]],
-  ['moduloassign_517',['ModuloAssign',['../structllama_1_1internal_1_1ModuloAssign.html',1,'llama::internal']]],
-  ['movertdown_518',['MoveRTDown',['../structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown.html',1,'llama::mapping::tree::functor']]],
-  ['mp_5fflatten_5fimpl_519',['mp_flatten_impl',['../structboost_1_1mp11_1_1detail_1_1mp__flatten__impl.html',1,'boost::mp11::detail']]],
-  ['mp_5funwrap_5fvalues_5finto_5fimpl_520',['mp_unwrap_values_into_impl',['../structllama_1_1internal_1_1mp__unwrap__values__into__impl.html',1,'llama::internal']]],
-  ['mp_5funwrap_5fvalues_5finto_5fimpl_3c_20fromlist_3c_20values_2e_2e_2e_20_3e_2c_20tolist_20_3e_521',['mp_unwrap_values_into_impl&lt; FromList&lt; Values... &gt;, ToList &gt;',['../structllama_1_1internal_1_1mp__unwrap__values__into__impl_3_01FromList_3_01Values_8_8_8_01_4_00_01ToList_01_4.html',1,'llama::internal']]],
-  ['multiplyassign_522',['MultiplyAssign',['../structllama_1_1internal_1_1MultiplyAssign.html',1,'llama::internal']]]
+  ['leaf_511',['Leaf',['../structllama_1_1mapping_1_1tree_1_1Leaf.html',1,'llama::mapping::tree']]],
+  ['leafonlyrt_512',['LeafOnlyRT',['../structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT.html',1,'llama::mapping::tree::functor']]],
+  ['leafrecordcoordsimpl_513',['LeafRecordCoordsImpl',['../structllama_1_1internal_1_1LeafRecordCoordsImpl.html',1,'llama::internal']]],
+  ['leafrecordcoordsimpl_3c_20child_5bn_5d_2c_20recordcoord_3c_20rcs_2e_2e_2e_20_3e_20_3e_514',['LeafRecordCoordsImpl&lt; Child[N], RecordCoord&lt; RCs... &gt; &gt;',['../structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Child_0fN_0e_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html',1,'llama::internal']]],
+  ['leafrecordcoordsimpl_3c_20record_3c_20fields_2e_2e_2e_20_3e_2c_20recordcoord_3c_20rcs_2e_2e_2e_20_3e_20_3e_515',['LeafRecordCoordsImpl&lt; Record&lt; Fields... &gt;, RecordCoord&lt; RCs... &gt; &gt;',['../structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html',1,'llama::internal']]],
+  ['leafrecordcoordsimpl_3c_20t_2c_20recordcoord_3c_20rcs_2e_2e_2e_20_3e_20_3e_516',['LeafRecordCoordsImpl&lt; T, RecordCoord&lt; RCs... &gt; &gt;',['../structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01T_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html',1,'llama::internal']]],
+  ['linearizearraydimscpp_517',['LinearizeArrayDimsCpp',['../structllama_1_1mapping_1_1LinearizeArrayDimsCpp.html',1,'llama::mapping']]],
+  ['linearizearraydimsfortran_518',['LinearizeArrayDimsFortran',['../structllama_1_1mapping_1_1LinearizeArrayDimsFortran.html',1,'llama::mapping']]],
+  ['linearizearraydimsmorton_519',['LinearizeArrayDimsMorton',['../structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html',1,'llama::mapping']]],
+  ['loader_520',['Loader',['../structllama_1_1VirtualRecord_1_1Loader.html',1,'llama::VirtualRecord']]],
+  ['loaderconst_521',['LoaderConst',['../structllama_1_1VirtualRecord_1_1LoaderConst.html',1,'llama::VirtualRecord']]]
 ];

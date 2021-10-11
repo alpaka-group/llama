@@ -92,6 +92,12 @@ $(document).ready(function(){initNavTree('namespacellama_1_1mapping_1_1internal.
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
+<tr class="memitem:afb46513e82a723e018572be98ef08d18"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:afb46513e82a723e018572be98ef08d18"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#afb46513e82a723e018572be98ef08d18">ReplaceByByteArray</a> = std::byte[sizeof(T)]</td></tr>
+<tr class="separator:afb46513e82a723e018572be98ef08d18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6541b9600737326f2e0b6354d0b3dfa1"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
+<tr class="memitem:a6541b9600737326f2e0b6354d0b3dfa1"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a6541b9600737326f2e0b6354d0b3dfa1">SplitBytes</a> = <a class="el" href="namespacellama.html#aea850368a25989a05b5c158bb3a537d2">TransformLeaves</a>&lt; RecordDim, <a class="el" href="namespacellama_1_1mapping_1_1internal.html#afb46513e82a723e018572be98ef08d18">ReplaceByByteArray</a> &gt;</td></tr>
+<tr class="separator:a6541b9600737326f2e0b6354d0b3dfa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a761919af792a2052749e060dec4adafe"><td class="memTemplParams" colspan="2">template&lt;typename A , typename B &gt; </td></tr>
 <tr class="memitem:a761919af792a2052749e060dec4adafe"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a761919af792a2052749e060dec4adafe">LessAlignment</a> = std::bool_constant&lt; alignof(A)&lt; alignof(B)&gt;</td></tr>
 <tr class="separator:a761919af792a2052749e060dec4adafe"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -145,6 +151,42 @@ template&lt;typename A , typename B &gt; </div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00190">190</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
+
+</div>
+</div>
+<a id="afb46513e82a723e018572be98ef08d18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb46513e82a723e018572be98ef08d18">&#9670;&nbsp;</a></span>ReplaceByByteArray</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama_1_1mapping_1_1internal.html#afb46513e82a723e018572be98ef08d18">llama::mapping::internal::ReplaceByByteArray</a> = typedef std::byte[sizeof(T)]</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Bytesplit_8hpp_source.html#l00012">12</a> of file <a class="el" href="Bytesplit_8hpp_source.html">Bytesplit.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a6541b9600737326f2e0b6354d0b3dfa1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6541b9600737326f2e0b6354d0b3dfa1">&#9670;&nbsp;</a></span>SplitBytes</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename RecordDim &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a6541b9600737326f2e0b6354d0b3dfa1">llama::mapping::internal::SplitBytes</a> = typedef <a class="el" href="namespacellama.html#aea850368a25989a05b5c158bb3a537d2">TransformLeaves</a>&lt;RecordDim, <a class="el" href="namespacellama_1_1mapping_1_1internal.html#afb46513e82a723e018572be98ef08d18">ReplaceByByteArray</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Bytesplit_8hpp_source.html#l00015">15</a> of file <a class="el" href="Bytesplit_8hpp_source.html">Bytesplit.hpp</a>.</p>
 
 </div>
 </div>
@@ -250,7 +292,7 @@ template&lt;typename... Fields, std::size_t FirstCoord, std::size_t... Coords&gt
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Mon Oct 11 2021 12:47:55 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Oct 11 2021 16:04:12 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
