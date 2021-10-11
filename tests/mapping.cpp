@@ -18,6 +18,12 @@ TEST_CASE("mapping.concepts")
     using Inner = llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<2>, Particle>;
     STATIC_REQUIRE(llama::Mapping<llama::mapping::Trace<Inner>>);
     STATIC_REQUIRE(llama::Mapping<llama::mapping::Heatmap<Inner>>);
+
+    // TODO(bgruber): Bytesplit is a computed mapping
+    // STATIC_REQUIRE(llama::Mapping<
+    //               llama::mapping::
+    //                   Bytesplit<llama::ArrayExtentsDynamic<2>, Particle,
+    //                   llama::mapping::PreconfiguredAoS<>::type>>);
 }
 #endif
 
