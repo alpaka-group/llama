@@ -23,90 +23,12 @@ using Data = llama::Record<
 >;
 // clang-format on
 
-template<typename T>
-using ReplaceByByteArray = std::byte[sizeof(T)];
-
-template<typename RecordDim>
-using SplitBytes = llama::TransformLeaves<RecordDim, ReplaceByByteArray>;
-
-template<typename TArrayExtents, typename TRecordDim>
-struct BytesplitSoA : private llama::mapping::SoA<TArrayExtents, SplitBytes<TRecordDim>, false>
-{
-    using Base = llama::mapping::SoA<TArrayExtents, SplitBytes<TRecordDim>, false>;
-
-    using ArrayExtents = typename Base::ArrayExtents;
-    using ArrayIndex = typename Base::ArrayIndex;
-    using RecordDim = TRecordDim; // hide Base::RecordDim
-    using Base::blobCount;
-
-    using Base::Base;
-    using Base::blobSize;
-    using Base::extents;
-
-    LLAMA_FN_HOST_ACC_INLINE
-    constexpr explicit BytesplitSoA(TArrayExtents extents, TRecordDim = {}) : Base(extents)
-    {
-    }
-
-    template<std::size_t... RecordCoords>
-    static constexpr auto isComputed(llama::RecordCoord<RecordCoords...>)
-    {
-        return true;
-    }
-
-    template<typename QualifiedBase, typename RC, typename BlobArray>
-    struct Reference
-    {
-        QualifiedBase& innerMapping;
-        ArrayIndex ai;
-        BlobArray& blobs;
-
-        using DstType = llama::GetType<TRecordDim, RC>;
-
-        // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-        operator DstType() const
-        {
-            DstType v;
-            auto* p = reinterpret_cast<std::byte*>(&v);
-            boost::mp11::mp_for_each<boost::mp11::mp_iota_c<sizeof(DstType)>>(
-                [&](auto ic)
-                {
-                    constexpr auto i = decltype(ic)::value;
-                    const auto [nr, off] = innerMapping.blobNrAndOffset(ai, llama::Cat<RC, llama::RecordCoord<i>>{});
-                    p[i] = blobs[nr][off];
-                });
-            return v;
-        }
-
-        auto operator=(DstType v) -> Reference&
-        {
-            auto* p = reinterpret_cast<std::byte*>(&v);
-            boost::mp11::mp_for_each<boost::mp11::mp_iota_c<sizeof(DstType)>>(
-                [&](auto ic)
-                {
-                    constexpr auto i = decltype(ic)::value;
-                    const auto [nr, off] = innerMapping.blobNrAndOffset(ai, llama::Cat<RC, llama::RecordCoord<i>>{});
-                    blobs[nr][off] = p[i];
-                });
-            return *this;
-        }
-    };
-
-    template<std::size_t... RecordCoords, typename BlobArray>
-    LLAMA_FN_HOST_ACC_INLINE constexpr auto compute(
-        typename Base::ArrayIndex ai,
-        llama::RecordCoord<RecordCoords...>,
-        BlobArray& blobs) const
-    {
-        return Reference<decltype(*this), llama::RecordCoord<RecordCoords...>, BlobArray>{*this, ai, blobs};
-    }
-};
-
 auto main() -> int
 {
     constexpr auto N = 128;
     using ArrayExtents = llama::ArrayExtentsDynamic<1>;
-    const auto mapping = BytesplitSoA<ArrayExtents, Data>{{N}};
+    const auto mapping
+        = llama::mapping::Bytesplit<ArrayExtents, Data, llama::mapping::PreconfiguredSoA<false>::type>{{N}};
 
     auto view = llama::allocView(mapping);
 
