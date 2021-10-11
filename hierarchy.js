@@ -44,7 +44,6 @@ var hierarchy =
     [ "llama::internal::GetCoordFromTagsImpl< ChildType[Count], RecordCoord< ResultCoords... >, FirstTag, Tags... >", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01ChildType_0fCount_0e_00_01RecordCoord_3_01Rea82f6370a44084538dfd07ee1f739c70.html", null ],
     [ "llama::internal::GetCoordFromTagsImpl< Record< Fields... >, RecordCoord< ResultCoords... >, FirstTag, Tags... >", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoor9dc4730dbf0b2c94fd53092536b251f3.html", null ],
     [ "llama::internal::GetCoordFromTagsImpl< RecordDim, RecordCoord >", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01RecordDim_00_01RecordCoord_01_4.html", null ],
-    [ "llama::internal::GetCoordFromTagsRelativeImpl< RecordDim, BaseRecordCoord, Tags >", "structllama_1_1internal_1_1GetCoordFromTagsRelativeImpl.html", null ],
     [ "llama::internal::GetTagsImpl< CurrTag, RecordDim, RecordCoord >", "structllama_1_1internal_1_1GetTagsImpl.html", null ],
     [ "llama::internal::GetTagsImpl< CurrTag, ChildType[Count], RecordCoord< FirstCoord, Coords... > >", "structllama_1_1internal_1_1GetTagsImpl_3_01CurrTag_00_01ChildType_0fCount_0e_00_01RecordCoord_3_39be958474f7189ffb882234646363f8.html", null ],
     [ "llama::internal::GetTagsImpl< CurrTag, Record< Fields... >, RecordCoord< FirstCoord, Coords... > >", "structllama_1_1internal_1_1GetTagsImpl_3_01CurrTag_00_01Record_3_01Fields_8_8_8_01_4_00_01Record7901748d8214fe0ef9dc00fd4214fa7e.html", null ],
@@ -57,11 +56,11 @@ var hierarchy =
     [ "llama::mapping::tree::functor::Idem", "structllama_1_1mapping_1_1tree_1_1functor_1_1Idem.html", null ],
     [ "llama::internal::IndirectValue< T >", "structllama_1_1internal_1_1IndirectValue.html", null ],
     [ "integral_constant", null, [
-      [ "std::tuple_size< llama::Array< T, N > >", "structstd_1_1tuple__size_3_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html", null ]
-    ] ],
-    [ "integral_constant", null, [
       [ "std::tuple_size< llama::ArrayExtents< Sizes... > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayExtents_3_01Sizes_8_8_8_01_4_01_4.html", null ],
       [ "std::tuple_size< llama::ArrayIndex< N > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayIndex_3_01N_01_4_01_4.html", null ]
+    ] ],
+    [ "integral_constant", null, [
+      [ "std::tuple_size< llama::Array< T, N > >", "structstd_1_1tuple__size_3_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html", null ]
     ] ],
     [ "is_same", null, [
       [ "llama::internal::GetCoordFromTagsImpl< Record< Fields... >, RecordCoord< ResultCoords... >, FirstTag, Tags... >::HasTag< Field >", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoor097fc6d4759914143ed6b970ceeaa1d4.html", null ]

@@ -194,8 +194,6 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1GetTypeImpl_3_01T_00_01RecordCoord_3_4_01_4.html">llama::internal::GetTypeImpl&lt; T, RecordCoord&lt;&gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1GetCoordFromTagsRelativeImpl.html">llama::internal::GetCoordFromTagsRelativeImpl&lt; RecordDim, BaseRecordCoord, Tags &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1LeafRecordCoordsImpl.html">llama::internal::LeafRecordCoordsImpl&lt; RecordDim, RecordCoord &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01T_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html">llama::internal::LeafRecordCoordsImpl&lt; T, RecordCoord&lt; RCs... &gt; &gt;</a></td></tr>
@@ -254,9 +252,6 @@ Typedefs</h2></td></tr>
 <tr class="memitem:acdfb627d325de5ab6c18cdc842cd7350"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename... RecordCoordOrTags&gt; </td></tr>
 <tr class="memitem:acdfb627d325de5ab6c18cdc842cd7350"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">llama::GetType</a> = typename internal::GetTypeImpl&lt; RecordDim, RecordCoordOrTags... &gt;::type</td></tr>
 <tr class="separator:acdfb627d325de5ab6c18cdc842cd7350"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9bd9d38a5cbc2ee5ce127ca218ee378"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename BaseRecordCoord , typename... Tags&gt; </td></tr>
-<tr class="memitem:aa9bd9d38a5cbc2ee5ce127ca218ee378"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aa9bd9d38a5cbc2ee5ce127ca218ee378">llama::GetCoordFromTagsRelative</a> = typename internal::GetCoordFromTagsRelativeImpl&lt; RecordDim, BaseRecordCoord, Tags... &gt;::type</td></tr>
-<tr class="separator:aa9bd9d38a5cbc2ee5ce127ca218ee378"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab0c1ac83b09aa8a960eca20d2aea3a98"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
 <tr class="memitem:ab0c1ac83b09aa8a960eca20d2aea3a98"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ab0c1ac83b09aa8a960eca20d2aea3a98">llama::LeafRecordCoords</a> = typename internal::LeafRecordCoordsImpl&lt; RecordDim, RecordCoord&lt;&gt; &gt;::type</td></tr>
 <tr class="memdesc:ab0c1ac83b09aa8a960eca20d2aea3a98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a flat type list containing all record coordinates to all leaves of the given record dimension.  <a href="namespacellama.html#ab0c1ac83b09aa8a960eca20d2aea3a98">More...</a><br /></td></tr>
@@ -294,12 +289,6 @@ Functions</h2></td></tr>
 <tr class="memitem:a86a72929fc8c71b9aa2b514a74ab34eb"><td class="memTemplParams" colspan="2">template&lt;typename S &gt; </td></tr>
 <tr class="memitem:a86a72929fc8c71b9aa2b514a74ab34eb"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a86a72929fc8c71b9aa2b514a74ab34eb">llama::structName</a> (S={}) -&gt; std::string</td></tr>
 <tr class="separator:a86a72929fc8c71b9aa2b514a74ab34eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acbf92b00b74f32b216133e8092bc68c6"><td class="memTemplParams" colspan="2">template&lt;std::size_t Dim, typename Func , typename... OuterIndices&gt; </td></tr>
-<tr class="memitem:acbf92b00b74f32b216133e8092bc68c6"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#acbf92b00b74f32b216133e8092bc68c6">llama::forEachADCoord</a> (ArrayIndex&lt; Dim &gt; adSize, Func &amp;&amp;func, OuterIndices... outerIndices)</td></tr>
-<tr class="separator:acbf92b00b74f32b216133e8092bc68c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a075ee11c5354aee4827df3816598e0c5"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Sizes, typename Func &gt; </td></tr>
-<tr class="memitem:a075ee11c5354aee4827df3816598e0c5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a075ee11c5354aee4827df3816598e0c5">llama::forEachADCoord</a> (ArrayExtents&lt; Sizes... &gt; extents, Func &amp;&amp;func)</td></tr>
-<tr class="separator:a075ee11c5354aee4827df3816598e0c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9c5c0a1ca0698a8871689b9924736ac"><td class="memTemplParams" colspan="2">template&lt;typename Integral &gt; </td></tr>
 <tr class="memitem:ab9c5c0a1ca0698a8871689b9924736ac"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ab9c5c0a1ca0698a8871689b9924736ac">llama::roundUpToMultiple</a> (Integral n, Integral mult) -&gt; Integral</td></tr>
 <tr class="memdesc:ab9c5c0a1ca0698a8871689b9924736ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the integral n rounded up to be a multiple of mult.  <a href="namespacellama.html#ab9c5c0a1ca0698a8871689b9924736ac">More...</a><br /></td></tr>
@@ -395,7 +384,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Core_8hpp.html">Core.hpp</a></li>
-    <li class="footer">Generated on Thu Oct 7 2021 14:29:52 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Oct 11 2021 12:47:54 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
