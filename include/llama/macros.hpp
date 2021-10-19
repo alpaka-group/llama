@@ -42,6 +42,26 @@
 #    endif
 #endif
 
+#ifndef LLAMA_PRAGMA
+#    define LLAMA_PRAGMA(tokens) _Pragma(#    tokens)
+#endif
+
+#ifndef LLAMA_UNROLL
+#    if defined(__NVCC__) || defined(__clang__) || defined(__INTEL_LLVM_COMPILER)
+#        define LLAMA_UNROLL(...) LLAMA_PRAGMA(unroll __VA_ARGS__)
+#    elif defined(__GNUG__)
+#        define LLAMA_UNROLL(...) LLAMA_PRAGMA(GCC unroll __VA_ARGS__)
+#    elif defined(_MSC_VER)
+// MSVC does not support a pragma for unrolling
+#        define LLAMA_UNROLL(...)
+#    else
+/// Requests the compiler to unroll the loop following this directive. An optional unrolling count may be provided as
+/// argument, which must be a constant expression.
+#        define LLAMA_UNROLL(...)
+#        warning LLAMA_UNROLL is not implemented for your compiler
+#    endif
+#endif
+
 #ifndef LLAMA_HOST_ACC
 #    if defined(__NVCC__) || (defined(__clang__) && defined(__CUDA__))
 #        define LLAMA_HOST_ACC __host__ __device__
