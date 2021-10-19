@@ -82,11 +82,7 @@ auto memcpy_avx2(void* dst, const void* src, size_t n) noexcept -> void*
     constexpr auto bytesPerIteration = 32 * unrollFactor;
     while(n >= bytesPerIteration)
     {
-#    if defined(__GNUC__) || defined(__clang__) || defined(__INTEL_LLVM_COMPILER)
-#        pragma GCC unroll unrollFactor
-#    else
-#        pragma unroll
-#    endif
+        LLAMA_UNROLL(unrollFactor)
         for(auto i = 0; i < unrollFactor; i++)
             _mm256_stream_si256(
                 reinterpret_cast<__m256i*>(d) + i,
