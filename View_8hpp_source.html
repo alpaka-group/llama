@@ -447,7 +447,7 @@ $(document).ready(function(){initNavTree('View_8hpp_source.html',''); initResiza
 <div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;                std::conjunction_v&lt;std::is_convertible&lt;Indices, std::size_t&gt;...&gt;,</div>
 <div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;                <span class="stringliteral">&quot;Indices must be convertible to std::size_t&quot;</span>);</div>
 <div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;            <a class="code" href="macros_8hpp.html#a48abf2d81c1aac87ff87f95bb427049a">LLAMA_FORCE_INLINE_RECURSIVE</a></div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;            <span class="keywordflow">return</span> (*<span class="keyword">this</span>) (<a class="code" href="structllama_1_1View.html#ac72d2fa98682de4dffd04eda255691bb">ArrayIndex</a>{<span class="keyword">static_cast&lt;</span>typename <a class="code" href="structllama_1_1Array.html#a0774edd854887549deb6cd3b7c606af8">ArrayIndex::value_type</a><span class="keyword">&gt;</span>(indices)...});</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;            <span class="keywordflow">return</span> (*<span class="keyword">this</span>)(<a class="code" href="structllama_1_1View.html#ac72d2fa98682de4dffd04eda255691bb">ArrayIndex</a>{<span class="keyword">static_cast&lt;</span>typename <a class="code" href="structllama_1_1Array.html#a0774edd854887549deb6cd3b7c606af8">ArrayIndex::value_type</a><span class="keyword">&gt;</span>(indices)...});</div>
 <div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        }</div>
 <div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160; </div>
 <div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Indices&gt;</div>
@@ -460,31 +460,31 @@ $(document).ready(function(){initNavTree('View_8hpp_source.html',''); initResiza
 <div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;                std::conjunction_v&lt;std::is_convertible&lt;Indices, std::size_t&gt;...&gt;,</div>
 <div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;                <span class="stringliteral">&quot;Indices must be convertible to std::size_t&quot;</span>);</div>
 <div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;            <a class="code" href="macros_8hpp.html#a48abf2d81c1aac87ff87f95bb427049a">LLAMA_FORCE_INLINE_RECURSIVE</a></div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;            <span class="keywordflow">return</span> (*<span class="keyword">this</span>) (<a class="code" href="structllama_1_1View.html#ac72d2fa98682de4dffd04eda255691bb">ArrayIndex</a>{<span class="keyword">static_cast&lt;</span>typename <a class="code" href="structllama_1_1Array.html#a0774edd854887549deb6cd3b7c606af8">ArrayIndex::value_type</a><span class="keyword">&gt;</span>(indices)...});</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;            <span class="keywordflow">return</span> (*<span class="keyword">this</span>)(<a class="code" href="structllama_1_1View.html#ac72d2fa98682de4dffd04eda255691bb">ArrayIndex</a>{<span class="keyword">static_cast&lt;</span>typename <a class="code" href="structllama_1_1Array.html#a0774edd854887549deb6cd3b7c606af8">ArrayIndex::value_type</a><span class="keyword">&gt;</span>(indices)...});</div>
 <div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;        }</div>
 <div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160; </div>
 <div class="line"><a name="l00398"></a><span class="lineno"><a class="line" href="structllama_1_1View.html#aff76cbd89f5f34e40404b06148175daa">  398</a></span>&#160;        <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> <span class="keyword">auto</span> <a class="code" href="structllama_1_1View.html#aff76cbd89f5f34e40404b06148175daa">operator[]</a>(<a class="code" href="structllama_1_1View.html#ac72d2fa98682de4dffd04eda255691bb">ArrayIndex</a> ai) <span class="keyword">const</span> -&gt; decltype(<span class="keyword">auto</span>)</div>
 <div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;        {</div>
 <div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;            <a class="code" href="macros_8hpp.html#a48abf2d81c1aac87ff87f95bb427049a">LLAMA_FORCE_INLINE_RECURSIVE</a></div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;            <span class="keywordflow">return</span> (*<span class="keyword">this</span>) (ai);</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;            <span class="keywordflow">return</span> (*<span class="keyword">this</span>)(ai);</div>
 <div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;        }</div>
 <div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160; </div>
 <div class="line"><a name="l00404"></a><span class="lineno"><a class="line" href="structllama_1_1View.html#ab447a03a160bf1e42fe05f5bc10712fd">  404</a></span>&#160;        <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> <span class="keyword">auto</span> <a class="code" href="structllama_1_1View.html#ab447a03a160bf1e42fe05f5bc10712fd">operator[]</a>(<a class="code" href="structllama_1_1View.html#ac72d2fa98682de4dffd04eda255691bb">ArrayIndex</a> ai) -&gt; decltype(<span class="keyword">auto</span>)</div>
 <div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;        {</div>
 <div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;            <a class="code" href="macros_8hpp.html#a48abf2d81c1aac87ff87f95bb427049a">LLAMA_FORCE_INLINE_RECURSIVE</a></div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;            <span class="keywordflow">return</span> (*<span class="keyword">this</span>) (ai);</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;            <span class="keywordflow">return</span> (*<span class="keyword">this</span>)(ai);</div>
 <div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;        }</div>
 <div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160; </div>
 <div class="line"><a name="l00411"></a><span class="lineno"><a class="line" href="structllama_1_1View.html#ae818c1089796177e23e8a65009cf3cd9">  411</a></span>&#160;        <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> <span class="keyword">auto</span> <a class="code" href="structllama_1_1View.html#ae818c1089796177e23e8a65009cf3cd9">operator[]</a>(std::size_t index) <span class="keyword">const</span> -&gt; decltype(<span class="keyword">auto</span>)</div>
 <div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;        {</div>
 <div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;            <a class="code" href="macros_8hpp.html#a48abf2d81c1aac87ff87f95bb427049a">LLAMA_FORCE_INLINE_RECURSIVE</a></div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;            <span class="keywordflow">return</span> (*<span class="keyword">this</span>) (index);</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;            <span class="keywordflow">return</span> (*<span class="keyword">this</span>)(index);</div>
 <div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;        }</div>
 <div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160; </div>
 <div class="line"><a name="l00417"></a><span class="lineno"><a class="line" href="structllama_1_1View.html#aba7c1332495bdfb2eae14c23e8401deb">  417</a></span>&#160;        <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> <span class="keyword">auto</span> <a class="code" href="structllama_1_1View.html#aba7c1332495bdfb2eae14c23e8401deb">operator[]</a>(std::size_t index) -&gt; decltype(<span class="keyword">auto</span>)</div>
 <div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;        {</div>
 <div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;            <a class="code" href="macros_8hpp.html#a48abf2d81c1aac87ff87f95bb427049a">LLAMA_FORCE_INLINE_RECURSIVE</a></div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;            <span class="keywordflow">return</span> (*<span class="keyword">this</span>) (index);</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;            <span class="keywordflow">return</span> (*<span class="keyword">this</span>)(index);</div>
 <div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;        }</div>
 <div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160; </div>
 <div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;        <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a></div>
@@ -747,7 +747,7 @@ $(document).ready(function(){initNavTree('View_8hpp_source.html',''); initResiza
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="View_8hpp.html">View.hpp</a></li>
-    <li class="footer">Generated on Tue Oct 12 2021 15:51:33 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Oct 25 2021 17:26:05 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
