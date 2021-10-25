@@ -267,7 +267,7 @@ TEST_CASE("recorddim.int[1][1][1][1][1][1][1][1][1][1]")
     auto view
         = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<llama::dyn>, RecordDim>{llama::ArrayExtents{1}});
 
-    view(0u)(0_RC)(0_RC) (0_RC) (0_RC) (0_RC) (0_RC) (0_RC) (0_RC) (0_RC) (0_RC) = 42;
+    view(0u)(0_RC)(0_RC)(0_RC)(0_RC)(0_RC)(0_RC)(0_RC)(0_RC)(0_RC)(0_RC) = 42;
 }
 
 // clang-format off

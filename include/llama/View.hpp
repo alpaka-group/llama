@@ -377,7 +377,7 @@ namespace llama
                 std::conjunction_v<std::is_convertible<Indices, std::size_t>...>,
                 "Indices must be convertible to std::size_t");
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this) (ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...});
+            return (*this)(ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...});
         }
 
         template<typename... Indices>
@@ -390,7 +390,7 @@ namespace llama
                 std::conjunction_v<std::is_convertible<Indices, std::size_t>...>,
                 "Indices must be convertible to std::size_t");
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this) (ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...});
+            return (*this)(ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...});
         }
 
         /// Retrieves the \ref VirtualRecord at the \ref ArrayIndex index constructed from the passed component
@@ -398,26 +398,26 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayIndex ai) const -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this) (ai);
+            return (*this)(ai);
         }
 
         LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayIndex ai) -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this) (ai);
+            return (*this)(ai);
         }
 
         /// Retrieves the \ref VirtualRecord at the 1D \ref ArrayIndex index constructed from the passed index.
         LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t index) const -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this) (index);
+            return (*this)(index);
         }
 
         LLAMA_FN_HOST_ACC_INLINE auto operator[](std::size_t index) -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this) (index);
+            return (*this)(index);
         }
 
         LLAMA_FN_HOST_ACC_INLINE
