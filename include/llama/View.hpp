@@ -489,19 +489,22 @@ namespace llama
     template<typename Mapping, typename BlobType>
     inline constexpr auto IsView<View<Mapping, BlobType>> = true;
 
-    /// Acts like a \ref View, but shows only a smaller and/or shifted part of another view it references, the parent
-    /// view.
-    template<typename TParentView>
+    /// Like a \ref View, but array indices are shifted.
+    /// @tparam TStoredParentView Type of the underlying view. May be cv qualified and/or a reference type.
+    template<typename TStoredParentView>
     struct VirtualView
     {
-        using ParentView = TParentView; ///< type of the parent view
+        using StoredParentView = TStoredParentView;
+        using ParentView = std::remove_const_t<std::remove_reference_t<StoredParentView>>; ///< type of the parent view
         using Mapping = typename ParentView::Mapping; ///< mapping of the parent view
         using ArrayExtents = typename Mapping::ArrayExtents; ///< array extents of the parent view
         using ArrayIndex = typename Mapping::ArrayIndex; ///< array index of the parent view
 
         /// Creates a VirtualView given a parent \ref View and offset.
-        LLAMA_FN_HOST_ACC_INLINE
-        VirtualView(ParentView& parentView, ArrayIndex offset) : parentView(parentView), offset(offset)
+        template<typename StoredParentViewFwd>
+        LLAMA_FN_HOST_ACC_INLINE VirtualView(StoredParentViewFwd&& parentView, ArrayIndex offset)
+            : parentView(std::forward<StoredParentViewFwd>(parentView))
+            , offset(offset)
         {
         }
 
@@ -573,8 +576,14 @@ namespace llama
             return accessor<Coord...>(ArrayIndex{});
         }
 
-        ParentView& parentView; ///< reference to parent view.
-        const ArrayIndex
-            offset; ///< offset this view's \ref ArrayIndex indices are shifted when passed to the parent view.
+        StoredParentView parentView;
+        const ArrayIndex offset; ///< offset by which this view's \ref ArrayIndex indices are shifted when passed to
+                                 ///< the parent view.
     };
+
+    /// VirtualView vview(view); will store a reference to view.
+    /// VirtualView vview(std::move(view)); will store the view.
+    template<typename TStoredParentView>
+    VirtualView(TStoredParentView&&, typename std::remove_reference_t<TStoredParentView>::Mapping::ArrayIndex)
+        -> VirtualView<TStoredParentView>;
 } // namespace llama

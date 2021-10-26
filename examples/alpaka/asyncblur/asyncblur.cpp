@@ -296,7 +296,7 @@ try
 
     struct VirtualHostElement
     {
-        llama::VirtualView<decltype(hostView)> virtualHost;
+        llama::VirtualView<decltype(hostView)&> virtualHost;
         const llama::ArrayExtentsDynamic<2> validMiniSize;
     };
     std::list<VirtualHostElement> virtualHostList;
