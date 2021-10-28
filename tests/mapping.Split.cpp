@@ -3,6 +3,52 @@
 #include <fstream>
 #include <llama/DumpMapping.hpp>
 
+TEST_CASE("Split.partitionRecordDim.OneMemberRecord")
+{
+    using RecordDim = llama::Record<llama::Field<int, int>>;
+    using R = decltype(llama::mapping::internal::partitionRecordDim(RecordDim{}, llama::RecordCoord<0>{}));
+    STATIC_REQUIRE(std::is_same_v<boost::mp11::mp_first<R>, RecordDim>);
+    STATIC_REQUIRE(std::is_same_v<boost::mp11::mp_second<R>, llama::Record<>>);
+}
+
+TEST_CASE("Split.partitionRecordDim.Vec3I")
+{
+    using R = decltype(llama::mapping::internal::partitionRecordDim(Vec3I{}, llama::RecordCoord<1>{}));
+    STATIC_REQUIRE(std::is_same_v<boost::mp11::mp_first<R>, llama::Record<llama::Field<tag::Y, int>>>);
+    STATIC_REQUIRE(
+        std::
+            is_same_v<boost::mp11::mp_second<R>, llama::Record<llama::Field<tag::X, int>, llama::Field<tag::Z, int>>>);
+}
+
+TEST_CASE("Split.partitionRecordDim.Particle")
+{
+    using R = decltype(llama::mapping::internal::partitionRecordDim(Particle{}, llama::RecordCoord<2, 1>{}));
+    STATIC_REQUIRE(std::is_same_v<
+                   boost::mp11::mp_first<R>,
+                   llama::Record<llama::Field<tag::Vel, llama::Record<llama::Field<tag::Y, double>>>>>);
+    STATIC_REQUIRE(
+        std::is_same_v<
+            boost::mp11::mp_second<R>,
+            llama::Record<
+                llama::Field<tag::Pos, Vec3D>,
+                llama::Field<tag::Mass, float>,
+                llama::Field<tag::Vel, llama::Record<llama::Field<tag::X, double>, llama::Field<tag::Z, double>>>,
+                llama::Field<tag::Flags, bool[4]>>>);
+}
+
+TEST_CASE("Split.partitionRecordDim.Particle.List")
+{
+    using R = decltype(llama::mapping::internal::partitionRecordDim(
+        Particle{},
+        boost::mp11::mp_list<llama::RecordCoord<0>, llama::RecordCoord<2>>{}));
+    STATIC_REQUIRE(std::is_same_v<
+                   boost::mp11::mp_first<R>,
+                   llama::Record<llama::Field<tag::Pos, Vec3D>, llama::Field<tag::Vel, Vec3D>>>);
+    STATIC_REQUIRE(std::is_same_v<
+                   boost::mp11::mp_second<R>,
+                   llama::Record<llama::Field<tag::Mass, float>, llama::Field<tag::Flags, bool[4]>>>);
+}
+
 TEST_CASE("Split.SoA_SingleBlob.AoS_Packed.1Buffer")
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<2>;
@@ -73,6 +119,47 @@ TEST_CASE("Split.AoSoA8.AoS_Packed.One.SoA_SingleBlob.4Buffer")
     CHECK(mapping.blobNrAndOffset<3, 1>({31}) == llama::NrAndOffset{3, 63});
     CHECK(mapping.blobNrAndOffset<3, 2>({31}) == llama::NrAndOffset{3, 95});
     CHECK(mapping.blobNrAndOffset<3, 3>({31}) == llama::NrAndOffset{3, 127});
+
+    // std::ofstream{"Split.AoSoA8.AoS.One.SoA.4Buffer.svg"} << llama::toSvg(mapping);
+}
+
+
+TEST_CASE("Split.Multilist.SoA.One")
+{
+    // split out Pos and Vel into SoA, the rest into One
+    using ArrayExtents = llama::ArrayExtentsDynamic<1>;
+    auto extents = ArrayExtents{32};
+    auto mapping = llama::mapping::Split<
+        ArrayExtents,
+        Particle,
+        boost::mp11::mp_list<llama::RecordCoord<0>, llama::RecordCoord<2>>,
+        llama::mapping::PreconfiguredSoA<>::type,
+        llama::mapping::AlignedOne,
+        true>{extents};
+
+    CHECK(mapping.blobNrAndOffset<0, 0>({0}) == llama::NrAndOffset{0, 0});
+    CHECK(mapping.blobNrAndOffset<0, 1>({0}) == llama::NrAndOffset{1, 0});
+    CHECK(mapping.blobNrAndOffset<0, 2>({0}) == llama::NrAndOffset{2, 0});
+    CHECK(mapping.blobNrAndOffset<1>({0}) == llama::NrAndOffset{6, 0});
+    CHECK(mapping.blobNrAndOffset<2, 0>({0}) == llama::NrAndOffset{3, 0});
+    CHECK(mapping.blobNrAndOffset<2, 1>({0}) == llama::NrAndOffset{4, 0});
+    CHECK(mapping.blobNrAndOffset<2, 2>({0}) == llama::NrAndOffset{5, 0});
+    CHECK(mapping.blobNrAndOffset<3, 0>({0}) == llama::NrAndOffset{6, 4});
+    CHECK(mapping.blobNrAndOffset<3, 1>({0}) == llama::NrAndOffset{6, 5});
+    CHECK(mapping.blobNrAndOffset<3, 2>({0}) == llama::NrAndOffset{6, 6});
+    CHECK(mapping.blobNrAndOffset<3, 3>({0}) == llama::NrAndOffset{6, 7});
+
+    CHECK(mapping.blobNrAndOffset<0, 0>({31}) == llama::NrAndOffset{0, 31 * 8});
+    CHECK(mapping.blobNrAndOffset<0, 1>({31}) == llama::NrAndOffset{1, 31 * 8});
+    CHECK(mapping.blobNrAndOffset<0, 2>({31}) == llama::NrAndOffset{2, 31 * 8});
+    CHECK(mapping.blobNrAndOffset<1>({31}) == llama::NrAndOffset{6, 0});
+    CHECK(mapping.blobNrAndOffset<2, 0>({31}) == llama::NrAndOffset{3, 31 * 8});
+    CHECK(mapping.blobNrAndOffset<2, 1>({31}) == llama::NrAndOffset{4, 31 * 8});
+    CHECK(mapping.blobNrAndOffset<2, 2>({31}) == llama::NrAndOffset{5, 31 * 8});
+    CHECK(mapping.blobNrAndOffset<3, 0>({31}) == llama::NrAndOffset{6, 4});
+    CHECK(mapping.blobNrAndOffset<3, 1>({31}) == llama::NrAndOffset{6, 5});
+    CHECK(mapping.blobNrAndOffset<3, 2>({31}) == llama::NrAndOffset{6, 6});
+    CHECK(mapping.blobNrAndOffset<3, 3>({31}) == llama::NrAndOffset{6, 7});
 
     // std::ofstream{"Split.AoSoA8.AoS.One.SoA.4Buffer.svg"} << llama::toSvg(mapping);
 }

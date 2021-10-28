@@ -220,6 +220,18 @@ TEST_CASE("dump.ParticleUnaligned.Split.AoSoA8.SoA.One.AoS")
          true>{extents});
 }
 
+TEST_CASE("dump.ParticleUnaligned.Split.Multilist.SoA.One")
+{
+    // split out Pos and Vel into SoA, the rest into One
+    dump(llama::mapping::Split<
+         ArrayExtents,
+         Particle,
+         boost::mp11::mp_list<llama::RecordCoord<0>, llama::RecordCoord<2>>,
+         llama::mapping::PreconfiguredSoA<>::type,
+         llama::mapping::AlignedOne,
+         true>{extents});
+}
+
 TEST_CASE("AoS.Aligned")
 {
     const auto mapping = llama::mapping::AlignedAoS<ArrayExtents, ParticleUnaligned>{extents};
