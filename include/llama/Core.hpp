@@ -202,9 +202,21 @@ namespace llama
         {
             using type = RecordCoord;
         };
+
+        // unpack a list of tags
+        template<typename... Fields, typename... Tags>
+        struct GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<>, boost::mp11::mp_list<Tags...>>
+            : GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<>, Tags...>
+        {
+        };
+        template<typename ChildType, std::size_t Count, typename... Tags>
+        struct GetCoordFromTagsImpl<ChildType[Count], RecordCoord<>, boost::mp11::mp_list<Tags...>>
+            : GetCoordFromTagsImpl<ChildType[Count], RecordCoord<>, Tags...>
+        {
+        };
     } // namespace internal
 
-    /// Converts a series of tags navigating down a record dimension into a \ref RecordCoord.
+    /// Converts a series of tags, or a list of tags, navigating down a record dimension into a \ref RecordCoord.
     template<typename RecordDim, typename... Tags>
     using GetCoordFromTags = typename internal::GetCoordFromTagsImpl<RecordDim, RecordCoord<>, Tags...>::type;
 
