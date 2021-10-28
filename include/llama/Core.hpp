@@ -151,6 +151,15 @@ namespace llama
 
     namespace internal
     {
+        template<typename FieldList, typename Tag>
+        struct FindFieldByTag
+        {
+            template<typename Field>
+            using HasTag = std::is_same<GetFieldTag<Field>, Tag>;
+
+            static constexpr auto value = boost::mp11::mp_find_if<FieldList, HasTag>::value;
+        };
+
         template<typename RecordDim, typename RecordCoord, typename... Tags>
         struct GetCoordFromTagsImpl
         {
@@ -160,12 +169,7 @@ namespace llama
         template<typename... Fields, std::size_t... ResultCoords, typename FirstTag, typename... Tags>
         struct GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<ResultCoords...>, FirstTag, Tags...>
         {
-            template<typename Field>
-            struct HasTag : std::is_same<GetFieldTag<Field>, FirstTag>
-            {
-            };
-
-            static constexpr auto tagIndex = boost::mp11::mp_find_if<boost::mp11::mp_list<Fields...>, HasTag>::value;
+            static constexpr auto tagIndex = FindFieldByTag<boost::mp11::mp_list<Fields...>, FirstTag>::value;
             static_assert(
                 tagIndex < sizeof...(Fields),
                 "FirstTag was not found inside this Record. Does your record dimension contain the tag you access "
@@ -572,4 +576,70 @@ namespace llama
     /// the original leaf field's type.
     template<typename RecordDim, template<typename> typename FieldTypeFunctor>
     using TransformLeaves = typename internal::TransformLeavesImpl<RecordDim, FieldTypeFunctor>::type;
+
+    namespace internal
+    {
+        // TODO: we might implement this better by expanding a record dim into a list of tag lists and then computing a
+        // real set union of the two tag list lists
+
+        template<typename A, typename B>
+        auto mergeRecordDimsImpl(boost::mp11::mp_identity<A> a, boost::mp11::mp_identity<B>)
+        {
+            static_assert(std::is_same_v<A, B>, "Cannot merge record and non-record or fields with different types");
+            return a;
+        }
+
+        template<typename A, std::size_t NA, typename B, std::size_t NB>
+        auto mergeRecordDimsImpl(
+            [[maybe_unused]] boost::mp11::mp_identity<A[NA]> a,
+            [[maybe_unused]] boost::mp11::mp_identity<B[NB]> b)
+        {
+            static_assert(std::is_same_v<A, B>, "Cannot merge arrays of different type");
+            if constexpr(NA < NB)
+                return b;
+            else
+                return a;
+        }
+
+        template<typename... FieldsA>
+        auto mergeRecordDimsImpl(boost::mp11::mp_identity<Record<FieldsA...>> a, boost::mp11::mp_identity<Record<>>)
+        {
+            return a;
+        }
+
+        template<
+            typename... FieldsA,
+            typename FieldB,
+            typename... FieldsB,
+            auto pos = FindFieldByTag<Record<FieldsA...>, GetFieldTag<FieldB>>::value>
+        auto mergeRecordDimsImpl(
+            boost::mp11::mp_identity<Record<FieldsA...>>,
+            boost::mp11::mp_identity<Record<FieldB, FieldsB...>>)
+        {
+            using namespace boost::mp11;
+            if constexpr(pos == sizeof...(FieldsA))
+            {
+                return mergeRecordDimsImpl(
+                    mp_identity<Record<FieldsA..., FieldB>>{},
+                    mp_identity<Record<FieldsB...>>{});
+            }
+            else
+            {
+                using OldFieldA = mp_at_c<Record<FieldsA...>, pos>;
+                using NewFieldA = Field<
+                    GetFieldTag<OldFieldA>,
+                    typename decltype(mergeRecordDimsImpl(
+                        mp_identity<GetFieldType<OldFieldA>>{},
+                        mp_identity<GetFieldType<FieldB>>{}))::type>;
+                using NewRecordA = mp_replace_at_c<Record<FieldsA...>, pos, NewFieldA>;
+                return mergeRecordDimsImpl(mp_identity<NewRecordA>{}, mp_identity<Record<FieldsB...>>{});
+            }
+        }
+    } // namespace internal
+
+    /// Creates a merged record dimension, where duplicated, nested fields are unified.
+    template<typename RecordDimA, typename RecordDimB>
+    using MergedRecordDims = typename decltype(internal::mergeRecordDimsImpl(
+        boost::mp11::mp_identity<RecordDimA>{},
+        boost::mp11::mp_identity<RecordDimB>{}))::type;
 } // namespace llama
