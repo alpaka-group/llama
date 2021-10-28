@@ -10,46 +10,65 @@ namespace llama::mapping
         auto partitionRecordDim(Record<Fields...>, RecordCoord<FirstCoord, Coords...>)
         {
             using namespace boost::mp11;
+            using Rec = Record<Fields...>;
             if constexpr(sizeof...(Coords) == 0)
             {
-                using With = Record<mp_at_c<Record<Fields...>, FirstCoord>>;
-                using Without = mp_erase_c<Record<Fields...>, FirstCoord, FirstCoord + 1>;
-                return mp_list<With, Without>{};
+                using Part1 = Record<mp_at_c<Rec, FirstCoord>>;
+                using Part2 = mp_erase_c<Rec, FirstCoord, FirstCoord + 1>;
+                return mp_list<Part1, Part2>{};
             }
             else
             {
-                using Result = decltype(partitionRecordDim(
-                    Record<mp_at_c<Record<Fields...>, FirstCoord>>{},
-                    RecordCoord<Coords...>{}));
-                using With = mp_replace_at_c<Record<Fields...>, FirstCoord, mp_first<Result>>;
-                using Without = mp_replace_at_c<Record<Fields...>, FirstCoord, mp_second<Result>>;
-                return mp_list<With, Without>{};
+                using FieldTag = GetTag<Rec, RecordCoord<FirstCoord>>;
+                using FieldType = GetType<Rec, RecordCoord<FirstCoord>>;
+                using InnerPartition = decltype(partitionRecordDim(FieldType{}, RecordCoord<Coords...>{}));
+                using Part1 = Record<Field<FieldTag, mp_first<InnerPartition>>>;
+                using Part2 = mp_replace_at_c<Rec, FirstCoord, Field<FieldTag, mp_second<InnerPartition>>>;
+                return mp_list<Part1, Part2>{};
             }
         }
 
-        template<
-            std::size_t FirstDstCoord,
-            std::size_t... DstCoords,
-            std::size_t FirstSkippedCoord,
-            std::size_t... SkippedCoords>
-        constexpr auto offsetCoord(
-            RecordCoord<FirstDstCoord, DstCoords...>,
-            RecordCoord<FirstSkippedCoord, SkippedCoords...>)
+        template<typename Acc, typename TagList>
+        struct PartitionFoldOpImpl
         {
-            if constexpr(FirstDstCoord < FirstSkippedCoord)
-                return RecordCoord<FirstDstCoord, DstCoords...>{};
-            else if constexpr(FirstDstCoord > FirstSkippedCoord)
-                return RecordCoord<FirstDstCoord - 1, DstCoords...>{};
-            else
-                return cat(
-                    RecordCoord<FirstDstCoord>{},
-                    offsetCoord(RecordCoord<DstCoords...>{}, RecordCoord<SkippedCoords...>{}));
+            using Part1Before = boost::mp11::mp_first<Acc>;
+            using Part2Before = boost::mp11::mp_second<Acc>;
+            using R = decltype(partitionRecordDim(Part2Before{}, GetCoordFromTags<Part2Before, TagList>{}));
+            using Part1After = boost::mp11::mp_first<R>;
+            using Part2After = boost::mp11::mp_second<R>;
+
+            using type = boost::mp11::mp_list<MergedRecordDims<Part1Before, Part1After>, Part2After>;
+        };
+
+        template<typename Acc, typename TagList>
+        using PartitionFoldOp = typename PartitionFoldOpImpl<Acc, TagList>::type;
+
+        template<typename... Fields, typename... RCs>
+        auto partitionRecordDim(Record<Fields...>, boost::mp11::mp_list<RCs...>)
+        {
+            using namespace boost::mp11;
+            using Initial = mp_list<Record<>, Record<Fields...>>; // initially, nothing selected for mapping 1
+            return mp_fold<mp_list<GetTags<Record<Fields...>, RCs>...>, Initial, PartitionFoldOp>{};
         }
+
+        template<typename RC, typename RecordCoordForMapping1>
+        inline constexpr bool isSelected = RecordCoordCommonPrefixIsSame<RecordCoordForMapping1, RC>;
+
+        template<typename RC>
+        struct IsSelectedPredicate
+        {
+            template<typename RecordCoordForMapping1>
+            using fn = boost::mp11::mp_bool<isSelected<RC, RecordCoordForMapping1>>;
+        };
+
+        template<typename RC, typename... RecordCoordsForMapping1>
+        inline constexpr bool isSelected<RC, boost::mp11::mp_list<RecordCoordsForMapping1...>> = boost::mp11::
+            mp_any_of_q<boost::mp11::mp_list<RecordCoordsForMapping1...>, IsSelectedPredicate<RC>>::value;
     } // namespace internal
 
     /// Mapping which splits off a part of the record dimension and maps it differently then the rest.
-    /// \tparam RecordCoordForMapping1 A \ref RecordCoord selecting the part of the record dimension to be mapped
-    /// differently.
+    /// \tparam RecordCoordForMapping1 A \ref RecordCoord or a list of RecordCoords selecting the part of the record
+    /// dimension to be mapped differently.
     /// \tparam MappingTemplate1 The mapping used for the selected part of the record dimension.
     /// \tparam MappingTemplate2 The mapping used for the not selected part of the record dimension.
     /// \tparam SeparateBlobs If true, both pieces of the record dimension are mapped to separate blobs.
@@ -107,19 +126,13 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayIndex ai, RecordCoord<RecordCoords...> = {}) const
             -> NrAndOffset
         {
-            if constexpr(RecordCoordCommonPrefixIsSame<RecordCoordForMapping1, RecordCoord<RecordCoords...>>)
-            {
-                using namespace boost::mp11;
-                // zero all coordinate values that are part of RecordCoordForMapping1
-                using Prefix = mp_repeat_c<mp_list_c<std::size_t, 0>, RecordCoordForMapping1::size>;
-                using Suffix = mp_drop_c<mp_list_c<std::size_t, RecordCoords...>, RecordCoordForMapping1::size>;
-                return mapping1.blobNrAndOffset(ai, RecordCoordFromList<mp_append<Prefix, Suffix>>{});
-            }
+            using Tags = GetTags<RecordDim, RecordCoord<RecordCoords...>>;
+
+            if constexpr(internal::isSelected<RecordCoord<RecordCoords...>, RecordCoordForMapping1>)
+                return mapping1.blobNrAndOffset(ai, GetCoordFromTags<RecordDim1, Tags>{});
             else
             {
-                constexpr auto dstCoord
-                    = internal::offsetCoord(RecordCoord<RecordCoords...>{}, RecordCoordForMapping1{});
-                auto nrAndOffset = mapping2.blobNrAndOffset(ai, dstCoord);
+                auto nrAndOffset = mapping2.blobNrAndOffset(ai, GetCoordFromTags<RecordDim2, Tags>{});
                 if constexpr(SeparateBlobs)
                     nrAndOffset.nr += Mapping1::blobCount;
                 else
@@ -136,7 +149,7 @@ namespace llama::mapping
     };
 
     template<
-        typename RecordCoordForMapping1,
+        typename RecordCoordsForMapping1,
         template<typename...>
         typename MappingTemplate1,
         template<typename...>
@@ -148,7 +161,7 @@ namespace llama::mapping
         using type = Split<
             ArrayExtents,
             RecordDim,
-            RecordCoordForMapping1,
+            RecordCoordsForMapping1,
             MappingTemplate1,
             MappingTemplate2,
             SeparateBlobs>;
