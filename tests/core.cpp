@@ -199,6 +199,14 @@ TEST_CASE("GetCoordFromTags")
     // clang-format on
 }
 
+TEST_CASE("GetCoordFromTags.List")
+{
+    STATIC_REQUIRE(std::is_same_v<llama::GetCoordFromTags<Particle, boost::mp11::mp_list<>>, llama::RecordCoord<>>);
+    STATIC_REQUIRE(std::is_same_v<
+                   llama::GetCoordFromTags<Particle, boost::mp11::mp_list<tag::Vel, tag::Z>>,
+                   llama::RecordCoord<2, 2>>);
+}
+
 TEST_CASE("GetType")
 {
     STATIC_REQUIRE(std::is_same_v<llama::GetType<Particle, llama::RecordCoord<>>, Particle>);
