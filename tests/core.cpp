@@ -350,3 +350,31 @@ TEST_CASE("TransformLeaves")
         llama::Field<tag::Flags, bool* [4]>>;
     STATIC_REQUIRE(std::is_same_v<llama::TransformLeaves<Particle, std::add_pointer_t>, ParticleTransformed>);
 }
+
+TEST_CASE("MergedRecordDims")
+{
+    STATIC_REQUIRE(std::is_same_v<llama::MergedRecordDims<llama::Record<>, llama::Record<>>, llama::Record<>>);
+
+    using R1 = llama::Record<llama::Field<tag::X, int>>;
+    using R2 = llama::Record<llama::Field<tag::Y, int>>;
+    STATIC_REQUIRE(
+        std::is_same_v<llama::MergedRecordDims<llama::Record<>, R2>, llama::Record<llama::Field<tag::Y, int>>>);
+    STATIC_REQUIRE(
+        std::is_same_v<llama::MergedRecordDims<R1, llama::Record<>>, llama::Record<llama::Field<tag::X, int>>>);
+    STATIC_REQUIRE(std::is_same_v<
+                   llama::MergedRecordDims<R1, R2>,
+                   llama::Record<llama::Field<tag::X, int>, llama::Field<tag::Y, int>>>);
+    STATIC_REQUIRE(std::is_same_v<llama::MergedRecordDims<Vec3I, Vec3I>, Vec3I>);
+    STATIC_REQUIRE(std::is_same_v<llama::MergedRecordDims<Particle, Particle>, Particle>);
+    STATIC_REQUIRE(std::is_same_v<llama::MergedRecordDims<int[3], int[5]>, int[5]>);
+    STATIC_REQUIRE(std::is_same_v<
+                   llama::MergedRecordDims<Particle, Vec3I>,
+                   llama::Record<
+                       llama::Field<tag::Pos, Vec3D>,
+                       llama::Field<tag::Mass, float>,
+                       llama::Field<tag::Vel, Vec3D>,
+                       llama::Field<tag::Flags, bool[4]>,
+                       llama::Field<tag::X, int>,
+                       llama::Field<tag::Y, int>,
+                       llama::Field<tag::Z, int>>>);
+}
