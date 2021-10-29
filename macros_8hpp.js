@@ -9,5 +9,7 @@ var macros_8hpp =
     [ "LLAMA_INDEPENDENT_DATA", "macros_8hpp.html#aa201f5c2567527b34eae5fbdab0e2416", null ],
     [ "LLAMA_LAMBDA_INLINE", "macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca", null ],
     [ "LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS", "macros_8hpp.html#a4721c0034a032224eb82625124525689", null ],
-    [ "LLAMA_SUPPRESS_HOST_DEVICE_WARNING", "macros_8hpp.html#abe08b7d43a4670c1332a03f52d6010ac", null ]
+    [ "LLAMA_PRAGMA", "macros_8hpp.html#a4de57f00925e4094739efa778cc4fe05", null ],
+    [ "LLAMA_SUPPRESS_HOST_DEVICE_WARNING", "macros_8hpp.html#abe08b7d43a4670c1332a03f52d6010ac", null ],
+    [ "LLAMA_UNROLL", "macros_8hpp.html#aeedb6e6e72a46dc4496c0b684c14d5bd", null ]
 ];
