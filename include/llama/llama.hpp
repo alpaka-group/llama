@@ -28,7 +28,11 @@
 
 #ifdef __NVCC__
 #    pragma push
-#    pragma diag_suppress 940
+#    if __CUDACC_VER_MAJOR__ * 1000 + __CUDACC_VER_MINOR__ >= 11005
+#        pragma nv_diag_suppress 940
+#    else
+#        pragma diag_suppress 940
+#    endif
 #endif
 
 #include "ArrayExtents.hpp"
