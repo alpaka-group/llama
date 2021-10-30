@@ -122,8 +122,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9d15b2a33e1f01f9776dfa520ea88fb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ccb3c54b6cef2fa3b40d6c6be13a0ac"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Split.html#a9ccb3c54b6cef2fa3b40d6c6be13a0ac">extents</a> () const -&gt; <a class="el" href="structllama_1_1mapping_1_1Split.html#ad10adfa33f74f840ce950da5602c8c20">ArrayExtents</a></td></tr>
 <tr class="separator:a9ccb3c54b6cef2fa3b40d6c6be13a0ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ebb3d470285932c80dbb0f9dcbd41b4"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Split.html#a1ebb3d470285932c80dbb0f9dcbd41b4">blobSize</a> (std::size_t i) const -&gt; std::size_t</td></tr>
-<tr class="separator:a1ebb3d470285932c80dbb0f9dcbd41b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4229fd170056ccca83ea8f277fe5df74"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Split.html#a4229fd170056ccca83ea8f277fe5df74">blobSize</a> ([[maybe_unused]] std::size_t i) const -&gt; std::size_t</td></tr>
+<tr class="separator:a4229fd170056ccca83ea8f277fe5df74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a48cc12f222f0356bc6f15451d4da3d23"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
 <tr class="memitem:a48cc12f222f0356bc6f15451d4da3d23"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Split.html#a48cc12f222f0356bc6f15451d4da3d23">blobNrAndOffset</a> (<a class="el" href="structllama_1_1mapping_1_1Split.html#a14652d1ef9319a3361f0b5f91373c732">ArrayIndex</a> ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt;={}) const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a></td></tr>
 <tr class="separator:a48cc12f222f0356bc6f15451d4da3d23"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -402,8 +402,8 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 
 </div>
 </div>
-<a id="a1ebb3d470285932c80dbb0f9dcbd41b4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1ebb3d470285932c80dbb0f9dcbd41b4">&#9670;&nbsp;</a></span>blobSize()</h2>
+<a id="a4229fd170056ccca83ea8f277fe5df74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4229fd170056ccca83ea8f277fe5df74">&#9670;&nbsp;</a></span>blobSize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -416,7 +416,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename RecordCoordF
         <tr>
           <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1Split.html">llama::mapping::Split</a>&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;::blobSize </td>
           <td>(</td>
-          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramtype">[[maybe_unused] ] std::size_t&#160;</td>
           <td class="paramname"><em>i</em></td><td>)</td>
           <td> const -&gt; std::size_t
         </td>
@@ -535,7 +535,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename RecordCoordF
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1Split.html">Split</a></li>
-    <li class="footer">Generated on Fri Oct 29 2021 15:12:11 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sat Oct 30 2021 14:13:05 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
