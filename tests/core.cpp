@@ -225,10 +225,10 @@ TEST_CASE("GetType")
 TEST_CASE("GetTags")
 {
     // clang-format off
-    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::RecordCoord<0, 0>>, boost::mp11::mp_list<llama::NoName, tag::Pos, tag::X >>);
-    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::RecordCoord<0   >>, boost::mp11::mp_list<llama::NoName, tag::Pos         >>);
-    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::RecordCoord<    >>, boost::mp11::mp_list<llama::NoName                   >>);
-    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::RecordCoord<2, 1>>, boost::mp11::mp_list<llama::NoName, tag::Vel, tag::Y >>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::RecordCoord<0, 0>>, boost::mp11::mp_list<tag::Pos, tag::X >>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::RecordCoord<0   >>, boost::mp11::mp_list<tag::Pos         >>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::RecordCoord<    >>, boost::mp11::mp_list<                 >>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::RecordCoord<2, 1>>, boost::mp11::mp_list<tag::Vel, tag::Y >>);
     // clang-format on
 }
 

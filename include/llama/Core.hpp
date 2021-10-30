@@ -79,47 +79,57 @@ namespace llama
 
     namespace internal
     {
-        template<typename CurrTag, typename RecordDim, typename RecordCoord>
+        template<typename RecordDim, typename RecordCoord>
         struct GetTagsImpl;
 
-        template<typename CurrTag, typename... Fields, std::size_t FirstCoord, std::size_t... Coords>
-        struct GetTagsImpl<CurrTag, Record<Fields...>, RecordCoord<FirstCoord, Coords...>>
+        template<typename... Fields, std::size_t FirstCoord, std::size_t... Coords>
+        struct GetTagsImpl<Record<Fields...>, RecordCoord<FirstCoord, Coords...>>
         {
             using Field = boost::mp11::mp_at_c<boost::mp11::mp_list<Fields...>, FirstCoord>;
             using ChildTag = GetFieldTag<Field>;
             using ChildType = GetFieldType<Field>;
-            using type = boost::mp11::
-                mp_push_front<typename GetTagsImpl<ChildTag, ChildType, RecordCoord<Coords...>>::type, CurrTag>;
+            using type
+                = boost::mp11::mp_push_front<typename GetTagsImpl<ChildType, RecordCoord<Coords...>>::type, ChildTag>;
         };
 
-        template<
-            typename CurrTag,
-            typename ChildType,
-            std::size_t Count,
-            std::size_t FirstCoord,
-            std::size_t... Coords>
-        struct GetTagsImpl<CurrTag, ChildType[Count], RecordCoord<FirstCoord, Coords...>>
+        template<typename ChildType, std::size_t Count, std::size_t FirstCoord, std::size_t... Coords>
+        struct GetTagsImpl<ChildType[Count], RecordCoord<FirstCoord, Coords...>>
         {
             using ChildTag = RecordCoord<FirstCoord>;
-            using type = boost::mp11::
-                mp_push_front<typename GetTagsImpl<ChildTag, ChildType, RecordCoord<Coords...>>::type, CurrTag>;
+            using type
+                = boost::mp11::mp_push_front<typename GetTagsImpl<ChildType, RecordCoord<Coords...>>::type, ChildTag>;
         };
 
-        template<typename CurrTag, typename T>
-        struct GetTagsImpl<CurrTag, T, RecordCoord<>>
+        template<typename T>
+        struct GetTagsImpl<T, RecordCoord<>>
         {
-            using type = boost::mp11::mp_list<CurrTag>;
+            using type = boost::mp11::mp_list<>;
         };
     } // namespace internal
 
     /// Get the tags of all \ref Field%s from the root of the record dimension tree until to the node identified by
     /// \ref RecordCoord.
     template<typename RecordDim, typename RecordCoord>
-    using GetTags = typename internal::GetTagsImpl<NoName, RecordDim, RecordCoord>::type;
+    using GetTags = typename internal::GetTagsImpl<RecordDim, RecordCoord>::type;
+
+    namespace internal
+    {
+        template<typename RecordDim, typename RecordCoord>
+        struct GetTagImpl
+        {
+            using type = boost::mp11::mp_back<GetTags<RecordDim, RecordCoord>>;
+        };
+
+        template<typename RecordDim>
+        struct GetTagImpl<RecordDim, RecordCoord<>>
+        {
+            using type = NoName;
+        };
+    } // namespace internal
 
     /// Get the tag of the \ref Field at a \ref RecordCoord inside the record dimension tree.
     template<typename RecordDim, typename RecordCoord>
-    using GetTag = boost::mp11::mp_back<GetTags<RecordDim, RecordCoord>>;
+    using GetTag = typename internal::GetTagImpl<RecordDim, RecordCoord>::type;
 
     /// Is true if, starting at two coordinates in two record dimensions, all subsequent nodes in the record dimension
     /// tree have the same tag.
