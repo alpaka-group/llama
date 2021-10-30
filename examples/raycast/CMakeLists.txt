@@ -6,7 +6,7 @@ if (NOT TARGET llama::llama)
 	find_package(llama CONFIG REQUIRED)
 endif()
 add_executable(${PROJECT_NAME} raycast.cpp)
-target_include_directories(${PROJECT_NAME} PRIVATE ../../thirdparty/stb/include)
+target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ../../thirdparty/stb/include)
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 target_link_libraries(${PROJECT_NAME} PRIVATE tinyobjloader::tinyobjloader llama::llama)
 
