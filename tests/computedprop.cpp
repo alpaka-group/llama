@@ -56,9 +56,9 @@ namespace
 
             const auto length = std::sqrt(crossx * crossx + crossy * crossy + crossz * crossz);
 
-            const auto normalx = crossx / length;
-            const auto normaly = crossy / length;
-            const auto normalz = crossz / length;
+            [[maybe_unused]] const auto normalx = crossx / length;
+            [[maybe_unused]] const auto normaly = crossy / length;
+            [[maybe_unused]] const auto normalz = crossz / length;
 
             using DC = llama::RecordCoord<RecordCoords...>;
             if constexpr(std::is_same_v<DC, llama::RecordCoord<3, 0>>)
