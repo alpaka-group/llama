@@ -1,5 +1,0 @@
-var structllama_1_1internal_1_1GetTagsImpl_3_01CurrTag_00_01ChildType_0fCount_0e_00_01RecordCoord_3_39be958474f7189ffb882234646363f8 =
-[
-    [ "ChildTag", "structllama_1_1internal_1_1GetTagsImpl_3_01CurrTag_00_01ChildType_0fCount_0e_00_01RecordCoord_3_39be958474f7189ffb882234646363f8.html#aefe5fd09a15fcb1a1cd210d501e00991", null ],
-    [ "type", "structllama_1_1internal_1_1GetTagsImpl_3_01CurrTag_00_01ChildType_0fCount_0e_00_01RecordCoord_3_39be958474f7189ffb882234646363f8.html#a556e26e063f35ce1b57bfaff191adc30", null ]
-];

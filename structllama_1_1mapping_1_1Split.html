@@ -103,11 +103,11 @@ Public Types</h2></td></tr>
 <tr class="separator:a14652d1ef9319a3361f0b5f91373c732"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6009d5d660d810dea23c84f90594e560"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Split.html#a6009d5d660d810dea23c84f90594e560">RecordDim</a> = TRecordDim</td></tr>
 <tr class="separator:a6009d5d660d810dea23c84f90594e560"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a682b8f9368a3fbb7a42c0cff8ff67597"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Split.html#a682b8f9368a3fbb7a42c0cff8ff67597">RecordDimPartitions</a> = decltype(<a class="el" href="namespacellama_1_1mapping_1_1internal.html#a6e7e517f779808ecc12e1549170d2c16">internal::partitionRecordDim</a>(<a class="el" href="structllama_1_1mapping_1_1Split.html#a6009d5d660d810dea23c84f90594e560">RecordDim</a>{}, RecordCoordForMapping1{}))</td></tr>
-<tr class="separator:a682b8f9368a3fbb7a42c0cff8ff67597"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28eaff4176cd793388c247b069af68b0"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Split.html#a28eaff4176cd793388c247b069af68b0">RecordDim1</a> = boost::mp11::mp_first&lt; <a class="el" href="structllama_1_1mapping_1_1Split.html#a682b8f9368a3fbb7a42c0cff8ff67597">RecordDimPartitions</a> &gt;</td></tr>
+<tr class="memitem:a265adac4a4570caf3b8cdb67db39b44b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Split.html#a265adac4a4570caf3b8cdb67db39b44b">RecordDimPartitions</a> = typename <a class="el" href="structllama_1_1mapping_1_1internal_1_1PartionedRecordDim.html">internal::PartionedRecordDim</a>&lt; <a class="el" href="structllama_1_1mapping_1_1Split.html#a6009d5d660d810dea23c84f90594e560">RecordDim</a>, RecordCoordForMapping1 &gt;::type</td></tr>
+<tr class="separator:a265adac4a4570caf3b8cdb67db39b44b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28eaff4176cd793388c247b069af68b0"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Split.html#a28eaff4176cd793388c247b069af68b0">RecordDim1</a> = boost::mp11::mp_first&lt; <a class="el" href="structllama_1_1mapping_1_1Split.html#a265adac4a4570caf3b8cdb67db39b44b">RecordDimPartitions</a> &gt;</td></tr>
 <tr class="separator:a28eaff4176cd793388c247b069af68b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07b155e3bd5d0f74618e7818c1e4ba5f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Split.html#a07b155e3bd5d0f74618e7818c1e4ba5f">RecordDim2</a> = boost::mp11::mp_second&lt; <a class="el" href="structllama_1_1mapping_1_1Split.html#a682b8f9368a3fbb7a42c0cff8ff67597">RecordDimPartitions</a> &gt;</td></tr>
+<tr class="memitem:a07b155e3bd5d0f74618e7818c1e4ba5f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Split.html#a07b155e3bd5d0f74618e7818c1e4ba5f">RecordDim2</a> = boost::mp11::mp_second&lt; <a class="el" href="structllama_1_1mapping_1_1Split.html#a265adac4a4570caf3b8cdb67db39b44b">RecordDimPartitions</a> &gt;</td></tr>
 <tr class="separator:a07b155e3bd5d0f74618e7818c1e4ba5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93be969da1394375c5fe928649e698c0"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Split.html#a93be969da1394375c5fe928649e698c0">Mapping1</a> = MappingTemplate1&lt; <a class="el" href="structllama_1_1mapping_1_1Split.html#ad10adfa33f74f840ce950da5602c8c20">ArrayExtents</a>, <a class="el" href="structllama_1_1mapping_1_1Split.html#a28eaff4176cd793388c247b069af68b0">RecordDim1</a> &gt;</td></tr>
 <tr class="separator:a93be969da1394375c5fe928649e698c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -146,7 +146,7 @@ struct llama::mapping::Split&lt; TArrayExtents, TRecordDim, RecordCoordForMappin
 
 <p>Mapping which splits off a part of the record dimension and maps it differently then the rest. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">RecordCoordForMapping1</td><td>A <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> selecting the part of the record dimension to be mapped differently. </td></tr>
+    <tr><td class="paramname">RecordCoordForMapping1</td><td>A <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> or a list of RecordCoords selecting the part of the record dimension to be mapped differently. </td></tr>
     <tr><td class="paramname">MappingTemplate1</td><td>The mapping used for the selected part of the record dimension. </td></tr>
     <tr><td class="paramname">MappingTemplate2</td><td>The mapping used for the not selected part of the record dimension. </td></tr>
     <tr><td class="paramname">SeparateBlobs</td><td>If true, both pieces of the record dimension are mapped to separate blobs. </td></tr>
@@ -154,7 +154,7 @@ struct llama::mapping::Split&lt; TArrayExtents, TRecordDim, RecordCoordForMappin
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00065">65</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00091">91</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="ad10adfa33f74f840ce950da5602c8c20"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad10adfa33f74f840ce950da5602c8c20">&#9670;&nbsp;</a></span>ArrayExtents</h2>
@@ -170,7 +170,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename RecordCoordF
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00067">67</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00093">93</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
 
 </div>
 </div>
@@ -188,7 +188,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename RecordCoordF
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00068">68</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00094">94</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
 
 </div>
 </div>
@@ -206,7 +206,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename RecordCoordF
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00075">75</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00101">101</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
 
 </div>
 </div>
@@ -224,7 +224,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename RecordCoordF
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00076">76</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00102">102</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
 
 </div>
 </div>
@@ -242,7 +242,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename RecordCoordF
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00069">69</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00095">95</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
 
 </div>
 </div>
@@ -255,12 +255,12 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename RecordCoordF
 template&lt;typename TArrayExtents , typename TRecordDim , typename RecordCoordForMapping1 , template&lt; typename... &gt; typename MappingTemplate1, template&lt; typename... &gt; typename MappingTemplate2, bool SeparateBlobs = false&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1Split.html">llama::mapping::Split</a>&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;::<a class="el" href="structllama_1_1mapping_1_1Split.html#a28eaff4176cd793388c247b069af68b0">RecordDim1</a> =  boost::mp11::mp_first&lt;<a class="el" href="structllama_1_1mapping_1_1Split.html#a682b8f9368a3fbb7a42c0cff8ff67597">RecordDimPartitions</a>&gt;</td>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1Split.html">llama::mapping::Split</a>&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;::<a class="el" href="structllama_1_1mapping_1_1Split.html#a28eaff4176cd793388c247b069af68b0">RecordDim1</a> =  boost::mp11::mp_first&lt;<a class="el" href="structllama_1_1mapping_1_1Split.html#a265adac4a4570caf3b8cdb67db39b44b">RecordDimPartitions</a>&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00072">72</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00098">98</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
 
 </div>
 </div>
@@ -273,17 +273,17 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename RecordCoordF
 template&lt;typename TArrayExtents , typename TRecordDim , typename RecordCoordForMapping1 , template&lt; typename... &gt; typename MappingTemplate1, template&lt; typename... &gt; typename MappingTemplate2, bool SeparateBlobs = false&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1Split.html">llama::mapping::Split</a>&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;::<a class="el" href="structllama_1_1mapping_1_1Split.html#a07b155e3bd5d0f74618e7818c1e4ba5f">RecordDim2</a> =  boost::mp11::mp_second&lt;<a class="el" href="structllama_1_1mapping_1_1Split.html#a682b8f9368a3fbb7a42c0cff8ff67597">RecordDimPartitions</a>&gt;</td>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1Split.html">llama::mapping::Split</a>&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;::<a class="el" href="structllama_1_1mapping_1_1Split.html#a07b155e3bd5d0f74618e7818c1e4ba5f">RecordDim2</a> =  boost::mp11::mp_second&lt;<a class="el" href="structllama_1_1mapping_1_1Split.html#a265adac4a4570caf3b8cdb67db39b44b">RecordDimPartitions</a>&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00073">73</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00099">99</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a682b8f9368a3fbb7a42c0cff8ff67597"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a682b8f9368a3fbb7a42c0cff8ff67597">&#9670;&nbsp;</a></span>RecordDimPartitions</h2>
+<a id="a265adac4a4570caf3b8cdb67db39b44b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a265adac4a4570caf3b8cdb67db39b44b">&#9670;&nbsp;</a></span>RecordDimPartitions</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -291,12 +291,12 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename RecordCoordF
 template&lt;typename TArrayExtents , typename TRecordDim , typename RecordCoordForMapping1 , template&lt; typename... &gt; typename MappingTemplate1, template&lt; typename... &gt; typename MappingTemplate2, bool SeparateBlobs = false&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1Split.html">llama::mapping::Split</a>&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;::<a class="el" href="structllama_1_1mapping_1_1Split.html#a682b8f9368a3fbb7a42c0cff8ff67597">RecordDimPartitions</a> =  decltype(<a class="el" href="namespacellama_1_1mapping_1_1internal.html#a6e7e517f779808ecc12e1549170d2c16">internal::partitionRecordDim</a>(<a class="el" href="structllama_1_1mapping_1_1Split.html#a6009d5d660d810dea23c84f90594e560">RecordDim</a>{}, RecordCoordForMapping1{}))</td>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1Split.html">llama::mapping::Split</a>&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;::<a class="el" href="structllama_1_1mapping_1_1Split.html#a265adac4a4570caf3b8cdb67db39b44b">RecordDimPartitions</a> =  typename <a class="el" href="structllama_1_1mapping_1_1internal_1_1PartionedRecordDim.html">internal::PartionedRecordDim</a>&lt;<a class="el" href="structllama_1_1mapping_1_1Split.html#a6009d5d660d810dea23c84f90594e560">RecordDim</a>, RecordCoordForMapping1&gt;::type</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00071">71</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00097">97</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
 
 </div>
 </div>
@@ -354,7 +354,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename RecordCoordF
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00085">85</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00111">111</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
 
 </div>
 </div>
@@ -398,7 +398,7 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00107">107</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00133">133</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
 
 </div>
 </div>
@@ -429,7 +429,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename RecordCoordF
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00094">94</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00120">120</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
 
 </div>
 </div>
@@ -459,7 +459,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename RecordCoordF
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00089">89</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00115">115</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
 
 </div>
 </div>
@@ -486,7 +486,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename RecordCoordF
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00078">78</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00104">104</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
 
 </div>
 </div>
@@ -504,7 +504,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename RecordCoordF
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00134">134</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00154">154</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
 
 </div>
 </div>
@@ -522,7 +522,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename RecordCoordF
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00135">135</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00155">155</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
 
 </div>
 </div>
@@ -535,7 +535,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename RecordCoordF
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1Split.html">Split</a></li>
-    <li class="footer">Generated on Sat Oct 30 2021 14:13:05 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sat Oct 30 2021 16:27:19 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

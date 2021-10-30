@@ -85,7 +85,9 @@ $(document).ready(function(){initNavTree('Split_8hpp.html',''); initResizable();
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">Split.hpp File Reference</div>  </div>
 </div><!--header-->
@@ -133,9 +135,15 @@ $(document).ready(function(){initNavTree('Split_8hpp.html',''); initResizable();
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html">llama::mapping::internal::PartitionFoldOpImpl&lt; Acc, TagList &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1PartionedRecordDim.html">llama::mapping::internal::PartionedRecordDim&lt; RecordDim, RecordCoordForMapping1 &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1IsSelectedPredicate.html">llama::mapping::internal::IsSelectedPredicate&lt; RC &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Split.html">llama::mapping::Split&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1PreconfiguredSplit.html">llama::mapping::PreconfiguredSplit&lt; RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1PreconfiguredSplit.html">llama::mapping::PreconfiguredSplit&lt; RecordCoordsForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -147,14 +155,26 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespacellama_1_1mapping_1_1internal"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html">llama::mapping::internal</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a580e552437b8ec7bdbbfbd737ecc175d"><td class="memTemplParams" colspan="2">template&lt;typename Acc , typename TagList &gt; </td></tr>
+<tr class="memitem:a580e552437b8ec7bdbbfbd737ecc175d"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a580e552437b8ec7bdbbfbd737ecc175d">llama::mapping::internal::PartitionFoldOp</a> = typename PartitionFoldOpImpl&lt; Acc, TagList &gt;::type</td></tr>
+<tr class="separator:a580e552437b8ec7bdbbfbd737ecc175d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a6e7e517f779808ecc12e1549170d2c16"><td class="memTemplParams" colspan="2">template&lt;typename... Fields, std::size_t FirstCoord, std::size_t... Coords&gt; </td></tr>
 <tr class="memitem:a6e7e517f779808ecc12e1549170d2c16"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a6e7e517f779808ecc12e1549170d2c16">llama::mapping::internal::partitionRecordDim</a> (Record&lt; Fields... &gt;, RecordCoord&lt; FirstCoord, Coords... &gt;)</td></tr>
 <tr class="separator:a6e7e517f779808ecc12e1549170d2c16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7927f944cddebbb1667e82924459b46c"><td class="memTemplParams" colspan="2">template&lt;std::size_t FirstDstCoord, std::size_t... DstCoords, std::size_t FirstSkippedCoord, std::size_t... SkippedCoords&gt; </td></tr>
-<tr class="memitem:a7927f944cddebbb1667e82924459b46c"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a7927f944cddebbb1667e82924459b46c">llama::mapping::internal::offsetCoord</a> (RecordCoord&lt; FirstDstCoord, DstCoords... &gt;, RecordCoord&lt; FirstSkippedCoord, SkippedCoords... &gt;)</td></tr>
-<tr class="separator:a7927f944cddebbb1667e82924459b46c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a088d9be1b205572462914646311d2e2e"><td class="memTemplParams" colspan="2">template&lt;typename... Fields, typename... RCs&gt; </td></tr>
+<tr class="memitem:a088d9be1b205572462914646311d2e2e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a088d9be1b205572462914646311d2e2e">llama::mapping::internal::partitionRecordDim</a> (Record&lt; Fields... &gt;, boost::mp11::mp_list&lt; RCs... &gt;)</td></tr>
+<tr class="separator:a088d9be1b205572462914646311d2e2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a72f565b64d0dec287502e69e8ffd2e01"><td class="memTemplParams" colspan="2">template&lt;typename RC , typename RecordCoordForMapping1 &gt; </td></tr>
+<tr class="memitem:a72f565b64d0dec287502e69e8ffd2e01"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a72f565b64d0dec287502e69e8ffd2e01">llama::mapping::internal::isSelected</a> = RecordCoordCommonPrefixIsSame&lt;RecordCoordForMapping1, RC&gt;</td></tr>
+<tr class="separator:a72f565b64d0dec287502e69e8ffd2e01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -162,7 +182,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="Split_8hpp.html">Split.hpp</a></li>
-    <li class="footer">Generated on Sat Oct 30 2021 14:13:05 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sat Oct 30 2021 16:27:19 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

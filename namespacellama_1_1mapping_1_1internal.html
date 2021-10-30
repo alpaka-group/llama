@@ -83,13 +83,24 @@ $(document).ready(function(){initNavTree('namespacellama_1_1mapping_1_1internal.
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">llama::mapping::internal Namespace Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1IsSelectedPredicate.html">IsSelectedPredicate</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1PartionedRecordDim.html">PartionedRecordDim</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html">PartitionFoldOpImpl</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:afb46513e82a723e018572be98ef08d18"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
@@ -104,18 +115,27 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a8c7482b69fbb2e73fe12f9acc59e95a3"><td class="memTemplParams" colspan="2">template&lt;typename A , typename B &gt; </td></tr>
 <tr class="memitem:a8c7482b69fbb2e73fe12f9acc59e95a3"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a8c7482b69fbb2e73fe12f9acc59e95a3">MoreAlignment</a> = std::bool_constant&lt;(alignof(A) &gt; alignof(B))&gt;</td></tr>
 <tr class="separator:a8c7482b69fbb2e73fe12f9acc59e95a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a580e552437b8ec7bdbbfbd737ecc175d"><td class="memTemplParams" colspan="2">template&lt;typename Acc , typename TagList &gt; </td></tr>
+<tr class="memitem:a580e552437b8ec7bdbbfbd737ecc175d"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a580e552437b8ec7bdbbfbd737ecc175d">PartitionFoldOp</a> = typename <a class="el" href="structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html">PartitionFoldOpImpl</a>&lt; Acc, TagList &gt;::type</td></tr>
+<tr class="separator:a580e552437b8ec7bdbbfbd737ecc175d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a6e7e517f779808ecc12e1549170d2c16"><td class="memTemplParams" colspan="2">template&lt;typename... Fields, std::size_t FirstCoord, std::size_t... Coords&gt; </td></tr>
 <tr class="memitem:a6e7e517f779808ecc12e1549170d2c16"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a6e7e517f779808ecc12e1549170d2c16">partitionRecordDim</a> (<a class="el" href="structllama_1_1Record.html">Record</a>&lt; Fields... &gt;, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; FirstCoord, Coords... &gt;)</td></tr>
 <tr class="separator:a6e7e517f779808ecc12e1549170d2c16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7927f944cddebbb1667e82924459b46c"><td class="memTemplParams" colspan="2">template&lt;std::size_t FirstDstCoord, std::size_t... DstCoords, std::size_t FirstSkippedCoord, std::size_t... SkippedCoords&gt; </td></tr>
-<tr class="memitem:a7927f944cddebbb1667e82924459b46c"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a7927f944cddebbb1667e82924459b46c">offsetCoord</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; FirstDstCoord, DstCoords... &gt;, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; FirstSkippedCoord, SkippedCoords... &gt;)</td></tr>
-<tr class="separator:a7927f944cddebbb1667e82924459b46c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a088d9be1b205572462914646311d2e2e"><td class="memTemplParams" colspan="2">template&lt;typename... Fields, typename... RCs&gt; </td></tr>
+<tr class="memitem:a088d9be1b205572462914646311d2e2e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a088d9be1b205572462914646311d2e2e">partitionRecordDim</a> (<a class="el" href="structllama_1_1Record.html">Record</a>&lt; Fields... &gt;, boost::mp11::mp_list&lt; RCs... &gt;)</td></tr>
+<tr class="separator:a088d9be1b205572462914646311d2e2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a475d43fe9e877bb253ddc2bf2cc0545c"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , std::size_t... Coords&gt; </td></tr>
 <tr class="memitem:a475d43fe9e877bb253ddc2bf2cc0545c"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a475d43fe9e877bb253ddc2bf2cc0545c">coordName</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords... &gt;) -&gt; std::string</td></tr>
 <tr class="separator:a475d43fe9e877bb253ddc2bf2cc0545c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a72f565b64d0dec287502e69e8ffd2e01"><td class="memTemplParams" colspan="2">template&lt;typename RC , typename RecordCoordForMapping1 &gt; </td></tr>
+<tr class="memitem:a72f565b64d0dec287502e69e8ffd2e01"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a72f565b64d0dec287502e69e8ffd2e01">isSelected</a> = <a class="el" href="namespacellama.html#a5d62fb6d777b67e3f73b80cc97d1cd44">RecordCoordCommonPrefixIsSame</a>&lt;RecordCoordForMapping1, RC&gt;</td></tr>
+<tr class="separator:a72f565b64d0dec287502e69e8ffd2e01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
 <a id="a761919af792a2052749e060dec4adafe"></a>
@@ -151,6 +171,24 @@ template&lt;typename A , typename B &gt; </div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00190">190</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a580e552437b8ec7bdbbfbd737ecc175d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a580e552437b8ec7bdbbfbd737ecc175d">&#9670;&nbsp;</a></span>PartitionFoldOp</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Acc , typename TagList &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a580e552437b8ec7bdbbfbd737ecc175d">llama::mapping::internal::PartitionFoldOp</a> = typedef typename <a class="el" href="structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html">PartitionFoldOpImpl</a>&lt;Acc, TagList&gt;::type</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00044">44</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
 
 </div>
 </div>
@@ -214,27 +252,24 @@ template&lt;typename RecordDim , std::size_t... Coords&gt; </div>
 
 </div>
 </div>
-<a id="a7927f944cddebbb1667e82924459b46c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7927f944cddebbb1667e82924459b46c">&#9670;&nbsp;</a></span>offsetCoord()</h2>
+<a id="a088d9be1b205572462914646311d2e2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a088d9be1b205572462914646311d2e2e">&#9670;&nbsp;</a></span>partitionRecordDim() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;std::size_t FirstDstCoord, std::size_t... DstCoords, std::size_t FirstSkippedCoord, std::size_t... SkippedCoords&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
+template&lt;typename... Fields, typename... RCs&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">constexpr auto llama::mapping::internal::offsetCoord </td>
+          <td class="memname">auto llama::mapping::internal::partitionRecordDim </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; FirstDstCoord, DstCoords... &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1Record.html">Record</a>&lt; Fields... &gt;&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; FirstSkippedCoord, SkippedCoords... &gt;&#160;</td>
+          <td class="paramtype">boost::mp11::mp_list&lt; RCs... &gt;&#160;</td>
           <td class="paramname">&#160;</td>
         </tr>
         <tr>
@@ -243,19 +278,14 @@ template&lt;std::size_t FirstDstCoord, std::size_t... DstCoords, std::size_t Fir
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00035">35</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00047">47</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a6e7e517f779808ecc12e1549170d2c16"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6e7e517f779808ecc12e1549170d2c16">&#9670;&nbsp;</a></span>partitionRecordDim()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e7e517f779808ecc12e1549170d2c16">&#9670;&nbsp;</a></span>partitionRecordDim() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -286,13 +316,40 @@ template&lt;typename... Fields, std::size_t FirstCoord, std::size_t... Coords&gt
 
 </div>
 </div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="a72f565b64d0dec287502e69e8ffd2e01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72f565b64d0dec287502e69e8ffd2e01">&#9670;&nbsp;</a></span>isSelected</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename RC , typename RecordCoordForMapping1 &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool llama::mapping::internal::isSelected&lt; RC, boost::mp11::mp_list&lt; RecordCoordsForMapping1... &gt; &gt; = <a class="el" href="namespacellama.html#a5d62fb6d777b67e3f73b80cc97d1cd44">RecordCoordCommonPrefixIsSame</a>&lt;RecordCoordForMapping1, RC&gt;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00062">62</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Sat Oct 30 2021 14:13:05 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sat Oct 30 2021 16:27:19 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

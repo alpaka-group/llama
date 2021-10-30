@@ -7,7 +7,7 @@ var structllama_1_1mapping_1_1Split =
     [ "RecordDim", "structllama_1_1mapping_1_1Split.html#a6009d5d660d810dea23c84f90594e560", null ],
     [ "RecordDim1", "structllama_1_1mapping_1_1Split.html#a28eaff4176cd793388c247b069af68b0", null ],
     [ "RecordDim2", "structllama_1_1mapping_1_1Split.html#a07b155e3bd5d0f74618e7818c1e4ba5f", null ],
-    [ "RecordDimPartitions", "structllama_1_1mapping_1_1Split.html#a682b8f9368a3fbb7a42c0cff8ff67597", null ],
+    [ "RecordDimPartitions", "structllama_1_1mapping_1_1Split.html#a265adac4a4570caf3b8cdb67db39b44b", null ],
     [ "Split", "structllama_1_1mapping_1_1Split.html#a788145e5f0f21141694604518a2c401d", null ],
     [ "Split", "structllama_1_1mapping_1_1Split.html#a9d15b2a33e1f01f9776dfa520ea88fb0", null ],
     [ "blobNrAndOffset", "structllama_1_1mapping_1_1Split.html#a48cc12f222f0356bc6f15451d4da3d23", null ],
