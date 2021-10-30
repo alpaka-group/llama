@@ -51,6 +51,13 @@ namespace llama::mapping
             return mp_fold<mp_list<GetTags<Record<Fields...>, RCs>...>, Initial, PartitionFoldOp>{};
         }
 
+        // workaround for nvcc 11.3 and below: we cannot put the decltype() directly into the Split class
+        template<typename RecordDim, typename RecordCoordForMapping1>
+        struct PartionedRecordDim
+        {
+            using type = decltype(partitionRecordDim(RecordDim{}, RecordCoordForMapping1{}));
+        };
+
         template<typename RC, typename RecordCoordForMapping1>
         inline constexpr bool isSelected = RecordCoordCommonPrefixIsSame<RecordCoordForMapping1, RC>;
 
@@ -87,7 +94,7 @@ namespace llama::mapping
         using ArrayIndex = typename ArrayExtents::Index;
         using RecordDim = TRecordDim;
 
-        using RecordDimPartitions = decltype(internal::partitionRecordDim(RecordDim{}, RecordCoordForMapping1{}));
+        using RecordDimPartitions = typename internal::PartionedRecordDim<RecordDim, RecordCoordForMapping1>::type;
         using RecordDim1 = boost::mp11::mp_first<RecordDimPartitions>;
         using RecordDim2 = boost::mp11::mp_second<RecordDimPartitions>;
 
