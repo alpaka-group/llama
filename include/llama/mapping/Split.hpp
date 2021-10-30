@@ -91,7 +91,7 @@ namespace llama::mapping
             return mapping1.extents();
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(std::size_t i) const -> std::size_t
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize([[maybe_unused]] std::size_t i) const -> std::size_t
         {
             if constexpr(SeparateBlobs)
             {

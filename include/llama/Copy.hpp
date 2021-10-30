@@ -146,8 +146,8 @@ namespace llama
         using RecordDim = typename SrcMapping::RecordDim;
         internal::assertTrivialCopyable<RecordDim>();
 
-        static constexpr bool MBSrc = SrcMapping::blobCount > 1;
-        static constexpr bool MBDst = DstMapping::blobCount > 1;
+        [[maybe_unused]] static constexpr bool MBSrc = SrcMapping::blobCount > 1;
+        [[maybe_unused]] static constexpr bool MBDst = DstMapping::blobCount > 1;
         static constexpr auto LanesSrc = internal::aosoaLanes<SrcMapping>;
         static constexpr auto LanesDst = internal::aosoaLanes<DstMapping>;
 
