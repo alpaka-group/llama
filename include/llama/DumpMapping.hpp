@@ -105,6 +105,8 @@ namespace llama
         inline auto cssClass(std::string tags)
         {
             std::replace(begin(tags), end(tags), '.', '_');
+            std::replace(begin(tags), end(tags), '<', '_');
+            std::replace(begin(tags), end(tags), '>', '_');
             return tags;
         };
     } // namespace internal
