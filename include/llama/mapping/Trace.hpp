@@ -3,33 +3,12 @@
 #include "Common.hpp"
 
 #include <atomic>
-#include <boost/core/demangle.hpp>
 #include <iostream>
 #include <string>
 #include <unordered_map>
-#include <vector>
 
 namespace llama::mapping
 {
-    namespace internal
-    {
-        template<typename RecordDim, std::size_t... Coords>
-        auto coordName(RecordCoord<Coords...>) -> std::string
-        {
-            using Tags = GetTags<RecordDim, RecordCoord<Coords...>>;
-
-            std::string r;
-            boost::mp11::mp_for_each<Tags>(
-                [&](auto tag)
-                {
-                    if(!r.empty())
-                        r += '.';
-                    r += structName(tag);
-                });
-            return r;
-        }
-    } // namespace internal
-
     /// Forwards all calls to the inner mapping. Traces all accesses made through this mapping and prints a summary on
     /// destruction.
     /// \tparam Mapping The type of the inner mapping.
@@ -48,7 +27,7 @@ namespace llama::mapping
             : mapping(mapping)
             , printOnDestruction(printOnDestruction)
         {
-            forEachLeafCoord<RecordDim>([&](auto rc) { fieldHits[internal::coordName<RecordDim>(rc)] = 0; });
+            forEachLeafCoord<RecordDim>([&](auto rc) { fieldHits[recordCoordTags<RecordDim>(rc)] = 0; });
         }
 
         Trace(const Trace&) = delete;
@@ -78,7 +57,7 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayIndex ai, RecordCoord<RecordCoords...> rc = {}) const
             -> NrAndOffset
         {
-            const static auto name = internal::coordName<RecordDim>(RecordCoord<RecordCoords...>{});
+            const static auto name = recordCoordTags<RecordDim>(RecordCoord<RecordCoords...>{});
             fieldHits.at(name)++;
 
             LLAMA_FORCE_INLINE_RECURSIVE return mapping.blobNrAndOffset(ai, rc);

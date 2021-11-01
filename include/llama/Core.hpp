@@ -9,6 +9,7 @@
 
 #include <boost/core/demangle.hpp>
 #include <iostream>
+#include <string>
 #include <type_traits>
 
 namespace llama
@@ -654,4 +655,28 @@ namespace llama
     using MergedRecordDims = typename decltype(internal::mergeRecordDimsImpl(
         boost::mp11::mp_identity<RecordDimA>{},
         boost::mp11::mp_identity<RecordDimB>{}))::type;
+
+    /// Returns the tags interspersed by '.' represented by the given record coord in the given record dimension.
+    template<typename RecordDim, std::size_t... Coords>
+    auto recordCoordTags(RecordCoord<Coords...>) -> std::string
+    {
+        using Tags = GetTags<RecordDim, RecordCoord<Coords...>>;
+
+        std::string r;
+        boost::mp11::mp_for_each<Tags>(
+            [&](auto tag)
+            {
+                using Tag = decltype(tag);
+                if(!r.empty())
+                    r += '.';
+                if constexpr(isRecordCoord<Tag>)
+                {
+                    static_assert(Tag::size == 1);
+                    r += std::to_string(Tag::front); // handle array indices
+                }
+                else
+                    r += structName(tag);
+            });
+        return r;
+    }
 } // namespace llama
