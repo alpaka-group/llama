@@ -53,6 +53,7 @@ var Core_8hpp =
     [ "mergeRecordDimsImpl", "Core_8hpp.html#a5e0917bdc10f5989a5a46c308d880f1c", null ],
     [ "mp_for_each_inlined", "Core_8hpp.html#af16d07d01be7acc8ced82a040bac87da", null ],
     [ "offsetOfImplWorkaround", "Core_8hpp.html#a8420725970ab9da75999e4dfad4e8590", null ],
+    [ "recordCoordTags", "Core_8hpp.html#aa73dcab7bd83ce896605808b5a5c4020", null ],
     [ "roundUpToMultiple", "Core_8hpp.html#ab9c5c0a1ca0698a8871689b9924736ac", null ],
     [ "roundUpToMultiple", "Core_8hpp.html#a365660e6c469c94566ee7fa45aa3e262", null ],
     [ "sizeOfImpl", "Core_8hpp.html#aeab53e4609fe07abfb6f5f2d532cd388", null ],

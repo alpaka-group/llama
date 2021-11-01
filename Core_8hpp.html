@@ -97,6 +97,7 @@ $(document).ready(function(){initNavTree('Core_8hpp.html',''); initResizable(); 
 <code>#include &quot;<a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>&quot;</code><br />
 <code>#include &lt;boost/core/demangle.hpp&gt;</code><br />
 <code>#include &lt;iostream&gt;</code><br />
+<code>#include &lt;string&gt;</code><br />
 <code>#include &lt;type_traits&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for Core.hpp:</div>
@@ -105,13 +106,14 @@ $(document).ready(function(){initNavTree('Core_8hpp.html',''); initResizable(); 
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="Core_8hpp__incl.png" border="0" usemap="#_2home_2runner_2work_2llama_2llama_2include_2llama_2Core_8hpp" alt=""/></div>
 <map name="_2home_2runner_2work_2llama_2llama_2include_2llama_2Core_8hpp" id="_2home_2runner_2work_2llama_2llama_2include_2llama_2Core_8hpp">
-<area shape="rect" title=" " alt="" coords="350,5,567,47"/>
+<area shape="rect" title=" " alt="" coords="402,5,619,47"/>
 <area shape="rect" href="ArrayExtents_8hpp.html" title=" " alt="" coords="130,95,265,121"/>
 <area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="421,169,504,196"/>
 <area shape="rect" title=" " alt="" coords="254,169,346,196"/>
 <area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="340,95,473,121"/>
 <area shape="rect" title=" " alt="" coords="548,95,735,121"/>
 <area shape="rect" title=" " alt="" coords="759,95,839,121"/>
+<area shape="rect" title=" " alt="" coords="863,95,921,121"/>
 <area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="64,169,147,196"/>
 <area shape="rect" title=" " alt="" coords="171,169,229,196"/>
 <area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="5,244,104,271"/>
@@ -318,6 +320,10 @@ Functions</h2></td></tr>
 <tr class="memitem:a5e0917bdc10f5989a5a46c308d880f1c"><td class="memTemplParams" colspan="2">template&lt;typename... FieldsA, typename FieldB , typename... FieldsB, auto pos = FindFieldByTag&lt;Record&lt;FieldsA...&gt;, GetFieldTag&lt;FieldB&gt;&gt;::value&gt; </td></tr>
 <tr class="memitem:a5e0917bdc10f5989a5a46c308d880f1c"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a5e0917bdc10f5989a5a46c308d880f1c">llama::internal::mergeRecordDimsImpl</a> (boost::mp11::mp_identity&lt; Record&lt; FieldsA... &gt;&gt;, boost::mp11::mp_identity&lt; Record&lt; FieldB, FieldsB... &gt;&gt;)</td></tr>
 <tr class="separator:a5e0917bdc10f5989a5a46c308d880f1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa73dcab7bd83ce896605808b5a5c4020"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , std::size_t... Coords&gt; </td></tr>
+<tr class="memitem:aa73dcab7bd83ce896605808b5a5c4020"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aa73dcab7bd83ce896605808b5a5c4020">llama::recordCoordTags</a> (RecordCoord&lt; Coords... &gt;) -&gt; std::string</td></tr>
+<tr class="memdesc:aa73dcab7bd83ce896605808b5a5c4020"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the tags interspersed by '.' represented by the given record coord in the given record dimension.  <a href="namespacellama.html#aa73dcab7bd83ce896605808b5a5c4020">More...</a><br /></td></tr>
+<tr class="separator:aa73dcab7bd83ce896605808b5a5c4020"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -409,7 +415,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Core_8hpp.html">Core.hpp</a></li>
-    <li class="footer">Generated on Sat Oct 30 2021 16:27:19 for Low Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Nov 1 2021 18:19:53 for Low Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
