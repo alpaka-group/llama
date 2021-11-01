@@ -24,42 +24,6 @@ namespace llama
             return {Coords...};
         }
 
-        template<typename Tag>
-        auto tagToString(Tag tag)
-        {
-            return structName(tag);
-        }
-
-        // handle array indices
-        template<std::size_t N>
-        auto tagToString(RecordCoord<N>)
-        {
-            return std::to_string(N);
-        }
-
-        template<typename RecordDim, std::size_t... CoordsBefore, std::size_t CoordCurrent, std::size_t... CoordsAfter>
-        void collectTagsAsStrings(
-            std::vector<std::string>& v,
-            RecordCoord<CoordsBefore...> /*before*/,
-            RecordCoord<CoordCurrent, CoordsAfter...> /*after*/)
-        {
-            using Tag = GetTag<RecordDim, RecordCoord<CoordsBefore..., CoordCurrent>>;
-            v.push_back(tagToString(Tag{}));
-            if constexpr(sizeof...(CoordsAfter) > 0)
-                collectTagsAsStrings<RecordDim>(
-                    v,
-                    RecordCoord<CoordsBefore..., CoordCurrent>{},
-                    RecordCoord<CoordsAfter...>{});
-        }
-
-        template<typename RecordDim, std::size_t... Coords>
-        auto tagsAsStrings(RecordCoord<Coords...>) -> std::vector<std::string>
-        {
-            std::vector<std::string> v;
-            collectTagsAsStrings<RecordDim>(v, RecordCoord<>{}, RecordCoord<Coords...>{});
-            return v;
-        }
-
         inline auto color(const std::vector<std::size_t>& recordCoord) -> std::size_t
         {
             auto c = boost::hash<std::vector<std::size_t>>{}(recordCoord) &0xFFFFFF;
@@ -86,24 +50,12 @@ namespace llama
             }
         }
 
-        inline auto formatDDTags(const std::vector<std::string>& tags)
-        {
-            std::string s;
-            for(const auto& tag : tags)
-            {
-                if(!s.empty())
-                    s += ".";
-                s += tag;
-            }
-            return s;
-        }
-
         template<std::size_t Dim>
         struct FieldBox
         {
             ArrayIndex<Dim> arrayIndex;
             std::vector<std::size_t> recordCoord;
-            std::vector<std::string> recordTags;
+            std::string recordTags;
             NrAndOffset nrAndOffset;
             std::size_t size;
         };
@@ -122,7 +74,7 @@ namespace llama
                         infos.push_back(
                             {ai,
                              internal::toVec(rc),
-                             internal::tagsAsStrings<RecordDim>(rc),
+                             recordCoordTags<RecordDim>(rc),
                              mapping.blobNrAndOffset(ai, rc),
                              sizeof(GetType<RecordDim, decltype(rc)>)});
                     });
@@ -149,6 +101,12 @@ namespace llama
             }
             return boxes;
         }
+
+        inline auto cssClass(std::string tags)
+        {
+            std::replace(begin(tags), end(tags), '.', '_');
+            return tags;
+        };
     } // namespace internal
 
     /// Returns an SVG image visualizing the memory layout created by the given mapping. The created memory blocks are
@@ -240,7 +198,7 @@ namespace llama
                 x + width / 2,
                 y + byteSizeInPixel * 3 / 4,
                 internal::formatArrayIndex(info.arrayIndex),
-                internal::formatDDTags(info.recordTags));
+                info.recordTags);
             if(cropBoxes)
                 svg += R"(</svg>
 )";
@@ -272,18 +230,6 @@ namespace llama
                 end(infos),
                 [](const auto& a, const auto& b) { return a.nrAndOffset == b.nrAndOffset; }),
             end(infos));
-
-        auto cssClass = [](const std::vector<std::string>& tags)
-        {
-            std::string s;
-            for(const auto& tag : tags)
-            {
-                if(!s.empty())
-                    s += "_";
-                s += tag;
-            }
-            return s;
-        };
 
         std::string html;
         html += fmt::format(
@@ -325,7 +271,7 @@ namespace llama
     background-color: #{:X};
 }}
 )",
-                    cssClass(internal::tagsAsStrings<RecordDim>(rc)),
+                    internal::cssClass(recordCoordTags<RecordDim>(rc)),
                     byteSizeInPixel * size,
                     internal::color(internal::toVec(rc)));
             });
@@ -355,9 +301,9 @@ namespace llama
             }
             html += fmt::format(
                 R"(<div class="box {0}" title="{1} {2}">{1} {2}</div>)",
-                cssClass(info.recordTags),
+                internal::cssClass(info.recordTags),
                 internal::formatArrayIndex(info.arrayIndex),
-                internal::formatDDTags(info.recordTags));
+                info.recordTags);
         }
         html += R"(</body>
 </html>)";
