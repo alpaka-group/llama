@@ -9,7 +9,10 @@
 #endif
 
 #if defined(__INTEL_LLVM_COMPILER)
-#    define LLAMA_INDEPENDENT_DATA _Pragma("ivdep")
+// icx supports #pragma ivdep, but it will issue a diagnostic that it needs vectorize(assume_safety) to vectorize.
+// Let's keep both pragmas for now.
+#    define LLAMA_INDEPENDENT_DATA                                                                                    \
+        _Pragma("ivdep") _Pragma("clang loop vectorize(assume_safety) interleave(assume_safety)")
 #elif defined(__clang__)
 #    define LLAMA_INDEPENDENT_DATA _Pragma("clang loop vectorize(assume_safety) interleave(assume_safety)")
 #elif defined(__GNUC__)
