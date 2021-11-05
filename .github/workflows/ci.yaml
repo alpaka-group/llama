@@ -239,9 +239,19 @@ jobs:
           build/tests
 
   build-windows:
-    runs-on: windows-latest
+    runs-on: ${{ matrix.runs-on }}
     env:
       VCPKG_DEFAULT_TRIPLET: x64-windows
+    name: ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: build-windows-VS2019
+            runs-on: windows-2019
+          - name: build-windows-VS2022
+            runs-on: windows-2022
+
     steps:
     - uses: actions/checkout@v2
     - name: install vcpkg
