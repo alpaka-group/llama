@@ -5,6 +5,8 @@
 #include <llama/DumpMapping.hpp>
 #include <string>
 
+// AppleClang 13.0 on MacOS 11.0 crashes (segfault) when compiling any of these tests
+#if !(defined(__APPLE__) && __clang_major__ == 13 && __clang_minor__ == 0)
 namespace
 {
     llama::ArrayExtentsDynamic<1> extents{32};
@@ -285,3 +287,4 @@ TEST_CASE("dump.ParticleAligned.PackedAoS")
 {
     dump(llama::mapping::PackedAoS<ArrayExtents, ParticleAligned>{extents});
 }
+#endif
