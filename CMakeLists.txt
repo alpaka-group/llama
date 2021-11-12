@@ -73,6 +73,7 @@ if (LLAMA_BUILD_EXAMPLES)
 	add_subdirectory("examples/raycast")
 	add_subdirectory("examples/bitpack")
 	add_subdirectory("examples/bytesplit")
+	add_subdirectory("examples/floatpack")
 
 	# alpaka examples
 	find_package(alpaka 0.7.0 QUIET)
