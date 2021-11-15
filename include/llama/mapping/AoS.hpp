@@ -72,7 +72,7 @@ namespace llama::mapping
     using MinAlignedAoS
         = AoS<ArrayExtents, RecordDim, true, LinearizeArrayDimsFunctor, FlattenRecordDimMinimizePadding>;
 
-    /// Array of struct mapping packing the field types tightly, violating the types alignment requirements.
+    /// Array of struct mapping packing the field types tightly, violating the type's alignment requirements.
     /// \see AoS
     template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     using PackedAoS = AoS<ArrayExtents, RecordDim, false, LinearizeArrayDimsFunctor>;

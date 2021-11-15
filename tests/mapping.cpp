@@ -7,8 +7,10 @@ TEMPLATE_LIST_TEST_CASE("mapping.concepts", "", SizeTypes)
         llama::PhysicalMapping<llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<TestType, 2>, Particle>>);
     STATIC_REQUIRE(
         llama::PhysicalMapping<llama::mapping::PackedAoS<llama::ArrayExtentsDynamic<TestType, 2>, Particle>>);
-    STATIC_REQUIRE(
-        llama::PhysicalMapping<llama::mapping::SingleBlobSoA<llama::ArrayExtentsDynamic<TestType, 2>, Particle>>);
+    STATIC_REQUIRE(llama::PhysicalMapping<
+                   llama::mapping::PackedSingleBlobSoA<llama::ArrayExtentsDynamic<TestType, 2>, Particle>>);
+    STATIC_REQUIRE(llama::PhysicalMapping<
+                   llama::mapping::AlignedSingleBlobSoA<llama::ArrayExtentsDynamic<TestType, 2>, Particle>>);
     STATIC_REQUIRE(
         llama::PhysicalMapping<llama::mapping::MultiBlobSoA<llama::ArrayExtentsDynamic<TestType, 2>, Particle>>);
     STATIC_REQUIRE(
@@ -16,7 +18,10 @@ TEMPLATE_LIST_TEST_CASE("mapping.concepts", "", SizeTypes)
 
     STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::AlignedAoS<llama::ArrayExtents<TestType, 2>, Particle>>);
     STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::PackedAoS<llama::ArrayExtents<TestType, 2>, Particle>>);
-    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::SingleBlobSoA<llama::ArrayExtents<TestType, 2>, Particle>>);
+    STATIC_REQUIRE(
+        llama::PhysicalMapping<llama::mapping::PackedSingleBlobSoA<llama::ArrayExtents<TestType, 2>, Particle>>);
+    STATIC_REQUIRE(
+        llama::PhysicalMapping<llama::mapping::AlignedSingleBlobSoA<llama::ArrayExtents<TestType, 2>, Particle>>);
     STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::MultiBlobSoA<llama::ArrayExtents<TestType, 2>, Particle>>);
     STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::AoSoA<llama::ArrayExtents<TestType, 2>, Particle, 8>>);
 
@@ -46,7 +51,8 @@ TEMPLATE_LIST_TEST_CASE("mapping.traits", "", SizeTypes)
 {
     using AAoS = llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<TestType, 2>, Particle>;
     using PAoS = llama::mapping::PackedAoS<llama::ArrayExtentsDynamic<TestType, 2>, Particle>;
-    using SBSoA = llama::mapping::SingleBlobSoA<llama::ArrayExtentsDynamic<TestType, 2>, Particle>;
+    using ASBSoA = llama::mapping::AlignedSingleBlobSoA<llama::ArrayExtentsDynamic<TestType, 2>, Particle>;
+    using PSBSoA = llama::mapping::PackedSingleBlobSoA<llama::ArrayExtentsDynamic<TestType, 2>, Particle>;
     using MBSoA = llama::mapping::MultiBlobSoA<llama::ArrayExtentsDynamic<TestType, 2>, Particle>;
     using AoAoS = llama::mapping::AoSoA<llama::ArrayExtentsDynamic<TestType, 2>, Particle, 8>;
     using One = llama::mapping::One<llama::ArrayExtentsDynamic<TestType, 2>, Particle>;
@@ -65,7 +71,8 @@ TEMPLATE_LIST_TEST_CASE("mapping.traits", "", SizeTypes)
 
     STATIC_REQUIRE(llama::mapping::isAoS<AAoS>);
     STATIC_REQUIRE(llama::mapping::isAoS<PAoS>);
-    STATIC_REQUIRE(!llama::mapping::isAoS<SBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isAoS<ASBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isAoS<PSBSoA>);
     STATIC_REQUIRE(!llama::mapping::isAoS<MBSoA>);
     STATIC_REQUIRE(!llama::mapping::isAoS<AoAoS>);
     STATIC_REQUIRE(!llama::mapping::isAoS<One>);
@@ -78,7 +85,8 @@ TEMPLATE_LIST_TEST_CASE("mapping.traits", "", SizeTypes)
 
     STATIC_REQUIRE(!llama::mapping::isSoA<AAoS>);
     STATIC_REQUIRE(!llama::mapping::isSoA<PAoS>);
-    STATIC_REQUIRE(llama::mapping::isSoA<SBSoA>);
+    STATIC_REQUIRE(llama::mapping::isSoA<ASBSoA>);
+    STATIC_REQUIRE(llama::mapping::isSoA<PSBSoA>);
     STATIC_REQUIRE(llama::mapping::isSoA<MBSoA>);
     STATIC_REQUIRE(!llama::mapping::isSoA<AoAoS>);
     STATIC_REQUIRE(!llama::mapping::isSoA<One>);
@@ -91,7 +99,8 @@ TEMPLATE_LIST_TEST_CASE("mapping.traits", "", SizeTypes)
 
     STATIC_REQUIRE(!llama::mapping::isAoSoA<AAoS>);
     STATIC_REQUIRE(!llama::mapping::isAoSoA<PAoS>);
-    STATIC_REQUIRE(!llama::mapping::isAoSoA<SBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isAoSoA<ASBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isAoSoA<PSBSoA>);
     STATIC_REQUIRE(!llama::mapping::isAoSoA<MBSoA>);
     STATIC_REQUIRE(llama::mapping::isAoSoA<AoAoS>);
     STATIC_REQUIRE(!llama::mapping::isAoSoA<One>);
@@ -104,7 +113,8 @@ TEMPLATE_LIST_TEST_CASE("mapping.traits", "", SizeTypes)
 
     STATIC_REQUIRE(!llama::mapping::isOne<AAoS>);
     STATIC_REQUIRE(!llama::mapping::isOne<PAoS>);
-    STATIC_REQUIRE(!llama::mapping::isOne<SBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isOne<ASBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isOne<PSBSoA>);
     STATIC_REQUIRE(!llama::mapping::isOne<MBSoA>);
     STATIC_REQUIRE(!llama::mapping::isOne<AoAoS>);
     STATIC_REQUIRE(llama::mapping::isOne<One>);
@@ -117,7 +127,8 @@ TEMPLATE_LIST_TEST_CASE("mapping.traits", "", SizeTypes)
 
     STATIC_REQUIRE(!llama::mapping::isNull<AAoS>);
     STATIC_REQUIRE(!llama::mapping::isNull<PAoS>);
-    STATIC_REQUIRE(!llama::mapping::isNull<SBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isNull<ASBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isNull<PSBSoA>);
     STATIC_REQUIRE(!llama::mapping::isNull<MBSoA>);
     STATIC_REQUIRE(!llama::mapping::isNull<AoAoS>);
     STATIC_REQUIRE(!llama::mapping::isNull<One>);
@@ -130,7 +141,8 @@ TEMPLATE_LIST_TEST_CASE("mapping.traits", "", SizeTypes)
 
     STATIC_REQUIRE(!llama::mapping::isBytesplit<AAoS>);
     STATIC_REQUIRE(!llama::mapping::isBytesplit<PAoS>);
-    STATIC_REQUIRE(!llama::mapping::isBytesplit<SBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isBytesplit<ASBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isBytesplit<PSBSoA>);
     STATIC_REQUIRE(!llama::mapping::isBytesplit<MBSoA>);
     STATIC_REQUIRE(!llama::mapping::isBytesplit<AoAoS>);
     STATIC_REQUIRE(!llama::mapping::isBytesplit<One>);
@@ -143,7 +155,8 @@ TEMPLATE_LIST_TEST_CASE("mapping.traits", "", SizeTypes)
 
     STATIC_REQUIRE(!llama::mapping::isChangeType<AAoS>);
     STATIC_REQUIRE(!llama::mapping::isChangeType<PAoS>);
-    STATIC_REQUIRE(!llama::mapping::isChangeType<SBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isChangeType<ASBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isChangeType<PSBSoA>);
     STATIC_REQUIRE(!llama::mapping::isChangeType<MBSoA>);
     STATIC_REQUIRE(!llama::mapping::isChangeType<AoAoS>);
     STATIC_REQUIRE(!llama::mapping::isChangeType<One>);
@@ -156,7 +169,8 @@ TEMPLATE_LIST_TEST_CASE("mapping.traits", "", SizeTypes)
 
     STATIC_REQUIRE(!llama::mapping::isBitPackedIntSoA<AAoS>);
     STATIC_REQUIRE(!llama::mapping::isBitPackedIntSoA<PAoS>);
-    STATIC_REQUIRE(!llama::mapping::isBitPackedIntSoA<SBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isBitPackedIntSoA<ASBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isBitPackedIntSoA<PSBSoA>);
     STATIC_REQUIRE(!llama::mapping::isBitPackedIntSoA<MBSoA>);
     STATIC_REQUIRE(!llama::mapping::isBitPackedIntSoA<AoAoS>);
     STATIC_REQUIRE(!llama::mapping::isBitPackedIntSoA<One>);
@@ -169,7 +183,8 @@ TEMPLATE_LIST_TEST_CASE("mapping.traits", "", SizeTypes)
 
     STATIC_REQUIRE(!llama::mapping::isBitPackedFloatSoA<AAoS>);
     STATIC_REQUIRE(!llama::mapping::isBitPackedFloatSoA<PAoS>);
-    STATIC_REQUIRE(!llama::mapping::isBitPackedFloatSoA<SBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isBitPackedFloatSoA<ASBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isBitPackedFloatSoA<PSBSoA>);
     STATIC_REQUIRE(!llama::mapping::isBitPackedFloatSoA<MBSoA>);
     STATIC_REQUIRE(!llama::mapping::isBitPackedFloatSoA<AoAoS>);
     STATIC_REQUIRE(!llama::mapping::isBitPackedFloatSoA<One>);
@@ -182,7 +197,8 @@ TEMPLATE_LIST_TEST_CASE("mapping.traits", "", SizeTypes)
 
     STATIC_REQUIRE(!llama::mapping::isTrace<AAoS>);
     STATIC_REQUIRE(!llama::mapping::isTrace<PAoS>);
-    STATIC_REQUIRE(!llama::mapping::isTrace<SBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isTrace<ASBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isTrace<PSBSoA>);
     STATIC_REQUIRE(!llama::mapping::isTrace<MBSoA>);
     STATIC_REQUIRE(!llama::mapping::isTrace<AoAoS>);
     STATIC_REQUIRE(!llama::mapping::isTrace<One>);

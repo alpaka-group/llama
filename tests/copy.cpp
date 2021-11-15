@@ -27,10 +27,12 @@ namespace
         llama::mapping::AoS<ArrayExtents, RecordDim, true, llama::mapping::LinearizeArrayDimsFortran>>;
 
     using OtherMappings = boost::mp11::mp_list<
-        llama::mapping::SoA<ArrayExtents, RecordDim, false, llama::mapping::LinearizeArrayDimsCpp>,
-        // llama::mapping::SoA<ArrayExtents, RecordDim, false, llama::mapping::LinearizeArrayDimsFortran>,
-        // llama::mapping::SoA<ArrayExtents, RecordDim, true, llama::mapping::LinearizeArrayDimsCpp>,
-        llama::mapping::SoA<ArrayExtents, RecordDim, true, llama::mapping::LinearizeArrayDimsFortran>,
+        llama::mapping::SoA<ArrayExtents, RecordDim, false, false, llama::mapping::LinearizeArrayDimsCpp>,
+        // llama::mapping::SoA<ArrayExtents, RecordDim, false, false, llama::mapping::LinearizeArrayDimsFortran>,
+        // llama::mapping::SoA<ArrayExtents, RecordDim, true, false, llama::mapping::LinearizeArrayDimsCpp>,
+        llama::mapping::SoA<ArrayExtents, RecordDim, true, false, llama::mapping::LinearizeArrayDimsFortran>,
+        llama::mapping::SoA<ArrayExtents, RecordDim, false, true, llama::mapping::LinearizeArrayDimsCpp>,
+        // llama::mapping::SoA<ArrayExtents, RecordDim, false, true, llama::mapping::LinearizeArrayDimsFortran>,
         llama::mapping::AoSoA<ArrayExtents, RecordDim, 4, llama::mapping::LinearizeArrayDimsCpp>,
         // llama::mapping::AoSoA<ArrayExtents, RecordDim, 4, llama::mapping::LinearizeArrayDimsFortran>,
         // llama::mapping::AoSoA<ArrayExtents, RecordDim, 8, llama::mapping::LinearizeArrayDimsCpp>,

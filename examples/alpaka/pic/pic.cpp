@@ -276,18 +276,18 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& devHost)
         if constexpr(FieldMapping == 3)
             return llama::mapping::SoA<ArrayExtents, V3Real, false>(fieldExtents);
         if constexpr(FieldMapping == 4)
-            return llama::mapping::SoA<ArrayExtents, V3Real, false, llama::mapping::LinearizeArrayDimsFortran>(
+            return llama::mapping::SoA<ArrayExtents, V3Real, false, false, llama::mapping::LinearizeArrayDimsFortran>(
                 fieldExtents);
         if constexpr(FieldMapping == 5)
-            return llama::mapping::SoA<ArrayExtents, V3Real, false, llama::mapping::LinearizeArrayDimsMorton>(
+            return llama::mapping::SoA<ArrayExtents, V3Real, false, false, llama::mapping::LinearizeArrayDimsMorton>(
                 fieldExtents);
         if constexpr(FieldMapping == 6)
             return llama::mapping::SoA<ArrayExtents, V3Real, true>(fieldExtents);
         if constexpr(FieldMapping == 7)
-            return llama::mapping::SoA<ArrayExtents, V3Real, true, llama::mapping::LinearizeArrayDimsFortran>(
+            return llama::mapping::SoA<ArrayExtents, V3Real, true, false, llama::mapping::LinearizeArrayDimsFortran>(
                 fieldExtents);
         if constexpr(FieldMapping == 8)
-            return llama::mapping::SoA<ArrayExtents, V3Real, true, llama::mapping::LinearizeArrayDimsMorton>(
+            return llama::mapping::SoA<ArrayExtents, V3Real, true, false, llama::mapping::LinearizeArrayDimsMorton>(
                 fieldExtents);
         if constexpr(FieldMapping == 9)
             return llama::mapping::AoSoA<ArrayExtents, V3Real, AOSOA_LANES>{fieldExtents};
