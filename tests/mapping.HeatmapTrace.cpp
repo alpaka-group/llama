@@ -54,7 +54,7 @@ TEST_CASE("Heatmap.nbody")
         llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
     run("SingleBlobSoA",
         heatmapSingleBlobSoA,
-        llama::mapping::SingleBlobSoA<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
+        llama::mapping::PackedSingleBlobSoA<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
 }
 
 TEST_CASE("Trace.ctor")
@@ -107,7 +107,7 @@ Mass            10200
 )");
     };
     run(llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
-    run(llama::mapping::SingleBlobSoA<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
+    run(llama::mapping::PackedSingleBlobSoA<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
 }
 
 TEMPLATE_LIST_TEST_CASE("Trace.nbody.reads_writes", "", SizeTypes)
@@ -148,7 +148,7 @@ Mass            10100        100
 )");
     };
     run(llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
-    run(llama::mapping::SingleBlobSoA<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
+    run(llama::mapping::PackedSingleBlobSoA<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
 }
 
 namespace

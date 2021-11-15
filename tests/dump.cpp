@@ -33,9 +33,14 @@ TEST_CASE("dump.Particle.AoS_Packed")
     dump(llama::mapping::PackedAoS<ArrayExtents, Particle>{extents});
 }
 
-TEST_CASE("dump.Particle.SoA_SB")
+TEST_CASE("dump.Particle.SoA_SB_Packed")
 {
-    dump(llama::mapping::SingleBlobSoA<ArrayExtents, Particle>{extents});
+    dump(llama::mapping::PackedSingleBlobSoA<ArrayExtents, Particle>{extents});
+}
+
+TEST_CASE("dump.Particle.SoA_SB_Aligned")
+{
+    dump(llama::mapping::AlignedSingleBlobSoA<ArrayExtents, Particle>{extents});
 }
 
 TEST_CASE("dump.Particle.SoA_MB")
@@ -60,7 +65,7 @@ TEST_CASE("dump.Particle.Split.SoA.AoS.1Buffer")
          ArrayExtents,
          Particle,
          llama::RecordCoord<2>,
-         llama::mapping::SingleBlobSoA,
+         llama::mapping::PackedSingleBlobSoA,
          llama::mapping::PackedAoS>{extents});
 }
 
@@ -71,7 +76,7 @@ TEST_CASE("dump.Particle.Split.SoA.AoS.2Buffer")
          ArrayExtents,
          Particle,
          llama::RecordCoord<2>,
-         llama::mapping::SingleBlobSoA,
+         llama::mapping::PackedSingleBlobSoA,
          llama::mapping::PackedAoS,
          true>{extents});
 }
@@ -101,8 +106,11 @@ TEST_CASE("dump.Particle.Split.AoSoA8.AoS.One.SoA")
          llama::mapping::BindSplit<
              llama::RecordCoord<1>,
              llama::mapping::PackedOne,
-             llama::mapping::
-                 BindSplit<llama::RecordCoord<0>, llama::mapping::PackedAoS, llama::mapping::SingleBlobSoA, true>::fn,
+             llama::mapping::BindSplit<
+                 llama::RecordCoord<0>,
+                 llama::mapping::PackedAoS,
+                 llama::mapping::PackedSingleBlobSoA,
+                 true>::fn,
              true>::fn,
          true>{extents});
 }
@@ -145,9 +153,14 @@ TEST_CASE("dump.ParticleUnaligned.AoS_Aligned_Min")
     dump(llama::mapping::MinAlignedAoS<ArrayExtents, ParticleUnaligned>{extents});
 }
 
-TEST_CASE("dump.ParticleUnaligned.SoA_SB")
+TEST_CASE("dump.ParticleUnaligned.SoA_SB_Packed")
 {
-    dump(llama::mapping::SingleBlobSoA<ArrayExtents, ParticleUnaligned>{extents});
+    dump(llama::mapping::PackedSingleBlobSoA<ArrayExtents, ParticleUnaligned>{extents});
+}
+
+TEST_CASE("dump.ParticleUnaligned.SoA_SB_Aligned")
+{
+    dump(llama::mapping::AlignedSingleBlobSoA<ArrayExtents, ParticleUnaligned>{extents});
 }
 
 TEST_CASE("dump.ParticleUnaligned.SoA_MB")
@@ -181,7 +194,7 @@ TEST_CASE("dump.ParticleUnaligned.Split.SoA.AoS.1Buffer")
          ArrayExtents,
          ParticleUnaligned,
          llama::RecordCoord<1>,
-         llama::mapping::SingleBlobSoA,
+         llama::mapping::PackedSingleBlobSoA,
          llama::mapping::PackedAoS>{extents});
 }
 
@@ -191,7 +204,7 @@ TEST_CASE("dump.ParticleUnaligned.Split.SoA.AoS.2Buffer")
          ArrayExtents,
          ParticleUnaligned,
          llama::RecordCoord<1>,
-         llama::mapping::SingleBlobSoA,
+         llama::mapping::PackedSingleBlobSoA,
          llama::mapping::PackedAoS,
          true>{extents});
 }

@@ -18,11 +18,12 @@ TEST_CASE("view.default-ctor")
     using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
     [[maybe_unused]] llama::View<llama::mapping::AlignedAoS<ArrayExtents, RecordDim>, std::byte*> view1{};
     [[maybe_unused]] llama::View<llama::mapping::PackedAoS<ArrayExtents, RecordDim>, std::byte*> view2{};
-    [[maybe_unused]] llama::View<llama::mapping::SingleBlobSoA<ArrayExtents, RecordDim>, std::byte*> view3{};
-    [[maybe_unused]] llama::View<llama::mapping::MultiBlobSoA<ArrayExtents, RecordDim>, std::byte*> view4{};
-    [[maybe_unused]] llama::View<llama::mapping::One<ArrayExtents, RecordDim>, std::byte*> view5{};
+    [[maybe_unused]] llama::View<llama::mapping::AlignedSingleBlobSoA<ArrayExtents, RecordDim>, std::byte*> view3{};
+    [[maybe_unused]] llama::View<llama::mapping::PackedSingleBlobSoA<ArrayExtents, RecordDim>, std::byte*> view4{};
+    [[maybe_unused]] llama::View<llama::mapping::MultiBlobSoA<ArrayExtents, RecordDim>, std::byte*> view5{};
+    [[maybe_unused]] llama::View<llama::mapping::One<ArrayExtents, RecordDim>, std::byte*> view6{};
     [[maybe_unused]] llama::View<llama::mapping::tree::Mapping<ArrayExtents, RecordDim, llama::Tuple<>>, std::byte*>
-        view6{};
+        view7{};
 }
 
 TEST_CASE("view.move")
@@ -159,7 +160,7 @@ TEST_CASE("view.addresses")
     using ArrayExtents = llama::ArrayExtentsDynamic<int, 2>;
     ArrayExtents extents{16, 16};
 
-    using Mapping = llama::mapping::SingleBlobSoA<ArrayExtents, Particle>;
+    using Mapping = llama::mapping::PackedSingleBlobSoA<ArrayExtents, Particle>;
     Mapping mapping{extents};
     auto view = llama::allocView(mapping);
 

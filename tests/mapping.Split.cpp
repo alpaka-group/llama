@@ -54,9 +54,12 @@ TEST_CASE("mapping.Split.SoA_SingleBlob.AoS_Packed.1Buffer")
     auto extents = ArrayExtents{16, 16};
 
     // we layout Pos as SoA, the rest as AoS
-    auto mapping = llama::mapping::
-        Split<ArrayExtents, Particle, llama::RecordCoord<0>, llama::mapping::SingleBlobSoA, llama::mapping::PackedAoS>{
-            extents};
+    auto mapping = llama::mapping::Split<
+        ArrayExtents,
+        Particle,
+        llama::RecordCoord<0>,
+        llama::mapping::PackedSingleBlobSoA,
+        llama::mapping::PackedAoS>{extents};
 
     STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 14336);
@@ -90,8 +93,11 @@ TEST_CASE("mapping.Split.AoSoA8.AoS_Packed.One.SoA_SingleBlob.4Buffer")
         llama::mapping::BindSplit<
             llama::RecordCoord<1>,
             llama::mapping::PackedOne,
-            llama::mapping::
-                BindSplit<llama::RecordCoord<0>, llama::mapping::PackedAoS, llama::mapping::SingleBlobSoA, true>::fn,
+            llama::mapping::BindSplit<
+                llama::RecordCoord<0>,
+                llama::mapping::PackedAoS,
+                llama::mapping::PackedSingleBlobSoA,
+                true>::fn,
             true>::fn,
         true>{extents};
 
