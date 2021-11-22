@@ -1,4 +1,4 @@
-LLAMA – Low Level Abstraction of Memory Access
+LLAMA – Low-Level Abstraction of Memory Access
 ==============================================
 
 [![ReadTheDocs](https://img.shields.io/badge/Docs-Read%20the%20Docs-blue.svg)](https://llama-doc.readthedocs.io)
