@@ -1,6 +1,6 @@
 .. image:: images/logo.svg
 
-Low Level Abstraction of Memory Access
+Low-Level Abstraction of Memory Access
 ======================================
 
 LLAMA is a C++17 template header-only library for the abstraction of memory
