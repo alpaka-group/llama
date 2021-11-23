@@ -78,7 +78,7 @@ set yrange [] reverse
 set link x2; set link y2
 set ylabel "Cacheline"
 set x2label "Byte"
-plot $data matrix with image axes x2y1
+plot $data matrix with image pixels axes x2y1
 )";
             return f.str();
         }
