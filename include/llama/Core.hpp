@@ -674,4 +674,8 @@ namespace llama
             });
         return r;
     }
+
+    /// Alias for ToT, adding `const` if FromT is const qualified.
+    template<typename FromT, typename ToT>
+    using CopyConst = std::conditional_t<std::is_const_v<FromT>, const ToT, ToT>;
 } // namespace llama
