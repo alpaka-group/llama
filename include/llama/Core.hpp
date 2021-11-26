@@ -437,13 +437,15 @@ namespace llama
     template<typename... Fields>
     inline constexpr std::size_t alignOf<Record<Fields...>> = flatAlignOf<FlatRecordDim<Record<Fields...>>>;
 
+    /// Returns the integral n rounded up to be a multiple of mult.
+    template<typename Integral>
+    [[nodiscard]] LLAMA_FN_HOST_ACC_INLINE constexpr auto roundUpToMultiple(Integral n, Integral mult) -> Integral
+    {
+        return (n + mult - 1) / mult * mult;
+    }
+
     namespace internal
     {
-        constexpr void roundUpToMultiple(std::size_t& value, std::size_t multiple)
-        {
-            value = ((value + multiple - 1) / multiple) * multiple;
-        }
-
         template<typename TypeList, bool Align, bool IncludeTailPadding>
         constexpr auto sizeOfImpl() -> std::size_t
         {
@@ -456,7 +458,7 @@ namespace llama
                                                                  using T = typename decltype(e)::type;
                                                                  if constexpr(Align)
                                                                  {
-                                                                     roundUpToMultiple(size, alignof(T));
+                                                                     size = roundUpToMultiple(size, alignof(T));
                                                                      maxAlign = std::max(maxAlign, alignof(T));
                                                                  }
                                                                  // NOLINTNEXTLINE(readability-misleading-indentation)
@@ -465,8 +467,8 @@ namespace llama
 
             // final padding, so next struct can start right away
             if constexpr(Align && IncludeTailPadding)
-                roundUpToMultiple(size, maxAlign); // TODO(bgruber): we could use flatAlignOf<TypeList> here, at the
-                                                   // cost of more template instantiations
+                size = roundUpToMultiple(size, maxAlign); // TODO(bgruber): we could use flatAlignOf<TypeList> here, at
+                                                          // the cost of more template instantiations
             return size;
         }
 
@@ -487,7 +489,7 @@ namespace llama
         {
             std::size_t offset = offsetOfImpl<Align, TypeList, I - 1> + sizeof(boost::mp11::mp_at_c<TypeList, I - 1>);
             if constexpr(Align)
-                roundUpToMultiple(offset, alignof(boost::mp11::mp_at_c<TypeList, I>));
+                offset = roundUpToMultiple(offset, alignof(boost::mp11::mp_at_c<TypeList, I>));
             return offset;
         }
     } // namespace internal
@@ -556,13 +558,6 @@ namespace llama
         {
         };
     } // namespace internal
-
-    /// Returns the integral n rounded up to be a multiple of mult.
-    template<typename Integral>
-    LLAMA_FN_HOST_ACC_INLINE constexpr auto roundUpToMultiple(Integral n, Integral mult) -> Integral
-    {
-        return (n + mult - 1) / mult * mult;
-    }
 
     namespace internal
     {
