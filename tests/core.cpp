@@ -386,3 +386,11 @@ TEST_CASE("MergedRecordDims")
                        llama::Field<tag::Y, int>,
                        llama::Field<tag::Z, int>>>);
 }
+
+TEST_CASE("CopyConst")
+{
+    STATIC_REQUIRE(std::is_same_v<llama::CopyConst<int, float>, float>);
+    STATIC_REQUIRE(std::is_same_v<llama::CopyConst<const int, float>, const float>);
+    STATIC_REQUIRE(std::is_same_v<llama::CopyConst<int, const float>, const float>);
+    STATIC_REQUIRE(std::is_same_v<llama::CopyConst<const int, const float>, const float>);
+}
