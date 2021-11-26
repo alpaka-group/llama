@@ -132,12 +132,8 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto virtualRecordRelOperator(const LeftRecord& left, const T& right) -> bool
         {
             bool result = true;
-            forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>(
-                [&](auto leftRC) LLAMA_LAMBDA_INLINE {
-                    result &= Functor{}(
-                        left(leftRC),
-                        static_cast<std::remove_reference_t<decltype(left(leftRC))>>(right));
-                });
+            forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>([&](auto leftRC) LLAMA_LAMBDA_INLINE
+                                                                       { result &= Functor{}(left(leftRC), right); });
             return result;
         }
 
