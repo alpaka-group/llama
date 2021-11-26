@@ -962,12 +962,7 @@ TEST_CASE("VirtualRecord.One.size")
 {
     using Mapping = llama::mapping::MinAlignedOne<llama::ArrayExtents<>, Particle>;
     STATIC_REQUIRE(Mapping{}.blobSize(0) == 56);
-
-    struct S : Mapping::ArrayIndex
-    {
-        char c;
-    };
-    STATIC_REQUIRE(sizeof(S) == sizeof(char));
+    STATIC_REQUIRE(std::is_empty_v<Mapping::ArrayIndex>);
 
     [[maybe_unused]] const auto v = llama::allocViewStack<0, Particle>();
     STATIC_REQUIRE(std::is_same_v<typename decltype(v)::Mapping, Mapping>);
