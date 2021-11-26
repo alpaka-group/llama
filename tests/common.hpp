@@ -152,6 +152,7 @@ void iotaCheckView(View& view)
         llama::forEachLeafCoord<RecordDim>(
             [&](auto rc)
             {
+                CAPTURE(ai, rc);
                 using Type = llama::GetType<RecordDim, decltype(rc)>;
                 CHECK(view(ai)(rc) == static_cast<Type>(value));
                 ++value;
