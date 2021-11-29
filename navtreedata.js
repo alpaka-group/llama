@@ -22,7 +22,7 @@ for the JavaScript code in this file
 */
 var NAVTREE =
 [
-  [ "Low Level Abstraction of Memory Access", "index.html", [
+  [ "Low-Level Abstraction of Memory Access", "index.html", [
     [ "LLAMA API documentation", "index.html", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
