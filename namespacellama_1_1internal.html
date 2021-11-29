@@ -213,8 +213,6 @@ Functions</h2></td></tr>
 <tr class="memitem:a2413ee7f2d6487f7e306148cf2b46ac4"><td class="memTemplParams" colspan="2">template&lt;typename TypeList &gt; </td></tr>
 <tr class="memitem:a2413ee7f2d6487f7e306148cf2b46ac4"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a2413ee7f2d6487f7e306148cf2b46ac4">flatAlignOfImpl</a> ()</td></tr>
 <tr class="separator:a2413ee7f2d6487f7e306148cf2b46ac4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a365660e6c469c94566ee7fa45aa3e262"><td class="memItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a365660e6c469c94566ee7fa45aa3e262">roundUpToMultiple</a> (std::size_t &amp;value, std::size_t multiple)</td></tr>
-<tr class="separator:a365660e6c469c94566ee7fa45aa3e262"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeab53e4609fe07abfb6f5f2d532cd388"><td class="memTemplParams" colspan="2">template&lt;typename TypeList , bool Align, bool IncludeTailPadding&gt; </td></tr>
 <tr class="memitem:aeab53e4609fe07abfb6f5f2d532cd388"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#aeab53e4609fe07abfb6f5f2d532cd388">sizeOfImpl</a> () -&gt; std::size_t</td></tr>
 <tr class="separator:aeab53e4609fe07abfb6f5f2d532cd388"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1059,7 +1057,7 @@ template&lt;typename A , std::size_t NA, typename B , std::size_t NB&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00606">606</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00601">601</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1091,7 +1089,7 @@ template&lt;typename A , typename B &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00599">599</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00594">594</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1123,7 +1121,7 @@ template&lt;typename... FieldsA&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00618">618</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00613">613</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1155,7 +1153,7 @@ template&lt;typename... FieldsA, typename FieldB , typename... FieldsB, auto pos
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00628">628</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00623">623</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1224,7 +1222,7 @@ template&lt;bool Align, typename TypeList , std::size_t I&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00486">486</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00488">488</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1290,44 +1288,6 @@ template&lt;bool Align, typename TypeList , std::size_t I&gt; </div>
 
 </div>
 </div>
-<a id="a365660e6c469c94566ee7fa45aa3e262"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a365660e6c469c94566ee7fa45aa3e262">&#9670;&nbsp;</a></span>roundUpToMultiple()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr void llama::internal::roundUpToMultiple </td>
-          <td>(</td>
-          <td class="paramtype">std::size_t &amp;&#160;</td>
-          <td class="paramname"><em>value</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>multiple</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00442">442</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
-
-</div>
-</div>
 <a id="aeab53e4609fe07abfb6f5f2d532cd388"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aeab53e4609fe07abfb6f5f2d532cd388">&#9670;&nbsp;</a></span>sizeOfImpl()</h2>
 
@@ -1354,7 +1314,7 @@ template&lt;typename TypeList , bool Align, bool IncludeTailPadding&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00448">448</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00450">450</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1903,7 +1863,7 @@ template&lt;bool Align, typename TypeList , std::size_t I&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00480">480</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00482">482</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1929,7 +1889,7 @@ template&lt;bool Align, typename TypeList &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00483">483</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00485">485</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1939,7 +1899,7 @@ template&lt;bool Align, typename TypeList &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Mon Nov 29 2021 09:41:55 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Nov 29 2021 10:16:55 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
