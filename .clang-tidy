@@ -5,10 +5,12 @@
 # -cppcoreguidelines-pro-type-reinterpret-cast # we need some reinterpret casts in LLAMA
 # -readability-misleading-indentation # many false positives because of constexpr if
 # -readability-static-accessed-through-instance # flags threadIdx/blockIdx in CUDA code
+# -cert-err58-cpp # errors in Catch2
 Checks: >
     *,
     -bugprone-exception-escape,
     -bugprone-forward-declaration-namespace,
+    -cert-err58-cpp,
     -cert-msc32-c,
     -cert-msc51-cpp,
     -cppcoreguidelines-avoid-c-arrays,
