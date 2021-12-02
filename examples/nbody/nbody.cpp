@@ -5,7 +5,6 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <llama/DumpMapping.hpp>
 #include <llama/llama.hpp>
 #include <omp.h>
 #include <random>

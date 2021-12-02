@@ -11,7 +11,7 @@ target_link_libraries(${PROJECT_NAME} INTERFACE Boost::headers)
 if (fmt_FOUND)
 	target_link_libraries(${PROJECT_NAME} INTERFACE fmt::fmt)
 else()
-	message("The fmt library was not found. You cannot use llama/DumpMapping.hpp")
+	message(WARNING "The fmt library was not found. You cannot use llama's dumping facilities.")
 endif()
 
 # llama::llama to make subdirectory projects work

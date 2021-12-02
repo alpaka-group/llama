@@ -1,7 +1,6 @@
 #include "common.hpp"
 
 #include <fstream>
-#include <llama/DumpMapping.hpp>
 
 TEST_CASE("Split.partitionRecordDim.OneMemberRecord")
 {

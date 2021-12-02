@@ -2,17 +2,14 @@
 
 #pragma once
 
-#if !__has_include(<fmt/format.h>)
-#    error DumpMapping.hpp requires the fmt library
-#endif
+#if __has_include(<fmt/format.h>)
+#    include "ArrayIndexRange.hpp"
+#    include "Core.hpp"
 
-#include "ArrayIndexRange.hpp"
-#include "Core.hpp"
-
-#include <boost/functional/hash.hpp>
-#include <fmt/format.h>
-#include <string>
-#include <vector>
+#    include <boost/functional/hash.hpp>
+#    include <fmt/format.h>
+#    include <string>
+#    include <vector>
 
 namespace llama
 {
@@ -312,3 +309,5 @@ namespace llama
         return html;
     }
 } // namespace llama
+
+#endif

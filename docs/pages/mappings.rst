@@ -244,14 +244,11 @@ Dump visualizations
 -------------------
 
 Sometimes it is hard to image how data will be laid out in memory by a mapping.
-LLAMA can create a grafical representation of a mapping instance as SVG image or HTML document:
+LLAMA can create a graphical representation of a mapping instance as SVG image or HTML document:
 
 .. code-block:: C++
-
-    #include <llama/DumpMapping.hpp>
 
     std::ofstream{filename + ".svg" } << llama::toSvg (mapping);
     std::ofstream{filename + ".html"} << llama::toHtml(mapping);
 
-Since this feature is not often needed, it currently resides in a separate header :cpp:`llama/DumpMapping.hpp`
-and is not included as part of :cpp:`llama.hpp`.
+This feature requires to have libfmt installed.
