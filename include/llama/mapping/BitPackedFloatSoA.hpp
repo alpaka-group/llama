@@ -38,7 +38,7 @@ namespace llama::mapping
         constexpr BitPackedFloatSoA() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr explicit BitPackedFloatSoA(
+        constexpr BitPackedFloatSoA(
             unsigned exponentBits,
             unsigned mantissaBits,
             ArrayExtents extents,
