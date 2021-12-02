@@ -1,5 +1,6 @@
 #include "common.hpp"
 
+#include <filesystem>
 #include <fstream>
 #include <string>
 
@@ -13,8 +14,10 @@ namespace
     template<typename Mapping>
     void dump(const Mapping& mapping)
     {
+        const auto outputDir = std::string{"dump"};
+        std::filesystem::create_directory(outputDir);
         // undocumented Catch feature, see: https://github.com/catchorg/Catch2/issues/510
-        const auto filename = Catch::getResultCapture().getCurrentTestName();
+        const auto filename = outputDir + "/" + Catch::getResultCapture().getCurrentTestName();
         std::ofstream{filename + ".svg"} << llama::toSvg(mapping);
         std::ofstream{filename + ".html"} << llama::toHtml(mapping);
     }
