@@ -106,3 +106,16 @@ TEST_CASE("mapping.BitPackedIntSoA.SInts.Roundtrip")
     for(auto i = 0; i < N; i++)
         CHECK(view(i) == view2(i));
 }
+
+TEST_CASE("mapping.BitPackedIntSoA.bool")
+{
+    // pack 32 bools into 4 bytes
+    const auto n = 32;
+    const auto mapping = llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<1>, bool>{1, {n}};
+    CHECK(mapping.blobSize(0) == n / CHAR_BIT);
+    auto view = llama::allocView(mapping);
+    for(auto i = 0; i < n; i++)
+        view(i) = i % 2 == 0;
+    for(auto i = 0; i < n; i++)
+        CHECK(view(i) == (i % 2 == 0));
+}
