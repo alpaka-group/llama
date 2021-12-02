@@ -111,6 +111,31 @@ TEST_CASE("dump.Particle.Split.AoSoA8.AoS.One.SoA")
          true>{extents});
 }
 
+TEST_CASE("dump.Particle.BitPacked")
+{
+    dump(llama::mapping::Split<
+         ArrayExtents,
+         Particle,
+         llama::RecordCoord<0>,
+         llama::mapping::PreconfiguredSplit<
+             llama::RecordCoord<0, 2>,
+             llama::mapping::BitPackedFloatSoA,
+             llama::mapping::PackedAoS,
+             true>::type,
+         llama::mapping::PreconfiguredSplit<
+             llama::RecordCoord<0>,
+             llama::mapping::PackedOne,
+             llama::mapping::PreconfiguredSplit<
+                 llama::RecordCoord<0>,
+                 llama::mapping::BitPackedFloatSoA,
+                 llama::mapping::BitPackedIntSoA,
+                 true>::type,
+             true>::type,
+         true>{
+        std::tuple{std::tuple{3, 3, extents}, std::tuple{extents}},
+        std::tuple{std::tuple{}, std::tuple{std::tuple{5, 5, extents}, std::tuple{1, extents}}}});
+}
+
 TEST_CASE("dump.ParticleUnaligned.AoS")
 {
     dump(llama::mapping::PackedAoS<ArrayExtents, ParticleUnaligned>{extents});
