@@ -50,7 +50,7 @@ namespace llama::mapping
         constexpr BitPackedIntSoA() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr explicit BitPackedIntSoA(unsigned bits, ArrayExtents extents, RecordDim = {})
+        constexpr BitPackedIntSoA(unsigned bits, ArrayExtents extents, RecordDim = {})
             : ArrayExtents(extents)
             , bits{bits}
         {
