@@ -13,6 +13,17 @@ namespace llama::mapping
 
         template<typename RecordDim>
         using LargestIntegral = boost::mp11::mp_max_element<FlatRecordDim<RecordDim>, HasLargerSize>;
+
+        template<typename T>
+        struct MakeUnsigned : std::make_unsigned<T>
+        {
+        };
+
+        template<>
+        struct MakeUnsigned<bool>
+        {
+            using type = std::uint8_t;
+        };
     } // namespace internal
 
     /// Struct of array mapping using bit packing to reduce size/precision of integral data types. If your record
@@ -24,7 +35,7 @@ namespace llama::mapping
         typename TArrayExtents,
         typename TRecordDim,
         typename LinearizeArrayDimsFunctor = mapping::LinearizeArrayDimsCpp,
-        typename StoredIntegral = std::make_unsigned_t<internal::LargestIntegral<TRecordDim>>>
+        typename StoredIntegral = typename internal::MakeUnsigned<internal::LargestIntegral<TRecordDim>>::type>
     struct BitPackedIntSoA : TArrayExtents
     {
         static_assert(
