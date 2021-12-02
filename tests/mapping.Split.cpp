@@ -162,3 +162,46 @@ TEST_CASE("Split.Multilist.SoA.One")
 
     // std::ofstream{"Split.AoSoA8.AoS.One.SoA.4Buffer.svg"} << llama::toSvg(mapping);
 }
+
+TEST_CASE("Split.BitPacked")
+{
+    // split out Pos and Vel into SoA, the rest into One
+    using ArrayExtents = llama::ArrayExtentsDynamic<1>;
+    auto extents = ArrayExtents{32};
+    auto mapping = llama::mapping::Split<
+        ArrayExtents,
+        Vec3I,
+        llama::RecordCoord<0>,
+        llama::mapping::BitPackedIntSoA,
+        llama::mapping::PreconfiguredSplit<
+            llama::RecordCoord<0>,
+            llama::mapping::BitPackedIntSoA,
+            llama::mapping::PackedAoS,
+            true>::type,
+        true>{{3, extents}, {std::tuple{5, extents}, std::tuple{extents}}};
+    CHECK(mapping.blobSize(0) == 12);
+    CHECK(mapping.blobSize(1) == 20);
+    CHECK(mapping.blobSize(2) == 128);
+
+    std::array<std::array<std::byte, 128>, 3> blobs{};
+
+    STATIC_REQUIRE(mapping.isComputed(llama::RecordCoord<0>{}));
+    mapping.compute({0}, llama::RecordCoord<0>{}, blobs) = 1;
+    mapping.compute({1}, llama::RecordCoord<0>{}, blobs) = 2;
+    mapping.compute({31}, llama::RecordCoord<0>{}, blobs) = 31;
+    CHECK(mapping.compute({0}, llama::RecordCoord<0>{}, blobs) == 1);
+    CHECK(mapping.compute({1}, llama::RecordCoord<0>{}, blobs) == 2);
+    CHECK(mapping.compute({31}, llama::RecordCoord<0>{}, blobs) == 3); // bits cut off
+
+    STATIC_REQUIRE(mapping.isComputed(llama::RecordCoord<1>{}));
+    mapping.compute({0}, llama::RecordCoord<1>{}, blobs) = 1;
+    mapping.compute({1}, llama::RecordCoord<1>{}, blobs) = 2;
+    mapping.compute({31}, llama::RecordCoord<1>{}, blobs) = 31;
+    CHECK(mapping.compute({0}, llama::RecordCoord<1>{}, blobs) == 1);
+    CHECK(mapping.compute({1}, llama::RecordCoord<1>{}, blobs) == 2);
+    CHECK(mapping.compute({31}, llama::RecordCoord<1>{}, blobs) == 15); // bits cut off
+
+    CHECK(mapping.blobNrAndOffset<2>({0}) == llama::NrAndOffset{2, 0});
+    CHECK(mapping.blobNrAndOffset<2>({1}) == llama::NrAndOffset{2, 4});
+    CHECK(mapping.blobNrAndOffset<2>({31}) == llama::NrAndOffset{2, 124});
+}

@@ -112,6 +112,20 @@ namespace llama::mapping
         {
         }
 
+        LLAMA_FN_HOST_ACC_INLINE
+        constexpr Split(Mapping1 mapping1, Mapping2 mapping2)
+            : mapping1(std::move(mapping1))
+            , mapping2(std::move(mapping2))
+        {
+        }
+
+        template<typename... Args1, typename... Args2>
+        LLAMA_FN_HOST_ACC_INLINE constexpr Split(std::tuple<Args1...> mappingArgs1, std::tuple<Args2...> mappingArgs2)
+            : mapping1(std::make_from_tuple<Mapping1>(mappingArgs1))
+            , mapping2(std::make_from_tuple<Mapping2>(mappingArgs2))
+        {
+        }
+
         LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayExtents
         {
             return mapping1.extents();
@@ -148,6 +162,33 @@ namespace llama::mapping
                         nrAndOffset.offset += mapping1.blobSize(i);
                 }
                 return nrAndOffset;
+            }
+        }
+
+        template<std::size_t... RecordCoords>
+        static constexpr auto isComputed(llama::RecordCoord<RecordCoords...>) -> bool
+        {
+            using Tags = GetTags<RecordDim, RecordCoord<RecordCoords...>>;
+            if constexpr(internal::isSelected<RecordCoord<RecordCoords...>, RecordCoordForMapping1>)
+                return llama::isComputed<Mapping1, GetCoordFromTags<RecordDim1, Tags>>;
+            else
+                return llama::isComputed<Mapping2, GetCoordFromTags<RecordDim2, Tags>>;
+        }
+
+        template<std::size_t... RecordCoords, typename Blobs>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto compute(
+            ArrayIndex ai,
+            llama::RecordCoord<RecordCoords...>,
+            Blobs& blobs) const
+        {
+            using Tags = GetTags<RecordDim, RecordCoord<RecordCoords...>>;
+            if constexpr(internal::isSelected<RecordCoord<RecordCoords...>, RecordCoordForMapping1>)
+                return mapping1.compute(ai, GetCoordFromTags<RecordDim1, Tags>{}, blobs);
+            else
+            {
+                // only pass on blobs for mapping 2, so it can index starting from 0
+                auto* blobs2 = &blobs[0] + Mapping1::blobCount;
+                return mapping2.compute(ai, GetCoordFromTags<RecordDim2, Tags>{}, blobs2);
             }
         }
 
