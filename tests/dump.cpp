@@ -1,8 +1,6 @@
 #include "common.hpp"
 
-#include <fmt/core.h>
 #include <fstream>
-#include <llama/DumpMapping.hpp>
 #include <string>
 
 // AppleClang 13.0 on MacOS 11.0 crashes (segfault) when compiling any of these tests

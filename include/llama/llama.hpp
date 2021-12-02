@@ -40,6 +40,7 @@
 #include "BlobAllocators.hpp"
 #include "Copy.hpp"
 #include "Core.hpp"
+#include "DumpMapping.hpp"
 #include "Meta.hpp"
 #include "Vector.hpp"
 #include "View.hpp"

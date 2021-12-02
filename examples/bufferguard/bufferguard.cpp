@@ -3,7 +3,6 @@
 #include <cstring>
 #include <fmt/core.h>
 #include <fstream>
-#include <llama/DumpMapping.hpp>
 #include <llama/llama.hpp>
 
 // clang-format off
