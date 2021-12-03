@@ -342,12 +342,12 @@ namespace llama
             if constexpr(isRecord<RecordDim> || internal::IsBoundedArray<RecordDim>::value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualRecord<const View>{ai, *this};
+                return VirtualRecord<const View>{*this, ai};
             }
             else
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return accessor(ai, RecordCoord<>{});
+                return accessor(ai, Array<size_t, 0>{}, RecordCoord<>{});
             }
         }
 
@@ -356,12 +356,12 @@ namespace llama
             if constexpr(isRecord<RecordDim> || internal::IsBoundedArray<RecordDim>::value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualRecord<View>{ai, *this};
+                return VirtualRecord<View>{*this, ai};
             }
             else
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return accessor(ai, RecordCoord<>{});
+                return accessor(ai, Array<size_t, 0>{}, RecordCoord<>{});
             }
         }
 
@@ -451,28 +451,34 @@ namespace llama
         friend struct VirtualRecord;
 
         LLAMA_SUPPRESS_HOST_DEVICE_WARNING
-        template<std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayIndex ai, RecordCoord<Coords...> rc = {}) const -> decltype(auto)
+        template<std::size_t N, std::size_t... Coords>
+        LLAMA_FN_HOST_ACC_INLINE auto accessor(
+            ArrayIndex ai,
+            Array<size_t, N> dynamicArrayExtents,
+            RecordCoord<Coords...> rc = {}) const -> decltype(auto)
         {
             if constexpr(llama::isComputed<Mapping, RecordCoord<Coords...>>)
                 return mapping().compute(ai, rc, storageBlobs);
             else
             {
-                const auto [nr, offset] = mapping().blobNrAndOffset(ai, rc);
+                const auto [nr, offset] = mapping().blobNrAndOffset(ai, dynamicArrayExtents, rc);
                 using Type = GetType<RecordDim, RecordCoord<Coords...>>;
                 return reinterpret_cast<const Type&>(storageBlobs[nr][offset]);
             }
         }
 
         LLAMA_SUPPRESS_HOST_DEVICE_WARNING
-        template<std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayIndex ai, RecordCoord<Coords...> rc = {}) -> decltype(auto)
+        template<std::size_t N, std::size_t... Coords>
+        LLAMA_FN_HOST_ACC_INLINE auto accessor(
+            ArrayIndex ai,
+            Array<size_t, N> dynamicArrayExtents,
+            RecordCoord<Coords...> rc = {}) -> decltype(auto)
         {
             if constexpr(llama::isComputed<Mapping, RecordCoord<Coords...>>)
-                return mapping().compute(ai, rc, storageBlobs);
+                return mapping().compute(ai, dynamicArrayExtents, rc, storageBlobs);
             else
             {
-                const auto [nr, offset] = mapping().blobNrAndOffset(ai, rc);
+                const auto [nr, offset] = mapping().blobNrAndOffset(ai, dynamicArrayExtents, rc);
                 using Type = GetType<RecordDim, RecordCoord<Coords...>>;
                 using QualifiedType = std::conditional_t<
                     std::is_const_v<std::remove_reference_t<decltype(storageBlobs[nr][offset])>>,

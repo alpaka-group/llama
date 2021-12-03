@@ -308,6 +308,21 @@ namespace llama
         template<typename T, template<typename...> typename Tuple, typename... Args>
         constexpr inline auto
             isDirectListInitializableFromTuple<T, Tuple<Args...>> = isDirectListInitializable<T, Args...>;
+
+        template<typename RecordDim, typename RecordCoord>
+        constexpr inline auto unboundArraysUntil = []() constexpr
+        {
+            std::size_t count = 0;
+            boost::mp11::mp_for_each<boost::mp11::mp_iota_c<RecordCoord::size>>(
+                [&](auto i) constexpr
+                {
+                    using RC = RecordCoordFromList<boost::mp11::mp_take_c<typename RecordCoord::List, i>>;
+                    using TypeAtRC = GetType<RecordDim, RC>;
+                    count += static_cast<std::size_t>(internal::is_unbounded_array_v<TypeAtRC>);
+                });
+            return count;
+        }
+        ();
     } // namespace internal
 
     /// Virtual record type returned by \ref View after resolving an array dimensions coordinate or partially resolving
@@ -325,7 +340,12 @@ namespace llama
     private:
         using ArrayIndex = typename View::Mapping::ArrayIndex;
         using RecordDim = typename View::Mapping::RecordDim;
+        using DynamicArrayExtentsArray = Array<std::size_t, internal::unboundArraysUntil<RecordDim, BoundRecordCoord>>;
 
+#ifndef __NVCC__
+        [[no_unique_address]]
+#endif
+        const DynamicArrayExtentsArray dynamicArrayExtents;
         std::conditional_t<OwnView, View, View&> view;
 
     public:
@@ -337,14 +357,19 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE VirtualRecord()
             /* requires(OwnView) */
             : ArrayIndex{}
+            , dynamicArrayExtents({})
             , view{allocViewStack<0, RecordDim>()}
         {
             static_assert(OwnView, "The default constructor of VirtualRecord is only available if it owns the view.");
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        VirtualRecord(ArrayIndex ai, std::conditional_t<OwnView, View&&, View&> view)
+        VirtualRecord(
+            std::conditional_t<OwnView, View&&, View&> view,
+            ArrayIndex ai,
+            DynamicArrayExtentsArray dynamicArrayExtents = {})
             : ArrayIndex{ai}
+            , dynamicArrayExtents{dynamicArrayExtents}
             , view{static_cast<decltype(view)>(view)}
         {
         }
@@ -406,15 +431,21 @@ namespace llama
         {
             using AbsolutCoord = Cat<BoundRecordCoord, RecordCoord<Coord...>>;
             using AccessedType = GetType<RecordDim, AbsolutCoord>;
-            if constexpr(isRecord<AccessedType> || internal::IsBoundedArray<AccessedType>::value)
+            if constexpr(
+                isRecord<AccessedType> || internal::IsBoundedArray<AccessedType>::value
+                || internal::is_unbounded_array_v<AccessedType>)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualRecord<const View, AbsolutCoord>{arrayIndex(), this->view};
+                return VirtualRecord<const View, AbsolutCoord>{
+                    this->view,
+                    arrayIndex(),
+                    dynamicArrayExtents,
+                };
             }
             else
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return this->view.accessor(arrayIndex(), AbsolutCoord{});
+                return this->view.accessor(arrayIndex(), dynamicArrayExtents, AbsolutCoord{});
             }
         }
 
@@ -424,22 +455,24 @@ namespace llama
         {
             using AbsolutCoord = Cat<BoundRecordCoord, RecordCoord<Coord...>>;
             using AccessedType = GetType<RecordDim, AbsolutCoord>;
-            if constexpr(isRecord<AccessedType> || internal::IsBoundedArray<AccessedType>::value)
+            if constexpr(
+                isRecord<AccessedType> || internal::IsBoundedArray<AccessedType>::value
+                || internal::is_unbounded_array_v<AccessedType>)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualRecord<View, AbsolutCoord>{arrayIndex(), this->view};
+                return VirtualRecord<View, AbsolutCoord>{this->view, arrayIndex(), dynamicArrayExtents};
             }
             else
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return this->view.accessor(arrayIndex(), AbsolutCoord{});
+                return this->view.accessor(arrayIndex(), dynamicArrayExtents, AbsolutCoord{});
             }
         }
 
         /// Access a record in the record dimension underneath the current virtual record using a series of tags. If
         /// the access resolves to a leaf, a reference to a variable inside the \ref View storage is returned,
         /// otherwise another virtual record.
-        template<typename... Tags>
+        template<typename... Tags, std::enable_if_t<!std::disjunction_v<std::is_integral<Tags>...>, bool> = true>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Tags...) const -> decltype(auto)
         {
             using RecordCoord = GetCoordFromTags<AccessibleRecordDim, Tags...>;
@@ -449,13 +482,54 @@ namespace llama
         }
 
         // FIXME(bgruber): remove redundancy
-        template<typename... Tags>
+        template<typename... Tags, std::enable_if_t<!std::disjunction_v<std::is_integral<Tags>...>, bool> = true>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Tags...) -> decltype(auto)
         {
             using RecordCoord = GetCoordFromTags<AccessibleRecordDim, Tags...>;
 
             LLAMA_FORCE_INLINE_RECURSIVE
             return operator()(RecordCoord{});
+        }
+
+        template<
+            typename ADD = AccessibleRecordDim,
+            std::enable_if_t<internal::is_unbounded_array_v<ADD>, bool> = true>
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(std::size_t i) const -> decltype(auto)
+        {
+            using AbsolutCoord = Cat<BoundRecordCoord, RecordCoord<dynamic>>;
+            using ResolvedType = GetType<RecordDim, AbsolutCoord>;
+            auto newDynamicArrayExtents = push_back(dynamicArrayExtents, i);
+            if constexpr(isRecord<ResolvedType> || internal::is_unbounded_array_v<ResolvedType>)
+            {
+                LLAMA_FORCE_INLINE_RECURSIVE
+                return VirtualRecord<const View, AbsolutCoord>{this->view, arrayIndex(), newDynamicArrayExtents};
+            }
+            else
+            {
+                LLAMA_FORCE_INLINE_RECURSIVE
+                return this->view.accessor(arrayIndex(), newDynamicArrayExtents, AbsolutCoord{});
+            }
+        }
+
+        // FIXME(bgruber): remove redundancy
+        template<
+            typename ADD = AccessibleRecordDim,
+            std::enable_if_t<internal::is_unbounded_array_v<ADD>, bool> = true>
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(std::size_t i) -> decltype(auto)
+        {
+            using AbsolutCoord = Cat<BoundRecordCoord, RecordCoord<dynamic>>;
+            using ResolvedType = GetType<RecordDim, AbsolutCoord>;
+            auto newDynamicArrayExtents = push_back(dynamicArrayExtents, i);
+            if constexpr(isRecord<ResolvedType> || internal::is_unbounded_array_v<ResolvedType>)
+            {
+                LLAMA_FORCE_INLINE_RECURSIVE
+                return VirtualRecord<View, AbsolutCoord>{this->view, arrayIndex(), newDynamicArrayExtents};
+            }
+            else
+            {
+                LLAMA_FORCE_INLINE_RECURSIVE
+                return this->view.accessor(arrayIndex(), newDynamicArrayExtents, AbsolutCoord{});
+            }
         }
 
         template<typename T>

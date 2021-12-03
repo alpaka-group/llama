@@ -24,9 +24,10 @@ namespace
             return llama::RecordCoordCommonPrefixIsSame<llama::RecordCoord<RecordCoords...>, llama::RecordCoord<3>>;
         }
 
-        template<std::size_t... RecordCoords, typename Blob>
+        template<std::size_t... RecordCoords, std::size_t N, typename Blob>
         constexpr auto compute(
             ArrayIndex ai,
+            llama::Array<std::size_t, N>,
             llama::RecordCoord<RecordCoords...>,
             llama::Array<Blob, Base::blobCount>& storageBlobs) const
         {
@@ -135,9 +136,12 @@ namespace
             return true;
         }
 
-        template<std::size_t... RecordCoords, typename Blob>
-        constexpr auto compute(ArrayIndex ai, llama::RecordCoord<RecordCoords...>, llama::Array<Blob, blobCount>&)
-            const -> std::size_t
+        template<std::size_t... RecordCoords, std::size_t N, typename Blob>
+        constexpr auto compute(
+            ArrayIndex ai,
+            llama::Array<std::size_t, N>,
+            llama::RecordCoord<RecordCoords...>,
+            llama::Array<Blob, blobCount>&) const -> std::size_t
         {
             return std::reduce(std::begin(ai), std::end(ai), std::size_t{1}, std::multiplies<>{});
         }
@@ -213,9 +217,10 @@ namespace
             return true;
         }
 
-        template<std::size_t... RecordCoords, typename Blob>
+        template<std::size_t... RecordCoords, std::size_t N, typename Blob>
         constexpr auto compute(
             ArrayIndex ai,
+            llama::Array<std::size_t, N>,
             llama::RecordCoord<RecordCoords...>,
             llama::Array<Blob, blobCount>& blobs) const -> BoolRef
         {

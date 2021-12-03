@@ -394,3 +394,30 @@ TEST_CASE("CopyConst")
     STATIC_REQUIRE(std::is_same_v<llama::CopyConst<int, const float>, const float>);
     STATIC_REQUIRE(std::is_same_v<llama::CopyConst<const int, const float>, const float>);
 }
+TEST_CASE("unboundArrays")
+{
+    struct Tag
+    {
+    };
+
+    using Int0 = int;
+    using Int1 = int[];
+    using Int2 = llama::Record<llama::Field<Tag, int[]>>[];
+    using Int3 = llama::Record<llama::Field<Tag, llama::Record<llama::Field<Tag, int[]>>[]>>[];
+
+    using llama::internal::unboundArraysUntil;
+    STATIC_REQUIRE(unboundArraysUntil<Int0, llama::RecordCoord<>> == 0);
+    STATIC_REQUIRE(unboundArraysUntil<Int1, llama::RecordCoord<>> == 0);
+    STATIC_REQUIRE(unboundArraysUntil<Int1, llama::RecordCoord<llama::dynamic>> == 1);
+    STATIC_REQUIRE(unboundArraysUntil<Int2, llama::RecordCoord<>> == 0);
+    STATIC_REQUIRE(unboundArraysUntil<Int2, llama::RecordCoord<llama::dynamic>> == 1);
+    STATIC_REQUIRE(unboundArraysUntil<Int2, llama::RecordCoord<llama::dynamic, 0>> == 1);
+    STATIC_REQUIRE(unboundArraysUntil<Int2, llama::RecordCoord<llama::dynamic, 0, llama::dynamic>> == 2);
+    STATIC_REQUIRE(unboundArraysUntil<Int3, llama::RecordCoord<>> == 0);
+    STATIC_REQUIRE(unboundArraysUntil<Int3, llama::RecordCoord<llama::dynamic>> == 1);
+    STATIC_REQUIRE(unboundArraysUntil<Int3, llama::RecordCoord<llama::dynamic, llama::dynamic>> == 1);
+    STATIC_REQUIRE(unboundArraysUntil<Int3, llama::RecordCoord<llama::dynamic, 0, llama::dynamic>> == 2);
+    STATIC_REQUIRE(unboundArraysUntil<Int3, llama::RecordCoord<llama::dynamic, 0, llama::dynamic, 0>> == 2);
+    STATIC_REQUIRE(
+        unboundArraysUntil<Int3, llama::RecordCoord<llama::dynamic, 0, llama::dynamic, 0, llama::dynamic>> == 3);
+}

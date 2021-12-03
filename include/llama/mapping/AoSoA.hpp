@@ -61,9 +61,11 @@ namespace llama::mapping
                 Lanes * sizeOf<RecordDim>);
         }
 
-        template<std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayIndex ai, RecordCoord<RecordCoords...> = {}) const
-            -> NrAndOffset
+        template<std::size_t... RecordCoords, std::size_t N = 0>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
+            ArrayIndex ai,
+            Array<std::size_t, N> = {},
+            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset
         {
             constexpr std::size_t flatFieldIndex =
 #ifdef __NVCC__

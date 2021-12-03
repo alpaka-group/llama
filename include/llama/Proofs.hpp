@@ -73,7 +73,8 @@ namespace llama
                                                           {
                                                               using Type
                                                                   = GetType<typename Mapping::RecordDim, decltype(rc)>;
-                                                              const auto [blob, offset] = m.blobNrAndOffset(ai, rc);
+                                                              const auto [blob, offset]
+                                                                  = m.blobNrAndOffset(ai, {}, rc);
                                                               for(std::size_t b = 0; b < sizeof(Type); b++)
                                                                   if(testAndSet(blob, offset + b))
                                                                   {
@@ -105,7 +106,8 @@ namespace llama
                                                           {
                                                               using Type
                                                                   = GetType<typename Mapping::RecordDim, decltype(rc)>;
-                                                              const auto [blob, offset] = m.blobNrAndOffset(ai, rc);
+                                                              const auto [blob, offset]
+                                                                  = m.blobNrAndOffset(ai, {}, rc);
                                                               if(flatIndex % PieceLength != 0
                                                                  && (lastBlob != blob
                                                                      || lastOffset + sizeof(Type) != offset))
