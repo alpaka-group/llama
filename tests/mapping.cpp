@@ -894,7 +894,7 @@ TEST_CASE("AoSoA.address_within_bounds")
     auto mapping = AoSoA{ad};
     for(auto i : llama::ArrayIndexRange{ad})
         llama::forEachLeafCoord<Particle>([&](auto rc)
-                                          { CHECK(mapping.blobNrAndOffset(i, rc).offset < mapping.blobSize(0)); });
+                                          { CHECK(mapping.blobNrAndOffset(i, {}, rc).offset < mapping.blobSize(0)); });
 }
 
 TEST_CASE("FlattenRecordDimInOrder")

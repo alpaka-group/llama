@@ -40,11 +40,12 @@ namespace llama::mapping
             return true;
         }
 
-        template<typename QualifiedBase, typename RC, typename BlobArray>
+        template<typename QualifiedBase, std::size_t N, typename RC, typename BlobArray>
         struct Reference
         {
             QualifiedBase& innerMapping;
             ArrayIndex ai;
+            llama::Array<std::size_t, N> dynamicArrayExtents;
             BlobArray& blobs;
 
             using DstType = GetType<TRecordDim, RC>;
@@ -58,7 +59,8 @@ namespace llama::mapping
                     [&](auto ic)
                     {
                         constexpr auto i = decltype(ic)::value;
-                        const auto [nr, off] = innerMapping.blobNrAndOffset(ai, Cat<RC, RecordCoord<i>>{});
+                        const auto [nr, off]
+                            = innerMapping.blobNrAndOffset(ai, dynamicArrayExtents, Cat<RC, RecordCoord<i>>{});
                         p[i] = blobs[nr][off];
                     });
                 return v;
@@ -71,20 +73,26 @@ namespace llama::mapping
                     [&](auto ic)
                     {
                         constexpr auto i = decltype(ic)::value;
-                        const auto [nr, off] = innerMapping.blobNrAndOffset(ai, Cat<RC, RecordCoord<i>>{});
+                        const auto [nr, off]
+                            = innerMapping.blobNrAndOffset(ai, dynamicArrayExtents, Cat<RC, RecordCoord<i>>{});
                         blobs[nr][off] = p[i];
                     });
                 return *this;
             }
         };
 
-        template<std::size_t... RecordCoords, typename BlobArray>
+        template<std::size_t... RecordCoords, std::size_t N, typename BlobArray>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto compute(
             typename Inner::ArrayIndex ai,
+            llama::Array<std::size_t, N> dynamicArrayExtents,
             RecordCoord<RecordCoords...>,
             BlobArray& blobs) const
         {
-            return Reference<decltype(*this), RecordCoord<RecordCoords...>, BlobArray>{*this, ai, blobs};
+            return Reference<decltype(*this), N, RecordCoord<RecordCoords...>, BlobArray>{
+                *this,
+                ai,
+                dynamicArrayExtents,
+                blobs};
         }
     };
 } // namespace llama::mapping
