@@ -47,9 +47,11 @@ namespace
             return llama::product(extents()) * llama::sizeOf<RecordDim>;
         }
 
-        template<std::size_t... RecordCoords>
-        constexpr auto blobNrAndOffset(ArrayIndex, llama::RecordCoord<RecordCoords...> = {}) const
-            -> llama::NrAndOffset
+        template<std::size_t N = 0, std::size_t... RecordCoords>
+        constexpr auto blobNrAndOffset(
+            ArrayIndex,
+            llama::Array<std::size_t, N> = {},
+            llama::RecordCoord<RecordCoords...> = {}) const -> llama::NrAndOffset
         {
             return {0, 0};
         }
@@ -95,9 +97,11 @@ namespace
             return Modulus * llama::sizeOf<RecordDim>;
         }
 
-        template<std::size_t... RecordCoords>
-        constexpr auto blobNrAndOffset(ArrayIndex ai, llama::RecordCoord<RecordCoords...> = {}) const
-            -> llama::NrAndOffset
+        template<std::size_t N = 0, std::size_t... RecordCoords>
+        constexpr auto blobNrAndOffset(
+            ArrayIndex ai,
+            llama::Array<std::size_t, N> = {},
+            llama::RecordCoord<RecordCoords...> = {}) const -> llama::NrAndOffset
         {
             const auto blob = llama::flatRecordCoord<RecordDim, llama::RecordCoord<RecordCoords...>>;
             const auto offset = (llama::mapping::LinearizeArrayDimsCpp{}(ai, extents()) % Modulus)
