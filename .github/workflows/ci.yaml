@@ -2,7 +2,7 @@ name: CI
 on: [push, pull_request]
 
 env:
-  THREADS: 4
+  THREADS: 2
   CONFIG: RelWithDebInfo
 
 jobs:
