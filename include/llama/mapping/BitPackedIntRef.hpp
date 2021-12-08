@@ -24,27 +24,32 @@ namespace llama::internal
         StoredIntegralPointer ptr;
         std::size_t bitOffset;
         unsigned bits;
+#ifndef NDEBUG
+        StoredIntegralPointer endPtr;
+#endif
 
-        static constexpr auto registerBits = sizeof(StoredIntegral) * CHAR_BIT;
+        static constexpr auto bitsPerStoredIntegral = sizeof(StoredIntegral) * CHAR_BIT;
 
         // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
         operator Integral() const
         {
-            auto* p = ptr + bitOffset / registerBits;
-            const auto innerBitOffset = bitOffset % registerBits;
+            auto* p = ptr + bitOffset / bitsPerStoredIntegral;
+            const auto innerBitOffset = bitOffset % bitsPerStoredIntegral;
+            assert(p < endPtr);
             auto v = p[0] >> innerBitOffset;
 
             const auto innerBitEndOffset = innerBitOffset + bits;
-            if(innerBitEndOffset <= registerBits)
+            if(innerBitEndOffset <= bitsPerStoredIntegral)
             {
                 const auto mask = (StoredIntegral{1} << bits) - 1u;
                 v &= mask;
             }
             else
             {
-                const auto excessBits = innerBitEndOffset - registerBits;
-                const auto bitsLoaded = registerBits - innerBitOffset;
+                const auto excessBits = innerBitEndOffset - bitsPerStoredIntegral;
+                const auto bitsLoaded = bitsPerStoredIntegral - innerBitOffset;
                 const auto mask = (StoredIntegral{1} << excessBits) - 1u;
+                assert(p + 1 < endPtr);
                 v |= (p[1] & mask) << bitsLoaded;
             }
             if constexpr(std::is_signed_v<Integral>)
@@ -67,19 +72,21 @@ namespace llama::internal
                 valueBits = (StoredIntegral{isSigned} << (bits - 1)) | (unsignedValue & magnitudeMask);
             }
 
-            auto* p = ptr + bitOffset / registerBits;
-            const auto innerBitOffset = bitOffset % registerBits;
+            auto* p = ptr + bitOffset / bitsPerStoredIntegral;
+            const auto innerBitOffset = bitOffset % bitsPerStoredIntegral;
             const auto clearMask = ~(mask << innerBitOffset);
+            assert(p < endPtr);
             auto mem = p[0] & clearMask; // clear previous bits
             mem |= valueBits << innerBitOffset; // write new bits
             p[0] = mem;
 
             const auto innerBitEndOffset = innerBitOffset + bits;
-            if(innerBitEndOffset > registerBits)
+            if(innerBitEndOffset > bitsPerStoredIntegral)
             {
-                const auto excessBits = innerBitEndOffset - registerBits;
-                const auto bitsWritten = registerBits - innerBitOffset;
+                const auto excessBits = innerBitEndOffset - bitsPerStoredIntegral;
+                const auto bitsWritten = bitsPerStoredIntegral - innerBitOffset;
                 const auto clearMask = ~((StoredIntegral{1} << excessBits) - 1u);
+                assert(p + 1 < endPtr);
                 auto mem = p[1] & clearMask; // clear previous bits
                 mem |= valueBits >> bitsWritten; // write new bits
                 p[1] = mem;
