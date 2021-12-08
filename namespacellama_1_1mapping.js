@@ -5,6 +5,7 @@ var namespacellama_1_1mapping =
     [ "AoS", "structllama_1_1mapping_1_1AoS.html", "structllama_1_1mapping_1_1AoS" ],
     [ "AoSoA", "structllama_1_1mapping_1_1AoSoA.html", "structllama_1_1mapping_1_1AoSoA" ],
     [ "Bytesplit", "structllama_1_1mapping_1_1Bytesplit.html", "structllama_1_1mapping_1_1Bytesplit" ],
+    [ "ChangeType", "structllama_1_1mapping_1_1ChangeType.html", "structllama_1_1mapping_1_1ChangeType" ],
     [ "FlattenRecordDimInOrder", "structllama_1_1mapping_1_1FlattenRecordDimInOrder.html", "structllama_1_1mapping_1_1FlattenRecordDimInOrder" ],
     [ "FlattenRecordDimSorted", "structllama_1_1mapping_1_1FlattenRecordDimSorted.html", "structllama_1_1mapping_1_1FlattenRecordDimSorted" ],
     [ "Heatmap", "structllama_1_1mapping_1_1Heatmap.html", "structllama_1_1mapping_1_1Heatmap" ],

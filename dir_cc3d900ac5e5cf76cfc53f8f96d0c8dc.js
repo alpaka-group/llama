@@ -4,6 +4,7 @@ var dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc =
     [ "AoS.hpp", "AoS_8hpp.html", "AoS_8hpp" ],
     [ "AoSoA.hpp", "AoSoA_8hpp.html", "AoSoA_8hpp" ],
     [ "Bytesplit.hpp", "Bytesplit_8hpp.html", "Bytesplit_8hpp" ],
+    [ "ChangeType.hpp", "ChangeType_8hpp.html", "ChangeType_8hpp" ],
     [ "Common.hpp", "Common_8hpp.html", "Common_8hpp" ],
     [ "Heatmap.hpp", "Heatmap_8hpp.html", [
       [ "Heatmap", "structllama_1_1mapping_1_1Heatmap.html", "structllama_1_1mapping_1_1Heatmap" ]

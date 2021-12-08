@@ -21,6 +21,7 @@ var hierarchy =
       [ "llama::internal::IsComputed< Mapping, RecordCoord, std::void_t< decltype(Mapping::isComputed(RecordCoord{}))> >", "structllama_1_1internal_1_1IsComputed_3_01Mapping_00_01RecordCoord_00_01std_1_1void__t_3_01declt31ec39d02aa75d5ea3308109fe018112.html", null ]
     ] ],
     [ "llama::mapping::tree::functor::internal::ChangeNodeChildsRuntimeFunctor", "structllama_1_1mapping_1_1tree_1_1functor_1_1internal_1_1ChangeNodeChildsRuntimeFunctor.html", null ],
+    [ "llama::mapping::internal::ChangeTypeReference< UserT, StoredT >", "structllama_1_1mapping_1_1internal_1_1ChangeTypeReference.html", null ],
     [ "llama::Copy< SrcMapping, DstMapping, SFINAE >", "structllama_1_1Copy.html", null ],
     [ "llama::Copy< Mapping, Mapping >", "structllama_1_1Copy_3_01Mapping_00_01Mapping_01_4.html", null ],
     [ "llama::Copy< mapping::AoSoA< ArrayExtents, RecordDim, LanesSrc, LinearizeArrayDims >, mapping::AoSoA< ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims >, std::enable_if_t< LanesSrc !=LanesDst > >", "structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Line6dc3fb3fdb46e2d3a2a87dd652990741.html", null ],
@@ -65,7 +66,8 @@ var hierarchy =
     [ "llama::mapping::tree::functor::Idem", "structllama_1_1mapping_1_1tree_1_1functor_1_1Idem.html", null ],
     [ "llama::internal::IndirectValue< T >", "structllama_1_1internal_1_1IndirectValue.html", null ],
     [ "InnerMapping", null, [
-      [ "llama::mapping::Bytesplit< TArrayExtents, TRecordDim, InnerMapping >", "structllama_1_1mapping_1_1Bytesplit.html", null ]
+      [ "llama::mapping::Bytesplit< TArrayExtents, TRecordDim, InnerMapping >", "structllama_1_1mapping_1_1Bytesplit.html", null ],
+      [ "llama::mapping::ChangeType< TArrayExtents, TRecordDim, InnerMapping, ReplacementMap >", "structllama_1_1mapping_1_1ChangeType.html", null ]
     ] ],
     [ "integral_constant", null, [
       [ "std::tuple_size< llama::ArrayExtents< Sizes... > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayExtents_3_01Sizes_8_8_8_01_4_01_4.html", null ],
@@ -87,6 +89,7 @@ var hierarchy =
     [ "llama::mapping::LinearizeArrayDimsMorton", "structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html", null ],
     [ "llama::VirtualRecord< TView, TBoundRecordCoord, OwnView >::Loader", "structllama_1_1VirtualRecord_1_1Loader.html", null ],
     [ "llama::VirtualRecord< TView, TBoundRecordCoord, OwnView >::LoaderConst", "structllama_1_1VirtualRecord_1_1LoaderConst.html", null ],
+    [ "llama::mapping::internal::MakeReplacer< ReplacementMap >", "structllama_1_1mapping_1_1internal_1_1MakeReplacer.html", null ],
     [ "llama::mapping::tree::internal::MergeFunctors< Tree, TreeOperationList >", "structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors.html", null ],
     [ "llama::mapping::tree::internal::MergeFunctors< BasicTree, TreeOperationList >", "structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors.html", null ],
     [ "llama::mapping::tree::internal::MergeFunctors< ResultTree, boost::mp11::mp_drop_c< llama::Tuple< Operations... >, 1 > >", "structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors.html", null ],
@@ -152,8 +155,8 @@ var hierarchy =
     [ "llama::internal::TupleReplaceImpl< Pos, Tuple, Replacement >", "structllama_1_1internal_1_1TupleReplaceImpl.html", null ],
     [ "llama::internal::TupleReplaceImpl< 0, Tuple< Elements... >, Replacement >", "structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01Elements_8_8_8_01_4_00_01Replacement_01_4.html", null ],
     [ "llama::internal::TupleReplaceImpl< 0, Tuple< OneElement >, Replacement >", "structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01OneElement_01_4_00_01Replacement_01_4.html", null ],
-    [ "llama::bloballoc::Vector", "structllama_1_1bloballoc_1_1Vector.html", null ],
     [ "llama::Vector< Mapping >", "structllama_1_1Vector.html", null ],
+    [ "llama::bloballoc::Vector", "structllama_1_1bloballoc_1_1Vector.html", null ],
     [ "llama::View< TMapping, BlobType >", "structllama_1_1View.html", null ],
     [ "llama::VirtualRecord< TView, TBoundRecordCoord, OwnView >", "structllama_1_1VirtualRecord.html", null ],
     [ "llama::VirtualView< TParentView >", "structllama_1_1VirtualView.html", null ],
