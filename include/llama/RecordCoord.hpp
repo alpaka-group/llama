@@ -117,59 +117,45 @@ namespace llama
 
     namespace internal
     {
-        template<typename First, typename Second>
-        struct RecordCoordCommonPrefixIsBiggerImpl;
-
         template<std::size_t... Coords1, std::size_t... Coords2>
-        struct RecordCoordCommonPrefixIsBiggerImpl<RecordCoord<Coords1...>, RecordCoord<Coords2...>>
+        constexpr auto recordCoordCommonPrefixIsBiggerImpl(RecordCoord<Coords1...>, RecordCoord<Coords2...>) -> bool
         {
-            static constexpr auto value = []() constexpr
+            // CTAD does not work if Coords1/2 is an empty pack
+            std::array<std::size_t, sizeof...(Coords1)> a1{Coords1...};
+            std::array<std::size_t, sizeof...(Coords2)> a2{Coords2...};
+            for(std::size_t i = 0; i < std::min(a1.size(), a2.size()); i++)
             {
-                // CTAD does not work if Coords1/2 is an empty pack
-                std::array<std::size_t, sizeof...(Coords1)> a1{Coords1...};
-                std::array<std::size_t, sizeof...(Coords2)> a2{Coords2...};
-                for(std::size_t i = 0; i < std::min(a1.size(), a2.size()); i++)
-                {
-                    if(a1[i] > a2[i])
-                        return true;
-                    if(a1[i] < a2[i])
-                        return false;
-                }
-                return false;
+                if(a1[i] > a2[i])
+                    return true;
+                if(a1[i] < a2[i])
+                    return false;
             }
-            ();
+            return false;
         };
     } // namespace internal
 
     /// Checks wether the first RecordCoord is bigger than the second.
     template<typename First, typename Second>
     inline constexpr auto RecordCoordCommonPrefixIsBigger
-        = internal::RecordCoordCommonPrefixIsBiggerImpl<First, Second>::value;
+        = internal::recordCoordCommonPrefixIsBiggerImpl(First{}, Second{});
 
     namespace internal
     {
-        template<typename First, typename Second>
-        struct RecordCoordCommonPrefixIsSameImpl;
-
         template<std::size_t... Coords1, std::size_t... Coords2>
-        struct RecordCoordCommonPrefixIsSameImpl<RecordCoord<Coords1...>, RecordCoord<Coords2...>>
+        constexpr auto recordCoordCommonPrefixIsSameImpl(RecordCoord<Coords1...>, RecordCoord<Coords2...>) -> bool
         {
-            static constexpr auto value = []() constexpr
-            {
-                // CTAD does not work if Coords1/2 is an empty pack
-                std::array<std::size_t, sizeof...(Coords1)> a1{Coords1...};
-                std::array<std::size_t, sizeof...(Coords2)> a2{Coords2...};
-                for(std::size_t i = 0; i < std::min(a1.size(), a2.size()); i++)
-                    if(a1[i] != a2[i])
-                        return false;
-                return true;
-            }
-            ();
+            // CTAD does not work if Coords1/2 is an empty pack
+            std::array<std::size_t, sizeof...(Coords1)> a1{Coords1...};
+            std::array<std::size_t, sizeof...(Coords2)> a2{Coords2...};
+            for(std::size_t i = 0; i < std::min(a1.size(), a2.size()); i++)
+                if(a1[i] != a2[i])
+                    return false;
+            return true;
         };
     } // namespace internal
 
     /// Checks whether two \ref RecordCoord%s are the same or one is the prefix of the other.
     template<typename First, typename Second>
     inline constexpr auto RecordCoordCommonPrefixIsSame
-        = internal::RecordCoordCommonPrefixIsSameImpl<First, Second>::value;
+        = internal::recordCoordCommonPrefixIsSameImpl(First{}, Second{});
 } // namespace llama
