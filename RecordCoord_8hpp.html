@@ -154,14 +154,6 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordCoord_3_4.html">llama::RecordCoord&lt;&gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1RecordCoordCommonPrefixIsBiggerImpl.html">llama::internal::RecordCoordCommonPrefixIsBiggerImpl&lt; First, Second &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1RecordCoordCommonPrefixIsBiggerImpl_3_01RecordCoord_3_01Coords1_8_8_8d80b8b3340e93b40985783911438eb21.html">llama::internal::RecordCoordCommonPrefixIsBiggerImpl&lt; RecordCoord&lt; Coords1... &gt;, RecordCoord&lt; Coords2... &gt; &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1RecordCoordCommonPrefixIsSameImpl.html">llama::internal::RecordCoordCommonPrefixIsSameImpl&lt; First, Second &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1RecordCoordCommonPrefixIsSameImpl_3_01RecordCoord_3_01Coords1_8_8_8_0f195a8b8a0db2355fe3190fcb9b6d969.html">llama::internal::RecordCoordCommonPrefixIsSameImpl&lt; RecordCoord&lt; Coords1... &gt;, RecordCoord&lt; Coords2... &gt; &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
@@ -209,6 +201,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a42cdd926d98388052f028ab19c94b649"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a42cdd926d98388052f028ab19c94b649">llama::cat</a> (RecordCoords...)</td></tr>
 <tr class="memdesc:a42cdd926d98388052f028ab19c94b649"><td class="mdescLeft">&#160;</td><td class="mdescRight">Concatenate a set of <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>s instances.  <a href="namespacellama.html#a42cdd926d98388052f028ab19c94b649">More...</a><br /></td></tr>
 <tr class="separator:a42cdd926d98388052f028ab19c94b649"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02e115f3c9d3acdccd07526d475ed358"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Coords1, std::size_t... Coords2&gt; </td></tr>
+<tr class="memitem:a02e115f3c9d3acdccd07526d475ed358"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a02e115f3c9d3acdccd07526d475ed358">llama::internal::recordCoordCommonPrefixIsBiggerImpl</a> (RecordCoord&lt; Coords1... &gt;, RecordCoord&lt; Coords2... &gt;) -&gt; bool</td></tr>
+<tr class="separator:a02e115f3c9d3acdccd07526d475ed358"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5732c14ad8045af3e542cf23a7e82c6d"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Coords1, std::size_t... Coords2&gt; </td></tr>
+<tr class="memitem:a5732c14ad8045af3e542cf23a7e82c6d"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a5732c14ad8045af3e542cf23a7e82c6d">llama::internal::recordCoordCommonPrefixIsSameImpl</a> (RecordCoord&lt; Coords1... &gt;, RecordCoord&lt; Coords2... &gt;) -&gt; bool</td></tr>
+<tr class="separator:a5732c14ad8045af3e542cf23a7e82c6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -219,11 +217,11 @@ Variables</h2></td></tr>
 <tr class="memitem:a9c898b6940a90559b91b4057b85fb74b"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a9c898b6940a90559b91b4057b85fb74b">llama::isRecordCoord&lt; RecordCoord&lt; Coords... &gt; &gt;</a> = true</td></tr>
 <tr class="separator:a9c898b6940a90559b91b4057b85fb74b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a167bf28d08f395c481af0260eb7e1e1c"><td class="memTemplParams" colspan="2">template&lt;typename First , typename Second &gt; </td></tr>
-<tr class="memitem:a167bf28d08f395c481af0260eb7e1e1c"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a167bf28d08f395c481af0260eb7e1e1c">llama::RecordCoordCommonPrefixIsBigger</a> = internal::RecordCoordCommonPrefixIsBiggerImpl&lt;First, Second&gt;::value</td></tr>
+<tr class="memitem:a167bf28d08f395c481af0260eb7e1e1c"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a167bf28d08f395c481af0260eb7e1e1c">llama::RecordCoordCommonPrefixIsBigger</a> = internal::recordCoordCommonPrefixIsBiggerImpl(First{}, Second{})</td></tr>
 <tr class="memdesc:a167bf28d08f395c481af0260eb7e1e1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks wether the first <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> is bigger than the second.  <a href="namespacellama.html#a167bf28d08f395c481af0260eb7e1e1c">More...</a><br /></td></tr>
 <tr class="separator:a167bf28d08f395c481af0260eb7e1e1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d62fb6d777b67e3f73b80cc97d1cd44"><td class="memTemplParams" colspan="2">template&lt;typename First , typename Second &gt; </td></tr>
-<tr class="memitem:a5d62fb6d777b67e3f73b80cc97d1cd44"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a5d62fb6d777b67e3f73b80cc97d1cd44">llama::RecordCoordCommonPrefixIsSame</a> = internal::RecordCoordCommonPrefixIsSameImpl&lt;First, Second&gt;::value</td></tr>
+<tr class="memitem:a5d62fb6d777b67e3f73b80cc97d1cd44"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a5d62fb6d777b67e3f73b80cc97d1cd44">llama::RecordCoordCommonPrefixIsSame</a> = internal::recordCoordCommonPrefixIsSameImpl(First{}, Second{})</td></tr>
 <tr class="memdesc:a5d62fb6d777b67e3f73b80cc97d1cd44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether two <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>s are the same or one is the prefix of the other.  <a href="namespacellama.html#a5d62fb6d777b67e3f73b80cc97d1cd44">More...</a><br /></td></tr>
 <tr class="separator:a5d62fb6d777b67e3f73b80cc97d1cd44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -233,7 +231,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="RecordCoord_8hpp.html">RecordCoord.hpp</a></li>
-    <li class="footer">Generated on Wed Dec 8 2021 15:08:02 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Dec 8 2021 15:57:12 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

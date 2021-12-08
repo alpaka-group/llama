@@ -1,9 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01Elements_8_8_8_01_4_00_01Replacement_01_4.html":[2,0,1,1,45],
-"structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01Elements_8_8_8_01_4_00_01Replacement_01_4.html#add4db39e00907ae1ad895c02c6ea74ba":[2,0,1,1,45,0],
-"structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01OneElement_01_4_00_01Replacement_01_4.html":[2,0,1,1,46],
-"structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01OneElement_01_4_00_01Replacement_01_4.html#a109f24a75c6eafe81df0b17aa1111c0c":[2,0,1,1,46,0],
 "structllama_1_1internal_1_1mp__unwrap__values__into__impl.html":[2,0,1,1,33],
 "structllama_1_1internal_1_1mp__unwrap__values__into__impl_3_01FromList_3_01Values_8_8_8_01_4_00_01ToList_01_4.html":[2,0,1,1,34],
 "structllama_1_1internal_1_1mp__unwrap__values__into__impl_3_01FromList_3_01Values_8_8_8_01_4_00_01ToList_01_4.html#a3a184387bd7b3fea126f63eaa55679a9":[2,0,1,1,34,0],
@@ -249,5 +245,9 @@ var NAVTREEINDEX3 =
 "structstd_1_1tuple__element_3_01I_00_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html":[2,0,2,1],
 "structstd_1_1tuple__element_3_01I_00_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html#a9eb4aa91a7a1ef27eb5060719269e93b":[2,0,2,1,0],
 "structstd_1_1tuple__element_3_01I_00_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html":[2,0,2,4],
-"structstd_1_1tuple__element_3_01I_00_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html#ab58302406179f5fe72d1c568fcc3fc2f":[2,0,2,4,0]
+"structstd_1_1tuple__element_3_01I_00_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html#ab58302406179f5fe72d1c568fcc3fc2f":[2,0,2,4,0],
+"structstd_1_1tuple__element_3_01I_00_01llama_1_1VirtualRecord_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html":[2,0,2,5],
+"structstd_1_1tuple__element_3_01I_00_01llama_1_1VirtualRecord_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html#a05a8df86edec9f2b0c745ff0c608a4f4":[2,0,2,5,0],
+"structstd_1_1tuple__size_3_01llama_1_1ArrayExtents_3_01Sizes_8_8_8_01_4_01_4.html":[2,0,2,7],
+"structstd_1_1tuple__size_3_01llama_1_1ArrayIndex_3_01N_01_4_01_4.html":[2,0,2,8]
 };

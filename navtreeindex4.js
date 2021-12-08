@@ -1,9 +1,5 @@
 var NAVTREEINDEX4 =
 {
-"structstd_1_1tuple__element_3_01I_00_01llama_1_1VirtualRecord_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html":[2,0,2,5],
-"structstd_1_1tuple__element_3_01I_00_01llama_1_1VirtualRecord_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html#a05a8df86edec9f2b0c745ff0c608a4f4":[2,0,2,5,0],
-"structstd_1_1tuple__size_3_01llama_1_1ArrayExtents_3_01Sizes_8_8_8_01_4_01_4.html":[2,0,2,7],
-"structstd_1_1tuple__size_3_01llama_1_1ArrayIndex_3_01N_01_4_01_4.html":[2,0,2,8],
 "structstd_1_1tuple__size_3_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html":[2,0,2,6],
 "structstd_1_1tuple__size_3_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html":[2,0,2,9],
 "structstd_1_1tuple__size_3_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html#abfb585e14c073fe0440706749d845b00":[2,0,2,9,0],

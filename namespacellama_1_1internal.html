@@ -168,14 +168,6 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1PlusAssign.html">PlusAssign</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1RecordCoordCommonPrefixIsBiggerImpl.html">RecordCoordCommonPrefixIsBiggerImpl</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1RecordCoordCommonPrefixIsBiggerImpl_3_01RecordCoord_3_01Coords1_8_8_8d80b8b3340e93b40985783911438eb21.html">RecordCoordCommonPrefixIsBiggerImpl&lt; RecordCoord&lt; Coords1... &gt;, RecordCoord&lt; Coords2... &gt; &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1RecordCoordCommonPrefixIsSameImpl.html">RecordCoordCommonPrefixIsSameImpl</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1RecordCoordCommonPrefixIsSameImpl_3_01RecordCoord_3_01Coords1_8_8_8_0f195a8b8a0db2355fe3190fcb9b6d969.html">RecordCoordCommonPrefixIsSameImpl&lt; RecordCoord&lt; Coords1... &gt;, RecordCoord&lt; Coords2... &gt; &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1TransformLeavesImpl.html">TransformLeavesImpl</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1TransformLeavesImpl_3_01Child_0fN_0e_00_01TypeFunctor_01_4.html">TransformLeavesImpl&lt; Child[N], TypeFunctor &gt;</a></td></tr>
@@ -233,6 +225,12 @@ Functions</h2></td></tr>
 <tr class="separator:a5e0917bdc10f5989a5a46c308d880f1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a158338076284b27d9f1875797789bd59"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a158338076284b27d9f1875797789bd59">divRoundUp</a> (std::size_t dividend, std::size_t divisor) -&gt; std::size_t</td></tr>
 <tr class="separator:a158338076284b27d9f1875797789bd59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02e115f3c9d3acdccd07526d475ed358"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Coords1, std::size_t... Coords2&gt; </td></tr>
+<tr class="memitem:a02e115f3c9d3acdccd07526d475ed358"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a02e115f3c9d3acdccd07526d475ed358">recordCoordCommonPrefixIsBiggerImpl</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords1... &gt;, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords2... &gt;) -&gt; bool</td></tr>
+<tr class="separator:a02e115f3c9d3acdccd07526d475ed358"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5732c14ad8045af3e542cf23a7e82c6d"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Coords1, std::size_t... Coords2&gt; </td></tr>
+<tr class="memitem:a5732c14ad8045af3e542cf23a7e82c6d"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a5732c14ad8045af3e542cf23a7e82c6d">recordCoordCommonPrefixIsSameImpl</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords1... &gt;, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords2... &gt;) -&gt; bool</td></tr>
+<tr class="separator:a5732c14ad8045af3e542cf23a7e82c6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad6320a13162da7c7c045674a49a741b4"><td class="memTemplParams" colspan="2">template&lt;typename... Elements, std::size_t... Is&gt; </td></tr>
 <tr class="memitem:ad6320a13162da7c7c045674a49a741b4"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#ad6320a13162da7c7c045674a49a741b4">areEqual</a> (const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt; &amp;a, const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt; &amp;b, std::index_sequence&lt; Is... &gt;) -&gt; bool</td></tr>
 <tr class="separator:ad6320a13162da7c7c045674a49a741b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1288,6 +1286,88 @@ template&lt;bool Align, typename TypeList , std::size_t I&gt; </div>
 
 </div>
 </div>
+<a id="a02e115f3c9d3acdccd07526d475ed358"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02e115f3c9d3acdccd07526d475ed358">&#9670;&nbsp;</a></span>recordCoordCommonPrefixIsBiggerImpl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;std::size_t... Coords1, std::size_t... Coords2&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::internal::recordCoordCommonPrefixIsBiggerImpl </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords1... &gt;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords2... &gt;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> -&gt; bool
+        </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00121">121</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a5732c14ad8045af3e542cf23a7e82c6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5732c14ad8045af3e542cf23a7e82c6d">&#9670;&nbsp;</a></span>recordCoordCommonPrefixIsSameImpl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;std::size_t... Coords1, std::size_t... Coords2&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::internal::recordCoordCommonPrefixIsSameImpl </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords1... &gt;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords2... &gt;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> -&gt; bool
+        </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00145">145</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+
+</div>
+</div>
 <a id="aeab53e4609fe07abfb6f5f2d532cd388"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aeab53e4609fe07abfb6f5f2d532cd388">&#9670;&nbsp;</a></span>sizeOfImpl()</h2>
 
@@ -1899,7 +1979,7 @@ template&lt;bool Align, typename TypeList &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Wed Dec 8 2021 15:08:02 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Dec 8 2021 15:57:12 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
