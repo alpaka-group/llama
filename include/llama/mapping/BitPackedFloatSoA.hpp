@@ -38,11 +38,7 @@ namespace llama::mapping
         constexpr BitPackedFloatSoA() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr BitPackedFloatSoA(
-            unsigned exponentBits,
-            unsigned mantissaBits,
-            ArrayExtents extents,
-            RecordDim = {})
+        constexpr BitPackedFloatSoA(unsigned exponentBits, unsigned mantissaBits, ArrayExtents extents, RecordDim = {})
             : ArrayExtents(extents)
             , exponentBits{exponentBits}
             , mantissaBits{mantissaBits}
@@ -83,7 +79,12 @@ namespace llama::mapping
                 reinterpret_cast<QualifiedStoredIntegral*>(&blobs[blob][0]),
                 bitOffset,
                 exponentBits,
-                mantissaBits};
+                mantissaBits
+#ifndef NDEBUG
+                ,
+                reinterpret_cast<QualifiedStoredIntegral*>(&blobs[blob][0] + blobSize(blob))
+#endif
+            };
         }
 
     private:

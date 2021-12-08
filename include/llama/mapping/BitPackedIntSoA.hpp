@@ -87,7 +87,12 @@ namespace llama::mapping
             return llama::internal::BitPackedIntRef<DstType, QualifiedStoredIntegral*>{
                 reinterpret_cast<QualifiedStoredIntegral*>(&blobs[blob][0]),
                 bitOffset,
-                bits};
+                bits
+#ifndef NDEBUG
+                ,
+                reinterpret_cast<QualifiedStoredIntegral*>(&blobs[blob][0] + blobSize(blob))
+#endif
+            };
         }
 
     private:

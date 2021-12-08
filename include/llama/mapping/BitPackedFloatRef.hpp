@@ -93,8 +93,21 @@ namespace llama::internal
         unsigned mantissaBits = 0;
 
     public:
-        BitPackedFloatRef(StoredIntegralPointer p, std::size_t bitOffset, unsigned exponentBits, unsigned mantissaBits)
-            : intref{p, bitOffset, exponentBits + mantissaBits + 1}
+        BitPackedFloatRef(
+            StoredIntegralPointer p,
+            std::size_t bitOffset,
+            unsigned exponentBits,
+            unsigned mantissaBits
+#ifndef NDEBUG
+            ,
+            StoredIntegralPointer endPtr
+#endif
+            )
+            : intref{p, bitOffset, exponentBits + mantissaBits + 1,
+#ifndef NDEBUG
+            endPtr
+#endif
+        }
             , exponentBits(exponentBits)
             , mantissaBits(mantissaBits)
         {
