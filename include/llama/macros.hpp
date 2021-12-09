@@ -122,3 +122,17 @@
 #else
 #    define LLAMA_DECLSPEC_EMPTY_BASES
 #endif
+
+/// Expands to likely if [[likely]] supported by the compiler. Use as [[LLAMA_LIKELY]].
+#if __has_cpp_attribute(likely)
+#    define LLAMA_LIKELY likely
+#else
+#    define LLAMA_LIKELY
+#endif
+
+/// Expands to unlikely if [[unlikely]] supported by the compiler. Use as [[LLAMA_UNLIKELY]].
+#if __has_cpp_attribute(unlikely)
+#    define LLAMA_UNLIKELY unlikely
+#else
+#    define LLAMA_UNLIKELY
+#endif
