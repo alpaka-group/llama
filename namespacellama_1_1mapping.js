@@ -4,6 +4,8 @@ var namespacellama_1_1mapping =
     [ "tree", "namespacellama_1_1mapping_1_1tree.html", "namespacellama_1_1mapping_1_1tree" ],
     [ "AoS", "structllama_1_1mapping_1_1AoS.html", "structllama_1_1mapping_1_1AoS" ],
     [ "AoSoA", "structllama_1_1mapping_1_1AoSoA.html", "structllama_1_1mapping_1_1AoSoA" ],
+    [ "BitPackedFloatSoA", "structllama_1_1mapping_1_1BitPackedFloatSoA.html", "structllama_1_1mapping_1_1BitPackedFloatSoA" ],
+    [ "BitPackedIntSoA", "structllama_1_1mapping_1_1BitPackedIntSoA.html", "structllama_1_1mapping_1_1BitPackedIntSoA" ],
     [ "Bytesplit", "structllama_1_1mapping_1_1Bytesplit.html", "structllama_1_1mapping_1_1Bytesplit" ],
     [ "ChangeType", "structllama_1_1mapping_1_1ChangeType.html", "structllama_1_1mapping_1_1ChangeType" ],
     [ "FlattenRecordDimInOrder", "structllama_1_1mapping_1_1FlattenRecordDimInOrder.html", "structllama_1_1mapping_1_1FlattenRecordDimInOrder" ],

@@ -1,11 +1,16 @@
 var namespacellama_1_1internal =
 [
     [ "Assign", "structllama_1_1internal_1_1Assign.html", "structllama_1_1internal_1_1Assign" ],
+    [ "BitPackedFloatRef", "structllama_1_1internal_1_1BitPackedFloatRef.html", "structllama_1_1internal_1_1BitPackedFloatRef" ],
+    [ "BitPackedIntRef", "structllama_1_1internal_1_1BitPackedIntRef.html", "structllama_1_1internal_1_1BitPackedIntRef" ],
     [ "DivideAssign", "structllama_1_1internal_1_1DivideAssign.html", "structllama_1_1internal_1_1DivideAssign" ],
     [ "FindFieldByTag", "structllama_1_1internal_1_1FindFieldByTag.html", "structllama_1_1internal_1_1FindFieldByTag" ],
     [ "FlattenRecordDimImpl", "structllama_1_1internal_1_1FlattenRecordDimImpl.html", "structllama_1_1internal_1_1FlattenRecordDimImpl" ],
     [ "FlattenRecordDimImpl< Child[N]>", "structllama_1_1internal_1_1FlattenRecordDimImpl_3_01Child_0fN_0e_4.html", "structllama_1_1internal_1_1FlattenRecordDimImpl_3_01Child_0fN_0e_4" ],
     [ "FlattenRecordDimImpl< Record< Fields... > >", "structllama_1_1internal_1_1FlattenRecordDimImpl_3_01Record_3_01Fields_8_8_8_01_4_01_4.html", "structllama_1_1internal_1_1FlattenRecordDimImpl_3_01Record_3_01Fields_8_8_8_01_4_01_4" ],
+    [ "FloatBitTraits", "structllama_1_1internal_1_1FloatBitTraits.html", null ],
+    [ "FloatBitTraits< double >", "structllama_1_1internal_1_1FloatBitTraits_3_01double_01_4.html", "structllama_1_1internal_1_1FloatBitTraits_3_01double_01_4" ],
+    [ "FloatBitTraits< float >", "structllama_1_1internal_1_1FloatBitTraits_3_01float_01_4.html", "structllama_1_1internal_1_1FloatBitTraits_3_01float_01_4" ],
     [ "GetCoordFromTagsImpl", "structllama_1_1internal_1_1GetCoordFromTagsImpl.html", null ],
     [ "GetCoordFromTagsImpl< ChildType[Count], RecordCoord< ResultCoords... >, FirstTag, Tags... >", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01ChildType_0fCount_0e_00_01RecordCoord_3_01Rea82f6370a44084538dfd07ee1f739c70.html", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01ChildType_0fCount_0e_00_01RecordCoord_3_01Rea82f6370a44084538dfd07ee1f739c70" ],
     [ "GetCoordFromTagsImpl< ChildType[Count], RecordCoord<>, boost::mp11::mp_list< Tags... > >", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01ChildType_0fCount_0e_00_01RecordCoord_3_4_00668ebc2534e30f45d740d6e6789b2146.html", null ],

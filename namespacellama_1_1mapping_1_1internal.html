@@ -100,6 +100,10 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeReplacer.html">MakeReplacer</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeUnsigned.html">MakeUnsigned</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01bool_01_4.html">MakeUnsigned&lt; bool &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1PartionedRecordDim.html">PartionedRecordDim</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html">PartitionFoldOpImpl</a></td></tr>
@@ -107,6 +111,12 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
+<tr class="memitem:a0f20341d5c6d9555b6bf0728dd6990a6"><td class="memTemplParams" colspan="2">template&lt;typename A , typename B &gt; </td></tr>
+<tr class="memitem:a0f20341d5c6d9555b6bf0728dd6990a6"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a0f20341d5c6d9555b6bf0728dd6990a6">HasLargerSize</a> = boost::mp11::mp_bool&lt; sizeof(A)&lt; sizeof(B)&gt;</td></tr>
+<tr class="separator:a0f20341d5c6d9555b6bf0728dd6990a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a702eab9c841dbc5d1fa483dd875d243e"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
+<tr class="memitem:a702eab9c841dbc5d1fa483dd875d243e"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a702eab9c841dbc5d1fa483dd875d243e">LargestIntegral</a> = boost::mp11::mp_max_element&lt; <a class="el" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">FlatRecordDim</a>&lt; RecordDim &gt;, <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a0f20341d5c6d9555b6bf0728dd6990a6">HasLargerSize</a> &gt;</td></tr>
+<tr class="separator:a702eab9c841dbc5d1fa483dd875d243e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb46513e82a723e018572be98ef08d18"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:afb46513e82a723e018572be98ef08d18"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#afb46513e82a723e018572be98ef08d18">ReplaceByByteArray</a> = std::byte[sizeof(T)]</td></tr>
 <tr class="separator:afb46513e82a723e018572be98ef08d18"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -142,6 +152,42 @@ Variables</h2></td></tr>
 <tr class="separator:a72f565b64d0dec287502e69e8ffd2e01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
+<a id="a0f20341d5c6d9555b6bf0728dd6990a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f20341d5c6d9555b6bf0728dd6990a6">&#9670;&nbsp;</a></span>HasLargerSize</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename A , typename B &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a0f20341d5c6d9555b6bf0728dd6990a6">llama::mapping::internal::HasLargerSize</a> = typedef boost::mp11::mp_bool&lt;sizeof(A) &lt; sizeof(B)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00012">12</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a702eab9c841dbc5d1fa483dd875d243e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a702eab9c841dbc5d1fa483dd875d243e">&#9670;&nbsp;</a></span>LargestIntegral</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename RecordDim &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a702eab9c841dbc5d1fa483dd875d243e">llama::mapping::internal::LargestIntegral</a> = typedef boost::mp11::mp_max_element&lt;<a class="el" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">FlatRecordDim</a>&lt;RecordDim&gt;, <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a0f20341d5c6d9555b6bf0728dd6990a6">HasLargerSize</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00015">15</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a761919af792a2052749e060dec4adafe"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a761919af792a2052749e060dec4adafe">&#9670;&nbsp;</a></span>LessAlignment</h2>
 
@@ -348,7 +394,7 @@ template&lt;typename RC , typename RecordCoordForMapping1 &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Wed Dec 8 2021 15:57:12 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Dec 9 2021 13:34:53 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

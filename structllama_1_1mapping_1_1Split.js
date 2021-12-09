@@ -10,9 +10,13 @@ var structllama_1_1mapping_1_1Split =
     [ "RecordDimPartitions", "structllama_1_1mapping_1_1Split.html#a265adac4a4570caf3b8cdb67db39b44b", null ],
     [ "Split", "structllama_1_1mapping_1_1Split.html#a788145e5f0f21141694604518a2c401d", null ],
     [ "Split", "structllama_1_1mapping_1_1Split.html#a9d15b2a33e1f01f9776dfa520ea88fb0", null ],
+    [ "Split", "structllama_1_1mapping_1_1Split.html#a7399b8d8ef86cb6676c194233c6afa2e", null ],
+    [ "Split", "structllama_1_1mapping_1_1Split.html#aa1a50809bf78aea843c3ac0e8b3526bc", null ],
     [ "blobNrAndOffset", "structllama_1_1mapping_1_1Split.html#a48cc12f222f0356bc6f15451d4da3d23", null ],
     [ "blobSize", "structllama_1_1mapping_1_1Split.html#a4229fd170056ccca83ea8f277fe5df74", null ],
+    [ "compute", "structllama_1_1mapping_1_1Split.html#a4db7f8f42fca29352229f5856dfe13b4", null ],
     [ "extents", "structllama_1_1mapping_1_1Split.html#a9ccb3c54b6cef2fa3b40d6c6be13a0ac", null ],
+    [ "isComputed", "structllama_1_1mapping_1_1Split.html#a0809cdc5cf488ac6034d94fccaae0b1c", null ],
     [ "blobCount", "structllama_1_1mapping_1_1Split.html#acee2ab5c3ff2c87c61f8a5ffe2e3ce47", null ],
     [ "mapping1", "structllama_1_1mapping_1_1Split.html#ab122d03d23fba214e2e9b62526d2172c", null ],
     [ "mapping2", "structllama_1_1mapping_1_1Split.html#ac8f0841cd14873d74c7aee30d0c4b922", null ]

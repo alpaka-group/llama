@@ -105,9 +105,20 @@ $(document).ready(function(){initNavTree('functions_vars.html',''); initResizabl
 <li>basicTree
 : <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#ab63f2b5381d208c6de3c0860c748988d">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
 </li>
+<li>bitOffset
+: <a class="el" href="structllama_1_1internal_1_1BitPackedIntRef.html#a1dc73bbd077b574a9a0b8c025d980600">llama::internal::BitPackedIntRef&lt; Integral, StoredIntegralPointer &gt;</a>
+</li>
+<li>bits
+: <a class="el" href="structllama_1_1internal_1_1BitPackedIntRef.html#acf271e6f83290a92431120a79b8a08d5">llama::internal::BitPackedIntRef&lt; Integral, StoredIntegralPointer &gt;</a>
+</li>
+<li>bitsPerStoredIntegral
+: <a class="el" href="structllama_1_1internal_1_1BitPackedIntRef.html#abaf6cc37bba81a8b5d9fcc648a17c563">llama::internal::BitPackedIntRef&lt; Integral, StoredIntegralPointer &gt;</a>
+</li>
 <li>blobCount
 : <a class="el" href="structllama_1_1mapping_1_1AoS.html#a96203bebd47e0eafddb44070772f9271">llama::mapping::AoS&lt; TArrayExtents, TRecordDim, AlignAndPad, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a0776e656f4a3cec8830a6671bf6bb2be">llama::mapping::AoSoA&lt; TArrayExtents, TRecordDim, Lanes, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#a268ffa43bd15882ebd290651379eeaeb">llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, LinearizeArrayDimsFunctor, StoredIntegral &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html#a1df00057cd4f276cae8c410d0958bd8a">llama::mapping::BitPackedIntSoA&lt; TArrayExtents, TRecordDim, LinearizeArrayDimsFunctor, StoredIntegral &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Heatmap.html#a638b77bb13d6e2cd646cef26fa6cf8f9">llama::mapping::Heatmap&lt; Mapping, CountType &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1One.html#a323f4c20f6ed55034d9a0082759ee316">llama::mapping::One&lt; TArrayExtents, TRecordDim, AlignAndPad, FlattenRecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1SoA.html#a2487c810f21acdd1405ffb03183b2657">llama::mapping::SoA&lt; TArrayExtents, TRecordDim, SeparateBuffers, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;</a>
@@ -142,6 +153,13 @@ $(document).ready(function(){initNavTree('functions_vars.html',''); initResizabl
 <li>element
 : <a class="el" href="structllama_1_1Array.html#adcb4206c8a2d2bc2cbe141d354a6185b">llama::Array&lt; T, N &gt;</a>
 </li>
+<li>endPtr
+: <a class="el" href="structllama_1_1internal_1_1BitPackedIntRef.html#af269e4728905a3d8289f5368505b2726">llama::internal::BitPackedIntRef&lt; Integral, StoredIntegralPointer &gt;</a>
+</li>
+<li>exponent
+: <a class="el" href="structllama_1_1internal_1_1FloatBitTraits_3_01double_01_4.html#a7981ea30e5921afa8ae8a5f2e4282bd6">llama::internal::FloatBitTraits&lt; double &gt;</a>
+, <a class="el" href="structllama_1_1internal_1_1FloatBitTraits_3_01float_01_4.html#ae6d36eefbf4d0887afbc7b9b8d394371">llama::internal::FloatBitTraits&lt; float &gt;</a>
+</li>
 </ul>
 
 
@@ -170,6 +188,10 @@ $(document).ready(function(){initNavTree('functions_vars.html',''); initResizabl
 
 
 <h3><a id="index_m"></a>- m -</h3><ul>
+<li>mantissa
+: <a class="el" href="structllama_1_1internal_1_1FloatBitTraits_3_01double_01_4.html#a0b609dbdbcd3f9fa98d0a67318b03897">llama::internal::FloatBitTraits&lt; double &gt;</a>
+, <a class="el" href="structllama_1_1internal_1_1FloatBitTraits_3_01float_01_4.html#abad74d59079b888ab566957a79223366">llama::internal::FloatBitTraits&lt; float &gt;</a>
+</li>
 <li>mapping
 : <a class="el" href="structllama_1_1mapping_1_1Heatmap.html#a82b4b95305ad3e5a4be41f429cbcd95d">llama::mapping::Heatmap&lt; Mapping, CountType &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Trace.html#a4de28c7220fbe298bd65a27d295fa5ca">llama::mapping::Trace&lt; Mapping &gt;</a>
@@ -216,6 +238,9 @@ $(document).ready(function(){initNavTree('functions_vars.html',''); initResizabl
 </li>
 <li>printOnDestruction
 : <a class="el" href="structllama_1_1mapping_1_1Trace.html#a0a1716bb80ec5379e3d05a1eac9c4544">llama::mapping::Trace&lt; Mapping &gt;</a>
+</li>
+<li>ptr
+: <a class="el" href="structllama_1_1internal_1_1BitPackedIntRef.html#a911f7b030ba9bea4fb4bdcb2d11bf62d">llama::internal::BitPackedIntRef&lt; Integral, StoredIntegralPointer &gt;</a>
 </li>
 </ul>
 
@@ -287,7 +312,7 @@ $(document).ready(function(){initNavTree('functions_vars.html',''); initResizabl
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Dec 8 2021 15:57:12 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Dec 9 2021 13:34:53 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
