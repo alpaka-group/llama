@@ -17,9 +17,9 @@ var hierarchy =
     [ "llama::ArrayIndexIterator< ArrayExtents >", "structllama_1_1ArrayIndexIterator.html", null ],
     [ "llama::ArrayIndexIterator< typename View::ArrayExtents >", "structllama_1_1ArrayIndexIterator.html", null ],
     [ "llama::internal::Assign", "structllama_1_1internal_1_1Assign.html", null ],
-    [ "llama::internal::BitPackedFloatRef< Float, StoredIntegralPointer >", "structllama_1_1internal_1_1BitPackedFloatRef.html", null ],
-    [ "llama::internal::BitPackedIntRef< Integral, StoredIntegralPointer >", "structllama_1_1internal_1_1BitPackedIntRef.html", null ],
-    [ "llama::internal::BitPackedIntRef< FloatBits, StoredIntegralPointer >", "structllama_1_1internal_1_1BitPackedIntRef.html", null ],
+    [ "llama::mapping::internal::BitPackedFloatRef< Float, StoredIntegralPointer >", "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html", null ],
+    [ "llama::mapping::internal::BitPackedIntRef< Integral, StoredIntegralPointer >", "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html", null ],
+    [ "llama::mapping::internal::BitPackedIntRef< FloatBits, StoredIntegralPointer >", "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html", null ],
     [ "bool_constant", null, [
       [ "llama::internal::IsComputed< Mapping, RecordCoord, std::void_t< decltype(Mapping::isComputed(RecordCoord{}))> >", "structllama_1_1internal_1_1IsComputed_3_01Mapping_00_01RecordCoord_00_01std_1_1void__t_3_01declt31ec39d02aa75d5ea3308109fe018112.html", null ]
     ] ],
@@ -45,9 +45,9 @@ var hierarchy =
     [ "llama::internal::FlattenRecordDimImpl< Record< Fields... > >", "structllama_1_1internal_1_1FlattenRecordDimImpl_3_01Record_3_01Fields_8_8_8_01_4_01_4.html", null ],
     [ "llama::mapping::FlattenRecordDimInOrder< RecordDim >", "structllama_1_1mapping_1_1FlattenRecordDimInOrder.html", null ],
     [ "llama::mapping::FlattenRecordDimSorted< RecordDim, Less >", "structllama_1_1mapping_1_1FlattenRecordDimSorted.html", null ],
-    [ "llama::internal::FloatBitTraits< T >", "structllama_1_1internal_1_1FloatBitTraits.html", null ],
-    [ "llama::internal::FloatBitTraits< double >", "structllama_1_1internal_1_1FloatBitTraits_3_01double_01_4.html", null ],
-    [ "llama::internal::FloatBitTraits< float >", "structllama_1_1internal_1_1FloatBitTraits_3_01float_01_4.html", null ],
+    [ "llama::mapping::internal::FloatBitTraits< T >", "structllama_1_1mapping_1_1internal_1_1FloatBitTraits.html", null ],
+    [ "llama::mapping::internal::FloatBitTraits< double >", "structllama_1_1mapping_1_1internal_1_1FloatBitTraits_3_01double_01_4.html", null ],
+    [ "llama::mapping::internal::FloatBitTraits< float >", "structllama_1_1mapping_1_1internal_1_1FloatBitTraits_3_01float_01_4.html", null ],
     [ "llama::internal::GetCoordFromTagsImpl< RecordDim, RecordCoord, Tags >", "structllama_1_1internal_1_1GetCoordFromTagsImpl.html", null ],
     [ "llama::internal::GetCoordFromTagsImpl< ChildType[Count], RecordCoord< ResultCoords... >, FirstTag, Tags... >", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01ChildType_0fCount_0e_00_01RecordCoord_3_01Rea82f6370a44084538dfd07ee1f739c70.html", null ],
     [ "llama::internal::GetCoordFromTagsImpl< ChildType[Count], RecordCoord<>, Tags... >", "structllama_1_1internal_1_1GetCoordFromTagsImpl.html", [

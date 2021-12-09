@@ -1,6 +1,11 @@
 var namespacellama_1_1mapping_1_1internal =
 [
+    [ "BitPackedFloatRef", "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html", "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef" ],
+    [ "BitPackedIntRef", "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html", "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef" ],
     [ "ChangeTypeReference", "structllama_1_1mapping_1_1internal_1_1ChangeTypeReference.html", "structllama_1_1mapping_1_1internal_1_1ChangeTypeReference" ],
+    [ "FloatBitTraits", "structllama_1_1mapping_1_1internal_1_1FloatBitTraits.html", null ],
+    [ "FloatBitTraits< double >", "structllama_1_1mapping_1_1internal_1_1FloatBitTraits_3_01double_01_4.html", "structllama_1_1mapping_1_1internal_1_1FloatBitTraits_3_01double_01_4" ],
+    [ "FloatBitTraits< float >", "structllama_1_1mapping_1_1internal_1_1FloatBitTraits_3_01float_01_4.html", "structllama_1_1mapping_1_1internal_1_1FloatBitTraits_3_01float_01_4" ],
     [ "IsSelectedPredicate", "structllama_1_1mapping_1_1internal_1_1IsSelectedPredicate.html", "structllama_1_1mapping_1_1internal_1_1IsSelectedPredicate" ],
     [ "MakeReplacer", "structllama_1_1mapping_1_1internal_1_1MakeReplacer.html", "structllama_1_1mapping_1_1internal_1_1MakeReplacer" ],
     [ "MakeUnsigned", "structllama_1_1mapping_1_1internal_1_1MakeUnsigned.html", null ],

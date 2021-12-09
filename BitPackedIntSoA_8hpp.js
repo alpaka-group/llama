@@ -1,5 +1,6 @@
 var BitPackedIntSoA_8hpp =
 [
+    [ "BitPackedIntRef", "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html", "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef" ],
     [ "MakeUnsigned", "structllama_1_1mapping_1_1internal_1_1MakeUnsigned.html", null ],
     [ "MakeUnsigned< bool >", "structllama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01bool_01_4.html", "structllama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01bool_01_4" ],
     [ "BitPackedIntSoA", "structllama_1_1mapping_1_1BitPackedIntSoA.html", "structllama_1_1mapping_1_1BitPackedIntSoA" ],
