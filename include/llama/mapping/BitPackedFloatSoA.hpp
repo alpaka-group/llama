@@ -51,9 +51,9 @@ namespace llama::mapping
 
             const Integral outExponentMask = (Integral{1} << outExponentBits) - 1u;
             Integral outExponent;
-            if(inExponent == inExponentMask) [[unlikely]]
+            if(inExponent == inExponentMask) [[LLAMA_UNLIKELY]]
                 outExponent = outExponentMask; // propagate +/- inf/nan
-            else if(inExponent == 0) [[unlikely]]
+            else if(inExponent == 0) [[LLAMA_UNLIKELY]]
                 outExponent = 0; // propagate -/+ zero
             else
             {
