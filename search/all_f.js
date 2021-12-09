@@ -18,7 +18,8 @@ var searchData=
   ['storageref_443',['storageRef',['../structllama_1_1mapping_1_1internal_1_1ChangeTypeReference.html#a193d65af01bc78bc53f3ca8e6009ee81',1,'llama::mapping::internal::ChangeTypeReference']]],
   ['store_444',['store',['../structllama_1_1VirtualRecord.html#a9cba5ab8df2e439c1ae9b75eec5666d7',1,'llama::VirtualRecord']]],
   ['storedintegral_445',['StoredIntegral',['../structllama_1_1internal_1_1BitPackedIntRef.html#aaa476ae78dd71fb8c3cbe73179fd1c2d',1,'llama::internal::BitPackedIntRef']]],
-  ['structname_446',['structName',['../namespacellama.html#a86a72929fc8c71b9aa2b514a74ab34eb',1,'llama']]],
-  ['sumchildrensmallerthan_447',['sumChildrenSmallerThan',['../namespacellama_1_1mapping_1_1tree_1_1internal.html#ac64ac187e14ff4540b332b55e4fdc7f7',1,'llama::mapping::tree::internal']]],
-  ['swap_448',['swap',['../structllama_1_1Vector.html#a83f69184d753889d37b68b9169a34113',1,'llama::Vector::swap()'],['../structllama_1_1VirtualRecord.html#a8d445e33790c005518c8400be083965e',1,'llama::VirtualRecord::swap()'],['../namespacellama.html#af0d8ff2d635e29b9e259af59fe796741',1,'llama::swap()']]]
+  ['storedparentview_446',['StoredParentView',['../structllama_1_1VirtualView.html#a21144d5af8d33763e98fe2e1849cf9cf',1,'llama::VirtualView']]],
+  ['structname_447',['structName',['../namespacellama.html#a86a72929fc8c71b9aa2b514a74ab34eb',1,'llama']]],
+  ['sumchildrensmallerthan_448',['sumChildrenSmallerThan',['../namespacellama_1_1mapping_1_1tree_1_1internal.html#ac64ac187e14ff4540b332b55e4fdc7f7',1,'llama::mapping::tree::internal']]],
+  ['swap_449',['swap',['../structllama_1_1Vector.html#a83f69184d753889d37b68b9169a34113',1,'llama::Vector::swap()'],['../structllama_1_1VirtualRecord.html#a8d445e33790c005518c8400be083965e',1,'llama::VirtualRecord::swap()'],['../namespacellama.html#af0d8ff2d635e29b9e259af59fe796741',1,'llama::swap()']]]
 ];

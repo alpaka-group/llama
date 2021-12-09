@@ -370,6 +370,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a3750d27a7f8dd111fbe32dc769b44120"><td class="memTemplParams" colspan="2">template&lt;std::size_t Dim, typename RecordDim &gt; </td></tr>
 <tr class="memitem:a3750d27a7f8dd111fbe32dc769b44120"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a3750d27a7f8dd111fbe32dc769b44120">allocViewStack</a> () -&gt; decltype(auto)</td></tr>
 <tr class="separator:a3750d27a7f8dd111fbe32dc769b44120"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a416bef7f5a6a9e2cecf4f9b090c9d4ed"><td class="memTemplParams" colspan="2">template&lt;typename TStoredParentView &gt; </td></tr>
+<tr class="memitem:a416bef7f5a6a9e2cecf4f9b090c9d4ed"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a416bef7f5a6a9e2cecf4f9b090c9d4ed">VirtualView</a> (TStoredParentView &amp;&amp;, typename std::remove_reference_t&lt; TStoredParentView &gt;::Mapping::ArrayIndex) -&gt; <a class="el" href="structllama_1_1VirtualView.html">VirtualView</a>&lt; TStoredParentView &gt;</td></tr>
+<tr class="separator:a416bef7f5a6a9e2cecf4f9b090c9d4ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8183deaf1069415900815fd9f2f1e373"><td class="memTemplParams" colspan="2">template&lt;typename VirtualRecord &gt; </td></tr>
 <tr class="memitem:a8183deaf1069415900815fd9f2f1e373"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a8183deaf1069415900815fd9f2f1e373">copyVirtualRecordStack</a> (const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> &amp;vd) -&gt; decltype(auto)</td></tr>
 <tr class="separator:a8183deaf1069415900815fd9f2f1e373"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -2533,6 +2536,37 @@ template&lt;typename... Elements, typename Functor &gt; </div>
 
 </div>
 </div>
+<a id="a416bef7f5a6a9e2cecf4f9b090c9d4ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a416bef7f5a6a9e2cecf4f9b090c9d4ed">&#9670;&nbsp;</a></span>VirtualView()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TStoredParentView &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structllama_1_1VirtualView.html">llama::VirtualView</a> </td>
+          <td>(</td>
+          <td class="paramtype">TStoredParentView &amp;&amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">typename std::remove_reference_t&lt; TStoredParentView &gt;::Mapping::ArrayIndex&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> -&gt;  <a class="el" href="structllama_1_1VirtualView.html">VirtualView</a>&lt; TStoredParentView &gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p><a class="el" href="structllama_1_1VirtualView.html">VirtualView</a> vview(view); will store a reference to view. <a class="el" href="structllama_1_1VirtualView.html">VirtualView</a> vview(std::move(view)); will store the view. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Variable Documentation</h2>
 <a id="af54c80b077fb3d417466c83d0d005907"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af54c80b077fb3d417466c83d0d005907">&#9670;&nbsp;</a></span>alignOf</h2>
@@ -3361,7 +3395,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Thu Dec 9 2021 13:34:53 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Dec 9 2021 15:09:59 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

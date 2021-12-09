@@ -14,6 +14,7 @@ var View_8hpp =
     [ "allocViewUninitialized", "View_8hpp.html#a41836d1bd1b74b791e3ee54319e67c59", null ],
     [ "constructFields", "View_8hpp.html#a0294f7d0aa47fdf5f11075cc8d92d0f8", null ],
     [ "makeBlobArray", "View_8hpp.html#a36b0736740116d5e9fff6172f5b202af", null ],
+    [ "VirtualView", "View_8hpp.html#a416bef7f5a6a9e2cecf4f9b090c9d4ed", null ],
     [ "isComputed", "View_8hpp.html#a9676a3903b134df116791bcae533d6c6", null ],
     [ "IsView", "View_8hpp.html#a9950d7fcb0405c5c7f10238b7752fa6d", null ],
     [ "IsView< View< Mapping, BlobType > >", "View_8hpp.html#a1de4eb420b7c43553df533b32b3b45a8", null ]
