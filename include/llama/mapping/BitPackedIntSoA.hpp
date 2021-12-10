@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "../ProxyRefOpMixin.hpp"
+
 #include <climits>
 #include <type_traits>
 
@@ -14,8 +16,9 @@ namespace llama::mapping
         /// @tparam Integral Integral data type which can be loaded and store through this reference.
         /// @tparam StoredIntegralPointer Pointer to integral type used for storing the bits.
         template<typename Integral, typename StoredIntegralPointer>
-        struct BitPackedIntRef
+        struct BitPackedIntRef : ProxyRefOpMixin<BitPackedIntRef<Integral, StoredIntegralPointer>, Integral>
         {
+        private:
             using StoredIntegral = std::remove_const_t<std::remove_pointer_t<StoredIntegralPointer>>;
 
             static_assert(std::is_integral_v<Integral>);
@@ -35,8 +38,35 @@ namespace llama::mapping
 
             static constexpr auto bitsPerStoredIntegral = sizeof(StoredIntegral) * CHAR_BIT;
 
+        public:
+            using value_type = Integral;
+
+            LLAMA_FN_HOST_ACC_INLINE constexpr BitPackedIntRef(
+                StoredIntegralPointer ptr,
+                std::size_t bitOffset,
+                unsigned bits
+#ifndef NDEBUG
+                ,
+                StoredIntegralPointer endPtr
+#endif
+                )
+                : ptr{ptr}
+                , bitOffset{bitOffset}
+                , bits
+            {
+                bits
+            }
+#ifndef NDEBUG
+            , endPtr
+            {
+                endPtr
+            }
+#endif
+            {
+            }
+
             // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-            operator Integral() const
+            LLAMA_FN_HOST_ACC_INLINE constexpr operator Integral() const
             {
                 auto* p = ptr + bitOffset / bitsPerStoredIntegral;
                 const auto innerBitOffset = bitOffset % bitsPerStoredIntegral;
@@ -63,7 +93,7 @@ namespace llama::mapping
                 return static_cast<Integral>(v);
             }
 
-            auto operator=(Integral value) -> BitPackedIntRef&
+            LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(Integral value) -> BitPackedIntRef&
             {
                 const auto unsignedValue = static_cast<StoredIntegral>(value);
                 const auto mask = (StoredIntegral{1} << bits) - 1u;

@@ -4,11 +4,6 @@
 #include <limits>
 #include <random>
 
-// the following tests rely on correct IEEE 754 behavior wrt. infinity and NAN
-#ifdef __INTEL_LLVM_COMPILER
-#    pragma float_control(precise, on)
-#endif
-
 #define STORE_LOAD_CHECK(in, out)                                                                                     \
     {                                                                                                                 \
         view() = (in);                                                                                                \

@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "../ProxyRefOpMixin.hpp"
 #include "Common.hpp"
 
 namespace llama::mapping
@@ -22,17 +23,25 @@ namespace llama::mapping
         using ReplaceType = TransformLeaves<RecordDim, MakeReplacer<ReplacementMap>::template type>;
 
         template<typename UserT, typename StoredT>
-        struct ChangeTypeReference
+        struct ChangeTypeReference : ProxyRefOpMixin<ChangeTypeReference<UserT, StoredT>, UserT>
         {
+        private:
             StoredT& storageRef;
 
+        public:
+            using value_type = UserT;
+
+            LLAMA_FN_HOST_ACC_INLINE constexpr ChangeTypeReference(StoredT& storageRef) : storageRef{storageRef}
+            {
+            }
+
             // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-            operator UserT() const
+            LLAMA_FN_HOST_ACC_INLINE constexpr operator UserT() const
             {
                 return storageRef;
             }
 
-            auto operator=(UserT v) -> ChangeTypeReference&
+            LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(UserT v) -> ChangeTypeReference&
             {
                 storageRef = v;
                 return *this;
