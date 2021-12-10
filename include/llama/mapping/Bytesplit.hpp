@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "../ProxyRefOpMixin.hpp"
 #include "Common.hpp"
 
 namespace llama::mapping
@@ -15,6 +16,8 @@ namespace llama::mapping
         using SplitBytes = TransformLeaves<RecordDim, ReplaceByByteArray>;
     } // namespace internal
 
+    /// Meta mapping splitting each field in the record dimension into an array of bytes and mapping the resulting
+    /// record dimension using a further mapping.
     template<typename TArrayExtents, typename TRecordDim, template<typename, typename> typename InnerMapping>
     struct Bytesplit : private InnerMapping<TArrayExtents, internal::SplitBytes<TRecordDim>>
     {
@@ -41,20 +44,28 @@ namespace llama::mapping
         }
 
         template<typename QualifiedBase, typename RC, typename BlobArray>
-        struct Reference
+        struct Reference : ProxyRefOpMixin<Reference<QualifiedBase, RC, BlobArray>, GetType<TRecordDim, RC>>
         {
             QualifiedBase& innerMapping;
             ArrayIndex ai;
             BlobArray& blobs;
 
-            using DstType = GetType<TRecordDim, RC>;
+        public:
+            using value_type = GetType<TRecordDim, RC>;
+
+            Reference(QualifiedBase& innerMapping, ArrayIndex ai, BlobArray& blobs)
+                : innerMapping(innerMapping)
+                , ai(ai)
+                , blobs(blobs)
+            {
+            }
 
             // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-            operator DstType() const
+            operator value_type() const
             {
-                DstType v;
+                value_type v;
                 auto* p = reinterpret_cast<std::byte*>(&v);
-                boost::mp11::mp_for_each<boost::mp11::mp_iota_c<sizeof(DstType)>>(
+                boost::mp11::mp_for_each<boost::mp11::mp_iota_c<sizeof(value_type)>>(
                     [&](auto ic)
                     {
                         constexpr auto i = decltype(ic)::value;
@@ -64,10 +75,10 @@ namespace llama::mapping
                 return v;
             }
 
-            auto operator=(DstType v) -> Reference&
+            auto operator=(value_type v) -> Reference&
             {
                 auto* p = reinterpret_cast<std::byte*>(&v);
-                boost::mp11::mp_for_each<boost::mp11::mp_iota_c<sizeof(DstType)>>(
+                boost::mp11::mp_for_each<boost::mp11::mp_iota_c<sizeof(value_type)>>(
                     [&](auto ic)
                     {
                         constexpr auto i = decltype(ic)::value;

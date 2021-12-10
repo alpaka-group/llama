@@ -42,6 +42,7 @@
 #include "Core.hpp"
 #include "DumpMapping.hpp"
 #include "Meta.hpp"
+#include "ProxyRefOpMixin.hpp"
 #include "Vector.hpp"
 #include "View.hpp"
 #include "VirtualRecord.hpp"

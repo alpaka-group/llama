@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "../ProxyRefOpMixin.hpp"
 #include "BitPackedIntSoA.hpp"
 
 #include <climits>
@@ -82,8 +83,9 @@ namespace llama::mapping
         /// @tparam Integral Integral data type which can be loaded and store through this reference.
         /// @tparam StoredIntegralPointer Pointer to integral type used for storing the bits.
         template<typename Float, typename StoredIntegralPointer>
-        struct BitPackedFloatRef
+        struct BitPackedFloatRef : ProxyRefOpMixin<BitPackedFloatRef<Float, StoredIntegralPointer>, Float>
         {
+        private:
             static_assert(
                 std::is_same_v<Float, float> || std::is_same_v<Float, double>,
                 "Types other than float or double are not implemented yet");
@@ -93,13 +95,14 @@ namespace llama::mapping
 
             using FloatBits = std::conditional_t<std::is_same_v<Float, float>, std::uint32_t, std::uint64_t>;
 
-        private:
             internal::BitPackedIntRef<FloatBits, StoredIntegralPointer> intref;
             unsigned exponentBits = 0;
             unsigned mantissaBits = 0;
 
         public:
-            BitPackedFloatRef(
+            using value_type = Float;
+
+            LLAMA_FN_HOST_ACC_INLINE constexpr BitPackedFloatRef(
             StoredIntegralPointer p,
             std::size_t bitOffset,
             unsigned exponentBits,
@@ -120,7 +123,7 @@ namespace llama::mapping
             }
 
             // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-            operator Float() const
+            LLAMA_FN_HOST_ACC_INLINE constexpr operator Float() const
             {
                 using Bits = internal::FloatBitTraits<Float>;
                 const FloatBits packedFloat = intref;
@@ -131,7 +134,7 @@ namespace llama::mapping
                 return f;
             }
 
-            auto operator=(Float f) -> BitPackedFloatRef&
+            LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(Float f) -> BitPackedFloatRef&
             {
                 using Bits = internal::FloatBitTraits<Float>;
                 FloatBits unpackedFloat = 0;
