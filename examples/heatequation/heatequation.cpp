@@ -22,61 +22,81 @@
 #include <utility>
 
 template<typename View>
-inline void kernel(uint32_t idx, const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
+inline void kernel(uint32_t idx, const View& uCurr, View& uNext, double r)
 {
-    const auto r = dt / (dx * dx);
-    if(idx > 0 && idx < extent - 1u)
-        uNext[idx] = uCurr[idx] * (1.0 - 2.0 * r) + uCurr[idx - 1] * r + uCurr[idx + 1] * r;
+    uNext[idx] = uCurr[idx] * (1.0 - 2.0 * r) + uCurr[idx - 1] * r + uCurr[idx + 1] * r;
 }
 
 template<typename View>
 void update_scalar(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
 {
+    const auto r = dt / (dx * dx);
     for(auto i = 0; i < extent; i++)
-        kernel(i, uCurr, uNext, extent, dx, dt);
+        if(i > 0 && i < extent - 1u)
+            kernel(i, uCurr, uNext, r);
 }
 
 #if __has_include(<Vc/Vc>)
 #    include <Vc/Vc>
 
 template<typename View>
-inline void kernel_vec(uint32_t blockIdx, const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
+inline void kernel_vec(uint32_t baseIdx, const View& uCurr, View& uNext, double r)
 {
-    const auto r = dt / (dx * dx);
-
-    const auto baseIdx = static_cast<uint32_t>(blockIdx * Vc::double_v::size());
-    if(baseIdx > 0 && baseIdx + Vc::double_v::size() < extent)
-    {
-        const auto next = Vc::double_v{&uCurr[baseIdx]} * (1.0 - 2.0 * r) + Vc::double_v{&uCurr[baseIdx - 1]} * r
-            + Vc::double_v{&uCurr[baseIdx + 1]} * r;
-        next.store(&uNext[baseIdx]);
-    }
-    else
-    {
-        for(auto idx = baseIdx; idx <= baseIdx + Vc::double_v::size(); idx++)
-            if(idx > 0 && idx < extent - 1u)
-                uNext[idx] = uCurr[idx] * (1.0 - 2.0 * r) + uCurr[idx - 1] * r + uCurr[idx + 1] * r;
-    }
+    const auto next = Vc::double_v{&uCurr[baseIdx]} * (1.0 - 2.0 * r) + Vc::double_v{&uCurr[baseIdx - 1]} * r
+        + Vc::double_v{&uCurr[baseIdx + 1]} * r;
+    next.store(&uNext[baseIdx]);
 }
 
 template<typename View>
 void update_Vc(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
 {
     constexpr auto L = Vc::double_v::size();
+    const auto r = dt / (dx * dx);
+
     const auto blocks = (extent + L - 1) / L;
-    for(auto i = 0; i < blocks; i++)
-        kernel_vec(i, uCurr, uNext, extent, dx, dt);
+    for(auto blockIdx = 0; blockIdx < blocks; blockIdx++)
+    {
+        const auto baseIdx = static_cast<uint32_t>(blockIdx * L);
+        if(baseIdx > 0 && baseIdx + L < extent)
+            kernel_vec(baseIdx, uCurr, uNext, r);
+        else
+            for(auto i = baseIdx; i <= baseIdx + L; i++)
+                if(i > 0 && i < extent - 1u)
+                    kernel(i, uCurr, uNext, r);
+    }
 }
 
 template<typename View>
 void update_Vc_peel(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
 {
     constexpr auto L = Vc::double_v::size();
-    const auto blocks = (extent + L - 1) / L;
-    kernel_vec(0, uCurr, uNext, extent, dx, dt);
-    for(auto i = 1; i < blocks - 1; i++)
-        kernel_vec(i, uCurr, uNext, extent, dx, dt);
-    kernel_vec(blocks - 1, uCurr, uNext, extent, dx, dt);
+    const auto r = dt / (dx * dx);
+
+    for(auto i = 1; i < L; i++)
+        kernel(i, uCurr, uNext, r);
+
+    const auto blocksEnd = ((extent - 1) / L) * L;
+    for(auto i = L; i < blocksEnd; i += L)
+        kernel_vec(i, uCurr, uNext, r);
+
+    for(auto i = blocksEnd; i < extent - 1; i++)
+        kernel(i, uCurr, uNext, r);
+}
+
+template<typename View>
+void update_Vc_peel_unal_st(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
+{
+    constexpr auto L = Vc::double_v::size();
+    const auto r = dt / (dx * dx);
+
+    kernel(1, uCurr, uNext, r);
+
+    const auto blocksEnd = extent - 1 - L;
+    for(auto i = 1; i < blocksEnd; i += L)
+        kernel_vec(i, uCurr, uNext, r);
+
+    for(auto i = blocksEnd; i < extent - 1; i++)
+        kernel(i, uCurr, uNext, r);
 }
 
 #endif
@@ -118,6 +138,8 @@ try
         // init
         for(uint32_t i = 0; i < extent; i++)
             uCurr[i] = exactSolution(i * dx, 0.0);
+        uNext[0] = 0;
+        uNext[extent - 1] = 0;
 
         // run simulation
         const auto start = std::chrono::high_resolution_clock::now();
@@ -145,10 +167,11 @@ try
             std::cout << "Incorrect! error = " << maxError << " (the grid resolution may be too low)\n";
     };
 
-    run("update_scalar ", [](auto&... args) { update_scalar(args...); });
+    run("update_scalar         ", [](auto&... args) { update_scalar(args...); });
 #if __has_include(<Vc/Vc>)
-    run("update_Vc     ", [](auto&... args) { update_Vc(args...); });
-    run("update_Vc_peel", [](auto&... args) { update_Vc_peel(args...); });
+    run("update_Vc             ", [](auto&... args) { update_Vc(args...); });
+    run("update_Vc_peel        ", [](auto&... args) { update_Vc_peel(args...); });
+    run("update_Vc_peel_unal_st", [](auto&... args) { update_Vc_peel_unal_st(args...); });
 #endif
 
     return 0;
