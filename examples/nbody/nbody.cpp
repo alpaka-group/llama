@@ -112,6 +112,12 @@ namespace usellama
                 return "AoSoA" + std::to_string(AoSoALanes);
             if(m == 4)
                 return "Split SoA";
+            if(m == 5)
+                return "ByteSplit AoS";
+            if(m == 6)
+                return "ByteSplit SoA MB";
+            if(m == 7)
+                return "BitPack SoA 11e4";
             std::abort();
         };
         auto title = "LLAMA " + mappingName(Mapping);
@@ -137,6 +143,14 @@ namespace usellama
                     llama::mapping::PreconfiguredSoA<>::type,
                     llama::mapping::PreconfiguredSoA<>::type,
                     true>{extents};
+            if constexpr(Mapping == 5)
+                return llama::mapping::Bytesplit<ArrayExtents, Particle, llama::mapping::PreconfiguredAoS<>::type>{
+                    extents};
+            if constexpr(Mapping == 6)
+                return llama::mapping::Bytesplit<ArrayExtents, Particle, llama::mapping::PreconfiguredSoA<>::type>{
+                    extents};
+            if constexpr(Mapping == 7)
+                return llama::mapping::BitPackedFloatSoA<ArrayExtents, Particle>{4, 11, extents};
         }();
         if constexpr(DUMP_MAPPING)
             std::ofstream(title + ".svg") << llama::toSvg(mapping);
@@ -1389,7 +1403,7 @@ $data << EOD
 
     int r = 0;
     using namespace boost::mp11;
-    mp_for_each<mp_iota_c<5>>(
+    mp_for_each<mp_iota_c<8>>(
         [&](auto i)
         {
             // only AoSoA (3) needs lanes
