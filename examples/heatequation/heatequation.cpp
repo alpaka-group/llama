@@ -130,6 +130,7 @@ try
     }
 
     const auto mapping = llama::mapping::SoA{llama::ArrayExtents{extent}, double{}};
+    // const auto mapping = llama::mapping::BitPackedFloatSoA{5, 32, llama::ArrayExtents{extent}, double{}};
     auto uNext = llama::allocViewUninitialized(mapping);
     auto uCurr = llama::allocViewUninitialized(mapping);
 
