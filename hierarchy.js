@@ -17,14 +17,10 @@ var hierarchy =
     [ "llama::ArrayIndexIterator< ArrayExtents >", "structllama_1_1ArrayIndexIterator.html", null ],
     [ "llama::ArrayIndexIterator< typename View::ArrayExtents >", "structllama_1_1ArrayIndexIterator.html", null ],
     [ "llama::internal::Assign", "structllama_1_1internal_1_1Assign.html", null ],
-    [ "llama::mapping::internal::BitPackedFloatRef< Float, StoredIntegralPointer >", "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html", null ],
-    [ "llama::mapping::internal::BitPackedIntRef< Integral, StoredIntegralPointer >", "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html", null ],
-    [ "llama::mapping::internal::BitPackedIntRef< FloatBits, StoredIntegralPointer >", "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html", null ],
     [ "bool_constant", null, [
       [ "llama::internal::IsComputed< Mapping, RecordCoord, std::void_t< decltype(Mapping::isComputed(RecordCoord{}))> >", "structllama_1_1internal_1_1IsComputed_3_01Mapping_00_01RecordCoord_00_01std_1_1void__t_3_01declt31ec39d02aa75d5ea3308109fe018112.html", null ]
     ] ],
     [ "llama::mapping::tree::functor::internal::ChangeNodeChildsRuntimeFunctor", "structllama_1_1mapping_1_1tree_1_1functor_1_1internal_1_1ChangeNodeChildsRuntimeFunctor.html", null ],
-    [ "llama::mapping::internal::ChangeTypeReference< UserT, StoredT >", "structllama_1_1mapping_1_1internal_1_1ChangeTypeReference.html", null ],
     [ "llama::Copy< SrcMapping, DstMapping, SFINAE >", "structllama_1_1Copy.html", null ],
     [ "llama::Copy< Mapping, Mapping >", "structllama_1_1Copy_3_01Mapping_00_01Mapping_01_4.html", null ],
     [ "llama::Copy< mapping::AoSoA< ArrayExtents, RecordDim, LanesSrc, LinearizeArrayDims >, mapping::AoSoA< ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims >, std::enable_if_t< LanesSrc !=LanesDst > >", "structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Line6dc3fb3fdb46e2d3a2a87dd652990741.html", null ],
@@ -76,11 +72,11 @@ var hierarchy =
       [ "llama::mapping::ChangeType< TArrayExtents, TRecordDim, InnerMapping, ReplacementMap >", "structllama_1_1mapping_1_1ChangeType.html", null ]
     ] ],
     [ "integral_constant", null, [
-      [ "std::tuple_size< llama::ArrayExtents< Sizes... > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayExtents_3_01Sizes_8_8_8_01_4_01_4.html", null ],
-      [ "std::tuple_size< llama::ArrayIndex< N > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayIndex_3_01N_01_4_01_4.html", null ]
+      [ "std::tuple_size< llama::Array< T, N > >", "structstd_1_1tuple__size_3_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html", null ]
     ] ],
     [ "integral_constant", null, [
-      [ "std::tuple_size< llama::Array< T, N > >", "structstd_1_1tuple__size_3_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html", null ]
+      [ "std::tuple_size< llama::ArrayExtents< Sizes... > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayExtents_3_01Sizes_8_8_8_01_4_01_4.html", null ],
+      [ "std::tuple_size< llama::ArrayIndex< N > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayIndex_3_01N_01_4_01_4.html", null ]
     ] ],
     [ "llama::mapping::internal::IsSelectedPredicate< RC >", "structllama_1_1mapping_1_1internal_1_1IsSelectedPredicate.html", null ],
     [ "llama::Iterator< View >", "structllama_1_1Iterator.html", null ],
@@ -125,11 +121,26 @@ var hierarchy =
     [ "llama::mapping::PreconfiguredAoSoA< Lanes, LinearizeArrayDimsFunctor >", "structllama_1_1mapping_1_1PreconfiguredAoSoA.html", null ],
     [ "llama::mapping::PreconfiguredSoA< SeparateBuffers, LinearizeArrayDimsFunctor >", "structllama_1_1mapping_1_1PreconfiguredSoA.html", null ],
     [ "llama::mapping::PreconfiguredSplit< RecordCoordsForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs >", "structllama_1_1mapping_1_1PreconfiguredSplit.html", null ],
+    [ "llama::ProxyRefOpMixin< Derived, ValueType >", "structllama_1_1ProxyRefOpMixin.html", null ],
+    [ "llama::ProxyRefOpMixin< BitPackedFloatRef< Float, StoredIntegralPointer >, Float >", "structllama_1_1ProxyRefOpMixin.html", [
+      [ "llama::mapping::internal::BitPackedFloatRef< Float, StoredIntegralPointer >", "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html", null ]
+    ] ],
+    [ "llama::ProxyRefOpMixin< BitPackedIntRef< FloatBits, StoredIntegralPointer >, FloatBits >", "structllama_1_1ProxyRefOpMixin.html", [
+      [ "llama::mapping::internal::BitPackedIntRef< FloatBits, StoredIntegralPointer >", "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html", null ]
+    ] ],
+    [ "llama::ProxyRefOpMixin< BitPackedIntRef< Integral, StoredIntegralPointer >, Integral >", "structllama_1_1ProxyRefOpMixin.html", [
+      [ "llama::mapping::internal::BitPackedIntRef< Integral, StoredIntegralPointer >", "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html", null ]
+    ] ],
+    [ "llama::ProxyRefOpMixin< ChangeTypeReference< UserT, StoredT >, UserT >", "structllama_1_1ProxyRefOpMixin.html", [
+      [ "llama::mapping::internal::ChangeTypeReference< UserT, StoredT >", "structllama_1_1mapping_1_1internal_1_1ChangeTypeReference.html", null ]
+    ] ],
+    [ "llama::ProxyRefOpMixin< Reference< QualifiedBase, RC, BlobArray >, GetType< TRecordDim, RC > >", "structllama_1_1ProxyRefOpMixin.html", [
+      [ "llama::mapping::Bytesplit< TArrayExtents, TRecordDim, InnerMapping >::Reference< QualifiedBase, RC, BlobArray >", "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html", null ]
+    ] ],
     [ "llama::bloballoc::AlignedAllocator< T, Alignment >::rebind< T2 >", "structllama_1_1bloballoc_1_1AlignedAllocator_1_1rebind.html", null ],
     [ "llama::Record< Fields >", "structllama_1_1Record.html", null ],
     [ "llama::RecordCoord< Coords >", "structllama_1_1RecordCoord.html", null ],
     [ "llama::RecordCoord<>", "structllama_1_1RecordCoord_3_4.html", null ],
-    [ "llama::mapping::Bytesplit< TArrayExtents, TRecordDim, InnerMapping >::Reference< QualifiedBase, RC, BlobArray >", "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html", null ],
     [ "llama::bloballoc::SharedPtr", "structllama_1_1bloballoc_1_1SharedPtr.html", null ],
     [ "llama::mapping::Split< TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs >", "structllama_1_1mapping_1_1Split.html", null ],
     [ "llama::bloballoc::Stack< BytesToReserve >", "structllama_1_1bloballoc_1_1Stack.html", null ],
@@ -163,8 +174,8 @@ var hierarchy =
     [ "llama::internal::TupleReplaceImpl< Pos, Tuple, Replacement >", "structllama_1_1internal_1_1TupleReplaceImpl.html", null ],
     [ "llama::internal::TupleReplaceImpl< 0, Tuple< Elements... >, Replacement >", "structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01Elements_8_8_8_01_4_00_01Replacement_01_4.html", null ],
     [ "llama::internal::TupleReplaceImpl< 0, Tuple< OneElement >, Replacement >", "structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01OneElement_01_4_00_01Replacement_01_4.html", null ],
-    [ "llama::bloballoc::Vector", "structllama_1_1bloballoc_1_1Vector.html", null ],
     [ "llama::Vector< Mapping >", "structllama_1_1Vector.html", null ],
+    [ "llama::bloballoc::Vector", "structllama_1_1bloballoc_1_1Vector.html", null ],
     [ "llama::View< TMapping, BlobType >", "structllama_1_1View.html", null ],
     [ "llama::VirtualRecord< TView, TBoundRecordCoord, OwnView >", "structllama_1_1VirtualRecord.html", null ],
     [ "llama::VirtualView< TStoredParentView >", "structllama_1_1VirtualView.html", null ],

@@ -1,9 +1,11 @@
 <map id="/home/runner/work/llama/llama/include/llama/mapping/BitPackedFloatSoA.hpp" name="/home/runner/work/llama/llama/include/llama/mapping/BitPackedFloatSoA.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="142,5,358,61"/>
-<area shape="rect" id="node2" href="$BitPackedIntSoA_8hpp.html" title=" " alt="" coords="24,109,178,136"/>
-<area shape="rect" id="node3" title=" " alt="" coords="13,184,80,211"/>
-<area shape="rect" id="node4" title=" " alt="" coords="110,184,202,211"/>
-<area shape="rect" id="node5" title=" " alt="" coords="253,109,320,136"/>
-<area shape="rect" id="node6" title=" " alt="" coords="344,109,410,136"/>
-<area shape="rect" id="node7" title=" " alt="" coords="434,109,493,136"/>
+<area shape="rect" id="node1" title=" " alt="" coords="255,5,471,61"/>
+<area shape="rect" id="node2" href="$ProxyRefOpMixin_8hpp.html" title=" " alt="" coords="5,184,180,211"/>
+<area shape="rect" id="node4" href="$BitPackedIntSoA_8hpp.html" title=" " alt="" coords="171,109,326,136"/>
+<area shape="rect" id="node5" title=" " alt="" coords="210,184,277,211"/>
+<area shape="rect" id="node6" title=" " alt="" coords="309,184,401,211"/>
+<area shape="rect" id="node7" title=" " alt="" coords="401,109,467,136"/>
+<area shape="rect" id="node8" title=" " alt="" coords="491,109,558,136"/>
+<area shape="rect" id="node9" title=" " alt="" coords="582,109,641,136"/>
+<area shape="rect" id="node3" href="$macros_8hpp.html" title=" " alt="" coords="43,259,142,285"/>
 </map>

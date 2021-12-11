@@ -22,6 +22,9 @@ var dir_1edeeca147c2d4fb57fec1b01c02fb14 =
     [ "macros.hpp", "macros_8hpp.html", "macros_8hpp" ],
     [ "Meta.hpp", "Meta_8hpp.html", "Meta_8hpp" ],
     [ "Proofs.hpp", "Proofs_8hpp.html", "Proofs_8hpp" ],
+    [ "ProxyRefOpMixin.hpp", "ProxyRefOpMixin_8hpp.html", [
+      [ "ProxyRefOpMixin", "structllama_1_1ProxyRefOpMixin.html", "structllama_1_1ProxyRefOpMixin" ]
+    ] ],
     [ "RecordCoord.hpp", "RecordCoord_8hpp.html", "RecordCoord_8hpp" ],
     [ "Tuple.hpp", "Tuple_8hpp.html", "Tuple_8hpp" ],
     [ "Vector.hpp", "Vector_8hpp.html", [

@@ -19,6 +19,7 @@ var namespacellama =
     [ "Iterator", "structllama_1_1Iterator.html", "structllama_1_1Iterator" ],
     [ "NoName", "structllama_1_1NoName.html", null ],
     [ "NrAndOffset", "structllama_1_1NrAndOffset.html", "structllama_1_1NrAndOffset" ],
+    [ "ProxyRefOpMixin", "structllama_1_1ProxyRefOpMixin.html", "structllama_1_1ProxyRefOpMixin" ],
     [ "Record", "structllama_1_1Record.html", null ],
     [ "RecordCoord", "structllama_1_1RecordCoord.html", "structllama_1_1RecordCoord" ],
     [ "RecordCoord<>", "structllama_1_1RecordCoord_3_4.html", "structllama_1_1RecordCoord_3_4" ],

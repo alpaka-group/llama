@@ -92,20 +92,71 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1internal_1_1
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>&gt;</code></p>
+<div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for llama::mapping::internal::BitPackedFloatRef&lt; Float, StoredIntegralPointer &gt;:</div>
+<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-0-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef__inherit__graph.png" border="0" usemap="#llama_1_1mapping_1_1internal_1_1BitPackedFloatRef_3_01Float_00_01StoredIntegralPointer_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="llama_1_1mapping_1_1internal_1_1BitPackedFloatRef_3_01Float_00_01StoredIntegralPointer_01_4_inherit__map" id="llama_1_1mapping_1_1internal_1_1BitPackedFloatRef_3_01Float_00_01StoredIntegralPointer_01_4_inherit__map">
+<area shape="rect" title=" " alt="" coords="260,13,460,69"/>
+<area shape="rect" href="structllama_1_1ProxyRefOpMixin.html" title=" " alt="" coords="5,5,212,76"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for llama::mapping::internal::BitPackedFloatRef&lt; Float, StoredIntegralPointer &gt;:</div>
+<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-1-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef__coll__graph.png" border="0" usemap="#llama_1_1mapping_1_1internal_1_1BitPackedFloatRef_3_01Float_00_01StoredIntegralPointer_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="llama_1_1mapping_1_1internal_1_1BitPackedFloatRef_3_01Float_00_01StoredIntegralPointer_01_4_coll__map" id="llama_1_1mapping_1_1internal_1_1BitPackedFloatRef_3_01Float_00_01StoredIntegralPointer_01_4_coll__map">
+<area shape="rect" title=" " alt="" coords="260,13,460,69"/>
+<area shape="rect" href="structllama_1_1ProxyRefOpMixin.html" title=" " alt="" coords="5,5,212,76"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a458a1f5ffae0f5942009f5342fc453be"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#a458a1f5ffae0f5942009f5342fc453be">FloatBits</a> = std::conditional_t&lt; std::is_same_v&lt; Float, float &gt;, std::uint32_t, std::uint64_t &gt;</td></tr>
-<tr class="separator:a458a1f5ffae0f5942009f5342fc453be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27e3b4c6a4802e06eac825ce5707ab64"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#a27e3b4c6a4802e06eac825ce5707ab64">value_type</a> = Float</td></tr>
+<tr class="separator:a27e3b4c6a4802e06eac825ce5707ab64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a561f1ff00a92887aa218833aa35b3154"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#a561f1ff00a92887aa218833aa35b3154">BitPackedFloatRef</a> (StoredIntegralPointer p, std::size_t bitOffset, unsigned exponentBits, unsigned mantissaBits, StoredIntegralPointer endPtr)</td></tr>
-<tr class="separator:a561f1ff00a92887aa218833aa35b3154"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6289495b5af69980b0efa700bef99f1b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#a6289495b5af69980b0efa700bef99f1b">operator Float</a> () const</td></tr>
-<tr class="separator:a6289495b5af69980b0efa700bef99f1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9640dd5d613aa84da2f173a4a2b35b7d"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#a9640dd5d613aa84da2f173a4a2b35b7d">operator=</a> (Float f) -&gt; <a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html">BitPackedFloatRef</a> &amp;</td></tr>
-<tr class="separator:a9640dd5d613aa84da2f173a4a2b35b7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43815384d3524ef7b1428e9c77b84858"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#a43815384d3524ef7b1428e9c77b84858">BitPackedFloatRef</a> (StoredIntegralPointer p, std::size_t bitOffset, unsigned exponentBits, unsigned mantissaBits, StoredIntegralPointer endPtr)</td></tr>
+<tr class="separator:a43815384d3524ef7b1428e9c77b84858"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b307949316e4807ca30bf40b76cc118"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#a7b307949316e4807ca30bf40b76cc118">operator Float</a> () const</td></tr>
+<tr class="separator:a7b307949316e4807ca30bf40b76cc118"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa22260f1f6da2c6e2535c62543887f1f"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#aa22260f1f6da2c6e2535c62543887f1f">operator=</a> (Float f) -&gt; <a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html">BitPackedFloatRef</a> &amp;</td></tr>
+<tr class="separator:aa22260f1f6da2c6e2535c62543887f1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_structllama_1_1ProxyRefOpMixin"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_structllama_1_1ProxyRefOpMixin')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="structllama_1_1ProxyRefOpMixin.html">llama::ProxyRefOpMixin&lt; BitPackedFloatRef&lt; Float, StoredIntegralPointer &gt;, Float &gt;</a></td></tr>
+<tr class="memitem:aea6caa1eeacdd3fab0a7d5d91b4364ac inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ProxyRefOpMixin.html#aea6caa1eeacdd3fab0a7d5d91b4364ac">operator+=</a> (const Float &amp;rhs) -&gt; BitPackedFloatRef&lt; Float, StoredIntegralPointer &gt; &amp;</td></tr>
+<tr class="separator:aea6caa1eeacdd3fab0a7d5d91b4364ac inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e149fa3d0657b524413f1dfddad9288 inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ProxyRefOpMixin.html#a6e149fa3d0657b524413f1dfddad9288">operator-=</a> (const Float &amp;rhs) -&gt; BitPackedFloatRef&lt; Float, StoredIntegralPointer &gt; &amp;</td></tr>
+<tr class="separator:a6e149fa3d0657b524413f1dfddad9288 inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a427586bad791a7de5d69fcb990a4a2c8 inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ProxyRefOpMixin.html#a427586bad791a7de5d69fcb990a4a2c8">operator*=</a> (const Float &amp;rhs) -&gt; BitPackedFloatRef&lt; Float, StoredIntegralPointer &gt; &amp;</td></tr>
+<tr class="separator:a427586bad791a7de5d69fcb990a4a2c8 inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5c01adb17955a5be25e835456d947fb inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ProxyRefOpMixin.html#aa5c01adb17955a5be25e835456d947fb">operator/=</a> (const Float &amp;rhs) -&gt; BitPackedFloatRef&lt; Float, StoredIntegralPointer &gt; &amp;</td></tr>
+<tr class="separator:aa5c01adb17955a5be25e835456d947fb inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79956552e378d2dbb181c1e925b2278c inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ProxyRefOpMixin.html#a79956552e378d2dbb181c1e925b2278c">operator%=</a> (const Float &amp;rhs) -&gt; BitPackedFloatRef&lt; Float, StoredIntegralPointer &gt; &amp;</td></tr>
+<tr class="separator:a79956552e378d2dbb181c1e925b2278c inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a389ff0250f209c2643df1cc6bb996962 inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ProxyRefOpMixin.html#a389ff0250f209c2643df1cc6bb996962">operator&lt;&lt;=</a> (const Float &amp;rhs) -&gt; BitPackedFloatRef&lt; Float, StoredIntegralPointer &gt; &amp;</td></tr>
+<tr class="separator:a389ff0250f209c2643df1cc6bb996962 inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a461255210746b50f4b018054a2e00079 inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ProxyRefOpMixin.html#a461255210746b50f4b018054a2e00079">operator&gt;&gt;=</a> (const Float &amp;rhs) -&gt; BitPackedFloatRef&lt; Float, StoredIntegralPointer &gt; &amp;</td></tr>
+<tr class="separator:a461255210746b50f4b018054a2e00079 inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f835cd88e899ce34527bafba1751bb9 inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ProxyRefOpMixin.html#a9f835cd88e899ce34527bafba1751bb9">operator&amp;=</a> (const Float &amp;rhs) -&gt; BitPackedFloatRef&lt; Float, StoredIntegralPointer &gt; &amp;</td></tr>
+<tr class="separator:a9f835cd88e899ce34527bafba1751bb9 inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1761f974bd6b1b26bd3406db9bc10900 inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ProxyRefOpMixin.html#a1761f974bd6b1b26bd3406db9bc10900">operator|=</a> (const Float &amp;rhs) -&gt; BitPackedFloatRef&lt; Float, StoredIntegralPointer &gt; &amp;</td></tr>
+<tr class="separator:a1761f974bd6b1b26bd3406db9bc10900 inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74fa44395646ece004b25ddc9058ab54 inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ProxyRefOpMixin.html#a74fa44395646ece004b25ddc9058ab54">operator^=</a> (const Float &amp;rhs) -&gt; BitPackedFloatRef&lt; Float, StoredIntegralPointer &gt; &amp;</td></tr>
+<tr class="separator:a74fa44395646ece004b25ddc9058ab54 inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bf9f2e980a32925ce02eacec3103bf1 inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ProxyRefOpMixin.html#a0bf9f2e980a32925ce02eacec3103bf1">operator++</a> () -&gt; BitPackedFloatRef&lt; Float, StoredIntegralPointer &gt; &amp;</td></tr>
+<tr class="separator:a0bf9f2e980a32925ce02eacec3103bf1 inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1df0708f468d3bde426e868788da05ba inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ProxyRefOpMixin.html#a1df0708f468d3bde426e868788da05ba">operator++</a> (int) -&gt; Float</td></tr>
+<tr class="separator:a1df0708f468d3bde426e868788da05ba inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf96151b0aface32e6510a9f15ee616c inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ProxyRefOpMixin.html#aaf96151b0aface32e6510a9f15ee616c">operator--</a> () -&gt; BitPackedFloatRef&lt; Float, StoredIntegralPointer &gt; &amp;</td></tr>
+<tr class="separator:aaf96151b0aface32e6510a9f15ee616c inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38d2f14e872312209bb5089dcb48b5a1 inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ProxyRefOpMixin.html#a38d2f14e872312209bb5089dcb48b5a1">operator--</a> (int) -&gt; Float</td></tr>
+<tr class="separator:a38d2f14e872312209bb5089dcb48b5a1 inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Float, typename StoredIntegralPointer&gt;<br />
@@ -119,10 +170,10 @@ struct llama::mapping::internal::BitPackedFloatRef&lt; Float, StoredIntegralPoin
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00085">85</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00086">86</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a458a1f5ffae0f5942009f5342fc453be"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a458a1f5ffae0f5942009f5342fc453be">&#9670;&nbsp;</a></span>FloatBits</h2>
+<a id="a27e3b4c6a4802e06eac825ce5707ab64"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27e3b4c6a4802e06eac825ce5707ab64">&#9670;&nbsp;</a></span>value_type</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -130,18 +181,18 @@ struct llama::mapping::internal::BitPackedFloatRef&lt; Float, StoredIntegralPoin
 template&lt;typename Float , typename StoredIntegralPointer &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html">llama::mapping::internal::BitPackedFloatRef</a>&lt; Float, StoredIntegralPointer &gt;::<a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#a458a1f5ffae0f5942009f5342fc453be">FloatBits</a> =  std::conditional_t&lt;std::is_same_v&lt;Float, float&gt;, std::uint32_t, std::uint64_t&gt;</td>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html">llama::mapping::internal::BitPackedFloatRef</a>&lt; Float, StoredIntegralPointer &gt;::<a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#a27e3b4c6a4802e06eac825ce5707ab64">value_type</a> =  Float</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00094">94</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00103">103</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a561f1ff00a92887aa218833aa35b3154"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a561f1ff00a92887aa218833aa35b3154">&#9670;&nbsp;</a></span>BitPackedFloatRef()</h2>
+<a id="a43815384d3524ef7b1428e9c77b84858"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43815384d3524ef7b1428e9c77b84858">&#9670;&nbsp;</a></span>BitPackedFloatRef()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -152,7 +203,7 @@ template&lt;typename Float , typename StoredIntegralPointer &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html">llama::mapping::internal::BitPackedFloatRef</a>&lt; Float, StoredIntegralPointer &gt;::<a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html">BitPackedFloatRef</a> </td>
+          <td class="memname">constexpr <a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html">llama::mapping::internal::BitPackedFloatRef</a>&lt; Float, StoredIntegralPointer &gt;::<a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html">BitPackedFloatRef</a> </td>
           <td>(</td>
           <td class="paramtype">StoredIntegralPointer&#160;</td>
           <td class="paramname"><em>p</em>, </td>
@@ -189,18 +240,18 @@ template&lt;typename Float , typename StoredIntegralPointer &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00102">102</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00105">105</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a6289495b5af69980b0efa700bef99f1b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6289495b5af69980b0efa700bef99f1b">&#9670;&nbsp;</a></span>operator Float()</h2>
+<a id="a7b307949316e4807ca30bf40b76cc118"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b307949316e4807ca30bf40b76cc118">&#9670;&nbsp;</a></span>operator Float()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -211,7 +262,7 @@ template&lt;typename Float , typename StoredIntegralPointer &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html">llama::mapping::internal::BitPackedFloatRef</a>&lt; Float, StoredIntegralPointer &gt;::operator Float </td>
+          <td class="memname">constexpr <a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html">llama::mapping::internal::BitPackedFloatRef</a>&lt; Float, StoredIntegralPointer &gt;::operator Float </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -219,17 +270,17 @@ template&lt;typename Float , typename StoredIntegralPointer &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00123">123</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00126">126</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a9640dd5d613aa84da2f173a4a2b35b7d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9640dd5d613aa84da2f173a4a2b35b7d">&#9670;&nbsp;</a></span>operator=()</h2>
+<a id="aa22260f1f6da2c6e2535c62543887f1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa22260f1f6da2c6e2535c62543887f1f">&#9670;&nbsp;</a></span>operator=()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -240,7 +291,7 @@ template&lt;typename Float , typename StoredIntegralPointer &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html">llama::mapping::internal::BitPackedFloatRef</a>&lt; Float, StoredIntegralPointer &gt;::operator= </td>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html">llama::mapping::internal::BitPackedFloatRef</a>&lt; Float, StoredIntegralPointer &gt;::operator= </td>
           <td>(</td>
           <td class="paramtype">Float&#160;</td>
           <td class="paramname"><em>f</em></td><td>)</td>
@@ -250,12 +301,12 @@ template&lt;typename Float , typename StoredIntegralPointer &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00134">134</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00137">137</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -268,7 +319,7 @@ template&lt;typename Float , typename StoredIntegralPointer &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping_1_1internal.html">internal</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html">BitPackedFloatRef</a></li>
-    <li class="footer">Generated on Thu Dec 9 2021 15:53:05 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sat Dec 11 2021 00:11:20 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
