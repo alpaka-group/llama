@@ -161,44 +161,34 @@ namespace llama
 
     namespace internal
     {
-        template<std::size_t Pos, typename Tuple, typename Replacement>
-        struct TupleReplaceImpl
+        template<
+            std::size_t Pos,
+            typename Tuple,
+            typename Replacement,
+            std::size_t... IsBefore,
+            std::size_t... IsAfter>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto tupleReplaceImpl(
+            Tuple&& tuple,
+            Replacement&& replacement,
+            std::index_sequence<IsBefore...>,
+            std::index_sequence<IsAfter...>)
         {
-            LLAMA_FN_HOST_ACC_INLINE
-            auto operator()(Tuple const tuple, Replacement const replacement)
-            {
-                return tupleCat(
-                    llama::Tuple{tuple.first},
-                    TupleReplaceImpl<Pos - 1, typename Tuple::RestTuple, Replacement>()(tuple.rest, replacement));
-            };
-        };
-
-        template<typename... Elements, typename Replacement>
-        struct TupleReplaceImpl<0, Tuple<Elements...>, Replacement>
-        {
-            LLAMA_FN_HOST_ACC_INLINE
-            auto operator()(Tuple<Elements...> tuple, Replacement const replacement)
-            {
-                return tupleCat(Tuple{replacement}, tuple.rest);
-            };
-        };
-
-        template<typename OneElement, typename Replacement>
-        struct TupleReplaceImpl<0, Tuple<OneElement>, Replacement>
-        {
-            LLAMA_FN_HOST_ACC_INLINE
-            auto operator()(Tuple<OneElement>, Replacement const replacement)
-            {
-                return Tuple{replacement};
-            }
-        };
+            return llama::Tuple{
+                get<IsBefore>(std::forward<Tuple>(tuple))...,
+                std::forward<Replacement>(replacement),
+                get<Pos + 1 + IsAfter>(std::forward<Tuple>(tuple))...};
+        }
     } // namespace internal
 
     /// Creates a copy of a tuple with the element at position Pos replaced by replacement.
     template<std::size_t Pos, typename Tuple, typename Replacement>
-    LLAMA_FN_HOST_ACC_INLINE auto tupleReplace(Tuple tuple, Replacement replacement)
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto tupleReplace(Tuple&& tuple, Replacement&& replacement)
     {
-        return internal::TupleReplaceImpl<Pos, Tuple, Replacement>()(tuple, replacement);
+        return internal::tupleReplaceImpl<Pos>(
+            std::forward<Tuple>(tuple),
+            std::forward<Replacement>(replacement),
+            std::make_index_sequence<Pos>{},
+            std::make_index_sequence<std::tuple_size_v<std::decay_t<Tuple>> - Pos - 1>{});
     }
 
     namespace internal
