@@ -60,6 +60,14 @@ if (BUILD_TESTING)
 			target_link_options   (tests PRIVATE /wholearchive:clang_rt.asan_dynamic-x86_64.lib /wholearchive:clang_rt.asan_dynamic_runtime_thunk-x86_64.lib)
 		endif()
 	endif()
+
+	option(LLAMA_ENABLE_COVERAGE_FOR_TESTS "Enables code coverage for tests" OFF)
+	if (LLAMA_ENABLE_COVERAGE_FOR_TESTS)
+		if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+			target_compile_options(tests PRIVATE --coverage)
+			target_link_options(tests PRIVATE --coverage)
+		endif()
+	endif()
 endif()
 
 # examples

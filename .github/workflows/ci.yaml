@@ -45,6 +45,42 @@ jobs:
         sed -i 's/\(-forward-unknown-to-host-compiler\|--generate-code=arch=[^ ]\+\|--expt-extended-lambda\|--expt-relaxed-constexpr\|--use_fast_math\)//g' compile_commands.json # remove NVCC specific flags which clang cannot handle
         run-clang-tidy-12 -header-filter='^((?!/thirdparty/).)*$' -extra-arg=--no-cuda-version-check -extra-arg=-nocudalib
 
+  coverage:
+    runs-on: ubuntu-latest
+    env:
+      CXX: g++
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+    - name: apt install boost and lcov
+      run: |
+        sudo apt install libboost-all-dev lcov
+    - name: vcpkg install dependencies
+      run: |
+        vcpkg install catch2 fmt
+    - name: cmake
+      run: |
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_BUILD_TYPE=Debug -DLLAMA_ENABLE_COVERAGE_FOR_TESTS=ON -DLLAMA_BUILD_EXAMPLES=OFF -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+    - name: build tests
+      run: |
+        cmake --build build -j $THREADS
+    - name: run tests
+      run: |
+        build/tests
+    - name: generate coverage report
+      run: |
+        lcov --capture --directory build --output-file coverage.info
+        #lcov --remove coverage.info '/usr/*' --output-file coverage.info
+        #lcov --list coverage.info
+    - name: upload coverage report
+      run: |
+        curl -Os https://uploader.codecov.io/latest/linux/codecov
+        chmod +x codecov
+        ./codecov
+
   amalgamation:
     runs-on: ubuntu-latest
     steps:
