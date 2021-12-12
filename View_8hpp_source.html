@@ -166,7 +166,7 @@ $(document).ready(function(){initNavTree('View_8hpp_source.html',''); initResiza
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keyword">using</span> RecordDim = <span class="keyword">typename</span> <a class="code" href="structllama_1_1View.html#a078855f1e6995af9bce14b4a13075cc9">View::RecordDim</a>;</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <a class="code" href="namespacellama.html#a75a3a18e7d0835090b046316d049a032">forEachADCoord</a>(</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            view.<a class="code" href="structllama_1_1View.html#ab30a81d3be6170c1575d7d0a9b81711c">mapping</a>().extents(),</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            [&amp;](<span class="keyword">typename</span> <a class="code" href="structllama_1_1View.html#ac72d2fa98682de4dffd04eda255691bb">View::ArrayIndex</a> ai)</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            [&amp;]([[maybe_unused]] <span class="keyword">typename</span> <a class="code" href="structllama_1_1View.html#ac72d2fa98682de4dffd04eda255691bb">View::ArrayIndex</a> ai)</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            {</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                if constexpr(isRecord&lt;RecordDim&gt; || internal::IsBoundedArray&lt;RecordDim&gt;::value)</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                    forEachLeafCoord&lt;RecordDim&gt;(</div>
@@ -755,7 +755,7 @@ $(document).ready(function(){initNavTree('View_8hpp_source.html',''); initResiza
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="View_8hpp.html">View.hpp</a></li>
-    <li class="footer">Generated on Sun Dec 12 2021 22:43:20 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sun Dec 12 2021 23:24:22 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
