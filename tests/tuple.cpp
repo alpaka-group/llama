@@ -17,18 +17,18 @@ TEST_CASE("Tuple.get")
 {
     constexpr auto t = llama::Tuple{1, 1.0f, nullptr};
 
-    STATIC_REQUIRE(llama::get<0>(t) == 1);
-    STATIC_REQUIRE(llama::get<1>(t) == 1.0f);
-    STATIC_REQUIRE(llama::get<2>(t) == nullptr);
+    STATIC_REQUIRE(get<0>(t) == 1);
+    STATIC_REQUIRE(get<1>(t) == 1.0f);
+    STATIC_REQUIRE(get<2>(t) == nullptr);
 }
 
 TEST_CASE("Tuple.get_mutable")
 {
     auto t = llama::Tuple{1, 1.0f};
-    llama::get<0>(t)++;
-    llama::get<1>(t)++;
-    CHECK(llama::get<0>(t) == 2);
-    CHECK(llama::get<1>(t) == 2.0f);
+    get<0>(t)++;
+    get<1>(t)++;
+    CHECK(get<0>(t) == 2);
+    CHECK(get<1>(t) == 2.0f);
 }
 
 TEST_CASE("Tuple.structured_binding")
@@ -60,9 +60,9 @@ TEST_CASE("Tuple.converting_ctor")
     };
 
     constexpr auto t = llama::Tuple<double, A, B>{1, 42, nullptr};
-    STATIC_REQUIRE(llama::get<0>(t) == 1.0);
-    STATIC_REQUIRE(llama::get<1>(t).i == 84);
-    STATIC_REQUIRE(llama::get<2>(t).p == nullptr);
+    STATIC_REQUIRE(get<0>(t) == 1.0);
+    STATIC_REQUIRE(get<1>(t).i == 84);
+    STATIC_REQUIRE(get<2>(t).p == nullptr);
 }
 #endif
 

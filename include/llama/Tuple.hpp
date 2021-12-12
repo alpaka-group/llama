@@ -49,6 +49,24 @@ namespace llama
         [[no_unique_address]] // nvcc 11.3 ICE
 #endif
         RestTuple rest; ///< the remaining elements
+
+        template<std::size_t Pos>
+        LLAMA_FN_HOST_ACC_INLINE friend constexpr auto get(Tuple& tuple) -> auto&
+        {
+            if constexpr(Pos == 0)
+                return tuple.first;
+            else
+                return get<Pos - 1>(tuple.rest);
+        }
+
+        template<std::size_t Pos>
+        LLAMA_FN_HOST_ACC_INLINE friend constexpr auto get(const Tuple& tuple) -> const auto&
+        {
+            if constexpr(Pos == 0)
+                return tuple.first;
+            else
+                return get<Pos - 1>(tuple.rest);
+        }
     };
 
     template<typename... Elements>
