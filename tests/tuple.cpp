@@ -13,6 +13,19 @@ TEST_CASE("Tuple.CTAD")
     STATIC_REQUIRE(std::is_same_v<decltype(t3), const llama::Tuple<int, float, std::nullptr_t>>);
 }
 
+TEST_CASE("Tuple.size")
+{
+    STATIC_REQUIRE(std::is_empty_v<llama::Tuple<>>);
+    STATIC_REQUIRE(sizeof(llama::Tuple<int>{}) == 1 * sizeof(int));
+    STATIC_REQUIRE(sizeof(llama::Tuple<int, int>{}) == 2 * sizeof(int));
+    STATIC_REQUIRE(sizeof(llama::Tuple<int, int, int>{}) == 3 * sizeof(int));
+    STATIC_REQUIRE(sizeof(llama::Tuple<int, int, std::integral_constant<int, 3>>{}) == 2 * sizeof(int));
+    STATIC_REQUIRE(std::is_empty_v<llama::Tuple<
+                       std::integral_constant<int, 1>,
+                       std::integral_constant<int, 2>,
+                       std::integral_constant<int, 3>>>);
+}
+
 TEST_CASE("Tuple.get")
 {
     constexpr auto t = llama::Tuple{1, 1.0f, nullptr};
@@ -120,4 +133,6 @@ TEST_CASE("Tuple.pop_front")
     STATIC_REQUIRE(llama::pop_front(llama::Tuple{1}) == llama::Tuple{});
     STATIC_REQUIRE(llama::pop_front(llama::Tuple{1, 1.0f}) == llama::Tuple{1.0f});
     STATIC_REQUIRE(llama::pop_front(llama::Tuple{1.0f, 1, nullptr}) == llama::Tuple{1, nullptr});
+    STATIC_REQUIRE(llama::pop_front<2>(llama::Tuple{1.0f, 1, nullptr}) == llama::Tuple{nullptr});
+    STATIC_REQUIRE(llama::pop_front<3>(llama::Tuple{1.0f, 1, nullptr}) == llama::Tuple{});
 }

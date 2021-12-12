@@ -31,7 +31,7 @@ namespace llama::mapping::tree
 
             LLAMA_FN_HOST_ACC_INLINE
             MergeFunctors(const Tree& tree, const Tuple<Operations...>& treeOperationList)
-                : operation(treeOperationList.first)
+                : operation(get<0>(treeOperationList))
                 , treeAfterOp(operation.basicToResult(tree))
                 , next(treeAfterOp, pop_front(treeOperationList))
             {
@@ -148,15 +148,15 @@ namespace llama::mapping::tree
         LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobByte(const Tree& tree, const Tuple<Coords...>& treeCoord)
             -> std::size_t
         {
-            const auto firstArrayIndex = treeCoord.first.arrayIndex;
+            const auto firstArrayIndex = get<0>(treeCoord).arrayIndex;
             if constexpr(sizeof...(Coords) > 1)
             {
-                constexpr auto firstChildIndex = decltype(treeCoord.first.childIndex)::value;
+                constexpr auto firstChildIndex = decltype(get<0>(treeCoord).childIndex)::value;
                 return getTreeBlobSize(tree.childs, firstArrayIndex)
                     + sumChildrenSmallerThan<firstChildIndex>(
                            tree,
                            std::make_index_sequence<std::tuple_size_v<typename Tree::ChildrenTuple>>{})
-                    + getTreeBlobByte(get<firstChildIndex>(tree.childs), treeCoord.rest);
+                    + getTreeBlobByte(get<firstChildIndex>(tree.childs), pop_front(treeCoord));
             }
             else
                 return sizeof(typename Tree::Type) * firstArrayIndex;

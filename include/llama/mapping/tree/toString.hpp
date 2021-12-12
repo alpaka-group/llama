@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "../../Tuple.hpp"
 #include "TreeFromDimensions.hpp"
 
 #include <boost/core/demangle.hpp>
@@ -33,9 +34,9 @@ namespace llama::mapping::tree
     auto toString(Tuple<Elements...> tree) -> std::string
     {
         if constexpr(sizeof...(Elements) > 1)
-            return toString(tree.first) + " , " + toString(tree.rest);
+            return toString(get<0>(tree)) + " , " + toString(pop_front(tree));
         else
-            return toString(tree.first);
+            return toString(get<0>(tree));
     }
 
     namespace internal

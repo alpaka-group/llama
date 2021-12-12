@@ -8,87 +8,112 @@
 
 namespace llama
 {
+    // for implementation ideas, see e.g.:
+    // http://mitchnull.blogspot.com/2012/06/c11-tuple-implementation-details-part-1.html
+
     template<typename... Elements>
-    struct Tuple
+    struct Tuple;
+
+    namespace internal
     {
-    };
+        template<std::size_t I, typename T, bool = std::is_empty_v<T> && !std::is_final_v<T>>
+        struct TupleImplLeaf
+        {
+            T val;
 
-    /// Tuple class like `std::tuple` but suitable for use with offloading devices like GPUs.
-    template<typename TFirstElement, typename... Elements>
-    struct Tuple<TFirstElement, Elements...>
+            LLAMA_FN_HOST_ACC_INLINE constexpr auto value() -> T&
+            {
+                return val;
+            }
+
+            LLAMA_FN_HOST_ACC_INLINE constexpr auto value() const -> const T&
+            {
+                return val;
+            }
+        };
+
+        template<std::size_t I, typename T>
+        struct TupleImplLeaf<I, T, true> : T
+        {
+            LLAMA_FN_HOST_ACC_INLINE constexpr auto value() -> T&
+            {
+                return *this;
+            }
+
+            LLAMA_FN_HOST_ACC_INLINE constexpr auto value() const -> const T&
+            {
+                return *this;
+            }
+        };
+
+        template<typename... IsAndElements>
+        struct TupleImpl;
+
+        template<>
+        struct TupleImpl<std::index_sequence<>>
+        {
+        };
+
+        template<std::size_t... Is, typename... Elements>
+        struct TupleImpl<std::index_sequence<Is...>, Elements...> : TupleImplLeaf<Is, Elements>...
+        {
+            using FirstElement = boost::mp11::mp_first<Tuple<Elements...>>;
+            using RestTuple = boost::mp11::mp_pop_front<Tuple<Elements...>>;
+
+            constexpr TupleImpl() = default;
+
+            /// Construct a tuple from values of the same types as the tuple stores.
+            LLAMA_FN_HOST_ACC_INLINE constexpr explicit TupleImpl(Elements... args)
+                : TupleImplLeaf<Is, Elements>{args}...
+            {
+            }
+
+            /// Construct a tuple from forwarded values of potentially different types as the tuple stores.
+            template<
+                typename... Ts,
+                std::enable_if_t<
+                    sizeof...(Elements) == sizeof...(Ts) && (std::is_constructible_v<Elements, Ts> && ...),
+                    int> = 0>
+            LLAMA_FN_HOST_ACC_INLINE constexpr explicit TupleImpl(Ts&&... args)
+                : TupleImplLeaf<Is, Elements>{Elements(std::move(args))}...
+            {
+            }
+        };
+    } // namespace internal
+
+    /// Tuple class like `std::tuple` but suitable for use with offloading devices like GPUs. See also \ref
+    /// internal::TupleImpl.
+    template<typename... Elements>
+    struct Tuple : internal::TupleImpl<std::index_sequence_for<Elements...>, Elements...>
     {
-        using FirstElement = TFirstElement;
-        using RestTuple = Tuple<Elements...>;
+    private:
+        template<std::size_t I>
+        using Base = internal::TupleImplLeaf<I, boost::mp11::mp_at_c<boost::mp11::mp_list<Elements...>, I>>;
 
-        constexpr Tuple() = default;
-
-        /// Construct a tuple from values of the same types as the tuple stores.
-        LLAMA_FN_HOST_ACC_INLINE constexpr explicit Tuple(FirstElement first, Elements... rest)
-            : first(std::move(first))
-            , rest(std::move(rest)...)
-        {
-        }
-
-        /// Construct a tuple from forwarded values of potentially different types as the tuple stores.
-        // SFINAE away this ctor if tuple elements cannot be constructed from ctor arguments
-        template<
-            typename T,
-            typename... Ts,
-            std::enable_if_t<
-                sizeof...(Elements) == sizeof...(Ts)
-                    && std::is_constructible_v<TFirstElement, T> && (std::is_constructible_v<Elements, Ts> && ...),
-                int> = 0>
-        LLAMA_FN_HOST_ACC_INLINE constexpr explicit Tuple(T&& firstArg, Ts&&... restArgs)
-            : first(std::forward<T>(firstArg))
-            , rest(std::forward<Ts>(restArgs)...)
-        {
-        }
-
-        FirstElement first; ///< the first element (if existing)
-#ifndef __NVCC__
-        [[no_unique_address]] // nvcc 11.3 ICE
-#endif
-        RestTuple rest; ///< the remaining elements
+    public:
+        using internal::TupleImpl<std::index_sequence_for<Elements...>, Elements...>::TupleImpl;
 
         template<std::size_t Pos>
         LLAMA_FN_HOST_ACC_INLINE friend constexpr auto get(Tuple& tuple) -> auto&
         {
-            if constexpr(Pos == 0)
-                return tuple.first;
-            else
-                return get<Pos - 1>(tuple.rest);
+            return tuple.Base<Pos>::value();
         }
 
         template<std::size_t Pos>
         LLAMA_FN_HOST_ACC_INLINE friend constexpr auto get(const Tuple& tuple) -> const auto&
         {
-            if constexpr(Pos == 0)
-                return tuple.first;
-            else
-                return get<Pos - 1>(tuple.rest);
+            return tuple.Base<Pos>::value();
         }
     };
 
+    template<std::size_t Pos, typename... Elements>
+    constexpr auto get(Tuple<Elements...>& tuple);
+
+    template<std::size_t Pos, typename... Elements>
+    constexpr auto get(const Tuple<Elements...>& tuple);
+
     template<typename... Elements>
     Tuple(Elements...) -> Tuple<std::remove_cv_t<std::remove_reference_t<Elements>>...>;
-
-    template<std::size_t Pos, typename... Elements>
-    LLAMA_FN_HOST_ACC_INLINE constexpr auto get(Tuple<Elements...>& tuple) -> auto&
-    {
-        if constexpr(Pos == 0)
-            return tuple.first;
-        else
-            return get<Pos - 1>(tuple.rest);
-    }
-
-    template<std::size_t Pos, typename... Elements>
-    LLAMA_FN_HOST_ACC_INLINE constexpr auto get(const Tuple<Elements...>& tuple) -> const auto&
-    {
-        if constexpr(Pos == 0)
-            return tuple.first;
-        else
-            return get<Pos - 1>(tuple.rest);
-    }
 } // namespace llama
 
 template<typename... Elements>
@@ -216,20 +241,20 @@ namespace llama
 
     namespace internal
     {
-        template<typename... Elements, size_t... Is>
+        template<std::size_t Count = 1, typename... Elements, size_t... Is>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto pop_front_impl(
             const Tuple<Elements...>& tuple,
             std::index_sequence<Is...>)
         {
-            return Tuple{get<1 + Is>(tuple)...};
+            return Tuple{get<Count + Is>(tuple)...};
         }
     } // namespace internal
 
     /// Returns a copy of the tuple without the first element.
-    template<typename... Elements>
+    template<std::size_t Count = 1, typename... Elements>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto pop_front(const Tuple<Elements...>& tuple)
     {
         static_assert(sizeof...(Elements) > 0);
-        return internal::pop_front_impl(tuple, std::make_index_sequence<sizeof...(Elements) - 1>{});
+        return internal::pop_front_impl<Count>(tuple, std::make_index_sequence<sizeof...(Elements) - Count>{});
     }
 } // namespace llama
