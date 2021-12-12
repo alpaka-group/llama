@@ -81,7 +81,7 @@ namespace llama
         using RecordDim = typename View::RecordDim;
         forEachADCoord(
             view.mapping().extents(),
-            [&](typename View::ArrayIndex ai)
+            [&]([[maybe_unused]] typename View::ArrayIndex ai)
             {
                 if constexpr(isRecord<RecordDim> || internal::IsBoundedArray<RecordDim>::value)
                     forEachLeafCoord<RecordDim>(
