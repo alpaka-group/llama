@@ -45,7 +45,7 @@ namespace llama
         }
 
         FirstElement first; ///< the first element (if existing)
-#ifndef __NVCC__
+#if !defined(__NVCC__) && !(defined(__GNUG__) && __GNUC__ <= 9)
         [[no_unique_address]] // nvcc 11.3 ICE
 #endif
         RestTuple rest; ///< the remaining elements
