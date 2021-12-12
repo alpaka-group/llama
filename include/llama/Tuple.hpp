@@ -224,10 +224,22 @@ namespace llama
         return internal::tupleTransformHelper(std::make_index_sequence<sizeof...(Elements)>{}, tuple, functor);
     }
 
+    namespace internal
+    {
+        template<typename... Elements, size_t... Is>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto pop_front_impl(
+            const Tuple<Elements...>& tuple,
+            std::index_sequence<Is...>)
+        {
+            return Tuple{get<1 + Is>(tuple)...};
+        }
+    } // namespace internal
+
     /// Returns a copy of the tuple without the first element.
     template<typename... Elements>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto pop_front(const Tuple<Elements...>& tuple)
     {
-        return tuple.rest;
+        static_assert(sizeof...(Elements) > 0);
+        return internal::pop_front_impl(tuple, std::make_index_sequence<sizeof...(Elements) - 1>{});
     }
 } // namespace llama
