@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"structllama_1_1Iterator.html#afdae9444dfa6396d38463b08cdabff4d":[2,0,1,16,27],
 "structllama_1_1NoName.html":[2,0,1,17],
 "structllama_1_1NrAndOffset.html":[2,0,1,18],
 "structllama_1_1NrAndOffset.html#a86395ca5673d6fdd2136e97b81c22ade":[2,0,1,18,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "structllama_1_1internal_1_1GetTagsImpl_3_01T_00_01RecordCoord_3_4_01_4.html#ad42393346f9fc681d889f6eba51e05f4":[2,0,1,1,17,0],
 "structllama_1_1internal_1_1GetTypeImpl.html":[2,0,1,1,18],
 "structllama_1_1internal_1_1GetTypeImpl.html#a0306d23b9f90a8eecb3155dc5bceea51":[2,0,1,1,18,0],
-"structllama_1_1internal_1_1GetTypeImpl_3_01ChildType_0fN_0e_00_01RecordCoord_3_01HeadCoord_00_01TailCoords_8_8_8_01_4_01_4.html":[2,0,1,1,19],
-"structllama_1_1internal_1_1GetTypeImpl_3_01ChildType_0fN_0e_00_01RecordCoord_3_01HeadCoord_00_01TailCoords_8_8_8_01_4_01_4.html#ab9c3a8dc49e6eabb5dff849b9710446c":[2,0,1,1,19,0]
+"structllama_1_1internal_1_1GetTypeImpl_3_01ChildType_0fN_0e_00_01RecordCoord_3_01HeadCoord_00_01TailCoords_8_8_8_01_4_01_4.html":[2,0,1,1,19]
 };

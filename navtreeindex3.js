@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"structllama_1_1internal_1_1GetTypeImpl_3_01ChildType_0fN_0e_00_01RecordCoord_3_01HeadCoord_00_01TailCoords_8_8_8_01_4_01_4.html#ab9c3a8dc49e6eabb5dff849b9710446c":[2,0,1,1,19,0],
 "structllama_1_1internal_1_1GetTypeImpl_3_01Record_3_01Children_8_8_8_01_4_00_01RecordCoord_3_01Hd335281b58bf9419f48b7fc65f5657ab.html":[2,0,1,1,20],
 "structllama_1_1internal_1_1GetTypeImpl_3_01Record_3_01Children_8_8_8_01_4_00_01RecordCoord_3_01Hd335281b58bf9419f48b7fc65f5657ab.html#a20d230f3fb7208ab88e3e55a73936293":[2,0,1,1,20,1],
 "structllama_1_1internal_1_1GetTypeImpl_3_01Record_3_01Children_8_8_8_01_4_00_01RecordCoord_3_01Hd335281b58bf9419f48b7fc65f5657ab.html#abf3e13c2433911563d020538d2a04f4b":[2,0,1,1,20,0],
@@ -36,12 +37,6 @@ var NAVTREEINDEX3 =
 "structllama_1_1internal_1_1TransformLeavesImpl_3_01Child_0fN_0e_00_01TypeFunctor_01_4.html#a6acf596d7b94a4c7af40422097c0d879":[2,0,1,1,38,0],
 "structllama_1_1internal_1_1TransformLeavesImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01TypeFunctor_01_4.html":[2,0,1,1,39],
 "structllama_1_1internal_1_1TransformLeavesImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01TypeFunctor_01_4.html#ab351ffacdcb57ee8bc25c077e424add1":[2,0,1,1,39,0],
-"structllama_1_1internal_1_1TupleReplaceImpl.html":[2,0,1,1,40],
-"structllama_1_1internal_1_1TupleReplaceImpl.html#ab51b3ae7f97f02a33f94838a590fe792":[2,0,1,1,40,0],
-"structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01Elements_8_8_8_01_4_00_01Replacement_01_4.html":[2,0,1,1,41],
-"structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01Elements_8_8_8_01_4_00_01Replacement_01_4.html#add4db39e00907ae1ad895c02c6ea74ba":[2,0,1,1,41,0],
-"structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01OneElement_01_4_00_01Replacement_01_4.html":[2,0,1,1,42],
-"structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01OneElement_01_4_00_01Replacement_01_4.html#a109f24a75c6eafe81df0b17aa1111c0c":[2,0,1,1,42,0],
 "structllama_1_1internal_1_1mp__unwrap__values__into__impl.html":[2,0,1,1,33],
 "structllama_1_1internal_1_1mp__unwrap__values__into__impl_3_01FromList_3_01Values_8_8_8_01_4_00_01ToList_01_4.html":[2,0,1,1,34],
 "structllama_1_1internal_1_1mp__unwrap__values__into__impl_3_01FromList_3_01Values_8_8_8_01_4_00_01ToList_01_4.html#a3a184387bd7b3fea126f63eaa55679a9":[2,0,1,1,34,0],
@@ -249,5 +244,10 @@ var NAVTREEINDEX3 =
 "structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html":[2,0,1,2,0,11],
 "structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#a798a2670d572e44a72ea01cf5fb0698a":[2,0,1,2,0,11,5],
 "structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#a7b1689236c1ae5b422bd586b56059914":[2,0,1,2,0,11,2],
-"structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#aa0a824402a1e259326fbeb52e9545776":[2,0,1,2,0,11,3]
+"structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#aa0a824402a1e259326fbeb52e9545776":[2,0,1,2,0,11,3],
+"structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#ac3328efa4293b945075081b601b22b56":[2,0,1,2,0,11,1],
+"structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#acd986c335569566cea48f6c1ff697d1d":[2,0,1,2,0,11,0],
+"structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#af901d14f4c982ea08477ef47b03c1791":[2,0,1,2,0,11,4],
+"structllama_1_1mapping_1_1tree_1_1Leaf.html":[2,0,1,2,1,2],
+"structllama_1_1mapping_1_1tree_1_1Leaf.html#a1fc784a9c8c87bc43ff682121b8fd5d7":[2,0,1,2,1,2,0]
 };

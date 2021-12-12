@@ -1,10 +1,5 @@
 var NAVTREEINDEX4 =
 {
-"structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#ac3328efa4293b945075081b601b22b56":[2,0,1,2,0,11,1],
-"structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#acd986c335569566cea48f6c1ff697d1d":[2,0,1,2,0,11,0],
-"structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#af901d14f4c982ea08477ef47b03c1791":[2,0,1,2,0,11,4],
-"structllama_1_1mapping_1_1tree_1_1Leaf.html":[2,0,1,2,1,2],
-"structllama_1_1mapping_1_1tree_1_1Leaf.html#a1fc784a9c8c87bc43ff682121b8fd5d7":[2,0,1,2,1,2,0],
 "structllama_1_1mapping_1_1tree_1_1Leaf.html#a2c6625d5d7d4e237e401d5d25df35e8a":[2,0,1,2,1,2,1],
 "structllama_1_1mapping_1_1tree_1_1Leaf.html#a8f026ec65877a5458ae92eb95678ca0f":[2,0,1,2,1,2,2],
 "structllama_1_1mapping_1_1tree_1_1Mapping.html":[2,0,1,2,1,3],

@@ -133,12 +133,6 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstd_1_1tuple__element_3_01I_00_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html">std::tuple_element&lt; I, llama::Tuple&lt; Elements... &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1TupleReplaceImpl.html">llama::internal::TupleReplaceImpl&lt; Pos, Tuple, Replacement &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01Elements_8_8_8_01_4_00_01Replacement_01_4.html">llama::internal::TupleReplaceImpl&lt; 0, Tuple&lt; Elements... &gt;, Replacement &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01OneElement_01_4_00_01Replacement_01_4.html">llama::internal::TupleReplaceImpl&lt; 0, Tuple&lt; OneElement &gt;, Replacement &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
@@ -173,10 +167,13 @@ Functions</h2></td></tr>
 <tr class="memitem:a42df604d705148baf4262104f6541560"><td class="memTemplParams" colspan="2">template&lt;typename Tuple1 , typename Tuple2 &gt; </td></tr>
 <tr class="memitem:a42df604d705148baf4262104f6541560"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a42df604d705148baf4262104f6541560">llama::tupleCat</a> (const Tuple1 &amp;t1, const Tuple2 &amp;t2)</td></tr>
 <tr class="separator:a42df604d705148baf4262104f6541560"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ff00876dfd6bde55becc1bd80967a64"><td class="memTemplParams" colspan="2">template&lt;std::size_t Pos, typename Tuple , typename Replacement &gt; </td></tr>
-<tr class="memitem:a3ff00876dfd6bde55becc1bd80967a64"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a3ff00876dfd6bde55becc1bd80967a64">llama::tupleReplace</a> (Tuple tuple, Replacement replacement)</td></tr>
-<tr class="memdesc:a3ff00876dfd6bde55becc1bd80967a64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a copy of a tuple with the element at position Pos replaced by replacement.  <a href="namespacellama.html#a3ff00876dfd6bde55becc1bd80967a64">More...</a><br /></td></tr>
-<tr class="separator:a3ff00876dfd6bde55becc1bd80967a64"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f59f4bacbf256e86e1a9e06dde25492"><td class="memTemplParams" colspan="2">template&lt;std::size_t Pos, typename Tuple , typename Replacement , std::size_t... IsBefore, std::size_t... IsAfter&gt; </td></tr>
+<tr class="memitem:a0f59f4bacbf256e86e1a9e06dde25492"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a0f59f4bacbf256e86e1a9e06dde25492">llama::internal::tupleReplaceImpl</a> (Tuple &amp;&amp;tuple, Replacement &amp;&amp;replacement, std::index_sequence&lt; IsBefore... &gt;, std::index_sequence&lt; IsAfter... &gt;)</td></tr>
+<tr class="separator:a0f59f4bacbf256e86e1a9e06dde25492"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af97abfc449e394428735699c5259f4a2"><td class="memTemplParams" colspan="2">template&lt;std::size_t Pos, typename Tuple , typename Replacement &gt; </td></tr>
+<tr class="memitem:af97abfc449e394428735699c5259f4a2"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#af97abfc449e394428735699c5259f4a2">llama::tupleReplace</a> (Tuple &amp;&amp;tuple, Replacement &amp;&amp;replacement)</td></tr>
+<tr class="memdesc:af97abfc449e394428735699c5259f4a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a copy of a tuple with the element at position Pos replaced by replacement.  <a href="namespacellama.html#af97abfc449e394428735699c5259f4a2">More...</a><br /></td></tr>
+<tr class="separator:af97abfc449e394428735699c5259f4a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a76aaf566f3c6233df18940831d184aa9"><td class="memTemplParams" colspan="2">template&lt;size_t... Is, typename... Elements, typename Functor &gt; </td></tr>
 <tr class="memitem:a76aaf566f3c6233df18940831d184aa9"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a76aaf566f3c6233df18940831d184aa9">llama::internal::tupleTransformHelper</a> (std::index_sequence&lt; Is... &gt;, const Tuple&lt; Elements... &gt; &amp;tuple, const Functor &amp;functor)</td></tr>
 <tr class="separator:a76aaf566f3c6233df18940831d184aa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -194,7 +191,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Tuple_8hpp.html">Tuple.hpp</a></li>
-    <li class="footer">Generated on Sun Dec 12 2021 23:24:22 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sun Dec 12 2021 23:50:07 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

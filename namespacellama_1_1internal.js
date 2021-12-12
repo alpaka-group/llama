@@ -39,8 +39,5 @@ var namespacellama_1_1internal =
     [ "PlusAssign", "structllama_1_1internal_1_1PlusAssign.html", "structllama_1_1internal_1_1PlusAssign" ],
     [ "TransformLeavesImpl", "structllama_1_1internal_1_1TransformLeavesImpl.html", "structllama_1_1internal_1_1TransformLeavesImpl" ],
     [ "TransformLeavesImpl< Child[N], TypeFunctor >", "structllama_1_1internal_1_1TransformLeavesImpl_3_01Child_0fN_0e_00_01TypeFunctor_01_4.html", "structllama_1_1internal_1_1TransformLeavesImpl_3_01Child_0fN_0e_00_01TypeFunctor_01_4" ],
-    [ "TransformLeavesImpl< Record< Fields... >, TypeFunctor >", "structllama_1_1internal_1_1TransformLeavesImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01TypeFunctor_01_4.html", "structllama_1_1internal_1_1TransformLeavesImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01TypeFunctor_01_4" ],
-    [ "TupleReplaceImpl", "structllama_1_1internal_1_1TupleReplaceImpl.html", "structllama_1_1internal_1_1TupleReplaceImpl" ],
-    [ "TupleReplaceImpl< 0, Tuple< Elements... >, Replacement >", "structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01Elements_8_8_8_01_4_00_01Replacement_01_4.html", "structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01Elements_8_8_8_01_4_00_01Replacement_01_4" ],
-    [ "TupleReplaceImpl< 0, Tuple< OneElement >, Replacement >", "structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01OneElement_01_4_00_01Replacement_01_4.html", "structllama_1_1internal_1_1TupleReplaceImpl_3_010_00_01Tuple_3_01OneElement_01_4_00_01Replacement_01_4" ]
+    [ "TransformLeavesImpl< Record< Fields... >, TypeFunctor >", "structllama_1_1internal_1_1TransformLeavesImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01TypeFunctor_01_4.html", "structllama_1_1internal_1_1TransformLeavesImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01TypeFunctor_01_4" ]
 ];
