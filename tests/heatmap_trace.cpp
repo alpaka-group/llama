@@ -62,13 +62,14 @@ TEST_CASE("Trace.nbody")
         auto particles = llama::allocView(llama::mapping::Trace{mapping, false});
         updateAndMove(particles);
         auto& hits = particles.mapping().fieldHits;
-        CHECK(hits.at("Pos.X") == 10400);
-        CHECK(hits.at("Pos.Y") == 10400);
-        CHECK(hits.at("Pos.Z") == 10400);
-        CHECK(hits.at("Vel.X") == 400);
-        CHECK(hits.at("Vel.Y") == 400);
-        CHECK(hits.at("Vel.Z") == 400);
-        CHECK(hits.at("Mass") == 10300);
+        CHECK(hits.size() == 7);
+        CHECK(hits[0] == 10400);
+        CHECK(hits[1] == 10400);
+        CHECK(hits[2] == 10400);
+        CHECK(hits[3] == 400);
+        CHECK(hits[4] == 400);
+        CHECK(hits[5] == 400);
+        CHECK(hits[6] == 10300);
     };
     run(llama::mapping::AlignedAoS<llama::ArrayExtents<N>, ParticleHeatmap>{});
     run(llama::mapping::SingleBlobSoA<llama::ArrayExtents<N>, ParticleHeatmap>{});
@@ -87,13 +88,13 @@ TEST_CASE("Trace.print_dtor")
     CHECK(
         buffer.str()
         == "Trace mapping, number of accesses:\n"
-           "\tMass:\t10300\n"
-           "\tVel.Z:\t400\n"
-           "\tVel.Y:\t400\n"
-           "\tVel.X:\t400\n"
-           "\tPos.Z:\t10400\n"
+           "\tPos.X:\t10400\n"
            "\tPos.Y:\t10400\n"
-           "\tPos.X:\t10400\n");
+           "\tPos.Z:\t10400\n"
+           "\tVel.X:\t400\n"
+           "\tVel.Y:\t400\n"
+           "\tVel.Z:\t400\n"
+           "\tMass:\t10300\n");
 }
 
 namespace
