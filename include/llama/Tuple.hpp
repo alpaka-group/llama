@@ -8,24 +8,64 @@
 
 namespace llama
 {
+    namespace internal
+    {
+        template<std::size_t I, typename T, bool = std::is_empty_v<T> && !std::is_final_v<T>>
+        struct LLAMA_DECLSPEC_EMPTY_BASES TupleLeaf
+        {
+            T val;
+
+            LLAMA_FN_HOST_ACC_INLINE constexpr auto value() -> T&
+            {
+                return val;
+            }
+
+            LLAMA_FN_HOST_ACC_INLINE constexpr auto value() const -> const T&
+            {
+                return val;
+            }
+        };
+
+        template<std::size_t I, typename T>
+        struct LLAMA_DECLSPEC_EMPTY_BASES TupleLeaf<I, T, true>
+        {
+            static_assert(!std::is_reference_v<T>, "llama::Tuple cannot store references to stateless types");
+
+            LLAMA_FN_HOST_ACC_INLINE constexpr TupleLeaf(T)
+            {
+            }
+
+            LLAMA_FN_HOST_ACC_INLINE constexpr auto value() const -> T
+            {
+                return {};
+            }
+        };
+    } // namespace internal
+
     template<typename... Elements>
-    struct Tuple
+    struct LLAMA_DECLSPEC_EMPTY_BASES Tuple
     {
     };
 
     /// Tuple class like `std::tuple` but suitable for use with offloading devices like GPUs.
-    template<typename TFirstElement, typename... Elements>
-    struct Tuple<TFirstElement, Elements...>
+    template<typename TFirstElement, typename... RestElements>
+    struct LLAMA_DECLSPEC_EMPTY_BASES Tuple<TFirstElement, RestElements...>
+        : internal::TupleLeaf<1 + sizeof...(RestElements), TFirstElement>
+        , Tuple<RestElements...>
     {
+    private:
+        using Leaf = internal::TupleLeaf<1 + sizeof...(RestElements), TFirstElement>;
+
+    public:
         using FirstElement = TFirstElement;
-        using RestTuple = Tuple<Elements...>;
+        using RestTuple = Tuple<RestElements...>;
 
         constexpr Tuple() = default;
 
         /// Construct a tuple from values of the same types as the tuple stores.
-        LLAMA_FN_HOST_ACC_INLINE constexpr explicit Tuple(FirstElement first, Elements... rest)
-            : first(std::move(first))
-            , rest(std::move(rest)...)
+        LLAMA_FN_HOST_ACC_INLINE constexpr explicit Tuple(FirstElement first, RestElements... rest)
+            : Leaf{std::move(first)}
+            , RestTuple(std::move(rest)...)
         {
         }
 
@@ -35,41 +75,57 @@ namespace llama
             typename T,
             typename... Ts,
             std::enable_if_t<
-                sizeof...(Elements) == sizeof...(Ts)
-                    && std::is_constructible_v<TFirstElement, T> && (std::is_constructible_v<Elements, Ts> && ...),
+                sizeof...(RestElements) == sizeof...(Ts)
+                    && std::is_constructible_v<FirstElement, T> && (std::is_constructible_v<RestElements, Ts> && ...),
                 int> = 0>
         LLAMA_FN_HOST_ACC_INLINE constexpr explicit Tuple(T&& firstArg, Ts&&... restArgs)
-            : first(std::forward<T>(firstArg))
-            , rest(std::forward<Ts>(restArgs)...)
+            : Leaf{FirstElement(std::forward<T>(firstArg))}
+            , RestTuple(std::forward<Ts>(restArgs)...)
         {
         }
 
-        FirstElement first; ///< the first element (if existing)
-#if !defined(__NVCC__) && !(defined(__GNUG__) && __GNUC__ <= 9)
-        [[no_unique_address]] // nvcc 11.3 ICE
-#endif
-        RestTuple rest; ///< the remaining elements
+        /// Returns the first element of the tuple
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto first() -> decltype(auto)
+        {
+            return Leaf::value();
+        }
+
+        /// Returns the first element of the tuple
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto first() const -> decltype(auto)
+        {
+            return Leaf::value();
+        }
+
+        /// Returns a tuple of all but the first element
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto rest() -> RestTuple&
+        {
+            return static_cast<RestTuple&>(*this);
+        }
+
+        /// Returns a tuple of all but the first element
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto rest() const -> const RestTuple&
+        {
+            return static_cast<const RestTuple&>(*this);
+        }
     };
 
     template<typename... Elements>
     Tuple(Elements...) -> Tuple<std::remove_cv_t<std::remove_reference_t<Elements>>...>;
 
-    template<std::size_t Pos, typename... Elements>
+    template<std::size_t I, typename... Elements>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto get(Tuple<Elements...>& tuple) -> auto&
     {
-        if constexpr(Pos == 0)
-            return tuple.first;
-        else
-            return get<Pos - 1>(tuple.rest);
+        using Base [[maybe_unused]] // clang claims Base is unused ...
+        = internal::TupleLeaf<sizeof...(Elements) - I, boost::mp11::mp_at_c<llama::Tuple<Elements...>, I>>;
+        return tuple.Base::value();
     }
 
-    template<std::size_t Pos, typename... Elements>
+    template<std::size_t I, typename... Elements>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto get(const Tuple<Elements...>& tuple) -> const auto&
     {
-        if constexpr(Pos == 0)
-            return tuple.first;
-        else
-            return get<Pos - 1>(tuple.rest);
+        using Base [[maybe_unused]] // clang claims Base is unused ...
+        = internal::TupleLeaf<sizeof...(Elements) - I, boost::mp11::mp_at_c<llama::Tuple<Elements...>, I>>;
+        return tuple.Base::value();
     }
 } // namespace llama
 
@@ -200,6 +256,6 @@ namespace llama
     template<typename... Elements>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto pop_front(const Tuple<Elements...>& tuple)
     {
-        return tuple.rest;
+        return tuple.rest();
     }
 } // namespace llama

@@ -125,3 +125,10 @@
 #else
 #    define CAN_USE_RANGES 0
 #endif
+
+// https://devblogs.microsoft.com/cppblog/optimizing-the-layout-of-empty-base-classes-in-vs2015-update-2-3/
+#if defined(_MSC_VER)
+#    define LLAMA_DECLSPEC_EMPTY_BASES __declspec(empty_bases)
+#else
+#    define LLAMA_DECLSPEC_EMPTY_BASES
+#endif

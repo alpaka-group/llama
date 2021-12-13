@@ -33,9 +33,9 @@ namespace llama::mapping::tree
     auto toString(Tuple<Elements...> tree) -> std::string
     {
         if constexpr(sizeof...(Elements) > 1)
-            return toString(tree.first) + " , " + toString(tree.rest);
+            return toString(tree.first()) + " , " + toString(tree.rest());
         else
-            return toString(tree.first);
+            return toString(tree.first());
     }
 
     namespace internal
