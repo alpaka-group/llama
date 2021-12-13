@@ -285,6 +285,27 @@ namespace llama
         View* view;
     };
 
+    namespace internal
+    {
+        template<typename Blobs, typename Mapping, std::size_t... Coords>
+        LLAMA_FN_HOST_ACC_INLINE auto resolveToMemoryReference(
+            Blobs& blobs,
+            Mapping& mapping,
+            typename Mapping::ArrayIndex ai,
+            RecordCoord<Coords...> rc = {}) -> decltype(auto)
+        {
+            if constexpr(llama::isComputed<Mapping, RecordCoord<Coords...>>)
+                return mapping.compute(ai, rc, blobs);
+            else
+            {
+                const auto [nr, offset] = mapping.blobNrAndOffset(ai, rc);
+                using Type = GetType<typename Mapping::RecordDim, RecordCoord<Coords...>>;
+                return reinterpret_cast<CopyConst<std::remove_reference_t<decltype(blobs[nr][offset])>, Type>&>(
+                    blobs[nr][offset]);
+            }
+        }
+    } // namespace internal
+
     /// Central LLAMA class holding memory for storage and giving access to values stored there defined by a mapping. A
     /// view should be created using \ref allocView.
     /// \tparam TMapping The mapping used by the view to map accesses into memory.
@@ -454,32 +475,14 @@ namespace llama
         template<std::size_t... Coords>
         LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayIndex ai, RecordCoord<Coords...> rc = {}) const -> decltype(auto)
         {
-            if constexpr(llama::isComputed<Mapping, RecordCoord<Coords...>>)
-                return mapping().compute(ai, rc, storageBlobs);
-            else
-            {
-                const auto [nr, offset] = mapping().blobNrAndOffset(ai, rc);
-                using Type = GetType<RecordDim, RecordCoord<Coords...>>;
-                return reinterpret_cast<const Type&>(storageBlobs[nr][offset]);
-            }
+            return internal::resolveToMemoryReference(storageBlobs, mapping(), ai, rc);
         }
 
         LLAMA_SUPPRESS_HOST_DEVICE_WARNING
         template<std::size_t... Coords>
         LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayIndex ai, RecordCoord<Coords...> rc = {}) -> decltype(auto)
         {
-            if constexpr(llama::isComputed<Mapping, RecordCoord<Coords...>>)
-                return mapping().compute(ai, rc, storageBlobs);
-            else
-            {
-                const auto [nr, offset] = mapping().blobNrAndOffset(ai, rc);
-                using Type = GetType<RecordDim, RecordCoord<Coords...>>;
-                using QualifiedType = std::conditional_t<
-                    std::is_const_v<std::remove_reference_t<decltype(storageBlobs[nr][offset])>>,
-                    const Type,
-                    Type>;
-                return reinterpret_cast<QualifiedType&>(storageBlobs[nr][offset]);
-            }
+            return internal::resolveToMemoryReference(storageBlobs, mapping(), ai, rc);
         }
     };
 

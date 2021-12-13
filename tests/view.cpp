@@ -73,7 +73,7 @@ TEST_CASE("view.non-memory-owning")
 
         for(auto i = 0u; i < 256u; i++)
         {
-            auto* v = reinterpret_cast<decltype(storage.get())>(&view(i)(tag::Value{}));
+            auto* v = reinterpret_cast<byte*>(&view(i)(tag::Value{}));
             CHECK(storage.get() <= v);
             CHECK(v <= storage.get() + blobSize);
         }
