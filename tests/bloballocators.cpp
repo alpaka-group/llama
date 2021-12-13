@@ -26,3 +26,15 @@ TEST_CASE("bloballocators.SharedPtr")
     iotaCheckView(view);
 }
 #endif
+
+TEST_CASE("bloballocators.AlignedAllocator")
+{
+    constexpr auto size = 50;
+
+    auto aa = llama::bloballoc::AlignedAllocator<int, 1024>{};
+    auto* p = aa.allocate(size);
+    CHECK((reinterpret_cast<std::uintptr_t>(p) & std::uintptr_t{0x3FF}) == 0);
+    aa.deallocate(p, size);
+    CHECK(aa == llama::bloballoc::AlignedAllocator<int, 1024>{});
+    CHECK(!(aa != llama::bloballoc::AlignedAllocator<int, 1024>{}));
+}
