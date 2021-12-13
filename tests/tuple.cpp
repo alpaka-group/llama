@@ -13,6 +13,30 @@ TEST_CASE("Tuple.CTAD")
     STATIC_REQUIRE(std::is_same_v<decltype(t3), const llama::Tuple<int, float, std::nullptr_t>>);
 }
 
+TEST_CASE("Tuple.size")
+{
+    using IC = std::integral_constant<int, 1>;
+
+    STATIC_REQUIRE(std::is_empty_v<llama::Tuple<>>);
+    STATIC_REQUIRE(sizeof(llama::Tuple<int>) == 1 * sizeof(int));
+    STATIC_REQUIRE(sizeof(llama::Tuple<int, int>) == 2 * sizeof(int));
+    STATIC_REQUIRE(sizeof(llama::Tuple<int, int, int>) == 3 * sizeof(int));
+
+    STATIC_REQUIRE(std::is_empty_v<llama::Tuple<IC>>);
+    STATIC_REQUIRE(std::is_empty_v<llama::Tuple<IC, IC, IC>>);
+
+    STATIC_REQUIRE(sizeof(llama::Tuple<IC, int>) == sizeof(int));
+    STATIC_REQUIRE(sizeof(llama::Tuple<int, IC>) == sizeof(int));
+
+    STATIC_REQUIRE(sizeof(llama::Tuple<IC, int, int>) == 2 * sizeof(int));
+    STATIC_REQUIRE(sizeof(llama::Tuple<int, IC, int>) == 2 * sizeof(int));
+    STATIC_REQUIRE(sizeof(llama::Tuple<int, int, IC>) == 2 * sizeof(int));
+
+    STATIC_REQUIRE(sizeof(llama::Tuple<IC, int, IC>) == sizeof(int));
+    STATIC_REQUIRE(sizeof(llama::Tuple<int, IC, IC>) == sizeof(int));
+    STATIC_REQUIRE(sizeof(llama::Tuple<IC, IC, int>) == sizeof(int));
+}
+
 TEST_CASE("Tuple.get")
 {
     constexpr auto t = llama::Tuple{1, 1.0f, nullptr};
