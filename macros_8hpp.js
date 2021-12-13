@@ -2,6 +2,7 @@ var macros_8hpp =
 [
     [ "CAN_USE_RANGES", "macros_8hpp.html#a46ce794a2a02ddc4a84b9119b5f66ab8", null ],
     [ "LLAMA_COPY", "macros_8hpp.html#a2c7addf59d59bed9110075644e115f97", null ],
+    [ "LLAMA_DECLSPEC_EMPTY_BASES", "macros_8hpp.html#a54cf6c1e66eb82c07a01b945491e4916", null ],
     [ "LLAMA_FN_HOST_ACC_INLINE", "macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af", null ],
     [ "LLAMA_FORCE_INLINE", "macros_8hpp.html#a602fc531cfc17c6b8fadea678b7c937b", null ],
     [ "LLAMA_FORCE_INLINE_RECURSIVE", "macros_8hpp.html#a48abf2d81c1aac87ff87f95bb427049a", null ],

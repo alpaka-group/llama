@@ -154,8 +154,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Tuple.html">Tuple</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Tuple_3_01TFirstElement_00_01Elements_8_8_8_01_4.html">Tuple&lt; TFirstElement, Elements... &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structllama_1_1Tuple.html">Tuple</a> class like <code>std::tuple</code> but suitable for use with offloading devices like GPUs.  <a href="structllama_1_1Tuple_3_01TFirstElement_00_01Elements_8_8_8_01_4.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Tuple_3_01TFirstElement_00_01RestElements_8_8_8_01_4.html">Tuple&lt; TFirstElement, RestElements... &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structllama_1_1Tuple.html">Tuple</a> class like <code>std::tuple</code> but suitable for use with offloading devices like GPUs.  <a href="structllama_1_1Tuple_3_01TFirstElement_00_01RestElements_8_8_8_01_4.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Vector.html">Vector</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -333,10 +333,10 @@ Functions</h2></td></tr>
 <tr class="memitem:a1604e8162498ff814c1b1efacd212e95"><td class="memTemplParams" colspan="2">template&lt;typename... Elements&gt; </td></tr>
 <tr class="memitem:a1604e8162498ff814c1b1efacd212e95"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a1604e8162498ff814c1b1efacd212e95">Tuple</a> (Elements...) -&gt; <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; std::remove_cv_t&lt; std::remove_reference_t&lt; Elements &gt;&gt;... &gt;</td></tr>
 <tr class="separator:a1604e8162498ff814c1b1efacd212e95"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4a445e00f595ee5e2f75fc0a0e81b07"><td class="memTemplParams" colspan="2">template&lt;std::size_t Pos, typename... Elements&gt; </td></tr>
+<tr class="memitem:ab4a445e00f595ee5e2f75fc0a0e81b07"><td class="memTemplParams" colspan="2">template&lt;std::size_t I, typename... Elements&gt; </td></tr>
 <tr class="memitem:ab4a445e00f595ee5e2f75fc0a0e81b07"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ab4a445e00f595ee5e2f75fc0a0e81b07">get</a> (<a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt; &amp;tuple) -&gt; auto &amp;</td></tr>
 <tr class="separator:ab4a445e00f595ee5e2f75fc0a0e81b07"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b641cbeb889f9a3002ae9ec9b6569c9"><td class="memTemplParams" colspan="2">template&lt;std::size_t Pos, typename... Elements&gt; </td></tr>
+<tr class="memitem:a0b641cbeb889f9a3002ae9ec9b6569c9"><td class="memTemplParams" colspan="2">template&lt;std::size_t I, typename... Elements&gt; </td></tr>
 <tr class="memitem:a0b641cbeb889f9a3002ae9ec9b6569c9"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a0b641cbeb889f9a3002ae9ec9b6569c9">get</a> (const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt; &amp;tuple) -&gt; const auto &amp;</td></tr>
 <tr class="separator:a0b641cbeb889f9a3002ae9ec9b6569c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad527d6d304c87d6ab25d4d78e15cebc4"><td class="memTemplParams" colspan="2">template&lt;typename... ElementsA, typename... ElementsB&gt; </td></tr>
@@ -1555,7 +1555,7 @@ template&lt;typename RecordDim , typename Functor , typename... Tags&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;std::size_t Pos, typename... Elements&gt; </div>
+template&lt;std::size_t I, typename... Elements&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1576,7 +1576,7 @@ template&lt;std::size_t Pos, typename... Elements&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00067">67</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00124">124</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
 
 </div>
 </div>
@@ -1586,7 +1586,7 @@ template&lt;std::size_t Pos, typename... Elements&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;std::size_t Pos, typename... Elements&gt; </div>
+template&lt;std::size_t I, typename... Elements&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1607,7 +1607,7 @@ template&lt;std::size_t Pos, typename... Elements&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00058">58</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00116">116</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
 
 </div>
 </div>
@@ -1721,7 +1721,7 @@ template&lt;typename... ElementsA, typename... ElementsB&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00115">115</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00171">171</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
 
 </div>
 </div>
@@ -1942,7 +1942,7 @@ template&lt;typename... ElementsA, typename... ElementsB&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00103">103</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00159">159</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
 
 </div>
 </div>
@@ -2114,7 +2114,7 @@ template&lt;typename... Elements&gt; </div>
 
 <p>Returns a copy of the tuple without the first element. </p>
 
-<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00201">201</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00257">257</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
 
 </div>
 </div>
@@ -2452,7 +2452,7 @@ template&lt;typename Tuple1 , typename Tuple2 &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00135">135</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00191">191</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
 
 </div>
 </div>
@@ -2494,7 +2494,7 @@ template&lt;std::size_t Pos, typename Tuple , typename Replacement &gt; </div>
 
 <p>Creates a copy of a tuple with the element at position Pos replaced by replacement. </p>
 
-<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00167">167</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00223">223</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
 
 </div>
 </div>
@@ -2535,7 +2535,7 @@ template&lt;typename... Elements, typename Functor &gt; </div>
 </div><div class="memdoc">
 <p>Applies a functor to every element of a tuple, creating a new tuple with the result of the element transformations. The functor needs to implement a template <code>operator()</code> to which all tuple elements are passed. </p>
 
-<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00194">194</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00250">250</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
 
 </div>
 </div>
@@ -3398,7 +3398,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Mon Dec 13 2021 10:50:04 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Dec 13 2021 12:33:55 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

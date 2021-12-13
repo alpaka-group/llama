@@ -162,8 +162,9 @@ var hierarchy =
       [ "llama::internal::IsBoundedArray< T[N]>", "structllama_1_1internal_1_1IsBoundedArray_3_01T_0fN_0e_4.html", null ]
     ] ],
     [ "llama::Tuple< Elements >", "structllama_1_1Tuple.html", null ],
-    [ "llama::Tuple< Elements... >", "structllama_1_1Tuple.html", null ],
-    [ "llama::Tuple< TFirstElement, Elements... >", "structllama_1_1Tuple_3_01TFirstElement_00_01Elements_8_8_8_01_4.html", null ],
+    [ "llama::Tuple< RestElements... >", "structllama_1_1Tuple.html", [
+      [ "llama::Tuple< TFirstElement, RestElements... >", "structllama_1_1Tuple_3_01TFirstElement_00_01RestElements_8_8_8_01_4.html", null ]
+    ] ],
     [ "std::tuple_element< I, const llama::VirtualRecord< View, BoundRecordCoord, OwnView > >", "structstd_1_1tuple__element_3_01I_00_01const_01llama_1_1VirtualRecord_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html", null ],
     [ "std::tuple_element< I, llama::Array< T, N > >", "structstd_1_1tuple__element_3_01I_00_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html", null ],
     [ "std::tuple_element< I, llama::ArrayExtents< Sizes... > >", "structstd_1_1tuple__element_3_01I_00_01llama_1_1ArrayExtents_3_01Sizes_8_8_8_01_4_01_4.html", null ],
@@ -171,8 +172,13 @@ var hierarchy =
     [ "std::tuple_element< I, llama::Tuple< Elements... > >", "structstd_1_1tuple__element_3_01I_00_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html", null ],
     [ "std::tuple_element< I, llama::VirtualRecord< View, BoundRecordCoord, OwnView > >", "structstd_1_1tuple__element_3_01I_00_01llama_1_1VirtualRecord_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html", null ],
     [ "std::tuple_size< llama::Tuple< Elements... > >", "structstd_1_1tuple__size_3_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html", null ],
-    [ "llama::bloballoc::Vector", "structllama_1_1bloballoc_1_1Vector.html", null ],
+    [ "llama::internal::TupleLeaf< I, T, bool >", "structllama_1_1internal_1_1TupleLeaf.html", null ],
+    [ "llama::internal::TupleLeaf< 1+sizeof...(RestElements), TFirstElement >", "structllama_1_1internal_1_1TupleLeaf.html", [
+      [ "llama::Tuple< TFirstElement, RestElements... >", "structllama_1_1Tuple_3_01TFirstElement_00_01RestElements_8_8_8_01_4.html", null ]
+    ] ],
+    [ "llama::internal::TupleLeaf< I, T, true >", "structllama_1_1internal_1_1TupleLeaf_3_01I_00_01T_00_01true_01_4.html", null ],
     [ "llama::Vector< Mapping >", "structllama_1_1Vector.html", null ],
+    [ "llama::bloballoc::Vector", "structllama_1_1bloballoc_1_1Vector.html", null ],
     [ "llama::View< TMapping, BlobType >", "structllama_1_1View.html", null ],
     [ "llama::VirtualRecord< TView, TBoundRecordCoord, OwnView >", "structllama_1_1VirtualRecord.html", null ],
     [ "llama::VirtualView< TStoredParentView >", "structllama_1_1VirtualView.html", null ],

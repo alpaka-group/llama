@@ -24,7 +24,7 @@ var namespacellama =
     [ "RecordCoord", "structllama_1_1RecordCoord.html", "structllama_1_1RecordCoord" ],
     [ "RecordCoord<>", "structllama_1_1RecordCoord_3_4.html", "structllama_1_1RecordCoord_3_4" ],
     [ "Tuple", "structllama_1_1Tuple.html", null ],
-    [ "Tuple< TFirstElement, Elements... >", "structllama_1_1Tuple_3_01TFirstElement_00_01Elements_8_8_8_01_4.html", "structllama_1_1Tuple_3_01TFirstElement_00_01Elements_8_8_8_01_4" ],
+    [ "Tuple< TFirstElement, RestElements... >", "structllama_1_1Tuple_3_01TFirstElement_00_01RestElements_8_8_8_01_4.html", "structllama_1_1Tuple_3_01TFirstElement_00_01RestElements_8_8_8_01_4" ],
     [ "Vector", "structllama_1_1Vector.html", "structllama_1_1Vector" ],
     [ "View", "structllama_1_1View.html", "structllama_1_1View" ],
     [ "VirtualRecord", "structllama_1_1VirtualRecord.html", "structllama_1_1VirtualRecord" ],

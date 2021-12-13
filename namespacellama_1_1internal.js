@@ -39,5 +39,7 @@ var namespacellama_1_1internal =
     [ "PlusAssign", "structllama_1_1internal_1_1PlusAssign.html", "structllama_1_1internal_1_1PlusAssign" ],
     [ "TransformLeavesImpl", "structllama_1_1internal_1_1TransformLeavesImpl.html", "structllama_1_1internal_1_1TransformLeavesImpl" ],
     [ "TransformLeavesImpl< Child[N], TypeFunctor >", "structllama_1_1internal_1_1TransformLeavesImpl_3_01Child_0fN_0e_00_01TypeFunctor_01_4.html", "structllama_1_1internal_1_1TransformLeavesImpl_3_01Child_0fN_0e_00_01TypeFunctor_01_4" ],
-    [ "TransformLeavesImpl< Record< Fields... >, TypeFunctor >", "structllama_1_1internal_1_1TransformLeavesImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01TypeFunctor_01_4.html", "structllama_1_1internal_1_1TransformLeavesImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01TypeFunctor_01_4" ]
+    [ "TransformLeavesImpl< Record< Fields... >, TypeFunctor >", "structllama_1_1internal_1_1TransformLeavesImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01TypeFunctor_01_4.html", "structllama_1_1internal_1_1TransformLeavesImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01TypeFunctor_01_4" ],
+    [ "TupleLeaf", "structllama_1_1internal_1_1TupleLeaf.html", "structllama_1_1internal_1_1TupleLeaf" ],
+    [ "TupleLeaf< I, T, true >", "structllama_1_1internal_1_1TupleLeaf_3_01I_00_01T_00_01true_01_4.html", "structllama_1_1internal_1_1TupleLeaf_3_01I_00_01T_00_01true_01_4" ]
 ];
