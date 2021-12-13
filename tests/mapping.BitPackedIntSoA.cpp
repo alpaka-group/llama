@@ -119,3 +119,51 @@ TEST_CASE("mapping.BitPackedIntSoA.bool")
     for(auto i = 0; i < n; i++)
         CHECK(view(i) == (i % 2 == 0));
 }
+
+namespace
+{
+    enum Grades
+    {
+        A,
+        B,
+        C,
+        D,
+        E,
+        F
+    };
+
+    enum class GradesClass
+    {
+        A,
+        B,
+        C,
+        D,
+        E,
+        F
+    };
+} // namespace
+
+// NOLINTNEXTLINE(fuchsia-statically-constructed-objects)
+TEMPLATE_TEST_CASE("mapping.BitPackedIntSoA.Enum", "", Grades, GradesClass)
+{
+    using Enum = TestType;
+
+    using StoredIntegral =
+        typename llama::mapping::internal::MakeUnsigned<llama::mapping::internal::LargestIntegral<Enum>>::type;
+    STATIC_REQUIRE(std::is_same_v<StoredIntegral, unsigned>);
+
+    auto view = llama::allocView(llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<1>, Enum>{3, {6}});
+    view(0) = Enum::A;
+    view(1) = Enum::B;
+    view(2) = Enum::C;
+    view(3) = Enum::D;
+    view(4) = Enum::E;
+    view(5) = Enum::F;
+
+    CHECK(view(0) == Enum::A);
+    CHECK(view(1) == Enum::B);
+    CHECK(view(2) == Enum::C);
+    CHECK(view(3) == Enum::D);
+    CHECK(view(4) == Enum::E);
+    CHECK(view(5) == Enum::F);
+}
