@@ -74,6 +74,28 @@ TEST_CASE("Trace.nbody")
     run(llama::mapping::SingleBlobSoA<llama::ArrayExtents<N>, ParticleHeatmap>{});
 }
 
+TEST_CASE("Trace.print_dtor")
+{
+    std::stringstream buffer;
+    std::streambuf* old = std::cout.rdbuf(buffer.rdbuf());
+    {
+        auto particles = llama::allocView(
+            llama::mapping::Trace{llama::mapping::AlignedAoS<llama::ArrayExtents<N>, ParticleHeatmap>{}});
+        updateAndMove(particles);
+    }
+    std::cout.rdbuf(old);
+    CHECK(
+        buffer.str()
+        == "Trace mapping, number of accesses:\n"
+           "\tMass:\t10300\n"
+           "\tVel.Z:\t400\n"
+           "\tVel.Y:\t400\n"
+           "\tVel.X:\t400\n"
+           "\tPos.Z:\t10400\n"
+           "\tPos.Y:\t10400\n"
+           "\tPos.X:\t10400\n");
+}
+
 namespace
 {
     // note: string literal is broken into 2, because MSVC limits string literals to 16k chars
