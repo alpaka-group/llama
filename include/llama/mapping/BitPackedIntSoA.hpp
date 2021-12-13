@@ -21,7 +21,6 @@ namespace llama::mapping
         private:
             using StoredIntegral = std::remove_const_t<std::remove_pointer_t<StoredIntegralPointer>>;
 
-            static_assert(std::is_integral_v<Integral>);
             static_assert(std::is_integral_v<StoredIntegral>);
             static_assert(std::is_unsigned_v<StoredIntegral>);
             static_assert(
@@ -98,11 +97,11 @@ namespace llama::mapping
                 const auto unsignedValue = static_cast<StoredIntegral>(value);
                 const auto mask = (StoredIntegral{1} << bits) - 1u;
                 StoredIntegral valueBits;
-                if constexpr(std::is_unsigned_v<Integral>)
+                if constexpr(!std::is_signed_v<Integral>)
                     valueBits = unsignedValue & mask;
                 else
                 {
-                    const auto magnitudeMask = (StoredIntegral{1} << (bits - std::is_signed_v<Integral>) ) - 1u;
+                    const auto magnitudeMask = (StoredIntegral{1} << (bits - 1)) - 1u;
                     const auto isSigned = value < 0;
                     valueBits = (StoredIntegral{isSigned} << (bits - 1)) | (unsignedValue & magnitudeMask);
                 }
@@ -137,7 +136,7 @@ namespace llama::mapping
         template<typename RecordDim>
         using LargestIntegral = boost::mp11::mp_max_element<FlatRecordDim<RecordDim>, HasLargerSize>;
 
-        template<typename T>
+        template<typename T, typename SFINAE = void>
         struct MakeUnsigned : std::make_unsigned<T>
         {
         };
@@ -146,6 +145,11 @@ namespace llama::mapping
         struct MakeUnsigned<bool>
         {
             using type = std::uint8_t;
+        };
+
+        template<typename T>
+        struct MakeUnsigned<T, std::enable_if_t<std::is_enum_v<T>>> : std::make_unsigned<std::underlying_type_t<T>>
+        {
         };
     } // namespace internal
 
@@ -161,8 +165,11 @@ namespace llama::mapping
         typename StoredIntegral = typename internal::MakeUnsigned<internal::LargestIntegral<TRecordDim>>::type>
     struct BitPackedIntSoA : TArrayExtents
     {
+        template<typename T>
+        using IsAllowedFieldType = boost::mp11::mp_or<std::is_integral<T>, std::is_enum<T>>;
+
         static_assert(
-            boost::mp11::mp_all_of<FlatRecordDim<TRecordDim>, std::is_integral>::value,
+            boost::mp11::mp_all_of<FlatRecordDim<TRecordDim>, IsAllowedFieldType>::value,
             "All record dimension field types must be integral");
 
         using ArrayExtents = TArrayExtents;
