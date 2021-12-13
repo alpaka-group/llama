@@ -2,10 +2,9 @@
 
 #include "Common.hpp"
 
+#include <array>
 #include <atomic>
 #include <iostream>
-#include <string>
-#include <unordered_map>
 
 namespace llama::mapping
 {
@@ -25,16 +24,29 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE
         explicit Trace(Mapping mapping, bool printOnDestruction = true)
             : mapping(mapping)
+            , fieldHits{}
             , printOnDestruction(printOnDestruction)
         {
-            forEachLeafCoord<RecordDim>([&](auto rc) { fieldHits[recordCoordTags<RecordDim>(rc)] = 0; });
         }
 
         Trace(const Trace&) = delete;
         auto operator=(const Trace&) -> Trace& = delete;
 
-        Trace(Trace&&) noexcept = default;
-        auto operator=(Trace&&) noexcept -> Trace& = default;
+        Trace(Trace&& other) noexcept : mapping(std::move(other.mapping)), printOnDestruction(other.printOnDestruction)
+        {
+            for(std::size_t i = 0; i < fieldHits.size(); i++)
+                fieldHits[i] = other.fieldHits[i].load();
+            other.printOnDestruction = false;
+        }
+
+        auto operator=(Trace&& other) noexcept -> Trace&
+        {
+            mapping = std::move(other.mapping);
+            printOnDestruction = other.printOnDestruction;
+            for(std::size_t i = 0; i < fieldHits.size(); i++)
+                fieldHits[i] = other.fieldHits[i].load();
+            other.printOnDestruction = false;
+        }
 
         ~Trace()
         {
@@ -57,21 +69,23 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayIndex ai, RecordCoord<RecordCoords...> rc = {}) const
             -> NrAndOffset
         {
-            const static auto name = recordCoordTags<RecordDim>(RecordCoord<RecordCoords...>{});
-            fieldHits.at(name)++;
-
+            fieldHits[flatRecordCoord<RecordDim, RecordCoord<RecordCoords...>>]++;
             LLAMA_FORCE_INLINE_RECURSIVE return mapping.blobNrAndOffset(ai, rc);
         }
 
         void print() const
         {
             std::cout << "Trace mapping, number of accesses:\n";
-            for(const auto& [k, v] : fieldHits)
-                std::cout << '\t' << k << ":\t" << v << '\n';
+            forEachLeafCoord<RecordDim>(
+                [this](auto rc)
+                {
+                    std::cout << '\t' << recordCoordTags<RecordDim>(rc) << ":\t"
+                              << fieldHits[flatRecordCoord<RecordDim, decltype(rc)>] << '\n';
+                });
         }
 
         Mapping mapping;
-        mutable std::unordered_map<std::string, std::atomic<std::size_t>> fieldHits;
+        mutable std::array<std::atomic<std::size_t>, flatFieldCount<RecordDim>> fieldHits;
         bool printOnDestruction;
     };
 } // namespace llama::mapping
