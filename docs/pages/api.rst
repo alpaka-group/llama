@@ -11,20 +11,34 @@ Useful helpers
 
 .. _label-api-array:
 
-.. doxygenstruct:: llama::Array
-   :members:
-.. doxygenstruct:: llama::Tuple
-   :members:
-.. doxygentypedef:: llama::TupleElement
-.. doxygenfunction:: llama::get
-.. doxygenvariable:: llama::tupleSize
-.. doxygenfunction:: llama::tupleCat
-.. doxygenfunction:: llama::tupleReplace
-.. doxygenfunction:: llama::tupleTransform
-.. doxygenfunction:: llama::tupleWithoutFirst(const Tuple<Elements...> &tuple)
 .. doxygenstruct:: llama::NrAndOffset
    :members:
 .. doxygenfunction:: llama::structName
+.. doxygentypedef:: CopyConst
+.. doxygenstruct:: llama::ProxyRefOpMixin
+   :members:
+
+Array
+^^^^^
+
+.. doxygenstruct:: llama::Array
+   :members:
+.. doxygenfunction:: llama::push_front
+.. doxygenfunction:: llama::push_back
+.. doxygenfunction:: llama::pop_front(Array<T, N> a)
+.. doxygenfunction:: llama::pop_back
+.. doxygenfunction:: llama::product
+
+Tuple
+^^^^^
+
+.. doxygenstruct:: llama::Tuple
+   :members:
+.. doxygenfunction:: llama::get
+.. doxygenfunction:: llama::tupleCat
+.. doxygenfunction:: llama::tupleReplace
+.. doxygenfunction:: llama::tupleTransform
+.. doxygenfunction:: llama::pop_front(const Tuple<Elements...> &tuple)
 
 Array dimensions
 ----------------
@@ -61,9 +75,13 @@ Record dimension
 .. doxygentypedef:: llama::FlatRecordDim
 .. doxygenvariable:: llama::flatRecordCoord
 .. doxygentypedef:: llama::LeafRecordCoords
+.. doxygentypedef:: llama::TransformLeaves
+.. doxygentypedef:: llama::MergedRecordDims
 
 .. doxygenfunction:: llama::forEachLeafCoord(Functor &&functor, Tags... baseTags)
 .. doxygenfunction:: llama::forEachLeafCoord(Functor &&functor, RecordCoord<Coords...> baseCoord)
+
+.. doxygenfunction:: llama::recordCoordTags
 
 Record coordinates
 ------------------
@@ -120,6 +138,14 @@ Mappings
 .. doxygenstruct:: llama::mapping::Trace
    :members:
 .. doxygenstruct:: llama::mapping::Heatmap
+   :members:
+.. doxygenstruct:: llama::mapping::Bytesplit
+   :members:
+.. doxygenstruct:: llama::mapping::ChangeType
+   :members:
+.. doxygenstruct:: llama::mapping::BitPackedIntSoA
+   :members:
+.. doxygenstruct:: llama::mapping::BitPackedFloatSoA
    :members:
 
 RecordDim flattener
@@ -187,8 +213,9 @@ Macros
 
 .. doxygendefine:: LLAMA_INDEPENDENT_DATA
 .. doxygendefine:: LLAMA_FORCE_INLINE
+.. doxygendefine:: LLAMA_FORCE_INLINE_RECURSIVE
+.. doxygendefine:: LLAMA_UNROLL
 .. doxygendefine:: LLAMA_HOST_ACC
 .. doxygendefine:: LLAMA_FN_HOST_ACC_INLINE
 .. doxygendefine:: LLAMA_LAMBDA_INLINE
-.. doxygendefine:: LLAMA_FORCE_INLINE_RECURSIVE
 .. doxygendefine:: LLAMA_COPY
