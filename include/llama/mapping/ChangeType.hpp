@@ -12,6 +12,10 @@ namespace llama::mapping
         template<typename ReplacementMap>
         struct MakeReplacer
         {
+            static_assert(
+                boost::mp11::mp_is_map<ReplacementMap>::value,
+                "The Replacement map must be of the form: mp_list<mp_list<From, To>, ...>");
+
             template<typename UserT>
             using type = typename boost::mp11::mp_if<
                 boost::mp11::mp_map_contains<ReplacementMap, UserT>,
