@@ -42,12 +42,12 @@ namespace llama::mapping
             // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
             LLAMA_FN_HOST_ACC_INLINE constexpr operator UserT() const
             {
-                return storageRef;
+                return static_cast<UserT>(storageRef); // we could allow stronger casts here
             }
 
             LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(UserT v) -> ChangeTypeReference&
             {
-                storageRef = v;
+                storageRef = static_cast<StoredT>(v); // we could allow stronger casts here
                 return *this;
             }
         };
