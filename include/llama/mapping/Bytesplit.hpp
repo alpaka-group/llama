@@ -37,6 +37,12 @@ namespace llama::mapping
         {
         }
 
+        template<typename... Args>
+        LLAMA_FN_HOST_ACC_INLINE constexpr explicit Bytesplit(std::tuple<Args...> innerMappingArgs, TRecordDim = {})
+            : Inner(std::make_from_tuple<Inner>(innerMappingArgs))
+        {
+        }
+
         template<std::size_t... RecordCoords>
         static constexpr auto isComputed(RecordCoord<RecordCoords...>)
         {

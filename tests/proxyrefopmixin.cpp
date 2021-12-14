@@ -231,7 +231,8 @@ namespace
 TEST_CASE("proxyrefopmixin.Bytesplit")
 {
     auto view = llama::allocView(
-        llama::mapping::Bytesplit<llama::ArrayExtents<4>, Vec3I, llama::mapping::PreconfiguredAoS<>::type>{{}});
+        llama::mapping::Bytesplit<llama::ArrayExtents<4>, Vec3I, llama::mapping::PreconfiguredAoS<>::type>{
+            llama::ArrayExtents<4>{}});
     testProxyRef(view(2)(tag::X{}));
 }
 
