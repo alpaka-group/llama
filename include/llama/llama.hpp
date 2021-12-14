@@ -54,6 +54,7 @@
 #include "mapping/Bytesplit.hpp"
 #include "mapping/ChangeType.hpp"
 #include "mapping/Heatmap.hpp"
+#include "mapping/Null.hpp"
 #include "mapping/One.hpp"
 #include "mapping/SoA.hpp"
 #include "mapping/Split.hpp"
