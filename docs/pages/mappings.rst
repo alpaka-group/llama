@@ -14,11 +14,42 @@ LLAMA provides several ready-to-use mappings, but users are also free to supply 
 
 .. image:: ../images/mapping.svg
 
+LLAMA supports and uses different classes of mapping that differ in their usage:
+
+Physical mappings
+^^^^^^^^^^^^^^^^^
+
+A physical mapping is the primary form of a mapping.
+Mapping a record coordinate and array dimension index through a physical mapping results in a blob number and offset.
+This information is then used either by a view or subsequent mapping and, given a blob array, can be turned into a physical memory location,
+which is provided as l-value reference to the mapped field type of the record dimension.
+
+Computed mappings
+^^^^^^^^^^^^^^^^^
+
+A computed mapping may invoke a computation to map a subset of the record dimension.
+The fields of the record dimension which are mapped using a computation, are called computed fields.
+A computed mapping does not return a blob number and offset for computed fields, but rather a reference to memory directly.
+However, this reference is not an l-value reference but a proxy reference,
+since this reference needs to encapsulate computations to be performed when reading or writing through the reference.
+For non-computed fields, a computed mapping behaves like a physical mapping.
+A mapping with only computed fileds is called a fully computed mapping, otherwise a partially computed mapping.
+
+Meta mappings
+^^^^^^^^^^^^^
+
+A meta mapping is a mapping that builds on other mappings.
+Examples are altering record or array dimensions before passing the information to another mapping
+or modifying the blob number and offset returned from a mapping.
+A meta mapping can also instrument or trace information on the accesses to another mapping.
+Meta mappings are orthogonal to physical and computed mappings.
+
+
 Concept
 -------
 
 A LLAMA mapping is used to create views as detailed in the :ref:`allocView API section <label-api-allocView>` and views consult the mapping when resolving accesses.
-The view requires each mapping to fulfill the following concept:
+The view requires each mapping to fulfill at least the following concept:
 
 .. code-block:: C++
 
@@ -28,19 +59,46 @@ The view requires each mapping to fulfill the following concept:
         typename M::ArrayIndex;
         typename M::RecordDim;
         { M::blobCount } -> std::convertible_to<std::size_t>;
-        llama::Array<int, M::blobCount>{}; // validates constexpr-ness
         { m.blobSize(std::size_t{}) } -> std::same_as<std::size_t>;
-        { m.blobNrAndOffset(typename M::ArrayIndex{}) } -> std::same_as<NrAndOffset>;
     };
 
 That is, each mapping type needs to expose the types :cpp:`M::ArrayExtents`, :cpp:`M::ArrayIndex` and :cpp:`M::RecordDim`.
-Furthermore, each mapping needs to provide a static constexpr member variable :cpp:`blobCount` and two member functions.
-:cpp:`blobSize(i)` gives the size in bytes of the :cpp:`i`\ th block of memory needed for this mapping.
+Furthermore, each mapping needs to provide a :cpp:`static` :cpp:`constexpr` member variable :cpp:`blobCount`.
+Finally, the member function :cpp:`blobSize(i)` gives the size in bytes of the :cpp:`i`\ th block of memory needed for this mapping.
 :cpp:`i` is in the range of :cpp:`0` to :cpp:`blobCount - 1`.
-:cpp:`blobNrAndOffset(ai)` implements the core mapping logic by translating an array index :cpp:`ad` into a value of :cpp:`llama::NrAndOffset`, containing the blob number of offset within the blob where the value should be stored.
 
-AoS mappings
-------------
+Additionally, a mapping needs to be either a physical or a computed mapping.
+Physical mappings, in addition to being mappings, need to fulfill the following concept:
+
+.. code-block:: C++
+
+    template <typename M>
+    concept PhysicalMapping = Mapping<M> && requires(M m, typename M::ArrayIndex ai, RecordCoord<> rc) {
+        { m.blobNrAndOffset(ai, rc) } -> std::same_as<NrAndOffset>;
+    };
+
+That is, they must provide a member function callable as :cpp:`blobNrAndOffset(ai, rc)` that implements the core mapping logic,
+which is translating an array index :cpp:`ai` and record coordinate :cpp:`rc` into a value of :cpp:`llama::NrAndOffset`,
+containing the blob number of offset within the blob where the value should be stored.
+
+..
+    Computed mappings, in addition to being mappings, need to fulfill the following concept:
+
+    .. code-block:: C++
+
+        template <typename M>
+        concept ComputedMapping = Mapping<M> && requires(M m, typename M::ArrayIndex ai, RecordCoord<> rc) {
+            { m.isComputed(rc) } -> std::same_as<bool>;
+            { m.compute(ai, rc, Array<Array<std::byte, 0>, 0>{}) } -> AnyReference;
+            { m.blobNrAndOffset(ai, rc) } -> std::same_as<NrAndOffset>;
+        };
+
+    That is, they must provide a :cpp:`constexpr` member function :cpp:`isComputed(rc)`, callable for a record coordinate,
+    that returns a bool indicating whether or not the record field indicated by the given record coordinate is computed or not.
+
+
+AoS
+---
 
 LLAMA provides a family of AoS (array of structs) mappings based on a generic implementation.
 AoS mappings keep the data of a single record close together and therefore maximize locality for accesses to an individual record.
@@ -48,7 +106,7 @@ However, they do not vectorize well in practice.
 
 .. code-block:: C++
 
-    llama::mapping::AoS<ArrayExtents, RecordDim> mapping{extents};
+    llama::mapping::AoS<ArrayExtents, RecordDim> mapping{extents}; 
     llama::mapping::AoS<ArrayExtents, RecordDim, false> mapping{extents}; // pack fields (violates alignment)
     llama::mapping::AoS<ArrayExtents, RecordDim, false
         llama::mapping::LinearizeArrayDimsFortran> mapping{extents}; // pack fields, column major
@@ -57,8 +115,8 @@ By default, the array dimensions spanned by :cpp:`ArrayExtents` are linearized u
 LLAMA provides the aliases :cpp:`llama::mapping::AlignedAoS` and :cpp:`llama::mapping::PackedAoS` for convenience.
 
 
-SoA mappings
-------------
+SoA
+---
 
 LLAMA provides a family of SoA (struct of arrays) mappings based on a generic implementation.
 SoA mappings store the attributes of a record contigiously and therefore maximize locality for accesses to the same attribute of multiple records.
@@ -75,8 +133,8 @@ By default, the array dimensions spanned by :cpp:`ArrayExtents` are linearized u
 LLAMA provides the aliases :cpp:`llama::mapping::SingleBlobSoA` and :cpp:`llama::mapping::MultiBlobSoA` for convenience.
 
 
-AoSoA mappings
---------------
+AoSoA
+-----
 
 There are also combined AoSoA (array of struct of arrays) mappings.
 Since the mapping code is more complicated, compilers currently fail to auto vectorize view access.
@@ -100,15 +158,15 @@ In this example, the inner array a size of N so even the largest type in the rec
         llama::mapping::maxLanes<RecordDim, 256>> mapping{extents};
 
 
-One mapping
------------
+One
+---
 
 The One mapping is intended to map all coordinates in the array dimensions onto the same memory location.
 This is commonly used in the :cpp:`llama::One` virtual record, but also offers interesting applications in conjunction with the :cpp:`llama::mapping::Split` mapping.
 
 
-Split mapping
--------------
+Split
+-----
 
 WARNING: This is an experimental feature and might completely change in the future.
 
@@ -125,10 +183,120 @@ The remaining record dimension is mapped using a second mapping.
 Split mappings can be nested to map a record dimension into even fancier combinations.
 
 
+Heatmap
+-------
+
+The Heatmap mapping is a meta mapping that wraps over an inner mapping and counts all accesses made to all bytes.
+A script for gnuplot visualizing the heatmap can be extracted.
+
+.. code-block:: C++
+
+    auto anyMapping = ...;
+    llama::mapping::Heatmap mapping{anyMapping};
+    ...
+    std::ofstream("plot.sh") << mapping.toGnuplotScript();
+
+
+Trace
+-----
+
+The Trace mapping is a meta mapping that wraps over an inner mapping and counts all accesses made to the fields of the record dimension.
+A report is printed to the stdout when requested or the mapping instance is destroyed.
+
+.. code-block:: C++
+
+    {
+        auto anyMapping = ...;
+        llama::mapping::Trace mapping{anyMapping};
+        ...
+        mapping.print(); // print report explicitely
+    } // report is printed implicitely
+
 .. _label-tree-mapping:
 
-Tree mapping (deprecated)
--------------------------
+Null
+----
+
+
+The Null mappings is a fully computed mapping that maps all elements to nothing.
+Writing data through a reference obtained from the Null mapping discards the value.
+Reading through such a reference returns a default constructed object.
+A Null mapping requires no storage and thus its :cpp:`blobCount` is zero.
+
+.. code-block:: C++
+
+    llama::mapping::Null<ArrayExtents, RecordDim> mapping{extents};
+
+
+Bytesplit
+---------
+
+The Bytesplit mapping is a computed meta mapping that wraps over an inner mapping.
+It transforms the record dimension by replacing each field type by a byte array of the same size before forwarding the record dimension to the inner mapping.
+
+.. code-block:: C++
+
+    using InnerMapping = ...;
+    llama::mapping::Bytesplit<ArrayExtents, RecordDim, InnerMapping>
+            mapping{extents};
+
+
+ChangeType
+----------
+
+The ChangeType mapping is a computed meta mapping that allows to change data types of several fields in the record dimension before
+and mapping the adapted record dimension with a further mapping.
+
+.. code-block:: C++
+
+    using InnerMapping = ...;
+    using ReplacementMap = mp_list<
+        mp_list<int, short>,
+        mp_list<double, float>
+    >;
+    llama::mapping::ChangeType<ArrayExtents, RecordDim, InnerMapping, ReplacementMap>
+            mapping{extents};
+
+In this example, all fields of type :cpp:`int` in the record dimension will be stored as :cpp:`short`,
+and all fields of type :cpp:`double` will be stored as :cpp:`float`.
+Conversion between the data types is done on loading and storing through a proxy reference returned from the mapping.
+
+BitPackedIntSoA
+---------------
+
+The BitPackedIntSoA mapping is a fully computed mapping that bitpacks integral values to reduce size and precision.
+The bits are stored as struct of arrays.
+The number of bits used per integral is configurable.
+All field types in the record dimension must be integral.
+
+.. code-block:: C++
+
+    unsigned bits = 7;
+    llama::mapping::BitPackedIntSoA<ArrayExtents, RecordDim>
+            mapping{bits, extents}; // use 7 bits for each integral in RecordDim
+
+
+BitPackedFloatSoA
+-----------------
+
+The BitPackedFloatSoA mapping is a fully computed mapping that bitpacks floating-point values to reduce size and precision.
+The bits are stored as struct of arrays.
+The number of bits used to store the exponent and mantissa is configurable.
+All field types in the record dimension must be floating-point.
+This mappings require the C++ implementation to use `IEEE 754 <https://en.wikipedia.org/wiki/IEEE_754>`_ floating-point formats.
+
+.. code-block:: C++
+
+    unsigned exponentBits = 4;
+    unsigned mantissaBits = 7;
+    llama::mapping::BitPackedFloatSoA<ArrayExtents, RecordDim>
+            mapping{exponentBits, mantissaBits, extents}; // use 1+4+7 bits for each floating-point in RecordDim
+
+
+.. _label-tree-mapping:
+
+Tree (deprecated)
+-----------------
 
 WARNING: The tree mapping is currently not maintained and we consider deprecation.
 
