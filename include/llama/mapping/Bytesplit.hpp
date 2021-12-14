@@ -43,18 +43,18 @@ namespace llama::mapping
             return true;
         }
 
-        template<typename QualifiedBase, typename RC, typename BlobArray>
-        struct Reference : ProxyRefOpMixin<Reference<QualifiedBase, RC, BlobArray>, GetType<TRecordDim, RC>>
+        template<typename RC, typename BlobArray>
+        struct Reference : ProxyRefOpMixin<Reference<RC, BlobArray>, GetType<TRecordDim, RC>>
         {
-            QualifiedBase& innerMapping;
+            const Inner& inner;
             ArrayIndex ai;
             BlobArray& blobs;
 
         public:
             using value_type = GetType<TRecordDim, RC>;
 
-            Reference(QualifiedBase& innerMapping, ArrayIndex ai, BlobArray& blobs)
-                : innerMapping(innerMapping)
+            Reference(const Inner& innerMapping, ArrayIndex ai, BlobArray& blobs)
+                : inner(innerMapping)
                 , ai(ai)
                 , blobs(blobs)
             {
@@ -69,8 +69,9 @@ namespace llama::mapping
                     [&](auto ic)
                     {
                         constexpr auto i = decltype(ic)::value;
-                        const auto [nr, off] = innerMapping.blobNrAndOffset(ai, Cat<RC, RecordCoord<i>>{});
-                        p[i] = blobs[nr][off];
+                        auto&& ref
+                            = llama::internal::resolveToMemoryReference(blobs, inner, ai, Cat<RC, RecordCoord<i>>{});
+                        p[i] = ref;
                     });
                 return v;
             }
@@ -82,8 +83,9 @@ namespace llama::mapping
                     [&](auto ic)
                     {
                         constexpr auto i = decltype(ic)::value;
-                        const auto [nr, off] = innerMapping.blobNrAndOffset(ai, Cat<RC, RecordCoord<i>>{});
-                        blobs[nr][off] = p[i];
+                        auto&& ref
+                            = llama::internal::resolveToMemoryReference(blobs, inner, ai, Cat<RC, RecordCoord<i>>{});
+                        ref = p[i];
                     });
                 return *this;
             }
@@ -95,7 +97,7 @@ namespace llama::mapping
             RecordCoord<RecordCoords...>,
             BlobArray& blobs) const
         {
-            return Reference<decltype(*this), RecordCoord<RecordCoords...>, BlobArray>{*this, ai, blobs};
+            return Reference<RecordCoord<RecordCoords...>, BlobArray>{*this, ai, blobs};
         }
     };
 } // namespace llama::mapping
