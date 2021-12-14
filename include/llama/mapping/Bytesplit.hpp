@@ -96,10 +96,8 @@ namespace llama::mapping
         };
 
         template<std::size_t... RecordCoords, typename BlobArray>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto compute(
-            typename Inner::ArrayIndex ai,
-            RecordCoord<RecordCoords...>,
-            BlobArray& blobs) const
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto compute(ArrayIndex ai, RecordCoord<RecordCoords...>, BlobArray& blobs)
+            const
         {
             return Reference<RecordCoord<RecordCoords...>, BlobArray>{*this, ai, blobs};
         }

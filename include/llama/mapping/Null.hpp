@@ -11,6 +11,8 @@ namespace llama::mapping
         template<typename T>
         struct NullReference : ProxyRefOpMixin<NullReference<T>, T>
         {
+            using value_type = T;
+
             // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
             LLAMA_FN_HOST_ACC_INLINE constexpr operator T() const
             {

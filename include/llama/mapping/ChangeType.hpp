@@ -93,9 +93,10 @@ namespace llama::mapping
         template<std::size_t... RecordCoords, typename BlobArray>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto compute(
             typename Inner::ArrayIndex ai,
-            RecordCoord<RecordCoords...>,
+            RecordCoord<RecordCoords...> rc,
             BlobArray& blobs) const
         {
+            static_assert(isComputed(rc));
             using UserT = GetType<RecordDim, RecordCoord<RecordCoords...>>;
             using StoredT = boost::mp11::mp_second<boost::mp11::mp_map_find<ReplacementMap, UserT>>;
             using QualifiedStoredT = CopyConst<BlobArray, StoredT>;

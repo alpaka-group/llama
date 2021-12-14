@@ -3,27 +3,35 @@
 #ifdef __cpp_lib_concepts
 TEST_CASE("mapping.concepts")
 {
-    STATIC_REQUIRE(llama::Mapping<llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<2>, Particle>>);
-    STATIC_REQUIRE(llama::Mapping<llama::mapping::PackedAoS<llama::ArrayExtentsDynamic<2>, Particle>>);
-    STATIC_REQUIRE(llama::Mapping<llama::mapping::SingleBlobSoA<llama::ArrayExtentsDynamic<2>, Particle>>);
-    STATIC_REQUIRE(llama::Mapping<llama::mapping::MultiBlobSoA<llama::ArrayExtentsDynamic<2>, Particle>>);
-    STATIC_REQUIRE(llama::Mapping<llama::mapping::AoSoA<llama::ArrayExtentsDynamic<2>, Particle, 8>>);
+    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<2>, Particle>>);
+    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::PackedAoS<llama::ArrayExtentsDynamic<2>, Particle>>);
+    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::SingleBlobSoA<llama::ArrayExtentsDynamic<2>, Particle>>);
+    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::MultiBlobSoA<llama::ArrayExtentsDynamic<2>, Particle>>);
+    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::AoSoA<llama::ArrayExtentsDynamic<2>, Particle, 8>>);
 
-    STATIC_REQUIRE(llama::Mapping<llama::mapping::AlignedAoS<llama::ArrayExtents<2>, Particle>>);
-    STATIC_REQUIRE(llama::Mapping<llama::mapping::PackedAoS<llama::ArrayExtents<2>, Particle>>);
-    STATIC_REQUIRE(llama::Mapping<llama::mapping::SingleBlobSoA<llama::ArrayExtents<2>, Particle>>);
-    STATIC_REQUIRE(llama::Mapping<llama::mapping::MultiBlobSoA<llama::ArrayExtents<2>, Particle>>);
-    STATIC_REQUIRE(llama::Mapping<llama::mapping::AoSoA<llama::ArrayExtents<2>, Particle, 8>>);
+    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::AlignedAoS<llama::ArrayExtents<2>, Particle>>);
+    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::PackedAoS<llama::ArrayExtents<2>, Particle>>);
+    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::SingleBlobSoA<llama::ArrayExtents<2>, Particle>>);
+    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::MultiBlobSoA<llama::ArrayExtents<2>, Particle>>);
+    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::AoSoA<llama::ArrayExtents<2>, Particle, 8>>);
 
     using Inner = llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<2>, Particle>;
-    STATIC_REQUIRE(llama::Mapping<llama::mapping::Trace<Inner>>);
-    STATIC_REQUIRE(llama::Mapping<llama::mapping::Heatmap<Inner>>);
+    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::Trace<Inner>>);
+    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::Heatmap<Inner>>);
 
-    // TODO(bgruber): Bytesplit is a computed mapping
-    // STATIC_REQUIRE(llama::Mapping<
-    //               llama::mapping::
-    //                   Bytesplit<llama::ArrayExtentsDynamic<2>, Particle,
-    //                   llama::mapping::PreconfiguredAoS<>::type>>);
+    STATIC_REQUIRE(llama::FullyComputedMapping<llama::mapping::Null<llama::ArrayExtentsDynamic<2>, Particle>>);
+    STATIC_REQUIRE(llama::FullyComputedMapping<
+                   llama::mapping::
+                       Bytesplit<llama::ArrayExtentsDynamic<2>, Particle, llama::mapping::PreconfiguredAoS<>::type>>);
+    STATIC_REQUIRE(llama::FullyComputedMapping<llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<2>, Vec3I>>);
+    STATIC_REQUIRE(
+        llama::FullyComputedMapping<llama::mapping::BitPackedFloatSoA<llama::ArrayExtentsDynamic<2>, Vec3D>>);
+
+    STATIC_REQUIRE(llama::PartiallyComputedMapping<llama::mapping::ChangeType<
+                       llama::ArrayExtentsDynamic<2>,
+                       Particle,
+                       llama::mapping::PreconfiguredAoS<>::type,
+                       boost::mp11::mp_list<boost::mp11::mp_list<bool, int>>>>);
 }
 #endif
 
