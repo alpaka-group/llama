@@ -103,6 +103,14 @@ namespace llama::mapping
             return internal::ChangeTypeReference<UserT, QualifiedStoredT>{
                 reinterpret_cast<QualifiedStoredT&>(blobs[nr][offset])};
         }
+
+        template<std::size_t... RecordCoords>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayIndex ai, RecordCoord<RecordCoords...> rc = {})
+            const -> NrAndOffset
+        {
+            static_assert(!isComputed(rc));
+            return Inner::blobNrAndOffset(ai, rc);
+        }
     };
 
     template<template<typename, typename> typename InnerMapping, typename ReplacementMap>
