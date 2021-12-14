@@ -100,4 +100,11 @@ namespace llama::mapping
                 reinterpret_cast<QualifiedStoredT&>(blobs[nr][offset])};
         }
     };
+
+    template<template<typename, typename> typename InnerMapping, typename ReplacementMap>
+    struct PreconfiguredChangeType
+    {
+        template<typename ArrayExtents, typename RecordDim>
+        using type = ChangeType<ArrayExtents, RecordDim, InnerMapping, ReplacementMap>;
+    };
 } // namespace llama::mapping
