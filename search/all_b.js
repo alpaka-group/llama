@@ -5,5 +5,8 @@ var searchData=
   ['node_319',['Node',['../structllama_1_1mapping_1_1tree_1_1Node.html',1,'llama::mapping::tree']]],
   ['noname_320',['NoName',['../structllama_1_1NoName.html',1,'llama']]],
   ['nr_321',['nr',['../structllama_1_1NrAndOffset.html#af996b9a26c8e0d6ab6701a9c88632135',1,'llama::NrAndOffset']]],
-  ['nrandoffset_322',['NrAndOffset',['../structllama_1_1NrAndOffset.html',1,'llama']]]
+  ['nrandoffset_322',['NrAndOffset',['../structllama_1_1NrAndOffset.html',1,'llama']]],
+  ['null_323',['Null',['../structllama_1_1mapping_1_1Null.html',1,'llama::mapping::Null&lt; TArrayExtents, TRecordDim &gt;'],['../structllama_1_1mapping_1_1Null.html#a4e754349ab6f50a470c6e62da7a0e191',1,'llama::mapping::Null::Null()=default'],['../structllama_1_1mapping_1_1Null.html#ae1ce8f4c7bffaee55bfc4e2a95af6b08',1,'llama::mapping::Null::Null(ArrayExtents extents, RecordDim={})']]],
+  ['null_2ehpp_324',['Null.hpp',['../Null_8hpp.html',1,'']]],
+  ['nullreference_325',['NullReference',['../structllama_1_1mapping_1_1internal_1_1NullReference.html',1,'llama::mapping::internal']]]
 ];

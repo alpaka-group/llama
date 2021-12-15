@@ -1,5 +1,8 @@
 var NAVTREEINDEX2 =
 {
+"structllama_1_1Iterator.html#ad2bf84d6b26dd4dfa883e1c10b859969":[2,0,1,16,20],
+"structllama_1_1Iterator.html#ae8ae5582cfdbdcefc5507083a83422d7":[2,0,1,16,9],
+"structllama_1_1Iterator.html#aeee99cc02b53356ae49018fca42545ce":[2,0,1,16,13],
 "structllama_1_1Iterator.html#afa877e06adc28f4c7bb7644b2aa77d67":[2,0,1,16,6],
 "structllama_1_1Iterator.html#afdae9444dfa6396d38463b08cdabff4d":[2,0,1,16,27],
 "structllama_1_1NoName.html":[2,0,1,17],
@@ -246,8 +249,5 @@ var NAVTREEINDEX2 =
 "structllama_1_1internal_1_1GetTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01Fir6e3f04ac1206e0b3d3bf8dfbb0ac429a.html":[2,0,1,1,16],
 "structllama_1_1internal_1_1GetTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01Fir6e3f04ac1206e0b3d3bf8dfbb0ac429a.html#a4dd8ee60e85fdff633569b6e9da2e9e5":[2,0,1,1,16,2],
 "structllama_1_1internal_1_1GetTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01Fir6e3f04ac1206e0b3d3bf8dfbb0ac429a.html#a5983bacdbded6a1b2f4dd691df440aeb":[2,0,1,1,16,1],
-"structllama_1_1internal_1_1GetTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01Fir6e3f04ac1206e0b3d3bf8dfbb0ac429a.html#a62e30b0f8e1b2a3b5967ffe1725d2e38":[2,0,1,1,16,3],
-"structllama_1_1internal_1_1GetTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01Fir6e3f04ac1206e0b3d3bf8dfbb0ac429a.html#a9c7167cf08f4223bd26c58f5673f8a72":[2,0,1,1,16,0],
-"structllama_1_1internal_1_1GetTagsImpl_3_01T_00_01RecordCoord_3_4_01_4.html":[2,0,1,1,17],
-"structllama_1_1internal_1_1GetTagsImpl_3_01T_00_01RecordCoord_3_4_01_4.html#ad42393346f9fc681d889f6eba51e05f4":[2,0,1,1,17,0]
+"structllama_1_1internal_1_1GetTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01Fir6e3f04ac1206e0b3d3bf8dfbb0ac429a.html#a62e30b0f8e1b2a3b5967ffe1725d2e38":[2,0,1,1,16,3]
 };

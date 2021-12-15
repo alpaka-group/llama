@@ -11,6 +11,10 @@ var dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc =
     [ "Heatmap.hpp", "Heatmap_8hpp.html", [
       [ "Heatmap", "structllama_1_1mapping_1_1Heatmap.html", "structllama_1_1mapping_1_1Heatmap" ]
     ] ],
+    [ "Null.hpp", "Null_8hpp.html", [
+      [ "NullReference", "structllama_1_1mapping_1_1internal_1_1NullReference.html", "structllama_1_1mapping_1_1internal_1_1NullReference" ],
+      [ "Null", "structllama_1_1mapping_1_1Null.html", "structllama_1_1mapping_1_1Null" ]
+    ] ],
     [ "One.hpp", "One_8hpp.html", "One_8hpp" ],
     [ "SoA.hpp", "SoA_8hpp.html", "SoA_8hpp" ],
     [ "Split.hpp", "Split_8hpp.html", "Split_8hpp" ],

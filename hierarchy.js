@@ -134,6 +134,9 @@ var hierarchy =
     [ "llama::ProxyRefOpMixin< ChangeTypeReference< UserT, StoredT >, UserT >", "structllama_1_1ProxyRefOpMixin.html", [
       [ "llama::mapping::internal::ChangeTypeReference< UserT, StoredT >", "structllama_1_1mapping_1_1internal_1_1ChangeTypeReference.html", null ]
     ] ],
+    [ "llama::ProxyRefOpMixin< NullReference< T >, T >", "structllama_1_1ProxyRefOpMixin.html", [
+      [ "llama::mapping::internal::NullReference< T >", "structllama_1_1mapping_1_1internal_1_1NullReference.html", null ]
+    ] ],
     [ "llama::ProxyRefOpMixin< Reference< QualifiedBase, RC, BlobArray >, GetType< TRecordDim, RC > >", "structllama_1_1ProxyRefOpMixin.html", [
       [ "llama::mapping::Bytesplit< TArrayExtents, TRecordDim, InnerMapping >::Reference< QualifiedBase, RC, BlobArray >", "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html", null ]
     ] ],
@@ -149,6 +152,7 @@ var hierarchy =
       [ "llama::mapping::AoSoA< TArrayExtents, TRecordDim, Lanes, TLinearizeArrayDimsFunctor, FlattenRecordDim >", "structllama_1_1mapping_1_1AoSoA.html", null ],
       [ "llama::mapping::BitPackedFloatSoA< TArrayExtents, TRecordDim, LinearizeArrayDimsFunctor, StoredIntegral >", "structllama_1_1mapping_1_1BitPackedFloatSoA.html", null ],
       [ "llama::mapping::BitPackedIntSoA< TArrayExtents, TRecordDim, LinearizeArrayDimsFunctor, StoredIntegral >", "structllama_1_1mapping_1_1BitPackedIntSoA.html", null ],
+      [ "llama::mapping::Null< TArrayExtents, TRecordDim >", "structllama_1_1mapping_1_1Null.html", null ],
       [ "llama::mapping::One< TArrayExtents, TRecordDim, AlignAndPad, FlattenRecordDim >", "structllama_1_1mapping_1_1One.html", null ],
       [ "llama::mapping::SoA< TArrayExtents, TRecordDim, SeparateBuffers, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob >", "structllama_1_1mapping_1_1SoA.html", null ],
       [ "llama::mapping::tree::Mapping< TArrayExtents, TRecordDim, TreeOperationList >", "structllama_1_1mapping_1_1tree_1_1Mapping.html", null ]
