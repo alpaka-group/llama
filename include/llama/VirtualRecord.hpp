@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "HasRanges.hpp"
 #include "View.hpp"
 
 #include <iosfwd>
