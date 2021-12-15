@@ -8,6 +8,7 @@
 #include "BlobAllocators.hpp"
 #include "Concepts.hpp"
 #include "Core.hpp"
+#include "HasRanges.hpp"
 #include "macros.hpp"
 #include "mapping/One.hpp"
 

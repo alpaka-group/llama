@@ -2,6 +2,7 @@
 
 #include "ArrayExtents.hpp"
 #include "Core.hpp"
+#include "HasRanges.hpp"
 
 #include <algorithm>
 #include <iterator>

@@ -116,16 +116,6 @@
 /// Forces a copy of a value. This is useful to prevent ODR usage of constants when compiling for GPU targets.
 #define LLAMA_COPY(x) decltype(x)(x)
 
-// TODO(bgruber): clang 10 and 11 fail to compile this currently with the issue described here:
-// https://stackoverflow.com/questions/64300832/why-does-clang-think-gccs-subrange-does-not-satisfy-gccs-ranges-begin-functi
-// let's try again with clang 12
-// Intel LLVM compiler is also using the clang frontend
-#if(__has_include(<ranges>) && defined(__cpp_concepts) && !defined(__clang__) && !defined(__INTEL_LLVM_COMPILER))
-#    define CAN_USE_RANGES 1
-#else
-#    define CAN_USE_RANGES 0
-#endif
-
 // https://devblogs.microsoft.com/cppblog/optimizing-the-layout-of-empty-base-classes-in-vs2015-update-2-3/
 #if defined(_MSC_VER)
 #    define LLAMA_DECLSPEC_EMPTY_BASES __declspec(empty_bases)
