@@ -1,10 +1,10 @@
 var structllama_1_1mapping_1_1Bytesplit_1_1Reference =
 [
-    [ "value_type", "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#a46a4c5edc9e74355ab780ba7406260a6", null ],
-    [ "Reference", "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#aed472f3b99d3ea35a087d9cdf0371487", null ],
-    [ "operator value_type", "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#afd3a0e08f044c09e18d46b4567de083b", null ],
-    [ "operator=", "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#a1fc7f546657146fca23669f9077c4829", null ],
-    [ "ai", "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#a94feee46f4ff0a60980c99e42c583b44", null ],
-    [ "blobs", "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#a73d05cd088e075f929faf5172f2da218", null ],
-    [ "innerMapping", "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#af7c5b326f79fe2fb0440146e4ea1095c", null ]
+    [ "value_type", "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#ad397146d87434a6114bb15a88644b3bf", null ],
+    [ "Reference", "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#a492ef37d6697f92ed52370edee79d118", null ],
+    [ "operator value_type", "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#ad4ecb622789ccff0c1c255a50d55077d", null ],
+    [ "operator=", "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#a863bd34705bbb3cffe52eec02726a582", null ],
+    [ "ai", "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#a8d0c71579c3b45c879029aa9bdfeb5d0", null ],
+    [ "blobs", "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#a9e8472204f3a8cad3157482309ab1704", null ],
+    [ "inner", "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#a02544fb3be87c38c45af3cb306267b2e", null ]
 ];

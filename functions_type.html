@@ -203,6 +203,9 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 : <a class="el" href="structllama_1_1mapping_1_1Bytesplit.html#ae9a0b3f519c15de176403f3eea6e072b">llama::mapping::Bytesplit&lt; TArrayExtents, TRecordDim, InnerMapping &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1ChangeType.html#aa3afe70a238792895e72738c2fb7a57f">llama::mapping::ChangeType&lt; TArrayExtents, TRecordDim, InnerMapping, ReplacementMap &gt;</a>
 </li>
+<li>IsAllowedFieldType
+: <a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html#a9a7e96ed88b948f073f60354c381c369">llama::mapping::BitPackedIntSoA&lt; TArrayExtents, TRecordDim, LinearizeArrayDimsFunctor, StoredIntegral &gt;</a>
+</li>
 <li>iterator
 : <a class="el" href="structllama_1_1Vector.html#a7cb2da4cdee69566d96d906796ac96ff">llama::Vector&lt; Mapping &gt;</a>
 , <a class="el" href="structllama_1_1View.html#a47384b6a68647023bcca2232d7887bb0">llama::View&lt; TMapping, BlobType &gt;</a>
@@ -358,6 +361,7 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 , <a class="el" href="structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#a798a2670d572e44a72ea01cf5fb0698a">llama::mapping::internal::PartitionFoldOpImpl&lt; Acc, TagList &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1PreconfiguredAoS.html#a13b0bd7a521bd1f33c815ae6755df406">llama::mapping::PreconfiguredAoS&lt; AlignAndPad, LinearizeArrayDimsFunctor &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1PreconfiguredAoSoA.html#a7f31ca24b2abc9f214949a9e92e2ca71">llama::mapping::PreconfiguredAoSoA&lt; Lanes, LinearizeArrayDimsFunctor &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1PreconfiguredChangeType.html#a9d62297d54a020a272f99441fb04e97e">llama::mapping::PreconfiguredChangeType&lt; InnerMapping, ReplacementMap &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1PreconfiguredSoA.html#af35c6065b092b1d9f7774ae9f5f071e2">llama::mapping::PreconfiguredSoA&lt; SeparateBuffers, LinearizeArrayDimsFunctor &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1PreconfiguredSplit.html#a8401342458cf6c79b4294475d5ae778b">llama::mapping::PreconfiguredSplit&lt; RecordCoordsForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement.html#a4c64b6c502eb5c8e4f43aff9a262f892">llama::mapping::tree::internal::CreateTreeElement&lt; Tag, RecordDim, CountType &gt;</a>
@@ -389,7 +393,7 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 , <a class="el" href="structllama_1_1ArrayIndexIterator.html#a5c5098e0a5fd6680c3e58d5bdb11aa1d">llama::ArrayIndexIterator&lt; ArrayExtents &gt;</a>
 , <a class="el" href="structllama_1_1bloballoc_1_1AlignedAllocator.html#a5c4611d39117e5bef57bf756e5e80a1b">llama::bloballoc::AlignedAllocator&lt; T, Alignment &gt;</a>
 , <a class="el" href="structllama_1_1Iterator.html#a9c90d997ce6c6ef17fb23b3aa0907bf4">llama::Iterator&lt; View &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#a46a4c5edc9e74355ab780ba7406260a6">llama::mapping::Bytesplit&lt; TArrayExtents, TRecordDim, InnerMapping &gt;::Reference&lt; QualifiedBase, RC, BlobArray &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#ad397146d87434a6114bb15a88644b3bf">llama::mapping::Bytesplit&lt; TArrayExtents, TRecordDim, InnerMapping &gt;::Reference&lt; RC, BlobArray &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#a27e3b4c6a4802e06eac825ce5707ab64">llama::mapping::internal::BitPackedFloatRef&lt; Float, StoredIntegralPointer &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html#afeecbea97651912f3acd21d694b19329">llama::mapping::internal::BitPackedIntRef&lt; Integral, StoredIntegralPointer &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1internal_1_1ChangeTypeReference.html#a3f72be17c88ec9c8a831624bdc9c8a57">llama::mapping::internal::ChangeTypeReference&lt; UserT, StoredT &gt;</a>
@@ -407,7 +411,7 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Dec 15 2021 09:41:19 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Dec 15 2021 10:19:03 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

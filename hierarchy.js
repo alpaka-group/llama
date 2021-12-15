@@ -92,7 +92,8 @@ var hierarchy =
     [ "llama::VirtualRecord< TView, TBoundRecordCoord, OwnView >::Loader", "structllama_1_1VirtualRecord_1_1Loader.html", null ],
     [ "llama::VirtualRecord< TView, TBoundRecordCoord, OwnView >::LoaderConst", "structllama_1_1VirtualRecord_1_1LoaderConst.html", null ],
     [ "make_unsigned", null, [
-      [ "llama::mapping::internal::MakeUnsigned< T >", "structllama_1_1mapping_1_1internal_1_1MakeUnsigned.html", null ]
+      [ "llama::mapping::internal::MakeUnsigned< T, SFINAE >", "structllama_1_1mapping_1_1internal_1_1MakeUnsigned.html", null ],
+      [ "llama::mapping::internal::MakeUnsigned< T, std::enable_if_t< std::is_enum_v< T > > >", "structllama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__enum__v_3_01T_01_4_01_4_01_4.html", null ]
     ] ],
     [ "llama::mapping::internal::MakeReplacer< ReplacementMap >", "structllama_1_1mapping_1_1internal_1_1MakeReplacer.html", null ],
     [ "llama::mapping::internal::MakeUnsigned< bool >", "structllama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01bool_01_4.html", null ],
@@ -119,6 +120,7 @@ var hierarchy =
     [ "llama::internal::PlusAssign", "structllama_1_1internal_1_1PlusAssign.html", null ],
     [ "llama::mapping::PreconfiguredAoS< AlignAndPad, LinearizeArrayDimsFunctor >", "structllama_1_1mapping_1_1PreconfiguredAoS.html", null ],
     [ "llama::mapping::PreconfiguredAoSoA< Lanes, LinearizeArrayDimsFunctor >", "structllama_1_1mapping_1_1PreconfiguredAoSoA.html", null ],
+    [ "llama::mapping::PreconfiguredChangeType< InnerMapping, ReplacementMap >", "structllama_1_1mapping_1_1PreconfiguredChangeType.html", null ],
     [ "llama::mapping::PreconfiguredSoA< SeparateBuffers, LinearizeArrayDimsFunctor >", "structllama_1_1mapping_1_1PreconfiguredSoA.html", null ],
     [ "llama::mapping::PreconfiguredSplit< RecordCoordsForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs >", "structllama_1_1mapping_1_1PreconfiguredSplit.html", null ],
     [ "llama::ProxyRefOpMixin< Derived, ValueType >", "structllama_1_1ProxyRefOpMixin.html", null ],
@@ -137,8 +139,8 @@ var hierarchy =
     [ "llama::ProxyRefOpMixin< NullReference< T >, T >", "structllama_1_1ProxyRefOpMixin.html", [
       [ "llama::mapping::internal::NullReference< T >", "structllama_1_1mapping_1_1internal_1_1NullReference.html", null ]
     ] ],
-    [ "llama::ProxyRefOpMixin< Reference< QualifiedBase, RC, BlobArray >, GetType< TRecordDim, RC > >", "structllama_1_1ProxyRefOpMixin.html", [
-      [ "llama::mapping::Bytesplit< TArrayExtents, TRecordDim, InnerMapping >::Reference< QualifiedBase, RC, BlobArray >", "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html", null ]
+    [ "llama::ProxyRefOpMixin< Reference< RC, BlobArray >, GetType< TRecordDim, RC > >", "structllama_1_1ProxyRefOpMixin.html", [
+      [ "llama::mapping::Bytesplit< TArrayExtents, TRecordDim, InnerMapping >::Reference< RC, BlobArray >", "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html", null ]
     ] ],
     [ "llama::bloballoc::AlignedAllocator< T, Alignment >::rebind< T2 >", "structllama_1_1bloballoc_1_1AlignedAllocator_1_1rebind.html", null ],
     [ "llama::Record< Fields >", "structllama_1_1Record.html", null ],

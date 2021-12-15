@@ -1,4 +1,4 @@
-<map id="llama::mapping::Bytesplit&lt; TArrayExtents, TRecordDim, InnerMapping &gt;::Reference&lt; QualifiedBase, RC, BlobArray &gt;" name="llama::mapping::Bytesplit&lt; TArrayExtents, TRecordDim, InnerMapping &gt;::Reference&lt; QualifiedBase, RC, BlobArray &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="265,5,505,76"/>
-<area shape="rect" id="node2" href="$structllama_1_1ProxyRefOpMixin.html" title=" " alt="" coords="5,5,217,76"/>
+<map id="llama::mapping::Bytesplit&lt; TArrayExtents, TRecordDim, InnerMapping &gt;::Reference&lt; RC, BlobArray &gt;" name="llama::mapping::Bytesplit&lt; TArrayExtents, TRecordDim, InnerMapping &gt;::Reference&lt; RC, BlobArray &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="20,109,240,180"/>
+<area shape="rect" id="node2" href="$structllama_1_1ProxyRefOpMixin.html" title=" " alt="" coords="5,5,255,61"/>
 </map>

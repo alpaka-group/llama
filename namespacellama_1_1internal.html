@@ -244,6 +244,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a36b0736740116d5e9fff6172f5b202af"><td class="memTemplParams" colspan="2">template&lt;typename Allocator , typename Mapping , std::size_t... Is&gt; </td></tr>
 <tr class="memitem:a36b0736740116d5e9fff6172f5b202af"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a36b0736740116d5e9fff6172f5b202af">makeBlobArray</a> (const Allocator &amp;alloc, const Mapping &amp;mapping, std::integer_sequence&lt; std::size_t, Is... &gt;) -&gt; <a class="el" href="structllama_1_1Array.html">Array</a>&lt; <a class="el" href="namespacellama_1_1internal.html#a6b703634fd8ad7364cf42588add461bc">AllocatorBlobType</a>&lt; Allocator, typename Mapping::RecordDim &gt;, Mapping::blobCount &gt;</td></tr>
 <tr class="separator:a36b0736740116d5e9fff6172f5b202af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27211ee05647e5df4aa499a45f6944ac"><td class="memTemplParams" colspan="2">template&lt;typename Blobs , typename Mapping , std::size_t... Coords&gt; </td></tr>
+<tr class="memitem:a27211ee05647e5df4aa499a45f6944ac"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a27211ee05647e5df4aa499a45f6944ac">resolveToMemoryReference</a> (Blobs &amp;blobs, Mapping &amp;mapping, typename Mapping::ArrayIndex ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords... &gt; rc={}) -&gt; decltype(auto)</td></tr>
+<tr class="separator:a27211ee05647e5df4aa499a45f6944ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a124e4d559d771e918724b3fee4a86e39"><td class="memTemplParams" colspan="2">template&lt;typename Functor , typename LeftRecord , typename RightView , typename RightBoundRecordDim , bool RightOwnView&gt; </td></tr>
 <tr class="memitem:a124e4d559d771e918724b3fee4a86e39"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a124e4d559d771e918724b3fee4a86e39">virtualRecordArithOperator</a> (LeftRecord &amp;left, const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; RightView, RightBoundRecordDim, RightOwnView &gt; &amp;right) -&gt; LeftRecord &amp;</td></tr>
 <tr class="separator:a124e4d559d771e918724b3fee4a86e39"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1369,6 +1372,59 @@ template&lt;std::size_t... Coords1, std::size_t... Coords2&gt; </div>
 
 </div>
 </div>
+<a id="a27211ee05647e5df4aa499a45f6944ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27211ee05647e5df4aa499a45f6944ac">&#9670;&nbsp;</a></span>resolveToMemoryReference()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Blobs , typename Mapping , std::size_t... Coords&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto llama::internal::resolveToMemoryReference </td>
+          <td>(</td>
+          <td class="paramtype">Blobs &amp;&#160;</td>
+          <td class="paramname"><em>blobs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Mapping &amp;&#160;</td>
+          <td class="paramname"><em>mapping</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">typename Mapping::ArrayIndex&#160;</td>
+          <td class="paramname"><em>ai</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords... &gt;&#160;</td>
+          <td class="paramname"><em>rc</em> = <code>{}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> -&gt; decltype(auto)
+        </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00291">291</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
 <a id="aeab53e4609fe07abfb6f5f2d532cd388"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aeab53e4609fe07abfb6f5f2d532cd388">&#9670;&nbsp;</a></span>sizeOfImpl()</h2>
 
@@ -2032,7 +2088,7 @@ template&lt;bool Align, typename TypeList &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Wed Dec 15 2021 09:41:19 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Dec 15 2021 10:19:03 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

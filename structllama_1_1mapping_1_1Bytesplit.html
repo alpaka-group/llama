@@ -137,6 +137,9 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ac82e82eb5a2d6f70e59b54e9a1eff7fe"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Bytesplit.html#ac82e82eb5a2d6f70e59b54e9a1eff7fe">Bytesplit</a> (TArrayExtents extents, TRecordDim={})</td></tr>
 <tr class="separator:ac82e82eb5a2d6f70e59b54e9a1eff7fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88df065f4a75b9f055ccc5a0c994707f"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
+<tr class="memitem:a88df065f4a75b9f055ccc5a0c994707f"><td class="memTemplItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Bytesplit.html#a88df065f4a75b9f055ccc5a0c994707f">Bytesplit</a> (std::tuple&lt; Args... &gt; innerMappingArgs, TRecordDim={})</td></tr>
+<tr class="separator:a88df065f4a75b9f055ccc5a0c994707f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec5d9cc0639b66be5e0bfeda04414a7a"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords, typename BlobArray &gt; </td></tr>
 <tr class="memitem:aec5d9cc0639b66be5e0bfeda04414a7a"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Bytesplit.html#aec5d9cc0639b66be5e0bfeda04414a7a">compute</a> (typename Inner::ArrayIndex ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt;, BlobArray &amp;blobs) const</td></tr>
 <tr class="separator:aec5d9cc0639b66be5e0bfeda04414a7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -229,7 +232,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , template&lt; typename
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac82e82eb5a2d6f70e59b54e9a1eff7fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac82e82eb5a2d6f70e59b54e9a1eff7fe">&#9670;&nbsp;</a></span>Bytesplit()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac82e82eb5a2d6f70e59b54e9a1eff7fe">&#9670;&nbsp;</a></span>Bytesplit() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -265,6 +268,48 @@ template&lt;typename TArrayExtents , typename TRecordDim , template&lt; typename
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="Bytesplit_8hpp_source.html#l00036">36</a> of file <a class="el" href="Bytesplit_8hpp_source.html">Bytesplit.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a88df065f4a75b9f055ccc5a0c994707f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88df065f4a75b9f055ccc5a0c994707f">&#9670;&nbsp;</a></span>Bytesplit() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TArrayExtents , typename TRecordDim , template&lt; typename, typename &gt; typename InnerMapping&gt; </div>
+<div class="memtemplate">
+template&lt;typename... Args&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="structllama_1_1mapping_1_1Bytesplit.html">llama::mapping::Bytesplit</a>&lt; TArrayExtents, TRecordDim, InnerMapping &gt;::<a class="el" href="structllama_1_1mapping_1_1Bytesplit.html">Bytesplit</a> </td>
+          <td>(</td>
+          <td class="paramtype">std::tuple&lt; Args... &gt;&#160;</td>
+          <td class="paramname"><em>innerMappingArgs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TRecordDim&#160;</td>
+          <td class="paramname"> = <code>{}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Bytesplit_8hpp_source.html#l00041">41</a> of file <a class="el" href="Bytesplit_8hpp_source.html">Bytesplit.hpp</a>.</p>
 
 </div>
 </div>
@@ -313,7 +358,7 @@ template&lt;std::size_t... RecordCoords, typename BlobArray &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Bytesplit_8hpp_source.html#l00093">93</a> of file <a class="el" href="Bytesplit_8hpp_source.html">Bytesplit.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Bytesplit_8hpp_source.html#l00101">101</a> of file <a class="el" href="Bytesplit_8hpp_source.html">Bytesplit.hpp</a>.</p>
 
 </div>
 </div>
@@ -345,7 +390,7 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Bytesplit_8hpp_source.html#l00041">41</a> of file <a class="el" href="Bytesplit_8hpp_source.html">Bytesplit.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Bytesplit_8hpp_source.html#l00047">47</a> of file <a class="el" href="Bytesplit_8hpp_source.html">Bytesplit.hpp</a>.</p>
 
 </div>
 </div>
@@ -358,7 +403,7 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1Bytesplit.html">Bytesplit</a></li>
-    <li class="footer">Generated on Wed Dec 15 2021 09:41:19 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Dec 15 2021 10:19:03 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

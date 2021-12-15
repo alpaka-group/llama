@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Low-Level Abstraction of Memory Access: llama::mapping::internal::MakeUnsigned&lt; T &gt; Struct Template Reference</title>
+<title>Low-Level Abstraction of Memory Access: llama::mapping::internal::MakeUnsigned&lt; T, SFINAE &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -83,39 +83,39 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1internal_1_1
 
 <div class="header">
   <div class="headertitle">
-<div class="title">llama::mapping::internal::MakeUnsigned&lt; T &gt; Struct Template Reference</div>  </div>
+<div class="title">llama::mapping::internal::MakeUnsigned&lt; T, SFINAE &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for llama::mapping::internal::MakeUnsigned&lt; T &gt;:</div>
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for llama::mapping::internal::MakeUnsigned&lt; T, SFINAE &gt;:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="structllama_1_1mapping_1_1internal_1_1MakeUnsigned__inherit__graph.png" border="0" usemap="#llama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01T_01_4_inherit__map" alt="Inheritance graph"/></div>
-<map name="llama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01T_01_4_inherit__map" id="llama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01T_01_4_inherit__map">
-<area shape="rect" title=" " alt="" coords="9,80,192,121"/>
-<area shape="rect" title=" " alt="" coords="5,5,196,32"/>
+<div class="center"><img src="structllama_1_1mapping_1_1internal_1_1MakeUnsigned__inherit__graph.png" border="0" usemap="#llama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01T_00_01SFINAE_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="llama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01T_00_01SFINAE_01_4_inherit__map" id="llama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01T_00_01SFINAE_01_4_inherit__map">
+<area shape="rect" title=" " alt="" coords="5,80,224,121"/>
+<area shape="rect" title=" " alt="" coords="19,5,210,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for llama::mapping::internal::MakeUnsigned&lt; T &gt;:</div>
+  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for llama::mapping::internal::MakeUnsigned&lt; T, SFINAE &gt;:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="structllama_1_1mapping_1_1internal_1_1MakeUnsigned__coll__graph.png" border="0" usemap="#llama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01T_01_4_coll__map" alt="Collaboration graph"/></div>
-<map name="llama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01T_01_4_coll__map" id="llama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01T_01_4_coll__map">
-<area shape="rect" title=" " alt="" coords="9,80,192,121"/>
-<area shape="rect" title=" " alt="" coords="5,5,196,32"/>
+<div class="center"><img src="structllama_1_1mapping_1_1internal_1_1MakeUnsigned__coll__graph.png" border="0" usemap="#llama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01T_00_01SFINAE_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="llama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01T_00_01SFINAE_01_4_coll__map" id="llama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01T_00_01SFINAE_01_4_coll__map">
+<area shape="rect" title=" " alt="" coords="5,80,224,121"/>
+<area shape="rect" title=" " alt="" coords="19,5,210,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename T&gt;<br />
-struct llama::mapping::internal::MakeUnsigned&lt; T &gt;</h3>
+<div class="textblock"><h3>template&lt;typename T, typename SFINAE = void&gt;<br />
+struct llama::mapping::internal::MakeUnsigned&lt; T, SFINAE &gt;</h3>
 
 
-<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00141">141</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00140">140</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 </div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li>/home/runner/work/llama/llama/include/llama/mapping/<a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a></li>
 </ul>
@@ -125,7 +125,7 @@ struct llama::mapping::internal::MakeUnsigned&lt; T &gt;</h3>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping_1_1internal.html">internal</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeUnsigned.html">MakeUnsigned</a></li>
-    <li class="footer">Generated on Wed Dec 15 2021 09:41:19 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Dec 15 2021 10:19:03 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

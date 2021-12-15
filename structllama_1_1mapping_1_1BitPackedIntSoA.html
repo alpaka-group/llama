@@ -119,6 +119,9 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1BitPackedInt
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
+<tr class="memitem:a9a7e96ed88b948f073f60354c381c369"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a9a7e96ed88b948f073f60354c381c369"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html#a9a7e96ed88b948f073f60354c381c369">IsAllowedFieldType</a> = boost::mp11::mp_or&lt; std::is_integral&lt; T &gt;, std::is_enum&lt; T &gt; &gt;</td></tr>
+<tr class="separator:a9a7e96ed88b948f073f60354c381c369"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e04189b946b3479bf50337818ce9455"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html#a2e04189b946b3479bf50337818ce9455">ArrayExtents</a> = TArrayExtents</td></tr>
 <tr class="separator:a2e04189b946b3479bf50337818ce9455"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adb04b29bbd9cd6459bf9f66eacbffecc"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html#adb04b29bbd9cd6459bf9f66eacbffecc">ArrayIndex</a> = typename <a class="el" href="structllama_1_1ArrayExtents.html#a794d74d0ed53e82d42ea0f3c2dacd983">ArrayExtents::Index</a></td></tr>
@@ -163,7 +166,7 @@ struct llama::mapping::BitPackedIntSoA&lt; TArrayExtents, TRecordDim, LinearizeA
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00162">162</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00166">166</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a2e04189b946b3479bf50337818ce9455"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2e04189b946b3479bf50337818ce9455">&#9670;&nbsp;</a></span>ArrayExtents</h2>
@@ -179,7 +182,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename LinearizeArr
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00168">168</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00175">175</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -193,6 +196,26 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename LinearizeArr
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html">llama::mapping::BitPackedIntSoA</a>&lt; TArrayExtents, TRecordDim, LinearizeArrayDimsFunctor, StoredIntegral &gt;::<a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html#adb04b29bbd9cd6459bf9f66eacbffecc">ArrayIndex</a> =  typename <a class="el" href="structllama_1_1ArrayExtents.html#a794d74d0ed53e82d42ea0f3c2dacd983">ArrayExtents::Index</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00176">176</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a9a7e96ed88b948f073f60354c381c369"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a7e96ed88b948f073f60354c381c369">&#9670;&nbsp;</a></span>IsAllowedFieldType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TArrayExtents , typename TRecordDim , typename LinearizeArrayDimsFunctor  = mapping::LinearizeArrayDimsCpp, typename StoredIntegral  = typename internal::MakeUnsigned&lt;internal::LargestIntegral&lt;TRecordDim&gt;&gt;::type&gt; </div>
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html">llama::mapping::BitPackedIntSoA</a>&lt; TArrayExtents, TRecordDim, LinearizeArrayDimsFunctor, StoredIntegral &gt;::<a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html#a9a7e96ed88b948f073f60354c381c369">IsAllowedFieldType</a> =  boost::mp11::mp_or&lt;std::is_integral&lt;T&gt;, std::is_enum&lt;T&gt; &gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -215,7 +238,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename LinearizeArr
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00170">170</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00177">177</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -289,7 +312,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename LinearizeArr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00176">176</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00183">183</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -321,7 +344,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename LinearizeArr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00188">188</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00195">195</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -369,7 +392,7 @@ template&lt;std::size_t... RecordCoords, typename Blobs &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00202">202</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00209">209</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -399,7 +422,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename LinearizeArr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00182">182</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00189">189</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -431,7 +454,7 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00196">196</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00203">203</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -458,7 +481,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename LinearizeArr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00171">171</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00178">178</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -471,7 +494,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename LinearizeArr
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html">BitPackedIntSoA</a></li>
-    <li class="footer">Generated on Wed Dec 15 2021 09:41:19 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Dec 15 2021 10:19:03 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -2,7 +2,7 @@ var searchData=
 [
   ['accessiblerecorddim_0',['AccessibleRecordDim',['../structllama_1_1VirtualRecord.html#a2aa28a81ab488e17158b4c98d34d28f3',1,'llama::VirtualRecord']]],
   ['accessor_1',['accessor',['../structllama_1_1VirtualView.html#af48fa26b22a1d32f993df945f552e743',1,'llama::VirtualView::accessor(ArrayIndex ai) const -&gt; const auto &amp;'],['../structllama_1_1VirtualView.html#ac2811328ba015efd6c1e9822f637747f',1,'llama::VirtualView::accessor(ArrayIndex ai) -&gt; auto &amp;']]],
-  ['ai_2',['ai',['../structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#a94feee46f4ff0a60980c99e42c583b44',1,'llama::mapping::Bytesplit::Reference']]],
+  ['ai_2',['ai',['../structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#a8d0c71579c3b45c879029aa9bdfeb5d0',1,'llama::mapping::Bytesplit::Reference']]],
   ['alignedallocator_3',['AlignedAllocator',['../structllama_1_1bloballoc_1_1AlignedAllocator.html',1,'llama::bloballoc::AlignedAllocator&lt; T, Alignment &gt;'],['../structllama_1_1bloballoc_1_1AlignedAllocator.html#afc1b74be5b9bec25c966fe343f0aa235',1,'llama::bloballoc::AlignedAllocator::AlignedAllocator() noexcept=default'],['../structllama_1_1bloballoc_1_1AlignedAllocator.html#a36f6a75a027a96d79fd6a8623359d8a8',1,'llama::bloballoc::AlignedAllocator::AlignedAllocator(AlignedAllocator&lt; T2, Alignment &gt; const &amp;) noexcept']]],
   ['alignedaos_4',['AlignedAoS',['../namespacellama_1_1mapping.html#a3695faa8a6c5702ee9de9fda033d5fc1',1,'llama::mapping']]],
   ['alignedone_5',['AlignedOne',['../namespacellama_1_1mapping.html#a5abb72fb758db92b6d6f92b624788338',1,'llama::mapping']]],

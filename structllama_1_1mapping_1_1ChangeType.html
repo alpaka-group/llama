@@ -134,6 +134,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afb467a81b6d057ca3c54a558d680247b"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords, typename BlobArray &gt; </td></tr>
 <tr class="memitem:afb467a81b6d057ca3c54a558d680247b"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1ChangeType.html#afb467a81b6d057ca3c54a558d680247b">compute</a> (typename Inner::ArrayIndex ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt;, BlobArray &amp;blobs) const</td></tr>
 <tr class="separator:afb467a81b6d057ca3c54a558d680247b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85c0b9f5f802299623d252e0a6840a36"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
+<tr class="memitem:a85c0b9f5f802299623d252e0a6840a36"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1ChangeType.html#a85c0b9f5f802299623d252e0a6840a36">blobNrAndOffset</a> (<a class="el" href="structllama_1_1mapping_1_1ChangeType.html#ac65f6e089a7ead7aca908b6bbe89787f">ArrayIndex</a> ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt; rc={}) const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a></td></tr>
+<tr class="separator:a85c0b9f5f802299623d252e0a6840a36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -147,7 +150,7 @@ struct llama::mapping::ChangeType&lt; TArrayExtents, TRecordDim, InnerMapping, R
 
 <p>Mapping that changes the type in the record domain for a different one in storage. Conversions happen during load and store. /tparam ReplacementMap A type list of binary type lists (a map) specifiying which type to replace by which other type. </p>
 
-<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00062">62</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00066">66</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="add4f8b64089f480a07b1324b19426a1a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#add4f8b64089f480a07b1324b19426a1a">&#9670;&nbsp;</a></span>ArrayExtents</h2>
@@ -163,7 +166,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , template&lt; typename
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00066">66</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00070">70</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
 
 </div>
 </div>
@@ -181,7 +184,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , template&lt; typename
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00067">67</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00071">71</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
 
 </div>
 </div>
@@ -199,7 +202,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , template&lt; typename
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00064">64</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00068">68</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
 
 </div>
 </div>
@@ -217,7 +220,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , template&lt; typename
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00068">68</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00072">72</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
 
 </div>
 </div>
@@ -248,11 +251,54 @@ template&lt;typename TArrayExtents , typename TRecordDim , template&lt; typename
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00076">76</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00080">80</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a85c0b9f5f802299623d252e0a6840a36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85c0b9f5f802299623d252e0a6840a36">&#9670;&nbsp;</a></span>blobNrAndOffset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TArrayExtents , typename TRecordDim , template&lt; typename, typename &gt; typename InnerMapping, typename ReplacementMap &gt; </div>
+<div class="memtemplate">
+template&lt;std::size_t... RecordCoords&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1ChangeType.html">llama::mapping::ChangeType</a>&lt; TArrayExtents, TRecordDim, InnerMapping, ReplacementMap &gt;::blobNrAndOffset </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1mapping_1_1ChangeType.html#ac65f6e089a7ead7aca908b6bbe89787f">ArrayIndex</a>&#160;</td>
+          <td class="paramname"><em>ai</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt;&#160;</td>
+          <td class="paramname"><em>rc</em> = <code>{}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a>
+        </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00108">108</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
+
+</div>
+</div>
 <a id="afb467a81b6d057ca3c54a558d680247b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afb467a81b6d057ca3c54a558d680247b">&#9670;&nbsp;</a></span>compute()</h2>
 
@@ -297,7 +343,7 @@ template&lt;std::size_t... RecordCoords, typename BlobArray &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00090">90</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00094">94</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
 
 </div>
 </div>
@@ -329,7 +375,7 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00081">81</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00085">85</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
 
 </div>
 </div>
@@ -342,7 +388,7 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1ChangeType.html">ChangeType</a></li>
-    <li class="footer">Generated on Wed Dec 15 2021 09:41:19 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Dec 15 2021 10:19:03 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
