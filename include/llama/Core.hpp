@@ -531,6 +531,7 @@ namespace llama
 
     namespace internal
     {
+        // Such a class is also known as arraw_proxy: https://quuxplusone.github.io/blog/2019/02/06/arrow-proxy/
         template<typename T>
         struct IndirectValue
         {
