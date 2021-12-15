@@ -75,8 +75,7 @@ namespace llama::mapping
                     [&](auto ic)
                     {
                         constexpr auto i = decltype(ic)::value;
-                        auto&& ref
-                            = llama::internal::resolveToMemoryReference(blobs, inner, ai, Cat<RC, RecordCoord<i>>{});
+                        auto&& ref = mapToMemory(inner, ai, Cat<RC, RecordCoord<i>>{}, blobs);
                         p[i] = ref;
                     });
                 return v;
@@ -89,8 +88,7 @@ namespace llama::mapping
                     [&](auto ic)
                     {
                         constexpr auto i = decltype(ic)::value;
-                        auto&& ref
-                            = llama::internal::resolveToMemoryReference(blobs, inner, ai, Cat<RC, RecordCoord<i>>{});
+                        auto&& ref = mapToMemory(inner, ai, Cat<RC, RecordCoord<i>>{}, blobs);
                         ref = p[i];
                     });
                 return *this;
