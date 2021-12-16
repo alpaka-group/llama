@@ -13,25 +13,43 @@ using UInts = llama::Record<
     llama::Field<std::uint32_t, std::uint32_t>,
     llama::Field<std::uint64_t, std::uint64_t>>;
 
-TEST_CASE("mapping.BitPackedIntSoA.SInts")
+TEST_CASE("mapping.BitPackedIntSoA.Constant.SInts")
 {
     // 16 elements * 4 fields = 64 integers, iota produces [0;63], which fits int8_t and into 7 bits
-    auto view = llama::allocView(llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<1>, SInts>{7, {16}});
+    auto view = llama::allocView(
+        llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<1>, SInts, llama::Constant<7>>{{16}});
     iotaFillView(view);
     iotaCheckView(view);
 }
 
-TEST_CASE("mapping.BitPackedIntSoA.UInts")
+TEST_CASE("mapping.BitPackedIntSoA.Value.SInts")
+{
+    // 16 elements * 4 fields = 64 integers, iota produces [0;63], which fits int8_t and into 7 bits
+    auto view = llama::allocView(llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<1>, SInts>{{16}, 7});
+    iotaFillView(view);
+    iotaCheckView(view);
+}
+
+TEST_CASE("mapping.BitPackedIntSoA.Constant.UInts")
 {
     // 32 elements * 4 fields = 128 integers, iota produces [0;127], which fits uint8_t and into 7 bits
-    auto view = llama::allocView(llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<1>, UInts>{7, {32}});
+    auto view = llama::allocView(
+        llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<1>, UInts, llama::Constant<7>>{{32}});
+    iotaFillView(view);
+    iotaCheckView(view);
+}
+
+TEST_CASE("mapping.BitPackedIntSoA.Value.UInts")
+{
+    // 32 elements * 4 fields = 128 integers, iota produces [0;127], which fits uint8_t and into 7 bits
+    auto view = llama::allocView(llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<1>, UInts>{{32}, 7});
     iotaFillView(view);
     iotaCheckView(view);
 }
 
 TEST_CASE("mapping.BitPackedIntSoA.UInts.Cutoff")
 {
-    auto view = llama::allocView(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<>, UInts>{3, {}});
+    auto view = llama::allocView(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<>, UInts, llama::Constant<3>>{});
 
     for(auto i = 0; i < 8; i++)
     {
@@ -49,7 +67,7 @@ TEST_CASE("mapping.BitPackedIntSoA.UInts.Cutoff")
 
 TEST_CASE("mapping.BitPackedIntSoA.SInts.Cutoff")
 {
-    auto view = llama::allocView(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<>, SInts>{4, {}});
+    auto view = llama::allocView(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<>, SInts, llama::Constant<4>>{});
 
     for(auto i = 0; i < 8; i++)
     {
@@ -81,14 +99,15 @@ TEST_CASE("mapping.BitPackedIntSoA.SInts.Cutoff")
 TEST_CASE("mapping.BitPackedIntSoA.SInts.Roundtrip")
 {
     constexpr auto N = 1000;
-    auto view = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<N>, Vec3I>{{}});
+    auto view = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<N>, Vec3I>{});
     std::default_random_engine engine;
     std::uniform_int_distribution dist{-2000, 2000}; // fits into 12 bits
     for(auto i = 0; i < N; i++)
         view(i) = dist(engine);
 
     // copy into packed representation
-    auto packedView = llama::allocView(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<N>, Vec3I>{12, {}});
+    auto packedView
+        = llama::allocView(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<N>, Vec3I, llama::Constant<12>>{});
     llama::copy(view, packedView);
 
     // compute on packed representation
@@ -96,7 +115,7 @@ TEST_CASE("mapping.BitPackedIntSoA.SInts.Roundtrip")
         packedView(i) = packedView(i) + 1;
 
     // copy into normal representation
-    auto view2 = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<N>, Vec3I>{{}});
+    auto view2 = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<N>, Vec3I>{});
     llama::copy(packedView, view2);
 
     // compute on normal representation
@@ -111,7 +130,7 @@ TEST_CASE("mapping.BitPackedIntSoA.bool")
 {
     // pack 32 bools into 4 bytes
     const auto n = 32;
-    const auto mapping = llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<1>, bool>{1, {n}};
+    const auto mapping = llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<1>, bool, llama::Constant<1>>{{n}};
     CHECK(mapping.blobSize(0) == n / CHAR_BIT);
     auto view = llama::allocView(mapping);
     for(auto i = 0; i < n; i++)
@@ -151,7 +170,8 @@ TEMPLATE_TEST_CASE("mapping.BitPackedIntSoA.Enum", "", Grades, GradesClass)
         typename llama::mapping::internal::MakeUnsigned<llama::mapping::internal::LargestIntegral<Enum>>::type;
     STATIC_REQUIRE(std::is_same_v<StoredIntegral, unsigned>);
 
-    auto view = llama::allocView(llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<1>, Enum>{3, {6}});
+    auto view = llama::allocView(
+        llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<1>, Enum, llama::Constant<3>>{{6}});
     view(0) = Enum::A;
     view(1) = Enum::B;
     view(2) = Enum::C;
@@ -165,4 +185,11 @@ TEMPLATE_TEST_CASE("mapping.BitPackedIntSoA.Enum", "", Grades, GradesClass)
     CHECK(view(3) == Enum::D);
     CHECK(view(4) == Enum::E);
     CHECK(view(5) == Enum::F);
+}
+
+TEST_CASE("mapping.BitPackedIntSoA.Size")
+{
+    STATIC_REQUIRE(
+        std::is_empty_v<llama::mapping::BitPackedIntSoA<llama::ArrayExtents<16>, SInts, llama::Constant<7>>>);
+    STATIC_REQUIRE(sizeof(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<16>, SInts>{{}, 7}) == sizeof(unsigned));
 }

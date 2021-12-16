@@ -67,7 +67,7 @@ TEST_CASE("mapping.ByteSplit.Split.BitPackedIntSoA")
                                      llama::mapping::BitPackedIntSoA,
                                      llama::mapping::PreconfiguredAoS<>::type,
                                      true>::type>{
-        std::tuple{std::tuple{23, llama::ArrayExtents{128}}, std::tuple{llama::ArrayExtents{128}}}});
+        std::tuple{std::tuple{llama::ArrayExtents{128}, 23}, std::tuple{llama::ArrayExtents{128}}}});
     iotaFillView(view);
     iotaCheckView(view);
 }

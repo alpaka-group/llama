@@ -21,7 +21,8 @@ auto main() -> int
 {
     constexpr auto N = 128;
     constexpr auto bits = 7;
-    const auto mapping = llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<1>, Vector>{bits, {N}};
+    const auto mapping
+        = llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<1>, Vector, llama::Constant<bits>>{{N}};
 
     auto view = llama::allocView(mapping);
 

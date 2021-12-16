@@ -693,4 +693,49 @@ namespace llama
     /// Alias for ToT, adding `const` if FromT is const qualified.
     template<typename FromT, typename ToT>
     using CopyConst = std::conditional_t<std::is_const_v<FromT>, const ToT, ToT>;
+
+    /// Used as template argument to specify a constant/compile-time value.
+    template<auto V>
+    using Constant = std::integral_constant<decltype(V), V>;
+
+    namespace internal
+    {
+        /// Holds a value of type T. Is useful as a base class. Is specialized for llama::Constant to not store the
+        /// value at runtime. \tparam T Type of value to store. \tparam I Is used to disambiguate multiple BoxedValue
+        /// base classes.
+        template<typename T, int I = 0>
+        struct BoxedValue
+        {
+            BoxedValue() = default;
+
+            // we don't make this ctor explicit so a Value appearing in a ctor list can just be created by passing a T
+            BoxedValue(T value) : val(value)
+            {
+            }
+
+            constexpr auto value() const
+            {
+                return val;
+            }
+
+        private:
+            T val = {};
+        };
+
+        template<auto V, int I>
+        struct BoxedValue<Constant<V>, I>
+        {
+            BoxedValue() = default;
+
+            // we don't make this ctor explicit so a Value appearing in a ctor list can just be created by passing a T
+            BoxedValue(Constant<V>)
+            {
+            }
+
+            static constexpr auto value()
+            {
+                return V;
+            }
+        };
+    } // namespace internal
 } // namespace llama

@@ -118,6 +118,8 @@ namespace usellama
                 return "ByteSplit SoA MB";
             if(m == 7)
                 return "BitPack SoA 11e4";
+            if(m == 8)
+                return "BitPack SoA 11e4 CT";
             std::abort();
         };
         auto title = "LLAMA " + mappingName(Mapping);
@@ -150,7 +152,10 @@ namespace usellama
                 return llama::mapping::Bytesplit<ArrayExtents, Particle, llama::mapping::PreconfiguredSoA<>::type>{
                     extents};
             if constexpr(Mapping == 7)
-                return llama::mapping::BitPackedFloatSoA<ArrayExtents, Particle>{4, 11, extents};
+                return llama::mapping::BitPackedFloatSoA<ArrayExtents, Particle>{extents, 4, 11};
+            if constexpr(Mapping == 8)
+                return llama::mapping::
+                    BitPackedFloatSoA<ArrayExtents, Particle, llama::Constant<4>, llama::Constant<11>>{extents};
         }();
         if constexpr(DUMP_MAPPING)
             std::ofstream(title + ".svg") << llama::toSvg(mapping);
