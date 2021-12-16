@@ -128,12 +128,12 @@ TEST_CASE("dump.Particle.BitPacked")
              llama::mapping::PreconfiguredSplit<
                  llama::RecordCoord<0>,
                  llama::mapping::BitPackedFloatSoA,
-                 llama::mapping::BitPackedIntSoA,
+                 llama::mapping::PreconfiguredBitPackedIntSoA<llama::Constant<1>>::type,
                  true>::type,
              true>::type,
          true>{
-        std::tuple{std::tuple{3, 3, extents}, std::tuple{extents}},
-        std::tuple{std::tuple{}, std::tuple{std::tuple{5, 5, extents}, std::tuple{1, extents}}}});
+        std::tuple{std::tuple{extents, 3, 3}, std::tuple{extents}},
+        std::tuple{std::tuple{}, std::tuple{std::tuple{extents, 5, 5}, std::tuple{extents}}}});
 }
 
 TEST_CASE("dump.ParticleUnaligned.AoS")

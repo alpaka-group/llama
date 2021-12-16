@@ -238,13 +238,14 @@ TEST_CASE("proxyrefopmixin.Bytesplit")
 
 TEST_CASE("proxyrefopmixin.BitPackedIntSoA")
 {
-    auto view = llama::allocView(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<4>, Vec3I>{12, {}});
+    auto view = llama::allocView(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<4>, Vec3I>{{}, 12});
     testProxyRef(view(2)(tag::X{}));
 }
 
 TEST_CASE("proxyrefopmixin.BitPackedFloatSoA")
 {
-    auto view = llama::allocView(llama::mapping::BitPackedFloatSoA<llama::ArrayExtents<4>, Vec3D>{6, 20, {}});
+    auto view = llama::allocView(
+        llama::mapping::BitPackedFloatSoA<llama::ArrayExtents<4>, Vec3D, llama::Constant<6>, llama::Constant<20>>{});
     testProxyRef(view(2)(tag::X{}));
 }
 

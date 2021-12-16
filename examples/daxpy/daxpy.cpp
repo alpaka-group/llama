@@ -116,9 +116,9 @@ $data << EOD
             llama::mapping::PreconfiguredAoS<>::type,
             boost::mp11::mp_list<boost::mp11::mp_list<double, float>>>{extents},
         plotFile);
-    daxpy_llama("Bitpack 52^{11}", llama::mapping::BitPackedFloatSoA{11, 52, extents, double{}}, plotFile);
-    daxpy_llama("Bitpack 23^{8}", llama::mapping::BitPackedFloatSoA{8, 23, extents, double{}}, plotFile);
-    daxpy_llama("Bitpack 10^{5}", llama::mapping::BitPackedFloatSoA{5, 10, extents, double{}}, plotFile);
+    daxpy_llama("Bitpack 52^{11}", llama::mapping::BitPackedFloatSoA{extents, 11, 52, double{}}, plotFile);
+    daxpy_llama("Bitpack 23^{8}", llama::mapping::BitPackedFloatSoA{extents, 8, 23, double{}}, plotFile);
+    daxpy_llama("Bitpack 10^{5}", llama::mapping::BitPackedFloatSoA{extents, 5, 10, double{}}, plotFile);
 
     plotFile << R"(EOD
 plot $data using 2:xtic(1)

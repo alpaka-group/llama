@@ -172,13 +172,13 @@ TEST_CASE("Split.BitPacked")
         ArrayExtents,
         Vec3I,
         llama::RecordCoord<0>,
-        llama::mapping::BitPackedIntSoA,
+        llama::mapping::PreconfiguredBitPackedIntSoA<llama::Constant<3>>::type,
         llama::mapping::PreconfiguredSplit<
             llama::RecordCoord<0>,
             llama::mapping::BitPackedIntSoA,
             llama::mapping::PackedAoS,
             true>::type,
-        true>{{3, extents}, {std::tuple{5, extents}, std::tuple{extents}}};
+        true>{{extents}, {std::tuple{extents, 5}, std::tuple{extents}}};
     CHECK(mapping.blobSize(0) == 12);
     CHECK(mapping.blobSize(1) == 20);
     CHECK(mapping.blobSize(2) == 128);

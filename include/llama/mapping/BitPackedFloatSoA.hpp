@@ -4,7 +4,9 @@
 
 #include "../ProxyRefOpMixin.hpp"
 #include "BitPackedIntSoA.hpp"
+#include "Common.hpp"
 
+#include <algorithm>
 #include <climits>
 #include <cstdint>
 #include <cstring>
@@ -78,12 +80,28 @@ namespace llama::mapping
             return outFloat;
         }
 
+        // TODO: Boost.Hana generalizes these sorts of computations on mixed constants and values
+        template<typename E, typename M>
+        auto integBits(E e, M m)
+        {
+            return llama::internal::BoxedValue{e.value() + m.value() + 1};
+        }
+
+        template<auto E, auto M>
+        auto integBits(llama::internal::BoxedValue<Constant<E>>, llama::internal::BoxedValue<Constant<M>>)
+        {
+            return llama::internal::BoxedValue<Constant<E + M + 1>>{};
+        }
+
         /// A proxy type representing a reference to a reduced precision floating-point value, stored in a buffer at a
         /// specified bit offset.
-        /// @tparam Integral Integral data type which can be loaded and store through this reference.
+        /// @tparam Float Floating-point data type which can be loaded and store through this reference.
         /// @tparam StoredIntegralPointer Pointer to integral type used for storing the bits.
-        template<typename Float, typename StoredIntegralPointer>
-        struct BitPackedFloatRef : ProxyRefOpMixin<BitPackedFloatRef<Float, StoredIntegralPointer>, Float>
+        template<typename Float, typename StoredIntegralPointer, typename VHExp, typename VHMan>
+        struct LLAMA_DECLSPEC_EMPTY_BASES BitPackedFloatRef
+            : private VHExp
+            , private VHMan
+            , ProxyRefOpMixin<BitPackedFloatRef<Float, StoredIntegralPointer, VHExp, VHMan>, Float>
         {
         private:
             static_assert(
@@ -95,40 +113,45 @@ namespace llama::mapping
 
             using FloatBits = std::conditional_t<std::is_same_v<Float, float>, std::uint32_t, std::uint64_t>;
 
-            internal::BitPackedIntRef<FloatBits, StoredIntegralPointer> intref;
-            unsigned exponentBits = 0;
-            unsigned mantissaBits = 0;
+            BitPackedIntRef<
+                FloatBits,
+                StoredIntegralPointer,
+                decltype(integBits(std::declval<VHExp>(), std::declval<VHMan>()))>
+                intref;
 
         public:
             using value_type = Float;
 
             LLAMA_FN_HOST_ACC_INLINE constexpr BitPackedFloatRef(
-            StoredIntegralPointer p,
-            std::size_t bitOffset,
-            unsigned exponentBits,
-            unsigned mantissaBits
+                StoredIntegralPointer p,
+                std::size_t bitOffset,
+                VHExp vhExp,
+                VHMan vhMan
 #ifndef NDEBUG
-            ,
-            StoredIntegralPointer endPtr
+                ,
+                StoredIntegralPointer endPtr
 #endif
-            )
-            : intref{p, bitOffset, exponentBits + mantissaBits + 1,
+                )
+                : VHExp{vhExp}
+                , VHMan{vhMan}
+                , intref{
+                      p,
+                      bitOffset,
+                      integBits(vhExp, vhMan),
 #ifndef NDEBUG
-            endPtr
+                      endPtr
 #endif
-        }
-            , exponentBits(exponentBits)
-            , mantissaBits(mantissaBits)
+                  }
             {
             }
 
             // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
             LLAMA_FN_HOST_ACC_INLINE constexpr operator Float() const
             {
-                using Bits = internal::FloatBitTraits<Float>;
+                using Bits = FloatBitTraits<Float>;
                 const FloatBits packedFloat = intref;
                 const FloatBits unpackedFloat
-                    = repackFloat(packedFloat, mantissaBits, exponentBits, Bits::mantissa, Bits::exponent);
+                    = repackFloat(packedFloat, VHMan::value(), VHExp::value(), Bits::mantissa, Bits::exponent);
                 Float f;
                 std::memcpy(&f, &unpackedFloat, sizeof(Float));
                 return f;
@@ -136,11 +159,11 @@ namespace llama::mapping
 
             LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(Float f) -> BitPackedFloatRef&
             {
-                using Bits = internal::FloatBitTraits<Float>;
+                using Bits = FloatBitTraits<Float>;
                 FloatBits unpackedFloat = 0;
                 std::memcpy(&unpackedFloat, &f, sizeof(Float));
                 const FloatBits packedFloat
-                    = repackFloat(unpackedFloat, Bits::mantissa, Bits::exponent, mantissaBits, exponentBits);
+                    = repackFloat(unpackedFloat, Bits::mantissa, Bits::exponent, VHMan::value(), VHExp::value());
                 intref = packedFloat;
                 return *this;
             }
@@ -152,33 +175,49 @@ namespace llama::mapping
     /// IEEE 754. Infinity and NAN are supported. If the packed exponent bits are not big enough to hold a number, it
     /// will be set to infinity (preserving the sign). If your record dimension contains non-floating-point types,
     /// split them off using the \ref Split mapping first.
+    /// \tparam ExponentBits If ExponentBits is llama::Constant<N>, the compile-time N specifies the number of bits to
+    /// use to store the exponent. If ExponentBits is llama::Value<T>, the number of bits is specified at runtime,
+    /// passed to the constructor and stored as type T.
+    /// \tparam MantissaBits Like ExponentBits but for the mantissa bits.
     /// \tparam LinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and how
     /// big the linear domain gets.
     /// \tparam StoredIntegral Integral type used as storage of reduced precision floating-point values.
-    // TODO(bgruber): we could also split each float in the record dimension into 3 integers, sign bit, exponent and
-    // mantissa. might not be efficient though
     template<
         typename TArrayExtents,
         typename TRecordDim,
-        typename LinearizeArrayDimsFunctor = llama::mapping::LinearizeArrayDimsCpp,
+        typename ExponentBits = unsigned,
+        typename MantissaBits = unsigned,
+        typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
         typename StoredIntegral = std::conditional_t<
-            boost::mp11::mp_contains<llama::FlatRecordDim<TRecordDim>, double>::value,
+            boost::mp11::mp_contains<FlatRecordDim<TRecordDim>, double>::value,
             std::uint64_t,
             std::uint32_t>>
-    struct BitPackedFloatSoA : TArrayExtents
+    struct LLAMA_DECLSPEC_EMPTY_BASES BitPackedFloatSoA
+        : TArrayExtents
+        , llama::internal::BoxedValue<ExponentBits, 0>
+        , llama::internal::BoxedValue<MantissaBits, 1>
     {
+    private:
+        using VHExp = llama::internal::BoxedValue<ExponentBits, 0>;
+        using VHMan = llama::internal::BoxedValue<MantissaBits, 1>;
+
+    public:
         using ArrayExtents = TArrayExtents;
         using ArrayIndex = typename ArrayExtents::Index;
         using RecordDim = TRecordDim;
-        static constexpr std::size_t blobCount = boost::mp11::mp_size<llama::FlatRecordDim<RecordDim>>::value;
+        static constexpr std::size_t blobCount = boost::mp11::mp_size<FlatRecordDim<RecordDim>>::value;
 
         constexpr BitPackedFloatSoA() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        constexpr BitPackedFloatSoA(unsigned exponentBits, unsigned mantissaBits, ArrayExtents extents, RecordDim = {})
+        constexpr BitPackedFloatSoA(
+            ArrayExtents extents,
+            ExponentBits exponentBits = {},
+            MantissaBits mantissaBits = {},
+            RecordDim = {})
             : ArrayExtents(extents)
-            , exponentBits{exponentBits}
-            , mantissaBits{mantissaBits}
+            , VHExp{exponentBits}
+            , VHMan{mantissaBits}
         {
         }
 
@@ -191,41 +230,36 @@ namespace llama::mapping
         constexpr auto blobSize(std::size_t /*blobIndex*/) const -> std::size_t
         {
             constexpr auto bitsPerStoredIntegral = sizeof(StoredIntegral) * CHAR_BIT;
-            const auto bitsNeeded = LinearizeArrayDimsFunctor{}.size(extents()) * (exponentBits + mantissaBits + 1);
+            const auto bitsNeeded
+                = LinearizeArrayDimsFunctor{}.size(extents()) * (VHExp::value() + VHMan::value() + 1);
             return roundUpToMultiple(bitsNeeded, bitsPerStoredIntegral) / CHAR_BIT;
         }
 
         template<std::size_t... RecordCoords>
-        static constexpr auto isComputed(llama::RecordCoord<RecordCoords...>)
+        static constexpr auto isComputed(RecordCoord<RecordCoords...>)
         {
             return true;
         }
 
         template<std::size_t... RecordCoords, typename Blobs>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto compute(
-            ArrayIndex ai,
-            llama::RecordCoord<RecordCoords...>,
-            Blobs& blobs) const
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto compute(ArrayIndex ai, RecordCoord<RecordCoords...>, Blobs& blobs)
+            const
         {
-            constexpr auto blob = llama::flatRecordCoord<RecordDim, llama::RecordCoord<RecordCoords...>>;
-            const auto bitOffset = LinearizeArrayDimsFunctor{}(ai, extents()) * (exponentBits + mantissaBits + 1);
+            constexpr auto blob = llama::flatRecordCoord<RecordDim, RecordCoord<RecordCoords...>>;
+            const auto bitOffset = LinearizeArrayDimsFunctor{}(ai, extents()) * (VHExp::value() + VHMan::value() + 1);
 
             using QualifiedStoredIntegral = CopyConst<Blobs, StoredIntegral>;
-            using DstType = llama::GetType<RecordDim, llama::RecordCoord<RecordCoords...>>;
-            return internal::BitPackedFloatRef<DstType, QualifiedStoredIntegral*>{
+            using DstType = GetType<RecordDim, RecordCoord<RecordCoords...>>;
+            return internal::BitPackedFloatRef<DstType, QualifiedStoredIntegral*, VHExp, VHMan>{
                 reinterpret_cast<QualifiedStoredIntegral*>(&blobs[blob][0]),
                 bitOffset,
-                exponentBits,
-                mantissaBits
+                static_cast<VHExp>(*this),
+                static_cast<VHMan>(*this)
 #ifndef NDEBUG
-                ,
+                    ,
                 reinterpret_cast<QualifiedStoredIntegral*>(&blobs[blob][0] + blobSize(blob))
 #endif
             };
         }
-
-    private:
-        unsigned exponentBits = 0;
-        unsigned mantissaBits = 0;
     };
 } // namespace llama::mapping
