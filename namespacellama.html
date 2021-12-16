@@ -373,6 +373,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a3750d27a7f8dd111fbe32dc769b44120"><td class="memTemplParams" colspan="2">template&lt;std::size_t Dim, typename RecordDim &gt; </td></tr>
 <tr class="memitem:a3750d27a7f8dd111fbe32dc769b44120"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a3750d27a7f8dd111fbe32dc769b44120">allocViewStack</a> () -&gt; decltype(auto)</td></tr>
 <tr class="separator:a3750d27a7f8dd111fbe32dc769b44120"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1445fa67728a9433fbd8b68f195fbe4"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , std::size_t... Coords, typename Blobs &gt; </td></tr>
+<tr class="memitem:ac1445fa67728a9433fbd8b68f195fbe4"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ac1445fa67728a9433fbd8b68f195fbe4">mapToMemory</a> (Mapping &amp;mapping, typename Mapping::ArrayIndex ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords... &gt; rc, Blobs &amp;blobs) -&gt; decltype(auto)</td></tr>
+<tr class="separator:ac1445fa67728a9433fbd8b68f195fbe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a416bef7f5a6a9e2cecf4f9b090c9d4ed"><td class="memTemplParams" colspan="2">template&lt;typename TStoredParentView &gt; </td></tr>
 <tr class="memitem:a416bef7f5a6a9e2cecf4f9b090c9d4ed"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a416bef7f5a6a9e2cecf4f9b090c9d4ed">VirtualView</a> (TStoredParentView &amp;&amp;, typename std::remove_reference_t&lt; TStoredParentView &gt;::Mapping::ArrayIndex) -&gt; <a class="el" href="structllama_1_1VirtualView.html">VirtualView</a>&lt; TStoredParentView &gt;</td></tr>
 <tr class="separator:a416bef7f5a6a9e2cecf4f9b090c9d4ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -568,7 +571,7 @@ template&lt;typename FromT , typename ToT &gt; </div>
 
 <p>Alias for ToT, adding <code>const</code> if FromT is const qualified. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00680">680</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00681">681</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -746,7 +749,7 @@ template&lt;typename RecordDimA , typename RecordDimB &gt; </div>
 
 <p>Creates a merged record dimension, where duplicated, nested fields are unified. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00652">652</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00653">653</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -825,7 +828,7 @@ template&lt;typename RecordDim , template&lt; typename &gt; typename FieldTypeFu
 </div><div class="memdoc">
 <p>Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to the original leaf field's type. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00586">586</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00587">587</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1643,6 +1646,60 @@ template&lt;std::size_t PieceLength, typename Mapping &gt; </div>
 
 </div>
 </div>
+<a id="ac1445fa67728a9433fbd8b68f195fbe4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1445fa67728a9433fbd8b68f195fbe4">&#9670;&nbsp;</a></span>mapToMemory()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping , std::size_t... Coords, typename Blobs &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto llama::mapToMemory </td>
+          <td>(</td>
+          <td class="paramtype">Mapping &amp;&#160;</td>
+          <td class="paramname"><em>mapping</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">typename Mapping::ArrayIndex&#160;</td>
+          <td class="paramname"><em>ai</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords... &gt;&#160;</td>
+          <td class="paramname"><em>rc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Blobs &amp;&#160;</td>
+          <td class="paramname"><em>blobs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> -&gt; decltype(auto)
+    </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Using a mapping, maps the given array index and record coordinate to a memory reference onto the given blobs. </p><dl class="section return"><dt>Returns</dt><dd>Either an l-value reference if the record coord maps to a physical field or a proxy reference if mapped to a computed field. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00292">292</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a43a0e7db85b08e8fe36a253401e68a33"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a43a0e7db85b08e8fe36a253401e68a33">&#9670;&nbsp;</a></span>operator!=() <span class="overload">[1/3]</span></h2>
 
@@ -2283,7 +2340,7 @@ template&lt;typename RecordDim , std::size_t... Coords&gt; </div>
 
 <p>Returns the tags interspersed by '.' represented by the given record coord in the given record dimension. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00656">656</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00657">657</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3398,7 +3455,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Wed Dec 15 2021 16:58:00 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Dec 16 2021 19:53:14 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
