@@ -91,7 +91,8 @@ $(document).ready(function(){initNavTree('VirtualRecord_8hpp.html',''); initResi
 <div class="title">VirtualRecord.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="View_8hpp_source.html">View.hpp</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="HasRanges_8hpp_source.html">HasRanges.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="View_8hpp_source.html">View.hpp</a>&quot;</code><br />
 <code>#include &lt;iosfwd&gt;</code><br />
 <code>#include &lt;type_traits&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -101,35 +102,36 @@ $(document).ready(function(){initNavTree('VirtualRecord_8hpp.html',''); initResi
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="VirtualRecord_8hpp__incl.png" border="0" usemap="#_2home_2runner_2work_2llama_2llama_2include_2llama_2VirtualRecord_8hpp" alt=""/></div>
 <map name="_2home_2runner_2work_2llama_2llama_2include_2llama_2VirtualRecord_8hpp" id="_2home_2runner_2work_2llama_2llama_2include_2llama_2VirtualRecord_8hpp">
-<area shape="rect" title=" " alt="" coords="577,5,780,61"/>
-<area shape="rect" href="View_8hpp.html" title=" " alt="" coords="638,109,719,136"/>
-<area shape="rect" title=" " alt="" coords="494,483,586,509"/>
-<area shape="rect" title=" " alt="" coords="744,109,808,136"/>
-<area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="1088,483,1171,509"/>
-<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="1201,557,1300,584"/>
-<area shape="rect" href="ArrayIndexRange_8hpp.html" title=" " alt="" coords="83,259,245,285"/>
-<area shape="rect" href="Core_8hpp.html" title=" " alt="" coords="424,333,504,360"/>
-<area shape="rect" href="BlobAllocators_8hpp.html" title=" " alt="" coords="913,184,1057,211"/>
-<area shape="rect" href="Concepts_8hpp.html" title=" " alt="" coords="717,259,827,285"/>
-<area shape="rect" href="One_8hpp.html" title=" " alt="" coords="503,184,641,211"/>
+<area shape="rect" title=" " alt="" coords="950,5,1152,61"/>
+<area shape="rect" href="HasRanges_8hpp.html" title=" " alt="" coords="298,259,420,285"/>
+<area shape="rect" href="View_8hpp.html" title=" " alt="" coords="698,109,780,136"/>
+<area shape="rect" title=" " alt="" coords="1093,483,1185,509"/>
+<area shape="rect" title=" " alt="" coords="1354,109,1418,136"/>
+<area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="814,483,896,509"/>
+<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="1267,557,1366,584"/>
+<area shape="rect" href="ArrayIndexRange_8hpp.html" title=" " alt="" coords="70,184,232,211"/>
+<area shape="rect" href="Core_8hpp.html" title=" " alt="" coords="602,333,682,360"/>
+<area shape="rect" href="BlobAllocators_8hpp.html" title=" " alt="" coords="880,184,1024,211"/>
+<area shape="rect" href="Concepts_8hpp.html" title=" " alt="" coords="730,259,841,285"/>
+<area shape="rect" href="One_8hpp.html" title=" " alt="" coords="517,184,654,211"/>
 <area shape="rect" title=" " alt="" coords="941,557,1017,584"/>
-<area shape="rect" title=" " alt="" coords="1102,557,1157,584"/>
-<area shape="rect" href="ArrayExtents_8hpp.html" title=" " alt="" coords="93,408,227,435"/>
-<area shape="rect" title=" " alt="" coords="5,483,64,509"/>
-<area shape="rect" title=" " alt="" coords="92,333,177,360"/>
-<area shape="rect" title=" " alt="" coords="202,333,273,360"/>
-<area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="119,483,201,509"/>
-<area shape="rect" title=" " alt="" coords="97,557,223,584"/>
-<area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="852,408,985,435"/>
-<area shape="rect" title=" " alt="" coords="353,408,540,435"/>
-<area shape="rect" title=" " alt="" coords="564,408,644,435"/>
-<area shape="rect" title=" " alt="" coords="668,408,727,435"/>
-<area shape="rect" title=" " alt="" coords="956,483,1012,509"/>
-<area shape="rect" title=" " alt="" coords="1041,259,1111,285"/>
-<area shape="rect" title=" " alt="" coords="852,259,929,285"/>
-<area shape="rect" title=" " alt="" coords="954,259,1017,285"/>
-<area shape="rect" href="Common_8hpp.html" title=" " alt="" coords="525,259,635,285"/>
-<area shape="rect" title=" " alt="" coords="547,333,613,360"/>
+<area shape="rect" title=" " alt="" coords="828,557,882,584"/>
+<area shape="rect" href="ArrayExtents_8hpp.html" title=" " alt="" coords="184,408,318,435"/>
+<area shape="rect" title=" " alt="" coords="74,483,132,509"/>
+<area shape="rect" title=" " alt="" coords="188,259,274,285"/>
+<area shape="rect" title=" " alt="" coords="42,259,113,285"/>
+<area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="366,483,448,509"/>
+<area shape="rect" title=" " alt="" coords="344,557,470,584"/>
+<area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="943,408,1076,435"/>
+<area shape="rect" title=" " alt="" coords="527,408,714,435"/>
+<area shape="rect" title=" " alt="" coords="738,408,818,435"/>
+<area shape="rect" title=" " alt="" coords="444,408,503,435"/>
+<area shape="rect" title=" " alt="" coords="920,483,976,509"/>
+<area shape="rect" title=" " alt="" coords="917,259,988,285"/>
+<area shape="rect" title=" " alt="" coords="1012,259,1090,285"/>
+<area shape="rect" title=" " alt="" coords="1114,259,1177,285"/>
+<area shape="rect" href="Common_8hpp.html" title=" " alt="" coords="495,259,604,285"/>
+<area shape="rect" title=" " alt="" coords="511,333,578,360"/>
 </map>
 </div>
 </div><div class="textblock"><div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -275,7 +277,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="VirtualRecord_8hpp.html">VirtualRecord.hpp</a></li>
-    <li class="footer">Generated on Thu Dec 16 2021 19:53:14 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Fri Dec 17 2021 07:41:39 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

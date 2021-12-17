@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['can_5fuse_5franges_74',['CAN_USE_RANGES',['../macros_8hpp.html#a46ce794a2a02ddc4a84b9119b5f66ab8',1,'macros.hpp']]],
+  ['can_5fuse_5franges_74',['CAN_USE_RANGES',['../HasRanges_8hpp.html#a46ce794a2a02ddc4a84b9119b5f66ab8',1,'HasRanges.hpp']]],
   ['capacity_75',['capacity',['../structllama_1_1Vector.html#a0001bc3cc44dbb7143d9c88988b510a9',1,'llama::Vector']]],
   ['cat_76',['cat',['../namespacellama.html#a42cdd926d98388052f028ab19c94b649',1,'llama::cat(RecordCoords...)'],['../namespacellama.html#a21d2f247af9c167ca2238eaa09f1bada',1,'llama::Cat()']]],
   ['cbegin_77',['cbegin',['../structllama_1_1Vector.html#a80a45f6abdbe5474ba64bf74dddc7cc5',1,'llama::Vector::cbegin() -&gt; decltype(auto)'],['../structllama_1_1Vector.html#ac4ffac914906e5f4e585924f405c82ec',1,'llama::Vector::cbegin() const -&gt; decltype(auto)']]],

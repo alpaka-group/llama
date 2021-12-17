@@ -186,29 +186,19 @@ $(document).ready(function(){initNavTree('macros_8hpp_source.html',''); initResi
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
 <div class="line"><a name="l00117"></a><span class="lineno"><a class="line" href="macros_8hpp.html#a2c7addf59d59bed9110075644e115f97">  117</a></span>&#160;<span class="preprocessor">#define LLAMA_COPY(x) decltype(x)(x)</span></div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="comment">// TODO(bgruber): clang 10 and 11 fail to compile this currently with the issue described here:</span></div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="comment">// https://stackoverflow.com/questions/64300832/why-does-clang-think-gccs-subrange-does-not-satisfy-gccs-ranges-begin-functi</span></div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="comment">// let&#39;s try again with clang 12</span></div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="comment">// Intel LLVM compiler is also using the clang frontend</span></div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="preprocessor">#if(__has_include(&lt;ranges&gt;) &amp;&amp; defined(__cpp_concepts) &amp;&amp; !defined(__clang__) &amp;&amp; !defined(__INTEL_LLVM_COMPILER))</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="preprocessor">#    define CAN_USE_RANGES 1</span></div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00126"></a><span class="lineno"><a class="line" href="macros_8hpp.html#a46ce794a2a02ddc4a84b9119b5f66ab8">  126</a></span>&#160;<span class="preprocessor">#    define CAN_USE_RANGES 0</span></div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="comment">// https://devblogs.microsoft.com/cppblog/optimizing-the-layout-of-empty-base-classes-in-vs2015-update-2-3/</span></div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="preprocessor">#if defined(_MSC_VER)</span></div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="preprocessor">#    define LLAMA_DECLSPEC_EMPTY_BASES __declspec(empty_bases)</span></div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00133"></a><span class="lineno"><a class="line" href="macros_8hpp.html#a54cf6c1e66eb82c07a01b945491e4916">  133</a></span>&#160;<span class="preprocessor">#    define LLAMA_DECLSPEC_EMPTY_BASES</span></div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="comment">// https://devblogs.microsoft.com/cppblog/optimizing-the-layout-of-empty-base-classes-in-vs2015-update-2-3/</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="preprocessor">#if defined(_MSC_VER)</span></div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="preprocessor">#    define LLAMA_DECLSPEC_EMPTY_BASES __declspec(empty_bases)</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00123"></a><span class="lineno"><a class="line" href="macros_8hpp.html#a54cf6c1e66eb82c07a01b945491e4916">  123</a></span>&#160;<span class="preprocessor">#    define LLAMA_DECLSPEC_EMPTY_BASES</span></div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="macros_8hpp.html">macros.hpp</a></li>
-    <li class="footer">Generated on Thu Dec 16 2021 19:53:14 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Fri Dec 17 2021 07:41:39 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
