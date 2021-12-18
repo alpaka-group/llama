@@ -4,6 +4,7 @@ on: [push, pull_request]
 env:
   THREADS: 4
   CONFIG: RelWithDebInfo
+  BOOST_ROOT: ${{ github.workspace }}/_boost
 
 jobs:
   clang-format:
@@ -22,12 +23,20 @@ jobs:
       CXX: clang++-12
     steps:
     - uses: actions/checkout@v2
-    - name: apt install boost and clang-12
+    - name: install boost
+      run: |
+          BOOST_VERSION=1.74.0
+          BOOST_ARCHIVE=boost_${BOOST_VERSION//./_}.tar.bz2
+          wget -q https://boostorg.jfrog.io/artifactory/main/release/$BOOST_VERSION/source/$BOOST_ARCHIVE
+          tar -xf $BOOST_ARCHIVE
+          rm $BOOST_ARCHIVE
+          mv boost_${BOOST_VERSION//./_} "${BOOST_ROOT}"
+    - name: install clang-12
       run: |
         wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
         sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-12 main'
         sudo apt update
-        sudo apt install libboost-all-dev clang-12 libomp-12-dev clang-tidy-12
+        sudo apt install clang-12 libomp-12-dev clang-tidy-12
     - name: vcpkg install dependencies
       run: |
         vcpkg install catch2 fmt vc tinyobjloader
@@ -177,16 +186,21 @@ jobs:
           sudo apt install intel-oneapi-compiler-dpcpp-cpp
       - name: install boost
         run: |
-          sudo apt update
-          sudo apt install libboost-all-dev
-      - name: install ${{ matrix.install_extra }}
-        if: matrix.install_extra
+          BOOST_VERSION=1.74.0
+          BOOST_ARCHIVE=boost_${BOOST_VERSION//./_}.tar.bz2
+          wget -q https://boostorg.jfrog.io/artifactory/main/release/$BOOST_VERSION/source/$BOOST_ARCHIVE
+          tar -xf $BOOST_ARCHIVE
+          rm $BOOST_ARCHIVE
+          mv boost_${BOOST_VERSION//./_} "${BOOST_ROOT}"
+      - name: install extras
+        if: ${{ matrix.install_extra }} 
         run: |
+          sudo apt update
           sudo apt install ${{ matrix.install_extra }}
       - name: vcpkg install dependencies
         run: |
           # vcpkg fails to build with Intel compilers
-          if [ ${{ matrix.intel }} ]; then unset CXX; fi
+          if [ ${{ matrix.install_oneapi }} ]; then unset CXX; fi
           vcpkg install catch2 fmt vc tinyobjloader
       - name: download CUDA 11
         if: matrix.cuda_url
@@ -198,7 +212,7 @@ jobs:
           sudo sh cuda_installer.run --silent --toolkit
       - name: install alpaka
         run: |
-          if [ ${{ matrix.intel }} ]; then source /opt/intel/oneapi/setvars.sh; fi
+          if [ ${{ matrix.install_oneapi }} ]; then source /opt/intel/oneapi/setvars.sh; fi
           git clone https://github.com/alpaka-group/alpaka.git
           mkdir alpaka/build
           cd alpaka/build
@@ -206,7 +220,7 @@ jobs:
           sudo cmake --install .
       - name: cmake
         run: |
-          if [ ${{ matrix.intel }} ]; then source /opt/intel/oneapi/setvars.sh; fi
+          if [ ${{ matrix.install_oneapi }} ]; then source /opt/intel/oneapi/setvars.sh; fi
           mkdir build
           cd build
           CUDACXX=(`echo /usr/local/cuda-*/bin/nvcc`)
@@ -217,18 +231,17 @@ jobs:
           cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DLLAMA_ENABLE_ASAN_FOR_TESTS=ON -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLE=${{ !matrix.cuda }} -DALPAKA_ACC_GPU_CUDA_ENABLE=${{ matrix.cuda }} -DALPAKA_CXX_STANDARD=17 -DCMAKE_CUDA_COMPILER=$CUDACXX -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
       - name: build tests + examples
         run: |
-          if [ ${{ matrix.intel }} ]; then source /opt/intel/oneapi/setvars.sh; fi
+          if [ ${{ matrix.install_oneapi }} ]; then source /opt/intel/oneapi/setvars.sh; fi
           cmake --build build -j $THREADS
       - name: run tests
         run: |
-          if [ ${{ matrix.intel }} ]; then source /opt/intel/oneapi/setvars.sh; fi
+          if [ ${{ matrix.install_oneapi }} ]; then source /opt/intel/oneapi/setvars.sh; fi
           build/tests
 
   build-windows:
     runs-on: windows-latest
     env:
       VCPKG_DEFAULT_TRIPLET: x64-windows
-      BOOST_ROOT: C:\hostedtoolcache\windows\Boost\1.75.0\x86_64
     steps:
     - uses: actions/checkout@v2
     - name: install vcpkg
@@ -239,7 +252,7 @@ jobs:
     - name: install boost
       run: |
         # From: https://github.com/actions/virtual-environments/issues/2667
-        $url = "https://sourceforge.net/projects/boost/files/boost-binaries/1.75.0/boost_1_75_0-msvc-14.1-64.exe"
+        $url = "https://sourceforge.net/projects/boost/files/boost-binaries/1.74.0/boost_1_74_0-msvc-14.1-64.exe"
         (New-Object System.Net.WebClient).DownloadFile($url, "$env:TEMP\boost.exe")
         Start-Process -Wait -FilePath "$env:TEMP\boost.exe" "/SILENT","/SP-","/SUPPRESSMSGBOXES","/DIR=$env:BOOST_ROOT"
     - name: vcpkg install dependencies
