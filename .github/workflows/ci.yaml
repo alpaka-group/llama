@@ -18,7 +18,8 @@ jobs:
 
   clang-tidy:
     runs-on: ubuntu-latest
-    env: {CXX: clang++-12}
+    env:
+      CXX: clang++-12
     steps:
     - uses: actions/checkout@v2
     - name: apt install boost and clang-12
@@ -102,92 +103,97 @@ jobs:
 
   build-ubuntu:
     runs-on: ubuntu-latest
-    env: ${{ matrix.env }}
+    env:
+      CXX: ${{ matrix.cxx }}
     name: ${{ matrix.name }}
     strategy:
       fail-fast: false
       matrix:
         include:
           - name: build-ubuntu-gcc9
-            env: {CXX: g++-9}
-          #- name: build-ubuntu-gcc9-cuda11.0
-          #  env: {CXX: g++-9, CUDA_URL: "https://developer.download.nvidia.com/compute/cuda/11.0.3/local_installers/cuda_11.0.3_450.51.06_linux.run"}
-          #  cuda: true
-          #- name: build-ubuntu-gcc9-cuda11.1
-          #  env: {CXX: g++-9, CUDA_URL: "https://developer.download.nvidia.com/compute/cuda/11.1.1/local_installers/cuda_11.1.1_455.32.00_linux.run"}
-          #  cuda: true
+            cxx: g++-9
           - name: build-ubuntu-gcc9-cuda11.2
-            env: {CXX: g++-9, CUDA_URL: "https://developer.download.nvidia.com/compute/cuda/11.2.1/local_installers/cuda_11.2.1_460.32.03_linux.run"}
-            cuda: true
+            cxx: g++-9
+            cuda_url: https://developer.download.nvidia.com/compute/cuda/11.2.1/local_installers/cuda_11.2.1_460.32.03_linux.run
           - name: build-ubuntu-gcc9-cuda11.3
-            env: {CXX: g++-9, CUDA_URL: "https://developer.download.nvidia.com/compute/cuda/11.3.1/local_installers/cuda_11.3.1_465.19.01_linux.run"}
-            cuda: true
+            cxx: g++-9
+            cuda_url: https://developer.download.nvidia.com/compute/cuda/11.3.1/local_installers/cuda_11.3.1_465.19.01_linux.run
           - name: build-ubuntu-gcc9-cuda11.4
-            env: {CXX: g++-9, CUDA_URL: "https://developer.download.nvidia.com/compute/cuda/11.4.1/local_installers/cuda_11.4.1_470.57.02_linux.run"}
-            cuda: true
+            cxx: g++-9
+            cuda_url: https://developer.download.nvidia.com/compute/cuda/11.4.1/local_installers/cuda_11.4.1_470.57.02_linux.run
           - name: build-ubuntu-gcc10
-            env: {CXX: g++-10}
+            cxx: g++-10
           - name: build-ubuntu-gcc11
-            env: {CXX: g++-11, INSTALL_EXTRA: g++-11}
-            add-toolchain-repo: true
+            cxx: g++-11
+            install_extra: g++-11
+            add_toolchain_repo: true
           - name: build-ubuntu-gcc11-cuda11.4
-            env: {CXX: g++-11, INSTALL_EXTRA: g++-11, CUDA_URL: "https://developer.download.nvidia.com/compute/cuda/11.4.1/local_installers/cuda_11.4.1_470.57.02_linux.run"}
-            add-toolchain-repo: true
-            cuda: true
+            cxx: g++-11
+            install_extra: g++-11
+            cuda_url: https://developer.download.nvidia.com/compute/cuda/11.4.1/local_installers/cuda_11.4.1_470.57.02_linux.run
+            add_toolchain_repo: true
           - name: build-ubuntu-gcc11-cuda11.5
-            env: {CXX: g++-11, INSTALL_EXTRA: g++-11, CUDA_URL: "https://developer.download.nvidia.com/compute/cuda/11.5.0/local_installers/cuda_11.5.0_495.29.05_linux.run"}
-            add-toolchain-repo: true
-            cuda: true
+            cxx: g++-11
+            install_extra: g++-11
+            cuda_url: https://developer.download.nvidia.com/compute/cuda/11.5.0/local_installers/cuda_11.5.0_495.29.05_linux.run
+            add_toolchain_repo: true
           - name: build-ubuntu-clang10
-            env: {CXX: clang++-10}
+            cxx: clang++-10
           - name: build-ubuntu-clang11
-            env: {CXX: clang++-11, INSTALL_EXTRA: clang-11}
+            cxx: clang++-11
+            install_extra: clang-11
           - name: build-ubuntu-clang12
-            env: {CXX: clang++-12, INSTALL_EXTRA: clang-12 libomp-12-dev}
-            add-llvm-repo: true
+            cxx: clang++-12
+            install_extra: clang-12 libomp-12-dev
+            add_llvm_repo: true
           - name: build-ubuntu-clang13
-            env: {CXX: clang++-13, INSTALL_EXTRA: clang-13 libomp-13-dev}
-            add-llvm-repo: true
+            cxx: clang++-13
+            install_extra: clang-13 libomp-13-dev
+            add_llvm_repo: true
           - name: build-ubuntu-icpx
-            env: {CXX: icpx}
-            intel: true
+            cxx: icpx
+            install_oneapi: true
 
     steps:
       - uses: actions/checkout@v2
       - name: add ubuntu toolchain repo
-        if: ${{ matrix.add-toolchain-repo }}
+        if: matrix.add_toolchain_repo
         run: |
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test
       - name: add LLVM APT repo
-        if: ${{ matrix.add-llvm-repo }}
+        if: matrix.add_llvm_repo
         run: |
           wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
           sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal main'
           sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-12 main'
           sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-13 main'
       - name: install OneAPI
-        if: ${{ matrix.intel }}
+        if: matrix.install_oneapi
         run: |
           wget https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
           sudo apt-key add GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
           sudo add-apt-repository "deb https://apt.repos.intel.com/oneapi all main"
           sudo apt update
-          sudo apt install intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic
+          sudo apt install intel-oneapi-compiler-dpcpp-cpp
       - name: install boost
         run: |
           sudo apt update
-          sudo apt install libboost-all-dev $INSTALL_EXTRA
+          sudo apt install libboost-all-dev
+      - name: install ${{ matrix.install_extra }}
+        if: matrix.install_extra
+        run: |
+          sudo apt install ${{ matrix.install_extra }}
       - name: vcpkg install dependencies
         run: |
           # vcpkg fails to build with Intel compilers
           if [ ${{ matrix.intel }} ]; then unset CXX; fi
           vcpkg install catch2 fmt vc tinyobjloader
       - name: download CUDA 11
-        if: ${{ matrix.cuda }}
+        if: matrix.cuda_url
         run: |
-          wget --no-verbose -O cuda_installer.run $CUDA_URL
+          wget --no-verbose -O cuda_installer.run ${{ matrix.cuda_url }}
       - name: install CUDA 11
-        if: ${{ matrix.cuda }}
+        if: matrix.cuda
         run: |
           sudo sh cuda_installer.run --silent --toolkit
       - name: install alpaka
@@ -197,7 +203,7 @@ jobs:
           mkdir alpaka/build
           cd alpaka/build
           cmake .. -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
-          sudo cmake --build . --target install
+          sudo cmake --install .
       - name: cmake
         run: |
           if [ ${{ matrix.intel }} ]; then source /opt/intel/oneapi/setvars.sh; fi
@@ -246,7 +252,7 @@ jobs:
         mkdir alpaka/build
         cd alpaka/build
         cmake .. "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
-        cmake --build . --target install --config $env:CONFIG
+        cmake --install . --config $env:CONFIG
     - name: cmake
       run: |
         mkdir build
@@ -267,7 +273,8 @@ jobs:
         include:
           - os: macos-10.15
           - os: macos-11
-    env: {CXX: clang++}
+    env:
+      CXX: clang++
     steps:
       - uses: actions/checkout@v2
       - name: brew install dependencies
