@@ -112,19 +112,14 @@ jobs:
             env: {CXX: g++-9}
           #- name: build-ubuntu-gcc9-cuda11.0
           #  env: {CXX: g++-9, CUDA_URL: "https://developer.download.nvidia.com/compute/cuda/11.0.3/local_installers/cuda_11.0.3_450.51.06_linux.run"}
-          #  cuda: true
           #- name: build-ubuntu-gcc9-cuda11.1
           #  env: {CXX: g++-9, CUDA_URL: "https://developer.download.nvidia.com/compute/cuda/11.1.1/local_installers/cuda_11.1.1_455.32.00_linux.run"}
-          #  cuda: true
           - name: build-ubuntu-gcc9-cuda11.2
             env: {CXX: g++-9, CUDA_URL: "https://developer.download.nvidia.com/compute/cuda/11.2.1/local_installers/cuda_11.2.1_460.32.03_linux.run"}
-            cuda: true
           - name: build-ubuntu-gcc9-cuda11.3
             env: {CXX: g++-9, CUDA_URL: "https://developer.download.nvidia.com/compute/cuda/11.3.1/local_installers/cuda_11.3.1_465.19.01_linux.run"}
-            cuda: true
           - name: build-ubuntu-gcc9-cuda11.4
             env: {CXX: g++-9, CUDA_URL: "https://developer.download.nvidia.com/compute/cuda/11.4.1/local_installers/cuda_11.4.1_470.57.02_linux.run"}
-            cuda: true
           - name: build-ubuntu-gcc10
             env: {CXX: g++-10}
           - name: build-ubuntu-gcc11
@@ -133,11 +128,9 @@ jobs:
           - name: build-ubuntu-gcc11-cuda11.4
             env: {CXX: g++-11, INSTALL_EXTRA: g++-11, CUDA_URL: "https://developer.download.nvidia.com/compute/cuda/11.4.1/local_installers/cuda_11.4.1_470.57.02_linux.run"}
             add-toolchain-repo: true
-            cuda: true
           - name: build-ubuntu-gcc11-cuda11.5
             env: {CXX: g++-11, INSTALL_EXTRA: g++-11, CUDA_URL: "https://developer.download.nvidia.com/compute/cuda/11.5.0/local_installers/cuda_11.5.0_495.29.05_linux.run"}
             add-toolchain-repo: true
-            cuda: true
           - name: build-ubuntu-clang10
             env: {CXX: clang++-10}
           - name: build-ubuntu-clang11
@@ -150,29 +143,29 @@ jobs:
             add-llvm-repo: true
           - name: build-ubuntu-icpx
             env: {CXX: icpx}
-            intel: true
+            install_oneapi: true
 
     steps:
       - uses: actions/checkout@v2
       - name: add ubuntu toolchain repo
-        if: ${{ matrix.add-toolchain-repo }}
+        if: matrix.add-toolchain-repo
         run: |
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test
       - name: add LLVM APT repo
-        if: ${{ matrix.add-llvm-repo }}
+        if: matrix.add-llvm-repo
         run: |
           wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
           sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal main'
           sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-12 main'
           sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-13 main'
       - name: install OneAPI
-        if: ${{ matrix.intel }}
+        if: matrix.install_oneapi
         run: |
           wget https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
           sudo apt-key add GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
           sudo add-apt-repository "deb https://apt.repos.intel.com/oneapi all main"
           sudo apt update
-          sudo apt install intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic
+          sudo apt install intel-oneapi-compiler-dpcpp-cpp
       - name: install boost
         run: |
           sudo apt update
@@ -183,11 +176,11 @@ jobs:
           if [ ${{ matrix.intel }} ]; then unset CXX; fi
           vcpkg install catch2 fmt vc tinyobjloader
       - name: download CUDA 11
-        if: ${{ matrix.cuda }}
+        if: env.CUDA_URL
         run: |
           wget --no-verbose -O cuda_installer.run $CUDA_URL
       - name: install CUDA 11
-        if: ${{ matrix.cuda }}
+        if: matrix.cuda
         run: |
           sudo sh cuda_installer.run --silent --toolkit
       - name: install alpaka
@@ -197,7 +190,7 @@ jobs:
           mkdir alpaka/build
           cd alpaka/build
           cmake .. -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
-          sudo cmake --build . --target install
+          sudo cmake --install .
       - name: cmake
         run: |
           if [ ${{ matrix.intel }} ]; then source /opt/intel/oneapi/setvars.sh; fi
@@ -246,7 +239,7 @@ jobs:
         mkdir alpaka/build
         cd alpaka/build
         cmake .. "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
-        cmake --build . --target install --config $env:CONFIG
+        cmake --install . --config $env:CONFIG
     - name: cmake
       run: |
         mkdir build
