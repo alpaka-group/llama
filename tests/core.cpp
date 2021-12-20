@@ -394,3 +394,15 @@ TEST_CASE("CopyConst")
     STATIC_REQUIRE(std::is_same_v<llama::CopyConst<int, const float>, const float>);
     STATIC_REQUIRE(std::is_same_v<llama::CopyConst<const int, const float>, const float>);
 }
+
+TEST_CASE("structName")
+{
+    CHECK(llama::structName<int>() == "int");
+    CHECK(llama::structName(int{}) == "int");
+    CHECK(llama::structName<tag::A>() == "A");
+    CHECK(llama::structName(tag::A{}) == "A");
+    CHECK(llama::structName<tag::Normal>() == "Normal");
+    CHECK(llama::structName(tag::Normal{}) == "Normal");
+    CHECK(llama::structName(std::string{}) == "basic_string<char,char_traits<char>,allocator<char>>");
+    CHECK(llama::structName(Vec3D{}) == "Record<Field<X,double>,Field<Y,double>,Field<Z,double>>");
+}
