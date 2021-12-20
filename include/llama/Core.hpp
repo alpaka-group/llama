@@ -520,12 +520,26 @@ namespace llama
     inline constexpr std::size_t offsetOf
         = flatOffsetOf<FlatRecordDim<RecordDim>, flatRecordCoord<RecordDim, RecordCoord>, Align>;
 
-    template<typename S>
-    auto structName(S = {}) -> std::string
+    template<typename T>
+    auto structName(T = {}) -> std::string
     {
-        auto s = boost::core::demangle(typeid(S).name());
+        auto s = boost::core::demangle(typeid(T).name());
         if(const auto pos = s.rfind(':'); pos != std::string::npos)
             s = s.substr(pos + 1);
+        return s;
+    }
+
+    template<template<typename...> typename L, typename T0, typename... T>
+    auto structName(L<T0, T...> = {}) -> std::string
+    {
+        auto s = boost::core::demangle(typeid(L<T0, T...>).name());
+        if(const auto pos = s.find('<'); pos != std::string::npos)
+            s = s.substr(0, pos);
+        if(const auto pos = s.rfind(':'); pos != std::string::npos)
+            s = s.substr(pos + 1);
+        s += "<" + structName(T0{});
+        ((s += "," + structName(T{})), ...);
+        s += ">";
         return s;
     }
 
