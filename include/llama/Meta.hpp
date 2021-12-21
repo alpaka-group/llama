@@ -65,5 +65,25 @@ namespace llama
 
         template<typename FromList, template<auto...> class ToList>
         using mp_unwrap_values_into = typename mp_unwrap_values_into_impl<FromList, ToList>::type;
+
+        template<typename E, typename... Args>
+        struct ReplacePlaceholdersImpl
+        {
+            using type = E;
+        };
+        template<std::size_t I, typename... Args>
+        struct ReplacePlaceholdersImpl<boost::mp11::mp_arg<I>, Args...>
+        {
+            using type = boost::mp11::mp_at_c<boost::mp11::mp_list<Args...>, I>;
+        };
+
+        template<template<typename...> typename E, typename... Ts, typename... Args>
+        struct ReplacePlaceholdersImpl<E<Ts...>, Args...>
+        {
+            using type = E<typename ReplacePlaceholdersImpl<Ts, Args...>::type...>;
+        };
     } // namespace internal
+
+    template<typename Expression, typename... Args>
+    using ReplacePlaceholders = typename internal::ReplacePlaceholdersImpl<Expression, Args...>::type;
 } // namespace llama
