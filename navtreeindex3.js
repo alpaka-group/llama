@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"structllama_1_1internal_1_1GetTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01Fir6e3f04ac1206e0b3d3bf8dfbb0ac429a.html":[2,0,1,1,16],
 "structllama_1_1internal_1_1GetTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01Fir6e3f04ac1206e0b3d3bf8dfbb0ac429a.html#a4dd8ee60e85fdff633569b6e9da2e9e5":[2,0,1,1,16,2],
 "structllama_1_1internal_1_1GetTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01Fir6e3f04ac1206e0b3d3bf8dfbb0ac429a.html#a5983bacdbded6a1b2f4dd691df440aeb":[2,0,1,1,16,1],
 "structllama_1_1internal_1_1GetTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01Fir6e3f04ac1206e0b3d3bf8dfbb0ac429a.html#a62e30b0f8e1b2a3b5967ffe1725d2e38":[2,0,1,1,16,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#a7b307949316e4807ca30bf40b76cc118":[2,0,1,2,0,0,2],
 "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#aa22260f1f6da2c6e2535c62543887f1f":[2,0,1,2,0,0,3],
 "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html":[2,0,1,2,0,1],
-"structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html#a5750f27a17d97cc586db66dc8dab38e1":[2,0,1,2,0,1,3],
-"structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html#a63cc9ba0b0c40e0376b30ea5840db7d7":[2,0,1,2,0,1,2]
+"structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html#a5750f27a17d97cc586db66dc8dab38e1":[2,0,1,2,0,1,3]
 };

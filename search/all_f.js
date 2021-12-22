@@ -17,7 +17,7 @@ var searchData=
   ['storageblobs_453',['storageBlobs',['../structllama_1_1View.html#a176b21d204881a89dc8488e62fcb8dd6',1,'llama::View']]],
   ['store_454',['store',['../structllama_1_1VirtualRecord.html#a9cba5ab8df2e439c1ae9b75eec5666d7',1,'llama::VirtualRecord']]],
   ['storedparentview_455',['StoredParentView',['../structllama_1_1VirtualView.html#a21144d5af8d33763e98fe2e1849cf9cf',1,'llama::VirtualView']]],
-  ['structname_456',['structName',['../namespacellama.html#a86a72929fc8c71b9aa2b514a74ab34eb',1,'llama']]],
+  ['structname_456',['structName',['../namespacellama.html#a5ff901e3012935d38350c0f68e044fe5',1,'llama::structName(T={}) -&gt; std::string'],['../namespacellama.html#aeb3d43be3a5b6ce8de6469edd28d4a02',1,'llama::structName(L&lt; T0, T... &gt;={}) -&gt; std::string']]],
   ['sumchildrensmallerthan_457',['sumChildrenSmallerThan',['../namespacellama_1_1mapping_1_1tree_1_1internal.html#ac64ac187e14ff4540b332b55e4fdc7f7',1,'llama::mapping::tree::internal']]],
   ['swap_458',['swap',['../structllama_1_1Vector.html#a83f69184d753889d37b68b9169a34113',1,'llama::Vector::swap()'],['../structllama_1_1VirtualRecord.html#a8d445e33790c005518c8400be083965e',1,'llama::VirtualRecord::swap()'],['../namespacellama.html#af0d8ff2d635e29b9e259af59fe796741',1,'llama::swap()']]]
 ];

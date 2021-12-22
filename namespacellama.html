@@ -300,9 +300,12 @@ Functions</h2></td></tr>
 <tr class="memitem:ab9c5c0a1ca0698a8871689b9924736ac"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ab9c5c0a1ca0698a8871689b9924736ac">roundUpToMultiple</a> (Integral n, Integral mult) -&gt; Integral</td></tr>
 <tr class="memdesc:ab9c5c0a1ca0698a8871689b9924736ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the integral n rounded up to be a multiple of mult.  <a href="namespacellama.html#ab9c5c0a1ca0698a8871689b9924736ac">More...</a><br /></td></tr>
 <tr class="separator:ab9c5c0a1ca0698a8871689b9924736ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86a72929fc8c71b9aa2b514a74ab34eb"><td class="memTemplParams" colspan="2">template&lt;typename S &gt; </td></tr>
-<tr class="memitem:a86a72929fc8c71b9aa2b514a74ab34eb"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a86a72929fc8c71b9aa2b514a74ab34eb">structName</a> (S={}) -&gt; std::string</td></tr>
-<tr class="separator:a86a72929fc8c71b9aa2b514a74ab34eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ff901e3012935d38350c0f68e044fe5"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a5ff901e3012935d38350c0f68e044fe5"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a5ff901e3012935d38350c0f68e044fe5">structName</a> (T={}) -&gt; std::string</td></tr>
+<tr class="separator:a5ff901e3012935d38350c0f68e044fe5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb3d43be3a5b6ce8de6469edd28d4a02"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename... &gt; typename L, typename T0 , typename... T&gt; </td></tr>
+<tr class="memitem:aeb3d43be3a5b6ce8de6469edd28d4a02"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aeb3d43be3a5b6ce8de6469edd28d4a02">structName</a> (L&lt; T0, T... &gt;={}) -&gt; std::string</td></tr>
+<tr class="separator:aeb3d43be3a5b6ce8de6469edd28d4a02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa73dcab7bd83ce896605808b5a5c4020"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , std::size_t... Coords&gt; </td></tr>
 <tr class="memitem:aa73dcab7bd83ce896605808b5a5c4020"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aa73dcab7bd83ce896605808b5a5c4020">recordCoordTags</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords... &gt;) -&gt; std::string</td></tr>
 <tr class="memdesc:aa73dcab7bd83ce896605808b5a5c4020"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the tags interspersed by '.' represented by the given record coord in the given record dimension.  <a href="namespacellama.html#aa73dcab7bd83ce896605808b5a5c4020">More...</a><br /></td></tr>
@@ -571,7 +574,7 @@ template&lt;typename FromT , typename ToT &gt; </div>
 
 <p>Alias for ToT, adding <code>const</code> if FromT is const qualified. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00681">681</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00695">695</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -749,7 +752,7 @@ template&lt;typename RecordDimA , typename RecordDimB &gt; </div>
 
 <p>Creates a merged record dimension, where duplicated, nested fields are unified. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00653">653</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00667">667</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -828,7 +831,7 @@ template&lt;typename RecordDim , template&lt; typename &gt; typename FieldTypeFu
 </div><div class="memdoc">
 <p>Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to the original leaf field's type. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00587">587</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00601">601</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -2340,7 +2343,7 @@ template&lt;typename RecordDim , std::size_t... Coords&gt; </div>
 
 <p>Returns the tags interspersed by '.' represented by the given record coord in the given record dimension. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00657">657</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00671">671</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -2387,18 +2390,41 @@ template&lt;typename Integral &gt; </div>
 
 </div>
 </div>
-<a id="a86a72929fc8c71b9aa2b514a74ab34eb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a86a72929fc8c71b9aa2b514a74ab34eb">&#9670;&nbsp;</a></span>structName()</h2>
+<a id="aeb3d43be3a5b6ce8de6469edd28d4a02"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb3d43be3a5b6ce8de6469edd28d4a02">&#9670;&nbsp;</a></span>structName() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename S &gt; </div>
+template&lt;template&lt; typename... &gt; typename L, typename T0 , typename... T&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">auto llama::structName </td>
           <td>(</td>
-          <td class="paramtype">S&#160;</td>
+          <td class="paramtype">L&lt; T0, T... &gt;&#160;</td>
+          <td class="paramname"> = <code>{}</code></td><td>)</td>
+          <td> -&gt; std::string
+    </td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00533">533</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a5ff901e3012935d38350c0f68e044fe5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ff901e3012935d38350c0f68e044fe5">&#9670;&nbsp;</a></span>structName() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">auto llama::structName </td>
+          <td>(</td>
+          <td class="paramtype">T&#160;</td>
           <td class="paramname"> = <code>{}</code></td><td>)</td>
           <td> -&gt; std::string
     </td>
@@ -3455,7 +3481,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Sat Dec 18 2021 23:06:10 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Dec 22 2021 12:54:29 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
