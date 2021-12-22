@@ -150,6 +150,12 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1mp__unwrap__values__into__impl_3_01FromList_3_01Values_8_8_8_01_4_00_01ToList_01_4.html">llama::internal::mp_unwrap_values_into_impl&lt; FromList&lt; Values... &gt;, ToList &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1ReplacePlaceholdersImpl.html">llama::internal::ReplacePlaceholdersImpl&lt; E, Args &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1ReplacePlaceholdersImpl_3_01boost_1_1mp11_1_1mp__arg_3_01I_01_4_00_01Args_8_8_8_01_4.html">llama::internal::ReplacePlaceholdersImpl&lt; boost::mp11::mp_arg&lt; I &gt;, Args... &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1ReplacePlaceholdersImpl_3_01E_3_01Ts_8_8_8_01_4_00_01Args_8_8_8_01_4.html">llama::internal::ReplacePlaceholdersImpl&lt; E&lt; Ts... &gt;, Args... &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
@@ -172,6 +178,9 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a81e3783dd94e3a1b003f955aaacf49d6"><td class="memTemplParams" colspan="2">template&lt;typename FromList , template&lt; auto... &gt; class ToList&gt; </td></tr>
 <tr class="memitem:a81e3783dd94e3a1b003f955aaacf49d6"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a81e3783dd94e3a1b003f955aaacf49d6">llama::internal::mp_unwrap_values_into</a> = typename mp_unwrap_values_into_impl&lt; FromList, ToList &gt;::type</td></tr>
 <tr class="separator:a81e3783dd94e3a1b003f955aaacf49d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a533ad08f0a1fa09005088a13a6b59040"><td class="memTemplParams" colspan="2">template&lt;typename Expression , typename... Args&gt; </td></tr>
+<tr class="memitem:a533ad08f0a1fa09005088a13a6b59040"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a533ad08f0a1fa09005088a13a6b59040">llama::ReplacePlaceholders</a> = typename internal::ReplacePlaceholdersImpl&lt; Expression, Args... &gt;::type</td></tr>
+<tr class="separator:a533ad08f0a1fa09005088a13a6b59040"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -179,7 +188,7 @@ Typedefs</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Meta_8hpp.html">Meta.hpp</a></li>
-    <li class="footer">Generated on Wed Dec 22 2021 16:01:28 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Dec 22 2021 16:02:07 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

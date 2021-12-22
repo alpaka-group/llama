@@ -1,5 +1,12 @@
 var NAVTREEINDEX4 =
 {
+"structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html":[2,0,1,2,0,0],
+"structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#a27e3b4c6a4802e06eac825ce5707ab64":[2,0,1,2,0,0,0],
+"structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#a43815384d3524ef7b1428e9c77b84858":[2,0,1,2,0,0,1],
+"structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#a7b307949316e4807ca30bf40b76cc118":[2,0,1,2,0,0,2],
+"structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#aa22260f1f6da2c6e2535c62543887f1f":[2,0,1,2,0,0,3],
+"structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html":[2,0,1,2,0,1],
+"structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html#a5750f27a17d97cc586db66dc8dab38e1":[2,0,1,2,0,1,3],
 "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html#a63cc9ba0b0c40e0376b30ea5840db7d7":[2,0,1,2,0,1,2],
 "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html#ae0a6a8fe58ec6a43ed4079fb06ecb884":[2,0,1,2,0,1,1],
 "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html#afeecbea97651912f3acd21d694b19329":[2,0,1,2,0,1,0],

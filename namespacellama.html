@@ -217,6 +217,9 @@ Typedefs</h2></td></tr>
 <tr class="memitem:aa7d11eb31b39aeb9471429ced9d7a484"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aa7d11eb31b39aeb9471429ced9d7a484">CopyConst</a> = std::conditional_t&lt; std::is_const_v&lt; FromT &gt;, const ToT, ToT &gt;</td></tr>
 <tr class="memdesc:aa7d11eb31b39aeb9471429ced9d7a484"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alias for ToT, adding <code>const</code> if FromT is const qualified.  <a href="namespacellama.html#aa7d11eb31b39aeb9471429ced9d7a484">More...</a><br /></td></tr>
 <tr class="separator:aa7d11eb31b39aeb9471429ced9d7a484"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a533ad08f0a1fa09005088a13a6b59040"><td class="memTemplParams" colspan="2">template&lt;typename Expression , typename... Args&gt; </td></tr>
+<tr class="memitem:a533ad08f0a1fa09005088a13a6b59040"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a533ad08f0a1fa09005088a13a6b59040">ReplacePlaceholders</a> = typename <a class="el" href="structllama_1_1internal_1_1ReplacePlaceholdersImpl.html">internal::ReplacePlaceholdersImpl</a>&lt; Expression, Args... &gt;::type</td></tr>
+<tr class="separator:a533ad08f0a1fa09005088a13a6b59040"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad95912a49a83091fde091a4e2d9a4118"><td class="memTemplParams" colspan="2">template&lt;typename L &gt; </td></tr>
 <tr class="memitem:ad95912a49a83091fde091a4e2d9a4118"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ad95912a49a83091fde091a4e2d9a4118">RecordCoordFromList</a> = <a class="el" href="namespacellama_1_1internal.html#a81e3783dd94e3a1b003f955aaacf49d6">internal::mp_unwrap_values_into</a>&lt; L, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> &gt;</td></tr>
 <tr class="memdesc:ad95912a49a83091fde091a4e2d9a4118"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a type list of integral constants into a <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>.  <a href="namespacellama.html#ad95912a49a83091fde091a4e2d9a4118">More...</a><br /></td></tr>
@@ -813,6 +816,24 @@ template&lt;typename L &gt; </div>
 <p>Converts a type list of integral constants into a <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>. </p>
 
 <p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00101">101</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a533ad08f0a1fa09005088a13a6b59040"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a533ad08f0a1fa09005088a13a6b59040">&#9670;&nbsp;</a></span>ReplacePlaceholders</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Expression , typename... Args&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama.html#a533ad08f0a1fa09005088a13a6b59040">llama::ReplacePlaceholders</a> = typedef typename <a class="el" href="structllama_1_1internal_1_1ReplacePlaceholdersImpl.html">internal::ReplacePlaceholdersImpl</a>&lt;Expression, Args...&gt;::type</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Meta_8hpp_source.html#l00088">88</a> of file <a class="el" href="Meta_8hpp_source.html">Meta.hpp</a>.</p>
 
 </div>
 </div>
@@ -3481,7 +3502,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Wed Dec 22 2021 16:01:28 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Dec 22 2021 16:02:07 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
