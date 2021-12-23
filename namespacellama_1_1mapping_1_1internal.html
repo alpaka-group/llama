@@ -155,6 +155,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a5bdb3bce7b1c5dd3d2b2202be2f4166c"><td class="memTemplParams" colspan="2">template&lt;typename Integral &gt; </td></tr>
 <tr class="memitem:a5bdb3bce7b1c5dd3d2b2202be2f4166c"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a5bdb3bce7b1c5dd3d2b2202be2f4166c">repackFloat</a> (Integral inFloat, unsigned inMantissaBits, unsigned inExponentBits, unsigned outMantissaBits, unsigned outExponentBits) -&gt; Integral</td></tr>
 <tr class="separator:a5bdb3bce7b1c5dd3d2b2202be2f4166c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b646068d34ea7c565e412d470de2abc"><td class="memTemplParams" colspan="2">template&lt;typename E , typename M &gt; </td></tr>
+<tr class="memitem:a0b646068d34ea7c565e412d470de2abc"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a0b646068d34ea7c565e412d470de2abc">integBits</a> (E e, M m)</td></tr>
+<tr class="separator:a0b646068d34ea7c565e412d470de2abc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af82bc84df6926cd1cd56cd929c035aeb"><td class="memTemplParams" colspan="2">template&lt;auto E, auto M&gt; </td></tr>
+<tr class="memitem:af82bc84df6926cd1cd56cd929c035aeb"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#af82bc84df6926cd1cd56cd929c035aeb">integBits</a> (<a class="el" href="structllama_1_1internal_1_1BoxedValue.html">llama::internal::BoxedValue</a>&lt; <a class="el" href="namespacellama.html#a0af0304a902bcb5c5c90377ad751033a">Constant</a>&lt; E &gt;&gt;, <a class="el" href="structllama_1_1internal_1_1BoxedValue.html">llama::internal::BoxedValue</a>&lt; <a class="el" href="namespacellama.html#a0af0304a902bcb5c5c90377ad751033a">Constant</a>&lt; M &gt;&gt;)</td></tr>
+<tr class="separator:af82bc84df6926cd1cd56cd929c035aeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e7e517f779808ecc12e1549170d2c16"><td class="memTemplParams" colspan="2">template&lt;typename... Fields, std::size_t FirstCoord, std::size_t... Coords&gt; </td></tr>
 <tr class="memitem:a6e7e517f779808ecc12e1549170d2c16"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a6e7e517f779808ecc12e1549170d2c16">partitionRecordDim</a> (<a class="el" href="structllama_1_1Record.html">Record</a>&lt; Fields... &gt;, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; FirstCoord, Coords... &gt;)</td></tr>
 <tr class="separator:a6e7e517f779808ecc12e1549170d2c16"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -183,7 +189,7 @@ template&lt;typename A , typename B &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00134">134</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00138">138</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -201,7 +207,7 @@ template&lt;typename RecordDim &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00137">137</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00141">141</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -314,6 +320,70 @@ template&lt;typename RecordDim &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="a0b646068d34ea7c565e412d470de2abc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b646068d34ea7c565e412d470de2abc">&#9670;&nbsp;</a></span>integBits() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename E , typename M &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">auto llama::mapping::internal::integBits </td>
+          <td>(</td>
+          <td class="paramtype">E&#160;</td>
+          <td class="paramname"><em>e</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">M&#160;</td>
+          <td class="paramname"><em>m</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00085">85</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af82bc84df6926cd1cd56cd929c035aeb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af82bc84df6926cd1cd56cd929c035aeb">&#9670;&nbsp;</a></span>integBits() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;auto E, auto M&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">auto llama::mapping::internal::integBits </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1internal_1_1BoxedValue.html">llama::internal::BoxedValue</a>&lt; <a class="el" href="namespacellama.html#a0af0304a902bcb5c5c90377ad751033a">Constant</a>&lt; E &gt;&gt;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structllama_1_1internal_1_1BoxedValue.html">llama::internal::BoxedValue</a>&lt; <a class="el" href="namespacellama.html#a0af0304a902bcb5c5c90377ad751033a">Constant</a>&lt; M &gt;&gt;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00091">91</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a088d9be1b205572462914646311d2e2e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a088d9be1b205572462914646311d2e2e">&#9670;&nbsp;</a></span>partitionRecordDim() <span class="overload">[1/2]</span></h2>
 
@@ -425,7 +495,7 @@ template&lt;typename Integral &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00036">36</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00038">38</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -462,7 +532,7 @@ template&lt;typename RC , typename RecordCoordForMapping1 &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Wed Dec 22 2021 16:02:07 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Dec 23 2021 22:01:28 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -1,6 +1,8 @@
 var namespacellama_1_1internal =
 [
     [ "Assign", "structllama_1_1internal_1_1Assign.html", "structllama_1_1internal_1_1Assign" ],
+    [ "BoxedValue", "structllama_1_1internal_1_1BoxedValue.html", "structllama_1_1internal_1_1BoxedValue" ],
+    [ "BoxedValue< Constant< V >, I >", "structllama_1_1internal_1_1BoxedValue_3_01Constant_3_01V_01_4_00_01I_01_4.html", "structllama_1_1internal_1_1BoxedValue_3_01Constant_3_01V_01_4_00_01I_01_4" ],
     [ "DivideAssign", "structllama_1_1internal_1_1DivideAssign.html", "structllama_1_1internal_1_1DivideAssign" ],
     [ "FindFieldByTag", "structllama_1_1internal_1_1FindFieldByTag.html", "structllama_1_1internal_1_1FindFieldByTag" ],
     [ "FlattenRecordDimImpl", "structllama_1_1internal_1_1FlattenRecordDimImpl.html", "structllama_1_1internal_1_1FlattenRecordDimImpl" ],

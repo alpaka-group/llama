@@ -217,6 +217,10 @@ Typedefs</h2></td></tr>
 <tr class="memitem:aa7d11eb31b39aeb9471429ced9d7a484"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aa7d11eb31b39aeb9471429ced9d7a484">CopyConst</a> = std::conditional_t&lt; std::is_const_v&lt; FromT &gt;, const ToT, ToT &gt;</td></tr>
 <tr class="memdesc:aa7d11eb31b39aeb9471429ced9d7a484"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alias for ToT, adding <code>const</code> if FromT is const qualified.  <a href="namespacellama.html#aa7d11eb31b39aeb9471429ced9d7a484">More...</a><br /></td></tr>
 <tr class="separator:aa7d11eb31b39aeb9471429ced9d7a484"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0af0304a902bcb5c5c90377ad751033a"><td class="memTemplParams" colspan="2">template&lt;auto V&gt; </td></tr>
+<tr class="memitem:a0af0304a902bcb5c5c90377ad751033a"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a0af0304a902bcb5c5c90377ad751033a">Constant</a> = std::integral_constant&lt; decltype(V), V &gt;</td></tr>
+<tr class="memdesc:a0af0304a902bcb5c5c90377ad751033a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used as template argument to specify a constant/compile-time value.  <a href="namespacellama.html#a0af0304a902bcb5c5c90377ad751033a">More...</a><br /></td></tr>
+<tr class="separator:a0af0304a902bcb5c5c90377ad751033a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a533ad08f0a1fa09005088a13a6b59040"><td class="memTemplParams" colspan="2">template&lt;typename Expression , typename... Args&gt; </td></tr>
 <tr class="memitem:a533ad08f0a1fa09005088a13a6b59040"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a533ad08f0a1fa09005088a13a6b59040">ReplacePlaceholders</a> = typename <a class="el" href="structllama_1_1internal_1_1ReplacePlaceholdersImpl.html">internal::ReplacePlaceholdersImpl</a>&lt; Expression, Args... &gt;::type</td></tr>
 <tr class="separator:a533ad08f0a1fa09005088a13a6b59040"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -558,6 +562,26 @@ template&lt;typename... RecordCoords&gt; </div>
 <p>Concatenate a set of <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>s. </p>
 
 <p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00105">105</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a0af0304a902bcb5c5c90377ad751033a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0af0304a902bcb5c5c90377ad751033a">&#9670;&nbsp;</a></span>Constant</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;auto V&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama.html#a0af0304a902bcb5c5c90377ad751033a">llama::Constant</a> = typedef std::integral_constant&lt;decltype(V), V&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Used as template argument to specify a constant/compile-time value. </p>
+
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00699">699</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3502,7 +3526,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Wed Dec 22 2021 16:02:07 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Dec 23 2021 22:01:28 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -18,6 +18,7 @@ var namespacellama_1_1mapping =
     [ "One", "structllama_1_1mapping_1_1One.html", "structllama_1_1mapping_1_1One" ],
     [ "PreconfiguredAoS", "structllama_1_1mapping_1_1PreconfiguredAoS.html", "structllama_1_1mapping_1_1PreconfiguredAoS" ],
     [ "PreconfiguredAoSoA", "structllama_1_1mapping_1_1PreconfiguredAoSoA.html", "structllama_1_1mapping_1_1PreconfiguredAoSoA" ],
+    [ "PreconfiguredBitPackedIntSoA", "structllama_1_1mapping_1_1PreconfiguredBitPackedIntSoA.html", "structllama_1_1mapping_1_1PreconfiguredBitPackedIntSoA" ],
     [ "PreconfiguredChangeType", "structllama_1_1mapping_1_1PreconfiguredChangeType.html", "structllama_1_1mapping_1_1PreconfiguredChangeType" ],
     [ "PreconfiguredSoA", "structllama_1_1mapping_1_1PreconfiguredSoA.html", "structllama_1_1mapping_1_1PreconfiguredSoA" ],
     [ "PreconfiguredSplit", "structllama_1_1mapping_1_1PreconfiguredSplit.html", "structllama_1_1mapping_1_1PreconfiguredSplit" ],

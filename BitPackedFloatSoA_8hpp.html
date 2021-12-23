@@ -92,6 +92,8 @@ $(document).ready(function(){initNavTree('BitPackedFloatSoA_8hpp.html',''); init
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="ProxyRefOpMixin_8hpp_source.html">../ProxyRefOpMixin.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Common_8hpp_source.html">Common.hpp</a>&quot;</code><br />
+<code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;climits&gt;</code><br />
 <code>#include &lt;cstdint&gt;</code><br />
 <code>#include &lt;cstring&gt;</code><br />
@@ -104,15 +106,29 @@ $(document).ready(function(){initNavTree('BitPackedFloatSoA_8hpp.html',''); init
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="BitPackedFloatSoA_8hpp__incl.png" border="0" usemap="#_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2BitPackedFloatSoA_8hpp" alt=""/></div>
 <map name="_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2BitPackedFloatSoA_8hpp" id="_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2BitPackedFloatSoA_8hpp">
-<area shape="rect" title=" " alt="" coords="255,5,471,61"/>
+<area shape="rect" title=" " alt="" coords="809,5,1025,61"/>
 <area shape="rect" href="ProxyRefOpMixin_8hpp.html" title=" " alt="" coords="5,184,180,211"/>
-<area shape="rect" href="BitPackedIntSoA_8hpp.html" title=" " alt="" coords="171,109,326,136"/>
-<area shape="rect" title=" " alt="" coords="210,184,277,211"/>
-<area shape="rect" title=" " alt="" coords="309,184,401,211"/>
-<area shape="rect" title=" " alt="" coords="401,109,467,136"/>
-<area shape="rect" title=" " alt="" coords="491,109,558,136"/>
-<area shape="rect" title=" " alt="" coords="582,109,641,136"/>
-<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="43,259,142,285"/>
+<area shape="rect" href="BitPackedIntSoA_8hpp.html" title=" " alt="" coords="622,109,777,136"/>
+<area shape="rect" title=" " alt="" coords="1075,408,1134,435"/>
+<area shape="rect" title=" " alt="" coords="273,408,365,435"/>
+<area shape="rect" href="Common_8hpp.html" title=" " alt="" coords="719,184,829,211"/>
+<area shape="rect" title=" " alt="" coords="833,259,899,285"/>
+<area shape="rect" title=" " alt="" coords="1053,109,1138,136"/>
+<area shape="rect" title=" " alt="" coords="1162,109,1229,136"/>
+<area shape="rect" title=" " alt="" coords="1253,109,1319,136"/>
+<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="366,483,465,509"/>
+<area shape="rect" href="Core_8hpp.html" title=" " alt="" coords="692,259,784,285"/>
+<area shape="rect" href="ArrayExtents_8hpp.html" title=" " alt="" coords="912,333,1047,360"/>
+<area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="938,408,1021,435"/>
+<area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="671,333,805,360"/>
+<area shape="rect" title=" " alt="" coords="357,333,543,360"/>
+<area shape="rect" title=" " alt="" coords="567,333,647,360"/>
+<area shape="rect" title=" " alt="" coords="829,333,887,360"/>
+<area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="806,408,889,435"/>
+<area shape="rect" title=" " alt="" coords="685,483,761,509"/>
+<area shape="rect" title=" " alt="" coords="820,483,875,509"/>
+<area shape="rect" title=" " alt="" coords="916,483,1043,509"/>
+<area shape="rect" title=" " alt="" coords="726,408,782,435"/>
 </map>
 </div>
 </div>
@@ -126,9 +142,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1FloatBitTraits_3_01double_01_4.html">llama::mapping::internal::FloatBitTraits&lt; double &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html">llama::mapping::internal::BitPackedFloatRef&lt; Float, StoredIntegralPointer &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html">llama::mapping::internal::BitPackedFloatRef&lt; Float, StoredIntegralPointer, VHExp, VHMan &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html">llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, LinearizeArrayDimsFunctor, StoredIntegral &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html">llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, StoredIntegral &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -145,6 +161,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a5bdb3bce7b1c5dd3d2b2202be2f4166c"><td class="memTemplParams" colspan="2">template&lt;typename Integral &gt; </td></tr>
 <tr class="memitem:a5bdb3bce7b1c5dd3d2b2202be2f4166c"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a5bdb3bce7b1c5dd3d2b2202be2f4166c">llama::mapping::internal::repackFloat</a> (Integral inFloat, unsigned inMantissaBits, unsigned inExponentBits, unsigned outMantissaBits, unsigned outExponentBits) -&gt; Integral</td></tr>
 <tr class="separator:a5bdb3bce7b1c5dd3d2b2202be2f4166c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b646068d34ea7c565e412d470de2abc"><td class="memTemplParams" colspan="2">template&lt;typename E , typename M &gt; </td></tr>
+<tr class="memitem:a0b646068d34ea7c565e412d470de2abc"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a0b646068d34ea7c565e412d470de2abc">llama::mapping::internal::integBits</a> (E e, M m)</td></tr>
+<tr class="separator:a0b646068d34ea7c565e412d470de2abc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af82bc84df6926cd1cd56cd929c035aeb"><td class="memTemplParams" colspan="2">template&lt;auto E, auto M&gt; </td></tr>
+<tr class="memitem:af82bc84df6926cd1cd56cd929c035aeb"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#af82bc84df6926cd1cd56cd929c035aeb">llama::mapping::internal::integBits</a> (<a class="el" href="structllama_1_1internal_1_1BoxedValue.html">llama::internal::BoxedValue</a>&lt; Constant&lt; E &gt;&gt;, <a class="el" href="structllama_1_1internal_1_1BoxedValue.html">llama::internal::BoxedValue</a>&lt; Constant&lt; M &gt;&gt;)</td></tr>
+<tr class="separator:af82bc84df6926cd1cd56cd929c035aeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -152,7 +174,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="BitPackedFloatSoA_8hpp.html">BitPackedFloatSoA.hpp</a></li>
-    <li class="footer">Generated on Wed Dec 22 2021 16:02:07 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Dec 23 2021 22:01:28 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

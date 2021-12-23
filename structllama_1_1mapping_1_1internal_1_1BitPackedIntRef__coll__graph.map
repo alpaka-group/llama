@@ -1,4 +1,5 @@
-<map id="llama::mapping::internal::BitPackedIntRef&lt; Integral, StoredIntegralPointer &gt;" name="llama::mapping::internal::BitPackedIntRef&lt; Integral, StoredIntegralPointer &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="261,13,463,69"/>
-<area shape="rect" id="node2" href="$structllama_1_1ProxyRefOpMixin.html" title=" " alt="" coords="5,5,213,76"/>
+<map id="llama::mapping::internal::BitPackedIntRef&lt; Integral, StoredIntegralPointer, VHBits &gt;" name="llama::mapping::internal::BitPackedIntRef&lt; Integral, StoredIntegralPointer, VHBits &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="269,28,500,84"/>
+<area shape="rect" id="node2" title=" " alt="" coords="80,5,147,32"/>
+<area shape="rect" id="node3" href="$structllama_1_1ProxyRefOpMixin.html" title=" " alt="" coords="5,57,221,127"/>
 </map>

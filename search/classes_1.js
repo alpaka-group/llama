@@ -1,9 +1,13 @@
 var searchData=
 [
-  ['bitpackedfloatref_543',['BitPackedFloatRef',['../structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html',1,'llama::mapping::internal']]],
-  ['bitpackedfloatsoa_544',['BitPackedFloatSoA',['../structllama_1_1mapping_1_1BitPackedFloatSoA.html',1,'llama::mapping']]],
-  ['bitpackedintref_545',['BitPackedIntRef',['../structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html',1,'llama::mapping::internal']]],
-  ['bitpackedintref_3c_20floatbits_2c_20storedintegralpointer_20_3e_546',['BitPackedIntRef&lt; FloatBits, StoredIntegralPointer &gt;',['../structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html',1,'llama::mapping::internal']]],
-  ['bitpackedintsoa_547',['BitPackedIntSoA',['../structllama_1_1mapping_1_1BitPackedIntSoA.html',1,'llama::mapping']]],
-  ['bytesplit_548',['Bytesplit',['../structllama_1_1mapping_1_1Bytesplit.html',1,'llama::mapping']]]
+  ['bitpackedfloatref_549',['BitPackedFloatRef',['../structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html',1,'llama::mapping::internal']]],
+  ['bitpackedfloatsoa_550',['BitPackedFloatSoA',['../structllama_1_1mapping_1_1BitPackedFloatSoA.html',1,'llama::mapping']]],
+  ['bitpackedintref_551',['BitPackedIntRef',['../structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html',1,'llama::mapping::internal']]],
+  ['bitpackedintsoa_552',['BitPackedIntSoA',['../structllama_1_1mapping_1_1BitPackedIntSoA.html',1,'llama::mapping']]],
+  ['boxedvalue_553',['BoxedValue',['../structllama_1_1internal_1_1BoxedValue.html',1,'llama::internal']]],
+  ['boxedvalue_3c_20constant_3c_20v_20_3e_2c_20i_20_3e_554',['BoxedValue&lt; Constant&lt; V &gt;, I &gt;',['../structllama_1_1internal_1_1BoxedValue_3_01Constant_3_01V_01_4_00_01I_01_4.html',1,'llama::internal']]],
+  ['boxedvalue_3c_20unsigned_20_3e_555',['BoxedValue&lt; unsigned &gt;',['../structllama_1_1internal_1_1BoxedValue.html',1,'llama::internal']]],
+  ['boxedvalue_3c_20unsigned_2c_200_20_3e_556',['BoxedValue&lt; unsigned, 0 &gt;',['../structllama_1_1internal_1_1BoxedValue.html',1,'llama::internal']]],
+  ['boxedvalue_3c_20unsigned_2c_201_20_3e_557',['BoxedValue&lt; unsigned, 1 &gt;',['../structllama_1_1internal_1_1BoxedValue.html',1,'llama::internal']]],
+  ['bytesplit_558',['Bytesplit',['../structllama_1_1mapping_1_1Bytesplit.html',1,'llama::mapping']]]
 ];
