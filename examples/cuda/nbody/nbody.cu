@@ -332,7 +332,6 @@ namespace manual
         return ai;
     }
 
-    // NOLINTNEXTLINE(fuchsia-statically-constructed-objects)
     __shared__ FP4 shPosition[SHARED_ELEMENTS_PER_BLOCK];
 
     __device__ auto tile_calculation(FP4 myPosition, FP3 accel) -> FP3

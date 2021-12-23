@@ -6,6 +6,7 @@
 # -readability-misleading-indentation # many false positives because of constexpr if
 # -readability-static-accessed-through-instance # flags threadIdx/blockIdx in CUDA code
 # -cert-err58-cpp # errors in Catch2
+# -fuchsia-statically-constructed-objects # too much noise with Catch2
 Checks: >
     *,
     -bugprone-exception-escape,
@@ -48,7 +49,8 @@ Checks: >
     -altera-struct-pack-align,
     -misc-no-recursion,
     -llvm-header-guard,
-    -cppcoreguidelines-macro-usage
+    -cppcoreguidelines-macro-usage,
+    -fuchsia-statically-constructed-objects
 
 WarningsAsErrors: '*'
 HeaderFilterRegex: ''
