@@ -10,7 +10,6 @@
         CHECK(view() == (out));                                                                                       \
     }
 
-// NOLINTNEXTLINE(fuchsia-statically-constructed-objects)
 TEMPLATE_TEST_CASE("mapping.BitPackedFloatSoA.exponent_only", "", float, double)
 {
     const auto inf = std::numeric_limits<float>::infinity();
@@ -49,7 +48,6 @@ TEMPLATE_TEST_CASE("mapping.BitPackedFloatSoA.exponent_only", "", float, double)
     STORE_LOAD_CHECK(-nan, -inf);
 }
 
-// NOLINTNEXTLINE(fuchsia-statically-constructed-objects)
 TEMPLATE_TEST_CASE("mapping.BitPackedFloatSoA", "", float, double)
 {
     const auto inf = std::numeric_limits<float>::infinity();

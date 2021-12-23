@@ -143,7 +143,6 @@ namespace
     };
 } // namespace
 
-// NOLINTNEXTLINE(fuchsia-statically-constructed-objects)
 TEMPLATE_TEST_CASE("mapping.BitPackedIntSoA.Enum", "", Grades, GradesClass)
 {
     using Enum = TestType;
