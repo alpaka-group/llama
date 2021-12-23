@@ -15,6 +15,9 @@ constexpr auto alpha = 3.14;
 
 void daxpy(std::ofstream& plotFile)
 {
+    const auto* title = "std::vector";
+    std::cout << title << "\n";
+
     Stopwatch watch;
     auto x = std::vector<double>(PROBLEM_SIZE);
     auto y = std::vector<double>(PROBLEM_SIZE);
@@ -38,13 +41,14 @@ void daxpy(std::ofstream& plotFile)
             z[i] = alpha * x[i] + y[i];
         sum = watch.printAndReset("daxpy");
     }
-    plotFile << "\"std::vector\"\t" << sum / STEPS << '\n';
+    plotFile << std::quoted(title) << "\t" << sum / STEPS << '\n';
 }
 
 template<typename Mapping>
-void daxpy_llama(std::string mappingName, Mapping mapping, std::ofstream& plotFile)
+void daxpy_llama(std::string mappingName, std::ofstream& plotFile, Mapping mapping)
 {
     auto title = "LLAMA " + std::move(mappingName);
+    std::cout << title << "\n";
 
     Stopwatch watch;
     auto x = llama::allocViewUninitialized(mapping);
@@ -79,6 +83,16 @@ try
     const char* affinity = std::getenv("GOMP_CPU_AFFINITY"); // NOLINT(concurrency-mt-unsafe)
     affinity = affinity == nullptr ? "NONE - PLEASE PIN YOUR THREADS!" : affinity;
 
+    fmt::print(
+        R"({}Mi doubles ({}MiB)
+Threads: {}
+Affinity: {}
+)",
+        PROBLEM_SIZE / 1024 / 1024,
+        PROBLEM_SIZE * sizeof(double) / 1024 / 1024,
+        numThreads,
+        affinity);
+
     std::ofstream plotFile{"daxpy.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
     plotFile << fmt::format(
@@ -101,24 +115,42 @@ $data << EOD
     daxpy(plotFile);
 
     const auto extents = llama::ArrayExtents{PROBLEM_SIZE};
-    daxpy_llama("AoS", llama::mapping::AoS{extents, double{}}, plotFile);
-    daxpy_llama("SoA", llama::mapping::SoA{extents, double{}}, plotFile);
+    daxpy_llama("AoS", plotFile, llama::mapping::AoS{extents, double{}});
+    daxpy_llama("SoA", plotFile, llama::mapping::SoA{extents, double{}});
     daxpy_llama(
         "Bytesplit",
+        plotFile,
         llama::mapping::Bytesplit<llama::ArrayExtentsDynamic<1>, double, llama::mapping::PreconfiguredAoS<>::type>{
-            extents},
-        plotFile);
+            extents});
     daxpy_llama(
         "ChangeType D->F",
+        plotFile,
         llama::mapping::ChangeType<
             llama::ArrayExtentsDynamic<1>,
             double,
             llama::mapping::PreconfiguredAoS<>::type,
-            boost::mp11::mp_list<boost::mp11::mp_list<double, float>>>{extents},
-        plotFile);
-    daxpy_llama("Bitpack 52^{11}", llama::mapping::BitPackedFloatSoA{extents, 11, 52, double{}}, plotFile);
-    daxpy_llama("Bitpack 23^{8}", llama::mapping::BitPackedFloatSoA{extents, 8, 23, double{}}, plotFile);
-    daxpy_llama("Bitpack 10^{5}", llama::mapping::BitPackedFloatSoA{extents, 5, 10, double{}}, plotFile);
+            boost::mp11::mp_list<boost::mp11::mp_list<double, float>>>{extents});
+    daxpy_llama("Bitpack 52^{11}", plotFile, llama::mapping::BitPackedFloatSoA{extents, 11, 52, double{}});
+    daxpy_llama(
+        "Bitpack 52^{11} CT",
+        plotFile,
+        llama::mapping::
+            BitPackedFloatSoA<llama::ArrayExtentsDynamic<1>, double, llama::Constant<11>, llama::Constant<52>>{
+                extents});
+    daxpy_llama("Bitpack 23^{8}", plotFile, llama::mapping::BitPackedFloatSoA{extents, 8, 23, double{}});
+    daxpy_llama(
+        "Bitpack 23^{8} CT",
+        plotFile,
+        llama::mapping::
+            BitPackedFloatSoA<llama::ArrayExtentsDynamic<1>, double, llama::Constant<8>, llama::Constant<23>>{
+                extents});
+    daxpy_llama("Bitpack 10^{5}", plotFile, llama::mapping::BitPackedFloatSoA{extents, 5, 10, double{}});
+    daxpy_llama(
+        "Bitpack 10^{5} CT",
+        plotFile,
+        llama::mapping::
+            BitPackedFloatSoA<llama::ArrayExtentsDynamic<1>, double, llama::Constant<5>, llama::Constant<10>>{
+                extents});
 
     plotFile << R"(EOD
 plot $data using 2:xtic(1)
