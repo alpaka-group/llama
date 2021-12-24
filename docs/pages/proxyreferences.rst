@@ -45,7 +45,7 @@ it is advisable to use the corresponding :cpp:`reference` alias provided by them
 
 Although :cpp:`std::vector<bool>` is notrious for this behavior of its references,
 more such data structures exist (e.g. :cpp:`std::bitset`) or started to appear in recent C++ standards and its proposals.
-E.g. in the area of `text encodings <https://thephd.dev/proxies-references-gsoc-2019>`_:,
+E.g. in the area of `text encodings <https://thephd.dev/proxies-references-gsoc-2019>`_,
 or `the zip range adaptors <http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p2214r0.html#a-tuple-that-is-writable>`_.
 
 
@@ -98,15 +98,17 @@ Similarly, some mappings choose a different in-memory representation for the fie
 Examples are the :cpp:`Bytesplit`, :cpp:`ChangeType`, :cpp:`BitPackedIntSoa` or  :cpp:`BitPackedFloatSoa` mappings.
 These mappings even return a proxy reference for terminal accesses:
 
-    auto&& ref = vr(color{}, r{}); // may be float& ref or a proxy reference object, depending on the mapping
+.. code-block:: C++
+
+    auto&& ref = vr(color{}, r{}); // may be a float& or a proxy reference object, depending on the mapping
 
 Thus, when you want to write truly generic code with LLAMA's views, please keep these guidelines in mind:
 
-* Each non-terminal access on a view returns a virtual record, which is a value-type with reference semantic.
-* Each terminal access on a view may return an l-value reference or a proxy reference.
-  Thus use :cpp:`auto&&` to handle both cases.
-* Explicitely specify the type of copies of individual fields you want to make from references obtains from a LLAMA view.
-  This avoids accidentially coping a proxy reference.
+ * Each non-terminal access on a view returns a virtual record, which is a value-type with reference semantic.
+ * Each terminal access on a view may return an l-value reference or a proxy reference.
+   Thus use :cpp:`auto&&` to handle both cases.
+ * Explicitely specify the type of copies of individual fields you want to make from references obtains from a LLAMA view.
+   This avoids accidentially coping a proxy reference.
 
 Concept
 -------
@@ -124,7 +126,7 @@ Proxy references in LLAMA fullfill the following concept:
 
 That is, the provide a member type :cpp:`value_type`,
 which indicates the type of the values which can be loaded and stored through the proxy reference.
-Furthmore, a proxy reference can be converted to its value type (thus calling :cpp:`operator value_type`)
+Furthmore, a proxy reference can be converted to its value type (thus calling :cpp:`operator value_type ()`)
 or assigned an instance of its value type.
 
 Arithmetic on proxy references and ProxyRefOpMixin
@@ -141,8 +143,8 @@ An additional feature of normal references in C++ is that they can be used as op
                      // both work in LLAMA due to llama::ProxyRefOpMixin
 
 Proxy references cannot be used in compound assignment and increment/decrement operators unless they provide overloads for these operators.
-To cover this case, LLAMA provides the `CRTP <https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern>`_ mixin `llama::ProxyRefOpMixin`,
+To cover this case, LLAMA provides the `CRTP <https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern>`_ mixin :cpp:`llama::ProxyRefOpMixin`,
 which a proxy reference type can inherit from, to supply the necessary operators.
-All proxy reference types in LLAMA inherit from `llama::ProxyRefOpMixin` to supply the necessary operators.
+All proxy reference types in LLAMA inherit from :cpp:`llama::ProxyRefOpMixin` to supply the necessary operators.
 If you define your own computed mappings returning proxy references,
-make sure to inherit your proxy reference types from `llama::ProxyRefOpMixin`.
+make sure to inherit your proxy reference types from :cpp:`llama::ProxyRefOpMixin`.
