@@ -6,11 +6,20 @@ if (NOT TARGET llama::llama)
 	find_package(llama REQUIRED)
 endif()
 add_executable(${PROJECT_NAME} viewcopy.cpp ../common/Stopwatch.hpp)
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama OpenMP::OpenMP_CXX)
 
 if (MSVC)
 	target_compile_options(${PROJECT_NAME} PRIVATE /arch:AVX2)
+	if (MSVC_VERSION VERSION_GREATER_EQUAL 1930)
+		# VS 2022 has a new lambda processor that has troubles with OpenMP pragmas:
+		# https://developercommunity.visualstudio.com/t/OpenMP-in-lambda-expression-compile-erro/1501041
+		# And the workaround flag /Zc:lambda- needs to come after the CXX standard,
+		# so we have to workaround CMake as well and not use cxx_std_20
+		target_compile_options(${PROJECT_NAME} PRIVATE /std:c++20 /Zc:lambda-)
+	else()
+		target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
+	endif()
 else()
+	target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 	target_compile_options(${PROJECT_NAME} PRIVATE -march=native)
 endif()
