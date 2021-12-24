@@ -30,7 +30,7 @@ Computed mappings
 A computed mapping may invoke a computation to map a subset of the record dimension.
 The fields of the record dimension which are mapped using a computation, are called computed fields.
 A computed mapping does not return a blob number and offset for computed fields, but rather a reference to memory directly.
-However, this reference is not an l-value reference but a proxy reference,
+However, this reference is not an l-value reference but a :ref:`proxy reference <label-proxyreferences>`_,
 since this reference needs to encapsulate computations to be performed when reading or writing through the reference.
 For non-computed fields, a computed mapping behaves like a physical mapping.
 A mapping with only computed fileds is called a fully computed mapping, otherwise a partially computed mapping.
