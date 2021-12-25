@@ -6,10 +6,9 @@
 #include <iomanip>
 #include <llama/llama.hpp>
 #include <omp.h>
-#include <random>
 #include <vector>
 
-constexpr auto PROBLEM_SIZE = 1024 * 1024 * 16;
+constexpr auto PROBLEM_SIZE = 1024 * 1024 * 128;
 constexpr auto STEPS = 5;
 constexpr auto alpha = 3.14;
 
@@ -24,12 +23,10 @@ void daxpy(std::ofstream& plotFile)
     auto z = std::vector<double>(PROBLEM_SIZE);
     watch.printAndReset("alloc");
 
-    std::default_random_engine engine;
-    std::normal_distribution dist(0.0, 1.0);
     for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
     {
-        x[i] = dist(engine);
-        y[i] = dist(engine);
+        x[i] = static_cast<double>(i);
+        y[i] = static_cast<double>(i);
     }
     watch.printAndReset("init");
 
@@ -47,8 +44,12 @@ void daxpy(std::ofstream& plotFile)
 template<typename Mapping>
 void daxpy_llama(std::string mappingName, std::ofstream& plotFile, Mapping mapping)
 {
+    std::size_t storageSize = 0;
+    for(std::size_t i = 0; i < mapping.blobCount; i++)
+        storageSize += mapping.blobSize(i);
+
     auto title = "LLAMA " + std::move(mappingName);
-    std::cout << title << "\n";
+    fmt::print("{0} (blobs size: {1}MiB)\n", title, storageSize / 1024 / 1024);
 
     Stopwatch watch;
     auto x = llama::allocViewUninitialized(mapping);
@@ -56,12 +57,10 @@ void daxpy_llama(std::string mappingName, std::ofstream& plotFile, Mapping mappi
     auto z = llama::allocViewUninitialized(mapping);
     watch.printAndReset("alloc");
 
-    std::default_random_engine engine;
-    std::normal_distribution dist(0.0, 1.0);
     for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
     {
-        x[i] = dist(engine);
-        y[i] = dist(engine);
+        x[i] = static_cast<double>(i);
+        y[i] = static_cast<double>(i);
     }
     watch.printAndReset("init");
 
@@ -84,7 +83,7 @@ try
     affinity = affinity == nullptr ? "NONE - PLEASE PIN YOUR THREADS!" : affinity;
 
     fmt::print(
-        R"({}Mi doubles ({}MiB)
+        R"({}Mi doubles ({}MiB data)
 Threads: {}
 Affinity: {}
 )",

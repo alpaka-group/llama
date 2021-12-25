@@ -35,7 +35,7 @@ namespace llama::mapping
         };
 
         template<typename Integral>
-        auto repackFloat(
+        LLAMA_FN_HOST_ACC_INLINE auto repackFloat(
             Integral inFloat,
             unsigned inMantissaBits,
             unsigned inExponentBits,
@@ -82,13 +82,15 @@ namespace llama::mapping
 
         // TODO: Boost.Hana generalizes these sorts of computations on mixed constants and values
         template<typename E, typename M>
-        auto integBits(E e, M m)
+        LLAMA_FN_HOST_ACC_INLINE auto integBits(E e, M m)
         {
             return llama::internal::BoxedValue{e.value() + m.value() + 1};
         }
 
         template<auto E, auto M>
-        auto integBits(llama::internal::BoxedValue<Constant<E>>, llama::internal::BoxedValue<Constant<M>>)
+        LLAMA_FN_HOST_ACC_INLINE auto integBits(
+            llama::internal::BoxedValue<Constant<E>>,
+            llama::internal::BoxedValue<Constant<M>>)
         {
             return llama::internal::BoxedValue<Constant<E + M + 1>>{};
         }
