@@ -78,6 +78,15 @@ namespace llama::mapping
     template<typename ArrayExtents, typename RecordDim>
     using PackedOne = One<ArrayExtents, RecordDim, false, FlattenRecordDimInOrder>;
 
+    /// Binds parameters to a \ref One mapping except for array and record dimension, producing a quoted
+    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+    template<bool AlignAndPad, template<typename> typename FlattenRecordDim>
+    struct BindOne
+    {
+        template<typename ArrayExtents, typename RecordDim>
+        using fn = One<ArrayExtents, RecordDim, AlignAndPad, FlattenRecordDim>;
+    };
+
     template<typename Mapping>
     inline constexpr bool isOne = false;
 

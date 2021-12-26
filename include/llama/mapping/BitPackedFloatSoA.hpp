@@ -170,6 +170,12 @@ namespace llama::mapping
                 return *this;
             }
         };
+
+        template<typename RecordDim>
+        using StoredIntegralFor = std::conditional_t<
+            boost::mp11::mp_contains<FlatRecordDim<RecordDim>, double>::value,
+            std::uint64_t,
+            std::uint32_t>;
     } // namespace internal
 
     /// Struct of array mapping using bit packing to reduce size/precision of floating-point data types. The bit layout
@@ -190,10 +196,7 @@ namespace llama::mapping
         typename ExponentBits = unsigned,
         typename MantissaBits = unsigned,
         typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
-        typename StoredIntegral = std::conditional_t<
-            boost::mp11::mp_contains<FlatRecordDim<TRecordDim>, double>::value,
-            std::uint64_t,
-            std::uint32_t>>
+        typename StoredIntegral = internal::StoredIntegralFor<TRecordDim>>
     struct LLAMA_DECLSPEC_EMPTY_BASES BitPackedFloatSoA
         : TArrayExtents
         , llama::internal::BoxedValue<ExponentBits, 0>
@@ -264,4 +267,32 @@ namespace llama::mapping
             };
         }
     };
+
+    /// Binds parameters to a \ref BitPackedFloatSoA mapping except for array and record dimension, producing a quoted
+    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+    template<
+        typename ExponentBits = unsigned,
+        typename MantissaBits = unsigned,
+        typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+        typename StoredIntegral = void>
+    struct BindBitPackedFloatSoA
+    {
+        template<typename ArrayExtents, typename RecordDim>
+        using fn = BitPackedFloatSoA<
+            ArrayExtents,
+            RecordDim,
+            ExponentBits,
+            MantissaBits,
+            LinearizeArrayDimsFunctor,
+            std::conditional_t<
+                !std::is_void_v<StoredIntegral>,
+                StoredIntegral,
+                internal::StoredIntegralFor<RecordDim>>>;
+    };
+
+    template<typename Mapping>
+    inline constexpr bool isBitPackedFloatSoA = false;
+
+    template<typename... Ts>
+    inline constexpr bool isBitPackedFloatSoA<BitPackedFloatSoA<Ts...>> = true;
 } // namespace llama::mapping

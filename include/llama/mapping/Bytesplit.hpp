@@ -102,4 +102,19 @@ namespace llama::mapping
             return Reference<RecordCoord<RecordCoords...>, BlobArray>{*this, ai, blobs};
         }
     };
+
+    /// Binds parameters to a \ref Bytesplit mapping except for array and record dimension, producing a quoted
+    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+    template<template<typename, typename> typename InnerMapping>
+    struct BindBytesplit
+    {
+        template<typename ArrayExtents, typename RecordDim>
+        using fn = Bytesplit<ArrayExtents, RecordDim, InnerMapping>;
+    };
+
+    template<typename Mapping>
+    inline constexpr bool isBytesplit = false;
+
+    template<typename TArrayExtents, typename TRecordDim, template<typename, typename> typename InnerMapping>
+    inline constexpr bool isBytesplit<Bytesplit<TArrayExtents, TRecordDim, InnerMapping>> = true;
 } // namespace llama::mapping

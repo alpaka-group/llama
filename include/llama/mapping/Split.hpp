@@ -196,6 +196,8 @@ namespace llama::mapping
         Mapping2 mapping2;
     };
 
+    /// Binds parameters to a \ref Split mapping except for array and record dimension, producing a quoted
+    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
     template<
         typename RecordCoordsForMapping1,
         template<typename...>
@@ -203,10 +205,10 @@ namespace llama::mapping
         template<typename...>
         typename MappingTemplate2,
         bool SeparateBlobs = false>
-    struct PreconfiguredSplit
+    struct BindSplit
     {
         template<typename ArrayExtents, typename RecordDim>
-        using type = Split<
+        using fn = Split<
             ArrayExtents,
             RecordDim,
             RecordCoordsForMapping1,
@@ -214,4 +216,24 @@ namespace llama::mapping
             MappingTemplate2,
             SeparateBlobs>;
     };
+
+    template<typename Mapping>
+    inline constexpr bool isSplit = false;
+
+    template<
+        typename ArrayExtents,
+        typename RecordDim,
+        typename RecordCoordsForMapping1,
+        template<typename...>
+        typename MappingTemplate1,
+        template<typename...>
+        typename MappingTemplate2,
+        bool SeparateBlobs>
+    inline constexpr bool isSplit<Split<
+        ArrayExtents,
+        RecordDim,
+        RecordCoordsForMapping1,
+        MappingTemplate1,
+        MappingTemplate2,
+        SeparateBlobs>> = true;
 } // namespace llama::mapping

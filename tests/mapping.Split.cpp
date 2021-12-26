@@ -83,16 +83,13 @@ TEST_CASE("Split.AoSoA8.AoS_Packed.One.SoA_SingleBlob.4Buffer")
         ArrayExtents,
         Particle,
         llama::RecordCoord<2>,
-        llama::mapping::PreconfiguredAoSoA<8>::type,
-        llama::mapping::PreconfiguredSplit<
+        llama::mapping::BindAoSoA<8>::fn,
+        llama::mapping::BindSplit<
             llama::RecordCoord<1>,
             llama::mapping::PackedOne,
-            llama::mapping::PreconfiguredSplit<
-                llama::RecordCoord<0>,
-                llama::mapping::PackedAoS,
-                llama::mapping::SingleBlobSoA,
-                true>::type,
-            true>::type,
+            llama::mapping::
+                BindSplit<llama::RecordCoord<0>, llama::mapping::PackedAoS, llama::mapping::SingleBlobSoA, true>::fn,
+            true>::fn,
         true>{extents};
 
     CHECK(mapping.blobNrAndOffset<0, 0>({0}) == llama::NrAndOffset{2, 0});
@@ -132,7 +129,7 @@ TEST_CASE("Split.Multilist.SoA.One")
         ArrayExtents,
         Particle,
         boost::mp11::mp_list<llama::RecordCoord<0>, llama::RecordCoord<2>>,
-        llama::mapping::PreconfiguredSoA<>::type,
+        llama::mapping::BindSoA<>::fn,
         llama::mapping::AlignedOne,
         true>{extents};
 
@@ -172,12 +169,9 @@ TEST_CASE("Split.BitPacked")
         ArrayExtents,
         Vec3I,
         llama::RecordCoord<0>,
-        llama::mapping::PreconfiguredBitPackedIntSoA<llama::Constant<3>>::type,
-        llama::mapping::PreconfiguredSplit<
-            llama::RecordCoord<0>,
-            llama::mapping::BitPackedIntSoA,
-            llama::mapping::PackedAoS,
-            true>::type,
+        llama::mapping::BindBitPackedIntSoA<llama::Constant<3>>::fn,
+        llama::mapping::
+            BindSplit<llama::RecordCoord<0>, llama::mapping::BitPackedIntSoA, llama::mapping::PackedAoS, true>::fn,
         true>{{extents}, {std::tuple{extents, 5}, std::tuple{extents}}};
     CHECK(mapping.blobSize(0) == 12);
     CHECK(mapping.blobSize(1) == 20);

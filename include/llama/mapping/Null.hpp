@@ -67,4 +67,10 @@ namespace llama::mapping
             return internal::NullReference<FieldType>{};
         }
     };
+
+    template<typename Mapping>
+    inline constexpr bool isNull = false;
+
+    template<typename ArrayExtents, typename RecordDim>
+    inline constexpr bool isNull<Null<ArrayExtents, RecordDim>> = true;
 } // namespace llama::mapping

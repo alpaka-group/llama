@@ -155,6 +155,9 @@ namespace llama::mapping
         struct MakeUnsigned<T, std::enable_if_t<std::is_enum_v<T>>> : std::make_unsigned<std::underlying_type_t<T>>
         {
         };
+
+        template<typename RecordDim>
+        using StoredUnsignedFor = typename MakeUnsigned<LargestIntegral<RecordDim>>::type;
     } // namespace internal
 
     /// Struct of array mapping using bit packing to reduce size/precision of integral data types. If your record
@@ -169,7 +172,7 @@ namespace llama::mapping
         typename TRecordDim,
         typename Bits = unsigned,
         typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
-        typename StoredIntegral = typename internal::MakeUnsigned<internal::LargestIntegral<TRecordDim>>::type>
+        typename StoredIntegral = internal::StoredUnsignedFor<TRecordDim>>
     struct BitPackedIntSoA
         : TArrayExtents
         , private llama::internal::BoxedValue<Bits>
@@ -238,14 +241,16 @@ namespace llama::mapping
         }
     };
 
+    /// Binds parameters to a \ref BitPackedIntSoA mapping except for array and record dimension, producing a quoted
+    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
     template<
         typename Bits = unsigned,
         typename LinearizeArrayDimsFunctor = mapping::LinearizeArrayDimsCpp,
         typename StoredIntegral = void>
-    struct PreconfiguredBitPackedIntSoA
+    struct BindBitPackedIntSoA
     {
         template<typename ArrayExtents, typename RecordDim>
-        using type = BitPackedIntSoA<
+        using fn = BitPackedIntSoA<
             ArrayExtents,
             RecordDim,
             Bits,
@@ -253,6 +258,12 @@ namespace llama::mapping
             std::conditional_t<
                 !std::is_void_v<StoredIntegral>,
                 StoredIntegral,
-                typename internal::MakeUnsigned<internal::LargestIntegral<RecordDim>>::type>>;
+                internal::StoredUnsignedFor<RecordDim>>>;
     };
+
+    template<typename Mapping>
+    inline constexpr bool isBitPackedIntSoA = false;
+
+    template<typename... Ts>
+    inline constexpr bool isBitPackedIntSoA<BitPackedIntSoA<Ts...>> = true;
 } // namespace llama::mapping

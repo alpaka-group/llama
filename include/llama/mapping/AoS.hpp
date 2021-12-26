@@ -84,11 +84,13 @@ namespace llama::mapping
     template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     using PackedAoS = AoS<ArrayExtents, RecordDim, false, LinearizeArrayDimsFunctor>;
 
+    /// Binds parameters to an \ref AoS mapping except for array and record dimension, producing a quoted meta
+    /// function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
     template<bool AlignAndPad = true, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
-    struct PreconfiguredAoS
+    struct BindAoS
     {
         template<typename ArrayExtents, typename RecordDim>
-        using type = AoS<ArrayExtents, RecordDim, AlignAndPad, LinearizeArrayDimsFunctor>;
+        using fn = AoS<ArrayExtents, RecordDim, AlignAndPad, LinearizeArrayDimsFunctor>;
     };
 
     template<typename Mapping>

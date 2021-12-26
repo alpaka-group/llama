@@ -264,9 +264,9 @@ void run(const std::string& mappingName)
 auto main() -> int
 try
 {
-    run<llama::mapping::PreconfiguredAoS<>::type>("AoS");
-    run<llama::mapping::PreconfiguredSoA<>::type>("SoA");
-    run<llama::mapping::PreconfiguredSoA<true>::type>("SoA_MB");
+    run<llama::mapping::BindAoS<>::fn>("AoS");
+    run<llama::mapping::BindSoA<>::fn>("SoA");
+    run<llama::mapping::BindSoA<true>::fn>("SoA_MB");
 }
 catch(const std::exception& e)
 {
