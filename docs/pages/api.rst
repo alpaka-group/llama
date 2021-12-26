@@ -13,7 +13,7 @@ Useful helpers
 
 .. doxygenstruct:: llama::NrAndOffset
    :members:
-.. doxygenfunction:: llama::structName
+.. doxygenfunction:: llama::structName(T)
 .. doxygentypedef:: CopyConst
 .. doxygenstruct:: llama::ProxyRefOpMixin
    :members:
@@ -25,16 +25,16 @@ Array
    :members:
 .. doxygenfunction:: llama::push_front
 .. doxygenfunction:: llama::push_back
-.. doxygenfunction:: llama::pop_front(Array<T, N> a)
+.. doxygenfunction:: llama::pop_front([[maybe_unused]] Array<T, N> a)
 .. doxygenfunction:: llama::pop_back
-.. doxygenfunction:: llama::product
+.. doxygenfunction:: llama::product(Array<T, N> a)
 
 Tuple
 ^^^^^
 
 .. doxygenstruct:: llama::Tuple
    :members:
-.. doxygenfunction:: llama::get
+.. doxygenfunction:: llama::get(Tuple<Elements...> &tuple)
 .. doxygenfunction:: llama::tupleCat
 .. doxygenfunction:: llama::tupleReplace
 .. doxygenfunction:: llama::tupleTransform
@@ -44,8 +44,8 @@ Array dimensions
 ----------------
 
 .. doxygenstruct:: llama::ArrayExtents
-.. doxygentypedef:: llama::ArrayIndexDynamic
-.. doxygentypedef:: llama::ArrayIndexStatic
+.. doxygentypedef:: llama::ArrayExtentsDynamic
+.. doxygentypedef:: llama::ArrayExtentsStatic
 .. doxygenstruct:: llama::ArrayIndex
 
 .. doxygenstruct:: llama::ArrayIndexIterator
@@ -53,7 +53,7 @@ Array dimensions
 .. doxygenstruct:: llama::ArrayIndexRange
    :members:
 
-.. doxygenfunction:: llama::forEachADCoord
+.. doxygenfunction:: llama::forEachADCoord(ArrayExtents<Sizes...> extents, Func &&func)
 
 Record dimension
 ----------------

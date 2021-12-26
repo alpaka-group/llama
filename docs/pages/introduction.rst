@@ -147,5 +147,5 @@ computation devices, the image sensor data format and the problem size may vary
 and a fast and easy adaption of the code is needed.
 
 The shipped
-`examples <https://github.com/alpaka-group/llama/tree/master/examples>`_
+`examples <https://github.com/alpaka-group/llama/tree/develop/examples>`_
 of LLAMA try to showcase the implemented feature in the intended usage.
