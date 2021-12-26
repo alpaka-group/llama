@@ -59,7 +59,7 @@ namespace llama::mapping
         public:
             using value_type = GetType<TRecordDim, RC>;
 
-            Reference(const Inner& innerMapping, ArrayIndex ai, BlobArray& blobs)
+            LLAMA_FN_HOST_ACC_INLINE Reference(const Inner& innerMapping, ArrayIndex ai, BlobArray& blobs)
                 : inner(innerMapping)
                 , ai(ai)
                 , blobs(blobs)
@@ -67,7 +67,7 @@ namespace llama::mapping
             }
 
             // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-            operator value_type() const
+            LLAMA_FN_HOST_ACC_INLINE operator value_type() const
             {
                 value_type v;
                 auto* p = reinterpret_cast<std::byte*>(&v);
@@ -81,7 +81,7 @@ namespace llama::mapping
                 return v;
             }
 
-            auto operator=(value_type v) -> Reference&
+            LLAMA_FN_HOST_ACC_INLINE auto operator=(value_type v) -> Reference&
             {
                 auto* p = reinterpret_cast<std::byte*>(&v);
                 boost::mp11::mp_for_each<boost::mp11::mp_iota_c<sizeof(value_type)>>(
