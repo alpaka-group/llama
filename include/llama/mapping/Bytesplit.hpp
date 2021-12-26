@@ -52,6 +52,7 @@ namespace llama::mapping
         template<typename RC, typename BlobArray>
         struct Reference : ProxyRefOpMixin<Reference<RC, BlobArray>, GetType<TRecordDim, RC>>
         {
+        private:
             const Inner& inner;
             ArrayIndex ai;
             BlobArray& blobs;
