@@ -551,12 +551,12 @@ namespace llama
         {
             T value;
 
-            auto operator->() -> T*
+            LLAMA_FN_HOST_ACC_INLINE auto operator->() -> T*
             {
                 return &value;
             }
 
-            auto operator->() const -> const T*
+            LLAMA_FN_HOST_ACC_INLINE auto operator->() const -> const T*
             {
                 return &value;
             }
@@ -742,11 +742,11 @@ namespace llama
             BoxedValue() = default;
 
             // we don't make this ctor explicit so a Value appearing in a ctor list can just be created by passing a T
-            BoxedValue(T value) : val(value)
+            LLAMA_FN_HOST_ACC_INLINE BoxedValue(T value) : val(value)
             {
             }
 
-            constexpr auto value() const
+            LLAMA_FN_HOST_ACC_INLINE constexpr auto value() const
             {
                 return val;
             }
@@ -761,11 +761,11 @@ namespace llama
             BoxedValue() = default;
 
             // we don't make this ctor explicit so a Value appearing in a ctor list can just be created by passing a T
-            BoxedValue(Constant<V>)
+            LLAMA_FN_HOST_ACC_INLINE BoxedValue(Constant<V>)
             {
             }
 
-            static constexpr auto value()
+            LLAMA_FN_HOST_ACC_INLINE static constexpr auto value()
             {
                 return V;
             }

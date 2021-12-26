@@ -92,7 +92,7 @@ namespace llama::mapping
         }
 
         template<typename RecordCoord>
-        static constexpr auto isComputed(RecordCoord)
+        LLAMA_FN_HOST_ACC_INLINE static constexpr auto isComputed(RecordCoord)
         {
             using UserT = GetType<RecordDim, RecordCoord>;
             return boost::mp11::mp_map_contains<ReplacementMap, RecordCoord>::value
