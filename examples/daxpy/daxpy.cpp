@@ -119,15 +119,14 @@ $data << EOD
     daxpy_llama(
         "Bytesplit",
         plotFile,
-        llama::mapping::Bytesplit<llama::ArrayExtentsDynamic<1>, double, llama::mapping::PreconfiguredAoS<>::type>{
-            extents});
+        llama::mapping::Bytesplit<llama::ArrayExtentsDynamic<1>, double, llama::mapping::BindAoS<>::fn>{extents});
     daxpy_llama(
         "ChangeType D->F",
         plotFile,
         llama::mapping::ChangeType<
             llama::ArrayExtentsDynamic<1>,
             double,
-            llama::mapping::PreconfiguredAoS<>::type,
+            llama::mapping::BindAoS<>::fn,
             boost::mp11::mp_list<boost::mp11::mp_list<double, float>>>{extents});
     daxpy_llama("Bitpack 52^{11}", plotFile, llama::mapping::BitPackedFloatSoA{extents, 11, 52, double{}});
     daxpy_llama(

@@ -106,11 +106,13 @@ namespace llama::mapping
     template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
     using MultiBlobSoA = SoA<ArrayExtents, RecordDim, true, LinearizeArrayDimsFunctor>;
 
+    /// Binds parameters to an \ref SoA mapping except for array and record dimension, producing a quoted
+    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
     template<bool SeparateBuffers = true, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
-    struct PreconfiguredSoA
+    struct BindSoA
     {
         template<typename ArrayExtents, typename RecordDim>
-        using type = SoA<ArrayExtents, RecordDim, SeparateBuffers, LinearizeArrayDimsFunctor>;
+        using fn = SoA<ArrayExtents, RecordDim, SeparateBuffers, LinearizeArrayDimsFunctor>;
     };
 
     template<typename Mapping>

@@ -83,11 +83,13 @@ namespace llama::mapping
         using Flattener = FlattenRecordDim<TRecordDim>;
     };
 
+    /// Binds parameters to an \ref AoSoA mapping except for array and record dimension, producing a quoted meta
+    /// function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
     template<std::size_t Lanes, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
-    struct PreconfiguredAoSoA
+    struct BindAoSoA
     {
         template<typename ArrayExtents, typename RecordDim>
-        using type = AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayDimsFunctor>;
+        using fn = AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayDimsFunctor>;
     };
 
     template<typename Mapping>

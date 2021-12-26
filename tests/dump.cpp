@@ -83,10 +83,9 @@ TEST_CASE("dump.Particle.Split.AoSoA8.AoS.One")
          ArrayExtents,
          Particle,
          llama::RecordCoord<2>,
-         llama::mapping::PreconfiguredAoSoA<8>::type,
-         llama::mapping::
-             PreconfiguredSplit<llama::RecordCoord<1>, llama::mapping::PackedOne, llama::mapping::PackedAoS, true>::
-                 type,
+         llama::mapping::BindAoSoA<8>::fn,
+         llama::mapping::BindSplit<llama::RecordCoord<1>, llama::mapping::PackedOne, llama::mapping::PackedAoS, true>::
+             fn,
          true>{extents});
 }
 
@@ -98,16 +97,13 @@ TEST_CASE("dump.Particle.Split.AoSoA8.AoS.One.SoA")
          ArrayExtents,
          Particle,
          llama::RecordCoord<2>,
-         llama::mapping::PreconfiguredAoSoA<8>::type,
-         llama::mapping::PreconfiguredSplit<
+         llama::mapping::BindAoSoA<8>::fn,
+         llama::mapping::BindSplit<
              llama::RecordCoord<1>,
              llama::mapping::PackedOne,
-             llama::mapping::PreconfiguredSplit<
-                 llama::RecordCoord<0>,
-                 llama::mapping::PackedAoS,
-                 llama::mapping::SingleBlobSoA,
-                 true>::type,
-             true>::type,
+             llama::mapping::
+                 BindSplit<llama::RecordCoord<0>, llama::mapping::PackedAoS, llama::mapping::SingleBlobSoA, true>::fn,
+             true>::fn,
          true>{extents});
 }
 
@@ -117,20 +113,18 @@ TEST_CASE("dump.Particle.BitPacked")
          ArrayExtents,
          Particle,
          llama::RecordCoord<0>,
-         llama::mapping::PreconfiguredSplit<
-             llama::RecordCoord<0, 2>,
-             llama::mapping::BitPackedFloatSoA,
-             llama::mapping::PackedAoS,
-             true>::type,
-         llama::mapping::PreconfiguredSplit<
+         llama::mapping::
+             BindSplit<llama::RecordCoord<0, 2>, llama::mapping::BitPackedFloatSoA, llama::mapping::PackedAoS, true>::
+                 fn,
+         llama::mapping::BindSplit<
              llama::RecordCoord<0>,
              llama::mapping::PackedOne,
-             llama::mapping::PreconfiguredSplit<
+             llama::mapping::BindSplit<
                  llama::RecordCoord<0>,
                  llama::mapping::BitPackedFloatSoA,
-                 llama::mapping::PreconfiguredBitPackedIntSoA<llama::Constant<1>>::type,
-                 true>::type,
-             true>::type,
+                 llama::mapping::BindBitPackedIntSoA<llama::Constant<1>>::fn,
+                 true>::fn,
+             true>::fn,
          true>{
         std::tuple{std::tuple{extents, 3, 3}, std::tuple{extents}},
         std::tuple{std::tuple{}, std::tuple{std::tuple{extents, 5, 5}, std::tuple{extents}}}});
@@ -208,10 +202,9 @@ TEST_CASE("dump.ParticleUnaligned.Split.SoA_MB.AoS_Aligned.One")
          ArrayExtents,
          ParticleUnaligned,
          llama::RecordCoord<1>,
-         llama::mapping::PreconfiguredSoA<true>::type,
+         llama::mapping::BindSoA<true>::fn,
          llama::mapping::
-             PreconfiguredSplit<llama::RecordCoord<1>, llama::mapping::PackedOne, llama::mapping::AlignedAoS, true>::
-                 type,
+             BindSplit<llama::RecordCoord<1>, llama::mapping::PackedOne, llama::mapping::AlignedAoS, true>::fn,
          true>{extents});
 }
 
@@ -221,10 +214,9 @@ TEST_CASE("dump.ParticleUnaligned.Split.AoSoA8.AoS_Aligned.One")
          ArrayExtents,
          ParticleUnaligned,
          llama::RecordCoord<1>,
-         llama::mapping::PreconfiguredAoSoA<8>::type,
+         llama::mapping::BindAoSoA<8>::fn,
          llama::mapping::
-             PreconfiguredSplit<llama::RecordCoord<1>, llama::mapping::PackedOne, llama::mapping::AlignedAoS, true>::
-                 type,
+             BindSplit<llama::RecordCoord<1>, llama::mapping::PackedOne, llama::mapping::AlignedAoS, true>::fn,
          true>{extents});
 }
 
@@ -235,16 +227,13 @@ TEST_CASE("dump.ParticleUnaligned.Split.AoSoA8.SoA.One.AoS")
          ArrayExtents,
          ParticleUnaligned,
          llama::RecordCoord<1>,
-         llama::mapping::PreconfiguredAoSoA<8>::type,
-         llama::mapping::PreconfiguredSplit<
+         llama::mapping::BindAoSoA<8>::fn,
+         llama::mapping::BindSplit<
              llama::RecordCoord<1>,
              llama::mapping::PackedOne,
-             llama::mapping::PreconfiguredSplit<
-                 llama::RecordCoord<0>,
-                 llama::mapping::PreconfiguredSoA<>::type,
-                 llama::mapping::PackedAoS,
-                 true>::type,
-             true>::type,
+             llama::mapping::
+                 BindSplit<llama::RecordCoord<0>, llama::mapping::BindSoA<>::fn, llama::mapping::PackedAoS, true>::fn,
+             true>::fn,
          true>{extents});
 }
 
@@ -255,7 +244,7 @@ TEST_CASE("dump.ParticleUnaligned.Split.Multilist.SoA.One")
          ArrayExtents,
          Particle,
          boost::mp11::mp_list<llama::RecordCoord<0>, llama::RecordCoord<2>>,
-         llama::mapping::PreconfiguredSoA<>::type,
+         llama::mapping::BindSoA<>::fn,
          llama::mapping::AlignedOne,
          true>{extents});
 }

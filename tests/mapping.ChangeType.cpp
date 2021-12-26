@@ -4,11 +4,8 @@
 
 TEST_CASE("mapping.ChangeType.AoS")
 {
-    auto mapping = llama::mapping::ChangeType<
-        llama::ArrayExtents<128>,
-        Vec3D,
-        llama::mapping::PreconfiguredAoS<false>::type,
-        boost::mp11::mp_list<>>{{}};
+    auto mapping = llama::mapping::
+        ChangeType<llama::ArrayExtents<128>, Vec3D, llama::mapping::BindAoS<false>::fn, boost::mp11::mp_list<>>{{}};
     CHECK(mapping.blobSize(0) == 3072);
     auto view = llama::allocView(mapping);
     iotaFillView(view);
@@ -20,7 +17,7 @@ TEST_CASE("mapping.ChangeType.AoS.doubleToFloat")
     auto mapping = llama::mapping::ChangeType<
         llama::ArrayExtents<128>,
         Vec3D,
-        llama::mapping::PreconfiguredAoS<false>::type,
+        llama::mapping::BindAoS<false>::fn,
         boost::mp11::mp_list<boost::mp11::mp_list<double, float>>>{{}};
     CHECK(mapping.blobSize(0) == 1536);
     auto view = llama::allocView(mapping);
@@ -34,7 +31,7 @@ TEST_CASE("mapping.ChangeType.SoA.particle")
     auto mapping = llama::mapping::ChangeType<
         llama::ArrayExtents<128>,
         Particle,
-        llama::mapping::PreconfiguredAoS<false>::type,
+        llama::mapping::BindAoS<false>::fn,
         boost::mp11::mp_list<
             boost::mp11::mp_list<double, float>,
             boost::mp11::mp_list<float, std::int16_t>,

@@ -114,10 +114,23 @@ namespace llama::mapping
         }
     };
 
+    /// Binds parameters to a \ref ChangeType mapping except for array and record dimension, producing a quoted
+    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
     template<template<typename, typename> typename InnerMapping, typename ReplacementMap>
-    struct PreconfiguredChangeType
+    struct BindChangeType
     {
         template<typename ArrayExtents, typename RecordDim>
-        using type = ChangeType<ArrayExtents, RecordDim, InnerMapping, ReplacementMap>;
+        using fn = ChangeType<ArrayExtents, RecordDim, InnerMapping, ReplacementMap>;
     };
+
+    template<typename Mapping>
+    inline constexpr bool isChangeType = false;
+
+    template<
+        typename TArrayExtents,
+        typename TRecordDim,
+        template<typename, typename>
+        typename InnerMapping,
+        typename ReplacementMap>
+    inline constexpr bool isChangeType<ChangeType<TArrayExtents, TRecordDim, InnerMapping, ReplacementMap>> = true;
 } // namespace llama::mapping

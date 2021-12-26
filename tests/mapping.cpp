@@ -21,8 +21,7 @@ TEST_CASE("mapping.concepts")
 
     STATIC_REQUIRE(llama::FullyComputedMapping<llama::mapping::Null<llama::ArrayExtentsDynamic<2>, Particle>>);
     STATIC_REQUIRE(llama::FullyComputedMapping<
-                   llama::mapping::
-                       Bytesplit<llama::ArrayExtentsDynamic<2>, Particle, llama::mapping::PreconfiguredAoS<>::type>>);
+                   llama::mapping::Bytesplit<llama::ArrayExtentsDynamic<2>, Particle, llama::mapping::BindAoS<>::fn>>);
     STATIC_REQUIRE(llama::FullyComputedMapping<llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<2>, Vec3I>>);
     STATIC_REQUIRE(
         llama::FullyComputedMapping<llama::mapping::BitPackedFloatSoA<llama::ArrayExtentsDynamic<2>, Vec3D>>);
@@ -30,7 +29,7 @@ TEST_CASE("mapping.concepts")
     STATIC_REQUIRE(llama::PartiallyComputedMapping<llama::mapping::ChangeType<
                        llama::ArrayExtentsDynamic<2>,
                        Particle,
-                       llama::mapping::PreconfiguredAoS<>::type,
+                       llama::mapping::BindAoS<>::fn,
                        boost::mp11::mp_list<boost::mp11::mp_list<bool, int>>>>);
 }
 #endif
@@ -44,12 +43,24 @@ TEST_CASE("mapping.traits")
     using AoAoS = llama::mapping::AoSoA<llama::ArrayExtentsDynamic<2>, Particle, 8>;
     using One = llama::mapping::One<llama::ArrayExtentsDynamic<2>, Particle>;
 
+    using Null = llama::mapping::Null<llama::ArrayExtentsDynamic<2>, Particle>;
+    using BS = llama::mapping::Bytesplit<llama::ArrayExtentsDynamic<2>, Particle, llama::mapping::BindAoS<>::fn>;
+    using CT = llama::mapping::
+        ChangeType<llama::ArrayExtentsDynamic<2>, Particle, llama::mapping::BindAoS<>::fn, boost::mp11::mp_list<>>;
+    using BPI = llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<2>, Vec3I>;
+    using BPF = llama::mapping::BitPackedFloatSoA<llama::ArrayExtentsDynamic<2>, Vec3D>;
+
     STATIC_REQUIRE(llama::mapping::isAoS<AAoS>);
     STATIC_REQUIRE(llama::mapping::isAoS<PAoS>);
     STATIC_REQUIRE(!llama::mapping::isAoS<SBSoA>);
     STATIC_REQUIRE(!llama::mapping::isAoS<MBSoA>);
     STATIC_REQUIRE(!llama::mapping::isAoS<AoAoS>);
     STATIC_REQUIRE(!llama::mapping::isAoS<One>);
+    STATIC_REQUIRE(!llama::mapping::isAoS<Null>);
+    STATIC_REQUIRE(!llama::mapping::isAoS<BS>);
+    STATIC_REQUIRE(!llama::mapping::isAoS<CT>);
+    STATIC_REQUIRE(!llama::mapping::isAoS<BPI>);
+    STATIC_REQUIRE(!llama::mapping::isAoS<BPF>);
 
     STATIC_REQUIRE(!llama::mapping::isSoA<AAoS>);
     STATIC_REQUIRE(!llama::mapping::isSoA<PAoS>);
@@ -57,6 +68,11 @@ TEST_CASE("mapping.traits")
     STATIC_REQUIRE(llama::mapping::isSoA<MBSoA>);
     STATIC_REQUIRE(!llama::mapping::isSoA<AoAoS>);
     STATIC_REQUIRE(!llama::mapping::isSoA<One>);
+    STATIC_REQUIRE(!llama::mapping::isSoA<Null>);
+    STATIC_REQUIRE(!llama::mapping::isSoA<BS>);
+    STATIC_REQUIRE(!llama::mapping::isSoA<CT>);
+    STATIC_REQUIRE(!llama::mapping::isSoA<BPI>);
+    STATIC_REQUIRE(!llama::mapping::isSoA<BPF>);
 
     STATIC_REQUIRE(!llama::mapping::isAoSoA<AAoS>);
     STATIC_REQUIRE(!llama::mapping::isAoSoA<PAoS>);
@@ -64,6 +80,11 @@ TEST_CASE("mapping.traits")
     STATIC_REQUIRE(!llama::mapping::isAoSoA<MBSoA>);
     STATIC_REQUIRE(llama::mapping::isAoSoA<AoAoS>);
     STATIC_REQUIRE(!llama::mapping::isAoSoA<One>);
+    STATIC_REQUIRE(!llama::mapping::isAoSoA<Null>);
+    STATIC_REQUIRE(!llama::mapping::isAoSoA<BS>);
+    STATIC_REQUIRE(!llama::mapping::isAoSoA<CT>);
+    STATIC_REQUIRE(!llama::mapping::isAoSoA<BPI>);
+    STATIC_REQUIRE(!llama::mapping::isAoSoA<BPF>);
 
     STATIC_REQUIRE(!llama::mapping::isOne<AAoS>);
     STATIC_REQUIRE(!llama::mapping::isOne<PAoS>);
@@ -71,6 +92,71 @@ TEST_CASE("mapping.traits")
     STATIC_REQUIRE(!llama::mapping::isOne<MBSoA>);
     STATIC_REQUIRE(!llama::mapping::isOne<AoAoS>);
     STATIC_REQUIRE(llama::mapping::isOne<One>);
+    STATIC_REQUIRE(!llama::mapping::isOne<Null>);
+    STATIC_REQUIRE(!llama::mapping::isOne<BS>);
+    STATIC_REQUIRE(!llama::mapping::isOne<CT>);
+    STATIC_REQUIRE(!llama::mapping::isOne<BPI>);
+    STATIC_REQUIRE(!llama::mapping::isOne<BPF>);
+
+    STATIC_REQUIRE(!llama::mapping::isNull<AAoS>);
+    STATIC_REQUIRE(!llama::mapping::isNull<PAoS>);
+    STATIC_REQUIRE(!llama::mapping::isNull<SBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isNull<MBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isNull<AoAoS>);
+    STATIC_REQUIRE(!llama::mapping::isNull<One>);
+    STATIC_REQUIRE(llama::mapping::isNull<Null>);
+    STATIC_REQUIRE(!llama::mapping::isNull<BS>);
+    STATIC_REQUIRE(!llama::mapping::isNull<CT>);
+    STATIC_REQUIRE(!llama::mapping::isNull<BPI>);
+    STATIC_REQUIRE(!llama::mapping::isNull<BPF>);
+
+    STATIC_REQUIRE(!llama::mapping::isBytesplit<AAoS>);
+    STATIC_REQUIRE(!llama::mapping::isBytesplit<PAoS>);
+    STATIC_REQUIRE(!llama::mapping::isBytesplit<SBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isBytesplit<MBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isBytesplit<AoAoS>);
+    STATIC_REQUIRE(!llama::mapping::isBytesplit<One>);
+    STATIC_REQUIRE(!llama::mapping::isBytesplit<Null>);
+    STATIC_REQUIRE(llama::mapping::isBytesplit<BS>);
+    STATIC_REQUIRE(!llama::mapping::isBytesplit<CT>);
+    STATIC_REQUIRE(!llama::mapping::isBytesplit<BPI>);
+    STATIC_REQUIRE(!llama::mapping::isBytesplit<BPF>);
+
+    STATIC_REQUIRE(!llama::mapping::isChangeType<AAoS>);
+    STATIC_REQUIRE(!llama::mapping::isChangeType<PAoS>);
+    STATIC_REQUIRE(!llama::mapping::isChangeType<SBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isChangeType<MBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isChangeType<AoAoS>);
+    STATIC_REQUIRE(!llama::mapping::isChangeType<One>);
+    STATIC_REQUIRE(!llama::mapping::isChangeType<Null>);
+    STATIC_REQUIRE(!llama::mapping::isChangeType<BS>);
+    STATIC_REQUIRE(llama::mapping::isChangeType<CT>);
+    STATIC_REQUIRE(!llama::mapping::isChangeType<BPI>);
+    STATIC_REQUIRE(!llama::mapping::isChangeType<BPF>);
+
+    STATIC_REQUIRE(!llama::mapping::isBitPackedIntSoA<AAoS>);
+    STATIC_REQUIRE(!llama::mapping::isBitPackedIntSoA<PAoS>);
+    STATIC_REQUIRE(!llama::mapping::isBitPackedIntSoA<SBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isBitPackedIntSoA<MBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isBitPackedIntSoA<AoAoS>);
+    STATIC_REQUIRE(!llama::mapping::isBitPackedIntSoA<One>);
+    STATIC_REQUIRE(!llama::mapping::isBitPackedIntSoA<Null>);
+    STATIC_REQUIRE(!llama::mapping::isBitPackedIntSoA<BS>);
+    STATIC_REQUIRE(!llama::mapping::isBitPackedIntSoA<CT>);
+    STATIC_REQUIRE(llama::mapping::isBitPackedIntSoA<BPI>);
+    STATIC_REQUIRE(!llama::mapping::isBitPackedIntSoA<BPF>);
+
+    STATIC_REQUIRE(!llama::mapping::isBitPackedFloatSoA<AAoS>);
+    STATIC_REQUIRE(!llama::mapping::isBitPackedFloatSoA<PAoS>);
+    STATIC_REQUIRE(!llama::mapping::isBitPackedFloatSoA<SBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isBitPackedFloatSoA<MBSoA>);
+    STATIC_REQUIRE(!llama::mapping::isBitPackedFloatSoA<AoAoS>);
+    STATIC_REQUIRE(!llama::mapping::isBitPackedFloatSoA<One>);
+    STATIC_REQUIRE(!llama::mapping::isBitPackedFloatSoA<Null>);
+    STATIC_REQUIRE(!llama::mapping::isBitPackedFloatSoA<BS>);
+    STATIC_REQUIRE(!llama::mapping::isBitPackedFloatSoA<CT>);
+    STATIC_REQUIRE(!llama::mapping::isBitPackedFloatSoA<BPI>);
+    STATIC_REQUIRE(llama::mapping::isBitPackedFloatSoA<BPF>);
 }
 
 TEST_CASE("mapping.LinearizeArrayDimsCpp.size")
