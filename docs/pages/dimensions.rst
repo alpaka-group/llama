@@ -33,7 +33,7 @@ By explicitely specifying the template arguments, we can mix compile time and ru
     llama::ArrayExtents<llama::dyn, 256, llama::dyn> extents{128, 32};
 
 The template argument list specifies the order and nature (compile vs. runtime) of the extents.
-An instance of :cpp:`llama::ArrayExtents` can then be constructed with as many runtime extents as :cpp:`llama::dyn`s specified in the template argument list.
+An instance of :cpp:`llama::ArrayExtents` can then be constructed with as many runtime extents as :cpp:`llama::dyn`\ 's specified in the template argument list.
 
 By setting a specific value for all template arguments, the array extents are fully determined at compile time.
 
@@ -46,7 +46,7 @@ This is important if such extents are later embedded into other LLAMA objects su
 .. code-block:: C++
 
     llama::ArrayExtents<128, 256, 32> extents{};
-    sizeof(extents) == 1; // no object can have size 0
+    static_assert(sizeof(extents) == 1); // no object can have size 0
     struct S : llama::ArrayExtents<128, 256, 32> { char c; } s;
     static_assert(sizeof(s) == sizeof(char)); // empty base optimization eliminates storage
 
