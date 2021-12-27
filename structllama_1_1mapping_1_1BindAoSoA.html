@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Low-Level Abstraction of Memory Access: llama::mapping::PreconfiguredSoA&lt; SeparateBuffers, LinearizeArrayDimsFunctor &gt; Struct Template Reference</title>
+<title>Low-Level Abstraction of Memory Access: llama::mapping::BindAoSoA&lt; Lanes, LinearizeArrayDimsFunctor &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -63,7 +63,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('structllama_1_1mapping_1_1PreconfiguredSoA.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('structllama_1_1mapping_1_1BindAoSoA.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -84,57 +84,58 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1Preconfigure
 <div class="header">
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
-<a href="structllama_1_1mapping_1_1PreconfiguredSoA-members.html">List of all members</a>  </div>
+<a href="structllama_1_1mapping_1_1BindAoSoA-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">llama::mapping::PreconfiguredSoA&lt; SeparateBuffers, LinearizeArrayDimsFunctor &gt; Struct Template Reference</div>  </div>
+<div class="title">llama::mapping::BindAoSoA&lt; Lanes, LinearizeArrayDimsFunctor &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:af35c6065b092b1d9f7774ae9f5f071e2"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim &gt; </td></tr>
-<tr class="memitem:af35c6065b092b1d9f7774ae9f5f071e2"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1PreconfiguredSoA.html#af35c6065b092b1d9f7774ae9f5f071e2">type</a> = <a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, SeparateBuffers, LinearizeArrayDimsFunctor &gt;</td></tr>
-<tr class="separator:af35c6065b092b1d9f7774ae9f5f071e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbda736bc6c623e67f865d812096909c"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim &gt; </td></tr>
+<tr class="memitem:abbda736bc6c623e67f865d812096909c"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindAoSoA.html#abbda736bc6c623e67f865d812096909c">fn</a> = <a class="el" href="structllama_1_1mapping_1_1AoSoA.html">AoSoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, Lanes, LinearizeArrayDimsFunctor &gt;</td></tr>
+<tr class="separator:abbda736bc6c623e67f865d812096909c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;bool SeparateBuffers = true, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp&gt;<br />
-struct llama::mapping::PreconfiguredSoA&lt; SeparateBuffers, LinearizeArrayDimsFunctor &gt;</h3>
+<div class="textblock"><h3>template&lt;std::size_t Lanes, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp&gt;<br />
+struct llama::mapping::BindAoSoA&lt; Lanes, LinearizeArrayDimsFunctor &gt;</h3>
 
+<p>Binds parameters to an <a class="el" href="structllama_1_1mapping_1_1AoSoA.html">AoSoA</a> mapping except for array and record dimension, producing a quoted meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping. </p>
 
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00110">110</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoSoA_8hpp_source.html#l00089">89</a> of file <a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="af35c6065b092b1d9f7774ae9f5f071e2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af35c6065b092b1d9f7774ae9f5f071e2">&#9670;&nbsp;</a></span>type</h2>
+<a id="abbda736bc6c623e67f865d812096909c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abbda736bc6c623e67f865d812096909c">&#9670;&nbsp;</a></span>fn</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;bool SeparateBuffers = true, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </div>
+template&lt;std::size_t Lanes, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </div>
 <div class="memtemplate">
 template&lt;typename ArrayExtents , typename RecordDim &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1PreconfiguredSoA.html">llama::mapping::PreconfiguredSoA</a>&lt; SeparateBuffers, LinearizeArrayDimsFunctor &gt;::<a class="el" href="structllama_1_1mapping_1_1PreconfiguredSoA.html#af35c6065b092b1d9f7774ae9f5f071e2">type</a> =  <a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a>&lt;<a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, SeparateBuffers, LinearizeArrayDimsFunctor&gt;</td>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1BindAoSoA.html">llama::mapping::BindAoSoA</a>&lt; Lanes, LinearizeArrayDimsFunctor &gt;::<a class="el" href="structllama_1_1mapping_1_1BindAoSoA.html#abbda736bc6c623e67f865d812096909c">fn</a> =  <a class="el" href="structllama_1_1mapping_1_1AoSoA.html">AoSoA</a>&lt;<a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, Lanes, LinearizeArrayDimsFunctor&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00113">113</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoSoA_8hpp_source.html#l00092">92</a> of file <a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>/home/runner/work/llama/llama/include/llama/mapping/<a class="el" href="SoA_8hpp_source.html">SoA.hpp</a></li>
+<li>/home/runner/work/llama/llama/include/llama/mapping/<a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1PreconfiguredSoA.html">PreconfiguredSoA</a></li>
-    <li class="footer">Generated on Mon Dec 27 2021 18:46:25 for Low-Level Abstraction of Memory Access by
+    <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1BindAoSoA.html">BindAoSoA</a></li>
+    <li class="footer">Generated on Mon Dec 27 2021 20:14:04 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

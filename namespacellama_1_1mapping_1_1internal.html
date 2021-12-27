@@ -125,12 +125,18 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
+<tr class="memitem:afecc58173e68c27346d37cac01c045f2"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
+<tr class="memitem:afecc58173e68c27346d37cac01c045f2"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#afecc58173e68c27346d37cac01c045f2">StoredIntegralFor</a> = std::conditional_t&lt; boost::mp11::mp_contains&lt; <a class="el" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">FlatRecordDim</a>&lt; RecordDim &gt;, double &gt;::value, std::uint64_t, std::uint32_t &gt;</td></tr>
+<tr class="separator:afecc58173e68c27346d37cac01c045f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f20341d5c6d9555b6bf0728dd6990a6"><td class="memTemplParams" colspan="2">template&lt;typename A , typename B &gt; </td></tr>
 <tr class="memitem:a0f20341d5c6d9555b6bf0728dd6990a6"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a0f20341d5c6d9555b6bf0728dd6990a6">HasLargerSize</a> = boost::mp11::mp_bool&lt; sizeof(A)&lt; sizeof(B)&gt;</td></tr>
 <tr class="separator:a0f20341d5c6d9555b6bf0728dd6990a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a702eab9c841dbc5d1fa483dd875d243e"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
 <tr class="memitem:a702eab9c841dbc5d1fa483dd875d243e"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a702eab9c841dbc5d1fa483dd875d243e">LargestIntegral</a> = boost::mp11::mp_max_element&lt; <a class="el" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">FlatRecordDim</a>&lt; RecordDim &gt;, <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a0f20341d5c6d9555b6bf0728dd6990a6">HasLargerSize</a> &gt;</td></tr>
 <tr class="separator:a702eab9c841dbc5d1fa483dd875d243e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bd577e3648ac7819c4773138b256344"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
+<tr class="memitem:a2bd577e3648ac7819c4773138b256344"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a2bd577e3648ac7819c4773138b256344">StoredUnsignedFor</a> = typename <a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeUnsigned.html">MakeUnsigned</a>&lt; <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a702eab9c841dbc5d1fa483dd875d243e">LargestIntegral</a>&lt; RecordDim &gt; &gt;::type</td></tr>
+<tr class="separator:a2bd577e3648ac7819c4773138b256344"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb46513e82a723e018572be98ef08d18"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:afb46513e82a723e018572be98ef08d18"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#afb46513e82a723e018572be98ef08d18">ReplaceByByteArray</a> = std::byte[sizeof(T)]</td></tr>
 <tr class="separator:afb46513e82a723e018572be98ef08d18"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -316,6 +322,42 @@ template&lt;typename RecordDim &gt; </div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="Bytesplit_8hpp_source.html#l00016">16</a> of file <a class="el" href="Bytesplit_8hpp_source.html">Bytesplit.hpp</a>.</p>
+
+</div>
+</div>
+<a id="afecc58173e68c27346d37cac01c045f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afecc58173e68c27346d37cac01c045f2">&#9670;&nbsp;</a></span>StoredIntegralFor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename RecordDim &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama_1_1mapping_1_1internal.html#afecc58173e68c27346d37cac01c045f2">llama::mapping::internal::StoredIntegralFor</a> = typedef std::conditional_t&lt; boost::mp11::mp_contains&lt;<a class="el" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">FlatRecordDim</a>&lt;RecordDim&gt;, double&gt;::value, std::uint64_t, std::uint32_t&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00178">178</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a2bd577e3648ac7819c4773138b256344"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2bd577e3648ac7819c4773138b256344">&#9670;&nbsp;</a></span>StoredUnsignedFor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename RecordDim &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a2bd577e3648ac7819c4773138b256344">llama::mapping::internal::StoredUnsignedFor</a> = typedef typename <a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeUnsigned.html">MakeUnsigned</a>&lt;<a class="el" href="namespacellama_1_1mapping_1_1internal.html#a702eab9c841dbc5d1fa483dd875d243e">LargestIntegral</a>&lt;RecordDim&gt; &gt;::type</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00160">160</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -556,7 +598,7 @@ template&lt;typename RC , typename RecordCoordForMapping1 &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Mon Dec 27 2021 18:46:26 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Dec 27 2021 20:14:04 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

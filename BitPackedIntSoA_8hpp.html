@@ -85,7 +85,8 @@ $(document).ready(function(){initNavTree('BitPackedIntSoA_8hpp.html',''); initRe
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#typedef-members">Typedefs</a>  </div>
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">BitPackedIntSoA.hpp File Reference</div>  </div>
 </div><!--header-->
@@ -149,7 +150,7 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html">llama::mapping::BitPackedIntSoA&lt; TArrayExtents, TRecordDim, Bits, LinearizeArrayDimsFunctor, StoredIntegral &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1PreconfiguredBitPackedIntSoA.html">llama::mapping::PreconfiguredBitPackedIntSoA&lt; Bits, LinearizeArrayDimsFunctor, StoredIntegral &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindBitPackedIntSoA.html">llama::mapping::BindBitPackedIntSoA&lt; Bits, LinearizeArrayDimsFunctor, StoredIntegral &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -169,6 +170,18 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a702eab9c841dbc5d1fa483dd875d243e"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
 <tr class="memitem:a702eab9c841dbc5d1fa483dd875d243e"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a702eab9c841dbc5d1fa483dd875d243e">llama::mapping::internal::LargestIntegral</a> = boost::mp11::mp_max_element&lt; FlatRecordDim&lt; RecordDim &gt;, HasLargerSize &gt;</td></tr>
 <tr class="separator:a702eab9c841dbc5d1fa483dd875d243e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bd577e3648ac7819c4773138b256344"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
+<tr class="memitem:a2bd577e3648ac7819c4773138b256344"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a2bd577e3648ac7819c4773138b256344">llama::mapping::internal::StoredUnsignedFor</a> = typename MakeUnsigned&lt; LargestIntegral&lt; RecordDim &gt; &gt;::type</td></tr>
+<tr class="separator:a2bd577e3648ac7819c4773138b256344"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a6663b77c0af63f5b4ac7d7d1ca0eaf9e"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
+<tr class="memitem:a6663b77c0af63f5b4ac7d7d1ca0eaf9e"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a6663b77c0af63f5b4ac7d7d1ca0eaf9e">llama::mapping::isBitPackedIntSoA</a> = false</td></tr>
+<tr class="separator:a6663b77c0af63f5b4ac7d7d1ca0eaf9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac4694ed01d9ac98b71fb296eacbe1f3"><td class="memTemplParams" colspan="2">template&lt;typename... Ts&gt; </td></tr>
+<tr class="memitem:aac4694ed01d9ac98b71fb296eacbe1f3"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#aac4694ed01d9ac98b71fb296eacbe1f3">llama::mapping::isBitPackedIntSoA&lt; BitPackedIntSoA&lt; Ts... &gt; &gt;</a> = true</td></tr>
+<tr class="separator:aac4694ed01d9ac98b71fb296eacbe1f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -176,7 +189,7 @@ Typedefs</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="BitPackedIntSoA_8hpp.html">BitPackedIntSoA.hpp</a></li>
-    <li class="footer">Generated on Mon Dec 27 2021 18:46:25 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Dec 27 2021 20:14:04 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

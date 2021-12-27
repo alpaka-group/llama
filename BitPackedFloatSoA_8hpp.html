@@ -85,7 +85,9 @@ $(document).ready(function(){initNavTree('BitPackedFloatSoA_8hpp.html',''); init
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">BitPackedFloatSoA.hpp File Reference</div>  </div>
 </div><!--header-->
@@ -146,6 +148,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html">llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, StoredIntegral &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindBitPackedFloatSoA.html">llama::mapping::BindBitPackedFloatSoA&lt; ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, StoredIntegral &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
@@ -155,6 +159,12 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacellama_1_1mapping_1_1internal"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html">llama::mapping::internal</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:afecc58173e68c27346d37cac01c045f2"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
+<tr class="memitem:afecc58173e68c27346d37cac01c045f2"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#afecc58173e68c27346d37cac01c045f2">llama::mapping::internal::StoredIntegralFor</a> = std::conditional_t&lt; boost::mp11::mp_contains&lt; FlatRecordDim&lt; RecordDim &gt;, double &gt;::value, std::uint64_t, std::uint32_t &gt;</td></tr>
+<tr class="separator:afecc58173e68c27346d37cac01c045f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -167,6 +177,15 @@ Functions</h2></td></tr>
 <tr class="memitem:af82bc84df6926cd1cd56cd929c035aeb"><td class="memTemplParams" colspan="2">template&lt;auto E, auto M&gt; </td></tr>
 <tr class="memitem:af82bc84df6926cd1cd56cd929c035aeb"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#af82bc84df6926cd1cd56cd929c035aeb">llama::mapping::internal::integBits</a> (<a class="el" href="structllama_1_1internal_1_1BoxedValue.html">llama::internal::BoxedValue</a>&lt; Constant&lt; E &gt;&gt;, <a class="el" href="structllama_1_1internal_1_1BoxedValue.html">llama::internal::BoxedValue</a>&lt; Constant&lt; M &gt;&gt;)</td></tr>
 <tr class="separator:af82bc84df6926cd1cd56cd929c035aeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:af9c9d24fc8ce05a939c4bdb3ca8ae133"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
+<tr class="memitem:af9c9d24fc8ce05a939c4bdb3ca8ae133"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#af9c9d24fc8ce05a939c4bdb3ca8ae133">llama::mapping::isBitPackedFloatSoA</a> = false</td></tr>
+<tr class="separator:af9c9d24fc8ce05a939c4bdb3ca8ae133"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89403fec542ad934c779be84c857e970"><td class="memTemplParams" colspan="2">template&lt;typename... Ts&gt; </td></tr>
+<tr class="memitem:a89403fec542ad934c779be84c857e970"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a89403fec542ad934c779be84c857e970">llama::mapping::isBitPackedFloatSoA&lt; BitPackedFloatSoA&lt; Ts... &gt; &gt;</a> = true</td></tr>
+<tr class="separator:a89403fec542ad934c779be84c857e970"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -174,7 +193,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="BitPackedFloatSoA_8hpp.html">BitPackedFloatSoA.hpp</a></li>
-    <li class="footer">Generated on Mon Dec 27 2021 18:46:25 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Dec 27 2021 20:14:04 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

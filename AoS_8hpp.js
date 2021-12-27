@@ -1,7 +1,7 @@
 var AoS_8hpp =
 [
     [ "AoS", "structllama_1_1mapping_1_1AoS.html", "structllama_1_1mapping_1_1AoS" ],
-    [ "PreconfiguredAoS", "structllama_1_1mapping_1_1PreconfiguredAoS.html", "structllama_1_1mapping_1_1PreconfiguredAoS" ],
+    [ "BindAoS", "structllama_1_1mapping_1_1BindAoS.html", "structllama_1_1mapping_1_1BindAoS" ],
     [ "AlignedAoS", "AoS_8hpp.html#a3695faa8a6c5702ee9de9fda033d5fc1", null ],
     [ "MinAlignedAoS", "AoS_8hpp.html#aeac5020f4d483fa193c7112bbf8e046b", null ],
     [ "PackedAoS", "AoS_8hpp.html#a15f85a9f76c702975e3c96d0304fa10d", null ],
