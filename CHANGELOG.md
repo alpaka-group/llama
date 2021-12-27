@@ -3,6 +3,116 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+
+## [0.4] - 2022-01-XX
+
+### Added features
+- added `operator<<` for `llama::VirtualRecord`, `llama::RecordCoord`, `llama::Array` and `llama::ArrayExtents` #279, #243, #373, #374
+- allow to use static arrays as record dimension #285, #244
+- added `llama::copy` for layout aware copying between two views #289
+- added `llama::Vector` as analog to `std::vector`, but supports LLAMA mappings #296, #300
+- added CI tests for MacOS 10.15 and 11 #297, #306, #393
+- added `push_front`, `pop_front`, `push_back` and `pop_back` for `llama::Array` #307
+- added `operator==` and `operator!=` for `llama::RecordCoord` #308
+- support arbitrary many record coords in `llama::Cat` and `llama::cat` #308
+- added example showing a particle-in-cell (PIC) simulation #319
+- `llama::Array` now has a member function `size` #325
+- added `llama::isComputed<Mapping, RecordCoord>` to query whether a field is computed by a mapping #325
+- added `llama::swap` for `VirtualRecord`, used by STL algorithms #344
+- extended blob allocators to allow requesting blob alignment, now used by `llama::allocView` #339, #355
+- added `llama::alignOf` and `llama::flatAlignOf` #355
+- added traits to detect whether a type is a certain LLAMA mapping #359, #456
+- added `TransformLeaves<RecordDim, TypeFunctor>` meta function #365
+- added macros `LLAMA_FORCE_INLINE` and `LLAMA_HOST_ACC` #366
+- support clang as CUDA compiler #366
+- `llama::mapping::SoA` and `llama::mapping::AoSoA` now support custom record dimension flatteners #371
+- added the `llama::mapping::FlattenRecordDimIncreasingAlignment`, `llama::mapping::FlattenRecordDimDecreasingAlignment` and `llama::mapping::FlattenRecordDimMinimizePadding` record dimension flatteners #371
+- added new mapping `llama::mapping::BitPackedIntSoA` bitpacking integers in the record dimension into SoA arrays, and added new example #372, #427, #441, #446
+- added new mapping `llama::mapping::BitPackedFloatSoA` bitpacking floating-point types in the record dimension into SoA arrays, and added new example #414, #427, #446
+- `LLAMA_FORCE_INLINE` views can be created on `const` blobs #375
+- added `llama::allocViewUninitialized` to create a `llama::View` without running the field type's constructors #377
+- added `llama::constructFields` to run the constructors of all field type's in a view #377
+- LLAMA's unit tests can now be run from the `ctest` test driver (not recommended because slower) #384
+- added support for compile time array dimensions with new classes `llama::ArrayExtents` #391
+- allow suppressing console output from `llama::mapping::Trace` on destruction #391
+- added new mapping `llama::mapping::Bytesplit` that allows to split each field type into a byte array and map using a further mapping, and added example #395, #398, #399, #441
+- added macro `LLAMA_UNROLL` to request unrolling of a loop #403
+- allow `llama::VirtualView` to store its inner view #406
+- `llama::mapping::Split` now supports multiple record coords to select how the record dimension is split #407
+- added clang-12, clang-13, g\++-9, g++-11, nvcc 11.3, 11.4, 11.5, Visual Studio 2022 to CI #314, #315, #317, #335, #396, #408, #412
+- added `CopyConst` type function #419
+- added new mapping `llama::mapping::ChangeType` that replaces types from the record dimension for other types when storing #421, #441
+- added new mixin `llama::ProxyRefOpMixin` to help supporting compount assignment and increment/decrement operators on proxy references #430
+- added unit test coverage analysis and reports for each PR #432
+- added new `llama::mapping::Null` mapping, that maps elements to nothing, discarding written values and returning default constructed values when reading #442
+- added new example `daxpy` focusing on the mappings `llama::mapping::BitPackedFloatSoA`, `llama::mapping::Bytesplit` and `llama::mapping::ChangeType` #450, #452, #455
+- added `llama::ReplacePlaceholders` meta function #451
+
+### Breaking changes
+- develop is the new default branch on GitHub, master was deleted #280
+- `llama::One` is now a zero-dimensional view (instead of one-dimensional) #286
+- `llama::mapping::AoS` is aligned and `llama::mapping::SoA` is multiblob by default #312
+- all alpaka examples now require alpaka 0.7 #321
+- updated clang-format to version 12.0.1 #326, #404
+- stricter checking whether a type is allowed as field type in general #284
+- stricter checking whether a type is allowed as field type in `llama::copy` #329
+- `llama::allocView` will now execute the constructors of the field type's #377
+- brightened the colors used for dumped mapping visualizations #387
+- renamed `llama::forEachLeaf` to `llama::forEachLeafCoord` and added new `llama::forEachLeaf` iterating over the fields of a record #388
+- replaced `llama::ArrayDims` by `llama::ArrayExtents` and `llama::ArrayIndex` #391
+- renamed `llama::ArrayDimsIndexIterator` to `llama::ArrayIndexIterator` #391
+- renamed `llama::ArrayDimsIndexRange` to `llama::ArrayIndexRange` #391
+- renamed `llama::mapping::Mapping::arrayDims()` -to `llama::mapping::Mapping::extents()` #391
+- the `ASAN_FOR_TESTS` CMake option has been renamed to `LLAMA_ENABLE_ASAN_FOR_TESTS` #425
+- renamed all `llama::mapping::PreconfiguredMapping` meta functions to `llama::mapping::BindMapping` #456
+
+### Bug fixes and improvements
+- updated zenodo file and provided a DOI to LLAMA's releases #282, #291, #292
+- views can be indexed with signed integer types as well #283
+- improve `LLAMA_INDEPENDENT_DATA` for clang compilers and the Intel LLVM compiler (icx) #302, #411
+- fixed a missing include #304
+- made `llama::Tuple` more similar to `std::tuple` #309
+- added clang-tidy CI checks #310, #367
+- all CMake projects now only request C++ as language #321
+- `llama::One` now respects the field type's alignment and minimizes its size #323
+- fixed `LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS` for nvcc when using MSVC as host compiler #334
+- fixed AoSoA blob size when the flat array extent is not divisible by the `Lanes` parameter #336
+- switched MSVC C++ standard flag from `/std:c++20` to `/std:c++latest` for unit tests #338, #443
+- added more unit tests for `std::transform` on LLAMA views #343
+- fixed `value_type` of `View::iterator` to be STL compatible #346
+- fixed default arguments for `llama::mapping::PreconfiguredAoS` to match `llama::mapping::AoS` #347
+- fixed default arguments for `llama::mapping::PreconfiguredSoA` to match `llama::mapping::SoA` #369
+- improved `llama::VirtualRecord`'s and `llama::View`'s size using empty base optimization #348
+- updated `stb` third-party libraries #352
+- ensured proper truncation of empty space after `hostname()` in common example utilities #353
+- a mapping's `blobNrAndOffset` can now deduce the record coordinates from a passed instance of `llama::RecordCoord` #368
+- provided `boost::mp11::mp_flatten` if Boost version is too old #370
+- ensured that `llama::VirtualView` supports negative indices #379
+- documented the behavior of the array extents linearizers #380
+- the fmt library is now an optional dependency for the llama CMake target #382, #383
+- the unit tests now compile with higher warning levels #386
+- better checking for unnecessary `const` qualifiers on `Mapping` and `ArrayExtents` template arguments #391
+- refactoring CMake optimization flags #392
+- refactored unit tests #299, #397
+- added more unit tests for `llama::bloballoc::AlignedAllocator` and `llama::mapping::Trace` #437
+- fixed generating invalid CSS class names for HTML dumps #410
+- avoid blurry heatmaps dumped by `llama::mapping::Heatmap` #416
+- ensure that a fully-static `llama::ArrayExtents` and `llama::mapping::One` are stateless #417
+- `DumpMapping.hpp` is now included via `llama.hpp` (with disabled content when the fmt library is not available) #251, #422
+- added `Bytesplit` and `BitpackedFloatSoA` mappings to n-body and heatequation examples #431
+- simplified implementation of `llama::tupleReplace` #435
+- `llama::Tuple` does no longer reserve space for empty types #436
+- improved documentation and README.md #440, #445, #453, #454, #457
+- fixed detection whether compilers support C++20 ranges #443
+- refined mapping related concepts #444
+- CI switched to Boost 1.74 because of alpaka
+- support templates in `llama::structName` #449
+
+### Removed features
+
+- dropped support for the Intel C++ Compiler Classic (icp) #351
+- removed `llama::Array::rank`, replaced by `llama::Array::size` #391
+
 ## [0.3] - 2021-06-04
 
 ### Added features
