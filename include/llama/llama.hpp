@@ -23,7 +23,7 @@
 /// LLAMA is licensed under the LGPL3+.
 
 #define LLAMA_VERSION_MAJOR 0
-#define LLAMA_VERSION_MINOR 3
+#define LLAMA_VERSION_MINOR 4
 #define LLAMA_VERSION_PATCH 0
 
 #ifdef __NVCC__
