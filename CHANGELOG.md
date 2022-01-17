@@ -39,7 +39,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - added macro `LLAMA_UNROLL` to request unrolling of a loop #403
 - allow `llama::VirtualView` to store its inner view #406
 - `llama::mapping::Split` now supports multiple record coords to select how the record dimension is split #407
-- added clang-12, clang-13, g\++-9, g++-11, nvcc 11.3, 11.4, 11.5, Visual Studio 2022 to CI #314, #315, #317, #335, #396, #408, #412
+- added clang-12, clang-13, g\++-9, g++-11, nvcc 11.3, 11.4, 11.5, 11.6, Visual Studio 2022 to CI #314, #315, #317, #335, #396, #408, #412, #461
 - added `CopyConst` type function #419
 - added new mapping `llama::mapping::ChangeType` that replaces types from the record dimension for other types when storing #421, #441
 - added new mixin `llama::ProxyRefOpMixin` to help supporting compount assignment and increment/decrement operators on proxy references #430
