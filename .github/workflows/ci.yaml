@@ -145,6 +145,10 @@ jobs:
             cxx: g++-11
             install_extra: g++-11
             cuda_url: https://developer.download.nvidia.com/compute/cuda/11.5.0/local_installers/cuda_11.5.0_495.29.05_linux.run
+          - name: build-ubuntu-gcc11-cuda11.6
+            cxx: g++-11
+            install_extra: g++-11
+            cuda_url: https://developer.download.nvidia.com/compute/cuda/11.6.0/local_installers/cuda_11.6.0_510.39.01_linux.run
             add_toolchain_repo: true
           - name: build-ubuntu-clang10
             cxx: clang++-10
