@@ -5,7 +5,7 @@ LLAMA – Low-Level Abstraction of Memory Access
 [![Doxygen](https://img.shields.io/badge/API-Doxygen-blue.svg)](https://alpaka-group.github.io/llama)
 [![Language](https://img.shields.io/badge/Language-C%2B%2B17-blue.svg)](https://isocpp.org/)
 [![Preprint](https://img.shields.io/badge/Preprint-arXiv-blue.svg)](https://arxiv.org/abs/2106.04284)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4911493.svg)](https://doi.org/10.5281/zenodo.4911493)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5901242.svg)](https://doi.org/10.5281/zenodo.5901242)
 [![codecov](https://codecov.io/gh/alpaka-group/llama/branch/develop/graph/badge.svg?token=B94D9G96FA)](https://codecov.io/gh/alpaka-group/llama)
 
 ![LLAMA](docs/images/logo_400x169.png)
