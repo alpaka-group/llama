@@ -9,22 +9,31 @@ namespace llama::mapping
 {
     namespace internal
     {
+        template<typename ReplacementMap, typename Coord, typename UserT>
+        auto replacedType()
+        {
+            using namespace boost::mp11;
+            if constexpr(mp_map_contains<ReplacementMap, Coord>::value)
+                return mp_identity<mp_second<mp_map_find<ReplacementMap, Coord>>>{};
+            else if constexpr(mp_map_contains<ReplacementMap, UserT>::value)
+                return mp_identity<mp_second<mp_map_find<ReplacementMap, UserT>>>{};
+            else
+                return mp_identity<UserT>{};
+        }
+
+        template<typename ReplacementMap, typename Coord, typename UserT>
+        using ReplacedType = typename decltype(replacedType<ReplacementMap, Coord, UserT>())::type;
+
         template<typename ReplacementMap>
         struct MakeReplacer
         {
-            static_assert(
-                boost::mp11::mp_is_map<ReplacementMap>::value,
-                "The Replacement map must be of the form: mp_list<mp_list<From, To>, ...>");
-
-            template<typename UserT>
-            using type = typename boost::mp11::mp_if<
-                boost::mp11::mp_map_contains<ReplacementMap, UserT>,
-                boost::mp11::mp_defer<boost::mp11::mp_second, boost::mp11::mp_map_find<ReplacementMap, UserT>>,
-                boost::mp11::mp_identity<UserT>>::type;
+            template<typename Coord, typename UserT>
+            using type = ReplacedType<ReplacementMap, Coord, UserT>;
         };
 
         template<typename RecordDim, typename ReplacementMap>
-        using ReplaceType = TransformLeaves<RecordDim, MakeReplacer<ReplacementMap>::template type>;
+        using ReplaceTypesInRecordDim
+            = TransformLeavesWithCoord<RecordDim, MakeReplacer<ReplacementMap>::template type>;
 
         template<typename UserT, typename StoredT>
         struct ChangeTypeReference : ProxyRefOpMixin<ChangeTypeReference<UserT, StoredT>, UserT>
@@ -55,17 +64,18 @@ namespace llama::mapping
 
     /// Mapping that changes the type in the record domain for a different one in storage. Conversions happen during
     /// load and store.
-    /// /tparam ReplacementMap A type list of binary type lists (a map) specifiying which type to replace by which
-    /// other type.
+    /// /tparam ReplacementMap A type list of binary type lists (a map) specifiying which type or the type at a \ref
+    /// RecordCoord (map key) to replace by which other type (mapped value).
     template<
         typename TArrayExtents,
         typename TRecordDim,
         template<typename, typename>
         typename InnerMapping,
         typename ReplacementMap>
-    struct ChangeType : private InnerMapping<TArrayExtents, internal::ReplaceType<TRecordDim, ReplacementMap>>
+    struct ChangeType
+        : private InnerMapping<TArrayExtents, internal::ReplaceTypesInRecordDim<TRecordDim, ReplacementMap>>
     {
-        using Inner = InnerMapping<TArrayExtents, internal::ReplaceType<TRecordDim, ReplacementMap>>;
+        using Inner = InnerMapping<TArrayExtents, internal::ReplaceTypesInRecordDim<TRecordDim, ReplacementMap>>;
 
         using ArrayExtents = typename Inner::ArrayExtents;
         using ArrayIndex = typename Inner::ArrayIndex;
@@ -81,14 +91,15 @@ namespace llama::mapping
         {
         }
 
-        template<std::size_t... RecordCoords>
-        static constexpr auto isComputed(RecordCoord<RecordCoords...>)
+        template<typename RecordCoord>
+        static constexpr auto isComputed(RecordCoord)
         {
-            using UserT = GetType<RecordDim, RecordCoord<RecordCoords...>>;
-            return boost::mp11::mp_map_contains<ReplacementMap, UserT>::value;
+            using UserT = GetType<RecordDim, RecordCoord>;
+            return boost::mp11::mp_map_contains<ReplacementMap, RecordCoord>::value
+                || boost::mp11::mp_map_contains<ReplacementMap, UserT>::value;
         }
 
-        using Inner::blobNrAndOffset; // for all non-computed fields
+        // using Inner::blobNrAndOffset; // for all non-computed fields
 
         template<std::size_t... RecordCoords, typename BlobArray>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto compute(
@@ -98,7 +109,7 @@ namespace llama::mapping
         {
             static_assert(isComputed(rc));
             using UserT = GetType<RecordDim, RecordCoord<RecordCoords...>>;
-            using StoredT = boost::mp11::mp_second<boost::mp11::mp_map_find<ReplacementMap, UserT>>;
+            using StoredT = internal::ReplacedType<ReplacementMap, RecordCoord<RecordCoords...>, UserT>;
             using QualifiedStoredT = CopyConst<BlobArray, StoredT>;
             const auto [nr, offset] = Inner::template blobNrAndOffset<RecordCoords...>(ai);
             return internal::ChangeTypeReference<UserT, QualifiedStoredT>{
