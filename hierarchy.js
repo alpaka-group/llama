@@ -115,6 +115,7 @@ var hierarchy =
       [ "llama::mapping::internal::MakeUnsigned< T, SFINAE >", "structllama_1_1mapping_1_1internal_1_1MakeUnsigned.html", null ],
       [ "llama::mapping::internal::MakeUnsigned< T, std::enable_if_t< std::is_enum_v< T > > >", "structllama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__enum__v_3_01T_01_4_01_4_01_4.html", null ]
     ] ],
+    [ "llama::internal::MakePassSecond< F >", "structllama_1_1internal_1_1MakePassSecond.html", null ],
     [ "llama::mapping::internal::MakeReplacer< ReplacementMap >", "structllama_1_1mapping_1_1internal_1_1MakeReplacer.html", null ],
     [ "llama::mapping::internal::MakeUnsigned< bool >", "structllama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01bool_01_4.html", null ],
     [ "llama::mapping::tree::internal::MergeFunctors< Tree, TreeOperationList >", "structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors.html", null ],
@@ -175,9 +176,9 @@ var hierarchy =
       [ "llama::mapping::tree::Mapping< TArrayExtents, TRecordDim, TreeOperationList >", "structllama_1_1mapping_1_1tree_1_1Mapping.html", null ]
     ] ],
     [ "llama::mapping::Trace< Mapping >", "structllama_1_1mapping_1_1Trace.html", null ],
-    [ "llama::internal::TransformLeavesImpl< T, TypeFunctor >", "structllama_1_1internal_1_1TransformLeavesImpl.html", null ],
-    [ "llama::internal::TransformLeavesImpl< Child[N], TypeFunctor >", "structllama_1_1internal_1_1TransformLeavesImpl_3_01Child_0fN_0e_00_01TypeFunctor_01_4.html", null ],
-    [ "llama::internal::TransformLeavesImpl< Record< Fields... >, TypeFunctor >", "structllama_1_1internal_1_1TransformLeavesImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01TypeFunctor_01_4.html", null ],
+    [ "llama::internal::TransformLeavesWithCoordImpl< Coord, T, TypeFunctor >", "structllama_1_1internal_1_1TransformLeavesWithCoordImpl.html", null ],
+    [ "llama::internal::TransformLeavesWithCoordImpl< RecordCoord< Is... >, Child[N], TypeFunctor >", "structllama_1_1internal_1_1TransformLeavesWithCoordImpl_3_01RecordCoord_3_01Is_8_8_8_01_4_00_01C1fa9eea95bd347b217962f0d40f323c8.html", null ],
+    [ "llama::internal::TransformLeavesWithCoordImpl< RecordCoord< Is... >, Record< Fields... >, TypeFunctor >", "structllama_1_1internal_1_1TransformLeavesWithCoordImpl_3_01RecordCoord_3_01Is_8_8_8_01_4_00_01R42adaa4e9e950291b6a81a9b9f4ba005.html", null ],
     [ "llama::mapping::tree::TreeCoordElement< ChildIndex, ArrayIndexType >", "structllama_1_1mapping_1_1tree_1_1TreeCoordElement.html", null ],
     [ "true_type", null, [
       [ "llama::internal::IsBoundedArray< T[N]>", "structllama_1_1internal_1_1IsBoundedArray_3_01T_0fN_0e_4.html", null ]

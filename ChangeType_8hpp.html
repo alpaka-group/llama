@@ -86,6 +86,7 @@ $(document).ready(function(){initNavTree('ChangeType_8hpp.html',''); initResizab
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">ChangeType.hpp File Reference</div>  </div>
@@ -146,9 +147,18 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a5e58ce4aaee7c25f9365c829e5e4ea6e"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename ReplacementMap &gt; </td></tr>
-<tr class="memitem:a5e58ce4aaee7c25f9365c829e5e4ea6e"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a5e58ce4aaee7c25f9365c829e5e4ea6e">llama::mapping::internal::ReplaceType</a> = TransformLeaves&lt; RecordDim, MakeReplacer&lt; ReplacementMap &gt;::template type &gt;</td></tr>
-<tr class="separator:a5e58ce4aaee7c25f9365c829e5e4ea6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23ee1bddd53f0866f412625ad7eb246d"><td class="memTemplParams" colspan="2">template&lt;typename ReplacementMap , typename Coord , typename UserT &gt; </td></tr>
+<tr class="memitem:a23ee1bddd53f0866f412625ad7eb246d"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a23ee1bddd53f0866f412625ad7eb246d">llama::mapping::internal::ReplacedType</a> = typename decltype(replacedType&lt; ReplacementMap, Coord, UserT &gt;())::type</td></tr>
+<tr class="separator:a23ee1bddd53f0866f412625ad7eb246d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe4328384bcc5f94f9522177c61b1571"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename ReplacementMap &gt; </td></tr>
+<tr class="memitem:abe4328384bcc5f94f9522177c61b1571"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#abe4328384bcc5f94f9522177c61b1571">llama::mapping::internal::ReplaceTypesInRecordDim</a> = TransformLeavesWithCoord&lt; RecordDim, MakeReplacer&lt; ReplacementMap &gt;::template type &gt;</td></tr>
+<tr class="separator:abe4328384bcc5f94f9522177c61b1571"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a2be9329060ed4ca1edc78560fc151f0b"><td class="memTemplParams" colspan="2">template&lt;typename ReplacementMap , typename Coord , typename UserT &gt; </td></tr>
+<tr class="memitem:a2be9329060ed4ca1edc78560fc151f0b"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a2be9329060ed4ca1edc78560fc151f0b">llama::mapping::internal::replacedType</a> ()</td></tr>
+<tr class="separator:a2be9329060ed4ca1edc78560fc151f0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -165,7 +175,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="ChangeType_8hpp.html">ChangeType.hpp</a></li>
-    <li class="footer">Generated on Tue Jan 25 2022 13:12:50 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Feb 10 2022 17:04:13 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -141,11 +141,14 @@ Typedefs</h2></td></tr>
 <tr class="memitem:afb46513e82a723e018572be98ef08d18"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#afb46513e82a723e018572be98ef08d18">ReplaceByByteArray</a> = std::byte[sizeof(T)]</td></tr>
 <tr class="separator:afb46513e82a723e018572be98ef08d18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6541b9600737326f2e0b6354d0b3dfa1"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
-<tr class="memitem:a6541b9600737326f2e0b6354d0b3dfa1"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a6541b9600737326f2e0b6354d0b3dfa1">SplitBytes</a> = <a class="el" href="namespacellama.html#aea850368a25989a05b5c158bb3a537d2">TransformLeaves</a>&lt; RecordDim, <a class="el" href="namespacellama_1_1mapping_1_1internal.html#afb46513e82a723e018572be98ef08d18">ReplaceByByteArray</a> &gt;</td></tr>
+<tr class="memitem:a6541b9600737326f2e0b6354d0b3dfa1"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a6541b9600737326f2e0b6354d0b3dfa1">SplitBytes</a> = <a class="el" href="namespacellama.html#a825425dc4761ab3b27c3ec6d42876f32">TransformLeaves</a>&lt; RecordDim, <a class="el" href="namespacellama_1_1mapping_1_1internal.html#afb46513e82a723e018572be98ef08d18">ReplaceByByteArray</a> &gt;</td></tr>
 <tr class="separator:a6541b9600737326f2e0b6354d0b3dfa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e58ce4aaee7c25f9365c829e5e4ea6e"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename ReplacementMap &gt; </td></tr>
-<tr class="memitem:a5e58ce4aaee7c25f9365c829e5e4ea6e"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a5e58ce4aaee7c25f9365c829e5e4ea6e">ReplaceType</a> = <a class="el" href="namespacellama.html#aea850368a25989a05b5c158bb3a537d2">TransformLeaves</a>&lt; RecordDim, <a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeReplacer.html">MakeReplacer</a>&lt; ReplacementMap &gt;::template type &gt;</td></tr>
-<tr class="separator:a5e58ce4aaee7c25f9365c829e5e4ea6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23ee1bddd53f0866f412625ad7eb246d"><td class="memTemplParams" colspan="2">template&lt;typename ReplacementMap , typename Coord , typename UserT &gt; </td></tr>
+<tr class="memitem:a23ee1bddd53f0866f412625ad7eb246d"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a23ee1bddd53f0866f412625ad7eb246d">ReplacedType</a> = typename decltype(<a class="el" href="namespacellama_1_1mapping_1_1internal.html#a2be9329060ed4ca1edc78560fc151f0b">replacedType</a>&lt; ReplacementMap, Coord, UserT &gt;())::type</td></tr>
+<tr class="separator:a23ee1bddd53f0866f412625ad7eb246d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe4328384bcc5f94f9522177c61b1571"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename ReplacementMap &gt; </td></tr>
+<tr class="memitem:abe4328384bcc5f94f9522177c61b1571"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#abe4328384bcc5f94f9522177c61b1571">ReplaceTypesInRecordDim</a> = <a class="el" href="namespacellama.html#aaee3ebd8a4ac86fffc2c6e5cc1a3ac71">TransformLeavesWithCoord</a>&lt; RecordDim, <a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeReplacer.html">MakeReplacer</a>&lt; ReplacementMap &gt;::template type &gt;</td></tr>
+<tr class="separator:abe4328384bcc5f94f9522177c61b1571"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a761919af792a2052749e060dec4adafe"><td class="memTemplParams" colspan="2">template&lt;typename A , typename B &gt; </td></tr>
 <tr class="memitem:a761919af792a2052749e060dec4adafe"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a761919af792a2052749e060dec4adafe">LessAlignment</a> = std::bool_constant&lt; alignof(A)&lt; alignof(B)&gt;</td></tr>
 <tr class="separator:a761919af792a2052749e060dec4adafe"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -167,6 +170,9 @@ Functions</h2></td></tr>
 <tr class="memitem:af82bc84df6926cd1cd56cd929c035aeb"><td class="memTemplParams" colspan="2">template&lt;auto E, auto M&gt; </td></tr>
 <tr class="memitem:af82bc84df6926cd1cd56cd929c035aeb"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#af82bc84df6926cd1cd56cd929c035aeb">integBits</a> (<a class="el" href="structllama_1_1internal_1_1BoxedValue.html">llama::internal::BoxedValue</a>&lt; <a class="el" href="namespacellama.html#a0af0304a902bcb5c5c90377ad751033a">Constant</a>&lt; E &gt;&gt;, <a class="el" href="structllama_1_1internal_1_1BoxedValue.html">llama::internal::BoxedValue</a>&lt; <a class="el" href="namespacellama.html#a0af0304a902bcb5c5c90377ad751033a">Constant</a>&lt; M &gt;&gt;)</td></tr>
 <tr class="separator:af82bc84df6926cd1cd56cd929c035aeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2be9329060ed4ca1edc78560fc151f0b"><td class="memTemplParams" colspan="2">template&lt;typename ReplacementMap , typename Coord , typename UserT &gt; </td></tr>
+<tr class="memitem:a2be9329060ed4ca1edc78560fc151f0b"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a2be9329060ed4ca1edc78560fc151f0b">replacedType</a> ()</td></tr>
+<tr class="separator:a2be9329060ed4ca1edc78560fc151f0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e7e517f779808ecc12e1549170d2c16"><td class="memTemplParams" colspan="2">template&lt;typename... Fields, std::size_t FirstCoord, std::size_t... Coords&gt; </td></tr>
 <tr class="memitem:a6e7e517f779808ecc12e1549170d2c16"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a6e7e517f779808ecc12e1549170d2c16">partitionRecordDim</a> (<a class="el" href="structllama_1_1Record.html">Record</a>&lt; Fields... &gt;, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; FirstCoord, Coords... &gt;)</td></tr>
 <tr class="separator:a6e7e517f779808ecc12e1549170d2c16"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -289,8 +295,26 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a5e58ce4aaee7c25f9365c829e5e4ea6e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5e58ce4aaee7c25f9365c829e5e4ea6e">&#9670;&nbsp;</a></span>ReplaceType</h2>
+<a id="a23ee1bddd53f0866f412625ad7eb246d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23ee1bddd53f0866f412625ad7eb246d">&#9670;&nbsp;</a></span>ReplacedType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ReplacementMap , typename Coord , typename UserT &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a23ee1bddd53f0866f412625ad7eb246d">llama::mapping::internal::ReplacedType</a> = typedef typename decltype(<a class="el" href="namespacellama_1_1mapping_1_1internal.html#a2be9329060ed4ca1edc78560fc151f0b">replacedType</a>&lt;ReplacementMap, Coord, UserT&gt;())::type</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00025">25</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
+
+</div>
+</div>
+<a id="abe4328384bcc5f94f9522177c61b1571"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe4328384bcc5f94f9522177c61b1571">&#9670;&nbsp;</a></span>ReplaceTypesInRecordDim</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -298,12 +322,12 @@ template&lt;typename T &gt; </div>
 template&lt;typename RecordDim , typename ReplacementMap &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a5e58ce4aaee7c25f9365c829e5e4ea6e">llama::mapping::internal::ReplaceType</a> = typedef <a class="el" href="namespacellama.html#aea850368a25989a05b5c158bb3a537d2">TransformLeaves</a>&lt;RecordDim, <a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeReplacer.html">MakeReplacer</a>&lt;ReplacementMap&gt;::template type&gt;</td>
+          <td class="memname">using <a class="el" href="namespacellama_1_1mapping_1_1internal.html#abe4328384bcc5f94f9522177c61b1571">llama::mapping::internal::ReplaceTypesInRecordDim</a> = typedef <a class="el" href="namespacellama.html#aaee3ebd8a4ac86fffc2c6e5cc1a3ac71">TransformLeavesWithCoord</a>&lt;RecordDim, <a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeReplacer.html">MakeReplacer</a>&lt;ReplacementMap&gt;::template type&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00027">27</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00036">36</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
 
 </div>
 </div>
@@ -316,7 +340,7 @@ template&lt;typename RecordDim , typename ReplacementMap &gt; </div>
 template&lt;typename RecordDim &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a6541b9600737326f2e0b6354d0b3dfa1">llama::mapping::internal::SplitBytes</a> = typedef <a class="el" href="namespacellama.html#aea850368a25989a05b5c158bb3a537d2">TransformLeaves</a>&lt;RecordDim, <a class="el" href="namespacellama_1_1mapping_1_1internal.html#afb46513e82a723e018572be98ef08d18">ReplaceByByteArray</a>&gt;</td>
+          <td class="memname">using <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a6541b9600737326f2e0b6354d0b3dfa1">llama::mapping::internal::SplitBytes</a> = typedef <a class="el" href="namespacellama.html#a825425dc4761ab3b27c3ec6d42876f32">TransformLeaves</a>&lt;RecordDim, <a class="el" href="namespacellama_1_1mapping_1_1internal.html#afb46513e82a723e018572be98ef08d18">ReplaceByByteArray</a>&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -565,6 +589,27 @@ template&lt;typename Integral &gt; </div>
 
 </div>
 </div>
+<a id="a2be9329060ed4ca1edc78560fc151f0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2be9329060ed4ca1edc78560fc151f0b">&#9670;&nbsp;</a></span>replacedType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ReplacementMap , typename Coord , typename UserT &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">auto llama::mapping::internal::replacedType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00013">13</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Variable Documentation</h2>
 <a id="a72f565b64d0dec287502e69e8ffd2e01"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a72f565b64d0dec287502e69e8ffd2e01">&#9670;&nbsp;</a></span>isSelected</h2>
@@ -598,7 +643,7 @@ template&lt;typename RC , typename RecordCoordForMapping1 &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Tue Jan 25 2022 13:12:50 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Feb 10 2022 17:04:13 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

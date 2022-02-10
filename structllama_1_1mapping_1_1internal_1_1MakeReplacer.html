@@ -94,34 +94,34 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1internal_1_1
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ac749155b3a3bf4d463f097364bbcfef9"><td class="memTemplParams" colspan="2">template&lt;typename UserT &gt; </td></tr>
-<tr class="memitem:ac749155b3a3bf4d463f097364bbcfef9"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeReplacer.html#ac749155b3a3bf4d463f097364bbcfef9">type</a> = typename boost::mp11::mp_if&lt; boost::mp11::mp_map_contains&lt; ReplacementMap, UserT &gt;, boost::mp11::mp_defer&lt; boost::mp11::mp_second, boost::mp11::mp_map_find&lt; ReplacementMap, UserT &gt; &gt;, boost::mp11::mp_identity&lt; UserT &gt; &gt;::<a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeReplacer.html#ac749155b3a3bf4d463f097364bbcfef9">type</a></td></tr>
-<tr class="separator:ac749155b3a3bf4d463f097364bbcfef9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82c6273af00940ddc9d8ad6c4873bcd2"><td class="memTemplParams" colspan="2">template&lt;typename Coord , typename UserT &gt; </td></tr>
+<tr class="memitem:a82c6273af00940ddc9d8ad6c4873bcd2"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeReplacer.html#a82c6273af00940ddc9d8ad6c4873bcd2">type</a> = <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a23ee1bddd53f0866f412625ad7eb246d">ReplacedType</a>&lt; ReplacementMap, Coord, UserT &gt;</td></tr>
+<tr class="separator:a82c6273af00940ddc9d8ad6c4873bcd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename ReplacementMap&gt;<br />
 struct llama::mapping::internal::MakeReplacer&lt; ReplacementMap &gt;</h3>
 
 
-<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00013">13</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00028">28</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="ac749155b3a3bf4d463f097364bbcfef9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac749155b3a3bf4d463f097364bbcfef9">&#9670;&nbsp;</a></span>type</h2>
+<a id="a82c6273af00940ddc9d8ad6c4873bcd2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82c6273af00940ddc9d8ad6c4873bcd2">&#9670;&nbsp;</a></span>type</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename ReplacementMap &gt; </div>
 <div class="memtemplate">
-template&lt;typename UserT &gt; </div>
+template&lt;typename Coord , typename UserT &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeReplacer.html">llama::mapping::internal::MakeReplacer</a>&lt; ReplacementMap &gt;::<a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeReplacer.html#ac749155b3a3bf4d463f097364bbcfef9">type</a> =  typename boost::mp11::mp_if&lt; boost::mp11::mp_map_contains&lt;ReplacementMap, UserT&gt;, boost::mp11::mp_defer&lt;boost::mp11::mp_second, boost::mp11::mp_map_find&lt;ReplacementMap, UserT&gt; &gt;, boost::mp11::mp_identity&lt;UserT&gt; &gt;::<a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeReplacer.html#ac749155b3a3bf4d463f097364bbcfef9">type</a></td>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeReplacer.html">llama::mapping::internal::MakeReplacer</a>&lt; ReplacementMap &gt;::<a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeReplacer.html#a82c6273af00940ddc9d8ad6c4873bcd2">type</a> =  <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a23ee1bddd53f0866f412625ad7eb246d">ReplacedType</a>&lt;ReplacementMap, Coord, UserT&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00023">23</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00031">31</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
 
 </div>
 </div>
@@ -134,7 +134,7 @@ template&lt;typename UserT &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping_1_1internal.html">internal</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeReplacer.html">MakeReplacer</a></li>
-    <li class="footer">Generated on Tue Jan 25 2022 13:12:50 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Feb 10 2022 17:04:13 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
