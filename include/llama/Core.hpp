@@ -576,29 +576,62 @@ namespace llama
 
     namespace internal
     {
-        template<typename T, template<typename> typename TypeFunctor>
-        struct TransformLeavesImpl
+        template<typename Coord, typename T, template<typename, typename> typename TypeFunctor>
+        struct TransformLeavesWithCoordImpl
         {
-            using type = TypeFunctor<T>;
+            using type = TypeFunctor<Coord, T>;
         };
 
-        template<typename... Fields, template<typename> typename TypeFunctor>
-        struct TransformLeavesImpl<Record<Fields...>, TypeFunctor>
+        template<std::size_t... Is, typename... Fields, template<typename, typename> typename TypeFunctor>
+        struct TransformLeavesWithCoordImpl<RecordCoord<Is...>, Record<Fields...>, TypeFunctor>
         {
-            using type = Record<
-                Field<GetFieldTag<Fields>, typename TransformLeavesImpl<GetFieldType<Fields>, TypeFunctor>::type>...>;
+            template<std::size_t... Js>
+            static auto f(std::index_sequence<Js...>)
+            {
+                return Record<Field<
+                    GetFieldTag<Fields>,
+                    typename TransformLeavesWithCoordImpl<RecordCoord<Is..., Js>, GetFieldType<Fields>, TypeFunctor>::
+                        type>...>{};
+            }
+
+            using type = decltype(f(std::index_sequence_for<Fields...>{}));
         };
-        template<typename Child, std::size_t N, template<typename> typename TypeFunctor>
-        struct TransformLeavesImpl<Child[N], TypeFunctor>
+        template<std::size_t... Is, typename Child, std::size_t N, template<typename, typename> typename TypeFunctor>
+        struct TransformLeavesWithCoordImpl<RecordCoord<Is...>, Child[N], TypeFunctor>
         {
-            using type = typename TransformLeavesImpl<Child, TypeFunctor>::type[N];
+            template<std::size_t... Js>
+            static void f(std::index_sequence<Js...>)
+            {
+                static_assert(
+                    boost::mp11::mp_same<
+                        typename TransformLeavesWithCoordImpl<RecordCoord<Is..., Js>, Child, TypeFunctor>::type...>::
+                        value,
+                    "Leave transformations beneath an array node must return the same type");
+            }
+            using dummy = decltype(f(std::make_index_sequence<N>{}));
+
+            using type = typename TransformLeavesWithCoordImpl<RecordCoord<Is..., 0>, Child, TypeFunctor>::type[N];
+        };
+
+        template<template<typename> typename F>
+        struct MakePassSecond
+        {
+            template<typename A, typename B>
+            using fn = F<B>;
         };
     } // namespace internal
 
     /// Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to
+    /// the original leaf's \ref RecordCoord and field's type.
+    template<typename RecordDim, template<typename, typename> typename FieldTypeFunctor>
+    using TransformLeavesWithCoord =
+        typename internal::TransformLeavesWithCoordImpl<RecordCoord<>, RecordDim, FieldTypeFunctor>::type;
+
+    /// Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to
     /// the original leaf field's type.
     template<typename RecordDim, template<typename> typename FieldTypeFunctor>
-    using TransformLeaves = typename internal::TransformLeavesImpl<RecordDim, FieldTypeFunctor>::type;
+    using TransformLeaves
+        = TransformLeavesWithCoord<RecordDim, internal::MakePassSecond<FieldTypeFunctor>::template fn>;
 
     namespace internal
     {

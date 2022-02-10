@@ -359,6 +359,32 @@ TEST_CASE("TransformLeaves")
     STATIC_REQUIRE(std::is_same_v<llama::TransformLeaves<Particle, std::add_pointer_t>, ParticleTransformed>);
 }
 
+TEST_CASE("TransformLeavesWithCoord")
+{
+    STATIC_REQUIRE(
+        std::is_same_v<llama::TransformLeavesWithCoord<int, std::pair>, std::pair<llama::RecordCoord<>, int>>);
+    STATIC_REQUIRE(
+        std::is_same_v<llama::TransformLeavesWithCoord<int[3], std::pair>, std::pair<llama::RecordCoord<0>, int>[3]>);
+    STATIC_REQUIRE(std::is_same_v<
+                   llama::TransformLeavesWithCoord<llama::Record<llama::Field<int, int>>, std::pair>,
+                   llama::Record<llama::Field<int, std::pair<llama::RecordCoord<0>, int>>>>);
+
+    using PosTransformed = llama::Record<
+        llama::Field<tag::X, std::pair<llama::RecordCoord<0, 0>, double>>,
+        llama::Field<tag::Y, std::pair<llama::RecordCoord<0, 1>, double>>,
+        llama::Field<tag::Z, std::pair<llama::RecordCoord<0, 2>, double>>>;
+    using VelTransformed = llama::Record<
+        llama::Field<tag::X, std::pair<llama::RecordCoord<2, 0>, double>>,
+        llama::Field<tag::Y, std::pair<llama::RecordCoord<2, 1>, double>>,
+        llama::Field<tag::Z, std::pair<llama::RecordCoord<2, 2>, double>>>;
+    using ParticleTransformed = llama::Record<
+        llama::Field<tag::Pos, PosTransformed>,
+        llama::Field<tag::Mass, std::pair<llama::RecordCoord<1>, float>>,
+        llama::Field<tag::Vel, VelTransformed>,
+        llama::Field<tag::Flags, std::pair<llama::RecordCoord<3, 0>, bool>[4]>>;
+    STATIC_REQUIRE(std::is_same_v<llama::TransformLeavesWithCoord<Particle, std::pair>, ParticleTransformed>);
+}
+
 TEST_CASE("MergedRecordDims")
 {
     STATIC_REQUIRE(std::is_same_v<llama::MergedRecordDims<llama::Record<>, llama::Record<>>, llama::Record<>>);
