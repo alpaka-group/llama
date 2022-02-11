@@ -11,6 +11,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama fmt::fmt)
 
 if (MSVC)
 	target_compile_options(${PROJECT_NAME} PRIVATE /arch:AVX2 /fp:fast /bigobj)
-elseif(MSVC)
+else()
 	target_compile_options(${PROJECT_NAME} PRIVATE -march=native -ffast-math)
 endif()
