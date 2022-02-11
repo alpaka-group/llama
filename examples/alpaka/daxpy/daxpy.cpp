@@ -24,9 +24,10 @@ void daxpy(std::ofstream& plotFile)
     std::cout << title << "\n";
 
     Stopwatch watch;
-    auto x = std::vector<double>(PROBLEM_SIZE);
-    auto y = std::vector<double>(PROBLEM_SIZE);
-    auto z = std::vector<double>(PROBLEM_SIZE);
+    using Vec = std::vector<double, llama::bloballoc::AlignedAllocator<double, 64>>;
+    auto x = Vec(PROBLEM_SIZE);
+    auto y = Vec(PROBLEM_SIZE);
+    auto z = Vec(PROBLEM_SIZE);
     watch.printAndReset("alloc");
 
     for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
