@@ -10,7 +10,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama OpenMP::OpenMP_CXX)
 
 if (MSVC)
 	target_compile_options(${PROJECT_NAME} PRIVATE /arch:AVX2)
-	if (MSVC_VERSION VERSION_GREATER_EQUAL 1930)
+	if (MSVC_VERSION VERSION_GREATER_EQUAL 1930 AND MSVC_VERSION VERSION_LESS 1932)
 		# VS 2022 has a new lambda processor that has troubles with OpenMP pragmas:
 		# https://developercommunity.visualstudio.com/t/OpenMP-in-lambda-expression-compile-erro/1501041
 		# And the workaround flag /Zc:lambda- needs to come after the CXX standard,
