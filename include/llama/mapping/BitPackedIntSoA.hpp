@@ -174,10 +174,12 @@ namespace llama::mapping
         typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
         typename StoredIntegral = internal::StoredUnsignedFor<TRecordDim>>
     struct BitPackedIntSoA
-        : TArrayExtents
+        : MappingBase<TArrayExtents, TRecordDim>
         , private llama::internal::BoxedValue<Bits>
     {
     private:
+        using Base = MappingBase<TArrayExtents, TRecordDim>;
+
         template<typename T>
         using IsAllowedFieldType = boost::mp11::mp_or<std::is_integral<T>, std::is_enum<T>>;
 
@@ -188,29 +190,21 @@ namespace llama::mapping
         using VHBits = llama::internal::BoxedValue<Bits>;
 
     public:
-        using ArrayExtents = TArrayExtents;
-        using ArrayIndex = typename ArrayExtents::Index;
-        using RecordDim = TRecordDim;
-        static constexpr std::size_t blobCount = boost::mp11::mp_size<FlatRecordDim<RecordDim>>::value;
+        static constexpr std::size_t blobCount = boost::mp11::mp_size<FlatRecordDim<TRecordDim>>::value;
 
-        constexpr BitPackedIntSoA() = default;
+        using Base::Base;
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr BitPackedIntSoA(ArrayExtents extents, Bits bits = {}, RecordDim = {})
-            : ArrayExtents(extents)
+        LLAMA_FN_HOST_ACC_INLINE constexpr BitPackedIntSoA(TArrayExtents extents, Bits bits = {}, TRecordDim = {})
+            : Base(extents)
             , VHBits{bits}
         {
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayExtents
-        {
-            return *this; // NOLINT(cppcoreguidelines-slicing)
         }
 
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto blobSize(std::size_t /*blobIndex*/) const -> std::size_t
         {
             constexpr auto bitsPerStoredIntegral = sizeof(StoredIntegral) * CHAR_BIT;
-            const auto bitsNeeded = LinearizeArrayDimsFunctor{}.size(extents()) * VHBits::value();
+            const auto bitsNeeded = LinearizeArrayDimsFunctor{}.size(Base::extents()) * VHBits::value();
             return roundUpToMultiple(bitsNeeded, bitsPerStoredIntegral) / CHAR_BIT;
         }
 
@@ -221,14 +215,16 @@ namespace llama::mapping
         }
 
         template<std::size_t... RecordCoords, typename Blobs>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto compute(ArrayIndex ai, RecordCoord<RecordCoords...>, Blobs& blobs)
-            const
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto compute(
+            typename Base::ArrayIndex ai,
+            RecordCoord<RecordCoords...>,
+            Blobs& blobs) const
         {
-            constexpr auto blob = flatRecordCoord<RecordDim, RecordCoord<RecordCoords...>>;
-            const auto bitOffset = LinearizeArrayDimsFunctor{}(ai, extents()) * VHBits::value();
+            constexpr auto blob = flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>;
+            const auto bitOffset = LinearizeArrayDimsFunctor{}(ai, Base::extents()) * VHBits::value();
 
             using QualifiedStoredIntegral = CopyConst<Blobs, StoredIntegral>;
-            using DstType = GetType<RecordDim, RecordCoord<RecordCoords...>>;
+            using DstType = GetType<TRecordDim, RecordCoord<RecordCoords...>>;
             return internal::BitPackedIntRef<DstType, QualifiedStoredIntegral*, VHBits>{
                 reinterpret_cast<QualifiedStoredIntegral*>(&blobs[blob][0]),
                 bitOffset,

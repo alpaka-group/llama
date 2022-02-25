@@ -20,25 +20,15 @@ namespace llama::mapping
         typename TRecordDim,
         bool AlignAndPad = true,
         template<typename> typename FlattenRecordDim = FlattenRecordDimMinimizePadding>
-    struct One : TArrayExtents
+    struct One : MappingBase<TArrayExtents, TRecordDim>
     {
-        using ArrayExtents = TArrayExtents;
-        using ArrayIndex = typename ArrayExtents::Index;
-        using RecordDim = TRecordDim;
+    private:
+        using Base = MappingBase<TArrayExtents, TRecordDim>;
 
+    public:
         static constexpr std::size_t blobCount = 1;
 
-        constexpr One() = default;
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr explicit One(ArrayExtents extents, RecordDim = {}) : ArrayExtents(extents)
-        {
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayExtents
-        {
-            return ArrayExtents{*this};
-        }
+        using Base::Base;
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(std::size_t) const -> std::size_t
         {
@@ -46,8 +36,9 @@ namespace llama::mapping
         }
 
         template<std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayIndex, RecordCoord<RecordCoords...> = {}) const
-            -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
+            typename Base::ArrayIndex,
+            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset
         {
             constexpr std::size_t flatFieldIndex =
 #ifdef __NVCC__

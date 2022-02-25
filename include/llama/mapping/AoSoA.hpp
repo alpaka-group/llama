@@ -35,52 +35,43 @@ namespace llama::mapping
         std::size_t Lanes,
         typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
         template<typename> typename FlattenRecordDim = FlattenRecordDimInOrder>
-    struct AoSoA : private TArrayExtents
+    struct AoSoA : MappingBase<TArrayExtents, TRecordDim>
     {
-        using ArrayExtents = TArrayExtents;
-        using ArrayIndex = typename ArrayExtents::Index;
-        using RecordDim = TRecordDim;
+    private:
+        using Base = MappingBase<TArrayExtents, TRecordDim>;
+        using Flattener = FlattenRecordDim<TRecordDim>;
+
+    public:
         using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
         static constexpr std::size_t blobCount = 1;
 
-        constexpr AoSoA() = default;
-
-        LLAMA_FN_HOST_ACC_INLINE constexpr explicit AoSoA(ArrayExtents extents, RecordDim = {}) : ArrayExtents(extents)
-        {
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayExtents
-        {
-            return ArrayExtents{*this};
-        }
+        using Base::Base;
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(std::size_t) const -> std::size_t
         {
             return roundUpToMultiple(
-                LinearizeArrayDimsFunctor{}.size(extents()) * sizeOf<RecordDim>,
-                Lanes * sizeOf<RecordDim>);
+                LinearizeArrayDimsFunctor{}.size(Base::extents()) * sizeOf<TRecordDim>,
+                Lanes * sizeOf<TRecordDim>);
         }
 
         template<std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayIndex ai, RecordCoord<RecordCoords...> = {}) const
-            -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
+            typename Base::ArrayIndex ai,
+            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset
         {
             constexpr std::size_t flatFieldIndex =
 #ifdef __NVCC__
                 *& // mess with nvcc compiler state to workaround bug
 #endif
                  Flattener::template flatIndex<RecordCoords...>;
-            const auto flatArrayIndex = LinearizeArrayDimsFunctor{}(ai, extents());
+            const auto flatArrayIndex = LinearizeArrayDimsFunctor{}(ai, Base::extents());
             const auto blockIndex = flatArrayIndex / Lanes;
             const auto laneIndex = flatArrayIndex % Lanes;
-            const auto offset = (sizeOf<RecordDim> * Lanes) * blockIndex
+            const auto offset = (sizeOf<TRecordDim> * Lanes) * blockIndex
                 + flatOffsetOf<typename Flattener::FlatRecordDim, flatFieldIndex, false> * Lanes
-                + sizeof(GetType<RecordDim, RecordCoord<RecordCoords...>>) * laneIndex;
+                + sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>) * laneIndex;
             return {0, offset};
         }
-
-    private:
-        using Flattener = FlattenRecordDim<TRecordDim>;
     };
 
     /// Binds parameters to an \ref AoSoA mapping except for array and record dimension, producing a quoted meta

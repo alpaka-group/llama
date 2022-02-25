@@ -86,11 +86,6 @@ namespace llama::mapping
         using Inner::extents;
         using Inner::Inner;
 
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr explicit ChangeType(TArrayExtents extents) : Inner(extents)
-        {
-        }
-
         template<typename RecordCoord>
         LLAMA_FN_HOST_ACC_INLINE static constexpr auto isComputed(RecordCoord)
         {
