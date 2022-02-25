@@ -486,3 +486,12 @@ TEST_CASE("BoxedValue.Constant")
     CHECK(vc() == 1);
     STATIC_REQUIRE(vc() == 1);
 }
+
+TEST_CASE("divCeil")
+{
+    STATIC_REQUIRE(llama::divCeil(0, 16) == 0);
+    STATIC_REQUIRE(llama::divCeil(5, 16) == 1);
+    STATIC_REQUIRE(llama::divCeil(16, 16) == 1);
+    STATIC_REQUIRE(llama::divCeil(17, 16) == 2);
+    STATIC_REQUIRE(llama::divCeil(300, 16) == 19);
+}
