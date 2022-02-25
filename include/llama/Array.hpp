@@ -208,6 +208,16 @@ namespace llama
             prod *= s;
         return prod;
     }
+
+    template<typename T, std::size_t N>
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto dot(Array<T, N> a, Array<T, N> b) -> T
+    {
+        T r = 0;
+        if constexpr(N > 0)
+            for(std::size_t i = 0; i < N; i++)
+                r += a[i] * b[i];
+        return r;
+    }
 } // namespace llama
 
 namespace std

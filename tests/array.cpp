@@ -52,3 +52,11 @@ TEST_CASE("Array.product")
     STATIC_REQUIRE(product(llama::Array{1, 2}) == 2);
     STATIC_REQUIRE(product(llama::Array{3, 2, 1}) == 6);
 }
+
+TEST_CASE("Array.dot")
+{
+    STATIC_REQUIRE(llama::dot(llama::Array<int, 0>{}, llama::Array<int, 0>{}) == 0);
+    STATIC_REQUIRE(llama::dot(llama::Array{2}, llama::Array{3}) == 6);
+    STATIC_REQUIRE(llama::dot(llama::Array{4, 5}, llama::Array{6, 7}) == 59);
+    STATIC_REQUIRE(llama::dot(llama::Array{1, 2, 3, 4}, llama::Array{-5, 6, -7, 0}) == -14);
+}
