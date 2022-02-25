@@ -783,7 +783,7 @@ void run(std::ostream& plotFile)
     {
         auto i = 0;
         for(const auto& b : buffers)
-            fmt::print("Buffer #{}: {}MiB\n", i++, alpaka::extent::getExtentProduct(b) / 1024 / 1024);
+            fmt::print("Buffer #{}: {}MiB\n", i++, alpaka::getExtentProduct(b) / 1024 / 1024);
     }
 
     std::cout << std::string(reportInterval - 1, ' ')
