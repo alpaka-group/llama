@@ -11,10 +11,10 @@ namespace llama::mapping
 {
     /// Struct of array mapping. Used to create a \ref View via \ref allocView.
     /// \tparam SeparateBuffers If true, every element of the record dimension is mapped to its own buffer.
-    /// \tparam LinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
+    /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
     /// how big the linear domain gets.
-    /// \tparam FlattenRecordDim Defines how the record dimension's fields should be flattened if SeparateBuffers is
-    /// false. See \ref FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref
+    /// \tparam FlattenRecordDimSingleBlob Defines how the record dimension's fields should be flattened if
+    /// SeparateBuffers is false. See \ref FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref
     /// FlattenRecordDimDecreasingAlignment and \ref FlattenRecordDimMinimizePadding.
     template<
         typename TArrayExtents,
@@ -22,26 +22,18 @@ namespace llama::mapping
         bool SeparateBuffers = true,
         typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
         template<typename> typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder>
-    struct SoA : private TArrayExtents
+    struct SoA : MappingBase<TArrayExtents, TRecordDim>
     {
-        using ArrayExtents = TArrayExtents;
-        using ArrayIndex = typename ArrayExtents::Index;
-        using RecordDim = TRecordDim;
+    private:
+        using Base = MappingBase<TArrayExtents, TRecordDim>;
+        using Flattener = FlattenRecordDimSingleBlob<TRecordDim>;
+
+    public:
         using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
         static constexpr std::size_t blobCount
-            = SeparateBuffers ? boost::mp11::mp_size<FlatRecordDim<RecordDim>>::value : 1;
+            = SeparateBuffers ? boost::mp11::mp_size<FlatRecordDim<TRecordDim>>::value : 1;
 
-        constexpr SoA() = default;
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr explicit SoA(ArrayExtents extents, RecordDim = {}) : ArrayExtents(extents)
-        {
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayExtents
-        {
-            return ArrayExtents{*this};
-        }
+        using Base::Base;
 
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto blobSize([[maybe_unused]] std::size_t blobIndex) const -> std::size_t
@@ -51,28 +43,29 @@ namespace llama::mapping
                 constexpr Array<std::size_t, blobCount> typeSizes = []() constexpr
                 {
                     Array<std::size_t, blobCount> r{};
-                    forEachLeafCoord<RecordDim>([&r, i = 0](auto rc) mutable constexpr
-                                                { r[i++] = sizeof(GetType<RecordDim, decltype(rc)>); });
+                    forEachLeafCoord<TRecordDim>([&r, i = 0](auto rc) mutable constexpr
+                                                 { r[i++] = sizeof(GetType<TRecordDim, decltype(rc)>); });
                     return r;
                 }
                 ();
-                return LinearizeArrayDimsFunctor{}.size(extents()) * typeSizes[blobIndex];
+                return LinearizeArrayDimsFunctor{}.size(Base::extents()) * typeSizes[blobIndex];
             }
             else
             {
-                return LinearizeArrayDimsFunctor{}.size(extents()) * sizeOf<RecordDim>;
+                return LinearizeArrayDimsFunctor{}.size(Base::extents()) * sizeOf<TRecordDim>;
             }
         }
 
         template<std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayIndex ad, RecordCoord<RecordCoords...> = {}) const
-            -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
+            typename Base::ArrayIndex ad,
+            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset
         {
             if constexpr(SeparateBuffers)
             {
-                constexpr auto blob = flatRecordCoord<RecordDim, RecordCoord<RecordCoords...>>;
-                const auto offset = LinearizeArrayDimsFunctor{}(ad, extents())
-                    * sizeof(GetType<RecordDim, RecordCoord<RecordCoords...>>);
+                constexpr auto blob = flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>;
+                const auto offset = LinearizeArrayDimsFunctor{}(ad, Base::extents())
+                    * sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>);
                 return {blob, offset};
             }
             else
@@ -82,19 +75,20 @@ namespace llama::mapping
                     *& // mess with nvcc compiler state to workaround bug
 #endif
                      Flattener::template flatIndex<RecordCoords...>;
-                const auto offset = LinearizeArrayDimsFunctor{}(ad, extents())
-                        * sizeof(GetType<RecordDim, RecordCoord<RecordCoords...>>)
+                const auto offset = LinearizeArrayDimsFunctor{}(ad, Base::extents())
+                        * sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>)
                     + flatOffsetOf<
                           typename Flattener::FlatRecordDim,
                           flatFieldIndex,
-                          false> * LinearizeArrayDimsFunctor{}.size(extents());
+                          false> * LinearizeArrayDimsFunctor{}.size(Base::extents());
                 return {0, offset};
             }
         }
-
-    private:
-        using Flattener = FlattenRecordDimSingleBlob<TRecordDim>;
     };
+
+    // we can drop this when inherited ctors also inherit deduction guides
+    template<typename TArrayExtents, typename TRecordDim>
+    SoA(TArrayExtents, TRecordDim) -> SoA<TArrayExtents, TRecordDim>;
 
     /// Struct of array mapping storing the entire layout in a single blob.
     /// \see SoA

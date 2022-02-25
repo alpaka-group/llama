@@ -9,6 +9,26 @@
 
 namespace llama::mapping
 {
+    template<typename TArrayExtents, typename TRecordDim>
+    struct MappingBase : private TArrayExtents
+    {
+        using ArrayExtents = TArrayExtents;
+        using ArrayIndex = typename ArrayExtents::Index;
+        using RecordDim = TRecordDim;
+
+        constexpr MappingBase() = default;
+
+        LLAMA_FN_HOST_ACC_INLINE
+        constexpr explicit MappingBase(ArrayExtents extents, RecordDim = {}) : ArrayExtents(extents)
+        {
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayExtents
+        {
+            return *this;
+        }
+    };
+
     /// Functor that maps an \ref ArrayIndex into linear numbers the way C++ arrays work. The fast moving index of the
     /// ArrayIndex object should be the last one. E.g. ArrayIndex<3> a; stores 3 indices where a[2] should be
     /// incremented in the innermost loop.

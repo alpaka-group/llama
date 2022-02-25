@@ -12,20 +12,15 @@ namespace llama::mapping
     /// Forwards all calls to the inner mapping. Counts all accesses made to all bytes, allowing to extract a heatmap.
     /// \tparam Mapping The type of the inner mapping.
     template<typename Mapping, typename CountType = std::size_t>
-    struct Heatmap
+    struct Heatmap : Mapping
     {
-        using ArrayExtents = typename Mapping::ArrayExtents;
-        using ArrayIndex = typename Mapping::ArrayIndex;
-        using RecordDim = typename Mapping::RecordDim;
-        static constexpr std::size_t blobCount = Mapping::blobCount;
-
         constexpr Heatmap() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        explicit Heatmap(Mapping mapping) : mapping(mapping)
+        explicit Heatmap(Mapping mapping) : Mapping(mapping)
         {
-            for(std::size_t i = 0; i < blobCount; i++)
-                byteHits[i] = std::vector<std::atomic<CountType>>(blobSize(i));
+            for(std::size_t i = 0; i < Mapping::blobCount; i++)
+                byteHits[i] = std::vector<std::atomic<CountType>>(Mapping::blobSize(i));
         }
 
         Heatmap(const Heatmap&) = delete;
@@ -36,24 +31,15 @@ namespace llama::mapping
 
         ~Heatmap() = default;
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayExtents
-        {
-            return mapping.extents();
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(std::size_t i) const -> std::size_t
-        {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return mapping.blobSize(i);
-        }
-
         template<std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(ArrayIndex ai, RecordCoord<RecordCoords...> rc = {}) const
-            -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(
+            typename Mapping::ArrayIndex ai,
+            RecordCoord<RecordCoords...> rc = {}) const -> NrAndOffset
         {
-            const auto nao = mapping.blobNrAndOffset(ai, rc);
-            for(std::size_t i = 0; i < sizeof(GetType<RecordDim, RecordCoord<RecordCoords...>>); i++)
-                byteHits[nao.nr][nao.offset + i]++;
+            const auto nao = Mapping::blobNrAndOffset(ai, rc);
+            using Type = GetType<typename Mapping::RecordDim, RecordCoord<RecordCoords...>>;
+            for(std::size_t i = 0; i < sizeof(Type); i++)
+                ++byteHits[nao.nr][nao.offset + i];
             return nao;
         }
 
@@ -61,7 +47,7 @@ namespace llama::mapping
         {
             std::stringstream f;
             f << "#!/usr/bin/gnuplot -p\n$data << EOD\n";
-            for(std::size_t i = 0; i < blobCount; i++)
+            for(std::size_t i = 0; i < Mapping::blobCount; i++)
             {
                 std::size_t byteCount = 0;
                 for(const auto& hits : byteHits[i])
@@ -83,7 +69,6 @@ plot $data matrix with image pixels axes x2y1
             return f.str();
         }
 
-        Mapping mapping;
-        mutable std::array<std::vector<std::atomic<CountType>>, blobCount> byteHits;
+        mutable std::array<std::vector<std::atomic<CountType>>, Mapping::blobCount> byteHits;
     };
 } // namespace llama::mapping

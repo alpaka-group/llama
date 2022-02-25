@@ -10,7 +10,7 @@ namespace llama::mapping
     /// Array of struct mapping. Used to create a \ref View via \ref allocView.
     /// \tparam AlignAndPad If true, padding bytes are inserted to guarantee that struct members are properly aligned.
     /// If false, struct members are tightly packed.
-    /// \tparam T_LinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
+    /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
     /// how big the linear domain gets.
     /// \tparam FlattenRecordDim Defines how the record dimension's fields should be flattened. See \ref
     /// FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref FlattenRecordDimDecreasingAlignment and
@@ -21,35 +21,28 @@ namespace llama::mapping
         bool AlignAndPad = true,
         typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
         template<typename> typename FlattenRecordDim = FlattenRecordDimInOrder>
-    struct AoS : private TArrayExtents
+    struct AoS : MappingBase<TArrayExtents, TRecordDim>
     {
-        using ArrayExtents = TArrayExtents;
-        using ArrayIndex = typename ArrayExtents::Index;
-        using RecordDim = TRecordDim;
+    private:
+        using Base = MappingBase<TArrayExtents, TRecordDim>;
+        using Flattener = FlattenRecordDim<TRecordDim>;
+
+    public:
         using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
         static constexpr std::size_t blobCount = 1;
 
-        constexpr AoS() = default;
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr explicit AoS(ArrayExtents extents, RecordDim = {}) : ArrayExtents(extents)
-        {
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayExtents
-        {
-            return *this;
-        }
+        using Base::Base;
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(std::size_t) const -> std::size_t
         {
-            return LinearizeArrayDimsFunctor{}.size(extents())
+            return LinearizeArrayDimsFunctor{}.size(Base::extents())
                 * flatSizeOf<typename Flattener::FlatRecordDim, AlignAndPad>;
         }
 
         template<std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayIndex ai, RecordCoord<RecordCoords...> = {}) const
-            -> NrAndOffset
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
+            typename Base::ArrayIndex ai,
+            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset
         {
             constexpr std::size_t flatFieldIndex =
 #ifdef __NVCC__
@@ -57,16 +50,17 @@ namespace llama::mapping
 #endif
                  Flattener::template flatIndex<RecordCoords...>;
             const auto offset
-                = LinearizeArrayDimsFunctor{}(ai, extents())
+                = LinearizeArrayDimsFunctor{}(ai, Base::extents())
                     * flatSizeOf<
                         typename Flattener::FlatRecordDim,
                         AlignAndPad> + flatOffsetOf<typename Flattener::FlatRecordDim, flatFieldIndex, AlignAndPad>;
             return {0, offset};
         }
-
-    private:
-        using Flattener = FlattenRecordDim<TRecordDim>;
     };
+
+    // we can drop this when inherited ctors also inherit deduction guides
+    template<typename TArrayExtents, typename TRecordDim>
+    AoS(TArrayExtents, TRecordDim) -> AoS<TArrayExtents, TRecordDim>;
 
     /// Array of struct mapping preserving the alignment of the field types by inserting padding.
     /// \see AoS

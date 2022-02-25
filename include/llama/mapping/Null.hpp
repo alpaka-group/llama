@@ -29,24 +29,15 @@ namespace llama::mapping
     /// The Null mappings maps all elements to nothing. Writing data through a reference obtained from the Null mapping
     /// discards the value. Reading through such a reference returns a default constructed object.
     template<typename TArrayExtents, typename TRecordDim>
-    struct Null : TArrayExtents
+    struct Null : MappingBase<TArrayExtents, TRecordDim>
     {
-        using ArrayExtents = TArrayExtents;
-        using ArrayIndex = typename ArrayExtents::Index;
-        using RecordDim = TRecordDim;
+    private:
+        using Base = MappingBase<TArrayExtents, TRecordDim>;
+
+    public:
         static constexpr std::size_t blobCount = 0;
 
-        constexpr Null() = default;
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr Null(ArrayExtents extents, RecordDim = {}) : ArrayExtents(extents)
-        {
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayExtents
-        {
-            return *this; // NOLINT(cppcoreguidelines-slicing)
-        }
+        using Base::Base;
 
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto blobSize(std::size_t /*blobIndex*/) const -> std::size_t
@@ -61,9 +52,12 @@ namespace llama::mapping
         }
 
         template<std::size_t... RecordCoords, typename Blobs>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto compute(ArrayIndex, RecordCoord<RecordCoords...>, Blobs&) const
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto compute(
+            typename Base::ArrayIndex,
+            RecordCoord<RecordCoords...>,
+            Blobs&) const
         {
-            using FieldType = GetType<RecordDim, RecordCoord<RecordCoords...>>;
+            using FieldType = GetType<TRecordDim, RecordCoord<RecordCoords...>>;
             return internal::NullReference<FieldType>{};
         }
     };
