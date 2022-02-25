@@ -1,6 +1,5 @@
 cmake_minimum_required (VERSION 3.18.3)
 project(llama-cuda-nbody CXX CUDA)
-set(CMAKE_CUDA_ARCHITECTURES "35" CACHE STRING "CUDA architectures to compile for")
 
 find_package(CUDAToolkit) # for include directories
 find_package(fmt CONFIG REQUIRED)
