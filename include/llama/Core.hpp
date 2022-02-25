@@ -444,6 +444,13 @@ namespace llama
         return (n + mult - 1) / mult * mult;
     }
 
+    // Returns the ceiling of a / b.
+    template<typename Integral>
+    [[nodiscard]] LLAMA_FN_HOST_ACC_INLINE constexpr auto divCeil(Integral a, Integral b) -> Integral
+    {
+        return (a + b - 1) / b;
+    }
+
     namespace internal
     {
         template<typename TypeList, bool Align, bool IncludeTailPadding>
