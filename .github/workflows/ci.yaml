@@ -211,7 +211,7 @@ jobs:
         run: |
           wget --no-verbose -O cuda_installer.run ${{ matrix.cuda_url }}
       - name: install CUDA 11
-        if: matrix.cuda
+        if: matrix.cuda_url
         run: |
           sudo sh cuda_installer.run --silent --toolkit
       - name: install alpaka
