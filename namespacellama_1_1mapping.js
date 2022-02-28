@@ -23,6 +23,7 @@ var namespacellama_1_1mapping =
     [ "LinearizeArrayDimsCpp", "structllama_1_1mapping_1_1LinearizeArrayDimsCpp.html", "structllama_1_1mapping_1_1LinearizeArrayDimsCpp" ],
     [ "LinearizeArrayDimsFortran", "structllama_1_1mapping_1_1LinearizeArrayDimsFortran.html", "structllama_1_1mapping_1_1LinearizeArrayDimsFortran" ],
     [ "LinearizeArrayDimsMorton", "structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html", "structllama_1_1mapping_1_1LinearizeArrayDimsMorton" ],
+    [ "MappingBase", "structllama_1_1mapping_1_1MappingBase.html", "structllama_1_1mapping_1_1MappingBase" ],
     [ "Null", "structllama_1_1mapping_1_1Null.html", "structllama_1_1mapping_1_1Null" ],
     [ "One", "structllama_1_1mapping_1_1One.html", "structllama_1_1mapping_1_1One" ],
     [ "SoA", "structllama_1_1mapping_1_1SoA.html", "structllama_1_1mapping_1_1SoA" ],

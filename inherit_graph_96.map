@@ -1,3 +1,15 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html" title="Functor that maps an ArrayIndex into linear numbers using the Z&#45;order space filling curve (Morton cod..." alt="" coords="5,5,196,47"/>
+<area shape="rect" id="node1" href="$structllama_1_1internal_1_1BoxedValue.html" title=" " alt="" coords="187,155,389,196"/>
+<area shape="rect" id="node2" href="$structllama_1_1mapping_1_1BitPackedIntSoA.html" title=" " alt="" coords="494,140,735,211"/>
+<area shape="rect" id="node3" href="$structllama_1_1internal_1_1BoxedValue.html" title=" " alt="" coords="187,71,389,112"/>
+<area shape="rect" id="node4" href="$structllama_1_1mapping_1_1BitPackedFloatSoA.html" title=" " alt="" coords="465,30,764,115"/>
+<area shape="rect" id="node5" href="$structllama_1_1internal_1_1BoxedValue.html" title=" " alt="" coords="187,5,389,47"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,315,119,342"/>
+<area shape="rect" id="node7" href="$structllama_1_1mapping_1_1MappingBase.html" title=" " alt="" coords="173,344,403,385"/>
+<area shape="rect" id="node13" href="$structllama_1_1mapping_1_1tree_1_1Mapping.html" title=" " alt="" coords="167,263,409,319"/>
+<area shape="rect" id="node8" href="$structllama_1_1mapping_1_1AoS.html" title=" " alt="" coords="489,329,740,400"/>
+<area shape="rect" id="node9" href="$structllama_1_1mapping_1_1AoSoA.html" title=" " alt="" coords="485,424,745,495"/>
+<area shape="rect" id="node10" href="$structllama_1_1mapping_1_1Null.html" title=" " alt="" coords="499,519,730,560"/>
+<area shape="rect" id="node11" href="$structllama_1_1mapping_1_1One.html" title=" " alt="" coords="491,585,739,641"/>
+<area shape="rect" id="node12" href="$structllama_1_1mapping_1_1SoA.html" title=" " alt="" coords="457,235,772,305"/>
 </map>

@@ -1,6 +1,7 @@
 <map id="llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, StoredIntegral &gt;" name="llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, StoredIntegral &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="255,35,553,120"/>
-<area shape="rect" id="node2" title=" " alt="" coords="49,5,163,32"/>
-<area shape="rect" id="node3" href="$structllama_1_1internal_1_1BoxedValue.html" title=" " alt="" coords="5,57,207,98"/>
-<area shape="rect" id="node4" href="$structllama_1_1internal_1_1BoxedValue.html" title=" " alt="" coords="5,122,207,163"/>
+<area shape="rect" id="node1" title=" " alt="" coords="445,49,744,134"/>
+<area shape="rect" id="node2" href="$structllama_1_1mapping_1_1MappingBase.html" title=" " alt="" coords="167,5,397,47"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,13,119,39"/>
+<area shape="rect" id="node4" href="$structllama_1_1internal_1_1BoxedValue.html" title=" " alt="" coords="181,71,383,112"/>
+<area shape="rect" id="node5" href="$structllama_1_1internal_1_1BoxedValue.html" title=" " alt="" coords="181,136,383,177"/>
 </map>

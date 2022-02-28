@@ -1,4 +1,5 @@
 <map id="llama::mapping::AoS&lt; TArrayExtents, TRecordDim, AlignAndPad, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;" name="llama::mapping::AoS&lt; TArrayExtents, TRecordDim, AlignAndPad, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,256,151"/>
-<area shape="rect" id="node2" title=" " alt="" coords="74,5,187,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,169,256,240"/>
+<area shape="rect" id="node2" href="$structllama_1_1mapping_1_1MappingBase.html" title=" " alt="" coords="15,80,246,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="74,5,187,32"/>
 </map>
