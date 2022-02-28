@@ -78,13 +78,13 @@ namespace llama
         }
 
         template<std::size_t I>
-        constexpr auto get() -> T&
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto get() -> T&
         {
             return element[I];
         }
 
         template<std::size_t I>
-        constexpr auto get() const -> const T&
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto get() const -> const T&
         {
             return element[I];
         }
@@ -210,7 +210,7 @@ namespace llama
     }
 
     template<typename T, std::size_t N>
-    LLAMA_FN_HOST_ACC_INLINE constexpr auto dot(Array<T, N> a, Array<T, N> b) -> T
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto dot([[maybe_unused]] Array<T, N> a, [[maybe_unused]] Array<T, N> b) -> T
     {
         T r = 0;
         if constexpr(N > 0)
