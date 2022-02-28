@@ -50,6 +50,7 @@ var Core_8hpp =
     [ "MergedRecordDims", "Core_8hpp.html#a6add7a44239c13c19a356a2fa16af10e", null ],
     [ "TransformLeaves", "Core_8hpp.html#a825425dc4761ab3b27c3ec6d42876f32", null ],
     [ "TransformLeavesWithCoord", "Core_8hpp.html#aaee3ebd8a4ac86fffc2c6e5cc1a3ac71", null ],
+    [ "divCeil", "Core_8hpp.html#a516c8260631ec1b61a52f0e56dc58ac7", null ],
     [ "flatAlignOfImpl", "Core_8hpp.html#a2413ee7f2d6487f7e306148cf2b46ac4", null ],
     [ "forEachLeafCoord", "Core_8hpp.html#a91f5d2462d07fc7d5cfa0dac05946c63", null ],
     [ "forEachLeafCoord", "Core_8hpp.html#a28ad5ce29085756570effc3b27378a5c", null ],

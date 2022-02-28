@@ -1,5 +1,7 @@
 var NAVTREEINDEX4 =
 {
+"structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html#a26b01937e5451d1d6e71c554008e7874":[2,0,1,2,0,1,0],
+"structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html#ab4ff45785b9a24d9a6e2de5f60e14134":[2,0,1,2,0,1,1],
 "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html#abc969cb139712b74aa81d10aff31ffba":[2,0,1,2,0,1,3],
 "structllama_1_1mapping_1_1internal_1_1ChangeTypeReference.html":[2,0,1,2,0,2],
 "structllama_1_1mapping_1_1internal_1_1ChangeTypeReference.html#a3d0597e188f6df9359ee327a43b9b7d1":[2,0,1,2,0,2,2],

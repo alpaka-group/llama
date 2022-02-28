@@ -5,6 +5,7 @@ var Array_8hpp =
     [ "tuple_size< llama::Array< T, N > >", "structstd_1_1tuple__size_3_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html", null ],
     [ "tuple_element< I, llama::Array< T, N > >", "structstd_1_1tuple__element_3_01I_00_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html", "structstd_1_1tuple__element_3_01I_00_01llama_1_1Array_3_01T_00_01N_01_4_01_4" ],
     [ "Array", "Array_8hpp.html#a690689d38b43930430e58bb7fe17aca7", null ],
+    [ "dot", "Array_8hpp.html#a67747e23f263d6bc14c7f99a7cd51e78", null ],
     [ "operator<<", "Array_8hpp.html#a6b9492ccf576f0f3683d893e35882a54", null ],
     [ "pop_back", "Array_8hpp.html#a3e166c63d0e045a182afa16dc6f3a948", null ],
     [ "pop_front", "Array_8hpp.html#a4c253d54795ef1828757f0d732a0f04e", null ],

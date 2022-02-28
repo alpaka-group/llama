@@ -1,5 +1,7 @@
 var NAVTREEINDEX3 =
 {
+"structllama_1_1internal_1_1BoxedValue_3_01Constant_3_01V_01_4_00_01I_01_4.html#aabbb0ec3ba2d6644975803b53c2d4de8":[2,0,1,1,2,0],
+"structllama_1_1internal_1_1BoxedValue_3_01Constant_3_01V_01_4_00_01I_01_4.html#adae9b0544944885cb10a5b6894bfb309":[2,0,1,1,2,2],
 "structllama_1_1internal_1_1DivideAssign.html":[2,0,1,1,3],
 "structllama_1_1internal_1_1DivideAssign.html#a4ef194014d4c19d8bba9c2c3a0b7d9e0":[2,0,1,1,3,0],
 "structllama_1_1internal_1_1FindFieldByTag.html":[2,0,1,1,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX3 =
 "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#a38252c38d316e357605aa0050c457fbc":[2,0,1,2,0,0,3],
 "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#a49913dbbda6da127247a265a7b520d3c":[2,0,1,2,0,0,0],
 "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html":[2,0,1,2,0,1],
-"structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html#a0e5b2958ebe9572bc040bfe803f8c46f":[2,0,1,2,0,1,2],
-"structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html#a26b01937e5451d1d6e71c554008e7874":[2,0,1,2,0,1,0],
-"structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html#ab4ff45785b9a24d9a6e2de5f60e14134":[2,0,1,2,0,1,1]
+"structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html#a0e5b2958ebe9572bc040bfe803f8c46f":[2,0,1,2,0,1,2]
 };
