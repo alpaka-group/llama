@@ -193,16 +193,16 @@ try
                 ArrayExtents,
                 Particle,
                 llama::RecordCoord<1>,
-                llama::mapping::PreconfiguredSoA<>::type,
-                llama::mapping::PreconfiguredSoA<>::type,
+                llama::mapping::BindSoA<>::fn,
+                llama::mapping::BindSoA<>::fn,
                 true>{extents};
         if constexpr(Mapping == 5)
             return llama::mapping::Split<
                 ArrayExtents,
                 Particle,
                 llama::RecordCoord<1>,
-                llama::mapping::PreconfiguredAoS<>::type,
-                llama::mapping::PreconfiguredAoS<>::type,
+                llama::mapping::BindSoA<>::fn,
+                llama::mapping::BindSoA<>::fn,
                 true>{extents};
     }();
 
