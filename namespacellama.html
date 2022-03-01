@@ -267,9 +267,9 @@ Functions</h2></td></tr>
 <tr class="memitem:abab7973f7686f93f02ad33e4d0636a25"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N&gt; </td></tr>
 <tr class="memitem:abab7973f7686f93f02ad33e4d0636a25"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#abab7973f7686f93f02ad33e4d0636a25">product</a> (<a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N &gt; a) -&gt; T</td></tr>
 <tr class="separator:abab7973f7686f93f02ad33e4d0636a25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67747e23f263d6bc14c7f99a7cd51e78"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N&gt; </td></tr>
-<tr class="memitem:a67747e23f263d6bc14c7f99a7cd51e78"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a67747e23f263d6bc14c7f99a7cd51e78">dot</a> (<a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N &gt; a, <a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N &gt; b) -&gt; T</td></tr>
-<tr class="separator:a67747e23f263d6bc14c7f99a7cd51e78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a672915c49821a718f5dfa5d4540c4192"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N&gt; </td></tr>
+<tr class="memitem:a672915c49821a718f5dfa5d4540c4192"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a672915c49821a718f5dfa5d4540c4192">dot</a> ([[maybe_unused]] <a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N &gt; a, [[maybe_unused]] <a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N &gt; b) -&gt; T</td></tr>
+<tr class="separator:a672915c49821a718f5dfa5d4540c4192"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a07896c3e0d5563b8aeda1e3d48167b62"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
 <tr class="memitem:a07896c3e0d5563b8aeda1e3d48167b62"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a07896c3e0d5563b8aeda1e3d48167b62">ArrayIndex</a> (Args...) -&gt; <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a>&lt; sizeof...(Args)&gt;</td></tr>
 <tr class="separator:a07896c3e0d5563b8aeda1e3d48167b62"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1398,8 +1398,8 @@ template&lt;typename Integral &gt; </div>
 
 </div>
 </div>
-<a id="a67747e23f263d6bc14c7f99a7cd51e78"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a67747e23f263d6bc14c7f99a7cd51e78">&#9670;&nbsp;</a></span>dot()</h2>
+<a id="a672915c49821a718f5dfa5d4540c4192"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a672915c49821a718f5dfa5d4540c4192">&#9670;&nbsp;</a></span>dot()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1412,13 +1412,13 @@ template&lt;typename T , std::size_t N&gt; </div>
         <tr>
           <td class="memname">constexpr auto llama::dot </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N &gt;&#160;</td>
+          <td class="paramtype">[[maybe_unused] ] <a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N &gt;&#160;</td>
           <td class="paramname"><em>a</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N &gt;&#160;</td>
+          <td class="paramtype">[[maybe_unused] ] <a class="el" href="structllama_1_1Array.html">Array</a>&lt; T, N &gt;&#160;</td>
           <td class="paramname"><em>b</em>&#160;</td>
         </tr>
         <tr>
@@ -3636,7 +3636,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Mon Feb 28 2022 21:52:51 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue Mar 1 2022 08:46:10 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
