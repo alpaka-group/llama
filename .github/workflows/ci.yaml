@@ -266,8 +266,7 @@ jobs:
         Start-Process -Wait -FilePath "$env:TEMP\boost.exe" "/SILENT","/SP-","/SUPPRESSMSGBOXES","/DIR=$env:BOOST_ROOT"
     - name: vcpkg install dependencies
       run: |
-        vcpkg install catch2 fmt tinyobjloader
-        vcpkg install vc --head # MSVC patch is not released yet
+        vcpkg install catch2 fmt vc tinyobjloader
     - name: install alpaka
       run: |
         git clone https://github.com/alpaka-group/alpaka.git
