@@ -163,6 +163,10 @@ jobs:
             cxx: clang++-13
             install_extra: clang-13 libomp-13-dev
             add_llvm_repo: true
+          - name: build-ubuntu-clang14
+            cxx: clang++-14
+            install_extra: clang-14 libomp-14-dev
+            add_llvm_repo: true
           - name: build-ubuntu-icpx
             cxx: icpx
             install_oneapi: true
@@ -177,9 +181,9 @@ jobs:
         if: matrix.add_llvm_repo
         run: |
           wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
-          sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal main'
           sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-12 main'
           sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-13 main'
+          sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-14 main'
       - name: install OneAPI
         if: matrix.install_oneapi
         run: |
