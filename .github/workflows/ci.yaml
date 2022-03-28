@@ -258,11 +258,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: install vcpkg
-      uses: lukka/run-vcpkg@v4
-      with:
-        setupOnly: true
-        vcpkgGitCommitId: 9ab3bafca4de5dec5a5a8b60f1d654cae7ad95aa
     - name: install boost
       run: |
         # From: https://github.com/actions/virtual-environments/issues/2667
@@ -271,20 +266,20 @@ jobs:
         Start-Process -Wait -FilePath "$env:TEMP\boost.exe" "/SILENT","/SP-","/SUPPRESSMSGBOXES","/DIR=$env:BOOST_ROOT"
     - name: vcpkg install dependencies
       run: |
-        & $env:VCPKG_ROOT/vcpkg install catch2 fmt tinyobjloader
-        & $env:VCPKG_ROOT/vcpkg install vc --head # MSVC patch is not released yet
+        vcpkg install catch2 fmt tinyobjloader
+        vcpkg install vc --head # MSVC patch is not released yet
     - name: install alpaka
       run: |
         git clone https://github.com/alpaka-group/alpaka.git
         mkdir alpaka/build
         cd alpaka/build
-        cmake .. "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+        cmake .. "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
         cmake --install . --config $env:CONFIG
     - name: cmake
       run: |
         mkdir build
         cd build
-        cmake .. -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+        cmake .. -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
     - name: build tests + examples
       run: cmake --build build -j $env:THREADS --config $env:CONFIG
     - name: run tests
