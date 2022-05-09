@@ -74,6 +74,8 @@ endif()
 # examples
 option(LLAMA_BUILD_EXAMPLES "Building (and installing) the examples" ON)
 if (LLAMA_BUILD_EXAMPLES)
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+
 	# general examples
 	add_subdirectory("examples/simpletest")
 	add_subdirectory("examples/vectoradd")
