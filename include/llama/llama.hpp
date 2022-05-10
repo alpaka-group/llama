@@ -28,7 +28,7 @@
 
 #ifdef __NVCC__
 #    pragma push
-#    if __CUDACC_VER_MAJOR__ * 1000 + __CUDACC_VER_MINOR__ >= 11005
+#    ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
 #        pragma nv_diag_suppress 940
 #    else
 #        pragma diag_suppress 940
