@@ -77,7 +77,6 @@ if (LLAMA_BUILD_EXAMPLES)
 	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 	# general examples
-	add_subdirectory("examples/simpletest")
 	add_subdirectory("examples/vectoradd")
 	add_subdirectory("examples/nbody")
 	add_subdirectory("examples/nbody_benchmark")
