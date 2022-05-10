@@ -302,8 +302,25 @@ namespace llama
         {
             const auto [nr, offset] = mapping.blobNrAndOffset(ai, rc);
             using Type = GetType<typename Mapping::RecordDim, RecordCoord<Coords...>>;
+
+
+#ifdef __NVCC__
+            // suppress: calling a __host__ function from a __host__ __device__ function is not allowed
+            // suppress: calling a __host__ function("...") from a __host__ __device__ function("...") is not allowed
+#    pragma push
+#    ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
+#        pragma nv_diag_suppress 20011
+#        pragma nv_diag_suppress 20014
+#    else
+#        pragma diag_suppress 20011
+#        pragma diag_suppress 20014
+#    endif
+#endif
             return reinterpret_cast<CopyConst<std::remove_reference_t<decltype(blobs[nr][offset])>, Type>&>(
                 blobs[nr][offset]);
+#ifdef __NVCC__
+#    pragma pop
+#endif
         }
     }
 
