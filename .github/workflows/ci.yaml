@@ -115,7 +115,7 @@ jobs:
         if-no-files-found: error
 
   build-ubuntu:
-    runs-on: ubuntu-latest
+    runs-on: ${{ (matrix.os != null) && matrix.os || 'ubuntu-latest' }}
     env:
       CXX: ${{ matrix.cxx }}
     name: ${{ matrix.name }}
@@ -139,12 +139,12 @@ jobs:
           - name: build-ubuntu-gcc11
             cxx: g++-11
             install_extra: g++-11
-            add_toolchain_repo: true
+            add_toolchain_ppa: true
           - name: build-ubuntu-gcc11-cuda11.4
             cxx: g++-11
             install_extra: g++-11
             cuda_url: https://developer.download.nvidia.com/compute/cuda/11.4.4/local_installers/cuda_11.4.4_470.82.01_linux.run
-            add_toolchain_repo: true
+            add_toolchain_ppa: true
           - name: build-ubuntu-gcc11-cuda11.5
             cxx: g++-11
             install_extra: g++-11
@@ -153,6 +153,15 @@ jobs:
             cxx: g++-11
             install_extra: g++-11
             add_toolchain_repo: true
+            cuda_url: https://developer.download.nvidia.com/compute/cuda/11.6.2/local_installers/cuda_11.6.2_510.47.03_linux.run
+          - name: build-ubuntu-gcc12
+            os: ubuntu-22.04
+            cxx: g++-12
+            install_extra: g++-12
+          - name: build-ubuntu-gcc12-cuda11.6
+            os: ubuntu-22.04
+            cxx: g++-12
+            install_extra: g++-12
             cuda_url: https://developer.download.nvidia.com/compute/cuda/11.6.2/local_installers/cuda_11.6.2_510.47.03_linux.run
           - name: build-ubuntu-clang10
             cxx: clang++-10
@@ -178,9 +187,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: add ubuntu toolchain repo
-        if: matrix.add_toolchain_repo
+        if: matrix.add_toolchain_ppa
         run: |
-          sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
+          sudo apt update
       - name: add LLVM APT repo
         if: matrix.add_llvm_repo
         run: |
@@ -206,7 +216,6 @@ jobs:
       - name: install extras
         if: ${{ matrix.install_extra }} 
         run: |
-          sudo apt update
           sudo apt install ${{ matrix.install_extra }}
       - name: vcpkg install dependencies
         run: |
