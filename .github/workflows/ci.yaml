@@ -9,6 +9,7 @@ env:
   THREADS: 4
   CONFIG: RelWithDebInfo
   BOOST_ROOT: ${{ github.workspace }}/_boost
+  ALPAKA_BRANCH: 0.9.0
 
 jobs:
   clang-format:
@@ -225,7 +226,7 @@ jobs:
       - name: install alpaka
         run: |
           if [ ${{ matrix.install_oneapi }} ]; then source /opt/intel/oneapi/setvars.sh; fi
-          git clone https://github.com/alpaka-group/alpaka.git
+          git clone --branch $ALPAKA_BRANCH --depth 1 https://github.com/alpaka-group/alpaka.git
           mkdir alpaka/build
           cd alpaka/build
           cmake .. -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
