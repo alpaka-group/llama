@@ -2,7 +2,7 @@
 
 #include <fstream>
 
-TEST_CASE("Split.partitionRecordDim.OneMemberRecord")
+TEST_CASE("mapping.Split.partitionRecordDim.OneMemberRecord")
 {
     using RecordDim = llama::Record<llama::Field<int, int>>;
     using R = decltype(llama::mapping::internal::partitionRecordDim(RecordDim{}, llama::RecordCoord<0>{}));
@@ -10,7 +10,7 @@ TEST_CASE("Split.partitionRecordDim.OneMemberRecord")
     STATIC_REQUIRE(std::is_same_v<boost::mp11::mp_second<R>, llama::Record<>>);
 }
 
-TEST_CASE("Split.partitionRecordDim.Vec3I")
+TEST_CASE("mapping.Split.partitionRecordDim.Vec3I")
 {
     using R = decltype(llama::mapping::internal::partitionRecordDim(Vec3I{}, llama::RecordCoord<1>{}));
     STATIC_REQUIRE(std::is_same_v<boost::mp11::mp_first<R>, llama::Record<llama::Field<tag::Y, int>>>);
@@ -19,7 +19,7 @@ TEST_CASE("Split.partitionRecordDim.Vec3I")
             is_same_v<boost::mp11::mp_second<R>, llama::Record<llama::Field<tag::X, int>, llama::Field<tag::Z, int>>>);
 }
 
-TEST_CASE("Split.partitionRecordDim.Particle")
+TEST_CASE("mapping.Split.partitionRecordDim.Particle")
 {
     using R = decltype(llama::mapping::internal::partitionRecordDim(Particle{}, llama::RecordCoord<2, 1>{}));
     STATIC_REQUIRE(std::is_same_v<
@@ -35,7 +35,7 @@ TEST_CASE("Split.partitionRecordDim.Particle")
                 llama::Field<tag::Flags, bool[4]>>>);
 }
 
-TEST_CASE("Split.partitionRecordDim.Particle.List")
+TEST_CASE("mapping.Split.partitionRecordDim.Particle.List")
 {
     using R = decltype(llama::mapping::internal::partitionRecordDim(
         Particle{},
@@ -48,7 +48,7 @@ TEST_CASE("Split.partitionRecordDim.Particle.List")
                    llama::Record<llama::Field<tag::Mass, float>, llama::Field<tag::Flags, bool[4]>>>);
 }
 
-TEST_CASE("Split.SoA_SingleBlob.AoS_Packed.1Buffer")
+TEST_CASE("mapping.Split.SoA_SingleBlob.AoS_Packed.1Buffer")
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<2>;
     auto extents = ArrayExtents{16, 16};
@@ -73,7 +73,7 @@ TEST_CASE("Split.SoA_SingleBlob.AoS_Packed.1Buffer")
     CHECK(mapping.blobNrAndOffset<3, 3>(ai) == llama::NrAndOffset{0, mapping1Size + 55});
 }
 
-TEST_CASE("Split.AoSoA8.AoS_Packed.One.SoA_SingleBlob.4Buffer")
+TEST_CASE("mapping.Split.AoSoA8.AoS_Packed.One.SoA_SingleBlob.4Buffer")
 {
     // split out momentum as AoSoA8, mass into a single value, position into AoS, and the flags into SoA, makes 4
     // buffers
@@ -120,7 +120,7 @@ TEST_CASE("Split.AoSoA8.AoS_Packed.One.SoA_SingleBlob.4Buffer")
 }
 
 
-TEST_CASE("Split.Multilist.SoA.One")
+TEST_CASE("mapping.Split.Multilist.SoA.One")
 {
     // split out Pos and Vel into SoA, the rest into One
     using ArrayExtents = llama::ArrayExtentsDynamic<1>;
@@ -160,7 +160,7 @@ TEST_CASE("Split.Multilist.SoA.One")
     // std::ofstream{"Split.AoSoA8.AoS.One.SoA.4Buffer.svg"} << llama::toSvg(mapping);
 }
 
-TEST_CASE("Split.BitPacked")
+TEST_CASE("mapping.Split.BitPacked")
 {
     // split out Pos and Vel into SoA, the rest into One
     using ArrayExtents = llama::ArrayExtentsDynamic<1>;

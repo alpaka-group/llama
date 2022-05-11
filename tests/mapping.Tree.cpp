@@ -34,7 +34,7 @@ namespace tag
     }
 } // namespace tag
 
-TEST_CASE("treemapping.empty")
+TEST_CASE("mapping.Tree.empty")
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<2>;
     const ArrayExtents extents{16, 16};
@@ -103,7 +103,7 @@ TEST_CASE("treemapping.empty")
     }
 }
 
-TEST_CASE("treemapping.Idem")
+TEST_CASE("mapping.Tree.Idem")
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<2>;
     const ArrayExtents extents{16, 16};
@@ -172,7 +172,7 @@ TEST_CASE("treemapping.Idem")
     }
 }
 
-TEST_CASE("treemapping.LeafOnlyRT")
+TEST_CASE("mapping.Tree.LeafOnlyRT")
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<2>;
     const ArrayExtents extents{16, 16};
@@ -241,7 +241,7 @@ TEST_CASE("treemapping.LeafOnlyRT")
     }
 }
 
-TEST_CASE("treemapping.MoveRTDown<>")
+TEST_CASE("mapping.Tree.MoveRTDown<>")
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<2>;
     const ArrayExtents extents{16, 16};
@@ -298,7 +298,7 @@ TEST_CASE("treemapping.MoveRTDown<>")
     }
 }
 
-TEST_CASE("treemapping.MoveRTDown<0>")
+TEST_CASE("mapping.Tree.MoveRTDown<0>")
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<2>;
     const ArrayExtents extents{16, 16};
@@ -355,7 +355,7 @@ TEST_CASE("treemapping.MoveRTDown<0>")
     }
 }
 
-TEST_CASE("treemapping.MoveRTDown<0,0>")
+TEST_CASE("mapping.Tree.MoveRTDown<0,0>")
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<2>;
     const ArrayExtents extents{16, 16};
@@ -412,7 +412,7 @@ TEST_CASE("treemapping.MoveRTDown<0,0>")
     }
 }
 
-TEST_CASE("treemapping.MoveRTDownFixed<>")
+TEST_CASE("mapping.Tree.MoveRTDownFixed<>")
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<2>;
     const ArrayExtents extents{16, 16};
@@ -469,7 +469,7 @@ TEST_CASE("treemapping.MoveRTDownFixed<>")
     }
 }
 
-TEST_CASE("treemapping.MoveRTDownFixed<0>")
+TEST_CASE("mapping.Tree.MoveRTDownFixed<0>")
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<2>;
     const ArrayExtents extents{16, 16};
@@ -526,7 +526,7 @@ TEST_CASE("treemapping.MoveRTDownFixed<0>")
     }
 }
 
-TEST_CASE("treemapping.MoveRTDownFixed<0,0>")
+TEST_CASE("mapping.Tree.MoveRTDownFixed<0,0>")
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<2>;
     const ArrayExtents extents{16, 16};
@@ -583,7 +583,7 @@ TEST_CASE("treemapping.MoveRTDownFixed<0,0>")
     }
 }
 
-TEST_CASE("treemapping.vectorblocks.runtime")
+TEST_CASE("mapping.Tree.vectorblocks.runtime")
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<2>;
     const ArrayExtents extents{16, 16};
@@ -647,7 +647,7 @@ TEST_CASE("treemapping.vectorblocks.runtime")
     }
 }
 
-TEST_CASE("treemapping.vectorblocks.compiletime")
+TEST_CASE("mapping.Tree.vectorblocks.compiletime")
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<2>;
     const ArrayExtents extents{16, 16};
@@ -711,7 +711,7 @@ TEST_CASE("treemapping.vectorblocks.compiletime")
     }
 }
 
-TEST_CASE("treemapping.getNode")
+TEST_CASE("mapping.Tree.getNode")
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<2>;
     const ArrayExtents extents{16, 16};
@@ -755,7 +755,7 @@ TEST_CASE("treemapping.getNode")
     CHECK(toString(getNode<TreeCoord<0, 3, 3>>(mapping.resultTree)) == "1C * (bool)");
 }
 
-TEST_CASE("treemapping")
+TEST_CASE("mapping.Tree")
 {
     using ArrayExtents = llama::ArrayExtents<12, 12>;
     constexpr ArrayExtents extents{};
