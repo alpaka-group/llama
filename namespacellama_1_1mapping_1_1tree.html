@@ -120,7 +120,7 @@ Typedefs</h2></td></tr>
 <tr class="memitem:aa2770ac2c1d1a9d930488072572cc47f"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree.html#aa2770ac2c1d1a9d930488072572cc47f">TreeFromRecordDim</a> = <a class="el" href="namespacellama_1_1mapping_1_1tree_1_1internal.html#ab24406f0b8b84c41b373b9857ef0b917">internal::TreeFromRecordDimImpl</a>&lt; RecordDim &gt;</td></tr>
 <tr class="separator:aa2770ac2c1d1a9d930488072572cc47f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1ecec8e7fd7fc84ab0a83df9b680310"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim &gt; </td></tr>
-<tr class="memitem:ad1ecec8e7fd7fc84ab0a83df9b680310"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree.html#ad1ecec8e7fd7fc84ab0a83df9b680310">TreeFromDimensions</a> = typename <a class="el" href="structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes.html">internal::WrapInNNodes</a>&lt; <a class="el" href="namespacellama_1_1mapping_1_1tree_1_1internal.html#ab24406f0b8b84c41b373b9857ef0b917">internal::TreeFromRecordDimImpl</a>&lt; RecordDim &gt;, <a class="el" href="structllama_1_1ArrayExtents.html#ae2468d5c2b3714c09f81c60467b6a4cc">ArrayExtents::rank</a> - 1 &gt;::type</td></tr>
+<tr class="memitem:ad1ecec8e7fd7fc84ab0a83df9b680310"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree.html#ad1ecec8e7fd7fc84ab0a83df9b680310">TreeFromDimensions</a> = typename <a class="el" href="structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes.html">internal::WrapInNNodes</a>&lt; <a class="el" href="namespacellama_1_1mapping_1_1tree_1_1internal.html#ab24406f0b8b84c41b373b9857ef0b917">internal::TreeFromRecordDimImpl</a>&lt; RecordDim &gt;, <a class="el" href="structllama_1_1ArrayExtents.html#aa368d8287fad34884c1ccfdb01d527dc">ArrayExtents::rank</a> - 1 &gt;::type</td></tr>
 <tr class="separator:ad1ecec8e7fd7fc84ab0a83df9b680310"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -145,9 +145,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a5db1654176ea82f4ed22c4c247133dab"><td class="memTemplParams" colspan="2">template&lt;typename TreeCoord &gt; </td></tr>
 <tr class="memitem:a5db1654176ea82f4ed22c4c247133dab"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree.html#a5db1654176ea82f4ed22c4c247133dab">treeCoordToString</a> (<a class="el" href="namespacellama_1_1mapping_1_1tree.html#ad5b9ef0bed3b8a2e014b6583d780180d">TreeCoord</a> treeCoord) -&gt; std::string</td></tr>
 <tr class="separator:a5db1654176ea82f4ed22c4c247133dab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a39b9213a8f82848c240936541f8505b9"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , std::size_t N, std::size_t Pos = 0&gt; </td></tr>
-<tr class="memitem:a39b9213a8f82848c240936541f8505b9"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree.html#a39b9213a8f82848c240936541f8505b9">createTree</a> (const <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a>&lt; N &gt; &amp;size)</td></tr>
-<tr class="separator:a39b9213a8f82848c240936541f8505b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adaaaf6bd620fdbc2042f2c1d68cd96ea"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename V , std::size_t N, std::size_t Pos = 0&gt; </td></tr>
+<tr class="memitem:adaaaf6bd620fdbc2042f2c1d68cd96ea"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree.html#adaaaf6bd620fdbc2042f2c1d68cd96ea">createTree</a> (const <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a>&lt; V, N &gt; &amp;size)</td></tr>
+<tr class="separator:adaaaf6bd620fdbc2042f2c1d68cd96ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2116f38159bee878ad9cfb2f0558cba2"><td class="memTemplParams" colspan="2">template&lt;typename RecordCoord , typename ArrayIndex &gt; </td></tr>
 <tr class="memitem:a2116f38159bee878ad9cfb2f0558cba2"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1tree.html#a2116f38159bee878ad9cfb2f0558cba2">createTreeCoord</a> (const <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> &amp;ai)</td></tr>
 <tr class="separator:a2116f38159bee878ad9cfb2f0558cba2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -186,7 +186,7 @@ template&lt;std::size_t... Coords&gt; </div>
 template&lt;typename ArrayExtents , typename RecordDim &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacellama_1_1mapping_1_1tree.html#ad1ecec8e7fd7fc84ab0a83df9b680310">llama::mapping::tree::TreeFromDimensions</a> = typedef typename <a class="el" href="structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes.html">internal::WrapInNNodes</a>&lt;<a class="el" href="namespacellama_1_1mapping_1_1tree_1_1internal.html#ab24406f0b8b84c41b373b9857ef0b917">internal::TreeFromRecordDimImpl</a>&lt;RecordDim&gt;, <a class="el" href="structllama_1_1ArrayExtents.html#ae2468d5c2b3714c09f81c60467b6a4cc">ArrayExtents::rank</a> - 1&gt;::type</td>
+          <td class="memname">using <a class="el" href="namespacellama_1_1mapping_1_1tree.html#ad1ecec8e7fd7fc84ab0a83df9b680310">llama::mapping::tree::TreeFromDimensions</a> = typedef typename <a class="el" href="structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes.html">internal::WrapInNNodes</a>&lt;<a class="el" href="namespacellama_1_1mapping_1_1tree_1_1internal.html#ab24406f0b8b84c41b373b9857ef0b917">internal::TreeFromRecordDimImpl</a>&lt;RecordDim&gt;, <a class="el" href="structllama_1_1ArrayExtents.html#aa368d8287fad34884c1ccfdb01d527dc">ArrayExtents::rank</a> - 1&gt;::type</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -214,13 +214,13 @@ template&lt;typename RecordDim &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a39b9213a8f82848c240936541f8505b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a39b9213a8f82848c240936541f8505b9">&#9670;&nbsp;</a></span>createTree()</h2>
+<a id="adaaaf6bd620fdbc2042f2c1d68cd96ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adaaaf6bd620fdbc2042f2c1d68cd96ea">&#9670;&nbsp;</a></span>createTree()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename RecordDim , std::size_t N, std::size_t Pos = 0&gt; </div>
+template&lt;typename RecordDim , typename V , std::size_t N, std::size_t Pos = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -228,7 +228,7 @@ template&lt;typename RecordDim , std::size_t N, std::size_t Pos = 0&gt; </div>
         <tr>
           <td class="memname">auto llama::mapping::tree::createTree </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a>&lt; N &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a>&lt; V, N &gt; &amp;&#160;</td>
           <td class="paramname"><em>size</em></td><td>)</td>
           <td></td>
         </tr>
@@ -270,7 +270,7 @@ template&lt;typename RecordCoord , typename ArrayIndex &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="TreeFromDimensions_8hpp_source.html#l00158">158</a> of file <a class="el" href="TreeFromDimensions_8hpp_source.html">TreeFromDimensions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="TreeFromDimensions_8hpp_source.html#l00159">159</a> of file <a class="el" href="TreeFromDimensions_8hpp_source.html">TreeFromDimensions.hpp</a>.</p>
 
 </div>
 </div>
@@ -482,7 +482,7 @@ template&lt;typename T &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping_1_1tree.html">tree</a></li>
-    <li class="footer">Generated on Wed May 11 2022 14:30:13 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu May 12 2022 12:47:18 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

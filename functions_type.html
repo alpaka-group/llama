@@ -193,8 +193,8 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 , <a class="el" href="structllama_1_1mapping_1_1tree_1_1Node.html#a505e7e6a29add068afe6c17f3e5a022c">llama::mapping::tree::Node&lt; TIdentifier, TChildrenTuple, CountType &gt;</a>
 </li>
 <li>Index
-: <a class="el" href="structllama_1_1ArrayExtents.html#a794d74d0ed53e82d42ea0f3c2dacd983">llama::ArrayExtents&lt; Sizes &gt;</a>
-, <a class="el" href="structllama_1_1ArrayExtents_3_4.html#afee92ea69699f395ecb9f0ae449a8ad8">llama::ArrayExtents&lt;&gt;</a>
+: <a class="el" href="structllama_1_1ArrayExtents.html#abce5defd13fa5853289a5b1f744eb243">llama::ArrayExtents&lt; T, Sizes &gt;</a>
+, <a class="el" href="structllama_1_1ArrayExtents_3_01T_01_4.html#a3c7a03c62d1570aee15138dc3a754b10">llama::ArrayExtents&lt; T &gt;</a>
 </li>
 <li>Inner
 : <a class="el" href="structllama_1_1mapping_1_1Bytesplit.html#ae9a0b3f519c15de176403f3eea6e072b">llama::mapping::Bytesplit&lt; TArrayExtents, TRecordDim, InnerMapping &gt;</a>
@@ -312,6 +312,12 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 <li>shared_ptr
 : <a class="el" href="structllama_1_1bloballoc_1_1SharedPtr.html#a5080b68a3c4da3051afa37f04871e837">llama::bloballoc::SharedPtr</a>
 </li>
+<li>size_type
+: <a class="el" href="structllama_1_1mapping_1_1MappingBase.html#a5ce2266ed39400609731093894761df9">llama::mapping::MappingBase&lt; TArrayExtents, TRecordDim &gt;</a>
+, <a class="el" href="structllama_1_1Vector.html#af351e8734902f0ead47ba3b9aae4302e">llama::Vector&lt; Mapping &gt;</a>
+, <a class="el" href="structllama_1_1View.html#a06605754d91c85468a5e847120f578b8">llama::View&lt; TMapping, BlobType &gt;</a>
+, <a class="el" href="structllama_1_1VirtualView.html#aa332b4ff98b320561ed6bcd7c9acc605">llama::VirtualView&lt; TStoredParentView &gt;</a>
+</li>
 <li>StoredParentView
 : <a class="el" href="structllama_1_1VirtualView.html#a21144d5af8d33763e98fe2e1849cf9cf">llama::VirtualView&lt; TStoredParentView &gt;</a>
 </li>
@@ -335,6 +341,8 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 , <a class="el" href="structllama_1_1internal_1_1GetTypeImpl_3_01ChildType_0fN_0e_00_01RecordCoord_3_01HeadCoord_00_01TailCoords_8_8_8_01_4_01_4.html#ab9c3a8dc49e6eabb5dff849b9710446c">llama::internal::GetTypeImpl&lt; ChildType[N], RecordCoord&lt; HeadCoord, TailCoords... &gt; &gt;</a>
 , <a class="el" href="structllama_1_1internal_1_1GetTypeImpl_3_01Record_3_01Children_8_8_8_01_4_00_01RecordCoord_3_01Hd335281b58bf9419f48b7fc65f5657ab.html#a20d230f3fb7208ab88e3e55a73936293">llama::internal::GetTypeImpl&lt; Record&lt; Children... &gt;, RecordCoord&lt; HeadCoord, TailCoords... &gt; &gt;</a>
 , <a class="el" href="structllama_1_1internal_1_1GetTypeImpl_3_01T_00_01RecordCoord_3_4_01_4.html#a474df5888cc1b6a4ef60cef1700126ea">llama::internal::GetTypeImpl&lt; T, RecordCoord&lt;&gt; &gt;</a>
+, <a class="el" href="structllama_1_1internal_1_1IndexTypeFromArgs.html#ad020fa4195b4fc83a8a2a69ab44f7b39">llama::internal::IndexTypeFromArgs&lt; Default, Ints &gt;</a>
+, <a class="el" href="structllama_1_1internal_1_1IndexTypeFromArgs_3_01Default_00_01FirstInt_00_01Ints_8_8_8_01_4.html#af01748b74f84154118d66fcc855ea37f">llama::internal::IndexTypeFromArgs&lt; Default, FirstInt, Ints... &gt;</a>
 , <a class="el" href="structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Child_0fN_0e_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html#a7016562e5bb37ff5997b85bcaabef280">llama::internal::LeafRecordCoordsImpl&lt; Child[N], RecordCoord&lt; RCs... &gt; &gt;</a>
 , <a class="el" href="structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html#a9a6d2e2e78a46b2a9901de35280a32a9">llama::internal::LeafRecordCoordsImpl&lt; Record&lt; Fields... &gt;, RecordCoord&lt; RCs... &gt; &gt;</a>
 , <a class="el" href="structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01T_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html#a12ddbf42ab557dff563abf254b04cc60">llama::internal::LeafRecordCoordsImpl&lt; T, RecordCoord&lt; RCs... &gt; &gt;</a>
@@ -361,8 +369,8 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 <li>type
 : <a class="el" href="structstd_1_1tuple__element_3_01I_00_01const_01llama_1_1VirtualRecord_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html#a99bccd7094ec36226b121de02827db21">std::tuple_element&lt; I, const llama::VirtualRecord&lt; View, BoundRecordCoord, OwnView &gt; &gt;</a>
 , <a class="el" href="structstd_1_1tuple__element_3_01I_00_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html#a9eb4aa91a7a1ef27eb5060719269e93b">std::tuple_element&lt; I, llama::Array&lt; T, N &gt; &gt;</a>
-, <a class="el" href="structstd_1_1tuple__element_3_01I_00_01llama_1_1ArrayExtents_3_01Sizes_8_8_8_01_4_01_4.html#a5a5f00c02df028f5c8c5c49d423090a1">std::tuple_element&lt; I, llama::ArrayExtents&lt; Sizes... &gt; &gt;</a>
-, <a class="el" href="structstd_1_1tuple__element_3_01I_00_01llama_1_1ArrayIndex_3_01N_01_4_01_4.html#a93849c265dee3a5c2f1b13be95f9cebd">std::tuple_element&lt; I, llama::ArrayIndex&lt; N &gt; &gt;</a>
+, <a class="el" href="structstd_1_1tuple__element_3_01I_00_01llama_1_1ArrayExtents_3_01SizeType_00_01Sizes_8_8_8_01_4_01_4.html#ad5fb64a3dc9dff92570e6ff46117ea4b">std::tuple_element&lt; I, llama::ArrayExtents&lt; SizeType, Sizes... &gt; &gt;</a>
+, <a class="el" href="structstd_1_1tuple__element_3_01I_00_01llama_1_1ArrayIndex_3_01V_00_01N_01_4_01_4.html#a2f689961f173eaf8e46610264e779fd5">std::tuple_element&lt; I, llama::ArrayIndex&lt; V, N &gt; &gt;</a>
 , <a class="el" href="structstd_1_1tuple__element_3_01I_00_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html#ab58302406179f5fe72d1c568fcc3fc2f">std::tuple_element&lt; I, llama::Tuple&lt; Elements... &gt; &gt;</a>
 , <a class="el" href="structstd_1_1tuple__element_3_01I_00_01llama_1_1VirtualRecord_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html#a05a8df86edec9f2b0c745ff0c608a4f4">std::tuple_element&lt; I, llama::VirtualRecord&lt; View, BoundRecordCoord, OwnView &gt; &gt;</a>
 </li>
@@ -373,14 +381,14 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 <li>value_type
 : <a class="el" href="structllama_1_1Array.html#a0774edd854887549deb6cd3b7c606af8">llama::Array&lt; T, N &gt;</a>
 , <a class="el" href="structllama_1_1Array_3_01T_00_010_01_4.html#a1efa9138d873ccd7ea49c2d60b8f1bde">llama::Array&lt; T, 0 &gt;</a>
-, <a class="el" href="structllama_1_1ArrayExtents.html#af2943709cd80f07138e0b669f4c7366f">llama::ArrayExtents&lt; Sizes &gt;</a>
-, <a class="el" href="structllama_1_1ArrayExtents_3_4.html#a096ce68da7e3a9793a780de241fce850">llama::ArrayExtents&lt;&gt;</a>
+, <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">llama::ArrayExtents&lt; T, Sizes &gt;</a>
+, <a class="el" href="structllama_1_1ArrayExtents_3_01T_01_4.html#a7de763d8b77488924f1e795d98ca4efb">llama::ArrayExtents&lt; T &gt;</a>
 , <a class="el" href="structllama_1_1ArrayIndexIterator.html#a5c5098e0a5fd6680c3e58d5bdb11aa1d">llama::ArrayIndexIterator&lt; ArrayExtents &gt;</a>
 , <a class="el" href="structllama_1_1bloballoc_1_1AlignedAllocator.html#a5c4611d39117e5bef57bf756e5e80a1b">llama::bloballoc::AlignedAllocator&lt; T, Alignment &gt;</a>
 , <a class="el" href="structllama_1_1Iterator.html#a9c90d997ce6c6ef17fb23b3aa0907bf4">llama::Iterator&lt; View &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#ad397146d87434a6114bb15a88644b3bf">llama::mapping::Bytesplit&lt; TArrayExtents, TRecordDim, InnerMapping &gt;::Reference&lt; RC, BlobArray &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#a49913dbbda6da127247a265a7b520d3c">llama::mapping::internal::BitPackedFloatRef&lt; Float, StoredIntegralPointer, VHExp, VHMan &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html#a26b01937e5451d1d6e71c554008e7874">llama::mapping::internal::BitPackedIntRef&lt; Integral, StoredIntegralPointer, VHBits &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#a3be77bbc66766e7fc6f5313b10090215">llama::mapping::internal::BitPackedFloatRef&lt; Float, StoredIntegralPointer, VHExp, VHMan, SizeType &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html#a5ac5a212dc02081e69bc2ab734b52926">llama::mapping::internal::BitPackedIntRef&lt; Integral, StoredIntegralPointer, VHBits, SizeType &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1internal_1_1ChangeTypeReference.html#a3f72be17c88ec9c8a831624bdc9c8a57">llama::mapping::internal::ChangeTypeReference&lt; UserT, StoredT &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1internal_1_1NullReference.html#a99a9f1b8d254b905ab6f1a352057269d">llama::mapping::internal::NullReference&lt; T &gt;</a>
 , <a class="el" href="structllama_1_1Vector.html#a67955fe1bcd5a0ef79854df41d86cfcf">llama::Vector&lt; Mapping &gt;</a>
@@ -397,7 +405,7 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed May 11 2022 14:30:13 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu May 12 2022 12:47:18 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

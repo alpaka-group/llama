@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Low-Level Abstraction of Memory Access: llama::ArrayExtents&lt; Sizes &gt; Struct Template Reference</title>
+<title>Low-Level Abstraction of Memory Access: llama::ArrayExtents&lt; T, Sizes &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -88,145 +88,145 @@ $(document).ready(function(){initNavTree('structllama_1_1ArrayExtents.html','');
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="structllama_1_1ArrayExtents-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">llama::ArrayExtents&lt; Sizes &gt; Struct Template Reference</div>  </div>
+<div class="title">llama::ArrayExtents&lt; T, Sizes &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for llama::ArrayExtents&lt; Sizes &gt;:</div>
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for llama::ArrayExtents&lt; T, Sizes &gt;:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="structllama_1_1ArrayExtents__inherit__graph.png" border="0" usemap="#llama_1_1ArrayExtents_3_01Sizes_01_4_inherit__map" alt="Inheritance graph"/></div>
-<map name="llama_1_1ArrayExtents_3_01Sizes_01_4_inherit__map" id="llama_1_1ArrayExtents_3_01Sizes_01_4_inherit__map">
-<area shape="rect" title=" " alt="" coords="37,109,188,151"/>
-<area shape="rect" href="structllama_1_1ArrayIndexRange.html" title="Range allowing to iterate over all indices in an ArrayExtents." alt="" coords="23,199,202,240"/>
-<area shape="rect" href="structllama_1_1Array.html" title=" " alt="" coords="5,5,220,61"/>
+<div class="center"><img src="structllama_1_1ArrayExtents__inherit__graph.png" border="0" usemap="#llama_1_1ArrayExtents_3_01T_00_01Sizes_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="llama_1_1ArrayExtents_3_01T_00_01Sizes_01_4_inherit__map" id="llama_1_1ArrayExtents_3_01T_00_01Sizes_01_4_inherit__map">
+<area shape="rect" title=" " alt="" coords="19,109,170,151"/>
+<area shape="rect" href="structllama_1_1ArrayIndexRange.html" title="Range allowing to iterate over all indices in an ArrayExtents." alt="" coords="5,199,184,240"/>
+<area shape="rect" href="structllama_1_1Array.html" title=" " alt="" coords="15,5,174,61"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for llama::ArrayExtents&lt; Sizes &gt;:</div>
+  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for llama::ArrayExtents&lt; T, Sizes &gt;:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="structllama_1_1ArrayExtents__coll__graph.png" border="0" usemap="#llama_1_1ArrayExtents_3_01Sizes_01_4_coll__map" alt="Collaboration graph"/></div>
-<map name="llama_1_1ArrayExtents_3_01Sizes_01_4_coll__map" id="llama_1_1ArrayExtents_3_01Sizes_01_4_coll__map">
-<area shape="rect" title=" " alt="" coords="37,305,188,347"/>
-<area shape="rect" href="structllama_1_1Array.html" title=" " alt="" coords="5,200,220,256"/>
-<area shape="rect" href="structllama_1_1ArrayIndex.html" title=" " alt="" coords="38,96,187,137"/>
-<area shape="rect" href="structllama_1_1Array.html" title=" " alt="" coords="40,5,185,47"/>
+<div class="center"><img src="structllama_1_1ArrayExtents__coll__graph.png" border="0" usemap="#llama_1_1ArrayExtents_3_01T_00_01Sizes_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="llama_1_1ArrayExtents_3_01T_00_01Sizes_01_4_coll__map" id="llama_1_1ArrayExtents_3_01T_00_01Sizes_01_4_coll__map">
+<area shape="rect" title=" " alt="" coords="9,109,160,151"/>
+<area shape="rect" href="structllama_1_1Array.html" title=" " alt="" coords="5,5,164,61"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a794d74d0ed53e82d42ea0f3c2dacd983"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ArrayExtents.html#a794d74d0ed53e82d42ea0f3c2dacd983">Index</a> = <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html#ae2468d5c2b3714c09f81c60467b6a4cc">rank</a> &gt;</td></tr>
-<tr class="separator:a794d74d0ed53e82d42ea0f3c2dacd983"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2943709cd80f07138e0b669f4c7366f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ArrayExtents.html#af2943709cd80f07138e0b669f4c7366f">value_type</a> = typename <a class="el" href="structllama_1_1Array.html#a0774edd854887549deb6cd3b7c606af8">Index::value_type</a></td></tr>
-<tr class="separator:af2943709cd80f07138e0b669f4c7366f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_types_structllama_1_1Array"><td colspan="2" onclick="javascript:toggleInherit('pub_types_structllama_1_1Array')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="structllama_1_1Array.html">llama::Array&lt; ArrayIndex&lt; sizeof...(Sizes)&gt;::value_type,((Sizes==dyn)+...+0)&gt;</a></td></tr>
-<tr class="memitem:a0774edd854887549deb6cd3b7c606af8 inherit pub_types_structllama_1_1Array"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#a0774edd854887549deb6cd3b7c606af8">value_type</a> = <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a>&lt; sizeof...(Sizes)&gt;::<a class="el" href="structllama_1_1Array.html#a0774edd854887549deb6cd3b7c606af8">value_type</a></td></tr>
+<tr class="memitem:abce5defd13fa5853289a5b1f744eb243"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ArrayExtents.html#abce5defd13fa5853289a5b1f744eb243">Index</a> = <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a>&lt; T, <a class="el" href="structllama_1_1ArrayExtents.html#aa368d8287fad34884c1ccfdb01d527dc">rank</a> &gt;</td></tr>
+<tr class="separator:abce5defd13fa5853289a5b1f744eb243"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26ddad4db80efe93143b86c766b9a69f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">value_type</a> = T</td></tr>
+<tr class="separator:a26ddad4db80efe93143b86c766b9a69f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_structllama_1_1Array"><td colspan="2" onclick="javascript:toggleInherit('pub_types_structllama_1_1Array')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="structllama_1_1Array.html">llama::Array&lt; std::size_t,((Sizes==dyn)+...+0)&gt;</a></td></tr>
+<tr class="memitem:a0774edd854887549deb6cd3b7c606af8 inherit pub_types_structllama_1_1Array"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#a0774edd854887549deb6cd3b7c606af8">value_type</a> = std::size_t</td></tr>
 <tr class="separator:a0774edd854887549deb6cd3b7c606af8 inherit pub_types_structllama_1_1Array"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a42fac6cbcc344e0d7d29af63ac184c34"><td class="memTemplParams" colspan="2">template&lt;std::size_t I&gt; </td></tr>
-<tr class="memitem:a42fac6cbcc344e0d7d29af63ac184c34"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1ArrayExtents.html#a42fac6cbcc344e0d7d29af63ac184c34">get</a> () const</td></tr>
-<tr class="separator:a42fac6cbcc344e0d7d29af63ac184c34"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33f07e8404e8c0cde8a69334dd3b54b4"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ArrayExtents.html#a33f07e8404e8c0cde8a69334dd3b54b4">operator[]</a> (std::size_t i) const</td></tr>
-<tr class="separator:a33f07e8404e8c0cde8a69334dd3b54b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2980837e65544a89424008f40a32595e"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ArrayExtents.html#a2980837e65544a89424008f40a32595e">toArray</a> () const -&gt; <a class="el" href="structllama_1_1ArrayExtents.html#a794d74d0ed53e82d42ea0f3c2dacd983">Index</a></td></tr>
-<tr class="separator:a2980837e65544a89424008f40a32595e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1239f98ac546ffaaaf0e281807e23b9d"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ArrayExtents.html#a1239f98ac546ffaaaf0e281807e23b9d">operator Index</a> () const</td></tr>
-<tr class="separator:a1239f98ac546ffaaaf0e281807e23b9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_structllama_1_1Array"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_structllama_1_1Array')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="structllama_1_1Array.html">llama::Array&lt; ArrayIndex&lt; sizeof...(Sizes)&gt;::value_type,((Sizes==dyn)+...+0)&gt;</a></td></tr>
+<tr class="memitem:a4693739ef8f42b3dfeb8203b74395ed7"><td class="memTemplParams" colspan="2">template&lt;std::size_t I&gt; </td></tr>
+<tr class="memitem:a4693739ef8f42b3dfeb8203b74395ed7"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1ArrayExtents.html#a4693739ef8f42b3dfeb8203b74395ed7">get</a> () const -&gt; <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">value_type</a></td></tr>
+<tr class="separator:a4693739ef8f42b3dfeb8203b74395ed7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abff3ef6c9c1dede51fb8d21bc45d7e80"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ArrayExtents.html#abff3ef6c9c1dede51fb8d21bc45d7e80">operator[]</a> (T i) const -&gt; <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">value_type</a></td></tr>
+<tr class="separator:abff3ef6c9c1dede51fb8d21bc45d7e80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b27d54cbebca7e1a0184ee0f675769e"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ArrayExtents.html#a6b27d54cbebca7e1a0184ee0f675769e">toArray</a> () const -&gt; <a class="el" href="structllama_1_1ArrayExtents.html#abce5defd13fa5853289a5b1f744eb243">Index</a></td></tr>
+<tr class="separator:a6b27d54cbebca7e1a0184ee0f675769e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaabf2b9ae6c91da006681665e0201453"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ArrayExtents.html#aaabf2b9ae6c91da006681665e0201453">operator Index</a> () const</td></tr>
+<tr class="separator:aaabf2b9ae6c91da006681665e0201453"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_structllama_1_1Array"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_structllama_1_1Array')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="structllama_1_1Array.html">llama::Array&lt; std::size_t,((Sizes==dyn)+...+0)&gt;</a></td></tr>
 <tr class="memitem:aa20a497723e6189dfaf7145ddc256534 inherit pub_methods_structllama_1_1Array"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#aa20a497723e6189dfaf7145ddc256534">size</a> () const</td></tr>
 <tr class="separator:aa20a497723e6189dfaf7145ddc256534 inherit pub_methods_structllama_1_1Array"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23daa97b399455f659f57512aaf59eb2 inherit pub_methods_structllama_1_1Array"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#a23daa97b399455f659f57512aaf59eb2">begin</a> () -&gt; <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a>&lt; sizeof...(Sizes)&gt;::<a class="el" href="structllama_1_1Array.html#a0774edd854887549deb6cd3b7c606af8">value_type</a> *</td></tr>
+<tr class="memitem:a23daa97b399455f659f57512aaf59eb2 inherit pub_methods_structllama_1_1Array"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#a23daa97b399455f659f57512aaf59eb2">begin</a> () -&gt; std::size_t *</td></tr>
 <tr class="separator:a23daa97b399455f659f57512aaf59eb2 inherit pub_methods_structllama_1_1Array"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac650608d5cae226a669b00005e6a7c2c inherit pub_methods_structllama_1_1Array"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#ac650608d5cae226a669b00005e6a7c2c">begin</a> () const -&gt; const <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a>&lt; sizeof...(Sizes)&gt;::<a class="el" href="structllama_1_1Array.html#a0774edd854887549deb6cd3b7c606af8">value_type</a> *</td></tr>
+<tr class="memitem:ac650608d5cae226a669b00005e6a7c2c inherit pub_methods_structllama_1_1Array"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#ac650608d5cae226a669b00005e6a7c2c">begin</a> () const -&gt; const std::size_t *</td></tr>
 <tr class="separator:ac650608d5cae226a669b00005e6a7c2c inherit pub_methods_structllama_1_1Array"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a84bc834840cc6b3ff49a405326fd729a inherit pub_methods_structllama_1_1Array"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#a84bc834840cc6b3ff49a405326fd729a">end</a> () -&gt; <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a>&lt; sizeof...(Sizes)&gt;::<a class="el" href="structllama_1_1Array.html#a0774edd854887549deb6cd3b7c606af8">value_type</a> *</td></tr>
+<tr class="memitem:a84bc834840cc6b3ff49a405326fd729a inherit pub_methods_structllama_1_1Array"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#a84bc834840cc6b3ff49a405326fd729a">end</a> () -&gt; std::size_t *</td></tr>
 <tr class="separator:a84bc834840cc6b3ff49a405326fd729a inherit pub_methods_structllama_1_1Array"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66793ca523fda5798f6173d608621643 inherit pub_methods_structllama_1_1Array"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#a66793ca523fda5798f6173d608621643">end</a> () const -&gt; const <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a>&lt; sizeof...(Sizes)&gt;::<a class="el" href="structllama_1_1Array.html#a0774edd854887549deb6cd3b7c606af8">value_type</a> *</td></tr>
+<tr class="memitem:a66793ca523fda5798f6173d608621643 inherit pub_methods_structllama_1_1Array"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#a66793ca523fda5798f6173d608621643">end</a> () const -&gt; const std::size_t *</td></tr>
 <tr class="separator:a66793ca523fda5798f6173d608621643 inherit pub_methods_structllama_1_1Array"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18c4dca04c7d6ed3091def6653a8ae75 inherit pub_methods_structllama_1_1Array"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#a18c4dca04c7d6ed3091def6653a8ae75">operator[]</a> (IndexType &amp;&amp;idx) -&gt; <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a>&lt; sizeof...(Sizes)&gt;::<a class="el" href="structllama_1_1Array.html#a0774edd854887549deb6cd3b7c606af8">value_type</a> &amp;</td></tr>
+<tr class="memitem:a18c4dca04c7d6ed3091def6653a8ae75 inherit pub_methods_structllama_1_1Array"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#a18c4dca04c7d6ed3091def6653a8ae75">operator[]</a> (IndexType &amp;&amp;idx) -&gt; std::size_t &amp;</td></tr>
 <tr class="separator:a18c4dca04c7d6ed3091def6653a8ae75 inherit pub_methods_structllama_1_1Array"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb5972c69fe2ec584bd1b5cbf48d7a67 inherit pub_methods_structllama_1_1Array"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#afb5972c69fe2ec584bd1b5cbf48d7a67">operator[]</a> (IndexType &amp;&amp;idx) const -&gt; <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a>&lt; sizeof...(Sizes)&gt;::<a class="el" href="structllama_1_1Array.html#a0774edd854887549deb6cd3b7c606af8">value_type</a> const &amp;</td></tr>
+<tr class="memitem:afb5972c69fe2ec584bd1b5cbf48d7a67 inherit pub_methods_structllama_1_1Array"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#afb5972c69fe2ec584bd1b5cbf48d7a67">operator[]</a> (IndexType &amp;&amp;idx) const -&gt; std::size_t const &amp;</td></tr>
 <tr class="separator:afb5972c69fe2ec584bd1b5cbf48d7a67 inherit pub_methods_structllama_1_1Array"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5db7865aabd4d3174462fc7a818fe73 inherit pub_methods_structllama_1_1Array"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#ae5db7865aabd4d3174462fc7a818fe73">get</a> () -&gt; <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a>&lt; sizeof...(Sizes)&gt;::<a class="el" href="structllama_1_1Array.html#a0774edd854887549deb6cd3b7c606af8">value_type</a> &amp;</td></tr>
+<tr class="memitem:ae5db7865aabd4d3174462fc7a818fe73 inherit pub_methods_structllama_1_1Array"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#ae5db7865aabd4d3174462fc7a818fe73">get</a> () -&gt; std::size_t &amp;</td></tr>
 <tr class="separator:ae5db7865aabd4d3174462fc7a818fe73 inherit pub_methods_structllama_1_1Array"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4376175e8327f95424cd17bbca0c27b9 inherit pub_methods_structllama_1_1Array"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#a4376175e8327f95424cd17bbca0c27b9">get</a> () const -&gt; const <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a>&lt; sizeof...(Sizes)&gt;::<a class="el" href="structllama_1_1Array.html#a0774edd854887549deb6cd3b7c606af8">value_type</a> &amp;</td></tr>
+<tr class="memitem:a4376175e8327f95424cd17bbca0c27b9 inherit pub_methods_structllama_1_1Array"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#a4376175e8327f95424cd17bbca0c27b9">get</a> () const -&gt; const std::size_t &amp;</td></tr>
 <tr class="separator:a4376175e8327f95424cd17bbca0c27b9 inherit pub_methods_structllama_1_1Array"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:ae2468d5c2b3714c09f81c60467b6a4cc"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ArrayExtents.html#ae2468d5c2b3714c09f81c60467b6a4cc">rank</a> = sizeof...(Sizes)</td></tr>
-<tr class="separator:ae2468d5c2b3714c09f81c60467b6a4cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5c4d0fa925533034aab8c4aed3c52d2"><td class="memItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ArrayExtents.html#ae5c4d0fa925533034aab8c4aed3c52d2">rank_dynamic</a> = ((Sizes == <a class="el" href="namespacellama.html#a082c1dbcef89db3c7fa477e7b4ecfc68">dyn</a>) + ... + 0)</td></tr>
-<tr class="separator:ae5c4d0fa925533034aab8c4aed3c52d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac49f3c0b9da81e379e8ff81fdb5bc107"><td class="memItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ArrayExtents.html#ac49f3c0b9da81e379e8ff81fdb5bc107">rank_static</a> = <a class="el" href="structllama_1_1ArrayExtents.html#ae2468d5c2b3714c09f81c60467b6a4cc">rank</a> - <a class="el" href="structllama_1_1ArrayExtents.html#ae5c4d0fa925533034aab8c4aed3c52d2">rank_dynamic</a></td></tr>
-<tr class="separator:ac49f3c0b9da81e379e8ff81fdb5bc107"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa368d8287fad34884c1ccfdb01d527dc"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ArrayExtents.html#aa368d8287fad34884c1ccfdb01d527dc">rank</a> = sizeof...(Sizes)</td></tr>
+<tr class="separator:aa368d8287fad34884c1ccfdb01d527dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cde9d6a979db2cc62cf4e4571305035"><td class="memItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ArrayExtents.html#a4cde9d6a979db2cc62cf4e4571305035">rank_dynamic</a> = ((Sizes == <a class="el" href="namespacellama.html#a082c1dbcef89db3c7fa477e7b4ecfc68">dyn</a>) + ... + 0)</td></tr>
+<tr class="separator:a4cde9d6a979db2cc62cf4e4571305035"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83c3ee94b8e46a4bfcdaf890b475db37"><td class="memItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ArrayExtents.html#a83c3ee94b8e46a4bfcdaf890b475db37">rank_static</a> = <a class="el" href="structllama_1_1ArrayExtents.html#aa368d8287fad34884c1ccfdb01d527dc">rank</a> - <a class="el" href="structllama_1_1ArrayExtents.html#a4cde9d6a979db2cc62cf4e4571305035">rank_dynamic</a></td></tr>
+<tr class="separator:a83c3ee94b8e46a4bfcdaf890b475db37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_attribs_structllama_1_1Array"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_structllama_1_1Array')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="structllama_1_1Array.html">llama::Array&lt; ArrayIndex&lt; sizeof...(Sizes)&gt;::value_type,((Sizes==dyn)+...+0)&gt;</a></td></tr>
-<tr class="memitem:adcb4206c8a2d2bc2cbe141d354a6185b inherit pub_attribs_structllama_1_1Array"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a>&lt; sizeof...(Sizes)&gt;::<a class="el" href="structllama_1_1Array.html#a0774edd854887549deb6cd3b7c606af8">value_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#adcb4206c8a2d2bc2cbe141d354a6185b">element</a> [N &gt; 0 ? N :1]</td></tr>
+<tr class="inherit_header pub_attribs_structllama_1_1Array"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_structllama_1_1Array')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="structllama_1_1Array.html">llama::Array&lt; std::size_t,((Sizes==dyn)+...+0)&gt;</a></td></tr>
+<tr class="memitem:adcb4206c8a2d2bc2cbe141d354a6185b inherit pub_attribs_structllama_1_1Array"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#adcb4206c8a2d2bc2cbe141d354a6185b">element</a> [N &gt; 0 ? N :1]</td></tr>
 <tr class="separator:adcb4206c8a2d2bc2cbe141d354a6185b inherit pub_attribs_structllama_1_1Array"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;std::size_t... Sizes&gt;<br />
-struct llama::ArrayExtents&lt; Sizes &gt;</h3>
+<div class="textblock"><h3>template&lt;typename T = std::size_t, T... Sizes&gt;<br />
+struct llama::ArrayExtents&lt; T, Sizes &gt;</h3>
 
-<p><a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a> holding compile and runtime indices. This is conceptually equivalent to the std::extent of std::mdspan. See: <a href="https://wg21.link/P0009">https://wg21.link/P0009</a> </p>
+<p><a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a> holding compile and runtime indices. This is conceptually equivalent to the std::extent of std::mdspan (</p><dl class="section see"><dt>See also</dt><dd>: <a href="https://wg21.link/P0009">https://wg21.link/P0009</a>) including the changes to make the size_type controllable (</dd>
+<dd>
+: <a href="https://wg21.link/P2553">https://wg21.link/P2553</a>). </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ArrayExtents_8hpp_source.html#l00054">54</a> of file <a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ArrayExtents_8hpp_source.html#l00124">124</a> of file <a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a794d74d0ed53e82d42ea0f3c2dacd983"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a794d74d0ed53e82d42ea0f3c2dacd983">&#9670;&nbsp;</a></span>Index</h2>
+<a id="abce5defd13fa5853289a5b1f744eb243"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abce5defd13fa5853289a5b1f744eb243">&#9670;&nbsp;</a></span>Index</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;std::size_t... Sizes&gt; </div>
+template&lt;typename T  = std::size_t, T... Sizes&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1ArrayExtents.html">llama::ArrayExtents</a>&lt; Sizes &gt;::<a class="el" href="structllama_1_1ArrayExtents.html#a794d74d0ed53e82d42ea0f3c2dacd983">Index</a> =  <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a>&lt;<a class="el" href="structllama_1_1ArrayExtents.html#ae2468d5c2b3714c09f81c60467b6a4cc">rank</a>&gt;</td>
+          <td class="memname">using <a class="el" href="structllama_1_1ArrayExtents.html">llama::ArrayExtents</a>&lt; T, Sizes &gt;::<a class="el" href="structllama_1_1ArrayExtents.html#abce5defd13fa5853289a5b1f744eb243">Index</a> =  <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a>&lt;T, <a class="el" href="structllama_1_1ArrayExtents.html#aa368d8287fad34884c1ccfdb01d527dc">rank</a>&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ArrayExtents_8hpp_source.html#l00060">60</a> of file <a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ArrayExtents_8hpp_source.html#l00130">130</a> of file <a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>.</p>
 
 </div>
 </div>
-<a id="af2943709cd80f07138e0b669f4c7366f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af2943709cd80f07138e0b669f4c7366f">&#9670;&nbsp;</a></span>value_type</h2>
+<a id="a26ddad4db80efe93143b86c766b9a69f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26ddad4db80efe93143b86c766b9a69f">&#9670;&nbsp;</a></span>value_type</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;std::size_t... Sizes&gt; </div>
+template&lt;typename T  = std::size_t, T... Sizes&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1ArrayExtents.html">llama::ArrayExtents</a>&lt; Sizes &gt;::<a class="el" href="structllama_1_1ArrayExtents.html#af2943709cd80f07138e0b669f4c7366f">value_type</a> =  typename <a class="el" href="structllama_1_1Array.html#a0774edd854887549deb6cd3b7c606af8">Index::value_type</a></td>
+          <td class="memname">using <a class="el" href="structllama_1_1ArrayExtents.html">llama::ArrayExtents</a>&lt; T, Sizes &gt;::<a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">value_type</a> =  T</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ArrayExtents_8hpp_source.html#l00061">61</a> of file <a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ArrayExtents_8hpp_source.html#l00131">131</a> of file <a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a42fac6cbcc344e0d7d29af63ac184c34"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a42fac6cbcc344e0d7d29af63ac184c34">&#9670;&nbsp;</a></span>get()</h2>
+<a id="a4693739ef8f42b3dfeb8203b74395ed7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4693739ef8f42b3dfeb8203b74395ed7">&#9670;&nbsp;</a></span>get()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;std::size_t... Sizes&gt; </div>
+template&lt;typename T  = std::size_t, T... Sizes&gt; </div>
 <div class="memtemplate">
 template&lt;std::size_t I&gt; </div>
 <table class="mlabels">
@@ -234,98 +234,10 @@ template&lt;std::size_t I&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr auto <a class="el" href="structllama_1_1ArrayExtents.html">llama::ArrayExtents</a>&lt; Sizes &gt;::get </td>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1ArrayExtents.html">llama::ArrayExtents</a>&lt; T, Sizes &gt;::get </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ArrayExtents_8hpp_source.html#l00064">64</a> of file <a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a1239f98ac546ffaaaf0e281807e23b9d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1239f98ac546ffaaaf0e281807e23b9d">&#9670;&nbsp;</a></span>operator Index()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;std::size_t... Sizes&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="structllama_1_1ArrayExtents.html">llama::ArrayExtents</a>&lt; Sizes &gt;::operator <a class="el" href="structllama_1_1ArrayExtents.html#a794d74d0ed53e82d42ea0f3c2dacd983">Index</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ArrayExtents_8hpp_source.html#l00094">94</a> of file <a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a33f07e8404e8c0cde8a69334dd3b54b4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a33f07e8404e8c0cde8a69334dd3b54b4">&#9670;&nbsp;</a></span>operator[]()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;std::size_t... Sizes&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr auto <a class="el" href="structllama_1_1ArrayExtents.html">llama::ArrayExtents</a>&lt; Sizes &gt;::operator[] </td>
-          <td>(</td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>i</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ArrayExtents_8hpp_source.html#l00076">76</a> of file <a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a2980837e65544a89424008f40a32595e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2980837e65544a89424008f40a32595e">&#9670;&nbsp;</a></span>toArray()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;std::size_t... Sizes&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr auto <a class="el" href="structllama_1_1ArrayExtents.html">llama::ArrayExtents</a>&lt; Sizes &gt;::toArray </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const -&gt; <a class="el" href="structllama_1_1ArrayExtents.html#a794d74d0ed53e82d42ea0f3c2dacd983">Index</a>
+          <td> const -&gt; <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">value_type</a>
         </td>
         </tr>
       </table>
@@ -336,24 +248,114 @@ template&lt;std::size_t... Sizes&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ArrayExtents_8hpp_source.html#l00089">89</a> of file <a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ArrayExtents_8hpp_source.html#l00134">134</a> of file <a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aaabf2b9ae6c91da006681665e0201453"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaabf2b9ae6c91da006681665e0201453">&#9670;&nbsp;</a></span>operator Index()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T  = std::size_t, T... Sizes&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="structllama_1_1ArrayExtents.html">llama::ArrayExtents</a>&lt; T, Sizes &gt;::operator <a class="el" href="structllama_1_1ArrayExtents.html#abce5defd13fa5853289a5b1f744eb243">Index</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ArrayExtents_8hpp_source.html#l00164">164</a> of file <a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>.</p>
+
+</div>
+</div>
+<a id="abff3ef6c9c1dede51fb8d21bc45d7e80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abff3ef6c9c1dede51fb8d21bc45d7e80">&#9670;&nbsp;</a></span>operator[]()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T  = std::size_t, T... Sizes&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1ArrayExtents.html">llama::ArrayExtents</a>&lt; T, Sizes &gt;::operator[] </td>
+          <td>(</td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td> const -&gt; <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">value_type</a>
+        </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ArrayExtents_8hpp_source.html#l00146">146</a> of file <a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a6b27d54cbebca7e1a0184ee0f675769e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b27d54cbebca7e1a0184ee0f675769e">&#9670;&nbsp;</a></span>toArray()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T  = std::size_t, T... Sizes&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1ArrayExtents.html">llama::ArrayExtents</a>&lt; T, Sizes &gt;::toArray </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const -&gt; <a class="el" href="structllama_1_1ArrayExtents.html#abce5defd13fa5853289a5b1f744eb243">Index</a>
+        </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ArrayExtents_8hpp_source.html#l00159">159</a> of file <a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="ae2468d5c2b3714c09f81c60467b6a4cc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae2468d5c2b3714c09f81c60467b6a4cc">&#9670;&nbsp;</a></span>rank</h2>
+<a id="aa368d8287fad34884c1ccfdb01d527dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa368d8287fad34884c1ccfdb01d527dc">&#9670;&nbsp;</a></span>rank</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;std::size_t... Sizes&gt; </div>
+template&lt;typename T  = std::size_t, T... Sizes&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr std::size_t <a class="el" href="structllama_1_1ArrayExtents.html">llama::ArrayExtents</a>&lt; Sizes &gt;::rank = sizeof...(Sizes)</td>
+          <td class="memname">constexpr std::size_t <a class="el" href="structllama_1_1ArrayExtents.html">llama::ArrayExtents</a>&lt; T, Sizes &gt;::rank = sizeof...(Sizes)</td>
         </tr>
       </table>
   </td>
@@ -363,23 +365,23 @@ template&lt;std::size_t... Sizes&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ArrayExtents_8hpp_source.html#l00056">56</a> of file <a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ArrayExtents_8hpp_source.html#l00126">126</a> of file <a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ae5c4d0fa925533034aab8c4aed3c52d2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae5c4d0fa925533034aab8c4aed3c52d2">&#9670;&nbsp;</a></span>rank_dynamic</h2>
+<a id="a4cde9d6a979db2cc62cf4e4571305035"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4cde9d6a979db2cc62cf4e4571305035">&#9670;&nbsp;</a></span>rank_dynamic</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;std::size_t... Sizes&gt; </div>
+template&lt;typename T  = std::size_t, T... Sizes&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr auto <a class="el" href="structllama_1_1ArrayExtents.html">llama::ArrayExtents</a>&lt; Sizes &gt;::rank_dynamic = ((Sizes == <a class="el" href="namespacellama.html#a082c1dbcef89db3c7fa477e7b4ecfc68">dyn</a>) + ... + 0)</td>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1ArrayExtents.html">llama::ArrayExtents</a>&lt; T, Sizes &gt;::rank_dynamic = ((Sizes == <a class="el" href="namespacellama.html#a082c1dbcef89db3c7fa477e7b4ecfc68">dyn</a>) + ... + 0)</td>
         </tr>
       </table>
   </td>
@@ -389,23 +391,23 @@ template&lt;std::size_t... Sizes&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ArrayExtents_8hpp_source.html#l00057">57</a> of file <a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ArrayExtents_8hpp_source.html#l00127">127</a> of file <a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ac49f3c0b9da81e379e8ff81fdb5bc107"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac49f3c0b9da81e379e8ff81fdb5bc107">&#9670;&nbsp;</a></span>rank_static</h2>
+<a id="a83c3ee94b8e46a4bfcdaf890b475db37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83c3ee94b8e46a4bfcdaf890b475db37">&#9670;&nbsp;</a></span>rank_static</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;std::size_t... Sizes&gt; </div>
+template&lt;typename T  = std::size_t, T... Sizes&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr auto <a class="el" href="structllama_1_1ArrayExtents.html">llama::ArrayExtents</a>&lt; Sizes &gt;::rank_static = <a class="el" href="structllama_1_1ArrayExtents.html#ae2468d5c2b3714c09f81c60467b6a4cc">rank</a> - <a class="el" href="structllama_1_1ArrayExtents.html#ae5c4d0fa925533034aab8c4aed3c52d2">rank_dynamic</a></td>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1ArrayExtents.html">llama::ArrayExtents</a>&lt; T, Sizes &gt;::rank_static = <a class="el" href="structllama_1_1ArrayExtents.html#aa368d8287fad34884c1ccfdb01d527dc">rank</a> - <a class="el" href="structllama_1_1ArrayExtents.html#a4cde9d6a979db2cc62cf4e4571305035">rank_dynamic</a></td>
         </tr>
       </table>
   </td>
@@ -415,7 +417,7 @@ template&lt;std::size_t... Sizes&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ArrayExtents_8hpp_source.html#l00058">58</a> of file <a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ArrayExtents_8hpp_source.html#l00128">128</a> of file <a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>.</p>
 
 </div>
 </div>
@@ -428,7 +430,7 @@ template&lt;std::size_t... Sizes&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a></li>
-    <li class="footer">Generated on Wed May 11 2022 14:30:13 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu May 12 2022 12:47:17 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

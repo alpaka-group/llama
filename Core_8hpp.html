@@ -171,7 +171,7 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Field.html">llama::Field&lt; Tag, Type &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1NrAndOffset.html">llama::NrAndOffset</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1NrAndOffset.html">llama::NrAndOffset&lt; T &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1GetTagsImpl.html">llama::internal::GetTagsImpl&lt; RecordDim, RecordCoord &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -300,6 +300,15 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a33a2a1438ebfa33ecdae893ab0b93e37"><td class="memTemplParams" colspan="2">template&lt;typename Int &gt; </td></tr>
+<tr class="memitem:a33a2a1438ebfa33ecdae893ab0b93e37"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a33a2a1438ebfa33ecdae893ab0b93e37">llama::NrAndOffset</a> (Int, Int) -&gt; NrAndOffset&lt; Int &gt;</td></tr>
+<tr class="separator:a33a2a1438ebfa33ecdae893ab0b93e37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c7f2c72590f73698ff6f31ba44ec0a3"><td class="memTemplParams" colspan="2">template&lt;typename TA , typename TB &gt; </td></tr>
+<tr class="memitem:a5c7f2c72590f73698ff6f31ba44ec0a3"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a5c7f2c72590f73698ff6f31ba44ec0a3">llama::operator==</a> (const NrAndOffset&lt; TA &gt; &amp;a, const NrAndOffset&lt; TB &gt; &amp;b) -&gt; bool</td></tr>
+<tr class="separator:a5c7f2c72590f73698ff6f31ba44ec0a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a8faed7400b66b8a3d13185ea2a26e4"><td class="memTemplParams" colspan="2">template&lt;typename TA , typename TB &gt; </td></tr>
+<tr class="memitem:a4a8faed7400b66b8a3d13185ea2a26e4"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a4a8faed7400b66b8a3d13185ea2a26e4">llama::operator!=</a> (const NrAndOffset&lt; TA &gt; &amp;a, const NrAndOffset&lt; TB &gt; &amp;b) -&gt; bool</td></tr>
+<tr class="separator:a4a8faed7400b66b8a3d13185ea2a26e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af16d07d01be7acc8ced82a040bac87da"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename... &gt; typename L, typename... T, typename F &gt; </td></tr>
 <tr class="memitem:af16d07d01be7acc8ced82a040bac87da"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#af16d07d01be7acc8ced82a040bac87da">llama::internal::mp_for_each_inlined</a> (L&lt; T... &gt;, F &amp;&amp;f)</td></tr>
 <tr class="separator:af16d07d01be7acc8ced82a040bac87da"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -438,7 +447,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Core_8hpp.html">Core.hpp</a></li>
-    <li class="footer">Generated on Wed May 11 2022 14:30:12 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu May 12 2022 12:47:17 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

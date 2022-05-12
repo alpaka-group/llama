@@ -117,13 +117,13 @@ $(document).ready(function(){initNavTree('functions_b.html',''); initResizable()
 , <a class="el" href="structllama_1_1View.html#a634770fe86bb151e67187f324941bb75">llama::View&lt; TMapping, BlobType &gt;</a>
 </li>
 <li>BitPackedFloatRef()
-: <a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#a272be7cdc07ddc9c9270670f1c6cc53a">llama::mapping::internal::BitPackedFloatRef&lt; Float, StoredIntegralPointer, VHExp, VHMan &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#aba7dd85b2f01f805d25f9af24f727aaa">llama::mapping::internal::BitPackedFloatRef&lt; Float, StoredIntegralPointer, VHExp, VHMan, SizeType &gt;</a>
 </li>
 <li>BitPackedFloatSoA()
 : <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#ae61d17ec65edcb1dddd2e0ffb1327b0e">llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, StoredIntegral &gt;</a>
 </li>
 <li>BitPackedIntRef()
-: <a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html#ab4ff45785b9a24d9a6e2de5f60e14134">llama::mapping::internal::BitPackedIntRef&lt; Integral, StoredIntegralPointer, VHBits &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html#a3f4d4be20a75eb29a69764f328875596">llama::mapping::internal::BitPackedIntRef&lt; Integral, StoredIntegralPointer, VHBits, SizeType &gt;</a>
 </li>
 <li>BitPackedIntSoA()
 : <a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html#a0cfb348a572a64a91aa88ddcec983c7f">llama::mapping::BitPackedIntSoA&lt; TArrayExtents, TRecordDim, Bits, LinearizeArrayDimsFunctor, StoredIntegral &gt;</a>
@@ -140,26 +140,26 @@ $(document).ready(function(){initNavTree('functions_b.html',''); initResizable()
 , <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#add630d751b504ff1e133ae1188d6016b">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
 </li>
 <li>blobNrAndOffset()
-: <a class="el" href="structllama_1_1mapping_1_1AoS.html#a156536a3553aa72eafbf8b38363519d2">llama::mapping::AoS&lt; TArrayExtents, TRecordDim, AlignAndPad, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a0dab0061c953056a2bbe00fe5e9bf9e9">llama::mapping::AoSoA&lt; TArrayExtents, TRecordDim, Lanes, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1ChangeType.html#a85c0b9f5f802299623d252e0a6840a36">llama::mapping::ChangeType&lt; TArrayExtents, TRecordDim, InnerMapping, ReplacementMap &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1Heatmap.html#adf7f1c683bf7af7f7b7a63e78cbd1ff1">llama::mapping::Heatmap&lt; Mapping, CountType &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1One.html#a60083d02a16c571c3c33feefc5b21303">llama::mapping::One&lt; TArrayExtents, TRecordDim, AlignAndPad, FlattenRecordDim &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1SoA.html#ae23ec006c0333ad0b37807bcc7dfe46f">llama::mapping::SoA&lt; TArrayExtents, TRecordDim, SeparateBuffers, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1Split.html#a48cc12f222f0356bc6f15451d4da3d23">llama::mapping::Split&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1Trace.html#a953fc0f4c40279f8057cf71333c763c6">llama::mapping::Trace&lt; Mapping &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#abd378227798d6be264daa9b7c3be9ee7">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1AoS.html#a38a9e471536eb5603752400e2474309e">llama::mapping::AoS&lt; TArrayExtents, TRecordDim, AlignAndPad, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#ae68f04b9db570c5f003cbe0c5f3dde40">llama::mapping::AoSoA&lt; TArrayExtents, TRecordDim, Lanes, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1ChangeType.html#a4403970f14c2c2ca72126adbecef6b80">llama::mapping::ChangeType&lt; TArrayExtents, TRecordDim, InnerMapping, ReplacementMap &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1Heatmap.html#aa124aa3bc0585c69ab04772f653a23ee">llama::mapping::Heatmap&lt; Mapping, CountType &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1One.html#a555bb34745d102d8a2d6ab8e827385da">llama::mapping::One&lt; TArrayExtents, TRecordDim, AlignAndPad, FlattenRecordDim &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1SoA.html#a09f7448203562e0e4481b8eb7970f299">llama::mapping::SoA&lt; TArrayExtents, TRecordDim, SeparateBuffers, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1Split.html#a25c52c371fa575b7c8570e7f49e37265">llama::mapping::Split&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1Trace.html#aa1847c220eb45cc07feeb8a209847ece">llama::mapping::Trace&lt; Mapping &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#a23330da570f0c0ead06062b51bbc938c">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
 </li>
 <li>blobSize()
-: <a class="el" href="structllama_1_1mapping_1_1AoS.html#a5c0c287e752d49bc46869f26f12bafe2">llama::mapping::AoS&lt; TArrayExtents, TRecordDim, AlignAndPad, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a18dae0fc3b30b0c4a8c0a0a8d9089480">llama::mapping::AoSoA&lt; TArrayExtents, TRecordDim, Lanes, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#a840acba04365a43bb6b44a83e9c62460">llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, StoredIntegral &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html#a0222517d2e650a885cdd11aaf46d69da">llama::mapping::BitPackedIntSoA&lt; TArrayExtents, TRecordDim, Bits, LinearizeArrayDimsFunctor, StoredIntegral &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1Null.html#af69ab97ff740e20c742119f85b0f52a3">llama::mapping::Null&lt; TArrayExtents, TRecordDim &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1One.html#aae6e822671c7dc01f16147c99c9cdaab">llama::mapping::One&lt; TArrayExtents, TRecordDim, AlignAndPad, FlattenRecordDim &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1SoA.html#a67e5e1c5df86bcd071c788ded5620286">llama::mapping::SoA&lt; TArrayExtents, TRecordDim, SeparateBuffers, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1Split.html#a4229fd170056ccca83ea8f277fe5df74">llama::mapping::Split&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#a37d83e958a7ae3ce5e7962e224da005b">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1AoS.html#a494b50cd97160292c8a1c595141a0df4">llama::mapping::AoS&lt; TArrayExtents, TRecordDim, AlignAndPad, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a1cabaec5c9014a02c3463d66b03bc9d7">llama::mapping::AoSoA&lt; TArrayExtents, TRecordDim, Lanes, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#a7dadcfeec6547f7498e36e5efd00be0c">llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, StoredIntegral &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html#a239a22dd4d5ee3d12556ea5d72740fb0">llama::mapping::BitPackedIntSoA&lt; TArrayExtents, TRecordDim, Bits, LinearizeArrayDimsFunctor, StoredIntegral &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1Null.html#a1001f2ea347217a3452a27acab51a3a4">llama::mapping::Null&lt; TArrayExtents, TRecordDim &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1One.html#a65a555d9389d6fcf190acabb4df8f19a">llama::mapping::One&lt; TArrayExtents, TRecordDim, AlignAndPad, FlattenRecordDim &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1SoA.html#a8bb3f6484d0c247cdbdb26778213ee6b">llama::mapping::SoA&lt; TArrayExtents, TRecordDim, SeparateBuffers, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1Split.html#a6b0a4fe43cf45bcd8b5453c8cd501eef">llama::mapping::Split&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#aa1b1425f46265e63de759e2257355666">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
 </li>
 <li>BoundRecordCoord
 : <a class="el" href="structllama_1_1VirtualRecord.html#a2cf2a8dc5a0b7c23fa886ffd71847d0f">llama::VirtualRecord&lt; TView, TBoundRecordCoord, OwnView &gt;</a>
@@ -180,7 +180,7 @@ $(document).ready(function(){initNavTree('functions_b.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed May 11 2022 14:30:13 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu May 12 2022 12:47:18 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

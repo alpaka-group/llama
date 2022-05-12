@@ -132,9 +132,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a22132e6a827b16ffd6a7c90091b5350d"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords, typename BlobArray &gt; </td></tr>
 <tr class="memitem:a22132e6a827b16ffd6a7c90091b5350d"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1ChangeType.html#a22132e6a827b16ffd6a7c90091b5350d">compute</a> (typename Inner::ArrayIndex ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt; rc, BlobArray &amp;blobs) const</td></tr>
 <tr class="separator:a22132e6a827b16ffd6a7c90091b5350d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85c0b9f5f802299623d252e0a6840a36"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
-<tr class="memitem:a85c0b9f5f802299623d252e0a6840a36"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1ChangeType.html#a85c0b9f5f802299623d252e0a6840a36">blobNrAndOffset</a> (<a class="el" href="structllama_1_1mapping_1_1ChangeType.html#ac65f6e089a7ead7aca908b6bbe89787f">ArrayIndex</a> ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt; rc={}) const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a></td></tr>
-<tr class="separator:a85c0b9f5f802299623d252e0a6840a36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4403970f14c2c2ca72126adbecef6b80"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
+<tr class="memitem:a4403970f14c2c2ca72126adbecef6b80"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1ChangeType.html#a4403970f14c2c2ca72126adbecef6b80">blobNrAndOffset</a> (<a class="el" href="structllama_1_1mapping_1_1ChangeType.html#ac65f6e089a7ead7aca908b6bbe89787f">ArrayIndex</a> ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt; rc={}) const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a>&lt; typename <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a> &gt;</td></tr>
+<tr class="separator:a4403970f14c2c2ca72126adbecef6b80"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -223,8 +223,8 @@ template&lt;typename TArrayExtents , typename TRecordDim , template&lt; typename
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a85c0b9f5f802299623d252e0a6840a36"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a85c0b9f5f802299623d252e0a6840a36">&#9670;&nbsp;</a></span>blobNrAndOffset()</h2>
+<a id="a4403970f14c2c2ca72126adbecef6b80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4403970f14c2c2ca72126adbecef6b80">&#9670;&nbsp;</a></span>blobNrAndOffset()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -251,7 +251,7 @@ template&lt;std::size_t... RecordCoords&gt; </div>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a>
+          <td></td><td> const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a>&lt;typename <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a>&gt;
         </td>
         </tr>
       </table>
@@ -355,7 +355,7 @@ template&lt;typename RecordCoord &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1ChangeType.html">ChangeType</a></li>
-    <li class="footer">Generated on Wed May 11 2022 14:30:13 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu May 12 2022 12:47:17 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

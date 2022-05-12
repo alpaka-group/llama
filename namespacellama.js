@@ -6,7 +6,7 @@ var namespacellama =
     [ "Array", "structllama_1_1Array.html", "structllama_1_1Array" ],
     [ "Array< T, 0 >", "structllama_1_1Array_3_01T_00_010_01_4.html", "structllama_1_1Array_3_01T_00_010_01_4" ],
     [ "ArrayExtents", "structllama_1_1ArrayExtents.html", "structllama_1_1ArrayExtents" ],
-    [ "ArrayExtents<>", "structllama_1_1ArrayExtents_3_4.html", "structllama_1_1ArrayExtents_3_4" ],
+    [ "ArrayExtents< T >", "structllama_1_1ArrayExtents_3_01T_01_4.html", "structllama_1_1ArrayExtents_3_01T_01_4" ],
     [ "ArrayIndex", "structllama_1_1ArrayIndex.html", "structllama_1_1ArrayIndex" ],
     [ "ArrayIndexIterator", "structllama_1_1ArrayIndexIterator.html", "structllama_1_1ArrayIndexIterator" ],
     [ "ArrayIndexRange", "structllama_1_1ArrayIndexRange.html", "structllama_1_1ArrayIndexRange" ],

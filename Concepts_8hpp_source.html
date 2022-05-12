@@ -103,18 +103,18 @@ $(document).ready(function(){initNavTree('Concepts_8hpp_source.html',''); initRe
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="comment">// clang-format off</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> M&gt;</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    concept Mapping = requires(M m) {</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a118da5fc9535b04549b2a0a614a49ace">M::ArrayExtents</a>;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a07896c3e0d5563b8aeda1e3d48167b62">M::ArrayIndex</a>;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keyword">typename</span> <a class="code" href="namespacellama.html#af69d5826ccd82074d4be29c3f12c3e57">M::ArrayExtents</a>;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a0d0fda5486eb5976f940a638f0cdd9d4">M::ArrayIndex</a>;</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keyword">typename</span> M::RecordDim;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        { m.extents() } -&gt; std::same_as&lt;typename M::ArrayExtents&gt;;</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        { M::blobCount } -&gt; std::convertible_to&lt;std::size_t&gt;;</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        Array&lt;int, M::blobCount&gt;{}; <span class="comment">// validates constexpr-ness</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        { m.blobSize(std::size_t{}) } -&gt; std::same_as&lt;std::size_t&gt;;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        { m.blobSize(<span class="keyword">typename</span> M::ArrayExtents::value_type{}) } -&gt; std::same_as&lt;typename M::ArrayExtents::value_type&gt;;</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    };</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> M, <span class="keyword">typename</span> RC&gt;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    concept PhysicalField = requires(M m, <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a07896c3e0d5563b8aeda1e3d48167b62">M::ArrayIndex</a> ai) {</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        { m.blobNrAndOffset(ai, RC{}) } -&gt; std::same_as&lt;NrAndOffset&gt;;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    concept PhysicalField = requires(M m, <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a0d0fda5486eb5976f940a638f0cdd9d4">M::ArrayIndex</a> ai) {</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        { m.blobNrAndOffset(ai, RC{}) } -&gt; std::same_as&lt;NrAndOffset&lt;typename M::ArrayExtents::value_type&gt;&gt;;</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    };</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> M&gt;</div>
@@ -145,7 +145,7 @@ $(document).ready(function(){initNavTree('Concepts_8hpp_source.html',''); initRe
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    concept AnyReference = LValueReference&lt;R&gt; || ProxyReference&lt;R&gt;;</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> M, <span class="keyword">typename</span> RC&gt;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    concept ComputedField = <a class="code" href="namespacellama.html#a9676a3903b134df116791bcae533d6c6">M::isComputed</a>(RC{}) &amp;&amp; requires(M m, <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a07896c3e0d5563b8aeda1e3d48167b62">M::ArrayIndex</a> ai, <a class="code" href="namespacellama.html#a690689d38b43930430e58bb7fe17aca7">Array</a>&lt;Array&lt;std::byte, 1&gt;, 1&gt; blobs) {</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    concept ComputedField = <a class="code" href="namespacellama.html#a9676a3903b134df116791bcae533d6c6">M::isComputed</a>(RC{}) &amp;&amp; requires(M m, <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a0d0fda5486eb5976f940a638f0cdd9d4">M::ArrayIndex</a> ai, <a class="code" href="namespacellama.html#a690689d38b43930430e58bb7fe17aca7">Array</a>&lt;Array&lt;std::byte, 1&gt;, 1&gt; blobs) {</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        { m.compute(ai, RC{}, blobs) } -&gt; AnyReference;</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    };</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
@@ -195,18 +195,18 @@ $(document).ready(function(){initNavTree('Concepts_8hpp_source.html',''); initRe
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="anamespacellama_html"><div class="ttname"><a href="namespacellama.html">llama</a></div><div class="ttdef"><b>Definition:</b> <a href="Array_8hpp_source.html#l00011">Array.hpp:11</a></div></div>
-<div class="ttc" id="anamespacellama_html_a07896c3e0d5563b8aeda1e3d48167b62"><div class="ttname"><a href="namespacellama.html#a07896c3e0d5563b8aeda1e3d48167b62">llama::ArrayIndex</a></div><div class="ttdeci">ArrayIndex(Args...) -&gt; ArrayIndex&lt; sizeof...(Args)&gt;</div></div>
 <div class="ttc" id="anamespacellama_html_a9676a3903b134df116791bcae533d6c6"><div class="ttname"><a href="namespacellama.html#a9676a3903b134df116791bcae533d6c6">llama::isComputed</a></div><div class="ttdeci">constexpr bool isComputed</div><div class="ttdoc">Returns true if the field accessed via the given mapping and record coordinate is a computed value.</div><div class="ttdef"><b>Definition:</b> <a href="View_8hpp_source.html#l00075">View.hpp:75</a></div></div>
+<div class="ttc" id="anamespacellama_html_af69d5826ccd82074d4be29c3f12c3e57"><div class="ttname"><a href="namespacellama.html#af69d5826ccd82074d4be29c3f12c3e57">llama::ArrayExtents</a></div><div class="ttdeci">ArrayExtents(Args... args) -&gt; ArrayExtents&lt; typename internal::IndexTypeFromArgs&lt; std::size_t, Args... &gt;::type,(Args</div><div class="ttdef"><b>Definition:</b> <a href="ArrayExtents_8hpp_source.html#l00192">ArrayExtents.hpp:192</a></div></div>
 <div class="ttc" id="aArray_8hpp_html"><div class="ttname"><a href="Array_8hpp.html">Array.hpp</a></div></div>
-<div class="ttc" id="anamespacellama_html_a118da5fc9535b04549b2a0a614a49ace"><div class="ttname"><a href="namespacellama.html#a118da5fc9535b04549b2a0a614a49ace">llama::ArrayExtents</a></div><div class="ttdeci">ArrayExtents(Args... args) -&gt; ArrayExtents&lt;(Args</div><div class="ttdef"><b>Definition:</b> <a href="ArrayExtents_8hpp_source.html#l00122">ArrayExtents.hpp:122</a></div></div>
 <div class="ttc" id="anamespacellama_html_a690689d38b43930430e58bb7fe17aca7"><div class="ttname"><a href="namespacellama.html#a690689d38b43930430e58bb7fe17aca7">llama::Array</a></div><div class="ttdeci">Array(First, Args... args) -&gt; Array&lt; First, sizeof...(Args)+1 &gt;</div></div>
 <div class="ttc" id="aCore_8hpp_html"><div class="ttname"><a href="Core_8hpp.html">Core.hpp</a></div></div>
+<div class="ttc" id="anamespacellama_html_a0d0fda5486eb5976f940a638f0cdd9d4"><div class="ttname"><a href="namespacellama.html#a0d0fda5486eb5976f940a638f0cdd9d4">llama::ArrayIndex</a></div><div class="ttdeci">ArrayIndex(Args...) -&gt; ArrayIndex&lt; typename internal::IndexTypeFromArgs&lt; std::size_t, Args... &gt;::type, sizeof...(Args)&gt;</div></div>
 <div class="ttc" id="aRecordCoord_8hpp_html"><div class="ttname"><a href="RecordCoord_8hpp.html">RecordCoord.hpp</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Concepts_8hpp.html">Concepts.hpp</a></li>
-    <li class="footer">Generated on Wed May 11 2022 14:30:12 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu May 12 2022 12:47:17 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

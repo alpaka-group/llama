@@ -1,4 +1,4 @@
-<map id="llama::mapping::internal::BitPackedFloatRef&lt; Float, StoredIntegralPointer, VHExp, VHMan &gt;" name="llama::mapping::internal::BitPackedFloatRef&lt; Float, StoredIntegralPointer, VHExp, VHMan &gt;">
+<map id="llama::mapping::internal::BitPackedFloatRef&lt; Float, StoredIntegralPointer, VHExp, VHMan, SizeType &gt;" name="llama::mapping::internal::BitPackedFloatRef&lt; Float, StoredIntegralPointer, VHExp, VHMan, SizeType &gt;">
 <area shape="rect" id="node1" title=" " alt="" coords="272,34,491,105"/>
 <area shape="rect" id="node2" title=" " alt="" coords="82,5,147,32"/>
 <area shape="rect" id="node3" title=" " alt="" coords="80,56,149,83"/>

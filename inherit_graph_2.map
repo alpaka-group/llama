@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structllama_1_1Array.html" title=" " alt="" coords="5,5,185,47"/>
+<area shape="rect" id="node1" href="$structllama_1_1Array.html" title=" " alt="" coords="5,5,164,61"/>
+<area shape="rect" id="node2" href="$structllama_1_1ArrayExtents.html" title=" " alt="" coords="212,13,363,54"/>
+<area shape="rect" id="node3" href="$structllama_1_1ArrayIndexRange.html" title="Range allowing to iterate over all indices in an ArrayExtents." alt="" coords="411,13,589,54"/>
 </map>

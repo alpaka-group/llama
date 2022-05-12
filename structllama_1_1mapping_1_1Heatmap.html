@@ -134,9 +134,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aac10be68bbd3e4bf3afa2b5767846e6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a487f4c6de502d48e5dbb1dc94c0fca52"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#a487f4c6de502d48e5dbb1dc94c0fca52">~Heatmap</a> ()=default</td></tr>
 <tr class="separator:a487f4c6de502d48e5dbb1dc94c0fca52"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf7f1c683bf7af7f7b7a63e78cbd1ff1"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
-<tr class="memitem:adf7f1c683bf7af7f7b7a63e78cbd1ff1"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#adf7f1c683bf7af7f7b7a63e78cbd1ff1">blobNrAndOffset</a> (typename Mapping::ArrayIndex ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt; rc={}) const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a></td></tr>
-<tr class="separator:adf7f1c683bf7af7f7b7a63e78cbd1ff1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa124aa3bc0585c69ab04772f653a23ee"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
+<tr class="memitem:aa124aa3bc0585c69ab04772f653a23ee"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#aa124aa3bc0585c69ab04772f653a23ee">blobNrAndOffset</a> (typename Mapping::ArrayIndex ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt; rc={}) const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a>&lt; typename Mapping::ArrayExtents::value_type &gt;</td></tr>
+<tr class="separator:aa124aa3bc0585c69ab04772f653a23ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7f06bad00d2cdb67014dfc374e0ef08"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#aa7f06bad00d2cdb67014dfc374e0ef08">toGnuplotScript</a> (std::size_t wrapAfterBytes=64) const -&gt; std::string</td></tr>
 <tr class="separator:aa7f06bad00d2cdb67014dfc374e0ef08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -299,8 +299,8 @@ template&lt;typename Mapping , typename CountType  = std::size_t&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="adf7f1c683bf7af7f7b7a63e78cbd1ff1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adf7f1c683bf7af7f7b7a63e78cbd1ff1">&#9670;&nbsp;</a></span>blobNrAndOffset()</h2>
+<a id="aa124aa3bc0585c69ab04772f653a23ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa124aa3bc0585c69ab04772f653a23ee">&#9670;&nbsp;</a></span>blobNrAndOffset()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -327,7 +327,7 @@ template&lt;std::size_t... RecordCoords&gt; </div>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a>
+          <td></td><td> const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a>&lt;typename Mapping::ArrayExtents::value_type&gt;
         </td>
         </tr>
       </table>
@@ -465,7 +465,7 @@ template&lt;typename Mapping , typename CountType  = std::size_t&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html">Heatmap</a></li>
-    <li class="footer">Generated on Wed May 11 2022 14:30:13 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu May 12 2022 12:47:17 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

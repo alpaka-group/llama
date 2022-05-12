@@ -1,6 +1,4 @@
-<map id="llama::ArrayExtents&lt; Sizes &gt;" name="llama::ArrayExtents&lt; Sizes &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="37,305,188,347"/>
-<area shape="rect" id="node2" href="$structllama_1_1Array.html" title=" " alt="" coords="5,200,220,256"/>
-<area shape="rect" id="node3" href="$structllama_1_1ArrayIndex.html" title=" " alt="" coords="38,96,187,137"/>
-<area shape="rect" id="node4" href="$structllama_1_1Array.html" title=" " alt="" coords="40,5,185,47"/>
+<map id="llama::ArrayExtents&lt; T, Sizes &gt;" name="llama::ArrayExtents&lt; T, Sizes &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="9,109,160,151"/>
+<area shape="rect" id="node2" href="$structllama_1_1Array.html" title=" " alt="" coords="5,5,164,61"/>
 </map>
