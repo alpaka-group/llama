@@ -104,20 +104,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: clone amalgamate
-      uses: actions/checkout@v2
-      with:
-        repository: shrpnsld/amalgamate
-        path: build/amalgamate
-    - name: amalgamation
+    - name: update_single_header
       run: |
-        cd include/llama
-        ../../build/amalgamate/amalgamate -o ../../build -H -v -a
+        ./update_single_header.sh
     - name: upload llama.hpp
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: llama.hpp
-        path: build/llama-amalgamated/llama.hpp
+        path: single_header/llama.hpp
+        if-no-files-found: error
 
   build-ubuntu:
     runs-on: ubuntu-latest
