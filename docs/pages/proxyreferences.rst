@@ -43,7 +43,7 @@ it is advisable to use the corresponding :cpp:`reference` alias provided by them
     auto&&                    ref2 = obj[42]; // binds to T& for real references,
                                               // or proxy references returned by value
 
-Although :cpp:`std::vector<bool>` is notrious for this behavior of its references,
+Although :cpp:`std::vector<bool>` is notorious for this behavior of its references,
 more such data structures exist (e.g. :cpp:`std::bitset`) or started to appear in recent C++ standards and its proposals.
 E.g. in the area of `text encodings <https://thephd.dev/proxies-references-gsoc-2019>`_,
 or `the zip range adaptors <http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p2214r0.html#a-tuple-that-is-writable>`_.
@@ -56,7 +56,7 @@ A proxy reference is usually a value-type with reference semantic.
 Thus, a proxy reference can be freely created, copied, moved and destroyed.
 Their sole purpose is to give access to a value they refer to.
 They usually encapsulate a reference to some storage and computations to be performed when writing or reading through the proxy reference.
-Write access to a refered value of type :cpp:`T` is typically given via an assignment operator from :cpp:`T`.
+Write access to a referred value of type :cpp:`T` is typically given via an assignment operator from :cpp:`T`.
 Read access is given by a (non-explicit) conversion operator to :cpp:`T`.
 
 .. code-block:: C++
@@ -73,7 +73,7 @@ Read access is given by a (non-explicit) conversion operator to :cpp:`T`.
     for (auto&& element : v)
        bool b = element;
 
-Mind, that we explicitely state :cpp:`bool` as the type of the resulting value.
+Mind, that we explicitly state :cpp:`bool` as the type of the resulting value.
 If we use :cpp:`auto` instead, we would take a copy of the reference object, not the value.
 
 Proxy references in LLAMA
@@ -107,13 +107,13 @@ Thus, when you want to write truly generic code with LLAMA's views, please keep 
  * Each non-terminal access on a view returns a virtual record, which is a value-type with reference semantic.
  * Each terminal access on a view may return an l-value reference or a proxy reference.
    Thus use :cpp:`auto&&` to handle both cases.
- * Explicitely specify the type of copies of individual fields you want to make from references obtains from a LLAMA view.
-   This avoids accidentially coping a proxy reference.
+ * Explicitly specify the type of copies of individual fields you want to make from references obtains from a LLAMA view.
+   This avoids accidentally coping a proxy reference.
 
 Concept
 -------
 
-Proxy references in LLAMA fullfill the following concept:
+Proxy references in LLAMA fulfill the following concept:
 
 .. code-block:: C++
 
@@ -126,7 +126,7 @@ Proxy references in LLAMA fullfill the following concept:
 
 That is, the provide a member type :cpp:`value_type`,
 which indicates the type of the values which can be loaded and stored through the proxy reference.
-Furthmore, a proxy reference can be converted to its value type (thus calling :cpp:`operator value_type ()`)
+Furthermore, a proxy reference can be converted to its value type (thus calling :cpp:`operator value_type ()`)
 or assigned an instance of its value type.
 
 Arithmetic on proxy references and ProxyRefOpMixin

@@ -25,7 +25,7 @@ However, for every new mapping a new specialization is needed.
 The overhead is probably big, especially if no contiguous memory chunks are identified.
 
 3. A black box compile time analysis of the mapping function.
-All current LLAMA mappings are \lstinline{constexpr} and can thus be run at compile time.
+All current LLAMA mappings are :cpp:`constexpr` and can thus be run at compile time.
 This would allow to observe a mappings behavior from exhaustive sampling of the mapping function at compile time.
 
 4. A white box compile time analysis of the mapping function.
@@ -36,7 +36,7 @@ Copies between different address spaces, where elementary copy operations requir
 A good approach could use smaller intermediate views to shuffle a chunk from one mapping to the other and then perform a copy of that chunk into the other address space, potentially overlapping shuffles and copies in an asynchronous workflow.
 
 The `async copy example <https://github.com/alpaka-group/llama/blob/master/examples/asynccopy/asynccopy.cpp>`_ tries to show an asynchronous copy/shuffle/compute workflow.
-This example applies a bluring kernel to an RGB-image, but also may work only on two or one channel instead of all three.
+This example applies a blurring kernel to an RGB-image, but also may work only on two or one channel instead of all three.
 Not used channels are not allocated and especially not copied.
 
 
