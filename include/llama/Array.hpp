@@ -24,6 +24,11 @@ namespace llama
             return N;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto empty() const -> bool
+        {
+            return N == 0;
+        }
+
         LLAMA_FN_HOST_ACC_INLINE constexpr auto begin() -> T*
         {
             return &element[0];
@@ -98,6 +103,11 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE constexpr auto size() const
         {
             return 0;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto empty() const -> bool
+        {
+            return true;
         }
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto begin() -> T*
