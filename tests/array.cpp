@@ -1,5 +1,11 @@
 #include "common.hpp"
 
+TEST_CASE("Array.empty")
+{
+    STATIC_REQUIRE(llama::Array<int, 0>{}.empty());
+    STATIC_REQUIRE(!llama::Array{1}.empty());
+}
+
 TEST_CASE("Array.operator<<")
 {
     auto put = [](auto array)
