@@ -28,7 +28,7 @@ This object is a :cpp:`llama::VirtualRecord`.
     float& g = vdColor(g{});
     g = 1.0;
 
-Supplying the array dimensions coordinate to a view access returns such a :cpp:`llama::VirtualRecord`, storing this array dimensions coordiante.
+Supplying the array dimensions coordinate to a view access returns such a :cpp:`llama::VirtualRecord`, storing this array dimensions coordinate.
 This object can be thought of like a record in the :math:`N`-dimensional array dimensions space,
 but as the fields of this record may not be contiguous in memory, it is not a real object in the C++ sense and thus called virtual.
 
@@ -59,8 +59,8 @@ Technically, :cpp:`llama::One` is a :cpp:`llama::VirtualRecord` which stores a s
 This also has the consequence that a :cpp:`llama::One` is now a value type with deep-copy semantic.
 
 
-Arithmetic and logical operatores
----------------------------------
+Arithmetic and logical operators
+--------------------------------
 
 :cpp:`llama::VirtualRecord` overloads several operators:
 
@@ -81,7 +81,7 @@ Arithmetic and logical operatores
         vr = 42;
     }
 
-The assignment operator ( :cpp:`=`) and the arithmetic, non-bitwise, compount assignment operators (:cpp:`=`, :cpp:`+=`, :cpp:`-=`, :cpp:`*=`, :cpp:`/=`, :cpp:`%=` ) are overloaded.
+The assignment operator ( :cpp:`=`) and the arithmetic, non-bitwise, compound assignment operators (:cpp:`=`, :cpp:`+=`, :cpp:`-=`, :cpp:`*=`, :cpp:`/=`, :cpp:`%=` ) are overloaded.
 These operators directly write into the corresponding view.
 Furthermore, the binary, non-bitwise, arithmetic operators ( :cpp:`+`, :cpp:`-`, :cpp:`*`, :cpp:`/`, :cpp:`%` ) are overloaded too,
 but they return a temporary object on the stack (i.e. a :cpp:`llama::One`).
@@ -168,7 +168,7 @@ Let's examine this deeper in an example:
     //result is true, because only the matching "x" matters
 
 A partial addressing of a virtual record like :cpp:`record1(color{}) *= 7.0` is also possible.
-:cpp:`record1(color{})` itself returns a new virtual record with the first record dimension coordiante (:cpp:`color`) being bound.
+:cpp:`record1(color{})` itself returns a new virtual record with the first record dimension coordinate (:cpp:`color`) being bound.
 This enables e.g. to easily add a velocity to a position like this:
 
 .. code-block:: C++
@@ -210,7 +210,7 @@ However, such dead address computations are eliminated by most compilers during 
     std::tuple<float&, float&, float&, char&> = record.asFlatTuple();
     auto [r, g, b, a] = record.asFlatTuple();
 
-Additionally, if the user already has types supporting the C++ tuple interface, :cpp:`llama::VirtualRecord` can integreate with these using the :cpp:`load()`, :cpp:`loadAs<T>()` and :cpp:`store(T)` functions.
+Additionally, if the user already has types supporting the C++ tuple interface, :cpp:`llama::VirtualRecord` can integrate with these using the :cpp:`load()`, :cpp:`loadAs<T>()` and :cpp:`store(T)` functions.
 
 .. code-block:: C++
 
@@ -238,7 +238,7 @@ Structured bindings
 
 WARNING: This is an experimental feature and might completely change in the future.
 
-A :cpp:`llama::VirtualRecord` implementes the C++ tuple interface itself to allow destructuring:
+A :cpp:`llama::VirtualRecord` implements the C++ tuple interface itself to allow destructuring:
 
 .. code-block:: C++
 

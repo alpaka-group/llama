@@ -46,7 +46,7 @@ But there are more useful mappings than SoA and AoS, such as:
  * separating frequently accessed data from the rest (hot/cold data separation)
  * ...
 
-Moreover, software is often using various heterogenous memory architectures such as RAM, VRAM, caches, memory-mapped devices or files, etc.
+Moreover, software is often using various heterogeneous memory architectures such as RAM, VRAM, caches, memory-mapped devices or files, etc.
 A data layout optimized for a specific CPU may be inefficient on a GPU or only slowly transferable over network.
 A single layout -- not optimal for each architecture -- is very often a trade-off.
 An optimal layout is highly dependent on the architecture, the scaling of the problem and of course the chosen algorithm.
@@ -69,7 +69,7 @@ LLAMA tries to achieve the following goals:
   Deep copies are the focus, although LLAMA should include the possibility for zero copies and in-situ transformation of data layouts.
   Similar strategies could be adopted for message passing and copies between file systems and memory.
   (WIP)
-* To be compatible with many architectures, softwares, compilers and third party libraries, LLAMA tries to stay within C++17.
+* To be compatible with many architectures, other software packages, compilers and third party libraries, LLAMA tries to stay within C++17.
   No separate description files or language is used.
 * LLAMA should work well with auto vectorization approaches of modern compilers, but also support explicit vectorization on top of LLAMA.
 
@@ -81,7 +81,7 @@ Concept
 
 LLAMA separates the data structure access and physical memory layout by an opaque abstract data type called data space.
 The data space is an hypercubic index set described by the record dimension and one or more array dimensions.
-The record dimension consistes of a hierarchy of names and describes nested, structured data, much like a :cpp:`struct` in C++.
+The record dimension consists of a hierarchy of names and describes nested, structured data, much like a :cpp:`struct` in C++.
 The array dimensions are zero-based integral ranges.
 Programs are written against this abstract data space and thus formulated independent of the physical manifestation of the data space.
 Programs can refer to subparts of the data space via virtual records or real l-value references.

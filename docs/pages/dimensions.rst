@@ -6,7 +6,8 @@ Dimensions
 ==========
 
 As mentioned in the section before, LLAMA distinguishes between the array and the record dimensions.
-The most important difference is that the array dimensions are defined at *run time* whereas the record dimension is defined at *compile time*.
+The most important difference is that the array dimensions are defined at compile or *run time*
+whereas the record dimension is defined fully at *compile time*.
 This allows to make the problem size itself a run time value but leaves the compiler room to optimize the data access.
 
 .. _label-ad:
@@ -23,42 +24,51 @@ A simple definition of three array dimensions of the extents :math:`128 \times 2
 
     llama::ArrayExtents extents{128, 256, 32};
 
-The template arguments are deduced by the compiler using `CTAD <https://en.cppreference.com/w/cpp/language/class_template_argument_deduction>`_.
-The full type of :cpp:`extents` is :cpp:`llama::ArrayExtents<llama::dyn, llama::dyn, llama::dyn>`.
+The template arguments are deduced by the compiler using `Class Template Argument Deduction (CTAD) <https://en.cppreference.com/w/cpp/language/class_template_argument_deduction>`_.
+The full type of :cpp:`extents` is :cpp:`llama::ArrayExtents<int, llama::dyn, llama::dyn, llama::dyn>`.
 
-By explicitely specifying the template arguments, we can mix compile time and runtime extents, where the constant :cpp:`llama::dyn` denotes a dynamic extent:
+By explicitly specifying the template arguments, we can mix compile time and runtime extents, where the constant :cpp:`llama::dyn` denotes a dynamic extent:
 
 .. code-block:: C++
 
-    llama::ArrayExtents<llama::dyn, 256, llama::dyn> extents{128, 32};
+    llama::ArrayExtents<int, llama::dyn, 256, llama::dyn> extents{128, 32};
 
-The template argument list specifies the order and nature (compile vs. runtime) of the extents.
-An instance of :cpp:`llama::ArrayExtents` can then be constructed with as many runtime extents as :cpp:`llama::dyn`\ 's specified in the template argument list.
+The template argument list specifies the integral type used for index calculations
+and the order and nature (compile vs. runtime) of the extents.
+Choosing the right index type depends on the possible magnitude of values occurring during index calculations
+(e.g. :cpp:`int` only allows a maximum flat index space and blob size of :cpp:`INT_MAX`),
+as well as target specific optimization aspects (e.g. :cpp:`size_t` consuming more CUDA registers than `unsigned int`).
+An instance of :cpp:`llama::ArrayExtents` can then be constructed with as many runtime extents as :cpp:`llama::dyn`\ s specified in the template argument list.
 
 By setting a specific value for all template arguments, the array extents are fully determined at compile time.
 
 .. code-block:: C++
 
-    llama::ArrayExtents<128, 256, 32> extents{};
+    llama::ArrayExtents<int, 128, 256, 32> extents{};
 
-This is important if such extents are later embedded into other LLAMA objects such as mappings or views, where they should not occupy any additional memory.
+This is important if such extents are later embedded into other LLAMA objects such as mappings or views,
+where they should not occupy any additional memory.
 
 .. code-block:: C++
 
-    llama::ArrayExtents<128, 256, 32> extents{};
-    static_assert(sizeof(extents) == 1); // no object can have size 0
-    struct S : llama::ArrayExtents<128, 256, 32> { char c; } s;
+    llama::ArrayExtents<int, 128, 256, 32> extents{};
+    static_assert(std::is_empty_v<decltype(extents)>);
+
+    struct S : llama::ArrayExtents<int, 128, 256, 32> { char c; } s;
     static_assert(sizeof(s) == sizeof(char)); // empty base optimization eliminates storage
 
-To later described indices into the array dimensions described by a :cpp:`llama::ArrayExtents`, an instance of :cpp:`llama::ArrayIndex` is used:
+To later described indices into the array dimensions described by a :cpp:`llama::ArrayExtents`,
+an instance of :cpp:`llama::ArrayIndex` is used:
 
 .. code-block:: C++
 
     llama::ArrayIndex i{2, 3, 4};
-    // full type of i: llama::ArrayIndex<3>
+    // full type of i: llama::ArrayIndex<int, 3>
 
-Contrary to :cpp:`llama::ArrayExtents` which can store a mix of compile and runtime values, :cpp:`llama::ArrayIndex` only stores runtime indices, so it is templated on the number of dimensions.
-This might change at some point in the future, if we find sufficient evidence that a design similar to :cpp:`llama::ArrayExtents` is also useful for :cpp:`llama::ArrayIndex`.
+Contrary to :cpp:`llama::ArrayExtents` which can store a mix of compile and runtime values,
+:cpp:`llama::ArrayIndex` only stores runtime indices, so it is templated on the number of dimensions.
+This might change at some point in the future, if we find sufficient evidence
+that a design similar to :cpp:`llama::ArrayExtents` is also useful for :cpp:`llama::ArrayIndex`.
 
 .. _label-rd:
 

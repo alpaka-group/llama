@@ -64,7 +64,7 @@ Creating a small view of :math:`4 \times 4` may look like this:
 
 .. code-block:: C++
 
-    using ArrayExtents = llama::ArrayExtents<4, 4>;
+    using ArrayExtents = llama::ArrayExtents<int, 4, 4>;
     constexpr ArrayExtents extents{};
 
     using Mapping = /* a simple mapping */;

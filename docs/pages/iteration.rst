@@ -32,7 +32,7 @@ Record dimension iteration
 The record dimension is iterated using :cpp:`llama::forEachLeafCoord`.
 It takes a record dimension as template argument and a callable with a generic parameter as argument.
 This function's :cpp:`operator()` is then called for each leaf of the record dimension tree with a record coord as argument.
-A polymorphic lambda is recommented to be used as a functor.
+A polymorphic lambda is recommended to be used as a functor.
 
 .. code-block:: C++
 
@@ -65,7 +65,7 @@ Iterators on views of any dimension are supported and open up the standard libra
 .. code-block:: C++
 
     using Pixel = ...;
-    using ArrayExtents = llama::ArrayExtents<llama::dyn>;
+    using ArrayExtents = llama::ArrayExtents<std::size_t, llama::dyn>;
     // ...
     auto view = llama::allocView(mapping);
     // ...

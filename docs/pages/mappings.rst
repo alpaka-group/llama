@@ -33,7 +33,7 @@ A computed mapping does not return a blob number and offset for computed fields,
 However, this reference is not an l-value reference but a :ref:`proxy reference <label-proxyreferences>`,
 since this reference needs to encapsulate computations to be performed when reading or writing through the reference.
 For non-computed fields, a computed mapping behaves like a physical mapping.
-A mapping with only computed fileds is called a fully computed mapping, otherwise a partially computed mapping.
+A mapping with only computed fields is called a fully computed mapping, otherwise a partially computed mapping.
 
 Meta mappings
 ^^^^^^^^^^^^^
@@ -48,7 +48,8 @@ Meta mappings are orthogonal to physical and computed mappings.
 Concept
 -------
 
-A LLAMA mapping is used to create views as detailed in the :ref:`allocView API section <label-api-allocView>` and views consult the mapping when resolving accesses.
+A LLAMA mapping is used to create views as detailed in the :ref:`allocView API section <label-api-allocView>`
+and views consult the mapping when resolving accesses.
 The view requires each mapping to fulfill at least the following concept:
 
 .. code-block:: C++
@@ -58,13 +59,16 @@ The view requires each mapping to fulfill at least the following concept:
         typename M::ArrayExtents;
         typename M::ArrayIndex;
         typename M::RecordDim;
-        { M::blobCount } -> std::convertible_to<std::size_t>;
-        { m.blobSize(std::size_t{}) } -> std::same_as<std::size_t>;
+        { m.extents() } -> std::same_as<typename M::ArrayExtents>;
+        { +M::blobCount } -> std::same_as<std::size_t>;
+        { m.blobSize(std::size_t{}) } -> std::same_as<typename M::ArrayExtents::value_type>;
     };
 
-That is, each mapping type needs to expose the types :cpp:`M::ArrayExtents`, :cpp:`M::ArrayIndex` and :cpp:`M::RecordDim`.
-Furthermore, each mapping needs to provide a :cpp:`static` :cpp:`constexpr` member variable :cpp:`blobCount`.
-Finally, the member function :cpp:`blobSize(i)` gives the size in bytes of the :cpp:`i`\ th block of memory needed for this mapping.
+That is, each mapping type needs to expose the types :cpp:`ArrayExtents`, :cpp:`ArrayIndex` and :cpp:`RecordDim`.
+Each mapping also needs to provide a getter `extents()` to retrieve the runtime value of the :cpp:`ArrayExtents` held by the mapping,
+and provide a :cpp:`static constexpr` member variable :cpp:`blobCount`.
+Finally, the member function :cpp:`blobSize(i)` gives the size in bytes of the :cpp:`i`\ th block of memory needed for this mapping
+using the value type of the array extents.
 :cpp:`i` is in the range of :cpp:`0` to :cpp:`blobCount - 1`.
 
 Additionally, a mapping needs to be either a physical or a computed mapping.
@@ -74,12 +78,13 @@ Physical mappings, in addition to being mappings, need to fulfill the following 
 
     template <typename M>
     concept PhysicalMapping = Mapping<M> && requires(M m, typename M::ArrayIndex ai, RecordCoord<> rc) {
-        { m.blobNrAndOffset(ai, rc) } -> std::same_as<NrAndOffset>;
+        { m.blobNrAndOffset(ai, rc) } -> std::same_as<NrAndOffset<typename M::ArrayExtents::value_type>>;
     };
 
 That is, they must provide a member function callable as :cpp:`blobNrAndOffset(ai, rc)` that implements the core mapping logic,
 which is translating an array index :cpp:`ai` and record coordinate :cpp:`rc` into a value of :cpp:`llama::NrAndOffset`,
 containing the blob number of offset within the blob where the value should be stored.
+The integral type used for computing blob number and offset should be the value type of the array extents.
 
 ..
     Computed mappings, in addition to being mappings, need to fulfill the following concept:
@@ -90,7 +95,7 @@ containing the blob number of offset within the blob where the value should be s
         concept ComputedMapping = Mapping<M> && requires(M m, typename M::ArrayIndex ai, RecordCoord<> rc) {
             { m.isComputed(rc) } -> std::same_as<bool>;
             { m.compute(ai, rc, Array<Array<std::byte, 0>, 0>{}) } -> AnyReference;
-            { m.blobNrAndOffset(ai, rc) } -> std::same_as<NrAndOffset>;
+            { m.blobNrAndOffset(ai, rc) } -> std::same_as<NrAndOffset<typename M::ArrayExtents::value_type>>;
         };
 
     That is, they must provide a :cpp:`constexpr` member function :cpp:`isComputed(rc)`, callable for a record coordinate,
@@ -119,8 +124,8 @@ SoA
 ---
 
 LLAMA provides a family of SoA (struct of arrays) mappings based on a generic implementation.
-SoA mappings store the attributes of a record contigiously and therefore maximize locality for accesses to the same attribute of multiple records.
-This layout auto vectorizes well in practice.
+SoA mappings store the attributes of a record contiguously and therefore maximize locality for accesses to the same attribute of multiple records.
+This layout auto-vectorizes well in practice.
 
 .. code-block:: C++
 
@@ -209,10 +214,9 @@ A report is printed to the stdout when requested or the mapping instance is dest
         auto anyMapping = ...;
         llama::mapping::Trace mapping{anyMapping};
         ...
-        mapping.print(); // print report explicitely
-    } // report is printed implicitely
+        mapping.print(); // print report explicitly
+    } // report is printed implicitly
 
-.. _label-tree-mapping:
 
 Null
 ----
@@ -300,7 +304,7 @@ Tree (deprecated)
 
 WARNING: The tree mapping is currently not maintained and we consider deprecation.
 
-The LLAMA tree mapping is one approach to archieve the goal of mixing different mapping approaches.
+The LLAMA tree mapping is one approach to achieve the goal of mixing different mapping approaches.
 Furthermore, it tries to establish a general mapping description language and mapping definition framework.
 Let's take the example record dimension from the :ref:`dimensions section<label-dimensions>`:
 
@@ -344,7 +348,7 @@ Struct of array but with a padding after each 1024 elements may look like this:
 .. image:: ../images/padding_tree_2.svg
 
 The size of the leaf type in "pad" of course needs to be determined based on the
-desired aligment and sub tree sizes.
+desired alignment and sub tree sizes.
 
 Such a tree (with smaller array dimensions for easier drawing) …
 
