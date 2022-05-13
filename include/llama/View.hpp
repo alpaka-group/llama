@@ -333,7 +333,7 @@ namespace llama
 #else
     template<typename TMapping, typename BlobType>
 #endif
-    struct View
+    struct LLAMA_DECLSPEC_EMPTY_BASES View
         : private TMapping
 #if CAN_USE_RANGES
         , std::ranges::view_base
