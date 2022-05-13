@@ -218,7 +218,6 @@ jobs:
           sudo apt install intel-oneapi-compiler-dpcpp-cpp
       - name: install boost
         run: |
-          BOOST_VERSION=1.74.0
           BOOST_ARCHIVE=boost_${BOOST_VERSION//./_}.tar.bz2
           time wget -q https://boostorg.jfrog.io/artifactory/main/release/$BOOST_VERSION/source/$BOOST_ARCHIVE
           time tar -xf $BOOST_ARCHIVE
@@ -285,12 +284,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: install boost
+      shell: bash
       run: |
-        $BOOST_ARCHIVE = "boost_$($env:BOOST_VERSION.replace('.', '_')).zip"
-        $url = "https://boostorg.jfrog.io/artifactory/main/release/$env:BOOST_VERSION/source/$BOOST_ARCHIVE"
-        Measure-Command { (New-Object System.Net.WebClient).DownloadFile($url, "$env:TEMP/boost.zip") }
-        Measure-Command { 7z x "$env:TEMP/boost.zip" -o"$env:BOOST_ROOT" }
-        Measure-Command { mv "$env:BOOST_ROOT/boost_$($env:BOOST_VERSION.replace('.', '_'))" "$env:BOOST_ROOT" }
+        ls /mnt/c/msys64/usr/bin
+        export PATH=$PATH:/mnt/c/msys64/usr/bin
+        BOOST_ARCHIVE=boost_${BOOST_VERSION//./_}.tar.bz2
+        time wget -q https://boostorg.jfrog.io/artifactory/main/release/$BOOST_VERSION/source/$BOOST_ARCHIVE
+        time tar -xf $BOOST_ARCHIVE
+        time mv boost_${BOOST_VERSION//./_} "${BOOST_ROOT}"
     - name: vcpkg install dependencies
       run: |
         vcpkg install catch2 fmt vc tinyobjloader
