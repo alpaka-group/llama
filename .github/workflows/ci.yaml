@@ -154,6 +154,11 @@ jobs:
             install_extra: g++-11
             add_toolchain_repo: true
             cuda_url: https://developer.download.nvidia.com/compute/cuda/11.6.2/local_installers/cuda_11.6.2_510.47.03_linux.run
+          - name: build-ubuntu-gcc11-cuda11.7
+            cxx: g++-11
+            install_extra: g++-11
+            add_toolchain_repo: true
+            cuda_url: https://developer.download.nvidia.com/compute/cuda/11.7.0/local_installers/cuda_11.7.0_515.43.04_linux.run
           - name: build-ubuntu-gcc12
             os: ubuntu-22.04
             cxx: g++-12
@@ -163,6 +168,11 @@ jobs:
             cxx: g++-12
             install_extra: g++-12
             cuda_url: https://developer.download.nvidia.com/compute/cuda/11.6.2/local_installers/cuda_11.6.2_510.47.03_linux.run
+          - name: build-ubuntu-gcc12-cuda11.7
+            os: ubuntu-22.04
+            cxx: g++-12
+            install_extra: g++-12
+            cuda_url: https://developer.download.nvidia.com/compute/cuda/11.7.0/local_installers/cuda_11.7.0_515.43.04_linux.run
           - name: build-ubuntu-clang10
             cxx: clang++-10
           - name: build-ubuntu-clang11
