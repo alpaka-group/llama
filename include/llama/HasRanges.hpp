@@ -9,7 +9,7 @@
 #if __has_include(<version>)
 #    include <version>
 #    if defined(__cpp_concepts) && defined(__cpp_lib_ranges) && (!defined(__clang__) || __clang_major__ >= 15)        \
-        && !defined(__INTEL_LLVM_COMPILER)
+        && !defined(__INTEL_LLVM_COMPILER) && (!defined(_MSC_VER) || _MSC_VER > 1932)
 #        undef CAN_USE_RANGES
 #        define CAN_USE_RANGES 1
 #    endif
