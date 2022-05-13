@@ -403,7 +403,7 @@ $(document).ready(function(){initNavTree('View_8hpp_source.html',''); initResiza
 <div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;<span class="preprocessor">#else</span></div>
 <div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> TMapping, <span class="keyword">typename</span> BlobType&gt;</div>
 <div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    <span class="keyword">struct </span>View</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    <span class="keyword">struct </span><a class="code" href="macros_8hpp.html#a54cf6c1e66eb82c07a01b945491e4916">LLAMA_DECLSPEC_EMPTY_BASES</a> View</div>
 <div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;        : <span class="keyword">private</span> TMapping</div>
 <div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;<span class="preprocessor">#if CAN_USE_RANGES</span></div>
 <div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        , std::ranges::view_base</div>
@@ -682,6 +682,7 @@ $(document).ready(function(){initNavTree('View_8hpp_source.html',''); initResiza
 <div class="ttc" id="astructllama_1_1Iterator_html_ad2bf84d6b26dd4dfa883e1c10b859969"><div class="ttname"><a href="structllama_1_1Iterator.html#ad2bf84d6b26dd4dfa883e1c10b859969">llama::Iterator::operator-</a></div><div class="ttdeci">constexpr friend auto operator-(const Iterator &amp;a, const Iterator &amp;b) -&gt; difference_type</div><div class="ttdef"><b>Definition:</b> <a href="View_8hpp_source.html#l00241">View.hpp:241</a></div></div>
 <div class="ttc" id="anamespacellama_html"><div class="ttname"><a href="namespacellama.html">llama</a></div><div class="ttdef"><b>Definition:</b> <a href="Array_8hpp_source.html#l00011">Array.hpp:11</a></div></div>
 <div class="ttc" id="astructllama_1_1ArrayIndexRange_html_a231e46afd43c7573f4b7f75f3764c7e8"><div class="ttname"><a href="structllama_1_1ArrayIndexRange.html#a231e46afd43c7573f4b7f75f3764c7e8">llama::ArrayIndexRange::begin</a></div><div class="ttdeci">constexpr auto begin() const noexcept -&gt; ArrayIndexIterator&lt; ArrayExtents &gt;</div><div class="ttdef"><b>Definition:</b> <a href="ArrayIndexRange_8hpp_source.html#l00244">ArrayIndexRange.hpp:244</a></div></div>
+<div class="ttc" id="amacros_8hpp_html_a54cf6c1e66eb82c07a01b945491e4916"><div class="ttname"><a href="macros_8hpp.html#a54cf6c1e66eb82c07a01b945491e4916">LLAMA_DECLSPEC_EMPTY_BASES</a></div><div class="ttdeci">#define LLAMA_DECLSPEC_EMPTY_BASES</div><div class="ttdef"><b>Definition:</b> <a href="macros_8hpp_source.html#l00123">macros.hpp:123</a></div></div>
 <div class="ttc" id="astructllama_1_1VirtualView_html_ac2811328ba015efd6c1e9822f637747f"><div class="ttname"><a href="structllama_1_1VirtualView.html#ac2811328ba015efd6c1e9822f637747f">llama::VirtualView::accessor</a></div><div class="ttdeci">auto accessor(ArrayIndex ai) -&gt; auto &amp;</div><div class="ttdef"><b>Definition:</b> <a href="View_8hpp_source.html#l00552">View.hpp:552</a></div></div>
 <div class="ttc" id="astructllama_1_1View_html_a078855f1e6995af9bce14b4a13075cc9"><div class="ttname"><a href="structllama_1_1View.html#a078855f1e6995af9bce14b4a13075cc9">llama::View::RecordDim</a></div><div class="ttdeci">typename Mapping::RecordDim RecordDim</div><div class="ttdef"><b>Definition:</b> <a href="View_8hpp_source.html#l00346">View.hpp:346</a></div></div>
 <div class="ttc" id="astructllama_1_1Iterator_html_a8c51c62fb62cc6ee312758abc6614bc9"><div class="ttname"><a href="structllama_1_1Iterator.html#a8c51c62fb62cc6ee312758abc6614bc9">llama::Iterator::operator--</a></div><div class="ttdeci">constexpr auto operator--() -&gt; Iterator &amp;</div><div class="ttdef"><b>Definition:</b> <a href="View_8hpp_source.html#l00174">View.hpp:174</a></div></div>
@@ -794,7 +795,7 @@ $(document).ready(function(){initNavTree('View_8hpp_source.html',''); initResiza
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="View_8hpp.html">View.hpp</a></li>
-    <li class="footer">Generated on Fri May 13 2022 16:16:55 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Fri May 13 2022 16:30:45 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
