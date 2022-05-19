@@ -8,6 +8,7 @@ add_library(${PROJECT_NAME} INTERFACE)
 target_include_directories(${PROJECT_NAME} INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_17)
 target_link_libraries(${PROJECT_NAME} INTERFACE Boost::headers)
+add_compile_definitions(BOOST_ATOMIC_NO_LIB) # we don't need the compiled part in LLAMA or its examples
 if (fmt_FOUND)
 	target_link_libraries(${PROJECT_NAME} INTERFACE fmt::fmt)
 else()

@@ -17,6 +17,7 @@ constexpr auto SHARED_ELEMENTS_PER_BLOCK = 512;
 constexpr auto STEPS = 5; ///< number of steps to calculate
 constexpr auto ALLOW_RSQRT = true; // rsqrt can be way faster, but less accurate
 constexpr auto RUN_UPATE = true; // run update step. Useful to disable for benchmarking the move step.
+constexpr auto TRACE = true;
 constexpr FP TIMESTEP = 0.0001f;
 
 constexpr auto THREADS_PER_BLOCK = 256;
@@ -27,6 +28,12 @@ static_assert(PROBLEM_SIZE % SHARED_ELEMENTS_PER_BLOCK == 0);
 static_assert(SHARED_ELEMENTS_PER_BLOCK % THREADS_PER_BLOCK == 0);
 
 constexpr FP EPS2 = 0.01;
+
+#if __CUDA_ARCH__ >= 600
+using CountType = unsigned long long int;
+#else
+using CountType = unsigned;
+#endif
 
 using namespace std::literals;
 
@@ -205,12 +212,19 @@ try
                 llama::mapping::BindSoA<>::fn,
                 true>{extents};
     }();
+    auto tmapping = [&]
+    {
+        if constexpr(TRACE)
+            return llama::mapping::Trace<std::decay_t<decltype(mapping)>, CountType>{mapping};
+        else
+            return mapping;
+    }();
 
     Stopwatch watch;
 
-    auto hostView = llama::allocViewUninitialized(mapping);
+    auto hostView = llama::allocViewUninitialized(tmapping);
     auto accView = llama::allocViewUninitialized(
-        mapping,
+        tmapping,
         [](auto alignment, std::size_t size)
         {
             std::byte* p = nullptr;
@@ -236,6 +250,8 @@ try
         p(tag::Mass()) = distribution(engine) / FP(100);
         hostView(i) = p;
     }
+    if constexpr(TRACE)
+        hostView.mapping().fieldHits(hostView.storageBlobs) = {};
 
     watch.printAndReset("init");
 
@@ -255,12 +271,15 @@ try
     };
 
     start();
-    for(auto i = 0; i < accView.storageBlobs.size(); i++)
+    const auto blobs = hostView.storageBlobs.size();
+    for(std::size_t i = 0; i < blobs; i++)
         checkError(cudaMemcpy(
             accView.storageBlobs[i],
             hostView.storageBlobs[i].data(),
-            mapping.blobSize(i),
+            hostView.mapping().blobSize(i),
             cudaMemcpyHostToDevice));
+    if constexpr(TRACE)
+        cudaMemset(accView.storageBlobs[blobs], 0, accView.mapping().blobSize(blobs)); // init trace count buffer
     std::cout << "copy H->D " << stop() << " s\n";
 
     const auto blocks = PROBLEM_SIZE / THREADS_PER_BLOCK;
@@ -290,15 +309,18 @@ try
     plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
     start();
-    for(auto i = 0; i < accView.storageBlobs.size(); i++)
+    for(std::size_t i = 0; i < blobs; i++)
         checkError(cudaMemcpy(
             hostView.storageBlobs[i].data(),
             accView.storageBlobs[i],
-            mapping.blobSize(i),
+            hostView.mapping().blobSize(i),
             cudaMemcpyDeviceToHost));
     std::cout << "copy D->H " << stop() << " s\n";
 
-    for(auto i = 0; i < accView.storageBlobs.size(); i++)
+    if constexpr(TRACE)
+        hostView.mapping().printFieldHits(hostView.storageBlobs);
+
+    for(std::size_t i = 0; i < accView.storageBlobs.size(); i++)
         checkError(cudaFree(accView.storageBlobs[i]));
     checkError(cudaEventDestroy(startEvent));
     checkError(cudaEventDestroy(stopEvent));
