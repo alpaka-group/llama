@@ -50,7 +50,8 @@ Checks: >
     -misc-no-recursion,
     -llvm-header-guard,
     -cppcoreguidelines-macro-usage,
-    -fuchsia-statically-constructed-objects
+    -fuchsia-statically-constructed-objects,
+    -cppcoreguidelines-pro-type-union-access
 
 WarningsAsErrors: '*'
 HeaderFilterRegex: ''

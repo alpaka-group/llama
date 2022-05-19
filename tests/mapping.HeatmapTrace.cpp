@@ -57,46 +57,81 @@ TEST_CASE("Heatmap.nbody")
         llama::mapping::SingleBlobSoA<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
 }
 
-TEST_CASE("Trace.nbody")
+TEMPLATE_LIST_TEST_CASE("Trace.nbody.mem_locs_computed", "", SizeTypes)
 {
     auto run = [&](auto mapping)
     {
-        auto particles = llama::allocView(llama::mapping::Trace{mapping, false});
+        auto particles = llama::allocView(llama::mapping::Trace<decltype(mapping), TestType, false>{mapping});
         updateAndMove(particles);
-        auto& hits = particles.mapping().fieldHits;
+        auto& hits = particles.mapping().fieldHits(particles.storageBlobs);
         CHECK(hits.size() == 7);
-        CHECK(hits[0] == 10400);
-        CHECK(hits[1] == 10400);
-        CHECK(hits[2] == 10400);
-        CHECK(hits[3] == 400);
-        CHECK(hits[4] == 400);
-        CHECK(hits[5] == 400);
-        CHECK(hits[6] == 10300);
+        CHECK(hits[0].memLocsComputed == 10300);
+        CHECK(hits[1].memLocsComputed == 10300);
+        CHECK(hits[2].memLocsComputed == 10300);
+        CHECK(hits[3].memLocsComputed == 300);
+        CHECK(hits[4].memLocsComputed == 300);
+        CHECK(hits[5].memLocsComputed == 300);
+        CHECK(hits[6].memLocsComputed == 10200);
+
+        std::stringstream buffer;
+        std::streambuf* old = std::cout.rdbuf(buffer.rdbuf());
+        particles.mapping().printFieldHits(particles.storageBlobs);
+        std::cout.rdbuf(old);
+        CHECK(
+            buffer.str()
+            == "Trace mapping, number of memory locations computed:\n"
+               "\tPos.X:\t 10300\n"
+               "\tPos.Y:\t 10300\n"
+               "\tPos.Z:\t 10300\n"
+               "\tVel.X:\t 300\n"
+               "\tVel.Y:\t 300\n"
+               "\tVel.Z:\t 300\n"
+               "\tMass:\t 10200\n");
     };
     run(llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
     run(llama::mapping::SingleBlobSoA<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
 }
 
-TEST_CASE("Trace.print_dtor")
+TEMPLATE_LIST_TEST_CASE("Trace.nbody.reads_writes", "", SizeTypes)
 {
-    std::stringstream buffer;
-    std::streambuf* old = std::cout.rdbuf(buffer.rdbuf());
+    auto run = [&](auto mapping)
     {
-        auto particles = llama::allocView(
-            llama::mapping::Trace{llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{}});
+        auto particles = llama::allocView(llama::mapping::Trace<decltype(mapping), TestType>{mapping});
         updateAndMove(particles);
-    }
-    std::cout.rdbuf(old);
-    CHECK(
-        buffer.str()
-        == "Trace mapping, number of accesses:\n"
-           "\tPos.X:\t10400\n"
-           "\tPos.Y:\t10400\n"
-           "\tPos.Z:\t10400\n"
-           "\tVel.X:\t400\n"
-           "\tVel.Y:\t400\n"
-           "\tVel.Z:\t400\n"
-           "\tMass:\t10300\n");
+        auto& hits = particles.mapping().fieldHits(particles.storageBlobs);
+        CHECK(hits.size() == 7);
+        CHECK(hits[0].reads == 10200);
+        CHECK(hits[1].reads == 10200);
+        CHECK(hits[2].reads == 10200);
+        CHECK(hits[3].reads == 200);
+        CHECK(hits[4].reads == 200);
+        CHECK(hits[5].reads == 200);
+        CHECK(hits[6].reads == 10100);
+        CHECK(hits[0].writes == 200);
+        CHECK(hits[1].writes == 200);
+        CHECK(hits[2].writes == 200);
+        CHECK(hits[3].writes == 100);
+        CHECK(hits[4].writes == 100);
+        CHECK(hits[5].writes == 100);
+        CHECK(hits[6].writes == 100);
+
+        std::stringstream buffer;
+        std::streambuf* old = std::cout.rdbuf(buffer.rdbuf());
+        particles.mapping().printFieldHits(particles.storageBlobs);
+        std::cout.rdbuf(old);
+        CHECK(
+            buffer.str()
+            == "Trace mapping, number of accesses:\n"
+               "\tPos.X:\tR: 10200\tW: 200\n"
+               "\tPos.Y:\tR: 10200\tW: 200\n"
+               "\tPos.Z:\tR: 10200\tW: 200\n"
+               "\tVel.X:\tR: 200\tW: 100\n"
+               "\tVel.Y:\tR: 200\tW: 100\n"
+               "\tVel.Z:\tR: 200\tW: 100\n"
+               "\tMass:\tR: 10100\tW: 100\n");
+    };
+    run(llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
+    run(llama::mapping::SingleBlobSoA<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
 }
 
 namespace

@@ -190,6 +190,8 @@ namespace usellama
             p(tag::Vel{}, tag::Z{}) = dist(engine) / FP(10);
             p(tag::Mass{}) = dist(engine) / FP(100);
         }
+        if constexpr(TRACE)
+            particles.mapping().fieldHits(particles.storageBlobs) = {};
         watch.printAndReset("init");
 
         double sumUpdate = 0;
@@ -207,7 +209,9 @@ namespace usellama
         plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
         if constexpr(HEATMAP)
-            std::ofstream("nbody_heatmap_" + mappingName(Mapping) + ".sh") << particles.mapping.toGnuplotScript();
+            std::ofstream("nbody_heatmap_" + mappingName(Mapping) + ".sh") << particles.mapping().toGnuplotScript();
+        if constexpr(TRACE)
+            particles.mapping().printFieldHits(particles.storageBlobs);
 
         return 0;
     }
