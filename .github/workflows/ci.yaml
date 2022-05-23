@@ -72,9 +72,16 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 1
-    - name: apt install boost and lcov
+    - name: install boost
       run: |
-        sudo apt install libboost-all-dev lcov
+          BOOST_ARCHIVE=boost_${BOOST_VERSION//./_}.tar.bz2
+          wget -q https://boostorg.jfrog.io/artifactory/main/release/$BOOST_VERSION/source/$BOOST_ARCHIVE
+          tar -xf $BOOST_ARCHIVE
+          rm $BOOST_ARCHIVE
+          mv boost_${BOOST_VERSION//./_} "${BOOST_ROOT}"
+    - name: install lcov
+      run: |
+        sudo apt install lcov
     - name: vcpkg install dependencies
       run: |
         vcpkg install catch2 fmt
