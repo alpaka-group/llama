@@ -376,11 +376,13 @@ namespace llama
             return static_cast<const Mapping&>(*this);
         }
 
+#if !(defined(_MSC_VER) && defined(__NVCC__))
         template<typename V>
         auto operator()(llama::ArrayIndex<V, ArrayIndex::rank>) const
         {
             static_assert(!sizeof(V), "Passed ArrayIndex with SizeType different than Mapping::ArrayExtent");
         }
+#endif
 
         /// Retrieves the \ref VirtualRecord at the given \ref ArrayIndex index.
         LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) const -> decltype(auto)
@@ -451,11 +453,13 @@ namespace llama
             return (*this)(ai);
         }
 
+#if !(defined(_MSC_VER) && defined(__NVCC__))
         template<typename V>
         auto operator[](llama::ArrayIndex<V, ArrayIndex::rank>) const
         {
             static_assert(!sizeof(V), "Passed ArrayIndex with SizeType different than Mapping::ArrayExtent");
         }
+#endif
 
         /// Retrieves the \ref VirtualRecord at the 1D \ref ArrayIndex index constructed from the passed index.
         LLAMA_FN_HOST_ACC_INLINE auto operator[](size_type index) const -> decltype(auto)
