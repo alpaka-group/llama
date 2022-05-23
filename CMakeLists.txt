@@ -58,7 +58,7 @@ if (BUILD_TESTING)
 			target_link_options   (tests PRIVATE -fsanitize=address -fno-omit-frame-pointer)
 		elseif(MSVC)
 			target_compile_options(tests PRIVATE /fsanitize=address)
-			target_link_options   (tests PRIVATE /wholearchive:clang_rt.asan_dynamic-x86_64.lib /wholearchive:clang_rt.asan_dynamic_runtime_thunk-x86_64.lib)
+			target_link_options   (tests PRIVATE /fsanitize=address)
 		endif()
 	endif()
 
