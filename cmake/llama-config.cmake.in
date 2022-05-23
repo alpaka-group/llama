@@ -16,9 +16,15 @@ endif()
 set(llama_INCLUDE_DIR ${llama_INCLUDE_DIR} "${PACKAGE_PREFIX_DIR}/include")
 target_include_directories(llama INTERFACE ${llama_INCLUDE_DIR})
 
-# Boost
+# dependencies
 find_package(Boost 1.70.0 REQUIRED)
+find_package(fmt CONFIG QUIET)
 target_link_libraries(llama INTERFACE Boost::headers)
+if (fmt_FOUND)
+	target_link_libraries(${PROJECT_NAME} INTERFACE fmt::fmt)
+else()
+	message(WARNING "The fmt library was not found. You cannot use llama's dumping facilities.")
+endif()
 
 
 INCLUDE(FindPackageHandleStandardArgs)
