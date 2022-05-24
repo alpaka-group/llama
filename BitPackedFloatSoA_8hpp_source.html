@@ -139,9 +139,9 @@ $(document).ready(function(){initNavTree('BitPackedFloatSoA_8hpp_source.html',''
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            <span class="keyword">const</span> Integral outExponentMask = (Integral{1} &lt;&lt; outExponentBits) - 1u;</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;            Integral outExponent;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keywordflow">if</span>(inExponent == inExponentMask) [[unlikely]]</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keywordflow">if</span>(inExponent == inExponentMask) [[<a class="code" href="macros_8hpp.html#a00cc5cd2c6d364291992fbd5bbc4771f">LLAMA_UNLIKELY</a>]]</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                outExponent = outExponentMask; <span class="comment">// propagate +/- inf/nan</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span>(inExponent == 0) [[unlikely]]</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span>(inExponent == 0) [[<a class="code" href="macros_8hpp.html#a00cc5cd2c6d364291992fbd5bbc4771f">LLAMA_UNLIKELY</a>]]</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                outExponent = 0; <span class="comment">// propagate -/+ zero</span></div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            {</div>
@@ -391,6 +391,7 @@ $(document).ready(function(){initNavTree('BitPackedFloatSoA_8hpp_source.html',''
 <div class="ttc" id="astructllama_1_1mapping_1_1MappingBase_html_a9e8dbadc1023c973d1d8a10a773e4786"><div class="ttname"><a href="structllama_1_1mapping_1_1MappingBase.html#a9e8dbadc1023c973d1d8a10a773e4786">llama::mapping::MappingBase::ArrayIndex</a></div><div class="ttdeci">typename ArrayExtents::Index ArrayIndex</div><div class="ttdef"><b>Definition:</b> <a href="Common_8hpp_source.html#l00016">Common.hpp:16</a></div></div>
 <div class="ttc" id="aBitPackedIntSoA_8hpp_html"><div class="ttname"><a href="BitPackedIntSoA_8hpp.html">BitPackedIntSoA.hpp</a></div></div>
 <div class="ttc" id="anamespacellama_1_1mapping_html_af9c9d24fc8ce05a939c4bdb3ca8ae133"><div class="ttname"><a href="namespacellama_1_1mapping.html#af9c9d24fc8ce05a939c4bdb3ca8ae133">llama::mapping::isBitPackedFloatSoA</a></div><div class="ttdeci">constexpr bool isBitPackedFloatSoA</div><div class="ttdef"><b>Definition:</b> <a href="BitPackedFloatSoA_8hpp_source.html#l00290">BitPackedFloatSoA.hpp:290</a></div></div>
+<div class="ttc" id="amacros_8hpp_html_a00cc5cd2c6d364291992fbd5bbc4771f"><div class="ttname"><a href="macros_8hpp.html#a00cc5cd2c6d364291992fbd5bbc4771f">LLAMA_UNLIKELY</a></div><div class="ttdeci">#define LLAMA_UNLIKELY</div><div class="ttdoc">Expands to unlikely if [[unlikely]] supported by the compiler. Use as [[LLAMA_UNLIKELY]].</div><div class="ttdef"><b>Definition:</b> <a href="macros_8hpp_source.html#l00137">macros.hpp:137</a></div></div>
 <div class="ttc" id="astructllama_1_1RecordCoord_html"><div class="ttname"><a href="structllama_1_1RecordCoord.html">llama::RecordCoord</a></div><div class="ttdef"><b>Definition:</b> <a href="RecordCoord_8hpp_source.html#l00017">RecordCoord.hpp:17</a></div></div>
 <div class="ttc" id="astructllama_1_1mapping_1_1internal_1_1BitPackedFloatRef_html_a3be77bbc66766e7fc6f5313b10090215"><div class="ttname"><a href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#a3be77bbc66766e7fc6f5313b10090215">llama::mapping::internal::BitPackedFloatRef::value_type</a></div><div class="ttdeci">Float value_type</div><div class="ttdef"><b>Definition:</b> <a href="BitPackedFloatSoA_8hpp_source.html#l00126">BitPackedFloatSoA.hpp:126</a></div></div>
 <div class="ttc" id="astructllama_1_1mapping_1_1LinearizeArrayDimsCpp_html"><div class="ttname"><a href="structllama_1_1mapping_1_1LinearizeArrayDimsCpp.html">llama::mapping::LinearizeArrayDimsCpp</a></div><div class="ttdef"><b>Definition:</b> <a href="Common_8hpp_source.html#l00036">Common.hpp:36</a></div></div>
@@ -402,7 +403,7 @@ $(document).ready(function(){initNavTree('BitPackedFloatSoA_8hpp_source.html',''
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="BitPackedFloatSoA_8hpp.html">BitPackedFloatSoA.hpp</a></li>
-    <li class="footer">Generated on Tue May 24 2022 06:55:36 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue May 24 2022 07:04:36 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
