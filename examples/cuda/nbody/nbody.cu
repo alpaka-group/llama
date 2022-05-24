@@ -278,8 +278,6 @@ try
             hostView.storageBlobs[i].data(),
             hostView.mapping().blobSize(i),
             cudaMemcpyHostToDevice));
-    if constexpr(TRACE)
-        cudaMemset(accView.storageBlobs[blobs], 0, accView.mapping().blobSize(blobs)); // init trace count buffer
     std::cout << "copy H->D " << stop() << " s\n";
 
     const auto blocks = PROBLEM_SIZE / THREADS_PER_BLOCK;
