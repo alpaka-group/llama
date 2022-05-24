@@ -2,6 +2,7 @@ var namespacellama_1_1mapping =
 [
     [ "internal", "namespacellama_1_1mapping_1_1internal.html", "namespacellama_1_1mapping_1_1internal" ],
     [ "tree", "namespacellama_1_1mapping_1_1tree.html", "namespacellama_1_1mapping_1_1tree" ],
+    [ "AccessCounts", "structllama_1_1mapping_1_1AccessCounts.html", "structllama_1_1mapping_1_1AccessCounts" ],
     [ "AoS", "structllama_1_1mapping_1_1AoS.html", "structllama_1_1mapping_1_1AoS" ],
     [ "AoSoA", "structllama_1_1mapping_1_1AoSoA.html", "structllama_1_1mapping_1_1AoSoA" ],
     [ "BindAoS", "structllama_1_1mapping_1_1BindAoS.html", "structllama_1_1mapping_1_1BindAoS" ],

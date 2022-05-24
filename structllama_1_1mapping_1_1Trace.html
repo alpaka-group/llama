@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Low-Level Abstraction of Memory Access: llama::mapping::Trace&lt; Mapping &gt; Struct Template Reference</title>
+<title>Low-Level Abstraction of Memory Access: llama::mapping::Trace&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -85,118 +85,135 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1Trace.html',
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="structllama_1_1mapping_1_1Trace-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">llama::mapping::Trace&lt; Mapping &gt; Struct Template Reference</div>  </div>
+<div class="title">llama::mapping::Trace&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for llama::mapping::Trace&lt; Mapping &gt;:</div>
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for llama::mapping::Trace&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt;:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="structllama_1_1mapping_1_1Trace__inherit__graph.png" border="0" usemap="#llama_1_1mapping_1_1Trace_3_01Mapping_01_4_inherit__map" alt="Inheritance graph"/></div>
-<map name="llama_1_1mapping_1_1Trace_3_01Mapping_01_4_inherit__map" id="llama_1_1mapping_1_1Trace_3_01Mapping_01_4_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,80,172,121"/>
-<area shape="rect" title=" " alt="" coords="49,5,128,32"/>
+<div class="center"><img src="structllama_1_1mapping_1_1Trace__inherit__graph.png" border="0" usemap="#llama_1_1mapping_1_1Trace_3_01Mapping_00_01CountType_00_01MyCodeHandlesProxyReferences_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="llama_1_1mapping_1_1Trace_3_01Mapping_00_01CountType_00_01MyCodeHandlesProxyReferences_01_4_inherit__map" id="llama_1_1mapping_1_1Trace_3_01Mapping_00_01CountType_00_01MyCodeHandlesProxyReferences_01_4_inherit__map">
+<area shape="rect" title=" " alt="" coords="5,80,263,136"/>
+<area shape="rect" title=" " alt="" coords="95,5,173,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for llama::mapping::Trace&lt; Mapping &gt;:</div>
+  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for llama::mapping::Trace&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt;:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="structllama_1_1mapping_1_1Trace__coll__graph.png" border="0" usemap="#llama_1_1mapping_1_1Trace_3_01Mapping_01_4_coll__map" alt="Collaboration graph"/></div>
-<map name="llama_1_1mapping_1_1Trace_3_01Mapping_01_4_coll__map" id="llama_1_1mapping_1_1Trace_3_01Mapping_01_4_coll__map">
-<area shape="rect" title=" " alt="" coords="5,213,172,255"/>
-<area shape="rect" title=" " alt="" coords="28,109,107,136"/>
-<area shape="rect" title=" " alt="" coords="131,95,347,151"/>
-<area shape="rect" title=" " alt="" coords="144,5,335,32"/>
+<div class="center"><img src="structllama_1_1mapping_1_1Trace__coll__graph.png" border="0" usemap="#llama_1_1mapping_1_1Trace_3_01Mapping_00_01CountType_00_01MyCodeHandlesProxyReferences_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="llama_1_1mapping_1_1Trace_3_01Mapping_00_01CountType_00_01MyCodeHandlesProxyReferences_01_4_coll__map" id="llama_1_1mapping_1_1Trace_3_01Mapping_00_01CountType_00_01MyCodeHandlesProxyReferences_01_4_coll__map">
+<area shape="rect" title=" " alt="" coords="5,80,263,136"/>
+<area shape="rect" title=" " alt="" coords="95,5,173,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a2cda914e6fd4df3ae6e44c05acc4facf"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#a2cda914e6fd4df3ae6e44c05acc4facf">RecordDim</a> = typename Mapping::RecordDim</td></tr>
-<tr class="separator:a2cda914e6fd4df3ae6e44c05acc4facf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b083e5692e059286b265f7971e37b70"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#a3b083e5692e059286b265f7971e37b70">RecordDim</a> = typename Mapping::RecordDim</td></tr>
+<tr class="separator:a3b083e5692e059286b265f7971e37b70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb5b733df736b1ea00327f6a1a435278"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#acb5b733df736b1ea00327f6a1a435278">FieldHitsArray</a> = <a class="el" href="structllama_1_1Array.html">Array</a>&lt; <a class="el" href="structllama_1_1mapping_1_1AccessCounts.html">AccessCounts</a>&lt; CountType &gt;, <a class="el" href="namespacellama.html#aa6c960189f5edc242be631e2e8757914">flatFieldCount</a>&lt; <a class="el" href="structllama_1_1mapping_1_1Trace.html#a3b083e5692e059286b265f7971e37b70">RecordDim</a> &gt; &gt;</td></tr>
+<tr class="separator:acb5b733df736b1ea00327f6a1a435278"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:afb7cd0af480647f63d5962127e3b1450"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#afb7cd0af480647f63d5962127e3b1450">Trace</a> ()=default</td></tr>
-<tr class="separator:afb7cd0af480647f63d5962127e3b1450"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adfb5b537aa8504392616ddd7781803e8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#adfb5b537aa8504392616ddd7781803e8">Trace</a> (Mapping mapping, bool <a class="el" href="structllama_1_1mapping_1_1Trace.html#a0a1716bb80ec5379e3d05a1eac9c4544">printOnDestruction</a>=true)</td></tr>
-<tr class="separator:adfb5b537aa8504392616ddd7781803e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b0435b68d2741eb5101c14c31f9c14f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#a6b0435b68d2741eb5101c14c31f9c14f">Trace</a> (const <a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a> &amp;)=delete</td></tr>
-<tr class="separator:a6b0435b68d2741eb5101c14c31f9c14f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae93708151ca7e2742d1bd9576ab95464"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#ae93708151ca7e2742d1bd9576ab95464">operator=</a> (const <a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a> &amp;) -&gt; <a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a> &amp;=delete</td></tr>
-<tr class="separator:ae93708151ca7e2742d1bd9576ab95464"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a434178332cc299ecac2ef0dcbc7a1ac2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#a434178332cc299ecac2ef0dcbc7a1ac2">Trace</a> (<a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a> &amp;&amp;other) noexcept</td></tr>
-<tr class="separator:a434178332cc299ecac2ef0dcbc7a1ac2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a040d7a153c1f70680eb16a105005d090"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#a040d7a153c1f70680eb16a105005d090">operator=</a> (<a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a> &amp;&amp;other) noexcept -&gt; <a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a> &amp;</td></tr>
-<tr class="separator:a040d7a153c1f70680eb16a105005d090"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8feb8f4eba7493c7f1841de134f3a044"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#a8feb8f4eba7493c7f1841de134f3a044">~Trace</a> ()</td></tr>
-<tr class="separator:a8feb8f4eba7493c7f1841de134f3a044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1847c220eb45cc07feeb8a209847ece"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
-<tr class="memitem:aa1847c220eb45cc07feeb8a209847ece"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#aa1847c220eb45cc07feeb8a209847ece">blobNrAndOffset</a> (typename Mapping::ArrayIndex ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt; rc={}) const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a>&lt; size_type &gt;</td></tr>
-<tr class="separator:aa1847c220eb45cc07feeb8a209847ece"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab7abf557bd8ab060e3484353a3172bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#aab7abf557bd8ab060e3484353a3172bd">print</a> () const</td></tr>
-<tr class="separator:aab7abf557bd8ab060e3484353a3172bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a857166cd19b5580a1410b651d241ef2d"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#a857166cd19b5580a1410b651d241ef2d">Trace</a> ()=default</td></tr>
+<tr class="separator:a857166cd19b5580a1410b651d241ef2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb342d1891f2a0a605adbe784cdef6e1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#aeb342d1891f2a0a605adbe784cdef6e1">Trace</a> (Mapping mapping)</td></tr>
+<tr class="separator:aeb342d1891f2a0a605adbe784cdef6e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc8c1b7a7c5887aaefae0b0b87049d2b"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#afc8c1b7a7c5887aaefae0b0b87049d2b">blobSize</a> (size_type blobIndex) const -&gt; size_type</td></tr>
+<tr class="separator:afc8c1b7a7c5887aaefae0b0b87049d2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ee4c40dc3420283ef15ae0de916fc5b"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords, typename Blobs &gt; </td></tr>
+<tr class="memitem:a8ee4c40dc3420283ef15ae0de916fc5b"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#a8ee4c40dc3420283ef15ae0de916fc5b">compute</a> (typename Mapping::ArrayIndex ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt; rc, Blobs &amp;blobs) const -&gt; decltype(auto)</td></tr>
+<tr class="separator:a8ee4c40dc3420283ef15ae0de916fc5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ed05dd1e25f7b8d4d1351e40d3c21e5"><td class="memTemplParams" colspan="2">template&lt;typename Blobs &gt; </td></tr>
+<tr class="memitem:a6ed05dd1e25f7b8d4d1351e40d3c21e5"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#a6ed05dd1e25f7b8d4d1351e40d3c21e5">fieldHits</a> (const Blobs &amp;blobs) const -&gt; const <a class="el" href="structllama_1_1mapping_1_1Trace.html#acb5b733df736b1ea00327f6a1a435278">FieldHitsArray</a> &amp;</td></tr>
+<tr class="separator:a6ed05dd1e25f7b8d4d1351e40d3c21e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adab4804163a7cf02eae23a235ee664e9"><td class="memTemplParams" colspan="2">template&lt;typename Blobs &gt; </td></tr>
+<tr class="memitem:adab4804163a7cf02eae23a235ee664e9"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#adab4804163a7cf02eae23a235ee664e9">fieldHits</a> (Blobs &amp;blobs) const -&gt; <a class="el" href="structllama_1_1mapping_1_1Trace.html#acb5b733df736b1ea00327f6a1a435278">FieldHitsArray</a> &amp;</td></tr>
+<tr class="separator:adab4804163a7cf02eae23a235ee664e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07b7a9ee294c49240495cc685d0149d0"><td class="memTemplParams" colspan="2">template&lt;typename Blobs &gt; </td></tr>
+<tr class="memitem:a07b7a9ee294c49240495cc685d0149d0"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#a07b7a9ee294c49240495cc685d0149d0">printFieldHits</a> (const Blobs &amp;blobs) const</td></tr>
+<tr class="separator:a07b7a9ee294c49240495cc685d0149d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:acb9c47d9f7fa01e71fccd3d58167f53b"><td class="memItemLeft" align="right" valign="top">std::array&lt; std::atomic&lt; std::size_t &gt;, <a class="el" href="namespacellama.html#aa6c960189f5edc242be631e2e8757914">flatFieldCount</a>&lt; <a class="el" href="structllama_1_1mapping_1_1Trace.html#a2cda914e6fd4df3ae6e44c05acc4facf">RecordDim</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#acb9c47d9f7fa01e71fccd3d58167f53b">fieldHits</a></td></tr>
-<tr class="separator:acb9c47d9f7fa01e71fccd3d58167f53b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a1716bb80ec5379e3d05a1eac9c4544"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#a0a1716bb80ec5379e3d05a1eac9c4544">printOnDestruction</a></td></tr>
-<tr class="separator:a0a1716bb80ec5379e3d05a1eac9c4544"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a2d2fca0e436f91c5ad0344fba8eb183f"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
+<tr class="memitem:a2d2fca0e436f91c5ad0344fba8eb183f"><td class="memTemplItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#a2d2fca0e436f91c5ad0344fba8eb183f">isComputed</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt;)</td></tr>
+<tr class="separator:a2d2fca0e436f91c5ad0344fba8eb183f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a6c94db7c244e79bcf3a8f81483d6bc9c"><td class="memItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html#a6c94db7c244e79bcf3a8f81483d6bc9c">blobCount</a> = Mapping::blobCount + 1</td></tr>
+<tr class="separator:a6c94db7c244e79bcf3a8f81483d6bc9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename Mapping&gt;<br />
-struct llama::mapping::Trace&lt; Mapping &gt;</h3>
+<div class="textblock"><h3>template&lt;typename Mapping, typename CountType = std::size_t, bool MyCodeHandlesProxyReferences = true&gt;<br />
+struct llama::mapping::Trace&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt;</h3>
 
-<p>Forwards all calls to the inner mapping. Traces all accesses made through this mapping and prints a summary on destruction. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">Mapping</td><td>The type of the inner mapping. </td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Forwards all calls to the inner mapping. Traces all accesses made through this mapping and allows printing a summary. /tparam Mapping The type of the inner mapping. /tparam CountType The type used for counting the number of accesses. /tparam MyCodeHandlesProxyReferences If false, <a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a> will avoid proxy references but can then only count the number of address computations </p>
 
-<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00015">15</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00050">50</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a2cda914e6fd4df3ae6e44c05acc4facf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2cda914e6fd4df3ae6e44c05acc4facf">&#9670;&nbsp;</a></span>RecordDim</h2>
+<a id="acb5b733df736b1ea00327f6a1a435278"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb5b733df736b1ea00327f6a1a435278">&#9670;&nbsp;</a></span>FieldHitsArray</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Mapping &gt; </div>
+template&lt;typename Mapping , typename CountType  = std::size_t, bool MyCodeHandlesProxyReferences = true&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping &gt;::<a class="el" href="structllama_1_1mapping_1_1Trace.html#a2cda914e6fd4df3ae6e44c05acc4facf">RecordDim</a> =  typename Mapping::RecordDim</td>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt;::<a class="el" href="structllama_1_1mapping_1_1Trace.html#acb5b733df736b1ea00327f6a1a435278">FieldHitsArray</a> =  <a class="el" href="structllama_1_1Array.html">Array</a>&lt;<a class="el" href="structllama_1_1mapping_1_1AccessCounts.html">AccessCounts</a>&lt;CountType&gt;, <a class="el" href="namespacellama.html#aa6c960189f5edc242be631e2e8757914">flatFieldCount</a>&lt;<a class="el" href="structllama_1_1mapping_1_1Trace.html#a3b083e5692e059286b265f7971e37b70">RecordDim</a>&gt; &gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00021">21</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00057">57</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
 
 </div>
 </div>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="afb7cd0af480647f63d5962127e3b1450"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afb7cd0af480647f63d5962127e3b1450">&#9670;&nbsp;</a></span>Trace() <span class="overload">[1/4]</span></h2>
+<a id="a3b083e5692e059286b265f7971e37b70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b083e5692e059286b265f7971e37b70">&#9670;&nbsp;</a></span>RecordDim</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Mapping &gt; </div>
+template&lt;typename Mapping , typename CountType  = std::size_t, bool MyCodeHandlesProxyReferences = true&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt;::<a class="el" href="structllama_1_1mapping_1_1Trace.html#a3b083e5692e059286b265f7971e37b70">RecordDim</a> =  typename Mapping::RecordDim</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00056">56</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a857166cd19b5580a1410b651d241ef2d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a857166cd19b5580a1410b651d241ef2d">&#9670;&nbsp;</a></span>Trace() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping , typename CountType  = std::size_t, bool MyCodeHandlesProxyReferences = true&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping &gt;::<a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a> </td>
+          <td class="memname">constexpr <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt;::<a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -211,33 +228,23 @@ template&lt;typename Mapping &gt; </div>
 
 </div>
 </div>
-<a id="adfb5b537aa8504392616ddd7781803e8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adfb5b537aa8504392616ddd7781803e8">&#9670;&nbsp;</a></span>Trace() <span class="overload">[2/4]</span></h2>
+<a id="aeb342d1891f2a0a605adbe784cdef6e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb342d1891f2a0a605adbe784cdef6e1">&#9670;&nbsp;</a></span>Trace() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Mapping &gt; </div>
+template&lt;typename Mapping , typename CountType  = std::size_t, bool MyCodeHandlesProxyReferences = true&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping &gt;::<a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a> </td>
+          <td class="memname"><a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt;::<a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a> </td>
           <td>(</td>
           <td class="paramtype">Mapping&#160;</td>
-          <td class="paramname"><em>mapping</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>mapping</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>printOnDestruction</em> = <code>true</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -247,113 +254,57 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00026">26</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a6b0435b68d2741eb5101c14c31f9c14f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6b0435b68d2741eb5101c14c31f9c14f">&#9670;&nbsp;</a></span>Trace() <span class="overload">[3/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Mapping &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping &gt;::<a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a> </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a>&lt; Mapping &gt; &amp;&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a434178332cc299ecac2ef0dcbc7a1ac2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a434178332cc299ecac2ef0dcbc7a1ac2">&#9670;&nbsp;</a></span>Trace() <span class="overload">[4/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Mapping &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping &gt;::<a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a>&lt; Mapping &gt; &amp;&amp;&#160;</td>
-          <td class="paramname"><em>other</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00036">36</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a8feb8f4eba7493c7f1841de134f3a044"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8feb8f4eba7493c7f1841de134f3a044">&#9670;&nbsp;</a></span>~Trace()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Mapping &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping &gt;::~<a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00055">55</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00064">64</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="aa1847c220eb45cc07feeb8a209847ece"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa1847c220eb45cc07feeb8a209847ece">&#9670;&nbsp;</a></span>blobNrAndOffset()</h2>
+<a id="afc8c1b7a7c5887aaefae0b0b87049d2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc8c1b7a7c5887aaefae0b0b87049d2b">&#9670;&nbsp;</a></span>blobSize()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Mapping &gt; </div>
-<div class="memtemplate">
-template&lt;std::size_t... RecordCoords&gt; </div>
+template&lt;typename Mapping , typename CountType  = std::size_t, bool MyCodeHandlesProxyReferences = true&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping &gt;::blobNrAndOffset </td>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt;::blobSize </td>
+          <td>(</td>
+          <td class="paramtype">size_type&#160;</td>
+          <td class="paramname"><em>blobIndex</em></td><td>)</td>
+          <td> const -&gt; size_type
+        </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00069">69</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a8ee4c40dc3420283ef15ae0de916fc5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ee4c40dc3420283ef15ae0de916fc5b">&#9670;&nbsp;</a></span>compute()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping , typename CountType  = std::size_t, bool MyCodeHandlesProxyReferences = true&gt; </div>
+<div class="memtemplate">
+template&lt;std::size_t... RecordCoords, typename Blobs &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt;::compute </td>
           <td>(</td>
           <td class="paramtype">typename Mapping::ArrayIndex&#160;</td>
           <td class="paramname"><em>ai</em>, </td>
@@ -362,12 +313,18 @@ template&lt;std::size_t... RecordCoords&gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt;&#160;</td>
-          <td class="paramname"><em>rc</em> = <code>{}</code>&#160;</td>
+          <td class="paramname"><em>rc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Blobs &amp;&#160;</td>
+          <td class="paramname"><em>blobs</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a>&lt;size_type&gt;
+          <td></td><td> const -&gt; decltype(auto)
         </td>
         </tr>
       </table>
@@ -378,84 +335,126 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00062">62</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00083">83</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ae93708151ca7e2742d1bd9576ab95464"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae93708151ca7e2742d1bd9576ab95464">&#9670;&nbsp;</a></span>operator=() <span class="overload">[1/2]</span></h2>
+<a id="adab4804163a7cf02eae23a235ee664e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adab4804163a7cf02eae23a235ee664e9">&#9670;&nbsp;</a></span>fieldHits() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Mapping &gt; </div>
+template&lt;typename Mapping , typename CountType  = std::size_t, bool MyCodeHandlesProxyReferences = true&gt; </div>
+<div class="memtemplate">
+template&lt;typename Blobs &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping &gt;::operator= </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt;::fieldHits </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a>&lt; Mapping &gt; &amp;&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td> -&gt;  <a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a> &amp;=delete</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a040d7a153c1f70680eb16a105005d090"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a040d7a153c1f70680eb16a105005d090">&#9670;&nbsp;</a></span>operator=() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Mapping &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping &gt;::operator= </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a>&lt; Mapping &gt; &amp;&amp;&#160;</td>
-          <td class="paramname"><em>other</em></td><td>)</td>
-          <td> -&gt; <a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a>&amp;
+          <td class="paramtype">Blobs &amp;&#160;</td>
+          <td class="paramname"><em>blobs</em></td><td>)</td>
+          <td> const -&gt; <a class="el" href="structllama_1_1mapping_1_1Trace.html#acb5b733df736b1ea00327f6a1a435278">FieldHitsArray</a>&amp;
         </td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00045">45</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00131">131</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
 
 </div>
 </div>
-<a id="aab7abf557bd8ab060e3484353a3172bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aab7abf557bd8ab060e3484353a3172bd">&#9670;&nbsp;</a></span>print()</h2>
+<a id="a6ed05dd1e25f7b8d4d1351e40d3c21e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ed05dd1e25f7b8d4d1351e40d3c21e5">&#9670;&nbsp;</a></span>fieldHits() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Mapping &gt; </div>
+template&lt;typename Mapping , typename CountType  = std::size_t, bool MyCodeHandlesProxyReferences = true&gt; </div>
+<div class="memtemplate">
+template&lt;typename Blobs &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping &gt;::print </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt;::fieldHits </td>
           <td>(</td>
+          <td class="paramtype">const Blobs &amp;&#160;</td>
+          <td class="paramname"><em>blobs</em></td><td>)</td>
+          <td> const -&gt; const <a class="el" href="structllama_1_1mapping_1_1Trace.html#acb5b733df736b1ea00327f6a1a435278">FieldHitsArray</a>&amp;
+        </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00125">125</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a2d2fca0e436f91c5ad0344fba8eb183f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d2fca0e436f91c5ad0344fba8eb183f">&#9670;&nbsp;</a></span>isComputed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping , typename CountType  = std::size_t, bool MyCodeHandlesProxyReferences = true&gt; </div>
+<div class="memtemplate">
+template&lt;std::size_t... RecordCoords&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static constexpr auto <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt;::isComputed </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt;&#160;</td>
           <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00077">77</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a07b7a9ee294c49240495cc685d0149d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07b7a9ee294c49240495cc685d0149d0">&#9670;&nbsp;</a></span>printFieldHits()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping , typename CountType  = std::size_t, bool MyCodeHandlesProxyReferences = true&gt; </div>
+<div class="memtemplate">
+template&lt;typename Blobs &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt;::printFieldHits </td>
+          <td>(</td>
+          <td class="paramtype">const Blobs &amp;&#160;</td>
+          <td class="paramname"><em>blobs</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -466,52 +465,34 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00070">70</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00137">137</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="acb9c47d9f7fa01e71fccd3d58167f53b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acb9c47d9f7fa01e71fccd3d58167f53b">&#9670;&nbsp;</a></span>fieldHits</h2>
+<a id="a6c94db7c244e79bcf3a8f81483d6bc9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c94db7c244e79bcf3a8f81483d6bc9c">&#9670;&nbsp;</a></span>blobCount</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Mapping &gt; </div>
+template&lt;typename Mapping , typename CountType  = std::size_t, bool MyCodeHandlesProxyReferences = true&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::array&lt;std::atomic&lt;std::size_t&gt;, <a class="el" href="namespacellama.html#aa6c960189f5edc242be631e2e8757914">flatFieldCount</a>&lt;<a class="el" href="structllama_1_1mapping_1_1Trace.html#a2cda914e6fd4df3ae6e44c05acc4facf">RecordDim</a>&gt; &gt; <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping &gt;::fieldHits</td>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt;::blobCount = Mapping::blobCount + 1</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">mutable</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00081">81</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a0a1716bb80ec5379e3d05a1eac9c4544"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0a1716bb80ec5379e3d05a1eac9c4544">&#9670;&nbsp;</a></span>printOnDestruction</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Mapping &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace</a>&lt; Mapping &gt;::printOnDestruction</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00082">82</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00059">59</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
 
 </div>
 </div>
@@ -524,7 +505,7 @@ template&lt;typename Mapping &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a></li>
-    <li class="footer">Generated on Mon May 23 2022 14:49:00 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue May 24 2022 06:55:37 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -111,6 +111,7 @@ $(document).ready(function(){initNavTree('functions_vars.html',''); initResizabl
 , <a class="el" href="structllama_1_1mapping_1_1One.html#a323f4c20f6ed55034d9a0082759ee316">llama::mapping::One&lt; TArrayExtents, TRecordDim, AlignAndPad, FlattenRecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1SoA.html#a2487c810f21acdd1405ffb03183b2657">llama::mapping::SoA&lt; TArrayExtents, TRecordDim, SeparateBuffers, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Split.html#acee2ab5c3ff2c87c61f8a5ffe2e3ce47">llama::mapping::Split&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1Trace.html#a6c94db7c244e79bcf3a8f81483d6bc9c">llama::mapping::Trace&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#add630d751b504ff1e133ae1188d6016b">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
 </li>
 <li>byteHits
@@ -145,9 +146,6 @@ $(document).ready(function(){initNavTree('functions_vars.html',''); initResizabl
 
 
 <h3><a id="index_f"></a>- f -</h3><ul>
-<li>fieldHits
-: <a class="el" href="structllama_1_1mapping_1_1Trace.html#acb9c47d9f7fa01e71fccd3d58167f53b">llama::mapping::Trace&lt; Mapping &gt;</a>
-</li>
 <li>flatIndex
 : <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimInOrder.html#a6a14d9a8d0a41d707e657ed142a29c85">llama::mapping::FlattenRecordDimInOrder&lt; RecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimSorted.html#a120c165a35e9f9b39343a5b850836f88">llama::mapping::FlattenRecordDimSorted&lt; RecordDim, Less &gt;</a>
@@ -168,6 +166,9 @@ $(document).ready(function(){initNavTree('functions_vars.html',''); initResizabl
 </li>
 <li>mapping2
 : <a class="el" href="structllama_1_1mapping_1_1Split.html#ac8f0841cd14873d74c7aee30d0c4b922">llama::mapping::Split&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
+</li>
+<li>memLocsComputed
+: <a class="el" href="structllama_1_1mapping_1_1AccessCounts.html#a7cb54709b1b75556d89b0d62391f9475">llama::mapping::AccessCounts&lt; CountType &gt;</a>
 </li>
 <li>mergedFunctors
 : <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#a4361d3fef8c59d58c37bdeb5fb209cd8">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
@@ -203,9 +204,6 @@ $(document).ready(function(){initNavTree('functions_vars.html',''); initResizabl
 <li>parentView
 : <a class="el" href="structllama_1_1VirtualView.html#a0d668503865e6f8b8eba50f879ffc851">llama::VirtualView&lt; TStoredParentView &gt;</a>
 </li>
-<li>printOnDestruction
-: <a class="el" href="structllama_1_1mapping_1_1Trace.html#a0a1716bb80ec5379e3d05a1eac9c4544">llama::mapping::Trace&lt; Mapping &gt;</a>
-</li>
 </ul>
 
 
@@ -223,6 +221,9 @@ $(document).ready(function(){initNavTree('functions_vars.html',''); initResizabl
 <li>rank_static
 : <a class="el" href="structllama_1_1ArrayExtents.html#a83c3ee94b8e46a4bfcdaf890b475db37">llama::ArrayExtents&lt; T, Sizes &gt;</a>
 , <a class="el" href="structllama_1_1ArrayExtents_3_01T_01_4.html#aa321f9cdaa14f78ecd89d59a17378997">llama::ArrayExtents&lt; T &gt;</a>
+</li>
+<li>reads
+: <a class="el" href="structllama_1_1mapping_1_1AccessCounts.html#a6ba565a36cc065f5c7a2bbaf8057d72a">llama::mapping::AccessCounts&lt; CountType &gt;</a>
 </li>
 <li>resultTree
 : <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#a05de6e64a1ae1d70c6ee6dd7e8387636">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
@@ -268,12 +269,19 @@ $(document).ready(function(){initNavTree('functions_vars.html',''); initResizabl
 : <a class="el" href="structllama_1_1Iterator.html#a6d5bad87b068fd6786c1c8828bb3367f">llama::Iterator&lt; View &gt;</a>
 </li>
 </ul>
+
+
+<h3><a id="index_w"></a>- w -</h3><ul>
+<li>writes
+: <a class="el" href="structllama_1_1mapping_1_1AccessCounts.html#aaaef9ac789ae6c8d8203b93eeb9d9800">llama::mapping::AccessCounts&lt; CountType &gt;</a>
+</li>
+</ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon May 23 2022 14:49:00 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue May 24 2022 06:55:37 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

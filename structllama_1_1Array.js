@@ -3,6 +3,7 @@ var structllama_1_1Array =
     [ "value_type", "structllama_1_1Array.html#a0774edd854887549deb6cd3b7c606af8", null ],
     [ "begin", "structllama_1_1Array.html#a23daa97b399455f659f57512aaf59eb2", null ],
     [ "begin", "structllama_1_1Array.html#ac650608d5cae226a669b00005e6a7c2c", null ],
+    [ "empty", "structllama_1_1Array.html#a8fe388fdeca8ea27485333ff00b8b1f5", null ],
     [ "end", "structllama_1_1Array.html#a84bc834840cc6b3ff49a405326fd729a", null ],
     [ "end", "structllama_1_1Array.html#a66793ca523fda5798f6173d608621643", null ],
     [ "get", "structllama_1_1Array.html#ae5db7865aabd4d3174462fc7a818fe73", null ],

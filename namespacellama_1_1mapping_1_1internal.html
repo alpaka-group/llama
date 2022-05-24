@@ -179,6 +179,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a088d9be1b205572462914646311d2e2e"><td class="memTemplParams" colspan="2">template&lt;typename... Fields, typename... RCs&gt; </td></tr>
 <tr class="memitem:a088d9be1b205572462914646311d2e2e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a088d9be1b205572462914646311d2e2e">partitionRecordDim</a> (<a class="el" href="structllama_1_1Record.html">Record</a>&lt; Fields... &gt;, boost::mp11::mp_list&lt; RCs... &gt;)</td></tr>
 <tr class="separator:a088d9be1b205572462914646311d2e2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace4293b90c407582ad96f531c05c19b5"><td class="memTemplParams" colspan="2">template&lt;typename CountType &gt; </td></tr>
+<tr class="memitem:ace4293b90c407582ad96f531c05c19b5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#ace4293b90c407582ad96f531c05c19b5">atomicInc</a> (CountType &amp;i)</td></tr>
+<tr class="separator:ace4293b90c407582ad96f531c05c19b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -386,6 +389,36 @@ template&lt;typename RecordDim &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="ace4293b90c407582ad96f531c05c19b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace4293b90c407582ad96f531c05c19b5">&#9670;&nbsp;</a></span>atomicInc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename CountType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void llama::mapping::internal::atomicInc </td>
+          <td>(</td>
+          <td class="paramtype">CountType &amp;&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00018">18</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a0b646068d34ea7c565e412d470de2abc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0b646068d34ea7c565e412d470de2abc">&#9670;&nbsp;</a></span>integBits() <span class="overload">[1/2]</span></h2>
 
@@ -643,7 +676,7 @@ template&lt;typename RC , typename RecordCoordForMapping1 &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Mon May 23 2022 14:49:00 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue May 24 2022 06:55:37 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

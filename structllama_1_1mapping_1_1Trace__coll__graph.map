@@ -1,6 +1,4 @@
-<map id="llama::mapping::Trace&lt; Mapping &gt;" name="llama::mapping::Trace&lt; Mapping &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="5,213,172,255"/>
-<area shape="rect" id="node2" title=" " alt="" coords="28,109,107,136"/>
-<area shape="rect" id="node3" title=" " alt="" coords="131,95,347,151"/>
-<area shape="rect" id="node4" title=" " alt="" coords="144,5,335,32"/>
+<map id="llama::mapping::Trace&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt;" name="llama::mapping::Trace&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="5,80,263,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="95,5,173,32"/>
 </map>

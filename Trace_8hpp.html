@@ -84,15 +84,17 @@ $(document).ready(function(){initNavTree('Trace_8hpp.html',''); initResizable();
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">Trace.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="Common_8hpp_source.html">Common.hpp</a>&quot;</code><br />
-<code>#include &lt;array&gt;</code><br />
 <code>#include &lt;atomic&gt;</code><br />
+<code>#include &lt;cstdio&gt;</code><br />
 <code>#include &lt;iostream&gt;</code><br />
+<code>#include &lt;boost/atomic/atomic_ref.hpp&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for Trace.hpp:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -100,25 +102,27 @@ $(document).ready(function(){initNavTree('Trace_8hpp.html',''); initResizable();
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="Trace_8hpp__incl.png" border="0" usemap="#_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2Trace_8hpp" alt=""/></div>
 <map name="_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2Trace_8hpp" id="_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2Trace_8hpp">
-<area shape="rect" title=" " alt="" coords="768,5,984,61"/>
-<area shape="rect" href="Common_8hpp.html" title=" " alt="" coords="669,109,779,136"/>
-<area shape="rect" title=" " alt="" coords="676,333,732,360"/>
-<area shape="rect" title=" " alt="" coords="784,259,864,285"/>
-<area shape="rect" title=" " alt="" coords="939,109,1005,136"/>
-<area shape="rect" href="Core_8hpp.html" title=" " alt="" coords="473,184,565,211"/>
-<area shape="rect" title=" " alt="" coords="691,184,757,211"/>
-<area shape="rect" href="ArrayExtents_8hpp.html" title=" " alt="" coords="73,259,207,285"/>
-<area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="373,333,456,360"/>
-<area shape="rect" title=" " alt="" coords="206,333,298,360"/>
-<area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="283,259,416,285"/>
-<area shape="rect" title=" " alt="" coords="491,259,677,285"/>
-<area shape="rect" title=" " alt="" coords="701,259,760,285"/>
-<area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="99,333,181,360"/>
-<area shape="rect" title=" " alt="" coords="16,333,75,360"/>
-<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="5,408,104,435"/>
-<area shape="rect" title=" " alt="" coords="237,408,313,435"/>
-<area shape="rect" title=" " alt="" coords="129,408,183,435"/>
-<area shape="rect" title=" " alt="" coords="351,408,478,435"/>
+<area shape="rect" title=" " alt="" coords="620,5,836,61"/>
+<area shape="rect" href="Common_8hpp.html" title=" " alt="" coords="387,117,496,143"/>
+<area shape="rect" title=" " alt="" coords="691,273,771,300"/>
+<area shape="rect" title=" " alt="" coords="695,117,761,143"/>
+<area shape="rect" title=" " alt="" coords="785,117,847,143"/>
+<area shape="rect" title=" " alt="" coords="871,109,1027,151"/>
+<area shape="rect" href="Core_8hpp.html" title=" " alt="" coords="395,199,487,225"/>
+<area shape="rect" title=" " alt="" coords="304,199,371,225"/>
+<area shape="rect" href="ArrayExtents_8hpp.html" title=" " alt="" coords="531,273,666,300"/>
+<area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="212,348,295,375"/>
+<area shape="rect" title=" " alt="" coords="450,348,542,375"/>
+<area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="323,273,456,300"/>
+<area shape="rect" title=" " alt="" coords="29,273,216,300"/>
+<area shape="rect" title=" " alt="" coords="240,273,299,300"/>
+<area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="649,348,732,375"/>
+<area shape="rect" title=" " alt="" coords="567,348,625,375"/>
+<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="591,423,689,449"/>
+<area shape="rect" title=" " alt="" coords="431,423,507,449"/>
+<area shape="rect" title=" " alt="" coords="714,423,769,449"/>
+<area shape="rect" title=" " alt="" coords="190,423,317,449"/>
+<area shape="rect" title=" " alt="" coords="319,348,375,375"/>
 </map>
 </div>
 </div>
@@ -126,7 +130,9 @@ $(document).ready(function(){initNavTree('Trace_8hpp.html',''); initResizable();
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace&lt; Mapping &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AccessCounts.html">llama::mapping::AccessCounts&lt; CountType &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html">llama::mapping::Trace&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -135,6 +141,14 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacellama_1_1mapping"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html">llama::mapping</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacellama_1_1mapping_1_1internal"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html">llama::mapping::internal</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ace4293b90c407582ad96f531c05c19b5"><td class="memTemplParams" colspan="2">template&lt;typename CountType &gt; </td></tr>
+<tr class="memitem:ace4293b90c407582ad96f531c05c19b5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#ace4293b90c407582ad96f531c05c19b5">llama::mapping::internal::atomicInc</a> (CountType &amp;i)</td></tr>
+<tr class="separator:ace4293b90c407582ad96f531c05c19b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -142,7 +156,7 @@ Namespaces</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="Trace_8hpp.html">Trace.hpp</a></li>
-    <li class="footer">Generated on Mon May 23 2022 14:48:59 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue May 24 2022 06:55:37 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

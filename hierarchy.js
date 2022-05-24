@@ -1,5 +1,6 @@
 var hierarchy =
 [
+    [ "llama::mapping::AccessCounts< CountType >", "structllama_1_1mapping_1_1AccessCounts.html", null ],
     [ "llama::bloballoc::AlignedAllocator< T, Alignment >", "structllama_1_1bloballoc_1_1AlignedAllocator.html", null ],
     [ "llama::Array< T, N >", "structllama_1_1Array.html", null ],
     [ "llama::Array< BlobType, Mapping::blobCount >", "structllama_1_1Array.html", null ],
@@ -121,7 +122,7 @@ var hierarchy =
     [ "llama::mapping::internal::MakeUnsigned< bool >", "structllama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01bool_01_4.html", null ],
     [ "Mapping", null, [
       [ "llama::mapping::Heatmap< Mapping, CountType >", "structllama_1_1mapping_1_1Heatmap.html", null ],
-      [ "llama::mapping::Trace< Mapping >", "structllama_1_1mapping_1_1Trace.html", null ]
+      [ "llama::mapping::Trace< Mapping, CountType, MyCodeHandlesProxyReferences >", "structllama_1_1mapping_1_1Trace.html", null ]
     ] ],
     [ "llama::mapping::tree::internal::MergeFunctors< Tree, TreeOperationList >", "structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors.html", null ],
     [ "llama::mapping::tree::internal::MergeFunctors< BasicTree, TreeOperationList >", "structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors.html", null ],
