@@ -3,7 +3,10 @@
   "name": "llama",
   "version": "0.5.0",
   "dependencies": [
-    "alpaka",
+    {
+      "name": "alpaka",
+      "version>=": "0.9.0#1"
+    },
     "boost-atomic",
     "boost-container",
     "boost-core",
@@ -17,6 +20,10 @@
     "catch2",
     "fmt",
     "tinyobjloader",
-    "xsimd"
-  ]
+    {
+      "name": "xsimd",
+      "version>=": "9.0.1"
+    }
+  ],
+  "builtin-baseline": "f14984af3738e69f197bf0e647a8dca12de92996"
 }
