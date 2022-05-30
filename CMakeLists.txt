@@ -24,6 +24,7 @@ add_custom_target("llamaIde" SOURCES ${llamaSources})
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/include/llama" FILES ${llamaSources})
 
 # tests
+option(BUILD_TESTING "" OFF)
 include(CTest)
 if (BUILD_TESTING)
 	# get Catch2 v3, which we must build from source with the same C++ standard as the tests
@@ -74,7 +75,7 @@ if (BUILD_TESTING)
 endif()
 
 # examples
-option(LLAMA_BUILD_EXAMPLES "Building (and installing) the examples" ON)
+option(LLAMA_BUILD_EXAMPLES "Building (and installing) the examples" OFF)
 if (LLAMA_BUILD_EXAMPLES)
 	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
