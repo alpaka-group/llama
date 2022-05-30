@@ -86,7 +86,7 @@ TEST_CASE("computedprop")
     auto mapping = AoSWithComputedNormal<decltype(extents), Triangle>{extents};
 
     STATIC_REQUIRE(mapping.blobCount == 1);
-    CHECK(mapping.blobSize(0) == 10 * 12 * sizeof(double));
+    CHECK(mapping.blobSize(0) == sizeof(double) * 10 * 12);
 
     auto view = llama::allocViewUninitialized(mapping);
 

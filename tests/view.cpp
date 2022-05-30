@@ -212,7 +212,7 @@ TEST_CASE("view.iteration-and-access")
             SetZeroFunctor<decltype(view(x, y))> szf{view(x, y)};
             llama::forEachLeafCoord<Particle>(szf, llama::RecordCoord<0, 0>{});
             llama::forEachLeafCoord<Particle>(szf, tag::Vel{});
-            view({x, y}) = double(x + y) / double(extents[0] + extents[1]);
+            view({x, y}) = static_cast<double>(x + y) / static_cast<double>(extents[0] + extents[1]);
         }
 
     double sum = 0.0;

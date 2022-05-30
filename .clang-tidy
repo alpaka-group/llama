@@ -7,10 +7,12 @@
 # -readability-static-accessed-through-instance # flags threadIdx/blockIdx in CUDA code
 # -cert-err58-cpp # errors in Catch2
 # -fuchsia-statically-constructed-objects # too much noise with Catch2
+# -bugprone-easily-swappable-parameters # too noisy
 Checks: >
     *,
     -bugprone-exception-escape,
     -bugprone-forward-declaration-namespace,
+    -bugprone-easily-swappable-parameters,
     -cert-err58-cpp,
     -cert-msc32-c,
     -cert-msc51-cpp,
@@ -46,7 +48,10 @@ Checks: >
     -readability-uppercase-literal-suffix,
     -readability-function-cognitive-complexity,
     -readability-static-accessed-through-instance,
+    -readability-identifier-length,
     -altera-struct-pack-align,
+    -altera-unroll-loops,
+    -altera-id-dependent-backward-branch,
     -misc-no-recursion,
     -llvm-header-guard,
     -cppcoreguidelines-macro-usage,

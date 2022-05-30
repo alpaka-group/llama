@@ -8,6 +8,7 @@
 #include <boost/container/static_vector.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <cmath>
+#include <cstddef>
 #include <deque>
 #include <filesystem>
 #include <fstream>
@@ -326,12 +327,12 @@ namespace
             //        "Image " + filename.string() + " does not have 3 channels but " + std::to_string(comp));
             w = x;
             h = y;
-            pixels.resize(w * h);
-            std::memcpy(pixels.data(), data, w * h * 3);
+            pixels.resize(std::size_t{w} * h);
+            std::memcpy(pixels.data(), data, std::size_t{w} * h * 3);
             stbi_image_free(data);
         }
 
-        Image(unsigned int width, unsigned int height) : w(width), h(height), pixels(width * height)
+        Image(unsigned int width, unsigned int height) : w(width), h(height), pixels(std::size_t{width} * height)
         {
         }
 

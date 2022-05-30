@@ -114,8 +114,8 @@ __global__ void updateSM(View particles)
         return llama::View{sharedMapping, sharedMems};
     }();
 
-    const auto ti = threadIdx.x + blockIdx.x * blockDim.x;
-    const auto tbi = blockIdx.x;
+    const int ti = static_cast<int>(threadIdx.x + blockIdx.x * blockDim.x);
+    const int tbi = static_cast<int>(blockIdx.x);
 
     llama::One<Particle> pi = particles(ti);
     for(int blockOffset = 0; blockOffset < PROBLEM_SIZE; blockOffset += SHARED_ELEMENTS_PER_BLOCK)
@@ -237,17 +237,17 @@ try
     watch.printAndReset("alloc");
 
     std::default_random_engine engine;
-    std::normal_distribution<FP> distribution(FP(0), FP(1));
+    std::normal_distribution<FP> distribution(FP{0}, FP{1});
     for(int i = 0; i < PROBLEM_SIZE; ++i)
     {
         llama::One<Particle> p;
         p(tag::Pos(), tag::X()) = distribution(engine);
         p(tag::Pos(), tag::Y()) = distribution(engine);
         p(tag::Pos(), tag::Z()) = distribution(engine);
-        p(tag::Vel(), tag::X()) = distribution(engine) / FP(10);
-        p(tag::Vel(), tag::Y()) = distribution(engine) / FP(10);
-        p(tag::Vel(), tag::Z()) = distribution(engine) / FP(10);
-        p(tag::Mass()) = distribution(engine) / FP(100);
+        p(tag::Vel(), tag::X()) = distribution(engine) / FP{10};
+        p(tag::Vel(), tag::Y()) = distribution(engine) / FP{10};
+        p(tag::Vel(), tag::Z()) = distribution(engine) / FP{10};
+        p(tag::Mass()) = distribution(engine) / FP{100};
         hostView(i) = p;
     }
     if constexpr(TRACE)
@@ -407,7 +407,7 @@ namespace manual
         watch.printAndReset("alloc");
 
         std::default_random_engine engine;
-        std::normal_distribution<FP> distribution(FP(0), FP(1));
+        std::normal_distribution<FP> distribution(FP{0}, FP{1});
         for(int i = 0; i < PROBLEM_SIZE; ++i)
         {
             hostPositions[i].x = distribution(engine);
