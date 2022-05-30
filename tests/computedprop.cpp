@@ -1,5 +1,6 @@
 #include "common.hpp"
 
+#include <catch2/catch_approx.hpp>
 #include <numeric>
 
 namespace
@@ -102,9 +103,9 @@ TEST_CASE("computedprop")
     const auto nx = view(5u)(Normal{}, X{});
     const auto ny = view(5u)(Normal{}, Y{});
     const auto nz = view(5u)(Normal{}, Z{});
-    CHECK(nx == Approx(0.0f));
-    CHECK(ny == Approx(0.0f));
-    CHECK(nz == Approx(1.0f));
+    CHECK(nx == Catch::Approx(0.0f));
+    CHECK(ny == Catch::Approx(0.0f));
+    CHECK(nz == Catch::Approx(1.0f));
 }
 
 namespace

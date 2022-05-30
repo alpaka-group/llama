@@ -1,5 +1,6 @@
 #include "common.hpp"
 
+#include <catch2/catch_approx.hpp>
 #include <cmath>
 #include <limits>
 #include <random>
@@ -166,7 +167,7 @@ TEST_CASE("mapping.BitPackedFloatSoA.ReducedPrecisionComputation")
     }
 
     for(auto i = 0; i < N; i++)
-        CHECK(view(i)(tag::Z{}) == Approx(packedView(i)(tag::Z{})));
+        CHECK(view(i)(tag::Z{}) == Catch::Approx(packedView(i)(tag::Z{})));
 }
 
 TEST_CASE("mapping.BitPackedFloatSoA.Size")
