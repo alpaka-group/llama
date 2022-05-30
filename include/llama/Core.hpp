@@ -422,11 +422,10 @@ namespace llama
             using namespace boost::mp11;
 
             std::size_t maxAlign = 0;
-            mp_for_each<mp_transform<mp_identity, TypeList>>([&](auto e) constexpr
-                                                             {
-                                                                 using T = typename decltype(e)::type;
-                                                                 maxAlign = std::max(maxAlign, alignof(T));
-                                                             });
+            mp_for_each<mp_transform<mp_identity, TypeList>>([&](auto e) constexpr {
+                using T = typename decltype(e)::type;
+                maxAlign = std::max(maxAlign, alignof(T));
+            });
             return maxAlign;
         }
     } // namespace internal
@@ -466,17 +465,16 @@ namespace llama
 
             std::size_t size = 0;
             std::size_t maxAlign = 0;
-            mp_for_each<mp_transform<mp_identity, TypeList>>([&](auto e) constexpr
-                                                             {
-                                                                 using T = typename decltype(e)::type;
-                                                                 if constexpr(Align)
-                                                                 {
-                                                                     size = roundUpToMultiple(size, alignof(T));
-                                                                     maxAlign = std::max(maxAlign, alignof(T));
-                                                                 }
-                                                                 // NOLINTNEXTLINE(readability-misleading-indentation)
-                                                                 size += sizeof(T);
-                                                             });
+            mp_for_each<mp_transform<mp_identity, TypeList>>([&](auto e) constexpr {
+                using T = typename decltype(e)::type;
+                if constexpr(Align)
+                {
+                    size = roundUpToMultiple(size, alignof(T));
+                    maxAlign = std::max(maxAlign, alignof(T));
+                }
+                // NOLINTNEXTLINE(readability-misleading-indentation)
+                size += sizeof(T);
+            });
 
             // final padding, so next struct can start right away
             if constexpr(Align && IncludeTailPadding)
