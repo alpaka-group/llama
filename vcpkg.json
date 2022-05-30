@@ -1,0 +1,22 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
+  "name": "llama",
+  "version": "0.5.0",
+  "dependencies": [
+    "alpaka",
+    "boost-atomic",
+    "boost-container",
+    "boost-core",
+    "boost-functional",
+    "boost-mp11",
+    "boost-smart-ptr",
+    {
+      "name": "boost-iostreams",
+      "default-features": false
+    },
+    "catch2",
+    "fmt",
+    "tinyobjloader",
+    "xsimd"
+  ]
+}
