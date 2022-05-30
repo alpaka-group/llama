@@ -17,7 +17,7 @@ env:
 
 jobs:
   clang-format:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v2
     - uses: DoozyX/clang-format-lint-action@v0.13
@@ -27,7 +27,7 @@ jobs:
         clangFormatVersion: 13
 
   clang-tidy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     env:
       CXX: clang++-14
     steps:
@@ -35,7 +35,7 @@ jobs:
     - name: install clang-14
       run: |
         wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
-        sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-14 main'
+        sudo add-apt-repository 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-14 main'
         sudo apt update
         sudo apt install clang-14 libomp-14-dev clang-tidy-14
     - name: vcpkg install dependencies
@@ -64,7 +64,7 @@ jobs:
         run-clang-tidy-14 -header-filter='^((?!/thirdparty/).)*$' -extra-arg=--no-cuda-version-check -extra-arg=-nocudalib -extra-arg=-Wno-unused-command-line-argument '^(?!.*'$PWD').*$'
 
   coverage:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     env:
       CXX: g++
     steps:
@@ -104,7 +104,7 @@ jobs:
         ./codecov
 
   amalgamation:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v2
     - name: create-single-header.sh
@@ -118,7 +118,7 @@ jobs:
         if-no-files-found: error
 
   build-ubuntu:
-    runs-on: ${{ (matrix.os != null) && matrix.os || 'ubuntu-latest' }}
+    runs-on: ${{ matrix.os || 'ubuntu-22.04' }}
     env:
       CXX: ${{ matrix.cxx }}
     name: ${{ matrix.name }}
@@ -141,48 +141,37 @@ jobs:
             cxx: g++-10
           - name: build-ubuntu-gcc11
             cxx: g++-11
-            install_extra: g++-11
-            add_toolchain_ppa: true
           - name: build-ubuntu-gcc11-cuda11.4
             cxx: g++-11
-            install_extra: g++-11
             cuda_url: https://developer.download.nvidia.com/compute/cuda/11.4.4/local_installers/cuda_11.4.4_470.82.01_linux.run
-            add_toolchain_ppa: true
           - name: build-ubuntu-gcc11-cuda11.5
             cxx: g++-11
-            install_extra: g++-11
             cuda_url: https://developer.download.nvidia.com/compute/cuda/11.5.2/local_installers/cuda_11.5.2_495.29.05_linux.run
           - name: build-ubuntu-gcc11-cuda11.6
             cxx: g++-11
-            install_extra: g++-11
-            add_toolchain_repo: true
             cuda_url: https://developer.download.nvidia.com/compute/cuda/11.6.2/local_installers/cuda_11.6.2_510.47.03_linux.run
           - name: build-ubuntu-gcc11-cuda11.7
             cxx: g++-11
-            install_extra: g++-11
-            add_toolchain_repo: true
             cuda_url: https://developer.download.nvidia.com/compute/cuda/11.7.0/local_installers/cuda_11.7.0_515.43.04_linux.run
           - name: build-ubuntu-gcc12
-            os: ubuntu-22.04
             cxx: g++-12
             install_extra: g++-12
           - name: build-ubuntu-clang10
+            os: ubuntu-20.04 # clang-10 is not available on ubuntu-22.04
             cxx: clang++-10
+            install_extra: clang-10 libomp-10-dev
           - name: build-ubuntu-clang11
             cxx: clang++-11
-            install_extra: clang-11
+            install_extra: clang-11 libomp-11-dev
           - name: build-ubuntu-clang12
             cxx: clang++-12
             install_extra: clang-12 libomp-12-dev
-            add_llvm_repo: true
           - name: build-ubuntu-clang13
             cxx: clang++-13
             install_extra: clang-13 libomp-13-dev
-            add_llvm_repo: true
           - name: build-ubuntu-clang14
             cxx: clang++-14
             install_extra: clang-14 libomp-14-dev
-            add_llvm_repo: true
           - name: build-ubuntu-icpx
             cxx: icpx
             install_oneapi: true
@@ -198,9 +187,9 @@ jobs:
         if: matrix.add_llvm_repo
         run: |
           wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
-          sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-12 main'
-          sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-13 main'
-          sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-14 main'
+          sudo add-apt-repository 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-12 main'
+          sudo add-apt-repository 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-13 main'
+          sudo add-apt-repository 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-14 main'
       - name: install OneAPI
         if: matrix.install_oneapi
         run: |
@@ -218,14 +207,14 @@ jobs:
           # vcpkg fails to build with Intel compilers
           if [ ${{ matrix.install_oneapi }} ]; then unset CXX; fi
           vcpkg install $VCPKG_INSTALL_LIST
-      - name: download CUDA 11
+      - name: download CUDA
         if: matrix.cuda_url
         run: |
           wget --no-verbose -O cuda_installer.run ${{ matrix.cuda_url }}
-      - name: install CUDA 11
+      - name: install CUDA
         if: matrix.cuda_url
         run: |
-          sudo sh cuda_installer.run --silent --toolkit
+          sudo sh cuda_installer.run --silent --toolkit --override
       - name: install alpaka
         run: |
           if [ ${{ matrix.install_oneapi }} ]; then source /opt/intel/oneapi/setvars.sh; fi
