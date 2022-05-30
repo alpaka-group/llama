@@ -123,17 +123,17 @@ void run(std::ostream& plotFile)
     }
 
     std::default_random_engine engine; // NOLINT(readability-misleading-indentation)
-    std::normal_distribution<FP> dist(FP(0), FP(1));
+    std::normal_distribution<FP> dist(FP{0}, FP{1});
     for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
     {
         auto p = particles(i);
         p(tag::Pos{}, tag::X{}) = dist(engine);
         p(tag::Pos{}, tag::Y{}) = dist(engine);
         p(tag::Pos{}, tag::Z{}) = dist(engine);
-        p(tag::Vel{}, tag::X{}) = dist(engine) / FP(10);
-        p(tag::Vel{}, tag::Y{}) = dist(engine) / FP(10);
-        p(tag::Vel{}, tag::Z{}) = dist(engine) / FP(10);
-        p(tag::Mass{}) = dist(engine) / FP(100);
+        p(tag::Vel{}, tag::X{}) = dist(engine) / FP{10};
+        p(tag::Vel{}, tag::Y{}) = dist(engine) / FP{10};
+        p(tag::Vel{}, tag::Z{}) = dist(engine) / FP{10};
+        p(tag::Mass{}) = dist(engine) / FP{100};
     }
 
     double sumUpdate = 0;

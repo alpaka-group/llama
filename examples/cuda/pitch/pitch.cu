@@ -33,9 +33,9 @@ __global__ void init(View view, ArrayExtents extents)
     if(y >= extents[0] || x >= extents[1])
         return;
 
-    view(y, x).r = x * 255 / static_cast<float>(blockDim.x * gridDim.x);
-    view(y, x).g = y * 255 / static_cast<float>(blockDim.y * gridDim.y);
-    view(y, x).b = (threadIdx.x + threadIdx.y) * 255 / static_cast<float>(blockDim.x + blockDim.y);
+    view(y, x).r = static_cast<float>(x) * 255 / static_cast<float>(blockDim.x * gridDim.x);
+    view(y, x).g = static_cast<float>(y) * 255 / static_cast<float>(blockDim.y * gridDim.y);
+    view(y, x).b = static_cast<float>(threadIdx.x + threadIdx.y) * 255 / static_cast<float>(blockDim.x + blockDim.y);
 }
 
 namespace llamaex
@@ -143,8 +143,8 @@ try
         llama::divCeil(static_cast<unsigned>(extents[0]), blockDim.y),
         1};
 
-    std::vector<RGB> host1(llama::product(extents));
-    std::vector<RGB> host2(llama::product(extents));
+    auto host1 = std::vector<RGB>(llama::product(extents));
+    auto host2 = std::vector<RGB>(llama::product(extents));
     {
         std::byte* mem = nullptr;
         std::size_t rowPitch = 0;

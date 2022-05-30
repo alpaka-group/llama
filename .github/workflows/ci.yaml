@@ -30,7 +30,7 @@ jobs:
   clang-tidy:
     runs-on: ubuntu-latest
     env:
-      CXX: clang++-12
+      CXX: clang++-14
     steps:
     - uses: actions/checkout@v2
     - name: install boost
@@ -40,12 +40,12 @@ jobs:
           tar -xf $BOOST_ARCHIVE
           rm $BOOST_ARCHIVE
           mv boost_${BOOST_VERSION//./_} "${BOOST_ROOT}"
-    - name: install clang-12
+    - name: install clang-14
       run: |
         wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
-        sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-12 main'
+        sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-14 main'
         sudo apt update
-        sudo apt install clang-12 libomp-12-dev clang-tidy-12
+        sudo apt install clang-14 libomp-14-dev clang-tidy-14
     - name: vcpkg install dependencies
       run: |
         vcpkg install catch2 fmt vc tinyobjloader
@@ -62,7 +62,7 @@ jobs:
         cd build
         cmake .. -DBUILD_TESTING=ON -DLLAMA_BUILD_EXAMPLES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=$CONFIG -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON -DALPAKA_ACC_CPU_DISABLE_ATOMIC_REF=ON -DALPAKA_CXX_STANDARD=17 -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
         sed -i 's/\(-forward-unknown-to-host-compiler\|--generate-code=arch=[^ ]\+\|--expt-extended-lambda\|--expt-relaxed-constexpr\|--use_fast_math\)//g' compile_commands.json # remove NVCC specific flags which clang cannot handle
-        run-clang-tidy-12 -header-filter='^((?!/thirdparty/).)*$' -extra-arg=--no-cuda-version-check -extra-arg=-nocudalib '^(?!.*'$PWD').*$'
+        run-clang-tidy-14 -header-filter='^((?!/thirdparty/).)*$' -extra-arg=--no-cuda-version-check -extra-arg=-nocudalib -extra-arg=-Wno-unused-command-line-argument '^(?!.*'$PWD').*$'
 
   coverage:
     runs-on: ubuntu-latest

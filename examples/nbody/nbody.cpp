@@ -178,17 +178,17 @@ namespace usellama
         watch.printAndReset("alloc");
 
         std::default_random_engine engine;
-        std::normal_distribution<FP> dist(FP(0), FP(1));
+        std::normal_distribution<FP> dist(FP{0}, FP{1});
         for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
         {
             auto p = particles(i);
             p(tag::Pos{}, tag::X{}) = dist(engine);
             p(tag::Pos{}, tag::Y{}) = dist(engine);
             p(tag::Pos{}, tag::Z{}) = dist(engine);
-            p(tag::Vel{}, tag::X{}) = dist(engine) / FP(10);
-            p(tag::Vel{}, tag::Y{}) = dist(engine) / FP(10);
-            p(tag::Vel{}, tag::Z{}) = dist(engine) / FP(10);
-            p(tag::Mass{}) = dist(engine) / FP(100);
+            p(tag::Vel{}, tag::X{}) = dist(engine) / FP{10};
+            p(tag::Vel{}, tag::Y{}) = dist(engine) / FP{10};
+            p(tag::Vel{}, tag::Z{}) = dist(engine) / FP{10};
+            p(tag::Mass{}) = dist(engine) / FP{100};
         }
         if constexpr(TRACE)
             particles.mapping().fieldHits(particles.storageBlobs) = {};
@@ -324,16 +324,16 @@ namespace manualAoS
         watch.printAndReset("alloc");
 
         std::default_random_engine engine;
-        std::normal_distribution<FP> dist(FP(0), FP(1));
+        std::normal_distribution<FP> dist(FP{0}, FP{1});
         for(auto& p : particles)
         {
             p.pos.x = dist(engine);
             p.pos.y = dist(engine);
             p.pos.z = dist(engine);
-            p.vel.x = dist(engine) / FP(10);
-            p.vel.y = dist(engine) / FP(10);
-            p.vel.z = dist(engine) / FP(10);
-            p.mass = dist(engine) / FP(100);
+            p.vel.x = dist(engine) / FP{10};
+            p.vel.y = dist(engine) / FP{10};
+            p.vel.z = dist(engine) / FP{10};
+            p.mass = dist(engine) / FP{100};
         }
         watch.printAndReset("init");
 
@@ -431,16 +431,16 @@ namespace manualSoA
         watch.printAndReset("alloc");
 
         std::default_random_engine engine;
-        std::normal_distribution<FP> dist(FP(0), FP(1));
+        std::normal_distribution<FP> dist(FP{0}, FP{1});
         for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
         {
             posx[i] = dist(engine);
             posy[i] = dist(engine);
             posz[i] = dist(engine);
-            velx[i] = dist(engine) / FP(10);
-            vely[i] = dist(engine) / FP(10);
-            velz[i] = dist(engine) / FP(10);
-            mass[i] = dist(engine) / FP(100);
+            velx[i] = dist(engine) / FP{10};
+            vely[i] = dist(engine) / FP{10};
+            velz[i] = dist(engine) / FP{10};
+            mass[i] = dist(engine) / FP{100};
         }
         watch.printAndReset("init");
 
@@ -608,7 +608,7 @@ namespace manualAoSoA
         watch.printAndReset("alloc");
 
         std::default_random_engine engine;
-        std::normal_distribution<FP> dist(FP(0), FP(1));
+        std::normal_distribution<FP> dist(FP{0}, FP{1});
         for(std::size_t bi = 0; bi < blocks; ++bi)
         {
             auto& block = particles[bi];
@@ -617,10 +617,10 @@ namespace manualAoSoA
                 block.pos.x[i] = dist(engine);
                 block.pos.y[i] = dist(engine);
                 block.pos.z[i] = dist(engine);
-                block.vel.x[i] = dist(engine) / FP(10);
-                block.vel.y[i] = dist(engine) / FP(10);
-                block.vel.z[i] = dist(engine) / FP(10);
-                block.mass[i] = dist(engine) / FP(100);
+                block.vel.x[i] = dist(engine) / FP{10};
+                block.vel.y[i] = dist(engine) / FP{10};
+                block.vel.z[i] = dist(engine) / FP{10};
+                block.mass[i] = dist(engine) / FP{100};
             }
         }
         watch.printAndReset("init");
@@ -823,7 +823,7 @@ namespace manualAoSoA_manualAVX
         watch.printAndReset("alloc");
 
         std::default_random_engine engine;
-        std::normal_distribution<FP> dist(FP(0), FP(1));
+        std::normal_distribution<FP> dist(FP{0}, FP{1});
         for(std::size_t bi = 0; bi < BLOCKS; ++bi)
         {
             auto& block = particles[bi];
@@ -832,10 +832,10 @@ namespace manualAoSoA_manualAVX
                 block.pos.x[i] = dist(engine);
                 block.pos.y[i] = dist(engine);
                 block.pos.z[i] = dist(engine);
-                block.vel.x[i] = dist(engine) / FP(10);
-                block.vel.y[i] = dist(engine) / FP(10);
-                block.vel.z[i] = dist(engine) / FP(10);
-                block.mass[i] = dist(engine) / FP(100);
+                block.vel.x[i] = dist(engine) / FP{10};
+                block.vel.y[i] = dist(engine) / FP{10};
+                block.vel.z[i] = dist(engine) / FP{10};
+                block.mass[i] = dist(engine) / FP{100};
             }
         }
         watch.printAndReset("init");
@@ -1090,7 +1090,7 @@ namespace manualAoSoA_Vc
         watch.printAndReset("alloc");
 
         std::default_random_engine engine;
-        std::normal_distribution<FP> dist(FP(0), FP(1));
+        std::normal_distribution<FP> dist(FP{0}, FP{1});
         for(std::size_t bi = 0; bi < BLOCKS; ++bi)
         {
             auto& block = particles[bi];
@@ -1099,10 +1099,10 @@ namespace manualAoSoA_Vc
                 block.pos.x[i] = dist(engine);
                 block.pos.y[i] = dist(engine);
                 block.pos.z[i] = dist(engine);
-                block.vel.x[i] = dist(engine) / FP(10);
-                block.vel.y[i] = dist(engine) / FP(10);
-                block.vel.z[i] = dist(engine) / FP(10);
-                block.mass[i] = dist(engine) / FP(100);
+                block.vel.x[i] = dist(engine) / FP{10};
+                block.vel.y[i] = dist(engine) / FP{10};
+                block.vel.z[i] = dist(engine) / FP{10};
+                block.mass[i] = dist(engine) / FP{100};
             }
         }
         watch.printAndReset("init");
@@ -1207,16 +1207,16 @@ namespace manualAoS_Vc
         watch.printAndReset("alloc");
 
         std::default_random_engine engine;
-        std::normal_distribution<FP> dist(FP(0), FP(1));
+        std::normal_distribution<FP> dist(FP{0}, FP{1});
         for(auto& p : particles)
         {
             p.pos.x = dist(engine);
             p.pos.y = dist(engine);
             p.pos.z = dist(engine);
-            p.vel.x = dist(engine) / FP(10);
-            p.vel.y = dist(engine) / FP(10);
-            p.vel.z = dist(engine) / FP(10);
-            p.mass = dist(engine) / FP(100);
+            p.vel.x = dist(engine) / FP{10};
+            p.vel.y = dist(engine) / FP{10};
+            p.vel.z = dist(engine) / FP{10};
+            p.mass = dist(engine) / FP{100};
         }
         watch.printAndReset("init");
 
@@ -1312,16 +1312,16 @@ namespace manualSoA_Vc
         watch.printAndReset("alloc");
 
         std::default_random_engine engine;
-        std::normal_distribution<FP> dist(FP(0), FP(1));
+        std::normal_distribution<FP> dist(FP{0}, FP{1});
         for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
         {
             posx[i] = dist(engine);
             posy[i] = dist(engine);
             posz[i] = dist(engine);
-            velx[i] = dist(engine) / FP(10);
-            vely[i] = dist(engine) / FP(10);
-            velz[i] = dist(engine) / FP(10);
-            mass[i] = dist(engine) / FP(100);
+            velx[i] = dist(engine) / FP{10};
+            vely[i] = dist(engine) / FP{10};
+            velz[i] = dist(engine) / FP{10};
+            mass[i] = dist(engine) / FP{100};
         }
         watch.printAndReset("init");
 
