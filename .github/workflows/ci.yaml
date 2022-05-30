@@ -12,7 +12,6 @@ concurrency:
 env:
   THREADS: 2
   CONFIG: RelWithDebInfo
-  VCPKG_INSTALL: "vcpkg install alpaka fmt tinyobjloader boost-mp11 boost-atomic boost-smart-ptr boost-functional boost-container boost-iostreams[core] catch2 xsimd"
 
 jobs:
   clang-format:
@@ -49,9 +48,6 @@ jobs:
     - name: install clang-15
       run: |
         sudo apt install clang-15 libomp-15-dev clang-tidy-15
-    - name: vcpkg install dependencies
-      run: |
-        eval $VCPKG_INSTALL
     - name: cmake
       run: |
         mkdir build
@@ -83,9 +79,6 @@ jobs:
     - name: install lcov
       run: |
         sudo apt install lcov
-    - name: vcpkg install dependencies
-      run: |
-        eval $VCPKG_INSTALL
     - name: cmake
       run: |
         mkdir build
@@ -122,16 +115,14 @@ jobs:
     - uses: actions/checkout@v3
     - name: create llama.hpp
       run: ./tools/create-single-header.sh
-    - name: vcpkg install dependencies
-      run: |
-        eval $VCPKG_INSTALL
+    - run: vcpkg install # installs manifest in a folder called `vcpkg_installed` next to the manifest
     - name: test llama.hpp
       run: |
         mkdir build
         cd build
         mkdir llama
         cp -p ../single-header/llama.hpp llama
-        $CXX -std=c++20 -I$VCPKG_INSTALLATION_ROOT/installed/x64-linux/include -I. ../examples/heatequation/heatequation.cpp
+        $CXX -std=c++20 -I../vcpkg_installed/x64-linux/include -I. ../examples/heatequation/heatequation.cpp
     - name: upload llama.hpp
       uses: actions/upload-artifact@v3
       with:
@@ -244,11 +235,6 @@ jobs:
         if: ${{ matrix.install_extra }}
         run: |
           sudo apt install ${{ matrix.install_extra }}
-      - name: vcpkg install dependencies
-        run: |
-          # vcpkg fails to build with Intel or nvhpc compilers
-          if [ ${{ matrix.install_oneapi }} ] || [ ${{ matrix.add_nvcpp_repo }} ]; then unset CXX; fi
-          eval $VCPKG_INSTALL
       - name: download CUDA
         if: matrix.cuda_url
         run: |
@@ -314,9 +300,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: vcpkg install dependencies
-      run: |
-        eval $VCPKG_INSTALL
     - name: cmake
       run: |
         mkdir build
@@ -347,9 +330,6 @@ jobs:
         run: |
           brew install llvm libomp pkg-config
           echo "CXX is here: $(brew --prefix llvm)/bin/clang++"
-      - name: vcpkg install dependencies
-        run: |
-          eval $VCPKG_INSTALL
       - name: cmake
         run: |
           mkdir build
