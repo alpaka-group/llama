@@ -23,6 +23,12 @@ file(GLOB_RECURSE llamaSources "${CMAKE_CURRENT_SOURCE_DIR}/include/**")
 add_custom_target("llamaIde" SOURCES ${llamaSources})
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/include/llama" FILES ${llamaSources})
 
+# default build type, see: https://www.kitware.com/cmake-and-the-default-build-type/
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+	message(STATUS "Setting build type to 'Release' as none was specified.")
+	set_property(CACHE CMAKE_BUILD_TYPE PROPERTY VALUE "Release")
+endif()
+
 # tests
 option(BUILD_TESTING "" OFF)
 include(CTest)
