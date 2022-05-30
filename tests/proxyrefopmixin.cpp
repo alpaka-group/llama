@@ -170,7 +170,7 @@ TEST_CASE("proxyrefopmixin.operator++")
     auto r = FakeProxyRef<int>{i};
     ++r;
     CHECK(r == 43);
-    ++++r;
+    ++ ++r;
     CHECK(r == 45);
 }
 

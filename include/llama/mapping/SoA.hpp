@@ -44,8 +44,9 @@ namespace llama::mapping
                 constexpr auto typeSizes = []() constexpr
                 {
                     Array<size_type, blobCount> r{};
-                    forEachLeafCoord<TRecordDim>([&r, i = 0](auto rc) mutable constexpr
-                                                 { r[i++] = sizeof(GetType<TRecordDim, decltype(rc)>); });
+                    forEachLeafCoord<TRecordDim>([&r, i = 0](auto rc) mutable constexpr {
+                        r[i++] = sizeof(GetType<TRecordDim, decltype(rc)>);
+                    });
                     return r;
                 }
                 ();
