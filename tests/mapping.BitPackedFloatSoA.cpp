@@ -165,6 +165,9 @@ TEST_CASE("mapping.BitPackedFloatSoA.ReducedPrecisionComputation")
         z = std::sqrt(z);
     }
 
+#ifdef CATCH2_V3
+    using Catch::Approx;
+#endif
     for(auto i = 0; i < N; i++)
         CHECK(view(i)(tag::Z{}) == Approx(packedView(i)(tag::Z{})));
 }

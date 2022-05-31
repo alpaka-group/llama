@@ -102,6 +102,9 @@ TEST_CASE("computedprop")
     const auto nx = view(5u)(Normal{}, X{});
     const auto ny = view(5u)(Normal{}, Y{});
     const auto nz = view(5u)(Normal{}, Z{});
+#ifdef CATCH2_V3
+    using Catch::Approx;
+#endif
     CHECK(nx == Approx(0.0f));
     CHECK(ny == Approx(0.0f));
     CHECK(nz == Approx(1.0f));

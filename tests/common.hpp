@@ -1,7 +1,13 @@
 #pragma once
 
 #include <boost/core/demangle.hpp>
-#include <catch2/catch.hpp>
+#ifdef CATCH2_V3
+#    include <catch2/catch_approx.hpp>
+#    include <catch2/catch_template_test_macros.hpp>
+#    include <catch2/catch_test_macros.hpp>
+#else
+#    include <catch2/catch.hpp>
+#endif
 #include <llama/llama.hpp>
 #include <regex>
 #include <sstream>
