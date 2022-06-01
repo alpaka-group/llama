@@ -6,6 +6,24 @@ TEST_CASE("Array.empty")
     STATIC_REQUIRE(!llama::Array{1}.empty());
 }
 
+TEST_CASE("Array.first")
+{
+    llama::Array a{1, 2, 3};
+    CHECK(a.first() == 1);
+    CHECK(std::as_const(a).first() == 1);
+    a.first() = 4;
+    CHECK(a == llama::Array{4, 2, 3});
+}
+
+TEST_CASE("Array.last")
+{
+    llama::Array a{1, 2, 3};
+    CHECK(a.last() == 3);
+    CHECK(std::as_const(a).last() == 3);
+    a.last() = 4;
+    CHECK(a == llama::Array{1, 2, 4});
+}
+
 TEST_CASE("Array.operator<<")
 {
     auto put = [](auto array)
