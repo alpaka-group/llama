@@ -65,6 +65,11 @@ namespace llama::mapping
         {
         }
 
+        template<typename... Args>
+        LLAMA_FN_HOST_ACC_INLINE explicit Trace(Args&&... innerArgs) : Mapping(std::forward<Args>(innerArgs)...)
+        {
+        }
+
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto blobSize(size_type blobIndex) const -> size_type
         {
@@ -136,7 +141,6 @@ namespace llama::mapping
         template<typename Blobs>
         LLAMA_FN_HOST_ACC_INLINE void printFieldHits(const Blobs& blobs) const
         {
-            const auto& hits = fieldHits(blobs);
 #ifdef __CUDA_ARCH__
             if constexpr(MyCodeHandlesProxyReferences)
                 printf("Trace mapping, number of accesses:\n");
