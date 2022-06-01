@@ -57,6 +57,25 @@ TEST_CASE("Heatmap.nbody")
         llama::mapping::SingleBlobSoA<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
 }
 
+TEST_CASE("Trace.ctor")
+{
+    using AE = llama::ArrayExtentsDynamic<int, 1>;
+    using Mapping = llama::mapping::AoS<AE, ParticleHeatmap>;
+
+    // mapping ctor
+    {
+        Mapping mapping{AE{42}};
+        auto trace = llama::mapping::Trace<Mapping>{mapping};
+        CHECK(trace.extents() == AE{42});
+    }
+
+    // forwarding ctor
+    {
+        auto trace = llama::mapping::Trace<Mapping>{AE{42}};
+        CHECK(trace.extents() == AE{42});
+    }
+}
+
 TEMPLATE_LIST_TEST_CASE("Trace.nbody.mem_locs_computed", "", SizeTypes)
 {
     auto run = [&](auto mapping)
