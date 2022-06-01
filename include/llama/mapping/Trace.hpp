@@ -141,6 +141,11 @@ namespace llama::mapping
         template<typename Blobs>
         LLAMA_FN_HOST_ACC_INLINE void printFieldHits(const Blobs& blobs) const
         {
+            printFieldHits(fieldHits(blobs));
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE void printFieldHits(const FieldHitsArray& hits) const
+        {
 #ifdef __CUDA_ARCH__
             if constexpr(MyCodeHandlesProxyReferences)
                 printf("Trace mapping, number of accesses:\n");
