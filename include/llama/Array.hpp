@@ -49,6 +49,26 @@ namespace llama
             return &element[N];
         }
 
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto first() -> T&
+        {
+            return element[0];
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto first() const -> const T&
+        {
+            return element[0];
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto last() -> T&
+        {
+            return element[N - 1];
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto last() const -> const T&
+        {
+            return element[N - 1];
+        }
+
         template<typename IndexType>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](IndexType&& idx) -> T&
         {
