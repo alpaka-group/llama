@@ -152,64 +152,56 @@ $(document).ready(function(){initNavTree('Proofs_8hpp_source.html',''); initResi
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        };</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordtype">bool</span> collision = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        forEachLeafCoord&lt;typename Mapping::RecordDim&gt;([&amp;](<span class="keyword">auto</span> rc) constexpr</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                                                      {</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                                                          <span class="keywordflow">if</span>(collision)</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                                                              <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                                                          <span class="keywordflow">for</span>(<span class="keyword">auto</span> ai : ArrayIndexRange{m.extents()})</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                                                          {</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                                                              <span class="keyword">using</span> Type</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                                                                  = <a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;<span class="keyword">typename</span> Mapping::RecordDim, decltype(rc)&gt;;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                                                              <span class="keyword">const</span> <span class="keyword">auto</span> [blob, offset] = m.blobNrAndOffset(ai, rc);</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                                                              <span class="keywordflow">for</span>(std::size_t b = 0; b &lt; <span class="keyword">sizeof</span>(Type); b++)</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                                                                  <span class="keywordflow">if</span>(testAndSet(blob, offset + b))</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                                                                  {</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;                                                                      collision = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                                                                      <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                                                                  }</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                                                          }</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                                                      });</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keywordflow">return</span> !collision;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    }</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="comment">// Unfortunately, this only works for smallish array dimensions, because of compiler limits on constexpr evaluation</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="comment">// depth.</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keyword">template</span>&lt;std::<span class="keywordtype">size_t</span> PieceLength, <span class="keyword">typename</span> Mapping&gt;</div>
-<div class="line"><a name="l00094"></a><span class="lineno"><a class="line" href="namespacellama.html#a32bf07b53ebc403eee401038fc95b591">   94</a></span>&#160;    constexpr <span class="keyword">auto</span> <a class="code" href="namespacellama.html#a32bf07b53ebc403eee401038fc95b591">mapsPiecewiseContiguous</a>(<span class="keyword">const</span> Mapping&amp; m) -&gt; <span class="keywordtype">bool</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    {</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keywordtype">bool</span> collision = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        forEachLeafCoord&lt;typename Mapping::RecordDim&gt;([&amp;](<span class="keyword">auto</span> rc) constexpr</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                                                      {</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                                                          std::size_t flatIndex = 0;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                                                          std::size_t lastBlob</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                                                              = std::numeric_limits&lt;std::size_t&gt;::max();</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                                                          std::size_t lastOffset</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                                                              = std::numeric_limits&lt;std::size_t&gt;::max();</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                                                          <span class="keywordflow">for</span>(<span class="keyword">auto</span> ai : <a class="code" href="structllama_1_1ArrayIndexRange.html">ArrayIndexRange</a>{m.extents()})</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                                                          {</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;                                                              <span class="keyword">using</span> Type</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;                                                                  = <a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;<span class="keyword">typename</span> Mapping::RecordDim, decltype(rc)&gt;;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                                                              <span class="keyword">const</span> <span class="keyword">auto</span> [blob, offset] = m.blobNrAndOffset(ai, rc);</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                                                              <span class="keywordflow">if</span>(flatIndex % PieceLength != 0</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                                                                 &amp;&amp; (lastBlob != blob</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                                                                     || lastOffset + <span class="keyword">sizeof</span>(Type) != offset))</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;                                                              {</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;                                                                  collision = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                                                                  <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;                                                              }</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                                                              lastBlob = blob;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;                                                              lastOffset = offset;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                                                              flatIndex++;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;                                                          }</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                                                      });</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <span class="keywordflow">return</span> !collision;</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    }</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;} <span class="comment">// namespace llama</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        forEachLeafCoord&lt;typename Mapping::RecordDim&gt;([&amp;](<span class="keyword">auto</span> rc) constexpr {</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            <span class="keywordflow">if</span>(collision)</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            <span class="keywordflow">for</span>(<span class="keyword">auto</span> ai : ArrayIndexRange{m.extents()})</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            {</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                <span class="keyword">using</span> Type = <a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;<span class="keyword">typename</span> Mapping::RecordDim, decltype(rc)&gt;;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> [blob, offset] = m.blobNrAndOffset(ai, rc);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                <span class="keywordflow">for</span>(std::size_t b = 0; b &lt; <span class="keyword">sizeof</span>(Type); b++)</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                    <span class="keywordflow">if</span>(testAndSet(blob, offset + b))</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                    {</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                        collision = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                        <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;                    }</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;            }</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        });</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordflow">return</span> !collision;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    }</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="comment">// Unfortunately, this only works for smallish array dimensions, because of compiler limits on constexpr evaluation</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="comment">// depth.</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keyword">template</span>&lt;std::<span class="keywordtype">size_t</span> PieceLength, <span class="keyword">typename</span> Mapping&gt;</div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="namespacellama.html#a32bf07b53ebc403eee401038fc95b591">   92</a></span>&#160;    constexpr <span class="keyword">auto</span> <a class="code" href="namespacellama.html#a32bf07b53ebc403eee401038fc95b591">mapsPiecewiseContiguous</a>(<span class="keyword">const</span> Mapping&amp; m) -&gt; <span class="keywordtype">bool</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    {</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keywordtype">bool</span> collision = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        forEachLeafCoord&lt;typename Mapping::RecordDim&gt;([&amp;](<span class="keyword">auto</span> rc) constexpr {</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            std::size_t flatIndex = 0;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;            std::size_t lastBlob = std::numeric_limits&lt;std::size_t&gt;::max();</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;            std::size_t lastOffset = std::numeric_limits&lt;std::size_t&gt;::max();</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            <span class="keywordflow">for</span>(<span class="keyword">auto</span> ai : <a class="code" href="structllama_1_1ArrayIndexRange.html">ArrayIndexRange</a>{m.extents()})</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            {</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                <span class="keyword">using</span> Type = <a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;<span class="keyword">typename</span> Mapping::RecordDim, decltype(rc)&gt;;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> [blob, offset] = m.blobNrAndOffset(ai, rc);</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                <span class="keywordflow">if</span>(flatIndex % PieceLength != 0 &amp;&amp; (lastBlob != blob || lastOffset + <span class="keyword">sizeof</span>(Type) != offset))</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                {</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                    collision = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;                }</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                lastBlob = blob;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                lastOffset = offset;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                flatIndex++;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;            }</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        });</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="keywordflow">return</span> !collision;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    }</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;} <span class="comment">// namespace llama</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="anamespacellama_html"><div class="ttname"><a href="namespacellama.html">llama</a></div><div class="ttdef"><b>Definition:</b> <a href="Array_8hpp_source.html#l00011">Array.hpp:11</a></div></div>
-<div class="ttc" id="anamespacellama_html_a32bf07b53ebc403eee401038fc95b591"><div class="ttname"><a href="namespacellama.html#a32bf07b53ebc403eee401038fc95b591">llama::mapsPiecewiseContiguous</a></div><div class="ttdeci">constexpr auto mapsPiecewiseContiguous(const Mapping &amp;m) -&gt; bool</div><div class="ttdef"><b>Definition:</b> <a href="Proofs_8hpp_source.html#l00094">Proofs.hpp:94</a></div></div>
+<div class="ttc" id="anamespacellama_html_a32bf07b53ebc403eee401038fc95b591"><div class="ttname"><a href="namespacellama.html#a32bf07b53ebc403eee401038fc95b591">llama::mapsPiecewiseContiguous</a></div><div class="ttdeci">constexpr auto mapsPiecewiseContiguous(const Mapping &amp;m) -&gt; bool</div><div class="ttdef"><b>Definition:</b> <a href="Proofs_8hpp_source.html#l00092">Proofs.hpp:92</a></div></div>
 <div class="ttc" id="anamespacellama_html_acdfb627d325de5ab6c18cdc842cd7350"><div class="ttname"><a href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">llama::GetType</a></div><div class="ttdeci">typename internal::GetTypeImpl&lt; RecordDim, RecordCoordOrTags... &gt;::type GetType</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00262">Core.hpp:262</a></div></div>
 <div class="ttc" id="astructllama_1_1ArrayIndexRange_html"><div class="ttname"><a href="structllama_1_1ArrayIndexRange.html">llama::ArrayIndexRange</a></div><div class="ttdoc">Range allowing to iterate over all indices in an ArrayExtents.</div><div class="ttdef"><b>Definition:</b> <a href="ArrayIndexRange_8hpp_source.html#l00228">ArrayIndexRange.hpp:228</a></div></div>
 <div class="ttc" id="aArrayIndexRange_8hpp_html"><div class="ttname"><a href="ArrayIndexRange_8hpp.html">ArrayIndexRange.hpp</a></div></div>
@@ -219,7 +211,7 @@ $(document).ready(function(){initNavTree('Proofs_8hpp_source.html',''); initResi
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Proofs_8hpp.html">Proofs.hpp</a></li>
-    <li class="footer">Generated on Wed Jun 1 2022 08:54:23 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Jun 1 2022 09:29:11 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
