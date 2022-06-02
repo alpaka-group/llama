@@ -125,6 +125,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a84bc834840cc6b3ff49a405326fd729a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66793ca523fda5798f6173d608621643"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#a66793ca523fda5798f6173d608621643">end</a> () const -&gt; const T *</td></tr>
 <tr class="separator:a66793ca523fda5798f6173d608621643"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9aa9f1c82c2ee5f6cc651354c5a1e555"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#a9aa9f1c82c2ee5f6cc651354c5a1e555">first</a> () -&gt; T &amp;</td></tr>
+<tr class="separator:a9aa9f1c82c2ee5f6cc651354c5a1e555"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a822a1f3e77f5e97e6a9025730cd53c40"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#a822a1f3e77f5e97e6a9025730cd53c40">first</a> () const -&gt; const T &amp;</td></tr>
+<tr class="separator:a822a1f3e77f5e97e6a9025730cd53c40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0def8468a1ad75dde9a5cc0ddb374980"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#a0def8468a1ad75dde9a5cc0ddb374980">last</a> () -&gt; T &amp;</td></tr>
+<tr class="separator:a0def8468a1ad75dde9a5cc0ddb374980"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa126a40fc5ef4015a6539a78c1a01844"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#aa126a40fc5ef4015a6539a78c1a01844">last</a> () const -&gt; const T &amp;</td></tr>
+<tr class="separator:aa126a40fc5ef4015a6539a78c1a01844"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18c4dca04c7d6ed3091def6653a8ae75"><td class="memTemplParams" colspan="2">template&lt;typename IndexType &gt; </td></tr>
 <tr class="memitem:a18c4dca04c7d6ed3091def6653a8ae75"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1Array.html#a18c4dca04c7d6ed3091def6653a8ae75">operator[]</a> (IndexType &amp;&amp;idx) -&gt; T &amp;</td></tr>
 <tr class="separator:a18c4dca04c7d6ed3091def6653a8ae75"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -335,6 +343,66 @@ template&lt;typename T , std::size_t N&gt; </div>
 
 </div>
 </div>
+<a id="a9aa9f1c82c2ee5f6cc651354c5a1e555"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9aa9f1c82c2ee5f6cc651354c5a1e555">&#9670;&nbsp;</a></span>first() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , std::size_t N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1Array.html">llama::Array</a>&lt; T, N &gt;::first </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> -&gt; T&amp;
+        </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00052">52</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a822a1f3e77f5e97e6a9025730cd53c40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a822a1f3e77f5e97e6a9025730cd53c40">&#9670;&nbsp;</a></span>first() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , std::size_t N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1Array.html">llama::Array</a>&lt; T, N &gt;::first </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const -&gt; const T&amp;
+        </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00057">57</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+
+</div>
+</div>
 <a id="ae5db7865aabd4d3174462fc7a818fe73"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae5db7865aabd4d3174462fc7a818fe73">&#9670;&nbsp;</a></span>get() <span class="overload">[1/2]</span></h2>
 
@@ -363,7 +431,7 @@ template&lt;std::size_t I&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00086">86</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00106">106</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
 
 </div>
 </div>
@@ -395,7 +463,67 @@ template&lt;std::size_t I&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00092">92</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00112">112</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a0def8468a1ad75dde9a5cc0ddb374980"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0def8468a1ad75dde9a5cc0ddb374980">&#9670;&nbsp;</a></span>last() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , std::size_t N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1Array.html">llama::Array</a>&lt; T, N &gt;::last </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> -&gt; T&amp;
+        </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00062">62</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa126a40fc5ef4015a6539a78c1a01844"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa126a40fc5ef4015a6539a78c1a01844">&#9670;&nbsp;</a></span>last() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , std::size_t N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1Array.html">llama::Array</a>&lt; T, N &gt;::last </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const -&gt; const T&amp;
+        </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00067">67</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
 
 </div>
 </div>
@@ -428,7 +556,7 @@ template&lt;typename IndexType &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00053">53</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00073">73</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
 
 </div>
 </div>
@@ -461,7 +589,7 @@ template&lt;typename IndexType &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00059">59</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00079">79</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
 
 </div>
 </div>
@@ -532,7 +660,7 @@ template&lt;typename T , std::size_t N&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00072">72</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00092">92</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
 
 </div>
 </div>
@@ -573,7 +701,7 @@ template&lt;typename T , std::size_t N&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00077">77</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00097">97</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
 
 </div>
 </div>
@@ -614,7 +742,7 @@ template&lt;typename T , std::size_t N&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00064">64</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00084">84</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
 
 </div>
 </div>
@@ -646,7 +774,7 @@ template&lt;typename T , std::size_t N&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="structllama_1_1Array.html">Array</a></li>
-    <li class="footer">Generated on Wed Jun 1 2022 12:38:21 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Jun 2 2022 17:06:25 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
