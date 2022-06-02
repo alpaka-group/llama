@@ -96,16 +96,15 @@ TEMPLATE_LIST_TEST_CASE("Trace.nbody.mem_locs_computed", "", SizeTypes)
         std::streambuf* old = std::cout.rdbuf(buffer.rdbuf());
         particles.mapping().printFieldHits(particles.storageBlobs);
         std::cout.rdbuf(old);
-        CHECK(
-            buffer.str()
-            == "Trace mapping, number of memory locations computed:\n"
-               "\tPos.X:\t 10300\n"
-               "\tPos.Y:\t 10300\n"
-               "\tPos.Z:\t 10300\n"
-               "\tVel.X:\t 300\n"
-               "\tVel.Y:\t 300\n"
-               "\tVel.Z:\t 300\n"
-               "\tMass:\t 10200\n");
+        CHECK(buffer.str() == R"(Field      Mlocs comp
+Pos.X           10300
+Pos.Y           10300
+Pos.Z           10300
+Vel.X             300
+Vel.Y             300
+Vel.Z             300
+Mass            10200
+)");
     };
     run(llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
     run(llama::mapping::SingleBlobSoA<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
@@ -138,16 +137,15 @@ TEMPLATE_LIST_TEST_CASE("Trace.nbody.reads_writes", "", SizeTypes)
         std::streambuf* old = std::cout.rdbuf(buffer.rdbuf());
         particles.mapping().printFieldHits(particles.storageBlobs);
         std::cout.rdbuf(old);
-        CHECK(
-            buffer.str()
-            == "Trace mapping, number of accesses:\n"
-               "\tPos.X:\tR: 10200\tW: 200\n"
-               "\tPos.Y:\tR: 10200\tW: 200\n"
-               "\tPos.Z:\tR: 10200\tW: 200\n"
-               "\tVel.X:\tR: 200\tW: 100\n"
-               "\tVel.Y:\tR: 200\tW: 100\n"
-               "\tVel.Z:\tR: 200\tW: 100\n"
-               "\tMass:\tR: 10100\tW: 100\n");
+        CHECK(buffer.str() == R"(Field           Reads     Writes
+Pos.X           10200        200
+Pos.Y           10200        200
+Pos.Z           10200        200
+Vel.X             200        100
+Vel.Y             200        100
+Vel.Z             200        100
+Mass            10100        100
+)");
     };
     run(llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
     run(llama::mapping::SingleBlobSoA<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});

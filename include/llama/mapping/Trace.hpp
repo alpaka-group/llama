@@ -4,6 +4,7 @@
 
 #include <atomic>
 #include <cstdio>
+#include <iomanip>
 #include <iostream>
 
 #ifndef __cpp_lib_atomic_ref
@@ -146,37 +147,54 @@ namespace llama::mapping
 
         LLAMA_FN_HOST_ACC_INLINE void printFieldHits(const FieldHitsArray& hits) const
         {
+            constexpr auto columnWidth = 10;
 #ifdef __CUDA_ARCH__
             if constexpr(MyCodeHandlesProxyReferences)
-                printf("Trace mapping, number of accesses:\n");
+                printf("%*s %*s %*s\n", columnWidth, "Field", columnWidth, "Reads", columnWidth, "Writes");
             else
-                printf("Trace mapping, number of memory locations computed:\n");
-
-            for(int i = 0; i < hits.size(); i++)
-                if constexpr(MyCodeHandlesProxyReferences)
-                    printf(
-                        "\t%i:\tR: %lu\tW: %lu\n",
-                        i,
-                        static_cast<unsigned long>(hits[i].reads),
-                        static_cast<unsigned long>(hits[i].writes));
-                else
-                    printf("\t%i:\t%lu\n", i, static_cast<unsigned long>(hits[i].memLocsComputed));
-#else
-            if constexpr(MyCodeHandlesProxyReferences)
-                std::cout << "Trace mapping, number of accesses:\n";
-            else
-                std::cout << "Trace mapping, number of memory locations computed:\n";
+                printf("%*s %*s\n", columnWidth, "Field", columnWidth, "Mlocs comp");
             forEachLeafCoord<RecordDim>(
                 [&](auto rc)
                 {
                     const size_type i = flatRecordCoord<RecordDim, decltype(rc)>;
                     if constexpr(MyCodeHandlesProxyReferences)
-                        std::cout << '\t' << recordCoordTags<RecordDim>(rc) << ":\tR: " << hits[i].reads
-                                  << "\tW: " << hits[i].writes << '\n';
+                        printf(
+                            "%*i %*lu %*lu\n",
+                            columnWidth,
+                            i,
+                            columnWidth,
+                            static_cast<unsigned long>(hits[i].reads),
+                            columnWidth,
+                            static_cast<unsigned long>(hits[i].writes));
                     else
-                        std::cout << '\t' << recordCoordTags<RecordDim>(rc) << ":\t " << hits[i].memLocsComputed
-                                  << '\n';
+                        printf(
+                            "%*i %*lu\n",
+                            columnWidth,
+                            i,
+                            columnWidth,
+                            static_cast<unsigned long>(hits[i].memLocsComputed));
                 });
+#else
+            if constexpr(MyCodeHandlesProxyReferences)
+                std::cout << std::left << std::setw(columnWidth) << "Field" << ' ' << std::right
+                          << std::setw(columnWidth) << "Reads" << ' ' << std::right << std::setw(columnWidth)
+                          << "Writes" << '\n';
+            else
+                std::cout << std::left << std::setw(columnWidth) << "Field" << ' ' << std::right
+                          << std::setw(columnWidth) << "Mlocs comp" << '\n';
+            forEachLeafCoord<RecordDim>(
+                [&](auto rc)
+                {
+                    const size_type i = flatRecordCoord<RecordDim, decltype(rc)>;
+                    if constexpr(MyCodeHandlesProxyReferences)
+                        std::cout << std::left << std::setw(columnWidth) << recordCoordTags<RecordDim>(rc) << ' '
+                                  << std::right << std::setw(columnWidth) << hits[i].reads << ' ' << std::right
+                                  << std::setw(columnWidth) << hits[i].writes << '\n';
+                    else
+                        std::cout << std::left << std::setw(columnWidth) << recordCoordTags<RecordDim>(rc) << ' '
+                                  << std::right << std::setw(columnWidth) << hits[i].memLocsComputed << '\n';
+                });
+            std::cout << std::internal;
 #endif
         }
 
