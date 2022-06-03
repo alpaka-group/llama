@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <array>
 #include <boost/container/static_vector.hpp>
-#include <boost/math/constants/constants.hpp>
 #include <cmath>
 #include <cstddef>
 #include <deque>
@@ -400,8 +399,8 @@ namespace
         const auto xVec = cross(camera.view, camera.up);
         const auto yVec = camera.up;
 
-        const auto delta = (std::tan(camera.fovy * boost::math::constants::pi<float>() / 180.0f) * 2)
-            / static_cast<float>(height - 1);
+        const auto delta
+            = (std::tan(camera.fovy * static_cast<float>(M_PI) / 180.0f) * 2) / static_cast<float>(height - 1);
         const auto xDeltaVec = xVec * delta;
         const auto yDeltaVec = yVec * delta;
 
