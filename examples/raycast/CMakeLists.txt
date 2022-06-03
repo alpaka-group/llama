@@ -12,6 +12,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE tinyobjloader::tinyobjloader llama
 
 if (MSVC)
 	target_compile_options(${PROJECT_NAME} PRIVATE /arch:AVX2 /fp:fast)
+	target_compile_definitions(${PROJECT_NAME} PRIVATE _USE_MATH_DEFINES )
 else()
 	target_compile_options(${PROJECT_NAME} PRIVATE -march=native -ffast-math)
 endif()
