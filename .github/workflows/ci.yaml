@@ -12,9 +12,8 @@ concurrency:
 env:
   THREADS: 4
   CONFIG: RelWithDebInfo
-  BOOST_ROOT: ${{ github.workspace }}/_boost
-  BOOST_VERSION: 1.74.0
   ALPAKA_BRANCH: 0.9.0
+  VCPKG_INSTALL_LIST: "fmt vc tinyobjloader boost-mp11 boost-atomic boost-smart-ptr boost-functional boost-container"
 
 jobs:
   clang-format:
@@ -33,13 +32,6 @@ jobs:
       CXX: clang++-14
     steps:
     - uses: actions/checkout@v2
-    - name: install boost
-      run: |
-          BOOST_ARCHIVE=boost_${BOOST_VERSION//./_}.tar.bz2
-          wget -q https://boostorg.jfrog.io/artifactory/main/release/$BOOST_VERSION/source/$BOOST_ARCHIVE
-          tar -xf $BOOST_ARCHIVE
-          rm $BOOST_ARCHIVE
-          mv boost_${BOOST_VERSION//./_} "${BOOST_ROOT}"
     - name: install clang-14
       run: |
         wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
@@ -48,7 +40,7 @@ jobs:
         sudo apt install clang-14 libomp-14-dev clang-tidy-14
     - name: vcpkg install dependencies
       run: |
-        vcpkg install catch2 fmt vc tinyobjloader
+        vcpkg install $VCPKG_INSTALL_LIST
     - name: install alpaka
       run: |
         git clone https://github.com/alpaka-group/alpaka.git
@@ -72,19 +64,12 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 1
-    - name: install boost
-      run: |
-          BOOST_ARCHIVE=boost_${BOOST_VERSION//./_}.tar.bz2
-          wget -q https://boostorg.jfrog.io/artifactory/main/release/$BOOST_VERSION/source/$BOOST_ARCHIVE
-          tar -xf $BOOST_ARCHIVE
-          rm $BOOST_ARCHIVE
-          mv boost_${BOOST_VERSION//./_} "${BOOST_ROOT}"
     - name: install lcov
       run: |
         sudo apt install lcov
     - name: vcpkg install dependencies
       run: |
-        vcpkg install catch2 fmt
+        vcpkg install $VCPKG_INSTALL_LIST
     - name: cmake
       run: |
         mkdir build
@@ -223,13 +208,6 @@ jobs:
           sudo add-apt-repository "deb https://apt.repos.intel.com/oneapi all main"
           sudo apt update
           sudo apt install intel-oneapi-compiler-dpcpp-cpp
-      - name: install boost
-        run: |
-          BOOST_VERSION=1.74.0
-          BOOST_ARCHIVE=boost_${BOOST_VERSION//./_}.tar.bz2
-          time wget -q https://boostorg.jfrog.io/artifactory/main/release/$BOOST_VERSION/source/$BOOST_ARCHIVE
-          time tar -xf $BOOST_ARCHIVE
-          time mv boost_${BOOST_VERSION//./_} "${BOOST_ROOT}"
       - name: install extras
         if: ${{ matrix.install_extra }} 
         run: |
@@ -238,7 +216,7 @@ jobs:
         run: |
           # vcpkg fails to build with Intel compilers
           if [ ${{ matrix.install_oneapi }} ]; then unset CXX; fi
-          vcpkg install catch2 fmt vc tinyobjloader
+          vcpkg install $VCPKG_INSTALL_LIST
       - name: download CUDA 11
         if: matrix.cuda_url
         run: |
@@ -291,16 +269,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: install boost
-      run: |
-        $BOOST_ARCHIVE = "boost_$($env:BOOST_VERSION.replace('.', '_')).zip"
-        $url = "https://boostorg.jfrog.io/artifactory/main/release/$env:BOOST_VERSION/source/$BOOST_ARCHIVE"
-        Measure-Command { (New-Object System.Net.WebClient).DownloadFile($url, "$env:TEMP/boost.zip") }
-        Measure-Command { 7z x "$env:TEMP/boost.zip" -o"$env:BOOST_ROOT" }
-        Measure-Command { mv "$env:BOOST_ROOT/boost_$($env:BOOST_VERSION.replace('.', '_'))" "$env:BOOST_ROOT" }
     - name: vcpkg install dependencies
       run: |
-        vcpkg install catch2 fmt vc tinyobjloader
+        vcpkg install $env:VCPKG_INSTALL_LIST.split(' ')
     - name: install alpaka
       run: |
         git clone https://github.com/alpaka-group/alpaka.git
@@ -334,10 +305,10 @@ jobs:
       - uses: actions/checkout@v2
       - name: brew install dependencies
         run: |
-          brew install boost libomp
+          brew install libomp
       - name: vcpkg install dependencies
         run: |
-          vcpkg install catch2 fmt vc tinyobjloader
+          vcpkg install $VCPKG_INSTALL_LIST
       - name: install alpaka
         run: |
           git clone https://github.com/alpaka-group/alpaka.git
