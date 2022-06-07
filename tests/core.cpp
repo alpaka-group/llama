@@ -429,7 +429,11 @@ TEST_CASE("structName")
     CHECK(llama::structName(tag::A{}) == "A");
     CHECK(llama::structName<tag::Normal>() == "Normal");
     CHECK(llama::structName(tag::Normal{}) == "Normal");
-    CHECK(llama::structName(std::string{}) == "basic_string<char,char_traits<char>,allocator<char>>");
+    CHECK(llama::structName<unsigned int>() == "unsigned int");
+    CHECK(llama::structName(std::remove_const<int>{}) == "remove_const<int>");
+    CHECK(
+        llama::structName(std::remove_const<std::add_const<std::common_type<int, char>>>{})
+        == "remove_const<add_const<common_type<int,char>>>");
     CHECK(llama::structName(Vec3D{}) == "Record<Field<X,double>,Field<Y,double>,Field<Z,double>>");
 }
 

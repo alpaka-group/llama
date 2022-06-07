@@ -7,7 +7,6 @@
 #include "Meta.hpp"
 #include "RecordCoord.hpp"
 
-#include <boost/core/demangle.hpp>
 #include <iostream>
 #include <string>
 #include <type_traits>
@@ -533,29 +532,6 @@ namespace llama
     inline constexpr std::size_t offsetOf
         = flatOffsetOf<FlatRecordDim<RecordDim>, flatRecordCoord<RecordDim, RecordCoord>, Align>;
 
-    template<typename T>
-    auto structName(T = {}) -> std::string
-    {
-        auto s = boost::core::demangle(typeid(T).name());
-        if(const auto pos = s.rfind(':'); pos != std::string::npos)
-            s = s.substr(pos + 1);
-        return s;
-    }
-
-    template<template<typename...> typename L, typename T0, typename... T>
-    auto structName(L<T0, T...> = {}) -> std::string
-    {
-        auto s = boost::core::demangle(typeid(L<T0, T...>).name());
-        if(const auto pos = s.find('<'); pos != std::string::npos)
-            s = s.substr(0, pos);
-        if(const auto pos = s.rfind(':'); pos != std::string::npos)
-            s = s.substr(pos + 1);
-        s += "<" + structName(T0{});
-        ((s += "," + structName(T{})), ...);
-        s += ">";
-        return s;
-    }
-
     namespace internal
     {
         // Such a class is also known as arraw_proxy: https://quuxplusone.github.io/blog/2019/02/06/arrow-proxy/
@@ -711,30 +687,6 @@ namespace llama
     using MergedRecordDims = typename decltype(internal::mergeRecordDimsImpl(
         boost::mp11::mp_identity<RecordDimA>{},
         boost::mp11::mp_identity<RecordDimB>{}))::type;
-
-    /// Returns the tags interspersed by '.' represented by the given record coord in the given record dimension.
-    template<typename RecordDim, std::size_t... Coords>
-    auto recordCoordTags(RecordCoord<Coords...>) -> std::string
-    {
-        using Tags = GetTags<RecordDim, RecordCoord<Coords...>>;
-
-        std::string r;
-        boost::mp11::mp_for_each<Tags>(
-            [&](auto tag)
-            {
-                using Tag = decltype(tag);
-                if(!r.empty())
-                    r += '.';
-                if constexpr(isRecordCoord<Tag>)
-                {
-                    static_assert(Tag::size == 1);
-                    r += std::to_string(Tag::front); // handle array indices
-                }
-                else
-                    r += structName(tag);
-            });
-        return r;
-    }
 
     /// Alias for ToT, adding `const` if FromT is const qualified.
     template<typename FromT, typename ToT>

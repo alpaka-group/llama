@@ -44,6 +44,7 @@
 #include "HasRanges.hpp"
 #include "Meta.hpp"
 #include "ProxyRefOpMixin.hpp"
+#include "StructName.hpp"
 #include "Vector.hpp"
 #include "View.hpp"
 #include "VirtualRecord.hpp"

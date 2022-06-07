@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../StructName.hpp"
 #include "Common.hpp"
 
 #include <atomic>
@@ -157,20 +158,23 @@ namespace llama::mapping
                 [&](auto rc)
                 {
                     const size_type i = flatRecordCoord<RecordDim, decltype(rc)>;
+                    constexpr auto fieldName = recordCoordTags<RecordDim>(rc);
+                    char fieldNameZT[fieldName.size() + 1]{}; // nvcc does not handle the %*.*s parameter correctly
+                    llama::internal::constexpr_copy(fieldName.begin(), fieldName.end(), fieldNameZT);
                     if constexpr(MyCodeHandlesProxyReferences)
                         printf(
-                            "%*i %*lu %*lu\n",
+                            "%*.s %*lu %*lu\n",
                             columnWidth,
-                            i,
+                            fieldNameZT,
                             columnWidth,
                             static_cast<unsigned long>(hits[i].reads),
                             columnWidth,
                             static_cast<unsigned long>(hits[i].writes));
                     else
                         printf(
-                            "%*i %*lu\n",
+                            "%*.s %*lu %*lu\n",
                             columnWidth,
-                            i,
+                            fieldNameZT,
                             columnWidth,
                             static_cast<unsigned long>(hits[i].memLocsComputed));
                 });
