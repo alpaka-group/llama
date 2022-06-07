@@ -5,9 +5,7 @@
 
 #include "TreeFromDimensions.hpp"
 
-#include <boost/core/demangle.hpp>
 #include <string>
-#include <typeinfo>
 
 namespace llama::mapping::tree
 {
@@ -72,7 +70,7 @@ namespace llama::mapping::tree
     template<typename Identifier, typename Type, typename CountType>
     auto toString(const Leaf<Identifier, Type, CountType>& leaf) -> std::string
     {
-        auto raw = boost::core::demangle(typeid(Type).name());
+        auto raw = std::string{llama::structName<Type>()};
 #ifdef _MSC_VER
         internal::replace_all(raw, " __cdecl(void)", "");
 #endif

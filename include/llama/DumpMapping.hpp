@@ -5,6 +5,7 @@
 #if __has_include(<fmt/format.h>)
 #    include "ArrayIndexRange.hpp"
 #    include "Core.hpp"
+#    include "StructName.hpp"
 
 #    include <boost/functional/hash.hpp>
 #    include <fmt/format.h>
@@ -62,7 +63,7 @@ namespace llama
         {
             ArrayIndex arrayIndex;
             std::vector<std::size_t> recordCoord;
-            std::string recordTags;
+            std::string_view recordTags;
             NrAndOffset<typename ArrayIndex::value_type> nrAndOffset;
             std::size_t size;
         };
@@ -414,7 +415,7 @@ namespace llama
     background-color: #{:X};
 }}
 )",
-                    internal::cssClass(recordCoordTags<RecordDim>(rc)),
+                    internal::cssClass(std::string{recordCoordTags<RecordDim>(rc)}),
                     byteSizeInPixel * size,
                     internal::color(internal::toVec(rc)));
             });
@@ -444,7 +445,7 @@ namespace llama
             }
             html += fmt::format(
                 R"(<div class="box {0}" title="{1} {2}">{1} {2}</div>)",
-                internal::cssClass(info.recordTags),
+                internal::cssClass(std::string{info.recordTags}),
                 internal::formatArrayIndex(info.arrayIndex),
                 info.recordTags);
         }
