@@ -3,13 +3,18 @@
 
   <style>
     .wy-side-nav-search, .wy-nav-top {
-		background: #9CAEBA;
-	}
-	.version {
-		text-shadow: 0px 0px 0px #000000;
-	}
+        background: #9CAEBA;
+    }
+    .version {
+        text-shadow: 0px 0px 0px #000000;
+    }
 
-	/* https://github.com/readthedocs/sphinx_rtd_theme/issues/295 */
-	/* .wy-nav-content { max-width: none; } */
+    /* see: https://knowyourtoolset.com/2018/02/controlling-the-width-of-a-table-with-read-the-docs/ */
+    .tight-table td {
+        white-space: normal !important;
+    }
+
+    /* https://github.com/readthedocs/sphinx_rtd_theme/issues/295 */
+    /* .wy-nav-content { max-width: none; } */
   </style>
 {% endblock %}
