@@ -53,7 +53,7 @@ Array dimensions
 .. doxygenstruct:: llama::ArrayIndexRange
    :members:
 
-.. doxygenfunction:: llama::forEachADCoord(ArrayExtents<T, Sizes...> extents, Func &&func)
+.. doxygenfunction:: llama::forEachADCoord(ArrayExtents<SizeType, Sizes...> extents, Func&& func)
 
 Record dimension
 ----------------
@@ -183,11 +183,12 @@ For a detailed description of the tree mapping concept have a look at
 .. doxygenstruct:: llama::mapping::tree::functor::MoveRTDown
 
 .. FIXME: doxygen fails to parse the source code ...
+
 Dumping
 ^^^^^^^
 
-   .. doxygenfunction:: llama::toSvg
-   .. doxygenfunction:: llama::toHtml
+.. doxygenfunction:: llama::toSvg
+.. doxygenfunction:: llama::toHtml
 
 Data access
 -----------

@@ -1,7 +1,5 @@
 .. include:: common.rst
 
-.. _label-view:
-
 Iteration
 =========
 
