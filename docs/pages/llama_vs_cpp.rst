@@ -4,7 +4,10 @@ LLAMA vs. C++
 =============
 
 LLAMA tries hard to provide experience and constructs similar to native C++.
-The following is a comparison of how various constructs in C++ translate to LLAMA:
+The following tables compare how various constructs in C++ translate to LLAMA:
+
+Containers and views
+--------------------
 
 .. list-table::
     :header-rows: 1
@@ -14,7 +17,6 @@ The following is a comparison of how various constructs in C++ translate to LLAM
       - Native C++
       - LLAMA
       - LLAMA (alternative)
-      - wrong
     * - Defining structs/records
       - .. code:: C++
 
@@ -40,7 +42,6 @@ The following is a comparison of how various constructs in C++ translate to LLAM
             llama::Field<Flags, bool[3]>
           >;
       -
-      -
     * - Defining array extents
       - .. code:: C++
 
@@ -51,14 +52,12 @@ The following is a comparison of how various constructs in C++ translate to LLAM
           using ArrayExtents = ...;
           ArrayExtents n = ...;
       -
-      -
     * - Defining the memory layout
       - \-
       - .. code:: C++
 
           using Mapping = ...;
           Mapping m(n, ...);
-      -
       -
     * - A collection of n things in memory
       - .. code:: C++
@@ -72,7 +71,19 @@ The following is a comparison of how various constructs in C++ translate to LLAM
           llama::View<ArrayExtents, ParticleRec, ...> view;
 
         Useful for static array dimensions.
-      -
+
+Values and references
+---------------------
+
+.. list-table::
+    :header-rows: 1
+    :class: tight-table
+
+    * - Construct
+      - Native C++
+      - LLAMA
+      - LLAMA (alternative)
+      - wrong
     * - Declare single local record
       - .. code:: C++
 
