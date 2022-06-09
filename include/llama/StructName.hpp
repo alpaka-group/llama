@@ -128,13 +128,6 @@ namespace llama
             static_assert(start <= end);
 
             constexpr auto name = function.substr(start, (end - start));
-            // constexpr auto nameArray = [&]() constexpr
-            //{ // strip spaces
-            //     Array<char, name.size()> a{};
-            //     constexpr_copy(name.begin(), name.end(), a.begin());
-            //     return a;
-            // }
-            //();
 
             constexpr auto arrAndSize = [&]() constexpr
             {
@@ -142,8 +135,11 @@ namespace llama
                 constexpr_copy(name.begin(), name.end(), nameArray.begin());
 
 #ifdef _MSC_VER
-                // strip "struct " and "class "
-                auto removeAllOccurences = [&](std::size_t size, std::string_view str) constexpr
+                // MSVC 19.32 runs into a syntax error if we just capture nameArray. Passing it as argument is a
+                // workaround. Applies to the following lambdas.
+
+                // strip "struct " and "class ".
+                auto removeAllOccurences = [](auto& nameArray, std::size_t size, std::string_view str) constexpr
                 {
                     auto e = nameArray.begin() + size;
                     while(true)
@@ -157,13 +153,13 @@ namespace llama
                     return e - nameArray.begin();
                 };
 
-                auto size1 = removeAllOccurences(nameArray.size(), std::string_view{"struct "});
-                auto size2 = removeAllOccurences(size1, std::string_view{"class "});
+                auto size1 = removeAllOccurences(nameArray, nameArray.size(), std::string_view{"struct "});
+                auto size2 = removeAllOccurences(nameArray, size1, std::string_view{"class "});
 #else
                 auto size2 = nameArray.size();
 #endif
 
-                auto size3 = [&]() constexpr
+                auto size3Func = [&](auto& nameArray) constexpr
                 {
                     // remove spaces between closing template angle brackets and after commas
                     auto e = nameArray.begin() + size2;
@@ -176,8 +172,8 @@ namespace llama
                         }
                     }
                     return e - nameArray.begin();
-                }
-                ();
+                };
+                auto size3 = size3Func(nameArray);
 
                 return std::pair{nameArray, size3};
             }
