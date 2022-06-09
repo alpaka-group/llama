@@ -148,3 +148,62 @@ which a proxy reference type can inherit from, to supply the necessary operators
 All proxy reference types in LLAMA inherit from :cpp:`llama::ProxyRefOpMixin` to supply the necessary operators.
 If you define your own computed mappings returning proxy references,
 make sure to inherit your proxy reference types from :cpp:`llama::ProxyRefOpMixin`.
+
+Member functions and proxy references
+-------------------------------------
+
+Given a class with a member function:
+
+.. code-block:: C++
+
+    struct Rng {
+        double next();
+        RngState state() const;
+
+    private:
+        RngState m_state;
+    };
+
+We can naturally call a member function of that class on a reference to an instance in memory in C++:
+
+.. code-block:: C++
+
+    std::vector<Rng> v = ...;
+    Rng& rng = v[i]; // reference to Rng instance
+    RngState s = rng.state();
+    double n = rng.next();
+
+However, this is not possible with proxy references:
+
+.. code-block:: C++
+
+    using RecordDim = Rng;
+    auto v = llama::allocView(m); // where the mapping m uses proxy references
+    auto&& rng = v[i];            // proxy reference to Rng instance
+    RngState s = rng.state();     // compilation error
+    double n = rng.next();        // no member function state()/next() in proxy reference class
+
+
+We can workaround this limitation for :cpp:`const` member functions by materializing the proxy reference into a temporary value:
+
+.. code-block:: C++
+
+    auto&& rng = v[i]; // proxy reference to Rng instance
+    RngState s = (static_cast<Rng>(rng)).state();
+    double n = (static_cast<Rng>(rng)).next(); // silent error: updates temporary, not instance at rng!
+
+This invokes the conversion operator of the proxy reference and we call the member function on a temporary.
+However, for mutating member functions, the best possible solution so far is to load the instance into a local copy,
+call the mutating member function, and store back the local copy.
+
+.. code-block:: C++
+
+    auto&& rng = v[i];     // proxy reference to Rng instance
+    Rng rngCopy = rng;     // local copy
+    double n = rng.next(); // modify local copy
+    rng = rngCopy;         // store back modified instance
+
+This is also how :cpp:`llama::ProxyRefOpMixin` is implemented.
+
+In order to allow :cpp:`rng` to forward the call :cpp:`.next()` to a different object than itself,
+C++ would require a frequently discussed, but not standardized, extension: smart references.
