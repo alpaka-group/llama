@@ -17,17 +17,6 @@
 # sys.path.insert(0, os.path.abspath('.'))
 
 import os
-import site
-
-# -- Adding llama and alpaka keywords by hand to pygments --
-
-user_site = site.USER_SITE
-if not os.path.isdir( user_site ):
-    user_site = "/home/docs/checkouts/readthedocs.org/user_builds/llama-doc/envs/latest/lib/python2.7/site-packages"
-c_cpp_lexer_file = user_site + "/pygments/lexers/c_cpp.py"
-if os.path.isfile( c_cpp_lexer_file ):
-    if not "(words(('llama', 'alpaka')), Name.Exception)" in open(c_cpp_lexer_file).read():
-        os.system( "sed -i \"/'statements': \\[/a \\            (words(('llama', 'alpaka')), Name.Exception),\" " + c_cpp_lexer_file )
 
 # -- Updating doxygen --
 
