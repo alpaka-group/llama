@@ -3,7 +3,7 @@
 .. _label-virtualrecord:
 
 VirtualRecord
-============
+=============
 
 During a view accesses like :cpp:`view(1, 2, 3)(color{}, g{})` an intermediate object is needed for this to work.
 This object is a :cpp:`llama::VirtualRecord`.
