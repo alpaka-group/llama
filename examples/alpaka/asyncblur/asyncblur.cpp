@@ -342,8 +342,7 @@ try
                 alpaka::memcpy(
                     queue[chunkNr],
                     devOldView[chunkNr].storageBlobs[i],
-                    hostChunkView[chunkNr].storageBlobs[i],
-                    devMapping.blobSize(i));
+                    hostChunkView[chunkNr].storageBlobs[i]);
 
             alpaka::exec<Acc>(
                 queue[chunkNr],
@@ -356,8 +355,7 @@ try
                 alpaka::memcpy(
                     queue[chunkNr],
                     hostChunkView[chunkNr].storageBlobs[i],
-                    devNewView[chunkNr].storageBlobs[i],
-                    devMapping.blobSize(i));
+                    devNewView[chunkNr].storageBlobs[i]);
         }
 
     // Wait for not finished tasks on accelerator
