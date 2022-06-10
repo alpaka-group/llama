@@ -13,6 +13,9 @@
 #if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION < 11000
 #    include <boost/shared_ptr.hpp>
 #endif
+#if __has_include(<cuda_runtime.h>)
+#    include <cuda_runtime.h>
+#endif
 
 namespace llama::bloballoc
 {
@@ -113,5 +116,29 @@ namespace llama::bloballoc
     };
 #ifdef __cpp_lib_concepts
     static_assert(BlobAllocator<Vector>);
+#endif
+
+#if __has_include(<cuda_runtime.h>)
+    /// Allocates GPU device memory using cudaMalloc. The memory is managed by a std::unique_ptr with a deleter that
+    /// calles cudaFree. If you want to use a view created with this allocator in a CUDA kernel, call \ref shallowCopy
+    /// on the view before passing it to the kernel.
+    struct CudaMalloc
+    {
+        template<std::size_t Alignment>
+        inline auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
+        {
+            std::byte* p = nullptr;
+            if(const auto code = cudaMalloc(&p, count); code != cudaSuccess)
+                throw std::runtime_error(std::string{"cudaMalloc failed with code "} + cudaGetErrorString(code));
+            if(reinterpret_cast<std::uintptr_t>(p) & (Alignment - 1 != 0u))
+                throw std::runtime_error{"cudaMalloc does not align sufficiently"};
+            auto deleter = [](void* p)
+            {
+                if(const auto code = cudaFree(p); code != cudaSuccess)
+                    throw std::runtime_error(std::string{"cudaFree failed with code "} + cudaGetErrorString(code));
+            };
+            return std::unique_ptr<std::byte[], decltype(deleter)>(p, deleter);
+        }
+    };
 #endif
 } // namespace llama::bloballoc
