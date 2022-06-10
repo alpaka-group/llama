@@ -16,6 +16,9 @@
 #if __has_include(<cuda_runtime.h>)
 #    include <cuda_runtime.h>
 #endif
+#if __has_include(<alpaka/alpaka.hpp>)
+#    include <alpaka/alpaka.hpp>
+#endif
 
 namespace llama::bloballoc
 {
@@ -138,6 +141,20 @@ namespace llama::bloballoc
                     throw std::runtime_error(std::string{"cudaFree failed with code "} + cudaGetErrorString(code));
             };
             return std::unique_ptr<std::byte[], decltype(deleter)>(p, deleter);
+        }
+    };
+#endif
+
+#if __has_include(<alpaka/alpaka.hpp>)
+    template<typename Size, typename Dev>
+    struct AlpakaBuf
+    {
+        Dev& dev;
+
+        template<std::size_t Alignment>
+        inline auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
+        {
+            return alpaka::allocBuf<std::byte, Size>(dev, static_cast<Size>(count));
         }
     };
 #endif

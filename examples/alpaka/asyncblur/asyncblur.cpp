@@ -39,14 +39,6 @@ constexpr auto ELEMS_PER_BLOCK = 16; /// number of elements per direction(!) eve
 
 using FP = float;
 
-template<typename Mapping, typename AlpakaBuffer>
-auto viewAlpakaBuffer(
-    Mapping& mapping,
-    AlpakaBuffer& buffer) // taking mapping by & on purpose, so Mapping can deduce const
-{
-    return llama::View<std::decay_t<Mapping>, std::byte*>{mapping, {alpaka::getPtrNative(buffer)}};
-}
-
 // clang-format off
 namespace tag
 {
@@ -216,35 +208,29 @@ try
         PixelOnAcc{}};
     using DevMapping = std::decay_t<decltype(devMapping)>;
 
-    const auto hostBufferSize = hostMapping.blobSize(0);
-    const auto devBufferSize = devMapping.blobSize(0);
-
+    std::size_t hostBufferSize = 0;
+    for(std::size_t i = 0; i < hostMapping.blobCount; i++)
+        hostBufferSize += hostMapping.blobSize(i);
     std::cout << "Image size: " << img_x << ":" << img_y << '\n'
               << hostBufferSize * 2 / 1024 / 1024 << " MB on device\n";
 
     Stopwatch chrono;
 
-    auto hostBuffer = alpaka::allocBuf<std::byte, int>(devHost, hostBufferSize);
-    auto hostView = viewAlpakaBuffer(hostMapping, hostBuffer);
+    auto allocBlobHost = llama::bloballoc::AlpakaBuf<int, decltype(devHost)>{devHost};
+    auto allocBlobAcc = llama::bloballoc::AlpakaBuf<int, decltype(devAcc)>{devAcc};
+    auto hostView = llama::allocView(hostMapping, allocBlobHost);
 
-    std::vector<alpaka::Buf<DevHost, std::byte, alpaka::DimInt<1>, int>> hostChunkBuffer;
-    std::vector<llama::View<DevMapping, std::byte*>> hostChunkView;
-
-    std::vector<alpaka::Buf<DevAcc, std::byte, alpaka::DimInt<1>, int>> devOldBuffer;
-    std::vector<alpaka::Buf<DevAcc, std::byte, alpaka::DimInt<1>, int>> devNewBuffer;
-    std::vector<llama::View<DevMapping, std::byte*>> devOldView;
-    std::vector<llama::View<DevMapping, std::byte*>> devNewView;
+    using HostChunkView = decltype(llama::allocView(devMapping, allocBlobHost));
+    using AccChunkView = decltype(llama::allocView(devMapping, allocBlobAcc));
+    std::vector<HostChunkView> hostChunkView;
+    std::vector<AccChunkView> devOldView;
+    std::vector<AccChunkView> devNewView;
 
     for(int i = 0; i < CHUNK_COUNT; ++i)
     {
-        hostChunkBuffer.push_back(alpaka::allocBuf<std::byte, int>(devHost, devBufferSize));
-        hostChunkView.push_back(viewAlpakaBuffer(devMapping, hostChunkBuffer.back()));
-
-        devOldBuffer.push_back(alpaka::allocBuf<std::byte, int>(devAcc, devBufferSize));
-        devOldView.push_back(viewAlpakaBuffer(devMapping, devOldBuffer.back()));
-
-        devNewBuffer.push_back(alpaka::allocBuf<std::byte, int>(devAcc, devBufferSize));
-        devNewView.push_back(viewAlpakaBuffer(devMapping, devNewBuffer.back()));
+        hostChunkView.push_back(llama::allocView(devMapping, allocBlobHost));
+        devOldView.push_back(llama::allocView(devMapping, allocBlobAcc));
+        devNewView.push_back(llama::allocView(devMapping, allocBlobAcc));
     }
 
     chrono.printAndReset("Alloc");
@@ -324,6 +310,7 @@ try
                         if(alpaka::empty(queue[chunkNr]))
                         {
                             // Copy data back
+
                             LLAMA_INDEPENDENT_DATA
                             for(int y = 0; y < chunkIt->validMiniSize[0] - 2 * KERNEL_SIZE; ++y)
                             {
@@ -351,16 +338,26 @@ try
                 for(int x = 0; x < validMiniSize[1]; ++x)
                     hostChunkView[chunkNr](y, x) = virtualHost(y, x);
             }
-            alpaka::memcpy(queue[chunkNr], devOldBuffer[chunkNr], hostChunkBuffer[chunkNr], devBufferSize);
+            for(std::size_t i = 0; i < devMapping.blobCount; i++)
+                alpaka::memcpy(
+                    queue[chunkNr],
+                    devOldView[chunkNr].storageBlobs[i],
+                    hostChunkView[chunkNr].storageBlobs[i],
+                    devMapping.blobSize(i));
 
             alpaka::exec<Acc>(
                 queue[chunkNr],
                 workdiv,
                 BlurKernel<elemCount, KERNEL_SIZE, ELEMS_PER_BLOCK>{},
-                devOldView[chunkNr],
-                devNewView[chunkNr]);
+                llama::shallowCopy(devOldView[chunkNr]),
+                llama::shallowCopy(devNewView[chunkNr]));
 
-            alpaka::memcpy(queue[chunkNr], hostChunkBuffer[chunkNr], devNewBuffer[chunkNr], devBufferSize);
+            for(std::size_t i = 0; i < devMapping.blobCount; i++)
+                alpaka::memcpy(
+                    queue[chunkNr],
+                    hostChunkView[chunkNr].storageBlobs[i],
+                    devNewView[chunkNr].storageBlobs[i],
+                    devMapping.blobSize(i));
         }
 
     // Wait for not finished tasks on accelerator

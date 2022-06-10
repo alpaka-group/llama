@@ -91,25 +91,20 @@ void daxpy_alpaka_llama(std::string mappingName, std::ofstream& plotFile, Mappin
     }
     watch.printAndReset("init host");
 
-    static_assert(Mapping::blobCount == 1); // make our life simpler
-    const auto bufferSize = mapping.blobSize(0);
-    const auto extents = alpaka::Vec<Dim, Size>{bufferSize};
-    auto bufferX = alpaka::allocBuf<std::byte, Size>(devAcc, extents);
-    auto bufferY = alpaka::allocBuf<std::byte, Size>(devAcc, extents);
-    auto bufferZ = alpaka::allocBuf<std::byte, Size>(devAcc, extents);
+    auto alpakaBlobAlloc = llama::bloballoc::AlpakaBuf<Size, decltype(devAcc)>{devAcc};
+    auto viewX = llama::allocViewUninitialized(mapping, alpakaBlobAlloc);
+    auto viewY = llama::allocViewUninitialized(mapping, alpakaBlobAlloc);
+    auto viewZ = llama::allocViewUninitialized(mapping, alpakaBlobAlloc);
     watch.printAndReset("alloc device");
 
+    for(std::size_t i = 0; i < Mapping::blobCount; i++)
     {
-        auto vx = alpaka::createView(devHost, &x.storageBlobs[0][0], extents);
-        auto vy = alpaka::createView(devHost, &y.storageBlobs[0][0], extents);
-        alpaka::memcpy(queue, bufferX, vx, extents);
-        alpaka::memcpy(queue, bufferY, vy, extents);
+        auto vx = alpaka::createView(devHost, &x.storageBlobs[0][0], mapping.blobSize(i));
+        auto vy = alpaka::createView(devHost, &y.storageBlobs[0][0], mapping.blobSize(i));
+        alpaka::memcpy(queue, viewX.storageBlobs[i], vx, mapping.blobSize(i));
+        alpaka::memcpy(queue, viewY.storageBlobs[i], vy, mapping.blobSize(i));
     }
     watch.printAndReset("copy H->D");
-
-    auto viewX = llama::View{mapping, llama::Array{alpaka::getPtrNative(bufferX)}};
-    auto viewY = llama::View{mapping, llama::Array{alpaka::getPtrNative(bufferY)}};
-    auto viewZ = llama::View{mapping, llama::Array{alpaka::getPtrNative(bufferZ)}};
 
     constexpr auto blockSize = isGPU<Acc> ? BLOCK_SIZE : 1;
     const auto workdiv = alpaka::WorkDivMembers<Dim, Size>(
@@ -121,22 +116,34 @@ void daxpy_alpaka_llama(std::string mappingName, std::ofstream& plotFile, Mappin
     double sum = 0;
     for(std::size_t s = 0; s < WARMUP_STEPS + STEPS; ++s)
     {
-        auto kernel
-            = [] ALPAKA_FN_ACC(const Acc& acc, decltype(viewX) x, decltype(viewY) y, double alpha, decltype(viewZ) z)
+        auto kernel = [] ALPAKA_FN_ACC(
+                          const Acc& acc,
+                          decltype(llama::shallowCopy(viewX)) x,
+                          decltype(llama::shallowCopy(viewY)) y,
+                          double alpha,
+                          decltype(llama::shallowCopy(viewZ)) z)
         {
             const auto [i] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
             z[i] = alpha * x[i] + y[i];
         };
-        alpaka::exec<Acc>(queue, workdiv, kernel, viewX, viewY, alpha, viewZ);
+        alpaka::exec<Acc>(
+            queue,
+            workdiv,
+            kernel,
+            llama::shallowCopy(viewX),
+            llama::shallowCopy(viewY),
+            alpha,
+            llama::shallowCopy(viewZ));
         if(s < WARMUP_STEPS)
             watch.printAndReset("daxpy (warmup)");
         else
             sum += watch.printAndReset("daxpy");
     }
 
+    for(std::size_t i = 0; i < Mapping::blobCount; i++)
     {
-        auto vz = alpaka::createView(devHost, &z.storageBlobs[0][0], extents);
-        alpaka::memcpy(queue, vz, bufferZ, extents);
+        auto vz = alpaka::createView(devHost, &z.storageBlobs[0][0], mapping.blobSize(i));
+        alpaka::memcpy(queue, vz, viewZ.storageBlobs[i], mapping.blobSize(i));
     }
     watch.printAndReset("copy D->H");
 
@@ -187,6 +194,10 @@ $data << EOD
         "SoA",
         plotFile,
         llama::mapping::SoA<llama::ArrayExtentsDynamic<std::size_t, 1>, double, false>{extents});
+    daxpy_alpaka_llama(
+        "SoA MB",
+        plotFile,
+        llama::mapping::SoA<llama::ArrayExtentsDynamic<std::size_t, 1>, double, true>{extents});
     daxpy_alpaka_llama(
         "Bytesplit",
         plotFile,
