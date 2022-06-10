@@ -127,11 +127,14 @@ namespace llama::mapping::tree
     LLAMA_FN_HOST_ACC_INLINE auto createTree(const ArrayIndex<V, N>& size)
     {
         if constexpr(Pos == N - 1)
-            return TreeFromRecordDim<RecordDim>{size[N - 1]};
+            return TreeFromRecordDim<RecordDim>{
+                static_cast<std::size_t>(size[N - 1])}; // FIXME(bgruber): propagate index type
         else
         {
             Tuple inner{createTree<RecordDim, V, N, Pos + 1>(size)};
-            return Node<NoName, decltype(inner)>{size[Pos], inner};
+            return Node<NoName, decltype(inner)>{
+                static_cast<std::size_t>(size[Pos]),
+                inner}; // FIXME(bgruber): propagate index type
         }
     };
 

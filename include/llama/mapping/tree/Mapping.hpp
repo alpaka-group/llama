@@ -219,7 +219,9 @@ namespace llama::mapping::tree
             // TODO(bgruber): propagate use of size_type
             auto const basicTreeCoord = createTreeCoord<RecordCoord<RecordCoords...>>(ai);
             auto const resultTreeCoord = mergedFunctors.basicCoordToResultCoord(basicTreeCoord, basicTree);
-            const auto offset = internal::getTreeBlobByte(resultTree, resultTreeCoord);
+            const auto offset = static_cast<size_type>(internal::getTreeBlobByte(
+                resultTree,
+                resultTreeCoord)); // FIXME(bgruber): size_type should be propagated through getTreeBlobByte
             return {0, offset};
         }
     };
