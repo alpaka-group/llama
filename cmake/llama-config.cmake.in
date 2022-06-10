@@ -3,7 +3,7 @@
 #  LLAMA_INCLUDE_DIR      - include directory for LLAMA
 #  LLAMA_FOUND            - whether LLAMA was found and is useable
 
-cmake_minimum_required (VERSION 3.16)
+cmake_minimum_required (VERSION 3.18.3)
 
 @PACKAGE_INIT@
 
