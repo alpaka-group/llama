@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.3)
+cmake_minimum_required (VERSION 3.18.3)
 project(llama-alpaka-pic)
 
 if (NOT TARGET llama::llama)

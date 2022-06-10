@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.15)
+cmake_minimum_required (VERSION 3.18.3)
 project(llama-nbody CXX)
 
 find_package(fmt CONFIG REQUIRED)
