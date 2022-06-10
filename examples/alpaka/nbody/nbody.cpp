@@ -298,7 +298,7 @@ void run(std::ostream& plotFile)
     watch.printAndReset("init");
 
     for(std::size_t i = 0; i < mapping.blobCount; i++)
-        alpaka::memcpy(queue, accView.storageBlobs[i], hostView.storageBlobs[i], mapping.blobSize(0));
+        alpaka::memcpy(queue, accView.storageBlobs[i], hostView.storageBlobs[i]);
     watch.printAndReset("copy H->D");
 
     const auto workdiv = alpaka::WorkDivMembers<Dim, Size>{
@@ -321,7 +321,7 @@ void run(std::ostream& plotFile)
     plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
     for(std::size_t i = 0; i < mapping.blobCount; i++)
-        alpaka::memcpy(queue, hostView.storageBlobs[i], accView.storageBlobs[i], mapping.blobSize(0));
+        alpaka::memcpy(queue, hostView.storageBlobs[i], accView.storageBlobs[i]);
     watch.printAndReset("copy D->H");
 }
 

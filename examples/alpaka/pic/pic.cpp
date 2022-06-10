@@ -360,10 +360,7 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& devHost)
     }
     // std::shuffle(particlesHost.begin(), particlesHost.end(), engine);
     for(auto i = 0; i < decltype(particleMapping)::blobCount; i++)
-    {
-        const auto blobSize = particleMapping.blobSize(i);
-        alpaka::memcpy(queue, particles.storageBlobs[i], particlesHost.storageBlobs[i], blobSize);
-    }
+        alpaka::memcpy(queue, particles.storageBlobs[i], particlesHost.storageBlobs[i]);
 
     return std::tuple{E, B, J, particles};
 }
@@ -821,11 +818,7 @@ void run(std::ostream& plotFile)
                 auto copyBlobs = [&](auto& fieldView)
                 {
                     for(auto i = 0; i < fieldMapping.blobCount; i++)
-                        alpaka::memcpy(
-                            queue,
-                            hostFieldView.storageBlobs[i],
-                            fieldView.storageBlobs[i],
-                            fieldMapping.blobSize(i));
+                        alpaka::memcpy(queue, hostFieldView.storageBlobs[i], fieldView.storageBlobs[i]);
                 };
                 copyBlobs(E);
                 output(n, "E", hostFieldView);
@@ -838,11 +831,7 @@ void run(std::ostream& plotFile)
             const auto particlesMapping = particles.mapping();
             auto hostParticleView = llama::allocViewUninitialized(particlesMapping);
             for(auto i = 0; i < particlesMapping.blobCount; i++)
-                alpaka::memcpy(
-                    queue,
-                    hostParticleView.storageBlobs[i],
-                    particles.storageBlobs[i],
-                    particlesMapping.blobSize(i));
+                alpaka::memcpy(queue, hostParticleView.storageBlobs[i], particles.storageBlobs[i]);
             output(n, hostParticleView);
         }
     }
