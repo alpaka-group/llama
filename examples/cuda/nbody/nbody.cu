@@ -223,16 +223,7 @@ try
     Stopwatch watch;
 
     auto hostView = llama::allocViewUninitialized(tmapping);
-    auto accView = llama::allocViewUninitialized(
-        tmapping,
-        [](auto alignment, std::size_t size)
-        {
-            std::byte* p = nullptr;
-            checkError(cudaMalloc(&p, size));
-            if(reinterpret_cast<std::uintptr_t>(p) & (alignment - 1 != 0u))
-                throw std::runtime_error{"cudaMalloc does not align sufficiently"};
-            return p;
-        });
+    auto accView = llama::allocViewUninitialized(tmapping, llama::bloballoc::CudaMalloc{});
 
     watch.printAndReset("alloc");
 
@@ -274,8 +265,8 @@ try
     const auto blobs = hostView.storageBlobs.size();
     for(std::size_t i = 0; i < blobs; i++)
         checkError(cudaMemcpy(
-            accView.storageBlobs[i],
-            hostView.storageBlobs[i].data(),
+            &accView.storageBlobs[i][0],
+            &hostView.storageBlobs[i][0],
             hostView.mapping().blobSize(i),
             cudaMemcpyHostToDevice));
     std::cout << "copy H->D " << stop() << " s\n";
@@ -290,16 +281,16 @@ try
         {
             start();
             if(useSharedMemory)
-                updateSM<MappingSM><<<blocks, THREADS_PER_BLOCK>>>(accView);
+                updateSM<MappingSM><<<blocks, THREADS_PER_BLOCK>>>(llama::shallowCopy(accView));
             else
-                update<<<blocks, THREADS_PER_BLOCK>>>(accView);
+                update<<<blocks, THREADS_PER_BLOCK>>>(llama::shallowCopy(accView));
             const auto secondsUpdate = stop();
             std::cout << "update " << secondsUpdate << " s\t";
             sumUpdate += secondsUpdate;
         }
 
         start();
-        ::move<<<blocks, THREADS_PER_BLOCK>>>(accView);
+        ::move<<<blocks, THREADS_PER_BLOCK>>>(llama::shallowCopy(accView));
         const auto secondsMove = stop();
         std::cout << "move " << secondsMove << " s\n";
         sumMove += secondsMove;
@@ -309,8 +300,8 @@ try
     start();
     for(std::size_t i = 0; i < blobs; i++)
         checkError(cudaMemcpy(
-            hostView.storageBlobs[i].data(),
-            accView.storageBlobs[i],
+            &hostView.storageBlobs[i][0],
+            &accView.storageBlobs[i][0],
             hostView.mapping().blobSize(i),
             cudaMemcpyDeviceToHost));
     std::cout << "copy D->H " << stop() << " s\n";
@@ -318,8 +309,6 @@ try
     if constexpr(TRACE)
         hostView.mapping().printFieldHits(hostView.storageBlobs);
 
-    for(std::size_t i = 0; i < accView.storageBlobs.size(); i++)
-        checkError(cudaFree(accView.storageBlobs[i]));
     checkError(cudaEventDestroy(startEvent));
     checkError(cudaEventDestroy(stopEvent));
 }
