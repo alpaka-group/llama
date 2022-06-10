@@ -276,17 +276,10 @@ void run(std::ostream& plotFile)
 
     Stopwatch watch;
 
-    const auto bufferSize = Size(mapping.blobSize(0));
-
-    auto hostBuffer = alpaka::allocBuf<std::byte, Size>(devHost, bufferSize);
-    auto accBuffer = alpaka::allocBuf<std::byte, Size>(devAcc, bufferSize);
-
-    watch.printAndReset("alloc");
-
-    auto hostView = llama::View(mapping, llama::Array{alpaka::getPtrNative(hostBuffer)});
-    auto accView = llama::View(mapping, llama::Array{alpaka::getPtrNative(accBuffer)});
-
-    watch.printAndReset("views");
+    auto hostView
+        = llama::allocViewUninitialized(mapping, llama::bloballoc::AlpakaBuf<Size, decltype(devHost)>{devHost});
+    auto accView = llama::allocViewUninitialized(mapping, llama::bloballoc::AlpakaBuf<Size, decltype(devAcc)>{devAcc});
+    watch.printAndReset("alloc views");
 
     std::mt19937_64 generator;
     std::normal_distribution<FP> distribution(FP(0), FP(1));
@@ -302,10 +295,10 @@ void run(std::ostream& plotFile)
         p(tag::Mass()) = distribution(generator) / FP(100);
         hostView(i) = p;
     }
-
     watch.printAndReset("init");
 
-    alpaka::memcpy(queue, accBuffer, hostBuffer, bufferSize);
+    for(std::size_t i = 0; i < mapping.blobCount; i++)
+        alpaka::memcpy(queue, accView.storageBlobs[i], hostView.storageBlobs[i], mapping.blobSize(0));
     watch.printAndReset("copy H->D");
 
     const auto workdiv = alpaka::WorkDivMembers<Dim, Size>{
@@ -318,16 +311,17 @@ void run(std::ostream& plotFile)
     for(int s = 0; s < STEPS; ++s)
     {
         auto updateKernel = UpdateKernel<PROBLEM_SIZE, DESIRED_ELEMENTS_PER_THREAD, THREADS_PER_BLOCK, MappingSM>{};
-        alpaka::exec<Acc>(queue, workdiv, updateKernel, accView);
+        alpaka::exec<Acc>(queue, workdiv, updateKernel, llama::shallowCopy(accView));
         sumUpdate += watch.printAndReset("update", '\t');
 
         auto moveKernel = MoveKernel<PROBLEM_SIZE, DESIRED_ELEMENTS_PER_THREAD>{};
-        alpaka::exec<Acc>(queue, workdiv, moveKernel, accView);
+        alpaka::exec<Acc>(queue, workdiv, moveKernel, llama::shallowCopy(accView));
         sumMove += watch.printAndReset("move");
     }
     plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
-    alpaka::memcpy(queue, hostBuffer, accBuffer, bufferSize);
+    for(std::size_t i = 0; i < mapping.blobCount; i++)
+        alpaka::memcpy(queue, hostView.storageBlobs[i], accView.storageBlobs[i], mapping.blobSize(0));
     watch.printAndReset("copy D->H");
 }
 

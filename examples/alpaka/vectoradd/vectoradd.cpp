@@ -16,8 +16,7 @@
 #include <random>
 #include <utility>
 
-constexpr auto MAPPING
-    = 1; ///< 0 native AoS, 1 native SoA, 2 native SoA (separate blobs, does not work yet), 3 tree AoS, 4 tree SoA
+constexpr auto MAPPING = 2; ///< 0 native AoS, 1 native SoA, 2 native SoA, 3 tree AoS, 4 tree SoA
 constexpr auto PROBLEM_SIZE = 64 * 1024 * 1024;
 constexpr auto BLOCK_SIZE = 256;
 constexpr auto STEPS = 10;
@@ -104,23 +103,13 @@ try
 
     Stopwatch chrono;
 
-    const auto bufferSize = Size(mapping.blobSize(0));
+    // allocate LLAMA views
+    auto hostA = llama::allocViewUninitialized(mapping, llama::bloballoc::AlpakaBuf<Size, decltype(devHost)>{devHost});
+    auto hostB = llama::allocViewUninitialized(mapping, llama::bloballoc::AlpakaBuf<Size, decltype(devHost)>{devHost});
+    auto devA = llama::allocViewUninitialized(mapping, llama::bloballoc::AlpakaBuf<Size, decltype(devAcc)>{devAcc});
+    auto devB = llama::allocViewUninitialized(mapping, llama::bloballoc::AlpakaBuf<Size, decltype(devAcc)>{devAcc});
 
-    // allocate buffers
-    auto hostBufferA = alpaka::allocBuf<std::byte, Size>(devHost, bufferSize);
-    auto hostBufferB = alpaka::allocBuf<std::byte, Size>(devHost, bufferSize);
-    auto devBufferA = alpaka::allocBuf<std::byte, Size>(devAcc, bufferSize);
-    auto devBufferB = alpaka::allocBuf<std::byte, Size>(devAcc, bufferSize);
-
-    chrono.printAndReset("Alloc");
-
-    // create LLAMA views
-    auto hostA = llama::View{mapping, llama::Array{alpaka::getPtrNative(hostBufferA)}};
-    auto hostB = llama::View{mapping, llama::Array{alpaka::getPtrNative(hostBufferB)}};
-    auto devA = llama::View{mapping, llama::Array{alpaka::getPtrNative(devBufferA)}};
-    auto devB = llama::View{mapping, llama::Array{alpaka::getPtrNative(devBufferB)}};
-
-    chrono.printAndReset("Views");
+    chrono.printAndReset("Alloc views");
 
     std::default_random_engine generator;
     std::normal_distribution<FP> distribution(FP(0), FP(1));
@@ -133,9 +122,12 @@ try
     }
     chrono.printAndReset("Init");
 
-    alpaka::memcpy(queue, devBufferA, hostBufferA, bufferSize);
-    alpaka::memcpy(queue, devBufferB, hostBufferB, bufferSize);
-
+    const auto blobCount = decltype(mapping)::blobCount;
+    for(std::size_t i = 0; i < blobCount; i++)
+    {
+        alpaka::memcpy(queue, devA.storageBlobs[i], hostA.storageBlobs[i], mapping.blobSize(i));
+        alpaka::memcpy(queue, devB.storageBlobs[i], hostB.storageBlobs[i], mapping.blobSize(i));
+    }
     chrono.printAndReset("Copy H->D");
 
     constexpr std::size_t hardwareThreads = 2; // relevant for OpenMP2Threads
@@ -151,13 +143,20 @@ try
 
     for(std::size_t s = 0; s < STEPS; ++s)
     {
-        alpaka::exec<Acc>(queue, workdiv, AddKernel<PROBLEM_SIZE, elemCount>{}, devA, devB);
+        alpaka::exec<Acc>(
+            queue,
+            workdiv,
+            AddKernel<PROBLEM_SIZE, elemCount>{},
+            llama::shallowCopy(devA),
+            llama::shallowCopy(devB));
         chrono.printAndReset("Add kernel");
     }
 
-    alpaka::memcpy(queue, hostBufferA, devBufferA, bufferSize);
-    alpaka::memcpy(queue, hostBufferB, devBufferB, bufferSize);
-
+    for(std::size_t i = 0; i < blobCount; i++)
+    {
+        alpaka::memcpy(queue, hostA.storageBlobs[i], devA.storageBlobs[i], mapping.blobSize(i));
+        alpaka::memcpy(queue, hostB.storageBlobs[i], devB.storageBlobs[i], mapping.blobSize(i));
+    }
     chrono.printAndReset("Copy D->H");
 
     return 0;
