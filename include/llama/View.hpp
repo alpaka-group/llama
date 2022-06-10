@@ -519,6 +519,38 @@ namespace llama
         }
     };
 
+    namespace internal
+    {
+        template<typename Mapping, typename BlobType, typename TransformBlobFunc, std::size_t... Is>
+        LLAMA_FN_HOST_ACC_INLINE auto makeTransformedBlobArray(
+            View<Mapping, BlobType>& view,
+            const TransformBlobFunc& transformBlob,
+            std::integer_sequence<std::size_t, Is...>)
+        {
+            return llama::Array{transformBlob(view.storageBlobs[Is])...};
+        }
+    } // namespace internal
+
+    /// Applies the given transformation to the blobs of a view and creates a new view with the transformed blobs and
+    /// the same mapping as the old view.
+    template<typename Mapping, typename BlobType, typename TransformBlobFunc>
+    LLAMA_FN_HOST_ACC_INLINE auto transformBlobs(View<Mapping, BlobType>& view, const TransformBlobFunc& transformBlob)
+    {
+        constexpr auto blobCount = View<Mapping, BlobType>::Mapping::blobCount;
+        return View{
+            view.mapping(),
+            internal::makeTransformedBlobArray(view, transformBlob, std::make_index_sequence<blobCount>{})};
+    }
+
+    /// Creates a shallow copy of a view. This copy must not outlive the view, since it references its blob array.
+    /// \tparam NewBlobType The blob type of the shallow copy. Must be a non owning pointer like type.
+    /// \return A new view with the same mapping as view, where each blob refers to the blob in view.
+    template<typename Mapping, typename BlobType, typename NewBlobType = std::byte*>
+    LLAMA_FN_HOST_ACC_INLINE auto shallowCopy(View<Mapping, BlobType>& view)
+    {
+        return transformBlobs(view, [](BlobType& blob) { return static_cast<NewBlobType>(&blob[0]); });
+    }
+
     template<typename View>
     inline constexpr auto IsView = false;
 
