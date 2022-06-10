@@ -207,7 +207,7 @@ try
     }
 
     // LLAMA
-    using ArrayIndex = llama::ArrayIndex<2>;
+    using ArrayIndex = llama::ArrayIndex<std::size_t, 2>;
 
     auto treeOperationList = llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()};
     const auto hostMapping
@@ -299,7 +299,7 @@ try
     struct VirtualHostElement
     {
         llama::VirtualView<decltype(hostView)&> virtualHost;
-        const llama::ArrayExtentsDynamic<2> validMiniSize;
+        const llama::ArrayExtentsDynamic<std::size_t, 2> validMiniSize;
     };
     std::list<VirtualHostElement> virtualHostList;
     for(std::size_t chunk_y = 0; chunk_y < chunks[0]; ++chunk_y)
