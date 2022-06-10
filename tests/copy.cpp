@@ -3,6 +3,8 @@
 
 #include "common.hpp"
 
+#include <thread>
+
 namespace
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
@@ -92,9 +94,43 @@ TEMPLATE_LIST_TEST_CASE("copy", "", AllMappingsProduct)
 }
 
 // NOLINTNEXTLINE(cert-err58-cpp)
-TEMPLATE_LIST_TEST_CASE("blobMemcpy", "", AllMappings)
+TEMPLATE_LIST_TEST_CASE("memcpyBlobs_default", "", AllMappings)
 {
-    testCopy<TestType, TestType>([](const auto& srcView, auto& dstView) { llama::blobMemcpy(srcView, dstView); });
+    testCopy<TestType, TestType>([](const auto& srcView, auto& dstView) { llama::memcpyBlobs(srcView, dstView); });
+}
+
+TEMPLATE_LIST_TEST_CASE("memcpyBlobs_3threads", "", AllMappings)
+{
+    testCopy<TestType, TestType>(
+        [](const auto& srcView, auto& dstView)
+        {
+            std::thread t1{[&] { llama::memcpyBlobs(srcView, dstView, 0, 3); }};
+            std::thread t2{[&] { llama::memcpyBlobs(srcView, dstView, 1, 3); }};
+            std::thread t3{[&] { llama::memcpyBlobs(srcView, dstView, 2, 3); }};
+            t1.join();
+            t2.join();
+            t3.join();
+        });
+}
+
+// NOLINTNEXTLINE(cert-err58-cpp)
+TEMPLATE_LIST_TEST_CASE("copyBlobs_default", "", AllMappings)
+{
+    testCopy<TestType, TestType>([](const auto& srcView, auto& dstView) { llama::copyBlobs(srcView, dstView); });
+}
+
+// NOLINTNEXTLINE(cert-err58-cpp)
+TEMPLATE_LIST_TEST_CASE("copyBlobs_stdcopy", "", AllMappings)
+{
+    testCopy<TestType, TestType>(
+        [](const auto& srcView, auto& dstView)
+        {
+            llama::copyBlobs(
+                srcView,
+                dstView,
+                [](const auto& srcBlob, auto& dstBlob, std::size_t size)
+                { std::copy(&srcBlob[0], &srcBlob[0] + size, &dstBlob[0]); });
+        });
 }
 
 // NOLINTNEXTLINE(cert-err58-cpp)

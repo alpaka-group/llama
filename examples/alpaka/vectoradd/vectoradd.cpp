@@ -152,12 +152,10 @@ try
     }
     chrono.printAndReset("Init");
 
-    const auto blobCount = decltype(mapping)::blobCount;
-    for(std::size_t i = 0; i < blobCount; i++)
-    {
-        alpaka::memcpy(queue, devA.blobs()[i], hostA.blobs()[i]);
-        alpaka::memcpy(queue, devB.blobs()[i], hostB.blobs()[i]);
-    }
+    auto copyBlobAlpaka
+        = [&](const auto& srcBlob, auto& dstBlob, std::size_t size) { alpaka::memcpy(queue, dstBlob, srcBlob, size); };
+    llama::copyBlobs(hostA, devA, copyBlobAlpaka);
+    llama::copyBlobs(hostB, devB, copyBlobAlpaka);
     chrono.printAndReset("Copy H->D");
 
     const auto workdiv = alpaka::getValidWorkDiv<Acc>(devAcc, problemSize, elements, false);
@@ -171,11 +169,8 @@ try
     }
     plotFile << "\"LLAMA " << mappingname << "\"\t" << stats.mean() << "\t" << stats.sem() << '\n';
 
-    for(std::size_t i = 0; i < blobCount; i++)
-    {
-        alpaka::memcpy(queue, hostA.blobs()[i], devA.blobs()[i]);
-        alpaka::memcpy(queue, hostB.blobs()[i], devB.blobs()[i]);
-    }
+    llama::copyBlobs(devA, hostA, copyBlobAlpaka);
+    llama::copyBlobs(devB, hostB, copyBlobAlpaka);
     chrono.printAndReset("Copy D->H");
 }
 catch(const std::exception& e)
