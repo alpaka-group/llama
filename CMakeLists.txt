@@ -99,13 +99,13 @@ if (LLAMA_BUILD_EXAMPLES)
 
 	# alpaka examples
 	find_package(alpaka 0.9.0 QUIET)
-	if (_ALPAKA_FOUND)
+	if (_alpaka_FOUND)
 		add_subdirectory("examples/alpaka/nbody")
 		add_subdirectory("examples/alpaka/vectoradd")
 		add_subdirectory("examples/alpaka/asyncblur")
 		add_subdirectory("examples/alpaka/pic")
 		add_subdirectory("examples/alpaka/daxpy")
-	elseif()
+	else()
 		message(WARNING "Could not find alpaka. Alpaka examples are disabled.")
 	endif()
 
