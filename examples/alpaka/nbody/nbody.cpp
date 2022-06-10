@@ -262,7 +262,7 @@ void run(std::ostream& plotFile)
 
     auto mapping = []
     {
-        using ArrayExtents = llama::ArrayExtentsDynamic<1, int>;
+        using ArrayExtents = llama::ArrayExtentsDynamic<int, 1>;
         const auto extents = ArrayExtents{PROBLEM_SIZE};
         if constexpr(MappingGM == AoS)
             return llama::mapping::AoS<ArrayExtents, Particle>{extents};

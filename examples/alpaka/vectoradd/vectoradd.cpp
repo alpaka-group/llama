@@ -82,7 +82,7 @@ try
     // LLAMA
     const auto mapping = [&]
     {
-        using ArrayExtents = llama::ArrayExtentsDynamic<1>;
+        using ArrayExtents = llama::ArrayExtentsDynamic<unsigned, 1>;
         const auto extents = ArrayExtents{PROBLEM_SIZE};
         if constexpr(MAPPING == 0)
             return llama::mapping::AoS<ArrayExtents, Vector>{extents};

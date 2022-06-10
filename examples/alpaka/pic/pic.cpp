@@ -263,7 +263,7 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& devHost)
 
     const auto fieldMapping = []
     {
-        using ArrayExtents = llama::ArrayExtentsDynamic<2>;
+        using ArrayExtents = llama::ArrayExtentsDynamic<size_t, 2>;
         const auto fieldExtents = ArrayExtents{{X_, Y_}};
         if constexpr(FieldMapping == 0)
             return llama::mapping::AoS<ArrayExtents, V3Real>(fieldExtents);
@@ -309,7 +309,7 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& devHost)
 
     auto particleMapping = [&]
     {
-        using ArrayExtents = llama::ArrayExtentsDynamic<1>;
+        using ArrayExtents = llama::ArrayExtentsDynamic<size_t, 1>;
         const auto particleExtents = ArrayExtents{numpart};
         if constexpr(ParticleMapping == 0)
             return llama::mapping::AoS<ArrayExtents, Particle>{particleExtents};
