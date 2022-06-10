@@ -1,5 +1,7 @@
 #include "common.hpp"
 
+#include <deque>
+
 // clang-format off
 namespace tag
 {
@@ -287,4 +289,35 @@ TEST_CASE("view.indexing")
                     CHECK(w == 42.0f);
                 });
         });
+}
+
+TEMPLATE_TEST_CASE("view.transformBlobs", "", llama::bloballoc::Vector)
+{
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{16, 16}, Particle{}});
+    iotaFillView(view);
+
+    auto copy = llama::transformBlobs(
+        view,
+        [](auto& vector) { return std::deque<std::byte>(vector.begin(), vector.end()); });
+    STATIC_REQUIRE(std::is_same_v<std::decay_t<decltype(copy.storageBlobs[0])>, std::deque<std::byte>>);
+    iotaCheckView(copy);
+}
+
+TEMPLATE_TEST_CASE("view.shallowCopy", "", llama::bloballoc::Vector, llama::bloballoc::SharedPtr)
+{
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{16, 16}, Particle{}}, TestType{});
+    auto checkCopy = [](const auto& original, const auto& copy)
+    {
+        STATIC_REQUIRE(std::is_same_v<
+                       typename std::decay_t<decltype(view)>::Mapping,
+                       typename std::decay_t<decltype(copy)>::Mapping>);
+        // check that blob start address is the same
+        for(std::size_t i = 0; i < original.storageBlobs.size(); i++)
+            CHECK(&original.storageBlobs[i][0] == &copy.storageBlobs[i][0]);
+    };
+
+    auto copy = llama::shallowCopy(view);
+    checkCopy(view, copy);
+    auto copyOfCopy = llama::shallowCopy(copy);
+    checkCopy(view, copyOfCopy);
 }
