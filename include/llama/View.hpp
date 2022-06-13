@@ -40,7 +40,7 @@ namespace llama
             [[maybe_unused]] constexpr auto alignment
                 = alignOf<typename Mapping::RecordDim>; // g++-12 warns that alignment is unsed
             return {alloc(std::integral_constant<std::size_t, alignment>{}, mapping.blobSize(Is))...};
-        }
+        } // NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
     } // namespace internal
 
     /// Same as \ref allocView but does not run field constructors.
