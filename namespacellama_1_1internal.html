@@ -265,6 +265,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a36b0736740116d5e9fff6172f5b202af"><td class="memTemplParams" colspan="2">template&lt;typename Allocator , typename Mapping , std::size_t... Is&gt; </td></tr>
 <tr class="memitem:a36b0736740116d5e9fff6172f5b202af"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a36b0736740116d5e9fff6172f5b202af">makeBlobArray</a> (const Allocator &amp;alloc, const Mapping &amp;mapping, std::integer_sequence&lt; std::size_t, Is... &gt;) -&gt; <a class="el" href="structllama_1_1Array.html">Array</a>&lt; <a class="el" href="namespacellama_1_1internal.html#a6b703634fd8ad7364cf42588add461bc">AllocatorBlobType</a>&lt; Allocator, typename Mapping::RecordDim &gt;, Mapping::blobCount &gt;</td></tr>
 <tr class="separator:a36b0736740116d5e9fff6172f5b202af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a1b32157e1b55407cfa26630afeddc2"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename BlobType , typename TransformBlobFunc , std::size_t... Is&gt; </td></tr>
+<tr class="memitem:a4a1b32157e1b55407cfa26630afeddc2"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a4a1b32157e1b55407cfa26630afeddc2">makeTransformedBlobArray</a> (<a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType &gt; &amp;view, const TransformBlobFunc &amp;transformBlob, std::integer_sequence&lt; std::size_t, Is... &gt;)</td></tr>
+<tr class="separator:a4a1b32157e1b55407cfa26630afeddc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a124e4d559d771e918724b3fee4a86e39"><td class="memTemplParams" colspan="2">template&lt;typename Functor , typename LeftRecord , typename RightView , typename RightBoundRecordDim , bool RightOwnView&gt; </td></tr>
 <tr class="memitem:a124e4d559d771e918724b3fee4a86e39"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a124e4d559d771e918724b3fee4a86e39">virtualRecordArithOperator</a> (LeftRecord &amp;left, const <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; RightView, RightBoundRecordDim, RightOwnView &gt; &amp;right) -&gt; LeftRecord &amp;</td></tr>
 <tr class="separator:a124e4d559d771e918724b3fee4a86e39"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1076,6 +1079,52 @@ template&lt;typename T , typename Tuple , std::size_t... Is&gt; </div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00286">286</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a4a1b32157e1b55407cfa26630afeddc2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a1b32157e1b55407cfa26630afeddc2">&#9670;&nbsp;</a></span>makeTransformedBlobArray()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping , typename BlobType , typename TransformBlobFunc , std::size_t... Is&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto llama::internal::makeTransformedBlobArray </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>view</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const TransformBlobFunc &amp;&#160;</td>
+          <td class="paramname"><em>transformBlob</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::integer_sequence&lt; std::size_t, Is... &gt;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00525">525</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -2083,7 +2132,7 @@ template&lt;bool Align, typename TypeList &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Mon Jun 13 2022 07:49:13 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Jun 13 2022 14:46:10 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

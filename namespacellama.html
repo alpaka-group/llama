@@ -410,6 +410,12 @@ Functions</h2></td></tr>
 <tr class="memitem:ac1445fa67728a9433fbd8b68f195fbe4"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , std::size_t... Coords, typename Blobs &gt; </td></tr>
 <tr class="memitem:ac1445fa67728a9433fbd8b68f195fbe4"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ac1445fa67728a9433fbd8b68f195fbe4">mapToMemory</a> (Mapping &amp;mapping, typename Mapping::ArrayIndex ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords... &gt; rc, Blobs &amp;blobs) -&gt; decltype(auto)</td></tr>
 <tr class="separator:ac1445fa67728a9433fbd8b68f195fbe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1db17bfa9bb1b8f44ebee2e605c53897"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename BlobType , typename TransformBlobFunc &gt; </td></tr>
+<tr class="memitem:a1db17bfa9bb1b8f44ebee2e605c53897"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a1db17bfa9bb1b8f44ebee2e605c53897">transformBlobs</a> (<a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType &gt; &amp;view, const TransformBlobFunc &amp;transformBlob)</td></tr>
+<tr class="separator:a1db17bfa9bb1b8f44ebee2e605c53897"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f622b8c4a09a0c387f653dcfe93a5dd"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename BlobType , typename NewBlobType  = std::byte*&gt; </td></tr>
+<tr class="memitem:a4f622b8c4a09a0c387f653dcfe93a5dd"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a4f622b8c4a09a0c387f653dcfe93a5dd">shallowCopy</a> (<a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType &gt; &amp;view)</td></tr>
+<tr class="separator:a4f622b8c4a09a0c387f653dcfe93a5dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a416bef7f5a6a9e2cecf4f9b090c9d4ed"><td class="memTemplParams" colspan="2">template&lt;typename TStoredParentView &gt; </td></tr>
 <tr class="memitem:a416bef7f5a6a9e2cecf4f9b090c9d4ed"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a416bef7f5a6a9e2cecf4f9b090c9d4ed">VirtualView</a> (TStoredParentView &amp;&amp;, typename std::remove_reference_t&lt; TStoredParentView &gt;::Mapping::ArrayIndex) -&gt; <a class="el" href="structllama_1_1VirtualView.html">VirtualView</a>&lt; TStoredParentView &gt;</td></tr>
 <tr class="separator:a416bef7f5a6a9e2cecf4f9b090c9d4ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -2738,6 +2744,43 @@ template&lt;typename Integral &gt; </div>
 
 </div>
 </div>
+<a id="a4f622b8c4a09a0c387f653dcfe93a5dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f622b8c4a09a0c387f653dcfe93a5dd">&#9670;&nbsp;</a></span>shallowCopy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping , typename BlobType , typename NewBlobType  = std::byte*&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto llama::shallowCopy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>view</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Creates a shallow copy of a view. This copy must not outlive the view, since it references its blob array. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">NewBlobType</td><td>The blob type of the shallow copy. Must be a non owning pointer like type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A new view with the same mapping as view, where each blob refers to the blob in view. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00549">549</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
 <a id="aeb3d43be3a5b6ce8de6469edd28d4a02"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aeb3d43be3a5b6ce8de6469edd28d4a02">&#9670;&nbsp;</a></span>structName() <span class="overload">[1/2]</span></h2>
 
@@ -2824,6 +2867,47 @@ template&lt;typename ViewA , typename BoundRecordDimA , bool OwnViewA, typename 
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00729">729</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a1db17bfa9bb1b8f44ebee2e605c53897"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1db17bfa9bb1b8f44ebee2e605c53897">&#9670;&nbsp;</a></span>transformBlobs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping , typename BlobType , typename TransformBlobFunc &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto llama::transformBlobs </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>view</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const TransformBlobFunc &amp;&#160;</td>
+          <td class="paramname"><em>transformBlob</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Applies the given transformation to the blobs of a view and creates a new view with the transformed blobs and the same mapping as the old view. </p>
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00537">537</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -3639,7 +3723,7 @@ template&lt;typename View &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00523">523</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00555">555</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -3665,7 +3749,7 @@ template&lt;typename Mapping , typename BlobType &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00526">526</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00558">558</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -3829,7 +3913,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Mon Jun 13 2022 07:49:13 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Jun 13 2022 14:46:10 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
