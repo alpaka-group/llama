@@ -204,4 +204,10 @@ namespace llama::mapping
             return static_cast<const Mapping&>(*this);
         }
     };
+
+    template<typename Mapping>
+    inline constexpr bool isTrace = false;
+
+    template<typename Mapping, typename CountType, bool MyCodeHandlesProxyReferences>
+    inline constexpr bool isTrace<Trace<Mapping, CountType, MyCodeHandlesProxyReferences>> = true;
 } // namespace llama::mapping
