@@ -274,6 +274,12 @@ Variables</h2></td></tr>
 <tr class="memitem:a29822b876ecb74d42916a6c93877a384"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename RecordCoordsForMapping1 , template&lt; typename... &gt; typename MappingTemplate1, template&lt; typename... &gt; typename MappingTemplate2, bool SeparateBlobs&gt; </td></tr>
 <tr class="memitem:a29822b876ecb74d42916a6c93877a384"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a29822b876ecb74d42916a6c93877a384">isSplit&lt; Split&lt; ArrayExtents, RecordDim, RecordCoordsForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt; &gt;</a> = true</td></tr>
 <tr class="separator:a29822b876ecb74d42916a6c93877a384"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a033ccad2b2e578270aeaa7e96e066d57"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
+<tr class="memitem:a033ccad2b2e578270aeaa7e96e066d57"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a033ccad2b2e578270aeaa7e96e066d57">isTrace</a> = false</td></tr>
+<tr class="separator:a033ccad2b2e578270aeaa7e96e066d57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59f794bd5f87ee22946c743a4abaa90f"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename CountType , bool MyCodeHandlesProxyReferences&gt; </td></tr>
+<tr class="memitem:a59f794bd5f87ee22946c743a4abaa90f"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a59f794bd5f87ee22946c743a4abaa90f">isTrace&lt; Trace&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt; &gt;</a> = true</td></tr>
+<tr class="separator:a59f794bd5f87ee22946c743a4abaa90f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
 <a id="a3695faa8a6c5702ee9de9fda033d5fc1"></a>
@@ -1070,6 +1076,58 @@ template&lt;typename ArrayExtents , typename RecordDim , typename RecordCoordsFo
 
 </div>
 </div>
+<a id="a033ccad2b2e578270aeaa7e96e066d57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a033ccad2b2e578270aeaa7e96e066d57">&#9670;&nbsp;</a></span>isTrace</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool llama::mapping::isTrace = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00209">209</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a59f794bd5f87ee22946c743a4abaa90f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59f794bd5f87ee22946c743a4abaa90f">&#9670;&nbsp;</a></span>isTrace&lt; Trace&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt; &gt;</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping , typename CountType , bool MyCodeHandlesProxyReferences&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="namespacellama_1_1mapping.html#a033ccad2b2e578270aeaa7e96e066d57">llama::mapping::isTrace</a>&lt; <a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a>&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt; &gt; = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00212">212</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
+
+</div>
+</div>
 <a id="abde584824d91d31ec24b7c326632a3c3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abde584824d91d31ec24b7c326632a3c3">&#9670;&nbsp;</a></span>maxLanes</h2>
 
@@ -1116,7 +1174,7 @@ template&lt;typename RecordDim , std::size_t VectorRegisterBits&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li>
-    <li class="footer">Generated on Tue Jun 14 2022 13:49:12 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue Jun 14 2022 18:27:52 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
