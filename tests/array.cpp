@@ -6,21 +6,21 @@ TEST_CASE("Array.empty")
     STATIC_REQUIRE(!llama::Array{1}.empty());
 }
 
-TEST_CASE("Array.first")
+TEST_CASE("Array.front")
 {
     llama::Array a{1, 2, 3};
-    CHECK(a.first() == 1);
-    CHECK(std::as_const(a).first() == 1);
-    a.first() = 4;
+    CHECK(a.front() == 1);
+    CHECK(std::as_const(a).front() == 1);
+    a.front() = 4;
     CHECK(a == llama::Array{4, 2, 3});
 }
 
-TEST_CASE("Array.last")
+TEST_CASE("Array.back")
 {
     llama::Array a{1, 2, 3};
-    CHECK(a.last() == 3);
-    CHECK(std::as_const(a).last() == 3);
-    a.last() = 4;
+    CHECK(a.back() == 3);
+    CHECK(std::as_const(a).back() == 3);
+    a.back() = 4;
     CHECK(a == llama::Array{1, 2, 4});
 }
 

@@ -49,22 +49,22 @@ namespace llama
             return &element[N];
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto first() -> T&
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto front() -> T&
         {
             return element[0];
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto first() const -> const T&
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto front() const -> const T&
         {
             return element[0];
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto last() -> T&
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto back() -> T&
         {
             return element[N - 1];
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto last() const -> const T&
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto back() const -> const T&
         {
             return element[N - 1];
         }
