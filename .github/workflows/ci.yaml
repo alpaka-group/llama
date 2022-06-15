@@ -52,7 +52,14 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake .. -DBUILD_TESTING=ON -DLLAMA_BUILD_EXAMPLES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=$CONFIG -Dalpaka_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON -Dalpaka_ACC_CPU_DISABLE_ATOMIC_REF=ON -Dalpaka_CXX_STANDARD=17 -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+        cmake .. -DCMAKE_BUILD_TYPE=$CONFIG \
+                 -DBUILD_TESTING=ON \
+                 -DLLAMA_BUILD_EXAMPLES=ON \
+                 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+                 -Dalpaka_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON \
+                 -Dalpaka_ACC_CPU_DISABLE_ATOMIC_REF=ON \
+                 -Dalpaka_CXX_STANDARD=17 \
+                 -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
         sed -i 's/\(-forward-unknown-to-host-compiler\|--generate-code=arch=[^ ]\+\|--expt-extended-lambda\|--expt-relaxed-constexpr\|--use_fast_math\)//g' compile_commands.json # remove NVCC specific flags which clang cannot handle
         run-clang-tidy-14 -header-filter='^((?!/thirdparty/).)*$' -extra-arg=--no-cuda-version-check -extra-arg=-nocudalib -extra-arg=-Wno-unused-command-line-argument '^(?!.*'$PWD').*$'
 
@@ -74,7 +81,11 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake .. -DBUILD_TESTING=ON -DLLAMA_BUILD_EXAMPLES=OFF -DCMAKE_BUILD_TYPE=Debug -DLLAMA_ENABLE_COVERAGE_FOR_TESTS=ON -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+        cmake .. -DCMAKE_BUILD_TYPE=Debug \
+                 -DBUILD_TESTING=ON \
+                 -DLLAMA_BUILD_EXAMPLES=OFF \
+                 -DLLAMA_ENABLE_COVERAGE_FOR_TESTS=ON \
+                 -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
     - name: build tests
       run: |
         cmake --build build -j $THREADS
@@ -209,7 +220,7 @@ jobs:
           sudo apt update
           sudo apt install intel-oneapi-compiler-dpcpp-cpp
       - name: install extras
-        if: ${{ matrix.install_extra }} 
+        if: ${{ matrix.install_extra }}
         run: |
           sudo apt install ${{ matrix.install_extra }}
       - name: vcpkg install dependencies
@@ -243,7 +254,16 @@ jobs:
             unset CUDACXX
           fi
           echo "nvcc is here: $CUDACXX"
-          cmake .. -DBUILD_TESTING=ON -DLLAMA_BUILD_EXAMPLES=ON -DCMAKE_BUILD_TYPE=$CONFIG -DLLAMA_ENABLE_ASAN_FOR_TESTS=ON -Dalpaka_ACC_CPU_B_SEQ_T_SEQ_ENABLE=${{ !matrix.cuda }} -Dalpaka_ACC_CPU_DISABLE_ATOMIC_REF=ON -Dalpaka_ACC_GPU_CUDA_ENABLE=${{ matrix.cuda }} -Dalpaka_CXX_STANDARD=17 -DCMAKE_CUDA_COMPILER=$CUDACXX -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
+          cmake .. -DBUILD_TESTING=ON \
+                   -DLLAMA_BUILD_EXAMPLES=ON \
+                   -DCMAKE_BUILD_TYPE=$CONFIG \
+                   -DLLAMA_ENABLE_ASAN_FOR_TESTS=ON \
+                   -Dalpaka_ACC_CPU_B_SEQ_T_SEQ_ENABLE=${{ !matrix.cuda }} \
+                   -Dalpaka_ACC_CPU_DISABLE_ATOMIC_REF=ON \
+                   -Dalpaka_ACC_GPU_CUDA_ENABLE=${{ matrix.cuda }} \
+                   -Dalpaka_CXX_STANDARD=17 \
+                   -DCMAKE_CUDA_COMPILER=$CUDACXX \
+                   -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
       - name: build tests + examples
         run: |
           if [ ${{ matrix.install_oneapi }} ]; then source /opt/intel/oneapi/setvars.sh; fi
@@ -283,7 +303,10 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake .. -DBUILD_TESTING=ON -DLLAMA_BUILD_EXAMPLES=ON -Dalpaka_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
+        cmake .. -DBUILD_TESTING=ON \
+                 -DLLAMA_BUILD_EXAMPLES=ON \
+                 -Dalpaka_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON \
+                 -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
     - name: build tests + examples
       run: cmake --build build -j $env:THREADS --config $env:CONFIG
     - name: run tests
@@ -320,7 +343,12 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake .. -DBUILD_TESTING=ON -DLLAMA_BUILD_EXAMPLES=ON -DCMAKE_BUILD_TYPE=$CONFIG -Dalpaka_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON -Dalpaka_CXX_STANDARD=17 -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
+          cmake .. -DBUILD_TESTING=ON \
+                   -DLLAMA_BUILD_EXAMPLES=ON \
+                   -DCMAKE_BUILD_TYPE=$CONFIG \
+                   -Dalpaka_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON \
+                   -Dalpaka_CXX_STANDARD=17 \
+                   -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
       - name: build tests + examples
         run: |
           cmake --build build -j $THREADS
