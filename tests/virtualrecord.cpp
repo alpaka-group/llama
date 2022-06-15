@@ -1068,7 +1068,8 @@ TEST_CASE("VirtualRecord.reference_to_One")
     CHECK(v(tag::Y{}) == 2);
     CHECK(v(tag::Z{}) == 3);
 
-    auto r = v(llama::RecordCoord<>{});
+    STATIC_REQUIRE(std::is_same_v<decltype(v(llama::RecordCoord<>{})), decltype(v())>);
+    auto r = v();
     CHECK(r(tag::X{}) == 1);
     CHECK(r(tag::Y{}) == 2);
     CHECK(r(tag::Z{}) == 3);
