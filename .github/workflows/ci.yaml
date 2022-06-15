@@ -263,6 +263,7 @@ jobs:
                    -Dalpaka_ACC_GPU_CUDA_ENABLE=${{ matrix.cuda }} \
                    -Dalpaka_CXX_STANDARD=17 \
                    -DCMAKE_CUDA_COMPILER=$CUDACXX \
+                   -DCMAKE_CUDA_HOST_COMPILER=$CXX \
                    -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
       - name: build tests + examples
         run: |
@@ -303,9 +304,9 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake .. -DBUILD_TESTING=ON \
-                 -DLLAMA_BUILD_EXAMPLES=ON \
-                 -Dalpaka_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON \
+        cmake .. -DBUILD_TESTING=ON `
+                 -DLLAMA_BUILD_EXAMPLES=ON `
+                 -Dalpaka_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON `
                  -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
     - name: build tests + examples
       run: cmake --build build -j $env:THREADS --config $env:CONFIG
