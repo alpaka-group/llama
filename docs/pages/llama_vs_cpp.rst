@@ -223,6 +223,25 @@ Values and references
           auto y = view[i](Pos{});
 
         :cpp:`y` is a copy (of type :cpp:`float`), not a reference!
+    * - Create a copy of a single local record
+      - .. code:: C++
+
+          auto p2 = p;
+      - .. code:: C++
+
+          auto p2 = p;
+      -
+      -
+    * - Create a reference to a single local record
+      - .. code:: C++
+
+          auto& r = p;
+      - .. code:: C++
+
+          auto r = p();
+        Access with an empty tag list.
+      -
+      -
 
 
 Notice that the use of :cpp:`auto` to declare a local copy of a value read through a reference, e.g. :cpp:`auto pos = view[i].pos; // copy`, does not work as expected in LLAMA.
