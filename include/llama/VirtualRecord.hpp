@@ -365,7 +365,7 @@ namespace llama
             return *this;
         }
 
-        /// Create a VirtuaRecord from a different VirtualRecord. Only available for if the view is owned. Used by
+        /// Create a VirtualRecord from a different VirtualRecord. Only available for if the view is owned. Used by
         /// llama::One.
         template<typename OtherView, typename OtherBoundRecordCoord, bool OtherOwnView>
         // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
@@ -383,7 +383,7 @@ namespace llama
         }
 
         // TODO(bgruber): unify with previous in C++20 and use explicit(cond)
-        /// Create a VirtuaRecord from a scalar. Only available for if the view is owned. Used by llama::One.
+        /// Create a VirtualRecord from a scalar. Only available for if the view is owned. Used by llama::One.
         template<typename T, typename = std::enable_if_t<!is_VirtualRecord<T>>>
         LLAMA_FN_HOST_ACC_INLINE explicit VirtualRecord(const T& scalar)
             /* requires(OwnView) */
