@@ -58,6 +58,9 @@ TEST_CASE("mapping.Split.SoA_SingleBlob.AoS_Packed.1Buffer")
         Split<ArrayExtents, Particle, llama::RecordCoord<0>, llama::mapping::SingleBlobSoA, llama::mapping::PackedAoS>{
             extents};
 
+    STATIC_REQUIRE(mapping.blobCount == 1);
+    CHECK(mapping.blobSize(0) == 14336);
+
     constexpr auto mapping1Size = 6120;
     const auto ai = llama::ArrayIndex{0, 0};
     CHECK(mapping.blobNrAndOffset<0, 0>(ai) == llama::NrAndOffset{0, 0});
@@ -91,6 +94,12 @@ TEST_CASE("mapping.Split.AoSoA8.AoS_Packed.One.SoA_SingleBlob.4Buffer")
                 BindSplit<llama::RecordCoord<0>, llama::mapping::PackedAoS, llama::mapping::SingleBlobSoA, true>::fn,
             true>::fn,
         true>{extents};
+
+    STATIC_REQUIRE(mapping.blobCount == 4);
+    CHECK(mapping.blobSize(0) == 768);
+    CHECK(mapping.blobSize(1) == 4);
+    CHECK(mapping.blobSize(2) == 768);
+    CHECK(mapping.blobSize(3) == 128);
 
     CHECK(mapping.blobNrAndOffset<0, 0>({0}) == llama::NrAndOffset{2, 0});
     CHECK(mapping.blobNrAndOffset<0, 1>({0}) == llama::NrAndOffset{2, 8});
@@ -133,6 +142,9 @@ TEST_CASE("mapping.Split.Multilist.SoA.One")
         llama::mapping::AlignedOne,
         true>{extents};
 
+    STATIC_REQUIRE(mapping.blobCount == 7);
+    CHECK(mapping.blobSize(0) == 256);
+
     CHECK(mapping.blobNrAndOffset<0, 0>({0}) == llama::NrAndOffset{0, 0});
     CHECK(mapping.blobNrAndOffset<0, 1>({0}) == llama::NrAndOffset{1, 0});
     CHECK(mapping.blobNrAndOffset<0, 2>({0}) == llama::NrAndOffset{2, 0});
@@ -162,7 +174,7 @@ TEST_CASE("mapping.Split.Multilist.SoA.One")
 
 TEST_CASE("mapping.Split.BitPacked")
 {
-    // split out Pos and Vel into SoA, the rest into One
+    // split X and Y into bitpacked SoA, keep Z as AoS
     using ArrayExtents = llama::ArrayExtents<int, llama::dyn>;
     auto extents = ArrayExtents{32};
     auto mapping = llama::mapping::Split<
@@ -173,6 +185,8 @@ TEST_CASE("mapping.Split.BitPacked")
         llama::mapping::
             BindSplit<llama::RecordCoord<0>, llama::mapping::BitPackedIntSoA, llama::mapping::PackedAoS, true>::fn,
         true>{{extents}, {std::tuple{extents, 5}, std::tuple{extents}}};
+
+    STATIC_REQUIRE(mapping.blobCount == 3);
     CHECK(mapping.blobSize(0) == 12);
     CHECK(mapping.blobSize(1) == 20);
     CHECK(mapping.blobSize(2) == 128);

@@ -8,6 +8,9 @@ TEST_CASE("mapping.AoS.Packed.address")
         auto mapping = Mapping{arrayExtents};
         using ArrayIndex = typename Mapping::ArrayIndex;
 
+        STATIC_REQUIRE(mapping.blobCount == 1);
+        CHECK(mapping.blobSize(0) == 14336);
+
         {
             const auto ai = ArrayIndex{0, 0};
             CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 0);
@@ -67,6 +70,9 @@ TEST_CASE("mapping.AoS.Packed.fortran.address")
             = llama::mapping::PackedAoS<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayDimsFortran>;
         auto mapping = Mapping{arrayExtents};
         using ArrayIndex = typename Mapping::ArrayIndex;
+
+        STATIC_REQUIRE(mapping.blobCount == 1);
+        CHECK(mapping.blobSize(0) == 14336);
 
         {
             const auto ai = ArrayIndex{0, 0};
@@ -128,6 +134,9 @@ TEST_CASE("mapping.AoS.Packed.morton.address")
         auto mapping = Mapping{arrayExtents};
         using ArrayIndex = typename Mapping::ArrayIndex;
 
+        STATIC_REQUIRE(mapping.blobCount == 1);
+        CHECK(mapping.blobSize(0) == 14336);
+
         {
             const auto ai = ArrayIndex{0, 0};
             CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 0);
@@ -187,6 +196,9 @@ TEST_CASE("mapping.AoS.Aligned.address")
         auto mapping = Mapping{arrayExtents};
         using ArrayIndex = typename Mapping::ArrayIndex;
 
+        STATIC_REQUIRE(mapping.blobCount == 1);
+        CHECK(mapping.blobSize(0) == 16384);
+
         {
             const auto ai = ArrayIndex{0, 0};
             CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 0);
@@ -245,6 +257,9 @@ TEST_CASE("mapping.AoS.aligned_min.address")
         using Mapping = llama::mapping::MinAlignedAoS<decltype(arrayExtents), Particle>;
         auto mapping = Mapping{arrayExtents};
         using ArrayIndex = typename Mapping::ArrayIndex;
+
+        STATIC_REQUIRE(mapping.blobCount == 1);
+        CHECK(mapping.blobSize(0) == 14336);
 
         {
             const auto ai = ArrayIndex{0, 0};

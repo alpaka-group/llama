@@ -73,6 +73,9 @@ TEST_CASE("mapping.AoSoA.4.address")
             CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 1112);
             CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 1116);
         }
+
+        STATIC_REQUIRE(mapping.blobCount == 1);
+        CHECK(mapping.blobSize(0) == 14336);
     };
     test(llama::ArrayExtentsDynamic<std::size_t, 2>{16, 16});
     test(llama::ArrayExtents<int, 16, llama::dyn>{16});
