@@ -4,8 +4,9 @@
 #include <fstream>
 #include <string>
 
-// AppleClang 13.0 on MacOS 11.0 crashes (segfault) when compiling any of these tests
-#if !(defined(__APPLE__) && __clang_major__ == 13 && __clang_minor__ == 0)
+// AppleClang 13.0 and clang 11.1 crash (segfault) when compiling any of these tests
+#if !(defined(__APPLE__) && __clang_major__ == 13 && __clang_minor__ == 0)                                            \
+    && !(defined(__clang__) && __clang_major__ == 11 && __clang_minor__ == 1)
 namespace
 {
     llama::ArrayExtentsDynamic<std::size_t, 1> extents{32};
