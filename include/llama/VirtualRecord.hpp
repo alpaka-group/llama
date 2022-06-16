@@ -399,7 +399,7 @@ namespace llama
         /// the access resolves to a leaf, a reference to a variable inside the \ref View storage is returned,
         /// otherwise another virtual record.
         template<std::size_t... Coord>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coord...> = {}) const -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coord...>) const -> decltype(auto)
         {
             using AbsolutCoord = Cat<BoundRecordCoord, RecordCoord<Coord...>>;
             using AccessedType = GetType<RecordDim, AbsolutCoord>;
@@ -417,7 +417,7 @@ namespace llama
 
         // FIXME(bgruber): remove redundancy
         template<std::size_t... Coord>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coord...> = {}) -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coord...>) -> decltype(auto)
         {
             using AbsolutCoord = Cat<BoundRecordCoord, RecordCoord<Coord...>>;
             using AccessedType = GetType<RecordDim, AbsolutCoord>;
