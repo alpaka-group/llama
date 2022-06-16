@@ -105,7 +105,7 @@ namespace usellama
             if(m == 0)
                 return "AoS";
             if(m == 1)
-                return "SoA";
+                return "SoA SB";
             if(m == 2)
                 return "SoA MB";
             if(m == 3)
@@ -132,7 +132,7 @@ namespace usellama
             if constexpr(Mapping == 0)
                 return llama::mapping::AoS<ArrayExtents, Particle>{extents};
             if constexpr(Mapping == 1)
-                return llama::mapping::SoA<ArrayExtents, Particle>{extents};
+                return llama::mapping::SoA<ArrayExtents, Particle, false>{extents};
             if constexpr(Mapping == 2)
                 return llama::mapping::SoA<ArrayExtents, Particle, true>{extents};
             if constexpr(Mapping == 3)
