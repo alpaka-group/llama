@@ -137,6 +137,9 @@ jobs:
           - name: build-ubuntu-gcc9-cuda11.4
             cxx: g++-9
             cuda_url: https://developer.download.nvidia.com/compute/cuda/11.4.4/local_installers/cuda_11.4.4_470.82.01_linux.run
+          - name: build-ubuntu-gcc9-cuda11.5
+            cxx: g++-9
+            cuda_url: https://developer.download.nvidia.com/compute/cuda/11.5.2/local_installers/cuda_11.5.2_495.29.05_linux.run
           - name: build-ubuntu-gcc10
             cxx: g++-10
           - name: build-ubuntu-gcc11
