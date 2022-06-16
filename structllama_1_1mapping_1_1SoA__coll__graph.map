@@ -1,5 +1,5 @@
-<map id="llama::mapping::SoA&lt; TArrayExtents, TRecordDim, SeparateBuffers, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;" name="llama::mapping::SoA&lt; TArrayExtents, TRecordDim, SeparateBuffers, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="5,169,320,240"/>
-<area shape="rect" id="node2" href="$structllama_1_1mapping_1_1MappingBase.html" title=" " alt="" coords="47,80,278,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="106,5,219,32"/>
+<map id="llama::mapping::SoA&lt; TArrayExtents, TRecordDim, SeparateBuffers, AlignSubArrays, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;" name="llama::mapping::SoA&lt; TArrayExtents, TRecordDim, SeparateBuffers, AlignSubArrays, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="5,169,315,255"/>
+<area shape="rect" id="node2" href="$structllama_1_1mapping_1_1MappingBase.html" title=" " alt="" coords="45,80,275,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="103,5,217,32"/>
 </map>

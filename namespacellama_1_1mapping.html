@@ -193,12 +193,15 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a0232e67cb311c835b39b540a400f4da0"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim &gt; </td></tr>
 <tr class="memitem:a0232e67cb311c835b39b540a400f4da0"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a0232e67cb311c835b39b540a400f4da0">PackedOne</a> = <a class="el" href="structllama_1_1mapping_1_1One.html">One</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, false, <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimInOrder.html">FlattenRecordDimInOrder</a> &gt;</td></tr>
 <tr class="separator:a0232e67cb311c835b39b540a400f4da0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a34f18e4ebcd5a35dc52529d7c0151c97"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </td></tr>
-<tr class="memitem:a34f18e4ebcd5a35dc52529d7c0151c97"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a34f18e4ebcd5a35dc52529d7c0151c97">SingleBlobSoA</a> = <a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, false, LinearizeArrayDimsFunctor &gt;</td></tr>
-<tr class="separator:a34f18e4ebcd5a35dc52529d7c0151c97"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a808a5093a9fe29bce67e29580784b500"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </td></tr>
-<tr class="memitem:a808a5093a9fe29bce67e29580784b500"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a808a5093a9fe29bce67e29580784b500">MultiBlobSoA</a> = <a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, true, LinearizeArrayDimsFunctor &gt;</td></tr>
-<tr class="separator:a808a5093a9fe29bce67e29580784b500"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39ee3bd4146afeba314a257074e2237e"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </td></tr>
+<tr class="memitem:a39ee3bd4146afeba314a257074e2237e"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a39ee3bd4146afeba314a257074e2237e">AlignedSingleBlobSoA</a> = <a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, false, true, LinearizeArrayDimsFunctor &gt;</td></tr>
+<tr class="separator:a39ee3bd4146afeba314a257074e2237e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7dafaadaed054ff638b834a708c53ad7"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </td></tr>
+<tr class="memitem:a7dafaadaed054ff638b834a708c53ad7"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a7dafaadaed054ff638b834a708c53ad7">PackedSingleBlobSoA</a> = <a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, false, false, LinearizeArrayDimsFunctor &gt;</td></tr>
+<tr class="separator:a7dafaadaed054ff638b834a708c53ad7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab83b961bac0dcf12326d895f91a9451a"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </td></tr>
+<tr class="memitem:ab83b961bac0dcf12326d895f91a9451a"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#ab83b961bac0dcf12326d895f91a9451a">MultiBlobSoA</a> = <a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, true, false, LinearizeArrayDimsFunctor &gt;</td></tr>
+<tr class="separator:ab83b961bac0dcf12326d895f91a9451a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -265,9 +268,9 @@ Variables</h2></td></tr>
 <tr class="memitem:a131edc0148d778b3ebe27f58df87ffc1"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
 <tr class="memitem:a131edc0148d778b3ebe27f58df87ffc1"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a131edc0148d778b3ebe27f58df87ffc1">isSoA</a> = false</td></tr>
 <tr class="separator:a131edc0148d778b3ebe27f58df87ffc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63807f1580ea24bbe554a29711d0fe4f"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , bool SeparateBuffers, typename LinearizeArrayDimsFunctor &gt; </td></tr>
-<tr class="memitem:a63807f1580ea24bbe554a29711d0fe4f"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a63807f1580ea24bbe554a29711d0fe4f">isSoA&lt; SoA&lt; ArrayExtents, RecordDim, SeparateBuffers, LinearizeArrayDimsFunctor &gt; &gt;</a> = true</td></tr>
-<tr class="separator:a63807f1580ea24bbe554a29711d0fe4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75616bcdaa2a9c847151d43df56a9273"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , bool SeparateBuffers, bool AlignSubArrays, typename LinearizeArrayDimsFunctor &gt; </td></tr>
+<tr class="memitem:a75616bcdaa2a9c847151d43df56a9273"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a75616bcdaa2a9c847151d43df56a9273">isSoA&lt; SoA&lt; ArrayExtents, RecordDim, SeparateBuffers, AlignSubArrays, LinearizeArrayDimsFunctor &gt; &gt;</a> = true</td></tr>
+<tr class="separator:a75616bcdaa2a9c847151d43df56a9273"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aabd645ad645fb163c9c63781b08ed50a"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
 <tr class="memitem:aabd645ad645fb163c9c63781b08ed50a"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#aabd645ad645fb163c9c63781b08ed50a">isSplit</a> = false</td></tr>
 <tr class="separator:aabd645ad645fb163c9c63781b08ed50a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -317,6 +320,25 @@ template&lt;typename ArrayExtents , typename RecordDim &gt; </div>
 <p><a class="el" href="structllama_1_1mapping_1_1One.html">One</a> mapping preserving the alignment of the field types by inserting padding. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="structllama_1_1mapping_1_1One.html">One</a> </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="One_8hpp_source.html#l00061">61</a> of file <a class="el" href="One_8hpp_source.html">One.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a39ee3bd4146afeba314a257074e2237e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39ee3bd4146afeba314a257074e2237e">&#9670;&nbsp;</a></span>AlignedSingleBlobSoA</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ArrayExtents , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama_1_1mapping.html#a39ee3bd4146afeba314a257074e2237e">llama::mapping::AlignedSingleBlobSoA</a> = typedef <a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a>&lt;<a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, false, true, LinearizeArrayDimsFunctor&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Struct of array mapping storing the entire layout in a single blob. The starts of the sub arrays are aligned by inserting padding. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00137">137</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -418,8 +440,8 @@ template&lt;typename ArrayExtents , typename RecordDim &gt; </div>
 
 </div>
 </div>
-<a id="a808a5093a9fe29bce67e29580784b500"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a808a5093a9fe29bce67e29580784b500">&#9670;&nbsp;</a></span>MultiBlobSoA</h2>
+<a id="ab83b961bac0dcf12326d895f91a9451a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab83b961bac0dcf12326d895f91a9451a">&#9670;&nbsp;</a></span>MultiBlobSoA</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -427,13 +449,13 @@ template&lt;typename ArrayExtents , typename RecordDim &gt; </div>
 template&lt;typename ArrayExtents , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacellama_1_1mapping.html#a808a5093a9fe29bce67e29580784b500">llama::mapping::MultiBlobSoA</a> = typedef <a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a>&lt;<a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, true, LinearizeArrayDimsFunctor&gt;</td>
+          <td class="memname">using <a class="el" href="namespacellama_1_1mapping.html#ab83b961bac0dcf12326d895f91a9451a">llama::mapping::MultiBlobSoA</a> = typedef <a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a>&lt;<a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, true, false, LinearizeArrayDimsFunctor&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>Struct of array mapping storing each attribute of the record dimension in a separate blob. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00101">101</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00147">147</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -450,7 +472,7 @@ template&lt;typename ArrayExtents , typename RecordDim , typename LinearizeArray
         </tr>
       </table>
 </div><div class="memdoc">
-<p><a class="el" href="structllama_1_1Array.html">Array</a> of struct mapping packing the field types tightly, violating the types alignment requirements. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a> </dd></dl>
+<p><a class="el" href="structllama_1_1Array.html">Array</a> of struct mapping packing the field types tightly, violating the type's alignment requirements. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a> </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00078">78</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
 
@@ -475,8 +497,8 @@ template&lt;typename ArrayExtents , typename RecordDim &gt; </div>
 
 </div>
 </div>
-<a id="a34f18e4ebcd5a35dc52529d7c0151c97"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a34f18e4ebcd5a35dc52529d7c0151c97">&#9670;&nbsp;</a></span>SingleBlobSoA</h2>
+<a id="a7dafaadaed054ff638b834a708c53ad7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7dafaadaed054ff638b834a708c53ad7">&#9670;&nbsp;</a></span>PackedSingleBlobSoA</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -484,13 +506,13 @@ template&lt;typename ArrayExtents , typename RecordDim &gt; </div>
 template&lt;typename ArrayExtents , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacellama_1_1mapping.html#a34f18e4ebcd5a35dc52529d7c0151c97">llama::mapping::SingleBlobSoA</a> = typedef <a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a>&lt;<a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, false, LinearizeArrayDimsFunctor&gt;</td>
+          <td class="memname">using <a class="el" href="namespacellama_1_1mapping.html#a7dafaadaed054ff638b834a708c53ad7">llama::mapping::PackedSingleBlobSoA</a> = typedef <a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a>&lt;<a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, false, false, LinearizeArrayDimsFunctor&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Struct of array mapping storing the entire layout in a single blob. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a> </dd></dl>
+<p>Struct of array mapping storing the entire layout in a single blob. The sub arrays are tightly packed, violating the type's alignment requirements. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00096">96</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00142">142</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -994,23 +1016,23 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00113">113</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00162">162</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a63807f1580ea24bbe554a29711d0fe4f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a63807f1580ea24bbe554a29711d0fe4f">&#9670;&nbsp;</a></span>isSoA&lt; SoA&lt; ArrayExtents, RecordDim, SeparateBuffers, LinearizeArrayDimsFunctor &gt; &gt;</h2>
+<a id="a75616bcdaa2a9c847151d43df56a9273"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75616bcdaa2a9c847151d43df56a9273">&#9670;&nbsp;</a></span>isSoA&lt; SoA&lt; ArrayExtents, RecordDim, SeparateBuffers, AlignSubArrays, LinearizeArrayDimsFunctor &gt; &gt;</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename ArrayExtents , typename RecordDim , bool SeparateBuffers, typename LinearizeArrayDimsFunctor &gt; </div>
+template&lt;typename ArrayExtents , typename RecordDim , bool SeparateBuffers, bool AlignSubArrays, typename LinearizeArrayDimsFunctor &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr bool <a class="el" href="namespacellama_1_1mapping.html#a131edc0148d778b3ebe27f58df87ffc1">llama::mapping::isSoA</a>&lt; <a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, SeparateBuffers, LinearizeArrayDimsFunctor &gt; &gt; = true</td>
+          <td class="memname">constexpr bool <a class="el" href="namespacellama_1_1mapping.html#a131edc0148d778b3ebe27f58df87ffc1">llama::mapping::isSoA</a>&lt; <a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, SeparateBuffers, AlignSubArrays, LinearizeArrayDimsFunctor &gt; &gt; = true</td>
         </tr>
       </table>
   </td>
@@ -1020,7 +1042,7 @@ template&lt;typename ArrayExtents , typename RecordDim , bool SeparateBuffers, t
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00116">116</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00171">171</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -1174,7 +1196,7 @@ template&lt;typename RecordDim , std::size_t VectorRegisterBits&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li>
-    <li class="footer">Generated on Thu Jun 16 2022 09:12:33 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Jun 16 2022 11:20:58 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
