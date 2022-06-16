@@ -8,7 +8,9 @@ TEST_CASE("mapping.One.Packed.address")
         auto mapping = Mapping{arrayExtents};
         using ArrayIndex = typename Mapping::ArrayIndex;
 
+        STATIC_REQUIRE(mapping.blobCount == 1);
         STATIC_REQUIRE(mapping.blobSize(0) == 56);
+
         for(const auto ai : {ArrayIndex{0, 0}, ArrayIndex{0, 1}, ArrayIndex{1, 0}})
         {
             CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 0);
@@ -38,7 +40,9 @@ TEST_CASE("mapping.One.Aligned.address")
         auto mapping = Mapping{arrayExtents};
         using ArrayIndex = typename Mapping::ArrayIndex;
 
+        STATIC_REQUIRE(mapping.blobCount == 1);
         STATIC_REQUIRE(mapping.blobSize(0) == 60);
+
         for(const auto ai : {ArrayIndex{0, 0}, ArrayIndex{0, 1}, ArrayIndex{1, 0}})
         {
             CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 0);
@@ -68,7 +72,9 @@ TEST_CASE("mapping.One.MinAligned.address")
         auto mapping = Mapping{arrayExtents};
         using ArrayIndex = typename Mapping::ArrayIndex;
 
+        STATIC_REQUIRE(mapping.blobCount == 1);
         STATIC_REQUIRE(mapping.blobSize(0) == 56);
+
         for(const auto ai : {ArrayIndex{0, 0}, ArrayIndex{0, 1}, ArrayIndex{1, 0}})
         {
             CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 8);

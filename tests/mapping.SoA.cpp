@@ -8,6 +8,9 @@ TEST_CASE("mapping.SoA.SingleBlob.address")
         auto mapping = Mapping{arrayExtents};
         using ArrayIndex = typename Mapping::ArrayIndex;
 
+        STATIC_REQUIRE(mapping.blobCount == 1);
+        CHECK(mapping.blobSize(0) == 10472);
+
         {
             const auto ai = ArrayIndex{0, 0};
             CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 0);
@@ -67,6 +70,9 @@ TEST_CASE("mapping.SoA.SingleBlob.fortran.address")
             SingleBlobSoA<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayDimsFortran>;
         auto mapping = Mapping{arrayExtents};
         using ArrayIndex = typename Mapping::ArrayIndex;
+
+        STATIC_REQUIRE(mapping.blobCount == 1);
+        CHECK(mapping.blobSize(0) == 10472);
 
         {
             const auto ai = ArrayIndex{0, 0};
@@ -132,6 +138,9 @@ TEST_CASE("mapping.SoA.SingleBlob.morton.address")
         auto mapping = Mapping{arrayExtents};
         using ArrayIndex = typename Mapping::ArrayIndex;
 
+        STATIC_REQUIRE(mapping.blobCount == 1);
+        CHECK(mapping.blobSize(0) == 57344);
+
         {
             const auto ai = ArrayIndex{0, 0};
             CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 0);
@@ -191,6 +200,19 @@ TEST_CASE("mapping.SoA.MultiBlob.address")
         auto mapping = Mapping{arrayExtents};
         using ArrayIndex = typename Mapping::ArrayIndex;
         using SizeType = typename Mapping::ArrayExtents::value_type;
+
+        STATIC_REQUIRE(mapping.blobCount == 11);
+        CHECK(mapping.blobSize(0) == 2048);
+        CHECK(mapping.blobSize(1) == 2048);
+        CHECK(mapping.blobSize(2) == 2048);
+        CHECK(mapping.blobSize(3) == 1024);
+        CHECK(mapping.blobSize(4) == 2048);
+        CHECK(mapping.blobSize(5) == 2048);
+        CHECK(mapping.blobSize(6) == 2048);
+        CHECK(mapping.blobSize(7) == 256);
+        CHECK(mapping.blobSize(8) == 256);
+        CHECK(mapping.blobSize(9) == 256);
+        CHECK(mapping.blobSize(10) == 256);
 
         {
             const auto ai = ArrayIndex{0, 0};

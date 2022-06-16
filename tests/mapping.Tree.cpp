@@ -54,6 +54,7 @@ TEST_CASE("mapping.Tree.empty")
            "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
            "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
+    STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 14336);
 
     using ArrayIndex = typename Mapping::ArrayIndex;
@@ -123,6 +124,7 @@ TEST_CASE("mapping.Tree.Idem")
            "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
            "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
+    STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 14336);
 
     using ArrayIndex = typename Mapping::ArrayIndex;
@@ -192,6 +194,7 @@ TEST_CASE("mapping.Tree.LeafOnlyRT")
            "1C * Vel[ 256R * X(double) , 256R * Y(double) "
            ", 256R * Z(double) ] , 1C * Flags[ 256R * (bool) , 256R * (bool) , 256R * (bool) , 256R * (bool) ] ] ]");
 
+    STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 14336);
 
     using ArrayIndex = typename Mapping::ArrayIndex;
@@ -261,6 +264,7 @@ TEST_CASE("mapping.Tree.MoveRTDown<>")
            "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
            "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
+    STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 14336);
 
     using ArrayIndex = typename Mapping::ArrayIndex;
@@ -318,6 +322,7 @@ TEST_CASE("mapping.Tree.MoveRTDown<0>")
            "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
            "Z(double) ] , 4R * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
+    STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 14336);
 
     using ArrayIndex = typename Mapping::ArrayIndex;
@@ -375,6 +380,7 @@ TEST_CASE("mapping.Tree.MoveRTDown<0,0>")
            "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
            "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
+    STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 32768);
 
     using ArrayIndex = typename Mapping::ArrayIndex;
@@ -432,6 +438,7 @@ TEST_CASE("mapping.Tree.MoveRTDownFixed<>")
            "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
            "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
+    STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 14336);
 
     using ArrayIndex = typename Mapping::ArrayIndex;
@@ -489,6 +496,7 @@ TEST_CASE("mapping.Tree.MoveRTDownFixed<0>")
            "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
            "Z(double) ] , 4R * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
+    STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 14336);
 
     using ArrayIndex = typename Mapping::ArrayIndex;
@@ -546,6 +554,7 @@ TEST_CASE("mapping.Tree.MoveRTDownFixed<0,0>")
            "Vel[ 1C * X(double) , 1C * Y(double) , 1C * "
            "Z(double) ] , 1C * Flags[ 1C * (bool) , 1C * (bool) , 1C * (bool) , 1C * (bool) ] ] ]");
 
+    STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 32768);
 
     using ArrayIndex = typename Mapping::ArrayIndex;
@@ -610,6 +619,7 @@ TEST_CASE("mapping.Tree.vectorblocks.runtime")
            "1R * Vel[ 8R * X(double) , 8R * Y(double) , 8R * Z(double) ] , 8R * Flags[ 1C * (bool) , 1C * (bool) "
            ", 1C * (bool) , 1C * (bool) ] ] ]");
 
+    STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 14336);
 
     using ArrayIndex = typename Mapping::ArrayIndex;
@@ -674,6 +684,7 @@ TEST_CASE("mapping.Tree.vectorblocks.compiletime")
            "1R * Vel[ 8R * X(double) , 8R * Y(double) , 8R * Z(double) ] , 8R * Flags[ 1C * (bool) , 1C * (bool) "
            ", 1C * (bool) , 1C * (bool) ] ] ]");
 
+    STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 14336);
 
     using ArrayIndex = typename Mapping::ArrayIndex;
@@ -1037,6 +1048,7 @@ TEST_CASE("mapping.Tree")
            "1C * Vel[ 144R * X(double) , 144R * Y(double) , 144R * Z(double) ] , 1C * Flags[ 144R * (bool) , 144R "
            "* (bool) , 144R * (bool) , 144R * (bool) ] ] ]");
 
+    STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 8064);
     CHECK(mapping.blobNrAndOffset<2, 1>({50, 100}).offset == 10784);
     CHECK(mapping.blobNrAndOffset<2, 1>({50, 101}).offset == 10792);
