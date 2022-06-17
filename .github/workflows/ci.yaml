@@ -159,6 +159,7 @@ jobs:
             install_extra: clang-10 libomp-10-dev
           - name: build-ubuntu-clang11
             cxx: clang++-11
+            asan: OFF # ERROR: AddressSanitizer failed to allocate 0x0 (0) bytes of SetAlternateSignalStack (error code: 22)
             install_extra: clang-11 libomp-11-dev
           - name: build-ubuntu-clang12
             cxx: clang++-12
@@ -233,7 +234,7 @@ jobs:
           cmake .. -DBUILD_TESTING=ON \
                    -DLLAMA_BUILD_EXAMPLES=ON \
                    -DCMAKE_BUILD_TYPE=$CONFIG \
-                   -DLLAMA_ENABLE_ASAN_FOR_TESTS=ON \
+                   -DLLAMA_ENABLE_ASAN_FOR_TESTS=${{ matrix.asan || 'ON' }} \
                    -Dalpaka_ACC_CPU_B_SEQ_T_SEQ_ENABLE=${{ !matrix.cuda }} \
                    -Dalpaka_ACC_CPU_DISABLE_ATOMIC_REF=ON \
                    -Dalpaka_ACC_GPU_CUDA_ENABLE=${{ matrix.cuda }} \
