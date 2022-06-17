@@ -48,6 +48,17 @@ We gave a talk on LLAMA at CERN's Compute Accelerator Forum on 2021-05-12.
 The video recording (starting at 40:00) and slides are available here:
 https://indico.cern.ch/event/975010/.
 
+Single header
+-------------
+
+We create a single-header version of LLAMA on each commit,
+which you can find on the [single-header branch](https://github.com/alpaka-group/llama/tree/single-header).
+
+This also useful, if you would like to play with LLAMA on Compiler explorer:
+```c++
+#include <https://raw.githubusercontent.com/alpaka-group/llama/single-header/llama.hpp>
+```
+
 Contributing
 ------------
 
