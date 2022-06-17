@@ -107,14 +107,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: update_single_header
+    - name: create-single-header.sh
       run: |
-        ./update_single_header.sh
+        ./tools/create-single-header.sh
     - name: upload llama.hpp
       uses: actions/upload-artifact@v3
       with:
         name: llama.hpp
-        path: single_header/llama.hpp
+        path: llama.hpp
         if-no-files-found: error
 
   build-ubuntu:
