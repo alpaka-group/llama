@@ -21,6 +21,11 @@
 #include <llama/llama.hpp>
 #include <utility>
 
+#if __has_include(<xsimd/xsimd.hpp>)
+#    include <xsimd/xsimd.hpp>
+#    define HAVE_XSIMD
+#endif
+
 template<typename View>
 inline void kernel(uint32_t idx, const View& uCurr, View& uNext, double r)
 {
@@ -36,21 +41,21 @@ void update_scalar(const View& uCurr, View& uNext, uint32_t extent, double dx, d
             kernel(i, uCurr, uNext, r);
 }
 
-#if __has_include(<Vc/Vc>)
-#    include <Vc/Vc>
+#ifdef HAVE_XSIMD
 
 template<typename View>
 inline void kernel_vec(uint32_t baseIdx, const View& uCurr, View& uNext, double r)
 {
-    const auto next = Vc::double_v{&uCurr[baseIdx]} * (1.0 - 2.0 * r) + Vc::double_v{&uCurr[baseIdx - 1]} * r
-        + Vc::double_v{&uCurr[baseIdx + 1]} * r;
-    next.store(&uNext[baseIdx]);
+    using Simd = xsimd::batch<double>;
+    const auto next = Simd::load_unaligned(&uCurr[baseIdx]) * (1.0 - 2.0 * r)
+        + Simd::load_unaligned(&uCurr[baseIdx - 1]) * r + Simd::load_unaligned(&uCurr[baseIdx + 1]) * r;
+    next.store_unaligned(&uNext[baseIdx]);
 }
 
 template<typename View>
-void update_Vc(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
+void update_SIMD(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
 {
-    constexpr auto L = Vc::double_v::size();
+    constexpr auto L = xsimd::batch<double>::size;
     const auto r = dt / (dx * dx);
 
     const auto blocks = (extent + L - 1) / L;
@@ -67,9 +72,9 @@ void update_Vc(const View& uCurr, View& uNext, uint32_t extent, double dx, doubl
 }
 
 template<typename View>
-void update_Vc_peel(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
+void update_SIMD_peel(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
 {
-    constexpr auto L = Vc::double_v::size();
+    constexpr auto L = xsimd::batch<double>::size;
     const auto r = dt / (dx * dx);
 
     for(auto i = 1; i < L; i++)
@@ -84,9 +89,9 @@ void update_Vc_peel(const View& uCurr, View& uNext, uint32_t extent, double dx, 
 }
 
 template<typename View>
-void update_Vc_peel_unal_st(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
+void update_SIMD_peel_unal_st(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
 {
-    constexpr auto L = Vc::double_v::size();
+    constexpr auto L = xsimd::batch<double>::size;
     const auto r = dt / (dx * dx);
 
     kernel(1, uCurr, uNext, r);
@@ -168,11 +173,11 @@ try
             std::cout << "Incorrect! error = " << maxError << " (the grid resolution may be too low)\n";
     };
 
-    run("update_scalar         ", [](auto&... args) { update_scalar(args...); });
-#if __has_include(<Vc/Vc>)
-    run("update_Vc             ", [](auto&... args) { update_Vc(args...); });
-    run("update_Vc_peel        ", [](auto&... args) { update_Vc_peel(args...); });
-    run("update_Vc_peel_unal_st", [](auto&... args) { update_Vc_peel_unal_st(args...); });
+//    run("update_scalar           ", [](auto&... args) { update_scalar(args...); });
+#ifdef HAVE_XSIMD
+    run("update_SIMD             ", [](auto&... args) { update_SIMD(args...); });
+    run("update_SIMD_peel        ", [](auto&... args) { update_SIMD_peel(args...); });
+    run("update_SIMD_peel_unal_st", [](auto&... args) { update_SIMD_peel_unal_st(args...); });
 #endif
 
     return 0;
