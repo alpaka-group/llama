@@ -1,0 +1,20 @@
+name: Publish amalgamated llama.hpp to single-header
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  single-header:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: create-single-header.sh
+      run: |
+        ./tools/create-single-header.sh
+    - name: commit
+      run: |
+        git config --global user.email "action@github.com"
+        git config --global user.name "GitHub Action"
+        git add llama.hpp
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Update llama.hpp"; git push origin single-header)
