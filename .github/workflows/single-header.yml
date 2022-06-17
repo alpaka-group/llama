@@ -9,11 +9,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: clone single-header
+      run: |
+        git clone -b single-header https://x-access-token:${{secrets.github_token}}@github.com/${{github.repository}}.git single-header
     - name: create-single-header.sh
       run: |
         ./tools/create-single-header.sh
     - name: commit
       run: |
+        cd single-header
         git config --global user.email "action@github.com"
         git config --global user.name "GitHub Action"
         git add llama.hpp
