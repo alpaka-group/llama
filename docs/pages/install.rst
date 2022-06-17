@@ -23,7 +23,7 @@ Dependencies
 - Boost 1.70.0 or higher
 - libfmt 6.2.1 or higher (optional) for building the tests and examples and LLAMA supporting to dump mappings as SVG/HTML
 - `Alpaka <https://github.com/alpaka-group/alpaka>`_ (optional) for building some examples
-- `Vc <https://github.com/VcDevel/Vc>`_ (optional) for building some examples
+- `xsimd <https://github.com/xtensor-stack/xsimd>`_ (optional) for building some examples
 
 
 Build tests and examples

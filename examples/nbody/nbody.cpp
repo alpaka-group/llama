@@ -12,6 +12,11 @@
 #include <utility>
 #include <vector>
 
+#if __has_include(<xsimd/xsimd.hpp>)
+#    include <xsimd/xsimd.hpp>
+#    define HAVE_XSIMD
+#endif
+
 // needs -fno-math-errno, so std::sqrt() can be vectorized
 // for multithreading, specify thread affinity (GNU OpenMP):
 // e.g. for a 32 core CPU with SMT/hyperthreading: GOMP_CPU_AFFINITY='0-30:2,1-31:2' llama-nbody
@@ -219,13 +224,13 @@ namespace usellama
 
 namespace manualAoS
 {
-    struct Vec
+    struct Simd
     {
         FP x;
         FP y;
         FP z;
 
-        auto operator*=(FP s) -> Vec&
+        auto operator*=(FP s) -> Simd&
         {
             x *= s;
             y *= s;
@@ -233,7 +238,7 @@ namespace manualAoS
             return *this;
         }
 
-        auto operator*=(Vec v) -> Vec&
+        auto operator*=(Simd v) -> Simd&
         {
             x *= v.x;
             y *= v.y;
@@ -241,7 +246,7 @@ namespace manualAoS
             return *this;
         }
 
-        auto operator+=(Vec v) -> Vec&
+        auto operator+=(Simd v) -> Simd&
         {
             x += v.x;
             y += v.y;
@@ -249,7 +254,7 @@ namespace manualAoS
             return *this;
         }
 
-        auto operator-=(Vec v) -> Vec&
+        auto operator-=(Simd v) -> Simd&
         {
             x -= v.x;
             y -= v.y;
@@ -257,24 +262,24 @@ namespace manualAoS
             return *this;
         }
 
-        friend auto operator-(Vec a, Vec b) -> Vec
+        friend auto operator-(Simd a, Simd b) -> Simd
         {
             return a -= b;
         }
 
-        friend auto operator*(Vec a, FP s) -> Vec
+        friend auto operator*(Simd a, FP s) -> Simd
         {
             return a *= s;
         }
 
-        friend auto operator*(Vec a, Vec b) -> Vec
+        friend auto operator*(Simd a, Simd b) -> Simd
         {
             return a *= b;
         }
     };
 
-    using Pos = Vec;
-    using Vel = Vec;
+    using Pos = Simd;
+    using Vel = Simd;
 
     struct Particle
     {
@@ -646,7 +651,7 @@ namespace manualAoSoA
     }
 } // namespace manualAoSoA
 
-#ifdef __AVX2__
+#if defined(__AVX2__) && defined(__FMA__)
 #    include <immintrin.h>
 
 namespace manualAoSoA_manualAVX
@@ -862,74 +867,72 @@ namespace manualAoSoA_manualAVX
 } // namespace manualAoSoA_manualAVX
 #endif
 
-#if __has_include(<Vc/Vc>)
-#    include <Vc/Vc>
-
-namespace manualAoSoA_Vc
+#ifdef HAVE_XSIMD
+namespace manualAoSoA_SIMD
 {
-    template<typename Vec>
-    struct alignas(32) ParticleBlock
+    template<typename Simd>
+    struct alignas(64) ParticleBlock
     {
         struct
         {
-            Vec x;
-            Vec y;
-            Vec z;
+            Simd x;
+            Simd y;
+            Simd z;
         } pos, vel;
-        Vec mass;
+        Simd mass;
     };
 
 
-    template<typename Vec>
+    template<typename Simd>
     inline void pPInteraction(
-        Vec piposx,
-        Vec piposy,
-        Vec piposz,
-        Vec& pivelx,
-        Vec& pively,
-        Vec& pivelz,
-        Vec pjposx,
-        Vec pjposy,
-        Vec pjposz,
-        Vec pjmass)
+        Simd piposx,
+        Simd piposy,
+        Simd piposz,
+        Simd& pivelx,
+        Simd& pively,
+        Simd& pivelz,
+        Simd pjposx,
+        Simd pjposy,
+        Simd pjposz,
+        Simd pjmass)
     {
-        const Vec xdistance = piposx - pjposx;
-        const Vec ydistance = piposy - pjposy;
-        const Vec zdistance = piposz - pjposz;
-        const Vec xdistanceSqr = xdistance * xdistance;
-        const Vec ydistanceSqr = ydistance * ydistance;
-        const Vec zdistanceSqr = zdistance * zdistance;
-        const Vec distSqr = EPS2 + xdistanceSqr + ydistanceSqr + zdistanceSqr;
-        const Vec distSixth = distSqr * distSqr * distSqr;
-        const Vec invDistCube = [&]
+        const Simd xdistance = piposx - pjposx;
+        const Simd ydistance = piposy - pjposy;
+        const Simd zdistance = piposz - pjposz;
+        const Simd xdistanceSqr = xdistance * xdistance;
+        const Simd ydistanceSqr = ydistance * ydistance;
+        const Simd zdistanceSqr = zdistance * zdistance;
+        const Simd distSqr = EPS2 + xdistanceSqr + ydistanceSqr + zdistanceSqr;
+        const Simd distSixth = distSqr * distSqr * distSqr;
+        const Simd invDistCube = [&]
         {
             if constexpr(ALLOW_RSQRT)
             {
-                const Vec r = Vc::rsqrt(distSixth);
+                const Simd r = xsimd::rsqrt(distSixth);
                 if constexpr(NEWTON_RAPHSON_AFTER_RSQRT)
                 {
                     // from: http://stackoverflow.com/q/14752399/556899
-                    const Vec three = 3.0f;
-                    const Vec half = 0.5f;
-                    const Vec muls = distSixth * r * r;
+                    const Simd three = 3.0f;
+                    const Simd half = 0.5f;
+                    const Simd muls = distSixth * r * r;
                     return (half * r) * (three - muls);
                 }
                 else
                     return r;
             }
             else
-                return 1.0f / Vc::sqrt(distSixth);
+                return 1.0f / xsimd::sqrt(distSixth);
         }();
-        const Vec sts = pjmass * invDistCube * TIMESTEP;
+        const Simd sts = pjmass * invDistCube * TIMESTEP;
         pivelx = xdistanceSqr * sts + pivelx;
         pively = ydistanceSqr * sts + pively;
         pivelz = zdistanceSqr * sts + pivelz;
     }
 
-    template<typename Vec>
-    void update8(ParticleBlock<Vec>* particles, int threads)
+    template<typename Simd>
+    void update8(ParticleBlock<Simd>* particles, int threads)
     {
-        constexpr auto LANES = Vec::size();
+        constexpr auto LANES = Simd::size;
         constexpr auto BLOCKS = PROBLEM_SIZE / LANES;
 
 #    pragma omp parallel for schedule(static) num_threads(threads)
@@ -937,21 +940,21 @@ namespace manualAoSoA_Vc
         {
             auto& blockI = particles[bi];
             // std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& blockI) {
-            const Vec piposx = blockI.pos.x;
-            const Vec piposy = blockI.pos.y;
-            const Vec piposz = blockI.pos.z;
-            Vec pivelx = blockI.vel.x;
-            Vec pively = blockI.vel.y;
-            Vec pivelz = blockI.vel.z;
+            const Simd piposx = blockI.pos.x;
+            const Simd piposy = blockI.pos.y;
+            const Simd piposz = blockI.pos.z;
+            Simd pivelx = blockI.vel.x;
+            Simd pively = blockI.vel.y;
+            Simd pivelz = blockI.vel.z;
 
             for(std::size_t bj = 0; bj < BLOCKS; bj++)
                 for(std::size_t j = 0; j < LANES; j++)
                 {
                     const auto& blockJ = particles[bj];
-                    const Vec pjposx = blockJ.pos.x[j];
-                    const Vec pjposy = blockJ.pos.y[j];
-                    const Vec pjposz = blockJ.pos.z[j];
-                    const Vec pjmass = blockJ.mass[j];
+                    const Simd pjposx = blockJ.pos.x.get(j);
+                    const Simd pjposy = blockJ.pos.y.get(j);
+                    const Simd pjposz = blockJ.pos.z.get(j);
+                    const Simd pjmass = blockJ.mass.get(j);
 
                     pPInteraction(piposx, piposy, piposz, pivelx, pively, pivelz, pjposx, pjposy, pjposz, pjmass);
                 }
@@ -963,10 +966,10 @@ namespace manualAoSoA_Vc
         }
     }
 
-    template<typename Vec>
-    void update8Tiled(ParticleBlock<Vec>* particles, int threads)
+    template<typename Simd>
+    void update8Tiled(ParticleBlock<Simd>* particles, int threads)
     {
-        constexpr auto LANES = Vec::size();
+        constexpr auto LANES = Simd::size;
         constexpr auto BLOCKS = PROBLEM_SIZE / LANES;
 
         constexpr auto blocksPerTile = 128; // L1D_SIZE / sizeof(ParticleBlock);
@@ -976,21 +979,21 @@ namespace manualAoSoA_Vc
             for(std::size_t bi = 0; bi < blocksPerTile; bi++)
             {
                 auto& blockI = particles[bi];
-                const Vec piposx = blockI.pos.x;
-                const Vec piposy = blockI.pos.y;
-                const Vec piposz = blockI.pos.z;
-                Vec pivelx = blockI.vel.x;
-                Vec pively = blockI.vel.y;
-                Vec pivelz = blockI.vel.z;
+                const Simd piposx = blockI.pos.x;
+                const Simd piposy = blockI.pos.y;
+                const Simd piposz = blockI.pos.z;
+                Simd pivelx = blockI.vel.x;
+                Simd pively = blockI.vel.y;
+                Simd pivelz = blockI.vel.z;
                 for(std::size_t tj = 0; tj < BLOCKS / blocksPerTile; tj++)
                     for(std::size_t bj = 0; bj < blocksPerTile; bj++)
                         for(std::size_t j = 0; j < LANES; j++)
                         {
                             const auto& blockJ = particles[bj];
-                            const Vec pjposx = blockJ.pos.x[j];
-                            const Vec pjposy = blockJ.pos.y[j];
-                            const Vec pjposz = blockJ.pos.z[j];
-                            const Vec pjmass = blockJ.mass[j];
+                            const Simd pjposx = blockJ.pos.x.get(j);
+                            const Simd pjposy = blockJ.pos.y.get(j);
+                            const Simd pjposz = blockJ.pos.z.get(j);
+                            const Simd pjmass = blockJ.mass.get(j);
 
                             pPInteraction(
                                 piposx,
@@ -1011,10 +1014,23 @@ namespace manualAoSoA_Vc
             }
     }
 
-    template<typename Vec>
-    void update1(ParticleBlock<Vec>* particles, int threads)
+    // xsimd renamed hadd() to reduce_all() on master (after release 8.1), so we need to SFINAE for the name
+    template<typename Simd>
+    auto sum(Simd v) -> decltype(reduce_add(v))
     {
-        constexpr auto LANES = Vec::size();
+        return reduce_add(v);
+    }
+
+    template<typename Simd>
+    auto sum(Simd v) -> decltype(hadd(v))
+    {
+        return hadd(v);
+    }
+
+    template<typename Simd>
+    void update1(ParticleBlock<Simd>* particles, int threads)
+    {
+        constexpr auto LANES = Simd::size;
         constexpr auto BLOCKS = PROBLEM_SIZE / LANES;
 
 #    pragma omp parallel for schedule(static) num_threads(threads)
@@ -1024,12 +1040,12 @@ namespace manualAoSoA_Vc
             // std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& blockI) {
             for(std::size_t i = 0; i < LANES; i++)
             {
-                const Vec piposx = static_cast<FP>(blockI.pos.x[i]);
-                const Vec piposy = static_cast<FP>(blockI.pos.y[i]);
-                const Vec piposz = static_cast<FP>(blockI.pos.z[i]);
-                Vec pivelx = static_cast<FP>(blockI.vel.x[i]);
-                Vec pively = static_cast<FP>(blockI.vel.y[i]);
-                Vec pivelz = static_cast<FP>(blockI.vel.z[i]);
+                const Simd piposx = blockI.pos.x.get(i);
+                const Simd piposy = blockI.pos.y.get(i);
+                const Simd piposz = blockI.pos.z.get(i);
+                Simd pivelx = blockI.vel.x.get(i);
+                Simd pively = blockI.vel.y.get(i);
+                Simd pivelz = blockI.vel.z.get(i);
 
                 for(std::size_t bj = 0; bj < BLOCKS; bj++)
                 {
@@ -1047,18 +1063,18 @@ namespace manualAoSoA_Vc
                         blockJ.mass);
                 }
 
-                blockI.vel.x[i] = pivelx.sum();
-                blockI.vel.y[i] = pively.sum();
-                blockI.vel.z[i] = pivelz.sum();
+                reinterpret_cast<FP*>(&blockI.vel.x)[i] = sum(pivelx);
+                reinterpret_cast<FP*>(&blockI.vel.y)[i] = sum(pively);
+                reinterpret_cast<FP*>(&blockI.vel.z)[i] = sum(pivelz);
             }
             // });
         }
     }
 
-    template<typename Vec>
-    void move(ParticleBlock<Vec>* particles, int threads)
+    template<typename Simd>
+    void move(ParticleBlock<Simd>* particles, int threads)
     {
-        constexpr auto BLOCKS = PROBLEM_SIZE / Vec::size();
+        constexpr auto BLOCKS = PROBLEM_SIZE / Simd::size;
 
 #    pragma omp parallel for schedule(static) num_threads(threads)
         for(std::ptrdiff_t bi = 0; bi < BLOCKS; bi++)
@@ -1072,10 +1088,10 @@ namespace manualAoSoA_Vc
         }
     }
 
-    template<typename Vec>
+    template<typename Simd>
     auto main(std::ostream& plotFile, int threads, bool useUpdate1, bool tiled = false) -> int
     {
-        auto title = "AoSoA" + std::to_string(Vec::size()) + " Vc" + (useUpdate1 ? " w1r8" : " w8r1"); // NOLINT
+        auto title = "AoSoA" + std::to_string(Simd::size) + " SIMD" + (useUpdate1 ? " w1r8" : " w8r1"); // NOLINT
         if(tiled)
             title += " tiled";
         if(threads > 1)
@@ -1084,9 +1100,9 @@ namespace manualAoSoA_Vc
         std::cout << title << '\n';
         Stopwatch watch;
 
-        static_assert(PROBLEM_SIZE % Vec::size() == 0);
-        constexpr auto BLOCKS = PROBLEM_SIZE / Vec::size();
-        std::vector<ParticleBlock<Vec>> particles(BLOCKS);
+        static_assert(PROBLEM_SIZE % Simd::size == 0);
+        constexpr auto BLOCKS = PROBLEM_SIZE / Simd::size;
+        std::vector<ParticleBlock<Simd>> particles(BLOCKS);
         watch.printAndReset("alloc");
 
         std::default_random_engine engine;
@@ -1094,15 +1110,15 @@ namespace manualAoSoA_Vc
         for(std::size_t bi = 0; bi < BLOCKS; ++bi)
         {
             auto& block = particles[bi];
-            for(std::size_t i = 0; i < Vec::size(); ++i)
+            for(std::size_t i = 0; i < Simd::size; ++i)
             {
-                block.pos.x[i] = dist(engine);
-                block.pos.y[i] = dist(engine);
-                block.pos.z[i] = dist(engine);
-                block.vel.x[i] = dist(engine) / FP{10};
-                block.vel.y[i] = dist(engine) / FP{10};
-                block.vel.z[i] = dist(engine) / FP{10};
-                block.mass[i] = dist(engine) / FP{100};
+                reinterpret_cast<FP*>(&block.pos.x)[i] = dist(engine);
+                reinterpret_cast<FP*>(&block.pos.y)[i] = dist(engine);
+                reinterpret_cast<FP*>(&block.pos.z)[i] = dist(engine);
+                reinterpret_cast<FP*>(&block.vel.x)[i] = dist(engine) / FP{10};
+                reinterpret_cast<FP*>(&block.vel.y)[i] = dist(engine) / FP{10};
+                reinterpret_cast<FP*>(&block.vel.z)[i] = dist(engine) / FP{10};
+                reinterpret_cast<FP*>(&block.mass)[i] = dist(engine) / FP{100};
             }
         }
         watch.printAndReset("init");
@@ -1131,42 +1147,49 @@ namespace manualAoSoA_Vc
 
         return 0;
     }
-} // namespace manualAoSoA_Vc
+} // namespace manualAoSoA_SIMD
 
-namespace manualAoS_Vc
+namespace manualAoS_SIMD
 {
     using manualAoS::Particle;
-    using manualAoSoA_Vc::pPInteraction;
+    using manualAoSoA_SIMD::pPInteraction;
 
-    template<typename Vec>
-    const auto particleGatherScatterStrides = typename Vec::IndexType{Vc::IndexesFromZero} *
-        typename Vec::IndexType::value_type{sizeof(Particle) / sizeof(FP)};
+    struct GenStrides
+    {
+        static constexpr auto get(int i, int) -> int
+        {
+            return i * static_cast<int>(sizeof(Particle) / sizeof(FP));
+        }
+    };
 
-    template<typename Vec>
+    template<typename Simd>
+    const auto particleStrides = static_cast<xsimd::batch<int, typename Simd::arch_type>>(
+        xsimd::make_batch_constant<xsimd::batch<int, typename Simd::arch_type>, GenStrides>());
+
+    template<typename Simd>
     void update(Particle* particles, int threads)
     {
-        constexpr auto LANES = Vec::size();
-        const auto strides = particleGatherScatterStrides<Vec>;
+        constexpr auto LANES = Simd::size;
+        const auto strides = particleStrides<Simd>;
 
 #    pragma omp parallel for schedule(static) num_threads(threads)
         for(std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += LANES)
         {
-            // gather
             auto& pi = particles[i];
-            const Vec piposx = Vec(&pi.pos.x, strides);
-            const Vec piposy = Vec(&pi.pos.y, strides);
-            const Vec piposz = Vec(&pi.pos.z, strides);
-            Vec pivelx = Vec(&pi.vel.x, strides);
-            Vec pively = Vec(&pi.vel.y, strides);
-            Vec pivelz = Vec(&pi.vel.z, strides);
+            const Simd piposx = Simd::gather(&pi.pos.x, strides);
+            const Simd piposy = Simd::gather(&pi.pos.y, strides);
+            const Simd piposz = Simd::gather(&pi.pos.z, strides);
+            Simd pivelx = Simd::gather(&pi.vel.x, strides);
+            Simd pively = Simd::gather(&pi.vel.y, strides);
+            Simd pivelz = Simd::gather(&pi.vel.z, strides);
 
             for(std::size_t j = 0; j < PROBLEM_SIZE; j++)
             {
                 const auto& pj = particles[j];
-                const Vec pjposx = pj.pos.x;
-                const Vec pjposy = pj.pos.y;
-                const Vec pjposz = pj.pos.z;
-                const Vec pjmass = pj.mass;
+                const Simd pjposx(pj.pos.x);
+                const Simd pjposy(pj.pos.y);
+                const Simd pjposz(pj.pos.z);
+                const Simd pjmass(pj.mass);
 
                 pPInteraction(piposx, piposy, piposz, pivelx, pively, pivelz, pjposx, pjposy, pjposz, pjmass);
             }
@@ -1178,26 +1201,29 @@ namespace manualAoS_Vc
         }
     }
 
-    template<typename Vec>
+    template<typename Simd>
     void move(Particle* particles, int threads)
     {
-        constexpr auto LANES = Vec::size();
-        const auto strides = particleGatherScatterStrides<Vec>;
+        constexpr auto LANES = Simd::size;
+        const auto strides = particleStrides<Simd>;
 
 #    pragma omp parallel for schedule(static) num_threads(threads)
         for(std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += LANES)
         {
             auto& pi = particles[i];
-            (Vec(&pi.pos.x, strides) + Vec(&pi.vel.x, strides) * TIMESTEP).scatter(&pi.pos.x, strides);
-            (Vec(&pi.pos.y, strides) + Vec(&pi.vel.y, strides) * TIMESTEP).scatter(&pi.pos.y, strides);
-            (Vec(&pi.pos.z, strides) + Vec(&pi.vel.z, strides) * TIMESTEP).scatter(&pi.pos.z, strides);
+            (Simd::gather(&pi.pos.x, strides) + Simd::gather(&pi.vel.x, strides) * TIMESTEP)
+                .scatter(&pi.pos.x, strides);
+            (Simd::gather(&pi.pos.y, strides) + Simd::gather(&pi.vel.y, strides) * TIMESTEP)
+                .scatter(&pi.pos.y, strides);
+            (Simd::gather(&pi.pos.z, strides) + Simd::gather(&pi.vel.z, strides) * TIMESTEP)
+                .scatter(&pi.pos.z, strides);
         }
     }
 
-    template<typename Vec>
+    template<typename Simd>
     auto main(std::ostream& plotFile, int threads) -> int
     {
-        auto title = "AoS Vc"s;
+        auto title = "AoS SIMD"s;
         if(threads > 1)
             title += " " + std::to_string(threads) + "Thrds";
         std::cout << title << '\n';
@@ -1226,23 +1252,23 @@ namespace manualAoS_Vc
         {
             if constexpr(RUN_UPATE)
             {
-                update<Vec>(particles.data(), threads);
+                update<Simd>(particles.data(), threads);
                 sumUpdate += watch.printAndReset("update", '\t');
             }
-            move<Vec>(particles.data(), threads);
+            move<Simd>(particles.data(), threads);
             sumMove += watch.printAndReset("move");
         }
         plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
 
         return 0;
     }
-} // namespace manualAoS_Vc
+} // namespace manualAoS_SIMD
 
 namespace manualSoA_Vc
 {
-    using manualAoSoA_Vc::pPInteraction;
+    using manualAoSoA_SIMD::pPInteraction;
 
-    template<typename Vec>
+    template<typename Simd>
     void update(
         const FP* posx,
         const FP* posy,
@@ -1254,14 +1280,14 @@ namespace manualSoA_Vc
         int threads)
     {
 #    pragma omp parallel for schedule(static) num_threads(threads)
-        for(std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += Vec::size())
+        for(std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += Simd::size)
         {
-            const Vec piposx = Vec(posx + i);
-            const Vec piposy = Vec(posy + i);
-            const Vec piposz = Vec(posz + i);
-            Vec pivelx = Vec(velx + i);
-            Vec pively = Vec(vely + i);
-            Vec pivelz = Vec(velz + i);
+            const Simd piposx = Simd::load_aligned(posx + i);
+            const Simd piposy = Simd::load_aligned(posy + i);
+            const Simd piposz = Simd::load_aligned(posz + i);
+            Simd pivelx = Simd::load_aligned(velx + i);
+            Simd pively = Simd::load_aligned(vely + i);
+            Simd pivelz = Simd::load_aligned(velz + i);
             for(std::size_t j = 0; j < PROBLEM_SIZE; ++j)
                 pPInteraction(
                     piposx,
@@ -1270,32 +1296,32 @@ namespace manualSoA_Vc
                     pivelx,
                     pively,
                     pivelz,
-                    Vec(posx[j]),
-                    Vec(posy[j]),
-                    Vec(posz[j]),
-                    Vec(mass[j]));
-            pivelx.store(velx + i);
-            pively.store(vely + i);
-            pivelz.store(velz + i);
+                    Simd(posx[j]),
+                    Simd(posy[j]),
+                    Simd(posz[j]),
+                    Simd(mass[j]));
+            pivelx.store_aligned(velx + i);
+            pively.store_aligned(vely + i);
+            pivelz.store_aligned(velz + i);
         }
     }
 
-    template<typename Vec>
+    template<typename Simd>
     void move(FP* posx, FP* posy, FP* posz, const FP* velx, const FP* vely, const FP* velz, int threads)
     {
 #    pragma omp parallel for schedule(static) num_threads(threads)
-        for(std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += Vec::size())
+        for(std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i += Simd::size)
         {
-            (Vec(posx + i) + Vec(velx + i) * TIMESTEP).store(posx + i);
-            (Vec(posy + i) + Vec(vely + i) * TIMESTEP).store(posy + i);
-            (Vec(posz + i) + Vec(velz + i) * TIMESTEP).store(posz + i);
+            (Simd::load_aligned(posx + i) + Simd::load_aligned(velx + i) * TIMESTEP).store_aligned(posx + i);
+            (Simd::load_aligned(posy + i) + Simd::load_aligned(vely + i) * TIMESTEP).store_aligned(posy + i);
+            (Simd::load_aligned(posz + i) + Simd::load_aligned(velz + i) * TIMESTEP).store_aligned(posz + i);
         }
     }
 
-    template<typename Vec>
+    template<typename Simd>
     auto main(std::ostream& plotFile, int threads) -> int
     {
-        auto title = "SoA Vc"s;
+        auto title = "SoA SIMD"s;
         if(threads > 1)
             title += " " + std::to_string(threads) + "Thrds";
         std::cout << title << '\n';
@@ -1331,7 +1357,7 @@ namespace manualSoA_Vc
         {
             if constexpr(RUN_UPATE)
             {
-                update<Vec>(
+                update<Simd>(
                     posx.data(),
                     posy.data(),
                     posz.data(),
@@ -1342,7 +1368,7 @@ namespace manualSoA_Vc
                     threads);
                 sumUpdate += watch.printAndReset("update", '\t');
             }
-            move<Vec>(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), threads);
+            move<Simd>(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), threads);
             sumMove += watch.printAndReset("move");
         }
         plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
@@ -1355,10 +1381,10 @@ namespace manualSoA_Vc
 auto main() -> int
 try
 {
-#if __has_include(<Vc/Vc>)
-    using vec = Vc::Vector<FP>;
-    // using vec = Vc::SimdArray<FP, 16>;
-    constexpr auto SIMDLanes = vec::size();
+#ifdef HAVE_XSIMD
+    using Simd = xsimd::batch<FP>;
+    // using Simd = xsimd::make_sized_batch_t<FP, 16>;
+    constexpr auto SIMDLanes = Simd::size;
 #else
     constexpr auto SIMDLanes = 1;
 #endif
@@ -1428,12 +1454,12 @@ $data << EOD
             //    r += manualAoSoA::main<decltype(lanes)::value>(plotFile, tiled);
             r += manualAoSoA::main<decltype(lanes)::value>(plotFile, false);
         });
-#ifdef __AVX2__
+#if defined(__AVX2__) && defined(__FMA__)
     // for (auto useUpdate1 : {false, true})
     //    r += manualAoSoA_manualAVX::main(plotFile, useUpdate1);
     r += manualAoSoA_manualAVX::main(plotFile, false);
 #endif
-#if __has_include(<Vc/Vc>)
+#ifdef HAVE_XSIMD
     for(int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
     {
         // for (auto useUpdate1 : {false, true})
@@ -1441,19 +1467,23 @@ $data << EOD
         //    {
         //        if (useUpdate1 && tiled)
         //            continue;
-        //        r += manualAoSoA_Vc::main<vec>(plotFile, threads, useUpdate1, tiled);
+        //        r += manualAoSoA_SIMD::main<Simd>(plotFile, threads, useUpdate1, tiled);
         //    }
-        r += manualAoSoA_Vc::main<vec>(plotFile, threads, false, false);
+        r += manualAoSoA_SIMD::main<Simd>(plotFile, threads, false, false);
     }
     for(int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
     {
-        // mp_for_each<mp_list_c<std::size_t, 1, 2, 4, 8, 16>>(
-        //    [&](auto lanes) { r += manualAoS_Vc::main<Vc::SimdArray<FP, decltype(lanes)::value>>(plotFile, threads);
-        //    });
-        r += manualAoS_Vc::main<vec>(plotFile, threads);
+        //        mp_for_each<mp_list_c<std::size_t, 1, 2, 4, 8, 16>>(
+        //            [&](auto lanes)
+        //            {
+        //                using Simd = xsimd::make_sized_batch_t<FP, decltype(lanes)::value>;
+        //                if constexpr(!std::is_void_v<Simd>)
+        //                    r += manualAoS_SIMD::main<Simd>(plotFile, threads);
+        //            });
+        r += manualAoS_SIMD::main<Simd>(plotFile, threads);
     }
     for(int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
-        r += manualSoA_Vc::main<vec>(plotFile, threads);
+        r += manualSoA_Vc::main<Simd>(plotFile, threads);
 #endif
 
     plotFile << R"(EOD

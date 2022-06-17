@@ -10,6 +10,11 @@
 #include <string>
 #include <utility>
 
+#if __has_include(<xsimd/xsimd.hpp>)
+#    include <xsimd/xsimd.hpp>
+#    define HAVE_XSIMD
+#endif
+
 using FP = float;
 
 constexpr auto PROBLEM_SIZE = 16 * 1024; ///< total number of particles
@@ -19,13 +24,11 @@ constexpr auto ALLOW_RSQRT = true; // rsqrt can be way faster, but less accurate
 
 #if defined(ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED) || defined(ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED)
 #    if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
-#        error Cannot enable CUDA together with other backends, because nvcc cannot parse the Vc header, sorry :/
+#        error Cannot enable CUDA together with other backends
 #    endif
-// nvcc fails to compile Vc headers even if nothing is used from there, so we need to conditionally include it
-#    include <Vc/Vc>
-constexpr auto DESIRED_ELEMENTS_PER_THREAD = Vc::float_v::size();
+constexpr auto DESIRED_ELEMENTS_PER_THREAD = xsimd::batch<float>::size;
 constexpr auto THREADS_PER_BLOCK = 1;
-constexpr auto AOSOA_LANES = Vc::float_v::size(); // vectors
+constexpr auto AOSOA_LANES = xsimd::batch<float>::size; // vectors
 #elif defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
 constexpr auto DESIRED_ELEMENTS_PER_THREAD = 1;
 constexpr auto THREADS_PER_BLOCK = 256;
@@ -77,20 +80,20 @@ namespace stdext
     }
 } // namespace stdext
 
-// FIXME: this makes assumptions that there are always float_v::size() many values blocked in the LLAMA view
-template<typename Vec>
+// FIXME: this makes assumptions that there are always Simd::size many values blocked in the LLAMA view
+template<typename Simd>
 LLAMA_FN_HOST_ACC_INLINE auto load(const FP& src)
 {
-    if constexpr(std::is_same_v<Vec, FP>)
+    if constexpr(std::is_same_v<Simd, FP>)
         return src;
     else
-        return Vec(&src);
+        return Simd::load_unaligned(&src);
 }
 
-template<typename Vec>
+template<typename Simd>
 LLAMA_FN_HOST_ACC_INLINE auto broadcast(const FP& src)
 {
-    return Vec(src);
+    return Simd(src);
 }
 
 template<typename Vec>
@@ -99,19 +102,19 @@ LLAMA_FN_HOST_ACC_INLINE auto store(FP& dst, Vec v)
     if constexpr(std::is_same_v<Vec, FP>)
         dst = v;
     else
-        v.store(&dst);
+        v.store_unaligned(&dst);
 }
 
 template<int Elems>
-struct VecType
+struct SimdType
 {
     // TODO(bgruber): we need a vector type that also works on GPUs
-#ifndef ALPAKA_ACC_GPU_CUDA_ENABLED
-    using type = Vc::SimdArray<FP, Elems>;
-#endif
+    using type = xsimd::make_sized_batch_t<FP, Elems>;
+    static_assert(!std::is_void_v<type>, "xsimd does not have a SIMD type for this element count");
 };
+
 template<>
-struct VecType<1>
+struct SimdType<1>
 {
     using type = FP;
 };
@@ -119,28 +122,26 @@ struct VecType<1>
 template<int Elems, typename ViewParticleI, typename ParticleRefJ>
 LLAMA_FN_HOST_ACC_INLINE void pPInteraction(ViewParticleI pi, ParticleRefJ pj)
 {
-    using Vec = typename VecType<Elems>::type;
+    using Simd = typename SimdType<Elems>::type;
 
     using std::sqrt;
     using stdext::rsqrt;
-#ifndef ALPAKA_ACC_GPU_CUDA_ENABLED
-    using Vc::rsqrt;
-    using Vc::sqrt;
-#endif
+    using xsimd::rsqrt;
+    using xsimd::sqrt;
 
-    const Vec xdistance = load<Vec>(pi(tag::Pos{}, tag::X{})) - broadcast<Vec>(pj(tag::Pos{}, tag::X{}));
-    const Vec ydistance = load<Vec>(pi(tag::Pos{}, tag::Y{})) - broadcast<Vec>(pj(tag::Pos{}, tag::Y{}));
-    const Vec zdistance = load<Vec>(pi(tag::Pos{}, tag::Z{})) - broadcast<Vec>(pj(tag::Pos{}, tag::Z{}));
-    const Vec xdistanceSqr = xdistance * xdistance;
-    const Vec ydistanceSqr = ydistance * ydistance;
-    const Vec zdistanceSqr = zdistance * zdistance;
-    const Vec distSqr = +EPS2 + xdistanceSqr + ydistanceSqr + zdistanceSqr;
-    const Vec distSixth = distSqr * distSqr * distSqr;
-    const Vec invDistCube = ALLOW_RSQRT ? rsqrt(distSixth) : (1.0f / sqrt(distSixth));
-    const Vec sts = broadcast<Vec>(pj(tag::Mass())) * invDistCube * TIMESTEP;
-    store<Vec>(pi(tag::Vel{}, tag::X{}), xdistanceSqr * sts + load<Vec>(pi(tag::Vel{}, tag::X{})));
-    store<Vec>(pi(tag::Vel{}, tag::Y{}), ydistanceSqr * sts + load<Vec>(pi(tag::Vel{}, tag::Y{})));
-    store<Vec>(pi(tag::Vel{}, tag::Z{}), zdistanceSqr * sts + load<Vec>(pi(tag::Vel{}, tag::Z{})));
+    const Simd xdistance = load<Simd>(pi(tag::Pos{}, tag::X{})) - broadcast<Simd>(pj(tag::Pos{}, tag::X{}));
+    const Simd ydistance = load<Simd>(pi(tag::Pos{}, tag::Y{})) - broadcast<Simd>(pj(tag::Pos{}, tag::Y{}));
+    const Simd zdistance = load<Simd>(pi(tag::Pos{}, tag::Z{})) - broadcast<Simd>(pj(tag::Pos{}, tag::Z{}));
+    const Simd xdistanceSqr = xdistance * xdistance;
+    const Simd ydistanceSqr = ydistance * ydistance;
+    const Simd zdistanceSqr = zdistance * zdistance;
+    const Simd distSqr = +EPS2 + xdistanceSqr + ydistanceSqr + zdistanceSqr;
+    const Simd distSixth = distSqr * distSqr * distSqr;
+    const Simd invDistCube = ALLOW_RSQRT ? rsqrt(distSixth) : (1.0f / sqrt(distSixth));
+    const Simd sts = broadcast<Simd>(pj(tag::Mass())) * invDistCube * TIMESTEP;
+    store<Simd>(pi(tag::Vel{}, tag::X{}), xdistanceSqr * sts + load<Simd>(pi(tag::Vel{}, tag::X{})));
+    store<Simd>(pi(tag::Vel{}, tag::Y{}), ydistanceSqr * sts + load<Simd>(pi(tag::Vel{}, tag::Y{})));
+    store<Simd>(pi(tag::Vel{}, tag::Z{}), zdistanceSqr * sts + load<Simd>(pi(tag::Vel{}, tag::Z{})));
 }
 
 template<int ProblemSize, int Elems, int BlockSize, Mapping MappingSM>
@@ -218,16 +219,19 @@ struct MoveKernel
         const auto ti = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0];
         const auto i = ti * Elems;
 
-        using Vec = typename VecType<Elems>::type;
-        store<Vec>(
+        using Simd = typename SimdType<Elems>::type;
+        store<Simd>(
             particles(i)(tag::Pos{}, tag::X{}),
-            load<Vec>(particles(i)(tag::Pos{}, tag::X{})) + load<Vec>(particles(i)(tag::Vel{}, tag::X{})) * TIMESTEP);
-        store<Vec>(
+            load<Simd>(particles(i)(tag::Pos{}, tag::X{}))
+                + load<Simd>(particles(i)(tag::Vel{}, tag::X{})) * TIMESTEP);
+        store<Simd>(
             particles(i)(tag::Pos{}, tag::Y{}),
-            load<Vec>(particles(i)(tag::Pos{}, tag::Y{})) + load<Vec>(particles(i)(tag::Vel{}, tag::Y{})) * TIMESTEP);
-        store<Vec>(
+            load<Simd>(particles(i)(tag::Pos{}, tag::Y{}))
+                + load<Simd>(particles(i)(tag::Vel{}, tag::Y{})) * TIMESTEP);
+        store<Simd>(
             particles(i)(tag::Pos{}, tag::Z{}),
-            load<Vec>(particles(i)(tag::Pos{}, tag::Z{})) + load<Vec>(particles(i)(tag::Vel{}, tag::Z{})) * TIMESTEP);
+            load<Simd>(particles(i)(tag::Pos{}, tag::Z{}))
+                + load<Simd>(particles(i)(tag::Vel{}, tag::Z{})) * TIMESTEP);
     }
 };
 
@@ -337,7 +341,7 @@ try
 
     std::ofstream plotFile{"nbody.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
-    std::ofstream{"nbody.sh"} << R"(#!/usr/bin/gnuplot -p
+    plotFile << R"(#!/usr/bin/gnuplot -p
 set style data histograms
 set style fill solid
 set xtics rotate by 45 right
