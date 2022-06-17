@@ -244,9 +244,9 @@ jobs:
                    -DLLAMA_BUILD_EXAMPLES=ON \
                    -DCMAKE_BUILD_TYPE=$CONFIG \
                    -DLLAMA_ENABLE_ASAN_FOR_TESTS=${{ matrix.asan || 'ON' }} \
-                   -Dalpaka_ACC_CPU_B_SEQ_T_SEQ_ENABLE=${{ !matrix.cuda }} \
+                   -Dalpaka_ACC_CPU_B_SEQ_T_SEQ_ENABLE=${{ !matrix.cuda_url }} \
                    -Dalpaka_ACC_CPU_DISABLE_ATOMIC_REF=ON \
-                   -Dalpaka_ACC_GPU_CUDA_ENABLE=${{ matrix.cuda }} \
+                   -Dalpaka_ACC_GPU_CUDA_ENABLE=${{ !!matrix.cuda_url }} \
                    -Dalpaka_CXX_STANDARD=17 \
                    -DCMAKE_CUDA_COMPILER=$CUDACXX \
                    -DCMAKE_CUDA_HOST_COMPILER=$CXX \
