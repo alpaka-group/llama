@@ -114,7 +114,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: llama.hpp
-        path: llama.hpp
+        path: single-header/llama.hpp
         if-no-files-found: error
 
   build-ubuntu:
