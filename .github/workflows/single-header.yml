@@ -22,3 +22,4 @@ jobs:
         git config --global user.name "GitHub Action"
         git add llama.hpp
         git diff --quiet && git diff --staged --quiet || (git commit -m "Update llama.hpp"; git push origin single-header)
+        git push
