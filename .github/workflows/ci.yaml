@@ -272,7 +272,7 @@ jobs:
         vcpkg install $env:VCPKG_INSTALL_LIST.split(' ')
     - name: install alpaka
       run: |
-        git clone https://github.com/alpaka-group/alpaka.git
+        git clone --branch $env:ALPAKA_BRANCH --depth 1 https://github.com/alpaka-group/alpaka.git
         mkdir alpaka/build
         cd alpaka/build
         cmake .. "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
@@ -312,7 +312,7 @@ jobs:
           vcpkg install $VCPKG_INSTALL_LIST
       - name: install alpaka
         run: |
-          git clone https://github.com/alpaka-group/alpaka.git
+          git clone --branch $ALPAKA_BRANCH --depth 1 https://github.com/alpaka-group/alpaka.git
           mkdir alpaka/build
           cd alpaka/build
           cmake .. -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
