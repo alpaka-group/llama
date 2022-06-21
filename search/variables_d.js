@@ -1,7 +1,11 @@
 var searchData=
 [
-  ['size_1056',['size',['../structllama_1_1RecordCoord.html#a3710d7a4f643b8b004809005a7d81f44',1,'llama::RecordCoord::size()'],['../structllama_1_1RecordCoord_3_4.html#a88c46f2ba080197e2c49a2e4066b841a',1,'llama::RecordCoord&lt;&gt;::size()']]],
-  ['sizeof_1057',['sizeOf',['../namespacellama.html#a2404e09083dc2c685bc283cd4ead0edc',1,'llama']]],
-  ['sizeof_3c_20record_3c_20fields_2e_2e_2e_20_3e_2c_20align_2c_20includetailpadding_20_3e_1058',['sizeOf&lt; Record&lt; Fields... &gt;, Align, IncludeTailPadding &gt;',['../namespacellama.html#a585d55cd3a51152ec452bc1f2d49a3ec',1,'llama']]],
-  ['storageblobs_1059',['storageBlobs',['../structllama_1_1View.html#a176b21d204881a89dc8488e62fcb8dd6',1,'llama::View']]]
+  ['rank_1070',['rank',['../structllama_1_1ArrayIndex.html#a09d5dffbdde28ac87fc8ef1f20340593',1,'llama::ArrayIndex::rank()'],['../structllama_1_1ArrayExtents.html#aa368d8287fad34884c1ccfdb01d527dc',1,'llama::ArrayExtents::rank()'],['../structllama_1_1ArrayExtents_3_01T_01_4.html#a4c0c9b1ef4553bf85aec1033ffe9ffba',1,'llama::ArrayExtents&lt; T &gt;::rank()'],['../structllama_1_1ArrayIndexIterator.html#a3eb86c873b8b0e82f711d9b2bf43ca43',1,'llama::ArrayIndexIterator::rank()']]],
+  ['rank_5fdynamic_1071',['rank_dynamic',['../structllama_1_1ArrayExtents.html#a4cde9d6a979db2cc62cf4e4571305035',1,'llama::ArrayExtents::rank_dynamic()'],['../structllama_1_1ArrayExtents_3_01T_01_4.html#ade2f1a61201059266fa48cac559c6bc8',1,'llama::ArrayExtents&lt; T &gt;::rank_dynamic()']]],
+  ['rank_5fstatic_1072',['rank_static',['../structllama_1_1ArrayExtents.html#a83c3ee94b8e46a4bfcdaf890b475db37',1,'llama::ArrayExtents::rank_static()'],['../structllama_1_1ArrayExtents_3_01T_01_4.html#aa321f9cdaa14f78ecd89d59a17378997',1,'llama::ArrayExtents&lt; T &gt;::rank_static()']]],
+  ['reads_1073',['reads',['../structllama_1_1mapping_1_1AccessCounts.html#a6ba565a36cc065f5c7a2bbaf8057d72a',1,'llama::mapping::AccessCounts']]],
+  ['recordcoordcommonprefixisbigger_1074',['RecordCoordCommonPrefixIsBigger',['../namespacellama.html#a167bf28d08f395c481af0260eb7e1e1c',1,'llama']]],
+  ['recordcoordcommonprefixissame_1075',['RecordCoordCommonPrefixIsSame',['../namespacellama.html#a5d62fb6d777b67e3f73b80cc97d1cd44',1,'llama']]],
+  ['recordcoordtagsstorage_1076',['recordCoordTagsStorage',['../namespacellama_1_1internal.html#aadb89628e7b37c78df955928a1934c00',1,'llama::internal']]],
+  ['resulttree_1077',['resultTree',['../structllama_1_1mapping_1_1tree_1_1Mapping.html#a05de6e64a1ae1d70c6ee6dd7e8387636',1,'llama::mapping::tree::Mapping']]]
 ];

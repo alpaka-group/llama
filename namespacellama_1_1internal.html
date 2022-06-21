@@ -250,6 +250,25 @@ Functions</h2></td></tr>
 <tr class="memitem:a5732c14ad8045af3e542cf23a7e82c6d"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Coords1, std::size_t... Coords2&gt; </td></tr>
 <tr class="memitem:a5732c14ad8045af3e542cf23a7e82c6d"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a5732c14ad8045af3e542cf23a7e82c6d">recordCoordCommonPrefixIsSameImpl</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords1... &gt;, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords2... &gt;) -&gt; bool</td></tr>
 <tr class="separator:a5732c14ad8045af3e542cf23a7e82c6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1fc2fd68326f2ed7ccf68b4e6df3720"><td class="memTemplParams" colspan="2">template&lt;typename In , typename Out &gt; </td></tr>
+<tr class="memitem:aa1fc2fd68326f2ed7ccf68b4e6df3720"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#aa1fc2fd68326f2ed7ccf68b4e6df3720">constexpr_copy</a> (In f, In l, Out d)</td></tr>
+<tr class="separator:aa1fc2fd68326f2ed7ccf68b4e6df3720"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad444679bd1aafdc6d907e329cae57860"><td class="memTemplParams" colspan="2">template&lt;class ForwardIt1 , class ForwardIt2 &gt; </td></tr>
+<tr class="memitem:ad444679bd1aafdc6d907e329cae57860"><td class="memTemplItemLeft" align="right" valign="top">constexpr ForwardIt1&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#ad444679bd1aafdc6d907e329cae57860">constexpr_search</a> (ForwardIt1 first, ForwardIt1 last, ForwardIt2 s_first, ForwardIt2 s_last)</td></tr>
+<tr class="separator:ad444679bd1aafdc6d907e329cae57860"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70d2f2b8d33999f712051c9e6876a342"><td class="memTemplParams" colspan="2">template&lt;class InputIt , class OutputIt , class T &gt; </td></tr>
+<tr class="memitem:a70d2f2b8d33999f712051c9e6876a342"><td class="memTemplItemLeft" align="right" valign="top">constexpr OutputIt&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a70d2f2b8d33999f712051c9e6876a342">constexpr_remove_copy</a> (InputIt first, InputIt last, OutputIt d_first, const T &amp;value)</td></tr>
+<tr class="separator:a70d2f2b8d33999f712051c9e6876a342"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51aecac55383e44813c46e74ab405edf"><td class="memTemplParams" colspan="2">template&lt;class InputIt , class T &gt; </td></tr>
+<tr class="memitem:a51aecac55383e44813c46e74ab405edf"><td class="memTemplItemLeft" align="right" valign="top">std::iterator_traits&lt; InputIt &gt;::difference_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a51aecac55383e44813c46e74ab405edf">constexpr_count</a> (InputIt first, InputIt last, const T &amp;value)</td></tr>
+<tr class="separator:a51aecac55383e44813c46e74ab405edf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64b252f2299cce03f8814269a0c25ca2"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a64b252f2299cce03f8814269a0c25ca2"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a64b252f2299cce03f8814269a0c25ca2">typeNameAsArray</a> ()</td></tr>
+<tr class="separator:a64b252f2299cce03f8814269a0c25ca2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a180ada47fd3f35af9c404efbce16cf"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a7a180ada47fd3f35af9c404efbce16cf">isIdentChar</a> (char c) -&gt; bool</td></tr>
+<tr class="separator:a7a180ada47fd3f35af9c404efbce16cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4195dfa3069a0e4cc1d15e13175cc88"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#ad4195dfa3069a0e4cc1d15e13175cc88">intToStrSize</a> (std::size_t s)</td></tr>
+<tr class="separator:ad4195dfa3069a0e4cc1d15e13175cc88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad6320a13162da7c7c045674a49a741b4"><td class="memTemplParams" colspan="2">template&lt;typename... Elements, std::size_t... Is&gt; </td></tr>
 <tr class="memitem:ad6320a13162da7c7c045674a49a741b4"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#ad6320a13162da7c7c045674a49a741b4">areEqual</a> (const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt; &amp;a, const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt; &amp;b, std::index_sequence&lt; Is... &gt;) -&gt; bool</td></tr>
 <tr class="separator:ad6320a13162da7c7c045674a49a741b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -328,6 +347,15 @@ Variables</h2></td></tr>
 <tr class="memitem:a0a6972426a3c2ab551a48d21cac6370c"><td class="memTemplParams" colspan="2">template&lt;std::size_t I, typename... Children&gt; </td></tr>
 <tr class="memitem:a0a6972426a3c2ab551a48d21cac6370c"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a0a6972426a3c2ab551a48d21cac6370c">flatFieldCountBefore&lt; I, Record&lt; Children... &gt; &gt;</a> = <a class="el" href="namespacellama_1_1internal.html#a1dc0436b8f0598e4fe3e707051be5b5f">flatFieldCountBefore</a>&lt;I - 1, <a class="el" href="structllama_1_1Record.html">Record</a>&lt;Children...&gt;&gt; + <a class="el" href="namespacellama.html#aa6c960189f5edc242be631e2e8757914">flatFieldCount</a>&lt;<a class="el" href="namespacellama.html#ae4381442d997f1a8d4ace841c2b4eff9">GetFieldType</a>&lt;boost::mp11::mp_at_c&lt;<a class="el" href="structllama_1_1Record.html">Record</a>&lt;Children...&gt;, I - 1&gt;&gt;&gt;</td></tr>
 <tr class="separator:a0a6972426a3c2ab551a48d21cac6370c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52be59da116649206cd1d61b613ee680"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a52be59da116649206cd1d61b613ee680"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a52be59da116649206cd1d61b613ee680">typeNameStorage</a> = <a class="el" href="namespacellama_1_1internal.html#a64b252f2299cce03f8814269a0c25ca2">typeNameAsArray</a>&lt;T&gt;()</td></tr>
+<tr class="separator:a52be59da116649206cd1d61b613ee680"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32808c34947a5a5be5e1f677a50e64e4"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a32808c34947a5a5be5e1f677a50e64e4"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a32808c34947a5a5be5e1f677a50e64e4">structNameStorage</a></td></tr>
+<tr class="separator:a32808c34947a5a5be5e1f677a50e64e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadb89628e7b37c78df955928a1934c00"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , std::size_t... Coords&gt; </td></tr>
+<tr class="memitem:aadb89628e7b37c78df955928a1934c00"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#aadb89628e7b37c78df955928a1934c00">recordCoordTagsStorage</a></td></tr>
+<tr class="separator:aadb89628e7b37c78df955928a1934c00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa30231c6e488d62d3b26388e1ca9f590"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = void&gt; </td></tr>
 <tr class="memitem:aa30231c6e488d62d3b26388e1ca9f590"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#aa30231c6e488d62d3b26388e1ca9f590">isTupleLike</a> = false</td></tr>
 <tr class="separator:aa30231c6e488d62d3b26388e1ca9f590"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -891,6 +919,194 @@ template&lt;typename VirtualRecord , typename T , std::size_t N, std::size_t... 
 
 </div>
 </div>
+<a id="aa1fc2fd68326f2ed7ccf68b4e6df3720"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1fc2fd68326f2ed7ccf68b4e6df3720">&#9670;&nbsp;</a></span>constexpr_copy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename In , typename Out &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::internal::constexpr_copy </td>
+          <td>(</td>
+          <td class="paramtype">In&#160;</td>
+          <td class="paramname"><em>f</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">In&#160;</td>
+          <td class="paramname"><em>l</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Out&#160;</td>
+          <td class="paramname"><em>d</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="StructName_8hpp_source.html#l00015">15</a> of file <a class="el" href="StructName_8hpp_source.html">StructName.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a51aecac55383e44813c46e74ab405edf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51aecac55383e44813c46e74ab405edf">&#9670;&nbsp;</a></span>constexpr_count()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class InputIt , class T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::iterator_traits&lt;InputIt&gt;::difference_type llama::internal::constexpr_count </td>
+          <td>(</td>
+          <td class="paramtype">InputIt&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InputIt&#160;</td>
+          <td class="paramname"><em>last</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="StructName_8hpp_source.html#l00061">61</a> of file <a class="el" href="StructName_8hpp_source.html">StructName.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a70d2f2b8d33999f712051c9e6876a342"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70d2f2b8d33999f712051c9e6876a342">&#9670;&nbsp;</a></span>constexpr_remove_copy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class InputIt , class OutputIt , class T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr OutputIt llama::internal::constexpr_remove_copy </td>
+          <td>(</td>
+          <td class="paramtype">InputIt&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InputIt&#160;</td>
+          <td class="paramname"><em>last</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">OutputIt&#160;</td>
+          <td class="paramname"><em>d_first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="StructName_8hpp_source.html#l00046">46</a> of file <a class="el" href="StructName_8hpp_source.html">StructName.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ad444679bd1aafdc6d907e329cae57860"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad444679bd1aafdc6d907e329cae57860">&#9670;&nbsp;</a></span>constexpr_search()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class ForwardIt1 , class ForwardIt2 &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr ForwardIt1 llama::internal::constexpr_search </td>
+          <td>(</td>
+          <td class="paramtype">ForwardIt1&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ForwardIt1&#160;</td>
+          <td class="paramname"><em>last</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ForwardIt2&#160;</td>
+          <td class="paramname"><em>s_first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ForwardIt2&#160;</td>
+          <td class="paramname"><em>s_last</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="StructName_8hpp_source.html#l00025">25</a> of file <a class="el" href="StructName_8hpp_source.html">StructName.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a158338076284b27d9f1875797789bd59"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a158338076284b27d9f1875797789bd59">&#9670;&nbsp;</a></span>divRoundUp()</h2>
 
@@ -955,7 +1171,64 @@ template&lt;typename TypeList &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00420">420</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00419">419</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ad4195dfa3069a0e4cc1d15e13175cc88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4195dfa3069a0e4cc1d15e13175cc88">&#9670;&nbsp;</a></span>intToStrSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::internal::intToStrSize </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>s</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="StructName_8hpp_source.html#l00263">263</a> of file <a class="el" href="StructName_8hpp_source.html">StructName.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a7a180ada47fd3f35af9c404efbce16cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a180ada47fd3f35af9c404efbce16cf">&#9670;&nbsp;</a></span>isIdentChar()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::internal::isIdentChar </td>
+          <td>(</td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td> -&gt; bool
+        </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="StructName_8hpp_source.html#l00200">200</a> of file <a class="el" href="StructName_8hpp_source.html">StructName.hpp</a>.</p>
 
 </div>
 </div>
@@ -1150,7 +1423,7 @@ template&lt;typename A , std::size_t NA, typename B , std::size_t NB&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00662">662</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00638">638</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1182,7 +1455,7 @@ template&lt;typename A , typename B &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00655">655</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00631">631</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1214,7 +1487,7 @@ template&lt;typename... FieldsA&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00674">674</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00650">650</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1246,7 +1519,7 @@ template&lt;typename... FieldsA, typename FieldB , typename... FieldsB, auto pos
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00684">684</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00660">660</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1286,7 +1559,7 @@ template&lt;template&lt; typename... &gt; typename L, typename... T, typename F 
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00308">308</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00307">307</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1315,7 +1588,7 @@ template&lt;typename TypeList , std::size_t I, bool Align&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00514">514</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00513">513</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1489,7 +1762,7 @@ template&lt;typename TypeList , bool Align, bool IncludeTailPadding&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00462">462</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00461">461</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1640,6 +1913,35 @@ template&lt;size_t... Is, typename... Elements, typename Functor &gt; </div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00235">235</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a64b252f2299cce03f8814269a0c25ca2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64b252f2299cce03f8814269a0c25ca2">&#9670;&nbsp;</a></span>typeNameAsArray()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::internal::typeNameAsArray </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="StructName_8hpp_source.html#l00078">78</a> of file <a class="el" href="StructName_8hpp_source.html">StructName.hpp</a>.</p>
 
 </div>
 </div>
@@ -1882,7 +2184,7 @@ template&lt;std::size_t I, typename RecordDim &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00380">380</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00379">379</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1908,7 +2210,7 @@ template&lt;typename... Children&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00383">383</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00382">382</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1934,7 +2236,7 @@ template&lt;std::size_t I, typename... Children&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00391">391</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00390">390</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -2068,13 +2370,91 @@ template&lt;typename T , typename  = void&gt; </div>
 
 </div>
 </div>
+<a id="aadb89628e7b37c78df955928a1934c00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadb89628e7b37c78df955928a1934c00">&#9670;&nbsp;</a></span>recordCoordTagsStorage</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename RecordDim , std::size_t... Coords&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::internal::recordCoordTagsStorage</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="StructName_8hpp_source.html#l00272">272</a> of file <a class="el" href="StructName_8hpp_source.html">StructName.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a32808c34947a5a5be5e1f677a50e64e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32808c34947a5a5be5e1f677a50e64e4">&#9670;&nbsp;</a></span>structNameStorage</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::internal::structNameStorage</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="StructName_8hpp_source.html#l00214">214</a> of file <a class="el" href="StructName_8hpp_source.html">StructName.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a52be59da116649206cd1d61b613ee680"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52be59da116649206cd1d61b613ee680">&#9670;&nbsp;</a></span>typeNameStorage</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::internal::typeNameStorage = <a class="el" href="namespacellama_1_1internal.html#a64b252f2299cce03f8814269a0c25ca2">typeNameAsArray</a>&lt;T&gt;()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="StructName_8hpp_source.html#l00188">188</a> of file <a class="el" href="StructName_8hpp_source.html">StructName.hpp</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Tue Jun 21 2022 17:08:01 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue Jun 21 2022 21:33:55 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
