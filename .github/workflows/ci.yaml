@@ -260,8 +260,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: build-windows-VS2019
-            runs-on: windows-2019
           - name: build-windows-VS2022
             runs-on: windows-2022
 
