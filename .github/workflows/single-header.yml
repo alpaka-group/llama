@@ -22,5 +22,11 @@ jobs:
         git config --global user.email "action@github.com"
         git config --global user.name "GitHub Action"
         git add llama.hpp
-        git diff --quiet && git diff --staged --quiet || (git commit -m "Update llama.hpp"; git push origin single-header)
+        if (git diff --quiet) || (git diff --staged --quiet)
+        then
+          git commit -m "Update llama.hpp"
+          git push origin single-header
+        else
+          echo "No changes to commit"
+        fi
         git push
