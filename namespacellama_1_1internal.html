@@ -227,7 +227,7 @@ Functions</h2></td></tr>
 <tr class="memitem:aeab53e4609fe07abfb6f5f2d532cd388"><td class="memTemplParams" colspan="2">template&lt;typename TypeList , bool Align, bool IncludeTailPadding&gt; </td></tr>
 <tr class="memitem:aeab53e4609fe07abfb6f5f2d532cd388"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#aeab53e4609fe07abfb6f5f2d532cd388">sizeOfImpl</a> () -&gt; std::size_t</td></tr>
 <tr class="separator:aeab53e4609fe07abfb6f5f2d532cd388"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8420725970ab9da75999e4dfad4e8590"><td class="memTemplParams" colspan="2">template&lt;bool Align, typename TypeList , std::size_t I&gt; </td></tr>
+<tr class="memitem:a8420725970ab9da75999e4dfad4e8590"><td class="memTemplParams" colspan="2">template&lt;typename TypeList , std::size_t I, bool Align&gt; </td></tr>
 <tr class="memitem:a8420725970ab9da75999e4dfad4e8590"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a8420725970ab9da75999e4dfad4e8590">offsetOfImplWorkaround</a> () -&gt; std::size_t</td></tr>
 <tr class="separator:a8420725970ab9da75999e4dfad4e8590"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6bba575bc352188001b17ab79739fa8"><td class="memTemplParams" colspan="2">template&lt;typename A , typename B &gt; </td></tr>
@@ -328,12 +328,6 @@ Variables</h2></td></tr>
 <tr class="memitem:a0a6972426a3c2ab551a48d21cac6370c"><td class="memTemplParams" colspan="2">template&lt;std::size_t I, typename... Children&gt; </td></tr>
 <tr class="memitem:a0a6972426a3c2ab551a48d21cac6370c"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a0a6972426a3c2ab551a48d21cac6370c">flatFieldCountBefore&lt; I, Record&lt; Children... &gt; &gt;</a> = <a class="el" href="namespacellama_1_1internal.html#a1dc0436b8f0598e4fe3e707051be5b5f">flatFieldCountBefore</a>&lt;I - 1, <a class="el" href="structllama_1_1Record.html">Record</a>&lt;Children...&gt;&gt; + <a class="el" href="namespacellama.html#aa6c960189f5edc242be631e2e8757914">flatFieldCount</a>&lt;<a class="el" href="namespacellama.html#ae4381442d997f1a8d4ace841c2b4eff9">GetFieldType</a>&lt;boost::mp11::mp_at_c&lt;<a class="el" href="structllama_1_1Record.html">Record</a>&lt;Children...&gt;, I - 1&gt;&gt;&gt;</td></tr>
 <tr class="separator:a0a6972426a3c2ab551a48d21cac6370c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2299e5867f7c90d4c67225474bd27a8"><td class="memTemplParams" colspan="2">template&lt;bool Align, typename TypeList , std::size_t I&gt; </td></tr>
-<tr class="memitem:aa2299e5867f7c90d4c67225474bd27a8"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#aa2299e5867f7c90d4c67225474bd27a8">offsetOfImpl</a> = <a class="el" href="namespacellama_1_1internal.html#a8420725970ab9da75999e4dfad4e8590">offsetOfImplWorkaround</a>&lt;Align, TypeList, I&gt;()</td></tr>
-<tr class="separator:aa2299e5867f7c90d4c67225474bd27a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1f7c19ca39d418ef7d866f6d41e41ea"><td class="memTemplParams" colspan="2">template&lt;bool Align, typename TypeList &gt; </td></tr>
-<tr class="memitem:ae1f7c19ca39d418ef7d866f6d41e41ea"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#ae1f7c19ca39d418ef7d866f6d41e41ea">offsetOfImpl&lt; Align, TypeList, 0 &gt;</a> = 0</td></tr>
-<tr class="separator:ae1f7c19ca39d418ef7d866f6d41e41ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa30231c6e488d62d3b26388e1ca9f590"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = void&gt; </td></tr>
 <tr class="memitem:aa30231c6e488d62d3b26388e1ca9f590"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#aa30231c6e488d62d3b26388e1ca9f590">isTupleLike</a> = false</td></tr>
 <tr class="separator:aa30231c6e488d62d3b26388e1ca9f590"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1156,7 +1150,7 @@ template&lt;typename A , std::size_t NA, typename B , std::size_t NB&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00660">660</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00662">662</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1188,7 +1182,7 @@ template&lt;typename A , typename B &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00653">653</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00655">655</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1220,7 +1214,7 @@ template&lt;typename... FieldsA&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00672">672</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00674">674</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1252,7 +1246,7 @@ template&lt;typename... FieldsA, typename FieldB , typename... FieldsB, auto pos
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00682">682</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00684">684</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1302,7 +1296,7 @@ template&lt;template&lt; typename... &gt; typename L, typename... T, typename F 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;bool Align, typename TypeList , std::size_t I&gt; </div>
+template&lt;typename TypeList , std::size_t I, bool Align&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1321,7 +1315,7 @@ template&lt;bool Align, typename TypeList , std::size_t I&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00499">499</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00514">514</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -2074,65 +2068,13 @@ template&lt;typename T , typename  = void&gt; </div>
 
 </div>
 </div>
-<a id="aa2299e5867f7c90d4c67225474bd27a8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa2299e5867f7c90d4c67225474bd27a8">&#9670;&nbsp;</a></span>offsetOfImpl</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;bool Align, typename TypeList , std::size_t I&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr std::size_t llama::internal::offsetOfImpl = <a class="el" href="namespacellama_1_1internal.html#a8420725970ab9da75999e4dfad4e8590">offsetOfImplWorkaround</a>&lt;Align, TypeList, I&gt;()</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00493">493</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
-
-</div>
-</div>
-<a id="ae1f7c19ca39d418ef7d866f6d41e41ea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae1f7c19ca39d418ef7d866f6d41e41ea">&#9670;&nbsp;</a></span>offsetOfImpl&lt; Align, TypeList, 0 &gt;</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;bool Align, typename TypeList &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr std::size_t <a class="el" href="namespacellama_1_1internal.html#aa2299e5867f7c90d4c67225474bd27a8">llama::internal::offsetOfImpl</a>&lt; Align, TypeList, 0 &gt; = 0</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00496">496</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
-
-</div>
-</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Tue Jun 21 2022 16:59:31 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue Jun 21 2022 17:08:01 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

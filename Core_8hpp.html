@@ -331,7 +331,7 @@ Functions</h2></td></tr>
 <tr class="memitem:aeab53e4609fe07abfb6f5f2d532cd388"><td class="memTemplParams" colspan="2">template&lt;typename TypeList , bool Align, bool IncludeTailPadding&gt; </td></tr>
 <tr class="memitem:aeab53e4609fe07abfb6f5f2d532cd388"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#aeab53e4609fe07abfb6f5f2d532cd388">llama::internal::sizeOfImpl</a> () -&gt; std::size_t</td></tr>
 <tr class="separator:aeab53e4609fe07abfb6f5f2d532cd388"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8420725970ab9da75999e4dfad4e8590"><td class="memTemplParams" colspan="2">template&lt;bool Align, typename TypeList , std::size_t I&gt; </td></tr>
+<tr class="memitem:a8420725970ab9da75999e4dfad4e8590"><td class="memTemplParams" colspan="2">template&lt;typename TypeList , std::size_t I, bool Align&gt; </td></tr>
 <tr class="memitem:a8420725970ab9da75999e4dfad4e8590"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a8420725970ab9da75999e4dfad4e8590">llama::internal::offsetOfImplWorkaround</a> () -&gt; std::size_t</td></tr>
 <tr class="separator:a8420725970ab9da75999e4dfad4e8590"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ff901e3012935d38350c0f68e044fe5"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
@@ -415,12 +415,6 @@ Variables</h2></td></tr>
 <tr class="memitem:a945addc7fc78f444f37bb79d099cfd84"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a945addc7fc78f444f37bb79d099cfd84">llama::alignOf&lt; Record&lt; Fields... &gt; &gt;</a> = flatAlignOf&lt;FlatRecordDim&lt;Record&lt;Fields...&gt;&gt;&gt;</td></tr>
 <tr class="memdesc:a945addc7fc78f444f37bb79d099cfd84"><td class="mdescLeft">&#160;</td><td class="mdescRight">The alignment of a record dimension if its fields would be in a normal struct.  <a href="namespacellama.html#a945addc7fc78f444f37bb79d099cfd84">More...</a><br /></td></tr>
 <tr class="separator:a945addc7fc78f444f37bb79d099cfd84"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2299e5867f7c90d4c67225474bd27a8"><td class="memTemplParams" colspan="2">template&lt;bool Align, typename TypeList , std::size_t I&gt; </td></tr>
-<tr class="memitem:aa2299e5867f7c90d4c67225474bd27a8"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#aa2299e5867f7c90d4c67225474bd27a8">llama::internal::offsetOfImpl</a> = offsetOfImplWorkaround&lt;Align, TypeList, I&gt;()</td></tr>
-<tr class="separator:aa2299e5867f7c90d4c67225474bd27a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1f7c19ca39d418ef7d866f6d41e41ea"><td class="memTemplParams" colspan="2">template&lt;bool Align, typename TypeList &gt; </td></tr>
-<tr class="memitem:ae1f7c19ca39d418ef7d866f6d41e41ea"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#ae1f7c19ca39d418ef7d866f6d41e41ea">llama::internal::offsetOfImpl&lt; Align, TypeList, 0 &gt;</a> = 0</td></tr>
-<tr class="separator:ae1f7c19ca39d418ef7d866f6d41e41ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8f48517b46c35c1a511273f08d2abb3"><td class="memTemplParams" colspan="2">template&lt;typename TypeList , bool Align, bool IncludeTailPadding = true&gt; </td></tr>
 <tr class="memitem:ac8f48517b46c35c1a511273f08d2abb3"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ac8f48517b46c35c1a511273f08d2abb3">llama::flatSizeOf</a> = internal::sizeOfImpl&lt;TypeList, Align, IncludeTailPadding&gt;()</td></tr>
 <tr class="memdesc:ac8f48517b46c35c1a511273f08d2abb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The size of a type list if its elements would be in a normal struct.  <a href="namespacellama.html#ac8f48517b46c35c1a511273f08d2abb3">More...</a><br /></td></tr>
@@ -434,7 +428,7 @@ Variables</h2></td></tr>
 <tr class="memdesc:a585d55cd3a51152ec452bc1f2d49a3ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">The size of a record dimension if its fields would be in a normal struct.  <a href="namespacellama.html#a585d55cd3a51152ec452bc1f2d49a3ec">More...</a><br /></td></tr>
 <tr class="separator:a585d55cd3a51152ec452bc1f2d49a3ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b86f2441b1aae82532668e1a8377df2"><td class="memTemplParams" colspan="2">template&lt;typename TypeList , std::size_t I, bool Align&gt; </td></tr>
-<tr class="memitem:a7b86f2441b1aae82532668e1a8377df2"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a7b86f2441b1aae82532668e1a8377df2">llama::flatOffsetOf</a> = internal::offsetOfImpl&lt;Align, TypeList, I&gt;</td></tr>
+<tr class="memitem:a7b86f2441b1aae82532668e1a8377df2"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a7b86f2441b1aae82532668e1a8377df2">llama::flatOffsetOf</a> = internal::offsetOfImplWorkaround&lt;TypeList, I, Align&gt;()</td></tr>
 <tr class="memdesc:a7b86f2441b1aae82532668e1a8377df2"><td class="mdescLeft">&#160;</td><td class="mdescRight">The byte offset of an element in a type list ifs elements would be in a normal struct.  <a href="namespacellama.html#a7b86f2441b1aae82532668e1a8377df2">More...</a><br /></td></tr>
 <tr class="separator:a7b86f2441b1aae82532668e1a8377df2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae03df933faef61723569d4655563bbe"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename RecordCoord , bool Align = false&gt; </td></tr>
@@ -447,7 +441,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Core_8hpp.html">Core.hpp</a></li>
-    <li class="footer">Generated on Tue Jun 21 2022 16:59:31 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue Jun 21 2022 17:08:01 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

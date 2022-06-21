@@ -1,7 +1,5 @@
 var NAVTREEINDEX4 =
 {
-"structllama_1_1mapping_1_1Split.html":[2,0,1,2,28],
-"structllama_1_1mapping_1_1Split.html#a07b155e3bd5d0f74618e7818c1e4ba5f":[2,0,1,2,28,6],
 "structllama_1_1mapping_1_1Split.html#a14652d1ef9319a3361f0b5f91373c732":[2,0,1,2,28,1],
 "structllama_1_1mapping_1_1Split.html#a25c52c371fa575b7c8570e7f49e37265":[2,0,1,2,28,12],
 "structllama_1_1mapping_1_1Split.html#a265adac4a4570caf3b8cdb67db39b44b":[2,0,1,2,28,7],
