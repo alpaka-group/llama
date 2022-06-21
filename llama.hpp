@@ -968,7 +968,6 @@
 		// ============================================================================
 
 
-	#include <boost/core/demangle.hpp>
 	#include <iostream>
 	#include <string>
 	// #include <type_traits>    // amalgamate: file already included
@@ -1494,29 +1493,6 @@
 	    inline constexpr std::size_t offsetOf
 	        = flatOffsetOf<FlatRecordDim<RecordDim>, flatRecordCoord<RecordDim, RecordCoord>, Align>;
 
-	    template<typename T>
-	    auto structName(T = {}) -> std::string
-	    {
-	        auto s = boost::core::demangle(typeid(T).name());
-	        if(const auto pos = s.rfind(':'); pos != std::string::npos)
-	            s = s.substr(pos + 1);
-	        return s;
-	    }
-
-	    template<template<typename...> typename L, typename T0, typename... T>
-	    auto structName(L<T0, T...> = {}) -> std::string
-	    {
-	        auto s = boost::core::demangle(typeid(L<T0, T...>).name());
-	        if(const auto pos = s.find('<'); pos != std::string::npos)
-	            s = s.substr(0, pos);
-	        if(const auto pos = s.rfind(':'); pos != std::string::npos)
-	            s = s.substr(pos + 1);
-	        s += "<" + structName(T0{});
-	        ((s += "," + structName(T{})), ...);
-	        s += ">";
-	        return s;
-	    }
-
 	    namespace internal
 	    {
 	        // Such a class is also known as arraw_proxy: https://quuxplusone.github.io/blog/2019/02/06/arrow-proxy/
@@ -1672,30 +1648,6 @@
 	    using MergedRecordDims = typename decltype(internal::mergeRecordDimsImpl(
 	        boost::mp11::mp_identity<RecordDimA>{},
 	        boost::mp11::mp_identity<RecordDimB>{}))::type;
-
-	    /// Returns the tags interspersed by '.' represented by the given record coord in the given record dimension.
-	    template<typename RecordDim, std::size_t... Coords>
-	    auto recordCoordTags(RecordCoord<Coords...>) -> std::string
-	    {
-	        using Tags = GetTags<RecordDim, RecordCoord<Coords...>>;
-
-	        std::string r;
-	        boost::mp11::mp_for_each<Tags>(
-	            [&](auto tag)
-	            {
-	                using Tag = decltype(tag);
-	                if(!r.empty())
-	                    r += '.';
-	                if constexpr(isRecordCoord<Tag>)
-	                {
-	                    static_assert(Tag::size == 1);
-	                    r += std::to_string(Tag::front); // handle array indices
-	                }
-	                else
-	                    r += structName(tag);
-	            });
-	        return r;
-	    }
 
 	    /// Alias for ToT, adding `const` if FromT is const qualified.
 	    template<typename FromT, typename ToT>
@@ -4051,6 +4003,351 @@ namespace llama
 	#if __has_include(<fmt/format.h>)
 	// #    include "ArrayIndexRange.hpp"    // amalgamate: file already expanded
 	// #    include "Core.hpp"    // amalgamate: file already expanded
+		// ============================================================================
+		// == ./StructName.hpp ==
+		// ==
+		// SPDX-License-Identifier: GPL-3.0-or-later
+
+		// #pragma once
+		// #include "Core.hpp"    // amalgamate: file already expanded
+
+		#include <string_view>
+
+		namespace llama
+		{
+		    namespace internal
+		    {
+		        // TODO(bgruber): just use std::copy which became constexpr in C++20
+		        template<typename In, typename Out>
+		        constexpr auto constexpr_copy(In f, In l, Out d)
+		        {
+		            while(f != l)
+		                *d++ = *f++;
+		            return d;
+		        }
+
+		        // TODO(bgruber): just use std::search which became constexpr in C++20
+		        // from: https://en.cppreference.com/w/cpp/algorithm/search
+		        template<class ForwardIt1, class ForwardIt2>
+		        constexpr ForwardIt1 constexpr_search(ForwardIt1 first, ForwardIt1 last, ForwardIt2 s_first, ForwardIt2 s_last)
+		        {
+		            while(1)
+		            {
+		                ForwardIt1 it = first;
+		                for(ForwardIt2 s_it = s_first;; ++it, ++s_it)
+		                {
+		                    if(s_it == s_last)
+		                        return first;
+		                    if(it == last)
+		                        return last;
+		                    if(!(*it == *s_it))
+		                        break;
+		                }
+		                ++first;
+		            }
+		        }
+
+		        // TODO(bgruber): just use std::remove_copy which became constexpr in C++20
+		        // from: https://en.cppreference.com/w/cpp/algorithm/remove_copy
+		        template<class InputIt, class OutputIt, class T>
+		        constexpr OutputIt constexpr_remove_copy(InputIt first, InputIt last, OutputIt d_first, const T& value)
+		        {
+		            for(; first != last; ++first)
+		            {
+		                if(!(*first == value))
+		                {
+		                    *d_first++ = *first;
+		                }
+		            }
+		            return d_first;
+		        }
+
+		        // TODO(bgruber): just use std::count which became constexpr in C++20
+		        // from: https://en.cppreference.com/w/cpp/algorithm/count
+		        template<class InputIt, class T>
+		        typename std::iterator_traits<InputIt>::difference_type constexpr_count(
+		            InputIt first,
+		            InputIt last,
+		            const T& value)
+		        {
+		            typename std::iterator_traits<InputIt>::difference_type ret = 0;
+		            for(; first != last; ++first)
+		            {
+		                if(*first == value)
+		                {
+		                    ret++;
+		                }
+		            }
+		            return ret;
+		        }
+
+		        template<typename T>
+		        constexpr auto typeNameAsArray()
+		        {
+		            // adapted from Matthew Rodusek:
+		            // https://bitwizeshift.github.io/posts/2021/03/09/getting-an-unmangled-type-name-at-compile-time/
+		            //
+		            // Boost Software License - Version 1.0 - August 17th, 2003
+		            //
+		            // Permission is hereby granted, free of charge, to any person or organization
+		            // obtaining a copy of the software and accompanying documentation covered by
+		            // this license (the "Software") to use, reproduce, display, distribute,
+		            // execute, and transmit the Software, and to prepare derivative works of the
+		            // Software, and to permit third-parties to whom the Software is furnished to
+		            // do so, all subject to the following:
+		            //
+		            // The copyright notices in the Software and this entire statement, including
+		            // the above license grant, this restriction and the following disclaimer,
+		            // must be included in all copies of the Software, in whole or in part, and
+		            // all derivative works of the Software, unless such copies or derivative
+		            // works are solely in the form of machine-executable object code generated by
+		            // a source language processor.
+		            //
+		            // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+		            // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+		            // FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT
+		            // SHALL THE COPYRIGHT HOLDERS OR ANYONE DISTRIBUTING THE SOFTWARE BE LIABLE
+		            // FOR ANY DAMAGES OR OTHER LIABILITY, WHETHER IN CONTRACT, TORT OR OTHERWISE,
+		            // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+		            // DEALINGS IN THE SOFTWARE.
+
+		#if defined(__clang__)
+		            constexpr auto prefix = std::string_view{"[T = "};
+		            constexpr auto suffix = std::string_view{"]"};
+		            constexpr auto function = std::string_view{__PRETTY_FUNCTION__};
+		#elif defined(__GNUC__)
+		            constexpr auto prefix = std::string_view{"with T = "};
+		            constexpr auto suffix = std::string_view{"]"};
+		            constexpr auto function = std::string_view{__PRETTY_FUNCTION__};
+		#elif defined(_MSC_VER)
+		            constexpr auto prefix = std::string_view{"typeNameAsArray<"};
+		            constexpr auto suffix = std::string_view{">(void)"};
+		            constexpr auto function = std::string_view{__FUNCSIG__};
+		#else
+		#    warning Unsupported compiler
+		            constexpr auto prefix = std::string_view{};
+		            constexpr auto suffix = std::string_view{};
+		            constexpr auto function = std::string_view{};
+		#endif
+
+		            constexpr auto start = function.find(prefix) + prefix.size();
+		            constexpr auto end = function.rfind(suffix);
+		            static_assert(start <= end);
+
+		            constexpr auto name = function.substr(start, (end - start));
+
+		            constexpr auto arrAndSize = [&]() constexpr
+		            {
+		                Array<char, name.size()> nameArray{};
+		                constexpr_copy(name.begin(), name.end(), nameArray.begin());
+
+		#ifdef _MSC_VER
+		                // MSVC 19.32 runs into a syntax error if we just capture nameArray. Passing it as argument is a
+		                // workaround. Applies to the following lambdas.
+
+		                // strip "struct " and "class ".
+		                auto removeAllOccurences = [](auto& nameArray, std::size_t size, std::string_view str) constexpr
+		                {
+		                    auto e = nameArray.begin() + size;
+		                    while(true)
+		                    {
+		                        auto it = constexpr_search(nameArray.begin(), e, str.begin(), str.end());
+		                        if(it == e)
+		                            break;
+		                        constexpr_copy(it + str.size(), e, it);
+		                        e -= str.size();
+		                    }
+		                    return e - nameArray.begin();
+		                };
+
+		                auto size1 = removeAllOccurences(nameArray, nameArray.size(), std::string_view{"struct "});
+		                auto size2 = removeAllOccurences(nameArray, size1, std::string_view{"class "});
+		#else
+		                auto size2 = nameArray.size();
+		#endif
+
+		                auto size3Func = [&](auto& nameArray) constexpr
+		                {
+		                    // remove spaces between closing template angle brackets and after commas
+		                    auto e = nameArray.begin() + size2;
+		                    for(auto b = nameArray.begin(); b < e - 2; b++)
+		                    {
+		                        if((b[0] == '>' && b[1] == ' ' && b[2] == '>') || (b[0] == ',' && b[1] == ' '))
+		                        {
+		                            constexpr_copy(b + 2, e, b + 1);
+		                            e--;
+		                        }
+		                    }
+		                    return e - nameArray.begin();
+		                };
+		                auto size3 = size3Func(nameArray);
+
+		                return std::pair{nameArray, size3};
+		            }
+		            ();
+
+		            Array<char, arrAndSize.second> a{};
+		            constexpr_copy(arrAndSize.first.begin(), arrAndSize.first.begin() + arrAndSize.second, a.begin());
+		            return a;
+		        }
+
+		        template<typename T>
+		        inline constexpr auto typeNameStorage = typeNameAsArray<T>();
+		    } // namespace internal
+
+		    template<typename T>
+		    inline constexpr auto qualifiedTypeName = []
+		    {
+		        constexpr auto& value = internal::typeNameStorage<T>;
+		        return std::string_view{&value[0], value.size()};
+		    }();
+
+		    namespace internal
+		    {
+		        constexpr auto isIdentChar(char c) -> bool
+		        {
+		            if(c >= 'A' && c <= 'Z')
+		                return true;
+		            if(c >= 'a' && c <= 'z')
+		                return true;
+		            if(c >= '0' && c <= '9')
+		                return true;
+		            if(c == '_')
+		                return true;
+		            return false;
+		        }
+
+		        template<typename T>
+		        inline constexpr auto structNameStorage = []() constexpr
+		        {
+		            // strip namespace qualifiers before type names
+		            constexpr auto arrAndSize = []() constexpr
+		            {
+		                auto s = internal::typeNameStorage<T>;
+		                auto e = s.end();
+		                auto b = s.begin();
+		                while(true)
+		                {
+		                    // find iterator to after "::"
+		                    auto l = b;
+		                    while(l + 1 < e && !(l[0] == ':' && l[1] == ':'))
+		                        l++;
+		                    if(l + 1 == e)
+		                        break;
+		                    l += 2;
+
+		                    // find iterator to first identifier char before "::"
+		                    auto f = l - 3; // start at first char before "::"
+		                    while(s.begin() < f && isIdentChar(f[-1]))
+		                        f--;
+
+		                    // cut out [f:l[
+		                    constexpr_copy(l, e, f);
+		                    e -= (l - f);
+		                    b = f;
+		                }
+
+		                return std::pair{s, e - s.begin()};
+		            }
+		            ();
+
+		            Array<char, arrAndSize.second> a{};
+		            constexpr_copy(arrAndSize.first.begin(), arrAndSize.first.begin() + arrAndSize.second, a.begin());
+		            return a;
+		        }
+		        ();
+		    } // namespace internal
+
+		    template<typename T>
+		    constexpr auto structName(T = {}) -> std::string_view
+		    {
+		        constexpr auto& value = internal::structNameStorage<T>;
+		        return std::string_view{&value[0], value.size()};
+		    }
+
+		    namespace internal
+		    {
+		        constexpr auto intToStrSize(std::size_t s)
+		        {
+		            std::size_t len = 1;
+		            for(auto n = s; n != 0; n /= 10)
+		                len++;
+		            return len;
+		        }
+
+		        template<typename RecordDim, std::size_t... Coords>
+		        LLAMA_HOST_ACC inline constexpr auto recordCoordTagsStorage = []() constexpr
+		        {
+		            using Tags = GetTags<RecordDim, RecordCoord<Coords...>>;
+
+		            // precompute char array size
+		            constexpr auto size = [&]() constexpr
+		            {
+		                std::size_t s = 0;
+		                boost::mp11::mp_for_each<Tags>(
+		                    [&](auto tag)
+		                    {
+		                        if(s != 0)
+		                            s++; // for the '.'s
+		                        using Tag = decltype(tag);
+		                        if constexpr(isRecordCoord<Tag>)
+		                            s += intToStrSize(s);
+		                        else
+		                            s += structName(tag).size();
+		                    });
+		                return s;
+		            }
+		            ();
+		            llama::Array<char, size> a{};
+		            for(auto& c : a)
+		                c = '?';
+		            auto w = a.begin();
+
+		            boost::mp11::mp_for_each<Tags>([&](auto tag) constexpr {
+		                if(w != a.begin())
+		                {
+		                    *w = '.';
+		                    w++;
+		                }
+		                using Tag = decltype(tag);
+		                if constexpr(isRecordCoord<Tag>)
+		                {
+		                    // handle array indices
+		                    static_assert(Tag::size == 1);
+		                    // convert to string
+		                    auto n = Tag::front;
+		                    w += intToStrSize(n) - 1;
+		                    do
+		                    {
+		                        *w = '0' + n % 10;
+		                        w--;
+		                        n /= 10;
+		                    } while(n != 0);
+		                }
+		                else
+		                {
+		                    constexpr auto sn = structName(tag);
+		                    constexpr_copy(sn.begin(), sn.end(), w);
+		                    w += sn.size();
+		                }
+		            });
+		            return a;
+		        }
+		        ();
+		    } // namespace internal
+
+		    /// Returns the tags interspersed by '.' represented by the given record coord in the given record dimension.
+		    template<typename RecordDim, std::size_t... Coords>
+		    constexpr auto recordCoordTags(RecordCoord<Coords...> = {}) -> std::string_view
+		    {
+		        constexpr auto& value = internal::recordCoordTagsStorage<RecordDim, Coords...>;
+		        return std::string_view{&value[0], value.size()};
+		    }
+		} // namespace llama
+		// ==
+		// == ./StructName.hpp ==
+		// ============================================================================
+
 
 	#    include <boost/functional/hash.hpp>
 	#    include <fmt/format.h>
@@ -4108,7 +4405,7 @@ namespace llama
 	        {
 	            ArrayIndex arrayIndex;
 	            std::vector<std::size_t> recordCoord;
-	            std::string recordTags;
+	            std::string_view recordTags;
 	            NrAndOffset<typename ArrayIndex::value_type> nrAndOffset;
 	            std::size_t size;
 	        };
@@ -4460,7 +4757,7 @@ namespace llama
 	    background-color: #{:X};
 	}}
 	)",
-	                    internal::cssClass(recordCoordTags<RecordDim>(rc)),
+	                    internal::cssClass(std::string{recordCoordTags<RecordDim>(rc)}),
 	                    byteSizeInPixel * size,
 	                    internal::color(internal::toVec(rc)));
 	            });
@@ -4490,7 +4787,7 @@ namespace llama
 	            }
 	            html += fmt::format(
 	                R"(<div class="box {0}" title="{1} {2}">{1} {2}</div>)",
-	                internal::cssClass(info.recordTags),
+	                internal::cssClass(std::string{info.recordTags}),
 	                internal::formatArrayIndex(info.arrayIndex),
 	                info.recordTags);
 	        }
@@ -4656,6 +4953,7 @@ namespace llama
 	// == ./ProxyRefOpMixin.hpp ==
 	// ============================================================================
 
+// #include "StructName.hpp"    // amalgamate: file already expanded
 	// ============================================================================
 	// == ./Vector.hpp ==
 	// ==
@@ -7168,6 +7466,7 @@ namespace llama
 	// == ./mapping/Trace.hpp ==
 	// ==
 	// #pragma once
+	// #include "../StructName.hpp"    // amalgamate: file already expanded
 	// #include "Common.hpp"    // amalgamate: file already expanded
 
 	// #include <atomic>    // amalgamate: file already included
@@ -7325,20 +7624,23 @@ namespace llama
 	                [&](auto rc)
 	                {
 	                    const size_type i = flatRecordCoord<RecordDim, decltype(rc)>;
+	                    constexpr auto fieldName = recordCoordTags<RecordDim>(rc);
+	                    char fieldNameZT[fieldName.size() + 1]{}; // nvcc does not handle the %*.*s parameter correctly
+	                    llama::internal::constexpr_copy(fieldName.begin(), fieldName.end(), fieldNameZT);
 	                    if constexpr(MyCodeHandlesProxyReferences)
 	                        printf(
-	                            "%*i %*lu %*lu\n",
+	                            "%*.s %*lu %*lu\n",
 	                            columnWidth,
-	                            i,
+	                            fieldNameZT,
 	                            columnWidth,
 	                            static_cast<unsigned long>(hits[i].reads),
 	                            columnWidth,
 	                            static_cast<unsigned long>(hits[i].writes));
 	                    else
 	                        printf(
-	                            "%*i %*lu\n",
+	                            "%*.s %*lu %*lu\n",
 	                            columnWidth,
-	                            i,
+	                            fieldNameZT,
 	                            columnWidth,
 	                            static_cast<unsigned long>(hits[i].memLocsComputed));
 	                });
@@ -8093,9 +8395,7 @@ namespace llama
 		// #pragma once
 		// #include "TreeFromDimensions.hpp"    // amalgamate: file already expanded
 
-		// #include <boost/core/demangle.hpp>    // amalgamate: file already included
 		// #include <string>    // amalgamate: file already included
-		#include <typeinfo>
 
 		namespace llama::mapping::tree
 		{
@@ -8160,7 +8460,7 @@ namespace llama
 		    template<typename Identifier, typename Type, typename CountType>
 		    auto toString(const Leaf<Identifier, Type, CountType>& leaf) -> std::string
 		    {
-		        auto raw = boost::core::demangle(typeid(Type).name());
+		        auto raw = std::string{llama::structName<Type>()};
 		#ifdef _MSC_VER
 		        internal::replace_all(raw, " __cdecl(void)", "");
 		#endif
