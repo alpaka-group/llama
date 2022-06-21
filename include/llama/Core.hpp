@@ -483,26 +483,8 @@ namespace llama
             return size;
         }
 
-        template<bool Align, typename TypeList, std::size_t I>
+        template<typename TypeList, std::size_t I, bool Align>
         constexpr auto offsetOfImplWorkaround() -> std::size_t;
-
-        // recursive formulation to benefit from template instantiation memoization
-        // this massively improves compilation time when this template is instantiated with a lot of different I
-        template<bool Align, typename TypeList, std::size_t I>
-        inline constexpr std::size_t offsetOfImpl
-            = offsetOfImplWorkaround<Align, TypeList, I>(); // FIXME: MSVC fails to compile an IILE here.
-
-        template<bool Align, typename TypeList>
-        inline constexpr std::size_t offsetOfImpl<Align, TypeList, 0> = 0;
-
-        template<bool Align, typename TypeList, std::size_t I>
-        constexpr auto offsetOfImplWorkaround() -> std::size_t
-        {
-            std::size_t offset = offsetOfImpl<Align, TypeList, I - 1> + sizeof(boost::mp11::mp_at_c<TypeList, I - 1>);
-            if constexpr(Align)
-                offset = roundUpToMultiple(offset, alignof(boost::mp11::mp_at_c<TypeList, I>));
-            return offset;
-        }
     } // namespace internal
 
     /// The size of a type list if its elements would be in a normal struct.
@@ -522,7 +504,27 @@ namespace llama
 
     /// The byte offset of an element in a type list ifs elements would be in a normal struct.
     template<typename TypeList, std::size_t I, bool Align>
-    inline constexpr std::size_t flatOffsetOf = internal::offsetOfImpl<Align, TypeList, I>;
+    inline constexpr std::size_t flatOffsetOf = internal::offsetOfImplWorkaround<TypeList, I, Align>();
+
+    namespace internal
+    {
+        // unfortunately, we cannot inline this function as an IILE, as MSVC complains:
+        // fatal error C1202: recursive type or function dependency context too complex
+        template<typename TypeList, std::size_t I, bool Align>
+        constexpr auto offsetOfImplWorkaround() -> std::size_t
+        {
+            if constexpr(I == 0)
+                return 0;
+            else
+            {
+                std::size_t offset
+                    = flatOffsetOf<TypeList, I - 1, Align> + sizeof(boost::mp11::mp_at_c<TypeList, I - 1>);
+                if constexpr(Align)
+                    offset = roundUpToMultiple(offset, alignof(boost::mp11::mp_at_c<TypeList, I>));
+                return offset;
+            }
+        }
+    } // namespace internal
 
     /// The byte offset of an element in a record dimension if it would be a normal struct.
     /// \tparam RecordDim Record dimension tree.

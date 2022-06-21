@@ -747,32 +747,27 @@ namespace llama
     {
         using RecordDim = typename VirtualRecord<View, BoundRecordCoord, OwnView>::AccessibleRecordDim;
         os << "{";
-        // TODO(bgruber): I tried refactoring both branches into one, but MSVC and icpc have troubles with correctly
-        // discarding the discarded if constexpr branch and not instantiating templates inside them.
         if constexpr(std::is_array_v<RecordDim>)
         {
-            constexpr auto size = std::extent_v<RecordDim>;
-            boost::mp11::mp_for_each<boost::mp11::mp_iota_c<size>>(
+            boost::mp11::mp_for_each<boost::mp11::mp_iota_c<std::extent_v<RecordDim>>>(
                 [&](auto ic)
                 {
                     constexpr std::size_t i = decltype(ic)::value;
-                    os << '[' << i << ']' << ": " << vr(RecordCoord<i>{});
-                    if(i + 1 < size)
+                    if(i > 0)
                         os << ", ";
+                    os << '[' << i << ']' << ": " << vr(RecordCoord<i>{});
                 });
         }
         else
         {
-            constexpr auto size = boost::mp11::mp_size<RecordDim>::value;
-            boost::mp11::mp_for_each<boost::mp11::mp_iota_c<size>>(
+            boost::mp11::mp_for_each<boost::mp11::mp_iota<boost::mp11::mp_size<RecordDim>>>(
                 [&](auto ic)
                 {
                     constexpr std::size_t i = decltype(ic)::value;
-                    using Field = boost::mp11::mp_at_c<RecordDim, i>;
-                    using Tag = GetFieldTag<Field>;
-                    os << structName<Tag>() << ": " << vr(RecordCoord<i>{});
-                    if(i + 1 < size)
+                    if(i > 0)
                         os << ", ";
+                    using Field = boost::mp11::mp_at_c<RecordDim, i>;
+                    os << structName<GetFieldTag<Field>>() << ": " << vr(RecordCoord<i>{});
                 });
         }
         os << "}";
