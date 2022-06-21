@@ -17,6 +17,7 @@ jobs:
         ./tools/create-single-header.sh
     - name: commit
       run: |
+        set -x
         cd single-header
         git config --global user.email "action@github.com"
         git config --global user.name "GitHub Action"
