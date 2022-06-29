@@ -1083,3 +1083,118 @@ TEST_CASE("VirtualRecord.reference_to_One")
     CHECK(v(tag::Y{}) == 22);
     CHECK(v(tag::Z{}) == 3);
 }
+
+TEST_CASE("ValueOf")
+{
+    STATIC_REQUIRE(std::is_same_v<llama::internal::ValueOf<int&>::type, int>);
+
+    using One = llama::One<Vec3I>;
+    STATIC_REQUIRE(std::is_same_v<llama::internal::ValueOf<decltype(One{}())>::type, One>);
+
+    auto mapping = llama::mapping::BitPackedIntSoA<llama::ArrayExtents<int, 4>, Vec3I>{{}, 17};
+    auto v = llama::allocView(mapping);
+    [[maybe_unused]] auto ref = v(1)(tag::X{});
+#ifdef __cpp_lib_concepts
+    STATIC_REQUIRE(llama::ProxyReference<decltype(ref)>);
+#endif
+    STATIC_REQUIRE(std::is_same_v<llama::internal::ValueOf<decltype(ref)>::type, int>);
+}
+TEST_CASE("ScopedUpdate.Fundamental")
+{
+    int i = 1;
+    {
+        llama::ScopedUpdate u(i);
+        STATIC_REQUIRE(std::is_same_v<decltype(u), llama::ScopedUpdate<int&>>);
+        u = 23;
+        CHECK(u == 23);
+        CHECK(u.get() == 23);
+        CHECK(i == 1);
+        u = 24;
+        CHECK(u == 24);
+        CHECK(u.get() == 24);
+        CHECK(i == 1);
+    }
+    CHECK(i == 24);
+}
+
+TEST_CASE("ScopedUpdate.Object")
+{
+    std::vector v = {1};
+    {
+        llama::ScopedUpdate u(v);
+        STATIC_REQUIRE(std::is_same_v<decltype(u), llama::ScopedUpdate<std::vector<int>&>>);
+        u.push_back(2);
+        CHECK(u == std::vector{1, 2});
+        CHECK(u.get() == std::vector{1, 2});
+        CHECK(v == std::vector{1});
+        u = std::vector{3, 4, 5};
+        CHECK(u == std::vector{3, 4, 5});
+        CHECK(u.get() == std::vector{3, 4, 5});
+        CHECK(v == std::vector{1});
+    }
+    CHECK(v == std::vector{3, 4, 5});
+}
+
+TEST_CASE("ScopedUpdate.ProxyRef")
+{
+    auto mapping = llama::mapping::BitPackedIntSoA<llama::ArrayExtents<int, 4>, Vec3I>{{}, 17};
+    auto v = llama::allocView(mapping);
+    auto i = v(1)(tag::X{});
+    i = 1;
+    {
+        llama::ScopedUpdate u(i);
+        STATIC_REQUIRE(std::is_same_v<decltype(u), llama::ScopedUpdate<decltype(i)>>);
+        u = 23;
+        CHECK(u == 23);
+        CHECK(u.get() == 23);
+        CHECK(i == 1);
+        u = 24;
+        CHECK(u == 24);
+        CHECK(u.get() == 24);
+        CHECK(i == 1);
+    }
+    CHECK(i == 24);
+}
+
+TEST_CASE("ScopedUpdate.VirtualRecord")
+{
+    auto test = [](auto&& v)
+    {
+        llama::forEachLeaf(v, [i = 0](auto& field) mutable { field = ++i; });
+        {
+            llama::ScopedUpdate u(v);
+            if constexpr(llama::is_One<std::remove_reference_t<decltype(v)>>)
+            {
+                STATIC_REQUIRE(
+                    std::is_same_v<decltype(u), llama::ScopedUpdate<std::remove_reference_t<decltype(v)>&>>);
+            }
+            else
+            {
+                STATIC_REQUIRE(std::is_same_v<decltype(u), llama::ScopedUpdate<decltype(v())>>);
+            }
+            u(tag::X{}) = 11;
+            CHECK(u(tag::X{}) == 11);
+            CHECK(u(tag::Y{}) == 2);
+            CHECK(u(tag::Z{}) == 3);
+            CHECK(u.get()(tag::Z{}) == 3);
+            CHECK(v(tag::X{}) == 1);
+            CHECK(v(tag::Y{}) == 2);
+            CHECK(v(tag::Z{}) == 3);
+            CHECK(v(tag::Z{}) == 3);
+            u = 24;
+            CHECK(u(tag::X{}) == 24);
+            CHECK(u(tag::Y{}) == 24);
+            CHECK(u(tag::Z{}) == 24);
+            CHECK(u.get()(tag::Z{}) == 24);
+            CHECK(v(tag::X{}) == 1);
+            CHECK(v(tag::Y{}) == 2);
+            CHECK(v(tag::Z{}) == 3);
+        }
+        CHECK(v(tag::X{}) == 24);
+        CHECK(v(tag::Y{}) == 24);
+        CHECK(v(tag::Z{}) == 24);
+    };
+    llama::One<Vec3I> v;
+    test(v);
+    test(v());
+}
