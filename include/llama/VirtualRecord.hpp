@@ -3,7 +3,9 @@
 
 #pragma once
 
+#include "Concepts.hpp"
 #include "HasRanges.hpp"
+#include "ProxyRefOpMixin.hpp"
 #include "View.hpp"
 
 #include <iosfwd>
@@ -783,6 +785,165 @@ namespace llama
             [functor = std::forward<Functor>(functor), &vr = vr](auto rc)
                 LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(constexpr mutable) { std::forward<Functor>(functor)(vr(rc)); });
     }
+
+    namespace internal
+    {
+        // gets the value type for a given T, where T models a reference type. T is either an l-value reference, a
+        // proxy reference or a VirtualRecord
+        template<typename T, typename = void>
+        struct ValueOf
+        {
+            static_assert(sizeof(T) == 0, "T does not model a reference");
+        };
+
+        template<typename T>
+        struct ValueOf<T, std::enable_if_t<is_VirtualRecord<T>>>
+        {
+            using type = One<typename T::AccessibleRecordDim>;
+        };
+
+#ifdef __cpp_lib_concepts
+        template<ProxyReference T>
+#else
+        template<typename T>
+#endif
+        struct ValueOf<T, std::enable_if_t<isProxyReference<T>>>
+        {
+            using type = typename T::value_type;
+        };
+
+        template<typename T>
+        struct ValueOf<T&>
+        {
+            using type = T;
+        };
+    } // namespace internal
+
+    /// Scope guard type. ScopedUpdate takes a copy of a value through a reference and stores it internally during
+    /// construction. The stored value is written back when ScopedUpdate is destroyed. ScopedUpdate tries to act like
+    /// the stored value as much as possible, exposing member functions of the stored value and acting like a proxy
+    /// reference if the stored value is a primitive type.
+    template<typename Reference, typename = void>
+    struct ScopedUpdate : internal::ValueOf<Reference>::type
+    {
+        using value_type = typename internal::ValueOf<Reference>::type;
+
+        /// Loads a copy of the value referenced by r. Stores r and the loaded value.
+        LLAMA_FN_HOST_ACC_INLINE ScopedUpdate(Reference r) : value_type(r), ref(r)
+        {
+        }
+
+        ScopedUpdate(const ScopedUpdate&) = delete;
+        auto operator=(const ScopedUpdate&) -> ScopedUpdate& = delete;
+
+        ScopedUpdate(ScopedUpdate&&) noexcept = default;
+        auto operator=(ScopedUpdate&&) noexcept -> ScopedUpdate& = default;
+
+        using value_type::operator=;
+
+        /// Stores the internally stored value back to the referenced value.
+        LLAMA_FN_HOST_ACC_INLINE ~ScopedUpdate()
+        {
+            ref = static_cast<value_type&>(*this);
+        }
+
+        /// Get access to the stored value.
+        LLAMA_FN_HOST_ACC_INLINE auto get() -> value_type&
+        {
+            return *this;
+        }
+
+        /// Get access to the stored value.
+        LLAMA_FN_HOST_ACC_INLINE auto get() const -> const value_type&
+        {
+            return *this;
+        }
+
+    private:
+        Reference ref;
+    };
+
+    template<typename Reference>
+    struct ScopedUpdate<
+        Reference,
+        std::enable_if_t<std::is_fundamental_v<typename internal::ValueOf<Reference>::type>>>
+        : ProxyRefOpMixin<ScopedUpdate<Reference>, typename internal::ValueOf<Reference>::type>
+    {
+        using value_type = typename internal::ValueOf<Reference>::type;
+
+        LLAMA_FN_HOST_ACC_INLINE ScopedUpdate(Reference r) : value(r), ref(r)
+        {
+        }
+
+        ScopedUpdate(const ScopedUpdate&) = delete;
+        auto operator=(const ScopedUpdate&) -> ScopedUpdate& = delete;
+
+        ScopedUpdate(ScopedUpdate&&) noexcept = default;
+        auto operator=(ScopedUpdate&&) noexcept -> ScopedUpdate& = default;
+
+        LLAMA_FN_HOST_ACC_INLINE auto get() -> value_type&
+        {
+            return value;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE auto get() const -> const value_type&
+        {
+            return value;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE operator const value_type&() const
+        {
+            return value;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE operator value_type&()
+        {
+            return value;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE auto operator=(value_type v) -> ScopedUpdate&
+        {
+            value = v;
+            return *this;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE ~ScopedUpdate()
+        {
+            ref = value;
+        }
+
+    private:
+        value_type value;
+        Reference ref;
+    };
+
+    namespace internal
+    {
+        template<typename T, typename = void>
+        struct ReferenceTo
+        {
+            using type = T&;
+        };
+
+        template<typename T>
+        struct ReferenceTo<T, std::enable_if_t<is_VirtualRecord<T> && !is_One<T>>>
+        {
+            using type = T;
+        };
+
+#ifdef __cpp_lib_concepts
+        template<ProxyReference T>
+#else
+        template<typename T>
+#endif
+        struct ReferenceTo<T, std::enable_if_t<isProxyReference<T>>>
+        {
+            using type = T;
+        };
+    } // namespace internal
+
+    template<typename T>
+    ScopedUpdate(T) -> ScopedUpdate<typename internal::ReferenceTo<std::remove_reference_t<T>>::type>;
 } // namespace llama
 
 template<typename View, typename BoundRecordCoord, bool OwnView>
