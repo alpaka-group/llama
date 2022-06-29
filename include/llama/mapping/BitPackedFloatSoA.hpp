@@ -186,8 +186,8 @@ namespace llama::mapping
     /// split them off using the \ref Split mapping first.
     /// \tparam ExponentBits If ExponentBits is llama::Constant<N>, the compile-time N specifies the number of bits to
     /// use to store the exponent. If ExponentBits is llama::Value<T>, the number of bits is specified at runtime,
-    /// passed to the constructor and stored as type T.
-    /// \tparam MantissaBits Like ExponentBits but for the mantissa bits.
+    /// passed to the constructor and stored as type T. Must not be zero.
+    /// \tparam MantissaBits Like ExponentBits but for the mantissa bits. May be zero.
     /// \tparam LinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and how
     /// big the linear domain gets.
     /// \tparam StoredIntegral Integral type used as storage of reduced precision floating-point values.
@@ -222,6 +222,7 @@ namespace llama::mapping
             , VHExp{exponentBits}
             , VHMan{mantissaBits}
         {
+            assert(VHExp::value() > 0);
         }
 
         LLAMA_FN_HOST_ACC_INLINE
