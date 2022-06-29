@@ -164,6 +164,7 @@ namespace llama::mapping
     /// dimension contains non-integral types, split them off using the \ref Split mapping first.
     /// \tparam Bits If Bits is llama::Constant<N>, the compile-time N specifies the number of bits to use. If Bits is
     /// an integral type T, the number of bits is specified at runtime, passed to the constructor and stored as type T.
+    /// Must not be zero.
     /// \tparam LinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and how
     /// big the linear domain gets.
     /// \tparam StoredIntegral Integral type used as storage of reduced precision integers.
@@ -198,6 +199,7 @@ namespace llama::mapping
             : Base(extents)
             , VHBits{bits}
         {
+            assert(VHBits::value() > 0);
         }
 
         LLAMA_FN_HOST_ACC_INLINE
