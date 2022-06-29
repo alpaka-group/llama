@@ -81,8 +81,6 @@ namespace llama::mapping
             typename Base::ArrayIndex ad,
             RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
         {
-            const auto subArrayOffset = LinearizeArrayDimsFunctor{}(ad, Base::extents())
-                * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
             if constexpr(SeparateBuffers)
             {
                 constexpr auto blob = flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>;
@@ -92,6 +90,8 @@ namespace llama::mapping
             }
             else
             {
+                const auto subArrayOffset = LinearizeArrayDimsFunctor{}(ad, Base::extents())
+                    * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
                 constexpr std::size_t flatFieldIndex =
 #ifdef __NVCC__
                     *& // mess with nvcc compiler state to workaround bug
