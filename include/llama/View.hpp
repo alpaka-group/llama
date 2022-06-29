@@ -132,6 +132,13 @@ namespace llama
     template<typename RecordDim>
     using One = VirtualRecord<decltype(allocViewStack<0, RecordDim>()), RecordCoord<>, true>;
 
+    /// Is true, if T is an instance of \ref One.
+    template<typename T>
+    inline constexpr bool is_One = false;
+
+    template<typename View, typename BoundRecordCoord>
+    inline constexpr bool is_One<VirtualRecord<View, BoundRecordCoord, true>> = true;
+
     // TODO(bgruber): Higher dimensional iterators might not have good codegen. Multiple nested loops seem to be
     // superior to a single iterator over multiple dimensions. At least compilers are able to produce better code.
     // std::mdspan also discovered similar difficulties and there was a discussion in WG21 in Oulu 2016 to
