@@ -188,8 +188,11 @@ $data << EOD
 
     daxpy(plotFile);
 
-    const auto extents = llama::ArrayExtents{PROBLEM_SIZE};
-    daxpy_alpaka_llama("AoS", plotFile, llama::mapping::AoS{extents, double{}});
+    const auto extents = llama::ArrayExtentsDynamic<std::size_t, 1>{PROBLEM_SIZE};
+    daxpy_alpaka_llama(
+        "AoS",
+        plotFile,
+        llama::mapping::AoS<llama::ArrayExtentsDynamic<std::size_t, 1>, double>{extents});
     daxpy_alpaka_llama(
         "SoA",
         plotFile,
@@ -211,7 +214,14 @@ $data << EOD
             double,
             llama::mapping::BindAoS<>::fn,
             boost::mp11::mp_list<boost::mp11::mp_list<double, float>>>{extents});
-    daxpy_alpaka_llama("Bitpack 52^{11}", plotFile, llama::mapping::BitPackedFloatSoA{extents, 11, 52, double{}});
+    daxpy_alpaka_llama(
+        "Bitpack 52^{11}",
+        plotFile,
+        llama::mapping::BitPackedFloatSoA<llama::ArrayExtentsDynamic<std::size_t, 1>, double, unsigned, unsigned>{
+            extents,
+            11,
+            52,
+            double{}});
     daxpy_alpaka_llama(
         "Bitpack 52^{11} CT",
         plotFile,
@@ -220,7 +230,14 @@ $data << EOD
             double,
             llama::Constant<11>,
             llama::Constant<52>>{extents});
-    daxpy_alpaka_llama("Bitpack 23^{8}", plotFile, llama::mapping::BitPackedFloatSoA{extents, 8, 23, double{}});
+    daxpy_alpaka_llama(
+        "Bitpack 23^{8}",
+        plotFile,
+        llama::mapping::BitPackedFloatSoA<llama::ArrayExtentsDynamic<std::size_t, 1>, double, unsigned, unsigned>{
+            extents,
+            8,
+            23,
+            double{}});
     daxpy_alpaka_llama(
         "Bitpack 23^{8} CT",
         plotFile,
@@ -229,7 +246,14 @@ $data << EOD
             double,
             llama::Constant<8>,
             llama::Constant<23>>{extents});
-    daxpy_alpaka_llama("Bitpack 10^{5}", plotFile, llama::mapping::BitPackedFloatSoA{extents, 5, 10, double{}});
+    daxpy_alpaka_llama(
+        "Bitpack 10^{5}",
+        plotFile,
+        llama::mapping::BitPackedFloatSoA<llama::ArrayExtentsDynamic<std::size_t, 1>, double, unsigned, unsigned>{
+            extents,
+            5,
+            10,
+            double{}});
     daxpy_alpaka_llama(
         "Bitpack 10^{5} CT",
         plotFile,
