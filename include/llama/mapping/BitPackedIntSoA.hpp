@@ -91,8 +91,10 @@ namespace llama::mapping
                     v |= (p[1] & mask) << bitsLoaded;
                 }
                 if constexpr(std::is_signed_v<Integral>)
+                {
                     if(v & (StoredIntegral{1} << (VHBits::value() - 1)))
                         v |= ~StoredIntegral{0} << VHBits::value(); // sign extend
+                }
                 return static_cast<Integral>(v);
             }
 

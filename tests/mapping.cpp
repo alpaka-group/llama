@@ -29,6 +29,7 @@ TEMPLATE_LIST_TEST_CASE("mapping.concepts", "", SizeTypes)
     STATIC_REQUIRE(llama::FullyComputedMapping<llama::mapping::Trace<Inner>>);
     STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::Heatmap<Inner>>);
 
+#    ifndef __NVCOMPILER
     STATIC_REQUIRE(
         llama::FullyComputedMapping<llama::mapping::Null<llama::ArrayExtentsDynamic<TestType, 2>, Particle>>);
     STATIC_REQUIRE(llama::FullyComputedMapping<
@@ -44,6 +45,7 @@ TEMPLATE_LIST_TEST_CASE("mapping.concepts", "", SizeTypes)
                        Particle,
                        llama::mapping::BindAoS<>::fn,
                        boost::mp11::mp_list<boost::mp11::mp_list<bool, int>>>>);
+#    endif
 }
 #endif
 

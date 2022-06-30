@@ -2,26 +2,28 @@
 
 #include <llama/Proofs.hpp>
 
+#ifndef __NVCOMPILER
 TEST_CASE("mapsNonOverlappingly.PackedAoS")
 {
-#ifdef __cpp_constexpr_dynamic_alloc
+#    ifdef __cpp_constexpr_dynamic_alloc
     constexpr auto mapping = llama::mapping::PackedAoS<llama::ArrayExtentsDynamic<std::size_t, 2>, Particle>{{32, 32}};
     STATIC_REQUIRE(llama::mapsNonOverlappingly(mapping));
-#else
+#    else
     INFO("Test disabled because compiler does not support __cpp_constexpr_dynamic_alloc");
-#endif
+#    endif
 }
 
 TEST_CASE("mapsNonOverlappingly.AlignedAoS")
 {
-#ifdef __cpp_constexpr_dynamic_alloc
+#    ifdef __cpp_constexpr_dynamic_alloc
     constexpr auto mapping
         = llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<std::size_t, 2>, Particle>{{32, 32}};
     STATIC_REQUIRE(llama::mapsNonOverlappingly(mapping));
-#else
+#    else
     INFO("Test disabled because compiler does not support __cpp_constexpr_dynamic_alloc");
-#endif
+#    endif
 }
+#endif
 
 namespace
 {

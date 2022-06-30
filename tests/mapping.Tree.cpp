@@ -776,13 +776,14 @@ TEST_CASE("mapping.Tree")
     using Mapping = tree::Mapping<ArrayExtents, Particle, decltype(treeOperationList)>;
     const Mapping mapping(extents, treeOperationList);
 
+#ifndef __NVCOMPILER
     auto raw = prettyPrintType(mapping.basicTree);
-#ifdef _WIN32
+#    ifdef _WIN32
     tree::internal::replace_all(raw, "__int64", "long");
-#endif
-#ifdef _LIBCPP_VERSION
+#    endif
+#    ifdef _LIBCPP_VERSION
     tree::internal::replace_all(raw, "std::__1::", "std::");
-#endif
+#    endif
     const auto* const ref = R"(llama::mapping::tree::Node<
     llama::NoName,
     llama::Tuple<
@@ -919,6 +920,7 @@ TEST_CASE("mapping.Tree")
     unsigned long
 >)";
     CHECK(raw == ref);
+#endif
 
     auto raw2 = prettyPrintType(mapping.resultTree);
 #ifdef _WIN32
