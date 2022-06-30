@@ -26,6 +26,8 @@
 #define LLAMA_VERSION_MINOR 4
 #define LLAMA_VERSION_PATCH 0
 
+// suppress warnings on missing return statements. we get a lot of these because nvcc/nvc++ have some troubles with if
+// constexpr.
 #ifdef __NVCC__
 #    pragma push
 #    ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
@@ -33,6 +35,10 @@
 #    else
 #        pragma diag_suppress 940
 #    endif
+#endif
+#ifdef __NVCOMPILER
+#    pragma push
+#    pragma diag_suppress 941
 #endif
 
 #include "ArrayExtents.hpp"
@@ -63,6 +69,6 @@
 #include "mapping/Trace.hpp"
 #include "mapping/tree/Mapping.hpp"
 
-#ifdef __NVCC__
+#if defined(__NVCC__) || defined(__NVCOMPILER)
 #    pragma pop
 #endif

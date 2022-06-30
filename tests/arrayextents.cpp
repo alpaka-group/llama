@@ -9,7 +9,7 @@ TEMPLATE_LIST_TEST_CASE("ArrayExtents.CTAD", "", SizeTypes)
 {
     TestType one = 1;
 
-    llama::ArrayExtents ad0{};
+    [[maybe_unused]] llama::ArrayExtents ad0{};
     llama::ArrayExtents ad1{one};
     llama::ArrayExtents ad2{one, one};
     llama::ArrayExtents ad3{one, one, one};

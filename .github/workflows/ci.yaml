@@ -173,6 +173,10 @@ jobs:
           - name: build-ubuntu-icpx
             cxx: icpx
             install_oneapi: true
+          - name: build-ubuntu-nvc++
+            cxx: /opt/nvidia/hpc_sdk/Linux_x86_64/22.7/compilers/bin/nvc++
+            add_nvcpp_repo: true
+            install_extra: nvhpc
 
     steps:
       - uses: actions/checkout@v2
@@ -181,13 +185,18 @@ jobs:
         run: |
           sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
           sudo apt update
-      - name: add LLVM APT repo
+      - name: add LLVM apt repo
         if: matrix.add_llvm_repo
         run: |
           wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
           sudo add-apt-repository 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-12 main'
           sudo add-apt-repository 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-13 main'
           sudo add-apt-repository 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-14 main'
+      - name: add CUDA apt repo
+        if: matrix.add_nvcpp_repo
+        run: |
+          echo 'deb [trusted=yes] https://developer.download.nvidia.com/hpc-sdk/ubuntu/amd64 /' | sudo tee /etc/apt/sources.list.d/nvhpc.list
+          sudo apt update
       - name: install OneAPI
         if: matrix.install_oneapi
         run: |
@@ -202,8 +211,8 @@ jobs:
           sudo apt install ${{ matrix.install_extra }}
       - name: vcpkg install dependencies
         run: |
-          # vcpkg fails to build with Intel compilers
-          if [ ${{ matrix.install_oneapi }} ]; then unset CXX; fi
+          # vcpkg fails to build with Intel or nvhpc compilers
+          if [ ${{ matrix.install_oneapi }} ] || [ ${{ matrix.add_nvcpp_repo }} ]; then unset CXX; fi
           eval $VCPKG_INSTALL
       - name: download CUDA
         if: matrix.cuda_url

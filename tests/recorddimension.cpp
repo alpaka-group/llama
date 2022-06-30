@@ -5,6 +5,9 @@
 #include <complex>
 #include <vector>
 
+// nvc++ 22.7 gets TERMINATED by signal 11 in this file
+#ifndef __NVCOMPILER
+
 namespace
 {
     struct Tag
@@ -300,3 +303,4 @@ TEST_CASE("recorddim.record_with_arrays")
     view(0u)(A3{}, 1_RC, 0_RC);
     view(0u)(A3{}, 1_RC, 1_RC);
 }
+#endif

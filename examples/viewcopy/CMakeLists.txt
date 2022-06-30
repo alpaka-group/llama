@@ -1,6 +1,11 @@
 cmake_minimum_required (VERSION 3.18.3)
 project(llama-viewcopy CXX)
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "NVHPC")
+	message(WARNING "nvc++ cannot compile the viewcopy example")
+	return()
+endif()
+
 find_package(OpenMP REQUIRED)
 if (NOT TARGET llama::llama)
 	find_package(llama REQUIRED)

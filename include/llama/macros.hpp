@@ -15,6 +15,8 @@
         _Pragma("ivdep") _Pragma("clang loop vectorize(assume_safety) interleave(assume_safety)")
 #elif defined(__clang__)
 #    define LLAMA_INDEPENDENT_DATA _Pragma("clang loop vectorize(assume_safety) interleave(assume_safety)")
+#elif defined(__NVCOMPILER)
+#    define LLAMA_INDEPENDENT_DATA _Pragma("ivdep")
 #elif defined(__GNUC__)
 #    define LLAMA_INDEPENDENT_DATA _Pragma("GCC ivdep")
 #elif defined(_MSC_VER)
@@ -50,7 +52,7 @@
 #endif
 
 #ifndef LLAMA_UNROLL
-#    if defined(__NVCC__) || defined(__clang__) || defined(__INTEL_LLVM_COMPILER)
+#    if defined(__NVCC__) || defined(__NVCOMPILER) || defined(__clang__) || defined(__INTEL_LLVM_COMPILER)
 #        define LLAMA_UNROLL(...) LLAMA_PRAGMA(unroll __VA_ARGS__)
 #    elif defined(__GNUG__)
 #        define LLAMA_UNROLL(...) LLAMA_PRAGMA(GCC unroll __VA_ARGS__)

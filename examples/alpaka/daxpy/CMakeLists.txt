@@ -13,5 +13,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama OpenMP::OpenMP_CXX al
 if (MSVC)
 	target_compile_options(${PROJECT_NAME} PRIVATE /arch:AVX2 /fp:fast)
 else()
-	target_compile_options(${PROJECT_NAME} PRIVATE -march=native -ffast-math)
+	target_compile_options(${PROJECT_NAME} PRIVATE -march=native $<IF:$<CXX_COMPILER_ID:NVHPC>,-fast,-ffast-math>)
 endif()

@@ -75,7 +75,10 @@ TEMPLATE_TEST_CASE("mapping.BitPackedFloatSoA.exponent_only", "", float, double)
 
     // nan's need mantissa bits, so they decay to infinities
     STORE_LOAD_CHECK(nan, inf);
+#ifndef __NVCOMPILER
+    // it is implementation defined whether nan retains the sign bit
     STORE_LOAD_CHECK(-nan, -inf);
+#endif
 }
 
 TEMPLATE_TEST_CASE("mapping.BitPackedFloatSoA", "", float, double)
@@ -112,21 +115,18 @@ TEMPLATE_TEST_CASE("mapping.BitPackedFloatSoA", "", float, double)
     STORE_LOAD_CHECK(-inf, -inf);
 
     {
-        // we cannot call std::isnan here, because that is outside the float_control pragma
-        auto isNan = [](TestType f)
-        {
-            return !(f == f); // NOLINT(misc-redundant-expression)
-        };
-
         view() = nan;
         auto f = static_cast<TestType>(view());
         CAPTURE(f);
 
-        CHECK(isNan(static_cast<TestType>(view())));
+        CHECK(std::isnan(static_cast<TestType>(view())));
         CHECK(!std::signbit(static_cast<TestType>(view())));
         view() = -nan;
-        CHECK(isNan(static_cast<TestType>(view())));
+        CHECK(std::isnan(static_cast<TestType>(view())));
+#ifndef __NVCOMPILER
+        // it is implementation defined whether nan retains the sign bit
         CHECK(std::signbit(static_cast<TestType>(view())));
+#endif
     }
 }
 
