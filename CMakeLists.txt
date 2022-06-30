@@ -40,6 +40,14 @@ if (BUILD_TESTING)
 	target_compile_features(Catch2 PUBLIC cxx_std_20)
 	include(Catch)
 
+	# hide Catch2 cmake variables by default in cmake gui
+	get_cmake_property(variables VARIABLES)
+	foreach (var ${variables})
+		if (var MATCHES "^CATCH_")
+			mark_as_advanced(${var})
+		endif()
+	endforeach()
+
 	file(GLOB_RECURSE testSources "${CMAKE_CURRENT_SOURCE_DIR}/tests/**")
 	add_executable(tests ${testSources})
 	catch_discover_tests(tests)
