@@ -9,9 +9,9 @@
 #if __has_include(<concepts>)
 #    include <concepts>
 #endif
-#ifdef __cpp_lib_concepts
 namespace llama
 {
+#ifdef __cpp_lib_concepts
     // clang-format off
     template <typename M>
     concept Mapping = requires(M m) {
@@ -50,7 +50,7 @@ namespace llama
     concept ProxyReference = requires(R r) {
         typename R::value_type;
         { static_cast<typename R::value_type>(r) } -> std::same_as<typename R::value_type>;
-        { r = typename R::value_type{} } -> std::same_as<R&>;
+        { r = std::declval<typename R::value_type>() } -> std::same_as<R&>;
     };
 
     template <typename R>
@@ -100,7 +100,31 @@ namespace llama
     concept BlobAllocator = requires(BA ba, std::integral_constant<std::size_t, 16> alignment, std::size_t size) {
         { ba(alignment, size) } -> Blob;
     };
-    // clang-format on
-} // namespace llama
-
+        // clang-format on
 #endif
+
+    namespace internal
+    {
+        template<typename R, typename = void>
+        struct IsProxyReferenceImpl : std::false_type
+        {
+        };
+
+        template<typename R>
+        struct IsProxyReferenceImpl<
+            R,
+            std::void_t<
+                typename R::value_type,
+                decltype(static_cast<typename R::value_type>(std::declval<R&>())),
+                decltype(std::declval<R&>() = std::declval<typename R::value_type>())>> : std::true_type
+        {
+        };
+    } // namespace internal
+
+    template<typename R>
+#ifdef __cpp_lib_concepts
+    inline constexpr bool isProxyReference = ProxyReference<R>;
+#else
+    inline constexpr bool isProxyReference = internal::IsProxyReferenceImpl<R>::value;
+#endif
+} // namespace llama
