@@ -2726,6 +2726,13 @@
 	    template<typename RecordDim>
 	    using One = VirtualRecord<decltype(allocViewStack<0, RecordDim>()), RecordCoord<>, true>;
 
+	    /// Is true, if T is an instance of \ref One.
+	    template<typename T>
+	    inline constexpr bool is_One = false;
+
+	    template<typename View, typename BoundRecordCoord>
+	    inline constexpr bool is_One<VirtualRecord<View, BoundRecordCoord, true>> = true;
+
 	    // TODO(bgruber): Higher dimensional iterators might not have good codegen. Multiple nested loops seem to be
 	    // superior to a single iterator over multiple dimensions. At least compilers are able to produce better code.
 	    // std::mdspan also discovered similar difficulties and there was a discussion in WG21 in Oulu 2016 to
@@ -3439,8 +3446,6 @@
 	            typename Base::ArrayIndex ad,
 	            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
 	        {
-	            const auto subArrayOffset = LinearizeArrayDimsFunctor{}(ad, Base::extents())
-	                * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
 	            if constexpr(SeparateBuffers)
 	            {
 	                constexpr auto blob = flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>;
@@ -3450,6 +3455,8 @@
 	            }
 	            else
 	            {
+	                const auto subArrayOffset = LinearizeArrayDimsFunctor{}(ad, Base::extents())
+	                    * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
 	                constexpr std::size_t flatFieldIndex =
 	#ifdef __NVCC__
 	                    *& // mess with nvcc compiler state to workaround bug
@@ -5033,6 +5040,7 @@ namespace llama::mapping
     /// dimension contains non-integral types, split them off using the \ref Split mapping first.
     /// \tparam Bits If Bits is llama::Constant<N>, the compile-time N specifies the number of bits to use. If Bits is
     /// an integral type T, the number of bits is specified at runtime, passed to the constructor and stored as type T.
+    /// Must not be zero.
     /// \tparam LinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and how
     /// big the linear domain gets.
     /// \tparam StoredIntegral Integral type used as storage of reduced precision integers.
@@ -5067,6 +5075,7 @@ namespace llama::mapping
             : Base(extents)
             , VHBits{bits}
         {
+            assert(VHBits::value() > 0);
         }
 
         LLAMA_FN_HOST_ACC_INLINE
@@ -6799,8 +6808,8 @@ namespace llama::mapping
     /// split them off using the \ref Split mapping first.
     /// \tparam ExponentBits If ExponentBits is llama::Constant<N>, the compile-time N specifies the number of bits to
     /// use to store the exponent. If ExponentBits is llama::Value<T>, the number of bits is specified at runtime,
-    /// passed to the constructor and stored as type T.
-    /// \tparam MantissaBits Like ExponentBits but for the mantissa bits.
+    /// passed to the constructor and stored as type T. Must not be zero.
+    /// \tparam MantissaBits Like ExponentBits but for the mantissa bits. May be zero.
     /// \tparam LinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and how
     /// big the linear domain gets.
     /// \tparam StoredIntegral Integral type used as storage of reduced precision floating-point values.
@@ -6835,6 +6844,7 @@ namespace llama::mapping
             , VHExp{exponentBits}
             , VHMan{mantissaBits}
         {
+            assert(VHExp::value() > 0);
         }
 
         LLAMA_FN_HOST_ACC_INLINE
