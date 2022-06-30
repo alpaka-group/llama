@@ -508,3 +508,27 @@ TEST_CASE("divCeil")
     STATIC_REQUIRE(llama::divCeil(17, 16) == 2);
     STATIC_REQUIRE(llama::divCeil(300, 16) == 19);
 }
+
+TEST_CASE("isProxyReference")
+{
+    STATIC_REQUIRE(!llama::internal::IsProxyReferenceImpl<int&>::value);
+    STATIC_REQUIRE(!llama::isProxyReference<int&>);
+    STATIC_REQUIRE(!llama::internal::IsProxyReferenceImpl<std::string>::value);
+    STATIC_REQUIRE(!llama::isProxyReference<std::string>);
+    STATIC_REQUIRE(!llama::internal::IsProxyReferenceImpl<std::vector<int>>::value);
+    STATIC_REQUIRE(!llama::isProxyReference<std::vector<int>>);
+    STATIC_REQUIRE(!llama::internal::IsProxyReferenceImpl<std::vector<bool>::reference>::value);
+    STATIC_REQUIRE(!llama::isProxyReference<std::vector<bool>::reference>); // misses a value_type alias
+
+    using One = llama::One<Vec3I>;
+    STATIC_REQUIRE(!llama::internal::IsProxyReferenceImpl<One>::value);
+    STATIC_REQUIRE(!llama::isProxyReference<One>);
+    STATIC_REQUIRE(!llama::internal::IsProxyReferenceImpl<decltype(One{}())>::value);
+    STATIC_REQUIRE(!llama::isProxyReference<decltype(One{}())>);
+
+    auto mapping = llama::mapping::BitPackedIntSoA<llama::ArrayExtents<int, 4>, Vec3I>{{}, 17};
+    auto v = llama::allocView(mapping);
+    [[maybe_unused]] auto ref = v(1)(tag::X{});
+    STATIC_REQUIRE(llama::internal::IsProxyReferenceImpl<decltype(ref)>::value);
+    STATIC_REQUIRE(llama::isProxyReference<decltype(ref)>);
+}
