@@ -521,6 +521,13 @@ Variables</h2></td></tr>
 <tr class="memitem:a9676a3903b134df116791bcae533d6c6"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a9676a3903b134df116791bcae533d6c6">isComputed</a> = <a class="el" href="structllama_1_1internal_1_1IsComputed.html">internal::IsComputed</a>&lt;Mapping, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&gt;::value</td></tr>
 <tr class="memdesc:a9676a3903b134df116791bcae533d6c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the field accessed via the given mapping and record coordinate is a computed value.  <a href="namespacellama.html#a9676a3903b134df116791bcae533d6c6">More...</a><br /></td></tr>
 <tr class="separator:a9676a3903b134df116791bcae533d6c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60e664cfed9ce1d9d1c5b4c59464cdb6"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a60e664cfed9ce1d9d1c5b4c59464cdb6"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a60e664cfed9ce1d9d1c5b4c59464cdb6">is_One</a> = false</td></tr>
+<tr class="memdesc:a60e664cfed9ce1d9d1c5b4c59464cdb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is true, if T is an instance of <a class="el" href="namespacellama.html#a2f44282e6b70a3eedaa8e7355a6f7dd0">One</a>.  <a href="namespacellama.html#a60e664cfed9ce1d9d1c5b4c59464cdb6">More...</a><br /></td></tr>
+<tr class="separator:a60e664cfed9ce1d9d1c5b4c59464cdb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a263a1c987e4c6a1330ae47f0c40fa416"><td class="memTemplParams" colspan="2">template&lt;typename View , typename BoundRecordCoord &gt; </td></tr>
+<tr class="memitem:a263a1c987e4c6a1330ae47f0c40fa416"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a263a1c987e4c6a1330ae47f0c40fa416">is_One&lt; VirtualRecord&lt; View, BoundRecordCoord, true &gt; &gt;</a> = true</td></tr>
+<tr class="separator:a263a1c987e4c6a1330ae47f0c40fa416"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9950d7fcb0405c5c7f10238b7752fa6d"><td class="memTemplParams" colspan="2">template&lt;typename View &gt; </td></tr>
 <tr class="memitem:a9950d7fcb0405c5c7f10238b7752fa6d"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a9950d7fcb0405c5c7f10238b7752fa6d">IsView</a> = false</td></tr>
 <tr class="separator:a9950d7fcb0405c5c7f10238b7752fa6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1875,7 +1882,7 @@ template&lt;typename Mapping , std::size_t... Coords, typename Blobs &gt; </div>
 </div><div class="memdoc">
 <p>Using a mapping, maps the given array index and record coordinate to a memory reference onto the given blobs. </p><dl class="section return"><dt>Returns</dt><dd>Either an l-value reference if the record coord maps to a physical field or a proxy reference if mapped to a computed field. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00293">293</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00300">300</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -2785,7 +2792,7 @@ template&lt;typename Mapping , typename BlobType , typename NewBlobType  = std::
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A new view with the same mapping as view, where each blob refers to the blob in view. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00549">549</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00556">556</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -2900,7 +2907,7 @@ template&lt;typename Mapping , typename BlobType , typename TransformBlobFunc &g
 </div><div class="memdoc">
 <p>Applies the given transformation to the blobs of a view and creates a new view with the transformed blobs and the same mapping as the old view. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00537">537</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00544">544</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -3482,6 +3489,60 @@ template&lt;typename RecordDimA , typename LocalA , typename RecordDimB , typena
 
 </div>
 </div>
+<a id="a60e664cfed9ce1d9d1c5b4c59464cdb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60e664cfed9ce1d9d1c5b4c59464cdb6">&#9670;&nbsp;</a></span>is_One</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool llama::is_One = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Is true, if T is an instance of <a class="el" href="namespacellama.html#a2f44282e6b70a3eedaa8e7355a6f7dd0">One</a>. </p>
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00137">137</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a263a1c987e4c6a1330ae47f0c40fa416"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a263a1c987e4c6a1330ae47f0c40fa416">&#9670;&nbsp;</a></span>is_One&lt; VirtualRecord&lt; View, BoundRecordCoord, true &gt; &gt;</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename View , typename BoundRecordCoord &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="namespacellama.html#a60e664cfed9ce1d9d1c5b4c59464cdb6">llama::is_One</a>&lt; <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>&lt; <a class="el" href="structllama_1_1View.html">View</a>, BoundRecordCoord, true &gt; &gt; = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00140">140</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
 <a id="ad46854783d9c1cfa01ab277dbc5b5de8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad46854783d9c1cfa01ab277dbc5b5de8">&#9670;&nbsp;</a></span>is_VirtualRecord</h2>
 
@@ -3716,7 +3777,7 @@ template&lt;typename View &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00555">555</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00562">562</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -3742,7 +3803,7 @@ template&lt;typename Mapping , typename BlobType &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00558">558</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00565">565</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -3937,7 +3998,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Thu Jun 30 2022 17:35:45 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Jun 30 2022 23:46:07 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

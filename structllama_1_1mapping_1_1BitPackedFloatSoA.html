@@ -182,8 +182,8 @@ struct llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, Exponent
 
 <p>Struct of array mapping using bit packing to reduce size/precision of floating-point data types. The bit layout is [1 sign bit, exponentBits bits from the exponent, mantissaBits bits from the mantissa]+ and tries to follow IEEE 754. Infinity and NAN are supported. If the packed exponent bits are not big enough to hold a number, it will be set to infinity (preserving the sign). If your record dimension contains non-floating-point types, split them off using the <a class="el" href="structllama_1_1mapping_1_1Split.html">Split</a> mapping first. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">ExponentBits</td><td>If ExponentBits is <a class="el" href="namespacellama.html#a0af0304a902bcb5c5c90377ad751033a" title="Used as template argument to specify a constant/compile-time value.">llama::Constant&lt;N&gt;</a>, the compile-time N specifies the number of bits to use to store the exponent. If ExponentBits is llama::Value&lt;T&gt;, the number of bits is specified at runtime, passed to the constructor and stored as type T. </td></tr>
-    <tr><td class="paramname">MantissaBits</td><td>Like ExponentBits but for the mantissa bits. </td></tr>
+    <tr><td class="paramname">ExponentBits</td><td>If ExponentBits is <a class="el" href="namespacellama.html#a0af0304a902bcb5c5c90377ad751033a" title="Used as template argument to specify a constant/compile-time value.">llama::Constant&lt;N&gt;</a>, the compile-time N specifies the number of bits to use to store the exponent. If ExponentBits is llama::Value&lt;T&gt;, the number of bits is specified at runtime, passed to the constructor and stored as type T. Must not be zero. </td></tr>
+    <tr><td class="paramname">MantissaBits</td><td>Like ExponentBits but for the mantissa bits. May be zero. </td></tr>
     <tr><td class="paramname">LinearizeArrayDimsFunctor</td><td>Defines how the array dimensions should be mapped into linear numbers and how big the linear domain gets. </td></tr>
     <tr><td class="paramname">StoredIntegral</td><td>Integral type used as storage of reduced precision floating-point values. </td></tr>
   </table>
@@ -272,7 +272,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename ExponentBits
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00228">228</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00229">229</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -320,7 +320,7 @@ template&lt;std::size_t... RecordCoords, typename Blobs &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00243">243</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00244">244</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -352,7 +352,7 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00237">237</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00238">238</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -392,7 +392,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename ExponentBits
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html">BitPackedFloatSoA</a></li>
-    <li class="footer">Generated on Thu Jun 30 2022 17:35:46 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Jun 30 2022 23:46:07 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
