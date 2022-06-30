@@ -200,8 +200,10 @@ try
     using ArrayIndex = llama::ArrayIndex<int, 2>;
 
     auto treeOperationList = llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()};
-    const auto hostMapping
-        = llama::mapping::tree::Mapping{llama::ArrayExtents{buffer_y, buffer_x}, treeOperationList, Pixel{}};
+    const auto hostMapping = llama::mapping::tree::Mapping{
+        llama::ArrayExtentsDynamic<int, 2>{buffer_y, buffer_x},
+        treeOperationList,
+        Pixel{}};
     const auto devMapping = llama::mapping::tree::Mapping{
         llama::ArrayExtents<int, CHUNK_SIZE + 2 * KERNEL_SIZE, CHUNK_SIZE + 2 * KERNEL_SIZE>{},
         treeOperationList,
@@ -290,7 +292,7 @@ try
         for(int chunk_x = 0; chunk_x < chunks[1]; ++chunk_x)
         {
             // Create virtual view with size of mini view
-            const auto validMiniSize = llama::ArrayExtents{
+            const auto validMiniSize = llama::ArrayExtentsDynamic<int, 2>{
                 ((chunk_y < chunks[0] - 1) ? CHUNK_SIZE : (img_y - 1) % CHUNK_SIZE + 1) + 2 * KERNEL_SIZE,
                 ((chunk_x < chunks[1] - 1) ? CHUNK_SIZE : (img_x - 1) % CHUNK_SIZE + 1) + 2 * KERNEL_SIZE};
             llama::VirtualView virtualHost(hostView, {chunk_y * CHUNK_SIZE, chunk_x * CHUNK_SIZE});
