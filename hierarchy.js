@@ -53,7 +53,8 @@ var hierarchy =
     [ "llama::internal::Dyn", "structllama_1_1internal_1_1Dyn.html", null ],
     [ "false_type", null, [
       [ "llama::internal::IsBoundedArray< T >", "structllama_1_1internal_1_1IsBoundedArray.html", null ],
-      [ "llama::internal::IsComputed< Mapping, RecordCoord, typename >", "structllama_1_1internal_1_1IsComputed.html", null ]
+      [ "llama::internal::IsComputed< Mapping, RecordCoord, typename >", "structllama_1_1internal_1_1IsComputed.html", null ],
+      [ "llama::internal::IsProxyReferenceImpl< R, typename >", "structllama_1_1internal_1_1IsProxyReferenceImpl.html", null ]
     ] ],
     [ "llama::Field< Tag, Type >", "structllama_1_1Field.html", null ],
     [ "llama::internal::FindFieldByTag< FieldList, Tag >", "structllama_1_1internal_1_1FindFieldByTag.html", null ],
@@ -94,11 +95,11 @@ var hierarchy =
       [ "llama::mapping::ChangeType< TArrayExtents, TRecordDim, InnerMapping, ReplacementMap >", "structllama_1_1mapping_1_1ChangeType.html", null ]
     ] ],
     [ "integral_constant", null, [
-      [ "std::tuple_size< llama::Array< T, N > >", "structstd_1_1tuple__size_3_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html", null ]
-    ] ],
-    [ "integral_constant", null, [
       [ "std::tuple_size< llama::ArrayExtents< SizeType, Sizes... > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayExtents_3_01SizeType_00_01Sizes_8_8_8_01_4_01_4.html", null ],
       [ "std::tuple_size< llama::ArrayIndex< V, N > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayIndex_3_01V_00_01N_01_4_01_4.html", null ]
+    ] ],
+    [ "integral_constant", null, [
+      [ "std::tuple_size< llama::Array< T, N > >", "structstd_1_1tuple__size_3_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html", null ]
     ] ],
     [ "llama::mapping::internal::IsSelectedPredicate< RC >", "structllama_1_1mapping_1_1internal_1_1IsSelectedPredicate.html", null ],
     [ "llama::Iterator< View >", "structllama_1_1Iterator.html", null ],
@@ -161,10 +162,16 @@ var hierarchy =
     [ "llama::ProxyRefOpMixin< Reference< RC, BlobArray >, GetType< TRecordDim, RC > >", "structllama_1_1ProxyRefOpMixin.html", [
       [ "llama::mapping::Bytesplit< TArrayExtents, TRecordDim, InnerMapping >::Reference< RC, BlobArray >", "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html", null ]
     ] ],
+    [ "llama::ProxyRefOpMixin< ScopedUpdate< Reference >, internal::ValueOf< Reference >::type >", "structllama_1_1ProxyRefOpMixin.html", [
+      [ "llama::ScopedUpdate< Reference, std::enable_if_t< std::is_fundamental_v< typename internal::ValueOf< Reference >::type > > >", "structllama_1_1ScopedUpdate_3_01Reference_00_01std_1_1enable__if__t_3_01std_1_1is__fundamental__e14f71eb64730a69a1b74dea5c5f8b59.html", null ]
+    ] ],
     [ "llama::bloballoc::AlignedAllocator< T, Alignment >::rebind< T2 >", "structllama_1_1bloballoc_1_1AlignedAllocator_1_1rebind.html", null ],
     [ "llama::Record< Fields >", "structllama_1_1Record.html", null ],
     [ "llama::RecordCoord< Coords >", "structllama_1_1RecordCoord.html", null ],
     [ "llama::RecordCoord<>", "structllama_1_1RecordCoord_3_4.html", null ],
+    [ "llama::internal::ReferenceTo< T, typename >", "structllama_1_1internal_1_1ReferenceTo.html", null ],
+    [ "llama::internal::ReferenceTo< T, std::enable_if_t< is_VirtualRecord< T > &&!is_One< T > > >", "structllama_1_1internal_1_1ReferenceTo_3_01T_00_01std_1_1enable__if__t_3_01is__VirtualRecord_3_0c38ae29a40d3cf0bf09e0d36917a1cec.html", null ],
+    [ "llama::internal::ReferenceTo< T, std::enable_if_t< isProxyReference< T > > >", "structllama_1_1internal_1_1ReferenceTo_3_01T_00_01std_1_1enable__if__t_3_01isProxyReference_3_01T_01_4_01_4_01_4.html", null ],
     [ "llama::internal::ReplacePlaceholdersImpl< E, Args >", "structllama_1_1internal_1_1ReplacePlaceholdersImpl.html", null ],
     [ "llama::internal::ReplacePlaceholdersImpl< boost::mp11::mp_arg< I >, Args... >", "structllama_1_1internal_1_1ReplacePlaceholdersImpl_3_01boost_1_1mp11_1_1mp__arg_3_01I_01_4_00_01Args_8_8_8_01_4.html", null ],
     [ "llama::internal::ReplacePlaceholdersImpl< E< Ts... >, Args... >", "structllama_1_1internal_1_1ReplacePlaceholdersImpl_3_01E_3_01Ts_8_8_8_01_4_00_01Args_8_8_8_01_4.html", null ],
@@ -188,7 +195,8 @@ var hierarchy =
     [ "llama::internal::TransformLeavesWithCoordImpl< RecordCoord< Is... >, Record< Fields... >, TypeFunctor >", "structllama_1_1internal_1_1TransformLeavesWithCoordImpl_3_01RecordCoord_3_01Is_8_8_8_01_4_00_01R42adaa4e9e950291b6a81a9b9f4ba005.html", null ],
     [ "llama::mapping::tree::TreeCoordElement< ChildIndex, ArrayIndexType >", "structllama_1_1mapping_1_1tree_1_1TreeCoordElement.html", null ],
     [ "true_type", null, [
-      [ "llama::internal::IsBoundedArray< T[N]>", "structllama_1_1internal_1_1IsBoundedArray_3_01T_0fN_0e_4.html", null ]
+      [ "llama::internal::IsBoundedArray< T[N]>", "structllama_1_1internal_1_1IsBoundedArray_3_01T_0fN_0e_4.html", null ],
+      [ "llama::internal::IsProxyReferenceImpl< R, std::void_t< typename R::value_type, decltype(static_cast< typename R::value_type >(std::declval< R & >())), decltype(std::declval< R & >()=std::declval< typename R::value_type >())> >", "structllama_1_1internal_1_1IsProxyReferenceImpl_3_01R_00_01std_1_1void__t_3_01typename_01R_1_1vaf29d5bd88afd76084d03518114f19340.html", null ]
     ] ],
     [ "llama::Tuple< Elements >", "structllama_1_1Tuple.html", null ],
     [ "llama::Tuple< RestElements... >", "structllama_1_1Tuple.html", [
@@ -206,8 +214,16 @@ var hierarchy =
       [ "llama::Tuple< TFirstElement, RestElements... >", "structllama_1_1Tuple_3_01TFirstElement_00_01RestElements_8_8_8_01_4.html", null ]
     ] ],
     [ "llama::internal::TupleLeaf< I, T, true >", "structllama_1_1internal_1_1TupleLeaf_3_01I_00_01T_00_01true_01_4.html", null ],
-    [ "llama::Vector< Mapping >", "structllama_1_1Vector.html", null ],
+    [ "type", null, [
+      [ "llama::ScopedUpdate< Reference, typename >", "structllama_1_1ScopedUpdate.html", null ]
+    ] ],
+    [ "llama::internal::ValueOf< T, typename >", "structllama_1_1internal_1_1ValueOf.html", null ],
+    [ "llama::internal::ValueOf< Reference >", "structllama_1_1internal_1_1ValueOf.html", null ],
+    [ "llama::internal::ValueOf< T & >", "structllama_1_1internal_1_1ValueOf_3_01T_01_6_01_4.html", null ],
+    [ "llama::internal::ValueOf< T, std::enable_if_t< is_VirtualRecord< T > > >", "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01is__VirtualRecord_3_01T_01_4_01_4_01_4.html", null ],
+    [ "llama::internal::ValueOf< T, std::enable_if_t< isProxyReference< T > > >", "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01isProxyReference_3_01T_01_4_01_4_01_4.html", null ],
     [ "llama::bloballoc::Vector", "structllama_1_1bloballoc_1_1Vector.html", null ],
+    [ "llama::Vector< Mapping >", "structllama_1_1Vector.html", null ],
     [ "VHBits", null, [
       [ "llama::mapping::internal::BitPackedIntRef< Integral, StoredIntegralPointer, VHBits, SizeType >", "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html", null ]
     ] ],

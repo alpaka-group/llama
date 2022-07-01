@@ -23,6 +23,8 @@ var namespacellama =
     [ "Record", "structllama_1_1Record.html", null ],
     [ "RecordCoord", "structllama_1_1RecordCoord.html", "structllama_1_1RecordCoord" ],
     [ "RecordCoord<>", "structllama_1_1RecordCoord_3_4.html", "structllama_1_1RecordCoord_3_4" ],
+    [ "ScopedUpdate", "structllama_1_1ScopedUpdate.html", "structllama_1_1ScopedUpdate" ],
+    [ "ScopedUpdate< Reference, std::enable_if_t< std::is_fundamental_v< typename internal::ValueOf< Reference >::type > > >", "structllama_1_1ScopedUpdate_3_01Reference_00_01std_1_1enable__if__t_3_01std_1_1is__fundamental__e14f71eb64730a69a1b74dea5c5f8b59.html", "structllama_1_1ScopedUpdate_3_01Reference_00_01std_1_1enable__if__t_3_01std_1_1is__fundamental__e14f71eb64730a69a1b74dea5c5f8b59" ],
     [ "Tuple", "structllama_1_1Tuple.html", null ],
     [ "Tuple< TFirstElement, RestElements... >", "structllama_1_1Tuple_3_01TFirstElement_00_01RestElements_8_8_8_01_4.html", "structllama_1_1Tuple_3_01TFirstElement_00_01RestElements_8_8_8_01_4" ],
     [ "Vector", "structllama_1_1Vector.html", "structllama_1_1Vector" ],

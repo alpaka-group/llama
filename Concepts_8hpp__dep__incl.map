@@ -1,10 +1,10 @@
 <map id="/home/runner/work/llama/llama/include/llama/Concepts.hpp" name="/home/runner/work/llama/llama/include/llama/Concepts.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="363,5,610,47"/>
-<area shape="rect" id="node2" href="$BlobAllocators_8hpp.html" title=" " alt="" coords="435,95,717,136"/>
-<area shape="rect" id="node3" href="$View_8hpp.html" title=" " alt="" coords="288,184,507,225"/>
-<area shape="rect" id="node5" href="$llama_8hpp.html" title=" " alt="" coords="557,377,781,419"/>
+<area shape="rect" id="node1" title=" " alt="" coords="117,5,363,47"/>
+<area shape="rect" id="node2" href="$BlobAllocators_8hpp.html" title=" " alt="" coords="278,95,559,136"/>
+<area shape="rect" id="node3" href="$View_8hpp.html" title=" " alt="" coords="213,184,432,225"/>
+<area shape="rect" id="node8" href="$VirtualRecord_8hpp.html" title=" " alt="" coords="5,273,208,329"/>
+<area shape="rect" id="node5" href="$llama_8hpp.html" title=" " alt="" coords="593,377,817,419"/>
 <area shape="rect" id="node4" href="$Copy_8hpp.html" title=" " alt="" coords="523,281,741,322"/>
-<area shape="rect" id="node6" href="$Split_8hpp.html" title=" " alt="" coords="5,273,221,329"/>
-<area shape="rect" id="node7" href="$Vector_8hpp.html" title=" " alt="" coords="245,377,472,419"/>
-<area shape="rect" id="node8" href="$VirtualRecord_8hpp.html" title=" " alt="" coords="296,273,499,329"/>
+<area shape="rect" id="node6" href="$Split_8hpp.html" title=" " alt="" coords="283,273,499,329"/>
+<area shape="rect" id="node7" href="$Vector_8hpp.html" title=" " alt="" coords="63,377,289,419"/>
 </map>

@@ -152,6 +152,10 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordCoord_3_4.html">RecordCoord&lt;&gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ScopedUpdate.html">ScopedUpdate</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ScopedUpdate_3_01Reference_00_01std_1_1enable__if__t_3_01std_1_1is__fundamental__e14f71eb64730a69a1b74dea5c5f8b59.html">ScopedUpdate&lt; Reference, std::enable_if_t&lt; std::is_fundamental_v&lt; typename internal::ValueOf&lt; Reference &gt;::type &gt; &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Tuple.html">Tuple</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Tuple_3_01TFirstElement_00_01RestElements_8_8_8_01_4.html">Tuple&lt; TFirstElement, RestElements... &gt;</a></td></tr>
@@ -428,12 +432,18 @@ Functions</h2></td></tr>
 <tr class="memitem:a3e88640d42d178be469e422db475886f"><td class="memTemplParams" colspan="2">template&lt;typename VirtualRecordFwd , typename Functor &gt; </td></tr>
 <tr class="memitem:a3e88640d42d178be469e422db475886f"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a3e88640d42d178be469e422db475886f">forEachLeaf</a> (VirtualRecordFwd &amp;&amp;vr, Functor &amp;&amp;functor)</td></tr>
 <tr class="separator:a3e88640d42d178be469e422db475886f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7dddd17106d2711c85b213e61fb9155"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ad7dddd17106d2711c85b213e61fb9155"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ad7dddd17106d2711c85b213e61fb9155">ScopedUpdate</a> (T) -&gt; <a class="el" href="structllama_1_1ScopedUpdate.html">ScopedUpdate</a>&lt; typename <a class="el" href="structllama_1_1internal_1_1ReferenceTo.html">internal::ReferenceTo</a>&lt; std::remove_reference_t&lt; T &gt;&gt;::type &gt;</td></tr>
+<tr class="separator:ad7dddd17106d2711c85b213e61fb9155"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a082c1dbcef89db3c7fa477e7b4ecfc68"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama.html#a082c1dbcef89db3c7fa477e7b4ecfc68">dyn</a> = <a class="el" href="structllama_1_1internal_1_1Dyn.html">internal::Dyn</a>{}</td></tr>
 <tr class="memdesc:a082c1dbcef89db3c7fa477e7b4ecfc68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used as a template argument to <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a> to mark a dynamic extent.  <a href="namespacellama.html#a082c1dbcef89db3c7fa477e7b4ecfc68">More...</a><br /></td></tr>
 <tr class="separator:a082c1dbcef89db3c7fa477e7b4ecfc68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06e1dd12e96257f3aaf7a1ea6b9eead8"><td class="memTemplParams" colspan="2">template&lt;typename R &gt; </td></tr>
+<tr class="memitem:a06e1dd12e96257f3aaf7a1ea6b9eead8"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a06e1dd12e96257f3aaf7a1ea6b9eead8">isProxyReference</a> = <a class="el" href="structllama_1_1internal_1_1IsProxyReferenceImpl.html">internal::IsProxyReferenceImpl</a>&lt;R&gt;::value</td></tr>
+<tr class="separator:a06e1dd12e96257f3aaf7a1ea6b9eead8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acca32b49e2be7c3c136e940939c531ae"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:acca32b49e2be7c3c136e940939c531ae"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#acca32b49e2be7c3c136e940939c531ae">isAllowedFieldType</a> = std::is_trivially_destructible_v&lt;T&gt;</td></tr>
 <tr class="memdesc:acca32b49e2be7c3c136e940939c531ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells whether the given type is allowed as a field type in LLAMA. Such types need to be trivially constructible and trivially destructible.  <a href="namespacellama.html#acca32b49e2be7c3c136e940939c531ae">More...</a><br /></td></tr>
@@ -1381,7 +1391,7 @@ template&lt;typename VirtualRecord &gt; </div>
 </div><div class="memdoc">
 <p>Creates a single <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a> owning a view with stack memory and copies all values from an existing <a class="el" href="structllama_1_1VirtualRecord.html">VirtualRecord</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00026">26</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00029">29</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -1640,7 +1650,7 @@ template&lt;typename VirtualRecordFwd , typename Functor &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00778">778</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00781">781</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -2174,7 +2184,7 @@ template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00746">746</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00749">749</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -2759,6 +2769,26 @@ template&lt;typename Integral &gt; </div>
 
 </div>
 </div>
+<a id="ad7dddd17106d2711c85b213e61fb9155"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7dddd17106d2711c85b213e61fb9155">&#9670;&nbsp;</a></span>ScopedUpdate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structllama_1_1ScopedUpdate.html">llama::ScopedUpdate</a> </td>
+          <td>(</td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> -&gt;  <a class="el" href="structllama_1_1ScopedUpdate.html">ScopedUpdate</a>&lt; typename <a class="el" href="structllama_1_1internal_1_1ReferenceTo.html">internal::ReferenceTo</a>&lt; std::remove_reference_t&lt; T &gt;&gt;::type &gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a4f622b8c4a09a0c387f653dcfe93a5dd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4f622b8c4a09a0c387f653dcfe93a5dd">&#9670;&nbsp;</a></span>shallowCopy()</h2>
 
@@ -2866,7 +2896,7 @@ template&lt;typename ViewA , typename BoundRecordDimA , bool OwnViewA, typename 
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00729">729</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00732">732</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -3565,7 +3595,7 @@ template&lt;typename View &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00018">18</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00021">21</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -3591,7 +3621,7 @@ template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00021">21</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualRecord_8hpp_source.html#l00024">24</a> of file <a class="el" href="VirtualRecord_8hpp_source.html">VirtualRecord.hpp</a>.</p>
 
 </div>
 </div>
@@ -3648,6 +3678,32 @@ template&lt;typename Mapping , typename RecordCoord &gt; </div>
 <p>Returns true if the field accessed via the given mapping and record coordinate is a computed value. </p>
 
 <p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00075">75</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a06e1dd12e96257f3aaf7a1ea6b9eead8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06e1dd12e96257f3aaf7a1ea6b9eead8">&#9670;&nbsp;</a></span>isProxyReference</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename R &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool llama::isProxyReference = <a class="el" href="structllama_1_1internal_1_1IsProxyReferenceImpl.html">internal::IsProxyReferenceImpl</a>&lt;R&gt;::value</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Concepts_8hpp_source.html#l00128">128</a> of file <a class="el" href="Concepts_8hpp_source.html">Concepts.hpp</a>.</p>
 
 </div>
 </div>
@@ -3998,7 +4054,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Thu Jun 30 2022 23:46:07 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Fri Jul 1 2022 21:44:28 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
