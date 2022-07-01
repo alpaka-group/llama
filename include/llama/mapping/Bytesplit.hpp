@@ -30,7 +30,6 @@ namespace llama::mapping
 
         using Inner::blobSize;
         using Inner::extents;
-        using Inner::Inner;
 
         LLAMA_FN_HOST_ACC_INLINE
         constexpr explicit Bytesplit(TArrayExtents extents, TRecordDim = {}) : Inner(extents)
