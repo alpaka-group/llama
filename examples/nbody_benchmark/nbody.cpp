@@ -44,8 +44,8 @@ using Particle = llama::Record<
 >;
 // clang-format on
 
-template<typename VirtualParticle>
-LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticle p1, VirtualParticle p2)
+template<typename ParticleRef>
+LLAMA_FN_HOST_ACC_INLINE void pPInteraction(ParticleRef p1, ParticleRef p2)
 {
     auto dist = p1(tag::Pos{}) - p2(tag::Pos{});
     dist *= dist;

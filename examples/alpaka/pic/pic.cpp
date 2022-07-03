@@ -380,8 +380,8 @@ LLAMA_FN_HOST_ACC_INLINE auto cross(const Vec3F& a, const Vec3F& b)
         a(Z{}) * b(Y{}) - a(Y{}) * b(Z{}));
 }
 
-template<typename VirtualParticle, typename FieldView>
-LLAMA_FN_HOST_ACC_INLINE void advance_particle(VirtualParticle part, const FieldView& E, const FieldView& B)
+template<typename ParticleRef, typename FieldView>
+LLAMA_FN_HOST_ACC_INLINE void advance_particle(ParticleRef part, const FieldView& E, const FieldView& B)
 {
     /* Interpolate fields (nearest-neighbor) */
     const auto i = static_cast<size_t>(part(R{}, X{}) * inv_dx);
@@ -417,8 +417,8 @@ LLAMA_FN_HOST_ACC_INLINE void advance_particle(VirtualParticle part, const Field
 #endif
 }
 
-template<typename VirtualParticle>
-LLAMA_FN_HOST_ACC_INLINE void particle_boundary_conditions(VirtualParticle p)
+template<typename ParticleRef>
+LLAMA_FN_HOST_ACC_INLINE void particle_boundary_conditions(ParticleRef p)
 {
     //* Periodic boundary condition
     if(p(R{}, X{}) < dx)
@@ -431,8 +431,8 @@ LLAMA_FN_HOST_ACC_INLINE void particle_boundary_conditions(VirtualParticle p)
         p(R{}, Y{}) -= (Y_ - 3) * dx;
 }
 
-template<typename VirtualParticle, typename FieldView>
-LLAMA_FN_HOST_ACC_INLINE void deposit_current(const VirtualParticle& part, FieldView& J)
+template<typename ParticleRef, typename FieldView>
+LLAMA_FN_HOST_ACC_INLINE void deposit_current(const ParticleRef& part, FieldView& J)
 {
     /* Calculation of previous position */
     const Real igamma = 1 / sqrt(1 + squaredNorm(part(U{})));

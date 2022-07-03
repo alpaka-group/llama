@@ -80,19 +80,19 @@ Proxy references in LLAMA
 -------------------------
 
 By handing out references to access contained objects, LLAMA views are similar to standard C++ containers.
-For references to whole records, LLAMA views hand out virtual records.
-Although a virtual record models a reference to a struct (= record) in memory, this struct is not physically manifested in memory.
+For references to whole records, LLAMA views hand out record references.
+Although a record reference models a reference to a struct (= record) in memory, this struct is not physically manifested in memory.
 This allows mappings the freedom to arbitrarily arrange how the data for a struct is stored.
-A virtual record in LLAMA is thus conceptually a proxy reference.
+A record reference in LLAMA is thus a proxy reference.
 An exception is however made for read/write access in the current API, which is governed by the :cpp:`load()` and :cpp:`store()` member functions.
 We might change this in the future.
 
 .. code-block:: C++
 
     auto view = llama::allocView(...);
-    auto vr = view(1, 2, 3); // vr is a VirtualRecord, a proxy reference
-    Pixel p = vr.load(); // read access
-    vr.store(p);         // write access
+    auto rr = view(1, 2, 3); // vr is a RecordRef, a proxy reference
+    Pixel p = rr.load(); // read access
+    rr.store(p);         // write access
 
 Similarly, some mappings choose a different in-memory representation for the field types in the leaves of the record dimension.
 Examples are the :cpp:`Bytesplit`, :cpp:`ChangeType`, :cpp:`BitPackedIntSoa` or  :cpp:`BitPackedFloatSoa` mappings.
@@ -100,11 +100,11 @@ These mappings even return a proxy reference for terminal accesses:
 
 .. code-block:: C++
 
-    auto&& ref = vr(color{}, r{}); // may be a float& or a proxy reference object, depending on the mapping
+    auto&& ref = rr(color{}, r{}); // may be a float& or a proxy reference object, depending on the mapping
 
 Thus, when you want to write truly generic code with LLAMA's views, please keep these guidelines in mind:
 
- * Each non-terminal access on a view returns a virtual record, which is a value-type with reference semantic.
+ * Each non-terminal access on a view returns a record reference, which is a value-type with reference semantic.
  * Each terminal access on a view may return an l-value reference or a proxy reference.
    Thus use :cpp:`auto&&` to handle both cases.
  * Explicitly specify the type of copies of individual fields you want to make from references obtains from a LLAMA view.

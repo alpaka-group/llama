@@ -153,7 +153,7 @@ Values and references
       - .. code:: C++
 
           auto p = view[i];
-          // decltype(p) == llama::VirtualRecord<...>
+          // decltype(p) == llama::RecordRef<...>
       - .. code:: C++
 
           auto&& p = view[i];
@@ -187,7 +187,7 @@ Values and references
       - .. code:: C++
 
           auto v = view[i](Pos{});
-          // decltype(v) == llama::VirtualRecord<...>
+          // decltype(v) == llama::RecordRef<...>
       - .. code:: C++
 
           auto&& v = view[i](Pos{});
@@ -245,7 +245,7 @@ Values and references
 
 
 Notice that the use of :cpp:`auto` to declare a local copy of a value read through a reference, e.g. :cpp:`auto pos = view[i].pos; // copy`, does not work as expected in LLAMA.
-LLAMA makes extensive use of proxy reference types (including :cpp:`llama::VirtualRecord`),
+LLAMA makes extensive use of proxy reference types (including :cpp:`llama::RecordRef`),
 where a reference is sometimes represented as a value and sometimes as a real C++ reference.
 The only consistent way to deal with this duality in LLAMA is the use a forwarding reference :cpp:`auto&&`
 when we want to have a reference (native or proxy) into a LLAMA data structure,

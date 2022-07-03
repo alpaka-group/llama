@@ -64,8 +64,8 @@ namespace usellama
     >;
     // clang-format on
 
-    template<typename VirtualParticleI, typename VirtualParticleJ>
-    LLAMA_FN_HOST_ACC_INLINE void pPInteraction(VirtualParticleI& pi, VirtualParticleJ pj)
+    template<typename ParticleRefI, typename ParticleRefJ>
+    LLAMA_FN_HOST_ACC_INLINE void pPInteraction(ParticleRefI& pi, ParticleRefJ pj)
     {
         auto dist = pi(tag::Pos{}) - pj(tag::Pos{});
         dist *= dist;

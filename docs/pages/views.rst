@@ -66,7 +66,7 @@ Alternatively, an addressing with integral record coordinates is possible like t
 These record coordinates are zero-based, nested indices reflecting the nested tuple-like structure of the record dimension.
 
 Notice that the :cpp:`operator()` is invoked twice in the last example and that an intermediate object is needed for this to work.
-This object is a :cpp:`llama::VirtualRecord`.
+This object is a :cpp:`llama::RecordRef`.
 
 .. _label-virtualview:
 
