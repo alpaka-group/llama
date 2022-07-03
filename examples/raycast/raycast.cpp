@@ -757,8 +757,8 @@ namespace
         return planeBoxOverlap(normal, v0, boxhalfsize);
     }
 
-    template<typename VirtualRecord>
-    auto overlaps(const VirtualRecord& t, const AABB& box) -> bool
+    template<typename RecordRef>
+    auto overlaps(const RecordRef& t, const AABB& box) -> bool
     {
         return overlaps(t.template loadAs<PreparedTriangle>(), box);
     }

@@ -84,7 +84,7 @@ The data space is an hypercubic index set described by the record dimension and 
 The record dimension consists of a hierarchy of names and describes nested, structured data, much like a :cpp:`struct` in C++.
 The array dimensions are zero-based integral ranges.
 Programs are written against this abstract data space and thus formulated independent of the physical manifestation of the data space.
-Programs can refer to subparts of the data space via virtual records or real l-value references.
+Programs can refer to subparts of the data space via record references or real l-value references.
 The data space is materialized via a mapping that describes how the index set of the data space is embedded into a physical memory.
 This mapping is exchangeable at compile time and can be augmented with additional information from the programs access pattern and target hardware information.
 Due to a mapping encapsulating the full knowledge of a memory layout, LLAMA supports layout aware copies between instances of the same data space but with different mappings.
@@ -110,7 +110,7 @@ LLAMA comes with a set of predefined blob allocators and users can again provide
 Once a view is created, the user can navigate on the data managed by the view.
 On top of a view, a :ref:`VirtualView <label-virtualview>` can be created, offering access to a subspace of the array dimensions.
 Elements of the array dimensions, called records, are accessed on both, View and VirtualView, by calling :cpp:`operator()` with an array index as instance of :cpp:`ArrayIndex`.
-This access returns a :ref:`VirtualRecord <label-virtualrecord>`, allowing further access using the tags from the record dimension, until eventually a reference to actual data in memory is returned.
+This access returns a :ref:`RecordRef <label-recordref>`, allowing further access using the tags from the record dimension, until eventually a reference to actual data in memory is returned.
 
 
 Example use cases

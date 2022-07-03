@@ -126,18 +126,18 @@ namespace llama
     }
 
     template<typename View, typename BoundRecordCoord = RecordCoord<>, bool OwnView = false>
-    struct VirtualRecord;
+    struct RecordRef;
 
-    /// A \ref VirtualRecord that owns and holds a single value.
+    /// A \ref RecordRef that owns and holds a single value.
     template<typename RecordDim>
-    using One = VirtualRecord<decltype(allocViewStack<0, RecordDim>()), RecordCoord<>, true>;
+    using One = RecordRef<decltype(allocViewStack<0, RecordDim>()), RecordCoord<>, true>;
 
     /// Is true, if T is an instance of \ref One.
     template<typename T>
     inline constexpr bool is_One = false;
 
     template<typename View, typename BoundRecordCoord>
-    inline constexpr bool is_One<VirtualRecord<View, BoundRecordCoord, true>> = true;
+    inline constexpr bool is_One<RecordRef<View, BoundRecordCoord, true>> = true;
 
     // TODO(bgruber): Higher dimensional iterators might not have good codegen. Multiple nested loops seem to be
     // superior to a single iterator over multiple dimensions. At least compilers are able to produce better code.
@@ -151,8 +151,8 @@ namespace llama
         using iterator_category = std::random_access_iterator_tag;
         using value_type = One<typename View::RecordDim>;
         using difference_type = typename ArrayIndexIterator::difference_type;
-        using pointer = internal::IndirectValue<VirtualRecord<View>>;
-        using reference = VirtualRecord<View>;
+        using pointer = internal::IndirectValue<RecordRef<View>>;
+        using reference = RecordRef<View>;
 
         constexpr Iterator() = default;
 
@@ -391,13 +391,13 @@ namespace llama
         }
 #endif
 
-        /// Retrieves the \ref VirtualRecord at the given \ref ArrayIndex index.
+        /// Retrieves the \ref RecordRef at the given \ref ArrayIndex index.
         LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) const -> decltype(auto)
         {
             if constexpr(isRecord<RecordDim> || internal::IsBoundedArray<RecordDim>::value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualRecord<const View>{ai, *this};
+                return RecordRef<const View>{ai, *this};
             }
             else
             {
@@ -411,7 +411,7 @@ namespace llama
             if constexpr(isRecord<RecordDim> || internal::IsBoundedArray<RecordDim>::value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualRecord<View>{ai, *this};
+                return RecordRef<View>{ai, *this};
             }
             else
             {
@@ -420,7 +420,7 @@ namespace llama
             }
         }
 
-        /// Retrieves the \ref VirtualRecord at the \ref ArrayIndex index constructed from the passed component
+        /// Retrieves the \ref RecordRef at the \ref ArrayIndex index constructed from the passed component
         /// indices.
         template<
             typename... Indices,
@@ -446,7 +446,7 @@ namespace llama
             return (*this)(ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...});
         }
 
-        /// Retrieves the \ref VirtualRecord at the \ref ArrayIndex index constructed from the passed component
+        /// Retrieves the \ref RecordRef at the \ref ArrayIndex index constructed from the passed component
         /// indices.
         LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayIndex ai) const -> decltype(auto)
         {
@@ -468,7 +468,7 @@ namespace llama
         }
 #endif
 
-        /// Retrieves the \ref VirtualRecord at the 1D \ref ArrayIndex index constructed from the passed index.
+        /// Retrieves the \ref RecordRef at the 1D \ref ArrayIndex index constructed from the passed index.
         LLAMA_FN_HOST_ACC_INLINE auto operator[](size_type index) const -> decltype(auto)
         {
             LLAMA_FORCE_INLINE_RECURSIVE
@@ -509,7 +509,7 @@ namespace llama
 
     private:
         template<typename TView, typename TBoundRecordCoord, bool OwnView>
-        friend struct VirtualRecord;
+        friend struct RecordRef;
 
         LLAMA_SUPPRESS_HOST_DEVICE_WARNING
         template<std::size_t... Coords>

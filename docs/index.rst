@@ -28,7 +28,7 @@ LLAMA is licensed under the LGPL3+.
    pages/introduction
    pages/dimensions
    pages/views
-   pages/virtualrecord
+   pages/recordref
    pages/iteration
    pages/mappings
    pages/proxyreferences

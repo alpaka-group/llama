@@ -103,7 +103,7 @@ View creation
 .. doxygenfunction:: llama::allocViewUninitialized
 .. doxygenfunction:: llama::allocViewStack
 .. doxygentypedef:: llama::One
-.. doxygenfunction:: llama::copyVirtualRecordStack
+.. doxygenfunction:: llama::copyRecord
 
 .. _label-api-bloballocators:
 
@@ -197,7 +197,7 @@ Data access
    :members:
 .. doxygenstruct:: llama::VirtualView
    :members:
-.. doxygenstruct:: llama::VirtualRecord
+.. doxygenstruct:: llama::RecordRef
    :members:
 
 Copying

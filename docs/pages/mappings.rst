@@ -167,7 +167,7 @@ One
 ---
 
 The One mapping is intended to map all coordinates in the array dimensions onto the same memory location.
-This is commonly used in the :cpp:`llama::One` virtual record, but also offers interesting applications in conjunction with the :cpp:`llama::mapping::Split` mapping.
+This is commonly used in :cpp:`llama::One`, but also offers interesting applications in conjunction with the :cpp:`llama::mapping::Split` mapping.
 
 
 Split

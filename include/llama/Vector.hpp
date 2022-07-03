@@ -2,8 +2,8 @@
 
 #pragma once
 
+#include "RecordRef.hpp"
 #include "View.hpp"
-#include "VirtualRecord.hpp"
 
 #include <algorithm>
 #include <stdexcept>
@@ -30,8 +30,8 @@ namespace llama
 
         Vector() = default;
 
-        template<typename VirtualRecord = One<RecordDim>>
-        LLAMA_FN_HOST_ACC_INLINE explicit Vector(size_type count, const VirtualRecord& value = {})
+        template<typename RecordRef = One<RecordDim>>
+        LLAMA_FN_HOST_ACC_INLINE explicit Vector(size_type count, const RecordRef& value = {})
         {
             reserve(count);
             for(size_type i = 0; i < count; i++)
@@ -210,8 +210,8 @@ namespace llama
 
         // TODO(bgruber): more erase overloads
 
-        // TODO(bgruber): T here is probably a virtual record. We could also allow any struct that is storable to the
-        // view via VirtualRecord::store().
+        // TODO(bgruber): T here is probably a RecordRef. We could also allow any struct that is storable to the
+        // view via RecordRef::store().
         template<typename T>
         LLAMA_FN_HOST_ACC_INLINE void push_back(T&& t)
         {
@@ -228,8 +228,8 @@ namespace llama
             m_size--;
         }
 
-        template<typename VirtualRecord = One<RecordDim>>
-        LLAMA_FN_HOST_ACC_INLINE void resize(size_type count, const VirtualRecord& value = {})
+        template<typename RecordRef = One<RecordDim>>
+        LLAMA_FN_HOST_ACC_INLINE void resize(size_type count, const RecordRef& value = {})
         {
             reserve(count);
             for(size_type i = m_size; i < count; i++)

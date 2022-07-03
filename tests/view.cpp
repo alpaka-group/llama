@@ -189,7 +189,7 @@ TEST_CASE("view.addresses")
     CHECK(reinterpret_cast<std::byte*>(&o3) - reinterpret_cast<std::byte*>(&x) == 14080);
 }
 
-template<typename VirtualRecord>
+template<typename RecordRef>
 struct SetZeroFunctor
 {
     template<typename RecordCoord>
@@ -197,7 +197,7 @@ struct SetZeroFunctor
     {
         vd(rc) = 0;
     }
-    VirtualRecord vd;
+    RecordRef vd;
 };
 
 TEST_CASE("view.iteration-and-access")

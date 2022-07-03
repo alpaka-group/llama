@@ -116,8 +116,8 @@ struct VecType<1>
     using type = FP;
 };
 
-template<int Elems, typename ViewParticleI, typename VirtualParticleJ>
-LLAMA_FN_HOST_ACC_INLINE void pPInteraction(ViewParticleI pi, VirtualParticleJ pj)
+template<int Elems, typename ViewParticleI, typename ParticleRefJ>
+LLAMA_FN_HOST_ACC_INLINE void pPInteraction(ViewParticleI pi, ParticleRefJ pj)
 {
     using Vec = typename VecType<Elems>::type;
 

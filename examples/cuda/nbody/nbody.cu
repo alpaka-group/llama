@@ -73,8 +73,8 @@ using ParticleJ = llama::Record<
 // using SharedMemoryParticle = Particle;
 using SharedMemoryParticle = ParticleJ;
 
-template<typename VirtualParticleI, typename VirtualParticleJ>
-__device__ void pPInteraction(VirtualParticleI&& pi, VirtualParticleJ pj)
+template<typename ParticleRefI, typename ParticleRefJ>
+__device__ void pPInteraction(ParticleRefI&& pi, ParticleRefJ pj)
 {
     auto dist = pi(tag::Pos()) - pj(tag::Pos());
     dist *= dist;

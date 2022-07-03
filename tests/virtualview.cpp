@@ -61,15 +61,15 @@ TEST_CASE("VirtualView.fast")
 
 namespace
 {
-    template<typename VirtualRecord>
+    template<typename RecordRef>
     struct DoubleFunctor
     {
         template<typename RecordCoord>
         void operator()(RecordCoord rc)
         {
-            vd(rc) *= 2;
+            ref(rc) *= 2;
         }
-        VirtualRecord vd;
+        RecordRef ref;
     };
 } // namespace
 

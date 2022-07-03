@@ -15,21 +15,21 @@
 namespace llama
 {
     template<typename View, typename BoundRecordCoord, bool OwnView>
-    struct VirtualRecord;
+    struct RecordRef;
 
     template<typename View>
-    inline constexpr auto is_VirtualRecord = false;
+    inline constexpr auto is_RecordRef = false;
 
     template<typename View, typename BoundRecordCoord, bool OwnView>
-    inline constexpr auto is_VirtualRecord<VirtualRecord<View, BoundRecordCoord, OwnView>> = true;
+    inline constexpr auto is_RecordRef<RecordRef<View, BoundRecordCoord, OwnView>> = true;
 
-    /// Creates a single \ref VirtualRecord owning a view with stack memory and copies all values from an existing \ref
-    /// VirtualRecord.
-    template<typename VirtualRecord>
-    LLAMA_FN_HOST_ACC_INLINE auto copyVirtualRecordStack(const VirtualRecord& vd) -> decltype(auto)
+    /// Returns a \ref One with the same record dimension as the given record ref, with values copyied from rr.
+    template<typename View, typename BoundRecordCoord, bool OwnView>
+    LLAMA_FN_HOST_ACC_INLINE auto copyRecord(const RecordRef<View, BoundRecordCoord, OwnView>& rr)
     {
-        One<typename VirtualRecord::AccessibleRecordDim> temp;
-        temp = vd;
+        using RecordDim = typename RecordRef<View, BoundRecordCoord, OwnView>::AccessibleRecordDim;
+        One<RecordDim> temp;
+        temp = rr;
         return temp;
     }
 
@@ -41,11 +41,11 @@ namespace llama
             typename RightView,
             typename RightBoundRecordDim,
             bool RightOwnView>
-        LLAMA_FN_HOST_ACC_INLINE auto virtualRecordArithOperator(
+        LLAMA_FN_HOST_ACC_INLINE auto recordRefArithOperator(
             LeftRecord& left,
-            const VirtualRecord<RightView, RightBoundRecordDim, RightOwnView>& right) -> LeftRecord&
+            const RecordRef<RightView, RightBoundRecordDim, RightOwnView>& right) -> LeftRecord&
         {
-            using RightRecord = VirtualRecord<RightView, RightBoundRecordDim, RightOwnView>;
+            using RightRecord = RecordRef<RightView, RightBoundRecordDim, RightOwnView>;
             // if the record dimension left and right is the same, a single loop is enough and no tag check is needed.
             // this safes a lot of compilation time.
             if constexpr(std::is_same_v<
@@ -80,7 +80,7 @@ namespace llama
         }
 
         template<typename Functor, typename LeftRecord, typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto virtualRecordArithOperator(LeftRecord& left, const T& right) -> LeftRecord&
+        LLAMA_FN_HOST_ACC_INLINE auto recordRefArithOperator(LeftRecord& left, const T& right) -> LeftRecord&
         {
             forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>([&](auto leftRC) LLAMA_LAMBDA_INLINE
                                                                        { Functor{}(left(leftRC), right); });
@@ -93,11 +93,11 @@ namespace llama
             typename RightView,
             typename RightBoundRecordDim,
             bool RightOwnView>
-        LLAMA_FN_HOST_ACC_INLINE auto virtualRecordRelOperator(
+        LLAMA_FN_HOST_ACC_INLINE auto recordRefRelOperator(
             const LeftRecord& left,
-            const VirtualRecord<RightView, RightBoundRecordDim, RightOwnView>& right) -> bool
+            const RecordRef<RightView, RightBoundRecordDim, RightOwnView>& right) -> bool
         {
-            using RightRecord = VirtualRecord<RightView, RightBoundRecordDim, RightOwnView>;
+            using RightRecord = RecordRef<RightView, RightBoundRecordDim, RightOwnView>;
             bool result = true;
             // if the record dimension left and right is the same, a single loop is enough and no tag check is needed.
             // this safes a lot of compilation time.
@@ -133,7 +133,7 @@ namespace llama
         }
 
         template<typename Functor, typename LeftRecord, typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto virtualRecordRelOperator(const LeftRecord& left, const T& right) -> bool
+        LLAMA_FN_HOST_ACC_INLINE auto recordRefRelOperator(const LeftRecord& left, const T& right) -> bool
         {
             bool result = true;
             forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>([&](auto leftRC) LLAMA_LAMBDA_INLINE
@@ -196,52 +196,51 @@ namespace llama
         };
 
         template<typename TWithOptionalConst, typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(TWithOptionalConst& leaf, T) -> std::enable_if_t<
-            !is_VirtualRecord<std::decay_t<TWithOptionalConst>>,
-            std::reference_wrapper<TWithOptionalConst>>
+        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(TWithOptionalConst& leaf, T) -> std::
+            enable_if_t<!is_RecordRef<std::decay_t<TWithOptionalConst>>, std::reference_wrapper<TWithOptionalConst>>
         {
             return leaf;
         }
 
-        template<typename VirtualRecord, typename T, std::size_t N, std::size_t... Is>
-        LLAMA_FN_HOST_ACC_INLINE auto asTupleImplArr(VirtualRecord&& vd, T(&&)[N], std::index_sequence<Is...>)
+        template<typename RecordRef, typename T, std::size_t N, std::size_t... Is>
+        LLAMA_FN_HOST_ACC_INLINE auto asTupleImplArr(RecordRef&& vd, T(&&)[N], std::index_sequence<Is...>)
         {
             return std::make_tuple(asTupleImpl(vd(RecordCoord<Is>{}), T{})...);
         }
 
-        template<typename VirtualRecord, typename T, std::size_t N>
-        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(VirtualRecord&& vd, T(&&a)[N])
+        template<typename RecordRef, typename T, std::size_t N>
+        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(RecordRef&& vd, T(&&a)[N])
         {
-            return asTupleImplArr(std::forward<VirtualRecord>(vd), std::move(a), std::make_index_sequence<N>{});
+            return asTupleImplArr(std::forward<RecordRef>(vd), std::move(a), std::make_index_sequence<N>{});
         }
 
-        template<typename VirtualRecord, typename... Fields>
-        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(VirtualRecord&& vd, Record<Fields...>)
+        template<typename RecordRef, typename... Fields>
+        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(RecordRef&& vd, Record<Fields...>)
         {
             return std::make_tuple(asTupleImpl(vd(GetFieldTag<Fields>{}), GetFieldType<Fields>{})...);
         }
 
         template<typename TWithOptionalConst, typename T>
         LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(TWithOptionalConst& leaf, T)
-            -> std::enable_if_t<!is_VirtualRecord<std::decay_t<TWithOptionalConst>>, std::tuple<TWithOptionalConst&>>
+            -> std::enable_if_t<!is_RecordRef<std::decay_t<TWithOptionalConst>>, std::tuple<TWithOptionalConst&>>
         {
             return {leaf};
         }
 
-        template<typename VirtualRecord, typename T, std::size_t N, std::size_t... Is>
-        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImplArr(VirtualRecord&& vd, T(&&)[N], std::index_sequence<Is...>)
+        template<typename RecordRef, typename T, std::size_t N, std::size_t... Is>
+        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImplArr(RecordRef&& vd, T(&&)[N], std::index_sequence<Is...>)
         {
             return std::tuple_cat(asFlatTupleImpl(vd(RecordCoord<Is>{}), T{})...);
         }
 
-        template<typename VirtualRecord, typename T, std::size_t N>
-        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(VirtualRecord&& vd, T(&&a)[N])
+        template<typename RecordRef, typename T, std::size_t N>
+        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(RecordRef&& vd, T(&&a)[N])
         {
-            return asFlatTupleImplArr(std::forward<VirtualRecord>(vd), std::move(a), std::make_index_sequence<N>{});
+            return asFlatTupleImplArr(std::forward<RecordRef>(vd), std::move(a), std::make_index_sequence<N>{});
         }
 
-        template<typename VirtualRecord, typename... Fields>
-        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(VirtualRecord&& vd, Record<Fields...>)
+        template<typename RecordRef, typename... Fields>
+        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(RecordRef&& vd, Record<Fields...>)
         {
             return std::tuple_cat(asFlatTupleImpl(vd(GetFieldTag<Fields>{}), GetFieldType<Fields>{})...);
         }
@@ -310,17 +309,17 @@ namespace llama
             isDirectListInitializableFromTuple<T, Tuple<Args...>> = isDirectListInitializable<T, Args...>;
     } // namespace internal
 
-    /// Virtual record type returned by \ref View after resolving an array dimensions coordinate or partially resolving
-    /// a \ref RecordCoord. A virtual record does not hold data itself (thus named "virtual"), it just binds enough
-    /// information (array dimensions coord and partial record coord) to retrieve it from a \ref View later. Virtual
-    /// records should not be created by the user. They are returned from various access functions in \ref View and
-    /// VirtualRecord itself.
+    /// Record reference type returned by \ref View after resolving an array dimensions coordinate or partially
+    /// resolving a \ref RecordCoord. A record reference does not hold data itself, it just binds enough information
+    /// (array dimensions coord and partial record coord) to retrieve it later from a \ref View. Records references
+    /// should not be created by the user. They are returned from various access functions in \ref View and RecordRef
+    /// itself.
     template<typename TView, typename TBoundRecordCoord, bool OwnView>
-    struct VirtualRecord : private TView::Mapping::ArrayIndex
+    struct RecordRef : private TView::Mapping::ArrayIndex
     {
-        using View = TView; ///< View this virtual record points into.
+        using View = TView; ///< View this record reference points into.
         using BoundRecordCoord
-            = TBoundRecordCoord; ///< Record coords into View::RecordDim which are already bound by this VirtualRecord.
+            = TBoundRecordCoord; ///< Record coords into View::RecordDim which are already bound by this RecordRef.
 
     private:
         using ArrayIndex = typename View::Mapping::ArrayIndex;
@@ -333,74 +332,73 @@ namespace llama
         /// `RecordCoord<>` (default) AccessibleRecordDim is the same as `Mapping::RecordDim`.
         using AccessibleRecordDim = GetType<RecordDim, BoundRecordCoord>;
 
-        /// Creates an empty VirtualRecord. Only available for if the view is owned. Used by llama::One.
-        LLAMA_FN_HOST_ACC_INLINE VirtualRecord()
+        /// Creates an empty RecordRef. Only available for if the view is owned. Used by llama::One.
+        LLAMA_FN_HOST_ACC_INLINE RecordRef()
             /* requires(OwnView) */
             : ArrayIndex{}
             , view{allocViewStack<0, RecordDim>()}
         {
-            static_assert(OwnView, "The default constructor of VirtualRecord is only available if it owns the view.");
+            static_assert(OwnView, "The default constructor of RecordRef is only available if it owns the view.");
         }
 
         LLAMA_FN_HOST_ACC_INLINE
-        VirtualRecord(ArrayIndex ai, std::conditional_t<OwnView, View&&, View&> view)
+        RecordRef(ArrayIndex ai, std::conditional_t<OwnView, View&&, View&> view)
             : ArrayIndex{ai}
             , view{static_cast<decltype(view)>(view)}
         {
         }
 
-        VirtualRecord(const VirtualRecord&) = default;
+        RecordRef(const RecordRef&) = default;
 
         // NOLINTNEXTLINE(cert-oop54-cpp)
-        LLAMA_FN_HOST_ACC_INLINE auto operator=(const VirtualRecord& other) -> VirtualRecord&
+        LLAMA_FN_HOST_ACC_INLINE auto operator=(const RecordRef& other) -> RecordRef&
         {
             // NOLINTNEXTLINE(cppcoreguidelines-c-copy-assignment-signature,misc-unconventional-assign-operator)
-            return this->operator=<VirtualRecord>(other);
+            return this->operator=<RecordRef>(other);
         }
 
-        VirtualRecord(VirtualRecord&&) noexcept = default;
-        auto operator=(VirtualRecord&&) noexcept -> VirtualRecord& = default;
+        RecordRef(RecordRef&&) noexcept = default;
+        auto operator=(RecordRef&&) noexcept -> RecordRef& = default;
 
-        ~VirtualRecord() = default;
+        ~RecordRef() = default;
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayIndex() const -> ArrayIndex
         {
             return *this;
         }
 
-        /// Create a VirtualRecord from a different VirtualRecord. Only available for if the view is owned. Used by
+        /// Create a RecordRef from a different RecordRef. Only available for if the view is owned. Used by
         /// llama::One.
         template<typename OtherView, typename OtherBoundRecordCoord, bool OtherOwnView>
         // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-        LLAMA_FN_HOST_ACC_INLINE VirtualRecord(
-            const VirtualRecord<OtherView, OtherBoundRecordCoord, OtherOwnView>& virtualRecord)
+        LLAMA_FN_HOST_ACC_INLINE RecordRef(const RecordRef<OtherView, OtherBoundRecordCoord, OtherOwnView>& recordRef)
             /* requires(OwnView) */
-            : VirtualRecord()
+            : RecordRef()
         {
             static_assert(
                 OwnView,
-                "The copy constructor of VirtualRecord from a different VirtualRecord is only available if it owns "
+                "The copy constructor of RecordRef from a different RecordRef is only available if it owns "
                 "the "
                 "view.");
-            *this = virtualRecord;
+            *this = recordRef;
         }
 
         // TODO(bgruber): unify with previous in C++20 and use explicit(cond)
-        /// Create a VirtualRecord from a scalar. Only available for if the view is owned. Used by llama::One.
-        template<typename T, typename = std::enable_if_t<!is_VirtualRecord<T>>>
-        LLAMA_FN_HOST_ACC_INLINE explicit VirtualRecord(const T& scalar)
+        /// Create a RecordRef from a scalar. Only available for if the view is owned. Used by llama::One.
+        template<typename T, typename = std::enable_if_t<!is_RecordRef<T>>>
+        LLAMA_FN_HOST_ACC_INLINE explicit RecordRef(const T& scalar)
             /* requires(OwnView) */
-            : VirtualRecord()
+            : RecordRef()
         {
             static_assert(
                 OwnView,
-                "The constructor of VirtualRecord from a scalar is only available if it owns the view.");
+                "The constructor of RecordRef from a scalar is only available if it owns the view.");
             *this = scalar;
         }
 
-        /// Access a record in the record dimension underneath the current virtual record using a \ref RecordCoord. If
-        /// the access resolves to a leaf, a reference to a variable inside the \ref View storage is returned,
-        /// otherwise another virtual record.
+        /// Access a record in the record dimension underneath the current record reference using a \ref RecordCoord.
+        /// If the access resolves to a leaf, an l-value reference to a variable inside the \ref View storage is
+        /// returned, otherwise another RecordRef.
         template<std::size_t... Coord>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coord...>) const -> decltype(auto)
         {
@@ -409,7 +407,7 @@ namespace llama
             if constexpr(isRecord<AccessedType> || internal::IsBoundedArray<AccessedType>::value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualRecord<const View, AbsolutCoord>{arrayIndex(), this->view};
+                return RecordRef<const View, AbsolutCoord>{arrayIndex(), this->view};
             }
             else
             {
@@ -427,7 +425,7 @@ namespace llama
             if constexpr(isRecord<AccessedType> || internal::IsBoundedArray<AccessedType>::value)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return VirtualRecord<View, AbsolutCoord>{arrayIndex(), this->view};
+                return RecordRef<View, AbsolutCoord>{arrayIndex(), this->view};
             }
             else
             {
@@ -436,9 +434,9 @@ namespace llama
             }
         }
 
-        /// Access a record in the record dimension underneath the current virtual record using a series of tags. If
-        /// the access resolves to a leaf, a reference to a variable inside the \ref View storage is returned,
-        /// otherwise another virtual record.
+        /// Access a record in the record dimension underneath the current record reference using a series of tags. If
+        /// the access resolves to a leaf, an l-value reference to a variable inside the \ref View storage is returned,
+        /// otherwise another RecordRef.
         template<typename... Tags>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Tags...) const -> decltype(auto)
         {
@@ -459,152 +457,152 @@ namespace llama
         }
 
         template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator=(const T& other) -> VirtualRecord&
+        LLAMA_FN_HOST_ACC_INLINE auto operator=(const T& other) -> RecordRef&
         {
             // NOLINTNEXTLINE(cppcoreguidelines-c-copy-assignment-signature,misc-unconventional-assign-operator)
-            return internal::virtualRecordArithOperator<internal::Assign>(*this, other);
+            return internal::recordRefArithOperator<internal::Assign>(*this, other);
         }
 
         template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator+=(const T& other) -> VirtualRecord&
+        LLAMA_FN_HOST_ACC_INLINE auto operator+=(const T& other) -> RecordRef&
         {
-            return internal::virtualRecordArithOperator<internal::PlusAssign>(*this, other);
+            return internal::recordRefArithOperator<internal::PlusAssign>(*this, other);
         }
 
         template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator-=(const T& other) -> VirtualRecord&
+        LLAMA_FN_HOST_ACC_INLINE auto operator-=(const T& other) -> RecordRef&
         {
-            return internal::virtualRecordArithOperator<internal::MinusAssign>(*this, other);
+            return internal::recordRefArithOperator<internal::MinusAssign>(*this, other);
         }
 
         template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator*=(const T& other) -> VirtualRecord&
+        LLAMA_FN_HOST_ACC_INLINE auto operator*=(const T& other) -> RecordRef&
         {
-            return internal::virtualRecordArithOperator<internal::MultiplyAssign>(*this, other);
+            return internal::recordRefArithOperator<internal::MultiplyAssign>(*this, other);
         }
 
         template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator/=(const T& other) -> VirtualRecord&
+        LLAMA_FN_HOST_ACC_INLINE auto operator/=(const T& other) -> RecordRef&
         {
-            return internal::virtualRecordArithOperator<internal::DivideAssign>(*this, other);
+            return internal::recordRefArithOperator<internal::DivideAssign>(*this, other);
         }
 
         template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator%=(const T& other) -> VirtualRecord&
+        LLAMA_FN_HOST_ACC_INLINE auto operator%=(const T& other) -> RecordRef&
         {
-            return internal::virtualRecordArithOperator<internal::ModuloAssign>(*this, other);
+            return internal::recordRefArithOperator<internal::ModuloAssign>(*this, other);
         }
 
         template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator+(const VirtualRecord& vd, const T& t)
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator+(const RecordRef& vd, const T& t)
         {
-            return copyVirtualRecordStack(vd) += t;
+            return copyRecord(vd) += t;
         }
 
-        template<typename T, typename = std::enable_if_t<!is_VirtualRecord<T>>>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator+(const T& t, const VirtualRecord& vd)
+        template<typename T, typename = std::enable_if_t<!is_RecordRef<T>>>
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator+(const T& t, const RecordRef& vd)
         {
             return vd + t;
         }
 
         template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator-(const VirtualRecord& vd, const T& t)
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator-(const RecordRef& vd, const T& t)
         {
-            return copyVirtualRecordStack(vd) -= t;
+            return copyRecord(vd) -= t;
         }
 
         template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator*(const VirtualRecord& vd, const T& t)
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator*(const RecordRef& vd, const T& t)
         {
-            return copyVirtualRecordStack(vd) *= t;
+            return copyRecord(vd) *= t;
         }
 
-        template<typename T, typename = std::enable_if_t<!is_VirtualRecord<T>>>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator*(const T& t, const VirtualRecord& vd)
+        template<typename T, typename = std::enable_if_t<!is_RecordRef<T>>>
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator*(const T& t, const RecordRef& vd)
         {
             return vd * t;
         }
 
         template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator/(const VirtualRecord& vd, const T& t)
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator/(const RecordRef& vd, const T& t)
         {
-            return copyVirtualRecordStack(vd) /= t;
+            return copyRecord(vd) /= t;
         }
 
         template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator%(const VirtualRecord& vd, const T& t)
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator%(const RecordRef& vd, const T& t)
         {
-            return copyVirtualRecordStack(vd) %= t;
+            return copyRecord(vd) %= t;
         }
 
         template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator==(const VirtualRecord& vd, const T& t) -> bool
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator==(const RecordRef& vd, const T& t) -> bool
         {
-            return internal::virtualRecordRelOperator<std::equal_to<>>(vd, t);
+            return internal::recordRefRelOperator<std::equal_to<>>(vd, t);
         }
 
-        template<typename T, typename = std::enable_if_t<!is_VirtualRecord<T>>>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator==(const T& t, const VirtualRecord& vd) -> bool
+        template<typename T, typename = std::enable_if_t<!is_RecordRef<T>>>
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator==(const T& t, const RecordRef& vd) -> bool
         {
             return vd == t;
         }
 
         template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator!=(const VirtualRecord& vd, const T& t) -> bool
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator!=(const RecordRef& vd, const T& t) -> bool
         {
-            return internal::virtualRecordRelOperator<std::not_equal_to<>>(vd, t);
+            return internal::recordRefRelOperator<std::not_equal_to<>>(vd, t);
         }
 
-        template<typename T, typename = std::enable_if_t<!is_VirtualRecord<T>>>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator!=(const T& t, const VirtualRecord& vd) -> bool
+        template<typename T, typename = std::enable_if_t<!is_RecordRef<T>>>
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator!=(const T& t, const RecordRef& vd) -> bool
         {
             return vd != t;
         }
 
         template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator<(const VirtualRecord& vd, const T& t) -> bool
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator<(const RecordRef& vd, const T& t) -> bool
         {
-            return internal::virtualRecordRelOperator<std::less<>>(vd, t);
+            return internal::recordRefRelOperator<std::less<>>(vd, t);
         }
 
-        template<typename T, typename = std::enable_if_t<!is_VirtualRecord<T>>>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator<(const T& t, const VirtualRecord& vd) -> bool
+        template<typename T, typename = std::enable_if_t<!is_RecordRef<T>>>
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator<(const T& t, const RecordRef& vd) -> bool
         {
             return vd > t;
         }
 
         template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator<=(const VirtualRecord& vd, const T& t) -> bool
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator<=(const RecordRef& vd, const T& t) -> bool
         {
-            return internal::virtualRecordRelOperator<std::less_equal<>>(vd, t);
+            return internal::recordRefRelOperator<std::less_equal<>>(vd, t);
         }
 
-        template<typename T, typename = std::enable_if_t<!is_VirtualRecord<T>>>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator<=(const T& t, const VirtualRecord& vd) -> bool
+        template<typename T, typename = std::enable_if_t<!is_RecordRef<T>>>
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator<=(const T& t, const RecordRef& vd) -> bool
         {
             return vd >= t;
         }
 
         template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator>(const VirtualRecord& vd, const T& t) -> bool
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator>(const RecordRef& vd, const T& t) -> bool
         {
-            return internal::virtualRecordRelOperator<std::greater<>>(vd, t);
+            return internal::recordRefRelOperator<std::greater<>>(vd, t);
         }
 
-        template<typename T, typename = std::enable_if_t<!is_VirtualRecord<T>>>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator>(const T& t, const VirtualRecord& vd) -> bool
+        template<typename T, typename = std::enable_if_t<!is_RecordRef<T>>>
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator>(const T& t, const RecordRef& vd) -> bool
         {
             return vd < t;
         }
 
         template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator>=(const VirtualRecord& vd, const T& t) -> bool
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator>=(const RecordRef& vd, const T& t) -> bool
         {
-            return internal::virtualRecordRelOperator<std::greater_equal<>>(vd, t);
+            return internal::recordRefRelOperator<std::greater_equal<>>(vd, t);
         }
 
-        template<typename T, typename = std::enable_if_t<!is_VirtualRecord<T>>>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator>=(const T& t, const VirtualRecord& vd) -> bool
+        template<typename T, typename = std::enable_if_t<!is_RecordRef<T>>>
+        LLAMA_FN_HOST_ACC_INLINE friend auto operator>=(const T& t, const RecordRef& vd) -> bool
         {
             return vd <= t;
         }
@@ -646,7 +644,7 @@ namespace llama
         {
             static_assert(
                 internal::isDirectListInitializableFromTuple<TupleLike, decltype(asFlatTuple())>,
-                "TupleLike must be constructible from as many values as this VirtualRecord recursively represents "
+                "TupleLike must be constructible from as many values as this RecordRef recursively represents "
                 "like "
                 "this: TupleLike{values...}");
             return internal::makeFromTuple<TupleLike>(
@@ -659,7 +657,7 @@ namespace llama
         {
             static_assert(
                 internal::isDirectListInitializableFromTuple<TupleLike, decltype(asFlatTuple())>,
-                "TupleLike must be constructible from as many values as this VirtualRecord recursively represents "
+                "TupleLike must be constructible from as many values as this RecordRef recursively represents "
                 "like "
                 "this: TupleLike{values...}");
             return internal::makeFromTuple<TupleLike>(
@@ -669,7 +667,7 @@ namespace llama
 
         struct Loader
         {
-            VirtualRecord& vd;
+            RecordRef& vd;
 
             template<typename T>
             // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
@@ -681,7 +679,7 @@ namespace llama
 
         struct LoaderConst
         {
-            const VirtualRecord& vd;
+            const RecordRef& vd;
 
             template<typename T>
             // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
@@ -707,10 +705,10 @@ namespace llama
             internal::assignTuples(asTuple(), t, std::make_index_sequence<std::tuple_size_v<TupleLike>>{});
         }
 
-        // swap for equal VirtualRecord
+        // swap for equal RecordRef
         LLAMA_FN_HOST_ACC_INLINE friend void swap(
-            std::conditional_t<OwnView, VirtualRecord&, VirtualRecord> a,
-            std::conditional_t<OwnView, VirtualRecord&, VirtualRecord> b) noexcept
+            std::conditional_t<OwnView, RecordRef&, RecordRef> a,
+            std::conditional_t<OwnView, RecordRef&, RecordRef> b) noexcept
         {
             forEachLeafCoord<AccessibleRecordDim>(
                 [&](auto rc) LLAMA_LAMBDA_INLINE
@@ -721,7 +719,7 @@ namespace llama
         }
     };
 
-    // swap for heterogeneous VirtualRecord
+    // swap for heterogeneous RecordRef
     template<
         typename ViewA,
         typename BoundRecordDimA,
@@ -730,13 +728,13 @@ namespace llama
         typename BoundRecordDimB,
         bool OwnViewB>
     LLAMA_FN_HOST_ACC_INLINE auto swap(
-        VirtualRecord<ViewA, BoundRecordDimA, OwnViewA>& a,
-        VirtualRecord<ViewB, BoundRecordDimB, OwnViewB>& b) noexcept
+        RecordRef<ViewA, BoundRecordDimA, OwnViewA>& a,
+        RecordRef<ViewB, BoundRecordDimB, OwnViewB>& b) noexcept
         -> std::enable_if_t<std::is_same_v<
-            typename VirtualRecord<ViewA, BoundRecordDimA, OwnViewA>::AccessibleRecordDim,
-            typename VirtualRecord<ViewB, BoundRecordDimB, OwnViewB>::AccessibleRecordDim>>
+            typename RecordRef<ViewA, BoundRecordDimA, OwnViewA>::AccessibleRecordDim,
+            typename RecordRef<ViewB, BoundRecordDimB, OwnViewB>::AccessibleRecordDim>>
     {
-        using LeftRecord = VirtualRecord<ViewA, BoundRecordDimA, OwnViewA>;
+        using LeftRecord = RecordRef<ViewA, BoundRecordDimA, OwnViewA>;
         forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>(
             [&](auto rc) LLAMA_LAMBDA_INLINE
             {
@@ -746,9 +744,9 @@ namespace llama
     }
 
     template<typename View, typename BoundRecordCoord, bool OwnView>
-    auto operator<<(std::ostream& os, const VirtualRecord<View, BoundRecordCoord, OwnView>& vr) -> std::ostream&
+    auto operator<<(std::ostream& os, const RecordRef<View, BoundRecordCoord, OwnView>& vr) -> std::ostream&
     {
-        using RecordDim = typename VirtualRecord<View, BoundRecordCoord, OwnView>::AccessibleRecordDim;
+        using RecordDim = typename RecordRef<View, BoundRecordCoord, OwnView>::AccessibleRecordDim;
         os << "{";
         if constexpr(std::is_array_v<RecordDim>)
         {
@@ -777,12 +775,12 @@ namespace llama
         return os;
     }
 
-    template<typename VirtualRecordFwd, typename Functor>
-    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaf(VirtualRecordFwd&& vr, Functor&& functor)
+    template<typename RecordRefFwd, typename Functor>
+    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaf(RecordRefFwd&& vr, Functor&& functor)
     {
-        using VirtualRecord = std::remove_reference_t<VirtualRecordFwd>;
+        using RecordRef = std::remove_reference_t<RecordRefFwd>;
         LLAMA_FORCE_INLINE_RECURSIVE
-        forEachLeafCoord<typename VirtualRecord::AccessibleRecordDim>(
+        forEachLeafCoord<typename RecordRef::AccessibleRecordDim>(
             [functor = std::forward<Functor>(functor), &vr = vr](auto rc)
                 LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(constexpr mutable) { std::forward<Functor>(functor)(vr(rc)); });
     }
@@ -790,7 +788,7 @@ namespace llama
     namespace internal
     {
         // gets the value type for a given T, where T models a reference type. T is either an l-value reference, a
-        // proxy reference or a VirtualRecord
+        // proxy reference or a RecordRef
         template<typename T, typename = void>
         struct ValueOf
         {
@@ -798,7 +796,7 @@ namespace llama
         };
 
         template<typename T>
-        struct ValueOf<T, std::enable_if_t<is_VirtualRecord<T>>>
+        struct ValueOf<T, std::enable_if_t<is_RecordRef<T>>>
         {
             using type = One<typename T::AccessibleRecordDim>;
         };
@@ -927,7 +925,7 @@ namespace llama
         };
 
         template<typename T>
-        struct ReferenceTo<T, std::enable_if_t<is_VirtualRecord<T> && !is_One<T>>>
+        struct ReferenceTo<T, std::enable_if_t<is_RecordRef<T> && !is_One<T>>>
         {
             using type = T;
         };
@@ -948,22 +946,21 @@ namespace llama
 } // namespace llama
 
 template<typename View, typename BoundRecordCoord, bool OwnView>
-struct std::tuple_size<llama::VirtualRecord<View, BoundRecordCoord, OwnView>>
-    : boost::mp11::mp_size<typename llama::VirtualRecord<View, BoundRecordCoord, OwnView>::AccessibleRecordDim>
+struct std::tuple_size<llama::RecordRef<View, BoundRecordCoord, OwnView>>
+    : boost::mp11::mp_size<typename llama::RecordRef<View, BoundRecordCoord, OwnView>::AccessibleRecordDim>
 {
 };
 
 template<std::size_t I, typename View, typename BoundRecordCoord, bool OwnView>
-struct std::tuple_element<I, llama::VirtualRecord<View, BoundRecordCoord, OwnView>>
+struct std::tuple_element<I, llama::RecordRef<View, BoundRecordCoord, OwnView>>
 {
-    using type = decltype(std::declval<llama::VirtualRecord<View, BoundRecordCoord, OwnView>>().template get<I>());
+    using type = decltype(std::declval<llama::RecordRef<View, BoundRecordCoord, OwnView>>().template get<I>());
 };
 
 template<std::size_t I, typename View, typename BoundRecordCoord, bool OwnView>
-struct std::tuple_element<I, const llama::VirtualRecord<View, BoundRecordCoord, OwnView>>
+struct std::tuple_element<I, const llama::RecordRef<View, BoundRecordCoord, OwnView>>
 {
-    using type
-        = decltype(std::declval<const llama::VirtualRecord<View, BoundRecordCoord, OwnView>>().template get<I>());
+    using type = decltype(std::declval<const llama::RecordRef<View, BoundRecordCoord, OwnView>>().template get<I>());
 };
 
 #if CAN_USE_RANGES
@@ -978,16 +975,13 @@ template<
     class TQual,
     template<class>
     class UQual>
-struct std::basic_common_reference<
-    llama::VirtualRecord<ViewA, BoundA, OwnA>,
-    llama::VirtualRecord<ViewB, BoundB, OwnB>,
-    TQual,
-    UQual>
+struct std::
+    basic_common_reference<llama::RecordRef<ViewA, BoundA, OwnA>, llama::RecordRef<ViewB, BoundB, OwnB>, TQual, UQual>
 {
     using type = std::enable_if_t<
         std::is_same_v<
-            typename llama::VirtualRecord<ViewA, BoundA, OwnA>::AccessibleRecordDim,
-            typename llama::VirtualRecord<ViewB, BoundB, OwnB>::AccessibleRecordDim>,
+            typename llama::RecordRef<ViewA, BoundA, OwnA>::AccessibleRecordDim,
+            typename llama::RecordRef<ViewB, BoundB, OwnB>::AccessibleRecordDim>,
         llama::One<typename ViewA::RecordDim>>;
 };
 #endif
