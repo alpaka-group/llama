@@ -24,6 +24,25 @@ namespace
     }
 } // namespace
 
+TEST_CASE("dump.different_extents")
+{
+    auto mapping1 = llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<std::size_t, 1>, Particle>{{32}};
+    auto refSvg = llama::toSvg(mapping1);
+    auto refHtml = llama::toHtml(mapping1);
+
+    auto mapping2 = llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<int, 1>, Particle>{{32}};
+    CHECK(refSvg == llama::toSvg(mapping2));
+    CHECK(refHtml == llama::toHtml(mapping2));
+
+    auto mapping3 = llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, 32>, Particle>{{}};
+    CHECK(refSvg == llama::toSvg(mapping3));
+    CHECK(refHtml == llama::toHtml(mapping3));
+
+    auto mapping4 = llama::mapping::AlignedAoS<llama::ArrayExtents<int, 32>, Particle>{{}};
+    CHECK(refSvg == llama::toSvg(mapping4));
+    CHECK(refHtml == llama::toHtml(mapping4));
+}
+
 TEST_CASE("dump.Particle.AoS_Aligned")
 {
     dump(llama::mapping::AlignedAoS<ArrayExtents, Particle>{extents});
