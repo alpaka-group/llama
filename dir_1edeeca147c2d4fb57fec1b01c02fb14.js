@@ -27,11 +27,11 @@ var dir_1edeeca147c2d4fb57fec1b01c02fb14 =
       [ "ProxyRefOpMixin", "structllama_1_1ProxyRefOpMixin.html", "structllama_1_1ProxyRefOpMixin" ]
     ] ],
     [ "RecordCoord.hpp", "RecordCoord_8hpp.html", "RecordCoord_8hpp" ],
+    [ "RecordRef.hpp", "RecordRef_8hpp.html", "RecordRef_8hpp" ],
     [ "StructName.hpp", "StructName_8hpp.html", "StructName_8hpp" ],
     [ "Tuple.hpp", "Tuple_8hpp.html", "Tuple_8hpp" ],
     [ "Vector.hpp", "Vector_8hpp.html", [
       [ "Vector", "structllama_1_1Vector.html", "structllama_1_1Vector" ]
     ] ],
-    [ "View.hpp", "View_8hpp.html", "View_8hpp" ],
-    [ "VirtualRecord.hpp", "VirtualRecord_8hpp.html", "VirtualRecord_8hpp" ]
+    [ "View.hpp", "View_8hpp.html", "View_8hpp" ]
 ];

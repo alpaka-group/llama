@@ -38,10 +38,10 @@ var searchData=
   ['llama_5fversion_5fmajor_319',['LLAMA_VERSION_MAJOR',['../llama_8hpp.html#a8e2c37e852e6877edf8e3e9d9e2de8f3',1,'llama.hpp']]],
   ['llama_5fversion_5fminor_320',['LLAMA_VERSION_MINOR',['../llama_8hpp.html#ad0bc6386ccc31c0274eb0337c1c8192b',1,'llama.hpp']]],
   ['llama_5fversion_5fpatch_321',['LLAMA_VERSION_PATCH',['../llama_8hpp.html#a9cc4298783dc19b00d12972c3ef45ba7',1,'llama.hpp']]],
-  ['load_322',['load',['../structllama_1_1VirtualRecord.html#abe9b5e725e3e9d499876fe3ee31f9929',1,'llama::VirtualRecord::load() -&gt; Loader'],['../structllama_1_1VirtualRecord.html#aa2474f362f8fecaaadbdd0e25970d2c8',1,'llama::VirtualRecord::load() const -&gt; LoaderConst']]],
-  ['loadas_323',['loadAs',['../structllama_1_1VirtualRecord.html#aefba2710c28023c4f847a4b6f6d26d9f',1,'llama::VirtualRecord::loadAs() -&gt; TupleLike'],['../structllama_1_1VirtualRecord.html#aa4d1c2005cd3da1c7ba08b43d819061e',1,'llama::VirtualRecord::loadAs() const -&gt; TupleLike']]],
-  ['loader_324',['Loader',['../structllama_1_1VirtualRecord_1_1Loader.html',1,'llama::VirtualRecord']]],
-  ['loaderconst_325',['LoaderConst',['../structllama_1_1VirtualRecord_1_1LoaderConst.html',1,'llama::VirtualRecord']]],
+  ['load_322',['load',['../structllama_1_1RecordRef.html#a77847e3b3e62b78dd42938b079e5e4c7',1,'llama::RecordRef::load() -&gt; Loader'],['../structllama_1_1RecordRef.html#aff7f72b957384a550cb2fee9c303b23b',1,'llama::RecordRef::load() const -&gt; LoaderConst']]],
+  ['loadas_323',['loadAs',['../structllama_1_1RecordRef.html#a9bc0da67e993fb64667e84e9a4efd36c',1,'llama::RecordRef::loadAs() -&gt; TupleLike'],['../structllama_1_1RecordRef.html#abd56de3b1bc2549540a41e80f28bfcd7',1,'llama::RecordRef::loadAs() const -&gt; TupleLike']]],
+  ['loader_324',['Loader',['../structllama_1_1RecordRef_1_1Loader.html',1,'llama::RecordRef']]],
+  ['loaderconst_325',['LoaderConst',['../structllama_1_1RecordRef_1_1LoaderConst.html',1,'llama::RecordRef']]],
   ['mapping_326',['mapping',['../namespacellama_1_1mapping.html',1,'llama']]],
   ['tree_327',['tree',['../namespacellama_1_1mapping_1_1tree.html',1,'llama::mapping']]]
 ];

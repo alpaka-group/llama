@@ -46,7 +46,7 @@ var namespacellama_1_1internal =
     [ "MultiplyAssign", "structllama_1_1internal_1_1MultiplyAssign.html", "structllama_1_1internal_1_1MultiplyAssign" ],
     [ "PlusAssign", "structllama_1_1internal_1_1PlusAssign.html", "structllama_1_1internal_1_1PlusAssign" ],
     [ "ReferenceTo", "structllama_1_1internal_1_1ReferenceTo.html", "structllama_1_1internal_1_1ReferenceTo" ],
-    [ "ReferenceTo< T, std::enable_if_t< is_VirtualRecord< T > &&!is_One< T > > >", "structllama_1_1internal_1_1ReferenceTo_3_01T_00_01std_1_1enable__if__t_3_01is__VirtualRecord_3_0c38ae29a40d3cf0bf09e0d36917a1cec.html", "structllama_1_1internal_1_1ReferenceTo_3_01T_00_01std_1_1enable__if__t_3_01is__VirtualRecord_3_0c38ae29a40d3cf0bf09e0d36917a1cec" ],
+    [ "ReferenceTo< T, std::enable_if_t< is_RecordRef< T > &&!is_One< T > > >", "structllama_1_1internal_1_1ReferenceTo_3_01T_00_01std_1_1enable__if__t_3_01is__RecordRef_3_01T_02d33164bb39d0262029d90bd66129e01.html", "structllama_1_1internal_1_1ReferenceTo_3_01T_00_01std_1_1enable__if__t_3_01is__RecordRef_3_01T_02d33164bb39d0262029d90bd66129e01" ],
     [ "ReferenceTo< T, std::enable_if_t< isProxyReference< T > > >", "structllama_1_1internal_1_1ReferenceTo_3_01T_00_01std_1_1enable__if__t_3_01isProxyReference_3_01T_01_4_01_4_01_4.html", "structllama_1_1internal_1_1ReferenceTo_3_01T_00_01std_1_1enable__if__t_3_01isProxyReference_3_01T_01_4_01_4_01_4" ],
     [ "ReplacePlaceholdersImpl", "structllama_1_1internal_1_1ReplacePlaceholdersImpl.html", "structllama_1_1internal_1_1ReplacePlaceholdersImpl" ],
     [ "ReplacePlaceholdersImpl< boost::mp11::mp_arg< I >, Args... >", "structllama_1_1internal_1_1ReplacePlaceholdersImpl_3_01boost_1_1mp11_1_1mp__arg_3_01I_01_4_00_01Args_8_8_8_01_4.html", "structllama_1_1internal_1_1ReplacePlaceholdersImpl_3_01boost_1_1mp11_1_1mp__arg_3_01I_01_4_00_01Args_8_8_8_01_4" ],
@@ -58,6 +58,6 @@ var namespacellama_1_1internal =
     [ "TupleLeaf< I, T, true >", "structllama_1_1internal_1_1TupleLeaf_3_01I_00_01T_00_01true_01_4.html", "structllama_1_1internal_1_1TupleLeaf_3_01I_00_01T_00_01true_01_4" ],
     [ "ValueOf", "structllama_1_1internal_1_1ValueOf.html", null ],
     [ "ValueOf< T & >", "structllama_1_1internal_1_1ValueOf_3_01T_01_6_01_4.html", "structllama_1_1internal_1_1ValueOf_3_01T_01_6_01_4" ],
-    [ "ValueOf< T, std::enable_if_t< is_VirtualRecord< T > > >", "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01is__VirtualRecord_3_01T_01_4_01_4_01_4.html", "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01is__VirtualRecord_3_01T_01_4_01_4_01_4" ],
+    [ "ValueOf< T, std::enable_if_t< is_RecordRef< T > > >", "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01is__RecordRef_3_01T_01_4_01_4_01_4.html", "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01is__RecordRef_3_01T_01_4_01_4_01_4" ],
     [ "ValueOf< T, std::enable_if_t< isProxyReference< T > > >", "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01isProxyReference_3_01T_01_4_01_4_01_4.html", "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01isProxyReference_3_01T_01_4_01_4_01_4" ]
 ];

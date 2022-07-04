@@ -9,6 +9,6 @@ var searchData=
   ['part2after_1198',['Part2After',['../structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#a7b1689236c1ae5b422bd586b56059914',1,'llama::mapping::internal::PartitionFoldOpImpl']]],
   ['part2before_1199',['Part2Before',['../structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#aa0a824402a1e259326fbeb52e9545776',1,'llama::mapping::internal::PartitionFoldOpImpl']]],
   ['partitionfoldop_1200',['PartitionFoldOp',['../namespacellama_1_1mapping_1_1internal.html#a580e552437b8ec7bdbbfbd737ecc175d',1,'llama::mapping::internal']]],
-  ['pointer_1201',['pointer',['../structllama_1_1ArrayIndexIterator.html#ae9bac80dbbaa4896e146b58fdefdf4a2',1,'llama::ArrayIndexIterator::pointer()'],['../structllama_1_1Iterator.html#a72dda896ba4ad13eea5ff8ecd3728f0c',1,'llama::Iterator::pointer()']]],
+  ['pointer_1201',['pointer',['../structllama_1_1ArrayIndexIterator.html#ae9bac80dbbaa4896e146b58fdefdf4a2',1,'llama::ArrayIndexIterator::pointer()'],['../structllama_1_1Iterator.html#affb1d5d1049931f294f463805f5010bc',1,'llama::Iterator::pointer()']]],
   ['popfront_1202',['PopFront',['../namespacellama.html#a25d8302ec14d00c68dd886d296a1373d',1,'llama']]]
 ];

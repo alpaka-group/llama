@@ -112,8 +112,8 @@ var hierarchy =
     [ "llama::mapping::LinearizeArrayDimsCpp", "structllama_1_1mapping_1_1LinearizeArrayDimsCpp.html", null ],
     [ "llama::mapping::LinearizeArrayDimsFortran", "structllama_1_1mapping_1_1LinearizeArrayDimsFortran.html", null ],
     [ "llama::mapping::LinearizeArrayDimsMorton", "structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html", null ],
-    [ "llama::VirtualRecord< TView, TBoundRecordCoord, OwnView >::Loader", "structllama_1_1VirtualRecord_1_1Loader.html", null ],
-    [ "llama::VirtualRecord< TView, TBoundRecordCoord, OwnView >::LoaderConst", "structllama_1_1VirtualRecord_1_1LoaderConst.html", null ],
+    [ "llama::RecordRef< TView, TBoundRecordCoord, OwnView >::Loader", "structllama_1_1RecordRef_1_1Loader.html", null ],
+    [ "llama::RecordRef< TView, TBoundRecordCoord, OwnView >::LoaderConst", "structllama_1_1RecordRef_1_1LoaderConst.html", null ],
     [ "make_unsigned", null, [
       [ "llama::mapping::internal::MakeUnsigned< T, SFINAE >", "structllama_1_1mapping_1_1internal_1_1MakeUnsigned.html", null ],
       [ "llama::mapping::internal::MakeUnsigned< T, std::enable_if_t< std::is_enum_v< T > > >", "structllama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__enum__v_3_01T_01_4_01_4_01_4.html", null ]
@@ -135,7 +135,7 @@ var hierarchy =
     [ "llama::mapping::tree::functor::MoveRTDown< TreeCoord, Amount >", "structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown.html", null ],
     [ "boost::mp11::detail::mp_flatten_impl< L2 >", "structboost_1_1mp11_1_1detail_1_1mp__flatten__impl.html", null ],
     [ "mp_size", null, [
-      [ "std::tuple_size< llama::VirtualRecord< View, BoundRecordCoord, OwnView > >", "structstd_1_1tuple__size_3_01llama_1_1VirtualRecord_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html", null ]
+      [ "std::tuple_size< llama::RecordRef< View, BoundRecordCoord, OwnView > >", "structstd_1_1tuple__size_3_01llama_1_1RecordRef_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html", null ]
     ] ],
     [ "llama::internal::mp_unwrap_values_into_impl< FromList, ToList >", "structllama_1_1internal_1_1mp__unwrap__values__into__impl.html", null ],
     [ "llama::internal::mp_unwrap_values_into_impl< FromList< Values... >, ToList >", "structllama_1_1internal_1_1mp__unwrap__values__into__impl_3_01FromList_3_01Values_8_8_8_01_4_00_01ToList_01_4.html", null ],
@@ -169,8 +169,9 @@ var hierarchy =
     [ "llama::Record< Fields >", "structllama_1_1Record.html", null ],
     [ "llama::RecordCoord< Coords >", "structllama_1_1RecordCoord.html", null ],
     [ "llama::RecordCoord<>", "structllama_1_1RecordCoord_3_4.html", null ],
+    [ "llama::RecordRef< TView, TBoundRecordCoord, OwnView >", "structllama_1_1RecordRef.html", null ],
     [ "llama::internal::ReferenceTo< T, typename >", "structllama_1_1internal_1_1ReferenceTo.html", null ],
-    [ "llama::internal::ReferenceTo< T, std::enable_if_t< is_VirtualRecord< T > &&!is_One< T > > >", "structllama_1_1internal_1_1ReferenceTo_3_01T_00_01std_1_1enable__if__t_3_01is__VirtualRecord_3_0c38ae29a40d3cf0bf09e0d36917a1cec.html", null ],
+    [ "llama::internal::ReferenceTo< T, std::enable_if_t< is_RecordRef< T > &&!is_One< T > > >", "structllama_1_1internal_1_1ReferenceTo_3_01T_00_01std_1_1enable__if__t_3_01is__RecordRef_3_01T_02d33164bb39d0262029d90bd66129e01.html", null ],
     [ "llama::internal::ReferenceTo< T, std::enable_if_t< isProxyReference< T > > >", "structllama_1_1internal_1_1ReferenceTo_3_01T_00_01std_1_1enable__if__t_3_01isProxyReference_3_01T_01_4_01_4_01_4.html", null ],
     [ "llama::internal::ReplacePlaceholdersImpl< E, Args >", "structllama_1_1internal_1_1ReplacePlaceholdersImpl.html", null ],
     [ "llama::internal::ReplacePlaceholdersImpl< boost::mp11::mp_arg< I >, Args... >", "structllama_1_1internal_1_1ReplacePlaceholdersImpl_3_01boost_1_1mp11_1_1mp__arg_3_01I_01_4_00_01Args_8_8_8_01_4.html", null ],
@@ -202,12 +203,12 @@ var hierarchy =
     [ "llama::Tuple< RestElements... >", "structllama_1_1Tuple.html", [
       [ "llama::Tuple< TFirstElement, RestElements... >", "structllama_1_1Tuple_3_01TFirstElement_00_01RestElements_8_8_8_01_4.html", null ]
     ] ],
-    [ "std::tuple_element< I, const llama::VirtualRecord< View, BoundRecordCoord, OwnView > >", "structstd_1_1tuple__element_3_01I_00_01const_01llama_1_1VirtualRecord_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html", null ],
+    [ "std::tuple_element< I, const llama::RecordRef< View, BoundRecordCoord, OwnView > >", "structstd_1_1tuple__element_3_01I_00_01const_01llama_1_1RecordRef_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html", null ],
     [ "std::tuple_element< I, llama::Array< T, N > >", "structstd_1_1tuple__element_3_01I_00_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html", null ],
     [ "std::tuple_element< I, llama::ArrayExtents< SizeType, Sizes... > >", "structstd_1_1tuple__element_3_01I_00_01llama_1_1ArrayExtents_3_01SizeType_00_01Sizes_8_8_8_01_4_01_4.html", null ],
     [ "std::tuple_element< I, llama::ArrayIndex< V, N > >", "structstd_1_1tuple__element_3_01I_00_01llama_1_1ArrayIndex_3_01V_00_01N_01_4_01_4.html", null ],
+    [ "std::tuple_element< I, llama::RecordRef< View, BoundRecordCoord, OwnView > >", "structstd_1_1tuple__element_3_01I_00_01llama_1_1RecordRef_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html", null ],
     [ "std::tuple_element< I, llama::Tuple< Elements... > >", "structstd_1_1tuple__element_3_01I_00_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html", null ],
-    [ "std::tuple_element< I, llama::VirtualRecord< View, BoundRecordCoord, OwnView > >", "structstd_1_1tuple__element_3_01I_00_01llama_1_1VirtualRecord_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html", null ],
     [ "std::tuple_size< llama::Tuple< Elements... > >", "structstd_1_1tuple__size_3_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html", null ],
     [ "llama::internal::TupleLeaf< I, T, bool >", "structllama_1_1internal_1_1TupleLeaf.html", null ],
     [ "llama::internal::TupleLeaf< 1+sizeof...(RestElements), TFirstElement >", "structllama_1_1internal_1_1TupleLeaf.html", [
@@ -220,7 +221,7 @@ var hierarchy =
     [ "llama::internal::ValueOf< T, typename >", "structllama_1_1internal_1_1ValueOf.html", null ],
     [ "llama::internal::ValueOf< Reference >", "structllama_1_1internal_1_1ValueOf.html", null ],
     [ "llama::internal::ValueOf< T & >", "structllama_1_1internal_1_1ValueOf_3_01T_01_6_01_4.html", null ],
-    [ "llama::internal::ValueOf< T, std::enable_if_t< is_VirtualRecord< T > > >", "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01is__VirtualRecord_3_01T_01_4_01_4_01_4.html", null ],
+    [ "llama::internal::ValueOf< T, std::enable_if_t< is_RecordRef< T > > >", "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01is__RecordRef_3_01T_01_4_01_4_01_4.html", null ],
     [ "llama::internal::ValueOf< T, std::enable_if_t< isProxyReference< T > > >", "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01isProxyReference_3_01T_01_4_01_4_01_4.html", null ],
     [ "llama::bloballoc::Vector", "structllama_1_1bloballoc_1_1Vector.html", null ],
     [ "llama::Vector< Mapping >", "structllama_1_1Vector.html", null ],
@@ -234,7 +235,6 @@ var hierarchy =
       [ "llama::mapping::internal::BitPackedFloatRef< Float, StoredIntegralPointer, VHExp, VHMan, SizeType >", "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html", null ]
     ] ],
     [ "llama::View< TMapping, BlobType >", "structllama_1_1View.html", null ],
-    [ "llama::VirtualRecord< TView, TBoundRecordCoord, OwnView >", "structllama_1_1VirtualRecord.html", null ],
     [ "llama::VirtualView< TStoredParentView >", "structllama_1_1VirtualView.html", null ],
     [ "llama::mapping::tree::internal::WrapInNNodes< Leaf, Count >", "structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes.html", null ],
     [ "llama::mapping::tree::internal::WrapInNNodes< Leaf, 0 >", "structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes_3_01Leaf_00_010_01_4.html", null ]

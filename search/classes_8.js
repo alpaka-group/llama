@@ -9,6 +9,6 @@ var searchData=
   ['linearizearraydimscpp_695',['LinearizeArrayDimsCpp',['../structllama_1_1mapping_1_1LinearizeArrayDimsCpp.html',1,'llama::mapping']]],
   ['linearizearraydimsfortran_696',['LinearizeArrayDimsFortran',['../structllama_1_1mapping_1_1LinearizeArrayDimsFortran.html',1,'llama::mapping']]],
   ['linearizearraydimsmorton_697',['LinearizeArrayDimsMorton',['../structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html',1,'llama::mapping']]],
-  ['loader_698',['Loader',['../structllama_1_1VirtualRecord_1_1Loader.html',1,'llama::VirtualRecord']]],
-  ['loaderconst_699',['LoaderConst',['../structllama_1_1VirtualRecord_1_1LoaderConst.html',1,'llama::VirtualRecord']]]
+  ['loader_698',['Loader',['../structllama_1_1RecordRef_1_1Loader.html',1,'llama::RecordRef']]],
+  ['loaderconst_699',['LoaderConst',['../structllama_1_1RecordRef_1_1LoaderConst.html',1,'llama::RecordRef']]]
 ];

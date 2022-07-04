@@ -15,7 +15,7 @@ var searchData=
   ['constexpr_5fsearch_882',['constexpr_search',['../namespacellama_1_1internal.html#ad444679bd1aafdc6d907e329cae57860',1,'llama::internal']]],
   ['constructfields_883',['constructFields',['../namespacellama.html#a0294f7d0aa47fdf5f11075cc8d92d0f8',1,'llama']]],
   ['copy_884',['copy',['../namespacellama.html#ab67a5448cc031309dc1aa8580b7d4950',1,'llama']]],
-  ['copyvirtualrecordstack_885',['copyVirtualRecordStack',['../namespacellama.html#a8183deaf1069415900815fd9f2f1e373',1,'llama']]],
+  ['copyrecord_885',['copyRecord',['../namespacellama.html#a4fca680f97ca52a42cd74519e6347395',1,'llama']]],
   ['countandidenttostring_886',['countAndIdentToString',['../namespacellama_1_1mapping_1_1tree_1_1internal.html#a0f5840fc793fb073e78d7801f57ec9e9',1,'llama::mapping::tree::internal']]],
   ['createchildren_887',['createChildren',['../structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement_3_01Tag_00_01ChildType_0fCount_0e_00_01CountType_01_4.html#ae551ba2c29a3b074c6ec0f646d826350',1,'llama::mapping::tree::internal::CreateTreeElement&lt; Tag, ChildType[Count], CountType &gt;']]],
   ['createtree_888',['createTree',['../namespacellama_1_1mapping_1_1tree.html#adaaaf6bd620fdbc2042f2c1d68cd96ea',1,'llama::mapping::tree']]],

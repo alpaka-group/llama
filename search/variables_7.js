@@ -1,9 +1,9 @@
 var searchData=
 [
   ['is_5fone_1053',['is_One',['../namespacellama.html#a60e664cfed9ce1d9d1c5b4c59464cdb6',1,'llama']]],
-  ['is_5fone_3c_20virtualrecord_3c_20view_2c_20boundrecordcoord_2c_20true_20_3e_20_3e_1054',['is_One&lt; VirtualRecord&lt; View, BoundRecordCoord, true &gt; &gt;',['../namespacellama.html#a263a1c987e4c6a1330ae47f0c40fa416',1,'llama']]],
-  ['is_5fvirtualrecord_1055',['is_VirtualRecord',['../namespacellama.html#ad46854783d9c1cfa01ab277dbc5b5de8',1,'llama']]],
-  ['is_5fvirtualrecord_3c_20virtualrecord_3c_20view_2c_20boundrecordcoord_2c_20ownview_20_3e_20_3e_1056',['is_VirtualRecord&lt; VirtualRecord&lt; View, BoundRecordCoord, OwnView &gt; &gt;',['../namespacellama.html#a9c9e2ef4bd6659e881e281fdaced37ef',1,'llama']]],
+  ['is_5fone_3c_20recordref_3c_20view_2c_20boundrecordcoord_2c_20true_20_3e_20_3e_1054',['is_One&lt; RecordRef&lt; View, BoundRecordCoord, true &gt; &gt;',['../namespacellama.html#aa7d2ea8fb695e49dddef62709b18ba10',1,'llama']]],
+  ['is_5frecordref_1055',['is_RecordRef',['../namespacellama.html#a6d94d4ed47ea3a92cc388f6a15f55432',1,'llama']]],
+  ['is_5frecordref_3c_20recordref_3c_20view_2c_20boundrecordcoord_2c_20ownview_20_3e_20_3e_1056',['is_RecordRef&lt; RecordRef&lt; View, BoundRecordCoord, OwnView &gt; &gt;',['../namespacellama.html#a3b47fd4ebc9642fdca57d9f8568b5ef2',1,'llama']]],
   ['isallowedfieldtype_1057',['isAllowedFieldType',['../namespacellama.html#acca32b49e2be7c3c136e940939c531ae',1,'llama']]],
   ['isaos_1058',['isAoS',['../namespacellama_1_1mapping.html#a8ccdc77397e087a2a223e32b544006fa',1,'llama::mapping']]],
   ['isaos_3c_20aos_3c_20arrayextents_2c_20recorddim_2c_20alignandpad_2c_20linearizearraydimsfunctor_2c_20flattenrecorddim_20_3e_20_3e_1059',['isAoS&lt; AoS&lt; ArrayExtents, RecordDim, AlignAndPad, LinearizeArrayDimsFunctor, FlattenRecordDim &gt; &gt;',['../namespacellama_1_1mapping.html#af3c0dd9c619fcff7196da0a6ec08d1d0',1,'llama::mapping']]],

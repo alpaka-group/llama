@@ -25,6 +25,6 @@ var structllama_1_1View =
     [ "operator[]", "structllama_1_1View.html#a3f2d64305b367d492c5a33856160c26c", null ],
     [ "operator[]", "structllama_1_1View.html#a56d89e1b5ab3a144a72bb44bf756a8ec", null ],
     [ "operator[]", "structllama_1_1View.html#a730b39406c05ffba9e4f788f4195fd3f", null ],
-    [ "VirtualRecord", "structllama_1_1View.html#a73c6031066ac874a71c88cebb181a06c", null ],
+    [ "RecordRef", "structllama_1_1View.html#ac9e9cf8bf6a130ba0fb6dcfd0be19709", null ],
     [ "storageBlobs", "structllama_1_1View.html#a176b21d204881a89dc8488e62fcb8dd6", null ]
 ];

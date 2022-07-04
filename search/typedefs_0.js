@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['accessiblerecorddim_1130',['AccessibleRecordDim',['../structllama_1_1VirtualRecord.html#a2aa28a81ab488e17158b4c98d34d28f3',1,'llama::VirtualRecord']]],
+  ['accessiblerecorddim_1130',['AccessibleRecordDim',['../structllama_1_1RecordRef.html#a223e50b0deb646b9c71811296b235d9d',1,'llama::RecordRef']]],
   ['alignedaos_1131',['AlignedAoS',['../namespacellama_1_1mapping.html#a3695faa8a6c5702ee9de9fda033d5fc1',1,'llama::mapping']]],
   ['alignedone_1132',['AlignedOne',['../namespacellama_1_1mapping.html#a5abb72fb758db92b6d6f92b624788338',1,'llama::mapping']]],
   ['alignedsingleblobsoa_1133',['AlignedSingleBlobSoA',['../namespacellama_1_1mapping.html#a39ee3bd4146afeba314a257074e2237e',1,'llama::mapping']]],

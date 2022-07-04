@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['virtualrecord_1245',['VirtualRecord',['../structllama_1_1View.html#a73c6031066ac874a71c88cebb181a06c',1,'llama::View']]]
+  ['swap_1245',['swap',['../structllama_1_1RecordRef.html#ae2d91aa2202932f93e1bf2f014ca7437',1,'llama::RecordRef::swap()'],['../structllama_1_1Vector.html#a83f69184d753889d37b68b9169a34113',1,'llama::Vector::swap()']]]
 ];
