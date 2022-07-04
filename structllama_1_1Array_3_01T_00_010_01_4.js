@@ -3,6 +3,8 @@ var structllama_1_1Array_3_01T_00_010_01_4 =
     [ "value_type", "structllama_1_1Array_3_01T_00_010_01_4.html#a1efa9138d873ccd7ea49c2d60b8f1bde", null ],
     [ "begin", "structllama_1_1Array_3_01T_00_010_01_4.html#afc6a6c833cdc85ea2e92affd3d9ef8bd", null ],
     [ "begin", "structllama_1_1Array_3_01T_00_010_01_4.html#a9952cac7a0797922d5d2db281c55dd35", null ],
+    [ "data", "structllama_1_1Array_3_01T_00_010_01_4.html#a62c079f22672a7b042bc5694d11e1e8e", null ],
+    [ "data", "structllama_1_1Array_3_01T_00_010_01_4.html#a23b81ef26990eb569e6de47fdcce7e7f", null ],
     [ "empty", "structllama_1_1Array_3_01T_00_010_01_4.html#abe7d3aeee8f68b3a8aa94dac44ae1d73", null ],
     [ "end", "structllama_1_1Array_3_01T_00_010_01_4.html#a94c4d7a815cd5d4a18e7903584f22299", null ],
     [ "end", "structllama_1_1Array_3_01T_00_010_01_4.html#a76b2e4500d706b9218674858442b5587", null ],

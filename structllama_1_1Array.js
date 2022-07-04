@@ -5,6 +5,8 @@ var structllama_1_1Array =
     [ "back", "structllama_1_1Array.html#ae62482909e05847ecbca0f5077a29132", null ],
     [ "begin", "structllama_1_1Array.html#a23daa97b399455f659f57512aaf59eb2", null ],
     [ "begin", "structllama_1_1Array.html#ac650608d5cae226a669b00005e6a7c2c", null ],
+    [ "data", "structllama_1_1Array.html#aac212f44b09bef91a0a44f39abb2377a", null ],
+    [ "data", "structllama_1_1Array.html#ac712290289d93eb6736d03579f846cc6", null ],
     [ "empty", "structllama_1_1Array.html#a8fe388fdeca8ea27485333ff00b8b1f5", null ],
     [ "end", "structllama_1_1Array.html#a84bc834840cc6b3ff49a405326fd729a", null ],
     [ "end", "structllama_1_1Array.html#a66793ca523fda5798f6173d608621643", null ],
