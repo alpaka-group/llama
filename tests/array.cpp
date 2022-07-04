@@ -24,6 +24,44 @@ TEST_CASE("Array.back")
     CHECK(a == llama::Array{1, 2, 4});
 }
 
+TEST_CASE("Array.begin")
+{
+    llama::Array a{1, 2, 3};
+    // NOLINTNEXTLINE(readability-container-data-pointer)
+    CHECK(a.begin() == &a[0]);
+    CHECK(*a.begin() == 1);
+    CHECK(llama::Array<int, 0>{}.begin() == nullptr);
+}
+
+TEST_CASE("Array.range_for")
+{
+    llama::Array a{1, 2, 3};
+    int i = 1;
+    for(auto e : a)
+    {
+        CHECK(e == i);
+        i++;
+    }
+}
+
+TEST_CASE("Array.end")
+{
+    llama::Array a{1, 2, 3};
+    CHECK(a.end() == &a[3]);
+    CHECK(llama::Array<int, 0>{}.end() == nullptr);
+}
+
+TEST_CASE("Array.data")
+{
+    llama::Array a{1, 2, 3};
+    // NOLINTNEXTLINE(readability-container-data-pointer)
+    CHECK(a.data() == &a[0]);
+    CHECK(a.begin()[0] == 1);
+    CHECK(a.begin()[1] == 2);
+    CHECK(a.begin()[2] == 3);
+    CHECK(llama::Array<int, 0>{}.data() == nullptr);
+}
+
 TEST_CASE("Array.operator<<")
 {
     auto put = [](auto array)
