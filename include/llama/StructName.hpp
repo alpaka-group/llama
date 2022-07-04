@@ -336,4 +336,10 @@ namespace llama
         constexpr auto& value = internal::recordCoordTagsStorage<RecordDim, Coords...>;
         return std::string_view{&value[0], value.size()};
     }
+
+    template<typename RecordDim>
+    constexpr auto recordCoordTags(RecordCoord<>) -> std::string_view
+    {
+        return {};
+    }
 } // namespace llama

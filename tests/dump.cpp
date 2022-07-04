@@ -43,6 +43,11 @@ TEST_CASE("dump.different_extents")
     CHECK(refHtml == llama::toHtml(mapping4));
 }
 
+TEST_CASE("dump.int")
+{
+    dump(llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<std::size_t, 1>, int>{{32}});
+}
+
 TEST_CASE("dump.Particle.AoS_Aligned")
 {
     dump(llama::mapping::AlignedAoS<ArrayExtents, Particle>{extents});
