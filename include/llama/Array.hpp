@@ -81,6 +81,16 @@ namespace llama
             return element[idx];
         }
 
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto data() -> T*
+        {
+            return &element[0];
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto data() const -> const T*
+        {
+            return &element[0];
+        }
+
         LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator==(const Array& a, const Array& b) -> bool
         {
             for(std::size_t i = 0; i < N; ++i)
@@ -146,6 +156,16 @@ namespace llama
         }
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto end() const -> const T*
+        {
+            return nullptr;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto data() -> T*
+        {
+            return nullptr;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto data() const -> const T*
         {
             return nullptr;
         }
