@@ -4599,6 +4599,12 @@ namespace llama
 	        constexpr auto& value = internal::recordCoordTagsStorage<RecordDim, Coords...>;
 	        return std::string_view{&value[0], value.size()};
 	    }
+
+	    template<typename RecordDim>
+	    constexpr auto recordCoordTags(RecordCoord<>) -> std::string_view
+	    {
+	        return {};
+	    }
 	} // namespace llama
 	// ==
 	// == ./StructName.hpp ==
@@ -8253,7 +8259,7 @@ namespace llama
             ArrayIndex arrayIndex;
             std::vector<std::size_t> recordCoord;
             std::string_view recordTags;
-            NrAndOffset<typename ArrayIndex::value_type> nrAndOffset;
+            NrAndOffset<std::size_t> nrAndOffset;
             std::size_t size;
         };
 
@@ -8360,12 +8366,15 @@ namespace llama
                         if constexpr(llama::isComputed<Mapping, decltype(rc)>)
                             boxesFromComputedField(view.value(), ai, rc, infos);
                         else
+                        {
+                            const auto [nr, off] = mapping.blobNrAndOffset(ai, rc);
                             infos.push_back(
                                 {ai,
                                  internal::toVec(rc),
                                  recordCoordTags<RecordDim>(rc),
-                                 mapping.blobNrAndOffset(ai, rc),
+                                 {static_cast<std::size_t>(nr), static_cast<std::size_t>(off)},
                                  sizeof(Type)});
+                        }
                     });
 
             return infos;
