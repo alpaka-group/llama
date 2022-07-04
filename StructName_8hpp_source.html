@@ -423,7 +423,13 @@ $(document).ready(function(){initNavTree('StructName_8hpp_source.html',''); init
 <div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        constexpr <span class="keyword">auto</span>&amp; value = <a class="code" href="namespacellama_1_1internal.html#aadb89628e7b37c78df955928a1934c00">internal::recordCoordTagsStorage</a>&lt;RecordDim, Coords...&gt;;</div>
 <div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;        <span class="keywordflow">return</span> std::string_view{&amp;value[0], value.size()};</div>
 <div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;    }</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;} <span class="comment">// namespace llama</span></div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160; </div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> RecordDim&gt;</div>
+<div class="line"><a name="l00341"></a><span class="lineno"><a class="line" href="namespacellama.html#ad4229fbc3f0a63b19c56b256991a4762">  341</a></span>&#160;    constexpr <span class="keyword">auto</span> <a class="code" href="namespacellama.html#a3d23cdc7e16d96e5d627ef1b15e6c4af">recordCoordTags</a>(<a class="code" href="structllama_1_1RecordCoord_3_4.html">RecordCoord&lt;&gt;</a>) -&gt; std::string_view</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;    {</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;        <span class="keywordflow">return</span> {};</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;    }</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;} <span class="comment">// namespace llama</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="anamespacellama_html"><div class="ttname"><a href="namespacellama.html">llama</a></div><div class="ttdef"><b>Definition:</b> <a href="Array_8hpp_source.html#l00011">Array.hpp:11</a></div></div>
@@ -432,6 +438,7 @@ $(document).ready(function(){initNavTree('StructName_8hpp_source.html',''); init
 <div class="ttc" id="anamespacellama_1_1internal_html_aadb89628e7b37c78df955928a1934c00"><div class="ttname"><a href="namespacellama_1_1internal.html#aadb89628e7b37c78df955928a1934c00">llama::internal::recordCoordTagsStorage</a></div><div class="ttdeci">constexpr auto recordCoordTagsStorage</div><div class="ttdef"><b>Definition:</b> <a href="StructName_8hpp_source.html#l00272">StructName.hpp:272</a></div></div>
 <div class="ttc" id="astructllama_1_1Array_html_aa20a497723e6189dfaf7145ddc256534"><div class="ttname"><a href="structllama_1_1Array.html#aa20a497723e6189dfaf7145ddc256534">llama::Array::size</a></div><div class="ttdeci">constexpr auto size() const</div><div class="ttdef"><b>Definition:</b> <a href="Array_8hpp_source.html#l00022">Array.hpp:22</a></div></div>
 <div class="ttc" id="anamespacellama_1_1internal_html_a32808c34947a5a5be5e1f677a50e64e4"><div class="ttname"><a href="namespacellama_1_1internal.html#a32808c34947a5a5be5e1f677a50e64e4">llama::internal::structNameStorage</a></div><div class="ttdeci">constexpr auto structNameStorage</div><div class="ttdef"><b>Definition:</b> <a href="StructName_8hpp_source.html#l00214">StructName.hpp:214</a></div></div>
+<div class="ttc" id="astructllama_1_1RecordCoord_3_4_html"><div class="ttname"><a href="structllama_1_1RecordCoord_3_4.html">llama::RecordCoord&lt;&gt;</a></div><div class="ttdef"><b>Definition:</b> <a href="RecordCoord_8hpp_source.html#l00028">RecordCoord.hpp:28</a></div></div>
 <div class="ttc" id="amacros_8hpp_html_a0df9a6bf4db1561110a18783a7276900"><div class="ttname"><a href="macros_8hpp.html#a0df9a6bf4db1561110a18783a7276900">LLAMA_HOST_ACC</a></div><div class="ttdeci">#define LLAMA_HOST_ACC</div><div class="ttdef"><b>Definition:</b> <a href="macros_8hpp_source.html#l00077">macros.hpp:77</a></div></div>
 <div class="ttc" id="anamespacellama_html_a4a4fd33218cce7b2e592486d80f2ae90"><div class="ttname"><a href="namespacellama.html#a4a4fd33218cce7b2e592486d80f2ae90">llama::GetTags</a></div><div class="ttdeci">typename internal::GetTagsImpl&lt; RecordDim, RecordCoord &gt;::type GetTags</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00119">Core.hpp:119</a></div></div>
 <div class="ttc" id="anamespacellama_1_1internal_html_ad4195dfa3069a0e4cc1d15e13175cc88"><div class="ttname"><a href="namespacellama_1_1internal.html#ad4195dfa3069a0e4cc1d15e13175cc88">llama::internal::intToStrSize</a></div><div class="ttdeci">constexpr auto intToStrSize(std::size_t s)</div><div class="ttdef"><b>Definition:</b> <a href="StructName_8hpp_source.html#l00263">StructName.hpp:263</a></div></div>
@@ -451,7 +458,7 @@ $(document).ready(function(){initNavTree('StructName_8hpp_source.html',''); init
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="StructName_8hpp.html">StructName.hpp</a></li>
-    <li class="footer">Generated on Mon Jul 4 2022 15:59:00 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Jul 4 2022 19:27:06 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"structllama_1_1mapping_1_1ChangeType.html#a4403970f14c2c2ca72126adbecef6b80":[2,0,1,2,17,4],
 "structllama_1_1mapping_1_1ChangeType.html#a5957375d77f5dd80d13e023700fe1fb9":[2,0,1,2,17,2],
 "structllama_1_1mapping_1_1ChangeType.html#a6ccdff0f50214b707140e6bc5926ef02":[2,0,1,2,17,3],
 "structllama_1_1mapping_1_1ChangeType.html#aa169402baccbd7cd5aa29a0c96713d98":[2,0,1,2,17,6],
