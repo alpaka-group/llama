@@ -5658,6 +5658,38 @@ namespace llama::mapping
         CountType writes;
     };
 
+    namespace internal
+    {
+        template<typename Value, typename Ref, typename Count>
+        struct TraceReference : ProxyRefOpMixin<TraceReference<Value, Ref, Count>, Value>
+        {
+            using value_type = Value;
+
+            Ref r;
+            AccessCounts<Count>* hits;
+
+            LLAMA_FN_HOST_ACC_INLINE auto operator=(const TraceReference& ref) -> TraceReference&
+            {
+                internal::atomicInc(hits->writes);
+                r = static_cast<value_type>(ref);
+                return *this;
+            }
+
+            LLAMA_FN_HOST_ACC_INLINE auto operator=(value_type value) -> TraceReference&
+            {
+                internal::atomicInc(hits->writes);
+                r = value;
+                return *this;
+            }
+
+            LLAMA_FN_HOST_ACC_INLINE operator value_type() const
+            {
+                internal::atomicInc(hits->reads);
+                return static_cast<value_type>(r);
+            }
+        };
+    } // namespace internal
+
     /// Forwards all calls to the inner mapping. Traces all accesses made through this mapping and allows printing a
     /// summary.
     /// /tparam Mapping The type of the inner mapping.
@@ -5708,34 +5740,18 @@ namespace llama::mapping
             RecordCoord<RecordCoords...> rc,
             Blobs& blobs) const -> decltype(auto)
         {
+            static_assert(
+                !std::is_const_v<Blobs>,
+                "Cannot access (even just reading) data through Trace from const blobs/view, since we need to write "
+                "the access counts");
+
             auto& hits = fieldHits(blobs)[+flatRecordCoord<RecordDim, RecordCoord<RecordCoords...>>];
-            auto&& ref = mapToMemory(inner(), ai, rc, blobs);
+            decltype(auto) ref = mapToMemory(inner(), ai, rc, blobs); // T& or proxy reference (value)
             if constexpr(MyCodeHandlesProxyReferences)
             {
-                using Ref = decltype(mapToMemory(inner(), ai, rc,
-                                                 blobs)); // T& or proxy reference
-                using VT = GetType<RecordDim, decltype(rc)>;
-                struct Reference : ProxyRefOpMixin<Reference, VT>
-                {
-                    using value_type = VT;
-
-                    Ref r;
-                    AccessCounts<CountType>* hits;
-
-                    LLAMA_FN_HOST_ACC_INLINE auto operator=(value_type t) -> Reference&
-                    {
-                        internal::atomicInc(hits->writes);
-                        r = t;
-                        return *this;
-                    }
-
-                    LLAMA_FN_HOST_ACC_INLINE operator value_type() const
-                    {
-                        internal::atomicInc(hits->reads);
-                        return static_cast<value_type>(r);
-                    }
-                };
-                return Reference{{}, std::forward<Ref>(ref), &hits};
+                using Value = GetType<RecordDim, decltype(rc)>;
+                using Ref = decltype(ref);
+                return internal::TraceReference<Value, Ref, CountType>{{}, std::forward<Ref>(ref), &hits};
             }
             else
             {
