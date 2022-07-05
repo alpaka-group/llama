@@ -151,6 +151,24 @@ Mass            10100        100
     run(llama::mapping::PackedSingleBlobSoA<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
 }
 
+TEST_CASE("Trace.assign_ref_to_ref")
+{
+    auto view = llama::allocView(
+        llama::mapping::Trace{llama::mapping::AoS<llama::ArrayExtents<int, 42>, ParticleHeatmap>{{}}});
+
+    view(0) = 1;
+
+    // assign proxy ref to proxy ref
+    view(1) = view(0);
+    CHECK((view(1) == 1));
+
+    // with some intermediate variables
+    auto pr = view(1);
+    auto pr2 = pr;
+    view(2) = pr2;
+    CHECK((view(2) == 1));
+}
+
 namespace
 {
     // note: string literal is broken into 2, because MSVC limits string literals to 16k chars
