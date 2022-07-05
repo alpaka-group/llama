@@ -13,5 +13,6 @@ var namespacellama_1_1mapping_1_1internal =
     [ "MakeUnsigned< T, std::enable_if_t< std::is_enum_v< T > > >", "structllama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__enum__v_3_01T_01_4_01_4_01_4.html", null ],
     [ "NullReference", "structllama_1_1mapping_1_1internal_1_1NullReference.html", "structllama_1_1mapping_1_1internal_1_1NullReference" ],
     [ "PartionedRecordDim", "structllama_1_1mapping_1_1internal_1_1PartionedRecordDim.html", "structllama_1_1mapping_1_1internal_1_1PartionedRecordDim" ],
-    [ "PartitionFoldOpImpl", "structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html", "structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl" ]
+    [ "PartitionFoldOpImpl", "structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html", "structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl" ],
+    [ "TraceReference", "structllama_1_1mapping_1_1internal_1_1TraceReference.html", "structllama_1_1mapping_1_1internal_1_1TraceReference" ]
 ];

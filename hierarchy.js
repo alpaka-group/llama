@@ -1,6 +1,7 @@
 var hierarchy =
 [
     [ "llama::mapping::AccessCounts< CountType >", "structllama_1_1mapping_1_1AccessCounts.html", null ],
+    [ "llama::mapping::AccessCounts< Count >", "structllama_1_1mapping_1_1AccessCounts.html", null ],
     [ "llama::bloballoc::AlignedAllocator< T, Alignment >", "structllama_1_1bloballoc_1_1AlignedAllocator.html", null ],
     [ "llama::Array< T, N >", "structllama_1_1Array.html", null ],
     [ "llama::Array< BlobType, Mapping::blobCount >", "structllama_1_1Array.html", null ],
@@ -95,11 +96,11 @@ var hierarchy =
       [ "llama::mapping::ChangeType< TArrayExtents, TRecordDim, InnerMapping, ReplacementMap >", "structllama_1_1mapping_1_1ChangeType.html", null ]
     ] ],
     [ "integral_constant", null, [
-      [ "std::tuple_size< llama::ArrayExtents< SizeType, Sizes... > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayExtents_3_01SizeType_00_01Sizes_8_8_8_01_4_01_4.html", null ],
-      [ "std::tuple_size< llama::ArrayIndex< V, N > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayIndex_3_01V_00_01N_01_4_01_4.html", null ]
+      [ "std::tuple_size< llama::Array< T, N > >", "structstd_1_1tuple__size_3_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html", null ]
     ] ],
     [ "integral_constant", null, [
-      [ "std::tuple_size< llama::Array< T, N > >", "structstd_1_1tuple__size_3_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html", null ]
+      [ "std::tuple_size< llama::ArrayExtents< SizeType, Sizes... > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayExtents_3_01SizeType_00_01Sizes_8_8_8_01_4_01_4.html", null ],
+      [ "std::tuple_size< llama::ArrayIndex< V, N > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayIndex_3_01V_00_01N_01_4_01_4.html", null ]
     ] ],
     [ "llama::mapping::internal::IsSelectedPredicate< RC >", "structllama_1_1mapping_1_1internal_1_1IsSelectedPredicate.html", null ],
     [ "llama::Iterator< View >", "structllama_1_1Iterator.html", null ],
@@ -164,6 +165,9 @@ var hierarchy =
     ] ],
     [ "llama::ProxyRefOpMixin< ScopedUpdate< Reference >, internal::ValueOf< Reference >::type >", "structllama_1_1ProxyRefOpMixin.html", [
       [ "llama::ScopedUpdate< Reference, std::enable_if_t< std::is_fundamental_v< typename internal::ValueOf< Reference >::type > > >", "structllama_1_1ScopedUpdate_3_01Reference_00_01std_1_1enable__if__t_3_01std_1_1is__fundamental__e14f71eb64730a69a1b74dea5c5f8b59.html", null ]
+    ] ],
+    [ "llama::ProxyRefOpMixin< TraceReference< Value, Ref, Count >, Value >", "structllama_1_1ProxyRefOpMixin.html", [
+      [ "llama::mapping::internal::TraceReference< Value, Ref, Count >", "structllama_1_1mapping_1_1internal_1_1TraceReference.html", null ]
     ] ],
     [ "llama::bloballoc::AlignedAllocator< T, Alignment >::rebind< T2 >", "structllama_1_1bloballoc_1_1AlignedAllocator_1_1rebind.html", null ],
     [ "llama::Record< Fields >", "structllama_1_1Record.html", null ],
