@@ -149,7 +149,7 @@ jobs:
             cuda_url: https://developer.download.nvidia.com/compute/cuda/11.6.2/local_installers/cuda_11.6.2_510.47.03_linux.run
           - name: build-ubuntu-gcc11-cuda11.7
             cxx: g++-11
-            cuda_url: https://developer.download.nvidia.com/compute/cuda/11.7.0/local_installers/cuda_11.7.0_515.43.04_linux.run
+            cuda_url: https://developer.download.nvidia.com/compute/cuda/11.7.1/local_installers/cuda_11.7.1_515.65.01_linux.run
           - name: build-ubuntu-gcc12
             cxx: g++-12
             install_extra: g++-12
