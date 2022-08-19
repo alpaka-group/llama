@@ -262,32 +262,35 @@ jobs:
         include:
           - name: build-windows-VS2022
             runs-on: windows-2022
+    defaults:
+      run:
+        shell: bash
 
     steps:
     - uses: actions/checkout@v2
     - name: vcpkg install dependencies
       run: |
-        vcpkg install $env:VCPKG_INSTALL_LIST.split(' ')
+        vcpkg install $VCPKG_INSTALL_LIST
     - name: install alpaka
       run: |
-        git clone --branch $env:ALPAKA_BRANCH --depth 1 https://github.com/alpaka-group/alpaka.git
+        git clone --branch $ALPAKA_BRANCH --depth 1 https://github.com/alpaka-group/alpaka.git
         mkdir alpaka/build
         cd alpaka/build
-        cmake .. "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
-        cmake --install . --config $env:CONFIG
+        cmake .. -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
+        cmake --install . --config $CONFIG
     - name: cmake
       run: |
         mkdir build
         cd build
-        cmake .. -DBUILD_TESTING=ON `
-                 -DLLAMA_BUILD_EXAMPLES=ON `
-                 -Dalpaka_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON `
-                 -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
+        cmake .. -DBUILD_TESTING=ON \
+                 -DLLAMA_BUILD_EXAMPLES=ON \
+                 -Dalpaka_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON \
+                 -DCMAKE_TOOLCHAIN_FILE="$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
     - name: build tests + examples
-      run: cmake --build build -j $env:THREADS --config $env:CONFIG
+      run: cmake --build build -j $THREADS --config $CONFIG
     - name: run tests
       run: |
-        & build/$env:CONFIG/tests
+        build/$CONFIG/tests
 
   build-macos:
     runs-on: ${{ matrix.os }}
