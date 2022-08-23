@@ -237,8 +237,10 @@ TEST_CASE("ranges")
         }
 
         std::vector<int> v;
-        for(auto y : view | std::views::filter([](auto vd) { return vd(tag::X{}) % 10 == 0; })
-                | std::views::transform([](auto vd) { return vd(tag::Y{}); }) | std::views::take(2))
+        // BUG: MSVC errors when we put the range expression below directly into the for loop
+        auto range = view | std::views::filter([](auto vd) { return vd(tag::X{}) % 10 == 0; })
+            | std::views::transform([](auto vd) { return vd(tag::Y{}); }) | std::views::take(2);
+        for(auto y : range)
             v.push_back(y);
         CHECK(v == std::vector<int>{11, 41});
     };
