@@ -36,6 +36,8 @@
 			        _Pragma("ivdep") _Pragma("clang loop vectorize(assume_safety) interleave(assume_safety)")
 			#elif defined(__clang__)
 			#    define LLAMA_INDEPENDENT_DATA _Pragma("clang loop vectorize(assume_safety) interleave(assume_safety)")
+			#elif defined(__NVCOMPILER)
+			#    define LLAMA_INDEPENDENT_DATA _Pragma("ivdep")
 			#elif defined(__GNUC__)
 			#    define LLAMA_INDEPENDENT_DATA _Pragma("GCC ivdep")
 			#elif defined(_MSC_VER)
@@ -71,7 +73,7 @@
 			#endif
 
 			#ifndef LLAMA_UNROLL
-			#    if defined(__NVCC__) || defined(__clang__) || defined(__INTEL_LLVM_COMPILER)
+			#    if defined(__NVCC__) || defined(__NVCOMPILER) || defined(__clang__) || defined(__INTEL_LLVM_COMPILER)
 			#        define LLAMA_UNROLL(...) LLAMA_PRAGMA(unroll __VA_ARGS__)
 			#    elif defined(__GNUG__)
 			#        define LLAMA_UNROLL(...) LLAMA_PRAGMA(GCC unroll __VA_ARGS__)
@@ -1735,7 +1737,7 @@
 	#if __has_include(<version>)
 	#    include <version>
 	#    if defined(__cpp_concepts) && defined(__cpp_lib_ranges) && (!defined(__clang__) || __clang_major__ >= 15)        \
-	        && !defined(__INTEL_LLVM_COMPILER) && (!defined(_MSC_VER) || _MSC_VER > 1932)
+	        && !defined(__INTEL_LLVM_COMPILER) && (!defined(_MSC_VER) || _MSC_VER > 1932) && !defined(__NVCOMPILER)
 	#        undef CAN_USE_RANGES
 	#        define CAN_USE_RANGES 1
 	#    endif
@@ -6882,8 +6884,10 @@ namespace llama::mapping
 	                    v |= (p[1] & mask) << bitsLoaded;
 	                }
 	                if constexpr(std::is_signed_v<Integral>)
+	                {
 	                    if(v & (StoredIntegral{1} << (VHBits::value() - 1)))
 	                        v |= ~StoredIntegral{0} << VHBits::value(); // sign extend
+	                }
 	                return static_cast<Integral>(v);
 	            }
 
@@ -8485,6 +8489,8 @@ plot $data matrix with image pixels axes x2y1
 #define LLAMA_VERSION_MINOR 4
 #define LLAMA_VERSION_PATCH 0
 
+// suppress warnings on missing return statements. we get a lot of these because nvcc/nvc++ have some troubles with if
+// constexpr.
 #ifdef __NVCC__
 #    pragma push
 #    ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
@@ -8492,6 +8498,10 @@ plot $data matrix with image pixels axes x2y1
 #    else
 #        pragma diag_suppress 940
 #    endif
+#endif
+#ifdef __NVCOMPILER
+#    pragma push
+#    pragma diag_suppress 941
 #endif
 
 // #include "ArrayExtents.hpp"    // amalgamate: file already expanded
@@ -8947,7 +8957,7 @@ plot $data matrix with image pixels axes x2y1
 // #include "mapping/Trace.hpp"    // amalgamate: file already expanded
 // #include "mapping/tree/Mapping.hpp"    // amalgamate: file already expanded
 
-#ifdef __NVCC__
+#if defined(__NVCC__) || defined(__NVCOMPILER)
 #    pragma pop
 #endif
 // ==
