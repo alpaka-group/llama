@@ -13,7 +13,7 @@ env:
   THREADS: 4
   CONFIG: RelWithDebInfo
   ALPAKA_BRANCH: 0.9.0
-  VCPKG_INSTALL: "vcpkg install fmt tinyobjloader boost-mp11 boost-atomic boost-smart-ptr boost-functional boost-container; vcpkg install --head xsimd"
+  VCPKG_INSTALL: "vcpkg install fmt tinyobjloader boost-mp11 boost-atomic boost-smart-ptr boost-functional boost-container; until vcpkg install --head xsimd; do echo 'Retrying'; done"
 
 jobs:
   clang-format:
