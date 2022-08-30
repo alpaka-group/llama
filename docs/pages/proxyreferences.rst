@@ -70,27 +70,35 @@ Read access is given by a (non-explicit) conversion operator to :cpp:`T`.
     auto  ref2 = ref;  // takes a copy of the proxy reference (!!!)
     auto& ref3 = ref2; // references (via the language build-in l-value reference) the proxy reference ref2
 
-    for (auto&& element : v)
-       bool b = element;
+    for (auto&& ref : v) {
+       bool b = ref;
+       ref = !b;
+       ...
+    }
 
-Mind, that we explicitly state :cpp:`bool` as the type of the resulting value.
+Mind, that we explicitly state :cpp:`bool` as the type of the resulting value on access.
 If we use :cpp:`auto` instead, we would take a copy of the reference object, not the value.
 
 Proxy references in LLAMA
 -------------------------
 
-By handing out references to access contained objects, LLAMA views are similar to standard C++ containers.
+By handing out references to contained objects on access, LLAMA views are similar to standard C++ containers.
 For references to whole records, LLAMA views hand out record references.
-Although a record reference models a reference to a struct (= record) in memory, this struct is not physically manifested in memory.
+Although a record reference models a reference to a "struct" (= record) in memory, this struct is not physically manifested in memory.
 This allows mappings the freedom to arbitrarily arrange how the data for a struct is stored.
-A record reference in LLAMA is thus a proxy reference.
-An exception is however made for read/write access in the current API, which is governed by the :cpp:`load()` and :cpp:`store()` member functions.
+A record reference in LLAMA is thus a proxy reference to a "struct".
+
+.. code-block:: C++
+
+    auto view = llama::allocView(mapping);
+    auto rr1 = view(1, 2, 3); // rr1 is a RecordRef, a proxy reference (assuming this access is not terminal)
+    auto rr2 = rr1(color{});  // same here
+
+An exception to this are the :cpp:`load()` and :cpp:`store()` member functions of a record reference.
 We might change this in the future.
 
 .. code-block:: C++
 
-    auto view = llama::allocView(...);
-    auto rr = view(1, 2, 3); // vr is a RecordRef, a proxy reference
     Pixel p = rr.load(); // read access
     rr.store(p);         // write access
 
@@ -124,7 +132,7 @@ Proxy references in LLAMA fulfill the following concept:
         { r = typename R::value_type{} } -> std::same_as<R&>;
     };
 
-That is, the provide a member type :cpp:`value_type`,
+That is, they provide a member type :cpp:`value_type`,
 which indicates the type of the values which can be loaded and stored through the proxy reference.
 Furthermore, a proxy reference can be converted to its value type (thus calling :cpp:`operator value_type ()`)
 or assigned an instance of its value type.
