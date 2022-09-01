@@ -20,11 +20,11 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v2
-    - uses: DoozyX/clang-format-lint-action@v0.13
+    - uses: DoozyX/clang-format-lint-action@v0.14
       with:
         exclude: './thirdparty'
         extensions: 'cpp,hpp,h,cu'
-        clangFormatVersion: 13
+        clangFormatVersion: 14
 
   clang-tidy:
     runs-on: ubuntu-22.04
