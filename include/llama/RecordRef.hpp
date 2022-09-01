@@ -203,13 +203,13 @@ namespace llama
         }
 
         template<typename RecordRef, typename T, std::size_t N, std::size_t... Is>
-        LLAMA_FN_HOST_ACC_INLINE auto asTupleImplArr(RecordRef&& vd, T(&&)[N], std::index_sequence<Is...>)
+        LLAMA_FN_HOST_ACC_INLINE auto asTupleImplArr(RecordRef&& vd, T (&&)[N], std::index_sequence<Is...>)
         {
             return std::make_tuple(asTupleImpl(vd(RecordCoord<Is>{}), T{})...);
         }
 
         template<typename RecordRef, typename T, std::size_t N>
-        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(RecordRef&& vd, T(&&a)[N])
+        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(RecordRef&& vd, T (&&a)[N])
         {
             return asTupleImplArr(std::forward<RecordRef>(vd), std::move(a), std::make_index_sequence<N>{});
         }
@@ -228,13 +228,13 @@ namespace llama
         }
 
         template<typename RecordRef, typename T, std::size_t N, std::size_t... Is>
-        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImplArr(RecordRef&& vd, T(&&)[N], std::index_sequence<Is...>)
+        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImplArr(RecordRef&& vd, T (&&)[N], std::index_sequence<Is...>)
         {
             return std::tuple_cat(asFlatTupleImpl(vd(RecordCoord<Is>{}), T{})...);
         }
 
         template<typename RecordRef, typename T, std::size_t N>
-        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(RecordRef&& vd, T(&&a)[N])
+        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(RecordRef&& vd, T (&&a)[N])
         {
             return asFlatTupleImplArr(std::forward<RecordRef>(vd), std::move(a), std::make_index_sequence<N>{});
         }

@@ -54,16 +54,10 @@ namespace llama::mapping
                 )
                 : VHBits{vhBits}
                 , ptr{ptr}
-                , bitOffset
-            {
-                bitOffset
-            }
+                , bitOffset{bitOffset}
 
 #ifndef NDEBUG
-            , endPtr
-            {
-                endPtr
-            }
+                , endPtr{endPtr}
 #endif
             {
             }
