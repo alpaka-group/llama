@@ -47,7 +47,7 @@ jobs:
         mkdir alpaka/build
         cd alpaka/build
         cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
-        sudo cmake --build . --target install
+        sudo cmake --install .
     - name: run clang-tidy
       run: |
         mkdir build
