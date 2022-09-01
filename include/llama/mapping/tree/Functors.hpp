@@ -226,7 +226,7 @@ namespace llama::mapping::tree::functor
                         + basicCoord.rest().first().arrayIndex;
                     auto rt1Child = TreeCoordElement<BasicCoord::FirstElement::childIndex>{rt1};
                     auto rt2Child = TreeCoordElement<BasicCoord::RestTuple::FirstElement::childIndex>{rt2};
-                    return tupleCat(Tuple{rt1Child}, tupleCat(Tuple{rt2Child}, pop_front(basicCoord.rest())));
+                    return tupleCat(Tuple{rt1Child}, tupleCat(Tuple{rt2Child}, popFront(basicCoord.rest())));
                 }
             }
             else
@@ -236,7 +236,7 @@ namespace llama::mapping::tree::functor
                 else
                 {
                     auto rest = basicCoordToResultCoordImpl<typename InternalTreeCoord::RestTuple>(
-                        pop_front(basicCoord),
+                        popFront(basicCoord),
                         get<BasicCoord::FirstElement::childIndex>(tree.childs));
                     return tupleCat(Tuple{basicCoord.first()}, rest);
                 }

@@ -132,11 +132,11 @@ TEMPLATE_TEST_CASE("mapping.BitPackedFloatSoA", "", float, double)
 
 TEST_CASE("mapping.BitPackedFloatSoA.ReducedPrecisionComputation")
 {
-    constexpr auto N = 1000;
-    auto view = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<std::size_t, N>, Vec3D>{{}});
+    constexpr auto n = 1000;
+    auto view = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<std::size_t, n>, Vec3D>{{}});
     std::default_random_engine engine;
     std::uniform_real_distribution dist{0.0f, 1e20f};
-    for(auto i = 0; i < N; i++)
+    for(auto i = 0; i < n; i++)
     {
         auto v = dist(engine);
         view(i) = v;
@@ -145,7 +145,7 @@ TEST_CASE("mapping.BitPackedFloatSoA.ReducedPrecisionComputation")
 
     // copy into packed representation
     auto packedView = llama::allocView(llama::mapping::BitPackedFloatSoA<
-                                       llama::ArrayExtents<std::size_t, N>,
+                                       llama::ArrayExtents<std::size_t, n>,
                                        Vec3D,
                                        llama::Constant<8>,
                                        llama::Constant<23>>{}); // basically
@@ -153,20 +153,20 @@ TEST_CASE("mapping.BitPackedFloatSoA.ReducedPrecisionComputation")
     llama::copy(view, packedView);
 
     // compute on original representation
-    for(auto i = 0; i < N; i++)
+    for(auto i = 0; i < n; i++)
     {
         auto&& z = view(i)(tag::Z{});
         z = std::sqrt(z);
     }
 
     // compute on packed representation
-    for(auto i = 0; i < N; i++)
+    for(auto i = 0; i < n; i++)
     {
         auto&& z = packedView(i)(tag::Z{});
         z = std::sqrt(z);
     }
 
-    for(auto i = 0; i < N; i++)
+    for(auto i = 0; i < n; i++)
         CHECK(view(i)(tag::Z{}) == Catch::Approx(packedView(i)(tag::Z{})));
 }
 

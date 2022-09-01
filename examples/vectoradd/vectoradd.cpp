@@ -6,9 +6,9 @@
 #include <iostream>
 #include <llama/llama.hpp>
 
-constexpr auto MAPPING = 2; ///< 0 native AoS, 1 native SoA, 2 native SoA (separate blobs), 3 tree AoS, 4 tree SoA
-constexpr auto PROBLEM_SIZE = 64 * 1024 * 1024; ///< problem size
-constexpr auto STEPS = 10; ///< number of vector adds to perform
+constexpr auto mappingIndex = 2; ///< 0 native AoS, 1 native SoA, 2 native SoA (separate blobs), 3 tree AoS, 4 tree SoA
+constexpr auto problemSize = 64 * 1024 * 1024; ///< problem size
+constexpr auto steps = 10; ///< number of vector adds to perform
 
 using FP = float;
 
@@ -33,7 +33,7 @@ namespace usellama
     void add(const View& a, const View& b, View& c)
     {
         LLAMA_INDEPENDENT_DATA
-        for(std::size_t i = 0; i < PROBLEM_SIZE; i++)
+        for(std::size_t i = 0; i < problemSize; i++)
         {
             c(i)(tag::X{}) = a(i)(tag::X{}) + b(i)(tag::X{});
             c(i)(tag::Y{}) = a(i)(tag::Y{}) - b(i)(tag::Y{});
@@ -49,16 +49,16 @@ namespace usellama
         const auto mapping = [&]
         {
             using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 1>;
-            const auto extents = ArrayExtents{PROBLEM_SIZE};
-            if constexpr(MAPPING == 0)
+            const auto extents = ArrayExtents{problemSize};
+            if constexpr(mappingIndex == 0)
                 return llama::mapping::AoS{extents, Vector{}};
-            if constexpr(MAPPING == 1)
+            if constexpr(mappingIndex == 1)
                 return llama::mapping::SoA{extents, Vector{}};
-            if constexpr(MAPPING == 2)
+            if constexpr(mappingIndex == 2)
                 return llama::mapping::SoA<ArrayExtents, Vector, true>{extents};
-            if constexpr(MAPPING == 3)
+            if constexpr(mappingIndex == 3)
                 return llama::mapping::tree::Mapping{extents, llama::Tuple{}, Vector{}};
-            if constexpr(MAPPING == 4)
+            if constexpr(mappingIndex == 4)
                 return llama::mapping::tree::Mapping{
                     extents,
                     llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
@@ -71,7 +71,7 @@ namespace usellama
         watch.printAndReset("alloc");
 
         LLAMA_INDEPENDENT_DATA
-        for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+        for(std::size_t i = 0; i < problemSize; ++i)
         {
             const auto value = static_cast<FP>(i);
             a[i](tag::X{}) = value; // X
@@ -82,12 +82,12 @@ namespace usellama
         watch.printAndReset("init");
 
         double acc = 0;
-        for(std::size_t s = 0; s < STEPS; ++s)
+        for(std::size_t s = 0; s < steps; ++s)
         {
             add(a, b, c);
             acc += watch.printAndReset("add");
         }
-        plotFile << "LLAMA\t" << acc / STEPS << '\n';
+        plotFile << "LLAMA\t" << acc / steps << '\n';
 
         return static_cast<int>(c.storageBlobs[0][0]);
     }
@@ -105,7 +105,7 @@ namespace manualAoS
     inline void add(const Vector* a, const Vector* b, Vector* c)
     {
         LLAMA_INDEPENDENT_DATA
-        for(std::size_t i = 0; i < PROBLEM_SIZE; i++)
+        for(std::size_t i = 0; i < problemSize; i++)
         {
             c[i].x = a[i].x + b[i].x;
             c[i].y = a[i].y - b[i].y;
@@ -118,13 +118,13 @@ namespace manualAoS
         std::cout << "\nAoS\n";
         Stopwatch watch;
 
-        std::vector<Vector> a(PROBLEM_SIZE);
-        std::vector<Vector> b(PROBLEM_SIZE);
-        std::vector<Vector> c(PROBLEM_SIZE);
+        std::vector<Vector> a(problemSize);
+        std::vector<Vector> b(problemSize);
+        std::vector<Vector> c(problemSize);
         watch.printAndReset("alloc");
 
         LLAMA_INDEPENDENT_DATA
-        for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+        for(std::size_t i = 0; i < problemSize; ++i)
         {
             const auto value = static_cast<FP>(i);
             a[i].x = value;
@@ -137,12 +137,12 @@ namespace manualAoS
         watch.printAndReset("init");
 
         double acc = 0;
-        for(std::size_t s = 0; s < STEPS; ++s)
+        for(std::size_t s = 0; s < steps; ++s)
         {
             add(a.data(), b.data(), c.data());
             acc += watch.printAndReset("add");
         }
-        plotFile << "AoS\t" << acc / STEPS << '\n';
+        plotFile << "AoS\t" << acc / steps << '\n';
 
         return static_cast<int>(c[0].x);
     }
@@ -162,7 +162,7 @@ namespace manualSoA
         FP* cz)
     {
         LLAMA_INDEPENDENT_DATA
-        for(std::size_t i = 0; i < PROBLEM_SIZE; i++)
+        for(std::size_t i = 0; i < problemSize; i++)
         {
             cx[i] = ax[i] + bx[i];
             cy[i] = ay[i] - by[i];
@@ -176,19 +176,19 @@ namespace manualSoA
         Stopwatch watch;
 
         using Vector = std::vector<float, llama::bloballoc::AlignedAllocator<float, 64>>;
-        Vector ax(PROBLEM_SIZE);
-        Vector ay(PROBLEM_SIZE);
-        Vector az(PROBLEM_SIZE);
-        Vector bx(PROBLEM_SIZE);
-        Vector by(PROBLEM_SIZE);
-        Vector bz(PROBLEM_SIZE);
-        Vector cx(PROBLEM_SIZE);
-        Vector cy(PROBLEM_SIZE);
-        Vector cz(PROBLEM_SIZE);
+        Vector ax(problemSize);
+        Vector ay(problemSize);
+        Vector az(problemSize);
+        Vector bx(problemSize);
+        Vector by(problemSize);
+        Vector bz(problemSize);
+        Vector cx(problemSize);
+        Vector cy(problemSize);
+        Vector cz(problemSize);
         watch.printAndReset("alloc");
 
         LLAMA_INDEPENDENT_DATA
-        for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+        for(std::size_t i = 0; i < problemSize; ++i)
         {
             const auto value = static_cast<FP>(i);
             ax[i] = value;
@@ -201,12 +201,12 @@ namespace manualSoA
         watch.printAndReset("init");
 
         double acc = 0;
-        for(std::size_t s = 0; s < STEPS; ++s)
+        for(std::size_t s = 0; s < steps; ++s)
         {
             add(ax.data(), ay.data(), az.data(), bx.data(), by.data(), bz.data(), cx.data(), cy.data(), cz.data());
             acc += watch.printAndReset("add");
         }
-        plotFile << "SoA\t" << acc / STEPS << '\n';
+        plotFile << "SoA\t" << acc / steps << '\n';
 
         return static_cast<int>(cx[0]);
     }
@@ -215,25 +215,25 @@ namespace manualSoA
 
 namespace manualAoSoA
 {
-    constexpr auto LANES = 16;
+    constexpr auto lanes = 16;
 
     struct alignas(64) VectorBlock
     {
-        FP x[LANES];
-        FP y[LANES];
-        FP z[LANES];
+        FP x[lanes];
+        FP y[lanes];
+        FP z[lanes];
     };
 
-    constexpr auto BLOCKS = PROBLEM_SIZE / LANES;
+    constexpr auto blocks = problemSize / lanes;
 
     inline void add(const VectorBlock* a, const VectorBlock* b, VectorBlock* c)
     {
-        for(std::size_t bi = 0; bi < PROBLEM_SIZE / LANES; bi++)
+        for(std::size_t bi = 0; bi < problemSize / lanes; bi++)
         {
 // the unroll 1 is needed to prevent unrolling, which prevents vectorization in GCC
 #pragma GCC unroll 1
             LLAMA_INDEPENDENT_DATA
-            for(std::size_t i = 0; i < LANES; ++i)
+            for(std::size_t i = 0; i < lanes; ++i)
             {
                 const auto& blockA = a[bi];
                 const auto& blockB = b[bi];
@@ -250,17 +250,17 @@ namespace manualAoSoA
         std::cout << "\nAoSoA\n";
         Stopwatch watch;
 
-        std::vector<VectorBlock> a(BLOCKS);
-        std::vector<VectorBlock> b(BLOCKS);
-        std::vector<VectorBlock> c(BLOCKS);
+        std::vector<VectorBlock> a(blocks);
+        std::vector<VectorBlock> b(blocks);
+        std::vector<VectorBlock> c(blocks);
         watch.printAndReset("alloc");
 
-        for(std::size_t bi = 0; bi < PROBLEM_SIZE / LANES; ++bi)
+        for(std::size_t bi = 0; bi < problemSize / lanes; ++bi)
         {
             LLAMA_INDEPENDENT_DATA
-            for(std::size_t i = 0; i < LANES; ++i)
+            for(std::size_t i = 0; i < lanes; ++i)
             {
-                const auto value = static_cast<float>(bi * LANES + i);
+                const auto value = static_cast<float>(bi * lanes + i);
                 a[bi].x[i] = value;
                 a[bi].y[i] = value;
                 a[bi].z[i] = value;
@@ -272,12 +272,12 @@ namespace manualAoSoA
         watch.printAndReset("init");
 
         double acc = 0;
-        for(std::size_t s = 0; s < STEPS; ++s)
+        for(std::size_t s = 0; s < steps; ++s)
         {
             add(a.data(), b.data(), c.data());
             acc += watch.printAndReset("add");
         }
-        plotFile << "AoSoA\t" << acc / STEPS << '\n';
+        plotFile << "AoSoA\t" << acc / steps << '\n';
 
         return static_cast<int>(c[0].x[0]);
     }
@@ -287,8 +287,8 @@ namespace manualAoSoA
 auto main() -> int
 try
 {
-    std::cout << PROBLEM_SIZE / 1000 / 1000 << "M values "
-              << "(" << PROBLEM_SIZE * sizeof(float) / 1024 << "kiB)\n";
+    std::cout << problemSize / 1000 / 1000 << "M values "
+              << "(" << problemSize * sizeof(float) / 1024 << "kiB)\n";
 
     std::ofstream plotFile{"vectoradd.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
@@ -302,7 +302,7 @@ set yrange [0:*]
 set ylabel "update runtime [s]"
 $data << EOD
 )",
-        PROBLEM_SIZE / 1024 / 1024,
+        problemSize / 1024 / 1024,
         common::hostname());
 
     int r = 0;

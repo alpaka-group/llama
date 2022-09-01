@@ -10,13 +10,13 @@
 #include <omp.h>
 #include <vector>
 
-constexpr auto PROBLEM_SIZE = std::size_t{1024} * 1024 * 128;
-constexpr auto BLOCK_SIZE = std::size_t{256};
-constexpr auto WARMUP_STEPS = 1;
-constexpr auto STEPS = 5;
+constexpr auto problemSize = std::size_t{1024} * 1024 * 128;
+constexpr auto gpuBlockSize = std::size_t{256};
+constexpr auto warmupSteps = 1;
+constexpr auto steps = 5;
 constexpr auto alpha = 3.14;
 
-static_assert(PROBLEM_SIZE % BLOCK_SIZE == 0);
+static_assert(problemSize % gpuBlockSize == 0);
 
 void daxpy(std::ofstream& plotFile)
 {
@@ -25,12 +25,12 @@ void daxpy(std::ofstream& plotFile)
 
     Stopwatch watch;
     using Vec = std::vector<double, llama::bloballoc::AlignedAllocator<double, 64>>;
-    auto x = Vec(PROBLEM_SIZE);
-    auto y = Vec(PROBLEM_SIZE);
-    auto z = Vec(PROBLEM_SIZE);
+    auto x = Vec(problemSize);
+    auto y = Vec(problemSize);
+    auto z = Vec(problemSize);
     watch.printAndReset("alloc");
 
-    for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+    for(std::size_t i = 0; i < problemSize; ++i)
     {
         x[i] = static_cast<double>(i);
         y[i] = static_cast<double>(i);
@@ -38,17 +38,17 @@ void daxpy(std::ofstream& plotFile)
     watch.printAndReset("init");
 
     double sum = 0;
-    for(std::size_t s = 0; s < WARMUP_STEPS + STEPS; ++s)
+    for(std::size_t s = 0; s < warmupSteps + steps; ++s)
     {
 #pragma omp parallel for
-        for(std::ptrdiff_t i = 0; i < PROBLEM_SIZE; i++)
+        for(std::ptrdiff_t i = 0; i < problemSize; i++)
             z[i] = alpha * x[i] + y[i];
-        if(s < WARMUP_STEPS)
+        if(s < warmupSteps)
             watch.printAndReset("daxpy (warmup)");
         else
             sum += watch.printAndReset("daxpy");
     }
-    plotFile << std::quoted(title) << "\t" << sum / STEPS << '\n';
+    plotFile << std::quoted(title) << "\t" << sum / steps << '\n';
 }
 
 template<typename Acc>
@@ -60,7 +60,7 @@ inline constexpr bool isGPU<alpaka::AccGpuCudaRt<Dim, Idx>> = true;
 #endif
 
 template<typename Mapping>
-void daxpy_alpaka_llama(std::string mappingName, std::ofstream& plotFile, Mapping mapping)
+void daxpyAlpakaLlama(std::string mappingName, std::ofstream& plotFile, Mapping mapping)
 {
     std::size_t storageSize = 0;
     for(std::size_t i = 0; i < mapping.blobCount; i++)
@@ -84,7 +84,7 @@ void daxpy_alpaka_llama(std::string mappingName, std::ofstream& plotFile, Mappin
     auto z = llama::allocViewUninitialized(mapping);
     watch.printAndReset("alloc host");
 
-    for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+    for(std::size_t i = 0; i < problemSize; ++i)
     {
         x[i] = static_cast<double>(i);
         y[i] = static_cast<double>(i);
@@ -106,15 +106,15 @@ void daxpy_alpaka_llama(std::string mappingName, std::ofstream& plotFile, Mappin
     }
     watch.printAndReset("copy H->D");
 
-    constexpr auto blockSize = isGPU<Acc> ? BLOCK_SIZE : 1;
+    constexpr auto blockSize = isGPU<Acc> ? gpuBlockSize : 1;
     const auto workdiv = alpaka::WorkDivMembers<Dim, Size>(
-        alpaka::Vec<Dim, Size>{PROBLEM_SIZE / blockSize},
+        alpaka::Vec<Dim, Size>{problemSize / blockSize},
         alpaka::Vec<Dim, Size>{blockSize},
         alpaka::Vec<Dim, Size>{Size{1}});
     watch = {};
 
     double sum = 0;
-    for(std::size_t s = 0; s < WARMUP_STEPS + STEPS; ++s)
+    for(std::size_t s = 0; s < warmupSteps + steps; ++s)
     {
         auto kernel = [] ALPAKA_FN_ACC(
                           const Acc& acc,
@@ -134,7 +134,7 @@ void daxpy_alpaka_llama(std::string mappingName, std::ofstream& plotFile, Mappin
             llama::shallowCopy(viewY),
             alpha,
             llama::shallowCopy(viewZ));
-        if(s < WARMUP_STEPS)
+        if(s < warmupSteps)
             watch.printAndReset("daxpy (warmup)");
         else
             sum += watch.printAndReset("daxpy");
@@ -147,7 +147,7 @@ void daxpy_alpaka_llama(std::string mappingName, std::ofstream& plotFile, Mappin
     }
     watch.printAndReset("copy D->H");
 
-    plotFile << std::quoted(title) << "\t" << sum / STEPS << '\n';
+    plotFile << std::quoted(title) << "\t" << sum / steps << '\n';
 }
 
 auto main() -> int
@@ -162,8 +162,8 @@ try
 Threads: {}
 Affinity: {}
 )",
-        PROBLEM_SIZE / 1024 / 1024,
-        PROBLEM_SIZE * sizeof(double) / 1024 / 1024,
+        problemSize / 1024 / 1024,
+        problemSize * sizeof(double) / 1024 / 1024,
         numThreads,
         affinity);
 
@@ -183,30 +183,30 @@ $data << EOD
 )",
         numThreads,
         affinity,
-        PROBLEM_SIZE / 1024 / 1024,
+        problemSize / 1024 / 1024,
         common::hostname());
 
     daxpy(plotFile);
 
-    const auto extents = llama::ArrayExtentsDynamic<std::size_t, 1>{PROBLEM_SIZE};
-    daxpy_alpaka_llama(
+    const auto extents = llama::ArrayExtentsDynamic<std::size_t, 1>{problemSize};
+    daxpyAlpakaLlama(
         "AoS",
         plotFile,
         llama::mapping::AoS<llama::ArrayExtentsDynamic<std::size_t, 1>, double>{extents});
-    daxpy_alpaka_llama(
+    daxpyAlpakaLlama(
         "SoA",
         plotFile,
         llama::mapping::SoA<llama::ArrayExtentsDynamic<std::size_t, 1>, double, false>{extents});
-    daxpy_alpaka_llama(
+    daxpyAlpakaLlama(
         "SoA MB",
         plotFile,
         llama::mapping::SoA<llama::ArrayExtentsDynamic<std::size_t, 1>, double, true>{extents});
-    daxpy_alpaka_llama(
+    daxpyAlpakaLlama(
         "Bytesplit",
         plotFile,
         llama::mapping::Bytesplit<llama::ArrayExtentsDynamic<std::size_t, 1>, double, llama::mapping::BindAoS<>::fn>{
             extents});
-    daxpy_alpaka_llama(
+    daxpyAlpakaLlama(
         "ChangeType D->F",
         plotFile,
         llama::mapping::ChangeType<
@@ -214,7 +214,7 @@ $data << EOD
             double,
             llama::mapping::BindAoS<>::fn,
             boost::mp11::mp_list<boost::mp11::mp_list<double, float>>>{extents});
-    daxpy_alpaka_llama(
+    daxpyAlpakaLlama(
         "Bitpack 52^{11}",
         plotFile,
         llama::mapping::BitPackedFloatSoA<llama::ArrayExtentsDynamic<std::size_t, 1>, double, unsigned, unsigned>{
@@ -222,7 +222,7 @@ $data << EOD
             11,
             52,
             double{}});
-    daxpy_alpaka_llama(
+    daxpyAlpakaLlama(
         "Bitpack 52^{11} CT",
         plotFile,
         llama::mapping::BitPackedFloatSoA<
@@ -230,7 +230,7 @@ $data << EOD
             double,
             llama::Constant<11>,
             llama::Constant<52>>{extents});
-    daxpy_alpaka_llama(
+    daxpyAlpakaLlama(
         "Bitpack 23^{8}",
         plotFile,
         llama::mapping::BitPackedFloatSoA<llama::ArrayExtentsDynamic<std::size_t, 1>, double, unsigned, unsigned>{
@@ -238,7 +238,7 @@ $data << EOD
             8,
             23,
             double{}});
-    daxpy_alpaka_llama(
+    daxpyAlpakaLlama(
         "Bitpack 23^{8} CT",
         plotFile,
         llama::mapping::BitPackedFloatSoA<
@@ -246,7 +246,7 @@ $data << EOD
             double,
             llama::Constant<8>,
             llama::Constant<23>>{extents});
-    daxpy_alpaka_llama(
+    daxpyAlpakaLlama(
         "Bitpack 10^{5}",
         plotFile,
         llama::mapping::BitPackedFloatSoA<llama::ArrayExtentsDynamic<std::size_t, 1>, double, unsigned, unsigned>{
@@ -254,7 +254,7 @@ $data << EOD
             5,
             10,
             double{}});
-    daxpy_alpaka_llama(
+    daxpyAlpakaLlama(
         "Bitpack 10^{5} CT",
         plotFile,
         llama::mapping::BitPackedFloatSoA<

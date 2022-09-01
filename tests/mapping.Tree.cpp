@@ -779,10 +779,10 @@ TEST_CASE("mapping.Tree")
 #ifndef __NVCOMPILER
     auto raw = prettyPrintType(mapping.basicTree);
 #    ifdef _WIN32
-    tree::internal::replace_all(raw, "__int64", "long");
+    tree::internal::replaceAll(raw, "__int64", "long");
 #    endif
 #    ifdef _LIBCPP_VERSION
-    tree::internal::replace_all(raw, "std::__1::", "std::");
+    tree::internal::replaceAll(raw, "std::__1::", "std::");
 #    endif
     const auto* const ref = R"(llama::mapping::tree::Node<
     llama::NoName,
@@ -924,10 +924,10 @@ TEST_CASE("mapping.Tree")
 
     auto raw2 = prettyPrintType(mapping.resultTree);
 #ifdef _WIN32
-    tree::internal::replace_all(raw2, "__int64", "long");
+    tree::internal::replaceAll(raw2, "__int64", "long");
 #endif
 #ifdef _LIBCPP_VERSION
-    tree::internal::replace_all(raw2, "std::__1::", "std::");
+    tree::internal::replaceAll(raw2, "std::__1::", "std::");
 #endif
     const auto* const ref2 = R"(llama::mapping::tree::Node<
     llama::NoName,

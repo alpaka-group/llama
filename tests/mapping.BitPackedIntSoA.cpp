@@ -100,31 +100,31 @@ TEST_CASE("mapping.BitPackedIntSoA.SInts.Cutoff")
 
 TEST_CASE("mapping.BitPackedIntSoA.SInts.Roundtrip")
 {
-    constexpr auto N = 1000;
-    auto view = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<std::size_t, N>, Vec3I>{});
+    constexpr auto n = 1000;
+    auto view = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<std::size_t, n>, Vec3I>{});
     std::default_random_engine engine;
     std::uniform_int_distribution dist{-2000, 2000}; // fits into 12 bits
-    for(auto i = 0; i < N; i++)
+    for(auto i = 0; i < n; i++)
         view(i) = dist(engine);
 
     // copy into packed representation
     auto packedView = llama::allocView(
-        llama::mapping::BitPackedIntSoA<llama::ArrayExtents<std::size_t, N>, Vec3I, llama::Constant<12>>{});
+        llama::mapping::BitPackedIntSoA<llama::ArrayExtents<std::size_t, n>, Vec3I, llama::Constant<12>>{});
     llama::copy(view, packedView);
 
     // compute on packed representation
-    for(auto i = 0; i < N; i++)
+    for(auto i = 0; i < n; i++)
         packedView(i) = packedView(i) + 1;
 
     // copy into normal representation
-    auto view2 = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<std::size_t, N>, Vec3I>{});
+    auto view2 = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<std::size_t, n>, Vec3I>{});
     llama::copy(packedView, view2);
 
     // compute on normal representation
-    for(auto i = 0; i < N; i++)
+    for(auto i = 0; i < n; i++)
         view2(i) = view2(i) - 1;
 
-    for(auto i = 0; i < N; i++)
+    for(auto i = 0; i < n; i++)
         CHECK(view(i) == view2(i));
 }
 

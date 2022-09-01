@@ -254,7 +254,7 @@ namespace llama
 
     /// Returns a copy of the tuple without the first element.
     template<typename... Elements>
-    LLAMA_FN_HOST_ACC_INLINE constexpr auto pop_front(const Tuple<Elements...>& tuple)
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto popFront(const Tuple<Elements...>& tuple)
     {
         return tuple.rest();
     }

@@ -22,7 +22,7 @@ namespace
         template<std::size_t... RecordCoords>
         static constexpr auto isComputed(llama::RecordCoord<RecordCoords...>)
         {
-            return llama::RecordCoordCommonPrefixIsSame<llama::RecordCoord<RecordCoords...>, llama::RecordCoord<3>>;
+            return llama::recordCoordCommonPrefixIsSame<llama::RecordCoord<RecordCoords...>, llama::RecordCoord<3>>;
         }
 
         template<std::size_t... RecordCoords, typename Blob>

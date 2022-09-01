@@ -17,30 +17,30 @@
 
 using FP = float;
 
-constexpr auto PROBLEM_SIZE = 16 * 1024; ///< total number of particles
-constexpr auto STEPS = 5; ///< number of steps to calculate
-constexpr auto TIMESTEP = FP{0.0001};
-constexpr auto ALLOW_RSQRT = true; // rsqrt can be way faster, but less accurate
+constexpr auto problemSize = 16 * 1024; ///< total number of particles
+constexpr auto steps = 5; ///< number of steps to calculate
+constexpr auto timestep = FP{0.0001};
+constexpr auto allowRsqrt = true; // rsqrt can be way faster, but less accurate
 
 #if defined(ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED) || defined(ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED)
 #    if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
 #        error Cannot enable CUDA together with other backends
 #    endif
-constexpr auto DESIRED_ELEMENTS_PER_THREAD = xsimd::batch<float>::size;
-constexpr auto THREADS_PER_BLOCK = 1;
-constexpr auto AOSOA_LANES = xsimd::batch<float>::size; // vectors
+constexpr auto desiredElementsPerThread = xsimd::batch<float>::size;
+constexpr auto threadsPerBlock = 1;
+constexpr auto aosoaLanes = xsimd::batch<float>::size; // vectors
 #elif defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
-constexpr auto DESIRED_ELEMENTS_PER_THREAD = 1;
-constexpr auto THREADS_PER_BLOCK = 256;
-constexpr auto AOSOA_LANES = 32; // coalesced memory access
+constexpr auto desiredElementsPerThread = 1;
+constexpr auto threadsPerBlock = 256;
+constexpr auto aosoaLanes = 32; // coalesced memory access
 #else
 #    error "Unsupported backend"
 #endif
 
 // makes our life easier for now
-static_assert(PROBLEM_SIZE % (DESIRED_ELEMENTS_PER_THREAD * THREADS_PER_BLOCK) == 0);
+static_assert(problemSize % (desiredElementsPerThread * threadsPerBlock) == 0);
 
-constexpr FP EPS2 = 0.01;
+constexpr FP epS2 = 0.01;
 
 // clang-format off
 namespace tag
@@ -135,10 +135,10 @@ LLAMA_FN_HOST_ACC_INLINE void pPInteraction(ViewParticleI pi, ParticleRefJ pj)
     const Simd xdistanceSqr = xdistance * xdistance;
     const Simd ydistanceSqr = ydistance * ydistance;
     const Simd zdistanceSqr = zdistance * zdistance;
-    const Simd distSqr = +EPS2 + xdistanceSqr + ydistanceSqr + zdistanceSqr;
+    const Simd distSqr = +epS2 + xdistanceSqr + ydistanceSqr + zdistanceSqr;
     const Simd distSixth = distSqr * distSqr * distSqr;
-    const Simd invDistCube = ALLOW_RSQRT ? rsqrt(distSixth) : (1.0f / sqrt(distSixth));
-    const Simd sts = broadcast<Simd>(pj(tag::Mass())) * invDistCube * TIMESTEP;
+    const Simd invDistCube = allowRsqrt ? rsqrt(distSixth) : (1.0f / sqrt(distSixth));
+    const Simd sts = broadcast<Simd>(pj(tag::Mass())) * invDistCube * timestep;
     store<Simd>(pi(tag::Vel{}, tag::X{}), xdistanceSqr * sts + load<Simd>(pi(tag::Vel{}, tag::X{})));
     store<Simd>(pi(tag::Vel{}, tag::Y{}), ydistanceSqr * sts + load<Simd>(pi(tag::Vel{}, tag::Y{})));
     store<Simd>(pi(tag::Vel{}, tag::Z{}), zdistanceSqr * sts + load<Simd>(pi(tag::Vel{}, tag::Z{})));
@@ -165,7 +165,7 @@ struct UpdateKernel
                     if constexpr(MappingSM == SoA)
                         return llama::mapping::SoA<ArrayExtents, Particle, false>{};
                     if constexpr(MappingSM == AoSoA)
-                        return llama::mapping::AoSoA<ArrayExtents, Particle, AOSOA_LANES>{};
+                        return llama::mapping::AoSoA<ArrayExtents, Particle, aosoaLanes>{};
                 }();
                 static_assert(decltype(sharedMapping)::blobCount == 1);
 
@@ -194,7 +194,7 @@ struct UpdateKernel
         for(int blockOffset = 0; blockOffset < ProblemSize; blockOffset += BlockSize)
         {
             LLAMA_INDEPENDENT_DATA
-            for(int j = tbi; j < BlockSize; j += THREADS_PER_BLOCK)
+            for(int j = tbi; j < BlockSize; j += threadsPerBlock)
                 sharedView(j) = particles(blockOffset + j);
             alpaka::syncBlockThreads(acc);
 
@@ -223,15 +223,15 @@ struct MoveKernel
         store<Simd>(
             particles(i)(tag::Pos{}, tag::X{}),
             load<Simd>(particles(i)(tag::Pos{}, tag::X{}))
-                + load<Simd>(particles(i)(tag::Vel{}, tag::X{})) * TIMESTEP);
+                + load<Simd>(particles(i)(tag::Vel{}, tag::X{})) * timestep);
         store<Simd>(
             particles(i)(tag::Pos{}, tag::Y{}),
             load<Simd>(particles(i)(tag::Pos{}, tag::Y{}))
-                + load<Simd>(particles(i)(tag::Vel{}, tag::Y{})) * TIMESTEP);
+                + load<Simd>(particles(i)(tag::Vel{}, tag::Y{})) * timestep);
         store<Simd>(
             particles(i)(tag::Pos{}, tag::Z{}),
             load<Simd>(particles(i)(tag::Pos{}, tag::Z{}))
-                + load<Simd>(particles(i)(tag::Vel{}, tag::Z{})) * TIMESTEP);
+                + load<Simd>(particles(i)(tag::Vel{}, tag::Z{})) * timestep);
     }
 };
 
@@ -254,7 +254,7 @@ void run(std::ostream& plotFile)
         if(m == 1)
             return "SoA";
         if(m == 2)
-            return "AoSoA" + std::to_string(AOSOA_LANES);
+            return "AoSoA" + std::to_string(aosoaLanes);
         std::abort();
     };
     const auto title = "GM " + mappingName(MappingGM) + " SM " + mappingName(MappingSM);
@@ -267,7 +267,7 @@ void run(std::ostream& plotFile)
     auto mapping = []
     {
         using ArrayExtents = llama::ArrayExtentsDynamic<int, 1>;
-        const auto extents = ArrayExtents{PROBLEM_SIZE};
+        const auto extents = ArrayExtents{problemSize};
         if constexpr(MappingGM == AoS)
             return llama::mapping::AoS<ArrayExtents, Particle>{extents};
         if constexpr(MappingGM == SoA)
@@ -275,7 +275,7 @@ void run(std::ostream& plotFile)
         // if constexpr (MappingGM == 2)
         //    return llama::mapping::SoA<ArrayExtents, Particle, true>{extents};
         if constexpr(MappingGM == AoSoA)
-            return llama::mapping::AoSoA<ArrayExtents, Particle, AOSOA_LANES>{extents};
+            return llama::mapping::AoSoA<ArrayExtents, Particle, aosoaLanes>{extents};
     }();
 
     Stopwatch watch;
@@ -287,7 +287,7 @@ void run(std::ostream& plotFile)
 
     std::mt19937_64 generator;
     std::normal_distribution<FP> distribution(FP{0}, FP{1});
-    for(int i = 0; i < PROBLEM_SIZE; ++i)
+    for(int i = 0; i < problemSize; ++i)
     {
         llama::One<Particle> p;
         p(tag::Pos(), tag::X()) = distribution(generator);
@@ -306,23 +306,23 @@ void run(std::ostream& plotFile)
     watch.printAndReset("copy H->D");
 
     const auto workdiv = alpaka::WorkDivMembers<Dim, Size>{
-        alpaka::Vec<Dim, Size>{static_cast<Size>(PROBLEM_SIZE / (THREADS_PER_BLOCK * DESIRED_ELEMENTS_PER_THREAD))},
-        alpaka::Vec<Dim, Size>{static_cast<Size>(THREADS_PER_BLOCK)},
-        alpaka::Vec<Dim, Size>{static_cast<Size>(DESIRED_ELEMENTS_PER_THREAD)}};
+        alpaka::Vec<Dim, Size>{static_cast<Size>(problemSize / (threadsPerBlock * desiredElementsPerThread))},
+        alpaka::Vec<Dim, Size>{static_cast<Size>(threadsPerBlock)},
+        alpaka::Vec<Dim, Size>{static_cast<Size>(desiredElementsPerThread)}};
 
     double sumUpdate = 0;
     double sumMove = 0;
-    for(int s = 0; s < STEPS; ++s)
+    for(int s = 0; s < steps; ++s)
     {
-        auto updateKernel = UpdateKernel<PROBLEM_SIZE, DESIRED_ELEMENTS_PER_THREAD, THREADS_PER_BLOCK, MappingSM>{};
+        auto updateKernel = UpdateKernel<problemSize, desiredElementsPerThread, threadsPerBlock, MappingSM>{};
         alpaka::exec<Acc>(queue, workdiv, updateKernel, llama::shallowCopy(accView));
         sumUpdate += watch.printAndReset("update", '\t');
 
-        auto moveKernel = MoveKernel<PROBLEM_SIZE, DESIRED_ELEMENTS_PER_THREAD>{};
+        auto moveKernel = MoveKernel<problemSize, desiredElementsPerThread>{};
         alpaka::exec<Acc>(queue, workdiv, moveKernel, llama::shallowCopy(accView));
         sumMove += watch.printAndReset("move");
     }
-    plotFile << std::quoted(title) << "\t" << sumUpdate / STEPS << '\t' << sumMove / STEPS << '\n';
+    plotFile << std::quoted(title) << "\t" << sumUpdate / steps << '\t' << sumMove / steps << '\n';
 
     for(std::size_t i = 0; i < mapping.blobCount; i++)
         alpaka::memcpy(queue, hostView.storageBlobs[i], accView.storageBlobs[i]);
@@ -332,11 +332,11 @@ void run(std::ostream& plotFile)
 auto main() -> int
 try
 {
-    std::cout << PROBLEM_SIZE / 1000 << "k particles (" << PROBLEM_SIZE * llama::sizeOf<Particle> / 1024 << "kiB)\n"
-              << "Caching " << THREADS_PER_BLOCK << " particles ("
-              << THREADS_PER_BLOCK * llama::sizeOf<Particle> / 1024 << " kiB) in shared memory\n"
-              << "Reducing on " << DESIRED_ELEMENTS_PER_THREAD << " particles per thread\n"
-              << "Using " << THREADS_PER_BLOCK << " threads per block\n";
+    std::cout << problemSize / 1000 << "k particles (" << problemSize * llama::sizeOf<Particle> / 1024 << "kiB)\n"
+              << "Caching " << threadsPerBlock << " particles (" << threadsPerBlock * llama::sizeOf<Particle> / 1024
+              << " kiB) in shared memory\n"
+              << "Reducing on " << desiredElementsPerThread << " particles per thread\n"
+              << "Using " << threadsPerBlock << " threads per block\n";
     std::cout << std::fixed;
 
     std::ofstream plotFile{"nbody.sh"};

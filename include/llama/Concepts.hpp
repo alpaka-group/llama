@@ -37,11 +37,11 @@ namespace llama
     };
 
     template<typename M>
-    inline constexpr bool AllFieldsArePhysical
+    inline constexpr bool allFieldsArePhysical
         = boost::mp11::mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsPhysical<M>::template type>::value;
 
     template <typename M>
-    concept PhysicalMapping = Mapping<M> && AllFieldsArePhysical<M>;
+    concept PhysicalMapping = Mapping<M> && allFieldsArePhysical<M>;
 
     template <typename R>
     concept LValueReference = std::is_lvalue_reference_v<R>;
@@ -69,25 +69,25 @@ namespace llama
     };
 
     template<typename M>
-    inline constexpr bool AllFieldsAreComputed
+    inline constexpr bool allFieldsAreComputed
         = boost::mp11::mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsComputed<M>::template type>::value;
 
     template <typename M>
-    concept FullyComputedMapping = Mapping<M> && AllFieldsAreComputed<M>;
+    concept FullyComputedMapping = Mapping<M> && allFieldsAreComputed<M>;
 
     template<
         typename M,
         typename LeafCoords = LeafRecordCoords<typename M::RecordDim>,
         std::size_t PhysicalCount = boost::mp11::mp_count_if<LeafCoords, MakeIsPhysical<M>::template type>::value,
         std::size_t ComputedCount = boost::mp11::mp_count_if<LeafCoords, MakeIsComputed<M>::template type>::value>
-    inline constexpr bool AllFieldsArePhysicalOrComputed
+    inline constexpr bool allFieldsArePhysicalOrComputed
         = (PhysicalCount + ComputedCount) >= boost::mp11::mp_size<LeafCoords>::value&& PhysicalCount > 0
         && ComputedCount > 0; // == instead of >= would be better, but it's not easy to count correctly,
                               // because we cannot check whether the call to blobNrOrOffset()
                               // or compute() is actually valid
 
     template <typename M>
-    concept PartiallyComputedMapping = Mapping<M> && AllFieldsArePhysicalOrComputed<M>;
+    concept PartiallyComputedMapping = Mapping<M> && allFieldsArePhysicalOrComputed<M>;
 
     template<typename B>
     concept Blob = requires(B b, std::size_t i) {

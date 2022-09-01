@@ -175,6 +175,7 @@ namespace llama
             return m_view.mapping().extents()[0];
         }
 
+        // NOLINTNEXTLINE(readability-identifier-naming)
         LLAMA_FN_HOST_ACC_INLINE void shrink_to_fit()
         {
             changeCapacity(m_size);
@@ -213,6 +214,7 @@ namespace llama
         // TODO(bgruber): T here is probably a RecordRef. We could also allow any struct that is storable to the
         // view via RecordRef::store().
         template<typename T>
+        // NOLINTNEXTLINE(readability-identifier-naming)
         LLAMA_FN_HOST_ACC_INLINE void push_back(T&& t)
         {
             if(const auto cap = capacity(); m_size == cap)
@@ -223,6 +225,7 @@ namespace llama
 
         // TODO(bgruber): emplace_back
 
+        // NOLINTNEXTLINE(readability-identifier-naming)
         LLAMA_FN_HOST_ACC_INLINE void pop_back()
         {
             m_size--;

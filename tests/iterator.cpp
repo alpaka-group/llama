@@ -252,8 +252,8 @@ TEST_CASE("ranges")
 
 TEST_CASE("iterator.sort")
 {
-    constexpr auto N = 10;
-    auto view = llama::allocViewUninitialized(llama::mapping::AoS{llama::ArrayExtents<std::size_t, N>{}, Position{}});
+    constexpr auto n = 10;
+    auto view = llama::allocViewUninitialized(llama::mapping::AoS{llama::ArrayExtents<std::size_t, n>{}, Position{}});
 
     std::default_random_engine e{};
     std::uniform_int_distribution<int> d{0, 1000};
@@ -263,10 +263,10 @@ TEST_CASE("iterator.sort")
         vd(tag::Y{}) = d(e);
         vd(tag::Z{}) = d(e);
     }
-    auto manhattan_less = [](auto a, auto b)
+    auto manhattanLess = [](auto a, auto b)
     { return a(tag::X{}) + a(tag::Y{}) + a(tag::Z{}) < b(tag::X{}) + b(tag::Y{}) + b(tag::Z{}); };
-    std::sort(begin(view), end(view), manhattan_less);
+    std::sort(begin(view), end(view), manhattanLess);
 
-    for(auto i = 1; i < N; i++)
-        CHECK(manhattan_less(view[i - 1], view[i]));
+    for(auto i = 1; i < n; i++)
+        CHECK(manhattanLess(view[i - 1], view[i]));
 }

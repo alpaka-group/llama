@@ -4,7 +4,7 @@ TEST_CASE("prettyPrintType")
 {
     auto str = prettyPrintType<Particle>();
 #ifdef _WIN32
-    llama::mapping::tree::internal::replace_all(str, "__int64", "long");
+    llama::mapping::tree::internal::replaceAll(str, "__int64", "long");
 #endif
     const auto* const ref = R"(llama::Record<
     llama::Field<

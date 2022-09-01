@@ -77,34 +77,34 @@ TEST_CASE("Array.operator<<")
     CHECK(put(llama::Array{1.1, 2.2, 3.3}) == "Array{1.1, 2.2, 3.3}");
 }
 
-TEST_CASE("Array.push_front")
+TEST_CASE("Array.pushFront")
 {
-    STATIC_REQUIRE(push_front(llama::Array<int, 0>{}, 1) == llama::Array{1});
-    STATIC_REQUIRE(push_front(llama::Array{1}, 42) == llama::Array{42, 1});
-    STATIC_REQUIRE(push_front(llama::Array{1, 2}, 42) == llama::Array{42, 1, 2});
-    STATIC_REQUIRE(push_front(llama::Array{1, 2, 3}, 42) == llama::Array{42, 1, 2, 3});
+    STATIC_REQUIRE(pushFront(llama::Array<int, 0>{}, 1) == llama::Array{1});
+    STATIC_REQUIRE(pushFront(llama::Array{1}, 42) == llama::Array{42, 1});
+    STATIC_REQUIRE(pushFront(llama::Array{1, 2}, 42) == llama::Array{42, 1, 2});
+    STATIC_REQUIRE(pushFront(llama::Array{1, 2, 3}, 42) == llama::Array{42, 1, 2, 3});
 }
 
-TEST_CASE("Array.push_back")
+TEST_CASE("Array.pushBack")
 {
-    STATIC_REQUIRE(push_back(llama::Array<int, 0>{}, 1) == llama::Array{1});
-    STATIC_REQUIRE(push_back(llama::Array{1}, 42) == llama::Array{1, 42});
-    STATIC_REQUIRE(push_back(llama::Array{1, 2}, 42) == llama::Array{1, 2, 42});
-    STATIC_REQUIRE(push_back(llama::Array{1, 2, 3}, 42) == llama::Array{1, 2, 3, 42});
+    STATIC_REQUIRE(pushBack(llama::Array<int, 0>{}, 1) == llama::Array{1});
+    STATIC_REQUIRE(pushBack(llama::Array{1}, 42) == llama::Array{1, 42});
+    STATIC_REQUIRE(pushBack(llama::Array{1, 2}, 42) == llama::Array{1, 2, 42});
+    STATIC_REQUIRE(pushBack(llama::Array{1, 2, 3}, 42) == llama::Array{1, 2, 3, 42});
 }
 
-TEST_CASE("Array.pop_front")
+TEST_CASE("Array.popFront")
 {
-    STATIC_REQUIRE(pop_front(llama::Array{1}) == llama::Array<int, 0>{});
-    STATIC_REQUIRE(pop_front(llama::Array{1, 2}) == llama::Array{2});
-    STATIC_REQUIRE(pop_front(llama::Array{3, 2, 1}) == llama::Array{2, 1});
+    STATIC_REQUIRE(popFront(llama::Array{1}) == llama::Array<int, 0>{});
+    STATIC_REQUIRE(popFront(llama::Array{1, 2}) == llama::Array{2});
+    STATIC_REQUIRE(popFront(llama::Array{3, 2, 1}) == llama::Array{2, 1});
 }
 
-TEST_CASE("Array.pop_back")
+TEST_CASE("Array.popBack")
 {
-    STATIC_REQUIRE(pop_back(llama::Array{1}) == llama::Array<int, 0>{});
-    STATIC_REQUIRE(pop_back(llama::Array{1, 2}) == llama::Array{1});
-    STATIC_REQUIRE(pop_back(llama::Array{3, 2, 1}) == llama::Array{3, 2});
+    STATIC_REQUIRE(popBack(llama::Array{1}) == llama::Array<int, 0>{});
+    STATIC_REQUIRE(popBack(llama::Array{1, 2}) == llama::Array{1});
+    STATIC_REQUIRE(popBack(llama::Array{3, 2, 1}) == llama::Array{3, 2});
 }
 
 TEST_CASE("Array.product")

@@ -33,7 +33,7 @@ inline void kernel(uint32_t idx, const View& uCurr, View& uNext, double r)
 }
 
 template<typename View>
-void update_scalar(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
+void updateScalar(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
 {
     const auto r = dt / (dx * dx);
     for(auto i = 0; i < extent; i++)
@@ -44,7 +44,7 @@ void update_scalar(const View& uCurr, View& uNext, uint32_t extent, double dx, d
 #ifdef HAVE_XSIMD
 
 template<typename View>
-inline void kernel_vec(uint32_t baseIdx, const View& uCurr, View& uNext, double r)
+inline void kernelSimd(uint32_t baseIdx, const View& uCurr, View& uNext, double r)
 {
     using Simd = xsimd::batch<double>;
     const auto next = Simd::load_unaligned(&uCurr[baseIdx]) * (1.0 - 2.0 * r)
@@ -53,52 +53,50 @@ inline void kernel_vec(uint32_t baseIdx, const View& uCurr, View& uNext, double 
 }
 
 template<typename View>
-void update_SIMD(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
+void updateSimd(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
 {
-    constexpr auto L = xsimd::batch<double>::size;
+    constexpr auto l = xsimd::batch<double>::size;
     const auto r = dt / (dx * dx);
 
-    const auto blocks = (extent + L - 1) / L;
+    const auto blocks = (extent + l - 1) / l;
     for(auto blockIdx = 0; blockIdx < blocks; blockIdx++)
     {
-        const auto baseIdx = static_cast<uint32_t>(blockIdx * L);
-        if(baseIdx > 0 && baseIdx + L < extent)
-            kernel_vec(baseIdx, uCurr, uNext, r);
+        const auto baseIdx = static_cast<uint32_t>(blockIdx * l);
+        if(baseIdx > 0 && baseIdx + l < extent)
+            kernelSimd(baseIdx, uCurr, uNext, r);
         else
-            for(auto i = baseIdx; i <= baseIdx + L; i++)
+            for(auto i = baseIdx; i <= baseIdx + l; i++)
                 if(i > 0 && i < extent - 1u)
                     kernel(i, uCurr, uNext, r);
     }
 }
 
 template<typename View>
-void update_SIMD_peel(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
+void updateSimdPeel(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
 {
-    constexpr auto L = xsimd::batch<double>::size;
+    constexpr auto l = xsimd::batch<double>::size;
     const auto r = dt / (dx * dx);
 
-    for(auto i = 1; i < L; i++)
+    for(auto i = 1; i < l; i++)
         kernel(i, uCurr, uNext, r);
 
-    const auto blocksEnd = ((extent - 1) / L) * L;
-    for(auto i = L; i < blocksEnd; i += L)
-        kernel_vec(i, uCurr, uNext, r);
+    const auto blocksEnd = ((extent - 1) / l) * l;
+    for(auto i = l; i < blocksEnd; i += l)
+        kernelSimd(i, uCurr, uNext, r);
 
     for(auto i = blocksEnd; i < extent - 1; i++)
         kernel(i, uCurr, uNext, r);
 }
 
 template<typename View>
-void update_SIMD_peel_unal_st(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
+void updateSimdPeelUnalignedStore(const View& uCurr, View& uNext, uint32_t extent, double dx, double dt)
 {
-    constexpr auto L = xsimd::batch<double>::size;
+    constexpr auto l = xsimd::batch<double>::size;
     const auto r = dt / (dx * dx);
 
-    kernel(1, uCurr, uNext, r);
-
-    const auto blocksEnd = extent - 1 - L;
-    for(auto i = 1; i < blocksEnd; i += L)
-        kernel_vec(i, uCurr, uNext, r);
+    const auto blocksEnd = extent - 1 - l;
+    for(auto i = 1; i < blocksEnd; i += l)
+        kernelSimd(i, uCurr, uNext, r);
 
     for(auto i = blocksEnd; i < extent - 1; i++)
         kernel(i, uCurr, uNext, r);
@@ -173,11 +171,11 @@ try
             std::cout << "Incorrect! error = " << maxError << " (the grid resolution may be too low)\n";
     };
 
-//    run("update_scalar           ", [](auto&... args) { update_scalar(args...); });
+    run("updateScalar                ", [](auto&... args) { updateScalar(args...); });
 #ifdef HAVE_XSIMD
-    run("update_SIMD             ", [](auto&... args) { update_SIMD(args...); });
-    run("update_SIMD_peel        ", [](auto&... args) { update_SIMD_peel(args...); });
-    run("update_SIMD_peel_unal_st", [](auto&... args) { update_SIMD_peel_unal_st(args...); });
+    run("updateSimd                  ", [](auto&... args) { updateSimd(args...); });
+    run("updateSimdPeel              ", [](auto&... args) { updateSimdPeel(args...); });
+    run("updateSimdPeelUnalignedStore", [](auto&... args) { updateSimdPeelUnalignedStore(args...); });
 #endif
 
     return 0;

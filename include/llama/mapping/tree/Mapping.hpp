@@ -33,7 +33,7 @@ namespace llama::mapping::tree
             MergeFunctors(const Tree& tree, const Tuple<Operations...>& treeOperationList)
                 : operation(treeOperationList.first())
                 , treeAfterOp(operation.basicToResult(tree))
-                , next(treeAfterOp, pop_front(treeOperationList))
+                , next(treeAfterOp, popFront(treeOperationList))
             {
             }
 

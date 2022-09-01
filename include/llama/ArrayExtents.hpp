@@ -124,8 +124,8 @@ namespace llama
     struct ArrayExtents : Array<T, ((Sizes == dyn) + ... + 0)>
     {
         static constexpr std::size_t rank = sizeof...(Sizes);
-        static constexpr auto rank_dynamic = ((Sizes == dyn) + ... + 0);
-        static constexpr auto rank_static = rank - rank_dynamic;
+        static constexpr auto rankDynamic = ((Sizes == dyn) + ... + 0);
+        static constexpr auto rankStatic = rank - rankDynamic;
 
         using Index = ArrayIndex<T, rank>;
         using value_type = T;
@@ -139,7 +139,7 @@ namespace llama
             if constexpr(extent != dyn)
                 return extent;
             else
-                return static_cast<const Array<value_type, rank_dynamic>&>(
+                return static_cast<const Array<value_type, rankDynamic>&>(
                     *this)[+mp_count<mp_take_c<TypeList, I>, std::integral_constant<T, dyn>>::value];
         }
 
@@ -171,8 +171,8 @@ namespace llama
     struct ArrayExtents<T>
     {
         static constexpr std::size_t rank = 0;
-        static constexpr auto rank_dynamic = 0;
-        static constexpr auto rank_static = 0;
+        static constexpr auto rankDynamic = 0;
+        static constexpr auto rankStatic = 0;
 
         using Index = ArrayIndex<T, 0>;
         using value_type = T;
@@ -247,7 +247,7 @@ namespace llama
         if constexpr(Dim > 0)
             for(SizeType i = 0; i < adSize[0]; i++)
                 forEachADCoord(
-                    ArrayIndex<SizeType, Dim - 1>{pop_front(adSize)},
+                    ArrayIndex<SizeType, Dim - 1>{popFront(adSize)},
                     std::forward<Func>(func),
                     outerIndices...,
                     i);

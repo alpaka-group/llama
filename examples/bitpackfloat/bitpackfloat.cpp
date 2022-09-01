@@ -17,11 +17,11 @@ using Vector = llama::Record<
 
 auto main() -> int
 {
-    constexpr auto N = 100;
+    constexpr auto n = 100;
     constexpr auto exponentBits = 5;
     constexpr auto mantissaBits = 13;
     const auto mapping
-        = llama::mapping::BitPackedFloatSoA{llama::ArrayExtents{N}, exponentBits, mantissaBits, Vector{}};
+        = llama::mapping::BitPackedFloatSoA{llama::ArrayExtents{n}, exponentBits, mantissaBits, Vector{}};
 
     auto view = llama::allocView(mapping);
 
@@ -32,7 +32,7 @@ auto main() -> int
                 "Blob {}: {} bytes (uncompressed {} bytes)\n",
                 ic,
                 mapping.blobSize(ic),
-                N * sizeof(llama::GetType<Vector, llama::RecordCoord<decltype(ic)::value>>));
+                n * sizeof(llama::GetType<Vector, llama::RecordCoord<decltype(ic)::value>>));
         });
 
     std::default_random_engine engine;
@@ -42,7 +42,7 @@ auto main() -> int
     // float f = view(0)(tag::X{});
     // fmt::print("{}", f);
 
-    for(std::size_t i = 0; i < N; i++)
+    for(std::size_t i = 0; i < n; i++)
     {
         const auto v = dist(engine);
         view(i)(tag::X{}) = v;

@@ -12,7 +12,7 @@
 #include <omp.h>
 #include <string_view>
 
-constexpr auto REPETITIONS = 5;
+constexpr auto repetitions = 5;
 constexpr auto extents = llama::ArrayExtents{512, 512, 16};
 
 // clang-format off
@@ -46,7 +46,7 @@ using RecordDim = boost::mp11::mp_take_c<Event, 20>;
 // using RecordDim = Event; // WARN: expect long compilation time
 
 template<typename SrcMapping, typename SrcBlobType, typename DstMapping, typename DstBlobType>
-void std_copy(const llama::View<SrcMapping, SrcBlobType>& srcView, llama::View<DstMapping, DstBlobType>& dstView)
+void stdCopy(const llama::View<SrcMapping, SrcBlobType>& srcView, llama::View<DstMapping, DstBlobType>& dstView)
 {
     static_assert(std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>);
 
@@ -58,7 +58,7 @@ void std_copy(const llama::View<SrcMapping, SrcBlobType>& srcView, llama::View<D
 
 #ifdef __AVX2__
 // adapted from: https://stackoverflow.com/a/30386256/1034717
-auto memcpy_avx2(void* dst, const void* src, size_t n) noexcept -> void*
+auto memcpyAVX2(void* dst, const void* src, size_t n) noexcept -> void*
 {
     auto* d = static_cast<std::byte*>(dst);
     const auto* s = static_cast<const std::byte*>(src);
@@ -71,11 +71,11 @@ auto memcpy_avx2(void* dst, const void* src, size_t n) noexcept -> void*
     // align dst/src address multiple of 32
     if(lowerDstBits != 0u)
     {
-        const auto header_bytes = std::min(static_cast<size_t>(32 - lowerDstBits), n);
-        memcpy(d, s, header_bytes);
-        d += header_bytes;
-        s += header_bytes;
-        n -= header_bytes;
+        const auto headerBytes = std::min(static_cast<size_t>(32 - lowerDstBits), n);
+        memcpy(d, s, headerBytes);
+        d += headerBytes;
+        s += headerBytes;
+        n -= headerBytes;
     }
 
     constexpr auto unrollFactor = 8;
@@ -163,9 +163,9 @@ $data << EOD
     {
         std::vector<std::byte, llama::bloballoc::AlignedAllocator<std::byte, 64>> dst(dataSize);
         Stopwatch watch;
-        for(auto i = 0; i < REPETITIONS; i++)
+        for(auto i = 0; i < repetitions; i++)
             memcpy(dst.data(), src.data(), dataSize);
-        const auto seconds = watch.printAndReset(name, '\t') / REPETITIONS;
+        const auto seconds = watch.printAndReset(name, '\t') / repetitions;
         const auto gbs = (dataSize / seconds) / (1024.0 * 1024.0 * 1024.0);
         std::cout << gbs << "GiB/s\t\n";
         plotFile << gbs << "\t";
@@ -175,7 +175,7 @@ $data << EOD
     plotFile << "\"byte[] -> byte[]\"\t";
     benchmarkMemcpy("memcpy", std::memcpy);
 #ifdef __AVX2__
-    benchmarkMemcpy("memcpy_avx2", memcpy_avx2);
+    benchmarkMemcpy("memcpy_avx2", memcpyAVX2);
 #else
     plotFile << "0\t";
 #endif
@@ -184,7 +184,7 @@ $data << EOD
         [&](auto* dst, auto* src, auto size)
         {
 #pragma omp parallel
-            llama::internal::parallel_memcpy(dst, src, size, omp_get_thread_num(), omp_get_num_threads(), std::memcpy);
+            llama::internal::parallelMemcpy(dst, src, size, omp_get_thread_num(), omp_get_num_threads(), std::memcpy);
         });
 #ifdef __AVX2__
     benchmarkMemcpy(
@@ -192,7 +192,7 @@ $data << EOD
         [&](auto* dst, auto* src, auto size)
         {
 #    pragma omp parallel
-            llama::internal::parallel_memcpy(dst, src, size, omp_get_thread_num(), omp_get_num_threads(), memcpy_avx2);
+            llama::internal::parallelMemcpy(dst, src, size, omp_get_thread_num(), omp_get_num_threads(), memcpyAVX2);
         });
 #else
     plotFile << "0\t";
@@ -217,9 +217,9 @@ $data << EOD
         {
             auto dstView = llama::allocViewUninitialized(dstMapping);
             Stopwatch watch;
-            for(auto i = 0; i < REPETITIONS; i++)
+            for(auto i = 0; i < repetitions; i++)
                 copy(srcView, dstView);
-            const auto seconds = watch.printAndReset(name, '\t') / REPETITIONS;
+            const auto seconds = watch.printAndReset(name, '\t') / repetitions;
             const auto gbs = (dataSize / seconds) / (1024.0 * 1024.0 * 1024.0);
             const auto dstHash = hash(dstView);
             std::cout << gbs << "GiB/s\t" << (srcHash == dstHash ? "" : "\thash BAD ") << "\n";
@@ -233,7 +233,7 @@ $data << EOD
         benchmarkCopy(
             "naive copy",
             [](const auto& srcView, auto& dstView) { llama::fieldWiseCopy(srcView, dstView); });
-        benchmarkCopy("std::copy", [](const auto& srcView, auto& dstView) { std_copy(srcView, dstView); });
+        benchmarkCopy("std::copy", [](const auto& srcView, auto& dstView) { stdCopy(srcView, dstView); });
         constexpr auto oneIsAoSoA
             = llama::mapping::isAoSoA<decltype(srcMapping)> || llama::mapping::isAoSoA<decltype(dstMapping)>;
         if constexpr(oneIsAoSoA)

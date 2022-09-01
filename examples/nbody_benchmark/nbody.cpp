@@ -10,13 +10,13 @@
 #include <utility>
 #include <vector>
 
-constexpr auto PROBLEM_SIZE = 16 * 1024;
-constexpr auto STEPS = 10;
-constexpr auto PRINT_BLOCK_PLACEMENT = false;
+constexpr auto problemSize = 16 * 1024;
+constexpr auto steps = 10;
+constexpr auto printBlockPlacement = false;
 
 using FP = float;
-constexpr FP TIMESTEP = 0.0001f;
-constexpr FP EPS2 = 0.01f;
+constexpr FP timestep = 0.0001f;
+constexpr FP epS2 = 0.01f;
 
 // clang-format off
 namespace tag
@@ -49,21 +49,21 @@ LLAMA_FN_HOST_ACC_INLINE void pPInteraction(ParticleRef p1, ParticleRef p2)
 {
     auto dist = p1(tag::Pos{}) - p2(tag::Pos{});
     dist *= dist;
-    const FP distSqr = EPS2 + dist(tag::X{}) + dist(tag::Y{}) + dist(tag::Z{});
+    const FP distSqr = epS2 + dist(tag::X{}) + dist(tag::Y{}) + dist(tag::Z{});
     const FP distSixth = distSqr * distSqr * distSqr;
     const FP invDistCube = 1.0f / std::sqrt(distSixth);
     const FP s = p2(tag::Mass{}) * invDistCube;
-    dist *= s * TIMESTEP;
+    dist *= s * timestep;
     p1(tag::Vel{}) += dist;
 }
 
 template<typename View>
 void update(View& particles)
 {
-    for(std::size_t i = 0; i < PROBLEM_SIZE; i++)
+    for(std::size_t i = 0; i < problemSize; i++)
     {
         LLAMA_INDEPENDENT_DATA
-        for(std::size_t j = 0; j < PROBLEM_SIZE; j++)
+        for(std::size_t j = 0; j < problemSize; j++)
             pPInteraction(particles(j), particles(i));
     }
 }
@@ -72,8 +72,8 @@ template<typename View>
 void move(View& particles)
 {
     LLAMA_INDEPENDENT_DATA
-    for(std::size_t i = 0; i < PROBLEM_SIZE; i++)
-        particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * TIMESTEP;
+    for(std::size_t i = 0; i < problemSize; i++)
+        particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * timestep;
 }
 
 template<std::size_t Mapping, std::size_t Alignment>
@@ -86,7 +86,7 @@ void run(std::ostream& plotFile)
     const auto mapping = [&]
     {
         using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 1>;
-        const auto extents = ArrayExtents{PROBLEM_SIZE};
+        const auto extents = ArrayExtents{problemSize};
         if constexpr(Mapping == 0)
             return llama::mapping::AoS<ArrayExtents, Particle>{extents};
         if constexpr(Mapping == 1)
@@ -100,7 +100,7 @@ void run(std::ostream& plotFile)
         [](auto, std::size_t size)
         { return llama::bloballoc::Vector{}(std::integral_constant<std::size_t, Alignment>{}, size); });
 
-    if constexpr(PRINT_BLOCK_PLACEMENT)
+    if constexpr(printBlockPlacement)
     {
         std::vector<std::pair<std::uint64_t, std::uint64_t>> blobRanges;
         for(const auto& blob : particles.storageBlobs)
@@ -124,7 +124,7 @@ void run(std::ostream& plotFile)
 
     std::default_random_engine engine; // NOLINT(readability-misleading-indentation)
     std::normal_distribution<FP> dist(FP{0}, FP{1});
-    for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+    for(std::size_t i = 0; i < problemSize; ++i)
     {
         auto p = particles(i);
         p(tag::Pos{}, tag::X{}) = dist(engine);
@@ -138,7 +138,7 @@ void run(std::ostream& plotFile)
 
     double sumUpdate = 0;
     Stopwatch watch;
-    for(std::size_t s = 0; s < STEPS; ++s)
+    for(std::size_t s = 0; s < steps; ++s)
     {
         update(particles);
         sumUpdate += watch.printAndReset("update", '\t');
@@ -148,7 +148,7 @@ void run(std::ostream& plotFile)
 
     if(Mapping == 0)
         plotFile << Alignment;
-    plotFile << '\t' << sumUpdate / STEPS << (Mapping == 2 ? '\n' : '\t');
+    plotFile << '\t' << sumUpdate / steps << (Mapping == 2 ? '\n' : '\t');
 }
 
 auto main() -> int
@@ -168,7 +168,7 @@ set key out top center maxrows 3
 set yrange [0:*]
 $data << EOD
 )",
-        PROBLEM_SIZE / 1000,
+        problemSize / 1000,
         common::hostname());
 
     mp_for_each<mp_iota_c<28>>(
