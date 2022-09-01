@@ -112,7 +112,7 @@ try
     chrono.printAndReset("Alloc views");
 
     std::default_random_engine generator;
-    std::normal_distribution<FP> distribution(FP(0), FP(1));
+    std::normal_distribution<FP> distribution(FP{0}, FP{1});
     auto seed = distribution(generator);
     LLAMA_INDEPENDENT_DATA
     for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)

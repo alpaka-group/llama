@@ -18,6 +18,7 @@
 
 #include <alpaka/alpaka.hpp>
 #include <alpaka/example/ExampleDefaultAcc.hpp>
+#include <cstddef>
 #include <iostream>
 #include <list>
 #include <llama/llama.hpp>
@@ -114,19 +115,16 @@ struct BlurKernel
         };
 
         LLAMA_INDEPENDENT_DATA
-        for(auto y = start[0]; y < end[0]; ++y)
+        for(int y = start[0]; y < end[0]; ++y)
             LLAMA_INDEPENDENT_DATA
-        for(auto x = start[1]; x < end[1]; ++x)
+        for(int x = start[1]; x < end[1]; ++x)
         {
             llama::One<PixelOnAcc> sum{0};
 
-            using ItType = std::int64_t;
-            const ItType iBStart = SHARED ? ItType(y) - ItType(bi[0] * ElemsPerBlock) : y;
-            const ItType iAStart = SHARED ? ItType(x) - ItType(bi[1] * ElemsPerBlock) : x;
-            const ItType i_b_end
-                = SHARED ? ItType(y + 2 * KernelSize + 1) - ItType(bi[0] * ElemsPerBlock) : y + 2 * KernelSize + 1;
-            const ItType i_a_end
-                = SHARED ? ItType(x + 2 * KernelSize + 1) - ItType(bi[1] * ElemsPerBlock) : x + 2 * KernelSize + 1;
+            const int iBStart = SHARED ? y - bi[0] * ElemsPerBlock : y;
+            const int iAStart = SHARED ? x - bi[1] * ElemsPerBlock : x;
+            const int i_b_end = SHARED ? y + 2 * KernelSize + 1 - bi[0] * ElemsPerBlock : y + 2 * KernelSize + 1;
+            const int i_a_end = SHARED ? x + 2 * KernelSize + 1 - bi[1] * ElemsPerBlock : x + 2 * KernelSize + 1;
             LLAMA_INDEPENDENT_DATA
             for(auto b = iBStart; b < i_b_end; ++b)
                 LLAMA_INDEPENDENT_DATA
@@ -137,7 +135,7 @@ struct BlurKernel
                 else
                     sum += oldImage(b, a);
             }
-            sum /= FP((2 * KernelSize + 1) * (2 * KernelSize + 1));
+            sum /= static_cast<FP>((2 * KernelSize + 1) * (2 * KernelSize + 1));
             newImage(y + KernelSize, x + KernelSize) = sum;
         }
     }
@@ -161,6 +159,7 @@ try
     const DevAcc devAcc = alpaka::getDevByIdx<PltfAcc>(0);
     const DevHost devHost = alpaka::getDevByIdx<PltfHost>(0);
     std::vector<Queue> queue;
+    queue.reserve(CHUNK_COUNT);
     for(int i = 0; i < CHUNK_COUNT; ++i)
         queue.emplace_back(devAcc);
 
@@ -184,7 +183,7 @@ try
         int y = 0;
         int n = 3;
         unsigned char* data = stbi_load(argv[1], &x, &y, &n, 0);
-        image.resize(x * y * 3);
+        image.resize(static_cast<std::size_t>(x) * y * 3);
         std::copy(data, data + image.size(), begin(image));
         stbi_image_free(data);
         img_x = x;
@@ -239,9 +238,9 @@ try
 
     if(image.empty())
     {
-        image.resize(img_x * img_y * 3);
+        image.resize(static_cast<std::size_t>(img_x) * img_y * 3);
         std::default_random_engine generator;
-        std::normal_distribution<FP> distribution{FP(0), FP(0.5)};
+        std::normal_distribution<FP> distribution{FP{0}, FP{0.5}};
         for(int y = 0; y < buffer_y; ++y)
         {
             LLAMA_INDEPENDENT_DATA
@@ -262,10 +261,10 @@ try
             {
                 const auto X = std::clamp<int>(x, KERNEL_SIZE, img_x + KERNEL_SIZE - 1);
                 const auto Y = std::clamp<int>(y, KERNEL_SIZE, img_y + KERNEL_SIZE - 1);
-                const auto* pixel = &image[((Y - KERNEL_SIZE) * img_x + X - KERNEL_SIZE) * 3];
-                hostView(y, x)(tag::R()) = FP(pixel[0]) / 255;
-                hostView(y, x)(tag::G()) = FP(pixel[1]) / 255;
-                hostView(y, x)(tag::B()) = FP(pixel[2]) / 255;
+                const auto* pixel = &image[(static_cast<std::size_t>(Y - KERNEL_SIZE) * img_x + X - KERNEL_SIZE) * 3];
+                hostView(y, x)(tag::R()) = static_cast<FP>(pixel[0]) / 255;
+                hostView(y, x)(tag::G()) = static_cast<FP>(pixel[1]) / 255;
+                hostView(y, x)(tag::B()) = static_cast<FP>(pixel[2]) / 255;
             }
         }
     }
@@ -274,11 +273,9 @@ try
     const auto elems = alpaka::Vec<Dim, int>(elemCount, elemCount);
     const auto threads = alpaka::Vec<Dim, int>(threadCount, threadCount);
     const auto blocks = alpaka::Vec<Dim, int>(
-        static_cast<int>((CHUNK_SIZE + ELEMS_PER_BLOCK - 1) / ELEMS_PER_BLOCK),
-        static_cast<int>((CHUNK_SIZE + ELEMS_PER_BLOCK - 1) / ELEMS_PER_BLOCK));
-    const alpaka::Vec<Dim, int> chunks(
-        static_cast<int>((img_y + CHUNK_SIZE - 1) / CHUNK_SIZE),
-        static_cast<int>((img_x + CHUNK_SIZE - 1) / CHUNK_SIZE));
+        (CHUNK_SIZE + ELEMS_PER_BLOCK - 1) / ELEMS_PER_BLOCK,
+        (CHUNK_SIZE + ELEMS_PER_BLOCK - 1) / ELEMS_PER_BLOCK);
+    const alpaka::Vec<Dim, int> chunks((img_y + CHUNK_SIZE - 1) / CHUNK_SIZE, (img_x + CHUNK_SIZE - 1) / CHUNK_SIZE);
 
     const auto workdiv = alpaka::WorkDivMembers<Dim, int>{blocks, threads, elems};
 
@@ -384,10 +381,10 @@ try
             LLAMA_INDEPENDENT_DATA
             for(int x = 0; x < img_x; ++x)
             {
-                auto* pixel = &image[(y * img_x + x) * 3];
-                pixel[0] = static_cast<unsigned char>(hostView(y + KERNEL_SIZE, x + KERNEL_SIZE)(tag::R()) * 255.);
-                pixel[1] = static_cast<unsigned char>(hostView(y + KERNEL_SIZE, x + KERNEL_SIZE)(tag::G()) * 255.);
-                pixel[2] = static_cast<unsigned char>(hostView(y + KERNEL_SIZE, x + KERNEL_SIZE)(tag::B()) * 255.);
+                auto* pixel = &image[(static_cast<std::size_t>(y) * img_x + x) * 3];
+                pixel[0] = static_cast<unsigned char>(hostView(y + KERNEL_SIZE, x + KERNEL_SIZE)(tag::R()) * FP{255});
+                pixel[1] = static_cast<unsigned char>(hostView(y + KERNEL_SIZE, x + KERNEL_SIZE)(tag::G()) * FP{255});
+                pixel[2] = static_cast<unsigned char>(hostView(y + KERNEL_SIZE, x + KERNEL_SIZE)(tag::B()) * FP{255});
             }
         }
         stbi_write_png(out_filename.c_str(), static_cast<int>(img_x), static_cast<int>(img_y), 3, image.data(), 0);

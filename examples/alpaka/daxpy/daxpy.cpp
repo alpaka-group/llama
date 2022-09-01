@@ -10,7 +10,7 @@
 #include <omp.h>
 #include <vector>
 
-constexpr auto PROBLEM_SIZE = std::size_t{1024 * 1024 * 128};
+constexpr auto PROBLEM_SIZE = std::size_t{1024} * 1024 * 128;
 constexpr auto BLOCK_SIZE = std::size_t{256};
 constexpr auto WARMUP_STEPS = 1;
 constexpr auto STEPS = 5;
