@@ -286,17 +286,17 @@ void run(std::ostream& plotFile)
     watch.printAndReset("alloc views");
 
     std::mt19937_64 generator;
-    std::normal_distribution<FP> distribution(FP(0), FP(1));
+    std::normal_distribution<FP> distribution(FP{0}, FP{1});
     for(int i = 0; i < PROBLEM_SIZE; ++i)
     {
         llama::One<Particle> p;
         p(tag::Pos(), tag::X()) = distribution(generator);
         p(tag::Pos(), tag::Y()) = distribution(generator);
         p(tag::Pos(), tag::Z()) = distribution(generator);
-        p(tag::Vel(), tag::X()) = distribution(generator) / FP(10);
-        p(tag::Vel(), tag::Y()) = distribution(generator) / FP(10);
-        p(tag::Vel(), tag::Z()) = distribution(generator) / FP(10);
-        p(tag::Mass()) = distribution(generator) / FP(100);
+        p(tag::Vel(), tag::X()) = distribution(generator) / FP{10};
+        p(tag::Vel(), tag::Y()) = distribution(generator) / FP{10};
+        p(tag::Vel(), tag::Z()) = distribution(generator) / FP{10};
+        p(tag::Mass()) = distribution(generator) / FP{100};
         hostView(i) = p;
     }
     watch.printAndReset("init");

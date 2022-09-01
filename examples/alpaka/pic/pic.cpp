@@ -254,10 +254,10 @@ void initFields(Queue& queue, FieldView E, FieldView B, FieldView J)
         llama::shallowCopy(J));
 }
 
-constexpr size_t numpart = 2 * ppc * R_ * L;
+constexpr size_t numpart = std::size_t{2} * ppc * R_ * L;
 
 template<int FieldMapping, int ParticleMapping, typename Acc, typename Queue, typename Dev, typename DevHost>
-auto setup(Queue& queue, const Dev& dev, const DevHost& devHost)
+auto setup(Queue& queue, const Dev& dev, const DevHost& /*devHost*/)
 {
     // std::cout << "dt = " << dt << '\n';
 
@@ -294,7 +294,7 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& devHost)
     }();
 
     int i = 0;
-    auto alpakaBlobAlloc = [&](auto alignment, std::size_t count)
+    auto alpakaBlobAlloc = [&](auto /*alignment*/, std::size_t count)
     {
         fmt::print("Buffer #{}: {}MiB\n", i++, count / 1024 / 1024);
         return alpaka::allocBuf<std::byte, Size>(dev, count);
