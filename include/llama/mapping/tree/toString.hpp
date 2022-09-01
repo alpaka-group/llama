@@ -38,7 +38,7 @@ namespace llama::mapping::tree
 
     namespace internal
     {
-        inline void replace_all(std::string& str, const std::string& search, const std::string& replace)
+        inline void replaceAll(std::string& str, const std::string& search, const std::string& replace)
         {
             std::string::size_type i = 0;
             while((i = str.find(search, i)) != std::string::npos)
@@ -72,10 +72,10 @@ namespace llama::mapping::tree
     {
         auto raw = std::string{llama::structName<Type>()};
 #ifdef _MSC_VER
-        internal::replace_all(raw, " __cdecl(void)", "");
+        internal::replaceAll(raw, " __cdecl(void)", "");
 #endif
 #ifdef __GNUG__
-        internal::replace_all(raw, " ()", "");
+        internal::replaceAll(raw, " ()", "");
 #endif
         return internal::countAndIdentToString(leaf) + "(" + raw + ")";
     }

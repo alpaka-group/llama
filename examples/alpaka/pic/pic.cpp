@@ -28,33 +28,33 @@
 using Real = double;
 
 // simulation parameters
-constexpr size_t CELLS_X = 1000; // grid size (normalized units, speed of light = 1)
-constexpr size_t CELLS_Y = 1000; // grid size
-constexpr Real dx = 0.01; // size of the cell
-constexpr Real dt = 0.99 * dx / M_SQRT2; // length of a timestep
-constexpr int ppc = 10; // particles per cell
-constexpr int R_ = 200; // beam size
-constexpr int L = 400; // beam size
+constexpr size_t cellsX = 1000; // grid size (normalized units, speed of light = 1)
+constexpr size_t cellsY = 1000; // grid size
+constexpr Real cellSize = 0.01; // size of the cell
+constexpr Real dt = 0.99 * cellSize / M_SQRT2; // length of a timestep
+constexpr int particlesPerCell = 10; // particles per cell
+constexpr int beamR = 200; // beam size
+constexpr int beamL = 400; // beam size
 constexpr Real density = 0.2; // material density
-constexpr Real B0x = 0; // initial magnetic field
-constexpr Real B0y = 0;
-constexpr Real B0z = 0.1; // perpendicular to 2D particle movement, makes particles whirl
-constexpr Real v_drift = 0.2; // initial direction of particle beam
-constexpr Real v_therm = 0.05; // temperature/speed (ratio of speed of light), influences particle distribution
+constexpr Real b0x = 0; // initial magnetic field
+constexpr Real b0y = 0;
+constexpr Real b0z = 0.1; // perpendicular to 2D particle movement, makes particles whirl
+constexpr Real vDrift = 0.2; // initial direction of particle beam
+constexpr Real vTherm = 0.05; // temperature/speed (ratio of speed of light), influences particle distribution
 constexpr Real alpha = 0.0; // beam angle
-constexpr int NSTEPS = 100; // simulation steps
+constexpr int nsteps = 100; // simulation steps
 const std::optional<int> outputInterval = {}; // e.g. 10
-constexpr Real Rcx = R_ * dx + 0; // beam center
-constexpr Real Rcy = R_ * dx + 0;
-constexpr Real Rcz = 0;
+constexpr Real beamCenterX = beamR * cellSize + 0; // beam center
+constexpr Real beamCenterY = beamR * cellSize + 0;
+constexpr Real beamCenterZ = 0;
 constexpr auto reportInterval = 10;
 
 // tuning parameters
-constexpr auto AOSOA_LANES = 32;
-constexpr auto THREADS_PER_BLOCK = 128;
+constexpr auto aosoaLanes = 32;
+constexpr auto threadsPerBlock = 128;
 
-constexpr size_t X_ = CELLS_X + 2; // grid size including ghost cells
-constexpr size_t Y_ = CELLS_Y + 2; // grid size including ghost cells
+constexpr size_t gridX = cellsX + 2; // grid size including ghost cells
+constexpr size_t gridY = cellsY + 2; // grid size including ghost cells
 
 // clang-format off
 struct X{};
@@ -80,7 +80,7 @@ using Particle = llama::Record<
 >;
 // clang-format on
 
-constexpr Real PI = M_PI;
+constexpr Real pi = M_PI;
 
 template<typename Acc>
 inline constexpr bool isGPU = false;
@@ -97,7 +97,7 @@ using Vec = alpaka::Vec<Dim, Size>;
 template<typename Acc>
 auto roundUp1DWorkDiv(std::size_t n)
 {
-    const auto tpb = std::size_t{isGPU<Acc> ? THREADS_PER_BLOCK : 1};
+    const auto tpb = std::size_t{isGPU<Acc> ? threadsPerBlock : 1};
     auto wd = alpaka::WorkDivMembers<Dim, Size>(
         Vec{std::size_t{1}, (n + tpb - 1) / tpb},
         Vec{std::size_t{1}, tpb},
@@ -109,7 +109,7 @@ auto roundUp1DWorkDiv(std::size_t n)
 template<typename Acc>
 auto roundUp2DWorkDiv(std::size_t y, std::size_t x)
 {
-    const auto tpb = isGPU<Acc> ? THREADS_PER_BLOCK : 1;
+    const auto tpb = isGPU<Acc> ? threadsPerBlock : 1;
     const auto ytpb = std::size_t{1} << (static_cast<std::size_t>(std::log2(tpb)) / 2);
     const auto xtpb = tpb / ytpb;
     auto wd = alpaka::WorkDivMembers<Dim, Size>(
@@ -129,8 +129,8 @@ LLAMA_FN_HOST_ACC_INLINE auto makeV3Real(Real x, Real y, Real z) noexcept
     return r;
 }
 
-const auto Rc = makeV3Real(Rcx, Rcy, Rcz);
-constexpr Real inv_dx = 1 / dx;
+const auto rc = makeV3Real(beamCenterX, beamCenterY, beamCenterZ);
+constexpr Real invDx = 1 / cellSize;
 
 template<typename FieldView>
 LLAMA_FN_HOST_ACC_INLINE auto rot(const FieldView& field, size_t i, size_t j, int direction)
@@ -139,9 +139,9 @@ LLAMA_FN_HOST_ACC_INLINE auto rot(const FieldView& field, size_t i, size_t j, in
     const size_t jj = j + direction;
 
     return makeV3Real(
-        (field(i, j)(Z{}) - field(i, jj)(Z{})) * inv_dx,
-        (field(ii, j)(Z{}) - field(i, j)(Z{})) * inv_dx,
-        (field(i, j)(Y{}) - field(ii, j)(Y{})) * inv_dx - (field(i, j)(X{}) - field(i, jj)(X{})) * inv_dx);
+        (field(i, j)(Z{}) - field(i, jj)(Z{})) * invDx,
+        (field(ii, j)(Z{}) - field(i, j)(Z{})) * invDx,
+        (field(i, j)(Y{}) - field(ii, j)(Y{})) * invDx - (field(i, j)(X{}) - field(i, jj)(X{})) * invDx);
 }
 
 auto swapBytes(float t) -> float
@@ -161,17 +161,17 @@ void output(int n, const std::string& name, const VectorField2D& field)
 
     f << "# vtk DataFile Version 3.0\nvtkfile\n"
       << "BINARY\nDATASET STRUCTURED_POINTS\n"
-      << "DIMENSIONS 1 " << Y_ << " " << X_ << "\n"
+      << "DIMENSIONS 1 " << gridY << " " << gridX << "\n"
       << "ORIGIN 0 0 0\n"
-      << "SPACING " << dx << " " << dx << " " << dx << "\n"
-      << "POINT_DATA " << X_ * Y_ << "\n"
+      << "SPACING " << cellSize << " " << cellSize << " " << cellSize << "\n"
+      << "POINT_DATA " << gridX * gridY << "\n"
       << "VECTORS " << name << " float\n";
 
     std::vector<float> buffer;
-    buffer.reserve(X_ * Y_ * 3);
-    for(size_t i = 0; i < X_; i++)
+    buffer.reserve(gridX * gridY * 3);
+    for(size_t i = 0; i < gridX; i++)
     {
-        for(size_t j = 0; j < Y_; j++)
+        for(size_t j = 0; j < gridY; j++)
         {
             const auto& v = field(i, j);
             buffer.push_back(swapBytes(v(X{})));
@@ -235,17 +235,17 @@ void output(int n, const ParticleView& particles)
 template<typename Acc, typename Queue, typename FieldView>
 void initFields(Queue& queue, FieldView E, FieldView B, FieldView J)
 {
-    const auto workDiv = roundUp2DWorkDiv<Acc>(X_, Y_);
+    const auto workDiv = roundUp2DWorkDiv<Acc>(gridX, gridY);
     alpaka::exec<Acc>(
         queue,
         workDiv,
         [] ALPAKA_FN_ACC(const auto& acc, auto E, auto B, auto J)
         {
             const auto [x, y] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
-            if(x < X_ && y < Y_)
+            if(x < gridX && y < gridY)
             {
                 E(x, y) = 0;
-                B(x, y) = 1e6 * makeV3Real(B0x, B0y, B0z);
+                B(x, y) = 1e6 * makeV3Real(b0x, b0y, b0z);
                 J(x, y) = 0;
             }
         },
@@ -254,7 +254,7 @@ void initFields(Queue& queue, FieldView E, FieldView B, FieldView J)
         llama::shallowCopy(J));
 }
 
-constexpr size_t numpart = std::size_t{2} * ppc * R_ * L;
+constexpr size_t numpart = std::size_t{2} * particlesPerCell * beamR * beamL;
 
 template<int FieldMapping, int ParticleMapping, typename Acc, typename Queue, typename Dev, typename DevHost>
 auto setup(Queue& queue, const Dev& dev, const DevHost& /*devHost*/)
@@ -264,7 +264,7 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& /*devHost*/)
     const auto fieldMapping = []
     {
         using ArrayExtents = llama::ArrayExtentsDynamic<size_t, 2>;
-        const auto fieldExtents = ArrayExtents{{X_, Y_}};
+        const auto fieldExtents = ArrayExtents{{gridX, gridY}};
         if constexpr(FieldMapping == 0)
             return llama::mapping::AoS<ArrayExtents, V3Real>(fieldExtents);
         if constexpr(FieldMapping == 1)
@@ -290,7 +290,7 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& /*devHost*/)
             return llama::mapping::SoA<ArrayExtents, V3Real, true, false, llama::mapping::LinearizeArrayDimsMorton>(
                 fieldExtents);
         if constexpr(FieldMapping == 9)
-            return llama::mapping::AoSoA<ArrayExtents, V3Real, AOSOA_LANES>{fieldExtents};
+            return llama::mapping::AoSoA<ArrayExtents, V3Real, aosoaLanes>{fieldExtents};
     }();
 
     int i = 0;
@@ -300,14 +300,14 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& /*devHost*/)
         return alpaka::allocBuf<std::byte, Size>(dev, count);
     };
     //    auto alpakaBlobAlloc = llama::bloballoc::AlpakaBuf<Size, decltype(dev)>{dev};
-    auto E = llama::allocViewUninitialized(fieldMapping, alpakaBlobAlloc);
-    auto B = llama::allocViewUninitialized(fieldMapping, alpakaBlobAlloc);
-    auto J = llama::allocViewUninitialized(fieldMapping, alpakaBlobAlloc);
+    auto e = llama::allocViewUninitialized(fieldMapping, alpakaBlobAlloc);
+    auto b = llama::allocViewUninitialized(fieldMapping, alpakaBlobAlloc);
+    auto j = llama::allocViewUninitialized(fieldMapping, alpakaBlobAlloc);
 
-    initFields<Acc>(queue, E, B, J);
+    initFields<Acc>(queue, e, b, j);
 
-    const Real r = R_ * dx;
-    const Real l = L * dx;
+    const Real r = beamR * cellSize;
+    const Real l = beamL * cellSize;
 
     auto particleMapping = [&]
     {
@@ -320,7 +320,7 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& /*devHost*/)
         if constexpr(ParticleMapping == 2)
             return llama::mapping::SoA<ArrayExtents, Particle, true>{particleExtents};
         if constexpr(ParticleMapping == 3)
-            return llama::mapping::AoSoA<ArrayExtents, Particle, AOSOA_LANES>{particleExtents};
+            return llama::mapping::AoSoA<ArrayExtents, Particle, aosoaLanes>{particleExtents};
     }();
     const auto particleBufferSize = particleMapping.blobSize(0);
 
@@ -329,7 +329,7 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& /*devHost*/)
 
     std::default_random_engine engine;
     auto uniform = [&] { return std::uniform_real_distribution<Real>{}(engine); };
-    auto gauss = [&] { return sqrt(-2.0 * log(1.0 - uniform())) * sin(2 * PI * uniform()); };
+    auto gauss = [&] { return sqrt(-2.0 * log(1.0 - uniform())) * sin(2 * pi * uniform()); };
 
     /* Beam initialization. Plasma must be neutral in each cell, so let's just
      * create an electron and a proton at the same spot. (I know...) */
@@ -337,32 +337,32 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& /*devHost*/)
     {
         const Real rp = 2 * r * (uniform() - 0.5);
         const Real lp = l * uniform();
-        const auto r = Rc + makeV3Real(lp * sin(alpha) + rp * cos(alpha), lp * cos(alpha) - rp * sin(alpha), 0)
-            + dx * makeV3Real(1, 1, 0); // ghost cell
-        const auto u = makeV3Real(v_drift * sin(alpha), v_drift * cos(alpha), 0);
+        const auto r = rc + makeV3Real(lp * sin(alpha) + rp * cos(alpha), lp * cos(alpha) - rp * sin(alpha), 0)
+            + cellSize * makeV3Real(1, 1, 0); // ghost cell
+        const auto u = makeV3Real(vDrift * sin(alpha), vDrift * cos(alpha), 0);
 
-        assert(r(X{}) >= 0 && r(X{}) <= (CELLS_X + 1) * dx);
-        assert(r(Y{}) >= 0 && r(Y{}) <= (CELLS_Y + 1) * dx);
+        assert(r(X{}) >= 0 && r(X{}) <= (cellsX + 1) * cellSize);
+        assert(r(Y{}) >= 0 && r(Y{}) <= (cellsY + 1) * cellSize);
 
         /* Electron */
         auto p = particlesHost(i);
         p(Q{}) = -1;
         p(M{}) = 1;
         p(R{}) = r;
-        p(U{}) = u + v_therm * makeV3Real(gauss(), gauss(), gauss());
+        p(U{}) = u + vTherm * makeV3Real(gauss(), gauss(), gauss());
 
         /* Proton */
         auto p2 = particlesHost(i + 1);
         p2(Q{}) = 1;
         p2(M{}) = 1386;
         p2(R{}) = r;
-        p2(U{}) = u + v_therm * makeV3Real(gauss(), gauss(), gauss());
+        p2(U{}) = u + vTherm * makeV3Real(gauss(), gauss(), gauss());
     }
     // std::shuffle(particlesHost.begin(), particlesHost.end(), engine);
     for(auto i = 0; i < decltype(particleMapping)::blobCount; i++)
         alpaka::memcpy(queue, particles.storageBlobs[i], particlesHost.storageBlobs[i]);
 
-    return std::tuple{E, B, J, particles};
+    return std::tuple{e, b, j, particles};
 }
 
 template<typename Vec3F>
@@ -381,29 +381,29 @@ LLAMA_FN_HOST_ACC_INLINE auto cross(const Vec3F& a, const Vec3F& b)
 }
 
 template<typename ParticleRef, typename FieldView>
-LLAMA_FN_HOST_ACC_INLINE void advance_particle(ParticleRef part, const FieldView& E, const FieldView& B)
+LLAMA_FN_HOST_ACC_INLINE void advanceParticle(ParticleRef part, const FieldView& E, const FieldView& B)
 {
     /* Interpolate fields (nearest-neighbor) */
-    const auto i = static_cast<size_t>(part(R{}, X{}) * inv_dx);
-    const auto i_shift = static_cast<size_t>(std::lround(part(R{}, X{}) * inv_dx));
-    const auto j = static_cast<size_t>(part(R{}, Y{}) * inv_dx);
-    const auto j_shift = static_cast<size_t>(std::lround(part(R{}, Y{}) * inv_dx));
+    const auto i = static_cast<size_t>(part(R{}, X{}) * invDx);
+    const auto iShift = static_cast<size_t>(std::lround(part(R{}, X{}) * invDx));
+    const auto j = static_cast<size_t>(part(R{}, Y{}) * invDx);
+    const auto jShift = static_cast<size_t>(std::lround(part(R{}, Y{}) * invDx));
 
-    const auto E_ngp = makeV3Real(E(i_shift, j)(X{}), E(i, j_shift)(Y{}), E(i, j)(Z{}));
-    const auto B_ngp = makeV3Real(B(i, j_shift)(X{}), B(i_shift, j)(Y{}), B(i_shift, j_shift)(Z{}));
+    const auto eNgp = makeV3Real(E(iShift, j)(X{}), E(i, jShift)(Y{}), E(i, j)(Z{}));
+    const auto bNgp = makeV3Real(B(i, jShift)(X{}), B(iShift, j)(Y{}), B(iShift, jShift)(Z{}));
 
     /* q/m [SI] -> 2*PI*q/m in dimensionless */
-    const Real qmpidt = part(Q{}) / part(M{}) * PI * dt;
+    const Real qmpidt = part(Q{}) / part(M{}) * pi * dt;
     const Real igamma = 1 / sqrt(1 + squaredNorm(part(U{})));
 
-    const auto F_E = qmpidt * E_ngp;
-    const auto F_B = igamma * qmpidt * B_ngp;
+    const auto fE = qmpidt * eNgp;
+    const auto fB = igamma * qmpidt * bNgp;
 
     /* Buneman-Boris scheme */
-    const auto u_m = part(U{}) + F_E;
-    const auto u_0 = u_m + cross(u_m, F_B);
-    const auto u_p = u_m + 2 / (1 + squaredNorm(F_B)) * cross(u_0, F_B);
-    const auto u = u_p + F_E;
+    const auto uM = part(U{}) + fE;
+    const auto u0 = uM + cross(uM, fB);
+    const auto uP = uM + 2 / (1 + squaredNorm(fB)) * cross(u0, fB);
+    const auto u = uP + fE;
 
     /* Update stored velocity and advance particle */
     const Real igamma2 = 1 / sqrt(1 + squaredNorm(part(U{})));
@@ -412,71 +412,71 @@ LLAMA_FN_HOST_ACC_INLINE void advance_particle(ParticleRef part, const FieldView
     part(R{}, Z{}) = 0;
 
 #ifndef ALPAKA_ACC_GPU_CUDA_ENABLED
-    assert(part(R{}, X{}) >= 0 && part(R{}, Y{}) <= (CELLS_X + 1) * dx);
-    assert(part(R{}, Y{}) >= 0 && part(R{}, Y{}) <= (CELLS_Y + 1) * dx);
+    assert(part(R{}, X{}) >= 0 && part(R{}, Y{}) <= (cellsX + 1) * cellSize);
+    assert(part(R{}, Y{}) >= 0 && part(R{}, Y{}) <= (cellsY + 1) * cellSize);
 #endif
 }
 
 template<typename ParticleRef>
-LLAMA_FN_HOST_ACC_INLINE void particle_boundary_conditions(ParticleRef p)
+LLAMA_FN_HOST_ACC_INLINE void particleBoundaryConditions(ParticleRef p)
 {
     //* Periodic boundary condition
-    if(p(R{}, X{}) < dx)
-        p(R{}, X{}) += (X_ - 3) * dx;
-    else if(p(R{}, X{}) > (X_ - 2) * dx)
-        p(R{}, X{}) -= (X_ - 3) * dx;
-    if(p(R{}, Y{}) < dx)
-        p(R{}, Y{}) += (Y_ - 3) * dx;
-    else if(p(R{}, Y{}) > (Y_ - 2) * dx)
-        p(R{}, Y{}) -= (Y_ - 3) * dx;
+    if(p(R{}, X{}) < cellSize)
+        p(R{}, X{}) += (gridX - 3) * cellSize;
+    else if(p(R{}, X{}) > (gridX - 2) * cellSize)
+        p(R{}, X{}) -= (gridX - 3) * cellSize;
+    if(p(R{}, Y{}) < cellSize)
+        p(R{}, Y{}) += (gridY - 3) * cellSize;
+    else if(p(R{}, Y{}) > (gridY - 2) * cellSize)
+        p(R{}, Y{}) -= (gridY - 3) * cellSize;
 }
 
 template<typename ParticleRef, typename FieldView>
-LLAMA_FN_HOST_ACC_INLINE void deposit_current(const ParticleRef& part, FieldView& J)
+LLAMA_FN_HOST_ACC_INLINE void depositCurrent(const ParticleRef& part, FieldView& J)
 {
     /* Calculation of previous position */
     const Real igamma = 1 / sqrt(1 + squaredNorm(part(U{})));
-    const auto r_old = part(R{}) - igamma * dt * part(U{}); // Position should be a 2D vector
+    const auto rOld = part(R{}) - igamma * dt * part(U{}); // Position should be a 2D vector
 
     /* Particle position to cell coordinates */
-    const auto i = static_cast<size_t>(part(R{}, X{}) * inv_dx);
-    const auto i_shift = static_cast<size_t>(std::lround(part(R{}, X{}) * inv_dx));
-    const auto j = static_cast<size_t>(part(R{}, Y{}) * inv_dx);
-    const auto j_shift = static_cast<size_t>(std::lround(part(R{}, Y{}) * inv_dx));
+    const auto i = static_cast<size_t>(part(R{}, X{}) * invDx);
+    const auto iShift = static_cast<size_t>(std::lround(part(R{}, X{}) * invDx));
+    const auto j = static_cast<size_t>(part(R{}, Y{}) * invDx);
+    const auto jShift = static_cast<size_t>(std::lround(part(R{}, Y{}) * invDx));
 
-    const auto i_old = static_cast<size_t>(r_old(X{}) * inv_dx);
-    const auto i_old_shift = static_cast<size_t>(std::lround(r_old(X{}) * inv_dx));
-    const auto j_old = static_cast<size_t>(r_old(Y{}) * inv_dx);
-    const auto j_old_shift = static_cast<size_t>(std::lround(r_old(Y{}) * inv_dx));
+    const auto iOld = static_cast<size_t>(rOld(X{}) * invDx);
+    const auto iOldShift = static_cast<size_t>(std::lround(rOld(X{}) * invDx));
+    const auto jOld = static_cast<size_t>(rOld(Y{}) * invDx);
+    const auto jOldShift = static_cast<size_t>(std::lround(rOld(Y{}) * invDx));
 
     /* Current density deposition */
-    const auto F = density * part(Q{}) * igamma * part(U{});
+    const auto f = density * part(Q{}) * igamma * part(U{});
 
     // mid-x edge at (0.5, 0)
-    J(i_old_shift, j_old)(X{}) -= F(X{});
-    J(i_shift, j)(X{}) += F(X{});
+    J(iOldShift, jOld)(X{}) -= f(X{});
+    J(iShift, j)(X{}) += f(X{});
 
     // mid-y edge at (0, 0.5)
-    J(i_old, j_old_shift)(Y{}) -= F(Y{});
-    J(i, j_shift)(Y{}) += F(Y{});
+    J(iOld, jOldShift)(Y{}) -= f(Y{});
+    J(i, jShift)(Y{}) += f(Y{});
 
     // Fake mid-z edge at node (0, 0)
-    J(i_old, j_old)(Z{}) -= F(Z{});
-    J(i, j)(Z{}) += F(Z{});
+    J(iOld, jOld)(Z{}) -= f(Z{});
+    J(i, j)(Z{}) += f(Z{});
 }
 
 /* Half-step in B */
 template<typename FieldView>
-LLAMA_FN_HOST_ACC_INLINE void advance_B_half(const FieldView& E, FieldView& B, size_t i, size_t j)
+LLAMA_FN_HOST_ACC_INLINE void advanceBHalf(const FieldView& E, FieldView& B, size_t i, size_t j)
 {
     B(i, j) += 0.5 * dt * rot(E, i, j, 1);
 }
 
 /* Full step in E */
 template<typename FieldView>
-LLAMA_FN_HOST_ACC_INLINE void advance_E(FieldView& E, const FieldView& B, const FieldView& J, size_t i, size_t j)
+LLAMA_FN_HOST_ACC_INLINE void advanceE(FieldView& E, const FieldView& B, const FieldView& J, size_t i, size_t j)
 {
-    E(i, j) += +dt * rot(B, i, j, -1) - 2 * PI * +dt * J(i, j); // full step i n E
+    E(i, j) += +dt * rot(B, i, j, -1) - 2 * pi * +dt * J(i, j); // full step i n E
 }
 
 using clock_ = std::chrono::high_resolution_clock;
@@ -518,27 +518,27 @@ struct Times
 };
 
 template<typename Acc, typename Queue, typename FieldView>
-void field_boundary_condition(Queue& queue, FieldView& field)
+void fieldBoundaryCondition(Queue& queue, FieldView& field)
 {
-    static const auto workDiv = roundUp1DWorkDiv<Acc>(X_ + Y_);
+    static const auto workDiv = roundUp1DWorkDiv<Acc>(gridX + gridY);
     alpaka::exec<Acc>(
         queue,
         workDiv,
         [] ALPAKA_FN_ACC(const auto& acc, auto field)
         {
             const auto [_, i] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
-            if(i < X_)
+            if(i < gridX)
             {
-                field(i, size_t{0}) = field(i, Y_ - 2);
-                field(i, Y_ - 1) = field(i, size_t{1});
+                field(i, size_t{0}) = field(i, gridY - 2);
+                field(i, gridY - 1) = field(i, size_t{1});
             }
             else
             {
-                const auto j = i - X_;
-                if(j > 0 && j < Y_ - 1)
+                const auto j = i - gridX;
+                if(j > 0 && j < gridY - 1)
                 {
-                    field(size_t{0}, j) = field(X_ - 2, j);
-                    field(X_ - 1, j) = field(size_t{1}, j);
+                    field(size_t{0}, j) = field(gridX - 2, j);
+                    field(gridX - 1, j) = field(size_t{1}, j);
                 }
             }
         },
@@ -550,10 +550,10 @@ void step(Queue& queue, FieldView& E, FieldView& B, FieldView& J, ParticleView& 
 {
     static constexpr auto gridStride = false; // isGPU<Acc>;
     constexpr auto elements = gridStride ? 16 : 1;
-    static const auto fieldX = (X_ + elements - 1) / elements;
-    static const auto fieldWorkDiv = roundUp2DWorkDiv<Acc>(fieldX, Y_);
+    static const auto fieldX = (gridX + elements - 1) / elements;
+    static const auto fieldWorkDiv = roundUp2DWorkDiv<Acc>(fieldX, gridY);
     static const auto particleWorkDiv = roundUp1DWorkDiv<Acc>(numpart);
-    static const auto borderWorkDiv = roundUp1DWorkDiv<Acc>(X_ + Y_);
+    static const auto borderWorkDiv = roundUp1DWorkDiv<Acc>(gridX + gridY);
 
     // clear charge/current density fields
     auto start = clock_::now();
@@ -566,8 +566,8 @@ void step(Queue& queue, FieldView& E, FieldView& B, FieldView& J, ParticleView& 
             if constexpr(gridStride)
             {
                 const auto [xStride, _] = alpaka::getWorkDiv<alpaka::Grid, alpaka::Threads>(acc);
-                if(y < Y_)
-                    while(x < X_)
+                if(y < gridY)
+                    while(x < gridX)
                     {
                         J(x, y) = 0;
                         x += xStride;
@@ -575,7 +575,7 @@ void step(Queue& queue, FieldView& E, FieldView& B, FieldView& J, ParticleView& 
             }
             else
             {
-                if(x < X_ && y < Y_)
+                if(x < gridX && y < gridY)
                     J(x, y) = 0;
             }
         },
@@ -592,8 +592,8 @@ void step(Queue& queue, FieldView& E, FieldView& B, FieldView& J, ParticleView& 
             const auto [_, i] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
             if(i < numpart)
             {
-                advance_particle(particles(i), E, B);
-                particle_boundary_conditions(particles(i));
+                advanceParticle(particles(i), E, B);
+                particleBoundaryConditions(particles(i));
             }
         },
         llama::shallowCopy(particles),
@@ -610,7 +610,7 @@ void step(Queue& queue, FieldView& E, FieldView& B, FieldView& J, ParticleView& 
         {
             const auto [_, i] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
             if(i < numpart)
-                deposit_current(particles(i), J);
+                depositCurrent(particles(i), J);
         },
         llama::shallowCopy(particles),
         llama::shallowCopy(J));
@@ -624,25 +624,25 @@ void step(Queue& queue, FieldView& E, FieldView& B, FieldView& J, ParticleView& 
         [] ALPAKA_FN_ACC(const auto& acc, auto J)
         {
             const auto [_, i] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
-            if(i < X_)
+            if(i < gridX)
             {
-                J(i, Y_ - 2) += J(i, size_t{0});
-                J(i, size_t{1}) += J(i, Y_ - 1);
+                J(i, gridY - 2) += J(i, size_t{0});
+                J(i, size_t{1}) += J(i, gridY - 1);
             }
             else
             {
-                const auto j = i - X_;
-                if(j > 0 && j < Y_ - 1)
+                const auto j = i - gridX;
+                if(j > 0 && j < gridY - 1)
                 {
-                    J(X_ - 2, j) += J(size_t{0}, j);
-                    J(size_t{1}, j) += J(X_ - 1, j);
+                    J(gridX - 2, j) += J(size_t{0}, j);
+                    J(size_t{1}, j) += J(gridX - 1, j);
                 }
             }
         },
         llama::shallowCopy(J));
     times.boundariesCurrent += clock_::now() - start;
 
-    auto run_advance_B_half_kernel = [&]
+    auto runAdvanceBHalfKernel = [&]
     {
         alpaka::exec<Acc>(
             queue,
@@ -653,8 +653,8 @@ void step(Queue& queue, FieldView& E, FieldView& B, FieldView& J, ParticleView& 
                 if constexpr(gridStride)
                 {
                     const auto [xStride, _] = alpaka::getWorkDiv<alpaka::Grid, alpaka::Threads>(acc);
-                    if(y > 0 && y < Y_ - 1)
-                        while(x > 0 && x < X_ - 1)
+                    if(y > 0 && y < gridY - 1)
+                        while(x > 0 && x < gridX - 1)
                         {
                             advance_B_half(E, B, x, y);
                             x += xStride;
@@ -662,8 +662,8 @@ void step(Queue& queue, FieldView& E, FieldView& B, FieldView& J, ParticleView& 
                 }
                 else
                 {
-                    if(x > 0 && x < X_ - 1 && y > 0 && y < Y_ - 1)
-                        advance_B_half(E, B, x, y);
+                    if(x > 0 && x < gridX - 1 && y > 0 && y < gridY - 1)
+                        advanceBHalf(E, B, x, y);
                 }
             },
             llama::shallowCopy(E),
@@ -672,11 +672,11 @@ void step(Queue& queue, FieldView& E, FieldView& B, FieldView& J, ParticleView& 
 
     // Integrate Maxwell's equations
     start = clock_::now();
-    run_advance_B_half_kernel();
+    runAdvanceBHalfKernel();
     times.advanceB1 += clock_::now() - start;
 
     start = clock_::now();
-    field_boundary_condition<Acc>(queue, B);
+    fieldBoundaryCondition<Acc>(queue, B);
     times.boundariesB1 += clock_::now() - start;
 
     start = clock_::now();
@@ -689,8 +689,8 @@ void step(Queue& queue, FieldView& E, FieldView& B, FieldView& J, ParticleView& 
             if constexpr(gridStride)
             {
                 const auto [xStride, _] = alpaka::getWorkDiv<alpaka::Grid, alpaka::Threads>(acc);
-                if(y > 0 && y < Y_ - 1)
-                    while(x > 0 && x < X_ - 1)
+                if(y > 0 && y < gridY - 1)
+                    while(x > 0 && x < gridX - 1)
                     {
                         advance_E(E, B, J, x, y);
                         x += xStride;
@@ -698,8 +698,8 @@ void step(Queue& queue, FieldView& E, FieldView& B, FieldView& J, ParticleView& 
             }
             else
             {
-                if(x > 0 && x < X_ - 1 && y > 0 && y < Y_ - 1)
-                    advance_E(E, B, J, x, y);
+                if(x > 0 && x < gridX - 1 && y > 0 && y < gridY - 1)
+                    advanceE(E, B, J, x, y);
             }
         },
         llama::shallowCopy(E),
@@ -708,15 +708,15 @@ void step(Queue& queue, FieldView& E, FieldView& B, FieldView& J, ParticleView& 
     times.advanceE += clock_::now() - start;
 
     start = clock_::now();
-    field_boundary_condition<Acc>(queue, E);
+    fieldBoundaryCondition<Acc>(queue, E);
     times.boundariesE += clock_::now() - start;
 
     start = clock_::now();
-    run_advance_B_half_kernel();
+    runAdvanceBHalfKernel();
     times.advanceB2 += clock_::now() - start;
 
     start = clock_::now();
-    field_boundary_condition<Acc>(queue, B);
+    fieldBoundaryCondition<Acc>(queue, B);
     times.boundariesB2 += clock_::now() - start;
 }
 
@@ -729,7 +729,7 @@ auto particleMappingName(int m) -> std::string
     if(m == 2)
         return "SoA MB";
     if(m == 3)
-        return "AoSoA" + std::to_string(AOSOA_LANES);
+        return "AoSoA" + std::to_string(aosoaLanes);
     std::abort();
 }
 
@@ -754,7 +754,7 @@ auto fieldMappingName(int m) -> std::string
     if(m == 8)
         return "SoA MB Mor";
     if(m == 9)
-        return "AoSoA" + std::to_string(AOSOA_LANES);
+        return "AoSoA" + std::to_string(aosoaLanes);
     std::abort();
 }
 
@@ -780,7 +780,7 @@ void run(std::ostream& plotFile)
                  "|  total |\n";
     Times times = {};
     Times totalSimulationTimes = {};
-    for(int n = 0; n <= NSTEPS; n++)
+    for(int n = 0; n <= nsteps; n++)
     {
         if(n % reportInterval != 0)
             std::cout << "." << std::flush;
@@ -839,7 +839,7 @@ void run(std::ostream& plotFile)
     auto toSecs = [&](clock_::duration d) { return std::chrono::duration<double>{d}.count(); };
 
     const auto totalMu = std::chrono::duration_cast<std::chrono::microseconds>(totalSimulationTimes.sum()).count();
-    fmt::print("Simulation finished after: {}, avg step: {}\n", totalMu, totalMu / NSTEPS);
+    fmt::print("Simulation finished after: {}, avg step: {}\n", totalMu, totalMu / nsteps);
     fmt::print(
         plotFile,
         "\"P: {} F: {}\"\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n",
@@ -869,7 +869,13 @@ try
     auto accName = alpaka::getName(alpaka::getDevByIdx<alpaka::Pltf<alpaka::Dev<Acc>>>(0u));
     while(static_cast<bool>(std::isspace(accName.back())))
         accName.pop_back();
-    fmt::print("Running {} steps with grid {}x{} and {}k particles on {}\n", NSTEPS, X_, Y_, numpart / 1000, accName);
+    fmt::print(
+        "Running {} steps with grid {}x{} and {}k particles on {}\n",
+        nsteps,
+        gridX,
+        gridY,
+        numpart / 1000,
+        accName);
 
     std::ofstream plotFile{"pic.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
@@ -889,8 +895,8 @@ $data << EOD
 )aa",
         numThreads,
         affinity,
-        X_,
-        Y_,
+        gridX,
+        gridY,
         numpart / 1000,
         accName,
         common::hostname());

@@ -304,7 +304,7 @@ namespace llama
     {
         // adapted from boost::mp11, but with LLAMA_FN_HOST_ACC_INLINE
         template<template<typename...> typename L, typename... T, typename F>
-        LLAMA_FN_HOST_ACC_INLINE constexpr void mp_for_each_inlined(L<T...>, F&& f)
+        LLAMA_FN_HOST_ACC_INLINE constexpr void mpForEachInlined(L<T...>, F&& f)
         {
             using A = int[sizeof...(T)];
             (void) A{((void) f(T{}), 0)...};
@@ -320,7 +320,7 @@ namespace llama
     LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafCoord(Functor&& functor, RecordCoord<Coords...> baseCoord)
     {
         LLAMA_FORCE_INLINE_RECURSIVE
-        internal::mp_for_each_inlined(
+        internal::mpForEachInlined(
             LeafRecordCoords<GetType<RecordDim, RecordCoord<Coords...>>>{},
             [&](auto innerCoord) LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(constexpr)
             { std::forward<Functor>(functor)(cat(baseCoord, innerCoord)); });
@@ -656,13 +656,13 @@ namespace llama
             typename... FieldsA,
             typename FieldB,
             typename... FieldsB,
-            auto pos = FindFieldByTag<Record<FieldsA...>, GetFieldTag<FieldB>>::value>
+            auto Pos = FindFieldByTag<Record<FieldsA...>, GetFieldTag<FieldB>>::value>
         auto mergeRecordDimsImpl(
             boost::mp11::mp_identity<Record<FieldsA...>>,
             boost::mp11::mp_identity<Record<FieldB, FieldsB...>>)
         {
             using namespace boost::mp11;
-            if constexpr(pos == sizeof...(FieldsA))
+            if constexpr(Pos == sizeof...(FieldsA))
             {
                 return mergeRecordDimsImpl(
                     mp_identity<Record<FieldsA..., FieldB>>{},
@@ -670,13 +670,13 @@ namespace llama
             }
             else
             {
-                using OldFieldA = mp_at_c<Record<FieldsA...>, pos>;
+                using OldFieldA = mp_at_c<Record<FieldsA...>, Pos>;
                 using NewFieldA = Field<
                     GetFieldTag<OldFieldA>,
                     typename decltype(mergeRecordDimsImpl(
                         mp_identity<GetFieldType<OldFieldA>>{},
                         mp_identity<GetFieldType<FieldB>>{}))::type>;
-                using NewRecordA = mp_replace_at_c<Record<FieldsA...>, pos, NewFieldA>;
+                using NewRecordA = mp_replace_at_c<Record<FieldsA...>, Pos, NewFieldA>;
                 return mergeRecordDimsImpl(mp_identity<NewRecordA>{}, mp_identity<Record<FieldsB...>>{});
             }
         }

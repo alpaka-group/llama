@@ -6,31 +6,31 @@
 
 namespace
 {
-    constexpr auto N = 100;
+    constexpr auto n = 100;
 
     template<typename View>
     auto updateAndMove(View& particles)
     {
-        constexpr float TIMESTEP = 0.0001f;
-        constexpr float EPS2 = 0.01f;
-        for(std::size_t i = 0; i < N; i++)
+        constexpr float timestep = 0.0001f;
+        constexpr float epS2 = 0.01f;
+        for(std::size_t i = 0; i < n; i++)
         {
             llama::One<ParticleHeatmap> pi = particles(i);
-            for(std::size_t j = 0; j < N; ++j)
+            for(std::size_t j = 0; j < n; ++j)
             {
                 auto pj = particles(j);
                 auto dist = pi(tag::Pos{}) - pj(tag::Pos{});
                 dist *= dist;
-                const float distSqr = EPS2 + dist(tag::X{}) + dist(tag::Y{}) + dist(tag::Z{});
+                const float distSqr = epS2 + dist(tag::X{}) + dist(tag::Y{}) + dist(tag::Z{});
                 const float distSixth = distSqr * distSqr * distSqr;
                 const float invDistCube = 1.0f / std::sqrt(distSixth);
-                const float sts = pj(tag::Mass{}) * invDistCube * TIMESTEP;
+                const float sts = pj(tag::Mass{}) * invDistCube * timestep;
                 pi(tag::Vel{}) += dist * sts;
             }
             particles(i) = pi;
         }
-        for(std::size_t i = 0; i < N; i++)
-            particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * TIMESTEP;
+        for(std::size_t i = 0; i < n; i++)
+            particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * timestep;
     }
 
     extern std::string_view heatmapAlignedAoS;
@@ -51,10 +51,10 @@ TEST_CASE("Heatmap.nbody")
     };
     run("AlignedAoS",
         heatmapAlignedAoS,
-        llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
+        llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, n>, ParticleHeatmap>{});
     run("SingleBlobSoA",
         heatmapSingleBlobSoA,
-        llama::mapping::PackedSingleBlobSoA<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
+        llama::mapping::PackedSingleBlobSoA<llama::ArrayExtents<std::size_t, n>, ParticleHeatmap>{});
 }
 
 TEST_CASE("Trace.ctor")
@@ -106,8 +106,8 @@ Vel.Z             300
 Mass            10200
 )");
     };
-    run(llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
-    run(llama::mapping::PackedSingleBlobSoA<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
+    run(llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, n>, ParticleHeatmap>{});
+    run(llama::mapping::PackedSingleBlobSoA<llama::ArrayExtents<std::size_t, n>, ParticleHeatmap>{});
 }
 
 TEMPLATE_LIST_TEST_CASE("Trace.nbody.reads_writes", "", SizeTypes)
@@ -147,8 +147,8 @@ Vel.Z             200        100
 Mass            10100        100
 )");
     };
-    run(llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
-    run(llama::mapping::PackedSingleBlobSoA<llama::ArrayExtents<std::size_t, N>, ParticleHeatmap>{});
+    run(llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, n>, ParticleHeatmap>{});
+    run(llama::mapping::PackedSingleBlobSoA<llama::ArrayExtents<std::size_t, n>, ParticleHeatmap>{});
 }
 
 TEST_CASE("Trace.assign_ref_to_ref")

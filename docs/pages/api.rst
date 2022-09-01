@@ -23,10 +23,10 @@ Array
 
 .. doxygenstruct:: llama::Array
    :members:
-.. doxygenfunction:: llama::push_front
-.. doxygenfunction:: llama::push_back
-.. doxygenfunction:: llama::pop_front([[maybe_unused]] Array<T, N> a)
-.. doxygenfunction:: llama::pop_back
+.. doxygenfunction:: llama::pushFront
+.. doxygenfunction:: llama::pushBack
+.. doxygenfunction:: llama::popFront([[maybe_unused]] Array<T, N> a)
+.. doxygenfunction:: llama::popBack
 .. doxygenfunction:: llama::product(Array<T, N> a)
 
 Tuple
@@ -38,7 +38,7 @@ Tuple
 .. doxygenfunction:: llama::tupleCat
 .. doxygenfunction:: llama::tupleReplace
 .. doxygenfunction:: llama::tupleTransform
-.. doxygenfunction:: llama::pop_front(const Tuple<Elements...> &tuple)
+.. doxygenfunction:: llama::popFront(const Tuple<Elements...> &tuple)
 
 Array dimensions
 ----------------
@@ -91,8 +91,8 @@ Record coordinates
 .. doxygentypedef:: llama::RecordCoordFromList
 .. doxygentypedef:: llama::Cat
 .. doxygentypedef:: llama::PopFront
-.. doxygenvariable:: llama::RecordCoordCommonPrefixIsBigger
-.. doxygenvariable:: llama::RecordCoordCommonPrefixIsSame
+.. doxygenvariable:: llama::recordCoordCommonPrefixIsBigger
+.. doxygenvariable:: llama::recordCoordCommonPrefixIsSame
 
 View creation
 -------------

@@ -136,7 +136,7 @@ namespace llama
 
     /// Checks wether the first RecordCoord is bigger than the second.
     template<typename First, typename Second>
-    inline constexpr auto RecordCoordCommonPrefixIsBigger
+    inline constexpr auto recordCoordCommonPrefixIsBigger
         = internal::recordCoordCommonPrefixIsBiggerImpl(First{}, Second{});
 
     namespace internal
@@ -156,6 +156,6 @@ namespace llama
 
     /// Checks whether two \ref RecordCoord%s are the same or one is the prefix of the other.
     template<typename First, typename Second>
-    inline constexpr auto RecordCoordCommonPrefixIsSame
+    inline constexpr auto recordCoordCommonPrefixIsSame
         = internal::recordCoordCommonPrefixIsSameImpl(First{}, Second{});
 } // namespace llama

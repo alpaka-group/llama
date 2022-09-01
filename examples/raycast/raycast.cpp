@@ -483,17 +483,17 @@ namespace
         if(det > -epsilon && det < epsilon)
             return {};
 
-        const auto inv_det = 1.0f / det;
+        const auto invDet = 1.0f / det;
         const auto tvec = ray.origin - triangle.vertex0;
-        const auto u = dot(tvec, pvec) * inv_det;
+        const auto u = dot(tvec, pvec) * invDet;
         if(u < 0.0f || u > 1.0f)
             return {};
 
         const auto qvec = cross(tvec, triangle.edge1);
-        const auto v = dot(ray.direction, qvec) * inv_det;
+        const auto v = dot(ray.direction, qvec) * invDet;
         if(v < 0.0f || u + v >= 1.0f)
             return {};
-        const auto t = dot(triangle.edge2, qvec) * inv_det;
+        const auto t = dot(triangle.edge2, qvec) * invDet;
         if(t < 0)
             return {};
 
@@ -515,17 +515,17 @@ namespace
         if(det > -epsilon && det < epsilon)
             return {};
 
-        const auto inv_det = 1.0f / det;
+        const auto invDet = 1.0f / det;
         const auto tvec = ray.origin - triangle(Vertex0{}).template loadAs<VectorF>();
-        const auto u = dot(tvec, pvec) * inv_det;
+        const auto u = dot(tvec, pvec) * invDet;
         if(u < 0.0f || u > 1.0f)
             return {};
 
         const auto qvec = cross(tvec, edge1);
-        const auto v = dot(ray.direction, qvec) * inv_det;
+        const auto v = dot(ray.direction, qvec) * invDet;
         if(v < 0.0f || u + v >= 1.0f)
             return {};
-        const auto t = dot(edge2, qvec) * inv_det;
+        const auto t = dot(edge2, qvec) * invDet;
         if(t < 0)
             return {};
 

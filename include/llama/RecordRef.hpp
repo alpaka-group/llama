@@ -18,10 +18,10 @@ namespace llama
     struct RecordRef;
 
     template<typename View>
-    inline constexpr auto is_RecordRef = false;
+    inline constexpr auto isRecordRef = false;
 
     template<typename View, typename BoundRecordCoord, bool OwnView>
-    inline constexpr auto is_RecordRef<RecordRef<View, BoundRecordCoord, OwnView>> = true;
+    inline constexpr auto isRecordRef<RecordRef<View, BoundRecordCoord, OwnView>> = true;
 
     /// Returns a \ref One with the same record dimension as the given record ref, with values copyied from rr.
     template<typename View, typename BoundRecordCoord, bool OwnView>
@@ -197,7 +197,7 @@ namespace llama
 
         template<typename TWithOptionalConst, typename T>
         LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(TWithOptionalConst& leaf, T) -> std::
-            enable_if_t<!is_RecordRef<std::decay_t<TWithOptionalConst>>, std::reference_wrapper<TWithOptionalConst>>
+            enable_if_t<!isRecordRef<std::decay_t<TWithOptionalConst>>, std::reference_wrapper<TWithOptionalConst>>
         {
             return leaf;
         }
@@ -222,7 +222,7 @@ namespace llama
 
         template<typename TWithOptionalConst, typename T>
         LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(TWithOptionalConst& leaf, T)
-            -> std::enable_if_t<!is_RecordRef<std::decay_t<TWithOptionalConst>>, std::tuple<TWithOptionalConst&>>
+            -> std::enable_if_t<!isRecordRef<std::decay_t<TWithOptionalConst>>, std::tuple<TWithOptionalConst&>>
         {
             return {leaf};
         }
@@ -385,7 +385,7 @@ namespace llama
 
         // TODO(bgruber): unify with previous in C++20 and use explicit(cond)
         /// Create a RecordRef from a scalar. Only available for if the view is owned. Used by llama::One.
-        template<typename T, typename = std::enable_if_t<!is_RecordRef<T>>>
+        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
         LLAMA_FN_HOST_ACC_INLINE explicit RecordRef(const T& scalar)
             /* requires(OwnView) */
             : RecordRef()
@@ -499,7 +499,7 @@ namespace llama
             return copyRecord(vd) += t;
         }
 
-        template<typename T, typename = std::enable_if_t<!is_RecordRef<T>>>
+        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
         LLAMA_FN_HOST_ACC_INLINE friend auto operator+(const T& t, const RecordRef& vd)
         {
             return vd + t;
@@ -517,7 +517,7 @@ namespace llama
             return copyRecord(vd) *= t;
         }
 
-        template<typename T, typename = std::enable_if_t<!is_RecordRef<T>>>
+        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
         LLAMA_FN_HOST_ACC_INLINE friend auto operator*(const T& t, const RecordRef& vd)
         {
             return vd * t;
@@ -541,7 +541,7 @@ namespace llama
             return internal::recordRefRelOperator<std::equal_to<>>(vd, t);
         }
 
-        template<typename T, typename = std::enable_if_t<!is_RecordRef<T>>>
+        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
         LLAMA_FN_HOST_ACC_INLINE friend auto operator==(const T& t, const RecordRef& vd) -> bool
         {
             return vd == t;
@@ -553,7 +553,7 @@ namespace llama
             return internal::recordRefRelOperator<std::not_equal_to<>>(vd, t);
         }
 
-        template<typename T, typename = std::enable_if_t<!is_RecordRef<T>>>
+        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
         LLAMA_FN_HOST_ACC_INLINE friend auto operator!=(const T& t, const RecordRef& vd) -> bool
         {
             return vd != t;
@@ -565,7 +565,7 @@ namespace llama
             return internal::recordRefRelOperator<std::less<>>(vd, t);
         }
 
-        template<typename T, typename = std::enable_if_t<!is_RecordRef<T>>>
+        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
         LLAMA_FN_HOST_ACC_INLINE friend auto operator<(const T& t, const RecordRef& vd) -> bool
         {
             return vd > t;
@@ -577,7 +577,7 @@ namespace llama
             return internal::recordRefRelOperator<std::less_equal<>>(vd, t);
         }
 
-        template<typename T, typename = std::enable_if_t<!is_RecordRef<T>>>
+        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
         LLAMA_FN_HOST_ACC_INLINE friend auto operator<=(const T& t, const RecordRef& vd) -> bool
         {
             return vd >= t;
@@ -589,7 +589,7 @@ namespace llama
             return internal::recordRefRelOperator<std::greater<>>(vd, t);
         }
 
-        template<typename T, typename = std::enable_if_t<!is_RecordRef<T>>>
+        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
         LLAMA_FN_HOST_ACC_INLINE friend auto operator>(const T& t, const RecordRef& vd) -> bool
         {
             return vd < t;
@@ -601,7 +601,7 @@ namespace llama
             return internal::recordRefRelOperator<std::greater_equal<>>(vd, t);
         }
 
-        template<typename T, typename = std::enable_if_t<!is_RecordRef<T>>>
+        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
         LLAMA_FN_HOST_ACC_INLINE friend auto operator>=(const T& t, const RecordRef& vd) -> bool
         {
             return vd <= t;
@@ -796,7 +796,7 @@ namespace llama
         };
 
         template<typename T>
-        struct ValueOf<T, std::enable_if_t<is_RecordRef<T>>>
+        struct ValueOf<T, std::enable_if_t<isRecordRef<T>>>
         {
             using type = One<typename T::AccessibleRecordDim>;
         };
@@ -925,7 +925,7 @@ namespace llama
         };
 
         template<typename T>
-        struct ReferenceTo<T, std::enable_if_t<is_RecordRef<T> && !is_One<T>>>
+        struct ReferenceTo<T, std::enable_if_t<isRecordRef<T> && !isOne<T>>>
         {
             using type = T;
         };

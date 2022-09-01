@@ -68,12 +68,12 @@ using ParticleUnaligned = llama::Record<
 template<typename T>
 auto prettyPrintType(const T& t = {}) -> std::string
 {
-    using llama::mapping::tree::internal::replace_all;
+    using llama::mapping::tree::internal::replaceAll;
 
     auto raw = boost::core::demangle(typeid(t).name());
 #ifdef _MSC_VER
     // remove clutter in MSVC
-    replace_all(raw, "struct ", "");
+    replaceAll(raw, "struct ", "");
 #endif
 #ifdef __GNUG__
     // remove clutter in g++
@@ -81,14 +81,14 @@ auto prettyPrintType(const T& t = {}) -> std::string
     raw = std::regex_replace(raw, ulLiteral, "$1");
 #endif
 
-    replace_all(raw, "<", "<\n");
+    replaceAll(raw, "<", "<\n");
 #ifdef _MSC_VER
-    replace_all(raw, ",", ",\n");
+    replaceAll(raw, ",", ",\n");
 #else
-    replace_all(raw, ", ", ",\n");
+    replaceAll(raw, ", ", ",\n");
 #endif
-    replace_all(raw, " >", ">");
-    replace_all(raw, ">", "\n>");
+    replaceAll(raw, " >", ">");
+    replaceAll(raw, ">", "\n>");
 
     std::stringstream rawSS(raw);
     std::string token;

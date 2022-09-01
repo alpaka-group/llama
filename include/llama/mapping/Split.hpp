@@ -60,7 +60,7 @@ namespace llama::mapping
         };
 
         template<typename RC, typename RecordCoordForMapping1>
-        inline constexpr bool isSelected = RecordCoordCommonPrefixIsSame<RecordCoordForMapping1, RC>;
+        inline constexpr bool isSelected = recordCoordCommonPrefixIsSame<RecordCoordForMapping1, RC>;
 
         template<typename RC>
         struct IsSelectedPredicate

@@ -25,18 +25,18 @@ using Data = llama::Record<
 
 auto main() -> int
 {
-    constexpr auto N = 128;
+    constexpr auto n = 128;
     using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 1>;
-    const auto mapping = llama::mapping::Bytesplit<ArrayExtents, Data, llama::mapping::BindSoA<false>::fn>{{N}};
+    const auto mapping = llama::mapping::Bytesplit<ArrayExtents, Data, llama::mapping::BindSoA<false>::fn>{{n}};
 
     auto view = llama::allocView(mapping);
 
     int value = 0;
-    for(std::size_t i = 0; i < N; i++)
+    for(std::size_t i = 0; i < n; i++)
         llama::forEachLeafCoord<Data>([&](auto rc) { view(i)(rc) = ++value; });
 
     value = 0;
-    for(std::size_t i = 0; i < N; i++)
+    for(std::size_t i = 0; i < n; i++)
         llama::forEachLeafCoord<Data>(
             [&](auto rc)
             {
@@ -47,20 +47,20 @@ auto main() -> int
             });
 
     // extract into a view of unsplit fields
-    auto viewExtracted = llama::allocViewUninitialized(llama::mapping::AoS<ArrayExtents, Data>{{N}});
+    auto viewExtracted = llama::allocViewUninitialized(llama::mapping::AoS<ArrayExtents, Data>{{n}});
     llama::copy(view, viewExtracted);
     if(!std::equal(view.begin(), view.end(), viewExtracted.begin(), viewExtracted.end()))
         fmt::print("ERROR: unsplit view is different\n");
 
     // compute something on the extracted view
-    for(std::size_t i = 0; i < N; i++)
+    for(std::size_t i = 0; i < n; i++)
         viewExtracted(i) *= 2;
 
     // rearrange back into split view
     llama::copy(viewExtracted, view);
 
     value = 0;
-    for(std::size_t i = 0; i < N; i++)
+    for(std::size_t i = 0; i < n; i++)
         llama::forEachLeafCoord<Data>(
             [&](auto rc)
             {
@@ -71,11 +71,11 @@ auto main() -> int
             });
 
     // compute something on the split view
-    for(std::size_t i = 0; i < N; i++)
+    for(std::size_t i = 0; i < n; i++)
         view(i) = view(i) * 2; // cannot do view(i) *= 2; with proxy references
 
     value = 0;
-    for(std::size_t i = 0; i < N; i++)
+    for(std::size_t i = 0; i < n; i++)
         llama::forEachLeafCoord<Data>(
             [&](auto rc)
             {

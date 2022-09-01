@@ -1163,7 +1163,7 @@ TEST_CASE("ScopedUpdate.RecordRef")
         llama::forEachLeaf(v, [i = 0](auto& field) mutable { field = ++i; });
         {
             llama::ScopedUpdate u(v);
-            if constexpr(llama::is_One<std::remove_reference_t<decltype(v)>>)
+            if constexpr(llama::isOne<std::remove_reference_t<decltype(v)>>)
             {
                 STATIC_REQUIRE(
                     std::is_same_v<decltype(u), llama::ScopedUpdate<std::remove_reference_t<decltype(v)>&>>);

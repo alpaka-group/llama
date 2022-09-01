@@ -16,10 +16,10 @@
 #include <random>
 #include <utility>
 
-constexpr auto MAPPING = 2; ///< 0 native AoS, 1 native SoA, 2 native SoA, 3 tree AoS, 4 tree SoA
-constexpr auto PROBLEM_SIZE = 64 * 1024 * 1024;
-constexpr auto BLOCK_SIZE = 256;
-constexpr auto STEPS = 10;
+constexpr auto mappingIndex = 2; ///< 0 native AoS, 1 native SoA, 2 native SoA, 3 tree AoS, 4 tree SoA
+constexpr auto problemSize = 64 * 1024 * 1024;
+constexpr auto blockSize = 256;
+constexpr auto steps = 10;
 
 using FP = float;
 
@@ -82,24 +82,24 @@ try
     const auto mapping = [&]
     {
         using ArrayExtents = llama::ArrayExtentsDynamic<unsigned, 1>;
-        const auto extents = ArrayExtents{PROBLEM_SIZE};
-        if constexpr(MAPPING == 0)
+        const auto extents = ArrayExtents{problemSize};
+        if constexpr(mappingIndex == 0)
             return llama::mapping::AoS<ArrayExtents, Vector>{extents};
-        if constexpr(MAPPING == 1)
+        if constexpr(mappingIndex == 1)
             return llama::mapping::SoA<ArrayExtents, Vector, false>{extents};
-        if constexpr(MAPPING == 2)
+        if constexpr(mappingIndex == 2)
             return llama::mapping::SoA<ArrayExtents, Vector, true>{extents};
-        if constexpr(MAPPING == 3)
+        if constexpr(mappingIndex == 3)
             return llama::mapping::tree::Mapping{extents, llama::Tuple{}, Vector{}};
-        if constexpr(MAPPING == 4)
+        if constexpr(mappingIndex == 4)
             return llama::mapping::tree::Mapping{
                 extents,
                 llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
                 Vector{}};
     }();
 
-    std::cout << PROBLEM_SIZE / 1000 / 1000 << " million vectors\n"
-              << PROBLEM_SIZE * llama::sizeOf<Vector> * 2 / 1000 / 1000 << " MB on device\n";
+    std::cout << problemSize / 1000 / 1000 << " million vectors\n"
+              << problemSize * llama::sizeOf<Vector> * 2 / 1000 / 1000 << " MB on device\n";
 
     Stopwatch chrono;
 
@@ -115,7 +115,7 @@ try
     std::normal_distribution<FP> distribution(FP{0}, FP{1});
     auto seed = distribution(generator);
     LLAMA_INDEPENDENT_DATA
-    for(std::size_t i = 0; i < PROBLEM_SIZE; ++i)
+    for(std::size_t i = 0; i < problemSize; ++i)
     {
         hostA(i) = seed + static_cast<FP>(i);
         hostB(i) = seed - static_cast<FP>(i);
@@ -131,22 +131,22 @@ try
     chrono.printAndReset("Copy H->D");
 
     constexpr std::size_t hardwareThreads = 2; // relevant for OpenMP2Threads
-    using Distribution = common::ThreadsElemsDistribution<Acc, BLOCK_SIZE, hardwareThreads>;
+    using Distribution = common::ThreadsElemsDistribution<Acc, blockSize, hardwareThreads>;
     constexpr std::size_t elemCount = Distribution::elemCount;
     constexpr std::size_t threadCount = Distribution::threadCount;
     const alpaka::Vec<Dim, Size> elems(static_cast<Size>(elemCount));
     const alpaka::Vec<Dim, Size> threads(static_cast<Size>(threadCount));
     constexpr auto innerCount = elemCount * threadCount;
-    const alpaka::Vec<Dim, Size> blocks(static_cast<Size>((PROBLEM_SIZE + innerCount - 1) / innerCount));
+    const alpaka::Vec<Dim, Size> blocks(static_cast<Size>((problemSize + innerCount - 1) / innerCount));
 
     const auto workdiv = alpaka::WorkDivMembers<Dim, Size>{blocks, threads, elems};
 
-    for(std::size_t s = 0; s < STEPS; ++s)
+    for(std::size_t s = 0; s < steps; ++s)
     {
         alpaka::exec<Acc>(
             queue,
             workdiv,
-            AddKernel<PROBLEM_SIZE, elemCount>{},
+            AddKernel<problemSize, elemCount>{},
             llama::shallowCopy(devA),
             llama::shallowCopy(devB));
         chrono.printAndReset("Add kernel");

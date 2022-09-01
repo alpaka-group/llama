@@ -134,10 +134,10 @@ namespace llama
 
     /// Is true, if T is an instance of \ref One.
     template<typename T>
-    inline constexpr bool is_One = false;
+    inline constexpr bool isOne = false;
 
     template<typename View, typename BoundRecordCoord>
-    inline constexpr bool is_One<RecordRef<View, BoundRecordCoord, true>> = true;
+    inline constexpr bool isOne<RecordRef<View, BoundRecordCoord, true>> = true;
 
     // TODO(bgruber): Higher dimensional iterators might not have good codegen. Multiple nested loops seem to be
     // superior to a single iterator over multiple dimensions. At least compilers are able to produce better code.
@@ -559,10 +559,10 @@ namespace llama
     }
 
     template<typename View>
-    inline constexpr auto IsView = false;
+    inline constexpr auto isView = false;
 
     template<typename Mapping, typename BlobType>
-    inline constexpr auto IsView<View<Mapping, BlobType>> = true;
+    inline constexpr auto isView<View<Mapping, BlobType>> = true;
 
     /// Like a \ref View, but array indices are shifted.
     /// @tparam TStoredParentView Type of the underlying view. May be cv qualified and/or a reference type.

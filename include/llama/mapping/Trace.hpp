@@ -176,7 +176,7 @@ namespace llama::mapping
                     const size_type i = flatRecordCoord<RecordDim, decltype(rc)>;
                     constexpr auto fieldName = recordCoordTags<RecordDim>(rc);
                     char fieldNameZT[fieldName.size() + 1]{}; // nvcc does not handle the %*.*s parameter correctly
-                    llama::internal::constexpr_copy(fieldName.begin(), fieldName.end(), fieldNameZT);
+                    llama::internal::constexprCopy(fieldName.begin(), fieldName.end(), fieldNameZT);
                     if constexpr(MyCodeHandlesProxyReferences)
                         printf(
                             "%*.s %*lu %*lu\n",

@@ -27,7 +27,7 @@ namespace llama
 
         using memcopyFunc = void* (*) (void*, const void*, std::size_t);
 
-        inline void parallel_memcpy(
+        inline void parallelMemcpy(
             std::byte* dst,
             const std::byte* src,
             std::size_t size,
@@ -61,7 +61,7 @@ namespace llama
 
         // TODO(bgruber): this is maybe not the best parallel copying strategy
         for(std::size_t i = 0; i < Mapping::blobCount; i++)
-            internal::parallel_memcpy(
+            internal::parallelMemcpy(
                 &dstView.storageBlobs[i][0],
                 &srcView.storageBlobs[i][0],
                 dstView.mapping().blobSize(i),
@@ -103,7 +103,7 @@ namespace llama
             using SrcSizeType = typename SrcMapping::ArrayExtents::value_type;
             if constexpr(dims > 1)
                 forEachADCoord(
-                    ArrayIndex<SrcSizeType, dims - 1>{pop_front(extents)},
+                    ArrayIndex<SrcSizeType, dims - 1>{popFront(extents)},
                     copyOne,
                     static_cast<SrcSizeType>(i));
             else
@@ -155,16 +155,16 @@ namespace llama
         using RecordDim = typename SrcMapping::RecordDim;
         internal::assertTrivialCopyable<RecordDim>();
 
-        [[maybe_unused]] static constexpr bool MBSrc = SrcMapping::blobCount > 1;
-        [[maybe_unused]] static constexpr bool MBDst = DstMapping::blobCount > 1;
-        static constexpr auto LanesSrc = internal::aosoaLanes<SrcMapping>;
-        static constexpr auto LanesDst = internal::aosoaLanes<DstMapping>;
+        [[maybe_unused]] static constexpr bool isSrcMB = SrcMapping::blobCount > 1;
+        [[maybe_unused]] static constexpr bool isDstMB = DstMapping::blobCount > 1;
+        static constexpr auto lanesSrc = internal::aosoaLanes<SrcMapping>;
+        static constexpr auto lanesDst = internal::aosoaLanes<DstMapping>;
 
         if(srcView.mapping().extents() != dstView.mapping().extents())
             throw std::runtime_error{"Array dimensions sizes are different"};
 
-        static constexpr auto srcIsAoSoA = LanesSrc != std::numeric_limits<std::size_t>::max();
-        static constexpr auto dstIsAoSoA = LanesDst != std::numeric_limits<std::size_t>::max();
+        static constexpr auto srcIsAoSoA = lanesSrc != std::numeric_limits<std::size_t>::max();
+        static constexpr auto dstIsAoSoA = lanesDst != std::numeric_limits<std::size_t>::max();
 
         static_assert(srcIsAoSoA || dstIsAoSoA, "At least one of the mappings must be an AoSoA mapping");
         static_assert(
@@ -177,10 +177,10 @@ namespace llama
         const auto flatSize = product(dstView.mapping().extents());
 
         // TODO(bgruber): implement the following by adding additional copy loops for the remaining elements
-        if(!srcIsAoSoA && flatSize % LanesDst != 0)
+        if(!srcIsAoSoA && flatSize % lanesDst != 0)
             throw std::runtime_error{"Source SoA mapping's total array elements must be evenly divisible by the "
                                      "destination AoSoA Lane count."};
-        if(!dstIsAoSoA && flatSize % LanesSrc != 0)
+        if(!dstIsAoSoA && flatSize % lanesSrc != 0)
             throw std::runtime_error{"Destination SoA mapping's total array elements must be evenly divisible by the "
                                      "source AoSoA Lane count."};
 
@@ -205,34 +205,34 @@ namespace llama
         auto mapSrc = [&](std::size_t flatArrayIndex, auto rc) LLAMA_LAMBDA_INLINE
         {
             if constexpr(srcIsAoSoA)
-                return &srcView.storageBlobs[0][0] + mapAoSoA(flatArrayIndex, rc, LanesSrc);
+                return &srcView.storageBlobs[0][0] + mapAoSoA(flatArrayIndex, rc, lanesSrc);
             else
             {
-                const auto [blob, off] = mapSoA(flatArrayIndex, rc, MBSrc);
+                const auto [blob, off] = mapSoA(flatArrayIndex, rc, isSrcMB);
                 return &srcView.storageBlobs[blob][off];
             }
         };
         auto mapDst = [&](std::size_t flatArrayIndex, auto rc) LLAMA_LAMBDA_INLINE
         {
             if constexpr(dstIsAoSoA)
-                return &dstView.storageBlobs[0][0] + mapAoSoA(flatArrayIndex, rc, LanesDst);
+                return &dstView.storageBlobs[0][0] + mapAoSoA(flatArrayIndex, rc, lanesDst);
             else
             {
-                const auto [blob, off] = mapSoA(flatArrayIndex, rc, MBDst);
+                const auto [blob, off] = mapSoA(flatArrayIndex, rc, isDstMB);
                 return &dstView.storageBlobs[blob][off];
             }
         };
 
-        static constexpr auto L = []
+        static constexpr auto l = []
         {
             if constexpr(srcIsAoSoA && dstIsAoSoA)
-                return std::gcd(LanesSrc, LanesDst);
-            return std::min(LanesSrc, LanesDst);
+                return std::gcd(lanesSrc, lanesDst);
+            return std::min(lanesSrc, lanesDst);
         }();
         if(readOpt)
         {
             // optimized for linear reading
-            constexpr auto srcL = srcIsAoSoA ? LanesSrc : L;
+            constexpr auto srcL = srcIsAoSoA ? lanesSrc : l;
             const auto elementsPerThread = flatSize / srcL / threadCount * srcL;
             {
                 const auto start = threadId * elementsPerThread;
@@ -240,18 +240,18 @@ namespace llama
 
                 auto copyLBlock = [&](const std::byte*& threadSrc, std::size_t dstIndex, auto rc) LLAMA_LAMBDA_INLINE
                 {
-                    constexpr auto bytes = L * sizeof(GetType<RecordDim, decltype(rc)>);
+                    constexpr auto bytes = l * sizeof(GetType<RecordDim, decltype(rc)>);
                     std::memcpy(mapDst(dstIndex, rc), threadSrc, bytes);
                     threadSrc += bytes;
                 };
                 if constexpr(srcIsAoSoA)
                 {
                     auto* threadSrc = mapSrc(start, RecordCoord<>{});
-                    for(std::size_t i = start; i < stop; i += LanesSrc)
+                    for(std::size_t i = start; i < stop; i += lanesSrc)
                         forEachLeafCoord<RecordDim>(
                             [&](auto rc) LLAMA_LAMBDA_INLINE
                             {
-                                for(std::size_t j = 0; j < LanesSrc; j += L)
+                                for(std::size_t j = 0; j < lanesSrc; j += l)
                                     copyLBlock(threadSrc, i + j, rc);
                             });
                 }
@@ -261,7 +261,7 @@ namespace llama
                         [&](auto rc) LLAMA_LAMBDA_INLINE
                         {
                             auto* threadSrc = mapSrc(start, rc);
-                            for(std::size_t i = start; i < stop; i += L)
+                            for(std::size_t i = start; i < stop; i += l)
                                 copyLBlock(threadSrc, i, rc);
                         });
                 }
@@ -270,7 +270,7 @@ namespace llama
         else
         {
             // optimized for linear writing
-            constexpr auto dstL = dstIsAoSoA ? LanesDst : L;
+            constexpr auto dstL = dstIsAoSoA ? lanesDst : l;
             const auto elementsPerThread = flatSize / dstL / threadCount * dstL;
             {
                 const auto start = threadId * elementsPerThread;
@@ -278,18 +278,18 @@ namespace llama
 
                 auto copyLBlock = [&](std::byte*& threadDst, std::size_t srcIndex, auto rc) LLAMA_LAMBDA_INLINE
                 {
-                    constexpr auto bytes = L * sizeof(GetType<RecordDim, decltype(rc)>);
+                    constexpr auto bytes = l * sizeof(GetType<RecordDim, decltype(rc)>);
                     std::memcpy(threadDst, mapSrc(srcIndex, rc), bytes);
                     threadDst += bytes;
                 };
                 if constexpr(dstIsAoSoA)
                 {
                     auto* threadDst = mapDst(start, RecordCoord<>{});
-                    for(std::size_t i = start; i < stop; i += LanesDst)
+                    for(std::size_t i = start; i < stop; i += lanesDst)
                         forEachLeafCoord<RecordDim>(
                             [&](auto rc) LLAMA_LAMBDA_INLINE
                             {
-                                for(std::size_t j = 0; j < LanesDst; j += L)
+                                for(std::size_t j = 0; j < lanesDst; j += l)
                                     copyLBlock(threadDst, i + j, rc);
                             });
                 }
@@ -299,7 +299,7 @@ namespace llama
                         [&](auto rc) LLAMA_LAMBDA_INLINE
                         {
                             auto* threadDst = mapDst(start, rc);
-                            for(std::size_t i = start; i < stop; i += L)
+                            for(std::size_t i = start; i < stop; i += l)
                                 copyLBlock(threadDst, i, rc);
                         });
                 }

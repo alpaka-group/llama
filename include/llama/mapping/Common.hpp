@@ -112,7 +112,7 @@ namespace llama::mapping
                 auto longest = extents[0];
                 for(int i = 1; i < static_cast<int>(ArrayExtents::rank); i++)
                     longest = std::max(longest, extents[i]);
-                const auto longestPO2 = bit_ceil(longest);
+                const auto longestPO2 = bitCeil(longest);
                 return intPow(longestPO2, static_cast<typename ArrayExtents::value_type>(ArrayExtents::rank));
             }
         }
@@ -136,7 +136,7 @@ namespace llama::mapping
 
     private:
         template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE static constexpr auto bit_ceil(T n) -> T
+        LLAMA_FN_HOST_ACC_INLINE static constexpr auto bitCeil(T n) -> T
         {
             T r = 1u;
             while(r < n)

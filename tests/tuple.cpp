@@ -139,9 +139,9 @@ TEST_CASE("Tuple.tupleTransform")
     STATIC_REQUIRE(llama::tupleTransform(llama::Tuple{1, 1.0f}, f) == llama::Tuple{2, 2.0f});
 }
 
-TEST_CASE("Tuple.pop_front")
+TEST_CASE("Tuple.popFront")
 {
-    STATIC_REQUIRE(llama::pop_front(llama::Tuple{1}) == llama::Tuple{});
-    STATIC_REQUIRE(llama::pop_front(llama::Tuple{1, 1.0f}) == llama::Tuple{1.0f});
-    STATIC_REQUIRE(llama::pop_front(llama::Tuple{1.0f, 1, nullptr}) == llama::Tuple{1, nullptr});
+    STATIC_REQUIRE(llama::popFront(llama::Tuple{1}) == llama::Tuple{});
+    STATIC_REQUIRE(llama::popFront(llama::Tuple{1, 1.0f}) == llama::Tuple{1.0f});
+    STATIC_REQUIRE(llama::popFront(llama::Tuple{1.0f, 1, nullptr}) == llama::Tuple{1, nullptr});
 }

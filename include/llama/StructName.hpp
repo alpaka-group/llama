@@ -12,7 +12,7 @@ namespace llama
     {
         // TODO(bgruber): just use std::copy which became constexpr in C++20
         template<typename In, typename Out>
-        constexpr auto constexpr_copy(In f, In l, Out d)
+        constexpr auto constexprCopy(In f, In l, Out d)
         {
             while(f != l)
                 *d++ = *f++;
@@ -22,18 +22,18 @@ namespace llama
         // TODO(bgruber): just use std::search which became constexpr in C++20
         // from: https://en.cppreference.com/w/cpp/algorithm/search
         template<class ForwardIt1, class ForwardIt2>
-        constexpr ForwardIt1 constexpr_search(ForwardIt1 first, ForwardIt1 last, ForwardIt2 s_first, ForwardIt2 s_last)
+        constexpr ForwardIt1 constexprSearch(ForwardIt1 first, ForwardIt1 last, ForwardIt2 sFirst, ForwardIt2 sLast)
         {
             while(1)
             {
                 ForwardIt1 it = first;
-                for(ForwardIt2 s_it = s_first;; ++it, ++s_it)
+                for(ForwardIt2 sIt = sFirst;; ++it, ++sIt)
                 {
-                    if(s_it == s_last)
+                    if(sIt == sLast)
                         return first;
                     if(it == last)
                         return last;
-                    if(!(*it == *s_it))
+                    if(!(*it == *sIt))
                         break;
                 }
                 ++first;
@@ -43,7 +43,7 @@ namespace llama
         // TODO(bgruber): just use std::remove_copy which became constexpr in C++20
         // from: https://en.cppreference.com/w/cpp/algorithm/remove_copy
         template<class InputIt, class OutputIt, class T>
-        constexpr OutputIt constexpr_remove_copy(InputIt first, InputIt last, OutputIt d_first, const T& value)
+        constexpr OutputIt constexprRemoveCopy(InputIt first, InputIt last, OutputIt d_first, const T& value)
         {
             for(; first != last; ++first)
             {
@@ -58,7 +58,7 @@ namespace llama
         // TODO(bgruber): just use std::count which became constexpr in C++20
         // from: https://en.cppreference.com/w/cpp/algorithm/count
         template<class InputIt, class T>
-        typename std::iterator_traits<InputIt>::difference_type constexpr_count(
+        typename std::iterator_traits<InputIt>::difference_type constexprCount(
             InputIt first,
             InputIt last,
             const T& value)
@@ -132,7 +132,7 @@ namespace llama
             constexpr auto arrAndSize = [&]() constexpr
             {
                 Array<char, name.size()> nameArray{};
-                constexpr_copy(name.begin(), name.end(), nameArray.begin());
+                constexprCopy(name.begin(), name.end(), nameArray.begin());
 
 #ifdef _MSC_VER
                 // MSVC 19.32 runs into a syntax error if we just capture nameArray. Passing it as argument is a
@@ -144,10 +144,10 @@ namespace llama
                     auto e = nameArray.begin() + size;
                     while(true)
                     {
-                        auto it = constexpr_search(nameArray.begin(), e, str.begin(), str.end());
+                        auto it = constexprSearch(nameArray.begin(), e, str.begin(), str.end());
                         if(it == e)
                             break;
-                        constexpr_copy(it + str.size(), e, it);
+                        constexprCopy(it + str.size(), e, it);
                         e -= str.size();
                     }
                     return e - nameArray.begin();
@@ -167,7 +167,7 @@ namespace llama
                     {
                         if((b[0] == '>' && b[1] == ' ' && b[2] == '>') || (b[0] == ',' && b[1] == ' '))
                         {
-                            constexpr_copy(b + 2, e, b + 1);
+                            constexprCopy(b + 2, e, b + 1);
                             e--;
                         }
                     }
@@ -180,7 +180,7 @@ namespace llama
             ();
 
             Array<char, arrAndSize.second> a{};
-            constexpr_copy(arrAndSize.first.begin(), arrAndSize.first.begin() + arrAndSize.second, a.begin());
+            constexprCopy(arrAndSize.first.begin(), arrAndSize.first.begin() + arrAndSize.second, a.begin());
             return a;
         }
 
@@ -235,7 +235,7 @@ namespace llama
                         f--;
 
                     // cut out [f:l[
-                    constexpr_copy(l, e, f);
+                    constexprCopy(l, e, f);
                     e -= (l - f);
                     b = f;
                 }
@@ -245,7 +245,7 @@ namespace llama
             ();
 
             Array<char, arrAndSize.second> a{};
-            constexpr_copy(arrAndSize.first.begin(), arrAndSize.first.begin() + arrAndSize.second, a.begin());
+            constexprCopy(arrAndSize.first.begin(), arrAndSize.first.begin() + arrAndSize.second, a.begin());
             return a;
         }
         ();
@@ -320,7 +320,7 @@ namespace llama
                 else
                 {
                     constexpr auto sn = structName(tag);
-                    constexpr_copy(sn.begin(), sn.end(), w);
+                    constexprCopy(sn.begin(), sn.end(), w);
                     w += sn.size();
                 }
             });

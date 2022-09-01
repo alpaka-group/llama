@@ -92,30 +92,30 @@ TEST_CASE("cat")
         == llama::RecordCoord<1, 2, 3, 4, 5, 6, 7>{});
 }
 
-TEST_CASE("RecordCoordCommonPrefixIsBigger")
+TEST_CASE("recordCoordCommonPrefixIsBigger")
 {
     // clang-format off
-    STATIC_REQUIRE( llama::RecordCoordCommonPrefixIsBigger<llama::RecordCoord<1, 0, 0>, llama::RecordCoord<0, 0, 0>>);
-    STATIC_REQUIRE( llama::RecordCoordCommonPrefixIsBigger<llama::RecordCoord<0, 1, 0>, llama::RecordCoord<0, 0, 0>>);
-    STATIC_REQUIRE( llama::RecordCoordCommonPrefixIsBigger<llama::RecordCoord<0, 0, 1>, llama::RecordCoord<0, 0, 0>>);
+    STATIC_REQUIRE( llama::recordCoordCommonPrefixIsBigger<llama::RecordCoord<1, 0, 0>, llama::RecordCoord<0, 0, 0>>);
+    STATIC_REQUIRE( llama::recordCoordCommonPrefixIsBigger<llama::RecordCoord<0, 1, 0>, llama::RecordCoord<0, 0, 0>>);
+    STATIC_REQUIRE( llama::recordCoordCommonPrefixIsBigger<llama::RecordCoord<0, 0, 1>, llama::RecordCoord<0, 0, 0>>);
 
-    STATIC_REQUIRE( llama::RecordCoordCommonPrefixIsBigger<llama::RecordCoord<1, 0, 0>, llama::RecordCoord<0, 0   >>);
-    STATIC_REQUIRE( llama::RecordCoordCommonPrefixIsBigger<llama::RecordCoord<1, 0, 0>, llama::RecordCoord<0      >>);
-    STATIC_REQUIRE( llama::RecordCoordCommonPrefixIsBigger<llama::RecordCoord<1, 0   >, llama::RecordCoord<0, 0, 0>>);
-    STATIC_REQUIRE( llama::RecordCoordCommonPrefixIsBigger<llama::RecordCoord<1      >, llama::RecordCoord<0, 0, 0>>);
+    STATIC_REQUIRE( llama::recordCoordCommonPrefixIsBigger<llama::RecordCoord<1, 0, 0>, llama::RecordCoord<0, 0   >>);
+    STATIC_REQUIRE( llama::recordCoordCommonPrefixIsBigger<llama::RecordCoord<1, 0, 0>, llama::RecordCoord<0      >>);
+    STATIC_REQUIRE( llama::recordCoordCommonPrefixIsBigger<llama::RecordCoord<1, 0   >, llama::RecordCoord<0, 0, 0>>);
+    STATIC_REQUIRE( llama::recordCoordCommonPrefixIsBigger<llama::RecordCoord<1      >, llama::RecordCoord<0, 0, 0>>);
 
-    STATIC_REQUIRE(!llama::RecordCoordCommonPrefixIsBigger<llama::RecordCoord<0, 0, 0>, llama::RecordCoord<0, 0, 0>>);
-    STATIC_REQUIRE(!llama::RecordCoordCommonPrefixIsBigger<llama::RecordCoord<0, 0, 0>, llama::RecordCoord<0, 0, 0>>);
-    STATIC_REQUIRE(!llama::RecordCoordCommonPrefixIsBigger<llama::RecordCoord<0, 0, 0>, llama::RecordCoord<1, 0, 0>>);
-    STATIC_REQUIRE(!llama::RecordCoordCommonPrefixIsBigger<llama::RecordCoord<0, 0, 0>, llama::RecordCoord<0, 1, 0>>);
-    STATIC_REQUIRE(!llama::RecordCoordCommonPrefixIsBigger<llama::RecordCoord<0, 0, 0>, llama::RecordCoord<0, 0, 1>>);
+    STATIC_REQUIRE(!llama::recordCoordCommonPrefixIsBigger<llama::RecordCoord<0, 0, 0>, llama::RecordCoord<0, 0, 0>>);
+    STATIC_REQUIRE(!llama::recordCoordCommonPrefixIsBigger<llama::RecordCoord<0, 0, 0>, llama::RecordCoord<0, 0, 0>>);
+    STATIC_REQUIRE(!llama::recordCoordCommonPrefixIsBigger<llama::RecordCoord<0, 0, 0>, llama::RecordCoord<1, 0, 0>>);
+    STATIC_REQUIRE(!llama::recordCoordCommonPrefixIsBigger<llama::RecordCoord<0, 0, 0>, llama::RecordCoord<0, 1, 0>>);
+    STATIC_REQUIRE(!llama::recordCoordCommonPrefixIsBigger<llama::RecordCoord<0, 0, 0>, llama::RecordCoord<0, 0, 1>>);
 
-    STATIC_REQUIRE(!llama::RecordCoordCommonPrefixIsBigger<llama::RecordCoord<1      >, llama::RecordCoord<1, 0, 0>>);
-    STATIC_REQUIRE(!llama::RecordCoordCommonPrefixIsBigger<llama::RecordCoord<1      >, llama::RecordCoord<1, 1, 0>>);
-    STATIC_REQUIRE(!llama::RecordCoordCommonPrefixIsBigger<llama::RecordCoord<1      >, llama::RecordCoord<1, 1, 1>>);
+    STATIC_REQUIRE(!llama::recordCoordCommonPrefixIsBigger<llama::RecordCoord<1      >, llama::RecordCoord<1, 0, 0>>);
+    STATIC_REQUIRE(!llama::recordCoordCommonPrefixIsBigger<llama::RecordCoord<1      >, llama::RecordCoord<1, 1, 0>>);
+    STATIC_REQUIRE(!llama::recordCoordCommonPrefixIsBigger<llama::RecordCoord<1      >, llama::RecordCoord<1, 1, 1>>);
 
-    STATIC_REQUIRE(!llama::RecordCoordCommonPrefixIsBigger<llama::RecordCoord<0, 0   >, llama::RecordCoord<0, 0, 1>>);
-    STATIC_REQUIRE(!llama::RecordCoordCommonPrefixIsBigger<llama::RecordCoord<0      >, llama::RecordCoord<0, 0, 1>>);
+    STATIC_REQUIRE(!llama::recordCoordCommonPrefixIsBigger<llama::RecordCoord<0, 0   >, llama::RecordCoord<0, 0, 1>>);
+    STATIC_REQUIRE(!llama::recordCoordCommonPrefixIsBigger<llama::RecordCoord<0      >, llama::RecordCoord<0, 0, 1>>);
     // clang-format on
 }
 

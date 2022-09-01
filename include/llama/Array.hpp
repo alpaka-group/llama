@@ -207,7 +207,7 @@ namespace llama
     }
 
     template<typename T, std::size_t N>
-    LLAMA_FN_HOST_ACC_INLINE constexpr auto push_front([[maybe_unused]] Array<T, N> a, T v) -> Array<T, N + 1>
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto pushFront([[maybe_unused]] Array<T, N> a, T v) -> Array<T, N + 1>
     {
         Array<T, N + 1> r{};
         r[0] = v;
@@ -218,7 +218,7 @@ namespace llama
     }
 
     template<typename T, std::size_t N>
-    LLAMA_FN_HOST_ACC_INLINE constexpr auto push_back([[maybe_unused]] Array<T, N> a, T v) -> Array<T, N + 1>
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto pushBack([[maybe_unused]] Array<T, N> a, T v) -> Array<T, N + 1>
     {
         Array<T, N + 1> r{};
         if constexpr(N > 0)
@@ -229,7 +229,7 @@ namespace llama
     }
 
     template<typename T, std::size_t N>
-    LLAMA_FN_HOST_ACC_INLINE constexpr auto pop_back([[maybe_unused]] Array<T, N> a)
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto popBack([[maybe_unused]] Array<T, N> a)
     {
         static_assert(N > 0);
         Array<T, N - 1> r{};
@@ -240,7 +240,7 @@ namespace llama
     }
 
     template<typename T, std::size_t N>
-    LLAMA_FN_HOST_ACC_INLINE constexpr auto pop_front([[maybe_unused]] Array<T, N> a)
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto popFront([[maybe_unused]] Array<T, N> a)
     {
         static_assert(N > 0);
         Array<T, N - 1> r{};
