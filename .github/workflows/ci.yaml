@@ -34,32 +34,33 @@ jobs:
     - uses: actions/checkout@v2
     - name: install clang-14
       run: |
-        wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
-        sudo add-apt-repository 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-14 main'
-        sudo apt update
         sudo apt install clang-14 libomp-14-dev clang-tidy-14
     - name: vcpkg install dependencies
       run: |
         eval $VCPKG_INSTALL
     - name: install alpaka
       run: |
-        git clone https://github.com/alpaka-group/alpaka.git
+        git clone --branch $ALPAKA_BRANCH --depth 1 https://github.com/alpaka-group/alpaka.git
         mkdir alpaka/build
         cd alpaka/build
-        cmake .. -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+        cmake .. -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
         sudo cmake --install .
-    - name: run clang-tidy
+    - name: cmake
       run: |
         mkdir build
         cd build
         cmake .. -DCMAKE_BUILD_TYPE=$CONFIG \
                  -DBUILD_TESTING=ON \
                  -DLLAMA_BUILD_EXAMPLES=ON \
+                 -DCMAKE_BUILD_TYPE=$CONFIG \
                  -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
                  -Dalpaka_ACC_CPU_B_SEQ_T_SEQ_ENABLE=ON \
                  -Dalpaka_ACC_CPU_DISABLE_ATOMIC_REF=ON \
                  -Dalpaka_CXX_STANDARD=17 \
-                 -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+                 -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
+    - name: run clang-tidy
+      run: |
+        cd build
         sed -i 's/\(-forward-unknown-to-host-compiler\|--generate-code=arch=[^ ]\+\|--expt-extended-lambda\|--expt-relaxed-constexpr\|--use_fast_math\)//g' compile_commands.json # remove NVCC specific flags which clang cannot handle
         run-clang-tidy-14 -header-filter='^((?!/thirdparty/).)*$' -extra-arg=--no-cuda-version-check -extra-arg=-nocudalib -extra-arg=-Wno-unused-command-line-argument '^(?!.*'$PWD').*$'
 
