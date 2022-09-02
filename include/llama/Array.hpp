@@ -14,10 +14,11 @@ namespace llama
     /// \tparam T type if array elements.
     /// \tparam N rank of the array.
     template<typename T, std::size_t N>
+    // NOLINTNEXTLINE(bugprone-reserved-identifier,cert-dcl37-c,cert-dcl51-cpp,readability-identifier-naming)
     struct Array
     {
         using value_type = T;
-        T element[N > 0 ? N : 1];
+        T element[N];
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto size() const
         {

@@ -49,13 +49,25 @@ namespace llama::mapping
         {
             using value_type = Value;
 
-            Ref r;
-            AccessCounts<Count>* hits;
+            template<typename RefFwd>
+            TraceReference(RefFwd&& r, AccessCounts<Count>* hits) : r(std::forward<RefFwd>(r))
+                                                                  , hits(hits)
+            {
+                static_assert(std::is_same_v<std::remove_reference_t<Ref>, std::remove_reference_t<RefFwd>>);
+            }
+
+            TraceReference(const TraceReference&) = default;
+            TraceReference(TraceReference&&) noexcept = default;
+            auto operator=(TraceReference&& ref) noexcept -> TraceReference& = default;
+            ~TraceReference() = default;
 
             LLAMA_FN_HOST_ACC_INLINE auto operator=(const TraceReference& ref) -> TraceReference&
             {
-                internal::atomicInc(hits->writes);
-                r = static_cast<value_type>(ref);
+                if(&ref != this)
+                {
+                    internal::atomicInc(hits->writes);
+                    r = static_cast<value_type>(ref);
+                }
                 return *this;
             }
 
@@ -66,11 +78,16 @@ namespace llama::mapping
                 return *this;
             }
 
+            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
             LLAMA_FN_HOST_ACC_INLINE operator value_type() const
             {
                 internal::atomicInc(hits->reads);
                 return static_cast<value_type>(r);
             }
+
+        private:
+            Ref r;
+            AccessCounts<Count>* hits;
         };
     } // namespace internal
 
@@ -135,7 +152,7 @@ namespace llama::mapping
             {
                 using Value = GetType<RecordDim, decltype(rc)>;
                 using Ref = decltype(ref);
-                return internal::TraceReference<Value, Ref, CountType>{{}, std::forward<Ref>(ref), &hits};
+                return internal::TraceReference<Value, Ref, CountType>{std::forward<Ref>(ref), &hits};
             }
             else
             {
@@ -153,7 +170,7 @@ namespace llama::mapping
         template<typename Blobs>
         LLAMA_FN_HOST_ACC_INLINE auto fieldHits(Blobs& blobs) const -> FieldHitsArray&
         {
-            return const_cast<FieldHitsArray&>(fieldHits(std::as_const(blobs)));
+            return reinterpret_cast<FieldHitsArray&>(*&blobs[blobCount - 1][0]);
         }
 
         template<typename Blobs>

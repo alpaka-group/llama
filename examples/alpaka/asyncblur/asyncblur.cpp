@@ -29,7 +29,7 @@
 constexpr auto async = true; ///< defines whether the data shall be processed asynchronously
 constexpr auto shared = true; ///< defines whether shared memory shall be used
 constexpr auto save = true; ///< defines whether the resultion image shall be saved
-constexpr auto chunkCount = 4;
+constexpr auto chunkCount = std::size_t{4};
 
 constexpr auto defaultImgX = 4096; /// width of the default image if no png is loaded
 constexpr auto defaultImgY = 4096; /// height of the default image if no png is loaded
@@ -159,7 +159,7 @@ try
     const DevHost devHost = alpaka::getDevByIdx<PltfHost>(0);
     std::vector<Queue> queue;
     queue.reserve(chunkCount);
-    for(int i = 0; i < chunkCount; ++i)
+    for(std::size_t i = 0; i < chunkCount; ++i)
         queue.emplace_back(devAcc);
 
     // ASYNCCOPY
@@ -209,8 +209,8 @@ try
     using DevMapping = std::decay_t<decltype(devMapping)>;
 
     std::size_t hostBufferSize = 0;
-    for(std::size_t i = 0; i < hostMapping.blobCount; i++)
-        hostBufferSize += hostMapping.blobSize(i);
+    for(int i = 0; i < hostMapping.blobCount; i++)
+        hostBufferSize += static_cast<std::size_t>(hostMapping.blobSize(i));
     std::cout << "Image size: " << imgX << ":" << imgY << '\n'
               << hostBufferSize * 2 / 1024 / 1024 << " MB on device\n";
 
@@ -226,7 +226,7 @@ try
     std::vector<AccChunkView> devOldView;
     std::vector<AccChunkView> devNewView;
 
-    for(int i = 0; i < chunkCount; ++i)
+    for(std::size_t i = 0; i < chunkCount; ++i)
     {
         hostChunkView.push_back(llama::allocView(devMapping, allocBlobHost));
         devOldView.push_back(llama::allocView(devMapping, allocBlobAcc));
@@ -294,7 +294,7 @@ try
             llama::VirtualView virtualHost(hostView, {chunkY * chunkSize, chunkX * chunkSize});
 
             // Find free chunk stream
-            int chunkNr = virtualHostList.size();
+            auto chunkNr = virtualHostList.size();
             if(virtualHostList.size() < chunkCount)
                 virtualHostList.push_back({virtualHost, validMiniSize});
             else

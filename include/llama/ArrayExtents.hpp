@@ -82,7 +82,8 @@ namespace llama
     {
         struct Dyn
         {
-            template<typename T>
+            template<typename T, std::enable_if_t<std::is_integral_v<T>, int> = 0>
+            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
             constexpr operator T() const
             {
                 return static_cast<T>(-1);
@@ -160,11 +161,6 @@ namespace llama
         {
             return toArray(std::make_index_sequence<rank>{});
         }
-
-        LLAMA_FN_HOST_ACC_INLINE constexpr operator Index() const
-        {
-            return toArray();
-        }
     };
 
     template<typename T>
@@ -180,11 +176,6 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE constexpr auto toArray() const -> Index
         {
             return {};
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE constexpr operator Index() const
-        {
-            return toArray();
         }
     };
 

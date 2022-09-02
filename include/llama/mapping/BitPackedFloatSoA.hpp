@@ -80,7 +80,7 @@ namespace llama::mapping
             return outFloat;
         }
 
-        // TODO: Boost.Hana generalizes these sorts of computations on mixed constants and values
+        // TODO(bgruber): Boost.Hana generalizes these sorts of computations on mixed constants and values
         template<typename E, typename M>
         LLAMA_FN_HOST_ACC_INLINE auto integBits(E e, M m)
         {
@@ -255,8 +255,8 @@ namespace llama::mapping
             return internal::BitPackedFloatRef<DstType, QualifiedStoredIntegral*, VHExp, VHMan, size_type>{
                 reinterpret_cast<QualifiedStoredIntegral*>(&blobs[blob][0]),
                 bitOffset,
-                static_cast<VHExp>(*this),
-                static_cast<VHMan>(*this)
+                static_cast<const VHExp&>(*this),
+                static_cast<const VHMan&>(*this)
 #ifndef NDEBUG
                     ,
                 reinterpret_cast<QualifiedStoredIntegral*>(&blobs[blob][0] + blobSize(blob))

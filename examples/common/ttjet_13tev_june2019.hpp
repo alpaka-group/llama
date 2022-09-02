@@ -10,6 +10,7 @@ using byte = unsigned char;
 using Index = std::uint64_t;
 
 // clang-format off
+// NOLINTBEGIN(readability-identifier-naming)
 struct run {};
 struct luminosityBlock {};
 struct event {};
@@ -1489,6 +1490,7 @@ struct L1_UnpairedBunchBptxMinus {};
 struct L1_UnpairedBunchBptxPlus {};
 struct L1_ZeroBias {};
 struct L1_ZeroBias_copy {};
+// NOLINTEND(readability-identifier-naming)
 
 using CorrT1METJet = llama::Record<
     llama::Field<CorrT1METJet_area, float>,

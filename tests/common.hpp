@@ -9,6 +9,7 @@
 #include <string>
 #include <typeinfo>
 
+// NOLINTNEXTLINE(google-runtime-int)
 using SizeTypes = boost::mp11::mp_list<int, unsigned, long, unsigned long, long long, unsigned long long>;
 static_assert(boost::mp11::mp_contains<SizeTypes, std::size_t>::value);
 
@@ -64,7 +65,7 @@ using ParticleUnaligned = llama::Record<
 >;
 // clang-format on
 
-// TODO: replace by boost::core::type_name<T>() once released and available
+// TODO(bgruber): replace by boost::core::type_name<T>() once released and available
 template<typename T>
 auto prettyPrintType(const T& t = {}) -> std::string
 {

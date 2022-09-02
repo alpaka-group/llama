@@ -364,6 +364,8 @@ namespace llama
             "Mapping::ArrayExtents must not be const qualified or a reference. Are you using decltype(...) as mapping "
             "template argument?");
 
+        /// Performs default initialization of the blob array.
+        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init,hicpp-member-init)
         View() = default;
 
         LLAMA_FN_HOST_ACC_INLINE

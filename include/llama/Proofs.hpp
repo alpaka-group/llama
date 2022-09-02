@@ -15,7 +15,7 @@ namespace llama
         }
     } // namespace internal
 
-// FIXME: this test is actually not correct, because __cpp_constexpr_dynamic_alloc only guarantees constexpr
+// FIXME(bgruber): this test is actually not correct, because __cpp_constexpr_dynamic_alloc only guarantees constexpr
 // std::allocator
 #ifdef __cpp_constexpr_dynamic_alloc
     namespace internal
@@ -25,10 +25,14 @@ namespace llama
         {
             constexpr DynArray() = default;
 
-            constexpr DynArray(std::size_t n)
+            constexpr explicit DynArray(std::size_t n) : data(new T[n]{})
             {
-                data = new T[n]{};
             }
+
+            DynArray(const DynArray&) = delete;
+            DynArray(DynArray&&) = delete;
+            auto operator=(const DynArray&) -> DynArray& = delete;
+            auto operator=(DynArray&&) -> DynArray& = delete;
 
             constexpr ~DynArray()
             {
@@ -41,7 +45,7 @@ namespace llama
                 data = new T[n]{};
             }
 
-            T* data = nullptr;
+            T* data = nullptr; // TODO(bgruber): replace by std::unique_ptr in C++23
         };
     } // namespace internal
 

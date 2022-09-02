@@ -364,7 +364,7 @@ namespace llama
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayIndex() const -> ArrayIndex
         {
-            return *this;
+            return static_cast<const ArrayIndex&>(*this);
         }
 
         /// Create a RecordRef from a different RecordRef. Only available for if the view is owned. Used by
@@ -828,7 +828,7 @@ namespace llama
         using value_type = typename internal::ValueOf<Reference>::type;
 
         /// Loads a copy of the value referenced by r. Stores r and the loaded value.
-        LLAMA_FN_HOST_ACC_INLINE ScopedUpdate(Reference r) : value_type(r), ref(r)
+        LLAMA_FN_HOST_ACC_INLINE explicit ScopedUpdate(Reference r) : value_type(r), ref(r)
         {
         }
 
@@ -870,7 +870,7 @@ namespace llama
     {
         using value_type = typename internal::ValueOf<Reference>::type;
 
-        LLAMA_FN_HOST_ACC_INLINE ScopedUpdate(Reference r) : value(r), ref(r)
+        LLAMA_FN_HOST_ACC_INLINE explicit ScopedUpdate(Reference r) : value(r), ref(r)
         {
         }
 
@@ -890,11 +890,13 @@ namespace llama
             return value;
         }
 
+        // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
         LLAMA_FN_HOST_ACC_INLINE operator const value_type&() const
         {
             return value;
         }
 
+        // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
         LLAMA_FN_HOST_ACC_INLINE operator value_type&()
         {
             return value;

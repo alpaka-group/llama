@@ -624,8 +624,8 @@ namespace llama
 
     namespace internal
     {
-        // TODO: we might implement this better by expanding a record dim into a list of tag lists and then computing a
-        // real set union of the two tag list lists
+        // TODO(bgruber): we might implement this better by expanding a record dim into a list of tag lists and then
+        // computing a real set union of the two tag list lists
 
         template<typename A, typename B>
         auto mergeRecordDimsImpl(boost::mp11::mp_identity<A> a, boost::mp11::mp_identity<B>)
@@ -707,6 +707,7 @@ namespace llama
             BoxedValue() = default;
 
             // we don't make this ctor explicit so a Value appearing in a ctor list can just be created by passing a T
+            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
             LLAMA_FN_HOST_ACC_INLINE BoxedValue(T value) : val(value)
             {
             }
@@ -726,6 +727,7 @@ namespace llama
             BoxedValue() = default;
 
             // we don't make this ctor explicit so a Value appearing in a ctor list can just be created by passing a T
+            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
             LLAMA_FN_HOST_ACC_INLINE BoxedValue(Constant<V>)
             {
             }

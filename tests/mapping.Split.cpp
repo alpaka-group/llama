@@ -190,7 +190,7 @@ TEST_CASE("mapping.Split.BitPacked")
         llama::mapping::BindBitPackedIntSoA<llama::Constant<3>>::fn,
         llama::mapping::
             BindSplit<llama::RecordCoord<0>, llama::mapping::BitPackedIntSoA, llama::mapping::PackedAoS, true>::fn,
-        true>{{extents}, {std::tuple{extents, 5}, std::tuple{extents}}};
+        true>{std::tuple{extents}, std::tuple{std::tuple{extents, 5}, std::tuple{extents}}};
 
     STATIC_REQUIRE(mapping.blobCount == 3);
     CHECK(mapping.blobSize(0) == 12);

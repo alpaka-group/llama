@@ -38,6 +38,7 @@ namespace llama::mapping
             StoredIntegralPointer endPtr;
 #endif
 
+            // NOLINTNEXTLINE(bugprone-misplaced-widening-cast)
             static constexpr auto bitsPerStoredIntegral = static_cast<SizeType>(sizeof(StoredIntegral) * CHAR_BIT);
 
         public:
@@ -94,6 +95,7 @@ namespace llama::mapping
 
             LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(Integral value) -> BitPackedIntRef&
             {
+                // NOLINTNEXTLINE(bugprone-signed-char-misuse,cert-str34-c)
                 const auto unsignedValue = static_cast<StoredIntegral>(value);
                 const auto mask = (StoredIntegral{1} << VHBits::value()) - 1u;
                 StoredIntegral valueBits;
@@ -191,7 +193,10 @@ namespace llama::mapping
 
         using Base::Base;
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr BitPackedIntSoA(TArrayExtents extents, Bits bits = {}, TRecordDim = {})
+        LLAMA_FN_HOST_ACC_INLINE constexpr explicit BitPackedIntSoA(
+            TArrayExtents extents,
+            Bits bits = {},
+            TRecordDim = {})
             : Base(extents)
             , VHBits{bits}
         {
@@ -228,7 +233,7 @@ namespace llama::mapping
             return internal::BitPackedIntRef<DstType, QualifiedStoredIntegral*, VHBits, size_type>{
                 reinterpret_cast<QualifiedStoredIntegral*>(&blobs[blob][0]),
                 bitOffset,
-                static_cast<VHBits>(*this)
+                static_cast<const VHBits&>(*this)
 #ifndef NDEBUG
                     ,
                 reinterpret_cast<QualifiedStoredIntegral*>(&blobs[blob][0] + blobSize(blob))
