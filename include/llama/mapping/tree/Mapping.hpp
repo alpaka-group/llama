@@ -202,7 +202,7 @@ namespace llama::mapping::tree
 
         LLAMA_FN_HOST_ACC_INLINE auto extents() const -> ArrayExtents
         {
-            return ArrayExtents{*this};
+            return static_cast<const ArrayExtents&>(*this);
         }
 
         LLAMA_FN_HOST_ACC_INLINE

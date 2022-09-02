@@ -44,7 +44,8 @@ namespace llama::mapping
         public:
             using value_type = UserT;
 
-            LLAMA_FN_HOST_ACC_INLINE constexpr ChangeTypeReference(StoredT& storageRef) : storageRef{storageRef}
+            LLAMA_FN_HOST_ACC_INLINE constexpr explicit ChangeTypeReference(StoredT& storageRef)
+                : storageRef{storageRef}
             {
             }
 

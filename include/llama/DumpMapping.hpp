@@ -34,8 +34,8 @@ namespace llama
 
         inline auto color(const std::vector<std::size_t>& recordCoord) -> std::size_t
         {
-            auto c = boost::hash<std::vector<std::size_t>>{}(recordCoord) &0xFFFFFF;
-            c |= 0x404040; // ensure color per channel is at least 0x40.
+            auto c = boost::hash<std::vector<std::size_t>>{}(recordCoord) &std::size_t{0xFFFFFF};
+            c |= std::size_t{0x404040}; // ensure color per channel is at least 0x40.
             return c;
         }
 
@@ -59,6 +59,7 @@ namespace llama
         }
 
         template<typename ArrayIndex>
+        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init,hicpp-member-init)
         struct FieldBox
         {
             ArrayIndex arrayIndex;
@@ -101,7 +102,7 @@ namespace llama
                 auto address = reinterpret_cast<std::intptr_t>(&ref);
                 for(std::size_t i = 0; i < blobs.size(); i++)
                 {
-                    // TODO: this is UB, because we are comparing pointers from unrelated
+                    // TODO(bgruber): this is UB, because we are comparing pointers from unrelated
                     // allocations
                     const auto front = reinterpret_cast<std::intptr_t>(&blobs[i][0]);
                     const auto back = reinterpret_cast<std::intptr_t>(&blobs[i][view.mapping().blobSize(i) - 1]);
@@ -282,12 +283,10 @@ namespace llama
             {
                 if(info.nrAndOffset.nr < Mapping::blobCount)
                     return info.nrAndOffset.offset;
-                else
-                {
-                    const auto offset = computedSizeSoFar;
-                    computedSizeSoFar += info.size;
-                    return offset;
-                }
+
+                const auto offset = computedSizeSoFar;
+                computedSizeSoFar += info.size;
+                return offset;
             }();
             auto x = (offset % wrapByteCount) * byteSizeInPixel + blobBlockWidth;
             auto y = (offset / wrapByteCount) * byteSizeInPixel + blobY;
@@ -301,8 +300,8 @@ namespace llama
                 const auto& nextInfo = (&info)[1];
                 if(nextInfo.nrAndOffset.nr < Mapping::blobCount)
                     return nextInfo.nrAndOffset.offset;
-                else
-                    return std::numeric_limits<std::size_t>::max();
+
+                return std::numeric_limits<std::size_t>::max();
             }();
             const auto isOverlapped = offset < usedBytesInBlobSoFar || nextOffset < offset + info.size;
             usedBytesInBlobSoFar = offset + info.size;

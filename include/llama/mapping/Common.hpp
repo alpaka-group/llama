@@ -26,7 +26,7 @@ namespace llama::mapping
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayExtents
         {
-            return *this;
+            return static_cast<const ArrayExtents&>(*this);
         }
     };
 

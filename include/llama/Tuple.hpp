@@ -31,7 +31,7 @@ namespace llama
         {
             static_assert(!std::is_reference_v<T>, "llama::Tuple cannot store references to stateless types");
 
-            LLAMA_FN_HOST_ACC_INLINE constexpr TupleLeaf(T)
+            LLAMA_FN_HOST_ACC_INLINE constexpr explicit TupleLeaf(T)
             {
             }
 
@@ -79,7 +79,7 @@ namespace llama
                     && std::is_constructible_v<FirstElement, T> && (std::is_constructible_v<RestElements, Ts> && ...),
                 int> = 0>
         LLAMA_FN_HOST_ACC_INLINE constexpr explicit Tuple(T&& firstArg, Ts&&... restArgs)
-            : Leaf{FirstElement(std::forward<T>(firstArg))}
+            : Leaf{static_cast<FirstElement>(std::forward<T>(firstArg))}
             , RestTuple(std::forward<Ts>(restArgs)...)
         {
         }

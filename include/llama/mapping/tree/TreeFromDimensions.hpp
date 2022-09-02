@@ -151,8 +151,8 @@ namespace llama::mapping::tree
             RecordCoord<FirstRecordCoord, RecordCoords...>)
         {
             return Tuple{
-                TreeCoordElement<(ADIndices == ArrayIndex::rank - 1 ? FirstRecordCoord : 0)>{
-                    (std::size_t) ai[ADIndices]}..., // TODO
+                TreeCoordElement<(ADIndices == ArrayIndex::rank - 1 ? FirstRecordCoord : 0)>{static_cast<std::size_t>(
+                    ai[ADIndices])}..., // TODO(bgruber): we should keep the integer type from the array index
                 TreeCoordElement<RecordCoords, boost::mp11::mp_size_t<0>>{}...,
                 TreeCoordElement<0, boost::mp11::mp_size_t<0>>{}};
         }

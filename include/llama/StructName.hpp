@@ -12,7 +12,7 @@ namespace llama
     {
         // TODO(bgruber): just use std::copy which became constexpr in C++20
         template<typename In, typename Out>
-        constexpr auto constexprCopy(In f, In l, Out d)
+        constexpr auto constexprCopy(In f, In l, Out d) -> Out
         {
             while(f != l)
                 *d++ = *f++;
@@ -22,9 +22,10 @@ namespace llama
         // TODO(bgruber): just use std::search which became constexpr in C++20
         // from: https://en.cppreference.com/w/cpp/algorithm/search
         template<class ForwardIt1, class ForwardIt2>
-        constexpr ForwardIt1 constexprSearch(ForwardIt1 first, ForwardIt1 last, ForwardIt2 sFirst, ForwardIt2 sLast)
+        constexpr auto constexprSearch(ForwardIt1 first, ForwardIt1 last, ForwardIt2 sFirst, ForwardIt2 sLast)
+            -> ForwardIt1
         {
-            while(1)
+            while(true)
             {
                 ForwardIt1 it = first;
                 for(ForwardIt2 sIt = sFirst;; ++it, ++sIt)
@@ -43,7 +44,7 @@ namespace llama
         // TODO(bgruber): just use std::remove_copy which became constexpr in C++20
         // from: https://en.cppreference.com/w/cpp/algorithm/remove_copy
         template<class InputIt, class OutputIt, class T>
-        constexpr OutputIt constexprRemoveCopy(InputIt first, InputIt last, OutputIt d_first, const T& value)
+        constexpr auto constexprRemoveCopy(InputIt first, InputIt last, OutputIt d_first, const T& value) -> OutputIt
         {
             for(; first != last; ++first)
             {
@@ -58,10 +59,8 @@ namespace llama
         // TODO(bgruber): just use std::count which became constexpr in C++20
         // from: https://en.cppreference.com/w/cpp/algorithm/count
         template<class InputIt, class T>
-        typename std::iterator_traits<InputIt>::difference_type constexprCount(
-            InputIt first,
-            InputIt last,
-            const T& value)
+        auto constexprCount(InputIt first, InputIt last, const T& value) ->
+            typename std::iterator_traits<InputIt>::difference_type
         {
             typename std::iterator_traits<InputIt>::difference_type ret = 0;
             for(; first != last; ++first)

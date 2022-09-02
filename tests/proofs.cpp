@@ -128,7 +128,8 @@ TEST_CASE("mapsNonOverlappingly.ModulusMapping")
 
 TEST_CASE("maps.ModulusMapping")
 {
-    constexpr auto extents = llama::ArrayExtentsDynamic<std::size_t, 1>{128};
+    using Extents = llama::ArrayExtentsDynamic<std::size_t, 1>;
+    constexpr auto extents = Extents{128};
     STATIC_REQUIRE(llama::mapsPiecewiseContiguous<1>(llama::mapping::AoS{extents, Particle{}}));
     STATIC_REQUIRE(!llama::mapsPiecewiseContiguous<8>(llama::mapping::AoS{extents, Particle{}}));
     STATIC_REQUIRE(!llama::mapsPiecewiseContiguous<16>(llama::mapping::AoS{extents, Particle{}}));
@@ -137,9 +138,9 @@ TEST_CASE("maps.ModulusMapping")
     STATIC_REQUIRE(llama::mapsPiecewiseContiguous<8>(llama::mapping::SoA{extents, Particle{}}));
     STATIC_REQUIRE(llama::mapsPiecewiseContiguous<16>(llama::mapping::SoA{extents, Particle{}}));
 
-    STATIC_REQUIRE(llama::mapsPiecewiseContiguous<1>(llama::mapping::AoSoA<decltype(extents), Particle, 8>{extents}));
+    STATIC_REQUIRE(llama::mapsPiecewiseContiguous<1>(llama::mapping::AoSoA<Extents, Particle, 8>{extents}));
     STATIC_REQUIRE(
-        llama::mapsPiecewiseContiguous<8>(llama::mapping::AoSoA<decltype(extents), Particle, 8>{extents, Particle{}}));
-    STATIC_REQUIRE(!llama::mapsPiecewiseContiguous<16>(
-        llama::mapping::AoSoA<decltype(extents), Particle, 8>{extents, Particle{}}));
+        llama::mapsPiecewiseContiguous<8>(llama::mapping::AoSoA<Extents, Particle, 8>{extents, Particle{}}));
+    STATIC_REQUIRE(
+        !llama::mapsPiecewiseContiguous<16>(llama::mapping::AoSoA<Extents, Particle, 8>{extents, Particle{}}));
 }

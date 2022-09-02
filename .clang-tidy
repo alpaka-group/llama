@@ -2,7 +2,6 @@
 # -bugprone-forward-declaration-namespace # too many false positives in LLAMA
 # -cppcoreguidelines-macro-usage # too many macros flagged, which cannot be replaced by constexpr
 # -bugprone-exception-escape # bgruber is fine with exceptions escaping main we cannot add main as an exception
-# -cppcoreguidelines-pro-type-reinterpret-cast # we need some reinterpret casts in LLAMA
 # -readability-misleading-indentation # many false positives because of constexpr if
 # -readability-static-accessed-through-instance # flags threadIdx/blockIdx in CUDA code
 # -cert-err58-cpp # errors in Catch2
@@ -56,7 +55,12 @@ Checks: >
     -llvm-header-guard,
     -cppcoreguidelines-macro-usage,
     -fuchsia-statically-constructed-objects,
-    -cppcoreguidelines-pro-type-union-access
+    -cppcoreguidelines-pro-type-union-access,
+    -fuchsia-multiple-inheritance,
+    -hicpp-signed-bitwise,
+    -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+    -hicpp-no-array-decay,
+    -cppcoreguidelines-owning-memory
 
 WarningsAsErrors: '*'
 HeaderFilterRegex: ''
