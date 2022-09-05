@@ -71,7 +71,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        fetch-depth: 1
+        fetch-depth: 2
     - name: install lcov
       run: |
         sudo apt install lcov
@@ -99,10 +99,10 @@ jobs:
         #lcov --remove coverage.info '/usr/*' --output-file coverage.info
         #lcov --list coverage.info
     - name: upload coverage report
-      run: |
-        curl -Os https://uploader.codecov.io/latest/linux/codecov
-        chmod +x codecov
-        ./codecov
+      uses: codecov/codecov-action@v3
+      with:
+        fail_ci_if_error: true
+        verbose: true
 
   amalgamation:
     runs-on: ubuntu-22.04
