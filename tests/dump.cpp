@@ -340,4 +340,19 @@ TEST_CASE("dump.ParticleAligned.PackedAoS")
 {
     dump(llama::mapping::PackedAoS<ArrayExtents, ParticleAligned>{extents});
 }
+
+TEST_CASE("dump.Particle.ModulusMapping.8")
+{
+    dump(ModulusMapping<ArrayExtents, Particle, 8>{extents});
+}
+
+TEST_CASE("dump.Particle.MapEverythingToZero")
+{
+    dump(MapEverythingToZero<ArrayExtents, Particle>{extents});
+}
+
+TEST_CASE("dump.Triangle.TriangleAoSWithComputedNormal")
+{
+    dump(TriangleAoSWithComputedNormal<ArrayExtents, Triangle>{extents});
+}
 #endif
