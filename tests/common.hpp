@@ -163,3 +163,145 @@ void iotaCheckView(View& view)
                 ++value;
             });
 }
+
+// maps each element of the record dimension into a separate blobs. Each blob stores Modulus elements. If the array
+// dimensions are larger than Modulus, elements are overwritten.
+template<typename TArrayExtents, typename TRecordDim, std::size_t Modulus>
+struct ModulusMapping : TArrayExtents
+{
+    using ArrayExtents = TArrayExtents;
+    using ArrayIndex = typename ArrayExtents::Index;
+    using RecordDim = TRecordDim;
+    static constexpr std::size_t blobCount = boost::mp11::mp_size<llama::FlatRecordDim<RecordDim>>::value;
+
+    LLAMA_FN_HOST_ACC_INLINE
+    constexpr explicit ModulusMapping(ArrayExtents extents, RecordDim = {}) : ArrayExtents(extents)
+    {
+    }
+
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> const ArrayExtents&
+    {
+        return *this;
+    }
+
+    constexpr auto blobSize(std::size_t) const -> std::size_t
+    {
+        return Modulus * llama::sizeOf<RecordDim>;
+    }
+
+    template<std::size_t... RecordCoords>
+    constexpr auto blobNrAndOffset(ArrayIndex ai, llama::RecordCoord<RecordCoords...> = {}) const
+        -> llama::NrAndOffset<std::size_t>
+    {
+        const auto blob = llama::flatRecordCoord<RecordDim, llama::RecordCoord<RecordCoords...>>;
+        const auto offset = (llama::mapping::LinearizeArrayDimsCpp{}(ai, extents()) % Modulus)
+            * sizeof(llama::GetType<RecordDim, llama::RecordCoord<RecordCoords...>>);
+        return {blob, offset};
+    }
+};
+
+// Maps everything to blob 0, offset 0
+template<typename TArrayExtents, typename TRecordDim>
+struct MapEverythingToZero : TArrayExtents
+{
+    using ArrayExtents = TArrayExtents;
+    using ArrayIndex = typename ArrayExtents::Index;
+    using RecordDim = TRecordDim;
+    static constexpr std::size_t blobCount = 1;
+
+    LLAMA_FN_HOST_ACC_INLINE
+    constexpr explicit MapEverythingToZero(ArrayExtents extents, RecordDim = {}) : ArrayExtents(extents)
+    {
+    }
+
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> const ArrayExtents&
+    {
+        return *this;
+    }
+
+    constexpr auto blobSize(std::size_t) const -> std::size_t
+    {
+        return llama::product(extents()) * llama::sizeOf<RecordDim>;
+    }
+
+    template<std::size_t... RecordCoords>
+    constexpr auto blobNrAndOffset(ArrayIndex, llama::RecordCoord<RecordCoords...> = {}) const
+        -> llama::NrAndOffset<std::size_t>
+    {
+        return {0, 0};
+    }
+};
+
+using Triangle = llama::Record<
+    llama::Field<tag::A, Vec3D>,
+    llama::Field<tag::B, Vec3D>,
+    llama::Field<tag::C, Vec3D>,
+    llama::Field<tag::Normal, Vec3D>>;
+
+template<typename ArrayExtents, typename RecordDim>
+struct TriangleAoSWithComputedNormal : llama::mapping::PackedAoS<ArrayExtents, RecordDim>
+{
+    using Base = llama::mapping::PackedAoS<ArrayExtents, RecordDim>;
+    using typename Base::ArrayIndex;
+
+    using Base::Base;
+
+    template<std::size_t... RecordCoords>
+    static constexpr auto isComputed(llama::RecordCoord<RecordCoords...>)
+    {
+        return llama::recordCoordCommonPrefixIsSame<llama::RecordCoord<RecordCoords...>, llama::RecordCoord<3>>;
+    }
+
+    template<std::size_t... RecordCoords, typename Blob>
+    constexpr auto compute(
+        ArrayIndex ai,
+        llama::RecordCoord<RecordCoords...>,
+        llama::Array<Blob, Base::blobCount>& storageBlobs) const
+    {
+        auto fetch = [&](llama::NrAndOffset<std::size_t> nrAndOffset) -> double
+        { return *reinterpret_cast<double*>(&storageBlobs[nrAndOffset.nr][nrAndOffset.offset]); };
+
+        const auto ax = fetch(Base::template blobNrAndOffset<0, 0>(ai));
+        const auto ay = fetch(Base::template blobNrAndOffset<0, 1>(ai));
+        const auto az = fetch(Base::template blobNrAndOffset<0, 2>(ai));
+        const auto bx = fetch(Base::template blobNrAndOffset<1, 0>(ai));
+        const auto by = fetch(Base::template blobNrAndOffset<1, 1>(ai));
+        const auto bz = fetch(Base::template blobNrAndOffset<1, 2>(ai));
+        const auto cx = fetch(Base::template blobNrAndOffset<2, 0>(ai));
+        const auto cy = fetch(Base::template blobNrAndOffset<2, 1>(ai));
+        const auto cz = fetch(Base::template blobNrAndOffset<2, 2>(ai));
+
+        const auto e1x = bx - ax;
+        const auto e1y = by - ay;
+        const auto e1z = bz - az;
+        const auto e2x = cx - ax;
+        const auto e2y = cy - ay;
+        const auto e2z = cz - az;
+
+        const auto crossx = e1y * e2z - e1z * e2y;
+        const auto crossy = -(e1x * e2z - e1z * e2x);
+        const auto crossz = e1x * e2y - e1y * e2x;
+
+        const auto length = std::sqrt(crossx * crossx + crossy * crossy + crossz * crossz);
+
+        [[maybe_unused]] const auto normalx = crossx / length;
+        [[maybe_unused]] const auto normaly = crossy / length;
+        [[maybe_unused]] const auto normalz = crossz / length;
+
+        using DC = llama::RecordCoord<RecordCoords...>;
+        if constexpr(std::is_same_v<DC, llama::RecordCoord<3, 0>>)
+            return normalx;
+        if constexpr(std::is_same_v<DC, llama::RecordCoord<3, 1>>)
+            return normaly;
+        if constexpr(std::is_same_v<DC, llama::RecordCoord<3, 2>>)
+            return normalz;
+        // if constexpr (std::is_same_v<DC, llama::RecordCoord<3>>)
+        //{
+        //    llama::One<llama::GetType<RecordDim, llama::RecordCoord<3>>> normal;
+        //    normal(llama::RecordCoord<0>{}) = normalx;
+        //    normal(llama::RecordCoord<1>{}) = normaly;
+        //    normal(llama::RecordCoord<2>{}) = normalz;
+        //    return normal;
+        //}
+    }
+};
