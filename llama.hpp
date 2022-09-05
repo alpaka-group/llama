@@ -2852,11 +2852,11 @@ namespace llama
 
         std::string svg;
 
-        const auto hasAnyComputedField = internal::hasAnyComputedField<Mapping>();
+        constexpr auto hasAnyComputedField = internal::hasAnyComputedField<Mapping>();
         std::array<int, Mapping::blobCount + hasAnyComputedField + 1> blobYOffset{};
-        for(std::size_t i = 0; i < Mapping::blobCount + hasAnyComputedField; i++)
+        auto writeBlobHeader = [&](std::size_t i, std::size_t size, std::string_view name)
         {
-            const auto blobRows = (mapping.blobSize(i) + wrapByteCount - 1) / wrapByteCount;
+            const auto blobRows = (size + wrapByteCount - 1) / wrapByteCount;
             blobYOffset[i + 1] = blobYOffset[i] + (blobRows + 1) * byteSizeInPixel; // one row gap between blobs
             const auto height = blobRows * byteSizeInPixel;
             svg += fmt::format(
@@ -2868,8 +2868,10 @@ namespace llama
                 height,
                 blobBlockWidth / 2,
                 blobYOffset[i] + height / 2,
-                i < Mapping::blobCount ? "Blob: " + std::to_string(i) : "Comp.");
-        }
+                name);
+        };
+        for(std::size_t i = 0; i < Mapping::blobCount; i++)
+            writeBlobHeader(i, mapping.blobSize(i), "Blob: " + std::to_string(i));
 
         svg = fmt::format(
                   R"(<?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -2879,7 +2881,7 @@ namespace llama
     </style>
 )",
                   blobBlockWidth + wrapByteCount * byteSizeInPixel,
-                  blobYOffset.back() - byteSizeInPixel,
+                  blobYOffset.back() == 0 ? 987654321 : blobYOffset.back() - byteSizeInPixel,
                   byteSizeInPixel / 2)
             + svg;
 
@@ -2965,6 +2967,17 @@ namespace llama
                 svg += R"(</svg>
 )";
         }
+
+        if(hasAnyComputedField)
+        {
+            writeBlobHeader(Mapping::blobCount, computedSizeSoFar, "Comp.");
+
+            // fix total SVG size
+            const auto i = svg.find("987654321");
+            assert(i != std::string::npos);
+            svg.replace(i, 9, std::to_string(blobYOffset.back() - byteSizeInPixel));
+        }
+
         svg += "</svg>";
         return svg;
     }
