@@ -22,6 +22,7 @@ Dependencies
 - cmake 3.18.3 or higher
 - Boost 1.70.0 or higher
 - libfmt 6.2.1 or higher (optional) for building the tests and examples and LLAMA supporting to dump mappings as SVG/HTML
+- Catch2 3.0.1 or higher (optional) for building the tests
 - `Alpaka <https://github.com/alpaka-group/alpaka>`_ (optional) for building some examples
 - `xsimd <https://github.com/xtensor-stack/xsimd>`_ (optional) for building some examples
 
