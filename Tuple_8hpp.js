@@ -11,7 +11,7 @@ var Tuple_8hpp =
     [ "get", "Tuple_8hpp.html#ab4a445e00f595ee5e2f75fc0a0e81b07", null ],
     [ "operator!=", "Tuple_8hpp.html#a07c4b4fb7b3d91e88bca98224400ac32", null ],
     [ "operator==", "Tuple_8hpp.html#ad527d6d304c87d6ab25d4d78e15cebc4", null ],
-    [ "pop_front", "Tuple_8hpp.html#abb8d9886d24543b5cf05b4dc83fd0947", null ],
+    [ "popFront", "Tuple_8hpp.html#af3a49de4920182eda8ca9cf2bf57d0f9", null ],
     [ "Tuple", "Tuple_8hpp.html#a1604e8162498ff814c1b1efacd212e95", null ],
     [ "tupleCat", "Tuple_8hpp.html#a42df604d705148baf4262104f6541560", null ],
     [ "tupleCatImpl", "Tuple_8hpp.html#a8e5f24405a86c68d880af50c757603db", null ],

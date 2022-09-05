@@ -88,22 +88,19 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 <li>R
 : <a class="el" href="structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#af901d14f4c982ea08477ef47b03c1791">llama::mapping::internal::PartitionFoldOpImpl&lt; Acc, TagList &gt;</a>
 </li>
-<li>r
-: <a class="el" href="structllama_1_1mapping_1_1internal_1_1TraceReference.html#af5d90fc178f92b31bfad8cb1c8e9ef32">llama::mapping::internal::TraceReference&lt; Value, Ref, Count &gt;</a>
-</li>
 <li>rank
 : <a class="el" href="structllama_1_1ArrayExtents.html#aa368d8287fad34884c1ccfdb01d527dc">llama::ArrayExtents&lt; T, Sizes &gt;</a>
 , <a class="el" href="structllama_1_1ArrayExtents_3_01T_01_4.html#a4c0c9b1ef4553bf85aec1033ffe9ffba">llama::ArrayExtents&lt; T &gt;</a>
 , <a class="el" href="structllama_1_1ArrayIndex.html#a09d5dffbdde28ac87fc8ef1f20340593">llama::ArrayIndex&lt; T, Dim &gt;</a>
 , <a class="el" href="structllama_1_1ArrayIndexIterator.html#a3eb86c873b8b0e82f711d9b2bf43ca43">llama::ArrayIndexIterator&lt; ArrayExtents &gt;</a>
 </li>
-<li>rank_dynamic
-: <a class="el" href="structllama_1_1ArrayExtents.html#a4cde9d6a979db2cc62cf4e4571305035">llama::ArrayExtents&lt; T, Sizes &gt;</a>
-, <a class="el" href="structllama_1_1ArrayExtents_3_01T_01_4.html#ade2f1a61201059266fa48cac559c6bc8">llama::ArrayExtents&lt; T &gt;</a>
+<li>rankDynamic
+: <a class="el" href="structllama_1_1ArrayExtents.html#a7a3c0f899a9568d7399c4be97824ba82">llama::ArrayExtents&lt; T, Sizes &gt;</a>
+, <a class="el" href="structllama_1_1ArrayExtents_3_01T_01_4.html#aa049fba3ae38f86c381b4014477d39ac">llama::ArrayExtents&lt; T &gt;</a>
 </li>
-<li>rank_static
-: <a class="el" href="structllama_1_1ArrayExtents.html#a83c3ee94b8e46a4bfcdaf890b475db37">llama::ArrayExtents&lt; T, Sizes &gt;</a>
-, <a class="el" href="structllama_1_1ArrayExtents_3_01T_01_4.html#aa321f9cdaa14f78ecd89d59a17378997">llama::ArrayExtents&lt; T &gt;</a>
+<li>rankStatic
+: <a class="el" href="structllama_1_1ArrayExtents.html#a61bf37584da582be077d5858b220a909">llama::ArrayExtents&lt; T, Sizes &gt;</a>
+, <a class="el" href="structllama_1_1ArrayExtents_3_01T_01_4.html#a1db071f3aa8e955a109f7c4a8238e969">llama::ArrayExtents&lt; T &gt;</a>
 </li>
 <li>reads
 : <a class="el" href="structllama_1_1mapping_1_1AccessCounts.html#a6ba565a36cc065f5c7a2bbaf8057d72a">llama::mapping::AccessCounts&lt; CountType &gt;</a>
@@ -128,7 +125,7 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 : <a class="el" href="structllama_1_1mapping_1_1Split.html#a265adac4a4570caf3b8cdb67db39b44b">llama::mapping::Split&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 </li>
 <li>RecordRef()
-: <a class="el" href="structllama_1_1RecordRef.html#acb9dc732569a1a96087ecf61bc228222">llama::RecordRef&lt; TView, TBoundRecordCoord, OwnView &gt;</a>
+: <a class="el" href="structllama_1_1RecordRef.html#afe216e0488a15e06e895b276fecec4d3">llama::RecordRef&lt; TView, TBoundRecordCoord, OwnView &gt;</a>
 , <a class="el" href="structllama_1_1View.html#ac9e9cf8bf6a130ba0fb6dcfd0be19709">llama::View&lt; TMapping, BlobType &gt;</a>
 </li>
 <li>reference
@@ -145,7 +142,7 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 : <a class="el" href="structllama_1_1Vector.html#abe8a0858e18ac862b8e18f43f6bd7eba">llama::Vector&lt; Mapping &gt;</a>
 </li>
 <li>rest()
-: <a class="el" href="structllama_1_1Tuple_3_01TFirstElement_00_01RestElements_8_8_8_01_4.html#a20b9cc1ebc2d6a062b4ae53a15f9068d">llama::Tuple&lt; TFirstElement, RestElements... &gt;</a>
+: <a class="el" href="structllama_1_1Tuple_3_01TFirstElement_00_01RestElements_8_8_8_01_4.html#a326d166eb2415c0a6b4671a7a1331c3b">llama::Tuple&lt; TFirstElement, RestElements... &gt;</a>
 </li>
 <li>RestTuple
 : <a class="el" href="structllama_1_1Tuple_3_01TFirstElement_00_01RestElements_8_8_8_01_4.html#a9d44ece6524f1a59ce9ae1bfb87d1efa">llama::Tuple&lt; TFirstElement, RestElements... &gt;</a>
@@ -159,12 +156,10 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 </li>
 <li>ResultTree
 : <a class="el" href="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors_3_01Tree_00_01Tuple_3_01Operations_8_8_8_01_4_01_4.html#a40455feecb37c12d9319fe73acf29674">llama::mapping::tree::internal::MergeFunctors&lt; Tree, Tuple&lt; Operations... &gt; &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#acb96520922aa3b98fd2ed8b14e7d8e04">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
 </li>
 <li>resultTree
 : <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#a05de6e64a1ae1d70c6ee6dd7e8387636">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
-</li>
-<li>ResultTree
-: <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#acb96520922aa3b98fd2ed8b14e7d8e04">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
 </li>
 </ul>
 </div><!-- contents -->
@@ -172,7 +167,7 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Sep 1 2022 12:56:35 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Sep 5 2022 14:36:50 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

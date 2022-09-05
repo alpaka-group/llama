@@ -19,9 +19,9 @@ var View_8hpp =
     [ "shallowCopy", "View_8hpp.html#a4f622b8c4a09a0c387f653dcfe93a5dd", null ],
     [ "transformBlobs", "View_8hpp.html#a1db17bfa9bb1b8f44ebee2e605c53897", null ],
     [ "VirtualView", "View_8hpp.html#a416bef7f5a6a9e2cecf4f9b090c9d4ed", null ],
-    [ "is_One", "View_8hpp.html#a60e664cfed9ce1d9d1c5b4c59464cdb6", null ],
-    [ "is_One< RecordRef< View, BoundRecordCoord, true > >", "View_8hpp.html#aa7d2ea8fb695e49dddef62709b18ba10", null ],
     [ "isComputed", "View_8hpp.html#a9676a3903b134df116791bcae533d6c6", null ],
-    [ "IsView", "View_8hpp.html#a9950d7fcb0405c5c7f10238b7752fa6d", null ],
-    [ "IsView< View< Mapping, BlobType > >", "View_8hpp.html#a1de4eb420b7c43553df533b32b3b45a8", null ]
+    [ "isOne", "View_8hpp.html#aecf6a2d8f8fd3cde95667fbf433e42d1", null ],
+    [ "isOne< RecordRef< View, BoundRecordCoord, true > >", "View_8hpp.html#a44aec444f97e67c053400d58fae4126b", null ],
+    [ "isView", "View_8hpp.html#a2c3ef24f7ab0d71912a5f7e71cf24130", null ],
+    [ "isView< View< Mapping, BlobType > >", "View_8hpp.html#aa593eb5186353ddcb3dba09d59cbe0e9", null ]
 ];

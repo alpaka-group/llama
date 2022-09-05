@@ -135,7 +135,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afe216e0488a15e06e895b276fecec4d3"><td class="memTemplParams" colspan="2">template&lt;typename OtherView , typename OtherBoundRecordCoord , bool OtherOwnView&gt; </td></tr>
 <tr class="memitem:afe216e0488a15e06e895b276fecec4d3"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#afe216e0488a15e06e895b276fecec4d3">RecordRef</a> (const <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a>&lt; OtherView, OtherBoundRecordCoord, OtherOwnView &gt; &amp;recordRef)</td></tr>
 <tr class="separator:afe216e0488a15e06e895b276fecec4d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea6fff77548d86c90d3b2815ef72f6c5"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!is_RecordRef&lt;T&gt;&gt;&gt; </td></tr>
+<tr class="memitem:aea6fff77548d86c90d3b2815ef72f6c5"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!isRecordRef&lt;T&gt;&gt;&gt; </td></tr>
 <tr class="memitem:aea6fff77548d86c90d3b2815ef72f6c5"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#aea6fff77548d86c90d3b2815ef72f6c5">RecordRef</a> (const T &amp;scalar)</td></tr>
 <tr class="memdesc:aea6fff77548d86c90d3b2815ef72f6c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> from a scalar. Only available for if the view is owned. Used by <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746" title="A RecordRef that owns and holds a single value.">llama::One</a>.  <a href="structllama_1_1RecordRef.html#aea6fff77548d86c90d3b2815ef72f6c5">More...</a><br /></td></tr>
 <tr class="separator:aea6fff77548d86c90d3b2815ef72f6c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -202,7 +202,7 @@ Friends</h2></td></tr>
 <tr class="memitem:ad52b41ada501955c1808b973dfc1d153"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:ad52b41ada501955c1808b973dfc1d153"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#ad52b41ada501955c1808b973dfc1d153">operator+</a> (const <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;vd, const T &amp;t)</td></tr>
 <tr class="separator:ad52b41ada501955c1808b973dfc1d153"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67adea4a6bb0440a9c3fe3287f897e95"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!is_RecordRef&lt;T&gt;&gt;&gt; </td></tr>
+<tr class="memitem:a67adea4a6bb0440a9c3fe3287f897e95"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!isRecordRef&lt;T&gt;&gt;&gt; </td></tr>
 <tr class="memitem:a67adea4a6bb0440a9c3fe3287f897e95"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#a67adea4a6bb0440a9c3fe3287f897e95">operator+</a> (const T &amp;t, const <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;vd)</td></tr>
 <tr class="separator:a67adea4a6bb0440a9c3fe3287f897e95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a461a173618f8a9f833ddf28a1620927d"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
@@ -211,7 +211,7 @@ Friends</h2></td></tr>
 <tr class="memitem:a2028f8fd54ce1aa2de386b5988440f6d"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a2028f8fd54ce1aa2de386b5988440f6d"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#a2028f8fd54ce1aa2de386b5988440f6d">operator*</a> (const <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;vd, const T &amp;t)</td></tr>
 <tr class="separator:a2028f8fd54ce1aa2de386b5988440f6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae19da406eef392c2cc923b2b1532458a"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!is_RecordRef&lt;T&gt;&gt;&gt; </td></tr>
+<tr class="memitem:ae19da406eef392c2cc923b2b1532458a"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!isRecordRef&lt;T&gt;&gt;&gt; </td></tr>
 <tr class="memitem:ae19da406eef392c2cc923b2b1532458a"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#ae19da406eef392c2cc923b2b1532458a">operator*</a> (const T &amp;t, const <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;vd)</td></tr>
 <tr class="separator:ae19da406eef392c2cc923b2b1532458a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae719daa136af26cb4684f377a1068b58"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
@@ -223,37 +223,37 @@ Friends</h2></td></tr>
 <tr class="memitem:ab23a922fe11baad4daf96828b861e954"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:ab23a922fe11baad4daf96828b861e954"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#ab23a922fe11baad4daf96828b861e954">operator==</a> (const <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;vd, const T &amp;t) -&gt; bool</td></tr>
 <tr class="separator:ab23a922fe11baad4daf96828b861e954"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a230df489ece9b058c3aa28ecf6070858"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!is_RecordRef&lt;T&gt;&gt;&gt; </td></tr>
+<tr class="memitem:a230df489ece9b058c3aa28ecf6070858"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!isRecordRef&lt;T&gt;&gt;&gt; </td></tr>
 <tr class="memitem:a230df489ece9b058c3aa28ecf6070858"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#a230df489ece9b058c3aa28ecf6070858">operator==</a> (const T &amp;t, const <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;vd) -&gt; bool</td></tr>
 <tr class="separator:a230df489ece9b058c3aa28ecf6070858"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ce3df14aae118c00ac669cac09645db"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a3ce3df14aae118c00ac669cac09645db"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#a3ce3df14aae118c00ac669cac09645db">operator!=</a> (const <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;vd, const T &amp;t) -&gt; bool</td></tr>
 <tr class="separator:a3ce3df14aae118c00ac669cac09645db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29cafbc66f72dc1d0cdd50240dab09fd"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!is_RecordRef&lt;T&gt;&gt;&gt; </td></tr>
+<tr class="memitem:a29cafbc66f72dc1d0cdd50240dab09fd"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!isRecordRef&lt;T&gt;&gt;&gt; </td></tr>
 <tr class="memitem:a29cafbc66f72dc1d0cdd50240dab09fd"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#a29cafbc66f72dc1d0cdd50240dab09fd">operator!=</a> (const T &amp;t, const <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;vd) -&gt; bool</td></tr>
 <tr class="separator:a29cafbc66f72dc1d0cdd50240dab09fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a517bee54eb43b63ede727940f71cd9ae"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a517bee54eb43b63ede727940f71cd9ae"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#a517bee54eb43b63ede727940f71cd9ae">operator&lt;</a> (const <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;vd, const T &amp;t) -&gt; bool</td></tr>
 <tr class="separator:a517bee54eb43b63ede727940f71cd9ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35d17e80a4a27107b754078bf55f7106"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!is_RecordRef&lt;T&gt;&gt;&gt; </td></tr>
+<tr class="memitem:a35d17e80a4a27107b754078bf55f7106"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!isRecordRef&lt;T&gt;&gt;&gt; </td></tr>
 <tr class="memitem:a35d17e80a4a27107b754078bf55f7106"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#a35d17e80a4a27107b754078bf55f7106">operator&lt;</a> (const T &amp;t, const <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;vd) -&gt; bool</td></tr>
 <tr class="separator:a35d17e80a4a27107b754078bf55f7106"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a155794173eda55c96faccfa707e971e2"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a155794173eda55c96faccfa707e971e2"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#a155794173eda55c96faccfa707e971e2">operator&lt;=</a> (const <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;vd, const T &amp;t) -&gt; bool</td></tr>
 <tr class="separator:a155794173eda55c96faccfa707e971e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af0ee680a5e3fb0b9e3388e89df41d7ce"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!is_RecordRef&lt;T&gt;&gt;&gt; </td></tr>
+<tr class="memitem:af0ee680a5e3fb0b9e3388e89df41d7ce"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!isRecordRef&lt;T&gt;&gt;&gt; </td></tr>
 <tr class="memitem:af0ee680a5e3fb0b9e3388e89df41d7ce"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#af0ee680a5e3fb0b9e3388e89df41d7ce">operator&lt;=</a> (const T &amp;t, const <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;vd) -&gt; bool</td></tr>
 <tr class="separator:af0ee680a5e3fb0b9e3388e89df41d7ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ae3ca824c39d05ae2d94d1ab655565b"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a4ae3ca824c39d05ae2d94d1ab655565b"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#a4ae3ca824c39d05ae2d94d1ab655565b">operator&gt;</a> (const <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;vd, const T &amp;t) -&gt; bool</td></tr>
 <tr class="separator:a4ae3ca824c39d05ae2d94d1ab655565b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04302cfb043451c3932a1f787493ac1b"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!is_RecordRef&lt;T&gt;&gt;&gt; </td></tr>
+<tr class="memitem:a04302cfb043451c3932a1f787493ac1b"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!isRecordRef&lt;T&gt;&gt;&gt; </td></tr>
 <tr class="memitem:a04302cfb043451c3932a1f787493ac1b"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#a04302cfb043451c3932a1f787493ac1b">operator&gt;</a> (const T &amp;t, const <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;vd) -&gt; bool</td></tr>
 <tr class="separator:a04302cfb043451c3932a1f787493ac1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00162d3e10237d687c7130d695c6da4c"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a00162d3e10237d687c7130d695c6da4c"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#a00162d3e10237d687c7130d695c6da4c">operator&gt;=</a> (const <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;vd, const T &amp;t) -&gt; bool</td></tr>
 <tr class="separator:a00162d3e10237d687c7130d695c6da4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03d19131b5936cfe7e9e8ab2f80ddd69"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!is_RecordRef&lt;T&gt;&gt;&gt; </td></tr>
+<tr class="memitem:a03d19131b5936cfe7e9e8ab2f80ddd69"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!isRecordRef&lt;T&gt;&gt;&gt; </td></tr>
 <tr class="memitem:a03d19131b5936cfe7e9e8ab2f80ddd69"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#a03d19131b5936cfe7e9e8ab2f80ddd69">operator&gt;=</a> (const T &amp;t, const <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;vd) -&gt; bool</td></tr>
 <tr class="separator:a03d19131b5936cfe7e9e8ab2f80ddd69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae2d91aa2202932f93e1bf2f014ca7437"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#ae2d91aa2202932f93e1bf2f014ca7437">swap</a> (std::conditional_t&lt; OwnView, <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;, <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &gt; a, std::conditional_t&lt; OwnView, <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;, <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &gt; b) noexcept</td></tr>
@@ -522,7 +522,7 @@ template&lt;typename OtherView , typename OtherBoundRecordCoord , bool OtherOwnV
 <div class="memtemplate">
 template&lt;typename TView , typename TBoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
-template&lt;typename T , typename  = std::enable_if_t&lt;!is_RecordRef&lt;T&gt;&gt;&gt; </div>
+template&lt;typename T , typename  = std::enable_if_t&lt;!isRecordRef&lt;T&gt;&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1358,7 +1358,7 @@ template&lt;typename T &gt; </div>
 <div class="memtemplate">
 template&lt;typename TView , typename TBoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
-template&lt;typename T , typename  = std::enable_if_t&lt;!is_RecordRef&lt;T&gt;&gt;&gt; </div>
+template&lt;typename T , typename  = std::enable_if_t&lt;!isRecordRef&lt;T&gt;&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1485,7 +1485,7 @@ template&lt;typename T &gt; </div>
 <div class="memtemplate">
 template&lt;typename TView , typename TBoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
-template&lt;typename T , typename  = std::enable_if_t&lt;!is_RecordRef&lt;T&gt;&gt;&gt; </div>
+template&lt;typename T , typename  = std::enable_if_t&lt;!isRecordRef&lt;T&gt;&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1569,7 +1569,7 @@ template&lt;typename T &gt; </div>
 <div class="memtemplate">
 template&lt;typename TView , typename TBoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
-template&lt;typename T , typename  = std::enable_if_t&lt;!is_RecordRef&lt;T&gt;&gt;&gt; </div>
+template&lt;typename T , typename  = std::enable_if_t&lt;!isRecordRef&lt;T&gt;&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1738,7 +1738,7 @@ template&lt;typename T &gt; </div>
 <div class="memtemplate">
 template&lt;typename TView , typename TBoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
-template&lt;typename T , typename  = std::enable_if_t&lt;!is_RecordRef&lt;T&gt;&gt;&gt; </div>
+template&lt;typename T , typename  = std::enable_if_t&lt;!isRecordRef&lt;T&gt;&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1824,7 +1824,7 @@ template&lt;typename T &gt; </div>
 <div class="memtemplate">
 template&lt;typename TView , typename TBoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
-template&lt;typename T , typename  = std::enable_if_t&lt;!is_RecordRef&lt;T&gt;&gt;&gt; </div>
+template&lt;typename T , typename  = std::enable_if_t&lt;!isRecordRef&lt;T&gt;&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1910,7 +1910,7 @@ template&lt;typename T &gt; </div>
 <div class="memtemplate">
 template&lt;typename TView , typename TBoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
-template&lt;typename T , typename  = std::enable_if_t&lt;!is_RecordRef&lt;T&gt;&gt;&gt; </div>
+template&lt;typename T , typename  = std::enable_if_t&lt;!isRecordRef&lt;T&gt;&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1996,7 +1996,7 @@ template&lt;typename T &gt; </div>
 <div class="memtemplate">
 template&lt;typename TView , typename TBoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
-template&lt;typename T , typename  = std::enable_if_t&lt;!is_RecordRef&lt;T&gt;&gt;&gt; </div>
+template&lt;typename T , typename  = std::enable_if_t&lt;!isRecordRef&lt;T&gt;&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -2082,7 +2082,7 @@ template&lt;typename T &gt; </div>
 <div class="memtemplate">
 template&lt;typename TView , typename TBoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
-template&lt;typename T , typename  = std::enable_if_t&lt;!is_RecordRef&lt;T&gt;&gt;&gt; </div>
+template&lt;typename T , typename  = std::enable_if_t&lt;!isRecordRef&lt;T&gt;&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -2166,7 +2166,7 @@ template&lt;typename TView , typename TBoundRecordCoord , bool OwnView&gt; </div
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="structllama_1_1RecordRef.html">RecordRef</a></li>
-    <li class="footer">Generated on Thu Sep 1 2022 12:56:35 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Sep 5 2022 14:36:50 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

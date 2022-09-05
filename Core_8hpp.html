@@ -308,9 +308,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a4a8faed7400b66b8a3d13185ea2a26e4"><td class="memTemplParams" colspan="2">template&lt;typename TA , typename TB &gt; </td></tr>
 <tr class="memitem:a4a8faed7400b66b8a3d13185ea2a26e4"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a4a8faed7400b66b8a3d13185ea2a26e4">llama::operator!=</a> (const NrAndOffset&lt; TA &gt; &amp;a, const NrAndOffset&lt; TB &gt; &amp;b) -&gt; bool</td></tr>
 <tr class="separator:a4a8faed7400b66b8a3d13185ea2a26e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af16d07d01be7acc8ced82a040bac87da"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename... &gt; typename L, typename... T, typename F &gt; </td></tr>
-<tr class="memitem:af16d07d01be7acc8ced82a040bac87da"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#af16d07d01be7acc8ced82a040bac87da">llama::internal::mp_for_each_inlined</a> (L&lt; T... &gt;, F &amp;&amp;f)</td></tr>
-<tr class="separator:af16d07d01be7acc8ced82a040bac87da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acde58af143505d1ef6a1d7e34d181e5f"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename... &gt; typename L, typename... T, typename F &gt; </td></tr>
+<tr class="memitem:acde58af143505d1ef6a1d7e34d181e5f"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#acde58af143505d1ef6a1d7e34d181e5f">llama::internal::mpForEachInlined</a> (L&lt; T... &gt;, F &amp;&amp;f)</td></tr>
+<tr class="separator:acde58af143505d1ef6a1d7e34d181e5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91f5d2462d07fc7d5cfa0dac05946c63"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename Functor , std::size_t... Coords&gt; </td></tr>
 <tr class="memitem:a91f5d2462d07fc7d5cfa0dac05946c63"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a91f5d2462d07fc7d5cfa0dac05946c63">llama::forEachLeafCoord</a> (Functor &amp;&amp;functor, RecordCoord&lt; Coords... &gt; baseCoord)</td></tr>
 <tr class="separator:a91f5d2462d07fc7d5cfa0dac05946c63"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -342,7 +342,7 @@ Functions</h2></td></tr>
 <tr class="memitem:a856e40ef93c27c7678ea73a7763e12b4"><td class="memTemplParams" colspan="2">template&lt;typename... FieldsA&gt; </td></tr>
 <tr class="memitem:a856e40ef93c27c7678ea73a7763e12b4"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a856e40ef93c27c7678ea73a7763e12b4">llama::internal::mergeRecordDimsImpl</a> (boost::mp11::mp_identity&lt; Record&lt; FieldsA... &gt;&gt; a, boost::mp11::mp_identity&lt; Record&lt;&gt;&gt;)</td></tr>
 <tr class="separator:a856e40ef93c27c7678ea73a7763e12b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e0917bdc10f5989a5a46c308d880f1c"><td class="memTemplParams" colspan="2">template&lt;typename... FieldsA, typename FieldB , typename... FieldsB, auto pos = FindFieldByTag&lt;Record&lt;FieldsA...&gt;, GetFieldTag&lt;FieldB&gt;&gt;::value&gt; </td></tr>
+<tr class="memitem:a5e0917bdc10f5989a5a46c308d880f1c"><td class="memTemplParams" colspan="2">template&lt;typename... FieldsA, typename FieldB , typename... FieldsB, auto Pos = FindFieldByTag&lt;Record&lt;FieldsA...&gt;, GetFieldTag&lt;FieldB&gt;&gt;::value&gt; </td></tr>
 <tr class="memitem:a5e0917bdc10f5989a5a46c308d880f1c"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a5e0917bdc10f5989a5a46c308d880f1c">llama::internal::mergeRecordDimsImpl</a> (boost::mp11::mp_identity&lt; Record&lt; FieldsA... &gt;&gt;, boost::mp11::mp_identity&lt; Record&lt; FieldB, FieldsB... &gt;&gt;)</td></tr>
 <tr class="separator:a5e0917bdc10f5989a5a46c308d880f1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -430,7 +430,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Core_8hpp.html">Core.hpp</a></li>
-    <li class="footer">Generated on Thu Sep 1 2022 12:56:35 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Sep 5 2022 14:36:50 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -7,9 +7,9 @@ var Array_8hpp =
     [ "Array", "Array_8hpp.html#a690689d38b43930430e58bb7fe17aca7", null ],
     [ "dot", "Array_8hpp.html#a672915c49821a718f5dfa5d4540c4192", null ],
     [ "operator<<", "Array_8hpp.html#a6b9492ccf576f0f3683d893e35882a54", null ],
-    [ "pop_back", "Array_8hpp.html#a3e166c63d0e045a182afa16dc6f3a948", null ],
-    [ "pop_front", "Array_8hpp.html#a4c253d54795ef1828757f0d732a0f04e", null ],
+    [ "popBack", "Array_8hpp.html#a73b682ef182dc8da7ec372afc84f1abc", null ],
+    [ "popFront", "Array_8hpp.html#ac72b41ee8951d9b20dfbdc8630ea6e92", null ],
     [ "product", "Array_8hpp.html#abab7973f7686f93f02ad33e4d0636a25", null ],
-    [ "push_back", "Array_8hpp.html#a54ae07b7af990044cd6a71b06c49517d", null ],
-    [ "push_front", "Array_8hpp.html#a166f72eecc8a4f8c9b37b2113ca47ebf", null ]
+    [ "pushBack", "Array_8hpp.html#a582387ea1287dbab16833fc8da254d58", null ],
+    [ "pushFront", "Array_8hpp.html#afa7bf42db36a3e21c7819a833ed76ed2", null ]
 ];

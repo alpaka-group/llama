@@ -11,6 +11,6 @@ var Copy_8hpp =
     [ "blobMemcpy", "Copy_8hpp.html#a22c65b7815a74750d6b589d95d19d703", null ],
     [ "copy", "Copy_8hpp.html#ab67a5448cc031309dc1aa8580b7d4950", null ],
     [ "fieldWiseCopy", "Copy_8hpp.html#af977754d689a5f3cc10fd80d4b37ba1f", null ],
-    [ "parallel_memcpy", "Copy_8hpp.html#a843994c4a6f08a9d6f8e954cbbf73501", null ],
+    [ "parallelMemcpy", "Copy_8hpp.html#a0a81e9975bf6750cae8fa41b8b94f58c", null ],
     [ "aosoaLanes", "Copy_8hpp.html#a6be5f6ab0482c0b8d8276f41c70667c2", null ]
 ];

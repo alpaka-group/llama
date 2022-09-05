@@ -177,7 +177,7 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1ValueOf.html">llama::internal::ValueOf&lt; T, typename &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01is__RecordRef_3_01T_01_4_01_4_01_4.html">llama::internal::ValueOf&lt; T, std::enable_if_t&lt; is_RecordRef&lt; T &gt; &gt; &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01isRecordRef_3_01T_01_4_01_4_01_4.html">llama::internal::ValueOf&lt; T, std::enable_if_t&lt; isRecordRef&lt; T &gt; &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01isProxyReference_3_01T_01_4_01_4_01_4.html">llama::internal::ValueOf&lt; T, std::enable_if_t&lt; isProxyReference&lt; T &gt; &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -189,7 +189,7 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1ReferenceTo.html">llama::internal::ReferenceTo&lt; T, typename &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1ReferenceTo_3_01T_00_01std_1_1enable__if__t_3_01is__RecordRef_3_01T_02d33164bb39d0262029d90bd66129e01.html">llama::internal::ReferenceTo&lt; T, std::enable_if_t&lt; is_RecordRef&lt; T &gt; &amp;&amp;!is_One&lt; T &gt; &gt; &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1ReferenceTo_3_01T_00_01std_1_1enable__if__t_3_01isRecordRef_3_01T_01_8c16ab8a221dc30e1372285c3494e8f7.html">llama::internal::ReferenceTo&lt; T, std::enable_if_t&lt; isRecordRef&lt; T &gt; &amp;&amp;!isOne&lt; T &gt; &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1ReferenceTo_3_01T_00_01std_1_1enable__if__t_3_01isProxyReference_3_01T_01_4_01_4_01_4.html">llama::internal::ReferenceTo&lt; T, std::enable_if_t&lt; isProxyReference&lt; T &gt; &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -225,9 +225,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a1ba0c9b09c6a1e76d0d8f9c3e2fbe3ba"><td class="memTemplParams" colspan="2">template&lt;typename Functor , typename LeftRecord , typename T &gt; </td></tr>
 <tr class="memitem:a1ba0c9b09c6a1e76d0d8f9c3e2fbe3ba"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a1ba0c9b09c6a1e76d0d8f9c3e2fbe3ba">llama::internal::recordRefRelOperator</a> (const LeftRecord &amp;left, const T &amp;right) -&gt; bool</td></tr>
 <tr class="separator:a1ba0c9b09c6a1e76d0d8f9c3e2fbe3ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0af3a486d33e1a8cdd09410c0844821"><td class="memTemplParams" colspan="2">template&lt;typename TWithOptionalConst , typename T &gt; </td></tr>
-<tr class="memitem:ab0af3a486d33e1a8cdd09410c0844821"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#ab0af3a486d33e1a8cdd09410c0844821">llama::internal::asTupleImpl</a> (TWithOptionalConst &amp;leaf, T) -&gt; std::enable_if_t&lt;!is_RecordRef&lt; std::decay_t&lt; TWithOptionalConst &gt;&gt;, std::reference_wrapper&lt; TWithOptionalConst &gt;&gt;</td></tr>
-<tr class="separator:ab0af3a486d33e1a8cdd09410c0844821"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88bea379a173cef35494c7024b533932"><td class="memTemplParams" colspan="2">template&lt;typename TWithOptionalConst , typename T &gt; </td></tr>
+<tr class="memitem:a88bea379a173cef35494c7024b533932"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a88bea379a173cef35494c7024b533932">llama::internal::asTupleImpl</a> (TWithOptionalConst &amp;leaf, T) -&gt; std::enable_if_t&lt;!isRecordRef&lt; std::decay_t&lt; TWithOptionalConst &gt;&gt;, std::reference_wrapper&lt; TWithOptionalConst &gt;&gt;</td></tr>
+<tr class="separator:a88bea379a173cef35494c7024b533932"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d876769eca704a061372b695e856fa8"><td class="memTemplParams" colspan="2">template&lt;typename RecordRef , typename T , std::size_t N, std::size_t... Is&gt; </td></tr>
 <tr class="memitem:a1d876769eca704a061372b695e856fa8"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a1d876769eca704a061372b695e856fa8">llama::internal::asTupleImplArr</a> (RecordRef &amp;&amp;vd, T(&amp;&amp;)[N], std::index_sequence&lt; Is... &gt;)</td></tr>
 <tr class="separator:a1d876769eca704a061372b695e856fa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -237,9 +237,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a771e3206f84801cb13a0c35928fbd4dd"><td class="memTemplParams" colspan="2">template&lt;typename RecordRef , typename... Fields&gt; </td></tr>
 <tr class="memitem:a771e3206f84801cb13a0c35928fbd4dd"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a771e3206f84801cb13a0c35928fbd4dd">llama::internal::asTupleImpl</a> (RecordRef &amp;&amp;vd, Record&lt; Fields... &gt;)</td></tr>
 <tr class="separator:a771e3206f84801cb13a0c35928fbd4dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4882b13a772b641c37cdca235d007282"><td class="memTemplParams" colspan="2">template&lt;typename TWithOptionalConst , typename T &gt; </td></tr>
-<tr class="memitem:a4882b13a772b641c37cdca235d007282"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a4882b13a772b641c37cdca235d007282">llama::internal::asFlatTupleImpl</a> (TWithOptionalConst &amp;leaf, T) -&gt; std::enable_if_t&lt;!is_RecordRef&lt; std::decay_t&lt; TWithOptionalConst &gt;&gt;, std::tuple&lt; TWithOptionalConst &amp; &gt;&gt;</td></tr>
-<tr class="separator:a4882b13a772b641c37cdca235d007282"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a249d5205a91bb9096ebe108f0764bd83"><td class="memTemplParams" colspan="2">template&lt;typename TWithOptionalConst , typename T &gt; </td></tr>
+<tr class="memitem:a249d5205a91bb9096ebe108f0764bd83"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a249d5205a91bb9096ebe108f0764bd83">llama::internal::asFlatTupleImpl</a> (TWithOptionalConst &amp;leaf, T) -&gt; std::enable_if_t&lt;!isRecordRef&lt; std::decay_t&lt; TWithOptionalConst &gt;&gt;, std::tuple&lt; TWithOptionalConst &amp; &gt;&gt;</td></tr>
+<tr class="separator:a249d5205a91bb9096ebe108f0764bd83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79267127aa36048485408b6b8cba6a74"><td class="memTemplParams" colspan="2">template&lt;typename RecordRef , typename T , std::size_t N, std::size_t... Is&gt; </td></tr>
 <tr class="memitem:a79267127aa36048485408b6b8cba6a74"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a79267127aa36048485408b6b8cba6a74">llama::internal::asFlatTupleImplArr</a> (RecordRef &amp;&amp;vd, T(&amp;&amp;)[N], std::index_sequence&lt; Is... &gt;)</td></tr>
 <tr class="separator:a79267127aa36048485408b6b8cba6a74"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -273,12 +273,12 @@ Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a6d94d4ed47ea3a92cc388f6a15f55432"><td class="memTemplParams" colspan="2">template&lt;typename View &gt; </td></tr>
-<tr class="memitem:a6d94d4ed47ea3a92cc388f6a15f55432"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a6d94d4ed47ea3a92cc388f6a15f55432">llama::is_RecordRef</a> = false</td></tr>
-<tr class="separator:a6d94d4ed47ea3a92cc388f6a15f55432"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b47fd4ebc9642fdca57d9f8568b5ef2"><td class="memTemplParams" colspan="2">template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </td></tr>
-<tr class="memitem:a3b47fd4ebc9642fdca57d9f8568b5ef2"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a3b47fd4ebc9642fdca57d9f8568b5ef2">llama::is_RecordRef&lt; RecordRef&lt; View, BoundRecordCoord, OwnView &gt; &gt;</a> = true</td></tr>
-<tr class="separator:a3b47fd4ebc9642fdca57d9f8568b5ef2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3acf31ae1481251861f38e12ee58dda"><td class="memTemplParams" colspan="2">template&lt;typename View &gt; </td></tr>
+<tr class="memitem:af3acf31ae1481251861f38e12ee58dda"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#af3acf31ae1481251861f38e12ee58dda">llama::isRecordRef</a> = false</td></tr>
+<tr class="separator:af3acf31ae1481251861f38e12ee58dda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88abd408b8ac8bd2456a8316a62a5928"><td class="memTemplParams" colspan="2">template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </td></tr>
+<tr class="memitem:a88abd408b8ac8bd2456a8316a62a5928"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a88abd408b8ac8bd2456a8316a62a5928">llama::isRecordRef&lt; RecordRef&lt; View, BoundRecordCoord, OwnView &gt; &gt;</a> = true</td></tr>
+<tr class="separator:a88abd408b8ac8bd2456a8316a62a5928"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa30231c6e488d62d3b26388e1ca9f590"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = void&gt; </td></tr>
 <tr class="memitem:aa30231c6e488d62d3b26388e1ca9f590"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#aa30231c6e488d62d3b26388e1ca9f590">llama::internal::isTupleLike</a> = false</td></tr>
 <tr class="separator:aa30231c6e488d62d3b26388e1ca9f590"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -304,7 +304,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="RecordRef_8hpp.html">RecordRef.hpp</a></li>
-    <li class="footer">Generated on Thu Sep 1 2022 12:56:35 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Sep 5 2022 14:36:50 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

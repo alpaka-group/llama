@@ -1,0 +1,4 @@
+var structllama_1_1internal_1_1ReferenceTo_3_01T_00_01std_1_1enable__if__t_3_01isRecordRef_3_01T_01_8c16ab8a221dc30e1372285c3494e8f7 =
+[
+    [ "type", "structllama_1_1internal_1_1ReferenceTo_3_01T_00_01std_1_1enable__if__t_3_01isRecordRef_3_01T_01_8c16ab8a221dc30e1372285c3494e8f7.html#a6341b1e5bb86c7c2e9ed0764d5331194", null ]
+];
